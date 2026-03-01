@@ -34,8 +34,15 @@ $$
 W_g=-\Delta U_g
 $$
 
-## 5- Dominio de validez
+## 5- Dominio de validez (analisis riguroso)
 $U_g=mgh$ es valido para campo gravitatorio aproximadamente uniforme (alturas pequenas frente al radio terrestre). Para escalas astronomicas se usa potencial newtoniano general.
+
+**Aproximacion local:** Si $\Delta h \ll R_T$ (radio Tierra ~6371 km), entonces $g$ es constante y $U_g=mgh$ es valido.
+
+**Campo general newtoniano:** Para satelites y escalas planetarias, usas:
+$$U_g=-\frac{GMm}{r}$$
+
+**Cambio de referencia:** La energia potencial tiene significado solo en diferencias $\Delta U$. Puedes elegir cualquier nivel de referencia.
 
 ## 6- Metodo de resolucion
 1- Elige y declara una referencia de altura.
@@ -50,23 +57,17 @@ $U_g=mgh$ es valido para campo gravitatorio aproximadamente uniforme (alturas pe
 - Confundir trabajo de gravedad con trabajo externo para elevar.
 - Mezclar signos de $\Delta U_g$ y $W_g$.
 
-## 8- Ejemplo guiado
+## 8- Ejemplo guiado (extendido)
 Un cuerpo de $3\,\text{kg}$ sube de $2\,\text{m}$ a $9\,\text{m}$ con $g=9.8\,\text{m/s}^2$.
 
-$$
-\Delta U_g=mg(h_f-h_i)=3\cdot9.8\cdot(9-2)=205.8\,\text{J}
-$$
+$$\Delta U_g=mg(h_f-h_i)=3\cdot9.8\cdot7=205.8\,\text{J}$$
 
-La gravedad realiza trabajo:
+$$W_g=-\Delta U_g=-205.8\,\text{J}$$
 
-$$
-W_g=-205.8\,\text{J}
-$$
+**Nota:** El cambio $\Delta U_g$ no depende de donde pongas la referencia de altura (altura absoluta vs relativa).
 
-## 9- Aplicaciones reales
-- Calculo de energia en elevadores y gruas.
-- Analisis de movimientos en rampas.
-- Estimacion de energia en saltos y caidas.
+## 9- Aplicaciones reales y analisis tecnico
+- **Elevadores en rascacielos:** Levanta carga $m$ a altura $h=300\,\text{m}$. Energia potencial = $mgh$. Motor debe vencer gravedad y rozamiento.\n- **Represas hidroelectricas:** Agua almacena $U=Mgh$ donde $h$ es altura total. Turbinas convierten esa potencial en cinetica y luego en electricidad.\n- **Analisis de movimientos en rampas:** Bloque desliza por rampa de altura $h$. Sin rozamiento: pierde $mgh$ de potencial, gana $\frac{1}{2}mv^2$ de cinetica.\n- **Saltos y caidas:** Atleta salta desde altura $h_0$. Potencial inicial se convierte en cinetica. Velocidad al impacto $v=\sqrt{2gh_0}$ (sin aire).\n- **Satelites y orbitas:** Satelite en orbita tiene potencial newtoniano (negativo). Su energia total determina si queda ligado (orbita) o escapa (hiperbola).
 
 ## 10- Sintesis final
 La energia potencial gravitatoria permite leer de forma directa el costo energetico de cambiar de nivel y simplifica muchos problemas mecanicos.

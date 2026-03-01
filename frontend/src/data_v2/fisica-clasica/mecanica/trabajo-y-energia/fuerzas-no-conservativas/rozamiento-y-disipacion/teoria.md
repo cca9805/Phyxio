@@ -35,8 +35,17 @@ $$
 \Delta E_m=W_{nc}
 $$
 
-## 5- Dominio de validez
+## 5- Dominio de validez (analisis de modelos)
 Modelo $f_r=\mu N$ es aproximacion macroscopia clasica para contacto seco. Puede fallar en lubricacion, velocidades extremas o materiales no lineales.
+
+**Rozamiento cinetico vs estatico:**
+- Rozamiento **estatico** ($\mu_s$): antes de iniciar movimiento. Varia $0 \le f_s \le \mu_s N$.
+- Rozamiento **cinetico** ($\mu_k$): durante movimiento. Aproximadamente constante $f_k=\mu_k N$, donde usualmente $\mu_k < \mu_s$.
+
+**Modelos avanzados:**
+- Rozamiento viscoso: $f_v \propto v$ (aire, agua a baja velocidad).
+- Rozamiento turbulento: $f \propto v^2$ (altas velocidades).
+- Histeresis material: algunas deformaciones pierden energia (goma, asfalto).
 
 ## 6- Metodo de resolucion
 1- Dibuja fuerzas y sentido de movimiento.
@@ -66,10 +75,8 @@ $$
 W_r=-f_r d=-12.25\cdot8=-98\,\text{J}
 $$
 
-## 9- Aplicaciones reales
-- Frenos y distancia de parada.
-- Perdidas energeticas en maquinaria.
-- Estimacion de calor generado por friccion.
+## 9- Aplicaciones reales y analisis tecnico
+- **Frenos y distancia de parada:** Coche a 100 km/h debe frenar. Energia cinetica = $\frac{1}{2}mv^2$. Rozamiento de frenos disipa eso en calor. Mayor coeficiente $\mu$ = distancia mas corta (seguridad).\n- **Perdidas energeticas en maquinaria:** Motor de bomba: entrada mecanica $P_{in}$, salida util $P_{out}$, perdidas por friccion $P_{loss}=\mu NQ$ (donde $Q$ es flujo). Eficiencia $\\eta=P_{out}/P_{in}$.\n- **Estimacion de calor generado por friccion:** Energia disipada por rozamiento se transforma en calor. Temperatura local puede alcanzar valores altos. Ejemplo: pastillas de freno en bicicleta llanta $W_r = -\\mu N d$ se convierte en calor en el punto de contacto.\n- **Superficie de contacto y friccion:** Rozamiento depende principalm de $\\mu$ y $N$, no del area de contacto (segun modelo Coulomb). Pero en materiales reales, area muy pequena sufre desgaste extremo.\n- **Lubricacion:** Introducir lubricante reduce $\\mu$ dramaticamente (aceitado, grasa). Cambio de rozamiento cinetico seco a viscoso lubricado. Aplicacion: cojinetes, engranajes.
 
 ## 10- Sintesis final
 Rozamiento y disipacion son el paso del modelo ideal al modelo real. Dominar su signo y su papel en el balance evita muchos errores de interpretacion.

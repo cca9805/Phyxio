@@ -1,0 +1,79 @@
+*** Begin Patch
+*** Update File: ssh-setup.ps1
+@@
+-$repoPath = "C:\Users\USER\Desktop\Phyxio"
+-$sshDir   = "$env:USERPROFILE\.ssh"
+-$keyfile  = Join-Path $sshDir "id_ed25519"
+-$pubfile  = "$keyfile.pub"
++ $repoPath = "C:\Users\USER\Desktop\Phyxio"
++ $sshDir   = "$env:USERPROFILE\.ssh"
++ $keyfile  = Join-Path $sshDir "id_ed25519"
++ $pubfile  = "$keyfile.pub"
+@@
+-if (-not (Test-Path $keyfile)) {
+-    Write-Host "Generando clave SSH ed25519..."
+-    ssh-keygen -t ed25519 -C "cca9805@github" -f $keyfile -N ""
+-} else {
+-    Write-Host "La clave ya existe: $keyfile"
+-}
++if (-not (Test-Path $keyfile)) {
++    Write-Host "Generando clave SSH ed25519..."
++    ssh-keygen -t ed25519 -C "cca9805@github" -f $keyfile -N ""
++    if (-not (Test-Path $pubfile)) {
++        Write-Host "ERROR: no se creó el archivo público ($pubfile). Comprueba ssh-keygen."
++        exit 1
++    }
++} else {
++    Write-Host "La clave ya existe: $keyfile"
++}
+@@
+-Write-Host "Arrancando agente SSH y cargando clave..."
+-Start-Service ssh-agent -ErrorAction SilentlyContinue
+-ssh-add $keyfile
++Write-Host "Arrancando agente SSH y cargando clave..."
++try {
++    Start-Service ssh-agent -ErrorAction Stop
++} catch {
++    Write-Warning "No se pudo iniciar el servicio ssh-agent. Intentaré arrancarlo como proceso..."
++    try {
++        Start-Process ssh-agent -NoNewWindow -ErrorAction Stop
++    } catch {
++        Write-Warning "No se pudo arrancar ssh-agent; ssh-add podría fallar."
++    }
++}
++try {
++    ssh-add $keyfile -ErrorAction Stop
++} catch {
++    Write-Warning "ssh-add devolvió un error o no pudo conectarse al agente. Continuaré de todos modos."
++}
+@@
+-# 3. copiar la pública al portapapeles
+-Get-Content $pubfile | clip
+-Write-Host "Clave pública copiada al portapapeles. Ahora pégala en GitHub:"
++## 3. copiar la pública al portapapeles
++Write-Host "Copiando clave pública al portapapeles..."
++$pubKey = ""
++if (Test-Path $pubfile) { $pubKey = Get-Content $pubfile -Raw }
++if ($pubKey) {
++    if (Get-Command Set-Clipboard -ErrorAction SilentlyContinue) {
++        $pubKey | Set-Clipboard
++        Write-Host "Clave pública copiada al portapapeles via Set-Clipboard."
++    } else {
++        try {
++            $pubKey | clip
++            Write-Host "Clave pública copiada al portapapeles via clip.exe."
++        } catch {
++            Write-Warning "No se pudo copiar automáticamente; muestra la clave abajo para que la copies manualmente."
++            Write-Host ""
++            Write-Host $pubKey
++            Write-Host ""
++        }
++    }
++} else {
++    Write-Warning "No se encontró el archivo '$pubfile' para copiar."
++}
++Write-Host "Ahora pégala en GitHub:"
+@@
+-# Espera a que la añadas:
++# Espera a que la añadas:
+*** End Patch

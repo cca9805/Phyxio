@@ -37,12 +37,15 @@ $$
 ## 5- Dominio de validez
 Necesitas modelo de fuerza suficientemente definido en el intervalo. Si hay cambios por tramos, integra por segmentos y suma resultados.
 
-## 6- Metodo de resolucion
-1- Escribe explicitamente $F(x)$ y el intervalo.
-2- Decide via integral analitica o area grafica.
-3- Cuida el signo: area bajo el eje aporta trabajo negativo.
-4- Si hay tramos, separa por intervalos.
-5- Verifica unidades: N·m = J.
+## 6- Metodo de resolucion (extendido)
+1- Escribe explicitamente $F(x)$ y el intervalo $[x_1, x_2]$.
+2- Decide via integral analitica, metodo grafico, o aproximacion numerica.
+3- **Integral analitica:** Busca primitiva de $F(x)$ e integra con limites.
+4- **Metodo grafico:** Dibuja $F$ vs $x$. Area bajo la curva = trabajo (con signo).
+5- **Aproximacion numerica:** Divide intervalo en $n$ pasos, suma rectangulos (Riemann).
+6- Cuida el signo: area bajo eje = trabajo negativo.
+7- Si hay tramos con signos opuestos de $F$, integra por separado.
+8- Verifica unidades: N·m = J. Interpreta resultado en terminos de aceleracion/frenado.
 
 ## 7- Errores tipicos
 - Reemplazar fuerza variable por promedio sin justificar.

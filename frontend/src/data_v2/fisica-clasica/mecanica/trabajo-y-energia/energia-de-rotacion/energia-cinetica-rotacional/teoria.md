@@ -26,8 +26,17 @@ $$
 \Delta E_{rot}=\frac{1}{2}I(\omega_f^2-\omega_i^2)
 $$
 
-## 5- Dominio de validez
+## 5- Dominio de validez (analisis detallado)
 Modelo de cuerpo rigido con eje definido y $I$ conocido/constante respecto a ese eje. Si cambia el eje o la configuracion de masa, cambia $I$.
+
+**Momentos de inercia comunes:**
+- Vara delgada (eje en centro): $I=\frac{1}{12}mL^2$.
+- Disco solido (eje perpendicular por centro): $I=\frac{1}{2}mR^2$.
+- Esfera solida: $I=\frac{2}{5}mR^2$.
+- Cilindro hueco: $I=mR^2$.
+- Teorema de Steiner: si gira respecto a eje paralelo a distancia $d$: $I=I_c+md^2$ (donde $I_c$ es respecto al centro de masa).
+
+**Limite aplicable:** Formula vale para cuerpos rigidos. Si el cuerpo se deforma durante giro (resorte enrollado, liquido en recipiente), hay perdidas adicionales.
 
 ## 6- Metodo de resolucion
 1- Identifica eje de giro y momento de inercia correcto.
@@ -48,10 +57,8 @@ $$
 \Delta E_{rot}=\frac{1}{2}\cdot0.6\cdot(10^2-4^2)=0.3\cdot84=25.2\,\text{J}
 $$
 
-## 9- Aplicaciones reales
-- Volantes de inercia.
-- Sistemas de transmision y almacen energetico rotacional.
-- Maquinaria con ejes y rotores.
+## 9- Aplicaciones reales y analisis en sistemas
+- **Volantes de inercia:** Acumulan energia rotacional $\frac{1}{2}I\omega^2$. Auto con volante pesado (largo $I$) mantiene mejor velocidad estable, pero requiere torque mayor para cambiar revoluciones.\n- **Sistemas de transmision:** Poleas y ruedas dentadas con $I$ diferentes. Si polea motriz gira rapido/lento o tiene $I$ grande/pequeno, afecta energia de todo el sistema segun conservacion de momento angular.\n- **Maquinaria con ejes y rotores:** Bomba centrifuga gira a 3600 rpm. Energia rotacional se invierte en bombear liquido. Si se detiene bruscamente, esa energia se disipa (rozamiento, impacto).\n- **Conservacion de energia en rodadura pura:** Esfera que rueda sin deslizar tiene energia total $E=\frac{1}{2}mv^2+\frac{1}{2}I\omega^2$. Con $v=R\\omega$ (rodadura pura) e $I=\\frac{2}{5}mR^2$, resulta $E=\\frac{7}{10}mv^2 > \\frac{1}{2}mv^2$ (traslacion sola).\n- **Energia de frenado rotacional:** Disco en motor que gira a $\\omega$ almacena energia rotacional. Freno debe disipar toda esa energia (calor en almohadillas).
 
 ## 10- Sintesis final
 La energia cinetica rotacional permite cuantificar el costo energetico del giro y es imprescindible en cualquier analisis de dinamica rotacional.

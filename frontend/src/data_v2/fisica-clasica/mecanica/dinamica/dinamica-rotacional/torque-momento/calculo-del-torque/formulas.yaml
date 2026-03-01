@@ -1,0 +1,187 @@
+version: 1
+topic:
+  id: torque-momento-calculo
+  title: Calculo del torque
+
+variables:
+  - id: tau
+    symbol: \tau
+    nombre: torque
+    unidad_si: N*m
+    descripcion: Modulo del torque.
+  - id: F
+    symbol: F
+    nombre: fuerza
+    unidad_si: N
+    descripcion: Fuerza aplicada.
+  - id: d
+    symbol: d
+    nombre: brazo_perpendicular
+    unidad_si: m
+    descripcion: Brazo perpendicular.
+  - id: r
+    symbol: r
+    nombre: distancia_al_eje
+    unidad_si: m
+    descripcion: Distancia al eje.
+  - id: theta
+    symbol: \theta
+    nombre: angulo
+    unidad_si: rad
+    descripcion: Angulo entre r y F.
+  - id: rx
+    symbol: r_x
+    nombre: componente_x_de_r
+    unidad_si: m
+    descripcion: Componente x de r.
+  - id: ry
+    symbol: r_y
+    nombre: componente_y_de_r
+    unidad_si: m
+    descripcion: Componente y de r.
+  - id: Fx
+    symbol: F_x
+    nombre: componente_x_de_F
+    unidad_si: N
+    descripcion: Componente x de F.
+  - id: Fy
+    symbol: F_y
+    nombre: componente_y_de_F
+    unidad_si: N
+    descripcion: Componente y de F.
+  - id: tauz
+    symbol: \tau_z
+    nombre: torque_en_z
+    unidad_si: N*m
+    descripcion: Torque en eje z para 2D.
+
+formulas:
+  - id: torque_brazo
+    title: Torque por brazo perpendicular
+    equation: tau = F*d
+    latex: \tau = F\,d
+    rearrangements:
+      - target: tau
+        equation: tau = F*d
+        latex: \tau = F\,d
+      - target: F
+        equation: F = tau/d
+        latex: F = \frac{\tau}{d}
+      - target: d
+        equation: d = tau/F
+        latex: d = \frac{\tau}{F}
+    constraints:
+      - expr: F >= 0
+        message: Usa F no negativa en modulo.
+      - expr: d >= 0
+        message: El brazo perpendicular no puede ser negativo.
+      - expr: d != 0
+        message: Si despejas F, d no puede ser 0.
+      - expr: F != 0
+        message: Si despejas d, F no puede ser 0.
+    notes:
+      - Formula mas robusta cuando d es dato directo.
+    status: calculable
+
+  - id: brazo_por_angulo
+    title: Brazo a partir de r y theta
+    equation: d = r*sin(theta)
+    latex: d = r\,\sin(\theta)
+    rearrangements:
+      - target: d
+        equation: d = r*sin(theta)
+        latex: d = r\,\sin(\theta)
+      - target: r
+        equation: r = d/sin(theta)
+        latex: r = \frac{d}{\sin(\theta)}
+      - target: theta
+        equation: theta = asin(d/r)
+        latex: \theta = \arcsin\!\left(\frac{d}{r}\right)
+    constraints:
+      - expr: r > 0
+        message: r debe ser positiva para despejar theta.
+      - expr: abs(d/r) <= 1
+        message: Para arcsin, se requiere |d/r| <= 1.
+    notes:
+      - Sirve para construir el brazo cuando no esta dado.
+    status: calculable
+
+  - id: torque_por_angulo
+    title: Torque por forma angular
+    equation: tau = r*F*sin(theta)
+    latex: \tau = r\,F\,\sin(\theta)
+    rearrangements:
+      - target: tau
+        equation: tau = r*F*sin(theta)
+        latex: \tau = r\,F\,\sin(\theta)
+      - target: r
+        equation: r = tau/(F*sin(theta))
+        latex: r = \frac{\tau}{F\,\sin(\theta)}
+      - target: F
+        equation: F = tau/(r*sin(theta))
+        latex: F = \frac{\tau}{r\,\sin(\theta)}
+    constraints:
+      - expr: r >= 0
+        message: r debe ser no negativa en modulo.
+      - expr: F >= 0
+        message: F debe ser no negativa en modulo.
+      - expr: sin(theta) != 0
+        message: Si despejas r o F, sin(theta) no puede ser 0.
+    notes:
+      - Equivalente a tau = F*d con d = r*sin(theta).
+    status: calculable
+
+  - id: torque_componentes_2d
+    title: Torque en 2D por componentes
+    equation: tauz = rx*Fy - ry*Fx
+    latex: \tau_z = r_xF_y - r_yF_x
+    rearrangements:
+      - target: tauz
+        equation: tauz = rx*Fy - ry*Fx
+        latex: \tau_z = r_xF_y - r_yF_x
+      - target: rx
+        equation: rx = (tauz + ry*Fx)/Fy
+        latex: r_x = \frac{\tau_z + r_yF_x}{F_y}
+      - target: ry
+        equation: ry = (rx*Fy - tauz)/Fx
+        latex: r_y = \frac{r_xF_y - \tau_z}{F_x}
+      - target: Fx
+        equation: Fx = (rx*Fy - tauz)/ry
+        latex: F_x = \frac{r_xF_y - \tau_z}{r_y}
+      - target: Fy
+        equation: Fy = (tauz + ry*Fx)/rx
+        latex: F_y = \frac{\tau_z + r_yF_x}{r_x}
+    constraints:
+      - expr: Fy != 0
+        message: Si despejas rx, Fy no puede ser 0.
+      - expr: Fx != 0
+        message: Si despejas ry, Fx no puede ser 0.
+      - expr: ry != 0
+        message: Si despejas Fx, ry no puede ser 0.
+      - expr: rx != 0
+        message: Si despejas Fy, rx no puede ser 0.
+    notes:
+      - Muy util cuando tienes componentes y quieres evitar trigonometria.
+    status: calculable
+
+  - id: torque_neto
+    title: Sumatoria de torques
+    equation: tau = tauz
+    latex: \tau_{net} = \sum\tau_i
+    status: conceptual
+    notes:
+      - Relacion conceptual para recordar que el efecto final es suma algebraica de torques.
+      - No es calculable por si sola sin modelo de cada contribucion.
+
+ui:
+  default_formula: torque_brazo
+  groups:
+    - title: Calculables
+      items:
+        - torque_brazo
+        - brazo_por_angulo
+        - torque_por_angulo
+        - torque_componentes_2d
+    - title: Conceptuales
+      items:
+        - torque_neto

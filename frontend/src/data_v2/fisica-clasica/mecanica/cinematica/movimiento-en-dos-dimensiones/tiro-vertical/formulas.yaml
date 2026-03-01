@@ -1,0 +1,230 @@
+version: 1
+topic:
+  id: tiro-vertical
+  title: Tiro vertical
+variables:
+  - id: 'y'
+    symbol: 'y'
+    nombre: posición vertical
+    unidad_si: m
+    descripcion: Posición vertical.
+  - id: y0
+    symbol: y_0
+    nombre: posición inicial
+    unidad_si: m
+    descripcion: Posición inicial.
+  - id: v
+    symbol: v
+    nombre: velocidad vertical
+    unidad_si: m/s
+    descripcion: Velocidad vertical.
+  - id: v0
+    symbol: v_0
+    nombre: velocidad inicial
+    unidad_si: m/s
+    descripcion: Velocidad inicial.
+  - id: a
+    symbol: a
+    nombre: aceleración
+    unidad_si: m/s^2
+    descripcion: Aceleración.
+  - id: g
+    symbol: g
+    nombre: gravedad
+    unidad_si: m/s^2
+    descripcion: Gravedad.
+  - id: t
+    symbol: t
+    nombre: tiempo
+    unidad_si: s
+    descripcion: Tiempo.
+  - id: dy
+    symbol: \Delta y
+    nombre: desplazamiento vertical
+    unidad_si: m
+    descripcion: Desplazamiento vertical.
+  - id: tMax
+    symbol: t_{\max}
+    nombre: tiempo hasta altura máxima
+    unidad_si: s
+    descripcion: Tiempo hasta altura máxima.
+  - id: yMax
+    symbol: y_{\max}
+    nombre: altura máxima
+    unidad_si: m
+    descripcion: Altura máxima.
+formulas:
+  - id: tiro_vertical_aceleracion
+    title: Aceleración en tiro vertical
+    equation: a = -g
+    latex: a = -g
+    rearrangements:
+      - target: a
+        equation: a = -g
+        latex: a = -g
+      - target: g
+        equation: g = -a
+        latex: g = -a
+    constraints:
+      - expr: g > 0
+        message: g debe ser positiva.
+    status: calculable
+  - id: tiro_vertical_velocidad_tiempo
+    title: Velocidad en función del tiempo
+    equation: v = v0 - g*t
+    latex: v = v_0 - g t
+    rearrangements:
+      - target: v
+        equation: v = v0 - g*t
+        latex: v = v_0 - g t
+      - target: v0
+        equation: v0 = v + g*t
+        latex: v_0 = v + g t
+      - target: g
+        equation: g = (v0 - v)/t
+        latex: g = \frac{v_0 - v}{t}
+      - target: t
+        equation: t = (v0 - v)/g
+        latex: t = \frac{v_0 - v}{g}
+    constraints:
+      - expr: g != 0
+        message: g no puede ser 0.
+    status: calculable
+  - id: tiro_vertical_posicion_tiempo
+    title: Posición en función del tiempo
+    equation: y = y0 + v0*t - 0.5*g*t^2
+    latex: y = y_0 + v_0 t - \frac{1}{2} g t^2
+    rearrangements:
+      - target: 'y'
+        equation: y = y0 + v0*t - 0.5*g*t^2
+        latex: y = y_0 + v_0 t - \frac{1}{2} g t^2
+      - target: y0
+        equation: y0 = y - v0*t + 0.5*g*t^2
+        latex: y_0 = y - v_0 t + \frac{1}{2} g t^2
+      - target: v0
+        equation: v0 = (y - y0 + 0.5*g*t^2)/t
+        latex: v_0 = \frac{y - y_0 + \frac{1}{2} g t^2}{t}
+      - target: g
+        equation: g = 2*(y0 + v0*t - y)/(t^2)
+        latex: g = \frac{2\,(y_0 + v_0 t - y)}{t^2}
+    constraints:
+      - expr: t != 0
+        message: t no puede ser 0 si despejas v0.
+      - expr: t^2 != 0
+        message: t no puede ser 0 si despejas g.
+    status: calculable
+  - id: tiro_vertical_velocidad_posicion
+    title: Relación velocidad-posicion (dos ramas)
+    equation: v^2 = v0^2 - 2*g*(y - y0)
+    latex: v^2 = v_0^2 - 2 g (y - y_0)
+    rearrangements:
+      - target: v
+        equation: v = sqrt(v0^2 - 2*g*(y - y0))
+        latex: v = +\sqrt{v_0^2 - 2 g (y - y_0)}
+      - target: v
+        equation: v = -sqrt(v0^2 - 2*g*(y - y0))
+        latex: v = -\sqrt{v_0^2 - 2 g (y - y_0)}
+      - target: 'y'
+        equation: y = y0 + (v0^2 - v^2)/(2*g)
+        latex: y = y_0 + \frac{v_0^2 - v^2}{2 g}
+      - target: y0
+        equation: y0 = y - (v0^2 - v^2)/(2*g)
+        latex: y_0 = y - \frac{v_0^2 - v^2}{2 g}
+      - target: g
+        equation: g = (v0^2 - v^2)/(2*(y - y0))
+        latex: g = \frac{v_0^2 - v^2}{2 (y - y_0)}
+    constraints:
+      - expr: g != 0
+        message: g no puede ser 0.
+    status: calculable
+  - id: tv_dy_def
+    title: Desplazamiento vertical
+    equation: dy = y - y0
+    latex: \Delta y = y - y_0
+    rearrangements:
+      - target: dy
+        equation: dy = y - y0
+        latex: \Delta y = y - y_0
+      - target: 'y'
+        equation: y = dy + y0
+        latex: y = \Delta y + y_0
+      - target: y0
+        equation: y0 = y - dy
+        latex: y_0 = y - \Delta y
+    status: calculable
+  - id: tv_tmax
+    title: Tiempo hasta la altura máxima
+    equation: tMax = v0/g
+    latex: t_{\max} = \frac{v_0}{g}
+    rearrangements:
+      - target: tMax
+        equation: tMax = v0/g
+        latex: t_{\max} = \frac{v_0}{g}
+      - target: v0
+        equation: v0 = g*tMax
+        latex: v_0 = g\,t_{\max}
+    constraints:
+      - expr: g > 0
+        message: g debe ser positiva.
+    status: calculable
+  - id: tv_ymax
+    title: Altura máxima
+    equation: yMax = y0 + v0^2/(2*g)
+    latex: y_{\max} = y_0 + \frac{v_0^2}{2g}
+    rearrangements:
+      - target: yMax
+        equation: yMax = y0 + v0^2/(2*g)
+        latex: y_{\max} = y_0 + \frac{v_0^2}{2g}
+      - target: v0
+        equation: v0 = sqrt(2*g*(yMax - y0))
+        latex: v_0 = \sqrt{2g\,(y_{\max}-y_0)}
+    constraints:
+      - expr: g > 0
+        message: g debe ser positiva.
+      - expr: yMax >= y0
+        message: yMax debe ser mayor o igual que y0.
+    status: calculable
+  - id: tv_v_y
+    title: Velocidad en función de la altura
+    equation: v^2 = v0^2 - 2*g*(y - y0)
+    latex: v^2 = v_0^2 - 2g\,(y - y_0)
+    rearrangements:
+      - target: v
+        equation: v = sqrt(v0^2 - 2*g*(y - y0))
+        latex: v = \sqrt{v_0^2 - 2g\,(y - y_0)}
+      - target: 'y'
+        equation: y = y0 + (v0^2 - v^2)/(2*g)
+        latex: y = y_0 + \frac{v_0^2 - v^2}{2g}
+    constraints:
+      - expr: g > 0
+        message: g debe ser positiva.
+    status: calculable
+  - id: tiro_vertical_tiempo_altura_maxima
+    title: Tiempo hasta la altura máxima (modo lectura)
+    latex: t_{\max} = \frac{v_0}{g}
+    status: read_only
+    why_not:
+      - Depende del caso (requiere v0>0 y elección de eje).
+    notes:
+      - 'Con +y hacia arriba: válido si v0 > 0.'
+  - id: tiro_vertical_altura_maxima
+    title: Altura máxima (modo lectura)
+    latex: y_{\max} = y_0 + \frac{v_0^2}{2g}
+    status: read_only
+    why_not:
+      - Fórmula directa de teoría (derivada imponiendo v=0).
+    notes:
+      - Requiere v0>0.
+ui:
+  default_formula: tiro_vertical_posicion_tiempo
+  groups:
+    - title: Calculables
+      items:
+        - tiro_vertical_aceleracion
+        - tiro_vertical_velocidad_tiempo
+        - tiro_vertical_posicion_tiempo
+        - tiro_vertical_velocidad_posicion
+        - tv_dy_def
+        - tv_ymax
+        - tv_tmax
+        - tv_v_y

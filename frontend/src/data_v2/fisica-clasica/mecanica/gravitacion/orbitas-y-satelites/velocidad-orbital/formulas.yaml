@@ -1,0 +1,152 @@
+﻿version: 1
+topic:
+  id: velocidad-orbital
+  title: Velocidad orbital
+variables:
+  - id: G
+    symbol: G
+    nombre: constante de gravitación
+    unidad_si: N*m^2/kg^2
+    descripcion: Constante universal de gravitación.
+  - id: M
+    symbol: M
+    nombre: masa central
+    unidad_si: kg
+    descripcion: Masa del cuerpo central.
+  - id: r
+    symbol: r
+    nombre: radio orbital
+    unidad_si: m
+    descripcion: Distancia al centro en el punto considerado.
+  - id: a
+    symbol: a
+    nombre: semieje mayor
+    unidad_si: m
+    descripcion: Semieje mayor orbital.
+  - id: vc
+    symbol: v_c
+    nombre: velocidad circular
+    unidad_si: m/s
+    descripcion: Velocidad para órbita circular.
+  - id: v
+    symbol: v
+    nombre: velocidad instantanea
+    unidad_si: m/s
+    descripcion: Velocidad orbital instantánea.
+  - id: vesc
+    symbol: v_{esc}
+    nombre: velocidad de escape
+    unidad_si: m/s
+    descripcion: Velocidad de escape local.
+  - id: T
+    symbol: T
+    nombre: periodo orbital
+    unidad_si: s
+    descripcion: Período orbital.
+  - id: R
+    symbol: R
+    nombre: radio central
+    unidad_si: m
+    descripcion: Radio del cuerpo central.
+  - id: h
+    symbol: h
+    nombre: altura
+    unidad_si: m
+    descripcion: Altura sobre superficie.
+formulas:
+  - id: velocidad_circular
+    title: Velocidad orbital circular
+    equation: vc = sqrt(G*M/r)
+    latex: v_c = \sqrt{\frac{GM}{r}}
+    rearrangements:
+      - target: vc
+        equation: vc = sqrt(G*M/r)
+        latex: v_c = \sqrt{\frac{GM}{r}}
+      - target: r
+        equation: r = G*M/vc^2
+        latex: r = \frac{GM}{v_c^2}
+      - target: M
+        equation: M = vc^2*r/G
+        latex: M = \frac{v_c^2r}{G}
+    constraints:
+      - expr: r > 0
+        message: r debe ser mayor que 0.
+      - expr: M > 0
+        message: M debe ser mayor que 0.
+
+  - id: vis_viva
+    title: Ecuación vis-viva
+    equation: v = sqrt(G*M*(2/r - 1/a))
+    latex: v = \sqrt{GM\left(\frac{2}{r}-\frac{1}{a}\right)}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(G*M*(2/r - 1/a))
+        latex: v = \sqrt{GM\left(\frac{2}{r}-\frac{1}{a}\right)}
+      - target: a
+        equation: a = 1/(2/r - v^2/(G*M))
+        latex: a = \frac{1}{\frac{2}{r}-\frac{v^2}{GM}}
+    constraints:
+      - expr: r > 0
+        message: r debe ser mayor que 0.
+      - expr: a > 0
+        message: a debe ser mayor que 0 para órbitas ligadas.
+
+  - id: velocidad_escape
+    title: Velocidad de escape
+    equation: vesc = sqrt(2*G*M/r)
+    latex: v_{esc} = \sqrt{\frac{2GM}{r}}
+    rearrangements:
+      - target: vesc
+        equation: vesc = sqrt(2*G*M/r)
+        latex: v_{esc} = \sqrt{\frac{2GM}{r}}
+      - target: r
+        equation: r = 2*G*M/vesc^2
+        latex: r = \frac{2GM}{v_{esc}^2}
+
+  - id: periodo_circular
+    title: Período orbital circular
+    equation: T = 2*pi*r/vc
+    latex: T = \frac{2\pi r}{v_c}
+    rearrangements:
+      - target: T
+        equation: T = 2*pi*r/vc
+        latex: T = \frac{2\pi r}{v_c}
+      - target: vc
+        equation: vc = 2*pi*r/T
+        latex: v_c = \frac{2\pi r}{T}
+    constraints:
+      - expr: vc > 0
+        message: vc debe ser mayor que 0.
+
+  - id: radio_desde_altura
+    title: Conversión altura-radio
+    equation: r = R + h
+    latex: r = R + h
+    rearrangements:
+      - target: r
+        equation: r = R + h
+        latex: r = R + h
+      - target: h
+        equation: h = r - R
+        latex: h = r - R
+
+  - id: relacion_escape_circular_conceptual
+    title: Relación entre velocidad de escape y circular (conceptual)
+    equation: vesc = sqrt(2)*vc
+    latex: v_{esc}=\sqrt{2}\,v_c
+    calculable: false
+    motivo_no_calculable: Relación derivada válida solo al comparar en el mismo radio y masa central.
+
+ui:
+  default_formula: velocidad_circular
+  groups:
+    - title: Formulas calculables
+      items:
+        - velocidad_circular
+        - vis_viva
+        - velocidad_escape
+        - periodo_circular
+        - radio_desde_altura
+    - title: Formulas conceptuales
+      items:
+        - relacion_escape_circular_conceptual

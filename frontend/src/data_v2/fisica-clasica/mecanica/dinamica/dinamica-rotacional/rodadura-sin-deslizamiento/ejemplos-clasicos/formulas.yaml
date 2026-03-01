@@ -1,0 +1,72 @@
+version: 1
+topic:
+  id: ejemplos-clasicos
+  title: Ejemplos Clasicos
+variables:
+  - id: v
+    symbol: v
+    name: velocidad_lineal
+    si_unit: m/s
+  - id: omega
+    symbol: \omega
+    name: velocidad_angular
+    si_unit: rad/s
+  - id: R
+    symbol: R
+    name: radio
+    si_unit: m
+  - id: delta
+    symbol: \Delta
+    name: desviacion_rodadura
+    si_unit: m/s
+  - id: n
+    symbol: n
+    name: velocidad_rpm
+    si_unit: rpm
+formulas:
+  - id: condicion_rodadura
+    title: Rodadura pura
+    equation: v = omega*R
+    latex: v=\omega R
+    rearrangements:
+      - target: v
+        equation: v = omega*R
+        latex: v=\omega R
+      - target: omega
+        equation: omega = v/R
+        latex: \omega=\frac{v}{R}
+      - target: R
+        equation: R = v/omega
+        latex: R=\frac{v}{\omega}
+
+  - id: consistencia
+    title: Chequeo de consistencia
+    equation: delta = v - omega*R
+    latex: \Delta=v-\omega R
+    rearrangements:
+      - target: delta
+        equation: delta = v - omega*R
+        latex: \Delta=v-\omega R
+
+  - id: rpm_a_rad
+    title: Conversion de rpm a rad/s
+    equation: omega = 2*pi*n/60
+    latex: \omega=\frac{2\pi n}{60}
+    rearrangements:
+      - target: omega
+        equation: omega = 2*pi*n/60
+        latex: \omega=\frac{2\pi n}{60}
+      - target: n
+        equation: n = 60*omega/(2*pi)
+        latex: n=\frac{60\omega}{2\pi}
+
+ui:
+  default_formula: condicion_rodadura
+  groups:
+    - title: Relaciones de resolucion (calculables)
+      items:
+        - condicion_rodadura
+        - rpm_a_rad
+    - title: Verificacion de modelo (calculable)
+      items:
+        - consistencia

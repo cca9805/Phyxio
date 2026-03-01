@@ -1,0 +1,104 @@
+version: 1
+topic:
+  id: definicion-momento-de-inercia
+  title: Definicion De Momento De Inercia
+variables:
+  - id: I
+    symbol: I
+    name: momento_de_inercia
+    si_unit: kg*m^2
+  - id: m
+    symbol: m
+    name: masa
+    si_unit: kg
+  - id: r
+    symbol: r
+    name: distancia_al_eje
+    si_unit: m
+  - id: tau
+    symbol: \tau
+    name: torque_neto
+    si_unit: N*m
+  - id: alpha
+    symbol: \alpha
+    name: aceleracion_angular
+    si_unit: rad/s^2
+  - id: omega
+    symbol: \omega
+    name: velocidad_angular
+    si_unit: rad/s
+  - id: Krot
+    symbol: K_{rot}
+    name: energia_cinetica_rotacional
+    si_unit: J
+formulas:
+  - id: puntual
+    title: Definicion para masa puntual
+    equation: I = m*r^2
+    latex: I = mr^2
+    rearrangements:
+      - target: I
+        equation: I = m*r^2
+        latex: I = mr^2
+      - target: m
+        equation: m = I/r^2
+        latex: m = \frac{I}{r^2}
+      - target: r
+        equation: r = sqrt(I/m)
+        latex: r = \sqrt{\frac{I}{m}}
+
+  - id: suma_discreta
+    title: Definicion discreta general
+    equation: I = I
+    latex: I = \sum_i m_i r_i^2
+    calculable: false
+    motivo_no_calculable: Requiere una lista indexada de masas y distancias.
+
+  - id: integral_continua
+    title: Definicion continua
+    equation: I = I
+    latex: I = \int r^2\,dm
+    calculable: false
+    motivo_no_calculable: Requiere definir geometria y resolver una integral.
+
+  - id: segunda_ley_rotacional
+    title: Segunda ley rotacional
+    equation: tau = I*alpha
+    latex: \tau = I\alpha
+    rearrangements:
+      - target: tau
+        equation: tau = I*alpha
+        latex: \tau = I\alpha
+      - target: alpha
+        equation: alpha = tau/I
+        latex: \alpha = \frac{\tau}{I}
+      - target: I
+        equation: I = tau/alpha
+        latex: I = \frac{\tau}{\alpha}
+
+  - id: energia_rotacional
+    title: Energia cinetica rotacional
+    equation: Krot = 0.5*I*omega^2
+    latex: K_{rot}=\frac{1}{2}I\omega^2
+    rearrangements:
+      - target: Krot
+        equation: Krot = 0.5*I*omega^2
+        latex: K_{rot}=\frac{1}{2}I\omega^2
+      - target: omega
+        equation: omega = sqrt((2*Krot)/I)
+        latex: \omega=\sqrt{\frac{2K_{rot}}{I}}
+      - target: I
+        equation: I = 2*Krot/omega^2
+        latex: I=\frac{2K_{rot}}{\omega^2}
+ui:
+  default_formula: segunda_ley_rotacional
+  groups:
+    - title: Relaciones operativas (calculables)
+      items:
+        - puntual
+        - segunda_ley_rotacional
+        - energia_rotacional
+    - title: Definiciones generales (no calculables)
+      items:
+        - suma_discreta
+        - integral_continua

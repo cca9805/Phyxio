@@ -1,0 +1,109 @@
+version: 1
+topic:
+  id: descomposicion-vectorial
+  title: Descomposicion vectorial
+variables:
+- id: Fm
+  symbol: F
+  nombre: modulo de la fuerza
+  unidad_si: N
+  descripcion: Modulo de la fuerza.
+- id: theta
+  symbol: \theta
+  nombre: angulo
+  unidad_si: rad
+  descripcion: Angulo.
+- id: Fx
+  symbol: F_x
+  nombre: componente x
+  unidad_si: N
+  descripcion: Componente x.
+- id: Fy
+  symbol: F_y
+  nombre: componente y
+  unidad_si: N
+  descripcion: Componente y.
+- id: Fpar
+  symbol: F_{\parallel}
+  nombre: componente paralela
+  unidad_si: N
+  descripcion: Componente paralela.
+- id: Fperp
+  symbol: F_{\perp}
+  nombre: componente perpendicular
+  unidad_si: N
+  descripcion: Componente perpendicular.
+formulas:
+- id: comp_cartesianas
+  title: Componentes cartesianas (angulo desde x)
+  equation: Fx = Fm*cos(theta); Fy = Fm*sin(theta)
+  latex: F_x = F\cos\theta,\quad F_y = F\sin\theta
+  status: descriptive
+  motivo_no_calculable: 'Son dos ecuaciones relacionadas; la calculadora las trata por separado.
+
+    '
+- id: comp_cartesianas_fx
+  title: Componente x
+  equation: Fx = Fm*cos(theta)
+  latex: F_x = F\cos\theta
+  rearrangements:
+  - target: Fx
+    equation: Fx = Fm*cos(theta)
+    latex: F_x = F\cos\theta
+  - target: Fm
+    equation: Fm = Fx/cos(theta)
+    latex: F = \frac{F_x}{\cos\theta}
+    constraints:
+    - expr: cos(theta) != 0
+      message: cos(theta) no puede ser 0.
+  - target: theta
+    equation: theta = acos(Fx/Fm)
+    latex: \theta = \arccos\left(\frac{F_x}{F}\right)
+    constraints:
+    - expr: Fx/Fm <= 1
+      message: Fx/F debe estar en [-1,1].
+    - expr: Fx/Fm >= -1
+      message: Fx/F debe estar en [-1,1].
+  status: calculable
+- id: comp_cartesianas_fy
+  title: Componente y
+  equation: Fy = Fm*sin(theta)
+  latex: F_y = F\sin\theta
+  rearrangements:
+  - target: Fy
+    equation: Fy = Fm*sin(theta)
+    latex: F_y = F\sin\theta
+  - target: Fm
+    equation: Fm = Fy/sin(theta)
+    latex: F = \frac{F_y}{\sin\theta}
+    constraints:
+    - expr: sin(theta) != 0
+      message: sin(theta) no puede ser 0.
+  - target: theta
+    equation: theta = asin(Fy/Fm)
+    latex: \theta = \arcsin\left(\frac{F_y}{F}\right)
+    constraints:
+    - expr: Fy/Fm <= 1
+      message: Fy/F debe estar en [-1,1].
+    - expr: Fy/Fm >= -1
+      message: Fy/F debe estar en [-1,1].
+  status: calculable
+- id: comp_plano_inclinado
+  title: Proyeccion en plano inclinado (peso)
+  equation: Ppar = m*g*sin(theta); Pperp = m*g*cos(theta)
+  latex: P_{\parallel} = mg\sin\theta,\quad P_{\perp} = mg\cos\theta
+  status: descriptive
+  motivo_no_calculable: 'Depende del convenio de ejes (signo) y del problema concreto.
+
+    '
+ui:
+  default_formula: comp_cartesianas_fx
+  groups:
+  - title: Componentes (cartesianas)
+    items:
+    - comp_cartesianas_fx
+    - comp_cartesianas_fy
+    - comp_cartesianas
+  - title: Ejes inclinados
+    items:
+    - comp_plano_inclinado

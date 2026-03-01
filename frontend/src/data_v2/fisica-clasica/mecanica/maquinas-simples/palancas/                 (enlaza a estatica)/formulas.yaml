@@ -1,0 +1,166 @@
+version: 1
+topic:
+  id: palancas
+  title: Palancas
+variables:
+  - id: P
+    symbol: P
+    nombre: fuerza aplicada
+    unidad_si: N
+    descripcion: Fuerza que ejerce el operador sobre la palanca.
+  - id: R
+    symbol: R
+    nombre: fuerza resistente
+    unidad_si: N
+    descripcion: Carga o resistencia que se quiere vencer.
+  - id: bP
+    symbol: b_P
+    nombre: brazo de potencia
+    unidad_si: m
+    descripcion: Distancia perpendicular de P al fulcro.
+  - id: bR
+    symbol: b_R
+    nombre: brazo de resistencia
+    unidad_si: m
+    descripcion: Distancia perpendicular de R al fulcro.
+  - id: tauP
+    symbol: \tau_P
+    nombre: momento de potencia
+    unidad_si: N*m
+    descripcion: Momento generado por la fuerza aplicada.
+  - id: tauR
+    symbol: \tau_R
+    nombre: momento de resistencia
+    unidad_si: N*m
+    descripcion: Momento asociado a la carga.
+  - id: VM
+    symbol: VM
+    nombre: ventaja mecanica ideal
+    unidad_si: '1'
+    descripcion: Cociente entre carga y fuerza aplicada en modelo ideal.
+  - id: eta
+    symbol: \eta
+    nombre: rendimiento
+    unidad_si: '1'
+    descripcion: Fraccion de eficiencia real del sistema.
+  - id: VMreal
+    symbol: VM_{real}
+    nombre: ventaja mecanica real
+    unidad_si: '1'
+    descripcion: Ventaja mecanica efectiva en presencia de perdidas.
+formulas:
+  - id: equilibrio_momentos
+    title: Equilibrio de momentos
+    equation: P*bP = R*bR
+    latex: P\,b_P = R\,b_R
+    rearrangements:
+      - target: P
+        equation: P = (R*bR)/bP
+        latex: P=\frac{R\,b_R}{b_P}
+      - target: R
+        equation: R = (P*bP)/bR
+        latex: R=\frac{P\,b_P}{b_R}
+      - target: bP
+        equation: bP = (R*bR)/P
+        latex: b_P=\frac{R\,b_R}{P}
+      - target: bR
+        equation: bR = (P*bP)/R
+        latex: b_R=\frac{P\,b_P}{R}
+    constraints:
+      - expr: bP > 0
+        message: bP debe ser mayor que 0.
+      - expr: bR > 0
+        message: bR debe ser mayor que 0.
+  - id: momentos_individuales_potencia
+    title: Momento de la potencia
+    equation: tauP = P*bP
+    latex: \tau_P=P\,b_P
+    rearrangements:
+      - target: tauP
+        equation: tauP = P*bP
+        latex: \tau_P=P\,b_P
+      - target: P
+        equation: P = tauP/bP
+        latex: P=\frac{\tau_P}{b_P}
+      - target: bP
+        equation: bP = tauP/P
+        latex: b_P=\frac{\tau_P}{P}
+    constraints:
+      - expr: bP > 0
+        message: bP debe ser mayor que 0.
+  - id: momentos_individuales_resistencia
+    title: Momento de la resistencia
+    equation: tauR = R*bR
+    latex: \tau_R=R\,b_R
+    rearrangements:
+      - target: tauR
+        equation: tauR = R*bR
+        latex: \tau_R=R\,b_R
+      - target: R
+        equation: R = tauR/bR
+        latex: R=\frac{\tau_R}{b_R}
+      - target: bR
+        equation: bR = tauR/R
+        latex: b_R=\frac{\tau_R}{R}
+    constraints:
+      - expr: bR > 0
+        message: bR debe ser mayor que 0.
+  - id: ventaja_mecanica_ideal
+    title: Ventaja mecanica ideal
+    equation: VM = R/P
+    latex: VM=\frac{R}{P}
+    rearrangements:
+      - target: VM
+        equation: VM = R/P
+        latex: VM=\frac{R}{P}
+      - target: R
+        equation: R = VM*P
+        latex: R=VM\,P
+      - target: P
+        equation: P = R/VM
+        latex: P=\frac{R}{VM}
+    constraints:
+      - expr: P > 0
+        message: P debe ser mayor que 0.
+      - expr: VM > 0
+        message: VM debe ser mayor que 0.
+  - id: ventaja_mecanica_real
+    title: Ventaja mecanica real
+    equation: VMreal = eta*VM
+    latex: VM_{real}=\eta\,VM
+    rearrangements:
+      - target: VMreal
+        equation: VMreal = eta*VM
+        latex: VM_{real}=\eta\,VM
+      - target: eta
+        equation: eta = VMreal/VM
+        latex: \eta=\frac{VM_{real}}{VM}
+      - target: VM
+        equation: VM = VMreal/eta
+        latex: VM=\frac{VM_{real}}{\eta}
+    constraints:
+      - expr: eta > 0
+        message: eta debe ser mayor que 0.
+      - expr: eta <= 1
+        message: eta debe ser menor o igual que 1.
+  - id: trabajo_ideal_palanca
+    title: Trabajo ideal (conceptual)
+    equation: P*sP = R*sR
+    latex: P\,s_P=R\,s_R
+    calculable: false
+    motivo_no_calculable: Formula conceptual de energia. Es calculable solo si se incluyen desplazamientos sP y sR en el modelo del problema.
+ui:
+  default_formula: equilibrio_momentos
+  groups:
+    - title: Equilibrio y calculo base
+      items:
+        - equilibrio_momentos
+        - momentos_individuales_potencia
+        - momentos_individuales_resistencia
+    - title: Rendimiento y ventaja
+      items:
+        - ventaja_mecanica_ideal
+        - ventaja_mecanica_real
+    - title: Relacion conceptual
+      items:
+        - trabajo_ideal_palanca

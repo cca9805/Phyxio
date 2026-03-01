@@ -1,0 +1,194 @@
+﻿version: 1
+topic:
+  id: analisis-completo
+  title: Analisis Completo De Sistemas Con Rozamiento
+variables:
+  - id: m
+    symbol: m
+    name: masa
+    si_unit: kg
+  - id: g
+    symbol: g
+    name: gravedad
+    si_unit: m/s^2
+  - id: N
+    symbol: N
+    name: normal
+    si_unit: N
+  - id: F
+    symbol: F
+    name: fuerza_aplicada
+    si_unit: N
+  - id: f_s
+    symbol: f_s
+    name: rozamiento_estatico
+    si_unit: N
+  - id: f_s_max
+    symbol: f_s_max
+    name: maximo_rozamiento_estatico
+    si_unit: N
+  - id: f_k
+    symbol: f_k
+    name: rozamiento_cinetico
+    si_unit: N
+  - id: mu_s
+    symbol: \mu_s
+    name: coeficiente_rozamiento_estatico
+    si_unit: "1"
+  - id: mu_k
+    symbol: \mu_k
+    name: coeficiente_rozamiento_cinetico
+    si_unit: "1"
+  - id: a
+    symbol: a
+    name: aceleracion
+    si_unit: m/s^2
+  - id: theta
+    symbol: \theta
+    name: angulo_plano
+    si_unit: rad
+  - id: F_min
+    symbol: F_min
+    name: fuerza_minima_arranque
+    si_unit: N
+  - id: sumF
+    symbol: \sum F
+    name: suma_fuerzas_eje
+    si_unit: N
+  - id: delta
+    symbol: \Delta
+    name: residuo_newton
+    si_unit: N
+formulas:
+  - id: normal_horizontal
+    title: Normal en superficie horizontal
+    equation: N = m*g
+    latex: N=mg
+    rearrangements:
+      - target: N
+        equation: N = m*g
+        latex: N=mg
+      - target: m
+        equation: m = N/g
+        latex: m=\frac{N}{g}
+
+  - id: normal_plano_inclinado
+    title: Normal en plano inclinado
+    equation: N = m*g*cos(theta)
+    latex: N=mg\cos\theta
+    rearrangements:
+      - target: N
+        equation: N = m*g*cos(theta)
+        latex: N=mg\cos\theta
+      - target: m
+        equation: m = N/(g*cos(theta))
+        latex: m=\frac{N}{g\cos\theta}
+
+  - id: rozamiento_cinetico
+    title: Rozamiento cinetico
+    equation: f_k = mu_k*N
+    latex: f_k=\mu_k N
+    rearrangements:
+      - target: f_k
+        equation: f_k = mu_k*N
+        latex: f_k=\mu_k N
+      - target: mu_k
+        equation: mu_k = f_k/N
+        latex: \mu_k=\frac{f_k}{N}
+      - target: N
+        equation: N = f_k/mu_k
+        latex: N=\frac{f_k}{\mu_k}
+
+  - id: maximo_estatico
+    title: Maximo rozamiento estatico
+    equation: f_s_max = mu_s*N
+    latex: f_{s,\max}=\mu_s N
+    rearrangements:
+      - target: f_s_max
+        equation: f_s_max = mu_s*N
+        latex: f_{s,\max}=\mu_s N
+      - target: mu_s
+        equation: mu_s = f_s_max/N
+        latex: \mu_s=\frac{f_{s,\max}}{N}
+
+  - id: umbral_arranque_horizontal
+    title: Fuerza minima para iniciar deslizamiento (horizontal)
+    equation: F_min = mu_s*m*g
+    latex: F_{min}=\mu_s mg
+    rearrangements:
+      - target: F_min
+        equation: F_min = mu_s*m*g
+        latex: F_{min}=\mu_s mg
+      - target: mu_s
+        equation: mu_s = F_min/(m*g)
+        latex: \mu_s=\frac{F_{min}}{mg}
+      - target: m
+        equation: m = F_min/(mu_s*g)
+        latex: m=\frac{F_{min}}{\mu_s g}
+
+  - id: aceleracion_horizontal_cinetica
+    title: Aceleracion con rozamiento cinetico en horizontal
+    equation: a = (F - f_k)/m
+    latex: a=\frac{F-f_k}{m}
+    rearrangements:
+      - target: a
+        equation: a = (F - f_k)/m
+        latex: a=\frac{F-f_k}{m}
+      - target: F
+        equation: F = m*a + f_k
+        latex: F=ma+f_k
+      - target: f_k
+        equation: f_k = F - m*a
+        latex: f_k=F-ma
+
+  - id: aceleracion_plano_con_rozamiento
+    title: Aceleracion en plano inclinado con rozamiento cinetico
+    equation: a = g*(sin(theta) - mu_k*cos(theta))
+    latex: a=g\left(\sin\theta-\mu_k\cos\theta\right)
+    rearrangements:
+      - target: a
+        equation: a = g*(sin(theta) - mu_k*cos(theta))
+        latex: a=g\left(\sin\theta-\mu_k\cos\theta\right)
+
+  - id: chequeo_newton
+    title: Residuo de consistencia dinamica
+    equation: delta = sumF - m*a
+    latex: \Delta=\sum F-ma
+    rearrangements:
+      - target: delta
+        equation: delta = sumF - m*a
+        latex: \Delta=\sum F-ma
+
+  - id: condicion_estatica
+    title: Condicion de reposo por friccion estatico (conceptual)
+    equation: f_s <= mu_s*N
+    latex: f_s\le\mu_s N
+    calculable: false
+    motivo_no_calculable: Es un criterio de validez de hipotesis, no un despeje escalar unico.
+
+  - id: direccion_rozamiento
+    title: Direccion del rozamiento (conceptual)
+    equation: f_opuesto_al_deslizamiento_relativo
+    latex: \vec f\ \text{opuesto al deslizamiento relativo}
+    calculable: false
+    motivo_no_calculable: Requiere analisis cualitativo del sentido de movimiento o de su tendencia.
+
+ui:
+  default_formula: aceleracion_horizontal_cinetica
+  groups:
+    - title: Contacto y friccion (calculables)
+      items:
+        - normal_horizontal
+        - normal_plano_inclinado
+        - rozamiento_cinetico
+        - maximo_estatico
+        - umbral_arranque_horizontal
+    - title: Dinamica del sistema (calculables)
+      items:
+        - aceleracion_horizontal_cinetica
+        - aceleracion_plano_con_rozamiento
+        - chequeo_newton
+    - title: Criterios de validacion (no calculables)
+      items:
+        - condicion_estatica
+        - direccion_rozamiento

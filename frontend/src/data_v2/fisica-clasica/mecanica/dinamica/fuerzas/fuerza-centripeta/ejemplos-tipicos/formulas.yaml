@@ -1,0 +1,109 @@
+version: 1
+topic:
+  id: ejemplos-tipicos
+  title: Ejemplos típicos de fuerza centrípeta
+variables:
+- id: m
+  symbol: m
+  nombre: masa
+  unidad_si: kg
+  descripcion: Masa.
+- id: r
+  symbol: r
+  nombre: radio
+  unidad_si: m
+  descripcion: Radio.
+- id: v
+  symbol: v
+  nombre: velocidad
+  unidad_si: m/s
+  descripcion: Velocidad.
+- id: ac
+  symbol: a_c
+  nombre: aceleracion_centripeta
+  unidad_si: m/s^2
+  descripcion: Aceleracion_centripeta.
+- id: Fc
+  symbol: F_c
+  nombre: fuerza_centripeta
+  unidad_si: N
+  descripcion: Fuerza_centripeta.
+- id: g
+  symbol: g
+  nombre: gravedad
+  unidad_si: m/s^2
+  descripcion: Gravedad.
+- id: Fg
+  symbol: F_g
+  nombre: peso
+  unidad_si: N
+  descripcion: Peso.
+formulas:
+- id: aceleracion_centripeta
+  title: Aceleración centrípeta
+  equation: ac = v^2/r
+  latex: a_c = \frac{v^2}{r}
+  status: calculable
+  rearrangements:
+  - target: ac
+    equation: ac = v^2/r
+    latex: a_c = \frac{v^2}{r}
+    constraints:
+    - expr: r != 0
+      message: r no puede ser 0.
+  - target: v
+    equation: v = sqrt(ac*r)
+    latex: v = \sqrt{a_c r}
+    constraints:
+    - expr: ac >= 0
+      message: a_c debe ser ≥ 0.
+    - expr: r >= 0
+      message: r debe ser ≥ 0.
+  - target: r
+    equation: r = v^2/ac
+    latex: r = \frac{v^2}{a_c}
+    constraints:
+    - expr: ac != 0
+      message: a_c no puede ser 0.
+- id: fuerza_centripeta
+  title: Componente centrípeta de la resultante
+  equation: Fc = m*ac
+  latex: F_c = m a_c
+  status: calculable
+  rearrangements:
+  - target: Fc
+    equation: Fc = m*ac
+    latex: F_c = m a_c
+  - target: m
+    equation: m = Fc/ac
+    latex: m = \frac{F_c}{a_c}
+    constraints:
+    - expr: ac != 0
+      message: a_c no puede ser 0.
+  - target: ac
+    equation: ac = Fc/m
+    latex: a_c = \frac{F_c}{m}
+    constraints:
+    - expr: m != 0
+      message: m no puede ser 0.
+- id: peso
+  title: Peso
+  equation: Fg = m*g
+  latex: F_g = m g
+  status: calculable
+  rearrangements:
+  - target: Fg
+    equation: Fg = m*g
+    latex: F_g = m g
+  - target: m
+    equation: m = Fg/g
+    latex: m = \frac{F_g}{g}
+    constraints:
+    - expr: g != 0
+      message: g no puede ser 0.
+  - target: g
+    equation: g = Fg/m
+    latex: g = \frac{F_g}{m}
+    constraints:
+    - expr: m != 0
+      message: m no puede ser 0.

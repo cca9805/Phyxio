@@ -1,0 +1,193 @@
+version: 1
+topic:
+  id: propiedades-elasticas-del-solido
+  title: Propiedades Elasticas Del Solido
+variables:
+  - id: sigma
+    symbol: \sigma
+    name: esfuerzo_normal
+    si_unit: Pa
+  - id: E
+    symbol: E
+    name: modulo_young
+    si_unit: Pa
+  - id: epsilon
+    symbol: \epsilon
+    name: deformacion
+    si_unit: '1'
+  - id: G
+    symbol: G
+    name: modulo_corte
+    si_unit: Pa
+  - id: K
+    symbol: K
+    name: modulo_volumetrico
+    si_unit: Pa
+  - id: nu
+    symbol: \nu
+    name: coeficiente_poisson
+    si_unit: '1'
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: vL
+    symbol: v_L
+    name: velocidad_longitudinal
+    si_unit: m/s
+  - id: vT
+    symbol: v_T
+    name: velocidad_transversal
+    si_unit: m/s
+  - id: ZL
+    symbol: Z_L
+    name: impedancia_longitudinal
+    si_unit: kg/(m^2*s)
+  - id: ZT
+    symbol: Z_T
+    name: impedancia_transversal
+    si_unit: kg/(m^2*s)
+formulas:
+  - id: hooke
+    title: Ley de Hooke uniaxial
+    equation: sigma = E*epsilon
+    latex: \sigma=E\epsilon
+    rearrangements:
+      - target: sigma
+        equation: sigma = E*epsilon
+        latex: \sigma=E\epsilon
+      - target: E
+        equation: E = sigma/epsilon
+        latex: E=\frac{\sigma}{\epsilon}
+      - target: epsilon
+        equation: epsilon = sigma/E
+        latex: \epsilon=\frac{\sigma}{E}
+
+  - id: v_long
+    title: Velocidad longitudinal aproximada en barra
+    equation: vL = sqrt(E/rho)
+    latex: v_L\approx\sqrt{\frac{E}{\rho}}
+    rearrangements:
+      - target: vL
+        equation: vL = sqrt(E/rho)
+        latex: v_L\approx\sqrt{\frac{E}{\rho}}
+      - target: E
+        equation: E = rho*vL^2
+        latex: E\approx\rho v_L^2
+      - target: rho
+        equation: rho = E/vL^2
+        latex: \rho\approx\frac{E}{v_L^2}
+
+  - id: v_long_general
+    title: Velocidad longitudinal isotropa general
+    equation: vL = sqrt((K + 4*G/3)/rho)
+    latex: v_L=\sqrt{\frac{K+\frac{4}{3}G}{\rho}}
+    rearrangements:
+      - target: vL
+        equation: vL = sqrt((K + 4*G/3)/rho)
+        latex: v_L=\sqrt{\frac{K+\frac{4}{3}G}{\rho}}
+      - target: rho
+        equation: rho = (K + 4*G/3)/vL^2
+        latex: \rho=\frac{K+\frac{4}{3}G}{v_L^2}
+      - target: K
+        equation: K = rho*vL^2 - 4*G/3
+        latex: K=\rho v_L^2-\frac{4}{3}G
+
+  - id: v_corte
+    title: Velocidad de corte
+    equation: vT = sqrt(G/rho)
+    latex: v_T=\sqrt{\frac{G}{\rho}}
+    rearrangements:
+      - target: vT
+        equation: vT = sqrt(G/rho)
+        latex: v_T=\sqrt{\frac{G}{\rho}}
+      - target: G
+        equation: G = rho*vT^2
+        latex: G=\rho v_T^2
+      - target: rho
+        equation: rho = G/vT^2
+        latex: \rho=\frac{G}{v_T^2}
+
+  - id: young_desde_corte_poisson
+    title: Relacion entre Young, corte y Poisson
+    equation: E = 2*G*(1+nu)
+    latex: E=2G(1+\nu)
+    rearrangements:
+      - target: E
+        equation: E = 2*G*(1+nu)
+        latex: E=2G(1+\nu)
+      - target: G
+        equation: G = E/(2*(1+nu))
+        latex: G=\frac{E}{2(1+\nu)}
+      - target: nu
+        equation: nu = E/(2*G)-1
+        latex: \nu=\frac{E}{2G}-1
+
+  - id: volumetrico_desde_young_poisson
+    title: Modulo volumetrico desde Young y Poisson
+    equation: K = E/(3*(1-2*nu))
+    latex: K=\frac{E}{3(1-2\nu)}
+    rearrangements:
+      - target: K
+        equation: K = E/(3*(1-2*nu))
+        latex: K=\frac{E}{3(1-2\nu)}
+      - target: E
+        equation: E = 3*K*(1-2*nu)
+        latex: E=3K(1-2\nu)
+
+  - id: impedancia_longitudinal
+    title: Impedancia longitudinal
+    equation: ZL = rho*vL
+    latex: Z_L=\rho v_L
+    rearrangements:
+      - target: ZL
+        equation: ZL = rho*vL
+        latex: Z_L=\rho v_L
+      - target: rho
+        equation: rho = ZL/vL
+        latex: \rho=\frac{Z_L}{v_L}
+
+  - id: impedancia_transversal
+    title: Impedancia transversal
+    equation: ZT = rho*vT
+    latex: Z_T=\rho v_T
+    rearrangements:
+      - target: ZT
+        equation: ZT = rho*vT
+        latex: Z_T=\rho v_T
+      - target: rho
+        equation: rho = ZT/vT
+        latex: \rho=\frac{Z_T}{v_T}
+
+  - id: relacion_velocidades_poisson
+    title: Relacion de velocidades con Poisson
+    equation: vL_vT = sqrt((2*(1-nu))/(1-2*nu))
+    latex: \frac{v_L}{v_T}=\sqrt{\frac{2(1-\nu)}{1-2\nu}}
+    calculable: false
+    motivo_no_calculable: Formula de comprobacion constitutiva usada para validacion de consistencia.
+
+  - id: criterio_lineal
+    title: Criterio lineal amplitud-velocidad
+    equation: v_independiente_de_amplitud
+    latex: v\ \text{independiente de amplitud (regimen lineal)}
+    calculable: false
+    motivo_no_calculable: Regla conceptual de validez del modelo.
+ui:
+  default_formula: hooke
+  groups:
+    - title: Elasticidad basica (calculables)
+      items:
+        - hooke
+        - young_desde_corte_poisson
+        - volumetrico_desde_young_poisson
+    - title: Velocidades e impedancia (calculables)
+      items:
+        - v_long
+        - v_long_general
+        - v_corte
+        - impedancia_longitudinal
+        - impedancia_transversal
+    - title: Criterios conceptuales
+      items:
+        - relacion_velocidades_poisson
+        - criterio_lineal

@@ -1,0 +1,127 @@
+version: 1
+topic:
+  id: ejemplos-fuerza-centrifuga
+  title: Ejemplos De Fuerza Centrifuga
+variables:
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa del sistema en estudio.
+  - id: omega
+    symbol: \omega
+    nombre: velocidad_angular
+    unidad_si: rad/s
+    descripcion: Velocidad angular de rotacion.
+  - id: r
+    symbol: r
+    nombre: radio
+    unidad_si: m
+    descripcion: Radio de giro.
+  - id: v
+    symbol: v
+    nombre: velocidad_tangencial
+    unidad_si: m/s
+    descripcion: Rapidez tangencial.
+  - id: rpm
+    symbol: rpm
+    nombre: revoluciones_por_minuto
+    unidad_si: 1/min
+    descripcion: Frecuencia de giro en revoluciones por minuto.
+  - id: F_cf
+    symbol: F_{cf}
+    nombre: fuerza_centrifuga
+    unidad_si: N
+    descripcion: Fuerza centrifuga calculada para el caso.
+  - id: omega2
+    symbol: \omega_2
+    nombre: velocidad_angular_final
+    unidad_si: rad/s
+    descripcion: Velocidad angular de un segundo escenario.
+  - id: omega1
+    symbol: \omega_1
+    nombre: velocidad_angular_inicial
+    unidad_si: rad/s
+    descripcion: Velocidad angular del escenario inicial.
+  - id: ratio
+    symbol: R
+    nombre: razon_de_fuerzas
+    unidad_si: "1"
+    descripcion: Cociente entre fuerza final e inicial.
+formulas:
+  - id: fuerza_centrifuga_base
+    title: Fuerza centrifuga en ejemplo base
+    equation: F_cf = m*omega^2*r
+    latex: F_{cf}=m\omega^2 r
+    rearrangements:
+      - target: F_cf
+        equation: F_cf = m*omega^2*r
+        latex: F_{cf}=m\omega^2 r
+      - target: omega
+        equation: omega = sqrt(F_cf/(m*r))
+        latex: \omega=\sqrt{\frac{F_{cf}}{mr}}
+      - target: r
+        equation: r = F_cf/(m*omega^2)
+        latex: r=\frac{F_{cf}}{m\omega^2}
+  - id: conversion_rpm
+    title: Conversion de rpm a rad/s
+    equation: omega = 2*pi*rpm/60
+    latex: \omega=\frac{2\pi\,rpm}{60}
+    rearrangements:
+      - target: omega
+        equation: omega = 2*pi*rpm/60
+        latex: \omega=\frac{2\pi\,rpm}{60}
+      - target: rpm
+        equation: rpm = 60*omega/(2*pi)
+        latex: rpm=\frac{60\omega}{2\pi}
+  - id: velocidad_tangencial
+    title: Relacion tangencial para ejemplos
+    equation: v = omega*r
+    latex: v=\omega r
+    rearrangements:
+      - target: v
+        equation: v = omega*r
+        latex: v=\omega r
+      - target: omega
+        equation: omega = v/r
+        latex: \omega=\frac{v}{r}
+      - target: r
+        equation: r = v/omega
+        latex: r=\frac{v}{\omega}
+  - id: factor_por_cambio_omega
+    title: Cambio relativo de fuerza por cambio de omega
+    equation: ratio = (omega2/omega1)^2
+    latex: R=\left(\frac{\omega_2}{\omega_1}\right)^2
+    rearrangements:
+      - target: ratio
+        equation: ratio = (omega2/omega1)^2
+        latex: R=\left(\frac{\omega_2}{\omega_1}\right)^2
+      - target: omega2
+        equation: omega2 = omega1*sqrt(ratio)
+        latex: \omega_2=\omega_1\sqrt{R}
+      - target: omega1
+        equation: omega1 = omega2/sqrt(ratio)
+        latex: \omega_1=\frac{\omega_2}{\sqrt{R}}
+    constraints:
+      - expr: omega1 > 0
+        message: omega1 debe ser positiva.
+      - expr: ratio > 0
+        message: La razon de fuerzas debe ser positiva.
+  - id: criterio_de_aplicacion_conceptual
+    title: Criterio de marco (conceptual)
+    equation: F_cf = m*omega^2*r
+    latex: "\text{Solo usar }F_{cf}\text{ si el analisis se hace en marco rotatorio.}"
+    calculable: false
+    motivo_no_calculable: "Es una condicion de aplicacion del modelo, no una ecuacion numerica independiente."
+ui:
+  default_formula: fuerza_centrifuga_base
+  groups:
+    - title: Calculables de ejemplo
+      items:
+        - fuerza_centrifuga_base
+        - conversion_rpm
+        - velocidad_tangencial
+        - factor_por_cambio_omega
+    - title: Criterio conceptual
+      items:
+        - criterio_de_aplicacion_conceptual

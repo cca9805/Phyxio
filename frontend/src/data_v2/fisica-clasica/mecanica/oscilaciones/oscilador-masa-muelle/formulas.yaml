@@ -1,0 +1,145 @@
+version: 1
+topic:
+  id: oscilador-masa-muelle
+  title: Oscilador masa-muelle
+variables:
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa.
+  - id: k
+    symbol: k
+    nombre: constante elastica
+    unidad_si: N/m
+    descripcion: Constante elastica.
+  - id: omega0
+    symbol: \omega_0
+    nombre: pulsacion natural
+    unidad_si: rad/s
+    descripcion: Pulsacion natural.
+  - id: T
+    symbol: T
+    nombre: periodo
+    unidad_si: s
+    descripcion: Periodo.
+  - id: f
+    symbol: f
+    nombre: frecuencia
+    unidad_si: Hz
+    descripcion: Frecuencia.
+  - id: x
+    symbol: x
+    nombre: desplazamiento
+    unidad_si: m
+    descripcion: Desplazamiento.
+  - id: A
+    symbol: A
+    nombre: amplitud
+    unidad_si: m
+    descripcion: Amplitud.
+  - id: t
+    symbol: t
+    nombre: tiempo
+    unidad_si: s
+    descripcion: Tiempo.
+  - id: phi
+    symbol: \varphi
+    nombre: fase inicial
+    unidad_si: rad
+    descripcion: Fase inicial.
+  - id: F
+    symbol: F
+    nombre: fuerza
+    unidad_si: "N"
+    descripcion: Fuerza aplicada o restauradora.
+formulas:
+  - id: pulsacion_natural
+    title: Pulsacion natural
+    equation: omega0 = sqrt(k/m)
+    latex: \omega_0=\sqrt{\frac{k}{m}}
+    rearrangements:
+      - target: omega0
+        equation: omega0 = sqrt(k/m)
+        latex: \omega_0=\sqrt{\frac{k}{m}}
+      - target: k
+        equation: k = m*omega0^2
+        latex: k=m\omega_0^2
+      - target: m
+        equation: m = k/(omega0^2)
+        latex: m=\frac{k}{\omega_0^2}
+    constraints:
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+      - expr: k > 0
+        message: k debe ser mayor que 0.
+      - expr: omega0 > 0
+        message: omega0 debe ser mayor que 0.
+  - id: periodo_muelle
+    title: Periodo
+    equation: T = 2*pi*sqrt(m/k)
+    latex: T=2\pi\sqrt{\frac{m}{k}}
+    rearrangements:
+      - target: T
+        equation: T = 2*pi*sqrt(m/k)
+        latex: T=2\pi\sqrt{\frac{m}{k}}
+      - target: m
+        equation: m = (T^2*k)/(4*pi^2)
+        latex: m=\frac{T^2k}{4\pi^2}
+      - target: k
+        equation: k = (4*pi^2*m)/(T^2)
+        latex: k=\frac{4\pi^2m}{T^2}
+    constraints:
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+      - expr: k > 0
+        message: k debe ser mayor que 0.
+      - expr: T > 0
+        message: T debe ser mayor que 0.
+  - id: frecuencia_muelle
+    title: Frecuencia
+    equation: f = 1/T
+    latex: f=\frac{1}{T}
+    rearrangements:
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+    constraints:
+      - expr: T > 0
+        message: T debe ser mayor que 0.
+      - expr: f > 0
+        message: f debe ser mayor que 0.
+  - id: ecuacion_oscilacion
+    title: Ecuacion temporal
+    equation: x = A*cos(omega0*t + phi)
+    latex: x=A\cos(\omega_0 t+\varphi)
+    rearrangements:
+      - target: x
+        equation: x = A*cos(omega0*t + phi)
+        latex: x=A\cos(\omega_0 t+\varphi)
+    constraints:
+      - expr: omega0 > 0
+        message: omega0 debe ser mayor que 0.
+      - expr: A > 0
+        message: A debe ser mayor que 0.
+  - id: ley_hooke_conceptual
+    title: Ley de Hooke (conceptual)
+    equation: F = -k*x
+    latex: F=-kx
+    calculable: false
+    motivo_no_calculable: Describe dirección de la fuerza restauradora; el signo depende del eje de referencia elegido.
+ui:
+  default_formula: pulsacion_natural
+  groups:
+    - title: Fórmulas calculables
+      items:
+        - pulsacion_natural
+        - periodo_muelle
+        - frecuencia_muelle
+        - ecuacion_oscilacion
+    - title: Fórmulas conceptuales
+      items:
+        - ley_hooke_conceptual

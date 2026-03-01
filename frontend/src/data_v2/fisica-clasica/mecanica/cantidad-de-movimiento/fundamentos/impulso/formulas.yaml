@@ -1,0 +1,145 @@
+﻿version: 1
+topic:
+  id: impulso
+  title: Impulso
+variables:
+  - id: J
+    symbol: J
+    nombre: impulso
+    unidad_si: N*s
+    descripcion: Efecto acumulado de la fuerza en el tiempo.
+  - id: F
+    symbol: F
+    nombre: fuerza neta
+    unidad_si: N
+    descripcion: Fuerza neta aplicada.
+  - id: dt
+    symbol: \Delta t
+    nombre: intervalo de tiempo
+    unidad_si: s
+    descripcion: Duracion de la accion.
+  - id: Fmed
+    symbol: F_{med}
+    nombre: fuerza media
+    unidad_si: N
+    descripcion: Fuerza equivalente media en el intervalo.
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa del cuerpo.
+  - id: v0
+    symbol: v_0
+    nombre: velocidad inicial
+    unidad_si: m/s
+    descripcion: Velocidad al inicio del intervalo.
+  - id: vF
+    symbol: v_f
+    nombre: velocidad final
+    unidad_si: m/s
+    descripcion: Velocidad al final del intervalo.
+  - id: pi
+    symbol: p_i
+    nombre: momento inicial
+    unidad_si: kg*m/s
+    descripcion: Momento lineal inicial.
+  - id: pf
+    symbol: p_f
+    nombre: momento final
+    unidad_si: kg*m/s
+    descripcion: Momento lineal final.
+  - id: DeltaP
+    symbol: \Delta p
+    nombre: cambio de momento
+    unidad_si: kg*m/s
+    descripcion: Diferencia entre momento final e inicial.
+formulas:
+  - id: impulso_constante
+    title: Impulso con fuerza constante
+    equation: J = F*dt
+    latex: J = F\Delta t
+    rearrangements:
+      - target: J
+        equation: J = F*dt
+        latex: J = F\Delta t
+      - target: F
+        equation: F = J/dt
+        latex: F = \frac{J}{\Delta t}
+      - target: dt
+        equation: dt = J/F
+        latex: \Delta t = \frac{J}{F}
+    constraints:
+      - expr: dt > 0
+        message: dt debe ser mayor que 0.
+      - expr: F != 0
+        message: F no puede ser 0 al despejar dt.
+
+  - id: teorema_impulso_momento
+    title: Teorema impulso-momento
+    equation: J = pf - pi
+    latex: J = \Delta p = p_f - p_i
+    rearrangements:
+      - target: J
+        equation: J = pf - pi
+        latex: J = p_f - p_i
+      - target: pf
+        equation: pf = pi + J
+        latex: p_f = p_i + J
+      - target: pi
+        equation: pi = pf - J
+        latex: p_i = p_f - J
+
+  - id: fuerza_media
+    title: Fuerza media en el intervalo
+    equation: Fmed = J/dt
+    latex: F_{med} = \frac{J}{\Delta t}
+    rearrangements:
+      - target: Fmed
+        equation: Fmed = J/dt
+        latex: F_{med} = \frac{J}{\Delta t}
+      - target: J
+        equation: J = Fmed*dt
+        latex: J = F_{med}\Delta t
+
+  - id: velocidad_final_desde_impulso
+    title: Velocidad final desde impulso
+    equation: vF = v0 + J/m
+    latex: v_f = v_0 + \frac{J}{m}
+    rearrangements:
+      - target: vF
+        equation: vF = v0 + J/m
+        latex: v_f = v_0 + \frac{J}{m}
+      - target: J
+        equation: J = m*(vF - v0)
+        latex: J = m(v_f-v_0)
+    constraints:
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+
+  - id: definicion_integral_conceptual
+    title: Definicion integral del impulso (conceptual)
+    equation: J = int(F*dt)
+    latex: J = \int_{t_i}^{t_f} F(t)\,dt
+    calculable: false
+    motivo_no_calculable: Requiere conocer la funcion F(t) y resolver una integral definida.
+
+  - id: forma_vectorial_conceptual
+    title: Forma vectorial (conceptual)
+    equation: J_vec = Delta_p_vec
+    latex: \vec J = \Delta \vec p
+    calculable: false
+    motivo_no_calculable: La direccion y sentido requieren tratamiento vectorial completo.
+
+ui:
+  default_formula: teorema_impulso_momento
+  groups:
+    - title: Formulas calculables
+      items:
+        - impulso_constante
+        - teorema_impulso_momento
+        - fuerza_media
+        - velocidad_final_desde_impulso
+    - title: Formulas conceptuales
+      items:
+        - definicion_integral_conceptual
+        - forma_vectorial_conceptual

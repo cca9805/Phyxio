@@ -1,0 +1,106 @@
+version: 1
+topic:
+  id: mru
+  title: Movimiento Rectilíneo Uniforme
+variables:
+  - id: x
+    symbol: x
+    nombre: posición
+    unidad_si: m
+    descripcion: Posición.
+  - id: x0
+    symbol: x_0
+    nombre: posición inicial
+    unidad_si: m
+    descripcion: Posición inicial.
+  - id: v
+    symbol: v
+    nombre: velocidad
+    unidad_si: m/s
+    descripcion: Velocidad.
+  - id: t
+    symbol: t
+    nombre: tiempo
+    unidad_si: s
+    descripcion: Tiempo.
+  - id: dx
+    symbol: \Delta x
+    nombre: desplazamiento
+    unidad_si: m
+    descripcion: Desplazamiento.
+  - id: dt
+    symbol: \Delta t
+    nombre: intervalo de tiempo
+    unidad_si: s
+    descripcion: Intervalo de tiempo.
+formulas:
+  - id: mru_posicion
+    title: Posición en MRU
+    equation: x = x0 + v*t
+    latex: x = x_0 + v t
+    rearrangements:
+      - target: x
+        latex: x = x_0 + v t
+        equation: x = x0 + v*t
+      - target: x0
+        latex: x_0 = x - v t
+        equation: x0 = x - v*t
+      - target: v
+        latex: v = \frac{x - x_0}{t}
+        equation: v = (x - x0)/t
+      - target: t
+        latex: t = \frac{x - x_0}{v}
+        equation: t = (x - x0)/v
+    status: calculable
+  - id: mru_desplazamiento
+    title: Desplazamiento en MRU
+    equation: dx = v*dt
+    latex: \Delta x = v\,\Delta t
+    rearrangements:
+      - target: dx
+        latex: \Delta x = v\,\Delta t
+        equation: dx = v*dt
+      - target: v
+        latex: v = \frac{\Delta x}{\Delta t}
+        equation: v = dx/dt
+      - target: dt
+        latex: \Delta t = \frac{\Delta x}{v}
+        equation: dt = dx/v
+    constraints:
+      - expr: dt >= 0
+        message: Δt debe ser no negativo.
+      - expr: v != 0
+        message: v no puede ser 0 si despejas Δt.
+    notes:
+      - Útil cuando trabajas con intervalos en vez de x0 y x.
+    status: calculable
+  - id: mru_velocidad_media
+    title: Velocidad media
+    equation: v = dx/dt
+    latex: v = \frac{\Delta x}{\Delta t}
+    rearrangements:
+      - target: v
+        latex: v = \frac{\Delta x}{\Delta t}
+        equation: v = dx/dt
+      - target: dx
+        latex: \Delta x = v\,\Delta t
+        equation: dx = v*dt
+      - target: dt
+        latex: \Delta t = \frac{\Delta x}{v}
+        equation: dt = dx/v
+    constraints:
+      - expr: dt != 0
+        message: Δt no puede ser 0.
+      - expr: v != 0
+        message: v no puede ser 0 si despejas Δt.
+    notes:
+      - En MRU, la velocidad media coincide con la velocidad constante.
+    status: calculable
+ui:
+  default_formula: mru_posicion
+  groups:
+    - title: Básicas
+      items:
+        - mru_posicion
+        - mru_desplazamiento
+        - mru_velocidad_media

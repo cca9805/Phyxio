@@ -1,0 +1,90 @@
+version: 1
+topic:
+  id: segunda-ley-fuerza-masa
+  title: Segunda Ley de Newton (Fuerza–masa–aceleración)
+variables:
+- id: Fnet
+  symbol: \sum \vec F
+  nombre: fuerza neta
+  unidad_si: N
+  descripcion: Fuerza neta.
+- id: m
+  symbol: m
+  nombre: masa
+  unidad_si: kg
+  descripcion: Masa.
+- id: a
+  symbol: \vec a
+  nombre: aceleración
+  unidad_si: m/s^2
+  descripcion: Aceleración.
+- id: Fx
+  symbol: F_x
+  nombre: componente x de la fuerza neta
+  unidad_si: N
+  descripcion: Componente x de la fuerza neta.
+- id: Fy
+  symbol: F_y
+  nombre: componente y de la fuerza neta
+  unidad_si: N
+  descripcion: Componente y de la fuerza neta.
+- id: ax
+  symbol: a_x
+  nombre: componente x de la aceleración
+  unidad_si: m/s^2
+  descripcion: Componente x de la aceleración.
+- id: a_x
+  symbol: a_x
+  nombre: alias de ax (compatibilidad sustitución)
+  unidad_si: m/s^2
+  descripcion: Alias de ax (compatibilidad sustitución).
+- id: ay
+  symbol: a_y
+  nombre: componente y de la aceleración
+  unidad_si: m/s^2
+  descripcion: Componente y de la aceleración.
+formulas:
+- id: newton2_1d
+  title: '2ª ley (1D): F = m a'
+  equation: Fx = m*ax
+  latex: F_x = m a_x
+  rearrangements:
+  - target: Fx
+    equation: Fx = m*ax
+    latex: F_x = m a_x
+  - target: m
+    equation: m = Fx/ax
+    latex: m = \frac{F_x}{a_x}
+    constraints:
+    - expr: ax != 0
+      message: Para despejar m, a_x no puede ser 0.
+  - target: ax
+    equation: ax = Fx/m
+    latex: a_x = \frac{F_x}{m}
+    constraints:
+    - expr: m != 0
+      message: La masa no puede ser 0.
+  status: calculable
+- id: newton2_componentes
+  title: '2ª ley por componentes (2D): Fx=m ax, Fy=m ay'
+  equation: Fx = m*ax; Fy = m*ay
+  latex: \begin{cases}F_x = m a_x\\ F_y = m a_y\end{cases}
+  motivo_no_calculable: 'Son dos ecuaciones simultáneas. En calculadora 1D se resuelve una sola componente. Para 2D se resuelve
+    por componentes con más contexto (fuerzas concretas, ejes elegidos, etc.).
+
+    '
+  status: descriptive
+- id: forma_vectorial
+  title: 'Forma vectorial: ΣF = m a'
+  equation: Fnet = m*a
+  latex: \sum \vec F = m \vec a
+  motivo_no_calculable: 'La expresión vectorial requiere dirección y componentes; aquí se usa la versión 1D calculable.
+
+    '
+  status: descriptive
+ui:
+  default_formula: newton2_1d
+  groups:
+  - title: 2ª ley (calculable)
+    items:
+    - newton2_1d

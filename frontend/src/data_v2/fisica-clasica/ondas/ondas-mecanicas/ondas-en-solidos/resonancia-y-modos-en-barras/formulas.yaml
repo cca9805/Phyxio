@@ -1,0 +1,184 @@
+﻿version: 1
+topic:
+  id: resonancia-y-modos-en-barras
+  title: Resonancia Y Modos En Barras
+variables:
+  - id: E
+    symbol: E
+    name: modulo_young
+    si_unit: Pa
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: v
+    symbol: v
+    name: velocidad_axial
+    si_unit: m/s
+  - id: L
+    symbol: L
+    name: longitud_efectiva
+    si_unit: m
+  - id: n
+    symbol: n
+    name: numero_modo
+    si_unit: '1'
+  - id: fn
+    symbol: f_n
+    name: frecuencia_modal
+    si_unit: Hz
+  - id: lambda_n
+    symbol: \lambda_n
+    name: longitud_onda_modal
+    si_unit: m
+  - id: k_n
+    symbol: k_n
+    name: numero_onda_modal
+    si_unit: rad/m
+  - id: f0
+    symbol: f_0
+    name: frecuencia_resonancia
+    si_unit: Hz
+  - id: f_1
+    symbol: f_1
+    name: frecuencia_media_potencia_inferior
+    si_unit: Hz
+  - id: f_2
+    symbol: f_2
+    name: frecuencia_media_potencia_superior
+    si_unit: Hz
+  - id: Delta_f
+    symbol: \Delta f
+    name: ancho_banda
+    si_unit: Hz
+  - id: Q
+    symbol: Q
+    name: factor_calidad
+    si_unit: '1'
+  - id: zeta
+    symbol: \zeta
+    name: razon_amortiguamiento
+    si_unit: '1'
+formulas:
+  - id: v_axial
+    title: Velocidad axial en barra
+    equation: v = sqrt(E/rho)
+    latex: v=\sqrt{\frac{E}{\rho}}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(E/rho)
+        latex: v=\sqrt{\frac{E}{\rho}}
+      - target: E
+        equation: E = rho*v^2
+        latex: E=\rho v^2
+      - target: rho
+        equation: rho = E/(v^2)
+        latex: \rho=\frac{E}{v^2}
+
+  - id: fn_modo
+    title: Frecuencia modal (extremos equivalentes)
+    equation: fn = n*v/(2*L)
+    latex: f_n=\frac{n\,v}{2L}
+    rearrangements:
+      - target: fn
+        equation: fn = n*v/(2*L)
+        latex: f_n=\frac{n\,v}{2L}
+      - target: v
+        equation: v = 2*L*fn/n
+        latex: v=\frac{2Lf_n}{n}
+      - target: L
+        equation: L = n*v/(2*fn)
+        latex: L=\frac{n\,v}{2f_n}
+      - target: n
+        equation: n = 2*L*fn/v
+        latex: n=\frac{2Lf_n}{v}
+
+  - id: lambda_n
+    title: Longitud de onda modal
+    equation: lambda_n = 2*L/n
+    latex: \lambda_n=\frac{2L}{n}
+    rearrangements:
+      - target: lambda_n
+        equation: lambda_n = 2*L/n
+        latex: \lambda_n=\frac{2L}{n}
+      - target: L
+        equation: L = n*lambda_n/2
+        latex: L=\frac{n\lambda_n}{2}
+
+  - id: k_n
+    title: Numero de onda modal
+    equation: k_n = n*pi/L
+    latex: k_n=\frac{n\pi}{L}
+    rearrangements:
+      - target: k_n
+        equation: k_n = n*pi/L
+        latex: k_n=\frac{n\pi}{L}
+      - target: L
+        equation: L = n*pi/k_n
+        latex: L=\frac{n\pi}{k_n}
+
+  - id: bandwidth
+    title: Ancho de banda a media potencia
+    equation: Delta_f = f_2 - f_1
+    latex: \Delta f=f_2-f_1
+    rearrangements:
+      - target: Delta_f
+        equation: Delta_f = f_2 - f_1
+        latex: \Delta f=f_2-f_1
+      - target: f_2
+        equation: f_2 = f_1 + Delta_f
+        latex: f_2=f_1+\Delta f
+      - target: f_1
+        equation: f_1 = f_2 - Delta_f
+        latex: f_1=f_2-\Delta f
+
+  - id: Q_factor
+    title: Factor de calidad
+    equation: Q = f0/Delta_f
+    latex: Q=\frac{f_0}{\Delta f}
+    rearrangements:
+      - target: Q
+        equation: Q = f0/Delta_f
+        latex: Q=\frac{f_0}{\Delta f}
+      - target: f0
+        equation: f0 = Q*Delta_f
+        latex: f_0=Q\Delta f
+      - target: Delta_f
+        equation: Delta_f = f0/Q
+        latex: \Delta f=\frac{f_0}{Q}
+
+  - id: zeta_q
+    title: Amortiguamiento aproximado
+    equation: zeta = 1/(2*Q)
+    latex: \zeta\approx\frac{1}{2Q}
+    rearrangements:
+      - target: zeta
+        equation: zeta = 1/(2*Q)
+        latex: \zeta\approx\frac{1}{2Q}
+      - target: Q
+        equation: Q = 1/(2*zeta)
+        latex: Q\approx\frac{1}{2\zeta}
+
+  - id: resonance_condition
+    title: Condicion de resonancia modal (conceptual)
+    equation: k_n*L = n*pi
+    latex: k_nL=n\pi
+    calculable: false
+    motivo_no_calculable: Expresa condicion de frontera/modal; se usa para derivar familia de modos, no como calculo aislado.
+ui:
+  default_formula: fn_modo
+  groups:
+    - title: Propagacion y modos
+      items:
+        - v_axial
+        - fn_modo
+        - lambda_n
+        - k_n
+    - title: Resonancia experimental
+      items:
+        - bandwidth
+        - Q_factor
+        - zeta_q
+    - title: Marco conceptual
+      items:
+        - resonance_condition

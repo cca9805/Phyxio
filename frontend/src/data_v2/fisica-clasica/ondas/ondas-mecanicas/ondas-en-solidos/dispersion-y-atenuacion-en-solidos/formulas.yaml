@@ -1,0 +1,155 @@
+version: 1
+topic:
+  id: dispersion-y-atenuacion-en-solidos
+  title: Dispersion Y Atenuacion En Solidos
+variables:
+  - id: vp
+    symbol: v_p
+    name: velocidad_fase
+    si_unit: m/s
+  - id: vg
+    symbol: v_g
+    name: velocidad_grupo
+    si_unit: m/s
+  - id: omega
+    symbol: \omega
+    name: frecuencia_angular
+    si_unit: rad/s
+  - id: k
+    symbol: k
+    name: numero_onda
+    si_unit: rad/m
+  - id: ratioA
+    symbol: r_A
+    name: ratio_amplitud
+    si_unit: '1'
+  - id: Ax
+    symbol: A_x
+    name: amplitud_x
+    si_unit: '1'
+  - id: A0
+    symbol: A_0
+    name: amplitud_0
+    si_unit: '1'
+  - id: alpha_Np
+    symbol: \alpha_{Np}
+    name: atenuacion_neper_m
+    si_unit: Np/m
+  - id: alpha_dB
+    symbol: \alpha_{dB}
+    name: atenuacion_db_m
+    si_unit: dB/m
+  - id: atten_dB
+    symbol: A_{dB}
+    name: perdida_db
+    si_unit: dB
+  - id: x
+    symbol: x
+    name: distancia
+    si_unit: m
+formulas:
+  - id: vp
+    title: Velocidad de fase
+    equation: vp = omega/k
+    latex: v_p=\frac{\omega}{k}
+    rearrangements:
+      - target: vp
+        equation: vp = omega/k
+        latex: v_p=\frac{\omega}{k}
+      - target: omega
+        equation: omega = vp*k
+        latex: \omega=v_p k
+      - target: k
+        equation: k = omega/vp
+        latex: k=\frac{\omega}{v_p}
+
+  - id: vg
+    title: Velocidad de grupo (conceptual)
+    equation: vg = d_omega_d_k
+    latex: v_g=\frac{d\omega}{dk}
+    calculable: false
+    motivo_no_calculable: Requiere conocer la ley de dispersion omega(k) y derivarla.
+
+  - id: ratio
+    title: Ratio de amplitud
+    equation: ratioA = Ax/A0
+    latex: r_A=\frac{A_x}{A_0}
+    rearrangements:
+      - target: ratioA
+        equation: ratioA = Ax/A0
+        latex: r_A=\frac{A_x}{A_0}
+      - target: Ax
+        equation: Ax = ratioA*A0
+        latex: A_x=r_AA_0
+      - target: A0
+        equation: A0 = Ax/ratioA
+        latex: A_0=\frac{A_x}{r_A}
+
+  - id: alpha_np
+    title: Atenuacion en Np/m
+    equation: alpha_Np = ln(A0/Ax)/x
+    latex: \alpha_{Np}=\frac{1}{x}\ln\!\left(\frac{A_0}{A_x}\right)
+    rearrangements:
+      - target: alpha_Np
+        equation: alpha_Np = ln(A0/Ax)/x
+        latex: \alpha_{Np}=\frac{1}{x}\ln\!\left(\frac{A_0}{A_x}\right)
+      - target: Ax
+        equation: Ax = A0*exp(-alpha_Np*x)
+        latex: A_x=A_0e^{-\alpha_{Np}x}
+
+  - id: atten_db
+    title: Perdida en dB
+    equation: atten_dB = 20*log10(A0/Ax)
+    latex: A_{dB}=20\log_{10}\!\left(\frac{A_0}{A_x}\right)
+    rearrangements:
+      - target: atten_dB
+        equation: atten_dB = 20*log10(A0/Ax)
+        latex: A_{dB}=20\log_{10}\!\left(\frac{A_0}{A_x}\right)
+
+  - id: alpha
+    title: Atenuacion media en dB/m
+    equation: alpha_dB = atten_dB/x
+    latex: \alpha_{dB}=\frac{A_{dB}}{x}
+    rearrangements:
+      - target: alpha_dB
+        equation: alpha_dB = atten_dB/x
+        latex: \alpha_{dB}=\frac{A_{dB}}{x}
+      - target: atten_dB
+        equation: atten_dB = alpha_dB*x
+        latex: A_{dB}=\alpha_{dB}x
+
+  - id: conv_db_np
+    title: Conversion entre Np/m y dB/m
+    equation: alpha_dB = 8.686*alpha_Np
+    latex: \alpha_{dB}=8.686\,\alpha_{Np}
+    rearrangements:
+      - target: alpha_dB
+        equation: alpha_dB = 8.686*alpha_Np
+        latex: \alpha_{dB}=8.686\,\alpha_{Np}
+      - target: alpha_Np
+        equation: alpha_Np = alpha_dB/8.686
+        latex: \alpha_{Np}=\frac{\alpha_{dB}}{8.686}
+
+  - id: modelo_exponencial
+    title: Modelo exponencial de amplitud
+    equation: Ax = A0*exp(-alpha_Np*x)
+    latex: A_x=A_0e^{-\alpha_{Np}x}
+    calculable: false
+    motivo_no_calculable: Modelo de campo para describir evolucion de amplitud con distancia.
+ui:
+  default_formula: vp
+  groups:
+    - title: Dispersion (calculables)
+      items:
+        - vp
+        - ratio
+    - title: Atenuacion (calculables)
+      items:
+        - alpha_np
+        - atten_db
+        - alpha
+        - conv_db_np
+    - title: Modelo teorico
+      items:
+        - vg
+        - modelo_exponencial

@@ -1,0 +1,199 @@
+﻿version: 1
+topic:
+  id: energia-potencial-gravitatoria
+  title: Energía potencial gravitatoria
+variables:
+  - id: G
+    symbol: G
+    nombre: constante de gravitación
+    unidad_si: N*m^2/kg^2
+    descripcion: Constante universal de gravitación.
+  - id: M
+    symbol: M
+    nombre: masa fuente
+    unidad_si: kg
+    descripcion: Masa que crea el campo gravitatorio.
+  - id: m
+    symbol: m
+    nombre: masa de prueba
+    unidad_si: kg
+    descripcion: Masa del objeto en el campo.
+  - id: r
+    symbol: r
+    nombre: distancia radial
+    unidad_si: m
+    descripcion: Distancia al centro de la masa fuente.
+  - id: ri
+    symbol: r_i
+    nombre: radio inicial
+    unidad_si: m
+    descripcion: Distancia inicial al centro.
+  - id: rf
+    symbol: r_f
+    nombre: radio final
+    unidad_si: m
+    descripcion: Distancia final al centro.
+  - id: U
+    symbol: U
+    nombre: energia potencial gravitatoria
+    unidad_si: J
+    descripcion: Energía potencial del sistema gravitatorio.
+  - id: Ui
+    symbol: U_i
+    nombre: energia potencial inicial
+    unidad_si: J
+    descripcion: Energía potencial inicial.
+  - id: Uf
+    symbol: U_f
+    nombre: energia potencial final
+    unidad_si: J
+    descripcion: Energía potencial final.
+  - id: DeltaU
+    symbol: \Delta U
+    nombre: cambio energia potencial
+    unidad_si: J
+    descripcion: Variación de energía potencial.
+  - id: K
+    symbol: K
+    nombre: energia cinetica
+    unidad_si: J
+    descripcion: Energía cinética.
+  - id: DeltaK
+    symbol: \Delta K
+    nombre: cambio energia cinetica
+    unidad_si: J
+    descripcion: Variación de energía cinética.
+  - id: E
+    symbol: E
+    nombre: energia mecanica
+    unidad_si: J
+    descripcion: Energía mecánica total.
+  - id: Wg
+    symbol: W_g
+    nombre: trabajo gravitatorio
+    unidad_si: J
+    descripcion: Trabajo de la gravedad.
+  - id: h
+    symbol: h
+    nombre: altura
+    unidad_si: m
+    descripcion: Altura local para aproximación superficial.
+  - id: g
+    symbol: g
+    nombre: gravedad local
+    unidad_si: m/s^2
+    descripcion: Aceleración gravitatoria local.
+formulas:
+  - id: energia_potencial_general
+    title: Energía potencial gravitatoria general
+    equation: U = -G*M*m/r
+    latex: U = -G\frac{Mm}{r}
+    rearrangements:
+      - target: U
+        equation: U = -G*M*m/r
+        latex: U = -G\frac{Mm}{r}
+      - target: r
+        equation: r = -G*M*m/U
+        latex: r = -\frac{GMm}{U}
+      - target: m
+        equation: m = -U*r/(G*M)
+        latex: m = -\frac{Ur}{GM}
+    constraints:
+      - expr: r > 0
+        message: r debe ser mayor que 0.
+      - expr: M > 0
+        message: M debe ser mayor que 0.
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+
+  - id: cambio_energia_potencial
+    title: Cambio de energía potencial entre dos radios
+    equation: DeltaU = -G*M*m*(1/rf - 1/ri)
+    latex: \Delta U = -GMm\left(\frac{1}{r_f}-\frac{1}{r_i}\right)
+    rearrangements:
+      - target: DeltaU
+        equation: DeltaU = -G*M*m*(1/rf - 1/ri)
+        latex: \Delta U = -GMm\left(\frac{1}{r_f}-\frac{1}{r_i}\right)
+    constraints:
+      - expr: ri > 0
+        message: ri debe ser mayor que 0.
+      - expr: rf > 0
+        message: rf debe ser mayor que 0.
+
+  - id: energia_mecanica
+    title: Energía mecánica total
+    equation: E = K + U
+    latex: E = K + U
+    rearrangements:
+      - target: E
+        equation: E = K + U
+        latex: E = K + U
+      - target: K
+        equation: K = E - U
+        latex: K = E - U
+      - target: U
+        equation: U = E - K
+        latex: U = E - K
+
+  - id: conservacion_energia
+    title: Conservación energética sin disipación
+    equation: DeltaK = -DeltaU
+    latex: \Delta K = -\Delta U
+    rearrangements:
+      - target: DeltaK
+        equation: DeltaK = -DeltaU
+        latex: \Delta K = -\Delta U
+      - target: DeltaU
+        equation: DeltaU = -DeltaK
+        latex: \Delta U = -\Delta K
+
+  - id: trabajo_gravitatorio
+    title: Trabajo de la gravedad
+    equation: Wg = -DeltaU
+    latex: W_g = -\Delta U
+    rearrangements:
+      - target: Wg
+        equation: Wg = -DeltaU
+        latex: W_g = -\Delta U
+      - target: DeltaU
+        equation: DeltaU = -Wg
+        latex: \Delta U = -W_g
+
+  - id: aproximacion_superficial
+    title: Aproximación superficial (h pequeña)
+    equation: DeltaU = m*g*h
+    latex: \Delta U \approx mgh
+    rearrangements:
+      - target: DeltaU
+        equation: DeltaU = m*g*h
+        latex: \Delta U \approx mgh
+      - target: h
+        equation: h = DeltaU/(m*g)
+        latex: h \approx \frac{\Delta U}{mg}
+    constraints:
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+      - expr: g > 0
+        message: g debe ser mayor que 0.
+
+  - id: condicion_ligadura_conceptual
+    title: Condición de sistema ligado (conceptual)
+    equation: E = K + U < 0
+    latex: E = K + U < 0
+    calculable: false
+    motivo_no_calculable: Es criterio cualitativo de estado ligado, no ecuación de despeje directa.
+
+ui:
+  default_formula: energia_potencial_general
+  groups:
+    - title: Formulas calculables
+      items:
+        - energia_potencial_general
+        - cambio_energia_potencial
+        - energia_mecanica
+        - conservacion_energia
+        - trabajo_gravitatorio
+        - aproximacion_superficial
+    - title: Formulas conceptuales
+      items:
+        - condicion_ligadura_conceptual

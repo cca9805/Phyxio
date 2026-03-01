@@ -1,0 +1,110 @@
+﻿version: 1
+topic:
+  id: reflexion
+  title: Reflexion
+variables:
+  - id: theta_i
+    symbol: \theta_i
+    name: angulo_incidencia
+    si_unit: rad
+  - id: theta_r
+    symbol: \theta_r
+    name: angulo_reflexion
+    si_unit: rad
+  - id: phi_i
+    symbol: \phi_i
+    name: fase_incidente
+    si_unit: rad
+  - id: phi_r
+    symbol: \phi_r
+    name: fase_reflejada
+    si_unit: rad
+  - id: Z1
+    symbol: Z_1
+    name: impedancia_medio_1
+    si_unit: kg/(m^2*s)
+  - id: Z2
+    symbol: Z_2
+    name: impedancia_medio_2
+    si_unit: kg/(m^2*s)
+  - id: R_A
+    symbol: R_A
+    name: reflexion_amplitud
+    si_unit: '1'
+  - id: R_I
+    symbol: R_I
+    name: reflexion_intensidad
+    si_unit: '1'
+  - id: T_I
+    symbol: T_I
+    name: transmision_intensidad
+    si_unit: '1'
+formulas:
+  - id: ley_reflexion
+    title: Ley de reflexion
+    equation: theta_r = theta_i
+    latex: \theta_r=\theta_i
+    rearrangements:
+      - target: theta_r
+        equation: theta_r = theta_i
+        latex: \theta_r=\theta_i
+      - target: theta_i
+        equation: theta_i = theta_r
+        latex: \theta_i=\theta_r
+
+  - id: reflexion_amplitud
+    title: Coeficiente de reflexion en amplitud
+    equation: R_A = (Z2 - Z1)/(Z2 + Z1)
+    latex: R_A=\frac{Z_2-Z_1}{Z_2+Z_1}
+    rearrangements:
+      - target: R_A
+        equation: R_A = (Z2 - Z1)/(Z2 + Z1)
+        latex: R_A=\frac{Z_2-Z_1}{Z_2+Z_1}
+
+  - id: reflexion_intensidad
+    title: Coeficiente de reflexion en intensidad
+    equation: R_I = ((Z2 - Z1)/(Z2 + Z1))^2
+    latex: R_I=\left(\frac{Z_2-Z_1}{Z_2+Z_1}\right)^2
+
+  - id: transmision_intensidad
+    title: Coeficiente de transmision en intensidad
+    equation: T_I = 4*Z1*Z2/((Z1 + Z2)^2)
+    latex: T_I=\frac{4Z_1Z_2}{(Z_1+Z_2)^2}
+
+  - id: balance_ideal
+    title: Balance energetico ideal
+    equation: R_I + T_I = 1
+    latex: R_I+T_I=1
+    calculable: false
+    motivo_no_calculable: Relacion de chequeo conceptual ideal; en medios reales puede haber perdidas adicionales.
+
+  - id: fase_extremo_fijo
+    title: Inversion de fase en extremo fijo
+    equation: phi_r = phi_i + pi
+    latex: \phi_r=\phi_i+\pi
+    calculable: false
+    motivo_no_calculable: Depende de la condicion mecanica de frontera.
+
+  - id: fase_extremo_libre
+    title: Fase en extremo libre ideal
+    equation: phi_r = phi_i
+    latex: \phi_r=\phi_i
+    calculable: false
+    motivo_no_calculable: Regla idealizada de frontera libre sin perdidas.
+
+ui:
+  default_formula: ley_reflexion
+  groups:
+    - title: Geometria de reflexion
+      items:
+        - ley_reflexion
+    - title: Interfaz e intensidad
+      items:
+        - reflexion_amplitud
+        - reflexion_intensidad
+        - transmision_intensidad
+    - title: Marco conceptual
+      items:
+        - balance_ideal
+        - fase_extremo_fijo
+        - fase_extremo_libre

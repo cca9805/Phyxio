@@ -1,0 +1,166 @@
+version: 1
+topic:
+  id: sistemas-con-muelles
+  title: Sistemas con muelles
+variables:
+- id: F
+  symbol: F
+  nombre: fuerza (módulo 1D)
+  unidad_si: N
+  descripcion: Fuerza (módulo 1D).
+- id: x
+  symbol: x
+  nombre: elongación total
+  unidad_si: m
+  descripcion: Elongación total.
+- id: x1
+  symbol: x_1
+  nombre: elongación muelle 1
+  unidad_si: m
+  descripcion: Elongación muelle 1.
+- id: x2
+  symbol: x_2
+  nombre: elongación muelle 2
+  unidad_si: m
+  descripcion: Elongación muelle 2.
+- id: k1
+  symbol: k_1
+  nombre: constante muelle 1
+  unidad_si: N/m
+  descripcion: Constante muelle 1.
+- id: k2
+  symbol: k_2
+  nombre: constante muelle 2
+  unidad_si: N/m
+  descripcion: Constante muelle 2.
+- id: keq
+  symbol: k_{eq}
+  nombre: constante equivalente
+  unidad_si: N/m
+  descripcion: Constante equivalente.
+- id: m
+  symbol: m
+  nombre: masa
+  unidad_si: kg
+  descripcion: Masa.
+- id: g
+  symbol: g
+  nombre: gravedad
+  unidad_si: m/s^2
+  descripcion: Gravedad.
+formulas:
+- id: hooke_equivalente
+  title: Hooke con constante equivalente
+  equation: F = keq*x
+  latex: F = k_{eq}\,x
+  status: calculable
+  rearrangements:
+  - target: F
+    equation: F = keq*x
+    latex: F = k_{eq}\,x
+  - target: keq
+    equation: keq = F/x
+    latex: k_{eq} = \frac{F}{x}
+    constraints:
+    - expr: x != 0
+      message: x no puede ser 0.
+  - target: x
+    equation: x = F/keq
+    latex: x = \frac{F}{k_{eq}}
+    constraints:
+    - expr: keq != 0
+      message: k_eq no puede ser 0.
+- id: paralelo_keq
+  title: Muelles en paralelo (constante equivalente)
+  equation: keq = k1 + k2
+  latex: k_{eq} = k_1 + k_2
+  status: calculable
+  rearrangements:
+  - target: keq
+    equation: keq = k1 + k2
+    latex: k_{eq} = k_1 + k_2
+  - target: k1
+    equation: k1 = keq - k2
+    latex: k_1 = k_{eq} - k_2
+  - target: k2
+    equation: k2 = keq - k1
+    latex: k_2 = k_{eq} - k_1
+- id: serie_keq
+  title: Muelles en serie (constante equivalente)
+  equation: 1/keq = 1/k1 + 1/k2
+  latex: \frac{1}{k_{eq}} = \frac{1}{k_1} + \frac{1}{k_2}
+  status: calculable
+  rearrangements:
+  - target: keq
+    equation: keq = (k1*k2)/(k1+k2)
+    latex: k_{eq} = \frac{k_1 k_2}{k_1 + k_2}
+    constraints:
+    - expr: (k1+k2) != 0
+      message: k1 + k2 no puede ser 0.
+  - target: k1
+    equation: k1 = (keq*k2)/(k2-keq)
+    latex: k_1 = \frac{k_{eq}k_2}{k_2-k_{eq}}
+    constraints:
+    - expr: (k2-keq) != 0
+      message: k2 - k_eq no puede ser 0.
+  - target: k2
+    equation: k2 = (keq*k1)/(k1-keq)
+    latex: k_2 = \frac{k_{eq}k_1}{k_1-k_{eq}}
+    constraints:
+    - expr: (k1-keq) != 0
+      message: k1 - k_eq no puede ser 0.
+- id: reparto_serie
+  title: 'Serie: reparto de elongaciones'
+  equation: x = x1 + x2
+  latex: x = x_1 + x_2
+  status: descriptive
+  motivo_no_calculable: 'El reparto requiere además F común y Hooke en cada muelle: F = k1 x1 = k2 x2.
+
+    '
+- id: reparto_paralelo
+  title: 'Paralelo: reparto de fuerzas'
+  equation: F = F1 + F2
+  latex: F = F_1 + F_2
+  status: descriptive
+  motivo_no_calculable: 'En paralelo la elongación es común, y el reparto requiere F1 = k1 x y F2 = k2 x.
+
+    '
+- id: equilibrio_vertical_keq
+  title: Equilibrio vertical con muelle equivalente
+  equation: keq*x = m*g
+  latex: k_{eq}\,x = m g
+  status: calculable
+  rearrangements:
+  - target: x
+    equation: x = m*g/keq
+    latex: x = \frac{m g}{k_{eq}}
+    constraints:
+    - expr: keq != 0
+      message: k_eq no puede ser 0.
+  - target: m
+    equation: m = keq*x/g
+    latex: m = \frac{k_{eq}x}{g}
+    constraints:
+    - expr: g != 0
+      message: g no puede ser 0.
+  - target: keq
+    equation: keq = m*g/x
+    latex: k_{eq} = \frac{m g}{x}
+    constraints:
+    - expr: x != 0
+      message: x no puede ser 0.
+ui:
+  default_formula: hooke_equivalente
+  groups:
+  - title: Constante equivalente
+    items:
+    - paralelo_keq
+    - serie_keq
+    - hooke_equivalente
+  - title: Repartos
+    items:
+    - reparto_serie
+    - reparto_paralelo
+  - title: Equilibrio
+    items:
+    - equilibrio_vertical_keq

@@ -1,0 +1,111 @@
+﻿version: 1
+topic:
+  id: palancas
+  title: Palancas
+variables:
+  - id: P
+    symbol: P
+    nombre: fuerza_de_potencia
+    unidad_si: N
+    descripcion: Fuerza aplicada por el usuario o actuador.
+  - id: R
+    symbol: R
+    nombre: fuerza_de_resistencia
+    unidad_si: N
+    descripcion: Carga o fuerza resistente.
+  - id: bP
+    symbol: b_P
+    nombre: brazo_de_potencia
+    unidad_si: m
+    descripcion: Distancia perpendicular de P al eje.
+  - id: bR
+    symbol: b_R
+    nombre: brazo_de_resistencia
+    unidad_si: m
+    descripcion: Distancia perpendicular de R al eje.
+  - id: tauP
+    symbol: \tau_P
+    nombre: momento_de_potencia
+    unidad_si: N*m
+    descripcion: Momento producido por la potencia.
+  - id: tauR
+    symbol: \tau_R
+    nombre: momento_de_resistencia
+    unidad_si: N*m
+    descripcion: Momento producido por la resistencia.
+  - id: VM
+    symbol: VM
+    nombre: ventaja_mecanica
+    unidad_si: "1"
+    descripcion: Relacion entre carga y fuerza aplicada.
+formulas:
+  - id: equilibrio_momentos
+    title: Equilibrio de momentos
+    equation: P*bP = R*bR
+    latex: P\,b_P = R\,b_R
+    rearrangements:
+      - target: P
+        equation: P = (R*bR)/bP
+        latex: P=\frac{R b_R}{b_P}
+      - target: R
+        equation: R = (P*bP)/bR
+        latex: R=\frac{P b_P}{b_R}
+      - target: bP
+        equation: bP = (R*bR)/P
+        latex: b_P=\frac{R b_R}{P}
+      - target: bR
+        equation: bR = (P*bP)/R
+        latex: b_R=\frac{P b_P}{R}
+    constraints:
+      - expr: bP > 0
+        message: El brazo de potencia debe ser positivo.
+      - expr: bR > 0
+        message: El brazo de resistencia debe ser positivo.
+  - id: momentos_individuales
+    title: Momentos individuales
+    equation: tauP = P*bP
+    latex: \tau_P=P b_P,\quad \tau_R=R b_R
+    rearrangements:
+      - target: tauP
+        equation: tauP = P*bP
+        latex: \tau_P=P b_P
+      - target: P
+        equation: P = tauP/bP
+        latex: P=\frac{\tau_P}{b_P}
+      - target: bP
+        equation: bP = tauP/P
+        latex: b_P=\frac{\tau_P}{P}
+  - id: ventaja_mecanica
+    title: Ventaja mecanica ideal
+    equation: VM = R/P
+    latex: VM=\frac{R}{P}=\frac{b_P}{b_R}
+    rearrangements:
+      - target: VM
+        equation: VM = R/P
+        latex: VM=\frac{R}{P}
+      - target: R
+        equation: R = VM*P
+        latex: R=VM\,P
+      - target: P
+        equation: P = R/VM
+        latex: P=\frac{R}{VM}
+    constraints:
+      - expr: P > 0
+        message: P debe ser positiva para calcular VM.
+  - id: balance_vectorial_conceptual
+    title: Balance vectorial (conceptual)
+    equation: sum_tau = 0
+    latex: \sum \tau_{eje}=0
+    calculable: false
+    motivo_no_calculable: Es una condicion general de equilibrio que depende del signo y direccion de cada contribucion de momento.
+ui:
+  default_formula: equilibrio_momentos
+  groups:
+    - title: Calculables
+      items:
+        - equilibrio_momentos
+        - momentos_individuales
+        - ventaja_mecanica
+    - title: Conceptuales
+      items:
+        - balance_vectorial_conceptual

@@ -1,0 +1,136 @@
+﻿version: 1
+topic:
+  id: planos-inclinados
+  title: Planos Inclinados
+variables:
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa del bloque.
+  - id: g
+    symbol: g
+    nombre: gravedad
+    unidad_si: m/s^2
+    descripcion: Aceleracion gravitatoria local.
+  - id: theta
+    symbol: \theta
+    nombre: angulo
+    unidad_si: rad
+    descripcion: Angulo del plano respecto a la horizontal.
+  - id: mu
+    symbol: \mu
+    nombre: coeficiente_rozamiento
+    unidad_si: "1"
+    descripcion: Coeficiente de rozamiento cinetico simplificado.
+  - id: N
+    symbol: N
+    nombre: normal
+    unidad_si: N
+    descripcion: Reaccion normal del plano.
+  - id: W_par
+    symbol: W_{\parallel}
+    nombre: componente_paralela_del_peso
+    unidad_si: N
+    descripcion: Proyeccion del peso sobre el eje del plano.
+  - id: W_perp
+    symbol: W_{\perp}
+    nombre: componente_perpendicular_del_peso
+    unidad_si: N
+    descripcion: Proyeccion del peso normal al plano.
+  - id: f
+    symbol: f
+    nombre: fuerza_rozamiento
+    unidad_si: N
+    descripcion: Fuerza de rozamiento sobre el bloque.
+  - id: F_net
+    symbol: F_{net}
+    nombre: fuerza_neta
+    unidad_si: N
+    descripcion: Fuerza resultante en el eje paralelo al plano.
+  - id: a
+    symbol: a
+    nombre: aceleracion
+    unidad_si: m/s^2
+    descripcion: Aceleracion del bloque sobre el plano.
+formulas:
+  - id: descomposicion_peso
+    title: Descomposicion del peso
+    equation: W_par = m*g*sin(theta)
+    latex: W_{\parallel}=mg\sin\theta,\quad W_{\perp}=mg\cos\theta
+    rearrangements:
+      - target: W_par
+        equation: W_par = m*g*sin(theta)
+        latex: W_{\parallel}=mg\sin\theta
+      - target: W_perp
+        equation: W_perp = m*g*cos(theta)
+        latex: W_{\perp}=mg\cos\theta
+  - id: normal_plano
+    title: Normal en plano inclinado
+    equation: N = m*g*cos(theta)
+    latex: N=mg\cos\theta
+    rearrangements:
+      - target: N
+        equation: N = m*g*cos(theta)
+        latex: N=mg\cos\theta
+      - target: m
+        equation: m = N/(g*cos(theta))
+        latex: m=\frac{N}{g\cos\theta}
+  - id: fuerza_rozamiento
+    title: Fuerza de rozamiento
+    equation: f = mu*N
+    latex: f=\mu N
+    rearrangements:
+      - target: f
+        equation: f = mu*N
+        latex: f=\mu N
+      - target: mu
+        equation: mu = f/N
+        latex: \mu=\frac{f}{N}
+      - target: N
+        equation: N = f/mu
+        latex: N=\frac{f}{\mu}
+  - id: aceleracion_con_rozamiento
+    title: Aceleracion con rozamiento
+    equation: a = g*(sin(theta)-mu*cos(theta))
+    latex: a=g(\sin\theta-\mu\cos\theta)
+    rearrangements:
+      - target: a
+        equation: a = g*(sin(theta)-mu*cos(theta))
+        latex: a=g(\sin\theta-\mu\cos\theta)
+      - target: g
+        equation: g = a/(sin(theta)-mu*cos(theta))
+        latex: g=\frac{a}{\sin\theta-\mu\cos\theta}
+      - target: mu
+        equation: mu = (sin(theta)-a/g)/cos(theta)
+        latex: \mu=\frac{\sin\theta-\frac{a}{g}}{\cos\theta}
+  - id: aceleracion_sin_rozamiento
+    title: Aceleracion sin rozamiento
+    equation: a = g*sin(theta)
+    latex: a=g\sin\theta
+    rearrangements:
+      - target: a
+        equation: a = g*sin(theta)
+        latex: a=g\sin\theta
+      - target: theta
+        equation: theta = asin(a/g)
+        latex: \theta=\arcsin\left(\frac{a}{g}\right)
+  - id: ecuacion_vectorial_conceptual
+    title: Segunda ley proyectada (conceptual)
+    equation: F_net = m*a
+    latex: \sum F_{\parallel}=ma
+    calculable: false
+    motivo_no_calculable: Requiere definir previamente convencion de signos y todas las fuerzas que actuan en el caso concreto.
+ui:
+  default_formula: aceleracion_con_rozamiento
+  groups:
+    - title: Calculables
+      items:
+        - descomposicion_peso
+        - normal_plano
+        - fuerza_rozamiento
+        - aceleracion_con_rozamiento
+        - aceleracion_sin_rozamiento
+    - title: Conceptuales
+      items:
+        - ecuacion_vectorial_conceptual

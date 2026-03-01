@@ -1,0 +1,78 @@
+version: 1
+topic:
+  id: trabajo
+  title: Trabajo mecanico
+variables:
+- id: W
+  symbol: W
+  nombre: trabajo
+  unidad_si: J
+  descripcion: Trabajo.
+- id: F
+  symbol: F
+  nombre: fuerza
+  unidad_si: N
+  descripcion: Fuerza.
+- id: d
+  symbol: d
+  nombre: desplazamiento
+  unidad_si: m
+  descripcion: Desplazamiento.
+- id: theta
+  symbol: \theta
+  nombre: angulo entre fuerza y desplazamiento
+  unidad_si: rad
+  descripcion: Angulo entre fuerza y desplazamiento.
+- id: Wnet
+  symbol: W_{neto}
+  nombre: trabajo neto
+  unidad_si: J
+  descripcion: Trabajo neto.
+- id: dK
+  symbol: \Delta K
+  nombre: cambio de energia cinetica
+  unidad_si: J
+  descripcion: Cambio de energia cinetica.
+formulas:
+- id: trabajo_fuerza_constante
+  title: Trabajo de una fuerza constante
+  equation: W = F*d*cos(theta)
+  latex: W = Fd\cos\theta
+  rearrangements:
+  - target: W
+    equation: W = F*d*cos(theta)
+    latex: W = Fd\cos\theta
+  - target: F
+    equation: F = W/(d*cos(theta))
+    latex: F = \frac{W}{d\cos\theta}
+  - target: d
+    equation: d = W/(F*cos(theta))
+    latex: d = \frac{W}{F\cos\theta}
+  constraints:
+  - expr: d > 0
+    message: d debe ser mayor que 0.
+- id: trabajo_neto_sumatoria
+  title: Trabajo neto como suma
+  equation: Wnet = W1 + W2 + W3
+  latex: W_{neto}=\sum_i W_i
+  motivo_no_calculable: Es una forma general; requiere conocer cada trabajo parcial.
+  status: descriptive
+- id: teorema_trabajo_energia
+  title: Teorema trabajo-energia
+  equation: Wnet = dK
+  latex: W_{neto}=\Delta K
+  rearrangements:
+  - target: Wnet
+    equation: Wnet = dK
+    latex: W_{neto}=\Delta K
+  - target: dK
+    equation: dK = Wnet
+    latex: \Delta K=W_{neto}
+ui:
+  default_formula: trabajo_fuerza_constante
+  groups:
+  - title: Basicas
+    items:
+    - trabajo_fuerza_constante
+    - teorema_trabajo_energia
+    - trabajo_neto_sumatoria

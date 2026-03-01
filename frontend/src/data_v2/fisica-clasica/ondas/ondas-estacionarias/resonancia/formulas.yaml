@@ -1,0 +1,105 @@
+﻿version: 1
+topic:
+  id: resonancia
+  title: Resonancia
+variables:
+  - id: n
+    symbol: n
+    name: modo
+    si_unit: '1'
+  - id: L
+    symbol: L
+    name: longitud_efectiva
+    si_unit: m
+  - id: v
+    symbol: v
+    name: velocidad
+    si_unit: m/s
+  - id: lambda_n
+    symbol: \lambda_n
+    name: longitud_onda_modal
+    si_unit: m
+  - id: fn
+    symbol: f_n
+    name: frecuencia_modal
+    si_unit: Hz
+  - id: f_exc
+    symbol: f_{exc}
+    name: frecuencia_excitacion
+    si_unit: Hz
+  - id: f0
+    symbol: f_0
+    name: frecuencia_pico
+    si_unit: Hz
+  - id: Delta_f
+    symbol: \Delta f
+    name: ancho_banda
+    si_unit: Hz
+  - id: Q
+    symbol: Q
+    name: factor_calidad
+    si_unit: '1'
+  - id: zeta
+    symbol: \zeta
+    name: amortiguamiento_equivalente
+    si_unit: '1'
+formulas:
+  - id: frecuencia_modal
+    title: Frecuencia modal
+    equation: fn = n*v/(2*L)
+    latex: f_n=\frac{nv}{2L}
+    rearrangements:
+      - target: fn
+        equation: fn = n*v/(2*L)
+        latex: f_n=\frac{nv}{2L}
+      - target: v
+        equation: v = 2*L*fn/n
+        latex: v=\frac{2Lf_n}{n}
+
+  - id: lambda_modal
+    title: Longitud de onda modal
+    equation: lambda_n = 2*L/n
+    latex: \lambda_n=\frac{2L}{n}
+
+  - id: condicion_resonancia
+    title: Condicion de resonancia
+    equation: f_exc = fn
+    latex: f_{exc}\approx f_n
+
+  - id: pico_resonante
+    title: Frecuencia de pico
+    equation: f0 = fn
+    latex: f_0\approx f_n
+
+  - id: factor_calidad
+    title: Factor Q
+    equation: Q = f0/Delta_f
+    latex: Q=\frac{f_0}{\Delta f}
+    rearrangements:
+      - target: Q
+        equation: Q = f0/Delta_f
+        latex: Q=\frac{f_0}{\Delta f}
+      - target: Delta_f
+        equation: Delta_f = f0/Q
+        latex: \Delta f=\frac{f_0}{Q}
+
+  - id: amortiguamiento
+    title: Amortiguamiento equivalente
+    equation: zeta = 1/(2*Q)
+    latex: \zeta\approx\frac{1}{2Q}
+
+ui:
+  default_formula: frecuencia_modal
+  groups:
+    - title: Base modal
+      items:
+        - frecuencia_modal
+        - lambda_modal
+    - title: Criterio de resonancia
+      items:
+        - condicion_resonancia
+        - pico_resonante
+    - title: Pico y selectividad
+      items:
+        - factor_calidad
+        - amortiguamiento

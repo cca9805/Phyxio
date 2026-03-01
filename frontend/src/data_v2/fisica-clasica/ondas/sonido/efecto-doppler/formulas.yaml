@@ -1,0 +1,144 @@
+﻿version: 1
+topic:
+  id: efecto-doppler
+  title: Efecto Doppler
+variables:
+  - id: f0
+    symbol: f_0
+    name: frecuencia_fuente
+    si_unit: Hz
+  - id: fobs
+    symbol: f_{obs}
+    name: frecuencia_observada
+    si_unit: Hz
+  - id: v
+    symbol: v
+    name: velocidad_onda
+    si_unit: m/s
+  - id: vo
+    symbol: v_o
+    name: velocidad_observador
+    si_unit: m/s
+  - id: vs
+    symbol: v_s
+    name: velocidad_fuente
+    si_unit: m/s
+  - id: delta_f
+    symbol: \Delta f
+    name: corrimiento_frecuencia
+    si_unit: Hz
+  - id: beta
+    symbol: \beta
+    name: beta_relativista
+    si_unit: '1'
+  - id: c
+    symbol: c
+    name: velocidad_luz
+    si_unit: m/s
+  - id: u
+    symbol: u
+    name: velocidad_relativa
+    si_unit: m/s
+  - id: z
+    symbol: z
+    name: corrimiento_relativo
+    si_unit: '1'
+formulas:
+  - id: doppler_general
+    title: Doppler clasico general (1D)
+    equation: fobs = f0*(v + vo)/(v - vs)
+    latex: f_{obs}=f_0\frac{v+v_o}{v-v_s}
+    rearrangements:
+      - target: fobs
+        equation: fobs = f0*(v + vo)/(v - vs)
+        latex: f_{obs}=f_0\frac{v+v_o}{v-v_s}
+      - target: f0
+        equation: f0 = fobs*(v - vs)/(v + vo)
+        latex: f_0=f_{obs}\frac{v-v_s}{v+v_o}
+      - target: vo
+        equation: vo = (fobs*(v - vs)/f0) - v
+        latex: v_o=\frac{f_{obs}(v-v_s)}{f_0}-v
+      - target: vs
+        equation: vs = v - (f0*(v + vo)/fobs)
+        latex: v_s=v-\frac{f_0(v+v_o)}{f_{obs}}
+    constraints:
+      - expr: v > 0
+        message: v debe ser positiva.
+      - expr: (v - vs) != 0
+        message: El denominador v-vs no puede ser 0.
+      - expr: (v + vo) != 0
+        message: El denominador para despejar f0 no puede ser 0.
+
+  - id: doppler_fuente_fija
+    title: Caso fuente fija
+    equation: fobs = f0*(v + vo)/v
+    latex: f_{obs}=f_0\frac{v+v_o}{v}
+    rearrangements:
+      - target: fobs
+        equation: fobs = f0*(v + vo)/v
+        latex: f_{obs}=f_0\frac{v+v_o}{v}
+      - target: vo
+        equation: vo = v*(fobs/f0 - 1)
+        latex: v_o=v\left(\frac{f_{obs}}{f_0}-1\right)
+
+  - id: doppler_observador_fijo
+    title: Caso observador fijo
+    equation: fobs = f0*v/(v - vs)
+    latex: f_{obs}=f_0\frac{v}{v-v_s}
+    rearrangements:
+      - target: fobs
+        equation: fobs = f0*v/(v - vs)
+        latex: f_{obs}=f_0\frac{v}{v-v_s}
+      - target: vs
+        equation: vs = v - f0*v/fobs
+        latex: v_s=v-\frac{f_0v}{f_{obs}}
+
+  - id: corrimiento_hz
+    title: Corrimiento en frecuencia
+    equation: delta_f = fobs - f0
+    latex: \Delta f=f_{obs}-f_0
+    rearrangements:
+      - target: delta_f
+        equation: delta_f = fobs - f0
+        latex: \Delta f=f_{obs}-f_0
+      - target: fobs
+        equation: fobs = f0 + delta_f
+        latex: f_{obs}=f_0+\Delta f
+      - target: f0
+        equation: f0 = fobs - delta_f
+        latex: f_0=f_{obs}-\Delta f
+
+  - id: aproximacion_baja_velocidad
+    title: Aproximacion de baja velocidad
+    equation: delta_f = f0*(vo + vs)/v
+    latex: \frac{\Delta f}{f_0}\approx\frac{v_o+v_s}{v}
+    rearrangements:
+      - target: delta_f
+        equation: delta_f = f0*(vo + vs)/v
+        latex: \Delta f\approx f_0\frac{v_o+v_s}{v}
+    constraints:
+      - expr: v > 0
+        message: v debe ser positiva.
+
+  - id: doppler_relativista_conceptual
+    title: Doppler relativista longitudinal (conceptual)
+    equation: fobs = f0*sqrt((1+beta)/(1-beta))
+    latex: f_{obs}=f_0\sqrt{\frac{1+\beta}{1-\beta}}
+    calculable: false
+    motivo_no_calculable: Corresponde a modelo relativista (ondas electromagneticas) fuera del alcance operativo de este tema de sonido clasico.
+
+ui:
+  default_formula: doppler_general
+  groups:
+    - title: Modelo clasico 1D (calculables)
+      items:
+        - doppler_general
+        - doppler_fuente_fija
+        - doppler_observador_fijo
+    - title: Interpretacion del corrimiento (calculables)
+      items:
+        - corrimiento_hz
+        - aproximacion_baja_velocidad
+    - title: Formula conceptual (no calculable)
+      items:
+        - doppler_relativista_conceptual

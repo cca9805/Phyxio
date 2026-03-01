@@ -1,0 +1,328 @@
+version: 1
+
+topic:
+  id: tiro-parabolico
+  title: "Tiro parabólico"
+
+variables:
+  - id: x
+    symbol: x
+    name: "posición horizontal"
+    si_unit: "m"
+
+  - id: y
+    symbol: y
+    name: "posición vertical"
+    si_unit: "m"
+
+  - id: x0
+    symbol: "x_0"
+    name: "posición horizontal inicial"
+    si_unit: "m"
+
+  - id: y0
+    symbol: "y_0"
+    name: "posición vertical inicial"
+    si_unit: "m"
+
+  - id: t
+    symbol: t
+    name: "tiempo"
+    si_unit: "s"
+
+  - id: v0
+    symbol: "v_0"
+    name: "velocidad inicial"
+    si_unit: "m/s"
+
+  - id: theta
+    symbol: "\\theta"
+    name: "ángulo de lanzamiento"
+    si_unit: "rad"
+
+  - id: vx0
+    symbol: "v_{x0}"
+    name: "componente horizontal inicial"
+    si_unit: "m/s"
+
+  - id: vy0
+    symbol: "v_{y0}"
+    name: "componente vertical inicial"
+    si_unit: "m/s"
+
+  - id: vx
+    symbol: "v_x"
+    name: "velocidad horizontal"
+    si_unit: "m/s"
+
+  - id: vy
+    symbol: "v_y"
+    name: "velocidad vertical"
+    si_unit: "m/s"
+
+  - id: g
+    symbol: g
+    name: "aceleración de la gravedad"
+    si_unit: "m/s^2"
+
+  - id: R
+    symbol: R
+    name: "alcance"
+    si_unit: "m"
+
+  - id: hMax
+    symbol: "h_{\\max}"
+    name: "altura máxima"
+    si_unit: "m"
+
+  - id: tVuelo
+    symbol: "t_{\\text{vuelo}}"
+    name: "tiempo de vuelo"
+    si_unit: "s"
+
+formulas:
+  - id: tp_componentes_v
+    title: "Componentes de la velocidad inicial"
+    equation: "vx0 = v0*cos(theta)"
+    latex: "v_{x0} = v_0 \\cos\\theta"
+    rearrangements:
+      - target: vx0
+        latex: "v_{x0} = v_0 \\cos\\theta"
+        equation: "vx0 = v0*cos(theta)"
+      - target: v0
+        latex: "v_0 = \\frac{v_{x0}}{\\cos\\theta}"
+        equation: "v0 = vx0/cos(theta)"
+    constraints:
+      - expr: "cos(theta) != 0"
+        message: "cos(theta) no puede ser 0 si despejas v0."
+    notes:
+      - "Usa theta en radianes en las ecuaciones. Si introduces grados, conviértelos primero."
+    status: calculable
+
+  - id: tp_componentes_vy0
+    title: "Componente vertical inicial"
+    equation: "vy0 = v0*sin(theta)"
+    latex: "v_{y0} = v_0 \\sin\\theta"
+    rearrangements:
+      - target: vy0
+        latex: "v_{y0} = v_0 \\sin\\theta"
+        equation: "vy0 = v0*sin(theta)"
+      - target: v0
+        latex: "v_0 = \\frac{v_{y0}}{\\sin\\theta}"
+        equation: "v0 = vy0/sin(theta)"
+    constraints:
+      - expr: "sin(theta) != 0"
+        message: "sin(theta) no puede ser 0 si despejas v0."
+    status: calculable
+    
+
+  - id: tp_posicion_x
+    title: "Posición horizontal"
+    equation: "x = x0 + vx0*t"
+    latex: "x = x_0 + v_{x0} t"
+    rearrangements:
+      - target: x
+        latex: "x = x_0 + v_{x0} t"
+        equation: "x = x0 + vx0*t"
+      - target: x0
+        latex: "x_0 = x - v_{x0} t"
+        equation: "x0 = x - vx0*t"
+      - target: vx0
+        latex: "v_{x0} = \\frac{x - x_0}{t}"
+        equation: "vx0 = (x - x0)/t"
+      - target: t
+        latex: "t = \\frac{x - x_0}{v_{x0}}"
+        equation: "t = (x - x0)/vx0"
+    constraints:
+      - expr: "t != 0"
+        message: "t no puede ser 0 si despejas vx0."
+      - expr: "vx0 != 0"
+        message: "vx0 no puede ser 0 si despejas t."
+    status: calculable
+
+  - id: tp_posicion_y
+    title: "Posición vertical"
+    equation: "y = y0 + vy0*t - 0.5*g*t^2"
+    latex: "y = y_0 + v_{y0} t - \\frac{1}{2} g t^2"
+    rearrangements:
+      - target: y
+        latex: "y = y_0 + v_{y0} t - \\frac{1}{2} g t^2"
+        equation: "y = y0 + vy0*t - 0.5*g*t^2"
+      - target: y0
+        latex: "y_0 = y - v_{y0} t + \\frac{1}{2} g t^2"
+        equation: "y0 = y - vy0*t + 0.5*g*t^2"
+      - target: vy0
+        latex: "v_{y0} = \\frac{y - y_0 + \\frac{1}{2} g t^2}{t}"
+        equation: "vy0 = (y - y0 + 0.5*g*t^2)/t"
+      - target: g
+        latex: "g = \\frac{2\\,(y_0 + v_{y0} t - y)}{t^2}"
+        equation: "g = 2*(y0 + vy0*t - y)/(t^2)"
+    constraints:
+      - expr: "t != 0"
+        message: "t no puede ser 0 si despejas vy0."
+      - expr: "t^2 != 0"
+        message: "t no puede ser 0 si despejas g."
+    notes:
+      - "Convención: eje vertical positivo hacia arriba, aceleración vertical = -g."
+    status: calculable
+
+  - id: tp_velocidad_y
+    title: "Velocidad vertical en función del tiempo"
+    equation: "vy = vy0 - g*t"
+    latex: "v_y = v_{y0} - g t"
+    rearrangements:
+      - target: vy
+        latex: "v_y = v_{y0} - g t"
+        equation: "vy = vy0 - g*t"
+      - target: vy0
+        latex: "v_{y0} = v_y + g t"
+        equation: "vy0 = vy + g*t"
+      - target: g
+        latex: "g = \\frac{v_{y0} - v_y}{t}"
+        equation: "g = (vy0 - vy)/t"
+      - target: t
+        latex: "t = \\frac{v_{y0} - v_y}{g}"
+        equation: "t = (vy0 - vy)/g"
+    constraints:
+      - expr: "t != 0"
+        message: "t no puede ser 0 si despejas g."
+      - expr: "g != 0"
+        message: "g no puede ser 0 si despejas t."
+    status: calculable
+
+  - id: tp_altura_maxima
+    title: "Altura máxima (respecto a y0)"
+    equation: "hMax = (vy0^2)/(2*g)"
+    latex: "h_{\\max} = \\frac{v_{y0}^2}{2g}"
+    rearrangements:
+      - target: hMax
+        latex: "h_{\\max} = \\frac{v_{y0}^2}{2g}"
+        equation: "hMax = (vy0^2)/(2*g)"
+      - target: vy0
+        latex: "v_{y0} = +\\sqrt{2 g h_{\\max}}"
+        equation: "vy0 = sqrt(2*g*hMax)"
+      - target: g
+        latex: "g = \\frac{v_{y0}^2}{2 h_{\\max}}"
+        equation: "g = (vy0^2)/(2*hMax)"
+    constraints:
+      - expr: "g > 0"
+        message: "g debe ser positiva."
+      - expr: "hMax >= 0"
+        message: "hMax debe ser no negativa."
+      - expr: "hMax != 0"
+        message: "hMax no puede ser 0 si despejas g."
+    notes:
+      - "hMax es el incremento de altura: yMax = y0 + hMax."
+      - "Solo tiene sentido si el lanzamiento tiene componente vertical hacia arriba (vy0 > 0)."
+    status: calculable
+
+  - id: tp_tiempo_vuelo_suelo
+    title: "Tiempo de vuelo (caso y0 = 0)"
+    equation: "tVuelo = (2*vy0)/g"
+    latex: "t_{\\text{vuelo}} = \\frac{2 v_{y0}}{g}"
+    rearrangements:
+      - target: tVuelo
+        latex: "t_{\\text{vuelo}} = \\frac{2 v_{y0}}{g}"
+        equation: "tVuelo = (2*vy0)/g"
+      - target: vy0
+        latex: "v_{y0} = \\frac{g t_{\\text{vuelo}}}{2}"
+        equation: "vy0 = (g*tVuelo)/2"
+      - target: g
+        latex: "g = \\frac{2 v_{y0}}{t_{\\text{vuelo}}}"
+        equation: "g = (2*vy0)/tVuelo"
+    constraints:
+      - expr: "g > 0"
+        message: "g debe ser positiva."
+      - expr: "tVuelo != 0"
+        message: "tVuelo no puede ser 0 si despejas g."
+    notes:
+      - "Válida si el proyectil sale y llega al mismo nivel (y0 = 0 y y final = 0)."
+    status: calculable
+
+  - id: tp_alcance_suelo
+    title: "Alcance (caso y0 = 0)"
+    equation: "R = (v0^2*sin(2*theta))/g"
+    latex: "R = \\frac{v_0^2 \\sin(2\\theta)}{g}"
+    rearrangements:
+      - target: R
+        latex: "R = \\frac{v_0^2 \\sin(2\\theta)}{g}"
+        equation: "R = (v0^2*sin(2*theta))/g"
+      - target: v0
+        latex: "v_0 = \\sqrt{\\frac{R g}{\\sin(2\\theta)}}"
+        equation: "v0 = sqrt((R*g)/sin(2*theta))"
+      - target: g
+        latex: "g = \\frac{v_0^2 \\sin(2\\theta)}{R}"
+        equation: "g = (v0^2*sin(2*theta))/R"
+    constraints:
+      - expr: "g > 0"
+        message: "g debe ser positiva."
+      - expr: "R != 0"
+        message: "R no puede ser 0 si despejas g."
+      - expr: "sin(2*theta) != 0"
+        message: "sin(2*theta) no puede ser 0 si despejas v0."
+    notes:
+      - "Válida si el proyectil sale y llega al mismo nivel (y0 = 0)."
+    status: calculable
+
+# =========================
+# MODO LECTURA (NO CALCULABLES AÚN)
+# =========================
+
+  - id: tiro_parabolico_trayectoria
+    title: "Trayectoria y(x) (modo lectura)"
+    latex: "y(x)=y_0+\\tan\\theta\\,(x-x_0)-\\frac{g}{2v_0^2\\cos^2\\theta}\\,(x-x_0)^2"
+    status: read_only
+    why_not:
+      - "Muy útil para teoría, pero no es ideal para despejes automáticos."
+    notes:
+      - "Rozamiento despreciable, g constante."
+
+  - id: tiro_parabolico_tiempo_vuelo_general
+    title: "Tiempo de vuelo general (modo lectura)"
+    latex: "t=\\frac{v_0\\sin\\theta+\\sqrt{(v_0\\sin\\theta)^2+2g\\,(y_0-y)}}{g}"
+    status: read_only
+    why_not:
+      - "Procede de ecuación cuadrática; hay que elegir la raíz físicamente válida."
+    notes:
+      - "La otra raíz suele corresponder al instante 'anterior' o no físico según el caso."
+
+  - id: tiro_parabolico_altura_maxima_general
+    title: "Altura máxima (modo lectura)"
+    latex: "y_{\\max}=y_0+\\frac{(v_0\\sin\\theta)^2}{2g}"
+    status: read_only
+    why_not:
+      - "Requiere identificar el instante v_y=0; se usa como fórmula directa de teoría."
+    notes:
+      - "Solo tiene sentido si v0·sinθ > 0."
+
+  - id: tp_vx_constante
+    title: "Velocidad horizontal (constante)"
+    equation: "vx = vx0"
+    latex: "v_x = v_{x0}"
+    status: read_only
+
+
+
+ui:
+  default_formula: tp_posicion_y
+  groups:
+    - title: "Básicas"
+      items:
+        - tp_componentes_v
+        - tp_componentes_vy0
+        - tp_posicion_x
+        - tp_posicion_y
+        - tp_velocidad_y
+
+    - title: "Magnitudes características (y0 = 0)"
+      items:
+        - tp_tiempo_vuelo_suelo
+        - tp_alcance_suelo
+        - tp_altura_maxima
+
+    - title: "Fórmulas (modo lectura)"
+      items: 
+      - tiro_parabolico_trayectoria
+      - tiro_parabolico_tiempo_vuelo_general
+      - tiro_parabolico_altura_maxima_general
+      - tp_vx_constante

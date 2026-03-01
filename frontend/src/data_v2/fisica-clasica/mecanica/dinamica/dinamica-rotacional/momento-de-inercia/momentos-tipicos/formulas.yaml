@@ -1,0 +1,158 @@
+version: 1
+topic:
+  id: momentos-tipicos
+  title: Momentos Tipicos
+variables:
+  - id: I
+    symbol: I
+    name: momento_de_inercia
+    si_unit: kg*m^2
+  - id: m
+    symbol: m
+    name: masa
+    si_unit: kg
+  - id: R
+    symbol: R
+    name: radio
+    si_unit: m
+  - id: L
+    symbol: L
+    name: longitud
+    si_unit: m
+  - id: a
+    symbol: a
+    name: lado_a
+    si_unit: m
+  - id: b
+    symbol: b
+    name: lado_b
+    si_unit: m
+  - id: tau
+    symbol: \tau
+    name: torque_neto
+    si_unit: N*m
+  - id: alpha
+    symbol: \alpha
+    name: aceleracion_angular
+    si_unit: rad/s^2
+formulas:
+  - id: aro_fino
+    title: Aro o punto material
+    equation: I = m*R^2
+    latex: I = mR^2
+    rearrangements:
+      - target: I
+        equation: I = m*R^2
+        latex: I = mR^2
+      - target: m
+        equation: m = I/R^2
+        latex: m = \frac{I}{R^2}
+      - target: R
+        equation: R = sqrt(I/m)
+        latex: R = \sqrt{\frac{I}{m}}
+  - id: disco_macizo
+    title: Disco macizo
+    equation: I = 0.5*m*R^2
+    latex: I = \frac{1}{2}mR^2
+    rearrangements:
+      - target: I
+        equation: I = 0.5*m*R^2
+        latex: I = \frac{1}{2}mR^2
+      - target: m
+        equation: m = 2*I/R^2
+        latex: m = \frac{2I}{R^2}
+      - target: R
+        equation: R = sqrt((2*I)/m)
+        latex: R = \sqrt{\frac{2I}{m}}
+  - id: barra_centro
+    title: Barra por centro
+    equation: I = (1/12)*m*L^2
+    latex: I = \frac{1}{12}mL^2
+    rearrangements:
+      - target: I
+        equation: I = (1/12)*m*L^2
+        latex: I = \frac{1}{12}mL^2
+      - target: m
+        equation: m = 12*I/L^2
+        latex: m = \frac{12I}{L^2}
+      - target: L
+        equation: L = sqrt((12*I)/m)
+        latex: L = \sqrt{\frac{12I}{m}}
+  - id: esfera_maciza
+    title: Esfera maciza
+    equation: I = 0.4*m*R^2
+    latex: I = \frac{2}{5}mR^2
+    rearrangements:
+      - target: I
+        equation: I = 0.4*m*R^2
+        latex: I = \frac{2}{5}mR^2
+      - target: m
+        equation: m = (5*I)/(2*R^2)
+        latex: m = \frac{5I}{2R^2}
+      - target: R
+        equation: R = sqrt((5*I)/(2*m))
+        latex: R = \sqrt{\frac{5I}{2m}}
+
+  - id: barra_extremo
+    title: Barra por extremo
+    equation: I = (1/3)*m*L^2
+    latex: I = \frac{1}{3}mL^2
+    rearrangements:
+      - target: I
+        equation: I = (1/3)*m*L^2
+        latex: I = \frac{1}{3}mL^2
+      - target: m
+        equation: m = 3*I/L^2
+        latex: m = \frac{3I}{L^2}
+      - target: L
+        equation: L = sqrt((3*I)/m)
+        latex: L = \sqrt{\frac{3I}{m}}
+
+  - id: placa_rectangular
+    title: Placa rectangular por centro
+    equation: I = (1/12)*m*(a^2 + b^2)
+    latex: I = \frac{1}{12}m(a^2+b^2)
+    rearrangements:
+      - target: I
+        equation: I = (1/12)*m*(a^2 + b^2)
+        latex: I = \frac{1}{12}m(a^2+b^2)
+      - target: m
+        equation: m = 12*I/(a^2 + b^2)
+        latex: m = \frac{12I}{a^2+b^2}
+
+  - id: respuesta_dinamica
+    title: Uso dinamico de I tabulado
+    equation: alpha = tau/I
+    latex: \alpha = \frac{\tau}{I}
+    rearrangements:
+      - target: alpha
+        equation: alpha = tau/I
+        latex: \alpha = \frac{\tau}{I}
+      - target: tau
+        equation: tau = I*alpha
+        latex: \tau = I\alpha
+
+  - id: integral_general
+    title: Construccion general de I
+    equation: I = I
+    latex: I = \int_V r^2\rho(\mathbf{x})\,dV
+    calculable: false
+    motivo_no_calculable: Requiere conocer la distribucion espacial de densidad y resolver la integral en volumen.
+
+ui:
+  default_formula: disco_macizo
+  groups:
+    - title: Geometrias tipicas (calculables)
+      items:
+        - aro_fino
+        - disco_macizo
+        - esfera_maciza
+        - barra_centro
+        - barra_extremo
+        - placa_rectangular
+    - title: Uso dinamico (calculable)
+      items:
+        - respuesta_dinamica
+    - title: Formula general (no calculable)
+      items:
+        - integral_general

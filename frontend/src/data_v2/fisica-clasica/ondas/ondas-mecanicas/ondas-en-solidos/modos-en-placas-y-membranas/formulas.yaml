@@ -1,0 +1,140 @@
+﻿version: 1
+topic:
+  id: modos-en-placas-y-membranas
+  title: Modos En Placas Y Membranas
+variables:
+  - id: Ts
+    symbol: T_s
+    name: tension_superficial
+    si_unit: N/m
+  - id: mu_s
+    symbol: \mu_s
+    name: masa_superficial
+    si_unit: kg/m^2
+  - id: v
+    symbol: v
+    name: velocidad_membrana
+    si_unit: m/s
+  - id: Lx
+    symbol: L_x
+    name: longitud_x
+    si_unit: m
+  - id: Ly
+    symbol: L_y
+    name: longitud_y
+    si_unit: m
+  - id: m
+    symbol: m
+    name: indice_modal_x
+    si_unit: '1'
+  - id: n
+    symbol: n
+    name: indice_modal_y
+    si_unit: '1'
+  - id: fmn
+    symbol: f_{mn}
+    name: frecuencia_modal
+    si_unit: Hz
+  - id: omega_mn
+    symbol: \omega_{mn}
+    name: frecuencia_angular_modal
+    si_unit: rad/s
+  - id: E
+    symbol: E
+    name: modulo_young
+    si_unit: Pa
+  - id: h
+    symbol: h
+    name: espesor
+    si_unit: m
+  - id: nu
+    symbol: \nu
+    name: poisson
+    si_unit: '1'
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: D
+    symbol: D
+    name: rigidez_flexional
+    si_unit: N*m
+formulas:
+  - id: v_membrana
+    title: Velocidad de membrana
+    equation: v = sqrt(Ts/mu_s)
+    latex: v=\sqrt{\frac{T_s}{\mu_s}}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(Ts/mu_s)
+        latex: v=\sqrt{\frac{T_s}{\mu_s}}
+      - target: Ts
+        equation: Ts = mu_s*v^2
+        latex: T_s=\mu_s v^2
+      - target: mu_s
+        equation: mu_s = Ts/(v^2)
+        latex: \mu_s=\frac{T_s}{v^2}
+
+  - id: fmn_membrana
+    title: Frecuencia modal en membrana rectangular
+    equation: fmn = (v/2)*sqrt((m/Lx)^2 + (n/Ly)^2)
+    latex: f_{mn}=\frac{v}{2}\sqrt{\left(\frac{m}{L_x}\right)^2+\left(\frac{n}{L_y}\right)^2}
+    rearrangements:
+      - target: fmn
+        equation: fmn = (v/2)*sqrt((m/Lx)^2 + (n/Ly)^2)
+        latex: f_{mn}=\frac{v}{2}\sqrt{\left(\frac{m}{L_x}\right)^2+\left(\frac{n}{L_y}\right)^2}
+      - target: v
+        equation: v = 2*fmn/sqrt((m/Lx)^2 + (n/Ly)^2)
+        latex: v=\frac{2f_{mn}}{\sqrt{\left(\frac{m}{L_x}\right)^2+\left(\frac{n}{L_y}\right)^2}}
+
+  - id: D_placa
+    title: Rigidez flexional de placa
+    equation: D = E*h^3/(12*(1-nu^2))
+    latex: D=\frac{E h^3}{12\left(1-\nu^2\right)}
+    rearrangements:
+      - target: D
+        equation: D = E*h^3/(12*(1-nu^2))
+        latex: D=\frac{E h^3}{12\left(1-\nu^2\right)}
+      - target: E
+        equation: E = 12*D*(1-nu^2)/h^3
+        latex: E=\frac{12D\left(1-\nu^2\right)}{h^3}
+
+  - id: omega_mn_placa
+    title: Frecuencia angular modal en placa delgada
+    equation: omega_mn = (pi^2)*sqrt(D/(rho*h))*((m/Lx)^2 + (n/Ly)^2)
+    latex: \omega_{mn}=\pi^2\sqrt{\frac{D}{\rho h}}\left[\left(\frac{m}{L_x}\right)^2+\left(\frac{n}{L_y}\right)^2\right]
+
+  - id: f_omega
+    title: Conversion entre omega y f
+    equation: fmn = omega_mn/(2*pi)
+    latex: f_{mn}=\frac{\omega_{mn}}{2\pi}
+    rearrangements:
+      - target: fmn
+        equation: fmn = omega_mn/(2*pi)
+        latex: f_{mn}=\frac{\omega_{mn}}{2\pi}
+      - target: omega_mn
+        equation: omega_mn = 2*pi*fmn
+        latex: \omega_{mn}=2\pi f_{mn}
+
+  - id: modo_forma
+    title: Forma modal bidimensional (conceptual)
+    equation: w = A*sin(m*pi*x/Lx)*sin(n*pi*y/Ly)*cos(omega_mn*t + phi)
+    latex: w(x,y,t)=A\sin\left(\frac{m\pi x}{L_x}\right)\sin\left(\frac{n\pi y}{L_y}\right)\cos\left(\omega_{mn}t+\phi\right)
+    calculable: false
+    motivo_no_calculable: Modelo de campo espacial-temporal; no es un despeje escalar unico.
+
+ui:
+  default_formula: fmn_membrana
+  groups:
+    - title: Membranas (calculables)
+      items:
+        - v_membrana
+        - fmn_membrana
+    - title: Placas (calculables)
+      items:
+        - D_placa
+        - omega_mn_placa
+        - f_omega
+    - title: Modelo espacial
+      items:
+        - modo_forma

@@ -1,0 +1,133 @@
+version: 1
+topic:
+  id: identificacion-de-fuerzas
+  title: 'Diagramas de fuerzas (DCL): identificacion'
+variables:
+- id: m
+  symbol: m
+  nombre: masa
+  unidad_si: kg
+  descripcion: Masa.
+- id: g
+  symbol: g
+  nombre: gravedad
+  unidad_si: m/s^2
+  descripcion: Gravedad.
+- id: P
+  symbol: P
+  nombre: peso (modulo)
+  unidad_si: N
+  descripcion: Peso (modulo).
+- id: N
+  symbol: N
+  nombre: normal (modulo)
+  unidad_si: N
+  descripcion: Normal (modulo).
+- id: mu
+  symbol: \mu
+  nombre: coeficiente de rozamiento
+  unidad_si: '-'
+  descripcion: Coeficiente de rozamiento.
+- id: fk
+  symbol: f_k
+  nombre: rozamiento cinetico (modulo)
+  unidad_si: N
+  descripcion: Rozamiento cinetico (modulo).
+- id: k
+  symbol: k
+  nombre: constante elastica
+  unidad_si: N/m
+  descripcion: Constante elastica.
+- id: x
+  symbol: x
+  nombre: deformacion del muelle
+  unidad_si: m
+  descripcion: Deformacion del muelle.
+- id: Fel
+  symbol: F_{el}
+  nombre: fuerza elastica
+  unidad_si: N
+  descripcion: Fuerza elastica.
+formulas:
+- id: peso
+  title: Peso (modulo)
+  equation: P = m*g
+  latex: P = m\,g
+  rearrangements:
+  - target: P
+    equation: P = m*g
+    latex: P = m\,g
+  - target: m
+    equation: m = P/g
+    latex: m = \frac{P}{g}
+    constraints:
+    - expr: g != 0
+      message: g no puede ser 0.
+  - target: g
+    equation: g = P/m
+    latex: g = \frac{P}{m}
+    constraints:
+    - expr: m != 0
+      message: m no puede ser 0.
+  status: calculable
+- id: rozamiento_cinetico
+  title: Rozamiento cinetico (modulo)
+  equation: fk = mu*N
+  latex: f_k = \mu\,N
+  rearrangements:
+  - target: fk
+    equation: fk = mu*N
+    latex: f_k = \mu\,N
+  - target: mu
+    equation: mu = fk/N
+    latex: \mu = \frac{f_k}{N}
+    constraints:
+    - expr: N != 0
+      message: N no puede ser 0.
+  - target: N
+    equation: N = fk/mu
+    latex: N = \frac{f_k}{\mu}
+    constraints:
+    - expr: mu != 0
+      message: mu no puede ser 0.
+  status: calculable
+- id: hooke
+  title: Ley de Hooke (modulo)
+  equation: Fel = k*x
+  latex: F_{el} = k\,x
+  rearrangements:
+  - target: Fel
+    equation: Fel = k*x
+    latex: F_{el} = k\,x
+  - target: k
+    equation: k = Fel/x
+    latex: k = \frac{F_{el}}{x}
+    constraints:
+    - expr: x != 0
+      message: x no puede ser 0.
+  - target: x
+    equation: x = Fel/k
+    latex: x = \frac{F_{el}}{k}
+    constraints:
+    - expr: k != 0
+      message: k no puede ser 0.
+  status: calculable
+- id: reglas_dcl
+  title: Reglas del DCL (concepto)
+  equation: DCL = cuerpo aislado + fuerzas reales
+  latex: '\text{DCL: aislar el cuerpo y dibujar SOLO fuerzas reales sobre el.}'
+  motivo_no_calculable: 'Es un procedimiento. No es una ecuacion numerica.
+
+    '
+  status: descriptive
+ui:
+  default_formula: reglas_dcl
+  groups:
+  - title: Fuerzas tipicas
+    items:
+    - peso
+    - rozamiento_cinetico
+    - hooke
+  - title: Metodo
+    items:
+    - reglas_dcl

@@ -1,0 +1,132 @@
+version: 1
+topic:
+  id: fuerza-forzada
+  title: Oscilación forzada
+variables:
+  - id: F0
+    symbol: F_0
+    nombre: amplitud de fuerza externa
+    unidad_si: "N"
+    descripcion: Amplitud de fuerza externa.
+  - id: omega_f
+    symbol: \omega_f
+    nombre: pulsacion de forzado
+    unidad_si: rad/s
+    descripcion: Pulsacion de forzado.
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa.
+  - id: k
+    symbol: k
+    nombre: constante elastica
+    unidad_si: N/m
+    descripcion: Constante elastica.
+  - id: b
+    symbol: b
+    nombre: amortiguamiento viscoso
+    unidad_si: N*s/m
+    descripcion: Amortiguamiento viscoso.
+  - id: X
+    symbol: X
+    nombre: amplitud estacionaria
+    unidad_si: m
+    descripcion: Amplitud estacionaria.
+  - id: delta
+    symbol: \delta
+    nombre: desfase
+    unidad_si: rad
+    descripcion: Desfase.
+  - id: x
+    symbol: x
+    nombre: desplazamiento
+    unidad_si: m
+    descripcion: Desplazamiento.
+  - id: t
+    symbol: t
+    nombre: tiempo
+    unidad_si: s
+    descripcion: Tiempo.
+  - id: x_dd
+    symbol: \ddot x
+    nombre: aceleración
+    unidad_si: m/s^2
+    descripcion: Segunda derivada temporal de x.
+  - id: x_d
+    symbol: \dot x
+    nombre: velocidad
+    unidad_si: m/s
+    descripcion: Primera derivada temporal de x.
+formulas:
+  - id: amplitud_forzada
+    title: Amplitud estacionaria
+    equation: X = F0/sqrt((k-m*omega_f^2)^2 + (b*omega_f)^2)
+    latex: X=\frac{F_0}{\sqrt{(k-m\omega_f^2)^2+(b\omega_f)^2}}
+    rearrangements:
+      - target: X
+        equation: X = F0/sqrt((k-m*omega_f^2)^2 + (b*omega_f)^2)
+        latex: X=\frac{F_0}{\sqrt{(k-m\omega_f^2)^2+(b\omega_f)^2}}
+      - target: F0
+        equation: F0 = X*sqrt((k-m*omega_f^2)^2 + (b*omega_f)^2)
+        latex: F_0=X\sqrt{(k-m\omega_f^2)^2+(b\omega_f)^2}
+    constraints:
+      - expr: F0 > 0
+        message: F0 debe ser mayor que 0.
+      - expr: omega_f > 0
+        message: omega_f debe ser mayor que 0.
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+      - expr: k > 0
+        message: k debe ser mayor que 0.
+      - expr: b > 0
+        message: b debe ser mayor que 0.
+      - expr: X > 0
+        message: X debe ser mayor que 0.
+  - id: desfase_forzada
+    title: Desfase
+    equation: delta = atan((b*omega_f)/(k-m*omega_f^2))
+    latex: \delta=\arctan\left(\frac{b\omega_f}{k-m\omega_f^2}\right)
+    rearrangements:
+      - target: delta
+        equation: delta = atan((b*omega_f)/(k-m*omega_f^2))
+        latex: \delta=\arctan\left(\frac{b\omega_f}{k-m\omega_f^2}\right)
+    constraints:
+      - expr: omega_f > 0
+        message: omega_f debe ser mayor que 0.
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+      - expr: k > 0
+        message: k debe ser mayor que 0.
+      - expr: b > 0
+        message: b debe ser mayor que 0.
+  - id: respuesta_estacionaria
+    title: Respuesta temporal
+    equation: x = X*cos(omega_f*t - delta)
+    latex: x=X\cos(\omega_ft-\delta)
+    rearrangements:
+      - target: x
+        equation: x = X*cos(omega_f*t - delta)
+        latex: x=X\cos(\omega_ft-\delta)
+    constraints:
+      - expr: omega_f > 0
+        message: omega_f debe ser mayor que 0.
+      - expr: X > 0
+        message: X debe ser mayor que 0.
+  - id: ecuacion_diferencial_forzada
+    title: Ecuación del oscilador forzado (conceptual)
+    equation: m*x_dd + b*x_d + k*x = F0*cos(omega_f*t)
+    latex: m\ddot x+b\dot x+kx=F_0\cos(\omega_ft)
+    calculable: false
+    motivo_no_calculable: Requiere solución de ecuaciones diferenciales para separar transitorio y estacionario.
+ui:
+  default_formula: amplitud_forzada
+  groups:
+    - title: Fórmulas calculables
+      items:
+        - amplitud_forzada
+        - desfase_forzada
+        - respuesta_estacionaria
+    - title: Fórmulas conceptuales
+      items:
+        - ecuacion_diferencial_forzada

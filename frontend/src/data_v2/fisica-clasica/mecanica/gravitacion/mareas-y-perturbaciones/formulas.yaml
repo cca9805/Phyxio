@@ -1,0 +1,170 @@
+﻿version: 1
+topic:
+  id: mareas-y-perturbaciones
+  title: Mareas y perturbaciones
+variables:
+  - id: G
+    symbol: G
+    nombre: constante de gravitación
+    unidad_si: N*m^2/kg^2
+    descripcion: Constante universal de gravitación.
+  - id: M
+    symbol: M
+    nombre: masa perturbadora
+    unidad_si: kg
+    descripcion: Masa del cuerpo que induce la marea.
+  - id: R
+    symbol: R
+    nombre: radio del cuerpo afectado
+    unidad_si: m
+    descripcion: Escala radial del cuerpo deformado.
+  - id: d
+    symbol: d
+    nombre: distancia entre centros
+    unidad_si: m
+    descripcion: Distancia centro a centro.
+  - id: am
+    symbol: a_{marea}
+    nombre: aceleracion de marea
+    unidad_si: m/s^2
+    descripcion: Aceleración diferencial mareal.
+  - id: ac
+    symbol: a_{central}
+    nombre: aceleracion central
+    unidad_si: m/s^2
+    descripcion: Aceleración principal de la órbita.
+  - id: ap
+    symbol: a_{pert}
+    nombre: aceleracion perturbativa
+    unidad_si: m/s^2
+    descripcion: Aceleración de perturbaciones secundarias.
+  - id: eps
+    symbol: \varepsilon
+    nombre: parametro perturbativo
+    unidad_si: 1
+    descripcion: Razón entre aceleración perturbativa y central.
+  - id: M1
+    symbol: M_1
+    nombre: masa perturbador 1
+    unidad_si: kg
+    descripcion: Masa del primer perturbador.
+  - id: M2
+    symbol: M_2
+    nombre: masa perturbador 2
+    unidad_si: kg
+    descripcion: Masa del segundo perturbador.
+  - id: d1
+    symbol: d_1
+    nombre: distancia perturbador 1
+    unidad_si: m
+    descripcion: Distancia del perturbador 1.
+  - id: d2
+    symbol: d_2
+    nombre: distancia perturbador 2
+    unidad_si: m
+    descripcion: Distancia del perturbador 2.
+  - id: am1
+    symbol: a_{marea,1}
+    nombre: marea perturbador 1
+    unidad_si: m/s^2
+    descripcion: Contribución mareal del perturbador 1.
+  - id: am2
+    symbol: a_{marea,2}
+    nombre: marea perturbador 2
+    unidad_si: m/s^2
+    descripcion: Contribución mareal del perturbador 2.
+  - id: tau
+    symbol: \tau
+    nombre: torque mareal
+    unidad_si: N*m
+    descripcion: Torque característico asociado al efecto mareal.
+formulas:
+  - id: aceleracion_mareal
+    title: Aceleración de marea de primer orden
+    equation: am = 2*G*M*R/d^3
+    latex: a_{marea} \approx \frac{2GMR}{d^3}
+    rearrangements:
+      - target: am
+        equation: am = 2*G*M*R/d^3
+        latex: a_{marea} \approx \frac{2GMR}{d^3}
+      - target: d
+        equation: d = (2*G*M*R/am)^(1/3)
+        latex: d \approx \sqrt[3]{\frac{2GMR}{a_{marea}}}
+      - target: M
+        equation: M = am*d^3/(2*G*R)
+        latex: M \approx \frac{a_{marea}d^3}{2GR}
+    constraints:
+      - expr: d > 0
+        message: d debe ser mayor que 0.
+      - expr: R > 0
+        message: R debe ser mayor que 0.
+      - expr: am > 0
+        message: am debe ser mayor que 0.
+
+  - id: parametro_perturbativo
+    title: Parámetro perturbativo
+    equation: eps = ap/ac
+    latex: \varepsilon = \frac{a_{pert}}{a_{central}}
+    rearrangements:
+      - target: eps
+        equation: eps = ap/ac
+        latex: \varepsilon = \frac{a_{pert}}{a_{central}}
+      - target: ap
+        equation: ap = eps*ac
+        latex: a_{pert}=\varepsilon a_{central}
+      - target: ac
+        equation: ac = ap/eps
+        latex: a_{central}=\frac{a_{pert}}{\varepsilon}
+    constraints:
+      - expr: ac > 0
+        message: ac debe ser mayor que 0.
+      - expr: eps > 0
+        message: eps debe ser mayor que 0 al despejar ac.
+
+  - id: comparacion_perturbadores
+    title: Comparación de mareas entre perturbadores
+    equation: am1 = am2*(M1/M2)*(d2/d1)^3
+    latex: a_{marea,1}=a_{marea,2}\frac{M_1}{M_2}\left(\frac{d_2}{d_1}\right)^3
+    rearrangements:
+      - target: am1
+        equation: am1 = am2*(M1/M2)*(d2/d1)^3
+        latex: a_{marea,1}=a_{marea,2}\frac{M_1}{M_2}\left(\frac{d_2}{d_1}\right)^3
+      - target: am2
+        equation: am2 = am1*(M2/M1)*(d1/d2)^3
+        latex: a_{marea,2}=a_{marea,1}\frac{M_2}{M_1}\left(\frac{d_1}{d_2}\right)^3
+    constraints:
+      - expr: d1 > 0
+        message: d1 debe ser mayor que 0.
+      - expr: d2 > 0
+        message: d2 debe ser mayor que 0.
+      - expr: M1 > 0
+        message: M1 debe ser mayor que 0.
+      - expr: M2 > 0
+        message: M2 debe ser mayor que 0.
+
+  - id: torque_mareal_conceptual
+    title: Escalado de torque mareal (conceptual)
+    equation: tau ~ r*F_marea
+    latex: \tau \sim rF_{marea}
+    calculable: false
+    motivo_no_calculable: Es relación de orden de magnitud sin cierre algebraico único.
+
+  - id: aceleracion_total_conceptual
+    title: Aceleración total con perturbaciones (conceptual)
+    equation: a_total_vec = a_central_vec + sum(a_pert_i_vec)
+    latex: \vec a_{total}=\vec a_{central}+\sum_i \vec a_{pert,i}
+    calculable: false
+    motivo_no_calculable: Requiere suma vectorial dependiente de geometría y fase orbital.
+
+ui:
+  default_formula: aceleracion_mareal
+  groups:
+    - title: Formulas calculables
+      items:
+        - aceleracion_mareal
+        - parametro_perturbativo
+        - comparacion_perturbadores
+    - title: Formulas conceptuales
+      items:
+        - torque_mareal_conceptual
+        - aceleracion_total_conceptual

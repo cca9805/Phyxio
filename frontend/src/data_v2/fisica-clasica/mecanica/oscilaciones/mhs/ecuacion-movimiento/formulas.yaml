@@ -1,0 +1,106 @@
+version: 1
+topic:
+  id: ecuacion-movimiento
+  title: Ecuación de movimiento en MHS
+variables:
+  - id: x
+    symbol: x
+    nombre: desplazamiento
+    unidad_si: m
+    descripcion: Desplazamiento.
+  - id: A
+    symbol: A
+    nombre: amplitud
+    unidad_si: m
+    descripcion: Amplitud.
+  - id: omega
+    symbol: \omega
+    nombre: pulsacion
+    unidad_si: rad/s
+    descripcion: Pulsacion.
+  - id: phi
+    symbol: \varphi
+    nombre: fase inicial
+    unidad_si: rad
+    descripcion: Fase inicial.
+  - id: t
+    symbol: t
+    nombre: tiempo
+    unidad_si: s
+    descripcion: Tiempo.
+  - id: v
+    symbol: v
+    nombre: velocidad
+    unidad_si: m/s
+    descripcion: Velocidad.
+  - id: a
+    symbol: a
+    nombre: aceleracion
+    unidad_si: m/s^2
+    descripcion: Aceleracion.
+  - id: x_dd
+    symbol: \ddot x
+    nombre: aceleración
+    unidad_si: m/s^2
+    descripcion: Segunda derivada temporal de x.
+formulas:
+  - id: posicion_mhs
+    title: Posicion
+    equation: x = A*cos(omega*t + phi)
+    latex: x=A\cos(\omega t+\varphi)
+    rearrangements:
+      - target: x
+        equation: x = A*cos(omega*t + phi)
+        latex: x=A\cos(\omega t+\varphi)
+    constraints:
+      - expr: A > 0
+        message: A debe ser mayor que 0.
+      - expr: omega > 0
+        message: omega debe ser mayor que 0.
+  - id: velocidad_mhs
+    title: Velocidad
+    equation: v = -A*omega*sin(omega*t + phi)
+    latex: v=-A\omega\sin(\omega t+\varphi)
+    rearrangements:
+      - target: v
+        equation: v = -A*omega*sin(omega*t + phi)
+        latex: v=-A\omega\sin(\omega t+\varphi)
+    constraints:
+      - expr: A > 0
+        message: A debe ser mayor que 0.
+      - expr: omega > 0
+        message: omega debe ser mayor que 0.
+  - id: aceleracion_mhs
+    title: Aceleracion
+    equation: a = -omega^2*x
+    latex: a=-\omega^2x
+    rearrangements:
+      - target: a
+        equation: a = -omega^2*x
+        latex: a=-\omega^2x
+      - target: x
+        equation: x = -a/(omega^2)
+        latex: x=-\frac{a}{\omega^2}
+      - target: omega
+        equation: omega = sqrt(-a/x)
+        latex: \omega=\sqrt{-\frac{a}{x}}
+    constraints:
+      - expr: omega > 0
+        message: omega debe ser mayor que 0.
+  - id: ecuacion_diferencial_mhs
+    title: Ecuación diferencial del MHS (conceptual)
+    equation: x_dd + omega^2*x = 0
+    latex: \ddot x+\omega^2x=0
+    calculable: false
+    motivo_no_calculable: Relaciona derivadas temporales y requiere condiciones iniciales para solución completa.
+ui:
+  default_formula: posicion_mhs
+  groups:
+    - title: Fórmulas calculables
+      items:
+        - posicion_mhs
+        - velocidad_mhs
+        - aceleracion_mhs
+    - title: Fórmulas conceptuales
+      items:
+        - ecuacion_diferencial_mhs

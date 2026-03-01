@@ -1,0 +1,155 @@
+﻿version: 1
+topic:
+  id: espectro-electromagnetico
+  title: Espectro Electromagnetico
+variables:
+  - id: c
+    symbol: c
+    name: velocidad_luz_vacio
+    si_unit: m/s
+  - id: v
+    symbol: v
+    name: velocidad_en_medio
+    si_unit: m/s
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+  - id: h
+    symbol: h
+    name: constante_planck
+    si_unit: J*s
+  - id: E
+    symbol: E
+    name: energia_foton_j
+    si_unit: J
+  - id: E_eV
+    symbol: E_{eV}
+    name: energia_foton_ev
+    si_unit: eV
+  - id: e
+    symbol: e
+    name: carga_elemental
+    si_unit: C
+  - id: n
+    symbol: n
+    name: indice_refraccion
+    si_unit: '1'
+  - id: B_lambda
+    symbol: B_\lambda
+    name: radiancia_espectral
+    si_unit: W/(m^3*sr)
+  - id: T_K
+    symbol: T_K
+    name: temperatura_absoluta
+    si_unit: K
+formulas:
+  - id: relacion_onda_vacio
+    title: Relacion espectral en vacio
+    equation: c = lambda*f
+    latex: c=\lambda f
+    rearrangements:
+      - target: c
+        equation: c = lambda*f
+        latex: c=\lambda f
+      - target: lambda
+        equation: lambda = c/f
+        latex: \lambda=\frac{c}{f}
+      - target: f
+        equation: f = c/lambda
+        latex: f=\frac{c}{\lambda}
+
+  - id: periodo
+    title: Periodo
+    equation: T = 1/f
+    latex: T=\frac{1}{f}
+    rearrangements:
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+
+  - id: energia_foton_frecuencia
+    title: Energia de foton por frecuencia
+    equation: E = h*f
+    latex: E=hf
+    rearrangements:
+      - target: E
+        equation: E = h*f
+        latex: E=hf
+      - target: f
+        equation: f = E/h
+        latex: f=\frac{E}{h}
+      - target: h
+        equation: h = E/f
+        latex: h=\frac{E}{f}
+
+  - id: energia_foton_lambda
+    title: Energia de foton por longitud de onda
+    equation: E = h*c/lambda
+    latex: E=\frac{hc}{\lambda}
+    rearrangements:
+      - target: E
+        equation: E = h*c/lambda
+        latex: E=\frac{hc}{\lambda}
+      - target: lambda
+        equation: lambda = h*c/E
+        latex: \lambda=\frac{hc}{E}
+
+  - id: conversion_ev
+    title: Conversion Joule a eV
+    equation: E_eV = E/e
+    latex: E_{eV}=\frac{E}{e}
+    rearrangements:
+      - target: E_eV
+        equation: E_eV = E/e
+        latex: E_{eV}=\frac{E}{e}
+      - target: E
+        equation: E = E_eV*e
+        latex: E=E_{eV}e
+
+  - id: velocidad_medio
+    title: Velocidad en medio
+    equation: v = c/n
+    latex: v=\frac{c}{n}
+    rearrangements:
+      - target: v
+        equation: v = c/n
+        latex: v=\frac{c}{n}
+      - target: n
+        equation: n = c/v
+        latex: n=\frac{c}{v}
+
+  - id: planck_conceptual
+    title: Ley de Planck (conceptual)
+    equation: B_lambda = B_lambda
+    latex: B_\lambda(T)=\frac{2hc^2}{\lambda^5}\frac{1}{e^{hc/(\lambda k_BT)}-1}
+    calculable: false
+    motivo_no_calculable: Requiere evaluacion funcional completa con constantes y rango espectral, fuera del despeje escalar basico.
+
+ui:
+  default_formula: relacion_onda_vacio
+  groups:
+    - title: Conversiones espectrales (calculables)
+      items:
+        - relacion_onda_vacio
+        - periodo
+        - velocidad_medio
+    - title: Energia del foton (calculables)
+      items:
+        - energia_foton_frecuencia
+        - energia_foton_lambda
+        - conversion_ev
+    - title: Formula conceptual (no calculable)
+      items:
+        - planck_conceptual

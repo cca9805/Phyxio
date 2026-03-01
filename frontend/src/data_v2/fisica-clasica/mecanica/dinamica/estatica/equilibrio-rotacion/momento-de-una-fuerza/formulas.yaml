@@ -1,0 +1,96 @@
+﻿version: 1
+topic:
+  id: momento-de-una-fuerza
+  title: Momento de una fuerza
+
+variables:
+  - id: M
+    symbol: M
+    nombre: momento
+    unidad_si: N*m
+    descripcion: Efecto de giro de la fuerza respecto al eje.
+  - id: F
+    symbol: F
+    nombre: fuerza
+    unidad_si: N
+    descripcion: Fuerza aplicada.
+  - id: d
+    symbol: d
+    nombre: brazo_de_palanca
+    unidad_si: m
+    descripcion: Distancia perpendicular del eje a la linea de accion.
+  - id: r
+    symbol: r
+    nombre: distancia_radial
+    unidad_si: m
+    descripcion: Distancia del eje al punto de aplicacion.
+  - id: theta
+    symbol: \theta
+    nombre: angulo
+    unidad_si: rad
+    descripcion: Angulo entre r y F.
+
+formulas:
+  - id: momento_con_brazo
+    title: Momento con brazo perpendicular
+    equation: M = F*d
+    latex: M = Fd
+    variables: [M, F, d]
+    rearrangements:
+      - target: M
+        equation: M = F*d
+        latex: M = Fd
+      - target: F
+        equation: F = M/d
+        latex: F = \frac{M}{d}
+      - target: d
+        equation: d = M/F
+        latex: d = \frac{M}{F}
+
+  - id: momento_trigonometrico
+    title: Momento en forma trigonometrica
+    equation: M = r*F*sin(theta)
+    latex: M = rF\sin\theta
+    variables: [M, r, F, theta]
+    rearrangements:
+      - target: M
+        equation: M = r*F*sin(theta)
+        latex: M = rF\sin\theta
+      - target: F
+        equation: F = M/(r*sin(theta))
+        latex: F = \frac{M}{r\sin\theta}
+      - target: r
+        equation: r = M/(F*sin(theta))
+        latex: r = \frac{M}{F\sin\theta}
+
+  - id: relacion_brazo
+    title: Relacion geometrica del brazo
+    equation: d = r*sin(theta)
+    latex: d = r\sin\theta
+    variables: [d, r, theta]
+    rearrangements:
+      - target: d
+        equation: d = r*sin(theta)
+        latex: d = r\sin\theta
+      - target: r
+        equation: r = d/sin(theta)
+        latex: r = \frac{d}{\sin\theta}
+
+  - id: criterio_signo
+    title: Convenio de signo del momento
+    equation: M_signed = sign*M
+    latex: M_{\mathrm{signed}} = \pm M
+    calculable: false
+    motivo_no_calculable: Relacion conceptual; el signo depende del convenio elegido (horario/antihorario).
+
+ui:
+  default_formula: momento_con_brazo
+  groups:
+    - title: Calculables
+      items:
+        - momento_con_brazo
+        - momento_trigonometrico
+        - relacion_brazo
+    - title: Conceptuales
+      items:
+        - criterio_signo

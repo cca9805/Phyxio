@@ -1,0 +1,110 @@
+version: 1
+topic:
+  id: bloque-sobre-superficie
+  title: Bloque Sobre Superficie
+variables:
+  - id: F
+    symbol: F
+    name: fuerza_aplicada
+    si_unit: N
+  - id: m
+    symbol: m
+    name: masa
+    si_unit: kg
+  - id: a
+    symbol: a
+    name: aceleracion
+    si_unit: m/s^2
+  - id: N
+    symbol: N
+    name: normal
+    si_unit: N
+  - id: g
+    symbol: g
+    name: gravedad
+    si_unit: m/s^2
+  - id: mu_s
+    symbol: \mu_s
+    name: coeficiente_rozamiento_estatico
+    si_unit: "1"
+  - id: mu_k
+    symbol: \mu_k
+    name: coeficiente_rozamiento_cinetico
+    si_unit: "1"
+  - id: f
+    symbol: f
+    name: fuerza_rozamiento
+    si_unit: N
+formulas:
+  - id: equilibrio_vertical
+    title: Equilibrio vertical basico
+    equation: N = m*g
+    latex: N=mg
+    rearrangements:
+      - target: N
+        equation: N = m*g
+        latex: N=mg
+      - target: m
+        equation: m = N/g
+        latex: m=\frac{N}{g}
+
+  - id: sin_rozamiento
+    title: Movimiento sin rozamiento
+    equation: a = F/m
+    latex: a=\frac{F}{m}
+    rearrangements:
+      - target: a
+        equation: a = F/m
+        latex: a=\frac{F}{m}
+      - target: F
+        equation: F = m*a
+        latex: F=ma
+
+  - id: rozamiento_cinetico
+    title: Fuerza de rozamiento cinetico
+    equation: f = mu_k*N
+    latex: f_k=\mu_k N
+    rearrangements:
+      - target: f
+        equation: f = mu_k*N
+        latex: f_k=\mu_k N
+      - target: mu_k
+        equation: mu_k = f/N
+        latex: \mu_k=\frac{f_k}{N}
+
+  - id: aceleracion_con_rozamiento
+    title: Aceleracion con rozamiento cinetico
+    equation: a = (F - mu_k*m*g)/m
+    latex: a=\frac{F-\mu_k mg}{m}
+    rearrangements:
+      - target: a
+        equation: a = (F - mu_k*m*g)/m
+        latex: a=\frac{F-\mu_k mg}{m}
+      - target: F
+        equation: F = m*a + mu_k*m*g
+        latex: F=ma+\mu_k mg
+
+  - id: umbral_estatico
+    title: Umbral de inicio de movimiento
+    equation: F = mu_s*N
+    latex: F_{min}=\mu_s N
+    rearrangements:
+      - target: F
+        equation: F = mu_s*N
+        latex: F_{min}=\mu_s N
+      - target: mu_s
+        equation: mu_s = F/N
+        latex: \mu_s=\frac{F_{min}}{N}
+
+ui:
+  default_formula: aceleracion_con_rozamiento
+  groups:
+    - title: Relaciones dinamicas (calculables)
+      items:
+        - equilibrio_vertical
+        - sin_rozamiento
+        - rozamiento_cinetico
+        - aceleracion_con_rozamiento
+    - title: Regimen estatico (calculable)
+      items:
+        - umbral_estatico

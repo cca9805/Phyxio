@@ -1,0 +1,59 @@
+version: 1
+topic:
+  id: rozamiento-dinamico
+  title: Rozamiento dinámico
+variables:
+- id: fk
+  symbol: f_k
+  nombre: módulo del rozamiento dinámico
+  unidad_si: N
+  descripcion: Módulo del rozamiento dinámico.
+- id: mu_k
+  symbol: \mu_k
+  nombre: coeficiente de rozamiento dinámico
+  unidad_si: '-'
+  descripcion: Coeficiente de rozamiento dinámico.
+- id: N
+  symbol: N
+  nombre: normal
+  unidad_si: N
+  descripcion: Normal.
+formulas:
+- id: fk_modelo
+  title: Modelo de rozamiento dinámico
+  equation: fk = mu_k*N
+  latex: f_k = \mu_k N
+  status: calculable
+  rearrangements:
+  - target: fk
+    equation: fk = mu_k*N
+    latex: f_k = \mu_k N
+  - target: mu_k
+    equation: mu_k = fk/N
+    latex: \mu_k = \frac{f_k}{N}
+    constraints:
+    - expr: N != 0
+      message: La normal no puede ser 0.
+  - target: N
+    equation: N = fk/mu_k
+    latex: N = \frac{f_k}{\mu_k}
+    constraints:
+    - expr: mu_k != 0
+      message: μ_k no puede ser 0.
+- id: direccion_fk
+  title: Dirección del rozamiento (conceptual)
+  equation: fk opposes v_rel
+  latex: \vec f_k \;\text{se opone a}\; \vec v_{rel}
+  status: descriptive
+  motivo_no_calculable: 'La dirección depende del sentido del deslizamiento relativo (vector velocidad relativa).
+
+    '
+ui:
+  default_formula: fk_modelo
+  groups:
+  - title: Cálculo
+    items:
+    - fk_modelo
+  - title: Dirección
+    items:
+    - direccion_fk

@@ -1,0 +1,128 @@
+﻿version: 1
+topic:
+  id: ejemplos-de-equilibrio
+  title: Ejemplos de equilibrio (traslacion)
+
+variables:
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa del cuerpo.
+  - id: g
+    symbol: g
+    nombre: gravedad
+    unidad_si: m/s^2
+    descripcion: Aceleracion de la gravedad.
+  - id: P
+    symbol: P
+    nombre: peso
+    unidad_si: N
+    descripcion: Fuerza de gravedad sobre el cuerpo.
+  - id: N
+    symbol: N
+    nombre: normal
+    unidad_si: N
+    descripcion: Fuerza de contacto perpendicular.
+  - id: T
+    symbol: T
+    nombre: tension
+    unidad_si: N
+    descripcion: Fuerza transmitida por cuerda ideal.
+  - id: F
+    symbol: F
+    nombre: fuerza_aplicada
+    unidad_si: N
+    descripcion: Fuerza externa aplicada.
+  - id: theta
+    symbol: \theta
+    nombre: angulo
+    unidad_si: rad
+    descripcion: Angulo geometrico del sistema.
+  - id: mu_s
+    symbol: \mu_s
+    nombre: coeficiente_rozamiento_estatico
+    unidad_si: ""
+    descripcion: Coeficiente adimensional de rozamiento estatico.
+  - id: mu_k
+    symbol: \mu_k
+    nombre: coeficiente_rozamiento_cinetico
+    unidad_si: ""
+    descripcion: Coeficiente adimensional de rozamiento cinetico.
+  - id: fs
+    symbol: f_s
+    nombre: rozamiento_estatico
+    unidad_si: N
+    descripcion: Fuerza de rozamiento estatico.
+  - id: fk
+    symbol: f_k
+    nombre: rozamiento_cinetico
+    unidad_si: N
+    descripcion: Fuerza de rozamiento cinetico.
+
+equations:
+  - id: equilibrio_vectorial
+    title: Condicion vectorial de equilibrio
+    latex: \sum \vec F = \vec 0
+    description: Equilibrio traslacional en un sistema inercial.
+    variables_involved: []
+    calculable: false
+    why_not_calculable: Relacion vectorial de cierre; requiere proyeccion por ejes.
+
+  - id: equilibrio_x
+    title: Equilibrio en eje x
+    latex: \sum F_x = 0
+    description: Componente horizontal de la condicion de equilibrio.
+    variables_involved: []
+    calculable: false
+    why_not_calculable: Ecuacion de balance; depende de como se compongan las fuerzas del caso.
+
+  - id: equilibrio_y
+    title: Equilibrio en eje y
+    latex: \sum F_y = 0
+    description: Componente vertical de la condicion de equilibrio.
+    variables_involved: []
+    calculable: false
+    why_not_calculable: Ecuacion de balance; depende del DCL concreto.
+
+  - id: peso
+    title: Peso
+    latex: P = m g
+    description: Fuerza gravitatoria en campo uniforme.
+    variables_involved: [P, m, g]
+    rearrangements:
+      - target: m
+        latex: m = \frac{P}{g}
+      - target: g
+        latex: g = \frac{P}{m}
+
+  - id: rozamiento_estatico_limite
+    title: Limite de rozamiento estatico
+    latex: '|f_s| \le \mu_s N'
+    description: El valor real de fs se ajusta hasta un maximo.
+    variables_involved: [fs, mu_s, N]
+    calculable: false
+    why_not_calculable: Es una desigualdad de consistencia, no una igualdad universal de calculo directo.
+
+  - id: rozamiento_cinetico
+    title: Rozamiento cinetico
+    latex: f_k = \mu_k N
+    description: Modelo de rozamiento para deslizamiento.
+    variables_involved: [fk, mu_k, N]
+
+  - id: componentes_fuerza
+    title: Componentes de una fuerza inclinada
+    latex: F_x = F\cos\theta \quad ; \quad F_y = F\sin\theta
+    description: Proyeccion cartesiana de una fuerza oblicua.
+    variables_involved: [F, theta]
+    rearrangements:
+      - target: F
+        latex: F = \sqrt{F_x^2 + F_y^2}
+
+  - id: fuerza_equilibrante
+    title: Fuerza equilibrante
+    latex: \vec F_{eq} = -\vec R
+    description: Fuerza que anula una resultante parcial.
+    variables_involved: []
+    calculable: false
+    why_not_calculable: Expresion vectorial; requiere conocer previamente la resultante R por componentes.

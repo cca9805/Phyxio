@@ -1,0 +1,81 @@
+version: 1
+topic:
+  id: teorema-de-ejes-paralelos
+  title: Teorema De Ejes Paralelos
+variables:
+  - id: I
+    symbol: I
+    name: momento_eje_desplazado
+    si_unit: kg*m^2
+  - id: Icm
+    symbol: I_{cm}
+    name: momento_centro_masas
+    si_unit: kg*m^2
+  - id: m
+    symbol: m
+    name: masa
+    si_unit: kg
+  - id: d
+    symbol: d
+    name: distancia_entre_ejes
+    si_unit: m
+  - id: tau
+    symbol: \tau
+    name: torque_neto
+    si_unit: N*m
+  - id: alpha
+    symbol: \alpha
+    name: aceleracion_angular
+    si_unit: rad/s^2
+formulas:
+  - id: steiner_directa
+    title: Teorema de Steiner
+    equation: I = Icm + m*d^2
+    latex: I = I_{cm} + md^2
+    rearrangements:
+      - target: I
+        equation: I = Icm + m*d^2
+        latex: I = I_{cm} + md^2
+      - target: Icm
+        equation: Icm = I - m*d^2
+        latex: I_{cm} = I - md^2
+      - target: d
+        equation: d = sqrt((I - Icm)/m)
+        latex: d = \sqrt{\frac{I-I_{cm}}{m}}
+    constraints:
+      - expr: m > 0
+        message: m debe ser positiva.
+      - expr: I >= Icm
+        message: Para ejes paralelos, I debe ser mayor o igual que Icm.
+
+  - id: respuesta_rotacional
+    title: Efecto dinamico del nuevo eje
+    equation: alpha = tau/I
+    latex: \alpha = \frac{\tau}{I}
+    rearrangements:
+      - target: alpha
+        equation: alpha = tau/I
+        latex: \alpha = \frac{\tau}{I}
+      - target: tau
+        equation: tau = I*alpha
+        latex: \tau = I\alpha
+      - target: I
+        equation: I = tau/alpha
+        latex: I = \frac{\tau}{\alpha}
+
+  - id: compuesto
+    title: Cuerpo compuesto
+    equation: I = I
+    latex: I = \sum_j\left(I_{cm,j}+m_jd_j^2\right)
+    calculable: false
+    motivo_no_calculable: Requiere una lista de componentes con sus inercias y distancias.
+ui:
+  default_formula: steiner_directa
+  groups:
+    - title: Relaciones operativas (calculables)
+      items:
+        - steiner_directa
+        - respuesta_rotacional
+    - title: Extension de modelo (no calculable)
+      items:
+        - compuesto

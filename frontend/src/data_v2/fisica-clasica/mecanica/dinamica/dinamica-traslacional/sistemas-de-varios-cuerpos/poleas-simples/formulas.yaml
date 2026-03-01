@@ -1,0 +1,138 @@
+﻿version: 1
+topic:
+  id: poleas-simples
+  title: Poleas Simples
+variables:
+  - id: W
+    symbol: W
+    name: peso_carga
+    si_unit: N
+  - id: F
+    symbol: F
+    name: fuerza_aplicada
+    si_unit: N
+  - id: T
+    symbol: T
+    name: tension
+    si_unit: N
+  - id: n
+    symbol: n
+    name: numero_tramos_soporte
+    si_unit: "1"
+  - id: dx_pull
+    symbol: \Delta x_{pull}
+    name: desplazamiento_tiro
+    si_unit: m
+  - id: dx_load
+    symbol: \Delta x_{load}
+    name: desplazamiento_carga
+    si_unit: m
+  - id: v_pull
+    symbol: v_{pull}
+    name: velocidad_tiro
+    si_unit: m/s
+  - id: v_load
+    symbol: v_{load}
+    name: velocidad_carga
+    si_unit: m/s
+  - id: a_pull
+    symbol: a_{pull}
+    name: aceleracion_tiro
+    si_unit: m/s^2
+  - id: a_load
+    symbol: a_{load}
+    name: aceleracion_carga
+    si_unit: m/s^2
+formulas:
+  - id: fuerza_ideal_general
+    title: Fuerza ideal requerida
+    equation: F = W/n
+    latex: F=\frac{W}{n}
+    rearrangements:
+      - target: F
+        equation: F = W/n
+        latex: F=\frac{W}{n}
+      - target: W
+        equation: W = F*n
+        latex: W=Fn
+      - target: n
+        equation: n = W/F
+        latex: n=\frac{W}{F}
+
+  - id: tension_ideal
+    title: Tension ideal por tramo
+    equation: T = W/n
+    latex: T=\frac{W}{n}
+    rearrangements:
+      - target: T
+        equation: T = W/n
+        latex: T=\frac{W}{n}
+
+  - id: recorrido_geometrico
+    title: Relacion de recorridos
+    equation: dx_pull = n*dx_load
+    latex: \Delta x_{pull}=n\Delta x_{load}
+    rearrangements:
+      - target: dx_pull
+        equation: dx_pull = n*dx_load
+        latex: \Delta x_{pull}=n\Delta x_{load}
+      - target: dx_load
+        equation: dx_load = dx_pull/n
+        latex: \Delta x_{load}=\frac{\Delta x_{pull}}{n}
+
+  - id: velocidad_geometrica
+    title: Relacion de velocidades
+    equation: v_pull = n*v_load
+    latex: v_{pull}=nv_{load}
+    rearrangements:
+      - target: v_pull
+        equation: v_pull = n*v_load
+        latex: v_{pull}=nv_{load}
+      - target: v_load
+        equation: v_load = v_pull/n
+        latex: v_{load}=\frac{v_{pull}}{n}
+
+  - id: aceleracion_geometrica
+    title: Relacion de aceleraciones
+    equation: a_pull = n*a_load
+    latex: a_{pull}=na_{load}
+    rearrangements:
+      - target: a_pull
+        equation: a_pull = n*a_load
+        latex: a_{pull}=na_{load}
+      - target: a_load
+        equation: a_load = a_pull/n
+        latex: a_{load}=\frac{a_{pull}}{n}
+
+  - id: balance_trabajo_ideal
+    title: Balance de trabajo ideal
+    equation: F*dx_pull = W*dx_load
+    latex: F\Delta x_{pull}=W\Delta x_{load}
+    rearrangements:
+      - target: F
+        equation: F = W*dx_load/dx_pull
+        latex: F=\frac{W\Delta x_{load}}{\Delta x_{pull}}
+
+  - id: sin_trabajo_gratis
+    title: Criterio energetico (conceptual)
+    equation: reducir_F_implica_aumentar_dx_pull
+    latex: \text{reducir }F\Rightarrow\text{aumentar }\Delta x_{pull}
+    calculable: false
+    motivo_no_calculable: Es una regla conceptual de interpretacion del intercambio mecanico en el modelo ideal.
+
+ui:
+  default_formula: fuerza_ideal_general
+  groups:
+    - title: Ventaja mecanica (calculables)
+      items:
+        - fuerza_ideal_general
+        - tension_ideal
+    - title: Restricciones geometricas (calculables)
+      items:
+        - recorrido_geometrico
+        - velocidad_geometrica
+        - aceleracion_geometrica
+    - title: Energia e interpretacion
+      items:
+        - balance_trabajo_ideal
+        - sin_trabajo_gratis

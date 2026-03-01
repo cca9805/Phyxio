@@ -1,0 +1,134 @@
+version: 1
+topic:
+  id: pendulo-fisico
+  title: Péndulo físico
+variables:
+  - id: I
+    symbol: I
+    nombre: momento de inercia
+    unidad_si: kg*m^2
+    descripcion: Momento de inercia del cuerpo respecto al eje de giro.
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa total del cuerpo rígido.
+  - id: g
+    symbol: g
+    nombre: gravedad
+    unidad_si: m/s^2
+    descripcion: Aceleración de la gravedad local.
+  - id: d
+    symbol: d
+    nombre: distancia eje-centro de masas
+    unidad_si: m
+    descripcion: Brazo de palanca entre eje y centro de masas.
+  - id: omega0
+    symbol: \omega_0
+    nombre: pulsación natural
+    unidad_si: rad/s
+    descripcion: Frecuencia angular natural para pequeñas oscilaciones.
+  - id: T
+    symbol: T
+    nombre: periodo
+    unidad_si: s
+    descripcion: Tiempo de una oscilación completa.
+  - id: f
+    symbol: f
+    nombre: frecuencia
+    unidad_si: Hz
+    descripcion: Número de oscilaciones por segundo.
+  - id: theta
+    symbol: \theta
+    nombre: desplazamiento angular
+    unidad_si: rad
+    descripcion: Ángulo respecto de la posición de equilibrio.
+  - id: theta_dd
+    symbol: \ddot\theta
+    nombre: aceleración angular
+    unidad_si: rad/s^2
+    descripcion: Segunda derivada temporal de theta.
+formulas:
+  - id: omega0_pf
+    title: Pulsación natural (pequeños ángulos)
+    equation: omega0 = sqrt(m*g*d/I)
+    latex: \omega_0=\sqrt{\frac{mgd}{I}}
+    rearrangements:
+      - target: omega0
+        equation: omega0 = sqrt(m*g*d/I)
+        latex: \omega_0=\sqrt{\frac{mgd}{I}}
+      - target: I
+        equation: I = m*g*d/(omega0^2)
+        latex: I=\frac{mgd}{\omega_0^2}
+      - target: d
+        equation: d = I*(omega0^2)/(m*g)
+        latex: d=\frac{I\omega_0^2}{mg}
+    constraints:
+      - expr: I > 0
+        message: I debe ser positiva.
+      - expr: m > 0
+        message: m debe ser positiva.
+      - expr: d > 0
+        message: d debe ser positiva.
+      - expr: g > 0
+        message: g debe ser mayor que 0.
+      - expr: omega0 > 0
+        message: omega0 debe ser mayor que 0.
+  - id: periodo_pf
+    title: Periodo del péndulo físico
+    equation: T = 2*pi*sqrt(I/(m*g*d))
+    latex: T=2\pi\sqrt{\frac{I}{mgd}}
+    rearrangements:
+      - target: T
+        equation: T = 2*pi*sqrt(I/(m*g*d))
+        latex: T=2\pi\sqrt{\frac{I}{mgd}}
+      - target: I
+        equation: I = (T^2*m*g*d)/(4*pi^2)
+        latex: I=\frac{T^2mgd}{4\pi^2}
+      - target: d
+        equation: d = (4*pi^2*I)/(T^2*m*g)
+        latex: d=\frac{4\pi^2I}{T^2mg}
+    constraints:
+      - expr: m > 0
+        message: m debe ser positiva.
+      - expr: g > 0
+        message: g debe ser positiva.
+      - expr: d > 0
+        message: d debe ser positiva.
+      - expr: I > 0
+        message: I debe ser mayor que 0.
+      - expr: T > 0
+        message: T debe ser mayor que 0.
+  - id: frecuencia_pf
+    title: Frecuencia
+    equation: f = 1/T
+    latex: f=\frac{1}{T}
+    rearrangements:
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+    constraints:
+      - expr: T > 0
+        message: T debe ser positivo.
+      - expr: f > 0
+        message: f debe ser positiva.
+  - id: ecuacion_no_lineal_pf
+    title: Ecuación angular completa (conceptual)
+    equation: I*theta_dd + m*g*d*sin(theta) = 0
+    latex: I\ddot\theta+mgd\sin\theta=0
+    calculable: false
+    motivo_no_calculable: Es una ecuación diferencial no lineal; requiere métodos analíticos avanzados o integración numérica.
+ui:
+  default_formula: periodo_pf
+  groups:
+    - title: Fórmulas calculables
+      items:
+        - omega0_pf
+        - periodo_pf
+        - frecuencia_pf
+    - title: Fórmulas conceptuales
+      items:
+        - ecuacion_no_lineal_pf

@@ -1,0 +1,153 @@
+﻿version: 1
+topic:
+  id: colisiones-inelasticas
+  title: Colisiones inelásticas
+variables:
+  - id: m1
+    symbol: m_1
+    nombre: masa 1
+    unidad_si: kg
+    descripcion: Masa del cuerpo 1.
+  - id: m2
+    symbol: m_2
+    nombre: masa 2
+    unidad_si: kg
+    descripcion: Masa del cuerpo 2.
+  - id: v1i
+    symbol: v_{1i}
+    nombre: velocidad inicial 1
+    unidad_si: m/s
+    descripcion: Velocidad inicial del cuerpo 1.
+  - id: v2i
+    symbol: v_{2i}
+    nombre: velocidad inicial 2
+    unidad_si: m/s
+    descripcion: Velocidad inicial del cuerpo 2.
+  - id: v1f
+    symbol: v_{1f}
+    nombre: velocidad final 1
+    unidad_si: m/s
+    descripcion: Velocidad final del cuerpo 1.
+  - id: v2f
+    symbol: v_{2f}
+    nombre: velocidad final 2
+    unidad_si: m/s
+    descripcion: Velocidad final del cuerpo 2.
+  - id: e
+    symbol: e
+    nombre: coeficiente restitucion
+    unidad_si: "1"
+    descripcion: Fraccion de recuperacion de velocidad relativa.
+  - id: Ki
+    symbol: K_i
+    nombre: energía cinética inicial total
+    unidad_si: J
+    descripcion: Energia cinética total inicial.
+  - id: Kf
+    symbol: K_f
+    nombre: energía cinética final total
+    unidad_si: J
+    descripcion: Energia cinética total final.
+  - id: DeltaK
+    symbol: \Delta K
+    nombre: energía disipada
+    unidad_si: J
+    descripcion: Perdida de energía cinética traslacional.
+formulas:
+  - id: momento_1d
+    title: Conservación del momento lineal
+    equation: m1*v1i + m2*v2i = m1*v1f + m2*v2f
+    latex: m_1v_{1i}+m_2v_{2i}=m_1v_{1f}+m_2v_{2f}
+    rearrangements:
+      - target: v1f
+        equation: v1f = (m1*v1i + m2*v2i - m2*v2f)/m1
+        latex: v_{1f}=\frac{m_1v_{1i}+m_2v_{2i}-m_2v_{2f}}{m_1}
+      - target: v2f
+        equation: v2f = (m1*v1i + m2*v2i - m1*v1f)/m2
+        latex: v_{2f}=\frac{m_1v_{1i}+m_2v_{2i}-m_1v_{1f}}{m_2}
+    constraints:
+      - expr: m1 > 0
+        message: m1 debe ser mayor que 0.
+      - expr: m2 > 0
+        message: m2 debe ser mayor que 0.
+  - id: restitucion
+    title: Coeficiente de restitucion
+    equation: e = (v2f - v1f)/(v1i - v2i)
+    latex: e=\frac{v_{2f}-v_{1f}}{v_{1i}-v_{2i}}
+    rearrangements:
+      - target: v2f
+        equation: v2f = v1f + e*(v1i - v2i)
+        latex: v_{2f}=v_{1f}+e(v_{1i}-v_{2i})
+      - target: v1f
+        equation: v1f = v2f - e*(v1i - v2i)
+        latex: v_{1f}=v_{2f}-e(v_{1i}-v_{2i})
+    constraints:
+      - expr: v1i != v2i
+        message: v1i y v2i no pueden ser iguales al usar esta forma de e.
+  - id: v1f_desde_momento_y_e
+    title: v1f cerrada con momento + restitucion
+    equation: v1f = (m1*v1i + m2*v2i - m2*e*(v1i - v2i))/(m1 + m2)
+    latex: v_{1f}=\frac{m_1v_{1i}+m_2v_{2i}-m_2e(v_{1i}-v_{2i})}{m_1+m_2}
+    rearrangements:
+      - target: v1f
+        equation: v1f = (m1*v1i + m2*v2i - m2*e*(v1i - v2i))/(m1 + m2)
+        latex: v_{1f}=\frac{m_1v_{1i}+m_2v_{2i}-m_2e(v_{1i}-v_{2i})}{m_1+m_2}
+    constraints:
+      - expr: m1 + m2 > 0
+        message: m1 + m2 debe ser mayor que 0.
+  - id: v2f_desde_momento_y_e
+    title: v2f cerrada con momento + restitucion
+    equation: v2f = (m1*v1i + m2*v2i + m1*e*(v1i - v2i))/(m1 + m2)
+    latex: v_{2f}=\frac{m_1v_{1i}+m_2v_{2i}+m_1e(v_{1i}-v_{2i})}{m_1+m_2}
+    rearrangements:
+      - target: v2f
+        equation: v2f = (m1*v1i + m2*v2i + m1*e*(v1i - v2i))/(m1 + m2)
+        latex: v_{2f}=\frac{m_1v_{1i}+m_2v_{2i}+m_1e(v_{1i}-v_{2i})}{m_1+m_2}
+    constraints:
+      - expr: m1 + m2 > 0
+        message: m1 + m2 debe ser mayor que 0.
+  - id: ki_total
+    title: Energia cinética inicial total
+    equation: Ki = 0.5*m1*v1i*v1i + 0.5*m2*v2i*v2i
+    latex: K_i=\frac{1}{2}m_1v_{1i}^2+\frac{1}{2}m_2v_{2i}^2
+    rearrangements:
+      - target: Ki
+        equation: Ki = 0.5*m1*v1i*v1i + 0.5*m2*v2i*v2i
+        latex: K_i=\frac{1}{2}m_1v_{1i}^2+\frac{1}{2}m_2v_{2i}^2
+  - id: kf_total
+    title: Energia cinética final total
+    equation: Kf = 0.5*m1*v1f*v1f + 0.5*m2*v2f*v2f
+    latex: K_f=\frac{1}{2}m_1v_{1f}^2+\frac{1}{2}m_2v_{2f}^2
+    rearrangements:
+      - target: Kf
+        equation: Kf = 0.5*m1*v1f*v1f + 0.5*m2*v2f*v2f
+        latex: K_f=\frac{1}{2}m_1v_{1f}^2+\frac{1}{2}m_2v_{2f}^2
+  - id: delta_k
+    title: Energia cinética disipada
+    equation: DeltaK = Ki - Kf
+    latex: \Delta K=K_i-K_f
+    rearrangements:
+      - target: DeltaK
+        equation: DeltaK = Ki - Kf
+        latex: \Delta K=K_i-K_f
+  - id: rango_e_conceptual
+    title: Rango de e para choque inelástico parcial (conceptual)
+    equation: 0 < e < 1
+    latex: 0<e<1
+    calculable: false
+    motivo_no_calculable: Condicion de clasificacion del tipo de choque, no un despeje numerico general.
+ui:
+  default_formula: v1f_desde_momento_y_e
+  groups:
+    - title: Formulas calculables
+      items:
+        - momento_1d
+        - restitucion
+        - v1f_desde_momento_y_e
+        - v2f_desde_momento_y_e
+        - ki_total
+        - kf_total
+        - delta_k
+    - title: Formulas conceptuales
+      items:
+        - rango_e_conceptual

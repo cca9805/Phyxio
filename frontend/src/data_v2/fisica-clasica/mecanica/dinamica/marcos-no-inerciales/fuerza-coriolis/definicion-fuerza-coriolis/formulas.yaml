@@ -1,0 +1,108 @@
+version: 1
+topic:
+  id: definicion-fuerza-coriolis
+  title: Definicion De Fuerza Coriolis
+variables:
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa del movil.
+  - id: omega
+    symbol: \Omega
+    nombre: velocidad_angular_del_marco
+    unidad_si: rad/s
+    descripcion: Velocidad angular del marco rotatorio.
+  - id: v_rel
+    symbol: v_{rel}
+    nombre: velocidad_relativa
+    unidad_si: m/s
+    descripcion: Velocidad del movil respecto al marco rotatorio.
+  - id: alpha
+    symbol: \alpha
+    nombre: angulo_entre_omega_y_v
+    unidad_si: rad
+    descripcion: Angulo entre omega y v_rel.
+  - id: F_cor
+    symbol: F_{cor}
+    nombre: fuerza_coriolis
+    unidad_si: N
+    descripcion: Modulo de la fuerza de Coriolis.
+  - id: a_cor
+    symbol: a_{cor}
+    nombre: aceleracion_coriolis
+    unidad_si: m/s^2
+    descripcion: Aceleracion de Coriolis por unidad de masa.
+formulas:
+  - id: modulo_fuerza_coriolis
+    title: Modulo de la fuerza de Coriolis
+    equation: F_cor = 2*m*omega*v_rel*sin(alpha)
+    latex: F_{cor}=2m\Omega v_{rel}\sin\alpha
+    rearrangements:
+      - target: F_cor
+        equation: F_cor = 2*m*omega*v_rel*sin(alpha)
+        latex: F_{cor}=2m\Omega v_{rel}\sin\alpha
+      - target: m
+        equation: m = F_cor/(2*omega*v_rel*sin(alpha))
+        latex: m=\frac{F_{cor}}{2\Omega v_{rel}\sin\alpha}
+      - target: omega
+        equation: omega = F_cor/(2*m*v_rel*sin(alpha))
+        latex: \Omega=\frac{F_{cor}}{2m v_{rel}\sin\alpha}
+      - target: v_rel
+        equation: v_rel = F_cor/(2*m*omega*sin(alpha))
+        latex: v_{rel}=\frac{F_{cor}}{2m\Omega\sin\alpha}
+    constraints:
+      - expr: m > 0
+        message: La masa debe ser positiva.
+      - expr: omega >= 0
+        message: omega debe ser no negativa en este modelo escalar.
+      - expr: v_rel >= 0
+        message: v_rel debe ser no negativa en este modelo escalar.
+  - id: aceleracion_coriolis
+    title: Aceleracion de Coriolis
+    equation: a_cor = 2*omega*v_rel*sin(alpha)
+    latex: a_{cor}=2\Omega v_{rel}\sin\alpha
+    rearrangements:
+      - target: a_cor
+        equation: a_cor = 2*omega*v_rel*sin(alpha)
+        latex: a_{cor}=2\Omega v_{rel}\sin\alpha
+      - target: omega
+        equation: omega = a_cor/(2*v_rel*sin(alpha))
+        latex: \Omega=\frac{a_{cor}}{2v_{rel}\sin\alpha}
+      - target: v_rel
+        equation: v_rel = a_cor/(2*omega*sin(alpha))
+        latex: v_{rel}=\frac{a_{cor}}{2\Omega\sin\alpha}
+  - id: relacion_fuerza_aceleracion
+    title: Relacion entre fuerza y aceleracion de Coriolis
+    equation: F_cor = m*a_cor
+    latex: F_{cor}=m\,a_{cor}
+    rearrangements:
+      - target: F_cor
+        equation: F_cor = m*a_cor
+        latex: F_{cor}=m\,a_{cor}
+      - target: m
+        equation: m = F_cor/a_cor
+        latex: m=\frac{F_{cor}}{a_{cor}}
+      - target: a_cor
+        equation: a_cor = F_cor/m
+        latex: a_{cor}=\frac{F_{cor}}{m}
+    constraints:
+      - expr: m > 0
+        message: La masa debe ser positiva.
+  - id: forma_vectorial_conceptual
+    title: Forma vectorial de Coriolis (conceptual)
+    equation: F_cor = 2*m*omega*v_rel*sin(alpha)
+    latex: \vec F_{cor}=-2m(\vec\Omega\times\vec v_{rel})
+    calculable: false
+    motivo_no_calculable: "La direccion requiere producto vectorial completo. Esta calculadora trabaja con modulos escalares."
+ui:
+  default_formula: modulo_fuerza_coriolis
+  groups:
+    - title: Calculables
+      items:
+        - modulo_fuerza_coriolis
+        - aceleracion_coriolis
+        - relacion_fuerza_aceleracion
+    - title: Formula conceptual
+      items:
+        - forma_vectorial_conceptual

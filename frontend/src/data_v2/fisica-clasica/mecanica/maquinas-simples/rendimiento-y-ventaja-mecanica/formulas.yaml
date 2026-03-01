@@ -1,0 +1,147 @@
+version: 1
+topic:
+  id: rendimiento-y-ventaja-mecanica
+  title: Rendimiento Y Ventaja Mecanica
+variables:
+  - id: R
+    symbol: R
+    nombre: carga
+    unidad_si: N
+    descripcion: Fuerza de salida util.
+  - id: P
+    symbol: P
+    nombre: esfuerzo
+    unidad_si: N
+    descripcion: Fuerza de entrada aplicada.
+  - id: VMreal
+    symbol: VM_{real}
+    nombre: ventaja_mecanica_real
+    unidad_si: '1'
+    descripcion: Cociente entre carga y esfuerzo reales.
+  - id: VMideal
+    symbol: VM_{ideal}
+    nombre: ventaja_mecanica_ideal
+    unidad_si: '1'
+    descripcion: Ventaja determinada por geometria o desplazamientos.
+  - id: sP
+    symbol: s_P
+    nombre: desplazamiento_entrada
+    unidad_si: m
+    descripcion: Recorrido del punto donde aplicas la fuerza.
+  - id: sR
+    symbol: s_R
+    nombre: desplazamiento_salida
+    unidad_si: m
+    descripcion: Recorrido util de la carga.
+  - id: Win
+    symbol: W_{in}
+    nombre: trabajo_entrada
+    unidad_si: J
+    descripcion: Trabajo suministrado al sistema.
+  - id: Wout
+    symbol: W_{out}
+    nombre: trabajo_salida
+    unidad_si: J
+    descripcion: Trabajo util entregado por la maquina.
+  - id: eta
+    symbol: \eta
+    nombre: rendimiento
+    unidad_si: '1'
+    descripcion: Eficiencia energetica de la maquina.
+formulas:
+  - id: ventaja_real
+    title: Ventaja mecanica real
+    equation: VMreal = R/P
+    latex: VM_{real}=\frac{R}{P}
+    rearrangements:
+      - target: VMreal
+        equation: VMreal = R/P
+        latex: VM_{real}=\frac{R}{P}
+      - target: R
+        equation: R = VMreal*P
+        latex: R=VM_{real}\,P
+      - target: P
+        equation: P = R/VMreal
+        latex: P=\frac{R}{VM_{real}}
+  - id: ventaja_ideal_por_desplazamiento
+    title: Ventaja mecanica ideal
+    equation: VMideal = sP/sR
+    latex: VM_{ideal}=\frac{s_P}{s_R}
+    rearrangements:
+      - target: VMideal
+        equation: VMideal = sP/sR
+        latex: VM_{ideal}=\frac{s_P}{s_R}
+      - target: sP
+        equation: sP = VMideal*sR
+        latex: s_P=VM_{ideal}\,s_R
+      - target: sR
+        equation: sR = sP/VMideal
+        latex: s_R=\frac{s_P}{VM_{ideal}}
+  - id: rendimiento_por_trabajo
+    title: Rendimiento por trabajo
+    equation: eta = Wout/Win
+    latex: \eta=\frac{W_{out}}{W_{in}}
+    rearrangements:
+      - target: eta
+        equation: eta = Wout/Win
+        latex: \eta=\frac{W_{out}}{W_{in}}
+      - target: Wout
+        equation: Wout = eta*Win
+        latex: W_{out}=\eta W_{in}
+      - target: Win
+        equation: Win = Wout/eta
+        latex: W_{in}=\frac{W_{out}}{\eta}
+    constraints:
+      - expr: eta > 0
+        message: eta debe ser mayor que 0.
+      - expr: eta <= 1
+        message: eta debe ser menor o igual que 1.
+  - id: rendimiento_por_fuerza_y_recorrido
+    title: Rendimiento por fuerzas y desplazamientos
+    equation: eta = (R*sR)/(P*sP)
+    latex: \eta=\frac{R\,s_R}{P\,s_P}
+    rearrangements:
+      - target: eta
+        equation: eta = (R*sR)/(P*sP)
+        latex: \eta=\frac{R\,s_R}{P\,s_P}
+      - target: R
+        equation: R = (eta*P*sP)/sR
+        latex: R=\frac{\eta P s_P}{s_R}
+      - target: P
+        equation: P = (R*sR)/(eta*sP)
+        latex: P=\frac{R s_R}{\eta s_P}
+  - id: relacion_ventajas_y_rendimiento
+    title: Relacion entre ventajas y rendimiento
+    equation: VMreal = eta*VMideal
+    latex: VM_{real}=\eta\,VM_{ideal}
+    rearrangements:
+      - target: VMreal
+        equation: VMreal = eta*VMideal
+        latex: VM_{real}=\eta\,VM_{ideal}
+      - target: eta
+        equation: eta = VMreal/VMideal
+        latex: \eta=\frac{VM_{real}}{VM_{ideal}}
+      - target: VMideal
+        equation: VMideal = VMreal/eta
+        latex: VM_{ideal}=\frac{VM_{real}}{\eta}
+  - id: trabajo_con_fuerza_variable
+    title: Trabajo con fuerza variable (conceptual)
+    equation: W = intFdx
+    latex: W=\int F(x)\,dx
+    calculable: false
+    motivo_no_calculable: Formula conceptual. Requiere funcion de fuerza y limites de integracion para evaluarse.
+ui:
+  default_formula: relacion_ventajas_y_rendimiento
+  groups:
+    - title: Ventajas mecanicas
+      items:
+        - ventaja_real
+        - ventaja_ideal_por_desplazamiento
+        - relacion_ventajas_y_rendimiento
+    - title: Rendimiento energetico
+      items:
+        - rendimiento_por_trabajo
+        - rendimiento_por_fuerza_y_recorrido
+    - title: Formula conceptual
+      items:
+        - trabajo_con_fuerza_variable

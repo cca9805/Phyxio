@@ -1,0 +1,210 @@
+version: 1
+topic:
+  id: ondas-flexionales-en-vigas
+  title: Ondas Flexionales En Vigas
+variables:
+  - id: E
+    symbol: E
+    name: modulo_young
+    si_unit: Pa
+  - id: I
+    symbol: I
+    name: momento_inercia
+    si_unit: m^4
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: A
+    symbol: A
+    name: area
+    si_unit: m^2
+  - id: k
+    symbol: k
+    name: numero_onda
+    si_unit: rad/m
+  - id: omega
+    symbol: \omega
+    name: frecuencia_angular
+    si_unit: rad/s
+  - id: vp
+    symbol: v_p
+    name: velocidad_fase
+    si_unit: m/s
+  - id: vg
+    symbol: v_g
+    name: velocidad_grupo
+    si_unit: m/s
+  - id: L
+    symbol: L
+    name: longitud_viga
+    si_unit: m
+  - id: n
+    symbol: n
+    name: modo
+    si_unit: '1'
+  - id: fn
+    symbol: f_n
+    name: frecuencia_modal
+    si_unit: Hz
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+formulas:
+  - id: disp
+    title: Dispersion Euler-Bernoulli
+    equation: omega = sqrt(E*I/(rho*A))*k^2
+    latex: \omega=\sqrt{\frac{EI}{\rho A}}\,k^2
+    rearrangements:
+      - target: omega
+        equation: omega = sqrt(E*I/(rho*A))*k^2
+        latex: \omega=\sqrt{\frac{EI}{\rho A}}\,k^2
+      - target: k
+        equation: k = sqrt(omega/sqrt(E*I/(rho*A)))
+        latex: k=\sqrt{\frac{\omega}{\sqrt{EI/(\rho A)}}}
+
+  - id: vp
+    title: Velocidad de fase
+    equation: vp = omega/k
+    latex: v_p=\frac{\omega}{k}
+    rearrangements:
+      - target: vp
+        equation: vp = omega/k
+        latex: v_p=\frac{\omega}{k}
+      - target: omega
+        equation: omega = vp*k
+        latex: \omega=v_p k
+
+  - id: vp_k
+    title: Velocidad de fase en funcion de k
+    equation: vp = sqrt(E*I/(rho*A))*k
+    latex: v_p=\sqrt{\frac{EI}{\rho A}}\,k
+    rearrangements:
+      - target: vp
+        equation: vp = sqrt(E*I/(rho*A))*k
+        latex: v_p=\sqrt{\frac{EI}{\rho A}}\,k
+
+  - id: vg
+    title: Velocidad de grupo
+    equation: vg = 2*vp
+    latex: v_g=2v_p
+    rearrangements:
+      - target: vg
+        equation: vg = 2*vp
+        latex: v_g=2v_p
+      - target: vp
+        equation: vp = vg/2
+        latex: v_p=\frac{v_g}{2}
+
+  - id: vg_k
+    title: Velocidad de grupo en funcion de k
+    equation: vg = 2*sqrt(E*I/(rho*A))*k
+    latex: v_g=2\sqrt{\frac{EI}{\rho A}}\,k
+    rearrangements:
+      - target: vg
+        equation: vg = 2*sqrt(E*I/(rho*A))*k
+        latex: v_g=2\sqrt{\frac{EI}{\rho A}}\,k
+
+  - id: k_lambda
+    title: Numero de onda y longitud de onda
+    equation: k = 2*pi/lambda
+    latex: k=\frac{2\pi}{\lambda}
+    rearrangements:
+      - target: k
+        equation: k = 2*pi/lambda
+        latex: k=\frac{2\pi}{\lambda}
+      - target: lambda
+        equation: lambda = 2*pi/k
+        latex: \lambda=\frac{2\pi}{k}
+
+  - id: omega_f
+    title: Frecuencia angular y frecuencia
+    equation: omega = 2*pi*f
+    latex: \omega=2\pi f
+    rearrangements:
+      - target: omega
+        equation: omega = 2*pi*f
+        latex: \omega=2\pi f
+      - target: f
+        equation: f = omega/(2*pi)
+        latex: f=\frac{\omega}{2\pi}
+
+  - id: vp_lambda_f
+    title: Relacion de fase
+    equation: vp = lambda*f
+    latex: v_p=\lambda f
+    rearrangements:
+      - target: vp
+        equation: vp = lambda*f
+        latex: v_p=\lambda f
+      - target: lambda
+        equation: lambda = vp/f
+        latex: \lambda=\frac{v_p}{f}
+      - target: f
+        equation: f = vp/lambda
+        latex: f=\frac{v_p}{\lambda}
+
+  - id: fn_pinpin
+    title: Frecuencia modal pin-pin
+    equation: fn = (n^2*pi/(2*L^2))*sqrt(E*I/(rho*A))
+    latex: f_n=\frac{n^2\pi}{2L^2}\sqrt{\frac{EI}{\rho A}}
+    rearrangements:
+      - target: fn
+        equation: fn = (n^2*pi/(2*L^2))*sqrt(E*I/(rho*A))
+        latex: f_n=\frac{n^2\pi}{2L^2}\sqrt{\frac{EI}{\rho A}}
+
+  - id: periodo
+    title: Periodo
+    equation: T = 1/f
+    latex: T=\frac{1}{f}
+    rearrangements:
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+
+  - id: modo_pinpin_conceptual
+    title: Forma modal pin-pin (conceptual)
+    equation: y = A_n*sin(n*pi*x/L)*cos(omega_n*t + phi_n)
+    latex: y_n(x,t)=A_n\sin\!\left(\frac{n\pi x}{L}\right)\cos(\omega_n t+\phi_n)
+    calculable: false
+    motivo_no_calculable: Campo espacio-temporal, no salida escalar unica.
+
+  - id: criterio_lineal
+    title: Criterio lineal amplitud-velocidad
+    equation: dispersion_independiente_de_amplitud
+    latex: v_p,\,v_g\ \text{independientes de amplitud (regimen lineal)}
+    calculable: false
+    motivo_no_calculable: Regla conceptual de validez del modelo.
+ui:
+  default_formula: disp
+  groups:
+    - title: Dispersion flexional (calculables)
+      items:
+        - disp
+        - vp
+        - vp_k
+        - vg
+        - vg_k
+    - title: Conversiones y modos (calculables)
+      items:
+        - k_lambda
+        - omega_f
+        - vp_lambda_f
+        - fn_pinpin
+        - periodo
+    - title: Modelo teorico
+      items:
+        - modo_pinpin_conceptual
+        - criterio_lineal

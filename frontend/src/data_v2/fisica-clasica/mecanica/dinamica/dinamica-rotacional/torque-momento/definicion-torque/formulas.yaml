@@ -1,0 +1,152 @@
+version: 1
+topic:
+  id: definicion-torque
+  title: Definicion de torque
+
+variables:
+  - id: tau
+    symbol: \tau
+    nombre: torque
+    unidad_si: N*m
+    descripcion: Modulo del torque.
+  - id: F
+    symbol: F
+    nombre: fuerza
+    unidad_si: N
+    descripcion: Fuerza aplicada.
+  - id: d
+    symbol: d
+    nombre: brazo_perpendicular
+    unidad_si: m
+    descripcion: Distancia perpendicular al eje.
+  - id: r
+    symbol: r
+    nombre: distancia_al_eje
+    unidad_si: m
+    descripcion: Distancia desde el eje al punto de aplicacion.
+  - id: theta
+    symbol: \theta
+    nombre: angulo
+    unidad_si: rad
+    descripcion: Angulo entre r y F.
+  - id: I
+    symbol: I
+    nombre: momento_de_inercia
+    unidad_si: kg*m^2
+    descripcion: Momento de inercia.
+  - id: alpha
+    symbol: \alpha
+    nombre: aceleracion_angular
+    unidad_si: rad/s^2
+    descripcion: Aceleracion angular.
+
+formulas:
+  - id: torque_por_brazo
+    title: Definicion operativa del torque
+    equation: tau = F*d
+    latex: \tau = F\,d
+    rearrangements:
+      - target: tau
+        equation: tau = F*d
+        latex: \tau = F\,d
+      - target: F
+        equation: F = tau/d
+        latex: F = \frac{\tau}{d}
+      - target: d
+        equation: d = tau/F
+        latex: d = \frac{\tau}{F}
+    constraints:
+      - expr: F >= 0
+        message: Usa F no negativa para el modulo.
+      - expr: d >= 0
+        message: El brazo perpendicular no puede ser negativo.
+      - expr: d != 0
+        message: Si despejas F, d no puede ser 0.
+      - expr: F != 0
+        message: Si despejas d, F no puede ser 0.
+    notes:
+      - d es distancia perpendicular, no distancia directa al eje.
+    status: calculable
+
+  - id: torque_por_angulo
+    title: Definicion angular equivalente
+    equation: tau = r*F*sin(theta)
+    latex: \tau = r\,F\,\sin(\theta)
+    rearrangements:
+      - target: tau
+        equation: tau = r*F*sin(theta)
+        latex: \tau = r\,F\,\sin(\theta)
+      - target: r
+        equation: r = tau/(F*sin(theta))
+        latex: r = \frac{\tau}{F\,\sin(\theta)}
+      - target: F
+        equation: F = tau/(r*sin(theta))
+        latex: F = \frac{\tau}{r\,\sin(\theta)}
+    constraints:
+      - expr: r >= 0
+        message: r debe ser no negativa en modulo.
+      - expr: F >= 0
+        message: F debe ser no negativa en modulo.
+      - expr: sin(theta) != 0
+        message: Si despejas r o F, sin(theta) no puede ser 0.
+    notes:
+      - Formula equivalente a tau = F*d con d = r*sin(theta).
+    status: calculable
+
+  - id: brazo_desde_angulo
+    title: Brazo perpendicular desde geometria
+    equation: d = r*sin(theta)
+    latex: d = r\,\sin(\theta)
+    rearrangements:
+      - target: d
+        equation: d = r*sin(theta)
+        latex: d = r\,\sin(\theta)
+      - target: r
+        equation: r = d/sin(theta)
+        latex: r = \frac{d}{\sin(\theta)}
+      - target: theta
+        equation: theta = asin(d/r)
+        latex: \theta = \arcsin\!\left(\frac{d}{r}\right)
+    constraints:
+      - expr: r > 0
+        message: Para despejar theta, r debe ser positiva.
+      - expr: abs(d/r) <= 1
+        message: Para arcsin(d/r), se requiere |d/r| <= 1.
+    notes:
+      - En calculos numericos de trigonometria usa radianes.
+    status: calculable
+
+  - id: segunda_ley_rotacional
+    title: Relacion dinamica de referencia
+    equation: tau = I*alpha
+    latex: \tau = I\,\alpha
+    rearrangements:
+      - target: tau
+        equation: tau = I*alpha
+        latex: \tau = I\,\alpha
+      - target: I
+        equation: I = tau/alpha
+        latex: I = \frac{\tau}{\alpha}
+      - target: alpha
+        equation: alpha = tau/I
+        latex: \alpha = \frac{\tau}{I}
+    constraints:
+      - expr: I > 0
+        message: I debe ser positiva para cuerpos fisicos reales.
+      - expr: alpha != 0
+        message: Si despejas I, alpha no puede ser 0.
+    notes:
+      - Incluida como puente entre definicion de torque y dinamica rotacional.
+    status: calculable
+
+ui:
+  default_formula: torque_por_brazo
+  groups:
+    - title: Definicion y relaciones base
+      items:
+        - torque_por_brazo
+        - torque_por_angulo
+        - brazo_desde_angulo
+    - title: Conexion con dinamica rotacional
+      items:
+        - segunda_ley_rotacional

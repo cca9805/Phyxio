@@ -1,0 +1,187 @@
+version: 1
+topic:
+  id: velocidad-de-la-luz
+  title: Velocidad De La Luz
+variables:
+  - id: c
+    symbol: c
+    name: velocidad_luz_vacio
+    si_unit: m/s
+  - id: v
+    symbol: v
+    name: velocidad_en_medio
+    si_unit: m/s
+  - id: n
+    symbol: n
+    name: indice_refraccion
+    si_unit: '1'
+  - id: lambda0
+    symbol: \lambda_0
+    name: longitud_onda_vacio
+    si_unit: m
+  - id: lambdam
+    symbol: \lambda_m
+    name: longitud_onda_medio
+    si_unit: m
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda_generica
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+  - id: d
+    symbol: d
+    name: distancia
+    si_unit: m
+  - id: t
+    symbol: t
+    name: tiempo
+    si_unit: s
+  - id: epsilon0
+    symbol: \varepsilon_0
+    name: permitividad_vacio
+    si_unit: F/m
+  - id: mu0
+    symbol: \mu_0
+    name: permeabilidad_vacio
+    si_unit: H/m
+formulas:
+  - id: relacion_onda_vacio
+    title: Relacion de onda en vacio
+    equation: c = lambda0*f
+    latex: c=\lambda_0 f
+    rearrangements:
+      - target: c
+        equation: c = lambda0*f
+        latex: c=\lambda_0 f
+      - target: lambda0
+        equation: lambda0 = c/f
+        latex: \lambda_0=\frac{c}{f}
+      - target: f
+        equation: f = c/lambda0
+        latex: f=\frac{c}{\lambda_0}
+
+  - id: relacion_onda_medio
+    title: Relacion de onda en medio
+    equation: v = lambdam*f
+    latex: v=\lambda_m f
+    rearrangements:
+      - target: v
+        equation: v = lambdam*f
+        latex: v=\lambda_m f
+      - target: lambdam
+        equation: lambdam = v/f
+        latex: \lambda_m=\frac{v}{f}
+      - target: f
+        equation: f = v/lambdam
+        latex: f=\frac{v}{\lambda_m}
+
+  - id: indice_refraccion
+    title: Indice de refraccion del medio
+    equation: n = c/v
+    latex: n=\frac{c}{v}
+    rearrangements:
+      - target: n
+        equation: n = c/v
+        latex: n=\frac{c}{v}
+      - target: v
+        equation: v = c/n
+        latex: v=\frac{c}{n}
+
+  - id: lambda_en_medio
+    title: Longitud de onda en medio
+    equation: lambdam = lambda0/n
+    latex: \lambda_m=\frac{\lambda_0}{n}
+    rearrangements:
+      - target: lambdam
+        equation: lambdam = lambda0/n
+        latex: \lambda_m=\frac{\lambda_0}{n}
+      - target: lambda0
+        equation: lambda0 = lambdam*n
+        latex: \lambda_0=\lambda_m n
+      - target: n
+        equation: n = lambda0/lambdam
+        latex: n=\frac{\lambda_0}{\lambda_m}
+
+  - id: periodo_frecuencia
+    title: Periodo y frecuencia
+    equation: T = 1/f
+    latex: T=\frac{1}{f}
+    rearrangements:
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+
+  - id: tiempo_vuelo
+    title: Tiempo de vuelo rectilineo
+    equation: d = v*t
+    latex: d=vt
+    rearrangements:
+      - target: d
+        equation: d = v*t
+        latex: d=vt
+      - target: v
+        equation: v = d/t
+        latex: v=\frac{d}{t}
+      - target: t
+        equation: t = d/v
+        latex: t=\frac{d}{v}
+
+  - id: eco_ida_vuelta
+    title: Distancia por eco (ida y vuelta)
+    equation: d = v*t/2
+    latex: d=\frac{vt}{2}
+    rearrangements:
+      - target: d
+        equation: d = v*t/2
+        latex: d=\frac{vt}{2}
+      - target: v
+        equation: v = 2*d/t
+        latex: v=\frac{2d}{t}
+      - target: t
+        equation: t = 2*d/v
+        latex: t=\frac{2d}{v}
+
+  - id: c_constantes_vacio
+    title: c desde constantes del vacio
+    equation: c = 1/sqrt(epsilon0*mu0)
+    latex: c=\frac{1}{\sqrt{\varepsilon_0\mu_0}}
+    rearrangements:
+      - target: c
+        equation: c = 1/sqrt(epsilon0*mu0)
+        latex: c=\frac{1}{\sqrt{\varepsilon_0\mu_0}}
+
+  - id: frecuencia_invariante_conceptual
+    title: Frecuencia invariante en frontera ideal (conceptual)
+    equation: f = f
+    latex: f_1=f_2
+    calculable: false
+    motivo_no_calculable: Es una condicion conceptual de continuidad temporal en la interfaz, no un despeje escalar con nueva incognita.
+
+ui:
+  default_formula: relacion_onda_vacio
+  groups:
+    - title: Relaciones fundamentales (calculables)
+      items:
+        - relacion_onda_vacio
+        - relacion_onda_medio
+        - indice_refraccion
+        - lambda_en_medio
+        - periodo_frecuencia
+    - title: Propagacion y medida (calculables)
+      items:
+        - tiempo_vuelo
+        - eco_ida_vuelta
+    - title: Fundamentacion fisica (mixto)
+      items:
+        - c_constantes_vacio
+        - frecuencia_invariante_conceptual

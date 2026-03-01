@@ -1,0 +1,206 @@
+﻿version: 1
+topic:
+  id: aplicaciones
+  title: Aplicaciones
+variables:
+  - id: v
+    symbol: v
+    name: velocidad_propagacion
+    si_unit: m/s
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+  - id: d
+    symbol: d
+    name: distancia
+    si_unit: m
+  - id: t
+    symbol: t
+    name: tiempo
+    si_unit: s
+  - id: t_echo
+    symbol: t_{echo}
+    name: tiempo_eco
+    si_unit: s
+  - id: P
+    symbol: P
+    name: potencia_sonora
+    si_unit: W
+  - id: I
+    symbol: I
+    name: intensidad
+    si_unit: W/m^2
+  - id: r
+    symbol: r
+    name: distancia_fuente
+    si_unit: m
+  - id: I0
+    symbol: I_0
+    name: intensidad_referencia
+    si_unit: W/m^2
+  - id: beta
+    symbol: \beta
+    name: nivel_sonoro
+    si_unit: dB
+  - id: f0
+    symbol: f_0
+    name: frecuencia_fuente
+    si_unit: Hz
+  - id: fobs
+    symbol: f_{obs}
+    name: frecuencia_observada
+    si_unit: Hz
+  - id: vo
+    symbol: v_o
+    name: velocidad_observador
+    si_unit: m/s
+  - id: vs
+    symbol: v_s
+    name: velocidad_fuente
+    si_unit: m/s
+  - id: delta_f
+    symbol: \Delta f
+    name: corrimiento_frecuencia
+    si_unit: Hz
+formulas:
+  - id: onda_base
+    title: Relacion fundamental
+    equation: v = lambda*f
+    latex: v=\lambda f
+    rearrangements:
+      - target: v
+        equation: v = lambda*f
+        latex: v=\lambda f
+      - target: lambda
+        equation: lambda = v/f
+        latex: \lambda=\frac{v}{f}
+      - target: f
+        equation: f = v/lambda
+        latex: f=\frac{v}{\lambda}
+
+  - id: periodo
+    title: Periodo
+    equation: T = 1/f
+    latex: T=\frac{1}{f}
+    rearrangements:
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+
+  - id: distancia_ida
+    title: Distancia por tiempo de vuelo (ida)
+    equation: d = v*t
+    latex: d=vt
+    rearrangements:
+      - target: d
+        equation: d = v*t
+        latex: d=vt
+      - target: v
+        equation: v = d/t
+        latex: v=\frac{d}{t}
+      - target: t
+        equation: t = d/v
+        latex: t=\frac{d}{v}
+
+  - id: eco_distancia
+    title: Distancia por eco (ida-vuelta)
+    equation: d = v*t_echo/2
+    latex: d=\frac{vt_{echo}}{2}
+    rearrangements:
+      - target: d
+        equation: d = v*t_echo/2
+        latex: d=\frac{vt_{echo}}{2}
+      - target: t_echo
+        equation: t_echo = 2*d/v
+        latex: t_{echo}=\frac{2d}{v}
+      - target: v
+        equation: v = 2*d/t_echo
+        latex: v=\frac{2d}{t_{echo}}
+
+  - id: intensidad_fuente_puntual
+    title: Intensidad de fuente puntual
+    equation: I = P/(4*pi*r^2)
+    latex: I=\frac{P}{4\pi r^2}
+    rearrangements:
+      - target: I
+        equation: I = P/(4*pi*r^2)
+        latex: I=\frac{P}{4\pi r^2}
+      - target: P
+        equation: P = 4*pi*r^2*I
+        latex: P=4\pi r^2I
+      - target: r
+        equation: r = sqrt(P/(4*pi*I))
+        latex: r=\sqrt{\frac{P}{4\pi I}}
+
+  - id: nivel_sonoro
+    title: Nivel sonoro
+    equation: beta = 10*log10(I/I0)
+    latex: \beta=10\log_{10}\left(\frac{I}{I_0}\right)
+    rearrangements:
+      - target: beta
+        equation: beta = 10*log10(I/I0)
+        latex: \beta=10\log_{10}\left(\frac{I}{I_0}\right)
+      - target: I
+        equation: I = I0*10^(beta/10)
+        latex: I=I_0\,10^{\beta/10}
+
+  - id: doppler_general
+    title: Doppler clasico general
+    equation: fobs = f0*(v + vo)/(v - vs)
+    latex: f_{obs}=f_0\frac{v+v_o}{v-v_s}
+    rearrangements:
+      - target: fobs
+        equation: fobs = f0*(v + vo)/(v - vs)
+        latex: f_{obs}=f_0\frac{v+v_o}{v-v_s}
+      - target: f0
+        equation: f0 = fobs*(v - vs)/(v + vo)
+        latex: f_0=f_{obs}\frac{v-v_s}{v+v_o}
+
+  - id: corrimiento_hz
+    title: Corrimiento en frecuencia
+    equation: delta_f = fobs - f0
+    latex: \Delta f=f_{obs}-f_0
+    rearrangements:
+      - target: delta_f
+        equation: delta_f = fobs - f0
+        latex: \Delta f=f_{obs}-f_0
+
+  - id: suma_niveles_conceptual
+    title: Suma de niveles de fuentes independientes (conceptual)
+    equation: beta = beta
+    latex: \beta_{tot}=10\log_{10}\left(\sum_i10^{\beta_i/10}\right)
+    calculable: false
+    motivo_no_calculable: Requiere tratar una lista de fuentes y no una unica ecuacion escalar.
+
+ui:
+  default_formula: eco_distancia
+  groups:
+    - title: Propagacion y tiempo de vuelo (calculables)
+      items:
+        - onda_base
+        - periodo
+        - distancia_ida
+        - eco_distancia
+    - title: Energia y nivel (calculables)
+      items:
+        - intensidad_fuente_puntual
+        - nivel_sonoro
+    - title: Movimiento relativo (calculables)
+      items:
+        - doppler_general
+        - corrimiento_hz
+    - title: Formula conceptual (no calculable)
+      items:
+        - suma_niveles_conceptual

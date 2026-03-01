@@ -1,0 +1,104 @@
+version: 1
+topic:
+  id: sistemas-referencia
+  title: Sistemas de referencia
+variables:
+  - id: x
+    symbol: x
+    nombre: posición en S
+    unidad_si: m
+    descripcion: Posición en S.
+  - id: xp
+    symbol: x'
+    nombre: posición en S'
+    unidad_si: m
+    descripcion: Posición en S'.
+  - id: x0
+    symbol: x_0
+    nombre: posición del origen de S' en t=0
+    unidad_si: m
+    descripcion: Posición del origen de S' en t=0.
+  - id: v
+    symbol: v
+    nombre: velocidad en S
+    unidad_si: m/s
+    descripcion: Velocidad en S.
+  - id: vp
+    symbol: v'
+    nombre: velocidad en S'
+    unidad_si: m/s
+    descripcion: Velocidad en S'.
+  - id: v0
+    symbol: v_0
+    nombre: velocidad de S' respecto a S
+    unidad_si: m/s
+    descripcion: Velocidad de S' respecto a S.
+  - id: t
+    symbol: t
+    nombre: tiempo
+    unidad_si: s
+    descripcion: Tiempo.
+formulas:
+  - id: galileo_posicion_1d
+    title: Transformación galileana (posición, 1D)
+    equation: x = xp + x0 + v0*t
+    latex: x = x' + x_0 + v_0 t
+    rearrangements:
+      - target: x
+        equation: x = xp + x0 + v0*t
+        latex: x = x' + x_0 + v_0 t
+      - target: xp
+        equation: xp = x - x0 - v0*t
+        latex: x' = x - x_0 - v_0 t
+      - target: x0
+        equation: x0 = x - xp - v0*t
+        latex: x_0 = x - x' - v_0 t
+      - target: v0
+        equation: v0 = (x - xp - x0)/t
+        latex: v_0 = \frac{x - x' - x_0}{t}
+        constraints:
+          - expr: t != 0
+            message: Para despejar v0, t no puede ser 0.
+      - target: t
+        equation: t = (x - xp - x0)/v0
+        latex: t = \frac{x - x' - x_0}{v_0}
+        constraints:
+          - expr: v0 != 0
+            message: Para despejar t, v0 no puede ser 0.
+    status: calculable
+  - id: galileo_velocidad_1d
+    title: Composición de velocidades (1D)
+    equation: v = vp + v0
+    latex: v = v' + v_0
+    rearrangements:
+      - target: v
+        equation: v = vp + v0
+        latex: v = v' + v_0
+      - target: vp
+        equation: vp = v - v0
+        latex: v' = v - v_0
+      - target: v0
+        equation: v0 = v - vp
+        latex: v_0 = v - v'
+    status: calculable
+  - id: notacion_relativa
+    title: Notación relativa (conceptual)
+    equation: x_{A/B}
+    latex: x_{A/B}
+    motivo_no_calculable: |
+      Es notación para indicar “posición de A respecto a B”. No es una relación numérica cerrada sin definir sistemas, origen y convenciones.
+    status: descriptive
+  - id: transformacion_vectorial
+    title: Transformación vectorial (conceptual)
+    equation: r = r' + r0 + v0*t
+    latex: \vec r = \vec r\,' + \vec r_0 + \vec v_0 t
+    motivo_no_calculable: |
+      En forma vectorial necesitas direcciones/componentes. La calculadora básica (1D) no resuelve productos vectoriales ni bases arbitrarias.
+    status: descriptive
+ui:
+  default_formula: galileo_velocidad_1d
+  groups:
+    - title: Transformaciones 1D (calculables)
+      items:
+        - galileo_velocidad_1d
+        - galileo_posicion_1d

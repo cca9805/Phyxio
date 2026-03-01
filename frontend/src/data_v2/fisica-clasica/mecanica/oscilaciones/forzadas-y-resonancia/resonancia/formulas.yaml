@@ -1,0 +1,132 @@
+version: 1
+topic:
+  id: resonancia
+  title: Resonancia
+variables:
+  - id: omega_r
+    symbol: \omega_r
+    nombre: pulsacion de resonancia
+    unidad_si: rad/s
+    descripcion: Pulsacion de resonancia.
+  - id: omega0
+    symbol: \omega_0
+    nombre: pulsacion natural
+    unidad_si: rad/s
+    descripcion: Pulsacion natural.
+  - id: omega_f
+    symbol: \omega_f
+    nombre: pulsacion de forzado
+    unidad_si: rad/s
+    descripcion: Pulsacion de forzado.
+  - id: X
+    symbol: X
+    nombre: amplitud
+    unidad_si: m
+    descripcion: Amplitud.
+  - id: Q
+    symbol: Q
+    nombre: factor de calidad
+    unidad_si: "1"
+    descripcion: Factor de calidad.
+  - id: b
+    symbol: b
+    nombre: amortiguamiento
+    unidad_si: N*s/m
+    descripcion: Amortiguamiento.
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa.
+  - id: k
+    symbol: k
+    nombre: constante elastica
+    unidad_si: N/m
+    descripcion: Constante elastica.
+  - id: F0
+    symbol: F_0
+    nombre: fuerza de excitacion
+    unidad_si: "N"
+    descripcion: Fuerza de excitacion.
+formulas:
+  - id: amplitud_respuesta
+    title: Curva de amplitud
+    equation: X = F0/sqrt((k-m*omega_f^2)^2 + (b*omega_f)^2)
+    latex: X=\frac{F_0}{\sqrt{(k-m\omega_f^2)^2+(b\omega_f)^2}}
+    rearrangements:
+      - target: X
+        equation: X = F0/sqrt((k-m*omega_f^2)^2 + (b*omega_f)^2)
+        latex: X=\frac{F_0}{\sqrt{(k-m\omega_f^2)^2+(b\omega_f)^2}}
+      - target: F0
+        equation: F0 = X*sqrt((k-m*omega_f^2)^2 + (b*omega_f)^2)
+        latex: F_0=X\sqrt{(k-m\omega_f^2)^2+(b\omega_f)^2}
+    constraints:
+      - expr: omega_f > 0
+        message: omega_f debe ser mayor que 0.
+      - expr: X > 0
+        message: X debe ser mayor que 0.
+      - expr: b > 0
+        message: b debe ser mayor que 0.
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+      - expr: k > 0
+        message: k debe ser mayor que 0.
+      - expr: F0 > 0
+        message: F0 debe ser mayor que 0.
+  - id: frecuencia_resonancia
+    title: Pulsacion de resonancia
+    equation: omega_r = sqrt(k/m - b^2/(2*m^2))
+    latex: \omega_r=\sqrt{\frac{k}{m}-\frac{b^2}{2m^2}}
+    rearrangements:
+      - target: omega_r
+        equation: omega_r = sqrt(k/m - b^2/(2*m^2))
+        latex: \omega_r=\sqrt{\frac{k}{m}-\frac{b^2}{2m^2}}
+    constraints:
+      - expr: omega_r > 0
+        message: omega_r debe ser mayor que 0.
+      - expr: b > 0
+        message: b debe ser mayor que 0.
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+      - expr: k > 0
+        message: k debe ser mayor que 0.
+  - id: factor_calidad
+    title: Factor de calidad
+    equation: Q = m*omega0/b
+    latex: Q=\frac{m\omega_0}{b}
+    rearrangements:
+      - target: Q
+        equation: Q = m*omega0/b
+        latex: Q=\frac{m\omega_0}{b}
+      - target: b
+        equation: b = m*omega0/Q
+        latex: b=\frac{m\omega_0}{Q}
+      - target: omega0
+        equation: omega0 = Q*b/m
+        latex: \omega_0=\frac{Qb}{m}
+    constraints:
+      - expr: omega0 > 0
+        message: omega0 debe ser mayor que 0.
+      - expr: Q > 0
+        message: Q debe ser mayor que 0.
+      - expr: b > 0
+        message: b debe ser mayor que 0.
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+  - id: criterio_resonancia
+    title: Criterio de resonancia (conceptual)
+    equation: omega_f ≈ omega0
+    latex: \omega_f\approx\omega_0
+    calculable: false
+    motivo_no_calculable: La resonancia real depende también del amortiguamiento y del criterio de amplitud máximo adoptado.
+ui:
+  default_formula: amplitud_respuesta
+  groups:
+    - title: Fórmulas calculables
+      items:
+        - amplitud_respuesta
+        - frecuencia_resonancia
+        - factor_calidad
+    - title: Fórmulas conceptuales
+      items:
+        - criterio_resonancia

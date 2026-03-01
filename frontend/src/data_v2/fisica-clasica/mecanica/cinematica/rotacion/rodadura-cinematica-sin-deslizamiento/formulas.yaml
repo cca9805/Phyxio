@@ -1,0 +1,152 @@
+version: 1
+topic:
+  id: rodadura-cinematica-sin-deslizamiento
+  title: Rodadura sin deslizamiento
+variables:
+  - id: R
+    symbol: R
+    unidad_si: m
+    descripcion: ''
+  - id: x
+    symbol: x
+    unidad_si: m
+    descripcion: ''
+  - id: theta
+    symbol: \theta
+    unidad_si: rad
+    descripcion: ''
+  - id: omega
+    symbol: \omega
+    unidad_si: rad/s
+    descripcion: ''
+  - id: alpha
+    symbol: \alpha
+    unidad_si: rad/s^2
+    descripcion: ''
+  - id: vcm
+    symbol: v_{cm}
+    unidad_si: m/s
+    descripcion: ''
+  - id: acm
+    symbol: a_{cm}
+    unidad_si: m/s^2
+    descripcion: ''
+  - id: vtop
+    symbol: v_{arriba}
+    unidad_si: m/s
+    descripcion: ''
+  - id: vcontact
+    symbol: v_{contacto}
+    unidad_si: m/s
+    descripcion: ''
+  - id: vslip
+    symbol: v_{slip}
+    unidad_si: m/s
+    descripcion: ''
+formulas:
+  - id: avance_y_giro
+    title: Avance y giro (rodadura pura)
+    equation: x = R*theta
+    latex: x = R\,\theta
+    calculable: true
+    rearrangements:
+      - target: x
+        equation: x = R*theta
+        latex: x = R\,\theta
+      - target: R
+        equation: R = x/theta
+        latex: R = \frac{x}{\theta}
+      - target: theta
+        equation: theta = x/R
+        latex: \theta = \frac{x}{R}
+  - id: velocidad_rodadura
+    title: Condición de rodadura sin deslizamiento (velocidad)
+    equation: vcm = omega*R
+    latex: v_{cm} = \omega\,R
+    calculable: true
+    rearrangements:
+      - target: vcm
+        equation: vcm = omega*R
+        latex: v_{cm} = \omega\,R
+      - target: omega
+        equation: omega = vcm/R
+        latex: \omega = \frac{v_{cm}}{R}
+      - target: R
+        equation: R = vcm/omega
+        latex: R = \frac{v_{cm}}{\omega}
+  - id: aceleracion_rodadura
+    title: Condición de rodadura sin deslizamiento (aceleración)
+    equation: acm = alpha*R
+    latex: a_{cm} = \alpha\,R
+    calculable: true
+    rearrangements:
+      - target: acm
+        equation: acm = alpha*R
+        latex: a_{cm} = \alpha\,R
+      - target: alpha
+        equation: alpha = acm/R
+        latex: \alpha = \frac{a_{cm}}{R}
+      - target: R
+        equation: R = acm/alpha
+        latex: R = \frac{a_{cm}}{\alpha}
+  - id: velocidad_punto_superior
+    title: Velocidad del punto superior (rodadura pura)
+    equation: vtop = 2*vcm
+    latex: v_{\text{arriba}} = 2\,v_{cm}
+    calculable: true
+    rearrangements:
+      - target: vtop
+        equation: vtop = 2*vcm
+        latex: v_{\text{arriba}} = 2\,v_{cm}
+      - target: vcm
+        equation: vcm = vtop/2
+        latex: v_{cm} = \frac{v_{\text{arriba}}}{2}
+  - id: velocidad_contacto
+    title: Velocidad del punto de contacto (rodadura pura)
+    equation: vcontact = 0
+    latex: v_{\text{contacto}} = 0
+    calculable: true
+    rearrangements:
+      - target: vcontact
+        equation: vcontact = 0
+        latex: v_{\text{contacto}} = 0
+  - id: velocidad_deslizamiento
+    title: Velocidad de deslizamiento (definición)
+    equation: vslip = vcm - omega*R
+    latex: v_{slip} = v_{cm} - \omega R
+    calculable: true
+    rearrangements:
+      - target: vslip
+        equation: vslip = vcm - omega*R
+        latex: v_{slip} = v_{cm} - \omega R
+      - target: vcm
+        equation: vcm = vslip + omega*R
+        latex: v_{cm} = v_{slip} + \omega R
+      - target: omega
+        equation: omega = (vcm - vslip)/R
+        latex: \omega = \frac{v_{cm} - v_{slip}}{R}
+      - target: R
+        equation: R = (vcm - vslip)/omega
+        latex: R = \frac{v_{cm} - v_{slip}}{\omega}
+  - id: velocidad_punto_vectorial
+    title: Velocidad de un punto del sólido (vectorial)
+    equation: v = vcm + omega × r
+    latex: \vec v = \vec v_{cm} + \vec\omega \times \vec r
+    calculable: false
+    motivo_no_calculable: |
+      Relación vectorial con producto vectorial. Requiere ejes, sentido y componentes; el motor actual es escalar/algebraico.
+  - id: rodadura_condicion_vectorial
+    title: Condición de rodadura (vectorial)
+    equation: v_contacto = 0
+    latex: \vec v_{\text{contacto}} = \vec 0
+    calculable: false
+    motivo_no_calculable: |
+      Es una condición geométrica vectorial (incluye dirección). En el motor se usa su consecuencia escalar v_cm = ωR.
+  - id: trayectoria_cicloide
+    title: Trayectoria del punto del borde (cicloide)
+    equation: x = R(θ - sinθ), y = R(1 - cosθ)
+    latex: x = R(\theta - \sin\theta),\; y = R(1 - \cos\theta)
+    calculable: false
+    motivo_no_calculable: Parametrización 2D (x,y) con trigonometría y parámetro θ; no es una única ecuación escalar de despeje directo para la calculadora genérica (sí puede mostrarse en teoría y como gráfica específica).
+ui:
+  default_formula: avance_y_giro

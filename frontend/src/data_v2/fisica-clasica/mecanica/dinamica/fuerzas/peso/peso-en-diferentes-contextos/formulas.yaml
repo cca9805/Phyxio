@@ -1,0 +1,96 @@
+version: 1
+topic:
+  id: peso-en-diferentes-contextos
+  title: Peso en diferentes contextos
+variables:
+- id: P
+  symbol: \vec P
+  nombre: peso
+  unidad_si: N
+  descripcion: Peso.
+- id: m
+  symbol: m
+  nombre: masa
+  unidad_si: kg
+  descripcion: Masa.
+- id: g
+  symbol: \vec g
+  nombre: aceleracion de la gravedad
+  unidad_si: m/s^2
+  descripcion: Aceleracion de la gravedad.
+- id: g0
+  symbol: g_0
+  nombre: gravedad de referencia
+  unidad_si: m/s^2
+  descripcion: Gravedad de referencia.
+- id: h
+  symbol: h
+  nombre: altura
+  unidad_si: m
+  descripcion: Altura.
+- id: R
+  symbol: R
+  nombre: radio del planeta
+  unidad_si: m
+  descripcion: Radio del planeta.
+formulas:
+- id: peso_general
+  title: Expresion general del peso
+  equation: P = m*g
+  latex: \vec P = m\vec g
+  status: calculable
+  rearrangements:
+  - target: P
+    equation: P = m*g
+    latex: \vec P = m\vec g
+  - target: m
+    equation: m = P/g
+    latex: m = \frac{P}{g}
+    constraints:
+    - expr: g != 0
+      message: g no puede ser cero.
+  - target: g
+    equation: g = P/m
+    latex: g = \frac{P}{m}
+    constraints:
+    - expr: m != 0
+      message: m no puede ser cero.
+- id: peso_superficie
+  title: Peso cerca de la superficie
+  equation: P = m*g0
+  latex: P = m g_0
+  status: calculable
+  rearrangements:
+  - target: P
+    equation: P = m*g0
+    latex: P = m g_0
+  - target: m
+    equation: m = P/g0
+    latex: m = \frac{P}{g_0}
+    constraints:
+    - expr: g0 != 0
+      message: g0 no puede ser cero.
+  - target: g0
+    equation: g0 = P/m
+    latex: g_0 = \frac{P}{m}
+    constraints:
+    - expr: m != 0
+      message: m no puede ser cero.
+- id: variacion_altura
+  title: Variacion del peso con la altura
+  equation: g = g0*(R/(R+h))^2
+  latex: g(h) = g_0 \left( \frac{R}{R+h} \right)^2
+  status: descriptive
+  motivo_no_calculable: 'Requiere conocer el radio del planeta y se deriva de la ley de gravitacion universal.
+
+    '
+ui:
+  default_formula: peso_general
+  groups:
+  - title: Expresion del peso
+    items:
+    - peso_general
+    - peso_superficie
+  - title: Variacion con el entorno
+    items:
+    - variacion_altura

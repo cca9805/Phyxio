@@ -1,0 +1,118 @@
+﻿version: 1
+topic:
+  id: dos-masas-unidas-por-cuerda
+  title: Dos Masas Unidas Por Cuerda
+variables:
+  - id: m1
+    symbol: m_1
+    name: masa_1
+    si_unit: kg
+  - id: m2
+    symbol: m_2
+    name: masa_2
+    si_unit: kg
+  - id: g
+    symbol: g
+    name: gravedad
+    si_unit: m/s^2
+  - id: a
+    symbol: a
+    name: aceleracion
+    si_unit: m/s^2
+  - id: T
+    symbol: T
+    name: tension
+    si_unit: N
+  - id: F_ext
+    symbol: F_ext
+    name: fuerza_externa_neta
+    si_unit: N
+  - id: m_tot
+    symbol: m_tot
+    name: masa_total
+    si_unit: kg
+formulas:
+  - id: fuerza_externa_sistema
+    title: Fuerza externa neta del sistema
+    equation: F_ext = (m2 - m1)*g
+    latex: F_{ext}=(m_2-m_1)g
+    rearrangements:
+      - target: F_ext
+        equation: F_ext = (m2 - m1)*g
+        latex: F_{ext}=(m_2-m_1)g
+
+  - id: masa_total
+    title: Masa total acoplada
+    equation: m_tot = m1 + m2
+    latex: m_{tot}=m_1+m_2
+    rearrangements:
+      - target: m_tot
+        equation: m_tot = m1 + m2
+        latex: m_{tot}=m_1+m_2
+
+  - id: aceleracion_atwood
+    title: Aceleracion del sistema
+    equation: a = (m2 - m1)*g/(m1 + m2)
+    latex: a=\frac{(m_2-m_1)g}{m_1+m_2}
+    rearrangements:
+      - target: a
+        equation: a = (m2 - m1)*g/(m1 + m2)
+        latex: a=\frac{(m_2-m_1)g}{m_1+m_2}
+      - target: g
+        equation: g = a*(m1 + m2)/(m2 - m1)
+        latex: g=\frac{a(m_1+m_2)}{m_2-m_1}
+
+  - id: tension_por_m1
+    title: Tension usando ecuacion de m1
+    equation: T = m1*(g + a)
+    latex: T=m_1(g+a)
+    rearrangements:
+      - target: T
+        equation: T = m1*(g + a)
+        latex: T=m_1(g+a)
+      - target: a
+        equation: a = T/m1 - g
+        latex: a=\frac{T}{m_1}-g
+
+  - id: tension_por_m2
+    title: Tension usando ecuacion de m2
+    equation: T = m2*(g - a)
+    latex: T=m_2(g-a)
+    rearrangements:
+      - target: T
+        equation: T = m2*(g - a)
+        latex: T=m_2(g-a)
+      - target: a
+        equation: a = g - T/m2
+        latex: a=g-\frac{T}{m_2}
+
+  - id: tension_cerrada
+    title: Tension cerrada en funcion de masas
+    equation: T = 2*m1*m2*g/(m1 + m2)
+    latex: T=\frac{2m_1m_2}{m_1+m_2}g
+    rearrangements:
+      - target: T
+        equation: T = 2*m1*m2*g/(m1 + m2)
+        latex: T=\frac{2m_1m_2}{m_1+m_2}g
+
+  - id: equilibrio_masas_iguales
+    title: Condicion de equilibrio ideal (conceptual)
+    equation: equilibrio_masas_iguales
+    latex: m_1=m_2\Rightarrow a=0
+    calculable: false
+    motivo_no_calculable: Es un criterio de interpretacion fisica del modelo, no un despeje escalar unico.
+
+ui:
+  default_formula: aceleracion_atwood
+  groups:
+    - title: Modelo dinamico (calculables)
+      items:
+        - fuerza_externa_sistema
+        - masa_total
+        - aceleracion_atwood
+        - tension_por_m1
+        - tension_por_m2
+        - tension_cerrada
+    - title: Criterio conceptual
+      items:
+        - equilibrio_masas_iguales

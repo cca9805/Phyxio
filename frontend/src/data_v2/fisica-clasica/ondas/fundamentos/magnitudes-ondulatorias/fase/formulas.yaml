@@ -1,0 +1,177 @@
+version: 1
+topic:
+  id: fase
+  title: Fase
+variables:
+  - id: phi
+    symbol: \phi
+    name: fase_instantanea
+    si_unit: rad
+  - id: phi0
+    symbol: \phi_0
+    name: fase_inicial
+    si_unit: rad
+  - id: delta_phi
+    symbol: \Delta\phi
+    name: desfase
+    si_unit: rad
+  - id: omega
+    symbol: \omega
+    name: frecuencia_angular
+    si_unit: rad/s
+  - id: k
+    symbol: k
+    name: numero_onda
+    si_unit: rad/m
+  - id: x
+    symbol: x
+    name: posicion
+    si_unit: m
+  - id: t
+    symbol: t
+    name: tiempo
+    si_unit: s
+  - id: delta_x
+    symbol: \Delta x
+    name: separacion_espacial
+    si_unit: m
+  - id: delta_t
+    symbol: \Delta t
+    name: separacion_temporal
+    si_unit: s
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: n
+    symbol: n
+    name: indice_entero
+    si_unit: '1'
+formulas:
+  - id: fase_instantanea
+    title: Fase instantanea
+    equation: phi = k*x - omega*t + phi0
+    latex: \phi=kx-\omega t+\phi_0
+    rearrangements:
+      - target: phi
+        equation: phi = k*x - omega*t + phi0
+        latex: \phi=kx-\omega t+\phi_0
+      - target: phi0
+        equation: phi0 = phi - k*x + omega*t
+        latex: \phi_0=\phi-kx+\omega t
+  - id: desfase_espacial
+    title: Desfase espacial
+    equation: delta_phi = k*delta_x
+    latex: \Delta\phi=k\Delta x
+    rearrangements:
+      - target: delta_phi
+        equation: delta_phi = k*delta_x
+        latex: \Delta\phi=k\Delta x
+      - target: delta_x
+        equation: delta_x = delta_phi/k
+        latex: \Delta x=\frac{\Delta\phi}{k}
+      - target: k
+        equation: k = delta_phi/delta_x
+        latex: k=\frac{\Delta\phi}{\Delta x}
+  - id: desfase_espacial_lambda
+    title: Desfase espacial por lambda
+    equation: delta_phi = 2*pi*delta_x/lambda
+    latex: \Delta\phi=\frac{2\pi\Delta x}{\lambda}
+    rearrangements:
+      - target: delta_phi
+        equation: delta_phi = 2*pi*delta_x/lambda
+        latex: \Delta\phi=\frac{2\pi\Delta x}{\lambda}
+      - target: delta_x
+        equation: delta_x = (delta_phi*lambda)/(2*pi)
+        latex: \Delta x=\frac{\Delta\phi\lambda}{2\pi}
+      - target: lambda
+        equation: lambda = (2*pi*delta_x)/delta_phi
+        latex: \lambda=\frac{2\pi\Delta x}{\Delta\phi}
+  - id: desfase_temporal
+    title: Desfase temporal
+    equation: delta_phi = omega*delta_t
+    latex: \Delta\phi=\omega\Delta t
+    rearrangements:
+      - target: delta_phi
+        equation: delta_phi = omega*delta_t
+        latex: \Delta\phi=\omega\Delta t
+      - target: delta_t
+        equation: delta_t = delta_phi/omega
+        latex: \Delta t=\frac{\Delta\phi}{\omega}
+      - target: omega
+        equation: omega = delta_phi/delta_t
+        latex: \omega=\frac{\Delta\phi}{\Delta t}
+  - id: desfase_temporal_periodo
+    title: Desfase temporal por periodo
+    equation: delta_phi = 2*pi*delta_t/T
+    latex: \Delta\phi=\frac{2\pi\Delta t}{T}
+    rearrangements:
+      - target: delta_phi
+        equation: delta_phi = 2*pi*delta_t/T
+        latex: \Delta\phi=\frac{2\pi\Delta t}{T}
+      - target: delta_t
+        equation: delta_t = (delta_phi*T)/(2*pi)
+        latex: \Delta t=\frac{\Delta\phi T}{2\pi}
+      - target: T
+        equation: T = (2*pi*delta_t)/delta_phi
+        latex: T=\frac{2\pi\Delta t}{\Delta\phi}
+  - id: omega_f
+    title: Conexion frecuencia angular-frecuencia
+    equation: omega = 2*pi*f
+    latex: \omega=2\pi f
+    rearrangements:
+      - target: omega
+        equation: omega = 2*pi*f
+        latex: \omega=2\pi f
+      - target: f
+        equation: f = omega/(2*pi)
+        latex: f=\frac{\omega}{2\pi}
+  - id: k_lambda
+    title: Conexion numero de onda-longitud de onda
+    equation: k = 2*pi/lambda
+    latex: k=\frac{2\pi}{\lambda}
+    rearrangements:
+      - target: k
+        equation: k = 2*pi/lambda
+        latex: k=\frac{2\pi}{\lambda}
+      - target: lambda
+        equation: lambda = 2*pi/k
+        latex: \lambda=\frac{2\pi}{k}
+  - id: interferencia_constructiva
+    title: Criterio de interferencia constructiva
+    equation: delta_phi = 2*pi*n
+    latex: \Delta\phi=2\pi n
+    calculable: false
+    motivo_no_calculable: Condicion conceptual que requiere n entero y contexto de superposicion.
+  - id: interferencia_destructiva
+    title: Criterio de interferencia destructiva
+    equation: delta_phi = (2*n+1)*pi
+    latex: \Delta\phi=(2n+1)\pi
+    calculable: false
+    motivo_no_calculable: Condicion conceptual para minima superposicion ideal.
+ui:
+  default_formula: desfase_espacial_lambda
+  groups:
+    - title: Fase y desfase calculable
+      items:
+        - fase_instantanea
+        - desfase_espacial
+        - desfase_espacial_lambda
+        - desfase_temporal
+        - desfase_temporal_periodo
+    - title: Conversiones
+      items:
+        - omega_f
+        - k_lambda
+    - title: Interferencia conceptual
+      items:
+        - interferencia_constructiva
+        - interferencia_destructiva

@@ -1,0 +1,105 @@
+version: 1
+topic:
+  id: con-rozamiento
+  title: Con Rozamiento
+variables:
+  - id: m
+    symbol: m
+    name: masa
+    si_unit: kg
+  - id: g
+    symbol: g
+    name: gravedad
+    si_unit: m/s^2
+  - id: theta
+    symbol: \theta
+    name: angulo
+    si_unit: rad
+  - id: N
+    symbol: N
+    name: normal
+    si_unit: N
+  - id: mu_s
+    symbol: \mu_s
+    name: coeficiente_estatico
+    si_unit: "1"
+  - id: mu_k
+    symbol: \mu_k
+    name: coeficiente_cinetico
+    si_unit: "1"
+  - id: fs_max
+    symbol: f_{s,\max}
+    name: rozamiento_estatico_maximo
+    si_unit: N
+  - id: fk
+    symbol: f_k
+    name: rozamiento_cinetico
+    si_unit: N
+  - id: a
+    symbol: a
+    name: aceleracion
+    si_unit: m/s^2
+formulas:
+  - id: normal
+    title: Normal sobre el plano
+    equation: N = m*g*cos(theta)
+    latex: N=mg\cos\theta
+    rearrangements:
+      - target: N
+        equation: N = m*g*cos(theta)
+        latex: N=mg\cos\theta
+
+  - id: estatico_maximo
+    title: Rozamiento estatico maximo
+    equation: fs_max = mu_s*N
+    latex: f_{s,\max}=\mu_s N
+    rearrangements:
+      - target: fs_max
+        equation: fs_max = mu_s*N
+        latex: f_{s,\max}=\mu_s N
+      - target: mu_s
+        equation: mu_s = fs_max/N
+        latex: \mu_s=\frac{f_{s,\max}}{N}
+
+  - id: criterio_inicio
+    title: Criterio de inicio de deslizamiento
+    equation: m*g*sin(theta) = fs_max
+    latex: mg\sin\theta=f_{s,\max}
+    rearrangements:
+      - target: theta
+        equation: theta = atan(mu_s)
+        latex: \theta_c=\arctan(\mu_s)
+
+  - id: cinetico
+    title: Rozamiento cinetico
+    equation: fk = mu_k*N
+    latex: f_k=\mu_k N
+    rearrangements:
+      - target: fk
+        equation: fk = mu_k*N
+        latex: f_k=\mu_k N
+
+  - id: aceleracion_deslizamiento
+    title: Aceleracion con deslizamiento
+    equation: a = g*(sin(theta) - mu_k*cos(theta))
+    latex: a=g(\sin\theta-\mu_k\cos\theta)
+    rearrangements:
+      - target: a
+        equation: a = g*(sin(theta) - mu_k*cos(theta))
+        latex: a=g(\sin\theta-\mu_k\cos\theta)
+      - target: mu_k
+        equation: mu_k = (sin(theta) - a/g)/cos(theta)
+        latex: \mu_k=\frac{\sin\theta-a/g}{\cos\theta}
+
+ui:
+  default_formula: aceleracion_deslizamiento
+  groups:
+    - title: Contacto y umbral (calculables)
+      items:
+        - normal
+        - estatico_maximo
+        - criterio_inicio
+    - title: Movimiento con friccion (calculables)
+      items:
+        - cinetico
+        - aceleracion_deslizamiento

@@ -1,0 +1,137 @@
+﻿version: 1
+topic:
+  id: definicion-momento-angular
+  title: Definicion de momento angular
+variables:
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa.
+  - id: v
+    symbol: v
+    nombre: rapidez
+    unidad_si: m/s
+    descripcion: Rapidez lineal.
+  - id: r
+    symbol: r
+    nombre: distancia_al_origen
+    unidad_si: m
+    descripcion: Distancia desde el origen.
+  - id: theta
+    symbol: \theta
+    nombre: angulo_r_p
+    unidad_si: rad
+    descripcion: Angulo entre r y p.
+  - id: p
+    symbol: p
+    nombre: momento_lineal
+    unidad_si: kg*m/s
+    descripcion: Momento lineal.
+  - id: L
+    symbol: L
+    nombre: momento_angular
+    unidad_si: kg*m^2/s
+    descripcion: Modulo del momento angular.
+  - id: I
+    symbol: I
+    nombre: momento_inercia
+    unidad_si: kg*m^2
+    descripcion: Momento de inercia.
+  - id: omega
+    symbol: \omega
+    nombre: velocidad_angular
+    unidad_si: rad/s
+    descripcion: Velocidad angular.
+  - id: tau
+    symbol: \tau
+    nombre: torque
+    unidad_si: N*m
+    descripcion: Torque externo neto.
+  - id: DeltaL
+    symbol: \Delta L
+    nombre: cambio_momento_angular
+    unidad_si: kg*m^2/s
+    descripcion: Variacion de momento angular.
+  - id: DeltaT
+    symbol: \Delta t
+    nombre: intervalo_tiempo
+    unidad_si: s
+    descripcion: Intervalo temporal.
+formulas:
+  - id: momento_lineal
+    title: Momento lineal
+    equation: p = m*v
+    latex: p=mv
+    rearrangements:
+      - target: p
+        equation: p = m*v
+        latex: p=mv
+      - target: v
+        equation: v = p/m
+        latex: v=\frac{p}{m}
+    constraints:
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+  - id: momento_angular_modulo
+    title: Modulo de momento angular (partícula)
+    equation: L = r*p*sin(theta)
+    latex: L=r\,p\,\sin\theta
+    rearrangements:
+      - target: L
+        equation: L = r*p*sin(theta)
+        latex: L=r\,p\,\sin\theta
+    constraints:
+      - expr: r >= 0
+        message: r debe ser no negativa.
+  - id: momento_angular_eje_fijo
+    title: Momento angular en eje fijo
+    equation: L = I*omega
+    latex: L=I\omega
+    rearrangements:
+      - target: L
+        equation: L = I*omega
+        latex: L=I\omega
+      - target: omega
+        equation: omega = L/I
+        latex: \omega=\frac{L}{I}
+      - target: I
+        equation: I = L/omega
+        latex: I=\frac{L}{\omega}
+    constraints:
+      - expr: I > 0
+        message: I debe ser mayor que 0.
+      - expr: omega != 0
+        message: omega no puede ser 0 al despejar I.
+  - id: torque_promedio
+    title: Torque promedio y cambio de momento angular
+    equation: tau = DeltaL/DeltaT
+    latex: \tau=\frac{\Delta L}{\Delta t}
+    rearrangements:
+      - target: tau
+        equation: tau = DeltaL/DeltaT
+        latex: \tau=\frac{\Delta L}{\Delta t}
+      - target: DeltaL
+        equation: DeltaL = tau*DeltaT
+        latex: \Delta L=\tau\,\Delta t
+    constraints:
+      - expr: DeltaT > 0
+        message: Delta t debe ser mayor que 0.
+  - id: definicion_vectorial_conceptual
+    title: Definicion vectorial (conceptual)
+    equation: Lvec = rvec x pvec
+    latex: \vec L=\vec r\times\vec p
+    calculable: false
+    motivo_no_calculable: Requiere tratamiento vectorial completo (direccion y sentido), no un despeje escalar unico.
+ui:
+  default_formula: momento_angular_eje_fijo
+  groups:
+    - title: Formulas calculables
+      items:
+        - momento_lineal
+        - momento_angular_modulo
+        - momento_angular_eje_fijo
+        - torque_promedio
+    - title: Formulas conceptuales
+      items:
+        - definicion_vectorial_conceptual

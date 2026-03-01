@@ -1,0 +1,201 @@
+version: 1
+topic:
+  id: comparacion-con-ondas-mecanicas
+  title: Comparacion Con Ondas Mecanicas
+variables:
+  - id: v
+    symbol: v
+    name: velocidad_generica
+    si_unit: m/s
+  - id: v_em
+    symbol: v_{EM}
+    name: velocidad_em_medio
+    si_unit: m/s
+  - id: v_mec
+    symbol: v_{mec}
+    name: velocidad_mecanica
+    si_unit: m/s
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda_generica
+    si_unit: m
+  - id: lambda0
+    symbol: \lambda_0
+    name: longitud_onda_vacio
+    si_unit: m
+  - id: lambda_m
+    symbol: \lambda_m
+    name: longitud_onda_en_medio
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+  - id: c
+    symbol: c
+    name: velocidad_luz_vacio
+    si_unit: m/s
+  - id: n
+    symbol: n
+    name: indice_refraccion
+    si_unit: '1'
+  - id: F_t
+    symbol: F_t
+    name: tension
+    si_unit: N
+  - id: mu_l
+    symbol: \mu_l
+    name: densidad_lineal
+    si_unit: kg/m
+  - id: B
+    symbol: B
+    name: modulo_volumetrico
+    si_unit: Pa
+  - id: rho
+    symbol: \rho
+    name: densidad_volumica
+    si_unit: kg/m^3
+  - id: E
+    symbol: E
+    name: modulo_young
+    si_unit: Pa
+formulas:
+  - id: relacion_onda_general
+    title: Relacion ondulatoria comun
+    equation: v = lambda*f
+    latex: v=\lambda f
+    rearrangements:
+      - target: v
+        equation: v = lambda*f
+        latex: v=\lambda f
+      - target: lambda
+        equation: lambda = v/f
+        latex: \lambda=\frac{v}{f}
+      - target: f
+        equation: f = v/lambda
+        latex: f=\frac{v}{\lambda}
+
+  - id: periodo
+    title: Relacion periodo-frecuencia
+    equation: T = 1/f
+    latex: T=\frac{1}{f}
+    rearrangements:
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+
+  - id: em_vacio
+    title: Onda EM en vacio
+    equation: c = lambda0*f
+    latex: c=\lambda_0 f
+    rearrangements:
+      - target: c
+        equation: c = lambda0*f
+        latex: c=\lambda_0 f
+      - target: lambda0
+        equation: lambda0 = c/f
+        latex: \lambda_0=\frac{c}{f}
+      - target: f
+        equation: f = c/lambda0
+        latex: f=\frac{c}{\lambda_0}
+
+  - id: em_medio
+    title: Velocidad EM en medio
+    equation: v_em = c/n
+    latex: v_{EM}=\frac{c}{n}
+    rearrangements:
+      - target: v_em
+        equation: v_em = c/n
+        latex: v_{EM}=\frac{c}{n}
+      - target: n
+        equation: n = c/v_em
+        latex: n=\frac{c}{v_{EM}}
+
+  - id: em_lambda_medio
+    title: Longitud de onda EM en medio
+    equation: lambda_m = lambda0/n
+    latex: \lambda_m=\frac{\lambda_0}{n}
+    rearrangements:
+      - target: lambda_m
+        equation: lambda_m = lambda0/n
+        latex: \lambda_m=\frac{\lambda_0}{n}
+      - target: lambda0
+        equation: lambda0 = lambda_m*n
+        latex: \lambda_0=\lambda_m n
+      - target: n
+        equation: n = lambda0/lambda_m
+        latex: n=\frac{\lambda_0}{\lambda_m}
+
+  - id: mecanica_cuerda
+    title: Velocidad mecanica en cuerda
+    equation: v_mec = sqrt(F_t/mu_l)
+    latex: v_{mec}=\sqrt{\frac{F_t}{\mu_l}}
+    rearrangements:
+      - target: v_mec
+        equation: v_mec = sqrt(F_t/mu_l)
+        latex: v_{mec}=\sqrt{\frac{F_t}{\mu_l}}
+      - target: F_t
+        equation: F_t = mu_l*v_mec^2
+        latex: F_t=\mu_l v_{mec}^2
+      - target: mu_l
+        equation: mu_l = F_t/(v_mec^2)
+        latex: \mu_l=\frac{F_t}{v_{mec}^2}
+
+  - id: mecanica_fluido
+    title: Velocidad mecanica en fluido
+    equation: v_mec = sqrt(B/rho)
+    latex: v_{mec}=\sqrt{\frac{B}{\rho}}
+    rearrangements:
+      - target: v_mec
+        equation: v_mec = sqrt(B/rho)
+        latex: v_{mec}=\sqrt{\frac{B}{\rho}}
+      - target: B
+        equation: B = rho*v_mec^2
+        latex: B=\rho v_{mec}^2
+      - target: rho
+        equation: rho = B/(v_mec^2)
+        latex: \rho=\frac{B}{v_{mec}^2}
+
+  - id: mecanica_solido
+    title: Velocidad longitudinal mecanica en solido
+    equation: v_mec = sqrt(E/rho)
+    latex: v_{mec}=\sqrt{\frac{E}{\rho}}
+    rearrangements:
+      - target: v_mec
+        equation: v_mec = sqrt(E/rho)
+        latex: v_{mec}=\sqrt{\frac{E}{\rho}}
+
+  - id: frecuencia_comun_conceptual
+    title: Continuidad de frecuencia (conceptual)
+    equation: f = f
+    latex: f_{fuente}=f_{EM}=f_{mec}
+    calculable: false
+    motivo_no_calculable: Es un criterio conceptual de comparacion de regimenes, no un despeje escalar de nueva variable.
+
+ui:
+  default_formula: relacion_onda_general
+  groups:
+    - title: Estructura comun de ondas (calculables)
+      items:
+        - relacion_onda_general
+        - periodo
+    - title: Bloque electromagnetico (calculables)
+      items:
+        - em_vacio
+        - em_medio
+        - em_lambda_medio
+    - title: Bloque mecanico (calculables)
+      items:
+        - mecanica_cuerda
+        - mecanica_fluido
+        - mecanica_solido
+    - title: Comparacion conceptual (no calculable)
+      items:
+        - frecuencia_comun_conceptual

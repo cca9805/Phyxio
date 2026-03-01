@@ -1,0 +1,98 @@
+version: 1
+topic:
+  id: interpretacion
+  title: Interpretacion De Fuerzas Ficticias
+variables:
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa del cuerpo.
+  - id: a_in
+    symbol: a_{in}
+    nombre: aceleracion_inercial
+    unidad_si: m/s^2
+    descripcion: Aceleracion medida en marco inercial.
+  - id: a_rel
+    symbol: a_{rel}
+    nombre: aceleracion_relativa
+    unidad_si: m/s^2
+    descripcion: Aceleracion medida en el marco no inercial.
+  - id: a_marco
+    symbol: a_{marco}
+    nombre: aceleracion_del_marco
+    unidad_si: m/s^2
+    descripcion: Aceleracion del marco respecto al inercial.
+  - id: F_real
+    symbol: F_{real}
+    nombre: fuerza_real_resultante
+    unidad_si: N
+    descripcion: Suma de fuerzas reales en el eje de estudio.
+  - id: F_fict
+    symbol: F_{fict}
+    nombre: fuerza_ficticia
+    unidad_si: N
+    descripcion: Termino inercial asociado al marco acelerado.
+formulas:
+  - id: transformacion_aceleraciones
+    title: Transformacion de aceleraciones
+    equation: a_in = a_rel + a_marco
+    latex: a_{in}=a_{rel}+a_{marco}
+    rearrangements:
+      - target: a_in
+        equation: a_in = a_rel + a_marco
+        latex: a_{in}=a_{rel}+a_{marco}
+      - target: a_rel
+        equation: a_rel = a_in - a_marco
+        latex: a_{rel}=a_{in}-a_{marco}
+      - target: a_marco
+        equation: a_marco = a_in - a_rel
+        latex: a_{marco}=a_{in}-a_{rel}
+  - id: fuerza_ficticia_interpretacion
+    title: Fuerza ficticia por interpretacion de marco
+    equation: F_fict = -m*a_marco
+    latex: F_{fict}=-m\,a_{marco}
+    rearrangements:
+      - target: F_fict
+        equation: F_fict = -m*a_marco
+        latex: F_{fict}=-m\,a_{marco}
+      - target: a_marco
+        equation: a_marco = -F_fict/m
+        latex: a_{marco}=-\frac{F_{fict}}{m}
+      - target: m
+        equation: m = -F_fict/a_marco
+        latex: m=-\frac{F_{fict}}{a_{marco}}
+    constraints:
+      - expr: m > 0
+        message: La masa debe ser positiva.
+  - id: equivalencia_dinamica
+    title: Balance dinamico en marco no inercial
+    equation: F_real + F_fict = m*a_rel
+    latex: F_{real}+F_{fict}=m\,a_{rel}
+    rearrangements:
+      - target: F_real
+        equation: F_real = m*a_rel - F_fict
+        latex: F_{real}=m\,a_{rel}-F_{fict}
+      - target: F_fict
+        equation: F_fict = m*a_rel - F_real
+        latex: F_{fict}=m\,a_{rel}-F_{real}
+      - target: a_rel
+        equation: a_rel = (F_real + F_fict)/m
+        latex: a_{rel}=\frac{F_{real}+F_{fict}}{m}
+  - id: criterio_de_marco_conceptual
+    title: Criterio de consistencia de marco (conceptual)
+    equation: F_real = m*a_in
+    latex: \sum \vec F_{reales}=m\vec a_{in}
+    calculable: false
+    motivo_no_calculable: "Es una ecuacion vectorial general de marco inercial. Debe proyectarse por ejes para usarla en calculadora escalar."
+ui:
+  default_formula: transformacion_aceleraciones
+  groups:
+    - title: Relaciones calculables
+      items:
+        - transformacion_aceleraciones
+        - fuerza_ficticia_interpretacion
+        - equivalencia_dinamica
+    - title: Formula conceptual
+      items:
+        - criterio_de_marco_conceptual

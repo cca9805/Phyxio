@@ -1,0 +1,181 @@
+version: 1
+topic:
+  id: ejemplos-aplicados
+  title: Rotacion con rozamiento - ejemplos aplicados
+
+variables:
+  - id: tau_ap
+    symbol: \tau_{ap}
+    nombre: torque_aplicado
+    unidad_si: N*m
+    descripcion: Torque motor.
+  - id: tau_roz
+    symbol: \tau_{roz}
+    nombre: torque_resistente
+    unidad_si: N*m
+    descripcion: Torque de rozamiento efectivo.
+  - id: sum_tau
+    symbol: \sum\tau
+    nombre: torque_neto
+    unidad_si: N*m
+    descripcion: Torque neto.
+  - id: I
+    symbol: I
+    nombre: momento_de_inercia
+    unidad_si: kg*m^2
+    descripcion: Momento de inercia.
+  - id: alpha
+    symbol: \alpha
+    nombre: aceleracion_angular
+    unidad_si: rad/s^2
+    descripcion: Aceleracion angular.
+  - id: omega0
+    symbol: \omega_0
+    nombre: velocidad_angular_inicial
+    unidad_si: rad/s
+    descripcion: Velocidad angular inicial.
+  - id: omega
+    symbol: \omega
+    nombre: velocidad_angular
+    unidad_si: rad/s
+    descripcion: Velocidad angular final o instantanea.
+  - id: t
+    symbol: t
+    nombre: tiempo
+    unidad_si: s
+    descripcion: Tiempo.
+  - id: t_stop
+    symbol: t_{parada}
+    nombre: tiempo_de_parada
+    unidad_si: s
+    descripcion: Tiempo de parada.
+  - id: P
+    symbol: P
+    nombre: potencia
+    unidad_si: W
+    descripcion: Potencia rotacional.
+
+formulas:
+  - id: torque_neto_con_rozamiento
+    title: Torque neto con aporte resistente
+    equation: sum_tau = tau_ap - tau_roz
+    latex: \sum\tau = \tau_{ap} - \tau_{roz}
+    rearrangements:
+      - target: sum_tau
+        equation: sum_tau = tau_ap - tau_roz
+        latex: \sum\tau = \tau_{ap} - \tau_{roz}
+      - target: tau_ap
+        equation: tau_ap = sum_tau + tau_roz
+        latex: \tau_{ap} = \sum\tau + \tau_{roz}
+      - target: tau_roz
+        equation: tau_roz = tau_ap - sum_tau
+        latex: \tau_{roz} = \tau_{ap} - \sum\tau
+    notes:
+      - Asegura convencion de signos antes de sustituir valores.
+    status: calculable
+
+  - id: aceleracion_angular_resultante
+    title: Aceleracion angular resultante
+    equation: alpha = (tau_ap - tau_roz)/I
+    latex: \alpha = \frac{\tau_{ap}-\tau_{roz}}{I}
+    rearrangements:
+      - target: alpha
+        equation: alpha = (tau_ap - tau_roz)/I
+        latex: \alpha = \frac{\tau_{ap}-\tau_{roz}}{I}
+      - target: I
+        equation: I = (tau_ap - tau_roz)/alpha
+        latex: I = \frac{\tau_{ap}-\tau_{roz}}{\alpha}
+    constraints:
+      - expr: I > 0
+        message: I debe ser mayor que cero.
+      - expr: alpha != 0
+        message: Si despejas I, alpha no puede ser 0.
+    notes:
+      - Si tau_ap es menor que tau_roz, alpha sale negativa en la convencion habitual.
+    status: calculable
+
+  - id: velocidad_angular_tiempo
+    title: Evolucion temporal de omega (alpha constante)
+    equation: omega = omega0 + alpha*t
+    latex: \omega = \omega_0 + \alpha t
+    rearrangements:
+      - target: omega
+        equation: omega = omega0 + alpha*t
+        latex: \omega = \omega_0 + \alpha t
+      - target: omega0
+        equation: omega0 = omega - alpha*t
+        latex: \omega_0 = \omega - \alpha t
+      - target: alpha
+        equation: alpha = (omega - omega0)/t
+        latex: \alpha = \frac{\omega-\omega_0}{t}
+      - target: t
+        equation: t = (omega - omega0)/alpha
+        latex: t = \frac{\omega-\omega_0}{\alpha}
+    constraints:
+      - expr: t != 0
+        message: Si despejas alpha, t no puede ser 0.
+      - expr: alpha != 0
+        message: Si despejas t, alpha no puede ser 0.
+    notes:
+      - Valida solo en intervalos donde alpha pueda asumirse constante.
+    status: calculable
+
+  - id: tiempo_de_parada
+    title: Tiempo de parada en frenado
+    equation: t_stop = -omega0/alpha
+    latex: t_{parada} = \frac{-\omega_0}{\alpha}
+    rearrangements:
+      - target: t_stop
+        equation: t_stop = -omega0/alpha
+        latex: t_{parada} = \frac{-\omega_0}{\alpha}
+      - target: omega0
+        equation: omega0 = -t_stop*alpha
+        latex: \omega_0 = -t_{parada}\,\alpha
+    constraints:
+      - expr: alpha != 0
+        message: alpha no puede ser 0 para calcular tiempo de parada.
+      - expr: omega0 >= 0
+        message: Usa omega0 en modulo no negativo.
+    notes:
+      - Para t_stop positivo en frenado, alpha debe ser negativa en la convencion adoptada.
+    status: calculable
+
+  - id: potencia_rotacional
+    title: Potencia rotacional instantanea
+    equation: P = sum_tau*omega
+    latex: P = \tau\,\omega
+    rearrangements:
+      - target: P
+        equation: P = sum_tau*omega
+        latex: P = \tau\,\omega
+      - target: omega
+        equation: omega = P/sum_tau
+        latex: \omega = \frac{P}{\tau}
+    constraints:
+      - expr: sum_tau != 0
+        message: Si despejas omega, el torque no puede ser 0.
+    notes:
+      - Relacion energetica util para interpretar perdidas y rendimiento.
+    status: calculable
+
+  - id: condicion_regimen
+    title: Condicion de regimen angular
+    equation: sum_tau = 0
+    latex: \sum\tau = 0 \Rightarrow \alpha = 0
+    status: conceptual
+    notes:
+      - Criterio conceptual para giro uniforme con omega constante.
+
+ui:
+  default_formula: aceleracion_angular_resultante
+  groups:
+    - title: Calculables
+      items:
+        - torque_neto_con_rozamiento
+        - aceleracion_angular_resultante
+        - velocidad_angular_tiempo
+        - tiempo_de_parada
+        - potencia_rotacional
+    - title: Conceptuales
+      items:
+        - condicion_regimen

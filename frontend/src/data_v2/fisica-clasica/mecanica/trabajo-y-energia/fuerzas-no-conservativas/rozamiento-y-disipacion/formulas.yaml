@@ -1,0 +1,110 @@
+version: 1
+topic:
+  id: rozamiento-y-disipacion
+  title: Rozamiento y disipacion
+variables:
+- id: fr
+  symbol: f_r
+  nombre: fuerza de rozamiento
+  unidad_si: N
+  descripcion: Fuerza de rozamiento.
+- id: mu
+  symbol: \mu
+  nombre: coeficiente de rozamiento
+  unidad_si: '1'
+  descripcion: Coeficiente de rozamiento.
+- id: N
+  symbol: N
+  nombre: fuerza normal
+  unidad_si: N
+  descripcion: Fuerza normal.
+- id: d
+  symbol: d
+  nombre: desplazamiento
+  unidad_si: m
+  descripcion: Desplazamiento.
+- id: Wr
+  symbol: W_r
+  nombre: trabajo de rozamiento
+  unidad_si: J
+  descripcion: Trabajo de rozamiento.
+- id: Edis
+  symbol: E_{dis}
+  nombre: energia disipada
+  unidad_si: J
+  descripcion: Energia disipada.
+- id: m
+  symbol: m
+  nombre: masa
+  unidad_si: kg
+  descripcion: Masa.
+- id: g
+  symbol: g
+  nombre: gravedad
+  unidad_si: m/s^2
+  descripcion: Gravedad.
+formulas:
+- id: fuerza_rozamiento
+  title: Magnitud de rozamiento
+  equation: fr = mu*N
+  latex: f_r=\mu N
+  rearrangements:
+  - target: fr
+    equation: fr = mu*N
+    latex: f_r=\mu N
+  - target: mu
+    equation: mu = fr/N
+    latex: \mu=\frac{f_r}{N}
+  - target: N
+    equation: N = fr/mu
+    latex: N=\frac{f_r}{\mu}
+  constraints:
+  - expr: mu >= 0
+    message: mu debe ser no negativo.
+  - expr: N > 0
+    message: N debe ser mayor que 0.
+- id: trabajo_rozamiento
+  title: Trabajo del rozamiento en linea recta
+  equation: Wr = -fr*d
+  latex: W_r=-f_r d
+  rearrangements:
+  - target: Wr
+    equation: Wr = -fr*d
+    latex: W_r=-f_r d
+  - target: fr
+    equation: fr = -Wr/d
+    latex: f_r=-\frac{W_r}{d}
+  - target: d
+    equation: d = -Wr/fr
+    latex: d=-\frac{W_r}{f_r}
+- id: energia_disipada
+  title: Energia disipada por rozamiento
+  equation: Edis = -Wr
+  latex: E_{dis}=-W_r
+  rearrangements:
+  - target: Edis
+    equation: Edis = -Wr
+    latex: E_{dis}=-W_r
+  - target: Wr
+    equation: Wr = -Edis
+    latex: W_r=-E_{dis}
+- id: trabajo_rozamiento_horizontal
+  title: Caso horizontal (N = m*g)
+  equation: Wr = -mu*m*g*d
+  latex: W_r=-\mu mgd
+  rearrangements:
+  - target: Wr
+    equation: Wr = -mu*m*g*d
+    latex: W_r=-\mu mgd
+  - target: mu
+    equation: mu = -Wr/(m*g*d)
+    latex: \mu=-\frac{W_r}{mgd}
+ui:
+  default_formula: fuerza_rozamiento
+  groups:
+  - title: Basicas
+    items:
+    - fuerza_rozamiento
+    - trabajo_rozamiento
+    - energia_disipada
+    - trabajo_rozamiento_horizontal

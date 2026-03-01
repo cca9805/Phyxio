@@ -1,0 +1,212 @@
+version: 1
+topic:
+  id: tiro-horizontal
+  title: "Tiro horizontal"
+
+variables:
+  - id: x
+    symbol: x
+    name: "posición horizontal"
+    si_unit: "m"
+  - id: x0
+    symbol: "x_0"
+    name: "posición horizontal inicial"
+    si_unit: "m"
+  - id: y
+    symbol: y
+    name: "posición vertical"
+    si_unit: "m"
+  - id: y0
+    symbol: "y_0"
+    name: "altura inicial"
+    si_unit: "m"
+  - id: v0
+    symbol: "v_0"
+    name: "velocidad inicial horizontal"
+    si_unit: "m/s"
+  - id: vx0
+    symbol: "v_{x0}"
+    name: "componente horizontal inicial"
+    si_unit: "m/s"
+  - id: vx
+    symbol: "v_x"
+    name: "velocidad horizontal"
+    si_unit: "m/s"
+  - id: vy
+    symbol: "v_y"
+    name: "velocidad vertical"
+    si_unit: "m/s"
+  - id: t
+    symbol: t
+    name: "tiempo"
+    si_unit: "s"
+  - id: g
+    symbol: g
+    name: "gravedad"
+    si_unit: "m/s^2"
+  - id: R
+    symbol: R
+    name: "alcance"
+    si_unit: "m"
+  - id: v
+    symbol: v
+    name: "velocidad total"
+    si_unit: "m/s"
+
+formulas:
+  - id: th_posicion_x
+    title: "Posición horizontal (MRU)"
+    equation: "x = x0 + v0*t"
+    latex: "x = x_0 + v_0 t"
+    rearrangements:
+      - target: x
+        latex: "x = x_0 + v_0 t"
+        equation: "x = x0 + v0*t"
+      - target: x0
+        latex: "x_0 = x - v_0 t"
+        equation: "x0 = x - v0*t"
+      - target: v0
+        latex: "v_0 = \\frac{x - x_0}{t}"
+        equation: "v0 = (x - x0)/t"
+      - target: t
+        latex: "t = \\frac{x - x_0}{v_0}"
+        equation: "t = (x - x0)/v0"
+    status: calculable
+
+  - id: th_posicion_y
+    title: "Posición vertical (caída libre)"
+    equation: "y = y0 - (g*t^2)/2"
+    latex: "y = y_0 - \\frac{1}{2} g t^2"
+    rearrangements:
+      - target: y
+        latex: "y = y_0 - \\frac{1}{2} g t^2"
+        equation: "y = y0 - (g*t^2)/2"
+      - target: y0
+        latex: "y_0 = y + \\frac{1}{2} g t^2"
+        equation: "y0 = y + (g*t^2)/2"
+      - target: t
+        latex: "t = \\sqrt{\\frac{2\\,(y_0 - y)}{g}}"
+        equation: "t = sqrt(2*(y0 - y)/g)"
+      - target: g
+        latex: "g = \\frac{2\\,(y_0 - y)}{t^2}"
+        equation: "g = 2*(y0 - y)/(t^2)"
+    status: calculable
+
+  - id: th_velocidad_vertical
+    title: "Velocidad vertical"
+    equation: "vy = -g*t"
+    latex: "v_y = - g t"
+    rearrangements:
+      - target: vy
+        latex: "v_y = - g t"
+        equation: "vy = -g*t"
+      - target: t
+        latex: "t = -\\frac{v_y}{g}"
+        equation: "t = -vy/g"
+      - target: g
+        latex: "g = -\\frac{v_y}{t}"
+        equation: "g = -vy/t"
+    status: calculable
+
+  - id: th_alcance
+    title: "Alcance horizontal"
+    equation: "R = v0*t"
+    latex: "R = v_0 t"
+    rearrangements:
+      - target: R
+        latex: "R = v_0 t"
+        equation: "R = v0*t"
+      - target: v0
+        latex: "v_0 = \\frac{R}{t}"
+        equation: "v0 = R/t"
+      - target: t
+        latex: "t = \\frac{R}{v_0}"
+        equation: "t = R/v0"
+    status: calculable
+
+  - id: th_tiempo_caida
+    title: "Tiempo de caída (impacto en y=0)"
+    equation: "t = sqrt(2*y0/g)"
+    latex: "t = \\sqrt{\\frac{2 y_0}{g}}"
+    rearrangements:
+      - target: t
+        latex: "t = \\sqrt{\\frac{2 y_0}{g}}"
+        equation: "t = sqrt(2*y0/g)"
+      - target: y0
+        latex: "y_0 = \\frac{1}{2} g t^2"
+        equation: "y0 = (g*t^2)/2"
+      - target: g
+        latex: "g = \\frac{2 y_0}{t^2}"
+        equation: "g = 2*y0/(t^2)"
+    status: calculable
+
+  - id: th_velocidad_total
+    title: "Velocidad total (módulo)"
+    equation: "v = sqrt(v0^2 + (g*t)^2)"
+    latex: "v = \\sqrt{v_0^2 + (g t)^2}"
+    rearrangements:
+      - target: v
+        latex: "v = \\sqrt{v_0^2 + (g t)^2}"
+        equation: "v = sqrt(v0^2 + (g*t)^2)"
+    status: calculable
+
+# =========================
+# MODO LECTURA (NO CALCULABLES AÚN)
+# =========================
+
+  - id: tiro_horizontal_trayectoria
+    title: "Trayectoria y(x) (modo lectura)"
+    latex: "y(x) = y_0 - \\frac{g}{2 v_{x0}^2}\\,(x - x_0)^2"
+    equation: "y = y0 - (g*(x - x0)^2)/(2*vx0^2)"
+    status: read_only
+    why_not:
+      - "Es una relación funcional útil para teoría; no se usa como despeje directo en la calculadora."
+    notes:
+      - "Asume v_{y0}=0 y rozamiento despreciable."
+
+  - id: tiro_horizontal_tiempo_desde_x
+    title: "Tiempo para alcanzar una x (modo lectura)"
+    latex: "t = \\frac{x - x_0}{v_{x0}}"
+    equation: "t = (x - x0)/vx0"
+    status: read_only
+    why_not:
+      - "Depende del sentido (signo) y del dominio físico."
+    notes:
+      - "Útil para conectar x(t) con y(t)."
+
+  - id: tiro_horizontal_angulo_velocidad
+    title: "Ángulo instantáneo de la velocidad (modo lectura)"
+    latex: "\\tan\\varphi = \\frac{v_y}{v_x}"
+    equation: "tan(phi) = vy/vx"
+    status: read_only
+    why_not:
+      - "Se usa más como interpretación física que como despeje directo."
+    notes:
+      - "En tiro horizontal: v_x = v_{x0} constante y v_y = -gt."
+
+  - id: th_vx_constante
+    title: "Velocidad horizontal (constante)"
+    equation: "vx = v0"
+    latex: "v_x = v_0"
+    status: read_only
+
+
+ui:
+  default_formula: th_posicion_x
+  groups:
+    - title: "Ecuaciones del movimiento"
+      items:
+        - th_posicion_x
+        - th_posicion_y
+        - th_velocidad_vertical
+    - title: "Impacto y alcance"
+      items:
+        - th_tiempo_caida
+        - th_alcance
+        - th_velocidad_total
+    - title: "Fórmulas (modo lectura)"
+      items:
+        - tiro_horizontal_trayectoria
+        - tiro_horizontal_tiempo_desde_x
+        - tiro_horizontal_angulo_velocidad
+        - th_vx_constante

@@ -1,0 +1,196 @@
+﻿version: 1
+topic:
+  id: aplicaciones-ultrasonidos-y-ensayos
+  title: Aplicaciones Ultrasonidos Y Ensayos
+variables:
+  - id: e
+    symbol: e
+    name: espesor
+    si_unit: m
+  - id: v
+    symbol: v
+    name: velocidad_ultrasonica
+    si_unit: m/s
+  - id: t
+    symbol: t
+    name: tiempo_vuelo
+    si_unit: s
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: Z
+    symbol: Z
+    name: impedancia
+    si_unit: kg/(m^2*s)
+  - id: Z1
+    symbol: Z_1
+    name: impedancia_medio_1
+    si_unit: kg/(m^2*s)
+  - id: Z2
+    symbol: Z_2
+    name: impedancia_medio_2
+    si_unit: kg/(m^2*s)
+  - id: R_A
+    symbol: R_A
+    name: reflexion_amplitud
+    si_unit: '1'
+  - id: R_I
+    symbol: R_I
+    name: reflexion_intensidad
+    si_unit: '1'
+  - id: T_I
+    symbol: T_I
+    name: transmision_intensidad
+    si_unit: '1'
+  - id: A0
+    symbol: A_0
+    name: amplitud_referencia
+    si_unit: '1'
+  - id: Ax
+    symbol: A_x
+    name: amplitud_x
+    si_unit: '1'
+  - id: A_dB
+    symbol: A_{dB}
+    name: perdida_db
+    si_unit: dB
+  - id: alpha_dB
+    symbol: \alpha_{dB}
+    name: atenuacion_db_m
+    si_unit: dB/m
+  - id: alpha_Np
+    symbol: \alpha_{Np}
+    name: atenuacion_np_m
+    si_unit: Np/m
+  - id: x
+    symbol: x
+    name: distancia
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+formulas:
+  - id: espesor_pulso_eco
+    title: Espesor por pulso-eco
+    equation: e = v*t/2
+    latex: e=\frac{vt}{2}
+    rearrangements:
+      - target: e
+        equation: e = v*t/2
+        latex: e=\frac{vt}{2}
+      - target: v
+        equation: v = 2*e/t
+        latex: v=\frac{2e}{t}
+      - target: t
+        equation: t = 2*e/v
+        latex: t=\frac{2e}{v}
+
+  - id: impedancia
+    title: Impedancia acustica
+    equation: Z = rho*v
+    latex: Z=\rho v
+    rearrangements:
+      - target: Z
+        equation: Z = rho*v
+        latex: Z=\rho v
+      - target: rho
+        equation: rho = Z/v
+        latex: \rho=\frac{Z}{v}
+      - target: v
+        equation: v = Z/rho
+        latex: v=\frac{Z}{\rho}
+
+  - id: reflexion_amplitud
+    title: Reflexion en amplitud
+    equation: R_A = (Z2 - Z1)/(Z2 + Z1)
+    latex: R_A=\frac{Z_2-Z_1}{Z_2+Z_1}
+    rearrangements:
+      - target: R_A
+        equation: R_A = (Z2 - Z1)/(Z2 + Z1)
+        latex: R_A=\frac{Z_2-Z_1}{Z_2+Z_1}
+
+  - id: reflexion_intensidad
+    title: Reflexion en intensidad
+    equation: R_I = ((Z2 - Z1)/(Z2 + Z1))^2
+    latex: R_I=\left(\frac{Z_2-Z_1}{Z_2+Z_1}\right)^2
+
+  - id: transmision_intensidad
+    title: Transmision en intensidad
+    equation: T_I = 4*Z1*Z2/((Z1 + Z2)^2)
+    latex: T_I=\frac{4Z_1Z_2}{(Z_1+Z_2)^2}
+
+  - id: perdida_db
+    title: Perdida total en dB
+    equation: A_dB = 20*log10(A0/Ax)
+    latex: A_{dB}=20\log_{10}\!\left(\frac{A_0}{A_x}\right)
+    rearrangements:
+      - target: A_dB
+        equation: A_dB = 20*log10(A0/Ax)
+        latex: A_{dB}=20\log_{10}\!\left(\frac{A_0}{A_x}\right)
+
+  - id: atenuacion_db
+    title: Atenuacion por metro (dB/m)
+    equation: alpha_dB = A_dB/x
+    latex: \alpha_{dB}=\frac{A_{dB}}{x}
+    rearrangements:
+      - target: alpha_dB
+        equation: alpha_dB = A_dB/x
+        latex: \alpha_{dB}=\frac{A_{dB}}{x}
+      - target: A_dB
+        equation: A_dB = alpha_dB*x
+        latex: A_{dB}=\alpha_{dB}x
+
+  - id: atenuacion_np
+    title: Atenuacion por metro (Np/m)
+    equation: alpha_Np = ln(A0/Ax)/x
+    latex: \alpha_{Np}=\frac{1}{x}\ln\!\left(\frac{A_0}{A_x}\right)
+
+  - id: longitud_onda
+    title: Longitud de onda de ensayo
+    equation: lambda = v/f
+    latex: \lambda=\frac{v}{f}
+    rearrangements:
+      - target: lambda
+        equation: lambda = v/f
+        latex: \lambda=\frac{v}{f}
+      - target: v
+        equation: v = lambda*f
+        latex: v=\lambda f
+      - target: f
+        equation: f = v/lambda
+        latex: f=\frac{v}{\lambda}
+
+  - id: criterio_interfaz
+    title: Conservacion energetica ideal (conceptual)
+    equation: R_I + T_I = 1
+    latex: R_I+T_I=1
+    calculable: false
+    motivo_no_calculable: Relacion ideal de interfaz sin perdidas adicionales; se usa como chequeo conceptual.
+
+ui:
+  default_formula: espesor_pulso_eco
+  groups:
+    - title: Geometria por tiempo de vuelo
+      items:
+        - espesor_pulso_eco
+        - longitud_onda
+    - title: Interfaz y contraste
+      items:
+        - impedancia
+        - reflexion_amplitud
+        - reflexion_intensidad
+        - transmision_intensidad
+    - title: Perdidas y calibracion
+      items:
+        - perdida_db
+        - atenuacion_db
+        - atenuacion_np
+    - title: Marco conceptual
+      items:
+        - criterio_interfaz

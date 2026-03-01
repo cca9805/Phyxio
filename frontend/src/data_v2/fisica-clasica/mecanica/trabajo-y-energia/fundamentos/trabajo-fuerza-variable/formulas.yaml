@@ -1,0 +1,70 @@
+version: 1
+topic:
+  id: trabajo-fuerza-variable
+  title: Trabajo con fuerza variable
+variables:
+- id: W
+  symbol: W
+  nombre: trabajo
+  unidad_si: J
+  descripcion: Trabajo.
+- id: x1
+  symbol: x_1
+  nombre: posicion inicial
+  unidad_si: m
+  descripcion: Posicion inicial.
+- id: x2
+  symbol: x_2
+  nombre: posicion final
+  unidad_si: m
+  descripcion: Posicion final.
+- id: k
+  symbol: k
+  nombre: constante elastica
+  unidad_si: N/m
+  descripcion: Constante elastica.
+- id: Fmed
+  symbol: F_{med}
+  nombre: fuerza media
+  unidad_si: N
+  descripcion: Fuerza media.
+formulas:
+- id: trabajo_integral
+  title: Trabajo como integral
+  equation: W = integral(F(x),x,x1,x2)
+  latex: W = \int_{x_1}^{x_2} F(x)\,dx
+  motivo_no_calculable: Requiere especificar la forma de F(x).
+  status: descriptive
+- id: trabajo_hooke_intervalo
+  title: Trabajo para F(x)=k x
+  equation: W = 0.5*k*(x2^2 - x1^2)
+  latex: W=\frac{k}{2}\left(x_2^2-x_1^2\right)
+  rearrangements:
+  - target: W
+    equation: W = 0.5*k*(x2^2 - x1^2)
+    latex: W=\frac{k}{2}\left(x_2^2-x_1^2\right)
+  - target: k
+    equation: k = 2*W/(x2^2 - x1^2)
+    latex: k=\frac{2W}{x_2^2-x_1^2}
+  constraints:
+  - expr: x2 != x1
+    message: x2 debe ser distinto de x1.
+- id: trabajo_aprox_fuerza_media
+  title: Aproximacion con fuerza media
+  equation: W = Fmed*(x2-x1)
+  latex: W = F_{med}\,(x_2-x_1)
+  rearrangements:
+  - target: W
+    equation: W = Fmed*(x2-x1)
+    latex: W = F_{med}\,(x_2-x_1)
+  - target: Fmed
+    equation: Fmed = W/(x2-x1)
+    latex: F_{med}=\frac{W}{x_2-x_1}
+ui:
+  default_formula: trabajo_hooke_intervalo
+  groups:
+  - title: Basicas
+    items:
+    - trabajo_integral
+    - trabajo_hooke_intervalo
+    - trabajo_aprox_fuerza_media

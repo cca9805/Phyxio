@@ -1,0 +1,76 @@
+version: 1
+topic:
+  id: trabajo-y-torque
+  title: Trabajo y torque
+variables:
+- id: W
+  symbol: W
+  nombre: trabajo rotacional
+  unidad_si: J
+  descripcion: Trabajo rotacional.
+- id: tau
+  symbol: \tau
+  nombre: torque
+  unidad_si: N*m
+  descripcion: Torque.
+- id: theta
+  symbol: \theta
+  nombre: desplazamiento angular
+  unidad_si: rad
+  descripcion: Desplazamiento angular.
+- id: P
+  symbol: P
+  nombre: potencia angular
+  unidad_si: W
+  descripcion: Potencia angular.
+- id: omega
+  symbol: \omega
+  nombre: velocidad angular
+  unidad_si: rad/s
+  descripcion: Velocidad angular.
+formulas:
+- id: trabajo_torque_constante
+  title: Trabajo con torque constante
+  equation: W = tau*theta
+  latex: W=\tau\,\Delta\theta
+  rearrangements:
+  - target: W
+    equation: W = tau*theta
+    latex: W=\tau\,\Delta\theta
+  - target: tau
+    equation: tau = W/theta
+    latex: \tau=\frac{W}{\Delta\theta}
+  - target: theta
+    equation: theta = W/tau
+    latex: \Delta\theta=\frac{W}{\tau}
+- id: trabajo_torque_variable
+  title: Trabajo con torque variable
+  equation: W = integral(tau dtheta)
+  latex: W=\int_{\theta_i}^{\theta_f}\tau(\theta)\,d\theta
+  motivo_no_calculable: 'Requiere integrar una funcion de torque respecto al angulo. El solver actual solo resuelve ecuaciones
+    algebraicas.
+
+    '
+  status: descriptive
+- id: potencia_angular
+  title: Potencia instantanea
+  equation: P = tau*omega
+  latex: P=\tau\omega
+  rearrangements:
+  - target: P
+    equation: P = tau*omega
+    latex: P=\tau\omega
+  - target: tau
+    equation: tau = P/omega
+    latex: \tau=\frac{P}{\omega}
+  - target: omega
+    equation: omega = P/tau
+    latex: \omega=\frac{P}{\tau}
+ui:
+  default_formula: trabajo_torque_constante
+  groups:
+  - title: Basicas
+    items:
+    - trabajo_torque_constante
+    - trabajo_torque_variable
+    - potencia_angular

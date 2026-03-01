@@ -1,0 +1,91 @@
+version: 1
+topic:
+  id: normal-en-planos
+  title: Normal en planos
+variables:
+- id: N
+  symbol: N
+  nombre: módulo de la normal
+  unidad_si: N
+  descripcion: Módulo de la normal.
+- id: m
+  symbol: m
+  nombre: masa
+  unidad_si: kg
+  descripcion: Masa.
+- id: g
+  symbol: g
+  nombre: gravedad
+  unidad_si: m/s^2
+  descripcion: Gravedad.
+- id: theta
+  symbol: \theta
+  nombre: ángulo del plano
+  unidad_si: rad
+  descripcion: Ángulo del plano.
+formulas:
+- id: normal_plano_horizontal
+  title: Normal en plano horizontal (sin otras fuerzas verticales)
+  equation: N = m*g
+  latex: N = mg
+  status: calculable
+  rearrangements:
+  - target: N
+    equation: N = m*g
+    latex: N = mg
+  - target: m
+    equation: m = N/g
+    latex: m = \frac{N}{g}
+    constraints:
+    - expr: g != 0
+      message: g no puede ser 0.
+  - target: g
+    equation: g = N/m
+    latex: g = \frac{N}{m}
+    constraints:
+    - expr: m != 0
+      message: m no puede ser 0.
+- id: normal_plano_inclinado
+  title: Normal en plano inclinado (sin aceleración perpendicular)
+  equation: N = m*g*cos(theta)
+  latex: N = mg\cos\theta
+  status: calculable
+  rearrangements:
+  - target: N
+    equation: N = m*g*cos(theta)
+    latex: N = mg\cos\theta
+  - target: m
+    equation: m = N/(g*cos(theta))
+    latex: m = \frac{N}{g\cos\theta}
+    constraints:
+    - expr: g != 0
+      message: g no puede ser 0.
+    - expr: cos(theta) != 0
+      message: cos(θ) no puede ser 0.
+  - target: g
+    equation: g = N/(m*cos(theta))
+    latex: g = \frac{N}{m\cos\theta}
+    constraints:
+    - expr: m != 0
+      message: m no puede ser 0.
+    - expr: cos(theta) != 0
+      message: cos(θ) no puede ser 0.
+- id: caso_general
+  title: Caso general (conceptual)
+  equation: N = sum(F_perp)
+  latex: N = \sum F_{\perp}
+  status: descriptive
+  motivo_no_calculable: 'Depende del problema concreto: fuerzas aplicadas, aceleración perpendicular, contacto (a veces N=0
+    si pierde contacto), etc.
+
+    '
+ui:
+  default_formula: normal_plano_inclinado
+  groups:
+  - title: Casos típicos
+    items:
+    - normal_plano_horizontal
+    - normal_plano_inclinado
+  - title: Generalización
+    items:
+    - caso_general

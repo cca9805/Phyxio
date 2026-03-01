@@ -1,0 +1,201 @@
+﻿version: 1
+topic:
+  id: tono-y-timbre
+  title: Tono Y Timbre
+variables:
+  - id: f1
+    symbol: f_1
+    name: frecuencia_fundamental
+    si_unit: Hz
+  - id: fn
+    symbol: f_n
+    name: frecuencia_armonica
+    si_unit: Hz
+  - id: n
+    symbol: n
+    name: indice_armonico
+    si_unit: '1'
+  - id: An
+    symbol: A_n
+    name: amplitud_armonico
+    si_unit: '1'
+  - id: A1
+    symbol: A_1
+    name: amplitud_fundamental
+    si_unit: '1'
+  - id: rn
+    symbol: r_n
+    name: razon_armonica
+    si_unit: '1'
+  - id: v
+    symbol: v
+    name: velocidad_sonido
+    si_unit: m/s
+  - id: L
+    symbol: L
+    name: longitud_efectiva
+    si_unit: m
+  - id: lambda_n
+    symbol: \lambda_n
+    name: longitud_onda_armonica
+    si_unit: m
+  - id: fa
+    symbol: f_a
+    name: frecuencia_referencia
+    si_unit: Hz
+  - id: fb
+    symbol: f_b
+    name: frecuencia_comparada
+    si_unit: Hz
+  - id: delta_c
+    symbol: \Delta c
+    name: diferencia_cents
+    si_unit: cent
+  - id: A_t
+    symbol: A_t
+    name: envolvente
+    si_unit: '1'
+  - id: alpha
+    symbol: \alpha
+    name: coeficiente_decaimiento
+    si_unit: 1/s
+  - id: t
+    symbol: t
+    name: tiempo
+    si_unit: s
+formulas:
+  - id: serie_armonica
+    title: Serie armonica ideal
+    equation: fn = n*f1
+    latex: f_n=nf_1
+    rearrangements:
+      - target: fn
+        equation: fn = n*f1
+        latex: f_n=nf_1
+      - target: f1
+        equation: f1 = fn/n
+        latex: f_1=\frac{f_n}{n}
+      - target: n
+        equation: n = fn/f1
+        latex: n=\frac{f_n}{f_1}
+    constraints:
+      - expr: n > 0
+        message: n debe ser mayor que 0.
+      - expr: f1 > 0
+        message: f_1 debe ser positiva.
+
+  - id: fundamental_resonador_abierto
+    title: Fundamental en resonador abierto-abierto
+    equation: f1 = v/(2*L)
+    latex: f_1=\frac{v}{2L}
+    rearrangements:
+      - target: f1
+        equation: f1 = v/(2*L)
+        latex: f_1=\frac{v}{2L}
+      - target: v
+        equation: v = 2*L*f1
+        latex: v=2Lf_1
+      - target: L
+        equation: L = v/(2*f1)
+        latex: L=\frac{v}{2f_1}
+
+  - id: fundamental_resonador_cerrado
+    title: Fundamental en resonador abierto-cerrado
+    equation: f1 = v/(4*L)
+    latex: f_1=\frac{v}{4L}
+    rearrangements:
+      - target: f1
+        equation: f1 = v/(4*L)
+        latex: f_1=\frac{v}{4L}
+      - target: v
+        equation: v = 4*L*f1
+        latex: v=4Lf_1
+      - target: L
+        equation: L = v/(4*f1)
+        latex: L=\frac{v}{4f_1}
+
+  - id: longitud_onda_armonica
+    title: Longitud de onda del armonico
+    equation: lambda_n = v/fn
+    latex: \lambda_n=\frac{v}{f_n}
+    rearrangements:
+      - target: lambda_n
+        equation: lambda_n = v/fn
+        latex: \lambda_n=\frac{v}{f_n}
+      - target: v
+        equation: v = lambda_n*fn
+        latex: v=\lambda_n f_n
+      - target: fn
+        equation: fn = v/lambda_n
+        latex: f_n=\frac{v}{\lambda_n}
+
+  - id: razon_armonica
+    title: Razon de amplitudes armonicas
+    equation: rn = An/A1
+    latex: r_n=\frac{A_n}{A_1}
+    rearrangements:
+      - target: rn
+        equation: rn = An/A1
+        latex: r_n=\frac{A_n}{A_1}
+      - target: An
+        equation: An = rn*A1
+        latex: A_n=r_nA_1
+      - target: A1
+        equation: A1 = An/rn
+        latex: A_1=\frac{A_n}{r_n}
+
+  - id: diferencia_cents
+    title: Diferencia de altura en cents
+    equation: delta_c = 1200*log10(fb/fa)/log10(2)
+    latex: \Delta c=1200\log_2\left(\frac{f_b}{f_a}\right)
+    rearrangements:
+      - target: delta_c
+        equation: delta_c = 1200*log10(fb/fa)/log10(2)
+        latex: \Delta c=1200\log_2\left(\frac{f_b}{f_a}\right)
+      - target: fb
+        equation: fb = fa*(2^(delta_c/1200))
+        latex: f_b=f_a\,2^{\Delta c/1200}
+      - target: fa
+        equation: fa = fb/(2^(delta_c/1200))
+        latex: f_a=\frac{f_b}{2^{\Delta c/1200}}
+    constraints:
+      - expr: fa > 0
+        message: f_a debe ser positiva.
+      - expr: fb > 0
+        message: f_b debe ser positiva.
+
+  - id: envolvente_exponencial
+    title: Envolvente exponencial simplificada
+    equation: A_t = A1*exp(-alpha*t)
+    latex: A(t)=A_1e^{-\alpha t}
+    rearrangements:
+      - target: A_t
+        equation: A_t = A1*exp(-alpha*t)
+        latex: A(t)=A_1e^{-\alpha t}
+
+  - id: modelo_espectral_conceptual
+    title: Modelo espectral completo (conceptual)
+    equation: s = s
+    latex: s(t)=\sum_nA_n\sin(2\pi f_n t+\phi_n)
+    calculable: false
+    motivo_no_calculable: Requiere lista de armonicos con fases y amplitudes, no un despeje escalar unico.
+
+ui:
+  default_formula: serie_armonica
+  groups:
+    - title: Altura tonal (calculables)
+      items:
+        - serie_armonica
+        - diferencia_cents
+    - title: Resonador y fundamentales (calculables)
+      items:
+        - fundamental_resonador_abierto
+        - fundamental_resonador_cerrado
+        - longitud_onda_armonica
+    - title: Color timbrico (calculables)
+      items:
+        - razon_armonica
+        - envolvente_exponencial
+    - title: Modelo conceptual (no calculable)
+      items:
+        - modelo_espectral_conceptual

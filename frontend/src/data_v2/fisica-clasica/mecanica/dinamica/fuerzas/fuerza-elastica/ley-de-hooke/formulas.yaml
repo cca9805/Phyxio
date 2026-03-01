@@ -1,0 +1,124 @@
+version: 1
+topic:
+  id: ley-de-hooke
+  title: Ley de Hooke
+variables:
+- id: Fm
+  symbol: F
+  nombre: módulo de la fuerza elástica
+  unidad_si: N
+  descripcion: Módulo de la fuerza elástica.
+- id: k
+  symbol: k
+  nombre: constante elástica
+  unidad_si: N/m
+  descripcion: Constante elástica.
+- id: x
+  symbol: x
+  nombre: elongación (con signo)
+  unidad_si: m
+  descripcion: Elongación (con signo).
+- id: m
+  symbol: m
+  nombre: masa
+  unidad_si: kg
+  descripcion: Masa.
+- id: g
+  symbol: g
+  nombre: gravedad
+  unidad_si: m/s^2
+  descripcion: Gravedad.
+- id: Eel
+  symbol: U_{el}
+  nombre: energía potencial elástica
+  unidad_si: J
+  descripcion: Energía potencial elástica.
+formulas:
+- id: hooke_1d
+  title: Ley de Hooke (1D, módulo)
+  equation: Fm = k*abs(x)
+  latex: F = k\,|x|
+  status: calculable
+  rearrangements:
+  - target: Fm
+    equation: Fm = k*abs(x)
+    latex: F = k\,|x|
+  - target: k
+    equation: k = Fm/abs(x)
+    latex: k = \frac{F}{|x|}
+    constraints:
+    - expr: x != 0
+      message: x no puede ser 0 para calcular k.
+  - target: x
+    equation: x = Fm/k
+    latex: '|x| = \frac{F}{k}'
+    constraints:
+    - expr: k != 0
+      message: k no puede ser 0.
+- id: hooke_vector
+  title: Ley de Hooke (vectorial, restauradora)
+  equation: Fel = -k*x
+  latex: \vec F_{el} = -k\,x\,\hat{u}
+  status: descriptive
+  motivo_no_calculable: 'La forma vectorial requiere definir dirección \\hat{u} y convención de signo para x. En 1D es calculable
+    si se fija el eje y se usa x con signo.
+
+    '
+- id: equilibrio_peso_muelle
+  title: Equilibrio vertical (peso-muelle)
+  equation: k*x = m*g
+  latex: k\,x = m g
+  status: calculable
+  rearrangements:
+  - target: x
+    equation: x = m*g/k
+    latex: x = \frac{m g}{k}
+    constraints:
+    - expr: k != 0
+      message: k no puede ser 0.
+  - target: k
+    equation: k = m*g/x
+    latex: k = \frac{m g}{x}
+    constraints:
+    - expr: x != 0
+      message: x no puede ser 0.
+  - target: m
+    equation: m = k*x/g
+    latex: m = \frac{k x}{g}
+    constraints:
+    - expr: g != 0
+      message: g no puede ser 0.
+- id: energia_elastica
+  title: Energía potencial elástica
+  equation: Eel = 0.5*k*x^2
+  latex: U_{el} = \frac{1}{2}k x^2
+  status: calculable
+  rearrangements:
+  - target: Eel
+    equation: Eel = 0.5*k*x^2
+    latex: U_{el} = \frac{1}{2}k x^2
+  - target: k
+    equation: k = 2*Eel/(x^2)
+    latex: k = \frac{2U_{el}}{x^2}
+    constraints:
+    - expr: x != 0
+      message: x no puede ser 0.
+  - target: x
+    equation: x = sqrt(2*Eel/k)
+    latex: x = \sqrt{\frac{2U_{el}}{k}}
+    constraints:
+    - expr: k != 0
+      message: k no puede ser 0.
+ui:
+  default_formula: hooke_1d
+  groups:
+  - title: Hooke
+    items:
+    - hooke_1d
+    - hooke_vector
+  - title: Equilibrio
+    items:
+    - equilibrio_peso_muelle
+  - title: Energía
+    items:
+    - energia_elastica

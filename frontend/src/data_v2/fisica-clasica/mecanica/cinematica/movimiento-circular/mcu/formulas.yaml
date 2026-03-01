@@ -1,0 +1,199 @@
+version: 1
+topic:
+  id: mcu
+  title: Movimiento Circular Uniforme (MCU)
+variables:
+  - id: R
+    symbol: R
+    nombre: radio
+    unidad_si: m
+    descripcion: Radio.
+  - id: theta
+    symbol: \theta
+    nombre: posición angular
+    unidad_si: rad
+    descripcion: Posición angular.
+  - id: theta0
+    symbol: \theta_0
+    nombre: posición angular inicial
+    unidad_si: rad
+    descripcion: Posición angular inicial.
+  - id: omega
+    symbol: \omega
+    nombre: velocidad angular
+    unidad_si: rad/s
+    descripcion: Velocidad angular.
+  - id: T
+    symbol: T
+    nombre: periodo
+    unidad_si: s
+    descripcion: Periodo.
+  - id: f
+    symbol: f
+    nombre: frecuencia
+    unidad_si: Hz
+    descripcion: Frecuencia.
+  - id: t
+    symbol: t
+    nombre: tiempo
+    unidad_si: s
+    descripcion: Tiempo.
+  - id: v
+    symbol: v
+    nombre: rapidez lineal
+    unidad_si: m/s
+    descripcion: Rapidez lineal.
+  - id: ac
+    symbol: a_c
+    nombre: aceleración centrípeta
+    unidad_si: m/s^2
+    descripcion: Aceleración centrípeta.
+  - id: s
+    symbol: s
+    nombre: arco recorrido
+    unidad_si: m
+    descripcion: 'Longitud recorrida sobre la circunferencia: s = R·Δθ.'
+  - id: dtheta
+    symbol: \Delta\theta
+    nombre: desplazamiento angular
+    unidad_si: rad
+    descripcion: Desplazamiento angular.
+formulas:
+  - id: mcu_theta_t
+    title: Posición angular
+    equation: theta = theta0 + omega*t
+    latex: \theta = \theta_0 + \omega t
+    rearrangements:
+      - target: theta
+        equation: theta = theta0 + omega*t
+        latex: \theta = \theta_0 + \omega t
+      - target: theta0
+        equation: theta0 = theta - omega*t
+        latex: \theta_0 = \theta - \omega t
+      - target: omega
+        equation: omega = (theta - theta0)/t
+        latex: \omega = \frac{\theta - \theta_0}{t}
+      - target: t
+        equation: t = (theta - theta0)/omega
+        latex: t = \frac{\theta - \theta_0}{\omega}
+    constraints:
+      - expr: t != 0
+        message: t no puede ser 0 si despejas ω.
+      - expr: omega != 0
+        message: ω no puede ser 0 si despejas t.
+    status: calculable
+  - id: mcu_dtheta_def
+    title: Desplazamiento angular
+    equation: dtheta = theta - theta0
+    latex: \Delta\theta = \theta - \theta_0
+    rearrangements:
+      - target: dtheta
+        equation: dtheta = theta - theta0
+        latex: \Delta\theta = \theta - \theta_0
+      - target: theta
+        equation: theta = dtheta + theta0
+        latex: \theta = \Delta\theta + \theta_0
+      - target: theta0
+        equation: theta0 = theta - dtheta
+        latex: \theta_0 = \theta - \Delta\theta
+    status: calculable
+  - id: mcu_omega_T
+    title: Velocidad angular y periodo
+    equation: omega = 2*pi/T
+    latex: \omega = \frac{2\pi}{T}
+    rearrangements:
+      - target: omega
+        equation: omega = 2*pi/T
+        latex: \omega = \frac{2\pi}{T}
+      - target: T
+        equation: T = 2*pi/omega
+        latex: T = \frac{2\pi}{\omega}
+    constraints:
+      - expr: T != 0
+        message: T no puede ser 0.
+      - expr: omega != 0
+        message: ω no puede ser 0 si despejas T.
+    status: calculable
+  - id: mcu_f_T
+    title: Frecuencia y periodo
+    equation: f = 1/T
+    latex: f = \frac{1}{T}
+    rearrangements:
+      - target: f
+        equation: f = 1/T
+        latex: f = \frac{1}{T}
+      - target: T
+        equation: T = 1/f
+        latex: T = \frac{1}{f}
+    constraints:
+      - expr: T != 0
+        message: T no puede ser 0 si despejas f.
+      - expr: f != 0
+        message: f no puede ser 0 si despejas T.
+    status: calculable
+  - id: mcu_v_omega_R
+    title: Relación lineal-angular
+    equation: v = omega*R
+    latex: v = \omega R
+    rearrangements:
+      - target: v
+        equation: v = omega*R
+        latex: v = \omega R
+      - target: omega
+        equation: omega = v/R
+        latex: \omega = \frac{v}{R}
+      - target: R
+        equation: R = v/omega
+        latex: R = \frac{v}{\omega}
+    constraints:
+      - expr: R != 0
+        message: R no puede ser 0 si despejas ω.
+      - expr: omega != 0
+        message: ω no puede ser 0 si despejas R.
+    status: calculable
+  - id: mcu_ac
+    title: Aceleración centrípeta
+    equation: ac = omega^2*R
+    latex: a_c = \omega^2 R
+    rearrangements:
+      - target: ac
+        equation: ac = omega^2*R
+        latex: a_c = \omega^2 R
+      - target: omega
+        equation: omega = sqrt(ac/R)
+        latex: \omega = \sqrt{\frac{a_c}{R}}
+      - target: R
+        equation: R = ac/(omega^2)
+        latex: R = \frac{a_c}{\omega^2}
+    constraints:
+      - expr: R > 0
+        message: R debe ser positiva.
+      - expr: ac >= 0
+        message: a_c debe ser no negativa.
+      - expr: R != 0
+        message: R no puede ser 0.
+    status: calculable
+  - id: mcu_s_theta
+    title: Relación entre arco y ángulo
+    equation: s = R*theta
+    latex: s = R\,\theta
+    constraints:
+      - expr: R > 0
+        message: R debe ser positiva.
+    status: read_only
+ui:
+  default_formula: mcu_theta_t
+  groups:
+    - title: Básicas
+      items:
+        - mcu_theta_t
+        - mcu_dtheta_def
+        - mcu_omega_T
+        - mcu_f_T
+        - mcu_v_omega_R
+    - title: Aceleración
+      items:
+        - mcu_ac
+    - title: Fórmulas (modo lectura)
+      items:
+        - mcu_s_theta

@@ -1,0 +1,113 @@
+﻿version: 1
+topic:
+  id: nodos-y-antinodos
+  title: Nodos Y Antinodos
+variables:
+  - id: n
+    symbol: n
+    name: modo
+    si_unit: '1'
+  - id: L
+    symbol: L
+    name: longitud_efectiva
+    si_unit: m
+  - id: v
+    symbol: v
+    name: velocidad
+    si_unit: m/s
+  - id: lambda_n
+    symbol: \lambda_n
+    name: longitud_onda_modal
+    si_unit: m
+  - id: fn
+    symbol: f_n
+    name: frecuencia_modal
+    si_unit: Hz
+  - id: d_nn
+    symbol: d_{NN}
+    name: distancia_entre_nodos
+    si_unit: m
+  - id: d_na
+    symbol: d_{NA}
+    name: distancia_nodo_antinodo
+    si_unit: m
+  - id: x_Np
+    symbol: x_{N,p}
+    name: posicion_nodo
+    si_unit: m
+  - id: x_Ap
+    symbol: x_{A,p}
+    name: posicion_antinodo
+    si_unit: m
+  - id: p
+    symbol: p
+    name: indice_espacial
+    si_unit: '1'
+formulas:
+  - id: lambda_modal
+    title: Longitud de onda modal
+    equation: lambda_n = 2*L/n
+    latex: \lambda_n=\frac{2L}{n}
+    rearrangements:
+      - target: lambda_n
+        equation: lambda_n = 2*L/n
+        latex: \lambda_n=\frac{2L}{n}
+      - target: L
+        equation: L = n*lambda_n/2
+        latex: L=\frac{n\lambda_n}{2}
+
+  - id: frecuencia_modal
+    title: Frecuencia modal
+    equation: fn = n*v/(2*L)
+    latex: f_n=\frac{nv}{2L}
+    rearrangements:
+      - target: fn
+        equation: fn = n*v/(2*L)
+        latex: f_n=\frac{nv}{2L}
+      - target: v
+        equation: v = 2*L*fn/n
+        latex: v=\frac{2Lf_n}{n}
+
+  - id: distancia_nodos
+    title: Separacion nodo-nodo
+    equation: d_nn = lambda_n/2
+    latex: d_{NN}=\frac{\lambda_n}{2}
+
+  - id: distancia_nodo_antinodo
+    title: Separacion nodo-antinodo
+    equation: d_na = lambda_n/4
+    latex: d_{NA}=\frac{\lambda_n}{4}
+
+  - id: posicion_nodos
+    title: Posicion de nodos (fija-fija)
+    equation: x_Np = p*L/n
+    latex: x_{N,p}=p\frac{L}{n}
+
+  - id: posicion_antinodos
+    title: Posicion de antinodos (fija-fija)
+    equation: x_Ap = (p+0.5)*L/n
+    latex: x_{A,p}=\left(p+\frac{1}{2}\right)\frac{L}{n}
+
+  - id: conteo_fija_fija
+    title: Conteo modal en fija-fija (conceptual)
+    equation: nodos = n+1; antinodos = n
+    latex: N_{nodos}=n+1,\quad N_{antinodos}=n
+    calculable: false
+    motivo_no_calculable: Regla de interpretacion espacial del modo, no despeje escalar unico.
+
+ui:
+  default_formula: frecuencia_modal
+  groups:
+    - title: Parametros modales
+      items:
+        - lambda_modal
+        - frecuencia_modal
+    - title: Geometria espacial
+      items:
+        - distancia_nodos
+        - distancia_nodo_antinodo
+        - posicion_nodos
+        - posicion_antinodos
+    - title: Lectura del patron
+      items:
+        - conteo_fija_fija

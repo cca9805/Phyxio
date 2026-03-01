@@ -1,0 +1,3146 @@
+// DEPRECATED: education-hierarchy-from-metadata
+// The 'niveles' (education levels) feature was removed. Keep a minimal stub
+// to avoid runtime errors from imports during migration.
+
+export const educationHierarchy = {};
+
+// If you need to reintroduce this feature, regenerate a proper structure from
+// the canonical per-topic `levels` metadata and update callers accordingly.
+export const educationHierarchy = {
+  "ESO": {
+    "categories": {
+      "acustica": {
+        "titulo": "Acustica",
+        "subcategories": {
+          "ondas_sonoras": {
+            "titulo": "Ondas Sonoras",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "acustica/ondas_sonoras",
+                "titulo": "Ondas Sonoras",
+                "icono": "ondas_sonoras"
+              }
+            ]
+          },
+          "propiedades_sonido": {
+            "titulo": "Propiedades Sonido",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "acustica/propiedades_sonido",
+                "titulo": "Propiedades del Sonido",
+                "icono": "propiedades_sonido"
+              }
+            ]
+          }
+        },
+        "temas": []
+      },
+      "electromagnetismo": {
+        "titulo": "Electromagnetismo",
+        "subcategories": {
+          "electricidad": {
+            "titulo": "Electricidad",
+            "subcategories": {
+              "corriente-ohm": {
+                "titulo": "Corriente-ohm",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/electricidad/corriente-ohm",
+                    "titulo": "Corriente ohm",
+                    "icono": "corriente-ohm"
+                  }
+                ]
+              }
+            },
+            "temas": []
+              "BACHILLERATO": {
+                "categories": {
+                  "acustica": {
+                    "titulo": "Acustica",
+                    "subcategories": {},
+                    "temas": []
+                  },
+                  "electromagnetismo": {
+                    "titulo": "Electromagnetismo",
+                    "subcategories": {},
+                    "temas": []
+                  }
+                }
+              },
+        },
+        "temas": []
+            // DEPRECATED: education-hierarchy-from-metadata
+            // The 'niveles' (education levels) feature has been removed in favor of a single
+            // topics hierarchy driven by per-topic `levels` metadata. This module remains as
+            // a compatibility stub so scripts that import it won't crash during migration.
+
+            export const educationHierarchy = {};
+      },
+      "introduccion_fluidos": {
+        "titulo": "Introduccion_fluidos",
+        "subcategories": {
+          "aplicaciones_cotidianas": {
+            "titulo": "Aplicaciones Cotidianas",
+            "subcategories": {
+              "fontaneria": {
+                "titulo": "Fontaneria",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "introduccion_fluidos/aplicaciones_cotidianas/fontaneria",
+                    "titulo": "Fontanería: Presión en Tuberías y Abastecimiento (ESO)",
+                    "icono": "🚰"
+                  }
+                ]
+              },
+              "frenos_hidraulicos": {
+                "titulo": "Frenos Hidraulicos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "introduccion_fluidos/aplicaciones_cotidianas/frenos_hidraulicos",
+                    "titulo": "Frenos Hidráulicos: Principio y Aplicaciones (ESO)",
+                    "icono": "🛠️"
+                  }
+                ]
+              },
+              "neumaticos": {
+                "titulo": "Neumaticos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "introduccion_fluidos/aplicaciones_cotidianas/neumaticos",
+                    "titulo": "Neumáticos: Presión y Seguridad (ESO)",
+                    "icono": "🚗"
+                  }
+                ]
+              }
+            },
+            "temas": [
+              {
+                "path": "introduccion_fluidos/aplicaciones_cotidianas",
+                "titulo": "Aplicaciones Cotidianas de la Presión y Fluidos (ESO)",
+                "icono": "🧰"
+              }
+            ]
+          },
+          "flotacion_basica": {
+            "titulo": "Flotacion Basica",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "introduccion_fluidos/flotacion_basica",
+                "titulo": "Flotación Básica (ESO)",
+                "icono": "🛶"
+              }
+            ]
+          },
+          "presion_atmosferica": {
+            "titulo": "Presion Atmosferica",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "introduccion_fluidos/presion_atmosferica",
+                "titulo": "Presión Atmosférica",
+                "icono": "🌍"
+              }
+            ]
+          },
+          "presion_liquidos": {
+            "titulo": "Presion Liquidos",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "introduccion_fluidos/presion_liquidos",
+                "titulo": "Presión en Líquidos",
+                "icono": "💧"
+              }
+            ]
+          }
+        },
+        "temas": []
+      },
+      "mecanica": {
+        "titulo": "Mecanica",
+        "subcategories": {
+          "cinematica": {
+            "titulo": "Cinematica",
+            "subcategories": {
+              "introduccion_movimiento": {
+                "titulo": "Introduccion Movimiento",
+                "subcategories": {
+                  "graficas_basicas": {
+                    "titulo": "Graficas Basicas",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/cinematica/introduccion_movimiento/graficas_basicas",
+                        "titulo": "Gráficas Básicas del Movimiento",
+                        "icono": "📊"
+                      }
+                    ]
+                  },
+                  "movimientos_cotidianos": {
+                    "titulo": "Movimientos Cotidianos",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/cinematica/introduccion_movimiento/movimientos_cotidianos",
+                        "titulo": "Movimientos Cotidianos",
+                        "icono": "🚗"
+                      }
+                    ]
+                  },
+                  "profundizar_mas": {
+                    "titulo": "Profundizar Mas",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/cinematica/introduccion_movimiento/profundizar_mas",
+                        "titulo": "Profundizar Más",
+                        "icono": "🔗"
+                      }
+                    ]
+                  },
+                  "que_es_movimiento": {
+                    "titulo": "Que Es Movimiento",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/cinematica/introduccion_movimiento/que_es_movimiento",
+                        "titulo": "Qué es el Movimiento",
+                        "icono": "❓"
+                      }
+                    ]
+                  },
+                  "tipos_de_movimiento": {
+                    "titulo": "Tipos De Movimiento",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/cinematica/introduccion_movimiento/tipos_de_movimiento",
+                        "titulo": "Tipos de Movimiento",
+                        "icono": "🔄"
+                      }
+                    ]
+                  }
+                },
+                "temas": []
+              }
+            },
+            "temas": []
+          },
+          "dinamica": {
+            "titulo": "Dinamica",
+            "subcategories": {
+              "energia_cotidiana": {
+                "titulo": "Energia Cotidiana",
+                "subcategories": {
+                  "almacenamiento": {
+                    "titulo": "Almacenamiento",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/energia_cotidiana/almacenamiento",
+                        "titulo": "Almacenamiento de Energía",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "consumo_domestico": {
+                    "titulo": "Consumo Domestico",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/energia_cotidiana/consumo_domestico",
+                        "titulo": "Consumo Doméstico",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "energia_alimentos": {
+                    "titulo": "Energia Alimentos",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/energia_cotidiana/energia_alimentos",
+                        "titulo": "Energía y Alimentos",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "fuentes_energia": {
+                    "titulo": "Fuentes Energia",
+                    "subcategories": {
+                      "no_renovables": {
+                        "titulo": "No Renovables",
+                        "subcategories": {},
+                        "temas": [
+                          {
+                            "path": "mecanica/dinamica/energia_cotidiana/fuentes_energia/no_renovables",
+                            "titulo": "Energías No Renovables",
+                            "icono": "📚"
+                          }
+                        ]
+                      },
+                      "renovables": {
+                        "titulo": "Renovables",
+                        "subcategories": {},
+                        "temas": [
+                          {
+                            "path": "mecanica/dinamica/energia_cotidiana/fuentes_energia/renovables",
+                            "titulo": "Energías Renovables",
+                            "icono": "📚"
+                          }
+                        ]
+                      }
+                    },
+                    "temas": []
+                  },
+                  "fundamentos": {
+                    "titulo": "Fundamentos",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/energia_cotidiana/fundamentos",
+                        "titulo": "Fundamentos de la Energía",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "impacto_sostenibilidad": {
+                    "titulo": "Impacto Sostenibilidad",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/energia_cotidiana/impacto_sostenibilidad",
+                        "titulo": "Impacto y Sostenibilidad",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "movilidad": {
+                    "titulo": "Movilidad",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/energia_cotidiana/movilidad",
+                        "titulo": "Movilidad y Energía",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "transporte_estabilidad": {
+                    "titulo": "Transporte Estabilidad",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/energia_cotidiana/transporte_estabilidad",
+                        "titulo": "Transporte y Estabilidad Energética",
+                        "icono": "📚"
+                      }
+                    ]
+                  }
+                },
+                "temas": []
+              },
+              "maquinas_simples": {
+                "titulo": "Maquinas Simples",
+                "subcategories": {
+                  "cuna": {
+                    "titulo": "Cuna",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/maquinas_simples/cuna",
+                        "titulo": "Cuña",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "introduccion": {
+                    "titulo": "Introduccion",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/maquinas_simples/introduccion",
+                        "titulo": "Introducción a las Máquinas Simples",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "palancas": {
+                    "titulo": "Palancas",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/maquinas_simples/palancas",
+                        "titulo": "Palancas",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "plano_inclinado": {
+                    "titulo": "Plano Inclinado",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/maquinas_simples/plano_inclinado",
+                        "titulo": "Plano Inclinado",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "poleas": {
+                    "titulo": "Poleas",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/maquinas_simples/poleas",
+                        "titulo": "Poleas",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "rueda_eje": {
+                    "titulo": "Rueda Eje",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/maquinas_simples/rueda_eje",
+                        "titulo": "Rueda y Eje",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "tornillo": {
+                    "titulo": "Tornillo",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/maquinas_simples/tornillo",
+                        "titulo": "Tornillo",
+                        "icono": "📚"
+                      }
+                    ]
+                  }
+                },
+                "temas": []
+              }
+            },
+            "temas": []
+          }
+        },
+        "temas": []
+      },
+      "metodo_cientifico": {
+        "titulo": "Metodo_cientifico",
+        "subcategories": {
+          "analisis_de_datos": {
+            "titulo": "Analisis De Datos",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "metodo_cientifico/analisis_de_datos",
+                "titulo": "Análisis de Datos",
+                "icono": "📚"
+              }
+            ]
+          },
+          "comunicacion_cientifica": {
+            "titulo": "Comunicacion Cientifica",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "metodo_cientifico/comunicacion_cientifica",
+                "titulo": "Comunicación Científica",
+                "icono": "📚"
+              }
+            ]
+          },
+          "errores_e_incertidumbre": {
+            "titulo": "Errores E Incertidumbre",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "metodo_cientifico/errores_e_incertidumbre",
+                "titulo": "Errores e Incertidumbre",
+                "icono": "📚"
+              }
+            ]
+          },
+          "hipotesis_y_experimentacion": {
+            "titulo": "Hipotesis Y Experimentacion",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "metodo_cientifico/hipotesis_y_experimentacion",
+                "titulo": "Hipótesis y Experimentación",
+                "icono": "📚"
+              }
+            ]
+          },
+          "introduccion": {
+            "titulo": "Introduccion",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "metodo_cientifico/introduccion",
+                "titulo": "Método Científico",
+                "icono": "📚"
+              }
+            ]
+          },
+          "magnitudes_y_unidades": {
+            "titulo": "Magnitudes Y Unidades",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "metodo_cientifico/magnitudes_y_unidades",
+                "titulo": "Magnitudes y Unidades",
+                "icono": "📚"
+              }
+            ]
+          }
+        },
+        "temas": []
+      },
+      "optica": {
+        "titulo": "Optica",
+        "subcategories": {
+          "aplicaciones_cotidianas": {
+            "titulo": "Aplicaciones Cotidianas",
+            "subcategories": {
+              "fibra_optica_intro": {
+                "titulo": "Fibra Optica Intro",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/aplicaciones_cotidianas/fibra_optica_intro",
+                    "titulo": "Introducción a la Fibra Óptica (ESO)",
+                    "icono": "📡"
+                  }
+                ]
+              },
+              "fotografia_basica": {
+                "titulo": "Fotografia Basica",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/aplicaciones_cotidianas/fotografia_basica",
+                    "titulo": "Fotografía básica: Óptica en cámaras (ESO)",
+                    "icono": "📷"
+                  }
+                ]
+              },
+              "instrumentos_simples": {
+                "titulo": "Instrumentos Simples",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/aplicaciones_cotidianas/instrumentos_simples",
+                    "titulo": "Instrumentos simples: Lupas y lentes (ESO)",
+                    "icono": "🔍"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "colores_y_espectro": {
+            "titulo": "Colores Y Espectro",
+            "subcategories": {
+              "absorcion_y_reflexion": {
+                "titulo": "Absorcion Y Reflexion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/colores_y_espectro/absorcion_y_reflexion",
+                    "titulo": "Absorción y reflexión de colores",
+                    "icono": "🔍"
+                  }
+                ]
+              },
+              "colores_primarios": {
+                "titulo": "Colores Primarios",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/colores_y_espectro/colores_primarios",
+                    "titulo": "Colores primarios y mezcla",
+                    "icono": "🎨"
+                  }
+                ]
+              },
+              "espectro_visible": {
+                "titulo": "Espectro Visible",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/colores_y_espectro/espectro_visible",
+                    "titulo": "Espectro visible (detallado)",
+                    "icono": "🔬"
+                  }
+                ]
+              },
+              "luz_blanca_y_colores": {
+                "titulo": "Luz Blanca Y Colores",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/colores_y_espectro/luz_blanca_y_colores",
+                    "titulo": "Luz blanca y colores",
+                    "icono": "🌈"
+                  }
+                ]
+              }
+            },
+            "temas": [
+              {
+                "path": "optica/colores_y_espectro",
+                "titulo": "Colores y Espectro (índice de subtemas)",
+                "icono": "🌈"
+              }
+            ]
+          },
+          "introduccion_luz": {
+            "titulo": "Introduccion Luz",
+            "subcategories": {
+              "luz_y_sombras": {
+                "titulo": "Luz Y Sombras",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/introduccion_luz/luz_y_sombras",
+                    "titulo": "Luz y Sombras",
+                    "icono": "sombras"
+                  }
+                ]
+              },
+              "que_es_la_luz": {
+                "titulo": "Que Es La Luz",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/introduccion_luz/que_es_la_luz",
+                    "titulo": "¿Qué es la luz?",
+                    "icono": "luz"
+                  }
+                ]
+              },
+              "velocidad_de_la_luz": {
+                "titulo": "Velocidad De La Luz",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/introduccion_luz/velocidad_de_la_luz",
+                    "titulo": "Velocidad de la luz",
+                    "icono": "velocidad_luz"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "reflexion_basica": {
+            "titulo": "Reflexion Basica",
+            "subcategories": {
+              "espejos_curvos_intro": {
+                "titulo": "Espejos Curvos Intro",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/reflexion_basica/espejos_curvos_intro",
+                    "titulo": "Espejos Curvos (Introducción)",
+                    "icono": "📚"
+                  }
+                ]
+              },
+              "espejos_planos": {
+                "titulo": "Espejos Planos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/reflexion_basica/espejos_planos",
+                    "titulo": "Espejos planos",
+                    "icono": "📚"
+                  }
+                ]
+              },
+              "ley_reflexion_simple": {
+                "titulo": "Ley Reflexion Simple",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/reflexion_basica/ley_reflexion_simple",
+                    "titulo": "Ley de Reflexión",
+                    "icono": "📚"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "refraccion_basica": {
+            "titulo": "Refraccion Basica",
+            "subcategories": {
+              "lentes_convergentes": {
+                "titulo": "Lentes Convergentes",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/refraccion_basica/lentes_convergentes",
+                    "titulo": "Lentes Convergentes",
+                    "icono": "📚"
+                  }
+                ]
+              },
+              "lentes_divergentes": {
+                "titulo": "Lentes Divergentes",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/refraccion_basica/lentes_divergentes",
+                    "titulo": "Lentes Divergentes",
+                    "icono": "📚"
+                  }
+                ]
+              },
+              "que_es_refraccion": {
+                "titulo": "Que Es Refraccion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/refraccion_basica/que_es_refraccion",
+                    "titulo": "¿Qué es la Refracción?",
+                    "icono": "📚"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "vision_y_ojo_humano": {
+            "titulo": "Vision Y Ojo Humano",
+            "subcategories": {
+              "anatomia_del_ojo": {
+                "titulo": "Anatomia Del Ojo",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/vision_y_ojo_humano/anatomia_del_ojo",
+                    "titulo": "Anatomía del Ojo Humano",
+                    "icono": "📚"
+                  }
+                ]
+              },
+              "como_vemos": {
+                "titulo": "Como Vemos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/vision_y_ojo_humano/como_vemos",
+                    "titulo": "¿Cómo Vemos?",
+                    "icono": "📚"
+                  }
+                ]
+              },
+              "correccion_visual": {
+                "titulo": "Correccion Visual",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/vision_y_ojo_humano/correccion_visual",
+                    "titulo": "Corrección Visual",
+                    "icono": "📚"
+                  }
+                ]
+              },
+              "defectos_visuales": {
+                "titulo": "Defectos Visuales",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/vision_y_ojo_humano/defectos_visuales",
+                    "titulo": "Defectos Visuales",
+                    "icono": "📚"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          }
+        },
+        "temas": []
+      },
+      "termodinamica": {
+        "titulo": "Termodinamica",
+        "subcategories": {
+          "01_conceptos_fundamentales": {
+            "titulo": "01 Conceptos Fundamentales",
+            "subcategories": {
+              "estado_y_equilibrio": {
+                "titulo": "Estado Y Equilibrio",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/01_conceptos_fundamentales/estado_y_equilibrio",
+                    "titulo": "Estado y Equilibrio Termodinámico",
+                    "icono": "estado_y_equilibrio"
+                  }
+                ]
+              },
+              "frontera_y_entorno": {
+                "titulo": "Frontera Y Entorno",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/01_conceptos_fundamentales/frontera_y_entorno",
+                    "titulo": "Frontera y Entorno",
+                    "icono": "frontera_y_entorno"
+                  }
+                ]
+              },
+              "introduccion_a_la_termodinamica": {
+                "titulo": "Introduccion A La Termodinamica",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/01_conceptos_fundamentales/introduccion_a_la_termodinamica",
+                    "titulo": "Introducción a la Termodinámica",
+                    "icono": "introduccion_a_la_termodinamica"
+                  }
+                ]
+              },
+              "propiedades_termicas": {
+                "titulo": "Propiedades Termicas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/01_conceptos_fundamentales/propiedades_termicas",
+                    "titulo": "Propiedades Térmicas",
+                    "icono": "propiedades_termicas"
+                  }
+                ]
+              },
+              "sistemas_termodinamicos": {
+                "titulo": "Sistemas Termodinamicos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/01_conceptos_fundamentales/sistemas_termodinamicos",
+                    "titulo": "Sistemas Termodinámicos",
+                    "icono": "sistemas_termodinamicos"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          }
+        },
+        "temas": []
+      }
+    }
+  },
+  "BACHILLERATO": {
+    "categories": {
+      "acustica": {
+        "titulo": "Acustica",
+        "subcategories": {
+          "acustica_arquitectonica": {
+            "titulo": "Acustica Arquitectonica",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "acustica/acustica_arquitectonica",
+                "titulo": "Acústica Arquitectónica",
+                "icono": "acustica_arquitectonica"
+              }
+            ]
+          },
+          "acustica_musical": {
+            "titulo": "Acustica Musical",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "acustica/acustica_musical",
+                "titulo": "Acústica Musical",
+                "icono": "📚"
+              }
+            ]
+          },
+          "efecto_doppler": {
+            "titulo": "Efecto Doppler",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "acustica/efecto_doppler",
+                "titulo": "Efecto Doppler",
+                "icono": "efecto_doppler"
+              }
+            ]
+          },
+          "fenomenos_acusticos": {
+            "titulo": "Fenomenos Acusticos",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "acustica/fenomenos_acusticos",
+                "titulo": "Fenómenos Acústicos",
+                "icono": "fenomenos_acusticos"
+              }
+            ]
+          },
+          "psicoacustica": {
+            "titulo": "Psicoacustica",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "acustica/psicoacustica",
+                "titulo": "Psicoacústica",
+                "icono": "📚"
+              }
+            ]
+          },
+          "resonancia": {
+            "titulo": "Resonancia",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "acustica/resonancia",
+                "titulo": "Resonancia",
+                "icono": "resonancia"
+              }
+            ]
+          }
+        },
+        "temas": []
+      },
+      "electromagnetismo": {
+        "titulo": "Electromagnetismo",
+        "subcategories": {
+          "electricidad": {
+            "titulo": "Electricidad",
+            "subcategories": {
+              "campos-electricos": {
+                "titulo": "Campos-electricos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/electricidad/campos-electricos",
+                    "titulo": "Campos Eléctricos",
+                    "icono": "campos-electricos"
+                  }
+                ]
+              },
+              "capacidad": {
+                "titulo": "Capacidad",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/electricidad/capacidad",
+                    "titulo": "Capacidad",
+                    "icono": "capacidad"
+                  }
+                ]
+              },
+              "carga-fuerza": {
+                "titulo": "Carga-fuerza",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/electricidad/carga-fuerza",
+                    "titulo": "Carga fuerza",
+                    "icono": "carga-fuerza"
+                  }
+                ]
+              },
+              "circuitos": {
+                "titulo": "Circuitos",
+                "subcategories": {
+                  "circuitos-ca": {
+                    "titulo": "Circuitos-ca",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "electromagnetismo/electricidad/circuitos/circuitos-ca",
+                        "titulo": "Circuitos ca",
+                        "icono": "circuitos-ca"
+                      }
+                    ]
+                  },
+                  "circuitos-cc": {
+                    "titulo": "Circuitos-cc",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "electromagnetismo/electricidad/circuitos/circuitos-cc",
+                        "titulo": "Circuitos cc",
+                        "icono": "circuitos-cc"
+                      }
+                    ]
+                  },
+                  "transitorios": {
+                    "titulo": "Transitorios",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "electromagnetismo/electricidad/circuitos/transitorios",
+                        "titulo": "Transitorios",
+                        "icono": "transitorios"
+                      }
+                    ]
+                  }
+                },
+                "temas": []
+              },
+              "potencial": {
+                "titulo": "Potencial",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/electricidad/potencial",
+                    "titulo": "Potencial",
+                    "icono": "potencial"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "magnetismo": {
+            "titulo": "Magnetismo",
+            "subcategories": {
+              "campos-fuerza": {
+                "titulo": "Campos-fuerza",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/magnetismo/campos-fuerza",
+                    "titulo": "Campos fuerza",
+                    "icono": "campos-fuerza"
+                  }
+                ]
+              },
+              "fuentes-campo": {
+                "titulo": "Fuentes-campo",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/magnetismo/fuentes-campo",
+                    "titulo": "Fuentes campo",
+                    "icono": "fuentes-campo"
+                  }
+                ]
+              },
+              "induccion": {
+                "titulo": "Induccion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/magnetismo/induccion",
+                    "titulo": "Induccion",
+                    "icono": "induccion"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "maxwell": {
+            "titulo": "Maxwell",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "electromagnetismo/maxwell",
+                "titulo": "Maxwell",
+                "icono": "maxwell"
+              }
+            ]
+          },
+          "ondas": {
+            "titulo": "Ondas",
+            "subcategories": {
+              "aplicaciones-tecnologicas": {
+                "titulo": "Aplicaciones-tecnologicas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/ondas/aplicaciones-tecnologicas",
+                    "titulo": "Aplicaciones Tecnológicas de Ondas Electromagnéticas",
+                    "icono": "aplicaciones"
+                  }
+                ]
+              },
+              "espectro-electromagnetico": {
+                "titulo": "Espectro-electromagnetico",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/ondas/espectro-electromagnetico",
+                    "titulo": "Espectro Electromagnético",
+                    "icono": "espectro"
+                  }
+                ]
+              },
+              "luz-visible-optica": {
+                "titulo": "Luz-visible-optica",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/ondas/luz-visible-optica",
+                    "titulo": "Luz Visible y Óptica",
+                    "icono": "luz-visible"
+                  }
+                ]
+              },
+              "ondas-radio-microondas": {
+                "titulo": "Ondas-radio-microondas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/ondas/ondas-radio-microondas",
+                    "titulo": "Ondas de Radio y Microondas",
+                    "icono": "radio"
+                  }
+                ]
+              },
+              "propagacion-fenomenos": {
+                "titulo": "Propagacion-fenomenos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/ondas/propagacion-fenomenos",
+                    "titulo": "Propagación y Fenómenos Ondulatorios",
+                    "icono": "propagacion"
+                  }
+                ]
+              },
+              "radiacion-infrarroja": {
+                "titulo": "Radiacion-infrarroja",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/ondas/radiacion-infrarroja",
+                    "titulo": "Radiación Infrarroja y Térmica",
+                    "icono": "infrarroja"
+                  }
+                ]
+              },
+              "radiacion-ultravioleta": {
+                "titulo": "Radiacion-ultravioleta",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/ondas/radiacion-ultravioleta",
+                    "titulo": "Radiación Ultravioleta",
+                    "icono": "ultravioleta"
+                  }
+                ]
+              },
+              "rayos-x-gamma": {
+                "titulo": "Rayos-x-gamma",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/ondas/rayos-x-gamma",
+                    "titulo": "Rayos X y Rayos Gamma",
+                    "icono": "rayos-x"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          }
+        },
+        "temas": []
+      },
+      "mecanica": {
+        "titulo": "Mecanica",
+        "subcategories": {
+          "cinematica": {
+            "titulo": "Cinematica",
+            "subcategories": {
+              "mas": {
+                "titulo": "Mas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/cinematica/mas",
+                    "titulo": "MAS - Movimiento Armónico Simple",
+                    "icono": "mas"
+                  }
+                ]
+              },
+              "mcu": {
+                "titulo": "Mcu",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/cinematica/mcu",
+                    "titulo": "MCU - Movimiento Circular Uniforme",
+                    "icono": "mcu"
+                  }
+                ]
+              },
+              "mcua": {
+                "titulo": "Mcua",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/cinematica/mcua",
+                    "titulo": "Mcua",
+                    "icono": "mcua"
+                  }
+                ]
+              },
+              "mp": {
+                "titulo": "Mp",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/cinematica/mp",
+                    "titulo": "Mp",
+                    "icono": "mp"
+                  }
+                ]
+              },
+              "mr": {
+                "titulo": "Mr",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/cinematica/mr",
+                    "titulo": "Mr",
+                    "icono": "mr"
+                  }
+                ]
+              },
+              "mru": {
+                "titulo": "Mru",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/cinematica/mru",
+                    "titulo": "MRU - Movimiento Rectilíneo Uniforme",
+                    "icono": "mru"
+                  }
+                ]
+              },
+              "mruv": {
+                "titulo": "Mruv",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/cinematica/mruv",
+                    "titulo": "MRUV - Movimiento Rectilíneo Uniformemente Variado",
+                    "icono": "mruv"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "dinamica": {
+            "titulo": "Dinamica",
+            "subcategories": {
+              "colisiones": {
+                "titulo": "Colisiones",
+                "subcategories": {
+                  "centro_masa": {
+                    "titulo": "Centro Masa",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/colisiones/centro_masa",
+                        "titulo": "Centro de Masa",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "colisiones_elasticas": {
+                    "titulo": "Colisiones Elasticas",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/colisiones/colisiones_elasticas",
+                        "titulo": "Colisiones Elásticas",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "colisiones_inelasticas": {
+                    "titulo": "Colisiones Inelasticas",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/colisiones/colisiones_inelasticas",
+                        "titulo": "Colisiones Inelásticas",
+                        "icono": "📚"
+                      }
+                    ]
+                  },
+                  "dispersion": {
+                    "titulo": "Dispersion",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/dinamica/colisiones/dispersion",
+                        "titulo": "Dispersión (Scattering)",
+                        "icono": "📚"
+                      }
+                    ]
+                  }
+                },
+                "temas": []
+              },
+              "equilibrio": {
+                "titulo": "Equilibrio",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/dinamica/equilibrio",
+                    "titulo": "Equilibrio",
+                    "icono": "equilibrio"
+                  }
+                ]
+              },
+              "friccion": {
+                "titulo": "Friccion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/dinamica/friccion",
+                    "titulo": "Friccion",
+                    "icono": "friccion"
+                  }
+                ]
+              },
+              "gravitacion": {
+                "titulo": "Gravitacion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/dinamica/gravitacion",
+                    "titulo": "Gravitacion",
+                    "icono": "gravitacion"
+                  }
+                ]
+              },
+              "masaspoleas": {
+                "titulo": "Masaspoleas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/dinamica/masaspoleas",
+                    "titulo": "Masaspoleas",
+                    "icono": "masaspoleas"
+                  }
+                ]
+              },
+              "movcircular": {
+                "titulo": "Movcircular",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/dinamica/movcircular",
+                    "titulo": "Movimiento Circular",
+                    "icono": "movcircular"
+                  }
+                ]
+              },
+              "movimpulso": {
+                "titulo": "Movimpulso",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/dinamica/movimpulso",
+                    "titulo": "Impulso y Momento",
+                    "icono": "movimpulso"
+                  }
+                ]
+              },
+              "newton": {
+                "titulo": "Newton",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/dinamica/newton",
+                    "titulo": "Leyes de Newton",
+                    "icono": "newton"
+                  }
+                ]
+              },
+              "oscilaciones": {
+                "titulo": "Oscilaciones",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/dinamica/oscilaciones",
+                    "titulo": "Oscilaciones",
+                    "icono": "oscilaciones"
+                  }
+                ]
+              },
+              "rotacion": {
+                "titulo": "Rotacion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/dinamica/rotacion",
+                    "titulo": "Rotacion",
+                    "icono": "rotacion"
+                  }
+                ]
+              },
+              "trabajoenergia": {
+                "titulo": "Trabajoenergia",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/dinamica/trabajoenergia",
+                    "titulo": "Trabajo y Energía",
+                    "icono": "trabajoenergia"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "estatica": {
+            "titulo": "Estatica",
+            "subcategories": {
+              "aplicaciones": {
+                "titulo": "Aplicaciones",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/estatica/aplicaciones",
+                    "titulo": "Aplicaciones",
+                    "icono": "aplicaciones"
+                  }
+                ]
+              },
+              "apoyos": {
+                "titulo": "Apoyos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/estatica/apoyos",
+                    "titulo": "Apoyos",
+                    "icono": "apoyos"
+                  }
+                ]
+              },
+              "centro": {
+                "titulo": "Centro",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/estatica/centro",
+                    "titulo": "Centro",
+                    "icono": "centro"
+                  }
+                ]
+              },
+              "diagramas": {
+                "titulo": "Diagramas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/estatica/diagramas",
+                    "titulo": "Diagramas",
+                    "icono": "diagramas"
+                  }
+                ]
+              },
+              "elasticidad_deformacion": {
+                "titulo": "Elasticidad Deformacion",
+                "subcategories": {
+                  "deformacion_vigas": {
+                    "titulo": "Deformacion Vigas",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/estatica/elasticidad_deformacion/deformacion_vigas",
+                        "titulo": "Deformación en Vigas",
+                        "icono": "estatica"
+                      }
+                    ]
+                  },
+                  "esfuerzo_deformacion": {
+                    "titulo": "Esfuerzo Deformacion",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/estatica/elasticidad_deformacion/esfuerzo_deformacion",
+                        "titulo": "Esfuerzo y Deformación",
+                        "icono": "estatica"
+                      }
+                    ]
+                  },
+                  "ley_hooke": {
+                    "titulo": "Ley Hooke",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/estatica/elasticidad_deformacion/ley_hooke",
+                        "titulo": "Ley de Hooke Generalizada",
+                        "icono": "estatica"
+                      }
+                    ]
+                  },
+                  "modulos_elasticos": {
+                    "titulo": "Modulos Elasticos",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "mecanica/estatica/elasticidad_deformacion/modulos_elasticos",
+                        "titulo": "Módulos Elásticos",
+                        "icono": "estatica"
+                      }
+                    ]
+                  }
+                },
+                "temas": []
+              },
+              "estabilidad": {
+                "titulo": "Estabilidad",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/estatica/estabilidad",
+                    "titulo": "Estabilidad",
+                    "icono": "estabilidad"
+                  }
+                ]
+              },
+              "estructuras": {
+                "titulo": "Estructuras",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/estatica/estructuras",
+                    "titulo": "Estructuras",
+                    "icono": "estructuras"
+                  }
+                ]
+              },
+              "friccionest": {
+                "titulo": "Friccionest",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/estatica/friccionest",
+                    "titulo": "Friccionest",
+                    "icono": "friccionest"
+                  }
+                ]
+              },
+              "momentos": {
+                "titulo": "Momentos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/estatica/momentos",
+                    "titulo": "Momentos",
+                    "icono": "momentos"
+                  }
+                ]
+              },
+              "vectores": {
+                "titulo": "Vectores",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/estatica/vectores",
+                    "titulo": "Vectores",
+                    "icono": "vectores"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "ondas_mecanicas": {
+            "titulo": "Ondas Mecanicas",
+            "subcategories": {
+              "conceptos_basicos": {
+                "titulo": "Conceptos Basicos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/ondas_mecanicas/conceptos_basicos",
+                    "titulo": "Conceptos Básicos de Ondas",
+                    "icono": "ondas"
+                  }
+                ]
+              },
+              "energia_ondas": {
+                "titulo": "Energia Ondas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/ondas_mecanicas/energia_ondas",
+                    "titulo": "Energía de Ondas",
+                    "icono": "ondas"
+                  }
+                ]
+              },
+              "ondas_estacionarias": {
+                "titulo": "Ondas Estacionarias",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/ondas_mecanicas/ondas_estacionarias",
+                    "titulo": "Ondas Estacionarias",
+                    "icono": "ondas"
+                  }
+                ]
+              },
+              "ondas_longitudinales": {
+                "titulo": "Ondas Longitudinales",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/ondas_mecanicas/ondas_longitudinales",
+                    "titulo": "Ondas Longitudinales",
+                    "icono": "ondas"
+                  }
+                ]
+              },
+              "ondas_transversales": {
+                "titulo": "Ondas Transversales",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/ondas_mecanicas/ondas_transversales",
+                    "titulo": "Ondas Transversales",
+                    "icono": "ondas"
+                  }
+                ]
+              },
+              "superposicion": {
+                "titulo": "Superposicion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/ondas_mecanicas/superposicion",
+                    "titulo": "Superposición de Ondas",
+                    "icono": "ondas"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          }
+        },
+        "temas": []
+      },
+      "mecanica_de_fluidos": {
+        "titulo": "Mecanica_de_fluidos",
+        "subcategories": {
+          "analisis_dimensional_y_similitud": {
+            "titulo": "Analisis Dimensional Y Similitud",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "mecanica_de_fluidos/analisis_dimensional_y_similitud",
+                "titulo": "Análisis Dimensional",
+                "icono": "analisis"
+              }
+            ]
+          },
+          "dinamica_de_fluidos": {
+            "titulo": "Dinamica De Fluidos",
+            "subcategories": {
+              "analisis_diferencial_de_fluidos": {
+                "titulo": "Analisis Diferencial De Fluidos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/dinamica_de_fluidos/analisis_diferencial_de_fluidos",
+                    "titulo": "Análisis Diferencial",
+                    "icono": "diferencial"
+                  }
+                ]
+              },
+              "ecuacion_de_bernoulli": {
+                "titulo": "Ecuacion De Bernoulli",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/dinamica_de_fluidos/ecuacion_de_bernoulli",
+                    "titulo": "Ecuación de Bernoulli",
+                    "icono": "bernoulli"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "estatica_de_fluidos": {
+            "titulo": "Estatica De Fluidos",
+            "subcategories": {
+              "conceptos_fundamentales": {
+                "titulo": "Conceptos Fundamentales",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/estatica_de_fluidos/conceptos_fundamentales",
+                    "titulo": "Conceptos Fundamentales",
+                    "icono": "conceptos"
+                  }
+                ]
+              },
+              "densidad_presion": {
+                "titulo": "Densidad Presion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/estatica_de_fluidos/densidad_presion",
+                    "titulo": "Densidad y Presión",
+                    "icono": "densidad"
+                  }
+                ]
+              },
+              "flotabilidad_y_estabilidad": {
+                "titulo": "Flotabilidad Y Estabilidad",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/estatica_de_fluidos/flotabilidad_y_estabilidad",
+                    "titulo": "Flotabilidad y Estabilidad",
+                    "icono": "flotabilidad"
+                  }
+                ]
+              },
+              "flotacion": {
+                "titulo": "Flotacion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/estatica_de_fluidos/flotacion",
+                    "titulo": "Flotación",
+                    "icono": "flotacion"
+                  }
+                ]
+              },
+              "fuerzas_sobre_superficies": {
+                "titulo": "Fuerzas Sobre Superficies",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/estatica_de_fluidos/fuerzas_sobre_superficies",
+                    "titulo": "Fuerzas sobre Superficies",
+                    "icono": "fuerzas"
+                  }
+                ]
+              },
+              "manometria": {
+                "titulo": "Manometria",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/estatica_de_fluidos/manometria",
+                    "titulo": "Manometría",
+                    "icono": "manometria"
+                  }
+                ]
+              },
+              "presion": {
+                "titulo": "Presion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/estatica_de_fluidos/presion",
+                    "titulo": "Presión en Fluidos",
+                    "icono": "presion"
+                  }
+                ]
+              },
+              "presion_hidrostatica": {
+                "titulo": "Presion Hidrostatica",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/estatica_de_fluidos/presion_hidrostatica",
+                    "titulo": "Presión Hidrostática",
+                    "icono": "presion"
+                  }
+                ]
+              },
+              "principio_arquimedes": {
+                "titulo": "Principio Arquimedes",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/estatica_de_fluidos/principio_arquimedes",
+                    "titulo": "Principio de Arquímedes",
+                    "icono": "arquimedes"
+                  }
+                ]
+              },
+              "principio_pascal": {
+                "titulo": "Principio Pascal",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/estatica_de_fluidos/principio_pascal",
+                    "titulo": "Principio de Pascal",
+                    "icono": "pascal"
+                  }
+                ]
+              },
+              "vasos_comunicantes": {
+                "titulo": "Vasos Comunicantes",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/estatica_de_fluidos/vasos_comunicantes",
+                    "titulo": "Vasos Comunicantes",
+                    "icono": "vasos"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "flujo_compresible": {
+            "titulo": "Flujo Compresible",
+            "subcategories": {
+              "flujo_isentropico": {
+                "titulo": "Flujo Isentropico",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/flujo_compresible/flujo_isentropico",
+                    "titulo": "Flujo Isentrópico",
+                    "icono": "fluidos"
+                  }
+                ]
+              },
+              "flujo_supersonico": {
+                "titulo": "Flujo Supersonico",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/flujo_compresible/flujo_supersonico",
+                    "titulo": "Flujo Supersónico",
+                    "icono": "fluidos"
+                  }
+                ]
+              },
+              "numero_mach": {
+                "titulo": "Numero Mach",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/flujo_compresible/numero_mach",
+                    "titulo": "Número de Mach",
+                    "icono": "fluidos"
+                  }
+                ]
+              },
+              "ondas_choque": {
+                "titulo": "Ondas Choque",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica_de_fluidos/flujo_compresible/ondas_choque",
+                    "titulo": "Ondas de Choque",
+                    "icono": "fluidos"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "flujo_en_tuberias": {
+            "titulo": "Flujo En Tuberias",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "mecanica_de_fluidos/flujo_en_tuberias",
+                "titulo": "Flujo en Tuberías",
+                "icono": "tuberias"
+              }
+            ]
+          },
+          "flujo_sobre_cuerpos": {
+            "titulo": "Flujo Sobre Cuerpos",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "mecanica_de_fluidos/flujo_sobre_cuerpos",
+                "titulo": "Flujo sobre Cuerpos",
+                "icono": "flujo"
+              }
+            ]
+          },
+          "maquinaria_de_fluidos": {
+            "titulo": "Maquinaria De Fluidos",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "mecanica_de_fluidos/maquinaria_de_fluidos",
+                "titulo": "Maquinaria de Fluidos",
+                "icono": "maquinaria"
+              }
+            ]
+          }
+        },
+        "temas": []
+      },
+      "optica": {
+        "titulo": "Optica",
+        "subcategories": {
+          "fotometria": {
+            "titulo": "Fotometria",
+            "subcategories": {
+              "flujo_luminoso": {
+                "titulo": "Flujo Luminoso",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/fotometria/flujo_luminoso",
+                    "titulo": "Flujo Luminoso",
+                    "icono": "flujo_luminoso"
+                  }
+                ]
+              },
+              "iluminacion": {
+                "titulo": "Iluminacion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/fotometria/iluminacion",
+                    "titulo": "Iluminación",
+                    "icono": "iluminacion"
+                  }
+                ]
+              },
+              "intensidad_luminosa": {
+                "titulo": "Intensidad Luminosa",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/fotometria/intensidad_luminosa",
+                    "titulo": "Intensidad Luminosa",
+                    "icono": "intensidad_luminosa"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "optica_fisica": {
+            "titulo": "Optica Fisica",
+            "subcategories": {
+              "difraccion": {
+                "titulo": "Difraccion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/optica_fisica/difraccion",
+                    "titulo": "Difracción",
+                    "icono": "difraccion"
+                  }
+                ]
+              },
+              "dispersion": {
+                "titulo": "Dispersion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/optica_fisica/dispersion",
+                    "titulo": "Dispersión",
+                    "icono": "dispersion"
+                  }
+                ]
+              },
+              "interferencia": {
+                "titulo": "Interferencia",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/optica_fisica/interferencia",
+                    "titulo": "Interferencia",
+                    "icono": "interferencia"
+                  }
+                ]
+              },
+              "optica_no_lineal": {
+                "titulo": "Optica No Lineal",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/optica_fisica/optica_no_lineal",
+                    "titulo": "Óptica No Lineal",
+                    "icono": "📚"
+                  }
+                ]
+              },
+              "polarizacion": {
+                "titulo": "Polarizacion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/optica_fisica/polarizacion",
+                    "titulo": "Polarización",
+                    "icono": "polarizacion"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "optica_geometrica": {
+            "titulo": "Optica Geometrica",
+            "subcategories": {
+              "aberraciones_opticas": {
+                "titulo": "Aberraciones Opticas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/optica_geometrica/aberraciones_opticas",
+                    "titulo": "Aberraciones Ópticas",
+                    "icono": "aberraciones_opticas"
+                  }
+                ]
+              },
+              "instrumentos_opticos": {
+                "titulo": "Instrumentos Opticos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/optica_geometrica/instrumentos_opticos",
+                    "titulo": "Instrumentos Ópticos",
+                    "icono": "instrumentos_opticos"
+                  }
+                ]
+              },
+              "reflexion_y_espejos": {
+                "titulo": "Reflexion Y Espejos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/optica_geometrica/reflexion_y_espejos",
+                    "titulo": "Reflexión y Espejos",
+                    "icono": "reflexion_y_espejos"
+                  }
+                ]
+              },
+              "refraccion_y_lentes": {
+                "titulo": "Refraccion Y Lentes",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "optica/optica_geometrica/refraccion_y_lentes",
+                    "titulo": "Refracción y Lentes",
+                    "icono": "refraccion_y_lentes"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          }
+        },
+        "temas": []
+      },
+      "termodinamica": {
+        "titulo": "Termodinamica",
+        "subcategories": {
+          "02_magnitudes_termicas": {
+            "titulo": "02 Magnitudes Termicas",
+            "subcategories": {
+              "calor": {
+                "titulo": "Calor",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/02_magnitudes_termicas/calor",
+                    "titulo": "Calor",
+                    "icono": "calor"
+                  }
+                ]
+              },
+              "presion": {
+                "titulo": "Presion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/02_magnitudes_termicas/presion",
+                    "titulo": "Presión",
+                    "icono": "presion"
+                  }
+                ]
+              },
+              "temperatura": {
+                "titulo": "Temperatura",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/02_magnitudes_termicas/temperatura",
+                    "titulo": "Temperatura",
+                    "icono": "temperatura"
+                  }
+                ]
+              },
+              "trabajo_termodinamico": {
+                "titulo": "Trabajo Termodinamico",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/02_magnitudes_termicas/trabajo_termodinamico",
+                    "titulo": "Trabajo Termodinámico",
+                    "icono": "trabajo_termodinamico"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "03_principios_de_la_termodinamica": {
+            "titulo": "03 Principios De La Termodinamica",
+            "subcategories": {
+              "formulaciones_equivalentes": {
+                "titulo": "Formulaciones Equivalentes",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/03_principios_de_la_termodinamica/formulaciones_equivalentes",
+                    "titulo": "Formulaciones Equivalentes de las Leyes Termodinámicas",
+                    "icono": "formulaciones_equivalentes"
+                  }
+                ]
+              },
+              "ley_cero_de_la_termodinamica": {
+                "titulo": "Ley Cero De La Termodinamica",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/03_principios_de_la_termodinamica/ley_cero_de_la_termodinamica",
+                    "titulo": "Ley Cero de la Termodinámica",
+                    "icono": "ley_cero"
+                  }
+                ]
+              },
+              "primera_ley_de_la_termodinamica": {
+                "titulo": "Primera Ley De La Termodinamica",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/03_principios_de_la_termodinamica/primera_ley_de_la_termodinamica",
+                    "titulo": "Primera Ley de la Termodinámica",
+                    "icono": "primera_ley"
+                  }
+                ]
+              },
+              "segunda_ley_de_la_termodinamica": {
+                "titulo": "Segunda Ley De La Termodinamica",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/03_principios_de_la_termodinamica/segunda_ley_de_la_termodinamica",
+                    "titulo": "Segunda Ley de la Termodinámica",
+                    "icono": "segunda_ley"
+                  }
+                ]
+              },
+              "tercera_ley_de_la_termodinamica": {
+                "titulo": "Tercera Ley De La Termodinamica",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/03_principios_de_la_termodinamica/tercera_ley_de_la_termodinamica",
+                    "titulo": "Tercera Ley de la Termodinámica",
+                    "icono": "tercera_ley"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "04_modelos_moleculares_y_gases": {
+            "titulo": "04 Modelos Moleculares Y Gases",
+            "subcategories": {
+              "ecuaciones_de_estado": {
+                "titulo": "Ecuaciones De Estado",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/04_modelos_moleculares_y_gases/ecuaciones_de_estado",
+                    "titulo": "Ecuaciones de Estado",
+                    "icono": "ecuaciones"
+                  }
+                ]
+              },
+              "gases_ideales": {
+                "titulo": "Gases Ideales",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/04_modelos_moleculares_y_gases/gases_ideales",
+                    "titulo": "Gases Ideales",
+                    "icono": "gases_ideales"
+                  }
+                ]
+              },
+              "gases_reales": {
+                "titulo": "Gases Reales",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/04_modelos_moleculares_y_gases/gases_reales",
+                    "titulo": "Gases Reales",
+                    "icono": "gases_reales"
+                  }
+                ]
+              },
+              "teoria_cinetica_de_los_gases": {
+                "titulo": "Teoria Cinetica De Los Gases",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/04_modelos_moleculares_y_gases/teoria_cinetica_de_los_gases",
+                    "titulo": "Teoria Cinetica De Los Gases",
+                    "icono": "teoria_cinetica_de_los_gases"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "05_entropia": {
+            "titulo": "05 Entropia",
+            "subcategories": {
+              "entropia_de_mezcla": {
+                "titulo": "Entropia De Mezcla",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/05_entropia/entropia_de_mezcla",
+                    "titulo": "Entropía de Mezcla",
+                    "icono": "entropia_de_mezcla"
+                  }
+                ]
+              },
+              "entropia_en_procesos_reales": {
+                "titulo": "Entropia En Procesos Reales",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/05_entropia/entropia_en_procesos_reales",
+                    "titulo": "Entropia En Procesos Reales",
+                    "icono": "entropia_en_procesos_reales"
+                  }
+                ]
+              },
+              "entropia_y_segunda_ley": {
+                "titulo": "Entropia Y Segunda Ley",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/05_entropia/entropia_y_segunda_ley",
+                    "titulo": "Entropía y Segunda Ley de la Termodinámica",
+                    "icono": "entropia_y_segunda_ley"
+                  }
+                ]
+              },
+              "interpretacion_estadistica": {
+                "titulo": "Interpretacion Estadistica",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/05_entropia/interpretacion_estadistica",
+                    "titulo": "Interpretación Estadística de la Entropía",
+                    "icono": "interpretacion_estadistica"
+                  }
+                ]
+              },
+              "medicion_y_calculo_de_la_entropia": {
+                "titulo": "Medicion Y Calculo De La Entropia",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/05_entropia/medicion_y_calculo_de_la_entropia",
+                    "titulo": "Medicion Y Calculo De La Entropia",
+                    "icono": "medicion_y_calculo_de_la_entropia"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "06_procesos_termodinamicos": {
+            "titulo": "06 Procesos Termodinamicos",
+            "subcategories": {
+              "proceso_adiabatico": {
+                "titulo": "Proceso Adiabatico",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/06_procesos_termodinamicos/proceso_adiabatico",
+                    "titulo": "Proceso Adiabático",
+                    "icono": "proceso_adiabatico"
+                  }
+                ]
+              },
+              "proceso_isobarico": {
+                "titulo": "Proceso Isobarico",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/06_procesos_termodinamicos/proceso_isobarico",
+                    "titulo": "Proceso Isobárico",
+                    "icono": "proceso_isobarico"
+                  }
+                ]
+              },
+              "proceso_isocorico": {
+                "titulo": "Proceso Isocorico",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/06_procesos_termodinamicos/proceso_isocorico",
+                    "titulo": "Proceso Isocórico",
+                    "icono": "proceso_isocorico"
+                  }
+                ]
+              },
+              "proceso_isotermico": {
+                "titulo": "Proceso Isotermico",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/06_procesos_termodinamicos/proceso_isotermico",
+                    "titulo": "Proceso Isotérmico",
+                    "icono": "proceso_isotermico"
+                  }
+                ]
+              },
+              "proceso_politropico": {
+                "titulo": "Proceso Politropico",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/06_procesos_termodinamicos/proceso_politropico",
+                    "titulo": "Proceso Politrópico",
+                    "icono": "proceso_politropico"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "07_potenciales_termodinamicos": {
+            "titulo": "07 Potenciales Termodinamicos",
+            "subcategories": {
+              "criterios_equilibrio": {
+                "titulo": "Criterios Equilibrio",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/07_potenciales_termodinamicos/criterios_equilibrio",
+                    "titulo": "Criterios de Equilibrio",
+                    "icono": "criterios_equilibrio"
+                  }
+                ]
+              },
+              "energia_interna": {
+                "titulo": "Energia Interna",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/07_potenciales_termodinamicos/energia_interna",
+                    "titulo": "Energía Interna",
+                    "icono": "energia_interna"
+                  }
+                ]
+              },
+              "energia_libre_gibbs": {
+                "titulo": "Energia Libre Gibbs",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/07_potenciales_termodinamicos/energia_libre_gibbs",
+                    "titulo": "Energía Libre de Gibbs",
+                    "icono": "energia_libre_gibbs"
+                  }
+                ]
+              },
+              "energia_libre_helmholtz": {
+                "titulo": "Energia Libre Helmholtz",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/07_potenciales_termodinamicos/energia_libre_helmholtz",
+                    "titulo": "Energía Libre de Helmholtz",
+                    "icono": "energia_libre_helmholtz"
+                  }
+                ]
+              },
+              "entalpia": {
+                "titulo": "Entalpia",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/07_potenciales_termodinamicos/entalpia",
+                    "titulo": "Entalpía",
+                    "icono": "entalpia"
+                  }
+                ]
+              },
+              "relaciones_maxwell": {
+                "titulo": "Relaciones Maxwell",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/07_potenciales_termodinamicos/relaciones_maxwell",
+                    "titulo": "Relaciones de Maxwell",
+                    "icono": "relaciones_maxwell"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "08_maquinas_termicas_y_refrigeracion": {
+            "titulo": "08 Maquinas Termicas Y Refrigeracion",
+            "subcategories": {
+              "ciclo_de_carnot": {
+                "titulo": "Ciclo De Carnot",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/08_maquinas_termicas_y_refrigeracion/ciclo_de_carnot",
+                    "titulo": "Ciclo de Carnot",
+                    "icono": "ciclo_carnot"
+                  }
+                ]
+              },
+              "maquinas_termicas": {
+                "titulo": "Maquinas Termicas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/08_maquinas_termicas_y_refrigeracion/maquinas_termicas",
+                    "titulo": "Máquinas Térmicas",
+                    "icono": "maquinas_termicas"
+                  }
+                ]
+              },
+              "refrigeracion_y_bombas_de_calor": {
+                "titulo": "Refrigeracion Y Bombas De Calor",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/08_maquinas_termicas_y_refrigeracion/refrigeracion_y_bombas_de_calor",
+                    "titulo": "Refrigeración y Bombas de Calor",
+                    "icono": "refrigeracion"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "09_ciclos_termodinamicos": {
+            "titulo": "09 Ciclos Termodinamicos",
+            "subcategories": {
+              "ciclo_brayton": {
+                "titulo": "Ciclo Brayton",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/09_ciclos_termodinamicos/ciclo_brayton",
+                    "titulo": "Ciclo Brayton",
+                    "icono": "ciclo_brayton"
+                  }
+                ]
+              },
+              "ciclo_diesel": {
+                "titulo": "Ciclo Diesel",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/09_ciclos_termodinamicos/ciclo_diesel",
+                    "titulo": "Ciclo Diesel",
+                    "icono": "ciclo_diesel"
+                  }
+                ]
+              },
+              "ciclo_ericsson": {
+                "titulo": "Ciclo Ericsson",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/09_ciclos_termodinamicos/ciclo_ericsson",
+                    "titulo": "Ciclo Ericsson",
+                    "icono": "ericsson"
+                  }
+                ]
+              },
+              "ciclo_otto": {
+                "titulo": "Ciclo Otto",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/09_ciclos_termodinamicos/ciclo_otto",
+                    "titulo": "Ciclo Otto",
+                    "icono": "ciclo_otto"
+                  }
+                ]
+              },
+              "ciclo_rankine": {
+                "titulo": "Ciclo Rankine",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/09_ciclos_termodinamicos/ciclo_rankine",
+                    "titulo": "Ciclo Rankine",
+                    "icono": "ciclo_rankine"
+                  }
+                ]
+              },
+              "ciclo_stirling": {
+                "titulo": "Ciclo Stirling",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/09_ciclos_termodinamicos/ciclo_stirling",
+                    "titulo": "Ciclo Stirling",
+                    "icono": "stirling"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "10_ciclos_combinados": {
+            "titulo": "10 Ciclos Combinados",
+            "subcategories": {
+              "ciclo_de_brayton_rankine": {
+                "titulo": "Ciclo De Brayton Rankine",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/10_ciclos_combinados/ciclo_de_brayton_rankine",
+                    "titulo": "Ciclo Brayton-Rankine",
+                    "icono": "ciclo_combinado"
+                  }
+                ]
+              },
+              "ciclo_de_rankine_con_turbina_de_gas": {
+                "titulo": "Ciclo De Rankine Con Turbina De Gas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/10_ciclos_combinados/ciclo_de_rankine_con_turbina_de_gas",
+                    "titulo": "Ciclo Rankine con Turbina de Gas",
+                    "icono": "eficiencia_global"
+                  }
+                ]
+              },
+              "cogeneracion": {
+                "titulo": "Cogeneracion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/10_ciclos_combinados/cogeneracion",
+                    "titulo": "Cogeneración",
+                    "icono": "cogeneracion"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "11_transferencia_de_calor": {
+            "titulo": "11 Transferencia De Calor",
+            "subcategories": {
+              "aislamiento_termico": {
+                "titulo": "Aislamiento Termico",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/11_transferencia_de_calor/aislamiento_termico",
+                    "titulo": "Aislamiento Térmico",
+                    "icono": "aislamiento"
+                  }
+                ]
+              },
+              "conceptos_basicos": {
+                "titulo": "Conceptos Basicos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/11_transferencia_de_calor/conceptos_basicos",
+                    "titulo": "Conceptos Básicos",
+                    "icono": "conceptos"
+                  }
+                ]
+              },
+              "conduccion": {
+                "titulo": "Conduccion",
+                "subcategories": {
+                  "ley_de_fourier": {
+                    "titulo": "Ley De Fourier",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "termodinamica/11_transferencia_de_calor/conduccion/ley_de_fourier",
+                        "titulo": "Ley De Fourier",
+                        "icono": "ley_de_fourier"
+                      }
+                    ]
+                  }
+                },
+                "temas": [
+                  {
+                    "path": "termodinamica/11_transferencia_de_calor/conduccion",
+                    "titulo": "Conducción",
+                    "icono": "conduccion"
+                  }
+                ]
+              },
+              "conveccion": {
+                "titulo": "Conveccion",
+                "subcategories": {
+                  "ley_de_newton": {
+                    "titulo": "Ley De Newton",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "termodinamica/11_transferencia_de_calor/conveccion/ley_de_newton",
+                        "titulo": "Ley De Newton",
+                        "icono": "ley_de_newton"
+                      }
+                    ]
+                  }
+                },
+                "temas": [
+                  {
+                    "path": "termodinamica/11_transferencia_de_calor/conveccion",
+                    "titulo": "Convección",
+                    "icono": "conveccion"
+                  }
+                ]
+              },
+              "intercambiadores_de_calor": {
+                "titulo": "Intercambiadores De Calor",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/11_transferencia_de_calor/intercambiadores_de_calor",
+                    "titulo": "Intercambiadores de Calor",
+                    "icono": "intercambiador"
+                  }
+                ]
+              },
+              "radiacion": {
+                "titulo": "Radiacion",
+                "subcategories": {
+                  "ley_de_stefan_boltzmann": {
+                    "titulo": "Ley De Stefan Boltzmann",
+                    "subcategories": {},
+                    "temas": [
+                      {
+                        "path": "termodinamica/11_transferencia_de_calor/radiacion/ley_de_stefan_boltzmann",
+                        "titulo": "Ley De Stefan Boltzmann",
+                        "icono": "ley_de_stefan_boltzmann"
+                      }
+                    ]
+                  }
+                },
+                "temas": [
+                  {
+                    "path": "termodinamica/11_transferencia_de_calor/radiacion",
+                    "titulo": "Radiación",
+                    "icono": "radiacion"
+                  }
+                ]
+              },
+              "resistencia_termica_equivalente": {
+                "titulo": "Resistencia Termica Equivalente",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/11_transferencia_de_calor/resistencia_termica_equivalente",
+                    "titulo": "Resistencia Térmica Equivalente",
+                    "icono": "resistencia"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          },
+          "12_aplicaciones_practicas": {
+            "titulo": "12 Aplicaciones Practicas",
+            "subcategories": {
+              "bombas_termicas_domesticas": {
+                "titulo": "Bombas Termicas Domesticas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/12_aplicaciones_practicas/bombas_termicas_domesticas",
+                    "titulo": "Bombas Térmicas Domésticas",
+                    "icono": "bomba_termica"
+                  }
+                ]
+              },
+              "centrales_electricas": {
+                "titulo": "Centrales Electricas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/12_aplicaciones_practicas/centrales_electricas",
+                    "titulo": "Centrales Eléctricas",
+                    "icono": "central"
+                  }
+                ]
+              },
+              "ciclos_de_potencia": {
+                "titulo": "Ciclos De Potencia",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/12_aplicaciones_practicas/ciclos_de_potencia",
+                    "titulo": "Ciclos de Potencia",
+                    "icono": "potencia"
+                  }
+                ]
+              },
+              "ciclos_de_refrigeracion": {
+                "titulo": "Ciclos De Refrigeracion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/12_aplicaciones_practicas/ciclos_de_refrigeracion",
+                    "titulo": "Ciclos de Refrigeración",
+                    "icono": "refrigeracion"
+                  }
+                ]
+              },
+              "motores_de_combustion_interna": {
+                "titulo": "Motores De Combustion Interna",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/12_aplicaciones_practicas/motores_de_combustion_interna",
+                    "titulo": "Motores de Combustión Interna",
+                    "icono": "motor"
+                  }
+                ]
+              },
+              "sistemas_de_climatizacion": {
+                "titulo": "Sistemas De Climatizacion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/12_aplicaciones_practicas/sistemas_de_climatizacion",
+                    "titulo": "Sistemas de Climatización",
+                    "icono": "climatizacion"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          }
+        },
+        "temas": []
+      }
+    }
+  },
+  "UNIVERSIDAD": {
+    "categories": {
+      "acustica": {
+        "titulo": "Acustica",
+        "subcategories": {
+          "ultrasonido": {
+            "titulo": "Ultrasonido",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "acustica/ultrasonido",
+                "titulo": "Ultrasonido",
+                "icono": "📚"
+              }
+            ]
+          }
+        },
+        "temas": []
+      },
+      "electromagnetismo": {
+        "titulo": "Electromagnetismo",
+        "subcategories": {
+          "electronica": {
+            "titulo": "Electronica",
+            "subcategories": {
+              "dispositivos-fotonicos": {
+                "titulo": "Dispositivos-fotonicos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/electronica/dispositivos-fotonicos",
+                    "titulo": "Dispositivos fotonicos",
+                    "icono": "dispositivos-fotonicos"
+                  }
+                ]
+              },
+              "dispositivos-semiconductores": {
+                "titulo": "Dispositivos-semiconductores",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/electronica/dispositivos-semiconductores",
+                    "titulo": "Dispositivos semiconductores",
+                    "icono": "dispositivos-semiconductores"
+                  }
+                ]
+              },
+              "familias-logicas": {
+                "titulo": "Familias-logicas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "electromagnetismo/electronica/familias-logicas",
+                    "titulo": "Familias logicas",
+                    "icono": "familias-logicas"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          }
+        },
+        "temas": []
+      },
+      "fisica_plasmas": {
+        "titulo": "Fisica_plasmas",
+        "subcategories": {
+          "aplicaciones_plasma": {
+            "titulo": "Aplicaciones Plasma",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "fisica_plasmas/aplicaciones_plasma",
+                "titulo": "Aplicaciones del Plasma",
+                "icono": "📚"
+              }
+            ]
+          },
+          "estados_materia_plasma": {
+            "titulo": "Estados Materia Plasma",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "fisica_plasmas/estados_materia_plasma",
+                "titulo": "Estados de la Materia - Plasma",
+                "icono": "📚"
+              }
+            ]
+          },
+          "ionizacion_plasma": {
+            "titulo": "Ionizacion Plasma",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "fisica_plasmas/ionizacion_plasma",
+                "titulo": "Ionización del Plasma",
+                "icono": "📚"
+              }
+            ]
+          }
+        },
+        "temas": []
+      },
+      "mecanica": {
+        "titulo": "Mecanica",
+        "subcategories": {
+          "mecanica_analitica": {
+            "titulo": "Mecanica Analitica",
+            "subcategories": {
+              "coordenadas_generalizadas": {
+                "titulo": "Coordenadas Generalizadas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/mecanica_analitica/coordenadas_generalizadas",
+                    "titulo": "Coordenadas Generalizadas",
+                    "icono": "coordenadas"
+                  }
+                ]
+              },
+              "hamiltoniana": {
+                "titulo": "Hamiltoniana",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/mecanica_analitica/hamiltoniana",
+                    "titulo": "Mecánica Hamiltoniana",
+                    "icono": "hamilton"
+                  }
+                ]
+              },
+              "lagrangiana": {
+                "titulo": "Lagrangiana",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/mecanica_analitica/lagrangiana",
+                    "titulo": "Mecánica Lagrangiana",
+                    "icono": "lagrange"
+                  }
+                ]
+              },
+              "principio_minima_accion": {
+                "titulo": "Principio Minima Accion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "mecanica/mecanica_analitica/principio_minima_accion",
+                    "titulo": "Principio de Mínima Acción",
+                    "icono": "accion"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          }
+        },
+        "temas": []
+      },
+      "teoria_campos_clasicos": {
+        "titulo": "Teoria_campos_clasicos",
+        "subcategories": {
+          "campos_escalares": {
+            "titulo": "Campos Escalares",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "teoria_campos_clasicos/campos_escalares",
+                "titulo": "Campos Escalares",
+                "icono": "🌡️"
+              }
+            ]
+          },
+          "campos_vectoriales": {
+            "titulo": "Campos Vectoriales",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "teoria_campos_clasicos/campos_vectoriales",
+                "titulo": "Campos Vectoriales",
+                "icono": "➡️"
+              }
+            ]
+          },
+          "ecuaciones_campo": {
+            "titulo": "Ecuaciones Campo",
+            "subcategories": {},
+            "temas": [
+              {
+                "path": "teoria_campos_clasicos/ecuaciones_campo",
+                "titulo": "Ecuaciones de Campo",
+                "icono": "📐"
+              }
+            ]
+          }
+        },
+        "temas": []
+      },
+      "termodinamica": {
+        "titulo": "Termodinamica",
+        "subcategories": {
+          "13_termodinamica_estadistica": {
+            "titulo": "13 Termodinamica Estadistica",
+            "subcategories": {
+              "analisis_de_sistemas_complejos": {
+                "titulo": "Analisis De Sistemas Complejos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/analisis_de_sistemas_complejos",
+                    "titulo": "Análisis de Sistemas Complejos",
+                    "icono": "analisis_de_sistemas_complejos"
+                  }
+                ]
+              },
+              "aplicaciones_de_la_estadistica_cuantica": {
+                "titulo": "Aplicaciones De La Estadistica Cuantica",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/aplicaciones_de_la_estadistica_cuantica",
+                    "titulo": "Aplicaciones de la Estadística Cuántica",
+                    "icono": "aplicaciones_de_la_estadistica_cuantica"
+                  }
+                ]
+              },
+              "calculo_de_propiedades_termodinamicas": {
+                "titulo": "Calculo De Propiedades Termodinamicas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/calculo_de_propiedades_termodinamicas",
+                    "titulo": "Cálculo de Propiedades Termodinámicas",
+                    "icono": "calculo_de_propiedades_termodinamicas"
+                  }
+                ]
+              },
+              "condensacion_bose_einstein": {
+                "titulo": "Condensacion Bose Einstein",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/condensacion_bose_einstein",
+                    "titulo": "Condensación de Bose-Einstein",
+                    "icono": "condensacion_bose_einstein"
+                  }
+                ]
+              },
+              "distribuciones_de_boltzmann_y_gibbs": {
+                "titulo": "Distribuciones De Boltzmann Y Gibbs",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/distribuciones_de_boltzmann_y_gibbs",
+                    "titulo": "Distribuciones Estadísticas",
+                    "icono": "distribuciones_de_boltzmann_y_gibbs"
+                  }
+                ]
+              },
+              "ensambles_estadisticos": {
+                "titulo": "Ensambles Estadisticos",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/ensambles_estadisticos",
+                    "titulo": "Ensambles Estadísticos",
+                    "icono": "ensambles_estadisticos"
+                  }
+                ]
+              },
+              "estadisticas_cuanticas": {
+                "titulo": "Estadisticas Cuanticas",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/estadisticas_cuanticas",
+                    "titulo": "Estadísticas Cuánticas",
+                    "icono": "estadisticas_cuanticas"
+                  }
+                ]
+              },
+              "fonones_modelo_debye": {
+                "titulo": "Fonones Modelo Debye",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/fonones_modelo_debye",
+                    "titulo": "Fonones y Modelo de Debye",
+                    "icono": "fonones"
+                  }
+                ]
+              },
+              "funcion_de_particion": {
+                "titulo": "Funcion De Particion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/funcion_de_particion",
+                    "titulo": "Función de Partición",
+                    "icono": "funcion_de_particion"
+                  }
+                ]
+              },
+              "gas_de_fermi": {
+                "titulo": "Gas De Fermi",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/gas_de_fermi",
+                    "titulo": "Gas de Fermi",
+                    "icono": "gas_de_fermi"
+                  }
+                ]
+              },
+              "gas_ideal_cuantico": {
+                "titulo": "Gas Ideal Cuantico",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/gas_ideal_cuantico",
+                    "titulo": "Gas Ideal Cuántico",
+                    "icono": "gasideal"
+                  }
+                ]
+              },
+              "microestados_y_macroestados": {
+                "titulo": "Microestados Y Macroestados",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/microestados_y_macroestados",
+                    "titulo": "Microestados y Macroestados",
+                    "icono": "microestados_y_macroestados"
+                  }
+                ]
+              },
+              "modelo_de_ising": {
+                "titulo": "Modelo De Ising",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/modelo_de_ising",
+                    "titulo": "Modelo de Ising",
+                    "icono": "modelo_de_ising"
+                  }
+                ]
+              },
+              "simulaciones_monte_carlo": {
+                "titulo": "Simulaciones Monte Carlo",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/simulaciones_monte_carlo",
+                    "titulo": "Simulaciones Monte Carlo",
+                    "icono": "simulaciones_monte_carlo"
+                  }
+                ]
+              },
+              "teorema_de_equiparticion": {
+                "titulo": "Teorema De Equiparticion",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/teorema_de_equiparticion",
+                    "titulo": "Teorema de Equipartición",
+                    "icono": "teorema_de_equiparticion"
+                  }
+                ]
+              },
+              "transiciones_de_fase": {
+                "titulo": "Transiciones De Fase",
+                "subcategories": {},
+                "temas": [
+                  {
+                    "path": "termodinamica/13_termodinamica_estadistica/transiciones_de_fase",
+                    "titulo": "Transiciones de Fase",
+                    "icono": "transiciones_de_fase"
+                  }
+                ]
+              }
+            },
+            "temas": []
+          }
+        },
+        "temas": []
+      }
+    }
+  }
+};

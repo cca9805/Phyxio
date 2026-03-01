@@ -1,0 +1,166 @@
+version: 1
+topic:
+  id: segunda-ley-rotacional-analogia-traslacional
+  title: Analogia traslacional en segunda ley rotacional
+
+variables:
+  - id: tau
+    symbol: \tau
+    nombre: torque
+    unidad_si: N*m
+    descripcion: Torque neto.
+  - id: I
+    symbol: I
+    nombre: momento_de_inercia
+    unidad_si: kg*m^2
+    descripcion: Momento de inercia respecto al eje.
+  - id: alpha
+    symbol: \alpha
+    nombre: aceleracion_angular
+    unidad_si: rad/s^2
+    descripcion: Aceleracion angular.
+  - id: F
+    symbol: F
+    nombre: fuerza
+    unidad_si: N
+    descripcion: Fuerza neta.
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa.
+  - id: a
+    symbol: a
+    nombre: aceleracion_lineal
+    unidad_si: m/s^2
+    descripcion: Aceleracion lineal.
+  - id: omega
+    symbol: \omega
+    nombre: velocidad_angular
+    unidad_si: rad/s
+    descripcion: Velocidad angular.
+  - id: v
+    symbol: v
+    nombre: velocidad_lineal
+    unidad_si: m/s
+    descripcion: Velocidad lineal.
+  - id: r
+    symbol: r
+    nombre: radio
+    unidad_si: m
+    descripcion: Radio de giro.
+  - id: at
+    symbol: a_t
+    nombre: aceleracion_tangencial
+    unidad_si: m/s^2
+    descripcion: Aceleracion tangencial.
+
+formulas:
+  - id: segunda_ley_rotacional
+    title: Segunda ley rotacional
+    equation: tau = I*alpha
+    latex: \tau = I\,\alpha
+    rearrangements:
+      - target: tau
+        equation: tau = I*alpha
+        latex: \tau = I\,\alpha
+      - target: I
+        equation: I = tau/alpha
+        latex: I = \frac{\tau}{\alpha}
+      - target: alpha
+        equation: alpha = tau/I
+        latex: \alpha = \frac{\tau}{I}
+    constraints:
+      - expr: I > 0
+        message: I debe ser positiva.
+      - expr: alpha != 0
+        message: Si despejas I, alpha no puede ser 0.
+    notes:
+      - Version angular de la estructura de Newton.
+    status: calculable
+
+  - id: segunda_ley_traslacional
+    title: Segunda ley traslacional
+    equation: F = m*a
+    latex: F = m\,a
+    rearrangements:
+      - target: F
+        equation: F = m*a
+        latex: F = m\,a
+      - target: m
+        equation: m = F/a
+        latex: m = \frac{F}{a}
+      - target: a
+        equation: a = F/m
+        latex: a = \frac{F}{m}
+    constraints:
+      - expr: m > 0
+        message: m debe ser positiva.
+      - expr: a != 0
+        message: Si despejas m, a no puede ser 0.
+    notes:
+      - Incluida como espejo estructural para la analogia.
+    status: calculable
+
+  - id: velocidad_lineal_angular
+    title: Relacion lineal-angular de velocidad
+    equation: v = omega*r
+    latex: v = \omega r
+    rearrangements:
+      - target: v
+        equation: v = omega*r
+        latex: v = \omega r
+      - target: omega
+        equation: omega = v/r
+        latex: \omega = \frac{v}{r}
+      - target: r
+        equation: r = v/omega
+        latex: r = \frac{v}{\omega}
+    constraints:
+      - expr: r != 0
+        message: Si despejas omega, r no puede ser 0.
+      - expr: omega != 0
+        message: Si despejas r, omega no puede ser 0.
+    status: calculable
+
+  - id: aceleracion_tangencial
+    title: Relacion lineal-angular de aceleracion tangencial
+    equation: at = alpha*r
+    latex: a_t = \alpha r
+    rearrangements:
+      - target: at
+        equation: at = alpha*r
+        latex: a_t = \alpha r
+      - target: alpha
+        equation: alpha = at/r
+        latex: \alpha = \frac{a_t}{r}
+      - target: r
+        equation: r = at/alpha
+        latex: r = \frac{a_t}{\alpha}
+    constraints:
+      - expr: r != 0
+        message: Si despejas alpha, r no puede ser 0.
+      - expr: alpha != 0
+        message: Si despejas r, alpha no puede ser 0.
+    status: calculable
+
+  - id: analogia_conceptual
+    title: Mapa conceptual de analogia
+    equation: tau = I*alpha
+    latex: F \leftrightarrow \tau,\quad m \leftrightarrow I,\quad a \leftrightarrow \alpha
+    status: conceptual
+    notes:
+      - Formula conceptual de mapeo, no usada para calculo numerico directo.
+
+ui:
+  default_formula: segunda_ley_rotacional
+  groups:
+    - title: Calculables
+      items:
+        - segunda_ley_rotacional
+        - segunda_ley_traslacional
+        - velocidad_lineal_angular
+        - aceleracion_tangencial
+    - title: Conceptuales
+      items:
+        - analogia_conceptual

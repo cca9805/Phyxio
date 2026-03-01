@@ -1,0 +1,204 @@
+﻿version: 1
+topic:
+  id: centro-de-masas-mec
+  title: Centro de masas (mecanica)
+variables:
+  - id: m1
+    symbol: m_1
+    nombre: masa 1
+    unidad_si: kg
+    descripcion: Masa del cuerpo 1.
+  - id: m2
+    symbol: m_2
+    nombre: masa 2
+    unidad_si: kg
+    descripcion: Masa del cuerpo 2.
+  - id: m3
+    symbol: m_3
+    nombre: masa 3
+    unidad_si: kg
+    descripcion: Masa del cuerpo 3.
+  - id: x1
+    symbol: x_1
+    nombre: posición x1
+    unidad_si: m
+    descripcion: Posicion en x del cuerpo 1.
+  - id: x2
+    symbol: x_2
+    nombre: posición x2
+    unidad_si: m
+    descripcion: Posicion en x del cuerpo 2.
+  - id: x3
+    symbol: x_3
+    nombre: posición x3
+    unidad_si: m
+    descripcion: Posicion en x del cuerpo 3.
+  - id: y1
+    symbol: y_1
+    nombre: posición y1
+    unidad_si: m
+    descripcion: Posicion en y del cuerpo 1.
+  - id: y2
+    symbol: y_2
+    nombre: posición y2
+    unidad_si: m
+    descripcion: Posicion en y del cuerpo 2.
+  - id: xcm
+    symbol: x_{cm}
+    nombre: centro de masas x
+    unidad_si: m
+    descripcion: Componente x del centro de masas.
+  - id: ycm
+    symbol: y_{cm}
+    nombre: centro de masas y
+    unidad_si: m
+    descripcion: Componente y del centro de masas.
+  - id: v1
+    symbol: v_1
+    nombre: velocidad 1
+    unidad_si: m/s
+    descripcion: Velocidad del cuerpo 1.
+  - id: v2
+    symbol: v_2
+    nombre: velocidad 2
+    unidad_si: m/s
+    descripcion: Velocidad del cuerpo 2.
+  - id: vcm
+    symbol: v_{cm}
+    nombre: velocidad centro de masas
+    unidad_si: m/s
+    descripcion: Velocidad del centro de masas.
+  - id: pTot
+    symbol: p_{tot}
+    nombre: momento total
+    unidad_si: kg*m/s
+    descripcion: Momento lineal total.
+  - id: M
+    symbol: M
+    nombre: masa total
+    unidad_si: kg
+    descripcion: Masa total.
+  - id: Fext
+    symbol: F_{ext}
+    nombre: fuerza externa neta
+    unidad_si: N
+    descripcion: Fuerza externa neta sobre el sistema.
+  - id: acm
+    symbol: a_{cm}
+    nombre: aceleración centro de masas
+    unidad_si: m/s^2
+    descripcion: Aceleracion del centro de masas.
+formulas:
+  - id: masa_total_dos
+    title: Masa total (dos cuerpos)
+    equation: M = m1 + m2
+    latex: M=m_1+m_2
+    rearrangements:
+      - target: M
+        equation: M = m1 + m2
+        latex: M=m_1+m_2
+  - id: xcm_dos_masas
+    title: Centro de masas en x (dos cuerpos)
+    equation: xcm = (m1*x1 + m2*x2)/(m1 + m2)
+    latex: x_{cm}=\frac{m_1x_1+m_2x_2}{m_1+m_2}
+    rearrangements:
+      - target: xcm
+        equation: xcm = (m1*x1 + m2*x2)/(m1 + m2)
+        latex: x_{cm}=\frac{m_1x_1+m_2x_2}{m_1+m_2}
+      - target: x2
+        equation: x2 = (xcm*(m1 + m2) - m1*x1)/m2
+        latex: x_2=\frac{x_{cm}(m_1+m_2)-m_1x_1}{m_2}
+    constraints:
+      - expr: m1 + m2 > 0
+        message: La masa total debe ser positiva.
+      - expr: m2 > 0
+        message: m2 debe ser mayor que 0 para despejar x2.
+  - id: ycm_dos_masas
+    title: Centro de masas en y (dos cuerpos)
+    equation: ycm = (m1*y1 + m2*y2)/(m1 + m2)
+    latex: y_{cm}=\frac{m_1y_1+m_2y_2}{m_1+m_2}
+    rearrangements:
+      - target: ycm
+        equation: ycm = (m1*y1 + m2*y2)/(m1 + m2)
+        latex: y_{cm}=\frac{m_1y_1+m_2y_2}{m_1+m_2}
+    constraints:
+      - expr: m1 + m2 > 0
+        message: La masa total debe ser positiva.
+  - id: xcm_tres_masas
+    title: Centro de masas en x (tres cuerpos)
+    equation: xcm = (m1*x1 + m2*x2 + m3*x3)/(m1 + m2 + m3)
+    latex: x_{cm}=\frac{m_1x_1+m_2x_2+m_3x_3}{m_1+m_2+m_3}
+    rearrangements:
+      - target: xcm
+        equation: xcm = (m1*x1 + m2*x2 + m3*x3)/(m1 + m2 + m3)
+        latex: x_{cm}=\frac{m_1x_1+m_2x_2+m_3x_3}{m_1+m_2+m_3}
+    constraints:
+      - expr: m1 + m2 + m3 > 0
+        message: La masa total debe ser positiva.
+  - id: vcm_dos_masas
+    title: Velocidad del CM en 1D (dos cuerpos)
+    equation: vcm = (m1*v1 + m2*v2)/(m1 + m2)
+    latex: v_{cm}=\frac{m_1v_1+m_2v_2}{m_1+m_2}
+    rearrangements:
+      - target: vcm
+        equation: vcm = (m1*v1 + m2*v2)/(m1 + m2)
+        latex: v_{cm}=\frac{m_1v_1+m_2v_2}{m_1+m_2}
+    constraints:
+      - expr: m1 + m2 > 0
+        message: La masa total debe ser positiva.
+  - id: relacion_momento_cm
+    title: Relacion entre momento total y velocidad del CM
+    equation: pTot = M*vcm
+    latex: p_{tot}=Mv_{cm}
+    rearrangements:
+      - target: vcm
+        equation: vcm = pTot/M
+        latex: v_{cm}=\frac{p_{tot}}{M}
+      - target: pTot
+        equation: pTot = M*vcm
+        latex: p_{tot}=Mv_{cm}
+    constraints:
+      - expr: M > 0
+        message: M debe ser mayor que 0.
+  - id: dinamica_cm
+    title: Dinamica del centro de masas
+    equation: acm = Fext/M
+    latex: a_{cm}=\frac{F_{ext}}{M}
+    rearrangements:
+      - target: acm
+        equation: acm = Fext/M
+        latex: a_{cm}=\frac{F_{ext}}{M}
+      - target: Fext
+        equation: Fext = M*acm
+        latex: F_{ext}=Ma_{cm}
+    constraints:
+      - expr: M > 0
+        message: M debe ser mayor que 0.
+  - id: definicion_vectorial_general
+    title: Definicion vectorial general (conceptual)
+    equation: rcm = sum(m_i*r_i)/sum(m_i)
+    latex: \vec r_{cm}=\frac{\sum_i m_i\vec r_i}{\sum_i m_i}
+    calculable: false
+    motivo_no_calculable: Requiere tratamiento vectorial general con numero arbitrario de partículas y componentes.
+  - id: definicion_continua_integral
+    title: Definicion para distribucion continua (conceptual)
+    equation: rcm = (1/M)*integral(r*dm)
+    latex: \vec r_{cm}=\frac{1}{M}\int \vec r\,dm
+    calculable: false
+    motivo_no_calculable: Requiere conocer la distribucion de masa y resolver una integral dependiente de la geometria.
+ui:
+  default_formula: xcm_dos_masas
+  groups:
+    - title: Formulas calculables
+      items:
+        - masa_total_dos
+        - xcm_dos_masas
+        - ycm_dos_masas
+        - xcm_tres_masas
+        - vcm_dos_masas
+        - relacion_momento_cm
+        - dinamica_cm
+    - title: Formulas conceptuales
+      items:
+        - definicion_vectorial_general
+        - definicion_continua_integral

@@ -1,0 +1,170 @@
+﻿version: 1
+topic:
+  id: energia-orbital
+  title: Energía orbital
+variables:
+  - id: G
+    symbol: G
+    nombre: constante de gravitación
+    unidad_si: N*m^2/kg^2
+    descripcion: Constante universal de gravitación.
+  - id: M
+    symbol: M
+    nombre: masa central
+    unidad_si: kg
+    descripcion: Masa del cuerpo central.
+  - id: m
+    symbol: m
+    nombre: masa del satelite
+    unidad_si: kg
+    descripcion: Masa del satélite.
+  - id: r
+    symbol: r
+    nombre: distancia radial
+    unidad_si: m
+    descripcion: Distancia al centro.
+  - id: a
+    symbol: a
+    nombre: semieje mayor
+    unidad_si: m
+    descripcion: Semieje mayor orbital.
+  - id: v
+    symbol: v
+    nombre: velocidad instantanea
+    unidad_si: m/s
+    descripcion: Velocidad orbital instantánea.
+  - id: K
+    symbol: K
+    nombre: energia cinetica
+    unidad_si: J
+    descripcion: Energía cinética.
+  - id: U
+    symbol: U
+    nombre: energia potencial
+    unidad_si: J
+    descripcion: Energía potencial gravitatoria.
+  - id: E
+    symbol: E
+    nombre: energia total
+    unidad_si: J
+    descripcion: Energía mecánica total.
+  - id: eps
+    symbol: \varepsilon
+    nombre: energia especifica
+    unidad_si: J/kg
+    descripcion: Energía por unidad de masa.
+formulas:
+  - id: energia_total_desde_k_u
+    title: Energía total orbital
+    equation: E = K + U
+    latex: E = K + U
+    rearrangements:
+      - target: E
+        equation: E = K + U
+        latex: E = K + U
+      - target: K
+        equation: K = E - U
+        latex: K = E - U
+      - target: U
+        equation: U = E - K
+        latex: U = E - K
+
+  - id: energia_cinetica
+    title: Energía cinética orbital
+    equation: K = 0.5*m*v^2
+    latex: K = \frac{1}{2}mv^2
+    rearrangements:
+      - target: K
+        equation: K = 0.5*m*v^2
+        latex: K = \frac{1}{2}mv^2
+      - target: v
+        equation: v = sqrt(2*K/m)
+        latex: v = \sqrt{\frac{2K}{m}}
+
+  - id: energia_potencial
+    title: Energía potencial orbital
+    equation: U = -G*M*m/r
+    latex: U = -\frac{GMm}{r}
+    rearrangements:
+      - target: U
+        equation: U = -G*M*m/r
+        latex: U = -\frac{GMm}{r}
+      - target: r
+        equation: r = -G*M*m/U
+        latex: r = -\frac{GMm}{U}
+
+  - id: energia_especifica_estado
+    title: Energía específica desde estado instantáneo
+    equation: eps = v^2/2 - G*M/r
+    latex: \varepsilon = \frac{v^2}{2}-\frac{GM}{r}
+    rearrangements:
+      - target: eps
+        equation: eps = v^2/2 - G*M/r
+        latex: \varepsilon = \frac{v^2}{2}-\frac{GM}{r}
+      - target: v
+        equation: v = sqrt(2*(eps + G*M/r))
+        latex: v = \sqrt{2\left(\varepsilon+\frac{GM}{r}\right)}
+
+  - id: energia_total_ligada
+    title: Energía total en órbita ligada
+    equation: E = -G*M*m/(2*a)
+    latex: E = -\frac{GMm}{2a}
+    rearrangements:
+      - target: E
+        equation: E = -G*M*m/(2*a)
+        latex: E = -\frac{GMm}{2a}
+      - target: a
+        equation: a = -G*M*m/(2*E)
+        latex: a = -\frac{GMm}{2E}
+    constraints:
+      - expr: a > 0
+        message: a debe ser mayor que 0 en convención de órbita ligada.
+      - expr: E < 0
+        message: Para órbita ligada, E debe ser negativa.
+
+  - id: energia_especifica_ligada
+    title: Energía específica en órbita ligada
+    equation: eps = -G*M/(2*a)
+    latex: \varepsilon = -\frac{GM}{2a}
+    rearrangements:
+      - target: eps
+        equation: eps = -G*M/(2*a)
+        latex: \varepsilon = -\frac{GM}{2a}
+      - target: a
+        equation: a = -G*M/(2*eps)
+        latex: a = -\frac{GM}{2\varepsilon}
+    constraints:
+      - expr: eps < 0
+        message: eps debe ser negativa para órbita ligada.
+
+  - id: energia_circular
+    title: Energía total en órbita circular
+    equation: E = -G*M*m/(2*r)
+    latex: E_{circ}=-\frac{GMm}{2r}
+    rearrangements:
+      - target: E
+        equation: E = -G*M*m/(2*r)
+        latex: E_{circ}=-\frac{GMm}{2r}
+
+  - id: clasificacion_orbital_conceptual
+    title: Clasificación por signo energético (conceptual)
+    equation: E<0 ligado; E=0 parabolico; E>0 hiperbolico
+    latex: E<0\ (ligada),\ E=0\ (parabólica),\ E>0\ (hiperbólica)
+    calculable: false
+    motivo_no_calculable: Es criterio cualitativo de clasificación, no ecuación algebraica de despeje.
+
+ui:
+  default_formula: energia_especifica_estado
+  groups:
+    - title: Formulas calculables
+      items:
+        - energia_total_desde_k_u
+        - energia_cinetica
+        - energia_potencial
+        - energia_especifica_estado
+        - energia_total_ligada
+        - energia_especifica_ligada
+        - energia_circular
+    - title: Formulas conceptuales
+      items:
+        - clasificacion_orbital_conceptual

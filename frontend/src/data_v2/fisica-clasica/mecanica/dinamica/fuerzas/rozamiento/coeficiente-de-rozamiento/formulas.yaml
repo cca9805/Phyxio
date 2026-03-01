@@ -1,0 +1,100 @@
+version: 1
+topic:
+  id: coeficiente-de-rozamiento
+  title: Coeficiente de rozamiento
+variables:
+- id: mu_s
+  symbol: \mu_s
+  nombre: coeficiente de rozamiento estático
+  unidad_si: '-'
+  descripcion: Coeficiente de rozamiento estático.
+- id: mu_k
+  symbol: \mu_k
+  nombre: coeficiente de rozamiento dinámico
+  unidad_si: '-'
+  descripcion: Coeficiente de rozamiento dinámico.
+- id: fs_max
+  symbol: f_{s,\max}
+  nombre: rozamiento estático máximo
+  unidad_si: N
+  descripcion: Rozamiento estático máximo.
+- id: fk
+  symbol: f_k
+  nombre: rozamiento dinámico
+  unidad_si: N
+  descripcion: Rozamiento dinámico.
+- id: N
+  symbol: N
+  nombre: normal
+  unidad_si: N
+  descripcion: Normal.
+- id: theta_c
+  symbol: \theta_c
+  nombre: ángulo crítico
+  unidad_si: rad
+  descripcion: Ángulo crítico.
+formulas:
+- id: mu_s_desde_fsmax
+  title: Coeficiente estático desde fuerzas
+  equation: mu_s = fs_max/N
+  latex: \mu_s = \frac{f_{s,\max}}{N}
+  status: calculable
+  rearrangements:
+  - target: mu_s
+    equation: mu_s = fs_max/N
+    latex: \mu_s = \frac{f_{s,\max}}{N}
+    constraints:
+    - expr: N != 0
+      message: N no puede ser 0.
+  - target: fs_max
+    equation: fs_max = mu_s*N
+    latex: f_{s,\max} = \mu_s N
+  - target: N
+    equation: N = fs_max/mu_s
+    latex: N = \frac{f_{s,\max}}{\mu_s}
+    constraints:
+    - expr: mu_s != 0
+      message: μ_s no puede ser 0.
+- id: mu_k_desde_fk
+  title: Coeficiente dinámico desde fuerzas
+  equation: mu_k = fk/N
+  latex: \mu_k = \frac{f_k}{N}
+  status: calculable
+  rearrangements:
+  - target: mu_k
+    equation: mu_k = fk/N
+    latex: \mu_k = \frac{f_k}{N}
+    constraints:
+    - expr: N != 0
+      message: N no puede ser 0.
+  - target: fk
+    equation: fk = mu_k*N
+    latex: f_k = \mu_k N
+  - target: N
+    equation: N = fk/mu_k
+    latex: N = \frac{f_k}{\mu_k}
+    constraints:
+    - expr: mu_k != 0
+      message: μ_k no puede ser 0.
+- id: mu_s_angulo_critico
+  title: Método del ángulo crítico (plano inclinado)
+  equation: mu_s = tan(theta_c)
+  latex: \mu_s = \tan\theta_c
+  status: calculable
+  rearrangements:
+  - target: mu_s
+    equation: mu_s = tan(theta_c)
+    latex: \mu_s = \tan\theta_c
+  - target: theta_c
+    equation: theta_c = atan(mu_s)
+    latex: \theta_c = \arctan(\mu_s)
+ui:
+  default_formula: mu_s_desde_fsmax
+  groups:
+  - title: Desde fuerzas
+    items:
+    - mu_s_desde_fsmax
+    - mu_k_desde_fk
+  - title: Plano inclinado
+    items:
+    - mu_s_angulo_critico

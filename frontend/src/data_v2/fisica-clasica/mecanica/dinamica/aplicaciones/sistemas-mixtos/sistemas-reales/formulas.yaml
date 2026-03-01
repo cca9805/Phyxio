@@ -1,0 +1,129 @@
+﻿version: 1
+topic:
+  id: sistemas-reales
+  title: Sistemas Reales
+variables:
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa efectiva del sistema movil.
+  - id: F_ap
+    symbol: F_{ap}
+    nombre: fuerza_aplicada
+    unidad_si: N
+    descripcion: Fuerza total suministrada al sistema.
+  - id: F_loss
+    symbol: F_{loss}
+    nombre: fuerza_de_perdidas
+    unidad_si: N
+    descripcion: Perdidas mecanicas equivalentes en forma de fuerza.
+  - id: F_loss_max
+    symbol: F_{loss,max}
+    nombre: perdida_maxima_analizada
+    unidad_si: N
+    descripcion: Limite de barrido para estudios parametricos.
+  - id: F_net
+    symbol: F_{net}
+    nombre: fuerza_neta
+    unidad_si: N
+    descripcion: Fuerza util resultante sobre el sistema.
+  - id: a
+    symbol: a
+    nombre: aceleracion
+    unidad_si: m/s^2
+    descripcion: Aceleracion efectiva con perdidas.
+  - id: P_in
+    symbol: P_{in}
+    nombre: potencia_entrada
+    unidad_si: W
+    descripcion: Potencia suministrada al sistema.
+  - id: P_out
+    symbol: P_{out}
+    nombre: potencia_salida
+    unidad_si: W
+    descripcion: Potencia util entregada.
+  - id: eta
+    symbol: \eta
+    nombre: eficiencia
+    unidad_si: "1"
+    descripcion: Rendimiento energetico global.
+formulas:
+  - id: fuerza_neta
+    title: Fuerza neta con perdidas
+    equation: F_net = F_ap - F_loss
+    latex: F_{net}=F_{ap}-F_{loss}
+    rearrangements:
+      - target: F_net
+        equation: F_net = F_ap - F_loss
+        latex: F_{net}=F_{ap}-F_{loss}
+      - target: F_ap
+        equation: F_ap = F_net + F_loss
+        latex: F_{ap}=F_{net}+F_{loss}
+      - target: F_loss
+        equation: F_loss = F_ap - F_net
+        latex: F_{loss}=F_{ap}-F_{net}
+  - id: aceleracion_efectiva
+    title: Aceleracion efectiva
+    equation: a = (F_ap - F_loss)/m
+    latex: a=\frac{F_{ap}-F_{loss}}{m}
+    rearrangements:
+      - target: a
+        equation: a = (F_ap - F_loss)/m
+        latex: a=\frac{F_{ap}-F_{loss}}{m}
+      - target: m
+        equation: m = (F_ap - F_loss)/a
+        latex: m=\frac{F_{ap}-F_{loss}}{a}
+      - target: F_ap
+        equation: F_ap = m*a + F_loss
+        latex: F_{ap}=ma+F_{loss}
+    constraints:
+      - expr: m > 0
+        message: La masa debe ser positiva.
+      - expr: a != 0
+        message: a no puede ser 0 para despejar m.
+  - id: eficiencia_energetica
+    title: Eficiencia
+    equation: eta = P_out/P_in
+    latex: \eta=\frac{P_{out}}{P_{in}}
+    rearrangements:
+      - target: eta
+        equation: eta = P_out/P_in
+        latex: \eta=\frac{P_{out}}{P_{in}}
+      - target: P_out
+        equation: P_out = eta*P_in
+        latex: P_{out}=\eta P_{in}
+      - target: P_in
+        equation: P_in = P_out/eta
+        latex: P_{in}=\frac{P_{out}}{\eta}
+    constraints:
+      - expr: P_in > 0
+        message: P_in debe ser positiva.
+      - expr: eta > 0
+        message: eta debe ser positiva para despejar P_in.
+  - id: porcentaje_perdida
+    title: Perdida relativa de fuerza
+    equation: eta = F_net/F_ap
+    latex: \eta_F=\frac{F_{net}}{F_{ap}}=1-\frac{F_{loss}}{F_{ap}}
+    rearrangements:
+      - target: eta
+        equation: eta = F_net/F_ap
+        latex: \eta_F=\frac{F_{net}}{F_{ap}}
+  - id: modelo_ideal_conceptual
+    title: Referencia ideal (conceptual)
+    equation: F_loss = 0
+    latex: F_{loss}=0\ \Rightarrow\ F_{net}=F_{ap}
+    calculable: false
+    motivo_no_calculable: Es una condicion de referencia para comparar con el caso real, no una ecuacion de calculo independiente.
+ui:
+  default_formula: aceleracion_efectiva
+  groups:
+    - title: Calculables
+      items:
+        - fuerza_neta
+        - aceleracion_efectiva
+        - eficiencia_energetica
+        - porcentaje_perdida
+    - title: Conceptuales
+      items:
+        - modelo_ideal_conceptual

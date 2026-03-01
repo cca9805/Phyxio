@@ -1,0 +1,105 @@
+version: 1
+topic:
+  id: encuentros-y-persecuciones
+  title: Encuentros y persecuciones
+variables:
+  - id: xA0
+    symbol: x_{A0}
+    nombre: posición inicial de A
+    unidad_si: m
+    descripcion: Posición inicial de A.
+  - id: xB0
+    symbol: x_{B0}
+    nombre: posición inicial de B
+    unidad_si: m
+    descripcion: Posición inicial de B.
+  - id: vA
+    symbol: v_A
+    nombre: velocidad de A
+    unidad_si: m/s
+    descripcion: Velocidad de A.
+  - id: vB
+    symbol: v_B
+    nombre: velocidad de B
+    unidad_si: m/s
+    descripcion: Velocidad de B.
+  - id: aA
+    symbol: a_A
+    nombre: aceleración de A (MRUA)
+    unidad_si: m/s^2
+    descripcion: Aceleración de A (MRUA).
+  - id: aB
+    symbol: a_B
+    nombre: aceleración de B (MRUA)
+    unidad_si: m/s^2
+    descripcion: Aceleración de B (MRUA).
+  - id: dt
+    symbol: \Delta t
+    nombre: retraso de salida de B
+    unidad_si: s
+    descripcion: Retraso de salida de B.
+  - id: t
+    symbol: t
+    nombre: tiempo desde que sale A
+    unidad_si: s
+    descripcion: Tiempo desde que sale A.
+  - id: xMeet
+    symbol: x_*
+    nombre: posición de encuentro
+    unidad_si: m
+    descripcion: Posición de encuentro.
+formulas:
+  - id: encuentro_mru_sin_retraso
+    title: Encuentro MRU vs MRU (sin retraso)
+    equation: t = (xB0 - xA0)/(vA - vB)
+    latex: t = \frac{x_{B0}-x_{A0}}{v_A - v_B}
+    rearrangements:
+      - target: t
+        equation: t = (xB0 - xA0)/(vA - vB)
+        latex: t = \frac{x_{B0}-x_{A0}}{v_A - v_B}
+      - target: xMeet
+        equation: xMeet = xA0 + vA*t
+        latex: x_* = x_{A0} + v_A t
+    constraints:
+      - expr: (vA - vB) != 0
+        message: vA - vB no puede ser 0 (si son iguales, no se alcanzan salvo que ya estén juntos).
+    notes:
+      - Si sale t<0, el encuentro no es físico para el escenario planteado.
+    status: calculable
+  - id: encuentro_mru_con_retraso
+    title: Encuentro MRU vs MRU (B sale tarde)
+    equation: t = (xB0 - xA0 - vB*dt)/(vA - vB)
+    latex: t = \frac{x_{B0}-x_{A0}-v_B\Delta t}{v_A - v_B}
+    rearrangements:
+      - target: t
+        equation: t = (xB0 - xA0 - vB*dt)/(vA - vB)
+        latex: t = \frac{x_{B0}-x_{A0}-v_B\Delta t}{v_A - v_B}
+      - target: xMeet
+        equation: xMeet = xA0 + vA*t
+        latex: x_* = x_{A0} + v_A t
+    constraints:
+      - expr: (vA - vB) != 0
+        message: vA - vB no puede ser 0.
+    notes:
+      - Para que tenga sentido, debe cumplirse t >= dt.
+    status: calculable
+  - id: encuentro_mrua_readonly
+    title: Encuentro con MRUA (modo lectura)
+    latex: x_{A0}+v_{A0}t+\frac{1}{2}a_A t^2 = x_{B0}+v_{B0}t+\frac{1}{2}a_B t^2
+    equation: xA0 + vA0*t + 0.5*aA*t^2 = xB0 + vB0*t + 0.5*aB*t^2
+    status: read_only
+    why_not:
+      - 'Ecuación cuadrática: puede tener 0, 1 o 2 soluciones.'
+      - Requiere elegir la solución físicamente válida.
+    notes:
+      - Se resuelve llevando todo a un lado y aplicando fórmula general.
+ui:
+  default_formula: encuentro_mru_sin_retraso
+  groups:
+    - title: Calculables (MRU)
+      items:
+        - encuentro_mru_sin_retraso
+        - encuentro_mru_con_retraso
+    - title: Fórmulas (modo lectura)
+      items:
+        - encuentro_mrua_readonly

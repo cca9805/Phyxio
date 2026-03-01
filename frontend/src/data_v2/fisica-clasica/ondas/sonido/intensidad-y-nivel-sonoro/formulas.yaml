@@ -1,0 +1,149 @@
+﻿version: 1
+topic:
+  id: intensidad-y-nivel-sonoro
+  title: Intensidad Y Nivel Sonoro
+variables:
+  - id: I
+    symbol: I
+    name: intensidad
+    si_unit: W/m^2
+  - id: P
+    symbol: P
+    name: potencia_sonora
+    si_unit: W
+  - id: A
+    symbol: A
+    name: area
+    si_unit: m^2
+  - id: r
+    symbol: r
+    name: distancia
+    si_unit: m
+  - id: I0
+    symbol: I_0
+    name: intensidad_referencia
+    si_unit: W/m^2
+  - id: beta
+    symbol: \beta
+    name: nivel_sonoro
+    si_unit: dB
+  - id: delta_beta
+    symbol: \Delta\beta
+    name: diferencia_nivel
+    si_unit: dB
+  - id: I1
+    symbol: I_1
+    name: intensidad_1
+    si_unit: W/m^2
+  - id: I2
+    symbol: I_2
+    name: intensidad_2
+    si_unit: W/m^2
+formulas:
+  - id: intensidad_definicion
+    title: Definicion de intensidad sonora
+    equation: I = P/A
+    latex: I=\frac{P}{A}
+    rearrangements:
+      - target: I
+        equation: I = P/A
+        latex: I=\frac{P}{A}
+      - target: P
+        equation: P = I*A
+        latex: P=IA
+      - target: A
+        equation: A = P/I
+        latex: A=\frac{P}{I}
+    constraints:
+      - expr: A > 0
+        message: A debe ser positiva.
+
+  - id: intensidad_fuente_puntual
+    title: Intensidad de fuente puntual isotropica
+    equation: I = P/(4*pi*r^2)
+    latex: I=\frac{P}{4\pi r^2}
+    rearrangements:
+      - target: I
+        equation: I = P/(4*pi*r^2)
+        latex: I=\frac{P}{4\pi r^2}
+      - target: P
+        equation: P = 4*pi*r^2*I
+        latex: P=4\pi r^2 I
+      - target: r
+        equation: r = sqrt(P/(4*pi*I))
+        latex: r=\sqrt{\frac{P}{4\pi I}}
+    constraints:
+      - expr: r > 0
+        message: r debe ser positiva.
+      - expr: I > 0
+        message: I debe ser positiva para despejar r.
+
+  - id: nivel_sonoro
+    title: Nivel sonoro en decibelios
+    equation: beta = 10*log10(I/I0)
+    latex: \beta=10\log_{10}\left(\frac{I}{I_0}\right)
+    rearrangements:
+      - target: beta
+        equation: beta = 10*log10(I/I0)
+        latex: \beta=10\log_{10}\left(\frac{I}{I_0}\right)
+      - target: I
+        equation: I = I0*10^(beta/10)
+        latex: I=I_0\,10^{\beta/10}
+      - target: I0
+        equation: I0 = I/(10^(beta/10))
+        latex: I_0=\frac{I}{10^{\beta/10}}
+    constraints:
+      - expr: I > 0
+        message: I debe ser positiva.
+      - expr: I0 > 0
+        message: I_0 debe ser positiva.
+
+  - id: diferencia_niveles
+    title: Diferencia de niveles
+    equation: delta_beta = 10*log10(I2/I1)
+    latex: \Delta\beta=10\log_{10}\left(\frac{I_2}{I_1}\right)
+    rearrangements:
+      - target: delta_beta
+        equation: delta_beta = 10*log10(I2/I1)
+        latex: \Delta\beta=10\log_{10}\left(\frac{I_2}{I_1}\right)
+      - target: I2
+        equation: I2 = I1*10^(delta_beta/10)
+        latex: I_2=I_1\,10^{\Delta\beta/10}
+      - target: I1
+        equation: I1 = I2/(10^(delta_beta/10))
+        latex: I_1=\frac{I_2}{10^{\Delta\beta/10}}
+    constraints:
+      - expr: I1 > 0
+        message: I_1 debe ser positiva.
+      - expr: I2 > 0
+        message: I_2 debe ser positiva.
+
+  - id: caida_nivel_distancia
+    title: Cambio de nivel por cambio de distancia (misma fuente puntual)
+    equation: delta_beta = 20*log10(r1/r2)
+    latex: \Delta\beta=20\log_{10}\left(\frac{r_1}{r_2}\right)
+    calculable: false
+    motivo_no_calculable: Requiere variables r1 y r2 de escenario comparativo no definidas en la calculadora base de este leaf.
+
+  - id: suma_niveles_conceptual
+    title: Suma de niveles de fuentes independientes (conceptual)
+    equation: beta = beta
+    latex: \beta_{tot}=10\log_{10}\left(\sum_i10^{\beta_i/10}\right)
+    calculable: false
+    motivo_no_calculable: Es una operacion sobre lista de multiples fuentes y no un despeje directo de una sola ecuacion.
+
+ui:
+  default_formula: nivel_sonoro
+  groups:
+    - title: Magnitudes energeticas (calculables)
+      items:
+        - intensidad_definicion
+        - intensidad_fuente_puntual
+    - title: Conversion a decibelios (calculables)
+      items:
+        - nivel_sonoro
+        - diferencia_niveles
+    - title: Relaciones conceptuales (no calculables)
+      items:
+        - caida_nivel_distancia
+        - suma_niveles_conceptual

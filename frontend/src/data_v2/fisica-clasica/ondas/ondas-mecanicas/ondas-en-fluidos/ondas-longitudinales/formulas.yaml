@@ -1,0 +1,257 @@
+version: 1
+topic:
+  id: ondas-longitudinales
+  title: Ondas Longitudinales En Fluidos
+variables:
+  - id: v
+    symbol: v
+    name: velocidad_de_fase
+    si_unit: m/s
+  - id: lambda
+    symbol: \lambda
+    name: longitud_de_onda
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+  - id: k
+    symbol: k
+    name: numero_de_onda
+    si_unit: rad/m
+  - id: omega
+    symbol: \omega
+    name: frecuencia_angular
+    si_unit: rad/s
+  - id: B
+    symbol: B
+    name: modulo_de_compresion
+    si_unit: Pa
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: Z
+    symbol: Z
+    name: impedancia_acustica
+    si_unit: Pa*s/m
+  - id: p_hat
+    symbol: \hat{p}
+    name: amplitud_de_presion
+    si_unit: Pa
+  - id: u_hat
+    symbol: \hat{u}
+    name: amplitud_velocidad_particula
+    si_unit: m/s
+  - id: I
+    symbol: I
+    name: intensidad_acustica
+    si_unit: W/m^2
+  - id: p
+    symbol: p
+    name: presion_instante
+    si_unit: Pa
+  - id: x
+    symbol: x
+    name: posicion
+    si_unit: m
+  - id: t
+    symbol: t
+    name: tiempo
+    si_unit: s
+  - id: phi_0
+    symbol: \phi_0
+    name: fase_inicial
+    si_unit: rad
+formulas:
+  - id: relacion_ondulatoria
+    title: Relacion general de propagacion
+    equation: v = lambda*f
+    latex: v=\lambda f
+    rearrangements:
+      - target: v
+        equation: v = lambda*f
+        latex: v=\lambda f
+      - target: lambda
+        equation: lambda = v/f
+        latex: \lambda=\frac{v}{f}
+      - target: f
+        equation: f = v/lambda
+        latex: f=\frac{v}{\lambda}
+    constraints:
+      - expr: 'lambda > 0'
+        message: lambda debe ser positiva.
+      - expr: 'f > 0'
+        message: f debe ser positiva.
+
+  - id: periodo_frecuencia
+    title: Vinculo entre periodo y frecuencia
+    equation: T = 1/f
+    latex: T=\frac{1}{f}
+    rearrangements:
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+    constraints:
+      - expr: 'f > 0'
+        message: f debe ser positiva.
+      - expr: 'T > 0'
+        message: T debe ser positivo.
+
+  - id: numero_de_onda
+    title: Numero de onda
+    equation: k = 2*pi/lambda
+    latex: k=\frac{2\pi}{\lambda}
+    rearrangements:
+      - target: k
+        equation: k = 2*pi/lambda
+        latex: k=\frac{2\pi}{\lambda}
+      - target: lambda
+        equation: lambda = 2*pi/k
+        latex: \lambda=\frac{2\pi}{k}
+    constraints:
+      - expr: 'lambda > 0'
+        message: lambda debe ser positiva.
+      - expr: 'k > 0'
+        message: k debe ser positivo.
+
+  - id: frecuencia_angular
+    title: Frecuencia angular
+    equation: omega = 2*pi*f
+    latex: \omega=2\pi f
+    rearrangements:
+      - target: omega
+        equation: omega = 2*pi*f
+        latex: \omega=2\pi f
+      - target: f
+        equation: f = omega/(2*pi)
+        latex: f=\frac{\omega}{2\pi}
+    constraints:
+      - expr: 'f > 0'
+        message: f debe ser positiva.
+
+  - id: velocidad_en_fluido
+    title: Velocidad longitudinal en fluido
+    equation: v = sqrt(B/rho)
+    latex: v=\sqrt{\frac{B}{\rho}}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(B/rho)
+        latex: v=\sqrt{\frac{B}{\rho}}
+      - target: B
+        equation: B = rho*v^2
+        latex: B=\rho v^2
+      - target: rho
+        equation: rho = B/v^2
+        latex: \rho=\frac{B}{v^2}
+    constraints:
+      - expr: 'B > 0'
+        message: B debe ser positivo.
+      - expr: 'rho > 0'
+        message: rho debe ser positiva.
+
+  - id: impedancia_acustica
+    title: Impedancia acustica del medio
+    equation: Z = rho*v
+    latex: Z=\rho v
+    rearrangements:
+      - target: Z
+        equation: Z = rho*v
+        latex: Z=\rho v
+      - target: rho
+        equation: rho = Z/v
+        latex: \rho=\frac{Z}{v}
+      - target: v
+        equation: v = Z/rho
+        latex: v=\frac{Z}{\rho}
+    constraints:
+      - expr: 'rho > 0'
+        message: rho debe ser positiva.
+      - expr: 'v > 0'
+        message: v debe ser positiva.
+
+  - id: relacion_presion_velocidad
+    title: Relacion entre presion y velocidad de particula
+    equation: p_hat = Z*u_hat
+    latex: \hat{p}=Z\hat{u}
+    rearrangements:
+      - target: p_hat
+        equation: p_hat = Z*u_hat
+        latex: \hat{p}=Z\hat{u}
+      - target: Z
+        equation: Z = p_hat/u_hat
+        latex: Z=\frac{\hat{p}}{\hat{u}}
+      - target: u_hat
+        equation: u_hat = p_hat/Z
+        latex: \hat{u}=\frac{\hat{p}}{Z}
+    constraints:
+      - expr: 'Z > 0'
+        message: Z debe ser positiva.
+
+  - id: intensidad_acustica
+    title: Intensidad media para onda armonica plana
+    equation: I = p_hat^2/(2*Z)
+    latex: I=\frac{\hat{p}^2}{2Z}
+    rearrangements:
+      - target: I
+        equation: I = p_hat^2/(2*Z)
+        latex: I=\frac{\hat{p}^2}{2Z}
+      - target: p_hat
+        equation: p_hat = sqrt(2*I*Z)
+        latex: \hat{p}=\sqrt{2IZ}
+      - target: Z
+        equation: Z = p_hat^2/(2*I)
+        latex: Z=\frac{\hat{p}^2}{2I}
+    constraints:
+      - expr: 'Z > 0'
+        message: Z debe ser positiva.
+      - expr: 'I >= 0'
+        message: I no puede ser negativa.
+
+  - id: presion_armonica
+    title: Campo armonico de presion
+    equation: p = p_hat*cos(k*x - omega*t + phi_0)
+    latex: p(x,t)=\hat{p}\cos(kx-\omega t+\phi_0)
+    calculable: false
+    motivo_no_calculable: Describe un campo dependiente de x y t, no una salida escalar unica.
+
+  - id: ecuacion_onda_presion_conceptual
+    title: Ecuacion de onda de presion
+    equation: d2pdx2 = invv2d2pdt2
+    latex: \frac{\partial^2 p}{\partial x^2}=\frac{1}{v^2}\frac{\partial^2 p}{\partial t^2}
+    calculable: false
+    motivo_no_calculable: Requiere resolver una ecuacion diferencial parcial con condiciones iniciales y de frontera.
+
+  - id: criterio_lineal_amplitud
+    title: Criterio lineal amplitud-velocidad
+    equation: v_independiente_de_amplitud
+    latex: v\ \text{independiente de amplitud (regimen lineal)}
+    calculable: false
+    motivo_no_calculable: Regla conceptual de validez del modelo lineal.
+ui:
+  default_formula: velocidad_en_fluido
+  groups:
+    - title: Base ondulatoria (calculables)
+      items:
+        - relacion_ondulatoria
+        - periodo_frecuencia
+        - numero_de_onda
+        - frecuencia_angular
+    - title: Medio y energia acustica (calculables)
+      items:
+        - velocidad_en_fluido
+        - impedancia_acustica
+        - relacion_presion_velocidad
+        - intensidad_acustica
+    - title: Modelo teorico
+      items:
+        - presion_armonica
+        - ecuacion_onda_presion_conceptual
+        - criterio_lineal_amplitud

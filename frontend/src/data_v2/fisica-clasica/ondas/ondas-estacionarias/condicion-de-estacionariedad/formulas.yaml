@@ -1,0 +1,100 @@
+﻿version: 1
+topic:
+  id: condicion-de-estacionariedad
+  title: Condicion De Estacionariedad
+variables:
+  - id: n
+    symbol: n
+    name: modo
+    si_unit: '1'
+  - id: L
+    symbol: L
+    name: longitud_efectiva
+    si_unit: m
+  - id: v
+    symbol: v
+    name: velocidad
+    si_unit: m/s
+  - id: lambda_n
+    symbol: \lambda_n
+    name: longitud_onda_modal
+    si_unit: m
+  - id: fn
+    symbol: f_n
+    name: frecuencia_modal
+    si_unit: Hz
+  - id: k_n
+    symbol: k_n
+    name: numero_onda_modal
+    si_unit: rad/m
+  - id: omega_n
+    symbol: \omega_n
+    name: frecuencia_angular_modal
+    si_unit: rad/s
+formulas:
+  - id: fija_fija_lambda
+    title: Condicion modal (fija-fija / abierta-abierta)
+    equation: lambda_n = 2*L/n
+    latex: \lambda_n=\frac{2L}{n}
+    rearrangements:
+      - target: lambda_n
+        equation: lambda_n = 2*L/n
+        latex: \lambda_n=\frac{2L}{n}
+      - target: L
+        equation: L = n*lambda_n/2
+        latex: L=\frac{n\lambda_n}{2}
+
+  - id: fija_fija_fn
+    title: Frecuencia modal (fija-fija / abierta-abierta)
+    equation: fn = n*v/(2*L)
+    latex: f_n=\frac{nv}{2L}
+    rearrangements:
+      - target: fn
+        equation: fn = n*v/(2*L)
+        latex: f_n=\frac{nv}{2L}
+      - target: v
+        equation: v = 2*L*fn/n
+        latex: v=\frac{2Lf_n}{n}
+      - target: L
+        equation: L = n*v/(2*fn)
+        latex: L=\frac{nv}{2f_n}
+
+  - id: abierto_cerrado_fn
+    title: Frecuencia modal (abierta-cerrada)
+    equation: fn = (2*n-1)*v/(4*L)
+    latex: f_n=\frac{(2n-1)v}{4L}
+
+  - id: k_modal
+    title: Numero de onda modal
+    equation: k_n = 2*pi/lambda_n
+    latex: k_n=\frac{2\pi}{\lambda_n}
+
+  - id: omega_modal
+    title: Frecuencia angular modal
+    equation: omega_n = 2*pi*fn
+    latex: \omega_n=2\pi f_n
+
+  - id: criterio_estacionariedad
+    title: Criterio de estacionariedad (conceptual)
+    equation: k_n*L = n*pi
+    latex: k_nL=n\pi
+    calculable: false
+    motivo_no_calculable: Condicion de cierre de fase con frontera, base conceptual de cuantizacion modal.
+
+ui:
+  default_formula: fija_fija_fn
+  groups:
+    - title: Frontera equivalente
+      items:
+        - fija_fija_lambda
+        - fija_fija_fn
+    - title: Frontera asimetrica
+      items:
+        - abierto_cerrado_fn
+    - title: Parametros modales
+      items:
+        - k_modal
+        - omega_modal
+    - title: Marco conceptual
+      items:
+        - criterio_estacionariedad

@@ -1,0 +1,76 @@
+version: 1
+topic:
+  id: energia-cinetica-rotacional
+  title: Energia cinetica rotacional
+variables:
+- id: Erot
+  symbol: E_{rot}
+  nombre: energia cinetica rotacional
+  unidad_si: J
+  descripcion: Energia cinetica rotacional.
+- id: I
+  symbol: I
+  nombre: momento de inercia
+  unidad_si: kg*m^2
+  descripcion: Momento de inercia.
+- id: omega
+  symbol: \omega
+  nombre: velocidad angular
+  unidad_si: rad/s
+  descripcion: Velocidad angular.
+- id: Eroti
+  symbol: E_{rot,i}
+  nombre: energia rotacional inicial
+  unidad_si: J
+  descripcion: Energia rotacional inicial.
+- id: Erotf
+  symbol: E_{rot,f}
+  nombre: energia rotacional final
+  unidad_si: J
+  descripcion: Energia rotacional final.
+- id: Wrot
+  symbol: W_{rot}
+  nombre: trabajo rotacional
+  unidad_si: J
+  descripcion: Trabajo rotacional.
+formulas:
+- id: energia_rotacional_basica
+  title: Energia cinetica de rotacion
+  equation: Erot = 0.5*I*omega^2
+  latex: E_{rot}=\frac{1}{2}I\omega^2
+  rearrangements:
+  - target: Erot
+    equation: Erot = 0.5*I*omega^2
+    latex: E_{rot}=\frac{1}{2}I\omega^2
+  - target: I
+    equation: I = 2*Erot/(omega^2)
+    latex: I=\frac{2E_{rot}}{\omega^2}
+  - target: omega
+    equation: omega = sqrt(2*Erot/I)
+    latex: \omega=\sqrt{\frac{2E_{rot}}{I}}
+  constraints:
+  - expr: I > 0
+    message: I debe ser mayor que 0.
+  - expr: omega >= 0
+    message: omega se usa como modulo angular no negativo.
+- id: trabajo_rotacional_variacion
+  title: Trabajo y variacion de energia rotacional
+  equation: Wrot = Erotf - Eroti
+  latex: W_{rot}=E_{rot,f}-E_{rot,i}=\Delta E_{rot}
+  rearrangements:
+  - target: Wrot
+    equation: Wrot = Erotf - Eroti
+    latex: W_{rot}=E_{rot,f}-E_{rot,i}
+  - target: Erotf
+    equation: Erotf = Eroti + Wrot
+    latex: E_{rot,f}=E_{rot,i}+W_{rot}
+  - target: Eroti
+    equation: Eroti = Erotf - Wrot
+    latex: E_{rot,i}=E_{rot,f}-W_{rot}
+ui:
+  default_formula: energia_rotacional_basica
+  groups:
+  - title: Basicas
+    items:
+    - energia_rotacional_basica
+    - trabajo_rotacional_variacion

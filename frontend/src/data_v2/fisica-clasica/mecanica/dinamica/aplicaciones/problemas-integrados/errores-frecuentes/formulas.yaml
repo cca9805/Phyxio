@@ -1,0 +1,126 @@
+﻿version: 1
+
+topic:
+  id: errores-frecuentes
+  title: Errores frecuentes
+
+variables:
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa del sistema.
+
+  - id: g
+    symbol: g
+    nombre: gravedad
+    unidad_si: m/s^2
+    descripcion: Aceleracion de la gravedad.
+
+  - id: theta
+    symbol: "\\theta"
+    nombre: angulo
+    unidad_si: rad
+    descripcion: Angulo del plano inclinado.
+
+  - id: mu
+    symbol: "\\mu"
+    nombre: coeficiente_de_rozamiento
+    unidad_si: "1"
+    descripcion: Coeficiente de rozamiento cinetico usado en el modelo.
+
+  - id: F
+    symbol: F
+    nombre: fuerza_aplicada
+    unidad_si: N
+    descripcion: Fuerza externa aplicada en el eje analizado.
+
+  - id: F_net
+    symbol: "F_{net}"
+    nombre: fuerza_neta
+    unidad_si: N
+    descripcion: Fuerza neta segun el modelo elegido.
+
+  - id: a_ok
+    symbol: "a_{ok}"
+    nombre: aceleracion_correcta
+    unidad_si: m/s^2
+    descripcion: Aceleracion con planteamiento correcto.
+
+  - id: a_err
+    symbol: "a_{err}"
+    nombre: aceleracion_erronea
+    unidad_si: m/s^2
+    descripcion: Aceleracion obtenida al cometer un error tipico.
+
+  - id: e_abs
+    symbol: "e_{abs}"
+    nombre: error_absoluto
+    unidad_si: m/s^2
+    descripcion: Diferencia absoluta entre resultado correcto y erroneo.
+
+  - id: e_rel
+    symbol: "e_{rel}"
+    nombre: error_relativo
+    unidad_si: "1"
+    descripcion: Error relativo respecto al resultado correcto.
+
+formulas:
+  - id: aceleracion_correcta_base
+    title: Aceleracion correcta (plano con rozamiento)
+    equation: a_ok = (F - m*g*sin(theta) - mu*m*g*cos(theta))/m
+    latex: a_{ok}=\frac{F-mg\sin\theta-\mu mg\cos\theta}{m}
+    rearrangements:
+      - target: a_ok
+        equation: a_ok = (F - m*g*sin(theta) - mu*m*g*cos(theta))/m
+        latex: a_{ok}=\frac{F-mg\sin\theta-\mu mg\cos\theta}{m}
+
+  - id: aceleracion_error_sin_cos
+    title: Error tipico por intercambio seno/coseno
+    equation: a_err = (F - m*g*cos(theta) - mu*m*g*sin(theta))/m
+    latex: a_{err}=\frac{F-mg\cos\theta-\mu mg\sin\theta}{m}
+    rearrangements:
+      - target: a_err
+        equation: a_err = (F - m*g*cos(theta) - mu*m*g*sin(theta))/m
+        latex: a_{err}=\frac{F-mg\cos\theta-\mu mg\sin\theta}{m}
+
+  - id: error_absoluto
+    title: Error absoluto
+    equation: e_abs = abs(a_err - a_ok)
+    latex: e_{abs}=|a_{err}-a_{ok}|
+    rearrangements:
+      - target: e_abs
+        equation: e_abs = abs(a_err - a_ok)
+        latex: e_{abs}=|a_{err}-a_{ok}|
+
+  - id: error_relativo
+    title: Error relativo
+    equation: e_rel = e_abs/abs(a_ok)
+    latex: e_{rel}=\frac{e_{abs}}{|a_{ok}|}
+    rearrangements:
+      - target: e_rel
+        equation: e_rel = e_abs/abs(a_ok)
+        latex: e_{rel}=\frac{e_{abs}}{|a_{ok}|}
+    constraints:
+      - expr: a_ok != 0
+        message: No se puede calcular error relativo si a_ok = 0.
+
+  - id: aceleracion_sin_rozamiento_conceptual
+    title: Referencia sin rozamiento (conceptual)
+    equation: a = (F - m*g*sin(theta))/m
+    latex: a=\frac{F-mg\sin\theta}{m}
+    calculable: false
+    motivo_no_calculable: Se usa como referencia conceptual de comparacion de sesgo, no como solucion final del caso con rozamiento.
+
+ui:
+  default_formula: aceleracion_correcta_base
+  groups:
+    - title: Comparacion de modelos (calculables)
+      items:
+        - aceleracion_correcta_base
+        - aceleracion_error_sin_cos
+        - error_absoluto
+        - error_relativo
+    - title: Formula conceptual de contraste
+      items:
+        - aceleracion_sin_rozamiento_conceptual

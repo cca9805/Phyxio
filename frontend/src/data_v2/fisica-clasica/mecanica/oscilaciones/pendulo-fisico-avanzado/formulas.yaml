@@ -1,0 +1,189 @@
+version: 1
+topic:
+  id: pendulo-fisico-avanzado
+  title: Péndulo físico avanzado
+variables:
+  - id: I_O
+    symbol: I_O
+    nombre: momento de inercia respecto al eje
+    unidad_si: kg*m^2
+    descripcion: Momento de inercia respecto al eje real de giro.
+  - id: I_cm
+    symbol: I_{CM}
+    nombre: momento de inercia en centro de masas
+    unidad_si: kg*m^2
+    descripcion: Momento de inercia respecto a eje paralelo que pasa por CM.
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa del cuerpo rígido.
+  - id: g
+    symbol: g
+    nombre: gravedad
+    unidad_si: m/s^2
+    descripcion: Aceleración gravitatoria.
+  - id: d
+    symbol: d
+    nombre: distancia eje-centro de masas
+    unidad_si: m
+    descripcion: Distancia entre eje de giro y centro de masas.
+  - id: theta
+    symbol: \theta
+    nombre: desplazamiento angular
+    unidad_si: rad
+    descripcion: Ángulo instantáneo de oscilación.
+  - id: omega0
+    symbol: \omega_0
+    nombre: pulsación natural
+    unidad_si: rad/s
+    descripcion: Frecuencia angular natural en régimen lineal.
+  - id: T0
+    symbol: T_0
+    nombre: periodo lineal
+    unidad_si: s
+    descripcion: Periodo aproximado para pequeñas oscilaciones.
+  - id: leq
+    symbol: \ell_{eq}
+    nombre: longitud equivalente
+    unidad_si: m
+    descripcion: Longitud del péndulo simple equivalente en periodo.
+  - id: theta_dd
+    symbol: \ddot\theta
+    nombre: aceleración angular
+    unidad_si: rad/s^2
+    descripcion: Segunda derivada temporal de theta.
+  - id: E
+    symbol: E
+    nombre: energía
+    unidad_si: J
+    descripcion: Energía mecánica.
+  - id: theta_dot
+    symbol: \dot\theta
+    nombre: velocidad angular
+    unidad_si: rad/s
+    descripcion: Primera derivada temporal de theta.
+formulas:
+  - id: ecuacion_no_lineal_pf
+    title: Ecuación no lineal exacta
+    equation: I_O*theta_dd + m*g*d*sin(theta) = 0
+    latex: I_O\ddot\theta+mgd\sin\theta=0
+    calculable: false
+    motivo_no_calculable: Requiere resolver una ecuación diferencial no lineal; no se puede despejar con álgebra elemental.
+  - id: omega0_pf_av
+    title: Pulsación natural (linealizada)
+    equation: omega0 = sqrt(m*g*d/I_O)
+    latex: \omega_0=\sqrt{\frac{mgd}{I_O}}
+    rearrangements:
+      - target: omega0
+        equation: omega0 = sqrt(m*g*d/I_O)
+        latex: \omega_0=\sqrt{\frac{mgd}{I_O}}
+      - target: I_O
+        equation: I_O = m*g*d/(omega0^2)
+        latex: I_O=\frac{mgd}{\omega_0^2}
+      - target: d
+        equation: d = I_O*(omega0^2)/(m*g)
+        latex: d=\frac{I_O\omega_0^2}{mg}
+    constraints:
+      - expr: I_O > 0
+        message: I_O debe ser positivo.
+      - expr: m > 0
+        message: m debe ser positiva.
+      - expr: d > 0
+        message: d debe ser positiva.
+      - expr: g > 0
+        message: g debe ser mayor que 0.
+      - expr: omega0 > 0
+        message: omega0 debe ser mayor que 0.
+  - id: periodo_lineal_pf_av
+    title: Periodo lineal
+    equation: T0 = 2*pi*sqrt(I_O/(m*g*d))
+    latex: T_0=2\pi\sqrt{\frac{I_O}{mgd}}
+    rearrangements:
+      - target: T0
+        equation: T0 = 2*pi*sqrt(I_O/(m*g*d))
+        latex: T_0=2\pi\sqrt{\frac{I_O}{mgd}}
+      - target: I_O
+        equation: I_O = (T0^2*m*g*d)/(4*pi^2)
+        latex: I_O=\frac{T_0^2mgd}{4\pi^2}
+      - target: d
+        equation: d = (4*pi^2*I_O)/(T0^2*m*g)
+        latex: d=\frac{4\pi^2I_O}{T_0^2mg}
+    constraints:
+      - expr: m > 0
+        message: m debe ser positiva.
+      - expr: g > 0
+        message: g debe ser positiva.
+      - expr: d > 0
+        message: d debe ser positiva.
+      - expr: I_O > 0
+        message: I_O debe ser mayor que 0.
+  - id: steiner_pf_av
+    title: Teorema de ejes paralelos
+    equation: I_O = I_cm + m*d^2
+    latex: I_O=I_{CM}+md^2
+    rearrangements:
+      - target: I_O
+        equation: I_O = I_cm + m*d^2
+        latex: I_O=I_{CM}+md^2
+      - target: I_cm
+        equation: I_cm = I_O - m*d^2
+        latex: I_{CM}=I_O-md^2
+      - target: d
+        equation: d = sqrt((I_O - I_cm)/m)
+        latex: d=\sqrt{\frac{I_O-I_{CM}}{m}}
+    constraints:
+      - expr: m > 0
+        message: m debe ser positiva.
+      - expr: I_O >= I_cm
+        message: I_O debe ser mayor o igual que I_cm para eje paralelo.
+      - expr: I_O > 0
+        message: I_O debe ser mayor que 0.
+      - expr: I_cm > 0
+        message: I_cm debe ser mayor que 0.
+      - expr: d > 0
+        message: d debe ser mayor que 0.
+  - id: longitud_equivalente_pf_av
+    title: Longitud equivalente
+    equation: leq = I_O/(m*d)
+    latex: \ell_{eq}=\frac{I_O}{md}
+    rearrangements:
+      - target: leq
+        equation: leq = I_O/(m*d)
+        latex: \ell_{eq}=\frac{I_O}{md}
+      - target: I_O
+        equation: I_O = leq*m*d
+        latex: I_O=\ell_{eq}md
+      - target: d
+        equation: d = I_O/(m*leq)
+        latex: d=\frac{I_O}{m\ell_{eq}}
+    constraints:
+      - expr: m > 0
+        message: m debe ser positiva.
+      - expr: d > 0
+        message: d debe ser positiva.
+      - expr: leq > 0
+        message: leq debe ser positiva.
+      - expr: I_O > 0
+        message: I_O debe ser mayor que 0.
+  - id: energia_pf_av
+    title: Energía mecánica (conceptual)
+    equation: E = 0.5*I_O*theta_dot^2 + m*g*d*(1-cos(theta))
+    latex: E=\frac12I_O\dot\theta^2+mgd(1-\cos\theta)
+    calculable: false
+    motivo_no_calculable: >-
+      Expresión de conservación energética que requiere condiciones iniciales y/o integración para extraer tiempo o
+      periodo exacto.
+ui:
+  default_formula: periodo_lineal_pf_av
+  groups:
+    - title: Fórmulas calculables
+      items:
+        - omega0_pf_av
+        - periodo_lineal_pf_av
+        - steiner_pf_av
+        - longitud_equivalente_pf_av
+    - title: Fórmulas conceptuales
+      items:
+        - ecuacion_no_lineal_pf
+        - energia_pf_av

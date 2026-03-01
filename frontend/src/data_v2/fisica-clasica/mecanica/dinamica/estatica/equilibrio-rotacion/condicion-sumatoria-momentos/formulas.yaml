@@ -1,0 +1,119 @@
+﻿version: 1
+topic:
+  id: condicion-sumatoria-momentos
+  title: Condicion de sumatoria de momentos
+
+variables:
+  - id: M
+    symbol: M
+    nombre: momento
+    unidad_si: N*m
+    descripcion: Momento de una fuerza respecto al eje.
+  - id: F
+    symbol: F
+    nombre: fuerza
+    unidad_si: N
+    descripcion: Fuerza aplicada.
+  - id: d
+    symbol: d
+    nombre: brazo
+    unidad_si: m
+    descripcion: Distancia perpendicular al eje.
+  - id: P
+    symbol: P
+    nombre: potencia
+    unidad_si: N
+    descripcion: Fuerza de esfuerzo en palanca o viga ideal.
+  - id: R
+    symbol: R
+    nombre: resistencia
+    unidad_si: N
+    descripcion: Carga o fuerza resistente.
+  - id: dP
+    symbol: d_P
+    nombre: brazo_potencia
+    unidad_si: m
+    descripcion: Brazo asociado a la potencia.
+  - id: dR
+    symbol: d_R
+    nombre: brazo_resistencia
+    unidad_si: m
+    descripcion: Brazo asociado a la resistencia.
+  - id: M1
+    symbol: M_1
+    nombre: momento_1
+    unidad_si: N*m
+    descripcion: Primer momento aplicado.
+  - id: M2
+    symbol: M_2
+    nombre: momento_2
+    unidad_si: N*m
+    descripcion: Segundo momento aplicado.
+
+formulas:
+  - id: condicion_equilibrio_rotacional
+    title: Condicion de equilibrio rotacional
+    equation: sumM = 0
+    latex: \sum M = 0
+    calculable: false
+    motivo_no_calculable: Ecuacion de balance global; requiere expresar y sumar momentos individuales del caso concreto.
+
+  - id: momento_individual
+    title: Momento de una fuerza
+    equation: M = F*d
+    latex: M = Fd
+    variables: [M, F, d]
+    rearrangements:
+      - target: M
+        equation: M = F*d
+        latex: M = Fd
+      - target: F
+        equation: F = M/d
+        latex: F = \frac{M}{d}
+      - target: d
+        equation: d = M/F
+        latex: d = \frac{M}{F}
+
+  - id: equilibrio_dos_momentos
+    title: Equilibrio con dos momentos opuestos
+    equation: M1 + M2 = 0
+    latex: M_1 + M_2 = 0
+    variables: [M1, M2]
+    rearrangements:
+      - target: M1
+        equation: M1 = -M2
+        latex: M_1 = -M_2
+      - target: M2
+        equation: M2 = -M1
+        latex: M_2 = -M_1
+
+  - id: equilibrio_palanca
+    title: Equilibrio de palanca ideal
+    equation: P*dP = R*dR
+    latex: P\,d_P = R\,d_R
+    variables: [P, dP, R, dR]
+    rearrangements:
+      - target: P
+        equation: P = (R*dR)/dP
+        latex: P = \frac{R\,d_R}{d_P}
+      - target: R
+        equation: R = (P*dP)/dR
+        latex: R = \frac{P\,d_P}{d_R}
+      - target: dP
+        equation: dP = (R*dR)/P
+        latex: d_P = \frac{R\,d_R}{P}
+      - target: dR
+        equation: dR = (P*dP)/R
+        latex: d_R = \frac{P\,d_P}{R}
+
+ui:
+  default_formula: equilibrio_palanca
+  groups:
+    - title: Calculables
+      items:
+        - momento_individual
+        - equilibrio_dos_momentos
+        - equilibrio_palanca
+    - title: Conceptuales
+      items:
+        - condicion_equilibrio_rotacional

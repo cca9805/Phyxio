@@ -1,0 +1,113 @@
+version: 1
+topic:
+  id: aplicaciones-fisicas
+  title: Aplicaciones Fisicas De Coriolis
+variables:
+  - id: omega
+    symbol: \Omega
+    nombre: velocidad_angular_del_marco
+    unidad_si: rad/s
+    descripcion: Velocidad angular de la Tierra o del marco rotatorio considerado.
+  - id: v_rel
+    symbol: v_{rel}
+    nombre: velocidad_relativa
+    unidad_si: m/s
+    descripcion: Velocidad del movil respecto a la superficie del marco.
+  - id: alpha
+    symbol: \alpha
+    nombre: angulo_entre_omega_y_v
+    unidad_si: rad
+    descripcion: Angulo local entre eje de rotacion y velocidad.
+  - id: a_cor
+    symbol: a_{cor}
+    nombre: aceleracion_coriolis
+    unidad_si: m/s^2
+    descripcion: Aceleracion lateral de Coriolis.
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa del movil para convertir aceleracion en fuerza.
+  - id: F_cor
+    symbol: F_{cor}
+    nombre: fuerza_coriolis
+    unidad_si: N
+    descripcion: Fuerza de Coriolis.
+  - id: t
+    symbol: t
+    nombre: tiempo
+    unidad_si: s
+    descripcion: Tiempo de vuelo o de evolucion.
+  - id: y
+    symbol: y
+    nombre: desvio_lateral
+    unidad_si: m
+    descripcion: Desvio lateral aproximado por aceleracion casi constante.
+formulas:
+  - id: aceleracion_coriolis_aplicada
+    title: Aceleracion de Coriolis en aplicaciones
+    equation: a_cor = 2*omega*v_rel*sin(alpha)
+    latex: a_{cor}=2\Omega v_{rel}\sin\alpha
+    rearrangements:
+      - target: a_cor
+        equation: a_cor = 2*omega*v_rel*sin(alpha)
+        latex: a_{cor}=2\Omega v_{rel}\sin\alpha
+      - target: omega
+        equation: omega = a_cor/(2*v_rel*sin(alpha))
+        latex: \Omega=\frac{a_{cor}}{2v_{rel}\sin\alpha}
+      - target: v_rel
+        equation: v_rel = a_cor/(2*omega*sin(alpha))
+        latex: v_{rel}=\frac{a_{cor}}{2\Omega\sin\alpha}
+  - id: fuerza_desde_aceleracion
+    title: Fuerza de Coriolis desde aceleracion
+    equation: F_cor = m*a_cor
+    latex: F_{cor}=m\,a_{cor}
+    rearrangements:
+      - target: F_cor
+        equation: F_cor = m*a_cor
+        latex: F_{cor}=m\,a_{cor}
+      - target: m
+        equation: m = F_cor/a_cor
+        latex: m=\frac{F_{cor}}{a_{cor}}
+      - target: a_cor
+        equation: a_cor = F_cor/m
+        latex: a_{cor}=\frac{F_{cor}}{m}
+    constraints:
+      - expr: m > 0
+        message: La masa debe ser positiva.
+  - id: desvio_lateral_aproximado
+    title: Desvio lateral aproximado
+    equation: y = 0.5*a_cor*t^2
+    latex: y\approx\frac{1}{2}a_{cor}t^2
+    rearrangements:
+      - target: y
+        equation: y = 0.5*a_cor*t^2
+        latex: y\approx\frac{1}{2}a_{cor}t^2
+      - target: a_cor
+        equation: a_cor = 2*y/(t^2)
+        latex: a_{cor}\approx\frac{2y}{t^2}
+      - target: t
+        equation: t = sqrt(2*y/a_cor)
+        latex: t\approx\sqrt{\frac{2y}{a_{cor}}}
+    constraints:
+      - expr: t >= 0
+        message: El tiempo debe ser no negativo.
+      - expr: a_cor > 0
+        message: a_cor debe ser positiva para despejar t.
+  - id: criterio_relevancia_conceptual
+    title: Criterio de relevancia (conceptual)
+    equation: a_cor = 2*omega*v_rel*sin(alpha)
+    latex: "\text{Comparar }a_{cor}\text{ con otras aceleraciones del problema.}"
+    calculable: false
+    motivo_no_calculable: "Es un criterio de modelado por orden de magnitud, no una igualdad cerrada para un resultado unico."
+ui:
+  default_formula: aceleracion_coriolis_aplicada
+  groups:
+    - title: Calculables en aplicaciones
+      items:
+        - aceleracion_coriolis_aplicada
+        - fuerza_desde_aceleracion
+        - desvio_lateral_aproximado
+    - title: Criterio conceptual
+      items:
+        - criterio_relevancia_conceptual

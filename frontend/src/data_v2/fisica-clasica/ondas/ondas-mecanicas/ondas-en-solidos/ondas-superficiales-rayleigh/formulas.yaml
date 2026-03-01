@@ -1,0 +1,188 @@
+version: 1
+topic:
+  id: ondas-superficiales-rayleigh
+  title: Ondas Superficiales Rayleigh
+variables:
+  - id: vS
+    symbol: v_S
+    name: velocidad_corte
+    si_unit: m/s
+  - id: vR
+    symbol: v_R
+    name: velocidad_rayleigh
+    si_unit: m/s
+  - id: nu
+    symbol: \nu
+    name: poisson
+    si_unit: '1'
+  - id: cR
+    symbol: c_R
+    name: factor_rayleigh
+    si_unit: '1'
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+  - id: zp
+    symbol: z_p
+    name: profundidad_penetracion
+    si_unit: m
+  - id: G
+    symbol: G
+    name: modulo_corte
+    si_unit: Pa
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: k
+    symbol: k
+    name: numero_onda
+    si_unit: rad/m
+  - id: omega
+    symbol: \omega
+    name: frecuencia_angular
+    si_unit: rad/s
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+formulas:
+  - id: vS
+    title: Velocidad de corte en el volumen
+    equation: vS = sqrt(G/rho)
+    latex: v_S=\sqrt{\frac{G}{\rho}}
+    rearrangements:
+      - target: vS
+        equation: vS = sqrt(G/rho)
+        latex: v_S=\sqrt{\frac{G}{\rho}}
+      - target: G
+        equation: G = rho*vS^2
+        latex: G=\rho v_S^2
+      - target: rho
+        equation: rho = G/vS^2
+        latex: \rho=\frac{G}{v_S^2}
+
+  - id: cR
+    title: Factor Rayleigh
+    equation: cR = (0.87 + 1.12*nu)/(1 + nu)
+    latex: c_R\approx\frac{0.87+1.12\nu}{1+\nu}
+    rearrangements:
+      - target: cR
+        equation: cR = (0.87 + 1.12*nu)/(1 + nu)
+        latex: c_R\approx\frac{0.87+1.12\nu}{1+\nu}
+
+  - id: vR
+    title: Velocidad Rayleigh
+    equation: vR = cR*vS
+    latex: v_R\approx c_R v_S
+    rearrangements:
+      - target: vR
+        equation: vR = cR*vS
+        latex: v_R\approx c_R v_S
+      - target: cR
+        equation: cR = vR/vS
+        latex: c_R\approx\frac{v_R}{v_S}
+      - target: vS
+        equation: vS = vR/cR
+        latex: v_S\approx\frac{v_R}{c_R}
+
+  - id: onda
+    title: Relacion de propagacion superficial
+    equation: vR = lambda*f
+    latex: v_R=\lambda f
+    rearrangements:
+      - target: vR
+        equation: vR = lambda*f
+        latex: v_R=\lambda f
+      - target: lambda
+        equation: lambda = vR/f
+        latex: \lambda=\frac{v_R}{f}
+      - target: f
+        equation: f = vR/lambda
+        latex: f=\frac{v_R}{\lambda}
+
+  - id: periodo
+    title: Relacion periodo-frecuencia
+    equation: T = 1/f
+    latex: T=\frac{1}{f}
+    rearrangements:
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+
+  - id: k_lambda
+    title: Numero de onda
+    equation: k = 2*pi/lambda
+    latex: k=\frac{2\pi}{\lambda}
+    rearrangements:
+      - target: k
+        equation: k = 2*pi/lambda
+        latex: k=\frac{2\pi}{\lambda}
+      - target: lambda
+        equation: lambda = 2*pi/k
+        latex: \lambda=\frac{2\pi}{k}
+
+  - id: omega_f
+    title: Frecuencia angular
+    equation: omega = 2*pi*f
+    latex: \omega=2\pi f
+    rearrangements:
+      - target: omega
+        equation: omega = 2*pi*f
+        latex: \omega=2\pi f
+      - target: f
+        equation: f = omega/(2*pi)
+        latex: f=\frac{\omega}{2\pi}
+
+  - id: zp
+    title: Profundidad de penetracion aproximada
+    equation: zp = lambda/(2*pi)
+    latex: z_p\approx\frac{\lambda}{2\pi}
+    rearrangements:
+      - target: zp
+        equation: zp = lambda/(2*pi)
+        latex: z_p\approx\frac{\lambda}{2\pi}
+      - target: lambda
+        equation: lambda = 2*pi*zp
+        latex: \lambda\approx2\pi z_p
+
+  - id: atenuacion_profundidad
+    title: Atenuacion con profundidad (conceptual)
+    equation: A_z = A0*exp(-k*z)
+    latex: A(z)\propto e^{-kz}
+    calculable: false
+    motivo_no_calculable: Modelo conceptual de campo espacial; no salida escalar unica.
+
+  - id: jerarquia_velocidades
+    title: Jerarquia tipica de velocidades
+    equation: vR_lt_vS_lt_vL
+    latex: v_R<v_S<v_L
+    calculable: false
+    motivo_no_calculable: Criterio fisico de comprobacion en medios isotropos elasticos.
+ui:
+  default_formula: cR
+  groups:
+    - title: Propiedades y velocidad Rayleigh (calculables)
+      items:
+        - vS
+        - cR
+        - vR
+        - onda
+        - periodo
+    - title: Escala espacial y penetracion (calculables)
+      items:
+        - k_lambda
+        - omega_f
+        - zp
+    - title: Criterios conceptuales
+      items:
+        - atenuacion_profundidad
+        - jerarquia_velocidades

@@ -1,0 +1,98 @@
+version: 1
+topic:
+  id: centro-de-masas-en-cuerpos-extendidos
+  title: Centro de masas en cuerpos extendidos
+variables:
+  - id: L
+    symbol: L
+    nombre: longitud_caracteristica
+    unidad_si: m
+    descripcion: Longitud base de la figura (barra o cateto segun modelo).
+  - id: R
+    symbol: R
+    nombre: radio
+    unidad_si: m
+    descripcion: Radio en figuras circulares.
+  - id: M
+    symbol: M
+    nombre: masa_total
+    unidad_si: kg
+    descripcion: Masa total del cuerpo continuo.
+  - id: xcm
+    symbol: x_{CM}
+    nombre: centro_de_masas_x
+    unidad_si: m
+    descripcion: Coordenada x del centro de masas.
+  - id: rho
+    symbol: \rho
+    nombre: densidad_volumica
+    unidad_si: kg/m^3
+    descripcion: Densidad de masa por unidad de volumen.
+  - id: lambda
+    symbol: \lambda
+    nombre: densidad_lineal
+    unidad_si: kg/m
+    descripcion: Densidad de masa por unidad de longitud.
+  - id: sigma
+    symbol: \sigma
+    nombre: densidad_superficial
+    unidad_si: kg/m^2
+    descripcion: Densidad de masa por unidad de area.
+formulas:
+  - id: barra_uniforme
+    title: Barra uniforme
+    equation: xcm = L/2
+    latex: x_{CM}=\frac{L}{2}
+    rearrangements:
+      - target: xcm
+        equation: xcm = L/2
+        latex: x_{CM}=\frac{L}{2}
+      - target: L
+        equation: L = 2*xcm
+        latex: L=2x_{CM}
+  - id: triangulo_recto_uniforme
+    title: Triangulo recto uniforme
+    equation: xcm = L/3
+    latex: x_{CM}=\frac{L}{3}
+    rearrangements:
+      - target: xcm
+        equation: xcm = L/3
+        latex: x_{CM}=\frac{L}{3}
+      - target: L
+        equation: L = 3*xcm
+        latex: L=3x_{CM}
+  - id: semicirculo_uniforme
+    title: Semicirculo uniforme
+    equation: xcm = (4*R)/(3*pi)
+    latex: x_{CM}=\frac{4R}{3\pi}
+    rearrangements:
+      - target: xcm
+        equation: xcm = (4*R)/(3*pi)
+        latex: x_{CM}=\frac{4R}{3\pi}
+      - target: R
+        equation: R = (3*pi*xcm)/4
+        latex: R=\frac{3\pi x_{CM}}{4}
+  - id: definicion_continua_conceptual
+    title: Definicion continua general (conceptual)
+    equation: rcm = int_r_dm_over_M
+    latex: \vec r_{CM}=\frac{1}{M}\int \vec r\,dm
+    calculable: false
+    motivo_no_calculable: Requiere expresar dm con la densidad y resolver una integral dependiente de la geometria.
+  - id: componente_x_conceptual
+    title: Componente x continua (conceptual)
+    equation: xcm = int_x_dm_over_M
+    latex: x_{CM}=\frac{1}{M}\int x\,dm
+    calculable: false
+    motivo_no_calculable: Necesita funcion de densidad y limites de integracion especificos del cuerpo.
+ui:
+  default_formula: barra_uniforme
+  groups:
+    - title: Casos uniformes calculables
+      items:
+        - barra_uniforme
+        - triangulo_recto_uniforme
+        - semicirculo_uniforme
+    - title: Formulas conceptuales
+      items:
+        - definicion_continua_conceptual
+        - componente_x_conceptual

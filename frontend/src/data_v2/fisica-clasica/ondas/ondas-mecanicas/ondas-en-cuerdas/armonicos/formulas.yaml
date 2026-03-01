@@ -1,0 +1,277 @@
+version: 1
+topic:
+  id: armonicos
+  title: Armonicos En Cuerdas
+variables:
+  - id: fn
+    symbol: f_n
+    name: frecuencia_armonica
+    si_unit: Hz
+  - id: f1
+    symbol: f_1
+    name: frecuencia_fundamental
+    si_unit: Hz
+  - id: n
+    symbol: n
+    name: indice_armonico
+    si_unit: '1'
+  - id: v
+    symbol: v
+    name: velocidad_propagacion
+    si_unit: m/s
+  - id: L
+    symbol: L
+    name: longitud_cuerda
+    si_unit: m
+  - id: lambda_n
+    symbol: \lambda_n
+    name: longitud_onda_armonica
+    si_unit: m
+  - id: F_t
+    symbol: F_t
+    name: tension
+    si_unit: N
+  - id: mu_l
+    symbol: \mu_l
+    name: densidad_lineal
+    si_unit: kg/m
+  - id: r_n
+    symbol: r_n
+    name: razon_armonica
+    si_unit: '1'
+  - id: k_n
+    symbol: k_n
+    name: numero_onda_armonica
+    si_unit: rad/m
+  - id: omega_n
+    symbol: \omega_n
+    name: frecuencia_angular_armonica
+    si_unit: rad/s
+  - id: A_n
+    symbol: A_n
+    name: amplitud_armonica
+    si_unit: m
+  - id: phi_n
+    symbol: \phi_n
+    name: fase_armonica
+    si_unit: rad
+  - id: x
+    symbol: x
+    name: posicion
+    si_unit: m
+  - id: t
+    symbol: t
+    name: tiempo
+    si_unit: s
+  - id: y
+    symbol: y
+    name: desplazamiento
+    si_unit: m
+formulas:
+  - id: relacion_armonica
+    title: Frecuencia armonica desde la fundamental
+    equation: fn = n*f1
+    latex: f_n=nf_1
+    rearrangements:
+      - target: fn
+        equation: fn = n*f1
+        latex: f_n=nf_1
+      - target: f1
+        equation: f1 = fn/n
+        latex: f_1=\frac{f_n}{n}
+      - target: n
+        equation: n = fn/f1
+        latex: n=\frac{f_n}{f_1}
+    constraints:
+      - expr: 'n > 0'
+        message: n debe ser mayor que 0.
+      - expr: 'f1 > 0'
+        message: f1 debe ser positiva.
+
+  - id: fundamental_cuerda
+    title: Frecuencia fundamental de cuerda fija-fija
+    equation: f1 = v/(2*L)
+    latex: f_1=\frac{v}{2L}
+    rearrangements:
+      - target: f1
+        equation: f1 = v/(2*L)
+        latex: f_1=\frac{v}{2L}
+      - target: v
+        equation: v = 2*L*f1
+        latex: v=2Lf_1
+      - target: L
+        equation: L = v/(2*f1)
+        latex: L=\frac{v}{2f_1}
+    constraints:
+      - expr: 'L > 0'
+        message: L debe ser positiva.
+      - expr: 'v > 0'
+        message: v debe ser positiva.
+
+  - id: armonico_desde_medio
+    title: Frecuencia armonica desde velocidad y longitud
+    equation: fn = n*v/(2*L)
+    latex: f_n=\frac{nv}{2L}
+    rearrangements:
+      - target: fn
+        equation: fn = n*v/(2*L)
+        latex: f_n=\frac{nv}{2L}
+      - target: v
+        equation: v = 2*L*fn/n
+        latex: v=\frac{2Lf_n}{n}
+      - target: L
+        equation: L = n*v/(2*fn)
+        latex: L=\frac{nv}{2f_n}
+      - target: n
+        equation: n = 2*L*fn/v
+        latex: n=\frac{2Lf_n}{v}
+    constraints:
+      - expr: 'L > 0'
+        message: L debe ser positiva.
+      - expr: 'n > 0'
+        message: n debe ser mayor que 0.
+
+  - id: longitud_onda_armonica
+    title: Longitud de onda del armonico n
+    equation: lambda_n = 2*L/n
+    latex: \lambda_n=\frac{2L}{n}
+    rearrangements:
+      - target: lambda_n
+        equation: lambda_n = 2*L/n
+        latex: \lambda_n=\frac{2L}{n}
+      - target: L
+        equation: L = n*lambda_n/2
+        latex: L=\frac{n\lambda_n}{2}
+      - target: n
+        equation: n = 2*L/lambda_n
+        latex: n=\frac{2L}{\lambda_n}
+    constraints:
+      - expr: 'L > 0'
+        message: L debe ser positiva.
+      - expr: 'n > 0'
+        message: n debe ser mayor que 0.
+
+  - id: velocidad_cuerda
+    title: Velocidad de propagacion en cuerda tensa
+    equation: v = sqrt(F_t/mu_l)
+    latex: v=\sqrt{\frac{F_t}{\mu_l}}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(F_t/mu_l)
+        latex: v=\sqrt{\frac{F_t}{\mu_l}}
+      - target: F_t
+        equation: F_t = mu_l*v^2
+        latex: F_t=\mu_l v^2
+      - target: mu_l
+        equation: mu_l = F_t/v^2
+        latex: \mu_l=\frac{F_t}{v^2}
+    constraints:
+      - expr: 'F_t > 0'
+        message: F_t debe ser positiva.
+      - expr: 'mu_l > 0'
+        message: mu_l debe ser positiva.
+
+  - id: armonico_completo
+    title: Frecuencia armonica en funcion de tension y densidad lineal
+    equation: fn = (n/(2*L))*sqrt(F_t/mu_l)
+    latex: f_n=\frac{n}{2L}\sqrt{\frac{F_t}{\mu_l}}
+    rearrangements:
+      - target: fn
+        equation: fn = (n/(2*L))*sqrt(F_t/mu_l)
+        latex: f_n=\frac{n}{2L}\sqrt{\frac{F_t}{\mu_l}}
+    constraints:
+      - expr: 'L > 0'
+        message: L debe ser positiva.
+      - expr: 'n > 0'
+        message: n debe ser mayor que 0.
+      - expr: 'F_t > 0'
+        message: F_t debe ser positiva.
+      - expr: 'mu_l > 0'
+        message: mu_l debe ser positiva.
+
+  - id: razon_armonica
+    title: Razon armonica respecto a la fundamental
+    equation: r_n = fn/f1
+    latex: r_n=\frac{f_n}{f_1}
+    rearrangements:
+      - target: r_n
+        equation: r_n = fn/f1
+        latex: r_n=\frac{f_n}{f_1}
+      - target: fn
+        equation: fn = r_n*f1
+        latex: f_n=r_n f_1
+      - target: f1
+        equation: f1 = fn/r_n
+        latex: f_1=\frac{f_n}{r_n}
+    constraints:
+      - expr: 'f1 > 0'
+        message: f1 debe ser positiva.
+
+  - id: numero_onda_armonica
+    title: Numero de onda del armonico n
+    equation: k_n = n*pi/L
+    latex: k_n=\frac{n\pi}{L}
+    rearrangements:
+      - target: k_n
+        equation: k_n = n*pi/L
+        latex: k_n=\frac{n\pi}{L}
+      - target: n
+        equation: n = k_n*L/pi
+        latex: n=\frac{k_nL}{\pi}
+      - target: L
+        equation: L = n*pi/k_n
+        latex: L=\frac{n\pi}{k_n}
+
+  - id: frecuencia_angular_armonica
+    title: Frecuencia angular del armonico n
+    equation: omega_n = 2*pi*fn
+    latex: \omega_n=2\pi f_n
+    rearrangements:
+      - target: omega_n
+        equation: omega_n = 2*pi*fn
+        latex: \omega_n=2\pi f_n
+      - target: fn
+        equation: fn = omega_n/(2*pi)
+        latex: f_n=\frac{\omega_n}{2\pi}
+
+  - id: perfil_modo
+    title: Perfil espacial-temporal del modo n
+    equation: y = 2*A_n*sin(n*pi*x/L)*cos(omega_n*t + phi_n)
+    latex: y_n(x,t)=2A_n\sin\!\left(\frac{n\pi x}{L}\right)\cos(\omega_n t+\phi_n)
+    calculable: false
+    motivo_no_calculable: Depende de x y t simultaneamente; describe un campo, no una salida escalar unica.
+
+  - id: serie_armonica
+    title: Sintesis armonica conceptual
+    equation: y = serie_armonica
+    latex: y(t)=\sum_{n=1}^{\infty}A_n\sin(2\pi n f_1 t+\phi_n)
+    calculable: false
+    motivo_no_calculable: Requiere conjunto completo de amplitudes y fases para todos los modos.
+
+  - id: criterio_lineal
+    title: Criterio lineal amplitud-velocidad
+    equation: v_independiente_de_A
+    latex: v\ \text{independiente de}\ A\ \text{(regimen lineal)}
+    calculable: false
+    motivo_no_calculable: Regla conceptual de validez del modelo.
+ui:
+  default_formula: relacion_armonica
+  groups:
+    - title: Relaciones armonicas (calculables)
+      items:
+        - relacion_armonica
+        - razon_armonica
+        - fundamental_cuerda
+        - armonico_desde_medio
+        - longitud_onda_armonica
+    - title: Medio y conversiones modales (calculables)
+      items:
+        - velocidad_cuerda
+        - armonico_completo
+        - numero_onda_armonica
+        - frecuencia_angular_armonica
+    - title: Modelo teorico del timbre
+      items:
+        - perfil_modo
+        - serie_armonica
+        - criterio_lineal

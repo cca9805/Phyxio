@@ -1,0 +1,99 @@
+version: 1
+topic:
+  id: trabajo-de-fuerzas-no-conservativas
+  title: Trabajo de fuerzas no conservativas
+variables:
+- id: Wnc
+  symbol: W_{nc}
+  nombre: trabajo no conservativo
+  unidad_si: J
+  descripcion: Trabajo no conservativo.
+- id: Emi
+  symbol: E_{m,i}
+  nombre: energia mecanica inicial
+  unidad_si: J
+  descripcion: Energia mecanica inicial.
+- id: Emf
+  symbol: E_{m,f}
+  nombre: energia mecanica final
+  unidad_si: J
+  descripcion: Energia mecanica final.
+- id: dEm
+  symbol: \Delta E_m
+  nombre: variacion de energia mecanica
+  unidad_si: J
+  descripcion: Variacion de energia mecanica.
+- id: Ki
+  symbol: K_i
+  nombre: energia cinetica inicial
+  unidad_si: J
+  descripcion: Energia cinetica inicial.
+- id: Ui
+  symbol: U_i
+  nombre: energia potencial inicial
+  unidad_si: J
+  descripcion: Energia potencial inicial.
+- id: Kf
+  symbol: K_f
+  nombre: energia cinetica final
+  unidad_si: J
+  descripcion: Energia cinetica final.
+- id: Uf
+  symbol: U_f
+  nombre: energia potencial final
+  unidad_si: J
+  descripcion: Energia potencial final.
+formulas:
+- id: balance_general
+  title: Balance mecanico con fuerzas no conservativas
+  equation: Wnc = Emf - Emi
+  latex: W_{nc}=E_{m,f}-E_{m,i}=\Delta E_m
+  rearrangements:
+  - target: Wnc
+    equation: Wnc = Emf - Emi
+    latex: W_{nc}=E_{m,f}-E_{m,i}
+  - target: Emf
+    equation: Emf = Emi + Wnc
+    latex: E_{m,f}=E_{m,i}+W_{nc}
+  - target: Emi
+    equation: Emi = Emf - Wnc
+    latex: E_{m,i}=E_{m,f}-W_{nc}
+- id: energia_mecanica_por_componentes
+  title: Energia mecanica por componentes
+  equation: Emi = Ki + Ui
+  latex: E_{m,i}=K_i+U_i
+  rearrangements:
+  - target: Emi
+    equation: Emi = Ki + Ui
+    latex: E_{m,i}=K_i+U_i
+  constraints:
+  - expr: Ki >= 0
+    message: Ki debe ser no negativa.
+- id: energia_mecanica_final_componentes
+  title: Energia mecanica final
+  equation: Emf = Kf + Uf
+  latex: E_{m,f}=K_f+U_f
+  rearrangements:
+  - target: Emf
+    equation: Emf = Kf + Uf
+    latex: E_{m,f}=K_f+U_f
+- id: ecuacion_completa_estados
+  title: Relacion completa entre estados
+  equation: Kf + Uf = Ki + Ui + Wnc
+  latex: K_f+U_f=K_i+U_i+W_{nc}
+  rearrangements:
+  - target: Kf
+    equation: Kf = Ki + Ui + Wnc - Uf
+    latex: K_f=K_i+U_i+W_{nc}-U_f
+  - target: Uf
+    equation: Uf = Ki + Ui + Wnc - Kf
+    latex: U_f=K_i+U_i+W_{nc}-K_f
+ui:
+  default_formula: balance_general
+  groups:
+  - title: Basicas
+    items:
+    - balance_general
+    - energia_mecanica_por_componentes
+    - energia_mecanica_final_componentes
+    - ecuacion_completa_estados

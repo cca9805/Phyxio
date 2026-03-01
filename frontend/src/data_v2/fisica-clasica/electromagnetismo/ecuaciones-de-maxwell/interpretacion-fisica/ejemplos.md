@@ -1,0 +1,12 @@
+# interpretacion-fisica · Ejemplos
+
+> (pendiente)
+
+## Idea clave
+- (pendiente)
+
+## Desarrollo
+- (pendiente)
+
+## Resumen
+- (pendiente)

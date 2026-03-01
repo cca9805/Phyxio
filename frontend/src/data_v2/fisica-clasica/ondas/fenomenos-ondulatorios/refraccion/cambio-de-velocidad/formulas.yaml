@@ -1,0 +1,128 @@
+﻿version: 1
+topic:
+  id: cambio-de-velocidad
+  title: Cambio De Velocidad
+variables:
+  - id: v1
+    symbol: v_1
+    name: velocidad_1
+    si_unit: m/s
+  - id: v2
+    symbol: v_2
+    name: velocidad_2
+    si_unit: m/s
+  - id: n1
+    symbol: n_1
+    name: indice_1
+    si_unit: '1'
+  - id: n2
+    symbol: n_2
+    name: indice_2
+    si_unit: '1'
+  - id: theta1
+    symbol: \theta_1
+    name: angulo_incidencia
+    si_unit: rad
+  - id: theta2
+    symbol: \theta_2
+    name: angulo_refraccion
+    si_unit: rad
+  - id: lambda1
+    symbol: \lambda_1
+    name: longitud_onda_1
+    si_unit: m
+  - id: lambda2
+    symbol: \lambda_2
+    name: longitud_onda_2
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: x
+    symbol: x
+    name: distancia
+    si_unit: m
+  - id: t
+    symbol: t
+    name: tiempo
+    si_unit: s
+formulas:
+  - id: v_indice
+    title: Cambio de velocidad por indices
+    equation: v2 = v1*n1/n2
+    latex: v_2=v_1\frac{n_1}{n_2}
+    rearrangements:
+      - target: v2
+        equation: v2 = v1*n1/n2
+        latex: v_2=v_1\frac{n_1}{n_2}
+      - target: v1
+        equation: v1 = v2*n2/n1
+        latex: v_1=v_2\frac{n_2}{n_1}
+      - target: n2
+        equation: n2 = v1*n1/v2
+        latex: n_2=\frac{v_1 n_1}{v_2}
+
+  - id: lambda_indice
+    title: Cambio de longitud de onda por indices
+    equation: lambda2 = lambda1*n1/n2
+    latex: \lambda_2=\lambda_1\frac{n_1}{n_2}
+    rearrangements:
+      - target: lambda2
+        equation: lambda2 = lambda1*n1/n2
+        latex: \lambda_2=\lambda_1\frac{n_1}{n_2}
+      - target: lambda1
+        equation: lambda1 = lambda2*n2/n1
+        latex: \lambda_1=\lambda_2\frac{n_2}{n_1}
+
+  - id: lambda_velocidad
+    title: Cambio de longitud de onda por velocidades
+    equation: lambda2 = lambda1*v2/v1
+    latex: \lambda_2=\lambda_1\frac{v_2}{v_1}
+    rearrangements:
+      - target: lambda2
+        equation: lambda2 = lambda1*v2/v1
+        latex: \lambda_2=\lambda_1\frac{v_2}{v_1}
+      - target: v2
+        equation: v2 = v1*lambda2/lambda1
+        latex: v_2=v_1\frac{\lambda_2}{\lambda_1}
+
+  - id: snell_velocidad
+    title: Relacion angular por velocidades
+    equation: sin(theta1)/sin(theta2) = v1/v2
+    latex: \frac{\sin\theta_1}{\sin\theta_2}=\frac{v_1}{v_2}
+
+  - id: tiempo_tramo
+    title: Tiempo de propagacion por tramo
+    equation: t = x/v2
+    latex: t=\frac{x}{v_2}
+    rearrangements:
+      - target: t
+        equation: t = x/v2
+        latex: t=\frac{x}{v_2}
+      - target: x
+        equation: x = v2*t
+        latex: x=v_2t
+
+  - id: frecuencia_constante
+    title: Conservacion de frecuencia
+    equation: f1 = f2
+    latex: f_1=f_2=f
+    calculable: false
+    motivo_no_calculable: Relacion conceptual en interfaz ideal.
+
+ui:
+  default_formula: v_indice
+  groups:
+    - title: Cambio principal
+      items:
+        - v_indice
+        - lambda_indice
+        - lambda_velocidad
+    - title: Conexion geometrica y tiempos
+      items:
+        - snell_velocidad
+        - tiempo_tramo
+    - title: Marco conceptual
+      items:
+        - frecuencia_constante

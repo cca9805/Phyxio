@@ -1,0 +1,73 @@
+version: 1
+topic:
+  id: manometros
+  title: Manometros
+variables:
+- id: p
+  symbol: p
+  nombre: presion
+  unidad_si: Pa
+  descripcion: Presion.
+- id: F
+  symbol: F
+  nombre: fuerza
+  unidad_si: N
+  descripcion: Fuerza.
+- id: A
+  symbol: A
+  nombre: area
+  unidad_si: m^2
+  descripcion: Area.
+- id: p0
+  symbol: p_0
+  nombre: presion_referencia
+  unidad_si: Pa
+  descripcion: Presion_referencia.
+- id: rho
+  symbol: \rho
+  nombre: densidad
+  unidad_si: kg/m^3
+  descripcion: Densidad.
+- id: g
+  symbol: g
+  nombre: gravedad
+  unidad_si: m/s^2
+  descripcion: Gravedad.
+- id: h
+  symbol: h
+  nombre: altura
+  unidad_si: m
+  descripcion: Altura.
+formulas:
+- id: presion_mec
+  title: Presion mecanica
+  equation: p = F/A
+  latex: p=\frac{F}{A}
+  rearrangements:
+  - target: p
+    equation: p = F/A
+    latex: p=\frac{F}{A}
+  - target: F
+    equation: F = p*A
+    latex: F=pA
+  - target: A
+    equation: A = F/p
+    latex: A=\frac{F}{p}
+- id: presion_hidro
+  title: Presion hidrostatica
+  equation: p = p0 + rho*g*h
+  latex: p=p_0+\rho gh
+  rearrangements:
+  - target: p
+    equation: p = p0 + rho*g*h
+    latex: p=p_0+\rho gh
+  - target: h
+    equation: h = (p-p0)/(rho*g)
+    latex: h=\frac{p-p_0}{\rho g}
+ui:
+  default_formula: presion_mec
+  groups:
+  - title: Presion
+    items:
+    - presion_mec
+    - presion_hidro

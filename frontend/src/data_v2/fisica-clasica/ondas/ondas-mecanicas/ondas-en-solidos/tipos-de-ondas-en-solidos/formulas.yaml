@@ -1,0 +1,158 @@
+version: 1
+topic:
+  id: tipos-de-ondas-en-solidos
+  title: Tipos De Ondas En Solidos
+variables:
+  - id: vL
+    symbol: v_L
+    name: velocidad_longitudinal
+    si_unit: m/s
+  - id: vT
+    symbol: v_T
+    name: velocidad_transversal
+    si_unit: m/s
+  - id: vR
+    symbol: v_R
+    name: velocidad_rayleigh
+    si_unit: m/s
+  - id: nu
+    symbol: \nu
+    name: poisson
+    si_unit: '1'
+  - id: cR
+    symbol: c_R
+    name: factor_rayleigh
+    si_unit: '1'
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+  - id: K
+    symbol: K
+    name: modulo_volumetrico
+    si_unit: Pa
+  - id: G
+    symbol: G
+    name: modulo_corte
+    si_unit: Pa
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+formulas:
+  - id: cR
+    title: Factor de Rayleigh
+    equation: cR = (0.87 + 1.12*nu)/(1 + nu)
+    latex: c_R\approx\frac{0.87+1.12\nu}{1+\nu}
+    rearrangements:
+      - target: cR
+        equation: cR = (0.87 + 1.12*nu)/(1 + nu)
+        latex: c_R\approx\frac{0.87+1.12\nu}{1+\nu}
+
+  - id: vR
+    title: Velocidad Rayleigh
+    equation: vR = cR*vT
+    latex: v_R\approx c_R v_T
+    rearrangements:
+      - target: vR
+        equation: vR = cR*vT
+        latex: v_R\approx c_R v_T
+      - target: cR
+        equation: cR = vR/vT
+        latex: c_R\approx\frac{v_R}{v_T}
+      - target: vT
+        equation: vT = vR/cR
+        latex: v_T\approx\frac{v_R}{c_R}
+
+  - id: onda
+    title: Relacion de propagacion
+    equation: vL = lambda*f
+    latex: v=\lambda f
+    rearrangements:
+      - target: vL
+        equation: vL = lambda*f
+        latex: v=\lambda f
+      - target: lambda
+        equation: lambda = vL/f
+        latex: \lambda=\frac{v}{f}
+      - target: f
+        equation: f = vL/lambda
+        latex: f=\frac{v}{\lambda}
+
+  - id: periodo
+    title: Relacion periodo-frecuencia
+    equation: T = 1/f
+    latex: T=\frac{1}{f}
+    rearrangements:
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+
+  - id: vL_general
+    title: Velocidad longitudinal en solido isotropo
+    equation: vL = sqrt((K + 4*G/3)/rho)
+    latex: v_L=\sqrt{\frac{K+\frac{4}{3}G}{\rho}}
+    rearrangements:
+      - target: vL
+        equation: vL = sqrt((K + 4*G/3)/rho)
+        latex: v_L=\sqrt{\frac{K+\frac{4}{3}G}{\rho}}
+      - target: rho
+        equation: rho = (K + 4*G/3)/vL^2
+        latex: \rho=\frac{K+\frac{4}{3}G}{v_L^2}
+
+  - id: vT_general
+    title: Velocidad de corte en solido isotropo
+    equation: vT = sqrt(G/rho)
+    latex: v_T=\sqrt{\frac{G}{\rho}}
+    rearrangements:
+      - target: vT
+        equation: vT = sqrt(G/rho)
+        latex: v_T=\sqrt{\frac{G}{\rho}}
+      - target: G
+        equation: G = rho*vT^2
+        latex: G=\rho v_T^2
+      - target: rho
+        equation: rho = G/vT^2
+        latex: \rho=\frac{G}{v_T^2}
+
+  - id: orden_velocidades
+    title: Orden tipico de velocidades
+    equation: vL_gt_vT_gt_vR
+    latex: v_L>v_T>v_R
+    calculable: false
+    motivo_no_calculable: Criterio fisico tipico en isotropia lineal; se usa para validacion conceptual.
+
+  - id: criterio_lineal
+    title: Criterio lineal amplitud-velocidad
+    equation: v_independiente_de_amplitud
+    latex: v\ \text{independiente de amplitud (regimen lineal)}
+    calculable: false
+    motivo_no_calculable: Regla conceptual de validez del modelo.
+ui:
+  default_formula: cR
+  groups:
+    - title: Clasificacion y conversiones (calculables)
+      items:
+        - cR
+        - vR
+        - onda
+        - periodo
+    - title: Velocidades en el medio (calculables)
+      items:
+        - vL_general
+        - vT_general
+    - title: Criterios fisicos
+      items:
+        - orden_velocidades
+        - criterio_lineal

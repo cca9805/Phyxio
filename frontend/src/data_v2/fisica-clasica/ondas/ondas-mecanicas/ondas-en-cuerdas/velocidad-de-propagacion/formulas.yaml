@@ -1,0 +1,215 @@
+version: 1
+topic:
+  id: velocidad-de-propagacion
+  title: Velocidad De Propagacion En Cuerdas
+variables:
+  - id: v
+    symbol: v
+    name: velocidad_propagacion
+    si_unit: m/s
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+  - id: F_t
+    symbol: F_t
+    name: tension
+    si_unit: N
+  - id: mu_l
+    symbol: \mu_l
+    name: densidad_lineal
+    si_unit: kg/m
+  - id: m
+    symbol: m
+    name: masa_tramo
+    si_unit: kg
+  - id: L
+    symbol: L
+    name: longitud_tramo
+    si_unit: m
+  - id: f1
+    symbol: f_1
+    name: frecuencia_fundamental
+    si_unit: Hz
+  - id: n
+    symbol: n
+    name: numero_armonico
+    si_unit: '1'
+  - id: fn
+    symbol: f_n
+    name: frecuencia_armonico_n
+    si_unit: Hz
+  - id: lambda_n
+    symbol: \lambda_n
+    name: longitud_onda_armonico_n
+    si_unit: m
+formulas:
+  - id: v_tension
+    title: Velocidad por tension y densidad lineal
+    equation: v = sqrt(F_t/mu_l)
+    latex: v=\sqrt{\frac{F_t}{\mu_l}}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(F_t/mu_l)
+        latex: v=\sqrt{\frac{F_t}{\mu_l}}
+      - target: F_t
+        equation: F_t = mu_l*v^2
+        latex: F_t=\mu_l v^2
+      - target: mu_l
+        equation: mu_l = F_t/(v^2)
+        latex: \mu_l=\frac{F_t}{v^2}
+    constraints:
+      - expr: "F_t > 0"
+        message: "F_t debe ser positiva."
+      - expr: "mu_l > 0"
+        message: "mu_l debe ser positiva."
+      - expr: "v > 0"
+        message: "v debe ser positiva en este modelo."
+
+  - id: v_onda
+    title: Relacion ondulatoria en cuerda
+    equation: v = lambda*f
+    latex: v=\lambda f
+    rearrangements:
+      - target: v
+        equation: v = lambda*f
+        latex: v=\lambda f
+      - target: lambda
+        equation: lambda = v/f
+        latex: \lambda=\frac{v}{f}
+      - target: f
+        equation: f = v/lambda
+        latex: f=\frac{v}{\lambda}
+    constraints:
+      - expr: "f > 0"
+        message: "f debe ser positiva."
+      - expr: "lambda > 0"
+        message: "lambda debe ser positiva."
+
+  - id: mu_lineal
+    title: Densidad lineal de la cuerda
+    equation: mu_l = m/L
+    latex: \mu_l=\frac{m}{L}
+    rearrangements:
+      - target: mu_l
+        equation: mu_l = m/L
+        latex: \mu_l=\frac{m}{L}
+      - target: m
+        equation: m = mu_l*L
+        latex: m=\mu_l L
+      - target: L
+        equation: L = m/mu_l
+        latex: L=\frac{m}{\mu_l}
+    constraints:
+      - expr: "m > 0"
+        message: "m debe ser positiva."
+      - expr: "L > 0"
+        message: "L debe ser positiva."
+      - expr: "mu_l > 0"
+        message: "mu_l debe ser positiva."
+
+  - id: periodo_frecuencia
+    title: Relacion entre periodo y frecuencia
+    equation: T = 1/f
+    latex: T=\frac{1}{f}
+    rearrangements:
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+
+  - id: fundamental_cuerda
+    title: Frecuencia fundamental de cuerda fija en ambos extremos
+    equation: f1 = v/(2*L)
+    latex: f_1=\frac{v}{2L}
+    rearrangements:
+      - target: f1
+        equation: f1 = v/(2*L)
+        latex: f_1=\frac{v}{2L}
+      - target: v
+        equation: v = 2*L*f1
+        latex: v=2Lf_1
+      - target: L
+        equation: L = v/(2*f1)
+        latex: L=\frac{v}{2f_1}
+
+  - id: armonico_n
+    title: Frecuencia del armonico n
+    equation: fn = n*v/(2*L)
+    latex: f_n=\frac{nv}{2L}
+    rearrangements:
+      - target: fn
+        equation: fn = n*v/(2*L)
+        latex: f_n=\frac{nv}{2L}
+      - target: v
+        equation: v = 2*L*fn/n
+        latex: v=\frac{2Lf_n}{n}
+      - target: n
+        equation: n = 2*L*fn/v
+        latex: n=\frac{2Lf_n}{v}
+
+  - id: lambda_modo_n
+    title: Longitud de onda del armonico n
+    equation: lambda_n = 2*L/n
+    latex: \lambda_n=\frac{2L}{n}
+    rearrangements:
+      - target: lambda_n
+        equation: lambda_n = 2*L/n
+        latex: \lambda_n=\frac{2L}{n}
+      - target: L
+        equation: L = n*lambda_n/2
+        latex: L=\frac{n\lambda_n}{2}
+      - target: n
+        equation: n = 2*L/lambda_n
+        latex: n=\frac{2L}{\lambda_n}
+
+  - id: ecuacion_onda_cuerda
+    title: Ecuacion de onda armonica en la cuerda (conceptual)
+    equation: y = A*sin(k*x - omega*t + phi0)
+    latex: y=A\sin(kx-\omega t+\phi_0)
+    calculable: false
+    motivo_no_calculable: Requiere condiciones iniciales y de frontera para fijar parametros completos.
+
+  - id: ecuacion_onda_diferencial
+    title: Ecuacion diferencial de propagacion (conceptual)
+    equation: d2y_dt2 = (F_t/mu_l)*d2y_dx2
+    latex: \frac{\partial^2 y}{\partial t^2}=\frac{F_t}{\mu_l}\frac{\partial^2 y}{\partial x^2}
+    calculable: false
+    motivo_no_calculable: Es una ecuacion diferencial parcial del modelo continuo.
+
+  - id: criterio_lineal_amplitud
+    title: Criterio lineal amplitud-velocidad
+    equation: v_independiente_de_A
+    latex: v\ \text{independiente de}\ A\ \text{(regimen lineal)}
+    calculable: false
+    motivo_no_calculable: Regla conceptual de validez del modelo.
+
+ui:
+  default_formula: v_tension
+  groups:
+    - title: Nucleo del tema (calculables)
+      items:
+        - v_tension
+        - v_onda
+        - mu_lineal
+    - title: Modos en cuerda (calculables)
+      items:
+        - fundamental_cuerda
+        - armonico_n
+        - lambda_modo_n
+        - periodo_frecuencia
+    - title: Modelo teorico (no calculables)
+      items:
+        - ecuacion_onda_cuerda
+        - ecuacion_onda_diferencial
+        - criterio_lineal_amplitud

@@ -1,0 +1,94 @@
+version: 1
+topic:
+  id: definicion-centro-de-masas
+  title: Definicion de centro de masas
+variables:
+  - id: m1
+    symbol: m_1
+    nombre: masa_1
+    unidad_si: kg
+    descripcion: Masa de la particula 1.
+  - id: m2
+    symbol: m_2
+    nombre: masa_2
+    unidad_si: kg
+    descripcion: Masa de la particula 2.
+  - id: x1
+    symbol: x_1
+    nombre: posicion_1
+    unidad_si: m
+    descripcion: Posicion de la particula 1 en el eje x.
+  - id: x2
+    symbol: x_2
+    nombre: posicion_2
+    unidad_si: m
+    descripcion: Posicion de la particula 2 en el eje x.
+  - id: M
+    symbol: M
+    nombre: masa_total
+    unidad_si: kg
+    descripcion: Suma de masas del sistema.
+  - id: xcm
+    symbol: x_{CM}
+    nombre: centro_de_masas_x
+    unidad_si: m
+    descripcion: Coordenada x del centro de masas.
+formulas:
+  - id: masa_total_dos_masas
+    title: Masa total (dos masas)
+    equation: M = m1 + m2
+    latex: M=m_1+m_2
+    rearrangements:
+      - target: M
+        equation: M = m1 + m2
+        latex: M=m_1+m_2
+      - target: m1
+        equation: m1 = M - m2
+        latex: m_1=M-m_2
+      - target: m2
+        equation: m2 = M - m1
+        latex: m_2=M-m_1
+  - id: xcm_dos_masas
+    title: Centro de masas en 1D (dos masas)
+    equation: xcm = (m1*x1 + m2*x2)/(m1 + m2)
+    latex: x_{CM}=\frac{m_1x_1+m_2x_2}{m_1+m_2}
+    rearrangements:
+      - target: xcm
+        equation: xcm = (m1*x1 + m2*x2)/(m1 + m2)
+        latex: x_{CM}=\frac{m_1x_1+m_2x_2}{m_1+m_2}
+      - target: x1
+        equation: x1 = (xcm*(m1+m2)-m2*x2)/m1
+        latex: x_1=\frac{x_{CM}(m_1+m_2)-m_2x_2}{m_1}
+      - target: x2
+        equation: x2 = (xcm*(m1+m2)-m1*x1)/m2
+        latex: x_2=\frac{x_{CM}(m_1+m_2)-m_1x_1}{m_2}
+    constraints:
+      - expr: m1 + m2 > 0
+        message: La masa total debe ser positiva.
+      - expr: m1 > 0
+        message: m1 debe ser positiva para despejar x1.
+      - expr: m2 > 0
+        message: m2 debe ser positiva para despejar x2.
+  - id: definicion_vectorial_conceptual
+    title: Definicion vectorial general (conceptual)
+    equation: rcm = sum_mr_over_M
+    latex: \vec r_{CM}=\frac{1}{M}\sum_i m_i\vec r_i
+    calculable: false
+    motivo_no_calculable: Requiere un numero arbitrario de particulas y operaciones vectoriales por componentes.
+  - id: definicion_continua_conceptual
+    title: Definicion continua (conceptual)
+    equation: rcm = int_r_dm_over_M
+    latex: \vec r_{CM}=\frac{1}{M}\int \vec r\,dm
+    calculable: false
+    motivo_no_calculable: Requiere conocer la distribucion continua de masa e integrar sobre el cuerpo.
+ui:
+  default_formula: xcm_dos_masas
+  groups:
+    - title: Formulas calculables base
+      items:
+        - masa_total_dos_masas
+        - xcm_dos_masas
+    - title: Formulas conceptuales
+      items:
+        - definicion_vectorial_conceptual
+        - definicion_continua_conceptual

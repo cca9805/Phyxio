@@ -1,0 +1,12 @@
+# bandas-conduccion · Teoría
+
+> (pendiente)
+
+## Idea clave
+- (pendiente)
+
+## Desarrollo
+- (pendiente)
+
+## Resumen
+- (pendiente)

@@ -1,0 +1,133 @@
+﻿version: 1
+topic:
+  id: poleas
+  title: Poleas
+variables:
+  - id: R
+    symbol: R
+    nombre: carga
+    unidad_si: N
+    descripcion: Carga total que debe sostener o elevar el sistema.
+  - id: P
+    symbol: P
+    nombre: fuerza_aplicada
+    unidad_si: N
+    descripcion: Fuerza ejercida en el extremo libre de la cuerda.
+  - id: n
+    symbol: n
+    nombre: tramos_soportando_carga
+    unidad_si: "1"
+    descripcion: Numero de tramos activos que sostienen la carga.
+  - id: eta
+    symbol: \eta
+    nombre: eficiencia
+    unidad_si: "1"
+    descripcion: Factor global de perdidas del sistema.
+  - id: VM
+    symbol: VM
+    nombre: ventaja_mecanica
+    unidad_si: "1"
+    descripcion: Relacion entre carga y fuerza aplicada.
+  - id: sP
+    symbol: s_P
+    nombre: desplazamiento_extremo_libre
+    unidad_si: m
+    descripcion: Distancia recorrida por el extremo que tira.
+  - id: sR
+    symbol: s_R
+    nombre: desplazamiento_carga
+    unidad_si: m
+    descripcion: Distancia recorrida por la carga.
+  - id: T
+    symbol: T
+    nombre: tension
+    unidad_si: N
+    descripcion: Tension en cada tramo ideal de cuerda.
+formulas:
+  - id: fuerza_ideal
+    title: Fuerza necesaria (sistema ideal)
+    equation: P = R/n
+    latex: P=\frac{R}{n}
+    rearrangements:
+      - target: P
+        equation: P = R/n
+        latex: P=\frac{R}{n}
+      - target: R
+        equation: R = n*P
+        latex: R=nP
+      - target: n
+        equation: n = R/P
+        latex: n=\frac{R}{P}
+    constraints:
+      - expr: n > 0
+        message: n debe ser mayor que 0.
+  - id: fuerza_real
+    title: Fuerza necesaria con eficiencia
+    equation: P = R/(n*eta)
+    latex: P=\frac{R}{n\eta}
+    rearrangements:
+      - target: P
+        equation: P = R/(n*eta)
+        latex: P=\frac{R}{n\eta}
+      - target: R
+        equation: R = n*eta*P
+        latex: R=n\eta P
+      - target: eta
+        equation: eta = R/(n*P)
+        latex: \eta=\frac{R}{nP}
+    constraints:
+      - expr: n > 0
+        message: n debe ser mayor que 0.
+      - expr: eta > 0
+        message: eta debe ser mayor que 0.
+      - expr: eta <= 1
+        message: eta debe ser menor o igual que 1.
+  - id: ventaja_mecanica
+    title: Ventaja mecanica
+    equation: VM = R/P
+    latex: VM=\frac{R}{P}=n\eta
+    rearrangements:
+      - target: VM
+        equation: VM = R/P
+        latex: VM=\frac{R}{P}
+      - target: R
+        equation: R = VM*P
+        latex: R=VM\,P
+      - target: P
+        equation: P = R/VM
+        latex: P=\frac{R}{VM}
+  - id: relacion_desplazamientos
+    title: Relacion de desplazamientos
+    equation: sP = n*sR
+    latex: s_P=n\,s_R
+    rearrangements:
+      - target: sP
+        equation: sP = n*sR
+        latex: s_P=n\,s_R
+      - target: sR
+        equation: sR = sP/n
+        latex: s_R=\frac{s_P}{n}
+      - target: n
+        equation: n = sP/sR
+        latex: n=\frac{s_P}{s_R}
+    constraints:
+      - expr: n > 0
+        message: n debe ser mayor que 0.
+  - id: equilibrio_tensiones_conceptual
+    title: Equilibrio de tensiones (conceptual)
+    equation: R = n*T
+    latex: R=nT
+    calculable: false
+    motivo_no_calculable: Requiere identificar geometria exacta y tramos activos del montaje concreto.
+ui:
+  default_formula: fuerza_ideal
+  groups:
+    - title: Calculables
+      items:
+        - fuerza_ideal
+        - fuerza_real
+        - ventaja_mecanica
+        - relacion_desplazamientos
+    - title: Conceptuales
+      items:
+        - equilibrio_tensiones_conceptual

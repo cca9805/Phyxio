@@ -1,0 +1,263 @@
+version: 1
+topic:
+  id: problemas-tipo-examen
+  title: Problemas tipo examen
+variables:
+- id: m
+  symbol: m
+  nombre: masa
+  unidad_si: kg
+  descripcion: Masa.
+- id: g
+  symbol: g
+  nombre: gravedad
+  unidad_si: m/s^2
+  descripcion: Gravedad.
+- id: theta
+  symbol: \theta
+  nombre: angulo
+  unidad_si: rad
+  descripcion: Angulo.
+- id: mu
+  symbol: \mu
+  nombre: coeficiente de rozamiento
+  unidad_si: '1'
+  descripcion: Coeficiente de rozamiento.
+- id: F
+  symbol: F
+  nombre: fuerza aplicada
+  unidad_si: N
+  descripcion: Fuerza aplicada.
+- id: N
+  symbol: N
+  nombre: normal
+  unidad_si: N
+  descripcion: Normal.
+- id: f
+  symbol: f
+  nombre: fuerza de rozamiento
+  unidad_si: N
+  descripcion: Fuerza de rozamiento.
+- id: F_par
+  symbol: F_{\parallel}
+  nombre: componente paralela del peso
+  unidad_si: N
+  descripcion: Componente paralela del peso.
+- id: F_net
+  symbol: F_{net}
+  nombre: fuerza neta
+  unidad_si: N
+  descripcion: Fuerza neta.
+- id: a
+  symbol: a
+  nombre: aceleracion
+  unidad_si: m/s^2
+  descripcion: Aceleracion.
+- id: t
+  symbol: t
+  nombre: tiempo
+  unidad_si: s
+  descripcion: Tiempo.
+- id: v
+  symbol: v
+  nombre: velocidad
+  unidad_si: m/s
+  descripcion: Velocidad.
+- id: v0
+  symbol: v_0
+  nombre: velocidad inicial
+  unidad_si: m/s
+  descripcion: Velocidad inicial.
+- id: x
+  symbol: x
+  nombre: posicion
+  unidad_si: m
+  descripcion: Posicion.
+- id: x0
+  symbol: x_0
+  nombre: posicion inicial
+  unidad_si: m
+  descripcion: Posicion inicial.
+- id: W
+  symbol: W
+  nombre: trabajo
+  unidad_si: J
+  descripcion: Trabajo.
+formulas:
+- id: componente_paralela_peso
+  title: Componente paralela del peso
+  equation: F_par = m*g*sin(theta)
+  latex: F_{\parallel}=mg\sin\theta
+  rearrangements:
+  - target: F_par
+    equation: F_par = m*g*sin(theta)
+    latex: F_{\parallel}=mg\sin\theta
+  - target: m
+    equation: m = F_par/(g*sin(theta))
+    latex: m=\frac{F_{\parallel}}{g\sin\theta}
+  - target: g
+    equation: g = F_par/(m*sin(theta))
+    latex: g=\frac{F_{\parallel}}{m\sin\theta}
+  - target: theta
+    equation: theta = asin(F_par/(m*g))
+    latex: \theta=\arcsin\left(\frac{F_{\parallel}}{mg}\right)
+  constraints:
+  - expr: g > 0
+    message: g debe ser positiva.
+- id: normal_plano_examen
+  title: Fuerza normal en plano inclinado
+  equation: N = m*g*cos(theta)
+  latex: N=mg\cos\theta
+  rearrangements:
+  - target: N
+    equation: N = m*g*cos(theta)
+    latex: N=mg\cos\theta
+  - target: m
+    equation: m = N/(g*cos(theta))
+    latex: m=\frac{N}{g\cos\theta}
+  - target: g
+    equation: g = N/(m*cos(theta))
+    latex: g=\frac{N}{m\cos\theta}
+  - target: theta
+    equation: theta = acos(N/(m*g))
+    latex: \theta=\arccos\left(\frac{N}{mg}\right)
+  constraints:
+  - expr: g > 0
+    message: g debe ser positiva.
+- id: rozamiento_dinamico_examen
+  title: Rozamiento dinamico
+  equation: f = mu*N
+  latex: f=\mu N
+  rearrangements:
+  - target: f
+    equation: f = mu*N
+    latex: f=\mu N
+  - target: mu
+    equation: mu = f/N
+    latex: \mu=\frac{f}{N}
+  - target: N
+    equation: N = f/mu
+    latex: N=\frac{f}{\mu}
+  constraints:
+  - expr: N > 0
+    message: N debe ser positiva.
+  - expr: mu > 0
+    message: mu debe ser positivo para despejar N.
+- id: neta_plano_examen
+  title: Fuerza neta en el eje del movimiento
+  equation: F_net = F - F_par - f
+  latex: F_{net}=F-F_{\parallel}-f
+  rearrangements:
+  - target: F_net
+    equation: F_net = F - F_par - f
+    latex: F_{net}=F-F_{\parallel}-f
+  - target: F
+    equation: F = F_net + F_par + f
+    latex: F=F_{net}+F_{\parallel}+f
+  - target: F_par
+    equation: F_par = F - F_net - f
+    latex: F_{\parallel}=F-F_{net}-f
+  - target: f
+    equation: f = F - F_net - F_par
+    latex: f=F-F_{net}-F_{\parallel}
+- id: segunda_ley_examen
+  title: Segunda ley (forma escalar)
+  equation: a = F_net/m
+  latex: a=\frac{F_{net}}{m}
+  rearrangements:
+  - target: a
+    equation: a = F_net/m
+    latex: a=\frac{F_{net}}{m}
+  - target: F_net
+    equation: F_net = m*a
+    latex: F_{net}=ma
+  - target: m
+    equation: m = F_net/a
+    latex: m=\frac{F_{net}}{a}
+  constraints:
+  - expr: m != 0
+    message: m no puede ser 0.
+  - expr: a != 0
+    message: a no puede ser 0 si despejas m.
+- id: velocidad_tiempo_examen
+  title: Velocidad con aceleracion constante
+  equation: v = v0 + a*t
+  latex: v=v_0+at
+  rearrangements:
+  - target: v
+    equation: v = v0 + a*t
+    latex: v=v_0+at
+  - target: v0
+    equation: v0 = v - a*t
+    latex: v_0=v-at
+  - target: a
+    equation: a = (v - v0)/t
+    latex: a=\frac{v-v_0}{t}
+  - target: t
+    equation: t = (v - v0)/a
+    latex: t=\frac{v-v_0}{a}
+  constraints:
+  - expr: t != 0
+    message: t no puede ser 0 si despejas a.
+  - expr: a != 0
+    message: a no puede ser 0 si despejas t.
+- id: posicion_tiempo_examen
+  title: Posicion con aceleracion constante
+  equation: x = x0 + v0*t + 0.5*a*t^2
+  latex: x=x_0+v_0t+\frac{1}{2}at^2
+  rearrangements:
+  - target: x
+    equation: x = x0 + v0*t + 0.5*a*t^2
+    latex: x=x_0+v_0t+\frac{1}{2}at^2
+  - target: x0
+    equation: x0 = x - v0*t - 0.5*a*t^2
+    latex: x_0=x-v_0t-\frac{1}{2}at^2
+  - target: v0
+    equation: v0 = (x - x0 - 0.5*a*t^2)/t
+    latex: v_0=\frac{x-x_0-\frac{1}{2}at^2}{t}
+  - target: a
+    equation: a = 2*(x - x0 - v0*t)/(t^2)
+    latex: a=\frac{2(x-x_0-v_0t)}{t^2}
+  constraints:
+  - expr: t != 0
+    message: t no puede ser 0 si despejas v0.
+  - expr: t^2 != 0
+    message: t no puede ser 0 si despejas a.
+- id: segunda_ley_vectorial_conceptual
+  title: Segunda ley vectorial (conceptual)
+  equation: F_net = m*a
+  latex: \sum \vec{F}=m\vec{a}
+  calculable: false
+  motivo_no_calculable: Forma vectorial conceptual. Esta calculadora opera con ecuaciones escalares en 1D y requiere proyecciones
+    por ejes para resolver.
+- id: trabajo_fuerza_variable_conceptual
+  title: Trabajo con fuerza variable (conceptual)
+  equation: W = intFx
+  latex: W=\int_{x_i}^{x_f}F(x)\,dx
+  calculable: false
+  motivo_no_calculable: Requiere conocer la funcion F(x) y resolver una integral definida.
+- id: condicion_no_deslizamiento_conceptual
+  title: Condicion de no deslizamiento (conceptual)
+  equation: f = mu*N
+  latex: '|F-F_{\parallel}|\leq f_{s,\max}=\mu_sN'
+  calculable: false
+  motivo_no_calculable: Es una condicion de desigualdad que depende del regimen estatico y del analisis de casos.
+ui:
+  default_formula: neta_plano_examen
+  groups:
+  - title: Modelo dinamico (calculables)
+    items:
+    - componente_paralela_peso
+    - normal_plano_examen
+    - rozamiento_dinamico_examen
+    - neta_plano_examen
+    - segunda_ley_examen
+  - title: Cinematica de apoyo (calculables)
+    items:
+    - velocidad_tiempo_examen
+    - posicion_tiempo_examen
+  - title: Formulas conceptuales (no calculables)
+    items:
+    - segunda_ley_vectorial_conceptual
+    - trabajo_fuerza_variable_conceptual
+    - condicion_no_deslizamiento_conceptual

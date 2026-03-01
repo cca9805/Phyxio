@@ -1,0 +1,102 @@
+version: 1
+topic:
+  id: sobreamortiguado
+  title: Régimen sobreamortiguado
+variables:
+  - id: gamma
+    symbol: \gamma
+    nombre: amortiguamiento
+    unidad_si: 1/s
+    descripcion: Amortiguamiento.
+  - id: omega0
+    symbol: \omega_0
+    nombre: pulsacion natural
+    unidad_si: rad/s
+    descripcion: Pulsacion natural.
+  - id: r1
+    symbol: r_1
+    nombre: raiz 1
+    unidad_si: 1/s
+    descripcion: Raiz 1.
+  - id: r2
+    symbol: r_2
+    nombre: raiz 2
+    unidad_si: 1/s
+    descripcion: Raiz 2.
+  - id: x
+    symbol: x
+    nombre: desplazamiento
+    unidad_si: m
+    descripcion: Desplazamiento.
+  - id: C1
+    symbol: C_1
+    nombre: constante C1
+    unidad_si: m
+    descripcion: Constante de integración determinada por condiciones iniciales.
+  - id: t
+    symbol: t
+    nombre: tiempo
+    unidad_si: s
+    descripcion: Tiempo.
+  - id: C2
+    symbol: C_2
+    nombre: constante C2
+    unidad_si: m
+    descripcion: Constante de integración determinada por condiciones iniciales.
+formulas:
+  - id: raiz2_sobreamortiguado
+    title: Raíz característica r2
+    equation: r2 = -gamma - sqrt(gamma^2 - omega0^2)
+    latex: r_2=-\gamma-\sqrt{\gamma^2-\omega_0^2}
+    rearrangements:
+      - target: r2
+        equation: r2 = -gamma - sqrt(gamma^2 - omega0^2)
+        latex: r_2=-\gamma-\sqrt{\gamma^2-\omega_0^2}
+    constraints:
+      - expr: gamma > 0
+        message: gamma debe ser mayor que 0.
+      - expr: omega0 > 0
+        message: omega0 debe ser mayor que 0.
+      - expr: gamma > omega0
+        message: Para régimen sobreamortiguado debe cumplirse gamma > omega0.
+  - id: raices_sobreamortiguado
+    title: Raíz característica r1
+    equation: r1 = -gamma + sqrt(gamma^2 - omega0^2)
+    latex: r_1=-\gamma+\sqrt{\gamma^2-\omega_0^2}
+    rearrangements:
+      - target: r1
+        equation: r1 = -gamma + sqrt(gamma^2 - omega0^2)
+        latex: r_1=-\gamma+\sqrt{\gamma^2-\omega_0^2}
+    constraints:
+      - expr: gamma > 0
+        message: gamma debe ser mayor que 0.
+      - expr: omega0 > 0
+        message: omega0 debe ser mayor que 0.
+      - expr: gamma > omega0
+        message: Para régimen sobreamortiguado debe cumplirse gamma > omega0.
+  - id: solucion_sobreamortiguada
+    title: Solucion temporal
+    equation: x = C1*exp(r1*t) + C2*exp(r2*t)
+    latex: x=C_1e^{r_1t}+C_2e^{r_2t}
+    rearrangements:
+      - target: x
+        equation: x = C1*exp(r1*t) + C2*exp(r2*t)
+        latex: x=C_1e^{r_1t}+C_2e^{r_2t}
+    constraints: []
+  - id: condicion_sobreamortiguado
+    title: Condición de régimen sobreamortiguado (conceptual)
+    equation: gamma > omega0
+    latex: \gamma>\omega_0
+    calculable: false
+    motivo_no_calculable: Es un criterio de clasificación del sistema sin oscilaciones.
+ui:
+  default_formula: solucion_sobreamortiguada
+  groups:
+    - title: Fórmulas calculables
+      items:
+        - raiz2_sobreamortiguado
+        - raices_sobreamortiguado
+        - solucion_sobreamortiguada
+    - title: Fórmulas conceptuales
+      items:
+        - condicion_sobreamortiguado

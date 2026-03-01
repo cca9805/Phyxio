@@ -1,0 +1,280 @@
+version: 1
+
+topic:
+  id: caida-libre
+  title: "Caída libre"
+
+variables:
+  - id: y
+    symbol: y
+    name: "posición vertical"
+    si_unit: "m"
+  - id: y0
+    symbol: "y_0"
+    name: "posición inicial"
+    si_unit: "m"
+  - id: v
+    symbol: v
+    name: "velocidad vertical"
+    si_unit: "m/s"
+  - id: v0
+    symbol: "v_0"
+    name: "velocidad inicial"
+    si_unit: "m/s"
+  - id: a
+    symbol: a
+    name: "aceleración"
+    si_unit: "m/s^2"
+  - id: g
+    symbol: g
+    name: "aceleración de la gravedad"
+    si_unit: "m/s^2"
+  - id: t
+    symbol: t
+    name: "tiempo"
+    si_unit: "s"
+  - id: dy
+    symbol: "\\Delta y"
+    name: "desplazamiento vertical"
+    si_unit: "m"
+  - id: h
+    symbol: h
+    name: "altura (respecto al suelo)"
+    si_unit: "m"
+  - id: tMax
+    symbol: "t_{\\max}"
+    name: "tiempo hasta altura máxima"
+    si_unit: "s"
+
+
+formulas:
+  - id: caida_libre_aceleracion
+    title: "Aceleración en caída libre"
+    equation: "a = -g"
+    latex: "a = -g"
+    rearrangements:
+      - target: a
+        latex: "a = -g"
+        equation: "a = -g"
+      - target: g
+        latex: "g = -a"
+        equation: "g = -a"
+    constraints:
+      - expr: "g > 0"
+        message: "g debe ser positiva (magnitud de la gravedad)."
+    notes:
+      - "Convención: eje vertical positivo hacia arriba. En ese caso, a = -g."
+    status: calculable
+
+  - id: caida_libre_velocidad_tiempo
+    title: "Velocidad en función del tiempo"
+    equation: "v = v0 - g*t"
+    latex: "v = v_0 - g t"
+    rearrangements:
+      - target: v
+        latex: "v = v_0 - g t"
+        equation: "v = v0 - g*t"
+      - target: v0
+        latex: "v_0 = v + g t"
+        equation: "v0 = v + g*t"
+      - target: g
+        latex: "g = \\frac{v_0 - v}{t}"
+        equation: "g = (v0 - v)/t"
+      - target: t
+        latex: "t = \\frac{v_0 - v}{g}"
+        equation: "t = (v0 - v)/g"
+    constraints:
+      - expr: "g != 0"
+        message: "g no puede ser 0."
+    notes:
+      - "Si v0 = 0: v = -g t (la velocidad se hace negativa al caer)."
+    status: calculable
+
+  - id: caida_libre_posicion_tiempo
+    title: "Posición en función del tiempo"
+    equation: "y = y0 + v0*t - 0.5*g*t^2"
+    latex: "y = y_0 + v_0 t - \\frac{1}{2} g t^2"
+    rearrangements:
+      - target: y
+        latex: "y = y_0 + v_0 t - \\frac{1}{2} g t^2"
+        equation: "y = y0 + v0*t - 0.5*g*t^2"
+      - target: y0
+        latex: "y_0 = y - v_0 t + \\frac{1}{2} g t^2"
+        equation: "y0 = y - v0*t + 0.5*g*t^2"
+      - target: v0
+        latex: "v_0 = \\frac{y - y_0 + \\frac{1}{2} g t^2}{t}"
+        equation: "v0 = (y - y0 + 0.5*g*t^2)/t"
+      - target: g
+        latex: "g = \\frac{2\\,(y_0 + v_0 t - y)}{t^2}"
+        equation: "g = 2*(y0 + v0*t - y)/(t^2)"
+    constraints:
+      - expr: "t != 0"
+        message: "t no puede ser 0 si despejas v0."
+      - expr: "t^2 != 0"
+        message: "t no puede ser 0 si despejas g."
+    notes:
+      - "Ecuación horaria del MRUA vertical con a = -g."
+      - "Para caída desde el reposo (v0=0): y = y0 - (1/2) g t^2."
+    status: calculable
+
+  - id: caida_libre_velocidad_posicion
+    title: "Relación velocidad-posicion"
+    equation: "v^2 = v0^2 - 2*g*(y - y0)"
+    latex: "v^2 = v_0^2 - 2 g (y - y_0)"
+    rearrangements:
+      - target: v
+        latex: "v = +\\sqrt{v_0^2 - 2 g (y - y_0)}"
+        equation: "v = sqrt(v0^2 - 2*g*(y - y0))"
+
+      - target: v
+        latex: "v = -\\sqrt{v_0^2 - 2 g (y - y_0)}"
+        equation: "v = -sqrt(v0^2 - 2*g*(y - y0))"
+
+      - target: v0
+        latex: "v_0 = +\\sqrt{v^2 + 2 g (y - y_0)}"
+        equation: "v0 = sqrt(v^2 + 2*g*(y - y0))"
+
+      - target: v0
+        latex: "v_0 = -\\sqrt{v^2 + 2 g (y - y_0)}"
+        equation: "v0 = -sqrt(v^2 + 2*g*(y - y0))"
+
+      - target: y
+        latex: "y = y_0 + \\frac{v_0^2 - v^2}{2 g}"
+        equation: "y = y0 + (v0^2 - v^2)/(2*g)"
+
+      - target: y0
+        latex: "y_0 = y - \\frac{v_0^2 - v^2}{2 g}"
+        equation: "y0 = y - (v0^2 - v^2)/(2*g)"
+
+      - target: g
+        latex: "g = \\frac{v_0^2 - v^2}{2 (y - y_0)}"
+        equation: "g = (v0^2 - v^2)/(2*(y - y0))"
+
+    constraints:
+      - expr: "g != 0"
+        message: "g no puede ser 0."
+      - expr: "(y - y0) != 0"
+        message: "y - y0 no puede ser 0 si despejas g."
+    notes:
+      - "Útil cuando no conoces el tiempo."
+      - "El signo ± en v depende del sentido del movimiento."
+    status: calculable
+
+  - id: caida_libre_desplazamiento
+    title: "Desplazamiento vertical (con aceleración constante)"
+    equation: "dy = v0*t - 0.5*g*t^2"
+    latex: "\\Delta y = v_0 t - \\frac{1}{2} g t^2"
+    rearrangements:
+      - target: dy
+        latex: "\\Delta y = v_0 t - \\frac{1}{2} g t^2"
+        equation: "dy = v0*t - 0.5*g*t^2"
+      - target: v0
+        latex: "v_0 = \\frac{\\Delta y + \\frac{1}{2} g t^2}{t}"
+        equation: "v0 = (dy + 0.5*g*t^2)/t"
+      - target: g
+        latex: "g = \\frac{2\\,(v_0 t - \\Delta y)}{t^2}"
+        equation: "g = 2*(v0*t - dy)/(t^2)"
+    constraints:
+      - expr: "t != 0"
+        message: "t no puede ser 0 si despejas v0."
+      - expr: "t^2 != 0"
+        message: "t no puede ser 0 si despejas g."
+    notes:
+      - "Aquí Δy = y - y0."
+      - "Con v0 = 0: Δy = -(1/2) g t^2."
+    status: calculable
+
+  - id: caida_libre_tiempo_desde_altura
+    title: "Tiempo de caída desde reposo"
+    equation: "t = sqrt(2*h/g)"
+    latex: "t = \\sqrt{\\frac{2h}{g}}"
+    rearrangements:
+      - target: t
+        latex: "t = \\sqrt{\\frac{2h}{g}}"
+        equation: "t = sqrt(2*h/g)"
+      - target: h
+        latex: "h = \\frac{1}{2} g t^2"
+        equation: "h = 0.5*g*t^2"
+      - target: g
+        latex: "g = \\frac{2h}{t^2}"
+        equation: "g = 2*h/(t^2)"
+    constraints:
+      - expr: "h >= 0"
+        message: "h debe ser no negativa."
+      - expr: "g > 0"
+        message: "g debe ser positiva."
+    notes:
+      - "Caso particular de y = y0 - (1/2) g t^2 tomando y=0, y0=h y v0=0."
+    status: calculable
+
+  - id: caida_libre_tiempo_altura_maxima
+    title: "Tiempo hasta la altura máxima"
+    equation: "tMax = v0/g"
+    latex: "t_{\\max} = \\frac{v_0}{g}"
+    rearrangements:
+      - target: tMax
+        equation: "tMax = v0/g"
+        latex: "t_{\\max} = \\frac{v_0}{g}"
+    constraints:
+      - expr: "g > 0"
+        message: "g debe ser positiva."
+      - expr: "v0 > 0"
+        message: "Para que exista altura máxima, v0 debe ser mayor que 0 (lanzamiento hacia arriba)."
+    status: calculable
+
+  # =========================
+  # MODO LECTURA (NO CALCULABLES AÚN)
+  # =========================
+
+  - id: caida_libre_tiempo_general
+    title: "Tiempo general (ecuación cuadrática)"
+    latex: "t = \\frac{v_0 \\pm \\sqrt{v_0^2 + 2 g (y_0 - y)}}{g}"
+    equation: "t = (v0 + sqrt(v0^2 + 2*g*(y0 - y)))/g"
+    status: read_only
+    why_not:
+      - "Ecuación cuadrática con dos soluciones posibles (±)."
+      - "Requiere elegir la solución físicamente válida."
+    notes:
+      - "Describe subida y bajada."
+      - "Caso general de la ecuación horaria."
+
+  - id: caida_libre_altura_maxima
+    title: "Altura máxima en lanzamiento vertical"
+    latex: "y_{\\max} = y_0 + \\frac{v_0^2}{2g}"
+    equation: "yMax = y0 + v0^2/(2*g)"
+    status: read_only
+    why_not:
+      - "Depende de identificar el instante v = 0."
+    notes:
+      - "Solo aplicable cuando v0 > 0."
+
+  - id: caida_libre_velocidad_desde_altura
+    title: "Velocidad de impacto desde reposo (modo lectura)"
+    latex: "v = \\sqrt{2 g h}"
+    equation: "v = sqrt(2*g*h)"
+    status: read_only
+    why_not:
+      - "Caso particular (v0 = 0) y requiere elegir sentido."
+    notes:
+      - "Si tomas eje +y hacia arriba, en caída hacia abajo la velocidad será negativa: v = -\\sqrt{2gh}."
+
+
+
+ui:
+  default_formula: caida_libre_posicion_tiempo
+  groups:
+    - title: "Calculables"
+      items:
+        - caida_libre_aceleracion
+        - caida_libre_desplazamiento
+        - caida_libre_velocidad_tiempo
+        - caida_libre_posicion_tiempo
+        - caida_libre_velocidad_posicion
+        - caida_libre_tiempo_desde_altura
+
+    - title: "Fórmulas (modo lectura)"
+      items:
+        - caida_libre_tiempo_general
+        - caida_libre_altura_maxima
+        - caida_libre_tiempo_altura_maxima
+        - caida_libre_velocidad_desde_altura

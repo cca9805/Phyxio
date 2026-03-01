@@ -1,0 +1,142 @@
+﻿version: 1
+topic:
+  id: precesion
+  title: Precesion giroscópica
+variables:
+  - id: tau
+    symbol: \tau
+    nombre: torque externo
+    unidad_si: N*m
+    descripcion: Torque externo neto.
+  - id: L
+    symbol: L
+    nombre: momento angular
+    unidad_si: kg*m^2/s
+    descripcion: Momento angular del spin.
+  - id: Omegap
+    symbol: \Omega_p
+    nombre: velocidad angular de precesion
+    unidad_si: rad/s
+    descripcion: Velocidad angular de precesion.
+  - id: Tp
+    symbol: T_p
+    nombre: periodo de precesion
+    unidad_si: s
+    descripcion: Periodo de precesion.
+  - id: M
+    symbol: M
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa del cuerpo.
+  - id: g
+    symbol: g
+    nombre: gravedad
+    unidad_si: m/s^2
+    descripcion: Aceleracion gravitatoria.
+  - id: d
+    symbol: d
+    nombre: brazo
+    unidad_si: m
+    descripcion: Brazo del peso respecto al apoyo.
+  - id: I
+    symbol: I
+    nombre: momento de inercia
+    unidad_si: kg*m^2
+    descripcion: Momento de inercia del rotor.
+  - id: omega
+    symbol: \omega
+    nombre: velocidad angular spin
+    unidad_si: rad/s
+    descripcion: Velocidad angular de giro propio.
+formulas:
+  - id: precesion_general
+    title: Velocidad de precesion general
+    equation: Omegap = tau/L
+    latex: \Omega_p=\frac{\tau}{L}
+    rearrangements:
+      - target: Omegap
+        equation: Omegap = tau/L
+        latex: \Omega_p=\frac{\tau}{L}
+      - target: tau
+        equation: tau = Omegap*L
+        latex: \tau=\Omega_p L
+    constraints:
+      - expr: L != 0
+        message: L no puede ser 0.
+  - id: torque_gravitatorio
+    title: Torque gravitatorio aproximado
+    equation: tau = M*g*d
+    latex: \tau\approx Mgd
+    rearrangements:
+      - target: tau
+        equation: tau = M*g*d
+        latex: \tau\approx Mgd
+    constraints:
+      - expr: M > 0
+        message: M debe ser mayor que 0.
+      - expr: d >= 0
+        message: d debe ser no negativa.
+  - id: momento_angular_spin
+    title: Momento angular del spin
+    equation: L = I*omega
+    latex: L\approx I\omega
+    rearrangements:
+      - target: L
+        equation: L = I*omega
+        latex: L\approx I\omega
+    constraints:
+      - expr: I > 0
+        message: I debe ser mayor que 0.
+  - id: precesion_peonza
+    title: Precesion de peonza/giroscopio
+    equation: Omegap = (M*g*d)/(I*omega)
+    latex: \Omega_p\approx\frac{Mgd}{I\omega}
+    rearrangements:
+      - target: Omegap
+        equation: Omegap = (M*g*d)/(I*omega)
+        latex: \Omega_p\approx\frac{Mgd}{I\omega}
+      - target: omega
+        equation: omega = (M*g*d)/(I*Omegap)
+        latex: \omega\approx\frac{Mgd}{I\Omega_p}
+    constraints:
+      - expr: I > 0
+        message: I debe ser mayor que 0.
+      - expr: omega != 0
+        message: omega no puede ser 0.
+      - expr: Omegap != 0
+        message: Omega_p no puede ser 0 al despejar omega.
+  - id: periodo_precesion
+    title: Periodo de precesion
+    equation: Tp = 2*pi/Omegap
+    latex: T_p=\frac{2\pi}{\Omega_p}
+    rearrangements:
+      - target: Tp
+        equation: Tp = 2*pi/Omegap
+        latex: T_p=\frac{2\pi}{\Omega_p}
+      - target: Omegap
+        equation: Omegap = 2*pi/Tp
+        latex: \Omega_p=\frac{2\pi}{T_p}
+    constraints:
+      - expr: Omegap > 0
+        message: Omega_p debe ser mayor que 0.
+      - expr: Tp > 0
+        message: T_p debe ser mayor que 0.
+  - id: ecuacion_vectorial_conceptual
+    title: Ecuacion vectorial de base (conceptual)
+    equation: tau_vec = dL_vec/dt
+    latex: \vec\tau=\frac{d\vec L}{dt}
+    calculable: false
+    motivo_no_calculable: Relacion vectorial diferencial. Requiere tratamiento temporal y direccional fuera del despeje escalar simple.
+ui:
+  default_formula: precesion_peonza
+  groups:
+    - title: Formulas calculables
+      items:
+        - precesion_general
+        - torque_gravitatorio
+        - momento_angular_spin
+        - precesion_peonza
+        - periodo_precesion
+    - title: Formulas conceptuales
+      items:
+        - ecuacion_vectorial_conceptual

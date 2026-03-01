@@ -1,0 +1,120 @@
+version: 1
+topic:
+  id: reflexion-y-transmision-en-solidos
+  title: Reflexion Y Transmision En Solidos
+variables:
+  - id: Z1
+    symbol: Z_1
+    name: impedancia_1
+    si_unit: Pa*s/m
+  - id: Z2
+    symbol: Z_2
+    name: impedancia_2
+    si_unit: Pa*s/m
+  - id: R_A
+    symbol: R_A
+    name: coef_reflexion_amplitud
+    si_unit: '1'
+  - id: T_A
+    symbol: T_A
+    name: coef_transmision_amplitud
+    si_unit: '1'
+  - id: R_I
+    symbol: R_I
+    name: coef_reflexion_intensidad
+    si_unit: '1'
+  - id: T_I
+    symbol: T_I
+    name: coef_transmision_intensidad
+    si_unit: '1'
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: v
+    symbol: v
+    name: velocidad_onda
+    si_unit: m/s
+formulas:
+  - id: Z
+    title: Impedancia del medio
+    equation: Z = rho*v
+    latex: Z=\rho v
+    rearrangements:
+      - target: Z
+        equation: Z = rho*v
+        latex: Z=\rho v
+
+  - id: RA
+    title: Reflexion de amplitud
+    equation: R_A = (Z2 - Z1)/(Z2 + Z1)
+    latex: R_A=\frac{Z_2-Z_1}{Z_2+Z_1}
+    rearrangements:
+      - target: R_A
+        equation: R_A = (Z2 - Z1)/(Z2 + Z1)
+        latex: R_A=\frac{Z_2-Z_1}{Z_2+Z_1}
+
+  - id: TA
+    title: Transmision de amplitud
+    equation: T_A = 2*Z2/(Z1 + Z2)
+    latex: T_A=\frac{2Z_2}{Z_1+Z_2}
+    rearrangements:
+      - target: T_A
+        equation: T_A = 2*Z2/(Z1 + Z2)
+        latex: T_A=\frac{2Z_2}{Z_1+Z_2}
+
+  - id: RI
+    title: Reflexion de intensidad
+    equation: R_I = R_A^2
+    latex: R_I=R_A^2
+    rearrangements:
+      - target: R_I
+        equation: R_I = R_A^2
+        latex: R_I=R_A^2
+      - target: R_A
+        equation: R_A = sqrt(R_I)
+        latex: R_A=\sqrt{R_I}
+
+  - id: TI
+    title: Transmision de intensidad
+    equation: T_I = 4*Z1*Z2/(Z1 + Z2)^2
+    latex: T_I=\frac{4Z_1Z_2}{(Z_1+Z_2)^2}
+    rearrangements:
+      - target: T_I
+        equation: T_I = 4*Z1*Z2/(Z1 + Z2)^2
+        latex: T_I=\frac{4Z_1Z_2}{(Z_1+Z_2)^2}
+
+  - id: balance
+    title: Balance de intensidad ideal
+    equation: T_I = 1 - R_I
+    latex: R_I+T_I=1
+    rearrangements:
+      - target: T_I
+        equation: T_I = 1 - R_I
+        latex: T_I=1-R_I
+      - target: R_I
+        equation: R_I = 1 - T_I
+        latex: R_I=1-T_I
+
+  - id: contraste
+    title: Contraste de impedancias
+    equation: contraste = Z2/Z1
+    latex: \chi=\frac{Z_2}{Z_1}
+    calculable: false
+    motivo_no_calculable: Indicador conceptual para interpretar regimen de acoplamiento.
+ui:
+  default_formula: RA
+  groups:
+    - title: Interfaz normal (calculables)
+      items:
+        - RA
+        - TA
+        - RI
+        - TI
+        - balance
+    - title: Magnitudes auxiliares
+      items:
+        - Z
+    - title: Criterio conceptual
+      items:
+        - contraste

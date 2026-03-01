@@ -1,0 +1,158 @@
+﻿version: 1
+topic:
+  id: ventaja-mecanica
+  title: Ventaja mecanica
+
+variables:
+  - id: VM
+    symbol: VM
+    nombre: ventaja_mecanica
+    unidad_si: ""
+    descripcion: Relacion entre carga y esfuerzo.
+  - id: R
+    symbol: R
+    nombre: resistencia
+    unidad_si: N
+    descripcion: Carga o fuerza resistente.
+  - id: P
+    symbol: P
+    nombre: potencia
+    unidad_si: N
+    descripcion: Fuerza aplicada por el agente.
+  - id: dP
+    symbol: d_P
+    nombre: brazo_potencia
+    unidad_si: m
+    descripcion: Brazo de la potencia.
+  - id: dR
+    symbol: d_R
+    nombre: brazo_resistencia
+    unidad_si: m
+    descripcion: Brazo de la resistencia.
+  - id: eta
+    symbol: \eta
+    nombre: rendimiento
+    unidad_si: ""
+    descripcion: Proporcion de trabajo util respecto al trabajo de entrada.
+  - id: VMreal
+    symbol: VM_{real}
+    nombre: ventaja_mecanica_real
+    unidad_si: ""
+    descripcion: Ventaja mecanica considerando perdidas.
+  - id: Win
+    symbol: W_{in}
+    nombre: trabajo_entrada
+    unidad_si: J
+    descripcion: Trabajo suministrado al sistema.
+  - id: Wout
+    symbol: W_{out}
+    nombre: trabajo_salida
+    unidad_si: J
+    descripcion: Trabajo util entregado por el sistema.
+
+formulas:
+  - id: ventaja_mecanica_definicion
+    title: Definicion de ventaja mecanica
+    equation: VM = R/P
+    latex: VM = \frac{R}{P}
+    variables: [VM, R, P]
+    rearrangements:
+      - target: VM
+        equation: VM = R/P
+        latex: VM = \frac{R}{P}
+      - target: R
+        equation: R = VM*P
+        latex: R = VM\,P
+      - target: P
+        equation: P = R/VM
+        latex: P = \frac{R}{VM}
+
+  - id: ventaja_por_brazos
+    title: Ventaja mecanica por geometria
+    equation: VM = dP/dR
+    latex: VM = \frac{d_P}{d_R}
+    variables: [VM, dP, dR]
+    rearrangements:
+      - target: VM
+        equation: VM = dP/dR
+        latex: VM = \frac{d_P}{d_R}
+      - target: dP
+        equation: dP = VM*dR
+        latex: d_P = VM\,d_R
+      - target: dR
+        equation: dR = dP/VM
+        latex: d_R = \frac{d_P}{VM}
+
+  - id: equilibrio_palanca
+    title: Equilibrio de palanca
+    equation: P*dP = R*dR
+    latex: P\,d_P = R\,d_R
+    variables: [P, dP, R, dR]
+    rearrangements:
+      - target: P
+        equation: P = (R*dR)/dP
+        latex: P = \frac{R\,d_R}{d_P}
+      - target: R
+        equation: R = (P*dP)/dR
+        latex: R = \frac{P\,d_P}{d_R}
+      - target: dP
+        equation: dP = (R*dR)/P
+        latex: d_P = \frac{R\,d_R}{P}
+      - target: dR
+        equation: dR = (P*dP)/R
+        latex: d_R = \frac{P\,d_P}{R}
+
+  - id: rendimiento
+    title: Rendimiento
+    equation: eta = Wout/Win
+    latex: \eta = \frac{W_{out}}{W_{in}}
+    variables: [eta, Wout, Win]
+    rearrangements:
+      - target: eta
+        equation: eta = Wout/Win
+        latex: \eta = \frac{W_{out}}{W_{in}}
+      - target: Wout
+        equation: Wout = eta*Win
+        latex: W_{out} = \eta W_{in}
+      - target: Win
+        equation: Win = Wout/eta
+        latex: W_{in} = \frac{W_{out}}{\eta}
+
+  - id: ventaja_real
+    title: Ventaja mecanica real
+    equation: VMreal = eta*VM
+    latex: VM_{real} = \eta\,VM
+    variables: [VMreal, eta, VM]
+    rearrangements:
+      - target: VMreal
+        equation: VMreal = eta*VM
+        latex: VM_{real} = \eta\,VM
+      - target: eta
+        equation: eta = VMreal/VM
+        latex: \eta = \frac{VM_{real}}{VM}
+      - target: VM
+        equation: VM = VMreal/eta
+        latex: VM = \frac{VM_{real}}{\eta}
+
+  - id: principio_energetico
+    title: Conservacion ideal de trabajo
+    equation: Win = Wout
+    latex: W_{in}=W_{out}
+    calculable: false
+    motivo_no_calculable: Relacion conceptual de modelo ideal; se usa para interpretar intercambio fuerza-recorrido.
+
+ui:
+  default_formula: ventaja_mecanica_definicion
+  groups:
+    - title: Ventaja mecanica ideal
+      items:
+        - ventaja_mecanica_definicion
+        - ventaja_por_brazos
+        - equilibrio_palanca
+    - title: Rendimiento y caso real
+      items:
+        - rendimiento
+        - ventaja_real
+    - title: Conceptual
+      items:
+        - principio_energetico

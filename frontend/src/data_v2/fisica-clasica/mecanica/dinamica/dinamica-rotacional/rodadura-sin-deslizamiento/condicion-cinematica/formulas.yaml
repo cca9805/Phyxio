@@ -1,0 +1,99 @@
+version: 1
+topic:
+  id: condicion-cinematica
+  title: Condicion Cinematica
+variables:
+  - id: v
+    symbol: v
+    name: velocidad_lineal
+    si_unit: m/s
+  - id: omega
+    symbol: \omega
+    name: velocidad_angular
+    si_unit: rad/s
+  - id: R
+    symbol: R
+    name: radio
+    si_unit: m
+  - id: v_contacto
+    symbol: v_{contacto}
+    name: velocidad_punto_contacto
+    si_unit: m/s
+  - id: a
+    symbol: a
+    name: aceleracion_lineal
+    si_unit: m/s^2
+  - id: alpha
+    symbol: \alpha
+    name: aceleracion_angular
+    si_unit: rad/s^2
+  - id: delta
+    symbol: \Delta
+    name: desviacion_rodadura
+    si_unit: m/s
+formulas:
+  - id: condicion_rodadura
+    title: Condicion de rodadura pura
+    equation: v = omega*R
+    latex: v=\omega R
+    rearrangements:
+      - target: v
+        equation: v = omega*R
+        latex: v=\omega R
+      - target: omega
+        equation: omega = v/R
+        latex: \omega=\frac{v}{R}
+      - target: R
+        equation: R = v/omega
+        latex: R=\frac{v}{\omega}
+    constraints:
+      - expr: R > 0
+        message: R debe ser positiva.
+
+  - id: velocidad_contacto
+    title: Velocidad del punto de contacto
+    equation: v_contacto = v - omega*R
+    latex: v_{contacto}=v-\omega R
+    rearrangements:
+      - target: v_contacto
+        equation: v_contacto = v - omega*R
+        latex: v_{contacto}=v-\omega R
+      - target: v
+        equation: v = v_contacto + omega*R
+        latex: v=v_{contacto}+\omega R
+
+  - id: consistencia_rodadura
+    title: Chequeo de consistencia
+    equation: delta = v - omega*R
+    latex: \Delta=v-\omega R
+    rearrangements:
+      - target: delta
+        equation: delta = v - omega*R
+        latex: \Delta=v-\omega R
+
+  - id: relacion_aceleracion
+    title: Relacion de aceleraciones
+    equation: a = alpha*R
+    latex: a=\alpha R
+    rearrangements:
+      - target: a
+        equation: a = alpha*R
+        latex: a=\alpha R
+      - target: alpha
+        equation: alpha = a/R
+        latex: \alpha=\frac{a}{R}
+    constraints:
+      - expr: R > 0
+        message: R debe ser positiva.
+
+ui:
+  default_formula: condicion_rodadura
+  groups:
+    - title: Relaciones base (calculables)
+      items:
+        - condicion_rodadura
+        - velocidad_contacto
+        - relacion_aceleracion
+    - title: Diagnostico de deslizamiento (calculable)
+      items:
+        - consistencia_rodadura

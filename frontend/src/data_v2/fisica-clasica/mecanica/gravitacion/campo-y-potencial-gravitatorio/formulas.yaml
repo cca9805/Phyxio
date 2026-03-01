@@ -1,0 +1,196 @@
+﻿version: 1
+topic:
+  id: campo-y-potencial-gravitatorio
+  title: Campo y potencial gravitatorio
+variables:
+  - id: G
+    symbol: G
+    nombre: constante de gravitación
+    unidad_si: N*m^2/kg^2
+    descripcion: Constante universal de gravitación.
+  - id: M
+    symbol: M
+    nombre: masa fuente
+    unidad_si: kg
+    descripcion: Masa que crea el campo gravitatorio.
+  - id: m
+    symbol: m
+    nombre: masa de prueba
+    unidad_si: kg
+    descripcion: Masa afectada por el campo gravitatorio.
+  - id: r
+    symbol: r
+    nombre: distancia radial
+    unidad_si: m
+    descripcion: Distancia al centro de la masa fuente.
+  - id: g
+    symbol: g
+    nombre: campo gravitatorio
+    unidad_si: m/s^2
+    descripcion: Intensidad de campo gravitatorio local.
+  - id: V
+    symbol: V
+    nombre: potencial gravitatorio
+    unidad_si: J/kg
+    descripcion: Potencial gravitatorio local.
+  - id: U
+    symbol: U
+    nombre: energia potencial gravitatoria
+    unidad_si: J
+    descripcion: Energía potencial de la masa m.
+  - id: DeltaV
+    symbol: \Delta V
+    nombre: cambio de potencial
+    unidad_si: J/kg
+    descripcion: Variación de potencial entre dos puntos.
+  - id: DeltaU
+    symbol: \Delta U
+    nombre: cambio de energia potencial
+    unidad_si: J
+    descripcion: Variación de energía potencial.
+  - id: Wg
+    symbol: W_g
+    nombre: trabajo gravitatorio
+    unidad_si: J
+    descripcion: Trabajo de la fuerza gravitatoria.
+  - id: ri
+    symbol: r_i
+    nombre: radio inicial
+    unidad_si: m
+    descripcion: Distancia radial inicial.
+  - id: rf
+    symbol: r_f
+    nombre: radio final
+    unidad_si: m
+    descripcion: Distancia radial final.
+  - id: gi
+    symbol: g_i
+    nombre: campo inicial
+    unidad_si: m/s^2
+    descripcion: Campo en condición inicial.
+  - id: gf
+    symbol: g_f
+    nombre: campo final
+    unidad_si: m/s^2
+    descripcion: Campo en condición final.
+formulas:
+  - id: campo_puntual
+    title: Campo gravitatorio de masa puntual
+    equation: g = G*M/r^2
+    latex: g = G\frac{M}{r^2}
+    rearrangements:
+      - target: g
+        equation: g = G*M/r^2
+        latex: g = G\frac{M}{r^2}
+      - target: M
+        equation: M = g*r^2/G
+        latex: M = \frac{gr^2}{G}
+      - target: r
+        equation: r = sqrt(G*M/g)
+        latex: r = \sqrt{\frac{GM}{g}}
+    constraints:
+      - expr: r > 0
+        message: r debe ser mayor que 0.
+      - expr: g > 0
+        message: g debe ser mayor que 0 para despejar r.
+
+  - id: potencial_puntual
+    title: Potencial gravitatorio de masa puntual
+    equation: V = -G*M/r
+    latex: V = -G\frac{M}{r}
+    rearrangements:
+      - target: V
+        equation: V = -G*M/r
+        latex: V = -G\frac{M}{r}
+      - target: M
+        equation: M = -V*r/G
+        latex: M = -\frac{Vr}{G}
+      - target: r
+        equation: r = -G*M/V
+        latex: r = -\frac{GM}{V}
+    constraints:
+      - expr: r > 0
+        message: r debe ser mayor que 0.
+      - expr: V < 0
+        message: Con referencia en infinito, V debe ser negativo para masas positivas.
+
+  - id: energia_desde_potencial
+    title: Energía potencial desde potencial gravitatorio
+    equation: U = m*V
+    latex: U = mV
+    rearrangements:
+      - target: U
+        equation: U = m*V
+        latex: U = mV
+      - target: m
+        equation: m = U/V
+        latex: m = \frac{U}{V}
+      - target: V
+        equation: V = U/m
+        latex: V = \frac{U}{m}
+    constraints:
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+
+  - id: cambio_energia_potencial
+    title: Cambio de energía potencial gravitatoria
+    equation: DeltaU = -G*M*m*(1/rf - 1/ri)
+    latex: \Delta U = -GMm\left(\frac{1}{r_f}-\frac{1}{r_i}\right)
+    rearrangements:
+      - target: DeltaU
+        equation: DeltaU = -G*M*m*(1/rf - 1/ri)
+        latex: \Delta U = -GMm\left(\frac{1}{r_f}-\frac{1}{r_i}\right)
+    constraints:
+      - expr: ri > 0
+        message: ri debe ser mayor que 0.
+      - expr: rf > 0
+        message: rf debe ser mayor que 0.
+
+  - id: trabajo_gravitatorio
+    title: Trabajo gravitatorio
+    equation: Wg = -DeltaU
+    latex: W_g = -\Delta U
+    rearrangements:
+      - target: Wg
+        equation: Wg = -DeltaU
+        latex: W_g = -\Delta U
+      - target: DeltaU
+        equation: DeltaU = -Wg
+        latex: \Delta U = -W_g
+
+  - id: relacion_campo_potencial_conceptual
+    title: Relación campo-potencial (conceptual)
+    equation: g_vec = -grad(V)
+    latex: \vec g = -\nabla V
+    calculable: false
+    motivo_no_calculable: Requiere operador diferencial espacial y modelo de V(r,theta,phi).
+
+  - id: superposicion_campos_conceptual
+    title: Superposición de campos (conceptual)
+    equation: g_total_vec = sum(g_i_vec)
+    latex: \vec g_{total}=\sum_i \vec g_i
+    calculable: false
+    motivo_no_calculable: Requiere suma vectorial según geometría de múltiples fuentes.
+
+  - id: superposicion_potenciales_conceptual
+    title: Superposición de potenciales (conceptual)
+    equation: V_total = sum(V_i)
+    latex: V_{total}=\sum_i V_i
+    calculable: false
+    motivo_no_calculable: Depende de configuración espacial de varias masas fuente.
+
+ui:
+  default_formula: campo_puntual
+  groups:
+    - title: Formulas calculables
+      items:
+        - campo_puntual
+        - potencial_puntual
+        - energia_desde_potencial
+        - cambio_energia_potencial
+        - trabajo_gravitatorio
+    - title: Formulas conceptuales
+      items:
+        - relacion_campo_potencial_conceptual
+        - superposicion_campos_conceptual
+        - superposicion_potenciales_conceptual

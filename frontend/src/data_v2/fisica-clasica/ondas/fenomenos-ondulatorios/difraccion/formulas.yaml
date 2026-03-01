@@ -1,0 +1,103 @@
+﻿version: 1
+topic:
+  id: difraccion
+  title: Difraccion
+variables:
+  - id: a
+    symbol: a
+    name: abertura
+    si_unit: m
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+  - id: m
+    symbol: m
+    name: orden_minimo
+    si_unit: '1'
+  - id: theta
+    symbol: \theta
+    name: angulo
+    si_unit: rad
+  - id: sin_theta
+    symbol: \sin\theta
+    name: seno_angulo
+    si_unit: '1'
+  - id: L
+    symbol: L
+    name: distancia_pantalla
+    si_unit: m
+  - id: y_m
+    symbol: y_m
+    name: posicion_minimo
+    si_unit: m
+  - id: w0
+    symbol: w_0
+    name: ancho_maximo_central
+    si_unit: m
+  - id: D
+    symbol: D
+    name: diametro_apertura
+    si_unit: m
+  - id: theta_R
+    symbol: \theta_R
+    name: angulo_rayleigh
+    si_unit: rad
+formulas:
+  - id: minimo_rendija
+    title: Minimo de difraccion (rendija simple)
+    equation: sin_theta = m*lambda/a
+    latex: a\sin\theta=m\lambda
+    rearrangements:
+      - target: sin_theta
+        equation: sin_theta = m*lambda/a
+        latex: \sin\theta=\frac{m\lambda}{a}
+      - target: lambda
+        equation: lambda = a*sin_theta/m
+        latex: \lambda=\frac{a\sin\theta}{m}
+      - target: a
+        equation: a = m*lambda/sin_theta
+        latex: a=\frac{m\lambda}{\sin\theta}
+
+  - id: angulo_minimo
+    title: Angulo del minimo
+    equation: theta = asin(m*lambda/a)
+    latex: \theta=\arcsin\left(\frac{m\lambda}{a}\right)
+
+  - id: posicion_minimo
+    title: Posicion de minimo en pantalla (angulo pequeno)
+    equation: y_m = m*lambda*L/a
+    latex: y_m\approx\frac{m\lambda L}{a}
+
+  - id: ancho_central
+    title: Ancho del maximo central
+    equation: w0 = 2*lambda*L/a
+    latex: w_0\approx\frac{2\lambda L}{a}
+
+  - id: rayleigh
+    title: Criterio de Rayleigh (apertura circular)
+    equation: theta_R = 1.22*lambda/D
+    latex: \theta_R\approx1.22\frac{\lambda}{D}
+
+  - id: condicion_existencia
+    title: Existencia de orden difractivo (conceptual)
+    equation: m*lambda <= a
+    latex: m\lambda\le a
+    calculable: false
+    motivo_no_calculable: Criterio de existencia de orden, no despeje escalar unico.
+
+ui:
+  default_formula: angulo_minimo
+  groups:
+    - title: Rendija simple
+      items:
+        - minimo_rendija
+        - angulo_minimo
+        - posicion_minimo
+        - ancho_central
+    - title: Resolucion angular
+      items:
+        - rayleigh
+    - title: Criterio de validez
+      items:
+        - condicion_existencia

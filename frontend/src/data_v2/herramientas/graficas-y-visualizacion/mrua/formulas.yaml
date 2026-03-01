@@ -1,0 +1,127 @@
+version: 1
+topic:
+  id: mrua
+  title: "Movimiento Rectilíneo Uniformemente Acelerado"
+
+variables:
+  - id: x
+    symbol: x
+    name: "posición"
+    si_unit: "m"
+  - id: x0
+    symbol: "x_0"
+    name: "posición inicial"
+    si_unit: "m"
+  - id: v
+    symbol: v
+    name: "velocidad"
+    si_unit: "m/s"
+  - id: v0
+    symbol: "v_0"
+    name: "velocidad inicial"
+    si_unit: "m/s"
+  - id: a
+    symbol: a
+    name: "aceleración"
+    si_unit: "m/s^2"
+  - id: t
+    symbol: t
+    name: "tiempo"
+    si_unit: "s"
+  - id: dx
+    symbol: "\\Delta x"
+    name: "desplazamiento"
+    si_unit: "m"
+
+formulas:
+  - id: mrua_posicion
+    title: "Ecuación horaria (posición)"
+    equation: "x = x0 + v0*t + 0.5*a*t^2"
+    latex: "x = x_0 + v_0 t + \\frac{1}{2} a t^2"
+    rearrangements:
+      - target: x
+        equation: "x = x0 + v0*t + 0.5*a*t^2"
+        latex: "x = x_0 + v_0 t + \\frac{1}{2} a t^2"
+      - target: x0
+        equation: "x0 = x - v0*t - 0.5*a*t^2"
+        latex: "x_0 = x - v_0 t - \\frac{1}{2} a t^2"
+      - target: v0
+        equation: "v0 = (x - x0 - 0.5*a*t^2)/t"
+        latex: "v_0 = \\frac{x - x_0 - \\frac{1}{2} a t^2}{t}"
+      - target: a
+        equation: "a = 2*(x - x0 - v0*t)/t^2"
+        latex: "a = \\frac{2(x - x_0 - v_0 t)}{t^2}"
+      - target: t
+        equation: "x = x0 + v0*t + 0.5*a*t^2"
+        latex: "x = x_0 + v_0 t + \\frac{1}{2} a t^2"
+        constraints:
+          - expr: "t >= 0"
+            message: "El tiempo debe ser no negativo."
+    status: calculable
+
+  - id: mrua_velocidad
+    title: "Velocidad en MRUA"
+    equation: "v = v0 + a*t"
+    latex: "v = v_0 + a t"
+    rearrangements:
+      - target: v
+        equation: "v = v0 + a*t"
+        latex: "v = v_0 + a t"
+      - target: v0
+        equation: "v0 = v - a*t"
+        latex: "v_0 = v - a t"
+      - target: a
+        equation: "a = (v - v0)/t"
+        latex: "a = \\frac{v - v_0}{t}"
+      - target: t
+        equation: "t = (v - v0)/a"
+        latex: "t = \\frac{v - v_0}{a}"
+    status: calculable
+
+  - id: mrua_torricelli
+    title: "Ecuación de Torricelli"
+    equation: "v^2 = v0^2 + 2*a*(x - x0)"
+    latex: "v^2 = v_0^2 + 2 a (x - x_0)"
+    rearrangements:
+      - target: v
+        equation: "v = sqrt(v0^2 + 2*a*(x - x0))"
+        latex: "v = \\sqrt{v_0^2 + 2 a (x - x_0)}"
+      - target: v0
+        equation: "v0 = sqrt(v^2 - 2*a*(x - x0))"
+        latex: "v_0 = \\sqrt{v^2 - 2 a (x - x_0)}"
+      - target: a
+        equation: "a = (v^2 - v0^2)/(2*(x - x0))"
+        latex: "a = \\frac{v^2 - v_0^2}{2(x - x_0)}"
+    status: calculable
+
+  - id: mrua_desplazamiento_vel_media
+    title: "Desplazamiento con velocidad media (a constante)"
+    equation: "dx = ((v0 + v)/2)*t"
+    latex: "\\Delta x = \\frac{(v_0 + v)}{2}\\,t"
+    rearrangements:
+      - target: dx
+        equation: "dx = ((v0 + v)/2)*t"
+        latex: "\\Delta x = \\frac{(v_0 + v)}{2}\\,t"
+      - target: t
+        equation: "t = (2*dx)/(v0 + v)"
+        latex: "t = \\frac{2\\Delta x}{v_0 + v}"
+    constraints:
+      - expr: "(v0 + v) != 0"
+        message: "v0 + v no puede ser 0 al despejar t."
+      - expr: "t >= 0"
+        message: "El tiempo debe ser no negativo."
+    status: calculable
+
+ui:
+  default_formula: mrua_velocidad
+  groups:
+    - title: "Básicas"
+      items:
+        - mrua_velocidad
+        - mrua_posicion
+        - mrua_desplazamiento_vel_media   # <-- añade esto
+    - title: "Sin tiempo"
+      items:
+        - mrua_torricelli
+
+    

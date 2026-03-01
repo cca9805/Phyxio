@@ -1,0 +1,211 @@
+﻿version: 1
+topic:
+  id: momento-lineal
+  title: Momento lineal
+variables:
+  - id: p
+    symbol: p
+    nombre: momento lineal
+    unidad_si: kg*m/s
+    descripcion: Momento lineal del cuerpo.
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa del cuerpo.
+  - id: v
+    symbol: v
+    nombre: velocidad
+    unidad_si: m/s
+    descripcion: Velocidad lineal.
+  - id: v0
+    symbol: v_0
+    nombre: velocidad inicial
+    unidad_si: m/s
+    descripcion: Velocidad en t = 0.
+  - id: a
+    symbol: a
+    nombre: aceleración
+    unidad_si: m/s^2
+    descripcion: Aceleracion constante.
+  - id: t
+    symbol: t
+    nombre: tiempo
+    unidad_si: s
+    descripcion: Tiempo de evolucion.
+  - id: px
+    symbol: p_x
+    nombre: componente x del momento
+    unidad_si: kg*m/s
+    descripcion: Componente x del vector momento.
+  - id: py
+    symbol: p_y
+    nombre: componente y del momento
+    unidad_si: kg*m/s
+    descripcion: Componente y del vector momento.
+  - id: vx
+    symbol: v_x
+    nombre: componente x de velocidad
+    unidad_si: m/s
+    descripcion: Componente x de la velocidad.
+  - id: vy
+    symbol: v_y
+    nombre: componente y de velocidad
+    unidad_si: m/s
+    descripcion: Componente y de la velocidad.
+  - id: pi
+    symbol: p_i
+    nombre: momento inicial
+    unidad_si: kg*m/s
+    descripcion: Momento inicial.
+  - id: pf
+    symbol: p_f
+    nombre: momento final
+    unidad_si: kg*m/s
+    descripcion: Momento final.
+  - id: DeltaP
+    symbol: \Delta p
+    nombre: cambio de momento
+    unidad_si: kg*m/s
+    descripcion: Variacion de momento lineal.
+  - id: Fnet
+    symbol: F_{net}
+    nombre: fuerza neta
+    unidad_si: N
+    descripcion: Fuerza neta media en el intervalo.
+  - id: DeltaT
+    symbol: \Delta t
+    nombre: intervalo de tiempo
+    unidad_si: s
+    descripcion: Intervalo temporal.
+formulas:
+  - id: definicion_momento
+    title: Definicion de momento lineal
+    equation: p = m*v
+    latex: p = mv
+    rearrangements:
+      - target: p
+        equation: p = m*v
+        latex: p = mv
+      - target: m
+        equation: m = p/v
+        latex: m = \frac{p}{v}
+      - target: v
+        equation: v = p/m
+        latex: v = \frac{p}{m}
+    constraints:
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+      - expr: v != 0
+        message: v no puede ser 0 al despejar m.
+
+  - id: velocidad_en_t
+    title: Velocidad con aceleración constante
+    equation: v = v0 + a*t
+    latex: v = v_0 + at
+    rearrangements:
+      - target: v
+        equation: v = v0 + a*t
+        latex: v = v_0 + at
+      - target: a
+        equation: a = (v - v0)/t
+        latex: a = \frac{v-v_0}{t}
+      - target: t
+        equation: t = (v - v0)/a
+        latex: t = \frac{v-v_0}{a}
+    constraints:
+      - expr: t != 0
+        message: t no puede ser 0 al despejar a.
+      - expr: a != 0
+        message: a no puede ser 0 al despejar t.
+
+  - id: componente_px
+    title: Componente x del momento
+    equation: px = m*vx
+    latex: p_x = m v_x
+    rearrangements:
+      - target: px
+        equation: px = m*vx
+        latex: p_x = m v_x
+      - target: vx
+        equation: vx = px/m
+        latex: v_x = \frac{p_x}{m}
+
+  - id: componente_py
+    title: Componente y del momento
+    equation: py = m*vy
+    latex: p_y = m v_y
+    rearrangements:
+      - target: py
+        equation: py = m*vy
+        latex: p_y = m v_y
+      - target: vy
+        equation: vy = py/m
+        latex: v_y = \frac{p_y}{m}
+
+  - id: modulo_momento_2d
+    title: Modulo del momento por componentes
+    equation: p = sqrt(px^2 + py^2)
+    latex: p = \sqrt{p_x^2 + p_y^2}
+    rearrangements:
+      - target: p
+        equation: p = sqrt(px^2 + py^2)
+        latex: p = \sqrt{p_x^2 + p_y^2}
+
+  - id: cambio_momento
+    title: Cambio de momento
+    equation: DeltaP = pf - pi
+    latex: \Delta p = p_f - p_i
+    rearrangements:
+      - target: DeltaP
+        equation: DeltaP = pf - pi
+        latex: \Delta p = p_f - p_i
+      - target: pf
+        equation: pf = pi + DeltaP
+        latex: p_f = p_i + \Delta p
+
+  - id: fuerza_media_desde_momento
+    title: Fuerza media desde cambio de momento
+    equation: Fnet = DeltaP/DeltaT
+    latex: F_{net} = \frac{\Delta p}{\Delta t}
+    rearrangements:
+      - target: Fnet
+        equation: Fnet = DeltaP/DeltaT
+        latex: F_{net} = \frac{\Delta p}{\Delta t}
+      - target: DeltaP
+        equation: DeltaP = Fnet*DeltaT
+        latex: \Delta p = F_{net}\Delta t
+    constraints:
+      - expr: DeltaT > 0
+        message: DeltaT debe ser mayor que 0.
+
+  - id: forma_vectorial_conceptual
+    title: Forma vectorial (conceptual)
+    equation: p_vec = m*v_vec
+    latex: \vec p = m\vec v
+    calculable: false
+    motivo_no_calculable: La direccion y sentido requieren tratamiento vectorial completo.
+
+  - id: segunda_ley_momento_conceptual
+    title: Segunda ley en forma de momento (conceptual)
+    equation: Fnet = d(p)/dt
+    latex: \sum \vec F = \frac{d\vec p}{dt}
+    calculable: false
+    motivo_no_calculable: Requiere derivada temporal y modelo funcional de p(t).
+
+ui:
+  default_formula: definicion_momento
+  groups:
+    - title: Formulas calculables
+      items:
+        - definicion_momento
+        - velocidad_en_t
+        - componente_px
+        - componente_py
+        - modulo_momento_2d
+        - cambio_momento
+        - fuerza_media_desde_momento
+    - title: Formulas conceptuales
+      items:
+        - forma_vectorial_conceptual
+        - segunda_ley_momento_conceptual

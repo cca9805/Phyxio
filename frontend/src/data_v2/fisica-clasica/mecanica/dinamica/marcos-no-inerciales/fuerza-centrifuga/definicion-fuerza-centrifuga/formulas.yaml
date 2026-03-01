@@ -1,0 +1,135 @@
+version: 1
+topic:
+  id: definicion-fuerza-centrifuga
+  title: Definicion De Fuerza Centrifuga
+variables:
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa del cuerpo.
+  - id: omega
+    symbol: \omega
+    nombre: velocidad_angular
+    unidad_si: rad/s
+    descripcion: Velocidad angular del marco rotatorio.
+  - id: r
+    symbol: r
+    nombre: radio
+    unidad_si: m
+    descripcion: Distancia al eje de rotacion.
+  - id: v
+    symbol: v
+    nombre: velocidad_tangencial
+    unidad_si: m/s
+    descripcion: Rapidez tangencial del cuerpo.
+  - id: F_cf
+    symbol: F_{cf}
+    nombre: fuerza_centrifuga
+    unidad_si: N
+    descripcion: Magnitud de la fuerza centrifuga en marco rotatorio.
+  - id: a_cf
+    symbol: a_{cf}
+    nombre: aceleracion_centrifuga
+    unidad_si: m/s^2
+    descripcion: Aceleracion centrifuga aparente.
+formulas:
+  - id: fuerza_centrifuga_omega
+    title: Fuerza centrifuga desde omega
+    equation: F_cf = m*omega^2*r
+    latex: F_{cf}=m\omega^2 r
+    rearrangements:
+      - target: F_cf
+        equation: F_cf = m*omega^2*r
+        latex: F_{cf}=m\omega^2 r
+      - target: m
+        equation: m = F_cf/(omega^2*r)
+        latex: m=\frac{F_{cf}}{\omega^2 r}
+      - target: omega
+        equation: omega = sqrt(F_cf/(m*r))
+        latex: \omega=\sqrt{\frac{F_{cf}}{mr}}
+      - target: r
+        equation: r = F_cf/(m*omega^2)
+        latex: r=\frac{F_{cf}}{m\omega^2}
+    constraints:
+      - expr: m > 0
+        message: La masa debe ser positiva.
+      - expr: r > 0
+        message: El radio debe ser positivo.
+      - expr: omega >= 0
+        message: omega no puede ser negativa en esta calculadora escalar.
+  - id: fuerza_centrifuga_velocidad
+    title: Fuerza centrifuga desde velocidad tangencial
+    equation: F_cf = m*v^2/r
+    latex: F_{cf}=m\frac{v^2}{r}
+    rearrangements:
+      - target: F_cf
+        equation: F_cf = m*v^2/r
+        latex: F_{cf}=m\frac{v^2}{r}
+      - target: m
+        equation: m = F_cf*r/(v^2)
+        latex: m=\frac{F_{cf}r}{v^2}
+      - target: v
+        equation: v = sqrt(F_cf*r/m)
+        latex: v=\sqrt{\frac{F_{cf}r}{m}}
+      - target: r
+        equation: r = m*v^2/F_cf
+        latex: r=\frac{mv^2}{F_{cf}}
+    constraints:
+      - expr: m > 0
+        message: La masa debe ser positiva.
+      - expr: r > 0
+        message: El radio debe ser positivo.
+      - expr: F_cf > 0
+        message: F_cf debe ser positiva para despejar r.
+  - id: relacion_tangencial
+    title: Relacion entre velocidad y velocidad angular
+    equation: v = omega*r
+    latex: v=\omega r
+    rearrangements:
+      - target: v
+        equation: v = omega*r
+        latex: v=\omega r
+      - target: omega
+        equation: omega = v/r
+        latex: \omega=\frac{v}{r}
+      - target: r
+        equation: r = v/omega
+        latex: r=\frac{v}{\omega}
+    constraints:
+      - expr: r > 0
+        message: El radio debe ser positivo.
+      - expr: omega != 0
+        message: omega no puede ser 0 para despejar r.
+  - id: aceleracion_centrifuga
+    title: Aceleracion centrifuga aparente
+    equation: a_cf = omega^2*r
+    latex: a_{cf}=\omega^2 r
+    rearrangements:
+      - target: a_cf
+        equation: a_cf = omega^2*r
+        latex: a_{cf}=\omega^2 r
+      - target: omega
+        equation: omega = sqrt(a_cf/r)
+        latex: \omega=\sqrt{\frac{a_{cf}}{r}}
+      - target: r
+        equation: r = a_cf/(omega^2)
+        latex: r=\frac{a_{cf}}{\omega^2}
+  - id: forma_vectorial_conceptual
+    title: Forma vectorial (conceptual)
+    equation: F_cf = m*omega^2*r
+    latex: \vec F_{cf}=m\vec\Omega\times(\vec\Omega\times\vec r)
+    calculable: false
+    motivo_no_calculable: "La calculadora trabaja en modulo escalar; esta expresion es vectorial y requiere geometria completa."
+ui:
+  default_formula: fuerza_centrifuga_omega
+  groups:
+    - title: Calculables
+      items:
+        - fuerza_centrifuga_omega
+        - fuerza_centrifuga_velocidad
+        - relacion_tangencial
+        - aceleracion_centrifuga
+    - title: Formula conceptual
+      items:
+        - forma_vectorial_conceptual

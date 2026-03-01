@@ -1,0 +1,111 @@
+version: 1
+topic:
+  id: fase
+  title: Fase en oscilaciones
+variables:
+  - id: x
+    symbol: x
+    nombre: desplazamiento
+    unidad_si: m
+    descripcion: Desplazamiento.
+  - id: v
+    symbol: v
+    nombre: velocidad
+    unidad_si: m/s
+    descripcion: Velocidad.
+  - id: A
+    symbol: A
+    nombre: amplitud
+    unidad_si: m
+    descripcion: Amplitud.
+  - id: omega
+    symbol: \omega
+    nombre: pulsacion
+    unidad_si: rad/s
+    descripcion: Pulsacion.
+  - id: phi
+    symbol: \varphi
+    nombre: fase inicial
+    unidad_si: rad
+    descripcion: Fase inicial.
+  - id: delta_phi
+    symbol: \Delta\varphi
+    nombre: desfase
+    unidad_si: rad
+    descripcion: Desfase.
+  - id: phi_t
+    symbol: \varphi_t
+    nombre: fase instantánea
+    unidad_si: rad
+    descripcion: Fase evaluada en un instante de tiempo.
+  - id: t
+    symbol: t
+    nombre: tiempo
+    unidad_si: s
+    descripcion: Tiempo.
+  - id: phi2
+    symbol: \varphi_2
+    nombre: fase 2
+    unidad_si: rad
+    descripcion: Fase del oscilador 2.
+  - id: phi1
+    symbol: \varphi_1
+    nombre: fase 1
+    unidad_si: rad
+    descripcion: Fase del oscilador 1.
+formulas:
+  - id: fase_instante
+    title: Fase instantanea
+    equation: phi_t = omega*t + phi
+    latex: \varphi_t=\omega t+\varphi
+    rearrangements:
+      - target: phi_t
+        equation: phi_t = omega*t + phi
+        latex: \varphi_t=\omega t+\varphi
+      - target: omega
+        equation: omega = (phi_t - phi)/t
+        latex: \omega=\frac{\varphi_t-\varphi}{t}
+      - target: phi
+        equation: phi = phi_t - omega*t
+        latex: \varphi=\varphi_t-\omega t
+    constraints:
+      - expr: omega > 0
+        message: omega debe ser mayor que 0.
+  - id: posicion_fase
+    title: Posicion con fase
+    equation: x = A*cos(omega*t + phi)
+    latex: x=A\cos(\omega t+\varphi)
+    rearrangements:
+      - target: x
+        equation: x = A*cos(omega*t + phi)
+        latex: x=A\cos(\omega t+\varphi)
+    constraints:
+      - expr: A > 0
+        message: A debe ser mayor que 0.
+      - expr: omega > 0
+        message: omega debe ser mayor que 0.
+  - id: elipse_fase
+    title: Relacion de fase
+    equation: (x/A)^2 + (v/(A*omega))^2 = 1
+    latex: \left(\frac{x}{A}\right)^2+\left(\frac{v}{A\omega}\right)^2=1
+    calculable: false
+    motivo_no_calculable: >-
+      Relación implícita entre variables de fase; se usa para interpretación geométrica del estado, no para despeje
+      directo ?nico.
+  - id: desfase_entre_osciladores
+    title: Desfase entre osciladores (conceptual)
+    equation: delta_phi = phi2 - phi1
+    latex: \Delta\varphi=\varphi_2-\varphi_1
+    calculable: false
+    motivo_no_calculable: Requiere definir referencia temporal y convención de signo para comparar señales.
+ui:
+  default_formula: fase_instante
+  groups:
+    - title: Fórmulas calculables
+      items:
+        - fase_instante
+        - posicion_fase
+    - title: Fórmulas conceptuales
+      items:
+        - elipse_fase
+        - desfase_entre_osciladores

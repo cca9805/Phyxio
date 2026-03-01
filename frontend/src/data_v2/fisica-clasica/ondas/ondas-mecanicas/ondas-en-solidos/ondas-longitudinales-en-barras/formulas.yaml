@@ -1,0 +1,213 @@
+version: 1
+topic:
+  id: ondas-longitudinales-en-barras
+  title: Ondas Longitudinales En Barras
+variables:
+  - id: v
+    symbol: v
+    name: velocidad_axial
+    si_unit: m/s
+  - id: E
+    symbol: E
+    name: modulo_young
+    si_unit: Pa
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: n
+    symbol: n
+    name: modo
+    si_unit: '1'
+  - id: L
+    symbol: L
+    name: longitud
+    si_unit: m
+  - id: fn
+    symbol: f_n
+    name: frecuencia_modal
+    si_unit: Hz
+  - id: lambda_n
+    symbol: \lambda_n
+    name: longitud_modal
+    si_unit: m
+  - id: f1
+    symbol: f_1
+    name: frecuencia_fundamental
+    si_unit: Hz
+  - id: k_n
+    symbol: k_n
+    name: numero_onda_modal
+    si_unit: rad/m
+  - id: omega_n
+    symbol: \omega_n
+    name: frecuencia_angular_modal
+    si_unit: rad/s
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+formulas:
+  - id: vel
+    title: Velocidad axial
+    equation: v = sqrt(E/rho)
+    latex: v=\sqrt{\frac{E}{\rho}}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(E/rho)
+        latex: v=\sqrt{\frac{E}{\rho}}
+      - target: E
+        equation: E = rho*v^2
+        latex: E=\rho v^2
+      - target: rho
+        equation: rho = E/v^2
+        latex: \rho=\frac{E}{v^2}
+
+  - id: fn
+    title: Frecuencia modal fija-fija
+    equation: fn = n*v/(2*L)
+    latex: f_n=\frac{nv}{2L}
+    rearrangements:
+      - target: fn
+        equation: fn = n*v/(2*L)
+        latex: f_n=\frac{nv}{2L}
+      - target: v
+        equation: v = 2*L*fn/n
+        latex: v=\frac{2Lf_n}{n}
+      - target: L
+        equation: L = n*v/(2*fn)
+        latex: L=\frac{nv}{2f_n}
+      - target: n
+        equation: n = 2*L*fn/v
+        latex: n=\frac{2Lf_n}{v}
+
+  - id: lam
+    title: Longitud modal fija-fija
+    equation: lambda_n = 2*L/n
+    latex: \lambda_n=\frac{2L}{n}
+    rearrangements:
+      - target: lambda_n
+        equation: lambda_n = 2*L/n
+        latex: \lambda_n=\frac{2L}{n}
+      - target: L
+        equation: L = n*lambda_n/2
+        latex: L=\frac{n\lambda_n}{2}
+      - target: n
+        equation: n = 2*L/lambda_n
+        latex: n=\frac{2L}{\lambda_n}
+
+  - id: f1
+    title: Frecuencia fundamental fija-fija
+    equation: f1 = v/(2*L)
+    latex: f_1=\frac{v}{2L}
+    rearrangements:
+      - target: f1
+        equation: f1 = v/(2*L)
+        latex: f_1=\frac{v}{2L}
+      - target: v
+        equation: v = 2*L*f1
+        latex: v=2Lf_1
+      - target: L
+        equation: L = v/(2*f1)
+        latex: L=\frac{v}{2f_1}
+
+  - id: fn_fijo_libre
+    title: Frecuencia modal fija-libre
+    equation: fn = (2*n-1)*v/(4*L)
+    latex: f_n=\frac{(2n-1)v}{4L}
+    rearrangements:
+      - target: fn
+        equation: fn = (2*n-1)*v/(4*L)
+        latex: f_n=\frac{(2n-1)v}{4L}
+      - target: v
+        equation: v = 4*L*fn/(2*n-1)
+        latex: v=\frac{4Lf_n}{2n-1}
+
+  - id: onda
+    title: Relacion de propagacion
+    equation: v = lambda_n*fn
+    latex: v=\lambda_n f_n
+    rearrangements:
+      - target: v
+        equation: v = lambda_n*fn
+        latex: v=\lambda_n f_n
+      - target: lambda_n
+        equation: lambda_n = v/fn
+        latex: \lambda_n=\frac{v}{f_n}
+      - target: fn
+        equation: fn = v/lambda_n
+        latex: f_n=\frac{v}{\lambda_n}
+
+  - id: periodo
+    title: Periodo
+    equation: T = 1/f
+    latex: T=\frac{1}{f}
+    rearrangements:
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+
+  - id: numero_onda_modal
+    title: Numero de onda modal
+    equation: k_n = 2*pi/lambda_n
+    latex: k_n=\frac{2\pi}{\lambda_n}
+    rearrangements:
+      - target: k_n
+        equation: k_n = 2*pi/lambda_n
+        latex: k_n=\frac{2\pi}{\lambda_n}
+      - target: lambda_n
+        equation: lambda_n = 2*pi/k_n
+        latex: \lambda_n=\frac{2\pi}{k_n}
+
+  - id: frecuencia_angular_modal
+    title: Frecuencia angular modal
+    equation: omega_n = 2*pi*fn
+    latex: \omega_n=2\pi f_n
+    rearrangements:
+      - target: omega_n
+        equation: omega_n = 2*pi*fn
+        latex: \omega_n=2\pi f_n
+      - target: fn
+        equation: fn = omega_n/(2*pi)
+        latex: f_n=\frac{\omega_n}{2\pi}
+
+  - id: perfil_modal_conceptual
+    title: Perfil modal axial (conceptual)
+    equation: u = A*sin(n*pi*x/L)*cos(omega_n*t + phi_0)
+    latex: u_n(x,t)=A\sin\!\left(\frac{n\pi x}{L}\right)\cos(\omega_n t+\phi_0)
+    calculable: false
+    motivo_no_calculable: Describe un campo espacio-temporal, no una salida escalar unica.
+
+  - id: criterio_lineal
+    title: Criterio lineal amplitud-velocidad
+    equation: v_independiente_de_amplitud
+    latex: v\ \text{independiente de amplitud (regimen lineal)}
+    calculable: false
+    motivo_no_calculable: Regla conceptual de validez del modelo.
+ui:
+  default_formula: fn
+  groups:
+    - title: Propagacion y modos (calculables)
+      items:
+        - vel
+        - fn
+        - lam
+        - f1
+        - fn_fijo_libre
+        - onda
+        - periodo
+    - title: Conversiones modales (calculables)
+      items:
+        - numero_onda_modal
+        - frecuencia_angular_modal
+    - title: Modelo teorico
+      items:
+        - perfil_modal_conceptual
+        - criterio_lineal

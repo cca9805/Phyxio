@@ -1,0 +1,117 @@
+﻿version: 1
+topic:
+  id: superposicion
+  title: Superposicion
+variables:
+  - id: y
+    symbol: y
+    name: desplazamiento_total
+    si_unit: m
+  - id: y1
+    symbol: y_1
+    name: contribucion_1
+    si_unit: m
+  - id: y2
+    symbol: y_2
+    name: contribucion_2
+    si_unit: m
+  - id: A1
+    symbol: A_1
+    name: amplitud_1
+    si_unit: m
+  - id: A2
+    symbol: A_2
+    name: amplitud_2
+    si_unit: m
+  - id: Ares
+    symbol: A_{res}
+    name: amplitud_resultante
+    si_unit: m
+  - id: delta_phi
+    symbol: \Delta\phi
+    name: desfase_relativo
+    si_unit: rad
+  - id: f1
+    symbol: f_1
+    name: frecuencia_1
+    si_unit: Hz
+  - id: f2
+    symbol: f_2
+    name: frecuencia_2
+    si_unit: Hz
+  - id: f_beat
+    symbol: f_{beat}
+    name: frecuencia_batido
+    si_unit: Hz
+  - id: m
+    symbol: m
+    name: orden_entero
+    si_unit: '1'
+formulas:
+  - id: superposicion
+    title: Principio de superposicion
+    equation: y = y1 + y2
+    latex: y=y_1+y_2
+    rearrangements:
+      - target: y
+        equation: y = y1 + y2
+        latex: y=y_1+y_2
+      - target: y1
+        equation: y1 = y - y2
+        latex: y_1=y-y_2
+      - target: y2
+        equation: y2 = y - y1
+        latex: y_2=y-y_1
+
+  - id: amplitud_resultante
+    title: Amplitud resultante de dos armonicas
+    equation: Ares = sqrt(A1^2 + A2^2 + 2*A1*A2*cos(delta_phi))
+    latex: A_{res}=\sqrt{A_1^2+A_2^2+2A_1A_2\cos\Delta\phi}
+    rearrangements:
+      - target: Ares
+        equation: Ares = sqrt(A1^2 + A2^2 + 2*A1*A2*cos(delta_phi))
+        latex: A_{res}=\sqrt{A_1^2+A_2^2+2A_1A_2\cos\Delta\phi}
+
+  - id: amplitud_igual
+    title: Caso A1=A2=A
+    equation: Ares = 2*A1*abs(cos(delta_phi/2))
+    latex: A_{res}=2A\left|\cos\left(\frac{\Delta\phi}{2}\right)\right|
+
+  - id: constructiva
+    title: Condicion de maximo
+    equation: delta_phi = 2*pi*m
+    latex: \Delta\phi=2m\pi
+    calculable: false
+    motivo_no_calculable: Criterio de fase para interferencia maxima.
+
+  - id: destructiva
+    title: Condicion de minimo
+    equation: delta_phi = (2*m+1)*pi
+    latex: \Delta\phi=(2m+1)\pi
+    calculable: false
+    motivo_no_calculable: Criterio de fase para interferencia minima.
+
+  - id: batidos
+    title: Frecuencia de batido
+    equation: f_beat = abs(f1 - f2)
+    latex: f_{beat}=|f_1-f_2|
+    rearrangements:
+      - target: f_beat
+        equation: f_beat = abs(f1 - f2)
+        latex: f_{beat}=|f_1-f_2|
+
+ui:
+  default_formula: amplitud_resultante
+  groups:
+    - title: Suma y amplitud
+      items:
+        - superposicion
+        - amplitud_resultante
+        - amplitud_igual
+    - title: Condiciones de fase
+      items:
+        - constructiva
+        - destructiva
+    - title: Batidos
+      items:
+        - batidos

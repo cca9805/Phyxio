@@ -1,0 +1,106 @@
+version: 1
+topic:
+  id: concepto-fuerzas-ficticias
+  title: Concepto De Fuerzas Ficticias
+variables:
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa del cuerpo observado.
+  - id: a_marco
+    symbol: a_{marco}
+    nombre: aceleracion_del_marco
+    unidad_si: m/s^2
+    descripcion: Aceleracion del marco no inercial respecto al marco inercial.
+  - id: F_fict
+    symbol: F_{fict}
+    nombre: fuerza_ficticia
+    unidad_si: N
+    descripcion: Termino inercial que se agrega en el marco acelerado.
+  - id: F_real
+    symbol: F_{real}
+    nombre: fuerza_real_resultante
+    unidad_si: N
+    descripcion: Suma de fuerzas reales proyectadas en un eje.
+  - id: a_rel
+    symbol: a_{rel}
+    nombre: aceleracion_relativa
+    unidad_si: m/s^2
+    descripcion: Aceleracion medida por el observador en el marco no inercial.
+  - id: a_in
+    symbol: a_{in}
+    nombre: aceleracion_inercial
+    unidad_si: m/s^2
+    descripcion: Aceleracion medida en marco inercial.
+formulas:
+  - id: fuerza_ficticia_traslacional
+    title: Fuerza ficticia traslacional
+    equation: F_fict = -m*a_marco
+    latex: F_{fict}=-m\,a_{marco}
+    rearrangements:
+      - target: F_fict
+        equation: F_fict = -m*a_marco
+        latex: F_{fict}=-m\,a_{marco}
+      - target: a_marco
+        equation: a_marco = -F_fict/m
+        latex: a_{marco}=-\frac{F_{fict}}{m}
+      - target: m
+        equation: m = -F_fict/a_marco
+        latex: m=-\frac{F_{fict}}{a_{marco}}
+    constraints:
+      - expr: m > 0
+        message: La masa debe ser positiva.
+  - id: segunda_ley_marco_no_inercial
+    title: Segunda ley en marco no inercial (1D)
+    equation: a_rel = (F_real + F_fict)/m
+    latex: a_{rel}=\frac{F_{real}+F_{fict}}{m}
+    rearrangements:
+      - target: a_rel
+        equation: a_rel = (F_real + F_fict)/m
+        latex: a_{rel}=\frac{F_{real}+F_{fict}}{m}
+      - target: F_real
+        equation: F_real = m*a_rel - F_fict
+        latex: F_{real}=m\,a_{rel}-F_{fict}
+      - target: F_fict
+        equation: F_fict = m*a_rel - F_real
+        latex: F_{fict}=m\,a_{rel}-F_{real}
+      - target: m
+        equation: m = (F_real + F_fict)/a_rel
+        latex: m=\frac{F_{real}+F_{fict}}{a_{rel}}
+    constraints:
+      - expr: m > 0
+        message: La masa debe ser positiva.
+      - expr: a_rel != 0
+        message: a_rel no puede ser 0 para despejar m.
+  - id: relacion_aceleraciones
+    title: Relacion entre aceleraciones (traslacion)
+    equation: a_in = a_rel + a_marco
+    latex: a_{in}=a_{rel}+a_{marco}
+    rearrangements:
+      - target: a_in
+        equation: a_in = a_rel + a_marco
+        latex: a_{in}=a_{rel}+a_{marco}
+      - target: a_rel
+        equation: a_rel = a_in - a_marco
+        latex: a_{rel}=a_{in}-a_{marco}
+      - target: a_marco
+        equation: a_marco = a_in - a_rel
+        latex: a_{marco}=a_{in}-a_{rel}
+  - id: ecuacion_vectorial_conceptual
+    title: Ecuacion vectorial completa (conceptual)
+    equation: F_real + F_fict = m*a_rel
+    latex: \sum\vec F_{reales}+\vec F_{fict}=m\vec a_{rel}
+    calculable: false
+    motivo_no_calculable: "Es una relacion vectorial general. La calculadora opera con proyecciones escalares por eje."
+ui:
+  default_formula: fuerza_ficticia_traslacional
+  groups:
+    - title: Modelo base (calculables)
+      items:
+        - fuerza_ficticia_traslacional
+        - segunda_ley_marco_no_inercial
+        - relacion_aceleraciones
+    - title: Formula conceptual (no calculable)
+      items:
+        - ecuacion_vectorial_conceptual

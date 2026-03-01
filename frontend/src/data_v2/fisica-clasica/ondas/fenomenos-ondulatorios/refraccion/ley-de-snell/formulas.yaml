@@ -1,0 +1,133 @@
+﻿version: 1
+topic:
+  id: ley-de-snell
+  title: Ley De Snell
+variables:
+  - id: n1
+    symbol: n_1
+    name: indice_1
+    si_unit: '1'
+  - id: n2
+    symbol: n_2
+    name: indice_2
+    si_unit: '1'
+  - id: theta1
+    symbol: \theta_1
+    name: angulo_incidencia
+    si_unit: rad
+  - id: theta2
+    symbol: \theta_2
+    name: angulo_refraccion
+    si_unit: rad
+  - id: theta_c
+    symbol: \theta_c
+    name: angulo_critico
+    si_unit: rad
+  - id: sin_theta1
+    symbol: \sin\theta_1
+    name: seno_incidencia
+    si_unit: '1'
+  - id: sin_theta2
+    symbol: \sin\theta_2
+    name: seno_refraccion
+    si_unit: '1'
+  - id: v1
+    symbol: v_1
+    name: velocidad_medio_1
+    si_unit: m/s
+  - id: v2
+    symbol: v_2
+    name: velocidad_medio_2
+    si_unit: m/s
+  - id: lambda1
+    symbol: \lambda_1
+    name: longitud_onda_1
+    si_unit: m
+  - id: lambda2
+    symbol: \lambda_2
+    name: longitud_onda_2
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+formulas:
+  - id: snell
+    title: Ley de Snell
+    equation: n1*sin(theta1) = n2*sin(theta2)
+    latex: n_1\sin\theta_1=n_2\sin\theta_2
+    rearrangements:
+      - target: theta2
+        equation: theta2 = asin(n1*sin(theta1)/n2)
+        latex: \theta_2=\arcsin\left(\frac{n_1\sin\theta_1}{n_2}\right)
+      - target: theta1
+        equation: theta1 = asin(n2*sin(theta2)/n1)
+        latex: \theta_1=\arcsin\left(\frac{n_2\sin\theta_2}{n_1}\right)
+      - target: sin_theta2
+        equation: sin_theta2 = n1*sin(theta1)/n2
+        latex: \sin\theta_2=\frac{n_1}{n_2}\sin\theta_1
+      - target: sin_theta1
+        equation: sin_theta1 = n2*sin(theta2)/n1
+        latex: \sin\theta_1=\frac{n_2}{n_1}\sin\theta_2
+
+  - id: snell_velocidad
+    title: Forma por velocidades
+    equation: sin(theta1)/sin(theta2) = v1/v2
+    latex: \frac{\sin\theta_1}{\sin\theta_2}=\frac{v_1}{v_2}
+    rearrangements:
+      - target: v2
+        equation: v2 = v1*sin(theta2)/sin(theta1)
+        latex: v_2=v_1\frac{\sin\theta_2}{\sin\theta_1}
+      - target: v1
+        equation: v1 = v2*sin(theta1)/sin(theta2)
+        latex: v_1=v_2\frac{\sin\theta_1}{\sin\theta_2}
+
+  - id: snell_lambda
+    title: Forma por longitudes de onda
+    equation: sin(theta1)/sin(theta2) = lambda1/lambda2
+    latex: \frac{\sin\theta_1}{\sin\theta_2}=\frac{\lambda_1}{\lambda_2}
+    rearrangements:
+      - target: lambda2
+        equation: lambda2 = lambda1*sin(theta2)/sin(theta1)
+        latex: \lambda_2=\lambda_1\frac{\sin\theta_2}{\sin\theta_1}
+
+  - id: angulo_critico
+    title: Angulo critico
+    equation: theta_c = asin(n2/n1)
+    latex: \theta_c=\arcsin\left(\frac{n_2}{n_1}\right)
+    rearrangements:
+      - target: theta_c
+        equation: theta_c = asin(n2/n1)
+        latex: \theta_c=\arcsin\left(\frac{n_2}{n_1}\right)
+    condiciones:
+      - n1 > n2
+
+  - id: frecuencia_constante
+    title: Conservacion de frecuencia
+    equation: f1 = f2
+    latex: f_1=f_2=f
+    calculable: false
+    motivo_no_calculable: Relacion conceptual de continuidad temporal en interfaz.
+
+  - id: criterio_rit
+    title: Criterio de reflexion interna total
+    equation: theta1 > theta_c
+    latex: \theta_1>\theta_c\Rightarrow \text{RIT}
+    calculable: false
+    motivo_no_calculable: Criterio logico de regimen, no despeje escalar.
+
+ui:
+  default_formula: snell
+  groups:
+    - title: Geometria de refraccion
+      items:
+        - snell
+        - snell_velocidad
+        - snell_lambda
+    - title: Condiciones limite
+      items:
+        - angulo_critico
+        - criterio_rit
+    - title: Marco conceptual
+      items:
+        - frecuencia_constante

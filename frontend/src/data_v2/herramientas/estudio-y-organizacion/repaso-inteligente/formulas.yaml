@@ -1,0 +1,214 @@
+version: 1
+
+topic:
+  id: mcua
+  title: "Movimiento Circular Uniformemente Acelerado (MCUA)"
+
+variables:
+  - id: theta
+    symbol: "\\theta"
+    name: "posición angular"
+    si_unit: "rad"
+  - id: theta0
+    symbol: "\\theta_0"
+    name: "posición angular inicial"
+    si_unit: "rad"
+  - id: omega
+    symbol: "\\omega"
+    name: "velocidad angular"
+    si_unit: "rad/s"
+  - id: omega0
+    symbol: "\\omega_0"
+    name: "velocidad angular inicial"
+    si_unit: "rad/s"
+  - id: alpha
+    symbol: "\\alpha"
+    name: "aceleración angular"
+    si_unit: "rad/s^2"
+  - id: t
+    symbol: t
+    name: "tiempo"
+    si_unit: "s"
+  - id: R
+    symbol: R
+    name: "radio"
+    si_unit: "m"
+  - id: v
+    symbol: v
+    name: "rapidez lineal"
+    si_unit: "m/s"
+  - id: at
+    symbol: "a_t"
+    name: "aceleración tangencial"
+    si_unit: "m/s^2"
+  - id: ac
+    symbol: "a_c"
+    name: "aceleración centrípeta"
+    si_unit: "m/s^2"
+  - id: dtheta
+    symbol: "\\Delta\\theta"
+    nombre: "desplazamiento angular"
+    unidad_si: "rad"
+    descripcion: "Δθ = θ − θ0."
+
+
+formulas:
+  - id: mcua_omega_t
+    title: "Velocidad angular"
+    equation: "omega = omega0 + alpha*t"
+    latex: "\\omega = \\omega_0 + \\alpha t"
+    rearrangements:
+      - target: omega
+        equation: "omega = omega0 + alpha*t"
+        latex: "\\omega = \\omega_0 + \\alpha t"
+      - target: omega0
+        equation: "omega0 = omega - alpha*t"
+        latex: "\\omega_0 = \\omega - \\alpha t"
+      - target: alpha
+        equation: "alpha = (omega - omega0)/t"
+        latex: "\\alpha = \\frac{\\omega - \\omega_0}{t}"
+      - target: t
+        equation: "t = (omega - omega0)/alpha"
+        latex: "t = \\frac{\\omega - \\omega_0}{\\alpha}"
+    constraints:
+      - expr: "t != 0"
+        message: "t no puede ser 0 si despejas α."
+      - expr: "alpha != 0"
+        message: "α no puede ser 0 si despejas t."
+    status: calculable
+
+  - id: mcua_theta_t
+    title: "Posición angular"
+    equation: "theta = theta0 + omega0*t + 0.5*alpha*t^2"
+    latex: "\\theta = \\theta_0 + \\omega_0 t + \\frac{1}{2}\\alpha t^2"
+    rearrangements:
+      - target: theta
+        equation: "theta = theta0 + omega0*t + 0.5*alpha*t^2"
+        latex: "\\theta = \\theta_0 + \\omega_0 t + \\frac{1}{2}\\alpha t^2"
+      - target: theta0
+        equation: "theta0 = theta - omega0*t - 0.5*alpha*t^2"
+        latex: "\\theta_0 = \\theta - \\omega_0 t - \\frac{1}{2}\\alpha t^2"
+      - target: omega0
+        equation: "omega0 = (theta - theta0 - 0.5*alpha*t^2)/t"
+        latex: "\\omega_0 = \\frac{\\theta - \\theta_0 - \\frac{1}{2}\\alpha t^2}{t}"
+      - target: alpha
+        equation: "alpha = 2*(theta - theta0 - omega0*t)/(t^2)"
+        latex: "\\alpha = \\frac{2(\\theta - \\theta_0 - \\omega_0 t)}{t^2}"
+    constraints:
+      - expr: "t != 0"
+        message: "t no puede ser 0 si despejas ω0."
+      - expr: "t^2 != 0"
+        message: "t no puede ser 0 si despejas α."
+    status: calculable
+
+  - id: mcua_sin_t
+    title: "Relación sin tiempo"
+    equation: "omega^2 = omega0^2 + 2*alpha*(theta - theta0)"
+    latex: "\\omega^2 = \\omega_0^2 + 2\\alpha(\\theta - \\theta_0)"
+    rearrangements:
+      - target: omega
+        equation: "omega = sqrt(omega0^2 + 2*alpha*(theta - theta0))"
+        latex: "\\omega = \\sqrt{\\omega_0^2 + 2\\alpha(\\theta - \\theta_0)}"
+      - target: omega0
+        equation: "omega0 = sqrt(omega^2 - 2*alpha*(theta - theta0))"
+        latex: "\\omega_0 = \\sqrt{\\omega^2 - 2\\alpha(\\theta - \\theta_0)}"
+      - target: alpha
+        equation: "alpha = (omega^2 - omega0^2)/(2*(theta - theta0))"
+        latex: "\\alpha = \\frac{\\omega^2 - \\omega_0^2}{2(\\theta - \\theta_0)}"
+    constraints:
+      - expr: "(theta - theta0) != 0"
+        message: "θ - θ0 no puede ser 0 si despejas α."
+    status: calculable
+
+  - id: mcua_at
+    title: "Aceleración tangencial"
+    equation: "at = alpha*R"
+    latex: "a_t = \\alpha R"
+    rearrangements:
+      - target: at
+        equation: "at = alpha*R"
+        latex: "a_t = \\alpha R"
+      - target: alpha
+        equation: "alpha = at/R"
+        latex: "\\alpha = \\frac{a_t}{R}"
+      - target: R
+        equation: "R = at/alpha"
+        latex: "R = \\frac{a_t}{\\alpha}"
+    constraints:
+      - expr: "R != 0"
+        message: "R no puede ser 0."
+      - expr: "alpha != 0"
+        message: "α no puede ser 0 si despejas R."
+    status: calculable
+
+  - id: mcua_ac
+    title: "Aceleración centrípeta"
+    equation: "ac = omega^2*R"
+    latex: "a_c = \\omega^2 R"
+    rearrangements:
+      - target: ac
+        equation: "ac = omega^2*R"
+        latex: "a_c = \\omega^2 R"
+      - target: omega
+        equation: "omega = sqrt(ac/R)"
+        latex: "\\omega = \\sqrt{\\frac{a_c}{R}}"
+    constraints:
+      - expr: "R > 0"
+        message: "R debe ser positiva."
+      - expr: "ac >= 0"
+        message: "a_c debe ser no negativa."
+    status: calculable
+  
+  - id: mcua_dtheta_def
+    title: "Definición de desplazamiento angular"
+    equation: "dtheta = theta - theta0"
+    latex: "\\Delta\\theta = \\theta - \\theta_0"
+    rearrangements:
+      - target: dtheta
+        equation: "dtheta = theta - theta0"
+        latex: "\\Delta\\theta = \\theta - \\theta_0"
+      - target: theta
+        equation: "theta = dtheta + theta0"
+        latex: "\\theta = \\Delta\\theta + \\theta_0"
+      - target: theta0
+        equation: "theta0 = theta - dtheta"
+        latex: "\\theta_0 = \\theta - \\Delta\\theta"
+    status: calculable
+
+  - id: mcua_v_omega_R
+    title: "Velocidad lineal"
+    equation: "v = omega*R"
+    latex: "v = \\omega R"
+    rearrangements:
+      - target: v
+        equation: "v = omega*R"
+        latex: "v = \\omega R"
+      - target: omega
+        equation: "omega = v/R"
+        latex: "\\omega = \\frac{v}{R}"
+      - target: R
+        equation: "R = v/omega"
+        latex: "R = \\frac{v}{\\omega}"
+    constraints:
+      - expr: "R != 0"
+        message: "R no puede ser 0."
+      - expr: "omega != 0"
+        message: "ω no puede ser 0 si despejas R."
+    status: calculable
+
+
+
+ui:
+  default_formula: mcua_theta_t
+  groups:
+    - title: "Básicas"
+      items:
+        - mcua_omega_t
+        - mcua_theta_t
+        - mcua_sin_t
+        - mcua_dtheta_def
+        - mcua_v_omega_R
+    - title: "Relación con magnitudes lineales"
+      items:
+        - mcua_at
+        - mcua_ac

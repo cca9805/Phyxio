@@ -1,0 +1,152 @@
+version: 1
+topic:
+  id: ecuacion-de-onda
+  title: Ecuacion De Onda
+variables:
+  - id: y
+    symbol: y
+    name: desplazamiento
+    si_unit: m
+  - id: A
+    symbol: A
+    name: amplitud
+    si_unit: m
+  - id: x
+    symbol: x
+    name: posicion
+    si_unit: m
+  - id: t
+    symbol: t
+    name: tiempo
+    si_unit: s
+  - id: phi
+    symbol: \phi
+    name: fase_instantanea
+    si_unit: rad
+  - id: phi0
+    symbol: \phi_0
+    name: fase_inicial
+    si_unit: rad
+  - id: k
+    symbol: k
+    name: numero_onda
+    si_unit: rad/m
+  - id: omega
+    symbol: \omega
+    name: frecuencia_angular
+    si_unit: rad/s
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: v
+    symbol: v
+    name: velocidad_fase
+    si_unit: m/s
+  - id: delta_phi
+    symbol: \Delta\phi
+    name: desfase
+    si_unit: rad
+formulas:
+  - id: onda_armonica_1d
+    title: Ecuacion de onda armonica (1D)
+    equation: y = A*sin(k*x - omega*t + phi0)
+    latex: y=A\sin(kx-\omega t+\phi_0)
+    rearrangements:
+      - target: y
+        equation: y = A*sin(k*x - omega*t + phi0)
+        latex: y=A\sin(kx-\omega t+\phi_0)
+  - id: fase_instantanea
+    title: Argumento de fase
+    equation: phi = k*x - omega*t + phi0
+    latex: \phi=kx-\omega t+\phi_0
+    rearrangements:
+      - target: phi
+        equation: phi = k*x - omega*t + phi0
+        latex: \phi=kx-\omega t+\phi_0
+      - target: phi0
+        equation: phi0 = phi - k*x + omega*t
+        latex: \phi_0=\phi-kx+\omega t
+  - id: numero_onda
+    title: Numero de onda
+    equation: k = 2*pi/lambda
+    latex: k=\frac{2\pi}{\lambda}
+    rearrangements:
+      - target: k
+        equation: k = 2*pi/lambda
+        latex: k=\frac{2\pi}{\lambda}
+      - target: lambda
+        equation: lambda = 2*pi/k
+        latex: \lambda=\frac{2\pi}{k}
+  - id: frecuencia_angular
+    title: Frecuencia angular
+    equation: omega = 2*pi*f
+    latex: \omega=2\pi f
+    rearrangements:
+      - target: omega
+        equation: omega = 2*pi*f
+        latex: \omega=2\pi f
+      - target: f
+        equation: f = omega/(2*pi)
+        latex: f=\frac{\omega}{2\pi}
+  - id: velocidad_fase
+    title: Velocidad de fase
+    equation: v = omega/k
+    latex: v=\frac{\omega}{k}
+    rearrangements:
+      - target: v
+        equation: v = omega/k
+        latex: v=\frac{\omega}{k}
+      - target: omega
+        equation: omega = v*k
+        latex: \omega=vk
+      - target: k
+        equation: k = omega/v
+        latex: k=\frac{\omega}{v}
+  - id: relacion_v_lambda_f
+    title: Relacion con longitud y frecuencia
+    equation: v = lambda*f
+    latex: v=\lambda f
+    rearrangements:
+      - target: v
+        equation: v = lambda*f
+        latex: v=\lambda f
+      - target: lambda
+        equation: lambda = v/f
+        latex: \lambda=\frac{v}{f}
+      - target: f
+        equation: f = v/lambda
+        latex: f=\frac{v}{\lambda}
+  - id: ecuacion_diferencial_onda
+    title: Ecuacion diferencial de onda lineal 1D
+    equation: d2y_dt2 = v^2*d2y_dx2
+    latex: \frac{\partial^2 y}{\partial t^2}=v^2\frac{\partial^2 y}{\partial x^2}
+    calculable: false
+    motivo_no_calculable: Ecuacion diferencial del modelo continuo, no despeje algebraico directo para calculadora basica.
+  - id: criterio_lineal_amplitud
+    title: Criterio lineal amplitud-velocidad
+    equation: v_independiente_de_A
+    latex: v\ \text{independiente de}\ A\ \text{(regimen lineal)}
+    calculable: false
+    motivo_no_calculable: Regla conceptual de validez del modelo.
+ui:
+  default_formula: onda_armonica_1d
+  groups:
+    - title: Ecuacion y fase
+      items:
+        - onda_armonica_1d
+        - fase_instantanea
+    - title: Parametros de la onda
+      items:
+        - numero_onda
+        - frecuencia_angular
+        - velocidad_fase
+        - relacion_v_lambda_f
+    - title: Modelo conceptual
+      items:
+        - ecuacion_diferencial_onda
+        - criterio_lineal_amplitud

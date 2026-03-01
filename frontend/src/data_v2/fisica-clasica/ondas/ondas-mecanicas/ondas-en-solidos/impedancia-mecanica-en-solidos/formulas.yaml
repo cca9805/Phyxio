@@ -1,0 +1,131 @@
+version: 1
+topic:
+  id: impedancia-mecanica-en-solidos
+  title: Impedancia Mecanica En Solidos
+variables:
+  - id: Z
+    symbol: Z
+    name: impedancia
+    si_unit: Pa*s/m
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: v
+    symbol: v
+    name: velocidad_onda
+    si_unit: m/s
+  - id: p_hat
+    symbol: \hat p
+    name: presion_amplitud
+    si_unit: Pa
+  - id: u_hat
+    symbol: \hat u
+    name: velocidad_particula_amplitud
+    si_unit: m/s
+  - id: I
+    symbol: I
+    name: intensidad
+    si_unit: W/m^2
+  - id: P
+    symbol: P
+    name: potencia
+    si_unit: W
+  - id: A
+    symbol: A
+    name: area
+    si_unit: m^2
+formulas:
+  - id: Z
+    title: Impedancia
+    equation: Z = rho*v
+    latex: Z=\rho v
+    rearrangements:
+      - target: Z
+        equation: Z = rho*v
+        latex: Z=\rho v
+      - target: rho
+        equation: rho = Z/v
+        latex: \rho=\frac{Z}{v}
+      - target: v
+        equation: v = Z/rho
+        latex: v=\frac{Z}{\rho}
+
+  - id: pu
+    title: Relacion presion-velocidad
+    equation: p_hat = Z*u_hat
+    latex: \hat p=Z\hat u
+    rearrangements:
+      - target: p_hat
+        equation: p_hat = Z*u_hat
+        latex: \hat p=Z\hat u
+      - target: Z
+        equation: Z = p_hat/u_hat
+        latex: Z=\frac{\hat p}{\hat u}
+      - target: u_hat
+        equation: u_hat = p_hat/Z
+        latex: \hat u=\frac{\hat p}{Z}
+
+  - id: I
+    title: Intensidad
+    equation: I = p_hat^2/(2*Z)
+    latex: I=\frac{\hat p^2}{2Z}
+    rearrangements:
+      - target: I
+        equation: I = p_hat^2/(2*Z)
+        latex: I=\frac{\hat p^2}{2Z}
+      - target: p_hat
+        equation: p_hat = sqrt(2*I*Z)
+        latex: \hat p=\sqrt{2IZ}
+      - target: Z
+        equation: Z = p_hat^2/(2*I)
+        latex: Z=\frac{\hat p^2}{2I}
+
+  - id: Iu
+    title: Intensidad desde velocidad de particula
+    equation: I = Z*u_hat^2/2
+    latex: I=\frac{Z\hat u^2}{2}
+    rearrangements:
+      - target: I
+        equation: I = Z*u_hat^2/2
+        latex: I=\frac{Z\hat u^2}{2}
+      - target: u_hat
+        equation: u_hat = sqrt(2*I/Z)
+        latex: \hat u=\sqrt{\frac{2I}{Z}}
+
+  - id: P
+    title: Potencia
+    equation: P = I*A
+    latex: P=IA
+    rearrangements:
+      - target: P
+        equation: P = I*A
+        latex: P=IA
+      - target: I
+        equation: I = P/A
+        latex: I=\frac{P}{A}
+      - target: A
+        equation: A = P/I
+        latex: A=\frac{P}{I}
+
+  - id: contraste_conceptual
+    title: Contraste de impedancia (conceptual)
+    equation: chi = Z2/Z1
+    latex: \chi=\frac{Z_2}{Z_1}
+    calculable: false
+    motivo_no_calculable: Indicador conceptual cuando se comparan dos medios en interfaz.
+ui:
+  default_formula: Z
+  groups:
+    - title: Impedancia y amplitudes (calculables)
+      items:
+        - Z
+        - pu
+    - title: Energia (calculables)
+      items:
+        - I
+        - Iu
+        - P
+    - title: Criterio conceptual
+      items:
+        - contraste_conceptual

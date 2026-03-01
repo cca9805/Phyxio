@@ -1,0 +1,143 @@
+version: 1
+topic:
+  id: pendulo-simple
+  title: Péndulo simple
+variables:
+  - id: L
+    symbol: L
+    nombre: longitud
+    unidad_si: m
+    descripcion: Longitud.
+  - id: g
+    symbol: g
+    nombre: gravedad
+    unidad_si: m/s^2
+    descripcion: Gravedad.
+  - id: omega0
+    symbol: \omega_0
+    nombre: pulsacion natural
+    unidad_si: rad/s
+    descripcion: Pulsacion natural.
+  - id: T
+    symbol: T
+    nombre: periodo
+    unidad_si: s
+    descripcion: Periodo.
+  - id: f
+    symbol: f
+    nombre: frecuencia
+    unidad_si: Hz
+    descripcion: Frecuencia.
+  - id: theta
+    symbol: \theta
+    nombre: angulo
+    unidad_si: rad
+    descripcion: Angulo.
+  - id: theta0
+    symbol: \theta_0
+    nombre: amplitud angular
+    unidad_si: rad
+    descripcion: Amplitud angular inicial.
+  - id: t
+    symbol: t
+    nombre: tiempo
+    unidad_si: s
+    descripcion: Tiempo.
+  - id: phi
+    symbol: \varphi
+    nombre: fase inicial
+    unidad_si: rad
+    descripcion: Fase inicial.
+  - id: theta_dd
+    symbol: \ddot\theta
+    nombre: aceleración angular
+    unidad_si: rad/s^2
+    descripcion: Segunda derivada temporal de theta.
+formulas:
+  - id: pulsacion_pendulo
+    title: Pulsacion natural
+    equation: omega0 = sqrt(g/L)
+    latex: \omega_0=\sqrt{\frac{g}{L}}
+    rearrangements:
+      - target: omega0
+        equation: omega0 = sqrt(g/L)
+        latex: \omega_0=\sqrt{\frac{g}{L}}
+      - target: L
+        equation: L = g/(omega0^2)
+        latex: L=\frac{g}{\omega_0^2}
+      - target: g
+        equation: g = L*omega0^2
+        latex: g=L\omega_0^2
+    constraints:
+      - expr: L > 0
+        message: L debe ser mayor que 0.
+      - expr: g > 0
+        message: g debe ser mayor que 0.
+      - expr: omega0 > 0
+        message: omega0 debe ser mayor que 0.
+  - id: periodo_pendulo
+    title: Periodo
+    equation: T = 2*pi*sqrt(L/g)
+    latex: T=2\pi\sqrt{\frac{L}{g}}
+    rearrangements:
+      - target: T
+        equation: T = 2*pi*sqrt(L/g)
+        latex: T=2\pi\sqrt{\frac{L}{g}}
+      - target: L
+        equation: L = g*(T/(2*pi))^2
+        latex: L=g\left(\frac{T}{2\pi}\right)^2
+      - target: g
+        equation: g = 4*pi^2*L/(T^2)
+        latex: g=\frac{4\pi^2L}{T^2}
+    constraints:
+      - expr: L > 0
+        message: L debe ser mayor que 0.
+      - expr: g > 0
+        message: g debe ser mayor que 0.
+      - expr: T > 0
+        message: T debe ser mayor que 0.
+  - id: frecuencia_pendulo
+    title: Frecuencia
+    equation: f = 1/T
+    latex: f=\frac{1}{T}
+    rearrangements:
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+    constraints:
+      - expr: T > 0
+        message: T debe ser mayor que 0.
+      - expr: f > 0
+        message: f debe ser mayor que 0.
+  - id: ecuacion_angular
+    title: Ecuacion angular
+    equation: theta = theta0*cos(omega0*t + phi)
+    latex: \theta=\theta_0\cos(\omega_0 t+\varphi)
+    rearrangements:
+      - target: theta
+        equation: theta = theta0*cos(omega0*t + phi)
+        latex: \theta=\theta_0\cos(\omega_0 t+\varphi)
+    constraints:
+      - expr: omega0 > 0
+        message: omega0 debe ser mayor que 0.
+  - id: ecuacion_no_lineal_pendulo
+    title: Ecuación angular exacta (conceptual)
+    equation: theta_dd + (g/L)*sin(theta) = 0
+    latex: \ddot\theta+\frac{g}{L}\sin\theta=0
+    calculable: false
+    motivo_no_calculable: Ecuación diferencial no lineal; no admite despeje algebraico elemental para solución general.
+ui:
+  default_formula: periodo_pendulo
+  groups:
+    - title: Fórmulas calculables
+      items:
+        - pulsacion_pendulo
+        - periodo_pendulo
+        - frecuencia_pendulo
+        - ecuacion_angular
+    - title: Fórmulas conceptuales
+      items:
+        - ecuacion_no_lineal_pendulo

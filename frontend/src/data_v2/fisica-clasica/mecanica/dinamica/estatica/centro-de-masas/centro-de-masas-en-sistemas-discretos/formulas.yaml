@@ -1,0 +1,141 @@
+version: 1
+topic:
+  id: centro-de-masas-en-sistemas-discretos
+  title: Centro de masas en sistemas discretos
+variables:
+  - id: m1
+    symbol: m_1
+    nombre: masa_1
+    unidad_si: kg
+    descripcion: Masa de la particula 1.
+  - id: m2
+    symbol: m_2
+    nombre: masa_2
+    unidad_si: kg
+    descripcion: Masa de la particula 2.
+  - id: m3
+    symbol: m_3
+    nombre: masa_3
+    unidad_si: kg
+    descripcion: Masa de la particula 3.
+  - id: x1
+    symbol: x_1
+    nombre: posicion_x1
+    unidad_si: m
+    descripcion: Coordenada x de la particula 1.
+  - id: x2
+    symbol: x_2
+    nombre: posicion_x2
+    unidad_si: m
+    descripcion: Coordenada x de la particula 2.
+  - id: x3
+    symbol: x_3
+    nombre: posicion_x3
+    unidad_si: m
+    descripcion: Coordenada x de la particula 3.
+  - id: y1
+    symbol: y_1
+    nombre: posicion_y1
+    unidad_si: m
+    descripcion: Coordenada y de la particula 1.
+  - id: y2
+    symbol: y_2
+    nombre: posicion_y2
+    unidad_si: m
+    descripcion: Coordenada y de la particula 2.
+  - id: y3
+    symbol: y_3
+    nombre: posicion_y3
+    unidad_si: m
+    descripcion: Coordenada y de la particula 3.
+  - id: M
+    symbol: M
+    nombre: masa_total
+    unidad_si: kg
+    descripcion: Suma de masas del sistema.
+  - id: xcm
+    symbol: x_{CM}
+    nombre: centro_de_masas_x
+    unidad_si: m
+    descripcion: Coordenada x del centro de masas.
+  - id: ycm
+    symbol: y_{CM}
+    nombre: centro_de_masas_y
+    unidad_si: m
+    descripcion: Coordenada y del centro de masas.
+formulas:
+  - id: masa_total_tres_masas
+    title: Masa total (tres masas)
+    equation: M = m1 + m2 + m3
+    latex: M=m_1+m_2+m_3
+    rearrangements:
+      - target: M
+        equation: M = m1 + m2 + m3
+        latex: M=m_1+m_2+m_3
+      - target: m1
+        equation: m1 = M - m2 - m3
+        latex: m_1=M-m_2-m_3
+      - target: m2
+        equation: m2 = M - m1 - m3
+        latex: m_2=M-m_1-m_3
+      - target: m3
+        equation: m3 = M - m1 - m2
+        latex: m_3=M-m_1-m_2
+  - id: xcm_tres_masas
+    title: Centro de masas en x (tres masas)
+    equation: xcm = (m1*x1 + m2*x2 + m3*x3)/(m1 + m2 + m3)
+    latex: x_{CM}=\frac{m_1x_1+m_2x_2+m_3x_3}{m_1+m_2+m_3}
+    rearrangements:
+      - target: xcm
+        equation: xcm = (m1*x1 + m2*x2 + m3*x3)/(m1 + m2 + m3)
+        latex: x_{CM}=\frac{m_1x_1+m_2x_2+m_3x_3}{m_1+m_2+m_3}
+      - target: x3
+        equation: x3 = (xcm*(m1+m2+m3)-m1*x1-m2*x2)/m3
+        latex: x_3=\frac{x_{CM}(m_1+m_2+m_3)-m_1x_1-m_2x_2}{m_3}
+    constraints:
+      - expr: m1 + m2 + m3 > 0
+        message: La masa total debe ser positiva.
+      - expr: m3 > 0
+        message: m3 debe ser positiva para despejar x3.
+  - id: ycm_tres_masas
+    title: Centro de masas en y (tres masas)
+    equation: ycm = (m1*y1 + m2*y2 + m3*y3)/(m1 + m2 + m3)
+    latex: y_{CM}=\frac{m_1y_1+m_2y_2+m_3y_3}{m_1+m_2+m_3}
+    rearrangements:
+      - target: ycm
+        equation: ycm = (m1*y1 + m2*y2 + m3*y3)/(m1 + m2 + m3)
+        latex: y_{CM}=\frac{m_1y_1+m_2y_2+m_3y_3}{m_1+m_2+m_3}
+      - target: y3
+        equation: y3 = (ycm*(m1+m2+m3)-m1*y1-m2*y2)/m3
+        latex: y_3=\frac{y_{CM}(m_1+m_2+m_3)-m_1y_1-m_2y_2}{m_3}
+    constraints:
+      - expr: m1 + m2 + m3 > 0
+        message: La masa total debe ser positiva.
+      - expr: m3 > 0
+        message: m3 debe ser positiva para despejar y3.
+  - id: xcm_dos_masas
+    title: Caso rapido en 1D (dos masas)
+    equation: xcm = (m1*x1 + m2*x2)/(m1 + m2)
+    latex: x_{CM}=\frac{m_1x_1+m_2x_2}{m_1+m_2}
+    rearrangements:
+      - target: xcm
+        equation: xcm = (m1*x1 + m2*x2)/(m1 + m2)
+        latex: x_{CM}=\frac{m_1x_1+m_2x_2}{m_1+m_2}
+  - id: formula_vectorial_general
+    title: Formula vectorial general (conceptual)
+    equation: rcm = sum_mr_over_M
+    latex: \vec r_{CM}=\frac{1}{M}\sum_i m_i\vec r_i
+    calculable: false
+    motivo_no_calculable: Requiere un numero arbitrario de particulas y tratamiento vectorial por componentes.
+ui:
+  default_formula: xcm_tres_masas
+  groups:
+    - title: Calculables principales
+      items:
+        - masa_total_tres_masas
+        - xcm_tres_masas
+        - ycm_tres_masas
+        - xcm_dos_masas
+    - title: Formula conceptual
+      items:
+        - formula_vectorial_general

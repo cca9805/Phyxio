@@ -1,0 +1,167 @@
+version: 1
+topic:
+  id: poleas
+  title: Poleas
+variables:
+  - id: R
+    symbol: R
+    nombre: carga
+    unidad_si: N
+    descripcion: Fuerza resistente total.
+  - id: P
+    symbol: P
+    nombre: fuerza_aplicada
+    unidad_si: N
+    descripcion: Fuerza que aplica el operador.
+  - id: n
+    symbol: n
+    nombre: tramos_efectivos
+    unidad_si: '1'
+    descripcion: Numero de tramos de cuerda que sostienen la carga.
+  - id: eta
+    symbol: \eta
+    nombre: rendimiento
+    unidad_si: '1'
+    descripcion: Eficiencia global de la maquina.
+  - id: VM
+    symbol: VM
+    nombre: ventaja_mecanica
+    unidad_si: '1'
+    descripcion: Relacion entre carga y fuerza aplicada.
+  - id: T
+    symbol: T
+    nombre: tension
+    unidad_si: N
+    descripcion: Tension ideal por tramo de cuerda.
+  - id: sP
+    symbol: s_P
+    nombre: desplazamiento_entrada
+    unidad_si: m
+    descripcion: Recorrido del extremo libre.
+  - id: sR
+    symbol: s_R
+    nombre: desplazamiento_carga
+    unidad_si: m
+    descripcion: Recorrido de la carga.
+formulas:
+  - id: fuerza_ideal
+    title: Fuerza necesaria ideal
+    equation: P = R/n
+    latex: P=\frac{R}{n}
+    rearrangements:
+      - target: P
+        equation: P = R/n
+        latex: P=\frac{R}{n}
+      - target: R
+        equation: R = n*P
+        latex: R=nP
+      - target: n
+        equation: n = R/P
+        latex: n=\frac{R}{P}
+    constraints:
+      - expr: n > 0
+        message: n debe ser mayor que 0.
+      - expr: P > 0
+        message: P debe ser mayor que 0 para despejar n.
+  - id: fuerza_real
+    title: Fuerza necesaria real
+    equation: P = R/(n*eta)
+    latex: P=\frac{R}{n\eta}
+    rearrangements:
+      - target: P
+        equation: P = R/(n*eta)
+        latex: P=\frac{R}{n\eta}
+      - target: R
+        equation: R = n*eta*P
+        latex: R=n\eta P
+      - target: eta
+        equation: eta = R/(n*P)
+        latex: \eta=\frac{R}{nP}
+      - target: n
+        equation: n = R/(eta*P)
+        latex: n=\frac{R}{\eta P}
+    constraints:
+      - expr: n > 0
+        message: n debe ser mayor que 0.
+      - expr: eta > 0
+        message: eta debe ser mayor que 0.
+      - expr: eta <= 1
+        message: eta debe ser menor o igual que 1.
+  - id: ventaja_mecanica
+    title: Ventaja mecanica
+    equation: VM = R/P
+    latex: VM=\frac{R}{P}
+    rearrangements:
+      - target: VM
+        equation: VM = R/P
+        latex: VM=\frac{R}{P}
+      - target: R
+        equation: R = VM*P
+        latex: R=VM\,P
+      - target: P
+        equation: P = R/VM
+        latex: P=\frac{R}{VM}
+  - id: ventaja_por_tramos_y_rendimiento
+    title: Ventaja por tramos y rendimiento
+    equation: VM = n*eta
+    latex: VM=n\eta
+    rearrangements:
+      - target: VM
+        equation: VM = n*eta
+        latex: VM=n\eta
+      - target: eta
+        equation: eta = VM/n
+        latex: \eta=\frac{VM}{n}
+      - target: n
+        equation: n = VM/eta
+        latex: n=\frac{VM}{\eta}
+    constraints:
+      - expr: eta > 0
+        message: eta debe ser mayor que 0.
+  - id: tension_por_tramo_ideal
+    title: Tension por tramo ideal
+    equation: T = R/n
+    latex: T=\frac{R}{n}
+    rearrangements:
+      - target: T
+        equation: T = R/n
+        latex: T=\frac{R}{n}
+      - target: R
+        equation: R = n*T
+        latex: R=nT
+  - id: relacion_desplazamientos
+    title: Relacion de desplazamientos
+    equation: sP = n*sR
+    latex: s_P=n\,s_R
+    rearrangements:
+      - target: sP
+        equation: sP = n*sR
+        latex: s_P=n\,s_R
+      - target: sR
+        equation: sR = sP/n
+        latex: s_R=\frac{s_P}{n}
+      - target: n
+        equation: n = sP/sR
+        latex: n=\frac{s_P}{s_R}
+  - id: trabajo_ideal_conceptual
+    title: Trabajo ideal (conceptual)
+    equation: P*sP = R*sR
+    latex: P\,s_P=R\,s_R
+    calculable: false
+    motivo_no_calculable: Relacion energetica conceptual. Solo se resuelve si el problema aporta ambos recorridos o una geometria equivalente.
+ui:
+  default_formula: fuerza_real
+  groups:
+    - title: Fuerza de operacion
+      items:
+        - fuerza_ideal
+        - fuerza_real
+        - tension_por_tramo_ideal
+    - title: Ventaja y rendimiento
+      items:
+        - ventaja_mecanica
+        - ventaja_por_tramos_y_rendimiento
+    - title: Geometria y energia
+      items:
+        - relacion_desplazamientos
+        - trabajo_ideal_conceptual

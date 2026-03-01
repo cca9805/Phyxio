@@ -1,0 +1,97 @@
+﻿version: 1
+topic:
+  id: interferencia-destructiva
+  title: Interferencia Destructiva
+variables:
+  - id: delta
+    symbol: \Delta
+    name: diferencia_camino
+    si_unit: m
+  - id: m
+    symbol: m
+    name: orden_destructivo
+    si_unit: '1'
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+  - id: delta_phi
+    symbol: \Delta\phi
+    name: desfase
+    si_unit: rad
+  - id: A1
+    symbol: A_1
+    name: amplitud_1
+    si_unit: m
+  - id: A2
+    symbol: A_2
+    name: amplitud_2
+    si_unit: m
+  - id: Ares
+    symbol: A_{res}
+    name: amplitud_resultante
+    si_unit: m
+  - id: I
+    symbol: I
+    name: intensidad
+    si_unit: W/m^2
+formulas:
+  - id: condicion_camino
+    title: Condicion destructiva por camino
+    equation: delta = (m+0.5)*lambda
+    latex: \Delta=\left(m+\frac{1}{2}\right)\lambda
+    rearrangements:
+      - target: delta
+        equation: delta = (m+0.5)*lambda
+        latex: \Delta=\left(m+\frac{1}{2}\right)\lambda
+      - target: lambda
+        equation: lambda = delta/(m+0.5)
+        latex: \lambda=\frac{\Delta}{m+1/2}
+      - target: m
+        equation: m = delta/lambda - 0.5
+        latex: m=\frac{\Delta}{\lambda}-\frac{1}{2}
+
+  - id: condicion_fase
+    title: Condicion destructiva por fase
+    equation: delta_phi = (2*m+1)*pi
+    latex: \Delta\phi=(2m+1)\pi
+    rearrangements:
+      - target: delta_phi
+        equation: delta_phi = (2*m+1)*pi
+        latex: \Delta\phi=(2m+1)\pi
+
+  - id: fase_camino
+    title: Relacion desfase-camino
+    equation: delta_phi = 2*pi*delta/lambda
+    latex: \Delta\phi=\frac{2\pi}{\lambda}\Delta
+
+  - id: amplitud_resultante
+    title: Amplitud resultante general
+    equation: Ares = sqrt(A1^2 + A2^2 + 2*A1*A2*cos(delta_phi))
+    latex: A_{res}=\sqrt{A_1^2+A_2^2+2A_1A_2\cos\Delta\phi}
+
+  - id: amplitud_minima
+    title: Amplitud minima destructiva
+    equation: Ares = abs(A1 - A2)
+    latex: A_{res}=|A_1-A_2|
+
+  - id: intensidad_relativa
+    title: Intensidad proporcional a amplitud
+    equation: I = k*Ares^2
+    latex: I\propto A_{res}^2
+    calculable: false
+    motivo_no_calculable: Falta constante de proporcionalidad y calibracion.
+
+ui:
+  default_formula: condicion_camino
+  groups:
+    - title: Condicion de minimo
+      items:
+        - condicion_camino
+        - condicion_fase
+        - fase_camino
+    - title: Amplitud e intensidad
+      items:
+        - amplitud_resultante
+        - amplitud_minima
+        - intensidad_relativa

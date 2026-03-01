@@ -1,0 +1,96 @@
+version: 1
+topic:
+  id: sistemas-no-inerciales-intro
+  title: Sistemas no inerciales y fuerzas ficticias
+variables:
+- id: m
+  symbol: m
+  nombre: masa
+  unidad_si: kg
+  descripcion: Masa.
+- id: aref
+  symbol: \vec a_{ref}
+  nombre: aceleración del marco
+  unidad_si: m/s^2
+  descripcion: Aceleración del marco.
+- id: Ff
+  symbol: \vec F_f
+  nombre: fuerza ficticia
+  unidad_si: N
+  descripcion: Fuerza ficticia.
+- id: Fnet
+  symbol: \sum \vec F
+  nombre: fuerza neta real
+  unidad_si: N
+  descripcion: Fuerza neta real.
+- id: a
+  symbol: \vec a
+  nombre: aceleración (en el marco)
+  unidad_si: m/s^2
+  descripcion: Aceleración (en el marco).
+formulas:
+- id: definicion_no_inercial
+  title: Marco no inercial (idea)
+  equation: aref != 0 => no inercial
+  latex: \vec a_{ref} \neq 0 \Rightarrow \text{marco no inercial}
+  motivo_no_calculable: 'Es un criterio conceptual: un marco acelerado no es inercial.
+
+    '
+  status: descriptive
+- id: fuerza_ficticia_traslacion
+  title: Fuerza ficticia (traslación acelerada)
+  equation: Ff = -m*aref
+  latex: \vec F_f = -m\,\vec a_{ref}
+  rearrangements:
+  - target: Ff
+    equation: Ff = -m*aref
+    latex: \vec F_f = -m\,\vec a_{ref}
+  - target: aref
+    equation: aref = -Ff/m
+    latex: \vec a_{ref} = -\frac{\vec F_f}{m}
+    constraints:
+    - expr: m != 0
+      message: La masa no puede ser 0.
+  - target: m
+    equation: m = -Ff/aref
+    latex: m = -\frac{\vec F_f}{\vec a_{ref}}
+    motivo_no_calculable: 'Despejar m aquí requiere tratar la división vectorial con dirección conocida.
+
+      '
+    status: descriptive
+  status: calculable
+- id: newton_en_marco_no_inercial
+  title: Newton en marco no inercial (con ficticias)
+  equation: Fnet + Ff = m*a
+  latex: \sum \vec F + \vec F_f = m\vec a
+  motivo_no_calculable: 'Es una ecuación vectorial general. Para calcular hace falta el problema concreto y ejes definidos.
+
+    '
+  status: descriptive
+- id: centrifuga
+  title: Fuerza centrífuga (marco rotante)
+  equation: Fcf = m*omega^2*r
+  latex: \vec F_{cf} = m\,\omega^2\,\vec r
+  motivo_no_calculable: 'En general es vectorial (dirección radial) y depende del marco rotante; aquí se introduce como concepto.
+
+    '
+  status: descriptive
+- id: coriolis
+  title: Fuerza de Coriolis (marco rotante)
+  equation: Fcor = -2*m*(omega x vrel)
+  latex: \vec F_{cor} = -2m\,(\vec\omega \times \vec v_{rel})
+  motivo_no_calculable: 'Requiere producto vectorial y datos de dirección; se trata como extensión conceptual.
+
+    '
+  status: descriptive
+ui:
+  default_formula: fuerza_ficticia_traslacion
+  groups:
+  - title: Traslación acelerada (base)
+    items:
+    - fuerza_ficticia_traslacion
+    - newton_en_marco_no_inercial
+  - title: Rotación (extensión)
+    items:
+    - centrifuga
+    - coriolis

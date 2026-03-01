@@ -1,0 +1,187 @@
+version: 1
+topic:
+  id: planos-inclinados
+  title: Planos Inclinados
+variables:
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa del cuerpo.
+  - id: g
+    symbol: g
+    nombre: gravedad
+    unidad_si: m/s^2
+    descripcion: Aceleracion de la gravedad.
+  - id: theta
+    symbol: \theta
+    nombre: angulo_del_plano
+    unidad_si: rad
+    descripcion: Inclinacion del plano.
+  - id: N
+    symbol: N
+    nombre: fuerza_normal
+    unidad_si: N
+    descripcion: Reaccion normal del plano.
+  - id: mu
+    symbol: \mu
+    nombre: coeficiente_rozamiento
+    unidad_si: '1'
+    descripcion: Coeficiente de rozamiento dinamico efectivo.
+  - id: f
+    symbol: f
+    nombre: fuerza_rozamiento
+    unidad_si: N
+    descripcion: Fuerza de friccion en el eje del plano.
+  - id: Wpar
+    symbol: W_{\parallel}
+    nombre: componente_paralela_del_peso
+    unidad_si: N
+    descripcion: Componente del peso en direccion del plano.
+  - id: Wperp
+    symbol: W_{\perp}
+    nombre: componente_perpendicular_del_peso
+    unidad_si: N
+    descripcion: Componente del peso normal al plano.
+  - id: Fnet
+    symbol: F_{net}
+    nombre: fuerza_neta
+    unidad_si: N
+    descripcion: Fuerza neta en el eje del movimiento.
+  - id: a
+    symbol: a
+    nombre: aceleracion
+    unidad_si: m/s^2
+    descripcion: Aceleracion sobre el plano.
+  - id: Fmin
+    symbol: F_{min}
+    nombre: fuerza_minima_subida
+    unidad_si: N
+    descripcion: Fuerza minima para subir a velocidad constante.
+formulas:
+  - id: descomposicion_peso_paralela
+    title: Componente paralela del peso
+    equation: Wpar = m*g*sin(theta)
+    latex: W_{\parallel}=mg\sin\theta
+    rearrangements:
+      - target: Wpar
+        equation: Wpar = m*g*sin(theta)
+        latex: W_{\parallel}=mg\sin\theta
+      - target: m
+        equation: m = Wpar/(g*sin(theta))
+        latex: m=\frac{W_{\parallel}}{g\sin\theta}
+      - target: g
+        equation: g = Wpar/(m*sin(theta))
+        latex: g=\frac{W_{\parallel}}{m\sin\theta}
+      - target: theta
+        equation: theta = asin(Wpar/(m*g))
+        latex: \theta=\arcsin\left(\frac{W_{\parallel}}{mg}\right)
+  - id: descomposicion_peso_perpendicular
+    title: Componente perpendicular del peso
+    equation: Wperp = m*g*cos(theta)
+    latex: W_{\perp}=mg\cos\theta
+    rearrangements:
+      - target: Wperp
+        equation: Wperp = m*g*cos(theta)
+        latex: W_{\perp}=mg\cos\theta
+      - target: m
+        equation: m = Wperp/(g*cos(theta))
+        latex: m=\frac{W_{\perp}}{g\cos\theta}
+      - target: theta
+        equation: theta = acos(Wperp/(m*g))
+        latex: \theta=\arccos\left(\frac{W_{\perp}}{mg}\right)
+  - id: normal_basica
+    title: Fuerza normal
+    equation: N = m*g*cos(theta)
+    latex: N=mg\cos\theta
+    rearrangements:
+      - target: N
+        equation: N = m*g*cos(theta)
+        latex: N=mg\cos\theta
+      - target: m
+        equation: m = N/(g*cos(theta))
+        latex: m=\frac{N}{g\cos\theta}
+      - target: g
+        equation: g = N/(m*cos(theta))
+        latex: g=\frac{N}{m\cos\theta}
+  - id: rozamiento_dinamico
+    title: Rozamiento dinamico
+    equation: f = mu*N
+    latex: f=\mu N
+    rearrangements:
+      - target: f
+        equation: f = mu*N
+        latex: f=\mu N
+      - target: mu
+        equation: mu = f/N
+        latex: \mu=\frac{f}{N}
+      - target: N
+        equation: N = f/mu
+        latex: N=\frac{f}{\mu}
+    constraints:
+      - expr: N > 0
+        message: N debe ser mayor que 0.
+      - expr: mu > 0
+        message: mu debe ser mayor que 0 para despejar N.
+  - id: aceleracion_con_rozamiento
+    title: Aceleracion con rozamiento
+    equation: a = g*(sin(theta)-mu*cos(theta))
+    latex: a=g(\sin\theta-\mu\cos\theta)
+    rearrangements:
+      - target: a
+        equation: a = g*(sin(theta)-mu*cos(theta))
+        latex: a=g(\sin\theta-\mu\cos\theta)
+      - target: g
+        equation: g = a/(sin(theta)-mu*cos(theta))
+        latex: g=\frac{a}{\sin\theta-\mu\cos\theta}
+      - target: mu
+        equation: mu = (sin(theta)-a/g)/cos(theta)
+        latex: \mu=\frac{\sin\theta-\frac{a}{g}}{\cos\theta}
+  - id: aceleracion_sin_rozamiento
+    title: Aceleracion sin rozamiento
+    equation: a = g*sin(theta)
+    latex: a=g\sin\theta
+    rearrangements:
+      - target: a
+        equation: a = g*sin(theta)
+        latex: a=g\sin\theta
+      - target: g
+        equation: g = a/sin(theta)
+        latex: g=\frac{a}{\sin\theta}
+      - target: theta
+        equation: theta = asin(a/g)
+        latex: \theta=\arcsin\left(\frac{a}{g}\right)
+  - id: fuerza_minima_subida
+    title: Fuerza minima para subir (v constante)
+    equation: Fmin = m*g*sin(theta)+mu*m*g*cos(theta)
+    latex: F_{min}=mg\sin\theta+\mu mg\cos\theta
+    rearrangements:
+      - target: Fmin
+        equation: Fmin = m*g*sin(theta)+mu*m*g*cos(theta)
+        latex: F_{min}=mg\sin\theta+\mu mg\cos\theta
+      - target: mu
+        equation: mu = (Fmin-m*g*sin(theta))/(m*g*cos(theta))
+        latex: \mu=\frac{F_{min}-mg\sin\theta}{mg\cos\theta}
+  - id: trabajo_ideal_conceptual
+    title: Trabajo ideal del plano (conceptual)
+    equation: Fmin*s = m*g*h
+    latex: F_{min}\,s=mgh
+    calculable: false
+    motivo_no_calculable: Formula conceptual de energia y geometria. Requiere datos adicionales de recorrido s y altura h.
+ui:
+  default_formula: aceleracion_con_rozamiento
+  groups:
+    - title: Descomposicion y contacto
+      items:
+        - descomposicion_peso_paralela
+        - descomposicion_peso_perpendicular
+        - normal_basica
+        - rozamiento_dinamico
+    - title: Movimiento en el plano
+      items:
+        - aceleracion_con_rozamiento
+        - aceleracion_sin_rozamiento
+        - fuerza_minima_subida
+    - title: Relacion conceptual
+      items:
+        - trabajo_ideal_conceptual

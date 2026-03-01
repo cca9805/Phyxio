@@ -1,0 +1,182 @@
+version: 1
+topic:
+  id: tension-en-cuerdas-y-cables
+  title: Tension en cuerdas y cables
+variables:
+- id: T
+  symbol: T
+  nombre: tension
+  unidad_si: N
+  descripcion: Tension.
+- id: m
+  symbol: m
+  nombre: masa
+  unidad_si: kg
+  descripcion: Masa.
+- id: g
+  symbol: g
+  nombre: gravedad
+  unidad_si: m/s^2
+  descripcion: Gravedad.
+- id: a
+  symbol: a
+  nombre: aceleracion
+  unidad_si: m/s^2
+  descripcion: Aceleracion.
+- id: P
+  symbol: P
+  nombre: peso
+  unidad_si: N
+  descripcion: Peso.
+- id: m1
+  symbol: m_1
+  nombre: masa 1
+  unidad_si: kg
+  descripcion: Masa 1.
+- id: m2
+  symbol: m_2
+  nombre: masa 2
+  unidad_si: kg
+  descripcion: Masa 2.
+- id: lambda
+  symbol: \lambda
+  nombre: densidad lineal
+  unidad_si: kg/m
+  descripcion: Densidad lineal.
+- id: y
+  symbol: y
+  nombre: posicion a lo largo del cable
+  unidad_si: m
+  descripcion: Posicion a lo largo del cable.
+- id: dT
+  symbol: dT
+  nombre: variacion de tension
+  unidad_si: N
+  descripcion: Variacion de tension.
+- id: dy
+  symbol: dy
+  nombre: variacion de posicion
+  unidad_si: m
+  descripcion: Variacion de posicion.
+formulas:
+- id: peso
+  title: Peso
+  equation: P = m*g
+  latex: P = m\,g
+  rearrangements:
+  - target: P
+    latex: P = m\,g
+    equation: P = m*g
+  - target: m
+    latex: m = \frac{P}{g}
+    equation: m = P/g
+  - target: g
+    latex: g = \frac{P}{m}
+    equation: g = P/m
+  constraints:
+  - when: m <= 0
+    message: m debe ser > 0.
+  - when: g <= 0
+    message: g debe ser > 0.
+  notes:
+  - En problemas escolares se usa g aprox 9.8 m/s^2.
+  status: calculable
+- id: tension_equilibrio_vertical
+  title: Tension en equilibrio (cuerda vertical)
+  equation: T = m*g
+  latex: T = m\,g
+  rearrangements:
+  - target: T
+    latex: T = m\,g
+    equation: T = m*g
+  - target: m
+    latex: m = \frac{T}{g}
+    equation: m = T/g
+  - target: g
+    latex: g = \frac{T}{m}
+    equation: g = T/m
+  constraints:
+  - when: m <= 0
+    message: m debe ser > 0.
+  - when: g <= 0
+    message: g debe ser > 0.
+  notes:
+  - Solo valido si el cuerpo esta en reposo o con velocidad constante (a=0).
+  status: calculable
+- id: segunda_ley_vertical
+  title: '2a ley (vertical): T - m*g = m*a'
+  equation: T - m*g = m*a
+  latex: T - m\,g = m\,a
+  rearrangements:
+  - target: T
+    latex: T = m\,(g + a)
+    equation: T = m*(g + a)
+  - target: a
+    latex: a = \frac{T}{m} - g
+    equation: a = T/m - g
+  - target: m
+    latex: m = \frac{T}{g + a}
+    equation: m = T/(g + a)
+  constraints:
+  - when: m <= 0
+    message: m debe ser > 0.
+  - when: (g + a) == 0
+    message: g + a no puede ser 0 si despejas m.
+  notes:
+  - 'La convencion de signos importa: define positivo hacia arriba o abajo.'
+  status: calculable
+- id: atwood_aceleracion
+  title: Maquina de Atwood (aceleracion)
+  equation: a = (m2 - m1)*g/(m1 + m2)
+  latex: a = \frac{(m_2 - m_1)\,g}{m_1 + m_2}
+  rearrangements:
+  - target: a
+    latex: a = \frac{(m_2 - m_1)\,g}{m_1 + m_2}
+    equation: a = (m2 - m1)*g/(m1 + m2)
+  - target: g
+    latex: g = \frac{a\,(m_1 + m_2)}{m_2 - m_1}
+    equation: g = a*(m1 + m2)/(m2 - m1)
+  constraints:
+  - when: m1 <= 0 or m2 <= 0
+    message: m1 y m2 deben ser > 0.
+  - when: (m1 + m2) == 0
+    message: m1 + m2 no puede ser 0.
+  - when: (m2 - m1) == 0
+    message: Si m1=m2, a=0. No puedes despejar g con ese caso.
+  notes:
+  - Si m2>m1, con esta convencion m2 baja y m1 sube.
+  status: calculable
+- id: atwood_tension
+  title: Maquina de Atwood (tension)
+  equation: T = 2*m1*m2*g/(m1 + m2)
+  latex: T = \frac{2\,m_1\,m_2}{m_1 + m_2}\,g
+  rearrangements:
+  - target: T
+    latex: T = \frac{2\,m_1\,m_2}{m_1 + m_2}\,g
+    equation: T = 2*m1*m2*g/(m1 + m2)
+  constraints:
+  - when: m1 <= 0 or m2 <= 0
+    message: m1 y m2 deben ser > 0.
+  - when: (m1 + m2) == 0
+    message: m1 + m2 no puede ser 0.
+  - when: g <= 0
+    message: g debe ser > 0.
+  notes:
+  - Valido para cuerda y polea ideales.
+  status: calculable
+- id: cable_con_masa_vertical
+  title: Cable con masa (variacion de tension)
+  equation: dT/dy = lambda*g
+  latex: \frac{dT}{dy} = \lambda\,g
+  rearrangements:
+  - target: lambda
+    latex: \lambda = \frac{1}{g}\,\frac{dT}{dy}
+    equation: lambda = (dT/dy)/g
+  constraints:
+  - when: g <= 0
+    message: g debe ser > 0.
+  - when: dy == 0
+    message: dy no puede ser 0.
+  notes:
+  - 'Modelo continuo: dT y dy representan variaciones locales.'
+  status: calculable

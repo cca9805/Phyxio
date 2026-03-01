@@ -1,0 +1,216 @@
+﻿version: 1
+topic:
+  id: tubos
+  title: Tubos
+variables:
+  - id: L
+    symbol: L
+    name: longitud_efectiva
+    si_unit: m
+  - id: v
+    symbol: v
+    name: velocidad_sonido
+    si_unit: m/s
+  - id: n
+    symbol: n
+    name: indice_modal
+    si_unit: '1'
+  - id: lambda_n
+    symbol: \lambda_n
+    name: longitud_onda_modal
+    si_unit: m
+  - id: fn
+    symbol: f_n
+    name: frecuencia_modal
+    si_unit: Hz
+  - id: f1
+    symbol: f_1
+    name: frecuencia_fundamental
+    si_unit: Hz
+  - id: Tc
+    symbol: T_c
+    name: temperatura_celsius
+    si_unit: degC
+  - id: p_prima
+    symbol: p'
+    name: presion_acustica
+    si_unit: Pa
+  - id: u
+    symbol: u
+    name: velocidad_particula
+    si_unit: m/s
+formulas:
+  - id: relacion_onda
+    title: Relacion de onda
+    equation: v = lambda_n*fn
+    latex: v=\lambda_n f_n
+    rearrangements:
+      - target: v
+        equation: v = lambda_n*fn
+        latex: v=\lambda_n f_n
+      - target: lambda_n
+        equation: lambda_n = v/fn
+        latex: \lambda_n=\frac{v}{f_n}
+      - target: fn
+        equation: fn = v/lambda_n
+        latex: f_n=\frac{v}{\lambda_n}
+    constraints:
+      - expr: fn > 0
+        message: f_n debe ser positiva para despejar lambda_n.
+      - expr: lambda_n > 0
+        message: lambda_n debe ser positiva para despejar f_n.
+
+  - id: abierto_abierto_lambda
+    title: Tubo abierto-abierto (longitud de onda modal)
+    equation: lambda_n = 2*L/n
+    latex: \lambda_n=\frac{2L}{n}
+    rearrangements:
+      - target: lambda_n
+        equation: lambda_n = 2*L/n
+        latex: \lambda_n=\frac{2L}{n}
+      - target: L
+        equation: L = n*lambda_n/2
+        latex: L=\frac{n\lambda_n}{2}
+      - target: n
+        equation: n = 2*L/lambda_n
+        latex: n=\frac{2L}{\lambda_n}
+    constraints:
+      - expr: L > 0
+        message: L debe ser positiva.
+      - expr: n > 0
+        message: n debe ser mayor que 0.
+
+  - id: abierto_abierto_frecuencia
+    title: Tubo abierto-abierto (frecuencia modal)
+    equation: fn = n*v/(2*L)
+    latex: f_n=\frac{nv}{2L}
+    rearrangements:
+      - target: fn
+        equation: fn = n*v/(2*L)
+        latex: f_n=\frac{nv}{2L}
+      - target: v
+        equation: v = 2*L*fn/n
+        latex: v=\frac{2Lf_n}{n}
+      - target: L
+        equation: L = n*v/(2*fn)
+        latex: L=\frac{nv}{2f_n}
+    constraints:
+      - expr: L > 0
+        message: L debe ser positiva.
+      - expr: v > 0
+        message: v debe ser positiva.
+
+  - id: abierto_cerrado_lambda
+    title: Tubo abierto-cerrado (longitud de onda modal)
+    equation: lambda_n = 4*L/(2*n-1)
+    latex: \lambda_n=\frac{4L}{2n-1}
+    rearrangements:
+      - target: lambda_n
+        equation: lambda_n = 4*L/(2*n-1)
+        latex: \lambda_n=\frac{4L}{2n-1}
+      - target: L
+        equation: L = lambda_n*(2*n-1)/4
+        latex: L=\frac{\lambda_n(2n-1)}{4}
+    constraints:
+      - expr: L > 0
+        message: L debe ser positiva.
+      - expr: (2*n-1) > 0
+        message: n debe ser mayor o igual que 1.
+
+  - id: abierto_cerrado_frecuencia
+    title: Tubo abierto-cerrado (frecuencia modal)
+    equation: fn = (2*n-1)*v/(4*L)
+    latex: f_n=\frac{(2n-1)v}{4L}
+    rearrangements:
+      - target: fn
+        equation: fn = (2*n-1)*v/(4*L)
+        latex: f_n=\frac{(2n-1)v}{4L}
+      - target: v
+        equation: v = 4*L*fn/(2*n-1)
+        latex: v=\frac{4Lf_n}{2n-1}
+      - target: L
+        equation: L = (2*n-1)*v/(4*fn)
+        latex: L=\frac{(2n-1)v}{4f_n}
+    constraints:
+      - expr: L > 0
+        message: L debe ser positiva.
+      - expr: v > 0
+        message: v debe ser positiva.
+
+  - id: fundamental_abierto_abierto
+    title: Fundamental en tubo abierto-abierto
+    equation: f1 = v/(2*L)
+    latex: f_1=\frac{v}{2L}
+    rearrangements:
+      - target: f1
+        equation: f1 = v/(2*L)
+        latex: f_1=\frac{v}{2L}
+      - target: v
+        equation: v = 2*L*f1
+        latex: v=2Lf_1
+      - target: L
+        equation: L = v/(2*f1)
+        latex: L=\frac{v}{2f_1}
+
+  - id: fundamental_abierto_cerrado
+    title: Fundamental en tubo abierto-cerrado
+    equation: f1 = v/(4*L)
+    latex: f_1=\frac{v}{4L}
+    rearrangements:
+      - target: f1
+        equation: f1 = v/(4*L)
+        latex: f_1=\frac{v}{4L}
+      - target: v
+        equation: v = 4*L*f1
+        latex: v=4Lf_1
+      - target: L
+        equation: L = v/(4*f1)
+        latex: L=\frac{v}{4f_1}
+
+  - id: velocidad_aire_temperatura
+    title: Aproximacion de velocidad del sonido en aire
+    equation: v = 331 + 0.6*Tc
+    latex: v\approx331+0.6T_c
+    rearrangements:
+      - target: v
+        equation: v = 331 + 0.6*Tc
+        latex: v\approx331+0.6T_c
+      - target: Tc
+        equation: Tc = (v - 331)/0.6
+        latex: T_c\approx\frac{v-331}{0.6}
+
+  - id: frontera_abierta_conceptual
+    title: Condicion de frontera en extremo abierto (conceptual)
+    equation: p_prima = 0
+    latex: p'\approx0
+    calculable: false
+    motivo_no_calculable: Es una condicion de contorno fisica para seleccionar modos, no una ecuacion de despeje general.
+
+  - id: frontera_cerrada_conceptual
+    title: Condicion de frontera en extremo cerrado (conceptual)
+    equation: u = 0
+    latex: u\approx0
+    calculable: false
+    motivo_no_calculable: Es una condicion de contorno fisica para seleccionar modos, no una ecuacion de despeje numerico directo.
+
+ui:
+  default_formula: abierto_cerrado_frecuencia
+  groups:
+    - title: Base de propagacion (calculables)
+      items:
+        - relacion_onda
+        - velocidad_aire_temperatura
+    - title: Tubo abierto-abierto (calculables)
+      items:
+        - abierto_abierto_lambda
+        - abierto_abierto_frecuencia
+        - fundamental_abierto_abierto
+    - title: Tubo abierto-cerrado (calculables)
+      items:
+        - abierto_cerrado_lambda
+        - abierto_cerrado_frecuencia
+        - fundamental_abierto_cerrado
+    - title: Fronteras fisicas (no calculables)
+      items:
+        - frontera_abierta_conceptual
+        - frontera_cerrada_conceptual

@@ -1,0 +1,111 @@
+﻿version: 1
+topic:
+  id: colisiones-totalmente-inelasticas
+  title: Colisiones totalmente inelásticas
+variables:
+  - id: m1
+    symbol: m_1
+    nombre: masa 1
+    unidad_si: kg
+    descripcion: Masa del cuerpo 1.
+  - id: m2
+    symbol: m_2
+    nombre: masa 2
+    unidad_si: kg
+    descripcion: Masa del cuerpo 2.
+  - id: v1i
+    symbol: v_{1i}
+    nombre: velocidad inicial 1
+    unidad_si: m/s
+    descripcion: Velocidad inicial del cuerpo 1.
+  - id: v2i
+    symbol: v_{2i}
+    nombre: velocidad inicial 2
+    unidad_si: m/s
+    descripcion: Velocidad inicial del cuerpo 2.
+  - id: vf
+    symbol: v_f
+    nombre: velocidad final comun
+    unidad_si: m/s
+    descripcion: Velocidad comun tras adherencia.
+  - id: Ki
+    symbol: K_i
+    nombre: energía cinética inicial total
+    unidad_si: J
+    descripcion: Energia cinética total antes del choque.
+  - id: Kf
+    symbol: K_f
+    nombre: energía cinética final total
+    unidad_si: J
+    descripcion: Energia cinética total despues del choque.
+  - id: DeltaK
+    symbol: \Delta K
+    nombre: energía disipada
+    unidad_si: J
+    descripcion: Perdida de energía cinética traslacional.
+formulas:
+  - id: vf_adhesion
+    title: Velocidad final comun por adherencia
+    equation: vf = (m1*v1i + m2*v2i)/(m1 + m2)
+    latex: v_f=\frac{m_1v_{1i}+m_2v_{2i}}{m_1+m_2}
+    rearrangements:
+      - target: vf
+        equation: vf = (m1*v1i + m2*v2i)/(m1 + m2)
+        latex: v_f=\frac{m_1v_{1i}+m_2v_{2i}}{m_1+m_2}
+    constraints:
+      - expr: m1 + m2 > 0
+        message: m1 + m2 debe ser mayor que 0.
+  - id: momento_1d_total_inelastica
+    title: Conservación de momento con velocidad comun
+    equation: m1*v1i + m2*v2i = (m1 + m2)*vf
+    latex: m_1v_{1i}+m_2v_{2i}=(m_1+m_2)v_f
+    rearrangements:
+      - target: vf
+        equation: vf = (m1*v1i + m2*v2i)/(m1 + m2)
+        latex: v_f=\frac{m_1v_{1i}+m_2v_{2i}}{m_1+m_2}
+    constraints:
+      - expr: m1 + m2 > 0
+        message: m1 + m2 debe ser mayor que 0.
+  - id: ki_total
+    title: Energia cinética inicial total
+    equation: Ki = 0.5*m1*v1i*v1i + 0.5*m2*v2i*v2i
+    latex: K_i=\frac{1}{2}m_1v_{1i}^2+\frac{1}{2}m_2v_{2i}^2
+    rearrangements:
+      - target: Ki
+        equation: Ki = 0.5*m1*v1i*v1i + 0.5*m2*v2i*v2i
+        latex: K_i=\frac{1}{2}m_1v_{1i}^2+\frac{1}{2}m_2v_{2i}^2
+  - id: kf_total
+    title: Energia cinética final total
+    equation: Kf = 0.5*(m1 + m2)*vf*vf
+    latex: K_f=\frac{1}{2}(m_1+m_2)v_f^2
+    rearrangements:
+      - target: Kf
+        equation: Kf = 0.5*(m1 + m2)*vf*vf
+        latex: K_f=\frac{1}{2}(m_1+m_2)v_f^2
+  - id: delta_k
+    title: Energia cinética disipada
+    equation: DeltaK = Ki - Kf
+    latex: \Delta K=K_i-K_f
+    rearrangements:
+      - target: DeltaK
+        equation: DeltaK = Ki - Kf
+        latex: \Delta K=K_i-K_f
+  - id: condicion_adhesion_conceptual
+    title: Condicion de adherencia final (conceptual)
+    equation: v1f = v2f = vf
+    latex: v_{1f}=v_{2f}=v_f
+    calculable: false
+    motivo_no_calculable: Condicion de clasificacion del choque totalmente inelástico, no un despeje numerico general.
+ui:
+  default_formula: vf_adhesion
+  groups:
+    - title: Formulas calculables
+      items:
+        - vf_adhesion
+        - momento_1d_total_inelastica
+        - ki_total
+        - kf_total
+        - delta_k
+    - title: Formulas conceptuales
+      items:
+        - condicion_adhesion_conceptual

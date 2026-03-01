@@ -1,0 +1,272 @@
+version: 1
+topic:
+  id: ondas-superficiales
+  title: Ondas Superficiales
+variables:
+  - id: v
+    symbol: v
+    name: velocidad_de_fase
+    si_unit: m/s
+  - id: v_g
+    symbol: v_g
+    name: velocidad_de_grupo
+    si_unit: m/s
+  - id: lambda
+    symbol: \lambda
+    name: longitud_de_onda
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+  - id: k
+    symbol: k
+    name: numero_de_onda
+    si_unit: rad/m
+  - id: omega
+    symbol: \omega
+    name: frecuencia_angular
+    si_unit: rad/s
+  - id: g
+    symbol: g
+    name: aceleracion_gravitatoria
+    si_unit: m/s^2
+  - id: h
+    symbol: h
+    name: profundidad
+    si_unit: m
+  - id: kh
+    symbol: kh
+    name: parametro_de_regimen
+    si_unit: '1'
+  - id: sigma
+    symbol: \sigma
+    name: tension_superficial
+    si_unit: N/m
+  - id: rho
+    symbol: \rho
+    name: densidad_fluido
+    si_unit: kg/m^3
+formulas:
+  - id: relacion_ondulatoria
+    title: Relacion general de propagacion
+    equation: v = lambda*f
+    latex: v=\lambda f
+    rearrangements:
+      - target: v
+        equation: v = lambda*f
+        latex: v=\lambda f
+      - target: lambda
+        equation: lambda = v/f
+        latex: \lambda=\frac{v}{f}
+      - target: f
+        equation: f = v/lambda
+        latex: f=\frac{v}{\lambda}
+    constraints:
+      - expr: 'lambda > 0'
+        message: lambda debe ser positiva.
+      - expr: 'f > 0'
+        message: f debe ser positiva.
+
+  - id: periodo_frecuencia
+    title: Vinculo entre periodo y frecuencia
+    equation: T = 1/f
+    latex: T=\frac{1}{f}
+    rearrangements:
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+    constraints:
+      - expr: 'f > 0'
+        message: f debe ser positiva.
+      - expr: 'T > 0'
+        message: T debe ser positivo.
+
+  - id: numero_de_onda
+    title: Numero de onda
+    equation: k = 2*pi/lambda
+    latex: k=\frac{2\pi}{\lambda}
+    rearrangements:
+      - target: k
+        equation: k = 2*pi/lambda
+        latex: k=\frac{2\pi}{\lambda}
+      - target: lambda
+        equation: lambda = 2*pi/k
+        latex: \lambda=\frac{2\pi}{k}
+    constraints:
+      - expr: 'lambda > 0'
+        message: lambda debe ser positiva.
+      - expr: 'k > 0'
+        message: k debe ser positivo.
+
+  - id: frecuencia_angular
+    title: Frecuencia angular
+    equation: omega = 2*pi*f
+    latex: \omega=2\pi f
+    rearrangements:
+      - target: omega
+        equation: omega = 2*pi*f
+        latex: \omega=2\pi f
+      - target: f
+        equation: f = omega/(2*pi)
+        latex: f=\frac{\omega}{2\pi}
+    constraints:
+      - expr: 'f > 0'
+        message: f debe ser positiva.
+
+  - id: criterio_regimen
+    title: Criterio de regimen por profundidad relativa
+    equation: kh = k*h
+    latex: kh=k\,h
+    rearrangements:
+      - target: kh
+        equation: kh = k*h
+        latex: kh=k\,h
+      - target: h
+        equation: h = kh/k
+        latex: h=\frac{kh}{k}
+      - target: k
+        equation: k = kh/h
+        latex: k=\frac{kh}{h}
+    constraints:
+      - expr: 'k > 0'
+        message: k debe ser positivo.
+      - expr: 'h > 0'
+        message: h debe ser positiva.
+
+  - id: dispersion_agua_profunda
+    title: Dispersion en agua profunda
+    equation: omega^2 = g*k
+    latex: \omega^2=gk
+    rearrangements:
+      - target: omega
+        equation: omega = sqrt(g*k)
+        latex: \omega=\sqrt{gk}
+      - target: g
+        equation: g = omega^2/k
+        latex: g=\frac{\omega^2}{k}
+      - target: k
+        equation: k = omega^2/g
+        latex: k=\frac{\omega^2}{g}
+    constraints:
+      - expr: 'g > 0'
+        message: g debe ser positiva.
+      - expr: 'k > 0'
+        message: k debe ser positivo.
+
+  - id: velocidad_fase_profunda
+    title: Velocidad de fase en agua profunda
+    equation: v = sqrt(g*lambda/(2*pi))
+    latex: v=\sqrt{\frac{g\lambda}{2\pi}}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(g*lambda/(2*pi))
+        latex: v=\sqrt{\frac{g\lambda}{2\pi}}
+      - target: lambda
+        equation: lambda = (2*pi*v^2)/g
+        latex: \lambda=\frac{2\pi v^2}{g}
+      - target: g
+        equation: g = (2*pi*v^2)/lambda
+        latex: g=\frac{2\pi v^2}{\lambda}
+    constraints:
+      - expr: 'g > 0'
+        message: g debe ser positiva.
+      - expr: 'lambda > 0'
+        message: lambda debe ser positiva.
+
+  - id: velocidad_fase_somera
+    title: Velocidad de fase en agua somera
+    equation: v = sqrt(g*h)
+    latex: v=\sqrt{gh}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(g*h)
+        latex: v=\sqrt{gh}
+      - target: h
+        equation: h = v^2/g
+        latex: h=\frac{v^2}{g}
+      - target: g
+        equation: g = v^2/h
+        latex: g=\frac{v^2}{h}
+    constraints:
+      - expr: 'g > 0'
+        message: g debe ser positiva.
+      - expr: 'h > 0'
+        message: h debe ser positiva.
+
+  - id: velocidad_grupo_profunda
+    title: Velocidad de grupo en profunda
+    equation: v_g = v/2
+    latex: v_g=\frac{v}{2}
+    rearrangements:
+      - target: v_g
+        equation: v_g = v/2
+        latex: v_g=\frac{v}{2}
+      - target: v
+        equation: v = 2*v_g
+        latex: v=2v_g
+    constraints:
+      - expr: 'v > 0'
+        message: v debe ser positiva.
+
+  - id: velocidad_grupo_somera
+    title: Velocidad de grupo en somera
+    equation: v_g = v
+    latex: v_g=v
+    rearrangements:
+      - target: v_g
+        equation: v_g = v
+        latex: v_g=v
+      - target: v
+        equation: v = v_g
+        latex: v=v_g
+
+  - id: dispersion_general_conceptual
+    title: Dispersion general de gravedad
+    equation: omega2 = g*k*tanhkh
+    latex: \omega^2=gk\tanh(kh)
+    calculable: false
+    motivo_no_calculable: Formula de marco general; su uso completo exige resolver por regimen y aproximaciones.
+
+  - id: dispersion_capilar_gravedad_conceptual
+    title: Dispersion capilar-gravedad
+    equation: omega2 = (g*k + (sigma/rho)*k^3)*tanhkh
+    latex: \omega^2=\left(gk+\frac{\sigma}{\rho}k^3\right)\tanh(kh)
+    calculable: false
+    motivo_no_calculable: Formula conceptual avanzada usada para interpretar transicion gravedad-capilaridad.
+
+  - id: velocidad_grupo_general_conceptual
+    title: Definicion general de velocidad de grupo
+    equation: v_g = d_omega_d_k
+    latex: v_g=\frac{d\omega}{dk}
+    calculable: false
+    motivo_no_calculable: Requiere derivacion respecto a k del modelo de dispersion adoptado.
+ui:
+  default_formula: velocidad_fase_somera
+  groups:
+    - title: Base ondulatoria (calculables)
+      items:
+        - relacion_ondulatoria
+        - periodo_frecuencia
+        - numero_de_onda
+        - frecuencia_angular
+        - criterio_regimen
+    - title: Modelos por profundidad (calculables)
+      items:
+        - dispersion_agua_profunda
+        - velocidad_fase_profunda
+        - velocidad_fase_somera
+        - velocidad_grupo_profunda
+        - velocidad_grupo_somera
+    - title: Formulas conceptuales (no calculables)
+      items:
+        - dispersion_general_conceptual
+        - dispersion_capilar_gravedad_conceptual
+        - velocidad_grupo_general_conceptual

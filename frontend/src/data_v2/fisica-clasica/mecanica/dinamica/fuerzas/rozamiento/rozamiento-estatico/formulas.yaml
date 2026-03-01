@@ -1,0 +1,64 @@
+version: 1
+topic:
+  id: rozamiento-estatico
+  title: Rozamiento estático
+variables:
+- id: fs
+  symbol: f_s
+  nombre: rozamiento estático
+  unidad_si: N
+  descripcion: Rozamiento estático.
+- id: fs_max
+  symbol: f_{s,\max}
+  nombre: rozamiento estático máximo
+  unidad_si: N
+  descripcion: Rozamiento estático máximo.
+- id: mu_s
+  symbol: \mu_s
+  nombre: coeficiente de rozamiento estático
+  unidad_si: '-'
+  descripcion: Coeficiente de rozamiento estático.
+- id: N
+  symbol: N
+  nombre: normal
+  unidad_si: N
+  descripcion: Normal.
+formulas:
+- id: fs_definicion
+  title: Condición del rozamiento estático
+  equation: fs <= mu_s*N
+  latex: f_s \le \mu_s N
+  status: descriptive
+  motivo_no_calculable: 'El rozamiento estático se ajusta al valor necesario para impedir el movimiento.
+
+    '
+- id: fs_max
+  title: Rozamiento estático máximo
+  equation: fs_max = mu_s*N
+  latex: f_{s,\max} = \mu_s N
+  status: calculable
+  rearrangements:
+  - target: fs_max
+    equation: fs_max = mu_s*N
+    latex: f_{s,\max} = \mu_s N
+  - target: mu_s
+    equation: mu_s = fs_max/N
+    latex: \mu_s = \frac{f_{s,\max}}{N}
+    constraints:
+    - expr: N != 0
+      message: La normal no puede ser 0.
+  - target: N
+    equation: N = fs_max/mu_s
+    latex: N = \frac{f_{s,\max}}{\mu_s}
+    constraints:
+    - expr: mu_s != 0
+      message: μ_s no puede ser 0.
+ui:
+  default_formula: fs_max
+  groups:
+  - title: Definición
+    items:
+    - fs_definicion
+  - title: Valor máximo
+    items:
+    - fs_max

@@ -1,0 +1,9 @@
+export * as cinematica from "./cinematica/index.js";
+export * as dinamica from "./dinamica/index.js";
+export * as oscilaciones from "./oscilaciones/index.js";
+export * as trabajoYEnergia from "./trabajo-y-energia/index.js";
+export * as cantidadDeMovimiento from "./cantidad-de-movimiento/index.js";
+export * as gravitacion from "./gravitacion/index.js";
+export * as fluidos from "./fluidos/index.js";
+export * as mecanicaAnalitica from "./mecanica-analitica/index.js";
+export * as ondas from "./ondas/index.js";

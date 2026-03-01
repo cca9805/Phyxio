@@ -1,0 +1,122 @@
+version: 1
+topic:
+  id: relacion-entre-modulos-elasticos
+  title: Relacion Entre Modulos Elasticos
+variables:
+  - id: E
+    symbol: E
+    name: modulo_young
+    si_unit: Pa
+  - id: G
+    symbol: G
+    name: modulo_corte
+    si_unit: Pa
+  - id: K
+    symbol: K
+    name: modulo_compresion
+    si_unit: Pa
+  - id: nu
+    symbol: \nu
+    name: poisson
+    si_unit: '1'
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: vL
+    symbol: v_L
+    name: velocidad_longitudinal
+    si_unit: m/s
+  - id: vT
+    symbol: v_T
+    name: velocidad_transversal
+    si_unit: m/s
+formulas:
+  - id: EG
+    title: Relacion E-G-nu
+    equation: E = 2*G*(1 + nu)
+    latex: E=2G(1+\nu)
+    rearrangements:
+      - target: E
+        equation: E = 2*G*(1 + nu)
+        latex: E=2G(1+\nu)
+      - target: G
+        equation: G = E/(2*(1 + nu))
+        latex: G=\frac{E}{2(1+\nu)}
+      - target: nu
+        equation: nu = E/(2*G) - 1
+        latex: \nu=\frac{E}{2G}-1
+
+  - id: KE
+    title: Relacion K-E-nu
+    equation: K = E/(3*(1 - 2*nu))
+    latex: K=\frac{E}{3(1-2\nu)}
+    rearrangements:
+      - target: K
+        equation: K = E/(3*(1 - 2*nu))
+        latex: K=\frac{E}{3(1-2\nu)}
+      - target: E
+        equation: E = 3*K*(1 - 2*nu)
+        latex: E=3K(1-2\nu)
+
+  - id: nuKG
+    title: Poisson desde K y G
+    equation: nu = (3*K - 2*G)/(2*(3*K + G))
+    latex: \nu=\frac{3K-2G}{2(3K+G)}
+    rearrangements:
+      - target: nu
+        equation: nu = (3*K - 2*G)/(2*(3*K + G))
+        latex: \nu=\frac{3K-2G}{2(3K+G)}
+
+  - id: EKG
+    title: Young desde K y G
+    equation: E = 9*K*G/(3*K + G)
+    latex: E=\frac{9KG}{3K+G}
+    rearrangements:
+      - target: E
+        equation: E = 9*K*G/(3*K + G)
+        latex: E=\frac{9KG}{3K+G}
+
+  - id: vT
+    title: Velocidad de corte desde G y densidad
+    equation: vT = sqrt(G/rho)
+    latex: v_T=\sqrt{\frac{G}{\rho}}
+    rearrangements:
+      - target: vT
+        equation: vT = sqrt(G/rho)
+        latex: v_T=\sqrt{\frac{G}{\rho}}
+      - target: G
+        equation: G = rho*vT^2
+        latex: G=\rho v_T^2
+
+  - id: vL
+    title: Velocidad longitudinal desde K, G y densidad
+    equation: vL = sqrt((K + 4*G/3)/rho)
+    latex: v_L=\sqrt{\frac{K+\frac{4}{3}G}{\rho}}
+    rearrangements:
+      - target: vL
+        equation: vL = sqrt((K + 4*G/3)/rho)
+        latex: v_L=\sqrt{\frac{K+\frac{4}{3}G}{\rho}}
+
+  - id: restricciones_fisicas
+    title: Restricciones fisicas de isotropia lineal
+    equation: restricciones_nu_modulos
+    latex: E>0,\ G>0,\ K>0,\ -1<\nu<0.5
+    calculable: false
+    motivo_no_calculable: Criterio conceptual de consistencia del modelo constitutivo.
+ui:
+  default_formula: EG
+  groups:
+    - title: Conversion de modulos (calculables)
+      items:
+        - EG
+        - KE
+        - nuKG
+        - EKG
+    - title: Conexion con ondas (calculables)
+      items:
+        - vT
+        - vL
+    - title: Validacion conceptual
+      items:
+        - restricciones_fisicas

@@ -1,0 +1,137 @@
+version: 1
+topic:
+  id: energia-en-mhs
+  title: Energía en MHS
+variables:
+  - id: K
+    symbol: K
+    nombre: energia cinetica
+    unidad_si: J
+    descripcion: Energia cinetica.
+  - id: U
+    symbol: U
+    nombre: energia potencial elastica
+    unidad_si: J
+    descripcion: Energia potencial elastica.
+  - id: E
+    symbol: E
+    nombre: energia mecanica total
+    unidad_si: J
+    descripcion: Energia mecanica total.
+  - id: m
+    symbol: m
+    nombre: masa
+    unidad_si: kg
+    descripcion: Masa.
+  - id: k
+    symbol: k
+    nombre: constante elastica
+    unidad_si: N/m
+    descripcion: Constante elastica.
+  - id: x
+    symbol: x
+    nombre: desplazamiento
+    unidad_si: m
+    descripcion: Desplazamiento.
+  - id: v
+    symbol: v
+    nombre: velocidad
+    unidad_si: m/s
+    descripcion: Velocidad.
+  - id: A
+    symbol: A
+    nombre: amplitud
+    unidad_si: m
+    descripcion: Amplitud.
+  - id: E_total
+    symbol: E_{total}
+    nombre: energía total
+    unidad_si: J
+    descripcion: Energía mecánica total del oscilador.
+formulas:
+  - id: energia_cinetica
+    title: Energia cinetica
+    equation: K = 0.5*m*v^2
+    latex: K=\frac12mv^2
+    rearrangements:
+      - target: K
+        equation: K = 0.5*m*v^2
+        latex: K=\frac12mv^2
+      - target: v
+        equation: v = sqrt(2*K/m)
+        latex: v=\sqrt{\frac{2K}{m}}
+      - target: m
+        equation: m = 2*K/(v^2)
+        latex: m=\frac{2K}{v^2}
+    constraints:
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+  - id: energia_potencial_elastica
+    title: Energia potencial elastica
+    equation: U = 0.5*k*x^2
+    latex: U=\frac12kx^2
+    rearrangements:
+      - target: U
+        equation: U = 0.5*k*x^2
+        latex: U=\frac12kx^2
+      - target: x
+        equation: x = sqrt(2*U/k)
+        latex: x=\sqrt{\frac{2U}{k}}
+      - target: k
+        equation: k = 2*U/(x^2)
+        latex: k=\frac{2U}{x^2}
+    constraints:
+      - expr: k > 0
+        message: k debe ser mayor que 0.
+  - id: energia_total_mhs
+    title: Energia total
+    equation: E = K + U
+    latex: E=K+U
+    rearrangements:
+      - target: E
+        equation: E = K + U
+        latex: E=K+U
+      - target: K
+        equation: K = E - U
+        latex: K=E-U
+      - target: U
+        equation: U = E - K
+        latex: U=E-K
+    constraints: []
+  - id: energia_total_amplitud
+    title: Energia total por amplitud
+    equation: E = 0.5*k*A^2
+    latex: E=\frac12kA^2
+    rearrangements:
+      - target: E
+        equation: E = 0.5*k*A^2
+        latex: E=\frac12kA^2
+      - target: A
+        equation: A = sqrt(2*E/k)
+        latex: A=\sqrt{\frac{2E}{k}}
+      - target: k
+        equation: k = 2*E/(A^2)
+        latex: k=\frac{2E}{A^2}
+    constraints:
+      - expr: k > 0
+        message: k debe ser mayor que 0.
+      - expr: A > 0
+        message: A debe ser mayor que 0.
+  - id: conservacion_energia_mhs
+    title: Conservación de energía (conceptual)
+    equation: E_total = K + U = constante
+    latex: E=K+U=\text{cte}
+    calculable: false
+    motivo_no_calculable: Es una relación de principio físico; la constante depende de condiciones iniciales del sistema.
+ui:
+  default_formula: energia_total_mhs
+  groups:
+    - title: Fórmulas calculables
+      items:
+        - energia_cinetica
+        - energia_potencial_elastica
+        - energia_total_mhs
+        - energia_total_amplitud
+    - title: Fórmulas conceptuales
+      items:
+        - conservacion_energia_mhs

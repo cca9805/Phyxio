@@ -1,0 +1,214 @@
+﻿version: 1
+topic:
+  id: ley-de-gravitacion-universal
+  title: Ley de gravitación universal
+variables:
+  - id: F
+    symbol: F
+    nombre: fuerza gravitatoria
+    unidad_si: N
+    descripcion: Módulo de la fuerza entre dos masas.
+  - id: G
+    symbol: G
+    nombre: constante de gravitación
+    unidad_si: N*m^2/kg^2
+    descripcion: Constante universal de gravitación.
+  - id: m1
+    symbol: m_1
+    nombre: masa 1
+    unidad_si: kg
+    descripcion: Masa del primer cuerpo.
+  - id: m2
+    symbol: m_2
+    nombre: masa 2
+    unidad_si: kg
+    descripcion: Masa del segundo cuerpo.
+  - id: r
+    symbol: r
+    nombre: distancia entre centros
+    unidad_si: m
+    descripcion: Distancia entre centros de masa.
+  - id: M
+    symbol: M
+    nombre: masa fuente
+    unidad_si: kg
+    descripcion: Masa del astro que crea el campo gravitatorio.
+  - id: m
+    symbol: m
+    nombre: masa de prueba
+    unidad_si: kg
+    descripcion: Masa del cuerpo afectado por el campo.
+  - id: g
+    symbol: g
+    nombre: campo gravitatorio
+    unidad_si: m/s^2
+    descripcion: Intensidad de campo gravitatorio local.
+  - id: P
+    symbol: P
+    nombre: peso
+    unidad_si: N
+    descripcion: Fuerza gravitatoria sobre una masa m.
+  - id: a
+    symbol: a
+    nombre: aceleracion gravitatoria
+    unidad_si: m/s^2
+    descripcion: Aceleración producida por la masa fuente.
+  - id: R
+    symbol: R
+    nombre: radio del astro
+    unidad_si: m
+    descripcion: Distancia al centro para cálculo superficial.
+  - id: F1
+    symbol: F_1
+    nombre: fuerza inicial
+    unidad_si: N
+    descripcion: Fuerza en la condición 1.
+  - id: F2
+    symbol: F_2
+    nombre: fuerza final
+    unidad_si: N
+    descripcion: Fuerza en la condición 2.
+  - id: r1
+    symbol: r_1
+    nombre: distancia inicial
+    unidad_si: m
+    descripcion: Distancia en la condición 1.
+  - id: r2
+    symbol: r_2
+    nombre: distancia final
+    unidad_si: m
+    descripcion: Distancia en la condición 2.
+formulas:
+  - id: ley_newton_gravitacion
+    title: Ley de gravitación universal
+    equation: F = G*m1*m2/r^2
+    latex: F = G\frac{m_1m_2}{r^2}
+    rearrangements:
+      - target: F
+        equation: F = G*m1*m2/r^2
+        latex: F = G\frac{m_1m_2}{r^2}
+      - target: m1
+        equation: m1 = F*r^2/(G*m2)
+        latex: m_1 = \frac{Fr^2}{Gm_2}
+      - target: m2
+        equation: m2 = F*r^2/(G*m1)
+        latex: m_2 = \frac{Fr^2}{Gm_1}
+      - target: r
+        equation: r = sqrt(G*m1*m2/F)
+        latex: r = \sqrt{\frac{Gm_1m_2}{F}}
+    constraints:
+      - expr: r > 0
+        message: r debe ser mayor que 0.
+      - expr: m1 > 0
+        message: m1 debe ser mayor que 0.
+      - expr: m2 > 0
+        message: m2 debe ser mayor que 0.
+      - expr: F > 0
+        message: F debe ser mayor que 0 al despejar r.
+
+  - id: campo_gravitatorio
+    title: Campo gravitatorio de una masa puntual
+    equation: g = G*M/r^2
+    latex: g = G\frac{M}{r^2}
+    rearrangements:
+      - target: g
+        equation: g = G*M/r^2
+        latex: g = G\frac{M}{r^2}
+      - target: M
+        equation: M = g*r^2/G
+        latex: M = \frac{gr^2}{G}
+      - target: r
+        equation: r = sqrt(G*M/g)
+        latex: r = \sqrt{\frac{GM}{g}}
+    constraints:
+      - expr: r > 0
+        message: r debe ser mayor que 0.
+      - expr: M > 0
+        message: M debe ser mayor que 0.
+      - expr: g > 0
+        message: g debe ser mayor que 0 al despejar r.
+
+  - id: peso_desde_campo
+    title: Peso a partir del campo gravitatorio
+    equation: P = m*g
+    latex: P = mg
+    rearrangements:
+      - target: P
+        equation: P = m*g
+        latex: P = mg
+      - target: m
+        equation: m = P/g
+        latex: m = \frac{P}{g}
+      - target: g
+        equation: g = P/m
+        latex: g = \frac{P}{m}
+    constraints:
+      - expr: m > 0
+        message: m debe ser mayor que 0.
+      - expr: g > 0
+        message: g debe ser mayor que 0.
+
+  - id: aceleracion_gravitatoria
+    title: Aceleración por masa fuente
+    equation: a = G*M/r^2
+    latex: a = G\frac{M}{r^2}
+    rearrangements:
+      - target: a
+        equation: a = G*M/r^2
+        latex: a = G\frac{M}{r^2}
+      - target: M
+        equation: M = a*r^2/G
+        latex: M = \frac{ar^2}{G}
+
+  - id: variacion_inversa_cuadrado
+    title: Variación de fuerza con la distancia
+    equation: F2 = F1*(r1/r2)^2
+    latex: F_2 = F_1\left(\frac{r_1}{r_2}\right)^2
+    rearrangements:
+      - target: F2
+        equation: F2 = F1*(r1/r2)^2
+        latex: F_2 = F_1\left(\frac{r_1}{r_2}\right)^2
+      - target: F1
+        equation: F1 = F2*(r2/r1)^2
+        latex: F_1 = F_2\left(\frac{r_2}{r_1}\right)^2
+      - target: r2
+        equation: r2 = r1*sqrt(F1/F2)
+        latex: r_2 = r_1\sqrt{\frac{F_1}{F_2}}
+    constraints:
+      - expr: r1 > 0
+        message: r1 debe ser mayor que 0.
+      - expr: r2 > 0
+        message: r2 debe ser mayor que 0.
+      - expr: F1 > 0
+        message: F1 debe ser mayor que 0.
+      - expr: F2 > 0
+        message: F2 debe ser mayor que 0.
+
+  - id: forma_vectorial_conceptual
+    title: Forma vectorial de la interacción
+    equation: F12_vec = -G*m1*m2/r^2 * rhat12
+    latex: \vec F_{12} = -G\frac{m_1m_2}{r^2}\hat r_{12}
+    calculable: false
+    motivo_no_calculable: Requiere manejo vectorial completo (dirección y sentido en 2D/3D).
+
+  - id: superposicion_conceptual
+    title: Superposición gravitatoria (campo total)
+    equation: g_total_vec = sum(g_i_vec)
+    latex: \vec g_{total} = \sum_i \vec g_i
+    calculable: false
+    motivo_no_calculable: Requiere suma vectorial de múltiples fuentes y geometría del sistema.
+
+ui:
+  default_formula: ley_newton_gravitacion
+  groups:
+    - title: Formulas calculables
+      items:
+        - ley_newton_gravitacion
+        - campo_gravitatorio
+        - peso_desde_campo
+        - aceleracion_gravitatoria
+        - variacion_inversa_cuadrado
+    - title: Formulas conceptuales
+      items:
+        - forma_vectorial_conceptual
+        - superposicion_conceptual

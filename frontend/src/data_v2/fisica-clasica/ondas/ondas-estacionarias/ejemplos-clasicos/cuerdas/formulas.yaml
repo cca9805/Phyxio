@@ -1,0 +1,247 @@
+﻿version: 1
+topic:
+  id: cuerdas
+  title: Cuerdas
+variables:
+  - id: F_t
+    symbol: F_t
+    name: tension
+    si_unit: N
+  - id: mu_l
+    symbol: \mu_l
+    name: densidad_lineal
+    si_unit: kg/m
+  - id: L
+    symbol: L
+    name: longitud_vibrante
+    si_unit: m
+  - id: v
+    symbol: v
+    name: velocidad
+    si_unit: m/s
+  - id: n
+    symbol: n
+    name: indice_modal
+    si_unit: '1'
+  - id: fn
+    symbol: f_n
+    name: frecuencia_modal
+    si_unit: Hz
+  - id: f1
+    symbol: f_1
+    name: frecuencia_fundamental
+    si_unit: Hz
+  - id: lambda_n
+    symbol: \lambda_n
+    name: longitud_onda_modal
+    si_unit: m
+  - id: d_nn
+    symbol: d_{NN}
+    name: distancia_entre_nodos
+    si_unit: m
+  - id: d_na
+    symbol: d_{NA}
+    name: distancia_nodo_antinodo
+    si_unit: m
+  - id: A
+    symbol: A
+    name: amplitud
+    si_unit: m
+  - id: k
+    symbol: k
+    name: numero_onda
+    si_unit: rad/m
+  - id: omega
+    symbol: \omega
+    name: frecuencia_angular
+    si_unit: rad/s
+  - id: x
+    symbol: x
+    name: posicion
+    si_unit: m
+  - id: y
+    symbol: y
+    name: desplazamiento
+    si_unit: m
+  - id: t
+    symbol: t
+    name: tiempo
+    si_unit: s
+formulas:
+  - id: velocidad_cuerda
+    title: Velocidad en cuerda tensa
+    equation: v = sqrt(F_t/mu_l)
+    latex: v=\sqrt{\frac{F_t}{\mu_l}}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(F_t/mu_l)
+        latex: v=\sqrt{\frac{F_t}{\mu_l}}
+      - target: F_t
+        equation: F_t = mu_l*v^2
+        latex: F_t=\mu_l v^2
+      - target: mu_l
+        equation: mu_l = F_t/(v^2)
+        latex: \mu_l=\frac{F_t}{v^2}
+    constraints:
+      - expr: F_t > 0
+        message: La tension F_t debe ser positiva.
+      - expr: mu_l > 0
+        message: La densidad lineal mu_l debe ser positiva.
+
+  - id: relacion_onda_modal
+    title: Relacion de onda para el modo n
+    equation: v = lambda_n*fn
+    latex: v=\lambda_n f_n
+    rearrangements:
+      - target: v
+        equation: v = lambda_n*fn
+        latex: v=\lambda_n f_n
+      - target: lambda_n
+        equation: lambda_n = v/fn
+        latex: \lambda_n=\frac{v}{f_n}
+      - target: fn
+        equation: fn = v/lambda_n
+        latex: f_n=\frac{v}{\lambda_n}
+    constraints:
+      - expr: fn > 0
+        message: f_n debe ser positiva para despejar lambda_n.
+      - expr: lambda_n > 0
+        message: lambda_n debe ser positiva para despejar f_n.
+
+  - id: lambda_modal
+    title: Longitud de onda modal (extremos fijos)
+    equation: lambda_n = 2*L/n
+    latex: \lambda_n=\frac{2L}{n}
+    rearrangements:
+      - target: lambda_n
+        equation: lambda_n = 2*L/n
+        latex: \lambda_n=\frac{2L}{n}
+      - target: L
+        equation: L = n*lambda_n/2
+        latex: L=\frac{n\lambda_n}{2}
+      - target: n
+        equation: n = 2*L/lambda_n
+        latex: n=\frac{2L}{\lambda_n}
+    constraints:
+      - expr: L > 0
+        message: L debe ser positiva.
+      - expr: n > 0
+        message: n debe ser mayor que 0.
+
+  - id: frecuencia_modal
+    title: Frecuencia modal (extremos fijos)
+    equation: fn = n*v/(2*L)
+    latex: f_n=\frac{nv}{2L}
+    rearrangements:
+      - target: fn
+        equation: fn = n*v/(2*L)
+        latex: f_n=\frac{nv}{2L}
+      - target: v
+        equation: v = 2*L*fn/n
+        latex: v=\frac{2Lf_n}{n}
+      - target: L
+        equation: L = n*v/(2*fn)
+        latex: L=\frac{nv}{2f_n}
+      - target: n
+        equation: n = 2*L*fn/v
+        latex: n=\frac{2Lf_n}{v}
+    constraints:
+      - expr: L > 0
+        message: L debe ser positiva.
+      - expr: v > 0
+        message: v debe ser positiva.
+
+  - id: fundamental
+    title: Frecuencia fundamental
+    equation: f1 = v/(2*L)
+    latex: f_1=\frac{v}{2L}
+    rearrangements:
+      - target: f1
+        equation: f1 = v/(2*L)
+        latex: f_1=\frac{v}{2L}
+      - target: v
+        equation: v = 2*L*f1
+        latex: v=2Lf_1
+      - target: L
+        equation: L = v/(2*f1)
+        latex: L=\frac{v}{2f_1}
+
+  - id: armonicos
+    title: Relacion armonica
+    equation: fn = n*f1
+    latex: f_n=nf_1
+    rearrangements:
+      - target: fn
+        equation: fn = n*f1
+        latex: f_n=nf_1
+      - target: f1
+        equation: f1 = fn/n
+        latex: f_1=\frac{f_n}{n}
+      - target: n
+        equation: n = fn/f1
+        latex: n=\frac{f_n}{f_1}
+    constraints:
+      - expr: n > 0
+        message: n debe ser mayor que 0.
+      - expr: f1 > 0
+        message: f_1 debe ser positiva para despejar n.
+
+  - id: distancia_nodos
+    title: Distancia nodo a nodo
+    equation: d_nn = lambda_n/2
+    latex: d_{NN}=\frac{\lambda_n}{2}
+    rearrangements:
+      - target: d_nn
+        equation: d_nn = lambda_n/2
+        latex: d_{NN}=\frac{\lambda_n}{2}
+      - target: lambda_n
+        equation: lambda_n = 2*d_nn
+        latex: \lambda_n=2d_{NN}
+
+  - id: distancia_nodo_antinodo
+    title: Distancia nodo a antinodo
+    equation: d_na = lambda_n/4
+    latex: d_{NA}=\frac{\lambda_n}{4}
+    rearrangements:
+      - target: d_na
+        equation: d_na = lambda_n/4
+        latex: d_{NA}=\frac{\lambda_n}{4}
+      - target: lambda_n
+        equation: lambda_n = 4*d_na
+        latex: \lambda_n=4d_{NA}
+
+  - id: frontera_fija_conceptual
+    title: Condiciones de frontera fija-fija (conceptual)
+    equation: y = 0
+    latex: y(0,t)=0\ \text{y}\ y(L,t)=0
+    calculable: false
+    motivo_no_calculable: Son condiciones de frontera para seleccionar modos permitidos; no son una ecuacion de despeje numerico directo.
+
+  - id: forma_onda_estacionaria_conceptual
+    title: Forma espacial-temporal de la onda estacionaria (conceptual)
+    equation: y = 2*A*sin(k*x)*cos(omega*t)
+    latex: y(x,t)=2A\sin(kx)\cos(\omega t)
+    calculable: false
+    motivo_no_calculable: Describe el campo completo y requiere condiciones iniciales y de frontera para evaluacion puntual significativa.
+
+ui:
+  default_formula: frecuencia_modal
+  groups:
+    - title: Propagacion en el medio (calculables)
+      items:
+        - velocidad_cuerda
+        - relacion_onda_modal
+    - title: Modos y armonicos (calculables)
+      items:
+        - lambda_modal
+        - frecuencia_modal
+        - fundamental
+        - armonicos
+    - title: Geometria del patron (calculables)
+      items:
+        - distancia_nodos
+        - distancia_nodo_antinodo
+    - title: Formulas conceptuales (no calculables)
+      items:
+        - frontera_fija_conceptual
+        - forma_onda_estacionaria_conceptual

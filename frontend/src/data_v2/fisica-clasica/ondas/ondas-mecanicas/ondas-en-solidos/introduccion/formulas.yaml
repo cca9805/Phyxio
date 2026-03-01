@@ -1,0 +1,185 @@
+version: 1
+topic:
+  id: introduccion
+  title: Introduccion A Ondas En Solidos
+variables:
+  - id: v
+    symbol: v
+    name: velocidad
+    si_unit: m/s
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+  - id: vL
+    symbol: v_L
+    name: velocidad_longitudinal
+    si_unit: m/s
+  - id: vT
+    symbol: v_T
+    name: velocidad_transversal
+    si_unit: m/s
+  - id: K
+    symbol: K
+    name: modulo_compresion
+    si_unit: Pa
+  - id: G
+    symbol: G
+    name: modulo_corte
+    si_unit: Pa
+  - id: E
+    symbol: E
+    name: modulo_young
+    si_unit: Pa
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: nu
+    symbol: \nu
+    name: coeficiente_poisson
+    si_unit: '1'
+  - id: ZL
+    symbol: Z_L
+    name: impedancia_longitudinal
+    si_unit: kg/(m^2*s)
+  - id: ZT
+    symbol: Z_T
+    name: impedancia_transversal
+    si_unit: kg/(m^2*s)
+formulas:
+  - id: relacion_ondulatoria
+    title: Relacion ondulatoria general
+    equation: v = lambda*f
+    latex: v=\lambda f
+    rearrangements:
+      - target: v
+        equation: v = lambda*f
+        latex: v=\lambda f
+      - target: lambda
+        equation: lambda = v/f
+        latex: \lambda=\frac{v}{f}
+      - target: f
+        equation: f = v/lambda
+        latex: f=\frac{v}{\lambda}
+
+  - id: periodo_frecuencia
+    title: Relacion periodo-frecuencia
+    equation: T = 1/f
+    latex: T=\frac{1}{f}
+    rearrangements:
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+
+  - id: v_longitudinal_general
+    title: Velocidad longitudinal en solido isotropo
+    equation: vL = sqrt((K + 4*G/3)/rho)
+    latex: v_L=\sqrt{\frac{K+\frac{4}{3}G}{\rho}}
+    rearrangements:
+      - target: vL
+        equation: vL = sqrt((K + 4*G/3)/rho)
+        latex: v_L=\sqrt{\frac{K+\frac{4}{3}G}{\rho}}
+      - target: rho
+        equation: rho = (K + 4*G/3)/vL^2
+        latex: \rho=\frac{K+\frac{4}{3}G}{v_L^2}
+      - target: K
+        equation: K = rho*vL^2 - 4*G/3
+        latex: K=\rho v_L^2-\frac{4}{3}G
+
+  - id: v_transversal_corte
+    title: Velocidad transversal de corte
+    equation: vT = sqrt(G/rho)
+    latex: v_T=\sqrt{\frac{G}{\rho}}
+    rearrangements:
+      - target: vT
+        equation: vT = sqrt(G/rho)
+        latex: v_T=\sqrt{\frac{G}{\rho}}
+      - target: G
+        equation: G = rho*vT^2
+        latex: G=\rho v_T^2
+      - target: rho
+        equation: rho = G/vT^2
+        latex: \rho=\frac{G}{v_T^2}
+
+  - id: v_barra_axial
+    title: Velocidad axial aproximada en barra delgada
+    equation: v = sqrt(E/rho)
+    latex: v=\sqrt{\frac{E}{\rho}}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(E/rho)
+        latex: v=\sqrt{\frac{E}{\rho}}
+      - target: E
+        equation: E = rho*v^2
+        latex: E=\rho v^2
+      - target: rho
+        equation: rho = E/v^2
+        latex: \rho=\frac{E}{v^2}
+
+  - id: impedancia_longitudinal
+    title: Impedancia longitudinal
+    equation: ZL = rho*vL
+    latex: Z_L=\rho v_L
+    rearrangements:
+      - target: ZL
+        equation: ZL = rho*vL
+        latex: Z_L=\rho v_L
+      - target: rho
+        equation: rho = ZL/vL
+        latex: \rho=\frac{Z_L}{v_L}
+
+  - id: impedancia_transversal
+    title: Impedancia transversal
+    equation: ZT = rho*vT
+    latex: Z_T=\rho v_T
+    rearrangements:
+      - target: ZT
+        equation: ZT = rho*vT
+        latex: Z_T=\rho v_T
+      - target: rho
+        equation: rho = ZT/vT
+        latex: \rho=\frac{Z_T}{v_T}
+
+  - id: relacion_velocidades_poisson
+    title: Relacion entre velocidades y Poisson
+    equation: vL_vT = sqrt((2*(1-nu))/(1-2*nu))
+    latex: \frac{v_L}{v_T}=\sqrt{\frac{2(1-\nu)}{1-2\nu}}
+    calculable: false
+    motivo_no_calculable: Formula de validacion constitutiva que requiere consistencia simultanea de modelo isotropo lineal.
+
+  - id: criterio_lineal
+    title: Criterio lineal amplitud-velocidad
+    equation: v_independiente_de_amplitud
+    latex: v\ \text{independiente de amplitud (regimen lineal)}
+    calculable: false
+    motivo_no_calculable: Regla conceptual de validez del modelo elastico lineal.
+ui:
+  default_formula: v_longitudinal_general
+  groups:
+    - title: Base ondulatoria (calculables)
+      items:
+        - relacion_ondulatoria
+        - periodo_frecuencia
+    - title: Medio elastico (calculables)
+      items:
+        - v_longitudinal_general
+        - v_transversal_corte
+        - v_barra_axial
+        - impedancia_longitudinal
+        - impedancia_transversal
+    - title: Criterios conceptuales
+      items:
+        - relacion_velocidades_poisson
+        - criterio_lineal

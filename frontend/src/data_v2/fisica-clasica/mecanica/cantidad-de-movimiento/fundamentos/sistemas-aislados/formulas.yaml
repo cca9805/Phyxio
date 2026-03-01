@@ -1,0 +1,119 @@
+﻿version: 1
+topic:
+  id: sistemas-aislados
+  title: Sistemas aislados
+variables:
+  - id: m1
+    symbol: m_1
+    nombre: masa 1
+    unidad_si: kg
+    descripcion: Masa del cuerpo 1.
+  - id: m2
+    symbol: m_2
+    nombre: masa 2
+    unidad_si: kg
+    descripcion: Masa del cuerpo 2.
+  - id: v1i
+    symbol: v_{1i}
+    nombre: velocidad inicial 1
+    unidad_si: m/s
+    descripcion: Velocidad inicial del cuerpo 1.
+  - id: v2i
+    symbol: v_{2i}
+    nombre: velocidad inicial 2
+    unidad_si: m/s
+    descripcion: Velocidad inicial del cuerpo 2.
+  - id: v1f
+    symbol: v_{1f}
+    nombre: velocidad final 1
+    unidad_si: m/s
+    descripcion: Velocidad final del cuerpo 1.
+  - id: v2f
+    symbol: v_{2f}
+    nombre: velocidad final 2
+    unidad_si: m/s
+    descripcion: Velocidad final del cuerpo 2.
+  - id: pTotI
+    symbol: p_{tot,i}
+    nombre: momento total inicial
+    unidad_si: kg*m/s
+    descripcion: Momento lineal total al inicio.
+  - id: pTotF
+    symbol: p_{tot,f}
+    nombre: momento total final
+    unidad_si: kg*m/s
+    descripcion: Momento lineal total al final.
+  - id: Jext
+    symbol: J_{ext}
+    nombre: impulso externo
+    unidad_si: N*s
+    descripcion: Impulso externo neto sobre el sistema.
+  - id: DeltaPtot
+    symbol: \Delta p_{tot}
+    nombre: cambio de momento total
+    unidad_si: kg*m/s
+    descripcion: Cambio de momento lineal total.
+formulas:
+  - id: momento_total_inicial
+    title: Momento total inicial
+    equation: pTotI = m1*v1i + m2*v2i
+    latex: p_{tot,i}=m_1v_{1i}+m_2v_{2i}
+    rearrangements:
+      - target: pTotI
+        equation: pTotI = m1*v1i + m2*v2i
+        latex: p_{tot,i}=m_1v_{1i}+m_2v_{2i}
+
+  - id: momento_total_final
+    title: Momento total final
+    equation: pTotF = m1*v1f + m2*v2f
+    latex: p_{tot,f}=m_1v_{1f}+m_2v_{2f}
+    rearrangements:
+      - target: pTotF
+        equation: pTotF = m1*v1f + m2*v2f
+        latex: p_{tot,f}=m_1v_{1f}+m_2v_{2f}
+
+  - id: conservacion_1d
+    title: Conservación de momento en sistema aislado (1D)
+    equation: m1*v1i + m2*v2i = m1*v1f + m2*v2f
+    latex: m_1v_{1i}+m_2v_{2i}=m_1v_{1f}+m_2v_{2f}
+    rearrangements:
+      - target: v2f
+        equation: v2f = (m1*v1i + m2*v2i - m1*v1f)/m2
+        latex: v_{2f}=\frac{m_1v_{1i}+m_2v_{2i}-m_1v_{1f}}{m_2}
+      - target: v1f
+        equation: v1f = (m1*v1i + m2*v2i - m2*v2f)/m1
+        latex: v_{1f}=\frac{m_1v_{1i}+m_2v_{2i}-m_2v_{2f}}{m_1}
+    constraints:
+      - expr: m1 > 0
+        message: m1 debe ser mayor que 0.
+      - expr: m2 > 0
+        message: m2 debe ser mayor que 0.
+
+  - id: balance_con_impulso_externo
+    title: Balance general con impulso externo
+    equation: DeltaPtot = Jext
+    latex: \Delta p_{tot}=J_{ext}
+    rearrangements:
+      - target: DeltaPtot
+        equation: DeltaPtot = Jext
+        latex: \Delta p_{tot}=J_{ext}
+
+  - id: condicion_aislamiento_conceptual
+    title: Condicion de aislamiento (conceptual)
+    equation: Jext ~= 0
+    latex: J_{ext}\approx 0
+    calculable: false
+    motivo_no_calculable: Es criterio de validez del modelo, no un despeje algebraico directo.
+
+ui:
+  default_formula: conservacion_1d
+  groups:
+    - title: Formulas calculables
+      items:
+        - momento_total_inicial
+        - momento_total_final
+        - conservacion_1d
+        - balance_con_impulso_externo
+    - title: Formulas conceptuales
+      items:
+        - condicion_aislamiento_conceptual

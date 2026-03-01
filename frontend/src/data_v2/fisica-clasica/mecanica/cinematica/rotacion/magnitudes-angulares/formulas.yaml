@@ -1,0 +1,148 @@
+version: 1
+topic:
+  id: magnitudes-angulares
+  title: Magnitudes angulares
+variables:
+  - id: theta
+    symbol: \theta
+    nombre: posición angular
+    unidad_si: rad
+    descripcion: Posición angular.
+  - id: theta0
+    symbol: \theta_0
+    nombre: posición angular inicial
+    unidad_si: rad
+    descripcion: Posición angular inicial.
+  - id: dtheta
+    symbol: \Delta\theta
+    nombre: desplazamiento angular
+    unidad_si: rad
+    descripcion: Desplazamiento angular.
+  - id: omega
+    symbol: \omega
+    nombre: velocidad angular
+    unidad_si: rad/s
+    descripcion: Velocidad angular.
+  - id: omega0
+    symbol: \omega_0
+    nombre: velocidad angular inicial
+    unidad_si: rad/s
+    descripcion: Velocidad angular inicial.
+  - id: domega
+    symbol: \Delta\omega
+    nombre: variación de velocidad angular
+    unidad_si: rad/s
+    descripcion: Variación de velocidad angular.
+  - id: alpha
+    symbol: \alpha
+    nombre: aceleración angular
+    unidad_si: rad/s^2
+    descripcion: Aceleración angular.
+  - id: t
+    symbol: t
+    nombre: tiempo
+    unidad_si: s
+    descripcion: Tiempo.
+  - id: dt
+    symbol: \Delta t
+    nombre: intervalo de tiempo
+    unidad_si: s
+    descripcion: Intervalo de tiempo.
+formulas:
+  - id: desplazamiento_angular
+    title: Desplazamiento angular
+    equation: dtheta = theta - theta0
+    latex: \Delta\theta = \theta - \theta_0
+    calculable: true
+    rearrangements:
+      - target: dtheta
+        equation: dtheta = theta - theta0
+        latex: \Delta\theta = \theta - \theta_0
+      - target: theta
+        equation: theta = dtheta + theta0
+        latex: \theta = \Delta\theta + \theta_0
+      - target: theta0
+        equation: theta0 = theta - dtheta
+        latex: \theta_0 = \theta - \Delta\theta
+  - id: velocidad_angular_media
+    title: Velocidad angular media
+    equation: omega = dtheta/dt
+    latex: \omega_{\text{med}} = \frac{\Delta\theta}{\Delta t}
+    calculable: true
+    rearrangements:
+      - target: omega
+        equation: omega = dtheta/dt
+        latex: \omega_{\text{med}} = \frac{\Delta\theta}{\Delta t}
+      - target: dtheta
+        equation: dtheta = omega*dt
+        latex: \Delta\theta = \omega_{\text{med}}\,\Delta t
+      - target: dt
+        equation: dt = dtheta/omega
+        latex: \Delta t = \frac{\Delta\theta}{\omega_{\text{med}}}
+  - id: aceleracion_angular_media
+    title: Aceleración angular media
+    equation: alpha = domega/dt
+    latex: \alpha_{\text{med}} = \frac{\Delta\omega}{\Delta t}
+    calculable: true
+    rearrangements:
+      - target: alpha
+        equation: alpha = domega/dt
+        latex: \alpha_{\text{med}} = \frac{\Delta\omega}{\Delta t}
+      - target: domega
+        equation: domega = alpha*dt
+        latex: \Delta\omega = \alpha_{\text{med}}\,\Delta t
+      - target: dt
+        equation: dt = domega/alpha
+        latex: \Delta t = \frac{\Delta\omega}{\alpha_{\text{med}}}
+  - id: velocidad_angular_alpha_constante
+    title: Velocidad angular (α constante)
+    equation: omega = omega0 + alpha*t
+    latex: \omega = \omega_0 + \alpha t
+    calculable: true
+    rearrangements:
+      - target: omega
+        equation: omega = omega0 + alpha*t
+        latex: \omega = \omega_0 + \alpha t
+      - target: omega0
+        equation: omega0 = omega - alpha*t
+        latex: \omega_0 = \omega - \alpha t
+      - target: alpha
+        equation: alpha = (omega - omega0)/t
+        latex: \alpha = \frac{\omega - \omega_0}{t}
+      - target: t
+        equation: t = (omega - omega0)/alpha
+        latex: t = \frac{\omega - \omega_0}{\alpha}
+  - id: posicion_angular_alpha_constante
+    title: Posición angular (α constante)
+    equation: theta = theta0 + omega0*t + 0.5*alpha*t^2
+    latex: \theta = \theta_0 + \omega_0 t + \tfrac{1}{2}\alpha t^2
+    calculable: true
+    rearrangements:
+      - target: theta
+        equation: theta = theta0 + omega0*t + 0.5*alpha*t^2
+        latex: \theta = \theta_0 + \omega_0 t + \tfrac{1}{2}\alpha t^2
+      - target: theta0
+        equation: theta0 = theta - omega0*t - 0.5*alpha*t^2
+        latex: \theta_0 = \theta - \omega_0 t - \tfrac{1}{2}\alpha t^2
+  - id: definicion_velocidad_angular
+    title: Definición de velocidad angular
+    equation: omega = dtheta/dt
+    latex: \omega = \frac{d\theta}{dt}
+    calculable: false
+    motivo_no_calculable: |
+      Definición diferencial. Para calcular numéricamente hace falta conocer θ(t), derivar una función o usar datos experimentales (aprox. por diferencias finitas).
+  - id: definicion_aceleracion_angular
+    title: Definición de aceleración angular
+    equation: alpha = domega/dt
+    latex: \alpha = \frac{d\omega}{dt}
+    calculable: false
+    motivo_no_calculable: |
+      Definición diferencial. No es una ecuación algebraica de despeje directo.
+  - id: posicion_angular_integral_general
+    title: Posición angular (caso general)
+    equation: theta = theta0 + ∫ omega(t) dt
+    latex: \theta = \theta_0 + \int_{0}^{t} \omega(t')\,dt'
+    calculable: false
+    motivo_no_calculable: Expresión integral. Requiere un modelo explícito de ω(t) o integración numérica, fuera del motor algebraico actual.
+ui:
+  default_formula: desplazamiento_angular

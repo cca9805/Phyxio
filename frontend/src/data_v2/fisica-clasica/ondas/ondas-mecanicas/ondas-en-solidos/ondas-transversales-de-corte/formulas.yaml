@@ -1,0 +1,204 @@
+version: 1
+topic:
+  id: ondas-transversales-de-corte
+  title: Ondas Transversales De Corte
+variables:
+  - id: vS
+    symbol: v_S
+    name: velocidad_corte
+    si_unit: m/s
+  - id: G
+    symbol: G
+    name: modulo_corte
+    si_unit: Pa
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: tau
+    symbol: \tau
+    name: esfuerzo_cortante
+    si_unit: Pa
+  - id: gamma
+    symbol: \gamma
+    name: deformacion_cortante
+    si_unit: '1'
+  - id: n
+    symbol: n
+    name: modo
+    si_unit: '1'
+  - id: L
+    symbol: L
+    name: longitud
+    si_unit: m
+  - id: fn
+    symbol: f_n
+    name: frecuencia_modal
+    si_unit: Hz
+  - id: lambda_n
+    symbol: \lambda_n
+    name: longitud_modal
+    si_unit: m
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+  - id: k
+    symbol: k
+    name: numero_onda
+    si_unit: rad/m
+  - id: omega
+    symbol: \omega
+    name: frecuencia_angular
+    si_unit: rad/s
+formulas:
+  - id: hooke_corte
+    title: Relacion constitutiva de corte
+    equation: tau = G*gamma
+    latex: \tau=G\gamma
+    rearrangements:
+      - target: tau
+        equation: tau = G*gamma
+        latex: \tau=G\gamma
+      - target: G
+        equation: G = tau/gamma
+        latex: G=\frac{\tau}{\gamma}
+      - target: gamma
+        equation: gamma = tau/G
+        latex: \gamma=\frac{\tau}{G}
+
+  - id: vS
+    title: Velocidad de corte
+    equation: vS = sqrt(G/rho)
+    latex: v_S=\sqrt{\frac{G}{\rho}}
+    rearrangements:
+      - target: vS
+        equation: vS = sqrt(G/rho)
+        latex: v_S=\sqrt{\frac{G}{\rho}}
+      - target: G
+        equation: G = rho*vS^2
+        latex: G=\rho v_S^2
+      - target: rho
+        equation: rho = G/vS^2
+        latex: \rho=\frac{G}{v_S^2}
+
+  - id: fn
+    title: Frecuencia modal fija-fija
+    equation: fn = n*vS/(2*L)
+    latex: f_n=\frac{n v_S}{2L}
+    rearrangements:
+      - target: fn
+        equation: fn = n*vS/(2*L)
+        latex: f_n=\frac{n v_S}{2L}
+      - target: vS
+        equation: vS = 2*L*fn/n
+        latex: v_S=\frac{2Lf_n}{n}
+      - target: L
+        equation: L = n*vS/(2*fn)
+        latex: L=\frac{n v_S}{2f_n}
+
+  - id: lambda_modal
+    title: Longitud modal fija-fija
+    equation: lambda_n = 2*L/n
+    latex: \lambda_n=\frac{2L}{n}
+    rearrangements:
+      - target: lambda_n
+        equation: lambda_n = 2*L/n
+        latex: \lambda_n=\frac{2L}{n}
+      - target: L
+        equation: L = n*lambda_n/2
+        latex: L=\frac{n\lambda_n}{2}
+
+  - id: fn_fijo_libre
+    title: Frecuencia modal fija-libre
+    equation: fn = (2*n-1)*vS/(4*L)
+    latex: f_n=\frac{(2n-1)v_S}{4L}
+    rearrangements:
+      - target: fn
+        equation: fn = (2*n-1)*vS/(4*L)
+        latex: f_n=\frac{(2n-1)v_S}{4L}
+
+  - id: onda
+    title: Relacion onda
+    equation: vS = lambda*f
+    latex: v_S=\lambda f
+    rearrangements:
+      - target: vS
+        equation: vS = lambda*f
+        latex: v_S=\lambda f
+      - target: lambda
+        equation: lambda = vS/f
+        latex: \lambda=\frac{v_S}{f}
+      - target: f
+        equation: f = vS/lambda
+        latex: f=\frac{v_S}{\lambda}
+
+  - id: periodo
+    title: Periodo
+    equation: T = 1/f
+    latex: T=\frac{1}{f}
+    rearrangements:
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+
+  - id: numero_onda
+    title: Numero de onda
+    equation: k = 2*pi/lambda
+    latex: k=\frac{2\pi}{\lambda}
+    rearrangements:
+      - target: k
+        equation: k = 2*pi/lambda
+        latex: k=\frac{2\pi}{\lambda}
+      - target: lambda
+        equation: lambda = 2*pi/k
+        latex: \lambda=\frac{2\pi}{k}
+
+  - id: frecuencia_angular
+    title: Frecuencia angular
+    equation: omega = 2*pi*f
+    latex: \omega=2\pi f
+    rearrangements:
+      - target: omega
+        equation: omega = 2*pi*f
+        latex: \omega=2\pi f
+      - target: f
+        equation: f = omega/(2*pi)
+        latex: f=\frac{\omega}{2\pi}
+
+  - id: criterio_lineal
+    title: Criterio lineal amplitud-velocidad
+    equation: vS_independiente_de_amplitud
+    latex: v_S\ \text{independiente de amplitud (regimen lineal)}
+    calculable: false
+    motivo_no_calculable: Regla conceptual de validez del modelo elastico lineal.
+ui:
+  default_formula: fn
+  groups:
+    - title: Elasticidad de corte (calculables)
+      items:
+        - hooke_corte
+        - vS
+    - title: Modos y propagacion (calculables)
+      items:
+        - fn
+        - lambda_modal
+        - fn_fijo_libre
+        - onda
+        - periodo
+        - numero_onda
+        - frecuencia_angular
+    - title: Criterio conceptual
+      items:
+        - criterio_lineal

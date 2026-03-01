@@ -1,0 +1,198 @@
+﻿version: 1
+topic:
+  id: velocidad-del-sonido
+  title: Velocidad Del Sonido
+variables:
+  - id: v
+    symbol: v
+    name: velocidad_sonido
+    si_unit: m/s
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: Tc
+    symbol: T_c
+    name: temperatura_celsius
+    si_unit: degC
+  - id: TK
+    symbol: T_K
+    name: temperatura_kelvin
+    si_unit: K
+  - id: gamma
+    symbol: \gamma
+    name: coeficiente_adiabatico
+    si_unit: '1'
+  - id: R
+    symbol: R
+    name: constante_gases
+    si_unit: J/(mol*K)
+  - id: M
+    symbol: M
+    name: masa_molar
+    si_unit: kg/mol
+  - id: B
+    symbol: B
+    name: modulo_compresion
+    si_unit: Pa
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: p0
+    symbol: p_0
+    name: presion_equilibrio
+    si_unit: Pa
+  - id: d
+    symbol: d
+    name: distancia
+    si_unit: m
+  - id: t
+    symbol: t
+    name: tiempo
+    si_unit: s
+formulas:
+  - id: velocidad_onda
+    title: Relacion ondulatoria de velocidad
+    equation: v = lambda*f
+    latex: v=\lambda f
+    rearrangements:
+      - target: v
+        equation: v = lambda*f
+        latex: v=\lambda f
+      - target: lambda
+        equation: lambda = v/f
+        latex: \lambda=\frac{v}{f}
+      - target: f
+        equation: f = v/lambda
+        latex: f=\frac{v}{\lambda}
+
+  - id: velocidad_aire_aprox
+    title: Aproximacion en aire (cerca de ambiente)
+    equation: v = 331 + 0.6*Tc
+    latex: v\approx331+0.6T_c
+    rearrangements:
+      - target: v
+        equation: v = 331 + 0.6*Tc
+        latex: v\approx331+0.6T_c
+      - target: Tc
+        equation: Tc = (v - 331)/0.6
+        latex: T_c\approx\frac{v-331}{0.6}
+
+  - id: velocidad_medio_general
+    title: Velocidad en medio compresible
+    equation: v = sqrt(B/rho)
+    latex: v=\sqrt{\frac{B}{\rho}}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(B/rho)
+        latex: v=\sqrt{\frac{B}{\rho}}
+      - target: B
+        equation: B = rho*(v^2)
+        latex: B=\rho v^2
+      - target: rho
+        equation: rho = B/(v^2)
+        latex: \rho=\frac{B}{v^2}
+    constraints:
+      - expr: B > 0
+        message: B debe ser positiva.
+      - expr: rho > 0
+        message: rho debe ser positiva.
+
+  - id: velocidad_gas_ideal
+    title: Modelo de gas ideal adiabatico
+    equation: v = sqrt(gamma*R*TK/M)
+    latex: v=\sqrt{\frac{\gamma RT_K}{M}}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(gamma*R*TK/M)
+        latex: v=\sqrt{\frac{\gamma RT_K}{M}}
+      - target: TK
+        equation: TK = M*(v^2)/(gamma*R)
+        latex: T_K=\frac{Mv^2}{\gamma R}
+      - target: M
+        equation: M = gamma*R*TK/(v^2)
+        latex: M=\frac{\gamma RT_K}{v^2}
+    constraints:
+      - expr: gamma > 0
+        message: gamma debe ser positiva.
+      - expr: TK > 0
+        message: T_K debe ser positiva.
+      - expr: M > 0
+        message: M debe ser positiva.
+
+  - id: velocidad_gas_presion
+    title: Forma con presion y densidad
+    equation: v = sqrt(gamma*p0/rho)
+    latex: v=\sqrt{\frac{\gamma p_0}{\rho}}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(gamma*p0/rho)
+        latex: v=\sqrt{\frac{\gamma p_0}{\rho}}
+      - target: p0
+        equation: p0 = rho*(v^2)/gamma
+        latex: p_0=\frac{\rho v^2}{\gamma}
+    constraints:
+      - expr: p0 > 0
+        message: p_0 debe ser positiva.
+      - expr: rho > 0
+        message: rho debe ser positiva.
+
+  - id: distancia_tiempo_vuelo
+    title: Distancia por tiempo de vuelo (ida)
+    equation: d = v*t
+    latex: d=vt
+    rearrangements:
+      - target: d
+        equation: d = v*t
+        latex: d=vt
+      - target: v
+        equation: v = d/t
+        latex: v=\frac{d}{t}
+      - target: t
+        equation: t = d/v
+        latex: t=\frac{d}{v}
+
+  - id: eco_ida_vuelta
+    title: Distancia por eco (ida-vuelta)
+    equation: d = v*t/2
+    latex: d=\frac{vt}{2}
+    rearrangements:
+      - target: d
+        equation: d = v*t/2
+        latex: d=\frac{vt}{2}
+      - target: v
+        equation: v = 2*d/t
+        latex: v=\frac{2d}{t}
+      - target: t
+        equation: t = 2*d/v
+        latex: t=\frac{2d}{v}
+
+  - id: tiempo_trayectoria_variable_conceptual
+    title: Tiempo con velocidad no uniforme (conceptual)
+    equation: t = t
+    latex: t=\int_{x_i}^{x_f}\frac{dx}{v(x)}
+    calculable: false
+    motivo_no_calculable: Requiere conocer la funcion espacial v(x) y resolver una integral definida.
+
+ui:
+  default_formula: velocidad_aire_aprox
+  groups:
+    - title: Relaciones base (calculables)
+      items:
+        - velocidad_onda
+        - distancia_tiempo_vuelo
+        - eco_ida_vuelta
+    - title: Modelos de medio (calculables)
+      items:
+        - velocidad_aire_aprox
+        - velocidad_medio_general
+        - velocidad_gas_ideal
+        - velocidad_gas_presion
+    - title: Formula conceptual (no calculable)
+      items:
+        - tiempo_trayectoria_variable_conceptual

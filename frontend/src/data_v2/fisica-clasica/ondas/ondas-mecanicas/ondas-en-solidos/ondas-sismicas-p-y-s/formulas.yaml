@@ -1,0 +1,144 @@
+version: 1
+topic:
+  id: ondas-sismicas-p-y-s
+  title: Ondas Sismicas P Y S
+variables:
+  - id: vP
+    symbol: v_P
+    name: velocidad_p
+    si_unit: m/s
+  - id: vS
+    symbol: v_S
+    name: velocidad_s
+    si_unit: m/s
+  - id: d
+    symbol: d
+    name: distancia
+    si_unit: m
+  - id: tP
+    symbol: t_P
+    name: tiempo_p
+    si_unit: s
+  - id: tS
+    symbol: t_S
+    name: tiempo_s
+    si_unit: s
+  - id: Delta_t
+    symbol: \Delta t
+    name: diferencia_tiempo
+    si_unit: s
+  - id: K
+    symbol: K
+    name: modulo_volumetrico
+    si_unit: Pa
+  - id: G
+    symbol: G
+    name: modulo_corte
+    si_unit: Pa
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+formulas:
+  - id: tP
+    title: Tiempo de llegada P
+    equation: tP = d/vP
+    latex: t_P=\frac{d}{v_P}
+    rearrangements:
+      - target: tP
+        equation: tP = d/vP
+        latex: t_P=\frac{d}{v_P}
+      - target: d
+        equation: d = tP*vP
+        latex: d=t_P v_P
+      - target: vP
+        equation: vP = d/tP
+        latex: v_P=\frac{d}{t_P}
+
+  - id: tS
+    title: Tiempo de llegada S
+    equation: tS = d/vS
+    latex: t_S=\frac{d}{v_S}
+    rearrangements:
+      - target: tS
+        equation: tS = d/vS
+        latex: t_S=\frac{d}{v_S}
+      - target: d
+        equation: d = tS*vS
+        latex: d=t_S v_S
+      - target: vS
+        equation: vS = d/tS
+        latex: v_S=\frac{d}{t_S}
+
+  - id: delta_t
+    title: Diferencia de llegada P-S
+    equation: Delta_t = tS - tP
+    latex: \Delta t=t_S-t_P
+    rearrangements:
+      - target: Delta_t
+        equation: Delta_t = tS - tP
+        latex: \Delta t=t_S-t_P
+      - target: tS
+        equation: tS = tP + Delta_t
+        latex: t_S=t_P+\Delta t
+      - target: tP
+        equation: tP = tS - Delta_t
+        latex: t_P=t_S-\Delta t
+
+  - id: dist
+    title: Distancia desde Delta t
+    equation: d = Delta_t/(1/vS - 1/vP)
+    latex: d=\frac{\Delta t}{\frac{1}{v_S}-\frac{1}{v_P}}
+    rearrangements:
+      - target: d
+        equation: d = Delta_t/(1/vS - 1/vP)
+        latex: d=\frac{\Delta t}{\frac{1}{v_S}-\frac{1}{v_P}}
+
+  - id: vP_elastica
+    title: Velocidad P desde modulos elasticos
+    equation: vP = sqrt((K + 4*G/3)/rho)
+    latex: v_P=\sqrt{\frac{K+\frac{4}{3}G}{\rho}}
+    rearrangements:
+      - target: vP
+        equation: vP = sqrt((K + 4*G/3)/rho)
+        latex: v_P=\sqrt{\frac{K+\frac{4}{3}G}{\rho}}
+
+  - id: vS_elastica
+    title: Velocidad S desde modulo de corte
+    equation: vS = sqrt(G/rho)
+    latex: v_S=\sqrt{\frac{G}{\rho}}
+    rearrangements:
+      - target: vS
+        equation: vS = sqrt(G/rho)
+        latex: v_S=\sqrt{\frac{G}{\rho}}
+
+  - id: jerarquia_velocidades
+    title: Jerarquia tipica de velocidades
+    equation: vP_gt_vS
+    latex: v_P>v_S
+    calculable: false
+    motivo_no_calculable: Criterio fisico de validacion en medios elasticos isotropos.
+
+  - id: limitacion_estacion_unica
+    title: Limitacion de una sola estacion
+    equation: una_estacion_un_radio
+    latex: \text{Una estacion define un radio, no un epicentro unico}
+    calculable: false
+    motivo_no_calculable: Regla conceptual de triangulacion sismica.
+ui:
+  default_formula: dist
+  groups:
+    - title: Tiempos y distancia (calculables)
+      items:
+        - tP
+        - tS
+        - delta_t
+        - dist
+    - title: Conexion con el medio (calculables)
+      items:
+        - vP_elastica
+        - vS_elastica
+    - title: Criterios conceptuales
+      items:
+        - jerarquia_velocidades
+        - limitacion_estacion_unica

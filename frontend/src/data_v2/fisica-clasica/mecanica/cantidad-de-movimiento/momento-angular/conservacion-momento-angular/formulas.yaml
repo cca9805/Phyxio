@@ -1,0 +1,111 @@
+﻿version: 1
+topic:
+  id: conservacion-momento-angular
+  title: Conservación de momento angular
+variables:
+  - id: Ii
+    symbol: I_i
+    nombre: inercia inicial
+    unidad_si: kg*m^2
+    descripcion: Momento de inercia inicial.
+  - id: If
+    symbol: I_f
+    nombre: inercia final
+    unidad_si: kg*m^2
+    descripcion: Momento de inercia final.
+  - id: omegai
+    symbol: \omega_i
+    nombre: velocidad angular inicial
+    unidad_si: rad/s
+    descripcion: Velocidad angular inicial.
+  - id: omegaf
+    symbol: \omega_f
+    nombre: velocidad angular final
+    unidad_si: rad/s
+    descripcion: Velocidad angular final.
+  - id: Li
+    symbol: L_i
+    nombre: momento angular inicial
+    unidad_si: kg*m^2/s
+    descripcion: Momento angular inicial.
+  - id: Lf
+    symbol: L_f
+    nombre: momento angular final
+    unidad_si: kg*m^2/s
+    descripcion: Momento angular final.
+  - id: tau
+    symbol: \tau
+    nombre: torque externo neto
+    unidad_si: N*m
+    descripcion: Torque externo neto.
+  - id: DeltaL
+    symbol: \Delta L
+    nombre: cambio momento angular
+    unidad_si: kg*m^2/s
+    descripcion: Cambio de momento angular.
+  - id: DeltaT
+    symbol: \Delta t
+    nombre: intervalo tiempo
+    unidad_si: s
+    descripcion: Intervalo de tiempo.
+formulas:
+  - id: conservacion_directa
+    title: Conservación de momento angular
+    equation: Li = Lf
+    latex: L_i=L_f
+    rearrangements:
+      - target: Lf
+        equation: Lf = Li
+        latex: L_f=L_i
+      - target: Li
+        equation: Li = Lf
+        latex: L_i=L_f
+  - id: conservacion_eje_fijo
+    title: Conservación en eje fijo
+    equation: Ii*omegai = If*omegaf
+    latex: I_i\omega_i=I_f\omega_f
+    rearrangements:
+      - target: omegaf
+        equation: omegaf = (Ii*omegai)/If
+        latex: \omega_f=\frac{I_i\omega_i}{I_f}
+      - target: If
+        equation: If = (Ii*omegai)/omegaf
+        latex: I_f=\frac{I_i\omega_i}{\omega_f}
+    constraints:
+      - expr: Ii > 0
+        message: Ii debe ser mayor que 0.
+      - expr: If > 0
+        message: If debe ser mayor que 0.
+      - expr: omegaf != 0
+        message: omega_f no puede ser 0 al despejar If.
+  - id: torque_y_cambio_L
+    title: Torque promedio y variacion de L
+    equation: tau = DeltaL/DeltaT
+    latex: \tau=\frac{\Delta L}{\Delta t}
+    rearrangements:
+      - target: DeltaL
+        equation: DeltaL = tau*DeltaT
+        latex: \Delta L=\tau\Delta t
+      - target: tau
+        equation: tau = DeltaL/DeltaT
+        latex: \tau=\frac{\Delta L}{\Delta t}
+    constraints:
+      - expr: DeltaT > 0
+        message: Delta t debe ser mayor que 0.
+  - id: condicion_conservacion_conceptual
+    title: Condicion de conservación (conceptual)
+    equation: tau_ext = 0 -> L_constante
+    latex: \sum\tau_{ext}=0\Rightarrow \vec L=\text{cte}
+    calculable: false
+    motivo_no_calculable: Condicion de modelo fisico. Requiere análisis externo del sistema y no un despeje algebraico unico.
+ui:
+  default_formula: conservacion_eje_fijo
+  groups:
+    - title: Formulas calculables
+      items:
+        - conservacion_directa
+        - conservacion_eje_fijo
+        - torque_y_cambio_L
+    - title: Formulas conceptuales
+      items:
+        - condicion_conservacion_conceptual

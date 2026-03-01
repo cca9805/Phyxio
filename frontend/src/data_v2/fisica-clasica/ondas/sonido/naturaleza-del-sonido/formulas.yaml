@@ -1,0 +1,202 @@
+﻿version: 1
+topic:
+  id: naturaleza-del-sonido
+  title: Naturaleza Del Sonido
+variables:
+  - id: v
+    symbol: v
+    name: velocidad_propagacion
+    si_unit: m/s
+  - id: lambda
+    symbol: \lambda
+    name: longitud_onda
+    si_unit: m
+  - id: f
+    symbol: f
+    name: frecuencia
+    si_unit: Hz
+  - id: T
+    symbol: T
+    name: periodo
+    si_unit: s
+  - id: omega
+    symbol: \omega
+    name: frecuencia_angular
+    si_unit: rad/s
+  - id: k
+    symbol: k
+    name: numero_onda
+    si_unit: rad/m
+  - id: B
+    symbol: B
+    name: modulo_compresion
+    si_unit: Pa
+  - id: rho
+    symbol: \rho
+    name: densidad
+    si_unit: kg/m^3
+  - id: Tc
+    symbol: T_c
+    name: temperatura_celsius
+    si_unit: degC
+  - id: p_prima
+    symbol: p'
+    name: presion_acustica
+    si_unit: Pa
+  - id: u
+    symbol: u
+    name: velocidad_particula
+    si_unit: m/s
+  - id: Z
+    symbol: Z
+    name: impedancia_acustica
+    si_unit: Pa*s/m
+  - id: x
+    symbol: x
+    name: posicion
+    si_unit: m
+  - id: t
+    symbol: t
+    name: tiempo
+    si_unit: s
+formulas:
+  - id: onda_base
+    title: Relacion fundamental
+    equation: v = lambda*f
+    latex: v=\lambda f
+    rearrangements:
+      - target: v
+        equation: v = lambda*f
+        latex: v=\lambda f
+      - target: lambda
+        equation: lambda = v/f
+        latex: \lambda=\frac{v}{f}
+      - target: f
+        equation: f = v/lambda
+        latex: f=\frac{v}{\lambda}
+
+  - id: periodo
+    title: Periodo
+    equation: T = 1/f
+    latex: T=\frac{1}{f}
+    rearrangements:
+      - target: T
+        equation: T = 1/f
+        latex: T=\frac{1}{f}
+      - target: f
+        equation: f = 1/T
+        latex: f=\frac{1}{T}
+
+  - id: frecuencia_angular
+    title: Frecuencia angular
+    equation: omega = 2*pi*f
+    latex: \omega=2\pi f
+    rearrangements:
+      - target: omega
+        equation: omega = 2*pi*f
+        latex: \omega=2\pi f
+      - target: f
+        equation: f = omega/(2*pi)
+        latex: f=\frac{\omega}{2\pi}
+
+  - id: numero_onda
+    title: Numero de onda
+    equation: k = 2*pi/lambda
+    latex: k=\frac{2\pi}{\lambda}
+    rearrangements:
+      - target: k
+        equation: k = 2*pi/lambda
+        latex: k=\frac{2\pi}{\lambda}
+      - target: lambda
+        equation: lambda = 2*pi/k
+        latex: \lambda=\frac{2\pi}{k}
+
+  - id: velocidad_medio
+    title: Velocidad segun propiedades del medio
+    equation: v = sqrt(B/rho)
+    latex: v=\sqrt{\frac{B}{\rho}}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(B/rho)
+        latex: v=\sqrt{\frac{B}{\rho}}
+      - target: B
+        equation: B = rho*(v^2)
+        latex: B=\rho v^2
+      - target: rho
+        equation: rho = B/(v^2)
+        latex: \rho=\frac{B}{v^2}
+    constraints:
+      - expr: B > 0
+        message: B debe ser positiva.
+      - expr: rho > 0
+        message: rho debe ser positiva.
+
+  - id: velocidad_aire_temperatura
+    title: Aproximacion en aire por temperatura
+    equation: v = 331 + 0.6*Tc
+    latex: v\approx331+0.6T_c
+    rearrangements:
+      - target: v
+        equation: v = 331 + 0.6*Tc
+        latex: v\approx331+0.6T_c
+      - target: Tc
+        equation: Tc = (v - 331)/0.6
+        latex: T_c\approx\frac{v-331}{0.6}
+
+  - id: impedancia_acustica
+    title: Impedancia acustica caracteristica
+    equation: Z = rho*v
+    latex: Z=\rho v
+    rearrangements:
+      - target: Z
+        equation: Z = rho*v
+        latex: Z=\rho v
+      - target: rho
+        equation: rho = Z/v
+        latex: \rho=\frac{Z}{v}
+      - target: v
+        equation: v = Z/rho
+        latex: v=\frac{Z}{\rho}
+
+  - id: relacion_presion_velocidad
+    title: Relacion local presion-velocidad de particula
+    equation: p_prima = Z*u
+    latex: p'=Zu
+    rearrangements:
+      - target: p_prima
+        equation: p_prima = Z*u
+        latex: p'=Zu
+      - target: Z
+        equation: Z = p_prima/u
+        latex: Z=\frac{p'}{u}
+      - target: u
+        equation: u = p_prima/Z
+        latex: u=\frac{p'}{Z}
+
+  - id: ecuacion_onda_conceptual
+    title: Ecuacion de onda acustica 1D (conceptual)
+    equation: p_prima = p_prima
+    latex: \frac{\partial^2 p'}{\partial x^2}=\frac{1}{v^2}\frac{\partial^2 p'}{\partial t^2}
+    calculable: false
+    motivo_no_calculable: Requiere resolver una ecuacion diferencial con condiciones iniciales y de contorno.
+
+ui:
+  default_formula: onda_base
+  groups:
+    - title: Relaciones basicas (calculables)
+      items:
+        - onda_base
+        - periodo
+        - frecuencia_angular
+        - numero_onda
+    - title: Medio de propagacion (calculables)
+      items:
+        - velocidad_medio
+        - velocidad_aire_temperatura
+    - title: Magnitudes acusticas locales (calculables)
+      items:
+        - impedancia_acustica
+        - relacion_presion_velocidad
+    - title: Formula conceptual (no calculable)
+      items:
+        - ecuacion_onda_conceptual

@@ -1,0 +1,101 @@
+﻿version: 1
+topic:
+  id: tipos-de-palancas
+  title: Tipos de palancas
+
+variables:
+  - id: P
+    symbol: P
+    nombre: potencia
+    unidad_si: N
+    descripcion: Fuerza aplicada por el agente.
+  - id: R
+    symbol: R
+    nombre: resistencia
+    unidad_si: N
+    descripcion: Carga o fuerza resistente.
+  - id: dP
+    symbol: d_P
+    nombre: brazo_potencia
+    unidad_si: m
+    descripcion: Brazo de la fuerza aplicada.
+  - id: dR
+    symbol: d_R
+    nombre: brazo_resistencia
+    unidad_si: m
+    descripcion: Brazo de la carga.
+  - id: VM
+    symbol: VM
+    nombre: ventaja_mecanica
+    unidad_si: ""
+    descripcion: Cociente entre resistencia y potencia.
+
+formulas:
+  - id: clasificacion_primer_genero
+    title: Criterio primer genero
+    equation: order = P-A-R or R-A-P
+    latex: '\text{1er genero: }P-A-R\;\text{o}\;R-A-P'
+    calculable: false
+    motivo_no_calculable: Regla de clasificacion topologica, no expresion numerica.
+
+  - id: clasificacion_segundo_genero
+    title: Criterio segundo genero
+    equation: order = A-R-P
+    latex: '\text{2do genero: }A-R-P'
+    calculable: false
+    motivo_no_calculable: Regla de clasificacion topologica, no expresion numerica.
+
+  - id: clasificacion_tercer_genero
+    title: Criterio tercer genero
+    equation: order = A-P-R
+    latex: '\text{3er genero: }A-P-R'
+    calculable: false
+    motivo_no_calculable: Regla de clasificacion topologica, no expresion numerica.
+
+  - id: equilibrio_palanca
+    title: Equilibrio por momentos
+    equation: P*dP = R*dR
+    latex: P\,d_P = R\,d_R
+    variables: [P, dP, R, dR]
+    rearrangements:
+      - target: P
+        equation: P = (R*dR)/dP
+        latex: P = \frac{R\,d_R}{d_P}
+      - target: R
+        equation: R = (P*dP)/dR
+        latex: R = \frac{P\,d_P}{d_R}
+      - target: dP
+        equation: dP = (R*dR)/P
+        latex: d_P = \frac{R\,d_R}{P}
+      - target: dR
+        equation: dR = (P*dP)/R
+        latex: d_R = \frac{P\,d_P}{R}
+
+  - id: ventaja_mecanica_ideal
+    title: Ventaja mecanica ideal
+    equation: VM = R/P
+    latex: VM = \frac{R}{P}
+    variables: [VM, R, P]
+    rearrangements:
+      - target: VM
+        equation: VM = R/P
+        latex: VM = \frac{R}{P}
+      - target: R
+        equation: R = VM*P
+        latex: R = VM\,P
+      - target: P
+        equation: P = R/VM
+        latex: P = \frac{R}{VM}
+
+ui:
+  default_formula: equilibrio_palanca
+  groups:
+    - title: Clasificacion conceptual
+      items:
+        - clasificacion_primer_genero
+        - clasificacion_segundo_genero
+        - clasificacion_tercer_genero
+    - title: Relaciones calculables
+      items:
+        - equilibrio_palanca
+        - ventaja_mecanica_ideal

@@ -1,23 +1,22 @@
-# Errores frecuentes - Caida Libre
 
-## 1- Errores tipicos
-- Cambiar signos sin criterio de eje.
-- Mezclar unidades sin conversion.
-- Usar formula fuera de su dominio de validez.
+# Errores frecuentes
 
-## 2- Senales de alarma
-- Tiempo negativo sin interpretacion.
-- Unidad final incompatible.
-- Magnitud fuera de escala razonable.
+## 1- Error de identificación de variables
+Confundir altura con desplazamiento, o tiempo de subida con tiempo total.
 
-## 3- Protocolo de autocorreccion
-1. Revisa eje y signos.
-2. Revisa conversiones SI.
-3. Revisa ecuacion elegida.
-4. Contrasta con intuicion fisica.
+## 2- Error de interpretación física
+Olvidar que la aceleración es siempre hacia abajo y que el signo indica dirección.
 
-## 4- Error de fondo
-Calcular sin identificar modelo produce resultados numericos pero fisicamente fragiles.
+## 3- Error de dominio de validez
+Aplicar caída libre cuando hay resistencia del aire significativa o fuerzas externas.
 
-## 5- Cierre
-Controlar errores es parte del dominio real del tema.
+## 4- Error de unidades y parámetros
+Mezclar metros con centímetros, segundos con milisegundos, o no convertir unidades antes de calcular.
+
+## 5- Error de cierre de resolución
+Obtener un resultado numérico sin verificar si es físicamente posible (por ejemplo, tiempo negativo o altura fuera del rango esperado).
+
+## Cómo evitar estos errores de forma sistemática
+- Define variables y unidades antes de sustituir.
+- Comprueba hipótesis del modelo antes de calcular.
+- Cierra siempre con verificación física del resultado y sentido de los signos.

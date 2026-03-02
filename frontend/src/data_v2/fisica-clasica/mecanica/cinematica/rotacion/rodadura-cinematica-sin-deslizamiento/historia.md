@@ -1,14 +1,15 @@
-# Historia y contexto - Rodadura Sin Deslizamiento
+# Historia
 
-## 1- Hitos utiles
-- Este subtema se consolido al pasar de descripcion verbal a modelo matematico predictivo.
-- Su formalizacion permitio estandarizar metodos de medida y verificacion.
+## Contexto histórico
+La rodadura sin deslizamiento se formalizó al comprender la relación entre el movimiento rotacional y el traslacional, permitiendo modelar sistemas de ruedas y cilindros con precisión.
 
-## 2- Valor didactico actual
-- Ayuda a construir criterio de modelo antes de estudiar dinamica.
+## Hitos clave
+- Galileo y Newton estudiaron el movimiento de ruedas y esferas.
+- Euler y otros consolidaron la notación y el análisis de rodadura.
+- La ingeniería moderna estandarizó el uso de estas relaciones en diseño y control de vehículos.
 
-## 3- Conexion con temas siguientes
-- Conecta directamente con dinamica, energia y analisis experimental.
+## Relevancia histórica
+Esta condición es central en mecánica, robótica, automoción y análisis experimental.
 
-## 4- Cierre historico
-Entender su origen ayuda a entender por que sus hipotesis importan.
+## Continuidad en la física e ingeniería actuales
+Hoy sigue siendo la base para el diseño de sistemas de transporte y el análisis de movimientos complejos sobre ruedas.

@@ -1,25 +1,28 @@
-﻿# Palancas - Errores comunes
+﻿
 
-## Error 1- Brazo mal medido
-Tomar la distancia sobre la barra en vez de la distancia perpendicular a la linea de accion.
+# Errores frecuentes
 
-## Error 2- Confundir fuerza con momento
-Igualar fuerzas y olvidar que el equilibrio rotacional depende de momentos.
+## 1- Error de identificación de brazos
+Medir el brazo sobre la barra en vez de la distancia perpendicular al fulcro. Si la fuerza se aplica en ángulo, solo la componente perpendicular cuenta.
 
-## Error 3- Unidades mezcladas
-Usar cm y m en la misma ecuacion sin conversion.
+## 2- Error de interpretación física
+Confundir fuerza con momento: el equilibrio depende de los momentos ($\tau=F\,b$), no solo de las fuerzas.
 
-## Error 4- Usar modelo ideal en sistema real
-Aplicar \(VM=R/P\) sin considerar rendimiento cuando hay perdidas claras.
+## 3- Error de unidades y parámetros
+Usar cm y m, o N y kgf, en la misma ecuación lleva a errores de escala. Convierte siempre al SI antes de operar.
 
-## Error 5- Signo de giro inconsistente
-Cambiar sentido positivo entre ecuaciones y anular resultados correctos.
+## 4- Error de dominio de validez
+Aplicar el modelo ideal ($VM=R/P$) en sistemas reales con fricción o deformación, subestimando el esfuerzo necesario.
 
-## Checklist rapido antes de cerrar
-- Distancias en m.
-- Fuerzas en N.
-- Brazo medido en perpendicular.
-- Misma convencion de signos.
-- Interpretacion fisica final escrita.
+## 5- Error de cierre de resolución
+Cambiar el sentido positivo entre ecuaciones o no mantener la convención de signos puede anular resultados correctos.
+
+## Cómo evitar estos errores de forma sistemática
+- Dibuja el diagrama y marca los brazos correctamente.
+- Usa siempre la componente perpendicular de la fuerza.
+- Convierte todas las magnitudes al SI antes de calcular.
+- Calcula y distingue entre ventaja mecánica y eficiencia real.
+- Mantén la convención de signos en todo el desarrollo.
+- Acompaña los errores típicos con un gráfico Coord que los ilustre.
 
 

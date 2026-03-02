@@ -1,15 +1,29 @@
-﻿# Poleas - Modelo y validez
+﻿
+# Modelos y validez
 
-## Idea clave
-El modelo de poleas se basa en equilibrio de fuerzas y tension uniforme en cuerda ideal.
+## Modelo base del subtema
+La polea se modela como una rueda que gira libremente alrededor de un eje, permitiendo cambiar la dirección de una fuerza y/o multiplicar la ventaja mecánica. El modelo ideal supone polea y cuerda sin masa ni fricción, fuerzas aplicadas verticalmente y sistema en equilibrio estático.
 
-## Hipotesis base
-- Cuerda inextensible y sin masa apreciable.
-- Polea sin inercia ni friccion en modelo ideal.
-- Regimen cuasiestatico.
+## Hipótesis operativas
+- Polea y cuerda ideales (sin masa, sin fricción, sin deformación)
+- Montaje correctamente diagramado (ver gráfico Coord)
+- Fuerzas aplicadas verticalmente y sin ángulo
 
-## Relaciones centrales
-$$
+## Qué explica bien este modelo
+- Cálculo de la fuerza necesaria para elevar una carga
+- Ventaja mecánica en polea fija, móvil y polipasto
+- Optimización de esfuerzo y análisis de sistemas compuestos
+
+## Límites del modelo
+- Fricción en el eje o la cuerda
+- Masa de la polea o la cuerda
+- Deformación de la cuerda
+- Montajes compuestos complejos
+
+## Señales de que debes cambiar de modelo
+- Desviaciones sistemáticas entre cálculo y resultado experimental
+- Fricción o masa apreciable en polea/cuerda
+- Fallos en la transmisión de fuerza por deformación o montaje incorrecto
 P=\frac{R}{n},\qquad VM=n
 $$
 

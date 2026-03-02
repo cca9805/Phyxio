@@ -1,22 +1,20 @@
-# Aplicaciones - Movimiento Rectilineo Uniforme (MRU)
 
-## 1- Donde aparece este subtema
-- Logistica en tramos de velocidad estable.
-- Encuentros entre moviles.
+# Aplicaciones
 
-## 2- Que decision tecnica permite tomar
-- Estimar magnitudes con trazabilidad.
-- Validar limites operativos del sistema.
-- Detectar inconsistencias de datos experimentales.
+## Aplicaciones científicas y tecnológicas
+- Análisis de trayectorias en experimentos de laboratorio donde la velocidad es constante.
+- Control de calidad en cintas transportadoras y sistemas logísticos de velocidad estable.
+- Sincronización de móviles en líneas de producción o sistemas de transporte.
 
-## 3- Datos minimos para aplicarlo
-- Marco de referencia definido.
-- Variables iniciales y condiciones de borde.
-- Unidades SI consistentes.
+## Qué se calcula en estas aplicaciones
+- Posición en función del tiempo para prever encuentros o evitar colisiones.
+- Intervalos temporales para coordinar procesos o medir distancias.
+- Validación de datos experimentales mediante comparación con el modelo ideal.
 
-## 4- Limites practicos
-- Si cambian condiciones, usar modelo por tramos.
-- Si hay efectos no modelados, cambiar de marco teorico.
+## Decisiones técnicas y operativas basadas en este subtema
+- Determinar si el sistema puede considerarse en MRU o requiere un modelo más general.
+- Ajustar parámetros de operación para mantener la velocidad constante.
+- Detectar desviaciones que indiquen fallos mecánicos o errores de medición.
 
-## 5- Cierre aplicado
-Este subtema es una herramienta operativa para predecir y verificar comportamiento real.
+## Lectura didáctica
+El MRU es la base para comprender y modelar movimientos más complejos. Su correcta aplicación permite tomar decisiones técnicas fundamentadas y sirve como referencia para validar resultados experimentales. El objetivo no es solo calcular, sino interpretar y decidir si el modelo describe adecuadamente el sistema físico.

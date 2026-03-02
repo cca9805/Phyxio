@@ -1,29 +1,21 @@
-# Ejemplos - Tiro Parabolico
+# Ejemplos guiados
 
-## 1- Chequeo conceptual rapido
-- Que variable domina este resultado
-- Que signo esperas antes de calcular
-- Que comprobacion valida tu numero final
+## Ejemplo 1- Estado instantáneo
+**Enunciado:** Un proyectil es lanzado con $v_0=30\ \text{m/s}$ y $\theta=40^\circ$. ¿Cuál es el alcance y la altura máxima?
 
-## 2- Ejemplo resuelto
-v0=30 m/s, theta=40 deg, g=9.8
+**Pasos de resolución**
+1. Descompón $v_{x0}=v_0\cos\theta$, $v_{y0}=v_0\sin\theta$.
+2. Calcula el tiempo de vuelo: $t=\frac{2v_{y0}}{g}$.
+3. Calcula el alcance: $x_{alcance}=v_{x0} t$.
+4. Calcula la altura máxima: $h_{max}=\frac{v_{y0}^2}{2g}$.
+5. Verifica unidades y sentido físico.
 
-$$
-v_{x0} = v_0 \cos\theta
-$$
+## Ejemplo 2- Variación de ángulo
+**Enunciado:** Cambia $\theta$ a $60^\circ$ y repite el procedimiento.
 
-$$
-v_{y0} = v_0 \sin\theta
-$$
+**Pasos de resolución**
+1. Repite los cálculos y compara el alcance y la altura máxima.
+2. Explica por qué cambian los resultados.
 
-## 3- Variacion intermedia
-- Cambia un dato clave y repite el procedimiento.
-- Explica por que cambia (o no cambia) el resultado.
-
-## 4- Propuestos
-- Caso A: mismos modelos, distintos datos.
-- Caso B: cambio de referencia o condicion inicial.
-- Caso C: caso limite para validar dominio de validez.
-
-## 5- Criterio de correccion
-Un ejercicio esta bien cerrado cuando unidades, signos y lectura fisica son coherentes.
+## Criterio didáctico de cierre
+En todos los ejemplos, la clave es justificar hipótesis, mantener consistencia de unidades y verificar que el resultado describe de forma coherente el comportamiento balístico.

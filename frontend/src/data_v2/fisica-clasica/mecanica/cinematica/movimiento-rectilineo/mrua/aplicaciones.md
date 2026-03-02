@@ -1,22 +1,20 @@
-# Aplicaciones - Movimiento Rectilineo Uniformemente Acelerado (MRUA)
 
-## 1- Donde aparece este subtema
-- Frenado de vehiculos.
-- Arranque de maquinaria lineal.
+# Aplicaciones
 
-## 2- Que decision tecnica permite tomar
-- Estimar magnitudes con trazabilidad.
-- Validar limites operativos del sistema.
-- Detectar inconsistencias de datos experimentales.
+## Aplicaciones científicas y tecnológicas
+- Análisis de frenado y arranque de vehículos y maquinaria.
+- Cálculo de distancias de seguridad y tiempos de reacción en sistemas de transporte.
+- Diseño de experimentos de laboratorio con aceleración constante (caída libre, planos inclinados, etc.).
 
-## 3- Datos minimos para aplicarlo
-- Marco de referencia definido.
-- Variables iniciales y condiciones de borde.
-- Unidades SI consistentes.
+## Qué se calcula en estas aplicaciones
+- Posición y velocidad en función del tiempo para prever trayectorias y tiempos de parada.
+- Intervalos temporales y distancias recorridas bajo aceleración constante.
+- Validación de datos experimentales mediante comparación con el modelo ideal.
 
-## 4- Limites practicos
-- Si cambian condiciones, usar modelo por tramos.
-- Si hay efectos no modelados, cambiar de marco teorico.
+## Decisiones técnicas y operativas basadas en este subtema
+- Determinar si el sistema puede considerarse en MRUA o requiere un modelo más general.
+- Ajustar parámetros de operación para optimizar aceleración o frenado.
+- Detectar desviaciones que indiquen fallos mecánicos o errores de medición.
 
-## 5- Cierre aplicado
-Este subtema es una herramienta operativa para predecir y verificar comportamiento real.
+## Lectura didáctica
+El MRUA es fundamental para comprender y modelar movimientos acelerados en la naturaleza y la tecnología. Su correcta aplicación permite tomar decisiones técnicas fundamentadas y sirve como referencia para validar resultados experimentales. El objetivo no es solo calcular, sino interpretar y decidir si el modelo describe adecuadamente el sistema físico.

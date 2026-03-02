@@ -1,14 +1,16 @@
-# Historia y contexto - Magnitudes Angulares
 
-## 1- Hitos utiles
-- Este subtema se consolido al pasar de descripcion verbal a modelo matematico predictivo.
-- Su formalizacion permitio estandarizar metodos de medida y verificacion.
+# Historia
 
-## 2- Valor didactico actual
-- Ayuda a construir criterio de modelo antes de estudiar dinamica.
+## Contexto histórico
+El concepto de magnitudes angulares surge de la necesidad de describir movimientos circulares y rotacionales en astronomía y mecánica clásica.
 
-## 3- Conexion con temas siguientes
-- Conecta directamente con dinamica, energia y analisis experimental.
+## Hitos clave
+- Los griegos ya utilizaban el ángulo para describir trayectorias celestes.
+- Newton y Euler formalizaron la relación entre ángulo, velocidad angular y aceleración angular.
+- El desarrollo de instrumentos de medida precisos permitió estandarizar métodos y validar modelos.
 
-## 4- Cierre historico
-Entender su origen ayuda a entender por que sus hipotesis importan.
+## Relevancia histórica
+Las magnitudes angulares son esenciales en la física, la ingeniería y la tecnología moderna, desde la descripción de órbitas planetarias hasta el diseño de motores y sistemas de control.
+
+## Continuidad en la física e ingeniería actuales
+Hoy, el análisis de magnitudes angulares es base para la dinámica rotacional, el control automático y la instrumentación avanzada.

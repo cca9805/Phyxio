@@ -1,22 +1,28 @@
-# Aplicaciones - Movimiento Circular Uniformemente Acelerado (MCUA)
 
-## 1- Donde aparece este subtema
-- Motores electricos.
-- Frenado angular controlado.
 
-## 2- Que decision tecnica permite tomar
-- Estimar magnitudes con trazabilidad.
-- Validar limites operativos del sistema.
-- Detectar inconsistencias de datos experimentales.
+# Aplicaciones – Movimiento Circular Uniformemente Acelerado (MCUA)
 
-## 3- Datos minimos para aplicarlo
-- Marco de referencia definido.
-- Variables iniciales y condiciones de borde.
-- Unidades SI consistentes.
+## Aplicaciones científicas y tecnológicas
+- Motores eléctricos: arranque y frenado controlado.
+- Sistemas de discos duros y mecanismos de almacenamiento.
+- Ruedas de vehículos al acelerar o frenar.
+- Equipos de laboratorio con platos giratorios.
 
-## 4- Limites practicos
-- Si cambian condiciones, usar modelo por tramos.
-- Si hay efectos no modelados, cambiar de marco teorico.
+## Qué decisión técnica permite tomar
+- Estimar el tiempo necesario para alcanzar cierta velocidad angular.
+- Determinar el ángulo girado en un intervalo de aceleración.
+- Validar límites operativos y detectar fallas en sistemas rotacionales.
+- Predecir el comportamiento ante cambios de aceleración.
 
-## 5- Cierre aplicado
-Este subtema es una herramienta operativa para predecir y verificar comportamiento real.
+## Datos mínimos para aplicarlo
+- Definir el sistema de referencia y el sentido positivo.
+- Conocer condiciones iniciales: $\omega_0$, $\theta_0$, $\alpha$.
+- Unidades SI consistentes en todos los datos.
+
+## Límites prácticos
+- Si la aceleración no es constante, dividir el análisis en tramos.
+- Si hay fricción significativa, considerar modelos más completos.
+- Si el radio varía, usar modelos de cuerda o polea variable.
+
+## Cierre aplicado
+El MCUA es fundamental para el diseño, control y diagnóstico de sistemas rotacionales en ingeniería y ciencia aplicada.

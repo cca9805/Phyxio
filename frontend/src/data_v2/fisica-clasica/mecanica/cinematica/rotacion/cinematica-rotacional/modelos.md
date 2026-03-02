@@ -1,22 +1,29 @@
-# Modelo y validez - Cinematica Rotacional
 
-## 1- Hipotesis del modelo
-- Subtema idealizado con variables del tab de formulas.
-- Condiciones iniciales y de borde explicitadas.
+# Modelos y validez
 
-## 2- Cuando si aplica
-- Modelo del subtema activo en el intervalo analizado.
-- Sistema de referencia y signos definidos antes de operar.
-- Unidades SI coherentes en todos los datos.
+## Modelo base del subtema
+La cinemática rotacional describe el movimiento de cuerpos rígidos alrededor de un eje fijo, usando magnitudes angulares (posición, velocidad, aceleración). El modelo asume condiciones ideales: eje fijo, sin deformaciones y sin fuerzas externas que alteren el movimiento durante el intervalo analizado.
 
-## 3- Cuando deja de aplicar
-- Cambio de regimen no incluido por el modelo.
-- Falta de datos para cerrar ecuaciones con trazabilidad.
+## Hipótesis operativas
+- El eje de rotación es fijo y conocido.
+- Las magnitudes angulares se definen respecto a un sistema de referencia explícito.
+- Las unidades empleadas son SI (radianes, rad/s, rad/s²).
+- No hay ambigüedad en el sentido de giro ni en la elección del origen angular.
 
-## 4- Como ampliar el modelo
-- Resolver por tramos.
-- Incorporar condiciones adicionales del sistema real.
-- Migrar a un marco teorico mas completo si hace falta.
+## Qué explica bien este modelo
+- Permite calcular desplazamientos, velocidades y aceleraciones angulares a partir de condiciones iniciales o experimentales.
+- Relaciona magnitudes angulares con magnitudes lineales (por ejemplo, $v = \omega R$).
+- Es la base para el análisis de sistemas rotacionales más complejos (dinámica rotacional, conservación del momento angular).
 
-## 5- Cierre de validez
-Saber cuando no aplicar un modelo es tan importante como saber calcular con el.
+## Límites del modelo
+- No contempla variaciones del eje de rotación ni movimientos fuera del plano.
+- No es válido si existen discontinuidades o saltos bruscos en las condiciones iniciales.
+- Si los datos experimentales muestran inconsistencias, se requiere un modelo más general.
+
+## Señales de que debes cambiar de modelo
+- El desplazamiento angular calculado no coincide con la observación.
+- Las unidades o el sentido de giro no son coherentes en los resultados.
+- El sistema presenta aceleraciones no previstas o el eje de rotación cambia.
+
+## Criterio didáctico de cierre
+Dominar la cinemática rotacional implica saber cuándo aplicarla, justificar sus hipótesis y detectar rápidamente los límites de validez. Un uso correcto requiere interpretar resultados, verificar unidades y signos, y estar atento a señales que indiquen la necesidad de un marco teórico más completo.

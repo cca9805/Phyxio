@@ -1,23 +1,22 @@
-# Errores frecuentes - Movimiento Rectilineo Uniforme (MRU)
 
-## 1- Errores tipicos
-- Cambiar signos sin criterio de eje.
-- Mezclar unidades sin conversion.
-- Usar formula fuera de su dominio de validez.
+# Errores frecuentes
 
-## 2- Senales de alarma
-- Tiempo negativo sin interpretacion.
-- Unidad final incompatible.
-- Magnitud fuera de escala razonable.
+## 1- Error de identificación de variables
+Confundir desplazamiento con posición absoluta, o tiempo transcurrido con tiempo total.
 
-## 3- Protocolo de autocorreccion
-1. Revisa eje y signos.
-2. Revisa conversiones SI.
-3. Revisa ecuacion elegida.
-4. Contrasta con intuicion fisica.
+## 2- Error de interpretación física
+Olvidar que la velocidad puede ser negativa y que el signo indica sentido.
 
-## 4- Error de fondo
-Calcular sin identificar modelo produce resultados numericos pero fisicamente fragiles.
+## 3- Error de dominio de validez
+Aplicar MRU cuando hay aceleración o fuerzas externas presentes.
 
-## 5- Cierre
-Controlar errores es parte del dominio real del tema.
+## 4- Error de unidades y parámetros
+Mezclar metros con kilómetros, segundos con horas, o no convertir unidades antes de calcular.
+
+## 5- Error de cierre de resolución
+Obtener un resultado numérico sin verificar si es físicamente posible (por ejemplo, tiempo negativo o posición fuera del rango esperado).
+
+## Cómo evitar estos errores de forma sistemática
+- Define variables y unidades antes de sustituir.
+- Comprueba hipótesis del modelo antes de calcular.
+- Cierra siempre con verificación física del resultado y sentido de los signos.

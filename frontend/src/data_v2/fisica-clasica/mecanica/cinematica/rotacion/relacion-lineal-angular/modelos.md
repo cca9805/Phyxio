@@ -1,3 +1,28 @@
+# Modelos y validez
+
+## Modelo base del subtema
+Este subtema modela la relación entre magnitudes lineales y angulares en sistemas en rotación, bajo un marco clásico y determinista, con parámetros constantes en el intervalo de análisis.
+
+## Hipótesis operativas
+- El radio de giro es constante y conocido.
+- El movimiento es planar y la trayectoria es circular o casi circular.
+- Unidades SI y definición explícita de ejes, signos y referencia angular.
+
+## Qué explica bien este modelo
+- Relaciona desplazamiento, velocidad y aceleración lineal con sus equivalentes angulares: $s = r\theta$, $v_t = \omega r$, $a_t = \alpha r$.
+- Permite analizar sistemas como poleas, ruedas, discos y mecanismos rotatorios.
+
+## Límites del modelo
+- Si el radio varía, se requiere un modelo más general.
+- Si hay deslizamiento o la trayectoria no es circular, el modelo pierde validez.
+- Si existen fuerzas externas no consideradas, se debe ampliar el análisis.
+
+## Señales de que debes cambiar de modelo
+- Desviaciones sistemáticas entre medida y predicción.
+- Incoherencias físicas persistentes aun con unidades y signos correctos.
+
+## Cierre didáctico
+El dominio real del subtema está en saber cuándo y cómo aplicar la relación lineal-angular, y cuándo migrar a un modelo más completo.
 # Modelo y validez - Relacion Lineal-Angular
 
 ## 1- Hipotesis del modelo

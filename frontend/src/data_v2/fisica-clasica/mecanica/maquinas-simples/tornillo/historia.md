@@ -1,14 +1,18 @@
-﻿# Tornillo - Historia
+﻿
+# Historia
 
-## Idea clave
-El tornillo evoluciono desde sistemas de prensado antiguos hasta elemento basico de la mecanica moderna.
+## Contexto histórico
+El tornillo surge como una evolución del plano inclinado helicoidal, permitiendo multiplicar la fuerza aplicada en sistemas de fijación y prensado desde la antigüedad.
 
-## Hitos
-1- Uso temprano en prensas de materiales.
-2- Estandarizacion de roscas en ingenieria industrial.
-3- Integracion en maquinas de precision y automatizacion.
+## Hitos clave
+- Arquímedes describió el tornillo para elevar agua (tornillo de Arquímedes).
+- La rosca se estandarizó en la revolución industrial, permitiendo la fabricación masiva y la universalidad de tornillos en maquinaria.
+- El tornillo se integró en sistemas de precisión, robótica y biomecánica en la ingeniería moderna.
 
-## Relevancia actual
-Su estudio conecta maquinas simples clasicas con diseno mecanico real de alta precision.
+## Relevancia histórica
+El tornillo es esencial en la historia de la tecnología por su capacidad de transformar fuerzas y su presencia en innumerables aplicaciones técnicas y cotidianas.
+
+## Continuidad en la física e ingeniería actuales
+Hoy, el tornillo sigue siendo un elemento fundamental en diseño mecánico, automatización y sistemas de fijación, ilustrando la vigencia de los principios de la máquina simple.
 
 

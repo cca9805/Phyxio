@@ -1,22 +1,24 @@
-# Modelo y validez - Encuentros Y Persecuciones
+# Modelos y validez
 
-## 1- Hipotesis del modelo
-- Subtema idealizado con variables del tab de formulas.
-- Condiciones iniciales y de borde explicitadas.
+## Modelo base del subtema
+Este subtema modela la resolución de problemas de encuentros y persecuciones entre dos o más móviles, usando ecuaciones de posición y velocidad en función del tiempo. Se asume un marco clásico, determinista y parámetros constantes.
 
-## 2- Cuando si aplica
-- Modelo del subtema activo en el intervalo analizado.
-- Sistema de referencia y signos definidos antes de operar.
-- Unidades SI coherentes en todos los datos.
+## Hipótesis operativas
+- Los móviles se desplazan con velocidades constantes o conocidas.
+- Las posiciones iniciales y referencias están bien definidas.
+- Unidades SI y definición explícita de ejes, signos y referencia.
 
-## 3- Cuando deja de aplicar
-- Cambio de regimen no incluido por el modelo.
-- Falta de datos para cerrar ecuaciones con trazabilidad.
+## Qué explica bien este modelo
+- Permite calcular el instante y lugar de encuentro o persecución.
+- Analiza trayectorias rectilíneas y casos de movimiento relativo.
 
-## 4- Como ampliar el modelo
-- Resolver por tramos.
-- Incorporar condiciones adicionales del sistema real.
-- Migrar a un marco teorico mas completo si hace falta.
+## Límites del modelo
+- Si hay aceleraciones no consideradas, se requiere un modelo más general.
+- Si los móviles cambian de trayectoria, debe resolverse por tramos.
 
-## 5- Cierre de validez
-Saber cuando no aplicar un modelo es tan importante como saber calcular con el.
+## Señales de que debes cambiar de modelo
+- Desviaciones sistemáticas entre medida y predicción.
+- Incoherencias físicas persistentes aun con unidades y signos correctos.
+
+## Cierre didáctico
+El dominio real del subtema está en saber cuándo y cómo aplicar el modelo de encuentros y persecuciones, y cuándo migrar a un modelo más completo.

@@ -1,29 +1,19 @@
-# Ejemplos - Tiro Horizontal
+# Ejemplos guiados
 
-## 1- Chequeo conceptual rapido
-- Que variable domina este resultado
-- Que signo esperas antes de calcular
-- Que comprobacion valida tu numero final
+## Ejemplo 1- Estado instantáneo
+**Enunciado:** Un proyectil parte de $y_0=20\ \text{m}$ con $v_0=12\ \text{m/s}$ horizontal. ¿Dónde impacta?
 
-## 2- Ejemplo resuelto
-y0=20 m, v0=12 m/s, g=9.8
+**Pasos de resolución**
+1. Calcula el tiempo de caída: $y=y_0-\frac{1}{2}gt^2\Rightarrow t=\sqrt{2y_0/g}$.
+2. Calcula el alcance: $x=x_0+v_0 t$.
+3. Verifica unidades y sentido físico.
 
-$$
-x = x_0 + v_0 t
-$$
+## Ejemplo 2- Variación de altura
+**Enunciado:** Cambia $y_0$ a $40\ \text{m}$ y repite el procedimiento.
 
-$$
-y = y_0 - \frac{1}{2} g t^2
-$$
+**Pasos de resolución**
+1. Repite los cálculos y compara el alcance.
+2. Explica por qué cambia el resultado.
 
-## 3- Variacion intermedia
-- Cambia un dato clave y repite el procedimiento.
-- Explica por que cambia (o no cambia) el resultado.
-
-## 4- Propuestos
-- Caso A: mismos modelos, distintos datos.
-- Caso B: cambio de referencia o condicion inicial.
-- Caso C: caso limite para validar dominio de validez.
-
-## 5- Criterio de correccion
-Un ejercicio esta bien cerrado cuando unidades, signos y lectura fisica son coherentes.
+## Criterio didáctico de cierre
+En todos los ejemplos, la clave es justificar hipótesis, mantener consistencia de unidades y verificar que el resultado describe de forma coherente el comportamiento balístico.

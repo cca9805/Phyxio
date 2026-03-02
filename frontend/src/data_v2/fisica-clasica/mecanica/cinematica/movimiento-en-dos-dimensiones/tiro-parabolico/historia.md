@@ -1,14 +1,14 @@
-# Historia y contexto - Tiro Parabolico
+# Historia
 
-## 1- Hitos utiles
-- Este subtema se consolido al pasar de descripcion verbal a modelo matematico predictivo.
-- Su formalizacion permitio estandarizar metodos de medida y verificacion.
+## Contexto histórico
+El análisis del tiro parabólico surgió para resolver problemas prácticos de balística y deportes, formalizándose con el desarrollo de la cinemática clásica.
 
-## 2- Valor didactico actual
-- Ayuda a construir criterio de modelo antes de estudiar dinamica.
+## Hitos clave
+- Galileo y Newton aplicaron ecuaciones de movimiento para resolver trayectorias parabólicas.
+- La ingeniería y la física moderna extendieron el análisis a simulaciones y robótica.
 
-## 3- Conexion con temas siguientes
-- Conecta directamente con dinamica, energia y analisis experimental.
+## Relevancia histórica
+Esta idea es central en mecánica, balística, educación y análisis experimental.
 
-## 4- Cierre historico
-Entender su origen ayuda a entender por que sus hipotesis importan.
+## Continuidad en la física e ingeniería actuales
+Hoy sigue siendo la base para el diseño de experimentos, simulaciones y validación de modelos en múltiples disciplinas.

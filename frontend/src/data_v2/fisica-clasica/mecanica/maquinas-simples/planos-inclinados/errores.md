@@ -1,24 +1,26 @@
-﻿# Planos Inclinados - Errores comunes
+﻿
 
-## Error 1- Intercambiar seno y coseno
-Tomar \(mg\cos\theta\) como componente paralela cuando debe ser \(mg\sin\theta\).
+# Errores frecuentes
 
-## Error 2- Angulo mal definido
-Usar un angulo respecto a la vertical y mantener formulas de angulo respecto a la horizontal.
+## 1- Error de identificación de componentes
+No separar correctamente las componentes paralela y normal del peso. Intercambiar seno y coseno ($mg\sin\theta$ vs $mg\cos\theta$).
 
-## Error 3- Signos inconsistentes
-No fijar sentido positivo del eje paralelo antes de escribir fuerzas.
+## 2- Error de interpretación física
+Calcular la fuerza suponiendo plano ideal, sin incluir fricción o deformación.
 
-## Error 4- Friccion sin direccion
-Escribir \(f=\mu N\) sin decidir si se opone a subida o bajada.
+## 3- Error de unidades y parámetros
+Usar grados en teoría y radianes en la calculadora sin conversión, o mezclar unidades de masa y fuerza.
 
-## Error 5- Unidades y modo angular
-Usar grados en teoria y calculadora en radianes sin conversion.
+## 4- Error de dominio de validez
+Aplicar la fuerza en ángulo incorrecto, o usar un ángulo respecto a la vertical con fórmulas de ángulo respecto a la horizontal.
 
-## Verificacion rapida
-- Ejes definidos.
-- Componentes correctas.
-- Signo de friccion revisado.
-- Resultado con sentido fisico.
+## 5- Error de cierre de resolución
+No fijar sentido positivo del eje paralelo antes de escribir fuerzas, o escribir $f=\mu N$ sin decidir si se opone a subida o bajada.
+
+## Cómo evitar estos errores de forma sistemática
+- Separa siempre las componentes paralela y normal del peso.
+- Incluye fricción y deformación cuando sean relevantes.
+- Usa unidades y modos angulares consistentes.
+- Fija el sentido positivo de los ejes y revisa la dirección de la fricción.
 
 

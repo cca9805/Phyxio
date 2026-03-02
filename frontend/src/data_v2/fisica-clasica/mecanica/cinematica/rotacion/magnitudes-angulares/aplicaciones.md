@@ -1,22 +1,20 @@
-# Aplicaciones - Magnitudes Angulares
 
-## 1- Donde aparece este subtema
-- Servomotores y control de ejes.
-- Instrumentacion rotativa.
+# Aplicaciones
 
-## 2- Que decision tecnica permite tomar
-- Estimar magnitudes con trazabilidad.
-- Validar limites operativos del sistema.
-- Detectar inconsistencias de datos experimentales.
+## Aplicaciones científicas y tecnológicas
+- Servomotores y control de ejes en robótica y automatización.
+- Instrumentación rotativa (tacómetros, giroscopios).
+- Análisis de sistemas de transmisión y mecanismos de relojería.
 
-## 3- Datos minimos para aplicarlo
-- Marco de referencia definido.
-- Variables iniciales y condiciones de borde.
-- Unidades SI consistentes.
+## Qué se calcula en estas aplicaciones
+- Desplazamiento angular, velocidad angular y aceleración angular en función del tiempo.
+- Relación entre magnitudes angulares y lineales para el diseño de sistemas.
+- Validación de datos experimentales mediante comparación con el modelo ideal.
 
-## 4- Limites practicos
-- Si cambian condiciones, usar modelo por tramos.
-- Si hay efectos no modelados, cambiar de marco teorico.
+## Decisiones técnicas y operativas basadas en este subtema
+- Determinar si el sistema puede considerarse ideal o requiere un modelo más general.
+- Ajustar parámetros de operación para mantener la precisión del control angular.
+- Detectar desviaciones que indiquen fallos mecánicos o errores de medición.
 
-## 5- Cierre aplicado
-Este subtema es una herramienta operativa para predecir y verificar comportamiento real.
+## Lectura didáctica
+Las magnitudes angulares son fundamentales para comprender y modelar movimientos rotacionales en la naturaleza y la tecnología. Su correcta aplicación permite tomar decisiones técnicas fundamentadas y sirve como referencia para validar resultados experimentales. El objetivo no es solo calcular, sino interpretar y decidir si el modelo describe adecuadamente el sistema físico.

@@ -1,23 +1,21 @@
-# Errores frecuentes - Velocidad Relativa
+# Errores frecuentes
 
-## 1- Errores tipicos
-- Cambiar signos sin criterio de eje.
-- Mezclar unidades sin conversion.
-- Usar formula fuera de su dominio de validez.
+## 1- Error de identificación de variables
+Confundir velocidades relativas con absolutas, o no especificar el sistema de referencia.
 
-## 2- Senales de alarma
-- Tiempo negativo sin interpretacion.
-- Unidad final incompatible.
-- Magnitud fuera de escala razonable.
+## 2- Error de interpretación física
+Olvidar que la suma de velocidades es vectorial y depende del sentido.
 
-## 3- Protocolo de autocorreccion
-1. Revisa eje y signos.
-2. Revisa conversiones SI.
-3. Revisa ecuacion elegida.
-4. Contrasta con intuicion fisica.
+## 3- Error de dominio de validez
+Aplicar la suma de velocidades fuera de sistemas inerciales.
 
-## 4- Error de fondo
-Calcular sin identificar modelo produce resultados numericos pero fisicamente fragiles.
+## 4- Error de unidades y parámetros
+Mezclar unidades de velocidad, o usar tiempos y distancias en sistemas distintos.
 
-## 5- Cierre
-Controlar errores es parte del dominio real del tema.
+## 5- Error de cierre de resolución
+No verificar que el resultado final tiene sentido físico y unidades correctas.
+
+## Cómo evitar estos errores de forma sistemática
+- Define variables, sistemas y unidades antes de sustituir.
+- Comprueba hipótesis del modelo antes de calcular.
+- Cierra siempre con verificación física del resultado.

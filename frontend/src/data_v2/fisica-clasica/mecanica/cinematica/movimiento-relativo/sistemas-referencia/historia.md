@@ -1,14 +1,15 @@
-# Historia y contexto - Sistemas De Referencia
+# Historia
 
-## 1- Hitos utiles
-- Este subtema se consolido al pasar de descripcion verbal a modelo matematico predictivo.
-- Su formalizacion permitio estandarizar metodos de medida y verificacion.
+## Contexto histórico
+El concepto de sistemas de referencia surgió para explicar cómo diferentes observadores describen el mismo fenómeno físico desde marcos en movimiento relativo.
 
-## 2- Valor didactico actual
-- Ayuda a construir criterio de modelo antes de estudiar dinamica.
+## Hitos clave
+- Galileo y Newton formalizaron la relatividad clásica y la transformación de velocidades.
+- La navegación y la astronomía impulsaron el desarrollo de métodos de referencia precisos.
+- La ingeniería moderna estandarizó el uso de sistemas de referencia en transporte y navegación.
 
-## 3- Conexion con temas siguientes
-- Conecta directamente con dinamica, energia y analisis experimental.
+## Relevancia histórica
+Esta idea es central en mecánica, navegación, aviación y análisis experimental.
 
-## 4- Cierre historico
-Entender su origen ayuda a entender por que sus hipotesis importan.
+## Continuidad en la física e ingeniería actuales
+Hoy sigue siendo la base para el diseño de sistemas de navegación, control y análisis de trayectorias.

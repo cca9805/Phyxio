@@ -1,17 +1,21 @@
-# Errores comunes
+# Errores frecuentes
 
-1) **“Si se mueve, debe haber una fuerza hacia delante”**
-Falso en un marco inercial: si ΣF = 0, puede moverse con velocidad constante.
+## 1- Error de identificación de fuerzas
+Pensar que si un cuerpo se mueve debe haber una fuerza en ese sentido. Falso en un marco inercial: si $\sum F = 0$, puede moverse con velocidad constante.
 
-2) **Confundir fuerza neta con “una fuerza concreta”**
-ΣF es la suma de todas. Puede haber 3 fuerzas y aún así ΣF = 0.
+## 2- Error de interpretación física
+Confundir fuerza neta con “una fuerza concreta”. $\sum F$ es la suma de todas. Puede haber varias fuerzas y aún así $\sum F = 0$.
 
-3) **Olvidar que son vectores**
-No basta con sumar módulos. Hay direcciones:
-\(\vec F_1 + \vec F_2 = \vec 0\) solo si se cancelan vectorialmente.
+## 3- Error vectorial
+Olvidar que las fuerzas son vectores: no basta con sumar módulos, hay que considerar direcciones.
 
-4) **Aplicar la ley en un marco acelerado sin corregir**
-En un coche que arranca, “parece” que hay una fuerza hacia atrás. Es efecto del marco no inercial.
+## 4- Error de marco de referencia
+Aplicar la ley en un marco acelerado sin corregir (fuerzas ficticias).
 
-5) **Creer que reposo es “caso especial” distinto a MRU**
-Reposo es MRU con \(v=0\).
+## 5- Error de dominio de validez
+Creer que reposo es “caso especial” distinto a MRU. Reposo es MRU con $v=0$.
+
+## Cómo evitar estos errores de forma sistemática
+- Define todas las fuerzas y verifica su suma vectorial.
+- Comprueba el marco de referencia antes de aplicar la ley.
+- Cierra siempre con verificación física del resultado.

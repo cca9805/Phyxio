@@ -1,29 +1,35 @@
-# Ejemplos
+# Ejemplos guiados
 
-## 1) Libro sobre una mesa (equilibrio estático)
-Fuerzas:
-- Peso \(\vec P\) hacia abajo
-- Normal \(\vec N\) hacia arriba
+## Ejemplo 1- Equilibrio estático
+**Enunciado:** Un libro descansa sobre una mesa. ¿Qué fuerzas actúan y cuál es su estado de movimiento?
 
-Si \(\vec N + \vec P = \vec 0\), entonces \(\vec a = \vec 0\).  
-El libro se queda en reposo.
+**Resolución:**
+- Peso ($P$) hacia abajo
+- Normal ($N$) hacia arriba
+$$
+N + P = 0 \Rightarrow a = 0
+$$
+El libro permanece en reposo.
 
----
+## Ejemplo 2- Equilibrio dinámico
+**Enunciado:** Un patinador se desliza sobre hielo sin rozamiento apreciable. ¿Qué ocurre con su velocidad?
 
-## 2) Patinador deslizándose (equilibrio dinámico)
-Si despreciamos rozamiento y resistencia del aire:
-\(\sum \vec F \approx \vec 0\)
+**Resolución:**
+$$
+\sum \vec F \approx 0 \Rightarrow a \approx 0
+$$
+El patinador mantiene velocidad constante (MRU).
 
-Conclusión:
-- \(a \approx 0\)
-- \(v\) aproximadamente constante (MRU)
+## Ejemplo 3- Vehículo a velocidad constante
+**Enunciado:** Un coche se mueve a velocidad constante en llano. ¿Qué fuerzas intervienen?
 
----
-
-## 3) Coche a velocidad constante
-Si un coche va a velocidad constante en llano:
-- motor empuja hacia delante
-- rozamientos y aire tiran hacia atrás
-
+**Resolución:**
+- Motor empuja hacia delante
+- Rozamiento y aire tiran hacia atrás
 Si se equilibran:
-\(\sum F_x = 0\) → \(a_x = 0\) → \(v=\text{cte}\)
+$$
+\sum F_x = 0 \Rightarrow a_x = 0 \Rightarrow v = \text{cte}
+$$
+
+## Criterio didáctico de cierre
+En todos los ejemplos, la clave es justificar hipótesis, mantener consistencia de unidades y verificar que el resultado describe de forma coherente el comportamiento físico esperado.

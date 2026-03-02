@@ -1,22 +1,24 @@
-# Modelo y validez - Velocidad Relativa
+# Modelos y validez
 
-## 1- Hipotesis del modelo
-- Subtema idealizado con variables del tab de formulas.
-- Condiciones iniciales y de borde explicitadas.
+## Modelo base del subtema
+Este subtema modela la suma y transformación de velocidades entre diferentes sistemas de referencia inerciales. Se asume un marco clásico, determinista y parámetros constantes.
 
-## 2- Cuando si aplica
-- Modelo del subtema activo en el intervalo analizado.
-- Sistema de referencia y signos definidos antes de operar.
-- Unidades SI coherentes en todos los datos.
+## Hipótesis operativas
+- Los sistemas de referencia son inerciales o se especifica la aceleración relativa.
+- Las velocidades relativas son constantes o conocidas.
+- Unidades SI y definición explícita de ejes, signos y referencia.
 
-## 3- Cuando deja de aplicar
-- Cambio de regimen no incluido por el modelo.
-- Falta de datos para cerrar ecuaciones con trazabilidad.
+## Qué explica bien este modelo
+- Permite transformar velocidades entre observadores en movimiento relativo.
+- Analiza navegación, tráfico, deportes y sistemas de transporte.
 
-## 4- Como ampliar el modelo
-- Resolver por tramos.
-- Incorporar condiciones adicionales del sistema real.
-- Migrar a un marco teorico mas completo si hace falta.
+## Límites del modelo
+- Si hay aceleraciones no consideradas, se requiere un modelo más general.
+- Si los sistemas no son inerciales, deben incluirse fuerzas ficticias.
 
-## 5- Cierre de validez
-Saber cuando no aplicar un modelo es tan importante como saber calcular con el.
+## Señales de que debes cambiar de modelo
+- Desviaciones sistemáticas entre medida y predicción.
+- Incoherencias físicas persistentes aun con unidades y signos correctos.
+
+## Cierre didáctico
+El dominio real del subtema está en saber cuándo y cómo aplicar la suma de velocidades relativas, y cuándo migrar a un modelo más completo.

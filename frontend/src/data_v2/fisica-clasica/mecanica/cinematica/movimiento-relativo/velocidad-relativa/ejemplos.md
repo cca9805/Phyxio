@@ -1,29 +1,20 @@
-# Ejemplos - Velocidad Relativa
+# Ejemplos guiados
 
-## 1- Chequeo conceptual rapido
-- Que variable domina este resultado
-- Que signo esperas antes de calcular
-- Que comprobacion valida tu numero final
+## Ejemplo 1- Estado instantáneo
+**Enunciado:** Un barco avanza respecto al agua con $v_{barco/agua}=6\ \text{m/s}$ y el agua fluye respecto a la orilla con $v_{agua/orilla}=1.5\ \text{m/s}$. ¿Cuál es la velocidad del barco respecto a la orilla?
 
-## 2- Ejemplo resuelto
-vbarco/agua=6 m/s, vagua/orilla=1.5 m/s
+**Pasos de resolución**
+1. Aplica $v_{barco/orilla}=v_{barco/agua}+v_{agua/orilla}=7.5\ \text{m/s}$.
+2. Justifica el sentido y la suma vectorial.
+3. Verifica unidades y sentido físico.
 
-$$
-v_{A/C} = v_{A/B} + v_{B/C}
-$$
+## Ejemplo 2- Reconstrucción desde condiciones iniciales
+**Enunciado:** Un ciclista avanza a $v_{ciclista/suelo}=10\ \text{m/s}$ y el viento sopla a $v_{viento/suelo}=3\ \text{m/s}$ en sentido opuesto. ¿Cuál es la velocidad del ciclista respecto al aire?
 
-$$
-v_{A/B} = -v_{B/A}
-$$
+**Pasos de resolución**
+1. $v_{ciclista/aire}=v_{ciclista/suelo}-v_{viento/suelo}=7\ \text{m/s}$.
+2. Determina el sentido relativo.
+3. Verifica interpretación física y sentido.
 
-## 3- Variacion intermedia
-- Cambia un dato clave y repite el procedimiento.
-- Explica por que cambia (o no cambia) el resultado.
-
-## 4- Propuestos
-- Caso A: mismos modelos, distintos datos.
-- Caso B: cambio de referencia o condicion inicial.
-- Caso C: caso limite para validar dominio de validez.
-
-## 5- Criterio de correccion
-Un ejercicio esta bien cerrado cuando unidades, signos y lectura fisica son coherentes.
+## Criterio didáctico de cierre
+En todos los ejemplos, la clave es justificar hipótesis, mantener consistencia de unidades y verificar que el resultado describe de forma coherente el comportamiento relativo.

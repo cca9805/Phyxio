@@ -1,14 +1,15 @@
-# Historia y contexto - Velocidad Relativa
+# Historia
 
-## 1- Hitos utiles
-- Este subtema se consolido al pasar de descripcion verbal a modelo matematico predictivo.
-- Su formalizacion permitio estandarizar metodos de medida y verificacion.
+## Contexto histórico
+El concepto de velocidad relativa surgió para explicar cómo diferentes observadores describen el movimiento de un objeto desde marcos en movimiento relativo.
 
-## 2- Valor didactico actual
-- Ayuda a construir criterio de modelo antes de estudiar dinamica.
+## Hitos clave
+- Galileo y Newton formalizaron la relatividad clásica y la suma de velocidades.
+- La navegación y la ingeniería impulsaron el desarrollo de métodos de referencia precisos.
+- La física moderna extendió el concepto a velocidades cercanas a la luz.
 
-## 3- Conexion con temas siguientes
-- Conecta directamente con dinamica, energia y analisis experimental.
+## Relevancia histórica
+Esta idea es central en mecánica, navegación, aviación y análisis experimental.
 
-## 4- Cierre historico
-Entender su origen ayuda a entender por que sus hipotesis importan.
+## Continuidad en la física e ingeniería actuales
+Hoy sigue siendo la base para el diseño de sistemas de navegación, control y análisis de trayectorias.

@@ -1,18 +1,26 @@
-﻿# Rendimiento Y Ventaja Mecanica - Errores comunes
+﻿# Errores frecuentes
 
-## Error 1- Confundir ventaja con eficiencia
-Una maquina puede tener gran ventaja ideal y baja eficiencia real.
+## 1- Confundir ventaja mecánica con eficiencia
+Creer que una máquina con alta ventaja mecánica siempre es eficiente. La eficiencia depende de las pérdidas, no solo de la relación de fuerzas.
 
-## Error 2- Ignorar desplazamientos
-Calcular rendimiento solo con fuerzas sin revisar recorridos.
+## 2- Ignorar desplazamientos en el cálculo
+Calcular rendimiento solo con fuerzas, sin considerar los recorridos de entrada y salida.
 
-## Error 3- Aceptar eta mayor que 1
-Eso indica error de datos, unidades o planteamiento.
+## 3- Aceptar eficiencia mayor que 1
+Si \(\eta > 1\), hay error de datos, unidades o planteamiento.
 
-## Error 4- Mezclar casos ideal y real
-Usar \(VM_{ideal}\) para estimar esfuerzo real sin correccion.
+## 4- Mezclar casos ideal y real
+Usar \(VM_{ideal}\) para estimar el esfuerzo real sin corregir por eficiencia.
 
-## Error 5- No identificar origen de perdidas
-Sin diagnostico de perdidas no hay mejora de diseno.
+## 5- No identificar el origen de las pérdidas
+Sin diagnóstico de pérdidas, no se puede mejorar el diseño ni el mantenimiento.
+
+## 6- Error de unidades y parámetros
+Confundir Joule con Nm, o usar mal los signos en el balance de trabajos.
+
+## Cómo evitar estos errores de forma sistemática
+- Define variables, unidades y sentido de los desplazamientos antes de calcular.
+- Comprueba que la eficiencia esté entre 0 y 1.
+- Cierra siempre con verificación física y de coherencia de resultados.
 
 

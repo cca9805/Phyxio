@@ -1,19 +1,18 @@
-﻿# Planos Inclinados - Historia
+﻿
 
-## Idea clave
-El plano inclinado se uso desde civilizaciones antiguas como estrategia simple para mover grandes masas con menor esfuerzo puntual.
+# Historia
 
-## Hitos
-1- Ingenieria antigua:
-- uso de rampas para transporte de bloques.
+## Contexto histórico
+Los planos inclinados se usaban en la antigüedad para mover bloques en la construcción de pirámides y templos. Fueron clave en la ingeniería egipcia y romana para superar grandes diferencias de altura con menor esfuerzo.
 
-2- Mecanica clasica:
-- formalizacion del intercambio fuerza-distancia en maquinas simples.
+## Hitos clave
+- Galileo Galilei estudió el movimiento en planos inclinados, desarrollando las leyes de la dinámica y sentando las bases de la física moderna.
+- Ingeniería moderna: uso en rampas, sistemas de carga, accesibilidad urbana y análisis de fuerzas en ingeniería civil y mecánica.
 
-3- Ingenieria moderna:
-- calculo de pendientes optimas con criterios de seguridad, energia y ergonomia.
+## Relevancia histórica
+El estudio de los planos inclinados conecta historia, tecnología y ciencia aplicada, permitiendo comprender los principios de la mecánica y la optimización de sistemas.
 
-## Valor didactico actual
-Sigue siendo un caso excelente para entrenar descomposicion vectorial y validar modelos de friccion.
+## Continuidad en la física e ingeniería actuales
+Sigue siendo un caso excelente para entrenar descomposición vectorial y validar modelos de fricción, con aplicaciones en diseño y accesibilidad.
 
 

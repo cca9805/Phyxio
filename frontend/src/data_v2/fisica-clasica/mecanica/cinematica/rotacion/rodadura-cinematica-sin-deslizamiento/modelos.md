@@ -1,22 +1,25 @@
-# Modelo y validez - Rodadura Sin Deslizamiento
+# Modelos y validez
 
-## 1- Hipotesis del modelo
-- Subtema idealizado con variables del tab de formulas.
-- Condiciones iniciales y de borde explicitadas.
+## Modelo base del subtema
+Este subtema modela la rodadura sin deslizamiento, donde el punto de contacto entre rueda y superficie tiene velocidad instantánea nula respecto al suelo. Se asume un marco clásico, determinista y parámetros constantes.
 
-## 2- Cuando si aplica
-- Modelo del subtema activo en el intervalo analizado.
-- Sistema de referencia y signos definidos antes de operar.
-- Unidades SI coherentes en todos los datos.
+## Hipótesis operativas
+- El radio de la rueda es constante y conocido.
+- No hay deslizamiento: $v_{cm} = \omega R$ y $a_{cm} = \alpha R$.
+- Unidades SI y definición explícita de ejes, signos y referencia.
 
-## 3- Cuando deja de aplicar
-- Cambio de regimen no incluido por el modelo.
-- Falta de datos para cerrar ecuaciones con trazabilidad.
+## Qué explica bien este modelo
+- Relaciona desplazamiento, velocidad y aceleración del centro de masa con las magnitudes angulares.
+- Permite analizar vehículos, rodillos, poleas y sistemas de transporte.
 
-## 4- Como ampliar el modelo
-- Resolver por tramos.
-- Incorporar condiciones adicionales del sistema real.
-- Migrar a un marco teorico mas completo si hace falta.
+## Límites del modelo
+- Si hay deslizamiento, el modelo pierde validez.
+- Si el radio varía o la superficie no es rígida, se requiere un modelo más general.
+- Si existen fuerzas externas no consideradas, se debe ampliar el análisis.
 
-## 5- Cierre de validez
-Saber cuando no aplicar un modelo es tan importante como saber calcular con el.
+## Señales de que debes cambiar de modelo
+- Desviaciones sistemáticas entre medida y predicción.
+- Incoherencias físicas persistentes aun con unidades y signos correctos.
+
+## Cierre didáctico
+El dominio real del subtema está en saber cuándo y cómo aplicar la condición de rodadura sin deslizamiento, y cuándo migrar a un modelo más completo.

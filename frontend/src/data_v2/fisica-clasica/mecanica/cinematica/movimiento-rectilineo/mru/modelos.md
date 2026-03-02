@@ -1,22 +1,29 @@
-# Modelo y validez - Movimiento Rectilineo Uniforme (MRU)
 
-## 1- Hipotesis del modelo
-- Subtema idealizado con variables del tab de formulas.
-- Condiciones iniciales y de borde explicitadas.
+# Modelos y validez
 
-## 2- Cuando si aplica
-- Modelo del subtema activo en el intervalo analizado.
-- Sistema de referencia y signos definidos antes de operar.
-- Unidades SI coherentes en todos los datos.
+## Modelo base del subtema
+El Movimiento Rectilíneo Uniforme (MRU) describe el desplazamiento de un cuerpo a velocidad constante en línea recta. Se asume un sistema idealizado, sin fuerzas externas actuando, y parámetros constantes durante el intervalo de análisis.
 
-## 3- Cuando deja de aplicar
-- Cambio de regimen no incluido por el modelo.
-- Falta de datos para cerrar ecuaciones con trazabilidad.
+## Hipótesis operativas
+- El móvil se desplaza en una sola dimensión, sin aceleración.
+- La velocidad es constante en módulo, dirección y sentido.
+- El sistema de referencia está claramente definido, así como el origen temporal y espacial.
+- Todas las magnitudes se expresan en unidades SI y se explicitan los signos.
 
-## 4- Como ampliar el modelo
-- Resolver por tramos.
-- Incorporar condiciones adicionales del sistema real.
-- Migrar a un marco teorico mas completo si hace falta.
+## Qué explica bien este modelo
+- Permite predecir la posición en cualquier instante a partir de condiciones iniciales.
+- Relaciona desplazamiento, velocidad y tiempo de forma directa y verificable.
+- Es la base para el análisis de trayectorias más complejas por tramos.
 
-## 5- Cierre de validez
-Saber cuando no aplicar un modelo es tan importante como saber calcular con el.
+## Límites del modelo
+- No contempla aceleraciones, cambios de velocidad ni fuerzas externas.
+- No es válido si existen rozamientos, pendientes o fuerzas no compensadas.
+- Si los datos experimentales muestran variaciones sistemáticas, se requiere un modelo más general (MRUA, dinámica, etc.).
+
+## Señales de que debes cambiar de modelo
+- El tiempo calculado resulta negativo o físicamente imposible.
+- La posición predicha no coincide con la observada en más de un punto de control.
+- El móvil cambia de velocidad o sentido durante el intervalo analizado.
+
+## Criterio didáctico de cierre
+El dominio del MRU implica saber cuándo aplicarlo, justificar sus hipótesis y detectar rápidamente los límites de validez. Un uso correcto del modelo requiere interpretar resultados, verificar unidades y signos, y estar atento a señales que indiquen la necesidad de un marco teórico más completo.

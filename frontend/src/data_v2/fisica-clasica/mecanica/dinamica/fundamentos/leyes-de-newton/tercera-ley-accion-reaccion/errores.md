@@ -1,18 +1,25 @@
-# Errores comunes
+# Errores frecuentes
 
-1) **“Acción y reacción se cancelan”**
-Solo si miras el sistema completo A+B. En un solo cuerpo no se cancelan porque la otra fuerza está en el otro cuerpo.
+## 1- Error de identificación de pares
+No distinguir que las fuerzas de acción y reacción actúan sobre cuerpos distintos y son del mismo tipo (contacto, campo, etc.).
 
-2) **Confundir acción–reacción con fuerzas equilibradas**
-Equilibrio: fuerzas del mismo cuerpo que suman cero.
-Acción–reacción: fuerzas en cuerpos distintos.
+## 2- Error de interpretación física
+Confundir acción-reacción con fuerzas internas en el mismo cuerpo, con fuerzas ficticias o con el peso y la normal (que no son par acción-reacción entre sí).
 
-3) **Creer que una de las dos fuerzas “es mayor”**
-En el par, siempre tienen el mismo módulo. Si uno acelera más es porque su masa es distinta o porque hay otras fuerzas.
+## 3- Error de simultaneidad
+Pensar que una fuerza aparece antes que la otra; en realidad son simultáneas y de igual módulo.
 
-4) **Emparejar fuerzas incorrectas**
-Ejemplo típico: emparejar peso con normal. NO son acción–reacción.
-- Peso: Tierra → objeto
-- Reacción del peso: objeto → Tierra
-- Normal: suelo → objeto
-- Reacción de la normal: objeto → suelo
+## 4- Error de cierre de resolución
+No validar la compatibilidad física entre fuerzas y cuerpos, o no identificar correctamente los pares en sistemas complejos.
+
+## 5- Error de unidades y parámetros
+No expresar correctamente las fuerzas en unidades SI o no definir los cuerpos implicados.
+
+## 6- Error de lectura de diagramas
+No identificar correctamente los pares en diagramas de cuerpo libre o confundir fuerzas internas y externas.
+
+## Cómo evitar estos errores de forma sistemática
+- Define correctamente los cuerpos y las fuerzas antes de analizar el sistema.
+- Comprueba hipótesis del modelo antes de calcular.
+- Cierra siempre con verificación física del resultado y la identificación de los pares acción-reacción.
+- Revisa los diagramas de cuerpo libre y asegúrate de no mezclar fuerzas internas y externas.

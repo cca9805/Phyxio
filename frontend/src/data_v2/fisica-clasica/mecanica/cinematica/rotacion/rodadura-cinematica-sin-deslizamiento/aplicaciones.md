@@ -1,22 +1,18 @@
-# Aplicaciones - Rodadura Sin Deslizamiento
+# Aplicaciones
 
-## 1- Donde aparece este subtema
-- Vehiculos y bicicletas.
-- Control de adherencia.
+## Aplicaciones científicas y tecnológicas
+- Vehículos, bicicletas, rodillos y sistemas de transporte.
+- Control de adherencia y diseño de neumáticos.
+- Análisis de eficiencia y seguridad en movimiento sobre ruedas.
 
-## 2- Que decision tecnica permite tomar
-- Estimar magnitudes con trazabilidad.
-- Validar limites operativos del sistema.
-- Detectar inconsistencias de datos experimentales.
+## Qué se calcula en estas aplicaciones
+- Velocidad y aceleración del centro de masa a partir de magnitudes angulares.
+- Validación de límites operativos y coherencia experimental.
 
-## 3- Datos minimos para aplicarlo
-- Marco de referencia definido.
-- Variables iniciales y condiciones de borde.
-- Unidades SI consistentes.
+## Decisiones de diseño y operación basadas en este subtema
+- Seleccionar radios y materiales adecuados para evitar deslizamiento.
+- Comprobar coherencia entre signo de aceleración y sentido de giro.
+- Detectar inconsistencias en datos experimentales.
 
-## 4- Limites practicos
-- Si cambian condiciones, usar modelo por tramos.
-- Si hay efectos no modelados, cambiar de marco teorico.
-
-## 5- Cierre aplicado
-Este subtema es una herramienta operativa para predecir y verificar comportamiento real.
+## Lectura didáctica
+El objetivo no es solo obtener un número: es decidir si el modelo elegido describe bien el sistema físico y permite tomar decisiones técnicas con criterio.

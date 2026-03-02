@@ -1,22 +1,18 @@
-# Aplicaciones - Tiro Horizontal
+# Aplicaciones
 
-## 1- Donde aparece este subtema
-- Balistica basica sin arrastre.
-- Simulacion de trayectorias.
+## Aplicaciones científicas y tecnológicas
+- Balística básica, simulación de trayectorias, robótica educativa.
+- Análisis de alcance y tiempo de vuelo en laboratorios.
+- Validación de modelos en física experimental.
 
-## 2- Que decision tecnica permite tomar
-- Estimar magnitudes con trazabilidad.
-- Validar limites operativos del sistema.
-- Detectar inconsistencias de datos experimentales.
+## Qué se calcula en estas aplicaciones
+- Alcance, tiempo de vuelo y posición en cualquier instante.
+- Validación de límites operativos y coherencia experimental.
 
-## 3- Datos minimos para aplicarlo
-- Marco de referencia definido.
-- Variables iniciales y condiciones de borde.
-- Unidades SI consistentes.
+## Decisiones de diseño y operación basadas en este subtema
+- Definir correctamente el sistema de referencia para evitar errores de interpretación.
+- Comprobar coherencia entre magnitudes medidas y transformadas.
+- Detectar inconsistencias en datos experimentales.
 
-## 4- Limites practicos
-- Si cambian condiciones, usar modelo por tramos.
-- Si hay efectos no modelados, cambiar de marco teorico.
-
-## 5- Cierre aplicado
-Este subtema es una herramienta operativa para predecir y verificar comportamiento real.
+## Lectura didáctica
+El objetivo no es solo obtener un número: es decidir si el modelo elegido describe bien el sistema físico y permite tomar decisiones técnicas con criterio.

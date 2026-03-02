@@ -1,23 +1,26 @@
-﻿# Poleas - Errores comunes
+﻿
 
-## Error 1- Contar mal tramos efectivos
-No todos los segmentos visibles sostienen la carga. Se cuentan solo los que tiran directamente del bloque movil.
+# Errores frecuentes
 
-## Error 2- Ignorar rendimiento
-Usar \(P=R/n\) en sistema real con friccion importante.
+## 1- Error de identificación de tramos
+Calcular la fuerza sin identificar correctamente el número de segmentos activos en el polipasto. Solución: verificar con el gráfico Coord.
 
-## Error 3- Confundir polea fija con movil
-La fija cambia direccion, la movil cambia fuerza efectiva.
+## 2- Error de interpretación física
+Suponer que el sistema es ideal y no considerar la fricción en el eje o la cuerda, lo que lleva a subestimar el esfuerzo real.
 
-## Error 4- Mezclar tension y fuerza aplicada
-En algunos montajes coinciden; en otros no.
+## 3- Error de unidades y parámetros
+Omitir la masa de la polea o la cuerda en sistemas donde sí afecta el cálculo, especialmente en poleas grandes o cuerdas largas.
 
-## Error 5- Olvidar compromiso fuerza-recorrido
-Reducir fuerza siempre implica aumentar recorrido de cuerda.
+## 4- Error de dominio de validez
+No considerar la pérdida de eficiencia por estiramiento o desgaste de la cuerda, o aplicar la fuerza en ángulo sin descomposición adecuada.
 
-## Control final
-- \(n\) verificado en diagrama.
-- \(\eta\) justificado o explicado como ideal.
-- Resultado compatible con experiencia fisica.
+## 5- Error de cierre de resolución
+Contar mal el número de tramos, lo que lleva a un cálculo incorrecto y posible fallo del sistema.
+
+## Cómo evitar estos errores de forma sistemática
+- Verifica el montaje con el gráfico Coord y cuenta los tramos activos.
+- Incluye la fricción y la masa cuando sean relevantes.
+- Considera la deformación y el ángulo de aplicación de la fuerza.
+- Usa siempre unidades consistentes y revisa la eficiencia real.
 
 

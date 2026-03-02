@@ -1,29 +1,20 @@
-# Ejemplos - Rodadura Sin Deslizamiento
+# Ejemplos guiados
 
-## 1- Chequeo conceptual rapido
-- Que variable domina este resultado
-- Que signo esperas antes de calcular
-- Que comprobacion valida tu numero final
+## Ejemplo 1- Estado instantáneo
+**Enunciado:** Una rueda de radio $R=0.35\ \text{m}$ gira con $\omega=12\ \text{rad/s}$. Calcula $v_{cm}$ y el desplazamiento tras $\theta=2\ \text{rad}$.
 
-## 2- Ejemplo resuelto
-R=0.35 m, omega=12 rad/s
+**Pasos de resolución**
+1. $v_{cm}=\omega R=4.2\ \text{m/s}$.
+2. $x=R\theta=0.70\ \text{m}$.
+3. Verifica que el punto de contacto tiene velocidad nula respecto al suelo.
 
-$$
-x = R\,\theta
-$$
+## Ejemplo 2- Reconstrucción desde condiciones iniciales
+**Enunciado:** Un cilindro parte del reposo y alcanza $\omega=10\ \text{rad/s}$ en $t=5\ \text{s}$, con $R=0.20\ \text{m}$. ¿Cuál es la aceleración del centro de masa y el desplazamiento?
 
-$$
-v_{cm} = \omega\,R
-$$
+**Pasos de resolución**
+1. $\alpha=\Delta\omega/\Delta t=2\ \text{rad/s}^2$.
+2. $a_{cm}=\alpha R=0.4\ \text{m/s}^2$.
+3. $\theta=\frac{1}{2}\alpha t^2=25\ \text{rad}$, $x=R\theta=5.0\ \text{m}$.
 
-## 3- Variacion intermedia
-- Cambia un dato clave y repite el procedimiento.
-- Explica por que cambia (o no cambia) el resultado.
-
-## 4- Propuestos
-- Caso A: mismos modelos, distintos datos.
-- Caso B: cambio de referencia o condicion inicial.
-- Caso C: caso limite para validar dominio de validez.
-
-## 5- Criterio de correccion
-Un ejercicio esta bien cerrado cuando unidades, signos y lectura fisica son coherentes.
+## Criterio didáctico de cierre
+En todos los ejemplos, la clave es justificar hipótesis, mantener consistencia de unidades y verificar que el resultado describe de forma coherente el comportamiento de rodadura.

@@ -1,3 +1,21 @@
+# Aplicaciones
+
+## Aplicaciones científicas y tecnológicas
+- Diseño de transmisiones y mecanismos rotatorios.
+- Análisis de la periferia de discos, ruedas y poleas.
+- Control de velocidad y aceleración en robots y maquinaria.
+
+## Qué se calcula en estas aplicaciones
+- Desplazamiento, velocidad y aceleración tangencial a partir de magnitudes angulares.
+- Validación de límites operativos y coherencia experimental.
+
+## Decisiones de diseño y operación basadas en este subtema
+- Seleccionar radios y materiales adecuados para evitar fallas.
+- Comprobar coherencia entre signo de aceleración y sentido de giro.
+- Detectar inconsistencias en datos experimentales.
+
+## Lectura didáctica
+El objetivo no es solo obtener un número: es decidir si el modelo elegido describe bien el sistema físico y permite tomar decisiones técnicas con criterio.
 # Aplicaciones - Relacion Lineal-Angular
 
 ## 1- Donde aparece este subtema

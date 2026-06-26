@@ -8,7 +8,7 @@ const profile = {
     es: "¿Cómo afecta la gravedad y la profundidad a la propagación de ondas en la superficie del agua?",
     en: "How do gravity and depth affect wave propagation on the water surface?",
   },
-  magnitud_estrella: "c",
+  magnitud_estrella: "rapidez_de_propagacion_de_ondas_superficiales",
   meta: {
     title: {
       es: "Ondas Superficiales",

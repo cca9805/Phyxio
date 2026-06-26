@@ -1,0 +1,80 @@
+const e=`version: 5
+id: flotacion
+nombre:
+  es: Flotacion
+  en: Flotation
+titulo:
+  es: flotación
+  en: flotation
+type: leaf
+area: fisica-clasica
+bloque: mecanica
+subbloque: fluidos
+orden: 218253
+parent_id: aplicaciones
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+icon: 💧
+ruta_relativa: fisica-clasica/mecanica/fluidos/estatica-de-fluidos/aplicaciones/flotacion
+descripcion: Equilibrio estático de cuerpos sumergidos en fluidos.
+description_en: Static equilibrium of submerged bodies in fluids.
+descripcion_corta:
+  es: Equilibrio de cuerpos flotantes.
+  en: Equilibrium of floating bodies.
+dificultad: 2
+tiempo_estimado_min: 55
+prerequisitos:
+  - fisica-clasica/mecanica/fluidos/estatica-de-fluidos/principio-de-arquimedes
+tags:
+  es: [fluidos, aplicaciones, flotacion, equilibrio, arquimedes, densidad]
+  en: [fluids, applications, flotation, equilibrium, archimedes, density]
+physical_role:
+  es: concepto físico
+  en: physical concept
+pregunta_fisica_central:
+  es: ¿Cómo determina la densidad relativa la fracción sumergida de un cuerpo en equilibrio?
+  en: How does relative density determine the submerged fraction of a body in equilibrium?
+representacion_dominante: Coord
+magnitud_dominante: frac_sum
+graficos:
+  - Coord
+  - Svg
+  - Dcl
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    tab_label:
+      es: Ver Interpretación
+      en: View Interpretation
+    show_summary: true
+    show_physical_reading: true
+    show_coherence: true
+    show_model_validity: true
+    show_graph_reading: true
+    show_likely_errors: true
+    show_next_step: true
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+  mini_graph:
+    enabled: true
+    preferred_type: Svg
+  output_policy:
+    max_inline_messages: 3
+    priority_order: [summary, physical_reading, coherence, likely_errors]
+    show_summary_first: true
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_magnitudes: true
+    requires_formulas: true
+    supports_graph_binding: true
+`;export{e as default};

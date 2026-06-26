@@ -1,0 +1,198 @@
+const e=`version: 5
+magnitudes:
+  - id: D_f
+    symbol: D_f
+    nombre:
+      es: Fuerza de Arrastre
+      en: Drag Force
+    descripcion:
+      es: Fuerza aerodinámica opuesta al movimiento relativo del cuerpo a través del fluido.
+      en: Aerodynamic force opposite to the relative motion of the body through the fluid.
+    unidad_si: N
+    dimension: M L T^-2
+    is_vector: true
+    components: [-1, 0, 0]
+    category: fuerza
+    physical_role: variable-dependiente
+    used_in: [arrastre]
+    common_mistake:
+      es: Confundir con la fricción pura; el arrastre incluye también efectos de presión.
+      en: Confusing it with pure friction; drag also includes pressure effects.
+    typical_range: [0, 10^6]
+    sign_behavior: siempre-opuesta
+    zero_behavior: reposo-o-vacio
+    value_nature: extensiva
+    interpretation_role: indicador-estado
+    graph_binding: dcl-aero.drag
+    pedagogical_notes:
+      es: Es la resistencia que el aire ofrece al avance de un vehículo.
+      en: It is the resistance that air offers to the progress of a vehicle.
+
+  - id: L_f
+    symbol: L_f
+    nombre:
+      es: Fuerza de Sustentación
+      en: Lift Force
+    descripcion:
+      es: Componente de la fuerza aerodinámica perpendicular a la dirección del flujo incidente.
+      en: Component of the aerodynamic force perpendicular to the direction of the incident flow.
+    unidad_si: N
+    dimension: M L T^-2
+    is_vector: true
+    components: [0, 1, 0]
+    category: fuerza
+    physical_role: variable-dependiente
+    used_in: [lift_aero]
+    common_mistake:
+      es: Creer que solo depende de la forma superior del ala (efecto Bernoulli parcial).
+      en: Believing it only depends on the upper wing shape (partial Bernoulli effect).
+    typical_range: [0, 10^7]
+    sign_behavior: perpendicular-al-flujo
+    zero_behavior: flujo-simetrico-o-reposo
+    value_nature: extensiva
+    interpretation_role: indicador-estado
+    graph_binding: dcl-aero.lift
+    pedagogical_notes:
+      es: Es la fuerza que permite a los aviones mantenerse en el aire.
+      en: It is the force that allows planes to stay in the air.
+
+  - id: rho
+    symbol: \\rho
+    nombre:
+      es: Densidad del Aire
+      en: Air Density
+    descripcion:
+      es: Masa por unidad de volumen del fluido ambiente.
+      en: Mass per unit volume of the ambient fluid.
+    unidad_si: kg/m^3
+    dimension: M L^-3
+    is_vector: false
+    components: null
+    category: propiedad-fluido
+    physical_role: condicion-entorno
+    used_in: [arrastre, lift_aero]
+    common_mistake:
+      es: Considerarla constante a grandes altitudes.
+      en: Considering it constant at high altitudes.
+    typical_range: [0.1, 1.3]
+    sign_behavior: siempre-positivo
+    zero_behavior: vacio
+    value_nature: intensiva
+    interpretation_role: condicion-entorno
+    graph_binding: null
+    pedagogical_notes:
+      es: Disminuye con la altitud, reduciendo el rendimiento aerodinámico.
+      en: It decreases with altitude, reducing aerodynamic performance.
+
+  - id: v
+    symbol: v_\\infty
+    nombre:
+      es: Velocidad de Flujo
+      en: Flow Velocity
+    descripcion:
+      es: Velocidad relativa entre el fluido imperturbado y el cuerpo sólido.
+      en: Relative velocity between the undisturbed fluid and the solid body.
+    unidad_si: m/s
+    dimension: L T^-1
+    is_vector: true
+    components: [1, 0, 0]
+    category: cinematica
+    physical_role: parametro-sistema
+    used_in: [arrastre, lift_aero]
+    common_mistake:
+      es: Olvidar que la fuerza crece con el cuadrado de esta velocidad.
+      en: Forgetting that force grows with the square of this velocity.
+    typical_range: [0, 1000]
+    sign_behavior: direccion-incidencia
+    zero_behavior: reposo
+    value_nature: intensiva
+    interpretation_role: control-entrada
+    graph_binding: svg-aero.v
+    pedagogical_notes:
+      es: Es la variable más sensible en las ecuaciones de fuerza aerodinámica.
+      en: It is the most sensitive variable in aerodynamic force equations.
+
+  - id: A
+    symbol: A
+    nombre:
+      es: Área Característica
+      en: Characteristic Area
+    descripcion:
+      es: Área proyectada o de referencia del cuerpo según el tipo de coeficiente usado.
+      en: Projected or reference area of the body according to the type of coefficient used.
+    unidad_si: m^2
+    dimension: L^2
+    is_vector: false
+    components: null
+    category: geometrica
+    physical_role: parametro-sistema
+    used_in: [arrastre, lift_aero]
+    common_mistake:
+      es: Usar el área total superficial en lugar del área proyectada frontal para el arrastre.
+      en: Using the total surface area instead of the frontal projected area for drag.
+    typical_range: [0.01, 500]
+    sign_behavior: siempre-positivo
+    zero_behavior: punto-material
+    value_nature: extensiva
+    interpretation_role: diseño-geometria
+    graph_binding: null
+    pedagogical_notes:
+      es: En aviones, se suele usar el área del ala (superficie alar).
+      en: In planes, the wing area (wing surface) is usually used.
+
+  - id: C_D
+    symbol: C_D
+    nombre:
+      es: Coeficiente de Arrastre
+      en: Drag Coefficient
+    descripcion:
+      es: Parámetro adimensional que cuantifica la resistencia aerodinámica de una forma.
+      en: Dimensionless parameter that quantifies the aerodynamic resistance of a shape.
+    unidad_si: "1"
+    dimension: "1"
+    is_vector: false
+    components: null
+    category: coeficiente
+    physical_role: parametro-sistema
+    used_in: [arrastre]
+    common_mistake:
+      es: Suponer que es constante para cualquier número de Reynolds.
+      en: Assuming it is constant for any Reynolds number.
+    typical_range: [0.04, 1.2]
+    sign_behavior: siempre-positivo
+    zero_behavior: forma-perfecta-teorica
+    value_nature: intensiva
+    interpretation_role: eficiencia-diseño
+    graph_binding: null
+    pedagogical_notes:
+      es: Depende de la forma del cuerpo y de la rugosidad de su superficie.
+      en: It depends on the body's shape and surface roughness.
+
+  - id: C_L
+    symbol: C_L
+    nombre:
+      es: Coeficiente de Sustentación
+      en: Lift Coefficient
+    descripcion:
+      es: Parámetro adimensional que cuantifica la capacidad de generar sustentación.
+      en: Dimensionless parameter that quantifies the ability to generate lift.
+    unidad_si: "1"
+    dimension: "1"
+    is_vector: false
+    components: null
+    category: coeficiente
+    physical_role: parametro-sistema
+    used_in: [lift_aero]
+    common_mistake:
+      es: Creer que no tiene un límite máximo (entrada en pérdida).
+      en: Believing it doesn't have a maximum limit (stall).
+    typical_range: [0, 2.5]
+    sign_behavior: depende-del-angulo
+    zero_behavior: simetria-a-zero-alfa
+    value_nature: intensiva
+    interpretation_role: eficiencia-diseño
+    graph_binding: null
+    pedagogical_notes:
+      es: Varía principalmente con el ángulo de ataque del perfil.
+      en: It varies mainly with the airfoil's angle of attack.
+`;export{e as default};

@@ -1,0 +1,155 @@
+const e=`ui:
+  default_formula: angulo_primer_minimo
+
+formulas:
+
+  - id: angulo_primer_minimo
+    title:
+      es: "Ángulo del primer mínimo de difracción"
+      en: "Angle of the first diffraction minimum"
+    equation: "theta = lambda / a"
+    latex: "\\\\theta = \\\\frac{\\\\lambda}{a}"
+    rearrangements:
+      - target: a
+        equation: "a = lambda / theta"
+        latex: "a = \\\\frac{\\\\lambda}{\\\\theta}"
+      - target: lambda
+        equation: "lambda = a * theta"
+        latex: "\\\\lambda = a \\\\theta"
+    category: fundamental
+    relation_type: physical_law
+    physical_meaning:
+      es: >
+        "El ángulo del primer mínimo de difracción determina la dispersión angular inicial del haz de luz al cruzar la rendija. En este ángulo, la interferencia destructiva de todas las ondas individuales a lo largo del ancho de la rendija anula por completo la intensidad."
+      en: >
+        "The angle of the first diffraction minimum determines the initial angular spread of the light beam after passing through the slit. At this angle, the destructive interference of all individual waves across the slit width completely cancels out the intensity."
+    constraints:
+      - "Rendija única rectangular infinitamente larga en una de sus dimensiones"
+      - "Incidencia normal de luz monocromática coherente (onda plana)"
+      - "Aproximación de difracción de Fraunhofer (pantalla lejana)"
+      - "Aproximación de ángulos pequeños (theta << 1 rad)"
+    validity:
+      es: "Válida en la aproximación paraxial de Fraunhofer donde el ancho de la rendija 'a' es mucho mayor que la longitud de onda 'lambda' y los ángulos son pequeños."
+      en: "Valid in the paraxial Fraunhofer approximation where the slit width 'a' is much larger than the wavelength 'lambda' and angles are small."
+    dimension_check: "[rad] = [m] / [m] (adimensional) ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "análisis de resolución angular en sistemas ópticos"
+      - "medición indirecta de espesores microscópicos"
+    interpretation_tags:
+      - "dispersión angular"
+      - "interferencia destructiva"
+      - "aproximación paraxial"
+    result_semantics:
+      target: theta
+      kind: output_quantity
+      sign_meaning:
+        es: "El signo indica la dirección espacial del mínimo: positivo a un lado del eje de incidencia y negativo al otro lado."
+        en: "The sign indicates the spatial direction of the minimum: positive on one side of the incidence axis and negative on the other side."
+      absolute_value_meaning:
+        es: "Representa la desviación angular del primer punto de total oscuridad. Un valor mayor de theta implica un patrón de difracción más extendido lateralmente."
+        en: "Represents the angular deviation of the first point of total darkness. A larger value of theta implies a more laterally spread diffraction pattern."
+    domain_checks:
+      - condition: "a > 0"
+        message:
+          es: "El ancho de la rendija debe ser estrictamente positivo. Una rendija de ancho cero bloquearía toda la luz."
+          en: "The slit width must be strictly positive. A slit of zero width would block all light."
+      - condition: "lambda > 0"
+        message:
+          es: "La longitud de onda debe ser estrictamente positiva. Una longitud de onda nula es físicamente imposible."
+          en: "The wavelength must be strictly positive. A zero wavelength is physically impossible."
+    coherence_checks:
+      - condition: "lambda < a"
+        message:
+          es: "Para observar difracción de Fraunhofer con mínimos bien definidos, la longitud de onda debe ser menor que el ancho de la rendija."
+          en: "To observe Fraunhofer diffraction with well-defined minima, the wavelength must be smaller than the slit width."
+      - condition: "abs(theta) < 0.1"
+        message:
+          es: "El ángulo obtenido es grande (mayor a 0.1 rad). La aproximación paraxial de ángulos pequeños pierde precisión."
+          en: "The obtained angle is large (greater than 0.1 rad). The paraxial small-angle approximation loses precision."
+    graph_implications:
+      - "El ángulo theta es inversamente proporcional al ancho de la rendija 'a', dibujando una curva hiperbólica decreciente."
+      - "El ángulo theta es directamente proporcional a la longitud de onda 'lambda', dibujando una recta creciente."
+    pedagogical_triggers:
+      - trigger: "lambda >= a"
+        message:
+          es: "Cuando la longitud de onda es comparable o mayor que la rendija, el patrón se dispersa casi a 180 grados, dificultando la observación de mínimos de difracción definidos."
+          en: "When the wavelength is comparable to or larger than the slit, the pattern spreads nearly 180 degrees, making it difficult to observe defined diffraction minima."
+
+  - id: ancho_maximo_central
+    title:
+      es: "Ancho del máximo central en la pantalla"
+      en: "Width of the central maximum on the screen"
+    equation: "w = 2 * lambda * L / a"
+    latex: "w = \\\\frac{2 \\\\lambda L}{a}"
+    rearrangements:
+      - target: a
+        equation: "a = 2 * lambda * L / w"
+        latex: "a = \\\\frac{2 \\\\lambda L}{w}"
+      - target: lambda
+        equation: "lambda = a * w / (2 * L)"
+        latex: "\\\\lambda = \\\\frac{a w}{2 L}"
+      - target: L
+        equation: "L = a * w / (2 * lambda)"
+        latex: "L = \\\\frac{a w}{2 \\\\lambda}"
+    category: derived
+    relation_type: physical_law
+    physical_meaning:
+      es: >
+        "Determina el tamaño lineal total del pico central brillante de luz proyectado en la pantalla de observación. Une la apertura angular del primer mínimo con la amplificación de distancia geométrica L."
+      en: >
+        "Determines the total linear size of the bright central peak of light projected on the observation screen. It joins the angular aperture of the first minimum with the geometric distance amplification L."
+    constraints:
+      - "Aproximación paraxial de ángulos pequeños (tan(theta) ≈ sin(theta) ≈ theta)"
+      - "Pantalla plana perpendicular al haz incidente"
+      - "Rendija uniforme rectangular simple"
+    validity:
+      es: "Válida en la zona de Fraunhofer paraxial donde el ángulo del primer mínimo es inferior a 0.1 radianes, asegurando que la distancia a la pantalla L es mucho mayor que el ancho de la rendija a."
+      en: "Valid in the paraxial Fraunhofer region where the angle of the first minimum is below 0.1 radians, ensuring that the distance to the screen L is much larger than the slit width a."
+    dimension_check: "[m] = [m] * [m] / [m] = [m] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "diseño y calibración de laboratorios de óptica de rendija simple"
+      - "determinación experimental del tamaño de partículas y rendijas"
+    interpretation_tags:
+      - "ancho lineal"
+      - "máximo de intensidad"
+      - "geometría de proyección"
+    result_semantics:
+      target: w
+      kind: output_quantity
+      sign_meaning:
+        es: "El ancho w es una dimensión física lineal simétrica y es siempre estrictamente positivo."
+        en: "The width w is a symmetric linear physical dimension and is always strictly positive."
+      absolute_value_meaning:
+        es: "Indica el tamaño del área central más brillante del patrón. A mayor ancho w, la luz se dispersa más sobre la pantalla."
+        en: "Indicates the size of the brightest central area of the pattern. The larger the width w, the more the light is spread on the screen."
+    domain_checks:
+      - condition: "a > 0"
+        message:
+          es: "El ancho de la rendija 'a' debe ser positivo para que cruce la luz."
+          en: "The slit width 'a' must be positive for light to pass."
+      - condition: "L > 0"
+        message:
+          es: "La distancia a la pantalla L debe ser positiva. No se puede medir un ancho sobre una pantalla en contacto con la rendija."
+          en: "The distance to the screen L must be positive. One cannot measure a width on a screen in contact with the slit."
+      - condition: "lambda > 0"
+        message:
+          es: "La longitud de onda lambda debe ser positiva."
+          en: "The wavelength lambda must be positive."
+    coherence_checks:
+      - condition: "w < L"
+        message:
+          es: "El ancho w es comparable o mayor que la distancia a la pantalla L. Esto viola la aproximación paraxial y resta validez a la expresión."
+          en: "The width w is comparable to or larger than the distance to the screen L. This violates the paraxial approximation and invalidates the expression."
+    graph_implications:
+      - "El ancho w crece de forma lineal con la distancia L y la longitud de onda lambda."
+      - "El ancho w decrece de forma hiperbólica conforme el ancho de la rendija 'a' se incrementa."
+    pedagogical_triggers:
+      - trigger: "w > 0.1"
+        message:
+          es: "Un máximo central de más de 10 centímetros de ancho indica una difracción muy dispersa, típica de rendijas extremadamente estrechas."
+          en: "A central maximum wider than 10 centimeters indicates highly dispersed diffraction, typical of extremely narrow slits."
+`;export{e as default};

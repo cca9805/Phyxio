@@ -1,0 +1,416 @@
+const e=`version: 2
+id: interpretacion-sistemas-con-ligaduras-y-dirac
+leaf_id: sistemas-con-ligaduras-y-dirac
+nombre:
+  es: Interpretacion de Sistemas con ligaduras y Dirac
+  en: Interpretation of Constrained Systems and Dirac Brackets
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: mecanica-analitica
+  parent_id: hamiltoniano
+  ruta_relativa: fisica-clasica/mecanica/mecanica-analitica/hamiltoniano/sistemas-con-ligaduras-y-dirac
+dependencies:
+  formulas:
+  - hamiltoniano_total_dirac
+  - matriz_ligaduras_dirac
+  - corchete_dirac
+  - evolucion_con_ligaduras
+  magnitudes:
+  - HT
+  - Hc
+  - phi_a
+  - lambda_a
+  - Cab
+  - Fobs
+  - DB
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  HT:
+    summary_rules:
+    - id: HT_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[HT]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[HT]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: HT_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[HT]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[HT]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: HT_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[HT]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[HT]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: HT_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el formalismo de dirac organiza ligaduras hamiltonianas en el espacio de fases y modifica los corchetes cuando las restricciones deben preservarse; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while dirac formalism organizes hamiltonian constraints in phase space and modifies brackets when restrictions must be preserved; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: HT_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[HT]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[HT]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: HT_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[HT]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[HT]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: HT_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[HT]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[HT]] with a limiting case and state what observable change it would produce.
+  Hc:
+    summary_rules:
+    - id: Hc_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[Hc]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[Hc]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: Hc_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[Hc]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[Hc]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: Hc_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[Hc]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[Hc]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: Hc_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el formalismo de dirac organiza ligaduras hamiltonianas en el espacio de fases y modifica los corchetes cuando las restricciones deben preservarse; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while dirac formalism organizes hamiltonian constraints in phase space and modifies brackets when restrictions must be preserved; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: Hc_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[Hc]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[Hc]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: Hc_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[Hc]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[Hc]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: Hc_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[Hc]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[Hc]] with a limiting case and state what observable change it would produce.
+  phi_a:
+    summary_rules:
+    - id: phi_a_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[phi_a]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[phi_a]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: phi_a_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[phi_a]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[phi_a]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: phi_a_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[phi_a]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[phi_a]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: phi_a_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el formalismo de dirac organiza ligaduras hamiltonianas en el espacio de fases y modifica los corchetes cuando las restricciones deben preservarse; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while dirac formalism organizes hamiltonian constraints in phase space and modifies brackets when restrictions must be preserved; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: phi_a_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[phi_a]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[phi_a]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: phi_a_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[phi_a]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[phi_a]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: phi_a_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[phi_a]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[phi_a]] with a limiting case and state what observable change it would produce.
+  lambda_a:
+    summary_rules:
+    - id: lambda_a_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[lambda_a]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[lambda_a]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: lambda_a_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[lambda_a]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[lambda_a]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: lambda_a_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[lambda_a]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[lambda_a]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: lambda_a_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el formalismo de dirac organiza ligaduras hamiltonianas en el espacio de fases y modifica los corchetes cuando las restricciones deben preservarse; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while dirac formalism organizes hamiltonian constraints in phase space and modifies brackets when restrictions must be preserved; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: lambda_a_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[lambda_a]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[lambda_a]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: lambda_a_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[lambda_a]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[lambda_a]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: lambda_a_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[lambda_a]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[lambda_a]] with a limiting case and state what observable change it would produce.
+  Cab:
+    summary_rules:
+    - id: Cab_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[Cab]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[Cab]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: Cab_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[Cab]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[Cab]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: Cab_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[Cab]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[Cab]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: Cab_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el formalismo de dirac organiza ligaduras hamiltonianas en el espacio de fases y modifica los corchetes cuando las restricciones deben preservarse; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while dirac formalism organizes hamiltonian constraints in phase space and modifies brackets when restrictions must be preserved; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: Cab_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[Cab]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[Cab]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: Cab_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[Cab]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[Cab]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: Cab_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[Cab]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[Cab]] with a limiting case and state what observable change it would produce.
+  Fobs:
+    summary_rules:
+    - id: Fobs_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[Fobs]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[Fobs]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: Fobs_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[Fobs]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[Fobs]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: Fobs_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[Fobs]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[Fobs]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: Fobs_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el formalismo de dirac organiza ligaduras hamiltonianas en el espacio de fases y modifica los corchetes cuando las restricciones deben preservarse; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while dirac formalism organizes hamiltonian constraints in phase space and modifies brackets when restrictions must be preserved; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: Fobs_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[Fobs]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[Fobs]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: Fobs_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[Fobs]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[Fobs]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: Fobs_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[Fobs]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[Fobs]] with a limiting case and state what observable change it would produce.
+  DB:
+    summary_rules:
+    - id: DB_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[DB]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[DB]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: DB_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[DB]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[DB]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: DB_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DB]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[DB]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: DB_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el formalismo de dirac organiza ligaduras hamiltonianas en el espacio de fases y modifica los corchetes cuando las restricciones deben preservarse; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while dirac formalism organizes hamiltonian constraints in phase space and modifies brackets when restrictions must be preserved; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: DB_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[DB]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[DB]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: DB_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[DB]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[DB]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: DB_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[DB]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[DB]] with a limiting case and state what observable change it would produce.
+`;export{e as default};

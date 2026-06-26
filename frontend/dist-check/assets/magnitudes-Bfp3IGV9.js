@@ -1,0 +1,149 @@
+const e=`version: 5
+magnitudes:
+- id: L
+  symbol: L
+  nombre: { es: Longitud, en: Length }
+  si_unit: m
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: geometria
+  physical_role: brazo_de_palanca
+  used_in: [ omega, Tper, tau ]
+  common_mistake: Usar la longitud total del soporte en lugar de la distancia pivote-centro de masa.
+  typical_range: [ 0.05, 10 ]
+  sign_behavior: positiva_por_definicion
+  zero_behavior: modelo_sin_pendulo
+  value_nature: parametro
+  interpretation_role: control_geom_trayectoria
+  graph_binding: A mayor [[L]], menor [[omega]] y mayor [[Tper]].
+  descripcion: { es: Distancia efectiva entre pivote y masa oscilante., en: Effective distance between pivot and oscillating mass. }
+  pedagogical_notes: { es: "Duplicar [[L]] ralentiza el pendulo de forma no lineal en el regimen pequeno angular.", en: "Doubling [[L]] slows the pendulum in a nonlinear way in the small-angle regime." }
+
+- id: g
+  symbol: g
+  nombre: { es: Gravedad, en: Gravity }
+  si_unit: m/s^2
+  unidad_si: m/s^2
+  dimension: L/T^2
+  is_vector: false
+  components: []
+  category: campo
+  physical_role: aceleracion_restauradora
+  used_in: [ omega, Tper, tau ]
+  common_mistake: Tratar [[g]] como constante universal sin contexto local.
+  typical_range: [ 1.5, 25 ]
+  sign_behavior: positiva_por_convencion
+  zero_behavior: ausencia_de_retorno_gravitatorio
+  value_nature: parametro_entorno
+  interpretation_role: intensidad_campo
+  graph_binding: A mayor [[g]], mayor [[omega]] y menor [[Tper]].
+  descripcion: { es: Intensidad local del campo gravitatorio., en: Local intensity of the gravitational field. }
+  pedagogical_notes: { es: "Cambiar planeta cambia ritmo aunque la geometria del pendulo sea la misma.", en: "Changing planet changes rhythm even with the same pendulum geometry." }
+
+- id: theta
+  symbol: \\theta
+  nombre: { es: Angulo, en: Angle }
+  si_unit: rad
+  unidad_si: rad
+  dimension: 1
+  is_vector: false
+  components: []
+  category: estado
+  physical_role: desviacion_angular
+  used_in: [ tau ]
+  common_mistake: Introducir grados sin conversion a radianes en calculos diferenciales.
+  typical_range: [ -0.6, 0.6 ]
+  sign_behavior: cambia_signo_segundo_lado
+  zero_behavior: equilibrio_vertical
+  value_nature: variable_estado
+  interpretation_role: posicion_instantanea
+  graph_binding: El signo de [[theta]] determina el signo de [[tau]].
+  descripcion: { es: Desviacion angular respecto a la vertical estable., en: Angular deviation from stable vertical direction. }
+  pedagogical_notes: { es: "Para angulos pequenos, el retorno es casi lineal con [[theta]].", en: "For small angles, restoring action is nearly linear in [[theta]]." }
+
+- id: m
+  symbol: m
+  nombre: { es: Masa, en: Mass }
+  si_unit: kg
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: []
+  category: sistema
+  physical_role: inercia
+  used_in: [ tau ]
+  common_mistake: Creer que [[m]] cambia [[omega]] en el pendulo simple ideal.
+  typical_range: [ 0.001, 1000 ]
+  sign_behavior: positiva_por_definicion
+  zero_behavior: modelo_sin_carga
+  value_nature: parametro
+  interpretation_role: escala_dinamica_torque
+  graph_binding: "[[m]] no cambia [[omega]] ideal pero si escala [[tau]]."
+  descripcion: { es: Masa concentrada en el extremo del pendulo., en: Mass concentrated at the pendulum end. }
+  pedagogical_notes: { es: Su rol principal aqui es escalar el torque gravitatorio instantaneo., en: Its main role here is scaling instantaneous gravitational torque. }
+
+- id: omega
+  symbol: \\omega
+  nombre: { es: Frecuencia angular, en: Angular Frequency }
+  si_unit: rad/s
+  unidad_si: rad/s
+  dimension: 1/T
+  is_vector: false
+  components: []
+  category: tiempo
+  physical_role: ritmo_natural
+  used_in: [ omega, Tper ]
+  common_mistake: Confundir [[omega]] con frecuencia en hertz.
+  typical_range: [ 0.1, 20 ]
+  sign_behavior: positiva_por_convencion
+  zero_behavior: oscilacion_lenta_limite
+  value_nature: resultado
+  interpretation_role: magnitud_dominante
+  graph_binding: Resume la rapidez angular del ciclo del pendulo.
+  descripcion: { es: Ritmo angular natural en aproximacion de angulos pequenos., en: Natural angular rhythm in the small-angle approximation. }
+  pedagogical_notes: { es: "No depende de [[m]] en el pendulo simple ideal.", en: "It does not depend on [[m]] in the ideal simple pendulum." }
+
+- id: Tper
+  symbol: T
+  nombre: { es: Periodo, en: Period }
+  si_unit: s
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: []
+  category: tiempo
+  physical_role: duracion_ciclo
+  used_in: [ Tper ]
+  common_mistake: Pensar que [[Tper]] cambia linealmente con [[L]].
+  typical_range: [ 0.2, 30 ]
+  sign_behavior: siempre_positivo
+  zero_behavior: ciclo_imposible
+  value_nature: resultado
+  interpretation_role: lectura_temporal
+  graph_binding: Distancia temporal entre dos pasos equivalentes del pendulo.
+  descripcion: { es: Tiempo para completar una oscilacion completa., en: Time required for one complete oscillation. }
+  pedagogical_notes: { es: "Cambia con raiz de [[L]] y raiz inversa de [[g]].", en: "It changes with the square root of [[L]] and inverse square root of [[g]]." }
+
+- id: tau
+  symbol: \\tau
+  nombre: { es: Torque gravitatorio, en: Gravitational Torque }
+  si_unit: N*m
+  unidad_si: N*m
+  dimension: M*L^2/T^2
+  is_vector: false
+  components: []
+  category: dinamica
+  physical_role: accion_restauradora
+  used_in: [ tau ]
+  common_mistake: Omitir el signo restaurador y perder direccion de retorno.
+  typical_range: [ -1e+4, 1e+4 ]
+  sign_behavior: opuesto_a_theta
+  zero_behavior: equilibrio_vertical
+  value_nature: resultado_instante
+  interpretation_role: causalidad_dinamica
+  graph_binding: El signo de [[tau]] muestra hacia que lado corrige el sistema.
+  descripcion: { es: Momento de fuerza que devuelve el pendulo hacia el equilibrio., en: Force moment that returns the pendulum toward equilibrium. }
+  pedagogical_notes: { es: Su forma senoidal muestra la no linealidad geometrica fuera de aproximacion lineal estricta., en: Its sinusoidal form reveals geometric nonlinearity beyond strict linear approximation. }
+`;export{e as default};

@@ -1,0 +1,282 @@
+const n=`version: 5
+magnitudes:
+  - id: sigma
+    symbol: "\\\\sigma"
+    nombre:
+      es: "Tensión Superficial"
+      en: "Surface Tension"
+    unidad_si: "N/m"
+    dimension: "M T⁻²"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Fuerza por unidad de longitud que actúa en la superficie de un líquido."
+      en: "Force per unit length acting on the surface of a liquid."
+    category: "fluidos"
+    physical_role: "propiedad del material"
+    used_in: ["fuerza_superficial", "laplace"]
+    common_mistake:
+      es: "Confundir con una fuerza neta en lugar de una densidad de fuerza."
+      en: "Confusing it with a net force instead of a force density."
+    typical_range: [0.01, 0.1]
+    sign_behavior: "siempre positivo"
+    zero_behavior: "punto critico"
+    value_nature: "continuo"
+    interpretation_role: "target"
+    graph_binding: "constant"
+    pedagogical_notes:
+      es: "Explicar como resultado de las fuerzas de cohesión."
+      en: "Explain as a result of cohesive forces."
+
+  - id: F
+    symbol: "F"
+    nombre:
+      es: "Fuerza Superficial"
+      en: "Surface Force"
+    unidad_si: "N"
+    dimension: "M L T⁻²"
+    is_vector: true
+    components: ["Fx", "Fy"]
+    descripcion:
+      es: "Fuerza total ejercida por la membrana superficial."
+      en: "Total force exerted by the surface membrane."
+    category: "mecanica"
+    physical_role: "causa"
+    used_in: ["fuerza_superficial"]
+    common_mistake:
+      es: "Olvidar que actúa tangencialmente a la superficie."
+      en: "Forgetting it acts tangentially to the surface."
+    typical_range: [1e-6, 1]
+    sign_behavior: "magnitud positiva"
+    zero_behavior: "ausencia de superficie"
+    value_nature: "continuo"
+    interpretation_role: "input"
+    graph_binding: "Y"
+    pedagogical_notes:
+      es: "Usar analogía de membrana elástica."
+      en: "Use elastic membrane analogy."
+
+  - id: L
+    symbol: "L"
+    nombre:
+      es: "Longitud de Contacto"
+      en: "Contact Length"
+    unidad_si: "m"
+    dimension: "L"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Perímetro o línea de contacto donde actúa la tensión."
+      en: "Perimeter or contact line where tension acts."
+    category: "geometria"
+    physical_role: "geometria"
+    used_in: ["fuerza_superficial"]
+    common_mistake:
+      es: "No considerar ambos lados de una película (ej. burbuja)."
+      en: "Not considering both sides of a film (e.g., bubble)."
+    typical_range: [1e-3, 0.1]
+    sign_behavior: "siempre positivo"
+    zero_behavior: "punto o inexistencia"
+    value_nature: "continuo"
+    interpretation_role: "input"
+    graph_binding: "X"
+    pedagogical_notes:
+      es: "Relacionar con el perímetro de la interfaz."
+      en: "Relate to the interface perimeter."
+
+  - id: dp
+    symbol: "\\\\Delta p"
+    nombre:
+      es: "Diferencia de Presión"
+      en: "Pressure Difference"
+    unidad_si: "Pa"
+    dimension: "M L⁻¹ T⁻²"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Salto de presión a través de una superficie curva (Presión de Laplace)."
+      en: "Pressure jump across a curved surface (Laplace Pressure)."
+    category: "fluidos"
+    physical_role: "variable de estado"
+    used_in: ["laplace"]
+    common_mistake:
+      es: "Olvidar que la presión es mayor en el lado cóncavo."
+      en: "Forgetting pressure is higher on the concave side."
+    typical_range: [0, 1000]
+    sign_behavior: "siempre positivo"
+    zero_behavior: "superficie plana"
+    value_nature: "continuo"
+    interpretation_role: "target"
+    graph_binding: "Y"
+    pedagogical_notes:
+      es: "Clave para entender la formación de burbujas."
+      en: "Key to understanding bubble formation."
+
+  - id: R
+    symbol: "R"
+    nombre:
+      es: "Radio de Curvatura"
+      en: "Radius of Curvature"
+    unidad_si: "m"
+    dimension: "L"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Radio de la superficie curva (menisco, gota o burbuja)."
+      en: "Radius of the curved surface (meniscus, drop, or bubble)."
+    category: "geometria"
+    physical_role: "geometria"
+    used_in: ["laplace", "ascenso_capilar"]
+    common_mistake:
+      es: "Confundir con el diámetro."
+      en: "Confusing with the diameter."
+    typical_range: [1e-6, 0.01]
+    sign_behavior: "siempre positivo"
+    zero_behavior: "curvatura infinita"
+    value_nature: "continuo"
+    interpretation_role: "input"
+    graph_binding: "X"
+    pedagogical_notes:
+      es: "A menor radio, mayor es el salto de presión."
+      en: "The smaller the radius, the larger the pressure jump."
+
+  - id: h
+    symbol: "h"
+    nombre:
+      es: "Altura Capilar"
+      en: "Capillary Height"
+    unidad_si: "m"
+    dimension: "L"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Altura de ascenso o descenso de un líquido en un tubo estrecho."
+      en: "Height of rise or fall of a liquid in a narrow tube."
+    category: "fluidos"
+    physical_role: "resultado"
+    used_in: ["ascenso_capilar"]
+    common_mistake:
+      es: "No considerar el signo (ascenso vs descenso)."
+      en: "Not considering the sign (rise vs fall)."
+    typical_range: [-0.1, 0.1]
+    sign_behavior: "positivo para ascenso, negativo para descenso"
+    zero_behavior: "sin efecto capilar"
+    value_nature: "continuo"
+    interpretation_role: "target"
+    graph_binding: "Y"
+    pedagogical_notes:
+      es: "Depende del equilibrio entre fuerzas superficiales y peso."
+      en: "Depends on the equilibrium between surface forces and weight."
+
+  - id: theta
+    symbol: "\\\\theta"
+    nombre:
+      es: "Ángulo de Contacto"
+      en: "Contact Angle"
+    unidad_si: "rad"
+    dimension: "1"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Ángulo que forma la interfaz líquido-gas con la pared sólida."
+      en: "Angle formed by the liquid-gas interface with the solid wall."
+    category: "geometria"
+    physical_role: "geometria"
+    used_in: ["ascenso_capilar"]
+    common_mistake:
+      es: "Medir el ángulo respecto al aire en lugar de respecto al líquido."
+      en: "Measuring the angle relative to air instead of the liquid."
+    typical_range: [0, 3.1416]
+    sign_behavior: "siempre positivo"
+    zero_behavior: "mojado perfecto"
+    value_nature: "continuo"
+    interpretation_role: "input"
+    graph_binding: "angle"
+    pedagogical_notes:
+      es: "Define si el líquido moja (agudo) o no moja (obtuso)."
+      en: "Defines if the liquid wets (acute) or does not wet (obtuse)."
+
+  - id: rho
+    symbol: "\\\\rho"
+    nombre:
+      es: "Densidad"
+      en: "Density"
+    unidad_si: "kg/m^3"
+    dimension: "M L⁻³"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Masa por unidad de volumen del fluido."
+      en: "Mass per unit volume of the fluid."
+    category: "fluidos"
+    physical_role: "propiedad del material"
+    used_in: ["ascenso_capilar"]
+    common_mistake:
+      es: "Usar la densidad del sólido en lugar de la del líquido."
+      en: "Using solid density instead of liquid density."
+    typical_range: [600, 14000]
+    sign_behavior: "siempre positivo"
+    zero_behavior: "vacío"
+    value_nature: "continuo"
+    interpretation_role: "input"
+    graph_binding: "constant"
+    pedagogical_notes:
+      es: "Crucial para el balance con la gravedad."
+      en: "Crucial for the balance with gravity."
+
+  - id: r
+    symbol: "r"
+    nombre:
+      es: "Radio del Tubo"
+      en: "Tube Radius"
+    unidad_si: "m"
+    dimension: "L"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Radio interno del tubo capilar."
+      en: "Internal radius of the capillary tube."
+    category: "geometria"
+    physical_role: "geometria"
+    used_in: ["ascenso_capilar"]
+    common_mistake:
+      es: "Usar el diámetro en lugar del radio."
+      en: "Using diameter instead of radius."
+    typical_range: [1e-4, 0.005]
+    sign_behavior: "siempre positivo"
+    zero_behavior: "tubo inexistente"
+    value_nature: "continuo"
+    interpretation_role: "input"
+    graph_binding: "X"
+    pedagogical_notes:
+      es: "A menor radio, mayor es el efecto capilar."
+      en: "The smaller the radius, the greater the capillary effect."
+
+  - id: g
+    symbol: "g"
+    nombre:
+      es: "Gravedad"
+      en: "Gravity"
+    unidad_si: "m/s^2"
+    dimension: "L T⁻²"
+    is_vector: true
+    components: ["gx", "gy", "gz"]
+    descripcion:
+      es: "Aceleración de la gravedad local."
+      en: "Local gravitational acceleration."
+    category: "mecanica"
+    physical_role: "constante"
+    used_in: ["ascenso_capilar"]
+    common_mistake:
+      es: "Olvidar que se opone al ascenso."
+      en: "Forgetting it opposes the rise."
+    typical_range: [9.7, 9.9]
+    sign_behavior: "magnitud positiva"
+    zero_behavior: "microgravedad"
+    value_nature: "continuo"
+    interpretation_role: "input"
+    graph_binding: "constant"
+    pedagogical_notes:
+      es: "Constante estándar 9.8 m/s²."
+      en: "Standard constant 9.8 m/s²."
+`;export{n as default};

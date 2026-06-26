@@ -1,0 +1,282 @@
+const e=`version: "v5"
+id: magnitudes_polarizacion
+leaf_id: polarizacion
+
+magnitudes:
+  - id: I
+    symbol: I
+    nombre:
+      es: Intensidad transmitida
+      en: Transmitted intensity
+    descripcion:
+      es: Intensidad luminosa que atraviesa el polarizador, proporcional al coseno cuadrado del angulo entre la polarizacion y el eje del filtro.
+      en: Luminous intensity passing through the polariser, proportional to the squared cosine of the angle between the polarisation and the filter axis.
+    unidad_si: "W/m^2"
+    dimension: "[M T^-3]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - ley de Malus
+      - interpretacion de resultados
+      - grafico Coord
+    common_mistake:
+      es: "Confundir intensidad transmitida con potencia total; olvidar que la intensidad depende del cuadrado del coseno, no del coseno lineal."
+      en: "Confusing transmitted intensity with total power; forgetting that intensity depends on cosine squared, not linear cosine."
+    typical_range: "0 a 1000 W/m^2 en laboratorio optico"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La intensidad es siempre no negativa.
+        en: Intensity is always non-negative.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Intensidad nula indica polarizadores cruzados (theta_p igual a 90 grados).
+        en: Zero intensity indicates crossed polarisers (theta_p equal to 90 degrees).
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, I_0]"
+    interpretation_role:
+      primary_for:
+        - lectura de intensidad tras polarizador
+      secondary_for:
+        - validacion del modelo de Malus
+    graph_binding:
+      channels:
+        - intensity_curve
+    pedagogical_notes:
+      es: "La intensidad transmitida es la magnitud central de este leaf. Su dependencia cuadratica con el coseno del angulo es lo que distingue la polarizacion del filtrado de color."
+      en: "Transmitted intensity is the central magnitude of this leaf. Its quadratic cosine dependence on angle is what distinguishes polarisation from colour filtering."
+
+  - id: I_0
+    symbol: I_0
+    nombre:
+      es: Intensidad incidente
+      en: Incident intensity
+    descripcion:
+      es: Intensidad de la luz polarizada antes de incidir sobre el polarizador analizador.
+      en: Intensity of polarised light before striking the analyser polariser.
+    unidad_si: "W/m^2"
+    dimension: "[M T^-3]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: initial_condition
+    used_in:
+      - ley de Malus
+      - normalizacion de la intensidad
+    common_mistake:
+      es: "Suponer que la intensidad incidente ya se ha reducido a la mitad tras el primer polarizador cuando la fuente es natural no polarizada."
+      en: "Assuming incident intensity has already been halved by the first polariser when the source is unpolarised natural light."
+    typical_range: "10 a 10000 W/m^2"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positiva; es una escala de amplitud.
+        en: Always positive; it is an amplitude scale.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Intensidad nula significaria ausencia de luz; la formula no aplica.
+        en: Zero intensity would mean no light; the formula does not apply.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, inf)"
+    interpretation_role:
+      primary_for:
+        - referencia de intensidad maxima
+      secondary_for: []
+    graph_binding:
+      channels:
+        - baseline_intensity
+    pedagogical_notes:
+      es: "Es el valor de referencia: la intensidad maxima que podria transmitirse si el polarizador y la onda estuvieran perfectamente alineados."
+      en: "It is the reference value: the maximum intensity that could be transmitted if the polariser and the wave were perfectly aligned."
+
+  - id: theta_p
+    symbol: "\\\\theta_p"
+    nombre:
+      es: Angulo del polarizador
+      en: Polariser angle
+    descripcion:
+      es: Angulo entre la direccion de polarizacion de la onda incidente y el eje de transmision del polarizador.
+      en: Angle between the polarisation direction of the incident wave and the transmission axis of the polariser.
+    unidad_si: rad
+    dimension: adimensional
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: control_variable
+    used_in:
+      - ley de Malus
+      - control del grafico interactivo
+    common_mistake:
+      es: "Medir el angulo respecto a la superficie del polarizador en lugar de respecto a su eje de transmision."
+      en: "Measuring the angle from the polariser surface instead of from its transmission axis."
+    typical_range: "0 a pi/2 rad (0 a 90 grados)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Angulo siempre positivo por convencion; se mide como diferencia absoluta de orientaciones.
+        en: Angle always positive by convention; measured as absolute orientation difference.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Angulo nulo significa polarizacion y eje alineados; transmision maxima.
+        en: Zero angle means polarisation and axis aligned; maximum transmission.
+    value_nature:
+      kind: angle
+      nonnegative_only: true
+      expected_interval: "[0, pi/2]"
+    interpretation_role:
+      primary_for:
+        - control de la intensidad transmitida
+      secondary_for:
+        - lectura grafica del perfil angular
+    graph_binding:
+      channels:
+        - angle_slider
+    pedagogical_notes:
+      es: "Es la variable de control principal del experimento. Girar el polarizador cambia theta_p y con el la intensidad transmitida segun el coseno cuadrado."
+      en: "It is the main control variable of the experiment. Rotating the polariser changes theta_p and with it the transmitted intensity according to the squared cosine."
+
+  - id: theta_B
+    symbol: "\\\\theta_B"
+    nombre:
+      es: Angulo de Brewster
+      en: Brewster angle
+    descripcion:
+      es: Angulo de incidencia sobre una interfase dielectrica para el cual la luz reflejada queda completamente polarizada.
+      en: Angle of incidence on a dielectric interface at which reflected light becomes completely polarised.
+    unidad_si: rad
+    dimension: adimensional
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - ley de Brewster
+      - interpretacion de reflexion polarizada
+    common_mistake:
+      es: "Confundir el angulo de Brewster con el angulo critico de reflexion total interna; ambos dependen de los indices pero tienen significados opuestos."
+      en: "Confusing the Brewster angle with the critical angle for total internal reflection; both depend on indices but have opposite meanings."
+    typical_range: "0.8 a 1.1 rad (45 a 65 grados) para interfases comunes"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positivo; es un angulo geometrico.
+        en: Always positive; it is a geometric angle.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Un angulo de Brewster nulo no tiene sentido fisico para medios distintos.
+        en: A zero Brewster angle has no physical meaning for distinct media.
+    value_nature:
+      kind: angle
+      nonnegative_only: true
+      expected_interval: "(0, pi/2)"
+    interpretation_role:
+      primary_for:
+        - determinacion del angulo de polarizacion por reflexion
+      secondary_for:
+        - identificacion del indice de refraccion
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "Al angulo de Brewster la componente paralela al plano de incidencia no se refleja, dejando la luz reflejada completamente polarizada perpendicularmente."
+      en: "At the Brewster angle the component parallel to the incidence plane is not reflected, leaving reflected light completely perpendicularly polarised."
+
+  - id: n_1
+    symbol: n_1
+    nombre:
+      es: Indice de refraccion del medio incidente
+      en: Refractive index of incident medium
+    descripcion:
+      es: Indice de refraccion del medio por el que viaja la luz antes de llegar a la interfase.
+      en: Refractive index of the medium through which light travels before reaching the interface.
+    unidad_si: adimensional
+    dimension: adimensional
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: medium_property
+    used_in:
+      - ley de Brewster
+      - calculo del angulo de Brewster
+    common_mistake:
+      es: "Olvidar que el aire tiene indice de refraccion ligeramente superior a 1 y redondearlo a 1 sin verificar la precision requerida."
+      en: "Forgetting that air has a refractive index slightly above 1 and rounding it to 1 without checking the required precision."
+    typical_range: "1.00 a 2.50"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positivo; es una propiedad del medio.
+        en: Always positive; it is a medium property.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Un indice nulo carece de sentido fisico.
+        en: A zero index has no physical meaning.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[1, 3]"
+    interpretation_role:
+      primary_for:
+        - parametro de entrada para ley de Brewster
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "Para aire se usa habitualmente 1.00; para agua 1.33; para vidrio comun entre 1.50 y 1.55."
+      en: "For air, 1.00 is commonly used; for water 1.33; for common glass between 1.50 and 1.55."
+
+  - id: n_2
+    symbol: n_2
+    nombre:
+      es: Indice de refraccion del medio transmitido
+      en: Refractive index of transmitted medium
+    descripcion:
+      es: Indice de refraccion del medio al que pasa la luz tras la interfase.
+      en: Refractive index of the medium into which light passes after the interface.
+    unidad_si: adimensional
+    dimension: adimensional
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: medium_property
+    used_in:
+      - ley de Brewster
+      - calculo del angulo de Brewster
+    common_mistake:
+      es: "Intercambiar n_1 y n_2 al calcular el angulo de Brewster, obteniendo el complementario del angulo correcto."
+      en: "Swapping n_1 and n_2 when calculating the Brewster angle, obtaining the complement of the correct angle."
+    typical_range: "1.00 a 2.50"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positivo; es una propiedad del medio.
+        en: Always positive; it is a medium property.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Un indice nulo carece de sentido fisico.
+        en: A zero index has no physical meaning.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[1, 3]"
+    interpretation_role:
+      primary_for:
+        - parametro de entrada para ley de Brewster
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "El angulo de Brewster depende del cociente n_2/n_1; si n_2 es mayor que n_1, theta_B supera 45 grados."
+      en: "The Brewster angle depends on the ratio n_2/n_1; if n_2 is greater than n_1, theta_B exceeds 45 degrees."
+`;export{e as default};

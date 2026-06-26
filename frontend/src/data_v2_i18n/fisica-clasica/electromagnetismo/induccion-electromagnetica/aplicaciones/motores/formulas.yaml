@@ -1,0 +1,330 @@
+formulas:
+- id: fuerza_laplace_motor
+  title:
+    es: Fuerza de Laplace sobre el conductor activo
+    en: Laplace force on the active conductor
+  equation: F_L = N_c * I * L_c * B * sin_theta
+  latex: F_L = N_c * I * L_c * B * \sin\theta
+  rearrangements:
+  - target: fuerza_de_laplace
+    equation: F_L = N_c * I * L_c * B * sin_theta
+    latex: F_L = N_c * I * L_c * B * \sin\theta
+  - target: corriente_de_armadura
+    equation: I = F_L / (N_c * L_c * B * sin_theta)
+    latex: I = \frac{F_L}{N_c * L_c * B * \sin\theta}
+  - target: campo_magnetico_del_estator
+    equation: B = F_L / (N_c * I * L_c * sin_theta)
+    latex: B = \frac{F_L}{N_c * I * L_c * \sin\theta}
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: La fuerza tangencial sobre los conductores activos de la bobina depende de la corriente, la longitud activa, el campo
+      magnético y el ángulo entre conductor y campo. Es el origen del par motriz.
+    en: The tangential force on the active conductors of the coil depends on current, active length, magnetic field, and the
+      angle between conductor and field. It is the origin of the driving torque.
+  constraints:
+  - Campo magnético aproximadamente uniforme en la región activa
+  - Conductores rectilíneos de longitud L_c en la región de campo
+  - Ángulo theta medido entre la dirección del conductor y B
+  validity:
+    es: Válido para campos uniformes, corriente continua o en instante de tiempo fijo, y conductores situados en la zona de
+      campo constante del entrehierro.
+    en: Valid for uniform fields, direct current or at a fixed instant in time, and conductors located in the constant-field
+      zone of the air gap.
+  dimension_check: N_c adimensional; [I]=A; [L_c]=m; [B]=T=kg·A⁻¹·s⁻²; sin_theta adimensional → [F_L]=N=kg·m·s⁻²
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculo_par_motor
+  - analisis_fuerza_laplace
+  interpretation_tags:
+  - fuerza_motriz
+  - interaccion_campo_corriente
+  result_semantics:
+    target: fuerza_de_laplace
+    kind: scalar_signed
+    sign_meaning:
+      es: Signo positivo indica fuerza en la dirección de rotación. Signo negativo indica frenado o inversión del giro.
+      en: Positive sign indicates force in the direction of rotation. Negative sign indicates braking or reversal of rotation.
+    absolute_value_meaning:
+      es: La magnitud de la fuerza determina la capacidad del motor para acelerar la carga.
+      en: The magnitude of the force determines the motor's capacity to accelerate the load.
+  domain_checks:
+  - condition: sin_theta == 0
+    message:
+      es: 'El ángulo es nulo o múltiplo de pi: la fuerza de Laplace es cero. El conductor es paralelo al campo.'
+      en: 'The angle is zero or a multiple of pi: the Laplace force is zero. The conductor is parallel to the field.'
+  - condition: B == 0
+    message:
+      es: Sin campo magnético no hay fuerza. Verificar la excitación del estátor.
+      en: Without magnetic field there is no force. Check stator excitation.
+  coherence_checks:
+  - condition: F_L > 1000
+    message:
+      es: Fuerza superior a 1000 N en un motor estándar es sospechosa. Verificar unidades de I y L_c.
+      en: Force greater than 1000 N in a standard motor is suspicious. Check units of I and L_c.
+  graph_implications:
+  - F_L aparece como amplitud del par sinusoidal en función del ángulo theta
+  pedagogical_triggers:
+  - Confundir L_c con la longitud total del bobinado en lugar de la longitud activa en el campo
+  - Omitir el factor sin_theta cuando el conductor no es perpendicular a B
+- id: par_motor_electrico
+  title:
+    es: Par motor del motor eléctrico
+    en: Torque of the electric motor
+  equation: tau_m = N_c * I * L_c * B * r_a * sin_theta
+  latex: \tau_m = N_c * I * L_c * B * r_a * \sin\theta
+  rearrangements:
+  - target: tau_m
+    equation: tau_m = N_c * I * L_c * B * r_a * sin_theta
+    latex: \tau_m = N_c * I * L_c * B * r_a * \sin\theta
+  - target: r_a
+    equation: r_a = tau_m / (N_c * I * L_c * B * sin_theta)
+    latex: r_a = \frac{\tau_m}{N_c * I * L_c * B * \sin\theta}
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: El par es el producto de la fuerza de Laplace por el radio del armado. Cuantifica la capacidad del motor para vencer
+      resistencias de giro en la carga.
+    en: Torque is the product of the Laplace force by the armature radius. It quantifies the motor's capacity to overcome
+      rotational resistance in the load.
+  constraints:
+  - Geometría cilíndrica con radio de armadura constante r_a
+  - Campo uniforme en el entrehierro
+  validity:
+    es: Válido para el modelo de motor de CC ideal y para el instante de ángulo theta dado.
+    en: Valid for the ideal DC motor model and at the given angle theta.
+  dimension_check: '[F_L]=N; [r_a]=m → [tau_m]=N·m=kg·m²·s⁻²'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - analisis_mecanico_motor
+  - comparacion_carga_par
+  interpretation_tags:
+  - par_rotacional
+  - capacidad_motriz
+  result_semantics:
+    target: tau_m
+    kind: scalar_signed
+    sign_meaning:
+      es: Par positivo produce rotación en la dirección de diseño. Par negativo indica inversión o frenada regenerativa.
+      en: Positive torque produces rotation in the design direction. Negative torque indicates reversal or regenerative braking.
+    absolute_value_meaning:
+      es: El valor absoluto del par determina qué carga resistente puede mover el motor en régimen estacionario.
+      en: The absolute value of torque determines what resistive load the motor can move at steady state.
+  domain_checks:
+  - condition: r_a <= 0
+    message:
+      es: El radio de armadura debe ser positivo. Revisar la geometría del motor.
+      en: The armature radius must be positive. Review motor geometry.
+  coherence_checks:
+  - condition: tau_m > 500
+    message:
+      es: Par superior a 500 N·m sin justificación dimensional indica probable error de unidades o escala.
+      en: Torque above 500 N·m without dimensional justification likely indicates a unit or scale error.
+  graph_implications:
+  - tau_m es la amplitud del par sinusoidal vs theta; en función del ángulo describe la curva de par del motor
+  pedagogical_triggers:
+  - 'Confundir par con fuerza: par requiere multiplicar por r_a'
+  - No convertir N_c al número real de conductores activos
+- id: fem_contragiro_motor
+  title:
+    es: Fuerza contraelectromotriz del motor
+    en: Back-EMF of the motor
+  equation: epsilon_c = N_c * L_c * B * r_a * omega
+  latex: \varepsilon_c = N_c * L_c * B * r_a * \omega  % epsilon_c
+  rearrangements:
+  - target: epsilon_c
+    equation: epsilon_c = N_c * L_c * B * r_a * omega
+    latex: \varepsilon_c = N_c * L_c * B * r_a * \omega  % epsilon_c
+  - target: omega
+    equation: omega = epsilon_c / (N_c * L_c * B * r_a)
+    latex: \omega = \frac{\varepsilon_c}{N_c * L_c * B * r_a}
+  - target: numero_de_conductores_activos
+    equation: N_c = epsilon_c / (L_c * B * r_a * omega)
+    latex: N_c = \frac{\varepsilon_c}{L_c * B * r_a * \omega}
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Al girar en el campo, la bobina del motor genera una fem opuesta a la tensión de alimentación. Esta fem contraelectromotriz
+      limita la corriente y, por tanto, el par en régimen.
+    en: As the coil rotates in the field, the motor winding generates an emf opposing the supply voltage. This back-EMF limits
+      the current and, therefore, the torque at steady state.
+  constraints:
+  - Giro estacionario a velocidad angular omega constante
+  - Campo magnético uniforme B en el entrehierro
+  validity:
+    es: Válido en régimen estacionario. Durante el arranque, omega tiende a cero y la fem contraelectromotriz es despreciable.
+    en: Valid at steady state. During start-up, omega tends to zero and back-EMF is negligible.
+  dimension_check: '[N_c adimensional; L_c=m; B=T; r_a=m; omega=rad/s] → [epsilon_c]=V=kg·m²·A⁻¹·s⁻³'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - balance_tension_motor
+  - calculo_corriente_regimen
+  interpretation_tags:
+  - fem_inducida
+  - autorregulacion_velocidad
+  result_semantics:
+    target: epsilon_c
+    kind: scalar_signed
+    sign_meaning:
+      es: Signo positivo indica que la fem contraelectromotriz se opone a la tensión de alimentación. Si es negativa, el motor
+        actúa como generador.
+      en: Positive sign means back-EMF opposes the supply voltage. If negative, the motor acts as a generator.
+    absolute_value_meaning:
+      es: El valor absoluto de la fem contraelectromotriz indica qué fracción de la tensión de red queda disponible para vencer
+        la resistencia interna.
+      en: The absolute value of back-EMF indicates what fraction of the supply voltage remains available to overcome internal
+        resistance.
+  domain_checks:
+  - condition: omega == 0
+    message:
+      es: 'Motor en reposo: la fem contraelectromotriz es cero y toda la tensión cae en la resistencia interna. La corriente
+        de arranque puede ser muy alta.'
+      en: 'Motor at rest: back-EMF is zero and the full supply voltage drops across the internal resistance. Start-up current
+        can be very high.'
+  coherence_checks:
+  - condition: epsilon_c > 500
+    message:
+      es: Fem contraelectromotriz superior a 500 V es inusual en motores de laboratorio. Verificar unidades de omega y r_a.
+      en: Back-EMF above 500 V is unusual for laboratory motors. Check units of omega and r_a.
+  graph_implications:
+  - epsilon_c crece linealmente con omega; en la gráfica velocidad-tensión es la pendiente de la curva de carga
+  pedagogical_triggers:
+  - Ignorar la fem contraelectromotriz al calcular la corriente en régimen
+  - Confundir la fem del motor con la tensión de alimentación
+- id: potencia_mecanica_motor
+  title:
+    es: Potencia mecánica del motor
+    en: Mechanical power of the motor
+  equation: P_{mec} = tau_m * omega
+  latex: P_{mec} = \tau_m * \omega
+  rearrangements:
+  - target: potencia_mecanica
+    equation: P_{mec} = tau_m * omega
+    latex: P_{mec} = \tau_m * \omega
+  - target: tau_m
+    equation: tau_m = P_{mec} / omega
+    latex: \tau_m = \frac{P_{mec}}{\omega}
+  - target: omega
+    equation: omega = P_{mec} / tau_m
+    latex: \omega = \frac{P_{mec}}{\tau_m}
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: La potencia mecánica entregada al eje es el producto del par y la velocidad angular. Cuantifica la energía por unidad
+      de tiempo disponible para la carga.
+    en: The mechanical power delivered to the shaft is the product of torque and angular speed. It quantifies the energy per
+      unit time available to the load.
+  constraints:
+  - Régimen estacionario con omega constante
+  - Sin pérdidas mecánicas adicionales en el eje
+  validity:
+    es: Relación cinemática exacta en régimen. No aplica durante transitorios de velocidad.
+    en: Exact kinematic relation at steady state. Does not apply during speed transients.
+  dimension_check: '[tau_m]=N·m; [omega]=rad/s → [P_{mec}]=W=kg·m²·s⁻³'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - eficiencia_motor
+  - balance_energetico_motor
+  interpretation_tags:
+  - potencia_util
+  - rendimiento_motor
+  result_semantics:
+    target: potencia_mecanica
+    kind: scalar_unsigned
+    sign_meaning:
+      es: La potencia mecánica es siempre positiva en modo motor. Un valor negativo indica operación en modo generador.
+      en: Mechanical power is always positive in motor mode. A negative value indicates operation in generator mode.
+    absolute_value_meaning:
+      es: El valor numérico indica la potencia útil disponible en el eje para accionar la carga.
+      en: The numerical value indicates the useful power available at the shaft to drive the load.
+  domain_checks:
+  - condition: omega == 0
+    message:
+      es: 'Velocidad angular nula: la potencia mecánica es cero aunque el par no lo sea. El motor no entrega energía al eje.'
+      en: 'Zero angular speed: mechanical power is zero even if torque is not. The motor delivers no energy to the shaft.'
+  coherence_checks:
+  - condition: P_{mec} > 100000
+    message:
+      es: Potencia superior a 100 kW es inhabitual en motores de laboratorio. Verificar magnitudes de tau_m y omega.
+      en: Power above 100 kW is unusual for laboratory motors. Check tau_m and omega magnitudes.
+  graph_implications:
+  - P_{mec} es la pendiente de la curva par-velocidad multiplicada por el cuadrado de la velocidad en el punto de operación
+  pedagogical_triggers:
+  - Confundir potencia eléctrica consumida con potencia mecánica entregada
+  - No convertir rpm a rad/s antes de multiplicar
+- id: eficiencia_motor
+  title:
+    es: Rendimiento del motor eléctrico
+    en: Efficiency of the electric motor
+  equation: eta = P_{mec} / P_{elec}
+  latex: \eta = \frac{P_{mec}}{P_{elec}}
+  rearrangements:
+  - target: eta
+    equation: eta = P_{mec} / P_{elec}
+    latex: \eta = \frac{P_{mec}}{P_{elec}}
+  - target: potencia_electrica_consumida
+    equation: P_{elec} = P_{mec} / eta
+    latex: P_{elec} = \frac{P_{mec}}{\eta}
+  - target: potencia_mecanica
+    equation: P_{mec} = eta * P_{elec}
+    latex: P_{mec} = \eta * P_{elec}
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: El rendimiento es la fracción de la potencia eléctrica consumida que se convierte en potencia mecánica útil. La diferencia
+      son pérdidas por efecto Joule, rozamiento y pérdidas magnéticas.
+    en: Efficiency is the fraction of consumed electrical power that is converted into useful mechanical power. The difference
+      represents Joule losses, friction, and magnetic losses.
+  constraints:
+  - P_{elec} > 0 para que eta sea definido
+  - eta debe estar en el intervalo (0, 1)
+  validity:
+    es: Válido en régimen estacionario. No aplica durante arranque ni frenada.
+    en: Valid at steady state. Does not apply during start-up or braking.
+  dimension_check: '[P_{mec}]=W; [P_{elec}]=W → eta adimensional'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - diseño_sistemas_motrices
+  - comparacion_motores
+  interpretation_tags:
+  - eficiencia_energetica
+  - perdidas_motor
+  result_semantics:
+    target: eta
+    kind: ratio
+    sign_meaning:
+      es: El rendimiento es adimensional y positivo. Un valor fuera del intervalo (0,1) indica un error de datos.
+      en: Efficiency is dimensionless and positive. A value outside (0,1) indicates a data error.
+    absolute_value_meaning:
+      es: Un rendimiento de 0.85 significa que el 85 % de la energía eléctrica se convierte en trabajo mecánico.
+      en: An efficiency of 0.85 means that 85 % of the electrical energy is converted to mechanical work.
+  domain_checks:
+  - condition: P_{elec} == 0
+    message:
+      es: 'La potencia eléctrica de entrada es cero: el rendimiento no está definido.'
+      en: 'Input electrical power is zero: efficiency is undefined.'
+  - condition: eta >= 1
+    message:
+      es: Rendimiento mayor o igual a la unidad viola la conservación de energía. Verificar los datos de entrada.
+      en: Efficiency greater than or equal to unity violates energy conservation. Check input data.
+  coherence_checks:
+  - condition: eta < 0.3
+    message:
+      es: 'Rendimiento por debajo del 30 %: inusual en motores modernos. Posible error de datos o motor muy degradado.'
+      en: 'Efficiency below 30 %: unusual for modern motors. Possible data error or highly degraded motor.'
+  graph_implications:
+  - eta aparece como valor constante en la curva de eficiencia vs potencia de carga; la curva tiene máximo en torno al 75-80
+    % de la carga nominal
+  pedagogical_triggers:
+  - Invertir el cociente y calcular P_{elec}/P_{mec} en lugar de P_{mec}/P_{elec}
+  - Expresar eta como porcentaje y usarlo directamente como decimal en cálculos
+ui:
+  default_formula: fuerza_laplace_motor
+  show_formula_selector: true
+  show_rearrangements: true
+  show_result_semantics: true

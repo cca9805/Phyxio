@@ -1,0 +1,236 @@
+version: 1
+formulas:
+- id: p
+  title: { es: Conservación del momento lineal, en: Linear momentum conservation }
+  equation: m1*v1i + m2*v2i = m1*v1f + m2*v2f
+  latex: 'm_1 v_{1i} + m_2 v_{2i} = m_1 v_{1f} + m_2 v_{2f}'
+  rearrangements:
+  - { target: v1f, equation: v1f = (m1*v1i + m2*v2i - m2*v2f)/m1, latex: 'v_{1f} = \frac{m_1 v_{1i} + m_2 v_{2i} - m_2 v_{2f}}{m_1}', constraints: ['m1 > 0'] }
+  - { target: v2f, equation: v2f = (m1*v1i + m2*v2i - m1*v1f)/m2, latex: 'v_{2f} = \frac{m_1 v_{1i} + m_2 v_{2i} - m_1 v_{1f}}{m_2}', constraints: ['m2 > 0'] }
+  category: fundamental
+  relation_type: physical_law
+  physical_meaning: { es: La cantidad de movimiento total del sistema se mantiene constante durante el choque., en: The total momentum of the system remains constant during the collision. }
+  constraints: Solo aplicable a sistemas aislados.
+  validity: { es: Válida para cualquier tipo de choque en ausencia de fuerzas externas., en: Valid for any type of collision in the absence of external forces. }
+  dimension_check: { es: kg*m/s, en: kg*m/s }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [momentum_conservation]
+  result_semantics: { target: v1f, score: 5 }
+  domain_checks:
+  - { expr: 'true', message: { es: El balance de momento debe cumplirse siempre., en: Momentum balance must always hold. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: momentum, message: { es: Refleja la conservación., en: Reflects conservation. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa el balance., en: Check the balance. } }
+
+- id: e_definition
+  title: { es: Coeficiente de restitución, en: Coefficient of restitution }
+  equation: e = (v2f - v1f)/(v1i - v2i)
+  latex: 'e = \frac{v_{2f} - v_{1f}}{v_{1i} - v_{2i}}'
+  rearrangements:
+  - { target: e, equation: e = (v2f - v1f)/(v1i - v2i), latex: 'e = \frac{v_{2f} - v_{1f}}{v_{1i} - v_{2i}}', constraints: ['v1i != v2i'] }
+  category: fundamental
+  relation_type: definition
+  physical_meaning: { es: Parámetro que mide el grado de inelasticidad de la colisión., en: Parameter that measures the degree of inelasticity of the collision. }
+  constraints: v1i != v2i
+  validity: { es: Válida para choques 1D., en: Valid for 1D collisions. }
+  dimension_check: { es: "1", en: "1" }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [restitution]
+  result_semantics: { target: e, score: 5 }
+  domain_checks:
+  - { expr: 'true', message: { es: Dominio válido., en: Valid domain. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: restitution, message: { es: Refleja la elasticidad., en: Reflects elasticity. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa e., en: Check e. } }
+
+- id: v1f_inelastic
+  title: { es: Velocidad final del cuerpo 1, en: Final velocity of body 1 }
+  equation: v1f = (m1*v1i + m2*v2i - m2*e*(v1i - v2i))/(m1 + m2)
+  latex: 'v_{1f} = \frac{m_1 v_{1i} + m_2 v_{2i} - m_2 e (v_{1i} - v_{2i})}{m_1 + m_2}'
+  rearrangements:
+  - { target: v1f, equation: v1f = (m1*v1i + m2*v2i - m2*e*(v1i - v2i))/(m1 + m2), latex: 'v_{1f} = \frac{m_1 v_{1i} + m_2 v_{2i} - m_2 e (v_{1i} - v_{2i})}{m_1 + m_2}', constraints: ['m1+m2 > 0'] }
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning: { es: Solución para la velocidad final del primer cuerpo., en: Solution for the final velocity of the first body. }
+  constraints: m1 + m2 > 0
+  validity: { es: Válida para choques inelásticos., en: Valid for inelastic collisions. }
+  dimension_check: { es: m/s, en: m/s }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [final_velocity]
+  result_semantics: { target: v1f, score: 5 }
+  domain_checks:
+  - { expr: 'true', message: { es: Válido., en: Valid. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: velocity, message: { es: Muestra v1f., en: Shows v1f. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa v1f., en: Check v1f. } }
+
+- id: v2f_inelastic
+  title: { es: Velocidad final del cuerpo 2, en: Final velocity of body 2 }
+  equation: v2f = (m1*v1i + m2*v2i + m1*e*(v1i - v2i))/(m1 + m2)
+  latex: 'v_{2f} = \frac{m_1 v_{1i} + m_2 v_{2i} + m_1 e (v_{1i} - v_{2i})}{m_1 + m_2}'
+  rearrangements:
+  - { target: v2f, equation: v2f = (m1*v1i + m2*v2i + m1*e*(v1i - v2i))/(m1 + m2), latex: 'v_{2f} = \frac{m_1 v_{1i} + m_2 v_{2i} + m_1 e (v_{1i} - v_{2i})}{m_1 + m_2}', constraints: ['m1+m2 > 0'] }
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning: { es: Solución para la velocidad final del segundo cuerpo., en: Solution for the final velocity of the second body. }
+  constraints: m1 + m2 > 0
+  validity: { es: Válida para choques inelásticos., en: Valid for inelastic collisions. }
+  dimension_check: { es: m/s, en: m/s }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [final_velocity]
+  result_semantics: { target: v2f, score: 5 }
+  domain_checks:
+  - { expr: 'true', message: { es: Válido., en: Valid. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: velocity, message: { es: Muestra v2f., en: Shows v2f. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa v2f., en: Check v2f. } }
+
+- id: v_perfectly_inelastic
+  title: { es: Velocidad final (Choque totalmente inelástico), en: Final velocity (Totally inelastic collision) }
+  equation: v1f = (m1*v1i + m2*v2i)/(m1 + m2)
+  latex: 'v_{1f} = \frac{m_1 v_{1i} + m_2 v_{2i}}{m_1 + m_2}'
+  rearrangements:
+  - { target: v1f, equation: v1f = (m1*v1i + m2*v2i)/(m1 + m2), latex: 'v_{1f} = \frac{m_1 v_{1i} + m_2 v_{2i}}{m_1 + m_2}', constraints: ['m1+m2 > 0'] }
+  category: fundamental
+  relation_type: physical_law
+  physical_meaning: { es: Ambos cuerpos se mueven juntos tras el impacto., en: Both bodies move together after impact. }
+  constraints: m1 + m2 > 0
+  validity: { es: Solo válida si e = 0., en: Only valid if e = 0. }
+  dimension_check: { es: m/s, en: m/s }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [perfectly_inelastic]
+  result_semantics: { target: v1f, score: 5 }
+  domain_checks:
+  - { expr: 'true', message: { es: Válido., en: Valid. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: velocity, message: { es: Muestra vf., en: Shows vf. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa vf., en: Check vf. } }
+
+- id: ki_system
+  title: { es: Energía cinética inicial del sistema, en: Initial kinetic energy of the system }
+  equation: Ki = 0.5*m1*v1i^2 + 0.5*m2*v2i^2
+  latex: 'K_i = \frac{1}{2} m_1 v_{1i}^2 + \frac{1}{2} m_2 v_{2i}^2'
+  rearrangements:
+  - { target: Ki, equation: Ki = 0.5*m1*v1i^2 + 0.5*m2*v2i^2, latex: 'K_i = \frac{1}{2} m_1 v_{1i}^2 + \frac{1}{2} m_2 v_{2i}^2', constraints: [] }
+  category: derived
+  relation_type: definition
+  physical_meaning: { es: Energía antes del impacto., en: Energy before impact. }
+  constraints: null
+  validity: { es: Universal., en: Universal. }
+  dimension_check: { es: J, en: J }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [energy]
+  result_semantics: { target: Ki, score: 3 }
+  domain_checks:
+  - { expr: 'true', message: { es: Válido., en: Valid. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: energy, message: { es: Muestra Ki., en: Shows Ki. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa Ki., en: Check Ki. } }
+
+- id: kf_system
+  title: { es: Energía cinética final del sistema, en: Final kinetic energy of the system }
+  equation: Kf = 0.5*m1*v1f^2 + 0.5*m2*v2f^2
+  latex: 'K_f = \frac{1}{2} m_1 v_{1f}^2 + \frac{1}{2} m_2 v_{2f}^2'
+  rearrangements:
+  - { target: Kf, equation: Kf = 0.5*m1*v1f^2 + 0.5*m2*v2f^2, latex: 'K_f = \frac{1}{2} m_1 v_{1f}^2 + \frac{1}{2} m_2 v_{2f}^2', constraints: [] }
+  category: derived
+  relation_type: definition
+  physical_meaning: { es: Energía tras el impacto., en: Energy after impact. }
+  constraints: null
+  validity: { es: Universal., en: Universal. }
+  dimension_check: { es: J, en: J }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [energy]
+  result_semantics: { target: Kf, score: 3 }
+  domain_checks:
+  - { expr: 'true', message: { es: Válido., en: Valid. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: energy, message: { es: Muestra Kf., en: Shows Kf. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa Kf., en: Check Kf. } }
+
+- id: delta_k
+  title: { es: Energía cinética disipada, en: Dissipated kinetic energy }
+  equation: DeltaK = Kf - Ki
+  latex: '\Delta K = K_f - K_i'
+  rearrangements:
+  - { target: DeltaK, equation: DeltaK = Kf - Ki, latex: '\Delta K = K_f - K_i', constraints: [] }
+  category: fundamental
+  relation_type: definition
+  physical_meaning: { es: Energía transformada en calor o deformación., en: Energy transformed into heat or deformation. }
+  constraints: null
+  validity: { es: Válida para choques., en: Valid for collisions. }
+  dimension_check: { es: J, en: J }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [energy_loss]
+  result_semantics: { target: DeltaK, score: 5 }
+  domain_checks:
+  - { expr: 'true', message: { es: Válido., en: Valid. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: energy, message: { es: Muestra DeltaK., en: Shows DeltaK. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa DeltaK., en: Check DeltaK. } }
+
+- id: energy_loss_fraction
+  title: { es: Fracción de energía disipada, en: Dissipated energy fraction }
+  equation: loss_fraction = (Ki - Kf) / Ki
+  latex: '\xi = \frac{K_i - K_f}{K_i}'
+  rearrangements:
+  - { target: loss_fraction, equation: loss_fraction = (Ki - Kf) / Ki, latex: '\xi = \frac{K_i - K_f}{K_i}', constraints: ['Ki > 0'] }
+  category: derived
+  relation_type: definition
+  physical_meaning: { es: Proporción de la energía inicial que se pierde., en: Proportion of the initial energy lost. }
+  constraints: Ki > 0
+  validity: { es: Válida para choques inelásticos., en: Valid for inelastic collisions. }
+  dimension_check: { es: "1", en: "1" }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [energy_loss]
+  result_semantics: { target: loss_fraction, score: 4 }
+  domain_checks:
+  - { expr: 'true', message: { es: Válido., en: Valid. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: energy, message: { es: Muestra pérdida., en: Shows loss. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa fracción., en: Check fraction. } }

@@ -1,0 +1,343 @@
+- id: cop_refrigeracion
+  title:
+    es: Coeficiente de rendimiento de refrigeracion
+    en: Refrigeration coefficient of performance
+  equation: "COP_ref = Q_C / W"
+  latex: "COP_{ref} = \\frac{Q_C}{W}"
+  rearrangements:
+    - target: COP_ref
+      equation: "COP_ref = Q_C / W"
+      latex: "COP_{ref} = \\frac{Q_C}{W}"
+    - target: Q_C
+      equation: "Q_C = COP_ref * W"
+      latex: "Q_C = COP_{ref} \\cdot W"
+    - target: W
+      equation: "W = Q_C / COP_ref"
+      latex: "W = \\frac{Q_C}{COP_{ref}}"
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: "Define la eficiencia de un refrigerador como el cociente entre el efecto útil (calor extraído del foco frío) y el coste energético (trabajo del compresor)"
+    en: "Defines the efficiency of a refrigerator as the ratio between the useful effect (heat extracted from the cold reservoir) and the energy cost (compressor work)"
+  constraints:
+    - "W > 0"
+    - "Q_C > 0"
+  validity:
+    es: "Válida para cualquier ciclo de refrigeración, ideal o real"
+    en: "Valid for any refrigeration cycle, ideal or real"
+  dimension_check: "adimensional: [J]/[J] resulta [1]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - evaluación de eficiencia de refrigeradores
+    - comparación con el COP de Carnot
+    - dimensionado de sistemas de climatización
+  interpretation_tags:
+    - eficiencia frigorífica
+    - coste energético
+    - segunda ley
+  result_semantics:
+    target: COP_ref
+    kind: ratio
+    sign_meaning:
+      es: "Siempre positivo, mide calor extraído por unidad de trabajo"
+      en: "Always positive, measures heat extracted per unit of work"
+    absolute_value_meaning:
+      es: "Mayor COP indica mayor eficiencia frigorífica; valores típicos entre 2 y 6"
+      en: "Higher COP indicates greater refrigeration efficiency; typical values between 2 and 6"
+  domain_checks:
+    - "W debe ser positivo"
+    - "Q_C debe ser positivo"
+    - "COP_ref debe ser positivo"
+  coherence_checks:
+    - "COP_ref no puede superar el COP de Carnot entre las mismas temperaturas"
+    - "Si COP_ref resulta negativo, los datos son incoherentes"
+  graph_implications:
+    - "En el diagrama COP vs T_C, la curva crece cuando T_C se acerca a T_H"
+  pedagogical_triggers:
+    - "Alumno confunde COP de refrigeración con COP de bomba de calor"
+    - "Alumno usa rendimiento térmico en lugar de COP"
+
+- id: cop_bomba_calor
+  title:
+    es: Coeficiente de rendimiento de bomba de calor
+    en: Heat pump coefficient of performance
+  equation: "COP_bc = Q_H / W"
+  latex: "COP_{bc} = \\frac{Q_H}{W}"
+  rearrangements:
+    - target: COP_bc
+      equation: "COP_bc = Q_H / W"
+      latex: "COP_{bc} = \\frac{Q_H}{W}"
+    - target: Q_H
+      equation: "Q_H = COP_bc * W"
+      latex: "Q_H = COP_{bc} \\cdot W"
+    - target: W
+      equation: "W = Q_H / COP_bc"
+      latex: "W = \\frac{Q_H}{COP_{bc}}"
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: "Define la eficiencia de una bomba de calor como el cociente entre el efecto útil (calor entregado al foco caliente) y el coste energético (trabajo del compresor)"
+    en: "Defines the efficiency of a heat pump as the ratio between the useful effect (heat delivered to the hot reservoir) and the energy cost (compressor work)"
+  constraints:
+    - "W > 0"
+    - "Q_H > 0"
+  validity:
+    es: "Válida para cualquier ciclo de bomba de calor, ideal o real"
+    en: "Valid for any heat pump cycle, ideal or real"
+  dimension_check: "adimensional: [J]/[J] resulta [1]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - evaluación de eficiencia de bombas de calor
+    - comparación con calefacción eléctrica directa
+    - dimensionado de calefacción geotérmica
+  interpretation_tags:
+    - eficiencia de calefacción
+    - bomba de calor
+    - segunda ley
+  result_semantics:
+    target: COP_bc
+    kind: ratio
+    sign_meaning:
+      es: "Siempre positivo y mayor que uno"
+      en: "Always positive and greater than one"
+    absolute_value_meaning:
+      es: "Mayor COP indica mayor eficiencia de calefacción; COP de 4 significa que por cada kWh eléctrico se entregan 4 kWh térmicos"
+      en: "Higher COP indicates greater heating efficiency; COP of 4 means 4 kWh of thermal energy delivered per kWh of electricity"
+  domain_checks:
+    - "W debe ser positivo"
+    - "Q_H debe ser positivo"
+    - "COP_bc debe ser mayor que 1"
+  coherence_checks:
+    - "COP_bc no puede superar el COP de Carnot de bomba de calor entre las mismas temperaturas"
+    - "COP_bc debe ser igual a COP_ref más 1"
+  graph_implications:
+    - "En el diagrama COP vs T_C, la curva de bomba de calor siempre está una unidad por encima de la de refrigeración"
+  pedagogical_triggers:
+    - "Alumno no entiende por qué COP puede ser mayor que uno"
+    - "Alumno confunde con rendimiento térmico de motor"
+
+- id: cop_carnot_ref
+  title:
+    es: COP de Carnot para refrigeracion
+    en: Carnot COP for refrigeration
+  equation: "COP_ref = T_C / (T_H - T_C)"
+  latex: "COP_{ref} = \\frac{T_C}{T_H - T_C}"
+  rearrangements:
+    - target: COP_ref
+      equation: "COP_ref = T_C / (T_H - T_C)"
+      latex: "COP_{ref} = \\frac{T_C}{T_H - T_C}"
+    - target: T_C
+      equation: "T_C = COP_ref * T_H / (COP_ref + 1)"
+      latex: "T_C = \\frac{COP_{ref} \\cdot T_H}{COP_{ref} + 1}"
+    - target: T_H
+      equation: "T_H = T_C * (COP_ref + 1) / COP_ref"
+      latex: "T_H = \\frac{T_C \\left(COP_{ref} + 1\\right)}{COP_{ref}}"
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: "Establece el COP máximo teórico de cualquier refrigerador que opera entre dos focos a temperaturas absolutas T_H y T_C"
+    en: "Establishes the maximum theoretical COP of any refrigerator operating between two reservoirs at absolute temperatures T_H and T_C"
+  constraints:
+    - "T_H > T_C > 0"
+    - "Ciclo completamente reversible"
+  validity:
+    es: "Válida para cualquier ciclo de refrigeración reversible entre dos focos térmicos"
+    en: "Valid for any reversible refrigeration cycle between two thermal reservoirs"
+  dimension_check: "adimensional: [K]/[K] resulta [1]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - límite superior del COP de refrigeración
+    - comparación con ciclos reales
+    - evaluación termodinámica de sistemas frigoríficos
+  interpretation_tags:
+    - COP máximo
+    - segunda ley
+    - límite termodinámico
+  result_semantics:
+    target: COP_ref
+    kind: ratio
+    sign_meaning:
+      es: "Siempre positivo, COP máximo alcanzable"
+      en: "Always positive, maximum achievable COP"
+    absolute_value_meaning:
+      es: "Diverge cuando T_C se acerca a T_H; tiende a cero cuando T_C tiende a cero"
+      en: "Diverges when T_C approaches T_H; tends to zero when T_C tends to zero"
+  domain_checks:
+    - "T_H debe ser estrictamente mayor que T_C"
+    - "Ambas temperaturas en kelvin"
+  coherence_checks:
+    - "Si COP resulta negativo, T_C supera T_H lo cual es incoherente"
+    - "Si COP real supera el de Carnot, viola la segunda ley"
+  graph_implications:
+    - "La curva COP de Carnot vs T_C diverge en T_C cercano a T_H y tiende a cero en T_C cercano a cero"
+  pedagogical_triggers:
+    - "Alumno usa Celsius en lugar de kelvin"
+    - "Alumno confunde COP de Carnot de refrigeración con el de bomba de calor"
+
+- id: cop_carnot_bc
+  title:
+    es: COP de Carnot para bomba de calor
+    en: Carnot COP for heat pump
+  equation: "COP_bc = T_H / (T_H - T_C)"
+  latex: "COP_{bc} = \\frac{T_H}{T_H - T_C}"
+  rearrangements:
+    - target: COP_bc
+      equation: "COP_bc = T_H / (T_H - T_C)"
+      latex: "COP_{bc} = \\frac{T_H}{T_H - T_C}"
+    - target: T_H
+      equation: "T_H = COP_bc * T_C / (COP_bc - 1)"
+      latex: "T_H = \\frac{COP_{bc} \\cdot T_C}{COP_{bc} - 1}"
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: "Establece el COP máximo teórico de cualquier bomba de calor que opera entre dos focos a temperaturas absolutas T_H y T_C"
+    en: "Establishes the maximum theoretical COP of any heat pump operating between two reservoirs at absolute temperatures T_H and T_C"
+  constraints:
+    - "T_H > T_C > 0"
+    - "Ciclo completamente reversible"
+  validity:
+    es: "Válida para cualquier ciclo de bomba de calor reversible entre dos focos térmicos"
+    en: "Valid for any reversible heat pump cycle between two thermal reservoirs"
+  dimension_check: "adimensional: [K]/[K] resulta [1]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - límite superior del COP de bomba de calor
+    - comparación con calefacción eléctrica
+    - evaluación termodinámica de bombas de calor
+  interpretation_tags:
+    - COP máximo
+    - segunda ley
+    - bomba de calor
+  result_semantics:
+    target: COP_bc
+    kind: ratio
+    sign_meaning:
+      es: "Siempre mayor que uno"
+      en: "Always greater than one"
+    absolute_value_meaning:
+      es: "Diverge cuando T_C se acerca a T_H; tiende a uno cuando la diferencia es muy grande"
+      en: "Diverges when T_C approaches T_H; tends to one when the difference is very large"
+  domain_checks:
+    - "T_H debe ser estrictamente mayor que T_C"
+    - "Ambas temperaturas en kelvin"
+  coherence_checks:
+    - "COP_bc de Carnot siempre es COP_ref de Carnot más 1"
+    - "Si COP_bc resulta menor que 1, los datos son incoherentes"
+  graph_implications:
+    - "La curva de bomba de calor siempre está una unidad por encima de la de refrigeración"
+  pedagogical_triggers:
+    - "Alumno confunde con COP de refrigeración"
+    - "Alumno no entiende por qué COP de bomba de calor es siempre mayor que uno"
+
+- id: relacion_cop
+  title:
+    es: Relacion entre COP de bomba de calor y refrigeracion
+    en: Relationship between heat pump and refrigeration COP
+  equation: "COP_bc = COP_ref + 1"
+  latex: "COP_{bc} = COP_{ref} + 1"
+  rearrangements:
+    - target: COP_bc
+      equation: "COP_bc = COP_ref + 1"
+      latex: "COP_{bc} = COP_{ref} + 1"
+    - target: COP_ref
+      equation: "COP_ref = COP_bc - 1"
+      latex: "COP_{ref} = COP_{bc} - 1"
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: "El COP de bomba de calor es siempre exactamente una unidad mayor que el COP de refrigeración, porque el foco caliente recibe tanto el calor extraído del foco frío como el trabajo del compresor"
+    en: "The heat pump COP is always exactly one unit greater than the refrigeration COP, because the hot reservoir receives both the heat extracted from the cold reservoir and the compressor work"
+  constraints:
+    - "Ambos COP referidos a las mismas temperaturas de focos"
+  validity:
+    es: "Válida para cualquier ciclo invertido, ideal o real, siempre que ambos COP se midan entre los mismos focos"
+    en: "Valid for any reversed cycle, ideal or real, as long as both COPs are measured between the same reservoirs"
+  dimension_check: "adimensional: [1] en ambos lados"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - verificación de coherencia entre COP de refrigeración y bomba de calor
+    - conversión rápida entre modos de operación
+  interpretation_tags:
+    - coherencia
+    - relación fundamental
+    - balance energético
+  result_semantics:
+    target: COP_bc
+    kind: ratio
+    sign_meaning:
+      es: "COP_bc siempre mayor que COP_ref en exactamente una unidad"
+      en: "COP_bc always greater than COP_ref by exactly one unit"
+    absolute_value_meaning:
+      es: "Confirma que bomba de calor siempre entrega más calor que el extraído del foco frío"
+      en: "Confirms that heat pump always delivers more heat than extracted from cold reservoir"
+  domain_checks:
+    - "COP_ref debe ser positivo"
+  coherence_checks:
+    - "Si la diferencia COP_bc menos COP_ref no es 1, hay error en los datos"
+  graph_implications:
+    - "Las dos curvas COP vs T_C siempre están separadas verticalmente por una unidad"
+  pedagogical_triggers:
+    - "Alumno no comprende el origen de la unidad adicional"
+
+- id: balance_energetico_cop
+  title:
+    es: Balance energetico del ciclo invertido
+    en: Energy balance of reversed cycle
+  equation: "Q_H = Q_C + W"
+  latex: "Q_H = Q_C + W"
+  rearrangements:
+    - target: Q_H
+      equation: "Q_H = Q_C + W"
+      latex: "Q_H = Q_C + W"
+    - target: Q_C
+      equation: "Q_C = Q_H - W"
+      latex: "Q_C = Q_H - W"
+    - target: W
+      equation: "W = Q_H - Q_C"
+      latex: "W = Q_H - Q_C"
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: "Expresa la conservación de energía en el ciclo invertido: el calor entregado al foco caliente es la suma del calor extraído del foco frío más el trabajo consumido"
+    en: "Expresses energy conservation in the reversed cycle: heat delivered to the hot reservoir is the sum of heat extracted from the cold reservoir plus consumed work"
+  constraints:
+    - "Q_H > Q_C > 0"
+    - "W > 0"
+  validity:
+    es: "Válida para cualquier ciclo termodinámico invertido que cumpla la primera ley"
+    en: "Valid for any reversed thermodynamic cycle satisfying the first law"
+  dimension_check: "[M L² T⁻²] en ambos lados"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - verificación de coherencia energética
+    - cálculo de calores a partir del trabajo
+    - deducción de la relación COP_bc igual a COP_ref más 1
+  interpretation_tags:
+    - primera ley
+    - conservación de energía
+    - balance térmico
+  result_semantics:
+    target: Q_H
+    kind: extensive
+    sign_meaning:
+      es: "Positivo indica calor entregado al foco caliente"
+      en: "Positive indicates heat delivered to hot reservoir"
+    absolute_value_meaning:
+      es: "Q_H es siempre mayor que Q_C porque incluye el trabajo W"
+      en: "Q_H is always greater than Q_C because it includes the work W"
+  domain_checks:
+    - "Q_H debe ser mayor que Q_C"
+    - "W debe ser positivo"
+  coherence_checks:
+    - "Si Q_H resulta menor que Q_C, los datos violan la primera ley"
+  graph_implications:
+    - "En un diagrama de flujo energético, Q_H es la salida total y Q_C más W son las entradas"
+  pedagogical_triggers:
+    - "Alumno olvida sumar W a Q_C para obtener Q_H"
+    - "Alumno confunde la dirección del flujo de calor"

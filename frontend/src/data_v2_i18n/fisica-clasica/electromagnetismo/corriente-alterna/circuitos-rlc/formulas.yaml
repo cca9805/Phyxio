@@ -1,0 +1,457 @@
+version: 5
+topic:
+  id: circuitos-rlc
+  title:
+    es: Circuitos rlc
+    en: RLC Circuits
+variables:
+- id: impedancia_total
+  symbol: impedancia_total
+  name:
+    es: impedancia total
+    en: Total Impedance
+  si_unit: ohm
+- id: resistencia_serie
+  symbol: resistencia_serie
+  name:
+    es: resistencia serie
+    en: Series Resistance
+  si_unit: ohm
+- id: reactancia_inductiva
+  symbol: X_L
+  name:
+    es: reactancia inductiva
+    en: Inductive Reactance
+  si_unit: ohm
+- id: reactancia_capacitiva
+  symbol: X_C
+  name:
+    es: reactancia capacitiva
+    en: Capacitive Reactance
+  si_unit: ohm
+- id: corriente_rms
+  symbol: corriente_rms
+  name:
+    es: corriente rms
+    en: RMS Current
+  si_unit: A
+- id: tension_rms
+  symbol: tension_rms
+  name:
+    es: tension rms
+    en: RMS Voltage
+  si_unit: tension_rms
+- id: phi
+  symbol: \phi
+  name:
+    es: desfase
+    en: Phase Shift
+  si_unit: rad
+- id: potencia_activa
+  symbol: potencia_activa
+  name:
+    es: potencia activa
+    en: Active Power
+  si_unit: W
+- id: potencia_reactiva
+  symbol: potencia_reactiva
+  name:
+    es: potencia reactiva
+    en: Reactive Power
+  si_unit: var
+- id: potencia_aparente
+  symbol: potencia_aparente
+  name:
+    es: potencia aparente
+    en: Apparent Power
+  si_unit: VA
+formulas:
+- id: impedancia_rlc
+  title:
+    es: Impedancia de circuito RLC serie
+    en: Series RLC impedance
+  equation: Z = sqrt(R^2 + (X_L - X_C)^2)
+  latex: Z=\sqrt{R^2+(X_L-X_C)^2}
+  rearrangements:
+  - target: impedancia_total
+    equation: Z = sqrt(R^2 + (X_L - X_C)^2)
+    latex: Z=\sqrt{R^2+(X_L-X_C)^2}
+  constraints:
+  - expr: R >= 0
+    message:
+      es: La resistencia debe ser no negativa.
+      en: Resistance must be non-negative.
+  - expr: X_L >= 0 and X_C >= 0
+    message:
+      es: Las reactancias se usan como magnitudes no negativas.
+      en: Reactances are used as non-negative magnitudes.
+  category: operative
+  relation_type: closed_form
+  physical_meaning:
+    es: Combina parte resistiva y desequilibrio reactivo para resumir la oposicion total.
+    en: Combines resistive part and reactive imbalance to summarize total opposition.
+  validity:
+    es: Valida para RLC serie lineal en regimen sinusoidal estacionario.
+    en: Valid for linear series RLC circuits in sinusoidal steady state.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - calculo de corriente eficaz
+  - lectura de compensacion reactiva
+  - analisis de demanda total
+  interpretation_tags:
+  - impedancia
+  - rlc
+  - cuadratura
+  - modulo
+  result_semantics:
+    target: impedancia_total
+    meaning: El resultado fija cuanta corriente exigira la rama para una tension eficaz dada.
+    kind: scalar
+    absolute_value_meaning:
+      es: El resultado fija cuanta corriente exigira la rama para una tension eficaz dada.
+      en: El resultado fija cuanta corriente exigira la rama para una tension eficaz dada.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: X_L y X_C deben pertenecer a la misma frecuencia de trabajo.
+      en: X_L and X_C must belong to the same operating frequency.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Z no puede ser menor que R en el modelo serie lineal.
+      en: Z cannot be smaller than R in the linear series model.
+  graph_implications:
+  - En Coord puede leerse como modulo ligado al desequilibrio reactivo.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: No sumes R, X_L y X_C como si estuvieran en una misma direccion fasorial.
+      en: Do not add R, X_L, and X_C as if they pointed in the same phasor direction.
+- id: corriente_total
+  title:
+    es: Corriente rms total
+    en: Total RMS current
+  equation: I = V/Z
+  latex: I=\frac{V}{Z}
+  rearrangements:
+  - target: corriente_rms
+    equation: I = V/Z
+    latex: I=\frac{V}{Z}
+  constraints:
+  - expr: Z > 0
+    message:
+      es: La impedancia debe ser positiva para una corriente finita.
+      en: Impedance must be positive for finite current.
+  category: operative
+  relation_type: proportional_relation
+  physical_meaning:
+    es: La corriente eficaz queda fijada por la tension aplicada y la impedancia total.
+    en: Effective current is fixed by applied voltage and total impedance.
+  validity:
+    es: Requiere magnitudes RMS consistentes y estado estacionario sinusoidal.
+    en: Requires consistent RMS magnitudes and sinusoidal steady state.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - demanda de linea
+  - lectura de potencia aparente
+  - comparacion entre cargas
+  interpretation_tags:
+  - corriente
+  - rms
+  - demanda
+  - fuente
+  result_semantics:
+    target: corriente_rms
+    meaning: El resultado cuantifica la demanda eficaz que deben soportar fuente y conductores.
+    kind: scalar
+    absolute_value_meaning:
+      es: El resultado cuantifica la demanda eficaz que deben soportar fuente y conductores.
+      en: El resultado cuantifica la demanda eficaz que deben soportar fuente y conductores.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: V y Z deben expresarse en RMS y unidades coherentes.
+      en: V and Z must be expressed in RMS and coherent units.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Si Z disminuye a tension fija, I debe aumentar.
+      en: If Z decreases at fixed voltage, I must increase.
+  graph_implications:
+  - La corriente se lee como respuesta inversa al modulo de impedancia.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Verifica que no mezclas valores pico con RMS al calcular corriente.
+      en: Verify that peak and RMS values are not mixed when computing current.
+- id: desfase_rlc
+  title:
+    es: Desfase global del circuito
+    en: Global circuit phase shift
+  equation: phi = arctan((X_L - X_C)/R)
+  latex: \phi=\arctan(\frac{X_L-X_C}{R})
+  rearrangements:
+  - target: phi
+    equation: phi = arctan((X_L - X_C)/R)
+    latex: \phi=\arctan(\frac{X_L-X_C}{R})
+  constraints:
+  - expr: R > 0
+    message:
+      es: La expresion cerrada requiere R positiva en el modelo basico.
+      en: The closed-form expression requires positive R in the basic model.
+  category: operative
+  relation_type: phase_relation
+  physical_meaning:
+    es: El desfase sintetiza si domina el almacenamiento magnetico o electrico.
+    en: Phase shift synthesizes whether magnetic or electric storage dominates.
+  validity:
+    es: Valida para topologia serie lineal y una convencion de signos consistente.
+    en: Valid for linear series topology with a consistent sign convention.
+  dimension_check: adimensional y coherente como angulo
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - clasificacion de regimen
+  - factor de potencia
+  - lectura de potencia reactiva
+  interpretation_tags:
+  - fase
+  - inductivo
+  - capacitivo
+  - compensacion
+  result_semantics:
+    target: phi
+    meaning: El signo y magnitud del desfase determinan el caracter operativo del circuito.
+    kind: scalar
+    absolute_value_meaning:
+      es: El signo y magnitud del desfase determinan el caracter operativo del circuito.
+      en: El signo y magnitud del desfase determinan el caracter operativo del circuito.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: X_L y X_C deben corresponder al mismo equivalente serie y a la misma frecuencia.
+      en: X_L and X_C must correspond to the same series equivalent and the same frequency.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Si X_L supera a X_C, phi debe resultar positiva en la convencion del leaf.
+      en: If X_L exceeds X_C, phase shift must be positive under the leaf convention.
+  graph_implications:
+  - En Coord se asocia al cambio de signo del desequilibrio reactivo.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: No pierdas el signo fisico del angulo al pasar de calculo a interpretacion.
+      en: Do not lose the physical sign of the angle when moving from calculation to interpretation.
+- id: potencia_activa
+  title:
+    es: Potencia activa del circuito
+    en: Active power of the circuit
+  equation: P = V*I*cos(phi)
+  latex: P=VI\cos\phi
+  rearrangements:
+  - target: potencia_activa
+    equation: P = V*I*cos(phi)
+    latex: P=VI\cos\phi
+  constraints:
+  - expr: V >= 0 and I >= 0
+    message:
+      es: Se usan magnitudes RMS no negativas de tension y corriente.
+      en: Non-negative RMS voltage and current magnitudes are used.
+  category: energetic
+  relation_type: power_relation
+  physical_meaning:
+    es: Mide la fraccion de demanda que se convierte en transferencia media neta.
+    en: Measures the fraction of demand that becomes net average transfer.
+  validity:
+    es: Requiere regimen sinusoidal estacionario y una interpretacion coherente de phi.
+    en: Requires sinusoidal steady state and a coherent interpretation of phase shift.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - consumo util de carga
+  - dimensionado termico
+  - comparacion con demanda total
+  interpretation_tags:
+  - potencia-activa
+  - promedio
+  - disipacion
+  - utilidad
+  result_semantics:
+    target: potencia_activa
+    meaning: El resultado expresa la potencia media realmente absorbida por la parte resistiva.
+    kind: scalar
+    absolute_value_meaning:
+      es: El resultado expresa la potencia media realmente absorbida por la parte resistiva.
+      en: El resultado expresa la potencia media realmente absorbida por la parte resistiva.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: V, I y phi deben provenir del mismo estado estacionario.
+      en: V, I, and phase shift must come from the same steady state.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: P no puede superar a S en el modelo pasivo del leaf.
+      en: Active power cannot exceed apparent power in the passive leaf model.
+  graph_implications:
+  - Puede leerse como proyeccion util de la demanda total.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Si cos(phi) baja, la carga puede exigir mucha corriente sin aumentar P en igual proporcion.
+      en: If power factor drops, the load may demand much current without increasing active power proportionally.
+- id: potencia_reactiva
+  title:
+    es: Potencia reactiva del circuito
+    en: Reactive power of the circuit
+  equation: Q = V*I*sin(phi)
+  latex: Q=VI\sin\phi
+  rearrangements:
+  - target: potencia_reactiva
+    equation: Q = V*I*sin(phi)
+    latex: Q=VI\sin\phi
+  constraints:
+  - expr: V >= 0 and I >= 0
+    message:
+      es: La formula usa magnitudes RMS no negativas.
+      en: The formula uses non-negative RMS magnitudes.
+  category: energetic
+  relation_type: power_relation
+  physical_meaning:
+    es: Cuantifica el intercambio alterno de energia asociado al desfase.
+    en: Quantifies alternating energy exchange associated with phase shift.
+  validity:
+    es: Valida bajo el mismo marco sinusoidal del resto del leaf.
+    en: Valid under the same sinusoidal framework as the rest of the leaf.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - compensacion de factor de potencia
+  - clasificacion inductiva o capacitiva
+  - criterio de red
+  interpretation_tags:
+  - potencia-reactiva
+  - desfase
+  - compensacion
+  - intercambio
+  result_semantics:
+    target: potencia_reactiva
+    meaning: El signo del resultado indica si domina el comportamiento inductivo o capacitivo.
+    kind: scalar
+    absolute_value_meaning:
+      es: El signo del resultado indica si domina el comportamiento inductivo o capacitivo.
+      en: El signo del resultado indica si domina el comportamiento inductivo o capacitivo.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Debe mantenerse explicita la convencion de signo de phi.
+      en: Phase sign convention must stay explicit.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Si phi es casi nula, Q debe ser pequena frente a S.
+      en: If phase shift is nearly zero, reactive power should be small compared with S.
+  graph_implications:
+  - Se vincula al lado del equilibrio reactivo en que opera el circuito.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Q no es un residuo numerico, sino un criterio operativo de intercambio y capacidad de red.
+      en: Reactive power is not a numerical residue but an operational criterion of exchange and network capacity.
+- id: potencia_aparente
+  title:
+    es: Potencia aparente del circuito
+    en: Apparent power of the circuit
+  equation: S = V*I
+  latex: S=VI
+  rearrangements:
+  - target: potencia_aparente
+    equation: S = V*I
+    latex: S=VI
+  constraints:
+  - expr: V >= 0 and I >= 0
+    message:
+      es: V e I se tratan como magnitudes RMS no negativas.
+      en: V and I are treated as non-negative RMS magnitudes.
+  category: energetic
+  relation_type: power_relation
+  physical_meaning:
+    es: Fija la demanda total de la carga sobre fuente y conductores.
+    en: Sets total load demand on source and conductors.
+  validity:
+    es: Valida en el modelo RMS sinusoidal usado por el leaf.
+    en: Valid in the sinusoidal RMS model used by the leaf.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - dimensionado de fuente
+  - comparacion entre demanda total y potencia activa
+  - lectura de factor de potencia
+  interpretation_tags:
+  - potencia-aparente
+  - demanda
+  - rms
+  - fuente
+  result_semantics:
+    target: potencia_aparente
+    meaning: El resultado indica cuanta demanda total debe transportar la fuente.
+    kind: scalar
+    absolute_value_meaning:
+      es: El resultado indica cuanta demanda total debe transportar la fuente.
+      en: El resultado indica cuanta demanda total debe transportar la fuente.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Debe mantenerse una sola frecuencia de analisis y valores RMS coherentes.
+      en: One analysis frequency and coherent RMS values must be maintained.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: S debe ser mayor o igual que P en este modelo pasivo.
+      en: Apparent power must be greater than or equal to active power in this passive model.
+  graph_implications:
+  - Se interpreta como techo de demanda total del caso.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Si la compensacion reduce phi, S puede acercarse a P sin cambiar la potencia util objetivo.
+      en: If compensation reduces phase shift, apparent power may approach active power without changing useful-power target.
+ui:
+  default_formula: impedancia_rlc
+  groups:
+  - title:
+      es: Basicas
+      en: Basics
+    items:
+    - impedancia_rlc
+    - corriente_total
+    - desfase_rlc
+    - potencia_activa
+    - potencia_reactiva
+    - potencia_aparente

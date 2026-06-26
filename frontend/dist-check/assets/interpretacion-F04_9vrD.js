@@ -1,0 +1,416 @@
+const e=`version: 2
+id: interpretacion-routhiano-y-coordenadas-ciclicas
+leaf_id: routhiano-y-coordenadas-ciclicas
+nombre:
+  es: Interpretacion de Routhiano y coordenadas ciclicas
+  en: Interpretation of Routhian and Cyclic Coordinates
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: mecanica-analitica
+  parent_id: lagrangiano
+  ruta_relativa: fisica-clasica/mecanica/mecanica-analitica/lagrangiano/routhiano-y-coordenadas-ciclicas
+dependencies:
+  formulas:
+  - momento_ciclico
+  - definicion_routhiano
+  - ecuacion_routh_no_ciclica
+  - energia_reducida_routh
+  magnitudes:
+  - Routh
+  - Lagr
+  - pa
+  - qa
+  - qdot_a
+  - qi
+  - E
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  Routh:
+    summary_rules:
+    - id: Routh_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[Routh]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[Routh]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: Routh_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[Routh]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[Routh]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: Routh_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[Routh]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[Routh]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: Routh_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el routhiano aprovecha coordenadas ciclicas para reducir un problema lagrangiano sin abandonar toda la estructura variacional; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while the routhian uses cyclic coordinates to reduce a lagrangian problem without abandoning the variational structure; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: Routh_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[Routh]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[Routh]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: Routh_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[Routh]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[Routh]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: Routh_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[Routh]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[Routh]] with a limiting case and state what observable change it would produce.
+  Lagr:
+    summary_rules:
+    - id: Lagr_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[Lagr]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[Lagr]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: Lagr_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[Lagr]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[Lagr]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: Lagr_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[Lagr]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[Lagr]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: Lagr_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el routhiano aprovecha coordenadas ciclicas para reducir un problema lagrangiano sin abandonar toda la estructura variacional; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while the routhian uses cyclic coordinates to reduce a lagrangian problem without abandoning the variational structure; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: Lagr_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[Lagr]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[Lagr]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: Lagr_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[Lagr]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[Lagr]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: Lagr_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[Lagr]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[Lagr]] with a limiting case and state what observable change it would produce.
+  pa:
+    summary_rules:
+    - id: pa_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[pa]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[pa]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: pa_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[pa]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[pa]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: pa_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[pa]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[pa]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: pa_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el routhiano aprovecha coordenadas ciclicas para reducir un problema lagrangiano sin abandonar toda la estructura variacional; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while the routhian uses cyclic coordinates to reduce a lagrangian problem without abandoning the variational structure; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: pa_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[pa]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[pa]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: pa_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[pa]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[pa]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: pa_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[pa]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[pa]] with a limiting case and state what observable change it would produce.
+  qa:
+    summary_rules:
+    - id: qa_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[qa]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[qa]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: qa_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[qa]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[qa]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: qa_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[qa]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[qa]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: qa_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el routhiano aprovecha coordenadas ciclicas para reducir un problema lagrangiano sin abandonar toda la estructura variacional; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while the routhian uses cyclic coordinates to reduce a lagrangian problem without abandoning the variational structure; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: qa_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[qa]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[qa]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: qa_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[qa]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[qa]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: qa_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[qa]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[qa]] with a limiting case and state what observable change it would produce.
+  qdot_a:
+    summary_rules:
+    - id: qdot_a_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[qdot_a]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[qdot_a]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: qdot_a_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[qdot_a]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[qdot_a]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: qdot_a_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[qdot_a]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[qdot_a]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: qdot_a_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el routhiano aprovecha coordenadas ciclicas para reducir un problema lagrangiano sin abandonar toda la estructura variacional; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while the routhian uses cyclic coordinates to reduce a lagrangian problem without abandoning the variational structure; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: qdot_a_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[qdot_a]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[qdot_a]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: qdot_a_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[qdot_a]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[qdot_a]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: qdot_a_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[qdot_a]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[qdot_a]] with a limiting case and state what observable change it would produce.
+  qi:
+    summary_rules:
+    - id: qi_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[qi]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[qi]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: qi_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[qi]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[qi]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: qi_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[qi]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[qi]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: qi_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el routhiano aprovecha coordenadas ciclicas para reducir un problema lagrangiano sin abandonar toda la estructura variacional; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while the routhian uses cyclic coordinates to reduce a lagrangian problem without abandoning the variational structure; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: qi_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[qi]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[qi]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: qi_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[qi]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[qi]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: qi_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[qi]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[qi]] with a limiting case and state what observable change it would produce.
+  E:
+    summary_rules:
+    - id: E_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[E]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[E]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: E_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[E]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[E]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: E_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[E]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[E]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: E_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el routhiano aprovecha coordenadas ciclicas para reducir un problema lagrangiano sin abandonar toda la estructura variacional; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while the routhian uses cyclic coordinates to reduce a lagrangian problem without abandoning the variational structure; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: E_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[E]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[E]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: E_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[E]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[E]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: E_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[E]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[E]] with a limiting case and state what observable change it would produce.
+`;export{e as default};

@@ -1,0 +1,108 @@
+version: v5
+id: frecuencia-y-periodo
+leaf_id: frecuencia-y-periodo
+nombre: { es: Frecuencia y periodo, en: Frequency and period }
+scope: { es: Interpretar ritmo temporal, periodo, frecuencia angular y conteo de ciclos., en: Interpret temporal rhythm, period, angular frequency, and cycle count. }
+ui:
+  display_modes: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  preferred_mode: physical_reading
+dependencies:
+  magnitudes: [f, T, omega, N, Delta_t]
+  formulas: [frecuencia_periodo, frecuencia_angular, frecuencia_por_conteo]
+global_context:
+  es: Frecuencia y periodo describen el mismo ritmo temporal desde dos lecturas inversas.
+  en: Frequency and period describe the same temporal rhythm from two inverse readings.
+result_blocks:
+  summary: { title: { es: Resumen, en: Summary } }
+  physical_reading: { title: { es: Lectura física, en: Physical reading } }
+  coherence: { title: { es: Coherencia, en: Coherence } }
+  model_validity: { title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { title: { es: Lectura gráfica, en: Graph reading } }
+  likely_errors: { title: { es: Errores probables, en: Likely errors } }
+  next_step: { title: { es: Siguiente paso, en: Next step } }
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  summary_first: true
+  include_units: true
+  include_warnings: true
+targets:
+  f:
+    label: { es: frecuencia, en: frequency }
+    summary_rules:
+      - { id: f_summary, when: always, status: ok, text: { es: "[[f]] describe cuántos ciclos ocurren por unidad de tiempo.", en: "[[f]] describes how many cycles occur per unit time." } }
+    physical_reading_rules:
+      - { id: f_reading, when: always, status: ok, text: { es: "Una frecuencia mayor indica un ritmo temporal más rápido, no una propagación espacial más veloz.", en: "A higher frequency indicates a faster temporal rhythm, not faster spatial propagation." } }
+    coherence_rules:
+      - { id: f_coherence, when: always, status: ok, text: { es: "Debe ser coherente con [[T]] y con la ventana [[Delta_t]] si procede de conteo.", en: "It must be coherent with [[T]] and with window [[Delta_t]] if it comes from counting." } }
+    model_validity_rules:
+      - { id: f_validity, when: always, status: warning, text: { es: "La lectura exige ciclos reconocibles durante la observación.", en: "The reading requires recognizable cycles during observation." } }
+    graph_rules:
+      - { id: f_graph, when: always, status: ok, text: { es: "En el gráfico, [[f]] se ve como ciclos más apretados en el eje temporal.", en: "On the graph, [[f]] appears as tighter cycles on the time axis." } }
+    likely_errors:
+      - { id: f_error, when: always, status: warning, text: { es: "Error probable: confundir [[f]] con rapidez de propagación.", en: "Likely mistake: confusing [[f]] with propagation speed." } }
+    next_step_rules:
+      - { id: f_next, when: always, status: ok, text: { es: "Calcula [[T]] para leer la duración de un ciclo.", en: "Calculate [[T]] to read the duration of one cycle." } }
+  T:
+    label: { es: periodo, en: period }
+    summary_rules:
+      - { id: T_summary, when: always, status: ok, text: { es: "[[T]] resume cuánto tarda un ciclo completo.", en: "[[T]] summarizes how long one complete cycle takes." } }
+    physical_reading_rules:
+      - { id: T_reading, when: always, status: ok, text: { es: "Un periodo mayor indica repetición más lenta y por tanto menor frecuencia.", en: "A larger period indicates slower repetition and therefore lower frequency." } }
+    coherence_rules:
+      - { id: T_coherence, when: always, status: ok, text: { es: "[[T]] debe ser inverso de [[f]] en una onda periódica estable.", en: "[[T]] must be inverse to [[f]] in a stable periodic wave." } }
+    model_validity_rules:
+      - { id: T_validity, when: always, status: warning, text: { es: "Si los ciclos cambian de duración, un único periodo es solo una aproximación.", en: "If cycles change duration, one period is only an approximation." } }
+    graph_rules:
+      - { id: T_graph, when: always, status: ok, text: { es: "En el gráfico, [[T]] es la separación temporal entre estados equivalentes.", en: "On the graph, [[T]] is the temporal spacing between equivalent states." } }
+    likely_errors:
+      - { id: T_error, when: always, status: warning, text: { es: "Error probable: creer que mayor [[T]] implica mayor [[f]].", en: "Likely mistake: believing larger [[T]] implies larger [[f]]." } }
+    next_step_rules:
+      - { id: T_next, when: always, status: ok, text: { es: "Compara [[T]] con [[Delta_t]] para saber cuántos ciclos caben.", en: "Compare [[T]] with [[Delta_t]] to know how many cycles fit." } }
+  omega:
+    label: { es: frecuencia angular, en: angular frequency }
+    summary_rules:
+      - { id: omega_summary, when: always, status: ok, text: { es: "[[omega]] expresa el mismo ritmo como avance angular de fase.", en: "[[omega]] expresses the same rhythm as angular phase advance." } }
+    physical_reading_rules:
+      - { id: omega_reading, when: always, status: ok, text: { es: "Describe radianes de fase por segundo y depende de [[f]].", en: "It describes radians of phase per second and depends on [[f]]." } }
+    coherence_rules:
+      - { id: omega_coherence, when: always, status: ok, text: { es: "Debe distinguirse de [[f]], que cuenta ciclos por segundo.", en: "It must be distinguished from [[f]], which counts cycles per second." } }
+    model_validity_rules:
+      - { id: omega_validity, when: always, status: warning, text: { es: "Tiene lectura directa cuando la fase angular está definida.", en: "It has direct meaning when angular phase is defined." } }
+    graph_rules:
+      - { id: omega_graph, when: always, status: ok, text: { es: "En animación, mayor [[omega]] acelera el avance de fase.", en: "In animation, larger [[omega]] speeds phase advance." } }
+    likely_errors:
+      - { id: omega_error, when: always, status: warning, text: { es: "Error probable: mezclar Hz y rad/s como si fueran idénticos.", en: "Likely mistake: mixing Hz and rad/s as if identical." } }
+    next_step_rules:
+      - { id: omega_next, when: always, status: ok, text: { es: "Usa [[omega]] cuando el problema hable de fase angular.", en: "Use [[omega]] when the problem refers to angular phase." } }
+  N:
+    label: { es: número de ciclos, en: number of cycles }
+    summary_rules:
+      - { id: N_summary, when: always, status: ok, text: { es: "[[N]] indica cuántas repeticiones completas se cuentan.", en: "[[N]] indicates how many complete repetitions are counted." } }
+    physical_reading_rules:
+      - { id: N_reading, when: always, status: ok, text: { es: "Sirve para estimar [[f]] si se conoce [[Delta_t]].", en: "It estimates [[f]] if [[Delta_t]] is known." } }
+    coherence_rules:
+      - { id: N_coherence, when: always, status: ok, text: { es: "Debe contarse con el mismo criterio de ciclo durante toda la ventana.", en: "It must be counted with the same cycle criterion throughout the window." } }
+    model_validity_rules:
+      - { id: N_validity, when: always, status: warning, text: { es: "Si el ritmo cambia mucho, el conteo solo da frecuencia media.", en: "If rhythm changes strongly, counting gives only average frequency." } }
+    graph_rules:
+      - { id: N_graph, when: always, status: ok, text: { es: "En el gráfico, [[N]] se ve como repeticiones dentro de una ventana.", en: "On the graph, [[N]] appears as repetitions inside a window." } }
+    likely_errors:
+      - { id: N_error, when: always, status: warning, text: { es: "Error probable: contar medios ciclos como ciclos completos.", en: "Likely mistake: counting half cycles as complete cycles." } }
+    next_step_rules:
+      - { id: N_next, when: always, status: ok, text: { es: "Divide el conteo entre [[Delta_t]] para estimar el ritmo.", en: "Divide the count by [[Delta_t]] to estimate rhythm." } }
+  Delta_t:
+    label: { es: intervalo de observación, en: observation interval }
+    summary_rules:
+      - { id: Dt_summary, when: always, status: ok, text: { es: "[[Delta_t]] define la ventana temporal usada para medir.", en: "[[Delta_t]] defines the time window used for measurement." } }
+    physical_reading_rules:
+      - { id: Dt_reading, when: always, status: ok, text: { es: "Una ventana mayor reduce error de conteo si el ritmo es estable.", en: "A larger window reduces counting error if rhythm is stable." } }
+    coherence_rules:
+      - { id: Dt_coherence, when: always, status: ok, text: { es: "No debe confundirse con [[T]], que mide un ciclo individual.", en: "It must not be confused with [[T]], which measures one individual cycle." } }
+    model_validity_rules:
+      - { id: Dt_validity, when: always, status: warning, text: { es: "La ventana debe ser adecuada al ritmo observado.", en: "The window must suit the observed rhythm." } }
+    graph_rules:
+      - { id: Dt_graph, when: always, status: ok, text: { es: "En el gráfico, [[Delta_t]] encierra los ciclos contados.", en: "On the graph, [[Delta_t]] encloses the counted cycles." } }
+    likely_errors:
+      - { id: Dt_error, when: always, status: warning, text: { es: "Error probable: usar la ventana total como si fuera periodo.", en: "Likely mistake: using the total window as if it were period." } }
+    next_step_rules:
+      - { id: Dt_next, when: always, status: ok, text: { es: "Comprueba cuántos ciclos completos caben en la ventana.", en: "Check how many complete cycles fit in the window." } }

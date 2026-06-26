@@ -1,0 +1,319 @@
+- id: eta_D
+  symbol: "\\eta_D"
+  nombre:
+    es: Rendimiento térmico del ciclo Diesel
+    en: Diesel cycle thermal efficiency
+  descripcion:
+    es: "Fracción del calor absorbido que se convierte en trabajo neto en el ciclo Diesel ideal"
+    en: "Fraction of absorbed heat converted into net work in the ideal Diesel cycle"
+  unidad_si: adimensional
+  dimension: "[1]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - ciclos termodinámicos de encendido por compresión
+    - evaluación de rendimiento de motores Diesel
+    - comparación con ciclo Otto y Carnot
+  common_mistake: "Confundir con rendimiento de Carnot o de Otto; olvidar el factor de la relación de corte; usar Celsius en vez de kelvin"
+  typical_range: "0.30 – 0.70 para motores Diesel industriales"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre positivo y menor que uno para ciclos reales"
+      en: "Always positive and less than one for real cycles"
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: "Rendimiento nulo implicaría que todo el calor se cede al foco frío sin producir trabajo"
+      en: "Zero efficiency would imply all heat is rejected to the cold reservoir without producing work"
+  value_nature:
+    kind: ratio
+    nonnegative_only: true
+    expected_interval: "[0, 1)"
+  interpretation_role:
+    primary_for:
+      - summary
+      - coherence
+    secondary_for:
+      - model_validity
+  graph_binding:
+    channels:
+      - y_axis
+  pedagogical_notes:
+    es: "El rendimiento Diesel siempre es menor que el de Otto para la misma relación de compresión, debido al factor de corte. Sin embargo, los motores Diesel operan con relaciones de compresión mucho mayores."
+    en: "Diesel efficiency is always lower than Otto for the same compression ratio due to the cutoff factor. However, Diesel engines operate with much higher compression ratios."
+
+- id: r
+  symbol: "r"
+  nombre:
+    es: Relación de compresión
+    en: Compression ratio
+  descripcion:
+    es: "Cociente entre el volumen máximo y el volumen mínimo del cilindro"
+    en: "Ratio between maximum and minimum cylinder volume"
+  unidad_si: adimensional
+  dimension: "[1]"
+  is_vector: false
+  components: []
+  category: design_parameter
+  physical_role: control_variable
+  used_in:
+    - fórmula de rendimiento Diesel
+    - comparación Otto vs Diesel
+    - diseño de motores de compresión
+  common_mistake: "Confundir con la relación de corte r_c; usar valores típicos de Otto (8-12) en lugar de Diesel (14-25)"
+  typical_range: "14 – 25 para motores Diesel"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre mayor que uno"
+      en: "Always greater than one"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "No tiene sentido físico; r debe ser mayor que uno para que exista compresión"
+      en: "No physical meaning; r must be greater than one for compression to exist"
+  value_nature:
+    kind: ratio
+    nonnegative_only: true
+    expected_interval: "(1, 30)"
+  interpretation_role:
+    primary_for:
+      - graph_reading
+    secondary_for:
+      - coherence
+  graph_binding:
+    channels:
+      - x_axis
+  pedagogical_notes:
+    es: "En motores Diesel reales la relación de compresión es mucho mayor que en Otto porque el encendido se produce por compresión del aire puro, sin riesgo de detonación."
+    en: "In real Diesel engines the compression ratio is much higher than in Otto because ignition occurs by compression of pure air, without detonation risk."
+
+- id: r_c
+  symbol: "r_c"
+  nombre:
+    es: Relación de corte
+    en: Cutoff ratio
+  descripcion:
+    es: "Cociente entre el volumen al final y al inicio de la combustión a presión constante"
+    en: "Ratio between volume at the end and at the start of constant-pressure combustion"
+  unidad_si: adimensional
+  dimension: "[1]"
+  is_vector: false
+  components: []
+  category: operating_parameter
+  physical_role: control_variable
+  used_in:
+    - fórmula de rendimiento Diesel
+    - factor de penalización respecto a Otto
+    - control de inyección de combustible
+  common_mistake: "Confundir con la relación de compresión r; olvidar que r_c mayor que uno siempre reduce el rendimiento respecto a Otto"
+  typical_range: "1.5 – 4.0 para motores Diesel"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre mayor que uno"
+      en: "Always greater than one"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "No tiene sentido físico; r_c igual a uno reduciría el ciclo al de Otto"
+      en: "No physical meaning; r_c equal to one would reduce the cycle to Otto"
+  value_nature:
+    kind: ratio
+    nonnegative_only: true
+    expected_interval: "(1, 6)"
+  interpretation_role:
+    primary_for:
+      - physical_reading
+    secondary_for:
+      - coherence
+  graph_binding:
+    channels:
+      - parameter
+  pedagogical_notes:
+    es: "Cuando r_c tiende a uno el ciclo Diesel se aproxima al de Otto; cuanto mayor es r_c más calor se inyecta pero más cae el rendimiento."
+    en: "When r_c approaches one the Diesel cycle approximates Otto; the higher r_c the more heat is injected but the more efficiency drops."
+
+- id: gamma
+  symbol: "\\gamma"
+  nombre:
+    es: Índice adiabático
+    en: Adiabatic index
+  descripcion:
+    es: "Cociente entre la capacidad calorífica a presión constante y a volumen constante del gas"
+    en: "Ratio of constant-pressure to constant-volume heat capacity of the gas"
+  unidad_si: adimensional
+  dimension: "[1]"
+  is_vector: false
+  components: []
+  category: material_property
+  physical_role: auxiliary_parameter
+  used_in:
+    - fórmula de rendimiento Diesel
+    - pendiente de procesos adiabáticos
+    - comparación aire frío vs aire caliente
+  common_mistake: "Asumir gamma constante a temperaturas muy altas donde varía; usar gamma del aire frío (1.4) en gases de combustión calientes (1.3)"
+  typical_range: "1.3 – 1.4 para aire y gases de combustión"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre mayor que uno para gases ideales"
+      en: "Always greater than one for ideal gases"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "No tiene sentido físico; gamma debe ser mayor que uno"
+      en: "No physical meaning; gamma must be greater than one"
+  value_nature:
+    kind: ratio
+    nonnegative_only: true
+    expected_interval: "(1, 1.7)"
+  interpretation_role:
+    primary_for:
+      - model_validity
+    secondary_for:
+      - physical_reading
+  graph_binding:
+    channels:
+      - parameter
+  pedagogical_notes:
+    es: "En el modelo de aire frío gamma es 1.4; en gases de combustión reales desciende a 1.3 o menos, reduciendo el rendimiento teórico un 10-15 %."
+    en: "In the cold-air standard gamma is 1.4; in real combustion gases it drops to 1.3 or less, reducing theoretical efficiency by 10-15 %."
+
+- id: Q_H
+  symbol: "Q_H"
+  nombre:
+    es: Calor absorbido a presión constante
+    en: Heat absorbed at constant pressure
+  descripcion:
+    es: "Energía térmica suministrada al gas durante la combustión isobárica"
+    en: "Thermal energy supplied to the gas during isobaric combustion"
+  unidad_si: J
+  dimension: "[M L² T⁻²]"
+  is_vector: false
+  components: []
+  category: extensive
+  physical_role: energy_input
+  used_in:
+    - balance energético del ciclo
+    - cálculo de trabajo neto
+    - verificación de rendimiento
+  common_mistake: "Confundir con el calor total del combustible incluyendo pérdidas; olvidar que solo se contabiliza el calor transferido al gas de trabajo"
+  typical_range: "500 – 3000 kJ/kg para motores Diesel"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Positivo por convenio; el gas absorbe calor del foco caliente"
+      en: "Positive by convention; the gas absorbs heat from the hot reservoir"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Sin aporte de calor no existe ciclo motor"
+      en: "Without heat input there is no power cycle"
+  value_nature:
+    kind: extensive
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - physical_reading
+    secondary_for:
+      - coherence
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: "En el ciclo Diesel ideal el calor se absorbe a presión constante, a diferencia del Otto donde se absorbe a volumen constante."
+    en: "In the ideal Diesel cycle heat is absorbed at constant pressure, unlike Otto where it is absorbed at constant volume."
+
+- id: Q_C
+  symbol: "Q_C"
+  nombre:
+    es: Calor cedido al foco frío
+    en: Heat rejected to the cold reservoir
+  descripcion:
+    es: "Energía térmica que el gas cede al entorno durante la isocórica de escape"
+    en: "Thermal energy the gas rejects to the surroundings during the isochoric exhaust"
+  unidad_si: J
+  dimension: "[M L² T⁻²]"
+  is_vector: false
+  components: []
+  category: extensive
+  physical_role: energy_loss
+  used_in:
+    - balance energético del ciclo
+    - verificación de rendimiento
+    - evaluación de pérdidas térmicas
+  common_mistake: "Asumir que Q_C puede ser cero en un motor real; confundir el calor rechazado con las pérdidas mecánicas"
+  typical_range: "200 – 1500 kJ/kg para motores Diesel"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Positivo por convenio; representa energía que sale del gas hacia el foco frío"
+      en: "Positive by convention; represents energy leaving the gas toward the cold reservoir"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Q_C nulo violaría la segunda ley; siempre debe cederse calor al foco frío"
+      en: "Zero Q_C would violate the second law; heat must always be rejected to the cold reservoir"
+  value_nature:
+    kind: extensive
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - coherence
+    secondary_for:
+      - physical_reading
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: "En el ciclo Diesel ideal el calor se rechaza a volumen constante, igual que en el ciclo Otto."
+    en: "In the ideal Diesel cycle heat is rejected at constant volume, same as in the Otto cycle."
+
+- id: W_neto
+  symbol: "W_{neto}"
+  nombre:
+    es: Trabajo neto del ciclo
+    en: Net cycle work
+  descripcion:
+    es: "Diferencia entre el calor absorbido y el calor cedido, igual al trabajo mecánico útil producido"
+    en: "Difference between absorbed and rejected heat, equal to the useful mechanical work produced"
+  unidad_si: J
+  dimension: "[M L² T⁻²]"
+  is_vector: false
+  components: []
+  category: extensive
+  physical_role: useful_output
+  used_in:
+    - balance energético del ciclo
+    - cálculo de rendimiento
+    - evaluación de potencia del motor
+  common_mistake: "Olvidar que W_neto incluye el trabajo de compresión; confundir trabajo neto con trabajo de expansión solamente"
+  typical_range: "300 – 1800 kJ/kg para motores Diesel"
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: "Positivo para un ciclo motor; negativo indicaría que el ciclo consume trabajo"
+      en: "Positive for a power cycle; negative would indicate the cycle consumes work"
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: "W_neto nulo significa que todo el calor absorbido se cede al foco frío; no se produce trabajo"
+      en: "Zero W_neto means all absorbed heat is rejected to the cold reservoir; no work is produced"
+  value_nature:
+    kind: extensive
+    nonnegative_only: false
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - summary
+    secondary_for:
+      - coherence
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: "El trabajo neto es el área encerrada por el ciclo en el diagrama P-V."
+    en: "Net work is the area enclosed by the cycle in the P-V diagram."

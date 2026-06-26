@@ -1,0 +1,72 @@
+const e=`version: 5
+id: magnitudes-alternas
+nombre:
+  es: Magnitudes alternas
+  en: AC Quantities
+titulo:
+  es: Magnitudes alternas
+  en: AC Quantities
+titulo_en: AC Quantities
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: corriente-alterna
+parent_id: corriente-alterna
+type: leaf
+ruta_relativa: fisica-clasica/electromagnetismo/corriente-alterna/magnitudes-alternas
+orden: 294100
+icon: "⚡"
+descripcion: Introduce amplitud, RMS, frecuencia, periodo y fase para interpretar señales y potencia en corriente alterna.
+description_en: Introduces amplitude, RMS, frequency, period, and phase to interpret AC signals and power.
+dificultad: 3
+tiempo_estimado_min: 70
+niveles:
+  es: [ UNIVERSIDAD ]
+  en: [ University ]
+prerequisitos:
+- fisica-clasica/electromagnetismo/fundamentos/principio-de-superposicion
+tags:
+  es: [ magnitudes-alternas, rms, frecuencia, desfase, potencia-activa ]
+  en: [ ac-quantities, rms, frequency, phase-shift, active-power ]
+physical_role:
+  es: concepto físico
+  en: physical concept
+graficos: []
+representacion_dominante: none
+magnitud_dominante: Vrms
+pregunta_fisica_central:
+  es: "¿Cómo se relacionan amplitud, frecuencia, fase y RMS para describir y comparar señales de corriente alterna?"
+  en: "How do amplitude, frequency, phase, and RMS combine to describe and compare AC signals?"
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    show_tab: true
+    show_inline_cards: true
+    allow_contextual_feedback: true
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+    output_magnitude: Vrms
+  output_policy:
+    show_summary: true
+    show_summary_first: true
+    show_physical_reading: true
+    show_coherence_checks: true
+    show_model_limitations: true
+    show_warnings: true
+    show_likely_errors: true
+    max_inline_messages: 4
+  dependencies:
+    require_formulas: true
+    require_magnitudes: true
+    require_examples: true
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

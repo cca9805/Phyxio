@@ -1,0 +1,279 @@
+const e=`version: 1
+formulas:
+- id: Pinicial
+  title:
+    es: Momento total inicial
+    en: Initial total momentum
+  equation: pTotI = m1*v1i + m2*v2i
+  latex: p_{tot,i} = m_1 v_{1i} + m_2 v_{2i}
+  rearrangements:
+  - target: pTotI
+    equation: pTotI = m1*v1i + m2*v2i
+    latex: p_{tot,i} = m_1 v_{1i} + m_2 v_{2i}
+    constraints: []
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: Define el estado de movimiento del sistema como la suma de los momentos individuales de sus partes antes de que ocurra la interacción.
+    en: Defines the system's motion state as the sum of the individual momenta of its parts before the interaction occurs.
+  constraints:
+  - expr: m1 > 0 and m2 > 0
+    message:
+      es: Las masas deben ser positivas.
+      en: Masses must be positive.
+  validity:
+    es: Válida para sistemas discretos de dos cuerpos en una dimensión.
+    en: Valid for two-body discrete systems in one dimension.
+  dimension_check:
+    es: '[pTotI] = [M · L/T] = M L T^-1'
+    en: '[pTotI] = [M · L/T] = M L T^-1'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - theory
+  - examples
+  - calculator
+  interpretation_tags:
+  - sistemas-aislados
+  - momento-total
+  - estado-inicial
+  result_semantics:
+    target: pTotI
+    meaning: Cantidad de movimiento total que posee el sistema al inicio del intervalo de análisis.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: Pfinal
+  title:
+    es: Momento total final
+    en: Final total momentum
+  equation: pTotF = m1*v1f + m2*v2f
+  latex: p_{tot,f} = m_1 v_{1f} + m_2 v_{2f}
+  rearrangements:
+  - target: pTotF
+    equation: pTotF = m1*v1f + m2*v2f
+    latex: p_{tot,f} = m_1 v_{1f} + m_2 v_{2f}
+    constraints: []
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: Define el estado de movimiento del sistema tras la interacción, sumando los momentos de todos sus componentes.
+    en: Defines the system's motion state after the interaction, summing the momenta of all its components.
+  constraints:
+  - expr: m1 > 0 and m2 > 0
+    message:
+      es: Las masas deben ser positivas.
+      en: Masses must be positive.
+  validity:
+    es: Válida tras finalizar el intercambio de momento entre las partes.
+    en: Valid after the momentum exchange between parts has finished.
+  dimension_check:
+    es: '[pTotF] = [M · L/T] = M L T^-1'
+    en: '[pTotF] = [M · L/T] = M L T^-1'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - theory
+  - examples
+  - calculator
+  interpretation_tags:
+  - sistemas-aislados
+  - momento-total
+  - estado-final
+  result_semantics:
+    target: pTotF
+    meaning: Cantidad de movimiento total del sistema tras el evento de interacción.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: cons
+  title:
+    es: Conservación del momento lineal
+    en: Linear momentum conservation
+  equation: pTotI = pTotF
+  latex: p_{tot,i} = p_{tot,f}
+  rearrangements:
+  - target: pTotF
+    equation: pTotF = pTotI
+    latex: p_{tot,f} = p_{tot,i}
+    constraints: []
+  - target: pTotI
+    equation: pTotI = pTotF
+    latex: p_{tot,i} = p_{tot,f}
+    constraints: []
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Establece que en ausencia de impulsos externos netos, el momento total del sistema no cambia, aunque sus partes intercambien momento entre sí.
+    en: Establishes that in the absence of net external impulses, the total momentum of the system does not change, even if its parts exchange momentum among themselves.
+  constraints:
+  - expr: Jext == 0
+    message:
+      es: El sistema debe estar aislado (impulso externo nulo) para aplicar esta igualdad.
+      en: The system must be isolated (zero external impulse) to apply this equality.
+  validity:
+    es: Aplicable durante intervalos de interacción breves (aproximación impulsiva) o en sistemas estrictamente aislados.
+    en: Applicable during brief interaction intervals (impulsive approximation) or in strictly isolated systems.
+  dimension_check:
+    es: '[pTotI] = [pTotF] = M L T^-1'
+    en: '[pTotI] = [pTotF] = M L T^-1'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - theory
+  - examples
+  - calculator
+  interpretation_tags:
+  - sistemas-aislados
+  - conservacion
+  - balance
+  result_semantics:
+    target: pTotF
+    meaning: Valor del momento final garantizado por la ley de conservación bajo aislamiento.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: balance
+  title:
+    es: Teorema del impulso para el sistema total
+    en: Impulse theorem for the total system
+  equation: DeltaPtot = Jext
+  latex: \\Delta p_{tot} = J_{ext}
+  rearrangements:
+  - target: DeltaPtot
+    equation: DeltaPtot = Jext
+    latex: \\Delta p_{tot} = J_{ext}
+    constraints: []
+  - target: Jext
+    equation: Jext = DeltaPtot
+    latex: J_{ext} = \\Delta p_{tot}
+    constraints: []
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Relaciona el cambio del momento total del sistema con el impulso neto recibido desde el exterior (el entorno).
+    en: Relates the change in the total momentum of the system with the net impulse received from the outside (the environment).
+  constraints:
+  - expr: 'true'
+    message:
+      es: Válida siempre que se identifiquen correctamente todas las fuerzas externas.
+      en: Valid as long as all external forces are correctly identified.
+  validity:
+    es: General para cualquier sistema de partículas en mecánica clásica.
+    en: General for any system of particles in classical mechanics.
+  dimension_check:
+    es: '[DeltaPtot] = [Jext] = M L T^-1'
+    en: '[DeltaPtot] = [Jext] = M L T^-1'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - theory
+  - examples
+  - calculator
+  interpretation_tags:
+  - sistemas-aislados
+  - impulso-externo
+  - variacion-momento
+  result_semantics:
+    target: DeltaPtot
+    meaning: Medida de cuánto se ha desviado el sistema de la conservación debido a la influencia del entorno.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: cons_completa
+  title:
+    es: Ecuación completa de conservación para dos cuerpos
+    en: Complete two-body conservation equation
+  equation: m1*v1i + m2*v2i = m1*v1f + m2*v2f
+  latex: m_1 v_{1i} + m_2 v_{2i} = m_1 v_{1f} + m_2 v_{2f}
+  rearrangements:
+  - target: v1f
+    equation: v1f = (m1*v1i + m2*v2i - m2*v2f) / m1
+    latex: v_{1f} = \\frac{m_1 v_{1i} + m_2 v_{2i} - m_2 v_{2f}}{m_1}
+    constraints: []
+  - target: v2f
+    equation: v2f = (m1*v1i + m2*v2i - m1*v1f) / m2
+    latex: v_{2f} = \\frac{m_1 v_{1i} + m_2 v_{2i} - m_1 v_{1f}}{m_2}
+    constraints: []
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Expresa la conservación del momento en términos de las variables cinemáticas (velocidades) y las propiedades inerciales (masas) de los cuerpos.
+    en: Expresses momentum conservation in terms of kinematic variables (velocities) and inertial properties (masses) of the bodies.
+  constraints:
+  - expr: m1 > 0 and m2 > 0 and Jext == 0
+    message:
+      es: Requiere masas reales y aislamiento del sistema.
+      en: Requires real masses and system isolation.
+  validity:
+    es: Válida para choques, explosiones y retrocesos en una dimensión con masa constante.
+    en: Valid for one-dimensional collisions, explosions, and recoils with constant mass.
+  dimension_check:
+    es: '[m v] = [M · L/T] = M L T^-1'
+    en: '[m v] = [M · L/T] = M L T^-1'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - theory
+  - examples
+  - calculator
+  interpretation_tags:
+  - sistemas-aislados
+  - colision
+  - retroceso
+  - cinematica
+  result_semantics:
+    target: v1f
+    meaning: Velocidad resultante del primer cuerpo tras interactuar aisladamente con el segundo.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: cons_solve_pTotF
+  title:
+    es: Cálculo del momento final por conservación
+    en: Calculation of final momentum by conservation
+  equation: pTotF = pTotI
+  latex: p_{tot,f} = p_{tot,i}
+  rearrangements:
+  - target: pTotF
+    equation: pTotF = pTotI
+    latex: p_{tot,f} = p_{tot,i}
+    constraints: []
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Permite determinar el estado de movimiento final de un sistema aislado asumiendo que es idéntico a su estado inicial.
+    en: Allows determining the final motion state of an isolated system assuming it is identical to its initial state.
+  constraints:
+  - expr: Jext == 0
+    message:
+      es: Solo aplicable si no hay impulsos externos.
+      en: Only applicable if there are no external impulses.
+  validity:
+    es: Válida para sistemas cerrados y aislados.
+    en: Valid for closed and isolated systems.
+  dimension_check:
+    es: '[pTotF] = [pTotI] = M L T^-1'
+    en: '[pTotF] = [pTotI] = M L T^-1'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - theory
+  - examples
+  - calculator
+  interpretation_tags:
+  - sistemas-aislados
+  - conservacion
+  result_semantics:
+    target: pTotF
+    meaning: Valor del momento final basado en la hipótesis de aislamiento.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+`;export{e as default};

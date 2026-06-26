@@ -1,0 +1,59 @@
+// frontend/src/v2/agent/buildSvgGraphMetadata.js
+
+import {
+  GRAPH_TYPES,
+  GRAPH_SEMANTIC_ROLES,
+  GRAPH_READING_MODES,
+  normalizeGraphMetadata,
+} from "./graphMetadata.contract";
+
+export function buildSvgGraphMetadata({
+  graphId,
+  title,
+  subtitle,
+  leafId,
+  sceneId,
+  sceneLabel,
+  visibleMagnitudes = [],
+  physicalReading,
+  modelConnection,
+  formulaConnection,
+  recommendedTab = "graficas",
+  agentHints = [],
+  commonMistakes = [],
+} = {}) {
+  return normalizeGraphMetadata({
+    graphId,
+    type: GRAPH_TYPES.SVG,
+    title,
+    subtitle,
+
+    semanticRole: GRAPH_SEMANTIC_ROLES.PHYSICAL_SCENE,
+    readingMode: GRAPH_READING_MODES.SCENE_GEOMETRY_MODEL,
+
+    sceneId,
+    sceneLabel,
+    visibleMagnitudes,
+
+    physicalReading,
+    modelConnection,
+    formulaConnection,
+
+    recommendedTab,
+
+    agentHints: [
+      "Lee primero la escena física y sus elementos.",
+      "Identifica qué modelo idealizado representa.",
+      "No interpretes la escena como una gráfica de ejes salvo que existan ejes explícitos.",
+      ...agentHints,
+    ],
+
+    commonMistakes: [
+      "Buscar pendiente donde solo hay una escena física.",
+      "Confundir dibujo cualitativo con medición exacta.",
+      ...commonMistakes,
+    ],
+
+    leafId,
+  });
+}

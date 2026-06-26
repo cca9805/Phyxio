@@ -1,0 +1,162 @@
+version: 5
+topic:
+  id: densidad
+  title:
+    es: "Densidad"
+    en: "Density"
+variables:
+  - id: rho
+    symbol: "\\rho"
+    nombre:
+      es: "Densidad absoluta"
+      en: "Absolute density"
+    unidad_si: "kg/m^3"
+  - id: m
+    symbol: "m"
+    nombre:
+      es: "Masa"
+      en: "Mass"
+    unidad_si: "kg"
+  - id: V
+    symbol: "V"
+    nombre:
+      es: "Volumen"
+      en: "Volume"
+    unidad_si: "m^3"
+  - id: gamma
+    symbol: "\\gamma"
+    nombre:
+      es: "Peso específico"
+      en: "Specific weight"
+    unidad_si: "N/m^3"
+  - id: SG
+    symbol: "SG"
+    nombre:
+      es: "Gravedad específica"
+      en: "Specific gravity"
+    unidad_si: "1"
+  - id: g
+    symbol: "g"
+    nombre:
+      es: "Gravedad"
+      en: "Gravity"
+    unidad_si: "m/s^2"
+  - id: rho_0
+    symbol: "\\rho_{0}"
+    nombre:
+      es: "Densidad de referencia"
+      en: "Reference density"
+    unidad_si: "kg/m^3"
+formulas:
+  - id: densidad
+    target: rho
+    title:
+      es: "Definición de Densidad"
+      en: "Density Definition"
+    equation: "rho = m/V"
+    latex: "\\rho = \\frac{m}{V}"
+    rearrangements:
+      - target: rho
+        equation: "rho = m/V"
+        latex: "\\rho = \\frac{m}{V}"
+      - target: m
+        equation: "m = rho * V"
+        latex: "m = \\rho \\cdot V"
+      - target: V
+        equation: "V = m / rho"
+        latex: "V = \\frac{m}{\\rho}"
+    category: "definición"
+    relation_type: "definición"
+    physical_meaning:
+      es: "Define la concentración de masa en una unidad de volumen determinada."
+      en: "Defines the concentration of mass in a given unit of volume."
+    constraints: ["m > 0", "V > 0"]
+    validity:
+      es: "Válida para medios continuos y sustancias homogéneas."
+      en: "Valid for continuous media and homogeneous substances."
+    dimension_check: "ML^{-3}"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["estática", "dinámica", "industria"]
+    interpretation_tags: ["concentración", "masa", "volumen"]
+    result_semantics: "inercia volumétrica"
+    domain_checks: ["rho > 0"]
+    coherence_checks: ["rho > 0"]
+    graph_implications: "Define la pendiente de la curva m-V."
+    pedagogical_triggers: ["concentración", "inercia"]
+
+  - id: peso_especifico
+    target: gamma
+    title:
+      es: "Peso Específico"
+      en: "Specific Weight"
+    equation: "gamma = rho * g"
+    latex: "\\gamma = \\rho \\cdot g"
+    rearrangements:
+      - target: gamma
+        equation: "gamma = rho * g"
+        latex: "\\gamma = \\rho \\cdot g"
+      - target: rho
+        equation: "rho = gamma / g"
+        latex: "\\rho = \\frac{\\gamma}{g}"
+    category: "propiedad"
+    relation_type: "equivalencia"
+    physical_meaning:
+      es: "Relaciona la inercia volumétrica con la fuerza gravitatoria por unidad de volumen."
+      en: "Relates volumetric inertia with gravitational force per unit volume."
+    constraints: ["rho > 0", "g > 0"]
+    validity:
+      es: "Válida en campos gravitatorios conocidos."
+      en: "Valid in known gravitational fields."
+    dimension_check: "ML^{-2}T^{-2}"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["hidrostática", "ingeniería civil"]
+    interpretation_tags: ["peso", "gravedad", "volumen"]
+    result_semantics: "fuerza volumétrica"
+    domain_checks: ["rho > 0"]
+    coherence_checks: ["gamma > 0"]
+    graph_implications: "Escalado de la presión hidrostática."
+    pedagogical_triggers: ["fuerza", "gravedad"]
+
+  - id: densidad_relativa
+    target: SG
+    title:
+      es: "Gravedad Específica"
+      en: "Specific Gravity"
+    equation: "SG = rho / rho_0"
+    latex: "SG = \\frac{\\rho}{\\rho_{0}}"
+    rearrangements:
+      - target: SG
+        equation: "SG = rho / rho_0"
+        latex: "SG = \\frac{\\rho}{\\rho_{0}}"
+      - target: rho
+        equation: "rho = SG * rho_0"
+        latex: "\\rho = SG \\cdot \\rho_{0}"
+    category: "propiedad"
+    relation_type: "ratio"
+    physical_meaning:
+      es: "Compara la densidad de la sustancia con un estándar (agua)."
+      en: "Compares substance density with a standard (water)."
+    constraints: ["rho > 0", "rho_0 > 0"]
+    validity:
+      es: "Ambas densidades deben estar a la misma temperatura para comparaciones exactas."
+      en: "Both densities must be at the same temperature for accurate comparisons."
+    dimension_check: "1"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["laboratorio", "geología"]
+    interpretation_tags: ["comparación", "agua", "pureza"]
+    result_semantics: "densidad relativa"
+    domain_checks: ["rho_0 > 0"]
+    coherence_checks: ["SG > 0"]
+    graph_implications: "Nivel de flotación visual."
+    pedagogical_triggers: ["flotación", "pureza"]
+
+ui:
+  default_formula: densidad
+  groups:
+    - title:
+        es: "Leyes fundamentales"
+        en: "Fundamental Laws"
+      items: ["densidad", "peso_especifico", "densidad_relativa"]

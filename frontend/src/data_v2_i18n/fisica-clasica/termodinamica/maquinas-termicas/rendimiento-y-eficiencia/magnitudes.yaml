@@ -1,0 +1,234 @@
+- id: eta
+  symbol: "\\eta"
+  nombre:
+    es: Rendimiento térmico
+    en: Thermal efficiency
+  descripcion:
+    es: Fracción del calor absorbido del foco caliente que se convierte en trabajo mecánico útil
+    en: Fraction of heat absorbed from the hot reservoir that is converted into useful mechanical work
+  unidad_si: adimensional
+  dimension: adimensional
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - evaluación de máquinas térmicas reales
+    - comparación con límite de Carnot
+    - diseño termodinámico
+  common_mistake: "Confundir el rendimiento con la potencia; un motor puede tener alto rendimiento pero baja potencia si el ciclo es lento"
+  typical_range: "0.10 a 0.60 para máquinas reales; límite teórico de Carnot suele estar entre 0.40 y 0.80"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre entre 0 y 1; un valor igual a 1 significaría conversión total del calor en trabajo, prohibida por la segunda ley
+      en: Always between 0 and 1; a value of 1 would imply total conversion of heat to work, forbidden by the second law
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un rendimiento nulo implicaría que ninguna parte del calor absorbido se convierte en trabajo, lo que no constituye una máquina térmica operativa
+      en: Zero efficiency would imply that none of the absorbed heat is converted to work, which does not constitute an operative heat engine
+  value_nature:
+    kind: ratio
+    nonnegative_only: true
+    expected_interval: "(0, 1)"
+  interpretation_role:
+    primary_for:
+      - evaluación de desempeño termodinámico
+      - comparación máquina real vs Carnot
+    secondary_for:
+      - estimación de calor residual cedido al ambiente
+  graph_binding:
+    channels:
+      - eje_y_rendimiento
+  pedagogical_notes:
+    es: "El rendimiento no mide qué tan rápido trabaja el motor sino qué fracción del calor se aprovecha. Dos motores con idéntico [[eta]] pero distinta [[Q_H]] producen diferente trabajo neto."
+    en: "Efficiency does not measure how fast the engine works but what fraction of heat is exploited. Two engines with identical [[eta]] but different [[Q_H]] produce different net work."
+
+- id: Q_H
+  symbol: "Q_H"
+  nombre:
+    es: Calor absorbido del foco caliente
+    en: Heat absorbed from the hot reservoir
+  descripcion:
+    es: Energía térmica que el fluido de trabajo extrae del foco a alta temperatura en cada ciclo
+    en: Thermal energy the working fluid extracts from the high-temperature reservoir in each cycle
+  unidad_si: J
+  dimension: "[M L² T⁻²]"
+  is_vector: false
+  components: []
+  category: state
+  physical_role: core_physical_quantity
+  used_in:
+    - cálculo del rendimiento
+    - balance energético del ciclo
+    - comparación entre ciclos
+  common_mistake: "Sumar Q_H y Q_C en lugar de restar Q_C para obtener el trabajo neto"
+  typical_range: "100 J a varios MJ según la escala de la máquina"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Convencionalmente positivo; representa calor entrante al fluido de trabajo desde el foco caliente
+      en: Conventionally positive; represents heat entering the working fluid from the hot reservoir
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un aporte nulo de calor implica que no hay ciclo posible; la máquina no puede operar
+      en: Zero heat input implies no cycle is possible; the engine cannot operate
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - cálculo del rendimiento real
+      - balance de primera ley
+    secondary_for:
+      - comparación de eficiencias
+  graph_binding:
+    channels:
+      - eje_x_calor_absorbido
+  pedagogical_notes:
+    es: "[[Q_H]] es la entrada energética del ciclo. Al aumentar [[Q_H]] con el mismo [[W_util]], el rendimiento [[eta]] disminuye, lo que ilustra la penalización de las irreversibilidades."
+    en: "[[Q_H]] is the energy input of the cycle. Increasing [[Q_H]] with the same [[W_util]] lowers [[eta]], illustrating the penalty of irreversibilities."
+
+- id: W_util
+  symbol: "W_{util}"
+  nombre:
+    es: Trabajo útil neto
+    en: Net useful work
+  descripcion:
+    es: Trabajo mecánico neto producido por el ciclo en una vuelta completa; diferencia entre trabajo producido y trabajo consumido internamente
+    en: Net mechanical work produced by the cycle in one complete revolution; difference between work produced and work internally consumed
+  unidad_si: J
+  dimension: "[M L² T⁻²]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - definición del rendimiento
+    - balance energético del ciclo
+    - potencia del motor
+  common_mistake: "Confundir el trabajo bruto de expansión con el trabajo neto; el ciclo también consume trabajo en la compresión"
+  typical_range: "50 J a varios MJ según la escala del motor"
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Positivo cuando el ciclo produce trabajo neto (motor); negativo cuando el ciclo consume trabajo neto (refrigerador)
+      en: Positive when the cycle produces net work (engine); negative when the cycle consumes net work (refrigerator)
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Trabajo neto nulo indica que la expansión y la compresión son simétricas y no se produce efecto mecánico aprovechable
+      en: Zero net work means expansion and compression are symmetric and no usable mechanical effect is produced
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: "(-inf, Q_H)"
+  interpretation_role:
+    primary_for:
+      - definición directa del rendimiento
+      - lectura del eje y en diagrama trabajo-calor
+    secondary_for:
+      - cálculo de potencia si se conoce la frecuencia del ciclo
+  graph_binding:
+    channels:
+      - eje_y_trabajo_util
+  pedagogical_notes:
+    es: "[[W_util]] es el denominador físico del rendimiento aunque no aparezca así en la fórmula directa [[eta]]. Su relación con [[Q_H]] y [[Q_C]] es la clave para entender por qué el calor residual [[Q_C]] no puede eliminarse."
+    en: "[[W_util]] is the physical numerator of efficiency even though it does not appear as such in the direct formula [[eta]]. Its relation to [[Q_H]] and [[Q_C]] is the key to understanding why residual heat [[Q_C]] cannot be eliminated."
+
+- id: Q_C
+  symbol: "Q_C"
+  nombre:
+    es: Calor cedido al foco frío
+    en: Heat rejected to the cold reservoir
+  descripcion:
+    es: Energía térmica que el fluido de trabajo entrega inevitablemente al foco a baja temperatura en cada ciclo
+    en: Thermal energy the working fluid inevitably delivers to the low-temperature reservoir in each cycle
+  unidad_si: J
+  dimension: "[M L² T⁻²]"
+  is_vector: false
+  components: []
+  category: state
+  physical_role: derived
+  used_in:
+    - balance energético del ciclo
+    - cálculo del calor residual
+    - diseño de sistemas de refrigeración del motor
+  common_mistake: "Asumir que Q_C puede reducirse a cero mejorando la ingeniería; la segunda ley lo prohíbe mientras T_C sea mayor que 0 K"
+  typical_range: "50 J a varios MJ; siempre menor que Q_H"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Convencionalmente positivo; representa calor saliente del fluido de trabajo hacia el foco frío
+      en: Conventionally positive; represents heat leaving the working fluid toward the cold reservoir
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un calor cedido nulo implicaría rendimiento del 100%, lo que viola la segunda ley de la termodinámica
+      en: Zero rejected heat would imply 100% efficiency, violating the second law of thermodynamics
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "(0, Q_H)"
+  interpretation_role:
+    primary_for:
+      - balance de primera ley
+      - lectura de irreversibilidades
+    secondary_for:
+      - diseño del sistema de refrigeración
+  graph_binding:
+    channels:
+      - eje_x_calor_cedido
+  pedagogical_notes:
+    es: "[[Q_C]] representa el coste inevitable de la segunda ley. Minimizarlo requiere acercar el ciclo al ideal reversible, no simplemente mejorar los materiales del motor."
+    en: "[[Q_C]] represents the unavoidable cost of the second law. Minimizing it requires approaching the reversible ideal cycle, not merely improving engine materials."
+
+- id: eta_Carnot
+  symbol: "\\eta_{Carnot}"
+  nombre:
+    es: Rendimiento de Carnot (límite superior)
+    en: Carnot efficiency (upper bound)
+  descripcion:
+    es: Rendimiento máximo teórico para cualquier máquina térmica operando entre los mismos focos; establece el techo de eficiencia que ninguna máquina real puede superar
+    en: Maximum theoretical efficiency for any heat engine operating between the same reservoirs; sets the efficiency ceiling that no real engine can exceed
+  unidad_si: adimensional
+  dimension: adimensional
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: derived
+  used_in:
+    - comparación máquina real vs límite teórico
+    - evaluación de irreversibilidades
+    - diseño termodinámico
+  common_mistake: "Creer que un motor bien diseñado puede superar el rendimiento de Carnot; esto es imposible independientemente del combustible o los materiales"
+  typical_range: "0.40 a 0.80 según las temperaturas de los focos; para T_H de 1000 K y T_C de 300 K el límite es 0.70"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre positivo; no tiene interpretación física como vector
+      en: Always positive; has no physical interpretation as a vector
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un límite de Carnot nulo requeriría que ambas temperaturas fueran iguales, lo que impide cualquier flujo neto de calor y por tanto cualquier trabajo
+      en: A zero Carnot limit requires both temperatures to be equal, preventing any net heat flow and therefore any work
+  value_nature:
+    kind: ratio
+    nonnegative_only: true
+    expected_interval: "(0, 1)"
+  interpretation_role:
+    primary_for:
+      - cota superior del rendimiento real
+      - cuantificación de distancia al ideal
+    secondary_for:
+      - análisis de exergía
+  graph_binding:
+    channels:
+      - eje_y_limite_carnot
+  pedagogical_notes:
+    es: "[[eta_Carnot]] actúa como espejo: la diferencia entre [[eta_Carnot]] y [[eta]] mide cuánto trabajo se pierde por irreversibilidades. Reducir esa brecha es el objetivo central de la ingeniería termodinámica."
+    en: "[[eta_Carnot]] acts as a mirror: the gap between [[eta_Carnot]] and [[eta]] measures how much work is lost to irreversibilities. Closing that gap is the central goal of thermodynamic engineering."

@@ -1,0 +1,122 @@
+formulas:
+
+  - id: definicion_helmholtz
+    title:
+      es: Definición de energía libre de Helmholtz
+      en: Definition of Helmholtz free energy
+    equation: "DeltaA = DeltaU - T * DeltaS"
+    latex: "\\Delta A = \\Delta U - T\\,\\Delta S"
+    rearrangements:
+      - target: DeltaA
+        equation: "DeltaA = DeltaU - T * DeltaS"
+        latex: "\\Delta A = \\Delta U - T\\,\\Delta S"
+      - target: DeltaU
+        equation: "DeltaU = DeltaA + T * DeltaS"
+        latex: "\\Delta U = \\Delta A + T\\,\\Delta S"
+      - target: DeltaS
+        equation: "DeltaS = (DeltaU - DeltaA) / T"
+        latex: "\\Delta S = \\frac{\\Delta U - \\Delta A}{T}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "La energía libre de Helmholtz combina la contribución de energía interna con el término entrópico escalado por la temperatura, resultando en el potencial que rige la espontaneidad a volumen y temperatura constantes."
+      en: "The Helmholtz free energy combines the internal energy contribution with the entropy term scaled by temperature, yielding the potential that governs spontaneity at constant volume and temperature."
+    constraints:
+      - Volumen constante
+      - Temperatura constante
+      - Sistema cerrado
+    validity:
+      es: "Válida para procesos a volumen y temperatura constantes en sistemas cerrados sin trabajo de expansión frente al entorno."
+      en: "Valid for processes at constant volume and temperature in closed systems without expansion work against the surroundings."
+    dimension_check: "[M L² T⁻²] = [M L² T⁻²] − [Θ][M L² T⁻² Θ⁻¹]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - criterio de espontaneidad
+      - trabajo maximo a volumen constante
+      - equilibrio en recipientes rigidos
+    interpretation_tags:
+      - espontaneidad
+      - balance energia-entropia
+      - criterio termodinamico
+    result_semantics:
+      target: DeltaA
+      kind: scalar_signed
+      sign_meaning:
+        es: "Negativo indica que el proceso libera energía útil y ocurre espontáneamente; positivo que requiere aporte externo de trabajo."
+        en: "Negative indicates the process releases useful energy and occurs spontaneously; positive that it requires external work input."
+      absolute_value_meaning:
+        es: "La magnitud de la variación de A indica cuán alejado del equilibrio se halla el sistema y cuánto trabajo máximo no expansivo puede extraerse."
+        en: "The magnitude of the change in A indicates how far from equilibrium the system is and how much maximum non-expansion work can be extracted."
+    domain_checks:
+      - "T > 0"
+      - "DeltaU is finite"
+      - "DeltaS is finite"
+    coherence_checks:
+      - "DeltaA == 0 implica equilibrio: ni avance ni retroceso espontaneo"
+      - "Si DeltaU < 0 y DeltaS > 0, DeltaA < 0 para cualquier T"
+      - "Si DeltaU > 0 y DeltaS < 0, DeltaA > 0 para cualquier T"
+    graph_implications:
+      - "La linea DeltaA(T) es lineal con pendiente -DeltaS; corta el eje T en T_inv"
+      - "Pendiente negativa indica proceso que se vuelve mas espontaneo al subir T"
+    pedagogical_triggers:
+      - "Si DeltaU < 0 pero el alumno concluye no espontaneidad: verificar signo de DeltaS y temperatura"
+      - "Si DeltaA > 0 y se afirma espontaneidad: error en el criterio de signo"
+
+  - id: temperatura_inversion
+    title:
+      es: Temperatura de inversión de espontaneidad
+      en: Spontaneity inversion temperature
+    equation: "T_inv = DeltaU / DeltaS"
+    latex: "T_{inv} = \\frac{\\Delta U}{\\Delta S}"
+    rearrangements:
+      - target: T_inv
+        equation: "T_inv = DeltaU / DeltaS"
+        latex: "T_{inv} = \\frac{\\Delta U}{\\Delta S}"
+      - target: DeltaU
+        equation: "DeltaU = T_inv * DeltaS"
+        latex: "\\Delta U = T_{inv}\\,\\Delta S"
+      - target: DeltaS
+        equation: "DeltaS = DeltaU / T_inv"
+        latex: "\\Delta S = \\frac{\\Delta U}{T_{inv}}"
+    category: derived
+    relation_type: definition
+    physical_meaning:
+      es: "Temperatura a la que la variación de Helmholtz se anula; por encima o por debajo de este umbral el proceso cambia de espontáneo a no espontáneo o viceversa."
+      en: "Temperature at which the Helmholtz change is zero; above or below this threshold the process switches from spontaneous to non-spontaneous or vice versa."
+    constraints:
+      - "DeltaS distinto de cero"
+      - "DeltaU y DeltaS del mismo signo para T_inv positiva"
+    validity:
+      es: "Solo tiene sentido físico cuando DeltaU y DeltaS tienen el mismo signo; si tienen signos opuestos, el proceso es siempre espontáneo o nunca espontáneo."
+      en: "Only physically meaningful when DeltaU and DeltaS have the same sign; if they have opposite signs, the process is always or never spontaneous."
+    dimension_check: "[Θ] = [M L² T⁻²] / [M L² T⁻² Θ⁻¹]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - analisis de espontaneidad con temperatura variable
+      - diseño de procesos en recipientes rigidos
+    interpretation_tags:
+      - umbral de espontaneidad
+      - cruce con eje de temperatura
+    result_semantics:
+      target: T_inv
+      kind: scalar_unsigned
+      sign_meaning:
+        es: "La temperatura de inversión es positiva solo cuando DeltaU y DeltaS tienen el mismo signo; en caso contrario el proceso no tiene umbral de inversión."
+        en: "The inversion temperature is positive only when DeltaU and DeltaS have the same sign; otherwise the process has no inversion threshold."
+      absolute_value_meaning:
+        es: "Indica la temperatura exacta a partir de la cual el proceso invierte su espontaneidad; es la intersección de la recta DeltaA(T) con el eje horizontal."
+        en: "Indicates the exact temperature at which the process reverses its spontaneity; it is the intersection of the DeltaA(T) line with the horizontal axis."
+    domain_checks:
+      - "DeltaS != 0"
+      - "T_inv > 0 implica que DeltaU y DeltaS tienen el mismo signo"
+    coherence_checks:
+      - "T_inv negativa indica inconsistencia en los datos de entrada"
+      - "Si DeltaS > 0 y DeltaU < 0, T_inv resultaria negativa: verificar signo de entradas"
+    graph_implications:
+      - "T_inv es el punto de cruce de la recta DeltaA vs T con el eje DeltaA nulo"
+      - "El marcador T_inv_marker senala visualmente el cambio de regimen de espontaneidad"
+    pedagogical_triggers:
+      - "Si T_inv resulta negativa: el alumno ha confundido signos de DeltaU o DeltaS"
+      - "Si T_inv es muy alta (> 5000 K): verificar que las unidades de DeltaS sean J/K y no kJ/K"

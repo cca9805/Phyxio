@@ -1,0 +1,533 @@
+version: 2
+id: interpretacion-aplicaciones-del-principio-de-conservacion
+leaf_id: aplicaciones-del-principio-de-conservacion
+nombre:
+  es: Interpretación de Aplicaciones de la Conservación
+  en: Interpretation of Conservation Applications
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: cantidad-de-movimiento
+  parent_id: principio-de-conservacion
+  ruta_relativa: fisica-clasica/mecanica/cantidad-de-movimiento/conservacion-momento-lineal/principio-de-conservacion/aplicaciones-del-principio-de-conservacion
+dependencies:
+  formulas:
+  - cons_principle
+  - recoil_law
+  - inelastic_collision
+  - general_1d_balance
+  - DeltaP
+  - P
+  - cond
+  - pf
+  - pi
+  magnitudes:
+  - P
+  - Pinitial
+  - Pfinal
+  - m1
+  - m2
+  - v1i
+  - v2i
+  - v1f
+  - v2f
+  - vf
+  - DeltaP
+  - Fext
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Diagnóstico del Balance Dinámico
+      en: Dynamic Balance Diagnosis
+  physical_reading:
+    title:
+      es: Análisis Causal de la Interacción
+      en: Causal Interaction Analysis
+  coherence:
+    title:
+      es: Verificación de Leyes de Conservación
+      en: Conservation Laws Verification
+  model_validity:
+    title:
+      es: Auditoría de Aislamiento del Sistema
+      en: System Isolation Audit
+  graph_reading:
+    title:
+      es: Lectura de la Trayectoria en el Espacio de Fases
+      en: Phase Space Trajectory Reading
+  likely_errors:
+    title:
+      es: Alertas de Errores en el Planteamiento
+      en: Problem Statement Error Alerts
+  next_step:
+    title:
+      es: Proyección Energética y Cinemática
+      en: Energetic and Kinematic Projection
+targets:
+  v1f:
+    summary_rules:
+    - id: v1f_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "La velocidad final [[v1f]] representa el estado de movimiento del primer cuerpo tras completar el intercambio de momento con el sistema."
+        en: "Final velocity [[v1f]] represents the first body's motion state after completing the momentum exchange with the system."
+    physical_reading_rules:
+    - id: v1f_recoil_check
+      when: 'v1f * v1i < 0'
+      status: success
+      text:
+        es: "Efecto de retroceso: El cuerpo ha invertido su sentido de marcha para compensar el momento ganado por el otro componente del sistema."
+        en: "Recoil effect: The body has reversed its direction to compensate for the momentum gained by the other system component."
+    coherence_rules:
+    - id: v1f_cons_ok
+      when: 'abs(m1*v1f + m2*v2f - (m1*v1i + m2*v2i)) < 1e-6'
+      status: ok
+      text:
+        es: "Balance perfecto: Se ha verificado que la cantidad de movimiento total se mantiene constante."
+        en: "Perfect balance: It has been verified that the total quantity of motion remains constant."
+    model_validity_rules:
+    - id: v1f_iso_system
+      when: 'true'
+      status: ok
+      text:
+        es: "Válida asumiendo que las fuerzas internas son mucho más intensas que cualquier fuerza externa durante la interacción."
+        en: "Valid assuming internal forces are much more intense than any external force during the interaction."
+    graph_rules:
+    - id: v1f_vector_graph
+      when: 'true'
+      status: info
+      text:
+        es: "En el diagrama vectorial, [[v1f]] se representa como el vector de salida del primer cuerpo."
+        en: "In the vector diagram, [[v1f]] is represented as the first body's output vector."
+    likely_errors:
+    - id: v1f_error_sign
+      when: 'true'
+      status: warning
+      text:
+        es: "Cuidado con el signo: Un error en la dirección de [[v1f]] violaría el principio de conservación. Asegúrate de que el balance neto sea cero."
+        en: "Watch the sign: An error in [[v1f]] direction would violate the conservation principle. Ensure the net balance is zero."
+    next_step_rules:
+    - id: v1f_energy_next
+      when: 'true'
+      status: tip
+      text:
+        es: "Calcula el cambio de energía cinética para determinar si la aplicación involucra una colisión elástica o inelástica."
+        en: "Calculate the kinetic energy change to determine if the application involves an elastic or inelastic collision."
+
+  vf:
+    summary_rules:
+    - id: vf_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "La velocidad común [[vf]] describe el movimiento del sistema acoplado tras una colisión perfectamente inelástica."
+        en: "The common velocity [[vf]] describes the coupled system's motion after a perfectly inelastic collision."
+    physical_reading_rules:
+    - id: vf_center_mass
+      when: 'true'
+      status: info
+      text:
+        es: "En un sistema acoplado, [[vf]] es idéntica a la velocidad del centro de masas del sistema original."
+        en: "In a coupled system, [[vf]] is identical to the original system's center of mass velocity."
+    coherence_rules:
+    - id: vf_mass_cons
+      when: 'true'
+      status: ok
+      text:
+        es: "La masa total se ha conservado correctamente como la suma de m1 y m2."
+        en: "Total mass has been correctly conserved as the sum of m1 and m2."
+    model_validity_rules:
+    - id: vf_stick_validity
+      when: 'true'
+      status: ok
+      text:
+        es: "Válida si los cuerpos permanecen unidos tras el impacto (ej. un proyectil incrustado en un bloque)."
+        en: "Valid if bodies remain joined after impact (e.g., a bullet embedded in a block)."
+    graph_rules:
+    - id: vf_graph_merger
+      when: 'true'
+      status: info
+      text:
+        es: "Visualmente, las dos trayectorias convergen en una única línea tras el choque."
+        en: "Visually, the two trajectories converge into a single line after the collision."
+    likely_errors:
+    - id: vf_error_scalar
+      when: 'true'
+      status: danger
+      text:
+        es: "No sumes las rapideces directamente: debes sumar los momentos vectoriales antes de dividir por la masa total."
+        en: "Do not sum speeds directly: you must sum the vector momenta before dividing by the total mass."
+    next_step_rules:
+    - id: vf_next_loss
+      when: 'true'
+      status: tip
+      text:
+        es: "Analiza la pérdida máxima de energía cinética, característica de este tipo de aplicaciones inelásticas."
+        en: "Analyze the maximum kinetic energy loss, characteristic of this type of inelastic applications."
+
+  Pfinal:
+    summary_rules:
+    - id: pf_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "[[Pfinal]] es el momento total resultante del sistema. Si el sistema está aislado, este valor debe ser idéntico al inicial."
+        en: "[[Pfinal]] is the system's resulting total momentum. If the system is isolated, this value must be identical to the initial one."
+    physical_reading_rules:
+    - id: pf_external_check
+      when: 'abs(Pfinal - Pinitial) > 1e-6'
+      status: warning
+      text:
+        es: "Detección de fuerzas externas: El momento ha cambiado, lo que indica que el sistema NO estaba realmente aislado."
+        en: "External forces detected: Momentum has changed, indicating the system was NOT truly isolated."
+    coherence_rules:
+    - id: pf_balance_ok
+      when: 'abs(Pfinal - Pinitial) < 1e-6'
+      status: success
+      text:
+        es: "Conservación verificada: El balance de momento es nulo, validando el aislamiento del sistema."
+        en: "Conservation verified: The momentum balance is zero, validating system isolation."
+    model_validity_rules:
+    - id: pf_closed_system
+      when: 'true'
+      status: ok
+      text:
+        es: "Válida para sistemas cerrados (masa constante) y aislados (fuerza externa nula)."
+        en: "Valid for closed (constant mass) and isolated (zero external force) systems."
+    graph_rules:
+    - id: pf_graph_horizontal
+      when: 'true'
+      status: info
+      text:
+        es: "En el gráfico de evolución temporal, [[Pfinal]] coincide con la asíntota del estado inicial."
+        en: "In the temporal evolution graph, [[Pfinal]] matches the initial state's asymptote."
+    likely_errors:
+    - id: pf_error_units
+      when: 'true'
+      status: warning
+      text:
+        es: "Asegúrate de que las unidades kg·m/s son consistentes en ambos lados del balance."
+        en: "Ensure kg·m/s units are consistent on both sides of the balance."
+    next_step_rules:
+    - id: pf_next_recoil
+      when: 'Pinitial == 0'
+      status: tip
+      text:
+        es: "Aplica la ley de retroceso para hallar la relación de velocidades si el sistema parte del reposo."
+        en: "Apply the recoil law to find the velocity relationship if the system starts from rest."
+
+  v2f:
+    summary_rules:
+    - id: v2f_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "La velocidad final [[v2f]] representa el estado de movimiento del segundo cuerpo tras el evento de interacción."
+        en: "Final velocity [[v2f]] represents the second body's motion state after the interaction event."
+    physical_reading_rules:
+    - id: v2f_contribution
+      when: 'true'
+      status: info
+      text:
+        es: "Su valor determina cuánto del momento total del sistema ha sido transferido a esta masa específica."
+        en: "Its value determines how much of the system's total momentum has been transferred to this specific mass."
+    coherence_rules:
+    - id: v2f_mass_ok
+      when: 'm2 > 0'
+      status: ok
+      text:
+        es: "Cálculo consistente con una masa positiva para el segundo cuerpo."
+        en: "Calculation consistent with a positive mass for the second body."
+    model_validity_rules:
+    - id: v2f_validity_god
+      when: 'true'
+      status: ok
+      text:
+        es: "Válida dentro del marco de referencia inercial elegido para el balance."
+        en: "Valid within the inertial reference frame chosen for the balance."
+    graph_rules:
+    - id: v2f_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "Se visualiza como el vector de salida del segundo cuerpo en el diagrama dinámico."
+        en: "Visualized as the second body's output vector in the dynamic diagram."
+    likely_errors:
+    - id: v2f_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: "Verifica que el sentido de [[v2f]] no contradiga el balance total; si uno gana momento en un sentido, el otro debe compensarlo si el total es constante."
+        en: "Verify that [[v2f]] direction does not contradict the total balance; if one gains momentum in one direction, the other must compensate if the total is constant."
+    next_step_rules:
+    - id: v2f_next_god
+      when: 'true'
+      status: tip
+      text:
+        es: "Compara el cambio de velocidad [[v2f]] - [[v2i]] para evaluar la fuerza impulsiva neta sobre este cuerpo."
+        en: "Compare the velocity change [[v2f]] - [[v2i]] to evaluate the net impulsive force on this body."
+
+  P:
+    summary_rules:
+    - id: P_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "El momento lineal total [[P]] es la magnitud conservada del sistema. Representa la inercia en movimiento global del conjunto."
+        en: "Total linear momentum [[P]] is the conserved quantity of the system. It represents the global moving inertia of the assembly."
+    physical_reading_rules:
+    - id: P_read_vector
+      when: 'true'
+      status: info
+      text:
+        es: "Como magnitud vectorial, [[P]] define la dirección preferente del transporte de materia del sistema completo."
+        en: "As a vector quantity, [[P]] defines the preferred direction of matter transport for the entire system."
+    coherence_rules:
+    - id: P_coh_units
+      when: 'true'
+      status: ok
+      text:
+        es: "Unidades correctas en kg·m/s (o N·s)."
+        en: "Correct units in kg·m/s (or N·s)."
+    model_validity_rules:
+    - id: P_val_newton
+      when: 'true'
+      status: ok
+      text:
+        es: "Válida para cualquier sistema de partículas bajo las leyes de Newton."
+        en: "Valid for any system of particles under Newton's laws."
+    graph_rules:
+    - id: P_graph_const
+      when: 'true'
+      status: info
+      text:
+        es: "Gráficamente, si el sistema está aislado, la curva de [[P]] respecto al tiempo es una recta horizontal."
+        en: "Graphically, if the system is isolated, the curve of [[P]] versus time is a horizontal straight line."
+    likely_errors:
+    - id: P_err_scalar
+      when: 'true'
+      status: warning
+      text:
+        es: "Error crítico: No sumes las magnitudes de los momentos individuales si tienen direcciones distintas; usa suma vectorial."
+        en: "Critical error: Do not add the magnitudes of individual momenta if they have different directions; use vector addition."
+    next_step_rules:
+    - id: P_next_balance
+      when: 'true'
+      status: tip
+      text:
+        es: "Usa el valor de [[P]] para establecer el balance de conservación [[Pinitial]] = [[Pfinal]]."
+        en: "Use the value of [[P]] to establish the conservation balance [[Pinitial]] = [[Pfinal]]."
+
+  DeltaP:
+    summary_rules:
+    - id: dp_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "[[DeltaP]] representa el cambio neto en la cantidad de movimiento. En un sistema aislado, este valor debe ser cero."
+        en: "[[DeltaP]] represents the net change in momentum. In an isolated system, this value must be zero."
+    physical_reading_rules:
+    - id: dp_impulse_reading
+      when: 'abs(DeltaP) > 1e-6'
+      status: warning
+      text:
+        es: "Intercambio externo: El sistema ha recibido un impulso neto desde el entorno, rompiendo la conservación estricta."
+        en: "External exchange: The system has received a net impulse from the environment, breaking strict conservation."
+    coherence_rules:
+    - id: dp_cons_check
+      when: 'abs(DeltaP) < 1e-6'
+      status: success
+      text:
+        es: "Conservación perfecta: El cambio de momento es nulo, confirmando el cumplimiento del principio fundamental."
+        en: "Perfect conservation: The momentum change is zero, confirming compliance with the fundamental principle."
+    model_validity_rules:
+    - id: dp_time_window
+      when: 'true'
+      status: ok
+      text:
+        es: "Válida si el intervalo de tiempo analizado es lo suficientemente corto para que las fuerzas externas no acumulen impulso."
+        en: "Valid if the analyzed time interval is short enough that external forces do not accumulate impulse."
+    graph_rules:
+    - id: dp_graph_delta
+      when: 'true'
+      status: info
+      text:
+        es: "En el espacio de fases, [[DeltaP]] es la distancia vectorial entre los estados inicial y final."
+        en: "In phase space, [[DeltaP]] is the vector distance between the initial and final states."
+    likely_errors:
+    - id: dp_error_sign
+      when: 'true'
+      status: warning
+      text:
+        es: "No confundas el cambio de momento de una parte con el del sistema total. El [[DeltaP]] del sistema debe ser nulo."
+        en: "Do not confuse the momentum change of one part with that of the total system. The system's [[DeltaP]] must be zero."
+    next_step_rules:
+    - id: dp_force_projection
+      when: 'true'
+      status: tip
+      text:
+        es: "Calcula el impulso medio dividiendo [[DeltaP]] por el tiempo de interacción si este es conocido."
+        en: "Calculate the average impulse by dividing [[DeltaP]] by the interaction time if it is known."
+
+  Fext:
+    summary_rules:
+    - id: fext_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "[[Fext]] representa la fuerza neta externa. Su valor nulo es el prerrequisito para la conservación del momento."
+        en: "[[Fext]] represents the net external force. Its null value is the prerequisite for momentum conservation."
+    physical_reading_rules:
+    - id: fext_gravity_check
+      when: 'true'
+      status: warning
+      text:
+        es: "Recuerda que fuerzas como el peso son externas; el sistema solo se conserva si su efecto es despreciable en el intervalo."
+        en: "Remember that forces like weight are external; the system is only conserved if their effect is negligible in the interval."
+    coherence_rules:
+    - id: fext_cond_check
+      when: 'Fext == 0'
+      status: success
+      text:
+        es: "Condición de aislamiento satisfecha. El modelo de conservación es rigurosamente exacto."
+        en: "Isolation condition satisfied. The conservation model is rigorously exact."
+    model_validity_rules:
+    - id: fext_model_failure
+      when: 'abs(Fext) > 1e2'
+      status: danger
+      text:
+        es: "Fuerzas externas dominantes: El principio de conservación no puede aplicarse sin correcciones por impulso externo."
+        en: "Dominant external forces: The conservation principle cannot be applied without external impulse corrections."
+    graph_rules:
+    - id: fext_slope_P
+      when: 'true'
+      status: info
+      text:
+        es: "En un gráfico de P vs t, [[Fext]] es la pendiente de la curva de momento total."
+        en: "In a P vs t graph, [[Fext]] is the slope of the total momentum curve."
+    likely_errors:
+    - id: fext_internal_mix
+      when: 'true'
+      status: warning
+      text:
+        es: "No incluyas fuerzas internas (como la explosión o el choque) en [[Fext]]; estas se cancelan por pares de acción-reacción."
+        en: "Do not include internal forces (such as the explosion or impact) in [[Fext]]; these cancel out by action-reaction pairs."
+    next_step_rules:
+    - id: fext_newton_law
+      when: 'true'
+      status: tip
+      text:
+        es: "Aplica la Segunda Ley de Newton para relacionar [[Fext]] con la aceleración del centro de masas."
+        en: "Apply Newton's Second Law to relate [[Fext]] to the center of mass acceleration."
+
+  Pinitial:
+    summary_rules:
+    - id: pinitial_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "[[Pinitial]] es el estado dinámico de entrada del sistema. Define el presupuesto de momento disponible antes de la interacción."
+        en: "[[Pinitial]] is the system's input dynamic state. It defines the momentum budget available before the interaction."
+    physical_reading_rules:
+    - id: pinitial_rest_check
+      when: 'Pinitial == 0'
+      status: info
+      text:
+        es: "Sistema en reposo: El punto de partida es nulo. Cualquier transferencia interna solo redistribuye, no crea momento."
+        en: "System at rest: The starting point is zero. Any internal transfer only redistributes, not creates momentum."
+    coherence_rules:
+    - id: pinitial_coh_balance
+      when: 'abs(Pinitial - Pfinal) < 1e-6'
+      status: success
+      text:
+        es: "Conservación verificada: el momento inicial coincide con el final, validando el aislamiento."
+        en: "Conservation verified: initial momentum matches final, validating isolation."
+    model_validity_rules:
+    - id: pinitial_validity_god
+      when: 'true'
+      status: ok
+      text:
+        es: "Válida para sistemas de masa constante bajo ausencia de fuerzas externas netas."
+        en: "Valid for constant-mass systems under zero net external forces."
+    graph_rules:
+    - id: pinitial_graph_plateau
+      when: 'true'
+      status: info
+      text:
+        es: "En la gráfica P(t), [[Pinitial]] define el nivel de la meseta inicial antes de la interacción."
+        en: "In the P(t) graph, [[Pinitial]] defines the level of the initial plateau before interaction."
+    likely_errors:
+    - id: pinitial_error_incomplete
+      when: 'true'
+      status: warning
+      text:
+        es: "Error frecuente: omitir algún cuerpo ya en movimiento al calcular [[Pinitial]], lo que rompe el balance."
+        en: "Common error: omitting a body already in motion when calculating [[Pinitial]], which breaks the balance."
+    next_step_rules:
+    - id: pinitial_next_balance
+      when: 'true'
+      status: tip
+      text:
+        es: "Establece [[Pinitial]] = [[Pfinal]] para plantear la ecuación de conservación y despejar la incógnita."
+        en: "Set [[Pinitial]] = [[Pfinal]] to write the conservation equation and solve for the unknown."
+
+  v1i:
+    summary_rules:
+    - id: v1i_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "[[v1i]] es la velocidad de entrada del primer cuerpo al sistema. Junto con [[m1]], define su contribución al [[Pinitial]]."
+        en: "[[v1i]] is the entry velocity of the first body to the system. Together with [[m1]], it defines its contribution to [[Pinitial]]."
+    physical_reading_rules:
+    - id: v1i_direction_check
+      when: 'v1i < 0'
+      status: info
+      text:
+        es: "Dirección negativa: El primer cuerpo se mueve en sentido contrario al eje positivo antes del choque."
+        en: "Negative direction: The first body moves opposite to the positive axis before the collision."
+    coherence_rules:
+    - id: v1i_coh_god
+      when: 'true'
+      status: ok
+      text:
+        es: "Velocidad inicial definida en el marco de referencia inercial elegido."
+        en: "Initial velocity defined in the chosen inertial reference frame."
+    model_validity_rules:
+    - id: v1i_validity_god
+      when: 'true'
+      status: ok
+      text:
+        es: "Válida en mecánica clásica para velocidades mucho menores que la de la luz."
+        en: "Valid in classical mechanics for velocities much less than the speed of light."
+    graph_rules:
+    - id: v1i_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "Corresponde a la pendiente de la trayectoria del primer cuerpo antes del instante de interacción."
+        en: "Corresponds to the slope of the first body's trajectory before the interaction instant."
+    likely_errors:
+    - id: v1i_error_sign
+      when: 'true'
+      status: warning
+      text:
+        es: "Asigna el signo correcto a [[v1i]] según el eje; un error de signo invierte el balance de momento."
+        en: "Assign the correct sign to [[v1i]] along the axis; a sign error inverts the momentum balance."
+    next_step_rules:
+    - id: v1i_next_god
+      when: 'true'
+      status: tip
+      text:
+        es: "Combina [[m1]] y [[v1i]] en la fórmula {{ f:pi }} para obtener la contribución inicial de este cuerpo al sistema."
+        en: "Combine [[m1]] and [[v1i]] in the formula {{ f:pi }} to get this body's initial contribution to the system."

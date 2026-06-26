@@ -1,0 +1,267 @@
+const n=`magnitudes:
+  - id: V
+    symbol: 'V'
+    nombre:
+      es: tensión
+      en: voltage
+    descripcion:
+      es: Diferencia de potencial eléctrico entre dos puntos.
+      en: Electric potential difference between two points.
+    unidad_si: 'V'
+    dimension: L^2*M*T^-3*I^-1
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: causa
+    used_in: [ley_ohm]
+    common_mistake: "Confundir con corriente eléctrica."
+    typical_range: "1.5 - 24 V (electrónica), 110-230 V (red doméstica)"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo depende de la referencia de potencial elegida."
+        en: "The sign depends on the chosen potential reference."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Cero implica equilibrio electrostático entre los puntos."
+        en: "Zero implies electrostatic equilibrium between the points."
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: [-1e6, 1e6]
+    interpretation_role:
+      primary_for: [conduccion, circuitos]
+      secondary_for: []
+    graph_binding:
+      channels: [x_axis]
+    pedagogical_notes: "Introducir como el 'empuje' o 'presión' eléctrica."
+
+  - id: I
+    symbol: 'I'
+    nombre:
+      es: intensidad
+      en: current
+    descripcion:
+      es: Flujo de carga eléctrica por unidad de tiempo.
+      en: Flow of electric charge per unit time.
+    unidad_si: 'A'
+    dimension: I
+    is_vector: false
+    components: null
+    category: fundamental
+    physical_role: flujo
+    used_in: [ley_ohm]
+    common_mistake: "Creer que la corriente se gasta en el circuito."
+    typical_range: "0.01 - 10 A"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Positivo en el sentido convencional (cargas positivas)."
+        en: "Positive in the conventional sense (positive charges)."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Cero implica circuito abierto o resistencia infinita."
+        en: "Zero implies open circuit or infinite resistance."
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: [-1000, 1000]
+    interpretation_role:
+      primary_for: [conduccion]
+      secondary_for: []
+    graph_binding:
+      channels: [y_axis]
+    pedagogical_notes: "Relacionar con el número de electrones que pasan por segundo."
+
+  - id: R
+    symbol: 'R'
+    nombre:
+      es: resistencia
+      en: resistance
+    descripcion:
+      es: Oposición de un elemento al flujo de corriente eléctrica.
+      en: Opposition of an element to the flow of electric current.
+    unidad_si: 'ohm'
+    dimension: L^2*M*T^-3*I^-2
+    is_vector: false
+    components: null
+    category: parameter
+    physical_role: oposición
+    used_in: [ley_ohm, resistencia_geometrica]
+    common_mistake: "Pensar que es constante para cualquier temperatura."
+    typical_range: "0.1 - 10^6 ohm"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Siempre positiva para elementos pasivos."
+        en: "Always positive for passive elements."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "R=0 implica un conductor ideal o superconductor."
+        en: "R=0 implies an ideal conductor or superconductor."
+    value_nature:
+      kind: parameter
+      nonnegative_only: true
+      expected_interval: [0, 1e9]
+    interpretation_role:
+      primary_for: [caracterizacion]
+      secondary_for: []
+    graph_binding:
+      channels: [slope]
+    pedagogical_notes: "Modelar como obstáculos en el camino de los electrones."
+
+  - id: rho
+    symbol: '\\rho'
+    nombre:
+      es: resistividad
+      en: resistivity
+    descripcion:
+      es: Propiedad intrínseca que cuantifica la oposición de un material al flujo.
+      en: Intrinsic property quantifying a material's opposition to flow.
+    unidad_si: 'ohm*m'
+    dimension: L^3*M*T^-3*I^-2
+    is_vector: false
+    components: null
+    category: constant
+    physical_role: propiedad intrínseca
+    used_in: [resistencia_geometrica]
+    common_mistake: "Confundir con resistencia (extensiva)."
+    typical_range: "1.7e-8 (Cobre) - 1.1e-6 (Nicrom)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Siempre positiva."
+        en: "Always positive."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Cero en superconductores."
+        en: "Zero in superconductors."
+    value_nature:
+      kind: constant
+      nonnegative_only: true
+      expected_interval: [0, 1e15]
+    interpretation_role:
+      primary_for: [material]
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: "Usar para diferenciar materiales (cobre vs vidrio)."
+
+  - id: L
+    symbol: 'L'
+    nombre:
+      es: longitud
+      en: length
+    descripcion:
+      es: Dimensión longitudinal del conductor.
+      en: Longitudinal dimension of the conductor.
+    unidad_si: 'm'
+    dimension: L
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: factor geométrico
+    used_in: [resistencia_geometrica]
+    common_mistake: "Olvidar que se mide en el sentido de la corriente."
+    typical_range: "0.01 - 100 m"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Siempre positiva."
+        en: "Always positive."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Longitud cero no tiene sentido físico para un objeto."
+        en: "Zero length has no physical meaning for an object."
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [1e-6, 1e6]
+    interpretation_role:
+      primary_for: [diseño]
+      secondary_for: []
+    graph_binding:
+      channels: [x_axis]
+    pedagogical_notes: "A mayor longitud, más colisiones."
+
+  - id: A
+    symbol: 'A'
+    nombre:
+      es: área
+      en: area
+    descripcion:
+      es: Sección transversal del conductor perpendicular al flujo.
+      en: Cross-sectional area of the conductor perpendicular to the flow.
+    unidad_si: 'm^2'
+    dimension: L^2
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: factor geométrico
+    used_in: [resistencia_geometrica]
+    common_mistake: "Usar mm^2 sin convertir a m^2."
+    typical_range: "0.5e-6 - 50e-6 m^2"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Siempre positiva."
+        en: "Always positive."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Área cero implica resistencia infinita (aislamiento)."
+        en: "Zero area implies infinite resistance (insulation)."
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [1e-12, 1e6]
+    interpretation_role:
+      primary_for: [diseño]
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: "Más área permite más portadores en paralelo."
+
+  - id: G
+    symbol: 'G'
+    nombre:
+      es: conductancia
+      en: conductance
+    descripcion:
+      es: Facilidad que ofrece un material al paso de la corriente.
+      en: Ease with which a material allows current to pass.
+    unidad_si: 'S'
+    dimension: L^-2*M^-1*T^3*I^2
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: facilidad de flujo
+    used_in: [conductancia]
+    common_mistake: "Confundir con conductividad (intrínseca)."
+    typical_range: "10^-6 - 10 S"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Siempre positiva."
+        en: "Always positive."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "G=0 implica aislante perfecto."
+        en: "G=0 implies perfect insulator."
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [0, 1e6]
+    interpretation_role:
+      primary_for: [facilidad]
+      secondary_for: []
+    graph_binding:
+      channels: [slope]
+    pedagogical_notes: "Introducir como el recíproco de la oposición."
+`;export{n as default};

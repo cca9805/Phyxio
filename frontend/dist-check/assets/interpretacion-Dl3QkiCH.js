@@ -1,0 +1,327 @@
+const e=`version: 1
+id: ejemplos-tipicos
+leaf_id: ejemplos-tipicos
+nombre:
+  es: Ejemplos tipicos de fuerza centripeta
+  en: Typical centripetal force examples
+scope: leaf
+result_blocks:
+  summary:
+    title: {es: Resumen del resultado, en: Result summary}
+    type: text
+  coherence:
+    title: {es: Coherencia del resultado, en: Result coherence}
+    type: text
+  physical_reading:
+    title: {es: Lectura fisica, en: Physical reading}
+    type: text
+  model_validity:
+    title: {es: Validez del modelo, en: Model validity}
+    type: text
+  graph_reading:
+    title: {es: Lectura del grafico, en: Graph reading}
+    type: text
+  likely_errors:
+    title: {es: Errores probables, en: Likely errors}
+    type: text
+  next_step:
+    title: {es: Siguiente paso, en: Next step}
+    type: text
+output_contract:
+  sections:
+    - summary
+    - coherence
+    - physical_reading
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+dependencies:
+  formulas:
+    - base_radial
+    - cuerda_tension
+    - curva_plana_velocidad_max
+    - peralte_ideal
+    - loop_contacto_minimo
+    - orbita_circular
+  magnitudes:
+    - m
+    - r
+    - v
+    - ac
+    - Frad
+    - Fc
+    - Tn
+    - Nn
+    - fs
+    - mu
+    - g
+    - th
+    - G
+    - M
+targets:
+  Frad:
+    summary_rules:
+      - id: Frad_sum_high
+        when: "Frad > 10000"
+        status: warning
+        text: {es: "La escena exige una resultante radial muy alta; el agente fisico debe sostener una curvatura intensa.", en: "The scenario demands a very high radial resultant; the physical agent must sustain intense curvature."}
+      - id: Frad_sum_ok
+        when: "Frad <= 10000"
+        status: ok
+        text: {es: "La resultante radial requerida es compatible con un ejemplo tipico y puede leerse como causa del giro.", en: "The required radial resultant is compatible with a typical example and can be read as the cause of the turn."}
+    coherence_rules:
+      - id: Frad_coh
+        when: "Frad >= 0"
+        status: ok
+        text: {es: "Frad positiva.", en: "Frad positive."}
+    physical_reading_rules:
+      - id: Frad_phys
+        when: "Frad > 0"
+        status: ok
+        text: {es: "Las fuerzas reales no acompañan el giro: lo producen, porque esta resultante desvia continuamente la velocidad hacia el centro.", en: "The real forces do not merely accompany the turn: they produce it, because this resultant keeps redirecting the velocity toward the centre."}
+    model_validity_rules:
+      - id: Frad_mod
+        when: "Frad >= 0"
+        status: ok
+        text: {es: "El modelo es valido si la fuente radial elegida coincide con la escena fisica y puede sostener esa resultante.", en: "The model is valid if the chosen radial source matches the physical scene and can sustain that resultant."}
+    graph_rules:
+      - id: Frad_graph
+        when: "Frad > 0"
+        status: ok
+        text: {es: "Representar Frad en el grafico.", en: "Plot Frad on the graph."}
+    likely_errors:
+      - id: Frad_err
+        when: "Frad > 0"
+        status: warning
+        text: {es: "Error tipico: añadir una fuerza centripeta extra en lugar de identificar que fuerza real o combinacion de fuerzas produce \`Frad\`.", en: "Typical mistake: adding an extra centripetal force instead of identifying which real force or combination of forces produces \`Frad\`."}
+    next_step_rules:
+      - id: Frad_next
+        when: "Frad > 0"
+        status: ok
+        text: {es: "Comprobar que coincide con m v^2 / r.", en: "Check it matches m v^2 / r."}
+  v:
+    summary_rules:
+      - id: v_sum_high
+        when: "v > 200"
+        status: warning
+        text: {es: "La rapidez es muy alta y aumenta fuertemente la exigencia radial del caso.", en: "The speed is very high and strongly increases the radial demand of the case."}
+      - id: v_sum_ok
+        when: "v <= 200"
+        status: ok
+        text: {es: "La rapidez cae en un rango interpretable para un ejemplo tipico del leaf.", en: "The speed lies in a range that is interpretable for a typical example from the leaf."}
+    coherence_rules:
+      - id: v_coh
+        when: "v >= 0"
+        status: ok
+        text: {es: "Rapidez positiva.", en: "Positive speed."}
+    physical_reading_rules:
+      - id: v_phys
+        when: "v > 0"
+        status: ok
+        text: {es: "Esta rapidez fija cuanta curvatura debe imponerse: si \`v\` aumenta, la causa radial debe crecer aun mas deprisa.", en: "This speed sets how much curvature must be imposed: if \`v\` increases, the radial cause must grow even faster."}
+    model_validity_rules:
+      - id: v_mod
+        when: "v > 0"
+        status: ok
+        text: {es: "El modelo circular sigue siendo valido mientras la escena mantenga radio bien definido y una fuente radial capaz de sostener esta rapidez.", en: "The circular model remains valid as long as the scene keeps a well-defined radius and a radial source able to sustain this speed."}
+    graph_rules:
+      - id: v_graph
+        when: "v > 0"
+        status: ok
+        text: {es: "Representar v en eje horizontal.", en: "Plot v on horizontal axis."}
+    likely_errors:
+      - id: v_err
+        when: "v > 0"
+        status: warning
+        text: {es: "Error tipico: tratar \`v\` como dato aislado sin comprobar si la fuerza disponible puede sostener la curvatura asociada.", en: "Typical mistake: treating \`v\` as an isolated datum without checking whether the available force can sustain the associated curvature."}
+    next_step_rules:
+      - id: v_next
+        when: "v > 0"
+        status: ok
+        text: {es: "Usa v para obtener la fuerza centripeta.", en: "Use v to obtain the centripetal force."}
+  r:
+    summary_rules:
+      - id: r_sum_small
+        when: "r < 0.1"
+        status: warning
+        text: {es: "Radio muy corto.", en: "Very small radius."}
+      - id: r_sum_ok
+        when: "r >= 0.1"
+        status: ok
+        text: {es: "Radio razonable.", en: "Reasonable radius."}
+    coherence_rules:
+      - id: r_coh
+        when: "r > 0"
+        status: ok
+        text: {es: "Radio positivo.", en: "Positive radius."}
+    physical_reading_rules:
+      - id: r_phys
+        when: "r > 0"
+        status: ok
+        text: {es: "Radio de curvatura de la trayectoria.", en: "Radius of curvature of the path."}
+    model_validity_rules:
+      - id: r_mod
+        when: "r > 0"
+        status: ok
+        text: {es: "Modelo valido con radio constante.", en: "Model valid with constant radius."}
+    graph_rules:
+      - id: r_graph
+        when: "r > 0"
+        status: ok
+        text: {es: "r fija la escala del grafico.", en: "r sets the graph scale."}
+    likely_errors:
+      - id: r_err
+        when: "r > 0"
+        status: warning
+        text: {es: "No confundir con el diametro.", en: "Do not confuse with diameter."}
+    next_step_rules:
+      - id: r_next
+        when: "r > 0"
+        status: ok
+        text: {es: "Calcula ac = v^2 / r.", en: "Calculate ac = v^2 / r."}
+  m:
+    summary_rules:
+      - id: m_sum
+        when: "m > 0"
+        status: ok
+        text: {es: "Masa razonable.", en: "Reasonable mass."}
+    coherence_rules:
+      - id: m_coh
+        when: "m > 0"
+        status: ok
+        text: {es: "Masa positiva.", en: "Positive mass."}
+    physical_reading_rules:
+      - id: m_phys
+        when: "m > 0"
+        status: ok
+        text: {es: "Inercia del cuerpo.", en: "Inertia of the body."}
+    model_validity_rules:
+      - id: m_mod
+        when: "m > 0"
+        status: ok
+        text: {es: "Modelo puntual valido.", en: "Point model valid."}
+    graph_rules:
+      - id: m_graph
+        when: "m > 0"
+        status: ok
+        text: {es: "Masa indicada en el diagrama.", en: "Mass labelled on the diagram."}
+    likely_errors:
+      - id: m_err
+        when: "m > 0"
+        status: warning
+        text: {es: "Verificar que m esta en kg.", en: "Verify m is in kg."}
+    next_step_rules:
+      - id: m_next
+        when: "m > 0"
+        status: ok
+        text: {es: "Usa m para obtener Frad.", en: "Use m to get Frad."}
+  Tn:
+    summary_rules:
+      - id: Tn_sum
+        when: "Tn >= 0"
+        status: ok
+        text: {es: "Tension razonable.", en: "Reasonable tension."}
+    coherence_rules:
+      - id: Tn_coh
+        when: "Tn >= 0"
+        status: ok
+        text: {es: "Tension no negativa.", en: "Non-negative tension."}
+    physical_reading_rules:
+      - id: Tn_phys
+        when: "Tn > 0"
+        status: ok
+        text: {es: "La cuerda esta tensa.", en: "The rope is taut."}
+    model_validity_rules:
+      - id: Tn_mod
+        when: "Tn >= 0"
+        status: ok
+        text: {es: "Modelo de cuerda valido.", en: "Rope model valid."}
+    graph_rules:
+      - id: Tn_graph
+        when: "Tn > 0"
+        status: ok
+        text: {es: "Mostrar T en el grafico.", en: "Show T on the graph."}
+    likely_errors:
+      - id: Tn_err
+        when: "Tn > 0"
+        status: warning
+        text: {es: "T depende de la posicion en giro vertical.", en: "T depends on position in vertical rotation."}
+    next_step_rules:
+      - id: Tn_next
+        when: "Tn > 0"
+        status: ok
+        text: {es: "Comprobar si la cuerda resiste.", en: "Check if the rope holds."}
+  mu:
+    summary_rules:
+      - id: mu_sum
+        when: "mu > 0"
+        status: ok
+        text: {es: "Coeficiente razonable.", en: "Reasonable coefficient."}
+    coherence_rules:
+      - id: mu_coh
+        when: "mu > 0"
+        status: ok
+        text: {es: "mu positivo.", en: "mu positive."}
+    physical_reading_rules:
+      - id: mu_phys
+        when: "mu > 0"
+        status: ok
+        text: {es: "Adherencia entre superficies.", en: "Grip between surfaces."}
+    model_validity_rules:
+      - id: mu_mod
+        when: "mu <= 1.2"
+        status: ok
+        text: {es: "Coeficiente en rango tipico.", en: "Coefficient in typical range."}
+    graph_rules:
+      - id: mu_graph
+        when: "mu > 0"
+        status: ok
+        text: {es: "mu parametro del grafico.", en: "mu graph parameter."}
+    likely_errors:
+      - id: mu_err
+        when: "mu > 0"
+        status: warning
+        text: {es: "Verificar si es estatico o dinamico.", en: "Check if static or dynamic."}
+    next_step_rules:
+      - id: mu_next
+        when: "mu > 0"
+        status: ok
+        text: {es: "Usa mu para calcular v max.", en: "Use mu to calculate v max."}
+  th:
+    summary_rules:
+      - id: th_sum
+        when: "th > 0"
+        status: ok
+        text: {es: "Angulo de peralte razonable.", en: "Reasonable banking angle."}
+    coherence_rules:
+      - id: th_coh
+        when: "th >= 0"
+        status: ok
+        text: {es: "Angulo no negativo.", en: "Non-negative angle."}
+    physical_reading_rules:
+      - id: th_phys
+        when: "th > 0"
+        status: ok
+        text: {es: "La carretera se inclina este angulo.", en: "The road tilts by this angle."}
+    model_validity_rules:
+      - id: th_mod
+        when: "th < 1.5"
+        status: ok
+        text: {es: "Peralte en rango valido.", en: "Banking in valid range."}
+    graph_rules:
+      - id: th_graph
+        when: "th > 0"
+        status: ok
+        text: {es: "theta en el diagrama de fuerzas.", en: "theta on the force diagram."}
+    likely_errors:
+      - id: th_err
+        when: "th > 0"
+        status: warning
+        text: {es: "Verificar unidades en rad.", en: "Check units in rad."}
+    next_step_rules:
+      - id: th_next
+        when: "th > 0"
+        status: ok
+        text: {es: "Calcula v de diseno con el peralte.", en: "Calculate design v with the banking."}
+`;export{e as default};

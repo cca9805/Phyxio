@@ -1,0 +1,284 @@
+version: 5
+formulas:
+  - id: M
+    title:
+      es: Masa total del sistema introductorio
+      en: Total mass of the introductory system
+    equation: M = m1 + m2
+    latex: M = m_1 + m_2
+    rearrangements:
+      - target: M
+        equation: M = m1 + m2
+        latex: M = m_1 + m_2
+    category: auxiliary
+    relation_type: definition
+    physical_meaning:
+      es: La masa total reúne todas las contribuciones del sistema y actúa como denominador físico del promedio ponderado.
+      en: Total mass gathers all system contributions and acts as the physical denominator of the weighted average.
+    constraints:
+      - expr: m1 >= 0 && m2 >= 0
+        message:
+          es: Las masas del modelo deben ser no negativas.
+          en: Masses in the model must be non-negative.
+    validity:
+      es: Válida cuando m1 y m2 representan todo el sistema definido.
+      en: Valid when m1 and m2 represent the full defined system.
+    dimension_check:
+      es: M
+      en: M
+    calculable: true
+    motivo_no_calculable:
+      es: ""
+      en: ""
+    used_in: [theory, examples, calculator]
+    interpretation_tags: [total_mass, normalization, system_definition]
+    result_semantics:
+      target: M
+      kind: positive_scalar
+      sign_meaning:
+        es: Su signo no codifica orientación; solo importa que sea físicamente admisible.
+        en: Its sign does not encode orientation; what matters is that it is physically admissible.
+      absolute_value_meaning:
+        es: Su valor cuantifica la inercia total que pondera las posiciones.
+        en: Its value quantifies the total inertia weighting the positions.
+    domain_checks:
+      - expr: m1 >= 0 && m2 >= 0
+        message:
+          es: Las masas de entrada deben pertenecer a un modelo mecánico ordinario.
+          en: Input masses must belong to an ordinary mechanical model.
+    coherence_checks:
+      - expr: M >= max(m1, m2)
+        severity: ok
+        message:
+          es: La masa total debe ser al menos tan grande como la mayor masa parcial.
+          en: Total mass must be at least as large as the largest partial mass.
+    graph_implications:
+      - channel: weight_scale
+        message:
+          es: El tamaño relativo de los marcadores debe reflejar que la suma de masas es M.
+          en: The relative size of the markers should reflect that the sum of masses is M.
+    pedagogical_triggers:
+      - detect_when: M < max(m1, m2)
+        message:
+          es: Revisa el denominador porque parece menor que una masa parcial positiva.
+          en: Check the denominator because it seems smaller than a positive partial mass.
+
+  - id: xcm
+    title:
+      es: Definición operativa del centro de masas para dos masas
+      en: Operational definition of the center of mass for two masses
+    equation: xcm = (m1*x1 + m2*x2)/M
+    latex: x_{cm} = \frac{m_1 x_1 + m_2 x_2}{M}
+    rearrangements:
+      - target: xcm
+        equation: xcm = (m1*x1 + m2*x2)/M
+        latex: x_{cm} = \frac{m_1 x_1 + m_2 x_2}{M}
+    category: fundamental
+    relation_type: average_relation
+    physical_meaning:
+      es: La coordenada del centro de masas es una media ponderada en la que cada posición cuenta según su masa.
+      en: The center-of-mass coordinate is a weighted average in which each position counts according to its mass.
+    constraints:
+      - expr: M > 0
+        message:
+          es: La masa total debe ser positiva para dividir.
+          en: Total mass must be positive to divide.
+      - expr: m1 >= 0 && m2 >= 0
+        message:
+          es: En este modelo introductorio no se usan masas negativas.
+          en: Negative masses are not used in this introductory model.
+      - expr: abs(M - (m1 + m2)) < 1e-9
+        message:
+          es: La masa total M debe coincidir con m1 + m2.
+          en: Total mass M must match m1 + m2.
+    validity:
+      es: Válida para dos masas medidas sobre el mismo eje y con el mismo origen.
+      en: Valid for two masses measured on the same axis and with the same origin.
+    dimension_check:
+      es: L
+      en: L
+    calculable: true
+    motivo_no_calculable:
+      es: ""
+      en: ""
+    used_in: [theory, examples, calculator]
+    interpretation_tags: [weighted_average, one_dimensional_definition, representative_position]
+    result_semantics:
+      target: xcm
+      kind: scalar_coordinate
+      sign_meaning:
+        es: El signo indica en qué lado del origen queda la posición colectiva.
+        en: The sign indicates on which side of the origin the collective position lies.
+      absolute_value_meaning:
+        es: El valor absoluto mide distancia al origen, no separación entre cuerpos.
+        en: The absolute value measures distance from the origin, not separation between bodies.
+    domain_checks:
+      - expr: M > 0
+        message:
+          es: La definición solo tiene sentido con masa total positiva.
+          en: The definition only makes sense with a positive total mass.
+      - expr: m1 >= 0 && m2 >= 0
+        message:
+          es: El tema trabaja con masas físicas ordinarias.
+          en: This leaf works with ordinary physical masses.
+    coherence_checks:
+      - expr: xcm >= min(x1, x2) && xcm <= max(x1, x2)
+        severity: ok
+        message:
+          es: Con masas positivas, xcm debe quedar entre x1 y x2.
+          en: With positive masses, xcm must lie between x1 and x2.
+      - expr: abs(xcm - ((x1 + x2) / 2)) < 1e-9 && abs(m1 - m2) > 1e-9
+        severity: warning
+        message:
+          es: Si las masas son distintas y sale el punto medio exacto, probablemente se usó una media simple.
+          en: If the masses differ and the exact midpoint appears, a simple mean was probably used.
+    graph_implications:
+      - channel: x_axis_marker
+        message:
+          es: El resultado debe mostrarse como un punto situado entre ambas posiciones.
+          en: The result should be shown as a point located between both positions.
+      - channel: weighted_shift
+        message:
+          es: El marcador debe desplazarse hacia la masa mayor.
+          en: The marker should shift toward the larger mass.
+    pedagogical_triggers:
+      - detect_when: xcm < min(x1, x2) || xcm > max(x1, x2)
+        message:
+          es: Revisa signos, origen y masa total porque el resultado salió fuera del intervalo esperado.
+          en: Check signs, origin, and total mass because the result lies outside the expected interval.
+      - detect_when: abs(xcm - ((x1 + x2) / 2)) < 1e-9 && abs(m1 - m2) > 1e-9
+        message:
+          es: Revisa si has sustituido el promedio ponderado por el punto medio geométrico.
+          en: Check whether you replaced the weighted average with the geometric midpoint.
+
+  - id: Mxcm
+    title:
+      es: Momento espacial total en una dimensión
+      en: Total spatial moment in one dimension
+    equation: M*xcm = m1*x1 + m2*x2
+    latex: M x_{cm} = m_1 x_1 + m_2 x_2
+    rearrangements: []
+    category: conceptual
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: Esta forma muestra que el centro de masas resume una suma de aportes espaciales ponderados por masa.
+      en: This form shows that the center of mass summarizes a sum of spatial contributions weighted by mass.
+    constraints:
+      - expr: M > 0
+        message:
+          es: La masa total debe ser positiva para que la lectura de promedio tenga sentido.
+          en: Total mass must be positive for the average reading to make sense.
+    validity:
+      es: Útil como puente entre el caso de dos masas y la definición general discreta.
+      en: Useful as a bridge between the two-mass case and the general discrete definition.
+    dimension_check:
+      es: M L
+      en: M L
+    calculable: false
+    motivo_no_calculable:
+      es: En este tema se usa como lectura estructural, no como fórmula operativa adicional.
+      en: In this leaf it is used as a structural reading, not as an additional operational formula.
+    used_in: [theory, models, examples]
+    interpretation_tags: [spatial_moment, structural_bridge, weighted_sum]
+    result_semantics:
+      target: Mxcm
+      kind: structural_relation
+      sign_meaning:
+        es: El signo sigue la orientación del centro de masas respecto al origen.
+        en: The sign follows the orientation of the center of mass with respect to the origin.
+      absolute_value_meaning:
+        es: Su módulo mide el peso espacial total del sistema respecto al origen elegido.
+        en: Its magnitude measures the system's total spatial weight with respect to the chosen origin.
+    domain_checks:
+      - expr: M > 0
+        message:
+          es: La relación necesita una masa total físicamente válida.
+          en: The relation needs a physically valid total mass.
+    coherence_checks:
+      - expr: abs(M*xcm - (m1*x1 + m2*x2)) < 1e-9
+        severity: ok
+        message:
+          es: La forma multiplicada debe ser coherente con la definición principal.
+          en: The multiplied form must remain consistent with the main definition.
+    graph_implications:
+      - channel: weighted_lever_balance
+        message:
+          es: Puede interpretarse visualmente como equilibrio de aportes espaciales respecto al origen.
+          en: It can be read visually as a balance of spatial contributions with respect to the origin.
+    pedagogical_triggers:
+      - detect_when: abs(M*xcm - (m1*x1 + m2*x2)) > 1e-9
+        message:
+          es: Revisa si cambiaste una masa o una posición al pasar de una forma a otra.
+          en: Check whether you changed a mass or a position when moving from one form to the other.
+
+  - id: rcm_general
+    title:
+      es: Definición vectorial general
+      en: General vector definition
+    equation: rcm = sum(m_i*r_i)/sum(m_i)
+    latex: \vec r_{cm} = \frac{\sum_i m_i \vec r_i}{\sum_i m_i}
+    rearrangements: []
+    category: derived
+    relation_type: definition
+    physical_meaning:
+      es: Generaliza la misma idea de promedio ponderado a cualquier sistema discreto en varias dimensiones.
+      en: It generalizes the same weighted-average idea to any discrete system in several dimensions.
+    constraints:
+      - expr: sum(m_i) > 0
+        message:
+          es: La masa total del sistema discreto general debe ser positiva.
+          en: The total mass of the general discrete system must be positive.
+    validity:
+      es: Válida cuando todas las posiciones y masas del sistema se miden en el mismo marco.
+      en: Valid when all masses and positions of the system are measured in the same frame.
+    dimension_check:
+      es: L
+      en: L
+    calculable: false
+    motivo_no_calculable:
+      es: Requiere conocer el conjunto completo de masas y posiciones del sistema general.
+      en: It requires knowing the complete set of masses and positions of the general system.
+    used_in: [theory, models, examples]
+    interpretation_tags: [vector_generalization, discrete_system, conceptual_extension]
+    result_semantics:
+      target: rcm
+      kind: vector_position
+      sign_meaning:
+        es: Cada componente conserva el significado geométrico del eje correspondiente.
+        en: Each component preserves the geometric meaning of its corresponding axis.
+      absolute_value_meaning:
+        es: El módulo solo se interpreta junto con dirección y origen.
+        en: The magnitude is interpreted only together with direction and origin.
+    domain_checks:
+      - expr: sum(m_i) > 0
+        message:
+          es: La generalización sigue exigiendo una masa total positiva.
+          en: The generalization still requires a positive total mass.
+    coherence_checks:
+      - expr: true
+        severity: info
+        message:
+          es: La extensión vectorial conserva exactamente el criterio de ponderación por masa.
+          en: The vector extension preserves exactly the mass-weighting criterion.
+    graph_implications:
+      - channel: vector_extension
+        message:
+          es: La lectura pasa de un punto sobre un eje a un punto en un espacio bidimensional o tridimensional.
+          en: The reading moves from a point on an axis to a point in a two- or three-dimensional space.
+    pedagogical_triggers:
+      - detect_when: true
+        message:
+          es: Al generalizar no cambia la física, solo cambia la notación y el número de componentes.
+          en: When generalizing, physics does not change; only notation and the number of components do.
+
+ui:
+  default_formula: xcm
+  groups:
+    - title:
+        es: Fórmulas operativas
+        en: Operational formulas
+      items: [M, xcm]
+    - title:
+        es: Lectura estructural
+        en: Structural reading
+      items: [Mxcm, rcm_general]

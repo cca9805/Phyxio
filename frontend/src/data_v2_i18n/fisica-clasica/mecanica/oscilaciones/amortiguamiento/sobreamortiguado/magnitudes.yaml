@@ -1,0 +1,162 @@
+version: 5
+magnitudes:
+  - id: gamma
+    symbol: \gamma
+    nombre: { es: Amortiguamiento efectivo, en: Effective damping }
+    si_unit: 1/s
+    unidad_si: 1/s
+    dimension: T^-1
+    is_vector: false
+    components: []
+    category: disipacion
+    physical_role: intensidad_disipativa
+    used_in: [condicion_sobreamortiguado, raices_sobreamortiguado, raiz2_sobreamortiguado]
+    common_mistake: Creer que aumentar amortiguamiento siempre acelera el retorno.
+    typical_range: [0.1, 100]
+    sign_behavior: positiva
+    zero_behavior: sin_amortiguamiento
+    value_nature: parametro
+    interpretation_role: clasifica_regimen
+    graph_binding: "Si [[gamma]] supera [[omega0]], la curva de [[x]] no oscila y puede hacerse lenta."
+    descripcion: { es: Parámetro que mide disipación viscosa equivalente del sistema., en: Parameter measuring equivalent viscous dissipation of the system. }
+    pedagogical_notes: { es: "En sobreamortiguado, mas [[gamma]] no implica respuesta mas rapida.", en: "In overdamping, larger [[gamma]] does not imply faster response." }
+  - id: omega0
+    symbol: \omega_0
+    nombre: { es: Pulsacion natural, en: Natural pulsation }
+    si_unit: rad/s
+    unidad_si: rad/s
+    dimension: T^-1
+    is_vector: false
+    components: []
+    category: escala_natural
+    physical_role: referencia_inercial_elastica
+    used_in: [condicion_sobreamortiguado, raices_sobreamortiguado, raiz2_sobreamortiguado]
+    common_mistake: Confundirla con frecuencia en hertz.
+    typical_range: [0.5, 80]
+    sign_behavior: positiva
+    zero_behavior: modelo_degenerado
+    value_nature: parametro
+    interpretation_role: umbral_de_comparacion
+    graph_binding: "Comparar [[omega0]] con [[gamma]] decide si hay regimen sobreamortiguado."
+    descripcion: { es: Escala temporal natural asociada a inercia y rigidez efectivas., en: Natural time scale associated with effective inertia and stiffness. }
+    pedagogical_notes: { es: "Funciona como frontera de comparacion, no como periodo observable.", en: "It acts as a comparison threshold, not as an observable period." }
+  - id: r1
+    symbol: r_1
+    nombre: { es: Raiz lenta, en: Slow root }
+    si_unit: 1/s
+    unidad_si: 1/s
+    dimension: T^-1
+    is_vector: false
+    components: []
+    category: exponente
+    physical_role: modo_dominante_lento
+    used_in: [raices_sobreamortiguado, solucion_sobreamortiguada]
+    common_mistake: Ignorar que la raiz menos negativa domina a largo plazo.
+    typical_range: [-50, -0.001]
+    sign_behavior: negativa
+    zero_behavior: relajacion_muy_lenta
+    value_nature: resultado
+    interpretation_role: modo_lento
+    graph_binding: "[[r1]] controla la cola lenta de [[x]] a tiempos largos."
+    descripcion: { es: Exponente real negativo menos intenso que domina la respuesta tardía., en: Less negative real exponent that dominates late response. }
+    pedagogical_notes: { es: "Es la raiz que explica por que el sistema puede tardar mucho sin oscilar.", en: "It explains why the system may take long to settle without oscillating." }
+  - id: r2
+    symbol: r_2
+    nombre: { es: Raiz rapida, en: Fast root }
+    si_unit: 1/s
+    unidad_si: 1/s
+    dimension: T^-1
+    is_vector: false
+    components: []
+    category: exponente
+    physical_role: modo_transitorio_rapido
+    used_in: [raiz2_sobreamortiguado, solucion_sobreamortiguada]
+    common_mistake: Tomarla como responsable del asentamiento final.
+    typical_range: [-200, -0.01]
+    sign_behavior: negativa
+    zero_behavior: no_aplica
+    value_nature: resultado
+    interpretation_role: modo_rapido
+    graph_binding: "[[r2]] suele desaparecer antes y deja dominando a [[r1]]."
+    descripcion: { es: Exponente real negativo más intenso asociado al decaimiento rápido inicial., en: More negative real exponent associated with fast initial decay. }
+    pedagogical_notes: { es: "Aporta forma inicial, pero no suele fijar la cola final.", en: "It shapes the initial decay but usually not the final tail." }
+  - id: x
+    symbol: x
+    nombre: { es: Desplazamiento, en: Displacement }
+    si_unit: m
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: []
+    category: estado
+    physical_role: salida_temporal
+    used_in: [solucion_sobreamortiguada]
+    common_mistake: Esperar cruces oscilatorios en un regimen sobreamortiguado ideal.
+    typical_range: [-1, 1]
+    sign_behavior: depende_referencia
+    zero_behavior: equilibrio
+    value_nature: estado
+    interpretation_role: respuesta_observable
+    graph_binding: "[[x]] retorna al equilibrio sin oscilacion sostenida."
+    descripcion: { es: Coordenada observable que describe el retorno al equilibrio., en: Observable coordinate describing return to equilibrium. }
+    pedagogical_notes: { es: "Su forma temporal importa mas que un valor aislado.", en: "Its time shape matters more than an isolated value." }
+  - id: C1
+    symbol: C_1
+    nombre: { es: Constante del modo lento, en: Slow-mode constant }
+    si_unit: m
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: []
+    category: condicion_inicial
+    physical_role: peso_modo_lento
+    used_in: [solucion_sobreamortiguada]
+    common_mistake: Tratarla como propiedad fija del sistema.
+    typical_range: [-1, 1]
+    sign_behavior: depende_condiciones
+    zero_behavior: modo_lento_ausente
+    value_nature: constante_integracion
+    interpretation_role: amplitud_modo_lento
+    graph_binding: "[[C1]] pesa la contribucion del modo asociado a [[r1]]."
+    descripcion: { es: Constante de integración fijada por condiciones iniciales del modo lento., en: Integration constant fixed by initial conditions of the slow mode. }
+    pedagogical_notes: { es: "Depende del estado inicial, no solo del sistema.", en: "It depends on the initial state, not only on the system." }
+  - id: C2
+    symbol: C_2
+    nombre: { es: Constante del modo rapido, en: Fast-mode constant }
+    si_unit: m
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: []
+    category: condicion_inicial
+    physical_role: peso_modo_rapido
+    used_in: [solucion_sobreamortiguada]
+    common_mistake: Ignorar su efecto temprano en la curva.
+    typical_range: [-1, 1]
+    sign_behavior: depende_condiciones
+    zero_behavior: modo_rapido_ausente
+    value_nature: constante_integracion
+    interpretation_role: amplitud_modo_rapido
+    graph_binding: "[[C2]] pesa la contribucion del modo asociado a [[r2]]."
+    descripcion: { es: Constante de integración fijada por condiciones iniciales del modo rápido., en: Integration constant fixed by initial conditions of the fast mode. }
+    pedagogical_notes: { es: "Puede afectar mucho al inicio aunque desaparezca pronto.", en: "It may strongly affect the beginning even if it vanishes quickly." }
+  - id: t
+    symbol: t
+    nombre: { es: Tiempo, en: Time }
+    si_unit: s
+    unidad_si: s
+    dimension: T
+    is_vector: false
+    components: []
+    category: variable_independiente
+    physical_role: eje_temporal
+    used_in: [solucion_sobreamortiguada]
+    common_mistake: Evaluar tiempos demasiado cortos y concluir que no hay asentamiento.
+    typical_range: [0, 20]
+    sign_behavior: no_negativo
+    zero_behavior: condicion_inicial
+    value_nature: independiente
+    interpretation_role: seguimiento_respuesta
+    graph_binding: "[[t]] permite observar la desaparicion del modo rapido y la cola lenta."
+    descripcion: { es: Variable independiente que ordena la evolucion transitoria., en: Independent variable ordering transient evolution. }
+    pedagogical_notes: { es: "Conviene mirar varios tiempos para detectar el modo dominante.", en: "Several times should be inspected to detect the dominant mode." }

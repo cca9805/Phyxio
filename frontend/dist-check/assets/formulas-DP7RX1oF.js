@@ -1,0 +1,235 @@
+const e=`version: 1
+topic:
+  id: energia-cinetica
+  title:
+    es: Energia cinetica
+    en: Kinetic Energy
+variables:
+- id: K
+  symbol: K
+  name:
+    es: energia cinetica
+    en: kinetic energy
+  si_unit: J
+- id: m
+  symbol: m
+  name:
+    es: masa
+    en: mass
+  si_unit: kg
+- id: v
+  symbol: v
+  name:
+    es: rapidez
+    en: speed
+  si_unit: m/s
+- id: Ki
+  symbol: K_i
+  name:
+    es: energia cinetica inicial
+    en: initial kinetic energy
+  si_unit: J
+- id: Kf
+  symbol: K_f
+  name:
+    es: energia cinetica final
+    en: final kinetic energy
+  si_unit: J
+- id: dK
+  symbol: \\Delta K
+  name:
+    es: variacion de energia cinetica
+    en: change in kinetic energy
+  si_unit: J
+- id: Wnet
+  symbol: W_{net}
+  name:
+    es: trabajo neto
+    en: net work
+  si_unit: J
+formulas:
+- id: energia_cinetica_basica
+  title:
+    es: Energia cinetica traslacional
+    en: Translational kinetic energy
+  equation: K = 0.5*m*v^2
+  latex: K=\\frac{1}{2} m v^2
+  rearrangements:
+  - target: K
+    equation: K = 0.5*m*v^2
+    latex: K=\\frac{1}{2}mv^2
+  - target: m
+    equation: m = 2*K/(v^2)
+    latex: m=\\frac{2K}{v^2}
+  - target: v
+    equation: v = sqrt(2*K/m)
+    latex: v=\\sqrt{\\frac{2K}{m}}
+  constraints:
+  - expr: m > 0
+    message:
+      es: m debe ser mayor que cero.
+      en: m must be greater than zero.
+  - expr: v >= 0
+    message:
+      es: v debe leerse como modulo de la rapidez.
+      en: v must be read as the speed magnitude.
+  category: fundamental
+  relation_type: energy_relation
+  physical_meaning:
+    es: Relaciona la masa y la rapidez con la energia asociada al movimiento traslacional.
+    en: Relates mass and speed to the energy associated with translational motion.
+  validity:
+    es: Valida para movimiento clasico no relativista y masa aproximadamente constante.
+    en: Valid for classical non-relativistic motion and approximately constant mass.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - estimaciones de energia de impacto y frenado
+  - comparaciones entre velocidades para una misma masa
+  interpretation_tags:
+  - movimiento
+  - energia
+  - rapidez
+  result_semantics:
+    target: K
+    meaning: El resultado mide cuanta energia mecanica esta asociada al estado de movimiento.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Revisa si el regimen sigue siendo clasico antes de usar esta expresion.
+      en: Check that the regime remains classical before using this expression.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Si duplicas v con la misma m, K debe cuadruplicarse.
+      en: If you double v with the same m, K must become four times larger.
+  graph_implications:
+  - La grafica Coord debe mostrar crecimiento cuadratico de K frente a v.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: No confundas velocidad negativa con energia cinetica negativa.
+      en: Do not confuse negative velocity with negative kinetic energy.
+- id: variacion_energia_cinetica
+  title:
+    es: Variacion de energia cinetica
+    en: Kinetic-energy change
+  equation: dK = Kf - Ki
+  latex: \\Delta K=K_f-K_i
+  rearrangements:
+  - target: dK
+    equation: dK = Kf - Ki
+    latex: \\Delta K=K_f-K_i
+  - target: Kf
+    equation: Kf = Ki + dK
+    latex: K_f=K_i+\\Delta K
+  - target: Ki
+    equation: Ki = Kf - dK
+    latex: K_i=K_f-\\Delta K
+  constraints: []
+  category: fundamental
+  relation_type: energy_relation
+  physical_meaning:
+    es: Expresa el cambio firmado de energia cinetica entre dos estados del mismo sistema.
+    en: Expresses the signed change in kinetic energy between two states of the same system.
+  validity:
+    es: Valida cuando Ki y Kf describen el mismo sistema y el mismo tipo de movimiento.
+    en: Valid when Ki and Kf describe the same system and the same kind of motion.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - comparacion de estados antes y despues de acelerar o frenar
+  interpretation_tags:
+  - cambio
+  - energia
+  - estados
+  result_semantics:
+    target: dK
+    meaning: El resultado indica si el sistema gano o perdio energia cinetica entre dos estados.
+  domain_checks:
+  - expr: Ki >= 0
+    message:
+      es: Ki debe ser no negativa.
+      en: Ki must be non-negative.
+  - expr: Kf >= 0
+    message:
+      es: Kf debe ser no negativa.
+      en: Kf must be non-negative.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: dK positiva implica aumento de rapidez o redistribucion energetica compatible.
+      en: Positive dK implies increasing speed or compatible energy redistribution.
+  graph_implications:
+  - La lectura Coord debe mostrar dK como diferencia entre nivel final e inicial de K.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Mantén el signo de dK; no la reemplaces por un modulo salvo que el problema lo pida.
+      en: Keep the sign of dK; do not replace it by a magnitude unless the problem asks for it.
+- id: teorema_trabajo_energia
+  title:
+    es: Teorema trabajo-energia
+    en: Work-energy theorem
+  equation: Wnet = dK
+  latex: W_{net}=\\Delta K
+  rearrangements:
+  - target: Wnet
+    equation: Wnet = dK
+    latex: W_{net}=\\Delta K
+  - target: dK
+    equation: dK = Wnet
+    latex: \\Delta K=W_{net}
+  constraints: []
+  category: fundamental
+  relation_type: energy_relation
+  physical_meaning:
+    es: Conecta el trabajo total de las fuerzas externas con el cambio de energia cinetica del sistema.
+    en: Connects total external work with the system's change in kinetic energy.
+  validity:
+    es: Valida para el sistema elegido cuando el trabajo neto se calcula con la misma convencion de signos.
+    en: Valid for the chosen system when net work is computed with the same sign convention.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - frenadas
+  - aceleraciones por fuerza resultante
+  - estimacion de distancias de parada
+  interpretation_tags:
+  - trabajo
+  - energia
+  - balance
+  result_semantics:
+    target: Wnet
+    meaning: El resultado mide el aporte o la extraccion neta de energia mecanica sobre el movimiento.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Comprueba que todas las fuerzas relevantes esten incluidas en el trabajo neto.
+      en: Check that all relevant forces are included in the net work.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Si Wnet es negativo, dK tambien debe ser negativa.
+      en: If Wnet is negative, dK must also be negative.
+  graph_implications:
+  - En Coord, un area o balance de trabajo positivo debe corresponder a aumento de K.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: No confundas trabajo neto con trabajo de una sola fuerza si actuan varias interacciones.
+      en: Do not confuse net work with the work of a single force when several interactions act.
+ui:
+  default_formula: energia_cinetica_basica
+  groups:
+  - title:
+      es: Basicas
+      en: Basics
+    items:
+    - energia_cinetica_basica
+    - variacion_energia_cinetica
+    - teorema_trabajo_energia
+`;export{e as default};

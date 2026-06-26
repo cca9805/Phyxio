@@ -1,0 +1,213 @@
+version: 5
+topic:
+  id: coherencia
+  title:
+    es: Coherencia
+    en: Coherence
+formulas:
+- id: longitud_coherencia
+  title:
+    es: Longitud de coherencia temporal
+    en: Temporal coherence length
+  equation: L_c = c * tau_c
+  latex: L_c = c * \tau_c
+  category: fundamental
+  relation_type: propagation_relation
+  physical_meaning:
+    es: Convierte estabilidad temporal de fase en distancia de coherencia.
+    en: Converts temporal phase stability into coherence distance.
+  constraints:
+  - c > 0
+  - tau_c > 0
+  validity:
+    es: Valida para propagacion en aire o vacio como primera aproximacion.
+    en: Valid for propagation in air or vacuum as a first approximation.
+  dimension_check: '[L] = [L T^-1] * [T]'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere [[c]] y [[tau_c]].
+    en: Requires [[c]] and [[tau_c]].
+  used_in:
+  - escala_coherencia
+  interpretation_tags:
+  - coherencia_temporal
+  - longitud
+  result_semantics:
+    target: longitud_de_coherencia
+    kind: core_physical_quantity
+    sign_meaning:
+      es: La longitud de coherencia es positiva.
+      en: Coherence length is positive.
+    absolute_value_meaning:
+      es: Distancia maxima aproximada para mantener interferencia estable.
+      en: Approximate maximum distance for keeping stable interference.
+  domain_checks:
+  - condition: tau_c > 0
+    message:
+      es: El tiempo de coherencia debe ser positivo.
+      en: Coherence time must be positive.
+    severity: error
+  coherence_checks:
+  - condition: L_c > 0
+    message:
+      es: La longitud de coherencia debe ser positiva.
+      en: Coherence length must be positive.
+    severity: error
+  graph_implications:
+    es: Fija la escala que se compara con [[\Delta L]].
+    en: Sets the scale compared with [[\Delta L]].
+  pedagogical_triggers:
+  - confundir_duracion_y_coherencia
+  rearrangements:
+  - target: longitud_de_coherencia
+    equation: L_c = c * tau_c
+    latex: L_c = c * \tau_c
+  - target: tau_c
+    equation: tau_c = L_c / c
+    latex: \tau_c = \frac{L_c}{c}
+  - target: velocidad_de_la_luz
+    equation: c = L_c / tau_c
+    latex: c = \frac{L_c}{\tau_c}
+  variables:
+  - longitud_de_coherencia
+  - velocidad_de_la_luz
+  - tau_c
+- id: coherencia_relativa
+  title:
+    es: Coherencia relativa por desajuste de camino
+    en: Relative coherence from path mismatch
+  equation: C_{rel} = L_c / (L_c + \Delta L)
+  latex: C_{rel} = \frac{L_c}{L_c + \Delta L}
+  category: derived
+  relation_type: model_relation
+  physical_meaning:
+    es: Estima como cae la coherencia observable al crecer la diferencia de camino.
+    en: Estimates how observable coherence falls as path difference grows.
+  constraints:
+  - L_c > 0
+  - \Delta L >= 0
+  validity:
+    es: Modelo pedagogico monotono para comparar escalas de camino y coherencia.
+    en: Monotonic pedagogical model for comparing path and coherence scales.
+  dimension_check: '[1] = [L] / [L]'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere [[L_c]] y [[\Delta L]].
+    en: Requires [[L_c]] and [[\Delta L]].
+  used_in:
+  - franjas_visibles
+  interpretation_tags:
+  - contraste
+  - camino
+  result_semantics:
+    target: coherencia_relativa
+    kind: core_physical_quantity
+    sign_meaning:
+      es: La coherencia relativa es no negativa.
+      en: Relative coherence is nonnegative.
+    absolute_value_meaning:
+      es: Indicador de supervivencia de franjas por desajuste de camino.
+      en: Indicator of fringe survival under path mismatch.
+  domain_checks:
+  - condition: \Delta L >= 0
+    message:
+      es: La diferencia de camino debe ser no negativa.
+      en: Path difference must be nonnegative.
+    severity: error
+  coherence_checks:
+  - condition: C_{rel} >= 0
+    message:
+      es: La coherencia relativa debe ser no negativa.
+      en: Relative coherence must be nonnegative.
+    severity: error
+  graph_implications:
+    es: Genera una curva decreciente de [[C_{rel}]] frente a [[\Delta L]].
+    en: Generates a decreasing curve of [[C_{rel}]] versus [[\Delta L]].
+  pedagogical_triggers:
+  - camino_mayor_que_coherencia
+  rearrangements:
+  - target: coherencia_relativa
+    equation: C_{rel} = L_c / (L_c + \Delta L)
+    latex: C_{rel} = \frac{L_c}{L_c + \Delta L}
+  - target: diferencia_de_camino_optico
+    equation: \Delta L = L_c * (1 - C_{rel}) / C_{rel}
+    latex: \Delta L = \frac{L_c(1-C_{rel})}{C_{rel}}
+  - target: longitud_de_coherencia
+    equation: L_c = C_{rel} * \Delta L / (1 - C_{rel})
+    latex: L_c = \frac{C_{rel}\Delta L}{1-C_{rel}}
+  variables:
+  - coherencia_relativa
+  - longitud_de_coherencia
+  - diferencia_de_camino_optico
+- id: visibilidad_franjas
+  title:
+    es: Visibilidad de franjas
+    en: Fringe visibility
+  equation: V = (I_{max} - I_{min}) / (I_{max} + I_{min})
+  latex: V = \frac{I_{max}-I_{min}}{I_{max}+I_{min}}
+  category: experimental
+  relation_type: measurement_relation
+  physical_meaning:
+    es: Mide el contraste observable entre franjas brillantes y oscuras.
+    en: Measures observable contrast between bright and dark fringes.
+  constraints:
+  - I_{max} > 0
+  - I_{min} >= 0
+  - I_{max} >= I_{min}
+  validity:
+    es: Valida cuando maximos y minimos se miden con el mismo detector y fondo controlado.
+    en: Valid when maxima and minima are measured with the same detector and controlled background.
+  dimension_check: '[1] = [M T^-3] / [M T^-3]'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere [[I_{max}]] e [[I_{min}]].
+    en: Requires [[I_{max}]] and [[I_{min}]].
+  used_in:
+  - contraste_experimental
+  interpretation_tags:
+  - visibilidad
+  - franjas
+  result_semantics:
+    target: visibilidad_de_franjas
+    kind: core_physical_quantity
+    sign_meaning:
+      es: La visibilidad se interpreta entre cero y uno.
+      en: Visibility is interpreted between zero and one.
+    absolute_value_meaning:
+      es: Contraste experimental del patron de interferencia.
+      en: Experimental contrast of the interference pattern.
+  domain_checks:
+  - condition: I_{max} >= I_{min}
+    message:
+      es: El maximo debe ser mayor o igual que el minimo.
+      en: The maximum must be greater than or equal to the minimum.
+    severity: error
+  coherence_checks:
+  - condition: V >= 0
+    message:
+      es: La visibilidad debe ser no negativa.
+      en: Visibility must be nonnegative.
+    severity: error
+  graph_implications:
+    es: Relaciona coherencia con contraste medido en franjas.
+    en: Relates coherence to measured fringe contrast.
+  pedagogical_triggers:
+  - confundir_visibilidad_intensidad
+  rearrangements:
+  - target: visibilidad_de_franjas
+    equation: V = (I_{max} - I_{min}) / (I_{max} + I_{min})
+    latex: V = \frac{I_{max}-I_{min}}{I_{max}+I_{min}}
+  variables:
+  - visibilidad_de_franjas
+  - intensidad_maxima
+  - intensidad_minima
+ui:
+  default_formula: coherencia_relativa
+  groups:
+  - title:
+      es: Coherencia y franjas
+      en: Coherence and fringes
+    items:
+    - longitud_coherencia
+    - coherencia_relativa
+    - visibilidad_franjas

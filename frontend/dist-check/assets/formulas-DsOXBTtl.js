@@ -1,0 +1,272 @@
+const e=`version: 5
+topic:
+  id: energia-potencial-gravitatoria
+  title:
+    es: Energia potencial gravitatoria
+    en: Gravitational Potential Energy
+
+formulas:
+- id: energia_potencial_general
+  title:
+    es: Energia potencial gravitatoria general
+    en: General gravitational potential energy
+  equation: U = -(G * M * m) / r
+  latex: U = -\\frac{G \\cdot M \\cdot m}{r}
+  category: energia
+  relation_type: definition
+  physical_meaning:
+    es: Relaciona la energia de configuracion con la distancia radial en campo central.
+    en: Relates configuration energy to radial distance in a central field.
+  constraints: [ G > 0, M > 0, m > 0, r > 0 ]
+  validity:
+    es: Valida para distribucion esferica o aproximacion de masa puntual.
+    en: Valid for spherical distributions or point-mass approximation.
+  dimension_check: "[M*L^2*T^-2] = ([M^-1*L^3*T^-2]*[M]*[M])/[L]"
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere valores numericos de G, M, m y r.
+    en: Requires numeric values for G, M, m, and r.
+  used_in: [ balance_energetico, lectura_radial ]
+  interpretation_tags: [ configuracion, referencia, signo ]
+  result_semantics:
+    target: U
+  domain_checks: [ r > 0, M > 0, m > 0 ]
+  coherence_checks: []
+  graph_implications: Curva U(r) negativa de magnitud decreciente al aumentar r.
+  pedagogical_triggers: [ signo_de_U, referencia_en_infinito ]
+  rearrangements:
+  - target: U
+    equation: U = -(G * M * m) / r
+  - target: r
+    equation: r = -(G * M * m) / U
+  - target: m
+    equation: m = -(U * r) / (G * M)
+  variables: [ U, G, M, m, r ]
+
+- id: cambio_energia_potencial
+  title:
+    es: Cambio de energia potencial entre dos radios
+    en: Potential-energy change between two radii
+  equation: DeltaU = -(G * M * m) * ((1 / rf) - (1 / ri))
+  latex: \\Delta U = -\\left(G \\cdot M \\cdot m\\right)\\left(\\frac{1}{r_f} - \\frac{1}{r_i}\\right)
+  category: energia
+  relation_type: transfer
+  physical_meaning:
+    es: Calcula la variacion energetica entre estado inicial y final.
+    en: Computes energy variation between initial and final states.
+  constraints: [ G > 0, M > 0, m > 0, ri > 0, rf > 0 ]
+  validity:
+    es: Requiere que ri y rf se midan desde la misma referencia.
+    en: Requires ri and rf measured from the same reference.
+  dimension_check: "[M*L^2*T^-2] = [M^-1*L^3*T^-2]*[M]*[M]*[1/L]"
+  calculable: true
+  motivo_no_calculable:
+    es: Sin dos radios fisicamente definidos no se puede evaluar.
+    en: It cannot be evaluated without two physically defined radii.
+  used_in: [ balance_energetico, transicion_estados ]
+  interpretation_tags: [ estado_inicial, estado_final, variacion ]
+  result_semantics:
+    target: DeltaU
+  domain_checks: [ ri > 0, rf > 0 ]
+  coherence_checks: []
+  graph_implications: Diferencia vertical entre dos puntos de U(r).
+  pedagogical_triggers: [ signo_de_deltaU, orden_de_estados ]
+  rearrangements:
+  - target: DeltaU
+    equation: DeltaU = -(G * M * m) * ((1 / rf) - (1 / ri))
+  variables: [ DeltaU, G, M, m, ri, rf ]
+
+- id: energia_mecanica
+  title:
+    es: Energia mecanica total
+    en: Total mechanical energy
+  equation: E = K + U
+  latex: E = K + U
+  category: energia
+  relation_type: identity
+  physical_meaning:
+    es: Expresa la suma entre energia cinetica y potencial.
+    en: Expresses the sum of kinetic and potential energy.
+  constraints: [ K >= 0 ]
+  validity:
+    es: Valida en modelos mecanicos clasicos para una particula de prueba.
+    en: Valid in classical mechanical models for a test particle.
+  dimension_check: "[M*L^2*T^-2] = [M*L^2*T^-2] + [M*L^2*T^-2]"
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere conocer K o U junto con E para despejar la restante.
+    en: Requires K or U together with E to solve for the remaining variable.
+  used_in: [ conservacion, clasificacion_orbital ]
+  interpretation_tags: [ balance, estado, invariante ]
+  result_semantics:
+    target: E
+  domain_checks: []
+  coherence_checks: [ K >= 0 ]
+  graph_implications: Permite leer K como diferencia entre E y U.
+  pedagogical_triggers: [ lectura_de_balance ]
+  rearrangements:
+  - target: E
+    equation: E = K + U
+  - target: K
+    equation: K = E - U
+  - target: U
+    equation: U = E - K
+  variables: [ E, K, U ]
+
+- id: conservacion_energia
+  title:
+    es: Conservacion de energia sin disipacion
+    en: Energy conservation without dissipation
+  equation: DeltaK = -DeltaU
+  latex: \\Delta K = -\\Delta U
+  category: energia
+  relation_type: conservation
+  physical_meaning:
+    es: En ausencia de perdida, el cambio cinetico compensa el potencial.
+    en: Without losses, kinetic change compensates potential change.
+  constraints: [ sistema_conservativo = true ]
+  validity:
+    es: Aplica cuando no hay trabajo no conservativo apreciable.
+    en: Applies when non-conservative work is negligible.
+  dimension_check: "[M*L^2*T^-2] = [M*L^2*T^-2]"
+  calculable: true
+  motivo_no_calculable:
+    es: Si hay disipacion, se requiere termino adicional de trabajo externo.
+    en: With dissipation, an extra external-work term is required.
+  used_in: [ balance_energetico, prediccion_velocidad ]
+  interpretation_tags: [ compensacion, conservacion ]
+  result_semantics:
+    target: DeltaK
+  domain_checks: []
+  coherence_checks: [ DeltaK + DeltaU == 0 ]
+  graph_implications: La ganancia de K coincide con la caida de U.
+  pedagogical_triggers: [ error_de_signo, chequeo_balance ]
+  rearrangements:
+  - target: DeltaK
+    equation: DeltaK = -DeltaU
+  - target: DeltaU
+    equation: DeltaU = -DeltaK
+  variables: [ DeltaK, DeltaU ]
+
+- id: trabajo_gravitatorio
+  title:
+    es: Trabajo de la gravedad
+    en: Gravitational work
+  equation: Wg = -DeltaU
+  latex: W_g = -\\Delta U
+  category: energia
+  relation_type: transfer
+  physical_meaning:
+    es: Vincula trabajo de la fuerza gravitatoria con variacion potencial.
+    en: Links gravitational-force work to potential-energy change.
+  constraints: []
+  validity:
+    es: Requiere fuerza gravitatoria tratada como conservativa.
+    en: Requires treating gravity as a conservative force.
+  dimension_check: "[M*L^2*T^-2] = [M*L^2*T^-2]"
+  calculable: true
+  motivo_no_calculable:
+    es: Necesita conocer DeltaU o Wg para evaluar el otro.
+    en: Needs DeltaU or Wg to compute the other one.
+  used_in: [ trabajo_energia ]
+  interpretation_tags: [ trabajo, signo ]
+  result_semantics:
+    target: Wg
+  domain_checks: []
+  coherence_checks: [ Wg + DeltaU == 0 ]
+  graph_implications: El signo de Wg se deduce del sentido de cambio en U.
+  pedagogical_triggers: [ signo_de_Wg ]
+  rearrangements:
+  - target: Wg
+    equation: Wg = -DeltaU
+  - target: DeltaU
+    equation: DeltaU = -Wg
+  variables: [ Wg, DeltaU ]
+
+- id: aproximacion_superficial
+  title:
+    es: Aproximacion local cercana a superficie
+    en: Near-surface local approximation
+  equation: DeltaU = m * g * h
+  latex: \\Delta U \\approx m \\cdot g \\cdot h
+  category: aproximacion
+  relation_type: approximation
+  physical_meaning:
+    es: Aproxima el cambio potencial para variaciones de altura pequenas.
+    en: Approximates potential-energy change for small height variations.
+  constraints: [ m > 0, g > 0, h >= 0, h << r ]
+  validity:
+    es: Valida cuando la variacion radial es pequena frente al radio local.
+    en: Valid when radial variation is small relative to local radius.
+  dimension_check: "[M*L^2*T^-2] = [M]*[L*T^-2]*[L]"
+  calculable: true
+  motivo_no_calculable:
+    es: Fuera del regimen local se debe usar la expresion general 1/r.
+    en: Outside local regime the general 1/r expression must be used.
+  used_in: [ estimacion_rapida, problemas_terrestres ]
+  interpretation_tags: [ local, linealizacion, escala ]
+  result_semantics:
+    target: DeltaU
+  domain_checks: [ m > 0, g > 0 ]
+  coherence_checks: []
+  graph_implications: Tramo local casi lineal de la curva U(r).
+  pedagogical_triggers: [ criterio_cambio_modelo ]
+  rearrangements:
+  - target: DeltaU
+    equation: DeltaU = m * g * h
+  - target: h
+    equation: h = DeltaU / (m * g)
+  variables: [ DeltaU, m, g, h ]
+
+- id: condicion_ligadura_conceptual
+  title:
+    es: Condicion energetica de sistema ligado
+    en: Energetic condition for bound state
+  equation: E = K + U < 0
+  latex: E = K + U < 0
+  category: energia
+  relation_type: conceptual
+  physical_meaning:
+    es: Indica que energia mecanica negativa corresponde a estado ligado.
+    en: Indicates that negative mechanical energy corresponds to a bound state.
+  constraints: [ K >= 0 ]
+  validity:
+    es: Criterio cualitativo en regimen gravitatorio clasico.
+    en: Qualitative criterion in classical gravitational regime.
+  dimension_check: "[M*L^2*T^-2] < 0"
+  calculable: false
+  motivo_no_calculable:
+    es: Es criterio de clasificacion, no ecuacion de despeje directo.
+    en: It is a classification criterion, not a direct solving equation.
+  used_in: [ clasificacion_orbital ]
+  interpretation_tags: [ ligado, escape, energia_total ]
+  result_semantics:
+    target: E
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: Permite discutir si la trayectoria permanece confinada.
+  pedagogical_triggers: [ estado_ligado ]
+  rearrangements:
+  - target: E
+    equation: E = K + U
+  variables: [ E, K, U ]
+
+ui:
+  default_formula: energia_potencial_general
+  groups:
+  - title:
+      es: Formulas calculables
+      en: Calculable formulas
+    items:
+    - energia_potencial_general
+    - cambio_energia_potencial
+    - energia_mecanica
+    - conservacion_energia
+    - trabajo_gravitatorio
+    - aproximacion_superficial
+  - title:
+      es: Formula conceptual
+      en: Conceptual formula
+    items:
+    - condicion_ligadura_conceptual
+`;export{e as default};

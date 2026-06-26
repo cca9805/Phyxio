@@ -1,0 +1,235 @@
+const e=`version: 5
+topic:
+  id: ecuacion-de-euler-de-fluidos
+  title:
+    es: Ecuacion de Euler de fluidos
+    en: Euler Equation for Fluids
+variables:
+- id: rho
+  symbol: \\rho
+  name:
+    es: densidad
+    en: density
+  si_unit: kg/m^3
+- id: v
+  symbol: \\vec v
+  name:
+    es: campo de velocidad
+    en: velocity field
+  si_unit: m/s
+- id: p
+  symbol: p
+  name:
+    es: presion
+    en: pressure
+  si_unit: Pa
+- id: g
+  symbol: \\vec g
+  name:
+    es: campo de fuerzas de volumen
+    en: body force field
+  si_unit: m/s^2
+- id: DvDt
+  symbol: D\\vec v/Dt
+  name:
+    es: aceleracion material
+    en: material acceleration
+  si_unit: m/s^2
+- id: t
+  symbol: t
+  name:
+    es: tiempo
+    en: time
+  si_unit: s
+- id: Phi
+  symbol: \\Phi
+  name:
+    es: potencial de fuerzas
+    en: force potential
+  si_unit: J/kg
+formulas:
+- id: derivada_material_velocidad
+  title:
+    es: Derivada material de la velocidad
+    en: Derivada material de la velocidad
+  equation: DvDt=DvDt
+  latex: \\frac{D\\vec v}{Dt}=\\frac{\\partial\\vec v}{\\partial t}+(\\vec v\\cdot\\nabla)\\vec v
+  category: fundamental
+  relation_type: model_relation
+  physical_meaning:
+    es: Relacion nuclear del leaf; vincula magnitudes medibles con una decision fisica sobre regimen, validez o reduccion del modelo.
+    en: Core relation of the leaf; it links measurable quantities to a physical decision about regime, validity, or model reduction.
+  constraints: []
+  validity:
+    es: Usar solo si las magnitudes pertenecen al mismo sistema, las unidades son coherentes y las hipotesis del leaf siguen dominando.
+    en: Use only when the quantities belong to the same system, units are coherent, and the leaf assumptions still dominate.
+  dimension_check: Debe conservar coherencia dimensional con las magnitudes definidas.
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - lectura_fisica_del_leaf
+  interpretation_tags:
+  - mecanica-avanzada
+  - modelo
+  result_semantics:
+    target: DvDt
+    meaning: Permite interpretar el regimen fisico del sistema.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Comprueba que las hipotesis del modelo son aplicables.
+      en: Check that model assumptions apply.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Verifica signos, unidades y dominio antes de interpretar.
+      en: Check signs, units, and domain before interpretation.
+  graph_implications: Sin grafico declarado; la lectura se apoya en estructura, unidades y limites.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Explica la lectura fisica antes de operar algebraicamente.
+      en: Explain the physical reading before algebraic manipulation.
+  rearrangements:
+  - target: DvDt
+    equation: DvDt=DvDt
+    latex: \\frac{D\\vec v}{Dt}=\\frac{\\partial\\vec v}{\\partial t}+(\\vec v\\cdot\\nabla)\\vec v
+- id: ecuacion_euler_fluidos
+  title:
+    es: Ecuacion de Euler
+    en: Ecuacion de Euler
+  equation: DvDt=DvDt
+  latex: \\rho\\frac{D\\vec v}{Dt}=-\\nabla p+\\rho\\vec g
+  category: fundamental
+  relation_type: model_relation
+  physical_meaning:
+    es: Relacion nuclear del leaf; vincula magnitudes medibles con una decision fisica sobre regimen, validez o reduccion del modelo.
+    en: Core relation of the leaf; it links measurable quantities to a physical decision about regime, validity, or model reduction.
+  constraints: []
+  validity:
+    es: Usar solo si las magnitudes pertenecen al mismo sistema, las unidades son coherentes y las hipotesis del leaf siguen dominando.
+    en: Use only when the quantities belong to the same system, units are coherent, and the leaf assumptions still dominate.
+  dimension_check: Debe conservar coherencia dimensional con las magnitudes definidas.
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - lectura_fisica_del_leaf
+  interpretation_tags:
+  - mecanica-avanzada
+  - modelo
+  result_semantics:
+    target: DvDt
+    meaning: Permite interpretar el regimen fisico del sistema.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Comprueba que las hipotesis del modelo son aplicables.
+      en: Check that model assumptions apply.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Verifica signos, unidades y dominio antes de interpretar.
+      en: Check signs, units, and domain before interpretation.
+  graph_implications: Sin grafico declarado; la lectura se apoya en estructura, unidades y limites.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Explica la lectura fisica antes de operar algebraicamente.
+      en: Explain the physical reading before algebraic manipulation.
+  rearrangements:
+  - target: DvDt
+    equation: DvDt=DvDt
+    latex: \\rho\\frac{D\\vec v}{Dt}=-\\nabla p+\\rho\\vec g
+- id: continuidad_incompresible
+  title:
+    es: Continuidad incompresible
+    en: Continuidad incompresible
+  equation: v=v
+  latex: \\nabla\\cdot\\vec v=0
+  category: fundamental
+  relation_type: model_relation
+  physical_meaning:
+    es: Relacion nuclear del leaf; vincula magnitudes medibles con una decision fisica sobre regimen, validez o reduccion del modelo.
+    en: Core relation of the leaf; it links measurable quantities to a physical decision about regime, validity, or model reduction.
+  constraints: []
+  validity:
+    es: Usar solo si las magnitudes pertenecen al mismo sistema, las unidades son coherentes y las hipotesis del leaf siguen dominando.
+    en: Use only when the quantities belong to the same system, units are coherent, and the leaf assumptions still dominate.
+  dimension_check: Debe conservar coherencia dimensional con las magnitudes definidas.
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - lectura_fisica_del_leaf
+  interpretation_tags:
+  - mecanica-avanzada
+  - modelo
+  result_semantics:
+    target: v
+    meaning: Permite interpretar el regimen fisico del sistema.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Comprueba que las hipotesis del modelo son aplicables.
+      en: Check that model assumptions apply.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Verifica signos, unidades y dominio antes de interpretar.
+      en: Check signs, units, and domain before interpretation.
+  graph_implications: Sin grafico declarado; la lectura se apoya en estructura, unidades y limites.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Explica la lectura fisica antes de operar algebraicamente.
+      en: Explain the physical reading before algebraic manipulation.
+  rearrangements:
+  - target: v
+    equation: v=v
+    latex: \\nabla\\cdot\\vec v=0
+- id: bernoulli_no_estacionario
+  title:
+    es: Bernoulli no estacionario
+    en: Bernoulli no estacionario
+  equation: p=p
+  latex: \\frac{\\partial\\phi}{\\partial t}+\\frac{1}{2}v^2+\\frac{p}{\\rho}+\\Phi=C(t)
+  category: fundamental
+  relation_type: model_relation
+  physical_meaning:
+    es: Relacion nuclear del leaf; vincula magnitudes medibles con una decision fisica sobre regimen, validez o reduccion del modelo.
+    en: Core relation of the leaf; it links measurable quantities to a physical decision about regime, validity, or model reduction.
+  constraints: []
+  validity:
+    es: Usar solo si las magnitudes pertenecen al mismo sistema, las unidades son coherentes y las hipotesis del leaf siguen dominando.
+    en: Use only when the quantities belong to the same system, units are coherent, and the leaf assumptions still dominate.
+  dimension_check: Debe conservar coherencia dimensional con las magnitudes definidas.
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - lectura_fisica_del_leaf
+  interpretation_tags:
+  - mecanica-avanzada
+  - modelo
+  result_semantics:
+    target: p
+    meaning: Permite interpretar el regimen fisico del sistema.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Comprueba que las hipotesis del modelo son aplicables.
+      en: Check that model assumptions apply.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Verifica signos, unidades y dominio antes de interpretar.
+      en: Check signs, units, and domain before interpretation.
+  graph_implications: Sin grafico declarado; la lectura se apoya en estructura, unidades y limites.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Explica la lectura fisica antes de operar algebraicamente.
+      en: Explain the physical reading before algebraic manipulation.
+  rearrangements:
+  - target: p
+    equation: p=p
+    latex: \\frac{\\partial\\phi}{\\partial t}+\\frac{1}{2}v^2+\\frac{p}{\\rho}+\\Phi=C(t)
+`;export{e as default};

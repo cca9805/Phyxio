@@ -1,0 +1,80 @@
+const n=`id: analogia-lineal-angular
+nombre:
+  es: Analogía lineal-angular
+  en: Linear-Angular Analogy
+area: fisica-clasica
+bloque: mecanica
+subbloque: rotacion
+parent_id: fundamentos
+ruta_relativa: fisica-clasica/mecanica/rotacion/fundamentos/analogia-lineal-angular
+orden: 213115
+type: leaf
+niveles:
+  es:
+  - BACHILLERATO
+  - UNIVERSIDAD
+  en:
+  - Upper Secondary
+  - University
+icon: ⚖️
+descripcion: Compara las magnitudes lineales y angulares sin confundir analogía matemática
+  con equivalencia física.
+description_en: Compares linear and angular quantities without confusing mathematical
+  analogy with physical equivalence.
+tags:
+  es:
+  - rotacion
+  - analogias
+  - traslacion
+  - torque
+  - momento de inercia
+  en:
+  - rotation
+  - analogies
+  - translation
+  - torque
+  - moment of inertia
+prerequisitos:
+- fisica-clasica/mecanica/rotacion/fundamentos/magnitudes-angulares
+- fisica-clasica/mecanica/rotacion/fundamentos/relacion-lineal-angular
+graficos:
+- Svg
+- Coord
+physical_role:
+  es: modelo físico
+  en: physical model
+dificultad: 3
+tiempo_estimado_min: 45
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Svg
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+pregunta_fisica_central:
+  es: ¿Qué magnitud angular corresponde a cada magnitud lineal y qué cambia físicamente?
+  en: Which angular quantity corresponds to each linear quantity and what changes
+    physically?
+representacion_dominante: Svg
+magnitud_dominante: alpha
+graph_profile_sugerido:
+  tipo_principal: Svg
+  descripcion: SVG de tabla/puente lineal-angular y Coord opcional con proporcionalidad
+    entre \\(\\alpha\\) y \\(\\tau\\) para \\(I\\) fijo.
+`;export{n as default};

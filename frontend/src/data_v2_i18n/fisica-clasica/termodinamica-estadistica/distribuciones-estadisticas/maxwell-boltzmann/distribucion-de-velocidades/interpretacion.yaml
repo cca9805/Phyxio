@@ -1,0 +1,1043 @@
+version: 5.0.0
+id: distribucion-de-velocidades
+leaf_id: distribucion-de-velocidades
+nombre:
+  es: Distribucion de velocidades
+  en: Velocity Distribution
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: distribuciones-estadisticas
+  parent_id: maxwell-boltzmann
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/distribuciones-estadisticas/maxwell-boltzmann/distribucion-de-velocidades
+  orden: 273110
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - maxwell_boltzmann_velocidad
+  - velocidad_mas_probable
+  - velocidad_media
+  - velocidad_cuadratica_media
+  - energia_cinetica_media_gas
+  - probabilidad_intervalo_velocidad
+  magnitudes:
+  - velocidad
+  - densidad_probabilidad_velocidad
+  - temperatura_absoluta
+  - masa_particula
+  - constante_boltzmann
+  - velocidad_mas_probable
+  - velocidad_media
+  - velocidad_rms
+  - energia_cinetica_media
+  - probabilidad_intervalo
+  - velocidad_minima
+  - velocidad_maxima
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: densidad_probabilidad_velocidad
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  densidad_probabilidad_velocidad:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado dominante
+      en: speed probability density
+    summary_rules:
+    - id: densidad_probabilidad_velocidad_summary_context
+      when: 'true'
+      status: ok
+      text:
+        es: '[[densidad_probabilidad_velocidad]] debe leerse dentro de una distribución de Maxwell-Boltzmann: describe velocidades
+          posibles, no trayectorias individuales.'
+        en: '[[densidad_probabilidad_velocidad]] must be read within a Maxwell-Boltzmann distribution: it describes possible
+          speeds, not individual trajectories.'
+    physical_reading_rules:
+    - id: densidad_probabilidad_velocidad_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[densidad_probabilidad_velocidad]] con su unidad y con el papel de [[temperatura_absoluta]] y [[masa_particula]]
+          en el ensanchamiento de la curva. Si [[temperatura_absoluta]] aumenta, [[densidad_probabilidad_velocidad]] indica
+          que la curva se desplaza hacia velocidades mayores porque la energía térmica disponible crece; si [[masa_particula]]
+          disminuye, el pico también se desplaza porque la misma energía produce más rapidez en partículas más ligeras.
+        en: Interpret [[densidad_probabilidad_velocidad]] with its unit and with the role of [[temperatura_absoluta]] and
+          [[masa_particula]] in broadening the curve. Because [[temperatura_absoluta]] sets the thermal energy scale, a higher
+          temperature means the distribution shifts toward larger speeds and the peak decreases in height; because [[masa_particula]]
+          determines how energy translates into speed, lighter particles produce a broader distribution at the same temperature.
+    coherence_rules:
+    - id: densidad_probabilidad_velocidad_coherence_positive_domain
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[densidad_probabilidad_velocidad]] sea compatible con velocidades no negativas y con una probabilidad
+          total normalizada en el dominio físico.
+        en: Check that [[densidad_probabilidad_velocidad]] is compatible with nonnegative speeds and with total probability
+          normalized over the physical domain.
+    - id: densidad_probabilidad_velocidad_coherence_thermal_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Si aumenta [[temperatura_absoluta]] o disminuye [[masa_particula]], las velocidades características deben desplazarse
+          hacia valores mayores.
+        en: If [[temperatura_absoluta]] increases or [[masa_particula]] decreases, characteristic speeds must shift toward
+          larger values.
+    model_validity_rules:
+    - id: densidad_probabilidad_velocidad_model_validity_classical_gas
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[densidad_probabilidad_velocidad]] solo para un gas clásico diluido, en equilibrio térmico y sin efectos
+          cuánticos degenerados dominantes.
+        en: Use [[densidad_probabilidad_velocidad]] only for a dilute classical gas in thermal equilibrium without dominant
+          quantum-degenerate effects.
+    - id: densidad_probabilidad_velocidad_model_validity_failure
+      when: 'true'
+      status: warning
+      text:
+        es: El modelo deja de ser fiable si hay gases muy densos, temperaturas extremadamente bajas o interacciones fuertes
+          no incluidas.
+        en: The model becomes unreliable for very dense gases, extremely low temperatures, or strong interactions not included.
+    graph_rules:
+    - id: densidad_probabilidad_velocidad_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[velocidad]] con [[densidad_probabilidad_velocidad]]: el pico no coincide necesariamente
+          con [[velocidad_media]] ni con [[velocidad_rms]].'
+        en: 'In the Coord graph, relate [[velocidad]] to [[densidad_probabilidad_velocidad]]: the peak does not necessarily
+          match [[velocidad_media]] or [[velocidad_rms]].'
+    - id: densidad_probabilidad_velocidad_graph_area_probability
+      when: 'true'
+      status: ok
+      text:
+        es: Lee el área entre [[velocidad_minima]] y [[velocidad_maxima]] como [[probabilidad_intervalo]], no como altura
+          puntual de la curva.
+        en: Read the area between [[velocidad_minima]] and [[velocidad_maxima]] as [[probabilidad_intervalo]], not as the
+          point height of the curve.
+    likely_errors:
+    - id: densidad_probabilidad_velocidad_likely_error_density_vs_probability
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[densidad_probabilidad_velocidad]] con una lectura aislada es un error frecuente: No confundas una
+          densidad de probabilidad con una probabilidad: un valor puntual de [[densidad_probabilidad_velocidad]] necesita
+          intervalo para producir probabilidad.'
+        en: 'Do not confuse probability density with probability: a point value of [[densidad_probabilidad_velocidad]] needs
+          an interval to produce probability.'
+    - id: densidad_probabilidad_velocidad_likely_error_speed_hierarchy
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[densidad_probabilidad_velocidad]] con una lectura aislada es un error frecuente: No trates [[velocidad_mas_probable]],
+          [[velocidad_media]] y [[velocidad_rms]] como si fueran iguales; resumen aspectos distintos de la misma distribución.'
+        en: 'A common mistake is to interpret [[densidad_probabilidad_velocidad]] in isolation: Do not treat [[velocidad_mas_probable]],
+          [[velocidad_media]], and [[velocidad_rms]] as equal; they summarize different aspects of the same distribution.'
+    next_step_rules:
+    - id: densidad_probabilidad_velocidad_next_step_result
+      when: 'true'
+      status: info
+      text:
+        es: Tras obtener [[densidad_probabilidad_velocidad]], revisa unidades, dominio de velocidades y coherencia con la
+          forma de la curva antes de cambiar de fórmula.
+        en: After obtaining [[densidad_probabilidad_velocidad]], check units, speed domain, and consistency with the curve
+          shape before changing formula.
+    physical_intuition:
+    - id: densidad_probabilidad_velocidad_physical_intuition_curve
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[densidad_probabilidad_velocidad]] ayuda a convertir agitación térmica microscópica en una lectura
+          estadística de velocidades medibles.
+        en: Intuitively, [[densidad_probabilidad_velocidad]] helps turn microscopic thermal agitation into a statistical reading
+          of measurable speeds.
+    limiting_cases:
+    - id: densidad_probabilidad_velocidad_limiting_case_temperature
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[temperatura_absoluta]] tiende a valores bajos, la distribución se estrecha; cuando crece, se ensancha
+          y desplaza hacia velocidades mayores.
+        en: When [[temperatura_absoluta]] tends to low values, the distribution narrows; when it grows, it broadens and shifts
+          toward higher speeds.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  velocidad_mas_probable:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado característico
+      en: most probable speed
+    summary_rules:
+    - id: velocidad_mas_probable_summary_context
+      when: 'true'
+      status: ok
+      text:
+        es: '[[velocidad_mas_probable]] debe leerse dentro de una distribución de Maxwell-Boltzmann: describe velocidades
+          posibles, no trayectorias individuales.'
+        en: '[[velocidad_mas_probable]] must be read within a Maxwell-Boltzmann distribution: it describes possible speeds,
+          not individual trajectories.'
+    physical_reading_rules:
+    - id: velocidad_mas_probable_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[velocidad_mas_probable]] con su unidad y con el papel de [[temperatura_absoluta]] y [[masa_particula]]
+          en el ensanchamiento de la curva.
+        en: Interpret [[velocidad_mas_probable]] with its unit and with the role of [[temperatura_absoluta]] and [[masa_particula]]
+          in broadening the curve.
+    coherence_rules:
+    - id: velocidad_mas_probable_coherence_positive_domain
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[velocidad_mas_probable]] sea compatible con velocidades no negativas y con una probabilidad total
+          normalizada en el dominio físico.
+        en: Check that [[velocidad_mas_probable]] is compatible with nonnegative speeds and with total probability normalized
+          over the physical domain.
+    - id: velocidad_mas_probable_coherence_thermal_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Si aumenta [[temperatura_absoluta]] o disminuye [[masa_particula]], las velocidades características deben desplazarse
+          hacia valores mayores.
+        en: If [[temperatura_absoluta]] increases or [[masa_particula]] decreases, characteristic speeds must shift toward
+          larger values.
+    model_validity_rules:
+    - id: velocidad_mas_probable_model_validity_classical_gas
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[velocidad_mas_probable]] solo para un gas clásico diluido, en equilibrio térmico y sin efectos cuánticos
+          degenerados dominantes.
+        en: Use [[velocidad_mas_probable]] only for a dilute classical gas in thermal equilibrium without dominant quantum-degenerate
+          effects.
+    - id: velocidad_mas_probable_model_validity_failure
+      when: 'true'
+      status: warning
+      text:
+        es: El modelo deja de ser fiable si hay gases muy densos, temperaturas extremadamente bajas o interacciones fuertes
+          no incluidas.
+        en: The model becomes unreliable for very dense gases, extremely low temperatures, or strong interactions not included.
+    graph_rules:
+    - id: velocidad_mas_probable_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[velocidad]] con [[densidad_probabilidad_velocidad]]: el pico no coincide necesariamente
+          con [[velocidad_media]] ni con [[velocidad_rms]].'
+        en: 'In the Coord graph, relate [[velocidad]] to [[densidad_probabilidad_velocidad]]: the peak does not necessarily
+          match [[velocidad_media]] or [[velocidad_rms]].'
+    - id: velocidad_mas_probable_graph_area_probability
+      when: 'true'
+      status: ok
+      text:
+        es: Lee el área entre [[velocidad_minima]] y [[velocidad_maxima]] como [[probabilidad_intervalo]], no como altura
+          puntual de la curva.
+        en: Read the area between [[velocidad_minima]] and [[velocidad_maxima]] as [[probabilidad_intervalo]], not as the
+          point height of the curve.
+    likely_errors:
+    - id: velocidad_mas_probable_likely_error_density_vs_probability
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[velocidad_mas_probable]] con una lectura aislada es un error frecuente: No confundas una densidad
+          de probabilidad con una probabilidad: un valor puntual de [[densidad_probabilidad_velocidad]] necesita intervalo
+          para producir probabilidad.'
+        en: 'Do not confuse probability density with probability: a point value of [[densidad_probabilidad_velocidad]] needs
+          an interval to produce probability.'
+    - id: velocidad_mas_probable_likely_error_speed_hierarchy
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[velocidad_mas_probable]] con una lectura aislada es un error frecuente: No trates [[velocidad_mas_probable]],
+          [[velocidad_media]] y [[velocidad_rms]] como si fueran iguales; resumen aspectos distintos de la misma distribución.'
+        en: 'A common mistake is to interpret [[velocidad_mas_probable]] in isolation: Do not treat [[velocidad_mas_probable]],
+          [[velocidad_media]], and [[velocidad_rms]] as equal; they summarize different aspects of the same distribution.'
+    next_step_rules:
+    - id: velocidad_mas_probable_next_step_result
+      when: 'true'
+      status: info
+      text:
+        es: Tras obtener [[velocidad_mas_probable]], revisa unidades, dominio de velocidades y coherencia con la forma de
+          la curva antes de cambiar de fórmula.
+        en: After obtaining [[velocidad_mas_probable]], check units, speed domain, and consistency with the curve shape before
+          changing formula.
+    physical_intuition:
+    - id: velocidad_mas_probable_physical_intuition_curve
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[velocidad_mas_probable]] ayuda a convertir agitación térmica microscópica en una lectura estadística
+          de velocidades medibles.
+        en: Intuitively, [[velocidad_mas_probable]] helps turn microscopic thermal agitation into a statistical reading of
+          measurable speeds.
+    limiting_cases:
+    - id: velocidad_mas_probable_limiting_case_temperature
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[temperatura_absoluta]] tiende a valores bajos, la distribución se estrecha; cuando crece, se ensancha
+          y desplaza hacia velocidades mayores.
+        en: When [[temperatura_absoluta]] tends to low values, the distribution narrows; when it grows, it broadens and shifts
+          toward higher speeds.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_absoluta:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro térmico
+      en: absolute temperature
+    summary_rules:
+    - id: temperatura_absoluta_summary_context
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_absoluta]] debe leerse dentro de una distribución de Maxwell-Boltzmann: describe velocidades posibles,
+          no trayectorias individuales.'
+        en: '[[temperatura_absoluta]] must be read within a Maxwell-Boltzmann distribution: it describes possible speeds,
+          not individual trajectories.'
+    physical_reading_rules:
+    - id: temperatura_absoluta_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura_absoluta]] con su unidad y con el papel de [[temperatura_absoluta]] y [[masa_particula]]
+          en el ensanchamiento de la curva.
+        en: Interpret [[temperatura_absoluta]] with its unit and with the role of [[temperatura_absoluta]] and [[masa_particula]]
+          in broadening the curve.
+    coherence_rules:
+    - id: temperatura_absoluta_coherence_positive_domain
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura_absoluta]] sea compatible con velocidades no negativas y con una probabilidad total
+          normalizada en el dominio físico.
+        en: Check that [[temperatura_absoluta]] is compatible with nonnegative speeds and with total probability normalized
+          over the physical domain.
+    - id: temperatura_absoluta_coherence_thermal_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Si aumenta [[temperatura_absoluta]] o disminuye [[masa_particula]], las velocidades características deben desplazarse
+          hacia valores mayores.
+        en: If [[temperatura_absoluta]] increases or [[masa_particula]] decreases, characteristic speeds must shift toward
+          larger values.
+    model_validity_rules:
+    - id: temperatura_absoluta_model_validity_classical_gas
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[temperatura_absoluta]] solo para un gas clásico diluido, en equilibrio térmico y sin efectos cuánticos degenerados
+          dominantes.
+        en: Use [[temperatura_absoluta]] only for a dilute classical gas in thermal equilibrium without dominant quantum-degenerate
+          effects.
+    - id: temperatura_absoluta_model_validity_failure
+      when: 'true'
+      status: warning
+      text:
+        es: El modelo deja de ser fiable si hay gases muy densos, temperaturas extremadamente bajas o interacciones fuertes
+          no incluidas.
+        en: The model becomes unreliable for very dense gases, extremely low temperatures, or strong interactions not included.
+    graph_rules:
+    - id: temperatura_absoluta_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[velocidad]] con [[densidad_probabilidad_velocidad]]: el pico no coincide necesariamente
+          con [[velocidad_media]] ni con [[velocidad_rms]].'
+        en: 'In the Coord graph, relate [[velocidad]] to [[densidad_probabilidad_velocidad]]: the peak does not necessarily
+          match [[velocidad_media]] or [[velocidad_rms]].'
+    - id: temperatura_absoluta_graph_area_probability
+      when: 'true'
+      status: ok
+      text:
+        es: Lee el área entre [[velocidad_minima]] y [[velocidad_maxima]] como [[probabilidad_intervalo]], no como altura
+          puntual de la curva.
+        en: Read the area between [[velocidad_minima]] and [[velocidad_maxima]] as [[probabilidad_intervalo]], not as the
+          point height of the curve.
+    likely_errors:
+    - id: temperatura_absoluta_likely_error_density_vs_probability
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura_absoluta]] con una lectura aislada es un error frecuente: No confundas una densidad de
+          probabilidad con una probabilidad: un valor puntual de [[densidad_probabilidad_velocidad]] necesita intervalo para
+          producir probabilidad.'
+        en: 'Do not confuse probability density with probability: a point value of [[densidad_probabilidad_velocidad]] needs
+          an interval to produce probability.'
+    - id: temperatura_absoluta_likely_error_speed_hierarchy
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura_absoluta]] con una lectura aislada es un error frecuente: No trates [[velocidad_mas_probable]],
+          [[velocidad_media]] y [[velocidad_rms]] como si fueran iguales; resumen aspectos distintos de la misma distribución.'
+        en: 'A common mistake is to interpret [[temperatura_absoluta]] in isolation: Do not treat [[velocidad_mas_probable]],
+          [[velocidad_media]], and [[velocidad_rms]] as equal; they summarize different aspects of the same distribution.'
+    next_step_rules:
+    - id: temperatura_absoluta_next_step_result
+      when: 'true'
+      status: info
+      text:
+        es: Tras obtener [[temperatura_absoluta]], revisa unidades, dominio de velocidades y coherencia con la forma de la
+          curva antes de cambiar de fórmula.
+        en: After obtaining [[temperatura_absoluta]], check units, speed domain, and consistency with the curve shape before
+          changing formula.
+    physical_intuition:
+    - id: temperatura_absoluta_physical_intuition_curve
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura_absoluta]] ayuda a convertir agitación térmica microscópica en una lectura estadística
+          de velocidades medibles.
+        en: Intuitively, [[temperatura_absoluta]] helps turn microscopic thermal agitation into a statistical reading of measurable
+          speeds.
+    limiting_cases:
+    - id: temperatura_absoluta_limiting_case_temperature
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[temperatura_absoluta]] tiende a valores bajos, la distribución se estrecha; cuando crece, se ensancha
+          y desplaza hacia velocidades mayores.
+        en: When [[temperatura_absoluta]] tends to low values, the distribution narrows; when it grows, it broadens and shifts
+          toward higher speeds.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  velocidad_media:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado promedio
+      en: mean speed
+    summary_rules:
+    - id: velocidad_media_summary_context
+      when: 'true'
+      status: ok
+      text:
+        es: '[[velocidad_media]] debe leerse dentro de una distribución de Maxwell-Boltzmann: describe velocidades posibles,
+          no trayectorias individuales.'
+        en: '[[velocidad_media]] must be read within a Maxwell-Boltzmann distribution: it describes possible speeds, not individual
+          trajectories.'
+    physical_reading_rules:
+    - id: velocidad_media_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[velocidad_media]] con su unidad y con el papel de [[temperatura_absoluta]] y [[masa_particula]] en
+          el ensanchamiento de la curva.
+        en: Interpret [[velocidad_media]] with its unit and with the role of [[temperatura_absoluta]] and [[masa_particula]]
+          in broadening the curve.
+    coherence_rules:
+    - id: velocidad_media_coherence_positive_domain
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[velocidad_media]] sea compatible con velocidades no negativas y con una probabilidad total normalizada
+          en el dominio físico.
+        en: Check that [[velocidad_media]] is compatible with nonnegative speeds and with total probability normalized over
+          the physical domain.
+    - id: velocidad_media_coherence_thermal_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Si aumenta [[temperatura_absoluta]] o disminuye [[masa_particula]], las velocidades características deben desplazarse
+          hacia valores mayores.
+        en: If [[temperatura_absoluta]] increases or [[masa_particula]] decreases, characteristic speeds must shift toward
+          larger values.
+    model_validity_rules:
+    - id: velocidad_media_model_validity_classical_gas
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[velocidad_media]] solo para un gas clásico diluido, en equilibrio térmico y sin efectos cuánticos degenerados
+          dominantes.
+        en: Use [[velocidad_media]] only for a dilute classical gas in thermal equilibrium without dominant quantum-degenerate
+          effects.
+    - id: velocidad_media_model_validity_failure
+      when: 'true'
+      status: warning
+      text:
+        es: El modelo deja de ser fiable si hay gases muy densos, temperaturas extremadamente bajas o interacciones fuertes
+          no incluidas.
+        en: The model becomes unreliable for very dense gases, extremely low temperatures, or strong interactions not included.
+    graph_rules:
+    - id: velocidad_media_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[velocidad]] con [[densidad_probabilidad_velocidad]]: el pico no coincide necesariamente
+          con [[velocidad_media]] ni con [[velocidad_rms]].'
+        en: 'In the Coord graph, relate [[velocidad]] to [[densidad_probabilidad_velocidad]]: the peak does not necessarily
+          match [[velocidad_media]] or [[velocidad_rms]].'
+    - id: velocidad_media_graph_area_probability
+      when: 'true'
+      status: ok
+      text:
+        es: Lee el área entre [[velocidad_minima]] y [[velocidad_maxima]] como [[probabilidad_intervalo]], no como altura
+          puntual de la curva.
+        en: Read the area between [[velocidad_minima]] and [[velocidad_maxima]] as [[probabilidad_intervalo]], not as the
+          point height of the curve.
+    likely_errors:
+    - id: velocidad_media_likely_error_density_vs_probability
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[velocidad_media]] con una lectura aislada es un error frecuente: No confundas una densidad de probabilidad
+          con una probabilidad: un valor puntual de [[densidad_probabilidad_velocidad]] necesita intervalo para producir probabilidad.'
+        en: 'Do not confuse probability density with probability: a point value of [[densidad_probabilidad_velocidad]] needs
+          an interval to produce probability.'
+    - id: velocidad_media_likely_error_speed_hierarchy
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[velocidad_media]] con una lectura aislada es un error frecuente: No trates [[velocidad_mas_probable]],
+          [[velocidad_media]] y [[velocidad_rms]] como si fueran iguales; resumen aspectos distintos de la misma distribución.'
+        en: 'A common mistake is to interpret [[velocidad_media]] in isolation: Do not treat [[velocidad_mas_probable]], [[velocidad_media]],
+          and [[velocidad_rms]] as equal; they summarize different aspects of the same distribution.'
+    next_step_rules:
+    - id: velocidad_media_next_step_result
+      when: 'true'
+      status: info
+      text:
+        es: Tras obtener [[velocidad_media]], revisa unidades, dominio de velocidades y coherencia con la forma de la curva
+          antes de cambiar de fórmula.
+        en: After obtaining [[velocidad_media]], check units, speed domain, and consistency with the curve shape before changing
+          formula.
+    physical_intuition:
+    - id: velocidad_media_physical_intuition_curve
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[velocidad_media]] ayuda a convertir agitación térmica microscópica en una lectura estadística
+          de velocidades medibles.
+        en: Intuitively, [[velocidad_media]] helps turn microscopic thermal agitation into a statistical reading of measurable
+          speeds.
+    limiting_cases:
+    - id: velocidad_media_limiting_case_temperature
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[temperatura_absoluta]] tiende a valores bajos, la distribución se estrecha; cuando crece, se ensancha
+          y desplaza hacia velocidades mayores.
+        en: When [[temperatura_absoluta]] tends to low values, the distribution narrows; when it grows, it broadens and shifts
+          toward higher speeds.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  velocidad_rms:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado cuadrático medio
+      en: root-mean-square speed
+    summary_rules:
+    - id: velocidad_rms_summary_context
+      when: 'true'
+      status: ok
+      text:
+        es: '[[velocidad_rms]] debe leerse dentro de una distribución de Maxwell-Boltzmann: describe velocidades posibles,
+          no trayectorias individuales.'
+        en: '[[velocidad_rms]] must be read within a Maxwell-Boltzmann distribution: it describes possible speeds, not individual
+          trajectories.'
+    physical_reading_rules:
+    - id: velocidad_rms_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[velocidad_rms]] con su unidad y con el papel de [[temperatura_absoluta]] y [[masa_particula]] en
+          el ensanchamiento de la curva.
+        en: Interpret [[velocidad_rms]] with its unit and with the role of [[temperatura_absoluta]] and [[masa_particula]]
+          in broadening the curve.
+    coherence_rules:
+    - id: velocidad_rms_coherence_positive_domain
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[velocidad_rms]] sea compatible con velocidades no negativas y con una probabilidad total normalizada
+          en el dominio físico.
+        en: Check that [[velocidad_rms]] is compatible with nonnegative speeds and with total probability normalized over
+          the physical domain.
+    - id: velocidad_rms_coherence_thermal_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Si aumenta [[temperatura_absoluta]] o disminuye [[masa_particula]], las velocidades características deben desplazarse
+          hacia valores mayores.
+        en: If [[temperatura_absoluta]] increases or [[masa_particula]] decreases, characteristic speeds must shift toward
+          larger values.
+    model_validity_rules:
+    - id: velocidad_rms_model_validity_classical_gas
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[velocidad_rms]] solo para un gas clásico diluido, en equilibrio térmico y sin efectos cuánticos degenerados
+          dominantes.
+        en: Use [[velocidad_rms]] only for a dilute classical gas in thermal equilibrium without dominant quantum-degenerate
+          effects.
+    - id: velocidad_rms_model_validity_failure
+      when: 'true'
+      status: warning
+      text:
+        es: El modelo deja de ser fiable si hay gases muy densos, temperaturas extremadamente bajas o interacciones fuertes
+          no incluidas.
+        en: The model becomes unreliable for very dense gases, extremely low temperatures, or strong interactions not included.
+    graph_rules:
+    - id: velocidad_rms_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[velocidad]] con [[densidad_probabilidad_velocidad]]: el pico no coincide necesariamente
+          con [[velocidad_media]] ni con [[velocidad_rms]].'
+        en: 'In the Coord graph, relate [[velocidad]] to [[densidad_probabilidad_velocidad]]: the peak does not necessarily
+          match [[velocidad_media]] or [[velocidad_rms]].'
+    - id: velocidad_rms_graph_area_probability
+      when: 'true'
+      status: ok
+      text:
+        es: Lee el área entre [[velocidad_minima]] y [[velocidad_maxima]] como [[probabilidad_intervalo]], no como altura
+          puntual de la curva.
+        en: Read the area between [[velocidad_minima]] and [[velocidad_maxima]] as [[probabilidad_intervalo]], not as the
+          point height of the curve.
+    likely_errors:
+    - id: velocidad_rms_likely_error_density_vs_probability
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[velocidad_rms]] con una lectura aislada es un error frecuente: No confundas una densidad de probabilidad
+          con una probabilidad: un valor puntual de [[densidad_probabilidad_velocidad]] necesita intervalo para producir probabilidad.'
+        en: 'Do not confuse probability density with probability: a point value of [[densidad_probabilidad_velocidad]] needs
+          an interval to produce probability.'
+    - id: velocidad_rms_likely_error_speed_hierarchy
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[velocidad_rms]] con una lectura aislada es un error frecuente: No trates [[velocidad_mas_probable]],
+          [[velocidad_media]] y [[velocidad_rms]] como si fueran iguales; resumen aspectos distintos de la misma distribución.'
+        en: 'A common mistake is to interpret [[velocidad_rms]] in isolation: Do not treat [[velocidad_mas_probable]], [[velocidad_media]],
+          and [[velocidad_rms]] as equal; they summarize different aspects of the same distribution.'
+    next_step_rules:
+    - id: velocidad_rms_next_step_result
+      when: 'true'
+      status: info
+      text:
+        es: Tras obtener [[velocidad_rms]], revisa unidades, dominio de velocidades y coherencia con la forma de la curva
+          antes de cambiar de fórmula.
+        en: After obtaining [[velocidad_rms]], check units, speed domain, and consistency with the curve shape before changing
+          formula.
+    physical_intuition:
+    - id: velocidad_rms_physical_intuition_curve
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[velocidad_rms]] ayuda a convertir agitación térmica microscópica en una lectura estadística
+          de velocidades medibles.
+        en: Intuitively, [[velocidad_rms]] helps turn microscopic thermal agitation into a statistical reading of measurable
+          speeds.
+    limiting_cases:
+    - id: velocidad_rms_limiting_case_temperature
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[temperatura_absoluta]] tiende a valores bajos, la distribución se estrecha; cuando crece, se ensancha
+          y desplaza hacia velocidades mayores.
+        en: When [[temperatura_absoluta]] tends to low values, the distribution narrows; when it grows, it broadens and shifts
+          toward higher speeds.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_cinetica_media:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado energético
+      en: mean kinetic energy
+    summary_rules:
+    - id: energia_cinetica_media_summary_context
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_cinetica_media]] debe leerse dentro de una distribución de Maxwell-Boltzmann: describe velocidades
+          posibles, no trayectorias individuales.'
+        en: '[[energia_cinetica_media]] must be read within a Maxwell-Boltzmann distribution: it describes possible speeds,
+          not individual trajectories.'
+    physical_reading_rules:
+    - id: energia_cinetica_media_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia_cinetica_media]] con su unidad y con el papel de [[temperatura_absoluta]] y [[masa_particula]]
+          en el ensanchamiento de la curva.
+        en: Interpret [[energia_cinetica_media]] with its unit and with the role of [[temperatura_absoluta]] and [[masa_particula]]
+          in broadening the curve.
+    coherence_rules:
+    - id: energia_cinetica_media_coherence_positive_domain
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[energia_cinetica_media]] sea compatible con velocidades no negativas y con una probabilidad total
+          normalizada en el dominio físico.
+        en: Check that [[energia_cinetica_media]] is compatible with nonnegative speeds and with total probability normalized
+          over the physical domain.
+    - id: energia_cinetica_media_coherence_thermal_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Si aumenta [[temperatura_absoluta]] o disminuye [[masa_particula]], las velocidades características deben desplazarse
+          hacia valores mayores.
+        en: If [[temperatura_absoluta]] increases or [[masa_particula]] decreases, characteristic speeds must shift toward
+          larger values.
+    model_validity_rules:
+    - id: energia_cinetica_media_model_validity_classical_gas
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[energia_cinetica_media]] solo para un gas clásico diluido, en equilibrio térmico y sin efectos cuánticos
+          degenerados dominantes.
+        en: Use [[energia_cinetica_media]] only for a dilute classical gas in thermal equilibrium without dominant quantum-degenerate
+          effects.
+    - id: energia_cinetica_media_model_validity_failure
+      when: 'true'
+      status: warning
+      text:
+        es: El modelo deja de ser fiable si hay gases muy densos, temperaturas extremadamente bajas o interacciones fuertes
+          no incluidas.
+        en: The model becomes unreliable for very dense gases, extremely low temperatures, or strong interactions not included.
+    graph_rules:
+    - id: energia_cinetica_media_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[velocidad]] con [[densidad_probabilidad_velocidad]]: el pico no coincide necesariamente
+          con [[velocidad_media]] ni con [[velocidad_rms]].'
+        en: 'In the Coord graph, relate [[velocidad]] to [[densidad_probabilidad_velocidad]]: the peak does not necessarily
+          match [[velocidad_media]] or [[velocidad_rms]].'
+    - id: energia_cinetica_media_graph_area_probability
+      when: 'true'
+      status: ok
+      text:
+        es: Lee el área entre [[velocidad_minima]] y [[velocidad_maxima]] como [[probabilidad_intervalo]], no como altura
+          puntual de la curva.
+        en: Read the area between [[velocidad_minima]] and [[velocidad_maxima]] as [[probabilidad_intervalo]], not as the
+          point height of the curve.
+    likely_errors:
+    - id: energia_cinetica_media_likely_error_density_vs_probability
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_cinetica_media]] con una lectura aislada es un error frecuente: No confundas una densidad
+          de probabilidad con una probabilidad: un valor puntual de [[densidad_probabilidad_velocidad]] necesita intervalo
+          para producir probabilidad.'
+        en: 'Do not confuse probability density with probability: a point value of [[densidad_probabilidad_velocidad]] needs
+          an interval to produce probability.'
+    - id: energia_cinetica_media_likely_error_speed_hierarchy
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_cinetica_media]] con una lectura aislada es un error frecuente: No trates [[velocidad_mas_probable]],
+          [[velocidad_media]] y [[velocidad_rms]] como si fueran iguales; resumen aspectos distintos de la misma distribución.'
+        en: 'A common mistake is to interpret [[energia_cinetica_media]] in isolation: Do not treat [[velocidad_mas_probable]],
+          [[velocidad_media]], and [[velocidad_rms]] as equal; they summarize different aspects of the same distribution.'
+    next_step_rules:
+    - id: energia_cinetica_media_next_step_result
+      when: 'true'
+      status: info
+      text:
+        es: Tras obtener [[energia_cinetica_media]], revisa unidades, dominio de velocidades y coherencia con la forma de
+          la curva antes de cambiar de fórmula.
+        en: After obtaining [[energia_cinetica_media]], check units, speed domain, and consistency with the curve shape before
+          changing formula.
+    physical_intuition:
+    - id: energia_cinetica_media_physical_intuition_curve
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_cinetica_media]] ayuda a convertir agitación térmica microscópica en una lectura estadística
+          de velocidades medibles.
+        en: Intuitively, [[energia_cinetica_media]] helps turn microscopic thermal agitation into a statistical reading of
+          measurable speeds.
+    limiting_cases:
+    - id: energia_cinetica_media_limiting_case_temperature
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[temperatura_absoluta]] tiende a valores bajos, la distribución se estrecha; cuando crece, se ensancha
+          y desplaza hacia velocidades mayores.
+        en: When [[temperatura_absoluta]] tends to low values, the distribution narrows; when it grows, it broadens and shifts
+          toward higher speeds.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  probabilidad_intervalo:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado probabilístico
+      en: interval probability
+    summary_rules:
+    - id: probabilidad_intervalo_summary_context
+      when: 'true'
+      status: ok
+      text:
+        es: '[[probabilidad_intervalo]] debe leerse dentro de una distribución de Maxwell-Boltzmann: describe velocidades
+          posibles, no trayectorias individuales.'
+        en: '[[probabilidad_intervalo]] must be read within a Maxwell-Boltzmann distribution: it describes possible speeds,
+          not individual trajectories.'
+    physical_reading_rules:
+    - id: probabilidad_intervalo_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[probabilidad_intervalo]] con su unidad y con el papel de [[temperatura_absoluta]] y [[masa_particula]]
+          en el ensanchamiento de la curva.
+        en: Interpret [[probabilidad_intervalo]] with its unit and with the role of [[temperatura_absoluta]] and [[masa_particula]]
+          in broadening the curve.
+    coherence_rules:
+    - id: probabilidad_intervalo_coherence_positive_domain
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[probabilidad_intervalo]] sea compatible con velocidades no negativas y con una probabilidad total
+          normalizada en el dominio físico.
+        en: Check that [[probabilidad_intervalo]] is compatible with nonnegative speeds and with total probability normalized
+          over the physical domain.
+    - id: probabilidad_intervalo_coherence_thermal_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Si aumenta [[temperatura_absoluta]] o disminuye [[masa_particula]], las velocidades características deben desplazarse
+          hacia valores mayores.
+        en: If [[temperatura_absoluta]] increases or [[masa_particula]] decreases, characteristic speeds must shift toward
+          larger values.
+    model_validity_rules:
+    - id: probabilidad_intervalo_model_validity_classical_gas
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[probabilidad_intervalo]] solo para un gas clásico diluido, en equilibrio térmico y sin efectos cuánticos
+          degenerados dominantes.
+        en: Use [[probabilidad_intervalo]] only for a dilute classical gas in thermal equilibrium without dominant quantum-degenerate
+          effects.
+    - id: probabilidad_intervalo_model_validity_failure
+      when: 'true'
+      status: warning
+      text:
+        es: El modelo deja de ser fiable si hay gases muy densos, temperaturas extremadamente bajas o interacciones fuertes
+          no incluidas.
+        en: The model becomes unreliable for very dense gases, extremely low temperatures, or strong interactions not included.
+    graph_rules:
+    - id: probabilidad_intervalo_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[velocidad]] con [[densidad_probabilidad_velocidad]]: el pico no coincide necesariamente
+          con [[velocidad_media]] ni con [[velocidad_rms]].'
+        en: 'In the Coord graph, relate [[velocidad]] to [[densidad_probabilidad_velocidad]]: the peak does not necessarily
+          match [[velocidad_media]] or [[velocidad_rms]].'
+    - id: probabilidad_intervalo_graph_area_probability
+      when: 'true'
+      status: ok
+      text:
+        es: Lee el área entre [[velocidad_minima]] y [[velocidad_maxima]] como [[probabilidad_intervalo]], no como altura
+          puntual de la curva.
+        en: Read the area between [[velocidad_minima]] and [[velocidad_maxima]] as [[probabilidad_intervalo]], not as the
+          point height of the curve.
+    likely_errors:
+    - id: probabilidad_intervalo_likely_error_density_vs_probability
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[probabilidad_intervalo]] con una lectura aislada es un error frecuente: No confundas una densidad
+          de probabilidad con una probabilidad: un valor puntual de [[densidad_probabilidad_velocidad]] necesita intervalo
+          para producir probabilidad.'
+        en: 'Do not confuse probability density with probability: a point value of [[densidad_probabilidad_velocidad]] needs
+          an interval to produce probability.'
+    - id: probabilidad_intervalo_likely_error_speed_hierarchy
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[probabilidad_intervalo]] con una lectura aislada es un error frecuente: No trates [[velocidad_mas_probable]],
+          [[velocidad_media]] y [[velocidad_rms]] como si fueran iguales; resumen aspectos distintos de la misma distribución.'
+        en: 'A common mistake is to interpret [[probabilidad_intervalo]] in isolation: Do not treat [[velocidad_mas_probable]],
+          [[velocidad_media]], and [[velocidad_rms]] as equal; they summarize different aspects of the same distribution.'
+    next_step_rules:
+    - id: probabilidad_intervalo_next_step_result
+      when: 'true'
+      status: info
+      text:
+        es: Tras obtener [[probabilidad_intervalo]], revisa unidades, dominio de velocidades y coherencia con la forma de
+          la curva antes de cambiar de fórmula.
+        en: After obtaining [[probabilidad_intervalo]], check units, speed domain, and consistency with the curve shape before
+          changing formula.
+    physical_intuition:
+    - id: probabilidad_intervalo_physical_intuition_curve
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[probabilidad_intervalo]] ayuda a convertir agitación térmica microscópica en una lectura estadística
+          de velocidades medibles.
+        en: Intuitively, [[probabilidad_intervalo]] helps turn microscopic thermal agitation into a statistical reading of
+          measurable speeds.
+    limiting_cases:
+    - id: probabilidad_intervalo_limiting_case_temperature
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[temperatura_absoluta]] tiende a valores bajos, la distribución se estrecha; cuando crece, se ensancha
+          y desplaza hacia velocidades mayores.
+        en: When [[temperatura_absoluta]] tends to low values, the distribution narrows; when it grows, it broadens and shifts
+          toward higher speeds.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

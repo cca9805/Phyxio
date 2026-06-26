@@ -1,0 +1,461 @@
+﻿version: 5.0.0
+id: resistiva
+leaf_id: resistiva
+nombre:
+  es: Resistiva
+  en: Resistive Heating
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: electricidad-domestica
+  parent_id: climatizacion
+  ruta_relativa: fisica-clasica/electromagnetismo/electricidad-domestica/climatizacion/resistiva
+  orden: 298810
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: false
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: false
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: false
+  preferred_type: none
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - energia
+  - calor_util
+  - cop_resistiva
+  magnitudes:
+  - potencia_del_emisor
+  - tiempo_efectivo_de_uso
+  - consumo_electrico
+  - eta
+  - calor_util
+  - coeficiente_de_rendimiento
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: false
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: false
+  type: none
+  channels: []
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: false
+  primary_variable: consumo_electrico
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  consumo_electrico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de consumo_electrico
+      en: Result of consumo_electrico
+    summary_rules:
+    - id: E_rango_bajo
+      when: result < 10
+      status: warning
+      text:
+        es: El [[consumo_electrico]] calculado es inferior a 10 kWh. Verifica que el tiempo efectivo no sea cero y que la
+          [[potencia_del_emisor]] esté en kW.
+        en: The calculated [[consumo_electrico]] is below 10 kWh. Verify that effective time is not zero and that [[emitter
+          power|P]] is in kW.
+    - id: E_rango_normal
+      when: 'true'
+      status: info
+      text:
+        es: '[[consumo_electrico]] indica un uso dentro del rango doméstico típico (10–2000 kWh). El resultado significa
+          que el modelo estacionario resistivo es válido para este escenario.'
+        en: '[[consumo_electrico]] indicates usage within the typical domestic range (10–2000 kWh). The result means
+          the resistive stationary model is valid for this scenario.'
+    - id: E_rango_alto
+      when: result > 2000
+      status: warning
+      text:
+        es: '[[consumo_electrico]] superior a 2000 kWh. Si corresponde a un emisor doméstico en una temporada, revisa el
+          [[tiempo_efectivo_de_uso]]: puede estar usando horas de conexión en lugar de horas activas.'
+        en: '[[consumo_electrico]] above 2000 kWh. If this corresponds to one domestic emitter in a season, check [[effective
+          usage time|t]]: you may be using connection hours instead of active hours.'
+    physical_reading_rules:
+    - id: E_lectura
+      when: 'true'
+      status: info
+      text:
+        es: El [[consumo_electrico]] es el producto directo de [[potencia_del_emisor]] por [[tiempo_efectivo_de_uso]].
+          Con [[coeficiente_de_rendimiento]] = 1, este valor representa también el calor mínimo necesario para calentar
+          el espacio.
+        en: '[[consumo_electrico]] is the direct product of [[potencia_del_emisor]] by [[tiempo_efectivo_de_uso]]. With
+          [[coeficiente_de_rendimiento]] = 1, this value also represents the minimum heat needed to warm the space.'
+    coherence_rules:
+    - id: E_coherencia
+      when: result <= 0
+      status: error
+      text:
+        es: El [[consumo_electrico]] debe ser estrictamente positivo. Revisa [[potencia_del_emisor]] y [[tiempo efectivo
+          de uso|t]].
+        en: '[[consumo_electrico]] must be strictly positive. Check [[potencia_del_emisor]] and [[tiempo_efectivo_de_uso]].'
+    model_validity_rules:
+    - id: E_validez
+      when: 'true'
+      status: info
+      text:
+        es: El modelo E = P·t es válido cuando [[tiempo_efectivo_de_uso]] representa las horas con la resistencia activa,
+          no el tiempo de conexión del aparato.
+        en: The model E = P·t is valid when [[tiempo_efectivo_de_uso]] represents hours with the resistance active, not the
+          device connection time.
+    graph_rules:
+    - id: E_grafico
+      when: 'true'
+      status: info
+      text:
+        es: En el gráfico [[consumo_electrico]] vs [[tiempo_efectivo_de_uso]], la pendiente es la [[potencia_del_emisor]].
+          Una línea más pronunciada indica un emisor más potente.
+        en: In the [[consumo_electrico]] vs [[tiempo_efectivo_de_uso]] graph, the slope is [[potencia_del_emisor]]. A steeper
+          line indicates a more powerful emitter.
+    likely_errors:
+    - id: E_error_tiempo
+      when: 'true'
+      status: error
+      text:
+        es: Usar horas de aparato encendido en lugar del [[tiempo_efectivo_de_uso]] real puede sobreestimar el [[consumo
+          eléctrico|E]] por un factor de 2–5.
+        en: Using device-on hours instead of real [[tiempo_efectivo_de_uso]] can overestimate [[consumo_electrico]]
+          by a factor of 2–5.
+    next_step_rules:
+    - id: E_siguiente
+      when: 'true'
+      status: tip
+      text:
+        es: 'Con [[consumo_electrico]] calculado, estima el consumo equivalente con bomba de calor: E_bomba = [[calor_util]] / COP_bomba.
+          Si COP_bomba = 3.5, el ahorro potencial es del 71%.'
+        en: 'With [[consumo_electrico]] calculated, estimate the equivalent heat pump consumption: E_pump = [[calor_util]] / COP_pump.
+          If COP_pump = 3.5, the potential savings are 71%.'
+    physical_intuition:
+    - id: consumo_electrico_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[consumo_electrico]] describe el estado dinámico.
+        en: Intuitively, [[consumo_electrico]] describes the dynamic state.
+    limiting_cases:
+    - id: consumo_electrico_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[consumo_electrico]].
+        en: Check limiting cases of [[consumo_electrico]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  calor_util:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de calor_util
+      en: Result of calor_util
+    summary_rules:
+    - id: Q_mayor_E
+      when: result > 1.05 * E
+      status: error
+      text:
+        es: El [[calor_util]] no puede superar el [[consumo_electrico]] en un sistema resistivo. Verifica que [[rendimiento
+          de conversión|eta]] esté entre 0 y 1.
+        en: '[[calor_util]] cannot exceed [[consumo_electrico]] in a resistive system. Verify that [[conversion
+          efficiency|eta]] is between 0 and 1.'
+    - id: Q_normal
+      when: 'true'
+      status: info
+      text:
+        es: '[[calor_util]] próximo al [[consumo_electrico]], coherente con [[rendimiento de conversión|eta]] ≥ 0.90 típico
+          de la resistiva.'
+        en: '[[calor_util]] close to [[consumo_electrico]], consistent with [[conversion efficiency|eta]] ≥ 0.90
+          typical of resistive systems.'
+    physical_reading_rules:
+    - id: Q_lectura
+      when: 'true'
+      status: info
+      text:
+        es: El [[calor_util]] es la energía que efectivamente calienta el recinto. En la resistiva, [[calor_util]] ≈ [[consumo_electrico]] porque
+          [[rendimiento de conversión|eta]] ≈ 1.
+        en: '[[calor_util]] is the energy that actually heats the room. In resistive heating, [[calor_util]] ≈ [[consumo_electrico]] because [[conversion
+          efficiency|eta]] ≈ 1.'
+    coherence_rules:
+    - id: Q_coherencia
+      when: result > E
+      status: error
+      text:
+        es: '[[calor_util]] > [[consumo_electrico]] viola la conservación de la energía. Revisa [[rendimiento de conversión|eta]].'
+        en: '[[calor_util]] > [[consumo_electrico]] violates energy conservation. Check [[conversion efficiency|eta]].'
+    model_validity_rules:
+    - id: Q_validez
+      when: 'true'
+      status: info
+      text:
+        es: La relación [[calor_util]] = [[eta]] · [[consumo_electrico]] es siempre válida para emisores resistivos convencionales con [[rendimiento
+          de conversión|eta]] estable.
+        en: The relation [[calor_util]] = [[eta]] · [[consumo_electrico]] is always valid for conventional resistive emitters with stable [[conversion
+          efficiency|eta]].
+    graph_rules:
+    - id: Q_grafico
+      when: 'true'
+      status: info
+      text:
+        es: '[[calor_util]] y [[consumo_electrico]] son prácticamente iguales en la gráfica resistiva; la diferencia visual
+          sería imperceptible con [[rendimiento de conversión|eta]] = 0.97.'
+        en: '[[calor_util]] and [[consumo_electrico]] are practically equal in the resistive graph; the visual difference
+          would be imperceptible with [[conversion efficiency|eta]] = 0.97.'
+    likely_errors:
+    - id: Q_error
+      when: 'true'
+      status: error
+      text:
+        es: Confundir [[calor_util]] con la demanda térmica del edificio. La demanda es la energía que el edificio necesita;
+          [[calor_util]] es la que el emisor entrega. Son iguales solo si no hay pérdidas de distribución.
+        en: Confusing [[calor_util]] with the building's thermal demand. Demand is the energy the building needs; [[calor_util]]
+          is what the emitter delivers. They are equal only if there are no distribution losses.
+    next_step_rules:
+    - id: Q_siguiente
+      when: 'true'
+      status: tip
+      text:
+        es: Usa [[calor_util]] como denominador para calcular el [[coeficiente_de_rendimiento]] real del sistema y compararlo
+          con el COP = 1 teórico.
+        en: Use [[calor_util]] as the denominator to calculate the real system [[coeficiente_de_rendimiento]] and compare
+          it to the theoretical COP = 1.
+    physical_intuition:
+    - id: calor_util_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[calor_util]] describe el estado dinámico.
+        en: Intuitively, [[calor_util]] describes the dynamic state.
+    limiting_cases:
+    - id: calor_util_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[calor_util]].
+        en: Check limiting cases of [[calor_util]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  coeficiente_de_rendimiento:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de coeficiente_de_rendimiento
+      en: Result of coeficiente_de_rendimiento
+    summary_rules:
+    - id: COP_mayor_1
+      when: result > 1.05
+      status: error
+      text:
+        es: '[[coeficiente_de_rendimiento]] mayor que 1 en un sistema resistivo viola la conservación de la energía. Revisa
+          los valores de [[calor_util]] y [[consumo_electrico]].'
+        en: '[[coeficiente_de_rendimiento]] greater than 1 in a resistive system violates energy conservation. Check [[useful
+          heat|Q]] and [[consumo_electrico]] values.'
+    - id: COP_normal
+      when: 'true'
+      status: info
+      text:
+        es: '[[coeficiente_de_rendimiento]] ≈ 1, confirmando que el sistema opera como calefacción resistiva estándar.
+          Cada kWh eléctrico produce aproximadamente 1 kWh térmico.'
+        en: '[[coeficiente_de_rendimiento]] ≈ 1, confirming the system operates as standard resistive heating. Each electrical
+          kWh produces approximately 1 thermal kWh.'
+    - id: COP_bajo
+      when: result < 0.90
+      status: warning
+      text:
+        es: '[[coeficiente_de_rendimiento]] < 0.90 implica pérdidas internas elevadas, atípicas para equipos en buen estado.
+          Verifica [[rendimiento de conversión|eta]] o la coherencia entre [[calor_util]] y [[consumo_electrico]].'
+        en: '[[coeficiente_de_rendimiento]] < 0.90 implies high internal losses, atypical for equipment in good condition.
+          Check [[conversion efficiency|eta]] or the coherence between [[calor_util]] and [[consumo_electrico]].'
+    physical_reading_rules:
+    - id: COP_lectura
+      when: 'true'
+      status: info
+      text:
+        es: El [[coeficiente_de_rendimiento]] = 1 de la resistiva es el límite inferior teórico de cualquier sistema de
+          calefacción eléctrica. Las bombas de calor superan este valor aprovechando el calor del entorno.
+        en: The resistive [[coeficiente_de_rendimiento]] = 1 is the theoretical lower limit for any electric heating system.
+          Heat pumps exceed this value by harnessing ambient heat.
+    coherence_rules:
+    - id: COP_coherencia
+      when: result > 1.1
+      status: error
+      text:
+        es: Un [[coeficiente_de_rendimiento]] superior a 1.1 en resistiva es físicamente imposible. Comprueba si el [[calor
+          útil|Q]] se está calculando correctamente.
+        en: A [[coeficiente_de_rendimiento]] above 1.1 in resistive systems is physically impossible. Check if [[useful
+          heat|Q]] is being calculated correctly.
+    model_validity_rules:
+    - id: COP_validez
+      when: 'true'
+      status: info
+      text:
+        es: El [[coeficiente_de_rendimiento]] = Q/E es siempre válido como definición. En resistiva ideal, COP = [[rendimiento
+          de conversión|eta]] ≈ 1.
+        en: The [[coeficiente_de_rendimiento]] = Q/E is always valid as a definition. In ideal resistive systems, COP
+          = [[conversion efficiency|eta]] ≈ 1.
+    graph_rules:
+    - id: COP_grafico
+      when: 'true'
+      status: info
+      text:
+        es: El [[coeficiente_de_rendimiento]] = 1 de la resistiva aparece como una línea horizontal en cualquier gráfico
+          de comparación tecnológica, representando el suelo de eficiencia.
+        en: The resistive [[coeficiente_de_rendimiento]] = 1 appears as a horizontal line in any technology comparison
+          graph, representing the efficiency floor.
+    likely_errors:
+    - id: COP_error
+      when: 'true'
+      status: error
+      text:
+        es: Interpretar [[coeficiente_de_rendimiento]] = 1 como eficiencia perfecta. En realidad, un [[coeficiente_de_rendimiento]] = 1 es el
+          peor caso posible para un sistema eléctrico que puede aprovechar el calor del entorno.
+        en: Interpreting [[coeficiente_de_rendimiento]] = 1 as perfect efficiency. In reality, a [[coeficiente_de_rendimiento]] = 1 is the worst
+          possible case for an electric system that could leverage ambient heat.
+    next_step_rules:
+    - id: COP_siguiente
+      when: 'true'
+      status: tip
+      text:
+        es: 'Compara este [[coeficiente_de_rendimiento]] = 1 con el SCOP de una bomba de calor para tu clima (típicamente
+          3–5). La relación directa es: E_resistiva / E_bomba = COP_bomba / 1.'
+        en: 'Compare this [[coeficiente_de_rendimiento]] = 1 with the SCOP of a heat pump for your climate (typically
+          3–5). The direct ratio is: E_resistive / E_pump = COP_pump / 1.'
+    physical_intuition:
+    - id: coeficiente_de_rendimiento_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[coeficiente_de_rendimiento]] describe el estado dinámico.
+        en: Intuitively, [[coeficiente_de_rendimiento]] describes the dynamic state.
+    limiting_cases:
+    - id: coeficiente_de_rendimiento_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[coeficiente_de_rendimiento]].
+        en: Check limiting cases of [[coeficiente_de_rendimiento]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

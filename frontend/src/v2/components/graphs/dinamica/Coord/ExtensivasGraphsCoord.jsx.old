@@ -1,0 +1,114 @@
+import React from "react";
+import { createCoordGraphPage } from "@/v2/components/graphs/graphFactories.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraph(
+const uiLang = "es";
+const tt = (es, en, lang = uiLang) => (lang === "en" ? en : es);
+
+export const graphContract = {
+  type: "Coord",
+  title: { es: "Escalado de variables extensivas", en: "Scaling of extensive variables" },
+  graph_identity: {
+    graph_type: "Coord",
+    pregunta_principal: {
+      es: "Como reconocemos que una magnitud termodinamica aumenta al juntar copias del sistema?",
+      en: "How do we recognize that a thermodynamic magnitude increases when copies of the system are joined?",
+    },
+    keywords: ["magnitud", "termodinamica", "aumenta", "copias", "sistema", "extensiva", "scale", "copies", "system"],
+    magnitud_estrella: "X_ext",
+    variable_control: "lambda_escala",
+    target_interpretable: true,
+  },
+  interpretation_binding: {
+    paramsIn: ["lambda_escala", "X_ext", "rho", "x_esp"],
+    stateOut: ["X_ext", "rho", "x_esp"],
+  },
+  equation: "X_scaled = lambda_escala X_ext",
+  axes: { x: "lambda_escala", y: "X_ext" },
+};
+
+const fmt = (value, digits = 1, lang = "es") => {
+  if (!Number.isFinite(value)) return "-";
+  const text = value.toFixed(digits);
+  return lang === "en" ? text : text.replace(".", ",");
+};
+
+const ExtensivasGraphsCoord = createCoordGraphPage({
+  displayName: "ExtensivasGraphsCoord",
+  title: { es: "Extensivas: total frente a normalizado", en: "Extensives: total versus normalized" },
+  defaultParams: { X0: 10, rho0: 1.25, lambdaMax: 4 },
+  controls: [
+    { id: "X0", label: { es: "X base", en: "base X" }, min: 1, max: 50, step: 1 },
+    { id: "rho0", label: { es: "rho", en: "rho" }, min: 0.2, max: 5, step: 0.05 },
+    { id: "lambdaMax", label: { es: "escala max", en: "max scale" }, min: 1, max: 8, step: 0.5 },
+  ],
+  compute: (pNum) => {
+    const X0 = Number.isFinite(pNum.X0) ? pNum.X0 : 10;
+    const rho0 = Number.isFinite(pNum.rho0) ? pNum.rho0 : 1.25;
+    const lambdaMax = Number.isFinite(pNum.lambdaMax) ? pNum.lambdaMax : 4;
+    const data = Array.from({ length: 31 }, (_, index) => {
+      const lambda = 1 + (index / 30) * (lambdaMax - 1);
+      return { x: lambda, X_ext: lambda * X0, rho: rho0, x_esp: X0 };
+    });
+    return {
+      data,
+      extra: {
+        interpretationTarget: "X_ext",
+        interpretationValue: data[data.length - 1]?.X_ext ?? X0,
+        graphState: {
+          lambda_escala: lambdaMax,
+          X_ext: data[data.length - 1]?.X_ext ?? X0,
+          rho: rho0,
+          x_esp: X0,
+        },
+      },
+    };
+  },
+  render: ({ data, pNum, lang = "es", linked, loadFromCalculator }) => {
+    const X0 = Number.isFinite(pNum.X0) ? pNum.X0 : 10;
+    const rho0 = Number.isFinite(pNum.rho0) ? pNum.rho0 : 1.25;
+    const maxX = Math.max(1, ...data.map((d) => d.X_ext));
+    const pointsX = data.map((d, i) => `${70 + i * 15},${300 - (d.X_ext / maxX) * 210}`).join(" ");
+    const pointsRho = data.map((_, i) => `${70 + i * 15},250`).join(" ");
+    return (
+      <div className="v2-card" style={{ display: "grid", gap: 12 }}>
+        <div className="v2-card-title">{tt("Test de duplicacion", "Duplication test", lang)}</div>
+        <svg viewBox="0 0 560 350" role="img" aria-label="Extensivas escalado">
+          <rect width="560" height="350" rx="12" fill="#f8fafc" />
+          <line x1="70" y1="300" x2="525" y2="300" stroke="#94a3b8" strokeWidth="1.5" />
+          <line x1="70" y1="70" x2="70" y2="300" stroke="#94a3b8" strokeWidth="1.5" />
+          <polyline points={pointsX} fill="none" stroke="#2563eb" strokeWidth="4" />
+          <polyline points={pointsRho} fill="none" stroke="#f97316" strokeWidth="4" strokeDasharray="8 8" />
+          <text x="92" y="52" fill="#0f172a" fontSize="18" fontWeight="800">
+            {tt("X_ext crece; rho queda normalizada", "X_ext grows; rho remains normalized", lang)}
+          </text>
+          <text x="400" y="105" fill="#2563eb" fontSize="14" fontWeight="800">
+            X_scaled = lambda X
+          </text>
+          <text x="400" y="240" fill="#f97316" fontSize="14" fontWeight="800">
+            rho = {fmt(rho0, 2, lang)}
+          </text>
+          <text x="245" y="330" fill="#475569" fontSize="13">
+            lambda_escala
+          </text>
+        </svg>
+        <div style={{ fontSize: 13, opacity: 0.9 }}>
+          {tt("X base", "base X", lang)}: <strong>{fmt(X0, 1, lang)}</strong>
+          {" · "}
+          {tt("Modo", "Mode", lang)}: <strong>{linked ? "calculator" : "experiment"}</strong>
+        </div>
+        {!linked ? (
+          <button type="button" className="btn btn-sm btn-light" onClick={loadFromCalculator}>
+            {tt("Cargar desde calculadora", "Load from calculator", lang)}
+          </button>
+        ) : null}
+      </div>
+    );
+  },
+});
+
+ExtensivasGraphsCoord.graph_identity = graphContract.graph_identity;
+ExtensivasGraphsCoord.pregunta_principal = graphContract.graph_identity.pregunta_principal;
+ExtensivasGraphsCoord.magnitud_estrella = graphContract.graph_identity.magnitud_estrella;
+
+export default ExtensivasGraphsCoord;

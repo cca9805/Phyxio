@@ -1,0 +1,267 @@
+- id: definicion_inductancia_mutua
+  title:
+    es: Definicion de inductancia mutua
+    en: Definition of mutual inductance
+  equation: M = lambda_21 / I1
+  latex: M = \frac{\lambda_{21}}{I_1}  % M lambda_21 I1
+  rearrangements:
+  - target: inductancia_mutua
+    equation: M = lambda_21 / I1
+    latex: M = \frac{\lambda_{21}}{I_1}  % M lambda_21 I1
+  - target: lambda_21
+    equation: lambda_21 = M * I1
+    latex: \lambda_{21} = M\,I_1  % lambda_21 M I1
+  - target: corriente_fuente
+    equation: I1 = lambda_21 / M
+    latex: I_1 = \frac{\lambda_{21}}{M}  % I1 lambda_21 M
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: La inductancia mutua mide cuanto flujo enlazado en la bobina secundaria produce una corriente primaria.
+    en: Mutual inductance measures how much secondary flux linkage a primary current produces.
+  constraints:
+  - bobinas fijas
+  - respuesta lineal
+  - material no saturado
+  validity:
+    es: Valida si el flujo enlazado secundario es proporcional a la corriente primaria.
+    en: Valid if secondary flux linkage is proportional to primary current.
+  dimension_check: Wb/A produce H.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - acoplamiento
+  - pendiente
+  result_semantics:
+    target: inductancia_mutua
+    kind: positive_scale
+    sign_meaning:
+      es: En modulo se espera no negativa; la polaridad se lee con la convencion de terminales.
+      en: As a magnitude it is expected nonnegative; polarity is read through terminal convention.
+    absolute_value_meaning:
+      es: Mayor valor indica mas flujo secundario por amperio primario.
+      en: Larger value indicates more secondary flux per primary ampere.
+  domain_checks:
+  - id: M_nonnegative
+    when: M >= 0
+    status: ok
+    message:
+      es: Inductancia mutua no negativa coherente con lectura de modulo.
+      en: Nonnegative mutual inductance is coherent with magnitude reading.
+  coherence_checks:
+  - id: I1_zero_warning
+    when: I1 == 0
+    status: warning
+    message:
+      es: No despejes M dividiendo por corriente primaria nula.
+      en: Do not solve for M by dividing by zero primary current.
+  graph_implications:
+  - M es la pendiente de lambda_21 frente a I1.
+  pedagogical_triggers:
+  - Distinguir flujo mutuo de flujo propio de cada bobina.
+- id: flujo_mutuo_lineal
+  title:
+    es: Flujo mutuo enlazado lineal
+    en: Linear mutual flux linkage
+  equation: lambda_21 = M * I1
+  latex: \lambda_{21} = M\,I_1  % lambda_21 M I1
+  rearrangements:
+  - target: lambda_21
+    equation: lambda_21 = M * I1
+    latex: \lambda_{21} = M\,I_1  % lambda_21 M I1
+  - target: inductancia_mutua
+    equation: M = lambda_21 / I1
+    latex: M = \frac{\lambda_{21}}{I_1}  % M lambda_21 I1
+  - target: corriente_fuente
+    equation: I1 = lambda_21 / M
+    latex: I_1 = \frac{\lambda_{21}}{M}  % I1 lambda_21 M
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: El flujo que la primaria enlaza en la secundaria crece proporcionalmente con la corriente primaria.
+    en: The flux linked in the secondary by the primary grows proportionally with primary current.
+  constraints:
+  - acoplamiento geometrico fijo
+  - inductancia mutua constante
+  validity:
+    es: Valida en el tramo lineal sin movimiento ni saturacion.
+    en: Valid over the linear segment without motion or saturation.
+  dimension_check: H multiplicado por A produce Wb.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - flujo
+  - proporcionalidad
+  result_semantics:
+    target: lambda_21
+    kind: signed_quantity
+    sign_meaning:
+      es: El signo sigue las referencias de bobinado y normal secundaria.
+      en: The sign follows winding references and secondary normal.
+    absolute_value_meaning:
+      es: Mayor modulo indica mayor flujo comun enlazado.
+      en: Larger magnitude indicates greater common linked flux.
+  domain_checks:
+  - id: lambda_mutual_linear
+    when: 'true'
+    status: ok
+    message:
+      es: Lectura valida dentro de un acoplamiento lineal.
+      en: Reading valid inside linear coupling.
+  coherence_checks:
+  - id: lambda_zero_if_no_source
+    when: I1 == 0
+    status: ok
+    message:
+      es: Sin corriente primaria, el flujo mutuo lineal se anula.
+      en: Without primary current, linear mutual flux vanishes.
+  graph_implications:
+  - La grafica lambda_21 frente a I1 es recta si M es constante.
+  pedagogical_triggers:
+  - Separar corriente fuente de bobina receptora.
+- id: fem_mutua_media
+  title:
+    es: Fem mutua media inducida
+    en: Average induced mutual emf
+  equation: epsilon_2 = -M * DeltaI1 / Deltat
+  latex: \varepsilon_2 = -M\,\frac{\Delta I_1}{\Delta t}  % epsilon_2 M DeltaI1 Deltat
+  rearrangements:
+  - target: epsilon_2
+    equation: epsilon_2 = -M * DeltaI1 / Deltat
+    latex: \varepsilon_2 = -M\,\frac{\Delta I_1}{\Delta t}  % epsilon_2 M DeltaI1 Deltat
+  - target: cambio_de_corriente_primaria
+    equation: DeltaI1 = -epsilon_2 * Deltat / M
+    latex: \Delta I_1 = -\frac{\varepsilon_2\,\Delta t}{M}  % DeltaI1 epsilon_2 Deltat M
+  - target: intervalo_de_tiempo
+    equation: Deltat = -M * DeltaI1 / epsilon_2
+    latex: \Delta t = -\frac{M\,\Delta I_1}{\varepsilon_2}  % Deltat M DeltaI1 epsilon_2
+  - target: inductancia_mutua
+    equation: M = -epsilon_2 * Deltat / DeltaI1
+    latex: M = -\frac{\varepsilon_2\,\Delta t}{\Delta I_1}  % M epsilon_2 Deltat DeltaI1
+  category: fundamental
+  relation_type: average_relation
+  physical_meaning:
+    es: La fem secundaria se opone al cambio de flujo mutuo producido por la corriente primaria.
+    en: The secondary emf opposes the mutual-flux change produced by primary current.
+  constraints:
+  - M aproximadamente constante
+  - intervalo temporal positivo
+  - referencias de bobinado coherentes
+  validity:
+    es: Valida para transitorios medios con acoplamiento lineal.
+    en: Valid for average transients with linear coupling.
+  dimension_check: H por A dividido por s produce V.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - fem_inducida
+  - lenz
+  - transitorio
+  result_semantics:
+    target: epsilon_2
+    kind: signed_quantity
+    sign_meaning:
+      es: El signo expresa la oposicion de Lenz en la bobina secundaria.
+      en: The sign expresses Lenz opposition in the secondary coil.
+    absolute_value_meaning:
+      es: Mayor modulo indica mayor tension inducida por el cambio primario.
+      en: Larger magnitude indicates larger induced voltage from the primary change.
+  domain_checks:
+  - id: dt_positive
+    when: Deltat > 0
+    status: ok
+    message:
+      es: Intervalo positivo permite rapidez media de cambio.
+      en: Positive interval allows average rate of change.
+  coherence_checks:
+  - id: dt_zero_error
+    when: Deltat == 0
+    status: error
+    message:
+      es: Intervalo nulo invalida la fem media.
+      en: Zero interval invalidates average emf.
+  graph_implications:
+  - epsilon_2 crece en modulo con la pendiente temporal de I1.
+  pedagogical_triggers:
+  - Recordar que la secundaria puede tener fem aunque este abierta.
+- id: coeficiente_acoplamiento
+  title:
+    es: Coeficiente de acoplamiento
+    en: Coupling coefficient
+  equation: k = M / sqrt(L1 * L2)
+  latex: k = \frac{M}{\sqrt{L_1 L_2}}  % k M L1 L2
+  rearrangements:
+  - target: coeficiente_de_acoplamiento
+    equation: k = M / sqrt(L1 * L2)
+    latex: k = \frac{M}{\sqrt{L_1 L_2}}  % k M L1 L2
+  - target: inductancia_mutua
+    equation: M = k * sqrt(L1 * L2)
+    latex: M = k\sqrt{L_1 L_2}  % M k L1 L2
+  - target: inductancia_propia_primaria
+    equation: L1 = M^2 / (k^2 * L2)
+    latex: L_1 = \frac{M^2}{k^2 L_2}  % L1 M k L2
+  - target: inductancia_propia_secundaria
+    equation: L2 = M^2 / (k^2 * L1)
+    latex: L_2 = \frac{M^2}{k^2 L_1}  % L2 M k L1
+  category: structural
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: El coeficiente k mide que fraccion del acoplamiento maximo compatible con L1 y L2 se alcanza.
+    en: Coefficient k measures what fraction of the maximum coupling compatible with L1 and L2 is reached.
+  constraints:
+  - bobinas pasivas
+  - L1 positiva
+  - L2 positiva
+  - acoplamiento lineal
+  validity:
+    es: Valida para pares de bobinas pasivas en regimen lineal.
+    en: Valid for passive coil pairs in the linear regime.
+  dimension_check: H dividido por raiz de H por H es adimensional.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - calidad_de_acoplamiento
+  - fuga
+  result_semantics:
+    target: coeficiente_de_acoplamiento
+    kind: bounded_ratio
+    sign_meaning:
+      es: No representa polaridad; representa fraccion de acoplamiento.
+      en: It does not represent polarity; it represents coupling fraction.
+    absolute_value_meaning:
+      es: Cerca de uno indica poco flujo de fuga; cerca de cero indica acoplamiento debil.
+      en: Near one indicates little leakage flux; near zero indicates weak coupling.
+  domain_checks:
+  - id: k_range
+    when: k >= 0
+    status: ok
+    message:
+      es: k no negativo es coherente con lectura de fraccion.
+      en: Nonnegative k is coherent with fraction reading.
+  coherence_checks:
+  - id: k_high_warning
+    when: k > 1
+    status: error
+    message:
+      es: k mayor que uno no es coherente con bobinas pasivas lineales.
+      en: k greater than one is not coherent with passive linear coils.
+  graph_implications:
+  - Aumentar k eleva la pendiente M sin cambiar necesariamente L1 ni L2.
+  pedagogical_triggers:
+  - No confundir inductancias propias grandes con acoplamiento perfecto.

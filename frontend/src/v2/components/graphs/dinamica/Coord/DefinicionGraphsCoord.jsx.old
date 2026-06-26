@@ -1,0 +1,143 @@
+import React from "react";
+import { createCoordGraphPage } from "@/v2/components/graphs/graphFactories.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraph(
+const uiLang = "es";
+const tt = (es, en) => (uiLang === "en" ? en : es);
+
+const graph_identity = {
+  graph_type: "Coord",
+  pregunta_principal: {
+    es: "Que mide la variacion de entropia y por que define la direccion irreversible de los procesos naturales?",
+    en: "What does entropy change measure and why does it define the irreversible direction of natural processes?",
+  },
+  keywords: [
+    "variacion",
+    "entropia",
+    "mide",
+    "direccion",
+    "irreversible",
+    "procesos",
+    "naturales",
+    "entropy",
+    "change",
+    "direction",
+    "irreversible",
+    "processes",
+  ],
+  magnitud_estrella: "DeltaS",
+  variable_control: "Q_rev",
+  formula: "DeltaS = Q_rev / T_abs",
+  target_interpretable: true,
+};
+
+const axes = {
+  xComponent: "XAxis",
+  yComponent: "YAxis",
+  xAxis: "Q_rev",
+  yAxis: "DeltaS",
+};
+
+const formula = {
+  id: "definicion_entropia_clausius",
+  formula: "DeltaS = Q_rev / T_abs",
+  equation: "DeltaS = Q_rev / T_abs",
+};
+
+const fmt = (value, digits = 1) =>
+  Number.isFinite(value) ? value.toFixed(digits) : "-";
+
+const DefinicionGraphsCoord = createCoordGraphPage({
+  displayName: "DefinicionGraphsCoord",
+  title: {
+    es: "Entropia generada por calor reversible",
+    en: "Entropy from reversible heat",
+  },
+  defaultParams: {
+    Q_rev: 1200,
+    T_abs: 300,
+  },
+  controls: [
+    { id: "Q_rev", label: { es: "Calor reversible", en: "Reversible heat" }, min: -5000, max: 5000, step: 100 },
+    { id: "T_abs", label: { es: "Temperatura absoluta", en: "Absolute temperature" }, min: 100, max: 900, step: 25 },
+  ],
+  compute: (pNum) => {
+    const q = Number.isFinite(pNum.Q_rev) ? pNum.Q_rev : 1200;
+    const t = Number.isFinite(pNum.T_abs) && pNum.T_abs > 0 ? pNum.T_abs : 300;
+    const deltaS = q / t;
+    const data = Array.from({ length: 41 }, (_, index) => {
+      const x = -5000 + index * 250;
+      return { x, y: x / t };
+    });
+
+    return {
+      data,
+      extra: {
+        interpretationTarget: "DeltaS",
+        interpretationValue: deltaS,
+        graphState: {
+          target: "DeltaS",
+          graphType: "Coord",
+          graph_identity,
+          axes,
+          formula,
+          Q_rev: q,
+          T_abs: t,
+          DeltaS: deltaS,
+        },
+      },
+    };
+  },
+  render: ({ data, pNum, extra }) => {
+    const q = pNum.Q_rev ?? 1200;
+    const t = pNum.T_abs ?? 300;
+    const deltaS = extra?.graphState?.DeltaS ?? q / t;
+    const width = 520;
+    const height = 260;
+    const x0 = width / 2;
+    const y0 = height / 2;
+    const maxAbs = Math.max(...data.map((point) => Math.abs(point.y)), 1);
+    const points = data
+      .map((point) => {
+        const x = x0 + (point.x / 5000) * (width * 0.42);
+        const y = y0 - (point.y / maxAbs) * (height * 0.42);
+        return `${x},${y}`;
+      })
+      .join(" ");
+    const currentX = x0 + (q / 5000) * (width * 0.42);
+    const currentY = y0 - (deltaS / maxAbs) * (height * 0.42);
+
+    return (
+      <div className="v2-card" style={{ display: "grid", gap: 12 }}>
+        <div className="v2-card-title">{tt("DeltaS frente a Q_rev", "DeltaS versus Q_rev")}</div>
+        <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Definicion entropia Coord">
+          <rect x="0" y="0" width={width} height={height} rx="10" fill="rgba(15,23,42,0.86)" />
+          <line x1="34" y1={y0} x2={width - 28} y2={y0} stroke="rgba(255,255,255,0.28)" />
+          <line x1={x0} y1="24" x2={x0} y2={height - 28} stroke="rgba(255,255,255,0.28)" />
+          <polyline points={points} fill="none" stroke="#38bdf8" strokeWidth="3" />
+          <circle cx={currentX} cy={currentY} r="6" fill="#fbbf24" stroke="#fff7ed" strokeWidth="2" />
+          <text x={width - 34} y={y0 - 8} textAnchor="end" fill="rgba(255,255,255,0.72)" fontSize="12">
+            Q_rev
+          </text>
+          <text x={x0 + 10} y="38" fill="rgba(255,255,255,0.72)" fontSize="12">
+            DeltaS
+          </text>
+        </svg>
+        <div style={{ display: "grid", gap: 4, fontSize: 13 }}>
+          <strong>{tt("Lectura fisica", "Physical reading")}</strong>
+          <span>
+            Q_rev = {fmt(q, 0)} J; T_abs = {fmt(t, 0)} K; DeltaS = {fmt(deltaS, 2)} J/K
+          </span>
+        </div>
+      </div>
+    );
+  },
+});
+
+DefinicionGraphsCoord.graph_identity = graph_identity;
+DefinicionGraphsCoord.pregunta_principal = graph_identity.pregunta_principal;
+DefinicionGraphsCoord.magnitud_estrella = graph_identity.magnitud_estrella;
+DefinicionGraphsCoord.axes = axes;
+DefinicionGraphsCoord.formula = formula;
+
+export default DefinicionGraphsCoord;

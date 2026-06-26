@@ -1,0 +1,802 @@
+version: 5.0.0
+id: metodo-de-montecarlo
+leaf_id: metodo-de-montecarlo
+nombre:
+  es: Metodo de montecarlo
+  en: Monte Carlo Method
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: modelos-y-metodos
+  parent_id: modelos-y-metodos
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/modelos-y-metodos/metodo-de-montecarlo
+  orden: 277200
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - estimador_montecarlo_media
+  - error_estandar_montecarlo
+  - varianza_muestral_montecarlo
+  - probabilidad_aceptacion_metropolis
+  - promedio_ponderado_muestras
+  magnitudes:
+  - numero_muestras
+  - valor_muestra
+  - estimador_montecarlo
+  - varianza_muestral
+  - error_estandar
+  - probabilidad_aceptacion
+  - peso_muestra
+  - energia_estado
+  - temperatura
+  - constante_boltzmann
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinámica estadística y simulación numérica
+    en: statistical thermodynamics and numerical simulation
+  axis_convention:
+    es: Los signos proceden del observable muestreado; en Monte Carlo no representan dirección espacial salvo que
+      el observable sea vectorial.
+    en: Signs come from the sampled observable; in Monte Carlo they do not represent spatial direction unless the
+      observable is vectorial.
+  standard_assumptions:
+  - es: Las muestras representan la distribución física objetivo definida por energía, temperatura, pesos o restricciones
+      del modelo.
+    en: Samples represent the target physical distribution defined by energy, temperature, weights, or model constraints.
+  - es: El estimador se interpreta con incertidumbre estadística explícita y no como valor exacto de una sola trayectoria.
+    en: The estimator is interpreted with explicit statistical uncertainty and not as the exact value of a single
+      trajectory.
+  standard_warnings:
+  - es: 'No confundas convergencia visual con validez física: revisa independencia, sesgo inicial, unidades y tamaño
+      de muestra.'
+    en: 'Do not confuse visual convergence with physical validity: check independence, initial bias, units, and
+      sample size.'
+  - es: Una aceptación extrema o una varianza grande puede ocultar mala exploración del espacio de estados.
+    en: Extreme acceptance or large variance can hide poor exploration of state space.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: El estimador y el error estándar deben conservar la dimensión del observable muestreado.
+      en: The estimator and standard error must preserve the dimension of the sampled observable.
+  - id: probability_bounds
+    status: ok
+    text:
+      es: Las probabilidades y pesos normalizados deben mantenerse en rangos compatibles con el modelo.
+      en: Probabilities and normalized weights must remain in ranges compatible with the model.
+  - id: sampling_consistency
+    status: warning
+    text:
+      es: Si el número efectivo de muestras es menor que el contado, la incertidumbre queda subestimada.
+      en: If the effective number of samples is smaller than the counted one, uncertainty is underestimated.
+error_patterns:
+  enabled: true
+  patterns:
+  - id: single_run_certainty
+    status: warning
+    text:
+      es: Tratar una ejecución Monte Carlo como prueba exacta elimina la incertidumbre estadística del resultado.
+      en: Treating a Monte Carlo run as exact proof removes the statistical uncertainty of the result.
+  - id: acceptance_probability_confusion
+    status: warning
+    text:
+      es: Confundir probabilidad de aceptación con probabilidad absoluta del estado final cambia el significado
+        físico.
+      en: Confusing acceptance probability with absolute probability of the final state changes the physical meaning.
+  - id: variance_ignored
+    status: warning
+    text:
+      es: Ignorar la varianza muestral puede hacer que un promedio aparentemente estable sea poco fiable.
+      en: Ignoring sample variance can make an apparently stable average unreliable.
+graph_reading_policy:
+  enabled: true
+  primary_variable: estimador_montecarlo
+  reading_sequence:
+  - es: Identifica [[numero_muestras]] en el eje horizontal y observa si [[estimador_montecarlo]] se estabiliza.
+    en: Identify [[numero_muestras]] on the horizontal axis and observe whether [[estimador_montecarlo]] stabilizes.
+  - es: Compara la caída de [[error_estandar]] con la dispersión indicada por [[varianza_muestral]].
+    en: Compare the decrease of [[error_estandar]] with the spread indicated by [[varianza_muestral]].
+  - es: Revisa si [[probabilidad_aceptacion]] muestra exploración razonable o bloqueo de la cadena.
+    en: Check whether [[probabilidad_aceptacion]] shows reasonable exploration or chain trapping.
+  key_points:
+  - es: La convergencia útil combina media estable, error decreciente y distribución física bien explorada.
+    en: Useful convergence combines stable mean, decreasing error, and a well-explored physical distribution.
+  - es: Una curva suave no valida por sí sola el modelo si el muestreo está sesgado.
+    en: A smooth curve does not by itself validate the model if sampling is biased.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Duplicar [[numero_muestras]] debería reducir [[error_estandar]] de forma apreciable si las muestras son
+      independientes.
+    en: Doubling [[numero_muestras]] should noticeably reduce [[error_estandar]] if samples are independent.
+  - es: Comparar dos semillas independientes ayuda a detectar si el estimador está atrapado en una región del espacio
+      de estados.
+    en: Comparing two independent seeds helps detect whether the estimator is trapped in one region of state space.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: '[[estimador_montecarlo]] y [[error_estandar]] tienen la unidad de [[valor_muestra]], mientras [[varianza_muestral]]
+      tiene esa unidad al cuadrado.'
+    en: '[[estimador_montecarlo]] and [[error_estandar]] have the unit of [[valor_muestra]], while [[varianza_muestral]]
+      has that unit squared.'
+  common_unit_mistakes:
+  - es: Sumar muestras con unidades diferentes antes de calcular el promedio.
+    en: Adding samples with different units before computing the average.
+  - es: Interpretar [[varianza_muestral]] con la misma unidad que el observable en lugar de unidad cuadrada.
+    en: Interpreting [[varianza_muestral]] with the same unit as the observable instead of squared unit.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  estimador_montecarlo:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: estimador de media
+      en: mean estimator
+    summary_rules:
+    - id: estimador_montecarlo_summary_montecarlo
+      when: 'true'
+      status: ok
+      text:
+        es: '[[estimador_montecarlo]] resume el valor físico estimado a partir de muchas muestras compatibles con
+          el modelo de Monte Carlo.'
+        en: '[[estimador_montecarlo]] summarizes the physical value estimated from many samples compatible with
+          the Monte Carlo model.'
+    physical_reading_rules:
+    - id: estimador_montecarlo_physical_reading_montecarlo
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[estimador_montecarlo]] como una media estadística, no como una medición exacta; su fiabilidad
+          depende de [[numero_muestras]] y de [[varianza_muestral]].
+        en: Read [[estimador_montecarlo]] as a statistical mean, not as an exact measurement; its reliability depends
+          on [[numero_muestras]] and [[varianza_muestral]].
+    coherence_rules:
+    - id: estimador_montecarlo_coherence_units_sampling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[estimador_montecarlo]] tenga la misma unidad física que [[valor_muestra]] y que no se
+          interprete separado de [[error_estandar]].
+        en: Check that [[estimador_montecarlo]] has the same physical unit as [[valor_muestra]] and is not interpreted
+          apart from [[error_estandar]].
+    model_validity_rules:
+    - id: estimador_montecarlo_model_validity_sampling
+      when: 'true'
+      status: info
+      text:
+        es: El resultado es válido si las muestras representan correctamente la distribución objetivo, si el sesgo
+          de arranque es pequeño y si [[numero_muestras]] es suficiente.
+        en: The result is valid if samples correctly represent the target distribution, startup bias is small, and
+          [[numero_muestras]] is sufficient.
+    graph_rules:
+    - id: estimador_montecarlo_graph_convergence
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, [[estimador_montecarlo]] debe estabilizarse cuando crece [[numero_muestras]]; oscilaciones
+          pequeñas son normales, deriva persistente no lo es.
+        en: On the graph, [[estimador_montecarlo]] should stabilize as [[numero_muestras]] grows; small oscillations
+          are normal, persistent drift is not.
+    likely_errors:
+    - id: estimador_montecarlo_likely_error_context
+      when: 'true'
+      status: warning
+      text:
+        es: 'No confundas [[estimador_montecarlo]] con el valor exacto: siempre necesita una lectura conjunta con
+          [[error_estandar]] y con la convergencia gráfica.'
+        en: 'Do not confuse [[estimador_montecarlo]] with the exact value: it always needs joint reading with [[error_estandar]]
+          and graphical convergence.'
+    next_step_rules:
+    - id: estimador_montecarlo_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Aumenta [[numero_muestras]], revisa [[varianza_muestral]] y compara ejecuciones independientes si [[estimador_montecarlo]]
+          cambia más que su [[error_estandar]].
+        en: Increase [[numero_muestras]], review [[varianza_muestral]], and compare independent runs if [[estimador_montecarlo]]
+          changes by more than its [[error_estandar]].
+    physical_intuition:
+    - id: estimador_montecarlo_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[estimador_montecarlo]] convierte una nube de configuraciones microscópicas en una predicción
+          macroscópica aproximada.
+        en: Physically, [[estimador_montecarlo]] turns a cloud of microscopic configurations into an approximate
+          macroscopic prediction.
+    limiting_cases:
+    - id: estimador_montecarlo_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Si [[numero_muestras]] crece mucho y la distribución se muestrea bien, [[estimador_montecarlo]] tiende
+          a estabilizarse; si no, revela sesgo o mala exploración.
+        en: If [[numero_muestras]] becomes large and the distribution is sampled well, [[estimador_montecarlo]]
+          tends to stabilize; otherwise it reveals bias or poor exploration.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  valor_muestra:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: valor de entrada
+      en: sample input value
+    summary_rules:
+    - id: valor_muestra_summary_montecarlo
+      when: 'true'
+      status: ok
+      text:
+        es: '[[valor_muestra]] es el dato microscópico observado en una muestra concreta de la simulación.'
+        en: '[[valor_muestra]] is the microscopic datum observed in a concrete simulation sample.'
+    physical_reading_rules:
+    - id: valor_muestra_physical_reading_montecarlo
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[valor_muestra]] como una realización individual: puede estar lejos de la media sin que el método
+          esté fallando.'
+        en: 'Read [[valor_muestra]] as an individual realization: it can be far from the mean without the method
+          failing.'
+    coherence_rules:
+    - id: valor_muestra_coherence_units_sampling
+      when: 'true'
+      status: ok
+      text:
+        es: Verifica que todos los [[valor_muestra]] tengan la misma unidad y procedan del mismo observable físico
+          antes de promediarlos.
+        en: Verify that all [[valor_muestra]] values have the same unit and come from the same physical observable
+          before averaging them.
+    model_validity_rules:
+    - id: valor_muestra_model_validity_sampling
+      when: 'true'
+      status: info
+      text:
+        es: '[[valor_muestra]] solo es útil si proviene de muestras aceptadas por el criterio del modelo y no de
+          estados prohibidos por energía o temperatura.'
+        en: '[[valor_muestra]] is useful only if it comes from samples accepted by the model criterion, not from
+          states forbidden by energy or temperature.'
+    graph_rules:
+    - id: valor_muestra_graph_convergence
+      when: 'true'
+      status: info
+      text:
+        es: En la nube de puntos, la dispersión de [[valor_muestra]] anticipa el tamaño de [[varianza_muestral]]
+          y del [[error_estandar]].
+        en: In the point cloud, the spread of [[valor_muestra]] anticipates the size of [[varianza_muestral]] and
+          [[error_estandar]].
+    likely_errors:
+    - id: valor_muestra_likely_error_context
+      when: 'true'
+      status: warning
+      text:
+        es: 'No selecciones solo [[valor_muestra]] cómodos: descartar fluctuaciones legítimas sesga el [[estimador_montecarlo]].'
+        en: 'Do not select only convenient [[valor_muestra]] values: discarding legitimate fluctuations biases [[estimador_montecarlo]].'
+    next_step_rules:
+    - id: valor_muestra_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Tras inspeccionar [[valor_muestra]], calcula su contribución al promedio y comprueba si hay valores
+          extremos físicamente justificables.
+        en: After inspecting [[valor_muestra]], compute its contribution to the average and check whether extreme
+          values are physically justified.
+    physical_intuition:
+    - id: valor_muestra_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Cada [[valor_muestra]] es una ventana pequeña al espacio de estados; por sí solo no representa el conjunto
+          completo.
+        en: Each [[valor_muestra]] is a small window into state space; by itself it does not represent the full
+          ensemble.
+    limiting_cases:
+    - id: valor_muestra_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Con muy pocas muestras, algunos [[valor_muestra]] dominan artificialmente; con muchas muestras, su influencia
+          individual disminuye.
+        en: With very few samples, some [[valor_muestra]] values dominate artificially; with many samples, their
+          individual influence decreases.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  error_estandar:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: incertidumbre estadística
+      en: statistical uncertainty
+    summary_rules:
+    - id: error_estandar_summary_montecarlo
+      when: 'true'
+      status: ok
+      text:
+        es: '[[error_estandar]] cuantifica la incertidumbre esperable del [[estimador_montecarlo]] debida al muestreo
+          finito.'
+        en: '[[error_estandar]] quantifies the expected uncertainty of [[estimador_montecarlo]] due to finite sampling.'
+    physical_reading_rules:
+    - id: error_estandar_physical_reading_montecarlo
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[error_estandar]] como escala de confianza práctica: menor valor indica una estimación más estable,
+          no un modelo automáticamente correcto.'
+        en: 'Read [[error_estandar]] as a practical confidence scale: a smaller value indicates a more stable estimate,
+          not an automatically correct model.'
+    coherence_rules:
+    - id: error_estandar_coherence_units_sampling
+      when: 'true'
+      status: ok
+      text:
+        es: '[[error_estandar]] debe tener la misma unidad que [[estimador_montecarlo]] y disminuir al aumentar
+          [[numero_muestras]] si [[varianza_muestral]] se mantiene comparable.'
+        en: '[[error_estandar]] must have the same unit as [[estimador_montecarlo]] and decrease as [[numero_muestras]]
+          grows if [[varianza_muestral]] remains comparable.'
+    model_validity_rules:
+    - id: error_estandar_model_validity_sampling
+      when: 'true'
+      status: info
+      text:
+        es: Su interpretación requiere muestras suficientemente independientes; si hay correlación fuerte, el [[error_estandar]]
+          ingenuo subestima la incertidumbre real.
+        en: Its interpretation requires sufficiently independent samples; under strong correlation, naive [[error_estandar]]
+          underestimates the real uncertainty.
+    graph_rules:
+    - id: error_estandar_graph_convergence
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, [[error_estandar]] debería caer aproximadamente al ritmo esperado con [[numero_muestras]];
+          una meseta sugiere alta varianza o correlación.
+        en: On the graph, [[error_estandar]] should fall roughly with the expected dependence on [[numero_muestras]];
+          a plateau suggests high variance or correlation.
+    likely_errors:
+    - id: error_estandar_likely_error_context
+      when: 'true'
+      status: warning
+      text:
+        es: 'No presentes [[estimador_montecarlo]] sin [[error_estandar]]: sería como dar una brújula sin rosa de
+          los vientos.'
+        en: 'Do not report [[estimador_montecarlo]] without [[error_estandar]]: it would be a compass without a
+          wind rose.'
+    next_step_rules:
+    - id: error_estandar_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Si [[error_estandar]] es grande, aumenta [[numero_muestras]], reduce [[varianza_muestral]] con mejor
+          muestreo o usa promedios ponderados.
+        en: If [[error_estandar]] is large, increase [[numero_muestras]], reduce [[varianza_muestral]] with better
+          sampling, or use weighted averages.
+    physical_intuition:
+    - id: error_estandar_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: '[[error_estandar]] mide cuánto se tambalea la estimación cuando el método solo ha visto una parte finita
+          del espacio de estados.'
+        en: '[[error_estandar]] measures how much the estimate wobbles when the method has seen only a finite part
+          of state space.'
+    limiting_cases:
+    - id: error_estandar_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: En el límite de [[numero_muestras]] muy grande, [[error_estandar]] tiende a cero si la varianza es finita
+          y el muestreo es ergódico.
+        en: In the limit of very large [[numero_muestras]], [[error_estandar]] tends to zero if variance is finite
+          and sampling is ergodic.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_muestras:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable independiente
+      en: independent variable
+    summary_rules:
+    - id: numero_muestras_summary_montecarlo
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_muestras]] indica cuántas configuraciones contribuyen al cálculo Monte Carlo.'
+        en: '[[numero_muestras]] indicates how many configurations contribute to the Monte Carlo calculation.'
+    physical_reading_rules:
+    - id: numero_muestras_physical_reading_montecarlo
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[numero_muestras]] como presupuesto estadístico: más muestras suelen mejorar la precisión, pero
+          no corrigen por sí solas un muestreo sesgado.'
+        en: 'Read [[numero_muestras]] as statistical budget: more samples usually improve precision, but they do
+          not by themselves fix biased sampling.'
+    coherence_rules:
+    - id: numero_muestras_coherence_units_sampling
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_muestras]] debe ser entero, positivo y coherente con el coste computacional y con la escala
+          de [[error_estandar]] declarada.'
+        en: '[[numero_muestras]] must be integer, positive, and consistent with computational cost and the declared
+          [[error_estandar]] scale.'
+    model_validity_rules:
+    - id: numero_muestras_model_validity_sampling
+      when: 'true'
+      status: info
+      text:
+        es: La lectura física exige que [[numero_muestras]] cuente muestras útiles, no pasos descartados de termalización
+          ni estados rechazados mal contabilizados.
+        en: Physical reading requires [[numero_muestras]] to count useful samples, not discarded thermalization
+          steps or miscounted rejected states.
+    graph_rules:
+    - id: numero_muestras_graph_convergence
+      when: 'true'
+      status: info
+      text:
+        es: 'En el eje horizontal, [[numero_muestras]] permite ver convergencia: el [[estimador_montecarlo]] debería
+          suavizarse y [[error_estandar]] reducirse.'
+        en: 'On the horizontal axis, [[numero_muestras]] reveals convergence: [[estimador_montecarlo]] should smooth
+          out and [[error_estandar]] should shrink.'
+    likely_errors:
+    - id: numero_muestras_likely_error_context
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas muchos pasos con muchas muestras independientes; si están correlacionadas, el [[numero_muestras]]
+          efectivo es menor.
+        en: Do not confuse many steps with many independent samples; if they are correlated, effective [[numero_muestras]]
+          is smaller.
+    next_step_rules:
+    - id: numero_muestras_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba la convergencia duplicando [[numero_muestras]] y observando si el cambio del estimador queda
+          dentro de [[error_estandar]].
+        en: Check convergence by doubling [[numero_muestras]] and observing whether the estimator change stays within
+          [[error_estandar]].
+    physical_intuition:
+    - id: numero_muestras_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: '[[numero_muestras]] es el tamaño del mapa que la simulación ha dibujado del territorio estadístico.'
+        en: '[[numero_muestras]] is the size of the map that the simulation has drawn of the statistical territory.'
+    limiting_cases:
+    - id: numero_muestras_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Con [[numero_muestras]] muy pequeño domina el azar; con [[numero_muestras]] grande aparece la tendencia
+          media si el algoritmo explora bien.
+        en: With very small [[numero_muestras]], randomness dominates; with large [[numero_muestras]], the mean
+          trend appears if the algorithm explores well.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  varianza_muestral:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: diagnóstico de dispersión
+      en: spread diagnostic
+    summary_rules:
+    - id: varianza_muestral_summary_montecarlo
+      when: 'true'
+      status: ok
+      text:
+        es: '[[varianza_muestral]] mide la dispersión de los valores muestreados y alimenta la incertidumbre del
+          estimador.'
+        en: '[[varianza_muestral]] measures the spread of sampled values and feeds the uncertainty of the estimator.'
+    physical_reading_rules:
+    - id: varianza_muestral_physical_reading_montecarlo
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[varianza_muestral]] como señal de heterogeneidad: alta dispersión implica que se necesitan más
+          muestras para igual precisión.'
+        en: 'Read [[varianza_muestral]] as a heterogeneity signal: high spread means more samples are needed for
+          the same precision.'
+    coherence_rules:
+    - id: varianza_muestral_coherence_units_sampling
+      when: 'true'
+      status: ok
+      text:
+        es: '[[varianza_muestral]] debe ser no negativa y tener dimensión cuadrada respecto a [[valor_muestra]].'
+        en: '[[varianza_muestral]] must be nonnegative and have squared dimension relative to [[valor_muestra]].'
+    model_validity_rules:
+    - id: varianza_muestral_model_validity_sampling
+      when: 'true'
+      status: info
+      text:
+        es: Su uso supone que las muestras describen la misma distribución; mezclar regímenes físicos distintos
+          infla o deforma [[varianza_muestral]].
+        en: Its use assumes samples describe the same distribution; mixing different physical regimes inflates or
+          distorts [[varianza_muestral]].
+    graph_rules:
+    - id: varianza_muestral_graph_convergence
+      when: 'true'
+      status: info
+      text:
+        es: Una banda vertical amplia de [[valor_muestra]] en la gráfica corresponde a [[varianza_muestral]] grande
+          y convergencia más lenta.
+        en: A wide vertical band of [[valor_muestra]] on the graph corresponds to large [[varianza_muestral]] and
+          slower convergence.
+    likely_errors:
+    - id: varianza_muestral_likely_error_context
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[varianza_muestral]] negativa o con unidades de [[valor_muestra]] como válida; revela cálculo
+          o definición incorrectos.
+        en: Do not treat negative [[varianza_muestral]] or variance with [[valor_muestra]] units as valid; it reveals
+          a wrong calculation or definition.
+    next_step_rules:
+    - id: varianza_muestral_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Si [[varianza_muestral]] domina, considera muestreo ponderado, estratificación o revisar la distribución
+          de [[peso_muestra]].
+        en: If [[varianza_muestral]] dominates, consider weighted sampling, stratification, or reviewing the [[peso_muestra]]
+          distribution.
+    physical_intuition:
+    - id: varianza_muestral_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: '[[varianza_muestral]] dice si las muestras susurran lo mismo o si cada una trae una noticia microscópica
+          muy distinta.'
+        en: '[[varianza_muestral]] tells whether samples whisper the same message or each brings a very different
+          microscopic report.'
+    limiting_cases:
+    - id: varianza_muestral_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Si todos los [[valor_muestra]] coinciden, [[varianza_muestral]] se anula; si aparecen colas largas,
+          crece y la convergencia se vuelve delicada.
+        en: If all [[valor_muestra]] values coincide, [[varianza_muestral]] vanishes; if long tails appear, it grows
+          and convergence becomes delicate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  probabilidad_aceptacion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: criterio de aceptación
+      en: acceptance criterion
+    summary_rules:
+    - id: probabilidad_aceptacion_summary_montecarlo
+      when: 'true'
+      status: ok
+      text:
+        es: '[[probabilidad_aceptacion]] decide qué propuestas entran en la cadena cuando se usa un paso tipo Metropolis.'
+        en: '[[probabilidad_aceptacion]] decides which proposals enter the chain when a Metropolis-type step is
+          used.'
+    physical_reading_rules:
+    - id: probabilidad_aceptacion_physical_reading_montecarlo
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[probabilidad_aceptacion]] como regla de exploración: equilibra aceptar estados favorables y permitir
+          saltos menos probables.'
+        en: 'Read [[probabilidad_aceptacion]] as an exploration rule: it balances accepting favorable states and
+          allowing less probable jumps.'
+    coherence_rules:
+    - id: probabilidad_aceptacion_coherence_units_sampling
+      when: 'true'
+      status: ok
+      text:
+        es: '[[probabilidad_aceptacion]] debe estar entre 0 y 1 y depender coherentemente de [[energia_estado]],
+          [[temperatura]] y [[constante_boltzmann]].'
+        en: '[[probabilidad_aceptacion]] must lie between 0 and 1 and depend consistently on [[energia_estado]],
+          [[temperatura]], and [[constante_boltzmann]].'
+    model_validity_rules:
+    - id: probabilidad_aceptacion_model_validity_sampling
+      when: 'true'
+      status: info
+      text:
+        es: La interpretación es válida si la propuesta respeta balance detallado o el criterio equivalente declarado
+          por el algoritmo.
+        en: The interpretation is valid if the proposal respects detailed balance or the equivalent criterion declared
+          by the algorithm.
+    graph_rules:
+    - id: probabilidad_aceptacion_graph_convergence
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, valores extremos persistentes de [[probabilidad_aceptacion]] advierten de pasos demasiado
+          grandes, demasiado pequeños o mala escala térmica.
+        en: On the graph, persistent extreme [[probabilidad_aceptacion]] values warn of too large steps, too small
+          steps, or a poor thermal scale.
+    likely_errors:
+    - id: probabilidad_aceptacion_likely_error_context
+      when: 'true'
+      status: warning
+      text:
+        es: 'No la leas como probabilidad del estado final absoluto: [[probabilidad_aceptacion]] se refiere a aceptar
+          una transición propuesta.'
+        en: 'Do not read it as the absolute probability of the final state: [[probabilidad_aceptacion]] refers to
+          accepting a proposed transition.'
+    next_step_rules:
+    - id: probabilidad_aceptacion_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Si [[probabilidad_aceptacion]] se concentra cerca de 0 o 1, ajusta la propuesta y revisa la escala de
+          [[temperatura]].
+        en: If [[probabilidad_aceptacion]] clusters near 0 or 1, tune the proposal and review the [[temperatura]]
+          scale.
+    physical_intuition:
+    - id: probabilidad_aceptacion_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: '[[probabilidad_aceptacion]] es el portero estadístico: no elige el destino final, pero controla qué
+          puertas puede atravesar la cadena.'
+        en: '[[probabilidad_aceptacion]] is the statistical gatekeeper: it does not choose the final destination,
+          but controls which doors the chain may cross.'
+    limiting_cases:
+    - id: probabilidad_aceptacion_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: A [[temperatura]] alta se aceptan más subidas de [[energia_estado]]; a [[temperatura]] baja la cadena
+          se vuelve más selectiva.
+        en: At high [[temperatura]], more upward [[energia_estado]] moves are accepted; at low [[temperatura]],
+          the chain becomes more selective.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

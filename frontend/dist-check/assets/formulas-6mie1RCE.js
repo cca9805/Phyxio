@@ -1,0 +1,133 @@
+const e=`version: 1
+formulas:
+  - id: arrastre_cuadratico_reducido
+    title:
+      es: Fuerza de arrastre cuadratico
+      en: Quadratic drag force
+    equation: F_d = c*v^2
+    latex: F_d = c v^2
+    rearrangements:
+      - target: F_d
+        equation: F_d = c*v^2
+        latex: F_d = c v^2
+        constraints:
+          - expr: c >= 0
+            message:
+              es: c >= 0
+              en: c >= 0
+      - target: c
+        equation: c = F_d/(v^2)
+        latex: c = \\frac{F_d}{v^2}
+        constraints:
+          - expr: v != 0
+            message:
+              es: v != 0
+              en: v != 0
+      - target: v
+        equation: v = sqrt(F_d/c)
+        latex: v = \\sqrt{\\frac{F_d}{c}}
+        constraints:
+          - expr: c > 0
+            message:
+              es: c > 0
+              en: c > 0
+          - expr: F_d >= 0
+            message:
+              es: F_d >= 0
+              en: F_d >= 0
+    category: operative
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: Ley reducida del arrastre cuadratico cuando la resistencia crece con el cuadrado de la rapidez.
+      en: Reduced law for quadratic drag when resistance grows with the square of speed.
+    constraints: Usar cuando el flujo este en un regimen inercial donde la ley cuadratica sea una buena aproximacion.
+    validity:
+      es: Es comun en aire y en otros medios donde la estela y la presion dinamica dominan la resistencia.
+      en: It is common in air and in other media where wake and dynamic pressure dominate the resistance.
+    dimension_check: c debe tener unidades de N s^2/m^2.
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - arrastre-cuadratico
+    interpretation_tags:
+      - arrastre-cuadratico
+    result_semantics:
+      target: F_d
+      meaning: Permite leer cuanto se penaliza la rapidez cuando el flujo ya no es lineal.
+    domain_checks:
+      - expr: 'true'
+        message:
+          es: Verifica que la escena este en un regimen donde la dependencia cuadratica tenga sentido.
+          en: Check that the scene is in a regime where the quadratic dependence makes sense.
+    coherence_checks:
+      - expr: 'true'
+        message:
+          es: Si v se duplica, F_d debe multiplicarse aproximadamente por cuatro.
+          en: If v doubles, F_d should increase by roughly a factor of four.
+    graph_implications:
+      - La grafica F_d frente a v debe curvarse hacia arriba.
+    pedagogical_triggers:
+      - when: 'true'
+        message:
+          es: El modelo cuadratico se reconoce por su sensibilidad fuerte a cambios de velocidad.
+          en: The quadratic model is recognized by its strong sensitivity to speed changes.
+  - id: coeficiente_cuadratico_equivalente
+    title:
+      es: Coeficiente cuadratico equivalente
+      en: Equivalent quadratic coefficient
+    equation: c = 0.5*rho*C_d*A
+    latex: c = \\frac{1}{2}\\rho C_d A
+    rearrangements:
+      - target: c
+        equation: c = 0.5*rho*C_d*A
+        latex: c = \\frac{1}{2}\\rho C_d A
+        constraints:
+          - expr: rho >= 0 && C_d >= 0 && A >= 0
+            message:
+              es: rho >= 0 && C_d >= 0 && A >= 0
+              en: rho >= 0 && C_d >= 0 && A >= 0
+      - target: C_d
+        equation: C_d = 2*c/(rho*A)
+        latex: C_d = \\frac{2 c}{\\rho A}
+        constraints:
+          - expr: rho > 0 && A > 0
+            message:
+              es: rho > 0 && A > 0
+              en: rho > 0 && A > 0
+    category: structural
+    relation_type: model_bridge
+    physical_meaning:
+      es: Puente entre la ley reducida y la forma estandar con densidad, forma y area frontal.
+      en: Bridge between the reduced law and the standard form with density, shape, and frontal area.
+    constraints: Requiere una definicion consistente del area de referencia y del regimen.
+    validity:
+      es: Es util cuando se quiere interpretar de donde sale c y no tratarlo como un numero opaco.
+      en: It is useful when one wants to interpret where c comes from instead of treating it as an opaque number.
+    dimension_check: c hereda unidades coherentes desde rho, C_d y A.
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - arrastre-cuadratico
+    interpretation_tags:
+      - arrastre-cuadratico
+    result_semantics:
+      target: c
+      meaning: Permite interpretar como el medio y la geometria fijan la intensidad del arrastre cuadratico.
+    domain_checks:
+      - expr: 'true'
+        message:
+          es: Revisa que rho, C_d y A correspondan al mismo cuerpo y al mismo flujo.
+          en: Check that rho, C_d, and A belong to the same body and the same flow.
+    coherence_checks:
+      - expr: 'true'
+        message:
+          es: Si aumenta el area frontal o la densidad del medio, c debe aumentar.
+          en: If frontal area or fluid density increases, c should increase.
+    graph_implications:
+      - Cambiar c desplaza hacia arriba o abajo la curva F_d frente a v.
+    pedagogical_triggers:
+      - when: 'true'
+        message:
+          es: c no es una nueva fuerza; es el parametro que resume medio y geometria.
+          en: c is not a new force; it is the parameter that summarizes medium and geometry.
+`;export{e as default};

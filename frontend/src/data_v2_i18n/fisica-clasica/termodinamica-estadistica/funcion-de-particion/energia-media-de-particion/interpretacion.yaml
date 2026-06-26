@@ -1,0 +1,791 @@
+version: 5.0.0
+id: energia-media-de-particion
+leaf_id: energia-media-de-particion
+nombre:
+  es: Energia media de partición
+  en: mean energy derived from the partition function
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: funcion-de-particion
+  parent_id: funcion-de-particion
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/funcion-de-particion/energia-media-de-particion
+  orden: 274300
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - beta_inversa_termica
+  - funcion_particion_canonica
+  - energia_media_desde_derivada_beta
+  - energia_media_desde_derivada_temperatura
+  - capacidad_calorifica_desde_energia_media
+  magnitudes:
+  - energia_media
+  - temperatura
+  - constante_boltzmann
+  - beta
+  - funcion_particion
+  - energia_microestado
+  - derivada_log_particion_beta
+  - derivada_log_particion_temperatura
+  - capacidad_calorifica
+  - peso_boltzmann
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: beta
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  beta:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro térmico inverso
+      en: inverse thermal parameter
+    summary_rules:
+    - id: beta_summary_mean_energy
+      when: 'true'
+      status: ok
+      text:
+        es: '[[beta]] mide la intensidad con la que el conjunto canónico penaliza microestados de energía alta.'
+        en: '[[beta]] measures how strongly the canonical ensemble penalizes high-energy microstates.'
+    physical_reading_rules:
+    - id: beta_physical_reading_mean_energy
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[beta]] como escala inversa de energía: valores grandes corresponden a baja [[temperatura]].'
+        en: 'Read [[beta]] as an inverse energy scale: large values correspond to low [[temperatura]].'
+    coherence_rules:
+    - id: beta_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[beta]] disminuya cuando aumenta [[temperatura]] y que su unidad sea J^-1.
+        en: Check that [[beta]] decreases when [[temperatura]] increases and that its unit is J^-1.
+    model_validity_rules:
+    - id: beta_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: El uso de [[beta]] requiere [[temperatura]] absoluta positiva y un baño térmico que fija el conjunto canónico.
+        en: Using [[beta]] requires positive absolute [[temperatura]] and a thermal bath fixing the canonical ensemble.
+    graph_rules:
+    - id: beta_graph_reading_coord
+      when: graph_binding.enabled == true
+      status: info
+      text:
+        es: En la gráfica, la pendiente de ln Z respecto a [[beta]] se lee con signo opuesto para obtener [[energia_media]].
+        en: On the graph, the slope of ln Z with respect to [[beta]] is read with opposite sign to obtain [[energia_media]].
+    likely_errors:
+    - id: beta_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: Un error común es olvidar el signo menos al pasar de la derivada respecto a [[beta]] a [[energia_media]].
+        en: A common error is forgetting the minus sign when moving from the derivative with respect to [[beta]] to [[energia_media]].
+    next_step_rules:
+    - id: beta_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Si la gráfica usa [[beta]] como eje horizontal, revisa si el resultado debe cambiar de signo por la fórmula usada.
+        en: If the graph uses [[beta]] as the horizontal axis, check whether the result must change sign because of the formula
+          used.
+    physical_intuition:
+    - id: beta_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: '[[beta]] grande actúa como un filtro severo que deja pasar principalmente energías bajas.'
+        en: Large [[beta]] acts as a severe filter that mainly lets low energies contribute.
+    limiting_cases:
+    - id: beta_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[beta]] tiende a cero, aparece el límite de alta [[temperatura]]; cuando crece mucho, domina el mínimo
+          energético.
+        en: When [[beta]] tends to zero, the high-[[temperatura]] limit appears; when it grows strongly, the energy minimum
+          dominates.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable térmica de entrada
+      en: thermal input variable
+    summary_rules:
+    - id: temperatura_summary_mean_energy
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] controla la escala térmica que decide cuánto importan las diferencias entre microestados.'
+        en: '[[temperatura]] controls the thermal scale that decides how much differences between microstates matter.'
+    physical_reading_rules:
+    - id: temperatura_physical_reading_mean_energy
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura]] en kelvin y como magnitud positiva dentro del conjunto canónico.
+        en: Read [[temperatura]] in kelvin and as a positive quantity within the canonical ensemble.
+    coherence_rules:
+    - id: temperatura_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Verifica que [[temperatura]] sea compatible con [[beta]] y con la escala energética fijada por [[constante_boltzmann]].
+        en: Verify that [[temperatura]] is compatible with [[beta]] and with the energy scale set by [[constante_boltzmann]].
+    model_validity_rules:
+    - id: temperatura_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: El modelo supone equilibrio térmico; si la [[temperatura]] no está bien definida, la energía media canónica pierde
+          sentido.
+        en: The model assumes thermal equilibrium; if [[temperatura]] is not well defined, the canonical mean energy loses
+          meaning.
+    graph_rules:
+    - id: temperatura_graph_reading_coord
+      when: graph_binding.enabled == true
+      status: info
+      text:
+        es: En la gráfica, un cambio de [[temperatura]] modifica la curvatura y la pendiente que conducen a [[energia_media]].
+        en: On the graph, a change in [[temperatura]] modifies the curvature and slope that lead to [[energia_media]].
+    likely_errors:
+    - id: temperatura_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura]] con una lectura aislada es un error frecuente: No uses grados Celsius en las fórmulas
+          estadísticas: la escala absoluta es obligatoria.'
+        en: 'A common mistake is to interpret [[temperatura]] in isolation: Do not use Celsius degrees in statistical formulas:
+          the absolute scale is required.'
+    next_step_rules:
+    - id: temperatura_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Convierte siempre a kelvin y calcula [[beta]] antes de interpretar pesos o derivadas.
+        en: Always convert to kelvin and calculate [[beta]] before interpreting weights or derivatives.
+    physical_intuition:
+    - id: temperatura_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Una [[temperatura]] alta aplana la selección energética; una baja concentra el peso cerca del mínimo.
+        en: High [[temperatura]] flattens energy selection; low temperature concentrates the weight near the minimum.
+    limiting_cases:
+    - id: temperatura_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[temperatura]] tiende a cero, el conjunto canónico puede quedar dominado por el estado fundamental.
+        en: When [[temperatura]] tends toward zero, the canonical ensemble may become dominated by the ground state.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  funcion_particion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: fuente estadística
+      en: statistical source
+    summary_rules:
+    - id: funcion_particion_summary_mean_energy
+      when: 'true'
+      status: ok
+      text:
+        es: '[[funcion_particion]] contiene la suma de pesos que permite obtener [[energia_media]] mediante derivadas.'
+        en: '[[funcion_particion]] contains the sum of weights that allows [[energia_media]] to be obtained through derivatives.'
+    physical_reading_rules:
+    - id: funcion_particion_physical_reading_mean_energy
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[funcion_particion]] como una cantidad adimensional positiva que organiza los microestados accesibles.
+        en: Read [[funcion_particion]] as a positive dimensionless quantity organizing accessible microstates.
+    coherence_rules:
+    - id: funcion_particion_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[funcion_particion]] sea positiva y que sus derivadas generen magnitudes con unidades correctas.
+        en: Check that [[funcion_particion]] is positive and that its derivatives generate quantities with correct units.
+    model_validity_rules:
+    - id: funcion_particion_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: La suma presupone microestados conocidos, equilibrio canónico y ausencia de interacción no incluida en el espectro
+          usado.
+        en: The sum assumes known microstates, canonical equilibrium, and no interaction missing from the spectrum used.
+    graph_rules:
+    - id: funcion_particion_graph_reading_coord
+      when: graph_binding.enabled == true
+      status: info
+      text:
+        es: La forma de ln Z frente a [[beta]] o [[temperatura]] contiene la información visual que determina [[energia_media]].
+        en: The shape of ln Z versus [[beta]] or [[temperatura]] contains the visual information determining [[energia_media]].
+    likely_errors:
+    - id: funcion_particion_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[funcion_particion]] con una lectura aislada es un error frecuente: No interpretes [[funcion_particion]]
+          como probabilidad: normaliza probabilidades, pero no es una probabilidad.'
+        en: 'A common mistake is to interpret [[funcion_particion]] in isolation: Do not interpret [[funcion_particion]] as
+          a probability: it normalizes probabilities, but is not itself a probability.'
+    next_step_rules:
+    - id: funcion_particion_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Tras calcularla, deriva ln Z con respecto a la variable térmica correcta y revisa el signo.
+        en: After calculating it, differentiate ln Z with respect to the correct thermal variable and check the sign.
+    physical_intuition:
+    - id: funcion_particion_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Cuanto más crece [[funcion_particion]], más peso estadístico total aportan los estados accesibles.
+        en: The more [[funcion_particion]] grows, the more total statistical weight the accessible states contribute.
+    limiting_cases:
+    - id: funcion_particion_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Si faltan estados relevantes en la suma, [[energia_media]] y [[capacidad_calorifica]] quedarán sesgadas.
+        en: If relevant states are missing from the sum, [[energia_media]] and [[capacidad_calorifica]] will be biased.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  peso_boltzmann:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: peso microscópico
+      en: microscopic weight
+    summary_rules:
+    - id: peso_boltzmann_summary_mean_energy
+      when: 'true'
+      status: ok
+      text:
+        es: '[[peso_boltzmann]] pondera cada [[energia_microestado]] antes de construir [[funcion_particion]] y [[energia_media]].'
+        en: '[[peso_boltzmann]] weights each [[energia_microestado]] before building [[funcion_particion]] and [[energia_media]].'
+    physical_reading_rules:
+    - id: peso_boltzmann_physical_reading_mean_energy
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[peso_boltzmann]] como contribución relativa no normalizada de un microestado.
+        en: Read [[peso_boltzmann]] as the unnormalized relative contribution of a microstate.
+    coherence_rules:
+    - id: peso_boltzmann_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que sea positivo, adimensional y menor o igual que uno si la energía de referencia es no negativa.
+        en: Check that it is positive, dimensionless, and at most one if the reference energy is nonnegative.
+    model_validity_rules:
+    - id: peso_boltzmann_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: El peso presupone contacto térmico con un baño y microestados con energía definida.
+        en: The weight assumes thermal contact with a reservoir and microstates with defined energy.
+    graph_rules:
+    - id: peso_boltzmann_graph_reading_coord
+      when: graph_binding.enabled == true
+      status: info
+      text:
+        es: Su caída con [[beta]] explica por qué la gráfica de ln Z cambia de pendiente y determina [[energia_media]].
+        en: Its fall with [[beta]] explains why the ln Z graph changes slope and determines [[energia_media]].
+    likely_errors:
+    - id: peso_boltzmann_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[peso_boltzmann]] con una lectura aislada es un error frecuente: No confundas [[peso_boltzmann]] con
+          probabilidad; falta dividir por [[funcion_particion]].'
+        en: Do not confuse [[peso_boltzmann]] with probability; division by [[funcion_particion]] is still missing.
+    next_step_rules:
+    - id: peso_boltzmann_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Normaliza los pesos con [[funcion_particion]] antes de calcular probabilidades o promedios.
+        en: Normalize the weights with [[funcion_particion]] before calculating probabilities or averages.
+    physical_intuition:
+    - id: peso_boltzmann_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Es la moneda estadística con la que cada microestado compra presencia en el promedio.
+        en: It is the statistical currency with which each microstate buys presence in the average.
+    limiting_cases:
+    - id: peso_boltzmann_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Para energías muy altas frente a k_B T, el peso puede ser despreciable numéricamente.
+        en: For energies much higher than k_B T, the weight can be numerically negligible.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_media:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: salida dominante
+      en: dominant output
+    summary_rules:
+    - id: energia_media_summary_mean_energy
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_media]] resume la energía promedio que el sistema ocupa al ponderar todos los microestados con la función
+          de partición.'
+        en: '[[energia_media]] summarizes the average energy occupied by the system after weighting all microstates through
+          the partition function.'
+    physical_reading_rules:
+    - id: energia_media_physical_reading_mean_energy
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[energia_media]] como promedio estadístico, no como energía de un único microestado.
+        en: Read [[energia_media]] as a statistical average, not as the energy of one single microstate.
+    coherence_rules:
+    - id: energia_media_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[energia_media]] tenga dimensión de energía y que cambie de forma coherente con [[temperatura]]
+          y [[funcion_particion]].
+        en: Check that [[energia_media]] has energy dimension and changes consistently with [[temperatura]] and [[funcion_particion]].
+    model_validity_rules:
+    - id: energia_media_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: El valor es válido para equilibrio canónico, microestados bien definidos y una [[temperatura]] positiva fijada
+          por un baño térmico.
+        en: The value is valid for canonical equilibrium, well-defined microstates, and positive [[temperatura]] fixed by
+          a thermal reservoir.
+    graph_rules:
+    - id: energia_media_graph_reading_coord
+      when: graph_binding.enabled == true
+      status: info
+      text:
+        es: En la gráfica, interpreta cómo la pendiente de ln Z frente a [[beta]] o frente a [[temperatura]] determina [[energia_media]].
+        en: On the graph, interpret how the slope of ln Z versus [[beta]] or versus [[temperatura]] determines [[energia_media]].
+    likely_errors:
+    - id: energia_media_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_media]] con una lectura aislada es un error frecuente: No confundas [[energia_media]] con
+          el microestado más probable ni con la suma simple de energías sin pesos.'
+        en: Do not confuse [[energia_media]] with the most probable microstate or with an unweighted sum of energies.
+    next_step_rules:
+    - id: energia_media_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[energia_media]], revisa el signo de la derivada, las unidades y si procede estimar [[capacidad_calorifica]].
+        en: After calculating [[energia_media]], check the derivative sign, the units, and whether estimating [[capacidad_calorifica]]
+          is appropriate.
+    physical_intuition:
+    - id: energia_media_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Si sube [[temperatura]], estados de mayor [[energia_microestado]] pueden contribuir más y elevar el promedio.
+        en: If [[temperatura]] rises, states with higher [[energia_microestado]] can contribute more and raise the average.
+    limiting_cases:
+    - id: energia_media_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: A baja [[temperatura]], [[energia_media]] se aproxima a los estados de menor energía; a alta [[temperatura]],
+          muchos estados pesan de forma comparable.
+        en: At low [[temperatura]], [[energia_media]] approaches the lowest-energy states; at high [[temperatura]], many states
+          carry comparable weight.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  derivada_log_particion_beta:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: pendiente estadística
+      en: statistical slope
+    summary_rules:
+    - id: derivada_log_particion_beta_summary_mean_energy
+      when: 'true'
+      status: ok
+      text:
+        es: '[[derivada_log_particion_beta]] mide cómo cambia ln Z al variar [[beta]] y conecta directamente con [[energia_media]].'
+        en: '[[derivada_log_particion_beta]] measures how ln Z changes as [[beta]] varies and connects directly with [[energia_media]].'
+    physical_reading_rules:
+    - id: derivada_log_particion_beta_physical_reading_mean_energy
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[derivada_log_particion_beta]] con atención al signo: normalmente la energía media aparece con signo opuesto.'
+        en: 'Read [[derivada_log_particion_beta]] with attention to sign: mean energy usually appears with the opposite sign.'
+    coherence_rules:
+    - id: derivada_log_particion_beta_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que su dimensión sea energía y que el signo sea compatible con la disminución de Z al aumentar [[beta]].
+        en: Check that its dimension is energy and that the sign is compatible with Z decreasing as [[beta]] increases.
+    model_validity_rules:
+    - id: derivada_log_particion_beta_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: La derivada requiere que [[funcion_particion]] sea diferenciable respecto a [[beta]] en el intervalo estudiado.
+        en: The derivative requires [[funcion_particion]] to be differentiable with respect to [[beta]] over the interval
+          studied.
+    graph_rules:
+    - id: derivada_log_particion_beta_graph_reading_coord
+      when: graph_binding.enabled == true
+      status: info
+      text:
+        es: En una gráfica ln Z frente a [[beta]], esta magnitud es la pendiente local que se convierte en [[energia_media]].
+        en: On a ln Z versus [[beta]] graph, this quantity is the local slope that becomes [[energia_media]].
+    likely_errors:
+    - id: derivada_log_particion_beta_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[derivada_log_particion_beta]] con una lectura aislada es un error frecuente: No confundas pendiente
+          negativa con energía negativa sin aplicar antes el signo de la relación formal.'
+        en: Do not confuse a negative slope with negative energy before applying the sign of the formal relation.
+    next_step_rules:
+    - id: derivada_log_particion_beta_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Usa la pendiente local, no una pendiente promedio amplia si la curva tiene curvatura apreciable.
+        en: Use the local slope, not a broad average slope if the curve has appreciable curvature.
+    physical_intuition:
+    - id: derivada_log_particion_beta_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: La pendiente expresa cuánto se contrae el peso estadístico total al endurecer el filtro térmico.
+        en: The slope expresses how much the total statistical weight contracts as the thermal filter tightens.
+    limiting_cases:
+    - id: derivada_log_particion_beta_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Cerca de cambios bruscos del espectro efectivo, una derivada numérica puede ser inestable.
+        en: Near abrupt changes of the effective spectrum, a numerical derivative can be unstable.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  derivada_log_particion_temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: pendiente térmica
+      en: thermal slope
+    summary_rules:
+    - id: derivada_log_particion_temperatura_summary_mean_energy
+      when: 'true'
+      status: ok
+      text:
+        es: '[[derivada_log_particion_temperatura]] mide la sensibilidad de ln Z ante la [[temperatura]] y ofrece otra vía
+          para obtener [[energia_media]].'
+        en: '[[derivada_log_particion_temperatura]] measures the sensitivity of ln Z to [[temperatura]] and gives another
+          route to [[energia_media]].'
+    physical_reading_rules:
+    - id: derivada_log_particion_temperatura_physical_reading_mean_energy
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[derivada_log_particion_temperatura]] como pendiente térmica que debe combinarse con k_B T^2.
+        en: Read [[derivada_log_particion_temperatura]] as a thermal slope that must be combined with k_B T^2.
+    coherence_rules:
+    - id: derivada_log_particion_temperatura_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que al multiplicarla por los factores térmicos adecuados resulte una energía.
+        en: Check that multiplying it by the proper thermal factors gives an energy.
+    model_validity_rules:
+    - id: derivada_log_particion_temperatura_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura es válida si la función de partición cambia suavemente con [[temperatura]].
+        en: The reading is valid if the partition function changes smoothly with [[temperatura]].
+    graph_rules:
+    - id: derivada_log_particion_temperatura_graph_reading_coord
+      when: graph_binding.enabled == true
+      status: info
+      text:
+        es: En una gráfica ln Z frente a [[temperatura]], la pendiente positiva suele indicar aumento de [[energia_media]].
+        en: On a ln Z versus [[temperatura]] graph, a positive slope usually indicates increasing [[energia_media]].
+    likely_errors:
+    - id: derivada_log_particion_temperatura_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[derivada_log_particion_temperatura]] con una lectura aislada es un error frecuente: No uses esta
+          derivada como energía directamente: falta la escala térmica multiplicativa.'
+        en: 'A common mistake is to interpret [[derivada_log_particion_temperatura]] in isolation: Do not use this derivative
+          directly as energy: the multiplicative thermal scale is missing.'
+    next_step_rules:
+    - id: derivada_log_particion_temperatura_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Tras medir la pendiente, aplica los factores de [[constante_boltzmann]] y [[temperatura]] antes de interpretar.
+        en: After measuring the slope, apply the [[constante_boltzmann]] and [[temperatura]] factors before interpreting.
+    physical_intuition:
+    - id: derivada_log_particion_temperatura_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Si ln Z responde mucho a la [[temperatura]], el sistema está incorporando estados energéticos nuevos.
+        en: If ln Z responds strongly to [[temperatura]], the system is bringing in new energetic states.
+    limiting_cases:
+    - id: derivada_log_particion_temperatura_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: A temperaturas extremas, la pendiente puede saturarse si ya dominan muy pocos o casi todos los estados disponibles.
+        en: At extreme temperatures, the slope may saturate if very few or nearly all available states already dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  capacidad_calorifica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: respuesta térmica derivada
+      en: derived thermal response
+    summary_rules:
+    - id: capacidad_calorifica_summary_mean_energy
+      when: 'true'
+      status: ok
+      text:
+        es: '[[capacidad_calorifica]] indica cuánto cambia [[energia_media]] cuando cambia [[temperatura]].'
+        en: '[[capacidad_calorifica]] indicates how much [[energia_media]] changes when [[temperatura]] changes.'
+    physical_reading_rules:
+    - id: capacidad_calorifica_physical_reading_mean_energy
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[capacidad_calorifica]] como sensibilidad térmica, no como cantidad de calor almacenada.
+        en: Read [[capacidad_calorifica]] as thermal sensitivity, not as stored heat.
+    coherence_rules:
+    - id: capacidad_calorifica_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que su unidad sea J/K y que sea compatible con la pendiente de [[energia_media]] frente a [[temperatura]].
+        en: Check that its unit is J/K and that it matches the slope of [[energia_media]] versus [[temperatura]].
+    model_validity_rules:
+    - id: capacidad_calorifica_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: La interpretación requiere equilibrio y una variación de [[temperatura]] suficientemente pequeña para usar pendiente
+          local.
+        en: The interpretation requires equilibrium and a sufficiently small [[temperatura]] change to use a local slope.
+    graph_rules:
+    - id: capacidad_calorifica_graph_reading_coord
+      when: graph_binding.enabled == true
+      status: info
+      text:
+        es: En la gráfica, una zona de fuerte crecimiento de [[energia_media]] se traduce en mayor [[capacidad_calorifica]].
+        en: On the graph, a strong growth region of [[energia_media]] translates into larger [[capacidad_calorifica]].
+    likely_errors:
+    - id: capacidad_calorifica_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[capacidad_calorifica]] con una lectura aislada es un error frecuente: No confundas una energía alta
+          con alta [[capacidad_calorifica]]; importa la pendiente, no el valor absoluto.'
+        en: Do not confuse high energy with high [[capacidad_calorifica]]; the slope matters, not the absolute value.
+    next_step_rules:
+    - id: capacidad_calorifica_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Compara la pendiente térmica entre intervalos y verifica que no estés promediando una transición brusca.
+        en: Compare the thermal slope across intervals and verify that you are not averaging over an abrupt transition.
+    physical_intuition:
+    - id: capacidad_calorifica_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Es grande cuando pequeños cambios térmicos abren muchos estados energéticos accesibles.
+        en: It is large when small thermal changes open many accessible energetic states.
+    limiting_cases:
+    - id: capacidad_calorifica_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Si el sistema no está en equilibrio o intercambia partículas, la capacidad canónica simple puede no ser la adecuada.
+        en: If the system is not in equilibrium or exchanges particles, the simple canonical capacity may not be appropriate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

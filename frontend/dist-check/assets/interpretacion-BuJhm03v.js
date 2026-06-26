@@ -1,0 +1,353 @@
+const e=`version: 2
+id: interpretacion-colisiones-totalmente-inelasticas
+leaf_id: colisiones-totalmente-inelasticas
+nombre:
+  es: Interpretación de Colisiones totalmente inelásticas
+  en: Interpretation of Perfectly Inelastic Collisions
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: cantidad-de-movimiento
+  parent_id: colisiones
+  ruta_relativa: fisica-clasica/mecanica/cantidad-de-movimiento/colisiones/colisiones-totalmente-inelasticas
+
+dependencies:
+  formulas: [p_balance, vf, Ki, Kf, DeltaK, loss_fraction]
+  magnitudes: [m1, m2, v1i, v2i, vf, Ki, Kf, DeltaK, loss_fraction, p]
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+  config:
+    axes: { x: { label: { es: "v_i", en: "v_i" } }, y: { label: { es: "v_f", en: "v_f" } } }
+    series:
+      - id: model_line
+        type: line
+        equation: (m1*x + m2*v2i)/(m1 + m2)
+
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+
+result_blocks:
+  summary: { title: { es: Resumen físico, en: Physical summary } }
+  physical_reading: { title: { es: Lectura física, en: Physical reading } }
+  coherence: { title: { es: Coherencia, en: Coherence } }
+  model_validity: { title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { title: { es: Lectura gráfica, en: Graph reading } }
+  likely_errors: { title: { es: Errores probables, en: Likely errors } }
+  next_step: { title: { es: Siguiente paso, en: Next step } }
+
+targets:
+  vf:
+    summary_rules:
+      - id: vf_result
+        when: 'true'
+        status: info
+        text:
+          es: "La velocidad final común es [[vf]] = {value} {unit} a causa de la formación de una masa única resultante tras el choque perfectamente inelástico."
+          en: "The common final velocity is [[vf]] = {value} {unit} because of the formation of a single resulting mass after the perfectly inelastic collision."
+    physical_reading_rules:
+      - id: mass_ratio_effect_m1
+        when: 'm1 > 10 * m2'
+        status: info
+        text:
+          es: "Puesto que [[m1]] es mucho mayor que [[m2]], el conjunto se mueve a una velocidad muy cercana a la inicial del proyectil ([[v1i]]) porque el blanco apenas ofrece resistencia inercial."
+          en: "Since [[m1]] is much larger than [[m2]], the assembly moves at a velocity very close to the projectile's initial velocity ([[v1i]]) because the target offers little inertial resistance."
+    coherence_rules:
+      - id: sign_coherence
+        when: 'v1i > 0 and v2i > 0 and vf < 0'
+        status: fail
+        text:
+          es: "Error de signo detectado: si ambos cuerpos avanzan hacia la derecha, el conjunto no puede retroceder puesto que el momento total es positivo."
+          en: "Sign error detected: if both bodies are moving to the right, the assembly cannot move backward since the total momentum is positive."
+    model_validity_rules:
+      - id: vf_sticking_condition
+        when: 'true'
+        status: ok
+        text:
+          es: "La validez de [[vf]] depende estrictamente de que los cuerpos queden pegados tras el impacto; si rebotan, este valor carece de sentido físico."
+          en: "The validity of [[vf]] strictly depends on the bodies staying stuck after impact; if they bounce, this value lacks physical meaning."
+    graph_rules:
+      - id: vf_graph_reading
+        when: 'true'
+        status: info
+        text:
+          es: "La gráfica muestra la relación lineal entre la velocidad de entrada y la de salida compartida, indicando cómo se distribuye el momento."
+          en: "The graph shows the linear relationship between the input velocity and the shared output velocity, indicating how momentum is distributed."
+    likely_errors:
+      - id: zero_velocity_error
+        when: 'vf == 0 and m1*v1i != -m2*v2i'
+        status: error
+        text:
+          es: "Has obtenido [[vf]] = 0, pero el momento inicial no es nulo. Este es un error conceptual crítico porque el momento lineal siempre debe conservarse en el impacto."
+          en: "You obtained [[vf]] = 0, but the initial momentum is not zero. This is a critical conceptual error because linear momentum must always be conserved during impact."
+    next_step_rules:
+      - id: vf_to_energy
+        when: 'true'
+        status: info
+        text:
+          es: "Con [[vf]] determinada, el siguiente paso lógico es calcular la energía cinética final [[Kf]] del conjunto unido."
+          en: "With [[vf]] determined, the next logical step is to calculate the final kinetic energy [[Kf]] of the united assembly."
+
+  DeltaK:
+    summary_rules:
+      - id: energy_loss_summary
+        when: 'true'
+        status: warning
+        text:
+          es: "Se han disipado [[DeltaK]] = {value} {unit} de energía mecánica a causa de las fuerzas de deformación interna durante el proceso de unión."
+          en: "[[DeltaK]] = {value} {unit} of mechanical energy has been dissipated due to internal deformation forces during the joining process."
+    physical_reading_rules:
+      - id: max_dissipation
+        when: 'true'
+        status: info
+        text:
+          es: "En este choque, la pérdida de energía es la máxima compatible con la conservación del momento, puesto que se ha eliminado toda la energía relativa entre cuerpos."
+          en: "In this collision, the energy loss is the maximum compatible with momentum conservation, since all relative energy between bodies has been eliminated."
+    coherence_rules:
+      - id: energy_gain_check
+        when: 'DeltaK > 0'
+        status: fail
+        text:
+          es: "Violación de la termodinámica: un choque inelástico pasivo no puede generar energía cinética extra debido al principio de conservación de la energía."
+          en: "Thermodynamics violation: a passive inelastic collision cannot generate extra kinetic energy due to the energy conservation principle."
+    model_validity_rules:
+      - id: delta_k_validity
+        when: 'true'
+        status: ok
+        text:
+          es: "Este valor de [[DeltaK]] es exclusivo para el caso de acoplamiento total de masas; cualquier separación posterior cambiaría el balance energético final."
+          en: "This value of [[DeltaK]] is exclusive to the total mass coupling case; any subsequent separation would change the final energy balance."
+    graph_rules:
+      - id: delta_k_graph
+        when: 'true'
+        status: info
+        text:
+          es: "El salto energético entre [[Ki]] y [[Kf]] representa visualmente la magnitud de [[DeltaK]] disipada en el impacto."
+          en: "The energy jump between [[Ki]] and [[Kf]] visually represents the magnitude of [[DeltaK]] dissipated in the impact."
+    likely_errors:
+      - id: positive_delta_k
+        when: 'DeltaK > 0'
+        status: error
+        text:
+          es: "Has obtenido una ganancia de energía. Este es un error físico crítico porque en un choque pasivo siempre hay degradación energética irreversible."
+          en: "You obtained an energy gain. This is a critical physical error because in a passive collision there is always irreversible energy degradation."
+    next_step_rules:
+      - id: delta_k_to_heat
+        when: 'true'
+        status: info
+        text:
+          es: "Esta energía [[DeltaK]] se ha transformado íntegramente en calor y deformación permanente del material de los cuerpos implicados."
+          en: "This energy [[DeltaK]] has been entirely transformed into heat and permanent deformation of the material of the bodies involved."
+
+  loss_fraction:
+    summary_rules:
+      - id: loss_ratio_summary
+        when: 'true'
+        status: info
+        text:
+          es: "Se ha perdido el {value*100}% de la energía cinética inicial a causa del carácter totalmente inelástico y disipativo del choque."
+          en: "{value*100}% of the initial kinetic energy has been lost due to the perfectly inelastic and dissipative nature of the collision."
+    physical_reading_rules:
+      - id: capture_efficiency
+        when: 'loss_fraction > 0.9'
+        status: warning
+        text:
+          es: "Choque extremadamente disipativo: casi toda la energía de movimiento se ha transformado en calor debido a la penetración masiva del proyectil."
+          en: "Extremely dissipative collision: almost all motion energy has been transformed into heat due to the projectile's massive penetration."
+    coherence_rules:
+      - id: fraction_range_check
+        when: 'loss_fraction > 1 or loss_fraction < 0'
+        status: fail
+        text:
+          es: "La fracción de pérdida debe estar entre 0 y 1, puesto que no se puede perder más energía de la que había inicialmente en el sistema."
+          en: "The loss fraction must be between 0 and 1, since more energy cannot be lost than what was initially present in the system."
+    model_validity_rules:
+      - id: loss_fraction_model
+        when: 'true'
+        status: ok
+        text:
+          es: "La fracción [[loss_fraction]] caracteriza la 'totalidad' de la naturaleza inelástica en este escenario específico de impacto."
+          en: "The fraction [[loss_fraction]] characterizes the 'totality' of the inelastic nature in this specific impact scenario."
+    graph_rules:
+      - id: loss_fraction_graph
+        when: 'true'
+        status: info
+        text:
+          es: "La relación de áreas en el gráfico de energía muestra visualmente el factor de eficiencia de la disipación térmica."
+          en: "The area ratio in the energy graph visually shows the thermal dissipation efficiency factor."
+    likely_errors:
+      - id: loss_fraction_error
+        when: 'loss_fraction == 0 and v1i != v2i'
+        status: error
+        text:
+          es: "La pérdida no puede ser cero en un choque donde los cuerpos terminan juntos. Creemos que esto es un error conceptual porque el acoplamiento requiere fricción interna disipativa."
+          en: "The loss cannot be zero in a collision where the bodies end up together. We believe this is a conceptual mistake because coupling requires dissipative internal friction."
+    next_step_rules:
+      - id: loss_fraction_to_material
+        when: 'true'
+        status: info
+        text:
+          es: "Analiza si el material del blanco es capaz de absorber esta fracción de energía sin sufrir una desintegración estructural."
+          en: "Analyze whether the target material is capable of absorbing this energy fraction without suffering structural disintegration."
+
+  Ki:
+    summary_rules:
+      - id: ki_summary
+        when: 'true'
+        status: info
+        text:
+          es: "La energía cinética inicial del sistema es [[Ki]] = {value} {unit} debido al movimiento de los reactivos antes del contacto."
+          en: "The initial kinetic energy of the system is [[Ki]] = {value} {unit} due to the motion of the reactants before contact."
+    physical_reading_rules:
+      - id: ki_dominance
+        when: 'true'
+        status: info
+        text:
+          es: "Esta energía representa la capacidad máxima de trabajo que el sistema puede realizar antes de comenzar el proceso de impacto."
+          en: "This energy represents the maximum work capacity the system can perform before starting the impact process."
+    coherence_rules:
+      - id: ki_positive
+        when: 'Ki < 0'
+        status: fail
+        text:
+          es: "Error de cálculo: la energía cinética debe ser siempre positiva puesto que depende del cuadrado de la velocidad."
+          en: "Calculation error: kinetic energy must always be positive since it depends on the square of the velocity."
+    model_validity_rules:
+      - id: ki_validity
+        when: 'true'
+        status: ok
+        text:
+          es: "El valor de [[Ki]] es independiente del tipo de choque; depende solo de las condiciones iniciales del sistema."
+          en: "The value of [[Ki]] is independent of the type of collision; it depends only on the initial conditions of the system."
+    graph_rules:
+      - id: ki_graph
+        when: 'true'
+        status: info
+        text:
+          es: "En el gráfico de barras energéticas, [[Ki]] establece el nivel de referencia superior para el análisis posterior."
+          en: "In the energy bar chart, [[Ki]] sets the upper reference level for subsequent analysis."
+    likely_errors:
+      - id: ki_negative_error
+        when: 'Ki < 0'
+        status: error
+        text:
+          es: "Obtener una energía negativa es un error conceptual y matemático fundamental. Revisa el signo y el cuadrado de las velocidades iniciales."
+          en: "Obtaining negative energy is a fundamental conceptual and mathematical error. Check the sign and the square of the initial velocities."
+    next_step_rules:
+      - id: ki_to_kf
+        when: 'true'
+        status: info
+        text:
+          es: "Compara este valor con [[Kf]] para determinar cuánta energía se ha degradado en el choque."
+          en: "Compare this value with [[Kf]] to determine how much energy has degraded in the collision."
+
+  Kf:
+    summary_rules:
+      - id: kf_summary
+        when: 'true'
+        status: info
+        text:
+          es: "La energía cinética final del sistema es [[Kf]] = {value} {unit} debido a que el centro de masas debe conservar su movimiento global."
+          en: "The final kinetic energy of the system is [[Kf]] = {value} {unit} because the center of mass must conserve its global motion."
+    physical_reading_rules:
+      - id: kf_minimum
+        when: 'true'
+        status: info
+        text:
+          es: "Puesto que el choque es totalmente inelástico, [[Kf]] alcanza el valor mínimo posible para un sistema aislado."
+          en: "Since the collision is perfectly inelastic, [[Kf]] reaches the minimum possible value for an isolated system."
+    coherence_rules:
+      - id: kf_limit
+        when: 'Kf > Ki'
+        status: fail
+        text:
+          es: "Error de coherencia: la energía final no puede superar a la inicial en un choque sin aporte externo de energía."
+          en: "Coherence error: the final energy cannot exceed the initial energy in a collision without external energy input."
+    model_validity_rules:
+      - id: kf_validity
+        when: 'true'
+        status: ok
+        text:
+          es: "Este valor de [[Kf]] es el 'mínimo indestructible' asociado al movimiento traslacional del conjunto."
+          en: "This value of [[Kf]] is the 'indestructible minimum' associated with the translational motion of the assembly."
+    graph_rules:
+      - id: kf_graph
+        when: 'true'
+        status: info
+        text:
+          es: "La barra de [[Kf]] muestra la fracción de energía que permanece en forma de movimiento tras el impacto inelástico."
+          en: "The [[Kf]] bar shows the fraction of energy that remains in the form of motion after the inelastic impact."
+    likely_errors:
+      - id: kf_greater_ki
+        when: 'Kf > Ki'
+        status: error
+        text:
+          es: "Si [[Kf]] es mayor que [[Ki]], has cometido un error de cálculo. Un choque inelástico siempre pierde energía cinética."
+          en: "If [[Kf]] is greater than [[Ki]], you have made a calculation error. An inelastic collision always loses kinetic energy."
+    next_step_rules:
+      - id: kf_to_potential
+        when: 'true'
+        status: info
+        text:
+          es: "En un péndulo balístico, esta [[Kf]] se transformará posteriormente en energía potencial gravitatoria."
+          en: "In a ballistic pendulum, this [[Kf]] will subsequently transform into gravitational potential energy."
+
+  v1i:
+    summary_rules:
+      - id: v1i_summary
+        when: 'true'
+        status: info
+        text:
+          es: "La velocidad inicial del proyectil es [[v1i]] = {value} {unit} puesto que se requiere ese momento para alcanzar el estado final observado."
+          en: "The initial velocity of the projectile is [[v1i]] = {value} {unit} since that momentum is required to reach the observed final state."
+    physical_reading_rules:
+      - id: v1i_impact
+        when: 'true'
+        status: info
+        text:
+          es: "Este valor determina la severidad del impacto y la cantidad de energía que el sistema debe ser capaz de disipar."
+          en: "This value determines the severity of the impact and the amount of energy the system must be able to dissipate."
+    coherence_rules:
+      - id: v1i_order
+        when: 'v1i < vf and v2i == 0'
+        status: fail
+        text:
+          es: "Error de escala: el proyectil no puede ser más lento que el conjunto final si el blanco estaba en reposo."
+          en: "Scale error: the projectile cannot be slower than the final assembly if the target was at rest."
+    model_validity_rules:
+      - id: v1i_limit
+        when: 'v1i > 343'
+        status: warning
+        text:
+          es: "Velocidad supersónica detectada: a estas velocidades, los efectos de la resistencia del aire antes del choque podrían ser significativos."
+          en: "Supersonic velocity detected: at these speeds, the effects of air resistance before the collision could be significant."
+    graph_rules:
+      - id: v1i_graph
+        when: 'true'
+        status: info
+        text:
+          es: "El eje horizontal de la gráfica de control suele representar esta variable [[v1i]] como el estímulo inicial del sistema."
+          en: "The horizontal axis of the control graph usually represents this variable [[v1i]] as the initial stimulus of the system."
+    likely_errors:
+      - id: v1i_sign_error
+        when: 'v1i * vf < 0 and v2i == 0'
+        status: error
+        text:
+          es: "Error conceptual de signo: el proyectil debe moverse en la misma dirección que el conjunto final si el blanco estaba inicialmente parado."
+          en: "Conceptual sign error: the projectile must move in the same direction as the final assembly if the target was initially stationary."
+    next_step_rules:
+      - id: v1i_to_momentum
+        when: 'true'
+        status: info
+        text:
+          es: "Usa [[v1i]] para calcular el momento lineal inicial del proyectil y verificar el balance total del sistema."
+          en: "Use [[v1i]] to calculate the projectile's initial linear momentum and verify the total balance of the system."
+`;export{e as default};

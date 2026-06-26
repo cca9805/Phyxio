@@ -1,0 +1,553 @@
+version: "5.0"
+id: interp_calor
+leaf_id: calor
+
+nombre:
+  es: Interpretación del calor transferido
+  en: Interpretation of heat transferred
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: calor-y-efectos-termicos
+  parent_id: calor-y-efectos-termicos
+  ruta_relativa: fisica-clasica/termodinamica/calor-y-efectos-termicos/calor
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_blocks: 3
+    max_rules_per_block: 2
+
+dependencies:
+  formulas:
+    - calor_sensible
+    - calor_latente
+  magnitudes:
+    - Q
+    - m
+    - c_esp
+    - DeltaT
+    - L
+
+global_context:
+  physical_domain:
+    es: "Transferencia de calor en procesos termodinámicos con o sin cambio de estado a presión constante."
+    en: "Heat transfer in thermodynamic processes with or without phase change at constant pressure."
+  axis_convention:
+    es: "Q positivo indica absorción de calor por el sistema; Q negativo indica cesión de calor al entorno."
+    en: "Q positive indicates heat absorption by the system; Q negative indicates heat release to the surroundings."
+  standard_assumptions:
+    - "Proceso cuasi-estático"
+    - "Calor específico constante en el rango de temperatura"
+    - "Sin trabajo mecánico simultáneo salvo indicación explícita"
+  standard_warnings:
+    - "No aplicar calor sensible durante cambios de estado"
+    - "Verificar coherencia de unidades: c en J/(kg·K), m en kg, DeltaT en K o °C"
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  Q:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Energía total transferida como calor en el proceso analizado."
+      en: "Total energy transferred as heat in the analyzed process."
+    summary_rules:
+      - id: Q_summary_positive
+        when: "Q > 0"
+        status: ok
+        text:
+          es: "[[Q]] indica que el sistema absorbe energía del entorno. El proceso es endotérmico y la temperatura del sistema aumenta (o se produce un cambio de estado de fusión/vaporización)."
+          en: "[[Q]] indicates the system absorbs energy from the surroundings. The process is endothermic and the system temperature rises (or a melting/vaporization phase change occurs)."
+      - id: Q_summary_negative
+        when: "Q < 0"
+        status: ok
+        text:
+          es: "[[Q]] indica que el sistema cede energía al entorno. El proceso es exotérmico y la temperatura del sistema disminuye (o se produce solidificación/condensación)."
+          en: "[[Q]] indicates the system releases energy to the surroundings. The process is exothermic and the system temperature decreases (or solidification/condensation occurs)."
+      - id: Q_summary_zero
+        when: "Q == 0"
+        status: warning
+        text:
+          es: "[[Q]] nulo indica proceso adiabático o ausencia de transferencia neta. Verificar si el proceso realmente no intercambia calor con el entorno."
+          en: "Zero [[Q]] indicates an adiabatic process or no net transfer. Verify whether the process truly exchanges no heat with the surroundings."
+      - id: Q_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q]] resume la energía intercambiada como calor. Su signo describe el sentido del flujo energético entre sistema y entorno."
+          en: "[[Q]] summarizes the energy exchanged as heat. Its sign describes the direction of energy flow between system and surroundings."
+    physical_reading_rules:
+      - id: Q_reading_large
+        when: "abs(Q) > 1000000"
+        status: warning
+        text:
+          es: "Valor de [[Q]] superior a 1 MJ. Revisar si la masa o el calor específico están en las unidades correctas (kg y J/(kg·K))."
+          en: "Value of [[Q]] exceeds 1 MJ. Check whether mass or specific heat are in correct units (kg and J/(kg·K))."
+      - id: Q_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q]] representa la energía que ha entrado o salido del sistema en forma de calor durante el proceso térmico analizado. Depende linealmente de [[m]], [[c_esp]] y [[DeltaT]]."
+          en: "[[Q]] represents the energy that has entered or left the system as heat during the analyzed thermal process. It depends linearly on [[m]], [[c_esp]], and [[DeltaT]]."
+    coherence_rules:
+      - id: Q_coherence_sign
+        when: "Q > 0 && DeltaT < 0"
+        status: error
+        text:
+          es: "Incoherencia detectada: [[Q]] positivo con [[DeltaT]] negativo. Si el sistema absorbe calor, su temperatura debe aumentar. Revisar el orden de la resta en ΔT."
+          en: "Inconsistency detected: [[Q]] positive with [[DeltaT]] negative. If the system absorbs heat, its temperature must increase. Check the subtraction order in ΔT."
+      - id: Q_coherence_sign_neg
+        when: "Q < 0 && DeltaT > 0"
+        status: error
+        text:
+          es: "Incoherencia detectada: [[Q]] negativo con [[DeltaT]] positivo. Si el sistema cede calor, su temperatura debe disminuir. Revisar el orden de la resta en ΔT."
+          en: "Inconsistency detected: [[Q]] negative with [[DeltaT]] positive. If the system releases heat, its temperature must decrease. Check the subtraction order in ΔT."
+      - id: Q_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Los signos de [[Q]] y [[DeltaT]] son coherentes. El proceso térmico es físicamente consistente."
+          en: "The signs of [[Q]] and [[DeltaT]] are consistent. The thermal process is physically coherent."
+    model_validity_rules:
+      - id: Q_validity_phase
+        when: "DeltaT == 0"
+        status: warning
+        text:
+          es: "Con [[DeltaT]] nulo, la fórmula de calor sensible da cero pero puede estar ocurriendo un cambio de estado. Considerar usar la fórmula de calor latente con [[L]]."
+          en: "With zero [[DeltaT]], the sensible heat formula gives zero but a phase change may be occurring. Consider using the latent heat formula with [[L]]."
+      - id: Q_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo de calor sensible es válido cuando no hay cambio de estado y el calor específico permanece aproximadamente constante en el rango de temperaturas del proceso."
+          en: "The sensible heat model is valid when there is no phase change and the specific heat capacity remains approximately constant over the temperature range of the process."
+    graph_rules:
+      - id: Q_graph_coord
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica Q frente a [[DeltaT]], el resultado obtenido corresponde a un punto de la recta de pendiente m·c. Cuanto mayor la pendiente, más energía requiere el material por grado de temperatura."
+          en: "In the Q vs [[DeltaT]] graph, the result corresponds to a point on the line of slope m·c. The larger the slope, the more energy the material requires per degree of temperature."
+    likely_errors:
+      - id: Q_error_units
+        when: "abs(Q) < 1 && m > 0.1"
+        status: warning
+        text:
+          es: "Resultado de [[Q]] muy pequeño para una masa significativa. Posible error de unidades: verificar que c_esp esté en J/(kg·K) y no en cal/(g·°C)."
+          en: "Very small [[Q]] result for a significant mass. Possible unit error: verify that c_esp is in J/(kg·K) and not in cal/(g·°C)."
+      - id: Q_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Error frecuente: usar la fórmula de calor sensible cuando hay cambio de estado (donde ΔT es nulo). En ese caso la energía transferida corresponde al calor latente [[L]]."
+          en: "Common error: applying the sensible heat formula when a phase change occurs (where ΔT is zero). In that case the transferred energy corresponds to latent heat [[L]]."
+    next_step_rules:
+      - id: Q_next_latent
+        when: "DeltaT == 0"
+        status: ok
+        text:
+          es: "Con ΔT nulo, el siguiente paso es calcular el calor latente usando la fórmula Q = m·L y determinar el tipo de cambio de estado involucrado."
+          en: "With zero ΔT, the next step is to calculate latent heat using Q = m·L and determine the type of phase change involved."
+      - id: Q_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Conocido [[Q]], el siguiente paso es relacionarlo con la primera ley de la termodinámica para analizar el balance energético completo del sistema."
+          en: "Once [[Q]] is known, the next step is to relate it to the first law of thermodynamics to analyze the complete energy balance of the system."
+
+  m:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Masa del sistema que experimenta el cambio térmico."
+      en: "Mass of the system undergoing the thermal change."
+    summary_rules:
+      - id: m_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[m]] indica la cantidad de materia involucrada en el proceso. Determina linealmente la energía total necesaria: duplicar [[m]] duplica [[Q]] para el mismo proceso."
+          en: "[[m]] indicates the amount of matter involved in the process. It linearly determines the total energy needed: doubling [[m]] doubles [[Q]] for the same process."
+    physical_reading_rules:
+      - id: m_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[m]] actúa como amplificador lineal del calor transferido. Una masa mayor requiere más energía para el mismo cambio de temperatura, lo que depende también del calor específico del material."
+          en: "[[m]] acts as a linear amplifier of the transferred heat. A larger mass requires more energy for the same temperature change, which also depends on the specific heat of the material."
+    coherence_rules:
+      - id: m_coherence_positive
+        when: "m <= 0"
+        status: error
+        text:
+          es: "[[m]] debe ser estrictamente positiva. Un valor nulo o negativo no tiene sentido físico en este contexto."
+          en: "[[m]] must be strictly positive. A zero or negative value has no physical meaning in this context."
+      - id: m_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[m]] es positiva y coherente con el sistema analizado."
+          en: "[[m]] is positive and consistent with the analyzed system."
+    model_validity_rules:
+      - id: m_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo de calor sensible asume [[m]] constante durante el proceso. Si el sistema pierde o gana masa (evaporación parcial), el modelo se vuelve una aproximación."
+          en: "The sensible heat model assumes constant [[m]] during the process. If the system loses or gains mass (partial evaporation), the model becomes an approximation."
+    graph_rules:
+      - id: m_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica Q vs ΔT, [[m]] determina la pendiente junto con c. Masas mayores producen rectas más pronunciadas, indicando mayor capacidad calorífica total del sistema."
+          en: "In the Q vs ΔT graph, [[m]] determines the slope together with c. Larger masses produce steeper lines, indicating greater total heat capacity of the system."
+    likely_errors:
+      - id: m_error_units
+        when: "m > 0 && m < 0.001"
+        status: warning
+        text:
+          es: "[[m]] muy pequeña. Verificar si el valor fue introducido en gramos en lugar de kilogramos."
+          en: "Very small [[m]]. Verify whether the value was entered in grams instead of kilograms."
+      - id: m_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Error frecuente: introducir [[m]] en gramos cuando el calor específico está en J/(kg·K), obteniendo un calor mil veces menor al real."
+          en: "Common error: entering [[m]] in grams when specific heat is in J/(kg·K), yielding a heat value a thousand times smaller than the real one."
+    next_step_rules:
+      - id: m_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[m]] determinada, el siguiente paso natural es identificar el material para obtener su calor específico y completar el cálculo del calor transferido."
+          en: "With [[m]] determined, the natural next step is to identify the material to obtain its specific heat and complete the calculation of transferred heat."
+
+  c_esp:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Propiedad del material que cuantifica su resistencia al cambio de temperatura."
+      en: "Material property quantifying its resistance to temperature change."
+    summary_rules:
+      - id: c_esp_summary_water
+        condition:
+          variable: c_esp
+          gt: 4000
+          lt: 4400
+        status: ok
+        text:
+          es: "[[c_esp]] corresponde aproximadamente al agua líquida (4186 J/(kg·K)). Este valor indica una capacidad calorífica excepcionalmente alta, característica del agua como regulador térmico."
+          en: "[[c_esp]] corresponds approximately to liquid water (4186 J/(kg·K)). This value indicates an exceptionally high heat capacity, characteristic of water as a thermal regulator."
+      - id: c_esp_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[c_esp]] resume la capacidad del material para almacenar energía térmica por unidad de masa. Depende de la composición molecular y la estructura del material analizado."
+          en: "[[c_esp]] summarizes the material's capacity to store thermal energy per unit mass. It depends on the molecular composition and structure of the analyzed material."
+    physical_reading_rules:
+      - id: c_esp_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[c_esp]] determina cuánta energía necesita absorber un kilogramo del material para subir un kelvin. Un valor alto indica que el material se calienta lentamente pero almacena mucha energía."
+          en: "[[c_esp]] determines how much energy one kilogram of the material must absorb to rise one kelvin. A high value means the material heats slowly but stores a large amount of energy."
+    coherence_rules:
+      - id: c_esp_coherence_positive
+        when: "c_esp <= 0"
+        status: error
+        text:
+          es: "[[c_esp]] debe ser estrictamente positivo. Un valor cero o negativo indica un error de entrada."
+          en: "[[c_esp]] must be strictly positive. A zero or negative value indicates an input error."
+      - id: c_esp_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[c_esp]] es positivo y coherente con el rango de valores físicos conocidos."
+          en: "[[c_esp]] is positive and consistent with the range of known physical values."
+    model_validity_rules:
+      - id: c_esp_validity_range
+        when: "c_esp > 10000"
+        status: warning
+        text:
+          es: "[[c_esp]] superior a 10 000 J/(kg·K) es inusual. Verificar que el valor corresponde al material real y que las unidades son J/(kg·K) y no cal/(g·°C)."
+          en: "[[c_esp]] above 10 000 J/(kg·K) is unusual. Verify that the value corresponds to the actual material and that units are J/(kg·K) and not cal/(g·°C)."
+      - id: c_esp_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume [[c_esp]] constante en el rango de temperatura del proceso. Para rangos amplios, puede ser necesario usar un valor promedio o integrar sobre la dependencia con T."
+          en: "The model assumes constant [[c_esp]] over the process temperature range. For wide ranges, it may be necessary to use an average value or integrate over the T-dependence."
+    graph_rules:
+      - id: c_esp_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica Q vs ΔT, [[c_esp]] junto con [[m]] fija la pendiente de la recta. Materiales con mayor [[c_esp]] producen rectas más pronunciadas para la misma masa."
+          en: "In the Q vs ΔT graph, [[c_esp]] together with [[m]] fixes the slope of the line. Materials with higher [[c_esp]] produce steeper lines for the same mass."
+    likely_errors:
+      - id: c_esp_error_units
+        when: "true"
+        status: ok
+        text:
+          es: "Error frecuente: usar el calor específico en cal/(g·°C) sin convertir. Multiplicar por 4186 para obtener el valor en J/(kg·K)."
+          en: "Common error: using specific heat in cal/(g·°C) without converting. Multiply by 4186 to obtain the value in J/(kg·K)."
+    next_step_rules:
+      - id: c_esp_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[c_esp]] determinado, comparar con tablas de referencia para verificar la razonabilidad del valor. Luego completar el cálculo de [[Q]] introduciendo [[m]] y [[DeltaT]]."
+          en: "With [[c_esp]] determined, compare with reference tables to verify the reasonableness of the value. Then complete the calculation of [[Q]] by introducing [[m]] and [[DeltaT]]."
+
+  DeltaT:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Variación de temperatura del sistema durante el proceso de transferencia de calor."
+      en: "Temperature change of the system during the heat transfer process."
+    summary_rules:
+      - id: DeltaT_summary_positive
+        when: "DeltaT > 0"
+        status: ok
+        text:
+          es: "[[DeltaT]] positivo indica que el sistema se ha calentado. El calor transferido al sistema es positivo y describe un proceso de absorción de energía térmica."
+          en: "Positive [[DeltaT]] indicates the system has warmed up. The heat transferred to the system is positive and describes a thermal energy absorption process."
+      - id: DeltaT_summary_negative
+        when: "DeltaT < 0"
+        status: ok
+        text:
+          es: "[[DeltaT]] negativo indica que el sistema se ha enfriado. El calor transferido es negativo y el sistema ha cedido energía al entorno."
+          en: "Negative [[DeltaT]] indicates the system has cooled down. The heat transferred is negative and the system has released energy to the surroundings."
+      - id: DeltaT_summary_zero
+        when: "DeltaT == 0"
+        status: warning
+        text:
+          es: "[[DeltaT]] nulo sugiere proceso isotérmico o cambio de estado. En este caso la fórmula de calor sensible no aplica; evaluar si hay calor latente con [[L]]."
+          en: "Zero [[DeltaT]] suggests an isothermal process or phase change. In this case the sensible heat formula does not apply; evaluate whether latent heat with [[L]] is involved."
+      - id: DeltaT_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaT]] resume la variación de temperatura del sistema. Su signo indica si el sistema ha ganado o perdido energía térmica durante el proceso."
+          en: "[[DeltaT]] summarizes the temperature change of the system. Its sign indicates whether the system has gained or lost thermal energy during the process."
+    physical_reading_rules:
+      - id: DeltaT_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaT]] conecta directamente el calor transferido con el estado final del sistema. Cuanto mayor sea [[DeltaT]], mayor la energía involucrada para la misma masa y material."
+          en: "[[DeltaT]] directly connects the transferred heat with the final state of the system. The larger [[DeltaT]], the greater the energy involved for the same mass and material."
+    coherence_rules:
+      - id: DeltaT_coherence_extreme
+        when: "abs(DeltaT) > 500"
+        status: warning
+        text:
+          es: "[[DeltaT]] muy grande (más de 500 K). Verificar que el proceso no implica cambios de estado intermedios donde la fórmula de calor sensible dejaría de ser válida."
+          en: "Very large [[DeltaT]] (more than 500 K). Verify that the process does not involve intermediate phase changes where the sensible heat formula would no longer be valid."
+      - id: DeltaT_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaT]] es coherente con el proceso descrito. Los valores numéricos son físicamente razonables."
+          en: "[[DeltaT]] is consistent with the described process. The numerical values are physically reasonable."
+    model_validity_rules:
+      - id: DeltaT_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo de calor sensible es válido cuando [[DeltaT]] no incluye transiciones de fase. Para procesos con cambio de estado, separar el proceso en tramos y aplicar calor latente en la transición."
+          en: "The sensible heat model is valid when [[DeltaT]] does not encompass phase transitions. For processes with phase change, split the process into segments and apply latent heat at the transition."
+    graph_rules:
+      - id: DeltaT_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaT]] aparece en el eje x de la gráfica Q vs ΔT. El punto calculado se sitúa sobre la recta de pendiente m·c, y su posición respecto al origen revela el sentido del proceso."
+          en: "[[DeltaT]] appears on the x-axis of the Q vs ΔT graph. The calculated point lies on the line of slope m·c, and its position relative to the origin reveals the direction of the process."
+    likely_errors:
+      - id: DeltaT_error_order
+        when: "true"
+        status: ok
+        text:
+          es: "Error frecuente: calcular [[DeltaT]] como T_inicial − T_final en lugar de T_final − T_inicial, invirtiendo el signo de [[Q]] y contradiciendo el sentido real del proceso."
+          en: "Common error: computing [[DeltaT]] as T_initial − T_final instead of T_final − T_initial, inverting the sign of [[Q]] and contradicting the actual direction of the process."
+    next_step_rules:
+      - id: DeltaT_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[DeltaT]] calculado, verificar que la temperatura final resultante es física (por ejemplo, no inferior a 0 K). Luego analizar si el proceso involucra algún cambio de estado para aplicar calor latente adicional."
+          en: "With [[DeltaT]] calculated, verify that the resulting final temperature is physical (e.g., not below 0 K). Then analyze whether the process involves any phase change to apply additional latent heat."
+
+  L:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Energía por unidad de masa liberada o absorbida durante un cambio de estado."
+      en: "Energy per unit mass released or absorbed during a phase change."
+    summary_rules:
+      - id: L_summary_fusion
+        condition:
+          variable: L
+          gt: 200000
+          lt: 400000
+        status: ok
+        text:
+          es: "[[L]] en el rango del calor de fusión del agua (334 000 J/kg). El proceso analizado involucra una transición sólido-líquido con una energía considerable por kilogramo de material."
+          en: "[[L]] in the range of water's heat of fusion (334 000 J/kg). The analyzed process involves a solid-liquid transition with considerable energy per kilogram of material."
+      - id: L_summary_vaporization
+        when: "L > 2000000"
+        status: ok
+        text:
+          es: "[[L]] en el rango de la vaporización. La transición de fase requiere una energía muy elevada por kilogramo, lo que indica la ruptura de enlaces intermoleculares de mayor intensidad."
+          en: "[[L]] in the vaporization range. The phase transition requires very high energy per kilogram, indicating the breaking of stronger intermolecular bonds."
+      - id: L_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[L]] describe la energía por unidad de masa involucrada en el cambio de estado. Su valor depende del material y del tipo de transición, e indica la intensidad de las interacciones moleculares a romper o formar."
+          en: "[[L]] describes the energy per unit mass involved in the phase change. Its value depends on the material and transition type, and indicates the strength of the molecular interactions to be broken or formed."
+    physical_reading_rules:
+      - id: L_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[L]] cuantifica la resistencia del material a cambiar de estado. Materiales con [[L]] alto requieren mucha energía para la transición a pesar de que la temperatura permanece constante durante todo el proceso."
+          en: "[[L]] quantifies the material's resistance to changing state. Materials with high [[L]] require large amounts of energy for the transition even though temperature remains constant throughout the process."
+    coherence_rules:
+      - id: L_coherence_positive
+        when: "L <= 0"
+        status: error
+        text:
+          es: "[[L]] debe ser estrictamente positivo. Un valor nulo o negativo indica error en la entrada de datos."
+          en: "[[L]] must be strictly positive. A zero or negative value indicates a data entry error."
+      - id: L_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[L]] es positivo y coherente con los rangos físicos de calores latentes conocidos."
+          en: "[[L]] is positive and consistent with the physical ranges of known latent heats."
+    model_validity_rules:
+      - id: L_validity_pressure
+        when: "true"
+        status: ok
+        text:
+          es: "Los valores tabulados de [[L]] corresponden a presión atmosférica estándar (101 325 Pa). A presiones distintas, el calor latente varía. En condiciones estándar el modelo es directamente aplicable."
+          en: "Tabulated values of [[L]] correspond to standard atmospheric pressure (101 325 Pa). At different pressures, latent heat varies. Under standard conditions the model is directly applicable."
+    graph_rules:
+      - id: L_graph_plateau
+        when: "true"
+        status: ok
+        text:
+          es: "En una gráfica temperatura frente a calor acumulado, [[L]] corresponde a la meseta horizontal donde la temperatura no varía mientras se transfiere energía para el cambio de estado."
+          en: "In a temperature vs accumulated heat graph, [[L]] corresponds to the horizontal plateau where temperature does not change while energy is transferred for the phase change."
+    likely_errors:
+      - id: L_error_sensible
+        when: "true"
+        status: ok
+        text:
+          es: "Error frecuente: olvidar sumar el calor latente cuando un proceso incluye un cambio de estado, y calcular solo el calor sensible de los tramos de temperatura variable."
+          en: "Common error: forgetting to add the latent heat when a process includes a phase change, and computing only the sensible heat of the temperature-varying segments."
+    next_step_rules:
+      - id: L_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Calculado el calor latente con [[L]], el siguiente paso es sumar el calor latente a los calores sensibles de los tramos anterior y posterior al cambio de estado para obtener el calor total del proceso."
+          en: "Once latent heat is calculated with [[L]], the next step is to add it to the sensible heats of the segments before and after the phase change to obtain the total heat of the process."
+
+cross_checks:
+  - id: sign_consistency
+    check: "signo(Q) debe coincidir con signo(DeltaT) en calor sensible"
+    action: "Si discrepan, revisar el orden de la resta en DeltaT"
+
+error_patterns:
+  - id: wrong_formula_during_phase_change
+    description:
+      es: "Aplicar calor sensible durante un cambio de estado donde ΔT es nulo."
+      en: "Applying sensible heat during a phase change where ΔT is zero."
+
+graph_binding:
+  tipo: Coord
+  eje_x: DeltaT
+  eje_y: Q
+  magnitud_estrella: Q
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+      - summary
+      - likely_errors
+  extended_mode:
+    show_all: true

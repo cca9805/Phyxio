@@ -1,0 +1,471 @@
+magnitudes:
+- id: distancia_focal
+  symbol: f
+  nombre:
+    es: Distancia focal
+    en: Focal length
+  descripcion:
+    es: Distancia entre el centro de la lente delgada y su foco principal.
+    en: Distance between the centre of a thin lens and its principal focus.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: core_physical_quantity
+  used_in:
+  - ecuacion_lente_delgada
+  - aumento_angular_lupa
+  common_mistake:
+    es: Confundir la focal del objetivo con la del ocular al calcular el aumento de un instrumento.
+    en: Confusing the objective focal length with the eyepiece focal length when computing instrument magnification.
+  typical_range: 0.005 m a 1 m
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Positiva para lentes convergentes, negativa para lentes divergentes.
+      en: Positive for converging lenses, negative for diverging lenses.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Una focal nula implicaria potencia infinita, situacion no fisica.
+      en: A zero focal length would imply infinite power, a non-physical situation.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: 0.005 a 1
+  interpretation_role:
+    primary_for:
+    - posicion_imagen
+    - aumento_angular
+    secondary_for:
+    - resolucion
+  graph_binding:
+    channels:
+    - eje_x_focal
+  pedagogical_notes:
+    es: La focal corta de un objetivo de microscopio produce gran aumento lateral, mientras que la focal del ocular controla
+      el aumento angular final.
+    en: The short focal length of a microscope objective produces large lateral magnification, while the eyepiece focal length
+      controls the final angular magnification.
+- id: d_o
+  symbol: d_o
+  nombre:
+    es: Distancia del objeto
+    en: Object distance
+  descripcion:
+    es: Distancia entre el objeto y el centro de la lente.
+    en: Distance between the object and the centre of the lens.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: core_physical_quantity
+  used_in:
+  - ecuacion_lente_delgada
+  common_mistake:
+    es: Medir la distancia del objeto respecto al foco en lugar de respecto al centro de la lente.
+    en: Measuring the object distance from the focus instead of from the lens centre.
+  typical_range: 0.01 m a 10 m
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre positiva por convencion (objeto real delante de la lente).
+      en: Always positive by convention (real object in front of the lens).
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un objeto en el centro de la lente no forma imagen definida.
+      en: An object at the lens centre does not form a defined image.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: 0.01 a 10
+  interpretation_role:
+    primary_for:
+    - posicion_imagen
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_x_objeto
+  pedagogical_notes:
+    es: En la lupa, el objeto se coloca entre la lente y el foco, de modo que la distancia del objeto es menor que la focal.
+    en: In a magnifying glass the object is placed between the lens and the focus, so the object distance is less than the
+      focal length.
+- id: d_i
+  symbol: d_i
+  nombre:
+    es: Distancia de la imagen
+    en: Image distance
+  descripcion:
+    es: Distancia entre el centro de la lente y la imagen formada.
+    en: Distance between the lens centre and the image formed.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+  - ecuacion_lente_delgada
+  common_mistake:
+    es: Olvidar que una distancia de imagen negativa indica imagen virtual (del mismo lado que el objeto).
+    en: Forgetting that a negative image distance indicates a virtual image (on the same side as the object).
+  typical_range: -1 m a 10 m
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Positiva para imagen real (lado opuesto al objeto); negativa para imagen virtual (mismo lado que el objeto).
+      en: Positive for a real image (opposite side from the object); negative for a virtual image (same side as the object).
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Distancia de imagen nula carece de sentido fisico practico.
+      en: Zero image distance has no practical physical meaning.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: -1 a 10
+  interpretation_role:
+    primary_for:
+    - posicion_imagen
+    secondary_for:
+    - tipo_imagen
+  graph_binding:
+    channels:
+    - eje_x_imagen
+  pedagogical_notes:
+    es: Cuando la lupa forma imagen virtual, la distancia de la imagen es negativa y la imagen aparece del mismo lado que
+      el objeto, ampliada y derecha.
+    en: When the magnifier forms a virtual image, the image distance is negative and the image appears on the same side as
+      the object, magnified and upright.
+- id: aumento_angular
+  symbol: M_{angular}
+  nombre:
+    es: Aumento angular
+    en: Angular magnification
+  descripcion:
+    es: Cociente entre el angulo subtendido por la imagen a traves del instrumento y el angulo subtendido por el objeto a
+      simple vista desde el punto proximo.
+    en: Ratio of the angle subtended by the image through the instrument to the angle subtended by the object with the unaided
+      eye from the near point.
+  unidad_si: adimensional
+  dimension: '[1]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+  - aumento_angular_lupa
+  - aumento_microscopio
+  common_mistake:
+    es: Confundir aumento angular con aumento lateral; el angular compara angulos, el lateral compara tamanos de imagen y
+      objeto.
+    en: Confusing angular magnification with lateral magnification; angular compares angles, lateral compares image and object
+      sizes.
+  typical_range: 2 a 1000
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre positivo; indica cuantas veces mayor es el angulo subtendido.
+      en: Always positive; indicates how many times larger the subtended angle is.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un aumento angular nulo significaria que el instrumento no forma imagen observable.
+      en: Zero angular magnification would mean the instrument forms no observable image.
+  value_nature:
+    kind: ratio
+    nonnegative_only: true
+    expected_interval: 2 a 1000
+  interpretation_role:
+    primary_for:
+    - aumento_angular
+    secondary_for:
+    - resolucion
+  graph_binding:
+    channels:
+    - eje_y_aumento
+  pedagogical_notes:
+    es: El aumento angular es la magnitud central de los instrumentos opticos; una lupa tipica ofrece entre 2 y 10 aumentos,
+      un microscopio entre 40 y 1000.
+    en: Angular magnification is the central quantity for optical instruments; a typical magnifier provides 2 to 10 times,
+      a microscope 40 to 1000.
+- id: d_pp
+  symbol: d_{pp}
+  nombre:
+    es: Distancia del punto proximo
+    en: Near-point distance
+  descripcion:
+    es: Distancia minima a la que el ojo humano puede enfocar nitidamente un objeto; valor convencional 0.25 m.
+    en: Minimum distance at which the human eye can sharply focus an object; conventional value 0.25 m.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: parameter
+  used_in:
+  - aumento_angular_lupa
+  - aumento_microscopio
+  common_mistake:
+    es: Usar un valor distinto de 0.25 m sin justificacion, o confundir punto proximo con punto remoto.
+    en: Using a value other than 0.25 m without justification, or confusing the near point with the far point.
+  typical_range: 0.10 m a 0.30 m
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre positiva.
+      en: Always positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un punto proximo nulo implicaria que el ojo puede enfocar a distancia cero, lo cual no es posible.
+      en: A zero near point would imply the eye can focus at zero distance, which is not possible.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: 0.10 a 0.30
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - aumento_angular
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: El valor convencional de 0.25 m es una referencia estandar; en personas jovenes puede ser menor y en personas mayores
+      mayor.
+    en: The conventional value of 0.25 m is a standard reference; it may be shorter in young people and longer in older individuals.
+- id: f_lupa
+  symbol: f_{lupa}
+  nombre:
+    es: Distancia focal de la lupa
+    en: Magnifying-glass focal length
+  descripcion:
+    es: Distancia focal de la lente convergente utilizada como lupa.
+    en: Focal length of the converging lens used as a magnifying glass.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: core_physical_quantity
+  used_in:
+  - aumento_angular_lupa
+  common_mistake:
+    es: Sustituir la focal de la lupa por la focal del ocular del microscopio en la formula del aumento angular simple.
+    en: Substituting the magnifier focal length with the microscope eyepiece focal length in the simple angular magnification
+      formula.
+  typical_range: 0.01 m a 0.15 m
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre positiva (lente convergente).
+      en: Always positive (converging lens).
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Una focal nula implicaria potencia optica infinita.
+      en: A zero focal length would imply infinite optical power.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: 0.01 a 0.15
+  interpretation_role:
+    primary_for:
+    - aumento_angular
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_x_focal_lupa
+  pedagogical_notes:
+    es: A menor focal de la lupa, mayor aumento angular; lupas de joyeria con focales de 1 a 2 cm proporcionan aumentos de
+      10 a 25.
+    en: The shorter the magnifier focal length, the higher the angular magnification; jewellers loupes with 1 to 2 cm focal
+      lengths provide 10 to 25 times magnification.
+- id: f_obj
+  symbol: f_{obj}
+  nombre:
+    es: Distancia focal del objetivo
+    en: Objective focal length
+  descripcion:
+    es: Distancia focal de la lente objetivo de un microscopio compuesto o telescopio.
+    en: Focal length of the objective lens in a compound microscope or telescope.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: core_physical_quantity
+  used_in:
+  - aumento_microscopio
+  common_mistake:
+    es: Confundir la focal del objetivo con la focal del ocular al montar o calcular el instrumento.
+    en: Confusing the objective focal length with the eyepiece focal length when assembling or computing the instrument.
+  typical_range: 0.002 m a 0.05 m
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre positiva (lente convergente).
+      en: Always positive (converging lens).
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Una focal nula no corresponde a ninguna lente real.
+      en: A zero focal length does not correspond to any real lens.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: 0.002 a 0.05
+  interpretation_role:
+    primary_for:
+    - aumento_microscopio
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_x_focal_obj
+  pedagogical_notes:
+    es: El objetivo del microscopio tiene focal muy corta (milimetros) para maximizar el aumento lateral de la primera imagen.
+    en: The microscope objective has a very short focal length (millimetres) to maximise the lateral magnification of the
+      first image.
+- id: f_oc
+  symbol: f_{oc}
+  nombre:
+    es: Distancia focal del ocular
+    en: Eyepiece focal length
+  descripcion:
+    es: Distancia focal de la lente ocular en un microscopio compuesto o telescopio.
+    en: Focal length of the eyepiece lens in a compound microscope or telescope.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: core_physical_quantity
+  used_in:
+  - aumento_microscopio
+  common_mistake:
+    es: Olvidar que el ocular actua como lupa sobre la imagen intermedia, no directamente sobre el objeto.
+    en: Forgetting that the eyepiece acts as a magnifier on the intermediate image, not directly on the object.
+  typical_range: 0.01 m a 0.05 m
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre positiva (lente convergente).
+      en: Always positive (converging lens).
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Una focal nula no es realizable.
+      en: A zero focal length is not achievable.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: 0.01 a 0.05
+  interpretation_role:
+    primary_for:
+    - aumento_microscopio
+    secondary_for:
+    - aumento_angular
+  graph_binding:
+    channels:
+    - eje_x_focal_oc
+  pedagogical_notes:
+    es: El ocular amplifica angularmente la imagen intermedia; oculares con focal de 25 mm dan 10 aumentos, con focal de 10
+      mm dan 25 aumentos.
+    en: The eyepiece angularly magnifies the intermediate image; eyepieces with 25 mm focal length give 10 times, with 10
+      mm they give 25 times.
+- id: longitud_del_tubo
+  symbol: L
+  nombre:
+    es: Longitud del tubo
+    en: Tube length
+  descripcion:
+    es: Distancia optica entre el foco imagen del objetivo y el foco objeto del ocular en un microscopio compuesto.
+    en: Optical distance between the image focus of the objective and the object focus of the eyepiece in a compound microscope.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: parameter
+  used_in:
+  - aumento_microscopio
+  common_mistake:
+    es: Confundir la longitud del tubo optico con la longitud fisica total del instrumento.
+    en: Confusing the optical tube length with the total physical length of the instrument.
+  typical_range: 0.12 m a 0.20 m
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre positiva.
+      en: Always positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un tubo de longitud nula implicaria que objetivo y ocular estan superpuestos.
+      en: A zero-length tube would imply the objective and eyepiece are superimposed.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: 0.12 a 0.20
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - aumento_microscopio
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: El valor estandar de longitud de tubo en microscopios modernos es 0.16 m; modificar esta distancia altera directamente
+      el aumento total.
+    en: The standard tube length in modern microscopes is 0.16 m; changing this distance directly alters the total magnification.
+- id: aumento_total_del_microscopio
+  symbol: M_{micro}
+  nombre:
+    es: Aumento total del microscopio
+    en: Total microscope magnification
+  descripcion:
+    es: Factor de ampliacion total de un microscopio compuesto, producto del aumento lateral del objetivo por el aumento angular
+      del ocular.
+    en: Total magnification factor of a compound microscope, product of the lateral magnification of the objective and the
+      angular magnification of the eyepiece.
+  unidad_si: adimensional
+  dimension: '[1]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+  - aumento_microscopio
+  common_mistake:
+    es: Sumar en lugar de multiplicar los aumentos del objetivo y del ocular.
+    en: Adding instead of multiplying the magnifications of the objective and eyepiece.
+  typical_range: 40 a 1000
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo negativo convencional indica que la imagen final esta invertida respecto al objeto.
+      en: The conventional negative sign indicates the final image is inverted relative to the object.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un aumento nulo indicaria que no se forma imagen observable.
+      en: Zero magnification would indicate no observable image is formed.
+  value_nature:
+    kind: ratio
+    nonnegative_only: false
+    expected_interval: 40 a 1000
+  interpretation_role:
+    primary_for:
+    - aumento_microscopio
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_aumento_micro
+  pedagogical_notes:
+    es: 'El aumento de un microscopio se indica tipicamente como producto: un objetivo 40x con ocular 10x da 400 aumentos
+      totales.'
+    en: 'Microscope magnification is typically stated as a product: a 40x objective with a 10x eyepiece gives 400 total magnification.'

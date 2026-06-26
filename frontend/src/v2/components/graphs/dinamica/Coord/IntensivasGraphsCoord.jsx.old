@@ -1,0 +1,119 @@
+import React from "react";
+import { createCoordGraphPage } from "@/v2/components/graphs/graphFactories.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraph(
+const uiLang = "es";
+const tt = (es, en, lang = uiLang) => (lang === "en" ? en : es);
+
+export const graphContract = {
+  type: "Coord",
+  title: { es: "Escalado de variables intensivas", en: "Scaling of intensive variables" },
+  graph_identity: {
+    graph_type: "Coord",
+    pregunta_principal: {
+      es: "Como reconocemos que una variable termodinamica permanece igual al escalar el sistema?",
+      en: "How do we recognize that a thermodynamic variable remains unchanged when the system is scaled?",
+    },
+    keywords: ["variable", "termodinamica", "permanece", "igual", "escalar", "sistema", "intensiva", "unchanged", "scaled"],
+    magnitud_estrella: "X_int",
+    variable_control: "lambda_escala",
+    target_interpretable: true,
+  },
+  interpretation_binding: {
+    paramsIn: ["lambda_escala", "X_int", "T", "P", "rho"],
+    stateOut: ["X_int", "T", "P", "rho"],
+  },
+  equation: "X_int(lambda_escala sistema) = X_int(sistema)",
+  axes: { x: "lambda_escala", y: "X_int" },
+};
+
+const fmt = (value, digits = 1, lang = "es") => {
+  if (!Number.isFinite(value)) return "-";
+  const text = value.toFixed(digits);
+  return lang === "en" ? text : text.replace(".", ",");
+};
+
+const IntensivasGraphsCoord = createCoordGraphPage({
+  displayName: "IntensivasGraphsCoord",
+  title: { es: "Intensivas: estado frente a escala", en: "Intensives: state versus scale" },
+  defaultParams: { Xint: 300, pressure: 100, density: 1.25, lambdaMax: 4 },
+  controls: [
+    { id: "Xint", label: { es: "X intensiva", en: "intensive X" }, min: 250, max: 400, step: 5 },
+    { id: "pressure", label: { es: "P", en: "P" }, min: 50, max: 300, step: 5 },
+    { id: "density", label: { es: "rho", en: "rho" }, min: 0.5, max: 5, step: 0.05 },
+    { id: "lambdaMax", label: { es: "escala max", en: "max scale" }, min: 1, max: 8, step: 0.5 },
+  ],
+  compute: (pNum) => {
+    const Xint = Number.isFinite(pNum.Xint) ? pNum.Xint : 300;
+    const pressure = Number.isFinite(pNum.pressure) ? pNum.pressure : 100;
+    const density = Number.isFinite(pNum.density) ? pNum.density : 1.25;
+    const lambdaMax = Number.isFinite(pNum.lambdaMax) ? pNum.lambdaMax : 4;
+    const data = Array.from({ length: 31 }, (_, index) => {
+      const lambda = 1 + (index / 30) * (lambdaMax - 1);
+      return { x: lambda, X_int: Xint, T: Xint, P: pressure, rho: density, m_rel: lambda };
+    });
+    return {
+      data,
+      extra: {
+        interpretationTarget: "X_int",
+        interpretationValue: Xint,
+        graphState: { lambda_escala: lambdaMax, X_int: Xint, T: Xint, P: pressure, rho: density },
+      },
+    };
+  },
+  render: ({ data, pNum, lang = "es", linked, loadFromCalculator }) => {
+    const Xint = Number.isFinite(pNum.Xint) ? pNum.Xint : 300;
+    const pressure = Number.isFinite(pNum.pressure) ? pNum.pressure : 100;
+    const density = Number.isFinite(pNum.density) ? pNum.density : 1.25;
+    const lambdaMax = Number.isFinite(pNum.lambdaMax) ? pNum.lambdaMax : 4;
+    const pointsX = data.map((_, i) => `${70 + i * 15},170`).join(" ");
+    const pointsM = data
+      .map((d, i) => `${70 + i * 15},${300 - (d.m_rel / Math.max(1, lambdaMax)) * 170}`)
+      .join(" ");
+    return (
+      <div className="v2-card" style={{ display: "grid", gap: 12 }}>
+        <div className="v2-card-title">{tt("Test de escala intensiva", "Intensive scale test", lang)}</div>
+        <svg viewBox="0 0 560 350" role="img" aria-label="Intensivas escalado">
+          <rect width="560" height="350" rx="12" fill="#f8fafc" />
+          <line x1="70" y1="300" x2="525" y2="300" stroke="#94a3b8" strokeWidth="1.5" />
+          <line x1="70" y1="70" x2="70" y2="300" stroke="#94a3b8" strokeWidth="1.5" />
+          <polyline points={pointsX} fill="none" stroke="#0f766e" strokeWidth="4" />
+          <polyline points={pointsM} fill="none" stroke="#64748b" strokeWidth="3" strokeDasharray="8 8" />
+          <text x="90" y="52" fill="#0f172a" fontSize="18" fontWeight="800">
+            {tt("X_int queda constante mientras crece el tamano", "X_int stays constant while size grows", lang)}
+          </text>
+          <text x="370" y="155" fill="#0f766e" fontSize="14" fontWeight="800">
+            X_int = {fmt(Xint, 0, lang)}
+          </text>
+          <text x="360" y="92" fill="#64748b" fontSize="13" fontWeight="700">
+            {tt("cantidad relativa", "relative amount", lang)}
+          </text>
+          <text x="235" y="330" fill="#475569" fontSize="13">
+            lambda_escala
+          </text>
+        </svg>
+        <div style={{ fontSize: 13, opacity: 0.9 }}>
+          T: <strong>{fmt(Xint, 0, lang)} K</strong>
+          {" · "}
+          P: <strong>{fmt(pressure, 0, lang)} kPa</strong>
+          {" · "}
+          rho: <strong>{fmt(density, 2, lang)} kg/m3</strong>
+        </div>
+        <div style={{ fontSize: 13, opacity: 0.9 }}>
+          {tt("Modo", "Mode", lang)}: <strong>{linked ? "calculator" : "experiment"}</strong>
+        </div>
+        {!linked ? (
+          <button type="button" className="btn btn-sm btn-light" onClick={loadFromCalculator}>
+            {tt("Cargar desde calculadora", "Load from calculator", lang)}
+          </button>
+        ) : null}
+      </div>
+    );
+  },
+});
+
+IntensivasGraphsCoord.graph_identity = graphContract.graph_identity;
+IntensivasGraphsCoord.pregunta_principal = graphContract.graph_identity.pregunta_principal;
+IntensivasGraphsCoord.magnitud_estrella = graphContract.graph_identity.magnitud_estrella;
+
+export default IntensivasGraphsCoord;

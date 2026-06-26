@@ -1,0 +1,161 @@
+version: 1
+formulas:
+  - id: energia_rotacional_basica
+    title: { es: "Energía cinética rotacional de eje fijo", en: "Rotational kinetic energy for a fixed axis" }
+    equation: "Erot = 0.5 * I * omega^2"
+    latex: 'E_{rot}=\frac{1}{2}I\omega^2'
+    rearrangements:
+      - "I = 2 * Erot / omega^2"
+      - "omega = sqrt(2 * Erot / I)"
+    category: "energy"
+    relation_type: "definition"
+    physical_meaning:
+      es: "La energía crece linealmente con el momento de inercia y cuadráticamente con la velocidad angular."
+      en: "Energy grows linearly with moment of inertia and quadratically with angular speed."
+    constraints:
+      - "I > 0"
+      - "omega en rad/s"
+      - "cuerpo rígido alrededor de un eje definido"
+    validity:
+      es: "Válida para rotación rígida alrededor de un eje fijo o principal con momento de inercia constante."
+      en: "Valid for rigid rotation about a fixed or principal axis with constant moment of inertia."
+    dimension_check: "[M L^2] [T^-2] = M L^2 T^-2"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["teoria", "ejemplos", "aplicaciones", "interpretacion"]
+    interpretation_tags: ["quadratic", "nonnegative", "state_quantity"]
+    result_semantics:
+      target: "Erot"
+      kind: "scalar_nonnegative"
+      sign_meaning: "no tiene signo de orientación"
+      absolute_value_meaning: "cantidad de energía mecánica almacenada en el giro"
+    domain_checks:
+      - "Convertir rpm a rad/s antes de sustituir."
+      - "Verificar que I corresponde al eje real de giro."
+      - "No sumar energía traslacional salvo que el centro de masa también se mueva."
+    coherence_checks:
+      - "Si omega se duplica y I no cambia, Erot debe multiplicarse por cuatro."
+      - "Si omega es cero, Erot debe ser cero."
+      - "Cambiar el signo de omega no debe cambiar Erot."
+    graph_implications:
+      - "La gráfica Erot frente a omega es una parábola abierta hacia arriba."
+      - "Para mayor I, la curva es más empinada."
+    pedagogical_triggers:
+      - "Confusión entre masa e inercia rotacional."
+      - "Uso directo de revoluciones por minuto."
+
+  - id: trabajo_rotacional_variacion
+    title: { es: "Trabajo rotacional y variación de energía", en: "Rotational work and energy change" }
+    equation: "Wrot = Erotf - Eroti"
+    latex: 'W_{rot}=E_{rot,f}-E_{rot,i}'
+    rearrangements:
+      - "Erotf = Eroti + Wrot"
+      - "Eroti = Erotf - Wrot"
+    category: "work_energy"
+    relation_type: "balance"
+    physical_meaning:
+      es: "El trabajo neto de los torques externos cambia la energía cinética rotacional del sistema."
+      en: "The net work of external torques changes the rotational kinetic energy of the system."
+    constraints:
+      - "sistema elegido de forma explícita"
+      - "trabajo neto externo"
+      - "pérdidas separadas si hay disipación"
+    validity:
+      es: "Válida como balance energético siempre que las transferencias y pérdidas se contabilicen con el mismo sistema."
+      en: "Valid as an energy balance when transfers and losses are accounted for using the same system."
+    dimension_check: "J = J - J"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["teoria", "ejemplos", "aplicaciones", "interpretacion"]
+    interpretation_tags: ["energy_balance", "signed_work", "state_change"]
+    result_semantics:
+      target: "Wrot"
+      kind: "signed_scalar"
+      sign_meaning: "positivo si aumenta la energía rotacional"
+      absolute_value_meaning: "magnitud de la transferencia neta"
+    domain_checks:
+      - "No confundir trabajo con energía final."
+      - "Separar trabajo motor, trabajo resistente y energía disipada."
+      - "Usar los mismos ejes para los estados inicial y final."
+    coherence_checks:
+      - "Trabajo positivo debe aumentar Erot salvo que existan pérdidas declaradas."
+      - "Trabajo negativo debe reducir Erot o aparecer como disipación."
+      - "Si Eroti y Erotf son iguales, el trabajo neto debe ser cero."
+    graph_implications:
+      - "El área bajo torque frente a ángulo representa trabajo rotacional."
+      - "Un cambio vertical entre marcadores de energía representa Wrot."
+    pedagogical_triggers:
+      - "Olvidar la energía inicial."
+      - "Sumar trabajos internos del sistema."
+
+  - id: energia_rotacional_inicial
+    title: { es: "Energía rotacional inicial", en: "Initial rotational energy" }
+    equation: "Eroti = 0.5 * I * omega_i^2"
+    latex: 'E_{rot,i}=\frac{1}{2}I\omega_i^2'
+    rearrangements:
+      - "omega_i = sqrt(2 * Eroti / I)"
+    category: "initial_state"
+    relation_type: "definition"
+    physical_meaning:
+      es: "Calcula la energía rotacional al inicio del proceso con el eje elegido."
+      en: "Computes rotational energy at the beginning of the process with the chosen axis."
+    constraints:
+      - "I > 0"
+      - "omega_i en rad/s"
+    validity:
+      es: "Válida si el momento de inercia inicial corresponde al eje real."
+      en: "Valid if the initial moment of inertia corresponds to the real axis."
+    dimension_check: "[M L^2] [T^-2] = M L^2 T^-2"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["ejemplos", "interpretacion"]
+    interpretation_tags: ["initial_state", "nonnegative"]
+    result_semantics:
+      target: "Eroti"
+      kind: "scalar_nonnegative"
+      sign_meaning: "no tiene signo de orientación"
+      absolute_value_meaning: "energía almacenada al inicio"
+    domain_checks:
+      - "No asumir Eroti cero sin dato explícito."
+    coherence_checks:
+      - "Si omega_i es cero, Eroti debe ser cero."
+    graph_implications:
+      - "Marca el nivel inicial de energía."
+    pedagogical_triggers:
+      - "Olvidar estado inicial no nulo."
+
+  - id: energia_rotacional_final
+    title: { es: "Energía rotacional final", en: "Final rotational energy" }
+    equation: "Erotf = 0.5 * I * omega_f^2"
+    latex: 'E_{rot,f}=\frac{1}{2}I\omega_f^2'
+    rearrangements:
+      - "omega_f = sqrt(2 * Erotf / I)"
+    category: "final_state"
+    relation_type: "definition"
+    physical_meaning:
+      es: "Calcula la energía rotacional que queda almacenada al final del proceso."
+      en: "Computes the rotational energy stored at the end of the process."
+    constraints:
+      - "I > 0"
+      - "omega_f en rad/s"
+    validity:
+      es: "Válida si el eje final y el momento de inercia final están bien definidos."
+      en: "Valid if final axis and final moment of inertia are well defined."
+    dimension_check: "[M L^2] [T^-2] = M L^2 T^-2"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["ejemplos", "interpretacion"]
+    interpretation_tags: ["final_state", "nonnegative"]
+    result_semantics:
+      target: "Erotf"
+      kind: "scalar_nonnegative"
+      sign_meaning: "no tiene signo de orientación"
+      absolute_value_meaning: "energía almacenada al final"
+    domain_checks:
+      - "Usar el I final si la geometría cambia."
+    coherence_checks:
+      - "Si omega_f es cero, Erotf debe ser cero."
+    graph_implications:
+      - "Marca el nivel final de energía."
+    pedagogical_triggers:
+      - "Confundir energía final con trabajo."

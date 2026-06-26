@@ -1,0 +1,1261 @@
+version: 5.0.0
+id: modelo-de-debye
+leaf_id: modelo-de-debye
+nombre:
+  es: Modelo de debye
+  en: Debye Model
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: sistemas-modelo
+  parent_id: solidos-y-calor-especifico
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/sistemas-modelo/solidos-y-calor-especifico/modelo-de-debye
+  orden: 275320
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - temperatura_debye
+  - variable_reducida_debye
+  - calor_especifico_debye_baja_temperatura
+  - limite_dulong_petit
+  - calor_especifico_debye_integral
+  magnitudes:
+  - calor_especifico
+  - calor_especifico_molar
+  - temperatura
+  - temperatura_debye
+  - frecuencia_debye
+  - hbar
+  - constante_boltzmann
+  - constante_gases
+  - numero_atomos
+  - temperatura_reducida
+  - funcion_debye
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinámica estadística de sólidos
+    en: statistical thermodynamics of solids
+  axis_convention:
+    es: Las magnitudes principales son escalares positivas; el signo no representa dirección mecánica.
+    en: The main quantities are positive scalars; the sign does not represent a mechanical direction.
+  standard_assumptions:
+  - es: El sólido se aproxima como una red cristalina armónica con modos acústicos cuantizados.
+    en: The solid is approximated as a harmonic crystalline lattice with quantized acoustic modes.
+  - es: El continuo de Debye sustituye el espectro real por una densidad de estados idealizada hasta una frecuencia
+      de corte.
+    en: The Debye continuum replaces the real spectrum with an idealized density of states up to a cutoff frequency.
+  standard_warnings:
+  - es: Antes de interpretar, decide si T es mucho menor, comparable o mucho mayor que la temperatura de Debye.
+    en: Before interpreting, decide whether T is far below, comparable to, or far above the Debye temperature.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: El calor específico debe acabar en J/K, J/(mol·K) o una forma normalizada adimensional declarada.
+      en: Heat capacity must end in J/K, J/(mol·K), or a declared dimensionless normalized form.
+  - id: regime_check
+    status: warning
+    text:
+      es: Usar la ley T³ fuera de baja temperatura o el límite Dulong-Petit fuera de alta temperatura produce interpretaciones
+        falsas.
+      en: Using the T³ law outside low temperature or the Dulong-Petit limit outside high temperature gives false
+        interpretations.
+error_patterns:
+  enabled: true
+  patterns:
+  - id: debye_temperature_vs_temperature
+    status: warning
+    text:
+      es: Confundir [[temperatura_debye]] con [[temperatura]] borra la lectura de régimen del modelo.
+      en: Confusing [[temperatura_debye]] with [[temperatura]] erases the regime reading of the model.
+  - id: molar_total_normalized_mix
+    status: warning
+    text:
+      es: Mezclar [[calor_especifico]], [[calor_especifico_molar]] y curvas normalizadas cambia el significado numérico.
+      en: Mixing [[calor_especifico]], [[calor_especifico_molar]], and normalized curves changes the numerical meaning.
+graph_reading_policy:
+  enabled: true
+  primary_variable: calor_especifico
+  reading_sequence:
+  - es: Lee primero [[temperatura]] frente a [[temperatura_debye]] para identificar el régimen térmico.
+    en: First read [[temperatura]] relative to [[temperatura_debye]] to identify the thermal regime.
+  - es: Observa si la curva de [[calor_especifico]] crece como T³, transiciona o se aproxima al límite Dulong-Petit.
+    en: Observe whether the [[calor_especifico]] curve grows as T³, crosses over, or approaches the Dulong-Petit
+      limit.
+  key_points:
+  - es: La curvatura positiva a baja temperatura revela que solo una parte pequeña del espectro de fonones está
+      activa.
+    en: The positive curvature at low temperature reveals that only a small part of the phonon spectrum is active.
+  - es: La meseta de alta temperatura indica recuperación del comportamiento clásico por equipartición.
+    en: The high-temperature plateau indicates recovery of classical equipartition behavior.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Compara [[calor_especifico_molar]] con 3R en alta temperatura.
+    en: Compare [[calor_especifico_molar]] with 3R at high temperature.
+  - es: Compara [[temperatura]]/[[temperatura_debye]] para distinguir régimen cuántico, transición y régimen clásico.
+    en: Compare [[temperatura]]/[[temperatura_debye]] to distinguish quantum, crossover, and classical regimes.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: '[[temperatura_debye]] debe tener kelvin; [[frecuencia_debye]] debe tener s^-1; el calor específico molar
+      debe escalar con [[constante_gases]].'
+    en: '[[temperatura_debye]] must have kelvin; [[frecuencia_debye]] must have s^-1; molar heat capacity must scale
+      with [[constante_gases]].'
+  common_unit_mistakes:
+  - es: Usar h en lugar de [[hbar]] sin convertir la frecuencia angular.
+    en: Using h instead of [[hbar]] without converting angular frequency.
+  - es: Comparar calor específico total con 3R, que es una magnitud molar.
+    en: Comparing total heat capacity with 3R, which is a molar quantity.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: true
+  phenomena:
+  - id: phonon_modes
+    label:
+      es: modos vibratorios cuantizados
+      en: quantized vibrational modes
+    reading:
+      es: El modelo trata las vibraciones colectivas como modos acústicos con corte de Debye.
+      en: The model treats collective vibrations as acoustic modes with a Debye cutoff.
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  calor_especifico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado térmico
+      en: heat capacity
+    summary_rules:
+    - id: calor_especifico_summary_debye
+      when: 'true'
+      status: ok
+      text:
+        es: '[[calor_especifico]] se interpreta como capacidad térmica total del sólido; debe leerse dentro del
+          modelo de Debye y no como un dato aislado.'
+        en: '[[calor_especifico]] is interpreted as total heat capacity of the solid; it must be read within the
+          Debye model and not as an isolated number.'
+    physical_reading_rules:
+    - id: calor_especifico_physical_reading_debye
+      when: 'true'
+      status: info
+      text:
+        es: '[[calor_especifico]] mide cuánta energía térmica adicional admite el sólido por aumento de [[temperatura]];
+          en Debye crece como T³ a baja temperatura y se aplana cerca del límite clásico.'
+        en: '[[calor_especifico]] measures how much extra thermal energy the solid accepts per rise in [[temperatura]];
+          in Debye it grows as T³ at low temperature and flattens near the classical limit.'
+    coherence_rules:
+    - id: calor_especifico_coherence_units_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[calor_especifico]] usa unidades SI coherentes y que sus fórmulas respetan la escala
+          marcada por [[temperatura_debye]].
+        en: Check that [[calor_especifico]] uses consistent SI units and that its formulas respect the scale set
+          by [[temperatura_debye]].
+    model_validity_rules:
+    - id: calor_especifico_model_validity_debye_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: El uso de [[calor_especifico]] supone sólido cristalino, modos acústicos continuos y comportamiento
+          armónico; defectos, electrones o anharmonicidad pueden dominar fuera de ese marco.
+        en: Using [[calor_especifico]] assumes a crystalline solid, continuous acoustic modes, and harmonic behavior;
+          defects, electrons, or anharmonicity can dominate outside that frame.
+    graph_rules:
+    - id: calor_especifico_graph_heat_capacity_curve
+      when: graph_binding.enabled
+      status: info
+      text:
+        es: En la gráfica, relaciona [[calor_especifico]] con el crecimiento de [[calor_especifico]] al aumentar
+          [[temperatura]] y con la saturación hacia el límite clásico.
+        en: On the graph, relate [[calor_especifico]] to the growth of [[calor_especifico]] as [[temperatura]] increases
+          and to saturation toward the classical limit.
+    likely_errors:
+    - id: calor_especifico_likely_error_units_regime
+      when: 'true'
+      status: warning
+      text:
+        es: 'No extrapoles [[calor_especifico]] linealmente hasta [[temperatura]] cero: el modelo predice una caída
+          rápida, no un valor constante residual.'
+        en: 'Do not extrapolate [[calor_especifico]] linearly down to zero [[temperatura]]: the model predicts a
+          rapid fall, not a residual constant value.'
+    next_step_rules:
+    - id: calor_especifico_next_step_choose_regime
+      when: 'true'
+      status: info
+      text:
+        es: Tras interpretar [[calor_especifico]], decide si el régimen es de baja temperatura, transición o límite
+          Dulong-Petit antes de elegir la fórmula siguiente.
+        en: After interpreting [[calor_especifico]], decide whether the regime is low temperature, crossover, or
+          Dulong-Petit limit before choosing the next formula.
+    physical_intuition:
+    - id: calor_especifico_intuition_quantized_modes
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[calor_especifico]] indica cuánto pesa la cuantización de las vibraciones frente a
+          la agitación térmica disponible.
+        en: Intuitively, [[calor_especifico]] indicates how strongly vibration quantization weighs against the available
+          thermal agitation.
+    limiting_cases:
+    - id: calor_especifico_limiting_low_high_temperature
+      when: 'true'
+      status: info
+      text:
+        es: 'Caso límite: si [[temperatura]] es mucho menor que [[temperatura_debye]], los modos activos son pocos;
+          si es mucho mayor, casi todos contribuyen.'
+        en: 'Limiting case: if [[temperatura]] is far below [[temperatura_debye]], few modes are active; if it is
+          far above it, almost all contribute.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  calor_especifico_molar:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado molar
+      en: molar heat capacity
+    summary_rules:
+    - id: calor_especifico_molar_summary_debye
+      when: 'true'
+      status: ok
+      text:
+        es: '[[calor_especifico_molar]] se interpreta como calor específico molar comparado con el límite de Dulong-Petit;
+          debe leerse dentro del modelo de Debye y no como un dato aislado.'
+        en: '[[calor_especifico_molar]] is interpreted as molar heat capacity compared with the Dulong-Petit limit;
+          it must be read within the Debye model and not as an isolated number.'
+    physical_reading_rules:
+    - id: calor_especifico_molar_physical_reading_debye
+      when: 'true'
+      status: info
+      text:
+        es: '[[calor_especifico_molar]] mide cuánta energía térmica adicional admite el sólido por aumento de [[temperatura]];
+          en Debye crece como T³ a baja temperatura y se aplana cerca del límite clásico.'
+        en: '[[calor_especifico_molar]] measures how much extra thermal energy the solid accepts per rise in [[temperatura]];
+          in Debye it grows as T³ at low temperature and flattens near the classical limit.'
+    coherence_rules:
+    - id: calor_especifico_molar_coherence_units_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[calor_especifico_molar]] usa unidades SI coherentes y que sus fórmulas respetan la escala
+          marcada por [[temperatura_debye]].
+        en: Check that [[calor_especifico_molar]] uses consistent SI units and that its formulas respect the scale
+          set by [[temperatura_debye]].
+    model_validity_rules:
+    - id: calor_especifico_molar_model_validity_debye_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: El uso de [[calor_especifico_molar]] supone sólido cristalino, modos acústicos continuos y comportamiento
+          armónico; defectos, electrones o anharmonicidad pueden dominar fuera de ese marco.
+        en: Using [[calor_especifico_molar]] assumes a crystalline solid, continuous acoustic modes, and harmonic
+          behavior; defects, electrons, or anharmonicity can dominate outside that frame.
+    graph_rules:
+    - id: calor_especifico_molar_graph_heat_capacity_curve
+      when: graph_binding.enabled
+      status: info
+      text:
+        es: En la gráfica, relaciona [[calor_especifico_molar]] con el crecimiento de [[calor_especifico]] al aumentar
+          [[temperatura]] y con la saturación hacia el límite clásico.
+        en: On the graph, relate [[calor_especifico_molar]] to the growth of [[calor_especifico]] as [[temperatura]]
+          increases and to saturation toward the classical limit.
+    likely_errors:
+    - id: calor_especifico_molar_likely_error_units_regime
+      when: 'true'
+      status: warning
+      text:
+        es: 'No extrapoles [[calor_especifico_molar]] linealmente hasta [[temperatura]] cero: el modelo predice
+          una caída rápida, no un valor constante residual.'
+        en: 'Do not extrapolate [[calor_especifico_molar]] linearly down to zero [[temperatura]]: the model predicts
+          a rapid fall, not a residual constant value.'
+    next_step_rules:
+    - id: calor_especifico_molar_next_step_choose_regime
+      when: 'true'
+      status: info
+      text:
+        es: Tras interpretar [[calor_especifico_molar]], decide si el régimen es de baja temperatura, transición
+          o límite Dulong-Petit antes de elegir la fórmula siguiente.
+        en: After interpreting [[calor_especifico_molar]], decide whether the regime is low temperature, crossover,
+          or Dulong-Petit limit before choosing the next formula.
+    physical_intuition:
+    - id: calor_especifico_molar_intuition_quantized_modes
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[calor_especifico_molar]] indica cuánto pesa la cuantización de las vibraciones frente
+          a la agitación térmica disponible.
+        en: Intuitively, [[calor_especifico_molar]] indicates how strongly vibration quantization weighs against
+          the available thermal agitation.
+    limiting_cases:
+    - id: calor_especifico_molar_limiting_low_high_temperature
+      when: 'true'
+      status: info
+      text:
+        es: 'Caso límite: si [[temperatura]] es mucho menor que [[temperatura_debye]], los modos activos son pocos;
+          si es mucho mayor, casi todos contribuyen.'
+        en: 'Limiting case: if [[temperatura]] is far below [[temperatura_debye]], few modes are active; if it is
+          far above it, almost all contribute.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable independiente
+      en: temperature
+    summary_rules:
+    - id: temperatura_summary_debye
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] se interpreta como temperatura absoluta de medida; debe leerse dentro del modelo de
+          Debye y no como un dato aislado.'
+        en: '[[temperatura]] is interpreted as absolute measurement temperature; it must be read within the Debye
+          model and not as an isolated number.'
+    physical_reading_rules:
+    - id: temperatura_physical_reading_debye
+      when: 'true'
+      status: info
+      text:
+        es: '[[temperatura]] decide qué fracción del espectro de fonones queda térmicamente accesible y por eso
+          controla la curvatura de [[calor_especifico]].'
+        en: '[[temperatura]] decides what fraction of the phonon spectrum is thermally accessible and therefore
+          controls the curvature of [[calor_especifico]].'
+    coherence_rules:
+    - id: temperatura_coherence_units_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura]] usa unidades SI coherentes y que sus fórmulas respetan la escala marcada
+          por [[temperatura_debye]].
+        en: Check that [[temperatura]] uses consistent SI units and that its formulas respect the scale set by [[temperatura_debye]].
+    model_validity_rules:
+    - id: temperatura_model_validity_debye_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: El uso de [[temperatura]] supone sólido cristalino, modos acústicos continuos y comportamiento armónico;
+          defectos, electrones o anharmonicidad pueden dominar fuera de ese marco.
+        en: Using [[temperatura]] assumes a crystalline solid, continuous acoustic modes, and harmonic behavior;
+          defects, electrons, or anharmonicity can dominate outside that frame.
+    graph_rules:
+    - id: temperatura_graph_heat_capacity_curve
+      when: graph_binding.enabled
+      status: info
+      text:
+        es: En la gráfica, relaciona [[temperatura]] con el crecimiento de [[calor_especifico]] al aumentar [[temperatura]]
+          y con la saturación hacia el límite clásico.
+        en: On the graph, relate [[temperatura]] to the growth of [[calor_especifico]] as [[temperatura]] increases
+          and to saturation toward the classical limit.
+    likely_errors:
+    - id: temperatura_likely_error_units_regime
+      when: 'true'
+      status: warning
+      text:
+        es: Un error frecuente con [[temperatura]] es olvidar si se está usando una magnitud total, molar o adimensional
+          antes de comparar con datos experimentales.
+        en: A common error with [[temperatura]] is forgetting whether a total, molar, or dimensionless quantity
+          is being used before comparing with experimental data.
+    next_step_rules:
+    - id: temperatura_next_step_choose_regime
+      when: 'true'
+      status: info
+      text:
+        es: Tras interpretar [[temperatura]], decide si el régimen es de baja temperatura, transición o límite Dulong-Petit
+          antes de elegir la fórmula siguiente.
+        en: After interpreting [[temperatura]], decide whether the regime is low temperature, crossover, or Dulong-Petit
+          limit before choosing the next formula.
+    physical_intuition:
+    - id: temperatura_intuition_quantized_modes
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura]] indica cuánto pesa la cuantización de las vibraciones frente a la agitación
+          térmica disponible.
+        en: Intuitively, [[temperatura]] indicates how strongly vibration quantization weighs against the available
+          thermal agitation.
+    limiting_cases:
+    - id: temperatura_limiting_low_high_temperature
+      when: 'true'
+      status: info
+      text:
+        es: 'Caso límite: si [[temperatura]] es mucho menor que [[temperatura_debye]], los modos activos son pocos;
+          si es mucho mayor, casi todos contribuyen.'
+        en: 'Limiting case: if [[temperatura]] is far below [[temperatura_debye]], few modes are active; if it is
+          far above it, almost all contribute.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_debye:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro de material
+      en: Debye temperature
+    summary_rules:
+    - id: temperatura_debye_summary_debye
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_debye]] se interpreta como escala que separa régimen cuántico y clásico del sólido; debe
+          leerse dentro del modelo de Debye y no como un dato aislado.'
+        en: '[[temperatura_debye]] is interpreted as scale separating quantum and classical behavior of the solid;
+          it must be read within the Debye model and not as an isolated number.'
+    physical_reading_rules:
+    - id: temperatura_debye_physical_reading_debye
+      when: 'true'
+      status: info
+      text:
+        es: '[[temperatura_debye]] es una huella del material: cuanto mayor es, más alta debe ser [[temperatura]]
+          para excitar gran parte del espectro vibratorio.'
+        en: '[[temperatura_debye]] is a material fingerprint: the larger it is, the higher [[temperatura]] must
+          be to excite much of the vibrational spectrum.'
+    coherence_rules:
+    - id: temperatura_debye_coherence_units_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura_debye]] usa unidades SI coherentes y que sus fórmulas respetan la escala
+          marcada por [[temperatura_debye]].
+        en: Check that [[temperatura_debye]] uses consistent SI units and that its formulas respect the scale set
+          by [[temperatura_debye]].
+    model_validity_rules:
+    - id: temperatura_debye_model_validity_debye_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: El uso de [[temperatura_debye]] supone sólido cristalino, modos acústicos continuos y comportamiento
+          armónico; defectos, electrones o anharmonicidad pueden dominar fuera de ese marco.
+        en: Using [[temperatura_debye]] assumes a crystalline solid, continuous acoustic modes, and harmonic behavior;
+          defects, electrons, or anharmonicity can dominate outside that frame.
+    graph_rules:
+    - id: temperatura_debye_graph_heat_capacity_curve
+      when: graph_binding.enabled
+      status: info
+      text:
+        es: En la gráfica, relaciona [[temperatura_debye]] con el crecimiento de [[calor_especifico]] al aumentar
+          [[temperatura]] y con la saturación hacia el límite clásico.
+        en: On the graph, relate [[temperatura_debye]] to the growth of [[calor_especifico]] as [[temperatura]]
+          increases and to saturation toward the classical limit.
+    likely_errors:
+    - id: temperatura_debye_likely_error_units_regime
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas [[temperatura_debye]] con la [[temperatura]] real del sólido; es una escala de comparación,
+          no una lectura del termómetro.
+        en: Do not confuse [[temperatura_debye]] with the actual [[temperatura]] of the solid; it is a comparison
+          scale, not a thermometer reading.
+    next_step_rules:
+    - id: temperatura_debye_next_step_choose_regime
+      when: 'true'
+      status: info
+      text:
+        es: Tras interpretar [[temperatura_debye]], decide si el régimen es de baja temperatura, transición o límite
+          Dulong-Petit antes de elegir la fórmula siguiente.
+        en: After interpreting [[temperatura_debye]], decide whether the regime is low temperature, crossover, or
+          Dulong-Petit limit before choosing the next formula.
+    physical_intuition:
+    - id: temperatura_debye_intuition_quantized_modes
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura_debye]] indica cuánto pesa la cuantización de las vibraciones frente a
+          la agitación térmica disponible.
+        en: Intuitively, [[temperatura_debye]] indicates how strongly vibration quantization weighs against the
+          available thermal agitation.
+    limiting_cases:
+    - id: temperatura_debye_limiting_low_high_temperature
+      when: 'true'
+      status: info
+      text:
+        es: 'Caso límite: si [[temperatura]] es mucho menor que [[temperatura_debye]], los modos activos son pocos;
+          si es mucho mayor, casi todos contribuyen.'
+        en: 'Limiting case: if [[temperatura]] is far below [[temperatura_debye]], few modes are active; if it is
+          far above it, almost all contribute.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  frecuencia_debye:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: corte espectral
+      en: Debye frequency
+    summary_rules:
+    - id: frecuencia_debye_summary_debye
+      when: 'true'
+      status: ok
+      text:
+        es: '[[frecuencia_debye]] se interpreta como frecuencia máxima efectiva de los modos acústicos; debe leerse
+          dentro del modelo de Debye y no como un dato aislado.'
+        en: '[[frecuencia_debye]] is interpreted as effective maximum frequency of acoustic modes; it must be read
+          within the Debye model and not as an isolated number.'
+    physical_reading_rules:
+    - id: frecuencia_debye_physical_reading_debye
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[frecuencia_debye]] conecta la respuesta térmica del sólido con el reparto de energía
+          entre modos vibratorios cuantizados.
+        en: Physically, [[frecuencia_debye]] connects the thermal response of the solid with energy sharing among
+          quantized vibrational modes.
+    coherence_rules:
+    - id: frecuencia_debye_coherence_units_scale
+      when: 'true'
+      status: ok
+      text:
+        es: '[[frecuencia_debye]] debe ser coherente con la normalización de modos y con el número de grados vibratorios
+          usado en el modelo de Debye.'
+        en: '[[frecuencia_debye]] must be consistent with mode normalization and with the number of vibrational
+          degrees of freedom used in the Debye model.'
+    model_validity_rules:
+    - id: frecuencia_debye_model_validity_debye_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: El uso de [[frecuencia_debye]] supone sólido cristalino, modos acústicos continuos y comportamiento
+          armónico; defectos, electrones o anharmonicidad pueden dominar fuera de ese marco.
+        en: Using [[frecuencia_debye]] assumes a crystalline solid, continuous acoustic modes, and harmonic behavior;
+          defects, electrons, or anharmonicity can dominate outside that frame.
+    graph_rules:
+    - id: frecuencia_debye_graph_heat_capacity_curve
+      when: graph_binding.enabled
+      status: info
+      text:
+        es: En la gráfica, relaciona [[frecuencia_debye]] con el crecimiento de [[calor_especifico]] al aumentar
+          [[temperatura]] y con la saturación hacia el límite clásico.
+        en: On the graph, relate [[frecuencia_debye]] to the growth of [[calor_especifico]] as [[temperatura]] increases
+          and to saturation toward the classical limit.
+    likely_errors:
+    - id: frecuencia_debye_likely_error_units_regime
+      when: 'true'
+      status: warning
+      text:
+        es: Un error frecuente con [[frecuencia_debye]] es olvidar si se está usando una magnitud total, molar o
+          adimensional antes de comparar con datos experimentales.
+        en: A common error with [[frecuencia_debye]] is forgetting whether a total, molar, or dimensionless quantity
+          is being used before comparing with experimental data.
+    next_step_rules:
+    - id: frecuencia_debye_next_step_choose_regime
+      when: 'true'
+      status: info
+      text:
+        es: Tras interpretar [[frecuencia_debye]], decide si el régimen es de baja temperatura, transición o límite
+          Dulong-Petit antes de elegir la fórmula siguiente.
+        en: After interpreting [[frecuencia_debye]], decide whether the regime is low temperature, crossover, or
+          Dulong-Petit limit before choosing the next formula.
+    physical_intuition:
+    - id: frecuencia_debye_intuition_quantized_modes
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[frecuencia_debye]] indica cuánto pesa la cuantización de las vibraciones frente a
+          la agitación térmica disponible.
+        en: Intuitively, [[frecuencia_debye]] indicates how strongly vibration quantization weighs against the available
+          thermal agitation.
+    limiting_cases:
+    - id: frecuencia_debye_limiting_low_high_temperature
+      when: 'true'
+      status: info
+      text:
+        es: 'Caso límite: si [[temperatura]] es mucho menor que [[temperatura_debye]], los modos activos son pocos;
+          si es mucho mayor, casi todos contribuyen.'
+        en: 'Limiting case: if [[temperatura]] is far below [[temperatura_debye]], few modes are active; if it is
+          far above it, almost all contribute.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  hbar:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: constante física
+      en: reduced Planck constant
+    summary_rules:
+    - id: hbar_summary_debye
+      when: 'true'
+      status: ok
+      text:
+        es: '[[hbar]] se interpreta como conversión entre frecuencia y energía cuántica; debe leerse dentro del
+          modelo de Debye y no como un dato aislado.'
+        en: '[[hbar]] is interpreted as conversion between frequency and quantum energy; it must be read within
+          the Debye model and not as an isolated number.'
+    physical_reading_rules:
+    - id: hbar_physical_reading_debye
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[hbar]] conecta la respuesta térmica del sólido con el reparto de energía entre modos
+          vibratorios cuantizados.
+        en: Physically, [[hbar]] connects the thermal response of the solid with energy sharing among quantized
+          vibrational modes.
+    coherence_rules:
+    - id: hbar_coherence_units_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[hbar]] usa unidades SI coherentes y que sus fórmulas respetan la escala marcada por
+          [[temperatura_debye]].
+        en: Check that [[hbar]] uses consistent SI units and that its formulas respect the scale set by [[temperatura_debye]].
+    model_validity_rules:
+    - id: hbar_model_validity_debye_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: '[[hbar]] debe mantenerse como constante física; cambiar su valor para ajustar datos indica un problema
+          de unidades o de modelo.'
+        en: '[[hbar]] must remain a physical constant; changing its value to fit data indicates a unit or model
+          problem.'
+    graph_rules:
+    - id: hbar_graph_heat_capacity_curve
+      when: graph_binding.enabled
+      status: info
+      text:
+        es: En la gráfica, relaciona [[hbar]] con el crecimiento de [[calor_especifico]] al aumentar [[temperatura]]
+          y con la saturación hacia el límite clásico.
+        en: On the graph, relate [[hbar]] to the growth of [[calor_especifico]] as [[temperatura]] increases and
+          to saturation toward the classical limit.
+    likely_errors:
+    - id: hbar_likely_error_units_regime
+      when: 'true'
+      status: warning
+      text:
+        es: Un error frecuente con [[hbar]] es olvidar si se está usando una magnitud total, molar o adimensional
+          antes de comparar con datos experimentales.
+        en: A common error with [[hbar]] is forgetting whether a total, molar, or dimensionless quantity is being
+          used before comparing with experimental data.
+    next_step_rules:
+    - id: hbar_next_step_choose_regime
+      when: 'true'
+      status: info
+      text:
+        es: Tras interpretar [[hbar]], decide si el régimen es de baja temperatura, transición o límite Dulong-Petit
+          antes de elegir la fórmula siguiente.
+        en: After interpreting [[hbar]], decide whether the regime is low temperature, crossover, or Dulong-Petit
+          limit before choosing the next formula.
+    physical_intuition:
+    - id: hbar_intuition_quantized_modes
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[hbar]] indica cuánto pesa la cuantización de las vibraciones frente a la agitación
+          térmica disponible.
+        en: Intuitively, [[hbar]] indicates how strongly vibration quantization weighs against the available thermal
+          agitation.
+    limiting_cases:
+    - id: hbar_limiting_low_high_temperature
+      when: 'true'
+      status: info
+      text:
+        es: 'Caso límite: si [[temperatura]] es mucho menor que [[temperatura_debye]], los modos activos son pocos;
+          si es mucho mayor, casi todos contribuyen.'
+        en: 'Limiting case: if [[temperatura]] is far below [[temperatura_debye]], few modes are active; if it is
+          far above it, almost all contribute.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  constante_boltzmann:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: constante física
+      en: Boltzmann constant
+    summary_rules:
+    - id: constante_boltzmann_summary_debye
+      when: 'true'
+      status: ok
+      text:
+        es: '[[constante_boltzmann]] se interpreta como conversión entre temperatura y energía térmica; debe leerse
+          dentro del modelo de Debye y no como un dato aislado.'
+        en: '[[constante_boltzmann]] is interpreted as conversion between temperature and thermal energy; it must
+          be read within the Debye model and not as an isolated number.'
+    physical_reading_rules:
+    - id: constante_boltzmann_physical_reading_debye
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[constante_boltzmann]] conecta la respuesta térmica del sólido con el reparto de energía
+          entre modos vibratorios cuantizados.
+        en: Physically, [[constante_boltzmann]] connects the thermal response of the solid with energy sharing among
+          quantized vibrational modes.
+    coherence_rules:
+    - id: constante_boltzmann_coherence_units_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[constante_boltzmann]] usa unidades SI coherentes y que sus fórmulas respetan la escala
+          marcada por [[temperatura_debye]].
+        en: Check that [[constante_boltzmann]] uses consistent SI units and that its formulas respect the scale
+          set by [[temperatura_debye]].
+    model_validity_rules:
+    - id: constante_boltzmann_model_validity_debye_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: '[[constante_boltzmann]] debe mantenerse como constante física; cambiar su valor para ajustar datos
+          indica un problema de unidades o de modelo.'
+        en: '[[constante_boltzmann]] must remain a physical constant; changing its value to fit data indicates a
+          unit or model problem.'
+    graph_rules:
+    - id: constante_boltzmann_graph_heat_capacity_curve
+      when: graph_binding.enabled
+      status: info
+      text:
+        es: En la gráfica, relaciona [[constante_boltzmann]] con el crecimiento de [[calor_especifico]] al aumentar
+          [[temperatura]] y con la saturación hacia el límite clásico.
+        en: On the graph, relate [[constante_boltzmann]] to the growth of [[calor_especifico]] as [[temperatura]]
+          increases and to saturation toward the classical limit.
+    likely_errors:
+    - id: constante_boltzmann_likely_error_units_regime
+      when: 'true'
+      status: warning
+      text:
+        es: Un error frecuente con [[constante_boltzmann]] es olvidar si se está usando una magnitud total, molar
+          o adimensional antes de comparar con datos experimentales.
+        en: A common error with [[constante_boltzmann]] is forgetting whether a total, molar, or dimensionless quantity
+          is being used before comparing with experimental data.
+    next_step_rules:
+    - id: constante_boltzmann_next_step_choose_regime
+      when: 'true'
+      status: info
+      text:
+        es: Tras interpretar [[constante_boltzmann]], decide si el régimen es de baja temperatura, transición o
+          límite Dulong-Petit antes de elegir la fórmula siguiente.
+        en: After interpreting [[constante_boltzmann]], decide whether the regime is low temperature, crossover,
+          or Dulong-Petit limit before choosing the next formula.
+    physical_intuition:
+    - id: constante_boltzmann_intuition_quantized_modes
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[constante_boltzmann]] indica cuánto pesa la cuantización de las vibraciones frente
+          a la agitación térmica disponible.
+        en: Intuitively, [[constante_boltzmann]] indicates how strongly vibration quantization weighs against the
+          available thermal agitation.
+    limiting_cases:
+    - id: constante_boltzmann_limiting_low_high_temperature
+      when: 'true'
+      status: info
+      text:
+        es: 'Caso límite: si [[temperatura]] es mucho menor que [[temperatura_debye]], los modos activos son pocos;
+          si es mucho mayor, casi todos contribuyen.'
+        en: 'Limiting case: if [[temperatura]] is far below [[temperatura_debye]], few modes are active; if it is
+          far above it, almost all contribute.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  constante_gases:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: constante molar
+      en: gas constant
+    summary_rules:
+    - id: constante_gases_summary_debye
+      when: 'true'
+      status: ok
+      text:
+        es: '[[constante_gases]] se interpreta como escala molar del límite clásico; debe leerse dentro del modelo
+          de Debye y no como un dato aislado.'
+        en: '[[constante_gases]] is interpreted as molar scale of the classical limit; it must be read within the
+          Debye model and not as an isolated number.'
+    physical_reading_rules:
+    - id: constante_gases_physical_reading_debye
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[constante_gases]] conecta la respuesta térmica del sólido con el reparto de energía entre
+          modos vibratorios cuantizados.
+        en: Physically, [[constante_gases]] connects the thermal response of the solid with energy sharing among
+          quantized vibrational modes.
+    coherence_rules:
+    - id: constante_gases_coherence_units_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[constante_gases]] usa unidades SI coherentes y que sus fórmulas respetan la escala marcada
+          por [[temperatura_debye]].
+        en: Check that [[constante_gases]] uses consistent SI units and that its formulas respect the scale set
+          by [[temperatura_debye]].
+    model_validity_rules:
+    - id: constante_gases_model_validity_debye_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: '[[constante_gases]] debe mantenerse como constante física; cambiar su valor para ajustar datos indica
+          un problema de unidades o de modelo.'
+        en: '[[constante_gases]] must remain a physical constant; changing its value to fit data indicates a unit
+          or model problem.'
+    graph_rules:
+    - id: constante_gases_graph_heat_capacity_curve
+      when: graph_binding.enabled
+      status: info
+      text:
+        es: En la gráfica, relaciona [[constante_gases]] con el crecimiento de [[calor_especifico]] al aumentar
+          [[temperatura]] y con la saturación hacia el límite clásico.
+        en: On the graph, relate [[constante_gases]] to the growth of [[calor_especifico]] as [[temperatura]] increases
+          and to saturation toward the classical limit.
+    likely_errors:
+    - id: constante_gases_likely_error_units_regime
+      when: 'true'
+      status: warning
+      text:
+        es: Un error frecuente con [[constante_gases]] es olvidar si se está usando una magnitud total, molar o
+          adimensional antes de comparar con datos experimentales.
+        en: A common error with [[constante_gases]] is forgetting whether a total, molar, or dimensionless quantity
+          is being used before comparing with experimental data.
+    next_step_rules:
+    - id: constante_gases_next_step_choose_regime
+      when: 'true'
+      status: info
+      text:
+        es: Tras interpretar [[constante_gases]], decide si el régimen es de baja temperatura, transición o límite
+          Dulong-Petit antes de elegir la fórmula siguiente.
+        en: After interpreting [[constante_gases]], decide whether the regime is low temperature, crossover, or
+          Dulong-Petit limit before choosing the next formula.
+    physical_intuition:
+    - id: constante_gases_intuition_quantized_modes
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[constante_gases]] indica cuánto pesa la cuantización de las vibraciones frente a la
+          agitación térmica disponible.
+        en: Intuitively, [[constante_gases]] indicates how strongly vibration quantization weighs against the available
+          thermal agitation.
+    limiting_cases:
+    - id: constante_gases_limiting_low_high_temperature
+      when: 'true'
+      status: info
+      text:
+        es: 'Caso límite: si [[temperatura]] es mucho menor que [[temperatura_debye]], los modos activos son pocos;
+          si es mucho mayor, casi todos contribuyen.'
+        en: 'Limiting case: if [[temperatura]] is far below [[temperatura_debye]], few modes are active; if it is
+          far above it, almost all contribute.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_atomos:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: tamaño del sistema
+      en: number of atoms
+    summary_rules:
+    - id: numero_atomos_summary_debye
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_atomos]] se interpreta como número de osciladores atómicos acoplados; debe leerse dentro del
+          modelo de Debye y no como un dato aislado.'
+        en: '[[numero_atomos]] is interpreted as number of coupled atomic oscillators; it must be read within the
+          Debye model and not as an isolated number.'
+    physical_reading_rules:
+    - id: numero_atomos_physical_reading_debye
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[numero_atomos]] conecta la respuesta térmica del sólido con el reparto de energía entre
+          modos vibratorios cuantizados.
+        en: Physically, [[numero_atomos]] connects the thermal response of the solid with energy sharing among quantized
+          vibrational modes.
+    coherence_rules:
+    - id: numero_atomos_coherence_units_scale
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_atomos]] debe ser coherente con la normalización de modos y con el número de grados vibratorios
+          usado en el modelo de Debye.'
+        en: '[[numero_atomos]] must be consistent with mode normalization and with the number of vibrational degrees
+          of freedom used in the Debye model.'
+    model_validity_rules:
+    - id: numero_atomos_model_validity_debye_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: El uso de [[numero_atomos]] supone sólido cristalino, modos acústicos continuos y comportamiento armónico;
+          defectos, electrones o anharmonicidad pueden dominar fuera de ese marco.
+        en: Using [[numero_atomos]] assumes a crystalline solid, continuous acoustic modes, and harmonic behavior;
+          defects, electrons, or anharmonicity can dominate outside that frame.
+    graph_rules:
+    - id: numero_atomos_graph_heat_capacity_curve
+      when: graph_binding.enabled
+      status: info
+      text:
+        es: En la gráfica, relaciona [[numero_atomos]] con el crecimiento de [[calor_especifico]] al aumentar [[temperatura]]
+          y con la saturación hacia el límite clásico.
+        en: On the graph, relate [[numero_atomos]] to the growth of [[calor_especifico]] as [[temperatura]] increases
+          and to saturation toward the classical limit.
+    likely_errors:
+    - id: numero_atomos_likely_error_units_regime
+      when: 'true'
+      status: warning
+      text:
+        es: Un error frecuente con [[numero_atomos]] es olvidar si se está usando una magnitud total, molar o adimensional
+          antes de comparar con datos experimentales.
+        en: A common error with [[numero_atomos]] is forgetting whether a total, molar, or dimensionless quantity
+          is being used before comparing with experimental data.
+    next_step_rules:
+    - id: numero_atomos_next_step_choose_regime
+      when: 'true'
+      status: info
+      text:
+        es: Tras interpretar [[numero_atomos]], decide si el régimen es de baja temperatura, transición o límite
+          Dulong-Petit antes de elegir la fórmula siguiente.
+        en: After interpreting [[numero_atomos]], decide whether the regime is low temperature, crossover, or Dulong-Petit
+          limit before choosing the next formula.
+    physical_intuition:
+    - id: numero_atomos_intuition_quantized_modes
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[numero_atomos]] indica cuánto pesa la cuantización de las vibraciones frente a la
+          agitación térmica disponible.
+        en: Intuitively, [[numero_atomos]] indicates how strongly vibration quantization weighs against the available
+          thermal agitation.
+    limiting_cases:
+    - id: numero_atomos_limiting_low_high_temperature
+      when: 'true'
+      status: info
+      text:
+        es: 'Caso límite: si [[temperatura]] es mucho menor que [[temperatura_debye]], los modos activos son pocos;
+          si es mucho mayor, casi todos contribuyen.'
+        en: 'Limiting case: if [[temperatura]] is far below [[temperatura_debye]], few modes are active; if it is
+          far above it, almost all contribute.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_reducida:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable de escala
+      en: reduced temperature
+    summary_rules:
+    - id: temperatura_reducida_summary_debye
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_reducida]] se interpreta como cociente que ordena los regímenes térmicos; debe leerse
+          dentro del modelo de Debye y no como un dato aislado.'
+        en: '[[temperatura_reducida]] is interpreted as ratio that orders thermal regimes; it must be read within
+          the Debye model and not as an isolated number.'
+    physical_reading_rules:
+    - id: temperatura_reducida_physical_reading_debye
+      when: 'true'
+      status: info
+      text:
+        es: '[[temperatura_reducida]] decide qué fracción del espectro de fonones queda térmicamente accesible y
+          por eso controla la curvatura de [[calor_especifico]].'
+        en: '[[temperatura_reducida]] decides what fraction of the phonon spectrum is thermally accessible and therefore
+          controls the curvature of [[calor_especifico]].'
+    coherence_rules:
+    - id: temperatura_reducida_coherence_units_scale
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura_reducida]] usa unidades SI coherentes y que sus fórmulas respetan la escala
+          marcada por [[temperatura_debye]].
+        en: Check that [[temperatura_reducida]] uses consistent SI units and that its formulas respect the scale
+          set by [[temperatura_debye]].
+    model_validity_rules:
+    - id: temperatura_reducida_model_validity_debye_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: El uso de [[temperatura_reducida]] supone sólido cristalino, modos acústicos continuos y comportamiento
+          armónico; defectos, electrones o anharmonicidad pueden dominar fuera de ese marco.
+        en: Using [[temperatura_reducida]] assumes a crystalline solid, continuous acoustic modes, and harmonic
+          behavior; defects, electrons, or anharmonicity can dominate outside that frame.
+    graph_rules:
+    - id: temperatura_reducida_graph_heat_capacity_curve
+      when: graph_binding.enabled
+      status: info
+      text:
+        es: En la gráfica, relaciona [[temperatura_reducida]] con el crecimiento de [[calor_especifico]] al aumentar
+          [[temperatura]] y con la saturación hacia el límite clásico.
+        en: On the graph, relate [[temperatura_reducida]] to the growth of [[calor_especifico]] as [[temperatura]]
+          increases and to saturation toward the classical limit.
+    likely_errors:
+    - id: temperatura_reducida_likely_error_units_regime
+      when: 'true'
+      status: warning
+      text:
+        es: Un error frecuente con [[temperatura_reducida]] es olvidar si se está usando una magnitud total, molar
+          o adimensional antes de comparar con datos experimentales.
+        en: A common error with [[temperatura_reducida]] is forgetting whether a total, molar, or dimensionless
+          quantity is being used before comparing with experimental data.
+    next_step_rules:
+    - id: temperatura_reducida_next_step_choose_regime
+      when: 'true'
+      status: info
+      text:
+        es: Tras interpretar [[temperatura_reducida]], decide si el régimen es de baja temperatura, transición o
+          límite Dulong-Petit antes de elegir la fórmula siguiente.
+        en: After interpreting [[temperatura_reducida]], decide whether the regime is low temperature, crossover,
+          or Dulong-Petit limit before choosing the next formula.
+    physical_intuition:
+    - id: temperatura_reducida_intuition_quantized_modes
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura_reducida]] indica cuánto pesa la cuantización de las vibraciones frente
+          a la agitación térmica disponible.
+        en: Intuitively, [[temperatura_reducida]] indicates how strongly vibration quantization weighs against the
+          available thermal agitation.
+    limiting_cases:
+    - id: temperatura_reducida_limiting_low_high_temperature
+      when: 'true'
+      status: info
+      text:
+        es: 'Caso límite: si [[temperatura]] es mucho menor que [[temperatura_debye]], los modos activos son pocos;
+          si es mucho mayor, casi todos contribuyen.'
+        en: 'Limiting case: if [[temperatura]] is far below [[temperatura_debye]], few modes are active; if it is
+          far above it, almost all contribute.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  funcion_debye:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: función adimensional
+      en: Debye function
+    summary_rules:
+    - id: funcion_debye_summary_debye
+      when: 'true'
+      status: ok
+      text:
+        es: '[[funcion_debye]] se interpreta como factor de corrección cuántica que interpola entre límites; debe
+          leerse dentro del modelo de Debye y no como un dato aislado.'
+        en: '[[funcion_debye]] is interpreted as quantum correction factor interpolating between limits; it must
+          be read within the Debye model and not as an isolated number.'
+    physical_reading_rules:
+    - id: funcion_debye_physical_reading_debye
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[funcion_debye]] conecta la respuesta térmica del sólido con el reparto de energía entre
+          modos vibratorios cuantizados.
+        en: Physically, [[funcion_debye]] connects the thermal response of the solid with energy sharing among quantized
+          vibrational modes.
+    coherence_rules:
+    - id: funcion_debye_coherence_units_scale
+      when: 'true'
+      status: ok
+      text:
+        es: '[[funcion_debye]] debe ser coherente con la normalización de modos y con el número de grados vibratorios
+          usado en el modelo de Debye.'
+        en: '[[funcion_debye]] must be consistent with mode normalization and with the number of vibrational degrees
+          of freedom used in the Debye model.'
+    model_validity_rules:
+    - id: funcion_debye_model_validity_debye_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: El uso de [[funcion_debye]] supone sólido cristalino, modos acústicos continuos y comportamiento armónico;
+          defectos, electrones o anharmonicidad pueden dominar fuera de ese marco.
+        en: Using [[funcion_debye]] assumes a crystalline solid, continuous acoustic modes, and harmonic behavior;
+          defects, electrons, or anharmonicity can dominate outside that frame.
+    graph_rules:
+    - id: funcion_debye_graph_heat_capacity_curve
+      when: graph_binding.enabled
+      status: info
+      text:
+        es: En la gráfica, relaciona [[funcion_debye]] con el crecimiento de [[calor_especifico]] al aumentar [[temperatura]]
+          y con la saturación hacia el límite clásico.
+        en: On the graph, relate [[funcion_debye]] to the growth of [[calor_especifico]] as [[temperatura]] increases
+          and to saturation toward the classical limit.
+    likely_errors:
+    - id: funcion_debye_likely_error_units_regime
+      when: 'true'
+      status: warning
+      text:
+        es: Un error frecuente con [[funcion_debye]] es olvidar si se está usando una magnitud total, molar o adimensional
+          antes de comparar con datos experimentales.
+        en: A common error with [[funcion_debye]] is forgetting whether a total, molar, or dimensionless quantity
+          is being used before comparing with experimental data.
+    next_step_rules:
+    - id: funcion_debye_next_step_choose_regime
+      when: 'true'
+      status: info
+      text:
+        es: Tras interpretar [[funcion_debye]], decide si el régimen es de baja temperatura, transición o límite
+          Dulong-Petit antes de elegir la fórmula siguiente.
+        en: After interpreting [[funcion_debye]], decide whether the regime is low temperature, crossover, or Dulong-Petit
+          limit before choosing the next formula.
+    physical_intuition:
+    - id: funcion_debye_intuition_quantized_modes
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[funcion_debye]] indica cuánto pesa la cuantización de las vibraciones frente a la
+          agitación térmica disponible.
+        en: Intuitively, [[funcion_debye]] indicates how strongly vibration quantization weighs against the available
+          thermal agitation.
+    limiting_cases:
+    - id: funcion_debye_limiting_low_high_temperature
+      when: 'true'
+      status: info
+      text:
+        es: 'Caso límite: si [[temperatura]] es mucho menor que [[temperatura_debye]], los modos activos son pocos;
+          si es mucho mayor, casi todos contribuyen.'
+        en: 'Limiting case: if [[temperatura]] is far below [[temperatura_debye]], few modes are active; if it is
+          far above it, almost all contribute.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

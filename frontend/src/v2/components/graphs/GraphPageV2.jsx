@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { getInlineGraphInterpretation } from "../../utils/interpretationEngine.js";
 
 /* ---------------------------
  * Helpers
@@ -49,36 +50,10 @@ export function NumInput({
   );
 }
 
-/**
- * Normaliza el origen de parámetros:
- * - Preferimos "params" (nuevo estándar)
- * - Si no, aceptamos "paramsFromCalculator" (legacy)
- * - Si no, aceptamos "sharedParams" (algunas integraciones)
- */
 function normalizeIncomingParams({ params, paramsFromCalculator, sharedParams }) {
   return params ?? paramsFromCalculator ?? sharedParams ?? undefined;
 }
 
-/* ---------------------------
- * GraphPageV2
- * --------------------------- */
-/**
- * Props (compatibles):
- * - title: string
- * - params?: object
- * - paramsFromCalculator?: object
- * - sharedParams?: object
- * - defaultParams: object (defaults experimento)
- * - controls: array [{
- *     id, label,
- *     min?, max?,
- *     parser?: (raw, fallback) => number,
- *     clamp?: boolean,
- *     placeholder?
- *   }]
- * - compute: (pNum, ctx) => { data, extra? }
- * - children: (ctx) => ReactNode
- */
 export default function GraphPageV2({
   title = "Gráficas",
 
@@ -86,7 +61,10 @@ export default function GraphPageV2({
   params,
   paramsFromCalculator,
   sharedParams,
-
+  interpretationDoc,
+  meta,
+  lang = "es",
+  onInterpretationContextChange,
   defaultParams,
   controls = [],
   compute,
@@ -235,6 +213,63 @@ export default function GraphPageV2({
     }
   }, [compute, pNum, pRaw, paramsIn, linked]);
 
+  const calc = paramsIn?.__calc || sharedParams?.__calc || null;
+  const graphTarget = calc?.target || extra?.interpretationTarget || null;
+  const graphValue = Number.isFinite(calc?.result)
+    ? calc.result
+    : (Number.isFinite(extra?.interpretationValue) ? extra.interpretationValue : null);
+
+  useEffect(() => {
+    if (typeof onInterpretationContextChange !== "function") return;
+
+    onInterpretationContextChange({
+      source: "coord",
+      target: graphTarget,
+      graph: {
+        source: "coord",
+        title,
+        mode: linked ? "follow" : "experiment",
+        followsCalculator: linked,
+        target: graphTarget,
+        value: graphValue,
+        paramsIn: pNum,
+        stateOut: extra?.graphState || {},
+      },
+      calc,
+      lang,
+    });
+  }, [calc, extra, graphTarget, graphValue, lang, linked, onInterpretationContextChange, pNum, title]);
+
+  const graphInterpretation = useMemo(() => {
+    if (!interpretationDoc || !graphTarget) return null;
+
+    return getInlineGraphInterpretation({
+      interpretation: interpretationDoc,
+      target: graphTarget,
+      result: {
+        value: graphValue,
+        latex: calc?.formulaLatex || "",
+      },
+      inputs: calc?.known || pNum || {},
+      formula: {
+        id: calc?.formulaId || "",
+        title: calc?.formulaTitle || "",
+        equation: calc?.formulaEquation || "",
+        latex: calc?.formulaLatex || "",
+      },
+      graphState: {
+        ...(paramsIn || sharedParams || {}),
+        ...(extra?.graphState || {}),
+        ...pNum,
+      },
+      lang,
+      extraContext: {
+        leafId: meta?.id || "",
+        ruta_relativa: meta?.ruta_relativa || "",
+      },
+    });
+  }, [graphTarget, graphValue, interpretationDoc, calc, paramsIn, sharedParams, pNum, extra, lang, meta]);
+
   return (
     <div>
       {/* Card de parámetros */}
@@ -298,9 +333,26 @@ export default function GraphPageV2({
             loadFromCalculator,
             data,
             extra,
-            paramsIn, // normalizado (params/paramsFromCalculator/sharedParams)
+            paramsIn,
           })
         : null}
+              
+      {/* Interpretación */}
+      {graphInterpretation?.ok && graphInterpretation.flatMessages?.length > 0 && (
+        <div className="v2-card" style={{ marginTop: 12 }}>
+          <div className="v2-card-title">
+            {lang === "en" ? "Graph reading" : "Lectura del gráfico"}
+          </div>
+
+          <div style={{ display: "grid", gap: 8 }}>
+            {graphInterpretation.flatMessages.map((msg) => (
+              <div key={msg.id || msg.text} className={`interp-msg interp-${msg.status || "info"}`}>
+                {msg.text}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

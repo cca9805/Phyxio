@@ -1,0 +1,265 @@
+version: 5.0.0
+leaf: simulaciones-estadisticas
+ui:
+  default_formula: error_estadistico_media
+formulas:
+- id: media_muestral_observable
+  title:
+    es: Media muestral de un observable
+    en: Sample mean of an observable
+  equation: X_bar=sum_X/N
+  latex: \bar{X}=\frac{\sum_i X_i}{N}
+  rearrangements:
+  - target: suma_observable
+    equation: sum_X=X_bar*N
+    latex: \sum_i X_i=\bar{X}N
+  - target: numero_muestras
+    equation: N=sum_X/X_bar
+    latex: N=\frac{\sum_i X_i}{\bar{X}}
+  category: estadistica
+  relation_type: definicion
+  physical_meaning:
+    es: La media muestral estima el valor medio físico de un observable a partir de muestras simuladas.
+    en: The sample mean estimates the physical average of an observable from simulated samples.
+  constraints:
+    es: El número de muestras debe ser positivo y las muestras deben representar el mismo observable.
+    en: The number of samples must be positive and samples must represent the same observable.
+  validity:
+    es: Válida como estimador cuando el muestreo es representativo; mejora al aumentar N.
+    en: Valid as an estimator when sampling is representative; it improves as N increases.
+  dimension_check: dimension(X_bar)=dimension(sum_X)
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - simulaciones-estadisticas
+  interpretation_tags:
+  - promedio
+  - estimador
+  - muestreo
+  result_semantics:
+    target: media_muestral
+    kind: estimador
+    sign_meaning:
+      es: El signo depende del observable simulado.
+      en: The sign depends on the simulated observable.
+    absolute_value_meaning:
+      es: Su valor absoluto mide el tamaño típico estimado del observable.
+      en: Its absolute value measures the estimated typical size of the observable.
+  domain_checks:
+  - id: N_positivo
+    condition: N>0
+    message:
+      es: N debe ser mayor que cero.
+      en: N must be greater than zero.
+  - id: muestras_homogeneas
+    condition: same_observable
+    message:
+      es: Todas las muestras deben medir el mismo observable.
+      en: All samples must measure the same observable.
+  coherence_checks:
+  - id: media_no_exacta
+    severity: warning
+    message:
+      es: La media muestral no es automáticamente el valor exacto.
+      en: The sample mean is not automatically the exact value.
+  graph_implications:
+    es: Al crecer N, la media suele estabilizarse alrededor de un valor central.
+    en: As N grows, the mean usually stabilizes around a central value.
+  pedagogical_triggers:
+    es: Distinguir entre promedio de una muestra finita y promedio ideal de muchas muestras.
+    en: Distinguish a finite-sample average from an ideal many-sample average.
+- id: error_estadistico_media
+  title:
+    es: Error estadístico de la media
+    en: Statistical error of the mean
+  equation: delta_X=s_X/sqrt(N)
+  latex: \Delta X=\frac{s_X}{\sqrt{N}}
+  rearrangements:
+  - target: desviacion_estandar
+    equation: s_X=delta_X*sqrt(N)
+    latex: s_X=\Delta X\sqrt{N}
+  - target: numero_muestras
+    equation: N=(s_X/delta_X)^2
+    latex: N=(\frac{s_X}{\Delta X})^2
+  category: estadistica
+  relation_type: proporcionalidad_inversa_raiz
+  physical_meaning:
+    es: El error estadístico disminuye como la raíz inversa del número de muestras.
+    en: Statistical error decreases as the inverse square root of the number of samples.
+  constraints:
+    es: N debe ser positivo, delta_X no negativo y s_X debe describir la dispersión de las muestras.
+    en: N must be positive, delta_X nonnegative, and s_X must describe sample dispersion.
+  validity:
+    es: Válida para muestras aproximadamente independientes; las correlaciones reducen el número efectivo de muestras.
+    en: Valid for approximately independent samples; correlations reduce the effective sample number.
+  dimension_check: dimension(delta_X)=dimension(s_X)=dimension(X)
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - simulaciones-estadisticas
+  interpretation_tags:
+  - incertidumbre
+  - raiz_N
+  - convergencia
+  result_semantics:
+    target: error_estadistico
+    kind: incertidumbre
+    sign_meaning:
+      es: El error estadístico no tiene signo físico; se interpreta como una cota positiva.
+      en: Statistical error has no physical sign; it is interpreted as a positive bound.
+    absolute_value_meaning:
+      es: Indica el tamaño probable de la fluctuación de la media estimada.
+      en: It indicates the likely size of the fluctuation of the estimated mean.
+  domain_checks:
+  - id: N_mayor_cero
+    condition: N>0
+    message:
+      es: No puede calcularse error estadístico con N cero.
+      en: Statistical error cannot be computed with zero N.
+  - id: dispersion_no_negativa
+    condition: s_X>=0
+    message:
+      es: La dispersión muestral no puede ser negativa.
+      en: Sample dispersion cannot be negative.
+  coherence_checks:
+  - id: doblar_muestras_no_mitad
+    severity: warning
+    message:
+      es: Duplicar N no divide el error por dos, solo por raíz de dos.
+      en: Doubling N does not halve the error, it only divides it by square root of two.
+  graph_implications:
+    es: La curva error estadístico frente a número de muestras baja con concavidad hacia arriba y se aplana lentamente.
+    en: The statistical error versus number of samples curve decreases with upward concavity and flattens slowly.
+  pedagogical_triggers:
+    es: Usar la ley de raíz de N para evitar esperar convergencia lineal.
+    en: Use the square-root N law to avoid expecting linear convergence.
+- id: factor_boltzmann
+  title:
+    es: Peso estadístico de Boltzmann
+    en: Boltzmann statistical weight
+  equation: P=C*exp(-E/(k_B*T))
+  latex: P=C\cdot e^{-E/(k_B T)}
+  rearrangements:
+  - target: energia
+    equation: E=-k_B*T*ln(P/C)
+    latex: E=-k_B T\ln(P/C)
+  - target: temperatura
+    equation: T=-E/(k_B*ln(P/C))
+    latex: T=-\frac{E}{k_B\ln(P/C)}
+  category: termodinamica_estadistica
+  relation_type: exponencial
+  physical_meaning:
+    es: Los estados de menor energía tienen mayor peso estadístico a temperatura fija.
+    en: Lower-energy states have larger statistical weight at fixed temperature.
+  constraints:
+    es: La temperatura absoluta y k_B deben ser positivas; C es una constante de normalización.
+    en: Absolute temperature and k_B must be positive; C is a normalization constant.
+  validity:
+    es: Válida para equilibrio térmico canónico con estados ponderados por energía.
+    en: Valid for canonical thermal equilibrium with states weighted by energy.
+  dimension_check: E/(k_B*T) is dimensionless
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - simulaciones-estadisticas
+  interpretation_tags:
+  - boltzmann
+  - equilibrio
+  - probabilidad
+  result_semantics:
+    target: probabilidad_boltzmann
+    kind: peso_relativo
+    sign_meaning:
+      es: La probabilidad o peso no puede ser negativo.
+      en: Probability or weight cannot be negative.
+    absolute_value_meaning:
+      es: Un valor mayor indica un estado más frecuente en el muestreo de equilibrio.
+      en: A larger value indicates a more frequent state in equilibrium sampling.
+  domain_checks:
+  - id: temperatura_positiva
+    condition: T>0
+    message:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  - id: peso_no_negativo
+    condition: P>=0
+    message:
+      es: Un peso estadístico negativo no tiene sentido físico.
+      en: A negative statistical weight has no physical meaning.
+  coherence_checks:
+  - id: exponente_adimensional
+    severity: error
+    message:
+      es: El exponente E/(k_B*T) debe ser adimensional.
+      en: The exponent E/(k_B*T) must be dimensionless.
+  graph_implications:
+    es: La probabilidad cae de forma exponencial cuando aumenta la energía a temperatura fija.
+    en: Probability decreases exponentially as energy increases at fixed temperature.
+  pedagogical_triggers:
+    es: Relacionar temperatura alta con aceptación de una gama mayor de energías.
+    en: Relate high temperature to acceptance of a wider range of energies.
+- id: aceptacion_monte_carlo
+  title:
+    es: Probabilidad de aceptación Monte Carlo
+    en: Monte Carlo acceptance probability
+  equation: p_acc=min(1,exp(-delta_E/(k_B*T)))
+  latex: p_a=\min(1,e^{-\Delta E/(k_B T)})
+  rearrangements:
+  - target: diferencia_energia
+    equation: delta_E=-k_B*T*ln(p_acc)
+    latex: \Delta E=-k_B T\ln(p_a)
+  - target: temperatura
+    equation: T=-delta_E/(k_B*ln(p_acc))
+    latex: T=-\frac{\Delta E}{k_B\ln(p_a)}
+  category: monte_carlo
+  relation_type: criterio_probabilistico
+  physical_meaning:
+    es: Los cambios que bajan energía se aceptan siempre y los que la suben pueden aceptarse térmicamente.
+    en: Energy-lowering moves are always accepted, while energy-raising moves may be thermally accepted.
+  constraints:
+    es: La temperatura debe ser positiva y p_acc debe permanecer entre cero y uno.
+    en: Temperature must be positive and p_acc must remain between zero and one.
+  validity:
+    es: Válida para muestreo tipo Metropolis en equilibrio canónico.
+    en: Valid for Metropolis-type sampling in canonical equilibrium.
+  dimension_check: delta_E/(k_B*T) is dimensionless
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - simulaciones-estadisticas
+  interpretation_tags:
+  - metropolis
+  - aceptacion
+  - muestreo
+  result_semantics:
+    target: probabilidad_aceptacion
+    kind: probabilidad
+    sign_meaning:
+      es: La probabilidad de aceptación no tiene signo y debe estar entre 0 y 1.
+      en: Acceptance probability has no sign and must lie between 0 and 1.
+    absolute_value_meaning:
+      es: Mide la fracción esperada de propuestas aceptadas con esa diferencia de energía.
+      en: It measures the expected fraction of proposals accepted with that energy difference.
+  domain_checks:
+  - id: probabilidad_intervalo
+    condition: 0<=p_acc<=1
+    message:
+      es: p_acc debe estar entre 0 y 1.
+      en: p_acc must be between 0 and 1.
+  - id: temperatura_valida
+    condition: T>0
+    message:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  coherence_checks:
+  - id: cambios_favorables
+    severity: warning
+    message:
+      es: Para delta_E menor o igual que cero la aceptación se satura en uno.
+      en: For delta_E less than or equal to zero, acceptance saturates at one.
+  graph_implications:
+    es: A temperatura fija, la aceptación de subidas de energía cae exponencialmente.
+    en: At fixed temperature, acceptance of energy-increasing moves decreases exponentially.
+  pedagogical_triggers:
+    es: Evitar interpretar Monte Carlo como una trayectoria dinámica real; es un muestreo estadístico.
+    en: Avoid interpreting Monte Carlo as a real dynamical trajectory; it is statistical sampling.

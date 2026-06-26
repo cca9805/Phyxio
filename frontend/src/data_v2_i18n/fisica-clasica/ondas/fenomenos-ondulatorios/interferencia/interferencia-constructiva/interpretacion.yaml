@@ -1,0 +1,480 @@
+version: v5
+id: interpretacion_interferencia_constructiva
+leaf_id: interferencia-constructiva
+nombre:
+  es: Interpretacion de interferencia constructiva
+  en: Constructive interference interpretation
+scope:
+  area: fisica-clasica
+  bloque: ondas
+  subbloque: fenomenos-ondulatorios
+  parent_id: interferencia
+  ruta_relativa: fisica-clasica/ondas/fenomenos-ondulatorios/interferencia/interferencia-constructiva
+dependencies:
+  formulas:
+    - condicion_constructiva_camino
+    - fase_desde_camino
+    - intensidad_interferencia_dos_ondas
+  magnitudes:
+    - I_resultante
+    - delta_phi
+    - Delta_r
+    - lambda
+    - m_orden
+    - I1
+    - I2
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  I_resultante:
+    magnitude_type: intensity
+    semantic_role:
+      es: Intensidad final que mide el refuerzo producido por superposicion coherente.
+      en: Final intensity measuring reinforcement produced by coherent superposition.
+    next_step_rules:
+      - id: ir_next_phase
+        when: "true"
+        status: ok
+        text:
+          es: "Relaciona [[I_resultante]] con [[delta_phi]] para saber si el punto es maximo constructivo."
+          en: "Relate [[I_resultante]] to [[delta_phi]] to decide whether the point is a constructive maximum."
+    summary_rules:
+      - id: ir_summary_max
+        when: "delta_phi == 0"
+        status: ok
+        text:
+          es: "[[I_resultante]] alcanza el refuerzo maximo cuando las ondas llegan en fase."
+          en: "[[I_resultante]] reaches maximum reinforcement when waves arrive in phase."
+      - id: ir_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[I_resultante]] resume cuanta energia media queda tras sumar las ondas."
+          en: "[[I_resultante]] summarizes how much average energy remains after adding the waves."
+    physical_reading_rules:
+      - id: ir_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "El refuerzo constructivo no crea energia de la nada: redistribuye intensidad entre puntos del patron."
+          en: "Constructive reinforcement does not create energy from nothing: it redistributes intensity across the pattern."
+    coherence_rules:
+      - id: ir_coherence_negative
+        when: "I_resultante < 0"
+        status: error
+        text:
+          es: "[[I_resultante]] no puede ser negativa."
+          en: "[[I_resultante]] cannot be negative."
+      - id: ir_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "La intensidad es coherente si aumenta cerca de desfase nulo y disminuye al alejarse de el."
+          en: "Intensity is coherent if it rises near zero phase offset and falls away from it."
+    model_validity_rules:
+      - id: ir_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "La lectura supone ondas coherentes, misma frecuencia y polarizacion compatible."
+          en: "The reading assumes coherent waves, same frequency, and compatible polarization."
+    graph_rules:
+      - id: ir_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el grafico, los maximos de [[I_resultante]] aparecen cuando la fase vuelve a coincidir."
+          en: "On the graph, maxima of [[I_resultante]] appear when phase matches again."
+    likely_errors:
+      - id: ir_error_sumar_intensidades
+        when: "true"
+        status: warning
+        text:
+          es: "Error comun: suponer que siempre basta sumar [[I1]] y [[I2]] sin considerar fase."
+          en: "Common mistake: assume it is always enough to add [[I1]] and [[I2]] without considering phase."
+
+  delta_phi:
+    magnitude_type: phase
+    semantic_role:
+      es: Desfase que decide si la superposicion refuerza, cancela parcialmente o cancela.
+      en: Phase offset deciding whether superposition reinforces, partially cancels, or cancels.
+    next_step_rules:
+      - id: dp_next_path
+        when: "true"
+        status: ok
+        text:
+          es: "Convierte [[Delta_r]] en [[delta_phi]] para leer la condicion de refuerzo."
+          en: "Convert [[Delta_r]] into [[delta_phi]] to read the reinforcement condition."
+    summary_rules:
+      - id: dp_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[delta_phi]] es la variable de control central del patron."
+          en: "[[delta_phi]] is the central control variable of the pattern."
+    physical_reading_rules:
+      - id: dp_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Un cambio de fase desplaza crestas respecto a crestas y modifica el termino de interferencia."
+          en: "A phase change shifts crests relative to crests and modifies the interference term."
+    coherence_rules:
+      - id: dp_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "La fase es periodica: desfases separados por ciclos completos tienen la misma lectura fisica."
+          en: "Phase is periodic: offsets separated by full cycles have the same physical reading."
+    model_validity_rules:
+      - id: dp_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El desfase debe mantenerse estable durante el tiempo de observacion."
+          en: "The phase offset must remain stable during observation time."
+    graph_rules:
+      - id: dp_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el eje de fase, los maximos se repiten periodicamente."
+          en: "On the phase axis, maxima repeat periodically."
+    likely_errors:
+      - id: dp_error_grados
+        when: "true"
+        status: warning
+        text:
+          es: "Error comun: confundir fase estable con coincidencia visual instantanea de cualquier perturbacion."
+          en: "Common mistake: confuse stable phase with instantaneous visual coincidence of any disturbance."
+
+  Delta_r:
+    magnitude_type: path_difference
+    semantic_role:
+      es: Diferencia geometrica que convierte el montaje en una diferencia de fase.
+      en: Geometric difference converting the setup into a phase difference.
+    next_step_rules:
+      - id: dr_next_lambda
+        when: "true"
+        status: ok
+        text:
+          es: "Compara [[Delta_r]] con [[lambda]] para decidir si hay refuerzo constructivo."
+          en: "Compare [[Delta_r]] with [[lambda]] to decide whether constructive reinforcement occurs."
+    summary_rules:
+      - id: dr_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Delta_r]] mide cuanto camino adicional recorre una onda respecto a la otra."
+          en: "[[Delta_r]] measures how much extra path one wave travels relative to the other."
+    physical_reading_rules:
+      - id: dr_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Si el camino extra equivale a ciclos completos, las crestas vuelven a coincidir."
+          en: "If the extra path equals full cycles, crests coincide again."
+    coherence_rules:
+      - id: dr_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Delta_r]] puede ser positiva o negativa; el refuerzo depende de su modulo respecto a [[lambda]]."
+          en: "[[Delta_r]] may be positive or negative; reinforcement depends on its magnitude relative to [[lambda]]."
+    model_validity_rules:
+      - id: dr_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "La diferencia de camino debe calcularse en el mismo medio o con camino optico equivalente."
+          en: "Path difference must be computed in the same medium or with equivalent optical path."
+    graph_rules:
+      - id: dr_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el grafico, los maximos aparecen separados por una longitud de onda en [[Delta_r]]."
+          en: "On the graph, maxima are separated by one wavelength in [[Delta_r]]."
+    likely_errors:
+      - id: dr_error_distancia
+        when: "true"
+        status: warning
+        text:
+          es: "Error comun: usar una distancia absoluta en vez de la diferencia entre dos caminos."
+          en: "Common mistake: use an absolute distance instead of the difference between two paths."
+
+  lambda:
+    magnitude_type: wavelength
+    semantic_role:
+      es: Escala espacial que fija la periodicidad de la fase.
+      en: Spatial scale setting phase periodicity.
+    next_step_rules:
+      - id: la_next_order
+        when: "true"
+        status: ok
+        text:
+          es: "Usa [[lambda]] para contar cuantos ciclos caben en [[Delta_r]]."
+          en: "Use [[lambda]] to count how many cycles fit in [[Delta_r]]."
+    summary_rules:
+      - id: la_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[lambda]] determina la separacion entre maximos constructivos sucesivos."
+          en: "[[lambda]] determines the spacing between successive constructive maxima."
+    physical_reading_rules:
+      - id: la_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Longitudes de onda mayores producen patrones mas espaciados para el mismo montaje."
+          en: "Longer wavelengths produce more widely spaced patterns for the same setup."
+    coherence_rules:
+      - id: la_coherence_positive
+        when: "lambda <= 0"
+        status: error
+        text:
+          es: "[[lambda]] debe ser positiva."
+          en: "[[lambda]] must be positive."
+      - id: la_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[lambda]] es coherente si representa el periodo espacial de la onda en el medio."
+          en: "[[lambda]] is coherent if it represents the wave spatial period in the medium."
+    model_validity_rules:
+      - id: la_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "En medios dispersivos, debe usarse la longitud de onda dentro del medio."
+          en: "In dispersive media, the wavelength inside the medium must be used."
+    graph_rules:
+      - id: la_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el grafico, cambiar [[lambda]] cambia el periodo espacial del patron."
+          en: "On the graph, changing [[lambda]] changes the spatial period of the pattern."
+    likely_errors:
+      - id: la_error_vacio
+        when: "true"
+        status: warning
+        text:
+          es: "Error comun: usar la longitud de onda en el vacio cuando la onda se propaga en otro medio."
+          en: "Common mistake: use vacuum wavelength when the wave propagates in another medium."
+
+  m_orden:
+    magnitude_type: order
+    semantic_role:
+      es: Numero entero que identifica cada maximo constructivo.
+      en: Integer identifying each constructive maximum.
+    next_step_rules:
+      - id: mo_next_path
+        when: "true"
+        status: ok
+        text:
+          es: "Relaciona [[m_orden]] con [[Delta_r]] para ubicar maximos sucesivos."
+          en: "Relate [[m_orden]] to [[Delta_r]] to locate successive maxima."
+    summary_rules:
+      - id: mo_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[m_orden]] cuenta maximos respecto al central."
+          en: "[[m_orden]] counts maxima relative to the central one."
+    physical_reading_rules:
+      - id: mo_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Ordenes distintos representan la misma condicion de fase repetida en caminos diferentes."
+          en: "Different orders represent the same phase condition repeated at different paths."
+    coherence_rules:
+      - id: mo_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[m_orden]] debe leerse como entero de patron, no como variable continua."
+          en: "[[m_orden]] must be read as a pattern integer, not as a continuous variable."
+    model_validity_rules:
+      - id: mo_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "En pantallas finitas solo algunos ordenes son observables."
+          en: "On finite screens only some orders are observable."
+    graph_rules:
+      - id: mo_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "Los marcadores de orden senalan maximos periodicos."
+          en: "Order markers indicate periodic maxima."
+    likely_errors:
+      - id: mo_error_entero
+        when: "true"
+        status: warning
+        text:
+          es: "Error comun: redondear un cociente cualquiera y llamar maximo al punto aunque no cumpla fase."
+          en: "Common mistake: round any ratio and call the point a maximum even if phase is not satisfied."
+
+  I1:
+    magnitude_type: intensity
+    semantic_role:
+      es: Intensidad individual de la primera onda antes de recombinarse.
+      en: Individual intensity of the first wave before recombination.
+    next_step_rules:
+      - id: i1_next_compare
+        when: "true"
+        status: ok
+        text:
+          es: "Compara [[I1]] con [[I2]] para estimar el contraste del maximo."
+          en: "Compare [[I1]] with [[I2]] to estimate maximum contrast."
+    summary_rules:
+      - id: i1_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[I1]] mide una contribucion individual, no la intensidad final."
+          en: "[[I1]] measures one individual contribution, not the final intensity."
+    physical_reading_rules:
+      - id: i1_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Si [[I1]] domina mucho sobre [[I2]], el refuerzo relativo visible disminuye."
+          en: "If [[I1]] strongly dominates [[I2]], the visible relative reinforcement decreases."
+    coherence_rules:
+      - id: i1_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[I1]] debe ser no negativa y compatible con la escala del detector."
+          en: "[[I1]] must be non-negative and compatible with detector scale."
+    model_validity_rules:
+      - id: i1_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "Debe representar la misma region y frecuencia que [[I2]]."
+          en: "It must represent the same region and frequency as [[I2]]."
+    graph_rules:
+      - id: i1_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "Aumentar [[I1]] eleva la escala de [[I_resultante]]."
+          en: "Increasing [[I1]] raises the scale of [[I_resultante]]."
+    likely_errors:
+      - id: i1_error_suma
+        when: "true"
+        status: warning
+        text:
+          es: "Error comun: tratar [[I1]] como si ya incluyera el termino de interferencia."
+          en: "Common mistake: treating [[I1]] as if it already included the interference term."
+
+  I2:
+    magnitude_type: intensity
+    semantic_role:
+      es: Intensidad individual de la segunda onda antes de recombinarse.
+      en: Individual intensity of the second wave before recombination.
+    next_step_rules:
+      - id: i2_next_compare
+        when: "true"
+        status: ok
+        text:
+          es: "Compara [[I2]] con [[I1]] para decidir si el maximo tendra alto contraste."
+          en: "Compare [[I2]] with [[I1]] to decide whether the maximum has high contrast."
+    summary_rules:
+      - id: i2_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[I2]] es la segunda contribucion individual del par coherente."
+          en: "[[I2]] is the second individual contribution of the coherent pair."
+    physical_reading_rules:
+      - id: i2_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "El contraste maximo aparece cuando [[I1]] e [[I2]] son comparables."
+          en: "Maximum contrast appears when [[I1]] and [[I2]] are comparable."
+    coherence_rules:
+      - id: i2_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[I2]] debe medirse bajo las mismas condiciones que [[I1]]."
+          en: "[[I2]] must be measured under the same conditions as [[I1]]."
+    model_validity_rules:
+      - id: i2_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo requiere que [[I2]] sea estable durante la observacion."
+          en: "The model requires [[I2]] to remain stable during observation."
+    graph_rules:
+      - id: i2_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "Cambiar [[I2]] modifica altura y contraste del maximo."
+          en: "Changing [[I2]] modifies maximum height and contrast."
+    likely_errors:
+      - id: i2_error_cero
+        when: "true"
+        status: warning
+        text:
+          es: "Error comun: esperar interferencia si una de las dos contribuciones reales es nula."
+          en: "Common mistake: expecting interference if one of the two real contributions is zero."

@@ -1,0 +1,267 @@
+const e=`version: 2
+id: interpretacion-mrua
+leaf_id: mrua
+nombre:
+  es: Interpretacion de Mrua
+  en: Interpretation of Motion with Constant Acceleration
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: cinematica
+  parent_id: movimiento-rectilineo
+  ruta_relativa: fisica-clasica/mecanica/cinematica/movimiento-rectilineo/mrua
+dependencies:
+  formulas:
+  - mrua_posicion
+  - mrua_velocidad
+  - mrua_torricelli
+  - mrua_desplazamiento_medio
+  magnitudes:
+  - x
+  - x0
+  - v
+  - v0
+  - a
+  - t
+  - dx
+  - dt
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  a:
+    summary_rules:
+    - id: a_summary
+      when: 'true'
+      status: info
+      text:
+        es: a resume una lectura fisica relevante del leaf.
+        en: a summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: a_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que a sea coherente con unidades y contexto.
+        en: Check that a is coherent with units and context.
+    physical_reading_rules:
+    - id: a_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de a debe mostrar qué cambio físico produce, qué magnitudes lo causan y por qué modifica el comportamiento del sistema.
+        en: The reading of a must show which physical change it produces, which magnitudes cause it, and why it modifies the system's behavior.
+    model_validity_rules:
+    - id: a_validity
+      when: 'true'
+      status: ok
+      text:
+        es: a solo es interpretable dentro del modelo elegido.
+        en: a is interpretable only inside the chosen model.
+    graph_rules:
+    - id: a_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de a.
+        en: The graph must reflect the role of a visually.
+    likely_errors:
+    - id: a_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas a con otra magnitud cercana del problema.
+        en: Do not confuse a with another nearby quantity in the problem.
+    next_step_rules:
+    - id: a_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa a para enlazar con el siguiente paso de interpretacion.
+        en: Use a to connect with the next interpretation step.
+  v0:
+    summary_rules:
+    - id: v0_summary
+      when: 'true'
+      status: info
+      text:
+        es: v0 resume una lectura fisica relevante del leaf.
+        en: v0 summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: v0_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que v0 sea coherente con unidades y contexto.
+        en: Check that v0 is coherent with units and context.
+    physical_reading_rules:
+    - id: v0_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de v0 debe mostrar qué cambio físico produce, qué magnitudes lo causan y por qué modifica el comportamiento del sistema.
+        en: The reading of v0 must show which physical change it produces, which magnitudes cause it, and why it modifies the system's behavior.
+    model_validity_rules:
+    - id: v0_validity
+      when: 'true'
+      status: ok
+      text:
+        es: v0 solo es interpretable dentro del modelo elegido.
+        en: v0 is interpretable only inside the chosen model.
+    graph_rules:
+    - id: v0_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de v0.
+        en: The graph must reflect the role of v0 visually.
+    likely_errors:
+    - id: v0_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas v0 con otra magnitud cercana del problema.
+        en: Do not confuse v0 with another nearby quantity in the problem.
+    next_step_rules:
+    - id: v0_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa v0 para enlazar con el siguiente paso de interpretacion.
+        en: Use v0 to connect with the next interpretation step.
+  t:
+    summary_rules:
+    - id: t_summary
+      when: 'true'
+      status: info
+      text:
+        es: t resume una lectura fisica relevante del leaf.
+        en: t summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: t_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que t sea coherente con unidades y contexto.
+        en: Check that t is coherent with units and context.
+    physical_reading_rules:
+    - id: t_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de t debe mostrar qué cambio físico produce, qué magnitudes lo causan y por qué modifica el comportamiento del sistema.
+        en: The reading of t must show which physical change it produces, which magnitudes cause it, and why it modifies the system's behavior.
+    model_validity_rules:
+    - id: t_validity
+      when: 'true'
+      status: ok
+      text:
+        es: t solo es interpretable dentro del modelo elegido.
+        en: t is interpretable only inside the chosen model.
+    graph_rules:
+    - id: t_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de t.
+        en: The graph must reflect the role of t visually.
+    likely_errors:
+    - id: t_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas t con otra magnitud cercana del problema.
+        en: Do not confuse t with another nearby quantity in the problem.
+    next_step_rules:
+    - id: t_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa t para enlazar con el siguiente paso de interpretacion.
+        en: Use t to connect with the next interpretation step.
+  dx:
+    summary_rules:
+    - id: dx_summary
+      when: 'true'
+      status: info
+      text:
+        es: dx resume una lectura fisica relevante del leaf.
+        en: dx summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: dx_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que dx sea coherente con unidades y contexto.
+        en: Check that dx is coherent with units and context.
+    physical_reading_rules:
+    - id: dx_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de dx debe mostrar qué cambio físico produce, qué magnitudes lo causan y por qué modifica el comportamiento del sistema.
+        en: The reading of dx must show which physical change it produces, which magnitudes cause it, and why it modifies the system's behavior.
+    model_validity_rules:
+    - id: dx_validity
+      when: 'true'
+      status: ok
+      text:
+        es: dx solo es interpretable dentro del modelo elegido.
+        en: dx is interpretable only inside the chosen model.
+    graph_rules:
+    - id: dx_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de dx.
+        en: The graph must reflect the role of dx visually.
+    likely_errors:
+    - id: dx_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas dx con otra magnitud cercana del problema.
+        en: Do not confuse dx with another nearby quantity in the problem.
+    next_step_rules:
+    - id: dx_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa dx para enlazar con el siguiente paso de interpretacion.
+        en: Use dx to connect with the next interpretation step.
+`;export{e as default};

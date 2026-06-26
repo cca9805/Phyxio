@@ -1,0 +1,148 @@
+const e=`version: "2.0"
+formulas:
+
+  - id: fuerza_coulomb
+    title:
+      es: Fuerza de Coulomb entre dos cargas puntuales
+      en: Coulomb force between two point charges
+    equation: "F_C = k_e * q1 * q2 / r12^2"
+    latex: "F_C = k_e \\\\frac{|q_1 q_2|}{r_{12}^2} \\\\quad (F\\\\_C, q1, q2, r12, k\\\\_e)"
+    rearrangements:
+      - target: F_C
+        equation: "F_C = k_e * q1 * q2 / r12^2"
+        latex: "F_C = k_e \\\\frac{|q_1 q_2|}{r_{12}^2}"
+      - target: r12
+        equation: "r12 = sqrt(k_e * q1 * q2 / F_C)"
+        latex: "r_{12} = \\\\sqrt{\\\\frac{k_e |q_1 q_2|}{F_C}}"
+      - target: q1
+        equation: "q1 = F_C * r12^2 / (k_e * q2)"
+        latex: "q_1 = \\\\frac{F_C \\\\, r_{12}^2}{k_e |q_2|}"
+      - target: q2
+        equation: "q2 = F_C * r12^2 / (k_e * q1)"
+        latex: "q_2 = \\\\frac{F_C \\\\, r_{12}^2}{k_e |q_1|}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: >
+        La fuerza de Coulomb es la fuerza electrostática entre dos cargas puntuales en reposo. Su módulo es proporcional al producto de los valores absolutos de las cargas y disminuye con el cuadrado de la distancia entre ellas. La constante [[k_e]] fija la escala absoluta en el sistema SI. La dependencia inversa cuadrática con [[r12]] es la firma de un campo central de largo alcance, análoga a la gravitación newtoniana pero de intensidad mucho mayor para cargas típicas de laboratorio.
+      en: >
+        The Coulomb force is the electrostatic force between two point charges at rest. Its magnitude is proportional to the product of the absolute values of the charges and decreases with the square of the distance between them. The constant [[k_e]] sets the absolute scale in the SI. The inverse-square dependence on [[r12]] is the signature of a long-range central field, analogous to Newtonian gravity but far more intense for typical laboratory charges.
+    constraints:
+      - Cargas puntuales (extensión despreciable respecto a la distancia)
+      - Cargas en reposo o con velocidades mucho menores que la velocidad de la luz
+      - Medio con permitividad del vacío (no hay dieléctrico entre las cargas)
+      - La distancia [[r12]] es estrictamente mayor que cero
+    validity:
+      es: "Válida para cargas puntuales en el vacío en régimen electrostático. En presencia de dieléctrico, [[k_e]] se divide por la permitividad relativa del medio. A distancias subatómicas domina la interacción nuclear fuerte y Coulomb pierde validez."
+      en: "Valid for point charges in vacuum in the electrostatic regime. In the presence of a dielectric, [[k_e]] is divided by the relative permittivity of the medium. At subatomic distances the strong nuclear interaction dominates and Coulomb's law loses validity."
+    dimension_check: "[N] = [N·m²·C⁻²] · [C²] / [m²] = [N] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - cálculo de la fuerza entre cargas puntuales en problemas de electrostática
+      - determinación del campo eléctrico como cociente de fuerza entre carga de prueba
+      - análisis de equilibrio de sistemas de cargas
+    interpretation_tags:
+      - fuerza electrostática
+      - ley inversa del cuadrado
+      - interacción entre cargas
+    result_semantics:
+      target: F_C
+      kind: output_quantity
+      sign_meaning:
+        es: "El módulo [[F_C]] es siempre positivo. El carácter atractivo (cargas opuestas) o repulsivo (mismo signo) se determina aparte por el signo del producto [[q1]]·[[q2]]."
+        en: "The magnitude [[F_C]] is always positive. The attractive (opposite charges) or repulsive (same sign) character is determined separately by the sign of the product [[q1]]·[[q2]]."
+      absolute_value_meaning:
+        es: "Mayor [[F_C]] indica que las cargas son grandes en módulo, están próximas, o ambas cosas. Una [[F_C]] muy pequeña frente a fuerzas gravitacionales en el mismo sistema indica cargas de escala atómica o distancias grandes."
+        en: "Larger [[F_C]] indicates that the charges are large in magnitude, are close together, or both. A very small [[F_C]] compared to gravitational forces in the same system indicates atomic-scale charges or large distances."
+    domain_checks:
+      - condition: "r12 > 0"
+        message:
+          es: "La distancia [[r12]] debe ser estrictamente positiva. Un valor nulo o negativo indica error en los datos o singularidad del modelo de carga puntual."
+          en: "Distance [[r12]] must be strictly positive. A zero or negative value indicates a data error or a singularity of the point charge model."
+      - condition: "F_C >= 0"
+        message:
+          es: "El módulo de la fuerza [[F_C]] es siempre no negativo. Un resultado negativo indica error en la fórmula utilizada."
+          en: "The magnitude [[F_C]] is always non-negative. A negative result indicates an error in the formula used."
+    coherence_checks:
+      - condition: "F_C decreases as r12 increases"
+        message:
+          es: "Si [[r12]] crece y [[F_C]] no disminuye, hay un error de cálculo. La dependencia inversa cuadrática implica que doblar la distancia reduce la fuerza a un cuarto."
+          en: "If [[r12]] increases and [[F_C]] does not decrease, there is a calculation error. The inverse-square dependence implies that doubling the distance reduces the force to one quarter."
+    graph_implications:
+      - "En el gráfico F_C vs r12, la curva es una hipérbola cuadrática decreciente. El eje x es [[r12]] y el eje y es [[F_C]]. La zona de alta densidad de curva (r12 pequeño) indica la región de mayor fuerza."
+    pedagogical_triggers:
+      - trigger: "r12 doubled"
+        message:
+          es: "Si [[r12]] se duplica, [[F_C]] se reduce a la cuarta parte, no a la mitad. La dependencia cuadrática es la trampa conceptual más frecuente en la ley de Coulomb."
+          en: "If [[r12]] doubles, [[F_C]] reduces to one quarter, not one half. The quadratic dependence is the most frequent conceptual trap in Coulomb's law."
+      - trigger: "one charge zero"
+        message:
+          es: "Si cualquiera de las cargas es cero, la fuerza es exactamente cero sin importar la distancia. No hay interacción si no hay carga."
+          en: "If either charge is zero, the force is exactly zero regardless of the distance. There is no interaction if there is no charge."
+
+  - id: campo_electrico_coulomb
+    title:
+      es: Campo eléctrico de una carga puntual (derivado de Coulomb)
+      en: Electric field of a point charge (derived from Coulomb)
+    equation: "E_C = k_e * q1 / r12^2"
+    latex: "E_C = k_e \\\\frac{|q_1|}{r_{12}^2} \\\\quad (E\\\\_C, q1, r12, k\\\\_e)"
+    rearrangements:
+      - target: E_C
+        equation: "E_C = k_e * q1 / r12^2"
+        latex: "E_C = k_e \\\\frac{|q_1|}{r_{12}^2}"
+      - target: r12
+        equation: "r12 = sqrt(k_e * q1 / E_C)"
+        latex: "r_{12} = \\\\sqrt{\\\\frac{k_e |q_1|}{E_C}}"
+    category: derived
+    relation_type: definition
+    physical_meaning:
+      es: >
+        El campo eléctrico generado por una carga puntual [[q1]] a distancia [[r12]] resulta de dividir la fuerza de Coulomb [[F_C]] entre la carga de prueba. Es independiente de la carga de prueba y solo depende de la carga fuente y la geometría. Esta relación es el puente directo entre la ley de Coulomb y el concepto de campo eléctrico.
+      en: >
+        The electric field generated by a point charge [[q1]] at distance [[r12]] results from dividing the Coulomb force [[F_C]] by the test charge. It is independent of the test charge and depends only on the source charge and geometry. This relation is the direct bridge between Coulomb's law and the concept of electric field.
+    constraints:
+      - Carga fuente puntual
+      - Régimen electrostático
+      - Vacío (permitividad del vacío)
+      - La distancia [[r12]] es estrictamente mayor que cero
+    validity:
+      es: "Válido para cargas puntuales en el vacío. En dieléctrico se divide por la permitividad relativa. Derivado directamente de la ley de Coulomb con las mismas condiciones de validez."
+      en: "Valid for point charges in vacuum. In a dielectric, divide by the relative permittivity. Derived directly from Coulomb's law with the same validity conditions."
+    dimension_check: "[N/C] = [N·m²·C⁻²] · [C] / [m²] = [N/C] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - cálculo del campo eléctrico en un punto debida a una carga puntual
+      - construcción del campo de distribuciones por superposición
+    interpretation_tags:
+      - campo eléctrico
+      - carga puntual
+      - ley inversa del cuadrado
+    result_semantics:
+      target: E_C
+      kind: output_quantity
+      sign_meaning:
+        es: "El módulo [[E_C]] es siempre positivo. La dirección del campo se aleja de cargas positivas y apunta hacia cargas negativas."
+        en: "The magnitude [[E_C]] is always positive. The field direction points away from positive charges and towards negative charges."
+      absolute_value_meaning:
+        es: "Mayor [[E_C]] indica que la carga fuente es grande en módulo o que la distancia [[r12]] es pequeña."
+        en: "Larger [[E_C]] indicates a large source charge or small distance [[r12]]."
+    domain_checks:
+      - condition: "r12 > 0"
+        message:
+          es: "La distancia [[r12]] debe ser estrictamente positiva."
+          en: "Distance [[r12]] must be strictly positive."
+    coherence_checks:
+      - condition: "E_C decreases as r12 increases"
+        message:
+          es: "Si [[r12]] crece y [[E_C]] no disminuye, hay un error de cálculo."
+          en: "If [[r12]] increases and [[E_C]] does not decrease, there is a calculation error."
+    graph_implications:
+      - "El campo [[E_C]] vs [[r12]] sigue la misma hipérbola cuadrática que [[F_C]]."
+    pedagogical_triggers:
+      - trigger: "r12 doubled"
+        message:
+          es: "Doblar [[r12]] reduce [[E_C]] a la cuarta parte, igual que [[F_C]]."
+          en: "Doubling [[r12]] reduces [[E_C]] to one quarter, just as with [[F_C]]."
+`;export{e as default};

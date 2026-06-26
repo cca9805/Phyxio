@@ -1,0 +1,144 @@
+import React from "react";
+import { createCoordGraphPage } from "@/v2/components/graphs/graphFactories.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraph(
+const uiLang = "es";
+const tt = (es, en) => (uiLang === "en" ? en : es);
+
+const graph_identity = {
+  graph_type: "Coord",
+  pregunta_principal: {
+    es: "Bajo que condiciones un proceso termodinamico reversible mantiene DeltaS_univ nula y fija la eficiencia maxima de Carnot?",
+    en: "Under what conditions does a reversible thermodynamic process keep DeltaS_univ zero and set the maximum Carnot efficiency?",
+  },
+  keywords: [
+    "proceso",
+    "reversible",
+    "termodinamico",
+    "entropia",
+    "universo",
+    "eficiencia",
+    "maxima",
+    "Carnot",
+    "process",
+    "reversible",
+    "entropy",
+    "universe",
+    "efficiency",
+    "maximum",
+  ],
+  magnitud_estrella: "DeltaS_univ",
+  variable_control: "T_frio",
+  formula: "eta_Carnot = 1 - T_frio/T_caliente",
+  target_interpretable: true,
+};
+
+const axes = {
+  xComponent: "XAxis",
+  yComponent: "YAxis",
+  xAxis: "T_frio/T_caliente",
+  yAxis: "eta_Carnot",
+};
+
+const formula = {
+  id: "eficiencia_carnot",
+  formula: "eta_Carnot = 1 - T_frio/T_caliente",
+  equation: "eta_Carnot = 1 - T_frio/T_caliente",
+};
+
+const fmt = (value, digits = 2) =>
+  Number.isFinite(value) ? value.toFixed(digits) : "-";
+
+const ProcesosReversiblesGraphsCoord = createCoordGraphPage({
+  displayName: "ProcesosReversiblesGraphsCoord",
+  title: {
+    es: "Limite reversible de Carnot",
+    en: "Carnot reversible limit",
+  },
+  defaultParams: {
+    T_caliente: 800,
+    T_frio: 300,
+  },
+  controls: [
+    { id: "T_caliente", label: { es: "Foco caliente", en: "Hot reservoir" }, min: 350, max: 1600, step: 10 },
+    { id: "T_frio", label: { es: "Foco frio", en: "Cold reservoir" }, min: 100, max: 800, step: 10 },
+  ],
+  compute: (pNum) => {
+    const tHot = Number.isFinite(pNum.T_caliente) && pNum.T_caliente > 0 ? pNum.T_caliente : 800;
+    const tColdRaw = Number.isFinite(pNum.T_frio) && pNum.T_frio > 0 ? pNum.T_frio : 300;
+    const tCold = Math.min(tColdRaw, tHot * 0.98);
+    const ratio = tCold / tHot;
+    const eta = Math.max(0, Math.min(1, 1 - ratio));
+    const data = Array.from({ length: 40 }, (_, index) => {
+      const x = index / 39;
+      return { x, y: 1 - x };
+    });
+
+    return {
+      data,
+      extra: {
+        interpretationTarget: "DeltaS_univ",
+        interpretationValue: 0,
+        graphState: {
+          target: "DeltaS_univ",
+          graphType: "Coord",
+          graph_identity,
+          axes,
+          formula,
+          DeltaS_univ: 0,
+          eta_Carnot: eta,
+          T_caliente: tHot,
+          T_frio: tCold,
+          ratio,
+        },
+      },
+    };
+  },
+  render: ({ data, extra }) => {
+    const state = extra?.graphState ?? {};
+    const width = 520;
+    const height = 260;
+    const points = data
+      .map((point) => {
+        const x = 42 + point.x * (width - 84);
+        const y = height - 34 - point.y * (height - 68);
+        return `${x},${y}`;
+      })
+      .join(" ");
+    const markerX = 42 + (state.ratio ?? 0) * (width - 84);
+    const markerY = height - 34 - (state.eta_Carnot ?? 0) * (height - 68);
+
+    return (
+      <div className="v2-card" style={{ display: "grid", gap: 12 }}>
+        <div className="v2-card-title">{tt("Reversibilidad y eficiencia maxima", "Reversibility and maximum efficiency")}</div>
+        <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Procesos reversibles Coord">
+          <rect x="0" y="0" width={width} height={height} rx="10" fill="rgba(15,23,42,0.86)" />
+          <line x1="38" y1={height - 32} x2={width - 28} y2={height - 32} stroke="rgba(255,255,255,0.28)" />
+          <line x1="42" y1="24" x2="42" y2={height - 28} stroke="rgba(255,255,255,0.28)" />
+          <polyline points={points} fill="none" stroke="#38bdf8" strokeWidth="3" />
+          <circle cx={markerX} cy={markerY} r="5" fill="#facc15" />
+          <text x={width - 34} y={height - 42} textAnchor="end" fill="rgba(255,255,255,0.72)" fontSize="12">
+            T_frio/T_caliente
+          </text>
+          <text x="52" y="38" fill="rgba(255,255,255,0.72)" fontSize="12">
+            eta_Carnot
+          </text>
+        </svg>
+        <div style={{ display: "grid", gap: 4, fontSize: 13 }}>
+          <strong>{tt("Lectura fisica", "Physical reading")}</strong>
+          <span>
+            T_caliente = {fmt(state.T_caliente, 0)} K; T_frio = {fmt(state.T_frio, 0)} K; eta_Carnot = {fmt((state.eta_Carnot ?? 0) * 100, 1)}%; DeltaS_univ = 0
+          </span>
+        </div>
+      </div>
+    );
+  },
+});
+
+ProcesosReversiblesGraphsCoord.graph_identity = graph_identity;
+ProcesosReversiblesGraphsCoord.pregunta_principal = graph_identity.pregunta_principal;
+ProcesosReversiblesGraphsCoord.magnitud_estrella = graph_identity.magnitud_estrella;
+ProcesosReversiblesGraphsCoord.axes = axes;
+ProcesosReversiblesGraphsCoord.formula = formula;
+
+export default ProcesosReversiblesGraphsCoord;

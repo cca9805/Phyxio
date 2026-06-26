@@ -1,0 +1,273 @@
+const e=`version: 5
+magnitudes:
+- id: Ueff
+  symbol: U_{eff}
+  nombre:
+    es: potencial efectivo
+    en: effective potential
+  unidad_si: J
+  descripcion:
+    es: potencial efectivo dentro del modelo avanzado del leaf.
+    en: effective potential inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: Ueff
+  used_in: &id001
+  - potencial_efectivo
+  - energia_radial
+  - condicion_orbita_circular
+  - velocidad_areal_central
+  common_mistake: Usar Ueff sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - potencial-efectivo-y-ecuacion-radial
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Ueff debe interpretarse junto con las hipotesis del leaf.
+- id: U
+  symbol: U
+  nombre:
+    es: potencial central
+    en: central potential
+  unidad_si: J
+  descripcion:
+    es: potencial central dentro del modelo avanzado del leaf.
+    en: central potential inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: U
+  used_in: *id001
+  common_mistake: Usar U sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - potencial-efectivo-y-ecuacion-radial
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: U debe interpretarse junto con las hipotesis del leaf.
+- id: L
+  symbol: L
+  nombre:
+    es: momento angular
+    en: angular momentum
+  unidad_si: kg*m^2/s
+  descripcion:
+    es: momento angular dentro del modelo avanzado del leaf.
+    en: angular momentum inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: L
+  used_in: *id001
+  common_mistake: Usar L sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - potencial-efectivo-y-ecuacion-radial
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: L debe interpretarse junto con las hipotesis del leaf.
+- id: m
+  symbol: m
+  nombre:
+    es: masa
+    en: mass
+  unidad_si: kg
+  descripcion:
+    es: masa dentro del modelo avanzado del leaf.
+    en: mass inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: m
+  used_in: *id001
+  common_mistake: Usar m sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - potencial-efectivo-y-ecuacion-radial
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: m debe interpretarse junto con las hipotesis del leaf.
+- id: r
+  symbol: r
+  nombre:
+    es: distancia radial
+    en: radial distance
+  unidad_si: m
+  descripcion:
+    es: distancia radial dentro del modelo avanzado del leaf.
+    en: radial distance inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: r
+  used_in: *id001
+  common_mistake: Usar r sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - potencial-efectivo-y-ecuacion-radial
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: r debe interpretarse junto con las hipotesis del leaf.
+- id: E
+  symbol: E
+  nombre:
+    es: energia mecanica
+    en: mechanical energy
+  unidad_si: J
+  descripcion:
+    es: energia mecanica dentro del modelo avanzado del leaf.
+    en: mechanical energy inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: E
+  used_in: *id001
+  common_mistake: Usar E sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - potencial-efectivo-y-ecuacion-radial
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: E debe interpretarse junto con las hipotesis del leaf.
+- id: rdot
+  symbol: \\dot r
+  nombre:
+    es: velocidad radial
+    en: radial velocity
+  unidad_si: m/s
+  descripcion:
+    es: velocidad radial dentro del modelo avanzado del leaf.
+    en: radial velocity inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: rdot
+  used_in: *id001
+  common_mistake: Usar rdot sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - potencial-efectivo-y-ecuacion-radial
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: rdot debe interpretarse junto con las hipotesis del leaf.
+`;export{e as default};

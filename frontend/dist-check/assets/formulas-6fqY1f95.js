@@ -1,0 +1,262 @@
+const e=`- id: xcm_sum
+  title:
+    es: "Coordenada x del centro de masas (N partículas)"
+    en: "x-coordinate of the center of mass (N particles)"
+  equation: "xcm = sum(m_i*x_i)/M"
+  latex: "x_{cm} = \\\\frac{\\\\sum_i m_i x_i}{M}"
+  rearrangements:
+    - target: xcm
+      equation: xcm = sum(m_i*x_i)/M
+      latex: x_{cm} = \\frac{\\sum_i m_i x_i}{M}
+  category: fundamental
+  relation_type: average_relation
+  physical_meaning:
+    es: "Cálculo de la componente horizontal del centro de masas para un conjunto de partículas puntuales distribuidas en el plano o espacio."
+    en: "Calculation of the horizontal center-of-mass component for a set of point particles distributed in a plane or space."
+  constraints:
+    - expr: "M > 0"
+      message:
+        es: "La masa total debe ser positiva para normalizar el promedio."
+        en: "Total mass must be positive to normalize the average."
+  validity:
+    es: "Válida para sistemas discretos arbitrarios donde se conocen las coordenadas individuales."
+    en: "Valid for arbitrary discrete systems where individual coordinates are known."
+  dimension_check: "L"
+  calculable: true
+  used_in:
+    - theory
+    - examples
+    - calculator
+  interpretation_tags:
+    - discrete_sum
+    - horizontal_balance
+  result_semantics:
+    target: xcm
+    kind: coordinate
+    sign_meaning:
+      es: "Posición a la derecha (+) o izquierda (-) respecto al eje de ordenadas."
+      en: "Position to the right (+) or left (-) relative to the ordinate axis."
+    absolute_value_meaning:
+      es: "Distancia horizontal del centro de masas al origen."
+      en: "Horizontal distance from the center of mass to the origin."
+  domain_checks:
+    - expr: "M > 0"
+      message:
+        es: "Masa total nula o negativa detectada; el cálculo carece de sentido físico."
+        en: "Zero or negative total mass detected; the calculation lacks physical meaning."
+  coherence_checks:
+    - expr: "xcm >= min(x_i) && xcm <= max(x_i)"
+      severity: ok
+      message:
+        es: "La coordenada xcm es consistente con la distribución de las partículas."
+        en: "The xcm coordinate is consistent with the particles' distribution."
+  graph_implications:
+    - implication: "El valor de xcm determina la posición horizontal del centro de masas en el gráfico de partículas."
+      es: "xcm se representa como una línea vertical o marcador sobre el eje x en la nube de partículas."
+      en: "xcm is shown as a vertical line or marker on the x-axis in the particle cloud."
+  motivo_no_calculable: ""
+  pedagogical_triggers:
+    - detect_when: "xcm < min(x_i) || xcm > max(x_i)"
+      message:
+        es: "El CM ha salido del intervalo horizontal ocupado por las partículas. Revisa la suma o los signos de las posiciones."
+        en: "The CM has fallen outside the horizontal interval occupied by the particles. Check the sum or the signs of the positions."
+
+- id: ycm_sum
+  title:
+    es: "Coordenada y del centro de masas (N partículas)"
+    en: "y-coordinate of the center of mass (N particles)"
+  equation: "ycm = sum(m_i*y_i)/M"
+  latex: "y_{cm} = \\\\frac{\\\\sum_i m_i y_i}{M}"
+  rearrangements:
+    - target: ycm
+      equation: ycm = sum(m_i*y_i)/M
+      latex: y_{cm} = \\frac{\\sum_i m_i y_i}{M}
+  category: fundamental
+  relation_type: average_relation
+  physical_meaning:
+    es: "Cálculo de la componente vertical del centro de masas para un conjunto de partículas puntuales."
+    en: "Calculation of the vertical center-of-mass component for a set of point particles."
+  constraints:
+    - expr: "M > 0"
+      message:
+        es: "Se requiere una masa total positiva para el cálculo del promedio vertical."
+        en: "A positive total mass is required for the vertical average calculation."
+  validity:
+    es: "Válida para sistemas discretos con distribución espacial definida."
+    en: "Valid for discrete systems with a defined spatial distribution."
+  dimension_check: "L"
+  calculable: true
+  used_in:
+    - theory
+    - examples
+    - calculator
+  interpretation_tags:
+    - discrete_sum
+    - vertical_balance
+  result_semantics:
+    target: ycm
+    kind: coordinate
+    sign_meaning:
+      es: "Posición arriba (+) o abajo (-) respecto al eje de abscisas."
+      en: "Position above (+) or below (-) relative to the abscissa axis."
+    absolute_value_meaning:
+      es: "Distancia vertical del centro de masas al origen."
+      en: "Vertical distance from the center of mass to the origin."
+  domain_checks:
+    - expr: "M > 0"
+      message:
+        es: "La masa total debe ser positiva para definir un centro de masas vertical."
+        en: "Total mass must be positive to define a vertical center of mass."
+  coherence_checks:
+    - expr: "ycm >= min(y_i) && ycm <= max(y_i)"
+      severity: ok
+      message:
+        es: "La coordenada ycm es consistente con la distribución de las partículas."
+        en: "The ycm coordinate is consistent with the particles' distribution."
+  graph_implications:
+    - implication: "El valor de ycm determina la posición vertical del centro de masas en el gráfico de partículas."
+      es: "ycm se representa como una línea horizontal o marcador sobre el eje y en la nube de partículas."
+      en: "ycm is shown as a horizontal line or marker on the y-axis in the particle cloud."
+  motivo_no_calculable: ""
+  pedagogical_triggers:
+    - detect_when: "ycm < min(y_i) || ycm > max(y_i)"
+      message:
+        es: "El CM ha salido del intervalo vertical ocupado por las partículas. Revisa los datos de altura."
+        en: "The CM has fallen outside the vertical interval occupied by the particles. Check the height data."
+
+- id: M_sum
+  title:
+    es: "Masa total del sistema discreto"
+    en: "Total mass of the discrete system"
+  equation: "M = sum(m_i)"
+  latex: "M = \\\\sum_i m_i"
+  rearrangements:
+    - target: M
+      equation: M = sum(m_i)
+      latex: M = \\sum_i m_i
+  category: structural
+  relation_type: definition
+  physical_meaning:
+    es: "Inercia traslacional total obtenida mediante la suma de todas las contribuciones materiales individuales."
+    en: "Total translational inertia obtained by summing all individual material contributions."
+  validity:
+    es: "Válida para cualquier conjunto finito de masas puntuales."
+    en: "Valid for any finite set of point masses."
+  dimension_check: "M"
+  calculable: true
+  used_in:
+    - theory
+    - examples
+  interpretation_tags:
+    - total_mass
+    - inertial_sum
+  result_semantics:
+    target: M
+    kind: mass
+    sign_meaning:
+      es: "La masa total es una propiedad intrínseca siempre positiva."
+      en: "Total mass is an intrinsic property that is always positive."
+    absolute_value_meaning:
+      es: "Cantidad total de materia concentrada en el sistema."
+      en: "Total amount of matter concentrated in the system."
+  domain_checks:
+    - expr: "all(m_i >= 0)"
+      message:
+        es: "Las masas de las partículas individuales no pueden ser negativas."
+        en: "Individual particle masses cannot be negative."
+  constraints:
+    - expr: "all(m_i >= 0)"
+      message:
+        es: "Las masas de las partículas individuales no pueden ser negativas."
+        en: "Individual particle masses cannot be negative."
+    - expr: "N > 0"
+      message:
+        es: "Debe haber al menos una partícula en el sistema."
+        en: "There must be at least one particle in the system."
+  coherence_checks:
+    - expr: "M > 0"
+      severity: ok
+      message:
+        es: "La masa total debe ser positiva para que el sistema tenga sentido físico."
+        en: "Total mass must be positive for the system to make physical sense."
+  graph_implications:
+    - implication: "El valor de M determina la escala de la nube de partículas en el gráfico."
+      es: "M se usa para normalizar la representación gráfica del centro de masas."
+      en: "M is used to normalize the graphical representation of the center of mass."
+  motivo_no_calculable: ""
+  pedagogical_triggers:
+    - detect_when: "M <= 0"
+      message:
+        es: "El sistema no tiene masa neta. Revisa si has olvidado incluir alguna partícula."
+        en: "The system has no net mass. Check if you missed any particles."
+
+- id: rcm_vector
+  title:
+    es: "Vector centro de masas (N partículas)"
+    en: "Center-of-mass vector (N particles)"
+  equation: "rcm = (1/M) * sum(m_i * r_i)"
+  latex: "\\\\vec r_{cm} = \\\\frac{1}{M} \\\\sum_i m_i \\\\vec r_i"
+  rearrangements:
+    - target: rcm
+      equation: rcm = (1/M) * sum(m_i * r_i)
+      latex: \\vec r_{cm} = \\frac{1}{M} \\sum_i m_i \\vec r_i
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: "Representación vectorial compacta de la posición media ponderada del sistema en el espacio multidimensional."
+    en: "Compact vector representation of the system's weighted average position in multidimensional space."
+  validity:
+    es: "Definición universal para sistemas discretos en marcos inerciales."
+    en: "Universal definition for discrete systems in inertial frames."
+  dimension_check: "L"
+  calculable: false
+  motivo_no_calculable:
+    es: "La calculadora opera sobre componentes escalares individuales."
+    en: "The calculator operates on individual scalar components."
+  used_in:
+    - theory
+    - models
+  interpretation_tags:
+    - vector_geometry
+    - barycenter
+  result_semantics:
+    target: rcm
+    kind: vector_position
+    sign_meaning:
+      es: "Orientación del vector respecto al origen tridimensional."
+      en: "Orientation of the vector relative to the three-dimensional origin."
+    absolute_value_meaning:
+      es: "Distancia radial del baricentro al origen de coordenadas."
+      en: "Radial distance of the barycenter from the coordinate origin."
+  domain_checks:
+    - expr: "M > 0"
+      message:
+        es: "Masa total positiva requerida."
+        en: "Positive total mass required."
+  constraints:
+    - expr: "M > 0"
+      message:
+        es: "La masa total debe ser positiva para definir el vector centro de masas."
+        en: "Total mass must be positive to define the center-of-mass vector."
+  coherence_checks:
+    - expr: "rcm es vector válido"
+      severity: info
+      message:
+        es: "El baricentro se localiza en el centro de inercia del sistema."
+        en: "The barycenter is located at the system's center of inertia."
+  graph_implications:
+    - implication: "El vector rcm se representa como un punto especial en el gráfico de la nube de partículas."
+      es: "rcm se dibuja como el baricentro de la nube de puntos."
+      en: "rcm is drawn as the barycenter of the point cloud."
+  coherence_checks:
+    - expr: "true"
+      severity: info
+      message:
+        es: "El baricentro se localiza en el centro de inercia del sistema."
+        en: "The barycenter is located at the system's center of inertia."
+  pedagogical_triggers:
+    - detect_when: "true"
+      message:
+        es: "Recuerda que el vector centro de masas es la suma ponderada de todos los vectores de posición."
+        en: "Remember that the center-of-mass vector is the weighted sum of all position vectors."
+`;export{e as default};

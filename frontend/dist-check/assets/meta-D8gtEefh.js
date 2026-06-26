@@ -1,0 +1,72 @@
+const e=`version: 5
+id: resonancia-electrica
+nombre:
+  es: Resonancia electrica
+  en: Electrical Resonance
+titulo:
+  es: Resonancia electrica
+  en: Electrical Resonance
+titulo_en: Electrical Resonance
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: corriente-alterna
+parent_id: corriente-alterna
+type: leaf
+ruta_relativa: fisica-clasica/electromagnetismo/corriente-alterna/resonancia-electrica
+orden: 294400
+icon: "🧲"
+descripcion: Relaciona frecuencia resonante, factor de calidad y ancho de banda para interpretar selectividad en circuitos RLC.
+description_en: Relates resonant frequency, quality factor, and bandwidth to interpret selectivity in RLC circuits.
+dificultad: 4
+tiempo_estimado_min: 90
+niveles:
+  es: [ UNIVERSIDAD ]
+  en: [ University ]
+prerequisitos:
+- fisica-clasica/electromagnetismo/corriente-alterna/circuitos-rlc
+tags:
+  es: [ resonancia-electrica, rlc-serie, factor-q, ancho-de-banda, sintonia ]
+  en: [ electrical-resonance, series-rlc, quality-factor, bandwidth, tuning ]
+physical_role:
+  es: concepto físico
+  en: physical concept
+graficos: []
+representacion_dominante: none
+magnitud_dominante: f0
+pregunta_fisica_central:
+  es: "¿Cómo fija el balance entre L y C la frecuencia resonante y cómo R controla la selectividad de un circuito RLC?"
+  en: "How does the L-C balance set resonant frequency and how does R control selectivity in an RLC circuit?"
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    show_tab: true
+    show_inline_cards: true
+    allow_contextual_feedback: true
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+    output_magnitude: f0
+  output_policy:
+    show_summary: true
+    show_summary_first: true
+    show_physical_reading: true
+    show_coherence_checks: true
+    show_model_limitations: true
+    show_warnings: true
+    show_likely_errors: true
+    max_inline_messages: 4
+  dependencies:
+    require_formulas: true
+    require_magnitudes: true
+    require_examples: true
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

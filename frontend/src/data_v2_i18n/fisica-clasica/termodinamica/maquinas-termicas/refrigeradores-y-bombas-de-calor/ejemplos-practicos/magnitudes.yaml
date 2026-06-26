@@ -1,0 +1,414 @@
+- id: COP_real
+  symbol: "COP_{real}"
+  nombre:
+    es: COP real del sistema
+    en: Real system COP
+  descripcion:
+    es: "Coeficiente de rendimiento medido en operacion real del refrigerador o bomba de calor, siempre inferior al COP de Carnot"
+    en: "Coefficient of performance measured in real operation of the refrigerator or heat pump, always below the Carnot COP"
+  unidad_si: adimensional
+  dimension: "[1]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - evaluacion de eficiencia de sistemas reales
+    - comparacion con COP de Carnot
+    - dimensionado de capacidad frigorifica
+  common_mistake: "Confundir COP real con COP de Carnot; asumir que COP real es constante independientemente de las condiciones"
+  typical_range: "1.5 - 6 para refrigeradores y bombas de calor domesticos"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre positivo, representa la eficiencia energetica real del sistema"
+      en: "Always positive, represents the real energy efficiency of the system"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "COP nulo indicaria que no se transfiere calor a pesar de consumir trabajo, sin sentido fisico"
+      en: "Zero COP would indicate no heat transfer despite consuming work, physically meaningless"
+  value_nature:
+    kind: ratio
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - summary
+      - coherence
+    secondary_for:
+      - model_validity
+  graph_binding:
+    channels:
+      - y_axis
+  pedagogical_notes:
+    es: "El COP real depende del tipo de compresor, refrigerante, temperaturas de operacion y perdidas. Tipicamente es 30 a 60 porciento del COP de Carnot."
+    en: "Real COP depends on compressor type, refrigerant, operating temperatures and losses. Typically 30 to 60 percent of the Carnot COP."
+
+- id: COP_Carnot
+  symbol: "COP_{Carnot}"
+  nombre:
+    es: COP de Carnot
+    en: Carnot COP
+  descripcion:
+    es: "Coeficiente de rendimiento maximo teorico dado por el ciclo de Carnot invertido entre las temperaturas de los focos"
+    en: "Maximum theoretical coefficient of performance given by the reversed Carnot cycle between the reservoir temperatures"
+  unidad_si: adimensional
+  dimension: "[1]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - referencia teorica de eficiencia
+    - calculo de fraccion de Carnot
+    - evaluacion de calidad de diseno
+  common_mistake: "Usar COP de Carnot como prediccion del rendimiento real; calcular con Celsius en lugar de kelvin"
+  typical_range: "3 - 15 para condiciones tipicas de climatizacion"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre positivo, representa el limite teorico superior"
+      en: "Always positive, represents the theoretical upper limit"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "COP de Carnot nulo indicaria que T_C es cero absoluto, imposible en la practica"
+      en: "Zero Carnot COP would indicate T_C at absolute zero, impossible in practice"
+  value_nature:
+    kind: ratio
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - coherence
+      - model_validity
+    secondary_for:
+      - summary
+  graph_binding:
+    channels:
+      - y_axis
+  pedagogical_notes:
+    es: "El COP de Carnot solo depende de las temperaturas absolutas de los focos. Es una cota superior que nunca se alcanza en la practica."
+    en: "The Carnot COP depends only on the absolute temperatures of the reservoirs. It is an upper bound never reached in practice."
+
+- id: W_comp
+  symbol: "W_{comp}"
+  nombre:
+    es: Potencia del compresor
+    en: Compressor power
+  descripcion:
+    es: "Potencia electrica consumida por el compresor del sistema de refrigeracion o bomba de calor"
+    en: "Electrical power consumed by the compressor of the refrigeration or heat pump system"
+  unidad_si: W
+  dimension: "[M L^2 T^{-3}]"
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: core_physical_quantity
+  used_in:
+    - calculo de capacidad de refrigeracion
+    - estimacion de consumo energetico
+    - balance energetico del sistema
+  common_mistake: "Confundir potencia del compresor con capacidad de refrigeracion; ignorar que W_comp varia con las condiciones"
+  typical_range: "50 - 5000 W para sistemas domesticos e industriales"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre positivo, representa potencia electrica consumida"
+      en: "Always positive, represents consumed electrical power"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Potencia nula significaria que el compresor esta apagado y no hay refrigeracion"
+      en: "Zero power would mean the compressor is off and there is no refrigeration"
+  value_nature:
+    kind: extensive
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - physical_reading
+    secondary_for:
+      - summary
+  graph_binding:
+    channels:
+      - parameter
+  pedagogical_notes:
+    es: "La potencia del compresor es la entrada de energia al sistema. La capacidad de refrigeracion o calefaccion es COP veces esta potencia."
+    en: "Compressor power is the energy input to the system. Cooling or heating capacity is COP times this power."
+
+- id: Q_C
+  symbol: "Q_C"
+  nombre:
+    es: Capacidad de refrigeracion
+    en: Cooling capacity
+  descripcion:
+    es: "Tasa de extraccion de calor del espacio refrigerado, tambien llamada capacidad frigorifica"
+    en: "Rate of heat extraction from the refrigerated space, also called cooling capacity"
+  unidad_si: W
+  dimension: "[M L^2 T^{-3}]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - dimensionado de sistemas de refrigeracion
+    - calculo de COP de refrigeracion
+    - balance energetico
+  common_mistake: "Confundir Q_C con Q_H; no multiplicar COP por W_comp para obtener Q_C"
+  typical_range: "100 - 50000 W"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Positivo, calor extraido del foco frio"
+      en: "Positive, heat extracted from the cold reservoir"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Q_C nulo significaria que no se extrae calor, sin efecto refrigerante"
+      en: "Zero Q_C would mean no heat extraction, no cooling effect"
+  value_nature:
+    kind: extensive
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - physical_reading
+    secondary_for:
+      - coherence
+  graph_binding:
+    channels:
+      - y_axis
+  pedagogical_notes:
+    es: "Q_C es el calor extraido del foco frio. Se calcula como COP_real multiplicado por W_comp."
+    en: "Q_C is the heat extracted from the cold reservoir. It is calculated as COP_real times W_comp."
+
+- id: Q_H
+  symbol: "Q_H"
+  nombre:
+    es: Capacidad de calefaccion
+    en: Heating capacity
+  descripcion:
+    es: "Tasa de entrega de calor al espacio calentado, suma del calor extraido del foco frio y el trabajo del compresor"
+    en: "Rate of heat delivery to the heated space, sum of heat extracted from cold reservoir and compressor work"
+  unidad_si: W
+  dimension: "[M L^2 T^{-3}]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - dimensionado de bombas de calor
+    - calculo de COP de bomba de calor
+    - balance energetico
+  common_mistake: "Olvidar sumar W_comp al calor extraido; igualar Q_H con Q_C"
+  typical_range: "200 - 60000 W"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Positivo, calor entregado al foco caliente"
+      en: "Positive, heat delivered to the hot reservoir"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Q_H nulo es imposible si el compresor funciona, ya que al menos recibe W_comp"
+      en: "Zero Q_H is impossible if the compressor runs, since it at least receives W_comp"
+  value_nature:
+    kind: extensive
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - physical_reading
+    secondary_for:
+      - coherence
+  graph_binding:
+    channels:
+      - y_axis
+  pedagogical_notes:
+    es: "Q_H siempre es mayor que Q_C porque incluye el trabajo del compresor. Q_H es Q_C mas W_comp."
+    en: "Q_H is always greater than Q_C because it includes compressor work. Q_H is Q_C plus W_comp."
+
+- id: T_C
+  symbol: "T_C"
+  nombre:
+    es: Temperatura del foco frio
+    en: Cold reservoir temperature
+  descripcion:
+    es: "Temperatura absoluta del espacio refrigerado o del foco frio exterior en modo bomba de calor"
+    en: "Absolute temperature of the refrigerated space or the cold outdoor reservoir in heat pump mode"
+  unidad_si: K
+  dimension: "[Theta]"
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: core_physical_quantity
+  used_in:
+    - calculo de COP de Carnot
+    - definicion de condiciones de operacion
+    - eje horizontal del diagrama COP vs T_C
+  common_mistake: "Usar Celsius en lugar de kelvin en la formula del COP de Carnot"
+  typical_range: "233 - 293 K"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre positivo en kelvin"
+      en: "Always positive in kelvin"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "T_C en cero absoluto es inalcanzable por la tercera ley"
+      en: "T_C at absolute zero is unattainable by the third law"
+  value_nature:
+    kind: intensive
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - graph_reading
+    secondary_for:
+      - coherence
+  graph_binding:
+    channels:
+      - x_axis
+  pedagogical_notes:
+    es: "T_C debe expresarse siempre en kelvin para los calculos del COP. Convertir sumando 273.15 a la temperatura en Celsius."
+    en: "T_C must always be expressed in kelvin for COP calculations. Convert by adding 273.15 to the Celsius temperature."
+
+- id: T_H
+  symbol: "T_H"
+  nombre:
+    es: Temperatura del foco caliente
+    en: Hot reservoir temperature
+  descripcion:
+    es: "Temperatura absoluta del ambiente exterior en refrigeracion o del espacio calentado en modo bomba de calor"
+    en: "Absolute temperature of the outdoor environment in refrigeration or the heated space in heat pump mode"
+  unidad_si: K
+  dimension: "[Theta]"
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: core_physical_quantity
+  used_in:
+    - calculo de COP de Carnot
+    - definicion de condiciones de operacion
+    - parametro fijo del diagrama COP vs T_C
+  common_mistake: "Usar Celsius en lugar de kelvin; intercambiar T_H con T_C"
+  typical_range: "293 - 338 K"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre positivo en kelvin"
+      en: "Always positive in kelvin"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "T_H en cero absoluto es fisicamente imposible en aplicaciones de climatizacion"
+      en: "T_H at absolute zero is physically impossible in HVAC applications"
+  value_nature:
+    kind: intensive
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - graph_reading
+    secondary_for:
+      - model_validity
+  graph_binding:
+    channels:
+      - parameter
+  pedagogical_notes:
+    es: "T_H debe expresarse en kelvin. En refrigeracion, es la temperatura del condensador; en bomba de calor, la del espacio a calentar."
+    en: "T_H must be expressed in kelvin. In refrigeration, it is the condenser temperature; in heat pump mode, the heated space temperature."
+
+- id: eta_Carnot
+  symbol: "\\eta_{Carnot}"
+  nombre:
+    es: Fraccion de Carnot
+    en: Carnot fraction
+  descripcion:
+    es: "Cociente entre el COP real y el COP de Carnot, expresado como porcentaje, que indica la calidad termodinamica del diseno"
+    en: "Ratio of real COP to Carnot COP, expressed as a percentage, indicating the thermodynamic quality of the design"
+  unidad_si: "%"
+  dimension: "[1]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - evaluacion de calidad de diseno
+    - comparacion entre sistemas
+    - diagnostico de eficiencia
+  common_mistake: "Confundir fraccion de Carnot con el COP real; expresar como decimal en lugar de porcentaje"
+  typical_range: "25 - 65 porciento"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre positivo, porcentaje del limite teorico alcanzado"
+      en: "Always positive, percentage of theoretical limit achieved"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Fraccion de Carnot nula significaria un sistema sin eficiencia alguna"
+      en: "Zero Carnot fraction would mean a system with no efficiency at all"
+  value_nature:
+    kind: ratio
+    nonnegative_only: true
+    expected_interval: "(0, 100)"
+  interpretation_role:
+    primary_for:
+      - model_validity
+    secondary_for:
+      - summary
+  graph_binding:
+    channels:
+      - y_axis
+  pedagogical_notes:
+    es: "La fraccion de Carnot tipica es 30 a 60 porciento. Un valor superior al 65 porciento es excepcional y debe verificarse."
+    en: "Typical Carnot fraction is 30 to 60 percent. A value above 65 percent is exceptional and should be verified."
+
+- id: E_dia
+  symbol: "E_{dia}"
+  nombre:
+    es: Consumo energetico diario
+    en: Daily energy consumption
+  descripcion:
+    es: "Energia total consumida por el compresor en un dia de operacion, base para estimar costes electricos"
+    en: "Total energy consumed by the compressor in a day of operation, basis for estimating electricity costs"
+  unidad_si: J
+  dimension: "[M L^2 T^{-2}]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: secondary_quantity
+  used_in:
+    - estimacion de costes electricos
+    - evaluacion de consumo mensual y anual
+    - comparacion de sistemas
+  common_mistake: "No convertir unidades a kWh; confundir potencia con energia"
+  typical_range: "500 - 50000 Wh por dia"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre positivo, energia consumida"
+      en: "Always positive, energy consumed"
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: "Consumo nulo si el compresor no funciona ese dia"
+      en: "Zero consumption if the compressor does not run that day"
+  value_nature:
+    kind: extensive
+    nonnegative_only: true
+    expected_interval: "[0, +inf)"
+  interpretation_role:
+    primary_for:
+      - physical_reading
+    secondary_for:
+      - summary
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: "Convertir a kWh dividiendo entre 3600000 o multiplicando W por horas de operacion."
+    en: "Convert to kWh by dividing by 3600000 or multiplying W by operating hours."

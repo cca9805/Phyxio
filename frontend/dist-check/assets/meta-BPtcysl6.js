@@ -1,0 +1,89 @@
+const n=`id: carga-electrica
+
+nombre:
+  es: Carga electrica
+  en: Electric Charge
+
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: fundamentos
+parent_id: fundamentos
+
+ruta_relativa: fisica-clasica/electromagnetismo/fundamentos/carga-electrica
+orden: 291100
+type: leaf
+
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+
+icon: 🧲
+
+descripcion: Propiedad fundamental de la materia que origina la interacción electromagnética; cuantizada y conservada.
+description_en: Fundamental property of matter originating the electromagnetic interaction; quantized and conserved.
+
+tags:
+  es:
+    - carga eléctrica
+    - cuantización
+    - conservación
+    - electrización
+    - culombio
+  en:
+    - electric charge
+    - quantization
+    - conservation
+    - electrification
+    - coulomb
+
+prerequisitos:
+  - fisica-clasica/mecanica/dinamica/fuerza-y-segunda-ley-de-newton
+
+graficos:
+  - Coord
+
+physical_role:
+  es: concepto físico
+  en: physical concept
+
+representacion_dominante: Coord
+magnitud_dominante: q
+
+pregunta_fisica_central:
+  es: "¿Qué propiedad fundamental de la materia determina su interacción electromagnética y cuál es el mínimo indivisible de esa propiedad observable en partículas libres?"
+  en: "What fundamental property of matter determines its electromagnetic interaction, and what is the smallest indivisible amount of that property observable in free particles?"
+
+dificultad: 2
+tiempo_estimado_min: 35
+
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

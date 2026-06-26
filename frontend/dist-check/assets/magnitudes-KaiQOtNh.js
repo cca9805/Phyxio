@@ -1,0 +1,434 @@
+const e=`version: v5
+leaf_id: flujo-de-energia
+magnitudes:
+  - id: S_flujo
+    symbol: "S"
+    nombre:
+      es: Densidad de flujo de energía
+      en: Energy flux density
+    descripcion:
+      es: Potencia transmitida por unidad de área perpendicular a la dirección de propagación de la onda. Representa la intensidad energética local.
+      en: Power transmitted per unit area perpendicular to the wave propagation direction. Represents the local energy intensity.
+    unidad_si: "W/m²"
+    dimension: "[M T⁻³]"
+    is_vector: true
+    components: ["S_x", "S_y", "S_z"]
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - Transporte de energía en ondas mecánicas
+      - Vector de Poynting en ondas electromagnéticas
+      - Balance energético en medios dispersivos
+    common_mistake: "Confundir con densidad de energía (u). El flujo es potencia por unidad de área, no energía por unidad de volumen."
+    typical_range: "10⁻⁶ W/m² (onda suave) hasta 10⁶ W/m² (láser pulsado)"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica dirección del flujo respecto al eje considerado. Positivo indica flujo en sentido positivo del eje.
+        en: Sign indicates flow direction relative to the considered axis. Positive means flow in the positive axis direction.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Flujo nulo indica ausencia de transporte neto de energía. Ocurre en ondas estacionarias en nodos o cuando la propagación se anula.
+        en: Zero flux indicates absence of net energy transport. Occurs at nodes in standing waves or when propagation cancels out.
+    value_nature:
+      kind: vector_component
+      nonnegative_only: false
+      expected_interval: "any"
+    interpretation_role:
+      primary_for:
+        - flujo_energia_onda
+        - transporte_energia_local
+      secondary_for:
+        - balance_energetico
+        - disipacion_energia
+    graph_binding:
+      channels:
+        - flux_density_arrow
+        - flux_magnitude_indicator
+        - energy_transport_visualization
+    pedagogical_notes:
+      es: "El flujo de energía es la magnitud clave para entender cómo la energía viaja desde la fuente hasta el receptor. En ondas mecánicas, es el producto de la densidad de energía por la velocidad de propagación. En electromagnetismo, se describe mediante el vector de Poynting."
+      en: "Energy flux is the key quantity for understanding how energy travels from source to receiver. In mechanical waves, it is the product of energy density by propagation velocity. In electromagnetism, it is described by the Poynting vector."
+
+  - id: P_onda
+    symbol: "P"
+    nombre:
+      es: Potencia de la onda
+      en: Wave power
+    descripcion:
+      es: Energía transportada por la onda por unidad de tiempo. Representa el ritmo de transferencia energética a través de una sección del medio.
+      en: Energy carried by the wave per unit time. Represents the rate of energy transfer through a section of the medium.
+    unidad_si: "W"
+    dimension: "[M L² T⁻³]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: derived
+    used_in:
+      - Cálculo de potencia transmitida
+      - Eficiencia de transmisión energética
+      - Balance de potencias en sistemas ondulatorios
+    common_mistake: "Confundir potencia instantánea con potencia media temporal. En ondas armónicas, la potencia oscila con el doble de la frecuencia de la onda."
+    typical_range: "10⁻³ W (ultrasonido médico) hasta 10⁹ W (ondas de choque)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La potencia es siempre no negativa por definición física.
+        en: Power is always non-negative by physical definition.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Potencia nula indica onda estacionaria perfecta o ausencia de onda.
+        en: Zero power indicates a perfect standing wave or absence of wave.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, ∞)"
+    interpretation_role:
+      primary_for:
+        - transferencia_energia_temporal
+      secondary_for:
+        - eficiencia_sistemas
+        - disipacion_energia
+    graph_binding:
+      channels:
+        - power_indicator
+        - temporal_power_graph
+    pedagogical_notes:
+      es: "La potencia de onda es proporcional al cuadrado de la amplitud y al cuadrado de la frecuencia. Esta dependencia cuadrática hace que pequeños cambios en amplitud o frecuencia produzcan grandes variaciones en el transporte energético."
+      en: "Wave power is proportional to the square of amplitude and the square of frequency. This quadratic dependence means small changes in amplitude or frequency produce large variations in energy transport."
+
+  - id: u_energia
+    symbol: "u"
+    nombre:
+      es: Densidad de energía
+      en: Energy density
+    descripcion:
+      es: Energía almacenada en la onda por unidad de volumen del medio. Incluye contribuciones cinética y potencial en ondas mecánicas, o energía de campos en ondas electromagnéticas.
+      en: Energy stored in the wave per unit volume of the medium. Includes kinetic and potential contributions in mechanical waves, or field energy in electromagnetic waves.
+    unidad_si: "J/m³"
+    dimension: "[M L⁻¹ T⁻²]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: fundamental
+    used_in:
+      - Almacenamiento energético en el medio
+      - Relación con flujo de energía
+      - Balance energético local
+    common_mistake: "Olvidar que la densidad de energía oscila en el espacio y el tiempo para ondas progresivas. No es uniforme salvo en casos especiales."
+    typical_range: "10⁻¹² J/m³ (ondas de radio) hasta 10⁶ J/m³ (ultrasonido de alta intensidad)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La densidad de energía es siempre no negativa.
+        en: Energy density is always non-negative.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Densidad nula indica ausencia de perturbación ondulatoria en ese punto.
+        en: Zero density indicates absence of wave perturbation at that point.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, ∞)"
+    interpretation_role:
+      primary_for:
+        - almacenamiento_energia_local
+      secondary_for:
+        - flujo_energia
+        - acumulacion_energia
+    graph_binding:
+      channels:
+        - energy_density_color_map
+        - density_profile_graph
+    pedagogical_notes:
+      es: "La densidad de energía es el 'combustible' que la onda transporta. Sin densidad de energía no hay flujo posible. En ondas en cuerdas, depende de la amplitud al cuadrado y de la densidad lineal del medio."
+      en: "Energy density is the 'fuel' that the wave transports. Without energy density there is no possible flow. In string waves, it depends on amplitude squared and the linear density of the medium."
+
+  - id: v
+    symbol: "v"
+    nombre:
+      es: Velocidad de propagación
+      en: Propagation velocity
+    descripcion:
+      es: Velocidad a la que se desplaza la perturbación ondulatoria y con ella el flujo de energía.
+      en: Velocity at which the wave disturbance propagates and with it the energy flow.
+    unidad_si: "m/s"
+    dimension: "[L T⁻¹]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: parameter
+    used_in:
+      - Propagación de ondas
+      - Transporte de energía
+      - Relación flujo-densidad
+    common_mistake: "Confundir velocidad de propagación con velocidad de oscilación de las partículas del medio. Son magnitudes distintas."
+    typical_range: "10 m/s (ondas en cuerdas) hasta 3×10⁸ m/s (ondas electromagnéticas)"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica dirección de propagación respecto al eje considerado.
+        en: Sign indicates propagation direction relative to the considered axis.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Velocidad nula implica ausencia de propagación y por tanto no hay onda progresiva.
+        en: Zero velocity implies absence of propagation and therefore no progressive wave.
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-∞, 0) ∪ (0, ∞)"
+    interpretation_role:
+      primary_for:
+        - direccion_propagacion
+      secondary_for:
+        - tiempo_viaje_onda
+        - longitud_onda
+    graph_binding:
+      channels:
+        - propagation_direction_arrow
+        - velocity_indicator
+    pedagogical_notes:
+      es: "La velocidad de propagación es la velocidad del mensaje, no de las partículas. En una cuerda pulsada, la onda viaja a v, pero cada punto de la cuerda solo oscila verticalmente con velocidad transversal mucho menor."
+      en: "Propagation velocity is the speed of the message, not of the particles. In a plucked string, the wave travels at v, but each point of the string only oscillates vertically with much smaller transverse velocity."
+
+  - id: A
+    symbol: "A"
+    nombre:
+      es: Amplitud
+      en: Amplitude
+    descripcion:
+      es: Desplazamiento máximo de la perturbación ondulatoria respecto al equilibrio.
+      en: Maximum displacement of the wave disturbance from equilibrium.
+    unidad_si: "m"
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: state
+    used_in:
+      - Intensidad de la onda
+      - Energía transportada
+      - Potencia radiada
+    common_mistake: "Asumir que amplitud doble implica el doble de energía. En realidad, la energía depende del cuadrado de la amplitud."
+    typical_range: "10⁻¹⁰ m (ondas sísmicas débiles) hasta 1 m (olas marinas)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La amplitud es siempre positiva por definición. El desplazamiento instantáneo sí puede ser negativo.
+        en: Amplitude is always positive by definition. Instantaneous displacement can be negative.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Amplitud nula indica ausencia de onda o onda de intensidad despreciable.
+        en: Zero amplitude indicates absence of wave or negligible intensity wave.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, ∞)"
+    interpretation_role:
+      primary_for:
+        - intensidad_onda
+      secondary_for:
+        - energia_onda
+        - potencia_onda
+    graph_binding:
+      channels:
+        - amplitude_indicator
+        - envelope_visualization
+    pedagogical_notes:
+      es: "La amplitud es la 'palanca' de control del flujo de energía. Duplicar la amplitud cuadruplica la potencia transportada. Esta no linealidad es clave en diseño de sistemas acústicos y ópticos."
+      en: "Amplitude is the 'lever' for controlling energy flux. Doubling amplitude quadruples the transported power. This non-linearity is key in acoustic and optical system design."
+
+  - id: mu
+    symbol: "\\\\mu"
+    nombre:
+      es: Densidad lineal de masa
+      en: Linear mass density
+    descripcion:
+      es: Masa por unidad de longitud de la cuerda o medio unidimensional que soporta la onda.
+      en: Mass per unit length of the string or one-dimensional medium supporting the wave.
+    unidad_si: "kg/m"
+    dimension: "[M L⁻¹]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: parameter
+    used_in:
+      - Velocidad de ondas en cuerdas
+      - Densidad de energía
+      - Impedancia mecánica
+    common_mistake: "Confundir densidad lineal con densidad volumétrica. Para cuerdas, solo importa la masa por metro, no la densidad del material."
+    typical_range: "10⁻⁴ kg/m (hilo de araña) hasta 10 kg/m (cable de acero grueso)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La densidad lineal es siempre positiva.
+        en: Linear mass density is always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Densidad nula implicaría ausencia de medio, imposible para ondas mecánicas.
+        en: Zero density would imply absence of medium, impossible for mechanical waves.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, ∞)"
+    interpretation_role:
+      primary_for:
+        - inercia_del_medio
+      secondary_for:
+        - velocidad_propagacion
+        - energia_onda
+    graph_binding:
+      channels:
+        - medium_property_indicator
+    pedagogical_notes:
+      es: "La densidad lineal controla cuánta inercia tiene el medio para 'almacenar' energía cinética. Cuerdas más densas (mayor μ) propagan ondas más lentas pero transportan más energía para la misma amplitud."
+      en: "Linear density controls how much inertia the medium has to 'store' kinetic energy. Denser strings (higher μ) propagate waves more slowly but carry more energy for the same amplitude."
+
+  - id: omega
+    symbol: "\\\\omega"
+    nombre:
+      es: Frecuencia angular
+      en: Angular frequency
+    descripcion:
+      es: Frecuencia de oscilación expresada en radianes por segundo. Relacionada con la frecuencia ordinaria por ω = 2πf.
+      en: Oscillation frequency expressed in radians per second. Related to ordinary frequency by ω = 2πf.
+    unidad_si: "rad/s"
+    dimension: "[T⁻¹]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: parameter
+    used_in:
+      - Descripción temporal de ondas
+      - Energía de oscilación
+      - Espectro de frecuencias
+    common_mistake: "Confundir ω con f. La frecuencia angular incluye el factor 2π, lo que afecta a las ecuaciones de energía."
+    typical_range: "10⁻² rad/s (mareas) hasta 10¹⁵ rad/s (luz visible)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La frecuencia angular es siempre positiva por convención física.
+        en: Angular frequency is always positive by physical convention.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Frecuencia nula indica ausencia de oscilación (onda estática, degenerada).
+        en: Zero frequency indicates absence of oscillation (static wave, degenerate case).
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, ∞)"
+    interpretation_role:
+      primary_for:
+        - ritmo_oscilacion
+      secondary_for:
+        - energia_onda
+        - potencia_onda
+    graph_binding:
+      channels:
+        - temporal_oscillation_rate
+    pedagogical_notes:
+      es: "La frecuencia angular es la 'velocidad de giro' del fasor que representa la onda. Al cuadrado, determina cuánta energía potencial almacena el medio por unidad de deformación."
+      en: "Angular frequency is the 'spin rate' of the phasor representing the wave. Squared, it determines how much potential energy the medium stores per unit deformation."
+
+  - id: lambda
+    symbol: "\\\\lambda"
+    nombre:
+      es: Longitud de onda
+      en: Wavelength
+    descripcion:
+      es: Distancia espacial entre dos puntos consecutivos de igual fase en la onda.
+      en: Spatial distance between two consecutive points of equal phase in the wave.
+    unidad_si: "m"
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: state
+    used_in:
+      - Descripción espacial de ondas
+      - Relación dispersión
+      - Resolución espacial
+    common_mistake: "Confundir longitud de onda con amplitud. La amplitud es el 'tamaño vertical' de la onda, la longitud de onda es el 'tamaño horizontal'."
+    typical_range: "10⁻¹² m (rayos gamma) hasta 10⁶ m (ondas de radio ELF)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La longitud de onda es siempre positiva.
+        en: Wavelength is always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Longitud de onda nula implicaría frecuencia infinita, físicamente imposible.
+        en: Zero wavelength would imply infinite frequency, physically impossible.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, ∞)"
+    interpretation_role:
+      primary_for:
+        - escala_espacial_onda
+      secondary_for:
+        - difraccion
+        - interferencia
+    graph_binding:
+      channels:
+        - spatial_period_indicator
+    pedagogical_notes:
+      es: "La longitud de onda es la 'huella digital' espacial de la onda. Determina qué obstáculos pueden 'ver' la onda (difracción) y cómo se distribuye la energía en el espacio."
+      en: "Wavelength is the spatial 'fingerprint' of the wave. It determines which obstacles can 'see' the wave (diffraction) and how energy is distributed in space."
+
+  - id: A_seccion
+    symbol: "A_{\\\\perp}"
+    nombre:
+      es: Area perpendicular de seccion
+      en: Perpendicular section area
+    descripcion:
+      es: Area efectiva atravesada perpendicularmente por el flujo de energia de la onda.
+      en: Effective area crossed perpendicularly by the wave energy flux.
+    unidad_si: "m²"
+    dimension: "[L²]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: parameter
+    used_in:
+      - Calculo de potencia total desde flujo
+      - Intercepcion de energia por receptores
+      - Balance energetico sobre superficies
+    common_mistake: "Usar el area geometrica total cuando la superficie esta inclinada respecto al flujo."
+    typical_range: "10⁻⁶ m² (sensores pequeños) hasta 10⁴ m² (frentes de onda extensos)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: El area efectiva es positiva por definicion.
+        en: Effective area is positive by definition.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Area nula implica que no se intercepta potencia de la onda.
+        en: Zero area means no wave power is intercepted.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, ∞)"
+    interpretation_role:
+      primary_for:
+        - potencia_desde_flujo
+      secondary_for:
+        - area_perpendicular
+        - receptor_energetico
+    graph_binding:
+      channels:
+        - section_area_visualization
+        - intercepted_power_indicator
+    pedagogical_notes:
+      es: "El area perpendicular convierte una densidad de flujo local en potencia total interceptada. Si la superficie esta inclinada, debe usarse la proyeccion perpendicular al flujo."
+      en: "The perpendicular area converts local flux density into total intercepted power. If the surface is tilted, the projection perpendicular to the flux must be used."
+`;export{e as default};

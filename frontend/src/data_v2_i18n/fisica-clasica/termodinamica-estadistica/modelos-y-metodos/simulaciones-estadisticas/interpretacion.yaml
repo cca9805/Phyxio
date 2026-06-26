@@ -1,0 +1,1011 @@
+version: 5.0.0
+id: simulaciones-estadisticas
+leaf_id: simulaciones-estadisticas
+nombre:
+  es: Simulaciones estadisticas
+  en: Statistical Simulations
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: modelos-y-metodos
+  parent_id: modelos-y-metodos
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/modelos-y-metodos/simulaciones-estadisticas
+  orden: 277300
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - media_muestral_observable
+  - error_estadistico_media
+  - factor_boltzmann
+  - aceptacion_monte_carlo
+  magnitudes:
+  - numero_muestras
+  - observable
+  - suma_observable
+  - media_muestral
+  - desviacion_estandar
+  - error_estadistico
+  - temperatura
+  - energia
+  - diferencia_energia
+  - constante_boltzmann
+  - probabilidad_boltzmann
+  - constante_normalizacion
+  - probabilidad_aceptacion
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: media_muestral
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  media_muestral:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado_estimado
+      en: sample mean
+    summary_rules:
+    - id: media_muestral_summary_contexto
+      when: 'true'
+      status: ok
+      text:
+        es: '[[media_muestral]] es la estimación finita del promedio físico del observable, no el valor exacto garantizado.'
+        en: '[[media_muestral]] is the finite estimate of the physical average, not a guaranteed exact value.'
+    physical_reading_rules:
+    - id: media_muestral_physical_reading_unidad_sentido
+      when: 'true'
+      status: info
+      text:
+        es: Lee la unidad, rango permitido y papel físico de [[media_muestral]] antes de comparar resultados de simulación.
+        en: Read the unit, allowed range, and physical role of [[media_muestral]] before comparing simulation results.
+    coherence_rules:
+    - id: media_muestral_coherence_dimension_dominio
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[media_muestral]] conserve la unidad de [[observable]] y proceda de [[suma_observable]]/[[numero_muestras]].
+        en: Check that [[media_muestral]] keeps the unit of [[observable]] and comes from [[suma_observable]]/[[numero_muestras]].
+    model_validity_rules:
+    - id: media_muestral_model_validity_hipotesis
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[media_muestral]] solo dentro de las hipótesis de muestreo, equilibrio y variables declaradas en el
+          leaf.
+        en: Interpret [[media_muestral]] only within the sampling, equilibrium, and variable assumptions declared in the leaf.
+    graph_rules:
+    - id: media_muestral_graph_coord_lectura
+      when: 'true'
+      status: info
+      text:
+        es: Usa la gráfica Coord como apoyo si [[media_muestral]] afecta a la convergencia, dispersión o lectura probabilística
+          del resultado.
+        en: Use the Coord graph as support if [[media_muestral]] affects convergence, spread, or probabilistic reading of
+          the result.
+    likely_errors:
+    - id: media_muestral_likely_error_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[media_muestral]] con una lectura aislada es un error frecuente: No leas [[media_muestral]] como número
+          aislado: revisa unidad, rango y fórmula antes de concluir.'
+        en: 'A common mistake is to interpret [[media_muestral]] in isolation: Do not read [[media_muestral]] as an isolated
+          number: check unit, range, and formula before concluding.'
+    next_step_rules:
+    - id: media_muestral_next_step_verificacion
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[media_muestral]], contrasta el resultado con la fórmula activa, las unidades SI y la
+          tendencia esperada.
+        en: After interpreting [[media_muestral]], compare the result with the active formula, SI units, and expected trend.
+    physical_intuition:
+    - id: media_muestral_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[media_muestral]] ayuda a decidir si la simulación describe tendencia física, ruido numérico
+          o peso estadístico.
+        en: Intuitively, [[media_muestral]] helps decide whether the simulation describes physical trend, numerical noise,
+          or statistical weight.
+    limiting_cases:
+    - id: media_muestral_limiting_cases_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza qué ocurre con [[media_muestral]] en valores nulos, extremos o fuera del dominio físico permitido.
+        en: Analyze what happens to [[media_muestral]] at zero, extreme, or outside allowed physical-domain values.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo de [[media_muestral]] solo tiene sentido después de fijar referencia y convenio.
+        en: The sign of [[media_muestral]] is meaningful only after fixing reference and convention.
+      common_sign_errors:
+      - es: Tomar un signo negativo como error numérico sin revisar la referencia.
+        en: Treating a negative sign as a numerical error without checking the reference.
+  suma_observable:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: acumulador
+      en: sum of observables
+    summary_rules:
+    - id: suma_observable_summary_contexto
+      when: 'true'
+      status: ok
+      text:
+        es: '[[suma_observable]] acumula los valores medidos y sirve de puente numérico hacia la media muestral.'
+        en: '[[suma_observable]] accumulates measured values and acts as the numerical bridge to the sample mean.'
+    physical_reading_rules:
+    - id: suma_observable_physical_reading_unidad_sentido
+      when: 'true'
+      status: info
+      text:
+        es: Lee la unidad, rango permitido y papel físico de [[suma_observable]] antes de comparar resultados de simulación.
+        en: Read the unit, allowed range, and physical role of [[suma_observable]] before comparing simulation results.
+    coherence_rules:
+    - id: suma_observable_coherence_dimension_dominio
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[suma_observable]] respete dimensión, rango físico y relación con las fórmulas declaradas.
+        en: Check that [[suma_observable]] respects dimension, physical range, and its declared formula relations.
+    model_validity_rules:
+    - id: suma_observable_model_validity_hipotesis
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[suma_observable]] solo dentro de las hipótesis de muestreo, equilibrio y variables declaradas en
+          el leaf.
+        en: Interpret [[suma_observable]] only within the sampling, equilibrium, and variable assumptions declared in the
+          leaf.
+    graph_rules:
+    - id: suma_observable_graph_coord_lectura
+      when: 'true'
+      status: info
+      text:
+        es: Usa la gráfica Coord como apoyo si [[suma_observable]] afecta a la convergencia, dispersión o lectura probabilística
+          del resultado.
+        en: Use the Coord graph as support if [[suma_observable]] affects convergence, spread, or probabilistic reading of
+          the result.
+    likely_errors:
+    - id: suma_observable_likely_error_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[suma_observable]] con una lectura aislada es un error frecuente: No leas [[suma_observable]] como
+          número aislado: revisa unidad, rango y fórmula antes de concluir.'
+        en: 'A common mistake is to interpret [[suma_observable]] in isolation: Do not read [[suma_observable]] as an isolated
+          number: check unit, range, and formula before concluding.'
+    next_step_rules:
+    - id: suma_observable_next_step_verificacion
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[suma_observable]], contrasta el resultado con la fórmula activa, las unidades SI y la
+          tendencia esperada.
+        en: After interpreting [[suma_observable]], compare the result with the active formula, SI units, and expected trend.
+    physical_intuition:
+    - id: suma_observable_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[suma_observable]] ayuda a decidir si la simulación describe tendencia física, ruido numérico
+          o peso estadístico.
+        en: Intuitively, [[suma_observable]] helps decide whether the simulation describes physical trend, numerical noise,
+          or statistical weight.
+    limiting_cases:
+    - id: suma_observable_limiting_cases_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza qué ocurre con [[suma_observable]] en valores nulos, extremos o fuera del dominio físico permitido.
+        en: Analyze what happens to [[suma_observable]] at zero, extreme, or outside allowed physical-domain values.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo de [[suma_observable]] solo tiene sentido después de fijar referencia y convenio.
+        en: The sign of [[suma_observable]] is meaningful only after fixing reference and convention.
+      common_sign_errors:
+      - es: Tomar un signo negativo como error numérico sin revisar la referencia.
+        en: Treating a negative sign as a numerical error without checking the reference.
+  numero_muestras:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable_independiente
+      en: number of samples
+    summary_rules:
+    - id: numero_muestras_summary_contexto
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_muestras]] fija cuántas muestras sostienen la estimación; gobierna coste y reducción del error estadístico.'
+        en: '[[numero_muestras]] sets how many samples support the estimate; it controls cost and statistical-error reduction.'
+    physical_reading_rules:
+    - id: numero_muestras_physical_reading_unidad_sentido
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[numero_muestras]] como conteo entero positivo; aumentar muestras mejora la precisión, pero no elimina todo
+          sesgo del modelo.
+        en: Read [[numero_muestras]] as a positive integer count; adding samples improves precision but does not remove model
+          bias.
+    coherence_rules:
+    - id: numero_muestras_coherence_dimension_dominio
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[numero_muestras]] respete dimensión, rango físico y relación con las fórmulas declaradas.
+        en: Check that [[numero_muestras]] respects dimension, physical range, and its declared formula relations.
+    model_validity_rules:
+    - id: numero_muestras_model_validity_hipotesis
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[numero_muestras]] solo dentro de las hipótesis de muestreo, equilibrio y variables declaradas en
+          el leaf.
+        en: Interpret [[numero_muestras]] only within the sampling, equilibrium, and variable assumptions declared in the
+          leaf.
+    graph_rules:
+    - id: numero_muestras_graph_coord_lectura
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, [[numero_muestras]] aparece en el eje x y permite ver que la mejora del error no es lineal.
+        en: In the Coord graph, [[numero_muestras]] is on the x-axis and shows that error improvement is not linear.
+    likely_errors:
+    - id: numero_muestras_likely_error_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[numero_muestras]] con una lectura aislada es un error frecuente: No confundas aumentar [[numero_muestras]]
+          con corregir un modelo mal planteado o muestras sesgadas.'
+        en: Do not confuse increasing [[numero_muestras]] with fixing a poor model or biased samples.
+    next_step_rules:
+    - id: numero_muestras_next_step_verificacion
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[numero_muestras]], contrasta el resultado con la fórmula activa, las unidades SI y la
+          tendencia esperada.
+        en: After interpreting [[numero_muestras]], compare the result with the active formula, SI units, and expected trend.
+    physical_intuition:
+    - id: numero_muestras_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[numero_muestras]] compra precisión con coste computacional; cada mejora adicional sale más cara.
+        en: Intuitively, [[numero_muestras]] buys precision with computational cost; each extra improvement is more expensive.
+    limiting_cases:
+    - id: numero_muestras_limiting_cases_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[numero_muestras]] crece mucho, el error baja lentamente; si se acerca a cero, la estimación deja de tener
+          sentido.
+        en: If [[numero_muestras]] grows very large, error decreases slowly; if it approaches zero, the estimate loses meaning.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: El signo de [[numero_muestras]] solo tiene sentido después de fijar referencia y convenio.
+        en: The sign of [[numero_muestras]] is meaningful only after fixing reference and convention.
+      common_sign_errors: []
+  error_estadistico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: magnitud_dominante
+      en: statistical error
+    summary_rules:
+    - id: error_estadistico_summary_contexto
+      when: 'true'
+      status: ok
+      text:
+        es: '[[error_estadistico]] resume la incertidumbre de la media estimada y debe disminuir al aumentar [[numero_muestras]].'
+        en: '[[error_estadistico]] summarizes the uncertainty of the estimated mean and should decrease as [[numero_muestras]]
+          increases.'
+    physical_reading_rules:
+    - id: error_estadistico_physical_reading_unidad_sentido
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[error_estadistico]] como una incertidumbre positiva de la media: no apunta en una dirección ni corrige
+          el valor por sí solo.'
+        en: 'Read [[error_estadistico]] as a positive uncertainty of the mean: it has no direction and does not correct the
+          value by itself.'
+    coherence_rules:
+    - id: error_estadistico_coherence_dimension_dominio
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[error_estadistico]] tenga la misma dimensión que [[desviacion_estandar]] y baje como 1/sqrt([[numero_muestras]]).
+        en: Check that [[error_estadistico]] has the same dimension as [[desviacion_estandar]] and decreases as 1/sqrt([[numero_muestras]]).
+    model_validity_rules:
+    - id: error_estadistico_model_validity_hipotesis
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de [[error_estadistico]] supone muestras aproximadamente independientes; si hay correlación, el N efectivo
+          es menor.
+        en: Reading [[error_estadistico]] assumes approximately independent samples; if correlation exists, the effective
+          N is smaller.
+    graph_rules:
+    - id: error_estadistico_graph_coord_lectura
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, [[error_estadistico]] aparece en el eje y y debe caer lentamente como raíz inversa de [[numero_muestras]].
+        en: In the Coord graph, [[error_estadistico]] is on the y-axis and should fall slowly as the inverse square root of
+          [[numero_muestras]].
+    likely_errors:
+    - id: error_estadistico_likely_error_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[error_estadistico]] con una lectura aislada es un error frecuente: No confundas [[error_estadistico]]
+          con [[desviacion_estandar]]: uno mide incertidumbre de la media y la otra dispersión de datos.'
+        en: 'Do not confuse [[error_estadistico]] with [[desviacion_estandar]]: one measures mean uncertainty and the other
+          data spread.'
+    next_step_rules:
+    - id: error_estadistico_next_step_verificacion
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[error_estadistico]], contrasta el resultado con la fórmula activa, las unidades SI y
+          la tendencia esperada.
+        en: After interpreting [[error_estadistico]], compare the result with the active formula, SI units, and expected trend.
+    physical_intuition:
+    - id: error_estadistico_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: 'Intuitivamente, bajar [[error_estadistico]] cuesta cada vez más muestras: la curva se aplana como una colina
+          numérica domesticada.'
+        en: 'Intuitively, lowering [[error_estadistico]] requires more and more samples: the curve flattens like a tamed numerical
+          hill.'
+    limiting_cases:
+    - id: error_estadistico_limiting_cases_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[numero_muestras]] se cuadruplica, [[error_estadistico]] se reduce aproximadamente a la mitad si la dispersión
+          no cambia.
+        en: If [[numero_muestras]] is quadrupled, [[error_estadistico]] is roughly halved if the spread is unchanged.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: El signo de [[error_estadistico]] solo tiene sentido después de fijar referencia y convenio.
+        en: The sign of [[error_estadistico]] is meaningful only after fixing reference and convention.
+      common_sign_errors: []
+  desviacion_estandar:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: dispersion_muestral
+      en: sample standard deviation
+    summary_rules:
+    - id: desviacion_estandar_summary_contexto
+      when: 'true'
+      status: ok
+      text:
+        es: '[[desviacion_estandar]] mide la dispersión de las muestras individuales alrededor de la media.'
+        en: '[[desviacion_estandar]] measures the spread of individual samples around the mean.'
+    physical_reading_rules:
+    - id: desviacion_estandar_physical_reading_unidad_sentido
+      when: 'true'
+      status: info
+      text:
+        es: Lee la unidad, rango permitido y papel físico de [[desviacion_estandar]] antes de comparar resultados de simulación.
+        en: Read the unit, allowed range, and physical role of [[desviacion_estandar]] before comparing simulation results.
+    coherence_rules:
+    - id: desviacion_estandar_coherence_dimension_dominio
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[desviacion_estandar]] respete dimensión, rango físico y relación con las fórmulas declaradas.
+        en: Check that [[desviacion_estandar]] respects dimension, physical range, and its declared formula relations.
+    model_validity_rules:
+    - id: desviacion_estandar_model_validity_hipotesis
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[desviacion_estandar]] solo dentro de las hipótesis de muestreo, equilibrio y variables declaradas
+          en el leaf.
+        en: Interpret [[desviacion_estandar]] only within the sampling, equilibrium, and variable assumptions declared in
+          the leaf.
+    graph_rules:
+    - id: desviacion_estandar_graph_coord_lectura
+      when: 'true'
+      status: info
+      text:
+        es: Usa la gráfica Coord como apoyo si [[desviacion_estandar]] afecta a la convergencia, dispersión o lectura probabilística
+          del resultado.
+        en: Use the Coord graph as support if [[desviacion_estandar]] affects convergence, spread, or probabilistic reading
+          of the result.
+    likely_errors:
+    - id: desviacion_estandar_likely_error_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[desviacion_estandar]] con una lectura aislada es un error frecuente: No leas [[desviacion_estandar]]
+          como número aislado: revisa unidad, rango y fórmula antes de concluir.'
+        en: 'A common mistake is to interpret [[desviacion_estandar]] in isolation: Do not read [[desviacion_estandar]] as
+          an isolated number: check unit, range, and formula before concluding.'
+    next_step_rules:
+    - id: desviacion_estandar_next_step_verificacion
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[desviacion_estandar]], contrasta el resultado con la fórmula activa, las unidades SI
+          y la tendencia esperada.
+        en: After interpreting [[desviacion_estandar]], compare the result with the active formula, SI units, and expected
+          trend.
+    physical_intuition:
+    - id: desviacion_estandar_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[desviacion_estandar]] ayuda a decidir si la simulación describe tendencia física, ruido numérico
+          o peso estadístico.
+        en: Intuitively, [[desviacion_estandar]] helps decide whether the simulation describes physical trend, numerical noise,
+          or statistical weight.
+    limiting_cases:
+    - id: desviacion_estandar_limiting_cases_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza qué ocurre con [[desviacion_estandar]] en valores nulos, extremos o fuera del dominio físico permitido.
+        en: Analyze what happens to [[desviacion_estandar]] at zero, extreme, or outside allowed physical-domain values.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: El signo de [[desviacion_estandar]] solo tiene sentido después de fijar referencia y convenio.
+        en: The sign of [[desviacion_estandar]] is meaningful only after fixing reference and convention.
+      common_sign_errors: []
+  probabilidad_boltzmann:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: peso_estadistico
+      en: Boltzmann probability
+    summary_rules:
+    - id: probabilidad_boltzmann_summary_contexto
+      when: 'true'
+      status: ok
+      text:
+        es: '[[probabilidad_boltzmann]] expresa el peso relativo de un estado dentro del modelo canónico.'
+        en: '[[probabilidad_boltzmann]] expresses the relative weight of a state in the canonical model.'
+    physical_reading_rules:
+    - id: probabilidad_boltzmann_physical_reading_unidad_sentido
+      when: 'true'
+      status: info
+      text:
+        es: Lee la unidad, rango permitido y papel físico de [[probabilidad_boltzmann]] antes de comparar resultados de simulación.
+        en: Read the unit, allowed range, and physical role of [[probabilidad_boltzmann]] before comparing simulation results.
+    coherence_rules:
+    - id: probabilidad_boltzmann_coherence_dimension_dominio
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[probabilidad_boltzmann]] sea adimensional, no negativa y coherente con E/(k_B*T).
+        en: Check that [[probabilidad_boltzmann]] is dimensionless, nonnegative, and consistent with E/(k_B*T).
+    model_validity_rules:
+    - id: probabilidad_boltzmann_model_validity_hipotesis
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de [[probabilidad_boltzmann]] exige equilibrio canónico y temperatura absoluta positiva.
+        en: Reading [[probabilidad_boltzmann]] requires canonical equilibrium and positive absolute temperature.
+    graph_rules:
+    - id: probabilidad_boltzmann_graph_coord_lectura
+      when: 'true'
+      status: info
+      text:
+        es: Usa la gráfica Coord como apoyo si [[probabilidad_boltzmann]] afecta a la convergencia, dispersión o lectura probabilística
+          del resultado.
+        en: Use the Coord graph as support if [[probabilidad_boltzmann]] affects convergence, spread, or probabilistic reading
+          of the result.
+    likely_errors:
+    - id: probabilidad_boltzmann_likely_error_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[probabilidad_boltzmann]] con una lectura aislada es un error frecuente: No interpretes [[probabilidad_boltzmann]]
+          aislada sin normalización ni comparación entre estados.'
+        en: 'A common mistake is to interpret [[probabilidad_boltzmann]] in isolation: Do not interpret [[probabilidad_boltzmann]]
+          in isolation without normalization or comparison between states.'
+    next_step_rules:
+    - id: probabilidad_boltzmann_next_step_verificacion
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[probabilidad_boltzmann]], contrasta el resultado con la fórmula activa, las unidades
+          SI y la tendencia esperada.
+        en: After interpreting [[probabilidad_boltzmann]], compare the result with the active formula, SI units, and expected
+          trend.
+    physical_intuition:
+    - id: probabilidad_boltzmann_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[probabilidad_boltzmann]] ayuda a decidir si la simulación describe tendencia física, ruido numérico
+          o peso estadístico.
+        en: Intuitively, [[probabilidad_boltzmann]] helps decide whether the simulation describes physical trend, numerical
+          noise, or statistical weight.
+    limiting_cases:
+    - id: probabilidad_boltzmann_limiting_cases_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza qué ocurre con [[probabilidad_boltzmann]] en valores nulos, extremos o fuera del dominio físico permitido.
+        en: Analyze what happens to [[probabilidad_boltzmann]] at zero, extreme, or outside allowed physical-domain values.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: El signo de [[probabilidad_boltzmann]] solo tiene sentido después de fijar referencia y convenio.
+        en: The sign of [[probabilidad_boltzmann]] is meaningful only after fixing reference and convention.
+      common_sign_errors: []
+  energia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: energia_estado
+      en: state energy
+    summary_rules:
+    - id: energia_summary_contexto
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia]] ordena los estados en el factor de Boltzmann; valores mayores suelen tener menor peso a temperatura
+          fija.'
+        en: '[[energia]] ranks states in the Boltzmann factor; larger values usually have lower weight at fixed temperature.'
+    physical_reading_rules:
+    - id: energia_physical_reading_unidad_sentido
+      when: 'true'
+      status: info
+      text:
+        es: Lee la unidad, rango permitido y papel físico de [[energia]] antes de comparar resultados de simulación.
+        en: Read the unit, allowed range, and physical role of [[energia]] before comparing simulation results.
+    coherence_rules:
+    - id: energia_coherence_dimension_dominio
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[energia]] respete dimensión, rango físico y relación con las fórmulas declaradas.
+        en: Check that [[energia]] respects dimension, physical range, and its declared formula relations.
+    model_validity_rules:
+    - id: energia_model_validity_hipotesis
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia]] solo dentro de las hipótesis de muestreo, equilibrio y variables declaradas en el leaf.
+        en: Interpret [[energia]] only within the sampling, equilibrium, and variable assumptions declared in the leaf.
+    graph_rules:
+    - id: energia_graph_coord_lectura
+      when: 'true'
+      status: info
+      text:
+        es: Usa la gráfica Coord como apoyo si [[energia]] afecta a la convergencia, dispersión o lectura probabilística del
+          resultado.
+        en: Use the Coord graph as support if [[energia]] affects convergence, spread, or probabilistic reading of the result.
+    likely_errors:
+    - id: energia_likely_error_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia]] con una lectura aislada es un error frecuente: No leas [[energia]] como número aislado:
+          revisa unidad, rango y fórmula antes de concluir.'
+        en: 'A common mistake is to interpret [[energia]] in isolation: Do not read [[energia]] as an isolated number: check
+          unit, range, and formula before concluding.'
+    next_step_rules:
+    - id: energia_next_step_verificacion
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[energia]], contrasta el resultado con la fórmula activa, las unidades SI y la tendencia
+          esperada.
+        en: After interpreting [[energia]], compare the result with the active formula, SI units, and expected trend.
+    physical_intuition:
+    - id: energia_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia]] ayuda a decidir si la simulación describe tendencia física, ruido numérico o peso
+          estadístico.
+        en: Intuitively, [[energia]] helps decide whether the simulation describes physical trend, numerical noise, or statistical
+          weight.
+    limiting_cases:
+    - id: energia_limiting_cases_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza qué ocurre con [[energia]] en valores nulos, extremos o fuera del dominio físico permitido.
+        en: Analyze what happens to [[energia]] at zero, extreme, or outside allowed physical-domain values.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo de [[energia]] solo tiene sentido después de fijar referencia y convenio.
+        en: The sign of [[energia]] is meaningful only after fixing reference and convention.
+      common_sign_errors:
+      - es: Tomar un signo negativo como error numérico sin revisar la referencia.
+        en: Treating a negative sign as a numerical error without checking the reference.
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parametro_termico
+      en: temperature
+    summary_rules:
+    - id: temperatura_summary_contexto
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] controla la intensidad de las fluctuaciones y el peso relativo de estados de distinta energía.'
+        en: '[[temperatura]] controls fluctuation strength and the relative weight of states with different energy.'
+    physical_reading_rules:
+    - id: temperatura_physical_reading_unidad_sentido
+      when: 'true'
+      status: info
+      text:
+        es: Lee la unidad, rango permitido y papel físico de [[temperatura]] antes de comparar resultados de simulación.
+        en: Read the unit, allowed range, and physical role of [[temperatura]] before comparing simulation results.
+    coherence_rules:
+    - id: temperatura_coherence_dimension_dominio
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura]] respete dimensión, rango físico y relación con las fórmulas declaradas.
+        en: Check that [[temperatura]] respects dimension, physical range, and its declared formula relations.
+    model_validity_rules:
+    - id: temperatura_model_validity_hipotesis
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura]] solo dentro de las hipótesis de muestreo, equilibrio y variables declaradas en el leaf.
+        en: Interpret [[temperatura]] only within the sampling, equilibrium, and variable assumptions declared in the leaf.
+    graph_rules:
+    - id: temperatura_graph_coord_lectura
+      when: 'true'
+      status: info
+      text:
+        es: Usa la gráfica Coord como apoyo si [[temperatura]] afecta a la convergencia, dispersión o lectura probabilística
+          del resultado.
+        en: Use the Coord graph as support if [[temperatura]] affects convergence, spread, or probabilistic reading of the
+          result.
+    likely_errors:
+    - id: temperatura_likely_error_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura]] con una lectura aislada es un error frecuente: No uses temperatura Celsius en exponentes
+          térmicos; [[temperatura]] debe ser absoluta.'
+        en: 'A common mistake is to interpret [[temperatura]] in isolation: Do not use Celsius temperature in thermal exponents;
+          [[temperatura]] must be absolute.'
+    next_step_rules:
+    - id: temperatura_next_step_verificacion
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[temperatura]], contrasta el resultado con la fórmula activa, las unidades SI y la tendencia
+          esperada.
+        en: After interpreting [[temperatura]], compare the result with the active formula, SI units, and expected trend.
+    physical_intuition:
+    - id: temperatura_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, mayor [[temperatura]] suaviza diferencias energéticas y permite explorar más estados.
+        en: Intuitively, higher [[temperatura]] softens energy differences and allows more states to be explored.
+    limiting_cases:
+    - id: temperatura_limiting_cases_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura]] tiende a cero, se favorecen estados de baja energía; si crece mucho, las diferencias se suavizan.
+        en: If [[temperatura]] approaches zero, low-energy states are favored; if it grows large, differences are softened.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: El signo de [[temperatura]] solo tiene sentido después de fijar referencia y convenio.
+        en: The sign of [[temperatura]] is meaningful only after fixing reference and convention.
+      common_sign_errors: []
+  probabilidad_aceptacion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: criterio_monte_carlo
+      en: acceptance probability
+    summary_rules:
+    - id: probabilidad_aceptacion_summary_contexto
+      when: 'true'
+      status: ok
+      text:
+        es: '[[probabilidad_aceptacion]] indica con qué probabilidad se acepta un cambio propuesto en Monte Carlo.'
+        en: '[[probabilidad_aceptacion]] gives the probability of accepting a proposed Monte Carlo move.'
+    physical_reading_rules:
+    - id: probabilidad_aceptacion_physical_reading_unidad_sentido
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[probabilidad_aceptacion]] como número entre 0 y 1; valores altos aceptan más cambios y valores bajos los
+          filtran.
+        en: Read [[probabilidad_aceptacion]] as a number between 0 and 1; high values accept more moves and low values filter
+          them.
+    coherence_rules:
+    - id: probabilidad_aceptacion_coherence_dimension_dominio
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[probabilidad_aceptacion]] quede entre 0 y 1 y responda al signo de [[diferencia_energia]].
+        en: Check that [[probabilidad_aceptacion]] stays between 0 and 1 and responds to the sign of [[diferencia_energia]].
+    model_validity_rules:
+    - id: probabilidad_aceptacion_model_validity_hipotesis
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de [[probabilidad_aceptacion]] pertenece a un algoritmo de Monte Carlo con criterio térmico, no a una
+          probabilidad universal.
+        en: Reading [[probabilidad_aceptacion]] belongs to a Monte Carlo algorithm with a thermal criterion, not to a universal
+          probability.
+    graph_rules:
+    - id: probabilidad_aceptacion_graph_coord_lectura
+      when: 'true'
+      status: info
+      text:
+        es: Usa la gráfica Coord como apoyo si [[probabilidad_aceptacion]] afecta a la convergencia, dispersión o lectura
+          probabilística del resultado.
+        en: Use the Coord graph as support if [[probabilidad_aceptacion]] affects convergence, spread, or probabilistic reading
+          of the result.
+    likely_errors:
+    - id: probabilidad_aceptacion_likely_error_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[probabilidad_aceptacion]] con una lectura aislada es un error frecuente: No permitas valores mayores
+          que 1; el criterio min(1, ...) recorta la probabilidad.'
+        en: 'A common mistake is to interpret [[probabilidad_aceptacion]] in isolation: Do not allow values greater than 1;
+          the min(1, ...) criterion clips the probability.'
+    next_step_rules:
+    - id: probabilidad_aceptacion_next_step_verificacion
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[probabilidad_aceptacion]], contrasta el resultado con la fórmula activa, las unidades
+          SI y la tendencia esperada.
+        en: After interpreting [[probabilidad_aceptacion]], compare the result with the active formula, SI units, and expected
+          trend.
+    physical_intuition:
+    - id: probabilidad_aceptacion_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[probabilidad_aceptacion]] ayuda a decidir si la simulación describe tendencia física, ruido
+          numérico o peso estadístico.
+        en: Intuitively, [[probabilidad_aceptacion]] helps decide whether the simulation describes physical trend, numerical
+          noise, or statistical weight.
+    limiting_cases:
+    - id: probabilidad_aceptacion_limiting_cases_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[diferencia_energia]] es negativa, la aceptación suele ser 1; si es muy positiva, puede ser muy pequeña.
+        en: If [[diferencia_energia]] is negative, acceptance is usually 1; if it is very positive, it can be very small.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: El signo de [[probabilidad_aceptacion]] solo tiene sentido después de fijar referencia y convenio.
+        en: The sign of [[probabilidad_aceptacion]] is meaningful only after fixing reference and convention.
+      common_sign_errors: []
+  diferencia_energia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: cambio_energetico
+      en: energy difference
+    summary_rules:
+    - id: diferencia_energia_summary_contexto
+      when: 'true'
+      status: ok
+      text:
+        es: '[[diferencia_energia]] decide si un cambio de Monte Carlo favorece o penaliza la aceptación.'
+        en: '[[diferencia_energia]] decides whether a Monte Carlo move favors or penalizes acceptance.'
+    physical_reading_rules:
+    - id: diferencia_energia_physical_reading_unidad_sentido
+      when: 'true'
+      status: info
+      text:
+        es: Lee la unidad, rango permitido y papel físico de [[diferencia_energia]] antes de comparar resultados de simulación.
+        en: Read the unit, allowed range, and physical role of [[diferencia_energia]] before comparing simulation results.
+    coherence_rules:
+    - id: diferencia_energia_coherence_dimension_dominio
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[diferencia_energia]] respete dimensión, rango físico y relación con las fórmulas declaradas.
+        en: Check that [[diferencia_energia]] respects dimension, physical range, and its declared formula relations.
+    model_validity_rules:
+    - id: diferencia_energia_model_validity_hipotesis
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[diferencia_energia]] solo dentro de las hipótesis de muestreo, equilibrio y variables declaradas
+          en el leaf.
+        en: Interpret [[diferencia_energia]] only within the sampling, equilibrium, and variable assumptions declared in the
+          leaf.
+    graph_rules:
+    - id: diferencia_energia_graph_coord_lectura
+      when: 'true'
+      status: info
+      text:
+        es: Usa la gráfica Coord como apoyo si [[diferencia_energia]] afecta a la convergencia, dispersión o lectura probabilística
+          del resultado.
+        en: Use the Coord graph as support if [[diferencia_energia]] affects convergence, spread, or probabilistic reading
+          of the result.
+    likely_errors:
+    - id: diferencia_energia_likely_error_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[diferencia_energia]] con una lectura aislada es un error frecuente: No leas [[diferencia_energia]]
+          como número aislado: revisa unidad, rango y fórmula antes de concluir.'
+        en: 'A common mistake is to interpret [[diferencia_energia]] in isolation: Do not read [[diferencia_energia]] as an
+          isolated number: check unit, range, and formula before concluding.'
+    next_step_rules:
+    - id: diferencia_energia_next_step_verificacion
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[diferencia_energia]], contrasta el resultado con la fórmula activa, las unidades SI y
+          la tendencia esperada.
+        en: After interpreting [[diferencia_energia]], compare the result with the active formula, SI units, and expected
+          trend.
+    physical_intuition:
+    - id: diferencia_energia_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[diferencia_energia]] ayuda a decidir si la simulación describe tendencia física, ruido numérico
+          o peso estadístico.
+        en: Intuitively, [[diferencia_energia]] helps decide whether the simulation describes physical trend, numerical noise,
+          or statistical weight.
+    limiting_cases:
+    - id: diferencia_energia_limiting_cases_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza qué ocurre con [[diferencia_energia]] en valores nulos, extremos o fuera del dominio físico permitido.
+        en: Analyze what happens to [[diferencia_energia]] at zero, extreme, or outside allowed physical-domain values.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo de [[diferencia_energia]] solo tiene sentido después de fijar referencia y convenio.
+        en: The sign of [[diferencia_energia]] is meaningful only after fixing reference and convention.
+      common_sign_errors:
+      - es: Tomar un signo negativo como error numérico sin revisar la referencia.
+        en: Treating a negative sign as a numerical error without checking the reference.

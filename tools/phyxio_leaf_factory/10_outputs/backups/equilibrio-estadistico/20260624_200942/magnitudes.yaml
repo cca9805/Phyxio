@@ -1,0 +1,512 @@
+version: 5.0.0
+leaf: equilibrio-estadistico
+magnitudes:
+- id: probabilidad_estado
+  symbol: p_i
+  nombre:
+    es: probabilidad de estado
+    en: state probability
+  descripcion:
+    es: Fracción estadística asociada a un microestado o mesoestado accesible.
+    en: Statistical fraction associated with an accessible microstate or mesostate.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: probabilidad
+  physical_role:
+    es: ocupación estadística
+    en: ocupación estadística
+  used_in:
+  - criterio_probabilidad_estacionaria
+  - normalizacion_probabilidades
+  - balance_detallado_dos_estados
+  - flujo_probabilidad_neto
+  - entropia_gibbs_equilibrio
+  common_mistake:
+    es: Interpretar esta magnitud fuera de las hipótesis estadísticas del modelo.
+    en: Interpreting this quantity outside the statistical assumptions of the model.
+  typical_range: 0 ≤ p_i ≤ 1
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No debe ser negativa; un signo negativo revela incoherencia.
+      en: It must not be negative; a negative sign reveals inconsistency.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica estado accesible no ocupado en ese modelo.
+      en: Zero means an accessible state is unoccupied in that model.
+  value_nature:
+    kind: probability
+    nonnegative_only: true
+    expected_interval: 0 ≤ p_i ≤ 1
+  interpretation_role:
+    primary_for:
+    - summary
+    - coherence
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - parameter
+    - dcl
+    - svg
+    preferred_graph: Dcl
+  pedagogical_notes:
+    es: probabilidad de estado debe leerse junto con normalización, tasas y estado de equilibrio.
+    en: state probability should be read together with normalization, rates, and equilibrium state.
+- id: tiempo
+  symbol: t
+  nombre:
+    es: tiempo
+    en: time
+  descripcion:
+    es: Variable usada para observar si las probabilidades cambian o permanecen estacionarias.
+    en: Variable used to observe whether probabilities change or remain stationary.
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: []
+  category: temporal
+  physical_role:
+    es: evolución
+    en: evolución
+  used_in:
+  - criterio_probabilidad_estacionaria
+  common_mistake:
+    es: Interpretar esta magnitud fuera de las hipótesis estadísticas del modelo.
+    en: Interpreting this quantity outside the statistical assumptions of the model.
+  typical_range: t ≥ 0
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del origen temporal elegido.
+      en: The sign depends on the chosen time origin.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero marca el inicio de observación.
+      en: Zero marks the start of observation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: t ≥ 0
+  interpretation_role:
+    primary_for:
+    - summary
+    - coherence
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - parameter
+    preferred_graph: Svg
+  pedagogical_notes:
+    es: tiempo debe leerse junto con normalización, tasas y estado de equilibrio.
+    en: time should be read together with normalization, rates, and equilibrium state.
+- id: tasa_transicion
+  symbol: k_ij
+  nombre:
+    es: tasa de transición
+    en: transition rate
+  descripcion:
+    es: Probabilidad por unidad de tiempo de pasar de un estado a otro.
+    en: Probability per unit time of going from one state to another.
+  unidad_si: s^-1
+  dimension: T^-1
+  is_vector: false
+  components: []
+  category: cinética estadística
+  physical_role:
+    es: intercambio
+    en: intercambio
+  used_in:
+  - balance_detallado_dos_estados
+  - flujo_probabilidad_neto
+  common_mistake:
+    es: Interpretar esta magnitud fuera de las hipótesis estadísticas del modelo.
+    en: Interpreting this quantity outside the statistical assumptions of the model.
+  typical_range: k_ij ≥ 0
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No puede ser negativa; el sentido se codifica en los índices.
+      en: It cannot be negative; direction is encoded in the indices.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica transición bloqueada en el modelo.
+      en: Zero means a blocked transition in the model.
+  value_nature:
+    kind: rate
+    nonnegative_only: true
+    expected_interval: k_ij ≥ 0
+  interpretation_role:
+    primary_for:
+    - summary
+    - coherence
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - dcl
+    - svg
+    preferred_graph: Dcl
+  pedagogical_notes:
+    es: tasa de transición debe leerse junto con normalización, tasas y estado de equilibrio.
+    en: transition rate should be read together with normalization, rates, and equilibrium state.
+- id: flujo_probabilidad
+  symbol: J_ij
+  nombre:
+    es: flujo de probabilidad
+    en: probability flow
+  descripcion:
+    es: Diferencia entre tránsito estadístico directo e inverso.
+    en: Difference between direct and reverse statistical traffic.
+  unidad_si: s^-1
+  dimension: T^-1
+  is_vector: false
+  components: []
+  category: flujo estadístico
+  physical_role:
+    es: diagnóstico de equilibrio
+    en: diagnóstico de equilibrio
+  used_in:
+  - flujo_probabilidad_neto
+  - balance_detallado_dos_estados
+  common_mistake:
+    es: Interpretar esta magnitud fuera de las hipótesis estadísticas del modelo.
+    en: Interpreting this quantity outside the statistical assumptions of the model.
+  typical_range: '|J_ij| cercano a 0 en equilibrio'
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo marca el sentido neto i→j o j→i.
+      en: The sign marks the net i→j or j→i direction.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica balance entre sentidos opuestos.
+      en: Zero indicates balance between opposite directions.
+  value_nature:
+    kind: signed_scalar
+    nonnegative_only: false
+    expected_interval: '|J_ij| cercano a 0 en equilibrio'
+  interpretation_role:
+    primary_for:
+    - summary
+    - coherence
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - dcl
+    - svg
+    preferred_graph: Dcl
+  pedagogical_notes:
+    es: flujo de probabilidad debe leerse junto con normalización, tasas y estado de equilibrio.
+    en: probability flow should be read together with normalization, rates, and equilibrium state.
+- id: entropia
+  symbol: S
+  nombre:
+    es: entropía
+    en: entropy
+  descripcion:
+    es: Medida macroscópica de dispersión estadística entre estados.
+    en: Macroscopic measure of statistical spread among states.
+  unidad_si: J*K^-1
+  dimension: M L^2 T^-2 Θ^-1
+  is_vector: false
+  components: []
+  category: entropía
+  physical_role:
+    es: dispersión
+    en: dispersión
+  used_in:
+  - entropia_gibbs_equilibrio
+  common_mistake:
+    es: Interpretar esta magnitud fuera de las hipótesis estadísticas del modelo.
+    en: Interpreting this quantity outside the statistical assumptions of the model.
+  typical_range: S ≥ 0 para distribuciones físicas
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No debería ser negativa en distribuciones válidas.
+      en: It should not be negative for valid distributions.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa ocupación concentrada en un solo estado ideal.
+      en: Zero represents occupation concentrated in one ideal state.
+  value_nature:
+    kind: nonnegative_scalar
+    nonnegative_only: true
+    expected_interval: S ≥ 0 para distribuciones físicas
+  interpretation_role:
+    primary_for:
+    - summary
+    - coherence
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - svg
+    preferred_graph: Svg
+  pedagogical_notes:
+    es: entropía debe leerse junto con normalización, tasas y estado de equilibrio.
+    en: entropy should be read together with normalization, rates, and equilibrium state.
+- id: constante_boltzmann
+  symbol: k_B
+  nombre:
+    es: constante de Boltzmann
+    en: Boltzmann constant
+  descripcion:
+    es: Constante que conecta escala térmica y energía microscópica.
+    en: Constant connecting thermal scale and microscopic energy.
+  unidad_si: J*K^-1
+  dimension: M L^2 T^-2 Θ^-1
+  is_vector: false
+  components: []
+  category: constante
+  physical_role:
+    es: escala térmica
+    en: escala térmica
+  used_in:
+  - entropia_gibbs_equilibrio
+  common_mistake:
+    es: Interpretar esta magnitud fuera de las hipótesis estadísticas del modelo.
+    en: Interpreting this quantity outside the statistical assumptions of the model.
+  typical_range: 1.380649e-23 J/K
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No tiene signo variable.
+      en: It has no variable sign.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: No puede anularse en el modelo físico.
+      en: It cannot vanish in the physical model.
+  value_nature:
+    kind: constant
+    nonnegative_only: true
+    expected_interval: 1.380649e-23 J/K
+  interpretation_role:
+    primary_for:
+    - summary
+    - coherence
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - constant
+    preferred_graph: Svg
+  pedagogical_notes:
+    es: constante de Boltzmann debe leerse junto con normalización, tasas y estado de equilibrio.
+    en: Boltzmann constant should be read together with normalization, rates, and equilibrium state.
+- id: temperatura
+  symbol: T
+  nombre:
+    es: temperatura absoluta
+    en: absolute temperature
+  descripcion:
+    es: Escala térmica del entorno que condiciona la distribución de equilibrio.
+    en: Thermal scale of the environment conditioning the equilibrium distribution.
+  unidad_si: K
+  dimension: Θ
+  is_vector: false
+  components: []
+  category: termodinámica
+  physical_role:
+    es: parámetro externo
+    en: parámetro externo
+  used_in: []
+  common_mistake:
+    es: Interpretar esta magnitud fuera de las hipótesis estadísticas del modelo.
+    en: Interpreting this quantity outside the statistical assumptions of the model.
+  typical_range: T > 0 K
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La temperatura absoluta canónica no es negativa.
+      en: Canonical absolute temperature is not negative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero queda fuera del tratamiento clásico simple.
+      en: Zero lies outside the simple classical treatment.
+  value_nature:
+    kind: positive_scalar
+    nonnegative_only: true
+    expected_interval: T > 0 K
+  interpretation_role:
+    primary_for:
+    - summary
+    - coherence
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - parameter
+    - svg
+    preferred_graph: Svg
+  pedagogical_notes:
+    es: temperatura absoluta debe leerse junto con normalización, tasas y estado de equilibrio.
+    en: absolute temperature should be read together with normalization, rates, and equilibrium state.
+- id: energia_estado
+  symbol: E_i
+  nombre:
+    es: energía de estado
+    en: state energy
+  descripcion:
+    es: Energía asignada al estado microscópico i.
+    en: Energy assigned to microscopic state i.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: energía
+  physical_role:
+    es: nivel microscópico
+    en: nivel microscópico
+  used_in: []
+  common_mistake:
+    es: Interpretar esta magnitud fuera de las hipótesis estadísticas del modelo.
+    en: Interpreting this quantity outside the statistical assumptions of the model.
+  typical_range: depende del sistema
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del cero de energía elegido.
+      en: The sign depends on the chosen energy zero.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero es una referencia posible, no ausencia de física.
+      en: Zero is a possible reference, not absence of physics.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: depende del sistema
+  interpretation_role:
+    primary_for:
+    - summary
+    - coherence
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - svg
+    preferred_graph: Svg
+  pedagogical_notes:
+    es: energía de estado debe leerse junto con normalización, tasas y estado de equilibrio.
+    en: state energy should be read together with normalization, rates, and equilibrium state.
+- id: peso_boltzmann
+  symbol: w_i
+  nombre:
+    es: peso de Boltzmann
+    en: Boltzmann weight
+  descripcion:
+    es: Peso relativo asociado a la ocupación de un estado energético.
+    en: Relative weight associated with occupation of an energy state.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: probabilidad
+  physical_role:
+    es: peso estadístico
+    en: peso estadístico
+  used_in: []
+  common_mistake:
+    es: Interpretar esta magnitud fuera de las hipótesis estadísticas del modelo.
+    en: Interpreting this quantity outside the statistical assumptions of the model.
+  typical_range: w_i > 0
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No es negativo.
+      en: It is not negative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero solo aparece como límite para estados extremadamente desfavorecidos.
+      en: Zero appears only as a limit for extremely disfavored states.
+  value_nature:
+    kind: positive_scalar
+    nonnegative_only: true
+    expected_interval: w_i > 0
+  interpretation_role:
+    primary_for:
+    - summary
+    - coherence
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - svg
+    preferred_graph: Svg
+  pedagogical_notes:
+    es: peso de Boltzmann debe leerse junto con normalización, tasas y estado de equilibrio.
+    en: Boltzmann weight should be read together with normalization, rates, and equilibrium state.
+- id: desbalance_estadistico
+  symbol: D
+  nombre:
+    es: desbalance estadístico
+    en: statistical imbalance
+  descripcion:
+    es: Indicador adimensional de separación respecto al balance.
+    en: Dimensionless indicator of departure from balance.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: diagnóstico
+  physical_role:
+    es: error de equilibrio
+    en: error de equilibrio
+  used_in:
+  - flujo_probabilidad_neto
+  common_mistake:
+    es: Interpretar esta magnitud fuera de las hipótesis estadísticas del modelo.
+    en: Interpreting this quantity outside the statistical assumptions of the model.
+  typical_range: D ≥ 0
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como módulo o indicador no negativo.
+      en: It is used as a nonnegative indicator or magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica equilibrio dentro de tolerancia.
+      en: Zero indicates equilibrium within tolerance.
+  value_nature:
+    kind: nonnegative_scalar
+    nonnegative_only: true
+    expected_interval: D ≥ 0
+  interpretation_role:
+    primary_for:
+    - summary
+    - coherence
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - dcl
+    - svg
+    preferred_graph: Dcl
+  pedagogical_notes:
+    es: desbalance estadístico debe leerse junto con normalización, tasas y estado de equilibrio.
+    en: statistical imbalance should be read together with normalization, rates, and equilibrium state.

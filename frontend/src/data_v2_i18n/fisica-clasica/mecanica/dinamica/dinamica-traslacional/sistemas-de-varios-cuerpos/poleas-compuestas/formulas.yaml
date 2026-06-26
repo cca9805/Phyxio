@@ -1,0 +1,175 @@
+version: 1
+formulas:
+- id: fuerza_ideal_poleas_compuestas
+  title:
+    es: fuerza ideal en poleas compuestas
+    en: ideal force in compound pulleys
+  equation: F_ideal = W / nSel
+  latex: F_{ideal} = \frac{W}{n}
+  rearrangements:
+  - target: F_ideal
+    equation: F_ideal = W / nSel
+    latex: F_{ideal} = \frac{W}{n}
+    constraints: []
+  - target: W
+    equation: W = F_ideal * nSel
+    latex: W = F_{ideal}\, n
+    constraints: []
+  - target: nSel
+    equation: nSel = W / F_ideal
+    latex: n = \frac{W}{F_{ideal}}
+    constraints: []
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: Relaciona el peso de la carga con la fuerza de tracción necesaria en el modelo
+      ideal mediante la ventaja mecánica del sistema.
+    en: Relates load weight to the pulling force required in the ideal model through
+      the system mechanical advantage.
+  constraints:
+  - cuerda inextensible
+  - poleas ideales sin rozamiento
+  - tramos portantes con igual tensión
+  - nSel representa el número de tramos que sostienen la carga
+  validity:
+    es: Válida en un modelo ideal de poleas compuestas en el que las pérdidas son
+      despreciables y la tensión es uniforme en cada tramo.
+    en: Valid in an ideal compound-pulley model where losses are negligible and tension
+      is uniform along each segment.
+  dimension_check: '[MLT^-2] = [MLT^-2] / [1]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  - aplicaciones.md
+  interpretation_tags:
+  - ventaja_mecanica
+  - modelo_ideal
+  - distribucion_del_esfuerzo
+  result_semantics:
+    target: F_ideal
+    meaning: Resulta util para interpretar F_ideal en el contexto del leaf.
+  domain_checks:
+  - id: carga_no_negativa
+    expr: W >= 0
+    message:
+      es: El peso de la carga debe ser no negativo.
+      en: The load weight must be non-negative.
+  - id: tramos_validos
+    expr: nSel >= 1
+    message:
+      es: El número de tramos portantes debe ser al menos 1.
+      en: The number of supporting segments must be at least 1.
+  coherence_checks:
+  - id: fuerza_ideal_no_negativa
+    expr: F_ideal >= 0
+    message:
+      es: La fuerza ideal no puede ser negativa en este modelo.
+      en: The ideal force cannot be negative in this model.
+  - id: fuerza_ideal_menor_igual_peso
+    expr: F_ideal <= W if W >= 0 else True
+    message:
+      es: En el modelo ideal, la fuerza requerida no debe superar el peso si nSel
+        >= 1.
+      en: In the ideal model, the required force should not exceed the weight if nSel
+        >= 1.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - id: contar_poleas_en_lugar_de_tramos
+    detect_when: nSel >= 1
+    message:
+      es: Recuerda contar tramos portantes, no simplemente el número de poleas visibles.
+      en: Remember to count supporting rope segments, not merely the number of visible
+        pulleys.
+- id: fuerza_real_poleas_compuestas
+  title:
+    es: fuerza real con eficiencia
+    en: real force with efficiency
+  equation: F_real = W / (eta * nSel)
+  latex: F_real = \frac{W}{\eta\, n}
+  rearrangements:
+  - target: F_real
+    equation: F_real = W / (eta * nSel)
+    latex: F_real = \frac{W}{\eta\, n}
+    constraints: []
+  - target: eta
+    equation: eta = W / (F_real * nSel)
+    latex: \eta = \frac{W}{F_real\, n}
+    constraints: []
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Corrige la fuerza ideal introduciendo una eficiencia menor que la unidad para
+      modelar pérdidas reales del sistema.
+    en: Corrects the ideal force by introducing an efficiency lower than one to model
+      real system losses.
+  constraints:
+  - modelo de eficiencia global
+  - 0 < eta <= 1
+  - cuerda inextensible
+  - distribucion ideal de tensiones salvo pérdidas resumidas en eta
+  validity:
+    es: Válida cuando las pérdidas del sistema pueden resumirse razonablemente mediante
+      un factor global de eficiencia eta.
+    en: Valid when system losses can be reasonably summarized by a global efficiency
+      factor eta.
+  dimension_check: '[MLT^-2] = [MLT^-2] / ([1][1])'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  - aplicaciones.md
+  interpretation_tags:
+  - eficiencia
+  - fuerza_real
+  - modelo_no_ideal
+  result_semantics:
+    target: F_real
+    meaning: Resulta util para interpretar F_real en el contexto del leaf.
+  domain_checks:
+  - id: carga_no_negativa_real
+    expr: W >= 0
+    message:
+      es: El peso de la carga debe ser no negativo.
+      en: The load weight must be non-negative.
+  - id: tramos_validos_real
+    expr: nSel >= 1
+    message:
+      es: El número de tramos portantes debe ser al menos 1.
+      en: The number of supporting segments must be at least 1.
+  - id: eficiencia_valida
+    expr: eta > 0 and eta <= 1
+    message:
+      es: La eficiencia debe estar entre 0 y 1.
+      en: Efficiency must lie between 0 and 1.
+  coherence_checks:
+  - id: fuerza_real_no_negativa
+    expr: F_real >= 0
+    message:
+      es: La fuerza real no puede ser negativa en este modelo.
+      en: The real force cannot be negative in this model.
+  - id: fuerza_real_mayor_igual_ideal
+    expr: F_real >= W / nSel if nSel > 0 else True
+    message:
+      es: Con eficiencia menor o igual que 1, la fuerza real debe ser al menos la
+        ideal.
+      en: With efficiency less than or equal to 1, the real force should be at least
+        the ideal force.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - id: usar_eta_mayor_que_uno
+    detect_when: eta > 1
+    message:
+      es: Una eficiencia mayor que 1 haría el sistema más que ideal y no es físicamente
+        aceptable.
+      en: An efficiency greater than 1 would make the system better than ideal and
+        is not physically acceptable.
+  - id: olvidar_perdidas
+    detect_when: eta == 1
+    message:
+      es: Si tomas eta = 1, estás volviendo al modelo ideal sin pérdidas.
+      en: If you set eta = 1, you are returning to the ideal lossless model.

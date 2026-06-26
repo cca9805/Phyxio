@@ -1,0 +1,379 @@
+version: 5.0.0
+formulas:
+- id: maxwell_boltzmann_velocidad
+  title:
+    es: Distribución de velocidades de Maxwell-Boltzmann
+    en: Maxwell-Boltzmann speed distribution
+  equation: f_v=4*pi*(masa_particula/(2*pi*constante_boltzmann*temperatura_absoluta))^(3/2)*velocidad^2*exp(-(masa_particula*velocidad^2)/(2*constante_boltzmann*temperatura_absoluta))
+  latex: f(v)=4\pi\left(\frac{m}{2\pi k_B T}\right)^{3/2}v^2 e^{-mv^2/(2k_B T)}
+  rearrangements: []
+  category: distribucion
+  relation_type: probability_density
+  physical_meaning:
+    es: Da la densidad de probabilidad de encontrar moléculas con rapidez cercana a una velocidad dada.
+    en: Gives the probability density of finding molecules with speeds near a given value.
+  constraints:
+    es: Gas ideal clásico, equilibrio térmico, partículas no relativistas y sin interacción salvo choques elásticos.
+    en: Classical ideal gas, thermal equilibrium, nonrelativistic particles, no interactions except elastic collisions.
+  validity:
+    es: Válida cuando el gas es diluido, clásico y no degenerado; falla en gases cuánticos o muy densos.
+    en: Valid for dilute, classical, nondegenerate gases; it fails for quantum or very dense gases.
+  dimension_check: '[T/L] porque f_v integra a 1 sobre velocidad.'
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - velocidad
+  - masa_particula
+  - constante_boltzmann
+  - temperatura_absoluta
+  - densidad_probabilidad_velocidad
+  interpretation_tags:
+  - distribucion
+  - temperatura
+  - probabilidad
+  result_semantics:
+    target: densidad_probabilidad_velocidad
+    kind: scalar
+    sign_meaning:
+      es: Debe ser no negativa; un valor negativo no tiene sentido probabilístico.
+      en: It must be nonnegative; a negative value has no probabilistic meaning.
+    absolute_value_meaning:
+      es: Indica densidad de probabilidad por intervalo de velocidad.
+      en: It indicates probability density per speed interval.
+  domain_checks:
+  - id: speed_nonnegative
+    status: ok
+    text:
+      es: La [[velocidad]] debe ser mayor o igual que cero.
+      en: '[[velocidad]] must be greater than or equal to zero.'
+  - id: temperature_positive
+    status: ok
+    text:
+      es: La [[temperatura_absoluta]] debe ser positiva.
+      en: '[[temperatura_absoluta]] must be positive.'
+  coherence_checks:
+  - id: normalization
+    status: ok
+    text:
+      es: El área total bajo la curva debe ser 1.
+      en: The total area under the curve must be 1.
+  graph_implications:
+    x_axis: velocidad
+    y_axis: densidad_probabilidad_velocidad
+    shape: curva unimodal desplazada a velocidades mayores al aumentar la temperatura
+  pedagogical_triggers:
+  - id: confundir_densidad_probabilidad
+    text:
+      es: Recuerda que f(v) no es una probabilidad aislada, sino una densidad por intervalo de velocidad.
+      en: Remember that f(v) is not an isolated probability, but a density per speed interval.
+- id: velocidad_mas_probable
+  title:
+    es: Velocidad más probable
+    en: Most probable speed
+  equation: velocidad_mas_probable=sqrt(2*constante_boltzmann*temperatura_absoluta/masa_particula)
+  latex: v_p=\sqrt{\frac{2k_B T}{m}}
+  rearrangements:
+  - target: temperatura_absoluta
+    equation: temperatura_absoluta=masa_particula*velocidad_mas_probable^2/(2*constante_boltzmann)
+    latex: T=\frac{m v_p^2}{2k_B}
+  category: caracteristica
+  relation_type: scale
+  physical_meaning:
+    es: Marca la rapidez donde la distribución tiene su máximo.
+    en: Marks the speed at which the distribution reaches its maximum.
+  constraints:
+    es: Temperatura positiva y masa positiva.
+    en: Positive temperature and positive mass.
+  validity:
+    es: Describe el máximo de la distribución clásica de Maxwell-Boltzmann.
+    en: Describes the maximum of the classical Maxwell-Boltzmann distribution.
+  dimension_check: '[L/T]'
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - velocidad_mas_probable
+  - constante_boltzmann
+  - temperatura_absoluta
+  - masa_particula
+  interpretation_tags:
+  - maximo
+  - escala
+  - temperatura
+  result_semantics:
+    target: velocidad_mas_probable
+    kind: scalar
+    sign_meaning:
+      es: Debe ser no negativa; un valor negativo no tiene sentido probabilístico.
+      en: It must be nonnegative; a negative value has no probabilistic meaning.
+    absolute_value_meaning:
+      es: Indica densidad de probabilidad por intervalo de velocidad.
+      en: It indicates probability density per speed interval.
+  domain_checks:
+  - id: positive_inputs
+    status: ok
+    text:
+      es: '[[temperatura_absoluta]] y [[masa_particula]] deben ser positivas.'
+      en: '[[temperatura_absoluta]] and [[masa_particula]] must be positive.'
+  coherence_checks:
+  - id: less_than_mean
+    status: ok
+    text:
+      es: Debe ser menor que la velocidad media.
+      en: It must be lower than the mean speed.
+  graph_implications:
+    x_axis: temperatura_absoluta
+    y_axis: velocidad_mas_probable
+    shape: crece con raíz cuadrada de la temperatura
+  pedagogical_triggers:
+  - id: peak_shift
+    text:
+      es: Si aumenta T, el pico se desplaza hacia la derecha.
+      en: If T increases, the peak shifts to the right.
+- id: velocidad_media
+  title:
+    es: Velocidad media
+    en: Mean speed
+  equation: velocidad_media=sqrt(8*constante_boltzmann*temperatura_absoluta/(pi*masa_particula))
+  latex: \bar v=\sqrt{\frac{8k_B T}{\pi m}}
+  rearrangements: []
+  category: caracteristica
+  relation_type: average
+  physical_meaning:
+    es: Da la rapidez promedio de las partículas del gas ideal.
+    en: Gives the average speed of the particles in the ideal gas.
+  constraints:
+    es: Distribución Maxwell-Boltzmann normalizada.
+    en: Normalized Maxwell-Boltzmann distribution.
+  validity:
+    es: Válida en régimen clásico no relativista.
+    en: Valid in the classical nonrelativistic regime.
+  dimension_check: '[L/T]'
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - velocidad_media
+  - constante_boltzmann
+  - temperatura_absoluta
+  - masa_particula
+  interpretation_tags:
+  - media
+  - temperatura
+  result_semantics:
+    target: velocidad_media
+    kind: scalar
+    sign_meaning:
+      es: Debe ser no negativa; un valor negativo no tiene sentido probabilístico.
+      en: It must be nonnegative; a negative value has no probabilistic meaning.
+    absolute_value_meaning:
+      es: Indica densidad de probabilidad por intervalo de velocidad.
+      en: It indicates probability density per speed interval.
+  domain_checks:
+  - id: positive_inputs
+    status: ok
+    text:
+      es: Las entradas deben mantener raíz real positiva.
+      en: Inputs must keep a real positive square root.
+  coherence_checks:
+  - id: order
+    status: ok
+    text:
+      es: Debe quedar entre la velocidad más probable y la velocidad cuadrática media.
+      en: It must lie between most probable speed and rms speed.
+  graph_implications:
+    x_axis: temperatura_absoluta
+    y_axis: velocidad_media
+    shape: crece como raíz cuadrada
+  pedagogical_triggers:
+  - id: not_peak
+    text:
+      es: La velocidad media no coincide con el pico de la curva.
+      en: Mean speed is not the peak of the curve.
+- id: velocidad_cuadratica_media
+  title:
+    es: Velocidad cuadrática media
+    en: Root-mean-square speed
+  equation: velocidad_rms=sqrt(3*constante_boltzmann*temperatura_absoluta/masa_particula)
+  latex: v_{rms}=\sqrt{\frac{3k_B T}{m}}
+  rearrangements: []
+  category: caracteristica
+  relation_type: rms
+  physical_meaning:
+    es: Relaciona la energía cinética media con una escala de rapidez cuadrática.
+    en: Relates mean kinetic energy to a quadratic speed scale.
+  constraints:
+    es: Gas ideal clásico, masa y temperatura positivas.
+    en: Classical ideal gas, positive mass and temperature.
+  validity:
+    es: Útil para energía cinética media traslacional.
+    en: Useful for mean translational kinetic energy.
+  dimension_check: '[L/T]'
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - velocidad_rms
+  - constante_boltzmann
+  - temperatura_absoluta
+  - masa_particula
+  interpretation_tags:
+  - rms
+  - energia
+  result_semantics:
+    target: velocidad_rms
+    kind: scalar
+    sign_meaning:
+      es: Debe ser no negativa; un valor negativo no tiene sentido probabilístico.
+      en: It must be nonnegative; a negative value has no probabilistic meaning.
+    absolute_value_meaning:
+      es: Indica densidad de probabilidad por intervalo de velocidad.
+      en: It indicates probability density per speed interval.
+  domain_checks:
+  - id: positive_inputs
+    status: ok
+    text:
+      es: La raíz exige cociente positivo.
+      en: The square root requires a positive quotient.
+  coherence_checks:
+  - id: largest_speed_scale
+    status: ok
+    text:
+      es: Debe ser mayor que la velocidad media.
+      en: It must be greater than the mean speed.
+  graph_implications:
+    x_axis: temperatura_absoluta
+    y_axis: velocidad_rms
+    shape: crece como raíz cuadrada
+  pedagogical_triggers:
+  - id: rms_energy
+    text:
+      es: Usa rms cuando el dato físico se refiere a energía media.
+      en: Use rms when the physical datum refers to mean energy.
+- id: energia_cinetica_media_gas
+  title:
+    es: Energía cinética media molecular
+    en: Mean molecular kinetic energy
+  equation: energia_cinetica_media=(3/2)*constante_boltzmann*temperatura_absoluta
+  latex: \langle E_k\rangle=\frac{3}{2}k_B T
+  rearrangements: []
+  category: energia
+  relation_type: proportionality
+  physical_meaning:
+    es: Conecta la temperatura con la energía cinética media de traslación.
+    en: Connects temperature with mean translational kinetic energy.
+  constraints:
+    es: Gas ideal monoatómico clásico con tres grados traslacionales.
+    en: Classical monatomic ideal gas with three translational degrees of freedom.
+  validity:
+    es: No incluye vibración, rotación ni efectos cuánticos.
+    en: Does not include vibration, rotation, or quantum effects.
+  dimension_check: '[M L^2 T^-2]'
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - energia_cinetica_media
+  - constante_boltzmann
+  - temperatura_absoluta
+  interpretation_tags:
+  - energia
+  - temperatura
+  result_semantics:
+    target: energia_cinetica_media
+    kind: scalar
+    sign_meaning:
+      es: Debe ser no negativa; un valor negativo no tiene sentido probabilístico.
+      en: It must be nonnegative; a negative value has no probabilistic meaning.
+    absolute_value_meaning:
+      es: Indica densidad de probabilidad por intervalo de velocidad.
+      en: It indicates probability density per speed interval.
+  domain_checks:
+  - id: temperature_positive
+    status: ok
+    text:
+      es: La temperatura absoluta no puede ser negativa.
+      en: Absolute temperature cannot be negative.
+  coherence_checks:
+  - id: linear_T
+    status: ok
+    text:
+      es: La energía media crece linealmente con T.
+      en: Mean energy grows linearly with T.
+  graph_implications:
+    x_axis: temperatura_absoluta
+    y_axis: energia_cinetica_media
+    shape: recta creciente
+  pedagogical_triggers:
+  - id: energy_not_speed
+    text:
+      es: No confundas crecimiento lineal de energía con crecimiento lineal de velocidad.
+      en: Do not confuse linear energy growth with linear speed growth.
+- id: probabilidad_intervalo_velocidad
+  title:
+    es: Probabilidad en un intervalo de velocidades
+    en: Probability in a speed interval
+  equation: probabilidad_intervalo=integral(f_v,dv,velocidad_minima,velocidad_maxima)
+  latex: P(v_1\le v\le v_2)=\int_{v_1}^{v_2} f(v)\,dv
+  rearrangements: []
+  category: probabilidad
+  relation_type: integral
+  physical_meaning:
+    es: Convierte el área bajo la curva de densidad en una probabilidad observable.
+    en: Turns area under the density curve into an observable probability.
+  constraints:
+    es: El intervalo debe estar dentro de velocidades no negativas.
+    en: The interval must lie within nonnegative speeds.
+  validity:
+    es: La distribución debe estar normalizada.
+    en: The distribution must be normalized.
+  dimension_check: adimensional
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - probabilidad_intervalo
+  - densidad_probabilidad_velocidad
+  - velocidad_minima
+  - velocidad_maxima
+  interpretation_tags:
+  - area
+  - probabilidad
+  - intervalo
+  result_semantics:
+    target: probabilidad_intervalo
+    kind: scalar
+    sign_meaning:
+      es: Debe ser no negativa; un valor negativo no tiene sentido probabilístico.
+      en: It must be nonnegative; a negative value has no probabilistic meaning.
+    absolute_value_meaning:
+      es: Indica densidad de probabilidad por intervalo de velocidad.
+      en: It indicates probability density per speed interval.
+  domain_checks:
+  - id: interval_order
+    status: ok
+    text:
+      es: Debe cumplirse velocidad_minima <= velocidad_maxima.
+      en: velocidad_minima <= velocidad_maxima must hold.
+  coherence_checks:
+  - id: bounded_probability
+    status: ok
+    text:
+      es: La probabilidad debe quedar entre 0 y 1.
+      en: The probability must lie between 0 and 1.
+  graph_implications:
+    x_axis: velocidad
+    y_axis: densidad_probabilidad_velocidad
+    shape: área bajo la curva en un intervalo
+  pedagogical_triggers:
+  - id: area_probability
+    text:
+      es: La probabilidad es un área, no la altura de la curva en un punto.
+      en: Probability is an area, not the curve height at one point.

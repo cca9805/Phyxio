@@ -1,0 +1,117 @@
+formulas:
+- id: trabajo_isobarico
+  title:
+    es: Trabajo de expansión a presión constante
+    en: Expansion work at constant pressure
+  equation: trabajo_termodinamico = presion * variacion_de_volumen
+  latex: W = p \Delta V
+  rearrangements:
+  - target: trabajo_termodinamico
+    equation: trabajo_termodinamico = presion * variacion_de_volumen
+    latex: W = p \Delta V
+  - target: presion
+    equation: presion = trabajo_termodinamico / variacion_de_volumen
+    latex: p = \dfrac{W}{\Delta V}
+  - target: variacion_de_volumen
+    equation: variacion_de_volumen = trabajo_termodinamico / presion
+    latex: \Delta V = \dfrac{W}{p}
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: El trabajo realizado por un gas que se expande a presión constante p es el producto de esa presión por la variación
+      de volumen. Geometricamente es el área del rectángulo bajo la curva p(V) en el diagrama p-V.
+    en: The work done by a gas expanding at constant pressure p is the product of that pressure and the volume change. Geometrically
+      it is the area of the rectangle under the p(V) curve in the p-V diagram.
+  constraints:
+  - presión constante durante todo el proceso (proceso isobárico)
+  - sistema cerrado
+  validity:
+    es: 'Válida exclusivamente para procesos isobáricos (p = cte). Para presión variable se debe integrar: W = ∫p dV.'
+    en: 'Valid exclusively for isobaric processes (p = const). For variable pressure use the integral: W = ∫p dV.'
+  dimension_check: '[M L⁻¹ T⁻²][L³] = [M L² T⁻²]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - primera ley de la termodinámica en procesos isobáricos
+  - cálculo del calor en reacciones a presión constante
+  interpretation_tags:
+  - trabajo de expansión
+  - proceso isobárico
+  - diagrama pV
+  result_semantics:
+    target: trabajo_termodinamico
+    kind: process_quantity
+    sign_meaning:
+      es: 'W > 0: el gas se expande y realiza trabajo sobre el entorno. W < 0: el gas se comprime y el entorno realiza trabajo
+        sobre él.'
+      en: 'W > 0: the gas expands and does work on the surroundings. W < 0: the gas is compressed and the surroundings do
+        work on it.'
+    absolute_value_meaning:
+      es: El módulo de W es la energía transferida mecánicamente a través de la frontera móvil del sistema.
+      en: The magnitude of W is the energy mechanically transferred through the moving boundary of the system.
+  domain_checks:
+  - p > 0
+  coherence_checks:
+  - abs(W) < 1e9
+  graph_implications:
+    es: En el diagrama p-V, el trabajo es el área del rectángulo de base ΔV y altura p.
+    en: In the p-V diagram, the work is the area of the rectangle with base ΔV and height p.
+  pedagogical_triggers:
+  - Alumno confunde W = p·ΔV con la integral general ∫p dV en procesos no isobáricos.
+  - Alumno invierte el signo calculando ΔV = V_i − V_f.
+- id: trabajo_integral
+  title:
+    es: Trabajo de expansión general (presión variable)
+    en: General expansion work (variable pressure)
+  equation: trabajo_termodinamico = presion * variacion_de_volumen
+  latex: W = \int_{V_i}^{V_f} p\,\mathrm{d}V
+  rearrangements:
+  - target: trabajo_termodinamico
+    equation: trabajo_termodinamico = presion * variacion_de_volumen
+    latex: W = \int_{V_i}^{V_f} p\,\mathrm{d}V
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: El trabajo realizado por un gas en un proceso general es la integral de la presión sobre el volumen entre los estados
+      inicial y final. Geométricamente es el área bajo la curva p(V) en el diagrama p-V.
+    en: The work done by a gas in a general process is the integral of pressure over volume between the initial and final
+      states. Geometrically it is the area under the p(V) curve in the p-V diagram.
+  constraints:
+  - proceso cuasi-estático (el sistema pasa por estados de equilibrio)
+  - p expresada como función de V (ecuación de estado o proceso conocido)
+  validity:
+    es: Válida para cualquier proceso cuasi-estático. Para expansión libre (proceso irreversible extremo), W = 0 aunque ΔV
+      ≠ 0.
+    en: Valid for any quasi-static process. For free expansion (extreme irreversible process), W = 0 even though ΔV ≠ 0.
+  dimension_check: '[M L⁻¹ T⁻²][L³] = [M L² T⁻²]'
+  calculable: false
+  motivo_no_calculable: Requiere conocer la función p(V) a lo largo de la trayectoria, que depende del proceso específico.
+  used_in:
+  - procesos isotérmicos (p = nRT/V)
+  - procesos adiabáticos (p·V^γ = cte)
+  - interpretación geométrica del trabajo
+  interpretation_tags:
+  - trabajo general
+  - integral pV
+  - área bajo curva
+  result_semantics:
+    target: trabajo_termodinamico
+    kind: process_quantity
+    sign_meaning:
+      es: W > 0 si V_f > V_i (expansión). W < 0 si V_f < V_i (compresión).
+      en: W > 0 if V_f > V_i (expansion). W < 0 if V_f < V_i (compression).
+    absolute_value_meaning:
+      es: El módulo de W es el área encerrada entre la curva p(V) y el eje de volúmenes.
+      en: The magnitude of W is the area enclosed between the p(V) curve and the volume axis.
+  domain_checks:
+  - V > 0
+  - p > 0
+  coherence_checks:
+  - 'true'
+  graph_implications:
+    es: En el diagrama p-V, el trabajo es el área bajo la curva p(V) entre V_i y V_f. Procesos distintos entre los mismos
+      estados dan áreas distintas, lo que evidencia que W es una magnitud de proceso.
+    en: In the p-V diagram, work is the area under p(V) between V_i and V_f. Different processes between the same states give
+      different areas, showing that W is a path-dependent quantity.
+  pedagogical_triggers:
+  - Alumno aplica W = p·ΔV en un proceso no isobárico donde p varía.

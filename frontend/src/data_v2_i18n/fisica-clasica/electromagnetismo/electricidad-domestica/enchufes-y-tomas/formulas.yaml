@@ -1,0 +1,333 @@
+version: 2
+topic:
+  id: enchufes-y-tomas
+  title: Enchufes y tomas
+ui:
+  default_formula: corriente_total
+  groups:
+  - title: Carga y limites
+    items:
+    - corriente_total
+    - potencia_max
+    - ratio_uso
+  - title: Riesgo termico local
+    items:
+    - perdida_contacto
+    - corriente_individual
+formulas:
+- id: corriente_individual
+  title:
+    es: Corriente individual de una carga
+    en: Individual load current
+  equation: I = P/V
+  latex: I=\frac{P}{V}
+  rearrangements:
+  - target: potencia_de_carga
+    equation: P = I*V
+    latex: P=I* V
+    constraints:
+    - V != 0
+  - target: tension_de_suministro
+    equation: V = P/I
+    latex: V=\frac{P}{I}
+    constraints:
+    - I != 0
+  category: fundamental
+  relation_type: algebraic
+  physical_meaning:
+    es: La corriente individual es la fraccion de la corriente total que demanda un solo equipo. Determina cuanto aporta ese
+      equipo al calentamiento del contacto.
+    en: The individual current is the fraction of the total current demanded by a single device. It determines how much that
+      device contributes to contact heating.
+  constraints: V != 0; valido para cargas resistivas puras (factor de potencia = 1).
+  validity:
+    es: Valida para cargas resistivas a tension nominal constante. Para cargas inductivas, la corriente real puede ser mayor
+      debido al factor de potencia.
+    en: Valid for resistive loads at constant nominal voltage. For inductive loads, actual current may be higher due to power
+      factor.
+  dimension_check: '[W]/[V] = A'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - carga
+  - corriente
+  - toma
+  result_semantics:
+    target: corriente_individual_de_carga
+    kind: ratio
+    sign_meaning:
+      es: La corriente individual es siempre positiva para cargas pasivas.
+      en: Individual current is always positive for passive loads.
+    absolute_value_meaning:
+      es: Cuanto mayor es I respecto a I_{max}, mayor es el riesgo termico del contacto.
+      en: The larger I relative to I_{max}, the greater the thermal risk of the contact.
+  domain_checks:
+  - expr: V > 0
+    message:
+      es: La tension de suministro debe ser positiva.
+      en: Supply voltage must be positive.
+  coherence_checks:
+  - expr: result < I_{max}
+    message:
+      es: La corriente individual supera el nominal de la toma; verificar que el equipo es compatible.
+      en: Individual current exceeds socket rating; verify device compatibility.
+  graph_implications:
+  - I individual contribuye como una barra al grafico de corrientes por equipo.
+  pedagogical_triggers:
+  - when: result > I_{max}
+    message:
+      es: Un solo equipo supera el nominal de la toma. Retirar el equipo o usar una toma de mayor capacidad.
+      en: A single device exceeds the socket rating. Remove the device or use a higher-capacity socket.
+- id: corriente_total
+  title:
+    es: Corriente total en la toma o regleta
+    en: Total current in socket or power strip
+  equation: I_{tot} = P_{tot}/V
+  latex: I_{tot}=\frac{P_{tot}}{V}
+  rearrangements:
+  - target: potencia_total_simultanea
+    equation: P_{tot} = I_{tot}*V
+    latex: P_{tot}=I_{tot}* V
+    constraints:
+    - V != 0
+  category: fundamental
+  relation_type: algebraic
+  physical_meaning:
+    es: La corriente total es la suma de corrientes de todos los equipos conectados simultaneamente. Es la magnitud que circula
+      por los contactos de la toma y determina su calentamiento.
+    en: The total current is the sum of currents of all simultaneously connected devices. It is the quantity flowing through
+      the socket contacts and determining their heating.
+  constraints: V != 0; todos los equipos deben estar activos simultaneamente para calcular el peor caso.
+  validity:
+    es: Valida para la aproximacion de factor de potencia unitario. En instalaciones con muchos equipos electronicos, la suma
+      vectorial puede diferir.
+    en: Valid for unity power factor approximation. In installations with many electronic devices, the vector sum may differ.
+  dimension_check: '[W]/[V] = A'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - sobrecarga
+  - corriente
+  - toma
+  result_semantics:
+    target: corriente_total_en_la_toma
+    kind: ratio
+    sign_meaning:
+      es: I_{tot} es siempre positiva para cargas pasivas.
+      en: I_{tot} is always positive for passive loads.
+    absolute_value_meaning:
+      es: Cuanto mayor es I_{tot} respecto a I_{max}, mayor es el riesgo de sobrecarga termica del contacto.
+      en: The larger I_{tot} relative to I_{max}, the greater the risk of thermal overload of the contact.
+  domain_checks:
+  - expr: V > 0
+    message:
+      es: La tension de suministro debe ser positiva.
+      en: Supply voltage must be positive.
+  coherence_checks:
+  - expr: result < 20
+    message:
+      es: Corriente total superior a 20 A es inusual en tomas residenciales; revisar datos.
+      en: Total current above 20 A is unusual for residential sockets; check data.
+  graph_implications:
+  - I_{tot} se representa en el eje Y; la linea de referencia I_{max} marca el umbral de sobrecarga.
+  pedagogical_triggers:
+  - when: result > I_{max}
+    message:
+      es: Sobrecarga activa. I_{tot} supera I_{max}. Desconectar equipos hasta reducir la carga al 80% del nominal.
+      en: Active overload. I_{tot} exceeds I_{max}. Disconnect devices until load is below 80% of rating.
+  - when: result/I_{max} > 0.8 and result/I_{max} <= 1
+    message:
+      es: Margen reducido (80-100% de I_{max}). No conectar mas equipos a esta toma.
+      en: Reduced margin (80-100% of I_{max}). Do not connect more devices to this socket.
+- id: potencia_max
+  title:
+    es: Potencia maxima nominal de la toma
+    en: Nominal maximum socket power
+  equation: P_{max} = V*I_{max}
+  latex: P_{max}=V* I_{max}
+  rearrangements:
+  - target: corriente_maxima_nominal
+    equation: I_{max} = P_{max}/V
+    latex: I_{max}=\frac{P_{max}}{V}
+    constraints:
+    - V != 0
+  category: derived
+  relation_type: algebraic
+  physical_meaning:
+    es: La potencia maxima es la potencia total maxima que puede conectarse a la toma sin superar su limite de corriente nominal
+      en regimen permanente con cargas resistivas.
+    en: The maximum power is the total maximum power connectable to the socket without exceeding its nominal current limit
+      in steady state with resistive loads.
+  constraints: V > 0; I_{max} > 0; estimacion valida solo para cargas resistivas.
+  validity:
+    es: Estimacion para carga resistiva pura. Cargas inductivas o con alto arranque pueden requerir una toma de mayor capacidad
+      aunque la potencia en estado estacionario sea menor.
+    en: Estimate for purely resistive load. Inductive loads or high-inrush devices may require higher-capacity socket even
+      if steady-state power is lower.
+  dimension_check: '[V]*[A] = W'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - potencia
+  - limite
+  - toma
+  result_semantics:
+    target: potencia_maxima_nominal
+    kind: product
+    sign_meaning:
+      es: P_{max} es siempre positiva.
+      en: P_{max} is always positive.
+    absolute_value_meaning:
+      es: Cuanto mayor es P_{max}, mayor es la capacidad de la toma para alimentar cargas.
+      en: The larger P_{max}, the greater the socket capacity to supply loads.
+  domain_checks:
+  - expr: V > 0 and I_{max} > 0
+    message:
+      es: La tension y la corriente maxima deben ser positivas.
+      en: Voltage and maximum current must be positive.
+  coherence_checks:
+  - expr: result > 0
+    message:
+      es: La potencia maxima debe ser positiva.
+      en: Maximum power must be positive.
+  graph_implications:
+  - P_{max} se muestra como linea de referencia horizontal en el grafico de potencia total.
+  pedagogical_triggers:
+  - when: P_{tot} >= result
+    message:
+      es: 'P_{tot} supera P_{max}: la toma esta sobrecargada. Redistribuir cargas o usar una regleta de mayor capacidad.'
+      en: 'P_{tot} exceeds P_{max}: the socket is overloaded. Redistribute loads or use a higher-capacity strip.'
+- id: perdida_contacto
+  title:
+    es: Potencia disipada en el contacto
+    en: Contact dissipated power
+  equation: P_{perdida} = I_{tot}^2 * R_{contacto}
+  latex: P_{perdida}=I_{tot}^{2}* R_{contacto}
+  rearrangements:
+  - target: resistencia_de_contacto
+    equation: R_{contacto} = P_{perdida} / I_{tot}^2
+    latex: R_{contacto}=\frac{P_{perdida}}{I_{tot}^{2}}
+    constraints:
+    - I_{tot} != 0
+  category: fundamental
+  relation_type: algebraic
+  physical_meaning:
+    es: La potencia disipada en el contacto sigue la ley de Joule localizada en la resistencia de contacto. Crece con el cuadrado
+      de la corriente, lo que hace que el riesgo termico escale rapidamente con la carga.
+    en: The power dissipated at the contact follows the Joule law localised at the contact resistance. It grows with the square
+      of the current, making thermal risk scale rapidly with load.
+  constraints: I_{tot} >= 0; R_{contacto} >= 0.
+  validity:
+    es: Valida en regimen permanente con corriente alterna eficaz. En regimen transitorio, los picos de corriente pueden generar
+      calentamientos instantaneos mayores.
+    en: Valid in steady state with RMS AC current. In transient regime, current peaks may generate higher instantaneous heating.
+  dimension_check: '[A^2]*[Ohm] = W'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - riesgo_termico
+  - contacto
+  - joule
+  result_semantics:
+    target: potencia_disipada_en_el_contacto
+    kind: product
+    sign_meaning:
+      es: P_{perdida} es siempre positiva; representa disipacion por efecto Joule.
+      en: P_{perdida} is always positive; it represents Joule-effect dissipation.
+    absolute_value_meaning:
+      es: Cuanto mayor es P_{perdida}, mayor es el calentamiento local del contacto y el riesgo de degradacion termica.
+      en: The larger P_{perdida}, the greater the local contact heating and the thermal degradation risk.
+  domain_checks:
+  - expr: I_{tot} >= 0 and R_{contacto} >= 0
+    message:
+      es: La corriente total y la resistencia de contacto deben ser no negativas.
+      en: Total current and contact resistance must be non-negative.
+  coherence_checks:
+  - expr: result < 50
+    message:
+      es: Perdida de contacto superior a 50 W indica degradacion severa; inspeccionar la toma inmediatamente.
+      en: Contact loss above 50 W indicates severe degradation; inspect the socket immediately.
+  graph_implications:
+  - P_{perdida} se representa en funcion de I_{tot} con una curva parabolica; el eje Y crece rapidamente.
+  pedagogical_triggers:
+  - when: result > 1
+    message:
+      es: Disipacion de contacto superior a 1 W. Con contactos degradados, el calentamiento local puede ser peligroso a largo
+        plazo.
+      en: Contact dissipation above 1 W. With degraded contacts, local heating can be dangerous over time.
+- id: ratio_uso
+  title:
+    es: Ratio de uso de la toma
+    en: Socket usage ratio
+  equation: margen_uso = I_{tot}/I_{max}
+  latex: margen_{uso}=\frac{I_{tot}}{I_{max}}
+  rearrangements:
+  - target: corriente_total_en_la_toma
+    equation: I_{tot} = margen_uso * I_{max}
+    latex: I_{tot}=margen_{uso}* I_{max}
+    constraints:
+    - I_{max} > 0
+  category: derived
+  relation_type: ratio
+  physical_meaning:
+    es: El ratio de uso indica que fraccion de la corriente nominal I_{max} esta siendo consumida. Un valor de 1 o superior
+      indica que la toma esta en sobrecarga o en su limite exacto.
+    en: The usage ratio indicates what fraction of the nominal current I_{max} is being consumed. A value of 1 or above indicates
+      the socket is at or above its overload limit.
+  constraints: I_{max} > 0.
+  validity:
+    es: Indicador de regimen permanente. Los transitorios de arranque pueden superar brevemente la unidad sin causar degradacion
+      inmediata.
+    en: Steady-state indicator. Startup transients may briefly exceed unity without causing immediate degradation.
+  dimension_check: '[A]/[A] = adimensional'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - margen
+  - sobrecarga
+  - toma
+  result_semantics:
+    target: margen_uso
+    kind: ratio
+    sign_meaning:
+      es: margen_uso es siempre no negativo; es el cociente de dos magnitudes positivas.
+      en: margen_uso is always non-negative; it is the ratio of two positive quantities.
+    absolute_value_meaning:
+      es: Valores mayores indican mayor proximidad a la sobrecarga de la toma.
+      en: Higher values indicate greater proximity to socket overload.
+  domain_checks:
+  - expr: I_{max} > 0
+    message:
+      es: La corriente maxima nominal I_{max} debe ser positiva.
+      en: The nominal maximum current I_{max} must be positive.
+  coherence_checks:
+  - expr: result >= 0
+    message:
+      es: El ratio de uso debe ser no negativo.
+      en: The usage ratio must be non-negative.
+  graph_implications:
+  - margen_uso se representa en el eje Y del grafico de margenes; la linea en 1 marca el umbral de sobrecarga.
+  pedagogical_triggers:
+  - when: result >= 1
+    message:
+      es: Sobrecarga activa. Desconectar equipos inmediatamente para proteger el contacto de degradacion termica.
+      en: Active overload. Disconnect devices immediately to protect the contact from thermal degradation.
+  - when: result >= 0.8 and result < 1
+    message:
+      es: Zona de vigilancia (80-100% del nominal). No conectar mas equipos hasta redistribuir la carga.
+      en: Monitoring zone (80-100% of rating). Do not connect more devices until load is redistributed.

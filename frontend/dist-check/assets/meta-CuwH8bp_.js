@@ -1,0 +1,83 @@
+const e=`version: 5
+id: transformacion-legendre
+nombre:
+  es: Transformacion legendre
+  en: Legendre Transformation
+titulo:
+  es: Transformacion legendre
+  en: Legendre Transformation
+type: leaf
+area: fisica-clasica
+bloque: mecanica
+subbloque: mecanica-analitica
+parent_id: hamiltoniano
+ruta_relativa: fisica-clasica/mecanica/mecanica-analitica/hamiltoniano/transformacion-legendre
+orden: 219410
+dificultad: 4
+tiempo_estimado_min: 55
+niveles:
+  es: [ UNIVERSIDAD ]
+  en: [ University ]
+icon: "📙"
+descripcion: Cambio regular de velocidades generalizadas a momentos conjugados.
+description_en: Regular change from generalized velocities to conjugate momenta.
+descripcion_corta: Puente entre lagrangiano y hamiltoniano.
+magnitud_dominante: H
+representacion_dominante: none
+physical_role:
+  es: concepto físico
+  en: physical concept
+pregunta_fisica_central:
+  es: "¿Cómo se transforma una descripción en velocidades en una descripción en momentos conjugados?"
+  en: "How is a velocity-based description transformed into a conjugate-momentum description?"
+prerequisitos:
+  - fisica-clasica/mecanica/mecanica-analitica/lagrangiano/energia-cinetica-y-potencial
+tags:
+  es: [ hamiltoniano, legendre, momento-conjugado, espacio-de-fases, mecanica-analitica ]
+  en: [ hamiltonian, legendre, conjugate-momentum, phase-space, analytical-mechanics ]
+objetivos:
+  - es: Entender que la transformacion cambia velocidad generalizada por momento conjugado.
+    en: Understand that the transformation replaces generalized velocity with conjugate momentum.
+  - es: Construir el hamiltoniano desde el lagrangiano sin dejar velocidades ocultas.
+    en: Build the Hamiltonian from the Lagrangian without hidden velocities.
+  - es: Reconocer cuando la transformacion falla por falta de invertibilidad.
+    en: Recognize when the transformation fails because invertibility is missing.
+suposiciones:
+  - es: El lagrangiano es diferenciable respecto de la velocidad generalizada.
+    en: The Lagrangian is differentiable with respect to generalized velocity.
+  - es: La relacion entre velocidad y momento puede invertirse localmente.
+    en: The relation between velocity and momentum can be locally inverted.
+competencias_lomloe: [ STEM, modelizacion, razonamiento_cientifico, resolucion_problemas ]
+graficos: []
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    tab_label:
+      es: Lectura hamiltoniana
+      en: Hamiltonian reading
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    show_summary: true
+    show_physical_reading: true
+    show_coherence: true
+    show_model_validity: true
+    show_graph_reading: true
+    show_likely_errors: true
+    show_next_step: true
+  mini_graph:
+    enabled: false
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    show_warnings: true
+    show_likely_errors: true
+    max_inline_messages: 3
+    show_status_icons: true
+    allow_collapsible_sections: true
+  dependencies:
+    requires_magnitudes: true
+    requires_formulas: true
+    supports_graph_binding: false
+`;export{e as default};

@@ -1,0 +1,295 @@
+version: 5
+magnitudes:
+- id: q
+  symbol: q_i
+  nombre: { es: Coordenada generalizada, en: Generalized coordinate }
+  si_unit: variable
+  unidad_si: variable
+  dimension: variable
+  is_vector: false
+  components: []
+  category: configuracion
+  physical_role: variable_independiente_de_configuracion
+  used_in: [ posicion_generalizada, velocidad_generalizada ]
+  common_mistake: Confundir q_i con una coordenada cartesiana concreta.
+  typical_range: [ -1e6, 1e6 ]
+  sign_behavior: depende_de_la_carta
+  zero_behavior: origen_de_carta
+  value_nature: estado
+  interpretation_role: entrada_de_configuracion
+  graph_binding: "[[q]] mueve el estado físico representado por [[r_vec]]."
+  descripcion: { es: Variable mínima que parametriza la configuración del sistema., en: Minimal variable that parametrizes system configuration. }
+  pedagogical_notes: { es: "Su unidad depende de la carta elegida.", en: "Its unit depends on the chosen chart." }
+
+- id: qdot
+  symbol: \dot q_i
+  nombre: { es: Velocidad generalizada, en: Generalized velocity }
+  si_unit: variable/s
+  unidad_si: variable/s
+  dimension: variable/T
+  is_vector: false
+  components: []
+  category: cinematica
+  physical_role: tasa_de_cambio_de_q
+  used_in: [ velocidad_generalizada, energia_cinetica_generalizada ]
+  common_mistake: Tratar qdot como velocidad física directa.
+  typical_range: [ -1e6, 1e6 ]
+  sign_behavior: orientado
+  zero_behavior: coordenada_congelada
+  value_nature: estado
+  interpretation_role: velocidad_de_carta
+  graph_binding: "[[qdot]] produce [[v]] a través del mapa geométrico."
+  descripcion: { es: Tasa temporal de una coordenada generalizada., en: Time rate of a generalized coordinate. }
+  pedagogical_notes: { es: "Solo coincide con rapidez física en cartas especialmente simples.", en: "It coincides with physical speed only in especially simple charts." }
+
+- id: r_vec
+  symbol: \vec r
+  nombre: { es: Posición física, en: Physical position }
+  si_unit: m
+  unidad_si: m
+  dimension: L
+  is_vector: true
+  components: [ x, y, z ]
+  category: posicion
+  physical_role: salida_geometrica
+  used_in: [ posicion_generalizada, velocidad_generalizada ]
+  common_mistake: Confundir el vector físico con el conjunto de coordenadas q_i.
+  typical_range: [ -1e6, 1e6 ]
+  sign_behavior: depende_del_origen
+  zero_behavior: origen_fisico
+  value_nature: estado
+  interpretation_role: posicion_observable
+  graph_binding: "[[r_vec]] es la posición que se dibuja al variar [[q]]."
+  descripcion: { es: Posición observable obtenida desde las coordenadas generalizadas., en: Observable position obtained from generalized coordinates. }
+  pedagogical_notes: { es: "Es la salida física de la parametrización.", en: "It is the physical output of the parametrization." }
+
+- id: v
+  symbol: \vec v
+  nombre: { es: Velocidad física, en: Physical velocity }
+  si_unit: m/s
+  unidad_si: m/s
+  dimension: L/T
+  is_vector: true
+  components: []
+  category: cinematica
+  physical_role: velocidad_observable
+  used_in: [ velocidad_generalizada, energia_cinetica_generalizada ]
+  common_mistake: Sustituir qdot directamente por v sin jacobiano.
+  typical_range: [ -1e6, 1e6 ]
+  sign_behavior: vectorial
+  zero_behavior: reposo_fisico
+  value_nature: estado
+  interpretation_role: salida_cinematica
+  graph_binding: "[[v]] resulta de combinar [[qdot]] con la geometría del mapa."
+  descripcion: { es: Velocidad real inducida por la evolución de las coordenadas generalizadas., en: Real velocity induced by generalized coordinate evolution. }
+  pedagogical_notes: { es: "Es la magnitud que entra en la energía cinética física.", en: "It is the magnitude entering physical kinetic energy." }
+
+- id: T
+  symbol: T
+  nombre: { es: Energía cinética, en: Kinetic energy }
+  si_unit: J
+  unidad_si: J
+  dimension: M*L^2/T^2
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: energia_de_movimiento
+  used_in: [ energia_cinetica_generalizada ]
+  common_mistake: Calcularla con qdot sin métrica ni velocidad física.
+  typical_range: [ 0, 1e12 ]
+  sign_behavior: no_negativa
+  zero_behavior: sin_movimiento_fisico
+  value_nature: resultado
+  interpretation_role: energia_resultante
+  graph_binding: "[[T]] crece con el cuadrado de [[v]]."
+  descripcion: { es: Energía asociada al movimiento físico inducido por la carta., en: Energy associated with physical motion induced by the chart. }
+  pedagogical_notes: { es: "Conecta la elección de coordenadas con el lagrangiano.", en: "It connects coordinate choice with the Lagrangian." }
+
+- id: m
+  symbol: m
+  nombre: { es: Masa, en: Mass }
+  si_unit: kg
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: []
+  category: parametro
+  physical_role: inercia
+  used_in: [ energia_cinetica_generalizada ]
+  common_mistake: Omitir que la energía cinética escala con la masa.
+  typical_range: [ 0, 1e9 ]
+  sign_behavior: positiva
+  zero_behavior: sin_inercia
+  value_nature: parametro
+  interpretation_role: escala_inercial
+  graph_binding: "[[m]] escala proporcionalmente [[T]]."
+  descripcion: { es: Parámetro inercial del sistema modelado., en: Inertial parameter of the modeled system. }
+  pedagogical_notes: { es: "Debe ser positiva en mecánica clásica ordinaria.", en: "It must be positive in ordinary classical mechanics." }
+
+- id: t
+  symbol: t
+  nombre: { es: Tiempo, en: Time }
+  si_unit: s
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: []
+  category: parametro
+  physical_role: variable_temporal
+  used_in: [ posicion_generalizada, velocidad_generalizada ]
+  common_mistake: Ignorar dependencia temporal explícita de la carta.
+  typical_range: [ 0, 1e12 ]
+  sign_behavior: orientado
+  zero_behavior: origen_temporal
+  value_nature: parametro
+  interpretation_role: evolucion
+  graph_binding: "[[t]] permite cartas móviles o dependientes del tiempo."
+  descripcion: { es: Variable temporal del modelo., en: Time variable of the model. }
+  pedagogical_notes: { es: "Puede aparecer explícitamente en mapas no estacionarios.", en: "It may appear explicitly in non-stationary maps." }
+
+- id: x
+  symbol: x
+  nombre: { es: Coordenada cartesiana x, en: Cartesian coordinate x }
+  si_unit: m
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: geometria
+  physical_role: posicion_cartesiana
+  used_in: [ x_desde_polar, radio_cartesiano ]
+  common_mistake: Tratar x como invariante al cambiar de coordenadas.
+  typical_range: [ -1e+6, 1e+6 ]
+  sign_behavior: depende_del_origen_elegido
+  zero_behavior: alineado_con_eje_y
+  value_nature: estado
+  interpretation_role: proyeccion_horizontal
+  graph_binding: "[[x]] cambia con [[r]] y [[theta]] al proyectar sobre el eje horizontal."
+  descripcion: { es: Proyección horizontal de la posición en base cartesiana., en: Horizontal projection of position in Cartesian basis. }
+  pedagogical_notes: { es: "Comparar [[x]] con [[y]] ayuda a visualizar cambios de base.", en: "Comparing [[x]] with [[y]] helps visualize basis changes." }
+
+- id: y
+  symbol: y
+  nombre: { es: Coordenada cartesiana y, en: Cartesian coordinate y }
+  si_unit: m
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: geometria
+  physical_role: posicion_cartesiana
+  used_in: [ y_desde_polar, radio_cartesiano ]
+  common_mistake: Usar y con signo incorrecto al no fijar orientación angular.
+  typical_range: [ -1e+6, 1e+6 ]
+  sign_behavior: depende_del_origen_elegido
+  zero_behavior: alineado_con_eje_x
+  value_nature: estado
+  interpretation_role: proyeccion_vertical
+  graph_binding: "[[y]] se obtiene como componente vertical del radio [[r]]."
+  descripcion: { es: Proyección vertical de la posición en base cartesiana., en: Vertical projection of position in Cartesian basis. }
+  pedagogical_notes: { es: "Una lectura conjunta de [[x]] y [[y]] evita errores de cuadrante.", en: "Joint reading of [[x]] and [[y]] prevents quadrant errors." }
+
+- id: r
+  symbol: r
+  nombre: { es: Radio polar, en: Polar radius }
+  si_unit: m
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: geometria
+  physical_role: distancia_al_origen
+  used_in: [ x_desde_polar, y_desde_polar, radio_cartesiano ]
+  common_mistake: Confundir r con trayectoria recorrida.
+  typical_range: [ 0, 1e+6 ]
+  sign_behavior: no_negativa
+  zero_behavior: origen
+  value_nature: estado
+  interpretation_role: coordenada_radial
+  graph_binding: "[[r]] fija la escala de la posición antes de proyectar en ejes cartesianos."
+  descripcion: { es: Distancia al origen en coordenadas polares., en: Distance to the origin in polar coordinates. }
+  pedagogical_notes: { es: "Cuando [[r]]=0, el ángulo [[theta]] deja de ser físicamente relevante.", en: "When [[r]]=0, angle [[theta]] becomes physically irrelevant." }
+
+- id: theta
+  symbol: \theta
+  nombre: { es: Ángulo polar, en: Polar angle }
+  si_unit: rad
+  unidad_si: rad
+  dimension: adimensional
+  is_vector: false
+  components: []
+  category: geometria
+  physical_role: orientacion
+  used_in: [ x_desde_polar, y_desde_polar ]
+  common_mistake: Mezclar grados y radianes sin conversión.
+  typical_range: [ -6.2832, 6.2832 ]
+  sign_behavior: orientado
+  zero_behavior: alineado_eje_x
+  value_nature: estado
+  interpretation_role: direccion
+  graph_binding: "[[theta]] determina el reparto entre [[x]] y [[y]] para un [[r]] fijo."
+  descripcion: { es: Orientación angular de la posición respecto del eje de referencia., en: Angular orientation of position with respect to the reference axis. }
+  pedagogical_notes: { es: "Revisar cuadrante de [[theta]] evita signos erróneos en seno y coseno.", en: "Checking [[theta]] quadrant avoids wrong sine and cosine signs." }
+
+- id: n
+  symbol: n
+  nombre: { es: Número de partículas, en: Number of particles }
+  si_unit: "1"
+  unidad_si: "1"
+  dimension: adimensional
+  is_vector: false
+  components: []
+  category: conteo
+  physical_role: tamano_del_sistema
+  used_in: [ grados_libertad ]
+  common_mistake: Usar n como número de ecuaciones en vez de entidades dinámicas.
+  typical_range: [ 1, 1e+6 ]
+  sign_behavior: entero_positivo
+  zero_behavior: sistema_vacio
+  value_nature: parametro
+  interpretation_role: cardinalidad
+  graph_binding: "[[n]] escala el espacio de configuración bruto antes de aplicar ligaduras."
+  descripcion: { es: Cantidad de entidades dinámicas consideradas en el modelo., en: Number of dynamic entities considered by the model. }
+  pedagogical_notes: { es: "Distinguir [[n]] de número de coordenadas evita sobreconteos.", en: "Distinguishing [[n]] from number of coordinates avoids overcounting." }
+
+- id: C
+  symbol: C
+  nombre: { es: Ligaduras independientes, en: Independent constraints }
+  si_unit: "1"
+  unidad_si: "1"
+  dimension: adimensional
+  is_vector: false
+  components: []
+  category: conteo
+  physical_role: reduccion_de_grados
+  used_in: [ grados_libertad ]
+  common_mistake: Contar dos veces la misma restricción en forma equivalente.
+  typical_range: [ 0, 1e+6 ]
+  sign_behavior: entero_no_negativo
+  zero_behavior: sin_ligaduras
+  value_nature: parametro
+  interpretation_role: restriccion
+  graph_binding: "[[C]] reduce el número de coordenadas efectivas del sistema."
+  descripcion: { es: Número de restricciones independientes que vinculan coordenadas., en: Number of independent constraints linking coordinates. }
+  pedagogical_notes: { es: "La independencia de ligaduras es condición clave para contar bien [[f]].", en: "Constraint independence is key for correct [[f]] counting." }
+
+- id: f
+  symbol: f
+  nombre: { es: Grados de libertad, en: Degrees of freedom }
+  si_unit: "1"
+  unidad_si: "1"
+  dimension: adimensional
+  is_vector: false
+  components: []
+  category: conteo
+  physical_role: dimension_efectiva_del_modelo
+  used_in: [ grados_libertad ]
+  common_mistake: Identificar f con dimensión espacial sin restar ligaduras.
+  typical_range: [ 0, 1e+6 ]
+  sign_behavior: entero_no_negativo
+  zero_behavior: sistema_completamente_restringido
+  value_nature: resultado
+  interpretation_role: salida_principal
+  graph_binding: "[[f]] resume cuántas coordenadas generalizadas independientes se necesitan."
+  descripcion: { es: Número mínimo de coordenadas independientes para describir el estado., en: Minimum number of independent coordinates needed to describe the state. }
+  pedagogical_notes: { es: "[[f]] organiza la estrategia de modelización y selección de coordenadas.", en: "[[f]] organizes modeling strategy and coordinate selection." }

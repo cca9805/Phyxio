@@ -1,14 +1,361 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
+import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
 import katex from "katex";
+import { Link, useLocation } from "react-router-dom";
 import "katex/dist/katex.min.css";
+import { getUiLanguage } from "../v2/utils/uiLanguage";
 
-// [[theta]] -> [theta](var:theta)
-function preprocessVariableHints(src) {
+// [[theta]] -> [$\\theta$](var:theta)
+// [[keq]] -> [$k_{\\mathrm{eq}}$](var:keq)
+// [[etiqueta|id]] -> [etiqueta](var:id)
+function autoVariableLatex(id) {
+  const cleanId = String(id || "").trim();
+
+  if (!cleanId || cleanId.includes("$") || cleanId.includes("\\(") || cleanId.includes("\\[")) {
+    return cleanId;
+  }
+
+  // 1. Griegas solas: tau -> τ
+  const greek = GREEK_TEX_MAP?.[cleanId];
+  if (greek) return `$${greek}$`;
+
+  // 2. Griegas compactas: DeltaP, tauR, omega0, thetaeq...
+  const greekCompact = cleanId.match(
+    /^(alpha|beta|gamma|Gamma|delta|Delta|epsilon|theta|Theta|lambda|Lambda|mu|pi|Pi|rho|sigma|Sigma|tau|phi|Phi|psi|Psi|omega|Omega)(\d+|0|f|i|max|min|rel|cm|ext|tot|eq|el|P|R|T|0|x|y|z)$/
+  );
+
+  if (greekCompact) {
+    const [, greekName, index] = greekCompact;
+    const greekTex = GREEK_TEX_MAP?.[greekName] || `\\${greekName}`;
+
+    // Si es Delta, lo tratamos como prefijo: DeltaP -> ΔP
+    if (greekName === "Delta" || greekName === "delta") {
+      return `$${greekTex} ${index}$`;
+    }
+
+    const formattedIndex =
+      /^[A-Za-z]{2,}$/.test(index)
+        ? `\\mathrm{${index}}`
+        : index;
+
+    return `$${greekTex}_{${formattedIndex}}$`;
+  }
+
+  // 3. Griegas con guion bajo: Delta_P, omega_max...
+  const greekUnderscored = cleanId.match(
+    /^(alpha|beta|gamma|Gamma|delta|Delta|epsilon|theta|Theta|lambda|Lambda|mu|pi|Pi|rho|sigma|Sigma|tau|phi|Phi|psi|Psi|omega|Omega)_([A-Za-z0-9]+)$/
+  );
+
+  if (greekUnderscored) {
+    const [, greekName, index] = greekUnderscored;
+    const greekTex = GREEK_TEX_MAP?.[greekName] || `\\${greekName}`;
+
+    if (greekName === "Delta" || greekName === "delta") {
+      return `$${greekTex} ${index}$`;
+    }
+
+    const formattedIndex =
+      /^[A-Za-z]{2,}$/.test(index)
+        ? `\\mathrm{${index}}`
+        : index;
+
+    return `$${greekTex}_{${formattedIndex}}$`;
+  }
+
+  // 4. IDs con guion bajo explícito: v_0, t_f, a_rel...
+  const underscored = cleanId.match(/^([A-Za-z]+)_([A-Za-z0-9]+)$/);
+  if (underscored) {
+    const [, base, index] = underscored;
+    const formattedIndex =
+      /^[A-Za-z]{2,}$/.test(index)
+        ? `\\mathrm{${index}}`
+        : index;
+
+    return `$${base}_{${formattedIndex}}$`;
+  }
+
+  // 5. Compactos normales: keq, bP, xcm...
+  const compactSub = cleanId.match(
+    /^([A-Za-z]{1,3})(\d+|0|f|i|max|min|rel|cm|ext|tot|eq|el|P|R|T)$/
+  );
+
+  if (compactSub) {
+    const [, base, index] = compactSub;
+    const formattedIndex =
+      /^[A-Za-z]{2,}$/.test(index)
+        ? `\\mathrm{${index}}`
+        : index;
+
+    return `$${base}_{${formattedIndex}}$`;
+  }
+
+  // 6. Símbolos simples
+  if (/^[A-Za-z]$/.test(cleanId)) {
+    return `$${cleanId}$`;
+  }
+
+  return cleanId;
+}
+
+function preprocessVariableHints(src, magsMap) {
   if (!src) return "";
-  return src.replace(/\[\[([a-zA-Z0-9_-]+)\]\]/g, (_, id) => `[${id}](var:${id})`);
+
+  // Soporte para [[id]] y [[etiqueta|id]]
+  return src.replace(/\[\[([^\]]+)\]\]/g, (_, content) => {
+    const raw = String(content || "").trim();
+
+    if (raw.includes("|")) {
+      const [label, id] = raw.split("|");
+      return `[${label.trim()}](var:${id.trim()})`;
+    }
+
+    const id = raw;
+    const mag = magsMap?.get(id);
+
+    if (mag) {
+      // Usar el símbolo de la magnitud (envuelto en $ para KaTeX) como texto visible
+      const label = mag.symbol ? `$${mag.symbol}$` : id;
+      return `[${label}](var:${id})`;
+    }
+
+    const label = autoVariableLatex(id);
+    return `[${label}](var:${id})`;
+  });
+}
+
+// Convierte referencias editoriales comunes en enlaces navegables sin tocar leaf por leaf.
+function preprocessReferenceLinks(src) {
+  if (!src) return "";
+
+  const toTopicLabel = (relPath) => {
+    const safe = String(relPath || "").replace(/^\/+|\/+$/g, "");
+    const last = safe.split("/").filter(Boolean).pop() || safe;
+    const base = last.replace(/\.(md|yaml|yml)$/i, "");
+    return base
+      .replace(/[-_]+/g, " ")
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+  };
+
+  const tabMap = {
+    "teoria.md": "teoria",
+    "procedimiento.md": "procedimiento",
+    "modelos.md": "modelos",
+    "errores.md": "errores",
+    "ejemplos.md": "ejemplos",
+    "aplicaciones.md": "aplicaciones",
+    "aplicaciones_fisicas.md": "aplicaciones",
+    "practica.md": "practica",
+    "historia.md": "historia",
+    "formulas.yaml": "calculadora",
+    "magnitudes.yaml": "leyenda",
+  };
+
+  let out = String(src);
+
+  // [fisica-clasica/...](leaf:fisica-clasica/...) -> [Tema](leaf:fisica-clasica/...)
+  // Cubre contenido ya migrado que guardo la ruta completa como etiqueta visible.
+  out = out.replace(
+    /\[((?:fundamentos|fisica-clasica|fisica-moderna|fisica-avanzada|matematicas|sostenibilidad-energia|energia-y-sostenibilidad|herramientas)\/[a-z0-9_/-]+)\]\(leaf:((?:fundamentos|fisica-clasica|fisica-moderna|fisica-avanzada|matematicas|sostenibilidad-energia|energia-y-sostenibilidad|herramientas)\/[a-z0-9_/-]+)\)/g,
+    (_, __labelPath, relPath) => `[${toTopicLabel(relPath)}](leaf:${relPath})`
+  );
+
+  // `errores.md` -> [errores.md](tab:errores)
+  out = out.replace(
+    /`(teoria\.md|modelos\.md|errores\.md|ejemplos\.md|aplicaciones\.md|historia\.md|formulas\.yaml|magnitudes\.yaml)`/g,
+    (_, file) => {
+      const label = String(file).replace(/\.(md|yaml)$/i, "");
+      return `[${label}](tab:${tabMap[file]})`;
+    }
+  );
+
+  // `fundamentos/...` -> [fundamentos/...](leaf:fundamentos/...)
+  out = out.replace(
+    /`((?:fundamentos|fisica-clasica|fisica-moderna|fisica-avanzada|matematicas|sostenibilidad-energia|energia-y-sostenibilidad|herramientas)\/[a-z0-9_/-]+)`/g,
+    (_, relPath) => `[${toTopicLabel(relPath)}](leaf:${relPath})`
+  );
+
+  // - fundamentos/... -> - [fundamentos/...](leaf:fundamentos/...)
+  // Soporta rutas internas en listas aunque no vengan entre backticks.
+  out = out.replace(
+    /^(\s*[-*]\s+)(?!\[)((?:fundamentos|fisica-clasica|fisica-moderna|fisica-avanzada|matematicas|sostenibilidad-energia|energia-y-sostenibilidad|herramientas)\/[a-z0-9_/-]+)\s*$/gm,
+    (_, prefix, relPath) => `${prefix}[${toTopicLabel(relPath)}](leaf:${relPath})`
+  );
+
+  // - fundamentos/...: explicacion -> - [Tema](leaf:fundamentos/...): explicacion
+  out = out.replace(
+    /^(\s*[-*]\s+)(?!\[)((?:fundamentos|fisica-clasica|fisica-moderna|fisica-avanzada|matematicas|sostenibilidad-energia|energia-y-sostenibilidad|herramientas)\/[a-z0-9_/-]+)(\s*:\s*)(.+)$/gm,
+    (_, prefix, relPath, sep, rest) =>
+      `${prefix}[${toTopicLabel(relPath)}](leaf:${relPath})${sep}${rest}`
+  );
+
+  return out;
+}
+
+// Normaliza delimitadores LaTeX estilo \(...\) y \[...\] a sintaxis markdown math.
+function preprocessLatexDelimiters(src) {
+  if (!src) return "";
+
+  const lines = String(src).split(/\r?\n/);
+  const out = [];
+  let inCodeFence = false;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    if (/^```/.test(trimmed)) {
+      inCodeFence = !inCodeFence;
+      out.push(line);
+      continue;
+    }
+
+    if (inCodeFence) {
+      out.push(line);
+      continue;
+    }
+
+    // Si toda la linea es una formula \(...\) o \[...\], convertir a bloque.
+    const blockRound = trimmed.match(/^\\\(([\s\S]+)\\\)$/);
+    if (blockRound) {
+      out.push("$$");
+      out.push(String(blockRound[1]).trim());
+      out.push("$$");
+      continue;
+    }
+
+    const blockSquare = trimmed.match(/^\\\[([\s\S]+)\\\]$/);
+    if (blockSquare) {
+      out.push("$$");
+      out.push(String(blockSquare[1]).trim());
+      out.push("$$");
+      continue;
+    }
+
+    // En texto mixto, mantener conversion inline.
+    let next = line;
+    next = next.replace(/\\\((.+?)\\\)/g, (_, expr) => `$${expr}$`);
+    next = next.replace(/\\\[((?:\\.|[^\]])+?)\\\]/g, (_, expr) => `$$${expr}$$`);
+    out.push(next);
+  }
+
+  return out.join("\n");
+}
+
+// Reemplaza · (U+00B7 MIDDLE DOT) dentro de bloques $...$ y $$...$$ por la
+// secuencia LaTeX equivalente que KaTeX sabe renderizar.
+// Dentro de \text{...}: · → }\cdot\text{  (sale de text mode para el punto)
+// Fuera de \text{...}: · → \cdot           (operador en math mode)
+function preprocessUnicodeDotInMath(src) {
+  if (!src || !src.includes("·")) return src;
+
+  function fixDotsInExpr(expr) {
+    // Paso 1: dentro de \text{...}, reemplazar · rompiendo text mode.
+    let fixed = expr.replace(
+      /\\text\{([^}]*)\}/g,
+      (m) => m.replace(/·/g, "}\\cdot\\text{")
+    );
+    // Limpiar posibles \text{} vacios generados.
+    fixed = fixed.replace(/\\text\{\}/g, "");
+    // Paso 2: · restante (en math mode puro) → \cdot
+    fixed = fixed.replace(/·/g, "\\cdot ");
+    return fixed;
+  }
+
+  let out = String(src);
+
+  // Proteger bloques $$...$$ primero (evitar conflicto con $ inline).
+  const displayBlocks = [];
+  out = out.replace(/\$\$([\s\S]*?)\$\$/g, (match, inner) => {
+    const idx = displayBlocks.length;
+    displayBlocks.push(inner.includes("·") ? "$$" + fixDotsInExpr(inner) + "$$" : match);
+    return `\x00DPROT${idx}\x00`;
+  });
+
+  // Inline $...$: reemplazar · dentro de cada bloque.
+  out = out.replace(/(?<!\$)\$(?!\$)((?:[^$\\]|\\.)+?)\$(?!\$)/g, (match, inner) => {
+    if (!inner.includes("·")) return match;
+    return "$" + fixDotsInExpr(inner) + "$";
+  });
+
+  // Restaurar display blocks.
+  displayBlocks.forEach((block, idx) => {
+    out = out.replace(`\x00DPROT${idx}\x00`, () => block);
+  });
+
+  return out;
+}
+
+function isBareLatexLine(trimmed) {
+  if (!trimmed) return false;
+  if (/^(?:#{1,6}\s|[-*+]\s|>\s|\d+\.\s|\|)/.test(trimmed)) return false;
+  if (/[`$]/.test(trimmed)) return false;
+  if (/\\\(|\\\)|\\\[|\\\]/.test(trimmed)) return false;
+  if (/^(?:https?:\/\/|\/|\.{1,2}\/)/i.test(trimmed)) return false;
+
+  const hasLatexCmd = /\\[A-Za-z]+/.test(trimmed);
+  const hasStrongLatex =
+    /\\(?:sum|frac|vec|sqrt|theta|omega|mu|lambda|Delta|sin|cos|tan|cdot|times|qquad|approx|Rightarrow|text|parallel|perp|hat|pi|le|ge|neq)\b/.test(
+      trimmed
+    );
+  const hasMathOps = /(?:=|\^|_|\\Rightarrow|\\approx|\\le|\\ge|\\neq)/.test(trimmed);
+
+  if (!(hasStrongLatex || (hasLatexCmd && hasMathOps))) return false;
+
+  const plainWordCount = (
+    trimmed.replace(/\\[A-Za-z]+/g, " ").match(/[A-Za-z]{4,}/g) || []
+  ).length;
+  if (plainWordCount >= 5) return false;
+
+  return true;
+}
+
+// Convierte lineas LaTeX sueltas (sin delimitadores) a bloques $$...$$.
+function preprocessBareLatexBlocks(src) {
+  if (!src) return "";
+
+  const lines = String(src).split(/\r?\n/);
+  const out = [];
+  let inCodeFence = false;
+  let inDisplayMath = false;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    if (/^```/.test(trimmed)) {
+      inCodeFence = !inCodeFence;
+      out.push(line);
+      continue;
+    }
+
+    if (trimmed === "$$") {
+      inDisplayMath = !inDisplayMath;
+      out.push(line);
+      continue;
+    }
+
+    if (/^\$\$[\s\S]*\$\$$/.test(trimmed)) {
+      out.push(line);
+      continue;
+    }
+
+    if (inCodeFence || inDisplayMath || !trimmed) {
+      out.push(line);
+      continue;
+    }
+
+    if (isBareLatexLine(trimmed)) {
+      out.push("$$");
+      out.push(trimmed);
+      out.push("$$");
+      continue;
+    }
+
+    out.push(line);
+  }
+
+  return out.join("\n");
 }
 
 function buildMagnitudesMap(magnitudesDoc) {
@@ -26,93 +373,620 @@ function buildMagnitudesMap(magnitudesDoc) {
   return map;
 }
 
+function buildFormulasMap(formulasDoc) {
+  const list =
+    (Array.isArray(formulasDoc?.formulas) && formulasDoc.formulas) ||
+    (Array.isArray(formulasDoc) && formulasDoc) ||
+    (Array.isArray(formulasDoc?.default?.formulas) && formulasDoc.default.formulas) ||
+    [];
+
+  const map = new Map();
+  for (const f of list) {
+    if (!f?.id) continue;
+    map.set(String(f.id), f);
+  }
+  return map;
+}
+
+// Replaces {{f:formula_id}} tags with the formula's LaTeX rendered as a
+// display-mode math block, preceded by a small title label.
+// It actively consumes surrounding whitespace and newlines to prevent
+// the creation of empty paragraphs (ghost cards) in the UI.
+function preprocessFormulaTags(src, formulasMap) {
+  if (!src || !formulasMap || formulasMap.size === 0) return src;
+
+  return String(src).replace(/(?:\r?\n)*\s*\{\{f:([a-zA-Z0-9_-]+)\}\}\s*(?:\r?\n)*/g, (match, id) => {
+    const f = formulasMap.get(id);
+    if (!f) return `\n\n${match}\n\n`;
+
+    let latex = String(f.latex || f.equation || "").trim();
+    if (!latex) return "";
+
+    // Metodo manual robusto para eliminar delimitadores
+    if (latex.startsWith("\\(") || latex.startsWith("\\[")) {
+      latex = latex.substring(2);
+    }
+    if (latex.endsWith("\\)") || latex.endsWith("\\]")) {
+      latex = latex.substring(0, latex.length - 2);
+    }
+
+    latex = latex.trim();
+
+    const title = (typeof f.title === "object" ? (f.title.es || f.title.en || "") : (f.title || ""));
+    const label = title ? `> **${title}**\n` : "";
+
+    return `\n\n${label}$$\n${latex}\n$$\n\n`;
+  });
+}
+
+const KATEX_CACHE = new Map();
+
 function renderInlineLatex(expr) {
+  const normalizedExpr = normalizeFriendlyTex(expr);
+  if (KATEX_CACHE.has(normalizedExpr)) {
+    return KATEX_CACHE.get(normalizedExpr);
+  }
+
   try {
-    const html = katex.renderToString(expr, {
+    const html = katex.renderToString(normalizedExpr, {
       displayMode: false,
       throwOnError: false,
       strict: "ignore",
     });
-    return <span dangerouslySetInnerHTML={{ __html: html }} />;
+    const element = <span dangerouslySetInnerHTML={{ __html: html }} />;
+    KATEX_CACHE.set(normalizedExpr, element);
+    return element;
   } catch {
-    return <span>{expr}</span>;
+    const element = <span>{normalizedExpr}</span>;
+    KATEX_CACHE.set(normalizedExpr, element);
+    return element;
   }
 }
 
-function VariableHint({ id, mag }) {
+const GREEK_TEX_MAP = {
+  alpha: "\\alpha",
+  beta: "\\beta",
+  gamma: "\\gamma",
+  Gamma: "\\Gamma",
+  delta: "\\delta",
+  Delta: "\\Delta",
+  epsilon: "\\epsilon",
+  varepsilon: "\\varepsilon",
+  zeta: "\\zeta",
+  eta: "\\eta",
+  theta: "\\theta",
+  vartheta: "\\vartheta",
+  Theta: "\\Theta",
+  iota: "\\iota",
+  kappa: "\\kappa",
+  lambda: "\\lambda",
+  Lambda: "\\Lambda",
+  mu: "\\mu",
+  nu: "\\nu",
+  xi: "\\xi",
+  Xi: "\\Xi",
+  pi: "\\pi",
+  varpi: "\\varpi",
+  Pi: "\\Pi",
+  rho: "\\rho",
+  varrho: "\\varrho",
+  sigma: "\\sigma",
+  varsigma: "\\varsigma",
+  Sigma: "\\Sigma",
+  tau: "\\tau",
+  upsilon: "\\upsilon",
+  Upsilon: "\\Upsilon",
+  phi: "\\phi",
+  varphi: "\\varphi",
+  Phi: "\\Phi",
+  chi: "\\chi",
+  psi: "\\psi",
+  Psi: "\\Psi",
+  omega: "\\omega",
+  Omega: "\\Omega",
+};
+
+// Convierte sqrt(...) a \sqrt{...} soportando parentesis anidados.
+function normalizeSqrtCalls(expr) {
+  const s = String(expr ?? "");
+  let out = "";
+  let i = 0;
+
+  while (i < s.length) {
+    const rel = s.slice(i).search(/\bsqrt\s*\(/);
+    if (rel === -1) {
+      out += s.slice(i);
+      break;
+    }
+
+    const start = i + rel;
+    const head = s.slice(start).match(/^sqrt\s*\(/);
+    if (!head) {
+      out += s.slice(i);
+      break;
+    }
+
+    // Si ya viene escapado (\sqrt), no tocar.
+    if (start > 0 && s[start - 1] === "\\") {
+      out += s.slice(i, start + 4);
+      i = start + 4;
+      continue;
+    }
+
+    out += s.slice(i, start);
+
+    const openPos = start + head[0].length - 1;
+    let depth = 0;
+    let closePos = -1;
+
+    for (let p = openPos; p < s.length; p += 1) {
+      const ch = s[p];
+      if (ch === "(") depth += 1;
+      else if (ch === ")") {
+        depth -= 1;
+        if (depth === 0) {
+          closePos = p;
+          break;
+        }
+      }
+    }
+
+    if (closePos === -1) {
+      out += s.slice(start);
+      break;
+    }
+
+    const inner = s.slice(openPos + 1, closePos);
+    out += `\\sqrt{${inner}}`;
+    i = closePos + 1;
+  }
+
+  return out;
+}
+
+function looksLikeMathInline(raw) {
+  const s = String(raw ?? "").trim();
+  if (!s) return false;
+
+  // Evita tratar rutas/archivos como expresiones matematicas.
+  if (/^(?:https?:\/\/|\/|\.{1,2}\/)/i.test(s)) return false;
+  if (/\.(?:md|ya?ml|json|jsx?|tsx?)$/i.test(s)) return false;
+
+  // Identificadores snake_case puros (solo letras, digitos y guiones bajos, sin
+  // operadores matematicos ni espacios) son IDs de formulas/magnitudes del YAML,
+  // no expresiones matematicas.  Ej: f_media, delta_p_solve_pf, P_solve_v.
+  // Se excluyen ANTES de cualquier otro check para evitar falsos positivos con
+  // guiones bajos interpretados como subindices KaTeX.
+  if (/_/.test(s) && /^[A-Za-z_][A-Za-z0-9_]*$/.test(s)) return false;
+
+  // Debe haber una marca matematica fuerte para activar render implicito.
+  // Evita falsos positivos en texto natural como "sin aceleracion ...".
+  const hasOperator = /(?:=|<=|>=|!=|\^|_|\*|\/)/.test(s);
+  const hasLatexCmd = /\\[A-Za-z]+/.test(s);
+  const hasMathKeyword = /\b(?:sum|integral|int)\b/.test(s);
+  const hasFunctionCall = /\b(?:sin|cos|tan|arcsin|arccos|arctan|log|ln|exp|sqrt)\s*\(/.test(s);
+  const hasCompactIntegral = /\b(?:integral|int)[A-Za-z][A-Za-z0-9]*\b/.test(s);
+  const hasDerivative = /\bd[A-Za-z]+\s*\/\s*d[A-Za-z]+\b/.test(s);
+  const hasGreekToken = /\b(?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|zeta|eta|theta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|pi|rho|sigma|Sigma|tau|upsilon|phi|Phi|chi|psi|Psi|omega|Omega)\b/.test(
+    s
+  );
+
+  if (
+    !(
+      hasOperator ||
+      hasLatexCmd ||
+      hasMathKeyword ||
+      hasFunctionCall ||
+      hasCompactIntegral ||
+      hasDerivative ||
+      hasGreekToken
+    )
+  ) {
+    return false;
+  }
+
+  // Frases largas sin operadores suelen ser texto editorial, no formula.
+  const wordCount = (s.match(/[A-Za-z]{2,}/g) || []).length;
+  if (wordCount >= 4 && !hasOperator && !hasLatexCmd && !hasFunctionCall && !hasDerivative) {
+    return false;
+  }
+
+  // Single letter variables (a, v, F, m, t, x, y, z, p, etc.) are usually math in this context.
+  if (/^[A-Za-z]$/.test(s)) return true;
+
+  return true;
+}
+
+// Permite escribir sintaxis amigable en markdown dentro de `tex:...`
+// y la normaliza a LaTeX valido para KaTeX.
+function normalizeFriendlyTex(expr) {
+  let out = String(expr ?? "");
+
+  // Simbolos unicode comunes en formulas escritas "a mano".
+  out = out.replace(/\u2211/g, "\\sum ");
+  out = out.replace(/\u221E/g, "\\infty ");
+
+  // Operadores relacionales comunes
+  out = out.replace(/<=/g, "\\le ");
+  out = out.replace(/>=/g, "\\ge ");
+  out = out.replace(/!=/g, "\\ne ");
+  // Grados escritos como unicode.
+  out = out.replace(/[°∘]/g, "^{\\circ}");
+
+  // sqrt(...) -> \sqrt{...} (incluye casos con parentesis anidados).
+  out = normalizeSqrtCalls(out);
+
+  // dT/dy -> \frac{dT}{dy}
+  out = out.replace(/(?<!\\)\bd([A-Za-z]+)\s*\/\s*d([A-Za-z]+)\b/g, "\\frac{d$1}{d$2}");
+
+  // sum ... -> \sum ...
+  out = out.replace(/(?<!\\)\bsum\b/g, "\\sum");
+  // integral ... -> \int ...
+  out = out.replace(/(?<!\\)\bintegral\b/g, "\\int");
+  out = out.replace(/(?<!\\)\bint\b/g, "\\int");
+  out = out.replace(/(?<!\\)\b(min|max)\b/g, "\\$1");
+
+  // Escritura compacta habitual: integraldm, integralxdm, intdm -> \int dm, \int xdm, \int dm
+  out = out.replace(/(?<!\\)\bintegral([A-Za-z][A-Za-z0-9]*)\b/g, "\\int $1");
+  out = out.replace(/(?<!\\)\bint([A-Za-z][A-Za-z0-9]*)\b/g, "\\int $1");
+
+  // Notacion perpendicular frecuente: Fperp, aperp, Nperp -> F_{\perp}, a_{\perp}, N_{\perp}
+  out = out.replace(/([A-Za-z])\s*_?\s*perp\b/g, "$1_{\\perp}");
+  // Variante unicode de perpendicular.
+  out = out.replace(/([A-Za-z])\s*\u22A5/g, "$1_{\\perp}");
+
+  // Alias en espanol frecuentes.
+  out = out.replace(/(?<!\\)\bsen\b/g, "sin");
+
+  // Inversas trigonometricas comunes.
+  out = out.replace(/(?<!\\)\b(asin|arcsin)\s*\(/g, "\\arcsin(");
+  out = out.replace(/(?<!\\)\b(acos|arccos)\s*\(/g, "\\arccos(");
+  out = out.replace(/(?<!\\)\b(atan|arctan)\s*\(/g, "\\arctan(");
+
+  // Funciones trigonometricas/logaritmicas comunes.
+  out = out.replace(/(?<!\\)\b(sin|cos|tan|arcsin|arccos|arctan|log|ln|exp)\s*\(/g, "\\$1(");
+
+  // Nombres griegos frecuentes en texto plano -> comandos LaTeX
+  for (const [name, cmd] of Object.entries(GREEK_TEX_MAP)) {
+    const rxSub = new RegExp(`(?<!\\\\)\\b${name}_([A-Za-z0-9]+)\\b`, "g");
+    out = out.replace(rxSub, `${cmd}_{$1}`);
+    const rx = new RegExp(`(?<!\\\\)\\b${name}\\b`, "g");
+    out = out.replace(rx, cmd);
+  }
+
+  // Caso comun de escritura compacta: lambdag -> \lambda g, sigmax -> \sigma x, rhog -> \rho g
+  for (const [name, cmd] of Object.entries(GREEK_TEX_MAP)) {
+    const rxJoined = new RegExp(`(?<!\\\\)\\b${name}([A-Za-z][A-Za-z0-9]*)\\b`, "g");
+    out = out.replace(rxJoined, `${cmd} $1`);
+  }
+
+  // Letras griegas Unicode frecuentes -> comandos LaTeX.
+  const greekUnicodeMap = {
+    α: "\\alpha",
+    β: "\\beta",
+    γ: "\\gamma",
+    Γ: "\\Gamma",
+    δ: "\\delta",
+    Δ: "\\Delta",
+    ε: "\\epsilon",
+    ϵ: "\\varepsilon",
+    ζ: "\\zeta",
+    η: "\\eta",
+    θ: "\\theta",
+    ϑ: "\\vartheta",
+    Θ: "\\Theta",
+    ι: "\\iota",
+    κ: "\\kappa",
+    λ: "\\lambda",
+    Λ: "\\Lambda",
+    μ: "\\mu",
+    ν: "\\nu",
+    ξ: "\\xi",
+    Ξ: "\\Xi",
+    π: "\\pi",
+    ϖ: "\\varpi",
+    Π: "\\Pi",
+    ρ: "\\rho",
+    ϱ: "\\varrho",
+    σ: "\\sigma",
+    ς: "\\varsigma",
+    Σ: "\\Sigma",
+    τ: "\\tau",
+    υ: "\\upsilon",
+    Υ: "\\Upsilon",
+    φ: "\\phi",
+    ϕ: "\\varphi",
+    Φ: "\\Phi",
+    χ: "\\chi",
+    ψ: "\\psi",
+    Ψ: "\\Psi",
+    ω: "\\omega",
+    Ω: "\\Omega",
+  };
+  for (const [char, cmd] of Object.entries(greekUnicodeMap)) {
+    out = out.replace(new RegExp(char, "g"), cmd);
+  }
+
+  return out;
+}
+
+function safeUrlTransform(url) {
+  const u = String(url || "").trim();
+
+  // Enlaces internos del renderer
+  if (u.startsWith("var:") || u.startsWith("leaf:") || u.startsWith("tab:")) {
+    return u;
+  }
+
+  // Rutas relativas/absolutas seguras y anchors
+  if (
+    u.startsWith("/") ||
+    u.startsWith("./") ||
+    u.startsWith("../") ||
+    u.startsWith("?") ||
+    u.startsWith("#")
+  ) {
+    return u;
+  }
+
+  // Protocolos externos permitidos
+  if (/^(https?:|mailto:|tel:)/i.test(u)) {
+    return u;
+  }
+
+  return "";
+}
+
+const CALLOUT_CONFIG = {
+  NOTE: { label: "NOTE", tone: "note" },
+  TIP: { label: "TIP", tone: "tip" },
+  WARNING: { label: "WARNING", tone: "warning" },
+  IMPORTANT: { label: "IMPORTANT", tone: "important" },
+  CAUTION: { label: "CAUTION", tone: "warning" },
+};
+
+const CALLOUT_MARKER_RE = /^\s*\[!(NOTE|TIP|WARNING|IMPORTANT|CAUTION)\]\s*/i;
+
+function extractReactText(node) {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(extractReactText).join("");
+  if (React.isValidElement(node)) return extractReactText(node.props?.children);
+  return "";
+}
+
+function stripLeadingText(node, state) {
+  if (typeof node === "string" || typeof node === "number") {
+    if (state.done) return node;
+    const text = String(node);
+    const next = text.replace(CALLOUT_MARKER_RE, "");
+    if (next !== text) {
+      state.done = true;
+      return next;
+    }
+    return node;
+  }
+
+  if (Array.isArray(node)) {
+    return node.map((child) => stripLeadingText(child, state));
+  }
+
+  if (React.isValidElement(node) && node.props && "children" in node.props) {
+    const nextChildren = stripLeadingText(node.props.children, state);
+    if (nextChildren === node.props.children) return node;
+    return React.cloneElement(node, undefined, nextChildren);
+  }
+
+  return node;
+}
+
+function buildCallout(children) {
+  const items = React.Children.toArray(children);
+  if (!items.length) return null;
+
+  const firstIndex = items.findIndex((child) => extractReactText(child).trim().length > 0);
+  if (firstIndex === -1) return null;
+
+  const match = extractReactText(items[firstIndex]).trimStart().match(CALLOUT_MARKER_RE);
+  if (!match) return null;
+
+  const kind = String(match[1] || "NOTE").toUpperCase();
+  const cfg = CALLOUT_CONFIG[kind] || CALLOUT_CONFIG.NOTE;
+  const state = { done: false };
+  const normalized = items.map((child, index) =>
+    index === firstIndex ? stripLeadingText(child, state) : child
+  );
+  const body = normalized.filter(
+    (child) => extractReactText(child).trim().length > 0
+  );
+
+  return { kind, cfg, body };
+}
+
+function VariableHint({ id, mag, children, lang }) {
+  const safeLang = (lang || getUiLanguage()) === "en" ? "en" : "es";
+  const [offset, setOffset] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const triggerRef = useRef(null);
+  const tooltipRef = useRef(null);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    if (!triggerRef.current || !tooltipRef.current) return;
+
+    const triggerRect = triggerRef.current.getBoundingClientRect();
+    const tooltipRect = tooltipRef.current.getBoundingClientRect();
+
+    const tooltipWidth = tooltipRect.width || 260;
+    const centerOfTrigger = triggerRect.left + triggerRect.width / 2;
+
+    const leftBound = centerOfTrigger - tooltipWidth / 2;
+    const rightBound = centerOfTrigger + tooltipWidth / 2;
+
+    // Obtener los límites del contenedor principal para evitar solaparse con la barra lateral (sidebar)
+    const mainContent = document.querySelector(".main-content") || document.querySelector("main");
+    const mainRect = mainContent
+      ? mainContent.getBoundingClientRect()
+      : { left: 0, right: window.innerWidth };
+
+    const margin = 16;
+    const leftLimit = mainRect.left + margin;
+    const rightLimit = mainRect.right - margin;
+
+    let newOffset = 0;
+    if (leftBound < leftLimit) {
+      newOffset = leftLimit - leftBound;
+    } else if (rightBound > rightLimit) {
+      newOffset = rightLimit - rightBound;
+    }
+
+    // Limitar el offset para evitar que la flecha se salga de la tarjeta del tooltip
+    const maxOffset = Math.max(0, tooltipWidth / 2 - 24);
+    newOffset = Math.max(-maxOffset, Math.min(maxOffset, newOffset));
+
+    setOffset(newOffset);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+  const resolveLocalized = (value, fallback = "") => {
+    if (!value) return fallback;
+
+    if (typeof value === "string") {
+      return value;
+    }
+
+    if (typeof value === "object") {
+      return value[safeLang] || value.es || value.en || fallback;
+    }
+
+    return fallback;
+  };
+
   const sym = mag?.symbol || id;
-  const nombreRaw = mag?.nombre || mag?.name || id;
-  const nombre = String(nombreRaw).replace(/_/g, " ").trim();
-  const nombrePretty = nombre ? nombre.charAt(0).toUpperCase() + nombre.slice(1) : id;
-  const unit = mag?.unidad_si || mag?.si_unit || "";
-  const desc = mag?.descripcion || mag?.description || "";
+
+  const nombre = resolveLocalized(
+    mag?.nombre || mag?.name || mag?.label,
+    id
+  );
+
+  const nombrePretty = nombre ? nombre.replace(/_/g, " ").trim() : id;
+
+  const capitalizedNombre =
+    nombrePretty.charAt(0).toUpperCase() + nombrePretty.slice(1);
+
+  const UNIT_TRANSLATIONS = {
+    "adimensional": "dimensionless",
+    "adimensional (angulo en radianes)": "dimensionless (angle in radians)",
+    "adimensional (ángulo en radianes)": "dimensionless (angle in radians)",
+    "kilovatio_hora": "kilowatt-hour",
+    "megajulio": "megajoule",
+    "radianes": "radians",
+    "segundos": "seconds",
+    "metros": "meters",
+    "julios": "joules",
+    "vatios": "watts",
+  };
+
+  const rawUnit =
+    mag?.unidad_si ||
+    mag?.si_unit ||
+    mag?.unit ||
+    mag?.unidad ||
+    "";
+
+  let unit = resolveLocalized(rawUnit, "");
+  if (safeLang === "en" && typeof unit === "string") {
+    const cleanUnit = unit.trim().toLowerCase();
+    if (UNIT_TRANSLATIONS[cleanUnit]) {
+      unit = UNIT_TRANSLATIONS[cleanUnit];
+    }
+  }
+
+  const desc = resolveLocalized(
+    mag?.descripcion || mag?.description || mag?.desc,
+    ""
+  );
+
+  const symbolLabel = safeLang === "en" ? "Symbol:" : "Símbolo:";
+  const unitLabel = safeLang === "en" ? "Unit:" : "Unidad:";
+
+  const displayText = children || sym;
+  const isSymbol = displayText === sym;
 
   return (
     <span
-      className="v2-varhint"
-      style={{
-        position: "relative",
-        display: "inline-flex",
-        alignItems: "baseline",
-        gap: 6,
-        padding: "0 3px",
-        borderRadius: 6,
-        cursor: "help",
-        borderBottom: "1px dotted rgba(255,255,255,0.35)",
-      }}
+      className="vh-wrapper"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
-      <span style={{ fontWeight: 800 }}>{renderInlineLatex(sym)}</span>
-
       <span
-        className="v2-varhint-tip"
+        ref={triggerRef}
+        className="vh-trigger"
         style={{
-          position: "absolute",
-          left: 0,
-          top: "100%",
-          marginTop: 8,
-          zIndex: 50,
-          minWidth: 220,
-          maxWidth: 360,
-          padding: "10px 12px",
-          borderRadius: 12,
-          border: "1px solid rgba(255,255,255,0.10)",
-          background: "rgba(20,20,22,0.96)",
-          boxShadow: "0 10px 25px rgba(0,0,0,0.35)",
-          opacity: 0,
-          transform: "translateY(-4px)",
-          pointerEvents: "none",
-          transition: "opacity 120ms ease, transform 120ms ease",
+          cursor: "help",
+          borderBottom: "1.5px dotted rgba(56, 189, 248, 0.4)",
+          padding: "0 2px",
+          borderRadius: 2,
+          transition: "all 0.2s ease",
+          fontWeight: 800
         }}
       >
-        <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
-          <div style={{ fontWeight: 900, fontSize: 14 }}>{nombrePretty}</div>
-          <div className="muted" style={{ fontSize: 13 }}>
-            {renderInlineLatex(sym)}
-          </div>
-          {unit ? (
-            <div className="muted" style={{ fontSize: 13 }}>
-              {unit}
-            </div>
-          ) : null}
-          <div className="muted" style={{ fontSize: 12 }}>
-            {id}
-          </div>
-        </div>
-
-        {desc ? (
-          <div className="muted" style={{ fontSize: 13, lineHeight: 1.35, marginTop: 6 }}>
-            {desc}
-          </div>
-        ) : null}
+        {isSymbol ? (mag ? renderInlineLatex(sym) : <span>{sym}</span>) : children}
       </span>
 
-      <style>{`
-        .v2-varhint:hover .v2-varhint-tip {
-          opacity: 1 !important;
-          transform: translateY(0) !important;
-          pointer-events: auto !important;
-        }
-      `}</style>
+      <span
+        ref={tooltipRef}
+        className="vh-tooltip-container"
+        style={{
+          transform: isHovered
+            ? `translateX(calc(-50% + ${offset}px)) translateY(-16px)`
+            : undefined,
+          "--arrow-offset": `${-offset}px`
+        }}
+      >
+        <span className="vh-tooltip-card">
+          <span style={{ display: "block" }}>
+            <strong>{capitalizedNombre}</strong>
+          </span>
+
+          {mag?.symbol ? (
+            <span
+              style={{
+                display: "block",
+                fontSize: 13,
+                color: "rgba(255,255,255,0.65)",
+                marginTop: 6,
+                textTransform: "none"
+              }}
+            >
+              {symbolLabel} {renderInlineLatex(mag.symbol)}
+            </span>
+          ) : null}
+
+          {unit ? (
+            <span
+              className="vh-unit"
+              style={{
+                display: "block",
+                fontSize: 13,
+                color: "rgba(255,255,255,0.65)",
+                marginTop: 3,
+                textTransform: "none"
+              }}
+            >
+              {unitLabel} {unit}
+            </span>
+          ) : null}
+
+          {desc ? (
+            <span className="desc" style={{ display: "block" }}>
+              {desc}
+            </span>
+          ) : null}
+        </span>
+      </span>
     </span>
   );
 }
@@ -121,40 +995,166 @@ export default function MarkdownRenderer({
   source = "",
   tag: Wrapper = "div",
   className = "",
-  magnitudesDoc = null, // 👈 NUEVO
+  magnitudesDoc = null,
+  formulasDoc = null,
+  lang,
 }) {
+  const location = useLocation();
+
   if (!source) {
     return <div className="markdown-empty">No hay contenido disponible.</div>;
   }
 
+  const currentLang = lang || getUiLanguage();
   const magsMap = useMemo(() => buildMagnitudesMap(magnitudesDoc), [magnitudesDoc]);
-  const processed = useMemo(() => preprocessVariableHints(source), [source]);
+  const formulasMap = useMemo(() => buildFormulasMap(formulasDoc), [formulasDoc]);
+  const processed = useMemo(
+    () =>
+      preprocessVariableHints(
+        preprocessBareLatexBlocks(preprocessUnicodeDotInMath(preprocessLatexDelimiters(preprocessReferenceLinks(
+          preprocessFormulaTags(source, formulasMap)
+        )))),
+        magsMap
+      ),
+    [source, magsMap, formulasMap]
+  );
 
   const components = useMemo(
     () => ({
       a: ({ href, children }) => {
         if (typeof href === "string" && href.startsWith("var:")) {
-          const id = href.slice(4);
-          const mag = magsMap.get(String(id));
-          // 👇 OJO: devolvemos un SPAN, no un <a>, así que NO navega
-          return <VariableHint id={id} mag={mag} />;
+          const rawId = href.slice(4);
+          let mag = magsMap.get(String(rawId));
+          let displayChildren = children;
+
+          // --- SMART INDEXING ---
+          // Si no encontramos la magnitud exacta (ej: rho1, v_f), probamos a separar base e índice
+          if (!mag && !children) {
+            // Regex: Captura base (letras/guiones) y un índice común (números, 0, f, i, max, min, rel, etc.)
+            // Soporta v0, v_0, v_f, v_rel, p_max, etc.
+            const match = rawId.match(/^([a-zA-Z]+)(?:_)?(\d+|0|f|i|max|min|rel|cm|ext|tot|eq|el|P|R|T|x|y|z|in|out|net|avg)$/);
+            if (match) {
+              const baseId = match[1];
+              const index = match[2];
+              const baseMag = magsMap.get(baseId);
+              if (baseMag) {
+                mag = baseMag;
+                const baseSym = baseMag.symbol || baseId;
+                // Generamos el LaTeX con subíndice automáticamente. 
+                // Si el índice es texto largo (max, min), lo envolvemos en \text{}
+                const indexFormatted = isNaN(index) && index.length > 1 ? `\\text{${index}}` : index;
+                displayChildren = renderInlineLatex(`${baseSym}_{${indexFormatted}}`);
+              }
+            }
+          }
+
+          // Si el texto resultante es exactamente el ID, significa que autoVariableLatex
+          // no logró generar un formato matemático y no hay un custom label.
+          // En este caso, priorizamos el símbolo definido en magnitudes.yaml (mag.symbol).
+          if (extractReactText(children) === rawId) {
+            displayChildren = null;
+          }
+
+          // Devolvemos un span, no un <a>, para que no navegue.
+          return <VariableHint id={rawId} mag={mag} children={displayChildren} lang={currentLang} />;
         }
 
+        if (typeof href === "string" && href.startsWith("leaf:")) {
+          const relPath = href.slice(5).replace(/^\/+|\/+$/g, "");
+          return (
+            <Link to={`/v2/${relPath}?tab=teoria`} className="md-internal-link">
+              {children}
+            </Link>
+          );
+        }
+
+        if (typeof href === "string" && href.startsWith("tab:")) {
+          const tabId = href.slice(4).trim();
+          const params = new URLSearchParams(location.search || "");
+          params.set("tab", tabId || "teoria");
+          return (
+            <Link
+              to={`${location.pathname}?${params.toString()}`}
+              className="md-internal-link"
+            >
+              {children}
+            </Link>
+          );
+        }
+
+        const isExternal = typeof href === "string" && /^(https?:\/\/)/i.test(href);
+
         return (
-          <a href={href} target="_blank" rel="noreferrer">
+          <a
+            href={href}
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noreferrer" : undefined}
+          >
             {children}
           </a>
         );
       },
+      code: ({ className, children, ...props }) => {
+        const raw = String(children ?? "").replace(/\n/g, "").trim();
+        const texMatch = raw.match(/^(?:tex|latex|katex):([\s\S]+)$/i);
+        const implicitMath = !texMatch && looksLikeMathInline(raw);
+
+        if (texMatch || implicitMath) {
+          const sourceExpr = texMatch ? String(texMatch[1] || "").trim() : raw;
+          const expr = normalizeFriendlyTex(sourceExpr);
+          let html = "";
+          try {
+            html = katex.renderToString(expr, {
+              displayMode: false,
+              throwOnError: false,
+              strict: "ignore",
+            });
+          } catch {
+            html = "";
+          }
+
+          if (html) {
+            return (
+              <code className={`${className || ""} md-inline-math-code`.trim()} {...props}>
+                <span dangerouslySetInnerHTML={{ __html: html }} />
+              </code>
+            );
+          }
+        }
+
+        return (
+          <code className={className} {...props}>
+            {children}
+          </code>
+        );
+      },
+      blockquote: ({ children }) => {
+        const callout = buildCallout(children);
+        if (!callout) return <blockquote>{children}</blockquote>;
+
+        return (
+          <div
+            className={`md-callout md-callout--${callout.cfg.tone}`}
+            data-callout={callout.kind}
+            role={callout.kind === "WARNING" || callout.kind === "CAUTION" ? "alert" : "note"}
+          >
+            <div className="md-callout__header">
+              <span className="md-callout__badge">{callout.cfg.label}</span>
+            </div>
+            <div className="md-callout__body">{callout.body}</div>
+          </div>
+        );
+      },
     }),
-    [magsMap]
+    [magsMap, location.pathname, location.search, currentLang]
   );
 
   const content = (
     <ReactMarkdown
       children={processed}
-      remarkPlugins={[remarkMath]}
-      rehypePlugins={[rehypeKatex]}
+      remarkPlugins={[remarkMath, remarkGfm]}
+      rehypePlugins={[[rehypeKatex, { strict: false, throwOnError: false }]]}
+      urlTransform={safeUrlTransform}
       components={components}
     />
   );

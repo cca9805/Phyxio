@@ -1,0 +1,112 @@
+version: 1.0.0
+id: sistema-abierto-interpretacion
+leaf_id: sistema-abierto
+nombre: { es: Interpretacion de sistema abierto, en: Open-system interpretation }
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: fundamentos
+  parent_id: sistemas-termodinamicos
+  ruta_relativa: fisica-clasica/termodinamica/fundamentos/sistemas-termodinamicos/sistema-abierto
+ui:
+  enabled: true
+  display_modes: { calculator_inline: true, graph_inline: true, dedicated_tab: true, modal: false }
+  labels:
+    es: { summary: Resumen fisico, reading: Lectura del resultado, coherence: Coherencia, validity: Validez del modelo, graph: Lectura grafica, errors: Errores probables, next_step: Siguiente paso }
+    en: { summary: Physical summary, reading: Result reading, coherence: Coherence, validity: Model validity, graph: Graph reading, errors: Likely errors, next_step: Next step }
+  priority_order: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  inline_limits: { max_summary_chars: 220, max_warnings: 2, max_suggestions: 2 }
+dependencies:
+  formulas: [balance_masa_abierto, energia_especifica_flujo, balance_energia_flujo]
+  magnitudes: [m_dot, m_sys, E_sys, Q_dot, W_dot, h, e_flujo]
+global_context:
+  physical_domain: { es: Volumenes de control con masa y energia cruzando fronteras, en: Control volumes with mass and energy crossing boundaries }
+  axis_convention: { es: Entrada positiva para acumulacion; trabajo positivo saliendo si se declara potencia producida., en: Inlet positive for accumulation; work positive outward when declared as produced power. }
+  standard_assumptions: [frontera definida, corrientes identificadas, convenio de signos]
+  standard_warnings: [no usar balance cerrado si hay m_dot no nulo]
+output_contract:
+  format: structured_text
+  include_emojis: true
+  max_lines_per_section: 5
+  truncate_long_values: true
+  decimal_places: 2
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+result_blocks:
+  summary: { enabled: true, priority: 1, title: { es: Resumen fisico, en: Physical summary } }
+  physical_reading: { enabled: true, priority: 2, title: { es: Lectura fisica, en: Physical reading } }
+  coherence: { enabled: true, priority: 3, title: { es: Coherencia, en: Coherence } }
+  model_validity: { enabled: true, priority: 4, title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { enabled: true, priority: 5, title: { es: Lectura grafica, en: Graph reading } }
+  likely_errors: { enabled: true, priority: 6, title: { es: Errores probables, en: Likely errors } }
+  next_step: { enabled: true, priority: 7, title: { es: Siguiente paso, en: Next step } }
+targets:
+  m_dot:
+    magnitude_type: m_dot
+    semantic_role: { es: Caudal que decide si la frontera es abierta, en: Flow rate deciding whether the boundary is open }
+    summary_rules: [{ id: resumen_mdot, when: "true", status: info, text: { es: "[[m_dot]] no nulo confirma cruce de masa.", en: "Non-zero [[m_dot]] confirms mass crossing." } }]
+    physical_reading_rules: [{ id: lectura_mdot, when: "true", status: info, text: { es: "La diferencia entre entradas y salidas decide acumulacion de [[m_sys]].", en: "The difference between inlets and outlets decides [[m_sys]] accumulation." } }]
+    coherence_rules: [{ id: coherencia_mdot, when: "true", status: success, text: { es: "Cada [[m_dot]] debe pertenecer a una entrada o salida.", en: "Each [[m_dot]] must belong to an inlet or outlet." } }]
+    model_validity_rules: [{ id: validez_mdot, when: "true", status: info, text: { es: "Requiere secciones de frontera identificadas.", en: "Requires identified boundary sections." } }]
+    graph_rules: [{ id: grafico_mdot, when: "true", status: info, text: { es: "La pendiente de acumulacion cambia con el caudal neto.", en: "Accumulation slope changes with net flow." } }]
+    likely_errors: [{ id: error_mdot, when: "true", status: warning, text: { es: "No trates como cerrado un sistema con [[m_dot]] no nulo.", en: "Do not treat a system with non-zero [[m_dot]] as closed." } }]
+    next_step_rules: [{ id: siguiente_mdot, when: "true", status: info, text: { es: "Escribe el balance de masa antes del de energia.", en: "Write the mass balance before the energy balance." } }]
+  m_sys:
+    magnitude_type: m_sys
+    semantic_role: { es: Masa acumulada dentro del volumen de control, en: Mass accumulated inside the control volume }
+    summary_rules: [{ id: resumen_msys, when: "true", status: info, text: { es: "[[m_sys]] indica inventario material interno.", en: "[[m_sys]] indicates internal material inventory." } }]
+    physical_reading_rules: [{ id: lectura_msys, when: "true", status: info, text: { es: "Puede ser constante aunque el sistema sea abierto.", en: "It can be constant even when the system is open." } }]
+    coherence_rules: [{ id: coherencia_msys, when: "true", status: success, text: { es: "Acumulacion nula exige entrada total igual a salida total.", en: "Zero accumulation requires total inlet equal to total outlet." } }]
+    model_validity_rules: [{ id: validez_msys, when: "true", status: info, text: { es: "Debe definirse que volumen contiene esa masa.", en: "The volume containing that mass must be defined." } }]
+    graph_rules: [{ id: grafico_msys, when: "true", status: info, text: { es: "La curva de [[m_sys]] sube, baja o queda plana segun caudal neto.", en: "The [[m_sys]] curve rises, falls, or stays flat according to net flow." } }]
+    likely_errors: [{ id: error_msys, when: "true", status: warning, text: { es: "Masa constante no implica sistema cerrado.", en: "Constant mass does not imply closed system." } }]
+    next_step_rules: [{ id: siguiente_msys, when: "true", status: info, text: { es: "Revisa si el problema declara regimen estacionario.", en: "Check whether the problem states steady state." } }]
+  E_sys:
+    magnitude_type: E_sys
+    semantic_role: { es: Energia acumulada dentro del sistema, en: Energy accumulated inside the system }
+    summary_rules: [{ id: resumen_esys, when: "true", status: info, text: { es: "[[E_sys]] cambia por calor, trabajo y masa.", en: "[[E_sys]] changes through heat, work, and mass." } }]
+    physical_reading_rules: [{ id: lectura_esys, when: "true", status: info, text: { es: "Su signo de cambio indica si el volumen de control gana o pierde energia.", en: "Its change sign indicates whether the control volume gains or loses energy." } }]
+    coherence_rules: [{ id: coherencia_esys, when: "true", status: success, text: { es: "Todos los terminos energeticos deben estar en W o J/s.", en: "All energy terms must be in W or J/s." } }]
+    model_validity_rules: [{ id: validez_esys, when: "true", status: info, text: { es: "Requiere inventariar todos los canales de frontera.", en: "Requires inventorying all boundary channels." } }]
+    graph_rules: [{ id: grafico_esys, when: "true", status: info, text: { es: "La curva de energia almacenada responde al balance neto.", en: "The stored-energy curve responds to the net balance." } }]
+    likely_errors: [{ id: error_esys, when: "true", status: warning, text: { es: "No olvides la energia transportada por masa.", en: "Do not forget energy carried by mass." } }]
+    next_step_rules: [{ id: siguiente_esys, when: "true", status: info, text: { es: "Multiplica [[m_dot]] por [[e_flujo]] para cada corriente.", en: "Multiply [[m_dot]] by [[e_flujo]] for each stream." } }]
+  Q_dot:
+    magnitude_type: Q_dot
+    semantic_role: { es: Calor por unidad de tiempo, en: Heat per unit time }
+    summary_rules: [{ id: resumen_qdot, when: "true", status: info, text: { es: "[[Q_dot]] es energia que cruza sin masa.", en: "[[Q_dot]] is energy crossing without mass." } }]
+    physical_reading_rules: [{ id: lectura_qdot, when: "true", status: info, text: { es: "Aporta o retira energia segun el convenio de signo.", en: "It adds or removes energy according to sign convention." } }]
+    coherence_rules: [{ id: coherencia_qdot, when: "true", status: success, text: { es: "Debe distinguirse de temperatura.", en: "It must be distinguished from temperature." } }]
+    model_validity_rules: [{ id: validez_qdot, when: "true", status: info, text: { es: "Puede ser cero en una frontera adiabatica.", en: "It may be zero at an adiabatic boundary." } }]
+    graph_rules: [{ id: grafico_qdot, when: "true", status: info, text: { es: "Desplaza verticalmente el balance energetico neto.", en: "It shifts the net energy balance vertically." } }]
+    likely_errors: [{ id: error_qdot, when: "true", status: warning, text: { es: "No sustituyas [[Q_dot]] por temperatura.", en: "Do not replace [[Q_dot]] by temperature." } }]
+    next_step_rules: [{ id: siguiente_qdot, when: "true", status: info, text: { es: "Declara si entra o sale del sistema.", en: "State whether it enters or leaves the system." } }]
+  W_dot:
+    magnitude_type: W_dot
+    semantic_role: { es: Trabajo por unidad de tiempo, en: Work per unit time }
+    summary_rules: [{ id: resumen_wdot, when: "true", status: info, text: { es: "[[W_dot]] representa potencia mecanica o electrica.", en: "[[W_dot]] represents mechanical or electrical power." } }]
+    physical_reading_rules: [{ id: lectura_wdot, when: "true", status: info, text: { es: "En turbinas suele salir; en compresores suele entrar.", en: "In turbines it often leaves; in compressors it often enters." } }]
+    coherence_rules: [{ id: coherencia_wdot, when: "true", status: success, text: { es: "El signo debe seguir el convenio elegido.", en: "The sign must follow the chosen convention." } }]
+    model_validity_rules: [{ id: validez_wdot, when: "true", status: info, text: { es: "Incluye eje, electricidad o trabajo de frontera relevante.", en: "Include shaft, electrical, or relevant boundary work." } }]
+    graph_rules: [{ id: grafico_wdot, when: "true", status: info, text: { es: "Reduce acumulacion si se toma positivo saliendo.", en: "It reduces accumulation if taken positive outward." } }]
+    likely_errors: [{ id: error_wdot, when: "true", status: warning, text: { es: "No cambies el signo de [[W_dot]] a mitad del problema.", en: "Do not change the sign of [[W_dot]] mid-problem." } }]
+    next_step_rules: [{ id: siguiente_wdot, when: "true", status: info, text: { es: "Identifica si el equipo produce o consume potencia.", en: "Identify whether the device produces or consumes power." } }]
+  e_flujo:
+    magnitude_type: e_flujo
+    semantic_role: { es: Energia transportada por unidad de masa, en: Energy transported per unit mass }
+    summary_rules: [{ id: resumen_ef, when: "true", status: info, text: { es: "[[e_flujo]] resume la energia que acompana cada kg.", en: "[[e_flujo]] summarizes energy accompanying each kg." } }]
+    physical_reading_rules: [{ id: lectura_ef, when: "true", status: info, text: { es: "Multiplicada por [[m_dot]] da potencia de corriente.", en: "Multiplied by [[m_dot]], it gives stream power." } }]
+    coherence_rules: [{ id: coherencia_ef, when: "true", status: success, text: { es: "Debe usar la misma referencia entre entradas y salidas.", en: "It must use the same reference between inlets and outlets." } }]
+    model_validity_rules: [{ id: validez_ef, when: "true", status: info, text: { es: "Requiere propiedades medias de corriente.", en: "Requires mean stream properties." } }]
+    graph_rules: [{ id: grafico_ef, when: "true", status: info, text: { es: "Aumenta la pendiente energetica cuando crece.", en: "It increases the energy slope when it grows." } }]
+    likely_errors: [{ id: error_ef, when: "true", status: warning, text: { es: "No omitas velocidad o altura si son de orden comparable.", en: "Do not omit velocity or height if comparable in order." } }]
+    next_step_rules: [{ id: siguiente_ef, when: "true", status: info, text: { es: "Decide si basta con [[h]] o si necesitas terminos cineticos.", en: "Decide whether [[h]] is enough or kinetic terms are needed." } }]
+  h:
+    magnitude_type: h
+    semantic_role: { es: Entalpia especifica de corriente, en: Specific stream enthalpy }
+    summary_rules: [{ id: resumen_h, when: "true", status: info, text: { es: "[[h]] es la propiedad natural para energia de flujo.", en: "[[h]] is the natural property for flow energy." } }]
+    physical_reading_rules: [{ id: lectura_h, when: "true", status: info, text: { es: "Agrupa energia interna y trabajo de empuje por unidad de masa.", en: "It groups internal energy and push work per unit mass." } }]
+    coherence_rules: [{ id: coherencia_h, when: "true", status: success, text: { es: "Debe compararse con terminos cineticos y potenciales.", en: "It must be compared with kinetic and potential terms." } }]
+    model_validity_rules: [{ id: validez_h, when: "true", status: info, text: { es: "Es apropiada para corrientes que cruzan fronteras de flujo.", en: "It is appropriate for streams crossing flow boundaries." } }]
+    graph_rules: [{ id: grafico_h, when: "true", status: info, text: { es: "Si domina, [[e_flujo]] queda casi igual a [[h]].", en: "If it dominates, [[e_flujo]] is nearly [[h]]." } }]
+    likely_errors: [{ id: error_h, when: "true", status: warning, text: { es: "No uses [[h]] sin definir una corriente.", en: "Do not use [[h]] without defining a stream." } }]
+    next_step_rules: [{ id: siguiente_h, when: "true", status: info, text: { es: "Revisa si el problema proporciona tabla o estado termodinamico.", en: "Check whether the problem provides a table or thermodynamic state." } }]

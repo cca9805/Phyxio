@@ -1,0 +1,473 @@
+version: 1
+id: interpretacion-definicion-torque
+leaf_id: definicion-torque
+nombre:
+  es: Interpretacion de definicion de torque
+  en: Interpretation of torque definition
+scope:
+  es: lectura numerica, coherencia fisica, validez del modelo y errores comunes de signos y unidades
+  en: numerical reading, physical coherence, model validity, and common unit and sign errors
+dependencies:
+  magnitudes:
+  - F
+  - F_x
+  - F_y
+  - I
+  - alpha
+  - b
+  - r
+  - tau
+  - tau_z
+  - theta
+  - x
+  - y
+  formulas:
+  - segunda_ley_rotacional
+  - torque_brazo
+  - torque_plano
+  - torque_por_angulo
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia fisica
+      en: Physical coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores comunes
+      en: Common errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  tau:
+    summary_rules:
+    - id: tau_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: El resultado entregado es torque neto respecto al eje elegido.
+        en: The reported result is net torque about the chosen axis.
+    coherence_rules:
+    - id: tau_coherence_units
+      when: 'true'
+      status: ok
+      text:
+        es: Tau debe expresarse en N*m y con signo consistente con el convenio.
+        en: Tau must be in N*m and keep sign consistent with convention.
+    physical_reading_rules:
+    - id: tau_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: Mayor modulo de tau implica mayor tendencia a cambiar el estado de giro.
+        en: Larger tau magnitude implies stronger tendency to change spin state.
+    model_validity_rules:
+    - id: tau_model_validity
+      when: r >= 0
+      status: info
+      text:
+        es: La lectura es valida si se definieron eje, punto y geometria de fuerza.
+        en: Reading is valid when axis, point, and force geometry are defined.
+    graph_rules:
+    - id: tau_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: En grafico, el sentido del giro debe coincidir con el signo de tau.
+        en: On graph, rotation direction must match tau sign.
+    likely_errors:
+    - id: tau_error_units
+      when: abs(tau) > 100000
+      status: warning
+      text:
+        es: Posible error de unidades o conversion de distancia.
+        en: Possible units or distance conversion error.
+    - id: tau_error_none
+      when: abs(tau) <= 100000
+      status: info
+      text:
+        es: No se detecta un error probable inmediato para tau.
+        en: No immediate likely error detected for tau.
+    next_step_rules:
+    - id: tau_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Contrasta el resultado con tau por brazo y revisa coherencia de signos.
+        en: Compare with lever-arm torque and verify sign coherence.
+  tau_z:
+    summary_rules:
+    - id: tauz_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: Tau_z representa el momento escalar en problemas planos.
+        en: Tau_z represents scalar moment in planar problems.
+    coherence_rules:
+    - id: tauz_coherence_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Su signo debe respetar la regla de mano derecha en el eje z.
+        en: Its sign should follow right-hand rule on z axis.
+    physical_reading_rules:
+    - id: tauz_physical
+      when: 'true'
+      status: info
+      text:
+        es: Tau_z positivo y negativo describen sentidos opuestos de giro.
+        en: Positive and negative tau_z describe opposite rotation senses.
+    model_validity_rules:
+    - id: tauz_validity
+      when: 'true'
+      status: info
+      text:
+        es: Valido si el sistema puede modelarse en el plano xy.
+        en: Valid when system can be modeled in the xy plane.
+    graph_rules:
+    - id: tauz_graph
+      when: 'true'
+      status: info
+      text:
+        es: Si cambian x, y, F_x o F_y, tau_z debe reflejar ese cambio.
+        en: If x, y, F_x, or F_y change, tau_z should reflect it.
+    likely_errors:
+    - id: tauz_error_axis
+      when: 'true'
+      status: info
+      text:
+        es: Error comun - cambiar orientacion del eje z a mitad del calculo.
+        en: Common error - changing z-axis orientation mid-calculation.
+    next_step_rules:
+    - id: tauz_next
+      when: 'true'
+      status: info
+      text:
+        es: Verifica componentes de fuerza y coordenadas del punto de aplicacion.
+        en: Verify force components and application-point coordinates.
+  F:
+    summary_rules:
+    - id: F_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: F es la intensidad de la accion externa aplicada.
+        en: F is the intensity of the applied external action.
+    coherence_rules:
+    - id: F_coherence_main
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser coherente con r, b y theta en la formula elegida.
+        en: It must be consistent with r, b, and theta in selected formula.
+    physical_reading_rules:
+    - id: F_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: Incrementar F aumenta tau si la geometria se mantiene.
+        en: Increasing F raises tau if geometry stays fixed.
+    model_validity_rules:
+    - id: F_validity_main
+      when: 'true'
+      status: info
+      text:
+        es: Revisar direccion de la fuerza para evitar proyecciones incorrectas.
+        en: Check force direction to avoid incorrect projections.
+    graph_rules:
+    - id: F_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: A F constante, la variacion de b o theta explica cambios en tau.
+        en: At constant F, variations in b or theta explain tau changes.
+    likely_errors:
+    - id: F_error_sign
+      when: 'true'
+      status: info
+      text:
+        es: Error comun - usar solo magnitud y perder informacion direccional.
+        en: Common error - using only magnitude and losing directional information.
+    next_step_rules:
+    - id: F_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Si hay dudas de direccion, descompone en F_x y F_y.
+        en: If direction is unclear, decompose into F_x and F_y.
+  r:
+    summary_rules:
+    - id: r_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: r mide la separacion entre eje de giro y punto de aplicacion.
+        en: r measures separation between rotation axis and application point.
+    coherence_rules:
+    - id: r_coherence_main
+      when: r >= 0
+      status: ok
+      text:
+        es: El radio no puede ser negativo por definicion geometrica.
+        en: Radius cannot be negative by geometric definition.
+    physical_reading_rules:
+    - id: r_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: Si r aumenta, el efecto de palanca aumenta para igual F y theta.
+        en: If r increases, lever effect increases for same F and theta.
+    model_validity_rules:
+    - id: r_validity_main
+      when: 'true'
+      status: info
+      text:
+        es: Debe medirse desde el eje real, no desde un origen arbitrario.
+        en: It must be measured from the real axis, not arbitrary origin.
+    graph_rules:
+    - id: r_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: En grafico, mover el punto de aplicacion cambia r y por tanto tau.
+        en: In graph, moving application point changes r and then tau.
+    likely_errors:
+    - id: r_error_wrong_reference
+      when: 'true'
+      status: info
+      text:
+        es: Error comun - medir r con referencia incorrecta.
+        en: Common error - measuring r with wrong reference.
+    next_step_rules:
+    - id: r_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba si es mas estable usar el brazo perpendicular b.
+        en: Check whether using perpendicular arm b is more robust.
+  b:
+    summary_rules:
+    - id: b_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: b es la distancia perpendicular efectiva para producir torque.
+        en: b is the effective perpendicular distance that produces torque.
+    coherence_rules:
+    - id: b_coherence_main
+      when: b >= 0
+      status: ok
+      text:
+        es: b no debe ser negativa y debe ser realmente perpendicular.
+        en: b must be non-negative and truly perpendicular.
+    physical_reading_rules:
+    - id: b_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: Misma fuerza con mayor b produce mayor momento.
+        en: Same force with greater b produces greater moment.
+    model_validity_rules:
+    - id: b_validity_main
+      when: 'true'
+      status: info
+      text:
+        es: Solo usar b si la linea de accion esta bien identificada.
+        en: Use b only if line of action is correctly identified.
+    graph_rules:
+    - id: b_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: Curva tau-b debe ser aproximadamente lineal para F fija.
+        en: Tau-b curve should be approximately linear for fixed F.
+    likely_errors:
+    - id: b_error_confusion
+      when: 'true'
+      status: info
+      text:
+        es: Error comun - confundir b con r sin considerar angulo.
+        en: Common error - confusing b with r without angle consideration.
+    next_step_rules:
+    - id: b_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Si falta b, calcula con b = r*sin(theta).
+        en: If b is missing, compute it with b = r*sin(theta).
+  theta:
+    summary_rules:
+    - id: theta_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: Theta fija el factor geometrico del torque en la forma angular.
+        en: Theta sets geometric factor of torque in angular form.
+    coherence_rules:
+    - id: theta_coherence_main
+      when: 'true'
+      status: ok
+      text:
+        es: Debe medirse entre r y F para usar sin(theta) correctamente.
+        en: It must be measured between r and F to use sin(theta) correctly.
+    physical_reading_rules:
+    - id: theta_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: Theta cercana a 90 grados maximiza el momento para r y F fijos.
+        en: Theta near 90 degrees maximizes moment for fixed r and F.
+    model_validity_rules:
+    - id: theta_validity_main
+      when: 'true'
+      status: info
+      text:
+        es: Evitar mezclar grados y radianes durante sustitucion numerica.
+        en: Avoid mixing degrees and radians during numeric substitution.
+    graph_rules:
+    - id: theta_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: Barrer theta debe producir respuesta senoidal de tau.
+        en: Sweeping theta should produce sinusoidal tau response.
+    likely_errors:
+    - id: theta_error_reference
+      when: 'true'
+      status: info
+      text:
+        es: Error comun - tomar el angulo respecto al suelo, no respecto a r.
+        en: Common error - taking angle from ground, not from r.
+    next_step_rules:
+    - id: theta_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Si el angulo es incierto, cambia al metodo de brazo de palanca.
+        en: If angle is uncertain, switch to lever-arm method.
+  alpha:
+    summary_rules:
+    - id: alpha_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: Alpha describe la respuesta angular ante el torque neto.
+        en: Alpha describes angular response to net torque.
+    coherence_rules:
+    - id: alpha_coherence_main
+      when: 'true'
+      status: ok
+      text:
+        es: Con I positiva, alpha debe tener el mismo signo que tau.
+        en: With positive I, alpha should have same sign as tau.
+    physical_reading_rules:
+    - id: alpha_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: Mayor alpha implica cambio mas rapido de velocidad angular.
+        en: Larger alpha means faster change in angular speed.
+    model_validity_rules:
+    - id: alpha_validity_main
+      when: I > 0
+      status: info
+      text:
+        es: Segunda ley rotacional exige I positiva y eje definido.
+        en: Rotational second law requires positive I and defined axis.
+    graph_rules:
+    - id: alpha_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: Con torque constante, alpha aproximadamente constante.
+        en: With constant torque, alpha is approximately constant.
+    likely_errors:
+    - id: alpha_error_confusion
+      when: 'true'
+      status: info
+      text:
+        es: Error comun - confundir alpha con omega.
+        en: Common error - confusing alpha with omega.
+    next_step_rules:
+    - id: alpha_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Usa alpha para estimar como evolucionara omega en el tiempo.
+        en: Use alpha to estimate how omega evolves over time.
+  I:
+    summary_rules:
+    - id: I_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: I cuantifica la resistencia del cuerpo a acelerar su rotacion.
+        en: I quantifies body resistance to rotational acceleration.
+    coherence_rules:
+    - id: I_coherence_main
+      when: I > 0
+      status: ok
+      text:
+        es: I positiva mantiene coherencia fisica y matematica.
+        en: Positive I preserves physical and mathematical coherence.
+    physical_reading_rules:
+    - id: I_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: A mayor I, menor alpha para el mismo torque aplicado.
+        en: Greater I gives smaller alpha for the same applied torque.
+    model_validity_rules:
+    - id: I_validity_main
+      when: 'true'
+      status: info
+      text:
+        es: Debe corresponder al eje usado en el problema.
+        en: It must correspond to the axis used in the problem.
+    graph_rules:
+    - id: I_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: Cambios en I desplazan la pendiente alpha-tau.
+        en: Changes in I shift alpha-tau slope.
+    likely_errors:
+    - id: I_error_axis
+      when: 'true'
+      status: info
+      text:
+        es: Error comun - usar I de un eje distinto sin conversion.
+        en: Common error - using I from a different axis without conversion.
+    next_step_rules:
+    - id: I_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Verifica geometria del cuerpo para confirmar el valor de I.
+        en: Verify body geometry to confirm I value.

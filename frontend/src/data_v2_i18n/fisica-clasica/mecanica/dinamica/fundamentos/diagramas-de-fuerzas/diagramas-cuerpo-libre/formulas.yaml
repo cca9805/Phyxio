@@ -1,0 +1,394 @@
+version: 1
+formulas:
+- id: newton_vectorial
+  title:
+    es: Segunda ley de Newton (vectorial)
+    en: Newton's second law (vector form)
+  equation: Fext = m*a
+  latex: \sum \vec F_{ext}=m\vec a
+  rearrangements: []
+  category: kinematic_law
+  relation_type: law
+  physical_meaning:
+    es: Relación física fundamental de este leaf.
+    en: Fundamental physical relationship of this leaf.
+  constraints:
+  - Classical mechanics validity conditions.
+  validity:
+    es: Válido en mecánica clásica newtoniana.
+    en: Valid in classical Newtonian mechanics.
+  dimension_check: dimensionally consistent
+  calculable: false
+  motivo_no_calculable:
+    es: Ecuación vectorial global; para cálculo directo se proyecta por ejes.
+    en: Global vector equation; direct calculations are usually performed on chosen
+      axes.
+  used_in:
+  - diagramas-cuerpo-libre
+  interpretation_tags:
+  - balance_global
+  - diagnostico_dinamico
+  result_semantics:
+    target: Fext
+    meaning: Resulta util para interpretar Fext en el contexto del leaf.
+  domain_checks:
+  - expr: m > 0
+    message:
+      es: La masa del sistema debe ser positiva.
+      en: The system mass must be positive.
+  coherence_checks:
+  - expr: true
+    message:
+      es: La ecuación vectorial exige haber dibujado todas las fuerzas externas antes
+        de proyectar por ejes.
+      en: The vector equation requires all external forces to be drawn before projecting
+        onto axes.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - detect_when: true
+    message:
+      es: Si el balance aún mezcla escena real y fuerzas aisladas, primero corrige
+        el DCL y luego calculas.
+      en: If the balance still mixes the real scene and isolated forces, correct the
+        FBD first and only then calculate.
+- id: newton_x
+  title:
+    es: Segunda ley en eje x
+    en: Newton's second law along x
+  equation: Fx = m*ax
+  latex: \sum F_x = m a_x
+  rearrangements:
+  - target: ax
+    equation: ax = Fx/m
+    latex: a_x=\frac{\sum F_x}{m}
+    constraints: []
+  - target: Fx
+    equation: Fx = m*ax
+    latex: \sum F_x = m a_x
+    constraints: []
+  category: kinematic_law
+  relation_type: component_balance
+  physical_meaning:
+    es: Relación física fundamental de este leaf.
+    en: Fundamental physical relationship of this leaf.
+  constraints:
+  - Classical mechanics validity conditions.
+  validity:
+    es: Válido en mecánica clásica newtoniana.
+    en: Valid in classical Newtonian mechanics.
+  dimension_check: dimensionally consistent
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - diagramas-cuerpo-libre
+  interpretation_tags:
+  - eje_x
+  - aceleracion_por_componentes
+  result_semantics:
+    target: ax
+    meaning: Resulta util para interpretar ax en el contexto del leaf.
+  domain_checks:
+  - expr: m > 0
+    message:
+      es: La masa debe ser positiva para despejar la aceleración.
+      en: Mass must be positive to solve for acceleration.
+  coherence_checks:
+  - expr: abs(Fx) < 1e-9 or abs(ax) > 0 or m > 0
+    message:
+      es: Si Fx es casi nula, la aceleración sobre x debe ser nula o despreciable
+        salvo que falten fuerzas en el DCL.
+      en: If Fx is nearly zero, the acceleration along x should be zero or negligible
+        unless forces are missing from the FBD.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - detect_when: abs(Fx) < 1e-9
+    message:
+      es: Un eje con fuerza neta casi nula suele indicar equilibrio o velocidad constante
+        en esa dirección.
+      en: An axis with nearly zero net force usually indicates equilibrium or constant
+        velocity in that direction.
+- id: newton_y
+  title:
+    es: Segunda ley en eje y
+    en: Newton's second law along y
+  equation: Fy = m*ay
+  latex: \sum F_y = m a_y
+  rearrangements:
+  - target: ay
+    equation: ay = Fy/m
+    latex: a_y=\frac{\sum F_y}{m}
+    constraints: []
+  - target: Fy
+    equation: Fy = m*ay
+    latex: \sum F_y = m a_y
+    constraints: []
+  category: kinematic_law
+  relation_type: component_balance
+  physical_meaning:
+    es: Relación física fundamental de este leaf.
+    en: Fundamental physical relationship of this leaf.
+  constraints:
+  - Classical mechanics validity conditions.
+  validity:
+    es: Válido en mecánica clásica newtoniana.
+    en: Valid in classical Newtonian mechanics.
+  dimension_check: dimensionally consistent
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - diagramas-cuerpo-libre
+  interpretation_tags:
+  - eje_y
+  - restricciones
+  result_semantics:
+    target: ay
+    meaning: Resulta util para interpretar ay en el contexto del leaf.
+  domain_checks:
+  - expr: m > 0
+    message:
+      es: La masa debe ser positiva para usar la forma escalar de Newton.
+      en: Mass must be positive to use the scalar form of Newton's law.
+  coherence_checks:
+  - expr: abs(Fy) < 1e-9 or abs(ay) > 0 or m > 0
+    message:
+      es: Si el cuerpo permanece apoyado sin despegar, una ay grande suele revelar
+        ejes mal elegidos o fuerzas omitidas.
+      en: If the body remains supported without lifting off, a large ay usually reveals
+        poorly chosen axes or omitted forces.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - detect_when: abs(Fy) < 1e-9
+    message:
+      es: Cuando Fy se anula, el eje y está en equilibrio aunque el cuerpo pueda acelerar
+        en otra dirección.
+      en: When Fy vanishes, the y axis is in equilibrium even if the body accelerates
+        in another direction.
+- id: equilibrio_vertical
+  title:
+    es: Equilibrio vertical típico
+    en: Typical vertical equilibrium
+  equation: N = P
+  latex: N=P
+  rearrangements:
+  - target: N
+    equation: N = P
+    latex: N=P
+    constraints: []
+  - target: P
+    equation: P = N
+    latex: P=N
+    constraints: []
+  category: kinematic_law
+  relation_type: constraint_relation
+  physical_meaning:
+    es: Relación física fundamental de este leaf.
+    en: Fundamental physical relationship of this leaf.
+  constraints:
+  - Classical mechanics validity conditions.
+  validity:
+    es: Válido en mecánica clásica newtoniana.
+    en: Valid in classical Newtonian mechanics.
+  dimension_check: dimensionally consistent
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - diagramas-cuerpo-libre
+  interpretation_tags:
+  - apoyo
+  - equilibrio_normal
+  result_semantics:
+    target: N
+    meaning: Resulta util para interpretar N en el contexto del leaf.
+  domain_checks:
+  - expr: P >= 0
+    message:
+      es: El peso debe ser no negativo.
+      en: Weight must be non-negative.
+  coherence_checks:
+  - expr: N >= 0
+    message:
+      es: Una normal negativa indicaría pérdida de contacto o un modelo de apoyo mal
+        planteado.
+      en: A negative normal would indicate loss of contact or a poorly posed support
+        model.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - detect_when: true
+    message:
+      es: Esta igualdad solo vale si no hay otras fuerzas verticales ni aceleración
+        vertical apreciable.
+      en: This equality only holds when there are no other vertical forces and no
+        appreciable vertical acceleration.
+- id: rozamiento_cinetico
+  title:
+    es: Rozamiento cinético
+    en: Kinetic friction
+  equation: fk = mu_k*N
+  latex: f_k=\mu_k N
+  rearrangements:
+  - target: fk
+    equation: fk = mu_k*N
+    latex: f_k=\mu_k N
+    constraints: []
+  - target: mu_k
+    equation: mu_k = fk/N
+    latex: \mu_k=\frac{f_k}{N}
+    constraints:
+    - expr: N != 0
+      message:
+        es: N != 0
+        en: N != 0
+  category: kinematic_law
+  relation_type: constitutive_model
+  physical_meaning:
+    es: Relación física fundamental de este leaf.
+    en: Fundamental physical relationship of this leaf.
+  constraints:
+  - Classical mechanics validity conditions.
+  validity:
+    es: Válido en mecánica clásica newtoniana.
+    en: Valid in classical Newtonian mechanics.
+  dimension_check: dimensionally consistent
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - diagramas-cuerpo-libre
+  interpretation_tags:
+  - rozamiento
+  - contacto
+  result_semantics:
+    target: fk
+    meaning: Resulta util para interpretar fk en el contexto del leaf.
+  domain_checks:
+  - expr: N >= 0
+    message:
+      es: La normal debe ser no negativa en un contacto ordinario.
+      en: The normal force must be non-negative in an ordinary contact.
+  - expr: mu_k >= 0
+    message:
+      es: El coeficiente cinético debe ser no negativo.
+      en: The kinetic coefficient must be non-negative.
+  coherence_checks:
+  - expr: fk >= 0
+    message:
+      es: El módulo de la fuerza de rozamiento no puede ser negativo; el signo se
+        fija con el eje, no con el valor absoluto.
+      en: The friction-force magnitude cannot be negative; the sign is set by the
+        axis, not by the absolute value.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - detect_when: mu_k > 1.2
+    message:
+      es: Un coeficiente muy alto no es imposible, pero suele pedir revisar datos,
+        unidades o tipo de material.
+      en: A very high coefficient is not impossible, but it usually calls for checking
+        the data, units, or material type.
+- id: rozamiento_estatico
+  title:
+    es: Cota de rozamiento estático
+    en: Static-friction bound
+  equation: fs <= mu_s*N
+  latex: f_s\leq\mu_s N
+  rearrangements: []
+  category: kinematic_law
+  relation_type: inequality_bound
+  physical_meaning:
+    es: Relación física fundamental de este leaf.
+    en: Fundamental physical relationship of this leaf.
+  constraints:
+  - Classical mechanics validity conditions.
+  validity:
+    es: Válido en mecánica clásica newtoniana.
+    en: Valid in classical Newtonian mechanics.
+  dimension_check: dimensionally consistent
+  calculable: false
+  motivo_no_calculable:
+    es: Es una desigualdad de umbral, no una igualdad universal.
+    en: It is a threshold inequality, not a universal equality.
+  used_in:
+  - diagramas-cuerpo-libre
+  interpretation_tags:
+  - rozamiento_estatico
+  - umbral
+  result_semantics:
+    target: fs
+    meaning: Resulta util para interpretar fs en el contexto del leaf.
+  domain_checks:
+  - expr: N >= 0
+    message:
+      es: La normal debe ser no negativa para que el límite tenga sentido físico.
+      en: The normal force must be non-negative for the bound to make physical sense.
+  coherence_checks:
+  - expr: mu_s >= 0
+    message:
+      es: El coeficiente estático debe ser no negativo.
+      en: The static coefficient must be non-negative.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - detect_when: true
+    message:
+      es: 'Error típico: sustituir siempre fs por mu_s N aunque el cuerpo todavía
+        no esté a punto de deslizar.'
+      en: 'Typical mistake: always replacing fs with mu_s N even when the body is
+        not yet about to slip.'
+- id: componentes_peso_plano
+  title:
+    es: Componentes del peso en plano inclinado
+    en: Weight components on an inclined plane
+  equation: Fy = m*g*cos(theta); Fx = m*g*sin(theta)
+  latex: P_{\perp}=mg\cos\theta,\quad P_{\parallel}=mg\sin\theta
+  rearrangements: []
+  category: kinematic_law
+  relation_type: geometric_projection
+  physical_meaning:
+    es: Relación física fundamental de este leaf.
+    en: Fundamental physical relationship of this leaf.
+  constraints:
+  - Classical mechanics validity conditions.
+  validity:
+    es: Válido en mecánica clásica newtoniana.
+    en: Valid in classical Newtonian mechanics.
+  dimension_check: dimensionally consistent
+  calculable: false
+  motivo_no_calculable:
+    es: Depende de la convención de ejes y signo adoptados.
+    en: It depends on the chosen axis orientation and sign convention.
+  used_in:
+  - diagramas-cuerpo-libre
+  interpretation_tags:
+  - plano_inclinado
+  - descomposicion
+  result_semantics:
+    target: Fy
+    meaning: Resulta util para interpretar Fy en el contexto del leaf.
+  domain_checks:
+  - expr: m >= 0
+    message:
+      es: La masa no puede ser negativa.
+      en: Mass cannot be negative.
+  - expr: g >= 0
+    message:
+      es: La gravedad debe ser no negativa en este modelo escalar.
+      en: Gravitational acceleration must be non-negative in this scalar model.
+  coherence_checks:
+  - expr: true
+    message:
+      es: Seno y coseno dependen de cómo se mida theta; primero fija el ángulo y luego
+        proyecta.
+      en: Sine and cosine depend on how theta is measured; fix the angle first and
+        then project.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - detect_when: true
+    message:
+      es: 'Error recurrente: intercambiar la componente paralela y la perpendicular
+        al cambiar la referencia angular.'
+      en: 'Recurrent mistake: swapping the parallel and perpendicular components when
+        the angular reference changes.'

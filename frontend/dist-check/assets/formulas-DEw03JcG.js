@@ -1,0 +1,114 @@
+const e=`version: 1
+formulas:
+- id: dv
+  title:
+    es: Ecuación de Tsiolkovski (Delta-v)
+    en: Tsiolkovsky Equation (Delta-v)
+  equation: DeltaV = ve*log(m0/mf)
+  latex: \\Delta v = v_e \\ln \\left(\\frac{m_0}{m_f}\\right)
+  rearrangements:
+  - target: DeltaV
+    equation: DeltaV = ve*log(m0/mf)
+    latex: \\Delta v = v_e \\ln \\left(\\frac{m_0}{m_f}\\right)
+    constraints: []
+  - target: mf
+    equation: mf = m0*exp(-DeltaV/ve)
+    latex: m_f = m_0 e^{-\\Delta v / v_e}
+    constraints: []
+  - target: m0
+    equation: m0 = mf*exp(DeltaV/ve)
+    latex: m_0 = m_f e^{\\Delta v / v_e}
+    constraints: []
+  category: fundamental
+  relation_type: integral_relation
+  physical_meaning:
+    es: Establece el cambio de velocidad máximo que un cohete puede alcanzar basándose en la velocidad de eyección de los gases y la proporción de masa de combustible consumida.
+    en: Establishes the maximum velocity change a rocket can achieve based on the exhaust velocity of the gases and the proportion of fuel mass consumed.
+  constraints:
+  - expr: m0 > mf
+    message:
+      es: La masa inicial m0 debe ser mayor que la masa final mf (quemado de combustible).
+      en: Initial mass m0 must be greater than final mass mf (fuel burnout).
+  - expr: mf > 0
+    message:
+      es: La masa final debe ser positiva (estructura y carga útil).
+      en: Final mass must be positive (structure and payload).
+  validity:
+    es: Válida en ausencia de fuerzas externas (gravedad y resistencia aerodinámica). Representa el límite ideal de rendimiento.
+    en: Valid in the absence of external forces (gravity and aerodynamic drag). Represents the ideal performance limit.
+  dimension_check:
+    es: '[DeltaV] = [L/T]'
+    en: '[DeltaV] = [L/T]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - theory
+  - models
+  - examples
+  - calculator
+  - applications
+  interpretation_tags:
+  - propulsion
+  - masa-variable
+  - astronáutica
+  result_semantics:
+    target: DeltaV
+    meaning: Capacidad total de maniobra orbital ganada por el vehículo.
+  domain_checks:
+  - expr: DeltaV < 3e8
+    message:
+      es: El modelo es no relativista. Para velocidades cercanas a c, usa la variante relativista.
+      en: The model is non-relativistic. For velocities close to c, use the relativistic variant.
+  coherence_checks:
+  - expr: m0/mf > 1
+    message:
+      es: La razón de masas debe ser superior a 1 para que el cohete se mueva.
+      en: The mass ratio must be greater than 1 for the rocket to move.
+  graph_implications:
+  - La curva es logarítmica; el rendimiento decae conforme aumenta la razón de masas.
+  pedagogical_triggers:
+  - when: DeltaV > ve
+    message:
+      es: "Interesante: ¡El cohete puede viajar más rápido que sus propios gases de escape!"
+      en: "Interesting: The rocket can travel faster than its own exhaust gases!"
+
+- id: ve_from_dv
+  title:
+    es: Velocidad efectiva de eyección
+    en: Effective exhaust velocity
+  equation: ve = DeltaV/log(m0/mf)
+  latex: v_e = \\frac{\\Delta v}{\\ln(m_0/m_f)}
+  rearrangements: []
+  category: derived
+  relation_type: rearrangement
+  physical_meaning:
+    es: Parámetro de eficiencia del motor; representa la velocidad promedio a la que el propelente es expulsado respecto al cohete.
+    en: Engine efficiency parameter; represents the average velocity at which the propellant is expelled relative to the rocket.
+  constraints:
+  - expr: m0 > mf
+    message:
+      es: Requiere que haya habido consumo de masa.
+      en: Requires mass consumption.
+  validity:
+    es: Válida para motores de empuje constante o variable bajo el modelo de Tsiolkovski.
+    en: Valid for constant or variable thrust engines under the Tsiolkovsky model.
+  dimension_check:
+    es: '[ve] = [L/T]'
+    en: '[ve] = [L/T]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - theory
+  - examples
+  - calculator
+  interpretation_tags:
+  - impulso-especifico
+  - eficiencia-motor
+  result_semantics:
+    target: ve
+    meaning: Medida de la calidad del sistema de propulsión.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+`;export{e as default};

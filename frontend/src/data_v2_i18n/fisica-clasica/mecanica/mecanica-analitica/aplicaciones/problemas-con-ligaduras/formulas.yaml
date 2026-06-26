@@ -1,0 +1,85 @@
+version: 5
+topic:
+  id: problemas-con-ligaduras
+  title:
+    es: Problemas con ligaduras
+    en: Problems with Constraints
+
+formulas:
+- id: a_comun
+  title: { es: Aceleracion comun del sistema acoplado, en: Common acceleration of the coupled system }
+  equation: a = ((m2 - m1)*g)/(m1 + m2)
+  latex: a=\frac{(m_2-m_1)g}{m_1+m_2}
+  category: dinamica
+  relation_type: coupled_acceleration
+  physical_meaning:
+    es: Determina la respuesta comun impuesta por la ligadura ideal entre las dos masas.
+    en: Determines the shared response imposed by the ideal constraint between the two masses.
+  constraints: [ m1 > 0, m2 > 0, g > 0 ]
+  validity:
+    es: Valida con cuerda inextensible, polea ideal y ausencia de perdidas dominantes.
+    en: Valid with inextensible rope, ideal pulley, and no dominant losses.
+  dimension_check: "[L/T^2] = ([M]-[M])*[L/T^2]/[M]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[m1]], [[m2]] y [[g]].", en: "Requires [[m1]], [[m2]], and [[g]]." }
+  used_in: [ T ]
+  interpretation_tags: [ ligadura, desbalance, respuesta_compartida ]
+  result_semantics:
+    target: a
+  domain_checks: [ m1 > 0, m2 > 0, g > 0 ]
+  coherence_checks: [ abs(a) <= g ]
+  graph_implications: "En barrido de masas, [[a]] cruza por cero cuando [[m1]] coincide con [[m2]]."
+  pedagogical_triggers: [ signo_y_convencion, simetria ]
+  rearrangements:
+  - target: a
+    equation: ((m2 - m1)*g)/(m1 + m2)
+  - target: m2
+    equation: m1*(g + a)/(g - a)
+  - target: m1
+    equation: m2*(g - a)/(g + a)
+  variables: [ a, m1, m2, g ]
+
+- id: T
+  title: { es: Tension interna de la cuerda ideal, en: Internal tension of the ideal rope }
+  equation: T = (2*m1*m2*g)/(m1 + m2)
+  latex: T=\frac{2m_1m_2g}{m_1+m_2}
+  category: dinamica
+  relation_type: internal_coupling_force
+  physical_meaning:
+    es: Mide el esfuerzo interno que transmite la ligadura para sostener movimiento compatible.
+    en: Measures the internal effort transmitted by the constraint to sustain compatible motion.
+  constraints: [ m1 > 0, m2 > 0, g > 0 ]
+  validity:
+    es: Valida para cuerda ideal tensa y polea sin friccion relevante.
+    en: Valid for a taut ideal rope and a pulley with negligible friction.
+  dimension_check: "[M*L/T^2] = [M]*[M]*[L/T^2]/[M]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[m1]], [[m2]] y [[g]].", en: "Requires [[m1]], [[m2]], and [[g]]." }
+  used_in: [ a ]
+  interpretation_tags: [ fuerza_interna, acoplamiento, coherencia ]
+  result_semantics:
+    target: T
+  domain_checks: [ m1 > 0, m2 > 0, g > 0 ]
+  coherence_checks: [ T > 0 ]
+  graph_implications: "[[T]] aumenta con la carga global y refleja acoplamiento entre ramas."
+  pedagogical_triggers: [ interna_vs_externa, cierre_sistema ]
+  rearrangements:
+  - target: T
+    equation: (2*m1*m2*g)/(m1 + m2)
+  - target: m2
+    equation: (T*m1)/(2*m1*g - T)
+  - target: m1
+    equation: (T*m2)/(2*m2*g - T)
+  variables: [ T, m1, m2, g ]
+
+ui:
+  default_formula: a_comun
+  groups:
+  - title:
+      es: Respuesta compartida
+      en: Shared response
+    items: [ a_comun ]
+  - title:
+      es: Fuerza interna
+      en: Internal force
+    items: [ T ]

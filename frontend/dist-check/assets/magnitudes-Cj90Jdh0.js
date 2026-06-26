@@ -1,0 +1,336 @@
+const n=`version: 5
+magnitudes:
+- id: omega0
+  symbol: \\omega_0
+  nombre:
+    es: frecuencia angular resonante
+    en: Resonant Angular Frequency
+  unidad_si: rad/s
+  descripcion:
+    es: Frecuencia angular donde se equilibran efectos reactivos en el modelo RLC ideal.
+    en: Angular frequency where reactive effects balance in the ideal RLC model.
+  dimension: T^{-1}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in: [ omega_resonancia, frecuencia_resonancia, factor_calidad ]
+  common_mistake: Mezclarla con frecuencia en hertz sin conversion.
+  typical_range: Del orden de centenas a decenas de miles de rad/s segun L y C.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud positiva en regimen de resonancia.
+      en: Used as a positive magnitude in resonance regime.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Frecuencia angular nula no describe resonancia oscilatoria.
+      en: Zero angular frequency does not describe oscillatory resonance.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '(0, inf)'
+  interpretation_role:
+    primary_for: [ resonancia-electrica ]
+    secondary_for: [ sintonia ]
+  graph_binding:
+    channels: [ frecuencia ]
+  pedagogical_notes: Conviene separar claramente omega0 y f0 en todo el desarrollo.
+- id: f0
+  symbol: f_0
+  nombre:
+    es: frecuencia de resonancia
+    en: Resonant Frequency
+  unidad_si: Hz
+  descripcion:
+    es: Frecuencia de excitacion que maximiza respuesta de corriente en RLC serie ideal.
+    en: Excitation frequency that maximizes current response in ideal series RLC.
+  dimension: T^{-1}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in: [ frecuencia_resonancia, ancho_banda ]
+  common_mistake: Tratarla como constante fija independiente de temperatura o tolerancias.
+  typical_range: Determinada por producto L*C y condiciones de componente.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se reporta como magnitud positiva de operacion.
+      en: Reported as a positive operating magnitude.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: El modelo resonante requiere frecuencia positiva.
+      en: Resonance model requires positive frequency.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '(0, inf)'
+  interpretation_role:
+    primary_for: [ resonancia-electrica ]
+    secondary_for: [ filtros-pasabanda ]
+  graph_binding:
+    channels: [ frecuencia ]
+  pedagogical_notes: Es magnitud dominante para lectura de selectividad y sintonia.
+- id: L
+  symbol: L
+  nombre:
+    es: inductancia
+    en: Inductance
+  unidad_si: H
+  descripcion:
+    es: Parametro de almacenamiento magnetico del inductor.
+    en: Magnetic-storage parameter of the inductor.
+  dimension: ML^2T^{-2}I^{-2}
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: physical_quantity
+  used_in: [ omega_resonancia, factor_calidad ]
+  common_mistake: Omitir conversion de milihenrios a henrios.
+  typical_range: Positiva y dependiente de geometria/material.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se considera no negativa en componentes pasivos.
+      en: Considered non-negative in passive components.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: L nula elimina el mecanismo resonante LC.
+      en: Zero inductance removes LC resonance mechanism.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '(0, inf)'
+  interpretation_role:
+    primary_for: [ resonancia-electrica ]
+    secondary_for: []
+  graph_binding:
+    channels: [ parametro ]
+  pedagogical_notes: Debe evaluarse junto con C para ubicar frecuencia de sintonia.
+- id: C
+  symbol: C
+  nombre:
+    es: capacitancia
+    en: Capacitance
+  unidad_si: F
+  descripcion:
+    es: Parametro de almacenamiento electrico del capacitor.
+    en: Electric-storage parameter of the capacitor.
+  dimension: M^{-1}L^{-2}T^{4}I^{2}
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: physical_quantity
+  used_in: [ omega_resonancia ]
+  common_mistake: Introducir microfaradios como si fueran faradios.
+  typical_range: Positiva y sensible a tolerancia/temperatura.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud no negativa de componente.
+      en: Used as a non-negative component magnitude.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: C nula rompe el balance resonante LC.
+      en: Zero capacitance breaks LC resonant balance.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '(0, inf)'
+  interpretation_role:
+    primary_for: [ resonancia-electrica ]
+    secondary_for: []
+  graph_binding:
+    channels: [ parametro ]
+  pedagogical_notes: Conviene revisar tolerancia para predecir deriva de f0.
+- id: R
+  symbol: R
+  nombre:
+    es: resistencia total serie
+    en: Total Series Resistance
+  unidad_si: ohm
+  descripcion:
+    es: Resistencia efectiva que modela perdidas en la rama resonante serie.
+    en: Effective resistance modeling losses in the series resonant branch.
+  dimension: ML^2T^{-3}I^{-2}
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: physical_quantity
+  used_in: [ factor_calidad, corriente_resonancia ]
+  common_mistake: Usar solo resistencia nominal y omitir perdidas parasitas.
+  typical_range: Positiva y determinante del amortiguamiento.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se modela como magnitud positiva de perdida.
+      en: Modeled as positive loss magnitude.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: R cero idealiza corriente no acotada en resonancia.
+      en: Zero resistance idealizes unbounded resonance current.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '(0, inf)'
+  interpretation_role:
+    primary_for: [ resonancia-electrica ]
+    secondary_for: [ amortiguamiento ]
+  graph_binding:
+    channels: [ perdida ]
+  pedagogical_notes: Su variacion controla amplitud y selectividad de la respuesta.
+- id: Q
+  symbol: Q
+  nombre:
+    es: factor de calidad
+    en: Quality Factor
+  unidad_si: '-'
+  descripcion:
+    es: Medida adimensional de selectividad y amortiguamiento del circuito resonante.
+    en: Dimensionless measure of selectivity and damping in resonant circuit.
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in: [ factor_calidad, ancho_banda ]
+  common_mistake: Interpretarlo como eficiencia energetica directa.
+  typical_range: Mayor que uno en resonadores moderadamente selectivos.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se reporta como magnitud positiva adimensional.
+      en: Reported as positive dimensionless magnitude.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Q nulo no representa oscilador resonante util.
+      en: Zero quality factor does not represent useful resonant oscillator.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '(0, inf)'
+  interpretation_role:
+    primary_for: [ resonancia-electrica ]
+    secondary_for: [ selectividad ]
+  graph_binding:
+    channels: [ selectividad ]
+  pedagogical_notes: Q alto implica banda estrecha y sensibilidad a tolerancias.
+- id: BW
+  symbol: BW
+  nombre:
+    es: ancho de banda
+    en: Bandwidth
+  unidad_si: Hz
+  descripcion:
+    es: Intervalo aproximado de frecuencias con respuesta significativa alrededor de resonancia.
+    en: Approximate frequency interval with significant response around resonance.
+  dimension: T^{-1}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in: [ ancho_banda ]
+  common_mistake: Tratarlo como independiente de R y Q.
+  typical_range: Inversamente proporcional al factor de calidad en aproximacion clasica.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se interpreta como ancho positivo de intervalo.
+      en: Interpreted as positive interval width.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: BW nula idealiza selectividad infinita no fisica.
+      en: Zero bandwidth idealizes non-physical infinite selectivity.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '(0, inf)'
+  interpretation_role:
+    primary_for: [ resonancia-electrica ]
+    secondary_for: [ filtros-pasabanda ]
+  graph_binding:
+    channels: [ banda ]
+  pedagogical_notes: Conecta teoria de resonancia con especificaciones de filtro.
+- id: V
+  symbol: V
+  nombre:
+    es: tension eficaz
+    en: RMS Voltage
+  unidad_si: V
+  descripcion:
+    es: Tension eficaz aplicada al circuito resonante.
+    en: RMS voltage applied to resonant circuit.
+  dimension: ML^2T^{-3}I^{-1}
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: physical_quantity
+  used_in: [ corriente_resonancia ]
+  common_mistake: Mezclar valor pico con valor eficaz en la sustitucion.
+  typical_range: Positiva en magnitud RMS de entrada.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud eficaz no negativa.
+      en: Used as non-negative RMS magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Con excitacion nula no hay respuesta forzada.
+      en: With zero excitation there is no forced response.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, inf)'
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ resonancia-electrica ]
+  graph_binding:
+    channels: [ excitacion ]
+  pedagogical_notes: Debe mantenerse consistente con tipo de medicion usada en campo.
+- id: Ires
+  symbol: I_res
+  nombre:
+    es: corriente resonante
+    en: Resonant Current
+  unidad_si: A
+  descripcion:
+    es: Corriente eficaz estimada en condicion resonante serie.
+    en: RMS current estimated at series resonant condition.
+  dimension: I
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in: [ corriente_resonancia ]
+  common_mistake: Suponer que su valor es seguro sin verificar limite termico.
+  typical_range: Puede crecer notablemente cerca de resonancia con R baja.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se reporta como magnitud eficaz positiva.
+      en: Reported as positive RMS magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Es nula sin excitacion o fuera de condicion activa.
+      en: Zero without excitation or active resonant condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, inf)'
+  interpretation_role:
+    primary_for: [ resonancia-electrica ]
+    secondary_for: [ proteccion ]
+  graph_binding:
+    channels: [ corriente ]
+  pedagogical_notes: Su lectura debe conectarse con limites de diseno y seguridad.
+`;export{n as default};

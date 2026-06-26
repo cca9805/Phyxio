@@ -1,0 +1,397 @@
+version: 5.0.0
+ui:
+  default_formula: parametro_orden_ley_critica
+formulas:
+- id: temperatura_reducida_critica
+  title:
+    es: Temperatura reducida crítica
+    en: Reduced critical temperature
+  equation: temperatura_reducida=(temperatura-temperatura_critica)/temperatura_critica
+  latex: t=\frac{T-T_c}{T_c}
+  rearrangements:
+  - id: temperatura_desde_reducida
+    equation: temperatura=temperatura_critica*(1+temperatura_reducida)
+    latex: T=T_c(1+t)
+    target: temperatura
+  category: definicion
+  relation_type: ratio
+  physical_meaning:
+    es: Mide la distancia relativa a la temperatura crítica y conserva el signo del lado térmico.
+    en: Measures the relative distance to the critical temperature and keeps the sign of the thermal side.
+  constraints:
+    es: Usar magnitudes en SI y evaluar suficientemente cerca de la región crítica sin cruzar un régimen no aplicable.
+    en: Use SI quantities and evaluate sufficiently near the critical region without crossing into an inapplicable regime.
+  validity:
+    es: Válida para temperatura crítica positiva y sistemas con transición bien identificada.
+    en: Valid for positive critical temperature and systems with a well identified transition.
+  dimension_check: dimensionless
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria.md
+  - modelos.md
+  - ejemplos.md
+  - interpretacion.yaml
+  - graficos.yaml
+  interpretation_tags:
+  - critical_distance
+  - dimensionless_control
+  result_semantics:
+    target: temperatura_reducida
+    kind: scalar
+    sign_meaning:
+      es: El signo indica el lado térmico o la positividad física de la magnitud según la relación.
+      en: The sign indicates the thermal side or the physical positivity of the quantity according to the relation.
+    absolute_value_meaning:
+      es: El valor absoluto mide la intensidad del comportamiento crítico observado.
+      en: The absolute value measures the strength of the observed critical behavior.
+  domain_checks:
+  - id: temperatura_reducida_critica_temperatura_positiva
+    status: warning
+    condition: temperatura > 0
+    text:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  - id: temperatura_reducida_critica_cercania_critica
+    status: info
+    condition: temperatura_reducida < 0.1
+    text:
+      es: La ley de escala es más representativa cerca de la temperatura crítica.
+      en: The scaling law is most representative near the critical temperature.
+  coherence_checks:
+  - id: temperatura_reducida_critica_dimensiones
+    status: ok
+    text:
+      es: La dimensión del resultado debe coincidir con la magnitud objetivo.
+      en: The result dimension must match the target quantity.
+  - id: temperatura_reducida_critica_exponente
+    status: warning
+    text:
+      es: El exponente crítico debe ser no negativo en esta lectura fenomenológica.
+      en: The critical exponent should be nonnegative in this phenomenological reading.
+  graph_implications:
+    es: El eje horizontal puede usar la temperatura reducida para ver la cercanía a la temperatura crítica.
+    en: The horizontal axis may use reduced temperature to show proximity to the critical temperature.
+  pedagogical_triggers:
+  - es: Distingue tendencia crítica de extrapolación lejana.
+    en: Distinguish critical trend from far-range extrapolation.
+  - es: Comprueba qué lado de la temperatura crítica se está usando.
+    en: Check which side of the critical temperature is being used.
+- id: parametro_orden_ley_critica
+  title:
+    es: Ley crítica del parámetro de orden
+    en: Critical law for the order parameter
+  equation: parametro_de_orden=amplitud_critica*temperatura_reducida^exponente_critico_beta
+  latex: \Phi=A|t|^{\beta}
+  rearrangements:
+  - id: amplitud_desde_parametro
+    equation: amplitud_critica=parametro_de_orden/(temperatura_reducida^exponente_critico_beta)
+    latex: A=\Phi/|t|^\beta
+    target: amplitud_critica
+  - id: beta_desde_logaritmos
+    equation: exponente_critico_beta=ln(parametro_de_orden/amplitud_critica)/ln(temperatura_reducida)
+    latex: \beta=\ln(\Phi/A)/\ln|t|
+    target: exponente_critico_beta
+  category: critical_scaling
+  relation_type: power_law
+  physical_meaning:
+    es: Describe cómo se anula el parámetro de orden al aproximarse a una transición continua desde la fase ordenada.
+    en: Describes how the order parameter vanishes when approaching a continuous transition from the ordered phase.
+  constraints:
+    es: Usar magnitudes en SI y evaluar suficientemente cerca de la región crítica sin cruzar un régimen no aplicable.
+    en: Use SI quantities and evaluate sufficiently near the critical region without crossing into an inapplicable regime.
+  validity:
+    es: Usar en el lado ordenado y suficientemente cerca de la temperatura crítica; no describe saltos de primer orden.
+    en: Use on the ordered side and sufficiently near the critical temperature; it does not describe first-order jumps.
+  dimension_check: dimension(parametro_de_orden)=dimension(amplitud_critica)
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria.md
+  - modelos.md
+  - ejemplos.md
+  - interpretacion.yaml
+  - graficos.yaml
+  interpretation_tags:
+  - order_parameter
+  - continuous_transition
+  - power_law
+  result_semantics:
+    target: parametro_de_orden
+    kind: scalar
+    sign_meaning:
+      es: El signo indica el lado térmico o la positividad física de la magnitud según la relación.
+      en: The sign indicates the thermal side or the physical positivity of the quantity according to the relation.
+    absolute_value_meaning:
+      es: El valor absoluto mide la intensidad del comportamiento crítico observado.
+      en: The absolute value measures the strength of the observed critical behavior.
+  domain_checks:
+  - id: parametro_orden_ley_critica_temperatura_positiva
+    status: warning
+    condition: temperatura > 0
+    text:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  - id: parametro_orden_ley_critica_cercania_critica
+    status: info
+    condition: temperatura_reducida < 0.1
+    text:
+      es: La ley de escala es más representativa cerca de la temperatura crítica.
+      en: The scaling law is most representative near the critical temperature.
+  coherence_checks:
+  - id: parametro_orden_ley_critica_dimensiones
+    status: ok
+    text:
+      es: La dimensión del resultado debe coincidir con la magnitud objetivo.
+      en: The result dimension must match the target quantity.
+  - id: parametro_orden_ley_critica_exponente
+    status: warning
+    text:
+      es: El exponente crítico debe ser no negativo en esta lectura fenomenológica.
+      en: The critical exponent should be nonnegative in this phenomenological reading.
+  graph_implications:
+    es: La curva del parámetro de orden desciende hacia cero al acercarse la temperatura a la temperatura crítica.
+    en: The order-parameter curve falls toward zero as temperature approaches the critical temperature.
+  pedagogical_triggers:
+  - es: Distingue tendencia crítica de extrapolación lejana.
+    en: Distinguish critical trend from far-range extrapolation.
+  - es: Comprueba qué lado de la temperatura crítica se está usando.
+    en: Check which side of the critical temperature is being used.
+- id: susceptibilidad_critica
+  title:
+    es: Divergencia de susceptibilidad
+    en: Susceptibility divergence
+  equation: susceptibilidad=amplitud_susceptibilidad*temperatura_reducida^(-exponente_critico_gamma)
+  latex: \chi=C|t|^{-\gamma}
+  rearrangements:
+  - id: amplitud_susceptibilidad_desde_chi
+    equation: amplitud_susceptibilidad=susceptibilidad*(temperatura_reducida^exponente_critico_gamma)
+    latex: C=\chi |t|^\gamma
+    target: amplitud_susceptibilidad
+  category: critical_scaling
+  relation_type: power_law
+  physical_meaning:
+    es: Representa el aumento de respuesta del sistema ante perturbaciones pequeñas cerca de la criticidad.
+    en: Represents the increasing response of the system to small perturbations near criticality.
+  constraints:
+    es: Usar magnitudes en SI y evaluar suficientemente cerca de la región crítica sin cruzar un régimen no aplicable.
+    en: Use SI quantities and evaluate sufficiently near the critical region without crossing into an inapplicable regime.
+  validity:
+    es: Válida en el régimen crítico fuera de redondeos por tamaño finito o campos externos fuertes.
+    en: Valid in the critical regime outside finite-size rounding or strong external fields.
+  dimension_check: dimension(susceptibilidad)=dimension(amplitud_susceptibilidad)
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria.md
+  - modelos.md
+  - ejemplos.md
+  - interpretacion.yaml
+  - graficos.yaml
+  interpretation_tags:
+  - susceptibility
+  - divergence
+  - response
+  result_semantics:
+    target: susceptibilidad
+    kind: scalar
+    sign_meaning:
+      es: El signo indica el lado térmico o la positividad física de la magnitud según la relación.
+      en: The sign indicates the thermal side or the physical positivity of the quantity according to the relation.
+    absolute_value_meaning:
+      es: El valor absoluto mide la intensidad del comportamiento crítico observado.
+      en: The absolute value measures the strength of the observed critical behavior.
+  domain_checks:
+  - id: susceptibilidad_critica_temperatura_positiva
+    status: warning
+    condition: temperatura > 0
+    text:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  - id: susceptibilidad_critica_cercania_critica
+    status: info
+    condition: temperatura_reducida < 0.1
+    text:
+      es: La ley de escala es más representativa cerca de la temperatura crítica.
+      en: The scaling law is most representative near the critical temperature.
+  coherence_checks:
+  - id: susceptibilidad_critica_dimensiones
+    status: ok
+    text:
+      es: La dimensión del resultado debe coincidir con la magnitud objetivo.
+      en: The result dimension must match the target quantity.
+  - id: susceptibilidad_critica_exponente
+    status: warning
+    text:
+      es: El exponente crítico debe ser no negativo en esta lectura fenomenológica.
+      en: The critical exponent should be nonnegative in this phenomenological reading.
+  graph_implications:
+    es: La susceptibilidad crece con pendiente cada vez mayor al acercarse a la temperatura crítica.
+    en: Susceptibility grows with an increasingly steep slope as the critical temperature is approached.
+  pedagogical_triggers:
+  - es: Distingue tendencia crítica de extrapolación lejana.
+    en: Distinguish critical trend from far-range extrapolation.
+  - es: Comprueba qué lado de la temperatura crítica se está usando.
+    en: Check which side of the critical temperature is being used.
+- id: longitud_correlacion_critica
+  title:
+    es: Divergencia de longitud de correlación
+    en: Correlation length divergence
+  equation: longitud_correlacion=amplitud_correlacion*temperatura_reducida^(-exponente_critico_nu)
+  latex: \xi=\xi_0|t|^{-\nu}
+  rearrangements:
+  - id: amplitud_correlacion_desde_xi
+    equation: amplitud_correlacion=longitud_correlacion*(temperatura_reducida^exponente_critico_nu)
+    latex: \xi_0=\xi |t|^\nu
+    target: amplitud_correlacion
+  category: critical_scaling
+  relation_type: power_law
+  physical_meaning:
+    es: Mide cuánto se extienden las correlaciones espaciales cuando el sistema se aproxima a la temperatura crítica.
+    en: Measures how far spatial correlations extend as the system approaches the critical temperature.
+  constraints:
+    es: Usar magnitudes en SI y evaluar suficientemente cerca de la región crítica sin cruzar un régimen no aplicable.
+    en: Use SI quantities and evaluate sufficiently near the critical region without crossing into an inapplicable regime.
+  validity:
+    es: Válida hasta que el tamaño de muestra o el alcance microscópico limiten la divergencia observable.
+    en: Valid until sample size or microscopic range limits the observable divergence.
+  dimension_check: length
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria.md
+  - modelos.md
+  - ejemplos.md
+  - interpretacion.yaml
+  - graficos.yaml
+  interpretation_tags:
+  - correlation_length
+  - divergence
+  - critical_region
+  result_semantics:
+    target: longitud_correlacion
+    kind: scalar
+    sign_meaning:
+      es: El signo indica el lado térmico o la positividad física de la magnitud según la relación.
+      en: The sign indicates the thermal side or the physical positivity of the quantity according to the relation.
+    absolute_value_meaning:
+      es: El valor absoluto mide la intensidad del comportamiento crítico observado.
+      en: The absolute value measures the strength of the observed critical behavior.
+  domain_checks:
+  - id: longitud_correlacion_critica_temperatura_positiva
+    status: warning
+    condition: temperatura > 0
+    text:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  - id: longitud_correlacion_critica_cercania_critica
+    status: info
+    condition: temperatura_reducida < 0.1
+    text:
+      es: La ley de escala es más representativa cerca de la temperatura crítica.
+      en: The scaling law is most representative near the critical temperature.
+  coherence_checks:
+  - id: longitud_correlacion_critica_dimensiones
+    status: ok
+    text:
+      es: La dimensión del resultado debe coincidir con la magnitud objetivo.
+      en: The result dimension must match the target quantity.
+  - id: longitud_correlacion_critica_exponente
+    status: warning
+    text:
+      es: El exponente crítico debe ser no negativo en esta lectura fenomenológica.
+      en: The critical exponent should be nonnegative in this phenomenological reading.
+  graph_implications:
+    es: La longitud de correlación aumenta al acercarse a la temperatura crítica, señalando fluctuaciones colectivas.
+    en: Correlation length increases near the critical temperature, signaling collective fluctuations.
+  pedagogical_triggers:
+  - es: Distingue tendencia crítica de extrapolación lejana.
+    en: Distinguish critical trend from far-range extrapolation.
+  - es: Comprueba qué lado de la temperatura crítica se está usando.
+    en: Check which side of the critical temperature is being used.
+- id: calor_especifico_critico
+  title:
+    es: Singularidad del calor específico
+    en: Specific heat singularity
+  equation: calor_especifico=amplitud_calor_especifico*temperatura_reducida^(-exponente_critico_alpha)
+  latex: C=A_C|t|^{-\alpha}
+  rearrangements:
+  - id: amplitud_calor_desde_C
+    equation: amplitud_calor_especifico=calor_especifico*(temperatura_reducida^exponente_critico_alpha)
+    latex: A_C=C |t|^\alpha
+    target: amplitud_calor_especifico
+  category: critical_scaling
+  relation_type: power_law
+  physical_meaning:
+    es: Describe la anomalía del calor específico cerca de una transición continua.
+    en: Describes the specific-heat anomaly near a continuous transition.
+  constraints:
+    es: Usar magnitudes en SI y evaluar suficientemente cerca de la región crítica sin cruzar un régimen no aplicable.
+    en: Use SI quantities and evaluate sufficiently near the critical region without crossing into an inapplicable regime.
+  validity:
+    es: Interpretar como singularidad ideal; en sistemas reales puede aparecer un máximo redondeado.
+    en: Interpret as an ideal singularity; real systems may show a rounded maximum.
+  dimension_check: J*mol^-1*K^-1
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria.md
+  - modelos.md
+  - ejemplos.md
+  - interpretacion.yaml
+  - graficos.yaml
+  interpretation_tags:
+  - specific_heat
+  - singularity
+  - critical_exponent
+  result_semantics:
+    target: calor_especifico
+    kind: scalar
+    sign_meaning:
+      es: El signo indica el lado térmico o la positividad física de la magnitud según la relación.
+      en: The sign indicates the thermal side or the physical positivity of the quantity according to the relation.
+    absolute_value_meaning:
+      es: El valor absoluto mide la intensidad del comportamiento crítico observado.
+      en: The absolute value measures the strength of the observed critical behavior.
+  domain_checks:
+  - id: calor_especifico_critico_temperatura_positiva
+    status: warning
+    condition: temperatura > 0
+    text:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  - id: calor_especifico_critico_cercania_critica
+    status: info
+    condition: temperatura_reducida < 0.1
+    text:
+      es: La ley de escala es más representativa cerca de la temperatura crítica.
+      en: The scaling law is most representative near the critical temperature.
+  coherence_checks:
+  - id: calor_especifico_critico_dimensiones
+    status: ok
+    text:
+      es: La dimensión del resultado debe coincidir con la magnitud objetivo.
+      en: The result dimension must match the target quantity.
+  - id: calor_especifico_critico_exponente
+    status: warning
+    text:
+      es: El exponente crítico debe ser no negativo en esta lectura fenomenológica.
+      en: The critical exponent should be nonnegative in this phenomenological reading.
+  graph_implications:
+    es: El calor específico puede formar una anomalía aguda cerca de la temperatura crítica.
+    en: Specific heat may form a sharp anomaly near the critical temperature.
+  pedagogical_triggers:
+  - es: Distingue tendencia crítica de extrapolación lejana.
+    en: Distinguish critical trend from far-range extrapolation.
+  - es: Comprueba qué lado de la temperatura crítica se está usando.
+    en: Check which side of the critical temperature is being used.

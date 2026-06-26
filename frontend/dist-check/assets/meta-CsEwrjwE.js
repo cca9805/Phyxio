@@ -1,0 +1,76 @@
+const e=`id: ondas-superficiales-rayleigh
+nombre:
+  es: Ondas superficiales rayleigh
+  en: Rayleigh Surface Waves
+area: fisica-clasica
+bloque: ondas
+subbloque: ondas-mecanicas
+parent_id: ondas-en-solidos
+ruta_relativa: fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/ondas-superficiales-rayleigh
+orden: 232380
+type: leaf
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+icon: "📢"
+descripcion: Ondas superficiales Rayleigh con trayectoria eliptica retrograda en la superficie libre de un solido.
+description_en: Rayleigh surface waves with retrograde elliptical trajectory on the free surface of a solid.
+tags:
+  es:
+    - ondas Rayleigh
+    - ondas superficiales
+    - sismologia
+    - elasticidad
+    - superficie libre
+  en:
+    - Rayleigh waves
+    - surface waves
+    - seismology
+    - elasticity
+    - free surface
+prerequisitos:
+  - fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/ondas-sismicas-p-y-s
+graficos:
+  - Coord
+  - Svg
+physical_role:
+  es: concepto físico
+  en: physical concept
+dificultad: 3
+tiempo_estimado_min: 25
+representacion_dominante: Coord
+magnitud_dominante: v_R
+pregunta_fisica_central:
+  es: "Por que las ondas de Rayleigh se propagan mas lento que las ondas de cuerpo y por que su amplitud decae exponencialmente con la profundidad?"
+  en: "Why do Rayleigh waves travel slower than body waves and why does their amplitude decay exponentially with depth?"
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

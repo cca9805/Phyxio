@@ -1,0 +1,705 @@
+version: 5.0.0
+id: modelo-de-einstein
+leaf_id: modelo-de-einstein
+nombre:
+  es: Modelo de einstein
+  en: Einstein Model
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: sistemas-modelo
+  parent_id: solidos-y-calor-especifico
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/sistemas-modelo/solidos-y-calor-especifico/modelo-de-einstein
+  orden: 275310
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - parametro_reducido_einstein
+  - temperatura_einstein_frecuencia
+  - calor_especifico_molar_einstein
+  - energia_interna_einstein
+  - capacidad_calorifica_total_einstein
+  magnitudes:
+  - temperatura
+  - temperatura_einstein
+  - parametro_reducido
+  - calor_especifico_molar_volumen_constante
+  - capacidad_calorifica_volumen_constante
+  - energia_interna
+  - numero_atomos
+  - constante_boltzmann
+  - constante_gases
+  - frecuencia_angular_einstein
+  - constante_planck_reducida
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: parametro_reducido
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  parametro_reducido:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable auxiliar adimensional
+      en: dimensionless auxiliary variable
+    summary_rules:
+    - id: parametro_reducido_summary_regime
+      when: 'true'
+      status: ok
+      text:
+        es: '[[parametro_reducido]] mide cuántas temperaturas de Einstein caben en la temperatura térmica disponible.'
+        en: '[[parametro_reducido]] measures how many Einstein-temperature scales fit into the available thermal temperature.'
+    physical_reading_rules:
+    - id: parametro_reducido_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Si [[parametro_reducido]] es grande, los modos vibracionales están congelados; si es pequeño, se recupera el régimen
+          clásico.
+        en: If [[parametro_reducido]] is large, vibrational modes are frozen; if it is small, the classical regime is recovered.
+    coherence_rules:
+    - id: parametro_reducido_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser positivo y adimensional porque procede del cociente [[temperatura_einstein]]/[[temperatura]].
+        en: It must be positive and dimensionless because it comes from the ratio [[temperatura_einstein]]/[[temperatura]].
+    model_validity_rules:
+    - id: parametro_reducido_model_validity_einstein
+      when: 'true'
+      status: info
+      text:
+        es: Solo tiene sentido con temperaturas absolutas positivas y con una frecuencia de Einstein representativa del sólido.
+        en: It is meaningful only for positive absolute temperatures and a representative Einstein frequency for the solid.
+    graph_rules:
+    - id: parametro_reducido_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica suele leerse de forma inversa a T/θ_E: valores grandes corresponden al extremo frío.'
+        en: 'On the graph it is usually read inversely to T/θ_E: large values correspond to the cold end.'
+    likely_errors:
+    - id: parametro_reducido_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[parametro_reducido]] con una lectura aislada es un error frecuente: No lo trates como temperatura
+          ni le asignes kelvin; es una razón adimensional.'
+        en: 'A common mistake is to interpret [[parametro_reducido]] in isolation: Do not treat it as a temperature or assign
+          kelvin to it; it is a dimensionless ratio.'
+    next_step_rules:
+    - id: parametro_reducido_next_step_interpret
+      when: 'true'
+      status: info
+      text:
+        es: Usa su tamaño para decidir si debes esperar C_Vm cercano a cero, en transición o cercano a 3R.
+        en: Use its size to decide whether C_Vm should be near zero, transitional, or close to 3R.
+    physical_intuition:
+    - id: parametro_reducido_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: 'Es el semáforo cuántico del modelo: grande bloquea excitaciones, pequeño las deja circular.'
+        en: 'It is the model''s quantum traffic light: large blocks excitations, small lets them pass.'
+    limiting_cases:
+    - id: parametro_reducido_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Cuando tiende a infinito, C_Vm tiende a cero; cuando tiende a cero, C_Vm tiende a 3R.
+        en: As it tends to infinity, C_Vm tends to zero; as it tends to zero, C_Vm tends to 3R.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_einstein:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro material
+      en: material parameter
+    summary_rules:
+    - id: temperatura_einstein_summary_regime
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_einstein]] representa la escala térmica asociada a la frecuencia vibracional característica.'
+        en: '[[temperatura_einstein]] represents the thermal scale associated with the characteristic vibrational frequency.'
+    physical_reading_rules:
+    - id: temperatura_einstein_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Una [[temperatura_einstein]] alta retrasa la activación térmica y desplaza la curva hacia temperaturas mayores.
+        en: A high [[temperatura_einstein]] delays thermal activation and shifts the curve toward higher temperatures.
+    coherence_rules:
+    - id: temperatura_einstein_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser positiva y compatible con ħω_E/k_B.
+        en: It must be positive and consistent with ħω_E/k_B.
+    model_validity_rules:
+    - id: temperatura_einstein_model_validity_einstein
+      when: 'true'
+      status: info
+      text:
+        es: Supone una sola frecuencia efectiva; en sólidos reales hay un espectro de frecuencias.
+        en: It assumes one effective frequency; real solids have a frequency spectrum.
+    graph_rules:
+    - id: temperatura_einstein_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: 'Controla la escala horizontal: T/θ_E compara temperatura del sólido y parámetro material.'
+        en: 'It controls the horizontal scale: T/θ_E compares the solid temperature and the material parameter.'
+    likely_errors:
+    - id: temperatura_einstein_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura_einstein]] con una lectura aislada es un error frecuente: No la confundas con la temperatura
+          del experimento; es una propiedad del modelo para el material.'
+        en: Do not confuse it with the experimental temperature; it is a model property for the material.
+    next_step_rules:
+    - id: temperatura_einstein_next_step_interpret
+      when: 'true'
+      status: info
+      text:
+        es: Si conoces ω_E, verifica θ_E=ħω_E/k_B antes de usarla en C_Vm.
+        en: If ω_E is known, verify θ_E=ħω_E/k_B before using it in C_Vm.
+    physical_intuition:
+    - id: temperatura_einstein_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Es la altura térmica que la energía disponible debe superar para excitar vibraciones.
+        en: It is the thermal height that available energy must overcome to excite vibrations.
+    limiting_cases:
+    - id: temperatura_einstein_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Si θ_E aumenta a T fija, el sólido queda más congelado y C_Vm disminuye.
+        en: If θ_E increases at fixed T, the solid becomes more frozen and C_Vm decreases.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable independiente
+      en: independent variable
+    summary_rules:
+    - id: temperatura_summary_regime
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] fija la energía térmica disponible para excitar los osciladores del sólido.'
+        en: '[[temperatura]] sets the thermal energy available to excite the solid''s oscillators.'
+    physical_reading_rules:
+    - id: temperatura_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Temperaturas mayores activan más modos vibracionales y aumentan C_Vm hasta la meseta clásica.
+        en: Higher temperatures activate more vibrational modes and increase C_Vm up to the classical plateau.
+    coherence_rules:
+    - id: temperatura_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Debe introducirse en kelvin y ser estrictamente positiva para que θ_E/T sea válido.
+        en: It must be entered in kelvin and be strictly positive for θ_E/T to be valid.
+    model_validity_rules:
+    - id: temperatura_model_validity_einstein
+      when: 'true'
+      status: info
+      text:
+        es: El modelo describe equilibrio térmico; no interpreta cambios bruscos fuera de equilibrio.
+        en: The model describes thermal equilibrium; it does not interpret abrupt nonequilibrium changes.
+    graph_rules:
+    - id: temperatura_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: Es el eje horizontal natural, normalmente normalizado como T/θ_E.
+        en: It is the natural horizontal axis, usually normalized as T/θ_E.
+    likely_errors:
+    - id: temperatura_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura]] con una lectura aislada es un error frecuente: No uses grados Celsius: el cero Celsius
+          no es cero térmico y deforma el exponencial.'
+        en: 'A common mistake is to interpret [[temperatura]] in isolation: Do not use Celsius: Celsius zero is not thermal
+          zero and distorts the exponential.'
+    next_step_rules:
+    - id: temperatura_next_step_interpret
+      when: 'true'
+      status: info
+      text:
+        es: Compárala con θ_E para clasificar el régimen de baja, media o alta temperatura.
+        en: Compare it with θ_E to classify the low-, intermediate-, or high-temperature regime.
+    physical_intuition:
+    - id: temperatura_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: T es la reserva térmica que intenta poner a vibrar los osciladores.
+        en: T is the thermal reservoir trying to set the oscillators vibrating.
+    limiting_cases:
+    - id: temperatura_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Al acercarse a cero, la capacidad calorífica tiende a anularse; a temperaturas muy altas aparece Dulong-Petit.
+        en: As it approaches zero, heat capacity tends to vanish; at very high temperatures Dulong-Petit appears.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  frecuencia_angular_einstein:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro microscópico
+      en: microscopic parameter
+    summary_rules:
+    - id: frecuencia_angular_einstein_summary_regime
+      when: 'true'
+      status: ok
+      text:
+        es: '[[frecuencia_angular_einstein]] fija la separación energética de los cuantos vibracionales.'
+        en: '[[frecuencia_angular_einstein]] sets the energy spacing of vibrational quanta.'
+    physical_reading_rules:
+    - id: frecuencia_angular_einstein_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Frecuencias mayores implican cuantos más energéticos y temperaturas de Einstein mayores.
+        en: Higher frequencies imply more energetic quanta and larger Einstein temperatures.
+    coherence_rules:
+    - id: frecuencia_angular_einstein_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser positiva y combinarse con ħ para producir energía.
+        en: It must be positive and combine with ħ to produce energy.
+    model_validity_rules:
+    - id: frecuencia_angular_einstein_model_validity_einstein
+      when: 'true'
+      status: info
+      text:
+        es: Representa una frecuencia efectiva; no sustituye al espectro fonónico completo.
+        en: It represents an effective frequency; it does not replace the full phonon spectrum.
+    graph_rules:
+    - id: frecuencia_angular_einstein_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: No suele ser eje directo, pero desplaza la curva al modificar θ_E.
+        en: It is not usually a direct axis, but shifts the curve by changing θ_E.
+    likely_errors:
+    - id: frecuencia_angular_einstein_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[frecuencia_angular_einstein]] con una lectura aislada es un error frecuente: No confundas frecuencia
+          angular con frecuencia ordinaria; faltaría el factor 2π.'
+        en: Do not confuse angular frequency with ordinary frequency; the factor 2π would be missing.
+    next_step_rules:
+    - id: frecuencia_angular_einstein_next_step_interpret
+      when: 'true'
+      status: info
+      text:
+        es: Conviértela en θ_E mediante ħω_E/k_B para interpretar el régimen térmico.
+        en: Convert it into θ_E using ħω_E/k_B to interpret the thermal regime.
+    physical_intuition:
+    - id: frecuencia_angular_einstein_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Es el ritmo microscópico de los osciladores encerrado en el parámetro térmico.
+        en: It is the microscopic rhythm of the oscillators encoded in the thermal parameter.
+    limiting_cases:
+    - id: frecuencia_angular_einstein_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Si ω_E tiende a cero, el modelo pierde la escala cuántica característica; si crece mucho, la activación se dificulta.
+        en: If ω_E tends to zero, the model loses its characteristic quantum scale; if it grows a lot, activation becomes
+          harder.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  calor_especifico_molar_volumen_constante:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable dependiente principal
+      en: main dependent variable
+    summary_rules:
+    - id: calor_especifico_molar_volumen_constante_summary_regime
+      when: 'true'
+      status: ok
+      text:
+        es: '[[calor_especifico_molar_volumen_constante]] indica cuánto aumenta la energía molar al subir la temperatura a
+          volumen constante.'
+        en: '[[calor_especifico_molar_volumen_constante]] indicates how much molar energy increases when temperature rises
+          at constant volume.'
+    physical_reading_rules:
+    - id: calor_especifico_molar_volumen_constante_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: En el modelo de Einstein crece desde casi cero y se aproxima a 3R cuando T supera claramente a θ_E.
+        en: In the Einstein model it rises from nearly zero and approaches 3R when T clearly exceeds θ_E.
+    coherence_rules:
+    - id: calor_especifico_molar_volumen_constante_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser no negativo, tener unidades J mol^-1 K^-1 y no superar de forma apreciable el límite 3R del modelo.
+        en: It must be nonnegative, have J mol^-1 K^-1 units, and not appreciably exceed the model's 3R limit.
+    model_validity_rules:
+    - id: calor_especifico_molar_volumen_constante_model_validity_einstein
+      when: 'true'
+      status: info
+      text:
+        es: La predicción es útil para mostrar congelación cuántica, aunque falla en la ley T^3 de muy baja temperatura.
+        en: The prediction is useful to show quantum freezing, although it fails in the very-low-temperature T^3 law.
+    graph_rules:
+    - id: calor_especifico_molar_volumen_constante_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: Es la magnitud del eje vertical; su curvatura responde directamente a la pregunta central del leaf.
+        en: It is the vertical-axis quantity; its curvature directly answers the leaf's central question.
+    likely_errors:
+    - id: calor_especifico_molar_volumen_constante_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[calor_especifico_molar_volumen_constante]] con una lectura aislada es un error frecuente: No confundas
+          C_Vm con C_V total ni olvides normalizar por mol si comparas con 3R.'
+        en: Do not confuse C_Vm with total C_V or forget molar normalization when comparing with 3R.
+    next_step_rules:
+    - id: calor_especifico_molar_volumen_constante_next_step_interpret
+      when: 'true'
+      status: info
+      text:
+        es: Compara el resultado con 3R y con la zona de la curva donde cae el punto T/θ_E.
+        en: Compare the result with 3R and with the curve region where the point T/θ_E falls.
+    physical_intuition:
+    - id: calor_especifico_molar_volumen_constante_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Mide cuánta facilidad tiene el sólido para guardar calor vibracional por cada mol.
+        en: It measures how easily the solid stores vibrational heat per mole.
+    limiting_cases:
+    - id: calor_especifico_molar_volumen_constante_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Tiende a cero para T≪θ_E y a 3R para T≫θ_E.
+        en: It tends to zero for T≪θ_E and to 3R for T≫θ_E.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_interna:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: energía interna vibracional
+      en: vibrational internal energy
+    summary_rules:
+    - id: energia_interna_summary_regime
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_interna]] recoge la energía vibracional media almacenada en los osciladores de Einstein.'
+        en: '[[energia_interna]] collects the mean vibrational energy stored in Einstein oscillators.'
+    physical_reading_rules:
+    - id: energia_interna_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Crece con la temperatura porque aumenta la ocupación media de los niveles vibracionales.
+        en: It grows with temperature because the mean occupation of vibrational levels increases.
+    coherence_rules:
+    - id: energia_interna_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser positiva y escalar con [[numero_atomos]], ħ y [[frecuencia_angular_einstein]].
+        en: It must be positive and scale with [[numero_atomos]], ħ, and [[frecuencia_angular_einstein]].
+    model_validity_rules:
+    - id: energia_interna_model_validity_einstein
+      when: 'true'
+      status: info
+      text:
+        es: Incluye la descripción de osciladores armónicos independientes en equilibrio térmico.
+        en: It includes the description of independent harmonic oscillators in thermal equilibrium.
+    graph_rules:
+    - id: energia_interna_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: Su derivada respecto a T se conecta con la capacidad calorífica.
+        en: Its derivative with respect to T connects to heat capacity.
+    likely_errors:
+    - id: energia_interna_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_interna]] con una lectura aislada es un error frecuente: No identifiques energía interna
+          con calor transferido; el calor depende del proceso.'
+        en: 'A common mistake is to interpret [[energia_interna]] in isolation: Do not identify internal energy with transferred
+          heat; heat depends on the process.'
+    next_step_rules:
+    - id: energia_interna_next_step_interpret
+      when: 'true'
+      status: info
+      text:
+        es: Deriva U respecto a T a volumen constante si quieres recuperar C_V.
+        en: Differentiate U with respect to T at constant volume to recover C_V.
+    physical_intuition:
+    - id: energia_interna_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Es la batería vibracional microscópica del sólido.
+        en: It is the solid's microscopic vibrational battery.
+    limiting_cases:
+    - id: energia_interna_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: A temperaturas altas crece aproximadamente de forma lineal con T; a bajas temperaturas queda dominada por la baja
+          ocupación.
+        en: At high temperature it grows approximately linearly with T; at low temperature it is dominated by low occupation.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  capacidad_calorifica_volumen_constante:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: capacidad calorífica total
+      en: total heat capacity
+    summary_rules:
+    - id: capacidad_calorifica_volumen_constante_summary_regime
+      when: 'true'
+      status: ok
+      text:
+        es: '[[capacidad_calorifica_volumen_constante]] es la respuesta térmica total del conjunto de átomos del sólido.'
+        en: '[[capacidad_calorifica_volumen_constante]] is the total thermal response of the solid''s atoms.'
+    physical_reading_rules:
+    - id: capacidad_calorifica_volumen_constante_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Aumenta con el número de átomos y con la activación térmica de los osciladores.
+        en: It increases with the number of atoms and with thermal activation of the oscillators.
+    coherence_rules:
+    - id: capacidad_calorifica_volumen_constante_coherence_units_sign
+      when: 'true'
+      status: ok
+      text:
+        es: Debe escalar con [[numero_atomos]] y conservar unidades J K^-1.
+        en: It must scale with [[numero_atomos]] and keep J K^-1 units.
+    model_validity_rules:
+    - id: capacidad_calorifica_volumen_constante_model_validity_einstein
+      when: 'true'
+      status: info
+      text:
+        es: Se interpreta para un sistema cerrado de osciladores idénticos a volumen constante.
+        en: It is interpreted for a closed system of identical oscillators at constant volume.
+    graph_rules:
+    - id: capacidad_calorifica_volumen_constante_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: No siempre aparece como eje, pero tiene la misma dependencia térmica que C_Vm con otra escala.
+        en: It is not always an axis, but has the same thermal dependence as C_Vm with another scale.
+    likely_errors:
+    - id: capacidad_calorifica_volumen_constante_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[capacidad_calorifica_volumen_constante]] con una lectura aislada es un error frecuente: No compares
+          directamente C_V total con 3R, porque 3R es molar.'
+        en: 'A common mistake is to interpret [[capacidad_calorifica_volumen_constante]] in isolation: Do not directly compare
+          total C_V with 3R, because 3R is molar.'
+    next_step_rules:
+    - id: capacidad_calorifica_volumen_constante_next_step_interpret
+      when: 'true'
+      status: info
+      text:
+        es: Si necesitas comparar materiales, conviértela a magnitud molar o fija el número de partículas.
+        en: If comparing materials, convert it to a molar quantity or fix the number of particles.
+    physical_intuition:
+    - id: capacidad_calorifica_volumen_constante_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Es la versión macroscópica de la capacidad de almacenamiento vibracional.
+        en: It is the macroscopic version of vibrational storage capacity.
+    limiting_cases:
+    - id: capacidad_calorifica_volumen_constante_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Se anula a baja temperatura ideal y tiende a 3Nk_B a alta temperatura.
+        en: It vanishes at ideal low temperature and tends to 3Nk_B at high temperature.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

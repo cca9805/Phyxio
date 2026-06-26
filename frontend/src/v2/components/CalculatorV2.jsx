@@ -1,13 +1,107 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
-import Latex from "react-latex-next";
+import Latex from "./shared/SafeLatex.jsx";
 import AngleConverterDetails from "../components/AngleConverterDetails.animated.jsx";
 import { solveEquation } from "../engine/solve.js";
 import { create, all } from "mathjs";
+import { getUiLanguage } from "../utils/uiLanguage";
 
 const math = create(all);
 
+const UI_TEXT = {
+  es: {
+    markedNonCalculable: "Marcada como no calculable.",
+    unsupportedEquation: "Esta formula usa una integral u otro operador no soportado por esta calculadora.",
+    reasonReadOnly: "Formula de referencia en modo lectura (sin despeje operativo en esta calculadora).",
+    reasonDescriptive: "Formula conceptual/descriptiva: requiere planteamiento adicional para calcular.",
+    reasonInfo: "Formula informativa: no se evalua numericamente en esta vista.",
+    reasonConceptual: "Formula conceptual: no se evalua numericamente en esta vista.",
+    legendVariables: "Leyenda de variables",
+    groupDefault: "Grupo",
+    otherFormulas: "Otras formulas del tema",
+    formulaNotCalculable: "Esta f\u00f3rmula no es calculable",
+    selectTargetVariable: "Selecciona qu\u00e9 variable quieres despejar.",
+    missingEquationOrTarget: "Falta equation o target.",
+    missingValueOf: "Falta el valor de",
+    stepFormula: "F\u00f3rmula",
+    stepSubstitution: "Sustituci\u00f3n",
+    stepResult: "Resultado",
+    stepDefault: "Paso",
+    formulas: "F\u00f3rmulas",
+    calculator: "Calculadora",
+    data: "Datos:",
+    gravitySelector: "Selector de gravedad",
+    enterG: "Introduce g",
+    commaTip: "Consejo: puedes escribir con coma o punto.",
+    useStandardG: "Usar G estandar",
+    recommendedValue: "Valor recomendado",
+    calculate: "Calcular",
+    clear: "Limpiar",
+    viewInterpretation: "Ver interpretación",
+    result: "Resultado",
+    viewResolutionSteps: "Ver pasos de la resoluci\u00f3n",
+    error: "Error",
+    cannotCalculate: "No se pudo calcular.",
+    enterDataAndCalculate: "Introduce los datos necesarios y pulsa",
+    custom: "Personalizada",
+    earth: "Tierra",
+    moon: "Luna",
+    mercury: "Mercurio",
+    venus: "Venus",
+    mars: "Marte",
+    jupiter: "J\u00fapiter",
+    saturn: "Saturno",
+    uranus: "Urano",
+    neptune: "Neptuno",
+  },
+  en: {
+    markedNonCalculable: "Marked as non-calculable.",
+    unsupportedEquation: "This formula uses an integral or another operator that is not supported by this calculator.",
+    reasonReadOnly: "Reference formula in read-only mode (no operational rearrangement in this calculator).",
+    reasonDescriptive: "Conceptual/descriptive formula: additional setup is required to compute.",
+    reasonInfo: "Informative formula: it is not numerically evaluated in this view.",
+    reasonConceptual: "Conceptual formula: it is not numerically evaluated in this view.",
+    legendVariables: "Variable legend",
+    groupDefault: "Group",
+    otherFormulas: "Other formulas in this topic",
+    formulaNotCalculable: "This formula is not calculable",
+    selectTargetVariable: "Select the variable you want to solve for.",
+    missingEquationOrTarget: "Missing equation or target.",
+    missingValueOf: "Missing value for",
+    stepFormula: "Formula",
+    stepSubstitution: "Substitution",
+    stepResult: "Result",
+    stepDefault: "Step",
+    formulas: "Formulas",
+    calculator: "Calculator",
+    data: "Data:",
+    gravitySelector: "Gravity selector",
+    enterG: "Enter g",
+    commaTip: "Tip: you can type with comma or dot.",
+    useStandardG: "Use standard G",
+    recommendedValue: "Recommended value",
+    calculate: "Calculate",
+    clear: "Clear",
+    viewInterpretation: "View interpretation",
+    result: "Result",
+    viewResolutionSteps: "View solution steps",
+    error: "Error",
+    cannotCalculate: "Could not calculate.",
+    enterDataAndCalculate: "Enter the required data and press",
+    custom: "Custom",
+    earth: "Earth",
+    moon: "Moon",
+    mercury: "Mercury",
+    venus: "Venus",
+    mars: "Mars",
+    jupiter: "Jupiter",
+    saturn: "Saturn",
+    uranus: "Uranus",
+    neptune: "Neptune",
+  },
+};
+
 // ---------------------------
-// Helpers de datos (fuente única: magnitudes, fallback variables)
+// Helpers de datos (fuente unica: magnitudes, fallback variables)
 // ---------------------------
 
 function humanLabel(v) {
@@ -24,8 +118,15 @@ function unitOf(list, id) {
 
 function symbolOf(list, id) {
   const v = (Array.isArray(list) ? list : []).find((x) => x?.id === id);
-  // symbol suele venir tipo "\\omega" o "v_{cm}" según tu YAML
-  return v?.symbol || id;
+  // symbol suele venir tipo "\\omega" o "v_{cm}" segun tu YAML
+  return v?.symbol || v?.simbolo || id;
+}
+
+function renderVariableLabel(dict, id) {
+  const symbol = symbolOf(dict, id);
+  if (symbol) return <Latex>{`$${symbol}$`}</Latex>;
+  const fallback = legendLabelOf(dict, id);
+  return <>{fallback || id}</>;
 }
 
 function legendLabelOf(list, id) {
@@ -33,19 +134,19 @@ function legendLabelOf(list, id) {
   return humanLabel(v) || id;
 }
 
-// Ángulos: detectamos por id típico y/o por unidad en el diccionario
+// Angulos: detectamos por id tipico y/o por unidad en el diccionario
 function isAngleVarId(id, dict) {
   const sid = String(id || "");
   const u = String(unitOf(dict || [], sid) || "").toLowerCase();
   if (u === "rad" || u === "radian" || u === "radianes") return true;
-  return ["theta", "alpha", "phi", "beta"].includes(sid);
+  return ["theta", "alpha", "phi"].includes(sid);
 }
 
 /**
- * Parseo de números "modo España"
+ * Parseo de numeros "modo Espana"
  * - acepta coma decimal: "9,8"
  * - acepta espacios de miles: "12 500,3"
- * - intenta tolerar "12.500,3" (EU) y "12,500.3" (US) eligiendo el separador decimal más a la derecha
+ * - intenta tolerar "12.500,3" (EU) y "12,500.3" (US) eligiendo el separador decimal mas a la derecha
  */
 function parseLocaleNumber(v) {
   if (v == null) return NaN;
@@ -55,7 +156,7 @@ function parseLocaleNumber(v) {
   // quitar espacios (miles con espacio)
   s = s.replace(/\s+/g, "");
 
-  // si contiene coma y punto, tomamos como decimal el último que aparezca
+  // si contiene coma y punto, tomamos como decimal el ultimo que aparezca
   const hasComma = s.includes(",");
   const hasDot = s.includes(".");
   if (hasComma && hasDot) {
@@ -78,7 +179,7 @@ function parseLocaleNumber(v) {
   return Number.isFinite(n) ? n : NaN;
 }
 
-// Formato agradable: hasta 6 decimales, sin ceros finales, sin notación rara si no hace falta
+// Formato agradable: hasta 6 decimales, sin ceros finales, sin notacion rara si no hace falta
 function formatNumberSmart(x, maxDecimals = 6) {
   if (!Number.isFinite(x)) return "";
   const abs = Math.abs(x);
@@ -87,7 +188,7 @@ function formatNumberSmart(x, maxDecimals = 6) {
   return fixed.replace(/\.?0+$/, "");
 }
 
-// Extrae símbolos (variables) de una ecuación mathjs del tipo "x = x0 + v*t"
+// Extrae simbolos (variables) de una ecuacion mathjs del tipo "x = x0 + v*t"
 function extractSymbols(equation) {
   try {
     if (!equation) return [];
@@ -99,12 +200,20 @@ function extractSymbols(equation) {
 
     const symbols = new Set();
     const banned = new Set(["e", "pi", "tau", "Infinity", "NaN"]);
+    const functionNames = new Set();
+
+    node.traverse((n) => {
+      if (!n?.isFunctionNode) return;
+      const fnName = n.fn?.name;
+      if (fnName) functionNames.add(String(fnName));
+    });
 
     node.traverse((n) => {
       if (!n.isSymbolNode) return;
       const name = n.name;
 
       if (banned.has(name)) return;
+      if (functionNames.has(name)) return;
       // excluye funciones/constantes conocidas por mathjs
       if (typeof math[name] === "function") return;
       if (typeof math[name] === "number") return;
@@ -119,37 +228,87 @@ function extractSymbols(equation) {
   }
 }
 
-function isFormulaMarkedNonCalculable(formula) {
+function hasUnsupportedOperators(equation) {
+  return /\bintegral\s*\(/i.test(String(equation || ""));
+}
+
+function toVarIdList(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((v) => (typeof v === "string" ? v : v?.id))
+    .filter(Boolean)
+    .map(String);
+}
+
+function getNonCalculableReasonText(reasonNode, lang = "es") {
+  if (typeof reasonNode === "string") return reasonNode.trim();
+  if (!reasonNode || typeof reasonNode !== "object" || Array.isArray(reasonNode)) return "";
+
+  const preferred =
+    lang === "en"
+      ? reasonNode?.en ?? reasonNode?.es
+      : reasonNode?.es ?? reasonNode?.en;
+
+  return typeof preferred === "string" ? preferred.trim() : "";
+}
+
+function isGenericNonCalculablePlaceholder(reason = "") {
+  const normalized = String(reason || "").trim().toLowerCase();
+  return (
+    normalized === "requires problem-specific boundary conditions." ||
+    normalized === "requires problem-specific boundary conditions"
+  );
+}
+
+function isFormulaMarkedNonCalculable(formula, lang = "es") {
   if (!formula) return false;
   const status = String(formula?.status || "").toLowerCase();
+  const reason = getNonCalculableReasonText(formula?.motivo_no_calculable, lang);
+  const hasOperationalRearrangements =
+    Array.isArray(formula?.rearrangements) &&
+    formula.rearrangements.some((r) => r?.target && r?.equation);
+
+  // Compatibilidad con datasets inconsistentes:
+  // status=calculable + despejes operativos debe calcularse.
+  if (status === "calculable" && hasOperationalRearrangements) return false;
+
+  // Si el contenido marca explícitamente una formula como calculable,
+  // no debe bloquearse por motivos residuales heredados en YAML.
+  if (formula?.calculable === true) return false;
   if (formula?.calculable === false) return true;
-  if (typeof formula?.motivo_no_calculable === "string" && formula.motivo_no_calculable.trim()) return true;
+
+  // Ignora placeholder generico heredado cuando no hay otra señal de bloqueo real.
+  if (isGenericNonCalculablePlaceholder(reason)) return false;
+  if (reason) return true;
   if (Array.isArray(formula?.why_not) && formula.why_not.length > 0) return true;
   return status === "read_only" || status === "descriptive" || status === "info" || status === "conceptual";
 }
 
-function nonCalculableReason(formula) {
-  if (!formula) return "Marcada como no calculable.";
-  const reason = formula?.motivo_no_calculable;
-  if (typeof reason === "string" && reason.trim()) return reason.trim();
+function nonCalculableReason(formula, lang = "es", equation = "") {
+  const t = UI_TEXT[lang] || UI_TEXT.es;
+  if (!formula) return t.markedNonCalculable;
+  if (hasUnsupportedOperators(equation)) return t.unsupportedEquation;
+  const reason = getNonCalculableReasonText(formula?.motivo_no_calculable, lang);
+  if (reason) return reason;
   if (Array.isArray(formula?.why_not) && formula.why_not.length > 0) {
     return formula.why_not.map((x) => String(x || "").trim()).filter(Boolean).join(" ");
   }
   const status = String(formula?.status || "").toLowerCase();
-  if (status === "read_only") return "Formula de referencia en modo lectura (sin despeje operativo en esta calculadora).";
-  if (status === "descriptive") return "Formula conceptual/descriptiva: requiere planteamiento adicional para calcular.";
-  if (status === "info") return "Formula informativa: no se evalua numericamente en esta vista.";
-  if (status === "conceptual") return "Formula conceptual: no se evalua numericamente en esta vista.";
-  return "Marcada como no calculable.";
+  if (status === "read_only") return t.reasonReadOnly;
+  if (status === "descriptive") return t.reasonDescriptive;
+  if (status === "info") return t.reasonInfo;
+  if (status === "conceptual") return t.reasonConceptual;
+  return t.markedNonCalculable;
 }
 
 // ---------------------------
 // UI pieces
 // ---------------------------
 
-function FormulaLegend({ dict, symbolIds }) {
+function FormulaLegend({ dict, symbolIds, title }) {
   const ids = Array.isArray(symbolIds) ? symbolIds : [];
   if (ids.length === 0) return null;
+  const legendTitle = title || UI_TEXT.es.legendVariables;
 
   const byId = new Map((Array.isArray(dict) ? dict : []).map((m) => [String(m.id), m]));
 
@@ -161,13 +320,13 @@ function FormulaLegend({ dict, symbolIds }) {
   return (
     <div className="v2-formula-legend" style={{ marginTop: 10 }}>
       <div className="muted" style={{ fontWeight: 600, marginBottom: 6 }}>
-        Leyenda de variables
+        {legendTitle}
       </div>
 
       <div style={{ display: "grid", gap: 10 }}>
         {ordered.map((id) => {
           const m = byId.get(id) || {};
-          const sym = m.symbol || id;
+          const sym = m.symbol || m.simbolo || "";
           const nombreRaw = m.nombre || m.name || id;
           const nombre = String(nombreRaw).replace(/_/g, " ").trim();
           const nombrePretty = nombre ? nombre.charAt(0).toUpperCase() + nombre.slice(1) : id;
@@ -178,7 +337,7 @@ function FormulaLegend({ dict, symbolIds }) {
             <div key={id} style={{ display: "grid", gap: 2 }}>
               <div style={{ display: "flex", gap: 10, alignItems: "baseline", flexWrap: "wrap" }}>
                 <span style={{ fontWeight: 800 }}>
-                  <Latex>{`$${sym}$`}</Latex>
+                  {sym ? <Latex>{`$${sym}$`}</Latex> : id}
                 </span>
                 <span style={{ fontWeight: 700 }}>{nombrePretty}</span>
                 {unit ? (
@@ -226,7 +385,7 @@ const GRAVITY_PRESETS = [
   { id: "mercury", name: "Mercurio", g: 3.7 },
   { id: "venus", name: "Venus", g: 8.87 },
   { id: "mars", name: "Marte", g: 3.71 },
-  { id: "jupiter", name: "Júpiter", g: 24.79 },
+  { id: "jupiter", name: "J\u00fapiter", g: 24.79 },
   { id: "saturn", name: "Saturno", g: 10.44 },
   { id: "uranus", name: "Urano", g: 8.69 },
   { id: "neptune", name: "Neptuno", g: 11.15 },
@@ -234,15 +393,30 @@ const GRAVITY_PRESETS = [
 
 const PHYS_CONSTANT_DEFAULTS = {
   G: "6.67430e-11",
+  kB: "1.380649e-23",
+  hbar: "1.054571817e-34",
+  h: "6.62607015e-34",
+  c: "299792458",
+  NA: "6.02214076e23",
+  R: "8.314462618",
+  mu0: "1.25663706212e-6",
+  eps0: "8.8541878128e-12",
 };
+
+const NON_TARGET_SYMBOLS = new Set([...Object.keys(PHYS_CONSTANT_DEFAULTS)]);
 
 export default function CalculatorV2({
   formulasDoc,
-  magnitudesDoc, // ✅ NUEVO (opcional): { magnitudes: [...] } desde magnitudes.yaml
-  magnitudes,    // ✅ NUEVO (opcional): lista directa
+  magnitudesDoc, // NUEVO (opcional): { magnitudes: [...] } desde magnitudes.yaml
+  magnitudes,    // NUEVO (opcional): lista directa
+  interpretationDoc,
+  leafMeta,
   sharedParams,
   onSharedParamsChange,
+  onOpenInterpretation,
 }) {
+  const lang = getUiLanguage();
+  const t = UI_TEXT[lang] || UI_TEXT.es;
   const formulas = formulasDoc?.formulas || [];
   const variables = formulasDoc?.variables || [];
   const groups = Array.isArray(formulasDoc?.ui?.groups) ? formulasDoc.ui.groups : null;
@@ -260,7 +434,7 @@ export default function CalculatorV2({
 
     const varList = Array.isArray(variables) ? variables : [];
 
-    // DEBUG útil: si estás cayendo a variables, lo verás en consola
+    // DEBUG util: si estas cayendo a variables, lo veras en consola
     const usingMagnitudes = magList.length > 0;
     if (!usingMagnitudes && varList.length > 0) {
       console.warn("[CalculatorV2] Leyenda usando formulasDoc.variables (fallback). Pasa magnitudes.yaml para nombre/descripcion.");
@@ -283,7 +457,7 @@ export default function CalculatorV2({
       const id = String(v.id);
       const prev = map.get(id) || {};
       map.set(id, {
-        ...v,         // añade si_unit/symbol si faltasen
+        ...v,         // anade si_unit/symbol si faltasen
         ...prev,      // prev gana (magnitudes gana)
         id,
       });
@@ -291,14 +465,6 @@ export default function CalculatorV2({
 
     return Array.from(map.values());
   }, [magnitudesDoc, magnitudes, variables]);
-
-
-
-  // Set de ids válidos (filtra símbolos "raros")
-  const variableIdSet = useMemo(() => {
-    const ids = (Array.isArray(dict) ? dict : []).map((v) => String(v?.id || ""));
-    return new Set(ids.filter(Boolean));
-  }, [dict]);
 
   const defaultFormulaId = formulasDoc?.ui?.default_formula || formulas[0]?.id;
 
@@ -318,13 +484,13 @@ export default function CalculatorV2({
   const [known, setKnown] = useState({});
   const [result, setResult] = useState(null);
 
-  // Unidad de entrada para ángulos (por defecto grados)
+  // Unidad de entrada para angulos (por defecto grados)
   const [angleUnits, setAngleUnits] = useState({ theta: "deg", alpha: "deg", phi: "deg" });
 
   const gInputRef = useRef(null);
   const [gravityPresetId, setGravityPresetId] = useState(null);
 
-  // Para evitar que sharedParams machaque lo que el usuario está escribiendo
+  // Para evitar que sharedParams machaque lo que el usuario esta escribiendo
   const editingRef = useRef(false);
   const lastSeedKeyRef = useRef("");
 
@@ -340,7 +506,7 @@ export default function CalculatorV2({
     }
     setKnown(seed);
   }, []);
-  // A) Seed al cambiar de fórmula (solo por fórmula)
+  // A) Seed al cambiar de formula (solo por formula)
   useEffect(() => {
     const arr = Array.isArray(formula?.rearrangements) ? formula.rearrangements : [];
     setTarget(arr[0]?.target || "");
@@ -350,67 +516,120 @@ export default function CalculatorV2({
 
     reseedFromSharedParams(sharedParams);
     lastSeedKeyRef.current = JSON.stringify(sharedParams || {});
-    // ⚠️ NO sharedParams en deps
+    // IMPORTANTE: NO sharedParams en deps
   }, [formulaId, formula, reseedFromSharedParams]);
 
   // B) Si cambian sharedParams (desde fuera), re-seed SOLO si no se edita
   useEffect(() => {
     const key = JSON.stringify(sharedParams || {});
     if (key === lastSeedKeyRef.current) return;        // nada nuevo
-    if (editingRef.current) return;                    // el usuario está tocando inputs
+    if (editingRef.current) return;                    // el usuario esta tocando inputs
 
     reseedFromSharedParams(sharedParams);
     lastSeedKeyRef.current = key;
-
-    // ⚠️ aquí NO se hace setResult(null), NO setTarget(...)
   }, [sharedParams, reseedFromSharedParams]);
+
+  // C) Extraer el target natural (LHS) de la ecuacion base
+  const baseLhs = useMemo(() => {
+    const eq = String(formula?.equation || "").trim();
+    if (!eq.includes("=")) return null;
+    const lhs = eq.split("=")[0].trim();
+    // Limpiamos posibles potencias simples tipo v^2 -> v
+    return lhs.replace(/\^2$/, "").trim();
+  }, [formula?.equation]);
+
 
 
 
   const rearrangements = useMemo(() => {
     const formulaLevel = Array.isArray(formula?.rearrangements) ? formula.rearrangements : [];
-    if (formulaLevel.length > 0) return formulaLevel;
+    const baseEq = String(formula?.equation || "").trim();
+    
+    let result = [];
 
-    const docLevelAll = Array.isArray(formulasDoc?.rearrangements) ? formulasDoc.rearrangements : [];
-    if (docLevelAll.length === 0) return [];
+    if (formulaLevel.length > 0) {
+      // Si hay despejes en el YAML, los usamos como base
+      result = formulaLevel.map(r => ({
+        target: r.target,
+        equation: r.equation || baseEq,
+        latex: r.latex || formula?.latex || baseEq,
+        constraints: r.constraints || [],
+        variables: r.variables,
+      }));
+    } else if (baseEq) {
+      // Auto-generacion si no hay nada
+      let targets = toVarIdList(formula?.variables);
+      if (!targets.length) targets = extractSymbols(baseEq);
+      targets = targets.filter((id) => !NON_TARGET_SYMBOLS.has(String(id)));
 
-    const docLevelScoped = docLevelAll.filter((r) => {
-      const owner = r?.formula_id ?? r?.formulaId ?? r?.formula;
-      return owner && formula?.id && String(owner) === String(formula.id);
-    });
-    if (docLevelScoped.length > 0) return docLevelScoped;
+      const seen = new Set();
+      const uniqueTargets = targets.filter((id) => id && !seen.has(id) && (seen.add(id), true));
+      result = uniqueTargets.map((id) => ({
+        target: id,
+        equation: baseEq, 
+        latex: formula?.latex || baseEq,
+      }));
+    }
 
-    // Compatibilidad con schema antiguo: un solo formula + rearrangements al nivel raiz.
-    if ((formulas || []).length === 1) return docLevelAll;
-    return [];
-  }, [formula, formulasDoc, formulas]);
+    // SIEMPRE asegurar que el miembro izquierdo (LHS) este presente si es calculable
+    if (baseLhs && !NON_TARGET_SYMBOLS.has(baseLhs)) {
+      if (!result.some(r => r.target === baseLhs)) {
+          result.unshift({
+            target: baseLhs,
+            equation: baseEq,
+            latex: formula?.latex || baseEq
+          });
+      }
+    }
 
-  // Target seguro
-  const safeTarget = target || rearrangements[0]?.target || "";
+    return result;
+  }, [formula, formulasDoc, formulas, baseLhs]);
+
+  // Target seguro: valida que el target pertenezca a la formula actual
+  const safeTarget = useMemo(() => {
+    if (target && rearrangements.some(r => r.target === target)) return target;
+    return rearrangements[0]?.target || "";
+  }, [target, rearrangements]);
 
   // Despeje activo
-  const activeRearr =
-    rearrangements.find((r) => r.target === safeTarget) || rearrangements[0] || null;
+  const activeRearr = useMemo(() => {
+    return rearrangements.find((r) => r.target === safeTarget) || rearrangements[0] || null;
+  }, [rearrangements, safeTarget]);
 
-  // Usamos la ecuación del despeje activo si existe; si no, fallback a la ecuación base
+  // Usamos la ecuacion del despeje activo si existe; si no, fallback a la ecuacion base
   const equation = activeRearr?.equation || formula?.equation || "";
 
-  // Inputs requeridos: símbolos de la ecuación, filtrados por ids válidos, excluyendo incógnita
-  const needed = useMemo(() => {
-    const ids = extractSymbols(equation);
-    const filtered = ids.filter((id) => variableIdSet.has(String(id)));
-    return safeTarget ? filtered.filter((id) => id !== safeTarget) : filtered;
-  }, [equation, safeTarget, variableIdSet]);
 
-  // Leyenda base: usa ecuación base y filtra por ids válidos
+  // Inputs requeridos: simbolos de la ecuacion, filtrados por ids validos, excluyendo incognita
+  const needed = useMemo(() => {
+    let ids = extractSymbols(equation);
+    if (!ids.length) ids = toVarIdList(activeRearr?.variables);
+    if (!ids.length) ids = toVarIdList(formula?.variables);
+
+    const seen = new Set();
+    const filtered = ids
+      .map(String)
+      .filter((id) => !seen.has(id) && (seen.add(id), true));
+    return safeTarget ? filtered.filter((id) => id !== safeTarget) : filtered;
+  }, [equation, safeTarget, activeRearr, formula]);
+
+  // Leyenda base: usa ecuacion base y filtra por ids validos
   const baseLegendIds = useMemo(() => {
     const eq = formula?.equation || formula?.rearrangements?.[0]?.equation || "";
-    const ids = extractSymbols(eq);
-    return ids.filter((id) => variableIdSet.has(String(id)));
-  }, [formula, variableIdSet]);
+    let ids = extractSymbols(eq);
+    if (!ids.length) ids = toVarIdList(formula?.variables);
+    return ids.map(String);
+  }, [formula]);
 
-  // Leyenda del despeje activo: usa los mismos ids que "Datos"
-  const rearrLegendIds = needed;
+  // Leyenda del despeje activo: incluye variable seleccionada + datos requeridos
+  const rearrLegendIds = useMemo(() => {
+    const seen = new Set();
+    return [safeTarget, ...needed]
+      .map(String)
+      .filter((id) => id)
+      .filter((id) => !seen.has(id) && (seen.add(id), true));
+  }, [safeTarget, needed]);
+
 
   const hasEquation = Boolean(activeRearr?.equation || formula?.equation);
 
@@ -423,30 +642,42 @@ export default function CalculatorV2({
           .map((id) => formulas.find((f) => f?.id === id))
           .filter(Boolean);
         for (const f of items) usedIds.add(f.id);
-        return { title: g?.title || "Grupo", items };
+        return { title: g?.title || t.groupDefault, items };
       })
       .filter((g) => g.items.length > 0);
 
     const ungrouped = formulas.filter((f) => f?.id && !usedIds.has(f.id));
     if (ungrouped.length > 0) {
       normalizedGroups.push({
-        title: "Otras formulas del tema",
+        title: t.otherFormulas,
         items: ungrouped,
       });
     }
     return normalizedGroups;
-  }, [groups, formulas]);
+  }, [groups, formulas, t.groupDefault, t.otherFormulas]);
 
-  // Fórmula no calculable
-  const isNonCalculable = isFormulaMarkedNonCalculable(formula);
-  const isNonCalculableReason = nonCalculableReason(formula);
+  // Formula no calculable
+  const equationHasUnsupportedOperators = hasUnsupportedOperators(equation);
+  const isNonCalculable = isFormulaMarkedNonCalculable(formula, lang) || equationHasUnsupportedOperators;
+  const isNonCalculableReason = nonCalculableReason(formula, lang, equation);
 
   const canCompute =
     !isNonCalculable &&
     hasEquation &&
     safeTarget &&
     needed.length > 0 &&
-    needed.every((k) => Number.isFinite(parseLocaleNumber(known[k])));
+    needed.every((k) => {
+      const direct = parseLocaleNumber(known[k]);
+      if (Number.isFinite(direct)) return true;
+
+      // Fallback termodinamico: beta puede derivarse desde T y kB
+      if (k === "beta") {
+        const t = parseLocaleNumber(known.T);
+        const kb = parseLocaleNumber(known.kB ?? PHYS_CONSTANT_DEFAULTS.kB);
+        return Number.isFinite(t) && t !== 0 && Number.isFinite(kb);
+      }
+      return false;
+    });
 
   // Si la formula requiere constantes fisicas conocidas (ej. G), las pre-rellena.
   useEffect(() => {
@@ -471,32 +702,51 @@ export default function CalculatorV2({
     if (!formula) return;
 
     if (isNonCalculable) {
-      setResult({ ok: false, error: "Esta fórmula está marcada como no calculable." });
+      setResult({ ok: false, error: t.markedNonCalculable });
       return;
     }
 
     const tSel = safeTarget;
     if (!tSel) {
-      setResult({ ok: false, error: "Selecciona qué variable quieres despejar." });
+      setResult({ ok: false, error: t.selectTargetVariable });
       return;
     }
     if (tSel !== target) setTarget(tSel);
 
     if (!activeRearr?.equation || !activeRearr?.target) {
-      setResult({ ok: false, error: "Falta equation o target." });
+      setResult({ ok: false, error: t.missingEquationOrTarget });
       return;
     }
 
+    const knownPrepared = { ...known };
+    for (const id of needed) {
+      if (Number.isFinite(parseLocaleNumber(knownPrepared[id]))) continue;
+      const def = PHYS_CONSTANT_DEFAULTS[id];
+      if (def != null) {
+        knownPrepared[id] = String(def);
+      }
+    }
+    if (
+      needed.includes("beta") &&
+      !Number.isFinite(parseLocaleNumber(knownPrepared.beta))
+    ) {
+      const t = parseLocaleNumber(knownPrepared.T);
+      const kb = parseLocaleNumber(knownPrepared.kB ?? PHYS_CONSTANT_DEFAULTS.kB);
+      if (Number.isFinite(t) && t !== 0 && Number.isFinite(kb)) {
+        knownPrepared.beta = String(1 / (kb * t));
+      }
+    }
+
     for (const k of needed) {
-      const n = parseLocaleNumber(known[k]);
+      const n = parseLocaleNumber(knownPrepared[k]);
       if (!Number.isFinite(n)) {
-        setResult({ ok: false, error: `Falta el valor de ${k}` });
+        setResult({ ok: false, error: `${t.missingValueOf} ${k}` });
         return;
       }
     }
 
     const payloadKnown = {};
-    for (const [k, v] of Object.entries(known)) {
+    for (const [k, v] of Object.entries(knownPrepared)) {
       const n = parseLocaleNumber(v);
       if (!Number.isFinite(n)) continue;
 
@@ -522,7 +772,7 @@ export default function CalculatorV2({
 
     setResult(out);
 
-    // Sync con gráficas (genérico)
+    // Sync con graficas (generico)
     if (out?.ok && onSharedParamsChange) {
       const raw = out.result?.[tSel];
       const num = typeof raw === "number" ? raw : parseLocaleNumber(raw);
@@ -531,7 +781,7 @@ export default function CalculatorV2({
       // Enviar el resultado calculado
       const paramsToSync = { [tSel]: num };
       
-      // También enviar todos los valores conocidos (inputs)
+      // Tambien enviar todos los valores conocidos (inputs)
       for (const [k, v] of Object.entries(known)) {
         const n = parseLocaleNumber(v);
         if (Number.isFinite(n)) {
@@ -554,10 +804,10 @@ export default function CalculatorV2({
         known: payloadKnown,
       };
 
-      console.log("[CalculatorV2] Enviando a gráfico:", JSON.stringify(paramsToSync, null, 2));
+      console.log("[CalculatorV2] Enviando a grafico:", JSON.stringify(paramsToSync, null, 2));
       onSharedParamsChange(paramsToSync);
       
-      // Compatibilidad con cinemática
+      // Compatibilidad con cinematica
       if (tSel === "t") onSharedParamsChange({ tMax: num });
     }
   };
@@ -571,7 +821,7 @@ export default function CalculatorV2({
     return formatNumberSmart(n, 6);
   }, [result, safeTarget]);
 
-  // Pasos de la resolución
+  // Pasos de la resolucion
   const stepsToRender = useMemo(() => {
     if (!result?.ok) return null;
 
@@ -579,12 +829,12 @@ export default function CalculatorV2({
       return result.stepsRich.map((s, i) => {
         const title =
           s.kind === "formula"
-            ? "Fórmula"
+            ? t.stepFormula
             : s.kind === "substitution"
-              ? "Sustitución"
+              ? t.stepSubstitution
               : s.kind === "result"
-                ? "Resultado"
-                : "Paso";
+                ? t.stepResult
+                : t.stepDefault;
         return { key: `rich-${i}`, title, latex: String(s.latex || "") };
       });
     }
@@ -596,14 +846,14 @@ export default function CalculatorV2({
       for (let i = 0; i < result.steps.length; i++) {
         const st = result.steps[i];
         if (st?.type === "text") {
-          const t = String(st.value || "").replace(/:$/, "").trim();
-          currentTitle = t || currentTitle;
+          const txt = String(st.value || "").replace(/:$/, "").trim();
+          currentTitle = txt || currentTitle;
           continue;
         }
         if (st?.type === "latex") {
           out.push({
             key: `steps-${i}`,
-            title: currentTitle || "Paso",
+            title: currentTitle || t.stepDefault,
             latex: String(st.value || ""),
           });
         }
@@ -613,13 +863,13 @@ export default function CalculatorV2({
     }
 
     return null;
-  }, [result]);
+  }, [result, t.stepDefault, t.stepFormula, t.stepResult, t.stepSubstitution]);
 
   return (
     <div className="v2-grid-fill" style={{ gap: 12 }}>
-      {/* Columna izquierda: lista de fórmulas */}
+      {/* Columna izquierda: lista de formulas */}
       <div className="v2-card">
-        <div className="v2-card-title">Fórmulas</div>
+        <div className="v2-card-title">{t.formulas}</div>
 
         {groupedFormulas && groupedFormulas.length ? (
           <div className="v2-formula-groups">
@@ -662,9 +912,9 @@ export default function CalculatorV2({
 
       {/* Columna derecha: despejes + inputs + resultado */}
       <div className="v2-card">
-        <div className="v2-card-title">{formula?.title || "Calculadora"}</div>
+        <div className="v2-card-title">{formula?.title || t.calculator}</div>
 
-        {/* Fórmula base (con leyenda) */}
+        {/* Formula base (con leyenda) */}
         {formula?.latex ? (
           <div style={{ marginTop: 10 }}>
             {/* Motivo no calculable */}
@@ -699,7 +949,7 @@ export default function CalculatorV2({
                   </div>
                   <div>
                     <div style={{ fontWeight: 600, color: "#92400e", marginBottom: 4 }}>
-                      Esta fórmula no es calculable
+                      {t.formulaNotCalculable}
                     </div>
                     <div style={{ color: "#92400e", fontSize: "0.9em" }}>
                       {isNonCalculableReason}
@@ -729,7 +979,7 @@ export default function CalculatorV2({
                     reseedFromSharedParams(sharedParams);
                   }}
                 >
-                  {r.target}
+                  {renderVariableLabel(dict, r.target)}
                 </button>
               ))}
             </div>
@@ -740,16 +990,19 @@ export default function CalculatorV2({
         <div style={{ marginTop: 14 }}>
           {/* Despeje activo (con leyenda) */}
           {activeRearr?.latex ? (
-            <div style={{ marginBottom: 10 }}>
+            <div
+              key={`active-rearr-${formula?.id || "formula"}-${safeTarget || "target"}`}
+              style={{ marginBottom: 10 }}
+            >
               <div className="v2-formula">
                 <Latex>{`$$${activeRearr.latex}$$`}</Latex>
               </div>
-              <FormulaLegend dict={dict} symbolIds={rearrLegendIds} />
+              <FormulaLegend dict={dict} symbolIds={rearrLegendIds} title={t.legendVariables} />
             </div>
           ) : null}
 
           <div className="muted" style={{ fontWeight: 700, marginBottom: 6 }}>
-            Datos:
+            {t.data}
           </div>
 
           <div className="v2-grid-fill-inputs">
@@ -760,12 +1013,12 @@ export default function CalculatorV2({
               const isAngle = isAngleVarId(id, dict);
               const displayUnit = isAngle
                 ? (angleUnits?.[id] ?? "deg") === "deg"
-                  ? "°"
+                  ? "\u00b0"
                   : "rad"
                 : unit;
 
               const labelClean = String(label)
-                .replace(/\s*\((?:rad|radianes?|deg|degrees?|grados?|°)\)\s*$/i, "")
+                .replace(/\s*\((?:rad|radianes?|deg|degrees?|grados?|\u00b0)\)\s*$/i, "")
                 .trim();
 
               // Especial: gravedad
@@ -813,11 +1066,11 @@ export default function CalculatorV2({
                           setKnown((prev) => ({ ...prev, g: String(p.g) }));
                           if (onSharedParamsChange) onSharedParamsChange({ g: p.g });
                         }}
-                        aria-label="Selector de gravedad"
+                        aria-label={t.gravitySelector}
                       >
                         {GRAVITY_PRESETS.map((p) => (
                           <option key={p.id} value={p.id}>
-                            {p.g == null ? p.name : `${p.name} (${p.g} m/s²)`}
+                            {p.g == null ? t[p.id] : `${t[p.id]} (${p.g} m/s²)`}
                           </option>
                         ))}
                       </select>
@@ -826,7 +1079,7 @@ export default function CalculatorV2({
                         className="form-control"
                         ref={gInputRef}
                         value={gValue}
-                        placeholder="Introduce g"
+                        placeholder={t.enterG}
                         inputMode="decimal"
                         onChange={(e) => {
                           const val = e.target.value;
@@ -842,7 +1095,7 @@ export default function CalculatorV2({
                       />
 
                       <div className="muted" style={{ fontSize: 12 }}>
-                        Consejo: puedes escribir con coma o punto.
+                        {t.commaTip}
                       </div>
                     </div>
                   </div>
@@ -881,10 +1134,10 @@ export default function CalculatorV2({
                           setResult(null);
                         }}
                       >
-                        Usar G estandar
+                        {t.useStandardG}
                       </button>
                       <div className="muted" style={{ fontSize: 12 }}>
-                        Valor recomendado: 6.67430e-11 N*m^2/kg^2
+                        {t.recommendedValue}: 6.67430e-11 N*m^2/kg^2
                       </div>
                     </div>
                   </div>
@@ -947,7 +1200,7 @@ export default function CalculatorV2({
           </div>
         </div>
 
-        {/* Acción */}
+        {/* Accion */}
         <div style={{ marginTop: 14, display: "flex", gap: 10 }}>
           <button
             type="button"
@@ -955,7 +1208,7 @@ export default function CalculatorV2({
             disabled={!formula || !safeTarget || !canCompute}
             onClick={onCompute}
           >
-            Calcular
+            {t.calculate}
           </button>
 
           <button
@@ -968,7 +1221,7 @@ export default function CalculatorV2({
               setGravityPresetId(null);
             }}
           >
-            Limpiar
+            {t.clear}
           </button>
         </div>
 
@@ -976,16 +1229,16 @@ export default function CalculatorV2({
         <div style={{ marginTop: 14 }}>
           {result?.ok ? (
             <div className="v2-card">
-              <div className="v2-card-title">Resultado</div>
+              <div className="v2-card-title">{t.result}</div>
               <div style={{ fontSize: 16 }}>
-                <strong>{safeTarget}</strong> = <strong>{resultValue}</strong>{" "}
+                <strong>{renderVariableLabel(dict, safeTarget)}</strong> = <strong>{resultValue}</strong>{" "}
                 {unitOf(dict, safeTarget)}
               </div>
 
               {stepsToRender ? (
                 <div style={{ marginTop: 10 }}>
                   <details>
-                    <summary style={{ cursor: "pointer" }}>Ver pasos de la resolución</summary>
+                    <summary style={{ cursor: "pointer" }}>{t.viewResolutionSteps}</summary>
 
                     <div style={{ marginTop: 10, display: "grid", gap: 10 }}>
                       {stepsToRender.map((s) => (
@@ -1008,15 +1261,26 @@ export default function CalculatorV2({
             </div>
           ) : result?.ok === false ? (
             <div className="v2-card">
-              <div className="v2-card-title">Error</div>
-              <div>{result.error || "No se pudo calcular."}</div>
+              <div className="v2-card-title">{t.error}</div>
+              <div>{result.error || t.cannotCalculate}</div>
             </div>
           ) : (
             <div className="muted" style={{ marginTop: 6 }}>
-              Introduce los datos necesarios y pulsa <strong>Calcular</strong>.
+              {t.enterDataAndCalculate} <strong>{t.calculate}</strong>.
             </div>
           )}
         </div>
+        {result?.ok && typeof onOpenInterpretation === "function" && (
+          <div style={{ marginTop: 12, display: "flex", justifyContent: "flex-start" }}>
+            <button
+              type="button"
+              className="btn btn-light btn-sm"
+              onClick={onOpenInterpretation}
+            >
+              {t.viewInterpretation}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

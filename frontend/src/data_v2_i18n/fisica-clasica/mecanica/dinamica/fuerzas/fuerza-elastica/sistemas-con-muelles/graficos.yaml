@@ -1,0 +1,236 @@
+version: "1.0"
+leaf: "sistemas-con-muelles"
+
+coord:
+  title:
+    es: Gráfica Coord · Sistemas con Muelles
+    en: Coord Graph · Systems with Springs
+  xAxis:
+    es: elongación total x (m)
+    en: total extension x (m)
+  yAxis:
+    es: fuerza elástica F (N)
+    en: elastic force F (N)
+  xMagnitude: x
+  yMagnitude: F
+  relation:
+    es: "F = k_eq·x. En serie: 1/k_eq = 1/k_1 + 1/k_2 (k_eq < k_1, k_2: más blando). En paralelo: k_eq = k_1 + k_2 (más rígido). La pendiente de F vs x es k_eq."
+    en: "F = k_eq·x. In series: 1/k_eq = 1/k_1 + 1/k_2 (k_eq < k_1, k_2: softer). In parallel: k_eq = k_1 + k_2 (stiffer). The slope of F vs x is k_eq."
+  physicalReading:
+    es: La pendiente de la recta F vs x es k_eq. Una pendiente pequeña indica muelles en serie (sistema blando); una pendiente grande indica paralelo (sistema rígido).
+    en: The slope of the F vs x line is k_eq. A small slope indicates springs in series (soft system); a large slope indicates parallel (stiff system).
+  slopeMeaning:
+    es: "Pendiente = k_eq (N/m): constante elástica equivalente del sistema. Permite identificar la configuración (serie vs paralelo) comparando k_eq con k_1 y k_2."
+    en: "Slope = k_eq (N/m): equivalent spring constant of the system. Allows identifying the configuration (series vs parallel) by comparing k_eq with k_1 and k_2."
+  interceptMeaning:
+    es: "La recta pasa por el origen: sin elongación no hay fuerza elástica (posición de equilibrio)."
+    en: "The line passes through the origin: no extension means no elastic force (equilibrium position)."
+  curvatureMeaning:
+    es: La relación F vs x es lineal (ley de Hooke). La no linealidad indica que se ha superado el límite elástico.
+    en: "The F vs x relationship is linear (Hooke's law). Non-linearity indicates the elastic limit has been exceeded."
+  signMeaning:
+    es: "F > 0 para x > 0 (extensión) y F < 0 para x < 0 (compresión). La fuerza restauradora siempre se opone a la deformación."
+    en: "F > 0 for x > 0 (extension) and F < 0 for x < 0 (compression). The restoring force always opposes the deformation."
+  areaMeaning:
+    es: "El área bajo la recta F vs x es la energía potencial elástica: E_p = ½k_eq·x²."
+    en: "The area under the F vs x line is the elastic potential energy: E_p = ½k_eq·x²."
+  domainMeaning:
+    es: Válido dentro del límite de proporcionalidad del muelle. Para x muy grande, la relación deja de ser lineal.
+    en: "Valid within the spring's proportionality limit. For very large x, the relationship becomes non-linear."
+  modelConnection:
+    es: "Se interpreta bajo la ley de Hooke generalizada: F = k_eq·x, con k_eq calculado según la configuración."
+    en: "Interpreted under the generalised Hooke's law: F = k_eq·x, with k_eq computed according to the configuration."
+  formulaConnection:
+    es: Conecta con k_eq_serie = k_1k_2/(k_1+k_2), k_eq_paralelo = k_1+k_2, y E_p = ½k_eq·x².
+    en: Connects to k_eq_series = k_1k_2/(k_1+k_2), k_eq_parallel = k_1+k_2, and E_p = ½k_eq·x².
+  readingFocus:
+    es: "leer la pendiente k_eq, comparar con k_1 y k_2 para identificar la configuración (serie: k_eq < min(k_1,k_2); paralelo: k_eq > max(k_1,k_2))."
+    en: "read the slope k_eq, compare with k_1 and k_2 to identify the configuration (series: k_eq < min(k_1,k_2); parallel: k_eq > max(k_1,k_2))."
+  agentHints:
+    es:
+      - "En serie: la elongación total es la suma de las elongaciones individuales: x = x_1 + x_2."
+      - "En paralelo: la fuerza total es la suma de las fuerzas individuales: F = F_1 + F_2."
+      - "El área bajo F vs x es la energía almacenada: E_p = ½k_eq·x². Más útil que la fuerza para problemas de energía."
+    en:
+      - "In series: total extension is the sum of individual extensions: x = x_1 + x_2."
+      - "In parallel: total force is the sum of individual forces: F = F_1 + F_2."
+      - "The area under F vs x is the stored energy: E_p = ½k_eq·x². More useful than force for energy problems."
+  commonMistakes:
+    es:
+      - Usar k_eq_serie = k_1 + k_2 (incorrecto; eso es el paralelo).
+      - Confundir elongación total x con elongación de cada muelle en serie.
+      - Olvidar que en serie ambos muelles tienen la misma tensión (misma F), no la misma elongación.
+    en:
+      - Using k_eq_series = k_1 + k_2 (incorrect; that is the parallel case).
+      - "Confusing total extension x with each spring's extension in series."
+      - Forgetting that in series both springs have the same tension (same F), not the same extension.
+
+dcl:
+  title:
+    es: DCL · Sistemas con Muelles
+    en: FBD · Systems with Springs
+  xAxis:
+    es: eje x (horizontal o vertical, según la configuración del sistema)
+    en: x-axis (horizontal or vertical, depending on system configuration)
+  yAxis:
+    es: eje y perpendicular al anterior
+    en: y-axis perpendicular to x
+  forces:
+    es:
+      - F_1 = k_1·x_1 (fuerza del muelle 1)
+      - F_2 = k_2·x_2 (fuerza del muelle 2)
+      - W = m·g (peso de la masa, si aplica)
+    en:
+      - F_1 = k_1·x_1 (spring 1 force)
+      - F_2 = k_2·x_2 (spring 2 force)
+      - W = m·g (mass weight, if applicable)
+  object:
+    es: masa unida a uno o varios muelles en serie o en paralelo
+    en: mass attached to one or several springs in series or parallel
+  freeBodyCondition:
+    es: "En equilibrio: ΣF = k_eq·x − mg = 0 → x_eq = mg/k_eq. El DCL muestra las fuerzas elásticas y el peso."
+    en: "At equilibrium: ΣF = k_eq·x − mg = 0 → x_eq = mg/k_eq. The FBD shows the spring forces and weight."
+  equilibriumCondition:
+    es: "Equilibrio: F_eq = k_eq·x_eq = mg. En serie: F_1 = F_2 = F (misma tensión). En paralelo: F_1 + F_2 = mg."
+    en: "Equilibrium: F_eq = k_eq·x_eq = mg. In series: F_1 = F_2 = F (same tension). In parallel: F_1 + F_2 = mg."
+  netForce:
+    es: "Fuera del equilibrio: ΣF = k_eq·x − mg = m·a. Esta es la ecuación del oscilador armónico."
+    en: "Out of equilibrium: ΣF = k_eq·x − mg = m·a. This is the harmonic oscillator equation."
+  accelerationDirection:
+    es: "La aceleración apunta hacia la posición de equilibrio (fuerza restauradora): a = −(k_eq/m)·(x − x_eq)."
+    en: "Acceleration points toward the equilibrium position (restoring force): a = −(k_eq/m)·(x − x_eq)."
+  referenceFrameChoice:
+    es: Origen en la posición de equilibrio de la masa. Desplazamientos medidos desde el equilibrio.
+    en: Origin at the equilibrium position of the mass. Displacements measured from equilibrium.
+  forceTypes:
+    es:
+      - F_e = k·x (elástica restauradora)
+      - W = mg (gravitacional)
+      - N (normal de apoyo si aplica)
+    en:
+      - F_e = k·x (elastic restoring)
+      - W = mg (gravitational)
+      - N (support normal if applicable)
+  signConvention:
+    es: "La fuerza elástica apunta hacia el equilibrio: positiva cuando x < 0 (muelle estirado empuja hacia arriba en vertical) y negativa cuando x > 0."
+    en: "The elastic force points toward equilibrium: positive when x < 0 (spring stretched pushes upward in vertical) and negative when x > 0."
+  relation:
+    es: El DCL muestra las fuerzas elásticas y el peso sobre la masa, permitiendo plantear la ecuación de equilibrio o de movimiento del oscilador.
+    en: The FBD shows the spring forces and weight on the mass, enabling the equilibrium or oscillator motion equation to be set up.
+  readingFocus:
+    es: identificar si la configuración es serie o paralelo, leer las fuerzas elásticas y verificar el equilibrio ΣF = 0.
+    en: identify whether the configuration is series or parallel, read the spring forces, and verify equilibrium ΣF = 0.
+  agentHints:
+    es:
+      - "En serie: F_1 = F_2 (misma fuerza, distintas elongaciones). En paralelo: x_1 = x_2 (misma elongación, distintas fuerzas)."
+      - La elongación de equilibrio en vertical es x_eq = mg/k_eq.
+      - El período de oscilación del sistema masa-muelle es T = 2π√(m/k_eq).
+    en:
+      - "In series: F_1 = F_2 (same force, different extensions). In parallel: x_1 = x_2 (same extension, different forces)."
+      - Equilibrium extension in vertical setup is x_eq = mg/k_eq.
+      - The period of oscillation for the mass-spring system is T = 2π√(m/k_eq).
+  commonMistakes:
+    es:
+      - En serie, asignar elongaciones iguales a los dos muelles (deben tener la misma fuerza, no la misma elongación).
+      - Calcular k_eq_serie = k_1 + k_2 (incorrecto).
+      - Olvidar que en paralelo la fuerza del sistema es F = k_eq·x = (k_1 + k_2)·x.
+    en:
+      - In series, assigning equal extensions to both springs (they must have the same force, not the same extension).
+      - Computing k_eq_series = k_1 + k_2 (incorrect).
+      - Forgetting that in parallel the system force is F = k_eq·x = (k_1 + k_2)·x.
+
+svg:
+  title:
+    es: Escena SVG · Sistemas con Muelles
+    en: SVG Scene · Systems with Springs
+  xAxis:
+    es: posición horizontal de la escena
+    en: horizontal position in the scene
+  yAxis:
+    es: posición vertical de la escena
+    en: vertical position in the scene
+  sceneId: sistemas_muelles_scene
+  sceneLabel:
+    es: Configuración serie y paralelo de muelles con masa en equilibrio y elongaciones individuales
+    en: Series and parallel spring configuration with mass at equilibrium and individual extensions
+  objects:
+    es:
+      - muelle 1 (k_1) con elongación x_1
+      - muelle 2 (k_2) con elongación x_2
+      - masa m en equilibrio
+      - vector W = mg (hacia abajo)
+      - vector F_e = k_eq·x (hacia arriba)
+    en:
+      - spring 1 (k_1) with extension x_1
+      - spring 2 (k_2) with extension x_2
+      - mass m at equilibrium
+      - vector W = mg (downward)
+      - vector F_e = k_eq·x (upward)
+  mainObject:
+    es: masa colgada de sistema de muelles en equilibrio estático
+    en: mass hanging from spring system in static equilibrium
+  referenceFrame:
+    es: marco inercial de laboratorio
+    en: inertial laboratory frame
+  geometry:
+    es: "La escena muestra las dos configuraciones (serie y paralelo) con la masa en equilibrio. En serie: los muelles están uno después del otro, con la misma fuerza pero elongaciones individuales. En paralelo: los muelles están en paralelo, con la misma elongación pero fuerzas individuales distintas."
+    en: "The scene shows both configurations (series and parallel) with the mass at equilibrium. In series: springs are one after another, with the same force but individual extensions. In parallel: springs are side by side, with the same extension but different individual forces."
+  interactions:
+    es: La fuerza elástica total k_eq·x equilibra el peso mg. En serie k_eq es menor (sistema más blando); en paralelo k_eq es mayor (sistema más rígido).
+    en: The total elastic force k_eq·x balances weight mg. In series k_eq is smaller (softer system); in parallel k_eq is larger (stiffer system).
+  modelElements:
+    es:
+      - dos muelles con k_1 y k_2
+      - masa m en el punto de unión
+      - elongaciones x_1 y x_2 individuales
+      - flechas de fuerzas elásticas y peso
+    en:
+      - two springs with k_1 and k_2
+      - mass m at the junction
+      - individual extensions x_1 and x_2
+      - arrows for spring forces and weight
+  visualCues:
+    es:
+      - "En serie: la masa se desplaza más para la misma fuerza (k_eq pequeño)."
+      - "En paralelo: la masa se desplaza menos para la misma fuerza (k_eq grande)."
+      - Las etiquetas x_1 y x_2 muestran la distribución de la deformación total entre los muelles.
+    en:
+      - "In series: the mass displaces more for the same force (small k_eq)."
+      - "In parallel: the mass displaces less for the same force (large k_eq)."
+      - Labels x_1 and x_2 show the distribution of total deformation between springs.
+  scaleMeaning:
+    es: Las longitudes de los muelles son proporcionales a sus constantes y elongaciones.
+    en: Spring lengths are proportional to their constants and extensions.
+  relation:
+    es: La escena compara visualmente las dos configuraciones de muelles (serie y paralelo) y cómo afectan a la elongación total y la rigidez del sistema.
+    en: The scene visually compares the two spring configurations (series and parallel) and how they affect total extension and system stiffness.
+  physicalReading:
+    es: Identificar si la configuración es serie (muelles uno tras otro) o paralelo (muelles juntos), y leer las elongaciones individuales.
+    en: Identify whether the configuration is series (springs one after another) or parallel (springs side by side), and read the individual extensions.
+  modelConnection:
+    es: "Se interpreta bajo la ley de Hooke con k_eq: F = k_eq·x, donde k_eq depende de la configuración."
+    en: "Interpreted under Hooke's law with k_eq: F = k_eq·x, where k_eq depends on the configuration."
+  formulaConnection:
+    es: Conecta con 1/k_serie = 1/k_1 + 1/k_2, k_paralelo = k_1 + k_2, y x_eq = mg/k_eq.
+    en: Connects to 1/k_series = 1/k_1 + 1/k_2, k_parallel = k_1 + k_2, and x_eq = mg/k_eq.
+  readingFocus:
+    es: identificar la configuración, calcular k_eq, verificar el equilibrio F_e = mg y leer las elongaciones individuales.
+    en: identify the configuration, compute k_eq, verify equilibrium F_e = mg, and read the individual extensions.
+  agentHints:
+    es:
+      - "En serie: ambos muelles tienen la misma tensión pero distinta elongación. En paralelo: ambos tienen la misma elongación pero distinta fuerza."
+      - La escena muestra claramente qué muelle es más rígido (mayor k, menor elongación para la misma fuerza).
+      - El equilibrio de la masa se establece siempre en x_eq = mg/k_eq.
+    en:
+      - "In series: both springs have the same tension but different extension. In parallel: both have the same extension but different force."
+      - The scene clearly shows which spring is stiffer (larger k, smaller extension for the same force).
+      - The mass equilibrium is always at x_eq = mg/k_eq.
+  commonMistakes:
+    es:
+      - Confundir serie (muelles en línea) con paralelo (muelles lado a lado).
+      - Asignar la misma elongación a los dos muelles en serie.
+      - Usar k_eq = k_1 + k_2 para el caso serie.
+    en:
+      - Confusing series (springs in line) with parallel (springs side by side).
+      - Assigning the same extension to both springs in series.
+      - Using k_eq = k_1 + k_2 for the series case.

@@ -1,0 +1,506 @@
+version: 5.0.0
+id: fluctuaciones
+leaf_id: fluctuaciones
+nombre:
+  es: Fluctuaciones
+  en: Fluctuations
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: funcion-de-particion
+  parent_id: funcion-de-particion
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/funcion-de-particion/fluctuaciones
+  orden: 274400
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas: beta_inversa_termica, energia_media_desde_particion, varianza_energia_desde_particion, fluctuacion_rms_energia,
+    capacidad_calorifica_fluctuaciones
+  magnitudes: temperatura, constante_boltzmann, beta, funcion_particion, energia_media, energia_microestado, derivada_log_particion_beta,
+    derivada_segunda_log_particion_beta, varianza_energia, fluctuacion_energia, capacidad_calorifica
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: physical concept
+  axis_convention:
+    es: El signo depende del convenio de ejes elegido cuando intervienen magnitudes vectoriales.
+    en: The sign depends on the chosen axis convention when vector quantities are involved.
+  standard_assumptions:
+  - es: El modelo se interpreta dentro de las hipótesis declaradas en el leaf.
+    en: The model is interpreted within the assumptions declared in the leaf.
+  standard_warnings:
+  - es: No interpretes el resultado sin revisar unidades, signo y validez del modelo.
+    en: Do not interpret the result without checking units, sign, and model validity.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: La interpretación debe respetar la dimensión física de cada resultado.
+      en: The interpretation must respect the physical dimension of each result.
+error_patterns:
+  enabled: true
+  patterns:
+  - id: unit_sign_model_confusion
+    status: warning
+    text:
+      es: Un error frecuente es leer el número sin unidad, signo o modelo físico.
+      en: A common error is reading the number without unit, sign, or physical model.
+graph_reading_policy:
+  enabled: true
+  primary_variable: beta
+  reading_sequence:
+  - es: Identifica ejes, dirección, sentido y relación entre magnitudes antes de interpretar el resultado.
+    en: Identify axes, direction, sense, and the relation between quantities before interpreting the result.
+  key_points:
+  - es: Conecta la lectura visual con el signo, la unidad y el modelo físico.
+    en: Connect the visual reading with sign, unit, and the physical model.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Compara el resultado con valores cotidianos o escalas físicas conocidas cuando sea posible.
+    en: Compare the result with everyday values or known physical scales when possible.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Comprueba que las unidades finales coinciden con la magnitud interpretada.
+    en: Check that the final units match the interpreted quantity.
+  common_unit_mistakes:
+  - es: Mezclar unidades incompatibles antes de aplicar la fórmula.
+    en: Mixing incompatible units before applying the formula.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  beta:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable térmica inversa
+      en: inverse thermal variable
+    summary_rules:
+    - id: beta_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[beta]] indica la magnitud física principal que se está interpretando.
+        en: The result [[beta]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: beta_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[beta]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[beta]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: beta_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[beta]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[beta]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: beta_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[beta]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[beta]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: beta_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[beta]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[beta]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: beta_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[beta]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[beta]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: beta_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[beta]], revisa la coherencia física y vuelve a la calculadora si necesitas otro despeje.
+        en: After obtaining [[beta]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: beta_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[beta]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[beta]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: beta_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[beta]] comprobando qué ocurre si una magnitud dominante crece, disminuye o se anula.
+        en: Analyze the limiting cases of [[beta]] by checking what happens if a dominant quantity grows, decreases, or becomes
+          zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_media:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: promedio energético
+      en: energy average
+    summary_rules:
+    - id: energia_media_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[energia_media]] indica la magnitud física principal que se está interpretando.
+        en: The result [[energia_media]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: energia_media_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[energia_media]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[energia_media]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: energia_media_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[energia_media]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[energia_media]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: energia_media_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia_media]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[energia_media]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: energia_media_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[energia_media]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[energia_media]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: energia_media_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[energia_media]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[energia_media]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: energia_media_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[energia_media]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[energia_media]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: energia_media_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_media]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[energia_media]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: energia_media_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[energia_media]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[energia_media]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  varianza_energia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: fluctuación cuadrática
+      en: quadratic fluctuation
+    summary_rules:
+    - id: varianza_energia_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[varianza_energia]] indica la magnitud física principal que se está interpretando.
+        en: The result [[varianza_energia]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: varianza_energia_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[varianza_energia]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[varianza_energia]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: varianza_energia_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[varianza_energia]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[varianza_energia]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: varianza_energia_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[varianza_energia]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[varianza_energia]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: varianza_energia_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[varianza_energia]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[varianza_energia]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: varianza_energia_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[varianza_energia]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[varianza_energia]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: varianza_energia_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[varianza_energia]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[varianza_energia]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: varianza_energia_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[varianza_energia]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[varianza_energia]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: varianza_energia_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[varianza_energia]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[varianza_energia]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  fluctuacion_energia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: escala de fluctuación
+      en: fluctuation scale
+    summary_rules:
+    - id: fluctuacion_energia_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[fluctuacion_energia]] indica la magnitud física principal que se está interpretando.
+        en: The result [[fluctuacion_energia]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: fluctuacion_energia_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[fluctuacion_energia]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[fluctuacion_energia]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: fluctuacion_energia_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[fluctuacion_energia]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[fluctuacion_energia]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: fluctuacion_energia_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[fluctuacion_energia]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[fluctuacion_energia]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: fluctuacion_energia_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[fluctuacion_energia]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[fluctuacion_energia]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: fluctuacion_energia_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[fluctuacion_energia]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[fluctuacion_energia]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: fluctuacion_energia_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[fluctuacion_energia]], revisa la coherencia física y vuelve a la calculadora si necesitas
+          otro despeje.
+        en: After obtaining [[fluctuacion_energia]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: fluctuacion_energia_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[fluctuacion_energia]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[fluctuacion_energia]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: fluctuacion_energia_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[fluctuacion_energia]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[fluctuacion_energia]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

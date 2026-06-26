@@ -1,0 +1,180 @@
+version: 5
+topic:
+  id: energia-en-mhs
+  title:
+    es: Energia en MHS
+    en: Energy in SHM
+
+formulas:
+- id: energia_cinetica
+  title: { es: Energia cinetica, en: Kinetic energy }
+  equation: K = 0.5*m*v^2
+  latex: K=\frac12mv^2
+  category: energia_de_movimiento
+  relation_type: definicion_operativa
+  physical_meaning:
+    es: Describe la porcion de energia asociada a la rapidez instantanea del oscilador.
+    en: Describes the energy portion associated with oscillator instantaneous speed.
+  constraints: [ m > 0 ]
+  validity:
+    es: Valida para el modelo mecanico clasico no relativista del oscilador armonico.
+    en: Valid for the classical non-relativistic oscillator model.
+  dimension_check: "[M L^2 T^-2] = [M]*[L T^-1]^2"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[m]] y [[v]].", en: "Requires [[m]] and [[v]]." }
+  used_in: [ energia_total_mhs, conservacion_energia_mhs ]
+  interpretation_tags: [ energia, movimiento, rapidez ]
+  result_semantics:
+    target: K
+  domain_checks: [ m > 0 ]
+  coherence_checks: [ K >= 0 ]
+  graph_implications: "[[K]] aumenta cuando crece la magnitud de [[v]]."
+  pedagogical_triggers: [ intercambio_energetico, lectura_cinetica ]
+  rearrangements:
+  - target: K
+    equation: 0.5*m*v^2
+  - target: v
+    equation: sqrt((2*K)/m)
+  - target: m
+    equation: (2*K)/(v^2)
+  variables: [ K, m, v ]
+
+- id: energia_potencial_elastica
+  title: { es: Energia potencial elastica, en: Elastic potential energy }
+  equation: U = 0.5*k*x^2
+  latex: U=\frac12kx^2
+  category: energia_de_configuracion
+  relation_type: definicion_operativa
+  physical_meaning:
+    es: Describe la energia almacenada por deformacion respecto del equilibrio.
+    en: Describes the energy stored by deformation relative to equilibrium.
+  constraints: [ k > 0 ]
+  validity:
+    es: Valida para resorte lineal ideal en el rango de Hooke.
+    en: Valid for an ideal linear spring in the Hooke range.
+  dimension_check: "[M L^2 T^-2] = [M T^-2]*[L]^2"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[k]] y [[x]].", en: "Requires [[k]] and [[x]]." }
+  used_in: [ energia_total_mhs, conservacion_energia_mhs ]
+  interpretation_tags: [ energia, elasticidad, configuracion ]
+  result_semantics:
+    target: U
+  domain_checks: [ k > 0 ]
+  coherence_checks: [ U >= 0 ]
+  graph_implications: "[[U]] crece con el cuadrado de [[x]] y se minimiza en equilibrio."
+  pedagogical_triggers: [ lectura_potencial, energia_elastica ]
+  rearrangements:
+  - target: U
+    equation: 0.5*k*x^2
+  - target: x
+    equation: sqrt((2*U)/k)
+  - target: k
+    equation: (2*U)/(x^2)
+  variables: [ U, k, x ]
+
+- id: energia_total_mhs
+  title: { es: Energia mecanica total, en: Total mechanical energy }
+  equation: E = K + U
+  latex: E=K+U
+  category: conservacion
+  relation_type: suma_de_componentes
+  physical_meaning:
+    es: Relaciona la energia total ideal con la suma de componentes cinetica y potencial.
+    en: Relates ideal total energy to the sum of kinetic and potential components.
+  constraints: []
+  validity:
+    es: Valida para MHS ideal sin disipacion dominante.
+    en: Valid for ideal SHM without dominant dissipation.
+  dimension_check: "[M L^2 T^-2] = [M L^2 T^-2] + [M L^2 T^-2]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[K]] y [[U]].", en: "Requires [[K]] and [[U]]." }
+  used_in: [ conservacion_energia_mhs ]
+  interpretation_tags: [ energia_total, conservacion, balance ]
+  result_semantics:
+    target: E
+  domain_checks: []
+  coherence_checks: [ E >= 0 ]
+  graph_implications: "La suma de [[K]] y [[U]] debe permanecer en el nivel de [[E]] para el caso ideal."
+  pedagogical_triggers: [ suma_energetica, chequeo_de_balance ]
+  rearrangements:
+  - target: E
+    equation: K+U
+  - target: K
+    equation: E-U
+  - target: U
+    equation: E-K
+  variables: [ E, K, U ]
+
+- id: energia_total_amplitud
+  title: { es: Energia total a partir de amplitud, en: Total energy from amplitude }
+  equation: E = 0.5*k*A^2
+  latex: E=\frac12\,k\,A^2
+  category: escala_energetica
+  relation_type: relacion_con_parametro_global
+  physical_meaning:
+    es: Vincula la energia total ideal con la amplitud maxima del movimiento.
+    en: Links ideal total energy with the maximum oscillation amplitude.
+  constraints: [ k > 0, A >= 0 ]
+  validity:
+    es: Valida para oscilador armonico simple ideal con amplitud definida.
+    en: Valid for an ideal simple harmonic oscillator with defined amplitude.
+  dimension_check: "[M L^2 T^-2] = [M T^-2]*[L]^2"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[k]] y [[A]].", en: "Requires [[k]] and [[A]]." }
+  used_in: [ conservacion_energia_mhs ]
+  interpretation_tags: [ amplitud, energia_total, escala ]
+  result_semantics:
+    target: E
+  domain_checks: [ k > 0, A >= 0 ]
+  coherence_checks: [ E >= 0 ]
+  graph_implications: "Cambiar [[A]] desplaza el nivel total de energia sin alterar la regla de intercambio entre [[K]] y [[U]]."
+  pedagogical_triggers: [ lectura_por_amplitud, escala_total ]
+  rearrangements:
+  - target: E
+    equation: 0.5*k*A^2
+  - target: A
+    equation: sqrt((2*E)/k)
+  - target: k
+    equation: (2*E)/(A^2)
+  variables: [ E, k, A ]
+
+- id: conservacion_energia_mhs
+  title: { es: Conservacion de energia en MHS, en: Energy conservation in SHM }
+  equation: E_total = K + U
+  latex: E_total=K+U
+  category: principio_fisico
+  relation_type: identidad_de_conservacion
+  physical_meaning:
+    es: Expresa que la energia total ideal permanece constante mientras cambian sus componentes.
+    en: States that ideal total energy remains constant while its components change.
+  constraints: []
+  validity:
+    es: Valida en ausencia de disipacion y trabajo externo neto dominante.
+    en: Valid in the absence of dissipation and dominant net external work.
+  dimension_check: "[M L^2 T^-2] = [M L^2 T^-2] + [M L^2 T^-2]"
+  calculable: false
+  motivo_no_calculable: { es: "Requiere contexto dinamico e hipotesis de sistema ideal para interpretarse como principio.", en: "Requires dynamic context and ideal-system assumptions to be interpreted as a principle." }
+  used_in: [ energia_total_mhs, energia_total_amplitud ]
+  interpretation_tags: [ conservacion, principio, intercambio ]
+  result_semantics:
+    target: E_total
+  domain_checks: []
+  coherence_checks: [ E_total >= 0 ]
+  graph_implications: "La linea o nivel asociado a [[E_total]] no debe oscilar en el caso ideal."
+  pedagogical_triggers: [ principio_de_conservacion, lectura_de_balance ]
+  rearrangements:
+  - target: E_total
+    equation: K+U
+  variables: [ E_total, K, U ]
+
+ui:
+  default_formula: energia_total_mhs
+  groups:
+  - title:
+      es: Componentes de energia
+      en: Energy components
+    items: [ energia_cinetica, energia_potencial_elastica, energia_total_mhs ]
+  - title:
+      es: Escala y conservacion
+      en: Scale and conservation
+    items: [ energia_total_amplitud, conservacion_energia_mhs ]

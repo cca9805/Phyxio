@@ -1,0 +1,161 @@
+version: 1
+formulas:
+- id: first_law_condition
+  target: F_net
+  title:
+    es: Condicion de la primera ley de Newton
+    en: Newton's first law condition
+  equation: F_net = 0
+  latex: \vec{F}_{\text{net}} = 0
+  rearrangements: []
+  category: fundamental
+  relation_type: physical_law
+  physical_meaning:
+    es: En un marco inercial, la resultante nula expresa que no existe causa dinamica para cambiar la velocidad.
+    en: In an inertial frame, a zero resultant states that there is no dynamical cause to change velocity.
+  constraints:
+  - Marco de referencia inercial
+  - DCL completo y coherente
+  validity:
+    es: Valida para mecanica clasica cuando el sistema se estudia desde un marco inercial.
+    en: Valid in classical mechanics when the system is studied from an inertial frame.
+  dimension_check: N = N
+  calculable: false
+  motivo_no_calculable:
+    es: Es una condicion de lectura fisica del sistema, no una receta numerica aislada.
+    en: It is a physical reading condition for the system, not an isolated numerical recipe.
+  used_in:
+  - analisis de equilibrio dinamico
+  - lectura de DCL
+  interpretation_tags:
+  - equilibrio
+  - inercia
+  - resultante nula
+  result_semantics:
+    target: F_net
+    meaning: F_net se interpreta como la resultante cuya nulidad conserva el estado de movimiento.
+  domain_checks:
+  - type: frame_inertial
+    condition: true
+    message:
+      es: La primera ley solo puede leerse sin ambiguedad en un marco inercial.
+      en: The first law can only be read without ambiguity in an inertial frame.
+  coherence_checks:
+  - type: acceleration_consistency
+    condition: a == 0
+    message:
+      es: Si F_net = 0, cualquier cambio de velocidad debe desaparecer.
+      en: If F_net = 0, any change in velocity must disappear.
+  graph_implications:
+  - El DCL debe permitir ver fuerzas que se compensan sin borrar su existencia individual.
+  pedagogical_triggers:
+  - error: movimiento_implica_fuerza
+    message:
+      es: Que el cuerpo se mueva no implica que exista una fuerza neta hacia delante.
+      en: The fact that a body moves does not imply a forward net force.
+- id: equilibrium_dynamics_relation
+  target: a
+  title:
+    es: Relacion fuerza-aceleracion en equilibrio
+    en: Force-acceleration relation in equilibrium
+  equation: a = 0
+  latex: \vec{a} = 0
+  rearrangements: []
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Si la resultante es nula en todas las direcciones, la aceleracion del sistema es cero.
+    en: If the resultant is zero in every direction, the system acceleration is zero.
+  constraints:
+  - F_net = 0
+  - Marco inercial
+  validity:
+    es: Valida cuando la resultante ya se ha identificado correctamente como nula.
+    en: Valid once the resultant has been correctly identified as zero.
+  dimension_check: m/s^2 = m/s^2
+  calculable: false
+  motivo_no_calculable:
+    es: Es una consecuencia del balance dinamico, no una ecuacion independiente para introducir datos.
+    en: It is a consequence of the dynamical balance, not an independent equation for inserting data.
+  used_in:
+  - lectura del estado dinamico
+  - deteccion de MRU
+  interpretation_tags:
+  - equilibrio
+  - aceleracion nula
+  result_semantics:
+    target: a
+    meaning: a indica si existe o no cambio de velocidad en el leaf.
+  domain_checks:
+  - type: force_balance
+    condition: F_net == 0
+    message:
+      es: Solo es valida si la resultante ya se ha demostrado nula.
+      en: It is valid only if the resultant has already been shown to be zero.
+  coherence_checks:
+  - type: velocity_consistency
+    condition: true
+    message:
+      es: Aceleracion nula deja abierta la opcion de reposo o de velocidad constante.
+      en: Zero acceleration still allows either rest or constant velocity.
+  graph_implications:
+  - El grafico no debe sugerir flecha de aceleracion si la resultante es nula.
+  pedagogical_triggers:
+  - error: reposo_vs_equilibrio
+    message:
+      es: Equilibrio dinamico no significa obligatoriamente reposo.
+      en: Dynamic equilibrium does not necessarily mean rest.
+- id: constant_velocity_inertia
+  target: v
+  title:
+    es: Conservacion de la velocidad por inercia
+    en: Velocity conservation by inertia
+  equation: v(t) = constante
+  latex: \vec{v}(t) = \text{constante}
+  rearrangements: []
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Cuando F_net = 0 y a = 0, la velocidad v no cambia con el tiempo; puede ser cero o distinta de cero.
+    en: When F_net = 0 and a = 0, the velocity v does not change with time; it may be zero or non-zero.
+  constraints:
+  - F_net = 0
+  - a = 0
+  - Marco de referencia inercial
+  validity:
+    es: Valida en el regimen clasico mientras no aparezca una fuerza resultante no compensada.
+    en: Valid in the classical regime as long as no uncompensated resultant force appears.
+  dimension_check: m/s = m/s
+  calculable: false
+  motivo_no_calculable:
+    es: Expresa una lectura temporal del movimiento, no un despeje entre variables independientes.
+    en: It expresses a temporal reading of motion, not an algebraic isolation between independent variables.
+  used_in:
+  - interpretacion de movimiento uniforme
+  - analisis de inercia
+  interpretation_tags:
+  - inercia
+  - velocidad constante
+  - conservacion
+  result_semantics:
+    target: v
+    meaning: v se interpreta como estado cinematico que permanece constante si no aparece resultante.
+  domain_checks:
+  - type: force_balance
+    condition: F_net == 0
+    message:
+      es: Solo aplica cuando la resultante ya se ha compensado en todas las direcciones.
+      en: It applies only when the resultant has already been balanced in every direction.
+  coherence_checks:
+  - type: acceleration_zero
+    condition: a == 0
+    message:
+      es: Si v cambia, este leaf deja de ser suficiente para describir la situacion.
+      en: If v changes, this leaf stops being sufficient to describe the situation.
+  graph_implications:
+  - El grafico debe permitir distinguir entre reposo y movimiento uniforme sin inventar una fuerza motriz.
+  pedagogical_triggers:
+  - error: velocidad_implica_fuerza
+    message:
+      es: La velocidad constante no necesita una fuerza que la mantenga.
+      en: Constant velocity does not need a force to keep it going.

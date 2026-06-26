@@ -1,0 +1,217 @@
+const e=`version: 5
+id: presion-hidrostatica-interp
+leaf_id: presion-hidrostatica
+scope: local
+nombre:
+  es: Análisis de Presión Hidrostática
+  en: Hydrostatic Pressure Analysis
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: Resumen del Cálculo
+      en: Calculation Summary
+  physical_reading:
+    title:
+      es: Lectura Física
+      en: Physical Reading
+  coherence:
+    title:
+      es: Coherencia y Consistencia
+      en: Coherence and Consistency
+  model_validity:
+    title:
+      es: Validez del Modelo
+      en: Model Validity
+  graph_reading:
+    title:
+      es: Análisis Gráfico
+      en: Graphical Analysis
+  likely_errors:
+    title:
+      es: Errores Comunes
+      en: Common Errors
+  next_step:
+    title:
+      es: Siguientes Pasos
+      en: Next Steps
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes:
+    - p
+    - p0
+    - rho
+    - g
+    - h
+    - dp
+  formulas:
+    - presion_hidro
+    - delta_p_hidro
+
+targets:
+  p:
+    summary_rules:
+      - id: p-abs-val
+        when: p > 0
+        status: success
+        text:
+          es: La presión absoluta calculada [[p]] describe la carga total que aumenta con la profundidad del fluido.
+          en: The calculated absolute pressure [[p]] describes the total load that increases with fluid depth.
+    physical_reading_rules:
+      - id: p-abs-meaning
+        when: p > 101325
+        status: success
+        text:
+          es: Significa que el objeto soporta una fuerza total porque el peso de la columna de fluido empuja hacia abajo.
+          en: It means that the object supports a total force because the weight of the fluid column pushes down.
+    coherence_rules:
+      - id: p-abs-depth
+        when: p > p0
+        status: success
+        text:
+          es: Es coherente porque la presión aumenta con la profundidad [[h]] y no puede ser menor que [[p0]].
+          en: It is coherent because pressure increases with depth [[h]] and cannot be less than [[p0]].
+    model_validity_rules:
+      - id: p-abs-valid
+        when: p < 1e8
+        status: success
+        text:
+          es: El valor es válido dentro del modelo asumiendo densidad constante y reposo absoluto.
+          en: The value is valid within the model assuming constant density and absolute rest.
+    graph_rules:
+      - id: p-abs-graph
+        when: p > 0
+        status: success
+        text:
+          es: La magnitud se visualiza como un vector isótropo en el perfil SVG y una línea en el gráfico Coord.
+          en: The magnitude is visualized as an isotropic vector in the SVG profile and a line in the Coord graph.
+    likely_errors:
+      - id: err-p-no-p0
+        when: p == dp
+        status: warning
+        text:
+          es: ¡Error! Has podido olvidar sumar la presión atmosférica [[p0]]. El resultado es solo manométrico.
+          en: Error! You may have forgotten to add the atmospheric pressure [[p0]]. The result is only gauge pressure.
+    next_step_rules:
+      - id: next-p-pascal
+        when: p > 0
+        status: info
+        text:
+          es: Explora el Principio de Pascal para ver cómo esta presión se transmite.
+          en: Explore Pascal's Principle to see how this pressure is transmitted.
+
+  dp:
+    summary_rules:
+      - id: dp-man-val
+        when: dp > 0
+        status: success
+        text:
+          es: El incremento de presión [[dp]] describe la carga neta que depende de la columna de fluido sobre el sensor.
+          en: The pressure increase [[dp]] describes the net load that depends on the fluid column above the sensor.
+    physical_reading_rules:
+      - id: dp-man-meaning
+        when: dp > 0
+        status: success
+        text:
+          es: Indica cuánta presión extra debe resistir la estructura porque el fluido tiene peso propio.
+          en: Indicates how much extra pressure the structure must resist because the fluid has its own weight.
+    coherence_rules:
+      - id: dp-man-pos
+        when: dp > 0
+        status: success
+        text:
+          es: El incremento es positivo porque estamos descendiendo en un fluido gravitatorio uniforme.
+          en: The increase is positive because we are descending in a uniform gravitational fluid.
+    model_validity_rules:
+      - id: dp-man-model
+        when: dp > 0
+        status: success
+        text:
+          es: Válido para fluidos de densidad constante [[rho]] en un rango de profundidad moderado.
+          en: Valid for constant density fluids [[rho]] in a moderate depth range.
+    graph_rules:
+      - id: dp-man-graph
+        when: dp > 0
+        status: success
+        text:
+          es: Representa la pendiente del gradiente de presión en el gráfico Coord del sistema.
+          en: Represents the slope of the pressure gradient in the Coord graph of the system.
+    likely_errors:
+      - id: err-dp-neg
+        when: dp < 0
+        status: error
+        text:
+          es: Un incremento negativo suele ocurrir al confundir la dirección de la profundidad o el signo de la gravedad.
+          en: A negative increase usually occurs when confusing the depth direction or the sign of gravity.
+    next_step_rules:
+      - id: next-dp-archimedes
+        when: dp > 0
+        status: info
+        text:
+          es: Estudia Arquímedes para ver cómo el gradiente de [[dp]] genera empuje.
+          en: Study Archimedes to see how the gradient of [[dp]] generates thrust.
+
+  h:
+    summary_rules:
+      - id: h-depth-val
+        when: h > 0
+        status: success
+        text:
+          es: La profundidad calculada [[h]] describe la distancia vertical desde la superficie libre del fluido.
+          en: The calculated depth [[h]] describes the vertical distance from the fluid's free surface.
+    physical_reading_rules:
+      - id: h-depth-meaning
+        when: h > 0
+        status: success
+        text:
+          es: Indica la posición del sensor en la columna hidrostática porque la presión aumenta con este valor.
+          en: Indicates the sensor's position in the hydrostatic column because pressure increases with this value.
+    coherence_rules:
+      - id: h-depth-pos
+        when: h > 0
+        status: success
+        text:
+          es: Es coherente que la profundidad sea positiva en este marco de referencia descendente.
+          en: It is coherent that depth is positive in this downward reference frame.
+    model_validity_rules:
+      - id: h-depth-valid
+        when: h < 11000
+        status: success
+        text:
+          es: Válido dentro de los límites de las fosas oceánicas terrestres conocidas.
+          en: Valid within the limits of known terrestrial oceanic trenches.
+    graph_rules:
+      - id: h-depth-graph
+        when: h > 0
+        status: success
+        text:
+          es: Representa la coordenada vertical en el eje de profundidad del gráfico Coord.
+          en: Represents the vertical coordinate on the depth axis of the Coord graph.
+    likely_errors:
+      - id: err-h-neg
+        when: h < 0
+        status: error
+        text:
+          es: Una profundidad negativa suele ocurrir al confundir la cota con la altitud sobre el nivel del mar.
+          en: A negative depth usually occurs when confusing the level with altitude above sea level.
+    next_step_rules:
+      - id: next-h-estatica
+        when: h > 0
+        status: info
+        text:
+          es: Revisa la teoría para ver cómo [[h]] influye en el Principio de Arquímedes.
+          en: Review the theory to see how [[h]] influences Archimedes' Principle.
+`;export{e as default};

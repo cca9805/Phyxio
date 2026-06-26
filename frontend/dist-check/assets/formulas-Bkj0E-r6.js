@@ -1,0 +1,145 @@
+const e=`- id: onda_em_velocidad
+  title:
+    es: Relacion entre velocidad, longitud de onda y frecuencia
+    en: Relation between speed, wavelength, and frequency
+  equation: "c = lambda * f"
+  latex: "c = \\\\lambda f  % lambda"
+  rearrangements:
+    - target: c
+      equation: "c = lambda * f"
+      latex: "c = \\\\lambda f  % lambda"
+    - target: lambda
+      equation: "lambda = c / f"
+      latex: "\\\\lambda = \\\\frac{c}{f}  % lambda"
+    - target: f
+      equation: "f = c / lambda"
+      latex: "f = \\\\frac{c}{\\\\lambda}  % lambda"
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: "En el vacio, [[lambda]] y [[f]] se compensan para mantener [[c]] como rapidez de propagacion."
+    en: "In vacuum, [[lambda]] and [[f]] compensate to keep [[c]] as the propagation speed."
+  constraints:
+    - "[[lambda]] > 0"
+    - "[[f]] > 0"
+    - "propagacion en vacio o aire ideal"
+  validity:
+    es: "Valida para ondas electromagneticas libres en vacio; en medios materiales se usa la velocidad del medio."
+    en: "Valid for free electromagnetic waves in vacuum; in material media the medium speed is used."
+  dimension_check: "[L T⁻¹] = [L] [T⁻¹]"
+  calculable: true
+  motivo_no_calculable:
+    es: "Calculable si se conocen dos magnitudes positivas entre [[c]], [[lambda]] y [[f]]."
+    en: "Calculable when two positive quantities among [[c]], [[lambda]], and [[f]] are known."
+  used_in: [teoria, ejemplos, interpretacion, grafico_coord]
+  interpretation_tags: [propagacion, escala_espacial, escala_temporal]
+  result_semantics:
+    target: c
+    kind: positive_speed
+    sign_meaning:
+      es: "El signo no se usa porque [[c]] es rapidez."
+      en: "The sign is not used because [[c]] is speed."
+    absolute_value_meaning:
+      es: "El valor mide cuanta distancia avanza la fase por segundo."
+      en: "The value measures how far phase advances per second."
+  domain_checks:
+    - id: lambda_positive
+      condition: "lambda > 0"
+      message:
+        es: "[[lambda]] debe ser positiva."
+        en: "[[lambda]] must be positive."
+    - id: f_positive
+      condition: "f > 0"
+      message:
+        es: "[[f]] debe ser positiva."
+        en: "[[f]] must be positive."
+  coherence_checks:
+    - id: vacuum_speed_near_c
+      condition: "c > 2e8 and c < 4e8"
+      message:
+        es: "El resultado esta en el orden esperado para una onda electromagnetica en vacio."
+        en: "The result is in the expected order for an electromagnetic wave in vacuum."
+  graph_implications:
+    - id: lambda_spacing
+      message:
+        es: "Mayor [[lambda]] separa mas las crestas del grafico."
+        en: "Larger [[lambda]] spreads the crests farther apart in the graph."
+  pedagogical_triggers:
+    - id: speed_frequency_confusion
+      detect_when: "f changes and c changes without medium change"
+      message:
+        es: "Revisa si estas atribuyendo a [[f]] un cambio de [[c]] que no corresponde al vacio."
+        en: "Check whether you are assigning to [[f]] a change in [[c]] that does not belong to vacuum."
+- id: relacion_campos_em
+  title:
+    es: Relacion entre amplitudes electrica y magnetica
+    en: Relation between electric and magnetic amplitudes
+  equation: "E0 = c * B0"
+  latex: "E_0 = c B_0"
+  rearrangements:
+    - target: E0
+      equation: "E0 = c * B0"
+      latex: "E_0 = c B_0"
+    - target: B0
+      equation: "B0 = E0 / c"
+      latex: "B_0 = \\\\frac{E_0}{c}"
+    - target: c
+      equation: "c = E0 / B0"
+      latex: "c = \\\\frac{E_0}{B_0}"
+  category: structural
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: "[[E0]] y [[B0]] no son amplitudes independientes en una onda electromagnetica plana en vacio."
+    en: "[[E0]] and [[B0]] are not independent amplitudes in a plane electromagnetic wave in vacuum."
+  constraints:
+    - "[[E0]] >= 0"
+    - "[[B0]] >= 0"
+    - "onda plana transversal en vacio"
+  validity:
+    es: "Usar en ondas planas lejos de fuentes; cerca de antenas o en materiales la relacion puede requerir modelo extendido."
+    en: "Use for plane waves far from sources; near antennas or in materials the relation may require an extended model."
+  dimension_check: "[M L T⁻³ I⁻¹] = [L T⁻¹] [M T⁻² I⁻¹]"
+  calculable: true
+  motivo_no_calculable:
+    es: "Calculable si se conoce [[c]] y una amplitud de campo."
+    en: "Calculable when [[c]] and one field amplitude are known."
+  used_in: [teoria, ejemplos, interpretacion, grafico_coord]
+  interpretation_tags: [acoplamiento, transversalidad, amplitudes]
+  result_semantics:
+    target: E0
+    kind: nonnegative_amplitude
+    sign_meaning:
+      es: "El signo no se usa porque [[E0]] representa amplitud."
+      en: "The sign is not used because [[E0]] represents amplitude."
+    absolute_value_meaning:
+      es: "El valor indica la escala del campo electrico transversal."
+      en: "The value indicates the transverse electric field scale."
+  domain_checks:
+    - id: B0_nonnegative
+      condition: "B0 >= 0"
+      message:
+        es: "[[B0]] debe introducirse como modulo no negativo."
+        en: "[[B0]] must be entered as a nonnegative magnitude."
+    - id: c_positive
+      condition: "c > 0"
+      message:
+        es: "[[c]] debe ser positiva."
+        en: "[[c]] must be positive."
+  coherence_checks:
+    - id: field_ratio_vacuum
+      condition: "E0 / B0 > 2e8 and E0 / B0 < 4e8"
+      message:
+        es: "La razon de campos es coherente con propagacion en vacio."
+        en: "The field ratio is coherent with vacuum propagation."
+  graph_implications:
+    - id: coupled_amplitudes
+      message:
+        es: "Al aumentar [[E0]], el grafico debe mostrar tambien una escala coherente para [[B0]]."
+        en: "When [[E0]] increases, the graph should also show a coherent scale for [[B0]]."
+  pedagogical_triggers:
+    - id: independent_fields
+      detect_when: "E0 changes and B0 fixed in vacuum model"
+      message:
+        es: "En el modelo de vacio, no ajustes [[E0]] y [[B0]] como si fueran independientes."
+        en: "In the vacuum model, do not adjust [[E0]] and [[B0]] as independent quantities."
+`;export{e as default};

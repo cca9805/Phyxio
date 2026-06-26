@@ -1,0 +1,271 @@
+version: 5.0.0
+leaf: conexion-con-magnitudes-termodinamicas
+ui:
+  default_formula: energia_libre_desde_particion
+formulas:
+- id: energia_libre_desde_particion
+  title:
+    es: Energía libre de Helmholtz desde la función de partición
+    en: Helmholtz free energy from the partition function
+  equation: F=-k_B*T*ln(Z)
+  latex: F=-k_B T\ln Z
+  rearrangements:
+  - id: particion_desde_energia_libre
+    equation: Z=exp(-F/(k_B*T))
+    latex: Z=e^{-F/(k_B T)}
+    target: funcion_particion
+  category: thermodynamic_potential
+  relation_type: definition_from_partition_function
+  physical_meaning:
+    es: Convierte el peso estadístico microscópico Z en el potencial macroscópico que fija equilibrio a temperatura y volumen
+      constantes.
+    en: Turns the microscopic statistical weight Z into the macroscopic potential that controls equilibrium at fixed temperature
+      and volume.
+  constraints:
+    es: Sistema canónico en equilibrio térmico, T positiva, Z adimensional y mayor que cero.
+    en: Canonical system in thermal equilibrium, positive T, dimensionless Z greater than zero.
+  validity:
+    es: Válida para el ensamble canónico con número de partículas, volumen y temperatura fijados.
+    en: Valid for the canonical ensemble with fixed particle number, volume, and temperature.
+  dimension_check:
+    es: k_B*T tiene dimensión de energía y ln(Z) es adimensional, por tanto F es energía.
+    en: k_B*T has energy dimension and ln(Z) is dimensionless, so F is energy.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - free_energy_curve
+  - thermodynamic_interpretation
+  interpretation_tags:
+  - partition_function
+  - helmholtz_free_energy
+  - temperature_dependence
+  result_semantics:
+    target: energia_libre_helmholtz
+    kind: scalar_potential
+    sign_meaning:
+      es: Un valor más negativo indica mayor peso estadístico accesible para el equilibrio canónico.
+      en: A more negative value indicates greater accessible statistical weight for canonical equilibrium.
+    absolute_value_meaning:
+      es: El módulo mide la escala energética del potencial termodinámico asociado a Z.
+      en: The magnitude measures the energy scale of the thermodynamic potential associated with Z.
+  domain_checks:
+  - id: temperatura_positiva
+    condition: T>0
+    message:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  - id: particion_positiva
+    condition: Z>0
+    message:
+      es: La función de partición debe ser positiva para que ln(Z) exista.
+      en: The partition function must be positive for ln(Z) to exist.
+  coherence_checks:
+  - id: z_adimensional
+    condition: dimension(Z)==1
+    message:
+      es: Z no lleva unidades; solo su logaritmo entra en F.
+      en: Z has no units; only its logarithm enters F.
+  graph_implications:
+    es: En una gráfica F frente a T, la pendiente se relaciona con la entropía mediante S=-∂F/∂T.
+    en: In an F versus T graph, the slope is related to entropy through S=-∂F/∂T.
+  pedagogical_triggers:
+  - id: confundir_z_con_energia
+    message:
+      es: Z no es una energía; es una suma de pesos estadísticos.
+      en: Z is not an energy; it is a sum of statistical weights.
+- id: energia_interna_desde_particion
+  title:
+    es: Energía interna desde la función de partición
+    en: Internal energy from the partition function
+  equation: U=k_B*T^2*dlnZ_dT
+  latex: U=k_B T^2(\frac{\partial \ln Z}{\partial T})_{V,N}
+  rearrangements:
+  - id: derivada_log_particion_desde_energia
+    equation: dlnZ_dT=U/(k_B*T^2)
+    latex: (\frac{\partial \ln Z}{\partial T})_{V,N}=\frac{U}{k_B T^2}
+    target: derivada_log_particion_temperatura
+  category: state_function
+  relation_type: temperature_derivative
+  physical_meaning:
+    es: Relaciona la sensibilidad de ln(Z) ante la temperatura con la energía media del sistema.
+    en: Relates the sensitivity of ln(Z) to temperature with the system average energy.
+  constraints:
+    es: Derivada tomada a volumen y número de partículas constantes; T absoluta positiva.
+    en: Derivative taken at constant volume and particle number; positive absolute temperature.
+  validity:
+    es: Ensable canónico en equilibrio, con niveles energéticos independientes de T.
+    en: Canonical ensemble in equilibrium, with energy levels independent of T.
+  dimension_check:
+    es: k_B*T^2*dlnZ_dT combina J/K, K² y 1/K, dando julios.
+    en: k_B*T^2*dlnZ_dT combines J/K, K², and 1/K, yielding joules.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - energy_temperature_reading
+  - thermodynamic_interpretation
+  interpretation_tags:
+  - internal_energy
+  - temperature_derivative
+  - partition_function
+  result_semantics:
+    target: energia_interna
+    kind: mean_energy
+    sign_meaning:
+      es: El signo depende del cero elegido para la energía microscópica.
+      en: The sign depends on the chosen zero of microscopic energy.
+    absolute_value_meaning:
+      es: El módulo representa la escala de energía media almacenada en los grados de libertad accesibles.
+      en: The magnitude represents the average energy scale stored in accessible degrees of freedom.
+  domain_checks:
+  - id: derivada_definida
+    condition: dlnZ_dT is finite
+    message:
+      es: La derivada debe ser finita en el intervalo de temperaturas considerado.
+      en: The derivative must be finite over the temperature interval considered.
+  coherence_checks:
+  - id: temperatura_constante_params
+    condition: V,N constant
+    message:
+      es: La derivada define U solo si V y N permanecen constantes.
+      en: The derivative defines U only if V and N remain constant.
+  graph_implications:
+    es: La curvatura de ln(Z) o de F frente a T anticipa cambios en U y capacidad calorífica.
+    en: The curvature of ln(Z) or F versus T signals changes in U and heat capacity.
+  pedagogical_triggers:
+  - id: olvidar_t_cuadrado
+    message:
+      es: El factor T² es esencial; no basta con derivar ln(Z).
+      en: The T² factor is essential; differentiating ln(Z) alone is not enough.
+- id: entropia_desde_energia_libre
+  title:
+    es: Entropía desde la energía libre
+    en: Entropy from free energy
+  equation: S=-dF_dT
+  latex: S=-(\frac{\partial F}{\partial T})_{V,N}
+  rearrangements:
+  - id: pendiente_energia_libre_desde_entropia
+    equation: dF_dT=-S
+    latex: (\frac{\partial F}{\partial T})_{V,N}=-S
+    target: pendiente_energia_libre_temperatura
+  category: state_function
+  relation_type: thermodynamic_derivative
+  physical_meaning:
+    es: La entropía mide cuánto desciende la energía libre al aumentar la temperatura.
+    en: Entropy measures how much free energy decreases as temperature increases.
+  constraints:
+    es: Derivada a volumen y número de partículas constantes, estado de equilibrio.
+    en: Derivative at constant volume and particle number, equilibrium state.
+  validity:
+    es: Válida cuando F(T,V,N) es diferenciable en el intervalo estudiado.
+    en: Valid when F(T,V,N) is differentiable over the studied interval.
+  dimension_check:
+    es: dF_dT tiene unidades J/K, las mismas de la entropía.
+    en: dF_dT has units J/K, the same as entropy.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - free_energy_curve
+  - slope_reading
+  interpretation_tags:
+  - entropy
+  - slope
+  - free_energy
+  result_semantics:
+    target: entropia
+    kind: state_function
+    sign_meaning:
+      es: En sistemas físicos ordinarios S suele ser no negativa si el cero entrópico está bien definido.
+      en: In ordinary physical systems S is usually nonnegative when the entropy zero is well defined.
+    absolute_value_meaning:
+      es: El módulo indica la cantidad de microestados accesibles expresada como respuesta térmica de F.
+      en: The magnitude indicates the amount of accessible microstates expressed as the thermal response of F.
+  domain_checks:
+  - id: f_diferenciable
+    condition: dF_dT is finite
+    message:
+      es: La pendiente de F debe estar definida para inferir S.
+      en: The slope of F must be defined to infer S.
+  coherence_checks:
+  - id: pendiente_negativa_entropia_positiva
+    condition: S>=0 implies dF_dT<=0
+    message:
+      es: Si S es positiva, F debe disminuir o permanecer constante al aumentar T.
+      en: If S is positive, F must decrease or remain constant as T increases.
+  graph_implications:
+    es: La pendiente de F(T) es -S; una caída más pronunciada implica mayor entropía.
+    en: The slope of F(T) is -S; a steeper decrease implies larger entropy.
+  pedagogical_triggers:
+  - id: signo_entropia_pendiente
+    message:
+      es: La entropía no es la pendiente de F, sino su opuesto.
+      en: Entropy is not the slope of F, but its opposite.
+- id: presion_desde_energia_libre
+  title:
+    es: Presión desde la energía libre
+    en: Pressure from free energy
+  equation: P=-dF_dV
+  latex: P=-(\frac{\partial F}{\partial V})_{T,N}
+  rearrangements:
+  - id: pendiente_volumen_desde_presion
+    equation: dF_dV=-P
+    latex: (\frac{\partial F}{\partial V})_{T,N}=-P
+    target: pendiente_energia_libre_volumen
+  category: equation_of_state
+  relation_type: volume_derivative
+  physical_meaning:
+    es: La presión aparece como la respuesta de la energía libre al cambiar el volumen.
+    en: Pressure appears as the response of free energy to a volume change.
+  constraints:
+    es: Derivada a temperatura y número de partículas constantes.
+    en: Derivative at constant temperature and particle number.
+  validity:
+    es: Válida para sistemas canónicos con F diferenciable respecto al volumen.
+    en: Valid for canonical systems with F differentiable with respect to volume.
+  dimension_check:
+    es: dF_dV tiene unidades J/m³, equivalentes a Pa.
+    en: dF_dV has units J/m³, equivalent to Pa.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - equation_of_state_reading
+  interpretation_tags:
+  - pressure
+  - free_energy
+  - volume_derivative
+  result_semantics:
+    target: presion
+    kind: intensive_variable
+    sign_meaning:
+      es: Presión positiva corresponde a tendencia expansiva frente a compresión externa.
+      en: Positive pressure corresponds to expansive tendency against external compression.
+    absolute_value_meaning:
+      es: El módulo mide la intensidad mecánica de la respuesta al cambio de volumen.
+      en: The magnitude measures the mechanical intensity of the response to volume change.
+  domain_checks:
+  - id: volumen_positivo
+    condition: V>0
+    message:
+      es: El volumen debe ser positivo.
+      en: Volume must be positive.
+  coherence_checks:
+  - id: derivada_volumen_constante_temperatura
+    condition: T,N constant
+    message:
+      es: Para leer presión desde F, T y N deben mantenerse constantes.
+      en: To read pressure from F, T and N must remain constant.
+  graph_implications:
+    es: En una curva F(V), la pendiente negativa representa la presión.
+    en: On an F(V) curve, the negative slope represents pressure.
+  pedagogical_triggers:
+  - id: confundir_presion_con_energia
+    message:
+      es: La presión no es F, sino una derivada de F respecto al volumen.
+      en: Pressure is not F, but a derivative of F with respect to volume.

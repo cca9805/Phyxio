@@ -1,0 +1,940 @@
+version: 5.0.0
+id: ondas-flexionales-en-vigas
+leaf_id: ondas-flexionales-en-vigas
+nombre:
+  es: Ondas flexionales en vigas
+  en: Flexural Waves in Beams
+scope:
+  area: fisica-clasica
+  bloque: ondas
+  subbloque: ondas-mecanicas
+  parent_id: ondas-en-solidos
+  ruta_relativa: fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/ondas-flexionales-en-vigas
+  orden: 232370
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - velocidad_fase_flexional
+  - velocidad_grupo_flexional
+  - relacion_dispersion_flex
+  - longitud_onda_flexional
+  magnitudes:
+  - v_fase_flex
+  - v_grupo_flex
+  - modulo_de_young
+  - momento_de_inercia_de_la_seccion_transversal
+  - rho_lin
+  - omega
+  - k_flex
+  - lambda_flex
+  - rho_vol
+  - area_de_la_seccion_transversal
+  - r_giro
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: ondas
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+  - Svg
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: v_fase_flex
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  v_fase_flex:
+    enabled: true
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: Velocidad a la que se desplaza un frente de fase de la onda de flexión; crece con la raíz de la frecuencia.
+      en: Speed at which a bending wave phase front travels; grows with the square root of frequency.
+    summary_rules:
+    - id: vf_summary_high
+      when: v_fase_flex > 500
+      status: ok
+      text:
+        es: '[[v_fase_flex]] indica propagación rápida de la fase. La viga es muy rígida o la frecuencia es elevada. Verificar
+          si la longitud de onda resultante sigue siendo mucho mayor que el espesor.'
+        en: '[[v_fase_flex]] indicates fast phase propagation. The beam is very stiff or frequency is high. Verify whether
+          the resulting wavelength is still much greater than the thickness.'
+    - id: vf_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[v_fase_flex]] resume la velocidad de un frente de fase. A diferencia de ondas longitudinales, esta velocidad
+          depende de la frecuencia: ondas de alta frecuencia viajan más rápido.'
+        en: '[[v_fase_flex]] summarizes the speed of a phase front. Unlike longitudinal waves, this speed depends on frequency:
+          higher-frequency waves travel faster.'
+    physical_reading_rules:
+    - id: vf_reading_dispersive
+      when: v_fase_flex > 0
+      status: ok
+      text:
+        es: '[[v_fase_flex]] crece como la raíz cuadrada de [[omega]]. Si se duplica la frecuencia, la velocidad de fase se
+          multiplica por raíz de 2 (aproximadamente 1.41). Esta dispersión positiva significa que los paquetes de ondas se
+          ensanchan al propagarse.'
+        en: '[[v_fase_flex]] grows as the square root of [[omega]]. If frequency doubles, phase velocity multiplies by the
+          square root of 2 (approximately 1.41). This positive dispersion means wave packets broaden as they propagate.'
+    - id: vf_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[v_fase_flex]] depende de la rigidez EI y de la inercia rho·A del material y sección, más la frecuencia. Un
+          material más rígido o una sección con mayor momento de inercia produce ondas de fase más rápida.'
+        en: '[[v_fase_flex]] depends on stiffness EI and inertia rho·A of the material and section, plus frequency. A stiffer
+          material or section with greater moment of inertia produces faster phase waves.'
+    coherence_rules:
+    - id: vf_coherence_vs_longitudinal
+      when: v_fase_flex > 6000
+      status: error
+      text:
+        es: '[[v_fase_flex]] supera la velocidad longitudinal típica. La velocidad de fase flexional siempre es menor que
+          la longitudinal en el mismo material. Revisar unidades de [[momento_de_inercia_de_la_seccion_transversal]] (debe ser m⁴) y [[omega]] (debe ser rad/s).'
+        en: '[[v_fase_flex]] exceeds typical longitudinal speed. Flexural phase velocity is always less than longitudinal
+          in the same material. Check units of [[momento_de_inercia_de_la_seccion_transversal]] (must be m⁴) and [[omega]] (must be rad/s).'
+    - id: vf_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: El valor de [[v_fase_flex]] es físicamente plausible para la frecuencia y sección consideradas.
+        en: The value of [[v_fase_flex]] is physically plausible for the considered frequency and section.
+    model_validity_rules:
+    - id: vf_validity_wavelength
+      when: v_fase_flex > 1000
+      status: warning
+      text:
+        es: A velocidades de fase elevadas, la longitud de onda puede reducirse hasta ser comparable al espesor de la sección.
+          Calcular [[lambda_flex]] y comparar con el espesor para verificar la validez de Euler-Bernoulli.
+        en: At high phase velocities, the wavelength may decrease until it is comparable to section thickness. Calculate [[lambda_flex]]
+          and compare with thickness to verify Euler-Bernoulli validity.
+    - id: vf_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo de Euler-Bernoulli es válido mientras la longitud de onda sea al menos 6 veces el espesor de la sección.
+          Para vigas metálicas delgadas a frecuencias audibles, esto se cumple con holgura.
+        en: Euler-Bernoulli model is valid as long as wavelength is at least 6 times the section thickness. For thin metallic
+          beams at audible frequencies, this is easily satisfied.
+    graph_rules:
+    - id: vf_graph_dispersion
+      when: 'true'
+      status: ok
+      text:
+        es: En el gráfico Coord de dispersión, [[v_fase_flex]] aparece como una curva creciente con la raíz de la frecuencia.
+          La pendiente de la curva disminuye a frecuencias altas porque la raíz cuadrada se satura.
+        en: In the Coord dispersion graph, [[v_fase_flex]] appears as a curve growing with the square root of frequency. The
+          curve slope decreases at high frequencies because the square root saturates.
+    likely_errors:
+    - id: vf_error_units
+      when: v_fase_flex > 10000
+      status: error
+      text:
+        es: 'Confundir [[v_fase_flex]] con una lectura aislada es un error frecuente: Velocidad de fase extremadamente alta.
+          El error más probable es usar [[momento_de_inercia_de_la_seccion_transversal]] en cm⁴ sin convertir a m⁴ (factor 10⁻⁸), o [[omega]] en Hz en lugar
+          de rad/s.'
+        en: 'A common mistake is to interpret [[v_fase_flex]] in isolation: Extremely high phase velocity. The most likely
+          error is using [[momento_de_inercia_de_la_seccion_transversal]] in cm⁴ without converting to m⁴ (factor 10⁻⁸), or [[omega]] in Hz instead of rad/s.'
+    - id: vf_error_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'Confundir [[v_fase_flex]] con una lectura aislada es un error frecuente: Verificar que [[omega]] está en rad/s
+          (no en Hz: multiplicar por 2π) y que [[momento_de_inercia_de_la_seccion_transversal]] está en m⁴ (no en cm⁴).'
+        en: 'A common mistake is to interpret [[v_fase_flex]] in isolation: Verify that [[omega]] is in rad/s (not Hz: multiply
+          by 2π) and that [[momento_de_inercia_de_la_seccion_transversal]] is in m⁴ (not cm⁴).'
+    next_step_rules:
+    - id: vf_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[v_fase_flex]] calculado, obtener [[v_grupo_flex]] multiplicando por 2, y [[lambda_flex]] dividiendo 2π entre
+          [[k_flex]]. Comparar [[lambda_flex]] con el espesor para confirmar la validez del modelo.
+        en: With [[v_fase_flex]] computed, obtain [[v_grupo_flex]] by multiplying by 2, and [[lambda_flex]] by dividing 2π
+          by [[k_flex]]. Compare [[lambda_flex]] with thickness to confirm model validity.
+    physical_intuition:
+    - id: v_fase_flex_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[v_fase_flex]] describe el estado dinámico.
+        en: Intuitively, [[v_fase_flex]] describes the dynamic state.
+    limiting_cases:
+    - id: v_fase_flex_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[v_fase_flex]].
+        en: Check limiting cases of [[v_fase_flex]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  omega:
+    enabled: true
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: Frecuencia angular de la excitación o del modo de la onda de flexión.
+      en: Angular frequency of the excitation or mode of the bending wave.
+    summary_rules:
+    - id: om_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[omega]] resume la frecuencia angular del fenómeno. A mayor [[omega]], mayor velocidad de fase y menor longitud
+          de onda, según la dispersión cuadrática de la viga.'
+        en: '[[omega]] summarizes the angular frequency of the phenomenon. Higher [[omega]] means higher phase velocity and
+          shorter wavelength, according to the beam''s quadratic dispersion.'
+    physical_reading_rules:
+    - id: om_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[omega]] entra en la velocidad de fase bajo una raíz cuadrada: duplicar la frecuencia multiplica v_f por la
+          raíz de 2. Esta dependencia sub-lineal es la firma de la dispersión flexional.'
+        en: '[[omega]] enters phase velocity under a square root: doubling frequency multiplies v_f by the square root of
+          2. This sub-linear dependence is the signature of flexural dispersion.'
+    coherence_rules:
+    - id: om_coherence_positive
+      when: omega <= 0
+      status: error
+      text:
+        es: '[[omega]] debe ser positiva para una onda de flexión propagante.'
+        en: '[[omega]] must be positive for a propagating bending wave.'
+    - id: om_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: El valor de [[omega]] es coherente con el rango esperado para la aplicación.
+        en: The value of [[omega]] is consistent with the expected range for the application.
+    model_validity_rules:
+    - id: om_validity_high
+      when: omega > 100000
+      status: warning
+      text:
+        es: A frecuencias angulares muy elevadas, la longitud de onda puede ser comparable al espesor y el modelo de Euler-Bernoulli
+          deja de ser válido. Verificar calculando [[lambda_flex]].
+        en: At very high angular frequencies, the wavelength may be comparable to thickness and the Euler-Bernoulli model
+          breaks down. Verify by computing [[lambda_flex]].
+    - id: om_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: Para el rango de frecuencia actual, el modelo de viga delgada es apropiado.
+        en: For the current frequency range, the slender beam model is appropriate.
+    graph_rules:
+    - id: om_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[omega]] es el eje vertical en la curva de dispersión omega vs k. La forma parabólica de esta curva es la característica
+          visual de la dispersión cuadrática.'
+        en: '[[omega]] is the vertical axis in the omega vs k dispersion curve. The parabolic shape of this curve is the visual
+          characteristic of quadratic dispersion.'
+    likely_errors:
+    - id: om_error_hz
+      when: omega < 10
+      status: warning
+      text:
+        es: 'Confundir [[omega]] con una lectura aislada es un error frecuente: [[omega]] parece muy baja. Verificar si se
+          ha introducido la frecuencia en Hz en lugar de rad/s. Para convertir, multiplicar Hz por 2π.'
+        en: 'A common mistake is to interpret [[omega]] in isolation: [[omega]] seems very low. Verify whether frequency was
+          entered in Hz instead of rad/s. To convert, multiply Hz by 2π.'
+    - id: om_error_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'Confundir [[omega]] con una lectura aislada es un error frecuente: Confirmar que [[omega]] está en rad/s. Para
+          1 kHz, omega vale aproximadamente 6283 rad/s.'
+        en: 'A common mistake is to interpret [[omega]] in isolation: Confirm that [[omega]] is in rad/s. For 1 kHz, omega
+          is approximately 6283 rad/s.'
+    next_step_rules:
+    - id: om_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[omega]] definida, calcular [[v_fase_flex]] y [[k_flex]] para characterizar completamente la onda de flexión
+          a esa frecuencia.
+        en: With [[omega]] defined, compute [[v_fase_flex]] and [[k_flex]] to fully characterize the bending wave at that
+          frequency.
+    physical_intuition:
+    - id: omega_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[omega]] describe el estado dinámico.
+        en: Intuitively, [[omega]] describes the dynamic state.
+    limiting_cases:
+    - id: omega_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[omega]].
+        en: Check limiting cases of [[omega]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  modulo_de_young:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de modulo_de_young
+      en: Result of modulo_de_young
+    summary_rules:
+    - id: modulo_de_young_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[modulo_de_young]] indica la magnitud física principal.
+        en: The result [[modulo_de_young]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: modulo_de_young_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[modulo_de_young]] junto con su unidad y signo.
+        en: Read [[modulo_de_young]] with its unit and sign.
+    coherence_rules:
+    - id: modulo_de_young_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[modulo_de_young]].
+        en: Check the dimensional consistency of [[modulo_de_young]]
+    model_validity_rules:
+    - id: modulo_de_young_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[modulo_de_young]] solo dentro de la validez del modelo.
+        en: Interpret [[modulo_de_young]] only within the validity of the model.
+    graph_rules:
+    - id: modulo_de_young_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[modulo_de_young]] con la lectura gráfica.
+        en: Relate [[modulo_de_young]] to the graph.
+    likely_errors:
+    - id: modulo_de_young_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[modulo_de_young]] con una lectura aislada es un error frecuente; debe interpretarse con el modelo, las unidades
+          y el rango físico.
+        en: A common mistake is to interpret [[modulo_de_young]] in isolation; it must be read with the model, units, and physical
+          range.
+    next_step_rules:
+    - id: modulo_de_young_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[modulo_de_young]], revisa los límites físicos.
+        en: After obtaining [[modulo_de_young]], review the physical limits.
+    physical_intuition:
+    - id: modulo_de_young_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[modulo_de_young]] describe el estado dinámico.
+        en: Intuitively, [[modulo_de_young]] describes the dynamic state.
+    limiting_cases:
+    - id: modulo_de_young_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[modulo_de_young]].
+        en: Check limiting cases of [[modulo_de_young]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  momento_de_inercia_de_la_seccion_transversal:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de momento_de_inercia_de_la_seccion_transversal
+      en: Result of momento_de_inercia_de_la_seccion_transversal
+    summary_rules:
+    - id: momento_de_inercia_de_la_seccion_transversal_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[momento_de_inercia_de_la_seccion_transversal]] indica la magnitud física principal.
+        en: The result [[momento_de_inercia_de_la_seccion_transversal]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: momento_de_inercia_de_la_seccion_transversal_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[momento_de_inercia_de_la_seccion_transversal]] junto con su unidad y signo.
+        en: Read [[momento_de_inercia_de_la_seccion_transversal]] with its unit and sign.
+    coherence_rules:
+    - id: momento_de_inercia_de_la_seccion_transversal_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[momento_de_inercia_de_la_seccion_transversal]].
+        en: Check the dimensional consistency of [[momento_de_inercia_de_la_seccion_transversal]]
+    model_validity_rules:
+    - id: momento_de_inercia_de_la_seccion_transversal_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[momento_de_inercia_de_la_seccion_transversal]] solo dentro de la validez del modelo.
+        en: Interpret [[momento_de_inercia_de_la_seccion_transversal]] only within the validity of the model.
+    graph_rules:
+    - id: momento_de_inercia_de_la_seccion_transversal_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[momento_de_inercia_de_la_seccion_transversal]] con la lectura gráfica.
+        en: Relate [[momento_de_inercia_de_la_seccion_transversal]] to the graph.
+    likely_errors:
+    - id: momento_de_inercia_de_la_seccion_transversal_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[momento_de_inercia_de_la_seccion_transversal]] con una lectura aislada es un error frecuente; debe interpretarse con el modelo, las unidades
+          y el rango físico.
+        en: A common mistake is to interpret [[momento_de_inercia_de_la_seccion_transversal]] in isolation; it must be read with the model, units, and physical
+          range.
+    next_step_rules:
+    - id: momento_de_inercia_de_la_seccion_transversal_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[momento_de_inercia_de_la_seccion_transversal]], revisa los límites físicos.
+        en: After obtaining [[momento_de_inercia_de_la_seccion_transversal]], review the physical limits.
+    physical_intuition:
+    - id: momento_de_inercia_de_la_seccion_transversal_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[momento_de_inercia_de_la_seccion_transversal]] describe el estado dinámico.
+        en: Intuitively, [[momento_de_inercia_de_la_seccion_transversal]] describes the dynamic state.
+    limiting_cases:
+    - id: momento_de_inercia_de_la_seccion_transversal_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[momento_de_inercia_de_la_seccion_transversal]].
+        en: Check limiting cases of [[momento_de_inercia_de_la_seccion_transversal]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  rho_lin:
+    enabled: true
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: Masa por unidad de longitud; la inercia lineal que se opone a la aceleración transversal de la viga.
+      en: Mass per unit length; the linear inertia opposing transverse acceleration of the beam.
+    summary_rules:
+    - id: rl_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[rho_lin]] resume la inercia lineal de la viga. Un valor elevado indica una viga pesada por metro que vibra
+          con menor velocidad de fase. La relación entre rigidez EI e inercia [[rho_lin]] determina la velocidad de propagación.'
+        en: '[[rho_lin]] summarizes the beam linear inertia. A high value indicates a heavy beam per metre that vibrates at
+          lower phase velocity. The ratio of stiffness EI to inertia [[rho_lin]] determines propagation speed.'
+    physical_reading_rules:
+    - id: rl_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[rho_lin]] aparece en el denominador bajo la raíz cuarta. Duplicar [[rho_lin]] reduce [[v_fase_flex]] por el
+          factor 2^(1/4) ≈ 1.19. Es equivalente a multiplicar la densidad o el área.'
+        en: '[[rho_lin]] appears in the denominator under the fourth root. Doubling [[rho_lin]] reduces [[v_fase_flex]] by
+          the factor 2^(1/4) ≈ 1.19. This is equivalent to multiplying density or area.'
+    coherence_rules:
+    - id: rl_coherence_positive
+      when: rho_lin <= 0
+      status: error
+      text:
+        es: '[[rho_lin]] debe ser positiva para una viga material.'
+        en: '[[rho_lin]] must be positive for a material beam.'
+    - id: rl_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[rho_lin]] es coherente con el producto de densidad volumétrica y área de la sección.'
+        en: '[[rho_lin]] is consistent with the product of volumetric density and cross-sectional area.'
+    model_validity_rules:
+    - id: rl_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[rho_lin]] se asume constante en el modelo de sección uniforme. Para vigas con sección variable o material no
+          homogéneo, la masa lineal puede variar a lo largo del eje.'
+        en: '[[rho_lin]] is assumed constant in the uniform section model. For beams with variable section or non-homogeneous
+          material, linear mass may vary along the axis.'
+    graph_rules:
+    - id: rl_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: Mayor [[rho_lin]] deprime la curva de dispersión, reduciendo todas las velocidades a la misma frecuencia.
+        en: Higher [[rho_lin]] depresses the dispersion curve, reducing all velocities at the same frequency.
+    likely_errors:
+    - id: rl_error_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'Confundir [[rho_lin]] con una lectura aislada es un error frecuente: Verificar que [[rho_lin]] se ha calculado
+          como [[rho_vol]] × [[A_seccion]] y que ambos están en unidades SI (kg/m³ y m²).'
+        en: 'A common mistake is to interpret [[rho_lin]] in isolation: Verify that [[rho_lin]] has been computed as [[rho_vol]]
+          × [[A_seccion]] and both are in SI units (kg/m³ and m²).'
+    next_step_rules:
+    - id: rl_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[rho_lin]] y EI calculados, sustituir en la fórmula de [[v_fase_flex]] para obtener la velocidad de fase
+          a la frecuencia [[omega]] deseada.
+        en: With [[rho_lin]] and EI computed, substitute in the [[v_fase_flex]] formula to obtain phase velocity at the desired
+          frequency [[omega]].
+    physical_intuition:
+    - id: rho_lin_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[rho_lin]] describe el estado dinámico.
+        en: Intuitively, [[rho_lin]] describes the dynamic state.
+    limiting_cases:
+    - id: rho_lin_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[rho_lin]].
+        en: Check limiting cases of [[rho_lin]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  v_grupo_flex:
+    enabled: true
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: Velocidad de transporte de energía de la onda de flexión; el doble de la velocidad de fase en Euler-Bernoulli.
+      en: Energy transport speed of the bending wave; twice the phase velocity in Euler-Bernoulli.
+    summary_rules:
+    - id: vg_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[v_grupo_flex]] resume la velocidad a la que un pulso de flexión transporta energía. Es exactamente el doble
+          de [[v_fase_flex]] en el modelo de Euler-Bernoulli, consecuencia de la dispersión cuadrática.'
+        en: '[[v_grupo_flex]] summarizes the speed at which a bending pulse transports energy. It is exactly twice [[v_fase_flex]]
+          in the Euler-Bernoulli model, a consequence of quadratic dispersion.'
+    physical_reading_rules:
+    - id: vg_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[v_grupo_flex]] indica cuánto tarda un impacto en recorrer la viga. Un golpe en un extremo llega al otro a esta
+          velocidad. La energía siempre viaja más rápido que la fase individual.'
+        en: '[[v_grupo_flex]] indicates how long an impact takes to travel the beam. A blow at one end arrives at the other
+          at this speed. Energy always travels faster than the individual phase.'
+    coherence_rules:
+    - id: vg_coherence_ratio
+      when: v_grupo_flex < v_fase_flex
+      status: error
+      text:
+        es: '[[v_grupo_flex]] no puede ser menor que [[v_fase_flex]] en ondas flexionales de Euler-Bernoulli. La relación
+          correcta es v_g igual a 2·v_f. Revisar el cálculo.'
+        en: '[[v_grupo_flex]] cannot be less than [[v_fase_flex]] in Euler-Bernoulli flexural waves. The correct relation
+          is v_g equals 2·v_f. Check the calculation.'
+    - id: vg_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: La relación [[v_grupo_flex]] igual a dos veces [[v_fase_flex]] se verifica correctamente.
+        en: The relation [[v_grupo_flex]] equals twice [[v_fase_flex]] is correctly verified.
+    model_validity_rules:
+    - id: vg_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: La relación exacta v_g igual a 2·v_f es específica del modelo de Euler-Bernoulli. En Timoshenko, v_g crece más
+          lentamente con la frecuencia y se satura en la velocidad de onda de cortante.
+        en: The exact relation v_g equals 2·v_f is specific to the Euler-Bernoulli model. In Timoshenko, v_g grows more slowly
+          with frequency and saturates at the shear wave speed.
+    graph_rules:
+    - id: vg_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: En el gráfico de dispersión, [[v_grupo_flex]] es la curva superior, exactamente al doble de [[v_fase_flex]]. Ambas
+          curvas crecen con la raíz de la frecuencia pero con pendientes distintas en la misma proporción 2:1.
+        en: In the dispersion graph, [[v_grupo_flex]] is the upper curve, exactly at double [[v_fase_flex]]. Both curves grow
+          with the square root of frequency but with slopes in the same 2:1 ratio.
+    likely_errors:
+    - id: vg_error_equal
+      when: 'true'
+      status: ok
+      text:
+        es: 'Confundir [[v_grupo_flex]] con una lectura aislada es un error frecuente: Si [[v_grupo_flex]] resulta igual a
+          [[v_fase_flex]], se ha confundido con un medio no dispersivo. En ondas flexionales v_g es siempre el doble de v_f.'
+        en: If [[v_grupo_flex]] equals [[v_fase_flex]], a non-dispersive medium has been assumed. In flexural waves v_g is
+          always twice v_f.
+    next_step_rules:
+    - id: vg_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[v_grupo_flex]] conocida, estimar el tiempo de llegada de un pulso dividiendo la longitud de la viga entre
+          [[v_grupo_flex]]. Verificar si el modelo de Euler-Bernoulli sigue siendo válido a esa frecuencia.
+        en: With [[v_grupo_flex]] known, estimate pulse arrival time by dividing beam length by [[v_grupo_flex]]. Verify whether
+          the Euler-Bernoulli model remains valid at that frequency.
+    physical_intuition:
+    - id: v_grupo_flex_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[v_grupo_flex]] describe el estado dinámico.
+        en: Intuitively, [[v_grupo_flex]] describes the dynamic state.
+    limiting_cases:
+    - id: v_grupo_flex_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[v_grupo_flex]].
+        en: Check limiting cases of [[v_grupo_flex]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  k_flex:
+    enabled: true
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: Número de onda flexional; define la escala espacial del patrón de deformación de la viga.
+      en: Flexural wavenumber; defines the spatial scale of the beam deformation pattern.
+    summary_rules:
+    - id: kf_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[k_flex]] resume la componente espacial de la onda de flexión. Un valor elevado indica longitud de onda corta
+          y deformación finamente distribuida a lo largo de la viga.'
+        en: '[[k_flex]] summarizes the spatial component of the bending wave. A high value indicates short wavelength and
+          finely distributed deformation along the beam.'
+    physical_reading_rules:
+    - id: kf_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[k_flex]] crece como la raíz cuadrada de [[omega]] (no linealmente). Si se duplica la frecuencia, k solo se
+          multiplica por la raíz de 2. Esto contrasta con ondas no dispersivas donde k es directamente proporcional a omega.'
+        en: '[[k_flex]] grows as the square root of [[omega]] (not linearly). If frequency doubles, k only multiplies by the
+          square root of 2. This contrasts with non-dispersive waves where k is directly proportional to omega.'
+    coherence_rules:
+    - id: kf_coherence_positive
+      when: k_flex <= 0
+      status: error
+      text:
+        es: '[[k_flex]] debe ser positivo para una onda propagante.'
+        en: '[[k_flex]] must be positive for a propagating wave.'
+    - id: kf_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: El valor de [[k_flex]] es coherente con los parámetros de la viga y la frecuencia.
+        en: The value of [[k_flex]] is consistent with beam parameters and frequency.
+    model_validity_rules:
+    - id: kf_validity_thick
+      when: k_flex > 100
+      status: warning
+      text:
+        es: '[[k_flex]] elevado implica longitud de onda corta. Si la longitud de onda resultante es menor que 6 veces el
+          espesor, el modelo de Euler-Bernoulli no es adecuado.'
+        en: High [[k_flex]] implies short wavelength. If the resulting wavelength is less than 6 times the thickness, the
+          Euler-Bernoulli model is inadequate.
+    - id: kf_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El número de onda está en el rango de validez del modelo de viga delgada.
+        en: The wavenumber is in the validity range of the slender beam model.
+    graph_rules:
+    - id: kf_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[k_flex]] es el eje horizontal en la curva de dispersión. La forma parabólica omega vs k muestra que a medida
+          que k aumenta, omega crece como k². La tangente a la curva en un punto da la velocidad de grupo.'
+        en: '[[k_flex]] is the horizontal axis in the dispersion curve. The parabolic shape omega vs k shows that as k increases,
+          omega grows as k². The tangent to the curve at a point gives the group velocity.'
+    likely_errors:
+    - id: kf_error_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'Confundir [[k_flex]] con una lectura aislada es un error frecuente: Verificar que [[k_flex]] se ha calculado
+          correctamente a partir de la relación de dispersión (raíz cuarta de omega²·rho·A/(EI)), no de una fórmula lineal
+          k igual a omega/v.'
+        en: 'A common mistake is to interpret [[k_flex]] in isolation: Verify that [[k_flex]] has been computed correctly
+          from the dispersion relation (fourth root of omega²·rho·A/(EI)), not from a linear formula k equals omega/v.'
+    next_step_rules:
+    - id: kf_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[k_flex]] calculado, obtener [[lambda_flex]] como 2π/k y comparar con el espesor de la sección. Si [[lambda_flex]]
+          es menor que 6 veces el espesor, cambiar al modelo de Timoshenko.
+        en: With [[k_flex]] computed, obtain [[lambda_flex]] as 2π/k and compare with section thickness. If [[lambda_flex]]
+          is less than 6 times the thickness, switch to the Timoshenko model.
+    physical_intuition:
+    - id: k_flex_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[k_flex]] describe el estado dinámico.
+        en: Intuitively, [[k_flex]] describes the dynamic state.
+    limiting_cases:
+    - id: k_flex_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[k_flex]].
+        en: Check limiting cases of [[k_flex]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  lambda_flex:
+    enabled: true
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: Longitud de onda flexional; la distancia entre máximos consecutivos de deformación transversal.
+      en: Flexural wavelength; the distance between consecutive transverse displacement maxima.
+    summary_rules:
+    - id: lf_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[lambda_flex]] resume la escala espacial de la deformación. Un valor pequeño indica que la viga se deforma con
+          muchos ciclos por unidad de longitud, típico de altas frecuencias.'
+        en: '[[lambda_flex]] summarizes the spatial scale of deformation. A small value indicates the beam deforms with many
+          cycles per unit length, typical of high frequencies.'
+    physical_reading_rules:
+    - id: lf_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[lambda_flex]] disminuye al aumentar la frecuencia, pero más lentamente que en ondas no dispersivas. Duplicar
+          la frecuencia reduce [[lambda_flex]] por el factor raíz de 2, no a la mitad.'
+        en: '[[lambda_flex]] decreases with increasing frequency, but more slowly than in non-dispersive waves. Doubling frequency
+          reduces [[lambda_flex]] by the square root of 2, not by half.'
+    coherence_rules:
+    - id: lf_coherence_positive
+      when: lambda_flex <= 0
+      status: error
+      text:
+        es: '[[lambda_flex]] debe ser positiva.'
+        en: '[[lambda_flex]] must be positive.'
+    - id: lf_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[lambda_flex]] es coherente con [[k_flex]] como 2π/k.'
+        en: '[[lambda_flex]] is consistent with [[k_flex]] as 2π/k.'
+    model_validity_rules:
+    - id: lf_validity_thin
+      when: lambda_flex < 0.01
+      status: warning
+      text:
+        es: '[[lambda_flex]] menor que 1 cm puede ser comparable al espesor de la sección. Verificar la condición de viga
+          delgada para la frecuencia actual.'
+        en: '[[lambda_flex]] less than 1 cm may be comparable to section thickness. Verify the slender beam condition for
+          the current frequency.'
+    - id: lf_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: La longitud de onda es suficientemente mayor que el espesor para que el modelo de Euler-Bernoulli sea adecuado.
+        en: Wavelength is sufficiently larger than thickness for the Euler-Bernoulli model to be adequate.
+    graph_rules:
+    - id: lf_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[lambda_flex]] define la separación entre crestas en la representación SVG del desplazamiento de la viga. A
+          mayor frecuencia, las crestas están más juntas.'
+        en: '[[lambda_flex]] defines the separation between crests in the SVG representation of beam displacement. At higher
+          frequency, crests are closer together.'
+    likely_errors:
+    - id: lf_error_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'Confundir [[lambda_flex]] con una lectura aislada es un error frecuente: Confirmar que [[lambda_flex]] es menor
+          que la longitud de onda longitudinal a la misma frecuencia. Las ondas de flexión siempre tienen longitudes de onda
+          más cortas que las longitudinales.'
+        en: 'A common mistake is to interpret [[lambda_flex]] in isolation: Confirm that [[lambda_flex]] is shorter than the
+          longitudinal wavelength at the same frequency. Bending waves always have shorter wavelengths than longitudinal ones.'
+    next_step_rules:
+    - id: lf_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Comparar [[lambda_flex]] con la longitud total de la viga para estimar cuántos ciclos caben, y con el espesor
+          para verificar la validez del modelo. Si caben pocos ciclos, las condiciones de contorno dominan la respuesta.
+        en: Compare [[lambda_flex]] with the total beam length to estimate how many cycles fit, and with thickness to verify
+          model validity. If few cycles fit, boundary conditions dominate the response.
+    physical_intuition:
+    - id: lambda_flex_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[lambda_flex]] describe el estado dinámico.
+        en: Intuitively, [[lambda_flex]] describes the dynamic state.
+    limiting_cases:
+    - id: lambda_flex_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[lambda_flex]].
+        en: Check limiting cases of [[lambda_flex]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

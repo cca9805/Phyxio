@@ -1,0 +1,515 @@
+version: 1
+id: interpretacion-ejemplos-aplicados
+leaf_id: ejemplos-aplicados
+nombre:
+  es: Interpretacion de ejemplos aplicados de rotacion con rozamiento
+  en: Interpretation of applied examples of rotation with friction
+scope:
+  es: lectura de calculadora, coherencia fisica y diagnostico de frenado disipativo
+  en: calculator reading, physical coherence, and dissipative braking diagnosis
+dependencies:
+  magnitudes:
+    - I
+    - K_rot
+    - N_normal
+    - R
+    - alpha
+    - b_rot
+    - mu_k
+    - omega
+    - omega0
+    - t
+    - tau_roz
+  formulas:
+    - decaimiento_exponencial
+    - dinamica_rotacional
+    - energia_rotacional
+    - torque_coulomb
+    - torque_viscoso
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia fisica
+      en: Physical coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  omega:
+    summary_rules:
+      - id: omega_summary_main
+        when: 'true'
+        status: info
+        text:
+          es: Omega resume la intensidad de giro y su caida muestra si el frenado disipativo se esta imponiendo.
+          en: Omega summarizes spin intensity, and its decay shows whether dissipative braking is taking control.
+    coherence_rules:
+      - id: omega_coherence_main
+        when: I > 0
+        status: ok
+        text:
+          es: Debe ser coherente con torque e inercia en la ventana evaluada.
+          en: It must remain coherent with torque and inertia in the evaluated window.
+    physical_reading_rules:
+      - id: omega_physical_main
+        when: 'true'
+        status: info
+        text:
+          es: Su modulo describe intensidad de giro y su pendiente temporal orienta entre regimen seco, viscoso o mixto.
+          en: Its magnitude describes spin intensity and its time slope helps distinguish dry, viscous, or mixed regimes.
+    model_validity_rules:
+      - id: omega_validity_main
+        when: I > 0
+        status: info
+        text:
+          es: Valida si el eje es fijo y el modelo de torque representa bien la ventana observada.
+          en: It is valid when the axis is fixed and the torque model represents the observed window well.
+    graph_rules:
+      - id: omega_graph_main
+        when: 'true'
+        status: info
+        text:
+          es: En la grafica, revisar si omega cae casi lineal, exponencial o por tramos para identificar el mecanismo disipativo.
+          en: In the graph, check whether omega decays linearly, exponentially, or by segments to identify the dissipative mechanism.
+    likely_errors:
+      - id: omega_error_high
+        when: abs(omega) > 2000
+        status: warning
+        text:
+          es: Posible confusion entre rpm y rad/s, o escala mal copiada del sensor; revisa unidades antes de interpretar el frenado.
+          en: You may be mixing rpm with rad/s, or copying the wrong sensor scale; check units before interpreting braking.
+      - id: omega_error_none
+        when: abs(omega) <= 2000
+        status: info
+        text:
+          es: No se detecta error inmediato en omega.
+          en: No immediate error detected for omega.
+    next_step_rules:
+      - id: omega_next_main
+        when: 'true'
+        status: info
+        text:
+          es: Contrasta ahora alpha y K_rot para cerrar coherencia dinamica y energetica.
+          en: Now compare alpha and K_rot to close the dynamic and energetic coherence check.
+  alpha:
+    summary_rules:
+      - id: alpha_summary_main
+        when: 'true'
+        status: info
+        text:
+          es: Alpha mide cuan rapido cambia omega y conecta directamente el torque disipativo con la respuesta del rotor.
+          en: Alpha measures how fast omega changes and directly connects dissipative torque with rotor response.
+    coherence_rules:
+      - id: alpha_coherence_main
+        when: I > 0
+        status: ok
+        text:
+          es: Su signo debe concordar con el sentido de tau_roz.
+          en: Its sign must match tau_roz direction.
+    physical_reading_rules:
+      - id: alpha_physical_main
+        when: 'true'
+        status: info
+        text:
+          es: Valor negativo indica frenado bajo convenio habitual.
+          en: A negative value indicates braking under the standard convention.
+    model_validity_rules:
+      - id: alpha_validity_main
+        when: I > 0
+        status: info
+        text:
+          es: Requiere inercia positiva y una ventana donde el torque efectivo no cambie de forma brusca.
+          en: It requires positive inertia and a window where effective torque does not change too abruptly.
+    graph_rules:
+      - id: alpha_graph_main
+        when: 'true'
+        status: info
+        text:
+          es: La curva de alpha debe ser compatible con la pendiente observada en omega.
+          en: The alpha curve should be compatible with the observed slope of omega.
+    likely_errors:
+      - id: alpha_error_high
+        when: abs(alpha) > 10000
+        status: warning
+        text:
+          es: Posible mezcla de unidades, intervalo temporal demasiado pequeno o torque mal estimado; no asumas frenado extremo sin revisar el modelo.
+          en: You may be mixing units, using an excessively short time interval, or misestimating torque; do not assume extreme braking without checking the model.
+      - id: alpha_error_none
+        when: abs(alpha) <= 10000
+        status: info
+        text:
+          es: No se detecta error inmediato en alpha.
+          en: No immediate error detected for alpha.
+    next_step_rules:
+      - id: alpha_next_main
+        when: 'true'
+        status: info
+        text:
+          es: Validar potencia disipativa con tau_roz y omega.
+          en: Validate dissipative power with tau_roz and omega.
+  tau_roz:
+    summary_rules:
+      - id: tau_summary_main
+        when: 'true'
+        status: info
+        text:
+          es: Tau_roz resume la causa inmediata del frenado y debe oponerse al giro en una maniobra pasiva.
+          en: Tau_roz summarizes the immediate cause of braking and should oppose rotation in a passive maneuver.
+    coherence_rules:
+      - id: tau_coherence_main
+        when: 'true'
+        status: ok
+        text:
+          es: En frenado pasivo, suele oponerse al giro.
+          en: In passive braking, it should oppose rotation.
+    physical_reading_rules:
+      - id: tau_physical_main
+        when: 'true'
+        status: info
+        text:
+          es: Determina intensidad de desaceleracion angular.
+          en: It sets angular deceleration intensity.
+    model_validity_rules:
+      - id: tau_validity_main
+        when: I > 0
+        status: info
+        text:
+          es: Interpretacion valida con convenio de signos consistente y con el mecanismo disipativo bien elegido.
+          en: The interpretation is valid with consistent sign convention and a well-chosen dissipative mechanism.
+    graph_rules:
+      - id: tau_graph_main
+        when: 'true'
+        status: info
+        text:
+          es: Revisar dependencia con omega para distinguir regimen.
+          en: Inspect dependence on omega to distinguish regime.
+    likely_errors:
+      - id: tau_error_sign
+        when: tau_roz * omega > 0
+        status: warning
+        text:
+          es: "Posible error de signos: estarias haciendo que el torque aporte energia mientras afirmas que el sistema se frena."
+          en: "There may be a sign mistake: the torque would be adding energy while you claim the system is braking."
+      - id: tau_error_none
+        when: tau_roz * omega <= 0
+        status: info
+        text:
+          es: Signo de torque compatible con disipacion.
+          en: Torque sign is compatible with dissipation.
+    next_step_rules:
+      - id: tau_next_main
+        when: 'true'
+        status: info
+        text:
+          es: Comparar modelos seco y viscoso para mejor ajuste.
+          en: Compare dry and viscous models for a better fit.
+  I:
+    summary_rules:
+      - id: I_summary_main
+        when: 'true'
+        status: info
+        text:
+          es: I fija la resistencia del rotor a cambiar su giro y escala la respuesta a un mismo torque.
+          en: I sets the rotor resistance to spin change and scales the response to the same torque.
+    coherence_rules:
+      - id: I_coherence_main
+        when: I > 0
+        status: ok
+        text:
+          es: Debe ser positivo para validez fisica.
+          en: It must be positive for physical validity.
+    physical_reading_rules:
+      - id: I_physical_main
+        when: 'true'
+        status: info
+        text:
+          es: Cuantifica resistencia al cambio de giro.
+          en: It quantifies resistance to spin change.
+    model_validity_rules:
+      - id: I_validity_main
+        when: I > 0
+        status: info
+        text:
+          es: Se asume constante en la ventana de calculo.
+          en: It is assumed constant in the calculation window.
+    graph_rules:
+      - id: I_graph_main
+        when: 'true'
+        status: info
+        text:
+          es: Influye en la escala temporal del decaimiento de omega.
+          en: It influences the timescale of omega decay.
+    likely_errors:
+      - id: I_error_non_positive
+        when: I <= 0
+        status: warning
+        text:
+          es: Inercia no positiva invalida el modelo.
+          en: Non-positive inertia invalidates the model.
+      - id: I_error_none
+        when: I > 0
+        status: info
+        text:
+          es: No se detecta error inmediato en I.
+          en: No immediate error detected for I.
+    next_step_rules:
+      - id: I_next_main
+        when: 'true'
+        status: info
+        text:
+          es: Verificar eje de referencia usado para I.
+          en: Verify the reference axis used for I.
+  mu_k:
+    summary_rules:
+      - id: mu_summary_main
+        when: 'true'
+        status: info
+        text:
+          es: Mu_k condensa la intensidad del contacto seco y solo tiene sentido si realmente existe ese regimen.
+          en: Mu_k condenses dry-contact intensity and only makes sense if that regime is truly present.
+    coherence_rules:
+      - id: mu_coherence_main
+        when: mu_k >= 0
+        status: ok
+        text:
+          es: Debe permanecer no negativo.
+          en: It must remain non-negative.
+    physical_reading_rules:
+      - id: mu_physical_main
+        when: 'true'
+        status: info
+        text:
+          es: Resume interaccion material entre superficies.
+          en: It summarizes material interaction between surfaces.
+    model_validity_rules:
+      - id: mu_validity_main
+        when: mu_k >= 0
+        status: info
+        text:
+          es: Valido solo si el rozamiento seco domina o forma parte relevante del modelo mixto.
+          en: It is valid only if dry friction dominates or forms a relevant part of the mixed model.
+    graph_rules:
+      - id: mu_graph_main
+        when: 'true'
+        status: info
+        text:
+          es: Cambios de mu_k alteran la escala de torque seco.
+          en: Changes in mu_k alter the dry-torque scale.
+    likely_errors:
+      - id: mu_error_high
+        when: mu_k > 1.2
+        status: warning
+        text:
+          es: Posible atribuir al contacto seco un frenado que en realidad incluye otros mecanismos; revisa materiales, R y la hipotesis del modelo.
+          en: You may be attributing to dry contact a braking effect that actually includes other mechanisms; review materials, R, and the model hypothesis.
+      - id: mu_error_none
+        when: mu_k <= 1.2
+        status: info
+        text:
+          es: Valor de mu_k plausible para muchos contactos.
+          en: The mu_k value is plausible for many contacts.
+    next_step_rules:
+      - id: mu_next_main
+        when: 'true'
+        status: info
+        text:
+          es: Contrastar con datos de catalogo del material.
+          en: Compare with material catalog data.
+  b_rot:
+    summary_rules:
+      - id: b_summary_main
+        when: 'true'
+        status: info
+        text:
+          es: B_rot mide cuanto del frenado escala con omega y gobierna la rapidez del decaimiento viscoso.
+          en: B_rot measures how much braking scales with omega and governs the rate of viscous decay.
+    coherence_rules:
+      - id: b_coherence_main
+        when: b_rot >= 0
+        status: ok
+        text:
+          es: Debe ser no negativo en modelo disipativo lineal.
+          en: It must be non-negative in a linear dissipative model.
+    physical_reading_rules:
+      - id: b_physical_main
+        when: 'true'
+        status: info
+        text:
+          es: Controla la rapidez de decaimiento de omega.
+          en: It controls the rate of omega decay.
+    model_validity_rules:
+      - id: b_validity_main
+        when: b_rot >= 0
+        status: info
+        text:
+          es: Interpretacion valida en regimen cercano a lineal.
+          en: The interpretation is valid in a near-linear regime.
+    graph_rules:
+      - id: b_graph_main
+        when: 'true'
+        status: info
+        text:
+          es: En semilog, la pendiente se relaciona con b_rot/I.
+          en: In semilog, the slope is related to b_rot/I.
+    likely_errors:
+      - id: b_error_negative
+        when: b_rot < 0
+        status: warning
+        text:
+          es: "Posible sobreajuste o confusion de signos: un b_rot negativo haria crecer omega en lugar de disiparla."
+          en: "There may be overfitting or a sign confusion: a negative b_rot would make omega grow instead of dissipating it."
+      - id: b_error_none
+        when: b_rot >= 0
+        status: info
+        text:
+          es: No se detecta error inmediato en b_rot.
+          en: No immediate error detected for b_rot.
+    next_step_rules:
+      - id: b_next_main
+        when: 'true'
+        status: info
+        text:
+          es: Evaluar si existe componente seca adicional.
+          en: Evaluate whether an additional dry component exists.
+  t:
+    summary_rules:
+      - id: t_summary_main
+        when: 'true'
+        status: info
+        text:
+          es: T fija la ventana de observacion y puede cambiar que modelo parece valido.
+          en: T sets the observation window and can change which model appears valid.
+    coherence_rules:
+      - id: t_coherence_main
+        when: t >= 0
+        status: ok
+        text:
+          es: Se asume tiempo no negativo por causalidad.
+          en: Non-negative time is assumed by causality.
+    physical_reading_rules:
+      - id: t_physical_main
+        when: 'true'
+        status: info
+        text:
+          es: Define horizonte de prediccion y comparacion.
+          en: It defines the prediction and comparison horizon.
+    model_validity_rules:
+      - id: t_validity_main
+        when: t >= 0
+        status: info
+        text:
+          es: Usar el mismo origen temporal en todas las magnitudes.
+          en: Use the same time origin for all magnitudes.
+    graph_rules:
+      - id: t_graph_main
+        when: 'true'
+        status: info
+        text:
+          es: Revisar resolucion temporal para evitar aliasing.
+          en: Check temporal resolution to avoid aliasing.
+    likely_errors:
+      - id: t_error_negative
+        when: t < 0
+        status: warning
+        text:
+          es: Tiempo negativo no valido en este contexto.
+          en: Negative time is invalid in this context.
+      - id: t_error_none
+        when: t >= 0
+        status: info
+        text:
+          es: No se detecta error inmediato en t.
+          en: No immediate error detected for t.
+    next_step_rules:
+      - id: t_next_main
+        when: 'true'
+        status: info
+        text:
+          es: Probar otra ventana temporal para robustez.
+          en: Test another time window for robustness.
+  K_rot:
+    summary_rules:
+      - id: K_summary_main
+        when: 'true'
+        status: info
+        text:
+          es: K_rot mide la energia almacenada en el giro y confirma si el frenado realmente esta disipando energia.
+          en: K_rot measures energy stored in rotation and confirms whether braking is actually dissipating energy.
+    coherence_rules:
+      - id: K_coherence_main
+        when: K_rot >= 0
+        status: ok
+        text:
+          es: Debe ser no negativa en modelo clasico.
+          en: It must be non-negative in the classical model.
+    physical_reading_rules:
+      - id: K_physical_main
+        when: 'true'
+        status: info
+        text:
+          es: Mide capacidad energetica instantanea del rotor.
+          en: It measures the instantaneous energetic capacity of the rotor.
+    model_validity_rules:
+      - id: K_validity_main
+        when: I > 0
+        status: info
+        text:
+          es: Requiere inercia positiva y omega coherente.
+          en: It requires positive inertia and coherent omega.
+    graph_rules:
+      - id: K_graph_main
+        when: 'true'
+        status: info
+        text:
+          es: En frenado pasivo, K_rot debe decrecer en promedio.
+          en: In passive braking, K_rot should decrease on average.
+    likely_errors:
+      - id: K_error_negative
+        when: K_rot < 0
+        status: warning
+        text:
+          es: Energia negativa indica inconsistencia de datos o de unidades.
+          en: Negative energy indicates inconsistent data or units.
+      - id: K_error_none
+        when: K_rot >= 0
+        status: info
+        text:
+          es: No se detecta error inmediato en K_rot.
+          en: No immediate error detected for K_rot.
+    next_step_rules:
+      - id: K_next_main
+        when: 'true'
+        status: info
+        text:
+          es: Contrastar la tasa de descenso con el torque estimado.
+          en: Contrast the rate of decrease with the estimated torque.

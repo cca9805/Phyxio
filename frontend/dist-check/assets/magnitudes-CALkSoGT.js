@@ -1,0 +1,279 @@
+const e=`version: "1.0"
+leaf_id: efecto-doppler
+
+magnitudes:
+
+  - id: f_obs
+    symbol: "f_obs"
+    nombre:
+      es: Frecuencia observada
+      en: Observed frequency
+    descripcion:
+      es: "Frecuencia del sonido tal como la percibe el receptor en movimiento relativo respecto a la fuente."
+      en: "Frequency of sound as perceived by the receiver in relative motion with respect to the source."
+    unidad_si: "Hz"
+    dimension: "[T⁻¹]"
+    is_vector: false
+    components: []
+    category: observable
+    physical_role: output_variable
+    used_in:
+      - calculo del efecto Doppler
+      - deteccion de velocidad de fuentes en movimiento
+      - diagnostico medico por ultrasonidos Doppler
+    common_mistake: "Confundir la frecuencia observada con la frecuencia de la fuente; son iguales solo cuando el receptor y la fuente estan en reposo relativo."
+    typical_range: "20 Hz a 20 kHz para sonido audible; hasta MHz para ultrasonidos medicos e industriales"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La frecuencia es siempre positiva; el desplazamiento Doppler puede ser positivo (aumento) o negativo (disminucion) pero [[f_obs]] en si misma es positiva."
+        en: "Frequency is always positive; the Doppler shift can be positive (increase) or negative (decrease) but [[f_obs]] itself is positive."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Frecuencia nula no tiene sentido fisico en este contexto."
+        en: "Zero frequency has no physical meaning in this context."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, 1e9] Hz"
+    interpretation_role:
+      primary_for:
+        - deteccion del movimiento relativo entre fuente y receptor
+      secondary_for:
+        - calculo del desplazamiento Doppler
+    graph_binding:
+      channels:
+        - eje vertical en grafico f_obs vs velocidad relativa
+    pedagogical_notes:
+      es: "La comparacion entre [[f_obs]] y [[f_fuente]] revela directamente si la fuente se acerca (mayor) o se aleja (menor) del receptor, y a que velocidad."
+      en: "Comparing [[f_obs]] with [[f_fuente]] directly reveals whether the source is approaching (higher) or receding (lower) from the receiver, and at what speed."
+
+  - id: f_fuente
+    symbol: "f_s"
+    nombre:
+      es: Frecuencia de la fuente
+      en: Source frequency
+    descripcion:
+      es: "Frecuencia de las ondas emitidas por la fuente en reposo respecto a si misma; es la frecuencia intrinseca de la fuente, independiente del movimiento."
+      en: "Frequency of waves emitted by the source at rest with respect to itself; it is the intrinsic frequency of the source, independent of motion."
+    unidad_si: "Hz"
+    dimension: "[T⁻¹]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: input_variable
+    used_in:
+      - formula general del efecto Doppler
+      - calculo de la velocidad de la fuente a partir del cambio de frecuencia
+    common_mistake: "Asumir que la fuente emite una frecuencia distinta cuando se mueve; la fuente siempre emite a [[f_fuente]] constante en su propio sistema de referencia."
+    typical_range: "20 Hz a 20 kHz para sonido audible"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Siempre positiva; la frecuencia de emision es una propiedad intrinseca de la fuente."
+        en: "Always positive; the emission frequency is an intrinsic property of the source."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Una fuente de frecuencia nula no emite sonido."
+        en: "A zero-frequency source emits no sound."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, 1e9] Hz"
+    interpretation_role:
+      primary_for:
+        - referencia para calcular el desplazamiento Doppler
+      secondary_for:
+        - calibracion de sistemas de deteccion de velocidad
+    graph_binding:
+      channels:
+        - linea de referencia horizontal en grafico f_obs vs velocidad relativa
+    pedagogical_notes:
+      es: "[[f_fuente]] es la frecuencia propia: la que mediria un observador en reposo respecto a la fuente. Toda la fisica del efecto Doppler consiste en la diferencia entre [[f_obs]] y [[f_fuente]]."
+      en: "[[f_fuente]] is the proper frequency: the one a resting observer would measure relative to the source. All the physics of the Doppler effect consists in the difference between [[f_obs]] and [[f_fuente]]."
+
+  - id: v_sonido
+    symbol: "v"
+    nombre:
+      es: Velocidad del sonido en el medio
+      en: Speed of sound in the medium
+    descripcion:
+      es: "Velocidad de propagacion de las ondas de presion en el medio material (aire, agua, etc.); parametro del medio que establece la referencia de velocidad en la formula Doppler."
+      en: "Propagation speed of pressure waves in the material medium (air, water, etc.); medium parameter that sets the velocity reference in the Doppler formula."
+    unidad_si: "m/s"
+    dimension: "[L T⁻¹]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: medium_property
+    used_in:
+      - formula general del efecto Doppler
+      - calculo del numero de Mach
+      - determinacion del cono de Mach
+    common_mistake: "Usar la velocidad de la fuente o del receptor en lugar de la velocidad del sonido en el medio."
+    typical_range: "340 m/s en aire a 20 °C; 1500 m/s en agua; 5900 m/s en acero"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Siempre positiva; es la rapidez de propagacion de la onda, no un vector."
+        en: "Always positive; it is the wave propagation speed, not a vector."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Velocidad nula del sonido implicaria que el medio no transmite ondas de presion."
+        en: "Zero sound speed would imply the medium does not transmit pressure waves."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[300, 6000] m/s"
+    interpretation_role:
+      primary_for:
+        - denominador de la formula Doppler
+        - calculo del numero de Mach
+      secondary_for:
+        - referencia para interpretar velocidades de fuente y receptor
+    graph_binding:
+      channels:
+        - escala de velocidades en grafico f_obs vs v_fuente
+    pedagogical_notes:
+      es: "[[v_sonido]] es la velocidad de referencia invariante del efecto Doppler; cuando [[v_fuente]] se acerca a [[v_sonido]], los efectos Doppler se hacen extremos y el modelo de onda plana simple falla. Cuando [[v_fuente]] supera a [[v_sonido]] se forma el cono de Mach y ya no hay soluciones de onda en la region delantera."
+      en: "[[v_sonido]] is the invariant reference speed of the Doppler effect; when [[v_fuente]] approaches [[v_sonido]], Doppler effects become extreme and the simple plane-wave model fails. When [[v_fuente]] exceeds [[v_sonido]] a Mach cone forms and there are no wave solutions in the forward region."
+
+  - id: v_fuente
+    symbol: "v_s"
+    nombre:
+      es: Velocidad de la fuente
+      en: Source velocity
+    descripcion:
+      es: "Componente de la velocidad de la fuente a lo largo de la linea que une la fuente y el receptor; positiva cuando la fuente se aleja del receptor."
+      en: "Component of the source velocity along the line connecting source and receiver; positive when the source moves away from the receiver."
+    unidad_si: "m/s"
+    dimension: "[L T⁻¹]"
+    is_vector: false
+    components: []
+    category: observable
+    physical_role: kinematic_variable
+    used_in:
+      - formula general del efecto Doppler
+      - calculo del numero de Mach de la fuente
+    common_mistake: "Olvidar el convenio de signos: positivo cuando la fuente se aleja, negativo cuando se acerca, segun la convencion mas habitual."
+    typical_range: "0 a 340 m/s (subsonica en aire)"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Positivo: fuente alejandose del receptor; negativo: fuente acercandose. El convenio debe ser consistente con el de [[v_receptor]]."
+        en: "Positive: source moving away from receiver; negative: source approaching. The convention must be consistent with that of [[v_receptor]]."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Fuente en reposo respecto al medio: no hay desplazamiento Doppler por movimiento de fuente."
+        en: "Source at rest relative to medium: no Doppler shift from source motion."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-340, 340) m/s en aire"
+    interpretation_role:
+      primary_for:
+        - desplazamiento Doppler por movimiento de la fuente
+      secondary_for:
+        - calculo del numero de Mach de la fuente
+    graph_binding:
+      channels:
+        - eje horizontal en grafico f_obs vs v_fuente
+    pedagogical_notes:
+      es: "El movimiento de la fuente y el del receptor producen efectos Doppler distintos aunque la velocidad relativa sea la misma, porque el mecanismo fisico es diferente: la fuente comprime o estira los frentes de onda, mientras que el receptor los recorre mas deprisa o mas despacio."
+      en: "Source motion and receiver motion produce different Doppler effects even if the relative velocity is the same, because the physical mechanism differs: the source compresses or stretches wavefronts, while the receiver traverses them faster or slower."
+
+  - id: v_receptor
+    symbol: "v_r"
+    nombre:
+      es: Velocidad del receptor
+      en: Receiver velocity
+    descripcion:
+      es: "Componente de la velocidad del receptor a lo largo de la linea que une la fuente y el receptor; positiva cuando el receptor se mueve hacia la fuente."
+      en: "Component of the receiver velocity along the line connecting source and receiver; positive when the receiver moves toward the source."
+    unidad_si: "m/s"
+    dimension: "[L T⁻¹]"
+    is_vector: false
+    components: []
+    category: observable
+    physical_role: kinematic_variable
+    used_in:
+      - formula general del efecto Doppler
+    common_mistake: "Confundir el convenio de signos del receptor con el de la fuente; son opuestos en la formula estandar."
+    typical_range: "0 a 100 m/s en aplicaciones practicas"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Positivo: receptor moviendose hacia la fuente; negativo: receptor alejandose. Convenio opuesto al de [[v_fuente]]."
+        en: "Positive: receiver moving toward source; negative: receiver moving away. Opposite convention to [[v_fuente]]."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Receptor en reposo respecto al medio: no hay desplazamiento Doppler por movimiento del receptor."
+        en: "Receiver at rest relative to medium: no Doppler shift from receiver motion."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-100, 100) m/s"
+    interpretation_role:
+      primary_for:
+        - desplazamiento Doppler por movimiento del receptor
+      secondary_for:
+        - analisis de simetria del efecto Doppler
+    graph_binding:
+      channels:
+        - parametro secundario en graficos de f_obs
+    pedagogical_notes:
+      es: "El movimiento del receptor no modifica la longitud de onda de las ondas en el medio (eso solo lo hace la fuente), pero si modifica el numero de frentes de onda que el receptor intercepta por unidad de tiempo, cambiando asi [[f_obs]]."
+      en: "Receiver motion does not modify the wavelength of waves in the medium (only the source does that), but it does modify the number of wavefronts the receiver intercepts per unit time, thus changing [[f_obs]]."
+
+  - id: delta_f
+    symbol: "Δf"
+    nombre:
+      es: Desplazamiento Doppler
+      en: Doppler shift
+    descripcion:
+      es: "Diferencia entre la frecuencia observada y la frecuencia de la fuente; magnitud que cuantifica el efecto Doppler y permite medir la velocidad relativa."
+      en: "Difference between observed frequency and source frequency; quantity that quantifies the Doppler effect and allows measuring relative velocity."
+    unidad_si: "Hz"
+    dimension: "[T⁻¹]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: diagnostic_quantity
+    used_in:
+      - radar Doppler de velocidad de vehiculos
+      - ecografia Doppler de flujo sanguineo
+      - astrometria y medicion de velocidad radial de estrellas
+    common_mistake: "Confundir el desplazamiento Doppler con la frecuencia observada; el desplazamiento es la diferencia entre ambas."
+    typical_range: "Desde fracciones de Hz en acustica de baja velocidad hasta MHz en sonar y radar"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Positivo cuando la fuente se acerca al receptor (frecuencia sube); negativo cuando se aleja (frecuencia baja)."
+        en: "Positive when source approaches receiver (frequency increases); negative when receding (frequency decreases)."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Sin movimiento relativo entre fuente y receptor: [[f_obs]] igual a [[f_fuente]]."
+        en: "No relative motion between source and receiver: [[f_obs]] equal to [[f_fuente]]."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-f_fuente, muy grande) Hz"
+    interpretation_role:
+      primary_for:
+        - medicion de velocidad relativa
+        - diagnostico de estado de movimiento
+      secondary_for:
+        - calibracion de equipos Doppler
+    graph_binding:
+      channels:
+        - eje vertical en grafico delta_f vs v_fuente
+    pedagogical_notes:
+      es: "[[delta_f]] es la magnitud operacional del efecto Doppler: es lo que mide directamente un analizador de espectro o un radar de velocidad. La interpretacion de su signo y magnitud permite deducir la velocidad y la direccion del movimiento de la fuente."
+      en: "[[delta_f]] is the operational quantity of the Doppler effect: it is what a spectrum analyser or speed radar directly measures. Interpreting its sign and magnitude allows deducing the speed and direction of the source's motion."
+`;export{e as default};

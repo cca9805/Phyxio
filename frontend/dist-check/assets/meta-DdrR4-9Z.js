@@ -1,0 +1,59 @@
+const e=`id: frecuencia-y-periodo
+nombre:
+  es: Frecuencia y periodo
+  en: Frequency and Period
+area: fisica-clasica
+bloque: ondas
+subbloque: fundamentos
+parent_id: magnitudes-ondulatorias
+ruta_relativa: fisica-clasica/ondas/fundamentos/magnitudes-ondulatorias/frecuencia-y-periodo
+orden: 231420
+type: leaf
+niveles:
+  es: [ESO, BACHILLERATO, UNIVERSIDAD, EXTRACURRICULAR]
+  en: [Secondary, Upper Secondary, University, Extracurricular]
+icon: 📘
+descripcion: Relación física entre ciclos por segundo y tiempo de repetición.
+description_en: Physical relation between cycles per second and repetition time.
+tags:
+  es: [ondas, frecuencia, periodo, ciclos, oscilacion, tiempo]
+  en: [waves, frequency, period, cycles, oscillation, time]
+prerequisitos:
+  - fisica-clasica/ondas/fundamentos/concepto-de-onda
+graficos: [Coord]
+physical_role:
+  es: concepto físico
+  en: physical concept
+dificultad: 2
+tiempo_estimado_min: 20
+representacion_dominante: Coord
+magnitud_dominante: f
+pregunta_fisica_central:
+  es: ¿Cómo se relacionan la frecuencia y el periodo para describir el ritmo temporal de una onda?
+  en: How are frequency and period related to describe the temporal rhythm of a wave?
+nucleo:
+  magnitudes: [f, T, omega, N, Delta_t]
+  formulas: [frecuencia_periodo, frecuencia_angular, frecuencia_por_conteo]
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 4
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

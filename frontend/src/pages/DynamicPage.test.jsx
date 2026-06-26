@@ -1,85 +1,50 @@
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import DynamicPage from './DynamicPage';
-import { topicsData } from '../data/topics.generated';
 
-describe('DynamicPage - Root Integration', () => {
-  it('should render root page content when at "/" route', () => {
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <DynamicPage />
-      </MemoryRouter>
-    );
+const RedirectTarget = () => <div>v2 page</div>;
 
-    // Check if root topic content is rendered
-    const rootTopic = topicsData[""];
-    expect(screen.getByText(rootTopic.title)).toBeInTheDocument();
-    expect(screen.getByText(rootTopic.intro)).toBeInTheDocument();
+function renderWithRouter(initialPath) {
+  return render(
+    <MemoryRouter initialEntries={[initialPath]}>
+      <Routes>
+        <Route path="/*" element={<DynamicPage />} />
+        <Route path="/v2" element={<RedirectTarget />} />
+        <Route path="/v2/*" element={<RedirectTarget />} />
+      </Routes>
+    </MemoryRouter>
+  );
+}
+
+describe('DynamicPage - Redirect behavior', () => {
+  it('redirects "/" to /v2', () => {
+    renderWithRouter('/');
+    expect(screen.getByText('v2 page')).toBeInTheDocument();
   });
 
-  it('should render Física Clásica and Moderna cards on root page', () => {
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <DynamicPage />
-      </MemoryRouter>
-    );
-
-    // Check for the main physics cards
-    expect(screen.getByText('Física Clásica')).toBeInTheDocument();
-    expect(screen.getByText('Física Moderna')).toBeInTheDocument();
-    
-    // Check for card descriptions
-    expect(screen.getByText(/Mecánica, Termodinámica, Óptica/)).toBeInTheDocument();
-    expect(screen.getByText(/Relatividad, Cuántica, Física de partículas/)).toBeInTheDocument();
+  it('redirects "/fisica" to /v2', () => {
+    renderWithRouter('/fisica');
+    expect(screen.getByText('v2 page')).toBeInTheDocument();
   });
 
-  it('should render comparison section on root page', () => {
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <DynamicPage />
-      </MemoryRouter>
-    );
-
-    // Check for comparison content
-    expect(screen.getByText('¿En qué se diferencian?')).toBeInTheDocument();
-    expect(screen.getByText(/Objetos grandes y velocidades bajas/)).toBeInTheDocument();
-    expect(screen.getByText(/Partículas subatómicas y altas velocidades/)).toBeInTheDocument();
+  it('redirects any other path to /v2', () => {
+    renderWithRouter('/some-topic');
+    expect(screen.getByText('v2 page')).toBeInTheDocument();
   });
 
-  it('should have correct navigation links on root page', () => {
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <DynamicPage />
-      </MemoryRouter>
-    );
-
-    // Check for navigation links
-    const links = screen.getAllByRole('link', { name: /explorar/i });
-    expect(links).toHaveLength(2);
-    expect(links[0]).toHaveAttribute('href', '/clasica');
-    expect(links[1]).toHaveAttribute('href', '/moderna');
+  it('does not render old v1 root content', () => {
+    renderWithRouter('/');
+    expect(screen.queryByText('Física Clásica')).not.toBeInTheDocument();
+    expect(screen.queryByText('Física Moderna')).not.toBeInTheDocument();
   });
 
-  it('should not show breadcrumbs on root page', () => {
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <DynamicPage />
-      </MemoryRouter>
-    );
-
-    // Breadcrumbs should not be present on root page
-    expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
-  });
-
-  it('should detect root page type correctly', () => {
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <DynamicPage />
-      </MemoryRouter>
-    );
-
-    // Should render root content, not error page
+  it('does not show "Página no encontrada"', () => {
+    renderWithRouter('/');
     expect(screen.queryByText('Página no encontrada')).not.toBeInTheDocument();
-    expect(screen.getByText('¿Qué es la Física?')).toBeInTheDocument();
+  });
+
+  it('does not render breadcrumb navigation', () => {
+    renderWithRouter('/');
+    expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
   });
 });

@@ -1,0 +1,490 @@
+version: "5.0.0"
+ui:
+  default_formula: "ley_fourier_conduccion_1d"
+formulas:
+  - id: diferencia_temperatura
+    title:
+      es: "Diferencia de temperatura entre caras"
+      en: "Temperature difference between faces"
+    equation: "diferencia_temperatura = temperatura_caliente - temperatura_fria"
+    latex: "\\Delta T = T_{c} - T_{f}"
+    magnitudes:
+      - "diferencia_temperatura"
+      - "temperatura_caliente"
+      - "temperatura_fria"
+    category: "definicion"
+    relation_type: "algebraic_difference"
+    physical_meaning:
+      es: "Mide la separación térmica que impulsa la conducción entre dos regiones."
+      en: "Measures the thermal separation driving conduction between two regions."
+    constraints:
+      - "temperatura_caliente >= temperatura_fria si se usa Delta T como módulo positivo"
+      - "temperaturas expresadas en una escala compatible para diferencias"
+    validity:
+      es: "Válida para comparar dos regiones térmicas bien definidas."
+      en: "Valid for comparing two well-defined thermal regions."
+    dimension_check: "[Θ] = [Θ] - [Θ]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "ley_fourier_conduccion_1d"
+      - "flujo_calor_conduccion"
+      - "potencia_resistencia_termica"
+      - "gradiente_temperatura_1d"
+    interpretation_tags:
+      - "diferencia_termica"
+      - "sentido_del_calor"
+      - "causa_de_conduccion"
+    result_semantics:
+      target: "diferencia_temperatura"
+      kind: "thermal_difference"
+      sign_meaning: "Positiva si se define como temperatura caliente menos temperatura fría."
+      absolute_value_meaning: "Intensidad de la separación térmica entre ambas caras."
+    domain_checks:
+      - "Comprobar que las temperaturas identifican correctamente el lado caliente y el lado frío."
+      - "No confundir temperatura absoluta con diferencia de temperatura."
+    coherence_checks:
+      - "Si diferencia_temperatura es cero, las fórmulas de conducción estacionaria dan flujo neto cero."
+      - "La diferencia de temperatura debe estar en K o en grados Celsius como intervalo equivalente."
+    graph_implications:
+      - "Una mayor diferencia de temperatura implica mayor pendiente térmica si el espesor no cambia."
+    pedagogical_triggers:
+      - "Revisar el orden de la resta cuando aparezca una potencia térmica negativa inesperada."
+      - "Recordar que el calor fluye espontáneamente del lado caliente al frío."
+    rearrangements:
+      - target: "diferencia_temperatura"
+        equation: "diferencia_temperatura = temperatura_caliente - temperatura_fria"
+        latex: "\\Delta T = T_{c} - T_{f}"
+      - target: "temperatura_caliente"
+        equation: "temperatura_caliente = diferencia_temperatura + temperatura_fria"
+        latex: "T_{c} = \\Delta T + T_{f}"
+      - target: "temperatura_fria"
+        equation: "temperatura_fria = temperatura_caliente - diferencia_temperatura"
+        latex: "T_{f} = T_{c} - \\Delta T"
+
+  - id: gradiente_temperatura_1d
+    title:
+      es: "Gradiente térmico medio en una dimensión"
+      en: "Mean one-dimensional thermal gradient"
+    equation: "gradiente_temperatura = diferencia_temperatura / espesor"
+    latex: "\\frac{\\Delta T}{L}"
+    magnitudes:
+      - "gradiente_temperatura"
+      - "diferencia_temperatura"
+      - "espesor"
+    category: "definicion"
+    relation_type: "ratio"
+    physical_meaning:
+      es: "Expresa cuánto cambia la temperatura por cada metro de material."
+      en: "Expresses how much temperature changes per meter of material."
+    constraints:
+      - "espesor > 0"
+      - "conduccion aproximadamente unidimensional"
+    validity:
+      es: "Válida como gradiente medio cuando la temperatura varía casi linealmente en el espesor."
+      en: "Valid as a mean gradient when temperature varies almost linearly through the thickness."
+    dimension_check: "[Θ L^-1] = [Θ] / [L]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "flujo_calor_conduccion"
+    interpretation_tags:
+      - "gradiente"
+      - "perfil_termico"
+      - "conduccion_1d"
+    result_semantics:
+      target: "gradiente_temperatura"
+      kind: "spatial_rate"
+      sign_meaning: "El signo depende del eje elegido para medir la variación térmica."
+      absolute_value_meaning: "Intensidad del cambio térmico por unidad de longitud."
+    domain_checks:
+      - "El espesor no puede ser cero."
+      - "El modelo pierde validez si hay fuentes internas intensas o geometría no unidimensional."
+    coherence_checks:
+      - "Mayor diferencia de temperatura aumenta el gradiente si el espesor se mantiene."
+      - "Mayor espesor reduce el gradiente si la diferencia térmica se mantiene."
+    graph_implications:
+      - "En una gráfica temperatura-posicion, el gradiente corresponde a la pendiente media."
+    pedagogical_triggers:
+      - "Distinguir diferencia de temperatura y gradiente de temperatura."
+      - "No olvidar dividir por la longitud de conducción."
+    rearrangements:
+      - target: "gradiente_temperatura"
+        equation: "gradiente_temperatura = diferencia_temperatura / espesor"
+        latex: "\\frac{\\Delta T}{L}"
+      - target: "diferencia_temperatura"
+        equation: "diferencia_temperatura = gradiente_temperatura * espesor"
+        latex: "\\Delta T = \\left(\\frac{\\Delta T}{L}\\right)L"
+      - target: "espesor"
+        equation: "espesor = diferencia_temperatura / gradiente_temperatura"
+        latex: "L = \\frac{\\Delta T}{\\Delta T/L}"
+
+  - id: ley_fourier_conduccion_1d
+    title:
+      es: "Ley de Fourier para conducción plana estacionaria"
+      en: "Fourier law for steady plane conduction"
+    equation: "potencia_termica = conductividad_termica * area * diferencia_temperatura / espesor"
+    latex: "\\dot{Q} = \\frac{k A \\Delta T}{L}"
+    magnitudes:
+      - "potencia_termica"
+      - "conductividad_termica"
+      - "area"
+      - "diferencia_temperatura"
+      - "espesor"
+    category: "ley_fundamental"
+    relation_type: "proportional_inverse"
+    physical_meaning:
+      es: "La potencia conducida aumenta con conductividad, área y diferencia térmica, y disminuye con el espesor."
+      en: "Conducted power increases with conductivity, area and thermal difference, and decreases with thickness."
+    constraints:
+      - "conductividad_termica > 0"
+      - "area > 0"
+      - "espesor > 0"
+      - "conduccion estacionaria"
+      - "material homogeneo"
+      - "flujo aproximadamente unidimensional"
+    validity:
+      es: "Válida para conducción estacionaria en una pared plana homogénea sin generación interna relevante."
+      en: "Valid for steady conduction in a homogeneous plane wall without relevant internal generation."
+    dimension_check: "[M L^2 T^-3] = [M L T^-3 Θ^-1] [L^2] [Θ] / [L]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "calor_potencia_tiempo"
+      - "flujo_potencia_area"
+    interpretation_tags:
+      - "ley_de_fourier"
+      - "conduccion_estacionaria"
+      - "potencia_termica"
+      - "aislamiento"
+    result_semantics:
+      target: "potencia_termica"
+      kind: "thermal_power"
+      sign_meaning: "El signo depende de si se conserva el sentido vectorial del gradiente térmico."
+      absolute_value_meaning: "Cantidad de energía térmica que atraviesa la sección por segundo."
+    domain_checks:
+      - "Verificar que no se está usando para convección o radiación."
+      - "Comprobar que la geometría puede aproximarse como pared plana."
+      - "Comprobar que las unidades están en SI."
+    coherence_checks:
+      - "Si diferencia_temperatura = 0, potencia_termica debe ser 0."
+      - "Si espesor aumenta, potencia_termica debe disminuir."
+      - "Si area aumenta, potencia_termica debe aumentar."
+    graph_implications:
+      - "La potencia térmica es proporcional a la diferencia de temperatura si k, A y L son constantes."
+      - "La potencia térmica es inversamente proporcional al espesor."
+    pedagogical_triggers:
+      - "No colocar el espesor en el numerador."
+      - "No confundir conductividad térmica con resistencia térmica."
+      - "Explicar que el signo negativo de Fourier indica flujo hacia menor temperatura."
+    rearrangements:
+      - target: "potencia_termica"
+        equation: "potencia_termica = conductividad_termica * area * diferencia_temperatura / espesor"
+        latex: "\\dot{Q} = \\frac{k A \\Delta T}{L}"
+      - target: "conductividad_termica"
+        equation: "conductividad_termica = potencia_termica * espesor / (area * diferencia_temperatura)"
+        latex: "k = \\frac{\\dot{Q} L}{A \\Delta T}"
+      - target: "area"
+        equation: "area = potencia_termica * espesor / (conductividad_termica * diferencia_temperatura)"
+        latex: "A = \\frac{\\dot{Q} L}{k \\Delta T}"
+      - target: "diferencia_temperatura"
+        equation: "diferencia_temperatura = potencia_termica * espesor / (conductividad_termica * area)"
+        latex: "\\Delta T = \\frac{\\dot{Q} L}{k A}"
+      - target: "espesor"
+        equation: "espesor = conductividad_termica * area * diferencia_temperatura / potencia_termica"
+        latex: "L = \\frac{k A \\Delta T}{\\dot{Q}}"
+
+  - id: flujo_calor_conduccion
+    title:
+      es: "Flujo de calor por conducción"
+      en: "Conductive heat flux"
+    equation: "flujo_calor = conductividad_termica * diferencia_temperatura / espesor"
+    latex: "q = \\frac{k \\Delta T}{L}"
+    magnitudes:
+      - "flujo_calor"
+      - "conductividad_termica"
+      - "diferencia_temperatura"
+      - "espesor"
+    category: "ley_derivada"
+    relation_type: "proportional_inverse"
+    physical_meaning:
+      es: "Mide la potencia conducida por unidad de área."
+      en: "Measures the conducted power per unit area."
+    constraints:
+      - "conductividad_termica > 0"
+      - "espesor > 0"
+      - "conduccion estacionaria y unidimensional"
+    validity:
+      es: "Válida para conducción plana estacionaria cuando interesa la intensidad por unidad de área."
+      en: "Valid for steady plane conduction when the intensity per unit area is needed."
+    dimension_check: "[M T^-3] = [M L T^-3 Θ^-1] [Θ] / [L]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "flujo_potencia_area"
+    interpretation_tags:
+      - "flujo_de_calor"
+      - "intensidad_de_conduccion"
+      - "ley_de_fourier"
+    result_semantics:
+      target: "flujo_calor"
+      kind: "heat_flux"
+      sign_meaning: "El signo indica el sentido del flujo respecto al eje elegido."
+      absolute_value_meaning: "Potencia térmica por metro cuadrado."
+    domain_checks:
+      - "No usar si se necesita la potencia total sin conocer el área."
+      - "El espesor debe corresponder a la dirección real de conducción."
+    coherence_checks:
+      - "Si diferencia_temperatura = 0, flujo_calor debe ser 0."
+      - "Si espesor aumenta, flujo_calor disminuye."
+    graph_implications:
+      - "El flujo de calor es proporcional al gradiente térmico medio."
+    pedagogical_triggers:
+      - "Diferenciar flujo de calor y calor transferido."
+      - "Recalcar que no aparece el área porque ya es una magnitud por unidad de superficie."
+    rearrangements:
+      - target: "flujo_calor"
+        equation: "flujo_calor = conductividad_termica * diferencia_temperatura / espesor"
+        latex: "q = \\frac{k \\Delta T}{L}"
+      - target: "conductividad_termica"
+        equation: "conductividad_termica = flujo_calor * espesor / diferencia_temperatura"
+        latex: "k = \\frac{q L}{\\Delta T}"
+      - target: "diferencia_temperatura"
+        equation: "diferencia_temperatura = flujo_calor * espesor / conductividad_termica"
+        latex: "\\Delta T = \\frac{q L}{k}"
+      - target: "espesor"
+        equation: "espesor = conductividad_termica * diferencia_temperatura / flujo_calor"
+        latex: "L = \\frac{k \\Delta T}{q}"
+
+  - id: flujo_potencia_area
+    title:
+      es: "Relación entre flujo de calor, potencia y área"
+      en: "Relation between heat flux, power and area"
+    equation: "flujo_calor = potencia_termica / area"
+    latex: "q = \\frac{\\dot{Q}}{A}"
+    magnitudes:
+      - "flujo_calor"
+      - "potencia_termica"
+      - "area"
+    category: "relacion_derivada"
+    relation_type: "ratio"
+    physical_meaning:
+      es: "Convierte potencia térmica total en intensidad de transferencia por unidad de área."
+      en: "Converts total thermal power into transfer intensity per unit area."
+    constraints:
+      - "area > 0"
+      - "flujo aproximadamente uniforme sobre el área"
+    validity:
+      es: "Válida cuando la potencia se distribuye de forma aproximadamente uniforme sobre la superficie."
+      en: "Valid when power is approximately uniformly distributed over the surface."
+    dimension_check: "[M T^-3] = [M L^2 T^-3] / [L^2]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: []
+    interpretation_tags:
+      - "densidad_de_potencia"
+      - "area"
+      - "flujo_termico"
+    result_semantics:
+      target: "flujo_calor"
+      kind: "heat_flux"
+      sign_meaning: "Hereda el signo de la potencia térmica según el convenio elegido."
+      absolute_value_meaning: "Potencia térmica repartida por cada metro cuadrado."
+    domain_checks:
+      - "No dividir por área cero."
+      - "Comprobar si el flujo es uniforme antes de usar un valor medio."
+    coherence_checks:
+      - "Si potencia_termica aumenta con área constante, flujo_calor aumenta."
+      - "Si area aumenta con potencia constante, flujo_calor disminuye."
+    graph_implications:
+      - "Con área constante, flujo y potencia son directamente proporcionales."
+    pedagogical_triggers:
+      - "Aclarar que W y W/m^2 no representan la misma magnitud."
+      - "Revisar si el problema pide potencia total o flujo por unidad de área."
+    rearrangements:
+      - target: "flujo_calor"
+        equation: "flujo_calor = potencia_termica / area"
+        latex: "q = \\frac{\\dot{Q}}{A}"
+      - target: "potencia_termica"
+        equation: "potencia_termica = flujo_calor * area"
+        latex: "\\dot{Q} = q A"
+      - target: "area"
+        equation: "area = potencia_termica / flujo_calor"
+        latex: "A = \\frac{\\dot{Q}}{q}"
+
+  - id: calor_potencia_tiempo
+    title:
+      es: "Calor transferido a partir de potencia térmica"
+      en: "Transferred heat from thermal power"
+    equation: "calor_transferido = potencia_termica * tiempo"
+    latex: "Q = \\dot{Q} t"
+    magnitudes:
+      - "calor_transferido"
+      - "potencia_termica"
+      - "tiempo"
+    category: "relacion_temporal"
+    relation_type: "product"
+    physical_meaning:
+      es: "Calcula la energía térmica total transferida cuando la potencia térmica se mantiene constante."
+      en: "Calculates total transferred thermal energy when thermal power remains constant."
+    constraints:
+      - "tiempo >= 0"
+      - "potencia_termica constante durante el intervalo"
+    validity:
+      es: "Válida para potencia térmica constante o como aproximación con potencia media."
+      en: "Valid for constant thermal power or as an approximation using average power."
+    dimension_check: "[M L^2 T^-2] = [M L^2 T^-3] [T]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: []
+    interpretation_tags:
+      - "energia_transferida"
+      - "potencia"
+      - "tiempo"
+    result_semantics:
+      target: "calor_transferido"
+      kind: "thermal_energy"
+      sign_meaning: "El signo depende del sentido definido para la transferencia."
+      absolute_value_meaning: "Energía térmica total que cruza la sección durante el intervalo."
+    domain_checks:
+      - "Si la potencia cambia con el tiempo, usar potencia media o integración."
+      - "Convertir el tiempo a segundos para unidades SI."
+    coherence_checks:
+      - "Si tiempo = 0, calor_transferido debe ser 0."
+      - "A potencia constante, el calor transferido crece linealmente con el tiempo."
+    graph_implications:
+      - "En una gráfica calor-tiempo, la pendiente es la potencia térmica."
+    pedagogical_triggers:
+      - "No confundir W con J."
+      - "Recordar que la potencia es una tasa de transferencia."
+    rearrangements:
+      - target: "calor_transferido"
+        equation: "calor_transferido = potencia_termica * tiempo"
+        latex: "Q = \\dot{Q} t"
+      - target: "potencia_termica"
+        equation: "potencia_termica = calor_transferido / tiempo"
+        latex: "\\dot{Q} = \\frac{Q}{t}"
+      - target: "tiempo"
+        equation: "tiempo = calor_transferido / potencia_termica"
+        latex: "t = \\frac{Q}{\\dot{Q}}"
+
+  - id: resistencia_termica_conduccion
+    title:
+      es: "Resistencia térmica de una pared plana"
+      en: "Thermal resistance of a plane wall"
+    equation: "resistencia_termica = espesor / (conductividad_termica * area)"
+    latex: "R_{th} = \\frac{L}{k A}"
+    magnitudes:
+      - "resistencia_termica"
+      - "espesor"
+      - "conductividad_termica"
+      - "area"
+    category: "modelo_equivalente"
+    relation_type: "ratio_inverse_product"
+    physical_meaning:
+      es: "Resume la oposición al paso del calor debida al material y a la geometría."
+      en: "Summarizes opposition to heat transfer due to material and geometry."
+    constraints:
+      - "espesor > 0"
+      - "conductividad_termica > 0"
+      - "area > 0"
+      - "pared plana homogenea"
+    validity:
+      es: "Válida para conducción estacionaria unidimensional en una capa homogénea."
+      en: "Valid for one-dimensional steady conduction through a homogeneous layer."
+    dimension_check: "[M^-1 L^-2 T^3 Θ] = [L] / ([M L T^-3 Θ^-1] [L^2])"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "potencia_resistencia_termica"
+    interpretation_tags:
+      - "resistencia_termica"
+      - "aislamiento"
+      - "modelo_equivalente"
+    result_semantics:
+      target: "resistencia_termica"
+      kind: "thermal_resistance"
+      sign_meaning: "No tiene signo en el modelo ordinario; representa una oposición positiva."
+      absolute_value_meaning: "Diferencia de temperatura necesaria por cada watt conducido."
+    domain_checks:
+      - "No usar para capas no homogéneas sin combinar resistencias."
+      - "Comprobar que se trata de conducción, no de convección superficial."
+    coherence_checks:
+      - "Si espesor aumenta, resistencia_termica aumenta."
+      - "Si conductividad_termica aumenta, resistencia_termica disminuye."
+      - "Si area aumenta, resistencia_termica disminuye."
+    graph_implications:
+      - "La potencia térmica es inversamente proporcional a la resistencia térmica."
+    pedagogical_triggers:
+      - "Relacionar con la analogía eléctrica: diferencia térmica como tensión y potencia térmica como corriente."
+      - "No confundir material buen conductor con material buen aislante."
+    rearrangements:
+      - target: "resistencia_termica"
+        equation: "resistencia_termica = espesor / (conductividad_termica * area)"
+        latex: "R_{th} = \\frac{L}{k A}"
+      - target: "espesor"
+        equation: "espesor = resistencia_termica * conductividad_termica * area"
+        latex: "L = R_{th} k A"
+      - target: "conductividad_termica"
+        equation: "conductividad_termica = espesor / (resistencia_termica * area)"
+        latex: "k = \\frac{L}{R_{th} A}"
+      - target: "area"
+        equation: "area = espesor / (resistencia_termica * conductividad_termica)"
+        latex: "A = \\frac{L}{R_{th} k}"
+
+  - id: potencia_resistencia_termica
+    title:
+      es: "Potencia térmica mediante resistencia térmica"
+      en: "Thermal power using thermal resistance"
+    equation: "potencia_termica = diferencia_temperatura / resistencia_termica"
+    latex: "\\dot{Q} = \\frac{\\Delta T}{R_{th}}"
+    magnitudes:
+      - "potencia_termica"
+      - "diferencia_temperatura"
+      - "resistencia_termica"
+    category: "modelo_equivalente"
+    relation_type: "ratio"
+    physical_meaning:
+      es: "Calcula la potencia conducida usando la oposición térmica equivalente del sistema."
+      en: "Calculates conducted power using the equivalent thermal opposition of the system."
+    constraints:
+      - "resistencia_termica > 0"
+      - "diferencia_temperatura definida entre las caras del sistema"
+      - "conduccion estacionaria"
+    validity:
+      es: "Válida en régimen estacionario cuando la resistencia térmica equivalente representa correctamente el sistema."
+      en: "Valid in steady state when the equivalent thermal resistance correctly represents the system."
+    dimension_check: "[M L^2 T^-3] = [Θ] / [M^-1 L^-2 T^3 Θ]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: []
+    interpretation_tags:
+      - "resistencia_termica"
+      - "potencia_termica"
+      - "analogía_termica"
+    result_semantics:
+      target: "potencia_termica"
+      kind: "thermal_power"
+      sign_meaning: "El signo depende del convenio aplicado a la diferencia de temperatura."
+      absolute_value_meaning: "Energía transferida por segundo a través de la resistencia térmica."
+    domain_checks:
+      - "Comprobar que resistencia_termica no es cero."
+      - "Usar resistencia equivalente si hay varias capas."
+    coherence_checks:
+      - "Si diferencia_temperatura = 0, potencia_termica debe ser 0."
+      - "Si resistencia_termica aumenta, potencia_termica disminuye."
+    graph_implications:
+      - "Con resistencia fija, potencia térmica y diferencia de temperatura son directamente proporcionales."
+    pedagogical_triggers:
+      - "Mostrar que esta forma es equivalente a la ley de Fourier para una pared plana."
+      - "Ayuda cuando el problema se plantea como aislamiento o pérdidas térmicas."
+    rearrangements:
+      - target: "potencia_termica"
+        equation: "potencia_termica = diferencia_temperatura / resistencia_termica"
+        latex: "\\dot{Q} = \\frac{\\Delta T}{R_{th}}"
+      - target: "diferencia_temperatura"
+        equation: "diferencia_temperatura = potencia_termica * resistencia_termica"
+        latex: "\\Delta T = \\dot{Q} R_{th}"
+      - target: "resistencia_termica"
+        equation: "resistencia_termica = diferencia_temperatura / potencia_termica"
+        latex: "R_{th} = \\frac{\\Delta T}{\\dot{Q}}"

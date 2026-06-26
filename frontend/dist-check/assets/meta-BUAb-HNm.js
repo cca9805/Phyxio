@@ -1,0 +1,95 @@
+const e=`version: 5
+id: ecuacion-de-euler-de-fluidos
+nombre:
+  es: Ecuacion de Euler de fluidos
+  en: Euler Equation for Fluids
+titulo:
+  es: Ecuacion de Euler de fluidos
+  en: Euler Equation for Fluids
+type: leaf
+area: fisica-clasica
+bloque: mecanica
+subbloque: fluidos
+parent_id: ecuaciones-del-movimiento
+ruta_relativa: fisica-clasica/mecanica/fluidos/dinamica-de-fluidos/ecuaciones-del-movimiento/ecuacion-de-euler-de-fluidos
+orden: 218342
+dificultad: 5
+tiempo_estimado_min: 75
+niveles:
+  es:
+  - UNIVERSIDAD
+  en:
+  - University
+icon: 💧
+descripcion: Ecuacion de Euler de fluidos en mecanica avanzada.
+description_en: Euler Equation for Fluids in advanced mechanics.
+descripcion_corta: la ecuacion de Euler balancea inercia material, gradiente de presion y fuerzas de volumen
+magnitud_dominante: DvDt
+representacion_dominante: none
+physical_role:
+  es: ley fisica
+  en: physical law
+pregunta_fisica_central:
+  es: ¿Como expresa la ecuacion de Euler el movimiento de un fluido ideal sin viscosidad?
+  en: How does Euler equation express the motion of an ideal inviscid fluid?
+prerequisitos:
+- fisica-clasica/mecanica/fluidos/dinamica-de-fluidos/ecuaciones-del-movimiento/ecuacion-de-navier-stokes-intro
+tags:
+  es:
+  - ecuacion-de-euler-de-fluidos
+  - mecanica-avanzada
+  - modelo
+  en:
+  - ecuacion-de-euler-de-fluidos
+  - advanced-mechanics
+  - model
+objetivos:
+- es: Identificar el objeto fisico central del leaf.
+  en: Identify the central physical object of the leaf.
+- es: Aplicar las formulas dentro de su dominio de validez.
+  en: Apply the formulas within their validity domain.
+- es: Interpretar el resultado como criterio de modelo avanzado.
+  en: Interpret the result as an advanced model criterion.
+suposiciones:
+- es: Sistema clasico descrito por variables suaves y unidades coherentes.
+  en: Classical system described by smooth variables and coherent units.
+- es: Dominio fisico compatible con las hipotesis especificas del leaf.
+  en: Physical domain compatible with the specific assumptions of the leaf.
+competencias_lomloe:
+- STEM
+- modelizacion
+- razonamiento_cientifico
+- resolucion_problemas
+graficos: []
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    tab_label:
+      es: Interpretacion avanzada
+      en: Advanced interpretation
+    inline_calculator: true
+    inline_graph: false
+    dedicated_tab: true
+    show_summary: true
+    show_physical_reading: true
+    show_coherence: true
+    show_model_validity: true
+    show_graph_reading: true
+    show_likely_errors: true
+    show_next_step: true
+  mini_graph:
+    enabled: false
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    show_warnings: true
+    show_likely_errors: true
+    max_inline_messages: 3
+    show_status_icons: true
+    allow_collapsible_sections: true
+  dependencies:
+    requires_magnitudes: true
+    requires_formulas: true
+    supports_graph_binding: false
+`;export{e as default};

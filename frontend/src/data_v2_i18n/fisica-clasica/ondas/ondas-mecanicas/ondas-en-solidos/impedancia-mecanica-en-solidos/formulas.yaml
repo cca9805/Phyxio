@@ -1,0 +1,192 @@
+- id: impedancia_mecanica
+  title:
+    es: Impedancia mecánica de un sólido
+    en: Mechanical impedance of a solid
+  equation: Z_mec = rho * c_s * A_sec
+  latex: Z_mec = rho * c_s * A_sec
+  rearrangements:
+  - target: impedancia_mecanica
+    equation: Z_mec = rho * c_s * A_sec
+    latex: Z_{mec} = \rho \cdot c_s \cdot A_{sec}
+  - target: c_s
+    equation: c_s = Z_mec / (rho * A_sec)
+    latex: c_s = \frac{Z_{mec}}{\rho \cdot A_{sec}}
+  - target: rho
+    equation: rho = Z_mec / (c_s * A_sec)
+    latex: \rho = \frac{Z_{mec}}{c_s \cdot A_{sec}}
+  - target: area_de_la_seccion_transversal
+    equation: A_sec = Z_mec / (rho * c_s)
+    latex: A_{sec} = \frac{Z_{mec}}{\rho \cdot c_s}
+  variables:
+  - Z_mec
+  - rho
+  - c_s
+  - A_sec
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: La impedancia mecánica [[Z_mec]] es el producto de la densidad [[rho]], la velocidad de fase [[c_s]] y la sección
+      transversal [[A_sec]]. Representa la resistencia del medio al movimiento vibratorio y determina cuánta fuerza se necesita
+      para mantener una velocidad de partícula dada.
+    en: Mechanical impedance [[Z_mec]] is the product of density [[rho]], phase velocity [[c_s]] and cross-sectional area
+      [[A_sec]]. It represents the medium's resistance to vibratory motion and determines how much force is needed to sustain
+      a given particle velocity.
+  constraints:
+  - rho > 0
+  - c_s > 0
+  - A_sec > 0
+  validity:
+    es: Válida para ondas planas en sólidos homogéneos e isótropos con sección uniforme. En geometrías complejas o materiales
+      anisótropos, la impedancia se convierte en tensor.
+    en: Valid for plane waves in homogeneous, isotropic solids with uniform cross-section. In complex geometries or anisotropic
+      materials, impedance becomes a tensor quantity.
+  dimension_check: '[M T⁻¹] = [M L⁻³] · [L T⁻¹] · [L²] = [M T⁻¹] ✓'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - impedancia_mecanica
+  - transferencia_energia
+  - adaptacion_impedancias
+  result_semantics:
+    target: impedancia_mecanica
+    kind: scalar_unsigned
+    sign_meaning:
+      es: La impedancia mecánica es siempre positiva; es producto de tres cantidades positivas.
+      en: Mechanical impedance is always positive; it is a product of three positive quantities.
+    absolute_value_meaning:
+      es: 'El valor en kg/s indica la relación fuerza-velocidad del medio. Valores altos (acero: ~10⁷ kg/s para secciones
+        típicas) significan gran resistencia al movimiento vibratorio.'
+      en: 'The value in kg/s indicates the force-to-velocity ratio of the medium. High values (steel: ~10⁷ kg/s for typical
+        cross-sections) mean strong resistance to vibratory motion.'
+  domain_checks:
+  - Z_mec > 0
+  - Z_mec típicamente entre 10³ y 10⁸ kg/s para sólidos de ingeniería
+  coherence_checks:
+  - Z_mec aumenta si rho aumenta con c_s y A_sec fijos
+  - Z_mec de acero debe ser mayor que Z_mec de aluminio para misma sección
+  graph_implications:
+  - En gráfica Z_mec vs material, los metales densos ocupan la zona superior
+  - Una barra más gruesa tiene mayor Z_mec a igual material
+  pedagogical_triggers:
+  - Si Z_mec resulta menor que 10³ kg/s para un metal, verificar unidades de A_sec
+  - Si el alumno confunde impedancia mecánica con impedancia acústica específica, recordar que Z_mec incluye el área
+- id: coeficiente_reflexion_impedancia
+  title:
+    es: Coeficiente de reflexión en amplitud por impedancias
+    en: Amplitude reflection coefficient from impedances
+  equation: R_Z = (Z2 - Z1) / (Z2 + Z1)
+  latex: R_Z = \frac{Z_2 - Z_1}{Z_2 + Z_1}
+  rearrangements:
+  - target: coeficiente_de_reflexion_en_amplitud
+    equation: R_Z = (Z2 - Z1) / (Z2 + Z1)
+    latex: R_Z = \frac{Z_2 - Z_1}{Z_2 + Z_1}
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: '[[R_Z]] cuantifica qué fracción de la amplitud de velocidad se refleja cuando una onda mecánica incide en la interfaz
+      entre dos medios con impedancias [[Z_mec]] distintas. Su signo indica inversión de fase.'
+    en: '[[R_Z]] quantifies what fraction of velocity amplitude is reflected when a mechanical wave strikes the interface
+      between two media with different [[Z_mec]]. Its sign indicates phase inversion.'
+  constraints:
+  - Z1 > 0
+  - Z2 > 0
+  validity:
+    es: Válida para incidencia normal y ondas planas en la interfaz. Para incidencia oblicua se necesitan las ecuaciones generalizadas
+      con conversión de modos.
+    en: Valid for normal incidence and plane waves at the interface. For oblique incidence, generalised equations with mode
+      conversion are required.
+  dimension_check: '[1] = [M T⁻¹] / [M T⁻¹] = adimensional ✓'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - reflexion_interfaz
+  - contraste_impedancia
+  - eficiencia_transmision
+  result_semantics:
+    target: coeficiente_de_reflexion_en_amplitud
+    kind: scalar_signed
+    sign_meaning:
+      es: Positivo indica que el segundo medio tiene mayor impedancia; la velocidad reflejada está en fase con la incidente.
+        Negativo indica que el segundo medio es más blando.
+      en: Positive means the second medium has higher impedance; reflected velocity is in phase with incident. Negative means
+        the second medium is softer.
+    absolute_value_meaning:
+      es: El módulo indica la fracción de amplitud reflejada. Si es 1, reflexión total; si es 0, adaptación perfecta (toda
+        la energía se transmite).
+      en: The magnitude indicates the fraction of amplitude reflected. If 1, total reflection; if 0, perfect matching (all
+        energy transmitted).
+  domain_checks:
+  - R_Z >= -1
+  - R_Z <= 1
+  coherence_checks:
+  - R_Z = 0 cuando Z1 = Z2 (adaptación perfecta)
+  - R_Z próximo a 1 indica interfaz muy reflectante
+  graph_implications:
+  - En gráfica R_Z vs ratio Z2/Z1, la curva pasa por cero en ratio = 1 y se satura en ±1
+  pedagogical_triggers:
+  - Si |R_Z| > 1, el alumno ha intercambiado numerador y denominador
+  - Si R_Z resulta exactamente 0 para dos materiales distintos, verificar que no se usó el mismo Z para ambos
+- id: coeficiente_transmision_impedancia
+  title:
+    es: Coeficiente de transmisión en amplitud por impedancias
+    en: Amplitude transmission coefficient from impedances
+  equation: T_Z = 2 * Z2 / (Z2 + Z1)
+  latex: T_Z = \frac{2 Z_2}{Z_2 + Z_1}
+  rearrangements:
+  - target: coeficiente_de_transmision_en_amplitud
+    equation: T_Z = 2 * Z2 / (Z2 + Z1)
+    latex: T_Z = \frac{2 Z_2}{Z_2 + Z_1}
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: '[[T_Z]] cuantifica la fracción de amplitud de velocidad que se transmite al segundo medio. Junto con [[R_Z]], satisface
+      la conservación de amplitud en la interfaz.'
+    en: '[[T_Z]] quantifies the fraction of velocity amplitude transmitted into the second medium. Together with [[R_Z]],
+      it satisfies amplitude conservation at the interface.'
+  constraints:
+  - Z1 > 0
+  - Z2 > 0
+  validity:
+    es: 'Válida bajo las mismas condiciones que el coeficiente de reflexión: incidencia normal y ondas planas.'
+    en: 'Valid under the same conditions as the reflection coefficient: normal incidence and plane waves.'
+  dimension_check: '[1] = [M T⁻¹] / [M T⁻¹] = adimensional ✓'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - transmision_interfaz
+  - eficiencia_acoplamiento
+  - transferencia_energia
+  result_semantics:
+    target: coeficiente_de_transmision_en_amplitud
+    kind: scalar_unsigned
+    sign_meaning:
+      es: El coeficiente de transmisión es siempre positivo; la onda transmitida mantiene la dirección de propagación.
+      en: The transmission coefficient is always positive; the transmitted wave maintains the propagation direction.
+    absolute_value_meaning:
+      es: Valor 1 indica adaptación perfecta. Valor 2 es el máximo teórico (cuando Z2 >> Z1, la velocidad transmitida puede
+        superar la incidente en amplitud, aunque la energía se conserva).
+      en: Value 1 indicates perfect matching. Value 2 is the theoretical maximum (when Z2 >> Z1, transmitted velocity can
+        exceed incident in amplitude, though energy is conserved).
+  domain_checks:
+  - T_Z > 0
+  - T_Z <= 2
+  coherence_checks:
+  - T_Z = 1 cuando Z1 = Z2
+  - T_Z + R_Z = 1 + R_Z (consistencia)
+  graph_implications:
+  - En gráfica T_Z vs ratio Z2/Z1, T_Z = 1 en ratio = 1 y tiende a 2 cuando Z2 >> Z1
+  pedagogical_triggers:
+  - Si T_Z > 2, el alumno ha cometido error algebraico
+  - Si el alumno cree que T_Z no puede superar 1, recordar que esto es amplitud de velocidad, no energía

@@ -1,0 +1,323 @@
+- id: COP_ref
+  symbol: "\\mathrm{COP}_{ref}"
+  nombre:
+    es: Coeficiente de rendimiento de refrigeracion
+    en: Refrigeration coefficient of performance
+  descripcion:
+    es: "Cociente entre el calor extraído del foco frío y el trabajo consumido por el compresor"
+    en: "Ratio of heat extracted from the cold reservoir to the work consumed by the compressor"
+  unidad_si: adimensional
+  dimension: "[1]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - evaluación de eficiencia de refrigeradores
+    - diseño de sistemas de climatización
+    - comparación con el COP de Carnot
+  common_mistake: "Confundir COP de refrigeración con COP de bomba de calor; usar rendimiento térmico en lugar de COP"
+  typical_range: "2 – 6 para refrigeradores domésticos e industriales"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre positivo, representa la capacidad de extracción de calor por unidad de trabajo"
+      en: "Always positive, represents heat extraction capacity per unit of work"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "COP nulo indicaría que no se extrae calor alguno a pesar de consumir trabajo, situación sin sentido físico"
+      en: "Zero COP would indicate no heat extraction despite consuming work, a physically meaningless situation"
+  value_nature:
+    kind: ratio
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - summary
+      - coherence
+    secondary_for:
+      - model_validity
+  graph_binding:
+    channels:
+      - y_axis
+  pedagogical_notes:
+    es: "A diferencia del rendimiento térmico, el COP puede ser mayor que uno porque mide calor transferido, no calor convertido en trabajo."
+    en: "Unlike thermal efficiency, COP can be greater than one because it measures heat transferred, not heat converted to work."
+
+- id: COP_bc
+  symbol: "\\mathrm{COP}_{bc}"
+  nombre:
+    es: Coeficiente de rendimiento de bomba de calor
+    en: Heat pump coefficient of performance
+  descripcion:
+    es: "Cociente entre el calor entregado al foco caliente y el trabajo consumido por el compresor"
+    en: "Ratio of heat delivered to the hot reservoir to the work consumed by the compressor"
+  unidad_si: adimensional
+  dimension: "[1]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - evaluación de eficiencia de bombas de calor
+    - dimensionado de calefacción geotérmica
+    - comparación con resistencias eléctricas
+  common_mistake: "Confundir COP de bomba de calor con COP de refrigeración; olvidar que COP_bc es siempre mayor que uno"
+  typical_range: "3 – 5 para bombas de calor residenciales; 2 – 12 para el COP de Carnot según diferencia de temperaturas"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre positivo y mayor que uno, porque el calor entregado incluye el trabajo aportado"
+      en: "Always positive and greater than one, because delivered heat includes the work input"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Físicamente imposible: siempre se entrega al menos el trabajo consumido como calor"
+      en: "Physically impossible: at least the consumed work is always delivered as heat"
+  value_nature:
+    kind: ratio
+    nonnegative_only: true
+    expected_interval: "(1, +inf)"
+  interpretation_role:
+    primary_for:
+      - summary
+      - coherence
+    secondary_for:
+      - model_validity
+  graph_binding:
+    channels:
+      - y_axis
+  pedagogical_notes:
+    es: "El COP de bomba de calor es siempre COP de refrigeración más uno, porque el foco caliente recibe tanto el calor extraído como el trabajo."
+    en: "Heat pump COP is always refrigeration COP plus one, because the hot reservoir receives both the extracted heat and the work."
+
+- id: T_H
+  symbol: T_H
+  nombre:
+    es: Temperatura del foco caliente
+    en: Hot reservoir temperature
+  descripcion:
+    es: "Temperatura absoluta del foco caliente al que se entrega calor (ambiente en refrigeración, espacio calefactado en bomba de calor)"
+    en: "Absolute temperature of the hot reservoir to which heat is delivered (environment in refrigeration, heated space in heat pump)"
+  unidad_si: K
+  dimension: "[Θ]"
+  is_vector: false
+  components: []
+  category: state
+  physical_role: core_physical_quantity
+  used_in:
+    - cálculo del COP de Carnot
+    - diseño de sistemas de refrigeración
+    - dimensionado de bombas de calor
+  common_mistake: "Usar la temperatura en Celsius en lugar de kelvin"
+  typical_range: "290 – 330 K para aplicaciones de climatización"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre positiva al medirse en kelvin"
+      en: "Always positive when measured in kelvin"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Una temperatura de 0 K es inalcanzable físicamente"
+      en: "A temperature of 0 K is physically unattainable"
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - physical_reading
+    secondary_for:
+      - coherence
+  graph_binding:
+    channels:
+      - parameter
+  pedagogical_notes:
+    es: "En refrigeración, T_H es la temperatura ambiente exterior; en bomba de calor, T_H es la del espacio interior a calentar."
+    en: "In refrigeration, T_H is the outdoor ambient temperature; in a heat pump, T_H is the indoor space to be heated."
+
+- id: T_C
+  symbol: T_C
+  nombre:
+    es: Temperatura del foco frio
+    en: Cold reservoir temperature
+  descripcion:
+    es: "Temperatura absoluta del foco frío del que se extrae calor (espacio refrigerado en refrigeración, ambiente exterior en bomba de calor)"
+    en: "Absolute temperature of the cold reservoir from which heat is extracted (refrigerated space in refrigeration, outdoor environment in heat pump)"
+  unidad_si: K
+  dimension: "[Θ]"
+  is_vector: false
+  components: []
+  category: state
+  physical_role: core_physical_quantity
+  used_in:
+    - cálculo del COP de Carnot
+    - diseño de cámaras frigoríficas
+    - análisis de bombas de calor geotérmicas
+  common_mistake: "Usar temperaturas negativas en Celsius sin convertir a kelvin"
+  typical_range: "230 – 300 K en aplicaciones de climatización y refrigeración"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Siempre positiva al medirse en kelvin"
+      en: "Always positive when measured in kelvin"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Un foco frío a 0 K daría COP de Carnot nulo para refrigeración, inalcanzable"
+      en: "A cold reservoir at 0 K would give zero Carnot COP for refrigeration, unattainable"
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - physical_reading
+    secondary_for:
+      - likely_errors
+  graph_binding:
+    channels:
+      - x_axis
+  pedagogical_notes:
+    es: "Cuanto más baja es T_C, menor es el COP y más costoso resulta extraer calor."
+    en: "The lower T_C is, the lower the COP and the more expensive it becomes to extract heat."
+
+- id: Q_H
+  symbol: Q_H
+  nombre:
+    es: Calor entregado al foco caliente
+    en: Heat delivered to hot reservoir
+  descripcion:
+    es: "Cantidad total de calor entregada al foco caliente, igual a la suma del calor extraído del foco frío y el trabajo consumido"
+    en: "Total amount of heat delivered to the hot reservoir, equal to the sum of heat extracted from the cold reservoir and work consumed"
+  unidad_si: J
+  dimension: "[M L² T⁻²]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - balance energético del ciclo invertido
+    - definición de COP de bomba de calor
+    - dimensionado de calefacción
+  common_mistake: "Confundir Q_H con Q_C o con el trabajo W"
+  typical_range: "depende de la escala del sistema"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Positivo por convención, calor que sale del ciclo hacia el foco caliente"
+      en: "Positive by convention, heat leaving the cycle towards the hot reservoir"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Q_H nulo significaría que el trabajo consumido no produce transferencia de calor"
+      en: "Zero Q_H would mean that consumed work produces no heat transfer"
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - physical_reading
+    secondary_for:
+      - coherence
+  graph_binding:
+    channels:
+      - area
+  pedagogical_notes:
+    es: "Q_H siempre es mayor que Q_C porque incluye el trabajo W aportado por el compresor."
+    en: "Q_H is always greater than Q_C because it includes the work W supplied by the compressor."
+
+- id: Q_C
+  symbol: Q_C
+  nombre:
+    es: Calor extraido del foco frio
+    en: Heat extracted from cold reservoir
+  descripcion:
+    es: "Cantidad de calor transferida desde el foco frío al fluido de trabajo, que es el efecto útil de la refrigeración"
+    en: "Amount of heat transferred from the cold reservoir to the working fluid, which is the useful effect of refrigeration"
+  unidad_si: J
+  dimension: "[M L² T⁻²]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - definición de COP de refrigeración
+    - balance energético del ciclo invertido
+    - dimensionado de cámaras frigoríficas
+  common_mistake: "Confundir Q_C con Q_H; olvidar que Q_C es menor que Q_H"
+  typical_range: "depende de la escala del sistema"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Positivo por convención, calor que entra al ciclo desde el foco frío"
+      en: "Positive by convention, heat entering the cycle from the cold reservoir"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Q_C nulo significaría que no se extrae calor del foco frío, situación sin sentido en refrigeración"
+      en: "Zero Q_C would mean no heat extraction from cold reservoir, meaningless in refrigeration"
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - physical_reading
+    secondary_for:
+      - coherence
+  graph_binding:
+    channels:
+      - area
+  pedagogical_notes:
+    es: "Q_C es el efecto útil en refrigeración; cuanto mayor sea Q_C por unidad de W, mayor es el COP de refrigeración."
+    en: "Q_C is the useful effect in refrigeration; the greater Q_C per unit of W, the higher the refrigeration COP."
+
+- id: W
+  symbol: W
+  nombre:
+    es: Trabajo consumido por el compresor
+    en: Work consumed by the compressor
+  descripcion:
+    es: "Energía mecánica o eléctrica suministrada al compresor para hacer funcionar el ciclo de refrigeración o bomba de calor"
+    en: "Mechanical or electrical energy supplied to the compressor to operate the refrigeration or heat pump cycle"
+  unidad_si: J
+  dimension: "[M L² T⁻²]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - denominador del COP
+    - balance energético del ciclo invertido
+    - cálculo de coste energético
+  common_mistake: "Confundir el trabajo del compresor con el calor transferido"
+  typical_range: "depende de la escala del sistema; siempre menor que Q_H"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "Positivo, es la entrada de energía al ciclo"
+      en: "Positive, it is the energy input to the cycle"
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "La segunda ley prohíbe transferir calor del foco frío al caliente sin trabajo"
+      en: "The second law forbids transferring heat from cold to hot reservoir without work"
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "(0, +inf)"
+  interpretation_role:
+    primary_for:
+      - coherence
+    secondary_for:
+      - summary
+  graph_binding:
+    channels:
+      - area
+  pedagogical_notes:
+    es: "W es siempre la diferencia Q_H menos Q_C. Cuanto menor sea W para el mismo Q_C, mayor COP de refrigeración."
+    en: "W is always the difference Q_H minus Q_C. The smaller W for the same Q_C, the higher the refrigeration COP."

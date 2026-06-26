@@ -1,0 +1,497 @@
+version: "1.0"
+id: interpretacion_principio_de_funcionamiento
+leaf_id: principio-de-funcionamiento
+
+nombre:
+  es: "Interpretacion del principio de funcionamiento"
+  en: "Operating principle interpretation"
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: maquinas-termicas
+  parent_id: refrigeradores-y-bombas-de-calor
+  ruta_relativa: fisica-clasica/termodinamica/maquinas-termicas/refrigeradores-y-bombas-de-calor/principio-de-funcionamiento
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretacion
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    priority:
+      - summary
+      - likely_errors
+
+dependencies:
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+  formulas:
+    - balance_energetico_ciclo_invertido
+    - segunda_ley_ciclo_invertido
+    - trabajo_minimo_carnot
+    - flujo_calor_espontaneo
+  magnitudes:
+    - Q_C
+    - Q_H
+    - W
+    - T_C
+    - T_H
+    - Delta_S_total
+
+global_context:
+  physical_domain:
+    es: "Termodinamica de ciclos invertidos: transferencia de calor del foco frio al caliente mediante trabajo externo"
+    en: "Reversed cycle thermodynamics: heat transfer from cold to hot reservoir through external work"
+  axis_convention:
+    es: "En el diagrama W_min vs T_C, el trabajo minimo crece cuando T_C decrece para T_H fijo"
+    en: "In the W_min vs T_C diagram, minimum work increases when T_C decreases for fixed T_H"
+  standard_assumptions:
+    - "Ciclo completamente reversible para trabajo de Carnot"
+    - "Focos de capacidad infinita"
+    - "Temperaturas en kelvin"
+  standard_warnings:
+    - "No aplicar trabajo de Carnot como prediccion de trabajo real"
+    - "Verificar conversion Celsius a kelvin"
+    - "Distinguir refrigerador de bomba de calor por efecto util"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen del resultado
+      en: Result summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia del resultado
+      en: Result coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+  Q_C:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Calor extraido del foco frio, efecto util del refrigerador"
+      en: "Heat extracted from cold reservoir, useful effect of the refrigerator"
+    summary_rules:
+      - id: qc_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] indica la cantidad de calor extraido del espacio refrigerado. Depende de la diferencia de temperatura y resume la capacidad frigorifica del sistema."
+          en: "[[Q_C]] indicates the amount of heat extracted from the refrigerated space. It depends on the temperature difference and describes the cooling capacity of the system."
+    physical_reading_rules:
+      - id: qc_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] representa la energia termica retirada del foco frio en cada ciclo. El compresor aporta [[W]] adicional para transportar este calor contra el gradiente termico."
+          en: "[[Q_C]] represents the thermal energy removed from the cold reservoir in each cycle. The compressor provides additional [[W]] to transport this heat against the thermal gradient."
+    coherence_rules:
+      - id: qc_coherence_balance
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[Q_H]] sea igual a [[Q_C]] mas [[W]]. Si la diferencia no cuadra, hay error en los datos."
+          en: "Verify that [[Q_H]] equals [[Q_C]] plus [[W]]. If the difference does not match, there is a data error."
+      - id: qc_coherence_negative
+        when: "Q_C <= 0"
+        status: error
+        text:
+          es: "[[Q_C]] negativo o nulo es fisicamente imposible: indicaria que no se extrae calor o que el calor fluye al reves."
+          en: "Negative or zero [[Q_C]] is physically impossible: it would indicate no heat extraction or reversed heat flow."
+    model_validity_rules:
+      - id: qc_model
+        when: "true"
+        status: info
+        text:
+          es: "El modelo es valido cuando el sistema opera en regimen estacionario. Deja de valer si la carga termica varia rapidamente o si el compresor opera en ciclos de arranque y parada frecuentes. Se asume capacidad del foco aproximadamente constante."
+          en: "The model is valid when the system operates in steady state. It breaks down if the thermal load varies rapidly or if the compressor operates in frequent start-stop cycles. Approximately constant reservoir capacity is assumed."
+    graph_rules:
+      - id: qc_graph
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama de balance energetico, [[Q_C]] aparece como la energia que entra al ciclo desde el foco frio."
+          en: "In the energy balance diagram, [[Q_C]] appears as the energy entering the cycle from the cold reservoir."
+    likely_errors:
+      - id: qc_error_sign
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[Q_C]] se ha tomado como positivo en el balance. Un signo negativo indicaria uso del convenio de motores termicos."
+          en: "Verify that [[Q_C]] has been taken as positive in the balance. A negative sign would indicate use of the heat engine convention."
+    next_step_rules:
+      - id: qc_next
+        when: "true"
+        status: info
+        text:
+          es: "Calcular [[Q_H]] sumando [[Q_C]] mas [[W]] y verificar la segunda ley calculando [[Delta_S_total]]."
+          en: "Calculate [[Q_H]] by adding [[Q_C]] plus [[W]] and verify the second law by calculating [[Delta_S_total]]."
+
+  Q_H:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Calor entregado al foco caliente, efecto util de la bomba de calor"
+      en: "Heat delivered to hot reservoir, useful effect of the heat pump"
+    summary_rules:
+      - id: qh_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] es el calor total entregado al foco caliente. Siempre es mayor que [[Q_C]] porque incluye el trabajo [[W]] del compresor."
+          en: "[[Q_H]] is the total heat delivered to the hot reservoir. It is always greater than [[Q_C]] because it includes the compressor work [[W]]."
+    physical_reading_rules:
+      - id: qh_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] es la suma de [[Q_C]] mas [[W]]: toda la energia que entra al ciclo termina en el foco caliente. Esto es consecuencia directa de la primera ley."
+          en: "[[Q_H]] is the sum of [[Q_C]] plus [[W]]: all energy entering the cycle ends up in the hot reservoir. This is a direct consequence of the first law."
+    coherence_rules:
+      - id: qh_coherence_less_qc
+        when: "Q_H <= Q_C"
+        status: error
+        text:
+          es: "[[Q_H]] menor o igual a [[Q_C]] viola la primera ley: [[Q_H]] debe ser [[Q_C]] mas [[W]] con [[W]] positivo."
+          en: "[[Q_H]] less than or equal to [[Q_C]] violates the first law: [[Q_H]] must be [[Q_C]] plus [[W]] with positive [[W]]."
+      - id: qh_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[Q_H]] menos [[Q_C]] sea exactamente [[W]]. Cualquier discrepancia indica error de calculo."
+          en: "Verify that [[Q_H]] minus [[Q_C]] equals exactly [[W]]. Any discrepancy indicates a calculation error."
+    model_validity_rules:
+      - id: qh_model
+        when: "true"
+        status: info
+        text:
+          es: "El modelo asume regimen estacionario. Deja de ser valido si hay acumulacion de energia en el fluido o si las temperaturas de los focos varian apreciablemente durante el ciclo."
+          en: "The model assumes steady state. It breaks down if there is energy accumulation in the fluid or if reservoir temperatures vary appreciably during the cycle."
+    graph_rules:
+      - id: qh_graph
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama de balance, [[Q_H]] aparece como la energia total que sale del ciclo hacia el foco caliente."
+          en: "In the balance diagram, [[Q_H]] appears as the total energy leaving the cycle toward the hot reservoir."
+    likely_errors:
+      - id: qh_error_confusion
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que no se haya confundido [[Q_H]] con [[Q_C]]. En bomba de calor, el efecto util es [[Q_H]], no [[Q_C]]."
+          en: "Verify that [[Q_H]] has not been confused with [[Q_C]]. In heat pump mode, the useful effect is [[Q_H]], not [[Q_C]]."
+    next_step_rules:
+      - id: qh_next
+        when: "true"
+        status: info
+        text:
+          es: "Calcular [[Delta_S_total]] como [[Q_H]] dividido entre [[T_H]] menos [[Q_C]] dividido entre [[T_C]] y verificar que sea no negativa."
+          en: "Calculate [[Delta_S_total]] as [[Q_H]] divided by [[T_H]] minus [[Q_C]] divided by [[T_C]] and verify it is non-negative."
+
+  W:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Trabajo externo que permite invertir el flujo natural de calor"
+      en: "External work that allows reversing the natural heat flow"
+    summary_rules:
+      - id: w_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[W]] es el trabajo que el compresor aporta al ciclo. Es la causa de que el calor pueda fluir del frio al caliente, en contra de su tendencia espontanea."
+          en: "[[W]] is the work that the compressor provides to the cycle. It is the cause of heat flowing from cold to hot, against its spontaneous tendency."
+    physical_reading_rules:
+      - id: w_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[W]] representa el coste energetico de operar el ciclo invertido. La segunda ley exige que sea estrictamente positivo para transferir calor del frio al caliente."
+          en: "[[W]] represents the energy cost of operating the reversed cycle. The second law requires it to be strictly positive to transfer heat from cold to hot."
+    coherence_rules:
+      - id: w_coherence_zero
+        when: "W <= 0"
+        status: error
+        text:
+          es: "[[W]] nulo o negativo viola la segunda ley. El calor no puede fluir espontaneamente del frio al caliente."
+          en: "Zero or negative [[W]] violates the second law. Heat cannot flow spontaneously from cold to hot."
+      - id: w_coherence_balance
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[W]] sea igual a [[Q_H]] menos [[Q_C]]. Si no coincide, hay error en el balance."
+          en: "Verify that [[W]] equals [[Q_H]] minus [[Q_C]]. If it does not match, there is a balance error."
+    model_validity_rules:
+      - id: w_model
+        when: "true"
+        status: info
+        text:
+          es: "El modelo asume potencia constante del compresor. Deja de ser valido si el compresor opera a carga variable con grandes fluctuaciones de regimen. Se supone que las perdidas mecanicas son aproximadamente constantes."
+          en: "The model assumes constant compressor power. It breaks down if the compressor operates at variable load with large regime fluctuations. Mechanical losses are assumed approximately constant."
+    graph_rules:
+      - id: w_graph
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama W_min vs [[T_C]], [[W]] minimo crece hiperbólicamente cuando [[T_C]] decrece con [[T_H]] fijo."
+          en: "In the W_min vs [[T_C]] diagram, minimum [[W]] grows hyperbolically when [[T_C]] decreases with fixed [[T_H]]."
+    likely_errors:
+      - id: w_error_missing
+        when: "true"
+        status: ok
+        text:
+          es: "Si [[W]] parece excesivo comparado con [[Q_C]], verificar que las temperaturas estan en kelvin y que la formula es correcta."
+          en: "If [[W]] seems excessive compared to [[Q_C]], verify that temperatures are in kelvin and the formula is correct."
+    next_step_rules:
+      - id: w_next
+        when: "true"
+        status: info
+        text:
+          es: "Comparar [[W]] con el trabajo minimo de Carnot para evaluar la irreversibilidad del ciclo real."
+          en: "Compare [[W]] with the minimum Carnot work to evaluate the irreversibility of the real cycle."
+
+  T_C:
+    magnitude_type: intensive
+    semantic_role:
+      es: "Temperatura del foco frio que determina las condiciones de operacion"
+      en: "Cold reservoir temperature determining operating conditions"
+    summary_rules:
+      - id: tc_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_C]] es la temperatura del foco frio. Cuanto menor sea [[T_C]] respecto a [[T_H]], mayor sera el trabajo necesario para extraer calor."
+          en: "[[T_C]] is the cold reservoir temperature. The lower [[T_C]] relative to [[T_H]], the greater the work needed to extract heat."
+    physical_reading_rules:
+      - id: tc_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_C]] determina la dificultad termodinamica de la refrigeracion. A menor [[T_C]], mayor es el salto termico que el compresor debe vencer."
+          en: "[[T_C]] determines the thermodynamic difficulty of refrigeration. The lower [[T_C]], the greater the thermal jump the compressor must overcome."
+    coherence_rules:
+      - id: tc_coherence
+        when: "T_C >= T_H"
+        status: error
+        text:
+          es: "[[T_C]] debe ser menor que [[T_H]]. Si no lo es, no se necesita ciclo invertido porque el calor ya fluiria espontaneamente."
+          en: "[[T_C]] must be less than [[T_H]]. If not, no reversed cycle is needed because heat would already flow spontaneously."
+      - id: tc_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_C]] menor que [[T_H]], coherente con la necesidad de ciclo invertido."
+          en: "[[T_C]] less than [[T_H]], consistent with the need for a reversed cycle."
+    model_validity_rules:
+      - id: tc_model
+        when: "true"
+        status: info
+        text:
+          es: "El modelo asume [[T_C]] constante durante el intercambio. Deja de valer si la temperatura del evaporador varia significativamente durante el ciclo o si el foco tiene capacidad termica limitada."
+          en: "The model assumes constant [[T_C]] during exchange. It breaks down if evaporator temperature varies significantly during the cycle or if the reservoir has limited thermal capacity."
+    graph_rules:
+      - id: tc_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[T_C]] es la variable independiente del diagrama W_min vs T_C. Al disminuir [[T_C]], el trabajo minimo crece hiperbolicamente."
+          en: "[[T_C]] is the independent variable of the W_min vs T_C diagram. As [[T_C]] decreases, minimum work grows hyperbolically."
+    likely_errors:
+      - id: tc_error_celsius
+        when: "T_C < 200"
+        status: warning
+        text:
+          es: "[[T_C]] inferior a 200 K es inusual fuera de criogenia. Verificar que se haya convertido de Celsius a kelvin correctamente."
+          en: "[[T_C]] below 200 K is unusual outside cryogenics. Verify correct conversion from Celsius to kelvin."
+    next_step_rules:
+      - id: tc_next
+        when: "true"
+        status: info
+        text:
+          es: "Con [[T_C]] y [[T_H]] definidas, calcular el trabajo minimo de Carnot y comparar con el trabajo real."
+          en: "With [[T_C]] and [[T_H]] defined, calculate the minimum Carnot work and compare with the real work."
+
+  T_H:
+    magnitude_type: intensive
+    semantic_role:
+      es: "Temperatura del foco caliente donde se rechaza el calor"
+      en: "Hot reservoir temperature where heat is rejected"
+    summary_rules:
+      - id: th_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_H]] es la temperatura del foco caliente. En refrigeracion es el ambiente; en bomba de calor es el espacio a calentar."
+          en: "[[T_H]] is the hot reservoir temperature. In refrigeration it is the environment; in heat pump it is the space to be heated."
+    physical_reading_rules:
+      - id: th_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_H]] establece el limite superior al cual se rechaza el calor. Cuanto mayor es [[T_H]] respecto a [[T_C]], mayor el trabajo necesario."
+          en: "[[T_H]] establishes the upper limit at which heat is rejected. The greater [[T_H]] relative to [[T_C]], the greater the required work."
+    coherence_rules:
+      - id: th_coherence
+        when: "T_H <= T_C"
+        status: error
+        text:
+          es: "[[T_H]] debe ser mayor que [[T_C]]. Si no lo es, no existe necesidad de ciclo invertido."
+          en: "[[T_H]] must be greater than [[T_C]]. If not, there is no need for a reversed cycle."
+      - id: th_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_H]] mayor que [[T_C]], coherente con el principio de funcionamiento del ciclo invertido."
+          en: "[[T_H]] greater than [[T_C]], consistent with the reversed cycle operating principle."
+    model_validity_rules:
+      - id: th_model
+        when: "true"
+        status: info
+        text:
+          es: "El modelo asume [[T_H]] constante. Deja de ser valido si la temperatura del condensador varia significativamente o si el foco caliente tiene capacidad limitada."
+          en: "The model assumes constant [[T_H]]. It breaks down if condenser temperature varies significantly or if the hot reservoir has limited capacity."
+    graph_rules:
+      - id: th_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[T_H]] aparece como parametro fijo en el diagrama W_min vs [[T_C]]. Cambiar [[T_H]] desplaza toda la curva."
+          en: "[[T_H]] appears as a fixed parameter in the W_min vs [[T_C]] diagram. Changing [[T_H]] shifts the entire curve."
+    likely_errors:
+      - id: th_error_celsius
+        when: "T_H < 200"
+        status: warning
+        text:
+          es: "[[T_H]] inferior a 200 K es inusual. Verificar conversion de Celsius a kelvin."
+          en: "[[T_H]] below 200 K is unusual. Verify conversion from Celsius to kelvin."
+    next_step_rules:
+      - id: th_next
+        when: "true"
+        status: info
+        text:
+          es: "Con [[T_H]] y [[T_C]] calculados, determinar el trabajo minimo de Carnot y la viabilidad del ciclo."
+          en: "With [[T_H]] and [[T_C]] calculated, determine the minimum Carnot work and cycle viability."
+
+  Delta_S_total:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Variacion de entropia total que verifica el cumplimiento de la segunda ley"
+      en: "Total entropy change verifying compliance with the second law"
+    summary_rules:
+      - id: ds_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[Delta_S_total]] es la variacion de entropia del universo en el ciclo. Debe ser mayor o igual a cero para cumplir la segunda ley."
+          en: "[[Delta_S_total]] is the entropy change of the universe in the cycle. It must be greater than or equal to zero to comply with the second law."
+    physical_reading_rules:
+      - id: ds_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[Delta_S_total]] cuantifica la irreversibilidad del ciclo. Cero indica el ciclo de Carnot ideal; valores positivos indican irreversibilidades reales."
+          en: "[[Delta_S_total]] quantifies the cycle irreversibility. Zero indicates the ideal Carnot cycle; positive values indicate real irreversibilities."
+    coherence_rules:
+      - id: ds_coherence_negative
+        when: "Delta_S_total < 0"
+        status: error
+        text:
+          es: "[[Delta_S_total]] negativa viola la segunda ley. Verificar datos de entrada y que las temperaturas estan en kelvin."
+          en: "Negative [[Delta_S_total]] violates the second law. Verify input data and that temperatures are in kelvin."
+      - id: ds_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[Delta_S_total]] no negativa, coherente con la segunda ley de la termodinamica."
+          en: "Non-negative [[Delta_S_total]], consistent with the second law of thermodynamics."
+    model_validity_rules:
+      - id: ds_model
+        when: "true"
+        status: info
+        text:
+          es: "El modelo es valido en regimen estacionario con focos de capacidad infinita. Deja de valer si los focos cambian de temperatura apreciablemente o si hay fugas de refrigerante. Se asume ciclo completo sin acumulacion de entropia en el fluido."
+          en: "The model is valid in steady state with infinite capacity reservoirs. It breaks down if reservoirs change temperature appreciably or if there are refrigerant leaks. A complete cycle with no entropy accumulation in the fluid is assumed."
+    graph_rules:
+      - id: ds_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[Delta_S_total]] no se grafica directamente sino que se calcula como verificacion del ciclo."
+          en: "[[Delta_S_total]] is not directly graphed but calculated as a cycle verification."
+    likely_errors:
+      - id: ds_error_sign
+        when: "true"
+        status: ok
+        text:
+          es: "Si [[Delta_S_total]] da negativa, el error mas probable es usar Celsius en lugar de kelvin o invertir Q_H y Q_C en la formula."
+          en: "If [[Delta_S_total]] gives negative, the most likely error is using Celsius instead of kelvin or swapping Q_H and Q_C in the formula."
+    next_step_rules:
+      - id: ds_next
+        when: "true"
+        status: info
+        text:
+          es: "Comparar [[Delta_S_total]] con cero para evaluar la irreversibilidad. Si es mucho mayor que cero, el ciclo tiene margen de mejora significativo."
+          en: "Compare [[Delta_S_total]] with zero to evaluate irreversibility. If much greater than zero, the cycle has significant room for improvement."

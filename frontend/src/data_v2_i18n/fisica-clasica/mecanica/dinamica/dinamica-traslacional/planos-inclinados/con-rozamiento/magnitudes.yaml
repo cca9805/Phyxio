@@ -1,0 +1,526 @@
+version: 1
+magnitudes:
+- id: mu_e
+  symbol: \mu_e
+  nombre:
+    es: Coeficiente de rozamiento estático
+    en: Static friction coefficient
+  descripcion:
+    es: Límite adimensional que determina la máxima fuerza tangencial sin deslizamiento.
+    en: Dimensionless limit that sets maximum tangential force before slipping.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: parameter
+  used_in:
+  - umbral_reposo
+  - angulo_critico
+  common_mistake:
+    es: Usarlo en movimiento cuando el bloque ya desliza.
+    en: Using it during motion after the block is already sliding.
+  typical_range:
+    es: 0.10 a 1.20 para contactos sólidos típicos.
+    en: 0.10 to 1.20 for typical solid contacts.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre no negativo.
+      en: Always non-negative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si vale cero no hay agarre estático.
+      en: If zero there is no static grip.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - criterio-deslizamiento
+    secondary_for:
+    - validacion-de-datos
+  graph_binding:
+    channels:
+    - threshold
+  pedagogical_notes:
+    es: Conecta con el ángulo crítico por tan(theta_c)=mu_e.
+    en: Connects with critical angle through tan(theta_c)=mu_e.
+- id: mu_c
+  symbol: \mu_c
+  nombre:
+    es: Coeficiente de rozamiento cinético
+    en: Kinetic friction coefficient
+  descripcion:
+    es: Relación entre fuerza de rozamiento en deslizamiento y normal de contacto.
+    en: Ratio between sliding friction force and contact normal.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: parameter
+  used_in:
+  - friccion_cinetica
+  - aceleracion_plano_rozamiento
+  common_mistake:
+    es: Tomarlo igual a mu_e sin justificar experimentalmente.
+    en: Assuming it is equal to mu_e without experimental justification.
+  typical_range:
+    es: 0.05 a 1.00 según materiales y estado superficial.
+    en: 0.05 to 1.00 depending on materials and surface state.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud positiva.
+      en: Used as a positive magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si vale cero el modelo reduce al caso sin rozamiento cinético.
+      en: If zero, model reduces to frictionless kinetic case.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - lectura-de-disipacion
+    secondary_for:
+    - comparacion-de-materiales
+  graph_binding:
+    channels:
+    - damping
+  pedagogical_notes:
+    es: Controla la pendiente de a(theta) para un mismo g.
+    en: Controls a(theta) slope for the same g.
+- id: theta
+  symbol: \theta
+  nombre:
+    es: Ángulo de inclinación
+    en: Inclination angle
+  descripcion:
+    es: Inclinación geométrica del plano respecto de la horizontal.
+    en: Geometric inclination of the plane relative to horizontal.
+  unidad_si: rad
+  dimension: '1'
+  is_vector: false
+  components: null
+  category: state
+  physical_role: state
+  used_in:
+  - aceleracion_plano_rozamiento
+  - umbral_reposo
+  - angulo_critico
+  common_mistake:
+    es: Mezclar grados y radianes sin convertir.
+    en: Mixing degrees and radians without conversion.
+  typical_range:
+    es: 0 a 1.57 rad para problemas de rampa.
+    en: 0 to 1.57 rad for ramp problems.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se toma no negativo en esta convención.
+      en: Taken as non-negative in this convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si theta=0 no hay componente del peso a lo largo del plano.
+      en: If theta=0 there is no along-plane weight component.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, pi/2]'
+  interpretation_role:
+    primary_for:
+    - control-geométrico
+    secondary_for:
+    - comparacion-con-theta-crit
+  graph_binding:
+    channels:
+    - x_axis_angle
+  pedagogical_notes:
+    es: Es la variable de barrido principal en el gráfico de coordenadas.
+    en: It is the main sweep variable in the coordinate graph.
+- id: N
+  symbol: N
+  nombre:
+    es: Fuerza normal
+    en: Normal force
+  descripcion:
+    es: Fuerza de contacto perpendicular al plano ejercida sobre el bloque.
+    en: Contact force perpendicular to the plane exerted on the block.
+  unidad_si: N
+  dimension: MLT^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: state
+  used_in:
+  - friccion_cinetica
+  common_mistake:
+    es: Igualarla a mg incluso en plano inclinado.
+    en: Setting it equal to mg even on an inclined plane.
+  typical_range:
+    es: 0 a mg según ángulo.
+    en: 0 to mg depending on angle.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En este leaf se usa su módulo positivo.
+      en: In this leaf its positive magnitude is used.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: En límite vertical N tiende a cero.
+      en: In vertical limit N tends to zero.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - cierre-de-fuerzas
+    secondary_for:
+    - consistencia-de-friccion
+  graph_binding:
+    channels:
+    - support_reaction
+  pedagogical_notes:
+    es: Se obtiene con balance en el eje perpendicular al plano.
+    en: Obtained from force balance normal to the plane.
+- id: f_r
+  symbol: f_r
+  nombre:
+    es: Fuerza de rozamiento
+    en: Friction force
+  descripcion:
+    es: Fuerza tangencial que se opone al deslizamiento o su tendencia.
+    en: Tangential force opposing sliding or its tendency.
+  unidad_si: N
+  dimension: MLT^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: state
+  used_in:
+  - friccion_cinetica
+  - aceleracion_plano_rozamiento
+  common_mistake:
+    es: Fijar su sentido sin estudiar la tendencia de movimiento.
+    en: Fixing direction without analyzing motion tendency.
+  typical_range:
+    es: 0 a mu_e*N en estático y mu_c*N en cinético.
+    en: 0 to mu_e*N in static and mu_c*N in kinetic regime.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su signo depende del eje y convenio elegido.
+      en: Sign depends on chosen axis and convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser nula si no hay contacto efectivo o mu=0.
+      en: Can be zero if no effective contact or mu=0.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - lectura-de-disipacion
+    secondary_for:
+    - diagnostico-de-regimen
+  graph_binding:
+    channels:
+    - resisting_force
+  pedagogical_notes:
+    es: Debe oponerse al movimiento real o inminente.
+    en: Must oppose real or incipient motion.
+- id: m
+  symbol: m
+  nombre:
+    es: Masa
+    en: Mass
+  descripcion:
+    es: Cantidad de materia del bloque deslizante.
+    en: Amount of matter of the sliding block.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: parameter
+  used_in:
+  - friccion_cinetica
+  - aceleracion_plano_rozamiento
+  common_mistake:
+    es: Suponer que modifica a cuando el modelo es lineal en m.
+    en: Assuming it changes a when model is linear in m.
+  typical_range:
+    es: 0.1 a 1000 kg en aplicaciones didácticas e ingenieriles.
+    en: 0.1 to 1000 kg in didactic and engineering applications.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre positiva.
+      en: Always positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: m=0 no representa cuerpo físico en este leaf.
+      en: m=0 does not represent a physical body in this leaf.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '> 0'
+  interpretation_role:
+    primary_for:
+    - escala-de-fuerzas
+    secondary_for:
+    - validacion-de-datos
+  graph_binding:
+    channels:
+    - mass_input
+  pedagogical_notes:
+    es: Cancela en la expresión de a pero no en N ni f_r.
+    en: Cancels in a expression but not in N nor f_r.
+- id: g
+  symbol: g
+  nombre:
+    es: Aceleración gravitatoria
+    en: Gravitational acceleration
+  descripcion:
+    es: Intensidad del campo gravitatorio local.
+    en: Intensity of local gravitational field.
+  unidad_si: m/s^2
+  dimension: LT^-2
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: parameter
+  used_in:
+  - aceleracion_plano_rozamiento
+  common_mistake:
+    es: Usar 10 sin indicar aproximación cuando se exige precisión.
+    en: Using 10 without declaring approximation when precision is required.
+  typical_range:
+    es: 9.78 a 9.83 m/s^2 en la Tierra.
+    en: 9.78 to 9.83 m/s^2 on Earth.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa módulo positivo.
+      en: Positive magnitude is used.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: g=0 sale del dominio de este modelo terrestre.
+      en: g=0 is outside this terrestrial model domain.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '> 0'
+  interpretation_role:
+    primary_for:
+    - escala-dinamica
+    secondary_for:
+    - comparacion-planetaria
+  graph_binding:
+    channels:
+    - gravity_input
+  pedagogical_notes:
+    es: Fija escala de aceleración para cualquier theta y mu_c.
+    en: Sets acceleration scale for any theta and mu_c.
+- id: a
+  symbol: a
+  nombre:
+    es: Aceleración del bloque
+    en: Block acceleration
+  descripcion:
+    es: Respuesta dinámica a lo largo del plano con rozamiento cinético.
+    en: Dynamic response along incline with kinetic friction.
+  unidad_si: m/s^2
+  dimension: LT^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: dependent
+  used_in:
+  - aceleracion_plano_rozamiento
+  common_mistake:
+    es: Interpretar signo negativo como subida espontánea sin fuerza externa.
+    en: Interpreting negative sign as spontaneous upward motion without external force.
+  typical_range:
+    es: Aproximadamente entre -g y g para problemas estándar.
+    en: Roughly between -g and g for standard problems.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica sentido respecto al eje elegido sobre el plano.
+      en: Sign indicates direction relative to chosen axis on incline.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: a=0 marca equilibrio dinámico o velocidad constante.
+      en: a=0 marks dynamic balance or constant speed.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - resultado-principal
+    secondary_for:
+    - chequeo-de-regimen
+  graph_binding:
+    channels:
+    - y_axis_acceleration
+  pedagogical_notes:
+    es: Debe leerse junto a theta y mu_c, no de forma aislada.
+    en: Must be read together with theta and mu_c, not in isolation.
+- id: theta_c
+  symbol: \theta_c
+  nombre:
+    es: Ángulo crítico de deslizamiento
+    en: Critical sliding angle
+  descripcion:
+    es: Umbral angular a partir del cual no se sostiene el reposo estático.
+    en: Angular threshold above which static rest cannot be sustained.
+  unidad_si: rad
+  dimension: '1'
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: threshold
+  used_in:
+  - angulo_critico
+  - umbral_reposo
+  common_mistake:
+    es: Comparar theta en grados con theta_c en radianes.
+    en: Comparing theta in degrees with theta_c in radians.
+  typical_range:
+    es: 0 a 1.57 rad según material.
+    en: 0 to 1.57 rad depending on material.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa valor angular no negativo.
+      en: Used as non-negative angular value.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si es cero, cualquier inclinación positiva desliza.
+      en: If zero, any positive incline slips.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, pi/2]'
+  interpretation_role:
+    primary_for:
+    - criterio-de-estabilidad
+    secondary_for:
+    - diseño-de-seguridad
+  graph_binding:
+    channels:
+    - critical_marker
+  pedagogical_notes:
+    es: Resume en un único número la adherencia estática del contacto.
+    en: Summarizes static grip of the contact in a single number.
+- id: f_s_max
+  symbol: f_{s,max}
+  nombre:
+    es: Fuerza de rozamiento estático máximo
+    en: Maximum static friction force
+  descripcion:
+    es: Valor límite del agarre tangencial antes del inicio del deslizamiento.
+    en: Limit value of tangential grip before the onset of sliding.
+  unidad_si: N
+  dimension: MLT^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: threshold
+  used_in:
+  - friccion_estatica_maxima
+  - umbral_reposo
+  common_mistake:
+    es: Confundirla con la fuerza de rozamiento estática instantánea.
+    en: Confusing it with the instantaneous static friction force.
+  typical_range:
+    es: 0 a mu_e*N según carga y materiales.
+    en: 0 to mu_e*N depending on load and materials.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa su módulo positivo como valor umbral.
+      en: Its positive magnitude is used as a threshold value.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si es cero, el bloque desliza ante cualquier fuerza tangencial.
+      en: If zero, the block slides under any tangential force.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - criterio-deslizamiento
+    secondary_for:
+    - seguridad-estática
+  graph_binding:
+    channels:
+    - static_limit
+  pedagogical_notes:
+    es: Es el "techo" de la fuerza de rozamiento antes de la transición al régimen cinético.
+    en: It is the "ceiling" of the friction force before the transition to the kinetic regime.
+- id: v
+  symbol: v
+  nombre:
+    es: Velocidad instantánea
+    en: Instantaneous speed
+  descripcion:
+    es: Rapidez del bloque en cualquier punto de su trayectoria.
+    en: Block speed at any point of its trajectory.
+  unidad_si: m/s
+  dimension: LT^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: state
+  used_in: []
+  common_mistake:
+    es: Confundirla con la velocidad media en el tramo.
+    en: Confusing it with average speed along the segment.
+  typical_range:
+    es: 0 a 60 m/s en contextos didácticos.
+    en: 0 to 60 m/s in didactic contexts.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se reporta como módulo de rapidez.
+      en: Reported as speed magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El bloque está instantáneamente en reposo.
+      en: The block is instantaneously at rest.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - estado-cinematico
+    secondary_for:
+    - validacion-de-limites
+  graph_binding:
+    channels:
+    - velocity_input
+  pedagogical_notes:
+    es: Se usa para evaluar límites de validez de modelos (ej. calentamiento por fricción).
+    en: Used to evaluate model validity limits (e.g., friction heating).

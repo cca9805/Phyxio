@@ -1,0 +1,155 @@
+const n=`version: 5
+magnitudes:
+  - id: Q
+    symbol: Q
+    nombre:
+      es: caudal volumétrico
+      en: volumetric flow rate
+    unidad_si: m^3/s
+    descripcion:
+      es: Volumen de fluido que atraviesa una sección por unidad de tiempo.
+      en: Volume of fluid passing through a section per unit of time.
+    tipo: escalar
+    dimension: L^3 T^-1
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: observable
+    used_in:
+      - ecuacion-de-continuidad
+      - principio-de-bernoulli
+    common_mistake:
+      es: Confundir con la velocidad del fluido.
+      en: Confusing it with fluid velocity.
+    typical_range: [1e-3, 1e2]
+    sign_behavior: strictly_positive
+    zero_behavior: zero_flow
+    value_nature: continuous
+    interpretation_role: primary_output
+    graph_binding: y-axis
+    pedagogical_notes:
+      es: Es el producto del área por la velocidad.
+      en: It is the product of area and velocity.
+
+  - id: A
+    symbol: A
+    nombre:
+      es: área de la sección
+      en: cross-sectional area
+    unidad_si: m^2
+    descripcion:
+      es: Área transversal del conducto por donde fluye el fluido.
+      en: Transverse area of the conduit through which the fluid flows.
+    tipo: escalar
+    dimension: L^2
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: parameter
+    used_in:
+      - ecuacion-de-continuidad
+    common_mistake:
+      es: Olvidar que es el área transversal y no el diámetro.
+      en: Forgetting it is the transverse area and not the diameter.
+    typical_range: [1e-4, 1.0]
+    sign_behavior: strictly_positive
+    zero_behavior: impossible
+    value_nature: continuous
+    interpretation_role: constraint
+    graph_binding: x-axis
+    pedagogical_notes:
+      es: Área circular A = π·r².
+      en: Circular area A = π·r².
+
+  - id: v
+    symbol: v
+    nombre:
+      es: velocidad del fluido
+      en: fluid velocity
+    unidad_si: m/s
+    descripcion:
+      es: Rapidez con la que el fluido se desplaza a través de la sección.
+      en: Speed at which the fluid moves through the section.
+    tipo: escalar
+    dimension: L T^-1
+    is_vector: false
+    components: []
+    category: state
+    physical_role: state_variable
+    used_in:
+      - ecuacion-de-continuidad
+      - principio-de-bernoulli
+    common_mistake:
+      es: Asumir que es uniforme en toda la sección en fluidos reales.
+      en: Assuming it is uniform across the entire section in real fluids.
+    typical_range: [0, 50]
+    sign_behavior: positive_or_zero
+    zero_behavior: zero_flow
+    value_nature: continuous
+    interpretation_role: secondary_output
+    graph_binding: line
+    pedagogical_notes:
+      es: Velocidad media en la sección.
+      en: Average velocity in the section.
+
+  - id: m_dot
+    symbol: \\dot{m}
+    nombre:
+      es: caudal másico
+      en: mass flow rate
+    unidad_si: kg/s
+    descripcion:
+      es: Masa de fluido que atraviesa una sección por unidad de tiempo.
+      en: Mass of fluid passing through a section per unit of time.
+    tipo: escalar
+    dimension: M T^-1
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: observable
+    used_in:
+      - ecuacion-de-continuidad
+    common_mistake:
+      es: Ignorar cambios de densidad en gases.
+      en: Ignoring density changes in gases.
+    typical_range: [1e-3, 1e3]
+    sign_behavior: positive_or_zero
+    zero_behavior: zero_flow
+    value_nature: continuous
+    interpretation_role: secondary_output
+    graph_binding: none
+    pedagogical_notes:
+      es: Fundamental para el balance de masa.
+      en: Fundamental for mass balance.
+
+  - id: rho
+    symbol: \\rho
+    nombre:
+      es: densidad del fluido
+      en: fluid density
+    unidad_si: kg/m^3
+    descripcion:
+      es: Masa por unidad de volumen del fluido.
+      en: Mass per unit volume of the fluid.
+    tipo: escalar
+    dimension: M L^-3
+    is_vector: false
+    components: []
+    category: state
+    physical_role: property
+    used_in:
+      - ecuacion-de-continuidad
+      - principio-de-bernoulli
+    common_mistake:
+      es: Confundir con la densidad relativa.
+      en: Confusing it with relative density.
+    typical_range: [0.1, 20000]
+    sign_behavior: strictly_positive
+    zero_behavior: vacuum
+    value_nature: continuous
+    interpretation_role: parameter
+    graph_binding: none
+    pedagogical_notes:
+      es: Se asume constante en este leaf.
+      en: Assumed constant in this leaf.
+`;export{n as default};

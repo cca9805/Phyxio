@@ -1,0 +1,343 @@
+version: 5.0.0
+leaf: fluctuaciones
+ui:
+  default_formula: varianza_energia_desde_particion
+formulas:
+- id: beta_inversa_termica
+  title:
+    es: Beta como inversa de la escala térmica
+    en: Beta as inverse thermal scale
+  equation: beta=1/(constante_boltzmann*temperatura)
+  latex: \beta=\frac{1}{k_B T}
+  rearrangements:
+  - id: beta_inversa_termica_despeje_principal
+    equation: beta=1/(constante_boltzmann*temperatura)
+    latex: \beta=\frac{1}{k_B T}
+    target: beta
+  category: termodinamica-estadistica
+  relation_type: derived_statistical_relation
+  physical_meaning:
+    es: Define la variable que endurece la selección de microestados energéticos.
+    en: Defines the variable that tightens selection among energy microstates.
+  constraints:
+    es: Sistema en equilibrio canónico, temperatura absoluta positiva y función de partición definida.
+    en: Canonical equilibrium, positive absolute temperature, and a defined partition function.
+  validity:
+    es: Válida para ensembles canónicos con microestados bien definidos y derivadas suaves de ln(Z).
+    en: Valid for canonical ensembles with well-defined microstates and smooth derivatives of ln(Z).
+  dimension_check:
+    es: El resultado tiene dimensión J^-1.
+    en: The result has dimension J^-1.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria
+  - modelos
+  - ejemplos
+  interpretation_tags:
+  - fluctuacion
+  - ensemble_canonico
+  - derivada
+  result_semantics:
+    target: beta
+    kind: scalar
+    sign_meaning:
+      es: El signo viene fijado por la respuesta térmica; la varianza no puede ser negativa.
+      en: The sign is fixed by thermal response; variance cannot be negative.
+    absolute_value_meaning:
+      es: Su tamaño mide la intensidad de la dispersión energética alrededor del promedio.
+      en: Its size measures the intensity of energy spread around the mean.
+  domain_checks:
+  - id: beta_inversa_termica_T_positive
+    condition: temperatura > 0
+    status: ok
+    message:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  coherence_checks:
+  - id: beta_inversa_termica_ids_coherent
+    condition: all_used_magnitudes_exist
+    status: ok
+    message:
+      es: Las magnitudes usadas deben existir en magnitudes.yaml.
+      en: Used quantities must exist in magnitudes.yaml.
+  graph_implications:
+    es: La pendiente o curvatura frente a temperatura muestra cómo crecen o se atenúan las fluctuaciones.
+    en: The slope or curvature versus temperature shows how fluctuations grow or fade.
+  pedagogical_triggers:
+  - es: Si la varianza sale negativa, revisa signos y derivadas.
+    en: If the variance is negative, check signs and derivatives.
+  - es: No confundas energía media con fluctuación de energía.
+    en: Do not confuse mean energy with energy fluctuation.
+- id: energia_media_desde_particion
+  title:
+    es: Energía media desde la función de partición
+    en: Mean energy from the partition function
+  equation: energia_media=-derivada_log_particion_beta
+  latex: U=-\frac{\partial \ln Z}{\partial \beta}
+  rearrangements:
+  - id: energia_media_desde_particion_despeje_principal
+    equation: energia_media=-derivada_log_particion_beta
+    latex: U=-\frac{\partial \ln Z}{\partial \beta}
+    target: energia_media
+  category: termodinamica-estadistica
+  relation_type: derived_statistical_relation
+  physical_meaning:
+    es: La energía media es la respuesta de ln(Z) al cambiar beta.
+    en: Mean energy is the response of ln(Z) to changing beta.
+  constraints:
+    es: Sistema en equilibrio canónico, temperatura absoluta positiva y función de partición definida.
+    en: Canonical equilibrium, positive absolute temperature, and a defined partition function.
+  validity:
+    es: Válida para ensembles canónicos con microestados bien definidos y derivadas suaves de ln(Z).
+    en: Valid for canonical ensembles with well-defined microstates and smooth derivatives of ln(Z).
+  dimension_check:
+    es: El resultado tiene dimensión J.
+    en: The result has dimension J.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - fluctuacion
+  - ensemble_canonico
+  - derivada
+  result_semantics:
+    target: energia_media
+    kind: scalar
+    sign_meaning:
+      es: El signo viene fijado por la respuesta térmica; la varianza no puede ser negativa.
+      en: The sign is fixed by thermal response; variance cannot be negative.
+    absolute_value_meaning:
+      es: Su tamaño mide la intensidad de la dispersión energética alrededor del promedio.
+      en: Its size measures the intensity of energy spread around the mean.
+  domain_checks:
+  - id: energia_media_desde_particion_T_positive
+    condition: temperatura > 0
+    status: ok
+    message:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  coherence_checks:
+  - id: energia_media_desde_particion_ids_coherent
+    condition: all_used_magnitudes_exist
+    status: ok
+    message:
+      es: Las magnitudes usadas deben existir en magnitudes.yaml.
+      en: Used quantities must exist in magnitudes.yaml.
+  graph_implications:
+    es: La pendiente o curvatura frente a temperatura muestra cómo crecen o se atenúan las fluctuaciones.
+    en: The slope or curvature versus temperature shows how fluctuations grow or fade.
+  pedagogical_triggers:
+  - es: Si la varianza sale negativa, revisa signos y derivadas.
+    en: If the variance is negative, check signs and derivatives.
+  - es: No confundas energía media con fluctuación de energía.
+    en: Do not confuse mean energy with energy fluctuation.
+- id: varianza_energia_desde_particion
+  title:
+    es: Varianza de energía desde la segunda derivada
+    en: Energy variance from the second derivative
+  equation: varianza_energia=derivada_segunda_log_particion_beta
+  latex: \sigma_E^2=\frac{\partial^2 \ln Z}{\partial \beta^2}
+  rearrangements:
+  - id: varianza_energia_desde_particion_despeje_principal
+    equation: varianza_energia=derivada_segunda_log_particion_beta
+    latex: \sigma_E^2=\frac{\partial^2 \ln Z}{\partial \beta^2}
+    target: varianza_energia
+  category: termodinamica-estadistica
+  relation_type: derived_statistical_relation
+  physical_meaning:
+    es: La curvatura de ln(Z) frente a beta mide la dispersión energética.
+    en: The curvature of ln(Z) versus beta measures energy spread.
+  constraints:
+    es: Sistema en equilibrio canónico, temperatura absoluta positiva y función de partición definida.
+    en: Canonical equilibrium, positive absolute temperature, and a defined partition function.
+  validity:
+    es: Válida para ensembles canónicos con microestados bien definidos y derivadas suaves de ln(Z).
+    en: Valid for canonical ensembles with well-defined microstates and smooth derivatives of ln(Z).
+  dimension_check:
+    es: El resultado tiene dimensión J^2.
+    en: The result has dimension J^2.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria
+  - modelos
+  - ejemplos
+  interpretation_tags:
+  - fluctuacion
+  - ensemble_canonico
+  - derivada
+  result_semantics:
+    target: varianza_energia
+    kind: scalar
+    sign_meaning:
+      es: El signo viene fijado por la respuesta térmica; la varianza no puede ser negativa.
+      en: The sign is fixed by thermal response; variance cannot be negative.
+    absolute_value_meaning:
+      es: Su tamaño mide la intensidad de la dispersión energética alrededor del promedio.
+      en: Its size measures the intensity of energy spread around the mean.
+  domain_checks:
+  - id: varianza_energia_desde_particion_T_positive
+    condition: temperatura > 0
+    status: ok
+    message:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  coherence_checks:
+  - id: varianza_energia_desde_particion_ids_coherent
+    condition: all_used_magnitudes_exist
+    status: ok
+    message:
+      es: Las magnitudes usadas deben existir en magnitudes.yaml.
+      en: Used quantities must exist in magnitudes.yaml.
+  graph_implications:
+    es: La pendiente o curvatura frente a temperatura muestra cómo crecen o se atenúan las fluctuaciones.
+    en: The slope or curvature versus temperature shows how fluctuations grow or fade.
+  pedagogical_triggers:
+  - es: Si la varianza sale negativa, revisa signos y derivadas.
+    en: If the variance is negative, check signs and derivatives.
+  - es: No confundas energía media con fluctuación de energía.
+    en: Do not confuse mean energy with energy fluctuation.
+- id: fluctuacion_rms_energia
+  title:
+    es: Fluctuación cuadrática media de energía
+    en: Root-mean-square energy fluctuation
+  equation: fluctuacion_energia=sqrt(varianza_energia)
+  latex: \Delta E=\sqrt{\sigma_E^2}
+  rearrangements:
+  - id: fluctuacion_rms_energia_despeje_principal
+    equation: fluctuacion_energia=sqrt(varianza_energia)
+    latex: \Delta E=\sqrt{\sigma_E^2}
+    target: fluctuacion_energia
+  category: termodinamica-estadistica
+  relation_type: derived_statistical_relation
+  physical_meaning:
+    es: Convierte la varianza en una escala energética directamente comparable con U.
+    en: Turns variance into an energy scale directly comparable with U.
+  constraints:
+    es: Sistema en equilibrio canónico, temperatura absoluta positiva y función de partición definida.
+    en: Canonical equilibrium, positive absolute temperature, and a defined partition function.
+  validity:
+    es: Válida para ensembles canónicos con microestados bien definidos y derivadas suaves de ln(Z).
+    en: Valid for canonical ensembles with well-defined microstates and smooth derivatives of ln(Z).
+  dimension_check:
+    es: El resultado tiene dimensión J.
+    en: The result has dimension J.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - fluctuacion
+  - ensemble_canonico
+  - derivada
+  result_semantics:
+    target: fluctuacion_energia
+    kind: scalar
+    sign_meaning:
+      es: El signo viene fijado por la respuesta térmica; la varianza no puede ser negativa.
+      en: The sign is fixed by thermal response; variance cannot be negative.
+    absolute_value_meaning:
+      es: Su tamaño mide la intensidad de la dispersión energética alrededor del promedio.
+      en: Its size measures the intensity of energy spread around the mean.
+  domain_checks:
+  - id: fluctuacion_rms_energia_T_positive
+    condition: temperatura > 0
+    status: ok
+    message:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  coherence_checks:
+  - id: fluctuacion_rms_energia_ids_coherent
+    condition: all_used_magnitudes_exist
+    status: ok
+    message:
+      es: Las magnitudes usadas deben existir en magnitudes.yaml.
+      en: Used quantities must exist in magnitudes.yaml.
+  graph_implications:
+    es: La pendiente o curvatura frente a temperatura muestra cómo crecen o se atenúan las fluctuaciones.
+    en: The slope or curvature versus temperature shows how fluctuations grow or fade.
+  pedagogical_triggers:
+  - es: Si la varianza sale negativa, revisa signos y derivadas.
+    en: If the variance is negative, check signs and derivatives.
+  - es: No confundas energía media con fluctuación de energía.
+    en: Do not confuse mean energy with energy fluctuation.
+- id: capacidad_calorifica_fluctuaciones
+  title:
+    es: Capacidad calorífica y fluctuaciones
+    en: Heat capacity and fluctuations
+  equation: varianza_energia=constante_boltzmann*temperatura^2*capacidad_calorifica
+  latex: \sigma_E^2=k_B T^2 C_V
+  rearrangements:
+  - id: capacidad_calorifica_fluctuaciones_despeje_principal
+    equation: varianza_energia=constante_boltzmann*temperatura^2*capacidad_calorifica
+    latex: \sigma_E^2=k_B T^2 C_V
+    target: varianza_energia
+  category: termodinamica-estadistica
+  relation_type: derived_statistical_relation
+  physical_meaning:
+    es: Relaciona la respuesta térmica macroscópica con la dispersión microscópica de energía.
+    en: Relates macroscopic thermal response to microscopic energy spread.
+  constraints:
+    es: Sistema en equilibrio canónico, temperatura absoluta positiva y función de partición definida.
+    en: Canonical equilibrium, positive absolute temperature, and a defined partition function.
+  validity:
+    es: Válida para ensembles canónicos con microestados bien definidos y derivadas suaves de ln(Z).
+    en: Valid for canonical ensembles with well-defined microstates and smooth derivatives of ln(Z).
+  dimension_check:
+    es: El resultado tiene dimensión J^2.
+    en: The result has dimension J^2.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria
+  - modelos
+  - aplicaciones
+  interpretation_tags:
+  - fluctuacion
+  - ensemble_canonico
+  - derivada
+  result_semantics:
+    target: varianza_energia
+    kind: scalar
+    sign_meaning:
+      es: El signo viene fijado por la respuesta térmica; la varianza no puede ser negativa.
+      en: The sign is fixed by thermal response; variance cannot be negative.
+    absolute_value_meaning:
+      es: Su tamaño mide la intensidad de la dispersión energética alrededor del promedio.
+      en: Its size measures the intensity of energy spread around the mean.
+  domain_checks:
+  - id: capacidad_calorifica_fluctuaciones_T_positive
+    condition: temperatura > 0
+    status: ok
+    message:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  coherence_checks:
+  - id: capacidad_calorifica_fluctuaciones_ids_coherent
+    condition: all_used_magnitudes_exist
+    status: ok
+    message:
+      es: Las magnitudes usadas deben existir en magnitudes.yaml.
+      en: Used quantities must exist in magnitudes.yaml.
+  graph_implications:
+    es: La pendiente o curvatura frente a temperatura muestra cómo crecen o se atenúan las fluctuaciones.
+    en: The slope or curvature versus temperature shows how fluctuations grow or fade.
+  pedagogical_triggers:
+  - es: Si la varianza sale negativa, revisa signos y derivadas.
+    en: If the variance is negative, check signs and derivatives.
+  - es: No confundas energía media con fluctuación de energía.
+    en: Do not confuse mean energy with energy fluctuation.

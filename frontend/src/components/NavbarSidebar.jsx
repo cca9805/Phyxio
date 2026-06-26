@@ -1,136 +1,32 @@
-import { useState, useMemo, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import logo from '../assets/phyxio_fb.png';
-import { useAuth } from '../contexts/AuthContext';
-import { getIconForSection } from '../config/icon-config';
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import logo from "../assets/phyxio_fb.png";
+import { useAuth } from "../contexts/AuthContext";
+import { tr } from "../v2/utils/uiLanguage";
+import PhyxioGlobalSearch from "../v2/search/PhyxioGlobalSearch";
+import { getContextForRoute, getPhyxioSearchEntries } from "../v2/search/phyxioSearch";
 
-// ✅ Mapa oficial V2
-import yaml from 'js-yaml';
-import phyxioMapYaml from '../v2/map/phyxio-map.yaml?raw';
-
-// ==========================================================================
-// Fuente de verdad: mapa oficial V2 (phyxio-map.yaml)
-// Sin tocar componentes ni className: solo sustituimos el origen de "sidebarItems"
-// ==========================================================================
-
-/**
- * Devuelve el array de nodos raíz del mapa, independientemente de si el YAML
- * usa `root: [...]` (lista) o `root: { children: [...] }` (objeto).
- */
-const safeLoadMapNodes = () => {
-  try {
-    const data = yaml.load(phyxioMapYaml);
-    const root = data?.root;
-
-    // Formato actual (tu YAML): root: [ ... ]
-    if (Array.isArray(root)) return root;
-
-    // Formato alternativo: root: { children: [...] }
-    if (root?.children && Array.isArray(root.children)) return root.children;
-
-    console.warn('[NavbarSidebar] phyxio-map.yaml: no encuentro nodos raíz en `root`');
-    return [];
-  } catch (e) {
-    console.error('[NavbarSidebar] Error cargando phyxio-map.yaml:', e);
-    return [];
-  }
-};
-
-const PHYXIO_ROOT_NODES = safeLoadMapNodes();
-
-/** ids tipo "energia-potencial-gravitatoria" -> "Energia Potencial Gravitatoria" */
-const labelFromId = (id) => {
-  if (!id) return '';
-  const acronyms = new Set(['mru', 'mrua', 'mas', 'si', 'pv', 'em', 'rlc', 'ohm', 'snell', 'ca', 'dc']);
-  return String(id)
-    .split('-')
-    .filter(Boolean)
-    .map((w) => {
-      const low = w.toLowerCase();
-      if (acronyms.has(low)) return low.toUpperCase();
-      if (low.length <= 3 && /^[a-z]+$/.test(low)) return low.toUpperCase();
-      return low.charAt(0).toUpperCase() + low.slice(1);
-    })
-    .join(' ');
-};
-
-const mapToSidebarItems = (nodes) => {
-  const arr = Array.isArray(nodes) ? nodes : [];
-  const sorted = [...arr].sort((a, b) => (a?.orden ?? 0) - (b?.orden ?? 0));
-
-  return sorted.map((n) => {
-    const ruta = n?.ruta_relativa ? String(n.ruta_relativa).replace(/^\/+|\/+$/g, '') : '';
-    const link = ruta ? `/v2/${ruta}` : '/v2';
-
-    const children =
-      Array.isArray(n?.children) && n.children.length > 0
-        ? mapToSidebarItems(n.children)
-        : [];
-
-    return {
-      label: n?.titulo || labelFromId(n?.id),
-      link,
-      icon: n?.icon ?? n?.emoji ?? null,
-      children
-    };
-  });
-};
-
-// ✅ Mantiene el mismo nombre "sidebarItems" para que el resto del archivo quede intacto
-const sidebarItems = PHYXIO_ROOT_NODES.length ? mapToSidebarItems(PHYXIO_ROOT_NODES) : [];
-
-// Build a metadata map from route links to icons using icon-config.js
-// (Fallback: solo se usa si el YAML no trae `icon`)
-const buildMetadataMap = () => {
-  const map = {};
-
-  const extractLinks = (items) => {
-    items.forEach((item) => {
-      if (item?.link) {
-        const segments = item.link.split('/').filter(Boolean);
-        const lastSegment = segments[segments.length - 1];
-
-        const icon = getIconForSection(lastSegment);
-        if (icon) {
-          map[item.link] = icon;
-          map[`/${lastSegment}`] = icon;
-        }
-      }
-
-      if (item?.children?.length) extractLinks(item.children);
-    });
-  };
-
-  extractLinks(sidebarItems);
-  return map;
-};
-
-const metadataIconMap = buildMetadataMap();
-// LevelFilter removed: filtering disabled to show full sidebar
-
-// (Eliminado: vista por niveles educativos — se mantendrá solo la vista por temas)
-
-// ==========================================================================
-// Navbar
-// ==========================================================================
-export function Navbar({ onMenuClick, isMobile, isDark, onThemeToggle, onLoginClick, onRegisterClick }) {
-  // Determinar la estructura a mostrar — solo por temas
-  const activeSidebarItems = sidebarItems;
-  const navigate = useNavigate();
-  const location = useLocation();
+export function Navbar({
+  onMenuClick,
+  isMobile,
+  isDark,
+  uiLanguage = "es",
+  onLanguageToggle,
+  onThemeToggle,
+  onLoginClick,
+  onRegisterClick,
+}) {
   const { user, logout } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
-  // (Se eliminó el toggle de vista por niveles; la app muestra solo la vista por temas)
 
-  // Obtener badge del tier
   const getTierBadge = (tier) => {
     const badges = {
-      guest: { label: 'Invitado', color: '#6c757d' },
-      demo: { label: 'Demo', color: '#17a2b8' },
-      basic: { label: 'Básico', color: '#28a745' },
-      premium: { label: 'Premium', color: '#ffc107' },
-      educator: { label: 'Educador', color: '#dc3545' },
-      admin: { label: 'Administrador', color: '#6f42c1' }
+      guest: { label: tr(uiLanguage, "Invitado", "Guest"), color: "#6c757d" },
+      demo: { label: "Demo", color: "#17a2b8" },
+      basic: { label: tr(uiLanguage, "Basico", "Basic"), color: "#28a745" },
+      premium: { label: "Premium", color: "#ffc107" },
+      educator: { label: tr(uiLanguage, "Educador", "Educator"), color: "#dc3545" },
+      admin: { label: tr(uiLanguage, "Administrador", "Administrator"), color: "#6f42c1" },
     };
     return badges[tier] || badges.guest;
   };
@@ -138,36 +34,53 @@ export function Navbar({ onMenuClick, isMobile, isDark, onThemeToggle, onLoginCl
   const tierBadge = user ? getTierBadge(user.tier) : null;
 
   return (
-    <nav className={`navbar ${isDark ? 'dark' : ''}`}>
+    <nav className={`navbar ${isDark ? "dark" : ""}`}>
       <div className="navbar-left">
-        <button className="navbar-menu-button" onClick={onMenuClick}>
+        <button className="navbar-menu-button" onClick={onMenuClick} type="button">
           <i className="bi bi-list"></i>
         </button>
-        
+
         <Link to="/" className="navbar-logo-link">
           <img src={logo} alt="Phyxio" className="navbar-logo-img" />
           <span className="navbar-title">Phyxio</span>
         </Link>
       </div>
-      
+
+      <PhyxioGlobalSearch lang={uiLanguage} />
+
       <div className="navbar-right">
+        <div className="navbar-global-toggles">
+          <button
+            className="navbar-language-toggle"
+            onClick={onLanguageToggle}
+            aria-label={`${tr(uiLanguage, "Cambiar idioma. Idioma actual:", "Change language. Current language:")} ${
+              uiLanguage === "es" ? "Espanol" : "English"
+            }`}
+            title={uiLanguage === "es" ? "Switch to English" : "Cambiar a Espanol"}
+            type="button"
+          >
+            {uiLanguage === "es" ? "ES" : "EN"}
+          </button>
+          <button className="navbar-theme-toggle" onClick={onThemeToggle} type="button">
+            <i className={`bi ${isDark ? "bi-sun" : "bi-moon"}`}></i>
+          </button>
+        </div>
+
         {!user ? (
           <div className="navbar-auth-buttons">
-            <button className="navbar-theme-toggle" onClick={onThemeToggle}>
-              <i className={`bi ${isDark ? 'bi-sun' : 'bi-moon'}`}></i>
+            <button className="tema-card-btn" onClick={onLoginClick} type="button">
+              {tr(uiLanguage, "Iniciar sesion", "Sign in")}
             </button>
-            <button className="tema-card-btn" onClick={onLoginClick}>
-              Iniciar Sesión
-            </button>
-            <button className="tema-card-btn" onClick={onRegisterClick}>
-              Registrarse
+            <button className="tema-card-btn" onClick={onRegisterClick} type="button">
+              {tr(uiLanguage, "Registrarse", "Sign up")}
             </button>
           </div>
         ) : (
           <div className="navbar-user-menu">
-            <button 
+            <button
               className="navbar-user-btn"
               onClick={() => setShowUserMenu(!showUserMenu)}
+              type="button"
             >
               <div className="navbar-user-avatar">
                 <i className="bi bi-person-circle"></i>
@@ -175,27 +88,24 @@ export function Navbar({ onMenuClick, isMobile, isDark, onThemeToggle, onLoginCl
               <div className="navbar-user-info">
                 <span className="navbar-user-name">{user.name || user.email}</span>
                 {tierBadge && (
-                  <span 
-                    className="navbar-tier-badge"
-                    style={{ backgroundColor: tierBadge.color }}
-                  >
+                  <span className="navbar-tier-badge" style={{ backgroundColor: tierBadge.color }}>
                     {tierBadge.label}
                   </span>
                 )}
               </div>
-              <i className={`bi bi-chevron-${showUserMenu ? 'up' : 'down'}`}></i>
+              <i className={`bi bi-chevron-${showUserMenu ? "up" : "down"}`}></i>
             </button>
-            
+
             {showUserMenu && (
               <div className="navbar-user-dropdown">
                 <Link to="/profile" className="navbar-dropdown-item">
-                  <i className="bi bi-person"></i> Perfil
+                  <i className="bi bi-person"></i> {tr(uiLanguage, "Perfil", "Profile")}
                 </Link>
                 <Link to="/subscription" className="navbar-dropdown-item">
-                  <i className="bi bi-gem"></i> Suscripción
+                  <i className="bi bi-gem"></i> {tr(uiLanguage, "Suscripcion", "Subscription")}
                 </Link>
-                <button className="navbar-dropdown-item" onClick={logout}>
-                  <i className="bi bi-box-arrow-right"></i> Cerrar Sesión
+                <button className="navbar-dropdown-item" onClick={logout} type="button">
+                  <i className="bi bi-box-arrow-right"></i> {tr(uiLanguage, "Cerrar sesion", "Sign out")}
                 </button>
               </div>
             )}
@@ -206,225 +116,166 @@ export function Navbar({ onMenuClick, isMobile, isDark, onThemeToggle, onLoginCl
   );
 }
 
-// ==========================================================================
-// Sidebar recursive component
-// ==========================================================================
-function SidebarRecursive({ items, currentPath, openSet, toggleOpen, isExpanded, onLinkClick, isEducationLevelRoute }) {
-  const navigate = useNavigate();
-
-  // Función para determinar si un item es wrapper o nodo real
-  const isWrapperNode = (item) => {
-    // Wrapper nodes typically have empty link or match pattern
-    return !item.link || item.link === '' || item.link === '#';
-  };
-
-  // Función para renderizar el icono
-  const renderIcon = (item) => {
-    // 1) MAP FIRST: si el mapa trae icon (emoji), se pinta tal cual
-    if (item?.icon) {
-      return <span className="sidebar-icon-emoji">{item.icon}</span>;
-    }
-
-    // 2) Plan B: icon-config (si existe link)
-    const fallback = item?.link ? metadataIconMap?.[item.link] : null;
-    if (fallback) {
-      // si fallback es un bootstrap icon
-      if (typeof fallback === "string" && fallback.startsWith("bi-")) {
-        return <i className={`bi ${fallback}`}></i>;
-      }
-      // si fallback es un emoji o texto
-      return <span className="sidebar-icon-emoji">{fallback}</span>;
-    }
-
-    // 3) Último recurso
-    return <i className="bi bi-folder"></i>;
-  };
-
+function SidebarContextList({ title, icon, items, isExpanded, onLinkClick, emptyLabel }) {
+  if (!isExpanded) {
+    return (
+      <div className="sidebar-context-icon-block" title={title}>
+        <i className={`bi ${icon}`}></i>
+      </div>
+    );
+  }
 
   return (
-    <ul className="sidebar-items">
-      {items.map((item) => {
-        // Procesar wrapper nodes: si tiene un solo hijo, promoverlo visualmente
-        let renderItem = item;
-        if (item.children && item.children.length === 1 && isWrapperNode(item)) {
-          const only = item.children[0];
-          if (only && only.link) {
-            // promote the single child's content for rendering
-            renderItem = { ...only, children: only.children || [] };
-          }
-        }
-
-        const isActive = renderItem.link && 
-          (currentPath === renderItem.link || currentPath.startsWith(renderItem.link + '/'));
-        const isOpen = openSet.has(renderItem.link);
-        const hasChildren = renderItem.children && renderItem.children.length > 0;
-
-        return (
-          <li key={renderItem.link || renderItem.label} className={`sidebar-item ${isActive ? 'active' : ''}`}>
-            <div className="sidebar-item-header">
-              <Link
-                to={renderItem.link || '#'}
-                className="sidebar-item-link"
-                onClick={onLinkClick}
-              >
-                <span className="sidebar-item-icon">
-                  {renderIcon(renderItem)}
-                </span>
-                {isExpanded && (
-                  <span className="sidebar-item-label">{renderItem.label}</span>
-                )}
+    <section className="sidebar-context-section">
+      <h3>
+        <i className={`bi ${icon}`}></i>
+        <span>{title}</span>
+      </h3>
+      {items.length === 0 ? (
+        <p className="sidebar-context-empty">{emptyLabel}</p>
+      ) : (
+        <ul className="sidebar-context-list">
+          {items.map((item) => (
+            <li key={item.route || item.id || item.title}>
+              <Link to={item.url || `/v2/${item.route}`} onClick={onLinkClick}>
+                {item.icon && <span className="sidebar-icon-emoji">{item.icon}</span>}
+                <span>{item.title}</span>
               </Link>
-
-              {hasChildren && isExpanded && (
-                <button
-                  className="sidebar-toggle-btn"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toggleOpen(renderItem.link);
-                  }}
-                >
-                  <i className={`bi bi-chevron-${isOpen ? 'up' : 'down'}`}></i>
-                </button>
-              )}
-            </div>
-
-            {hasChildren && isOpen && (
-              <div className="sidebar-children">
-                <SidebarRecursive
-                  items={renderItem.children}
-                  currentPath={currentPath}
-                  openSet={openSet}
-                  toggleOpen={toggleOpen}
-                  isExpanded={isExpanded}
-                  onLinkClick={onLinkClick}
-                  isEducationLevelRoute={isEducationLevelRoute}
-                />
-              </div>
-            )}
-          </li>
-        );
-      })}
-    </ul>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
 
-// ==========================================================================
-// Sidebar component (exported)
-// ==========================================================================
-export function Sidebar({ isExpanded, isMobile, onLinkClick }) {
+export function Sidebar({ isExpanded, isMobile, onLinkClick, uiLanguage = "es" }) {
   const location = useLocation();
-  const currentPath = location.pathname;
-  const [openSet, setOpenSet] = useState(new Set());
-
-  // Determinar estructura activa: solo por temas
-  const activeSidebarItems = sidebarItems;
-
-  // Ordenar items por label si se desea (aquí lo dejamos como venga del mapa)
-  const filteredSidebarItems = useMemo(() => {
-    return activeSidebarItems;
-  }, [activeSidebarItems]);
-
-  const toggleOpen = (link) => {
-    setOpenSet((prev) => {
-      const next = new Set(prev);
-      if (next.has(link)) next.delete(link);
-      else next.add(link);
-      return next;
-    });
-  };
-
-  // Auto-expand branch activo
-  const findActiveBranch = (items, path) => {
-    for (const item of items) {
-      if (item.link && (path === item.link || path.startsWith(item.link + '/'))) {
-        const branch = [item];
-        if (item.children && item.children.length > 0) {
-          const childBranch = findActiveBranch(item.children, path);
-          if (childBranch.length > 0) {
-            return [...branch, ...childBranch];
-          }
-        }
-        return branch;
-      }
-    }
-    return [];
-  };
+  const cleanRoute = location.pathname.replace(/^\/v2\/?/, "").replace(/^\/+|\/+$/g, "");
+  const [context, setContext] = useState({
+    current: null,
+    parent: null,
+    siblings: [],
+    prerequisites: [],
+    relatedByTags: [],
+    relatedByFormulas: [],
+  });
+  const [rootItems, setRootItems] = useState([]);
 
   useEffect(() => {
-    const branch = findActiveBranch(filteredSidebarItems, currentPath);
-    if (branch.length > 0) {
-      setOpenSet((prev) => {
-        const next = new Set(prev);
-        branch.forEach(item => {
-          if (item.link) next.add(item.link);
-        });
-        return next;
-      });
-    }
-  }, [currentPath, filteredSidebarItems]);
+    let cancelled = false;
 
-  // Detectar si estamos en una ruta "educational level" (ya no se usa, pero lo mantenemos para firma)
-  const isEducationLevelRoute = false;
+    Promise.all([
+      getContextForRoute(cleanRoute, { lang: uiLanguage }),
+      getPhyxioSearchEntries(),
+    ]).then(([nextContext, entries]) => {
+      if (cancelled) return;
+      setContext(nextContext);
+      setRootItems(
+        entries
+          .filter((entry) => entry.route && entry.route.split("/").length === 1)
+          .slice(0, 8)
+          .map((entry) => ({
+            id: entry.id,
+            route: entry.route,
+            url: `/v2/${entry.route}`,
+            title: uiLanguage === "en" ? entry.title?.en || entry.title?.es : entry.title?.es || entry.title?.en,
+            icon: entry.icon,
+          }))
+      );
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [cleanRoute, uiLanguage]);
+
+  const current = context.current;
+  const tags = current?.tags || [];
+  const formulas = current?.formulas || [];
 
   return (
-    <aside className={`sidebar ${isMobile ? 'mobile' : ''} ${isExpanded ? '' : 'collapsed'}`}>
-
+    <aside className={`sidebar ${isMobile ? "mobile" : ""} ${isExpanded ? "" : "collapsed"}`}>
       <nav className="sidebar-nav">
-        <div className="sidebar-header">
-          {/* LevelFilter removed: showing all topics */}
-        </div>
-        <SidebarRecursive 
-            items={filteredSidebarItems} 
-            currentPath={currentPath} 
-            openSet={openSet} 
-            toggleOpen={toggleOpen}
-            isExpanded={isExpanded}
-            onLinkClick={onLinkClick}
-            isEducationLevelRoute={isEducationLevelRoute}
+        {isExpanded && (
+          <div className="sidebar-context-current">
+            <span className="sidebar-context-kicker">{tr(uiLanguage, "Contexto", "Context")}</span>
+            <strong>{current?.title || tr(uiLanguage, "Explorador Phyxio", "Phyxio Explorer")}</strong>
+            {context.parent?.title && <span>{context.parent.title}</span>}
+          </div>
+        )}
+
+        <SidebarContextList
+          title={tr(uiLanguage, "Bloques", "Blocks")}
+          icon="bi-grid"
+          items={rootItems}
+          isExpanded={isExpanded}
+          onLinkClick={onLinkClick}
+          emptyLabel={tr(uiLanguage, "Sin bloques disponibles.", "No blocks available.")}
         />
+        <SidebarContextList
+          title={tr(uiLanguage, "Mismo bloque", "Same block")}
+          icon="bi-diagram-3"
+          items={context.siblings || []}
+          isExpanded={isExpanded}
+          onLinkClick={onLinkClick}
+          emptyLabel={tr(uiLanguage, "Sin leafs cercanos.", "No nearby leaves.")}
+        />
+        <SidebarContextList
+          title={tr(uiLanguage, "Prerrequisitos", "Prerequisites")}
+          icon="bi-signpost"
+          items={context.prerequisites || []}
+          isExpanded={isExpanded}
+          onLinkClick={onLinkClick}
+          emptyLabel={tr(uiLanguage, "Sin prerrequisitos declarados.", "No declared prerequisites.")}
+        />
+        <SidebarContextList
+          title={tr(uiLanguage, "Relacionados", "Related")}
+          icon="bi-link-45deg"
+          items={context.relatedByTags || []}
+          isExpanded={isExpanded}
+          onLinkClick={onLinkClick}
+          emptyLabel={tr(uiLanguage, "Sin relaciones por tags.", "No tag relations.")}
+        />
+
+        {isExpanded && (tags.length > 0 || formulas.length > 0) && (
+          <section className="sidebar-context-section">
+            <h3>
+              <i className="bi bi-tags"></i>
+              <span>{tr(uiLanguage, "Claves del leaf", "Leaf keys")}</span>
+            </h3>
+            {tags.length > 0 && (
+              <div className="sidebar-context-tags">
+                {tags.slice(0, 8).map((tag) => <span key={tag}>{tag}</span>)}
+              </div>
+            )}
+            {formulas.length > 0 && (
+              <div className="sidebar-context-formulas">
+                {formulas.slice(0, 4).map((formula) => (
+                  <code key={formula.id}>{formula.id}</code>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
       </nav>
+
       <div className="sidebar-footer">
         <div className="sidebar-tools">
-
-          <Link
-            to="/v2/tools/calculadora"
-            className="sidebar-tool-btn"
-            title="Calculadora rápida"
-            onClick={onLinkClick}
-          >
-            <span className="sidebar-icon">
-              <i className="bi bi-calculator"></i>
-            </span>
-            {isExpanded && <span className="sidebar-label">Calculadora</span>}
+          <Link to="/v2/tools/calculadora" className="sidebar-tool-btn" title="Calculadora" onClick={onLinkClick}>
+            <span className="sidebar-icon"><i className="bi bi-calculator"></i></span>
+            {isExpanded && <span className="sidebar-label">{tr(uiLanguage, "Calculadora", "Calculator")}</span>}
           </Link>
-
-          <Link
-            to="/v2/tools/conversor"
-            className="sidebar-tool-btn"
-            title="Conversor de unidades"
-            onClick={onLinkClick}
-          >
-            <span className="sidebar-icon">
-              <i className="bi bi-arrow-left-right"></i>
-            </span>
-            {isExpanded && <span className="sidebar-label">Conversor</span>}
+          <Link to="/v2/tools/conversor" className="sidebar-tool-btn" title="Conversor" onClick={onLinkClick}>
+            <span className="sidebar-icon"><i className="bi bi-arrow-left-right"></i></span>
+            {isExpanded && <span className="sidebar-label">{tr(uiLanguage, "Conversor", "Converter")}</span>}
           </Link>
-
-          <Link
-            to="/v2/tools/constantes"
-            className="sidebar-tool-btn"
-            title="Constantes físicas"
-            onClick={onLinkClick}
-          >
-            <span className="sidebar-icon">
-              <i className="bi bi-rulers"></i>
-            </span>
-            {isExpanded && <span className="sidebar-label">Constantes</span>}
+          <Link to="/v2/tools/constantes" className="sidebar-tool-btn" title="Constantes" onClick={onLinkClick}>
+            <span className="sidebar-icon"><i className="bi bi-rulers"></i></span>
+            {isExpanded && <span className="sidebar-label">{tr(uiLanguage, "Constantes", "Constants")}</span>}
           </Link>
-
         </div>
       </div>
-
     </aside>
   );
 }

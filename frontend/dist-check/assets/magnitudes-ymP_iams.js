@@ -1,0 +1,455 @@
+const n=`magnitudes:
+  - id: v_barra
+    symbol: c_b
+    nombre:
+      es: Velocidad de onda longitudinal en barra
+      en: Longitudinal wave speed in bar
+    descripcion:
+      es: Velocidad de propagacion de ondas de compresion-traccion en una barra esbelta, determinada por el modulo de Young y la densidad del material.
+      en: Propagation speed of compression-tension waves in a slender bar, determined by the Young modulus and density of the material.
+    unidad_si: m/s
+    dimension: "[L T^-1]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - velocidad_longitudinal_barra
+      - impedancia_barra
+    common_mistake:
+      es: Confundir con la velocidad del sonido en un medio infinito (ondas P), que incluye el modulo de compresibilidad y el de cizalla.
+      en: Confusing with bulk sound speed (P-waves), which includes bulk modulus and shear modulus.
+    typical_range: "1000 – 6000 m/s para metales y polimeros"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positiva, representa rapidez de propagacion.
+        en: Always positive, represents propagation speed.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Una velocidad cero implicaria rigidez nula o densidad infinita, ambos fisicamente imposibles.
+        en: Zero speed would imply zero stiffness or infinite density, both physically impossible.
+    value_nature:
+      kind: continuous
+      nonnegative_only: true
+      expected_interval: "[1000, 6500]"
+    interpretation_role:
+      primary_for:
+        - velocidad_longitudinal_barra
+      secondary_for:
+        - impedancia_barra
+    graph_binding:
+      channels:
+        - y_axis
+    pedagogical_notes:
+      es: Es la magnitud central del leaf. A diferencia de las ondas flexionales, esta velocidad NO depende de la frecuencia (no hay dispersion en el modelo de barra esbelta).
+      en: Central magnitude of the leaf. Unlike flexural waves, this speed does NOT depend on frequency (no dispersion in the slender bar model).
+
+  - id: E_young
+    symbol: E
+    nombre:
+      es: Modulo de Young
+      en: Young's modulus
+    descripcion:
+      es: Medida de la rigidez axial del material, define la relacion entre esfuerzo y deformacion unitaria en regimen elastico lineal.
+      en: Measure of axial stiffness, defines the stress-strain ratio in the linear elastic regime.
+    unidad_si: Pa
+    dimension: "[M L^-1 T^-2]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: material_property
+    used_in:
+      - velocidad_longitudinal_barra
+      - impedancia_barra
+    common_mistake:
+      es: Usar GPa sin convertir a Pa en las formulas SI.
+      en: Using GPa without converting to Pa in SI formulas.
+    typical_range: "1 GPa (polimeros) – 400 GPa (carburos)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positivo por definicion termodinamica.
+        en: Always positive by thermodynamic definition.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Un material con E cero no resistiria deformacion axial.
+        en: A material with zero E would not resist axial deformation.
+    value_nature:
+      kind: continuous
+      nonnegative_only: true
+      expected_interval: "[1e9, 4e11]"
+    interpretation_role:
+      primary_for:
+        - velocidad_longitudinal_barra
+      secondary_for: []
+    graph_binding:
+      channels:
+        - parameter
+    pedagogical_notes:
+      es: El modulo de Young controla directamente la velocidad de onda longitudinal. Duplicar E multiplica la velocidad por raiz de 2.
+      en: Young's modulus directly controls longitudinal wave speed. Doubling E multiplies speed by sqrt(2).
+
+  - id: rho_vol
+    symbol: "\\\\rho"
+    nombre:
+      es: Densidad volumetrica
+      en: Volumetric density
+    descripcion:
+      es: Masa por unidad de volumen del material de la barra.
+      en: Mass per unit volume of the bar material.
+    unidad_si: kg/m3
+    dimension: "[M L^-3]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: material_property
+    used_in:
+      - velocidad_longitudinal_barra
+      - impedancia_barra
+    common_mistake:
+      es: Confundir densidad volumetrica con masa lineal; la masa lineal es rho por area de seccion.
+      en: Confusing volumetric density with linear mass; linear mass is rho times cross-sectional area.
+    typical_range: "900 (polimeros) – 19300 (tungsteno) kg/m3"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positiva.
+        en: Always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Densidad cero es no-material.
+        en: Zero density means no material.
+    value_nature:
+      kind: continuous
+      nonnegative_only: true
+      expected_interval: "[800, 20000]"
+    interpretation_role:
+      primary_for:
+        - velocidad_longitudinal_barra
+      secondary_for: []
+    graph_binding:
+      channels:
+        - parameter
+    pedagogical_notes:
+      es: Mayor densidad reduce la velocidad. La inercia del material frena la propagacion.
+      en: Higher density reduces speed. Material inertia slows propagation.
+
+  - id: A_seccion
+    symbol: A
+    nombre:
+      es: Area de la seccion transversal
+      en: Cross-sectional area
+    descripcion:
+      es: Area de la seccion perpendicular al eje de la barra.
+      en: Area of the section perpendicular to the bar axis.
+    unidad_si: m2
+    dimension: "[L^2]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: geometric_property
+    used_in:
+      - impedancia_barra
+    common_mistake:
+      es: Olvidar que la velocidad longitudinal NO depende del area (solo la impedancia depende de ella).
+      en: Forgetting that longitudinal speed does NOT depend on area (only impedance does).
+    typical_range: "1e-6 – 0.1 m2"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positiva.
+        en: Always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Area cero implica que la barra no existe.
+        en: Zero area means the bar does not exist.
+    value_nature:
+      kind: continuous
+      nonnegative_only: true
+      expected_interval: "[1e-6, 0.1]"
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - impedancia_barra
+    graph_binding:
+      channels:
+        - parameter
+    pedagogical_notes:
+      es: El area entra en la impedancia mecanica pero no en la velocidad de onda.
+      en: Area enters the mechanical impedance but not the wave speed.
+
+  - id: Z_barra
+    symbol: Z
+    nombre:
+      es: Impedancia mecanica longitudinal de la barra
+      en: Longitudinal mechanical impedance of the bar
+    descripcion:
+      es: Relacion entre la fuerza axial y la velocidad de particula en una onda longitudinal progresiva.
+      en: Ratio of axial force to particle velocity in a progressive longitudinal wave.
+    unidad_si: kg/s
+    dimension: "[M T^-1]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - impedancia_barra
+    common_mistake:
+      es: Confundir con la impedancia acustica especifica (rho*c), que no incluye el area.
+      en: Confusing with specific acoustic impedance (rho*c), which does not include area.
+    typical_range: "10 – 1e6 kg/s segun material y seccion"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positiva en ondas progresivas.
+        en: Always positive for progressive waves.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Impedancia cero significaria que la barra no transmite fuerza.
+        en: Zero impedance would mean the bar transmits no force.
+    value_nature:
+      kind: continuous
+      nonnegative_only: true
+      expected_interval: "[10, 1e6]"
+    interpretation_role:
+      primary_for:
+        - impedancia_barra
+      secondary_for: []
+    graph_binding:
+      channels:
+        - y_axis
+    pedagogical_notes:
+      es: La impedancia determina la reflexion y transmision en uniones entre barras de distinto material o seccion.
+      en: Impedance determines reflection and transmission at junctions between bars of different material or section.
+
+  - id: omega
+    symbol: "\\\\omega"
+    nombre:
+      es: Frecuencia angular
+      en: Angular frequency
+    descripcion:
+      es: Pulsacion de la onda, 2pi veces la frecuencia en Hz.
+      en: Wave pulsation, 2pi times frequency in Hz.
+    unidad_si: rad/s
+    dimension: "[T^-1]"
+    is_vector: false
+    components: []
+    category: fundamental
+    physical_role: wave_parameter
+    used_in:
+      - velocidad_longitudinal_barra
+    common_mistake:
+      es: Introducir la frecuencia en Hz donde la formula requiere rad/s.
+      en: Entering frequency in Hz where the formula requires rad/s.
+    typical_range: "6 – 6e6 rad/s (1 Hz – 1 MHz)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Positiva por convenio.
+        en: Positive by convention.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Frecuencia cero corresponde a deformacion estatica.
+        en: Zero frequency corresponds to static deformation.
+    value_nature:
+      kind: continuous
+      nonnegative_only: true
+      expected_interval: "[0, 6e6]"
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - velocidad_longitudinal_barra
+    graph_binding:
+      channels:
+        - x_axis
+    pedagogical_notes:
+      es: En ondas longitudinales en barras la velocidad NO depende de omega. Esto las diferencia de las ondas de flexion.
+      en: In longitudinal bar waves the speed does NOT depend on omega. This distinguishes them from flexural waves.
+
+  - id: k_long
+    symbol: k
+    nombre:
+      es: Numero de onda longitudinal
+      en: Longitudinal wavenumber
+    descripcion:
+      es: Numero de ciclos espaciales por radian, cociente entre frecuencia angular y velocidad de onda.
+      en: Spatial cycles per radian, ratio of angular frequency to wave speed.
+    unidad_si: rad/m
+    dimension: "[L^-1]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: wave_parameter
+    used_in:
+      - relacion_dispersion_barra
+    common_mistake:
+      es: Confundir con k de ondas flexionales, que tiene dependencia no lineal con omega.
+      en: Confusing with flexural wavenumber, which has non-linear dependence on omega.
+    typical_range: "0.01 – 1000 rad/m"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Positivo para ondas progresivas en sentido positivo.
+        en: Positive for progressive waves in positive direction.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: k cero corresponde a longitud de onda infinita (modo rigido).
+        en: Zero k corresponds to infinite wavelength (rigid-body mode).
+    value_nature:
+      kind: continuous
+      nonnegative_only: true
+      expected_interval: "[0, 1000]"
+    interpretation_role:
+      primary_for:
+        - relacion_dispersion_barra
+      secondary_for: []
+    graph_binding:
+      channels:
+        - x_axis
+    pedagogical_notes:
+      es: La relacion omega-k es LINEAL en barras (no dispersiva). La pendiente es la velocidad de onda.
+      en: The omega-k relation is LINEAR in bars (non-dispersive). The slope is the wave speed.
+
+  - id: lambda_long
+    symbol: "\\\\lambda"
+    nombre:
+      es: Longitud de onda longitudinal
+      en: Longitudinal wavelength
+    descripcion:
+      es: Distancia entre dos puntos consecutivos en fase de la onda de compresion.
+      en: Distance between two consecutive in-phase points of the compression wave.
+    unidad_si: m
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: wave_parameter
+    used_in:
+      - longitud_onda_longitudinal
+    common_mistake:
+      es: Confundir con la longitud de onda flexional, que a la misma frecuencia es mucho menor.
+      en: Confusing with flexural wavelength, which at the same frequency is much shorter.
+    typical_range: "0.001 – 10 m"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positiva.
+        en: Always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Longitud de onda cero implicaria frecuencia infinita.
+        en: Zero wavelength would imply infinite frequency.
+    value_nature:
+      kind: continuous
+      nonnegative_only: true
+      expected_interval: "[0.001, 10]"
+    interpretation_role:
+      primary_for:
+        - longitud_onda_longitudinal
+      secondary_for: []
+    graph_binding:
+      channels:
+        - y_axis
+    pedagogical_notes:
+      es: En barras, la longitud de onda es inversamente proporcional a la frecuencia con constante de proporcionalidad igual a la velocidad de onda.
+      en: In bars, wavelength is inversely proportional to frequency with constant of proportionality equal to wave speed.
+
+  - id: u_particula
+    symbol: "\\\\dot{u}"
+    nombre:
+      es: Velocidad de particula
+      en: Particle velocity
+    descripcion:
+      es: Velocidad local del material en la direccion longitudinal debida al paso de la onda.
+      en: Local material velocity in the longitudinal direction due to wave passage.
+    unidad_si: m/s
+    dimension: "[L T^-1]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: dynamic_variable
+    used_in:
+      - impedancia_barra
+    common_mistake:
+      es: Confundir velocidad de particula con velocidad de onda. La velocidad de particula es mucho menor.
+      en: Confusing particle velocity with wave speed. Particle velocity is much smaller.
+    typical_range: "1e-6 – 10 m/s"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Positiva en el sentido de propagacion para ondas de compresion.
+        en: Positive in the propagation direction for compression waves.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: En los nodos de una onda estacionaria.
+        en: At the nodes of a standing wave.
+    value_nature:
+      kind: continuous
+      nonnegative_only: false
+      expected_interval: "[-10, 10]"
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - impedancia_barra
+    graph_binding:
+      channels:
+        - y_axis
+    pedagogical_notes:
+      es: La relacion entre velocidad de particula y velocidad de onda es proporcional a la deformacion.
+      en: The ratio of particle velocity to wave speed equals the strain.
+
+  - id: sigma_axial
+    symbol: "\\\\sigma"
+    nombre:
+      es: Esfuerzo axial
+      en: Axial stress
+    descripcion:
+      es: Tension normal en la seccion transversal debida al paso de la onda longitudinal.
+      en: Normal stress on the cross-section due to the passage of the longitudinal wave.
+    unidad_si: Pa
+    dimension: "[M L^-1 T^-2]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: dynamic_variable
+    used_in:
+      - impedancia_barra
+    common_mistake:
+      es: Olvidar que el esfuerzo y la velocidad de particula son proporcionales en una onda progresiva.
+      en: Forgetting that stress and particle velocity are proportional in a progressive wave.
+    typical_range: "1 – 500 MPa en ondas de impacto"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Positivo en traccion, negativo en compresion.
+        en: Positive in tension, negative in compression.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: En las posiciones libres de esfuerzo (extremos libres de barra).
+        en: At stress-free positions (free ends of bar).
+    value_nature:
+      kind: continuous
+      nonnegative_only: false
+      expected_interval: "[-5e8, 5e8]"
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - impedancia_barra
+    graph_binding:
+      channels:
+        - y_axis
+    pedagogical_notes:
+      es: El esfuerzo viaja con la onda. En una onda progresiva pura sigma y velocidad de particula tienen la misma forma temporal.
+      en: Stress travels with the wave. In a pure progressive wave sigma and particle velocity share the same temporal shape.
+`;export{n as default};

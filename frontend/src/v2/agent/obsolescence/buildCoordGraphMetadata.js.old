@@ -1,0 +1,61 @@
+// frontend/src/v2/agent/buildCoordGraphMetadata.js
+
+import {
+  GRAPH_TYPES,
+  GRAPH_SEMANTIC_ROLES,
+  GRAPH_READING_MODES,
+  normalizeGraphMetadata,
+} from "./graphMetadata.contract";
+
+export function buildCoordGraphMetadata({
+  graphId,
+  title,
+  subtitle,
+  leafId,
+  xMagnitude,
+  yMagnitude,
+  relation,
+  slopeMeaning,
+  interceptMeaning,
+  physicalReading,
+  formulaConnection,
+  recommendedTab = "graficas",
+  agentHints = [],
+  commonMistakes = [],
+} = {}) {
+  return normalizeGraphMetadata({
+    graphId,
+    type: GRAPH_TYPES.COORD,
+    title,
+    subtitle,
+
+    semanticRole: GRAPH_SEMANTIC_ROLES.LAW_RELATIONSHIP,
+    readingMode: GRAPH_READING_MODES.AXES_SLOPE_TREND,
+
+    xMagnitude,
+    yMagnitude,
+    relation,
+    slopeMeaning,
+    interceptMeaning,
+
+    physicalReading,
+    formulaConnection,
+
+    recommendedTab,
+
+    agentHints: [
+      "Lee primero qué representa cada eje.",
+      "Interpreta la pendiente antes de pasar a fórmulas.",
+      "No trates esta gráfica como un diagrama de fuerzas.",
+      ...agentHints,
+    ],
+
+    commonMistakes: [
+      "Confundir una relación entre magnitudes con una escena física.",
+      "Leer vectores donde solo hay ejes y tendencia.",
+      ...commonMistakes,
+    ],
+
+    leafId,
+  });
+}

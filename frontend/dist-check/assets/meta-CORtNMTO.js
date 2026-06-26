@@ -1,0 +1,61 @@
+const n=`id: tubos
+nombre:
+  es: Tubos
+  en: Tubes
+area: fisica-clasica
+bloque: ondas
+subbloque: ondas-estacionarias
+parent_id: ejemplos-clasicos
+ruta_relativa: fisica-clasica/ondas/ondas-estacionarias/ejemplos-clasicos/tubos
+orden: 234420
+type: leaf
+niveles:
+  es: [ESO, BACHILLERATO, UNIVERSIDAD, EXTRACURRICULAR]
+  en: [Secondary, Upper Secondary, University, Extracurricular]
+icon: 📌
+descripcion: Modos estacionarios de aire en tubos abiertos y cerrados.
+description_en: Standing air modes in open and closed tubes.
+tags:
+  es: [tubos, estacionarias, aire, resonancia, frecuencia, armonicos]
+  en: [tubes, standing, air, resonance, frequency, harmonics]
+prerequisitos:
+  - fisica-clasica/ondas/ondas-estacionarias/condicion-de-estacionariedad
+  - fisica-clasica/ondas/sonido/naturaleza-del-sonido
+  - fisica-clasica/ondas/sonido/velocidad-del-sonido
+graficos: [Coord]
+physical_role:
+  es: fenómeno físico
+  en: physical phenomenon
+dificultad: 3
+tiempo_estimado_min: 25
+representacion_dominante: Coord
+magnitud_dominante: f_n
+pregunta_fisica_central:
+  es: ¿Cómo determinan la longitud efectiva, el tipo de extremo y la velocidad del sonido las frecuencias estacionarias de un tubo?
+  en: How do effective length, end type, and sound speed determine the standing frequencies of a tube?
+nucleo:
+  magnitudes: [L, L_eff, v, n, lambda_n, f_n, m]
+  formulas: [frecuencia_tubo_abierto, frecuencia_tubo_cerrado, longitud_onda_tubo_abierto, longitud_onda_tubo_cerrado]
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 4
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

@@ -1,0 +1,1102 @@
+version: 5.0.0
+id: tipos-de-ondas-en-solidos
+leaf_id: tipos-de-ondas-en-solidos
+nombre:
+  es: Tipos de ondas en solidos
+  en: Types of Waves in Solids
+scope:
+  area: fisica-clasica
+  bloque: ondas
+  subbloque: ondas-mecanicas
+  parent_id: ondas-en-solidos
+  ruta_relativa: fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/tipos-de-ondas-en-solidos
+  orden: 232330
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - vel_longitudinal
+  - vel_transversal
+  - vel_rayleigh
+  magnitudes:
+  - velocidad_de_onda_longitudinal_p
+  - velocidad_de_onda_transversal_s
+  - velocidad_de_onda_de_rayleigh
+  - modulo_de_young
+  - modulo_de_corte
+  - rho
+  - nu
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: ondas
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+  - Svg
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: velocidad_de_onda_longitudinal_p
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  velocidad_de_onda_longitudinal_p:
+    enabled: true
+    magnitude_type: velocidad_de_propagacion
+    semantic_role:
+      es: Velocidad de la onda longitudinal (P) calculada a partir del modulo de Young, el coeficiente de Poisson y la densidad
+        del solido.
+      en: Longitudinal (P-wave) velocity calculated from Young's modulus, Poisson's ratio and solid density.
+    summary_rules:
+    - id: vL_summary_normal
+      when: v_L > 0
+      status: ok
+      text:
+        es: '[[v_L]] indica la velocidad de propagacion de la onda de compresion en el solido. Cuanto mayor es la rigidez
+          del material y menor su densidad, mayor resulta este valor. Para metales comunes el resultado tipico se situa entre
+          4000 y 7000 m/s.'
+        en: '[[v_L]] indicates the propagation speed of the compression wave in the solid. Higher stiffness and lower density
+          yield a larger result. For common metals the typical value ranges between 4000 and 7000 m/s.'
+    - id: vL_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[v_L]] resume la rapidez con que una perturbacion de compresion atraviesa el solido; depende del modulo confinado
+          M y de la densidad del material.'
+        en: '[[v_L]] summarises how fast a compression disturbance travels through the solid; it depends on the confined modulus
+          M and the material density.'
+    physical_reading_rules:
+    - id: vL_reading_high
+      when: v_L > 6000
+      status: ok
+      text:
+        es: Velocidad longitudinal alta (mayor de 6000 m/s). Indica un material de gran rigidez como el acero inoxidable,
+          el titanio o el tungsteno. La onda P atraviesa el solido rapidamente, lo que beneficia los tiempos de respuesta
+          en ultrasonidos.
+        en: High longitudinal velocity (above 6000 m/s). Indicates a high-stiffness material such as stainless steel, titanium
+          or tungsten. The P-wave crosses the solid quickly, which benefits response times in ultrasonics.
+    - id: vL_reading_medium
+      when: v_L >= 3000 && v_L <= 6000
+      status: ok
+      text:
+        es: Velocidad longitudinal moderada. Tipica de aluminio, cobre o concreto. El solido transmite ondas P a una velocidad
+          compatible con la mayoria de aplicaciones de control no destructivo convencional.
+        en: Moderate longitudinal velocity. Typical of aluminium, copper or concrete. The solid transmits P-waves at a speed
+          compatible with most conventional non-destructive testing applications.
+    - id: vL_reading_low
+      when: v_L < 3000
+      status: warning
+      text:
+        es: Velocidad longitudinal baja. Puede indicar un material polimerico, poroso o con dano interno. Verificar que los
+          modulos elasticos introducidos corresponden al material real y no a su version degradada.
+        en: Low longitudinal velocity. May indicate a polymeric, porous or internally damaged material. Verify that the input
+          elastic moduli correspond to the real material and not its degraded state.
+    - id: vL_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: La lectura de [[v_L]] depende principalmente del coeficiente de Poisson del material; un nu mas alto produce una
+          v_L mas elevada para los mismos E y rho.
+        en: The reading of [[v_L]] depends primarily on the material Poisson's ratio; a higher nu produces a larger v_L for
+          the same E and rho.
+    coherence_rules:
+    - id: vL_coherence_ok
+      when: v_L > 0
+      status: ok
+      text:
+        es: '[[v_L]] positiva: coherente con un solido elastico estable.'
+        en: 'Positive [[v_L]]: coherent with a stable elastic solid.'
+    - id: vL_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[v_L]] supera a [[v_T]] del mismo material; si no es asi, alguno de los parametros de entrada tiene
+          un error.
+        en: Verify that [[v_L]] exceeds [[v_T]] for the same material; if not, one of the input parameters contains an error.
+    model_validity_rules:
+    - id: vL_validity_isotropia
+      when: 'true'
+      status: warning
+      text:
+        es: El resultado es valido solo si el material es isotropo. En materiales anisotropos (fibra de carbono, madera) la
+          velocidad longitudinal depende de la orientacion y la formula escalar no aplica.
+        en: The result is valid only if the material is isotropic. In anisotropic materials (carbon fibre, wood) the longitudinal
+          velocity depends on orientation and the scalar formula does not apply.
+    - id: vL_validity_3d
+      when: 'true'
+      status: warning
+      text:
+        es: Esta formula corresponde a un solido tridimensional sin confinamiento. En una barra delgada (diametro mucho menor
+          que la longitud de onda) la velocidad longitudinal es menor y usa directamente el modulo de Young sin el factor
+          de Poisson.
+        en: This formula corresponds to a 3D solid without geometric confinement. In a thin bar (diameter much smaller than
+          wavelength) the longitudinal velocity is smaller and uses Young's modulus directly without the Poisson factor.
+    - id: vL_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: Modelo valido en el regimen elastico lineal con deformaciones pequeñas.
+        en: Model valid in the linear elastic regime with small strains.
+    graph_rules:
+    - id: vL_graph_coord
+      when: 'true'
+      status: ok
+      text:
+        es: En la grafica de velocidad frente a modulo elastico, [[v_L]] aparece como la curva superior. Su separacion con
+          respecto a [[v_T]] aumenta cuando el coeficiente de Poisson se acerca a 0.5.
+        en: In the velocity versus elastic modulus graph, [[v_L]] appears as the upper curve. Its separation from [[v_T]]
+          increases as Poisson's ratio approaches 0.5.
+    - id: vL_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: El grafico muestra como [[v_L]] y [[v_T]] divergen al variar nu, con [[v_L]] siempre por encima.
+        en: The graph shows how [[v_L]] and [[v_T]] diverge as nu varies, with [[v_L]] always on top.
+    likely_errors:
+    - id: vL_error_barradel
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[velocidad_de_onda_longitudinal_p]] con una lectura aislada es un error frecuente: Error frecuente:
+          usar el modulo de Young E directamente sin el factor de Poisson. Esto es correcto solo para una barra delgada; en
+          un solido 3D la velocidad real es mayor y usa el modulo confinado M.'
+        en: 'Common mistake: using Young''s modulus E directly without the Poisson factor. This is correct only for a thin
+          bar; in a 3D solid the real velocity is larger and uses the confined modulus M.'
+    - id: vL_error_unidades
+      when: v_L > 10000
+      status: error
+      text:
+        es: 'Confundir [[velocidad_de_onda_longitudinal_p]] con una lectura aislada es un error frecuente: Velocidad muy alta:
+          posible error de unidades. Verificar que E esta en Pa (no en GPa) y rho en kg/m³.'
+        en: 'A common mistake is to interpret [[velocidad_de_onda_longitudinal_p]] in isolation: Very high velocity: possible
+          unit error. Verify that E is in Pa (not GPa) and rho in kg/m³.'
+    - id: vL_error_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'Confundir [[velocidad_de_onda_longitudinal_p]] con una lectura aislada es un error frecuente: Comprobar que el
+          coeficiente de Poisson nu es estrictamente menor que 0.5; si nu tiende a 0.5, el denominador tiende a cero y la
+          velocidad diverge.'
+        en: 'A common mistake is to interpret [[velocidad_de_onda_longitudinal_p]] in isolation: Check that Poisson''s ratio
+          nu is strictly less than 0.5; if nu approaches 0.5, the denominator approaches zero and velocity diverges.'
+    next_step_rules:
+    - id: vL_next_comparar
+      when: 'true'
+      status: ok
+      text:
+        es: Calcular [[v_T]] con el modulo de corte del mismo material y comparar ambas velocidades. La razon v_T/v_L es un
+          indicador directo del coeficiente de Poisson del material.
+        en: Calculate [[v_T]] using the shear modulus of the same material and compare both velocities. The ratio v_T/v_L
+          is a direct indicator of the material Poisson's ratio.
+    - id: vL_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Continuar con el calculo de [[v_R]] para obtener la velocidad superficial y comparar los tres tipos de onda del
+          mismo material.
+        en: Continue with the calculation of [[v_R]] to obtain the surface velocity and compare all three wave types of the
+          same material.
+    physical_intuition:
+    - id: velocidad_de_onda_longitudinal_p_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[velocidad_de_onda_longitudinal_p]] describe el estado dinámico.
+        en: Intuitively, [[velocidad_de_onda_longitudinal_p]] describes the dynamic state.
+    limiting_cases:
+    - id: velocidad_de_onda_longitudinal_p_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[velocidad_de_onda_longitudinal_p]].
+        en: Check limiting cases of [[velocidad_de_onda_longitudinal_p]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  rho:
+    enabled: true
+    magnitude_type: densidad
+    semantic_role:
+      es: Densidad del material inferida a partir de la velocidad de onda medida y los modulos elasticos conocidos.
+      en: Material density inferred from the measured wave velocity and known elastic moduli.
+    summary_rules:
+    - id: rho_summary_normal
+      when: rho > 0
+      status: ok
+      text:
+        es: '[[rho]] indica la densidad del material calculada a partir de los datos de velocidad. Resume cuanta masa por
+          unidad de volumen tiene el solido; valores altos indican materiales pesados como acero o plomo.'
+        en: '[[rho]] indicates the material density calculated from the velocity data. It summarises how much mass per unit
+          volume the solid has; high values indicate heavy materials such as steel or lead.'
+    - id: rho_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[rho]] describe la inercia por unidad de volumen del solido; depende inversamente del cuadrado de la velocidad
+          de onda.'
+        en: '[[rho]] describes the inertia per unit volume of the solid; it depends inversely on the square of the wave velocity.'
+    physical_reading_rules:
+    - id: rho_reading_metal
+      when: rho >= 6000 && rho <= 10000
+      status: ok
+      text:
+        es: 'Densidad en el rango de metales comunes (6000 a 10000 kg/m³): compatible con acero, niquel o cobre.'
+        en: 'Density in the range of common metals (6000 to 10000 kg/m³): consistent with steel, nickel or copper.'
+    - id: rho_reading_ligero
+      when: rho < 3000
+      status: ok
+      text:
+        es: 'Densidad baja: compatible con aluminio, polimeros tecnicos o espumas estructurales.'
+        en: 'Low density: consistent with aluminium, technical polymers or structural foams.'
+    - id: rho_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: La densidad calculada depende de la velocidad al cuadrado; pequeñas variaciones en la velocidad medida producen
+          variaciones proporcionales del doble en rho.
+        en: The calculated density depends on the square of velocity; small variations in measured velocity produce proportionally
+          double variations in rho.
+    coherence_rules:
+    - id: rho_coherence_positive
+      when: rho > 0
+      status: ok
+      text:
+        es: '[[rho]] positiva: fisicamente coherente.'
+        en: 'Positive [[rho]]: physically coherent.'
+    - id: rho_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[rho]] es consistente con el material declarado. Un acero tipico debe dar entre 7700 y 7900 kg/m³.
+        en: Verify that [[rho]] is consistent with the declared material. Typical steel should give between 7700 and 7900
+          kg/m³.
+    model_validity_rules:
+    - id: rho_validity_homogeneo
+      when: 'true'
+      status: warning
+      text:
+        es: La densidad inferida es valida solo si el material es homogeneo. En materiales compuestos o con gradiente de densidad,
+          la velocidad de onda no representa una densidad unica.
+        en: The inferred density is valid only if the material is homogeneous. In composite or density-gradient materials,
+          wave velocity does not represent a single density.
+    - id: rho_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo asume que E y nu son conocidos con precision; incertidumbre en esos modulos se transfiere directamente
+          a la estimacion de rho.
+        en: The model assumes E and nu are known accurately; uncertainty in those moduli transfers directly to the rho estimate.
+    graph_rules:
+    - id: rho_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: En un grafico densidad versus velocidad, [[rho]] aparece como la variable del eje horizontal; materiales mas densos
+          tienen menor velocidad para el mismo modulo elastico.
+        en: In a density versus velocity graph, [[rho]] appears as the variable on the horizontal axis; denser materials have
+          lower velocity for the same elastic modulus.
+    - id: rho_graph_fallback
+      when: 'true'
+      status: ok
+      text:
+        es: La curva iso-velocidad en el plano (rho, E) muestra que se puede aumentar la rigidez compensando la densidad para
+          mantener la misma velocidad de onda.
+        en: The iso-velocity curve in the (rho, E) plane shows that stiffness can be increased by compensating density to
+          maintain the same wave velocity.
+    likely_errors:
+    - id: rho_error_unidades
+      when: rho > 25000
+      status: error
+      text:
+        es: 'Confundir [[rho]] con una lectura aislada es un error frecuente: Densidad calculada extremadamente alta: posible
+          error de unidades en E (verificar que esta en Pa, no en GPa) o en v_L (que este en m/s).'
+        en: 'A common mistake is to interpret [[rho]] in isolation: Extremely high calculated density: possible unit error
+          in E (verify it is in Pa, not GPa) or in v_L (that it is in m/s).'
+    - id: rho_error_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'Confundir [[rho]] con una lectura aislada es un error frecuente: La densidad derivada de la velocidad acustica
+          puede diferir de la densidad estatica si el material tiene porosidad o microfisurado. En ese caso la velocidad de
+          onda refleja la densidad efectiva del medio poroso.'
+        en: 'A common mistake is to interpret [[rho]] in isolation: Density derived from acoustic velocity may differ from
+          static density if the material has porosity or microcracks. In that case wave velocity reflects the effective density
+          of the porous medium.'
+    next_step_rules:
+    - id: rho_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Contrastar [[rho]] con tablas de referencia del material. Si hay discrepancia, investigar si el material tiene
+          defectos internos, porosidad o composicion diferente a la esperada.
+        en: Cross-check [[rho]] with reference tables for the material. If there is a discrepancy, investigate whether the
+          material has internal defects, porosity or different composition than expected.
+    - id: rho_next_fallback
+      when: 'true'
+      status: ok
+      text:
+        es: Usar el valor de [[rho]] para calcular la impedancia acustica del material y evaluar la reflectividad en interfaces.
+        en: Use the [[rho]] value to calculate the acoustic impedance of the material and evaluate reflectivity at interfaces.
+    physical_intuition:
+    - id: rho_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[rho]] describe el estado dinámico.
+        en: Intuitively, [[rho]] describes the dynamic state.
+    limiting_cases:
+    - id: rho_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[rho]].
+        en: Check limiting cases of [[rho]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  modulo_de_young:
+    enabled: true
+    magnitude_type: modulo_elastico
+    semantic_role:
+      es: Modulo de Young inferido a partir de la velocidad longitudinal medida y el coeficiente de Poisson y la densidad
+        conocidos.
+      en: Young's modulus inferred from the measured longitudinal velocity and the known Poisson's ratio and density.
+    summary_rules:
+    - id: Ey_summary_normal
+      when: E_young > 0
+      status: ok
+      text:
+        es: '[[E_young]] indica la rigidez de traccion-compresion del material. Un valor alto significa que el solido resiste
+          bien la deformacion longitudinal y transmite ondas P a mayor velocidad. Resume la respuesta del material a esfuerzos
+          normales.'
+        en: '[[E_young]] indicates the tension-compression stiffness of the material. A high value means the solid resists
+          longitudinal deformation well and transmits P-waves faster. It summarises the material response to normal stresses.'
+    - id: Ey_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[E_young]] describe la rigidez elastica longitudinal del material; depende cuadraticamente de la velocidad de
+          onda longitudinal medida.'
+        en: '[[E_young]] describes the longitudinal elastic stiffness of the material; it depends quadratically on the measured
+          longitudinal wave velocity.'
+    physical_reading_rules:
+    - id: Ey_reading_high
+      when: E_young > 1e11
+      status: ok
+      text:
+        es: 'Modulo de Young alto (mayor de 100 GPa): material rigido como un metal estructural. La onda P atraviesa el solido
+          a gran velocidad y con poca dispersion.'
+        en: 'High Young''s modulus (above 100 GPa): rigid material such as a structural metal. The P-wave crosses the solid
+          at high speed and with little dispersion.'
+    - id: Ey_reading_low
+      when: E_young < 1e10
+      status: warning
+      text:
+        es: 'Modulo de Young bajo (menor de 10 GPa): posiblemente un polimero, espuma o material biologico. Las velocidades
+          de onda son bajas y el amortiguamiento puede ser importante.'
+        en: 'Low Young''s modulus (below 10 GPa): possibly a polymer, foam or biological material. Wave velocities are low
+          and damping may be significant.'
+    - id: Ey_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modulo de Young inferido acusticamente incluye el efecto del coeficiente de Poisson; comparar con el valor
+          estatico de referencia del material para detectar daño.
+        en: The acoustically inferred Young's modulus includes the effect of Poisson's ratio; compare with the static reference
+          value for the material to detect damage.
+    coherence_rules:
+    - id: Ey_coherence_positive
+      when: E_young > 0
+      status: ok
+      text:
+        es: 'Modulo de Young positivo: coherente con un solido elastico.'
+        en: 'Positive Young''s modulus: coherent with an elastic solid.'
+    - id: Ey_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Comparar [[E_young]] con valores tabulados del material. Una reduccion mayor al 10 % respecto al valor virgen
+          puede indicar fatiga o degradacion.
+        en: Compare [[E_young]] with tabulated values for the material. A reduction greater than 10% compared to the virgin
+          value may indicate fatigue or degradation.
+    model_validity_rules:
+    - id: Ey_validity_linearity
+      when: 'true'
+      status: warning
+      text:
+        es: El modulo inferido es valido solo en el regimen elastico lineal. Cerca del limite de fluencia o con deformaciones
+          grandes, la relacion lineal entre tension y deformacion deja de ser valida.
+        en: The inferred modulus is valid only in the linear elastic regime. Near the yield limit or with large strains, the
+          linear stress-strain relation no longer holds.
+    - id: Ey_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: La formula usa el modelo 3D; para una barra delgada el modulo medido acusticamente coincide directamente con E
+          sin el factor de Poisson.
+        en: The formula uses the 3D model; for a thin bar the acoustically measured modulus coincides directly with E without
+          the Poisson factor.
+    graph_rules:
+    - id: Ey_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: En una representacion grafica velocidad-modulo, [[E_young]] aparece en el eje horizontal. La curva de v_L crece
+          con la raiz cuadrada de E, lo que produce una relacion no lineal visible.
+        en: In a velocity-modulus graph, [[E_young]] appears on the horizontal axis. The v_L curve grows with the square root
+          of E, producing a visible nonlinear relationship.
+    - id: Ey_graph_fallback
+      when: 'true'
+      status: ok
+      text:
+        es: La posicion del punto calculado en la grafica indica si el material esta dentro de la banda tipica para su clase.
+        en: The position of the calculated point in the graph indicates whether the material falls within the typical band
+          for its class.
+    likely_errors:
+    - id: Ey_error_unidades
+      when: E_young < 1e6
+      status: error
+      text:
+        es: 'Confundir [[modulo_de_young]] con una lectura aislada es un error frecuente: Modulo de Young extremadamente bajo:
+          probable error de unidades. Verificar que v_L esta en m/s y rho en kg/m³.'
+        en: 'A common mistake is to interpret [[modulo_de_young]] in isolation: Extremely low Young''s modulus: likely unit
+          error. Verify that v_L is in m/s and rho in kg/m³.'
+    - id: Ey_error_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'Confundir [[modulo_de_young]] con una lectura aislada es un error frecuente: Un modulo acustico sistematicamente
+          mayor que el estatico puede indicar que la frecuencia de ensayo esta por encima de la frecuencia de relajacion viscoelastica
+          del material.'
+        en: 'A common mistake is to interpret [[modulo_de_young]] in isolation: An acoustic modulus systematically larger
+          than the static one may indicate that the test frequency is above the viscoelastic relaxation frequency of the material.'
+    next_step_rules:
+    - id: Ey_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Calcular el modulo de corte G a partir de E y nu usando la relacion elastica. Luego verificar si v_T calculada
+          con ese G coincide con mediciones experimentales.
+        en: Calculate the shear modulus G from E and nu using the elastic relation. Then verify whether v_T calculated with
+          that G matches experimental measurements.
+    - id: Ey_next_fallback
+      when: 'true'
+      status: ok
+      text:
+        es: Usar [[E_young]] para estimar la frecuencia de resonancia fundamental de una barra de longitud conocida y comparar
+          con medicion.
+        en: Use [[E_young]] to estimate the fundamental resonance frequency of a bar of known length and compare with measurement.
+    physical_intuition:
+    - id: modulo_de_young_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[modulo_de_young]] describe el estado dinámico.
+        en: Intuitively, [[modulo_de_young]] describes the dynamic state.
+    limiting_cases:
+    - id: modulo_de_young_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[modulo_de_young]].
+        en: Check limiting cases of [[modulo_de_young]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  velocidad_de_onda_transversal_s:
+    enabled: true
+    magnitude_type: velocidad_de_propagacion
+    semantic_role:
+      es: Velocidad de la onda transversal (S) calculada a partir del modulo de corte y la densidad del solido.
+      en: Transverse (S-wave) velocity calculated from the shear modulus and solid density.
+    summary_rules:
+    - id: vT_summary_normal
+      when: v_T > 0
+      status: ok
+      text:
+        es: '[[v_T]] indica la velocidad a la que se propagan las perturbaciones de corte en el solido. Este valor resume
+          la capacidad del material para transmitir deformaciones angulares; es siempre menor que [[v_L]] en el mismo material
+          y no existe en fluidos.'
+        en: '[[v_T]] indicates the speed at which shear disturbances propagate in the solid. This value summarises the material''s
+          ability to transmit angular deformations; it is always smaller than [[v_L]] in the same material and does not exist
+          in fluids.'
+    - id: vT_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[v_T]] resume la propagacion de corte del solido; depende directamente del modulo G y la densidad rho.'
+        en: '[[v_T]] summarises the shear propagation of the solid; it depends directly on the shear modulus G and density
+          rho.'
+    physical_reading_rules:
+    - id: vT_reading_high
+      when: v_T > 3500
+      status: ok
+      text:
+        es: 'Velocidad transversal alta (mayor de 3500 m/s): material de gran rigidez al corte, como acero de alta resistencia
+          o ceramicas densas.'
+        en: 'High transverse velocity (above 3500 m/s): material with high shear stiffness, such as high-strength steel or
+          dense ceramics.'
+    - id: vT_reading_low
+      when: v_T < 1000
+      status: warning
+      text:
+        es: 'Velocidad transversal baja (menor de 1000 m/s): material con bajo modulo de corte, como polimeros blandos o solidos
+          geotecnicos sueltos. Verificar que el material no es un fluido.'
+        en: 'Low transverse velocity (below 1000 m/s): material with low shear modulus, such as soft polymers or loose geotechnical
+          solids. Verify the material is not a fluid.'
+    - id: vT_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: La velocidad transversal es la magnitud clave para determinar si el material se comporta como solido o fluido;
+          en un fluido ideal esta magnitud es cero.
+        en: Transverse velocity is the key quantity to determine whether the material behaves as a solid or fluid; in an ideal
+          fluid this magnitude is zero.
+    coherence_rules:
+    - id: vT_coherence_menor_vL
+      when: v_T > 0
+      status: ok
+      text:
+        es: '[[v_T]] positiva y, en el mismo material, debe ser menor que [[v_L]]. Si no es asi, hay una inconsistencia en
+          los modulos o en la densidad introducidos.'
+        en: Positive [[v_T]] and, for the same material, must be lower than [[v_L]]. If not, there is an inconsistency in
+          the entered moduli or density.
+    - id: vT_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: La razon [[v_T]]/[[v_L]] debe estar entre 0.5 y 0.7 para la mayoria de metales. Fuera de ese rango revisar los
+          valores de E, G, nu y rho.
+        en: The ratio [[v_T]]/[[v_L]] should be between 0.5 and 0.7 for most metals. Outside that range, review the values
+          of E, G, nu and rho.
+    model_validity_rules:
+    - id: vT_validity_solido
+      when: v_T > 0
+      status: ok
+      text:
+        es: El material se comporta como solido (G > 0 implica v_T > 0). El resultado es coherente con la existencia de ondas
+          de corte.
+        en: The material behaves as a solid (G > 0 implies v_T > 0). The result is consistent with the existence of shear
+          waves.
+    - id: vT_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo es valido en el regimen elastico lineal. En presencia de atenuacion significativa o anisotropia, la
+          velocidad de fase transversal puede depender de la frecuencia.
+        en: The model is valid in the linear elastic regime. In the presence of significant attenuation or anisotropy, the
+          transverse phase velocity may depend on frequency.
+    graph_rules:
+    - id: vT_graph_coord
+      when: 'true'
+      status: ok
+      text:
+        es: En la grafica comparativa de velocidades, [[v_T]] aparece siempre por debajo de [[v_L]] y por encima de [[v_R]].
+          La separacion entre [[v_T]] y [[v_R]] es muy pequeña (menos del 10 %), lo que hace que ambas lleguen casi simultaneamente
+          en un sismograma.
+        en: In the comparative velocity graph, [[v_T]] always appears below [[v_L]] and above [[v_R]]. The separation between
+          [[v_T]] and [[v_R]] is very small (less than 10%), making both arrive nearly simultaneously in a seismogram.
+    - id: vT_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'El punto correspondiente a [[v_T]] se puede usar como referencia para inferir el coeficiente de Poisson si se
+          conoce [[v_L]]: nu depende unicamente de la razon v_T/v_L.'
+        en: 'The point corresponding to [[v_T]] can be used as reference to infer Poisson''s ratio if [[v_L]] is known: nu
+          depends only on the ratio v_T/v_L.'
+    likely_errors:
+    - id: vT_error_fluido
+      when: v_T < 100
+      status: error
+      text:
+        es: 'Confundir [[velocidad_de_onda_transversal_s]] con una lectura aislada es un error frecuente: Velocidad transversal
+          casi nula: el material introducido puede ser un fluido o un gel blando. Las ondas S no se propagan en fluidos; revisar
+          el valor de G.'
+        en: 'A common mistake is to interpret [[velocidad_de_onda_transversal_s]] in isolation: Near-zero transverse velocity:
+          the input material may be a fluid or soft gel. S-waves do not propagate in fluids; review the value of G.'
+    - id: vT_error_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'Confundir [[velocidad_de_onda_transversal_s]] con una lectura aislada es un error frecuente: Error comun: usar
+          el modulo de Young E en lugar del modulo de corte G para calcular v_T. La formula correcta usa exclusivamente G
+          y rho.'
+        en: 'Common mistake: using Young''s modulus E instead of shear modulus G to calculate v_T. The correct formula uses
+          only G and rho.'
+    next_step_rules:
+    - id: vT_next_rayleigh
+      when: 'true'
+      status: ok
+      text:
+        es: 'Calcular [[v_R]] a partir de [[v_T]] y nu para obtener la velocidad de onda superficial del mismo material. Comparar
+          los tres valores: v_L, v_T y v_R.'
+        en: 'Calculate [[v_R]] from [[v_T]] and nu to obtain the surface wave velocity of the same material. Compare all three
+          values: v_L, v_T and v_R.'
+    - id: vT_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: La razon [[v_T]]/[[v_L]] permite calcular el coeficiente de Poisson del material sin necesidad de ensayos mecanicos
+          directos.
+        en: The ratio [[v_T]]/[[v_L]] allows calculating the Poisson's ratio of the material without the need for direct mechanical
+          tests.
+    physical_intuition:
+    - id: velocidad_de_onda_transversal_s_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[velocidad_de_onda_transversal_s]] describe el estado dinámico.
+        en: Intuitively, [[velocidad_de_onda_transversal_s]] describes the dynamic state.
+    limiting_cases:
+    - id: velocidad_de_onda_transversal_s_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[velocidad_de_onda_transversal_s]].
+        en: Check limiting cases of [[velocidad_de_onda_transversal_s]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  modulo_de_corte:
+    enabled: true
+    magnitude_type: modulo_elastico
+    semantic_role:
+      es: Modulo de corte del material inferido a partir de la velocidad transversal medida y la densidad.
+      en: Shear modulus of the material inferred from the measured transverse velocity and density.
+    summary_rules:
+    - id: G_summary_normal
+      when: G_corte > 0
+      status: ok
+      text:
+        es: '[[G_corte]] indica la resistencia del material a la deformacion angular. Resume la capacidad del solido para
+          soportar esfuerzos de corte; un valor nulo definiria un fluido. Para metales estructurales este valor suele estar
+          entre 25 y 90 GPa.'
+        en: '[[G_corte]] indicates the material''s resistance to angular deformation. It summarises the solid''s ability to
+          withstand shear stresses; a zero value would define a fluid. For structural metals this value typically ranges from
+          25 to 90 GPa.'
+    - id: G_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[G_corte]] describe la rigidez al corte del material; depende cuadraticamente de la velocidad transversal medida.'
+        en: '[[G_corte]] describes the shear stiffness of the material; it depends quadratically on the measured transverse
+          velocity.'
+    physical_reading_rules:
+    - id: G_reading_metal
+      when: G_corte > 2e10
+      status: ok
+      text:
+        es: 'Modulo de corte en el rango metalico (mayor de 20 GPa): material con alta resistencia a la torsion y al cizallamiento.
+          Las ondas S se propagan a buena velocidad y con poca deformacion por ciclo.'
+        en: 'Shear modulus in the metallic range (above 20 GPa): material with high resistance to torsion and shearing. S-waves
+          propagate at good speed with little deformation per cycle.'
+    - id: G_reading_soft
+      when: G_corte < 1e9
+      status: warning
+      text:
+        es: 'Modulo de corte bajo (menor de 1 GPa): material blando como caucho, tejido biologico o suelo no consolidado.
+          La onda S se propaga lentamente y el amortiguamiento puede ser relevante.'
+        en: 'Low shear modulus (below 1 GPa): soft material such as rubber, biological tissue or unconsolidated soil. The
+          S-wave propagates slowly and damping may be relevant.'
+    - id: G_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'El modulo de corte [[G_corte]] es el discriminador fundamental entre solido y fluido: un fluido tiene G nulo
+          y no transmite ondas transversales.'
+        en: 'The shear modulus [[G_corte]] is the fundamental discriminator between solid and fluid: a fluid has zero G and
+          does not transmit transverse waves.'
+    coherence_rules:
+    - id: G_coherence_positive
+      when: G_corte > 0
+      status: ok
+      text:
+        es: '[[G_corte]] positivo: coherente con un material solido capaz de transmitir ondas de corte.'
+        en: 'Positive [[G_corte]]: coherent with a solid material capable of transmitting shear waves.'
+    - id: G_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Comparar [[G_corte]] con E del mismo material; para solidos isotropos G debe estar entre E/3 y E/2.
+        en: Compare [[G_corte]] with E for the same material; for isotropic solids G should be between E/3 and E/2.
+    model_validity_rules:
+    - id: G_validity_isotropy
+      when: 'true'
+      status: warning
+      text:
+        es: El modulo de corte inferido acusticamente es valido para materiales isotropos. En materiales fibrosos o laminados,
+          G depende de la orientacion de propagacion respecto a las fibras.
+        en: The acoustically inferred shear modulus is valid for isotropic materials. In fibrous or laminated materials, G
+          depends on the propagation orientation relative to the fibres.
+    - id: G_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo asume regimen lineal sin viscosidad. En polimeros viscoelasticos, G depende de la frecuencia y la temperatura.
+        en: The model assumes linear regime without viscosity. In viscoelastic polymers, G depends on frequency and temperature.
+    graph_rules:
+    - id: G_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: En un grafico G frente a v_T, [[G_corte]] crece cuadraticamente con [[v_T]] para densidad constante. Materiales
+          de la misma clase forman familias de curvas paralelas en ese espacio.
+        en: In a G versus v_T graph, [[G_corte]] grows quadratically with [[v_T]] for constant density. Materials of the same
+          class form families of parallel curves in that space.
+    - id: G_graph_fallback
+      when: 'true'
+      status: ok
+      text:
+        es: La posicion de [[G_corte]] en el grafico permite clasificar el material en la familia de metales, ceramicas, polimeros
+          o composites segun su rigidez al corte.
+        en: The position of [[G_corte]] in the graph allows classifying the material into the family of metals, ceramics,
+          polymers or composites based on its shear stiffness.
+    likely_errors:
+    - id: G_error_confusionEG
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error clasico: confundir G con E. El modulo de corte G es siempre menor que E para los solidos isotropos con
+          coeficiente de Poisson positivo.'
+        en: 'Classic mistake: confusing G with E. The shear modulus G is always smaller than E for isotropic solids with positive
+          Poisson''s ratio.'
+    - id: G_error_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'Confundir [[modulo_de_corte]] con una lectura aislada es un error frecuente: Si [[G_corte]] calculado es mayor
+          que [[E_young]] del mismo material, hay un error en los datos de entrada o en la identificacion del tipo de onda
+          (quizas se uso v_L en lugar de v_T).'
+        en: 'A common mistake is to interpret [[modulo_de_corte]] in isolation: If the calculated [[G_corte]] is greater than
+          [[E_young]] for the same material, there is an error in the input data or in the wave type identification (perhaps
+          v_L was used instead of v_T).'
+    next_step_rules:
+    - id: G_next_poisson
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[G_corte]] y [[E_young]] conocidos se puede calcular el coeficiente de Poisson mediante la relacion elastica
+          nu = E/(2G) - 1 y verificar la consistencia con el valor de nu utilizado como entrada.
+        en: With known [[G_corte]] and [[E_young]], Poisson's ratio can be calculated using the elastic relation nu = E/(2G)
+          - 1 and the consistency with the nu value used as input can be verified.
+    - id: G_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Calcular la impedancia acustica de corte como el producto de [[G_corte]] y [[rho]] elevado a la raiz cuadrada,
+          para evaluar la reflectividad en una interfaz de corte.
+        en: Calculate the shear acoustic impedance as the square root of the product of [[G_corte]] and [[rho]], to evaluate
+          shear reflectivity at an interface.
+    physical_intuition:
+    - id: modulo_de_corte_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[modulo_de_corte]] describe el estado dinámico.
+        en: Intuitively, [[modulo_de_corte]] describes the dynamic state.
+    limiting_cases:
+    - id: modulo_de_corte_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[modulo_de_corte]].
+        en: Check limiting cases of [[modulo_de_corte]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  velocidad_de_onda_de_rayleigh:
+    enabled: true
+    magnitude_type: velocidad_de_propagacion
+    semantic_role:
+      es: Velocidad de la onda superficial de Rayleigh calculada como aproximacion de Viktorov a partir de v_T y el coeficiente
+        de Poisson.
+      en: Rayleigh surface wave velocity calculated using Viktorov's approximation from v_T and Poisson's ratio.
+    summary_rules:
+    - id: vR_summary_normal
+      when: v_R > 0
+      status: ok
+      text:
+        es: '[[v_R]] indica la velocidad de la onda superficial eliptica que viaja confinada a la superficie libre del solido.
+          Su valor resume la respuesta superficial del material; siempre es ligeramente menor que [[v_T]] y depende del coeficiente
+          de Poisson mediante la aproximacion de Viktorov.'
+        en: '[[v_R]] indicates the velocity of the elliptical surface wave travelling confined to the free surface of the
+          solid. Its value summarises the surface response of the material; it is always slightly less than [[v_T]] and depends
+          on Poisson''s ratio through Viktorov''s approximation.'
+    - id: vR_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[v_R]] describe la propagacion superficial del solido; su proximidad con [[v_T]] (entre el 87 y el 96 %) es
+          la razon por la que en sismologia las ondas superficiales y las S llegan casi al mismo tiempo.'
+        en: '[[v_R]] describes the surface propagation of the solid; its proximity to [[v_T]] (between 87 and 96%) is why
+          in seismology surface waves and S-waves arrive almost simultaneously.'
+    physical_reading_rules:
+    - id: vR_reading_proxima
+      when: v_R > 0
+      status: ok
+      text:
+        es: '[[v_R]] esta siempre cerca de [[v_T]]. La onda de Rayleigh transporta la mayor parte de la energia en la superficie
+          libre y su amplitud decrece exponencialmente con la profundidad en unas pocas longitudes de onda.'
+        en: '[[v_R]] is always close to [[v_T]]. The Rayleigh wave carries most of the energy at the free surface and its
+          amplitude decays exponentially with depth over a few wavelengths.'
+    - id: vR_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: La dependencia de [[v_R]] respecto a nu es debil. Variaciones de nu entre 0.2 y 0.4 producen cambios de [[v_R]]
+          menores al 3 % para el mismo [[v_T]].
+        en: The dependence of [[v_R]] on nu is weak. Variations of nu between 0.2 and 0.4 produce changes in [[v_R]] of less
+          than 3% for the same [[v_T]].
+    coherence_rules:
+    - id: vR_coherence_menor_vT
+      when: v_R > 0
+      status: ok
+      text:
+        es: '[[v_R]] positiva y menor que [[v_T]]: coherente con la teoria de Rayleigh para superficies libres planas.'
+        en: 'Positive [[v_R]] and less than [[v_T]]: coherent with Rayleigh theory for flat free surfaces.'
+    - id: vR_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: El cociente [[v_R]]/[[v_T]] debe estar entre 0.87 y 0.96 para nu en el rango [0, 0.5]. Si esta fuera de ese rango,
+          revisar nu.
+        en: The ratio [[v_R]]/[[v_T]] should be between 0.87 and 0.96 for nu in the range [0, 0.5]. If outside that range,
+          review nu.
+    model_validity_rules:
+    - id: vR_validity_semiespacio
+      when: 'true'
+      status: warning
+      text:
+        es: La formula de Viktorov es valida para un semiespacio homogeneo e isotropo con superficie plana. En medios estratificados
+          o con rugosidad superficial, la velocidad de fase de Rayleigh depende de la frecuencia (dispersion).
+        en: Viktorov's formula is valid for a homogeneous isotropic half-space with a flat surface. In layered media or with
+          surface roughness, the Rayleigh phase velocity is frequency-dependent (dispersive).
+    - id: vR_validity_auxetico
+      when: nu < 0
+      status: warning
+      text:
+        es: Para nu negativo (materiales auxeticos) la aproximacion de Viktorov tiene mayor error. Se recomienda resolver
+          la ecuacion secular exacta de Rayleigh.
+        en: For negative nu (auxetic materials) Viktorov's approximation has larger error. Solving the exact Rayleigh secular
+          equation is recommended.
+    - id: vR_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: La aproximacion de Viktorov tiene menos del 0.2 % de error para nu entre 0 y 0.5, lo que la hace adecuada para
+          la gran mayoria de metales y ceramicas.
+        en: Viktorov's approximation has less than 0.2% error for nu between 0 and 0.5, making it suitable for the vast majority
+          of metals and ceramics.
+    graph_rules:
+    - id: vR_graph_comparativo
+      when: 'true'
+      status: ok
+      text:
+        es: En la grafica comparativa de velocidades, [[v_R]] ocupa la posicion inferior, muy proxima a [[v_T]] y claramente
+          separada de [[v_L]]. El grafico ilustra visualmente la jerarquia de velocidades del material.
+        en: In the comparative velocity graph, [[v_R]] occupies the lowest position, very close to [[v_T]] and clearly separated
+          from [[v_L]]. The graph visually illustrates the material's velocity hierarchy.
+    - id: vR_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: En una grafica [[v_R]] vs nu, la curva crece suavemente de izquierda a derecha; la variacion total entre nu igual
+          a 0 y nu igual a 0.5 es de solo el 10 % de [[v_T]].
+        en: In a [[v_R]] vs nu graph, the curve grows gently from left to right; the total variation between nu equal to 0
+          and nu equal to 0.5 is only 10% of [[v_T]].
+    likely_errors:
+    - id: vR_error_mayor_vT
+      when: v_R >= v_T
+      status: error
+      text:
+        es: 'Confundir [[velocidad_de_onda_de_rayleigh]] con una lectura aislada es un error frecuente: [[v_R]] calculada
+          igual o mayor que [[v_T]]: error de calculo. La onda de Rayleigh siempre viaja mas lentamente que la onda S en el
+          mismo material.'
+        en: 'A common mistake is to interpret [[velocidad_de_onda_de_rayleigh]] in isolation: Calculated [[v_R]] equal to
+          or greater than [[v_T]]: calculation error. Rayleigh wave always travels slower than the S-wave in the same material.'
+    - id: vR_error_formula
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error frecuente: confundir la onda de Rayleigh con la onda de Love. Ambas son superficiales, pero la de Love
+          solo existe en medios estratificados y su velocidad esta entre v_T de la capa y del sustrato.'
+        en: 'Common mistake: confusing the Rayleigh wave with the Love wave. Both are surface waves, but Love''s exists only
+          in layered media and its velocity lies between v_T of the layer and the substrate.'
+    - id: vR_error_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'Confundir [[velocidad_de_onda_de_rayleigh]] con una lectura aislada es un error frecuente: Verificar que nu esta
+          en el rango [0, 0.5] antes de aplicar la formula de Viktorov. Para nu fuera de ese rango, la precision de la aproximacion
+          disminuye.'
+        en: 'A common mistake is to interpret [[velocidad_de_onda_de_rayleigh]] in isolation: Verify that nu is in the range
+          [0, 0.5] before applying Viktorov''s formula. For nu outside that range, the approximation accuracy decreases.'
+    next_step_rules:
+    - id: vR_next_clasificacion
+      when: 'true'
+      status: ok
+      text:
+        es: Con los tres valores v_L, v_T y v_R calculados, ya es posible clasificar completamente el tipo de onda y estimar
+          los modulos elasticos E, G y nu del material sin ensayos estaticos.
+        en: With the three values v_L, v_T and v_R calculated, it is now possible to completely classify the wave type and
+          estimate the elastic moduli E, G and nu of the material without static tests.
+    - id: vR_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Profundizar en el estudio de ondas de Love y ondas de placa (Lamb) como extensiones del concepto de onda superficial
+          cuando el solido tiene una segunda interfaz.
+        en: Explore Love waves and plate waves (Lamb) as extensions of the surface wave concept when the solid has a second
+          interface.
+    physical_intuition:
+    - id: velocidad_de_onda_de_rayleigh_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[velocidad_de_onda_de_rayleigh]] describe el estado dinámico.
+        en: Intuitively, [[velocidad_de_onda_de_rayleigh]] describes the dynamic state.
+    limiting_cases:
+    - id: velocidad_de_onda_de_rayleigh_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[velocidad_de_onda_de_rayleigh]].
+        en: Check limiting cases of [[velocidad_de_onda_de_rayleigh]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

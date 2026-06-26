@@ -1,0 +1,189 @@
+version: 1
+ui:
+  default_formula: definicion_corriente
+formulas:
+- id: definicion_corriente
+  title:
+    es: Definicion de intensidad de corriente
+    en: Definition of electric current
+  equation: I = q/t
+  latex: I = \frac{q}{t}
+  rearrangements:
+  - target: carga_electrica_transportada
+    equation: q = I t
+    latex: q = I t
+    constraints: []
+  - target: tiempo
+    equation: t = q/I
+    latex: t = \frac{q}{I}
+    constraints:
+    - I != 0
+  category: fundamental
+  relation_type: average_rate
+  physical_meaning:
+    es: La intensidad expresa la tasa media de transporte de carga a traves de una seccion.
+    en: Current expresses average charge transport rate through a section.
+  constraints: Aplicable como promedio sobre un intervalo donde q y t estan bien definidos.
+  validity:
+    es: Valida como relacion media; en regimen variable rapido se interpreta por tramos o en limite diferencial.
+    en: Valid as an average relation; for fast-varying regimes it is interpreted piecewise or in differential limit.
+  dimension_check: '[A] = [C]/[s]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - flujo-de-carga
+  - tasa
+  result_semantics:
+    target: intensidad_de_corriente
+    kind: flow_rate
+    sign_meaning:
+      es: El signo indica direccion neta segun el convenio elegido.
+      en: Sign indicates net direction under chosen convention.
+    absolute_value_meaning:
+      es: El modulo cuantifica intensidad del transporte de carga.
+      en: Magnitude quantifies transport intensity.
+  domain_checks:
+  - expr: t > 0
+    message:
+      es: El intervalo temporal debe ser positivo.
+      en: Time interval must be positive.
+  coherence_checks:
+  - expr: isfinite(result)
+    message:
+      es: El resultado debe ser numericamente finito.
+      en: Result must be numerically finite.
+  graph_implications:
+  - En un grafico q contra t, la pendiente media del tramo coincide con I.
+  pedagogical_triggers:
+  - when: t < 1e-6
+    message:
+      es: Intervalos muy pequenos requieren cuidado metrologico por resolucion instrumental.
+      en: Very short intervals require metrological care due to instrument resolution.
+- id: densidad_corriente
+  title:
+    es: Densidad de corriente
+    en: Current density
+  equation: J = I/A
+  latex: J = \frac{I}{A}
+  rearrangements:
+  - target: intensidad_de_corriente
+    equation: I = J A
+    latex: I = J A
+    constraints: []
+  - target: area_de_seccion
+    equation: A = I/J
+    latex: A = \frac{I}{J}
+    constraints:
+    - J != 0
+  category: structural
+  relation_type: normalization
+  physical_meaning:
+    es: Normaliza la intensidad por area para evaluar esfuerzo de conduccion local.
+    en: It normalizes current by area to evaluate local conduction stress.
+  constraints: Requiere area efectiva de paso representativa del flujo real.
+  validity:
+    es: Valida cuando la seccion de conduccion puede caracterizarse de manera macroscópica.
+    en: Valid when conduction cross-section can be represented macroscopically.
+  dimension_check: '[A/m^2] = [A]/[m^2]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - sobrecarga-local
+  - diseno-termico
+  result_semantics:
+    target: densidad_de_corriente
+    kind: normalized_flow
+    sign_meaning:
+      es: Conserva el signo de I para la misma convencion direccional.
+      en: Keeps I sign under the same directional convention.
+    absolute_value_meaning:
+      es: Valores altos indican mayor exigencia local en el conductor.
+      en: High values indicate higher local stress in the conductor.
+  domain_checks:
+  - expr: A > 0
+    message:
+      es: El area debe ser estrictamente positiva.
+      en: Area must be strictly positive.
+  coherence_checks:
+  - expr: isfinite(result)
+    message:
+      es: El resultado debe ser finito.
+      en: Result must be finite.
+  graph_implications:
+  - A igual I, reducir A incrementa J y el riesgo de calentamiento local.
+  pedagogical_triggers:
+  - when: abs(result) > 1e6
+    message:
+      es: Densidad elevada; revisar criterio termico y material.
+      en: High density; check thermal and material criteria.
+- id: corriente_portadores
+  title:
+    es: Corriente en modelo de portadores
+    en: Current in carrier model
+  equation: I = n q v_d A
+  latex: I = n q v_d A
+  rearrangements:
+  - target: velocidad_de_deriva
+    equation: v_d = I/(n q A)
+    latex: v_d = \frac{I}{n q A}
+    constraints:
+    - n != 0
+    - q != 0
+    - A != 0
+  category: structural
+  relation_type: micro_macro_bridge
+  physical_meaning:
+    es: Vincula descripcion microscopica de portadores con la magnitud macroscopica de corriente.
+    en: Links microscopic carrier description with macroscopic current.
+  constraints: Supone transporte efectivo promedio y parametros representativos del material.
+  validity:
+    es: Valida en regimen donde n y v_d pueden aproximarse por valores medios del volumen efectivo.
+    en: Valid when n and v_d can be approximated by effective average values.
+  dimension_check: '[A] = [1/m^3][C][m/s][m^2]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - portadores
+  - puente-micro-macro
+  result_semantics:
+    target: intensidad_de_corriente
+    kind: flow_rate
+    sign_meaning:
+      es: El signo depende de direccion de deriva y del signo del portador efectivo.
+      en: Sign depends on drift direction and effective carrier sign.
+    absolute_value_meaning:
+      es: Permite estimar intensidad desde propiedades del material y geometria.
+      en: Enables current estimation from material properties and geometry.
+  domain_checks:
+  - expr: n >= 0
+    message:
+      es: La densidad de portadores no puede ser negativa.
+      en: Carrier density cannot be negative.
+  - expr: A > 0
+    message:
+      es: El area de seccion debe ser positiva.
+      en: Cross-sectional area must be positive.
+  coherence_checks:
+  - expr: isfinite(result)
+    message:
+      es: El resultado debe ser finito.
+      en: Result must be finite.
+  graph_implications:
+  - Ayuda a interpretar por que I puede crecer al aumentar n o el area activa.
+  pedagogical_triggers:
+  - when: abs(v_d) > 1e3
+    message:
+      es: 'Revisar parametros: velocidad de deriva inusualmente alta para muchos materiales conductores.'
+      en: 'Review parameters: unusually high drift velocity for many conductors.'

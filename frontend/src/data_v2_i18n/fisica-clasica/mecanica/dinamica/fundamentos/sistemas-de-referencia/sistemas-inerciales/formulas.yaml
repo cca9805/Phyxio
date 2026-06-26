@@ -1,0 +1,378 @@
+version: 1
+formulas:
+- id: criterio_inercial_primera_ley
+  title:
+    es: Criterio de Sistema Inercial (Primera Ley de Newton)
+    en: Inertial System Criterion (Newton's First Law)
+  equation: F_neta = 0 => a = 0
+  latex: \sum \vec{F}_{ext} = \vec{0} \Rightarrow \vec{a} = \vec{0}
+  rearrangements: []
+  category: fundamental
+  relation_type: physical_law
+  physical_meaning:
+    es: Un sistema de referencia es inercial si y solo si un cuerpo aislado (sin fuerzas
+      netas) se mantiene en reposo o en movimiento rectilíneo uniforme. Este es el
+      criterio operativo para identificar sistemas inerciales.
+    en: A reference frame is inertial if and only if an isolated body (with no net
+      forces) remains at rest or in uniform rectilinear motion. This is the operational
+      criterion for identifying inertial systems.
+  constraints:
+  - es: Sistema de referencia no acelerado
+    en: Non-accelerated reference frame
+  - es: Sin rotación del sistema
+    en: No system rotation
+  - es: Régimen clásico (v << c)
+    en: Classical regime (v << c)
+  validity:
+    es: Define la esencia de los sistemas inerciales. Válido en mecánica clásica para
+      todos los sistemas no acelerados y no rotantes.
+    en: Defines the essence of inertial systems. Valid in classical mechanics for
+      all non-accelerated and non-rotating systems.
+  dimension_check: '[M L T^{-2}] = [M L T^{-2}]'
+  calculable: false
+  motivo_no_calculable:
+    es: Es un criterio conceptual de validez del marco (implicación lógica), no una
+      ecuación numérica para despejar una magnitud física.
+    en: It is a conceptual frame-validity criterion (logical implication), not a numerical
+      equation to solve a physical magnitude.
+  used_in:
+  - es: Identificación de sistemas inerciales
+    en: Identification of inertial systems
+  - es: Validación de marcos de referencia
+    en: Validation of reference frames
+  - es: Fundamento de la mecánica newtoniana
+    en: Foundation of Newtonian mechanics
+  interpretation_tags:
+  - inertial_criterion
+  - first_law
+  - reference_frame_validation
+  result_semantics:
+    target: F_neta
+    meaning: Resulta util para interpretar F_neta en el contexto del leaf.
+  domain_checks:
+  - condition: system_rotating
+    message:
+      es: 'ADVERTENCIA: Sistema en rotación detectado. El criterio inercial no aplica.
+        Aparecen fuerzas centrífuga y Coriolis.'
+      en: 'WARNING: Rotating system detected. Inertial criterion does not apply. Centrifugal
+        and Coriolis forces appear.'
+  - condition: system_accelerating
+    message:
+      es: 'ADVERTENCIA: Sistema acelerando detectado. NO es inercial. Debes añadir
+        fuerzas ficticias o cambiar a un SRI.'
+      en: 'WARNING: Accelerating system detected. NOT inertial. You must add fictitious
+        forces or switch to an IRF.'
+  coherence_checks:
+  - check: if F_neta == 0 and a != 0
+    message:
+      es: 'INCOHERENCIA CRÍTICA: Detectada aceleración sin fuerza neta. Tu sistema
+        NO es inercial.'
+      en: 'CRITICAL INCOHERENCE: Detected acceleration without net force. Your system
+        is NOT inertial.'
+  - check: if F_neta != 0 and a == 0
+    message:
+      es: 'INCOHERENCIA: Fuerza neta no nula pero aceleración cero. Verifica si falta
+        alguna fuerza en el balance.'
+      en: 'INCOHERENCE: Non-zero net force but zero acceleration. Check if any force
+        is missing from the balance.'
+  graph_implications:
+  - if: F_neta == 0 and a == 0
+    then:
+      es: La trayectoria es una línea recta (MRU) o el objeto está en reposo. Confirma
+        sistema inercial.
+      en: Trajectory is a straight line (uniform motion) or object is at rest. Confirms
+        inertial system.
+  - if: F_neta != 0
+    then:
+      es: La aceleración debe ser no nula y en la dirección de F_neta. Visualizar
+        vector fuerza y aceleración paralelos.
+      en: Acceleration must be non-zero and in the direction of F_net. Visualize force
+        and acceleration vectors parallel.
+  pedagogical_triggers:
+  - condition: user_observes_acceleration_without_force
+    error:
+      es: 'ERROR CONCEPTUAL: Si observas aceleración sin identificar fuerzas reales,
+        tu sistema NO es inercial. Cambia de referencia.'
+      en: 'CONCEPTUAL ERROR: If you observe acceleration without identifying real
+        forces, your system is NOT inertial. Change reference.'
+  - condition: user_adds_fictitious_forces_in_SRI
+    warning:
+      es: 'ADVERTENCIA: No añadas fuerzas ficticias en sistemas inerciales. Solo aparecen
+        en sistemas no inerciales.'
+      en: 'WARNING: Do not add fictitious forces in inertial systems. They only appear
+        in non-inertial systems.'
+- id: segunda_ley_newton_SRI
+  title:
+    es: Segunda Ley de Newton en Sistema Inercial
+    en: Newton's Second Law in Inertial Frame
+  equation: F_neta = m*a
+  latex: \sum \vec{F}_{ext} = m \vec{a}
+  rearrangements:
+  - target: a
+    latex: \vec{a} = \frac{\sum \vec{F}_{ext}}{m}
+    equation: a = F_neta / m
+    constraints: []
+  - target: F_neta
+    latex: \sum \vec{F}_{ext} = m \vec{a}
+    equation: F_neta = m * a
+    constraints: []
+  - target: m
+    latex: m = \frac{\sum \vec{F}_{ext}}{\vec{a}}
+    equation: m = F_neta / a
+    constraints: []
+  category: fundamental
+  relation_type: physical_law
+  physical_meaning:
+    es: En un sistema inercial, la aceleración de un objeto es directamente proporcional
+      a la fuerza neta aplicada e inversamente proporcional a su masa. Esta ley conecta
+      dinámica (fuerzas) con cinemática (aceleración).
+    en: In an inertial system, an object's acceleration is directly proportional to
+      the applied net force and inversely proportional to its mass. This law connects
+      dynamics (forces) with kinematics (acceleration).
+  constraints:
+  - es: Masa constante
+    en: Constant mass
+  - es: Sistema inercial
+    en: Inertial system
+  - es: Régimen clásico (v << c)
+    en: Classical regime (v << c)
+  validity:
+    es: Válido ÚNICAMENTE en sistemas inerciales. En sistemas no inerciales, debe
+      modificarse para incluir fuerzas ficticias.
+    en: Valid ONLY in inertial systems. In non-inertial systems, it must be modified
+      to include fictitious forces.
+  dimension_check: '[M L T^{-2}] = [M] × [L T^{-2}]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - es: Predecir aceleración dados fuerzas y masa
+    en: Predicting acceleration given forces and mass
+  - es: Calcular fuerza neta dada aceleración observada
+    en: Calculating net force given observed acceleration
+  - es: Determinar masa inercial de un cuerpo
+    en: Determining inertial mass of a body
+  interpretation_tags:
+  - newtons_second_law
+  - dynamics
+  - force_acceleration_relation
+  result_semantics:
+    target: a
+    meaning: Resulta util para interpretar a en el contexto del leaf.
+  domain_checks:
+  - condition: m <= 0
+    message:
+      es: 'ERROR: Masa no positiva. Físicamente imposible en mecánica clásica.'
+      en: 'ERROR: Non-positive mass. Physically impossible in classical mechanics.'
+  - condition: abs(v) > 0.1*c
+    message:
+      es: 'ADVERTENCIA: Velocidad cercana a 0.1c. Considerar efectos relativistas.
+        F = dp/dt en lugar de F = ma.'
+      en: 'WARNING: Velocity near 0.1c. Consider relativistic effects. F = dp/dt instead
+        of F = ma.'
+  coherence_checks:
+  - check: vector_direction(F_neta) == vector_direction(a)
+    message:
+      es: La dirección de la fuerza neta debe coincidir con la dirección de la aceleración.
+      en: The direction of net force must match the direction of acceleration.
+  - check: if F_neta == 0 then a == 0
+    message:
+      es: Si no hay fuerza neta, no puede haber aceleración (1ª ley).
+      en: If there is no net force, there cannot be acceleration (1st law).
+  graph_implications:
+  - if: F_neta > 0
+    then:
+      es: El vector aceleración apunta en la misma dirección que F_neta. Visualizar
+        ambos paralelos.
+      en: The acceleration vector points in the same direction as F_net. Visualize
+        both parallel.
+  - if: F_neta == 0
+    then:
+      es: El vector aceleración es nulo. El objeto sigue trayectoria recta (o está
+        en reposo).
+      en: The acceleration vector is zero. Object follows straight trajectory (or
+        is at rest).
+  pedagogical_triggers:
+  - condition: user_applies_in_non_inertial_frame
+    error:
+      es: 'ERROR GRAVE: Intentas aplicar F=ma en un sistema no inercial. Debes añadir
+        fuerzas ficticias o cambiar a SRI.'
+      en: 'SERIOUS ERROR: You''re trying to apply F=ma in a non-inertial system. You
+        must add fictitious forces or switch to IRF.'
+  - condition: forgot_force_in_sum
+    hint:
+      es: ¿Incluiste TODAS las fuerzas? Peso, Normal, Roce, Tensión... Verifica el
+        diagrama de cuerpo libre.
+      en: Did you include ALL forces? Weight, Normal, Friction, Tension... Check free
+        body diagram.
+- id: transformacion_galileana_velocidad
+  title:
+    es: Transformación Galileana de Velocidad
+    en: Galilean Velocity Transformation
+  equation: v_obs2 = v_obs1 - V_rel
+  latex: \vec{v}' = \vec{v} - \vec{V}
+  rearrangements:
+  - target: v_obs1
+    latex: \vec{v} = \vec{v}' + \vec{V}
+    equation: v_obs1 = v_obs2 + V_rel
+    constraints: []
+  - target: V_rel
+    latex: \vec{V} = \vec{v} - \vec{v}'
+    equation: V_rel = v_obs1 - v_obs2
+    constraints: []
+  category: fundamental
+  relation_type: kinematic_transformation
+  physical_meaning:
+    es: Permite convertir la velocidad de un objeto medida en un sistema inercial
+      S a la velocidad medida en otro sistema inercial S' que se mueve con velocidad
+      constante V respecto a S.
+    en: Allows converting an object's velocity measured in an inertial system S to
+      the velocity measured in another inertial system S' moving with constant velocity
+      V relative to S.
+  constraints:
+  - es: Ambos sistemas deben ser inerciales
+    en: Both systems must be inertial
+  - es: V_rel debe ser constante
+    en: V_rel must be constant
+  - es: Régimen clásico (V << c)
+    en: Classical regime (V << c)
+  validity:
+    es: Válido para transformaciones entre sistemas inerciales en mecánica clásica.
+      Falla en relatividad especial (v comparable a c).
+    en: Valid for transformations between inertial systems in classical mechanics.
+      Fails in special relativity (v comparable to c).
+  dimension_check: '[L T^{-1}] = [L T^{-1}] - [L T^{-1}]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - es: Conversión de velocidades entre sistemas inerciales
+    en: Velocity conversion between inertial systems
+  - es: Análisis de movimiento relativo
+    en: Relative motion analysis
+  - es: Navegación con múltiples referencias
+    en: Navigation with multiple references
+  interpretation_tags:
+  - galilean_transformation
+  - reference_frame_change
+  - relative_velocity
+  result_semantics:
+    target: v_obs1
+    meaning: Resulta util para interpretar v_obs1 en el contexto del leaf.
+  domain_checks:
+  - condition: abs(V_rel) > 0.1*c or abs(v_obs1) > 0.1*c
+    message:
+      es: 'ADVERTENCIA: Velocidades cercanas a régimen relativista. Usar transformaciones
+        de Lorentz en lugar de Galileo.'
+      en: 'WARNING: Velocities near relativistic regime. Use Lorentz transformations
+        instead of Galilean.'
+  coherence_checks:
+  - check: V_rel is constant
+    message:
+      es: V_rel debe ser constante en el tiempo. Si varía, los sistemas no son ambos
+        inerciales.
+      en: V_rel must be constant in time. If it varies, the systems are not both inertial.
+  graph_implications:
+  - if: V_rel != 0
+    then:
+      es: Los vectores velocidad v y v' difieren en dirección e/o magnitud. Visualizar
+        ambos desde un origen común.
+      en: Velocity vectors v and v' differ in direction and/or magnitude. Visualize
+        both from a common origin.
+  - if: V_rel == 0
+    then:
+      es: Ambos sistemas miden la misma velocidad. v' = v.
+      en: Both systems measure the same velocity. v' = v.
+  pedagogical_triggers:
+  - condition: user_forgot_minus_sign
+    warning:
+      es: 'ERROR COMÚN: Olvidar el signo menos. Es v'' = v - V, NO v'' = v + V.'
+      en: 'COMMON ERROR: Forgetting the minus sign. It''s v'' = v - V, NOT v'' = v
+        + V.'
+  - condition: user_applies_with_varying_V
+    error:
+      es: 'ERROR: V_rel está variando. Esta fórmula solo vale si V es constante (sistemas
+        inerciales).'
+      en: 'ERROR: V_rel is varying. This formula only holds if V is constant (inertial
+        systems).'
+- id: invariancia_aceleracion_galileana
+  title:
+    es: Invariancia de la Aceleración (Relatividad Galileana)
+    en: Acceleration Invariance (Galilean Relativity)
+  equation: a_obs2 = a_obs1
+  latex: \vec{a}' = \vec{a}
+  rearrangements: []
+  category: fundamental
+  relation_type: physical_law
+  physical_meaning:
+    es: La aceleración de un objeto es la misma cuando se mide desde cualquier sistema
+      inercial. Esta propiedad es la base del Principio de Relatividad de Galileo
+      y garantiza que las leyes de Newton sean las mismas en todos los sistemas inerciales.
+    en: An object's acceleration is the same when measured from any inertial system.
+      This property is the basis of Galileo's Principle of Relativity and ensures
+      that Newton's laws are the same in all inertial systems.
+  constraints:
+  - es: Ambos sistemas deben ser inerciales
+    en: Both systems must be inertial
+  - es: Régimen clásico (v << c)
+    en: Classical regime (v << c)
+  validity:
+    es: Válido para transformaciones entre sistemas inerciales. Si los sistemas miden
+      aceleraciones diferentes, al menos uno NO es inercial.
+    en: Valid for transformations between inertial systems. If systems measure different
+      accelerations, at least one is NOT inertial.
+  dimension_check: '[L T^{-2}] = [L T^{-2}]'
+  calculable: false
+  motivo_no_calculable:
+    es: Es una propiedad de invariancia entre marcos inerciales, no una relación independiente
+      de cálculo con grados de libertad nuevos.
+    en: It is an invariance property between inertial frames, not an independent calculable
+      relation with new degrees of freedom.
+  used_in:
+  - es: Verificación de sistemas inerciales
+    en: Inertial system verification
+  - es: Fundamento de la relatividad galileana
+    en: Foundation of Galilean relativity
+  - es: Validación de equivalencia de leyes físicas
+    en: Validation of physical law equivalence
+  interpretation_tags:
+  - galilean_invariance
+  - acceleration_invariance
+  - relativity_principle
+  result_semantics:
+    target: a_obs2
+    meaning: Resulta util para interpretar a_obs2 en el contexto del leaf.
+  domain_checks:
+  - condition: a_obs1 != a_obs2
+    message:
+      es: 'ERROR CRÍTICO: Detectada diferencia de aceleración entre sistemas. Al menos
+        uno NO es inercial.'
+      en: 'CRITICAL ERROR: Detected acceleration difference between systems. At least
+        one is NOT inertial.'
+  coherence_checks:
+  - check: if systems_both_inertial then a1 == a2
+    message:
+      es: La invariancia de aceleración es LA propiedad definitoria de sistemas inerciales.
+      en: Acceleration invariance is THE defining property of inertial systems.
+  graph_implications:
+  - if: a_obs1 == a_obs2
+    then:
+      es: Los vectores aceleración desde ambos sistemas se superponen perfectamente.
+        Confirma sistemas inerciales.
+      en: Acceleration vectors from both systems overlap perfectly. Confirms inertial
+        systems.
+  - if: a_obs1 != a_obs2
+    then:
+      es: Los vectores difieren. Indica que al menos un sistema es no inercial.
+      en: Vectors differ. Indicates at least one system is non-inertial.
+  pedagogical_triggers:
+  - condition: user_thinks_acceleration_changes_with_frame
+    error:
+      es: 'ERROR CONCEPTUAL GRAVE: La aceleración NO cambia entre sistemas inerciales.
+        Solo la velocidad cambia.'
+      en: 'SERIOUS CONCEPTUAL ERROR: Acceleration does NOT change between inertial
+        systems. Only velocity changes.'
+  - condition: observed_different_accelerations
+    diagnostic:
+      es: Si mides aceleraciones diferentes en dos sistemas, al menos uno está acelerando
+        (no inercial).
+      en: If you measure different accelerations in two systems, at least one is accelerating
+        (non-inertial).

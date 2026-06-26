@@ -1,0 +1,72 @@
+const e=`version: 5
+id: flujo-laminar
+parent_id: viscosidad-y-regimenes
+nombre:
+  es: "Flujo laminar"
+  en: "Laminar Flow"
+physical_role:
+  es: "concepto físico"
+  en: "physical concept"
+pregunta_fisica_central:
+  es: "¿Cómo se caracteriza el movimiento ordenado y laminar de un fluido viscoso?"
+  en: "How is the ordered and laminar motion of a viscous fluid characterized?"
+representacion_dominante: "Coord"
+magnitud_dominante: "v_max"
+type: leaf
+area: fisica-clasica
+bloque: mecanica
+subbloque: fluidos
+orden: 218420
+niveles:
+  es: ["UNIVERSIDAD", "EXTRACURRICULAR"]
+  en: ["University", "Extracurricular"]
+icon: 💧
+ruta_relativa: fisica-clasica/mecanica/fluidos/viscosidad-y-regimenes/flujo-laminar
+descripcion: "Estudio del régimen de flujo ordenado por láminas, ley de Poiseuille y perfil parabólico."
+description_en: "Study of the ordered laminar flow regime, Poiseuille's law, and parabolic profile."
+descripcion_corta:
+  es: "Análisis del flujo viscoso ordenado."
+  en: "Analysis of ordered viscous flow."
+dificultad: 3
+tiempo_estimado_min: 55
+prerequisitos:
+  - fisica-clasica/mecanica/fluidos/viscosidad-y-regimenes/viscosidad
+  - fisica-clasica/mecanica/fluidos/viscosidad-y-regimenes/numero-de-reynolds
+tags:
+  es: ["Fluidos", "Viscosidad", "Laminar", "Poiseuille"]
+  en: ["Fluids", "Viscosity", "Laminar", "Poiseuille"]
+graficos:
+  - Coord
+  - Svg
+interpretacion:
+  enabled: true
+  archivo: "interpretacion.yaml"
+  ui:
+    tab_label:
+      es: "Ver Hidrodinámica"
+      en: "View Hydrodynamics"
+    show_summary: true
+    show_physical_reading: true
+    show_coherence: true
+    show_model_validity: true
+    show_graph_reading: true
+    show_likely_errors: true
+    show_next_step: true
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+  mini_graph:
+    enabled: true
+    preferred_type: "Coord"
+  output_policy:
+    max_inline_messages: 3
+    show_severity_icons: true
+    collapse_advanced_sections: false
+    show_summary_first: true
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_magnitudes: true
+    requires_formulas: true
+    supports_graph_binding: true
+`;export{e as default};

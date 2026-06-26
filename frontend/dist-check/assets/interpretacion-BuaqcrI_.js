@@ -1,0 +1,411 @@
+const e=`version: 5
+id: vasos-comunicantes-interp
+leaf_id: vasos-comunicantes
+scope: local
+nombre:
+  es: Análisis de Vasos Comunicantes
+  en: Communicating Vessels Analysis
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: Resumen de Niveles
+      en: Level Summary
+  physical_reading:
+    title:
+      es: Significado Físico
+      en: Physical Meaning
+  coherence:
+    title:
+      es: Coherencia del Sistema
+      en: System Coherence
+  model_validity:
+    title:
+      es: Validez del Modelo
+      en: Model Validity
+  graph_reading:
+    title:
+      es: Interpretación Visual
+      en: Visual Interpretation
+  likely_errors:
+    title:
+      es: Posibles Errores
+      en: Possible Errors
+  next_step:
+    title:
+      es: Pasos Siguientes
+      en: Next Steps
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [h1, h2, rho1, rho2, p_atm]
+  formulas: [equilibrio_vasos, relacion_alturas_densidades]
+
+targets:
+  h2:
+    summary_rules:
+      - id: h2-val
+        when: h2 >= 0
+        status: success
+        text:
+          es: "El nivel [[h2]] alcanza {{h2}} m en equilibrio."
+          en: "The level [[h2]] reaches {{h2}} m in equilibrium."
+    physical_reading_rules:
+      - id: h2-meaning
+        when: h2 > h1
+        status: success
+        text:
+          es: "Indica un fluido más ligero en la rama derecha."
+          en: "Indicates a lighter fluid in the right branch."
+    coherence_rules:
+      - id: h2-coh
+        when: h2 > 0
+        status: success
+        text:
+          es: "Coherente con el equilibrio estático de presiones {{f:equilibrio_vasos}} y la relación de proporcionalidad {{f:relacion_alturas_densidades}}."
+          en: "Coherent with the static pressure equilibrium {{f:equilibrio_vasos}} and the proportionality relationship {{f:relacion_alturas_densidades}}."
+    model_validity_rules:
+      - id: h2-valid
+        when: h2 > 0
+        status: success
+        text:
+          es: "Válido bajo gravedad constante."
+          en: "Valid under constant gravity."
+    graph_rules:
+      - id: h2-graph
+        when: h2 >= 0
+        status: success
+        text:
+          es: "Posición del menisco derecho."
+          en: "Right meniscus position."
+    likely_errors:
+      - id: err-h2-low
+        when: h2 < h1 and rho2 < rho1
+        status: error
+        text:
+          es: "Error: Líquido ligero con altura menor (imposible)."
+          en: "Error: Light liquid with lower height (impossible)."
+      - id: err-h2-high
+        when: h2 > h1 and rho2 > rho1
+        status: error
+        text:
+          es: "Error: Líquido pesado con altura mayor (viola Pascal)."
+          en: "Error: Heavy liquid with higher height (violates Pascal)."
+      - id: err-h2-no-eq
+        when: h2 == h1 and rho2 != rho1
+        status: error
+        text:
+          es: "Error: Niveles iguales con densidades distintas (no hay equilibrio)."
+          en: "Error: Equal levels with different densities (no equilibrium)."
+      - id: err-h2-shape
+        when: h2 > 0
+        status: warning
+        text:
+          es: "Fallo de concepto: Pensar que el ancho del tubo altera la altura de equilibrio."
+          en: "Concept failure: Thinking that the tube width alters the equilibrium height."
+    next_step_rules:
+      - id: next-h2
+        when: h2 > 0
+        status: info
+        text:
+          es: "Varía [[rho2]] para ver el cambio de nivel."
+          en: "Vary [[rho2]] to see the level change."
+
+  rho2:
+    summary_rules:
+      - id: rho2-val
+        when: rho2 > 0
+        status: success
+        text:
+          es: "Densidad [[rho2]] = {{rho2}} kg/m³."
+          en: "Density [[rho2]] = {{rho2}} kg/m³."
+    physical_reading_rules:
+      - id: rho2-prop
+        when: rho2 > 0
+        status: success
+        text:
+          es: "Propiedad intensiva del fluido derecho."
+          en: "Intensive property of the right fluid."
+    coherence_rules:
+      - id: rho2-coh
+        when: rho2 > 0
+        status: success
+        text:
+          es: "Densidad positiva válida."
+          en: "Valid positive density."
+    model_validity_rules:
+      - id: rho2-mod
+        when: rho2 > 0
+        status: success
+        text:
+          es: "Fluido homogéneo asumido."
+          en: "Homogeneous fluid assumed."
+    graph_rules:
+      - id: rho2-viz
+        when: rho2 > 0
+        status: success
+        text:
+          es: "Color del fluido derecho."
+          en: "Right fluid color."
+    likely_errors:
+      - id: err-rho2-zero
+        when: rho2 <= 0
+        status: error
+        text:
+          es: "Error: Densidad nula o negativa."
+          en: "Error: Zero or negative density."
+      - id: err-rho2-gas
+        when: rho2 < 500 and rho2 > 0
+        status: warning
+        text:
+          es: "Riesgo: Densidad demasiado baja para un líquido."
+          en: "Risk: Density too low for a liquid."
+      - id: err-rho2-ext
+        when: rho2 > 20000
+        status: warning
+        text:
+          es: "Riesgo: Densidad extrema (superior al platino)."
+          en: "Risk: Extreme density (higher than platinum)."
+      - id: err-rho2-volume
+        when: rho2 > 0
+        status: warning
+        text:
+          es: "Confusión: Creer que la densidad depende del volumen total de líquido."
+          en: "Confusion: Believing that density depends on the total liquid volume."
+    next_step_rules:
+      - id: next-rho2
+        when: rho2 > 0
+        status: info
+        text:
+          es: "Usa mercurio ([[rho]] = 13600)."
+          en: "Use mercury ([[rho]] = 13600)."
+
+  h1:
+    summary_rules:
+      - id: h1-val
+        when: h1 >= 0
+        status: success
+        text:
+          es: "Nivel izquierdo [[h1]] = {{h1}} m."
+          en: "Left level [[h1]] = {{h1}} m."
+    physical_reading_rules:
+      - id: h1-read
+        when: h1 > 0
+        status: success
+        text:
+          es: "Carga hidrostática de la rama izquierda."
+          en: "Hydrostatic load of the left branch."
+    coherence_rules:
+      - id: h1-coh
+        when: h1 >= 0
+        status: success
+        text:
+          es: "Altura geométrica positiva."
+          en: "Positive geometric height."
+    model_validity_rules:
+      - id: h1-mod
+        when: h1 > 0
+        status: success
+        text:
+          es: "Válido para tubos anchos."
+          en: "Valid for wide tubes."
+    graph_rules:
+      - id: h1-viz
+        when: h1 >= 0
+        status: success
+        text:
+          es: "Menisco de la rama izquierda."
+          en: "Left branch meniscus."
+    likely_errors:
+      - id: err-h1-neg
+        when: h1 < 0
+        status: error
+        text:
+          es: "Error: Altura negativa imposible."
+          en: "Error: Impossible negative height."
+      - id: err-h1-cap
+        when: h1 < 0.005 and h1 > 0
+        status: warning
+        text:
+          es: "Riesgo: Efectos de capilaridad dominantes."
+          en: "Risk: Dominant capillarity effects."
+      - id: err-h1-ext
+        when: h1 > 100
+        status: warning
+        text:
+          es: "Riesgo: Altura fuera de escala de laboratorio."
+          en: "Risk: Height out of laboratory scale."
+      - id: err-h1-pressure
+        when: h1 > 0
+        status: error
+        text:
+          es: "Error: Pensar que la presión en el fondo no depende de [[h1]]."
+          en: "Error: Thinking that bottom pressure does not depend on [[h1]]."
+    next_step_rules:
+      - id: next-h1
+        when: h1 > 0
+        status: info
+        text:
+          es: "Duplica [[h1]] y observa [[h2]]."
+          en: "Double [[h1]] and observe [[h2]]."
+
+  rho1:
+    summary_rules:
+      - id: rho1-val
+        when: rho1 > 0
+        status: success
+        text:
+          es: "Densidad [[rho1]] = {{rho1}} kg/m³."
+          en: "Density [[rho1]] = {{rho1}} kg/m³."
+    physical_reading_rules:
+      - id: rho1-read
+        when: rho1 > 0
+        status: success
+        text:
+          es: "Fluido de referencia izquierdo."
+          en: "Left reference fluid."
+    coherence_rules:
+      - id: rho1-coh
+        when: rho1 > 0
+        status: success
+        text:
+          es: "Valor de masa volumétrica consistente."
+          en: "Consistent volumetric mass value."
+    model_validity_rules:
+      - id: rho1-mod
+        when: rho1 > 0
+        status: success
+        text:
+          es: "Modelo de medio continuo incompresible."
+          en: "Incompressible continuum model."
+    graph_rules:
+      - id: rho1-viz
+        when: rho1 > 0
+        status: success
+        text:
+          es: "Representación del fluido 1."
+          en: "Representation of fluid 1."
+    likely_errors:
+      - id: err-rho1-zero
+        when: rho1 <= 0
+        status: error
+        text:
+          es: "Error: La materia debe tener densidad positiva."
+          en: "Error: Matter must have positive density."
+      - id: err-rho1-low
+        when: rho1 < 500 and rho1 > 0
+        status: warning
+        text:
+          es: "Riesgo: Demasiado ligero para ser un líquido común."
+          en: "Risk: Too light to be a common liquid."
+      - id: err-rho1-diff
+        when: rho1 != rho2 and h1 == h2
+        status: error
+        text:
+          es: "Error: Densidades distintas requieren alturas distintas para equilibrio."
+          en: "Error: Different densities require different heights for equilibrium."
+      - id: err-rho1-mass
+        when: rho1 > 0
+        status: warning
+        text:
+          es: "Fallo: Confundir densidad con masa total de la columna."
+          en: "Failure: Confusing density with total column mass."
+    next_step_rules:
+      - id: next-rho1
+        when: rho1 > 0
+        status: info
+        text:
+          es: "Usa agua pura ([[rho]] = 1000)."
+          en: "Use pure water ([[rho]] = 1000)."
+
+  p_atm:
+    summary_rules:
+      - id: patm-val
+        when: p_atm > 0
+        status: success
+        text:
+          es: "Presión [[p_atm]] = {{p_atm}} Pa."
+          en: "Pressure [[p_atm]] = {{p_atm}} Pa."
+    physical_reading_rules:
+      - id: patm-read
+        when: p_atm > 0
+        status: success
+        text:
+          es: "Presión ambiental sobre el sistema."
+          en: "Ambient pressure on the system."
+    coherence_rules:
+      - id: patm-coh
+        when: p_atm > 0
+        status: success
+        text:
+          es: "Equilibrio con la atmósfera externa."
+          en: "Equilibrium with the external atmosphere."
+    model_validity_rules:
+      - id: patm-mod
+        when: p_atm > 0
+        status: success
+        text:
+          es: "Superficie libre abierta asumida."
+          en: "Open free surface assumed."
+    graph_rules:
+      - id: patm-viz
+        when: p_atm > 0
+        status: success
+        text:
+          es: "Flechas de carga atmosférica."
+          en: "Atmospheric load arrows."
+    likely_errors:
+      - id: err-patm-zero
+        when: p_atm < 0
+        status: error
+        text:
+          es: "Error: Presión negativa físicamente imposible."
+          en: "Error: Physically impossible negative pressure."
+      - id: err-patm-vac
+        when: p_atm == 0
+        status: warning
+        text:
+          es: "Riesgo: Condiciones de vacío absoluto (poco comunes)."
+          en: "Risk: Absolute vacuum conditions (uncommon)."
+      - id: err-patm-high
+        when: p_atm > 200000
+        status: warning
+        text:
+          es: "Riesgo: Presión muy alta (más de 2 atmósferas)."
+          en: "Risk: Very high pressure (over 2 atmospheres)."
+      - id: err-patm-diff
+        when: p_atm > 0
+        status: warning
+        text:
+          es: "Fallo: No considerar que [[p_atm]] se cancela solo si es igual en ambas ramas."
+          en: "Failure: Not considering that [[p_atm]] cancels out only if it is equal in both branches."
+    next_step_rules:
+      - id: next-patm
+        when: p_atm > 0
+        status: info
+        text:
+          es: "Observa qué ocurre si cierras una rama."
+          en: "Observe what happens if you close one branch."
+
+guidance:
+  es: Interactúa con las alturas y densidades para observar cómo la naturaleza equilibra las presiones de fondo.
+  en: Interact with heights and densities to observe how nature balances bottom pressures.
+physical_summary:
+  es: El equilibrio en vasos comunicantes es un balance de masas donde la densidad dicta la altura necesaria para igualar presiones.
+  en: Equilibrium in communicating vessels is a mass balance where density dictates the height needed to equalize pressures.
+didactic_analysis:
+  es: Este simulador demuestra que la presión es una propiedad intensiva independiente del volumen total del recipiente.
+  en: This simulator demonstrates that pressure is an intensive property independent of the container's total volume.
+`;export{e as default};

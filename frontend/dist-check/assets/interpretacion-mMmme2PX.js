@@ -1,0 +1,356 @@
+const e=`version: 2
+id: interpretacion-mapa-conceptual-de-rotacion
+leaf_id: mapa-conceptual-de-rotacion
+nombre:
+  es: Interpretación del Mapa Conceptual de Rotación
+  en: Interpretation of the Rotational Concept Map
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: rotacion
+  parent_id: fundamentos
+  ruta_relativa: fisica-clasica/mecanica/rotacion/fundamentos/mapa-conceptual-de-rotacion
+dependencies:
+  formulas:
+  - segunda-ley-rotacion
+  - relacion-lineal-angular-v
+  - posicion-angular-definicion
+  magnitudes:
+  - posicion-angular
+  - velocidad-angular
+  - aceleracion-angular
+  - torque
+  - momento-de-inercia
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen del mapa
+      en: Map summary
+  physical_reading:
+    title:
+      es: Lectura física global
+      en: Global physical reading
+  coherence:
+    title:
+      es: Coherencia de rotación
+      en: Rotational coherence
+  model_validity:
+    title:
+      es: Validez del sólido rígido
+      en: Rigid body validity
+  graph_reading:
+    title:
+      es: Lectura del gráfico
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores de concepto
+      en: Conceptual errors
+  next_step:
+    title:
+      es: Continuación del estudio
+      en: Continuing study
+targets:
+  posicion-angular:
+    summary_rules:
+    - id: pos_angular_summary
+      when: 'true'
+      status: info
+      text:
+        es: Define la orientación espacial del cuerpo respecto a una referencia fija.
+        en: Defines the body's spatial orientation relative to a fixed reference.
+    physical_reading_rules:
+    - id: pos_angular_physical
+      when: 'true'
+      status: info
+      text:
+        es: Es la base de la cinemática; sin un origen angular claro, no se pueden definir velocidades ni aceleraciones.
+        en: It is the basis of kinematics; without a clear angular origin, velocities and accelerations cannot be defined.
+    coherence_rules:
+    - id: pos_angular_coh
+      when: 'true'
+      status: ok
+      text:
+        es: La posición angular es coherente con el arco recorrido en el borde del sólido.
+        en: Angular position is coherent with the arc traveled at the solid's edge.
+    model_validity_rules:
+    - id: pos_angular_val
+      when: 'true'
+      status: ok
+      text:
+        es: Válido si el sistema de referencia para medir ángulos es inercial.
+        en: Valid if the reference system for measuring angles is inertial.
+    graph_rules:
+    - id: pos_angular_graph
+      when: 'true'
+      status: info
+      text:
+        es: El gráfico muestra cómo se conectan los ángulos con la geometría real.
+        en: The graph shows how angles connect with real geometry.
+    likely_errors:
+    - id: pos_angular_err
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir posición angular con distancia recorrida en el borde.
+        en: Confusing angular position with distance traveled on the edge.
+    next_step_rules:
+    - id: pos_angular_next
+      when: 'true'
+      status: info
+      text:
+        es: Revisa cómo la posición angular cambia en el tiempo para entender la velocidad angular.
+        en: Review how angular position changes over time to understand angular velocity.
+  velocidad-angular:
+    summary_rules:
+    - id: vel_angular_summary
+      when: 'true'
+      status: info
+      text:
+        es: Cuantifica la rapidez con la que el sistema barre ángulos por unidad de tiempo.
+        en: Quantifies the rate at which the system sweeps through angles per unit of time.
+    physical_reading_rules:
+    - id: vel_angular_physical
+      when: 'true'
+      status: info
+      text:
+        es: En un sólido rígido, todos los puntos comparten esta misma velocidad angular, independientemente de su radio.
+        en: In a rigid body, all points share this same angular velocity, regardless of their radius.
+    coherence_rules:
+    - id: vel_angular_coh
+      when: 'true'
+      status: ok
+      text:
+        es: La velocidad angular debe ser la misma para todos los puntos del cuerpo rígido.
+        en: Angular velocity must be the same for all points of the rigid body.
+    model_validity_rules:
+    - id: vel_angular_val
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo de velocidad angular única falla en sistemas deformables.
+        en: The unique angular velocity model fails in deformable systems.
+    graph_rules:
+    - id: vel_angular_graph
+      when: 'true'
+      status: info
+      text:
+        es: La rotación visual del disco representa la magnitud de la velocidad angular.
+        en: The visual rotation of the disk represents the magnitude of the angular velocity.
+    likely_errors:
+    - id: vel_angular_err
+      when: 'true'
+      status: warning
+      text:
+        es: No distinguir entre rapidez angular y velocidad tangencial.
+        en: Not distinguishing between angular speed and tangential velocity.
+    next_step_rules:
+    - id: vel_angular_next
+      when: 'true'
+      status: info
+      text:
+        es: Observa cómo un cambio en esta magnitud implica la presencia de un torque neto.
+        en: Observe how a change in this quantity implies the presence of a net torque.
+  aceleracion-angular:
+    summary_rules:
+    - id: acel_angular_summary
+      when: 'true'
+      status: info
+      text:
+        es: Indica el cambio temporal en la velocidad angular del sistema.
+        en: Indicates the temporal change in the system's angular velocity.
+    physical_reading_rules:
+    - id: acel_angular_physical
+      when: 'true'
+      status: info
+      text:
+        es: Es la respuesta dinámica al torque neto aplicado, mediada por el momento de inercia.
+        en: It is the dynamic response to the applied net torque, mediated by the moment of inertia.
+    coherence_rules:
+    - id: acel_angular_coh
+      when: 'true'
+      status: ok
+      text:
+        es: Coherente con el torque neto dividido por la inercia total.
+        en: Coherent with net torque divided by total inertia.
+    model_validity_rules:
+    - id: acel_angular_val
+      when: 'true'
+      status: ok
+      text:
+        es: Solo válida bajo el modelo de Newton; a nivel cuántico la aceleración no es continua.
+        en: Only valid under Newton's model; at the quantum level, acceleration is not continuous.
+    graph_rules:
+    - id: acel_angular_graph
+      when: 'true'
+      status: info
+      text:
+        es: La rapidez con la que aumenta el giro en el gráfico indica la aceleración angular.
+        en: The rate at which the rotation speed increases in the graph indicates angular acceleration.
+    likely_errors:
+    - id: acel_angular_err
+      when: 'true'
+      status: warning
+      text:
+        es: Creer que la aceleración angular es igual a la centrípeta.
+        en: Believing angular acceleration is the same as centripetal acceleration.
+    next_step_rules:
+    - id: acel_angular_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa la segunda ley de Newton rotacional para calcular esta magnitud.
+        en: Use Newton's second rotational law to calculate this quantity.
+  torque:
+    summary_rules:
+    - id: torque_summary
+      when: 'true'
+      status: info
+      text:
+        es: Representa la capacidad de las fuerzas para producir un giro.
+        en: Represents the ability of forces to produce a spin.
+    physical_reading_rules:
+    - id: torque_physical
+      when: 'true'
+      status: info
+      text:
+        es: No solo depende de la fuerza, sino de su punto de aplicación y dirección (brazo de palanca).
+        en: It depends not only on force, but on its point of application and direction (lever arm).
+    coherence_rules:
+    - id: torque_coh
+      when: 'true'
+      status: ok
+      text:
+        es: La suma de torques debe ser nula si el sistema está en equilibrio rotacional.
+        en: The sum of torques must be zero if the system is in rotational equilibrium.
+    model_validity_rules:
+    - id: torque_val
+      when: 'true'
+      status: ok
+      text:
+        es: El cálculo de torque asume que el brazo de palanca es rígido.
+        en: Torque calculation assumes the lever arm is rigid.
+    graph_rules:
+    - id: torque_graph
+      when: 'true'
+      status: info
+      text:
+        es: La flecha amarilla en el gráfico representa el torque aplicado.
+        en: The yellow arrow in the graph represents the applied torque.
+    likely_errors:
+    - id: torque_err
+      when: 'true'
+      status: warning
+      text:
+        es: Olvidar que una fuerza paralela al brazo de palanca no produce torque.
+        en: Forgetting that a force parallel to the lever arm produces no torque.
+    next_step_rules:
+    - id: torque_next
+      when: 'true'
+      status: info
+      text:
+        es: Suma todos los torques externos para hallar la aceleración del sistema.
+        en: Sum all external torques to find the system's acceleration.
+  momento-de-inercia:
+    summary_rules:
+    - id: inercia_summary
+      when: 'true'
+      status: info
+      text:
+        es: Mide la resistencia del cuerpo a los cambios en su estado de rotación.
+        en: Measures the body's resistance to changes in its rotational state.
+    physical_reading_rules:
+    - id: inercia_physical
+      when: 'true'
+      status: info
+      text:
+        es: Depende de la masa y, sobre todo, de cómo está distribuida respecto al eje de giro.
+        en: Depends on mass and, above all, on how it is distributed relative to the rotation axis.
+    coherence_rules:
+    - id: inercia_coh
+      when: 'true'
+      status: ok
+      text:
+        es: El momento de inercia debe ser siempre positivo para masas reales.
+        en: The moment of inertia must always be positive for real masses.
+    model_validity_rules:
+    - id: inercia_val
+      when: 'true'
+      status: ok
+      text:
+        es: Esta lectura falla si el eje de giro cambia su orientación dinámicamente.
+        en: This reading fails if the rotation axis changes its orientation dynamically.
+    graph_rules:
+    - id: inercia_graph
+      when: 'true'
+      status: info
+      text:
+        es: La distribución de masa en la rueda ilustra el concepto de inercia.
+        en: Mass distribution in the wheel illustrates the concept of inertia.
+    likely_errors:
+    - id: inercia_err
+      when: 'true'
+      status: warning
+      text:
+        es: Suponer que la inercia es la misma para cualquier eje de giro.
+        en: Assuming inertia is the same for any rotation axis.
+    next_step_rules:
+    - id: inercia_next
+      when: 'true'
+      status: info
+      text:
+        es: Aplica el teorema de Steiner si el eje de giro no pasa por el centro de masas.
+        en: Apply Steiner's theorem if the rotation axis does not pass through the center of mass.
+rules:
+- id: intro-mapa
+  priority: 1
+  when: 'true'
+  status: info
+  text:
+    es: Este mapa conceptual integra cinemática, dinámica y energía en la rotación.
+    en: This concept map integrates kinematics, dynamics, and energy in rotation.
+- id: continuity-theory
+  priority: 1
+  when: 'true'
+  status: ok
+  text:
+    es: La interpretación confirma la estructura de niveles (esencial, formal, estructural) de la teoría.
+    en: The interpretation confirms the level structure (essential, formal, structural) of the theory.
+- id: continuity-examples
+  priority: 1
+  when: 'true'
+  status: ok
+  text:
+    es: El uso de torque y momento de inercia coincide con el análisis del ejemplo del volante.
+    en: The use of torque and moment of inertia matches the analysis of the flywheel example.
+- id: validity-check
+  priority: 2
+  when: 'true'
+  status: warning
+  text:
+    es: El modelo de sólido rígido es válido si las deformaciones son despreciables.
+    en: The rigid body model is valid if deformations are negligible.
+- id: graph-reading-pfc
+  priority: 1
+  when: 'true'
+  status: info
+  text:
+    es: El gráfico de la rueda ilustra la conexión entre torque aplicado y aceleración angular.
+    en: The wheel graph illustrates the connection between applied torque and angular acceleration.
+- id: next-step-link
+  priority: 3
+  when: 'true'
+  status: info
+  text:
+    es: El siguiente paso natural es profundizar en las Magnitudes Angulares.
+    en: The natural next step is to delve deeper into Angular Quantities.
+`;export{e as default};

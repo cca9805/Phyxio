@@ -1,0 +1,169 @@
+version: 1
+formulas:
+- id: segunda_ley_rotacion
+  title:
+    es: Ecuación Fundamental de la Dinámica de Rotación
+    en: Fundamental Equation of Rotational Dynamics
+  equation: tau_net = I * alpha
+  latex: \tau_{net} = I \cdot \alpha
+  rearrangements:
+  - target: alpha
+    equation: alpha = tau_net / I
+    latex: \alpha = \frac{\tau_{net}}{I}
+    constraints: []
+  - target: I
+    equation: I = tau_net / alpha
+    latex: I = \frac{\tau_{net}}{\alpha}
+    constraints: []
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: El torque neto sobre un cuerpo rígido es proporcional a su aceleración angular;
+      la constante de proporcionalidad es el momento de inercia.
+    en: The net torque on a rigid body is proportional to its angular acceleration;
+      the proportionality constant is the moment of inertia.
+  constraints: Eje de giro fijo o que pasa por el CM; cuerpo rígido indeformable.
+  validity:
+    es: Válido para sólidos rígidos en rotación alrededor de un eje fijo en régimen
+      clásico no relativista.
+    en: Valid for rigid bodies rotating about a fixed axis in the classical non-relativistic
+      regime.
+  dimension_check: '[ML^2T^-2] = [ML^2] × [T^-2]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - resolución de sistemas vinculados traslación-rotación
+  interpretation_tags:
+  - respuesta_angular
+  - inercia_rotacional
+  - causa_del_giro
+  result_semantics:
+    target: alpha
+    meaning: Resulta util para interpretar alpha en el contexto del leaf.
+  domain_checks:
+  - 'alpha > 0: aceleración angular en sentido positivo convenido'
+  - 'alpha === 0: par neto cero o sistema en equilibrio rotacional'
+  - 'alpha < 0 con tau_net > 0: indicio de error de signos o convenio inconsistente'
+  coherence_checks:
+  - 'alpha > 100 para sistemas cotidianos: verificar unidades de tau_net e I'
+  - 'I <= 0 es imposible físicamente: error de modelo o de datos'
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - 'Si el alumno iguala tau_net = alpha omitiendo I, la dimensión delata el error:
+    N·m ≠ rad/s²'
+  - 'Si I es muy pequeño, alpha resultante muy grande: verificar si corresponde a
+    la geometría del cuerpo rotante'
+- id: vinculo_traslacion_rotacion
+  title:
+    es: Vínculo Cinemático Traslación-Rotación
+    en: Translation-Rotation Kinematic Constraint
+  equation: a = alpha * R
+  latex: a = \alpha \cdot R
+  rearrangements:
+  - target: alpha
+    equation: alpha = a / R
+    latex: \alpha = \frac{a}{R}
+    constraints: []
+  - target: R
+    equation: R = a / alpha
+    latex: R = \frac{a}{\alpha}
+    constraints: []
+  category: structural
+  relation_type: geometric_interpretation
+  physical_meaning:
+    es: La aceleración lineal tangencial del punto de vínculo (cuerda o contacto)
+      es el producto de la aceleración angular por el radio efectivo, bajo hipótesis
+      de no deslizamiento.
+    en: The linear tangential acceleration of the constraint point (rope or contact)
+      is the product of the angular acceleration and the effective radius, under the
+      no-slip hypothesis.
+  constraints: Hilo inextensible y rodadura sin deslizamiento. R > 0.
+  validity:
+    es: Válido únicamente cuando la cuerda no patina sobre la polea o cuando el cuerpo
+      rueda sin deslizar sobre la superficie.
+    en: Valid only when the rope does not slip on the pulley or when the body rolls
+      without slipping on the surface.
+  dimension_check: '[LT^-2] = [T^-2] × [L]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - acoplamiento de ecuaciones de Newton traslación y rotación
+  interpretation_tags:
+  - vinculo_cinematico
+  - acoplamiento_traslacion_rotacion
+  - no_deslizamiento
+  result_semantics:
+    target: alpha
+    meaning: Resulta util para interpretar alpha en el contexto del leaf.
+  domain_checks:
+  - 'a === alpha * R: la identidad define el vínculo; cualquier desviación viola la
+    hipótesis de no-deslizamiento'
+  - R > 0 siempre; R = 0 hace el vínculo físicamente indefinido
+  coherence_checks:
+  - 'a > 20 en sistemas pasivos con gravedad como única fuerza motriz es sospechoso:
+    verificar unidades'
+  - Si a calculada no coincide con alpha * R, el vínculo está mal aplicado o hay deslizamiento
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - 'Error más frecuente: usar el diámetro en lugar del radio; el resultado dobla
+    la aceleración'
+  - 'Si el alumno iguala a = alpha sin multiplicar por R, la dimensión ya delata el
+    error: m/s² ≠ rad/s²'
+- id: energia_cinetica_total
+  title:
+    es: Energía Cinética Total de un Sólido Rígido
+    en: Total Kinetic Energy of a Rigid Body
+  equation: K = 0.5 * m * v^2 + 0.5 * I * omega^2
+  latex: K = \frac{1}{2}m v^2 + \frac{1}{2}I \omega^2
+  rearrangements:
+  - target: v
+    equation: v = sqrt((2 * K - I * omega^2) / m)
+    latex: v = \sqrt{\frac{2K - I\omega^2}{m}}
+    constraints: []
+  - target: omega
+    equation: omega = sqrt((2 * K - m * v^2) / I)
+    latex: \omega = \sqrt{\frac{2K - mv^2}{I}}
+    constraints: []
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: La energía cinética de un cuerpo que traslada y rota simultáneamente es la
+      suma de la energía de traslación del centro de masas y la energía de rotación
+      respecto al centro de masas.
+    en: The kinetic energy of a body simultaneously translating and rotating is the
+      sum of the translational kinetic energy of the center of mass and the rotational
+      kinetic energy about the center of mass.
+  constraints: Cuerpo rígido; v es la velocidad del CM; omega es la velocidad angular
+    respecto al CM; I calculado respecto al CM.
+  validity:
+    es: Válido para cualquier movimiento plano de sólido rígido en régimen clásico.
+      Generalización del teorema de König.
+    en: Valid for any planar rigid body motion in the classical regime. Generalization
+      of König's theorem.
+  dimension_check: '[ML^2T^-2] = [M][LT^-1]^2 + [ML^2][T^-1]^2'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - balances energéticos mecánicos y verificación de consistencia de aceleraciones
+  interpretation_tags:
+  - particion_energetica
+  - fraccion_rotacional
+  - inercia_efectiva
+  result_semantics:
+    target: v
+    meaning: Resulta util para interpretar v en el contexto del leaf.
+  domain_checks:
+  - K >= 0 siempre
+  - 0.5 * I * omega^2 <= K siempre (componente rotacional no puede superar la total)
+  coherence_checks:
+  - 'K negativa es imposible: error de signo o sustitución incorrecta'
+  - Si 0.5*I*omega^2 > K resulta, hay error en la fórmula o en los datos de v y omega
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - 'Error clásico: usar K = ½mv² olvidando el término rotacional; subestima la energía
+    total'
+  - 'Si K calculada supera la energía potencial inicial perdida, hay violación de
+    la conservación energética: revisar pérdidas ignoradas'

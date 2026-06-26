@@ -1,0 +1,207 @@
+const e=`version: 1
+formulas:
+- id: p
+  title: { es: Conservación del momento lineal, en: Linear momentum conservation }
+  equation: 'm1*v1i + m2*v2i = m1*v1f + m2*v2f'
+  latex: 'm_1 v_{1i} + m_2 v_{2i} = m_1 v_{1f} + m_2 v_{2f}'
+  result_semantics: { target: 'v1f' }
+  rearrangements:
+    - { target: 'v1f', equation: 'v1f = (m1*v1i + m2*v2i - m2*v2f)/m1', latex: 'v_{1f} = \\frac{m_1 v_{1i} + m_2 v_{2i} - m_2 v_{2f}}{m_1}', constraints: ['m1 > 0'] }
+    - { target: 'v2f', equation: 'v2f = (m1*v1i + m2*v2i - m1*v1f)/m2', latex: 'v_{2f} = \\frac{m_1 v_{1i} + m_2 v_{2i} - m_1 v_{1f}}{m_2}', constraints: ['m2 > 0'] }
+  category: fundamental
+  relation_type: physical_law
+  physical_meaning: { es: Balance de cantidad de movimiento en un sistema aislado., en: Momentum balance in an isolated system. }
+  constraints: 'Válida si no hay fuerzas externas netas impulsivas.'
+  validity: { es: Aplicable a todo tipo de choques en 1D., en: Applicable to all 1D collisions. }
+  dimension_check: { es: kg*m/s, en: kg*m/s }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: ['theory', 'examples', 'calculator']
+  interpretation_tags: ['momentum', 'conservation']
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: K
+  title: { es: Conservación de energía cinética, en: Kinetic energy conservation }
+  equation: '0.5*m1*v1i*v1i + 0.5*m2*v2i*v2i = 0.5*m1*v1f*v1f + 0.5*m2*v2f*v2f'
+  latex: '\\frac{1}{2}m_1 v_{1i}^2 + \\frac{1}{2}m_2 v_{2i}^2 = \\frac{1}{2}m_1 v_{1f}^2 + \\frac{1}{2}m_2 v_{2f}^2'
+  result_semantics: { target: 'Kf' }
+  rearrangements: []
+  category: fundamental
+  relation_type: physical_law
+  physical_meaning: { es: Balance de energía cinética en un choque perfectamente elástico., en: Kinetic energy balance in a perfectly elastic collision. }
+  constraints: 'Solo válida si el coeficiente de restitución es e=1.'
+  validity: { es: Define la condición de elasticidad absoluta., en: Defines the absolute elasticity condition. }
+  dimension_check: { es: J, en: J }
+  calculable: false
+  motivo_no_calculable: { es: Requiere combinarse con la ley de momento lineal., en: Requires combining with momentum law. }
+  used_in: ['theory', 'models']
+  interpretation_tags: ['energy', 'elasticity']
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: v1f
+  title: { es: Velocidad final del proyectil (m1), en: Final velocity of projectile (m1) }
+  equation: 'v1f = ((m1 - m2)/(m1 + m2))*v1i + (2*m2/(m1 + m2))*v2i'
+  latex: 'v_{1f} = \\left(\\frac{m_1 - m_2}{m_1 + m_2}\\right) v_{1i} + \\left(\\frac{2 m_2}{m_1 + m_2}\\right) v_{2i}'
+  result_semantics: { target: 'v1f' }
+  rearrangements: []
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning: { es: Solución analítica para el estado final del primer cuerpo en un choque elástico 1D., en: Analytical solution for the final state of the first body in a 1D elastic collision. }
+  constraints: 'm1 + m2 > 0'
+  validity: { es: Derivada de la combinación de momento y energía., en: Derived from momentum and energy combination. }
+  dimension_check: { es: m/s, en: m/s }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: ['theory', 'examples', 'calculator']
+  interpretation_tags: ['solution', 'outcome']
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: v2f
+  title: { es: Velocidad final del blanco (m2), en: Final velocity of target (m2) }
+  equation: 'v2f = (2*m1/(m1 + m2))*v1i + ((m2 - m1)/(m1 + m2))*v2i'
+  latex: 'v_{2f} = \\left(\\frac{2 m_1}{m_1 + m_2}\\right) v_{1i} + \\left(\\frac{m_2 - m_1}{m_1 + m_2}\\right) v_{2i}'
+  result_semantics: { target: 'v2f' }
+  rearrangements: []
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning: { es: Solución analítica para el estado final del segundo cuerpo en un choque elástico 1D., en: Analytical solution for the final state of the second body in a 1D elastic collision. }
+  constraints: 'm1 + m2 > 0'
+  validity: { es: Derivada de la combinación de momento y energía., en: Derived from momentum and energy combination. }
+  dimension_check: { es: m/s, en: m/s }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: ['theory', 'examples', 'calculator']
+  interpretation_tags: ['solution', 'outcome']
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: rel
+  title: { es: Relación de velocidades relativas (Inversión), en: Relative velocity relation (Inversion) }
+  equation: 'v1i - v2i = -(v1f - v2f)'
+  latex: 'v_{1i} - v_{2i} = -(v_{1f} - v_{2f})'
+  result_semantics: { target: 'v1f' }
+  rearrangements:
+    - { target: 'v1f', equation: 'v1f = v2f - v1i + v2i', latex: 'v_{1f} = v_{2f} - v_{1i} + v_{2i}', constraints: [] }
+    - { target: 'v2f', equation: 'v2f = v1f + v1i - v2i', latex: 'v_{2f} = v_{1f} + v_{1i} - v_{2i}', constraints: [] }
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning: { es: La velocidad relativa de alejamiento es igual en magnitud y opuesta en dirección a la de acercamiento., en: The relative separation velocity is equal in magnitude and opposite in direction to the approach velocity. }
+  constraints: 'Solo válida para e=1.'
+  validity: { es: Es una consecuencia elegante de la conservación de energía y momento., en: Elegant consequence of energy and momentum conservation. }
+  dimension_check: { es: m/s, en: m/s }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: ['theory', 'examples', 'calculator']
+  interpretation_tags: ['relative_velocity', 'elastic_limit']
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: e_definition
+  title: { es: Condición de choque elástico, en: Elastic collision condition }
+  equation: 'e = 1'
+  latex: 'e = 1'
+  result_semantics: { target: 'e' }
+  rearrangements: []
+  category: fundamental
+  relation_type: definition
+  physical_meaning: { es: El coeficiente de restitución es la unidad para choques elásticos., en: The restitution coefficient is unity for elastic collisions. }
+  constraints: null
+  validity: { es: Característica definitoria del modelo elástico., en: Defining characteristic of the elastic model. }
+  dimension_check: { es: adimensional, en: dimensionless }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: ['theory', 'examples']
+  interpretation_tags: ['restitution', 'ideal']
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: energy_transfer
+  title: { es: Fracción de transferencia de energía cinética, en: Kinetic energy transfer fraction }
+  equation: 'T_fraction = (4*m1*m2)/((m1 + m2)*(m1 + m2))'
+  latex: 'T = \\frac{4 m_1 m_2}{(m_1 + m_2)^2}'
+  result_semantics: { target: 'T_fraction' }
+  rearrangements: []
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning: { es: Proporción de la energía cinética inicial del proyectil que se transfiere al blanco inicialmente en reposo., en: Proportion of the projectile''s initial kinetic energy transferred to a target initially at rest. }
+  constraints: 'v2i = 0'
+  validity: { es: Útil para estudiar la eficiencia de la colisión., en: Useful for studying collision efficiency. }
+  dimension_check: { es: adimensional, en: dimensionless }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: ['theory']
+  interpretation_tags: ['efficiency', 'exchange']
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: ki_system
+  title: { es: Energía cinética inicial del sistema, en: Initial system kinetic energy }
+  equation: 'Ki = 0.5*m1*v1i*v1i + 0.5*m2*v2i*v2i'
+  latex: 'K_i = \\frac{1}{2}m_1 v_{1i}^2 + \\frac{1}{2}m_2 v_{2i}^2'
+  result_semantics: { target: 'Ki' }
+  rearrangements: []
+  category: derived
+  relation_type: definition
+  physical_meaning: { es: Suma de energías cinéticas traslacionales antes del impacto., en: Sum of translational kinetic energies before impact. }
+  constraints: null
+  validity: { es: Estado energético inicial., en: Initial energy state. }
+  dimension_check: { es: J, en: J }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: ['theory', 'examples', 'calculator']
+  interpretation_tags: ['energy', 'initial_state']
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: kf_system
+  title: { es: Energía cinética final del sistema, en: Final system kinetic energy }
+  equation: 'Kf = 0.5*m1*v1f*v1f + 0.5*m2*v2f*v2f'
+  latex: 'K_f = \\frac{1}{2}m_1 v_{1f}^2 + \\frac{1}{2}m_2 v_{2f}^2'
+  result_semantics: { target: 'Kf' }
+  rearrangements: []
+  category: derived
+  relation_type: definition
+  physical_meaning: { es: Suma de energías cinéticas traslacionales tras el impacto., en: Sum of translational kinetic energies after impact. }
+  constraints: null
+  validity: { es: Estado energético final., en: Final energy state. }
+  dimension_check: { es: J, en: J }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: ['theory', 'examples', 'calculator']
+  interpretation_tags: ['energy', 'final_state']
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: delta_k
+  title: { es: Variación de energía cinética, en: Kinetic energy variation }
+  equation: 'DeltaK = Kf - Ki'
+  latex: '\\Delta K = K_f - K_i'
+  result_semantics: { target: 'DeltaK' }
+  rearrangements: []
+  category: derived
+  relation_type: definition
+  physical_meaning: { es: Balance neto de energía disipada o conservada durante el choque., en: Net balance of dissipated or conserved energy during the collision. }
+  constraints: null
+  validity: { es: Para choques elásticos, DeltaK debe ser siempre cero., en: For elastic collisions, DeltaK must always be zero. }
+  dimension_check: { es: J, en: J }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: ['theory', 'examples', 'calculator']
+  interpretation_tags: ['energy', 'balance']
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+`;export{e as default};

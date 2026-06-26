@@ -1,0 +1,119 @@
+const e=`id: interpretacion_velocidad_de_propagacion_cuerdas
+leaf_id: velocidad-de-propagacion
+version: v5
+scope: leaf
+nombre:
+  es: Interpretacion de la velocidad de propagacion en cuerdas
+  en: Interpretation of propagation speed on strings
+dependencies:
+  magnitudes: [T, mu, v, L, lambda, f]
+  formulas: [velocidad_cuerda_tensa, frecuencia_desde_velocidad, longitud_onda_desde_velocidad, frecuencia_fundamental_cuerda]
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+result_blocks:
+  summary:
+    title: { es: Resumen fisico, en: Physical summary }
+  physical_reading:
+    title: { es: Lectura causal, en: Causal reading }
+  coherence:
+    title: { es: Coherencia, en: Coherence }
+  model_validity:
+    title: { es: Validez del modelo, en: Model validity }
+  graph_reading:
+    title: { es: Lectura grafica, en: Graph reading }
+  likely_errors:
+    title: { es: Errores probables, en: Likely errors }
+  next_step:
+    title: { es: Siguiente paso, en: Next step }
+targets:
+  T:
+    summary_rules:
+      - { id: T_sum, when: "true", status: ok, text: { es: "[[T]] indica la restauracion mecanica disponible y resume cuanto tira la cuerda de sus tramos vecinos.", en: "[[T]] indicates the available mechanical restoration and summarizes how strongly the string pulls neighboring segments." } }
+    physical_reading_rules:
+      - { id: T_cause, when: "true", status: ok, text: { es: "Al aumentar [[T]], la perturbacion se comunica con mas eficacia y [[v]] aumenta de forma sublineal.", en: "When [[T]] increases, the disturbance is communicated more effectively and [[v]] increases sublinearly." } }
+    coherence_rules:
+      - { id: T_coh, when: "T <= 0", status: error, text: { es: "[[T]] debe ser positiva; sin traccion no hay modelo de cuerda tensa.", en: "[[T]] must be positive; without tensile force there is no taut-string model." } }
+    model_validity_rules:
+      - { id: T_val, when: "true", status: ok, text: { es: "La lectura es valida si [[T]] se mantiene aproximadamente uniforme durante la oscilacion.", en: "The reading is valid if [[T]] remains approximately uniform during oscillation." } }
+    graph_rules:
+      - { id: T_graph, when: "true", status: ok, text: { es: "En el Coord, subir [[T]] debe elevar la curva de [[v]] sin convertirla en una recta directa.", en: "In the Coord graph, raising [[T]] should lift the [[v]] curve without making it directly linear." } }
+    likely_errors:
+      - { id: T_err, when: "true", status: warning, text: { es: "Error tipico: pensar que duplicar [[T]] duplica [[v]].", en: "Typical error: thinking that doubling [[T]] doubles [[v]]." } }
+    next_step_rules:
+      - { id: T_next, when: "true", status: ok, text: { es: "Siguiente paso: comparar el mismo cambio de [[T]] para cuerdas con distinta [[mu]].", en: "Next step: compare the same [[T]] change for strings with different [[mu]]." } }
+  mu:
+    summary_rules:
+      - { id: mu_sum, when: "true", status: ok, text: { es: "[[mu]] resume la inercia distribuida de la cuerda y domina cuanto cuesta acelerar cada metro.", en: "[[mu]] summarizes the distributed inertia of the string and controls how hard each meter is to accelerate." } }
+    physical_reading_rules:
+      - { id: mu_cause, when: "true", status: ok, text: { es: "Al aumentar [[mu]], la misma tension debe mover mas masa por metro y [[v]] disminuye.", en: "When [[mu]] increases, the same tension must move more mass per meter and [[v]] decreases." } }
+    coherence_rules:
+      - { id: mu_coh, when: "mu <= 0", status: error, text: { es: "[[mu]] debe ser positiva y estar en kg/m para que la lectura dimensional sea coherente.", en: "[[mu]] must be positive and in kg/m for dimensional reading to be coherent." } }
+    model_validity_rules:
+      - { id: mu_val, when: "true", status: ok, text: { es: "El modelo supone [[mu]] uniforme; si cambia por tramos, una sola rapidez deja de valer.", en: "The model assumes uniform [[mu]]; if it changes by segments, a single speed breaks down." } }
+    graph_rules:
+      - { id: mu_graph, when: "true", status: ok, text: { es: "En el grafico, mayor [[mu]] desplaza la rapidez hacia valores menores.", en: "In the graph, larger [[mu]] shifts speed toward lower values." } }
+    likely_errors:
+      - { id: mu_err, when: "true", status: warning, text: { es: "Error tipico: introducir gramos por metro sin convertir a kg/m.", en: "Typical error: entering grams per meter without converting to kg/m." } }
+    next_step_rules:
+      - { id: mu_next, when: "true", status: ok, text: { es: "Siguiente paso: estimar como cambia [[lambda]] si [[f]] permanece fija.", en: "Next step: estimate how [[lambda]] changes if [[f]] remains fixed." } }
+  v:
+    summary_rules:
+      - { id: v_sum, when: "true", status: ok, text: { es: "[[v]] indica la rapidez del medio y significa cuanto avanza la perturbacion cada segundo.", en: "[[v]] indicates the medium speed and means how far the disturbance advances each second." } }
+    physical_reading_rules:
+      - { id: v_cause, when: "true", status: ok, text: { es: "[[v]] aumenta por mas restauracion o menor inercia, no simplemente por agitar mas rapido la fuente.", en: "[[v]] increases through more restoration or less inertia, not simply by shaking the source faster." } }
+    coherence_rules:
+      - { id: v_coh, when: "v <= 0", status: error, text: { es: "[[v]] debe ser positiva; un valor nulo o negativo contradice la propagacion ideal.", en: "[[v]] must be positive; a zero or negative value contradicts ideal propagation." } }
+    model_validity_rules:
+      - { id: v_val, when: "true", status: ok, text: { es: "La interpretacion es valida en regimen pequeno, con cuerda flexible y sin dispersion apreciable.", en: "The interpretation is valid in a small-amplitude regime, with a flexible string and no appreciable dispersion." } }
+    graph_rules:
+      - { id: v_graph, when: "true", status: ok, text: { es: "El Coord debe permitir leer [[v]] como salida principal frente a cambios de [[T]] y [[mu]].", en: "The Coord graph should allow [[v]] to be read as the main output under changes in [[T]] and [[mu]]." } }
+    likely_errors:
+      - { id: v_err, when: "true", status: warning, text: { es: "Error tipico: confundir [[v]] con la velocidad vertical de un punto de la cuerda.", en: "Typical error: confusing [[v]] with the vertical velocity of one point of the string." } }
+    next_step_rules:
+      - { id: v_next, when: "true", status: ok, text: { es: "Siguiente paso: usar [[v]] para interpretar [[lambda]] o frecuencias estacionarias.", en: "Next step: use [[v]] to interpret [[lambda]] or standing frequencies." } }
+  L:
+    summary_rules:
+      - { id: L_sum, when: "true", status: ok, text: { es: "[[L]] describe la escala disponible y resume el tramo donde despues pueden caber patrones.", en: "[[L]] describes the available scale and summarizes the segment where patterns may later fit." } }
+    physical_reading_rules:
+      - { id: L_cause, when: "true", status: ok, text: { es: "[[L]] no causa la rapidez local en una cuerda uniforme, pero condiciona tiempos de recorrido y modos.", en: "[[L]] does not cause local speed in a uniform string, but it conditions travel times and modes." } }
+    coherence_rules:
+      - { id: L_coh, when: "L <= 0", status: error, text: { es: "[[L]] debe ser positiva para representar un tramo fisico de cuerda.", en: "[[L]] must be positive to represent a physical string segment." } }
+    model_validity_rules:
+      - { id: L_val, when: "true", status: ok, text: { es: "La lectura de [[L]] es valida si el tramo tiene tension y densidad aproximadamente uniformes.", en: "The [[L]] reading is valid if the segment has approximately uniform tension and density." } }
+    graph_rules:
+      - { id: L_graph, when: "true", status: ok, text: { es: "El Svg usa [[L]] como dominio visual donde se observan pulsos o patrones.", en: "The Svg uses [[L]] as the visual domain where pulses or patterns are observed." } }
+    likely_errors:
+      - { id: L_err, when: "true", status: warning, text: { es: "Error tipico: creer que cambiar [[L]] cambia [[v]] aunque [[T]] y [[mu]] no cambien.", en: "Typical error: believing that changing [[L]] changes [[v]] although [[T]] and [[mu]] do not change." } }
+    next_step_rules:
+      - { id: L_next, when: "true", status: ok, text: { es: "Siguiente paso: conectar [[L]] con ondas estacionarias cuando aparezcan extremos fijos.", en: "Next step: connect [[L]] with standing waves when fixed ends appear." } }
+  lambda:
+    summary_rules:
+      - { id: lambda_sum, when: "true", status: ok, text: { es: "[[lambda]] indica la escala espacial que resulta de combinar rapidez del medio y ritmo de la fuente.", en: "[[lambda]] indicates the spatial scale resulting from combining medium speed and source rhythm." } }
+    physical_reading_rules:
+      - { id: lambda_cause, when: "true", status: ok, text: { es: "Con [[f]] fija, una [[v]] mayor estira [[lambda]] y una [[v]] menor la comprime.", en: "At fixed [[f]], larger [[v]] stretches [[lambda]] and smaller [[v]] compresses it." } }
+    coherence_rules:
+      - { id: lambda_coh, when: "lambda <= 0", status: error, text: { es: "[[lambda]] debe ser positiva para representar una distancia entre repeticiones.", en: "[[lambda]] must be positive to represent a distance between repetitions." } }
+    model_validity_rules:
+      - { id: lambda_val, when: "true", status: ok, text: { es: "La lectura es valida para ondas periodicas sin dispersion apreciable.", en: "The reading is valid for periodic waves without appreciable dispersion." } }
+    graph_rules:
+      - { id: lambda_graph, when: "true", status: ok, text: { es: "El Svg debe mostrar [[lambda]] como separacion espacial ligada a la rapidez calculada.", en: "The Svg should show [[lambda]] as spatial separation linked to computed speed." } }
+    likely_errors:
+      - { id: lambda_err, when: "true", status: warning, text: { es: "Error tipico: tratar [[lambda]] como causa primaria de [[v]].", en: "Typical error: treating [[lambda]] as the primary cause of [[v]]." } }
+    next_step_rules:
+      - { id: lambda_next, when: "true", status: ok, text: { es: "Siguiente paso: comparar [[lambda]] para dos cuerdas con la misma [[f]].", en: "Next step: compare [[lambda]] for two strings with the same [[f]]." } }
+  f:
+    summary_rules:
+      - { id: f_sum, when: "true", status: ok, text: { es: "[[f]] resume el ritmo impuesto por la fuente y no la causa mecanica principal de la rapidez.", en: "[[f]] summarizes the rhythm imposed by the source and not the main mechanical cause of speed." } }
+    physical_reading_rules:
+      - { id: f_cause, when: "true", status: ok, text: { es: "Cambiar [[f]] reorganiza [[lambda]] si la cuerda mantiene la misma [[v]].", en: "Changing [[f]] reorganizes [[lambda]] if the string keeps the same [[v]]." } }
+    coherence_rules:
+      - { id: f_coh, when: "f <= 0", status: error, text: { es: "[[f]] debe ser positiva para representar una onda periodica.", en: "[[f]] must be positive to represent a periodic wave." } }
+    model_validity_rules:
+      - { id: f_val, when: "true", status: ok, text: { es: "La lectura supone una fuente periodica estable y un medio aproximadamente no dispersivo.", en: "The reading assumes a stable periodic source and an approximately nondispersive medium." } }
+    graph_rules:
+      - { id: f_graph, when: "true", status: ok, text: { es: "En el Svg, [[f]] actua como entrada temporal que ajusta la separacion visual de la onda.", en: "In the Svg, [[f]] acts as the temporal input that adjusts visual wave spacing." } }
+    likely_errors:
+      - { id: f_err, when: "true", status: warning, text: { es: "Error tipico: pensar que duplicar [[f]] obliga a duplicar [[v]].", en: "Typical error: thinking that doubling [[f]] forces [[v]] to double." } }
+    next_step_rules:
+      - { id: f_next, when: "true", status: ok, text: { es: "Siguiente paso: fijar [[f]] y observar como cambia [[lambda]] al variar [[T]] o [[mu]].", en: "Next step: fix [[f]] and observe how [[lambda]] changes when [[T]] or [[mu]] varies." } }
+`;export{e as default};

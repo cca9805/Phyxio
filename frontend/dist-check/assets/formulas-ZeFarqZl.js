@@ -1,0 +1,240 @@
+const a=`formulas:
+
+  - id: calor_latente_general
+    title:
+      es: Calor latente de una transicion completa
+      en: Latent heat of a complete transition
+    equation: "Q_lat = m * L"
+    latex: "Q_{lat} = m \\\\cdot L"
+    rearrangements:
+      - target: Q_lat
+        equation: "Q_lat = m * L"
+        latex: "Q_{lat} = m \\\\cdot L"
+      - target: m
+        equation: "m = Q_lat / L"
+        latex: "m = \\\\dfrac{Q_{lat}}{L}"
+      - target: L
+        equation: "L = Q_lat / m"
+        latex: "L = \\\\dfrac{Q_{lat}}{m}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "El calor latente total Q_lat es proporcional a la masa m que completa la transicion de fase y al calor latente especifico L del material."
+      en: "The total latent heat Q_lat is proportional to the mass m completing the phase transition and to the material specific latent heat L."
+    constraints:
+      - "Proceso a presion constante"
+      - "Temperatura constante durante la transicion"
+      - "La masa m indicada completa el cambio de estado"
+      - "L corresponde al tipo concreto de transicion"
+    validity:
+      es: "Valida para una transicion completa de una sustancia a temperatura de transicion T_trans casi constante. Si la energia disponible no alcanza m * L, solo cambia de estado una fraccion de la masa."
+      en: "Valid for a complete transition of a substance at nearly constant transition temperature T_trans. If available energy is less than m * L, only a fraction of the mass changes state."
+    dimension_check: "[M] * [L^2 T^-2] = [M L^2 T^-2] = J"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - calor_latente
+      - temperatura_constante
+      - transicion_fase
+    result_semantics:
+      target: Q_lat
+      kind: scalar_signed
+      sign_meaning:
+        es: "Q_lat > 0 si la sustancia absorbe calor; Q_lat < 0 si lo cede."
+        en: "Q_lat > 0 if the substance absorbs heat; Q_lat < 0 if it releases heat."
+      absolute_value_meaning:
+        es: "El modulo de Q_lat es la energia intercambiada mientras la temperatura permanece en T_trans."
+        en: "The magnitude of Q_lat is the energy exchanged while temperature remains at T_trans."
+    domain_checks:
+      - "m > 0"
+      - "L > 0"
+      - "T_trans se mantiene constante mientras coexisten las dos fases"
+    coherence_checks:
+      - "Duplicar m duplica Q_lat"
+      - "Si la temperatura cambia durante el tramo latente, el modelo esta mal planteado"
+    graph_implications:
+      - "En la grafica Q_lat frente a m, la pendiente es L"
+      - "En la grafica temperatura frente a calor, Q_lat es la anchura de la meseta situada en T_trans"
+    pedagogical_triggers:
+      - "Si se calcula una temperatura durante la transicion antes de comprobar m * L, se esta mezclando calor sensible con calor latente."
+
+  - id: temperatura_transicion_constante
+    title:
+      es: Temperatura constante durante la transicion
+      en: Constant temperature during the transition
+    equation: "T = T_trans"
+    latex: "T = T_{trans}"
+    rearrangements:
+      - target: T_trans
+        equation: "T_trans = T"
+        latex: "T_{trans} = T"
+    category: constraint
+    relation_type: condition
+    physical_meaning:
+      es: "Mientras coexisten dos fases de una sustancia pura a presion fija, la temperatura del sistema permanece igual a T_trans."
+      en: "While two phases of a pure substance coexist at fixed pressure, the system temperature remains equal to T_trans."
+    constraints:
+      - "Debe haber coexistencia de dos fases"
+      - "La presion se mantiene aproximadamente constante"
+      - "La sustancia es pura o la temperatura de transicion efectiva ya esta determinada"
+    validity:
+      es: "Valida durante el tramo de cambio de estado. Deja de aplicarse cuando toda la masa ha completado la transicion o cuando la mezcla no es pura."
+      en: "Valid during the phase-change segment. It stops applying when all the mass has completed the transition or when the mixture is not pure."
+    dimension_check: "[Theta] = [Theta]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - temperatura_constante
+      - transicion_fase
+    result_semantics:
+      target: T_trans
+      kind: scalar
+      sign_meaning:
+        es: "El valor de T_trans fija la posicion vertical de la meseta de cambio de estado."
+        en: "The value of T_trans fixes the vertical position of the phase-change plateau."
+      absolute_value_meaning:
+        es: "T_trans es la temperatura a la que coexisten las fases para la presion dada."
+        en: "T_trans is the temperature at which the phases coexist for the given pressure."
+    domain_checks:
+      - "T_trans definido para el material y la presion"
+      - "No usar una temperatura de transicion de agua pura para una solucion concentrada"
+    coherence_checks:
+      - "Si dos fases coexisten y la presion es fija, la temperatura no debe variar"
+      - "Si desaparece una fase, el sistema puede volver a calentarse o enfriarse"
+    graph_implications:
+      - "En temperatura frente a calor, T_trans marca la altura de la meseta"
+    pedagogical_triggers:
+      - "Si el alumno calcula aumento de temperatura mientras quedan dos fases, esta ignorando la condicion T = T_trans."
+
+  - id: calor_latente_fusion
+    title:
+      es: Calor latente de fusión o solidificación
+      en: Latent heat of melting or solidification
+    equation: "Q_lat = m * L_f"
+    latex: "Q_{lat} = m \\\\cdot L_f"
+    rearrangements:
+      - target: Q_lat
+        equation: "Q_lat = m * L_f"
+        latex: "Q_{lat} = m \\\\cdot L_f"
+      - target: m
+        equation: "m = Q_lat / L_f"
+        latex: "m = \\\\dfrac{Q_{lat}}{L_f}"
+      - target: L
+        equation: "L_f = Q_lat / m"
+        latex: "L_f = \\\\dfrac{Q_{lat}}{m}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "El calor latente de fusión total de una masa m es el producto de m por el calor latente específico de fusión L_f del material. Este calor se absorbe a temperatura constante (T_fusion) para romper los enlaces del cristal y pasar de sólido a líquido (Q_lat > 0), o se cede a temperatura constante al reconstruir los enlaces al pasar de líquido a sólido (Q_lat < 0)."
+      en: "The total latent heat of melting of a mass m is the product of m by the specific latent heat of fusion L_f of the material. This heat is absorbed at constant temperature (T_melting) to break crystal bonds and transition from solid to liquid (Q_lat > 0), or is released at constant temperature when bonds reform during the transition from liquid to solid (Q_lat < 0)."
+    constraints:
+      - "Proceso a presión constante"
+      - "Temperatura constante e igual al punto de fusión del material durante toda la transición"
+      - "La transición debe ser completa: toda la masa m cambia de estado"
+      - "Si la transición es parcial, Q_lat corresponde solo a la fracción de masa que completa el cambio"
+    validity:
+      es: "Válida a presión constante y temperatura constante igual a T_fusion. A presiones distintas de la estándar, T_fusion y L_f cambian ligeramente (efecto pequeño para la mayoría de los sólidos, mayor para el agua por su diagrama de fases anómalo)."
+      en: "Valid at constant pressure and constant temperature equal to T_melting. At pressures other than standard, T_melting and L_f change slightly (small effect for most solids, larger for water due to its anomalous phase diagram)."
+    dimension_check: "[M] · [L^2 T^-2] = [M L^2 T^-2] = J ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - calor_latente
+      - fusion
+      - solidificacion
+      - temperatura_constante
+    result_semantics:
+      target: Q_lat
+      kind: scalar_signed
+      sign_meaning:
+        es: "Q_lat > 0: la sustancia absorbe calor y se funde (sólido → líquido). Q_lat < 0: la sustancia cede calor y se solidifica (líquido → sólido)."
+        en: "Q_lat > 0: the substance absorbs heat and melts (solid → liquid). Q_lat < 0: the substance releases heat and solidifies (liquid → solid)."
+      absolute_value_meaning:
+        es: "El valor absoluto de Q_lat es la energía total intercambiada durante la transición de toda la masa m."
+        en: "The absolute value of Q_lat is the total energy exchanged during the transition of the entire mass m."
+    domain_checks:
+      - "m > 0"
+      - "L_f > 0"
+      - "La temperatura del sistema durante el proceso debe ser constante e igual a T_fusion"
+    coherence_checks:
+      - "Si el sistema está calentándose (Q suministrado) y la temperatura no varía, está en proceso de fusión"
+      - "Q_lat de fusión tiene el mismo módulo que Q_lat de solidificación para la misma masa y material"
+    graph_implications:
+      - "En la gráfica T vs calor suministrado, el tramo horizontal corresponde a Q_lat. Su longitud horizontal es m · L_f"
+    pedagogical_triggers:
+      - "Si el alumno obtiene una temperatura superior al punto de fusión mientras aún queda sólido en el sistema, ha omitido el tramo de calor latente en el balance."
+
+  - id: calor_latente_vaporizacion
+    title:
+      es: Calor latente de vaporización o condensación
+      en: Latent heat of vaporization or condensation
+    equation: "Q_lat = m * L_v"
+    latex: "Q_{lat} = m \\\\cdot L_v"
+    rearrangements:
+      - target: Q_lat
+        equation: "Q_lat = m * L_v"
+        latex: "Q_{lat} = m \\\\cdot L_v"
+      - target: m
+        equation: "m = Q_lat / L_v"
+        latex: "m = \\\\dfrac{Q_{lat}}{L_v}"
+      - target: L
+        equation: "L_v = Q_lat / m"
+        latex: "L_v = \\\\dfrac{Q_{lat}}{m}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "El calor latente de vaporización total de una masa m es el producto de m por el calor latente específico de vaporización L_v del material. Este calor se absorbe a temperatura constante (T_ebullicion) para vencer las fuerzas intermoleculares del líquido y pasar a gas (Q_lat > 0), o se cede al condensarse el vapor (Q_lat < 0). L_v es típicamente de 5 a 10 veces mayor que L_f para el mismo material."
+      en: "The total latent heat of vaporization of a mass m is the product of m by the specific latent heat of vaporization L_v of the material. This heat is absorbed at constant temperature (T_boiling) to overcome intermolecular forces in the liquid and transition to gas (Q_lat > 0), or is released when vapor condenses (Q_lat < 0). L_v is typically 5 to 10 times greater than L_f for the same material."
+    constraints:
+      - "Proceso a presión constante"
+      - "Temperatura constante e igual al punto de ebullición a la presión dada"
+      - "La transición debe ser completa para que se aplique directamente"
+      - "L_v depende de la presión: decrece al aumentar la presión y se anula en el punto crítico"
+    validity:
+      es: "Válida a presión constante y temperatura constante igual a T_ebullicion a esa presión. L_v varía significativamente con la presión, a diferencia de L_f que varía poco. En aplicaciones de alta presión (autoclave, caldera industrial), se debe usar L_v a la presión de operación."
+      en: "Valid at constant pressure and constant temperature equal to T_boiling at that pressure. L_v varies significantly with pressure, unlike L_f which varies little. In high-pressure applications (autoclave, industrial boiler), L_v at the operating pressure must be used."
+    dimension_check: "[M] · [L^2 T^-2] = [M L^2 T^-2] = J ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - calor_latente
+      - vaporizacion
+      - condensacion
+      - temperatura_constante
+    result_semantics:
+      target: Q_lat
+      kind: scalar_signed
+      sign_meaning:
+        es: "Q_lat > 0: la sustancia absorbe calor y se vaporiza (líquido → gas). Q_lat < 0: la sustancia cede calor y se condensa (gas → líquido)."
+        en: "Q_lat > 0: the substance absorbs heat and vaporizes (liquid → gas). Q_lat < 0: the substance releases heat and condenses (gas → liquid)."
+      absolute_value_meaning:
+        es: "El valor absoluto de Q_lat es la energía total que el vapor libera al condensar o que el líquido necesita para evaporarse completamente."
+        en: "The absolute value of Q_lat is the total energy that the vapor releases upon condensation or that the liquid needs to evaporate completely."
+    domain_checks:
+      - "m > 0"
+      - "L_v > 0"
+      - "Temperatura constante durante todo el proceso de vaporización o condensación"
+    coherence_checks:
+      - "L_v >> L_f para el mismo material: si L_v ≈ L_f, comprobar que no se han intercambiado los valores"
+      - "Para el agua: L_v = 2 260 000 J/kg y L_f = 334 000 J/kg. Su cociente es aproximadamente 6.8"
+    graph_implications:
+      - "En la gráfica T vs calor suministrado, el tramo horizontal de vaporización es mucho más ancho que el de fusión para el mismo material"
+    pedagogical_triggers:
+      - "Si Q_lat de vaporización resulta del mismo orden que Q_lat de fusión para el mismo material, es probable que se hayan confundido L_f y L_v."
+      - "El vapor de agua a 100 °C contiene mucha más energía que el agua líquida a 100 °C: la diferencia es exactamente L_v · m."
+`;export{a as default};

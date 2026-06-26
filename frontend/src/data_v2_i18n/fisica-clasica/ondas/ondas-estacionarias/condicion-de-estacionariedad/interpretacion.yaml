@@ -1,0 +1,143 @@
+version: 5
+id: condicion_de_estacionariedad_interpretacion
+leaf_id: condicion-de-estacionariedad
+nombre:
+  es: Interpretacion de condicion de estacionariedad
+  en: Interpretation of standing-wave condition
+scope:
+  area: fisica-clasica
+  bloque: ondas
+  subbloque: ondas-estacionarias
+  parent_id: ondas-estacionarias
+  ruta_relativa: fisica-clasica/ondas/ondas-estacionarias/condicion-de-estacionariedad
+ui:
+  enabled: true
+  display_modes: { calculator_inline: true, graph_inline: true, dedicated_tab: true, modal: false }
+  labels: { es: Interpretacion, en: Interpretation }
+  priority_order: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  inline_limits: { max_blocks: 3, max_warnings: 2 }
+dependencies:
+  formulas: [condicion_estacionaria_cuerda, frecuencia_modo_estacionario]
+  magnitudes: [L, lambda, n, v, f_n]
+global_context:
+  physical_domain:
+    es: "Ondas estacionarias en cavidades o cuerdas con fronteras que seleccionan modos."
+    en: "Standing waves in cavities or strings whose boundaries select modes."
+  axis_convention:
+    es: "El eje horizontal representa posicion entre fronteras; el modo debe encajar en la longitud."
+    en: "The horizontal axis represents position between boundaries; the mode must fit the length."
+  standard_assumptions: [fronteras_compatibles, modo_entero, medio_uniforme]
+  standard_warnings:
+    - "No usar [[n]] decimal como modo permitido."
+    - "No confundir [[L]] con [[lambda]]."
+result_blocks:
+  summary: { enabled: true, order: 1, title: { es: Resumen, en: Summary } }
+  physical_reading: { enabled: true, order: 2, title: { es: Lectura fisica, en: Physical reading } }
+  coherence: { enabled: true, order: 3, title: { es: Coherencia, en: Coherence } }
+  model_validity: { enabled: true, order: 4, title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { enabled: true, order: 5, title: { es: Lectura del grafico, en: Graph reading } }
+  likely_errors: { enabled: true, order: 6, title: { es: Errores probables, en: Likely errors } }
+  next_step: { enabled: true, order: 7, title: { es: Siguiente paso, en: Next step } }
+targets:
+  L:
+    magnitude_type: length
+    semantic_role: { es: longitud que impone la frontera, en: boundary-imposed length }
+    summary_rules:
+      - { id: L_sum, when: "true", status: ok, text: { es: "[[L]] indica la cavidad fisica y resume cuanto espacio tiene el modo para equilibrar nodos y vientres.", en: "[[L]] indicates the physical cavity and describes how much space the mode has to balance nodes and antinodes." } }
+    physical_reading_rules:
+      - { id: L_read, when: "true", status: ok, text: { es: "Mayor [[L]] permite longitudes de onda mayores para el mismo [[n]].", en: "Larger [[L]] allows larger wavelengths for the same [[n]]." } }
+    coherence_rules:
+      - { id: L_coh, when: "L > 0", status: ok, text: { es: "[[L]] positiva define una cavidad fisica.", en: "Positive [[L]] defines a physical cavity." } }
+    model_validity_rules:
+      - { id: L_val, when: "true", status: ok, text: { es: "La lectura es valida si se asume una cavidad estable; deja de valer cuando la frontera se desplaza o el limite no esta definido.", en: "The reading is valid if a stable cavity is assumed; it breaks down when the boundary moves or the limit is undefined." } }
+    graph_rules:
+      - { id: L_graph, when: "true", status: ok, text: { es: "En Coord, [[L]] es el ancho entre fronteras.", en: "In Coord, [[L]] is the width between boundaries." } }
+    likely_errors:
+      - { id: L_err, when: "true", status: warning, text: { es: "No igualar siempre [[L]] con [[lambda]].", en: "Do not always equate [[L]] with [[lambda]]." } }
+    next_step_rules:
+      - { id: L_next, when: "true", status: ok, text: { es: "Comprueba que [[n]] sea entero.", en: "Check that [[n]] is an integer." } }
+  lambda:
+    magnitude_type: length
+    semantic_role: { es: escala espacial del modo, en: spatial scale of the mode }
+    summary_rules:
+      - { id: la_sum, when: "true", status: ok, text: { es: "[[lambda]] describe la escala espacial que depende de [[L]] y [[n]] para que la forma estacionaria encaje.", en: "[[lambda]] describes the spatial scale that depends on [[L]] and [[n]] so the standing shape fits." } }
+    physical_reading_rules:
+      - { id: la_read, when: "true", status: ok, text: { es: "El modo ajusta [[lambda]] para cerrar nodos en las fronteras.", en: "The mode adjusts [[lambda]] to close nodes at boundaries." } }
+    coherence_rules:
+      - { id: la_coh, when: "lambda > 0", status: ok, text: { es: "[[lambda]] debe ser positiva.", en: "[[lambda]] must be positive." } }
+    model_validity_rules:
+      - { id: la_val, when: "true", status: ok, text: { es: "El modelo es valido solo en regimen aproximadamente periodico; deja de valer si la forma se deforma o se amortigua antes de completar el modo.", en: "The model is valid only in an approximately periodic regime; it breaks down if the shape deforms or damps before completing the mode." } }
+    graph_rules:
+      - { id: la_graph, when: "true", status: ok, text: { es: "La separacion de vientres y nodos deriva de [[lambda]].", en: "Antinode and node spacing derives from [[lambda]]." } }
+    likely_errors:
+      - { id: la_err, when: "true", status: warning, text: { es: "No medir [[lambda]] como distancia entre cualquier par de puntos.", en: "Do not measure [[lambda]] as distance between any pair of points." } }
+    next_step_rules:
+      - { id: la_next, when: "true", status: ok, text: { es: "Relaciona [[lambda]] con [[f_n]] mediante [[v]].", en: "Relate [[lambda]] to [[f_n]] through [[v]]." } }
+  n:
+    magnitude_type: integer_index
+    semantic_role: { es: orden discreto del modo, en: discrete order of the mode }
+    summary_rules:
+      - { id: n_sum, when: "true", status: ok, text: { es: "[[n]] indica el orden modal y significa que la estacionariedad depende de una seleccion discreta.", en: "[[n]] indicates modal order and means standing behavior depends on a discrete selection." } }
+    physical_reading_rules:
+      - { id: n_read, when: "true", status: ok, text: { es: "Mayor [[n]] significa modo mas fragmentado espacialmente.", en: "Larger [[n]] means a spatially more segmented mode." } }
+    coherence_rules:
+      - { id: n_coh, when: "n >= 1", status: ok, text: { es: "[[n]] debe ser entero positivo.", en: "[[n]] must be a positive integer." } }
+    model_validity_rules:
+      - { id: n_val, when: "true", status: ok, text: { es: "La condicion es valida si [[n]] es entero positivo; deja de valer como modo ideal cuando se usa un valor decimal.", en: "The condition is valid if [[n]] is a positive integer; it breaks down as an ideal mode when a decimal value is used." } }
+    graph_rules:
+      - { id: n_graph, when: "true", status: ok, text: { es: "Al aumentar [[n]], aparecen mas vientres.", en: "When [[n]] increases, more antinodes appear." } }
+    likely_errors:
+      - { id: n_err, when: "true", status: warning, text: { es: "Un [[n]] decimal no representa modo permitido.", en: "A decimal [[n]] is not an allowed mode." } }
+    next_step_rules:
+      - { id: n_next, when: "true", status: ok, text: { es: "Calcula [[f_n]] para comparar resonancias.", en: "Calculate [[f_n]] to compare resonances." } }
+  v:
+    magnitude_type: speed
+    semantic_role: { es: rapidez del medio, en: medium speed }
+    summary_rules:
+      - { id: v_sum, when: "true", status: ok, text: { es: "[[v]] indica la rapidez del medio y describe como la geometria se convierte en frecuencia modal.", en: "[[v]] indicates medium speed and describes how geometry becomes modal frequency." } }
+    physical_reading_rules:
+      - { id: v_read, when: "true", status: ok, text: { es: "Mayor [[v]] eleva todas las frecuencias permitidas.", en: "Larger [[v]] raises all allowed frequencies." } }
+    coherence_rules:
+      - { id: v_coh, when: "v > 0", status: ok, text: { es: "[[v]] debe ser positiva.", en: "[[v]] must be positive." } }
+    model_validity_rules:
+      - { id: v_val, when: "true", status: ok, text: { es: "La lectura es valida si [[v]] se asume uniforme; deja de valer en regimen dispersivo o con variaciones fuertes del medio.", en: "The reading is valid if [[v]] is assumed uniform; it breaks down in a dispersive regime or with strong medium variations." } }
+    graph_rules:
+      - { id: v_graph, when: "true", status: ok, text: { es: "[[v]] no cambia la forma espacial, cambia [[f_n]].", en: "[[v]] does not change the spatial shape; it changes [[f_n]]." } }
+    likely_errors:
+      - { id: v_err, when: "true", status: warning, text: { es: "No confundir ausencia de avance neto con [[v]] nula.", en: "Do not confuse no net advance with zero [[v]]." } }
+    next_step_rules:
+      - { id: v_next, when: "true", status: ok, text: { es: "Usa [[v]] para pasar de geometria a frecuencia.", en: "Use [[v]] to move from geometry to frequency." } }
+  f_n:
+    magnitude_type: frequency
+    semantic_role: { es: frecuencia permitida del modo, en: allowed frequency of the mode }
+    summary_rules:
+      - { id: fn_sum, when: "true", status: ok, text: { es: "[[f_n]] resume la respuesta temporal permitida y significa que el modo puede resonar a esa frecuencia.", en: "[[f_n]] summarizes the allowed temporal response and means the mode can resonate at that frequency." } }
+    physical_reading_rules:
+      - { id: fn_read, when: "true", status: ok, text: { es: "[[f_n]] indica donde la cavidad responde con estacionariedad.", en: "[[f_n]] indicates where the cavity responds with standing behavior." } }
+    coherence_rules:
+      - { id: fn_coh, when: "f_n > 0", status: ok, text: { es: "[[f_n]] debe ser positiva.", en: "[[f_n]] must be positive." } }
+    model_validity_rules:
+      - { id: fn_val, when: "true", status: ok, text: { es: "El calculo es valido si se asumen fronteras estables, perdidas pequeñas y [[v]] constante; deja de valer con amortiguamiento fuerte.", en: "The calculation is valid if stable boundaries, small losses, and constant [[v]] are assumed; it breaks down with strong damping." } }
+    graph_rules:
+      - { id: fn_graph, when: "true", status: ok, text: { es: "El grafico etiqueta el modo que vibra a [[f_n]].", en: "The graph labels the mode vibrating at [[f_n]]." } }
+    likely_errors:
+      - { id: fn_err, when: "true", status: warning, text: { es: "No toda excitacion externa coincide con una [[f_n]].", en: "Not every external excitation matches an [[f_n]]." } }
+    next_step_rules:
+      - { id: fn_next, when: "true", status: ok, text: { es: "Compara modos vecinos para estudiar resonancia.", en: "Compare neighboring modes to study resonance." } }
+cross_checks:
+  - id: geometry_frequency_bridge
+    formulas: [condicion_estacionaria_cuerda, frecuencia_modo_estacionario]
+    message: { es: "La condicion geometrica y la frecuencia modal deben usar el mismo [[n]] y [[L]].", en: "The geometric condition and modal frequency must use the same [[n]] and [[L]]." }
+error_patterns:
+  - id: noninteger_mode
+    detect_when: "n is not integer"
+    message: { es: "La estacionariedad exige modo entero.", en: "Standing behavior requires an integer mode." }
+graph_binding:
+  preferred_type: Coord
+  variables: [L, lambda, n, v, f_n]
+  reading: { es: "El grafico muestra si el modo cabe entre fronteras.", en: "The graph shows whether the mode fits between boundaries." }
+mini_graph: { enabled: true, type: Coord, target: f_n }
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  inline_mode: { max_sections: 2, priority: [summary, likely_errors] }
+  extended_mode: { show_all: true }

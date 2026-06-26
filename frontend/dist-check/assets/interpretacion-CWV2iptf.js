@@ -1,0 +1,416 @@
+const e=`version: 2
+id: interpretacion-ecuacion-de-binet-y-orbitas
+leaf_id: ecuacion-de-binet-y-orbitas
+nombre:
+  es: Interpretacion de Ecuacion de Binet y orbitas
+  en: Interpretation of Binet Equation and Orbits
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: gravitacion
+  parent_id: fuerzas-centrales
+  ruta_relativa: fisica-clasica/mecanica/gravitacion/fuerzas-centrales/ecuacion-de-binet-y-orbitas
+dependencies:
+  formulas:
+  - radio_inverso
+  - binet_general
+  - fuerza_desde_potencial
+  - momento_angular_polar
+  magnitudes:
+  - u
+  - theta
+  - r
+  - F
+  - L
+  - m
+  - U
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  u:
+    summary_rules:
+    - id: u_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[u]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[u]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: u_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[u]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[u]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: u_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[u]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[u]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: u_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras la ecuacion de binet cambia la variable radial por el radio inverso y permite leer la forma de la orbita desde la ley de fuerza central; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while binet equation replaces the radial variable with inverse radius and lets the orbital shape be read from the central force law; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: u_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[u]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[u]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: u_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[u]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[u]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: u_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[u]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[u]] with a limiting case and state what observable change it would produce.
+  theta:
+    summary_rules:
+    - id: theta_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[theta]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[theta]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: theta_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[theta]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[theta]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: theta_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[theta]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[theta]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: theta_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras la ecuacion de binet cambia la variable radial por el radio inverso y permite leer la forma de la orbita desde la ley de fuerza central; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while binet equation replaces the radial variable with inverse radius and lets the orbital shape be read from the central force law; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: theta_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[theta]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[theta]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: theta_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[theta]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[theta]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: theta_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[theta]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[theta]] with a limiting case and state what observable change it would produce.
+  r:
+    summary_rules:
+    - id: r_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[r]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[r]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: r_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[r]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[r]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: r_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[r]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[r]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: r_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras la ecuacion de binet cambia la variable radial por el radio inverso y permite leer la forma de la orbita desde la ley de fuerza central; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while binet equation replaces the radial variable with inverse radius and lets the orbital shape be read from the central force law; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: r_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[r]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[r]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: r_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[r]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[r]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: r_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[r]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[r]] with a limiting case and state what observable change it would produce.
+  F:
+    summary_rules:
+    - id: F_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[F]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[F]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: F_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[F]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[F]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: F_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[F]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[F]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: F_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras la ecuacion de binet cambia la variable radial por el radio inverso y permite leer la forma de la orbita desde la ley de fuerza central; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while binet equation replaces the radial variable with inverse radius and lets the orbital shape be read from the central force law; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: F_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[F]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[F]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: F_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[F]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[F]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: F_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[F]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[F]] with a limiting case and state what observable change it would produce.
+  L:
+    summary_rules:
+    - id: L_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[L]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[L]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: L_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[L]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[L]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: L_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[L]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[L]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: L_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras la ecuacion de binet cambia la variable radial por el radio inverso y permite leer la forma de la orbita desde la ley de fuerza central; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while binet equation replaces the radial variable with inverse radius and lets the orbital shape be read from the central force law; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: L_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[L]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[L]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: L_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[L]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[L]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: L_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[L]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[L]] with a limiting case and state what observable change it would produce.
+  m:
+    summary_rules:
+    - id: m_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[m]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[m]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: m_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[m]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[m]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: m_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[m]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[m]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: m_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras la ecuacion de binet cambia la variable radial por el radio inverso y permite leer la forma de la orbita desde la ley de fuerza central; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while binet equation replaces the radial variable with inverse radius and lets the orbital shape be read from the central force law; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: m_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[m]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[m]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: m_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[m]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[m]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: m_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[m]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[m]] with a limiting case and state what observable change it would produce.
+  U:
+    summary_rules:
+    - id: U_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[U]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[U]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: U_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[U]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[U]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: U_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[U]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[U]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: U_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras la ecuacion de binet cambia la variable radial por el radio inverso y permite leer la forma de la orbita desde la ley de fuerza central; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while binet equation replaces the radial variable with inverse radius and lets the orbital shape be read from the central force law; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: U_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[U]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[U]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: U_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[U]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[U]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: U_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[U]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[U]] with a limiting case and state what observable change it would produce.
+`;export{e as default};

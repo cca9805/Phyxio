@@ -1,0 +1,48 @@
+## Ideal model
+
+The ideal model underlying this leaf is that of **point charges in vacuum with a conservative electrostatic field**. In this model, all charges are treated as mathematical points with no spatial extent, the medium is vacuum (unit relative permittivity), and the electric field they generate is strictly static. Under these conditions, the electric potential energy [[energia_potencial_electrica]] is completely determined by the relative positions of the charges and their values, with no dielectric, screening, retardation, or quantum effects.
+
+This model simplifies reality by ignoring that real charges have finite extent, that material media modify the interaction, and that moving charges generate additional magnetic fields. Nevertheless, it is extraordinarily accurate for systems where separations are much larger than the charge size and motions are slow compared to the speed of light.
+
+## Hypotheses
+
+- **Point charges**: each charge occupies a mathematical point with no extent. Consequence of violation: the energy diverges as the separation [[r_12]] approaches the charge radius; the Coulomb formula overestimates energy at distances comparable to charge size.
+- **Vacuum as medium**: the permittivity of the space between the charges is that of vacuum. Consequence of violation: in dielectric media, the interaction energy is reduced by a factor equal to the medium's relative permittivity.
+- **Static field**: the charges are at rest or move slowly enough that retardation effects are negligible. Consequence of violation: accelerated charges radiate electromagnetic energy, and the scalar potential energy alone is no longer sufficient to describe the system.
+- **Linear superposition**: the total system energy is the sum of pair energies. Consequence of violation: in nonlinear media or at very high field intensities, superposition fails and nonlinear electrodynamic effects appear.
+- **Reference at infinity**: potential energy is taken as zero when the charges are infinitely separated. Consequence of violation (reference change): the numerical values of [[energia_potencial_electrica]] change, but the differences [[variacion_de_energia_potencial_electrica]] are independent of the chosen reference.
+
+## Quantitative validity domain
+
+The Coulomb potential energy model is accurate to within 1 % when the separation [[r_12]] is greater than 100 times the radius of the larger charge. For electrons and protons, whose classical radius is on the order of \(10^{-15}\) m, the model is valid for separations r > 10⁻¹³ m. Above this scale, results are indistinguishable from quantum electrodynamics at the energy level.
+
+For charge velocities below 10 % of the speed of light (less than 3×10⁷ m/s), relativistic effects modify the energy by less than 1 %. At higher velocities, the relativistic correction becomes significant and the static model underestimates the interaction energy.
+
+In dielectric media with relative permittivity above 2, the reduction of interaction energy due to screening exceeds 50 % compared to vacuum, so ignoring the medium produces errors greater than 50 %.
+
+## Model failure signals
+
+- **Energy that diverges as charges approach without limit**: in the classical model, [[energia_potencial_electrica]] grows without bound as [[r_12]] approaches zero. In reality, before reaching atomic distances, quantum mechanics introduces exchange and exclusion effects that stabilize the system.
+- **Path-dependent result**: if calculating the field work by multiplying force by displacement along a trajectory gives a result different from the difference in [[energia_potencial_electrica]] between the endpoints, there is an error in the force calculation or integration; the electrostatic field is always conservative.
+- **[[energia_potencial_electrica]] that does not tend to zero as [[r_12]] increases**: if the interaction energy does not decrease as the charges separate, there is a conceptual or computational error. The only exception is systems with charge distributions extending to infinity (such as infinite plates), where the reference at infinity is not applicable.
+- **Incorrect sign of [[energia_potencial_electrica]] for the interaction type**: if [[energia_potencial_electrica]] is calculated as positive for opposite-sign charges, or negative for same-sign charges, there is an error in handling the charge signs.
+
+## Extended or alternative model
+
+The most immediate extension includes the **permittivity of the dielectric medium**. In a homogeneous, isotropic medium, the Coulomb interaction energy between two charges is reduced by the medium's relative permittivity: the energy in the medium is that many times less than in vacuum. This extension is fundamental for calculating energy in capacitors with a dielectric and for understanding the stabilization of ionic charges in aqueous solutions.
+
+For continuous charge distributions, the model is extended through integration: the potential energy of a test charge in the field of a distribution is obtained by integrating the potential generated by each charge element. This integration leads to the formulation of electric field energy in terms of volumetric energy density, which depends on the square of the field at each point in space.
+
+For charges in relativistic motion, the model extends to complete classical electromagnetism, where energy can no longer be cleanly separated into electric and magnetic components, and both contribute to the system's energy.
+
+When to switch to the extended dielectric model: whenever the problem involves capacitors with material between the plates, or when charges are immersed in a material medium whose permittivity differs significantly from vacuum. Transition to this model as soon as the relative permittivity of the environment exceeds 1.1, implying a correction greater than 10 % in the energy.
+
+## Operational comparison
+
+| Aspect | Ideal model (vacuum, point charges) | Extended model (dielectric, distributions) |
+|---|---|---|
+| Energy formula | Direct product or Coulomb ratio | Integration over distribution with permittivity |
+| Accuracy | Exact for well-separated point charges | Necessary when medium or extent matters |
+| Complexity | Direct algebraic calculation | Numerical or analytical integration by geometry |
+| Applicability limit | Separations greater than charge size | In principle unlimited, with correct medium physics |
+| Computational cost | Immediate | May require numerical methods for complex geometries |

@@ -1,0 +1,136 @@
+version: 1
+formulas:
+- id: rel_l_omega
+  target: momento_angular
+  title:
+    es: Relacion momento angular - velocidad angular (eje principal)
+    en: Angular momentum - angular velocity relation (principal axis)
+  equation: momento_angular = tensor_inercia * omega
+  latex: L = I \omega,\ I_{xy}
+  rearrangements:
+  - target: tensor_inercia
+    equation: tensor_inercia = momento_angular / omega
+    latex: I = \frac{L}{\omega}
+    constraints: []
+  - target: momento_angular
+    equation: momento_angular = tensor_inercia * omega
+    latex: L = I \omega
+    constraints: []
+  - target: omega
+    equation: omega = momento_angular / tensor_inercia
+    latex: \omega = \frac{L}{I}
+    constraints: []
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: En eje principal, el tensor se reduce a un escalar efectivo y relaciona L
+      con omega.
+    en: On a principal axis, the tensor reduces to an effective scalar that relates
+      L to omega.
+  constraints:
+    es: Valido en eje principal o cuando se usa el momento principal equivalente.
+    en: Valid on a principal axis or when using the equivalent principal moment.
+  validity:
+    es: Dinamica rotacional de cuerpos rigidos en aproximacion escalar por eje principal.
+    en: Rotational dynamics of rigid bodies in scalar principal-axis approximation.
+  dimension_check: '[ML^2T^-1] = [ML^2] * [T^-1]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  interpretation_tags:
+  - rel_l_omega
+  - rotational_dynamics
+  result_semantics:
+    target: tensor_inercia
+    meaning: Resulta util para interpretar tensor_inercia en el contexto del leaf.
+  domain_checks:
+  - condition: input_values_within_valid_range
+    message:
+      es: Verificar que los datos de entrada esten dentro del dominio fisico de la
+        formula.
+      en: Check that input values are inside the formula physical domain.
+  coherence_checks:
+  - check: result_consistent_with_units_and_signs
+    warning:
+      es: Revisar signos y unidades si el resultado contradice la lectura fisica esperada.
+      en: Review signs and units if result contradicts expected physical reading.
+  graph_implications:
+  - if: graph_available
+    then:
+      es: Representar la tendencia del resultado en el grafico asociado para lectura
+        cualitativa.
+      en: Represent result trend in associated graph for qualitative reading.
+  pedagogical_triggers:
+  - condition: common_sign_or_units_error
+    hint:
+      es: Comprobar unidades SI y coherencia de signo antes de interpretar el valor
+        final.
+      en: Check SI units and sign consistency before interpreting final value.
+- id: energia_cinetica_tensores
+  target: tensor_inercia
+  title:
+    es: Energia cinetica rotacional (eje principal)
+    en: Rotational kinetic energy (principal axis)
+  equation: E = 0.5 * tensor_inercia * omega^2
+  latex: E = \frac{1}{2} I \omega^2
+  rearrangements:
+  - target: E
+    equation: E = 0.5 * tensor_inercia * omega^2
+    latex: E = \frac{1}{2} I \omega^2
+    constraints: []
+  - target: omega
+    equation: omega = sqrt(2 * E / tensor_inercia)
+    latex: \omega = \sqrt{\frac{2E}{I}}
+    constraints: []
+  - target: tensor_inercia
+    equation: tensor_inercia = 2 * E / omega^2
+    latex: I = \frac{2E}{\omega^2}
+    constraints: []
+  category: derived
+  relation_type: quadratic_form
+  physical_meaning:
+    es: Energia asociada al giro cuando se usa el momento principal equivalente.
+    en: Energy associated with rotation when using the equivalent principal moment.
+  constraints:
+    es: Requiere mismo eje principal para I y omega.
+    en: Requires the same principal axis for I and omega.
+  validity:
+    es: Analisis energetico de rotacion en aproximacion escalar.
+    en: Rotational energy analysis in scalar approximation.
+  dimension_check: '[ML^2T^-2] = [ML^2] * [T^-1]^2'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria.md
+  - aplicaciones.md
+  interpretation_tags:
+  - energia_cinetica_tensores
+  - rotational_dynamics
+  result_semantics:
+    target: E
+    meaning: Resulta util para interpretar E en el contexto del leaf.
+  domain_checks:
+  - condition: input_values_within_valid_range
+    message:
+      es: Verificar que los datos de entrada esten dentro del dominio fisico de la
+        formula.
+      en: Check that input values are inside the formula physical domain.
+  coherence_checks:
+  - check: result_consistent_with_units_and_signs
+    warning:
+      es: Revisar signos y unidades si el resultado contradice la lectura fisica esperada.
+      en: Review signs and units if result contradicts expected physical reading.
+  graph_implications:
+  - if: graph_available
+    then:
+      es: Representar la tendencia del resultado en el grafico asociado para lectura
+        cualitativa.
+      en: Represent result trend in associated graph for qualitative reading.
+  pedagogical_triggers:
+  - condition: common_sign_or_units_error
+    hint:
+      es: Comprobar unidades SI y coherencia de signo antes de interpretar el valor
+        final.
+      en: Check SI units and sign consistency before interpreting final value.

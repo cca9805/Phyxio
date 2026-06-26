@@ -1,0 +1,41 @@
+# Ejemplo guiado
+
+## Situacion fisica
+
+Un sensor registra la posicion de un carrito en una pista recta. La grafica muestra `x (m)` frente a `t (s)`. Entre `t = 0 s` y `t = 2 s`, la posicion pasa de `0 m` a `4 m`. Entre `t = 2 s` y `t = 5 s`, la curva se mantiene casi horizontal alrededor de `4 m`.
+
+La pregunta no pide calcular una velocidad exacta. Pide describir que ocurre con el movimiento en esos dos tramos y leer la posicion aproximada a los `4 s`.
+
+## Traduccion matematica
+
+El objeto matematico es una grafica de una variable vertical `x` frente a una variable horizontal `t`. La operacion principal es lectura de coordenadas y tendencia: leer un valor vertical para un tiempo dado y describir si la curva crece o permanece constante.
+
+Datos visuales: eje horizontal en segundos, eje vertical en metros, tramo creciente de `0` a `2 s`, tramo casi horizontal de `2` a `5 s`. La unidad del resultado vertical sera metro; la unidad de los intervalos sera segundo.
+
+## Calculo paso a paso
+
+Primero se lee el tramo `0 s` a `2 s`: la curva sube desde `0 m` hasta `4 m`, por tanto la posicion aumenta. Despues se lee el tramo `2 s` a `5 s`: la curva permanece cerca de `4 m`, por tanto la posicion casi no cambia.
+
+Para `t = 4 s`, se sube desde el valor `4` del eje horizontal hasta la curva y se proyecta hacia el eje vertical. La lectura aproximada es `x = 4 m`. No se cuentan cuadros sin mirar etiquetas, porque la escala define cuanto vale cada division.
+
+## Lectura del resultado
+
+Fisicamente, el carrito se aleja del origen durante los dos primeros segundos y despues queda casi en reposo cerca de `4 m` del origen. La lectura `x = 4 m` a los `4 s` significa posicion, no distancia recorrida acumulada.
+
+La conclusion debe limitarse al intervalo mostrado. No sabemos si despues de `5 s` el carrito seguira parado, volvera o acelerara, porque la grafica no contiene esa informacion.
+
+## Error comun evitado
+
+El error evitado es calcular una pendiente promedio y responder solo con una velocidad. La grafica permite ver dos comportamientos distintos: primero cambio de posicion y despues posicion constante. Si se reduce todo a un unico numero, se pierde el tramo de reposo.
+
+# Ejemplo inverso
+
+## Resultado dado
+
+En una grafica temperatura-tiempo de un cuerpo que se enfria, se lee que la curva baja rapidamente al principio y luego se aplana cerca de `22 C`. A los `300 s`, la temperatura aproximada es `24 C`.
+
+## Que pregunta fisica permite responder
+
+Ese resultado permite responder preguntas como: "a que temperatura esta el cuerpo despues de cinco minutos?", "se acerca a la temperatura ambiente?" y "el enfriamiento mantiene el mismo ritmo todo el tiempo?". La forma aplanada indica que el cambio se vuelve mas lento al acercarse al ambiente.
+
+No permite afirmar por si sola la causa microscopica del enfriamiento ni extrapolar que exactamente alcanzara `22 C` en un tiempo concreto. Para eso haria falta un modelo fisico adicional y datos de mayor precision.

@@ -1,0 +1,371 @@
+magnitudes:
+- id: rapidez_de_propagacion_de_ondas_superficiales
+  symbol: v
+  nombre:
+    es: Rapidez de propagacion de ondas superficiales
+    en: Surface wave propagation speed
+  descripcion:
+    es: Rapidez con la que la perturbacion de la interfaz se propaga en la superficie del liquido.
+    en: Speed at which the interface disturbance propagates across the liquid surface.
+  unidad_si: m/s
+  dimension: '[L T⁻¹]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role:
+    es: Magnitud resultado principal de la relacion de dispersion
+    en: Main result quantity of the dispersion relation
+  used_in:
+  - rapidez_gravedad
+  - rapidez_capilares
+  - rapidez_combinada
+  common_mistake:
+    es: Confundir la rapidez de la onda superficial con la velocidad vertical de las particulas de agua en la cresta.
+    en: Confusing the speed of the surface wave with the vertical velocity of water particles at the crest.
+  typical_range: 0.2 a 10 m/s segun longitud de onda
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Rapidez de propagacion escalar, siempre positiva; la onda avanza en ambas direcciones horizontales.
+      en: Scalar propagation speed, always positive; the wave advances in both horizontal directions.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Rapidez nula implicaria ausencia total de propagacion en la interfaz.
+      en: Zero speed would imply complete absence of interface propagation.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, 20]
+  interpretation_role:
+    primary_for:
+    - rapidez_superficial
+    - regimen_dominante
+    secondary_for:
+    - longitud_de_onda
+  graph_binding:
+    channels:
+    - wave_speed_marker
+    - output_marker
+  pedagogical_notes:
+    es: '[[v]] depende de [[lambda]]; ondas cortas capilares viajan lentamente mientras que ondas largas de gravedad viajan
+      rapido. Identificar el regimen es el primer paso para calcular [[v]].'
+    en: '[[v]] depends on [[lambda]]; short capillary waves travel slowly while long gravity waves travel fast. Identifying
+      the regime is the first step to compute [[v]].'
+- id: aceleracion_gravitatoria
+  symbol: g
+  nombre:
+    es: Aceleracion gravitatoria
+    en: Gravitational acceleration
+  descripcion:
+    es: Aceleracion de la gravedad terrestre que actua como fuerza restauradora en ondas largas.
+    en: Earth's gravitational acceleration acting as restoring force in long surface waves.
+  unidad_si: m/s²
+  dimension: '[L T⁻²]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role:
+    es: Parametro de fuerza restauradora gravitatoria
+    en: Gravitational restoring force parameter
+  used_in:
+  - rapidez_gravedad
+  - rapidez_combinada
+  common_mistake:
+    es: Ignorar que las ondas capilares cortas apenas sienten la gravedad; aplicar la formula gravitatoria a ondas de milimetros
+      produce error sistematico.
+    en: Ignoring that short capillary waves barely feel gravity; applying the gravity formula to millimetre waves produces
+      systematic error.
+  typical_range: 9.81 m/s² estandar terrestre
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La gravedad actua como fuerza restauradora, siempre positiva en magnitud.
+      en: Gravity acts as a restoring force, always positive in magnitude.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Sin gravedad solo la tension superficial domina; las ondas capilares serian el unico regimen.
+      en: Without gravity only surface tension dominates; capillary waves would be the only regime.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (9.5, 10.0]
+  interpretation_role:
+    primary_for:
+    - fuerza_restauradora_gravitatoria
+    - regimen_gravitatorio
+    secondary_for:
+    - velocidad_ondas_largas
+  graph_binding:
+    channels:
+    - control_slider
+  pedagogical_notes:
+    es: '[[g]] separa los dos regimenes: para [[lambda]] grande, [[g]] domina la restauracion; para [[lambda]] pequena, [[sigma]]
+      domina. La longitud de onda critica esta fijada por el cociente entre [[sigma]], [[rho]] y [[g]].'
+    en: '[[g]] separates the two regimes: for large [[lambda]], [[g]] dominates restoration; for small [[lambda]], [[sigma]]
+      dominates. The critical wavelength is fixed by the ratio between [[sigma]], [[rho]] and [[g]].'
+- id: sigma
+  symbol: sigma
+  nombre:
+    es: Coeficiente de tension superficial
+    en: Surface tension coefficient
+  descripcion:
+    es: Energia por unidad de area (o fuerza por unidad de longitud) en la interfaz aire-liquido que controla la restauracion
+      de ondas cortas.
+    en: Energy per unit area (or force per unit length) at the air-liquid interface that controls restoration in short waves.
+  unidad_si: N/m
+  dimension: '[M T⁻²]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role:
+    es: Parametro de elasticidad interfacial capilar
+    en: Capillary interfacial elasticity parameter
+  used_in:
+  - rapidez_capilares
+  - rapidez_combinada
+  common_mistake:
+    es: Pensar que la tension superficial es una pelicula solida sobre el agua; es una propiedad volumetrica del liquido que
+      se manifiesta en la interfaz.
+    en: Thinking surface tension is a solid film on water; it is a volumetric property of the liquid that manifests at the
+      interface.
+  typical_range: 0.072 N/m para agua pura a 25 grados
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La tension superficial es un coeficiente positivo que mide la elasticidad de la interfaz.
+      en: Surface tension is a positive coefficient measuring interfacial elasticity.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Sin tension superficial no existen ondas capilares; la interfaz seria totalmente fluida sin rigidez.
+      en: Without surface tension capillary waves do not exist; the interface would be completely fluid with no stiffness.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, 0.1]
+  interpretation_role:
+    primary_for:
+    - elasticidad_interfacial
+    - regimen_capilar
+    secondary_for:
+    - longitud_critica
+  graph_binding:
+    channels:
+    - control_slider
+  pedagogical_notes:
+    es: '[[sigma]] gobierna el regimen microscopico; su efecto crece con [[k]] mientras que [[g]] decrece con [[k]]. El minimo
+      de [[v]] ocurre exactamente en la longitud de onda critica donde ambos contribuyen por igual.'
+    en: '[[sigma]] governs the microscopic regime; its effect grows with [[k]] while [[g]] decreases with [[k]]. The minimum
+      of [[v]] occurs exactly at the critical wavelength where both contribute equally.'
+- id: rho
+  symbol: rho
+  nombre:
+    es: Densidad del liquido
+    en: Liquid density
+  descripcion:
+    es: Masa por unidad de volumen del liquido en equilibrio, que determina la inercia del sistema ondulatorio.
+    en: Mass per unit volume of the liquid in equilibrium, which determines the inertia of the wave system.
+  unidad_si: kg/m³
+  dimension: '[M L⁻³]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role:
+    es: Parametro de inercia volumetrica del fluido
+    en: Volumetric inertia parameter of the fluid
+  used_in:
+  - rapidez_capilares
+  - rapidez_combinada
+  common_mistake:
+    es: Creer que la densidad del aire importa; solo la densidad del liquido determina la inercia ondulatoria superficial.
+    en: Believing air density matters; only the liquid density determines the surface wave inertia.
+  typical_range: 1000 kg/m³ para agua dulce; 1025 kg/m³ para agua de mar
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La densidad es una magnitud positiva que representa inercia volumetrica.
+      en: Density is a positive quantity representing volumetric inertia.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Una densidad nula implicaria ausencia de inercia; no habria onda propagable.
+      en: Zero density would imply no inertia; there would be no propagable wave.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (500, 2000]
+  interpretation_role:
+    primary_for:
+    - inercia_ondulatoria
+    - resistencia_al_movimiento
+    secondary_for:
+    - amortiguamiento_viscoso
+  graph_binding:
+    channels:
+    - control_slider
+  pedagogical_notes:
+    es: 'Mayor [[rho]] ralentiza la onda porque el liquido resiste mas los cambios de velocidad. En la formula capilar, [[rho]]
+      aparece en el denominador: duplicar [[rho]] reduce [[v]] en un factor raiz de dos.'
+    en: 'Greater [[rho]] slows the wave because the liquid resists velocity changes more. In the capillary formula, [[rho]]
+      appears in the denominator: doubling [[rho]] reduces [[v]] by a factor of square root of two.'
+- id: lambda
+  symbol: lambda
+  nombre:
+    es: Longitud de onda superficial
+    en: Surface wavelength
+  descripcion:
+    es: Distancia espacial entre dos crestas consecutivas de la onda superficial; determina el regimen fisico dominante.
+    en: Spatial distance between two consecutive wave crests; determines the dominant physical regime.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role:
+    es: Variable espacial que clasifica el regimen de dispersion
+    en: Spatial variable classifying the dispersion regime
+  used_in:
+  - rapidez_gravedad
+  - rapidez_capilares
+  - rapidez_combinada
+  common_mistake:
+    es: Ignorar que [[lambda]] determina si el regimen es gravitatorio o capilar; es la variable decisiva que el alumno olvida
+      calcular primero.
+    en: Ignoring that [[lambda]] determines whether the regime is gravitational or capillary; it is the decisive variable
+      that students often forget to compute first.
+  typical_range: 0.001 a 100 m segun contexto
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La longitud de onda es una distancia espacial, siempre positiva.
+      en: Wavelength is a spatial distance, always positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Longitud de onda nula implicaria densidad espacial infinita de oscilaciones.
+      en: Zero wavelength would imply infinite spatial oscillation density.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, 1000]
+  interpretation_role:
+    primary_for:
+    - escala_espacial_onda
+    - clasificacion_regimen
+    secondary_for:
+    - velocidad_de_grupo
+  graph_binding:
+    channels:
+    - wavelength_marker
+    - spatial_axis
+  pedagogical_notes:
+    es: '[[lambda]] es el eje que divide los dos mundos: por debajo de aproximadamente 1.7 cm en agua pura domina [[sigma]],
+      por encima domina [[g]]. Calcular siempre [[lambda]] antes de elegir la formula.'
+    en: '[[lambda]] is the axis dividing two worlds: below approximately 1.7 cm in pure water [[sigma]] dominates, above [[g]]
+      dominates. Always compute [[lambda]] before choosing the formula.'
+- id: frecuencia_de_la_onda_superficial
+  symbol: f
+  nombre:
+    es: Frecuencia de la onda superficial
+    en: Surface wave frequency
+  descripcion:
+    es: Numero de crestas que pasan por un punto fijo por unidad de tiempo.
+    en: Number of crests passing a fixed point per unit time.
+  unidad_si: Hz
+  dimension: '[T⁻¹]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role:
+    es: Escala temporal de la oscilacion superficial
+    en: Temporal scale of the surface oscillation
+  used_in:
+  - rapidez_gravedad
+  - rapidez_capilares
+  - rapidez_combinada
+  common_mistake:
+    es: Creer que [[f]] y [[lambda]] son independientes; en ondas superficiales estan acopladas por la relacion de dispersion.
+    en: Thinking [[f]] and [[lambda]] are independent; in surface waves they are coupled by the dispersion relation.
+  typical_range: 0.1 a 100 Hz
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La frecuencia es siempre positiva; mide el ritmo temporal de la oscilacion.
+      en: Frequency is always positive; it measures the temporal rhythm of oscillation.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Frecuencia nula significaria una deformacion estatica de la interfaz, no una onda.
+      en: Zero frequency would mean a static deformation of the interface, not a wave.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, 500]
+  interpretation_role:
+    primary_for:
+    - ritmo_temporal_onda
+    - periodo_oscilacion
+    secondary_for:
+    - espectro_ondas
+  graph_binding:
+    channels:
+    - frequency_marker
+  pedagogical_notes:
+    es: '[[f]] no es libre en ondas superficiales; una vez fijada [[lambda]] la relacion de dispersion impone la frecuencia.
+      El alumno no puede elegir [[f]] y [[lambda]] independientemente.'
+    en: '[[f]] is not free in surface waves; once [[lambda]] is fixed the dispersion relation imposes the frequency. The student
+      cannot choose [[f]] and [[lambda]] independently.'
+- id: numero_de_onda
+  symbol: k
+  nombre:
+    es: Numero de onda
+    en: Wavenumber
+  descripcion:
+    es: Inverso de la longitud de onda multiplicado por dos pi; mide la densidad espacial de oscilacion.
+    en: Inverse of wavelength multiplied by two pi; measures spatial oscillation density.
+  unidad_si: m⁻¹
+  dimension: '[L⁻¹]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role:
+    es: Variable conjugada espacial de la relacion de dispersion
+    en: Spatial conjugate variable of the dispersion relation
+  used_in:
+  - rapidez_gravedad
+  - rapidez_capilares
+  - rapidez_combinada
+  common_mistake:
+    es: Confundir [[k]] con la frecuencia angular; [[k]] es espacial (m⁻¹), la frecuencia angular es temporal (rad/s).
+    en: Confusing [[k]] with angular frequency; [[k]] is spatial (m⁻¹), angular frequency is temporal (rad/s).
+  typical_range: 0.01 a 10000 m⁻¹
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El numero de onda es positivo; mide cuantas oscilaciones caben por metro.
+      en: Wavenumber is positive; it measures how many oscillations fit per metre.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Numero de onda nulo implicaria longitud de onda infinita; no existe en la practica.
+      en: Zero wavenumber would imply infinite wavelength; it does not exist in practice.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, 100000]
+  interpretation_role:
+    primary_for:
+    - escala_espacial_inversa
+    - relacion_de_dispersion
+    secondary_for:
+    - resolucion_espacio
+  graph_binding:
+    channels:
+    - wavenumber_axis
+  pedagogical_notes:
+    es: '[[k]] es equivalente a [[lambda]] con la ventaja de aparecer directamente en las formulas de dispersion. Convertir
+      siempre: [[k]] es dos pi dividido entre [[lambda]].'
+    en: '[[k]] is equivalent to [[lambda]] with the advantage of appearing directly in dispersion formulas. Always convert:
+      [[k]] is two pi divided by [[lambda]].'

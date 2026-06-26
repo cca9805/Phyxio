@@ -1,0 +1,414 @@
+const n=`version: 1
+leaf_id: interferencia-de-la-luz
+
+magnitudes:
+  - id: delta
+    symbol: '\\delta'
+    nombre:
+      es: Diferencia de camino optico
+      en: Optical path difference
+    descripcion:
+      es: Diferencia de trayectoria entre dos haces de luz que interfieren.
+      en: Path difference between two interfering light beams.
+    unidad_si: m
+    dimension: '[L]'
+    is_vector: false
+    components: []
+    category: state
+    physical_role: state
+    used_in:
+      - formulas: diferencia_camino
+      - formulas: condicion_maximos
+      - formulas: condicion_minimos
+    common_mistake:
+      es: Confundir diferencia de camino con distancia geometrica directa sin considerar el indice de refraccion.
+      en: Confusing path difference with direct geometric distance without considering refractive index.
+    typical_range:
+      min: 1e-9
+      max: 1e-3
+      unit: m
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Positiva cuando el camino del haz 1 es mayor que el del haz 2.
+        en: Positive when beam 1 path is longer than beam 2 path.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Interferencia constructiva central cuando la diferencia de camino es cero.
+        en: Central constructive interference when path difference is zero.
+    value_nature:
+      kind: continuous
+      nonnegative_only: false
+      expected_interval:
+        min: -1e-3
+        max: 1e-3
+        unit: m
+    interpretation_role:
+      primary_for: interferencia_constructiva
+      secondary_for: desplazamiento_fase
+    graph_binding:
+      channels:
+        - x_axis
+        - color_map
+    pedagogical_notes:
+      es: Magnitud fundamental para determinar si la interferencia sera constructiva o destructiva.
+      en: Fundamental magnitude to determine whether interference will be constructive or destructive.
+
+  - id: d
+    symbol: 'd'
+    nombre:
+      es: Separacion entre rendijas
+      en: Slit separation
+    descripcion:
+      es: Distancia entre los centros de las dos rendijas en el experimento de Young.
+      en: Distance between the centers of the two slits in Young's experiment.
+    unidad_si: m
+    dimension: '[L]'
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: parameter
+    used_in:
+      - formulas: diferencia_camino
+      - formulas: posicion_franja
+    common_mistake:
+      es: Usar el ancho de las rendijas en lugar de la separacion entre centros.
+      en: Using slit width instead of separation between centers.
+    typical_range:
+      min: 1e-6
+      max: 1e-3
+      unit: m
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positiva, representa una distancia fisica.
+        en: Always positive, represents a physical distance.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Si d fuera cero, las rendijas coinciden y no hay interferencia.
+        en: If d were zero, slits would coincide and no interference occurs.
+    value_nature:
+      kind: continuous
+      nonnegative_only: true
+      expected_interval:
+        min: 1e-6
+        max: 1e-3
+        unit: m
+    interpretation_role:
+      primary_for: ancho_patron
+      secondary_for: resolucion_interferencia
+    graph_binding:
+      channels:
+        - parameter_slider
+    pedagogical_notes:
+      es: A menor separacion entre rendijas, mayor sera la separacion entre franjas.
+      en: Smaller slit separation leads to larger fringe spacing.
+
+  - id: theta
+    symbol: '\\theta'
+    nombre:
+      es: Angulo de observacion
+      en: Observation angle
+    descripcion:
+      es: Angulo entre la direccion del haz incidente y la direccion de observacion en la pantalla.
+      en: Angle between incident beam direction and observation direction on the screen.
+    unidad_si: rad
+    dimension: '[1]'
+    is_vector: false
+    components: []
+    category: state
+    physical_role: state
+    used_in:
+      - formulas: diferencia_camino
+    common_mistake:
+      es: No convertir grados a radianes al usar funciones trigonometricas.
+      en: Not converting degrees to radians when using trigonometric functions.
+    typical_range:
+      min: -0.1
+      max: 0.1
+      unit: rad
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Positivo hacia un lado del patron, negativo hacia el otro lado.
+        en: Positive towards one side of the pattern, negative towards the other.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Angulo cero corresponde al maximo central.
+        en: Zero angle corresponds to the central maximum.
+    value_nature:
+      kind: continuous
+      nonnegative_only: false
+      expected_interval:
+        min: -0.2
+        max: 0.2
+        unit: rad
+    interpretation_role:
+      primary_for: posicion_angular
+      secondary_for: intensidad_relativa
+    graph_binding:
+      channels:
+        - x_axis
+    pedagogical_notes:
+      es: En la aproximacion de angulos pequenos, sin(theta) ≈ theta ≈ tan(theta).
+      en: In the small angle approximation, sin(theta) ≈ theta ≈ tan(theta).
+
+  - id: m
+    symbol: 'm'
+    nombre:
+      es: Orden de la franja
+      en: Fringe order
+    descripcion:
+      es: Numero entero que identifica cada franja brillante o oscura en el patron de interferencia.
+      en: Integer number identifying each bright or dark fringe in the interference pattern.
+    unidad_si: '-'
+    dimension: '[1]'
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: parameter
+    used_in:
+      - formulas: condicion_maximos
+      - formulas: condicion_minimos
+      - formulas: posicion_franja
+    common_mistake:
+      es: Confundir el orden m=0 con el primer maximo lateral m=1.
+      en: Confusing order m=0 with the first lateral maximum m=1.
+    typical_range:
+      min: 0
+      max: 10
+      unit: '-'
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Positivo para franjas en un lado, negativo para el otro lado del centro.
+        en: Positive for fringes on one side, negative for the other side of center.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: m=0 corresponde al maximo central.
+        en: m=0 corresponds to the central maximum.
+    value_nature:
+      kind: discrete
+      nonnegative_only: false
+      expected_interval:
+        min: -10
+        max: 10
+        unit: '-'
+    interpretation_role:
+      primary_for: identificacion_franja
+      secondary_for: conteo_ordenes
+    graph_binding:
+      channels:
+        - label
+    pedagogical_notes:
+      es: El orden m determina cuantos enteros de longitud de onda caben en la diferencia de camino.
+      en: Order m determines how many integer wavelengths fit in the path difference.
+
+  - id: lambda
+    symbol: '\\lambda'
+    nombre:
+      es: Longitud de onda
+      en: Wavelength
+    descripcion:
+      es: Distancia entre dos crestas consecutivas de la onda electromagnetica.
+      en: Distance between two consecutive crests of the electromagnetic wave.
+    unidad_si: m
+    dimension: '[L]'
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: parameter
+    used_in:
+      - formulas: condicion_maximos
+      - formulas: condicion_minimos
+      - formulas: posicion_franja
+    common_mistake:
+      es: No convertir nanometros a metros al hacer calculos.
+      en: Not converting nanometers to meters when doing calculations.
+    typical_range:
+      min: 380e-9
+      max: 750e-9
+      unit: m
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positiva, representa una distancia fisica.
+        en: Always positive, represents a physical distance.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Longitud de onda cero no tiene sentido fisico para luz.
+        en: Zero wavelength has no physical meaning for light.
+    value_nature:
+      kind: continuous
+      nonnegative_only: true
+      expected_interval:
+        min: 100e-9
+        max: 1000e-9
+        unit: m
+    interpretation_role:
+      primary_for: color_luz
+      secondary_for: escala_patron
+    graph_binding:
+      channels:
+        - color_map
+        - parameter_slider
+    pedagogical_notes:
+      es: La longitud de onda determina el color de la luz visible.
+      en: Wavelength determines the color of visible light.
+
+  - id: L
+    symbol: 'L'
+    nombre:
+      es: Distancia a la pantalla
+      en: Screen distance
+    descripcion:
+      es: Distancia entre el plano de las rendijas y la pantalla de observacion.
+      en: Distance between the slit plane and the observation screen.
+    unidad_si: m
+    dimension: '[L]'
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: parameter
+    used_in:
+      - formulas: posicion_franja
+    common_mistake:
+      es: Usar distancias en centimetros sin convertir a metros.
+      en: Using distances in centimeters without converting to meters.
+    typical_range:
+      min: 0.1
+      max: 10
+      unit: m
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positiva, representa una distancia fisica.
+        en: Always positive, represents a physical distance.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Distancia cero implica pantalla en las rendijas, sin patron observable.
+        en: Zero distance implies screen at the slits, no observable pattern.
+    value_nature:
+      kind: continuous
+      nonnegative_only: true
+      expected_interval:
+        min: 0.5
+        max: 5
+        unit: m
+    interpretation_role:
+      primary_for: escala_patron
+      secondary_for: aproximacion_angulo_pequeno
+    graph_binding:
+      channels:
+        - parameter_slider
+    pedagogical_notes:
+      es: A mayor distancia L, mayor separacion entre franjas y mejor aproximacion de angulo pequeno.
+      en: Greater distance L leads to larger fringe spacing and better small angle approximation.
+
+  - id: y_m
+    symbol: 'y_m'
+    nombre:
+      es: Posicion de la franja
+      en: Fringe position
+    descripcion:
+      es: Distancia desde el centro del patron hasta la franja de orden m en la pantalla.
+      en: Distance from the center of the pattern to the fringe of order m on the screen.
+    unidad_si: m
+    dimension: '[L]'
+    is_vector: false
+    components: []
+    category: state
+    physical_role: state
+    used_in:
+      - formulas: posicion_franja
+    common_mistake:
+      es: Confundir la posicion y_m con el angulo theta.
+      en: Confusing position y_m with angle theta.
+    typical_range:
+      min: -0.1
+      max: 0.1
+      unit: m
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Positiva para franjas arriba/derecha del centro, negativa para abajo/izquierda.
+        en: Positive for fringes above/right of center, negative for below/left.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Posicion cero corresponde al maximo central m=0.
+        en: Zero position corresponds to the central maximum m=0.
+    value_nature:
+      kind: continuous
+      nonnegative_only: false
+      expected_interval:
+        min: -0.05
+        max: 0.05
+        unit: m
+    interpretation_role:
+      primary_for: medicion_experimental
+      secondary_for: calibracion_sistema
+    graph_binding:
+      channels:
+        - y_axis
+        - marker_position
+    pedagogical_notes:
+      es: Esta es la magnitud medible experimentalmente en el laboratorio.
+      en: This is the experimentally measurable magnitude in the laboratory.
+
+  - id: Delta_y
+    symbol: '\\Delta y'
+    nombre:
+      es: Separacion entre franjas consecutivas
+      en: Fringe spacing
+    descripcion:
+      es: Distancia entre dos maximos (o minimos) consecutivos del patron de interferencia.
+      en: Distance between two consecutive maxima (or minima) of the interference pattern.
+    unidad_si: m
+    dimension: '[L]'
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: observable
+    used_in:
+      - formulas: separacion_fringes
+    common_mistake:
+      es: Confundir la separacion entre franjas con la posicion de una franja individual.
+      en: Confusing fringe spacing with the position of an individual fringe.
+    typical_range:
+      min: 1e-4
+      max: 0.02
+      unit: m
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positiva, representa una distancia entre franjas.
+        en: Always positive, represents a distance between fringes.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Separacion nula implicaria franjas superpuestas, sin patron observable.
+        en: Zero spacing would imply superposed fringes, with no observable pattern.
+    value_nature:
+      kind: continuous
+      nonnegative_only: true
+      expected_interval:
+        min: 1e-4
+        max: 0.02
+        unit: m
+    interpretation_role:
+      primary_for: analisis_patron
+      secondary_for: medida_longitud_onda
+    graph_binding:
+      channels:
+        - scale_x
+    pedagogical_notes:
+      es: La separacion entre franjas es la magnitud mas facil de medir en el laboratorio y permite determinar la longitud de onda.
+      en: Fringe spacing is the easiest magnitude to measure in the laboratory and allows determining the wavelength.
+`;export{n as default};

@@ -1,0 +1,549 @@
+version: 5
+topic:
+  id: resistencias-en-paralelo
+  title:
+    es: Resistencias en paralelo
+    en: Resistors in Parallel
+variables:
+- id: resistencia_equivalente
+  symbol: R_{eq}
+  name:
+    es: resistencia equivalente
+    en: Equivalent Resistance
+  si_unit: ohm
+- id: resistencia_de_rama_1
+  symbol: R_1
+  name:
+    es: resistencia de rama 1
+    en: Branch Resistance 1
+  si_unit: ohm
+- id: resistencia_de_rama_2
+  symbol: R_2
+  name:
+    es: resistencia de rama 2
+    en: Branch Resistance 2
+  si_unit: ohm
+- id: resistencia_de_rama_3
+  symbol: R_3
+  name:
+    es: resistencia de rama 3
+    en: Branch Resistance 3
+  si_unit: ohm
+- id: tension_comun_del_paralelo
+  symbol: tension_comun_del_paralelo
+  name:
+    es: tensión común
+    en: Common Voltage
+  si_unit: tension_comun_del_paralelo
+- id: corriente_de_rama_1
+  symbol: I_1
+  name:
+    es: corriente de rama 1
+    en: Branch Current 1
+  si_unit: A
+- id: corriente_de_rama_2
+  symbol: I_2
+  name:
+    es: corriente de rama 2
+    en: Branch Current 2
+  si_unit: A
+- id: corriente_de_rama_3
+  symbol: I_3
+  name:
+    es: corriente de rama 3
+    en: Branch Current 3
+  si_unit: A
+- id: corriente_total
+  symbol: I_t
+  name:
+    es: corriente total
+    en: Total Current
+  si_unit: A
+- id: conductancia_equivalente
+  symbol: G_{eq}
+  name:
+    es: conductancia equivalente
+    en: Equivalent Conductance
+  si_unit: S
+- id: conductancia_de_rama_1
+  symbol: G_1
+  name:
+    es: conductancia de rama 1
+    en: Branch Conductance 1
+  si_unit: S
+- id: conductancia_de_rama_2
+  symbol: G_2
+  name:
+    es: conductancia de rama 2
+    en: Branch Conductance 2
+  si_unit: S
+- id: conductancia_de_rama_3
+  symbol: G_3
+  name:
+    es: conductancia de rama 3
+    en: Branch Conductance 3
+  si_unit: S
+formulas:
+- id: req_reciproco
+  title:
+    es: Resistencia equivalente por suma de recíprocos
+    en: Equivalent resistance from reciprocal sum
+  equation: R_{eq} = 1/(1/R_1 + 1/R_2 + 1/R_3)
+  latex: R_{eq}=\frac{1}{\frac{1}{R_1}+\frac{1}{R_2}+\frac{1}{R_3}}
+  rearrangements:
+  - target: resistencia_de_rama_1
+    equation: R_1 = 1/(1/R_{eq} - 1/R_2 - 1/R_3)
+    latex: R_1=\frac{1}{\frac{1}{R_{eq}}-\frac{1}{R_2}-\frac{1}{R_3}}
+  constraints:
+  - expr: R_1 > 0 and R_2 > 0 and R_3 > 0
+    message:
+      es: Las resistencias de rama deben ser positivas en el modelo pasivo.
+      en: Branch resistances must be positive in passive model.
+  category: structural
+  relation_type: equivalent_law
+  physical_meaning:
+    es: En paralelo, la red ofrece más caminos de conducción y por eso R_{eq} disminuye.
+    en: In parallel, network offers more conduction paths and therefore R_{eq} decreases.
+  validity:
+    es: Válida para ramas resistivas lineales conectadas entre los mismos dos nodos.
+    en: Valid for linear resistive branches connected across the same two nodes.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - cálculo de resistencia equivalente
+  - rediseño de ramas en paralelo
+  interpretation_tags:
+  - paralelo
+  - equivalente
+  - red-resistiva
+  result_semantics:
+    target: resistencia_equivalente
+    meaning: El resultado representa la resistencia total vista por la fuente.
+    kind: scalar
+    absolute_value_meaning:
+      es: El resultado representa la resistencia total vista por la fuente.
+      en: El resultado representa la resistencia total vista por la fuente.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: R_{eq} <= R_1 and R_{eq} <= R_2 and R_{eq} <= R_3
+    message:
+      es: R_{eq} debe ser menor o igual que cada resistencia de rama.
+      en: R_{eq} must be lower than or equal to each branch resistance.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Todas las ramas usadas en la ecuación deben estar realmente conectadas.
+      en: All branches used in equation must actually be connected.
+  graph_implications:
+  - Un incremento de ramas activas desplaza R_{eq} hacia valores menores.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Si R_{eq} sale mayor que la menor rama hay error de planteo o unidades.
+      en: If R_{eq} is greater than smallest branch, there is setup or unit error.
+- id: req_dos_ramas
+  title:
+    es: Forma compacta para dos ramas
+    en: Compact two-branch form
+  equation: R_{eq} = (R_1*R_2)/(R_1 + R_2)
+  latex: R_{eq}=\frac{R_1R_2}{R_1+R_2}
+  rearrangements: []
+  constraints:
+  - expr: R_1 > 0 and R_2 > 0
+    message:
+      es: R_1 y R_2 deben ser positivas para interpretar paralelo pasivo.
+      en: R_1 and R_2 must be positive for passive parallel interpretation.
+  category: operative
+  relation_type: equivalent_law
+  physical_meaning:
+    es: Resume el caso de dos ramas y facilita cálculo rápido en diseño preliminar.
+    en: Summarizes two-branch case and speeds up preliminary design.
+  validity:
+    es: Solo para dos ramas efectivas sin tercera derivación activa.
+    en: Only for two effective branches with no active third branch.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - ejercicios de dos ramas
+  interpretation_tags:
+  - paralelo
+  - dos-ramas
+  result_semantics:
+    target: resistencia_equivalente
+    meaning: Entrega R_{eq} para el caso reducido de dos resistencias en paralelo.
+    kind: scalar
+    absolute_value_meaning:
+      es: Entrega R_{eq} para el caso reducido de dos resistencias en paralelo.
+      en: Entrega R_{eq} para el caso reducido de dos resistencias en paralelo.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: R_{eq} <= R_1 and R_{eq} <= R_2
+    message:
+      es: R_{eq} debe permanecer por debajo de ambas resistencias.
+      en: R_{eq} must remain below both resistances.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Si existe una tercera rama activa esta forma deja de ser completa.
+      en: If a third branch is active this form is no longer complete.
+  graph_implications:
+  - Permite comparar rápidamente sensibilidad de R_{eq} frente a cambios de una rama.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Es útil como atajo solo cuando la topología realmente tiene dos ramas.
+      en: I_t is useful as shortcut only when topology truly has two branches.
+- id: corriente_rama_1
+  title:
+    es: Corriente de la rama 1
+    en: Branch 1 current
+  equation: I_1 = V/R_1
+  latex: I_1=\frac{V}{R_1}
+  rearrangements: []
+  constraints:
+  - expr: R_1 > 0
+    message:
+      es: R_1 debe ser positiva para cálculo directo por ley de Ohm.
+      en: R_1 must be positive for direct Ohm-law calculation.
+  category: operative
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: La corriente de una rama depende de la misma tensión común y su resistencia local.
+    en: Branch current depends on common voltage and its local resistance.
+  validity:
+    es: Válida en tramo óhmico lineal de la rama 1.
+    en: Valid for linear ohmic segment of branch 1.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - reparto de corriente
+  interpretation_tags:
+  - ohm
+  - rama
+  result_semantics:
+    target: corriente_de_rama_1
+    meaning: Mide la demanda de corriente de la rama de menor o mayor resistencia.
+    kind: scalar
+    absolute_value_meaning:
+      es: Mide la demanda de corriente de la rama de menor o mayor resistencia.
+      en: Mide la demanda de corriente de la rama de menor o mayor resistencia.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: A tensión fija, menor R_1 implica mayor I_1.
+      en: At fixed voltage, lower R_1 implies higher I_1.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: V y R_1 deben pertenecer a la misma rama física.
+      en: V and R_1 must belong to same physical branch.
+  graph_implications:
+  - La curva I_1 frente a V es lineal en el modelo resistivo.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Si I_1 no cambia al variar V, revisa saturación o error de medición.
+      en: If I_1 does not change with V, check saturation or measurement error.
+- id: corriente_rama_2
+  title:
+    es: Corriente de la rama 2
+    en: Branch 2 current
+  equation: I_2 = V/R_2
+  latex: I_2=\frac{V}{R_2}
+  rearrangements: []
+  constraints:
+  - expr: R_2 > 0
+    message:
+      es: R_2 positiva en régimen pasivo lineal.
+      en: R_2 must be positive in passive linear regime.
+  category: operative
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Define el aporte de la segunda rama al reparto total.
+    en: Defines second branch contribution to total sharing.
+  validity:
+    es: Válida cuando la rama 2 se comporta como resistor lineal.
+    en: Valid when branch 2 behaves as linear resistor.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - reparto de corriente
+  interpretation_tags:
+  - ohm
+  - rama
+  result_semantics:
+    target: corriente_de_rama_2
+    meaning: Entrega el flujo de carga de la rama 2 bajo tensión común.
+    kind: scalar
+    absolute_value_meaning:
+      es: Entrega el flujo de carga de la rama 2 bajo tensión común.
+      en: Entrega el flujo de carga de la rama 2 bajo tensión común.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: A R_2 fija, I_2 escala proporcionalmente con V.
+      en: At fixed R_2, I_2 scales proportionally with V.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Debe usarse con la misma referencia de polaridad que I_1 e I_3.
+      en: I_t must use same polarity reference as I_1 and I_3.
+  graph_implications:
+  - Permite comparar desequilibrios de ramas al cambiar resistencias.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Unidades mezcladas entre V y R_2 generan errores de orden de magnitud.
+      en: Mixed units between V and R_2 cause order-of-magnitude errors.
+- id: corriente_rama_3
+  title:
+    es: Corriente de la rama 3
+    en: Branch 3 current
+  equation: I_3 = V/R_3
+  latex: I_3=\frac{V}{R_3}
+  rearrangements: []
+  constraints:
+  - expr: R_3 > 0
+    message:
+      es: R_3 debe ser positiva en modelo resistivo pasivo.
+      en: R_3 must be positive in passive resistive model.
+  category: operative
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Cuantifica el flujo por la tercera rama sometida a la misma tensión.
+    en: Quantifies flow through third branch under same voltage.
+  validity:
+    es: Válida para rama lineal sin elementos activos en serie.
+    en: Valid for linear branch without active series elements.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - reparto de corriente
+  interpretation_tags:
+  - ohm
+  - rama
+  result_semantics:
+    target: corriente_de_rama_3
+    meaning: Aporta la tercera contribución al balance de nodo de entrada.
+    kind: scalar
+    absolute_value_meaning:
+      es: Aporta la tercera contribución al balance de nodo de entrada.
+      en: Aporta la tercera contribución al balance de nodo de entrada.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Con tensión fija, una R_3 alta reduce I_3.
+      en: With fixed voltage, high R_3 reduces I_3.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Solo se usa si la rama 3 existe y está cerrada.
+      en: Use only if branch 3 exists and is closed.
+  graph_implications:
+  - Permite visualizar ramas dominantes en consumo de corriente.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Si I_3 domina inesperadamente, revisa valor real de R_3.
+      en: If I_3 dominates unexpectedly, check actual R_3 value.
+- id: corriente_total
+  title:
+    es: Corriente total por conservación nodal
+    en: Total current from nodal conservation
+  equation: I_t = I_1 + I_2 + I_3
+  latex: I_t=I_1+I_2+I_3
+  rearrangements: []
+  constraints:
+  - expr: 'true'
+    message:
+      es: Las corrientes deben corresponder al mismo nodo de reparto.
+      en: Currents must correspond to same sharing node.
+  category: structural
+  relation_type: conservation_law
+  physical_meaning:
+    es: La corriente total es suma algebraica de corrientes que entran a ramas en paralelo.
+    en: Total current is algebraic sum of currents entering parallel branches.
+  validity:
+    es: Válida en análisis nodal DC con acumulación de carga despreciable en nodo.
+    en: Valid in DC nodal analysis with negligible charge accumulation.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - verificación de KCL
+  - dimensionamiento de fuente
+  interpretation_tags:
+  - kcl
+  - nodo
+  - corriente-total
+  result_semantics:
+    target: corriente_total
+    meaning: Determina corriente total demandada a la fuente.
+    kind: scalar
+    absolute_value_meaning:
+      es: Determina corriente total demandada a la fuente.
+      en: Determina corriente total demandada a la fuente.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: El balance debe cerrar con una única convención de signo.
+      en: Balance must close with a single sign convention.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Si falta una rama en la suma, I_t queda subestimada.
+      en: If a branch is missing in sum, I_t is underestimated.
+  graph_implications:
+  - Facilita inspección de sobrecorriente en nodo de alimentación.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: No reemplaces conservación nodal por promedio de ramas.
+      en: Do not replace nodal conservation with branch averaging.
+- id: geq_suma
+  title:
+    es: Conductancia equivalente por suma directa
+    en: Equivalent conductance by direct sum
+  equation: G_{eq} = G_1 + G_2 + G_3
+  latex: G_{eq}=G_1+G_2+G_3
+  rearrangements: []
+  constraints:
+  - expr: G_1 >= 0 and G_2 >= 0 and G_3 >= 0
+    message:
+      es: Conductancias de rama no negativas en red pasiva.
+      en: Branch conductances are non-negative in passive network.
+  category: structural
+  relation_type: equivalent_law
+  physical_meaning:
+    es: En paralelo las conductancias se agregan linealmente.
+    en: In parallel, conductances aggregate linearly.
+  validity:
+    es: Útil cuando se dispone de datos en siemens y se evita inversión repetida.
+    en: Useful when data is in siemens and repeated inversion is avoided.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - análisis por conductancia
+  interpretation_tags:
+  - conductancia
+  - paralelo
+  result_semantics:
+    target: conductancia_equivalente
+    meaning: Entrega la capacidad total de conducción de la red.
+    kind: scalar
+    absolute_value_meaning:
+      es: Entrega la capacidad total de conducción de la red.
+      en: Entrega la capacidad total de conducción de la red.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: G_{eq} >= G_1 and G_{eq} >= G_2 and G_{eq} >= G_3
+    message:
+      es: G_{eq} debe ser mayor o igual que cada conductancia de rama.
+      en: G_{eq} must be greater than or equal to each branch conductance.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: G_1, G_2 y G_3 deben corresponder a ramas distintas del mismo paralelo.
+      en: G_1, G_2 and G_3 must correspond to distinct branches of same parallel block.
+  graph_implications:
+  - Muestra crecimiento de conducción al añadir ramas activas.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Si G_{eq} decrece al añadir rama hay error de signo o dato.
+      en: If G_{eq} decreases when adding branch there is sign or data error.
+- id: geq_reciproco
+  title:
+    es: Relación entre conductancia y resistencia equivalente
+    en: Relation between conductance and equivalent resistance
+  equation: G_{eq} = 1/R_{eq}
+  latex: G_{eq}=\frac{1}{R_{eq}}
+  rearrangements: []
+  constraints:
+  - expr: R_{eq} > 0
+    message:
+      es: R_{eq} debe ser positiva para calcular conductancia equivalente.
+      en: R_{eq} must be positive to compute equivalent conductance.
+  category: operative
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Traduce el mismo fenómeno del paralelo entre dos representaciones duales.
+    en: Maps same parallel behavior into dual representations.
+  validity:
+    es: Válida para redes resistivas lineales.
+    en: Valid for linear resistive networks.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - conversión entre parámetros equivalentes
+  interpretation_tags:
+  - dualidad
+  - resistencia
+  - conductancia
+  result_semantics:
+    target: conductancia_equivalente
+    meaning: Expresa conductancia total asociada a R_{eq}.
+    kind: scalar
+    absolute_value_meaning:
+      es: Expresa conductancia total asociada a R_{eq}.
+      en: Expresa conductancia total asociada a R_{eq}.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: G_{eq} >= 0
+    message:
+      es: La conductancia equivalente debe mantenerse no negativa.
+      en: Equivalent conductance must remain non-negative.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: R_{eq} usada aquí debe provenir de la misma red de ramas.
+      en: R_{eq} used here must come from the same branch network.
+  graph_implications:
+  - Ayuda a interpretar cambios de pendiente en gráficos I-V globales.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Si R_{eq} se acerca a cero, G_{eq} crece fuertemente.
+      en: If R_{eq} approaches zero, G_{eq} grows strongly.
+ui:
+  default_formula: req_reciproco
+  groups:
+  - title:
+      es: Basicas
+      en: Basics
+    items:
+    - req_reciproco
+    - req_dos_ramas
+    - corriente_rama_1
+    - corriente_rama_2
+    - corriente_rama_3
+    - corriente_total
+    - geq_suma
+    - geq_reciproco

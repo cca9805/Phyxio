@@ -1,0 +1,309 @@
+﻿version: 2
+magnitudes:
+- id: FR
+  symbol: F_R
+  nombre:
+    es: Esfuerzo en la rueda
+    en: Wheel effort
+  descripcion:
+    es: Fuerza tangencial aplicada por el operador sobre el borde exterior de la rueda.
+    en: Tangential force applied by the operator on the outer edge of the wheel.
+  unidad_si: N
+  dimension: F
+  is_vector: true
+  components: []
+  category: mecanica/dinamica
+  physical_role:
+    es: esfuerzo
+    en: effort
+  used_in: [ fisica-clasica/mecanica/aplicaciones/maquinas-simples/rueda-y-eje ]
+  common_mistake:
+    es: Aplicar FR sobre el radio del eje en vez de sobre el radio de la rueda.
+    en: Applying FR on the axle radius instead of the wheel radius.
+  typical_range: [ 1, 2000 ]
+  sign_behavior: tangencial_sentido_giro
+  zero_behavior: sin esfuerzo el sistema está en reposo o en caída libre de la carga
+  value_nature: extensiva
+  interpretation_role: input
+  graph_binding: effort_arrow_wheel
+  pedagogical_notes: Es la fuerza de entrada; actúa sobre el brazo más largo (R) y por eso puede ser menor que la resistencia.
+
+- id: Fr
+  symbol: F_r
+  nombre:
+    es: Resistencia en el eje
+    en: Axle resistance
+  descripcion:
+    es: Fuerza tangencial que actúa sobre el eje, oponiéndose al giro útil del sistema.
+    en: Tangential force acting on the axle, opposing the useful rotation of the system.
+  unidad_si: N
+  dimension: F
+  is_vector: true
+  components: []
+  category: mecanica/dinamica
+  physical_role:
+    es: resistencia
+    en: resistance
+  used_in: [ fisica-clasica/mecanica/aplicaciones/maquinas-simples/rueda-y-eje ]
+  common_mistake:
+    es: Confundir la resistencia con el peso total del sistema; solo incluye la fuerza tangencial en el eje.
+    en: Confusing resistance with total system weight; it only includes the tangential force at the axle.
+  typical_range: [ 1, 20000 ]
+  sign_behavior: tangencial_opuesto_giro
+  zero_behavior: sin resistencia el sistema gira libremente sin carga útil
+  value_nature: extensiva
+  interpretation_role: output
+  graph_binding: resistance_arrow_axle
+  pedagogical_notes: Es la fuerza de salida o carga que el sistema debe vencer; actúa sobre el brazo corto (r).
+
+- id: R
+  symbol: R
+  nombre:
+    es: Radio de la rueda
+    en: Wheel radius
+  descripcion:
+    es: Distancia desde el eje de rotación hasta el punto de aplicación del esfuerzo en la rueda exterior.
+    en: Distance from the rotation axis to the point of effort application on the outer wheel.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: mecanica/estatica
+  physical_role:
+    es: brazo de entrada
+    en: input arm
+  used_in: [ fisica-clasica/mecanica/aplicaciones/maquinas-simples/rueda-y-eje ]
+  common_mistake:
+    es: Usar el diámetro en vez del radio en la fórmula de equilibrio.
+    en: Using diameter instead of radius in the equilibrium formula.
+  typical_range: [ 0.05, 2.0 ]
+  sign_behavior: siempre_positiva
+  zero_behavior: no aplica (mínimo físico > 0)
+  value_nature: intensiva
+  interpretation_role: control
+  graph_binding: wheel_radius_line
+  pedagogical_notes: El parámetro de diseño más accesible para incrementar la ventaja mecánica; aumentarlo no requiere cambiar el eje.
+
+- id: r
+  symbol: r
+  nombre:
+    es: Radio del eje
+    en: Axle radius
+  descripcion:
+    es: Distancia desde el eje de rotación hasta el punto de aplicación de la resistencia en el eje interior.
+    en: Distance from the rotation axis to the point of resistance application on the inner axle.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: mecanica/estatica
+  physical_role:
+    es: brazo de salida
+    en: output arm
+  used_in: [ fisica-clasica/mecanica/aplicaciones/maquinas-simples/rueda-y-eje ]
+  common_mistake:
+    es: Confundir r con R o usar el diámetro del eje.
+    en: Confusing r with R or using the axle diameter.
+  typical_range: [ 0.005, 0.5 ]
+  sign_behavior: siempre_positiva
+  zero_behavior: no aplica (mínimo físico > 0)
+  value_nature: intensiva
+  interpretation_role: control
+  graph_binding: axle_radius_line
+  pedagogical_notes: Reducirlo aumenta la ventaja mecánica pero reduce la resistencia estructural del eje; existe un mínimo de diseño impuesto por la resistencia al torque.
+
+- id: eta
+  symbol: \eta
+  nombre:
+    es: Rendimiento mecánico
+    en: Mechanical efficiency
+  descripcion:
+    es: Fracción de la energía de entrada que se convierte en trabajo útil en el eje; el resto se disipa por rozamiento.
+    en: Fraction of input energy converted into useful work at the axle; the rest is dissipated by friction.
+  unidad_si: "1"
+  dimension: "1"
+  is_vector: false
+  components: []
+  category: mecanica/dinamica
+  physical_role:
+    es: factor de pérdida
+    en: loss factor
+  used_in: [ fisica-clasica/mecanica/aplicaciones/maquinas-simples/rueda-y-eje ]
+  common_mistake:
+    es: Suponer eficiencia del 100% en sistemas reales con cojinetes o rozamiento en el eje.
+    en: Assuming 100% efficiency in real systems with bearings or axle friction.
+  typical_range: [ 0.6, 0.98 ]
+  sign_behavior: siempre_positiva
+  zero_behavior: bloqueo total por fricción; el sistema no transmite trabajo
+  value_nature: intensiva
+  interpretation_role: loss_factor
+  graph_binding: friction_indicator
+  pedagogical_notes: Depende del estado de los cojinetes, la lubricación y la carga. En problemas elementales se aproxima a 1 (modelo ideal).
+
+- id: VM
+  symbol: VM
+  nombre:
+    es: Ventaja mecánica ideal
+    en: Ideal mechanical advantage
+  descripcion:
+    es: Cociente entre el radio de la rueda y el radio del eje; indica cuántas veces el sistema multiplica la fuerza en condiciones ideales.
+    en: Ratio of wheel radius to axle radius; indicates how many times the system multiplies force under ideal conditions.
+  unidad_si: "1"
+  dimension: "1"
+  is_vector: false
+  components: []
+  category: mecanica/estatica
+  physical_role:
+    es: beneficio mecánico ideal
+    en: ideal mechanical benefit
+  used_in: [ fisica-clasica/mecanica/aplicaciones/maquinas-simples/rueda-y-eje ]
+  common_mistake:
+    es: Usar VM ideal en cálculos de sistemas reales sin aplicar el rendimiento.
+    en: Using ideal VM in real system calculations without applying efficiency.
+  typical_range: [ 2, 40 ]
+  sign_behavior: siempre_positiva
+  zero_behavior: no aplica
+  value_nature: intensiva
+  interpretation_role: output
+  graph_binding: benefit_meter
+  pedagogical_notes: Propiedad puramente geométrica; no cambia con la carga ni con la velocidad.
+
+- id: VM_real
+  symbol: VM_{\text{real}}
+  nombre:
+    es: Ventaja mecánica real
+    en: Real mechanical advantage
+  descripcion:
+    es: Ventaja mecánica efectiva una vez descontadas las pérdidas por rozamiento; siempre menor o igual que VM.
+    en: Effective mechanical advantage after deducting friction losses; always less than or equal to VM.
+  unidad_si: "1"
+  dimension: "1"
+  is_vector: false
+  components: []
+  category: mecanica/dinamica
+  physical_role:
+    es: beneficio mecánico real
+    en: real mechanical benefit
+  used_in: [ fisica-clasica/mecanica/aplicaciones/maquinas-simples/rueda-y-eje ]
+  common_mistake:
+    es: Calcular VM_real como R/(eta·r) en vez de eta·R/r.
+    en: Computing VM_real as R/(eta·r) instead of eta·R/r.
+  typical_range: [ 1, 35 ]
+  sign_behavior: siempre_positiva
+  zero_behavior: no aplica en condiciones normales
+  value_nature: intensiva
+  interpretation_role: output
+  graph_binding: real_benefit_meter
+  pedagogical_notes: Integra diseño (R/r) y calidad constructiva (eta); es el indicador operativo del sistema real.
+
+- id: sR
+  symbol: s_R
+  nombre:
+    es: Arco recorrido en la rueda
+    en: Arc traveled at the wheel
+  descripcion:
+    es: Longitud del arco que describe el punto de aplicación del esfuerzo sobre la rueda para un ángulo de giro dado.
+    en: Length of the arc traced by the effort application point on the wheel for a given rotation angle.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: mecanica/cinematica
+  physical_role:
+    es: recorrido de entrada
+    en: input travel
+  used_in: [ fisica-clasica/mecanica/aplicaciones/maquinas-simples/rueda-y-eje ]
+  common_mistake:
+    es: Usar el ángulo en grados en vez de radianes en la fórmula sR = R·θ.
+    en: Using angle in degrees instead of radians in the formula sR = R·θ.
+  typical_range: [ 0, 50 ]
+  sign_behavior: siempre_positiva
+  zero_behavior: sistema estático
+  value_nature: extensiva
+  interpretation_role: input
+  graph_binding: wheel_arc_travel
+  pedagogical_notes: Siempre mayor que sr; representa el costo en recorrido que paga el operador para ganar fuerza.
+
+- id: sr
+  symbol: s_r
+  nombre:
+    es: Arco recorrido en el eje
+    en: Arc traveled at the axle
+  descripcion:
+    es: Longitud del arco que describe el punto de aplicación de la resistencia sobre el eje para el mismo ángulo de giro.
+    en: Length of the arc traced by the resistance application point on the axle for the same rotation angle.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: mecanica/cinematica
+  physical_role:
+    es: recorrido de salida
+    en: output travel
+  used_in: [ fisica-clasica/mecanica/aplicaciones/maquinas-simples/rueda-y-eje ]
+  common_mistake:
+    es: Confundir sr con sR o calcular sr para un ángulo distinto al usado en sR.
+    en: Confusing sr with sR or computing sr for a different angle than the one used for sR.
+  typical_range: [ 0, 10 ]
+  sign_behavior: siempre_positiva
+  zero_behavior: sistema estático
+  value_nature: extensiva
+  interpretation_role: output
+  graph_binding: axle_arc_travel
+  pedagogical_notes: El recorrido útil del sistema; aumentarlo requiere sacrificar ventaja mecánica.
+
+- id: tau
+  symbol: \tau
+  nombre:
+    es: Torque o momento de fuerza
+    en: Torque or moment of force
+  descripcion:
+    es: Magnitud escalar que mide la capacidad de una fuerza de producir giro alrededor de un eje; producto de la fuerza por el brazo de momento.
+    en: Scalar magnitude measuring the capacity of a force to produce rotation about an axis; product of force by the moment arm.
+  unidad_si: "N·m"
+  dimension: "F·L"
+  is_vector: false
+  components: []
+  category: mecanica/estatica
+  physical_role:
+    es: concepto auxiliar de rotación
+    en: auxiliary rotation concept
+  used_in: [ fisica-clasica/mecanica/aplicaciones/maquinas-simples/rueda-y-eje ]
+  common_mistake:
+    es: Confundir torque (N·m) con trabajo (también N·m); son magnitudes distintas con distinto significado físico.
+    en: Confusing torque (N·m) with work (also N·m); they are different magnitudes with different physical meaning.
+  typical_range: [ 0.1, 5000 ]
+  sign_behavior: positivo_en_sentido_giro_util
+  zero_behavior: sin momento no hay tendencia al giro
+  value_nature: intensiva
+  interpretation_role: auxiliary
+  graph_binding: torque_indicator
+  pedagogical_notes: Concepto auxiliar que conecta la rueda y el eje con la mecánica de la rotación. El equilibrio tau_R = tau_r es la base de todas las fórmulas del leaf.
+
+- id: r_arm
+  symbol: r_{\text{arm}}
+  nombre:
+    es: Brazo de momento genérico
+    en: Generic moment arm
+  descripcion:
+    es: Distancia perpendicular desde el eje de rotación hasta la línea de acción de la fuerza; usado en la definición general de torque.
+    en: Perpendicular distance from the rotation axis to the line of action of the force; used in the general definition of torque.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: mecanica/estatica
+  physical_role:
+    es: brazo de momento (auxiliar)
+    en: moment arm (auxiliary)
+  used_in: [ fisica-clasica/mecanica/aplicaciones/maquinas-simples/rueda-y-eje ]
+  common_mistake:
+    es: Medir el brazo de momento desde un punto arbitrario en vez de desde el eje de rotación.
+    en: Measuring the moment arm from an arbitrary point instead of from the rotation axis.
+  typical_range: [ 0.005, 2.0 ]
+  sign_behavior: siempre_positiva
+  zero_behavior: la fuerza pasa por el eje; no produce giro
+  value_nature: intensiva
+  interpretation_role: auxiliary
+  graph_binding: moment_arm_line
+  pedagogical_notes: En la rueda y el eje, r_arm toma el valor R para el esfuerzo y r para la resistencia. Se explicita aquí como magnitud auxiliar para la fórmula conceptual del torque.

@@ -1,0 +1,96 @@
+import React from "react";
+import { createCoordGraph } from "../graphFactories.jsx";
+import OndasGraphsCoord from "./OndasGraphsCoord.jsx";
+import profile from "./electromagneticas.coord.profile.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraphPage
+// createCoordGraph(
+const uiLang = "es";
+const tt = (es, en) => (uiLang === "en" ? en : es);
+const axisContract = {
+  xComponent: "XAxis",
+  yComponent: "YAxis",
+  xAxis: "posicion de propagacion",
+  yAxis: "campo electrico transversal",
+};
+const formulaContract = {
+  id: "relacion_campos_em",
+  formula: "E0 = c * B0",
+  latex: "E_0 = c B_0",
+  equation: "E0 = c * B0",
+};
+
+function ElectromagneticasCoordView(props) {
+  const {
+    params,
+    sharedParams,
+    paramsIn,
+    onGraphStateChange,
+    onInterpretationContextChange,
+  } = props;
+  const input = paramsIn ?? params ?? sharedParams ?? {};
+  const calcParams = sharedParams?.__calc ?? params?.__calc ?? paramsIn?.__calc ?? {};
+  const c = Number(input?.c?.value ?? input?.c ?? calcParams?.c ?? 3e8);
+  const B0 = Number(input?.B0?.value ?? input?.B0 ?? calcParams?.B0 ?? 1e-9);
+  const E0 = Number(input?.E0?.value ?? input?.E0 ?? calcParams?.E0 ?? c * B0);
+  const lambda = Number(input?.lambda?.value ?? input?.lambda ?? calcParams?.lambda ?? 3);
+  const f = Number(input?.f?.value ?? input?.f ?? calcParams?.f ?? c / Math.max(lambda, 1e-12));
+  const stateOut = {
+    target: "E0",
+    graphType: "Coord",
+    formula: formulaContract.id,
+    axes: axisContract,
+    c,
+    E0,
+    B0,
+    lambda,
+    f,
+  };
+  const mergedSharedParams = {
+    ...input,
+    ...sharedParams,
+    __calc: calcParams,
+    graph_identity: profile.graph_identity,
+    axes: axisContract,
+    formula: formulaContract,
+    stateOut,
+  };
+
+  React.useEffect(() => {
+    onGraphStateChange?.(stateOut);
+    onInterpretationContextChange?.({
+      source: "coord",
+      target: "E0",
+      values: stateOut,
+      reading: {
+        es: "El grafico Coord vincula acoplamiento transversal, campo electrico, campo magnetico y propagacion.",
+        en: "The Coord graph links transverse coupling, electric field, magnetic field, and propagation.",
+      },
+    });
+  }, [c, E0, B0, lambda, f, onGraphStateChange, onInterpretationContextChange]);
+
+  return (
+    <OndasGraphsCoord
+      {...props}
+      params={{ ...input, c, E0, B0, lambda, f }}
+      sharedParams={mergedSharedParams}
+      forcedScenario="electromagnetic"
+      title={tt("Ondas electromagneticas", "Electromagnetic waves")}
+    />
+  );
+}
+
+const ElectromagneticasGraphsCoord = createCoordGraph({
+  displayName: "ElectromagneticasGraphsCoord",
+  Component: ElectromagneticasCoordView,
+});
+
+ElectromagneticasGraphsCoord.graph_identity = profile.graph_identity;
+ElectromagneticasGraphsCoord.pregunta_principal = profile.graph_identity.pregunta_principal;
+ElectromagneticasGraphsCoord.magnitud_estrella = profile.graph_identity.magnitud_estrella;
+ElectromagneticasGraphsCoord.axes = axisContract;
+ElectromagneticasGraphsCoord.formula = formulaContract;
+
+export default ElectromagneticasGraphsCoord;
+
+

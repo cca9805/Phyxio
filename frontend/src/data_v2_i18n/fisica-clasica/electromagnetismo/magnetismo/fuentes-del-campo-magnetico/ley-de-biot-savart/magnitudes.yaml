@@ -1,0 +1,399 @@
+magnitudes:
+- id: campo_magnetico
+  symbol: B
+  nombre:
+    es: Campo magnetico
+    en: Magnetic field
+  descripcion:
+    es: Campo magnetico total producido por una distribucion de corriente.
+    en: Total magnetic field produced by a current distribution.
+  unidad_si: T
+  dimension: '[M T^-2 I^-1]'
+  is_vector: true
+  components:
+  - B_x
+  - B_y
+  - B_z
+  category: state
+  physical_role: core_physical_quantity
+  used_in:
+  - campo_hilo_largo
+  - campo_espira_centro
+  - teoria.md
+  - ejemplos.md
+  - graph_y_axis
+  common_mistake:
+    es: Tratarlo como si saliera de un solo punto de corriente y no como suma vectorial.
+    en: Treating it as if it came from one current point instead of a vector sum.
+  typical_range: 1e-7 T a 1 T
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo de una componente depende de la orientacion elegida y de la regla de la mano derecha.
+      en: The sign of a component depends on the chosen orientation and the right-hand rule.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede anularse por simetria o cancelacion vectorial de contribuciones.
+      en: It may vanish by symmetry or vector cancellation of contributions.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: '[0, inf) T'
+  interpretation_role:
+    primary_for:
+    - field_result
+    - graph_output
+    secondary_for:
+    - symmetry_check
+  graph_binding:
+    channels:
+    - y_axis
+    - result_panel
+  pedagogical_notes:
+    es: En este leaf se calcula como modulo solo despues de decidir la geometria y la direccion comun de las contribuciones.
+    en: In this leaf it is calculated as a magnitude only after deciding geometry and common contribution direction.
+- id: contribucion_diferencial_de_campo
+  symbol: dB
+  nombre:
+    es: Contribucion diferencial de campo
+    en: Differential field contribution
+  descripcion:
+    es: Campo magnetico elemental producido por un pequeno elemento de corriente.
+    en: Elementary magnetic field produced by a small current element.
+  unidad_si: T
+  dimension: '[M T^-2 I^-1]'
+  is_vector: true
+  components:
+  - dB_x
+  - dB_y
+  - dB_z
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+  - biot_savart_diferencial
+  - teoria.md
+  - ejemplos.md
+  common_mistake:
+    es: Sumar modulos de contribuciones sin respetar su direccion vectorial.
+    en: Adding contribution magnitudes without respecting their vector direction.
+  typical_range: 1e-12 T a 1e-3 T
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su direccion se fija con el producto vectorial entre corriente y direccion hacia el punto.
+      en: Its direction is fixed by the cross product between current and direction to the point.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Se anula si el elemento apunta hacia el punto de observacion o si la corriente es nula.
+      en: It vanishes if the element points toward the observation point or if current is zero.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: '[0, inf) T'
+  interpretation_role:
+    primary_for:
+    - local_contribution
+    - superposition_step
+    secondary_for:
+    - direction_rule
+  graph_binding:
+    channels:
+    - local_vector
+  pedagogical_notes:
+    es: Es el ladrillo diferencial; no se interpreta como campo final hasta integrarlo sobre la geometria.
+    en: It is the differential building block; it is not the final field until integrated over geometry.
+- id: mu0
+  symbol: \mu_0
+  nombre:
+    es: Permeabilidad magnetica del vacio
+    en: Magnetic permeability of vacuum
+  descripcion:
+    es: Constante positiva que fija el acoplamiento entre corriente y campo magnetico en vacio.
+    en: Positive constant setting the coupling between current and magnetic field in vacuum.
+  unidad_si: N*A^-2
+  dimension: '[M L T^-2 I^-2]'
+  is_vector: false
+  components: []
+  category: constant
+  physical_role: core_physical_quantity
+  used_in:
+  - biot_savart_diferencial
+  - campo_hilo_largo
+  - campo_espira_centro
+  common_mistake:
+    es: Usarla sin revisar si el medio real modifica la permeabilidad efectiva.
+    en: Using it without checking whether the real medium changes effective permeability.
+  typical_range: 4*pi*1e-7 N*A^-2
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es positiva en el modelo de vacio.
+      en: It is positive in the vacuum model.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un valor nulo eliminaria el acoplamiento magnetico entre corriente y campo.
+      en: A zero value would remove magnetic coupling between current and field.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, inf) N*A^-2
+  interpretation_role:
+    primary_for:
+    - proportionality_constant
+    - vacuum_model
+    secondary_for:
+    - unit_check
+  graph_binding:
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Debe leerse como constante del medio ideal, no como descripcion completa de materiales magneticos.
+    en: It should be read as an ideal-medium constant, not as a full description of magnetic materials.
+- id: corriente_electrica
+  symbol: I
+  nombre:
+    es: Corriente electrica
+    en: Electric current
+  descripcion:
+    es: Corriente estacionaria que circula por el hilo o por la espira.
+    en: Steady current flowing through the wire or loop.
+  unidad_si: A
+  dimension: '[I]'
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: core_physical_quantity
+  used_in:
+  - biot_savart_diferencial
+  - campo_hilo_largo
+  - campo_espira_centro
+  - ejemplos.md
+  common_mistake:
+    es: Cambiar su sentido sin cambiar la direccion del campo indicada por la mano derecha.
+    en: Changing its direction without changing the field direction given by the right-hand rule.
+  typical_range: 0.01 A a 1000 A
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su signo representa sentido convencional de circulacion en la geometria elegida.
+      en: Its sign represents conventional circulation direction in the chosen geometry.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Sin corriente estacionaria no hay campo magnetico de Biot Savart.
+      en: Without steady current there is no Biot-Savart magnetic field.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: (-inf, inf) A
+  interpretation_role:
+    primary_for:
+    - source_strength
+    - field_scaling
+    secondary_for:
+    - direction_rule
+  graph_binding:
+    channels:
+    - input_parameter
+  pedagogical_notes:
+    es: Escala linealmente el campo, pero su sentido tambien fija la direccion vectorial.
+    en: It scales the field linearly, but its direction also fixes the vector direction.
+- id: dl
+  symbol: dl
+  nombre:
+    es: Elemento de corriente
+    en: Current element length
+  descripcion:
+    es: Elemento orientado de longitud por el que circula la corriente.
+    en: Oriented length element through which current flows.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: true
+  components:
+  - dl_x
+  - dl_y
+  - dl_z
+  category: dimension
+  physical_role: core_physical_quantity
+  used_in:
+  - biot_savart_diferencial
+  - teoria.md
+  - ejemplos.md
+  common_mistake:
+    es: Usarlo como longitud escalar y olvidar que su orientacion cambia la direccion de la contribucion.
+    en: Using it as a scalar length and forgetting that its orientation changes contribution direction.
+  typical_range: depende de la discretizacion o de la geometria del conductor
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su orientacion sigue el sentido convencional de la corriente.
+      en: Its orientation follows the conventional current direction.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un elemento nulo no aporta contribucion diferencial.
+      en: A zero element provides no differential contribution.
+  value_nature:
+    kind: vector_component
+    nonnegative_only: false
+    expected_interval: any oriented path element
+  interpretation_role:
+    primary_for:
+    - current_geometry
+    - cross_product_direction
+    secondary_for:
+    - integration_path
+  graph_binding:
+    channels:
+    - source_element
+  pedagogical_notes:
+    es: Es la parte de la geometria que convierte una corriente distribuida en suma de contribuciones.
+    en: It is the geometric part that turns a distributed current into a sum of contributions.
+- id: distancia_al_punto_de_observacion
+  symbol: r
+  nombre:
+    es: Distancia al punto de observacion
+    en: Distance to observation point
+  descripcion:
+    es: Distancia entre el elemento de corriente y el punto donde se calcula el campo.
+    en: Distance between the current element and the point where field is calculated.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: dimension
+  physical_role: core_physical_quantity
+  used_in:
+  - biot_savart_diferencial
+  - campo_hilo_largo
+  - graph_x_axis
+  common_mistake:
+    es: Usar una distancia al conductor completo en lugar de la distancia correcta a cada elemento.
+    en: Using a distance to the whole conductor instead of the correct distance to each element.
+  typical_range: 1e-3 m a 10 m
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es una distancia positiva.
+      en: It is a positive distance.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Distancia nula queda fuera del modelo de conductor ideal.
+      en: Zero distance is outside the ideal-conductor model.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, inf) m
+  interpretation_role:
+    primary_for:
+    - distance_decay
+    - graph_input
+    secondary_for:
+    - model_validity
+  graph_binding:
+    channels:
+    - x_axis
+  pedagogical_notes:
+    es: Controla una caida intensa de la contribucion diferencial y exige cuidado geometrico.
+    en: It controls a strong decrease of the differential contribution and requires geometric care.
+- id: s_theta
+  symbol: sin_theta
+  nombre:
+    es: Factor angular de Biot Savart
+    en: Biot-Savart angular factor
+  descripcion:
+    es: Factor entre cero y uno que mide cuanto del elemento de corriente es perpendicular a la direccion hacia el punto.
+    en: Factor between zero and one measuring how much of the current element is perpendicular to the direction toward the
+      point.
+  unidad_si: '-'
+  dimension: '[1]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: core_physical_quantity
+  used_in:
+  - biot_savart_diferencial
+  - teoria.md
+  - ejemplos.md
+  common_mistake:
+    es: Omitir el factor angular y hacer contribuir igual a elementos alineados y perpendiculares.
+    en: Omitting the angular factor and making aligned and perpendicular elements contribute equally.
+  typical_range: 0 a 1
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es un factor geometrico no negativo.
+      en: It is a nonnegative geometric factor.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor nulo implica contribucion diferencial nula por alineacion.
+      en: Zero value implies zero differential contribution by alignment.
+  value_nature:
+    kind: ratio
+    nonnegative_only: true
+    expected_interval: '[0, 1]'
+  interpretation_role:
+    primary_for:
+    - angular_weight
+    - cross_product_strength
+    secondary_for:
+    - symmetry_reasoning
+  graph_binding:
+    channels:
+    - angle_annotation
+  pedagogical_notes:
+    es: Es la magnitud que muestra que no basta estar cerca; tambien importa la orientacion del elemento.
+    en: It shows that proximity is not enough; current-element orientation also matters.
+- id: radio_de_espira
+  symbol: R
+  nombre:
+    es: Radio de espira
+    en: Loop radius
+  descripcion:
+    es: Radio de una espira circular usada para estimar el campo en su centro.
+    en: Radius of a circular loop used to estimate the field at its center.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: dimension
+  physical_role: core_physical_quantity
+  used_in:
+  - campo_espira_centro
+  - ejemplos.md
+  - aplicaciones.md
+  common_mistake:
+    es: Confundirlo con diametro o con distancia a un punto fuera del centro.
+    en: Confusing it with diameter or with distance to a point away from the center.
+  typical_range: 1e-3 m a 1 m
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es un radio positivo.
+      en: It is a positive radius.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Radio nulo no describe una espira fisica.
+      en: Zero radius does not describe a physical loop.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, inf) m
+  interpretation_role:
+    primary_for:
+    - loop_geometry
+    - center_field
+    secondary_for:
+    - coil_design
+  graph_binding:
+    channels:
+    - input_parameter
+  pedagogical_notes:
+    es: En la espira circular, permite ver como la misma corriente se concentra mas al reducir la escala.
+    en: In a circular loop, it shows how the same current is concentrated more strongly when scale is reduced.

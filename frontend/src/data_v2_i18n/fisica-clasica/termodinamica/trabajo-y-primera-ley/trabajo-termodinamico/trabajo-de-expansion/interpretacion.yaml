@@ -1,0 +1,508 @@
+version: 5.0.0
+id: trabajo-de-expansion
+leaf_id: trabajo-de-expansion
+nombre:
+  es: Trabajo de expansion
+  en: Expansion Work
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: trabajo-y-primera-ley
+  parent_id: trabajo-termodinamico
+  ruta_relativa: fisica-clasica/termodinamica/trabajo-y-primera-ley/trabajo-termodinamico/trabajo-de-expansion
+  orden: 254110
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - trabajo_isobarico
+  - trabajo_integral
+  magnitudes:
+  - trabajo_termodinamico
+  - presion
+  - volumen
+  - variacion_de_volumen
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: trabajo_termodinamico
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  trabajo_termodinamico:
+    enabled: true
+    magnitude_type: work
+    semantic_role:
+      es: Energía transferida mecánicamente a través de la frontera móvil del sistema.
+      en: Energy mechanically transferred through the moving boundary of the system.
+    summary_rules:
+    - id: W_summary_expansion
+      when: W > 0
+      status: ok
+      text:
+        es: '[[W]] es positivo: el gas se expande y transfiere energía mecánica al entorno. El sistema pierde energía interna
+          si no recibe calor simultáneamente.'
+        en: '[[W]] is positive: the gas expands and transfers mechanical energy to the surroundings. The system loses internal
+          energy if it does not simultaneously receive heat.'
+    - id: W_summary_compression
+      when: W < 0
+      status: ok
+      text:
+        es: '[[W]] es negativo: el entorno realiza trabajo sobre el gas (compresión). El sistema gana energía mecánica del
+          entorno.'
+        en: '[[W]] is negative: the surroundings do work on the gas (compression). The system gains mechanical energy from
+          the surroundings.'
+    - id: W_summary_zero
+      when: W == 0
+      status: ok
+      text:
+        es: '[[W]] es nulo: proceso isocórico (ΔV = 0) o expansión libre (p = 0). No hay transferencia de energía mecánica
+          a través de la frontera.'
+        en: '[[W]] is zero: isochoric process (ΔV = 0) or free expansion (p = 0). No mechanical energy is transferred through
+          the boundary.'
+    - id: W_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[W]] cuantifica la energía mecánica intercambiada a través de la frontera móvil. Depende de la trayectoria del
+          proceso, no solo de los estados inicial y final.'
+        en: '[[W]] quantifies the mechanical energy exchanged through the moving boundary. It depends on the process path,
+          not only on the initial and final states.'
+    physical_reading_rules:
+    - id: W_reading_path_dependence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[W]] es una magnitud de proceso: si el gas va del mismo estado inicial al mismo estado final por trayectorias
+          distintas en el diagrama p-V, el área bajo la curva y por tanto [[W]] serán diferentes.'
+        en: '[[W]] is a process quantity: if the gas goes from the same initial to the same final state by different paths
+          in the p-V diagram, the area under the curve and hence [[W]] will differ.'
+    - id: W_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[W]] = [[p]]·[[DeltaV]] en un proceso isobárico. El producto presión por variación de volumen da la energía
+          transferida por la fuerza de presión sobre el émbolo.'
+        en: '[[W]] = [[p]]·[[DeltaV]] in an isobaric process. Pressure times volume change gives the energy transferred by
+          the pressure force on the piston.'
+    coherence_rules:
+    - id: W_coherence_sign
+      when: W > 0 and DeltaV < 0
+      status: error
+      text:
+        es: '[[W]] positivo con [[DeltaV]] negativo es incoherente en la convención física. Revisar el signo de [[DeltaV]]
+          o la convención de signos usada.'
+        en: Positive [[W]] with negative [[DeltaV]] is inconsistent with the physics convention. Review the sign of [[DeltaV]]
+          or the sign convention used.
+    - id: W_coherence_large
+      when: abs(W) > 1e8
+      status: warning
+      text:
+        es: '[[W]] supera 100 MJ. Verificar que las unidades de [[p]] (Pa) y [[DeltaV]] (m³) son coherentes; un error habitual
+          es usar litros en lugar de metros cúbicos.'
+        en: '[[W]] exceeds 100 MJ. Verify that units of [[p]] (Pa) and [[DeltaV]] (m³) are consistent; a common error is using
+          litres instead of cubic metres.'
+    - id: W_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[W]] parece dentro del rango esperado para el proceso descrito.'
+        en: '[[W]] appears within the expected range for the described process.'
+    model_validity_rules:
+    - id: W_model_isobaric
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo W = [[p]]·[[DeltaV]] es válido solo para procesos isobáricos. Para procesos con presión variable, usar
+          la integral ∫p dV, que geométricamente equivale al área bajo la curva p-V.
+        en: The model W = [[p]]·[[DeltaV]] is valid only for isobaric processes. For variable-pressure processes, use the
+          integral ∫p dV, which geometrically equals the area under the p-V curve.
+    - id: W_model_free_expansion
+      when: W == 0 and DeltaV > 0
+      status: warning
+      text:
+        es: '[[W]] nulo con [[DeltaV]] positivo puede indicar expansión libre contra el vacío (p_ext = 0), que es un proceso
+          irreversible donde no se realiza trabajo útil.'
+        en: Zero [[W]] with positive [[DeltaV]] may indicate free expansion against vacuum (p_ext = 0), an irreversible process
+          where no useful work is done.
+    graph_rules:
+    - id: W_graph_area
+      when: 'true'
+      status: ok
+      text:
+        es: En el diagrama p-V, [[W]] es el área encerrada entre la curva del proceso y el eje de volúmenes. Para un proceso
+          isobárico esa área es un rectángulo de base [[DeltaV]] y altura [[p]].
+        en: In the p-V diagram, [[W]] is the area enclosed between the process curve and the volume axis. For an isobaric
+          process that area is a rectangle with base [[DeltaV]] and height [[p]].
+    likely_errors:
+    - id: W_error_sign_convention
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[trabajo_termodinamico]] con una lectura aislada es un error frecuente: Error frecuente: mezclar la
+          convención física (W > 0 para expansión) con la convención química (W = −p·ΔV, W < 0 para expansión). Verificar
+          qué convenio usa el enunciado antes de interpretar el signo.'
+        en: 'A common mistake is to interpret [[trabajo_termodinamico]] in isolation: Frequent error: mixing the physics convention
+          (W > 0 for expansion) with the chemistry convention (W = −p·ΔV, W < 0 for expansion). Verify which convention the
+          problem uses before interpreting the sign.'
+    - id: W_error_state_function
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[trabajo_termodinamico]] con una lectura aislada es un error frecuente: Error frecuente: tratar [[W]]
+          como función de estado y asumir que depende solo de los estados inicial y final. [[W]] depende de la trayectoria
+          del proceso.'
+        en: 'A common mistake is to interpret [[trabajo_termodinamico]] in isolation: Frequent error: treating [[W]] as a
+          state function and assuming it depends only on the initial and final states. [[W]] depends on the process path.'
+    next_step_rules:
+    - id: W_next_first_law
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[W]] calculado, aplicar la primera ley ΔU = Q − W para obtener el calor intercambiado Q, dado que se conozca
+          la variación de energía interna [[DeltaU]].
+        en: With [[W]] computed, apply the first law ΔU = Q − W to obtain the exchanged heat Q, given that the internal energy
+          change [[DeltaU]] is known.
+    physical_intuition:
+    - id: trabajo_termodinamico_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[trabajo_termodinamico]] describe el estado dinámico.
+        en: Intuitively, [[trabajo_termodinamico]] describes the dynamic state.
+    limiting_cases:
+    - id: trabajo_termodinamico_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[trabajo_termodinamico]].
+        en: Check limiting cases of [[trabajo_termodinamico]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  presion:
+    enabled: true
+    magnitude_type: pressure
+    semantic_role:
+      es: Presión del gas; factor multiplicativo del trabajo en procesos isobáricos.
+      en: Gas pressure; multiplicative factor of work in isobaric processes.
+    summary_rules:
+    - id: p_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[p]] determina la fuerza por unidad de área sobre el émbolo. En procesos isobáricos es constante y actúa como
+          factor de escala del trabajo.'
+        en: '[[p]] determines the force per unit area on the piston. In isobaric processes it is constant and acts as a scale
+          factor for work.'
+    physical_reading_rules:
+    - id: p_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[p]] constante implica que la curva p(V) es horizontal en el diagrama p-V; el trabajo es el área del rectángulo
+          bajo esa línea horizontal.'
+        en: Constant [[p]] means the p(V) curve is horizontal in the p-V diagram; work is the area of the rectangle below
+          that horizontal line.
+    coherence_rules:
+    - id: p_coherence_positive
+      when: p <= 0
+      status: error
+      text:
+        es: '[[p]] nula o negativa es físicamente imposible para un gas termodinámico estándar.'
+        en: Zero or negative [[p]] is physically impossible for a standard thermodynamic gas.
+    - id: p_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[p]] positiva y dentro del rango esperado.'
+        en: Positive [[p]] within the expected range.
+    model_validity_rules:
+    - id: p_model_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[p]] se interpreta como presión de equilibrio del gas (cuasi-estático). En procesos irreversibles rápidos, la
+          presión interna puede diferir de la presión externa del émbolo.'
+        en: '[[p]] is interpreted as the equilibrium pressure of the gas (quasi-static). In fast irreversible processes, the
+          internal pressure may differ from the piston''s external pressure.'
+    graph_rules:
+    - id: p_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[p]] es el eje vertical del diagrama p-V. Una línea horizontal a altura [[p]] corresponde a un proceso isobárico.'
+        en: '[[p]] is the vertical axis of the p-V diagram. A horizontal line at height [[p]] corresponds to an isobaric process.'
+    likely_errors:
+    - id: p_error_units
+      when: p < 100
+      status: warning
+      text:
+        es: 'Confundir [[presion]] con una lectura aislada es un error frecuente: [[p]] menor de 100 Pa es inusual en procesos
+          termodinámicos estándar. Verificar si se usó atmósferas o bares en lugar de pascales.'
+        en: 'A common mistake is to interpret [[presion]] in isolation: [[p]] below 100 Pa is unusual for standard thermodynamic
+          processes. Check if atmospheres or bars were used instead of pascals.'
+    next_step_rules:
+    - id: p_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar si [[p]] es constante (proceso isobárico) o variable antes de aplicar la fórmula de trabajo.
+        en: Verify whether [[p]] is constant (isobaric process) or variable before applying the work formula.
+    physical_intuition:
+    - id: presion_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[presion]] describe el estado dinámico.
+        en: Intuitively, [[presion]] describes the dynamic state.
+    limiting_cases:
+    - id: presion_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[presion]].
+        en: Check limiting cases of [[presion]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  variacion_de_volumen:
+    enabled: true
+    magnitude_type: volume_change
+    semantic_role:
+      es: Variación de volumen; determina la dirección y escala del trabajo de expansión o compresión.
+      en: Volume change; determines the direction and scale of expansion or compression work.
+    summary_rules:
+    - id: DeltaV_summary_expansion
+      when: DeltaV > 0
+      status: ok
+      text:
+        es: '[[DeltaV]] positivo indica expansión del gas. El sistema realiza trabajo positivo sobre el entorno en la convención
+          física.'
+        en: Positive [[DeltaV]] indicates gas expansion. The system does positive work on the surroundings in the physics
+          convention.
+    - id: DeltaV_summary_compression
+      when: DeltaV < 0
+      status: ok
+      text:
+        es: '[[DeltaV]] negativo indica compresión del gas. El entorno realiza trabajo sobre el sistema.'
+        en: Negative [[DeltaV]] indicates gas compression. The surroundings do work on the system.
+    - id: DeltaV_summary_zero
+      when: DeltaV == 0
+      status: ok
+      text:
+        es: '[[DeltaV]] nulo: proceso isocórico, sin trabajo de frontera móvil.'
+        en: 'Zero [[DeltaV]]: isochoric process, no moving-boundary work.'
+    - id: DeltaV_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaV]] = V_f − V_i. Verificar que el orden de la resta sea correcto; invertirlo cambia el signo del trabajo.'
+        en: '[[DeltaV]] = V_f − V_i. Verify the subtraction order is correct; inverting it changes the sign of work.'
+    physical_reading_rules:
+    - id: DeltaV_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaV]] es la base del rectángulo del trabajo en el diagrama p-V para un proceso isobárico. Para procesos
+          con [[p]] variable, es la proyección sobre el eje de volúmenes del área bajo la curva.'
+        en: '[[DeltaV]] is the base of the work rectangle in the p-V diagram for an isobaric process. For processes with variable
+          [[p]], it is the projection onto the volume axis of the area under the curve.'
+    coherence_rules:
+    - id: DeltaV_coherence_units
+      when: abs(DeltaV) > 1000
+      status: warning
+      text:
+        es: '[[DeltaV]] mayor de 1000 m³ es inusual en experimentos de laboratorio. Verificar si se usaron litros (1 L = 10⁻³
+          m³) en lugar de metros cúbicos.'
+        en: '[[DeltaV]] greater than 1000 m³ is unusual in lab experiments. Check if litres (1 L = 10⁻³ m³) were used instead
+          of cubic metres.'
+    - id: DeltaV_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaV]] dentro del rango esperado.'
+        en: '[[DeltaV]] within the expected range.'
+    model_validity_rules:
+    - id: DeltaV_model_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaV]] es la variación total de volumen; para usarla en W = [[p]]·[[DeltaV]] el proceso debe ser isobárico.
+          En procesos no isobáricos, [[DeltaV]] sola no determina el trabajo.'
+        en: '[[DeltaV]] is the total volume change; to use it in W = [[p]]·[[DeltaV]] the process must be isobaric. In non-isobaric
+          processes, [[DeltaV]] alone does not determine the work.'
+    graph_rules:
+    - id: DeltaV_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaV]] es la extensión horizontal del proceso en el diagrama p-V. Visualmente representa el desplazamiento
+          del estado del gas a lo largo del eje de volúmenes.'
+        en: '[[DeltaV]] is the horizontal extent of the process in the p-V diagram. Visually it represents the displacement
+          of the gas state along the volume axis.'
+    likely_errors:
+    - id: DeltaV_error_sign
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[variacion_de_volumen]] con una lectura aislada es un error frecuente: Error frecuente: calcular [[DeltaV]]
+          = V_i − V_f en lugar de V_f − V_i, invirtiendo el signo del trabajo.'
+        en: 'A common mistake is to interpret [[variacion_de_volumen]] in isolation: Frequent error: computing [[DeltaV]]
+          = V_i − V_f instead of V_f − V_i, inverting the sign of work.'
+    next_step_rules:
+    - id: DeltaV_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Confirmar que [[DeltaV]] = V_f − V_i y multiplicar por [[p]] constante para obtener [[W]] en procesos isobáricos.
+        en: Confirm that [[DeltaV]] = V_f − V_i and multiply by constant [[p]] to obtain [[W]] in isobaric processes.
+    physical_intuition:
+    - id: variacion_de_volumen_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[variacion_de_volumen]] describe el estado dinámico.
+        en: Intuitively, [[variacion_de_volumen]] describes the dynamic state.
+    limiting_cases:
+    - id: variacion_de_volumen_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[variacion_de_volumen]].
+        en: Check limiting cases of [[variacion_de_volumen]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

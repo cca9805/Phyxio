@@ -1,0 +1,262 @@
+const n=`version: 1
+magnitudes:
+- id: m1
+  symbol: m_1
+  nombre: { es: masa del primer cuerpo, en: mass of the first body }
+  descripcion: { es: Masa inercial del primer cuerpo del sistema., en: Inertial mass of the first body. }
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: physical_quantity
+  used_in: ["colisiones-inelasticas"]
+  common_mistake: Ignorar la inercia o confundirla con el peso.
+  typical_range: 0.1 - 100 kg
+  sign_behavior: { has_sign: false, meaning: Escalar positivo. }
+  zero_behavior: { allowed: false, meaning: Cuerpo masivo necesario. }
+  value_nature: { kind: scalar, nonnegative_only: true }
+  interpretation_role: { primary_for: ["colisiones-inelasticas"] }
+  graph_binding: { channels: [mass] }
+  pedagogical_notes: { es: "Representa el cuerpo incidente.", en: "Represents the incident body." }
+
+- id: m2
+  symbol: m_2
+  nombre: { es: masa del segundo cuerpo, en: mass of the second body }
+  descripcion: { es: Masa inercial del segundo cuerpo del sistema., en: Inertial mass of the second body. }
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: physical_quantity
+  used_in: ["colisiones-inelasticas"]
+  common_mistake: No considerar su estado de reposo inicial como fuente de resistencia.
+  typical_range: 0.1 - 100 kg
+  sign_behavior: { has_sign: false, meaning: Escalar positivo. }
+  zero_behavior: { allowed: false, meaning: Cuerpo masivo necesario. }
+  value_nature: { kind: scalar, nonnegative_only: true }
+  interpretation_role: { primary_for: ["colisiones-inelasticas"] }
+  graph_binding: { channels: [mass] }
+  pedagogical_notes: { es: "Representa el blanco.", en: "Represents the target." }
+
+- id: v1i
+  symbol: v_{1i}
+  nombre: { es: velocidad inicial del primer cuerpo, en: initial velocity of the first body }
+  descripcion: { es: Velocidad del primer cuerpo antes de la colisión., en: Velocity of the first body before the collision. }
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: true
+  components: [x]
+  category: fundamental
+  physical_role: state_variable
+  used_in: ["colisiones-inelasticas"]
+  common_mistake: Olvidar el signo según el sistema de referencia.
+  typical_range: -50 - 50 m/s
+  sign_behavior: { has_sign: true, meaning: Dirección del movimiento. }
+  zero_behavior: { allowed: true, meaning: Reposo. }
+  value_nature: { kind: vector_component, nonnegative_only: false }
+  interpretation_role: { primary_for: ["colisiones-inelasticas"] }
+  graph_binding: { channels: [velocity] }
+  pedagogical_notes: { es: "Velocidad de aproximación.", en: "Approach velocity." }
+
+- id: v2i
+  symbol: v_{2i}
+  nombre: { es: velocidad inicial del segundo cuerpo, en: initial velocity of the second body }
+  descripcion: { es: Velocidad del segundo cuerpo antes de la colisión., en: Velocity of the second body before the collision. }
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: true
+  components: [x]
+  category: fundamental
+  physical_role: state_variable
+  used_in: ["colisiones-inelasticas"]
+  common_mistake: Error de signo en choques frontales.
+  typical_range: -50 - 50 m/s
+  sign_behavior: { has_sign: true, meaning: Dirección del movimiento. }
+  zero_behavior: { allowed: true, meaning: Reposo habitual del blanco. }
+  value_nature: { kind: vector_component, nonnegative_only: false }
+  interpretation_role: { primary_for: ["colisiones-inelasticas"] }
+  graph_binding: { channels: [velocity] }
+  pedagogical_notes: { es: "Estado inicial del blanco.", en: "Initial state of the target." }
+
+- id: v1f
+  symbol: v_{1f}
+  nombre: { es: velocidad final del primer cuerpo, en: final velocity of the first body }
+  descripcion: { es: Velocidad del primer cuerpo tras la interacción inelástica., en: Velocity of the first body after the inelastic interaction. }
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: true
+  components: [x]
+  category: derived
+  physical_role: state_variable
+  used_in: ["colisiones-inelasticas"]
+  common_mistake: Asumir que siempre rebota hacia atrás.
+  typical_range: -50 - 50 m/s
+  sign_behavior: { has_sign: true, meaning: Dirección final. }
+  zero_behavior: { allowed: true, meaning: Detención tras el choque. }
+  value_nature: { kind: vector_component, nonnegative_only: false }
+  interpretation_role: { primary_for: ["colisiones-inelasticas"] }
+  graph_binding: { channels: [velocity] }
+  pedagogical_notes: { es: "Velocidad resultante tras el impacto.", en: "Resulting velocity after impact." }
+
+- id: v2f
+  symbol: v_{2f}
+  nombre: { es: velocidad final del segundo cuerpo, en: final velocity of the second body }
+  descripcion: { es: Velocidad del segundo cuerpo tras la interacción inelástica., en: Velocity of the second body after the inelastic interaction. }
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: true
+  components: [x]
+  category: derived
+  physical_role: state_variable
+  used_in: ["colisiones-inelasticas"]
+  common_mistake: No considerar la conservación del momento total.
+  typical_range: -50 - 50 m/s
+  sign_behavior: { has_sign: true, meaning: Dirección final. }
+  zero_behavior: { allowed: true, meaning: Detención (caso muy raro). }
+  value_nature: { kind: vector_component, nonnegative_only: false }
+  interpretation_role: { primary_for: ["colisiones-inelasticas"] }
+  graph_binding: { channels: [velocity] }
+  pedagogical_notes: { es: "Velocidad de alejamiento.", en: "Recoil velocity." }
+
+- id: e
+  symbol: e
+  nombre: { es: coeficiente de restitución, en: coefficient of restitution }
+  descripcion: { es: Razón entre la velocidad relativa final y la inicial., en: Ratio between final and initial relative velocities. }
+  unidad_si: "1"
+  dimension: "1"
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: physical_property
+  used_in: ["colisiones-inelasticas"]
+  common_mistake: Usar valores mayores que 1.
+  typical_range: 0 - 1
+  sign_behavior: { has_sign: false, meaning: Magnitud absoluta. }
+  zero_behavior: { allowed: true, meaning: Choque totalmente inelástico. }
+  value_nature: { kind: scalar, nonnegative_only: true }
+  interpretation_role: { primary_for: ["colisiones-inelasticas"] }
+  graph_binding: { channels: [restitution] }
+  pedagogical_notes: { es: "Mide la elasticidad del choque.", en: "Measures collision elasticity." }
+
+- id: Ki
+  symbol: K_i
+  nombre: { es: energía cinética inicial, en: initial kinetic energy }
+  descripcion: { es: Energía cinética total del sistema antes del impacto., en: Total kinetic energy of the system before impact. }
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in: ["colisiones-inelasticas"]
+  common_mistake: Sumar velocidades antes de elevar al cuadrado.
+  typical_range: 0 - 10000 J
+  sign_behavior: { has_sign: false, meaning: Magnitud escalar positiva. }
+  zero_behavior: { allowed: true, meaning: Sistema en reposo. }
+  value_nature: { kind: scalar, nonnegative_only: true }
+  interpretation_role: { primary_for: ["colisiones-inelasticas"] }
+  graph_binding: { channels: [energy] }
+  pedagogical_notes: { es: "Energía disponible.", en: "Available energy." }
+
+- id: Kf
+  symbol: K_f
+  nombre: { es: energía cinética final, en: final kinetic energy }
+  descripcion: { es: Energía cinética total tras el impacto inelástico., en: Total kinetic energy after the inelastic impact. }
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in: ["colisiones-inelasticas"]
+  common_mistake: Creer que se conserva igual que el momento.
+  typical_range: 0 - 10000 J
+  sign_behavior: { has_sign: false, meaning: Magnitud escalar positiva. }
+  zero_behavior: { allowed: true, meaning: Detención total (raro en 1D). }
+  value_nature: { kind: scalar, nonnegative_only: true }
+  interpretation_role: { primary_for: ["colisiones-inelasticas"] }
+  graph_binding: { channels: [energy] }
+  pedagogical_notes: { es: "Energía remanente.", en: "Remaining energy." }
+
+- id: DeltaK
+  symbol: \\Delta K
+  nombre: { es: variación de energía cinética, en: variation of kinetic energy }
+  descripcion: { es: Cantidad de energía mecánica disipada como calor o deformación., en: Amount of mechanical energy dissipated as heat or deformation. }
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in: ["colisiones-inelasticas"]
+  common_mistake: Ignorar el signo negativo.
+  typical_range: -10000 - 0 J
+  sign_behavior: { has_sign: true, meaning: Negativo indica pérdida. }
+  zero_behavior: { allowed: true, meaning: Choque elástico. }
+  value_nature: { kind: scalar, nonnegative_only: false }
+  interpretation_role: { primary_for: ["colisiones-inelasticas"] }
+  graph_binding: { channels: [energy] }
+  pedagogical_notes: { es: "Costo energético del choque.", en: "Energy cost of the collision." }
+
+- id: p
+  symbol: p
+  nombre: { es: momento lineal, en: linear momentum }
+  descripcion: { es: Producto de la masa por la velocidad de los cuerpos., en: Product of mass and velocity of the bodies. }
+  unidad_si: kg*m/s
+  dimension: M L T^-1
+  is_vector: true
+  components: [x]
+  category: fundamental
+  physical_role: physical_law
+  used_in: ["colisiones-inelasticas"]
+  common_mistake: Confundir con la energía cinética.
+  typical_range: -500 - 500 kg*m/s
+  sign_behavior: { has_sign: true, meaning: Dirección del movimiento total. }
+  zero_behavior: { allowed: true, meaning: Centro de masas en reposo. }
+  value_nature: { kind: vector_component, nonnegative_only: false }
+  interpretation_role: { primary_for: ["colisiones-inelasticas"] }
+  graph_binding: { channels: [momentum] }
+  pedagogical_notes: { es: "Magnitud conservada.", en: "Conserved quantity." }
+
+- id: loss_fraction
+  symbol: \\xi
+  nombre: { es: fracción de energía disipada, en: dissipated energy fraction }
+  descripcion: { es: Proporción de la energía inicial que se pierde en el choque., en: Proportion of initial energy lost in the collision. }
+  unidad_si: "1"
+  dimension: "1"
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_property
+  used_in: ["colisiones-inelasticas"]
+  common_mistake: Confundir con el coeficiente de restitución e.
+  typical_range: 0 - 1
+  sign_behavior: { has_sign: false, meaning: Escalar positivo. }
+  zero_behavior: { allowed: true, meaning: Sin pérdida (elástico). }
+  value_nature: { kind: scalar, nonnegative_only: true }
+  interpretation_role: { primary_for: ["colisiones-inelasticas"] }
+  graph_binding: { channels: [energy] }
+  pedagogical_notes: { es: "Eficacia del impacto.", en: "Impact effectiveness." }
+
+- id: K
+  symbol: K
+  nombre: { es: energía cinética, en: kinetic energy }
+  descripcion: { es: Capacidad del sistema para realizar trabajo por su movimiento., en: System's capacity to do work due to its motion. }
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: physical_quantity
+  used_in: ["colisiones-inelasticas"]
+  common_mistake: Olvidar que depende del cuadrado de v.
+  typical_range: 0 - 10000 J
+  sign_behavior: { has_sign: false, meaning: Siempre positiva. }
+  zero_behavior: { allowed: true, meaning: Reposo. }
+  value_nature: { kind: scalar, nonnegative_only: true }
+  interpretation_role: { primary_for: ["colisiones-inelasticas"] }
+  graph_binding: { channels: [energy] }
+  pedagogical_notes: { es: "Actividad cinética global.", en: "Global kinetic activity." }
+`;export{n as default};

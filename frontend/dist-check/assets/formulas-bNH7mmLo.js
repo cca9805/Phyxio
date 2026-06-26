@@ -1,0 +1,116 @@
+const e=`formulas:
+
+  - id: primer_principio_cerrado
+    title:
+      es: Primer principio de la termodinámica para sistema cerrado
+      en: First law of thermodynamics for a closed system
+    equation: "DeltaU = Q + W"
+    latex: "\\\\Delta U = Q + W"
+    rearrangements:
+      - target: Q
+        equation: "Q = DeltaU - W"
+        latex: "Q = \\\\Delta U - W"
+      - target: W
+        equation: "W = DeltaU - Q"
+        latex: "W = \\\\Delta U - Q"
+    domain_checks:
+      - "DeltaU = Q + W siempre para sistema cerrado sin flujo de materia"
+      - "Q y W pueden ser positivos, negativos o nulos según el proceso"
+      - "En proceso adiabático: Q = 0 y DeltaU = W"
+      - "En proceso isocórico con solo trabajo pV: W = 0 y DeltaU = Q"
+    coherence_checks:
+      - "Si DeltaU es nulo y Q no es nulo, entonces W debe ser igual a menos Q"
+      - "Si el sistema está perfectamente aislado, Q = 0 y W = 0 implica DeltaU = 0"
+    graph_implications:
+      - "Gráfica DeltaU vs proceso: pendiente positiva cuando Q + W > 0"
+      - "Proceso cíclico: la integral cerrada de DeltaU es nula"
+    pedagogical_triggers:
+      - "Si el alumno obtiene DeltaU distinto de Q + W, revisar convención de signos de W"
+      - "Recordar que Q y W dependen del camino pero DeltaU solo depende de los estados extremos"
+    category: fundamental
+    relation_type: conservation
+    physical_meaning:
+      es: "La variación de [[DeltaU]] de un sistema cerrado es igual a la suma del calor [[Q]] que recibe del entorno y el trabajo [[W]] que recibe del entorno. Esta expresión es la forma más general del primer principio cuando no hay flujo de materia a través de la frontera."
+      en: "The change in [[DeltaU]] of a closed system equals the sum of the heat [[Q]] received from the surroundings and the work [[W]] received from the surroundings. This expression is the most general form of the first law when there is no matter flow through the boundary."
+    constraints:
+      - "Sistema cerrado: la frontera es impermeable a la materia"
+      - "No hay flujo de masa: sin términos de entalpía de flujo en el balance"
+      - "Convención IUPAC: Q positivo cuando el sistema recibe calor; W positivo cuando el sistema recibe trabajo"
+    validity:
+      es: "Universal para sistemas cerrados en termodinámica clásica. Válida para cualquier proceso, independientemente del camino termodinámico seguido."
+      en: "Universal for closed systems in classical thermodynamics. Valid for any process, regardless of the thermodynamic path followed."
+    dimension_check: "[M L^2 T^-2] = [M L^2 T^-2] + [M L^2 T^-2]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "cálculo de calor intercambiado en procesos con trabajo conocido"
+      - "determinación de trabajo en procesos con calor medido"
+      - "análisis de ciclos termodinámicos"
+      - "calorimetría de sistemas cerrados"
+    interpretation_tags:
+      - "primer_principio"
+      - "conservacion_energia"
+      - "balance_energetico"
+    result_semantics:
+      target: DeltaU
+      kind: "balance_energetico"
+      sign_meaning:
+        es: "[[DeltaU]] positivo indica que el sistema ha ganado energía interna neta (el sistema se ha calentado o su energía potencial interna ha aumentado). [[DeltaU]] negativo indica pérdida neta de energía interna. [[DeltaU]] nulo ocurre en procesos cíclicos o en condiciones donde Q y W se cancelan."
+        en: "Positive [[DeltaU]] indicates the system has gained net internal energy (the system has warmed up or its internal potential energy has increased). Negative [[DeltaU]] indicates net internal energy loss. Zero [[DeltaU]] occurs in cyclic processes or when Q and W cancel."
+
+  - id: segundo_principio_cerrado
+    title:
+      es: Segundo principio para sistema cerrado (desigualdad de Clausius)
+      en: Second law for a closed system (Clausius inequality)
+    equation: "DeltaS >= Q / T"
+    latex: "\\\\Delta S \\\\geq \\\\frac{Q}{T}"
+    rearrangements:
+      - target: S
+        equation: "DeltaS >= Q / T"
+        latex: "\\\\Delta S \\\\geq \\\\frac{Q}{T}"
+      - target: Q
+        equation: "Q <= DeltaS * T"
+        latex: "Q \\\\leq \\\\Delta S \\\\cdot T"
+    domain_checks:
+      - "Para proceso reversible: DeltaS = Q / T exactamente"
+      - "Para proceso irreversible: DeltaS > Q / T"
+      - "T es la temperatura absoluta de la frontera donde se intercambia el calor"
+    coherence_checks:
+      - "DeltaS < Q / T es imposible en cualquier proceso real"
+      - "Si Q es negativo (sistema cede calor), DeltaS puede ser negativo sin violar el segundo principio"
+    graph_implications:
+      - "Gráfica S vs T en diagrama T-S: el área bajo la curva es el calor intercambiado en proceso reversible"
+      - "La entropía del sistema cerrado puede disminuir si el sistema cede calor a menor temperatura"
+    pedagogical_triggers:
+      - "Si el alumno obtiene DeltaS negativo en proceso donde Q es positivo, hay un error"
+      - "Distinguir entre entropía del sistema y entropía del universo: solo la segunda nunca disminuye"
+    category: fundamental
+    relation_type: inequality
+    physical_meaning:
+      es: "La variación de [[S]] del sistema cerrado es mayor o igual al cociente del calor [[Q]] intercambiado entre la temperatura absoluta [[U]] de la frontera. La igualdad se cumple solo para procesos reversibles; la desigualdad estricta indica irreversibilidad."
+      en: "The change in [[S]] of the closed system is greater than or equal to the ratio of the heat [[Q]] exchanged to the absolute temperature of the boundary. Equality holds only for reversible processes; strict inequality indicates irreversibility."
+    constraints:
+      - "T es la temperatura absoluta de la frontera en kelvin"
+      - "Válida para cada paso infinitesimal del proceso; la integral debe evaluarse a lo largo del camino real"
+      - "El sistema puede tener DeltaS negativo si cede calor al entorno a temperatura suficiente"
+    validity:
+      es: "Universal para sistemas cerrados en termodinámica clásica. La desigualdad de Clausius es equivalente a la formulación de Kelvin-Planck del segundo principio."
+      en: "Universal for closed systems in classical thermodynamics. The Clausius inequality is equivalent to the Kelvin-Planck formulation of the second law."
+    dimension_check: "[M L^2 T^-2 Theta^-1] >= [M L^2 T^-2] / [Theta]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "determinación de la reversibilidad de un proceso en sistema cerrado"
+      - "cálculo de la entropía generada por irreversibilidades"
+      - "análisis de eficiencia de ciclos termodinámicos"
+    interpretation_tags:
+      - "segundo_principio"
+      - "irreversibilidad"
+      - "clausius"
+    result_semantics:
+      target: S
+      kind: "criterio_irreversibilidad"
+      sign_meaning:
+        es: "[[S]] mayor que Q/T indica proceso irreversible con generación de entropía interna. [[S]] igual a Q/T indica proceso reversible ideal. [[S]] menor que Q/T es imposible y señala un error de cálculo o de modelado."
+        en: "[[S]] greater than Q/T indicates an irreversible process with internal entropy generation. [[S]] equal to Q/T indicates an ideal reversible process. [[S]] less than Q/T is impossible and signals a calculation or modeling error."
+`;export{e as default};

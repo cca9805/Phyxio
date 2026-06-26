@@ -1,0 +1,551 @@
+version: 5.0.0
+leaf: metodo-de-montecarlo
+magnitudes:
+- id: numero_muestras
+  symbol: N
+  nombre:
+    es: número de muestras
+    en: number of samples
+  descripcion:
+    es: Cantidad de evaluaciones aleatorias usadas por el estimador.
+    en: Number of random evaluations used by the estimator.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: sampling
+  physical_role: independent_variable
+  used_in:
+  - estimador_montecarlo_media
+  - error_estandar_montecarlo
+  - varianza_muestral_montecarlo
+  - probabilidad_aceptacion_metropolis
+  - promedio_ponderado_muestras
+  common_mistake:
+    es: Interpretar la magnitud fuera del modelo de muestreo declarado.
+    en: Interpreting the quantity outside the stated sampling model.
+  typical_range: Depende del observable; en simulaciones educativas se usan 10^2 a
+    10^6 muestras.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El signo solo tiene sentido si el observable puede tomar valores negativos.
+      en: The sign matters only if the observable can take negative values.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede significar ausencia de contribución, error nulo ideal o conteo
+        nulo según la magnitud.
+      en: Zero may mean no contribution, ideal zero error, or zero count depending
+        on the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: probabilidades entre 0 y 1; conteos positivos; errores no negativos
+  interpretation_role:
+    primary_for:
+    - summary
+    - physical_reading
+    secondary_for:
+    - coherence
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - xAxis
+    role:
+      es: Magnitud usada para leer la convergencia Monte Carlo.
+      en: Quantity used to read Monte Carlo convergence.
+  pedagogical_notes:
+    es: Ayuda a separar azar numérico, promedio físico y error estadístico.
+    en: Helps separate numerical randomness, physical average, and statistical error.
+- id: valor_muestra
+  symbol: A_i
+  nombre:
+    es: valor de muestra
+    en: sample value
+  descripcion:
+    es: Valor del observable en una muestra concreta.
+    en: Observable value in one concrete sample.
+  unidad_si: variable
+  dimension: '[A]'
+  is_vector: false
+  components: []
+  category: observable
+  physical_role: input
+  used_in:
+  - estimador_montecarlo_media
+  - varianza_muestral_montecarlo
+  - promedio_ponderado_muestras
+  common_mistake:
+    es: Interpretar la magnitud fuera del modelo de muestreo declarado.
+    en: Interpreting the quantity outside the stated sampling model.
+  typical_range: Depende del observable; en simulaciones educativas se usan 10^2 a
+    10^6 muestras.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo solo tiene sentido si el observable puede tomar valores negativos.
+      en: The sign matters only if the observable can take negative values.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede significar ausencia de contribución, error nulo ideal o conteo
+        nulo según la magnitud.
+      en: Zero may mean no contribution, ideal zero error, or zero count depending
+        on the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: probabilidades entre 0 y 1; conteos positivos; errores no negativos
+  interpretation_role:
+    primary_for:
+    - summary
+    - physical_reading
+    secondary_for:
+    - coherence
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - parameter
+    role:
+      es: Magnitud usada para leer la convergencia Monte Carlo.
+      en: Quantity used to read Monte Carlo convergence.
+  pedagogical_notes:
+    es: Ayuda a separar azar numérico, promedio físico y error estadístico.
+    en: Helps separate numerical randomness, physical average, and statistical error.
+- id: estimador_montecarlo
+  symbol: A_hat
+  nombre:
+    es: estimador Monte Carlo
+    en: Monte Carlo estimator
+  descripcion:
+    es: Media numérica que aproxima el valor medio físico.
+    en: Numerical mean that approximates the physical average.
+  unidad_si: variable
+  dimension: '[A]'
+  is_vector: false
+  components: []
+  category: result
+  physical_role: output
+  used_in:
+  - estimador_montecarlo_media
+  - promedio_ponderado_muestras
+  common_mistake:
+    es: Interpretar la magnitud fuera del modelo de muestreo declarado.
+    en: Interpreting the quantity outside the stated sampling model.
+  typical_range: Depende del observable; en simulaciones educativas se usan 10^2 a
+    10^6 muestras.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo solo tiene sentido si el observable puede tomar valores negativos.
+      en: The sign matters only if the observable can take negative values.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede significar ausencia de contribución, error nulo ideal o conteo
+        nulo según la magnitud.
+      en: Zero may mean no contribution, ideal zero error, or zero count depending
+        on the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: probabilidades entre 0 y 1; conteos positivos; errores no negativos
+  interpretation_role:
+    primary_for:
+    - summary
+    - physical_reading
+    secondary_for:
+    - coherence
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - parameter
+    role:
+      es: Magnitud usada para leer la convergencia Monte Carlo.
+      en: Quantity used to read Monte Carlo convergence.
+  pedagogical_notes:
+    es: Ayuda a separar azar numérico, promedio físico y error estadístico.
+    en: Helps separate numerical randomness, physical average, and statistical error.
+- id: varianza_muestral
+  symbol: s_A2
+  nombre:
+    es: varianza muestral
+    en: sample variance
+  descripcion:
+    es: Dispersión cuadrática de los valores muestreados.
+    en: Quadratic spread of sampled values.
+  unidad_si: variable^2
+  dimension: '[A]^2'
+  is_vector: false
+  components: []
+  category: uncertainty
+  physical_role: diagnostic
+  used_in:
+  - error_estandar_montecarlo
+  - varianza_muestral_montecarlo
+  common_mistake:
+    es: Interpretar la magnitud fuera del modelo de muestreo declarado.
+    en: Interpreting the quantity outside the stated sampling model.
+  typical_range: Depende del observable; en simulaciones educativas se usan 10^2 a
+    10^6 muestras.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El signo solo tiene sentido si el observable puede tomar valores negativos.
+      en: The sign matters only if the observable can take negative values.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede significar ausencia de contribución, error nulo ideal o conteo
+        nulo según la magnitud.
+      en: Zero may mean no contribution, ideal zero error, or zero count depending
+        on the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: probabilidades entre 0 y 1; conteos positivos; errores no negativos
+  interpretation_role:
+    primary_for:
+    - summary
+    - physical_reading
+    secondary_for:
+    - coherence
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - parameter
+    role:
+      es: Magnitud usada para leer la convergencia Monte Carlo.
+      en: Quantity used to read Monte Carlo convergence.
+  pedagogical_notes:
+    es: Ayuda a separar azar numérico, promedio físico y error estadístico.
+    en: Helps separate numerical randomness, physical average, and statistical error.
+- id: error_estandar
+  symbol: sigma_Ahat
+  nombre:
+    es: error estándar
+    en: standard error
+  descripcion:
+    es: Incertidumbre estadística del promedio Monte Carlo.
+    en: Statistical uncertainty of the Monte Carlo average.
+  unidad_si: variable
+  dimension: '[A]'
+  is_vector: false
+  components: []
+  category: uncertainty
+  physical_role: dominant_result
+  used_in:
+  - error_estandar_montecarlo
+  common_mistake:
+    es: Interpretar la magnitud fuera del modelo de muestreo declarado.
+    en: Interpreting the quantity outside the stated sampling model.
+  typical_range: Depende del observable; en simulaciones educativas se usan 10^2 a
+    10^6 muestras.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El signo solo tiene sentido si el observable puede tomar valores negativos.
+      en: The sign matters only if the observable can take negative values.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede significar ausencia de contribución, error nulo ideal o conteo
+        nulo según la magnitud.
+      en: Zero may mean no contribution, ideal zero error, or zero count depending
+        on the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: probabilidades entre 0 y 1; conteos positivos; errores no negativos
+  interpretation_role:
+    primary_for:
+    - summary
+    - physical_reading
+    secondary_for:
+    - coherence
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - yAxis
+    role:
+      es: Magnitud usada para leer la convergencia Monte Carlo.
+      en: Quantity used to read Monte Carlo convergence.
+  pedagogical_notes:
+    es: Ayuda a separar azar numérico, promedio físico y error estadístico.
+    en: Helps separate numerical randomness, physical average, and statistical error.
+- id: probabilidad_aceptacion
+  symbol: P_acc
+  nombre:
+    es: probabilidad de aceptación
+    en: acceptance probability
+  descripcion:
+    es: Probabilidad de aceptar una transición propuesta en muestreo Metropolis.
+    en: Probability of accepting a proposed transition in Metropolis sampling.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: probability
+  physical_role: criterion
+  used_in:
+  - probabilidad_aceptacion_metropolis
+  common_mistake:
+    es: Interpretar la magnitud fuera del modelo de muestreo declarado.
+    en: Interpreting the quantity outside the stated sampling model.
+  typical_range: Depende del observable; en simulaciones educativas se usan 10^2 a
+    10^6 muestras.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El signo solo tiene sentido si el observable puede tomar valores negativos.
+      en: The sign matters only if the observable can take negative values.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede significar ausencia de contribución, error nulo ideal o conteo
+        nulo según la magnitud.
+      en: Zero may mean no contribution, ideal zero error, or zero count depending
+        on the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: probabilidades entre 0 y 1; conteos positivos; errores no negativos
+  interpretation_role:
+    primary_for:
+    - summary
+    - physical_reading
+    secondary_for:
+    - coherence
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - none
+    role:
+      es: Magnitud usada para leer la convergencia Monte Carlo.
+      en: Quantity used to read Monte Carlo convergence.
+  pedagogical_notes:
+    es: Ayuda a separar azar numérico, promedio físico y error estadístico.
+    en: Helps separate numerical randomness, physical average, and statistical error.
+- id: peso_muestra
+  symbol: w_i
+  nombre:
+    es: peso de muestra
+    en: sample weight
+  descripcion:
+    es: Peso estadístico asignado a una muestra antes de promediar.
+    en: Statistical weight assigned to a sample before averaging.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: weight
+  physical_role: parameter
+  used_in:
+  - promedio_ponderado_muestras
+  common_mistake:
+    es: Interpretar la magnitud fuera del modelo de muestreo declarado.
+    en: Interpreting the quantity outside the stated sampling model.
+  typical_range: Depende del observable; en simulaciones educativas se usan 10^2 a
+    10^6 muestras.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El signo solo tiene sentido si el observable puede tomar valores negativos.
+      en: The sign matters only if the observable can take negative values.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede significar ausencia de contribución, error nulo ideal o conteo
+        nulo según la magnitud.
+      en: Zero may mean no contribution, ideal zero error, or zero count depending
+        on the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: probabilidades entre 0 y 1; conteos positivos; errores no negativos
+  interpretation_role:
+    primary_for:
+    - summary
+    - physical_reading
+    secondary_for:
+    - coherence
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - parameter
+    role:
+      es: Magnitud usada para leer la convergencia Monte Carlo.
+      en: Quantity used to read Monte Carlo convergence.
+  pedagogical_notes:
+    es: Ayuda a separar azar numérico, promedio físico y error estadístico.
+    en: Helps separate numerical randomness, physical average, and statistical error.
+- id: energia_estado
+  symbol: Delta_E
+  nombre:
+    es: cambio de energía de estado
+    en: state energy change
+  descripcion:
+    es: Cambio energético asociado a una propuesta de muestreo.
+    en: Energy change associated with a sampling proposal.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: energy
+  physical_role: input
+  used_in:
+  - probabilidad_aceptacion_metropolis
+  common_mistake:
+    es: Interpretar la magnitud fuera del modelo de muestreo declarado.
+    en: Interpreting the quantity outside the stated sampling model.
+  typical_range: Depende del observable; en simulaciones educativas se usan 10^2 a
+    10^6 muestras.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El signo solo tiene sentido si el observable puede tomar valores negativos.
+      en: The sign matters only if the observable can take negative values.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede significar ausencia de contribución, error nulo ideal o conteo
+        nulo según la magnitud.
+      en: Zero may mean no contribution, ideal zero error, or zero count depending
+        on the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: probabilidades entre 0 y 1; conteos positivos; errores no negativos
+  interpretation_role:
+    primary_for:
+    - summary
+    - physical_reading
+    secondary_for:
+    - coherence
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - none
+    role:
+      es: Magnitud usada para leer la convergencia Monte Carlo.
+      en: Quantity used to read Monte Carlo convergence.
+  pedagogical_notes:
+    es: Ayuda a separar azar numérico, promedio físico y error estadístico.
+    en: Helps separate numerical randomness, physical average, and statistical error.
+- id: temperatura
+  symbol: T
+  nombre:
+    es: temperatura
+    en: temperature
+  descripcion:
+    es: Escala térmica que controla aceptación de cambios energéticos.
+    en: Thermal scale controlling acceptance of energy changes.
+  unidad_si: K
+  dimension: Theta
+  is_vector: false
+  components: []
+  category: thermal_parameter
+  physical_role: parameter
+  used_in:
+  - probabilidad_aceptacion_metropolis
+  common_mistake:
+    es: Interpretar la magnitud fuera del modelo de muestreo declarado.
+    en: Interpreting the quantity outside the stated sampling model.
+  typical_range: Depende del observable; en simulaciones educativas se usan 10^2 a
+    10^6 muestras.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El signo solo tiene sentido si el observable puede tomar valores negativos.
+      en: The sign matters only if the observable can take negative values.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede significar ausencia de contribución, error nulo ideal o conteo
+        nulo según la magnitud.
+      en: Zero may mean no contribution, ideal zero error, or zero count depending
+        on the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: probabilidades entre 0 y 1; conteos positivos; errores no negativos
+  interpretation_role:
+    primary_for:
+    - summary
+    - physical_reading
+    secondary_for:
+    - coherence
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - none
+    role:
+      es: Magnitud usada para leer la convergencia Monte Carlo.
+      en: Quantity used to read Monte Carlo convergence.
+  pedagogical_notes:
+    es: Ayuda a separar azar numérico, promedio físico y error estadístico.
+    en: Helps separate numerical randomness, physical average, and statistical error.
+- id: constante_boltzmann
+  symbol: k_B
+  nombre:
+    es: constante de Boltzmann
+    en: Boltzmann constant
+  descripcion:
+    es: Convierte temperatura en escala energética microscópica.
+    en: Converts temperature into microscopic energy scale.
+  unidad_si: J/K
+  dimension: M L^2 T^-2 Theta^-1
+  is_vector: false
+  components: []
+  category: constant
+  physical_role: constant
+  used_in:
+  - probabilidad_aceptacion_metropolis
+  common_mistake:
+    es: Interpretar la magnitud fuera del modelo de muestreo declarado.
+    en: Interpreting the quantity outside the stated sampling model.
+  typical_range: Depende del observable; en simulaciones educativas se usan 10^2 a
+    10^6 muestras.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El signo solo tiene sentido si el observable puede tomar valores negativos.
+      en: The sign matters only if the observable can take negative values.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede significar ausencia de contribución, error nulo ideal o conteo
+        nulo según la magnitud.
+      en: Zero may mean no contribution, ideal zero error, or zero count depending
+        on the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: probabilidades entre 0 y 1; conteos positivos; errores no negativos
+  interpretation_role:
+    primary_for:
+    - summary
+    - physical_reading
+    secondary_for:
+    - coherence
+    - model_validity
+    - graph_reading
+  graph_binding:
+    channels:
+    - constant
+    role:
+      es: Magnitud usada para leer la convergencia Monte Carlo.
+      en: Quantity used to read Monte Carlo convergence.
+  pedagogical_notes:
+    es: Ayuda a separar azar numérico, promedio físico y error estadístico.
+    en: Helps separate numerical randomness, physical average, and statistical error.

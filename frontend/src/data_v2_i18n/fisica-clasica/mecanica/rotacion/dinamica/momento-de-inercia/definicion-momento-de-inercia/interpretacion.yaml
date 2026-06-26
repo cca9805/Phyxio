@@ -1,0 +1,520 @@
+version: 1
+id: interpretacion-definicion-momento-de-inercia
+leaf_id: definicion-momento-de-inercia
+nombre:
+  es: Interpretacion de definicion de momento de inercia
+  en: Interpretation of moment of inertia definition
+scope:
+  es: lectura numerica, coherencia fisica, validez del modelo y errores comunes
+  en: numerical reading, physical coherence, model validity, and common errors
+dependencies:
+  magnitudes:
+  - I
+  - K_rot
+  - alpha
+  - k
+  - dm
+  - m
+  - m_i
+  - omega
+  - r
+  - r_i
+  - rho
+  - tau
+  formulas:
+  - definicion_continua
+  - definicion_discreta
+  - energia_rotacional
+  - radio_giro
+  - segunda_ley_rotacional
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia fisica
+      en: Physical coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores comunes
+      en: Common errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  I:
+    summary_rules:
+    - id: I_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: I cuantifica la resistencia al cambio de estado rotacional.
+        en: I quantifies resistance to changes in rotational state.
+    coherence_rules:
+    - id: I_coherence_positive
+      when: I > 0
+      status: ok
+      text:
+        es: I debe ser positiva para un sistema fisico real.
+        en: I must be positive for a real physical system.
+    physical_reading_rules:
+    - id: I_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: I mide cuanta dificultad tiene el cuerpo para cambiar su giro respecto a un eje concreto; aumenta cuando la masa se aleja del eje y por eso reduce alpha para el mismo torque.
+        en: I measures how difficult it is for the body to change its rotation about a specific axis; it increases when mass moves farther from the axis and therefore reduces alpha for the same torque.
+    model_validity_rules:
+    - id: I_validity_main
+      when: 'true'
+      status: info
+      text:
+        es: Valido para cuerpo rigido y eje bien definido.
+        en: Valid for a rigid body and a well-defined axis.
+    graph_rules:
+    - id: I_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: En grafico, I cambia la pendiente de alpha frente a tau.
+        en: In graph reading, I changes the slope of alpha versus tau.
+    likely_errors:
+    - id: I_error_units
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error comun: mezclar gramos con kilogramos en la masa.'
+        en: 'Common error: mixing grams and kilograms in mass input.'
+    next_step_rules:
+    - id: I_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Usa I para estimar alpha con la segunda ley rotacional.
+        en: Use I to estimate alpha with rotational second law.
+  alpha:
+    summary_rules:
+    - id: alpha_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: Alpha describe la aceleracion angular del sistema.
+        en: Alpha describes the system angular acceleration.
+    coherence_rules:
+    - id: alpha_coherence_sign
+      when: 'true'
+      status: ok
+      text:
+        es: El signo de alpha debe ser coherente con el signo de tau.
+        en: Alpha sign must be consistent with tau sign.
+    physical_reading_rules:
+    - id: alpha_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: Alpha es la respuesta dinamica del sistema; si sube no significa que haya mas masa, sino que el torque domina sobre la inercia rotacional respecto a ese eje.
+        en: Alpha is the system's dynamic response; if it increases, it does not mean there is more mass, but that torque dominates over rotational inertia about that axis.
+    model_validity_rules:
+    - id: alpha_validity_main
+      when: I > 0
+      status: info
+      text:
+        es: La lectura requiere I positiva y eje de referencia fijo.
+        en: This reading requires positive I and a fixed reference axis.
+    graph_rules:
+    - id: alpha_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: Con torque constante, alpha tiende a mantenerse estable.
+        en: With constant torque, alpha tends to remain stable.
+    likely_errors:
+    - id: alpha_error_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error comun: confundir alpha con omega.'
+        en: 'Common error: confusing alpha with omega.'
+    next_step_rules:
+    - id: alpha_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Integra alpha para estimar la evolucion temporal de omega.
+        en: Integrate alpha to estimate time evolution of omega.
+  K_rot:
+    summary_rules:
+    - id: K_rot_summary
+      when: always
+      status: info
+      text:
+        es: 'K_rot: lectura resumida disponible.'
+        en: 'K_rot: summary reading available.'
+    coherence_rules:
+    - id: K_rot_coherence
+      when: always
+      status: info
+      text:
+        es: 'K_rot: verificar coherencia con el resto de variables.'
+        en: 'K_rot: check coherence with the rest of the variables.'
+    physical_reading_rules:
+    - id: K_rot_physical
+      when: always
+      status: info
+      text:
+        es: 'K_rot: interpretar en el contexto f?sico del problema.'
+        en: 'K_rot: interpret within the physical context of the problem.'
+    model_validity_rules:
+    - id: K_rot_validity
+      when: always
+      status: info
+      text:
+        es: 'K_rot: confirmar hip?tesis y rango de validez del modelo.'
+        en: 'K_rot: confirm assumptions and model validity range.'
+    graph_rules:
+    - id: K_rot_graph
+      when: always
+      status: info
+      text:
+        es: 'K_rot: revisar correspondencia con la representaci?n gr?fica.'
+        en: 'K_rot: review consistency with the graphical representation.'
+    likely_errors:
+    - id: K_rot_likely_error
+      when: always
+      status: warn
+      text:
+        es: 'Error com?n: usar K_rot sin revisar signo, unidades o dominio.'
+        en: 'Common error: using K_rot without checking sign, units, or domain.'
+    next_step_rules:
+    - id: K_rot_next_step
+      when: always
+      status: info
+      text:
+        es: 'Siguiente paso: contrastar K_rot con una ecuaci?n independiente.'
+        en: 'Next step: cross-check K_rot with an independent equation.'
+  k:
+    summary_rules:
+    - id: k_summary
+      when: always
+      status: info
+      text:
+        es: 'k: lectura resumida disponible.'
+        en: 'k: summary reading available.'
+    coherence_rules:
+    - id: k_coherence
+      when: always
+      status: info
+      text:
+        es: 'k: verificar coherencia con el resto de variables.'
+        en: 'k: check coherence with the rest of the variables.'
+    physical_reading_rules:
+    - id: k_physical
+      when: always
+      status: info
+      text:
+        es: 'k resume la geometria en una distancia equivalente: concentra toda la masa en un radio ficticio que conserva el mismo I respecto al eje elegido.'
+        en: 'k summarizes geometry into an equivalent distance: it concentrates all mass at a fictitious radius that preserves the same I about the chosen axis.'
+    model_validity_rules:
+    - id: k_validity
+      when: always
+      status: info
+      text:
+        es: 'k: confirmar hip?tesis y rango de validez del modelo.'
+        en: 'k: confirm assumptions and model validity range.'
+    graph_rules:
+    - id: k_graph
+      when: always
+      status: info
+      text:
+        es: 'k: revisar correspondencia con la representaci?n gr?fica.'
+        en: 'k: review consistency with the graphical representation.'
+    likely_errors:
+    - id: k_likely_error
+      when: always
+      status: warn
+      text:
+        es: 'Error com?n: usar k sin revisar signo, unidades o dominio.'
+        en: 'Common error: using k without checking sign, units, or domain.'
+    next_step_rules:
+    - id: k_next_step
+      when: always
+      status: info
+      text:
+        es: 'Siguiente paso: contrastar k con una ecuaci?n independiente.'
+        en: 'Next step: cross-check k with an independent equation.'
+  m:
+    summary_rules:
+    - id: m_summary
+      when: always
+      status: info
+      text:
+        es: 'm: lectura resumida disponible.'
+        en: 'm: summary reading available.'
+    coherence_rules:
+    - id: m_coherence
+      when: always
+      status: info
+      text:
+        es: 'm: verificar coherencia con el resto de variables.'
+        en: 'm: check coherence with the rest of the variables.'
+    physical_reading_rules:
+    - id: m_physical
+      when: always
+      status: info
+      text:
+        es: m fija cuanta materia hay, pero no determina por si sola la inercia rotacional; la distribucion espacial decide como entra en I.
+        en: m fixes how much matter there is, but it does not determine rotational inertia by itself; spatial distribution decides how it enters I.
+    model_validity_rules:
+    - id: m_validity
+      when: always
+      status: info
+      text:
+        es: 'm: confirmar hip?tesis y rango de validez del modelo.'
+        en: 'm: confirm assumptions and model validity range.'
+    graph_rules:
+    - id: m_graph
+      when: always
+      status: info
+      text:
+        es: 'm: revisar correspondencia con la representaci?n gr?fica.'
+        en: 'm: review consistency with the graphical representation.'
+    likely_errors:
+    - id: m_likely_error
+      when: always
+      status: warn
+      text:
+        es: 'Error com?n: usar m sin revisar signo, unidades o dominio.'
+        en: 'Common error: using m without checking sign, units, or domain.'
+    next_step_rules:
+    - id: m_next_step
+      when: always
+      status: info
+      text:
+        es: 'Siguiente paso: contrastar m con una ecuaci?n independiente.'
+        en: 'Next step: cross-check m with an independent equation.'
+  omega:
+    summary_rules:
+    - id: omega_summary
+      when: always
+      status: info
+      text:
+        es: 'omega: lectura resumida disponible.'
+        en: 'omega: summary reading available.'
+    coherence_rules:
+    - id: omega_coherence
+      when: always
+      status: info
+      text:
+        es: 'omega: verificar coherencia con el resto de variables.'
+        en: 'omega: check coherence with the rest of the variables.'
+    physical_reading_rules:
+    - id: omega_physical
+      when: always
+      status: info
+      text:
+        es: omega no define I, pero junto con I determina cuanta energia rotacional almacena el sistema.
+        en: omega does not define I, but together with I it determines how much rotational energy the system stores.
+    model_validity_rules:
+    - id: omega_validity
+      when: always
+      status: info
+      text:
+        es: 'omega: confirmar hip?tesis y rango de validez del modelo.'
+        en: 'omega: confirm assumptions and model validity range.'
+    graph_rules:
+    - id: omega_graph
+      when: always
+      status: info
+      text:
+        es: 'omega: revisar correspondencia con la representaci?n gr?fica.'
+        en: 'omega: review consistency with the graphical representation.'
+    likely_errors:
+    - id: omega_likely_error
+      when: always
+      status: warn
+      text:
+        es: 'Error com?n: usar omega sin revisar signo, unidades o dominio.'
+        en: 'Common error: using omega without checking sign, units, or domain.'
+    next_step_rules:
+    - id: omega_next_step
+      when: always
+      status: info
+      text:
+        es: 'Siguiente paso: contrastar omega con una ecuaci?n independiente.'
+        en: 'Next step: cross-check omega with an independent equation.'
+  tau:
+    summary_rules:
+    - id: tau_summary
+      when: always
+      status: info
+      text:
+        es: 'tau: lectura resumida disponible.'
+        en: 'tau: summary reading available.'
+    coherence_rules:
+    - id: tau_coherence
+      when: always
+      status: info
+      text:
+        es: 'tau: verificar coherencia con el resto de variables.'
+        en: 'tau: check coherence with the rest of the variables.'
+    physical_reading_rules:
+    - id: tau_physical
+      when: always
+      status: info
+      text:
+        es: tau es la causa externa del cambio de giro; su efecto sobre alpha solo puede leerse correctamente cuando I ya esta bien definido para ese eje.
+        en: tau is the external cause of rotational change; its effect on alpha can only be read correctly once I is properly defined for that axis.
+    model_validity_rules:
+    - id: tau_validity
+      when: always
+      status: info
+      text:
+        es: 'tau debe interpretarse junto con un eje definido, un signo coherente y un valor de I valido para ese modelo.'
+        en: 'tau must be interpreted together with a defined axis, a consistent sign convention, and a value of I that is valid for the chosen model.'
+    graph_rules:
+    - id: tau_graph
+      when: always
+      status: info
+      text:
+        es: 'En el grafico, el mismo tau produce menos alpha cuando la masa esta mas alejada del eje y I aumenta.'
+        en: 'In the graph, the same tau produces less alpha when mass is farther from the axis and I increases.'
+    likely_errors:
+    - id: tau_likely_error
+      when: always
+      status: warn
+      text:
+        es: 'Error comun: comparar tau entre sistemas sin comprobar si el eje, el signo y el momento de inercia son equivalentes.'
+        en: 'Common error: comparing tau across systems without checking whether the axis, sign convention, and moment of inertia are equivalent.'
+    next_step_rules:
+    - id: tau_next_step
+      when: always
+      status: info
+      text:
+        es: 'Siguiente paso: combinar tau con I mediante la segunda ley rotacional para estimar alpha.'
+        en: 'Next step: combine tau with I through the rotational second law to estimate alpha.'
+
+  m_i:
+    summary_rules:
+    - id: m_i_summary
+      when: always
+      status: info
+      text:
+        es: m_i es la masa de cada particula en la suma discreta.
+        en: m_i is the mass of each particle in the discrete sum.
+    coherence_rules:
+    - id: m_i_coherence
+      when: always
+      status: ok
+      text:
+        es: Cada m_i debe ser positiva para que la suma discreta tenga sentido fisico.
+        en: Each m_i must be positive for the discrete sum to make physical sense.
+    physical_reading_rules:
+    - id: m_i_physical
+      when: always
+      status: info
+      text:
+        es: m_i no aporta por igual a I; su efecto depende del cuadrado de su distancia r_i al eje, de modo que una particula lejana puede dominar la suma.
+        en: m_i does not contribute equally to I; its effect depends on the square of its distance r_i from the axis, so a distant particle can dominate the sum.
+    model_validity_rules:
+    - id: m_i_validity
+      when: always
+      status: info
+      text:
+        es: Valido cuando el sistema puede modelarse como conjunto discreto de masas puntuales.
+        en: Valid when the system can be modeled as a discrete set of point masses.
+    graph_rules:
+    - id: m_i_graph
+      when: always
+      status: info
+      text:
+        es: El grafico debe sugerir que la masa periferica pesa mas en I que la masa cercana al eje.
+        en: The graph should suggest that peripheral mass weighs more in I than mass near the axis.
+    likely_errors:
+    - id: m_i_error
+      when: always
+      status: warn
+      text:
+        es: 'Error comun: sumar m_i sin multiplicar por r_i^2.'
+        en: 'Common error: summing m_i without multiplying by r_i^2.'
+    next_step_rules:
+    - id: m_i_next
+      when: always
+      status: info
+      text:
+        es: Usa m_i junto con r_i para construir la definicion_discreta.
+        en: Use m_i together with r_i to build the discrete definition.
+
+  dm:
+    summary_rules:
+    - id: dm_summary
+      when: always
+      status: info
+      text:
+        es: dm es el elemento diferencial de masa en la definicion continua.
+        en: dm is the differential mass element in the continuous definition.
+    coherence_rules:
+    - id: dm_coherence
+      when: always
+      status: ok
+      text:
+        es: dm debe interpretarse como parte infinitesimal de una distribucion continua, no como masa total.
+        en: dm must be interpreted as an infinitesimal part of a continuous distribution, not as total mass.
+    physical_reading_rules:
+    - id: dm_physical
+      when: always
+      status: info
+      text:
+        es: 'dm conecta geometria y materia: cada porcion de masa aporta a I segun r^2, por eso la definicion continua traduce la forma del cuerpo en inercia rotacional.'
+        en: 'dm connects geometry and matter: each mass portion contributes to I according to r^2, so the continuous definition translates body shape into rotational inertia.'
+    model_validity_rules:
+    - id: dm_validity
+      when: always
+      status: info
+      text:
+        es: Valido para cuerpos continuos con densidad conocida o modelable.
+        en: Valid for continuous bodies with known or modelable density.
+    graph_rules:
+    - id: dm_graph
+      when: always
+      status: info
+      text:
+        es: El grafico debe ayudar a leer que la periferia aporta mas a I porque cada dm se pondera con r^2.
+        en: The graph should help read that the periphery contributes more to I because each dm is weighted by r^2.
+    likely_errors:
+    - id: dm_error
+      when: always
+      status: warn
+      text:
+        es: 'Error comun: usar dm como si fuera la masa total o suponer densidad uniforme sin justificarla.'
+        en: 'Common error: using dm as if it were total mass or assuming uniform density without justification.'
+    next_step_rules:
+    - id: dm_next
+      when: always
+      status: info
+      text:
+        es: Expresa dm mediante rho y la geometria antes de integrar la definicion_continua.
+        en: Express dm through rho and geometry before integrating the continuous definition.

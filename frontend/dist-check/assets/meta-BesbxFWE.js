@@ -1,0 +1,71 @@
+const n=`id: primera-ley-inercia
+nombre:
+  es: Primera ley inercia
+  en: Newton's First Law (Inertia)
+area: fisica-clasica
+bloque: mecanica
+subbloque: dinamica
+parent_id: leyes-de-newton
+ruta_relativa: fisica-clasica/mecanica/dinamica/fundamentos/leyes-de-newton/primera-ley-inercia
+orden: 212111
+type: leaf
+niveles:
+  es:
+  - ESO
+  - BACHILLERATO
+  - UNIVERSIDAD
+  en:
+  - Secondary
+  - Upper Secondary
+  - University
+icon: 🧱
+descripcion: Fuerza neta nula, marco inercial y continuidad del reposo o de la velocidad constante.
+description_en: Zero net force, inertial frame, and persistence of rest or constant velocity.
+tags:
+  es:
+  - inercia
+  - fuerza neta
+  - equilibrio dinamico
+  - marco inercial
+  en:
+  - inertia
+  - net force
+  - dynamic equilibrium
+  - inertial frame
+prerequisitos:
+- fisica-clasica/mecanica/dinamica/diagrama-de-fuerzas
+graficos:
+- Dcl
+physical_role:
+  es: ley física
+  en: physical law
+dificultad: 3
+tiempo_estimado_min: 25
+pregunta_fisica_central:
+  es: ¿Que fuerzas pueden actuar sobre un bloque cuando la resultante es nula y por que eso permite reposo o velocidad constante?
+  en: What forces can act on a block when the resultant is zero, and why does that allow rest or constant velocity?
+representacion_dominante: Dcl
+magnitud_dominante: F_net
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Dcl
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

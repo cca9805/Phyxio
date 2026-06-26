@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import Footer from './components/Footer.jsx';
 import { Routes, Route, Outlet, useLocation, Navigate } from 'react-router-dom';
 import { useUsageSync } from './hooks/useUsageSync';
-import V2Router from "./v2/pages/V2Router";
+const V2Router = lazy(() => import("./v2/pages/V2Router"));
+import { getUiLanguage, setUiLanguage as persistUiLanguage } from './v2/utils/uiLanguage';
 
 // Importar componentes de layout
 import { Navbar, Sidebar } from './components/NavbarSidebar';
@@ -43,6 +44,7 @@ const AppLayout = () => {
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false); // Estado para sidebar móvil
   const [isMobile, setIsMobile] = useState(false); // Detectar si es móvil
   const [isDarkTheme, setIsDarkTheme] = useState(false); // Estado del tema
+  const [uiLanguage, setUiLanguage] = useState('es'); // Toggle temporal ES/EN para pruebas de i18n
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showTemporalModal, setShowTemporalModal] = useState(false);
@@ -70,6 +72,13 @@ const AppLayout = () => {
       setIsDarkTheme(true);
       document.documentElement.classList.add('dark');
     }
+  }, []);
+
+  // Cargar idioma de UI temporal (sin i18n completo aun)
+  useEffect(() => {
+    const initialLanguage = getUiLanguage();
+    setUiLanguage(initialLanguage);
+    persistUiLanguage(initialLanguage);
   }, []);
 
   // Cerrar sidebar móvil al cambiar de ruta
@@ -103,12 +112,22 @@ const AppLayout = () => {
     }
   };
 
+  // Toggle temporal de idioma para validar futura implantacion bilingue
+  const toggleLanguage = () => {
+    const newLanguage = uiLanguage === 'es' ? 'en' : 'es';
+    setUiLanguage(persistUiLanguage(newLanguage));
+    // Fuerza recarga completa para que todos los componentes lean el nuevo idioma al montar.
+    window.location.reload();
+  };
+
   return (
     <div className="app-container">
       <Navbar 
         onMenuClick={toggleMobileSidebar} 
         isMobile={isMobile}
         isDark={isDarkTheme}
+        uiLanguage={uiLanguage}
+        onLanguageToggle={toggleLanguage}
         onThemeToggle={toggleTheme}
         onLoginClick={() => setShowLoginModal(true)}
         onRegisterClick={() => setShowRegisterModal(true)}
@@ -130,6 +149,7 @@ const AppLayout = () => {
             <Sidebar 
               isExpanded={isMobile ? true : isSidebarExpanded}
               isMobile={isMobile}
+              uiLanguage={uiLanguage}
               onLinkClick={isMobile ? closeMobileSidebar : undefined}
             />
           </div>
@@ -194,7 +214,11 @@ const AppRoutes = () => {
       <Route element={<AppLayout />}>
 
         {/* Rutas version 2 */}
-        <Route path="/v2/*" element={<V2Router />} />
+        <Route path="/v2/*" element={
+          <Suspense fallback={null}>
+            <V2Router />
+          </Suspense>
+        } />
 
 
         {/* Ruta de inicio (pública) */}

@@ -1,0 +1,618 @@
+version: 1
+id: interpretacion-sin-rozamiento
+leaf_id: sin-rozamiento
+nombre:
+  es: Interpretación de plano inclinado sin rozamiento
+  en: Interpretation of frictionless inclined plane
+scope:
+  es: Lectura causal entre ángulo, peso proyectado, normal y respuesta cinemática del bloque.
+  en: Causal reading among angle, projected weight, normal force, and block kinematic response.
+dependencies:
+  magnitudes:
+  - L
+  - N
+  - P
+  - P_par
+  - P_perp
+  - a
+  - g
+  - m
+  - t
+  - theta
+  - v_f
+  formulas:
+  - aceleracion_plano_ideal
+  - descomposicion_paralela
+  - descomposicion_perpendicular
+  - normal_plano_ideal
+  - tiempo_deslizamiento
+  - velocidad_final_desde_reposo
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia física
+      en: Physical coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura del gráfico
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores comunes
+      en: Common errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  a:
+    summary_rules:
+    - id: a_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: La aceleración depende de g y del ángulo, no de la masa del bloque.
+        en: Acceleration depends on g and angle, not on block mass.
+    coherence_rules:
+    - id: a_coherence_range
+      when: a >= 0 and a <= g
+      status: ok
+      text:
+        es: El valor de a está dentro del rango físico del modelo ideal.
+        en: a lies within the physical range of the ideal model.
+    physical_reading_rules:
+    - id: a_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: Si theta aumenta, la componente paralela crece y a sube de forma monótona.
+        en: As theta increases, the parallel component grows and a increases monotonically.
+    model_validity_rules:
+    - id: a_validity
+      when: 'true'
+      status: info
+      text:
+        es: Esta lectura asume ausencia de rozamiento y de pérdidas dominantes por aire.
+        en: This reading assumes no friction and no dominant air losses.
+    graph_rules:
+    - id: a_graph_curve
+      when: 'true'
+      status: info
+      text:
+        es: En el panel Coord, a(theta) parte de cero y se aproxima a g al aumentar theta.
+        en: In the Coord panel, a(theta) starts at zero and approaches g as theta increases.
+    likely_errors:
+    - id: a_error_units
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error común: usar theta en grados cuando el cálculo trigonométrico está en radianes.'
+        en: 'Common error: using theta in degrees while trigonometric calculations expect radians.'
+    next_step_rules:
+    - id: a_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Con a validada, calcula tiempo y velocidad final para contrastar con mediciones.
+        en: With validated a, compute time and final speed to compare with measurements.
+  theta:
+    summary_rules:
+    - id: theta_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: theta es la variable de control geométrico del fenómeno.
+        en: theta is the geometric control variable of the phenomenon.
+    coherence_rules:
+    - id: theta_coherence
+      when: theta >= 0 and theta <= 1.5708
+      status: ok
+      text:
+        es: El ángulo está en el dominio físico de una rampa convencional.
+        en: The angle is within the physical domain of a conventional incline.
+    physical_reading_rules:
+    - id: theta_physical
+      when: 'true'
+      status: info
+      text:
+        es: Al subir theta, aumenta P_par y disminuye P_perp.
+        en: As theta rises, P_par increases and P_perp decreases.
+    model_validity_rules:
+    - id: theta_validity
+      when: 'true'
+      status: info
+      text:
+        es: Se asume que theta permanece aproximadamente constante en el tramo analizado.
+        en: theta is assumed approximately constant in the analyzed segment.
+    graph_rules:
+    - id: theta_graph_marker
+      when: 'true'
+      status: info
+      text:
+        es: El marcador de theta define el punto operativo en la curva de aceleración.
+        en: theta marker defines the operating point on the acceleration curve.
+    likely_errors:
+    - id: theta_error_reference
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error común: medir el ángulo respecto a la vertical y no a la horizontal.'
+        en: 'Common error: measuring angle from vertical instead of horizontal.'
+    next_step_rules:
+    - id: theta_next
+      when: 'true'
+      status: info
+      text:
+        es: Explora sensibilidad variando theta para diseñar una pendiente segura.
+        en: Explore sensitivity by varying theta to design a safe incline.
+  P:
+    summary_rules:
+    - id: p_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: P es la fuerza gravitatoria total que se descompone en dos componentes.
+        en: P is the total gravitational force decomposed into two components.
+    coherence_rules:
+    - id: p_coherence
+      when: P > 0
+      status: ok
+      text:
+        es: El peso es positivo y coherente con masa y gravedad mayores que cero.
+        en: Weight is positive and coherent with positive mass and gravity.
+    physical_reading_rules:
+    - id: p_physical
+      when: 'true'
+      status: info
+      text:
+        es: El peso no cambia por la rampa; cambia su proyección sobre los ejes elegidos.
+        en: Weight does not change because of the ramp; only its axis projections change.
+    model_validity_rules:
+    - id: p_validity
+      when: 'true'
+      status: info
+      text:
+        es: Se asume campo gravitatorio uniforme en todo el tramo analizado.
+        en: Uniform gravitational field is assumed across the analyzed segment.
+    graph_rules:
+    - id: p_graph
+      when: 'true'
+      status: info
+      text:
+        es: En el DCL, P debe apuntar vertical hacia abajo independientemente de theta.
+        en: In the FBD, P must point vertically downward regardless of theta.
+    likely_errors:
+    - id: p_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error común: rotar el vector peso junto con el plano inclinado.'
+        en: 'Common error: rotating the weight vector with the incline.'
+    next_step_rules:
+    - id: p_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa P como base para verificar P_par y P_perp en la descomposición.
+        en: Use P as baseline to verify P_par and P_perp in decomposition.
+  P_par:
+    summary_rules:
+    - id: ppar_summary
+      when: 'true'
+      status: info
+      text:
+        es: P_par es la parte del peso que impulsa el movimiento sobre la rampa.
+        en: P_par is the part of weight that drives motion along the incline.
+    coherence_rules:
+    - id: ppar_coherence
+      when: P_par >= 0 and P_par <= P
+      status: ok
+      text:
+        es: P_par está en el rango esperado para una proyección física.
+        en: P_par is in the expected range for a physical projection.
+    physical_reading_rules:
+    - id: ppar_reading
+      when: 'true'
+      status: info
+      text:
+        es: Si theta aumenta, P_par sube y acelera más el bloque.
+        en: If theta increases, P_par rises and the block accelerates more.
+    model_validity_rules:
+    - id: ppar_validity
+      when: 'true'
+      status: info
+      text:
+        es: Solo aplica en el modelo ideal sin pérdidas tangenciales dominantes.
+        en: Applies to the ideal model without dominant tangential losses.
+    graph_rules:
+    - id: ppar_graph
+      when: 'true'
+      status: info
+      text:
+        es: En el análisis gráfico, P_par explica la pendiente de la curva a(theta).
+        en: In graph analysis, P_par explains the slope of the a(theta) curve.
+    likely_errors:
+    - id: ppar_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error común: usar cos(theta) en lugar de sin(theta) para la componente paralela.'
+        en: 'Common error: using cos(theta) instead of sin(theta) for the parallel component.'
+    next_step_rules:
+    - id: ppar_next
+      when: 'true'
+      status: info
+      text:
+        es: Contrasta P_par con P_perp para interpretar la geometría completa.
+        en: Compare P_par with P_perp to interpret full geometry.
+  P_perp:
+    summary_rules:
+    - id: pperp_summary
+      when: 'true'
+      status: info
+      text:
+        es: P_perp controla la compresión del bloque sobre el plano.
+        en: P_perp controls block compression on the incline.
+    coherence_rules:
+    - id: pperp_coherence
+      when: P_perp >= 0 and P_perp <= P
+      status: ok
+      text:
+        es: P_perp es coherente con una proyección normal del peso.
+        en: P_perp is coherent with a normal projection of weight.
+    physical_reading_rules:
+    - id: pperp_reading
+      when: 'true'
+      status: info
+      text:
+        es: A mayor theta, menor P_perp y menor fuerza normal.
+        en: Higher theta means lower P_perp and lower normal force.
+    model_validity_rules:
+    - id: pperp_validity
+      when: 'true'
+      status: info
+      text:
+        es: Se asume contacto continuo sin separación del bloque.
+        en: Continuous contact without detachment is assumed.
+    graph_rules:
+    - id: pperp_graph
+      when: 'true'
+      status: info
+      text:
+        es: P_perp está directamente ligada al valor de N en el modelo ideal.
+        en: P_perp is directly tied to N in the ideal model.
+    likely_errors:
+    - id: pperp_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error común: interpretar P_perp como fuerza motriz sobre el eje del plano.'
+        en: 'Common error: interpreting P_perp as driving force along the incline axis.'
+    next_step_rules:
+    - id: pperp_next
+      when: 'true'
+      status: info
+      text:
+        es: Verifica que N y P_perp coincidan cuando no hay aceleración normal.
+        en: Verify N and P_perp match when there is no normal acceleration.
+  N:
+    summary_rules:
+    - id: n_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: N representa la reacción de apoyo del plano sobre el bloque.
+        en: N represents support reaction from incline to block.
+    coherence_rules:
+    - id: n_coherence
+      when: N >= 0 and N <= m * g
+      status: ok
+      text:
+        es: La normal está en el rango físico esperado para el modelo.
+        en: Normal force is within expected physical range for the model.
+    physical_reading_rules:
+    - id: n_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si theta crece, N disminuye porque baja la compresión contra la superficie.
+        en: If theta grows, N decreases because compression against surface lowers.
+    model_validity_rules:
+    - id: n_validity
+      when: 'true'
+      status: info
+      text:
+        es: Se asume contacto continuo; si hay salto, esta ecuación deja de aplicar.
+        en: Continuous contact is assumed; if detachment appears, this equation fails.
+    graph_rules:
+    - id: n_graph
+      when: 'true'
+      status: info
+      text:
+        es: En el DCL, N debe verse perpendicular al plano y opuesta a P_perp.
+        en: In FBD, N must appear normal to incline and opposite to P_perp.
+    likely_errors:
+    - id: n_error_mg
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error común: fijar N = mg sin considerar la inclinación.'
+        en: 'Common error: setting N = mg without considering incline angle.'
+    next_step_rules:
+    - id: n_next
+      when: 'true'
+      status: info
+      text:
+        es: Verifica visualmente la ortogonalidad de N en el diagrama de cuerpo libre.
+        en: Visually verify N orthogonality in the free-body diagram.
+  g:
+    summary_rules:
+    - id: g_summary
+      when: 'true'
+      status: info
+      text:
+        es: g fija la escala absoluta de aceleración en el problema.
+        en: g sets the absolute acceleration scale in the problem.
+    coherence_rules:
+    - id: g_coherence
+      when: g > 0
+      status: ok
+      text:
+        es: La gravedad es positiva y consistente con el dominio físico.
+        en: Gravity is positive and consistent with the physical domain.
+    physical_reading_rules:
+    - id: g_reading
+      when: 'true'
+      status: info
+      text:
+        es: Un aumento de g eleva proporcionalmente a y las velocidades resultantes.
+        en: Increasing g raises a and resulting speeds proportionally.
+    model_validity_rules:
+    - id: g_validity
+      when: 'true'
+      status: info
+      text:
+        es: Se usa g constante, válido para variaciones de altura pequeñas.
+        en: Constant g is assumed, valid for small altitude variations.
+    graph_rules:
+    - id: g_graph
+      when: 'true'
+      status: info
+      text:
+        es: Cambiar g desplaza verticalmente la curva de aceleración.
+        en: Changing g vertically scales the acceleration curve.
+    likely_errors:
+    - id: g_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error común: mezclar unidades de g sin normalizar a m/s^2.'
+        en: 'Common error: mixing gravity units without normalizing to m/s^2.'
+    next_step_rules:
+    - id: g_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa un valor consistente de g en todo el cálculo y en todas las fórmulas.
+        en: Use a consistent g value across all calculations and formulas.
+  m:
+    summary_rules:
+    - id: m_summary
+      when: 'true'
+      status: info
+      text:
+        es: m escala fuerzas, aunque se cancela en la expresión de a del modelo ideal.
+        en: m scales forces, although it cancels in the ideal-model acceleration expression.
+    coherence_rules:
+    - id: m_coherence
+      when: m > 0
+      status: ok
+      text:
+        es: La masa es positiva y físicamente válida.
+        en: Mass is positive and physically valid.
+    physical_reading_rules:
+    - id: m_reading
+      when: 'true'
+      status: info
+      text:
+        es: Mayor masa implica mayor peso total, pero no mayor a en este modelo.
+        en: Larger mass means larger total weight, but not larger a in this model.
+    model_validity_rules:
+    - id: m_validity
+      when: 'true'
+      status: info
+      text:
+        es: Se asume bloque rígido sin cambios de masa durante el proceso.
+        en: A rigid block with constant mass is assumed.
+    graph_rules:
+    - id: m_graph
+      when: 'true'
+      status: info
+      text:
+        es: En el gráfico de a(theta), m no altera la curva ideal.
+        en: In a(theta), m does not alter the ideal curve.
+    likely_errors:
+    - id: m_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error común: concluir que un bloque más pesado acelera más en la misma rampa ideal.'
+        en: 'Common error: concluding a heavier block accelerates more on the same ideal incline.'
+    next_step_rules:
+    - id: m_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa m para energía e impacto, no para modificar a en este leaf.
+        en: Use m for energy and impact estimates, not to modify a in this leaf.
+  t:
+    summary_rules:
+    - id: t_summary
+      when: 'true'
+      status: info
+      text:
+        es: t mide la duración del descenso para la distancia analizada.
+        en: t measures descent duration for the analyzed distance.
+    coherence_rules:
+    - id: t_coherence
+      when: t > 0
+      status: ok
+      text:
+        es: El tiempo obtenido es positivo, como exige el proceso físico.
+        en: Obtained time is positive, as required by physical process.
+    physical_reading_rules:
+    - id: t_reading
+      when: 'true'
+      status: info
+      text:
+        es: A mayor aceleración, el tiempo disminuye para una misma L.
+        en: Higher acceleration reduces time for the same L.
+    model_validity_rules:
+    - id: t_validity
+      when: 'true'
+      status: info
+      text:
+        es: Requiere aceleración aproximadamente constante en todo el tramo.
+        en: Requires approximately constant acceleration over the full segment.
+    graph_rules:
+    - id: t_graph
+      when: 'true'
+      status: info
+      text:
+        es: t se interpreta junto con L y a, no de forma aislada.
+        en: t should be interpreted together with L and a, not in isolation.
+    likely_errors:
+    - id: t_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error común: usar fórmulas de velocidad constante en un régimen acelerado.'
+        en: 'Common error: using constant-speed formulas in an accelerated regime.'
+    next_step_rules:
+    - id: t_next
+      when: 'true'
+      status: info
+      text:
+        es: Contrasta el tiempo calculado con mediciones para validar el modelo.
+        en: Compare computed time with measurements to validate the model.
+  L:
+    summary_rules:
+    - id: l_summary
+      when: 'true'
+      status: info
+      text:
+        es: L define la escala espacial del problema sobre la rampa.
+        en: L defines the spatial scale of the problem along the incline.
+    coherence_rules:
+    - id: l_coherence
+      when: L > 0
+      status: ok
+      text:
+        es: La distancia es positiva y consistente con el planteamiento.
+        en: Distance is positive and consistent with the setup.
+    physical_reading_rules:
+    - id: l_reading
+      when: 'true'
+      status: info
+      text:
+        es: Para una misma a, mayor L implica mayor t y mayor v_f.
+        en: For the same a, larger L implies larger t and larger v_f.
+    model_validity_rules:
+    - id: l_validity
+      when: 'true'
+      status: info
+      text:
+        es: Se asume tramo con ángulo constante y sin cambios de régimen.
+        en: A constant-angle segment without regime changes is assumed.
+    graph_rules:
+    - id: l_graph
+      when: 'true'
+      status: info
+      text:
+        es: L opera como entrada de escala para estimaciones cinemáticas.
+        en: L acts as scale input for kinematic estimates.
+    likely_errors:
+    - id: l_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error común: confundir longitud de rampa con altura vertical.'
+        en: 'Common error: confusing ramp length with vertical height.'
+    next_step_rules:
+    - id: l_next
+      when: 'true'
+      status: info
+      text:
+        es: Revisa medición de L sobre el plano real antes de cerrar cálculo.
+        en: Recheck L measurement along the real incline before finalizing.
+  v_f:
+    summary_rules:
+    - id: vf_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: v_f resume el efecto acumulado de la aceleración a lo largo de L.
+        en: v_f summarizes accumulated acceleration effect over distance L.
+    coherence_rules:
+    - id: vf_coherence
+      when: v_f >= 0
+      status: ok
+      text:
+        es: La rapidez final se mantiene no negativa.
+        en: Final speed remains non-negative.
+    physical_reading_rules:
+    - id: vf_physical
+      when: 'true'
+      status: info
+      text:
+        es: Mayor theta o mayor L incrementan v_f en el modelo ideal.
+        en: Larger theta or larger L increase v_f in the ideal model.
+    model_validity_rules:
+    - id: vf_validity
+      when: 'true'
+      status: info
+      text:
+        es: Se supone aceleración constante y partida desde reposo.
+        en: Constant acceleration and rest initial condition are assumed.
+    graph_rules:
+    - id: vf_graph
+      when: 'true'
+      status: info
+      text:
+        es: La lectura conjunta de a y L permite anticipar v_f sin integrar trayectoria completa.
+        en: Joint reading of a and L allows estimating v_f without full trajectory integration.
+    likely_errors:
+    - id: vf_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error común: usar longitud vertical en lugar de distancia recorrida sobre la rampa.'
+        en: 'Common error: using vertical length instead of path length along incline.'
+    next_step_rules:
+    - id: vf_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa v_f para evaluar impacto, frenado o transición al siguiente tramo.
+        en: Use v_f to evaluate impact, braking, or transition to next segment.

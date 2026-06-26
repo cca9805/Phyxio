@@ -1,4 +1,4 @@
-import fs from "fs";
+﻿import fs from "fs";
 import path from "path";
 import yaml from "js-yaml";
 import { fileURLToPath } from "url";
@@ -10,7 +10,7 @@ const args = process.argv.slice(2);
 const getArg = (k, def = null) => {
   const i = args.indexOf(k);
   if (i === -1) return def;
-  return args[i + 1] ?? def;
+  return args[i + 1] ? def;
 };
 
 const OVERWRITE = args.includes("--overwrite");
@@ -54,9 +54,17 @@ function asTitle(node) {
 function defaults(node) {
   // Garantiza campos pedibles aunque no estén en el YAML todavía
   return {
-    icon: node.icon ?? "",
-    descripcion: node.descripcion ?? "",
-    ruta_relativa: node.ruta_relativa ?? "",
+    icon: node.icon ? "",
+    descripcion: node.descripcion ? "",
+    description_en: node.description_en ? "",
+    niveles: Array.isArray(node.niveles) ? node.niveles : [],
+    prerequisitos: Array.isArray(node.prerequisitos) ? node.prerequisitos : [],
+    tags: Array.isArray(node.tags) ? node.tags : [],
+    graficos: Array.isArray(node.graficos) ? node.graficos : [],
+    dificultad: node.dificultad ? "",
+    tiempo_estimado_min: node.tiempo_estimado_min ? null,
+    physical_role: node.physical_role ? null,
+    ruta_relativa: node.ruta_relativa ? "",
   };
 }
 
@@ -65,27 +73,34 @@ function mkIndexYaml(node) {
   const children = Array.isArray(node.children) ? node.children : [];
   const items = children
     .slice()
-    .sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0))
+    .sort((a, b) => (a.orden ? 0) - (b.orden ? 0))
     .map((c) => ({
       id: c.id,
       titulo: asTitle(c),
       type: c.type,
-      orden: c.orden ?? 0,
-      niveles: c.niveles ?? [],
-      icon: c.icon ?? "",
+      orden: c.orden ? 0,
+      niveles: c.niveles ? [],
+      icon: c.icon ? "",
       ruta_relativa: normRel(c.ruta_relativa),
-      descripcion: c.descripcion ?? "",
+      descripcion: c.descripcion ? "",
     }));
 
   const obj = {
     id: node.id,
     titulo: asTitle(node),
     type: node.type,
-    orden: node.orden ?? 0,
-    niveles: node.niveles ?? [],
+    orden: node.orden ? 0,
+    niveles: node.niveles ? [],
     icon: d.icon,
     ruta_relativa: normRel(d.ruta_relativa),
     descripcion: d.descripcion,
+    description_en: d.description_en,
+    prerequisitos: d.prerequisitos,
+    tags: d.tags,
+    graficos: d.graficos,
+    physical_role: d.physical_role,
+    dificultad: d.dificultad,
+    tiempo_estimado_min: d.tiempo_estimado_min,
     children: items,
   };
 
@@ -116,16 +131,19 @@ function mkLeafMeta(node) {
     id: node.id,
     titulo: asTitle(node),
     type: node.type,
-    orden: node.orden ?? 0,
-    niveles: node.niveles ?? [],
+    orden: node.orden ? 0,
+    niveles: d.niveles,
     icon: d.icon,
     ruta_relativa: normRel(d.ruta_relativa),
-    descripcion: d.descripcion,
+    descripcion: "(Pendiente)",
+    description_en: "",
+    prerequisitos: d.prerequisitos,
+    tags: d.tags,
+    graficos: d.graficos,
+    physical_role: d.physical_role,
     // Campos útiles extra (opcionales):
-    dificultad: node.dificultad ?? "",
-    tiempo_estimado_min: node.tiempo_estimado_min ?? null,
-    prerequisitos: node.prerequisitos ?? [],
-    tags: node.tags ?? [],
+    dificultad: d.dificultad ? node.dificultad ? "",
+    tiempo_estimado_min: d.tiempo_estimado_min ? node.tiempo_estimado_min ? null,
   };
   return yaml.dump(obj, { lineWidth: 120, noRefs: true });
 }
@@ -193,3 +211,4 @@ function main() {
 }
 
 main();
+

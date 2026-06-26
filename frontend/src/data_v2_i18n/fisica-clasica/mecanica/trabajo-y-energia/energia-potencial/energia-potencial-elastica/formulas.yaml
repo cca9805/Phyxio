@@ -1,0 +1,168 @@
+version: 5
+topic:
+  id: energia-potencial-elastica
+  title:
+    es: Energia potencial elastica
+    en: Elastic Potential Energy
+variables:
+- { id: Ue, symbol: U_e, name: { es: energia potencial elastica, en: elastic potential energy }, si_unit: J }
+- { id: k, symbol: k, name: { es: constante elastica, en: spring constant }, si_unit: N/m }
+- { id: x, symbol: x, name: { es: deformacion, en: deformation }, si_unit: m }
+- { id: xi, symbol: x_i, name: { es: deformacion inicial, en: initial deformation }, si_unit: m }
+- { id: xf, symbol: x_f, name: { es: deformacion final, en: final deformation }, si_unit: m }
+- { id: dUe, symbol: \Delta U_e, name: { es: variacion de energia potencial elastica, en: change in elastic potential energy }, si_unit: J }
+- { id: We, symbol: W_e, name: { es: trabajo de la fuerza elastica, en: work done by the elastic force }, si_unit: J }
+formulas:
+- id: potencial_elastico_basico
+  title:
+    es: Energia potencial elastica
+    en: Elastic potential energy
+  equation: Ue = 0.5*k*x^2
+  latex: U_e = \frac{1}{2}kx^2
+  rearrangements:
+  - target: Ue
+    equation: Ue = 0.5*k*x^2
+    latex: U_e = \frac{1}{2}kx^2
+    constraints:
+    - expr: k > 0
+      message: { es: k debe ser positiva, en: k must be positive }
+    - expr: x >= 0
+      message: { es: x se interpreta como deformacion no negativa, en: x is interpreted as a non-negative deformation }
+  - target: k
+    equation: k = 2*Ue/(x^2)
+    latex: k = \frac{2U_e}{x^2}
+    constraints:
+    - expr: x != 0
+      message: { es: x no puede ser cero al despejar k, en: x cannot be zero when solving for k }
+  - target: x
+    equation: x = sqrt(2*Ue/k)
+    latex: x = \sqrt{\frac{2U_e}{k}}
+    constraints:
+    - expr: k > 0
+      message: { es: k debe ser positiva al despejar x, en: k must be positive when solving for x }
+  category: fundamental
+  relation_type: energy_relation
+  physical_meaning:
+    es: Convierte la deformacion elastica en una energia de estado cuadratica.
+    en: Converts elastic deformation into a quadratic state energy.
+  constraints:
+  - expr: k > 0
+    message: { es: La rigidez debe ser positiva, en: Stiffness must be positive }
+  validity:
+    es: Valida para un resorte ideal en regimen lineal de Hooke.
+    en: Valid for an ideal spring in the linear Hooke regime.
+  dimension_check: J
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ teoria.md, teoria.en.md, ejemplos.md, ejemplos.en.md, interpretacion.yaml ]
+  interpretation_tags: [ elastic_energy, state_energy ]
+  result_semantics:
+    target: Ue
+    meaning: El resultado mide la energia almacenada por la deformacion del elemento elastico.
+  domain_checks:
+  - expr: x >= 0
+    message: { es: Comprueba que x representa deformacion y no un desplazamiento arbitrario, en: Check that x represents deformation and not an arbitrary displacement }
+  coherence_checks:
+  - expr: "true"
+    message: { es: Si x se duplica, Ue se cuadruplica, en: If x doubles, Ue becomes four times larger }
+  graph_implications:
+  - La curva Ue(x) es parabólica y abre hacia arriba.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: No confundas la energia con la rigidez k, en: Do not confuse energy with stiffness k }
+- id: variacion_potencial_elastico
+  title:
+    es: Variacion entre dos deformaciones
+    en: Change between two deformations
+  equation: dUe = 0.5*k*(xf^2 - xi^2)
+  latex: \Delta U_e = \frac{k}{2}(x_f^2-x_i^2)
+  rearrangements:
+  - target: dUe
+    equation: dUe = 0.5*k*(xf^2 - xi^2)
+    latex: \Delta U_e = \frac{k}{2}(x_f^2-x_i^2)
+  - target: xf
+    equation: xf = sqrt(xi^2 + 2*dUe/k)
+    latex: x_f = \sqrt{x_i^2 + \frac{2\Delta U_e}{k}}
+  - target: xi
+    equation: xi = sqrt(xf^2 - 2*dUe/k)
+    latex: x_i = \sqrt{x_f^2 - \frac{2\Delta U_e}{k}}
+  category: fundamental
+  relation_type: energy_relation
+  physical_meaning:
+    es: Expresa el cambio de energia elastica entre dos estados del mismo resorte.
+    en: Expresses the change in elastic energy between two states of the same spring.
+  constraints:
+  - expr: k > 0
+    message: { es: La rigidez debe ser positiva, en: Stiffness must be positive }
+  validity:
+    es: Valida cuando xi y xf describen el mismo elemento y la misma referencia.
+    en: Valid when xi and xf describe the same element and the same baseline.
+  dimension_check: J
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ teoria.md, teoria.en.md, ejemplos.md, ejemplos.en.md, interpretacion.yaml ]
+  interpretation_tags: [ delta_energy, states ]
+  result_semantics:
+    target: dUe
+    meaning: El resultado indica si la deformacion final almacena mas o menos energia que la inicial.
+  domain_checks:
+  - expr: xi >= 0
+    message: { es: xi debe leerse como deformacion, en: xi must be read as a deformation }
+  - expr: xf >= 0
+    message: { es: xf debe leerse como deformacion, en: xf must be read as a deformation }
+  coherence_checks:
+  - expr: "true"
+    message: { es: Si xf > xi, dUe es positiva, en: If xf > xi, dUe is positive }
+  graph_implications:
+  - La diferencia entre dos puntos de la parabola Ue(x) produce dUe.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: No confundas variacion con energia absoluta, en: Do not confuse variation with absolute energy }
+- id: trabajo_fuerza_elastica
+  title:
+    es: Trabajo de la fuerza elastica
+    en: Work done by the elastic force
+  equation: We = -dUe
+  latex: W_e = -\Delta U_e
+  rearrangements:
+  - target: We
+    equation: We = -dUe
+    latex: W_e = -\Delta U_e
+  - target: dUe
+    equation: dUe = -We
+    latex: \Delta U_e = -W_e
+  category: fundamental
+  relation_type: energy_relation
+  physical_meaning:
+    es: El trabajo de la fuerza elastica compensa el cambio de energia almacenada.
+    en: The work of the elastic force compensates the change in stored energy.
+  constraints:
+  - expr: "true"
+    message: { es: El signo debe seguir la convencion de energia potencial, en: The sign must follow the potential-energy convention }
+  validity:
+    es: Valida para el modelo ideal conservativo del resorte.
+    en: Valid for the ideal conservative spring model.
+  dimension_check: J
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ teoria.md, teoria.en.md, ejemplos.md, ejemplos.en.md, interpretacion.yaml ]
+  interpretation_tags: [ work, elastic_force ]
+  result_semantics:
+    target: We
+    meaning: El resultado mide la energia que entrega o absorbe la fuerza elastica durante el proceso.
+  domain_checks:
+  - expr: "true"
+    message: { es: Comprueba la convencion de signos antes de interpretar We, en: Check the sign convention before interpreting We }
+  coherence_checks:
+  - expr: "true"
+    message: { es: Si dUe aumenta, We debe volverse mas negativo, en: If dUe increases, We must become more negative }
+  graph_implications:
+  - El area energetica puede leerse como cambio de signo opuesto a dUe.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: Identifica primero si el resorte entrega energia o la recibe, en: First identify whether the spring delivers energy or receives it }
+ui:
+  default_formula: potencial_elastico_basico
+  groups:
+  - title: { es: Elasticidad lineal, en: Linear elasticity }
+    items: [ potencial_elastico_basico, variacion_potencial_elastico, trabajo_fuerza_elastica ]

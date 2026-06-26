@@ -1,0 +1,309 @@
+version: 1
+id: interpretacion-ejemplos-clasicos
+leaf_id: ejemplos-clasicos
+nombre:
+  es: Interpretacion de ejemplos clasicos de rodadura
+  en: Interpretation of classic rolling examples
+scope:
+  es: lectura de calculadora, coherencia fisica y deteccion de deslizamiento
+  en: calculator reading, physical coherence, and slip detection
+dependencies:
+  magnitudes:
+  - R
+  - delta
+  - n
+  - omega
+  - v
+  formulas:
+  - condicion_rodadura
+  - conversion_rpm_rad
+  - residuo_rodadura
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia fisica
+      en: Physical coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  v:
+    summary_rules:
+    - id: v_summary
+      when: 'true'
+      status: info
+      text:
+        es: v representa el avance lineal instantaneo del sistema.
+        en: v represents the instantaneous linear advance of the system.
+    physical_reading_rules:
+    - id: v_physical
+      when: 'true'
+      status: info
+      text:
+        es: Su modulo aumenta cuando la rueda cubre mas distancia por unidad de tiempo.
+        en: Its magnitude grows when the wheel covers more distance per unit time.
+    coherence_rules:
+    - id: v_coherence
+      when: abs(delta) <= 0.5
+      status: ok
+      text:
+        es: v es coherente con rodadura casi pura dentro del umbral de residual.
+        en: v is coherent with near-pure rolling within residual threshold.
+    model_validity_rules:
+    - id: v_validity
+      when: R > 0
+      status: info
+      text:
+        es: La lectura de v es valida si R es positivo y el contacto es continuo.
+        en: v reading is valid if R is positive and contact remains continuous.
+    graph_rules:
+    - id: v_graph
+      when: 'true'
+      status: info
+      text:
+        es: En la grafica, comparar v contra omega*R confirma acoplamiento cinematica.
+        en: On the graph, comparing v against omega*R confirms kinematic coupling.
+    likely_errors:
+    - id: v_error
+      when: abs(v) > 60
+      status: warning
+      text:
+        es: Un error frecuente es confundir la velocidad lineal media con una lectura instantanea o mezclar m/s con km/h; revisa unidades y ventana temporal.
+        en: A common mistake is to confuse average linear speed with an instantaneous reading or to mix m/s with km/h; recheck units and time window.
+    next_step_rules:
+    - id: v_next
+      when: 'true'
+      status: info
+      text:
+        es: Calcula delta para decidir si hay derrape o patinamiento.
+        en: Compute delta to decide whether skidding or spin-out is present.
+  omega:
+    summary_rules:
+    - id: omega_summary
+      when: 'true'
+      status: info
+      text:
+        es: omega cuantifica la velocidad de giro del cuerpo.
+        en: omega quantifies body rotation speed.
+    physical_reading_rules:
+    - id: omega_physical
+      when: 'true'
+      status: info
+      text:
+        es: Debe crecer en paralelo con v cuando R permanece constante.
+        en: It should grow with v when R stays constant.
+    coherence_rules:
+    - id: omega_coherence
+      when: abs(delta) <= 0.5
+      status: ok
+      text:
+        es: omega es compatible con el valor lineal reportado en v.
+        en: omega is compatible with the reported linear value in v.
+    model_validity_rules:
+    - id: omega_validity
+      when: R > 0
+      status: info
+      text:
+        es: La interpretacion requiere radio positivo y convenio de signo consistente.
+        en: Interpretation requires positive radius and consistent sign convention.
+    graph_rules:
+    - id: omega_graph
+      when: 'true'
+      status: info
+      text:
+        es: La curva angular debe mantener relacion estable con la curva lineal.
+        en: Angular curve should keep a stable relation with linear curve.
+    likely_errors:
+    - id: omega_error
+      when: abs(omega) > 500
+      status: warning
+      text:
+        es: Posible confusion entre rpm y rad/s; muchos alumnos suponen que n y omega son el mismo dato y sobredimensionan el giro.
+        en: Possible confusion between rpm and rad/s; many learners assume n and omega are the same datum and overscale rotation.
+    next_step_rules:
+    - id: omega_next
+      when: 'true'
+      status: info
+      text:
+        es: Si n esta disponible, valida conversion_rpm_rad para cerrar consistencia.
+        en: If n is available, validate conversion_rpm_rad to close consistency checks.
+  R:
+    summary_rules:
+    - id: R_summary
+      when: 'true'
+      status: info
+      text:
+        es: R fija la escala geometrica del acoplamiento de rodadura.
+        en: R sets geometric scale for rolling coupling.
+    physical_reading_rules:
+    - id: R_physical
+      when: 'true'
+      status: info
+      text:
+        es: Cambios en R alteran la conversion directa entre giro y avance.
+        en: Changes in R alter direct conversion between spin and advance.
+    coherence_rules:
+    - id: R_coherence
+      when: R > 0
+      status: ok
+      text:
+        es: R positivo conserva interpretacion fisica del problema.
+        en: Positive R preserves physical interpretation of the problem.
+    model_validity_rules:
+    - id: R_validity
+      when: R > 0
+      status: info
+      text:
+        es: El modelo deja de ser util si R es cero o negativo.
+        en: Model stops being useful if R is zero or negative.
+    graph_rules:
+    - id: R_graph
+      when: 'true'
+      status: info
+      text:
+        es: En grafica, R actua como factor de pendiente entre v y omega.
+        en: On the graph, R acts as a slope factor between v and omega.
+    likely_errors:
+    - id: R_error
+      when: R <= 0
+      status: warning
+      text:
+        es: R no valida; corregir geometria o unidad usada.
+        en: Invalid R; correct geometry or selected unit.
+    next_step_rules:
+    - id: R_next
+      when: 'true'
+      status: info
+      text:
+        es: Recalcula omega con el valor corregido de R.
+        en: Recompute omega with corrected R value.
+  delta:
+    summary_rules:
+    - id: delta_summary
+      when: 'true'
+      status: info
+      text:
+        es: delta resume la desviacion respecto a rodadura ideal.
+        en: delta summarizes deviation from ideal rolling.
+    physical_reading_rules:
+    - id: delta_physical
+      when: 'true'
+      status: info
+      text:
+        es: Su signo orienta el tipo de deslizamiento observado.
+        en: Its sign indicates observed slip type.
+    coherence_rules:
+    - id: delta_coherence
+      when: abs(delta) <= 0.5
+      status: ok
+      text:
+        es: El sistema opera en zona de rodadura casi pura.
+        en: System operates in near-pure rolling zone.
+    model_validity_rules:
+    - id: delta_validity
+      when: R > 0
+      status: info
+      text:
+        es: El diagnostico es robusto si las entradas se midieron en el mismo instante.
+        en: Diagnosis is robust if inputs were measured at the same instant.
+    graph_rules:
+    - id: delta_graph
+      when: 'true'
+      status: info
+      text:
+        es: Cruces por cero de delta marcan cambios de regimen.
+        en: Zero crossings of delta mark regime changes.
+    likely_errors:
+    - id: delta_error
+      when: abs(delta) > 0.5
+      status: warning
+      text:
+        es: Un error habitual es culpar solo al contacto; antes conviene revisar sincronizacion, radio efectivo y conversion de n a omega.
+        en: A common mistake is to blame contact alone; first review timing, effective radius, and conversion from n to omega.
+    next_step_rules:
+    - id: delta_next
+      when: 'true'
+      status: info
+      text:
+        es: Evalua causas mecanicas del residuo y decide accion correctiva.
+        en: Evaluate mechanical causes of residual and decide corrective action.
+  n:
+    summary_rules:
+    - id: n_summary
+      when: 'true'
+      status: info
+      text:
+        es: n aporta la lectura instrumental en rpm.
+        en: n provides instrumentation reading in rpm.
+    physical_reading_rules:
+    - id: n_physical
+      when: 'true'
+      status: info
+      text:
+        es: Permite estimar omega antes de aplicar la condicion de rodadura.
+        en: It allows estimating omega before applying rolling condition.
+    coherence_rules:
+    - id: n_coherence
+      when: n >= 0
+      status: ok
+      text:
+        es: n no negativa mantiene convenio operativo simple en este leaf.
+        en: Non-negative n maintains a simple operating convention in this leaf.
+    model_validity_rules:
+    - id: n_validity
+      when: n >= 0
+      status: info
+      text:
+        es: Valores negativos requieren convenio adicional no cubierto aqui.
+        en: Negative values require extra convention not covered here.
+    graph_rules:
+    - id: n_graph
+      when: 'true'
+      status: info
+      text:
+        es: Graficar n y omega ayuda a detectar conversiones inconsistentes.
+        en: Plotting n and omega helps detect inconsistent conversions.
+    likely_errors:
+    - id: n_error
+      when: n > 6000
+      status: warning
+      text:
+        es: n muy alta para escenario didactico; puede haber saturacion del sensor o confusion entre frecuencia y conteo acumulado.
+        en: n is very high for a didactic scenario; there may be sensor saturation or confusion between frequency and accumulated count.
+    next_step_rules:
+    - id: n_next
+      when: 'true'
+      status: info
+      text:
+        es: Convierte n con conversion_rpm_rad y cierra chequeo de unidades.
+        en: Convert n using conversion_rpm_rad and close unit checks.

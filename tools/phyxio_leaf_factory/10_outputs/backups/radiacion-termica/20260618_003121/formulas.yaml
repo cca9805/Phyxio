@@ -1,0 +1,136 @@
+version: 5.0.0
+leaf: radiacion-termica
+ui:
+  default_formula: ley_stefan_boltzmann
+formulas:
+- id: ley_stefan_boltzmann
+  nombre:
+    es: Ley de Stefan-Boltzmann
+    en: Stefan-Boltzmann law
+  latex: P=\varepsilon\sigma A T^4
+  descripcion:
+    es: Potencia total emitida por una superficie gris ideal a temperatura absoluta T.
+    en: Total power emitted by an ideal gray surface at absolute temperature T.
+  used:
+  - potencia_radiada
+  - emisividad
+  - constante_stefan_boltzmann
+  - area_superficie
+  - temperatura_absoluta
+  result_semantics:
+    target: potencia_radiada
+    meaning:
+      es: Potencia electromagnética emitida por radiación térmica.
+      en: Electromagnetic power emitted by thermal radiation.
+    sign:
+      es: No negativa para A≥0, T≥0 y 0≤ε≤1.
+      en: Non-negative for A≥0, T≥0, and 0≤ε≤1.
+  validity:
+    es: Superficie con emisividad conocida, temperatura uniforme, medio transparente y radiación térmica dominante.
+    en: Surface with known emissivity, uniform temperature, transparent medium, and dominant thermal radiation.
+  common_mistakes:
+    es:
+    - Usar grados Celsius en lugar de kelvin.
+    - Olvidar que la temperatura está elevada a la cuarta potencia.
+    - Asignar unidades a la emisividad.
+    en:
+    - Using degrees Celsius instead of kelvin.
+    - Forgetting that temperature is raised to the fourth power.
+    - Assigning units to emissivity.
+  rearrangements:
+  - id: temperatura_desde_potencia
+    latex: T=\left(\frac{P}{\varepsilon\sigma A}\right)^{1/4}
+    target: temperatura_absoluta
+    conditions:
+      es: Válida si ε>0, σ>0, A>0 y P≥0.
+      en: Valid if ε>0, σ>0, A>0, and P≥0.
+  - id: area_desde_potencia
+    latex: A=\frac{P}{\varepsilon\sigma T^4}
+    target: area_superficie
+    conditions:
+      es: Válida si ε>0, σ>0 y T>0.
+      en: Valid if ε>0, σ>0, and T>0.
+- id: radiacion_neta
+  nombre:
+    es: Potencia radiada neta
+    en: Net radiated power
+  latex: P_{net}=\varepsilon\sigma A\left(T^4-T_{amb}^4\right)
+  descripcion:
+    es: Balance neto entre emisión de la superficie y absorción del entorno idealizado.
+    en: Net balance between surface emission and absorption from an idealized environment.
+  used:
+  - potencia_neta
+  - emisividad
+  - constante_stefan_boltzmann
+  - area_superficie
+  - temperatura_absoluta
+  - temperatura_ambiente
+  result_semantics:
+    target: potencia_neta
+    meaning:
+      es: Potencia neta perdida si T>T_amb o ganada si T<T_amb.
+      en: Net power lost if T>T_amb or gained if T<T_amb.
+    sign:
+      es: Positiva cuando el cuerpo está más caliente que el entorno y negativa cuando está más frío.
+      en: Positive when the body is hotter than the surroundings and negative when it is colder.
+  validity:
+    es: Entorno grande equivalente a una temperatura radiativa uniforme y superficie gris.
+    en: Large surroundings equivalent to a uniform radiative temperature and gray surface.
+  common_mistakes:
+    es:
+    - Restar temperaturas en vez de restar T⁴.
+    - Usar la temperatura ambiente en Celsius.
+    - Interpretar siempre P_net como pérdida de energía.
+    en:
+    - Subtracting temperatures instead of subtracting T⁴.
+    - Using ambient temperature in Celsius.
+    - Always interpreting P_net as energy loss.
+  rearrangements:
+  - id: temperatura_equilibrio_radiativo
+    latex: T=T_{amb}\quad\text{si}\quad P_{net}=0
+    target: temperatura_absoluta
+    conditions:
+      es: Equilibrio radiativo ideal sin otras transferencias de calor.
+      en: Ideal radiative equilibrium with no other heat transfers.
+- id: flujo_radiativo_emitido
+  nombre:
+    es: Flujo radiativo emitido
+    en: Emitted radiative flux
+  latex: j=\frac{P}{A}=\varepsilon\sigma T^4
+  descripcion:
+    es: Potencia radiada por unidad de superficie.
+    en: Radiated power per unit surface area.
+  used:
+  - flujo_radiativo
+  - potencia_radiada
+  - area_superficie
+  - emisividad
+  - constante_stefan_boltzmann
+  - temperatura_absoluta
+  result_semantics:
+    target: flujo_radiativo
+    meaning:
+      es: Intensidad superficial de emisión térmica.
+      en: Surface intensity of thermal emission.
+    sign:
+      es: No negativa en emisión bruta.
+      en: Non-negative for gross emission.
+  validity:
+    es: Misma validez que Stefan-Boltzmann, expresada por unidad de área.
+    en: Same validity as Stefan-Boltzmann, expressed per unit area.
+  common_mistakes:
+    es:
+    - Confundir flujo radiativo con flujo de calor total.
+    - Olvidar dividir por el área.
+    - Aplicarlo a superficies no uniformes sin promediar.
+    en:
+    - Confusing radiative flux with total heat flow.
+    - Forgetting to divide by area.
+    - Applying it to non-uniform surfaces without averaging.
+  rearrangements:
+  - id: potencia_desde_flujo
+    latex: P=jA
+    target: potencia_radiada
+    conditions:
+      es: Flujo uniforme sobre el área considerada.
+      en: Uniform flux over the considered area.

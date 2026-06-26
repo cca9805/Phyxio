@@ -1,0 +1,642 @@
+version: 5.0.0
+magnitudes:
+- id: temperatura
+  symbol: T
+  nombre:
+    es: temperatura
+    en: temperature
+  descripcion:
+    es: Temperatura absoluta que controla el estado térmico del sistema.
+    en: Absolute temperature controlling the thermal state of the system.
+  unidad_si: K
+  dimension: Θ
+  is_vector: false
+  components: []
+  category: control_variable
+  physical_role: independent_variable
+  used_in:
+  - temperatura_reducida_critica
+  common_mistake: Usar Celsius en lugar de kelvin.
+  typical_range: T > 0 K
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: No debe ser negativa en escala absoluta.
+      en: It must not be negative on an absolute scale.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero kelvin es un límite ideal no operativo aquí.
+      en: Zero kelvin is an ideal limit not used here.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: T > 0 K
+  interpretation_role:
+    primary_for:
+    - temperatura_reducida_critica
+    secondary_for: []
+  graph_binding:
+    channels:
+    - xAxis
+    - parameter
+  pedagogical_notes:
+    es: Usa [[temperatura]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[temperatura]] to connect calculation with the physical reading of the critical regime.
+- id: temperatura_critica
+  symbol: T_c
+  nombre:
+    es: temperatura crítica
+    en: critical temperature
+  descripcion:
+    es: Temperatura en la que aparece el comportamiento crítico ideal.
+    en: Temperature at which ideal critical behavior appears.
+  unidad_si: K
+  dimension: Θ
+  is_vector: false
+  components: []
+  category: critical_parameter
+  physical_role: threshold
+  used_in:
+  - temperatura_reducida_critica
+  common_mistake: Confundirla con cualquier temperatura de cambio gradual.
+  typical_range: T_c > 0 K
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Es positiva en escala absoluta.
+      en: It is positive on an absolute scale.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa ausencia o referencia de la magnitud.
+      en: Zero represents absence or reference of the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: T_c > 0 K
+  interpretation_role:
+    primary_for:
+    - temperatura_reducida_critica
+    secondary_for: []
+  graph_binding:
+    channels:
+    - constant
+    - parameter
+  pedagogical_notes:
+    es: Usa [[temperatura_critica]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[temperatura_critica]] to connect calculation with the physical reading of the critical regime.
+- id: temperatura_reducida
+  symbol: t
+  nombre:
+    es: temperatura reducida
+    en: reduced temperature
+  descripcion:
+    es: Distancia relativa y con signo respecto a la temperatura crítica.
+    en: Signed relative distance from the critical temperature.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: dimensionless_control
+  physical_role: reduced_variable
+  used_in:
+  - temperatura_reducida_critica
+  - parametro_orden_ley_critica
+  - susceptibilidad_critica
+  - longitud_correlacion_critica
+  - calor_especifico_critico
+  common_mistake: Olvidar el valor absoluto en leyes de divergencia.
+  typical_range: '|t| < 0.1 en régimen crítico'
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo distingue estar por encima o por debajo de la temperatura crítica.
+      en: The sign distinguishes being above or below the critical temperature.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica el punto crítico ideal.
+      en: Zero indicates the ideal critical point.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: '|t| < 0.1 en régimen crítico'
+  interpretation_role:
+    primary_for:
+    - temperatura_reducida_critica
+    - parametro_orden_ley_critica
+    secondary_for:
+    - susceptibilidad_critica
+    - longitud_correlacion_critica
+    - calor_especifico_critico
+  graph_binding:
+    channels:
+    - xAxis
+  pedagogical_notes:
+    es: Usa [[temperatura_reducida]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[temperatura_reducida]] to connect calculation with the physical reading of the critical regime.
+- id: parametro_de_orden
+  symbol: Phi
+  nombre:
+    es: parámetro de orden
+    en: order parameter
+  descripcion:
+    es: Magnitud macroscópica que distingue fases por simetría u organización.
+    en: Macroscopic quantity distinguishing phases by symmetry or organization.
+  unidad_si: variable
+  dimension: variable
+  is_vector: false
+  components: []
+  category: state_variable
+  physical_role: dependent_variable
+  used_in:
+  - parametro_orden_ley_critica
+  common_mistake: Tratarlo como constante lejos y cerca de la transición.
+  typical_range: 0 a valor material típico
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Puede tener signo por simetría; su módulo mide orden.
+      en: It may have sign by symmetry; its magnitude measures order.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero suele indicar fase desordenada o simétrica.
+      en: Zero often indicates a disordered or symmetric phase.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: 0 a valor material típico
+  interpretation_role:
+    primary_for:
+    - parametro_orden_ley_critica
+    secondary_for: []
+  graph_binding:
+    channels:
+    - yAxis
+  pedagogical_notes:
+    es: Usa [[parametro_de_orden]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[parametro_de_orden]] to connect calculation with the physical reading of the critical regime.
+- id: amplitud_critica
+  symbol: A
+  nombre:
+    es: amplitud crítica
+    en: critical amplitude
+  descripcion:
+    es: Factor de escala del parámetro de orden en la ley crítica.
+    en: Scale factor of the order parameter in the critical law.
+  unidad_si: variable
+  dimension: variable
+  is_vector: false
+  components: []
+  category: fit_parameter
+  physical_role: scale_factor
+  used_in:
+  - parametro_orden_ley_critica
+  common_mistake: Confundir amplitud con exponente universal.
+  typical_range: depende del material
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo sigue su definición física.
+      en: The sign follows its physical definition.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa ausencia o referencia de la magnitud.
+      en: Zero represents absence or reference of the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: depende del material
+  interpretation_role:
+    primary_for:
+    - parametro_orden_ley_critica
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Usa [[amplitud_critica]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[amplitud_critica]] to connect calculation with the physical reading of the critical regime.
+- id: exponente_critico_beta
+  symbol: beta
+  nombre:
+    es: exponente crítico beta
+    en: critical exponent beta
+  descripcion:
+    es: Exponente que gobierna la desaparición del parámetro de orden.
+    en: Exponent governing the vanishing of the order parameter.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: critical_exponent
+  physical_role: exponent
+  used_in:
+  - parametro_orden_ley_critica
+  common_mistake: Pensar que siempre vale el mismo número para cualquier sistema.
+  typical_range: 0 < beta < 1 típico
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo sigue su definición física.
+      en: The sign follows its physical definition.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa ausencia o referencia de la magnitud.
+      en: Zero represents absence or reference of the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: 0 < beta < 1 típico
+  interpretation_role:
+    primary_for:
+    - parametro_orden_ley_critica
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Usa [[exponente_critico_beta]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[exponente_critico_beta]] to connect calculation with the physical reading of the critical regime.
+- id: susceptibilidad
+  symbol: chi
+  nombre:
+    es: susceptibilidad
+    en: susceptibility
+  descripcion:
+    es: Respuesta del sistema ante un campo o perturbación conjugada.
+    en: System response to a conjugate field or perturbation.
+  unidad_si: variable
+  dimension: variable
+  is_vector: false
+  components: []
+  category: response_function
+  physical_role: dependent_variable
+  used_in:
+  - susceptibilidad_critica
+  common_mistake: Interpretar la divergencia ideal como infinita en una muestra finita.
+  typical_range: crece cerca de T_c
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo sigue su definición física.
+      en: The sign follows its physical definition.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica respuesta nula ideal.
+      en: Zero indicates ideal null response.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: crece cerca de T_c
+  interpretation_role:
+    primary_for:
+    - susceptibilidad_critica
+    secondary_for: []
+  graph_binding:
+    channels:
+    - yAxis
+  pedagogical_notes:
+    es: Usa [[susceptibilidad]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[susceptibilidad]] to connect calculation with the physical reading of the critical regime.
+- id: amplitud_susceptibilidad
+  symbol: C
+  nombre:
+    es: amplitud de susceptibilidad
+    en: susceptibility amplitude
+  descripcion:
+    es: Escala prefactorial de la susceptibilidad crítica.
+    en: Prefactor scale of critical susceptibility.
+  unidad_si: variable
+  dimension: variable
+  is_vector: false
+  components: []
+  category: fit_parameter
+  physical_role: scale_factor
+  used_in:
+  - susceptibilidad_critica
+  common_mistake: Confundir prefactor con exponente gamma.
+  typical_range: depende del material
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo sigue su definición física.
+      en: The sign follows its physical definition.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa ausencia o referencia de la magnitud.
+      en: Zero represents absence or reference of the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: depende del material
+  interpretation_role:
+    primary_for:
+    - susceptibilidad_critica
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Usa [[amplitud_susceptibilidad]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[amplitud_susceptibilidad]] to connect calculation with the physical reading of the critical regime.
+- id: exponente_critico_gamma
+  symbol: gamma
+  nombre:
+    es: exponente crítico gamma
+    en: critical exponent gamma
+  descripcion:
+    es: Exponente de divergencia de la susceptibilidad.
+    en: Exponent for susceptibility divergence.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: critical_exponent
+  physical_role: exponent
+  used_in:
+  - susceptibilidad_critica
+  common_mistake: Usarlo con signo positivo en el exponente sin revisar la divergencia.
+  typical_range: gamma > 0 típico
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo sigue su definición física.
+      en: The sign follows its physical definition.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa ausencia o referencia de la magnitud.
+      en: Zero represents absence or reference of the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: gamma > 0 típico
+  interpretation_role:
+    primary_for:
+    - susceptibilidad_critica
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Usa [[exponente_critico_gamma]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[exponente_critico_gamma]] to connect calculation with the physical reading of the critical regime.
+- id: longitud_correlacion
+  symbol: xi
+  nombre:
+    es: longitud de correlación
+    en: correlation length
+  descripcion:
+    es: Distancia característica hasta la que se correlacionan las fluctuaciones.
+    en: Characteristic distance over which fluctuations are correlated.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: length
+  physical_role: dependent_variable
+  used_in:
+  - longitud_correlacion_critica
+  common_mistake: Creer que puede superar sin límite el tamaño real de la muestra.
+  typical_range: nm a tamaño de muestra cerca de T_c
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo sigue su definición física.
+      en: The sign follows its physical definition.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa ausencia o referencia de la magnitud.
+      en: Zero represents absence or reference of the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: nm a tamaño de muestra cerca de T_c
+  interpretation_role:
+    primary_for:
+    - longitud_correlacion_critica
+    secondary_for: []
+  graph_binding:
+    channels:
+    - yAxis
+  pedagogical_notes:
+    es: Usa [[longitud_correlacion]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[longitud_correlacion]] to connect calculation with the physical reading of the critical regime.
+- id: amplitud_correlacion
+  symbol: xi_0
+  nombre:
+    es: amplitud de correlación
+    en: correlation amplitude
+  descripcion:
+    es: Longitud microscópica de escala para la divergencia de correlación.
+    en: Microscopic length scale for correlation divergence.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: fit_parameter
+  physical_role: scale_factor
+  used_in:
+  - longitud_correlacion_critica
+  common_mistake: Tomarla como la longitud total de correlación lejos del límite crítico.
+  typical_range: 10^-10 m a 10^-8 m
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo sigue su definición física.
+      en: The sign follows its physical definition.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa ausencia o referencia de la magnitud.
+      en: Zero represents absence or reference of the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: 10^-10 m a 10^-8 m
+  interpretation_role:
+    primary_for:
+    - longitud_correlacion_critica
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Usa [[amplitud_correlacion]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[amplitud_correlacion]] to connect calculation with the physical reading of the critical regime.
+- id: exponente_critico_nu
+  symbol: nu
+  nombre:
+    es: exponente crítico nu
+    en: critical exponent nu
+  descripcion:
+    es: Exponente de divergencia de la longitud de correlación.
+    en: Exponent for correlation length divergence.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: critical_exponent
+  physical_role: exponent
+  used_in:
+  - longitud_correlacion_critica
+  common_mistake: Olvidar que controla longitud, no directamente orden.
+  typical_range: nu > 0 típico
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo sigue su definición física.
+      en: The sign follows its physical definition.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa ausencia o referencia de la magnitud.
+      en: Zero represents absence or reference of the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: nu > 0 típico
+  interpretation_role:
+    primary_for:
+    - longitud_correlacion_critica
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Usa [[exponente_critico_nu]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[exponente_critico_nu]] to connect calculation with the physical reading of the critical regime.
+- id: calor_especifico
+  symbol: C
+  nombre:
+    es: calor específico molar
+    en: molar specific heat
+  descripcion:
+    es: Capacidad molar de almacenar energía térmica cerca de la transición.
+    en: Molar capacity to store thermal energy near the transition.
+  unidad_si: J mol^-1 K^-1
+  dimension: M L^2 T^-2 N^-1 Θ^-1
+  is_vector: false
+  components: []
+  category: response_function
+  physical_role: dependent_variable
+  used_in:
+  - calor_especifico_critico
+  common_mistake: Confundir una anomalía redondeada con una divergencia matemática exacta.
+  typical_range: J mol^-1 K^-1
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo sigue su definición física.
+      en: The sign follows its physical definition.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa ausencia o referencia de la magnitud.
+      en: Zero represents absence or reference of the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: J mol^-1 K^-1
+  interpretation_role:
+    primary_for:
+    - calor_especifico_critico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - yAxis
+  pedagogical_notes:
+    es: Usa [[calor_especifico]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[calor_especifico]] to connect calculation with the physical reading of the critical regime.
+- id: amplitud_calor_especifico
+  symbol: A_C
+  nombre:
+    es: amplitud del calor específico
+    en: specific heat amplitude
+  descripcion:
+    es: Prefactor de escala para la anomalía del calor específico.
+    en: Scaling prefactor for the specific heat anomaly.
+  unidad_si: J mol^-1 K^-1
+  dimension: M L^2 T^-2 N^-1 Θ^-1
+  is_vector: false
+  components: []
+  category: fit_parameter
+  physical_role: scale_factor
+  used_in:
+  - calor_especifico_critico
+  common_mistake: Confundir el prefactor con el área bajo la curva.
+  typical_range: J mol^-1 K^-1
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo sigue su definición física.
+      en: The sign follows its physical definition.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa ausencia o referencia de la magnitud.
+      en: Zero represents absence or reference of the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: true
+    expected_interval: J mol^-1 K^-1
+  interpretation_role:
+    primary_for:
+    - calor_especifico_critico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Usa [[amplitud_calor_especifico]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[amplitud_calor_especifico]] to connect calculation with the physical reading of the critical regime.
+- id: exponente_critico_alpha
+  symbol: alpha
+  nombre:
+    es: exponente crítico alfa
+    en: critical exponent alpha
+  descripcion:
+    es: Exponente asociado a la singularidad del calor específico.
+    en: Exponent associated with the specific heat singularity.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: critical_exponent
+  physical_role: exponent
+  used_in:
+  - calor_especifico_critico
+  common_mistake: Suponer divergencia fuerte aunque alpha sea pequeño o negativo.
+  typical_range: -1 < alpha < 1 típico
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo sigue su definición física.
+      en: The sign follows its physical definition.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa ausencia o referencia de la magnitud.
+      en: Zero represents absence or reference of the quantity.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: -1 < alpha < 1 típico
+  interpretation_role:
+    primary_for:
+    - calor_especifico_critico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Usa [[exponente_critico_alpha]] para conectar el cálculo con la lectura física del régimen crítico.
+    en: Use [[exponente_critico_alpha]] to connect calculation with the physical reading of the critical regime.

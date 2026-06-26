@@ -1,0 +1,259 @@
+import React from "react";
+import SvgProfileRenderer from "@/v2/components/SVG/SvgProfileRenderer";
+import {
+  SVG_CONTROL_TYPES,
+  SVG_MOTION_TYPES,
+  SVG_SCENE_TYPES,
+} from "@/v2/components/SVG/svgGrammar";
+
+const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+const fmt = (n, d = 1, lang = "es") => {
+  if (!Number.isFinite(n)) return "-";
+  const text = n.toFixed(d);
+  return lang === "en" ? text : text.replace(".", ",");
+};
+
+const scenarioLabel = (value, lang) => {
+  if (value === "support") return lang === "en" ? "Horizontal support" : "Apoyo horizontal";
+  if (value === "plane") return lang === "en" ? "Inclined plane" : "Plano inclinado";
+  return lang === "en" ? "Symmetric cables" : "Cables simetricos";
+};
+
+const profile = {
+  meta: {
+    id: "svg-ejemplos-de-equilibrio",
+    leafId: "ejemplos-de-equilibrio",
+    title: {
+      es: "Ejemplos de equilibrio",
+      en: "Equilibrium examples",
+    },
+    subtitle: {
+      es: "Comparacion visual de apoyo, rampa y cables",
+      en: "Visual comparison of support, ramp, and cables",
+    },
+  },
+  scene: SVG_SCENE_TYPES.CUSTOM,
+  viewBox: "0 0 960 560",
+  svgHeight: 640,
+  params: {
+    schema: [
+      {
+        key: "scenario",
+        default: "plane",
+        label: { es: "Escenario", en: "Scenario" },
+        type: SVG_CONTROL_TYPES.SELECT,
+        options: [
+          { value: "support", label: { es: "Apoyo", en: "Support" } },
+          { value: "plane", label: { es: "Rampa", en: "Ramp" } },
+          { value: "cables", label: { es: "Cables", en: "Cables" } },
+        ],
+      },
+      {
+        key: "W",
+        default: 240,
+        label: { es: "Peso", en: "Weight" },
+        unit: "N",
+        type: SVG_CONTROL_TYPES.RANGE,
+        min: 20,
+        max: 1000,
+        step: 10,
+      },
+      {
+        key: "alpha",
+        default: 0.52,
+        label: { es: "Angulo del plano", en: "Plane angle" },
+        unit: "rad",
+        type: SVG_CONTROL_TYPES.RANGE,
+        min: 0.05,
+        max: 1.2,
+        step: 0.01,
+      },
+      {
+        key: "theta",
+        default: 0.95,
+        label: { es: "Angulo del cable", en: "Cable angle" },
+        unit: "rad",
+        type: SVG_CONTROL_TYPES.RANGE,
+        min: 0.15,
+        max: 1.45,
+        step: 0.01,
+      },
+      {
+        key: "mu_s",
+        default: 0.45,
+        label: { es: "Rozamiento estatico", en: "Static friction" },
+        unit: "1",
+        type: SVG_CONTROL_TYPES.RANGE,
+        min: 0,
+        max: 1.2,
+        step: 0.01,
+      },
+    ],
+    derivations: {
+      N: ({ W, alpha, scenario }) => {
+        if (scenario === "support") return W;
+        if (scenario === "plane") return W * Math.cos(alpha);
+        return 0;
+      },
+      W_parallel: ({ W, alpha, scenario }) => (scenario === "plane" ? W * Math.sin(alpha) : 0),
+      F_s_max: ({ mu_s, N, scenario }) => (scenario === "cables" ? 0 : mu_s * N),
+      T: ({ W, theta, scenario }) => (scenario === "cables" ? W / (2 * Math.sin(theta)) : 0),
+    },
+  },
+  infoCards: [
+    {
+      key: "scenario",
+      label: { es: "Lectura", en: "Reading" },
+      lines: ({ p, lang }) => [
+        `${lang === "en" ? "Scenario" : "Escenario"}: ${scenarioLabel(p?.scenario, lang)}`,
+        `W = ${fmt(Number(p?.W ?? 240), 1, lang)} N`,
+      ],
+      result: ({ p, lang }) =>
+        p?.scenario === "cables"
+          ? `T = ${fmt(Number(p?.T ?? 0), 1, lang)} N`
+          : `N = ${fmt(Number(p?.N ?? 0), 1, lang)} N`,
+      resultColor: "#fde68a",
+    },
+  ],
+  motion: {
+    type: SVG_MOTION_TYPES.NONE,
+  },
+  render: ({ p, lang = "es", toNum }) => {
+    const isEs = lang !== "en";
+    const scenario = p?.scenario ?? "plane";
+    const W = clamp(toNum(p?.W, 240), 20, 1000);
+    const alpha = clamp(toNum(p?.alpha, 0.52), 0.05, 1.2);
+    const theta = clamp(toNum(p?.theta, 0.95), 0.15, 1.45);
+    const muS = clamp(toNum(p?.mu_s, 0.45), 0, 1.2);
+    const N = scenario === "support" ? W : W * Math.cos(alpha);
+    const Wparallel = scenario === "plane" ? W * Math.sin(alpha) : 0;
+    const FsMax = scenario === "cables" ? 0 : muS * N;
+    const T = scenario === "cables" ? W / (2 * Math.sin(theta)) : 0;
+    const restOk = Wparallel <= FsMax + 1e-9;
+
+    return (
+      <g>
+        <defs>
+          <linearGradient id="eqExamplesBg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#08121a" />
+            <stop offset="100%" stopColor="#16324f" />
+          </linearGradient>
+        </defs>
+
+        <rect x="0" y="0" width="960" height="560" rx="20" fill="url(#eqExamplesBg)" />
+        <text x="480" y="46" textAnchor="middle" fill="#ffffff" fontSize="28" fontWeight="800">
+          {isEs ? "Ejemplos de equilibrio" : "Equilibrium examples"}
+        </text>
+        <text x="480" y="74" textAnchor="middle" fill="rgba(255,255,255,0.68)" fontSize="14">
+          {isEs
+            ? "La misma condicion se expresa de forma distinta segun el contexto"
+            : "The same condition looks different depending on the context"}
+        </text>
+
+        <rect x="48" y="108" width="864" height="388" rx="18" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.08)" />
+
+        {scenario === "support" && (
+          <g>
+            <rect x="250" y="340" width="460" height="16" rx="8" fill="#3f3f46" />
+            <rect x="440" y="250" width="80" height="90" rx="10" fill="#cbd5e1" stroke="#ffffff" strokeWidth="2" />
+            <line x1="480" y1="250" x2="480" y2="182" stroke="#f97316" strokeWidth="7" />
+            <polygon points="480,162 468,190 492,190" fill="#f97316" />
+            <text x="520" y="176" fill="#fdba74" fontSize="14" fontWeight="800">
+              W = {fmt(W, 1, lang)} N
+            </text>
+            <line x1="480" y1="340" x2="480" y2="236" stroke="#38bdf8" strokeWidth="7" />
+            <polygon points="480,216 468,244 492,244" fill="#38bdf8" />
+            <text x="520" y="228" fill="#7dd3fc" fontSize="14" fontWeight="800">
+              N = {fmt(N, 1, lang)} N
+            </text>
+          </g>
+        )}
+
+        {scenario === "plane" && (
+          <g>
+            <polygon points="120,430 430,250 430,430" fill="rgba(245,158,11,0.16)" stroke="#f59e0b" strokeWidth="3" />
+            <rect x="270" y="270" width="82" height="56" rx="10" fill="#cbd5e1" stroke="#ffffff" strokeWidth="2" transform={`rotate(${-alpha * 180 / Math.PI} 311 298)`} />
+            <line x1="312" y1="298" x2="312" y2="366" stroke="#f97316" strokeWidth="7" />
+            <polygon points="312,386 300,358 324,358" fill="#f97316" />
+            <line x1="300" y1="286" x2={300 - 88 * Math.sin(alpha)} y2={286 - 88 * Math.cos(alpha)} stroke="#38bdf8" strokeWidth="7" />
+            <line x1="326" y1="306" x2={326 + 88 * Math.cos(alpha)} y2={306 + 88 * Math.sin(alpha)} stroke="#fb7185" strokeWidth="7" />
+            <path d="M 168 430 A 54 54 0 0 1 220 404" fill="none" stroke="#fde68a" strokeWidth="3" />
+            <text x="210" y="392" fill="#fde68a" fontSize="13" fontWeight="800">
+              α = {fmt(alpha, 2, lang)} rad
+            </text>
+
+            <rect x="612" y="190" width="220" height="120" rx="14" fill="rgba(15,23,42,0.55)" stroke="rgba(255,255,255,0.12)" />
+            <text x="628" y="220" fill="#ffffff" fontSize="15" fontWeight="800">
+              {isEs ? "Chequeo de reposo" : "Rest check"}
+            </text>
+            <text x="628" y="248" fill="#7dd3fc" fontSize="13">N = {fmt(N, 1, lang)} N</text>
+            <text x="628" y="272" fill="#fda4af" fontSize="13">W_parallel = {fmt(Wparallel, 1, lang)} N</text>
+            <text x="628" y="296" fill="#86efac" fontSize="13">F_s_max = {fmt(FsMax, 1, lang)} N</text>
+            <text x="628" y="326" fill={restOk ? "#86efac" : "#fca5a5"} fontSize="13" fontWeight="800">
+              {restOk ? (isEs ? "Hay equilibrio" : "Equilibrium holds") : (isEs ? "No hay equilibrio" : "No equilibrium")}
+            </text>
+          </g>
+        )}
+
+        {scenario === "cables" && (
+          <g>
+            <line x1="280" y1="120" x2="480" y2="285" stroke="#c084fc" strokeWidth="6" />
+            <line x1="680" y1="120" x2="480" y2="285" stroke="#c084fc" strokeWidth="6" />
+            <circle cx="480" cy="285" r="16" fill="#f8fafc" stroke="#0f172a" strokeWidth="2" />
+            <line x1="480" y1="285" x2="480" y2="368" stroke="#f97316" strokeWidth="7" />
+            <polygon points="480,388 468,360 492,360" fill="#f97316" />
+            <line x1="480" y1="285" x2="392" y2="212" stroke="#22c55e" strokeWidth="8" />
+            <line x1="480" y1="285" x2="568" y2="212" stroke="#22c55e" strokeWidth="8" />
+            <path d="M 480 235 A 48 48 0 0 1 520 263" fill="none" stroke="#fde68a" strokeWidth="3" />
+            <text x="528" y="244" fill="#fde68a" fontSize="13" fontWeight="800">
+              θ = {fmt(theta, 2, lang)} rad
+            </text>
+            <rect x="610" y="188" width="220" height="120" rx="14" fill="rgba(15,23,42,0.55)" stroke="rgba(255,255,255,0.12)" />
+            <text x="626" y="218" fill="#ffffff" fontSize="15" fontWeight="800">
+              {isEs ? "Lectura del nudo" : "Node reading"}
+            </text>
+            <text x="626" y="248" fill="#bbf7d0" fontSize="13">T = {fmt(T, 1, lang)} N</text>
+            <text x="626" y="272" fill="#fde68a" fontSize="13">θ = {fmt(theta, 2, lang)} rad</text>
+            <text x="626" y="296" fill="#fdba74" fontSize="13">W = {fmt(W, 1, lang)} N</text>
+            <text x="626" y="326" fill="rgba(255,255,255,0.72)" fontSize="13">
+              {isEs ? "Menor θ implica mayor T." : "Smaller θ implies larger T."}
+            </text>
+          </g>
+        )}
+
+        <text x="80" y="528" fill="rgba(255,255,255,0.72)" fontSize="13">
+          {isEs ? "Escenario activo: " : "Active scenario: "}
+          <tspan fill="#ffffff" fontWeight="800">{scenarioLabel(scenario, lang)}</tspan>
+        </text>
+      </g>
+    );
+  },
+};
+
+export default function EjemplosDeEquilibrioSvg({
+  lang = "es",
+  sharedParams = null,
+  paramsIn = null,
+  onSharedParamsChange = null,
+  interpretationDoc = null,
+  onGraphStateChange = null,
+  onInterpretationContextChange = null,
+}) {
+  const combinedParams = {
+    ...(paramsIn ?? {}),
+    ...(sharedParams ?? {}),
+  };
+
+  return (
+    <SvgProfileRenderer
+      profile={profile}
+      lang={lang}
+      sharedParams={combinedParams}
+      interpretationDoc={interpretationDoc}
+      onGraphStateChange={onGraphStateChange}
+      onInterpretationContextChange={onInterpretationContextChange}
+      onApplyToCalculator={onSharedParamsChange}
+    />
+  );
+}

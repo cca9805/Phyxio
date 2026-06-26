@@ -1,0 +1,533 @@
+version: 5.0.0
+id: fluctuaciones
+leaf_id: fluctuaciones
+nombre:
+  es: Fluctuaciones
+  en: Fluctuations
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: funcion-de-particion
+  parent_id: funcion-de-particion
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/funcion-de-particion/fluctuaciones
+  orden: 274400
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - beta_inversa_termica
+  - energia_media_desde_particion
+  - varianza_energia_desde_particion
+  - fluctuacion_rms_energia
+  - capacidad_calorifica_fluctuaciones
+  magnitudes:
+  - temperatura
+  - constante_boltzmann
+  - beta
+  - funcion_particion
+  - energia_media
+  - energia_microestado
+  - derivada_log_particion_beta
+  - derivada_segunda_log_particion_beta
+  - varianza_energia
+  - fluctuacion_energia
+  - capacidad_calorifica
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: beta
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  beta:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable térmica inversa
+      en: inverse thermal variable
+    summary_rules:
+    - id: beta_summary_inverse_temperature
+      when: 'true'
+      status: ok
+      text:
+        es: '[[beta]] mide la inversa de la escala térmica: al aumentar [[temperatura]], [[beta]] disminuye y la selección
+          de microestados se suaviza.'
+        en: '[[beta]] measures the inverse thermal scale: when [[temperatura]] increases, [[beta]] decreases and microstate
+          selection becomes softer.'
+    physical_reading_rules:
+    - id: beta_physical_reading_selection
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[beta]] como el control que penaliza energías altas en la función de partición; no es una energía, sino una
+          magnitud de dimensión inversa de energía.
+        en: Read [[beta]] as the control that penalizes high energies in the partition function; it is not an energy but an
+          inverse-energy quantity.
+    coherence_rules:
+    - id: beta_coherence_positive_temperature
+      when: 'true'
+      status: ok
+      text:
+        es: '[[beta]] debe ser positivo si [[temperatura]] es positiva y [[constante_boltzmann]] se usa en SI; un valor negativo
+          indica convenio no físico o dato mal introducido.'
+        en: '[[beta]] must be positive if [[temperatura]] is positive and [[constante_boltzmann]] is used in SI; a negative
+          value signals a nonphysical convention or bad input.'
+    model_validity_rules:
+    - id: beta_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[beta]] solo en equilibrio canónico con baño térmico bien definido; fuera de equilibrio la relación entre
+          [[beta]] y fluctuaciones deja de ser directa.
+        en: Use [[beta]] only in canonical equilibrium with a well-defined heat bath; out of equilibrium the link between
+          [[beta]] and fluctuations is no longer direct.
+    graph_rules:
+    - id: beta_graph_axis
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, seguir [[beta]] en el eje térmico permite ver cómo cambian [[energia_media]] y [[varianza_energia]]
+          cuando se endurece la selección energética.
+        en: On the graph, following [[beta]] on the thermal axis shows how [[energia_media]] and [[varianza_energia]] change
+          as energy selection tightens.
+    likely_errors:
+    - id: beta_error_temperature_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[beta]] con una lectura aislada es un error frecuente: No confundas aumentar [[beta]] con calentar:
+          aumentar [[beta]] equivale a reducir [[temperatura]] y suele reducir la exploración de microestados energéticos
+          altos.'
+        en: 'Do not confuse increasing [[beta]] with heating: increasing [[beta]] means lowering [[temperatura]] and usually
+          reduces exploration of high-energy microstates.'
+    next_step_rules:
+    - id: beta_next_check_units
+      when: 'true'
+      status: info
+      text:
+        es: Tras calcular [[beta]], comprueba que [[temperatura]] esté en kelvin y que las energías estén en julios antes
+          de interpretar derivadas de ln Z.
+        en: After computing [[beta]], check that [[temperatura]] is in kelvin and energies are in joules before interpreting
+          derivatives of ln Z.
+    physical_intuition:
+    - id: beta_intuition_distribution
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[beta]] debe leerse como parte de una distribución energética, no como una pieza aislada del
+          cálculo.
+        en: Intuitively, [[beta]] should be read as part of an energy distribution, not as an isolated piece of calculation.
+    limiting_cases:
+    - id: beta_limits_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En límites térmicos extremos, revisa cómo [[beta]] cambia cuando [[temperatura]] crece mucho o cuando [[beta]]
+          se hace grande.
+        en: In extreme thermal limits, check how [[beta]] changes when [[temperatura]] becomes very large or when [[beta]]
+          becomes large.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_media:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: promedio energético
+      en: energy average
+    summary_rules:
+    - id: energia_media_summary_average
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_media]] es el centro de la distribución energética canónica; resume qué energía espera el sistema al
+          intercambiar calor con el baño.'
+        en: '[[energia_media]] is the center of the canonical energy distribution; it summarizes the energy expected when
+          the system exchanges heat with the bath.'
+    physical_reading_rules:
+    - id: energia_media_reading_weighted
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia_media]] como promedio ponderado, no como energía de un microestado concreto; depende de [[funcion_particion]]
+          y de cómo cambian los pesos con [[beta]].
+        en: Interpret [[energia_media]] as a weighted average, not as the energy of one concrete microstate; it depends on
+          [[funcion_particion]] and on how weights change with [[beta]].
+    coherence_rules:
+    - id: energia_media_coherence_bounds
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_media]] debe caer dentro de la escala de energías accesibles dominante; si queda fuera del rango de
+          [[energia_microestado]], revisa signos en la derivada.'
+        en: '[[energia_media]] should fall within the dominant accessible energy scale; if it lies outside the [[energia_microestado]]
+          range, check derivative signs.'
+    model_validity_rules:
+    - id: energia_media_validity_equilibrium
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de [[energia_media]] exige equilibrio térmico y microestados contados con el mismo conjunto de restricciones
+          macroscópicas.
+        en: The reading of [[energia_media]] requires thermal equilibrium and microstates counted under the same macroscopic
+          constraints.
+    graph_rules:
+    - id: energia_media_graph_trend
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, la pendiente de [[energia_media]] frente a [[temperatura]] se conecta con [[capacidad_calorifica]]
+          y revela si las fluctuaciones crecen al calentar.
+        en: In the graph, the slope of [[energia_media]] versus [[temperatura]] connects to [[capacidad_calorifica]] and reveals
+          whether fluctuations grow during heating.
+    likely_errors:
+    - id: energia_media_error_single_state
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_media]] con una lectura aislada es un error frecuente: No leas [[energia_media]] como el
+          microestado más probable; una media puede no coincidir con ningún [[energia_microestado]] individual.'
+        en: 'A common mistake is to interpret [[energia_media]] in isolation: Do not read [[energia_media]] as the most probable
+          microstate; an average need not match any individual [[energia_microestado]].'
+    next_step_rules:
+    - id: energia_media_next_compare_fluctuation
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[energia_media]], compárala con [[fluctuacion_energia]] para decidir si el promedio representa
+          bien el estado macroscópico.
+        en: After obtaining [[energia_media]], compare it with [[fluctuacion_energia]] to decide whether the average represents
+          the macroscopic state well.
+    physical_intuition:
+    - id: energia_media_intuition_distribution
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_media]] debe leerse como parte de una distribución energética, no como una pieza aislada
+          del cálculo.
+        en: Intuitively, [[energia_media]] should be read as part of an energy distribution, not as an isolated piece of calculation.
+    limiting_cases:
+    - id: energia_media_limits_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En límites térmicos extremos, revisa cómo [[energia_media]] cambia cuando [[temperatura]] crece mucho o cuando
+          [[beta]] se hace grande.
+        en: In extreme thermal limits, check how [[energia_media]] changes when [[temperatura]] becomes very large or when
+          [[beta]] becomes large.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  varianza_energia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: fluctuación cuadrática
+      en: quadratic fluctuation
+    summary_rules:
+    - id: varianza_summary_spread
+      when: 'true'
+      status: ok
+      text:
+        es: '[[varianza_energia]] mide la dispersión cuadrática de la energía alrededor de [[energia_media]]; es la señal
+          estadística principal de las fluctuaciones.'
+        en: '[[varianza_energia]] measures the quadratic spread of energy around [[energia_media]]; it is the main statistical
+          signal of fluctuations.'
+    physical_reading_rules:
+    - id: varianza_reading_nonnegative
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[varianza_energia]] como una magnitud siempre no negativa con unidades de energía al cuadrado; cero significa
+          distribución energética sin anchura.
+        en: Read [[varianza_energia]] as an always nonnegative quantity with energy-squared units; zero means an energy distribution
+          with no width.
+    coherence_rules:
+    - id: varianza_coherence_curvature
+      when: 'true'
+      status: ok
+      text:
+        es: '[[varianza_energia]] debe ser coherente con la curvatura de ln Z respecto a [[beta]] y con una [[capacidad_calorifica]]
+          no negativa en sistemas canónicos estables.'
+        en: '[[varianza_energia]] must be consistent with the curvature of ln Z with respect to [[beta]] and with nonnegative
+          [[capacidad_calorifica]] in stable canonical systems.'
+    model_validity_rules:
+    - id: varianza_validity_stability
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[varianza_energia]] dentro de un régimen estable; cerca de transiciones o sistemas pequeños puede
+          crecer mucho y requerir un modelo extendido.
+        en: Interpret [[varianza_energia]] within a stable regime; near transitions or in small systems it may grow strongly
+          and require an extended model.
+    graph_rules:
+    - id: varianza_graph_peak
+      when: 'true'
+      status: info
+      text:
+        es: Un máximo de [[varianza_energia]] en la gráfica suele señalar alta sensibilidad térmica y posible aumento de [[capacidad_calorifica]].
+        en: A peak in [[varianza_energia]] on the graph usually indicates high thermal sensitivity and possible growth of
+          [[capacidad_calorifica]].
+    likely_errors:
+    - id: varianza_error_negative
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[varianza_energia]] con una lectura aislada es un error frecuente: Si [[varianza_energia]] sale negativa,
+          no es una fluctuación física: revisa el signo de la segunda derivada o la fórmula aplicada.'
+        en: 'A common mistake is to interpret [[varianza_energia]] in isolation: If [[varianza_energia]] is negative, it is
+          not a physical fluctuation: check the sign of the second derivative or the applied formula.'
+    next_step_rules:
+    - id: varianza_next_rms
+      when: 'true'
+      status: info
+      text:
+        es: Tras obtener [[varianza_energia]], calcula [[fluctuacion_energia]] para expresar la escala de variación en las
+          mismas unidades que la energía.
+        en: After obtaining [[varianza_energia]], compute [[fluctuacion_energia]] to express the variation scale in the same
+          units as energy.
+    physical_intuition:
+    - id: varianza_energia_intuition_distribution
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[varianza_energia]] debe leerse como parte de una distribución energética, no como una pieza
+          aislada del cálculo.
+        en: Intuitively, [[varianza_energia]] should be read as part of an energy distribution, not as an isolated piece of
+          calculation.
+    limiting_cases:
+    - id: varianza_energia_limits_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En límites térmicos extremos, revisa cómo [[varianza_energia]] cambia cuando [[temperatura]] crece mucho o cuando
+          [[beta]] se hace grande.
+        en: In extreme thermal limits, check how [[varianza_energia]] changes when [[temperatura]] becomes very large or when
+          [[beta]] becomes large.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  fluctuacion_energia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: escala de fluctuación
+      en: fluctuation scale
+    summary_rules:
+    - id: fluctuacion_summary_rms
+      when: 'true'
+      status: ok
+      text:
+        es: '[[fluctuacion_energia]] da la escala típica de las desviaciones de energía respecto a [[energia_media]] en unidades
+          de energía.'
+        en: '[[fluctuacion_energia]] gives the typical scale of energy deviations from [[energia_media]] in energy units.'
+    physical_reading_rules:
+    - id: fluctuacion_reading_relative
+      when: 'true'
+      status: info
+      text:
+        es: 'Interpreta [[fluctuacion_energia]] junto a [[energia_media]]: si es pequeña, el promedio es representativo; si
+          es comparable, el sistema explora energías muy dispersas.'
+        en: 'Interpret [[fluctuacion_energia]] together with [[energia_media]]: if it is small, the average is representative;
+          if comparable, the system explores widely spread energies.'
+    coherence_rules:
+    - id: fluctuacion_coherence_sqrt
+      when: 'true'
+      status: ok
+      text:
+        es: '[[fluctuacion_energia]] debe ser la raíz positiva de [[varianza_energia]]; no arrastra signo aunque las desviaciones
+          individuales puedan ser positivas o negativas.'
+        en: '[[fluctuacion_energia]] must be the positive square root of [[varianza_energia]]; it carries no sign although
+          individual deviations may be positive or negative.'
+    model_validity_rules:
+    - id: fluctuacion_validity_finite_system
+      when: 'true'
+      status: info
+      text:
+        es: En sistemas macroscópicos estables, [[fluctuacion_energia]] suele ser pequeña frente a la energía total relativa;
+          en sistemas pequeños puede dominar la lectura.
+        en: In stable macroscopic systems, [[fluctuacion_energia]] is usually small relative to total energy; in small systems
+          it may dominate the reading.
+    graph_rules:
+    - id: fluctuacion_graph_width
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, [[fluctuacion_energia]] se lee como anchura energética típica y permite detectar regiones donde
+          el promedio deja de bastar.
+        en: On the graph, [[fluctuacion_energia]] is read as a typical energy width and helps detect regions where the average
+          is not enough.
+    likely_errors:
+    - id: fluctuacion_error_variance_units
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[fluctuacion_energia]] con una lectura aislada es un error frecuente: No confundas [[fluctuacion_energia]]
+          con [[varianza_energia]]: la fluctuación tiene unidades de energía, la varianza tiene unidades de energía al cuadrado.'
+        en: 'Do not confuse [[fluctuacion_energia]] with [[varianza_energia]]: fluctuation has energy units, variance has
+          energy-squared units.'
+    next_step_rules:
+    - id: fluctuacion_next_relative
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[fluctuacion_energia]], estima el cociente con [[energia_media]] para valorar si el sistema
+          se comporta de forma casi determinista.
+        en: After computing [[fluctuacion_energia]], estimate the ratio to [[energia_media]] to judge whether the system behaves
+          almost deterministically.
+    physical_intuition:
+    - id: fluctuacion_energia_intuition_distribution
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[fluctuacion_energia]] debe leerse como parte de una distribución energética, no como una pieza
+          aislada del cálculo.
+        en: Intuitively, [[fluctuacion_energia]] should be read as part of an energy distribution, not as an isolated piece
+          of calculation.
+    limiting_cases:
+    - id: fluctuacion_energia_limits_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En límites térmicos extremos, revisa cómo [[fluctuacion_energia]] cambia cuando [[temperatura]] crece mucho o
+          cuando [[beta]] se hace grande.
+        en: In extreme thermal limits, check how [[fluctuacion_energia]] changes when [[temperatura]] becomes very large or
+          when [[beta]] becomes large.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

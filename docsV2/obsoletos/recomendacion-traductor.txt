@@ -1,0 +1,1044 @@
+He revisado el `data_v2` que me has adjuntado y, con lo que tienes ahora, **sí se puede llevar Phyxio a inglés sin destrozar la arquitectura**. De hecho, tu estructura actual ya tiene una base muy buena para hacerlo porque está bastante modular: `overview.md`, `index.yaml`, `meta.yaml`, `magnitudes.yaml`, `formulas.yaml`, y los bloques de contenido por leaf (`teoria.md`, `errores.md`, etc.). Lo delicado no es la traducción, sino **cómo evitar que idioma y lógica se mezclen como cables en una caja de derivación** ⚙️🌍
+
+Mi propuesta exacta para **Phyxio bilingüe ES/EN** es esta:
+
+---
+
+## 1. Decisión principal: IDs y rutas internas estables, idioma separado
+
+La clave es:
+
+* **No traducir los IDs internos**
+* **No traducir la lógica**
+* **No hacer que React dependa de slugs visibles**
+* Traducir solo:
+
+  * textos
+  * títulos
+  * descripciones
+  * labels de UI
+  * nombres visibles de rutas, si más adelante quieres URLs bonitas por idioma
+
+### Qué mantener fijo
+
+Ejemplo:
+
+* `id: mru`
+* `id: mrua`
+* `id: caida-libre`
+* `id: leyes-de-kirchhoff`
+
+Estos IDs deben seguir siendo universales.
+
+Eso te permite que:
+
+* calculadoras
+* fórmulas
+* gráficos
+* enlaces internos
+* imports
+* scripts de scaffolding
+
+sigan funcionando aunque el usuario cambie de idioma.
+
+---
+
+## 2. Lo que he visto en tu `data_v2`
+
+Tu estructura actual mezcla dos cosas:
+
+1. **estructura pedagógica**
+2. **idioma español embebido en nombres y contenidos**
+
+Ejemplos reales que he visto:
+
+* `data_v2/fisica-clasica/mecanica/cinematica/...`
+* `overview.md`
+* `index.yaml`
+* `meta.yaml`
+* `magnitudes.yaml`
+* `formulas.yaml`
+* `teoria.md`
+* incluso `graphs/svg.config.js` en algunos leafs
+
+Eso me lleva a una conclusión clara:
+
+## La mejor estrategia para Phyxio es una arquitectura híbrida:
+
+### A. estructura canónica por IDs
+
+### B. contenido traducible por idioma
+
+### C. UI traducida con diccionario aparte
+
+---
+
+# 3. Arquitectura recomendada
+
+## Opción recomendada para Phyxio
+
+Mantener **una sola estructura canónica** y separar el contenido traducible dentro de carpetas de idioma.
+
+### Estructura propuesta
+
+```txt
+data_v3/
+  content/
+    es/
+      fundamentos/
+      fisica-clasica/
+      fisica-moderna/
+      fisica-avanzada/
+      matematicas/
+      herramientas/
+
+    en/
+      fundamentals/
+      classical-physics/
+      modern-physics/
+      advanced-physics/
+      mathematics/
+      tools/
+
+  canon/
+    map.yaml
+    aliases.yaml
+    locale-slugs.yaml
+```
+
+Pero para no romper demasiado tu proyecto actual, te propongo una versión más compatible:
+
+---
+
+## 4. Versión compatible con tu `data_v2` actual
+
+Haz esto:
+
+```txt
+data_v2_i18n/
+  es/
+    fundamentos/
+    fisica-clasica/
+    fisica-moderna/
+    fisica-avanzada/
+    matematicas/
+    herramientas/
+
+  en/
+    fundamentals/
+    classical-physics/
+    modern-physics/
+    advanced-physics/
+    mathematics/
+    tools/
+
+  _shared/
+    ids-map.yaml
+    locale-slugs.yaml
+    locale-labels.yaml
+```
+
+### Qué va en cada parte
+
+#### `es/` y `en/`
+
+Contienen el contenido visible del usuario.
+
+#### `_shared/ids-map.yaml`
+
+Contiene la estructura canónica del árbol con IDs estables.
+
+#### `_shared/locale-slugs.yaml`
+
+Relaciona IDs con slugs visibles por idioma.
+
+#### `_shared/locale-labels.yaml`
+
+Para textos de navegación y UI si decides centralizar parte del etiquetado.
+
+---
+
+# 5. Regla de oro para Phyxio
+
+## El `id` manda. El `slug` obedece.
+
+### Ejemplo de leaf
+
+En vez de depender de:
+
+```txt
+/fisica-clasica/mecanica/cinematica/movimiento-rectilineo/mru
+```
+
+internamente Phyxio debería depender de algo como:
+
+```yaml
+id: mru
+parent: movimiento-rectilineo
+domain: cinematica
+```
+
+Y luego resolver:
+
+### Español
+
+```txt
+/fisica-clasica/mecanica/cinematica/movimiento-rectilineo/mru
+```
+
+### Inglés
+
+```txt
+/classical-physics/mechanics/kinematics/rectilinear-motion/uniform-linear-motion
+```
+
+Así puedes cambiar la piel sin trasplantar el esqueleto.
+
+---
+
+# 6. Cómo deben ser los archivos
+
+## 6.1 `meta.yaml`
+
+Ahora mismo seguramente tienes algo del estilo:
+
+```yaml
+id: mru
+titulo: Movimiento Rectilíneo Uniforme
+descripcion: Movimiento con velocidad constante...
+```
+
+### Propuesta
+
+El `meta.yaml` de cada idioma puede seguir existiendo, pero con campos bien definidos:
+
+### `es/.../mru/meta.yaml`
+
+```yaml
+id: mru
+slug: mru
+title: Movimiento Rectilíneo Uniforme
+short_title: MRU
+description: Movimiento en línea recta con velocidad constante.
+summary: Estudia el desplazamiento uniforme cuando la aceleración es nula.
+tags:
+  - cinemática
+  - movimiento rectilíneo
+  - velocidad constante
+level: bachillerato
+```
+
+### `en/.../uniform-linear-motion/meta.yaml`
+
+```yaml
+id: mru
+slug: uniform-linear-motion
+title: Uniform Linear Motion
+short_title: ULM
+description: Motion in a straight line with constant velocity.
+summary: Study uniform displacement when acceleration is zero.
+tags:
+  - kinematics
+  - rectilinear motion
+  - constant velocity
+level: upper-secondary
+```
+
+### Lo importante
+
+* mismo `id`
+* distinto `slug`
+* distinto texto visible
+
+---
+
+## 6.2 `magnitudes.yaml`
+
+Aquí no te recomiendo duplicar la semántica física, solo el texto.
+
+### Propuesta
+
+```yaml
+- id: position
+  symbol: x
+  unit_si: m
+  quantity_type: length
+  name: Posición
+  description: Coordenada que indica dónde está el móvil.
+
+- id: velocity
+  symbol: v
+  unit_si: m/s
+  quantity_type: speed
+  name: Velocidad
+  description: Cambio de posición por unidad de tiempo.
+```
+
+Y en inglés:
+
+```yaml
+- id: position
+  symbol: x
+  unit_si: m
+  quantity_type: length
+  name: Position
+  description: Coordinate indicating where the object is located.
+
+- id: velocity
+  symbol: v
+  unit_si: m/s
+  quantity_type: speed
+  name: Velocity
+  description: Change in position per unit time.
+```
+
+### Recomendación importante
+
+Haz que el `id` de magnitud sea **idioma-neutral**:
+
+* bien en inglés técnico: `velocity`, `position`, `time`
+* o bien una clave abstracta: `velocidad_v`, `posicion_x`
+
+Yo usaría inglés técnico para las claves internas. Es más limpio a largo plazo.
+
+---
+
+## 6.3 `formulas.yaml`
+
+Las fórmulas son prácticamente universales. Lo que cambia es la explicación.
+
+### Propuesta
+
+```yaml
+- id: mru_position
+  latex: x = x_0 + v t
+  target: x
+  variables:
+    - x
+    - x_0
+    - v
+    - t
+  title: Ecuación de posición
+  explanation: Permite calcular la posición en función del tiempo en MRU.
+  rearrangements:
+    - target: x
+      latex: x = x_0 + v t
+    - target: v
+      latex: v = \frac{x - x_0}{t}
+```
+
+En inglés:
+
+```yaml
+- id: mru_position
+  latex: x = x_0 + v t
+  target: x
+  variables:
+    - x
+    - x_0
+    - v
+    - t
+  title: Position equation
+  explanation: Computes position as a function of time in uniform linear motion.
+  rearrangements:
+    - target: x
+      latex: x = x_0 + v t
+    - target: v
+      latex: v = \frac{x - x_0}{t}
+```
+
+### Lo que no cambia
+
+* `id`
+* `latex`
+* `variables`
+* `rearrangements`
+
+### Lo que sí cambia
+
+* `title`
+* `explanation`
+
+---
+
+## 6.4 `teoria.md`, `errores.md`, `modelos.md`, etc.
+
+Estos deben ser **archivos separados por idioma**, no bloques bilingües dentro del mismo archivo.
+
+Eso en tu caso es muchísimo más cómodo.
+
+---
+
+# 7. Qué no debes traducir todavía
+
+Para no abrir diez frentes a la vez, yo **no traduciría de inicio**:
+
+* nombres de archivos de gráficos
+* nombres de componentes React
+* imports de `graphs`
+* contracts técnicos
+* nombres de utilidades
+* scripts de build/scaffold
+* IDs internos del mapa
+
+Primero haría bilingüe:
+
+* navegación
+* títulos
+* teoría
+* magnitudes
+* fórmulas
+* labels visibles
+
+Después, en segunda fase, si quieres:
+
+* slugs de URL por idioma
+
+---
+
+# 8. Fases reales de implementación
+
+## Fase 1. Internacionalizar la UI
+
+Antes de tocar el contenido, crea un sistema de idioma para la interfaz:
+
+### `src/i18n/ui/es.js`
+
+```javascript
+export default {
+  languageName: "Español",
+  tabs: {
+    theory: "Teoría",
+    formulas: "Fórmulas",
+    magnitudes: "Magnitudes",
+    examples: "Ejemplos",
+    errors: "Errores típicos",
+    history: "Historia",
+    applications: "Aplicaciones",
+    models: "Modelos",
+    graphs: "Gráficas",
+    calculator: "Calculadora",
+  },
+  common: {
+    loading: "Cargando...",
+    notFound: "Contenido no encontrado",
+    followCalculator: "Seguir calculadora",
+  },
+}
+```
+
+### `src/i18n/ui/en.js`
+
+```javascript
+export default {
+  languageName: "English",
+  tabs: {
+    theory: "Theory",
+    formulas: "Formulas",
+    magnitudes: "Quantities",
+    examples: "Examples",
+    errors: "Typical mistakes",
+    history: "History",
+    applications: "Applications",
+    models: "Models",
+    graphs: "Graphs",
+    calculator: "Calculator",
+  },
+  common: {
+    loading: "Loading...",
+    notFound: "Content not found",
+    followCalculator: "Follow calculator",
+  },
+}
+```
+
+### Crear contexto
+
+```javascript
+import { createContext, useContext, useMemo, useState } from "react";
+import es from "./ui/es";
+import en from "./ui/en";
+
+const I18nContext = createContext(null);
+
+export function I18nProvider({ children }) {
+  const [lang, setLang] = useState("es");
+
+  const dict = useMemo(() => (lang === "en" ? en : es), [lang]);
+
+  return (
+    <I18nContext.Provider value={{ lang, setLang, dict }}>
+      {children}
+    </I18nContext.Provider>
+  );
+}
+
+export function useI18n() {
+  const ctx = useContext(I18nContext);
+  if (!ctx) throw new Error("useI18n must be used inside I18nProvider");
+  return ctx;
+}
+```
+
+---
+
+## Fase 2. Duplicar estructura de contenido
+
+Copia el árbol actual tal cual a `es/`.
+
+Ejemplo:
+
+```txt
+data_v2_i18n/es/fisica-clasica/...
+```
+
+y deja el actual congelado como referencia.
+
+No intentes traducir aún. Solo reorganiza.
+
+---
+
+## Fase 3. Crear loader por idioma
+
+Necesitas una función centralizada que resuelva contenido por idioma.
+
+### Ejemplo conceptual
+
+```javascript
+export async function loadLeafFile({ lang, path, file }) {
+  const mod = await import(`../data_v2_i18n/${lang}/${path}/${file}`);
+  return mod.default ?? mod;
+}
+```
+
+Pero como los imports dinámicos de Vite son quisquillosos, te recomiendo usar `import.meta.glob`.
+
+### Mejor enfoque
+
+```javascript
+const mdModules = import.meta.glob("../data_v2_i18n/**/*.{md,yaml,yml,js,jsx}", {
+  eager: false,
+  query: "?raw",
+  import: "default",
+});
+
+export async function loadRawContent(lang, relativePath) {
+  const fullPath = `../data_v2_i18n/${lang}/${relativePath}`;
+  const loader = mdModules[fullPath];
+  if (!loader) throw new Error(`Content not found: ${fullPath}`);
+  return await loader();
+}
+```
+
+Ese enfoque te va mejor con Phyxio porque ya manejas mucho contenido file-based.
+
+---
+
+## Fase 4. Introducir `locale-slugs.yaml`
+
+Esto es crucial si quieres inglés visible de verdad.
+
+### `_shared/locale-slugs.yaml`
+
+```yaml
+categories:
+  fundamentos:
+    es: fundamentos
+    en: fundamentals
+  fisica-clasica:
+    es: fisica-clasica
+    en: classical-physics
+  mecanica:
+    es: mecanica
+    en: mechanics
+  cinematica:
+    es: cinematica
+    en: kinematics
+  movimiento-rectilineo:
+    es: movimiento-rectilineo
+    en: rectilinear-motion
+  mru:
+    es: mru
+    en: uniform-linear-motion
+  mrua:
+    es: mrua
+    en: uniformly-accelerated-motion
+```
+
+Así puedes montar funciones como:
+
+```javascript
+getLocalizedSlug(id, lang)
+buildLocalizedPath(ids, lang)
+```
+
+---
+
+## Fase 5. Separar árbol canónico de árbol visible
+
+Ahora mismo tu estructura física de carpetas y tu navegación parecen bastante acopladas. Para inglés eso será una trampa con dientes.
+
+Necesitas un mapa canónico.
+
+### `_shared/ids-map.yaml`
+
+```yaml
+- id: fisica-clasica
+  type: category
+  children:
+    - id: mecanica
+      type: node
+      children:
+        - id: cinematica
+          type: node
+          children:
+            - id: movimiento-rectilineo
+              type: node
+              children:
+                - id: mru
+                  type: leaf
+                - id: mrua
+                  type: leaf
+```
+
+Este mapa se usa para:
+
+* navegación
+* breadcrumbs
+* relaciones padre/hijo
+* búsqueda
+* árbol lateral
+
+Y luego los textos visibles vienen del idioma.
+
+---
+
+# 9. Qué hacer con `index.yaml` y `overview.md`
+
+He visto que en tu estructura hay muchos `index.yaml` y `overview.md`.
+
+## Mi propuesta
+
+### `index.yaml`
+
+Debe quedarse como archivo de estructura y metadatos de navegación del nodo.
+
+### `overview.md`
+
+Debe quedarse como contenido pedagógico del nodo.
+
+### Ejemplo
+
+#### `es/.../cinematica/index.yaml`
+
+```yaml
+id: cinematica
+title: Cinemática
+description: Estudio del movimiento sin analizar sus causas.
+children:
+  - movimiento-rectilineo
+  - movimiento-circular
+  - movimiento-en-dos-dimensiones
+  - movimiento-relativo
+  - rotacion
+```
+
+#### `en/.../kinematics/index.yaml`
+
+```yaml
+id: cinematica
+title: Kinematics
+description: Study of motion without analyzing its causes.
+children:
+  - movimiento-rectilineo
+  - movimiento-circular
+  - movimiento-en-dos-dimensiones
+  - movimiento-relativo
+  - rotacion
+```
+
+Observa el truco bonito:
+
+* `id` sigue siendo `cinematica`
+* `children` siguen siendo IDs canónicos
+* solo cambia lo visible
+
+Eso te evita un infierno barroco.
+
+---
+
+# 10. Qué hacer con los gráficos
+
+He visto que hay leafs con cosas como:
+
+```txt
+graphs/svg.config.js
+```
+
+Aquí la mejor estrategia es esta:
+
+## Mantener lógica del gráfico compartida
+
+y sacar las etiquetas visibles a un diccionario.
+
+### Ejemplo
+
+```javascript
+export const graphLabels = {
+  es: {
+    time: "Tiempo",
+    position: "Posición",
+    velocity: "Velocidad",
+    acceleration: "Aceleración",
+  },
+  en: {
+    time: "Time",
+    position: "Position",
+    velocity: "Velocity",
+    acceleration: "Acceleration",
+  },
+};
+```
+
+Y en el gráfico:
+
+```javascript
+const { lang } = useI18n();
+const L = graphLabels[lang] ?? graphLabels.es;
+```
+
+### No dupliques el gráfico entero por idioma
+
+Solo duplica textos si hace falta.
+
+---
+
+# 11. Estrategia de traducción realista
+
+No intentes traducir manualmente todo `data_v2` de golpe. Sería un leviatán con café.
+
+Hazlo así:
+
+## Paso 1
+
+Traducir:
+
+* `meta.yaml`
+* `index.yaml`
+* `overview.md`
+
+de los nodos principales.
+
+## Paso 2
+
+Traducir 1 bloque completo de prueba:
+
+* `fundamentos`
+* `cinematica`
+* `mru`
+* `mrua`
+* `caida-libre`
+
+## Paso 3
+
+Validar:
+
+* navegación
+* tabs
+* calculadora
+* gráficos
+* breadcrumbs
+* búsqueda
+
+## Paso 4
+
+Crear script automático para el resto.
+
+---
+
+# 12. Script de migración que te recomiendo
+
+Necesitas dos scripts Node:
+
+## A. `migrate-data-v2-to-i18n.js`
+
+Hace:
+
+* copia `data_v2` a `data_v2_i18n/es`
+* genera `_shared`
+* detecta IDs y slugs actuales
+
+## B. `seed-en-from-es.js`
+
+Hace:
+
+* clona estructura `es` a `en`
+* traduce archivos de texto
+* mantiene IDs
+* crea slugs ingleses provisionales
+
+---
+
+# 13. Orden exacto que yo seguiría en Phyxio
+
+Este sería mi plan de ejecución, sin fuegos artificiales innecesarios:
+
+## Etapa 1
+
+Crear `I18nProvider` y selector ES/EN.
+
+## Etapa 2
+
+Internacionalizar solo la UI fija:
+
+* tabs
+* botones
+* mensajes
+* textos comunes
+
+## Etapa 3
+
+Mover tu `data_v2` actual a:
+
+```txt
+data_v2_i18n/es/
+```
+
+## Etapa 4
+
+Crear un `contentLoader` nuevo que reciba `lang`.
+
+## Etapa 5
+
+Introducir IDs canónicos y `locale-slugs.yaml`.
+
+## Etapa 6
+
+Traducir un piloto:
+
+* `fundamentos`
+* `mecanica > cinematica > movimiento-rectilineo > mru/mrua`
+* uno con gráfico
+* uno con calculadora
+* uno con DCL
+
+## Etapa 7
+
+Automatizar traducción del resto.
+
+---
+
+# 14. Mi recomendación final para tu caso
+
+Para **Phyxio**, no haría una internacionalización “genérica de app”. Haría una **internacionalización de plataforma educativa basada en contenido**.
+
+Eso significa:
+
+* UI con diccionarios
+* contenido por idioma en archivos
+* IDs estables
+* slugs localizados
+* loaders centralizados
+* gráficos con labels traducibles
+* fórmulas y lógica compartidas
+
+Es la opción más robusta, más limpia y más compatible con cómo ya estás construyendo el proyecto.
+
+---
+
+# 15. Qué te propongo hacer ahora
+
+Puedo prepararte el siguiente bloque ya aterrizado a tu proyecto:
+
+### Opción A
+
+**La estructura exacta de carpetas y archivos para empezar la migración de `data_v2` a bilingüe**, ya escrita para copiar.
+
+### Opción B
+
+**Los archivos base del sistema i18n en React**:
+
+* `I18nProvider.jsx`
+* `ui/es.js`
+* `ui/en.js`
+* `contentLoader.js`
+* `locale-slugs.yaml` de ejemplo
+
+### Opción C
+
+**Un script Node de migración inicial** que convierta tu `data_v2` actual en `data_v2_i18n/es`.
+
+La mejor siguiente jugada es la **B + C**. Ahí es donde el proyecto deja de ser idea y pasa a tener esqueleto con tendones.
+
+
+
+Segunda parte
+
+La propuesta de ese análisis me parece **más segura como plan de ejecución inmediato** para Phyxio. La mía sigue siendo buena como **arquitectura objetivo**, pero la suya es mejor como **camino de despliegue sin romper nada**. En resumen:
+
+**Arquitectura final**: me sigo quedando con la idea base que te propuse
+**Estrategia de implantación**: me quedo con la propuesta “Phyxio-safe” que te han dado
+
+Dicho de otro modo: la mía dibuja bien la catedral; la otra te evita tirar media nave al poner el primer ladrillo 🧱🌍
+
+### Lo que creo que acierta mucho la propuesta que te pasaron
+
+Tiene razón en cuatro puntos importantes:
+
+**1. No traducir la estructura física demasiado pronto**
+Eso en tu proyecto es clave. Phyxio tiene mucho acoplamiento entre mapa, rutas, loaders, imports, graphs y archivos. Si empiezas cambiando carpetas y slugs visibles desde el minuto uno, puedes despertar una bandada de errores raros.
+
+**2. Duplicar solo contenido textual al principio**
+Muy buena idea. En tu caso, duplicar toda la estructura por idioma desde ya mete mantenimiento extra antes de haber validado el sistema. Mejor separar primero:
+
+* UI traducida
+* contenido textual traducible
+* lógica intacta
+
+**3. Cuidado con `import.meta.glob` sobre todo el árbol**
+También es una observación fina. En proyectos grandes, usar un glob enorme para todo puede volver el arranque y el HMR más pesados. Para Phyxio, con tantos archivos, mejor un loader más controlado o manifestado.
+
+**4. Introducir `locale-slugs` más tarde**
+Completamente de acuerdo. Los slugs traducidos son bonitos y útiles, pero ahora mismo son un lujo peligroso. Primero que funcione el bilingüismo. Luego ya le pones traje y corbata.
+
+---
+
+## Mi veredicto real
+
+Yo haría una **síntesis**:
+
+### Qué conservaría de mi propuesta
+
+* `id` canónico estable y no traducible
+* separar UI i18n de contenido i18n
+* no traducir lógica, fórmulas ni componentes técnicos
+* preparar una capa futura para slugs localizados
+* pensar en arquitectura multilenguaje desde ya
+
+### Qué cambiaría siguiendo la propuesta “safe”
+
+* no movería aún todo a `data_v2_i18n/es` y `en`
+* no traduciría todavía carpetas físicas ni rutas internas
+* no haría aún el refactor grande del árbol
+* empezaría por una capa mínima, reversible y compatible con tu proyecto actual
+
+---
+
+# Lo que te recomiendo de verdad para Phyxio
+
+## Fase 1. UI bilingüe
+
+Traducir primero la interfaz:
+
+* tabs
+* botones
+* mensajes comunes
+* labels de calculadora
+* textos de navegación visibles
+
+Sin tocar estructura de contenido todavía.
+
+## Fase 2. Contenido bilingüe piloto
+
+Elegir una zona pequeña, por ejemplo:
+
+* `cinematica`
+* `mru`
+* `mrua`
+* `caida-libre`
+
+Y para esa zona:
+
+* mantener mismos IDs
+* mantener mismas rutas internas
+* añadir versión inglesa del contenido textual
+
+Aquí puede hacerse de dos formas:
+
+* archivos paralelos `teoria.en.md`, `errores.en.md`, etc.
+* o subcarpeta `i18n/en/` dentro de cada leaf o nodo
+
+Para tu caso, ahora mismo me gusta más esto:
+
+```txt
+mru/
+  meta.yaml
+  teoria.md
+  teoria.en.md
+  errores.md
+  errores.en.md
+  aplicaciones.md
+  aplicaciones.en.md
+  formulas.yaml
+  formulas.en.yaml
+  magnitudes.yaml
+  magnitudes.en.yaml
+```
+
+Porque:
+
+* no rompe imports
+* no rompe rutas
+* no obliga a duplicar toda la jerarquía
+* es fácil de introducir progresivamente
+
+## Fase 3. Loader con fallback
+
+Crear un loader del tipo:
+
+* si existe `teoria.en.md`, cargarlo
+* si no existe, usar `teoria.md`
+
+Eso te da un sistema robusto y progresivo.
+
+## Fase 4. Traducir labels de gráficos
+
+No duplicar gráficos.
+Solo extraer textos visibles.
+
+## Fase 5. Cuando todo esté estable
+
+Entonces sí:
+
+* manifiesto canónico
+* `locale-slugs`
+* rutas bonitas por idioma
+* redirects y aliases
+
+---
+
+# Entonces, ¿mejor mi idea o la otra?
+
+Mi respuesta honesta es:
+
+**Para visión de largo plazo:** la mía
+**Para empezar mañana sin liarla:** la otra
+**Para Phyxio de verdad:** una mezcla de ambas, pero arrancando con la otra
+
+Así que, si tuviera que elegir una sola **hoy**, elegiría la **propuesta Phyxio-safe** como base de ejecución.
+
+---
+
+# Mi recomendación final, muy concreta
+
+Yo haría esto:
+
+### Ahora mismo
+
+* `I18nProvider`
+* diccionarios UI `es/en`
+* loader con fallback a archivos `.en.*`
+* piloto en una sola rama de contenido
+
+### Más adelante
+
+* manifiesto canónico por IDs
+* slugs traducibles
+* rutas `/es/...` y `/en/...`
+* reorganización física si de verdad compensa
+
+Eso te permite avanzar sin convertir el proyecto en una excavación arqueológica cada vez que tocas una ruta.
+
+Además, encaja bastante bien con cómo trabajas Phyxio: iterando leaf por leaf, con mucho archivo suelto y mucho componente conectado a contenido real.
+
+Si quieres, el siguiente paso útil es que te proponga la **arquitectura Phyxio-safe exacta sobre tu `data_v2` actual**, con ejemplos de nombres de archivo, loader React y reglas para `meta`, `teoria`, `formulas` y `magnitudes`.

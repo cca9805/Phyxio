@@ -1,0 +1,108 @@
+const e=`# Vorticidad y circulacion
+
+## Contexto conceptual
+
+Vorticidad y circulacion responde a una pregunta fisica precisa: ¿Como conectan vorticidad y circulacion la rotacion local del fluido con efectos globales de sustentacion? El tema no se introduce para sumar una formula mas, sino para dar al alumno una herramienta de lectura cuando los modelos elementales ya no separan bien causa, escala y dominio.
+
+La vorticidad mide giro local del fluido y la circulacion resume giro acumulado alrededor de un contorno. El alumno aprende a no confundir trayectoria curva con rotacion local del elemento fluido. Por eso las magnitudes nucleares, [[omega]], [[v]], [[Gamma]], [[C]], [[rho]], [[Vinf]], [[Lprime]], no son una lista decorativa. Cada una marca una parte de la estructura: una escala, una frontera, una variable dinamica, una condicion de validez o una cantidad conservada.
+
+## 🟢 Nivel esencial
+
+La idea esencial es que la vorticidad mide giro local del fluido y la circulacion resume giro acumulado alrededor de un contorno. Antes de calcular, el estudiante debe poder decir que mecanismo fisico se esta aislando y que aspecto del sistema queda deliberadamente fuera. Si esa lectura no existe, la formula puede producir un numero correcto para una pregunta equivocada.
+
+En este nivel, [[omega]] actua como magnitud dominante porque concentra la decision didactica del leaf. No basta nombrarla: hay que explicar si aumenta, disminuye, cambia de signo, se anula o deja de tener sentido cuando cambia el regimen. Esa lectura verbal prepara el paso formal.
+
+El profesor puede usar preguntas de contraste: que pasaria si se anula una velocidad, si la simetria desaparece, si la frontera deja de ser fija o si una correccion crece hasta competir con el termino principal. La respuesta debe conservar fisica, no solo algebra.
+
+Una prueba didactica util es pedir una prediccion cualitativa antes de sustituir: que termino domina, que signo se espera y que caso limite deberia aparecer. Si el alumno responde eso, el algebra posterior tiene objetivo fisico. Si no, el mismo calculo queda fragil porque no hay criterio para detectar un resultado imposible.
+
+Tambien conviene separar descripcion y decision. La descripcion enumera magnitudes; la decision explica cual de ellas controla el cambio observado. En este leaf, esa decision se apoya en [[omega]] y en la comparacion entre termino dominante, correccion y caso limite. Esta distincion evita que el alumno confunda una solucion larga con una solucion profunda.
+
+## 🔵 Nivel formal
+
+El nivel formal queda concentrado en estas relaciones:
+
+{{f:definicion_vorticidad}}
+
+{{f:definicion_circulacion}}
+
+{{f:teorema_kelvin}}
+
+{{f:kutta_joukowski}}
+
+Las relaciones anteriores deben aparecer juntas porque forman el nucleo operativo del leaf. Una define el objeto matematico que se va a leer, otra introduce el balance que gobierna el sistema, otra fija una condicion de reduccion o compatibilidad, y otra conecta el formalismo con un diagnostico fisico observable.
+
+Para aplicarlas, [[omega]], [[v]], [[Gamma]], [[C]], [[rho]], [[Vinf]], [[Lprime]] deben pertenecer al mismo sistema. Tambien hay que revisar signo, unidades y dominio. La pregunta central sigue siendo: ¿Como conectan vorticidad y circulacion la rotacion local del fluido con efectos globales de sustentacion? Si un despeje cambia esa pregunta, el procedimiento ha dejado de ser fisica y se ha convertido en manipulacion simbolica.
+
+El resultado formal debe leerse de forma causal. Cuando un termino crece, no solo cambia un numero: cambia la jerarquia entre mecanismos. Cuando un termino se anula, no desaparece por magia algebraica, sino porque el caso limite elimina una contribucion fisica concreta.
+
+El desarrollo formal incluye una comprobacion de sensibilidad algebraica: se identifica que magnitud controla cada termino, se decide que puede mantenerse constante y se observa que sucede si la variable dominante cambia de escala. Esta lectura no añade formulas nuevas, pero aumenta la calidad fisica del uso de las formulas existentes.
+
+Formalmente, la vorticidad exige pensar en rotacion local de un elemento material, mientras que la circulacion exige recorrer un contorno. Esa doble escala es especifica del leaf y evita confundir velocidad grande con giro real del fluido.
+
+## 🔴 Nivel estructural
+
+La estructura profunda aparece al comparar el modelo con sus limites. La vorticidad mide giro local del fluido y la circulacion resume giro acumulado alrededor de un contorno. El alumno aprende a no confundir trayectoria curva con rotacion local del elemento fluido. Esta frase debe funcionar como criterio de control: permite decidir si el tema se esta usando en su dominio natural o si se esta forzando fuera de rango.
+
+Un caso limite razonable debe llevar a una formula mas simple, una simetria clara o una contradiccion detectable. Si el limite no se puede interpretar, faltan condiciones en el modelo. En problemas avanzados, la ausencia de lectura de limite suele ser mas grave que un error aritmetico.
+
+La precision tambien forma parte de la estructura. Una desviacion del orden del diez por ciento puede ser aceptable para estimar una tendencia, pero no para declarar estabilidad, seguridad o equivalencia entre modelos. El alumno debe justificar que precision merece su conclusion.
+
+Este nivel estructural tambien permite comparar metodos. Dos procedimientos pueden dar numeros parecidos y, sin embargo, apoyarse en hipotesis distintas. La respuesta aceptable es la que conserva correspondencia entre hipotesis, observacion y limite interpretable.
+
+Como desarrollo formal adicional, se debe decidir que relacion se usa como definicion, que relacion actua como balance y que relacion funciona como prueba. Esa separacion aumenta la profundidad del nivel formal: evita aplicar todas las formulas del mismo modo y obliga a justificar la funcion de cada una dentro del argumento.
+
+Estructuralmente, el alumno debe comparar dos salidas posibles: aceptar el modelo con una incertidumbre razonable o declarar que el modelo ha dejado de representar el sistema. Esa decision no es un añadido final; forma parte del contenido fisico avanzado del leaf.
+
+La lectura especifica de vorticidad distingue giro local de trayectoria curva. Un elemento fluido puede moverse en curva sin rotar sobre si mismo, y una circulacion global puede revelar sustentacion aunque la region exterior parezca casi irrotacional. Este leaf entrena la mirada local-global del movimiento fluido.
+
+## Interpretación física profunda
+
+La interpretacion profunda empieza preguntando que representa [[omega]] dentro de la cadena causal. Si [[omega]] se modifica, puede cambiar el regimen, desplazar una condicion critica o revelar que una hipotesis secundaria ya no es secundaria.
+
+La respuesta final debe mencionar tendencia, causa y limite. Un resultado sin esa lectura queda incompleto para Phyxio, aunque el calculo sea correcto.
+
+## Orden de magnitud
+
+El orden de magnitud se estima comparando la escala principal con las correcciones. Si un termino que se suponia pequeno alcanza entre el 5 % y el 10 % del termino dominante, la solucion debe tratarse como aproximacion y no como descripcion exacta.
+
+Esta comprobacion evita conclusiones artificiales. Las unidades de [[omega]], [[v]], [[Gamma]], [[C]], [[rho]], [[Vinf]], [[Lprime]] deben sostener la misma dimension fisica y la misma escala experimental.
+
+## Método de resolución personalizado
+
+Primero se delimita el sistema y se nombran las hipotesis. Segundo se identifica [[omega]] y se decide que formula responde a la pregunta central. Tercero se calcula simbolicamente antes de sustituir numeros.
+
+Cuarto se valida el resultado por unidades, signo y caso limite. Quinto se redacta una conclusion causal: que cambia fisicamente, que se conserva y que dato obligaria a abandonar el modelo.
+
+## Casos especiales y ejemplo extendido
+
+En el caso ideal, las relaciones del leaf se reducen a una lectura directa. En un caso real aparecen perturbaciones, perdidas, asimetrias, viscosidad, geometria no ideal o restricciones adicionales.
+
+El ejemplo extendido debe mostrar esa diferencia. No se busca complicar el calculo, sino aprender cuando una version reducida sigue siendo defendible.
+
+## Preguntas reales del alumno
+
+Una pregunta habitual es por que no usar siempre la formula mas general. La respuesta es que una formula general sin criterio puede ocultar la causa principal. Otra pregunta es como saber si el modelo falla; se detecta cuando las correcciones crecen, los signos contradicen el sistema o el limite simple no aparece.
+
+## Conexiones transversales y rutas de estudio
+
+Este leaf conecta con energia, momento, rotacion, fluidos, gravitacion y mecanica analitica segun el nodo donde aparece. Debe estudiarse despues de dominar las magnitudes basicas del bloque y antes de abordar problemas donde la estructura del modelo pesa tanto como el resultado numerico.
+
+## Síntesis final
+
+Al terminar, el alumno debe explicar que la vorticidad mide giro local del fluido y la circulacion resume giro acumulado alrededor de un contorno, aplicar las formulas en su dominio y justificar que significa fisicamente el resultado. La competencia final es decidir si el modelo responde a la pregunta del sistema real, no solo obtener una expresion algebraica.
+
+La ultima comprobacion didactica consiste en explicar que observacion real confirmaria el resultado. Si el alumno puede proponer una medida, una grafica o una comparacion experimental, entonces ha conectado el formalismo con el fenomeno. Esta exigencia evita repetir formulas sin comprender para que sirven.
+
+Este leaf requiere lenguaje de rotacion local: rotor, contorno, circulacion y sustentacion. Su identidad se pierde si se convierte en un balance generico, porque la pregunta central no es cuanto entra o sale, sino donde aparece giro material y como se acumula alrededor de una curva.
+
+El lenguaje final del leaf es rotacional: rotor, circulacion, contorno, tubo vorticial y sustentacion. Estos sustantivos deben aparecer en la explicacion porque separan este contenido de los balances integrales de volumen de control.
+
+Identidad adicional: trabaja con mapas de rotor, curvas cerradas, circulacion acumulada y generacion de sustentacion.
+
+Diferenciacion fuerte: este leaf no suma entradas y salidas de una frontera de control; identifica giro local y circulacion alrededor de curvas. Sus problemas tipicos preguntan por vortices y sustentacion.
+
+Separacion final respecto a Reynolds: las preguntas se formulan en terminos de rotor, integrales de linea, circulacion conservada y efectos de sustentacion. No se pide escribir un balance de volumen, sino decidir donde hay giro local y como se acumula alrededor de un contorno.
+
+Practica especifica recomendada: comparar un campo de velocidades con flechas paralelas, un remolino solido y un flujo potencial alrededor de un perfil. En cada caso se pregunta si hay rotor local, circulacion no nula o ambos. El alumno debe distinguir giro del elemento fluido, recorrido del contorno y efecto global sobre fuerzas aerodinamicas. Esta practica pertenece a la cinematica local del fluido y a la lectura de contornos cerrados.
+`;export{e as default};

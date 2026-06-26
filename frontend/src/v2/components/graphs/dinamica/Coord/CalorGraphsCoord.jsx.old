@@ -1,0 +1,150 @@
+import React from "react";
+import { createCoordGraphPage } from "@/v2/components/graphs/graphFactories.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraph(
+const uiLang = "es";
+const tt = (es, en) => (uiLang === "en" ? en : es);
+
+const graph_identity = {
+  graph_type: "Coord",
+  pregunta_principal: {
+    es: "Cuanta energia se transfiere como calor cuando un cuerpo cambia de temperatura o de estado?",
+    en: "How much energy is transferred as heat when a body changes temperature or phase?",
+  },
+  keywords: [
+    "energia",
+    "transfiere",
+    "calor",
+    "cuerpo",
+    "cambia",
+    "temperatura",
+    "estado",
+    "energy",
+    "heat",
+    "body",
+    "temperature",
+    "phase",
+  ],
+  magnitud_estrella: "Q",
+  variable_control: "DeltaT",
+  formula: "Q = m * c_esp * DeltaT",
+  target_interpretable: true,
+};
+
+const axes = {
+  xComponent: "XAxis",
+  yComponent: "YAxis",
+  xAxis: "DeltaT",
+  yAxis: "Q",
+};
+
+const formula = {
+  id: "calor_sensible",
+  formula: "Q = m * c_esp * DeltaT",
+  equation: "Q = m * c_esp * DeltaT",
+};
+
+const fmt = (value, digits = 1) =>
+  Number.isFinite(value) ? value.toFixed(digits) : "-";
+
+const CalorGraphsCoord = createCoordGraphPage({
+  displayName: "CalorGraphsCoord",
+  title: {
+    es: "Calor sensible",
+    en: "Sensible heat",
+  },
+  defaultParams: {
+    m: 1,
+    c_esp: 4186,
+    DeltaT: 25,
+  },
+  controls: [
+    { id: "m", label: { es: "Masa", en: "Mass" }, min: 0.1, max: 5, step: 0.1 },
+    { id: "c_esp", label: { es: "Calor especifico", en: "Specific heat" }, min: 100, max: 5000, step: 10 },
+    { id: "DeltaT", label: { es: "Cambio de temperatura", en: "Temperature change" }, min: -80, max: 80, step: 1 },
+  ],
+  compute: (pNum) => {
+    const m = Number.isFinite(pNum.m) ? pNum.m : 1;
+    const c = Number.isFinite(pNum.c_esp) ? pNum.c_esp : 4186;
+    const deltaT = Number.isFinite(pNum.DeltaT) ? pNum.DeltaT : 25;
+    const q = m * c * deltaT;
+    const data = Array.from({ length: 41 }, (_, index) => {
+      const x = -80 + index * 4;
+      return { x, y: m * c * x };
+    });
+
+    return {
+      data,
+      extra: {
+        interpretationTarget: "Q",
+        interpretationValue: q,
+        graphState: {
+          target: "Q",
+          graphType: "Coord",
+          graph_identity,
+          axes,
+          formula,
+          m,
+          c_esp: c,
+          DeltaT: deltaT,
+          Q: q,
+        },
+      },
+    };
+  },
+  render: ({ data, pNum, extra }) => {
+    const q = extra?.graphState?.Q ?? 0;
+    const maxAbs = Math.max(...data.map((point) => Math.abs(point.y)), 1);
+    const width = 520;
+    const height = 260;
+    const x0 = width / 2;
+    const y0 = height / 2;
+    const points = data
+      .map((point) => {
+        const x = x0 + (point.x / 80) * (width * 0.42);
+        const y = y0 - (point.y / maxAbs) * (height * 0.42);
+        return `${x},${y}`;
+      })
+      .join(" ");
+    const currentX = x0 + ((pNum.DeltaT ?? 25) / 80) * (width * 0.42);
+    const currentY = y0 - (q / maxAbs) * (height * 0.42);
+
+    return (
+      <div className="v2-card" style={{ display: "grid", gap: 12 }}>
+        <div className="v2-card-title">{tt("Q frente a DeltaT", "Q versus DeltaT")}</div>
+        <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Calor sensible Coord">
+          <rect x="0" y="0" width={width} height={height} rx="10" fill="rgba(15,23,42,0.86)" />
+          <line x1="34" y1={y0} x2={width - 28} y2={y0} stroke="rgba(255,255,255,0.28)" />
+          <line x1={x0} y1="24" x2={x0} y2={height - 28} stroke="rgba(255,255,255,0.28)" />
+          <polyline points={points} fill="none" stroke="#38bdf8" strokeWidth="3" />
+          <circle cx={currentX} cy={currentY} r="6" fill="#fbbf24" stroke="#fff7ed" strokeWidth="2" />
+          <text x={width - 32} y={y0 - 8} textAnchor="end" fill="rgba(255,255,255,0.72)" fontSize="12">
+            DeltaT
+          </text>
+          <text x={x0 + 10} y="38" fill="rgba(255,255,255,0.72)" fontSize="12">
+            Q
+          </text>
+        </svg>
+        <div style={{ display: "grid", gap: 4, fontSize: 13 }}>
+          <strong>{tt("Lectura fisica", "Physical reading")}</strong>
+          <span>
+            {tt("Q = ", "Q = ")}
+            {fmt(q / 1000, 2)} kJ
+            {" · "}
+            {q >= 0
+              ? tt("el sistema absorbe calor.", "the system absorbs heat.")
+              : tt("el sistema cede calor.", "the system releases heat.")}
+          </span>
+        </div>
+      </div>
+    );
+  },
+});
+
+CalorGraphsCoord.graph_identity = graph_identity;
+CalorGraphsCoord.pregunta_principal = graph_identity.pregunta_principal;
+CalorGraphsCoord.magnitud_estrella = graph_identity.magnitud_estrella;
+CalorGraphsCoord.axes = axes;
+CalorGraphsCoord.formula = formula;
+
+export default CalorGraphsCoord;

@@ -1,0 +1,244 @@
+formulas:
+- id: rendimiento_brayton
+  title:
+    es: Rendimiento térmico del ciclo Brayton
+    en: Thermal efficiency of the Brayton cycle
+  equation: "eta_th = 1 - r_p^((1-gamma)/gamma)"
+  latex: "\\eta_{th} = 1 - r_p^{\\frac{1-\\gamma}{\\gamma}}"
+  rearrangements:
+  - id: eta_th
+    target: eta_th
+    equation: "eta_th = 1 - r_p^((1-gamma)/gamma)"
+    latex: "\\eta_{th} = 1 - r_p^{\\frac{1-\\gamma}{\\gamma}}"
+    calculable: true
+    motivo_no_calculable: ""
+  - id: r_p
+    target: r_p
+    equation: "r_p = (1 - eta_th)^(gamma/(1-gamma))"
+    latex: "r_p = (1 - \\eta_{th})^{\\frac{\\gamma}{1-\\gamma}}"
+    calculable: true
+    motivo_no_calculable: ""
+  category: ciclos termodinámicos
+  relation_type: definición operacional
+  physical_meaning:
+    es: "El rendimiento del ciclo Brayton ideal depende únicamente de la relación de presiones r_p y del índice adiabático γ del gas de trabajo. Aumentar r_p eleva η_th porque la temperatura de los gases de escape disminuye respecto a T_H."
+    en: "The efficiency of the ideal Brayton cycle depends only on the pressure ratio r_p and the adiabatic index γ of the working gas. Increasing r_p raises η_th because the exhaust gas temperature decreases relative to T_H."
+  constraints:
+  - "r_p > 1"
+  - "1 < gamma <= 5/3"
+  - "0 < eta_th < 1"
+  validity:
+    es: "Válido para el ciclo Brayton ideal con gas ideal de propiedades constantes y procesos internamente reversibles."
+    en: "Valid for the ideal Brayton cycle with ideal gas of constant properties and internally reversible processes."
+  dimension_check: "adimensional = adimensional"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in:
+  - teoria
+  - ejemplos
+  - graficas
+  interpretation_tags:
+  - rendimiento
+  - ciclo Brayton
+  - turbina de gas
+  result_semantics:
+    target: eta_th
+    meaning:
+      es: "η_th entre 0.3 y 0.45 es típico de turbinas de gas industriales con r_p entre 10 y 20."
+      en: "η_th between 0.3 and 0.45 is typical of industrial gas turbines with r_p between 10 and 20."
+  domain_checks:
+  - check: "r_p > 1"
+    message:
+      es: "La relación de presiones debe ser mayor que 1 para un ciclo de potencia."
+      en: "The pressure ratio must be greater than 1 for a power cycle."
+  - check: "gamma > 1"
+    message:
+      es: "El índice adiabático debe ser mayor que 1 para cualquier gas real."
+      en: "The adiabatic index must be greater than 1 for any real gas."
+  coherence_checks:
+  - check: "0 < eta_th < 1"
+    message:
+      es: "El rendimiento debe estar estrictamente entre 0 y 1."
+      en: "Efficiency must be strictly between 0 and 1."
+  graph_implications:
+  - graph_type: Coord
+    axes:
+      x: r_p
+      y: eta_th
+    description:
+      es: "Curva creciente sublineal de η_th frente a r_p."
+      en: "Sub-linear increasing curve of η_th versus r_p."
+  pedagogical_triggers:
+  - trigger: "eta_th > 0.60"
+    message:
+      es: "Rendimiento superior al 60 %. Verificar si se ha confundido con el rendimiento de Carnot."
+      en: "Efficiency above 60 %. Check whether it was confused with Carnot efficiency."
+  ui:
+    default_formula: eta_th
+- id: rendimiento_rankine
+  title:
+    es: Rendimiento térmico del ciclo Rankine
+    en: Thermal efficiency of the Rankine cycle
+  equation: "eta_th = W_neto / Q_H"
+  latex: "\\eta_{th} = \\frac{W_{net}}{Q_H}"
+  rearrangements:
+  - id: eta_th
+    target: eta_th
+    equation: "eta_th = W_neto / Q_H"
+    latex: "\\eta_{th} = \\frac{W_{net}}{Q_H}"
+    calculable: true
+    motivo_no_calculable: ""
+  - id: W_neto
+    target: W_neto
+    equation: "W_neto = eta_th * Q_H"
+    latex: "W_{net} = \\eta_{th} \\cdot Q_H"
+    calculable: true
+    motivo_no_calculable: ""
+  - id: Q_H
+    target: Q_H
+    equation: "Q_H = W_neto / eta_th"
+    latex: "Q_H = \\frac{W_{net}}{\\eta_{th}}"
+    calculable: true
+    motivo_no_calculable: ""
+  category: ciclos termodinámicos
+  relation_type: definición operacional
+  physical_meaning:
+    es: "El rendimiento del ciclo Rankine es la razón entre el trabajo neto extraído y el calor total suministrado por la caldera. El ciclo Rankine usa vapor de agua como fluido de trabajo; la condensación permite bombear el líquido con mucho menos trabajo que comprimir vapor."
+    en: "The Rankine cycle efficiency is the ratio of the net work extracted to the total heat supplied by the boiler. The Rankine cycle uses steam as working fluid; condensation allows pumping the liquid with far less work than compressing vapor."
+  constraints:
+  - "Q_H > 0"
+  - "W_neto > 0"
+  - "0 < eta_th < 1"
+  validity:
+    es: "Válido para el ciclo Rankine estándar con vapor saturado o sobrecalentado en la caldera."
+    en: "Valid for the standard Rankine cycle with saturated or superheated steam in the boiler."
+  dimension_check: "adimensional = J / J"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in:
+  - teoria
+  - ejemplos
+  - graficas
+  interpretation_tags:
+  - rendimiento
+  - ciclo Rankine
+  - turbina de vapor
+  result_semantics:
+    target: eta_th
+    meaning:
+      es: "η_th entre 0.30 y 0.45 es típico de centrales de vapor modernas con recalentamiento."
+      en: "η_th between 0.30 and 0.45 is typical of modern steam power plants with reheating."
+  domain_checks:
+  - check: "Q_H > 0"
+    message:
+      es: "El calor absorbido debe ser positivo para que el ciclo tenga sentido."
+      en: "Absorbed heat must be positive for the cycle to make sense."
+  - check: "W_neto > 0"
+    message:
+      es: "El trabajo neto debe ser positivo en un ciclo de potencia."
+      en: "Net work must be positive in a power cycle."
+  coherence_checks:
+  - check: "0 < eta_th < 1"
+    message:
+      es: "El rendimiento debe estar estrictamente entre 0 y 1."
+      en: "Efficiency must be strictly between 0 and 1."
+  - check: "W_neto < Q_H"
+    message:
+      es: "El trabajo neto no puede superar el calor absorbido por la segunda ley."
+      en: "Net work cannot exceed absorbed heat by the second law."
+  graph_implications:
+  - graph_type: Coord
+    axes:
+      x: T_H
+      y: eta_th
+    description:
+      es: "Curva creciente de η_th frente a T_H para T_C fija."
+      en: "Increasing curve of η_th versus T_H for fixed T_C."
+  pedagogical_triggers:
+  - trigger: "eta_th > 0.50"
+    message:
+      es: "Rendimiento Rankine superior al 50 %. Verificar si se incluyen mejoras como recalentamiento y regeneración."
+      en: "Rankine efficiency above 50 %. Check whether improvements like reheating and regeneration are included."
+  ui:
+    default_formula: eta_th
+- id: balance_energetico
+  title:
+    es: Balance energético del ciclo
+    en: Energy balance of the cycle
+  equation: "W_neto = Q_H - Q_C"
+  latex: "W_{net} = Q_H - Q_C"
+  rearrangements:
+  - id: W_neto
+    target: W_neto
+    equation: "W_neto = Q_H - Q_C"
+    latex: "W_{net} = Q_H - Q_C"
+    calculable: true
+    motivo_no_calculable: ""
+  - id: Q_C
+    target: Q_C
+    equation: "Q_C = Q_H - W_neto"
+    latex: "Q_C = Q_H - W_{net}"
+    calculable: true
+    motivo_no_calculable: ""
+  - id: Q_H
+    target: Q_H
+    equation: "Q_H = W_neto + Q_C"
+    latex: "Q_H = W_{net} + Q_C"
+    calculable: true
+    motivo_no_calculable: ""
+  category: termodinámica del ciclo
+  relation_type: conservación de energía
+  physical_meaning:
+    es: "Toda la energía que entra como calor de la fuente caliente debe salir como trabajo neto o como calor rechazado al foco frío. Es la expresión del primer principio de la termodinámica aplicado al ciclo completo."
+    en: "All energy entering as heat from the hot source must leave as net work or as heat rejected to the cold sink. This is the expression of the first law of thermodynamics applied to the complete cycle."
+  constraints:
+  - "Q_H > 0"
+  - "Q_C > 0"
+  - "W_neto > 0"
+  validity:
+    es: "Válido para cualquier ciclo termodinámico cerrado que opera entre dos focos de temperatura."
+    en: "Valid for any closed thermodynamic cycle operating between two temperature reservoirs."
+  dimension_check: "J = J - J"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - balance energético
+  - primer principio
+  - ciclos
+  result_semantics:
+    target: W_neto
+    meaning:
+      es: "W_neto siempre menor que Q_H; la diferencia Q_C es el calor inevitablemente rechazado al entorno."
+      en: "W_net always less than Q_H; the difference Q_C is the heat inevitably rejected to the environment."
+  domain_checks:
+  - check: "Q_H > 0"
+    message:
+      es: "El calor de la fuente caliente debe ser positivo."
+      en: "Hot source heat must be positive."
+  - check: "Q_C > 0"
+    message:
+      es: "El calor rechazado debe ser positivo por la segunda ley."
+      en: "Rejected heat must be positive by the second law."
+  coherence_checks:
+  - check: "W_neto < Q_H"
+    message:
+      es: "El trabajo neto no puede superar el calor absorbido."
+      en: "Net work cannot exceed absorbed heat."
+  graph_implications:
+  - graph_type: Coord
+    axes:
+      x: Q_H
+      y: W_neto
+    description:
+      es: "Para η_th fijo, W_neto crece linealmente con Q_H."
+      en: "For fixed η_th, W_net grows linearly with Q_H."
+  pedagogical_triggers:
+  - trigger: "Q_C <= 0"
+    message:
+      es: "Q_C nulo o negativo viola la segunda ley de la termodinámica."
+      en: "Zero or negative Q_C violates the second law of thermodynamics."
+  ui:
+    default_formula: W_neto

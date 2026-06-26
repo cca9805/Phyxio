@@ -1,0 +1,495 @@
+version: 1
+magnitudes:
+- id: Fel
+  symbol: F_{el,tot}
+  nombre:
+    es: fuerza elastica total
+    en: total elastic force
+  descripcion:
+    es: Fuerza elastica total con signo a lo largo del eje de analisis del sistema equivalente.
+    en: Total elastic force with sign along the analysis axis of the equivalent system.
+  unidad_si: "N"
+  dimension: "MLT^{-2}"
+  is_vector: true
+  components: [ "F_{el,x}" ]
+  category: derived
+  physical_role: elastic_restoring_force
+  used_in: [ hooke_equivalente_1d ]
+  common_mistake: "Olvidar el signo negativo que indica que la fuerza se opone a la deformacion."
+  typical_range: "0.1 - 10000 N en problemas de mecanica clasica"
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Signo negativo indica fuerza restauradora opuesta a la deformacion positiva.
+      en: Negative sign indicates restoring force opposing positive deformation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Fuerza nula corresponde a deformacion nula o posicion natural del sistema.
+      en: Zero force corresponds to zero deformation or the natural position of the system.
+  value_nature:
+    kind: vector_projection
+    nonnegative_only: false
+    expected_interval: "[-10000, 10000] N"
+  interpretation_role:
+    primary_for: [ hooke_equivalente_1d ]
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: "Dibujar siempre como flecha opuesta al desplazamiento en el DCL."
+
+- id: Fm
+  symbol: "|F_{el,tot}|"
+  nombre:
+    es: modulo de fuerza elastica total
+    en: total elastic force magnitude
+  descripcion:
+    es: Magnitud de la fuerza elastica total del sistema equivalente.
+    en: Magnitude of the total elastic force of the equivalent system.
+  unidad_si: "N"
+  dimension: "MLT^{-2}"
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: force_magnitude
+  used_in: [ hooke_equivalente_modulo, reparto_paralelo ]
+  common_mistake: "Confundir modulo con componente; el modulo es siempre positivo."
+  typical_range: "0 - 10000 N"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre positivo o cero por ser un modulo.
+      en: Always nonnegative as it is a magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Modulo nulo indica que el sistema esta en posicion natural sin deformacion.
+      en: Zero magnitude means the system is at its natural position with no deformation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: "[0, 10000] N"
+  interpretation_role:
+    primary_for: [ hooke_equivalente_modulo ]
+    secondary_for: [ reparto_paralelo ]
+  graph_binding:
+    channels: []
+  pedagogical_notes: "Usar cuando interesa la intensidad sin importar la direccion."
+
+- id: keq
+  symbol: K
+  nombre:
+    es: constante equivalente
+    en: equivalent spring constant
+  descripcion:
+    es: Rigidez equivalente de la red de muelles que reproduce la misma relacion fuerza-deformacion.
+    en: Equivalent stiffness of the spring network producing the same force-deformation relation.
+  unidad_si: "N/m"
+  dimension: "MT^{-2}"
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: equivalent_stiffness
+  used_in: [ hooke_equivalente_1d, hooke_equivalente_modulo, paralelo_dos_muelles, serie_dos_muelles, equilibrio_vertical ]
+  common_mistake: "Sumar directamente las k en serie como si fuera paralelo."
+  typical_range: "1 - 1e6 N/m"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La rigidez equivalente es siempre positiva en el rango lineal.
+      en: Equivalent stiffness is always positive within the linear range.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Una rigidez nula implica que no hay muelle, el sistema no puede restaurar.
+      en: Zero stiffness means no spring is present and the system cannot restore.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: "(0, 1e6] N/m"
+  interpretation_role:
+    primary_for: [ paralelo_dos_muelles, serie_dos_muelles ]
+    secondary_for: [ hooke_equivalente_1d, equilibrio_vertical ]
+  graph_binding:
+    channels: []
+  pedagogical_notes: "Comparar siempre con las k individuales: en paralelo keq mayor, en serie keq menor."
+
+- id: k1
+  symbol: k_1
+  nombre:
+    es: constante elastica 1
+    en: spring constant 1
+  descripcion:
+    es: Rigidez del muelle 1 del sistema.
+    en: Stiffness of spring 1 in the system.
+  unidad_si: "N/m"
+  dimension: "MT^{-2}"
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: individual_stiffness
+  used_in: [ paralelo_dos_muelles, serie_dos_muelles ]
+  common_mistake: "Intercambiar k1 y k2 cuando tienen valores distintos en serie."
+  typical_range: "1 - 100000 N/m"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre positiva; un muelle real no puede tener rigidez negativa.
+      en: Always positive; a real spring cannot have negative stiffness.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un muelle con k nula no existe fisicamente.
+      en: A spring with zero stiffness does not physically exist.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: "(0, 100000] N/m"
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ paralelo_dos_muelles, serie_dos_muelles ]
+  graph_binding:
+    channels: []
+  pedagogical_notes: "Dato de entrada del problema; verificar siempre que las unidades sean N/m."
+
+- id: k2
+  symbol: k_2
+  nombre:
+    es: constante elastica 2
+    en: spring constant 2
+  descripcion:
+    es: Rigidez del muelle 2 del sistema.
+    en: Stiffness of spring 2 in the system.
+  unidad_si: "N/m"
+  dimension: "MT^{-2}"
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: individual_stiffness
+  used_in: [ paralelo_dos_muelles, serie_dos_muelles ]
+  common_mistake: "Olvidar que en serie el muelle mas blando domina la keq resultante."
+  typical_range: "1 - 100000 N/m"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre positiva por ser una rigidez real.
+      en: Always positive as a real stiffness.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Rigidez nula carece de sentido fisico para un muelle real.
+      en: Zero stiffness has no physical meaning for a real spring.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: "(0, 100000] N/m"
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ paralelo_dos_muelles, serie_dos_muelles ]
+  graph_binding:
+    channels: []
+  pedagogical_notes: "Comparar con k1 para anticipar cual muelle domina el comportamiento."
+
+- id: x
+  symbol: x
+  nombre:
+    es: deformacion total
+    en: total deformation
+  descripcion:
+    es: Deformacion total del sistema equivalente respecto a la posicion natural.
+    en: Total deformation of the equivalent system from its natural position.
+  unidad_si: "m"
+  dimension: "L"
+  is_vector: false
+  components: null
+  category: state
+  physical_role: total_displacement
+  used_in: [ hooke_equivalente_1d, hooke_equivalente_modulo ]
+  common_mistake: "Confundir la deformacion total con la deformacion de un muelle individual."
+  typical_range: "0.001 - 1 m"
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Positivo indica elongacion, negativo indica compresion respecto a la posicion natural.
+      en: Positive means elongation, negative means compression from the natural position.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Deformacion nula indica que el sistema esta en su posicion natural sin carga.
+      en: Zero deformation means the system is at its natural rest position.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: "[-1, 1] m"
+  interpretation_role:
+    primary_for: [ hooke_equivalente_1d ]
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: "Es la variable independiente del problema; se mide siempre desde la longitud natural."
+
+- id: x1
+  symbol: x_1
+  nombre:
+    es: deformacion muelle 1
+    en: spring 1 deformation
+  descripcion:
+    es: Deformacion individual del muelle 1 respecto a su longitud natural.
+    en: Individual deformation of spring 1 from its natural length.
+  unidad_si: "m"
+  dimension: "L"
+  is_vector: false
+  components: null
+  category: state
+  physical_role: individual_displacement
+  used_in: [ reparto_serie ]
+  common_mistake: "En paralelo, asumir que cada muelle se deforma distinto cuando todos se deforman lo mismo."
+  typical_range: "0.001 - 0.5 m"
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Positivo elongacion, negativo compresion del muelle individual.
+      en: Positive elongation, negative compression of the individual spring.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El muelle 1 esta en su longitud natural sin carga.
+      en: Spring 1 is at its natural length with no load.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: "[-0.5, 0.5] m"
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ reparto_serie ]
+  graph_binding:
+    channels: []
+  pedagogical_notes: "En serie, x1 depende de k1; el muelle mas blando se deforma mas."
+
+- id: x2
+  symbol: x_2
+  nombre:
+    es: deformacion muelle 2
+    en: spring 2 deformation
+  descripcion:
+    es: Deformacion individual del muelle 2 respecto a su longitud natural.
+    en: Individual deformation of spring 2 from its natural length.
+  unidad_si: "m"
+  dimension: "L"
+  is_vector: false
+  components: null
+  category: state
+  physical_role: individual_displacement
+  used_in: [ reparto_serie ]
+  common_mistake: "En serie, olvidar que la suma x1 + x2 debe igualar la deformacion total x."
+  typical_range: "0.001 - 0.5 m"
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Positivo elongacion, negativo compresion del muelle individual.
+      en: Positive elongation, negative compression of the individual spring.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El muelle 2 esta en su longitud natural sin carga.
+      en: Spring 2 is at its natural length with no load.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: "[-0.5, 0.5] m"
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ reparto_serie ]
+  graph_binding:
+    channels: []
+  pedagogical_notes: "En serie, x2 depende de k2; comparar con x1 para validar reparto."
+
+- id: F1
+  symbol: F_1
+  nombre:
+    es: fuerza muelle 1
+    en: spring 1 force
+  descripcion:
+    es: Fuerza elastica individual aportada por el muelle 1.
+    en: Individual elastic force provided by spring 1.
+  unidad_si: "N"
+  dimension: "MLT^{-2}"
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: individual_force
+  used_in: [ reparto_paralelo ]
+  common_mistake: "Asumir que F1 = F2 en paralelo; solo son iguales si k1 = k2."
+  typical_range: "0 - 5000 N"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Valor positivo que representa la magnitud de la contribucion del muelle 1.
+      en: Positive value representing the magnitude of spring 1 contribution.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Sin deformacion, el muelle 1 no aporta fuerza.
+      en: Without deformation, spring 1 contributes no force.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: "[0, 5000] N"
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ reparto_paralelo ]
+  graph_binding:
+    channels: []
+  pedagogical_notes: "En paralelo F1/F2 = k1/k2; en serie F1 = F2 siempre."
+
+- id: F2
+  symbol: F_2
+  nombre:
+    es: fuerza muelle 2
+    en: spring 2 force
+  descripcion:
+    es: Fuerza elastica individual aportada por el muelle 2.
+    en: Individual elastic force provided by spring 2.
+  unidad_si: "N"
+  dimension: "MLT^{-2}"
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: individual_force
+  used_in: [ reparto_paralelo ]
+  common_mistake: "Olvidar que en serie F1 = F2 siempre, independientemente de las k."
+  typical_range: "0 - 5000 N"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Valor positivo que representa la magnitud de la contribucion del muelle 2.
+      en: Positive value representing the magnitude of spring 2 contribution.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Sin deformacion, el muelle 2 no aporta fuerza.
+      en: Without deformation, spring 2 contributes no force.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: "[0, 5000] N"
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ reparto_paralelo ]
+  graph_binding:
+    channels: []
+  pedagogical_notes: "Comparar con F1 para verificar coherencia del reparto."
+
+- id: m
+  symbol: m
+  nombre:
+    es: masa
+    en: mass
+  descripcion:
+    es: Masa del cuerpo conectado al sistema de muelles.
+    en: Mass of the body connected to the spring system.
+  unidad_si: "kg"
+  dimension: "M"
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: inertial_mass
+  used_in: [ equilibrio_vertical ]
+  common_mistake: "Expresar la masa en gramos sin convertir a kg al usar la formula de equilibrio."
+  typical_range: "0.01 - 1000 kg"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La masa es siempre positiva por definicion.
+      en: Mass is always positive by definition.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Masa nula carece de sentido fisico en mecanica clasica.
+      en: Zero mass has no physical meaning in classical mechanics.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: "(0, 1000] kg"
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ equilibrio_vertical ]
+  graph_binding:
+    channels: []
+  pedagogical_notes: "Dato de entrada; verificar conversion de unidades antes de sustituir."
+
+- id: g
+  symbol: g
+  nombre:
+    es: aceleracion de la gravedad
+    en: gravitational acceleration
+  descripcion:
+    es: Intensidad del campo gravitatorio local en la ubicacion del sistema.
+    en: Magnitude of the local gravitational field at the system location.
+  unidad_si: "m/s^2"
+  dimension: "LT^{-2}"
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: field_intensity
+  used_in: [ equilibrio_vertical ]
+  common_mistake: "Usar g = 10 sin indicar la aproximacion; en problemas de precision usar 9.81."
+  typical_range: "9.78 - 9.83 m/s^2 en la superficie terrestre"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como modulo positivo en la formula de equilibrio vertical.
+      en: Used as a positive magnitude in the vertical equilibrium formula.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Gravedad nula solo en caida libre; no aplica a equilibrio estatico terrestre.
+      en: Zero gravity only in free fall; does not apply to terrestrial static equilibrium.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: "[1.6, 274] m/s^2"
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ equilibrio_vertical ]
+  graph_binding:
+    channels: []
+  pedagogical_notes: "Parametro del entorno, no del sistema de muelles; cambia con el planeta."
+
+- id: x_eq
+  symbol: x_{0}
+  nombre:
+    es: deformacion de equilibrio
+    en: equilibrium deformation
+  descripcion:
+    es: Deformacion estatica del sistema equivalente bajo su propio peso en equilibrio vertical.
+    en: Static deformation of the equivalent system under its own weight in vertical equilibrium.
+  unidad_si: "m"
+  dimension: "L"
+  is_vector: false
+  components: null
+  category: state
+  physical_role: equilibrium_displacement
+  used_in: [ equilibrio_vertical ]
+  common_mistake: "Confundir x_eq con la deformacion dinamica; x_eq es solo el hundimiento estatico."
+  typical_range: "0.001 - 0.5 m"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre positiva porque mide la elongacion debida al peso.
+      en: Always positive because it measures the elongation due to weight.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Si x_eq fuera cero, no habria peso o la rigidez seria infinita.
+      en: If x_eq were zero, there would be no weight or infinite stiffness.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: "(0, 0.5] m"
+  interpretation_role:
+    primary_for: [ equilibrio_vertical ]
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: "Resultado clave para verificar si la suspension es adecuada para la carga."

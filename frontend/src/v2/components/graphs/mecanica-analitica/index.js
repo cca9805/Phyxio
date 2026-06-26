@@ -1,44 +1,51 @@
-import MecanicaAnaliticaGraphsCoord from "./MecanicaAnaliticaGraphsCoord";
-import MecanicaAnaliticaGraphsDcl from "./MecanicaAnaliticaGraphsDcl";
-import MecanicaAnaliticaGraphsSvg from "./MecanicaAnaliticaGraphsSvg";
+import { withGraphContextRegistry } from "../shared/withGraphContext.jsx";
+/**
+ * Mecanica Analitica - Graph Components Index
+ *
+ * WIRING ONLY — los metadatos semánticos (title, xAxis, yAxis, relation,
+ * physicalReading, agentHints, commonMistakes, etc.) viven en graficos.yaml.
+ * Este archivo solo declara { type, graphType, component } por entrada.
+ */
 
-const common = {
-  Coord: MecanicaAnaliticaGraphsCoord,
-  Dcl: MecanicaAnaliticaGraphsDcl,
-  Svg: MecanicaAnaliticaGraphsSvg,
+import CoordenadasGeneralizadasGraphsCoord from "./Coord/CoordenadasGeneralizadasGraphsCoord.jsx";
+import EcuacionesLagrangeGraphsCoord from "./Coord/EcuacionesLagrangeGraphsCoord.jsx";
+import LigadurasGradosLibertadGraphsCoord from "./Coord/LigadurasGradosLibertadGraphsCoord.jsx";
+import OsciladorArmonicoGraphsCoord from "./Coord/OsciladorArmonicoGraphsCoord.jsx";
+import PenduloGraphsCoord from "./Coord/PenduloGraphsCoord.jsx";
+import ProblemasConLigadurasGraphsCoord from "./Coord/ProblemasConLigadurasGraphsCoord.jsx";
+import SimetriasConservacionesGraphsCoord from "./Coord/SimetriasConservacionesGraphsCoord.jsx";
+import OsciladorArmonicoGraphsSvg from "./Svg/OsciladorArmonicoGraphsSvg.jsx";
+import PenduloGraphsSvg from "./Svg/PenduloGraphsSvg.jsx";
+import ProblemasConLigadurasGraphsSvg from "./Svg/ProblemasConLigadurasGraphsSvg.jsx";
+
+const rawGraphs = {
+  "coordenadas-generalizadas": {
+    Coord: { type: "Coord", graphType: "Coord", component: CoordenadasGeneralizadasGraphsCoord },
+  },
+  "ecuaciones-de-lagrange": {
+    Coord: { type: "Coord", graphType: "Coord", component: EcuacionesLagrangeGraphsCoord },
+  },
+  "ligaduras-y-grados-de-libertad": {
+    Coord: { type: "Coord", graphType: "Coord", component: LigadurasGradosLibertadGraphsCoord },
+  },
+  "oscilador-armonico": {
+    Coord: { type: "Coord", graphType: "Coord", component: OsciladorArmonicoGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: OsciladorArmonicoGraphsSvg },
+  },
+  "pendulo": {
+    Coord: { type: "Coord", graphType: "Coord", component: PenduloGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: PenduloGraphsSvg },
+  },
+  "problemas-con-ligaduras": {
+    Coord: { type: "Coord", graphType: "Coord", component: ProblemasConLigadurasGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: ProblemasConLigadurasGraphsSvg },
+  },
+  "simetrias-y-conservaciones": {
+    Coord: { type: "Coord", graphType: "Coord", component: SimetriasConservacionesGraphsCoord },
+  },
 };
 
-const leafRoutes = [
-  "fisica-clasica/mecanica/mecanica-analitica/coordenadas-generalizadas",
-  "fisica-clasica/mecanica/mecanica-analitica/ligaduras-y-grados-de-libertad",
-  "fisica-clasica/mecanica/mecanica-analitica/lagrangiano/energia-cinetica-y-potencial",
-  "fisica-clasica/mecanica/mecanica-analitica/lagrangiano/ecuaciones-de-lagrange",
-  "fisica-clasica/mecanica/mecanica-analitica/lagrangiano/simetrias-y-conservaciones/  (Noether intro)",
-  "fisica-clasica/mecanica/mecanica-analitica/hamiltoniano/transformacion-legendre",
-  "fisica-clasica/mecanica/mecanica-analitica/hamiltoniano/ecuaciones-de-hamilton",
-  "fisica-clasica/mecanica/mecanica-analitica/aplicaciones/oscilador-armonico",
-  "fisica-clasica/mecanica/mecanica-analitica/aplicaciones/pendulo",
-  "fisica-clasica/mecanica/mecanica-analitica/aplicaciones/problemas-con-ligaduras",
-];
+export const graphs = withGraphContextRegistry(rawGraphs);
+export const mecanica_analiticaGraphs = graphs;
 
-const byRoute = Object.fromEntries(leafRoutes.map((route) => [route, common]));
-
-const byId = {
-  "coordenadas-generalizadas": common,
-  "ligaduras-y-grados-de-libertad": common,
-  "energia-cinetica-y-potencial": common,
-  "ecuaciones-de-lagrange": common,
-  "simetrias-y-conservaciones/  (Noether intro)": common,
-  "(Noether intro)": common,
-  "transformacion-legendre": common,
-  "ecuaciones-de-hamilton": common,
-  "oscilador-armonico": common,
-  pendulo: common,
-  "problemas-con-ligaduras": common,
-};
-
-export const graphs = {
-  ...byId,
-  ...byRoute,
-};
-
+export default graphs;

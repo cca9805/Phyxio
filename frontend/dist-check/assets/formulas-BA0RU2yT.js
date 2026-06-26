@@ -1,0 +1,300 @@
+const e=`version: 1
+topic:
+  id: sistemas-conservativos
+  title:
+    es: Sistemas conservativos
+    en: Conservative Systems
+variables:
+- id: Em
+  symbol: E_m
+  name:
+    es: energia mecanica
+    en: mechanical energy
+  si_unit: J
+- id: K
+  symbol: K
+  name:
+    es: energia cinetica
+    en: kinetic energy
+  si_unit: J
+- id: U
+  symbol: U
+  name:
+    es: energia potencial
+    en: potential energy
+  si_unit: J
+- id: Wc
+  symbol: W_c
+  name:
+    es: trabajo conservativo
+    en: conservative work
+  si_unit: J
+- id: dU
+  symbol: \\Delta U
+  name:
+    es: variacion de energia potencial
+    en: change in potential energy
+  si_unit: J
+- id: Wnc
+  symbol: W_{nc}
+  name:
+    es: trabajo no conservativo
+    en: non-conservative work
+  si_unit: J
+- id: Ki
+  symbol: K_i
+  name:
+    es: energia cinetica inicial
+    en: initial kinetic energy
+  si_unit: J
+- id: Kf
+  symbol: K_f
+  name:
+    es: energia cinetica final
+    en: final kinetic energy
+  si_unit: J
+- id: Ui
+  symbol: U_i
+  name:
+    es: energia potencial inicial
+    en: initial potential energy
+  si_unit: J
+- id: Uf
+  symbol: U_f
+  name:
+    es: energia potencial final
+    en: final potential energy
+  si_unit: J
+formulas:
+- id: trabajo_conservativo
+  title:
+    es: Trabajo de fuerza conservativa
+    en: Work done by a conservative force
+  equation: Wc = -dU
+  latex: W_c = -\\Delta U
+  rearrangements:
+  - target: Wc
+    equation: Wc = -dU
+    latex: W_c = -\\Delta U
+  - target: dU
+    equation: dU = -Wc
+    latex: \\Delta U = -W_c
+  category: fundamental
+  relation_type: energy_relation
+  physical_meaning:
+    es: Relaciona el trabajo conservativo con la caida o aumento de energia potencial entre dos estados.
+    en: Relates conservative work to the decrease or increase of potential energy between two states.
+  constraints:
+  - misma referencia potencial en ambos estados
+  - fuerza conservativa bien identificada
+  - signo de dU consistente
+  validity:
+    es: Valida cuando la interaccion relevante admite energia potencial y el proceso se lee entre estados coherentes.
+    en: Valid when the relevant interaction admits potential energy and the process is read between coherent states.
+  dimension_check: ambos terminos deben expresarse en julios
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - cambios de altura
+  - resortes ideales
+  interpretation_tags:
+  - trabajo
+  - potencial
+  - conservativo
+  result_semantics:
+    target: Wc
+    meaning: El resultado expresa cuanta energia entrega o recupera la parte conservativa de la interaccion.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Confirma que Ui y Uf usan la misma referencia potencial.
+      en: Confirm that Ui and Uf use the same potential baseline.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Si dU es negativa, Wc debe ser positiva.
+      en: If dU is negative, Wc must be positive.
+  graph_implications:
+  - En Coord, una caida de U debe corresponder a trabajo conservativo positivo.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: No confundas trabajo conservativo con trabajo total si tambien actua Wnc.
+      en: Do not confuse conservative work with total work when Wnc also acts.
+- id: conservacion_energia_mecanica
+  title:
+    es: Conservacion de energia mecanica
+    en: Mechanical-energy conservation
+  equation: Em = K + U
+  latex: E_m = K + U
+  rearrangements:
+  - target: Em
+    equation: Em = K + U
+    latex: E_m = K + U
+  category: structural
+  relation_type: definition
+  physical_meaning:
+    es: Define la energia mecanica del estado como suma de energia cinetica y potencial.
+    en: Defines mechanical energy of a state as the sum of kinetic and potential energy.
+  constraints:
+  - definicion de K y U adaptada al sistema
+  - referencia potencial coherente
+  validity:
+    es: Valida como definicion general en mecanica clasica; la conservacion exige ademas ausencia de Wnc neto.
+    en: Valid as a general definition in classical mechanics; conservation additionally requires absence of net Wnc.
+  dimension_check: K, U y Em deben estar en julios
+  calculable: false
+  motivo_no_calculable:
+    es: Es una definicion estructural; para calcular Em hacen falta expresiones concretas de K y U.
+    en: It is a structural definition; computing Em requires explicit expressions for K and U.
+  used_in:
+  - balances energeticos entre estados
+  interpretation_tags:
+  - energia-mecanica
+  - definicion
+  result_semantics:
+    target: Em
+    meaning: El resultado resume el contenido energetico mecanico total del estado analizado.
+  domain_checks:
+  - expr: K >= 0
+    message:
+      es: La energia cinetica debe ser no negativa.
+      en: Kinetic energy must be non-negative.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Em constante no implica K constante; solo implica compensacion entre K y U.
+      en: Constant Em does not imply constant K; it only implies compensation between K and U.
+  graph_implications:
+  - En Coord, la curva Em se obtiene como suma punto a punto de K y U.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Distingue siempre definicion de Em y condicion de conservacion ideal.
+      en: Always distinguish Em definition from ideal conservation condition.
+- id: estados_conservativos
+  title:
+    es: Estados inicial y final en sistema conservativo
+    en: Initial and final states in a conservative system
+  equation: Ki + Ui = Kf + Uf
+  latex: K_i + U_i = K_f + U_f
+  rearrangements:
+  - target: Kf
+    equation: Kf = Ki + Ui - Uf
+    latex: K_f = K_i + U_i - U_f
+  - target: Uf
+    equation: Uf = Ki + Ui - Kf
+    latex: U_f = K_i + U_i - K_f
+  category: fundamental
+  relation_type: conservation_law
+  physical_meaning:
+    es: Expresa que el reparto entre K y U puede cambiar sin alterar el total mecanico en el caso conservativo ideal.
+    en: States that the partition between K and U may change without altering total mechanical energy in the ideal conservative case.
+  constraints:
+  - estados inicial y final del mismo sistema
+  - trabajo no conservativo neto despreciable
+  - misma referencia para Ui y Uf
+  validity:
+    es: Valida cuando las fuerzas relevantes son conservativas o cuando Wnc puede considerarse nulo.
+    en: Valid when relevant forces are conservative or when Wnc can be considered zero.
+  dimension_check: todos los terminos deben ser energias en julios
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - descensos y ascensos ideales
+  - osciladores sin disipacion apreciable
+  interpretation_tags:
+  - conservacion
+  - estados
+  - balance
+  result_semantics:
+    target: Kf
+    meaning: El resultado fija la energia cinetica final compatible con el balance conservativo del sistema.
+  domain_checks:
+  - expr: Ki >= 0
+    message:
+      es: Ki debe ser no negativa.
+      en: Ki must be non-negative.
+  - expr: Ui == Ui
+    message:
+      es: Usa una referencia potencial definida antes de comparar Ui con Uf.
+      en: Use a defined potential baseline before comparing Ui with Uf.
+  coherence_checks:
+  - expr: Kf >= 0
+    message:
+      es: Si Kf sale negativa, hay error de signos, unidades o de modelo.
+      en: If Kf becomes negative, there is a sign, unit, or model error.
+  graph_implications:
+  - En Coord, K y U deben intercambiarse manteniendo constante la suma K+U.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Antes de usarla, verifica que no haya rozamiento apreciable ni motor externo neto.
+      en: Before using it, verify there is no appreciable friction or net external driving input.
+- id: extension_no_conservativa
+  title:
+    es: Extension con trabajo no conservativo
+    en: Extension with non-conservative work
+  equation: Wnc = (Kf + Uf) - (Ki + Ui)
+  latex: W_{nc} = (K_f + U_f) - (K_i + U_i)
+  rearrangements:
+  - target: Wnc
+    equation: Wnc = (Kf + Uf) - (Ki + Ui)
+    latex: W_{nc} = (K_f + U_f) - (K_i + U_i)
+  - target: Kf
+    equation: Kf = Ki + Ui + Wnc - Uf
+    latex: K_f = K_i + U_i + W_{nc} - U_f
+  category: derived
+  relation_type: energy_balance
+  physical_meaning:
+    es: Extiende el balance ideal para cuantificar cuanto se gana o pierde por mecanismos no conservativos.
+    en: Extends the ideal balance to quantify how much is gained or lost through non-conservative mechanisms.
+  constraints:
+  - estados inicial y final bien definidos
+  - convenio de signos explicito para Wnc
+  - misma referencia potencial entre Ui y Uf
+  validity:
+    es: Valida cuando interesa modelar disipacion o aporte externo manteniendo el lenguaje de balance energetico.
+    en: Valid when modeling dissipation or external input while keeping an energy-balance description.
+  dimension_check: todos los terminos deben expresarse en julios
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - frenadas con disipacion
+  - sistemas con motores o perdidas
+  interpretation_tags:
+  - trabajo-no-conservativo
+  - disipacion
+  - aporte
+  result_semantics:
+    target: Wnc
+    meaning: El resultado mide la desviacion del caso conservativo ideal entre los dos estados.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Asegura que el balance incluye todas las transferencias no conservativas relevantes.
+      en: Ensure the balance includes all relevant non-conservative transfers.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Si Wnc es cero, esta ecuacion debe reducirse al caso conservativo ideal.
+      en: If Wnc is zero, this equation must reduce to the ideal conservative case.
+  graph_implications:
+  - En Coord, cambios de nivel de K+U representan Wnc acumulado.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Wnc negativa suele indicar disipacion; positiva, aporte mecanico externo.
+      en: Negative Wnc usually indicates dissipation; positive Wnc external mechanical input.
+ui:
+  default_formula: estados_conservativos
+  groups:
+  - title:
+      es: Basicas
+      en: Basics
+    items:
+    - trabajo_conservativo
+    - conservacion_energia_mecanica
+    - estados_conservativos
+    - extension_no_conservativa
+`;export{e as default};

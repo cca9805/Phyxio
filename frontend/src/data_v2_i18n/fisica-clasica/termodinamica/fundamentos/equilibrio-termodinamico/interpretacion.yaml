@@ -1,0 +1,102 @@
+version: 1.0.0
+id: equilibrio-termodinamico-interpretacion
+leaf_id: equilibrio-termodinamico
+nombre: { es: Interpretacion del equilibrio termodinamico, en: Thermodynamic equilibrium interpretation }
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: fundamentos
+  parent_id: fundamentos
+  ruta_relativa: fisica-clasica/termodinamica/fundamentos/equilibrio-termodinamico
+ui:
+  enabled: true
+  display_modes: { calculator_inline: true, graph_inline: true, dedicated_tab: true, modal: false }
+  labels:
+    es: { summary: Resumen fisico, reading: Lectura del resultado, coherence: Coherencia, validity: Validez del modelo, graph: Lectura grafica, errors: Errores probables, next_step: Siguiente paso }
+    en: { summary: Physical summary, reading: Result reading, coherence: Coherence, validity: Model validity, graph: Graph reading, errors: Likely errors, next_step: Next step }
+  priority_order: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  inline_limits: { max_summary_chars: 200, max_warnings: 2, max_suggestions: 2 }
+dependencies:
+  formulas: [equilibrio_termico, igualdad_temperatura, equilibrio_mecanico, igualdad_presion, equilibrio_material, equilibrio_general]
+  magnitudes: [T, P, mu, DeltaT, DeltaP, A, tau]
+global_context:
+  physical_domain: { es: Estados de equilibrio y relajacion termodinamica, en: Equilibrium states and thermodynamic relaxation }
+  axis_convention: { es: Gradientes positivos indican impulso de evolucion., en: Positive gradients indicate drive for evolution. }
+  standard_assumptions: [variables macroscopicas definidas, fronteras conocidas]
+  standard_warnings: [no confundir estado estacionario con equilibrio]
+output_contract:
+  format: structured_text
+  include_emojis: true
+  max_lines_per_section: 5
+  truncate_long_values: true
+  decimal_places: 2
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+result_blocks:
+  summary: { enabled: true, priority: 1, title: { es: Resumen fisico, en: Physical summary } }
+  physical_reading: { enabled: true, priority: 2, title: { es: Lectura fisica, en: Physical reading } }
+  coherence: { enabled: true, priority: 3, title: { es: Coherencia, en: Coherence } }
+  model_validity: { enabled: true, priority: 4, title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { enabled: true, priority: 5, title: { es: Lectura grafica, en: Graph reading } }
+  likely_errors: { enabled: true, priority: 6, title: { es: Errores probables, en: Likely errors } }
+  next_step: { enabled: true, priority: 7, title: { es: Siguiente paso, en: Next step } }
+targets:
+  T:
+    magnitude_type: T
+    semantic_role: { es: Temperatura comun de equilibrio, en: Common equilibrium temperature }
+    summary_rules: [{ id: resumen_t, when: "true", status: info, text: { es: "[[T]] comun indica equilibrio termico.", en: "Common [[T]] indicates thermal equilibrium." } }]
+    physical_reading_rules: [{ id: lectura_t, when: "true", status: info, text: { es: "La igualdad de [[T]] elimina la direccion neta del flujo de calor.", en: "Equality of [[T]] removes net heat-flow direction." } }]
+    coherence_rules: [{ id: coherencia_t, when: T > 0, status: success, text: { es: "Temperatura absoluta positiva.", en: "Positive absolute temperature." } }]
+    model_validity_rules: [{ id: validez_t, when: "true", status: info, text: { es: "Requiere temperatura bien definida.", en: "Requires well-defined temperature." } }]
+    graph_rules: [{ id: grafico_t, when: "true", status: info, text: { es: "El grafico muestra igualacion de temperaturas.", en: "The graph shows temperature equalization." } }]
+    likely_errors: [{ id: error_t, when: "true", status: warning, text: { es: "No confundas equilibrio termico con equilibrio completo.", en: "Do not confuse thermal equilibrium with complete equilibrium." } }]
+    next_step_rules: [{ id: siguiente_t, when: "true", status: info, text: { es: "Revisa tambien [[DeltaP]] y [[A]].", en: "Also check [[DeltaP]] and [[A]]." } }]
+  P:
+    magnitude_type: P
+    semantic_role: { es: Presion efectiva comun, en: Common effective pressure }
+    summary_rules: [{ id: resumen_p, when: "true", status: info, text: { es: "[[P]] comun indica equilibrio mecanico de una frontera movil.", en: "Common [[P]] indicates mechanical equilibrium of a movable boundary." } }]
+    physical_reading_rules: [{ id: lectura_p, when: "true", status: info, text: { es: "La igualdad efectiva de [[P]] elimina el empuje neto sobre la frontera.", en: "Effective equality of [[P]] removes net push on the boundary." } }]
+    coherence_rules: [{ id: coherencia_p, when: P > 0, status: success, text: { es: "Presion absoluta positiva.", en: "Positive absolute pressure." } }]
+    model_validity_rules: [{ id: validez_p, when: "true", status: info, text: { es: "Requiere presiones efectivas y fuerzas externas contabilizadas.", en: "Requires effective pressures and external forces to be accounted for." } }]
+    graph_rules: [{ id: grafico_p, when: "true", status: info, text: { es: "El DCL muestra presiones opuestas sobre el piston.", en: "The FBD shows opposite pressures on the piston." } }]
+    likely_errors: [{ id: error_p, when: "true", status: warning, text: { es: "No ignores la presion exterior ni el peso sobre la frontera.", en: "Do not ignore external pressure or weight on the boundary." } }]
+    next_step_rules: [{ id: siguiente_p, when: "true", status: info, text: { es: "Comprueba si [[DeltaP]] queda dentro de tolerancia.", en: "Check whether [[DeltaP]] is within tolerance." } }]
+  mu:
+    magnitude_type: mu
+    semantic_role: { es: Potencial quimico comun, en: Common chemical potential }
+    summary_rules: [{ id: resumen_mu, when: "true", status: info, text: { es: "[[mu]] comun indica ausencia de transferencia material neta.", en: "Common [[mu]] indicates absence of net material transfer." } }]
+    physical_reading_rules: [{ id: lectura_mu, when: "true", status: info, text: { es: "La igualdad de [[mu]] borra el sentido neto de difusion o reaccion.", en: "Equality of [[mu]] removes the net direction of diffusion or reaction." } }]
+    coherence_rules: [{ id: coherencia_mu, when: "true", status: success, text: { es: "El criterio material se evalua solo si la frontera permite intercambio.", en: "The material criterion is evaluated only if the boundary allows exchange." } }]
+    model_validity_rules: [{ id: validez_mu, when: "true", status: info, text: { es: "Requiere especie definida y canal material permitido.", en: "Requires a defined species and an allowed material channel." } }]
+    graph_rules: [{ id: grafico_mu, when: "true", status: info, text: { es: "El grafico apaga la flecha material cuando [[mu]] se iguala.", en: "The graph turns off the material arrow when [[mu]] equalizes." } }]
+    likely_errors: [{ id: error_mu, when: "true", status: warning, text: { es: "No reemplaces [[mu]] por concentracion sin justificar idealidad.", en: "Do not replace [[mu]] by concentration without justifying ideality." } }]
+    next_step_rules: [{ id: siguiente_mu, when: "true", status: info, text: { es: "Decide primero si la pared permite paso de materia.", en: "First decide whether the wall allows matter transfer." } }]
+  DeltaT:
+    magnitude_type: DeltaT
+    semantic_role: { es: Gradiente termico restante, en: Remaining thermal gradient }
+    summary_rules: [{ id: resumen_dt, when: "true", status: info, text: { es: "[[DeltaT]] mide distancia al equilibrio termico.", en: "[[DeltaT]] measures distance from thermal equilibrium." } }]
+    physical_reading_rules: [{ id: lectura_dt, when: DeltaT != 0, status: warning, text: { es: "[[DeltaT]] no nulo implica flujo de calor posible.", en: "Non-zero [[DeltaT]] implies possible heat flow." } }]
+    coherence_rules: [{ id: coherencia_dt, when: DeltaT == 0, status: success, text: { es: "Criterio termico satisfecho.", en: "Thermal criterion satisfied." } }]
+    model_validity_rules: [{ id: validez_dt, when: "true", status: info, text: { es: "Evaluar dentro de tolerancia experimental.", en: "Evaluate within experimental tolerance." } }]
+    graph_rules: [{ id: grafico_dt, when: "true", status: info, text: { es: "La flecha termica desaparece cuando [[DeltaT]] tiende a cero.", en: "The thermal arrow disappears as [[DeltaT]] tends to zero." } }]
+    likely_errors: [{ id: error_dt, when: "true", status: warning, text: { es: "Error comun: declarar equilibrio con gradiente termico.", en: "Common error: declaring equilibrium with a thermal gradient." } }]
+    next_step_rules: [{ id: siguiente_dt, when: "true", status: info, text: { es: "Mide si [[DeltaT]] cambia durante varios [[tau]].", en: "Measure whether [[DeltaT]] changes over several [[tau]]." } }]
+  DeltaP:
+    magnitude_type: DeltaP
+    semantic_role: { es: Gradiente mecanico restante, en: Remaining mechanical gradient }
+    summary_rules: [{ id: resumen_dp, when: "true", status: info, text: { es: "[[DeltaP]] mide desequilibrio mecanico.", en: "[[DeltaP]] measures mechanical disequilibrium." } }]
+    physical_reading_rules: [{ id: lectura_dp, when: DeltaP != 0, status: warning, text: { es: "[[DeltaP]] puede mover una frontera movil.", en: "[[DeltaP]] can move a movable boundary." } }]
+    coherence_rules: [{ id: coherencia_dp, when: DeltaP == 0, status: success, text: { es: "Criterio mecanico satisfecho.", en: "Mechanical criterion satisfied." } }]
+    model_validity_rules: [{ id: validez_dp, when: "true", status: info, text: { es: "Incluir pesos y presion externa efectiva.", en: "Include weights and effective external pressure." } }]
+    graph_rules: [{ id: grafico_dp, when: "true", status: info, text: { es: "El DCL muestra empujes que se compensan.", en: "The FBD shows balanced pushes." } }]
+    likely_errors: [{ id: error_dp, when: "true", status: warning, text: { es: "Error comun: ignorar presion exterior.", en: "Common error: ignoring external pressure." } }]
+    next_step_rules: [{ id: siguiente_dp, when: "true", status: info, text: { es: "Comprueba si la frontera puede moverse.", en: "Check whether the boundary can move." } }]
+  A:
+    magnitude_type: A
+    semantic_role: { es: Afinidad residual, en: Residual affinity }
+    summary_rules: [{ id: resumen_a, when: "true", status: info, text: { es: "[[A]] resume el impulso termodinamico restante.", en: "[[A]] summarizes remaining thermodynamic drive." } }]
+    physical_reading_rules: [{ id: lectura_a, when: A != 0, status: warning, text: { es: "[[A]] no nula indica evolucion posible.", en: "Non-zero [[A]] indicates possible evolution." } }]
+    coherence_rules: [{ id: coherencia_a, when: A == 0, status: success, text: { es: "No queda afinidad para ese proceso.", en: "No affinity remains for that process." } }]
+    model_validity_rules: [{ id: validez_a, when: "true", status: info, text: { es: "Depende de procesos permitidos por restricciones.", en: "Depends on processes allowed by constraints." } }]
+    graph_rules: [{ id: grafico_a, when: "true", status: info, text: { es: "El indicador central se apaga al llegar al equilibrio.", en: "The central indicator turns off at equilibrium." } }]
+    likely_errors: [{ id: error_a, when: "true", status: warning, text: { es: "Error comun: olvidar equilibrio quimico o material.", en: "Common error: forgetting chemical or material equilibrium." } }]
+    next_step_rules: [{ id: siguiente_a, when: "true", status: info, text: { es: "Lista que intercambios permite la frontera.", en: "List which exchanges the boundary allows." } }]

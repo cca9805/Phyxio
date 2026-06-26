@@ -1,0 +1,373 @@
+version: 2
+id: interpretacion-energia-en-mhs
+leaf_id: energia-en-mhs
+nombre:
+  es: Interpretacion de energia en MHS
+  en: Interpretation of energy in SHM
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: oscilaciones
+  parent_id: mhs
+  ruta_relativa: fisica-clasica/mecanica/oscilaciones/mhs/energia-en-mhs
+dependencies:
+  formulas: [ energia_cinetica, energia_potencial_elastica, energia_total_mhs, energia_total_amplitud, conservacion_energia_mhs ]
+  magnitudes: [ K, U, E, m, k, x, v, A, E_total ]
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title: { es: Resumen energetico, en: Energy summary }
+  physical_reading:
+    title: { es: Lectura causal, en: Causal reading }
+  coherence:
+    title: { es: Coherencia del resultado, en: Result coherence }
+  model_validity:
+    title: { es: Validez del modelo, en: Model validity }
+  graph_reading:
+    title: { es: Lectura grafica, en: Graph reading }
+  likely_errors:
+    title: { es: Errores probables, en: Likely errors }
+  next_step:
+    title: { es: Siguiente decision, en: Next decision }
+
+targets:
+  K:
+    summary_rules:
+    - id: K_summary
+      when: "true"
+      status: info
+      text: { es: "[[K]] resume fisicamente cuanta energia del sistema esta actuando como movimiento instantaneo en ese estado.", en: "[[K]] physically summarizes how much of the system energy is acting as instantaneous motion in that state." }
+    physical_reading_rules:
+    - id: K_phys
+      when: "true"
+      status: info
+      text: { es: "Si aumenta la rapidez [[v]], entonces una mayor fraccion de la energia pasa a manifestarse como [[K]], porque el movimiento instantaneo domina sobre el almacenamiento elastico.", en: "If speed [[v]] increases, then a larger fraction of energy appears as [[K]] because instantaneous motion becomes more dominant than elastic storage." }
+    coherence_rules:
+    - id: K_coh
+      when: "true"
+      status: ok
+      text: { es: "[[K]] debe ser no negativa y compatible con [[E]] total.", en: "[[K]] should be non-negative and compatible with total [[E]]." }
+    model_validity_rules:
+    - id: K_valid
+      when: "true"
+      status: ok
+      text: { es: "La interpretacion es valida en mecanica clasica no relativista.", en: "Interpretation is valid in classical non-relativistic mechanics." }
+    graph_rules:
+    - id: K_graph
+      when: "true"
+      status: info
+      text: { es: "En una grafica energetica, [[K]] crece cerca del equilibrio.", en: "In an energy graph, [[K]] grows near equilibrium." }
+    likely_errors:
+    - id: K_err
+      when: "true"
+      status: warning
+      text: { es: "Error comun: creer que [[K]] es maxima en los extremos.", en: "Common error: thinking [[K]] is maximum at turning points." }
+    next_step_rules:
+    - id: K_next
+      when: "true"
+      status: tip
+      text: { es: "Comparar [[K]] con [[U]] para cerrar el balance de energia.", en: "Compare [[K]] with [[U]] to close the energy balance." }
+
+  U:
+    summary_rules:
+    - id: U_summary
+      when: "true"
+      status: info
+      text: { es: "[[U]] representa la energia almacenada en la configuracion elastica.", en: "[[U]] represents energy stored in elastic configuration." }
+    physical_reading_rules:
+    - id: U_phys
+      when: "true"
+      status: info
+      text: { es: "[[U]] aumenta con el cuadrado de [[x]] segun {{ f:energia_potencial_elastica }}.", en: "[[U]] increases with the square of [[x]] according to {{ f:energia_potencial_elastica }}." }
+    coherence_rules:
+    - id: U_coh
+      when: "true"
+      status: ok
+      text: { es: "[[U]] debe ser no negativa y minima cerca del equilibrio ideal.", en: "[[U]] should be non-negative and minimum near ideal equilibrium." }
+    model_validity_rules:
+    - id: U_valid
+      when: "true"
+      status: ok
+      text: { es: "Valida si el resorte sigue una respuesta lineal tipo Hooke.", en: "Valid if the spring follows a Hooke-like linear response." }
+    graph_rules:
+    - id: U_graph
+      when: "true"
+      status: info
+      text: { es: "[[U]] domina en los extremos del movimiento donde [[x]] es grande en magnitud.", en: "[[U]] dominates at turning points where [[x]] is large in magnitude." }
+    likely_errors:
+    - id: U_err
+      when: "true"
+      status: warning
+      text: { es: "Error comun: asociar [[U]] a velocidad en lugar de desplazamiento.", en: "Common error: associating [[U]] with velocity instead of displacement." }
+    next_step_rules:
+    - id: U_next
+      when: "true"
+      status: tip
+      text: { es: "Contrastar [[U]] con [[K]] y [[E_total]] para verificar conservacion.", en: "Contrast [[U]] with [[K]] and [[E_total]] to verify conservation." }
+
+  E:
+    summary_rules:
+    - id: E_summary
+      when: "true"
+      status: info
+      text: { es: "[[E]] fija la escala energetica global del MHS ideal.", en: "[[E]] sets the global energetic scale of ideal SHM." }
+    physical_reading_rules:
+    - id: E_phys
+      when: "true"
+      status: info
+      text: { es: "[[E]] se interpreta como suma de [[K]] y [[U]] mediante {{ f:energia_total_mhs }}.", en: "[[E]] is interpreted as the sum of [[K]] and [[U]] through {{ f:energia_total_mhs }}." }
+    coherence_rules:
+    - id: E_coh
+      when: "true"
+      status: ok
+      text: { es: "[[E]] debe ser no negativa y coherente con [[A]] y [[k]] si se usa {{ f:energia_total_amplitud }}.", en: "[[E]] should be non-negative and coherent with [[A]] and [[k]] if {{ f:energia_total_amplitud }} is used." }
+    model_validity_rules:
+    - id: E_valid
+      when: "true"
+      status: ok
+      text: { es: "La lectura de constancia es valida cuando no hay disipacion dominante.", en: "The constancy reading is valid when no dominant dissipation is present." }
+    graph_rules:
+    - id: E_graph
+      when: "true"
+      status: info
+      text: { es: "En la grafica, [[E]] debe aparecer como nivel total estable del sistema ideal.", en: "In the graph, [[E]] should appear as a stable total level for the ideal system." }
+    likely_errors:
+    - id: E_err
+      when: "true"
+      status: warning
+      text: { es: "Error comun: tratar [[E]] como variable oscilante aun en sistema ideal.", en: "Common error: treating [[E]] as an oscillating quantity in an ideal system." }
+    next_step_rules:
+    - id: E_next
+      when: "true"
+      status: tip
+      text: { es: "Usar [[E]] para decidir si el modelo ideal sigue siendo consistente con los datos.", en: "Use [[E]] to decide whether the ideal model remains consistent with the data." }
+
+  E_total:
+    summary_rules:
+    - id: Et_summary
+      when: "true"
+      status: info
+      text: { es: "[[E_total]] enfatiza el principio de conservacion energetica en el sistema ideal.", en: "[[E_total]] emphasizes the energy-conservation principle in the ideal system." }
+    physical_reading_rules:
+    - id: Et_phys
+      when: "true"
+      status: info
+      text: { es: "Segun {{ f:conservacion_energia_mhs }}, [[E_total]] no cambia mientras se intercambian [[K]] y [[U]].", en: "According to {{ f:conservacion_energia_mhs }}, [[E_total]] does not change while [[K]] and [[U]] exchange." }
+    coherence_rules:
+    - id: Et_coh
+      when: "true"
+      status: ok
+      text: { es: "[[E_total]] debe leerse de forma coherente con [[E]] y con el caracter ideal del modelo.", en: "[[E_total]] should be read coherently with [[E]] and with the ideal character of the model." }
+    model_validity_rules:
+    - id: Et_valid
+      when: "true"
+      status: ok
+      text: { es: "Valido cuando el trabajo externo neto y la disipacion son despreciables.", en: "Valid when net external work and dissipation are negligible." }
+    graph_rules:
+    - id: Et_graph
+      when: "true"
+      status: info
+      text: { es: "La curva o referencia de [[E_total]] no debe presentar oscilacion idealmente.", en: "The [[E_total]] reference should not oscillate ideally." }
+    likely_errors:
+    - id: Et_err
+      when: "true"
+      status: warning
+      text: { es: "Error comun: interpretar intercambios entre [[K]] y [[U]] como perdida de energia total.", en: "Common error: interpreting exchange between [[K]] and [[U]] as loss of total energy." }
+    next_step_rules:
+    - id: Et_next
+      when: "true"
+      status: tip
+      text: { es: "Si [[E_total]] deja de ser estable, revisar si el sistema sigue siendo ideal.", en: "If [[E_total]] stops being stable, check whether the system is still ideal." }
+
+  A:
+    summary_rules:
+    - id: A_summary
+      when: "true"
+      status: info
+      text: { es: "[[A]] fija la escala maxima de oscilacion y, por eso, condiciona la escala total de energia del sistema ideal.", en: "[[A]] sets the maximum oscillation scale and therefore conditions the total energy scale of the ideal system." }
+    physical_reading_rules:
+    - id: A_phys
+      when: "true"
+      status: info
+      text: { es: "Si [[A]] aumenta con [[k]] fija, entonces la energia total ideal crece porque el sistema alcanza deformaciones maximas mayores.", en: "If [[A]] increases with fixed [[k]], then ideal total energy grows because the system reaches larger maximum deformations." }
+    coherence_rules:
+    - id: A_coh
+      when: "true"
+      status: ok
+      text: { es: "[[A]] debe ser no negativa y coherente con la escala energetica inferida para [[E]].", en: "[[A]] should be non-negative and coherent with the inferred energy scale for [[E]]." }
+    model_validity_rules:
+    - id: A_valid
+      when: "true"
+      status: ok
+      text: { es: "Su uso como parametro estable exige un oscilador ideal sin amortiguamiento dominante en la ventana analizada.", en: "Using it as a stable parameter requires an ideal oscillator without dominant damping over the analyzed window." }
+    graph_rules:
+    - id: A_graph
+      when: "true"
+      status: info
+      text: { es: "En una lectura grafica, [[A]] fija los extremos del desplazamiento y ayuda a interpretar la escala de [[U]] y [[E]].", en: "In a graph reading, [[A]] sets displacement extremes and helps interpret the scale of [[U]] and [[E]]." }
+    likely_errors:
+    - id: A_err
+      when: "true"
+      status: warning
+      text: { es: "Error comun: tratar [[A]] como si variara libremente dentro de cada ciclo ideal.", en: "Common error: treating [[A]] as if it varied freely within each ideal cycle." }
+    next_step_rules:
+    - id: A_next
+      when: "true"
+      status: tip
+      text: { es: "Usar [[A]] para contrastar si la escala de [[E]] es compatible con el resto del balance.", en: "Use [[A]] to test whether the scale of [[E]] is compatible with the rest of the balance." }
+
+  k:
+    summary_rules:
+    - id: k_summary
+      when: "true"
+      status: info
+      text: { es: "[[k]] expresa cuanta rigidez opone el sistema y determina cuan costosa es energeticamente una deformacion dada.", en: "[[k]] expresses how much stiffness the system provides and determines how energetically costly a given deformation is." }
+    physical_reading_rules:
+    - id: k_phys
+      when: "true"
+      status: info
+      text: { es: "Si [[k]] aumenta para el mismo [[x]], entonces [[U]] crece porque el sistema almacena mas energia por unidad de deformacion.", en: "If [[k]] increases for the same [[x]], then [[U]] grows because the system stores more energy per unit deformation." }
+    coherence_rules:
+    - id: k_coh
+      when: "true"
+      status: ok
+      text: { es: "[[k]] debe ser positiva y consistente con la escala de [[U]] y [[E]] reconstruidas.", en: "[[k]] should be positive and consistent with the reconstructed scales of [[U]] and [[E]]." }
+    model_validity_rules:
+    - id: k_valid
+      when: "true"
+      status: ok
+      text: { es: "La interpretacion energetica requiere que [[k]] represente una rigidez aproximadamente lineal en el rango observado.", en: "Energetic interpretation requires [[k]] to represent approximately linear stiffness in the observed range." }
+    graph_rules:
+    - id: k_graph
+      when: "true"
+      status: info
+      text: { es: "Graficamente, [[k]] controla cuan rapido crece [[U]] al alejarse del equilibrio.", en: "Graphically, [[k]] controls how fast [[U]] grows away from equilibrium." }
+    likely_errors:
+    - id: k_err
+      when: "true"
+      status: warning
+      text: { es: "Error comun: leer [[k]] como energia en lugar de parametro de rigidez.", en: "Common error: reading [[k]] as an energy rather than a stiffness parameter." }
+    next_step_rules:
+    - id: k_next
+      when: "true"
+      status: tip
+      text: { es: "Contrastar [[k]] con [[A]] y [[x]] para decidir si el modelo lineal sigue siendo razonable.", en: "Contrast [[k]] with [[A]] and [[x]] to decide whether the linear model remains reasonable." }
+
+  m:
+    summary_rules:
+    - id: m_summary
+      when: "true"
+      status: info
+      text: { es: "[[m]] fija la escala inercial y condiciona cuanta [[K]] corresponde a una rapidez dada.", en: "[[m]] sets the inertial scale and conditions how much [[K]] corresponds to a given speed." }
+    physical_reading_rules:
+    - id: m_phys
+      when: "true"
+      status: info
+      text: { es: "Si [[m]] aumenta con [[v]] fija, entonces [[K]] crece porque hay mas inercia asociada al mismo estado de movimiento.", en: "If [[m]] increases with fixed [[v]], then [[K]] grows because more inertia is associated with the same motion state." }
+    coherence_rules:
+    - id: m_coh
+      when: "true"
+      status: ok
+      text: { es: "[[m]] debe ser positiva y compatible con la escala de energia cinetica inferida.", en: "[[m]] should be positive and compatible with the inferred kinetic-energy scale." }
+    model_validity_rules:
+    - id: m_valid
+      when: "true"
+      status: ok
+      text: { es: "Su uso es valido cuando la masa efectiva del sistema puede tratarse como estable durante la observacion.", en: "Its use is valid when the effective system mass can be treated as stable during observation." }
+    graph_rules:
+    - id: m_graph
+      when: "true"
+      status: info
+      text: { es: "En la lectura grafica, [[m]] no cambia la forma del intercambio pero si la escala de [[K]].", en: "In graph reading, [[m]] does not change the exchange pattern but it does change the scale of [[K]]." }
+    likely_errors:
+    - id: m_err
+      when: "true"
+      status: warning
+      text: { es: "Error comun: omitir [[m]] al interpretar energia de movimiento.", en: "Common error: omitting [[m]] when interpreting motion-related energy." }
+    next_step_rules:
+    - id: m_next
+      when: "true"
+      status: tip
+      text: { es: "Revisar [[m]] cuando la escala de [[K]] no encaja con [[v]] medida.", en: "Check [[m]] when the scale of [[K]] does not fit measured [[v]]." }
+
+  v:
+    summary_rules:
+    - id: v_summary
+      when: "true"
+      status: info
+      text: { es: "[[v]] indica cuan intenso es el movimiento instantaneo y por eso gobierna la lectura de [[K]].", en: "[[v]] indicates how intense instantaneous motion is and therefore governs the reading of [[K]]." }
+    physical_reading_rules:
+    - id: v_phys
+      when: "true"
+      status: info
+      text: { es: "Si aumenta la magnitud de [[v]], entonces el sistema dedica mas energia al movimiento y [[K]] pasa a dominar sobre [[U]].", en: "If the magnitude of [[v]] increases, then the system devotes more energy to motion and [[K]] comes to dominate over [[U]]." }
+    coherence_rules:
+    - id: v_coh
+      when: "true"
+      status: ok
+      text: { es: "[[v]] debe ser coherente con una [[K]] no negativa y con el estado dinamico descrito.", en: "[[v]] should be coherent with non-negative [[K]] and with the described dynamic state." }
+    model_validity_rules:
+    - id: v_valid
+      when: "true"
+      status: ok
+      text: { es: "La lectura es valida cuando la velocidad medida representa bien el estado instantaneo del oscilador.", en: "The reading is valid when measured velocity represents the oscillator instantaneous state well." }
+    graph_rules:
+    - id: v_graph
+      when: "true"
+      status: info
+      text: { es: "Graficamente, [[v]] es maxima cerca del equilibrio y eso coincide con maximos de [[K]].", en: "Graphically, [[v]] is maximal near equilibrium and that matches maxima of [[K]]." }
+    likely_errors:
+    - id: v_err
+      when: "true"
+      status: warning
+      text: { es: "Error comun: pensar que [[v]] maxima y [[x]] maxima ocurren al mismo tiempo.", en: "Common error: thinking maximum [[v]] and maximum [[x]] happen at the same time." }
+    next_step_rules:
+    - id: v_next
+      when: "true"
+      status: tip
+      text: { es: "Comparar [[v]] con [[x]] para decidir que componente energetica deberia dominar.", en: "Compare [[v]] with [[x]] to decide which energetic component should dominate." }
+
+  x:
+    summary_rules:
+    - id: x_summary
+      when: "true"
+      status: info
+      text: { es: "[[x]] informa cuan alejado esta el sistema del equilibrio y por eso estructura la lectura de [[U]].", en: "[[x]] tells how far the system is from equilibrium and therefore structures the reading of [[U]]." }
+    physical_reading_rules:
+    - id: x_phys
+      when: "true"
+      status: info
+      text: { es: "Si aumenta la magnitud de [[x]], entonces crece [[U]] porque la deformacion elastica almacenada es mayor.", en: "If the magnitude of [[x]] increases, then [[U]] grows because stored elastic deformation becomes larger." }
+    coherence_rules:
+    - id: x_coh
+      when: "true"
+      status: ok
+      text: { es: "[[x]] debe ser coherente con la escala de [[U]] y con la amplitud [[A]] declarada.", en: "[[x]] should be coherent with the scale of [[U]] and with the declared amplitude [[A]]." }
+    model_validity_rules:
+    - id: x_valid
+      when: "true"
+      status: ok
+      text: { es: "La interpretacion es robusta mientras [[x]] permanezca dentro del rango lineal del resorte.", en: "Interpretation is robust while [[x]] stays within the spring linear range." }
+    graph_rules:
+    - id: x_graph
+      when: "true"
+      status: info
+      text: { es: "En la grafica, grandes valores de [[x]] en magnitud corresponden a zonas donde [[U]] domina sobre [[K]].", en: "On the graph, large-magnitude [[x]] values correspond to regions where [[U]] dominates over [[K]]." }
+    likely_errors:
+    - id: x_err
+      when: "true"
+      status: warning
+      text: { es: "Error comun: confundir [[x]] con distancia total recorrida durante varios ciclos.", en: "Common error: confusing [[x]] with total distance traveled over several cycles." }
+    next_step_rules:
+    - id: x_next
+      when: "true"
+      status: tip
+      text: { es: "Usar [[x]] junto con [[v]] para decidir si el sistema esta mas cerca de un extremo o del equilibrio.", en: "Use [[x]] together with [[v]] to decide whether the system is closer to a turning point or to equilibrium." }

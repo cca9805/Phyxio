@@ -1,0 +1,724 @@
+version: 2
+id: interpretacion-rozamiento-y-disipacion
+leaf_id: rozamiento-y-disipacion
+nombre:
+  es: Interpretacion de rozamiento y disipacion
+  en: Interpretation of friction and dissipation
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: trabajo-y-energia
+  parent_id: fuerzas-no-conservativas
+  ruta_relativa: fisica-clasica/mecanica/trabajo-y-energia/fuerzas-no-conservativas/rozamiento-y-disipacion
+dependencies:
+  formulas:
+  - fuerza_rozamiento_cinetico
+  - trabajo_rozamiento
+  - energia_disipada_rozamiento
+  - trabajo_rozamiento_horizontal
+  - balance_energia_mecanica_disipacion
+  - variacion_energia_mecanica_rozamiento
+  - potencia_disipada_media
+  magnitudes:
+  - fr
+  - mu
+  - N
+  - d
+  - Wr
+  - Edis
+  - m
+  - g
+  - Emi
+  - Emf
+  - dEm
+  - Pdis
+  - t
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  Edis:
+    summary_rules:
+    - id: edis_summary
+      when: 'true'
+      status: info
+      text:
+        es: Edis mide cuanta energia mecanica ha pasado a calor, sonido o deformacion microscopica; se lee como cantidad positiva.
+        en: Edis measures how much mechanical energy has become heat, sound, or microscopic deformation; it is read as positive.
+    physical_reading_rules:
+    - id: edis_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si Edis aumenta, el movimiento deja mas energia en el contacto y menos energia mecanica queda disponible.
+        en: If Edis increases, motion leaves more energy in the contact and less mechanical energy remains available.
+    coherence_rules:
+    - id: edis_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Edis debe coincidir con el modulo de Wr cuando el rozamiento es la unica perdida mecanica.
+        en: Edis must match the magnitude of Wr when friction is the only mechanical loss.
+    model_validity_rules:
+    - id: edis_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Interpreta Edis con este modelo solo si el contacto seco y el coeficiente mu constante son defendibles.
+        en: Interpret Edis with this model only if dry contact and constant mu are defensible.
+    graph_rules:
+    - id: edis_graph
+      when: 'true'
+      status: info
+      text:
+        es: En la grafica, Edis debe crecer con la distancia de deslizamiento si fr se mantiene aproximadamente constante.
+        en: On the graph, Edis should grow with sliding distance if fr remains approximately constant.
+    likely_errors:
+    - id: edis_error
+      when: 'true'
+      status: warning
+      text:
+        es: No escribas Edis negativa; el signo negativo pertenece a Wr, no a la energia disipada acumulada.
+        en: Do not write Edis as negative; the negative sign belongs to Wr, not to accumulated dissipated energy.
+    next_step_rules:
+    - id: edis_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular Edis, revisa Pdis si el proceso ocurre en poco tiempo o puede calentar el contacto.
+        en: After computing Edis, check Pdis if the process occurs quickly or may heat the contact.
+  Wr:
+    summary_rules:
+    - id: wr_summary
+      when: 'true'
+      status: info
+      text:
+        es: Wr es el trabajo firmado del rozamiento sobre el sistema elegido.
+        en: Wr is the signed work done by friction on the chosen system.
+    physical_reading_rules:
+    - id: wr_physical
+      when: 'true'
+      status: info
+      text:
+        es: Cuando el rozamiento se opone al movimiento, Wr reduce la energia mecanica del cuerpo.
+        en: When friction opposes motion, Wr reduces the body's mechanical energy.
+    coherence_rules:
+    - id: wr_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que el signo de Wr sea compatible con el sentido de fr y el desplazamiento d.
+        en: Check that the sign of Wr is compatible with the directions of fr and displacement d.
+    model_validity_rules:
+    - id: wr_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Wr = -fr d presupone fuerza opuesta al movimiento durante el tramo analizado.
+        en: Wr = -fr d assumes a force opposite to motion over the analyzed segment.
+    graph_rules:
+    - id: wr_graph
+      when: 'true'
+      status: info
+      text:
+        es: La pendiente de Wr frente a d debe ser negativa si fr se mantiene constante.
+        en: The slope of Wr versus d must be negative if fr remains constant.
+    likely_errors:
+    - id: wr_error
+      when: 'true'
+      status: warning
+      text:
+        es: El error tipico es usar el modulo de Wr y perder el signo del balance energetico.
+        en: The common error is to use the magnitude of Wr and lose the sign in the energy balance.
+    next_step_rules:
+    - id: wr_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa Wr para cerrar dEm y despues traduce el modulo perdido como Edis.
+        en: Use Wr to close dEm and then translate the lost magnitude as Edis.
+  fr:
+    summary_rules:
+    - id: fr_summary
+      when: 'true'
+      status: info
+      text:
+        es: fr fija la escala de la perdida mecanica por unidad de distancia.
+        en: fr sets the scale of mechanical loss per unit distance.
+    physical_reading_rules:
+    - id: fr_physical
+      when: 'true'
+      status: info
+      text:
+        es: fr aumenta si crece la normal N o si el par de superficies tiene mayor mu.
+        en: fr increases if the normal force N grows or if the surface pair has larger mu.
+    coherence_rules:
+    - id: fr_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: fr debe tener unidades de newton y no puede confundirse con el coeficiente mu.
+        en: fr must have units of newtons and must not be confused with coefficient mu.
+    model_validity_rules:
+    - id: fr_validity
+      when: 'true'
+      status: ok
+      text:
+        es: fr = mu N es una aproximacion de contacto seco, no una ley universal de cualquier resistencia.
+        en: fr = mu N is a dry-contact approximation, not a universal law for every resistance.
+    graph_rules:
+    - id: fr_graph
+      when: 'true'
+      status: info
+      text:
+        es: Un grafico fr-N debe ser lineal si mu permanece constante.
+        en: An fr-N graph must be linear if mu remains constant.
+    likely_errors:
+    - id: fr_error
+      when: 'true'
+      status: warning
+      text:
+        es: No sustituyas N por mg si el cuerpo esta en una rampa o tiene fuerzas verticales adicionales.
+        en: Do not replace N by mg if the body is on a ramp or has additional vertical forces.
+    next_step_rules:
+    - id: fr_next
+      when: 'true'
+      status: info
+      text:
+        es: Tras hallar fr, decide si necesitas trabajo Wr o potencia Pdis.
+        en: After finding fr, decide whether work Wr or power Pdis is needed.
+  Pdis:
+    summary_rules:
+    - id: pdis_summary
+      when: 'true'
+      status: info
+      text:
+        es: Pdis mide la rapidez de la disipacion, no solo su cantidad total.
+        en: Pdis measures the rate of dissipation, not only its total amount.
+    physical_reading_rules:
+    - id: pdis_physical
+      when: 'true'
+      status: info
+      text:
+        es: Una Pdis alta indica riesgo de calentamiento aunque Edis no parezca enorme.
+        en: A high Pdis indicates heating risk even if Edis does not seem huge.
+    coherence_rules:
+    - id: pdis_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Pdis debe expresarse en vatios y requiere un intervalo t positivo.
+        en: Pdis must be expressed in watts and requires a positive time interval t.
+    model_validity_rules:
+    - id: pdis_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si Pdis cambia mucho durante el proceso, la media solo da una estimacion global.
+        en: If Pdis changes strongly during the process, the average only gives a global estimate.
+    graph_rules:
+    - id: pdis_graph
+      when: 'true'
+      status: info
+      text:
+        es: En una lectura temporal, un mismo Edis repartido en menos t implica mayor Pdis.
+        en: In a time-based reading, the same Edis spread over less t implies greater Pdis.
+    likely_errors:
+    - id: pdis_error
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas energia en julios con potencia en vatios.
+        en: Do not confuse energy in joules with power in watts.
+    next_step_rules:
+    - id: pdis_next
+      when: 'true'
+      status: info
+      text:
+        es: Si Pdis es grande, conecta el resultado con limites termicos del sistema.
+        en: If Pdis is large, connect the result with the system's thermal limits.
+  dEm:
+    summary_rules:
+    - id: dem_summary
+      when: 'true'
+      status: info
+      text:
+        es: dEm resume el cambio firmado de energia mecanica producido por el rozamiento.
+        en: dEm summarizes the signed mechanical-energy change produced by friction.
+    physical_reading_rules:
+    - id: dem_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si dEm es negativo, el sistema conserva energia total pero pierde energia mecanica disponible.
+        en: If dEm is negative, the system conserves total energy but loses available mechanical energy.
+    coherence_rules:
+    - id: dem_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: dEm debe coincidir con Emf menos Emi y con Wr si el rozamiento es la unica fuerza no conservativa.
+        en: dEm must match Emf minus Emi and Wr if friction is the only non-conservative force.
+    model_validity_rules:
+    - id: dem_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si hay motores, golpes o arrastre adicional, dEm ya no puede atribuirse solo al rozamiento seco.
+        en: If motors, impacts, or additional drag exist, dEm can no longer be attributed only to dry friction.
+    graph_rules:
+    - id: dem_graph
+      when: 'true'
+      status: info
+      text:
+        es: El grafico debe mostrar que dEm cae al acumularse trabajo negativo.
+        en: The graph should show dEm decreasing as negative work accumulates.
+    likely_errors:
+    - id: dem_error
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas dEm con Edis; una es variacion firmada y la otra energia acumulada positiva.
+        en: Do not confuse dEm with Edis; one is signed change and the other positive accumulated energy.
+    next_step_rules:
+    - id: dem_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa dEm para decidir si el siguiente modelo debe incluir otras fuerzas no conservativas.
+        en: Use dEm to decide whether the next model must include other non-conservative forces.
+  mu:
+    summary_rules:
+    - id: mu_summary
+      when: 'true'
+      status: info
+      text:
+        es: 'mu: Resumen de la magnitud en el balance de rozamiento.'
+        en: 'mu: Summary of the quantity in the friction balance.'
+    physical_reading_rules:
+    - id: mu_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: 'mu: Lectura causal dentro de la perdida mecanica por rozamiento.'
+        en: 'mu: Causal reading within mechanical loss by friction.'
+    coherence_rules:
+    - id: mu_coherence
+      when: 'true'
+      status: info
+      text:
+        es: 'mu: Comprueba unidades, signo y coherencia con las demas magnitudes.'
+        en: 'mu: Check units, sign, and coherence with the other quantities.'
+    model_validity_rules:
+    - id: mu_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: 'mu: Valida solo dentro del modelo de contacto seco elegido.'
+        en: 'mu: Valid only within the chosen dry-contact model.'
+    graph_rules:
+    - id: mu_graph
+      when: 'true'
+      status: info
+      text:
+        es: 'mu: Debe leerse en la grafica como parte del vinculo entre contacto y energia.'
+        en: 'mu: It should be read on the graph as part of the link between contact and energy.'
+    likely_errors:
+    - id: mu_likely_errors
+      when: 'true'
+      status: info
+      text:
+        es: 'mu: No la confundas con otra magnitud del balance energetico.'
+        en: 'mu: Do not confuse it with another quantity in the energy balance.'
+    next_step_rules:
+    - id: mu_next_step
+      when: 'true'
+      status: info
+      text:
+        es: 'mu: Usala para decidir el siguiente calculo del balance de disipacion.'
+        en: 'mu: Use it to decide the next calculation in the dissipation balance.'
+  N:
+    summary_rules:
+    - id: N_summary
+      when: 'true'
+      status: info
+      text:
+        es: 'N: Resumen de la magnitud en el balance de rozamiento.'
+        en: 'N: Summary of the quantity in the friction balance.'
+    physical_reading_rules:
+    - id: N_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: 'N: Lectura causal dentro de la perdida mecanica por rozamiento.'
+        en: 'N: Causal reading within mechanical loss by friction.'
+    coherence_rules:
+    - id: N_coherence
+      when: 'true'
+      status: info
+      text:
+        es: 'N: Comprueba unidades, signo y coherencia con las demas magnitudes.'
+        en: 'N: Check units, sign, and coherence with the other quantities.'
+    model_validity_rules:
+    - id: N_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: 'N: Valida solo dentro del modelo de contacto seco elegido.'
+        en: 'N: Valid only within the chosen dry-contact model.'
+    graph_rules:
+    - id: N_graph
+      when: 'true'
+      status: info
+      text:
+        es: 'N: Debe leerse en la grafica como parte del vinculo entre contacto y energia.'
+        en: 'N: It should be read on the graph as part of the link between contact and energy.'
+    likely_errors:
+    - id: N_likely_errors
+      when: 'true'
+      status: info
+      text:
+        es: 'N: No la confundas con otra magnitud del balance energetico.'
+        en: 'N: Do not confuse it with another quantity in the energy balance.'
+    next_step_rules:
+    - id: N_next_step
+      when: 'true'
+      status: info
+      text:
+        es: 'N: Usala para decidir el siguiente calculo del balance de disipacion.'
+        en: 'N: Use it to decide the next calculation in the dissipation balance.'
+  d:
+    summary_rules:
+    - id: d_summary
+      when: 'true'
+      status: info
+      text:
+        es: 'd: Resumen de la magnitud en el balance de rozamiento.'
+        en: 'd: Summary of the quantity in the friction balance.'
+    physical_reading_rules:
+    - id: d_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: 'd: Lectura causal dentro de la perdida mecanica por rozamiento.'
+        en: 'd: Causal reading within mechanical loss by friction.'
+    coherence_rules:
+    - id: d_coherence
+      when: 'true'
+      status: info
+      text:
+        es: 'd: Comprueba unidades, signo y coherencia con las demas magnitudes.'
+        en: 'd: Check units, sign, and coherence with the other quantities.'
+    model_validity_rules:
+    - id: d_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: 'd: Valida solo dentro del modelo de contacto seco elegido.'
+        en: 'd: Valid only within the chosen dry-contact model.'
+    graph_rules:
+    - id: d_graph
+      when: 'true'
+      status: info
+      text:
+        es: 'd: Debe leerse en la grafica como parte del vinculo entre contacto y energia.'
+        en: 'd: It should be read on the graph as part of the link between contact and energy.'
+    likely_errors:
+    - id: d_likely_errors
+      when: 'true'
+      status: info
+      text:
+        es: 'd: No la confundas con otra magnitud del balance energetico.'
+        en: 'd: Do not confuse it with another quantity in the energy balance.'
+    next_step_rules:
+    - id: d_next_step
+      when: 'true'
+      status: info
+      text:
+        es: 'd: Usala para decidir el siguiente calculo del balance de disipacion.'
+        en: 'd: Use it to decide the next calculation in the dissipation balance.'
+  m:
+    summary_rules:
+    - id: m_summary
+      when: 'true'
+      status: info
+      text:
+        es: 'm: Resumen de la magnitud en el balance de rozamiento.'
+        en: 'm: Summary of the quantity in the friction balance.'
+    physical_reading_rules:
+    - id: m_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: 'm: Lectura causal dentro de la perdida mecanica por rozamiento.'
+        en: 'm: Causal reading within mechanical loss by friction.'
+    coherence_rules:
+    - id: m_coherence
+      when: 'true'
+      status: info
+      text:
+        es: 'm: Comprueba unidades, signo y coherencia con las demas magnitudes.'
+        en: 'm: Check units, sign, and coherence with the other quantities.'
+    model_validity_rules:
+    - id: m_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: 'm: Valida solo dentro del modelo de contacto seco elegido.'
+        en: 'm: Valid only within the chosen dry-contact model.'
+    graph_rules:
+    - id: m_graph
+      when: 'true'
+      status: info
+      text:
+        es: 'm: Debe leerse en la grafica como parte del vinculo entre contacto y energia.'
+        en: 'm: It should be read on the graph as part of the link between contact and energy.'
+    likely_errors:
+    - id: m_likely_errors
+      when: 'true'
+      status: info
+      text:
+        es: 'm: No la confundas con otra magnitud del balance energetico.'
+        en: 'm: Do not confuse it with another quantity in the energy balance.'
+    next_step_rules:
+    - id: m_next_step
+      when: 'true'
+      status: info
+      text:
+        es: 'm: Usala para decidir el siguiente calculo del balance de disipacion.'
+        en: 'm: Use it to decide the next calculation in the dissipation balance.'
+  g:
+    summary_rules:
+    - id: g_summary
+      when: 'true'
+      status: info
+      text:
+        es: 'g: Resumen de la magnitud en el balance de rozamiento.'
+        en: 'g: Summary of the quantity in the friction balance.'
+    physical_reading_rules:
+    - id: g_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: 'g: Lectura causal dentro de la perdida mecanica por rozamiento.'
+        en: 'g: Causal reading within mechanical loss by friction.'
+    coherence_rules:
+    - id: g_coherence
+      when: 'true'
+      status: info
+      text:
+        es: 'g: Comprueba unidades, signo y coherencia con las demas magnitudes.'
+        en: 'g: Check units, sign, and coherence with the other quantities.'
+    model_validity_rules:
+    - id: g_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: 'g: Valida solo dentro del modelo de contacto seco elegido.'
+        en: 'g: Valid only within the chosen dry-contact model.'
+    graph_rules:
+    - id: g_graph
+      when: 'true'
+      status: info
+      text:
+        es: 'g: Debe leerse en la grafica como parte del vinculo entre contacto y energia.'
+        en: 'g: It should be read on the graph as part of the link between contact and energy.'
+    likely_errors:
+    - id: g_likely_errors
+      when: 'true'
+      status: info
+      text:
+        es: 'g: No la confundas con otra magnitud del balance energetico.'
+        en: 'g: Do not confuse it with another quantity in the energy balance.'
+    next_step_rules:
+    - id: g_next_step
+      when: 'true'
+      status: info
+      text:
+        es: 'g: Usala para decidir el siguiente calculo del balance de disipacion.'
+        en: 'g: Use it to decide the next calculation in the dissipation balance.'
+  Emi:
+    summary_rules:
+    - id: Emi_summary
+      when: 'true'
+      status: info
+      text:
+        es: 'Emi: Resumen de la magnitud en el balance de rozamiento.'
+        en: 'Emi: Summary of the quantity in the friction balance.'
+    physical_reading_rules:
+    - id: Emi_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: 'Emi: Lectura causal dentro de la perdida mecanica por rozamiento.'
+        en: 'Emi: Causal reading within mechanical loss by friction.'
+    coherence_rules:
+    - id: Emi_coherence
+      when: 'true'
+      status: info
+      text:
+        es: 'Emi: Comprueba unidades, signo y coherencia con las demas magnitudes.'
+        en: 'Emi: Check units, sign, and coherence with the other quantities.'
+    model_validity_rules:
+    - id: Emi_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: 'Emi: Valida solo dentro del modelo de contacto seco elegido.'
+        en: 'Emi: Valid only within the chosen dry-contact model.'
+    graph_rules:
+    - id: Emi_graph
+      when: 'true'
+      status: info
+      text:
+        es: 'Emi: Debe leerse en la grafica como parte del vinculo entre contacto y energia.'
+        en: 'Emi: It should be read on the graph as part of the link between contact and energy.'
+    likely_errors:
+    - id: Emi_likely_errors
+      when: 'true'
+      status: info
+      text:
+        es: 'Emi: No la confundas con otra magnitud del balance energetico.'
+        en: 'Emi: Do not confuse it with another quantity in the energy balance.'
+    next_step_rules:
+    - id: Emi_next_step
+      when: 'true'
+      status: info
+      text:
+        es: 'Emi: Usala para decidir el siguiente calculo del balance de disipacion.'
+        en: 'Emi: Use it to decide the next calculation in the dissipation balance.'
+  Emf:
+    summary_rules:
+    - id: Emf_summary
+      when: 'true'
+      status: info
+      text:
+        es: 'Emf: Resumen de la magnitud en el balance de rozamiento.'
+        en: 'Emf: Summary of the quantity in the friction balance.'
+    physical_reading_rules:
+    - id: Emf_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: 'Emf: Lectura causal dentro de la perdida mecanica por rozamiento.'
+        en: 'Emf: Causal reading within mechanical loss by friction.'
+    coherence_rules:
+    - id: Emf_coherence
+      when: 'true'
+      status: info
+      text:
+        es: 'Emf: Comprueba unidades, signo y coherencia con las demas magnitudes.'
+        en: 'Emf: Check units, sign, and coherence with the other quantities.'
+    model_validity_rules:
+    - id: Emf_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: 'Emf: Valida solo dentro del modelo de contacto seco elegido.'
+        en: 'Emf: Valid only within the chosen dry-contact model.'
+    graph_rules:
+    - id: Emf_graph
+      when: 'true'
+      status: info
+      text:
+        es: 'Emf: Debe leerse en la grafica como parte del vinculo entre contacto y energia.'
+        en: 'Emf: It should be read on the graph as part of the link between contact and energy.'
+    likely_errors:
+    - id: Emf_likely_errors
+      when: 'true'
+      status: info
+      text:
+        es: 'Emf: No la confundas con otra magnitud del balance energetico.'
+        en: 'Emf: Do not confuse it with another quantity in the energy balance.'
+    next_step_rules:
+    - id: Emf_next_step
+      when: 'true'
+      status: info
+      text:
+        es: 'Emf: Usala para decidir el siguiente calculo del balance de disipacion.'
+        en: 'Emf: Use it to decide the next calculation in the dissipation balance.'
+  t:
+    summary_rules:
+    - id: t_summary
+      when: 'true'
+      status: info
+      text:
+        es: 't: Resumen de la magnitud en el balance de rozamiento.'
+        en: 't: Summary of the quantity in the friction balance.'
+    physical_reading_rules:
+    - id: t_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: 't: Lectura causal dentro de la perdida mecanica por rozamiento.'
+        en: 't: Causal reading within mechanical loss by friction.'
+    coherence_rules:
+    - id: t_coherence
+      when: 'true'
+      status: info
+      text:
+        es: 't: Comprueba unidades, signo y coherencia con las demas magnitudes.'
+        en: 't: Check units, sign, and coherence with the other quantities.'
+    model_validity_rules:
+    - id: t_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: 't: Valida solo dentro del modelo de contacto seco elegido.'
+        en: 't: Valid only within the chosen dry-contact model.'
+    graph_rules:
+    - id: t_graph
+      when: 'true'
+      status: info
+      text:
+        es: 't: Debe leerse en la grafica como parte del vinculo entre contacto y energia.'
+        en: 't: It should be read on the graph as part of the link between contact and energy.'
+    likely_errors:
+    - id: t_likely_errors
+      when: 'true'
+      status: info
+      text:
+        es: 't: No la confundas con otra magnitud del balance energetico.'
+        en: 't: Do not confuse it with another quantity in the energy balance.'
+    next_step_rules:
+    - id: t_next_step
+      when: 'true'
+      status: info
+      text:
+        es: 't: Usala para decidir el siguiente calculo del balance de disipacion.'
+        en: 't: Use it to decide the next calculation in the dissipation balance.'

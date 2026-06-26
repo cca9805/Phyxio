@@ -1,0 +1,385 @@
+version: "5.0"
+id: interp_capacidad_calorifica
+leaf_id: capacidad-calorifica
+
+nombre:
+  es: Interpretación de la capacidad calorífica
+  en: Interpretation of heat capacity
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: calor-y-efectos-termicos
+  parent_id: calor-y-efectos-termicos
+  ruta_relativa: fisica-clasica/termodinamica/calor-y-efectos-termicos/capacidad-calorifica
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_blocks: 3
+    max_rules_per_block: 2
+
+dependencies:
+  formulas:
+    - definicion_capacidad_calorifica
+    - capacidad_calorifica_desde_especifico
+  magnitudes:
+    - C
+    - Q
+    - DeltaT
+
+global_context:
+  physical_domain:
+    es: "Propiedad extensiva de un cuerpo que cuantifica su resistencia al cambio de temperatura ante entradas o salidas de calor a presión constante."
+    en: "Extensive property of a body quantifying its resistance to temperature change upon heat inputs or outputs at constant pressure."
+  axis_convention:
+    es: "Q > 0 si el cuerpo absorbe calor y su temperatura sube (DeltaT > 0). Q < 0 si cede calor y su temperatura baja (DeltaT < 0). C es siempre positiva."
+    en: "Q > 0 if the body absorbs heat and its temperature rises (DeltaT > 0). Q < 0 if it releases heat and its temperature falls (DeltaT < 0). C is always positive."
+  standard_assumptions:
+    - "Proceso sin cambio de estado durante el calentamiento o enfriamiento"
+    - "C constante en el rango de temperatura del proceso"
+    - "Proceso a presión constante"
+    - "Cuerpo homogéneo o caracterizable por una única C efectiva"
+  standard_warnings:
+    - "C es una propiedad extensiva: depende de la masa del cuerpo, no solo del material"
+    - "No confundir C (J/K, extensiva) con c (J/(kg·K), intensiva)"
+    - "C se vuelve dependiente de T para rangos superiores a 100 K o cerca del cero absoluto"
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  C:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Capacidad calorífica total del cuerpo; propiedad extensiva que cuantifica su resistencia térmica al cambio de temperatura."
+      en: "Total heat capacity of the body; extensive property quantifying its thermal resistance to temperature change."
+    summary_rules:
+      - id: C_summary_water_1kg
+        condition:
+          variable: C
+          gt: 4000
+          lt: 4400
+        status: ok
+        text:
+          es: "[[C]] está en el rango de la capacidad calorífica total del agua líquida a 1 kg (4186 J/K). Si el cuerpo es agua de masa aproximadamente 1 kg, el resultado es consistente."
+          en: "[[C]] is in the range of the total heat capacity of liquid water at 1 kg (4186 J/K). If the body is approximately 1 kg of water, the result is consistent."
+      - id: C_summary_large
+        when: "C > 100000"
+        status: ok
+        text:
+          es: "[[C]] grande indica un cuerpo con alta resistencia térmica: necesita [[C]] joules de calor para subir 1 K. Este cuerpo actuará como un buen regulador térmico en sistemas de intercambio de calor."
+          en: "Large [[C]] indicates a body with high thermal resistance: it needs [[C]] joules of heat to rise 1 K. This body will act as a good thermal regulator in heat exchange systems."
+      - id: C_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[C]] es la capacidad calorífica total de este cuerpo: necesita [[C]] joules de calor para subir 1 kelvin de temperatura, independientemente de su masa o material concreto."
+          en: "[[C]] is the total heat capacity of this body: it needs [[C]] joules of heat to rise 1 kelvin in temperature, regardless of its mass or specific material."
+    physical_reading_rules:
+      - id: C_reading_extensive
+        when: "true"
+        status: ok
+        text:
+          es: "[[C]] es una propiedad extensiva: depende tanto del material (a través de c) como de la masa del cuerpo. Dos cuerpos del mismo material pero distinta masa tienen distinta [[C]]. [[C]] = m · c, donde c es el calor específico del material. Un cuerpo con [[C]] grande cambia poco de temperatura ante grandes entradas de calor."
+          en: "[[C]] is an extensive property: it depends on both the material (through c) and the mass of the body. Two bodies of the same material but different mass have different [[C]]. [[C]] = m · c, where c is the specific heat capacity of the material. A body with large [[C]] changes little in temperature for large heat inputs."
+    coherence_rules:
+      - id: C_coherence_negative
+        when: "C < 0"
+        status: error
+        text:
+          es: "[[C]] negativa es físicamente imposible para materiales estables. Indica un error de signo en [[Q]] o en [[DeltaT]]. Verificar que DeltaT = T_final - T_inicial y que Q tiene el mismo signo que DeltaT."
+          en: "Negative [[C]] is physically impossible for stable materials. It indicates a sign error in [[Q]] or [[DeltaT]]. Verify that DeltaT = T_final - T_initial and that Q has the same sign as DeltaT."
+      - id: C_coherence_zero
+        when: "C == 0"
+        status: error
+        text:
+          es: "[[C]] nula implica que el cuerpo no necesita energía para cambiar de temperatura, lo cual es físicamente imposible. Revisar los datos de entrada."
+          en: "Zero [[C]] implies the body needs no energy to change temperature, which is physically impossible. Check the input data."
+      - id: C_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[C]] es positiva y coherente con un material termodinámicamente estable. Verificar adicionalmente que [[C]] = m · c usando los datos del material si están disponibles."
+          en: "[[C]] is positive and consistent with a thermodynamically stable material. Additionally verify that [[C]] = m · c using material data if available."
+    model_validity_rules:
+      - id: C_validity_T_range
+        when: "true"
+        status: ok
+        text:
+          es: "[[C]] se ha calculado asumiendo que es constante en el rango de temperatura del proceso. Para variaciones de temperatura superiores a 100 K o para materiales cerca del cero absoluto, [[C]] puede variar significativamente con T y el valor calculado es un promedio del rango ensayado."
+          en: "[[C]] has been calculated assuming it is constant over the process temperature range. For temperature variations above 100 K or for materials near absolute zero, [[C]] can vary significantly with T and the calculated value is an average over the tested range."
+    graph_rules:
+      - id: C_graph_slope
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica [[Q]] vs [[DeltaT]], [[C]] es la pendiente de la recta que pasa por el origen. Un cuerpo con mayor [[C]] tiene una recta más empinada: necesita más calor para el mismo cambio de temperatura. En la gráfica [[C]] vs masa m, [[C]] crece linealmente con m con pendiente igual al calor específico c del material."
+          en: "In the [[Q]] vs [[DeltaT]] graph, [[C]] is the slope of the line passing through the origin. A body with larger [[C]] has a steeper line: it needs more heat for the same temperature change. In the [[C]] vs mass m graph, [[C]] grows linearly with m with slope equal to the specific heat capacity c of the material."
+    likely_errors:
+      - id: C_error_confuse_c
+        when: "true"
+        status: ok
+        text:
+          es: "Error frecuente: confundir [[C]] (J/K, extensiva, propiedad del cuerpo) con c (J/(kg·K), intensiva, propiedad del material). [[C]] depende de la masa; c no. Para comparar materiales, usar c. Para calcular el calor de un cuerpo específico, usar [[C]] o m · c."
+          en: "Common error: confusing [[C]] (J/K, extensive, body property) with c (J/(kg·K), intensive, material property). [[C]] depends on mass; c does not. To compare materials, use c. To calculate the heat of a specific body, use [[C]] or m · c."
+    next_step_rules:
+      - id: C_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[C]] determinada, calcular el calor necesario para cualquier cambio de temperatura del cuerpo como [[Q]] = [[C]] · [[DeltaT]]. En calorimetría, [[C]] es el peso relativo del cuerpo en la temperatura de equilibrio: mayor [[C]] implica mayor influencia sobre la temperatura final."
+          en: "With [[C]] determined, calculate the heat needed for any temperature change of the body as [[Q]] = [[C]] · [[DeltaT]]. In calorimetry, [[C]] is the relative weight of the body in the equilibrium temperature: larger [[C]] implies greater influence over the final temperature."
+
+  Q:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Calor intercambiado por el cuerpo durante el proceso; variable de proceso proporcional a C y DeltaT."
+      en: "Heat exchanged by the body during the process; process variable proportional to C and DeltaT."
+    summary_rules:
+      - id: Q_summary_positive
+        when: "Q > 0"
+        status: ok
+        text:
+          es: "[[Q]] positivo: el cuerpo ha absorbido [[Q]] joules del entorno y su temperatura ha subido [[DeltaT]] kelvin. La fuente de ese calor puede ser un cuerpo más caliente en contacto, radiación absorbida, o trabajo eléctrico."
+          en: "Positive [[Q]]: the body has absorbed [[Q]] joules from the surroundings and its temperature has risen [[DeltaT]] kelvin. The source of that heat can be a hotter body in contact, absorbed radiation, or electrical work."
+      - id: Q_summary_negative
+        when: "Q < 0"
+        status: ok
+        text:
+          es: "[[Q]] negativo: el cuerpo ha cedido [[Q]] joules al entorno y su temperatura ha bajado [[DeltaT]] kelvin."
+          en: "Negative [[Q]]: the body has released [[Q]] joules to the surroundings and its temperature has fallen [[DeltaT]] kelvin."
+      - id: Q_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q]] es el calor intercambiado por el cuerpo, calculado como [[Q]] = [[C]] · [[DeltaT]]. Su signo indica la dirección del flujo de calor."
+          en: "[[Q]] is the heat exchanged by the body, calculated as [[Q]] = [[C]] · [[DeltaT]]. Its sign indicates the direction of heat flow."
+    physical_reading_rules:
+      - id: Q_reading_proportionality
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q]] es proporcional a [[DeltaT]] con constante de proporcionalidad [[C]]. Para el mismo cuerpo, duplicar [[DeltaT]] duplica [[Q]]. Para la misma [[DeltaT]], un cuerpo con el doble de [[C]] necesita el doble de calor."
+          en: "[[Q]] is proportional to [[DeltaT]] with proportionality constant [[C]]. For the same body, doubling [[DeltaT]] doubles [[Q]]. For the same [[DeltaT]], a body with twice the [[C]] needs twice the heat."
+    coherence_rules:
+      - id: Q_coherence_sign_mismatch
+        when: "Q > 0 && DeltaT < 0"
+        status: error
+        text:
+          es: "Incoherencia: [[Q]] positivo (calor absorbido) con [[DeltaT]] negativo (temperatura bajando). Si el cuerpo absorbe calor, su temperatura debe subir. Revisar signos de [[Q]] y [[DeltaT]]."
+          en: "Inconsistency: positive [[Q]] (heat absorbed) with negative [[DeltaT]] (temperature falling). If the body absorbs heat, its temperature must rise. Check signs of [[Q]] and [[DeltaT]]."
+      - id: Q_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Los signos de [[Q]] y [[DeltaT]] son coherentes: ambos positivos (calentamiento) o ambos negativos (enfriamiento)."
+          en: "The signs of [[Q]] and [[DeltaT]] are consistent: both positive (heating) or both negative (cooling)."
+    model_validity_rules:
+      - id: Q_validity_no_phase_change
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q]] = [[C]] · [[DeltaT]] es válido mientras el cuerpo no cruce ninguna transición de fase entre su temperatura inicial y final. Si cruza una, el calor total incluye además el calor latente de la transición y la fórmula simple no es suficiente."
+          en: "[[Q]] = [[C]] · [[DeltaT]] is valid as long as the body does not cross any phase transition between its initial and final temperature. If it does, the total heat also includes the latent heat of the transition and the simple formula is not sufficient."
+    graph_rules:
+      - id: Q_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica [[Q]] vs [[DeltaT]], [[Q]] es la ordenada del punto correspondiente al proceso del cuerpo. La pendiente de la recta que une el origen con ese punto es [[C]]. Todos los procesos del mismo cuerpo caen sobre la misma recta de pendiente [[C]]."
+          en: "In the [[Q]] vs [[DeltaT]] graph, [[Q]] is the ordinate of the point corresponding to the body's process. The slope of the line connecting the origin to that point is [[C]]. All processes of the same body fall on the same line of slope [[C]]."
+    likely_errors:
+      - id: Q_error_sign
+        when: "true"
+        status: ok
+        text:
+          es: "Error frecuente: calcular [[DeltaT]] como valor absoluto de la diferencia de temperaturas, obteniendo [[Q]] siempre positivo. Un cuerpo que se enfría tiene [[DeltaT]] negativo y [[Q]] negativo. Respetar el convenio DeltaT = T_final - T_inicial garantiza el signo correcto."
+          en: "Common error: calculating [[DeltaT]] as the absolute value of the temperature difference, always getting positive [[Q]]. A body that cools has negative [[DeltaT]] and negative [[Q]]. Respecting the convention DeltaT = T_final - T_initial ensures the correct sign."
+    next_step_rules:
+      - id: Q_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[Q]] calculado, verificar que tiene el mismo signo que [[DeltaT]]. Si el cuerpo forma parte de un sistema calorimétrico, incluir [[Q]] en el balance de suma de calores igual a cero con su signo correcto."
+          en: "With [[Q]] calculated, verify it has the same sign as [[DeltaT]]. If the body is part of a calorimetric system, include [[Q]] in the zero-sum heat balance with its correct sign."
+
+  DeltaT:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Variación de temperatura del cuerpo durante el proceso; determina junto con C el calor intercambiado."
+      en: "Temperature change of the body during the process; together with C it determines the exchanged heat."
+    summary_rules:
+      - id: DeltaT_summary_positive
+        when: "DeltaT > 0"
+        status: ok
+        text:
+          es: "[[DeltaT]] positivo: el cuerpo se ha calentado [[DeltaT]] kelvin. Ha absorbido [[Q]] = [[C]] · [[DeltaT]] joules del entorno."
+          en: "Positive [[DeltaT]]: the body has warmed up [[DeltaT]] kelvin. It has absorbed [[Q]] = [[C]] · [[DeltaT]] joules from the surroundings."
+      - id: DeltaT_summary_negative
+        when: "DeltaT < 0"
+        status: ok
+        text:
+          es: "[[DeltaT]] negativo: el cuerpo se ha enfriado [[DeltaT]] kelvin. Ha cedido [[Q]] = [[C]] · [[DeltaT]] joules al entorno (valor negativo)."
+          en: "Negative [[DeltaT]]: the body has cooled [[DeltaT]] kelvin. It has released [[Q]] = [[C]] · [[DeltaT]] joules to the surroundings (negative value)."
+      - id: DeltaT_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaT]] = T_final - T_inicial es la variación de temperatura del cuerpo. Su signo indica si el cuerpo absorbió (positivo) o cedió (negativo) calor."
+          en: "[[DeltaT]] = T_final - T_initial is the temperature change of the body. Its sign indicates whether the body absorbed (positive) or released (negative) heat."
+    physical_reading_rules:
+      - id: DeltaT_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Para la misma cantidad de calor [[Q]], un cuerpo con [[C]] mayor experimenta un [[DeltaT]] menor. Esta relación inversa es la razón por la que los cuerpos con gran capacidad calorífica (como el agua) son buenos reguladores térmicos: absorben o ceden mucho calor con poco cambio de temperatura."
+          en: "For the same amount of heat [[Q]], a body with larger [[C]] experiences smaller [[DeltaT]]. This inverse relationship is why bodies with large heat capacity (like water) are good thermal regulators: they absorb or release much heat with little temperature change."
+    coherence_rules:
+      - id: DeltaT_coherence_sign_Q
+        when: "DeltaT > 0 && Q < 0"
+        status: error
+        text:
+          es: "Incoherencia: [[DeltaT]] positivo (temperatura subió) con [[Q]] negativo (el cuerpo cedió calor). Si la temperatura sube, el cuerpo debe haber absorbido calor. Revisar el convenio de signos."
+          en: "Inconsistency: positive [[DeltaT]] (temperature rose) with negative [[Q]] (body released heat). If temperature rises, the body must have absorbed heat. Check the sign convention."
+      - id: DeltaT_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaT]] y [[Q]] tienen signos coherentes entre sí."
+          en: "[[DeltaT]] and [[Q]] have consistent signs."
+    model_validity_rules:
+      - id: DeltaT_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo Q = [[C]] · [[DeltaT]] es válido mientras [[DeltaT]] no implique cruzar una transición de fase. Para variaciones superiores a 100 K, verificar si [[C]] varía significativamente con T para el material en cuestión."
+          en: "The model Q = [[C]] · [[DeltaT]] is valid as long as [[DeltaT]] does not imply crossing a phase transition. For variations above 100 K, check whether [[C]] varies significantly with T for the material in question."
+    graph_rules:
+      - id: DeltaT_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica [[Q]] vs [[DeltaT]], [[DeltaT]] es la abscisa del punto del proceso. La recta de pendiente [[C]] que pasa por el origen conecta el origen con ese punto. Un [[DeltaT]] mayor con la misma pendiente [[C]] implica mayor [[Q]]."
+          en: "In the [[Q]] vs [[DeltaT]] graph, [[DeltaT]] is the abscissa of the process point. The line of slope [[C]] passing through the origin connects the origin to that point. A larger [[DeltaT]] with the same slope [[C]] implies larger [[Q]]."
+    likely_errors:
+      - id: DeltaT_error_order
+        when: "true"
+        status: ok
+        text:
+          es: "Error frecuente: calcular [[DeltaT]] como T_inicial - T_final en lugar de T_final - T_inicial. El orden importa: invertirlo cambia el signo de [[Q]] e indica un flujo de calor en dirección contraria a la real."
+          en: "Common error: computing [[DeltaT]] as T_initial - T_final instead of T_final - T_initial. Order matters: reversing it changes the sign of [[Q]] and indicates heat flow in the opposite direction to the real one."
+    next_step_rules:
+      - id: DeltaT_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[DeltaT]] y [[C]] conocidos, calcular [[Q]] = [[C]] · [[DeltaT]]. Si el objetivo es alcanzar una [[DeltaT]] específica con un calor disponible dado, despejar [[C]] necesaria como [[C]] = [[Q]] / [[DeltaT]] y comparar con la [[C]] real del cuerpo."
+          en: "With [[DeltaT]] and [[C]] known, calculate [[Q]] = [[C]] · [[DeltaT]]. If the goal is to reach a specific [[DeltaT]] with a given available heat, solve for the required [[C]] as [[C]] = [[Q]] / [[DeltaT]] and compare with the actual [[C]] of the body."
+
+cross_checks:
+  - id: C_consistency
+    check: "C calculada como Q/DeltaT debe coincidir con C = m · c si se conocen la masa y el calor específico del material"
+    action: "Si difieren en más del 5 %, verificar unidades de masa (kg) y de c (J/(kg·K))"
+  - id: Q_DeltaT_sign
+    check: "Q y DeltaT deben tener siempre el mismo signo para un cuerpo sin fuentes internas de energía"
+    action: "Si tienen signos opuestos, hay un error de convenio en uno de los dos: verificar el orden de la resta en DeltaT y el sentido de Q"
+
+error_patterns:
+  - id: confuse_C_and_c
+    description:
+      es: "El alumno usa el calor específico c (J/(kg·K)) como si fuera la capacidad calorífica total C (J/K), ignorando la dependencia con la masa."
+      en: "The student uses the specific heat capacity c (J/(kg·K)) as if it were the total heat capacity C (J/K), ignoring the dependence on mass."
+  - id: DeltaT_wrong_order
+    description:
+      es: "DeltaT calculado como T_inicial - T_final en lugar de T_final - T_inicial, invirtiendo el signo de Q."
+      en: "DeltaT computed as T_initial - T_final instead of T_final - T_initial, inverting the sign of Q."
+  - id: C_negative_from_sign_error
+    description:
+      es: "C calculada como negativa debido a un error de signo en Q o DeltaT, en lugar de identificar el error."
+      en: "C calculated as negative due to a sign error in Q or DeltaT, instead of identifying the error."
+
+graph_binding:
+  tipo: Coord
+  eje_x: DeltaT
+  eje_y: Q
+  magnitud_estrella: C
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+      - summary
+      - likely_errors
+  extended_mode:
+    show_all: true

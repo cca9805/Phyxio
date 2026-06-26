@@ -1,0 +1,87 @@
+const e=`id: dielectricos
+
+nombre:
+  es: Dielectricos
+  en: Dielectrics
+
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: electrostatica
+parent_id: aplicaciones
+ruta_relativa: fisica-clasica/electromagnetismo/electrostatica/aplicaciones/dielectricos
+orden: 292520
+type: leaf
+
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+
+icon: "📘"
+graficos:
+  - Coord
+
+physical_role:
+  es: concepto físico
+  en: physical concept
+
+descripcion: "Materiales que modifican el campo eléctrico al polarizarse en su interior."
+description_en: "Materials that modify the electric field by becoming polarised internally."
+
+tags:
+  es:
+    - dieléctrico
+    - permitividad
+    - polarización
+    - campo eléctrico
+    - condensador
+    - constante dieléctrica
+  en:
+    - dielectric
+    - permittivity
+    - polarisation
+    - electric field
+    - capacitor
+    - dielectric constant
+
+prerequisitos:
+  - fisica-clasica/electromagnetismo/electrostatica/aplicaciones/condensadores
+
+dificultad: 3
+tiempo_estimado_min: 50
+
+representacion_dominante: Coord
+magnitud_dominante: epsilon_r
+
+pregunta_fisica_central:
+  es: "¿Por qué la presencia de un dieléctrico entre las placas de un condensador aumenta su capacidad y qué ocurre microscópicamente con el campo eléctrico?"
+  en: "Why does placing a dielectric between capacitor plates increase its capacitance and what happens microscopically to the electric field?"
+
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

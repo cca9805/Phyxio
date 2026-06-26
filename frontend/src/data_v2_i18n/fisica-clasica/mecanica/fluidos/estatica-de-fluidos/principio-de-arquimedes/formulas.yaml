@@ -1,0 +1,103 @@
+version: 5
+id: principio-de-arquimedes
+formulas:
+  - id: ley_arquimedes
+    title:
+      es: Ley de Arquímedes
+      en: Archimedes' Law
+    equation: E = rho_f * g * V_des
+    latex: E = \rho_f \cdot g \cdot V_{des}
+    rearrangements:
+      - target: E
+        equation: rho_f * g * V_des
+        latex: \rho_f \cdot g \cdot V_{des}
+      - target: V_des
+        equation: E / (rho_f * g)
+        latex: \frac{E}{\rho_f \cdot g}
+      - target: rho_f
+        equation: E / (g * V_des)
+        latex: \frac{E}{g \cdot V_{des}}
+    category: mecanica-fluidos
+    relation_type: ley-fundamental
+    physical_meaning:
+      es: El empuje es igual al peso del volumen de fluido desalojado.
+      en: Buoyancy is equal to the weight of the displaced fluid volume.
+    constraints: [fluido-en-reposo, campo-gravitatorio-uniforme]
+    validity:
+      es: Estática de fluidos incompresibles.
+      en: Incompressible fluid statics.
+    dimension_check: "[M L T^-2] = [M L^-3] * [L T^-2] * [L^3] = [M L T^-2]"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: [principio-de-arquimedes, flotacion]
+    interpretation_tags: [empuje, fluido, volumen]
+    result_semantics:
+      target: E
+      description:
+        es: Fuerza de empuje ascendente.
+        en: Upward buoyant force.
+    domain_checks:
+      - variable: rho_f
+        min: 0
+      - variable: V_des
+        min: 0
+    coherence_checks:
+      - message: "El empuje no puede ser mayor que el peso del objeto si este flota en equilibrio."
+        condition: "E <= W"
+    graph_implications:
+      es: Determina la longitud de la flecha azul hacia arriba en el DCL.
+      en: Determines the length of the upward blue arrow in the DCL.
+    pedagogical_triggers:
+      es: "¿Qué pasaría si la densidad del fluido fuera mayor?"
+      en: "What would happen if the fluid density were higher?"
+
+  - id: peso_aparente
+    title:
+      es: Peso Aparente
+      en: Apparent Weight
+    equation: W_ap = W - E
+    latex: W_{ap} = W - E
+    rearrangements:
+      - target: W_ap
+        equation: W - E
+        latex: W - E
+      - target: E
+        equation: W - W_ap
+        latex: W - W_{ap}
+    category: mecanica-fluidos
+    relation_type: balance-fuerzas
+    physical_meaning:
+      es: Peso neto resultante tras restar la fuerza de flotación al peso real.
+      en: Resulting net weight after subtracting the buoyant force from the real weight.
+    constraints: [cuerpo-sumergido]
+    validity:
+      es: Estática y equilibrio de fuerzas.
+      en: Statics and force balance.
+    dimension_check: "[M L T^-2] = [M L T^-2] - [M L T^-2]"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: [principio-de-arquimedes]
+    interpretation_tags: [peso, empuje, equilibrio]
+    result_semantics:
+      target: W_ap
+      description:
+        es: Peso percibido bajo el agua.
+        en: Perceived weight underwater.
+    domain_checks: []
+    coherence_checks:
+      - message: "Si el peso aparente es negativo, el cuerpo tiende a subir."
+        condition: "W_ap >= 0"
+    graph_implications:
+      es: Representa la fuerza resultante hacia abajo.
+      en: Represents the downward net force.
+    pedagogical_triggers:
+      es: "¿Por qué nos sentimos más ligeros en una piscina?"
+      en: "Why do we feel lighter in a swimming pool?"
+
+ui:
+  default_formula: ley_arquimedes
+  groups:
+    - title:
+        es: Relaciones Principales
+        en: Main Relations
+      items: [ley_arquimedes, peso_aparente]

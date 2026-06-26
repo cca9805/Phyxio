@@ -1,0 +1,771 @@
+version: 5.0.0
+id: ley-de-faraday
+leaf_id: ley-de-faraday
+nombre:
+  es: Ley de faraday
+  en: Faraday's Law
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: induccion-electromagnetica
+  parent_id: induccion-electromagnetica
+  ruta_relativa: fisica-clasica/electromagnetismo/induccion-electromagnetica/ley-de-faraday
+  orden: 2100200
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - ley_faraday_media
+  - tasa_cambio_flujo
+  - ley_faraday_tasa
+  - flujo_uniforme
+  magnitudes:
+  - epsilon_ind
+  - cambio_de_flujo_magnetico
+  - intervalo_de_tiempo
+  - rapidez_media_de_cambio_de_flujo
+  - numero_de_espiras
+  - flujo_magnetico
+  - campo_magnetico_perpendicular_efectivo
+  - area_enlazada
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: epsilon_ind
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  epsilon_ind:
+    enabled: true
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: respuesta electrica inducida por cambio de flujo
+      en: electrical response induced by flux change
+    summary_rules:
+    - id: eps_summary
+      when: 'true'
+      status: ok
+      text:
+        es: '[[epsilon_ind]] mide la fem inducida por el cambio de flujo enlazado.'
+        en: '[[epsilon_ind]] measures the emf induced by linked-flux change.'
+    physical_reading_rules:
+    - id: eps_reading
+      when: 'true'
+      status: ok
+      text:
+        es: Mayor modulo de [[epsilon_ind]] indica cambio de flujo mas rapido, mas espiras o ambos.
+        en: Larger [[epsilon_ind]] magnitude indicates faster flux change, more turns, or both.
+    coherence_rules:
+    - id: eps_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: El signo de [[epsilon_ind]] debe oponerse al cambio indicado por [[DeltaPhi_B]].
+        en: The sign of [[epsilon_ind]] must oppose the change indicated by [[DeltaPhi_B]].
+    model_validity_rules:
+    - id: eps_validity
+      when: 'true'
+      status: ok
+      text:
+        es: La lectura media supone que el cambio puede resumirse durante [[Deltat]].
+        en: The average reading assumes the change can be summarized during [[Deltat]].
+    graph_rules:
+    - id: eps_graph
+      when: 'true'
+      status: ok
+      text:
+        es: '[[epsilon_ind]] se grafica contra [[r_Phi]] con pendiente controlada por [[N]].'
+        en: '[[epsilon_ind]] is graphed against [[r_Phi]] with slope controlled by [[N]].'
+    likely_errors:
+    - id: eps_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[epsilon_ind]] con una lectura aislada es un error frecuente: Error tipico: predecir fem con flujo
+          constante.'
+        en: 'A common mistake is to interpret [[epsilon_ind]] in isolation: Typical error: predicting emf from constant flux.'
+    next_step_rules:
+    - id: eps_next
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba [[DeltaPhi_B]], [[Deltat]] y [[N]] antes de interpretar polaridad.
+        en: Check [[DeltaPhi_B]], [[Deltat]], and [[N]] before interpreting polarity.
+    physical_intuition:
+    - id: epsilon_ind_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[epsilon_ind]] describe el estado dinámico.
+        en: Intuitively, [[epsilon_ind]] describes the dynamic state.
+    limiting_cases:
+    - id: epsilon_ind_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[epsilon_ind]].
+        en: Check limiting cases of [[epsilon_ind]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  cambio_de_flujo_magnetico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de DeltaPhi_B
+      en: Result of DeltaPhi_B
+    summary_rules:
+    - id: DeltaPhi_B_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[DeltaPhi_B]] indica la magnitud física principal.
+        en: The result [[DeltaPhi_B]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: DeltaPhi_B_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[DeltaPhi_B]] junto con su unidad y signo.
+        en: Read [[DeltaPhi_B]] with its unit and sign.
+    coherence_rules:
+    - id: DeltaPhi_B_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[DeltaPhi_B]].
+        en: Check the dimensional consistency of [[DeltaPhi_B]]
+    model_validity_rules:
+    - id: DeltaPhi_B_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[DeltaPhi_B]] solo dentro de la validez del modelo.
+        en: Interpret [[DeltaPhi_B]] only within the validity of the model.
+    graph_rules:
+    - id: DeltaPhi_B_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[DeltaPhi_B]] con la lectura gráfica.
+        en: Relate [[DeltaPhi_B]] to the graph.
+    likely_errors:
+    - id: DeltaPhi_B_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[DeltaPhi_B]] con una lectura aislada es un error frecuente; debe interpretarse con el modelo, las
+          unidades y el rango físico.
+        en: A common mistake is to interpret [[DeltaPhi_B]] in isolation; it must be read with the model, units, and physical
+          range.
+    next_step_rules:
+    - id: DeltaPhi_B_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[DeltaPhi_B]], revisa los límites físicos.
+        en: After obtaining [[DeltaPhi_B]], review the physical limits.
+    physical_intuition:
+    - id: DeltaPhi_B_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[DeltaPhi_B]] describe el estado dinámico.
+        en: Intuitively, [[DeltaPhi_B]] describes the dynamic state.
+    limiting_cases:
+    - id: DeltaPhi_B_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[DeltaPhi_B]].
+        en: Check limiting cases of [[DeltaPhi_B]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  intervalo_de_tiempo:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de Deltat
+      en: Result of Deltat
+    summary_rules:
+    - id: Deltat_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[Deltat]] indica la magnitud física principal.
+        en: The result [[Deltat]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: Deltat_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[Deltat]] junto con su unidad y signo.
+        en: Read [[Deltat]] with its unit and sign.
+    coherence_rules:
+    - id: Deltat_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[Deltat]].
+        en: Check the dimensional consistency of [[Deltat]]
+    model_validity_rules:
+    - id: Deltat_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[Deltat]] solo dentro de la validez del modelo.
+        en: Interpret [[Deltat]] only within the validity of the model.
+    graph_rules:
+    - id: Deltat_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[Deltat]] con la lectura gráfica.
+        en: Relate [[Deltat]] to the graph.
+    likely_errors:
+    - id: Deltat_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[Deltat]] con una lectura aislada es un error frecuente; debe interpretarse con el modelo, las unidades
+          y el rango físico.
+        en: A common mistake is to interpret [[Deltat]] in isolation; it must be read with the model, units, and physical
+          range.
+    next_step_rules:
+    - id: Deltat_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[Deltat]], revisa los límites físicos.
+        en: After obtaining [[Deltat]], review the physical limits.
+    physical_intuition:
+    - id: Deltat_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[Deltat]] describe el estado dinámico.
+        en: Intuitively, [[Deltat]] describes the dynamic state.
+    limiting_cases:
+    - id: Deltat_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[Deltat]].
+        en: Check limiting cases of [[Deltat]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_de_espiras:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de N
+      en: Result of N
+    summary_rules:
+    - id: N_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[N]] indica la magnitud física principal.
+        en: The result [[N]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: N_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[N]] junto con su unidad y signo.
+        en: Read [[N]] with its unit and sign.
+    coherence_rules:
+    - id: N_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[N]].
+        en: Check the dimensional consistency of [[N]]
+    model_validity_rules:
+    - id: N_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[N]] solo dentro de la validez del modelo.
+        en: Interpret [[N]] only within the validity of the model.
+    graph_rules:
+    - id: N_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[N]] con la lectura gráfica.
+        en: Relate [[N]] to the graph.
+    likely_errors:
+    - id: N_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[N]] con una lectura aislada es un error frecuente; debe interpretarse con el modelo, las unidades
+          y el rango físico.
+        en: A common mistake is to interpret [[N]] in isolation; it must be read with the model, units, and physical range.
+    next_step_rules:
+    - id: N_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[N]], revisa los límites físicos.
+        en: After obtaining [[N]], review the physical limits.
+    physical_intuition:
+    - id: N_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[N]] describe el estado dinámico.
+        en: Intuitively, [[N]] describes the dynamic state.
+    limiting_cases:
+    - id: N_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[N]].
+        en: Check limiting cases of [[N]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  rapidez_media_de_cambio_de_flujo:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de r_Phi
+      en: Result of r_Phi
+    summary_rules:
+    - id: r_Phi_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[r_Phi]] indica la magnitud física principal.
+        en: The result [[r_Phi]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: r_Phi_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[r_Phi]] junto con su unidad y signo.
+        en: Read [[r_Phi]] with its unit and sign.
+    coherence_rules:
+    - id: r_Phi_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[r_Phi]].
+        en: Check the dimensional consistency of [[r_Phi]]
+    model_validity_rules:
+    - id: r_Phi_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[r_Phi]] solo dentro de la validez del modelo.
+        en: Interpret [[r_Phi]] only within the validity of the model.
+    graph_rules:
+    - id: r_Phi_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[r_Phi]] con la lectura gráfica.
+        en: Relate [[r_Phi]] to the graph.
+    likely_errors:
+    - id: r_Phi_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[r_Phi]] con una lectura aislada es un error frecuente; debe interpretarse con el modelo, las unidades
+          y el rango físico.
+        en: A common mistake is to interpret [[r_Phi]] in isolation; it must be read with the model, units, and physical range.
+    next_step_rules:
+    - id: r_Phi_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[r_Phi]], revisa los límites físicos.
+        en: After obtaining [[r_Phi]], review the physical limits.
+    physical_intuition:
+    - id: r_Phi_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[r_Phi]] describe el estado dinámico.
+        en: Intuitively, [[r_Phi]] describes the dynamic state.
+    limiting_cases:
+    - id: r_Phi_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[r_Phi]].
+        en: Check limiting cases of [[r_Phi]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  flujo_magnetico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de Phi_B
+      en: Result of Phi_B
+    summary_rules:
+    - id: Phi_B_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[Phi_B]] indica la magnitud física principal.
+        en: The result [[Phi_B]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: Phi_B_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[Phi_B]] junto con su unidad y signo.
+        en: Read [[Phi_B]] with its unit and sign.
+    coherence_rules:
+    - id: Phi_B_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[Phi_B]].
+        en: Check the dimensional consistency of [[Phi_B]]
+    model_validity_rules:
+    - id: Phi_B_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[Phi_B]] solo dentro de la validez del modelo.
+        en: Interpret [[Phi_B]] only within the validity of the model.
+    graph_rules:
+    - id: Phi_B_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[Phi_B]] con la lectura gráfica.
+        en: Relate [[Phi_B]] to the graph.
+    likely_errors:
+    - id: Phi_B_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[Phi_B]] con una lectura aislada es un error frecuente; debe interpretarse con el modelo, las unidades
+          y el rango físico.
+        en: A common mistake is to interpret [[Phi_B]] in isolation; it must be read with the model, units, and physical range.
+    next_step_rules:
+    - id: Phi_B_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[Phi_B]], revisa los límites físicos.
+        en: After obtaining [[Phi_B]], review the physical limits.
+    physical_intuition:
+    - id: Phi_B_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[Phi_B]] describe el estado dinámico.
+        en: Intuitively, [[Phi_B]] describes the dynamic state.
+    limiting_cases:
+    - id: Phi_B_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[Phi_B]].
+        en: Check limiting cases of [[Phi_B]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  campo_magnetico_perpendicular_efectivo:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de B_perp
+      en: Result of B_perp
+    summary_rules:
+    - id: B_perp_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[B_perp]] indica la magnitud física principal.
+        en: The result [[B_perp]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: B_perp_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[B_perp]] junto con su unidad y signo.
+        en: Read [[B_perp]] with its unit and sign.
+    coherence_rules:
+    - id: B_perp_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[B_perp]].
+        en: Check the dimensional consistency of [[B_perp]]
+    model_validity_rules:
+    - id: B_perp_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[B_perp]] solo dentro de la validez del modelo.
+        en: Interpret [[B_perp]] only within the validity of the model.
+    graph_rules:
+    - id: B_perp_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[B_perp]] con la lectura gráfica.
+        en: Relate [[B_perp]] to the graph.
+    likely_errors:
+    - id: B_perp_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[B_perp]] con una lectura aislada es un error frecuente; debe interpretarse con el modelo, las unidades
+          y el rango físico.
+        en: A common mistake is to interpret [[B_perp]] in isolation; it must be read with the model, units, and physical
+          range.
+    next_step_rules:
+    - id: B_perp_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[B_perp]], revisa los límites físicos.
+        en: After obtaining [[B_perp]], review the physical limits.
+    physical_intuition:
+    - id: B_perp_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[B_perp]] describe el estado dinámico.
+        en: Intuitively, [[B_perp]] describes the dynamic state.
+    limiting_cases:
+    - id: B_perp_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[B_perp]].
+        en: Check limiting cases of [[B_perp]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  area_enlazada:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de A
+      en: Result of A
+    summary_rules:
+    - id: A_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[A]] indica la magnitud física principal.
+        en: The result [[A]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: A_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[A]] junto con su unidad y signo.
+        en: Read [[A]] with its unit and sign.
+    coherence_rules:
+    - id: A_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[A]].
+        en: Check the dimensional consistency of [[A]]
+    model_validity_rules:
+    - id: A_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[A]] solo dentro de la validez del modelo.
+        en: Interpret [[A]] only within the validity of the model.
+    graph_rules:
+    - id: A_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[A]] con la lectura gráfica.
+        en: Relate [[A]] to the graph.
+    likely_errors:
+    - id: A_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[A]] con una lectura aislada es un error frecuente; debe interpretarse con el modelo, las unidades
+          y el rango físico.
+        en: A common mistake is to interpret [[A]] in isolation; it must be read with the model, units, and physical range.
+    next_step_rules:
+    - id: A_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[A]], revisa los límites físicos.
+        en: After obtaining [[A]], review the physical limits.
+    physical_intuition:
+    - id: A_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[A]] describe el estado dinámico.
+        en: Intuitively, [[A]] describes the dynamic state.
+    limiting_cases:
+    - id: A_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[A]].
+        en: Check limiting cases of [[A]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

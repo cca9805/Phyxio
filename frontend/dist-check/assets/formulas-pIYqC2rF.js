@@ -1,0 +1,163 @@
+const e=`version: 1
+formulas:
+- id: posicion-angular-definicion
+  target: posicion-angular
+  title:
+    es: Definición de posición angular
+    en: Angular position definition
+  equation: theta = theta_0 + omega_0 * t + 0.5 * alpha * t^2
+  latex: \\theta = \\theta_0 + \\omega_0 t + \\frac{1}{2} \\alpha t^2
+  category: kinematic
+  relation_type: kinematic_relation
+  physical_meaning:
+    es: Describe la ubicación angular del cuerpo en función del tiempo bajo aceleración constante.
+    en: Describes the body's angular location as a function of time under constant acceleration.
+  motivo_no_calculable: null
+  rearrangements:
+  - id: despeje-omega-medio
+    equation: omega_0 = (theta - theta_0 - 0.5 * alpha * t^2) / t
+  constraints:
+  - variable: t
+    condition: t >= 0
+    message:
+      es: El tiempo no puede ser negativo.
+      en: Time cannot be negative.
+  validity:
+    es: Solo válida para aceleración angular constante (MCUA).
+    en: Only valid for constant angular acceleration (MCUA).
+  dimension_check: rad = rad + (rad/s)*s + (rad/s^2)*s^2
+  calculable: true
+  used_in:
+  - magnitudes-angulares
+  - cinematica-rotacional
+  - mapa-conceptual-de-rotacion
+  interpretation_tags:
+  - cinemática
+  - tiempo
+  result_semantics:
+    target: posicion-angular
+    meaning: Indica la orientación final del cuerpo tras el intervalo de tiempo.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications:
+  - La curva en un gráfico de posición vs tiempo es una parábola.
+  pedagogical_triggers:
+  - tip: unidades-radianes
+    message:
+      es: Asegúrate de que todos los ángulos estén en radianes antes de operar.
+      en: Ensure all angles are in radians before operating.
+
+- id: segunda-ley-rotacion
+  target: aceleracion-angular
+  title:
+    es: Segunda ley de Newton para la rotación
+    en: Newton's second law for rotation
+  equation: alpha = tau / I
+  latex: \\sum \\tau = I \\alpha
+  motivo_no_calculable: null
+  rearrangements:
+  - id: despeje-torque
+    equation: tau = I * alpha
+  - id: despeje-inercia
+    equation: I = tau / alpha
+  category: fundamental
+  relation_type: physical_law
+  physical_meaning:
+    es: Relaciona el torque neto aplicado con la aceleración angular resultante, mediado por la inercia del cuerpo.
+    en: Relates applied net torque with resulting angular acceleration, mediated by the body's inertia.
+  constraints:
+  - variable: I
+    condition: I > 0
+    message:
+      es: El momento de inercia debe ser positivo.
+      en: Moment of inertia must be positive.
+  validity:
+    es: Válida para un sólido rígido rotando alrededor de un eje fijo.
+    en: Valid for a rigid body rotating around a fixed axis.
+  dimension_check: rad/s^2 = (N*m) / (kg*m^2)
+  calculable: true
+  used_in:
+  - segunda-ley-rotacional
+  - mapa-conceptual-de-rotacion
+  interpretation_tags:
+  - dinámica
+  - causa-efecto
+  result_semantics:
+    target: aceleracion-angular
+    meaning: Determina la intensidad con la que el sistema cambia su ritmo de giro.
+  domain_checks: []
+  coherence_checks:
+  - type: sign_coherence
+    condition: sign(alpha) == sign(tau)
+    message:
+      es: La aceleración debe tener el mismo signo que el torque neto.
+      en: Acceleration must have the same sign as the net torque.
+  graph_implications:
+  - Un mayor torque aplicado aumenta linealmente la pendiente de la velocidad angular.
+  pedagogical_triggers:
+  - error: confusion-masa-inercia
+    message:
+      es: No usamos la masa m; usa el momento de inercia I para rotaciones.
+      en: We don't use mass m; use moment of inertia I for rotations.
+  - tip: brazo-palanca
+    message:
+      es: Asegúrate de usar el torque neto, no solo una de las fuerzas aplicadas.
+      en: Make sure to use net torque, not just one of the applied forces.
+
+- id: relacion-lineal-angular-v
+  target: velocidad-angular
+  title:
+    es: Velocidad tangencial
+    en: Tangential velocity
+  equation: v = omega * r
+  latex: v = \\omega r
+  motivo_no_calculable: null
+  rearrangements:
+  - id: despeje-omega
+    equation: omega = v / r
+  - id: despeje-radio
+    equation: r = v / omega
+  category: kinematic
+  relation_type: connection_relation
+  physical_meaning:
+    es: Conecta la rapidez angular con la velocidad tangencial de un punto a una distancia r del eje.
+    en: Connects angular speed with the tangential velocity of a point at distance r from the axis.
+  constraints:
+  - variable: r
+    condition: r >= 0
+    message:
+      es: El radio no puede ser negativo.
+      en: Radius cannot be negative.
+  validity:
+    es: Válida para puntos que pertenecen al mismo sólido rígido.
+    en: Valid for points belonging to the same rigid body.
+  dimension_check: m/s = (rad/s) * m
+  calculable: true
+  used_in:
+  - cinematica-rotacional
+  - mapa-conceptual-de-rotacion
+  interpretation_tags:
+  - enlace-cinemático
+  - geometría
+  result_semantics:
+    target: velocidad-angular
+    meaning: Define la rotación necesaria para producir una velocidad lineal dada en el borde.
+  domain_checks: []
+  coherence_checks:
+  - type: non_zero_r_for_v
+    condition: r > 0 or v == 0
+    message:
+      es: En el eje (r=0), la velocidad tangencial debe ser cero.
+      en: At the axis (r=0), tangential velocity must be zero.
+  graph_implications:
+  - Puntos más alejados del eje deben tener vectores de velocidad más largos.
+  pedagogical_triggers:
+  - error: confusion-velocidades
+    message:
+      es: No confundas la velocidad angular (rad/s) con la tangencial (m/s).
+      en: Do not confuse angular velocity (rad/s) with tangential velocity (m/s).
+  - tip: radio-vanguardia
+    message:
+      es: El radio r es la distancia perpendicular desde el eje de rotación.
+      en: The radius r is the perpendicular distance from the rotation axis.
+`;export{e as default};

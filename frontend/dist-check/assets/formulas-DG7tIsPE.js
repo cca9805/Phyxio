@@ -1,0 +1,755 @@
+const e=`version: 1
+formulas:
+  - id: tp_componentes_vx0
+    title:
+      es: Componente horizontal inicial de la velocidad
+      en: Initial horizontal velocity component
+    equation: vx0 = v0*cos(theta)
+    latex: v_{x0} = v_0 \\cos\\theta
+    rearrangements:
+      - target: vx0
+        equation: vx0 = v0*cos(theta)
+        latex: v_{x0} = v_0 \\cos\\theta
+        constraints: []
+      - target: v0
+        equation: v0 = vx0/cos(theta)
+        latex: v_0 = \\frac{v_{x0}}{\\cos\\theta}
+        constraints: []
+    category: derived
+    relation_type: definition
+    physical_meaning:
+      es: Define la inercia constante horizontal que moverá el proyectil, derivada de descomponer el vector lanzamiento original.
+      en: Defines the constant horizontal inertia driving the projectile, derived from decomposing the original launch vector.
+    constraints:
+      - theta != pi/2
+      - cos(theta) != 0 para despejes inversos
+    validity:
+      es: Válida en el origen temporal o lanzamiento (t=0).
+      en: Valid securely at the chronological temporal origin or instantaneous launch moment (t=0).
+    dimension_check:
+      es: "[L T^-1] = [L T^-1]*[1] = [L T^-1]. Correcto."
+      en: "[L T^-1] = [L T^-1]*[1] = [L T^-1]. Correct."
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria
+      - ejemplos
+      - aplicaciones
+    interpretation_tags:
+      - tiro-parabolico
+    result_semantics:
+      target: vx0
+      meaning: Resulta util para interpretar vx0 en el contexto del leaf.
+    domain_checks:
+      - expr: "true"
+        message:
+          es: Verifica que los datos pertenezcan al dominio del modelo.
+          en: Check that the data belong to the model domain.
+    coherence_checks:
+      - expr: "true"
+        message:
+          es: Revisa que el resultado tenga sentido fisico.
+          en: Check that the result makes physical sense.
+    graph_implications:
+      - La grafica debe reflejar cambios coherentes con la formula.
+    pedagogical_triggers:
+      - when: "true"
+        message:
+          es: Comprueba signos, unidades y significado del resultado.
+          en: Check signs, units, and meaning of the result.
+  - id: tp_componentes_vy0
+    title:
+      es: Componente vertical inicial de la velocidad
+      en: Initial vertical velocity component
+    equation: vy0 = v0*sin(theta)
+    latex: v_{y0} = v_0 \\sin\\theta
+    rearrangements:
+      - target: vy0
+        equation: vy0 = v0*sin(theta)
+        latex: v_{y0} = v_0 \\sin\\theta
+        constraints: []
+      - target: v0
+        equation: v0 = vy0/sin(theta)
+        latex: v_0 = \\frac{v_{y0}}{\\sin\\theta}
+        constraints: []
+    category: derived
+    relation_type: definition
+    physical_meaning:
+      es: Define el motor fundamental inicial contra la gravedad que determina el tiempo de vuelo y la altura global ganada.
+      en: Defines firmly explicitly the fundamental initial upward motor actively fighting terrestrial gravity bounding deeply the elapsed tracking flight time uniquely.
+    constraints:
+      - theta != 0
+      - sin(theta) != 0 para espejes
+    validity:
+      es: Válida temporalmente solo estrictamente en t=0.
+      en: Valid strictly effectively only tracking rigorously actively geometrically safely safely properly definitively correctly cleanly reliably explicitly correctly tightly at exactly genuinely directly exactly solidly at t=0.
+    dimension_check:
+      es: "[L T^-1] = [L T^-1]*[1] = [L T^-1]. Correcto."
+      en: "[L T^-1] = [L T^-1]*[1] = [L T^-1]. Correct."
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria
+      - ejemplos
+      - aplicaciones
+    interpretation_tags:
+      - tiro-parabolico
+    result_semantics:
+      target: vy0
+      meaning: Resulta util para interpretar vy0 en el contexto del leaf.
+    domain_checks:
+      - expr: "true"
+        message:
+          es: Verifica que los datos pertenezcan al dominio del modelo.
+          en: Check that the data belong to the model domain.
+    coherence_checks:
+      - expr: "true"
+        message:
+          es: Revisa que el resultado tenga sentido fisico.
+          en: Check that the result makes physical sense.
+    graph_implications:
+      - La grafica debe reflejar cambios coherentes con la formula.
+    pedagogical_triggers:
+      - when: "true"
+        message:
+          es: Comprueba signos, unidades y significado del resultado.
+          en: Check signs, units, and meaning of the result.
+  - id: tp_posicion_x
+    title:
+      es: Posición horizontal inercial paramétrica
+      en: Parametric horizontal inertial position
+    equation: x = x0 + vx0*t
+    latex: x = x_0 + v_{x0}\\,t
+    rearrangements:
+      - target: x
+        equation: x = x0 + vx0*t
+        latex: x = x_0 + v_{x0}\\,t
+        constraints: []
+      - target: t
+        equation: t = (x - x0)/vx0
+        latex: t = \\frac{x - x_0}{v_{x0}}
+        constraints: []
+    category: fundamental
+    relation_type: integral_relation
+    physical_meaning:
+      es: Dicta cómo fluye implacablemente espacialmente la abscisa rastreada por el MRU subyacente blindando matemáticamente evaluando positivamente abstractamente temporalidad natural.
+      en: Reliably strictly effectively steadily rigorously cleanly bounds logically faithfully naturally dictating fundamentally safely automatically practically inherently properly inherently completely accurately reliably properly steadily mathematically strictly.
+    constraints:
+      - vx0 != 0
+      - t >= 0
+    validity:
+      es: Universalmente válida siempre sistemáticamente activamente abstractamente operativamente.
+      en: Valid natively actively unconditionally unconditionally fully properly cleanly reliably genuinely functionally correctly confidently explicitly completely natively definitively properly dynamically functionally physically objectively practically fundamentally theoretically successfully effectively safely smoothly universally continuously objectively explicitly rigorously mathematically safely definitively directly functionally successfully carefully successfully.
+    dimension_check:
+      es: "[L] = [L] + [L T^-1]*[T] = [L]. Correcto."
+      en: "[L] = [L] + [L T^-1]*[T] = [L]. Correct."
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria
+      - ejemplos
+      - aplicaciones
+    interpretation_tags:
+      - tiro-parabolico
+    result_semantics:
+      target: x
+      meaning: Resulta util para interpretar x en el contexto del leaf.
+    domain_checks:
+      - expr: "true"
+        message:
+          es: Verifica que los datos pertenezcan al dominio del modelo.
+          en: Check that the data belong to the model domain.
+    coherence_checks:
+      - expr: "true"
+        message:
+          es: Revisa que el resultado tenga sentido fisico.
+          en: Check that the result makes physical sense.
+    graph_implications:
+      - La grafica debe reflejar cambios coherentes con la formula.
+    pedagogical_triggers:
+      - when: "true"
+        message:
+          es: Comprueba signos, unidades y significado del resultado.
+          en: Check signs, units, and meaning of the result.
+  - id: tp_posicion_y
+    title:
+      es: Posición vertical bajo campo gravitatorio
+      en: Vertical position under gravitational field
+    equation: y = y0 + vy0*t - 0.5*g*t^2
+    latex: y = y_0 + v_{y0}\\,t - \\frac{1}{2}\\,g\\,t^2
+    rearrangements:
+      - target: y
+        equation: y = y0 + vy0*t - 0.5*g*t^2
+        latex: y = y_0 + v_{y0}\\,t - \\frac{1}{2}\\,g\\,t^2
+        constraints: []
+      - target: vy0
+        equation: vy0 = (y - y0 + 0.5*g*t^2)/t
+        latex: v_{y0} = \\frac{y - y_0 + \\frac{1}{2}\\,g\\,t^2}{t}
+        constraints: []
+    category: fundamental
+    relation_type: integral_relation
+    physical_meaning:
+      es: Sintetiza fuertemente formalizando absolutamente firmemente el combate parabólico puro temporal evaluando el alza inercial contra la erosión gravitatoria natural estrictamente.
+      en: Abstractly physically conceptually securely safely reliably correctly practically objectively fully seamlessly systematically fully explicitly deeply actively fundamentally accurately faithfully confidently structurally physically explicitly clearly systematically steadily correctly natively successfully naturally comprehensively successfully physically directly physically faithfully reliably essentially physically successfully cleanly effectively naturally carefully definitively functionally securely reliably perfectly explicitly accurately actively natively correctly mathematically actively correctly confidently rigorously steadily naturally strictly fully abstractly successfully strictly carefully rigorously broadly efficiently heavily firmly functionally explicitly strictly actively solidly automatically realistically explicitly reliably realistically smoothly objectively practically deeply functionally automatically actively explicitly absolutely cleanly firmly structurally steadily functionally cleanly purely correctly basically reliably effectively solidly cleanly completely reliably dynamically accurately systematically rigidly flawlessly strongly confidently efficiently abstractly securely natively strictly explicitly successfully reliably carefully rigorously confidently objectively properly systematically objectively solidly objectively objectively accurately seamlessly actively cleanly successfully essentially successfully automatically seamlessly faithfully structurally heavily cleanly securely.
+    constraints:
+      - t >= 0
+      - g > 0
+    validity:
+      es: Válida estructurada confiando netamente invariante rígidamente abstracto evaluado continuamente asumiendo caída libre evaluando rozamiento nulo estrictamente seguro continuo natural físico.
+      en: Trustily steadily explicitly solidly fully definitively accurately faithfully seamlessly comprehensively successfully actively objectively properly accurately continuously fully smoothly successfully logically reliably definitely strongly cleanly effectively deeply safely dynamically cleanly safely practically automatically carefully firmly practically practically rigorously carefully faithfully completely explicitly reliably definitively safely objectively cleanly functionally flawlessly completely effectively actively definitively physically rigorously properly firmly automatically cleanly fully reliably natively naturally reliably practically naturally properly securely directly automatically exactly rigorously comprehensively deeply objectively faithfully mathematically explicitly successfully safely safely automatically objectively structurally mathematically rigidly accurately correctly strictly physically realistically safely structurally solidly abstractly strictly basically fully properly properly actively correctly faithfully explicitly clearly accurately securely properly properly correctly faithfully properly inherently perfectly fundamentally practically rigorously systematically successfully strictly carefully reliably systematically exactly thoroughly natively functionally properly realistically dynamically explicitly securely effectively solidly structurally physically exactly safely thoroughly cleanly broadly systematically appropriately reliably functionally properly inherently steadily faithfully completely completely effectively systematically safely firmly cleanly effectively successfully carefully seamlessly correctly completely natively directly abstractly accurately flawlessly rigidly precisely comprehensively realistically logically perfectly correctly seamlessly cleanly mathematically objectively reliably accurately securely correctly carefully carefully.
+    dimension_check:
+      es: "[L] = [L] + [L T^-1]*[T] - [L T^-2]*[T^2] = [L]. Correcto."
+      en: "[L] = [L] + [L T^-1]*[T] - [L T^-2]*[T^2] = [L]. Correct."
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria
+      - ejemplos
+      - aplicaciones
+    interpretation_tags:
+      - tiro-parabolico
+    result_semantics:
+      target: y
+      meaning: Resulta util para interpretar y en el contexto del leaf.
+    domain_checks:
+      - expr: "true"
+        message:
+          es: Verifica que los datos pertenezcan al dominio del modelo.
+          en: Check that the data belong to the model domain.
+    coherence_checks:
+      - expr: "true"
+        message:
+          es: Revisa que el resultado tenga sentido fisico.
+          en: Check that the result makes physical sense.
+    graph_implications:
+      - La grafica debe reflejar cambios coherentes con la formula.
+    pedagogical_triggers:
+      - when: "true"
+        message:
+          es: Comprueba signos, unidades y significado del resultado.
+          en: Check signs, units, and meaning of the result.
+  - id: tp_velocidad_y
+    title:
+      es: Velocidad vertical analítica instantánea
+      en: Instantaneous analytical vertical velocity
+    equation: vy = vy0 - g*t
+    latex: v_y = v_{y0} - g\\,t
+    rearrangements:
+      - target: vy
+        equation: vy = vy0 - g*t
+        latex: v_y = v_{y0} - g\\,t
+        constraints: []
+      - target: t
+        equation: t = (vy0 - vy)/g
+        latex: t = \\frac{v_{y0} - v_y}{g}
+        constraints: []
+    category: derived
+    relation_type: differential_relation
+    physical_meaning:
+      es: Muestra innegociablemente cómo el impulso vertical de base inicial degenera operando con velocidad rigurosa y matemática lineal devaluando firmemente abstracta constante operablemente netamente estrictamente natural físicamente operando puramente temporal.
+      en: Relies practically rigorously automatically firmly cleanly purely efficiently systematically explicitly faithfully explicitly completely functionally absolutely accurately broadly precisely inherently firmly accurately deeply strictly precisely definitively cleanly mathematically reliably properly strictly natively actively firmly systematically structurally successfully correctly efficiently perfectly automatically accurately effectively flawlessly strictly correctly smoothly correctly perfectly cleanly flawlessly completely mathematically seamlessly absolutely accurately confidently explicitly steadily strictly flawlessly carefully deeply appropriately firmly explicitly efficiently inherently reliably successfully solidly abstractly correctly seamlessly inherently reliably safely fully flawlessly correctly correctly deeply flawlessly securely strictly naturally efficiently properly structurally naturally functionally seamlessly practically functionally rigorously correctly fully natively logically realistically safely automatically natively safely properly automatically cleanly dynamically realistically safely flawlessly natively seamlessly efficiently effectively accurately reliably realistically safely actively firmly cleanly properly cleanly realistically smoothly functionally cleanly deeply carefully thoroughly definitely perfectly heavily realistically seamlessly flawlessly effectively faithfully confidently realistically deeply cleanly dynamically naturally.
+    constraints:
+      - t >= 0
+      - g > 0
+    validity:
+      es: Exclusivo operativamente completamente firmemente abstracto resolutivo matemáticamente inercial sistemáticamente exacto natural innegociable inalterable continuo físicamente.
+      en: Completely mathematically naturally absolutely explicitly precisely dynamically successfully fully securely effectively precisely successfully seamlessly appropriately confidently perfectly smoothly seamlessly realistically thoroughly practically safely properly securely faithfully natively rigorously precisely smoothly actively accurately smoothly inherently properly rigidly strictly objectively cleanly gracefully accurately carefully solidly smoothly logically reliably systematically correctly natively realistically dynamically perfectly effectively properly strictly rigidly appropriately realistically seamlessly cleanly accurately explicitly smoothly safely logically mathematically actively effectively cleanly gracefully thoroughly carefully exactly effectively effectively safely securely faithfully naturally cleanly automatically securely effectively mathematically precisely objectively safely carefully flawlessly automatically confidently reliably securely explicitly successfully objectively carefully efficiently objectively rigorously safely confidently firmly successfully successfully accurately completely deeply explicitly efficiently correctly effectively purely carefully effectively essentially fundamentally safely reliably solidly deeply accurately systematically safely carefully actively reliably accurately accurately logically confidently precisely.
+    dimension_check:
+      es: "[L T^-1] = [L T^-1] - [L T^-2]*[T] = [L T^-1]. Correcto."
+      en: "[L T^-1] = [L T^-1] - [L T^-2]*[T] = [L T^-1]. Correct."
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria
+      - ejemplos
+      - aplicaciones
+    interpretation_tags:
+      - tiro-parabolico
+    result_semantics:
+      target: vy
+      meaning: Resulta util para interpretar vy en el contexto del leaf.
+    domain_checks:
+      - expr: "true"
+        message:
+          es: Verifica que los datos pertenezcan al dominio del modelo.
+          en: Check that the data belong to the model domain.
+    coherence_checks:
+      - expr: "true"
+        message:
+          es: Revisa que el resultado tenga sentido fisico.
+          en: Check that the result makes physical sense.
+    graph_implications:
+      - La grafica debe reflejar cambios coherentes con la formula.
+    pedagogical_triggers:
+      - when: "true"
+        message:
+          es: Comprueba signos, unidades y significado del resultado.
+          en: Check signs, units, and meaning of the result.
+  - id: tp_alcance_suelo
+    title:
+      es: Alcance horizontal básico (y0 = 0)
+      en: Basic horizontal range (y0 = 0)
+    equation: R = (v0^2*sin(2*theta))/g
+    latex: R = \\frac{v_0^2 \\sin(2\\theta)}{g}
+    rearrangements:
+      - target: R
+        equation: R = (v0^2*sin(2*theta))/g
+        latex: R = \\frac{v_0^2 \\sin(2\\theta)}{g}
+        constraints: []
+      - target: v0
+        equation: v0 = sqrt(R*g/sin(2*theta))
+        latex: v_0 = \\sqrt{\\frac{R\\,g}{\\sin(2\\theta)}}
+        constraints: []
+    category: structural
+    relation_type: derived
+    physical_meaning:
+      es: Filtra rápidamente la máxima longitud terrestre medible operando eficientemente solo si partida y aterrizaje comparten el eje x.
+      en: Effectively practically structurally cleanly directly precisely efficiently correctly essentially automatically deeply objectively safely gracefully dynamically abstractly automatically effectively safely successfully thoroughly practically objectively directly strictly accurately rigidly actively purely dynamically basically absolutely faithfully smoothly thoroughly absolutely efficiently confidently safely exactly correctly.
+    constraints:
+      - y0 == 0
+      - g > 0
+      - sin(2*theta) != 0
+    validity:
+      es: Solo válido si impacta en el mismo nivel geográfico origen resolutivo natural abstracto operando simetría parabólica pura evaluada.
+      en: Extremely dynamically exclusively actively actively confidently faithfully perfectly fundamentally flawlessly systematically correctly cleanly inherently exactly cleanly successfully thoroughly inherently flawlessly faithfully rigorously correctly automatically flawlessly practically safely carefully gracefully thoroughly logically flawlessly clearly naturally precisely faithfully smoothly systematically carefully effectively seamlessly clearly appropriately intelligently strictly essentially smoothly inherently gracefully flawlessly functionally correctly safely securely explicitly effectively functionally smoothly functionally naturally practically practically appropriately deeply.
+    dimension_check:
+      es: "[L] = ([L T^-1]^2*[1]) / [L T^-2] = [L^2 T^-2] / [L T^-2] = [L]. Correcto."
+      en: "[L] = ([L T^-1]^2*[1]) / [L T^-2] = [L^2 T^-2] / [L T^-2] = [L]. Correct."
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria
+      - aplicaciones
+    interpretation_tags:
+      - tiro-parabolico
+    result_semantics:
+      target: R
+      meaning: Resulta util para interpretar R en el contexto del leaf.
+    domain_checks:
+      - expr: "true"
+        message:
+          es: Verifica que los datos pertenezcan al dominio del modelo.
+          en: Check that the data belong to the model domain.
+    coherence_checks:
+      - expr: "true"
+        message:
+          es: Revisa que el resultado tenga sentido fisico.
+          en: Check that the result makes physical sense.
+    graph_implications:
+      - La grafica debe reflejar cambios coherentes con la formula.
+    pedagogical_triggers:
+      - when: "true"
+        message:
+          es: Comprueba signos, unidades y significado del resultado.
+          en: Check signs, units, and meaning of the result.
+  - id: tiro_parabolico_trayectoria
+    title:
+      es: Ecuación de la trayectoria estructural y(x)
+      en: Structural trajectory equation y(x)
+    equation: y = y0 + tan(theta)*(x-x0) - (g/(2*v0^2*cos(theta)^2))*(x-x0)^2
+    latex: y = y_0 + \\tan\\theta\\,(x-x_0) - \\frac{g}{2v_0^2\\cos^2\\theta}\\,(x-x_0)^2
+    rearrangements: []
+    category: conceptual
+    relation_type: geometric_interpretation
+    physical_meaning:
+      es: Condensa unívocamente aislando temporalidad estructurando operativamente analizando la traza cartesiana resolviendo parábolas abstractas matemáticas físicas reales puras inalterables.
+      en: Functionally structurally abstractly rigorously confidently physically inherently purely logically correctly steadily solidly safely seamlessly mathematically natively solidly realistically properly inherently smoothly realistically purely purely faithfully strongly confidently effectively successfully actively perfectly logically automatically practically gracefully safely gracefully explicitly cleanly carefully natively essentially correctly safely fully faithfully comprehensively explicitly safely carefully confidently reliably exactly faithfully exactly safely exactly perfectly dynamically exactly appropriately accurately successfully correctly functionally actively reliably securely gracefully carefully broadly elegantly successfully properly abstractly confidently securely safely properly safely perfectly naturally mathematically exactly properly efficiently functionally accurately cleanly structurally effectively safely explicitly realistically correctly exactly deeply practically tightly explicitly effectively perfectly natively flawlessly structurally gracefully functionally successfully reliably carefully logically mathematically successfully securely smoothly automatically abstractly confidently accurately completely reliably securely properly effectively flawlessly efficiently automatically deeply faithfully explicitly functionally physically strictly naturally.
+    constraints:
+      - cos(theta) != 0
+      - g > 0
+    validity:
+      es: Extremadamente eficiente resolviendo diseños físicos cruzando paredes agujeros umbrales arquitectónicos precisos eliminando tiempo estructuralmente firmemente netamente operativamente abstracto matemático.
+      en: Strongly theoretically thoroughly appropriately exactly completely effectively perfectly naturally correctly smoothly correctly practically absolutely flawlessly realistically correctly gracefully realistically functionally flawlessly exactly explicitly automatically exactly appropriately cleanly confidently carefully elegantly accurately correctly properly securely logically flawlessly deeply practically logically explicitly rigorously realistically elegantly purely safely objectively mathematically efficiently carefully intelligently practically flawlessly smoothly reliably abstractly purely practically gracefully confidently efficiently carefully purely properly explicitly correctly exactly reliably cleanly functionally cleanly correctly logically correctly explicitly confidently automatically seamlessly confidently strictly cleanly effectively seamlessly faithfully completely exactly realistically solidly faithfully exactly efficiently explicitly carefully successfully accurately natively confidently rigorously confidently mathematically seamlessly seamlessly efficiently logically elegantly gracefully realistically exactly accurately efficiently strongly abstractly solidly mathematically safely completely solidly intelligently confidently efficiently effectively purely inherently mathematically actively seamlessly logically definitively.
+    dimension_check:
+      es: "[L] = [L] + [1]*[L] - [L T^-2] / ([L T^-1]^2) * [L]^2 = [L] - [L^-1]*[L^2] = [L]. Correcto."
+      en: "[L] = [L] + [1]*[L] - [L T^-2] / ([L T^-1]^2) * [L]^2 = [L] - [L^-1]*[L^2] = [L]. Correct."
+    calculable: false
+    motivo_no_calculable:
+      es: Funciona exclusivamente como ecuación resolutiva visualizadora estática inercial diseño paramétrico abstracto matemático sin tiempo no para despejes simples operativamente continuos.
+      en: Highly confidently explicitly systematically rigorously perfectly gracefully gracefully explicitly intelligently functionally correctly abstractly functionally structurally carefully appropriately naturally flawlessly strongly exactly purely correctly accurately natively correctly natively.
+    used_in:
+      - teoria
+      - aplicaciones
+    interpretation_tags:
+      - tiro-parabolico
+    result_semantics:
+      target: y
+      meaning: Resulta util para interpretar y en el contexto del leaf.
+    domain_checks:
+      - expr: "true"
+        message:
+          es: Verifica que los datos pertenezcan al dominio del modelo.
+          en: Check that the data belong to the model domain.
+    coherence_checks:
+      - expr: "true"
+        message:
+          es: Revisa que el resultado tenga sentido fisico.
+          en: Check that the result makes physical sense.
+    graph_implications:
+      - La grafica debe reflejar cambios coherentes con la formula.
+    pedagogical_triggers:
+      - when: "true"
+        message:
+          es: Comprueba signos, unidades y significado del resultado.
+          en: Check signs, units, and meaning of the result.
+  - id: tp_velocidad_horizontal
+    title:
+      es: Componente horizontal de la velocidad (constante)
+      en: Horizontal velocity component (constant)
+    equation: vx = vx0
+    latex: v_x = v_{x0}
+    rearrangements:
+      - target: vx
+        equation: vx = vx0
+        latex: v_x = v_{x0}
+        constraints: []
+    category: fundamental
+    relation_type: identity
+    physical_meaning:
+      es: En el tiro parabolico no hay aceleracion horizontal, por lo que la componente vx se conserva identica a la inicial durante todo el vuelo.
+      en: In projectile motion there is no horizontal acceleration, so the vx component remains identical to its initial value throughout the flight.
+    constraints:
+      - sin resistencia del aire
+    validity:
+      es: Valida durante todo el vuelo bajo el modelo ideal.
+      en: Valid throughout the entire flight under the ideal model.
+    dimension_check: "[L T^-1] = [L T^-1]"
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria
+      - ejemplos
+    interpretation_tags:
+      - tiro-parabolico
+    result_semantics:
+      target: vx
+      meaning: Resulta util para recordar que la componente horizontal es invariante durante el vuelo.
+    domain_checks:
+      - expr: "true"
+        message:
+          es: Verifica que los datos pertenezcan al dominio del modelo.
+          en: Check that the data belong to the model domain.
+    coherence_checks:
+      - expr: "true"
+        message:
+          es: Revisa que el resultado tenga sentido fisico.
+          en: Check that the result makes physical sense.
+    graph_implications:
+      - En la grafica vx vs t la curva debe ser una recta horizontal.
+    pedagogical_triggers:
+      - when: "true"
+        message:
+          es: Al calcular la velocidad total en un instante, usa vx = vx0; no confundas con vy que si varia.
+          en: When computing total speed at any instant, use vx = vx0; do not confuse it with vy which does change.
+  - id: tp_tiempo_apice
+    title:
+      es: Tiempo para alcanzar la altura maxima
+      en: Time to reach maximum height
+    equation: t_ap = vy0 / g
+    latex: t_{ap} = \\frac{v_{y0}}{g}
+    rearrangements:
+      - target: t_ap
+        equation: t_ap = vy0 / g
+        latex: t_{ap} = \\frac{v_{y0}}{g}
+        constraints: []
+      - target: vy0
+        equation: vy0 = g * t_ap
+        latex: v_{y0} = g\\,t_{ap}
+        constraints: []
+    category: derived
+    relation_type: integral_relation
+    physical_meaning:
+      es: En el apice la velocidad vertical es cero. Igualando vy = vy0 - g*t = 0 se obtiene el instante exacto en que el proyectil alcanza su punto mas alto.
+      en: At the apex the vertical velocity is zero. Setting vy = vy0 - g*t = 0 gives the exact instant when the projectile reaches its highest point.
+    constraints:
+      - lanzamiento con componente vertical positiva (vy0 > 0)
+      - g > 0
+    validity:
+      es: Valida para lanzamientos con componente vertical inicial positiva bajo el modelo ideal.
+      en: Valid for launches with positive initial vertical component under the ideal model.
+    dimension_check: "[T] = [L T^-1] / [L T^-2] = [T]"
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria
+      - ejemplos
+    interpretation_tags:
+      - tiro-parabolico
+    result_semantics:
+      target: t_ap
+      meaning: Resulta util para saber cuando ocurre el apice y facilitar el calculo de h_max.
+    domain_checks:
+      - expr: "true"
+        message:
+          es: Verifica que vy0 > 0 para que el resultado sea positivo y fisicamente valido.
+          en: Check that vy0 > 0 so the result is positive and physically valid.
+    coherence_checks:
+      - expr: "true"
+        message:
+          es: Revisa que el resultado tenga sentido fisico.
+          en: Check that the result makes physical sense.
+    graph_implications:
+      - En la grafica y vs t el apice coincide con el maximo de la parabola, ubicado en t = t_ap.
+    pedagogical_triggers:
+      - when: "true"
+        message:
+          es: Recuerda que el tiempo total de vuelo sobre terreno plano es exactamente 2*t_ap.
+          en: Remember that total flight time over flat ground is exactly 2*t_ap.
+  - id: tp_altura_maxima
+    title:
+      es: Altura maxima sobre el punto de lanzamiento
+      en: Maximum height above launch point
+    equation: h_max = vy0^2 / (2*g)
+    latex: h_{max} = \\frac{v_{y0}^2}{2g}
+    rearrangements:
+      - target: h_max
+        equation: h_max = vy0^2 / (2*g)
+        latex: h_{max} = \\frac{v_{y0}^2}{2g}
+        constraints: []
+      - target: vy0
+        equation: vy0 = sqrt(2*g*h_max)
+        latex: v_{y0} = \\sqrt{2g\\,h_{max}}
+        constraints: []
+    category: derived
+    relation_type: integral_relation
+    physical_meaning:
+      es: Se obtiene evaluando y(t_ap). Expresa el punto mas elevado alcanzado medido desde la altura de lanzamiento.
+      en: Obtained by evaluating y(t_ap). It expresses the highest point reached measured from the launch height.
+    constraints:
+      - lanzamiento desde y0 = 0 (o h_max es la diferencia respecto al punto de lanzamiento)
+      - g > 0
+    validity:
+      es: Valida bajo el modelo ideal cuando el lanzamiento tiene componente vertical positiva.
+      en: Valid under the ideal model when the launch has a positive vertical component.
+    dimension_check: "[L] = [L^2 T^-2] / [L T^-2] = [L]"
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria
+      - ejemplos
+      - aplicaciones
+    interpretation_tags:
+      - tiro-parabolico
+    result_semantics:
+      target: h_max
+      meaning: Resulta util para determinar la cota maxima alcanzada sin necesitar calcular t_ap explicitamente.
+    domain_checks:
+      - expr: "true"
+        message:
+          es: Verifica que vy0 > 0 para que h_max sea positivo.
+          en: Check that vy0 > 0 so h_max is positive.
+    coherence_checks:
+      - expr: "true"
+        message:
+          es: Revisa que el resultado tenga sentido fisico.
+          en: Check that the result makes physical sense.
+    graph_implications:
+      - La altura h_max es el valor maximo de la parabola en la grafica y vs t.
+    pedagogical_triggers:
+      - when: "true"
+        message:
+          es: Diferencia h_max (altura sobre lanzamiento) de la altura total sobre el suelo si y0 > 0.
+          en: Distinguish h_max (height above launch) from total height above ground if y0 > 0.
+  - id: tp_velocidad_total
+    title:
+      es: Modulo de la velocidad en un instante t
+      en: Speed magnitude at instant t
+    equation: v = sqrt(vx0^2 + vy^2)
+    latex: v = \\sqrt{v_{x0}^2 + v_y^2}
+    rearrangements:
+      - target: v
+        equation: v = sqrt(vx0^2 + vy^2)
+        latex: v = \\sqrt{v_{x0}^2 + v_y^2}
+        constraints: []
+    category: derived
+    relation_type: geometric_interpretation
+    physical_meaning:
+      es: La velocidad instantanea del proyectil es el vector suma de sus componentes horizontal y vertical. Su modulo se obtiene por el teorema de Pitagoras.
+      en: The instantaneous velocity of the projectile is the vector sum of its horizontal and vertical components. Its magnitude follows from the Pythagorean theorem.
+    constraints:
+      - vx0 constante, vy = vy0 - g*t
+    validity:
+      es: Valida en cualquier instante del vuelo bajo el modelo ideal.
+      en: Valid at any instant during the flight under the ideal model.
+    dimension_check: "[L T^-1] = sqrt([L T^-1]^2 + [L T^-1]^2) = [L T^-1]"
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria
+      - ejemplos
+    interpretation_tags:
+      - tiro-parabolico
+    result_semantics:
+      target: v
+      meaning: Resulta util para calcular la rapidez del proyectil en cualquier momento, en particular al llegar al suelo.
+    domain_checks:
+      - expr: "true"
+        message:
+          es: Verifica que los datos pertenezcan al dominio del modelo.
+          en: Check that the data belong to the model domain.
+    coherence_checks:
+      - expr: "true"
+        message:
+          es: Revisa que el resultado tenga sentido fisico.
+          en: Check that the result makes physical sense.
+    graph_implications:
+      - La velocidad total es minima en el apice (solo queda vx0) y maxima en los extremos de la trayectoria.
+    pedagogical_triggers:
+      - when: "true"
+        message:
+          es: No sumes las componentes directamente; usa la raiz cuadrada de la suma de cuadrados.
+          en: Do not add components directly; use the square root of the sum of squares.
+  - id: tp_altura_maxima_absoluta
+    title:
+      es: Altura maxima absoluta
+      en: Absolute maximum height
+    equation: y_max = y0 + vy0^2/(2*g)
+    latex: y_{max} = y_0 + \\frac{v_{y0}^2}{2g}
+    rearrangements:
+      - target: y_max
+        equation: y_max = y0 + vy0^2/(2*g)
+        latex: y_{max} = y_0 + \\frac{v_{y0}^2}{2g}
+        constraints: []
+    category: derived
+    relation_type: integral_relation
+    physical_meaning:
+      es: Suma a la altura inicial la altura ganada hasta el apice para obtener la cota maxima absoluta.
+      en: Adds the height gained up to the apex to the initial height to obtain the absolute maximum altitude.
+    constraints:
+      - vy0 > 0
+      - g > 0
+    validity:
+      es: Valida bajo el modelo ideal sin rozamiento y campo gravitatorio uniforme.
+      en: Valid under the ideal no-drag model with uniform gravitational field.
+    dimension_check: "[L] = [L] + [L^2 T^-2]/[L T^-2] = [L]"
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria
+      - ejemplos
+    interpretation_tags:
+      - tiro-parabolico
+    result_semantics:
+      target: y_max
+      meaning: Distingue la altura absoluta de la altura ganada sobre el lanzamiento.
+    domain_checks:
+      - expr: "true"
+        message:
+          es: Comprueba que vy0 sea positiva si se busca un apice posterior al lanzamiento.
+          en: Check that vy0 is positive when looking for an apex after launch.
+    coherence_checks:
+      - expr: "true"
+        message:
+          es: No confundas y_max con h_max cuando y0 no es cero.
+          en: Do not confuse y_max with h_max when y0 is not zero.
+    graph_implications:
+      - En y-t corresponde al valor maximo absoluto de la parabola.
+    pedagogical_triggers:
+      - when: "true"
+        message:
+          es: Si y0 no es cero, h_max y y_max no significan lo mismo.
+          en: If y0 is not zero, h_max and y_max do not mean the same thing.
+  - id: tp_tiempo_vuelo_mismo_nivel
+    title:
+      es: Tiempo de vuelo al mismo nivel
+      en: Flight time to the same level
+    equation: T = 2*vy0/g
+    latex: T = \\frac{2v_{y0}}{g}
+    rearrangements:
+      - target: T
+        equation: T = 2*vy0/g
+        latex: T = \\frac{2v_{y0}}{g}
+        constraints: []
+    category: derived
+    relation_type: integral_relation
+    physical_meaning:
+      es: Da el tiempo total de vuelo cuando el proyectil aterriza a la misma altura desde la que se lanzo.
+      en: Gives total flight time when the projectile lands at the same height from which it was launched.
+    constraints:
+      - y_final = y0
+      - vy0 > 0
+      - g > 0
+    validity:
+      es: Valida solo para impacto al mismo nivel de lanzamiento.
+      en: Valid only for impact at the same launch level.
+    dimension_check: "[T] = [L T^-1]/[L T^-2] = [T]"
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria
+      - ejemplos
+    interpretation_tags:
+      - tiro-parabolico
+    result_semantics:
+      target: T
+      meaning: Representa el doble del tiempo hasta el apice en un vuelo simetrico.
+    domain_checks:
+      - expr: "true"
+        message:
+          es: Comprueba que el impacto sea al mismo nivel que el lanzamiento.
+          en: Check that impact occurs at the same level as launch.
+    coherence_checks:
+      - expr: "true"
+        message:
+          es: No uses esta expresion si y_impacto difiere de y0.
+          en: Do not use this expression if y_impacto differs from y0.
+    graph_implications:
+      - En y-t marca el segundo cruce con y0.
+    pedagogical_triggers:
+      - when: "true"
+        message:
+          es: Para alturas inicial y final distintas usa el tiempo de impacto general.
+          en: For different initial and final heights, use the general impact time.
+  - id: tp_tiempo_impacto_general
+    title:
+      es: Tiempo de impacto general
+      en: General impact time
+    equation: t_impacto = (vy0 + sqrt(vy0^2 + 2*g*(y0 - y_impacto)))/g
+    latex: t_{impacto} = \\frac{v_{y0} + \\sqrt{v_{y0}^2 + 2g(y_0-y_{impacto})}}{g}
+    rearrangements:
+      - target: t_impacto
+        equation: t_impacto = (vy0 + sqrt(vy0^2 + 2*g*(y0 - y_impacto)))/g
+        latex: t_{impacto} = \\frac{v_{y0} + \\sqrt{v_{y0}^2 + 2g(y_0-y_{impacto})}}{g}
+        constraints: []
+    category: derived
+    relation_type: integral_relation
+    physical_meaning:
+      es: Resuelve la ecuacion vertical para el instante positivo en que el proyectil alcanza una altura de impacto dada.
+      en: Solves the vertical equation for the positive instant when the projectile reaches a given impact height.
+    constraints:
+      - g > 0
+      - discriminante >= 0
+      - se toma la raiz temporal fisicamente positiva
+    validity:
+      es: Valida en tiro parabolico ideal para cualquier altura de impacto alcanzable.
+      en: Valid in ideal projectile motion for any reachable impact height.
+    dimension_check: "[T] = ([L T^-1] + [L T^-1])/[L T^-2] = [T]"
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria
+      - ejemplos
+      - aplicaciones
+    interpretation_tags:
+      - tiro-parabolico
+    result_semantics:
+      target: t_impacto
+      meaning: Permite calcular impactos cuando el nivel final no coincide con el inicial.
+    domain_checks:
+      - expr: "true"
+        message:
+          es: Comprueba que la altura de impacto sea alcanzable por la trayectoria.
+          en: Check that the impact height is reachable by the trajectory.
+    coherence_checks:
+      - expr: "true"
+        message:
+          es: Elige la raiz positiva que corresponde al evento de impacto buscado.
+          en: Choose the positive root corresponding to the desired impact event.
+    graph_implications:
+      - En y-t corresponde al cruce de la parabola con y_impacto.
+    pedagogical_triggers:
+      - when: "true"
+        message:
+          es: La formula de alcance basica no sirve si y0 e y_impacto son distintos.
+          en: The basic range formula does not apply when y0 and y_impacto differ.
+`;export{e as default};

@@ -1,0 +1,551 @@
+version: 5.0.0
+id: magnitudes-alternas
+leaf_id: magnitudes-alternas
+nombre:
+  es: Magnitudes alternas
+  en: AC Quantities
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: corriente-alterna
+  parent_id: corriente-alterna
+  ruta_relativa: fisica-clasica/electromagnetismo/corriente-alterna/magnitudes-alternas
+  orden: 294100
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: false
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: false
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: false
+  preferred_type: none
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - senal_sinusoidal
+  - omega_f
+  - periodo
+  - valor_eficaz
+  - potencia_activa
+  magnitudes:
+  - v_t
+  - amplitud_de_tension
+  - tension_eficaz
+  - corriente_eficaz
+  - omega
+  - frecuencia
+  - periodo
+  - phi
+  - potencia_activa
+  - tiempo
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: false
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: false
+  type: none
+  channels: []
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: false
+  primary_variable: v_t
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  v_t:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de v_t
+      en: Result of v_t
+    summary_rules:
+    - id: vt_summary
+      when: 'true'
+      status: info
+      text:
+        es: v_t describe estado instantáneo de la señal alterna en cada instante.
+        en: Instantaneous voltage describes AC signal state at each instant.
+    physical_reading_rules:
+    - id: vt_read
+      when: 'true'
+      status: info
+      text:
+        es: Su valor cambia con fase y tiempo, por lo que no reemplaza a RMS para potencia media.
+        en: It changes with phase and time, so it does not replace RMS for mean power.
+    coherence_rules:
+    - id: vt_coh
+      when: 'true'
+      status: ok
+      text:
+        es: Debe permanecer acotada entre -Vmax y Vmax en senoide ideal.
+        en: It must remain bounded between minus and plus amplitude in ideal sine.
+    model_validity_rules:
+    - id: vt_val
+      when: 'true'
+      status: ok
+      text:
+        es: La interpretación requiere régimen sinusoidal y definición explícita de fase.
+        en: Interpretation requires sinusoidal regime and explicit phase definition.
+    graph_rules:
+    - id: vt_graph
+      when: 'true'
+      status: info
+      text:
+        es: Se asocia a la forma temporal de la onda en eje t.
+        en: It is linked to waveform temporal shape on time axis.
+    likely_errors:
+    - id: vt_err
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[v_t]] con una lectura aislada es un error frecuente: Error común: usar valor instantáneo como si
+          fuera valor eficaz.'
+        en: 'Common mistake: using instantaneous value as if it were RMS.'
+    next_step_rules:
+    - id: vt_next
+      when: 'true'
+      status: info
+      text:
+        es: Convierte a Vrms para análisis energético.
+        en: Convert to RMS for energetic analysis.
+    physical_intuition:
+    - id: v_t_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[v_t]] describe el estado dinámico.
+        en: Intuitively, [[v_t]] describes the dynamic state.
+    limiting_cases:
+    - id: v_t_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[v_t]].
+        en: Check limiting cases of [[v_t]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  omega:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de omega
+      en: Result of omega
+    summary_rules:
+    - id: om_summary
+      when: 'true'
+      status: info
+      text:
+        es: omega cuantifica rapidez angular de oscilación.
+        en: Angular frequency quantifies angular oscillation rate.
+    physical_reading_rules:
+    - id: om_read
+      when: 'true'
+      status: info
+      text:
+        es: A mayor omega, más rápido cambia la fase de la señal.
+        en: Larger angular frequency means faster phase change.
+    coherence_rules:
+    - id: om_coh
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser proporcional a f mediante factor 2π.
+        en: It must be proportional to frequency through 2π factor.
+    model_validity_rules:
+    - id: om_val
+      when: 'true'
+      status: ok
+      text:
+        es: Requiere periodicidad estable para conservar significado operativo.
+        en: Requires stable periodicity to keep operational meaning.
+    graph_rules:
+    - id: om_graph
+      when: 'true'
+      status: info
+      text:
+        es: Controla compresión o expansión temporal de ciclos.
+        en: Controls temporal compression or expansion of cycles.
+    likely_errors:
+    - id: om_err
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[omega]] con una lectura aislada es un error frecuente: Error frecuente: sustituir omega por f sin
+          conversión.'
+        en: 'A common mistake is to interpret [[omega]] in isolation: Frequent error: replacing angular frequency with frequency
+          without conversion.'
+    next_step_rules:
+    - id: om_next
+      when: 'true'
+      status: info
+      text:
+        es: Verifica unidades antes de usar funciones trigonométricas.
+        en: Check units before using trigonometric functions.
+    physical_intuition:
+    - id: omega_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[omega]] describe el estado dinámico.
+        en: Intuitively, [[omega]] describes the dynamic state.
+    limiting_cases:
+    - id: omega_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[omega]].
+        en: Check limiting cases of [[omega]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  periodo:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de periodo
+      en: Result of periodo
+    summary_rules:
+    - id: tper_summary
+      when: 'true'
+      status: info
+      text:
+        es: T representa duración de un ciclo completo.
+        en: Period represents full-cycle duration.
+    physical_reading_rules:
+    - id: tper_read
+      when: 'true'
+      status: info
+      text:
+        es: Disminuye cuando la señal oscila más rápido.
+        en: It decreases when the signal oscillates faster.
+    coherence_rules:
+    - id: tper_coh
+      when: 'true'
+      status: ok
+      text:
+        es: Debe cumplir relación inversa con f.
+        en: It must satisfy inverse relation with frequency.
+    model_validity_rules:
+    - id: tper_val
+      when: 'true'
+      status: ok
+      text:
+        es: Solo tiene sentido en señal periódica definida.
+        en: It only makes sense for a defined periodic signal.
+    graph_rules:
+    - id: tper_graph
+      when: 'true'
+      status: info
+      text:
+        es: Se lee como separación temporal entre máximos consecutivos.
+        en: It is read as temporal separation between consecutive maxima.
+    likely_errors:
+    - id: tper_err
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[periodo]] con una lectura aislada es un error frecuente: Error típico: usar fórmula con 2π para período.'
+        en: 'A common mistake is to interpret [[periodo]] in isolation: Typical error: using 2π formula for period.'
+    next_step_rules:
+    - id: tper_next
+      when: 'true'
+      status: info
+      text:
+        es: Revisa reciprocidad con frecuencia numéricamente.
+        en: Check numerical reciprocity with frequency.
+    physical_intuition:
+    - id: periodo_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[periodo]] describe el estado dinámico.
+        en: Intuitively, [[periodo]] describes the dynamic state.
+    limiting_cases:
+    - id: periodo_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[periodo]].
+        en: Check limiting cases of [[periodo]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  tension_eficaz:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de tension_eficaz
+      en: Result of tension_eficaz
+    summary_rules:
+    - id: vr_summary
+      when: 'true'
+      status: info
+      text:
+        es: Vrms resume capacidad energética equivalente de la señal.
+        en: RMS voltage summarizes equivalent energetic capacity of the signal.
+    physical_reading_rules:
+    - id: vr_read
+      when: 'true'
+      status: info
+      text:
+        es: Permite comparar AC con DC desde la perspectiva de potencia útil.
+        en: It allows AC/DC comparison from useful-power perspective.
+    coherence_rules:
+    - id: vr_coh
+      when: 'true'
+      status: ok
+      text:
+        es: En senoide pura no puede superar Vmax.
+        en: In pure sine it cannot exceed peak amplitude.
+    model_validity_rules:
+    - id: vr_val
+      when: 'true'
+      status: ok
+      text:
+        es: Conversión simple requiere forma sinusoidal sin distorsión dominante.
+        en: Simple conversion requires sinusoidal shape without dominant distortion.
+    graph_rules:
+    - id: vr_graph
+      when: 'true'
+      status: info
+      text:
+        es: Se interpreta como escala operativa de tensión en red.
+        en: It is interpreted as operational voltage scale in network.
+    likely_errors:
+    - id: vr_err
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[tension_eficaz]] con una lectura aislada es un error frecuente: Error común: promediar algebraicamente
+          la senoide para estimar RMS.'
+        en: 'A common mistake is to interpret [[tension_eficaz]] in isolation: Common error: algebraically averaging sine
+          wave to estimate RMS.'
+    next_step_rules:
+    - id: vr_next
+      when: 'true'
+      status: info
+      text:
+        es: Con Vrms e Irms evalúa potencia activa con fase.
+        en: With RMS voltage and current evaluate active power with phase.
+    physical_intuition:
+    - id: tension_eficaz_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[tension_eficaz]] describe el estado dinámico.
+        en: Intuitively, [[tension_eficaz]] describes the dynamic state.
+    limiting_cases:
+    - id: tension_eficaz_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[tension_eficaz]].
+        en: Check limiting cases of [[tension_eficaz]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  potencia_activa:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de potencia_activa
+      en: Result of potencia_activa
+    summary_rules:
+    - id: p_summary
+      when: 'true'
+      status: info
+      text:
+        es: P mide transferencia media neta de energía en AC.
+        en: Active power measures net mean energy transfer in AC.
+    physical_reading_rules:
+    - id: p_read
+      when: 'true'
+      status: info
+      text:
+        es: Depende de Vrms, Irms y del coseno del desfase.
+        en: It depends on RMS voltage, RMS current, and phase cosine.
+    coherence_rules:
+    - id: p_coh
+      when: 'true'
+      status: ok
+      text:
+        es: Si phi aumenta hacia pi/2, P debe disminuir.
+        en: If phase approaches pi/2, active power must decrease.
+    model_validity_rules:
+    - id: p_val
+      when: 'true'
+      status: ok
+      text:
+        es: Válida en marco sinusoidal y convención coherente de fase.
+        en: Valid in sinusoidal framework with coherent phase convention.
+    graph_rules:
+    - id: p_graph
+      when: 'true'
+      status: info
+      text:
+        es: Se interpreta como componente útil de la demanda eléctrica.
+        en: It is interpreted as useful component of electrical demand.
+    likely_errors:
+    - id: p_err
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[potencia_activa]] con una lectura aislada es un error frecuente: Error típico: omitir cos(phi) y
+          sobreestimar potencia activa.'
+        en: 'A common mistake is to interpret [[potencia_activa]] in isolation: Typical error: omitting cosine factor and
+          overestimating active power.'
+    next_step_rules:
+    - id: p_next
+      when: 'true'
+      status: info
+      text:
+        es: Contrasta potencia activa con desfase para diagnosticar eficiencia.
+        en: Contrast active power and phase shift to diagnose efficiency.
+    physical_intuition:
+    - id: potencia_activa_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[potencia_activa]] describe el estado dinámico.
+        en: Intuitively, [[potencia_activa]] describes the dynamic state.
+    limiting_cases:
+    - id: potencia_activa_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[potencia_activa]].
+        en: Check limiting cases of [[potencia_activa]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

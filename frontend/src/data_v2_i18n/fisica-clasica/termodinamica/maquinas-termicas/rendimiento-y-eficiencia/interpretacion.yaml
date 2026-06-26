@@ -1,0 +1,578 @@
+version: "2.0"
+id: interp-rendimiento-y-eficiencia
+leaf_id: rendimiento-y-eficiencia
+
+nombre:
+  es: Rendimiento y eficiencia de máquinas térmicas
+  en: Efficiency and Performance of Heat Engines
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: maquinas-termicas
+  parent_id: maquinas-termicas
+  ruta_relativa: fisica-clasica/termodinamica/maquinas-termicas/rendimiento-y-eficiencia
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación termodinámica
+    en: Thermodynamic interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_messages: 3
+    show_warnings: true
+
+dependencies:
+  formulas:
+    - rendimiento_termico
+    - balance_termico
+    - rendimiento_calores
+  magnitudes:
+    - eta
+    - Q_H
+    - W_util
+    - Q_C
+    - eta_Carnot
+
+global_context:
+  physical_domain:
+    es: "Termodinámica de máquinas térmicas clásicas que operan en ciclos cerrados entre dos focos a temperaturas distintas"
+    en: "Thermodynamics of classical heat engines operating in closed cycles between two reservoirs at different temperatures"
+  axis_convention:
+    es: "Q_H y Q_C positivos como calores transferidos en valor absoluto; W_util positivo para motor"
+    en: "Q_H and Q_C positive as absolute heat transfers; W_util positive for engine operation"
+  standard_assumptions:
+    - "Ciclo cerrado estacionario"
+    - "Dos focos térmicos a temperaturas fijas"
+    - "Fluido de trabajo con comportamiento termodinámico idealizado"
+  standard_warnings:
+    - "El rendimiento siempre es menor que el límite de Carnot para los mismos focos"
+    - "Las temperaturas deben usarse en kelvin al comparar con el límite de Carnot"
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del gráfico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+  eta:
+    magnitude_type: ratio
+    semantic_role:
+      es: "Rendimiento real del ciclo: fracción del calor absorbido que se transforma en trabajo útil"
+      en: "Actual cycle efficiency: fraction of absorbed heat converted into useful work"
+    summary_rules:
+      - id: eta_summary_high
+        when: "eta > 0.45"
+        status: ok
+        text:
+          es: "[[eta]] indica un rendimiento elevado para un motor real. La máquina transforma más del 45% del calor absorbido en trabajo útil, lo que resulta excepcional en la práctica industrial."
+          en: "[[eta]] indicates a high efficiency for a real engine. The machine converts more than 45% of the absorbed heat into useful work, which is exceptional in industrial practice."
+      - id: eta_summary_moderate
+        condition:
+          variable: eta
+          gte: 0.25
+          lte: 0.45
+        status: ok
+        text:
+          es: "[[eta]] resume un rendimiento moderado, típico de motores de combustión o turbinas industriales. Aproximadamente la mitad o más del calor absorbido se pierde como calor residual cedido al ambiente."
+          en: "[[eta]] summarises a moderate efficiency, typical of combustion engines or industrial turbines. Approximately half or more of the absorbed heat is lost as waste heat rejected to the environment."
+      - id: eta_summary_low
+        when: "eta < 0.25"
+        status: warning
+        text:
+          es: "[[eta]] indica un rendimiento reducido. El ciclo desperdicia más del 75% del calor absorbido como calor residual, lo que sugiere grandes irreversibilidades o un diseño alejado del ciclo ideal."
+          en: "[[eta]] indicates low efficiency. The cycle wastes more than 75% of absorbed heat as rejected heat, suggesting large irreversibilities or a design far from the ideal cycle."
+      - id: eta_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[eta]] resume la fracción del calor absorbido que se convierte en trabajo útil. El rendimiento depende de la diferencia entre Q_H y Q_C según la primera ley, y está acotado superiormente por el límite de Carnot para los mismos focos."
+          en: "[[eta]] summarises the fraction of absorbed heat converted to useful work. Efficiency depends on the difference between Q_H and Q_C from the first law, and is bounded above by the Carnot limit for the same reservoirs."
+    physical_reading_rules:
+      - id: eta_reading_high
+        when: "eta > 0.45"
+        status: ok
+        text:
+          es: "Con este rendimiento, de cada 100 J absorbidos del foco caliente, más de 45 J se transforman en trabajo mecánico disponible. La pérdida obligatoria hacia el foco frío es inferior a 55 J por cada 100 J de entrada."
+          en: "At this efficiency, for every 100 J absorbed from the hot reservoir, more than 45 J are transformed into available mechanical work. The mandatory loss to the cold reservoir is less than 55 J per 100 J of input."
+      - id: eta_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[eta]] mide cuántos julios de trabajo se obtienen por julio de calor absorbido. Un valor de 0.35 significa que 35 julios de trabajo resultan de cada 100 julios de calor, y los 65 restantes se disipan inevitablemente. La segunda ley impone este coste energético residual."
+          en: "[[eta]] measures how many joules of work are obtained per joule of absorbed heat. A value of 0.35 means 35 joules of work result from every 100 joules of heat, and the remaining 65 are inevitably dissipated. The second law imposes this residual energy cost."
+    coherence_rules:
+      - id: eta_coherence_range
+        when: "eta >= 1"
+        status: error
+        text:
+          es: "Un rendimiento mayor o igual a 1 viola la segunda ley de la termodinámica. Verificar que Q_H sea mayor que W_util y que los datos no estén intercambiados."
+          en: "An efficiency greater than or equal to 1 violates the second law of thermodynamics. Verify that Q_H is greater than W_util and that data are not swapped."
+      - id: eta_coherence_negative
+        when: "eta <= 0"
+        status: error
+        text:
+          es: "Un rendimiento nulo o negativo indica que el ciclo no produce trabajo neto. Comprobar que el sistema opera como motor y no como refrigerador."
+          en: "Zero or negative efficiency indicates the cycle produces no net work. Check that the system operates as an engine, not a refrigerator."
+      - id: eta_coherence_ok
+        when: "eta > 0 && eta < 1"
+        status: ok
+        text:
+          es: "El valor de [[eta]] está en el intervalo físicamente permitido. El balance energético es coherente con la primera ley."
+          en: "The value of [[eta]] is within the physically allowed interval. The energy balance is coherent with the first law."
+      - id: eta_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[eta]] esté entre 0 y 1 y que sea menor que el rendimiento de Carnot calculado con las temperaturas de los focos."
+          en: "Verify that [[eta]] is between 0 and 1 and that it is less than the Carnot efficiency calculated from the reservoir temperatures."
+    model_validity_rules:
+      - id: eta_validity_irreversible
+        when: "eta > 0.70"
+        status: warning
+        text:
+          es: "Para rendimientos superiores al 70%, verificar que las temperaturas de los focos justifican ese límite de Carnot. En máquinas reales con ciclos irreversibles, alcanzar ese valor es extremadamente difícil."
+          en: "For efficiencies above 70%, verify that the reservoir temperatures justify that Carnot limit. In real machines with irreversible cycles, reaching that value is extremely difficult."
+      - id: eta_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo es válido para ciclos estacionarios con dos focos bien definidos. No aplica a máquinas de combustión interna con procesos transitorios complejos sin corrección por irreversibilidades."
+          en: "The model is valid for stationary cycles with two well-defined reservoirs. It does not apply to internal combustion engines with complex transient processes without irreversibility corrections."
+    graph_rules:
+      - id: eta_graph_steep
+        when: "eta > 0.40"
+        status: ok
+        text:
+          es: "En el diagrama W_util frente a Q_H, el punto calculado se sitúa por encima de la bisectriz del 40%, indicando un rendimiento elevado. La pendiente visual desde el origen supera 0.40."
+          en: "In the W_util vs Q_H diagram, the calculated point lies above the 40% bisector, indicating high efficiency. The visual slope from the origin exceeds 0.40."
+      - id: eta_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico de rendimiento frente a la razón Q_C/Q_H, el punto calculado se aleja de la ordenada 1 (rendimiento nulo) y se acerca al límite de Carnot. Una posición más alta en el eje vertical indica mayor aprovechamiento del calor."
+          en: "In the efficiency vs Q_C/Q_H ratio graph, the calculated point moves away from ordinate 1 (zero efficiency) and approaches the Carnot limit. A higher position on the vertical axis indicates greater heat utilization."
+    likely_errors:
+      - id: eta_error_celsius
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente al comparar con el límite de Carnot: usar temperaturas en Celsius en lugar de kelvin sobreestima el rendimiento máximo. Añadir 273.15 a cada temperatura antes de calcular el cociente."
+          en: "Frequent error when comparing with the Carnot limit: using Celsius instead of kelvin overestimates the maximum efficiency. Add 273.15 to each temperature before computing the ratio."
+      - id: eta_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Confundir [[eta]] con potencia: un motor con rendimiento de 0.40 puede tener baja potencia si el ciclo es lento. [[eta]] mide la calidad de la conversión, no su rapidez. Verificar que se usa [[W_util]] y no la potencia en la fórmula."
+          en: "Confusing [[eta]] with power: an engine with efficiency 0.40 can have low power if the cycle is slow. [[eta]] measures conversion quality, not its speed. Verify that [[W_util]] is used, not power, in the formula."
+    next_step_rules:
+      - id: eta_next_compare_carnot
+        when: "eta > 0"
+        status: ok
+        text:
+          es: "Comparar [[eta]] con el rendimiento de Carnot calculado con las temperaturas de los focos. La diferencia mide el trabajo perdido por irreversibilidades. Consultar el leaf de Ciclo de Carnot para el límite teórico."
+          en: "Compare [[eta]] with the Carnot efficiency calculated from the reservoir temperatures. The difference measures work lost to irreversibilities. Consult the Carnot cycle leaf for the theoretical limit."
+      - id: eta_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con el rendimiento calculado, estimar [[Q_C]] usando la fórmula de balance y valorar si el calor residual puede aprovecharse en cogeneración o en un ciclo combinado."
+          en: "With the calculated efficiency, estimate [[Q_C]] using the balance formula and assess whether the waste heat can be exploited in cogeneration or a combined cycle."
+
+  W_util:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Trabajo mecánico neto producido por el ciclo; diferencia entre el calor absorbido y el calor cedido"
+      en: "Net mechanical work produced by the cycle; difference between absorbed and rejected heat"
+    summary_rules:
+      - id: Wutil_summary_positive
+        when: "W_util > 0"
+        status: ok
+        text:
+          es: "[[W_util]] indica que el ciclo opera como motor: produce trabajo mecánico neto. El valor obtenido resume cuánta energía mecánica aprovechable resulta de cada ciclo completo."
+          en: "[[W_util]] indicates the cycle operates as an engine: it produces net mechanical work. The obtained value summarises how much usable mechanical energy results from each complete cycle."
+      - id: Wutil_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[W_util]] resume el trabajo neto disponible para uso externo. Depende de la diferencia entre [[Q_H]] y [[Q_C]] según la primera ley, y determina junto con [[Q_H]] el rendimiento del ciclo."
+          en: "[[W_util]] summarises the net work available for external use. It depends on the difference between [[Q_H]] and [[Q_C]] from the first law, and together with [[Q_H]] determines the cycle efficiency."
+    physical_reading_rules:
+      - id: Wutil_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[W_util]] mide cuánta energía mecánica entrega el motor por ciclo. Un valor mayor indica mayor producción de trabajo por ciclo, pero no implica mayor rendimiento si [[Q_H]] también aumentó proporcionalmente."
+          en: "[[W_util]] measures how much mechanical energy the engine delivers per cycle. A higher value indicates greater work production per cycle, but does not imply greater efficiency if [[Q_H]] also increased proportionally."
+    coherence_rules:
+      - id: Wutil_coherence_exceeds_QH
+        when: "W_util >= Q_H"
+        status: error
+        text:
+          es: "[[W_util]] no puede ser mayor o igual que [[Q_H]]: el trabajo neto no puede superar el calor absorbido. El balance energético viola la primera ley. Revisar los datos de entrada."
+          en: "[[W_util]] cannot be greater than or equal to [[Q_H]]: net work cannot exceed absorbed heat. The energy balance violates the first law. Review input data."
+      - id: Wutil_coherence_ok
+        when: "W_util > 0 && W_util < Q_H"
+        status: ok
+        text:
+          es: "[[W_util]] está en el rango coherente con la primera ley: positivo y menor que [[Q_H]]."
+          en: "[[W_util]] is in the range coherent with the first law: positive and less than [[Q_H]]."
+      - id: Wutil_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[W_util]] sea positivo y menor que [[Q_H]] para confirmar que el ciclo opera como motor térmico."
+          en: "Verify that [[W_util]] is positive and less than [[Q_H]] to confirm the cycle operates as a heat engine."
+    model_validity_rules:
+      - id: Wutil_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[W_util]] es válido para ciclos estacionarios en los que el fluido de trabajo retorna a su estado inicial. En procesos no cíclicos, el trabajo total puede diferir del trabajo neto del ciclo."
+          en: "[[W_util]] is valid for stationary cycles where the working fluid returns to its initial state. In non-cyclic processes, total work may differ from the net cycle work."
+    graph_rules:
+      - id: Wutil_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama P-V del ciclo, [[W_util]] equivale al área encerrada por la curva cerrada del ciclo. Una mayor área indica mayor trabajo neto por ciclo."
+          en: "In the P-V diagram of the cycle, [[W_util]] corresponds to the area enclosed by the closed cycle curve. A larger area indicates greater net work per cycle."
+    likely_errors:
+      - id: Wutil_error_bruto
+        when: "true"
+        status: warning
+        text:
+          es: "Error habitual: confundir el trabajo bruto de expansión con [[W_util]]. El trabajo neto descuenta el trabajo consumido en la compresión, que en un ciclo real no es despreciable."
+          en: "Common error: confusing the gross expansion work with [[W_util]]. Net work subtracts the work consumed in compression, which in a real cycle is not negligible."
+      - id: Wutil_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "No confundir [[W_util]] con potencia: el trabajo neto del ciclo debe dividirse entre el tiempo de ciclo para obtener la potencia del motor."
+          en: "Do not confuse [[W_util]] with power: net cycle work must be divided by cycle time to obtain engine power."
+    next_step_rules:
+      - id: Wutil_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[W_util]] calculado, dividir entre el tiempo de un ciclo para obtener la potencia del motor. También permite comparar la producción de trabajo entre diferentes ciclos con el mismo [[Q_H]]."
+          en: "With [[W_util]] calculated, divide by cycle time to obtain engine power. It also enables comparison of work production between different cycles with the same [[Q_H]]."
+
+  Q_H:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Calor absorbido del foco caliente por ciclo; energía de entrada del ciclo motor"
+      en: "Heat absorbed from the hot reservoir per cycle; input energy of the engine cycle"
+    summary_rules:
+      - id: QH_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] resume la energía térmica total que entra al ciclo por cada vuelta completa. Indica la demanda energética del motor y, junto con [[W_util]], determina su rendimiento [[eta]]. Un [[Q_H]] elevado con bajo [[W_util]] describe un ciclo ineficiente."
+          en: "[[Q_H]] summarises the total thermal energy entering the cycle per complete revolution. It indicates the engine's energy demand and, together with [[W_util]], determines its efficiency [[eta]]. A high [[Q_H]] with low [[W_util]] describes an inefficient cycle."
+    physical_reading_rules:
+      - id: QH_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] indica cuánta energía térmica debe suministrarse al fluido de trabajo para mantener el ciclo operativo. Para un motor de combustión, se relaciona con la energía química del combustible consumido por ciclo."
+          en: "[[Q_H]] indicates how much thermal energy must be supplied to the working fluid to keep the cycle running. For a combustion engine, it relates to the chemical energy of fuel consumed per cycle."
+    coherence_rules:
+      - id: QH_coherence_positive
+        when: "Q_H <= 0"
+        status: error
+        text:
+          es: "[[Q_H]] debe ser estrictamente positivo. Un valor nulo o negativo indica que no hay aporte de calor al ciclo, lo cual hace imposible el funcionamiento del motor."
+          en: "[[Q_H]] must be strictly positive. A zero or negative value indicates no heat input to the cycle, making engine operation impossible."
+      - id: QH_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] positivo y mayor que [[W_util]] es coherente con la primera ley para un ciclo motor."
+          en: "[[Q_H]] positive and greater than [[W_util]] is coherent with the first law for an engine cycle."
+    model_validity_rules:
+      - id: QH_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] es válido bajo la hipótesis de que el foco caliente mantiene su temperatura constante durante todo el ciclo (hipótesis de foco ideal). En combustores reales la temperatura del gas caliente varía, y [[Q_H]] representa una media efectiva."
+          en: "[[Q_H]] is valid under the assumption that the hot reservoir maintains constant temperature throughout the cycle (ideal reservoir hypothesis). In real combustors the hot gas temperature varies, and [[Q_H]] represents an effective average."
+    graph_rules:
+      - id: QH_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama T-s del ciclo, [[Q_H]] corresponde al área bajo la curva de absorción de calor (procesos isotérmicos o de expansión con aporte). Un mayor [[Q_H]] se traduce en una banda vertical más ancha en el eje de temperaturas altas."
+          en: "In the T-s diagram of the cycle, [[Q_H]] corresponds to the area under the heat absorption curve (isothermal or expansion processes with input). A larger [[Q_H]] translates to a wider vertical band on the high-temperature axis."
+    likely_errors:
+      - id: QH_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error habitual: usar [[Q_H]] como si fuera el único determinante del rendimiento. Aumentar [[Q_H]] manteniendo [[Q_C]] constante sí mejora [[eta]], pero en la práctica aumentar [[Q_H]] sin reducir proporcionalmente [[Q_C]] no modifica el rendimiento."
+          en: "Common error: treating [[Q_H]] as if it were the sole determinant of efficiency. Increasing [[Q_H]] while keeping [[Q_C]] constant does improve [[eta]], but in practice increasing [[Q_H]] without proportionally reducing [[Q_C]] does not change efficiency."
+    next_step_rules:
+      - id: QH_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[Q_H]] calculado, comparar con la energía química del combustible (valor calorífico) para estimar el rendimiento global de la instalación incluyendo pérdidas de combustión."
+          en: "With [[Q_H]] calculated, compare with the chemical energy of the fuel (calorific value) to estimate the overall plant efficiency including combustion losses."
+
+  Q_C:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Calor cedido al foco frío; pérdida energética inevitable impuesta por la segunda ley"
+      en: "Heat rejected to the cold reservoir; unavoidable energy loss imposed by the second law"
+    summary_rules:
+      - id: QC_summary_high
+        when: "Q_C > 0.60 * Q_H"
+        status: warning
+        text:
+          es: "[[Q_C]] supera el 60% del calor absorbido, lo que indica un ciclo con rendimiento inferior al 40%. La mayor parte de la energía térmica se disipa sin convertirse en trabajo útil, lo que resulta característico de ciclos con grandes irreversibilidades."
+          en: "[[Q_C]] exceeds 60% of absorbed heat, indicating a cycle with efficiency below 40%. Most thermal energy is dissipated without conversion to useful work, characteristic of cycles with large irreversibilities."
+      - id: QC_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] resume la energía que el ciclo cede inevitablemente al foco frío. Según la segunda ley, este calor residual no puede eliminarse mientras los focos estén a temperaturas distintas y finitas. Reducirlo implica acercarse al ideal reversible."
+          en: "[[Q_C]] summarises the energy the cycle inevitably rejects to the cold reservoir. According to the second law, this waste heat cannot be eliminated as long as the reservoirs are at different and finite temperatures. Reducing it requires approaching the reversible ideal."
+    physical_reading_rules:
+      - id: QC_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] mide la energía que el motor devuelve al entorno en forma de calor sin utilizar. En un motor de vapor, representa el calor cedido al agua de refrigeración o a la atmósfera. En un motor de combustión interna, incluye los gases de escape calientes y el calor disipado por el radiador."
+          en: "[[Q_C]] measures the energy the engine returns to the environment as unused heat. In a steam engine, it represents heat rejected to the cooling water or atmosphere. In an internal combustion engine, it includes hot exhaust gases and heat dissipated by the radiator."
+    coherence_rules:
+      - id: QC_coherence_exceeds_QH
+        when: "Q_C >= Q_H"
+        status: error
+        text:
+          es: "[[Q_C]] no puede ser mayor o igual que [[Q_H]]: el calor cedido al foco frío debe ser menor que el calor absorbido del foco caliente. El balance energético está mal planteado."
+          en: "[[Q_C]] cannot be greater than or equal to [[Q_H]]: heat rejected to the cold reservoir must be less than heat absorbed from the hot reservoir. The energy balance is incorrectly set up."
+      - id: QC_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] positivo y menor que [[Q_H]] es coherente con la primera ley. La diferencia corresponde al trabajo neto del ciclo."
+          en: "[[Q_C]] positive and less than [[Q_H]] is coherent with the first law. The difference corresponds to the net work of the cycle."
+    model_validity_rules:
+      - id: QC_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo es válido para ciclos con foco frío bien definido. En ciclos de cogeneración, parte de [[Q_C]] se aprovecha como calor útil, y el rendimiento global debe recalcularse incluyendo ese aprovechamiento."
+          en: "The model is valid for cycles with a well-defined cold reservoir. In cogeneration cycles, part of [[Q_C]] is exploited as useful heat, and the overall efficiency must be recalculated including that exploitation."
+    graph_rules:
+      - id: QC_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama T-s, [[Q_C]] es el área bajo la curva de cesión de calor (procesos de compresión y rechazo isotérmico). Una menor área en la zona de temperaturas bajas indica un menor calor residual y mayor rendimiento."
+          en: "In the T-s diagram, [[Q_C]] is the area under the heat rejection curve (compression and isothermal rejection processes). A smaller area in the low-temperature zone indicates less waste heat and higher efficiency."
+    likely_errors:
+      - id: QC_error_evitable
+        when: "true"
+        status: warning
+        text:
+          es: "Error conceptual grave: creer que [[Q_C]] es evitable mediante mejoras de ingeniería. La segunda ley garantiza que siempre existe un calor residual mínimo igual al límite de Carnot. Solo reducir irreversibilidades permite disminuir [[Q_C]] más allá de ese mínimo."
+          en: "Serious conceptual error: believing [[Q_C]] is avoidable through engineering improvements. The second law guarantees there is always a minimum waste heat equal to the Carnot limit. Only reducing irreversibilities allows decreasing [[Q_C]] beyond that minimum."
+      - id: QC_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "No confundir [[Q_C]] con pérdidas mecánicas por rozamiento o con calor disipado en componentes auxiliares; esas pérdidas se suman a [[Q_C]] aumentando las irreversibilidades totales del ciclo."
+          en: "Do not confuse [[Q_C]] with mechanical friction losses or heat dissipated in auxiliary components; those losses add to [[Q_C]], increasing total cycle irreversibilities."
+    next_step_rules:
+      - id: QC_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Evaluar si [[Q_C]] puede aprovecharse en cogeneración (calefacción de edificios, procesos industriales de baja temperatura) para aumentar el rendimiento global del sistema energético."
+          en: "Evaluate whether [[Q_C]] can be exploited in cogeneration (building heating, low-temperature industrial processes) to increase the overall energy system efficiency."
+
+  eta_Carnot:
+    magnitude_type: ratio
+    semantic_role:
+      es: "Límite superior de Carnot: rendimiento máximo teórico para los focos dados; ningún motor real puede superarlo"
+      en: "Carnot upper bound: maximum theoretical efficiency for the given reservoirs; no real engine can exceed it"
+    summary_rules:
+      - id: etaCarnot_summary_high
+        when: "eta_Carnot > 0.60"
+        status: ok
+        text:
+          es: "[[eta_Carnot]] indica que la diferencia de temperatura entre los focos permite teóricamente un rendimiento muy elevado. En la práctica, los ciclos reales se quedan muy por debajo de este límite debido a las irreversibilidades."
+          en: "[[eta_Carnot]] indicates that the temperature difference between the reservoirs theoretically allows a very high efficiency. In practice, real cycles fall well below this limit due to irreversibilities."
+      - id: etaCarnot_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[eta_Carnot]] resume el rendimiento máximo que podría alcanzarse si el ciclo fuera completamente reversible entre los dos focos dados. Ningún motor real puede superar este valor, y la distancia entre [[eta]] y [[eta_Carnot]] mide las pérdidas por irreversibilidades."
+          en: "[[eta_Carnot]] summarises the maximum efficiency achievable if the cycle were completely reversible between the two given reservoirs. No real engine can exceed this value, and the gap between [[eta]] and [[eta_Carnot]] measures losses due to irreversibilities."
+    physical_reading_rules:
+      - id: etaCarnot_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[eta_Carnot]] depende exclusivamente de las temperaturas absolutas de los focos y no de la naturaleza del fluido de trabajo ni del tipo de ciclo. Para focos con mayor diferencia de temperatura, [[eta_Carnot]] aumenta; para focos a la misma temperatura, [[eta_Carnot]] es nulo."
+          en: "[[eta_Carnot]] depends exclusively on the absolute temperatures of the reservoirs, not on the nature of the working fluid or cycle type. For reservoirs with larger temperature difference, [[eta_Carnot]] increases; for reservoirs at the same temperature, [[eta_Carnot]] is zero."
+    coherence_rules:
+      - id: etaCarnot_coherence_exceeded
+        when: "eta_Carnot < eta"
+        status: error
+        text:
+          es: "El rendimiento calculado supera el límite de Carnot, lo que es físicamente imposible. Verificar las temperaturas de los focos en kelvin y los valores de [[Q_H]] y [[W_util]]."
+          en: "The calculated efficiency exceeds the Carnot limit, which is physically impossible. Verify reservoir temperatures in kelvin and the values of [[Q_H]] and [[W_util]]."
+      - id: etaCarnot_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Confirmar que [[eta_Carnot]] se calculó usando temperaturas en kelvin. Si solo se dispone de los calores, usar la fórmula [[eta_Carnot]] con la razón de temperaturas absolutas del foco frío y caliente."
+          en: "Confirm that [[eta_Carnot]] was calculated using temperatures in kelvin. If only heat values are available, use the [[eta_Carnot]] formula with the ratio of absolute temperatures of cold and hot reservoirs."
+    model_validity_rules:
+      - id: etaCarnot_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[eta_Carnot]] es válido solo cuando los focos tienen temperaturas bien definidas y constantes. Para ciclos con fuentes de calor variables (p. ej., llama de combustión con temperatura no uniforme), el límite real es más restrictivo que el calculado con temperaturas medias."
+          en: "[[eta_Carnot]] is valid only when the reservoirs have well-defined and constant temperatures. For cycles with variable heat sources (e.g., combustion flame with non-uniform temperature), the real limit is more restrictive than calculated with average temperatures."
+    graph_rules:
+      - id: etaCarnot_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico de rendimiento frente a la razón Q_C/Q_H, [[eta_Carnot]] marca la línea horizontal del límite teórico. Los puntos que representen ciclos reales deben estar por debajo de esa línea."
+          en: "In the efficiency vs Q_C/Q_H graph, [[eta_Carnot]] marks the horizontal line of the theoretical limit. Points representing real cycles must lie below that line."
+    likely_errors:
+      - id: etaCarnot_error_celsius
+        when: "true"
+        status: warning
+        text:
+          es: "Error muy frecuente: calcular [[eta_Carnot]] con temperaturas en Celsius. Usar Celsius da valores erróneos porque el cociente de temperaturas solo tiene sentido en la escala absoluta kelvin. Siempre sumar 273.15 a las temperaturas Celsius antes de calcular."
+          en: "Very frequent error: calculating [[eta_Carnot]] with temperatures in Celsius. Using Celsius gives erroneous values because the temperature ratio only makes sense on the absolute kelvin scale. Always add 273.15 to Celsius temperatures before computing."
+      - id: etaCarnot_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "No confundir [[eta_Carnot]] con el rendimiento real [[eta]]. [[eta_Carnot]] es el máximo teórico posible; el rendimiento real siempre es menor debido a las irreversibilidades del ciclo."
+          en: "Do not confuse [[eta_Carnot]] with actual efficiency [[eta]]. [[eta_Carnot]] is the maximum theoretical possible value; real efficiency is always lower due to cycle irreversibilities."
+    next_step_rules:
+      - id: etaCarnot_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[eta_Carnot]] calculado, comparar con [[eta]] para cuantificar las irreversibilidades como porcentaje del límite máximo. Esto orienta si la mejora debe enfocarse en reducir pérdidas mecánicas, mejorar la transferencia de calor o modificar las temperaturas de operación."
+          en: "With [[eta_Carnot]] calculated, compare with [[eta]] to quantify irreversibilities as a percentage of the maximum limit. This guides whether improvement should focus on reducing mechanical losses, improving heat transfer, or modifying operating temperatures."
+
+cross_checks:
+  - id: eta_vs_carnot
+    condition: "eta <= eta_Carnot"
+    status: ok
+    message:
+      es: "El rendimiento real es consistente con el límite de Carnot para los focos dados"
+      en: "Actual efficiency is consistent with the Carnot limit for the given reservoirs"
+  - id: balance_primera_ley
+    condition: "W_util < Q_H && Q_C < Q_H"
+    status: ok
+    message:
+      es: "El balance energético es coherente con la primera ley de la termodinámica"
+      en: "The energy balance is coherent with the first law of thermodynamics"
+
+error_patterns:
+  - id: celsius_en_carnot
+    description:
+      es: "Temperaturas de los focos en Celsius en lugar de kelvin al calcular el límite de Carnot"
+      en: "Reservoir temperatures in Celsius instead of kelvin when calculating the Carnot limit"
+  - id: confusion_Q_C_W_util
+    description:
+      es: "Usar Q_C en el numerador de la fórmula del rendimiento en lugar de W_util"
+      en: "Using Q_C in the numerator of the efficiency formula instead of W_util"
+  - id: rendimiento_mayor_1
+    description:
+      es: "Calcular un rendimiento mayor que 1 por error de signos o de datos"
+      en: "Computing an efficiency greater than 1 due to sign or data error"
+
+graph_binding:
+  type: Coord
+  axes:
+    x: Q_C/Q_H ratio
+    y: eta
+  reference_line: eta_Carnot
+  description:
+    es: "Diagrama de rendimiento real frente a la fracción de calor cedido, con la línea del límite de Carnot como referencia"
+    en: "Actual efficiency vs rejected heat fraction diagram, with the Carnot limit line as reference"
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+  description:
+    es: "Mini gráfico de rendimiento frente a Q_C/Q_H mostrando el límite de Carnot"
+    en: "Mini graph of efficiency vs Q_C/Q_H showing the Carnot limit"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true

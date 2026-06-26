@@ -1,0 +1,580 @@
+const e=`version: 2
+id: interpretacion-diagramas-cuerpo-libre
+leaf_id: diagramas-cuerpo-libre
+nombre:
+  es: Interpretacion de Diagramas cuerpo libre
+  en: Interpretation of Free-Body Diagrams
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: dinamica
+  parent_id: diagramas-de-fuerzas
+  ruta_relativa: fisica-clasica/mecanica/dinamica/fundamentos/diagramas-de-fuerzas/diagramas-cuerpo-libre
+dependencies:
+  formulas:
+  - newton_vectorial
+  - newton_x
+  - newton_y
+  - equilibrio_vertical
+  - rozamiento_cinetico
+  - rozamiento_estatico
+  - componentes_peso_plano
+  magnitudes:
+  - m
+  - a
+  - ax
+  - ay
+  - Fext
+  - Fx
+  - Fy
+  - P
+  - N
+  - T
+  - fk
+  - fs
+  - mu_k
+  - mu_s
+  - theta
+  - g
+  - Ppar
+  - Pperp
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  Fext:
+    summary_rules:
+    - id: Fext_summary
+      when: 'true'
+      status: info
+      text:
+        es: Fext resume una lectura fisica relevante del leaf.
+        en: Fext summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: Fext_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que Fext sea coherente con unidades y contexto.
+        en: Check that Fext is coherent with units and context.
+    physical_reading_rules:
+    - id: Fext_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si Fext no es nula, entonces una interaccion externa no compensada esta causando el cambio de movimiento del sistema en el eje estudiado.
+        en: If Fext is not zero, an uncompensated external interaction is causing the change in motion of the system along the studied axis.
+    model_validity_rules:
+    - id: Fext_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Fext solo es interpretable dentro del modelo elegido.
+        en: Fext is interpretable only inside the chosen model.
+    graph_rules:
+    - id: Fext_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de Fext.
+        en: The graph must reflect the role of Fext visually.
+    likely_errors:
+    - id: Fext_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas Fext con otra magnitud cercana del problema.
+        en: Do not confuse Fext with another nearby quantity in the problem.
+    next_step_rules:
+    - id: Fext_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa Fext para enlazar con el siguiente paso de interpretacion.
+        en: Use Fext to connect with the next interpretation step.
+  ax:
+    summary_rules:
+    - id: ax_summary
+      when: 'true'
+      status: info
+      text:
+        es: ax resume una lectura fisica relevante del leaf.
+        en: ax summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: ax_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que ax sea coherente con unidades y contexto.
+        en: Check that ax is coherent with units and context.
+    physical_reading_rules:
+    - id: ax_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de ax debe conectarse con el fenomeno fisico descrito.
+        en: The reading of ax must connect with the described physical phenomenon.
+    model_validity_rules:
+    - id: ax_validity
+      when: 'true'
+      status: ok
+      text:
+        es: ax solo es interpretable dentro del modelo elegido.
+        en: ax is interpretable only inside the chosen model.
+    graph_rules:
+    - id: ax_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de ax.
+        en: The graph must reflect the role of ax visually.
+    likely_errors:
+    - id: ax_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas ax con otra magnitud cercana del problema.
+        en: Do not confuse ax with another nearby quantity in the problem.
+    next_step_rules:
+    - id: ax_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa ax para enlazar con el siguiente paso de interpretacion.
+        en: Use ax to connect with the next interpretation step.
+  Fx:
+    summary_rules:
+    - id: Fx_summary
+      when: 'true'
+      status: info
+      text:
+        es: Fx resume una lectura fisica relevante del leaf.
+        en: Fx summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: Fx_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que Fx sea coherente con unidades y contexto.
+        en: Check that Fx is coherent with units and context.
+    physical_reading_rules:
+    - id: Fx_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de Fx debe conectarse con el fenomeno fisico descrito.
+        en: The reading of Fx must connect with the described physical phenomenon.
+    model_validity_rules:
+    - id: Fx_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Fx solo es interpretable dentro del modelo elegido.
+        en: Fx is interpretable only inside the chosen model.
+    graph_rules:
+    - id: Fx_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de Fx.
+        en: The graph must reflect the role of Fx visually.
+    likely_errors:
+    - id: Fx_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas Fx con otra magnitud cercana del problema.
+        en: Do not confuse Fx with another nearby quantity in the problem.
+    next_step_rules:
+    - id: Fx_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa Fx para enlazar con el siguiente paso de interpretacion.
+        en: Use Fx to connect with the next interpretation step.
+  ay:
+    summary_rules:
+    - id: ay_summary
+      when: 'true'
+      status: info
+      text:
+        es: ay resume una lectura fisica relevante del leaf.
+        en: ay summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: ay_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que ay sea coherente con unidades y contexto.
+        en: Check that ay is coherent with units and context.
+    physical_reading_rules:
+    - id: ay_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de ay debe conectarse con el fenomeno fisico descrito.
+        en: The reading of ay must connect with the described physical phenomenon.
+    model_validity_rules:
+    - id: ay_validity
+      when: 'true'
+      status: ok
+      text:
+        es: ay solo es interpretable dentro del modelo elegido.
+        en: ay is interpretable only inside the chosen model.
+    graph_rules:
+    - id: ay_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de ay.
+        en: The graph must reflect the role of ay visually.
+    likely_errors:
+    - id: ay_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas ay con otra magnitud cercana del problema.
+        en: Do not confuse ay with another nearby quantity in the problem.
+    next_step_rules:
+    - id: ay_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa ay para enlazar con el siguiente paso de interpretacion.
+        en: Use ay to connect with the next interpretation step.
+  Fy:
+    summary_rules:
+    - id: Fy_summary
+      when: 'true'
+      status: info
+      text:
+        es: Fy resume una lectura fisica relevante del leaf.
+        en: Fy summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: Fy_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que Fy sea coherente con unidades y contexto.
+        en: Check that Fy is coherent with units and context.
+    physical_reading_rules:
+    - id: Fy_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de Fy debe conectarse con el fenomeno fisico descrito.
+        en: The reading of Fy must connect with the described physical phenomenon.
+    model_validity_rules:
+    - id: Fy_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Fy solo es interpretable dentro del modelo elegido.
+        en: Fy is interpretable only inside the chosen model.
+    graph_rules:
+    - id: Fy_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de Fy.
+        en: The graph must reflect the role of Fy visually.
+    likely_errors:
+    - id: Fy_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas Fy con otra magnitud cercana del problema.
+        en: Do not confuse Fy with another nearby quantity in the problem.
+    next_step_rules:
+    - id: Fy_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa Fy para enlazar con el siguiente paso de interpretacion.
+        en: Use Fy to connect with the next interpretation step.
+  N:
+    summary_rules:
+    - id: N_summary
+      when: 'true'
+      status: info
+      text:
+        es: N resume una lectura fisica relevante del leaf.
+        en: N summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: N_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que N sea coherente con unidades y contexto.
+        en: Check that N is coherent with units and context.
+    physical_reading_rules:
+    - id: N_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de N debe conectarse con el fenomeno fisico descrito.
+        en: The reading of N must connect with the described physical phenomenon.
+    model_validity_rules:
+    - id: N_validity
+      when: 'true'
+      status: ok
+      text:
+        es: N solo es interpretable dentro del modelo elegido.
+        en: N is interpretable only inside the chosen model.
+    graph_rules:
+    - id: N_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de N.
+        en: The graph must reflect the role of N visually.
+    likely_errors:
+    - id: N_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas N con otra magnitud cercana del problema.
+        en: Do not confuse N with another nearby quantity in the problem.
+    next_step_rules:
+    - id: N_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa N para enlazar con el siguiente paso de interpretacion.
+        en: Use N to connect with the next interpretation step.
+  P:
+    summary_rules:
+    - id: P_summary
+      when: 'true'
+      status: info
+      text:
+        es: P resume una lectura fisica relevante del leaf.
+        en: P summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: P_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que P sea coherente con unidades y contexto.
+        en: Check that P is coherent with units and context.
+    physical_reading_rules:
+    - id: P_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de P debe conectarse con el fenomeno fisico descrito.
+        en: The reading of P must connect with the described physical phenomenon.
+    model_validity_rules:
+    - id: P_validity
+      when: 'true'
+      status: ok
+      text:
+        es: P solo es interpretable dentro del modelo elegido.
+        en: P is interpretable only inside the chosen model.
+    graph_rules:
+    - id: P_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de P.
+        en: The graph must reflect the role of P visually.
+    likely_errors:
+    - id: P_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas P con otra magnitud cercana del problema.
+        en: Do not confuse P with another nearby quantity in the problem.
+    next_step_rules:
+    - id: P_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa P para enlazar con el siguiente paso de interpretacion.
+        en: Use P to connect with the next interpretation step.
+  fk:
+    summary_rules:
+    - id: fk_summary
+      when: 'true'
+      status: info
+      text:
+        es: fk resume una lectura fisica relevante del leaf.
+        en: fk summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: fk_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que fk sea coherente con unidades y contexto.
+        en: Check that fk is coherent with units and context.
+    physical_reading_rules:
+    - id: fk_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de fk debe conectarse con el fenomeno fisico descrito.
+        en: The reading of fk must connect with the described physical phenomenon.
+    model_validity_rules:
+    - id: fk_validity
+      when: 'true'
+      status: ok
+      text:
+        es: fk solo es interpretable dentro del modelo elegido.
+        en: fk is interpretable only inside the chosen model.
+    graph_rules:
+    - id: fk_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de fk.
+        en: The graph must reflect the role of fk visually.
+    likely_errors:
+    - id: fk_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas fk con otra magnitud cercana del problema.
+        en: Do not confuse fk with another nearby quantity in the problem.
+    next_step_rules:
+    - id: fk_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa fk para enlazar con el siguiente paso de interpretacion.
+        en: Use fk to connect with the next interpretation step.
+  mu_k:
+    summary_rules:
+    - id: mu_k_summary
+      when: 'true'
+      status: info
+      text:
+        es: mu_k resume una lectura fisica relevante del leaf.
+        en: mu_k summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: mu_k_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que mu_k sea coherente con unidades y contexto.
+        en: Check that mu_k is coherent with units and context.
+    physical_reading_rules:
+    - id: mu_k_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de mu_k debe conectarse con el fenomeno fisico descrito.
+        en: The reading of mu_k must connect with the described physical phenomenon.
+    model_validity_rules:
+    - id: mu_k_validity
+      when: 'true'
+      status: ok
+      text:
+        es: mu_k solo es interpretable dentro del modelo elegido.
+        en: mu_k is interpretable only inside the chosen model.
+    graph_rules:
+    - id: mu_k_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de mu_k.
+        en: The graph must reflect the role of mu_k visually.
+    likely_errors:
+    - id: mu_k_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas mu_k con otra magnitud cercana del problema.
+        en: Do not confuse mu_k with another nearby quantity in the problem.
+    next_step_rules:
+    - id: mu_k_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa mu_k para enlazar con el siguiente paso de interpretacion.
+        en: Use mu_k to connect with the next interpretation step.
+  fs:
+    summary_rules:
+    - id: fs_summary
+      when: 'true'
+      status: info
+      text:
+        es: fs resume una lectura fisica relevante del leaf.
+        en: fs summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: fs_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que fs sea coherente con unidades y contexto.
+        en: Check that fs is coherent with units and context.
+    physical_reading_rules:
+    - id: fs_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de fs debe conectarse con el fenomeno fisico descrito.
+        en: The reading of fs must connect with the described physical phenomenon.
+    model_validity_rules:
+    - id: fs_validity
+      when: 'true'
+      status: ok
+      text:
+        es: fs solo es interpretable dentro del modelo elegido.
+        en: fs is interpretable only inside the chosen model.
+    graph_rules:
+    - id: fs_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de fs.
+        en: The graph must reflect the role of fs visually.
+    likely_errors:
+    - id: fs_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas fs con otra magnitud cercana del problema.
+        en: Do not confuse fs with another nearby quantity in the problem.
+    next_step_rules:
+    - id: fs_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa fs para enlazar con el siguiente paso de interpretacion.
+        en: Use fs to connect with the next interpretation step.
+`;export{e as default};

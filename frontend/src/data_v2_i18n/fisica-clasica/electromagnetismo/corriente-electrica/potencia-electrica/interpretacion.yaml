@@ -1,0 +1,314 @@
+version: 5.0.0
+id: potencia-electrica
+leaf_id: potencia-electrica
+nombre:
+  es: Potencia electrica
+  en: Electric Power
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: corriente-electrica
+  parent_id: corriente-electrica
+  ruta_relativa: fisica-clasica/electromagnetismo/corriente-electrica/potencia-electrica
+  orden: 293300
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - potencia_base
+  - potencia_resistiva_corriente
+  - potencia_resistiva_tension
+  - energia_desde_potencia
+  magnitudes:
+  - potencia_electrica
+  - tension_electrica
+  - corriente_electrica
+  - resistencia_electrica
+  - energia_electrica
+  - tiempo
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: potencia_electrica
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  potencia_electrica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de potencia_electrica
+      en: Result of potencia_electrica
+    summary_rules:
+    - id: p_summary
+      when: 'true'
+      status: info
+      text:
+        es: La magnitud [[P]] indica la rapidez de transferencia de [[E]] y fija exigencia termica en el componente.
+        en: The quantity [[P]] indicates the transfer rate of [[E]] and sets thermal stress in the component.
+    physical_reading_rules:
+    - id: p_physical
+      when: 'true'
+      status: info
+      text:
+        es: Aumentar [[I]] o [[V]] eleva [[P]] y puede activar sobrecalentamiento si no hay margen de disipacion.
+        en: Increasing [[I]] or [[V]] raises [[P]] and may trigger overheating without dissipation margin.
+    coherence_rules:
+    - id: p_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe existir consistencia entre {{ f:potencia_base }} y la lectura resistiva cuando el modelo ohmico es valido.
+        en: Consistency should exist between {{ f:potencia_base }} and resistive reading when the ohmic model is valid.
+    model_validity_rules:
+    - id: p_validity
+      when: R > 0
+      status: ok
+      text:
+        es: El uso de {{ f:potencia_resistiva_corriente }} y {{ f:potencia_resistiva_tension }} requiere comportamiento resistivo
+          dominante.
+        en: Using {{ f:potencia_resistiva_corriente }} and {{ f:potencia_resistiva_tension }} requires dominant resistive
+          behavior.
+    graph_rules:
+    - id: p_graph
+      when: 'true'
+      status: info
+      text:
+        es: En una curva [[P]] frente a [[t]], picos altos anticipan riesgo termico aunque el promedio sea moderado.
+        en: In a [[P]] versus [[t]] curve, high peaks signal thermal risk even with moderate average.
+    likely_errors:
+    - id: p_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[potencia_electrica]] con una lectura aislada es un error frecuente: Error frecuente: reportar potencia
+          sin compararla con potencia nominal y margen de seguridad.'
+        en: 'A common mistake is to interpret [[potencia_electrica]] in isolation: Common error: reporting power without comparing
+          against rating and safety margin.'
+    next_step_rules:
+    - id: p_next
+      when: 'true'
+      status: info
+      text:
+        es: Contrasta [[P]] calculada con limite continuo del componente y revisa condiciones de enfriamiento.
+        en: Compare computed [[P]] against component continuous limit and verify cooling conditions.
+    physical_intuition:
+    - id: potencia_electrica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[potencia_electrica]] describe el estado dinámico.
+        en: Intuitively, [[potencia_electrica]] describes the dynamic state.
+    limiting_cases:
+    - id: potencia_electrica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[potencia_electrica]].
+        en: Check limiting cases of [[potencia_electrica]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_electrica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de energia_electrica
+      en: Result of energia_electrica
+    summary_rules:
+    - id: e_summary
+      when: 'true'
+      status: info
+      text:
+        es: La variable [[E]] expresa acumulacion energetica durante una ventana temporal y complementa la lectura de [[P]].
+        en: The variable [[E]] expresses energy accumulation over a time window and complements [[P]] reading.
+    physical_reading_rules:
+    - id: e_physical
+      when: 'true'
+      status: info
+      text:
+        es: Igual [[E]] puede corresponder a escenarios fisicos distintos segun el perfil temporal de [[P]].
+        en: Equal [[E]] may correspond to different physical scenarios depending on [[P]] time profile.
+    coherence_rules:
+    - id: e_coherence
+      when: t > 0
+      status: ok
+      text:
+        es: La relacion {{ f:energia_desde_potencia }} exige tiempo positivo y unidades consistentes para evitar errores de
+          escala.
+        en: The relation {{ f:energia_desde_potencia }} requires positive time and consistent units to avoid scale errors.
+    model_validity_rules:
+    - id: e_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si [[P]] cambia mucho en el intervalo, usar una sola potencia media puede ocultar picos relevantes.
+        en: If [[P]] varies strongly over the interval, a single average power may hide critical peaks.
+    graph_rules:
+    - id: e_graph
+      when: 'true'
+      status: info
+      text:
+        es: El area bajo la curva [[P]] contra [[t]] representa [[E]] transferida en el intervalo.
+        en: The area under the [[P]] versus [[t]] curve represents transferred [[E]] over the interval.
+    likely_errors:
+    - id: e_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error frecuente: confundir joule con watt-hora y mezclar unidades sin conversion.'
+        en: 'A common mistake is to interpret [[energia_electrica]] in isolation: Common error: confusing joule with watt-hour
+          and mixing units without conversion.'
+    next_step_rules:
+    - id: e_next
+      when: 'true'
+      status: info
+      text:
+        es: Descompone el intervalo en tramos si hay cambios de carga para mejorar la estimacion energetica.
+        en: Split the interval into segments when load changes to improve energy estimation.
+    physical_intuition:
+    - id: energia_electrica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_electrica]] describe el estado dinámico.
+        en: Intuitively, [[energia_electrica]] describes the dynamic state.
+    limiting_cases:
+    - id: energia_electrica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[energia_electrica]].
+        en: Check limiting cases of [[energia_electrica]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

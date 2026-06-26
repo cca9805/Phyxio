@@ -1,0 +1,235 @@
+version: "v5"
+id: formulas_resonancia
+
+formulas:
+  - id: frecuencia_natural_sistema
+    title:
+      es: "Frecuencia natural del sistema"
+      en: "System natural frequency"
+    equation: "f_0 = (1/(2*pi)) * sqrt(k/m)"
+    latex: "f_0 = \\frac{1}{2\\pi} \\sqrt{\\frac{k}{m}}"
+    rearrangements:
+      - target: frecuencia_natural
+        equation: "f_0 = (1/(2*pi)) * sqrt(k/m)"
+        latex: "f_0 = \\frac{1}{2\\pi} \\sqrt{\\frac{k}{m}}"
+      - target: constante_restauradora
+        equation: "k = m * (2*pi*f_0)^2"
+        latex: "k = m (2\\pi f_0)^2"
+      - target: masa
+        equation: "m = k / (2*pi*f_0)^2"
+        latex: "m = \\frac{k}{(2\\pi f_0)^2}"
+    category: "fundamental"
+    relation_type: "definition"
+    physical_meaning:
+      es: "Define la frecuencia caracteristica de oscilacion libre del sistema, determinada exclusivamente por la inercia (masa) y la elasticidad (constante restauradora)."
+      en: "Defines the characteristic frequency of free system oscillation, determined exclusively by inertia (mass) and elasticity (restoring constant)."
+    constraints:
+      - "m > 0"
+      - "k > 0"
+    validity:
+      es: "Valida para osciladores armonicos simples con un solo grado de libertad y pequenas amplitudes donde la ley de Hooke se cumple."
+      en: "Valid for simple harmonic oscillators with a single degree of freedom and small amplitudes where Hooke's law holds."
+    dimension_check: "[M^(1/2) L^(1/2) T^-1] / [M^(1/2)] = [T^-1] => Hz"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "Determinacion de condicion de resonancia"
+      - "Diseno de sistemas oscilantes"
+      - "Analisis de vibraciones mecanicas"
+    interpretation_tags:
+      - "frecuencia_caracteristica"
+      - "propiedad_intrinseca"
+    result_semantics:
+      target: frecuencia_natural
+      kind: "natural_frequency"
+      sign_meaning:
+        es: "Valor positivo que indica la rapidez de oscilacion espontanea del sistema"
+        en: "Positive value indicating the speed of spontaneous system oscillation"
+      absolute_value_meaning:
+        es: "Mayor valor implica oscilaciones mas rapidas; depende de la raiz cuadrada de la rigidez relativa a la masa"
+        en: "Higher value implies faster oscillations; depends on the square root of stiffness relative to mass"
+    domain_checks:
+      - "Verificar que masa sea positiva"
+      - "Verificar que constante restauradora sea positiva"
+      - "Comprobar que resultado este en rango fisico razonable (Hz, kHz, MHz)"
+    coherence_checks:
+      - "La frecuencia natural debe ser mayor que cero"
+      - "Para sistemas mecanicos macroscopicos, valores tipicos entre 0.1 Hz y 10 kHz"
+    graph_implications:
+      - "Determina la posicion del pico en la curva de respuesta"
+      - "Eje de referencia vertical en graficos de amplitud vs frecuencia"
+    pedagogical_triggers:
+      - "Alumno cree que la frecuencia natural depende de la amplitud inicial"
+      - "Confusion entre frecuencia y velocidad angular"
+
+  - id: amplitud_resonancia
+    title:
+      es: "Amplitud de oscilacion forzada"
+      en: "Forced oscillation amplitude"
+    equation: "A = F_0 / sqrt((k - m*omega^2)^2 + (b*omega)^2)"
+    latex: "A = \\frac{F_0}{\\sqrt{(k - m\\omega^2)^2 + (b\\omega)^2}}"
+    rearrangements:
+      - target: amplitud_forzada
+        equation: "A = F_0 / sqrt((k - m*omega^2)^2 + (b*omega)^2)"
+        latex: "A = \\frac{F_0}{\\sqrt{(k - m\\omega^2)^2 + (b\\omega)^2}}"
+    category: "derived"
+    relation_type: "constitutive_relation"
+    physical_meaning:
+      es: "Determina la amplitud estacionaria alcanzada por el sistema bajo excitacion periodica, dependiendo de la relacion entre frecuencia forzada y natural, asi como del amortiguamiento."
+      en: "Determines the steady-state amplitude reached by the system under periodic excitation, depending on the relationship between driving and natural frequency, as well as damping."
+    constraints:
+      - "F_0 > 0"
+      - "m > 0"
+      - "k > 0"
+      - "b >= 0"
+      - "omega >= 0"
+    validity:
+      es: "Aplica en regimen estacionario de oscilaciones forzadas con amortiguamiento viscoso lineal. No valida para transitorios ni amortiguamientos no lineales."
+      en: "Applies in steady state of forced oscillations with linear viscous damping. Not valid for transients or nonlinear damping."
+    dimension_check: "[M L T^-2] / ([M T^-2]) = [L] => metros"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "Curva de respuesta en frecuencia"
+      - "Analisis de resonancia"
+      - "Diseno de aisladores de vibracion"
+    interpretation_tags:
+      - "amplitud_respuesta"
+      - "maximo_desplazamiento"
+    result_semantics:
+      target: amplitud_forzada
+      kind: "displacement"
+      sign_meaning:
+        es: "La amplitud es siempre positiva, representando el maximo alejamiento del equilibrio"
+        en: "Amplitude is always positive, representing maximum displacement from equilibrium"
+      absolute_value_meaning:
+        es: "Valor grande indica oscilaciones vigorosas; valor pequeno indica respuesta debil a la excitacion"
+        en: "Large value indicates vigorous oscillations; small value indicates weak response to excitation"
+    domain_checks:
+      - "Verificar que la frecuencia angular sea no negativa"
+      - "Comprobar que el denominador no sea cero (sistema no es inestable)"
+    coherence_checks:
+      - "La amplitud debe ser finita para sistemas amortiguados"
+      - "En resonancia perfecta sin amortiguamiento, la amplitud teorica diverge"
+    graph_implications:
+      - "Representa la ordenada en curvas de respuesta"
+      - "Pico pronunciado indica resonancia aguda"
+    pedagogical_triggers:
+      - "Alumno asume que amplitud maxima ocurre exactamente en frecuencia natural"
+      - "Olvida el efecto del amortiguamiento en la amplitud de resonancia"
+
+  - id: factor_calidad_Q
+    title:
+      es: "Factor de calidad de la resonancia"
+      en: "Quality factor of resonance"
+    equation: "Q = f_0 / Delta_f"
+    latex: "Q = \\frac{f_0}{\\Delta f}"
+    rearrangements:
+      - target: factor_calidad
+        equation: "Q = f_0 / Delta_f"
+        latex: "Q = \\frac{f_0}{\\Delta f}"
+      - target: ancho_banda
+        equation: "Delta_f = f_0 / Q"
+        latex: "\\Delta f = \\frac{f_0}{Q}"
+      - target: frecuencia_natural
+        equation: "f_0 = Q * Delta_f"
+        latex: "f_0 = Q \\Delta f"
+    category: "derived"
+    relation_type: "definition"
+    physical_meaning:
+      es: "Cuantifica la selectividad del sistema resonante. Relaciona la frecuencia central con el ancho de la curva de resonancia a altura media. Mayor Q implica resonancia mas aguda y selectiva."
+      en: "Quantifies the selectivity of the resonant system. Relates central frequency to the width of the resonance curve at half height. Higher Q implies sharper and more selective resonance."
+    constraints:
+      - "f_0 > 0"
+      - "Delta_f > 0"
+    validity:
+      es: "Definicion general aplicable a cualquier sistema resonante. Especialmente util para sistemas con resonancia pronunciada y bajo amortiguamiento."
+      en: "General definition applicable to any resonant system. Especially useful for systems with pronounced resonance and low damping."
+    dimension_check: "[T^-1] / [T^-1] = [1] => adimensional"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "Caracterizacion de resonadores"
+      - "Diseno de filtros"
+      - "Especificacion de selectividad"
+    interpretation_tags:
+      - "selectividad"
+      - "agudeza_resonancia"
+    result_semantics:
+      target: factor_calidad
+      kind: "quality_factor"
+      sign_meaning:
+        es: "Valor positivo que indica pureza de la resonancia"
+        en: "Positive value indicating purity of resonance"
+      absolute_value_meaning:
+        es: "Q mayor que 10 indica resonancia aguda; Q menor que 5 indica resonancia amplia y poco selectiva"
+        en: "Q greater than 10 indicates sharp resonance; Q less than 5 indicates broad, non-selective resonance"
+    domain_checks:
+      - "Verificar que frecuencia natural sea positiva"
+      - "Verificar que ancho de banda sea positivo"
+      - "Resultado debe ser mayor que cero"
+    coherence_checks:
+      - "Para sistemas fisicos reales, Q tipicamente entre 1 y 10000"
+      - "Valores extremos (Q < 1 o Q > 100000) requieren justificacion fisica especifica"
+    graph_implications:
+      - "Determina la forma de la curva de resonancia"
+      - "Q alto produce pico estrecho y alto"
+    pedagogical_triggers:
+      - "Alumno confunde Q alto con mejor sistema sin considerar la aplicacion"
+      - "Desconoce que Q bajo es deseable en sistemas de banda ancha"
+
+  - id: relacion_amplitud_frecuencia
+    title:
+      es: "Relacion de amplitud en funcion de la frecuencia"
+      en: "Amplitude as a function of frequency"
+    equation: "A/A_max = 1 / sqrt(1 + Q^2*(f/f_0 - f_0/f)^2)"
+    latex: "\\frac{A}{A_{max}} = \\frac{1}{\\sqrt{1 + Q^2\\left(\\frac{f}{f_0} - \\frac{f_0}{f}\\right)^2}}"
+    rearrangements:
+      - target: amplitud_forzada
+        equation: "A = A_max / sqrt(1 + Q^2*(f/f_0 - f_0/f)^2)"
+        latex: "A = \\frac{A_{max}}{\\sqrt{1 + Q^2\\left(\\frac{f}{f_0} - \\frac{f_0}{f}\\right)^2}}"
+    category: "structural"
+    relation_type: "geometric_interpretation"
+    physical_meaning:
+      es: "Describe la forma funcional de la curva de resonancia normalizada. Muestra como la amplitud relativa decae al alejarse de la frecuencia natural, con mayor pendiente para sistemas de mayor factor de calidad."
+      en: "Describes the functional shape of the normalized resonance curve. Shows how relative amplitude decays when moving away from natural frequency, with steeper slope for higher quality factor systems."
+    constraints:
+      - "Q > 0"
+      - "f > 0"
+      - "f_0 > 0"
+      - "A_max > 0"
+    validity:
+      es: "Forma estandar de la curva de resonancia para osciladores armonicos amortiguados. Valida cerca y lejos de la resonancia dentro del modelo lineal."
+      en: "Standard form of the resonance curve for damped harmonic oscillators. Valid near and far from resonance within the linear model."
+    dimension_check: "[1] / [1] = [1] => adimensional (relacion de amplitudes)"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "Trazado de curvas de resonancia"
+      - "Analisis espectral"
+      - "Diseno de sistemas de filtrado"
+    interpretation_tags:
+      - "curva_resonancia"
+      - "respuesta_frecuencia"
+    result_semantics:
+      target: amplitud_forzada
+      kind: "normalized_amplitude"
+      sign_meaning:
+        es: "Relacion adimensional entre 0 y 1 que describe el grado de excitacion del sistema"
+        en: "Dimensionless ratio between 0 and 1 describing the degree of system excitation"
+      absolute_value_meaning:
+        es: "Valor 1 indica resonancia perfecta; valores menores indican desajuste de frecuencias"
+        en: "Value 1 indicates perfect resonance; lower values indicate frequency mismatch"
+    domain_checks:
+      - "Verificar que Q sea positivo"
+      - "Verificar que frecuencias sean positivas"
+      - "Resultado debe estar entre 0 y 1"
+    coherence_checks:
+      - "En f = f_0, la relacion debe ser 1"
+      - "Para f << f_0 o f >> f_0, la relacion debe aproximarse a cero"
+    graph_implications:
+      - "Define la curva de Lorentziana o lorentz-like"
+      - "Ancho del pico determinado por Q"
+    pedagogical_triggers:
+      - "Alumno no reconoce la forma simetrica de la curva en escala logaritmica"
+      - "Confunde ancho del pico a media altura con ancho a altura completa"

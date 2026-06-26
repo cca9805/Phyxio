@@ -1,0 +1,172 @@
+const e=`formulas:
+  - id: ampere_integral
+    title:
+      es: Ley de Ampere integral
+      en: Ampere's integral law
+    equation: "C_B = mu0 * I_enc"
+    latex: '\\oint \\vec{B}\\cdot d\\vec{l} = \\mu_0 I_{enc} \\quad % C_B mu0 I_enc dl'
+    rearrangements:
+      - target: C_B
+        equation: "C_B = mu0 * I_enc"
+        latex: 'C_B = \\mu_0 I_{enc} \\quad % C_B mu0 I_enc'
+    category: fundamental
+    relation_type: integral_relation
+    physical_meaning:
+      es: La circulacion magnetica alrededor de una curva cerrada depende de la corriente neta encerrada por esa curva.
+      en: Magnetic circulation around a closed curve depends on the net current enclosed by that curve.
+    constraints:
+      - corriente estacionaria
+      - curva cerrada orientada
+      - magnetostatica clasica
+    validity:
+      es: Valida en magnetostatica; con campos variables debe usarse la correccion de Maxwell.
+      en: Valid in magnetostatics; with time-varying fields Maxwell's correction is required.
+    dimension_check: "T*m coincide con N*A^-2 multiplicado por A"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["teoria.md", "teoria.en.md", "ejemplos.md", "ejemplos.en.md", "interpretacion.yaml"]
+    interpretation_tags: ["circulation", "enclosed_current", "orientation"]
+    result_semantics:
+      target: C_B
+      kind: scalar_signed
+      sign_meaning:
+        es: El signo depende de la orientacion elegida para la curva y para la corriente encerrada.
+        en: The sign depends on the chosen orientation for the curve and enclosed current.
+      absolute_value_meaning:
+        es: Mide la circulacion magnetica total asociada a la corriente encerrada.
+        en: Measures total magnetic circulation associated with the enclosed current.
+    domain_checks:
+      - id: ampere_magnetostatics
+        condition: "true"
+        message:
+          es: La relacion requiere corrientes estacionarias o variacion temporal despreciable.
+          en: The relation requires steady currents or negligible time variation.
+    coherence_checks:
+      - id: cb_zero_current
+        condition: "I_enc == 0"
+        message:
+          es: Si la corriente neta encerrada es nula, la circulacion neta debe ser nula.
+          en: If net enclosed current is zero, net circulation must be zero.
+    graph_implications:
+      - es: El grafico debe destacar que la curva cerrada encierra la fuente, no un punto aislado.
+        en: The graph should emphasize that the closed curve encloses the source, not an isolated point.
+    pedagogical_triggers:
+      - es: Revisar si el estudiante conto corrientes externas como encerradas.
+        en: Check whether the learner counted external currents as enclosed.
+
+  - id: campo_hilo_ampere
+    title:
+      es: Campo magnetico de un hilo recto largo
+      en: Magnetic field of a long straight wire
+    equation: "B = mu0 * I / (2 * pi * r)"
+    latex: 'B = \\frac{\\mu_0 I}{2\\pi r} \\quad % B mu0 I r'
+    rearrangements:
+      - target: B
+        equation: "B = mu0 * I / (2 * pi * r)"
+        latex: 'B = \\frac{\\mu_0 I}{2\\pi r} \\quad % B mu0 I r'
+    category: derived
+    relation_type: geometric_interpretation
+    physical_meaning:
+      es: Campo magnetico tangencial a distancia r de un hilo recto largo con corriente estacionaria.
+      en: Tangential magnetic field at distance r from a long straight wire carrying steady current.
+    constraints:
+      - hilo recto muy largo
+      - simetria cilindrica
+      - radio mayor que el radio fisico del conductor
+    validity:
+      es: Primera aproximacion para puntos lejos de los extremos del conductor y fuera del material conductor.
+      en: First approximation for points far from conductor ends and outside the conducting material.
+    dimension_check: "N*A^-2 multiplicado por A y dividido por m produce T"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["teoria.md", "teoria.en.md", "ejemplos.md", "ejemplos.en.md", "graph_coord"]
+    interpretation_tags: ["wire_field", "inverse_distance", "cylindrical_symmetry"]
+    result_semantics:
+      target: B
+      kind: scalar_unsigned
+      sign_meaning:
+        es: El modulo es positivo; el sentido se obtiene con la regla de la mano derecha.
+        en: The magnitude is positive; direction follows the right-hand rule.
+      absolute_value_meaning:
+        es: Intensidad del campo magnetico circular alrededor del hilo.
+        en: Strength of the circular magnetic field around the wire.
+    domain_checks:
+      - id: wire_radius_positive
+        condition: "r > 0"
+        message:
+          es: El radio amperiano debe ser positivo y estar fuera del eje ideal.
+          en: The Amperian radius must be positive and outside the ideal axis.
+    coherence_checks:
+      - id: wire_field_decreases
+        condition: "r > 0"
+        message:
+          es: Al aumentar el radio, el campo de un hilo largo debe disminuir.
+          en: As radius increases, the long-wire field must decrease.
+    graph_implications:
+      - es: La curva del grafico debe decrecer con el radio para corriente fija.
+        en: The graph curve should decrease with radius for fixed current.
+    pedagogical_triggers:
+      - es: Revisar si se uso diametro en lugar de radio.
+        en: Check whether diameter was used instead of radius.
+
+  - id: campo_solenoide_largo
+    title:
+      es: Campo magnetico de un solenoide largo
+      en: Magnetic field of a long solenoid
+    equation: "B_sol = mu0 * n * I"
+    latex: 'B_{sol} = \\mu_0 n I \\quad % B_sol mu0 n I'
+    rearrangements:
+      - target: B_sol
+        equation: "B_sol = mu0 * n * I"
+        latex: 'B_{sol} = \\mu_0 n I \\quad % B_sol mu0 n I'
+    category: derived
+    relation_type: geometric_interpretation
+    physical_meaning:
+      es: Campo interior aproximado de un solenoide largo con densidad de espiras n y corriente I.
+      en: Approximate internal field of a long solenoid with turn density n and current I.
+    constraints:
+      - solenoide largo frente a su radio
+      - punto interior lejos de los bordes
+      - medio aproximado como vacio
+    validity:
+      es: Falla cerca de los extremos, en solenoides cortos y en nucleos no lineales.
+      en: Fails near the ends, in short solenoids, and in nonlinear cores.
+    dimension_check: "N*A^-2 multiplicado por m^-1 y por A produce T"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["teoria.md", "teoria.en.md", "ejemplos.md", "ejemplos.en.md", "aplicaciones.md"]
+    interpretation_tags: ["solenoid_field", "turn_density", "uniform_field"]
+    result_semantics:
+      target: B_sol
+      kind: scalar_unsigned
+      sign_meaning:
+        es: El sentido sigue la orientacion de corriente en las espiras.
+        en: Direction follows current orientation in the turns.
+      absolute_value_meaning:
+        es: Intensidad del campo casi uniforme dentro del solenoide ideal.
+        en: Strength of the nearly uniform field inside the ideal solenoid.
+    domain_checks:
+      - id: solenoid_long_model
+        condition: "true"
+        message:
+          es: El modelo supone un solenoide largo y una region interior lejos de los bordes.
+          en: The model assumes a long solenoid and an interior region far from the ends.
+    coherence_checks:
+      - id: solenoid_linear_scaling
+        condition: "n > 0 and I >= 0"
+        message:
+          es: Para un medio lineal, el campo interior aumenta con densidad de espiras y corriente.
+          en: For a linear medium, the internal field increases with turn density and current.
+    graph_implications:
+      - es: La lectura visual debe asociar mas espiras por longitud con mayor campo interior.
+        en: The visual reading should associate more turns per length with a stronger internal field.
+    pedagogical_triggers:
+      - es: Revisar si se uso numero total de espiras en lugar de densidad de espiras.
+        en: Check whether total turns were used instead of turn density.
+
+ui:
+  default_formula: ampere_integral
+  show_formula_selector: true
+  show_rearrangements: true
+  show_result_semantics: true
+`;export{e as default};

@@ -1,0 +1,479 @@
+const e=`version: 2
+id: interpretacion-tornillo
+leaf_id: tornillo
+nombre:
+  es: Interpretación de Tornillo
+  en: Interpretation of Screw
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: aplicaciones
+  parent_id: maquinas-simples
+  ruta_relativa: fisica-clasica/mecanica/aplicaciones/maquinas-simples/tornillo
+dependencies:
+  formulas:
+    - ventaja_mecanica_ideal
+    - fuerza_real
+    - fuerza_ideal
+    - eficiencia
+    - torque_real
+    - torque_basico
+    - condicion_geometria
+    - error_rendimiento
+  magnitudes:
+    - R
+    - F
+    - r
+    - p
+    - eta
+    - ventaja_mecanica
+    - tau
+    - error_relativo
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen Físico-Técnico
+      en: Physical-Technical Summary
+  physical_reading:
+    title:
+      es: Análisis Dinámico del Tornillo
+      en: Dynamic Analysis of the Screw
+  coherence:
+    title:
+      es: Validación de Coherencia
+      en: Coherence Validation
+  model_validity:
+    title:
+      es: Auditoría de Validez del Modelo
+      en: Model Validity Audit
+  graph_reading:
+    title:
+      es: Diagnóstico de Visualización
+      en: Visualization Diagnosis
+  likely_errors:
+    title:
+      es: Alerta de Sesgo Cognitivo
+      en: Cognitive Bias Alert
+  next_step:
+    title:
+      es: Optimización y Diseño
+      en: Optimization and Design
+targets:
+  ventaja_mecanica:
+    summary_rules:
+      - id: vm_summary_god
+        when: "true"
+        status: info
+        text:
+          es: "La ventaja mecánica VM indica el factor de multiplicación de fuerza del sistema; resume la eficiencia mecánica global."
+          en: "The mechanical advantage VM indicates the system's force multiplication factor; it summarizes the overall mechanical efficiency."
+    physical_reading_rules:
+      - id: vm_physical_god
+        when: "true"
+        status: info
+        text:
+          es: "VM significa cuántas veces menos esfuerzo F debes realizar para mover la carga R; depende de la palanca r y el paso p."
+          en: "VM means how many times less effort F you must perform to move the load R; it depends on the lever r and the pitch p."
+    coherence_rules:
+      - id: vm_coherence_god
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de VM es consistente con la relación geométrica y las pérdidas por fricción declaradas."
+          en: "The VM value is consistent with the geometric relationship and the declared friction losses."
+    model_validity_rules:
+      - id: vm_validity_god
+        when: "true"
+        status: ok
+        text:
+          es: "La ventaja mecánica calculada es válida bajo el modelo de plano inclinado helicoidal."
+          en: "The calculated mechanical advantage is valid under the helical inclined plane model."
+    graph_rules:
+      - id: vm_graph_god
+        when: "true"
+        status: info
+        text:
+          es: "En el gráfico, VM define la pendiente de la línea de respuesta entre la carga axial y la fuerza de entrada."
+          en: "In the graph, VM defines the slope of the response line between axial load and input force."
+    likely_errors:
+      - id: vm_errors_god
+        when: "true"
+        status: warning
+        text:
+          es: "Cuidado: no asumas que la ventaja mecánica real es igual a la ideal sin considerar el rendimiento eta."
+          en: "Warning: do not assume that the real mechanical advantage is equal to the ideal one without considering efficiency eta."
+    next_step_rules:
+      - id: vm_next_god
+        when: "true"
+        status: tip
+        text:
+          es: "Si necesitas más ventaja, aumenta el radio de la palanca r o utiliza un tornillo con un paso p más pequeño."
+          en: "If you need more advantage, increase the lever radius r or use a screw with a smaller pitch p."
+
+  F:
+    summary_rules:
+      - id: F_summary_god
+        when: "true"
+        status: info
+        text:
+          es: "La fuerza tangencial F describe el esfuerzo de entrada necesario; indica la carga física que debe aplicar el actuador."
+          en: "The tangential force F describes the required input effort; it indicates the physical load the actuator must apply."
+    physical_reading_rules:
+      - id: F_physical_god
+        when: "true"
+        status: info
+        text:
+          es: "F significa la fuerza requerida para vencer la componente axial de la carga y el rozamiento interno de la rosca."
+          en: "F means the force required to overcome the axial component of the load and the internal friction of the thread."
+    coherence_rules:
+      - id: F_coherence_god
+        when: "true"
+        status: ok
+        text:
+          es: "La magnitud F es coherente con el torque aplicado y el brazo de palanca utilizado."
+          en: "The magnitude F is consistent with the applied torque and the lever arm used."
+    model_validity_rules:
+      - id: F_validity_god
+        when: "true"
+        status: ok
+        text:
+          es: "El cálculo de F asume un equilibrio cuasiestático, válido para movimientos lentos y controlados."
+          en: "The calculation of F assumes a quasi-static equilibrium, valid for slow and controlled movements."
+    graph_rules:
+      - id: F_graph_god
+        when: "true"
+        status: info
+        text:
+          es: "Representa el valor en el eje de esfuerzo necesario para equilibrar una carga axial R determinada."
+          en: "Represents the value on the effort axis needed to balance a given axial load R."
+    likely_errors:
+      - id: F_errors_god
+        when: "true"
+        status: warning
+        text:
+          es: "Error común: olvidar convertir el paso p a metros, lo que puede resultar en una fuerza F mil veces errónea."
+          en: "Common error: forgetting to convert pitch p to meters, which can result in a force F being a thousand times wrong."
+    next_step_rules:
+      - id: F_next_god
+        when: "true"
+        status: tip
+        text:
+          es: "Verifica si el valor de F está dentro del límite de capacidad humana (150-200 N) si es accionamiento manual."
+          en: "Verify if the F value is within the limit of human capacity (150-200 N) if it is manual drive."
+
+  eta:
+    summary_rules:
+      - id: eta_summary_god
+        when: "true"
+        status: info
+        text:
+          es: "El rendimiento eta resume la calidad energética del sistema; indica qué porcentaje del esfuerzo se traduce en movimiento útil."
+          en: "The efficiency eta summarizes the system's energetic quality; it indicates what percentage of the effort translates into useful motion."
+    physical_reading_rules:
+      - id: eta_physical_god
+        when: "true"
+        status: info
+        text:
+          es: "eta significa la eficiencia del husillo; valores bajos indican un alto rozamiento, lo cual es típico en tornillos de potencia."
+          en: "eta means the screw efficiency; low values indicate high friction, which is typical in power screws."
+    coherence_rules:
+      - id: eta_coherence_god
+        when: "true"
+        status: ok
+        text:
+          es: "El rendimiento es coherente con las pérdidas esperadas para este tipo de rosca y lubricación."
+          en: "The efficiency is consistent with the expected losses for this type of thread and lubrication."
+    model_validity_rules:
+      - id: eta_validity_god
+        when: "eta < 0.5"
+        status: ok
+        text:
+          es: "Rendimiento inferior al 50%: el sistema es probablemente autobloqueante (condición de seguridad)."
+          en: "Efficiency below 50%: the system is likely self-locking (safety condition)."
+    graph_rules:
+      - id: eta_graph_god
+        when: "true"
+        status: info
+        text:
+          es: "Visualmente, un rendimiento bajo aleja la curva de operación real de la línea ideal de 45 grados."
+          en: "Visually, low efficiency moves the real operating curve away from the ideal 45-degree line."
+    likely_errors:
+      - id: eta_errors_god
+        when: "true"
+        status: warning
+        text:
+          es: "No confundas rendimiento con ventaja mecánica; son conceptos distintos aunque relacionados."
+          en: "Do not confuse efficiency with mechanical advantage; they are distinct though related concepts."
+    next_step_rules:
+      - id: eta_next_god
+        when: "true"
+        status: tip
+        text:
+          es: "Para mejorar eta, considera el uso de lubricantes de alta presión o husillos de bolas (rodamiento)."
+          en: "To improve eta, consider using high-pressure lubricants or ball screws (rolling)."
+
+  tau:
+    summary_rules:
+      - id: tau_summary_god
+        when: "true"
+        status: info
+        text:
+          es: "El torque tau describe el par de giro total necesario; es la magnitud fundamental para dimensionar motores o palancas."
+          en: "The torque tau describes the total turning moment needed; it is the fundamental magnitude for sizing motors or levers."
+    physical_reading_rules:
+      - id: tau_physical_god
+        when: "true"
+        status: info
+        text:
+          es: "tau significa el momento torsor que vence la fricción y el avance; depende de la carga axial R y el paso p."
+          en: "tau means the twisting moment that overcomes friction and advance; it depends on the axial load R and the pitch p."
+    coherence_rules:
+      - id: tau_coherence_god
+        when: "true"
+        status: ok
+        text:
+          es: "El par calculado es consistente con el equilibrio de momentos en el brazo de palanca."
+          en: "The calculated torque is consistent with the moment balance on the lever arm."
+    model_validity_rules:
+      - id: tau_validity_god
+        when: "true"
+        status: ok
+        text:
+          es: "Modelo de torque válido para husillos de potencia estándar."
+          en: "Torque model valid for standard power screws."
+    graph_rules:
+      - id: tau_graph_god
+        when: "true"
+        status: info
+        text:
+          es: "En el gráfico de momentos, tau representa la magnitud del vector de torsión aplicado al eje Z."
+          en: "In the moment graph, tau represents the magnitude of the torque vector applied to the Z axis."
+    likely_errors:
+      - id: tau_errors_god
+        when: "true"
+        status: warning
+        text:
+          es: "Asegúrate de que las unidades sean N·m y no solo N; el torque incluye siempre una distancia."
+          en: "Ensure units are N·m and not just N; torque always includes a distance."
+    next_step_rules:
+      - id: tau_next_god
+        when: "true"
+        status: tip
+        text:
+          es: "Compara el torque tau con el límite de rotura del tornillo para asegurar la integridad estructural."
+          en: "Compare torque tau with the screw's breaking limit to ensure structural integrity."
+
+  error_relativo:
+    summary_rules:
+      - id: error_summary_god
+        when: "true"
+        status: info
+        text:
+          es: "El error relativo describe la desviación entre el modelo sin fricción y el real; cuantifica la ineficiencia."
+          en: "The relative error describes the deviation between the friction-less model and the real one; it quantifies inefficiency."
+    physical_reading_rules:
+      - id: error_physical_god
+        when: "true"
+        status: info
+        text:
+          es: "Este error significa cuánto esfuerzo extra F estás realizando debido únicamente al rozamiento de la rosca."
+          en: "This error means how much extra effort F you are performing due solely to thread friction."
+    coherence_rules:
+      - id: error_coherence_god
+        when: "true"
+        status: ok
+        text:
+          es: "El error calculado es complementario al rendimiento eta (1 - eta)."
+          en: "The calculated error is complementary to efficiency eta (1 - eta)."
+    model_validity_rules:
+      - id: error_validity_god
+        when: "true"
+        status: ok
+        text:
+          es: "Métrica válida para evaluar la necesidad de optimización o lubricación."
+          en: "Valid metric to evaluate the need for optimization or lubrication."
+    graph_rules:
+      - id: error_graph_god
+        when: "true"
+        status: info
+        text:
+          es: "Representa el área de 'pérdida' entre la curva de fuerza ideal y la real."
+          en: "Represents the 'loss' area between the ideal and real force curves."
+    likely_errors:
+      - id: error_errors_god
+        when: "true"
+        status: warning
+        text:
+          es: "No ignores errores superiores al 50%; indican que el sistema está operando en un régimen muy ineficiente."
+          en: "Do not ignore errors over 50%; they indicate the system is operating in a very inefficient regime."
+    next_step_rules:
+      - id: error_next_god
+        when: "true"
+        status: tip
+        text:
+          es: "Reduce el error relativo seleccionando materiales con menor coeficiente de fricción (ej. bronce sobre acero)."
+          en: "Reduce relative error by selecting materials with lower friction coefficients (e.g., bronze on steel)."
+
+  R:
+    summary_rules:
+      - id: R_summary_god
+        when: "true"
+        status: info
+        text:
+          es: "La carga axial R es la fuerza útil que el tornillo debe generar; resume el objetivo mecánico del sistema."
+          en: "The axial load R is the useful force that the screw must generate; it summarizes the mechanical objective of the system."
+    physical_reading_rules:
+      - id: R_physical_god
+        when: "true"
+        status: info
+        text:
+          es: "R significa el peso o resistencia que el tornillo vence; determina directamente el esfuerzo F de entrada y el torque tau necesario."
+          en: "R means the weight or resistance that the screw overcomes; it directly determines the input effort F and the required torque tau."
+    coherence_rules:
+      - id: R_coherence_god
+        when: "true"
+        status: ok
+        text:
+          es: "La carga R es coherente con la fuerza de entrada F y el rendimiento eta declarados."
+          en: "The load R is consistent with the input force F and declared efficiency eta."
+    model_validity_rules:
+      - id: R_validity_god
+        when: "true"
+        status: ok
+        text:
+          es: "La carga R debe estar dentro del rango elástico del material del tornillo para que el modelo sea válido."
+          en: "The load R must be within the elastic range of the screw material for the model to be valid."
+    graph_rules:
+      - id: R_graph_god
+        when: "true"
+        status: info
+        text:
+          es: "En el gráfico, R es el eje de la carga axial, que determina la curva de operación del sistema."
+          en: "In the graph, R is the axial load axis, which determines the system's operating curve."
+    likely_errors:
+      - id: R_errors_god
+        when: "true"
+        status: warning
+        text:
+          es: "No confundas la carga axial R con el torque; R es una fuerza lineal, no un momento de giro."
+          en: "Do not confuse the axial load R with torque; R is a linear force, not a rotational moment."
+    next_step_rules:
+      - id: R_next_god
+        when: "true"
+        status: tip
+        text:
+          es: "Verifica que la carga R esté dentro de la capacidad nominal del tornillo antes de operar el sistema."
+          en: "Verify that load R is within the nominal capacity of the screw before operating the system."
+
+  p:
+    summary_rules:
+      - id: p_summary_god
+        when: "true"
+        status: info
+        text:
+          es: "El paso de rosca p resume la resolución geométrica del tornillo; determina el avance axial por vuelta."
+          en: "The thread pitch p summarizes the geometric resolution of the screw; it determines the axial advance per turn."
+    physical_reading_rules:
+      - id: p_physical_god
+        when: "true"
+        status: info
+        text:
+          es: "Un paso p pequeño significa más vueltas para el mismo avance pero una mayor ventaja mecánica y mayor precisión."
+          en: "A small pitch p means more turns for the same advance but greater mechanical advantage and precision."
+    coherence_rules:
+      - id: p_coherence_god
+        when: "true"
+        status: ok
+        text:
+          es: "El paso p es coherente con las unidades del sistema (metros) y con la ventaja mecánica resultante."
+          en: "The pitch p is consistent with the system units (meters) and the resulting mechanical advantage."
+    model_validity_rules:
+      - id: p_validity_god
+        when: "true"
+        status: ok
+        text:
+          es: "El paso p debe satisfacer la condición geométrica p < 2πr para que el modelo de máquina simple sea válido."
+          en: "The pitch p must satisfy the geometric condition p < 2πr for the simple machine model to be valid."
+    graph_rules:
+      - id: p_graph_god
+        when: "true"
+        status: info
+        text:
+          es: "El paso p define la pendiente de la hélice en el diagrama de resolución del tornillo."
+          en: "The pitch p defines the helix slope in the screw resolution diagram."
+    likely_errors:
+      - id: p_errors_god
+        when: "true"
+        status: warning
+        text:
+          es: "Error crítico: el paso p se expresa en milímetros en catálogos; debes convertirlo a metros antes de calcular."
+          en: "Critical error: pitch p is expressed in millimeters in catalogs; you must convert it to meters before calculating."
+    next_step_rules:
+      - id: p_next_god
+        when: "true"
+        status: tip
+        text:
+          es: "Para aplicaciones de alta precisión, selecciona un paso p fino; para alta velocidad de avance, selecciona un paso grueso."
+          en: "For high-precision applications, select a fine pitch p; for high advance speed, select a coarse pitch."
+
+  r:
+    summary_rules:
+      - id: r_summary_god
+        when: "true"
+        status: info
+        text:
+          es: "El radio efectivo r resume el brazo de palanca del sistema; es el principal parámetro de diseño para ajustar la fuerza de entrada."
+          en: "The effective radius r summarizes the system's lever arm; it is the main design parameter for adjusting the input force."
+    physical_reading_rules:
+      - id: r_physical_god
+        when: "true"
+        status: info
+        text:
+          es: "Un radio r mayor significa un menor esfuerzo F necesario para la misma carga R, a costa de recorrer una distancia circular mayor por vuelta."
+          en: "A larger radius r means less effort F needed for the same load R, at the cost of traveling a greater circular distance per turn."
+    coherence_rules:
+      - id: r_coherence_god
+        when: "true"
+        status: ok
+        text:
+          es: "El radio r es coherente con el torque aplicado y la fuerza tangencial calculada."
+          en: "The radius r is consistent with the applied torque and the calculated tangential force."
+    model_validity_rules:
+      - id: r_validity_god
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo es válido siempre que r corresponda al brazo de palanca real del accionamiento, no al radio del tornillo."
+          en: "The model is valid as long as r corresponds to the actual lever arm of the drive, not the screw radius."
+    graph_rules:
+      - id: r_graph_god
+        when: "true"
+        status: info
+        text:
+          es: "El radio r aparece en el gráfico como el factor de escala que transforma fuerza en torque."
+          en: "The radius r appears in the graph as the scaling factor that transforms force into torque."
+    likely_errors:
+      - id: r_errors_god
+        when: "true"
+        status: warning
+        text:
+          es: "No confundas el radio de la palanca r con el radio del cilindro del tornillo; son magnitudes completamente distintas."
+          en: "Do not confuse the lever radius r with the radius of the screw cylinder; they are completely different quantities."
+    next_step_rules:
+      - id: r_next_god
+        when: "true"
+        status: tip
+        text:
+          es: "Si la fuerza F calculada supera la capacidad humana, aumenta el radio r de la palanca o usa un actuador mecánico."
+          en: "If the calculated force F exceeds human capacity, increase the lever radius r or use a mechanical actuator."
+
+`;export{e as default};

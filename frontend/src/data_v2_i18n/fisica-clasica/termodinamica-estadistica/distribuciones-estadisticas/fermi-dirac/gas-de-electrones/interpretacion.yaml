@@ -1,0 +1,1095 @@
+version: 5.0.0
+id: gas-de-electrones
+leaf_id: gas-de-electrones
+nombre:
+  es: Gas de electrones
+  en: Electron Gas
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: distribuciones-estadisticas
+  parent_id: fermi-dirac
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/distribuciones-estadisticas/fermi-dirac/gas-de-electrones
+  orden: 273320
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - energia_fermi_gas_electrones_3d
+  - temperatura_fermi_gas_electrones
+  - ocupacion_fermi_dirac_electrones
+  - energia_reducida_electrones
+  - velocidad_fermi
+  magnitudes:
+  - densidad_electronica
+  - energia_fermi
+  - masa_electron
+  - constante_planck_reducida
+  - temperatura_fermi
+  - constante_boltzmann
+  - temperatura_absoluta
+  - energia_estado
+  - potencial_quimico
+  - ocupacion_estado
+  - energia_reducida
+  - velocidad_fermi
+  - numero_electrones
+  - volumen
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: energia_fermi
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  energia_fermi:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado dominante
+      en: dominant result
+    summary_rules:
+    - id: energia_fermi_summary_core
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_fermi]] resume la energía hasta la que quedan ocupados los estados electrónicos a temperatura casi
+          nula.'
+        en: '[[energia_fermi]] summarizes the energy up to which electronic states are filled at nearly zero temperature.'
+    physical_reading_rules:
+    - id: energia_fermi_physical_reading_core
+      when: 'true'
+      status: info
+      text:
+        es: Una [[energia_fermi]] mayor significa que la [[densidad_electronica]] obliga a ocupar estados de mayor [[energia_estado]]
+          aunque el gas esté frío.
+        en: A larger [[energia_fermi]] means [[densidad_electronica]] forces occupation of higher [[energia_estado]] states
+          even when the gas is cold.
+    coherence_rules:
+    - id: energia_fermi_coherence_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[energia_fermi]] usa unidades SI y que su valor encaja con las magnitudes relacionadas del gas
+          de electrones.
+        en: Check that [[energia_fermi]] uses SI units and that its value fits the related quantities of the electron gas.
+    - id: energia_fermi_coherence_density_power
+      when: 'true'
+      status: ok
+      text:
+        es: Si [[densidad_electronica]] aumenta, [[energia_fermi]] debe aumentar; una tendencia contraria indica error de
+          despeje o unidades.
+        en: If [[densidad_electronica]] increases, [[energia_fermi]] must increase; the opposite trend indicates algebra or
+          unit error.
+    model_validity_rules:
+    - id: energia_fermi_model_validity_degenerate_gas
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia_fermi]] dentro de un gas de electrones libre o casi libre, no relativista y en equilibrio
+          térmico.
+        en: Interpret [[energia_fermi]] within a free or nearly free, nonrelativistic electron gas in thermal equilibrium.
+    graph_rules:
+    - id: energia_fermi_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[energia_fermi]] con cómo la [[densidad_electronica]] modifica [[energia_fermi]]
+          y la ocupación de estados.
+        en: In the Coord graph, relate [[energia_fermi]] to how [[densidad_electronica]] changes [[energia_fermi]] and state
+          occupation.
+    likely_errors:
+    - id: energia_fermi_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_fermi]] con una lectura aislada es un error frecuente: No leas [[energia_fermi]] como un
+          número aislado: revisa escala, unidades, dependencia con densidad y régimen de validez.'
+        en: 'A common mistake is to interpret [[energia_fermi]] in isolation: Do not read [[energia_fermi]] as an isolated
+          number: check scale, units, density dependence, and validity regime.'
+    next_step_rules:
+    - id: energia_fermi_next_step_compare_scale
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[energia_fermi]], compáralo con [[energia_fermi]], [[temperatura_fermi]] o [[ocupacion_estado]]
+          según el tipo de pregunta.
+        en: After obtaining [[energia_fermi]], compare it with [[energia_fermi]], [[temperatura_fermi]], or [[ocupacion_estado]]
+          according to the question type.
+    physical_intuition:
+    - id: energia_fermi_physical_intuition_fermi_pressure
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_fermi]] debe ayudar a leer el llenado progresivo impuesto por Pauli en el gas de electrones.
+        en: Intuitively, [[energia_fermi]] should help read the progressive filling imposed by Pauli exclusion in the electron
+          gas.
+    limiting_cases:
+    - id: energia_fermi_limiting_case_cold_dense
+      when: 'true'
+      status: info
+      text:
+        es: 'Como caso límite, revisa el régimen frío y denso: si [[temperatura_absoluta]] es pequeña frente a [[temperatura_fermi]],
+          domina la degeneración.'
+        en: 'As a limiting case, check the cold dense regime: if [[temperatura_absoluta]] is small compared with [[temperatura_fermi]],
+          degeneracy dominates.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  densidad_electronica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro de entrada
+      en: input parameter
+    summary_rules:
+    - id: densidad_electronica_summary_core
+      when: 'true'
+      status: ok
+      text:
+        es: '[[densidad_electronica]] mide cuántos electrones disponibles hay por volumen y controla la presión de llenado
+          cuántico.'
+        en: '[[densidad_electronica]] measures how many available electrons exist per volume and controls quantum filling
+          pressure.'
+    physical_reading_rules:
+    - id: densidad_electronica_physical_reading_core
+      when: 'true'
+      status: info
+      text:
+        es: Al aumentar [[densidad_electronica]], la exclusión de Pauli empuja el llenado hacia estados más altos y eleva
+          [[energia_fermi]].
+        en: As [[densidad_electronica]] increases, Pauli exclusion pushes filling toward higher states and raises [[energia_fermi]].
+    coherence_rules:
+    - id: densidad_electronica_coherence_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[densidad_electronica]] usa unidades SI y que su valor encaja con las magnitudes relacionadas del
+          gas de electrones.
+        en: Check that [[densidad_electronica]] uses SI units and that its value fits the related quantities of the electron
+          gas.
+    model_validity_rules:
+    - id: densidad_electronica_model_validity_degenerate_gas
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[densidad_electronica]] dentro de un gas de electrones libre o casi libre, no relativista y en equilibrio
+          térmico.
+        en: Interpret [[densidad_electronica]] within a free or nearly free, nonrelativistic electron gas in thermal equilibrium.
+    graph_rules:
+    - id: densidad_electronica_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[densidad_electronica]] con cómo la [[densidad_electronica]] modifica [[energia_fermi]]
+          y la ocupación de estados.
+        en: In the Coord graph, relate [[densidad_electronica]] to how [[densidad_electronica]] changes [[energia_fermi]]
+          and state occupation.
+    likely_errors:
+    - id: densidad_electronica_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[densidad_electronica]] con una lectura aislada es un error frecuente: No leas [[densidad_electronica]]
+          como un número aislado: revisa escala, unidades, dependencia con densidad y régimen de validez.'
+        en: 'A common mistake is to interpret [[densidad_electronica]] in isolation: Do not read [[densidad_electronica]]
+          as an isolated number: check scale, units, density dependence, and validity regime.'
+    next_step_rules:
+    - id: densidad_electronica_next_step_compare_scale
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[densidad_electronica]], compáralo con [[energia_fermi]], [[temperatura_fermi]] o [[ocupacion_estado]]
+          según el tipo de pregunta.
+        en: After obtaining [[densidad_electronica]], compare it with [[energia_fermi]], [[temperatura_fermi]], or [[ocupacion_estado]]
+          according to the question type.
+    - id: densidad_electronica_next_step_from_count
+      when: 'true'
+      status: info
+      text:
+        es: Si solo conoces [[numero_electrones]] y [[volumen]], calcula primero la densidad antes de usar la escala de Fermi.
+        en: If only [[numero_electrones]] and [[volumen]] are known, first compute density before using the Fermi scale.
+    physical_intuition:
+    - id: densidad_electronica_physical_intuition_fermi_pressure
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[densidad_electronica]] debe ayudar a leer el llenado progresivo impuesto por Pauli en el gas
+          de electrones.
+        en: Intuitively, [[densidad_electronica]] should help read the progressive filling imposed by Pauli exclusion in the
+          electron gas.
+    limiting_cases:
+    - id: densidad_electronica_limiting_case_cold_dense
+      when: 'true'
+      status: info
+      text:
+        es: 'Como caso límite, revisa el régimen frío y denso: si [[temperatura_absoluta]] es pequeña frente a [[temperatura_fermi]],
+          domina la degeneración.'
+        en: 'As a limiting case, check the cold dense regime: if [[temperatura_absoluta]] is small compared with [[temperatura_fermi]],
+          degeneracy dominates.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  masa_electron:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: constante de partícula
+      en: particle constant
+    summary_rules:
+    - id: masa_electron_summary_core
+      when: 'true'
+      status: ok
+      text:
+        es: '[[masa_electron]] fija la inercia cuántica del electrón y aparece como escala del modelo no relativista.'
+        en: '[[masa_electron]] sets the electron inertia scale and belongs to the nonrelativistic model assumptions.'
+    physical_reading_rules:
+    - id: masa_electron_physical_reading_core
+      when: 'true'
+      status: info
+      text:
+        es: Con la misma [[densidad_electronica]], una [[masa_electron]] efectiva mayor reduce la escala energética cinética
+          del borde de Fermi.
+        en: For the same [[densidad_electronica]], a larger effective [[masa_electron]] lowers the kinetic energy scale at
+          the Fermi edge.
+    coherence_rules:
+    - id: masa_electron_coherence_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[masa_electron]] usa unidades SI y que su valor encaja con las magnitudes relacionadas del gas
+          de electrones.
+        en: Check that [[masa_electron]] uses SI units and that its value fits the related quantities of the electron gas.
+    model_validity_rules:
+    - id: masa_electron_model_validity_degenerate_gas
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[masa_electron]] dentro de un gas de electrones libre o casi libre, no relativista y en equilibrio
+          térmico.
+        en: Interpret [[masa_electron]] within a free or nearly free, nonrelativistic electron gas in thermal equilibrium.
+    graph_rules:
+    - id: masa_electron_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[masa_electron]] con cómo la [[densidad_electronica]] modifica [[energia_fermi]]
+          y la ocupación de estados.
+        en: In the Coord graph, relate [[masa_electron]] to how [[densidad_electronica]] changes [[energia_fermi]] and state
+          occupation.
+    likely_errors:
+    - id: masa_electron_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[masa_electron]] con una lectura aislada es un error frecuente: No leas [[masa_electron]] como un
+          número aislado: revisa escala, unidades, dependencia con densidad y régimen de validez.'
+        en: 'A common mistake is to interpret [[masa_electron]] in isolation: Do not read [[masa_electron]] as an isolated
+          number: check scale, units, density dependence, and validity regime.'
+    next_step_rules:
+    - id: masa_electron_next_step_compare_scale
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[masa_electron]], compáralo con [[energia_fermi]], [[temperatura_fermi]] o [[ocupacion_estado]]
+          según el tipo de pregunta.
+        en: After obtaining [[masa_electron]], compare it with [[energia_fermi]], [[temperatura_fermi]], or [[ocupacion_estado]]
+          according to the question type.
+    physical_intuition:
+    - id: masa_electron_physical_intuition_fermi_pressure
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[masa_electron]] debe ayudar a leer el llenado progresivo impuesto por Pauli en el gas de electrones.
+        en: Intuitively, [[masa_electron]] should help read the progressive filling imposed by Pauli exclusion in the electron
+          gas.
+    limiting_cases:
+    - id: masa_electron_limiting_case_cold_dense
+      when: 'true'
+      status: info
+      text:
+        es: 'Como caso límite, revisa el régimen frío y denso: si [[temperatura_absoluta]] es pequeña frente a [[temperatura_fermi]],
+          domina la degeneración.'
+        en: 'As a limiting case, check the cold dense regime: if [[temperatura_absoluta]] is small compared with [[temperatura_fermi]],
+          degeneracy dominates.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_fermi:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: escala térmica característica
+      en: characteristic thermal scale
+    summary_rules:
+    - id: temperatura_fermi_summary_core
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_fermi]] expresa [[energia_fermi]] como temperatura equivalente para comparar degeneración y agitación
+          térmica.'
+        en: '[[temperatura_fermi]] expresses [[energia_fermi]] as an equivalent temperature for comparing degeneracy with
+          thermal agitation.'
+    physical_reading_rules:
+    - id: temperatura_fermi_physical_reading_core
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_absoluta]] es mucho menor que [[temperatura_fermi]], el gas se comporta como degenerado.
+        en: If [[temperatura_absoluta]] is far below [[temperatura_fermi]], the gas behaves as a degenerate electron gas.
+    coherence_rules:
+    - id: temperatura_fermi_coherence_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura_fermi]] usa unidades SI y que su valor encaja con las magnitudes relacionadas del
+          gas de electrones.
+        en: Check that [[temperatura_fermi]] uses SI units and that its value fits the related quantities of the electron
+          gas.
+    model_validity_rules:
+    - id: temperatura_fermi_model_validity_degenerate_gas
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura_fermi]] dentro de un gas de electrones libre o casi libre, no relativista y en equilibrio
+          térmico.
+        en: Interpret [[temperatura_fermi]] within a free or nearly free, nonrelativistic electron gas in thermal equilibrium.
+    graph_rules:
+    - id: temperatura_fermi_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[temperatura_fermi]] con cómo la [[densidad_electronica]] modifica [[energia_fermi]]
+          y la ocupación de estados.
+        en: In the Coord graph, relate [[temperatura_fermi]] to how [[densidad_electronica]] changes [[energia_fermi]] and
+          state occupation.
+    likely_errors:
+    - id: temperatura_fermi_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura_fermi]] con una lectura aislada es un error frecuente: No leas [[temperatura_fermi]]
+          como un número aislado: revisa escala, unidades, dependencia con densidad y régimen de validez.'
+        en: 'A common mistake is to interpret [[temperatura_fermi]] in isolation: Do not read [[temperatura_fermi]] as an
+          isolated number: check scale, units, density dependence, and validity regime.'
+    next_step_rules:
+    - id: temperatura_fermi_next_step_compare_scale
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[temperatura_fermi]], compáralo con [[energia_fermi]], [[temperatura_fermi]] o [[ocupacion_estado]]
+          según el tipo de pregunta.
+        en: After obtaining [[temperatura_fermi]], compare it with [[energia_fermi]], [[temperatura_fermi]], or [[ocupacion_estado]]
+          according to the question type.
+    physical_intuition:
+    - id: temperatura_fermi_physical_intuition_fermi_pressure
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura_fermi]] debe ayudar a leer el llenado progresivo impuesto por Pauli en el gas de
+          electrones.
+        en: Intuitively, [[temperatura_fermi]] should help read the progressive filling imposed by Pauli exclusion in the
+          electron gas.
+    limiting_cases:
+    - id: temperatura_fermi_limiting_case_cold_dense
+      when: 'true'
+      status: info
+      text:
+        es: 'Como caso límite, revisa el régimen frío y denso: si [[temperatura_absoluta]] es pequeña frente a [[temperatura_fermi]],
+          domina la degeneración.'
+        en: 'As a limiting case, check the cold dense regime: if [[temperatura_absoluta]] is small compared with [[temperatura_fermi]],
+          degeneracy dominates.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  ocupacion_estado:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado de ocupación
+      en: occupation result
+    summary_rules:
+    - id: ocupacion_estado_summary_core
+      when: 'true'
+      status: ok
+      text:
+        es: '[[ocupacion_estado]] indica la probabilidad media de encontrar ocupado un estado electrónico permitido.'
+        en: '[[ocupacion_estado]] indicates the mean probability that an allowed electronic state is occupied.'
+    physical_reading_rules:
+    - id: ocupacion_estado_physical_reading_core
+      when: 'true'
+      status: info
+      text:
+        es: '[[ocupacion_estado]] debe leerse entre cero y uno por estado no degenerado; no es el número total de electrones.'
+        en: '[[ocupacion_estado]] must be read between zero and one for a nondegenerate state; it is not the total electron
+          count.'
+    coherence_rules:
+    - id: ocupacion_estado_coherence_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[ocupacion_estado]] usa unidades SI y que su valor encaja con las magnitudes relacionadas del gas
+          de electrones.
+        en: Check that [[ocupacion_estado]] uses SI units and that its value fits the related quantities of the electron gas.
+    - id: ocupacion_estado_bounds
+      when: 'true'
+      status: ok
+      text:
+        es: '[[ocupacion_estado]] debe permanecer entre 0 y 1 para un estado no degenerado.'
+        en: '[[ocupacion_estado]] must remain between 0 and 1 for a nondegenerate state.'
+    model_validity_rules:
+    - id: ocupacion_estado_model_validity_degenerate_gas
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[ocupacion_estado]] dentro de un gas de electrones libre o casi libre, no relativista y en equilibrio
+          térmico.
+        en: Interpret [[ocupacion_estado]] within a free or nearly free, nonrelativistic electron gas in thermal equilibrium.
+    graph_rules:
+    - id: ocupacion_estado_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[ocupacion_estado]] con cómo la [[densidad_electronica]] modifica [[energia_fermi]]
+          y la ocupación de estados.
+        en: In the Coord graph, relate [[ocupacion_estado]] to how [[densidad_electronica]] changes [[energia_fermi]] and
+          state occupation.
+    likely_errors:
+    - id: ocupacion_estado_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[ocupacion_estado]] con una lectura aislada es un error frecuente: No leas [[ocupacion_estado]] como
+          un número aislado: revisa escala, unidades, dependencia con densidad y régimen de validez.'
+        en: 'A common mistake is to interpret [[ocupacion_estado]] in isolation: Do not read [[ocupacion_estado]] as an isolated
+          number: check scale, units, density dependence, and validity regime.'
+    next_step_rules:
+    - id: ocupacion_estado_next_step_compare_scale
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[ocupacion_estado]], compáralo con [[energia_fermi]], [[temperatura_fermi]] o [[ocupacion_estado]]
+          según el tipo de pregunta.
+        en: After obtaining [[ocupacion_estado]], compare it with [[energia_fermi]], [[temperatura_fermi]], or [[ocupacion_estado]]
+          according to the question type.
+    physical_intuition:
+    - id: ocupacion_estado_physical_intuition_fermi_pressure
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[ocupacion_estado]] debe ayudar a leer el llenado progresivo impuesto por Pauli en el gas de
+          electrones.
+        en: Intuitively, [[ocupacion_estado]] should help read the progressive filling imposed by Pauli exclusion in the electron
+          gas.
+    limiting_cases:
+    - id: ocupacion_estado_limiting_case_cold_dense
+      when: 'true'
+      status: info
+      text:
+        es: 'Como caso límite, revisa el régimen frío y denso: si [[temperatura_absoluta]] es pequeña frente a [[temperatura_fermi]],
+          domina la degeneración.'
+        en: 'As a limiting case, check the cold dense regime: if [[temperatura_absoluta]] is small compared with [[temperatura_fermi]],
+          degeneracy dominates.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_estado:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable independiente
+      en: independent variable
+    summary_rules:
+    - id: energia_estado_summary_core
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_estado]] localiza el estado electrónico cuya probabilidad de ocupación se quiere leer.'
+        en: '[[energia_estado]] locates the electronic state whose occupation probability is being read.'
+    physical_reading_rules:
+    - id: energia_estado_physical_reading_core
+      when: 'true'
+      status: info
+      text:
+        es: Estados con [[energia_estado]] por debajo del [[potencial_quimico]] tienden a alta [[ocupacion_estado]]; por encima,
+          a baja ocupación.
+        en: States with [[energia_estado]] below [[potencial_quimico]] tend toward high [[ocupacion_estado]]; states above
+          it tend toward low occupation.
+    coherence_rules:
+    - id: energia_estado_coherence_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[energia_estado]] usa unidades SI y que su valor encaja con las magnitudes relacionadas del gas
+          de electrones.
+        en: Check that [[energia_estado]] uses SI units and that its value fits the related quantities of the electron gas.
+    model_validity_rules:
+    - id: energia_estado_model_validity_degenerate_gas
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia_estado]] dentro de un gas de electrones libre o casi libre, no relativista y en equilibrio
+          térmico.
+        en: Interpret [[energia_estado]] within a free or nearly free, nonrelativistic electron gas in thermal equilibrium.
+    graph_rules:
+    - id: energia_estado_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[energia_estado]] con cómo la [[densidad_electronica]] modifica [[energia_fermi]]
+          y la ocupación de estados.
+        en: In the Coord graph, relate [[energia_estado]] to how [[densidad_electronica]] changes [[energia_fermi]] and state
+          occupation.
+    likely_errors:
+    - id: energia_estado_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_estado]] con una lectura aislada es un error frecuente: No leas [[energia_estado]] como un
+          número aislado: revisa escala, unidades, dependencia con densidad y régimen de validez.'
+        en: 'A common mistake is to interpret [[energia_estado]] in isolation: Do not read [[energia_estado]] as an isolated
+          number: check scale, units, density dependence, and validity regime.'
+    next_step_rules:
+    - id: energia_estado_next_step_compare_scale
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[energia_estado]], compáralo con [[energia_fermi]], [[temperatura_fermi]] o [[ocupacion_estado]]
+          según el tipo de pregunta.
+        en: After obtaining [[energia_estado]], compare it with [[energia_fermi]], [[temperatura_fermi]], or [[ocupacion_estado]]
+          according to the question type.
+    physical_intuition:
+    - id: energia_estado_physical_intuition_fermi_pressure
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_estado]] debe ayudar a leer el llenado progresivo impuesto por Pauli en el gas de electrones.
+        en: Intuitively, [[energia_estado]] should help read the progressive filling imposed by Pauli exclusion in the electron
+          gas.
+    limiting_cases:
+    - id: energia_estado_limiting_case_cold_dense
+      when: 'true'
+      status: info
+      text:
+        es: 'Como caso límite, revisa el régimen frío y denso: si [[temperatura_absoluta]] es pequeña frente a [[temperatura_fermi]],
+          domina la degeneración.'
+        en: 'As a limiting case, check the cold dense regime: if [[temperatura_absoluta]] is small compared with [[temperatura_fermi]],
+          degeneracy dominates.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  potencial_quimico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: referencia energética
+      en: energy reference
+    summary_rules:
+    - id: potencial_quimico_summary_core
+      when: 'true'
+      status: ok
+      text:
+        es: '[[potencial_quimico]] marca la referencia energética donde cambia la ocupación media del gas en equilibrio.'
+        en: '[[potencial_quimico]] marks the energy reference where mean occupation changes in equilibrium.'
+    physical_reading_rules:
+    - id: potencial_quimico_physical_reading_core
+      when: 'true'
+      status: info
+      text:
+        es: '[[potencial_quimico]] no es una energía de un electrón concreto, sino la referencia de equilibrio para añadir
+          partículas.'
+        en: '[[potencial_quimico]] is not the energy of one particular electron, but the equilibrium reference for adding
+          particles.'
+    coherence_rules:
+    - id: potencial_quimico_coherence_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[potencial_quimico]] usa unidades SI y que su valor encaja con las magnitudes relacionadas del
+          gas de electrones.
+        en: Check that [[potencial_quimico]] uses SI units and that its value fits the related quantities of the electron
+          gas.
+    model_validity_rules:
+    - id: potencial_quimico_model_validity_degenerate_gas
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[potencial_quimico]] dentro de un gas de electrones libre o casi libre, no relativista y en equilibrio
+          térmico.
+        en: Interpret [[potencial_quimico]] within a free or nearly free, nonrelativistic electron gas in thermal equilibrium.
+    graph_rules:
+    - id: potencial_quimico_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[potencial_quimico]] con cómo la [[densidad_electronica]] modifica [[energia_fermi]]
+          y la ocupación de estados.
+        en: In the Coord graph, relate [[potencial_quimico]] to how [[densidad_electronica]] changes [[energia_fermi]] and
+          state occupation.
+    likely_errors:
+    - id: potencial_quimico_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[potencial_quimico]] con una lectura aislada es un error frecuente: No leas [[potencial_quimico]]
+          como un número aislado: revisa escala, unidades, dependencia con densidad y régimen de validez.'
+        en: 'A common mistake is to interpret [[potencial_quimico]] in isolation: Do not read [[potencial_quimico]] as an
+          isolated number: check scale, units, density dependence, and validity regime.'
+    next_step_rules:
+    - id: potencial_quimico_next_step_compare_scale
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[potencial_quimico]], compáralo con [[energia_fermi]], [[temperatura_fermi]] o [[ocupacion_estado]]
+          según el tipo de pregunta.
+        en: After obtaining [[potencial_quimico]], compare it with [[energia_fermi]], [[temperatura_fermi]], or [[ocupacion_estado]]
+          according to the question type.
+    physical_intuition:
+    - id: potencial_quimico_physical_intuition_fermi_pressure
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[potencial_quimico]] debe ayudar a leer el llenado progresivo impuesto por Pauli en el gas de
+          electrones.
+        en: Intuitively, [[potencial_quimico]] should help read the progressive filling imposed by Pauli exclusion in the
+          electron gas.
+    limiting_cases:
+    - id: potencial_quimico_limiting_case_cold_dense
+      when: 'true'
+      status: info
+      text:
+        es: 'Como caso límite, revisa el régimen frío y denso: si [[temperatura_absoluta]] es pequeña frente a [[temperatura_fermi]],
+          domina la degeneración.'
+        en: 'As a limiting case, check the cold dense regime: if [[temperatura_absoluta]] is small compared with [[temperatura_fermi]],
+          degeneracy dominates.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_reducida:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable adimensional de comparación
+      en: dimensionless comparison variable
+    summary_rules:
+    - id: energia_reducida_summary_core
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_reducida]] mide la separación entre [[energia_estado]] y [[potencial_quimico]] en unidades térmicas.'
+        en: '[[energia_reducida]] measures the separation between [[energia_estado]] and [[potencial_quimico]] in thermal
+          units.'
+    physical_reading_rules:
+    - id: energia_reducida_physical_reading_core
+      when: 'true'
+      status: info
+      text:
+        es: El signo de [[energia_reducida]] indica si el estado está por debajo o por encima del [[potencial_quimico]].
+        en: The sign of [[energia_reducida]] indicates whether the state lies below or above the [[potencial_quimico]].
+    coherence_rules:
+    - id: energia_reducida_coherence_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[energia_reducida]] usa unidades SI y que su valor encaja con las magnitudes relacionadas del gas
+          de electrones.
+        en: Check that [[energia_reducida]] uses SI units and that its value fits the related quantities of the electron gas.
+    - id: energia_reducida_dimensionless
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_reducida]] debe ser adimensional; si conserva unidades de energía, falta dividir por la escala térmica.'
+        en: '[[energia_reducida]] must be dimensionless; if it keeps energy units, division by the thermal scale is missing.'
+    model_validity_rules:
+    - id: energia_reducida_model_validity_degenerate_gas
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia_reducida]] dentro de un gas de electrones libre o casi libre, no relativista y en equilibrio
+          térmico.
+        en: Interpret [[energia_reducida]] within a free or nearly free, nonrelativistic electron gas in thermal equilibrium.
+    graph_rules:
+    - id: energia_reducida_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[energia_reducida]] con cómo la [[densidad_electronica]] modifica [[energia_fermi]]
+          y la ocupación de estados.
+        en: In the Coord graph, relate [[energia_reducida]] to how [[densidad_electronica]] changes [[energia_fermi]] and
+          state occupation.
+    likely_errors:
+    - id: energia_reducida_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_reducida]] con una lectura aislada es un error frecuente: No leas [[energia_reducida]] como
+          un número aislado: revisa escala, unidades, dependencia con densidad y régimen de validez.'
+        en: 'A common mistake is to interpret [[energia_reducida]] in isolation: Do not read [[energia_reducida]] as an isolated
+          number: check scale, units, density dependence, and validity regime.'
+    next_step_rules:
+    - id: energia_reducida_next_step_compare_scale
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[energia_reducida]], compáralo con [[energia_fermi]], [[temperatura_fermi]] o [[ocupacion_estado]]
+          según el tipo de pregunta.
+        en: After obtaining [[energia_reducida]], compare it with [[energia_fermi]], [[temperatura_fermi]], or [[ocupacion_estado]]
+          according to the question type.
+    physical_intuition:
+    - id: energia_reducida_physical_intuition_fermi_pressure
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_reducida]] debe ayudar a leer el llenado progresivo impuesto por Pauli en el gas de
+          electrones.
+        en: Intuitively, [[energia_reducida]] should help read the progressive filling imposed by Pauli exclusion in the electron
+          gas.
+    limiting_cases:
+    - id: energia_reducida_limiting_case_cold_dense
+      when: 'true'
+      status: info
+      text:
+        es: 'Como caso límite, revisa el régimen frío y denso: si [[temperatura_absoluta]] es pequeña frente a [[temperatura_fermi]],
+          domina la degeneración.'
+        en: 'As a limiting case, check the cold dense regime: if [[temperatura_absoluta]] is small compared with [[temperatura_fermi]],
+          degeneracy dominates.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_absoluta:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro térmico
+      en: thermal parameter
+    summary_rules:
+    - id: temperatura_absoluta_summary_core
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_absoluta]] suaviza la frontera de ocupación alrededor del [[potencial_quimico]].'
+        en: '[[temperatura_absoluta]] smooths the occupation boundary around the [[potencial_quimico]].'
+    physical_reading_rules:
+    - id: temperatura_absoluta_physical_reading_core
+      when: 'true'
+      status: info
+      text:
+        es: 'Una [[temperatura_absoluta]] mayor no elimina Pauli: solo ensancha la transición de [[ocupacion_estado]] cerca
+          del borde.'
+        en: 'A larger [[temperatura_absoluta]] does not remove Pauli exclusion: it only broadens the [[ocupacion_estado]]
+          transition near the edge.'
+    coherence_rules:
+    - id: temperatura_absoluta_coherence_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura_absoluta]] usa unidades SI y que su valor encaja con las magnitudes relacionadas del
+          gas de electrones.
+        en: Check that [[temperatura_absoluta]] uses SI units and that its value fits the related quantities of the electron
+          gas.
+    model_validity_rules:
+    - id: temperatura_absoluta_model_validity_degenerate_gas
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura_absoluta]] dentro de un gas de electrones libre o casi libre, no relativista y en equilibrio
+          térmico.
+        en: Interpret [[temperatura_absoluta]] within a free or nearly free, nonrelativistic electron gas in thermal equilibrium.
+    - id: temperatura_absoluta_degenerate_limit
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[temperatura_absoluta]] es comparable o superior a [[temperatura_fermi]], la lectura de gas fuertemente
+          degenerado se debilita.
+        en: When [[temperatura_absoluta]] is comparable to or above [[temperatura_fermi]], the strongly degenerate gas reading
+          weakens.
+    graph_rules:
+    - id: temperatura_absoluta_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[temperatura_absoluta]] con cómo la [[densidad_electronica]] modifica [[energia_fermi]]
+          y la ocupación de estados.
+        en: In the Coord graph, relate [[temperatura_absoluta]] to how [[densidad_electronica]] changes [[energia_fermi]]
+          and state occupation.
+    likely_errors:
+    - id: temperatura_absoluta_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura_absoluta]] con una lectura aislada es un error frecuente: No leas [[temperatura_absoluta]]
+          como un número aislado: revisa escala, unidades, dependencia con densidad y régimen de validez.'
+        en: 'A common mistake is to interpret [[temperatura_absoluta]] in isolation: Do not read [[temperatura_absoluta]]
+          as an isolated number: check scale, units, density dependence, and validity regime.'
+    next_step_rules:
+    - id: temperatura_absoluta_next_step_compare_scale
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[temperatura_absoluta]], compáralo con [[energia_fermi]], [[temperatura_fermi]] o [[ocupacion_estado]]
+          según el tipo de pregunta.
+        en: After obtaining [[temperatura_absoluta]], compare it with [[energia_fermi]], [[temperatura_fermi]], or [[ocupacion_estado]]
+          according to the question type.
+    physical_intuition:
+    - id: temperatura_absoluta_physical_intuition_fermi_pressure
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura_absoluta]] debe ayudar a leer el llenado progresivo impuesto por Pauli en el gas
+          de electrones.
+        en: Intuitively, [[temperatura_absoluta]] should help read the progressive filling imposed by Pauli exclusion in the
+          electron gas.
+    limiting_cases:
+    - id: temperatura_absoluta_limiting_case_cold_dense
+      when: 'true'
+      status: info
+      text:
+        es: 'Como caso límite, revisa el régimen frío y denso: si [[temperatura_absoluta]] es pequeña frente a [[temperatura_fermi]],
+          domina la degeneración.'
+        en: 'As a limiting case, check the cold dense regime: if [[temperatura_absoluta]] is small compared with [[temperatura_fermi]],
+          degeneracy dominates.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  velocidad_fermi:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: escala cinemática del borde de Fermi
+      en: kinematic scale at the Fermi edge
+    summary_rules:
+    - id: velocidad_fermi_summary_core
+      when: 'true'
+      status: ok
+      text:
+        es: '[[velocidad_fermi]] representa la velocidad característica de los electrones próximos al borde de Fermi.'
+        en: '[[velocidad_fermi]] represents the characteristic speed of electrons close to the Fermi edge.'
+    physical_reading_rules:
+    - id: velocidad_fermi_physical_reading_core
+      when: 'true'
+      status: info
+      text:
+        es: '[[velocidad_fermi]] no implica que todos los electrones viajen igual: caracteriza los electrones del borde ocupado.'
+        en: '[[velocidad_fermi]] does not mean all electrons move equally: it characterizes electrons near the occupied edge.'
+    coherence_rules:
+    - id: velocidad_fermi_coherence_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[velocidad_fermi]] usa unidades SI y que su valor encaja con las magnitudes relacionadas del gas
+          de electrones.
+        en: Check that [[velocidad_fermi]] uses SI units and that its value fits the related quantities of the electron gas.
+    model_validity_rules:
+    - id: velocidad_fermi_model_validity_degenerate_gas
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[velocidad_fermi]] dentro de un gas de electrones libre o casi libre, no relativista y en equilibrio
+          térmico.
+        en: Interpret [[velocidad_fermi]] within a free or nearly free, nonrelativistic electron gas in thermal equilibrium.
+    - id: velocidad_fermi_nonrelativistic
+      when: 'true'
+      status: warning
+      text:
+        es: Si [[velocidad_fermi]] se acerca a la velocidad de la luz, el modelo no relativista deja de ser suficiente.
+        en: If [[velocidad_fermi]] approaches the speed of light, the nonrelativistic model is no longer sufficient.
+    graph_rules:
+    - id: velocidad_fermi_graph_coord_reading
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[velocidad_fermi]] con cómo la [[densidad_electronica]] modifica [[energia_fermi]]
+          y la ocupación de estados.
+        en: In the Coord graph, relate [[velocidad_fermi]] to how [[densidad_electronica]] changes [[energia_fermi]] and state
+          occupation.
+    likely_errors:
+    - id: velocidad_fermi_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[velocidad_fermi]] con una lectura aislada es un error frecuente: No leas [[velocidad_fermi]] como
+          un número aislado: revisa escala, unidades, dependencia con densidad y régimen de validez.'
+        en: 'A common mistake is to interpret [[velocidad_fermi]] in isolation: Do not read [[velocidad_fermi]] as an isolated
+          number: check scale, units, density dependence, and validity regime.'
+    next_step_rules:
+    - id: velocidad_fermi_next_step_compare_scale
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[velocidad_fermi]], compáralo con [[energia_fermi]], [[temperatura_fermi]] o [[ocupacion_estado]]
+          según el tipo de pregunta.
+        en: After obtaining [[velocidad_fermi]], compare it with [[energia_fermi]], [[temperatura_fermi]], or [[ocupacion_estado]]
+          according to the question type.
+    physical_intuition:
+    - id: velocidad_fermi_physical_intuition_fermi_pressure
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[velocidad_fermi]] debe ayudar a leer el llenado progresivo impuesto por Pauli en el gas de electrones.
+        en: Intuitively, [[velocidad_fermi]] should help read the progressive filling imposed by Pauli exclusion in the electron
+          gas.
+    limiting_cases:
+    - id: velocidad_fermi_limiting_case_cold_dense
+      when: 'true'
+      status: info
+      text:
+        es: 'Como caso límite, revisa el régimen frío y denso: si [[temperatura_absoluta]] es pequeña frente a [[temperatura_fermi]],
+          domina la degeneración.'
+        en: 'As a limiting case, check the cold dense regime: if [[temperatura_absoluta]] is small compared with [[temperatura_fermi]],
+          degeneracy dominates.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

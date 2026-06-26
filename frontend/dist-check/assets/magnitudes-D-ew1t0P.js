@@ -1,0 +1,188 @@
+const e=`version: 5
+magnitudes:
+- id: W
+  symbol: W
+  nombre:
+    es: trabajo
+    en: Work
+  unidad_si: J
+  descripcion:
+    es: Trabajo acumulado por una fuerza variable a lo largo de un intervalo espacial.
+    en: Work accumulated by a variable force along a spatial interval.
+  dimension: ML^2T^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in: [ trabajo_integral, trabajo_hooke_intervalo, trabajo_aprox_fuerza_media ]
+  common_mistake: Tratar W como siempre positiva sin analizar signo del area.
+  typical_range: Puede ser positiva, negativa o nula.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende de la orientacion local de la fuerza respecto al desplazamiento.
+      en: Sign depends on local force orientation relative to displacement.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: W nula puede surgir por cancelacion de areas positivas y negativas.
+      en: Zero work may arise from cancellation of positive and negative areas.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for: [ trabajo-fuerza-variable ]
+    secondary_for: []
+  graph_binding:
+    channels: [ area_bajo_curva ]
+  pedagogical_notes: Su lectura principal es geometrica y acumulativa.
+- id: x1
+  symbol: x_1
+  nombre:
+    es: posicion inicial
+    en: Initial Position
+  unidad_si: m
+  descripcion:
+    es: Inicio del intervalo sobre el eje de posicion para el calculo de trabajo.
+    en: Start of the position interval used for work computation.
+  dimension: L
+  is_vector: false
+  components: []
+  category: base_or_parameter
+  physical_role: physical_quantity
+  used_in: [ trabajo_integral, trabajo_hooke_intervalo, trabajo_aprox_fuerza_media ]
+  common_mistake: Cambiar x1 en mitad de la resolucion sin redefinir el intervalo.
+  typical_range: Dependiente del origen elegido.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su signo depende de la convencion de referencia espacial.
+      en: Sign depends on spatial reference convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: x1 cero fija el inicio en el origen elegido.
+      en: x1 equals zero sets the start at the chosen origin.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ trabajo-fuerza-variable ]
+  graph_binding:
+    channels: [ eje_x ]
+  pedagogical_notes: Debe declararse junto con x2 antes de integrar.
+- id: x2
+  symbol: x_2
+  nombre:
+    es: posicion final
+    en: Final Position
+  unidad_si: m
+  descripcion:
+    es: Fin del intervalo sobre el eje de posicion para el calculo de trabajo.
+    en: End of the position interval used for work computation.
+  dimension: L
+  is_vector: false
+  components: []
+  category: base_or_parameter
+  physical_role: physical_quantity
+  used_in: [ trabajo_integral, trabajo_hooke_intervalo, trabajo_aprox_fuerza_media ]
+  common_mistake: Usar x2 como distancia recorrida en vez de posicion final.
+  typical_range: Dependiente del origen elegido.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su signo depende de la referencia espacial definida.
+      en: Sign depends on the chosen spatial reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: x2 cero indica fin en el origen de referencia.
+      en: x2 equals zero indicates ending at the reference origin.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ trabajo-fuerza-variable ]
+  graph_binding:
+    channels: [ eje_x ]
+  pedagogical_notes: El orden x1 a x2 define el signo de la integral.
+- id: k
+  symbol: k
+  nombre:
+    es: constante elastica
+    en: Spring Constant
+  unidad_si: N/m
+  descripcion:
+    es: Parametro de rigidez en el modelo lineal F(x)=k x.
+    en: Stiffness parameter in the linear model F(x)=k x.
+  dimension: MT^{-2}
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: physical_quantity
+  used_in: [ trabajo_hooke_intervalo ]
+  common_mistake: Aplicar k constante fuera del rango lineal del resorte.
+  typical_range: Positiva en resortes lineales estables.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En el modelo ideal, k se toma no negativa.
+      en: In the ideal model, k is treated as non-negative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: k cero elimina aporte elastico variable en ese modelo.
+      en: k equals zero removes variable elastic contribution in that model.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, inf)'
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ trabajo-fuerza-variable ]
+  graph_binding:
+    channels: [ pendiente ]
+  pedagogical_notes: Debe validarse linealidad antes de usarlo.
+- id: Fmed
+  symbol: F_{med}
+  nombre:
+    es: fuerza media
+    en: Average Force
+  unidad_si: N
+  descripcion:
+    es: Fuerza equivalente promedio para aproximar trabajo en un intervalo.
+    en: Equivalent average force used to approximate work over an interval.
+  dimension: MLT^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in: [ trabajo_aprox_fuerza_media ]
+  common_mistake: Tomar Fmed sin justificar variacion suave de la fuerza real.
+  typical_range: Depende del perfil F(x) del caso.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Puede ser positiva o negativa segun balance del intervalo.
+      en: It can be positive or negative depending on interval balance.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Fmed cero implica trabajo aproximado nulo para ese tramo.
+      en: Zero average force implies near-zero approximate work on that segment.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ trabajo-fuerza-variable ]
+  graph_binding:
+    channels: [ rectangulo_equivalente ]
+  pedagogical_notes: Es una aproximacion, no reemplaza siempre la integral exacta.
+`;export{e as default};

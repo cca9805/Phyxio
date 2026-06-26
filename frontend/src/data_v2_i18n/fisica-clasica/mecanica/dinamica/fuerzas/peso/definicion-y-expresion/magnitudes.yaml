@@ -1,0 +1,457 @@
+version: 1
+magnitudes:
+  - id: P
+    symbol: \vec{P}
+    nombre:
+      es: peso
+      en: weight
+    descripcion:
+      es: Fuerza gravitatoria ejercida por el astro sobre el cuerpo, dirigida hacia el centro del astro.
+      en: Gravitational force exerted by the attracting body on the object, directed toward the body center.
+    unidad_si: "N"
+    dimension: "LMT^{-2}"
+    is_vector: true
+    components: ["P_x", "P_y"]
+    category: derived
+    physical_role: gravitational_load
+    used_in: [peso_vectorial, modulo_peso]
+    common_mistake: "Confundir peso con masa; el peso es una fuerza y se mide en newtons, no en kilogramos."
+    typical_range: "0.01 - 1e8 N en escala humana a industrial"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo negativo indica que apunta en sentido contrario al eje y positivo (hacia abajo).
+        en: A negative sign means the force points opposite to the positive y-axis (downward).
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Un peso nulo implicaria masa nula o gravedad nula, ambos fisicamente imposibles en mecanica clasica terrestre.
+        en: Zero weight would imply zero mass or zero gravity, both physically impossible in terrestrial classical mechanics.
+    value_nature:
+      kind: vector_projection
+      nonnegative_only: false
+      expected_interval: "(0, 1e8] N modulo"
+    interpretation_role:
+      primary_for: [peso_vectorial, modulo_peso]
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: "Siempre dibujar como flecha vertical hacia abajo desde el centro de masas del cuerpo en el DCL."
+
+  - id: m
+    symbol: m
+    nombre:
+      es: masa
+      en: mass
+    descripcion:
+      es: Medida de la inercia del cuerpo; cantidad de materia que no depende del lugar.
+      en: Measure of the body inertia; quantity of matter independent of location.
+    unidad_si: "kg"
+    dimension: "M"
+    is_vector: false
+    components: null
+    category: fundamental
+    physical_role: inertial_mass
+    used_in: [peso_vectorial, modulo_peso, gravedad_campo_central]
+    common_mistake: "Creer que la masa cambia al cambiar de planeta; la masa es invariante, el peso no."
+    typical_range: "0.001 - 1e6 kg en problemas tipicos"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La masa es siempre positiva por definicion en mecanica clasica.
+        en: Mass is always positive by definition in classical mechanics.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Una masa nula carece de sentido fisico en mecanica clasica.
+        en: Zero mass has no physical meaning in classical mechanics.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "(0, 1e6] kg"
+    interpretation_role:
+      primary_for: []
+      secondary_for: [peso_vectorial, modulo_peso]
+    graph_binding:
+      channels: []
+    pedagogical_notes: "La masa es el dato de entrada del problema; no confundirla con el peso ni expresarla en newtons."
+
+  - id: g
+    symbol: \vec{g}
+    nombre:
+      es: campo gravitatorio local
+      en: local gravitational field
+    descripcion:
+      es: Vector campo gravitatorio en el punto donde se encuentra el cuerpo, dirigido hacia el centro del astro.
+      en: Gravitational field vector at the point where the body is located, directed toward the attracting body center.
+    unidad_si: "m/s^2"
+    dimension: "LT^{-2}"
+    is_vector: true
+    components: ["g_x", "g_y"]
+    category: parameter
+    physical_role: field_intensity
+    used_in: [peso_vectorial]
+    common_mistake: "Usar g = 9.8 siempre sin considerar que cambia con la altitud y el planeta."
+    typical_range: "1.6 - 274 m/s^2 en superficies del sistema solar"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Signo negativo indica que el campo apunta hacia abajo respecto al eje y positivo.
+        en: Negative sign means the field points downward relative to the positive y-axis.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Un campo nulo implicaria estar infinitamente lejos de toda materia.
+        en: Zero field would imply being infinitely far from all matter.
+    value_nature:
+      kind: vector_projection
+      nonnegative_only: false
+      expected_interval: "(0, 300] m/s^2 modulo"
+    interpretation_role:
+      primary_for: [peso_vectorial]
+      secondary_for: [gravedad_campo_central]
+    graph_binding:
+      channels: []
+    pedagogical_notes: "En problemas introductorios se usa g = 9.8 m/s^2 hacia abajo. No olvidar la direccion."
+
+  - id: Pmod
+    symbol: P
+    nombre:
+      es: modulo del peso
+      en: weight magnitude
+    descripcion:
+      es: Valor escalar positivo de la fuerza peso; magnitud del vector peso.
+      en: Positive scalar value of the weight force; magnitude of the weight vector.
+    unidad_si: "N"
+    dimension: "LMT^{-2}"
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: gravitational_load_scalar
+    used_in: [modulo_peso]
+    common_mistake: "Usar P como escalar sin distinguirlo del vector peso en ecuaciones vectoriales."
+    typical_range: "0.01 - 1e8 N"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: El modulo es siempre positivo; la direccion se asigna por convenio en el DCL.
+        en: The magnitude is always positive; direction is assigned by convention in the FBD.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Un modulo nulo es fisicamente imposible si hay masa y gravedad.
+        en: Zero magnitude is physically impossible when mass and gravity exist.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "(0, 1e8] N"
+    interpretation_role:
+      primary_for: [modulo_peso]
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: "Es el valor que se obtiene con la calculadora; la direccion se interpreta aparte."
+
+  - id: gmod
+    symbol: g
+    nombre:
+      es: modulo de la gravedad
+      en: gravitational field magnitude
+    descripcion:
+      es: Valor escalar positivo del campo gravitatorio local.
+      en: Positive scalar value of the local gravitational field.
+    unidad_si: "m/s^2"
+    dimension: "LT^{-2}"
+    is_vector: false
+    components: null
+    category: parameter
+    physical_role: field_intensity_scalar
+    used_in: [modulo_peso, gravedad_campo_central]
+    common_mistake: "Tomar g como constante universal cuando realmente depende del astro y la altitud."
+    typical_range: "1.6 - 274 m/s^2 en superficies del sistema solar"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: El modulo es siempre positivo; el signo se asigna al elegir el eje.
+        en: The magnitude is always positive; the sign is assigned when choosing the axis.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Gravedad nula no existe en la superficie de ningun astro real.
+        en: Zero gravity does not exist on the surface of any real celestial body.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "(0, 300] m/s^2"
+    interpretation_role:
+      primary_for: [modulo_peso, gravedad_campo_central]
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: "Para la Tierra usar g = 9.8 m/s^2 salvo que el problema indique otro valor."
+
+  - id: G
+    symbol: G
+    nombre:
+      es: constante de gravitacion universal
+      en: universal gravitational constant
+    descripcion:
+      es: Constante fundamental que cuantifica la intensidad de la interaccion gravitatoria entre dos masas.
+      en: Fundamental constant that quantifies the strength of gravitational interaction between two masses.
+    unidad_si: "N m^2 / kg^2"
+    dimension: "L^3 M^{-1} T^{-2}"
+    is_vector: false
+    components: null
+    category: constant
+    physical_role: coupling_constant
+    used_in: [gravedad_campo_central]
+    common_mistake: "Confundir G (constante universal) con g (campo local); sus unidades y valores son completamente distintos."
+    typical_range: "6.674e-11 N m^2/kg^2 (valor unico universal)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La constante es siempre positiva.
+        en: The constant is always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Si G fuera cero no existiria gravedad.
+        en: If G were zero, gravity would not exist.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "[6.674e-11, 6.674e-11]"
+    interpretation_role:
+      primary_for: [gravedad_campo_central]
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: "Solo aparece al conectar el modelo local P = mg con el modelo de campo central g = GM/r^2."
+
+  - id: M_astro
+    symbol: M
+    nombre:
+      es: masa del astro
+      en: attracting body mass
+    descripcion:
+      es: Masa del cuerpo celeste que genera el campo gravitatorio.
+      en: Mass of the celestial body that generates the gravitational field.
+    unidad_si: "kg"
+    dimension: "M"
+    is_vector: false
+    components: null
+    category: parameter
+    physical_role: source_mass
+    used_in: [gravedad_campo_central]
+    common_mistake: "Confundir la masa del astro con la masa del cuerpo que pesa."
+    typical_range: "7.3e22 - 1.99e30 kg (de la Luna al Sol)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La masa del astro es siempre positiva.
+        en: La masa del astro es siempre positiva.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Sin masa en el astro no hay campo gravitatorio.
+        en: Without mass in the attracting body there is no gravitational field.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "(0, 1e31] kg"
+    interpretation_role:
+      primary_for: [gravedad_campo_central]
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: "Para la Tierra M = 5.97e24 kg. Solo se necesita en el modelo de campo central."
+
+  - id: r
+    symbol: r
+    nombre:
+      es: distancia al centro del astro
+      en: distance to the attracting body center
+    descripcion:
+      es: Distancia radial desde el centro del astro hasta el punto donde se encuentra el cuerpo.
+      en: Radial distance from the center of the attracting body to the point where the object is located.
+    unidad_si: "m"
+    dimension: "L"
+    is_vector: false
+    components: null
+    category: parameter
+    physical_role: radial_distance
+    used_in: [gravedad_campo_central]
+    common_mistake: "Usar la altura sobre la superficie en lugar de la distancia al centro del astro."
+    typical_range: "1.7e6 - 1.5e11 m (de la Luna a la orbita terrestre)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La distancia radial es siempre positiva.
+        en: Radial distance is always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Distancia nula implicaria estar en el centro del astro, donde el modelo diverge.
+        en: Zero distance would mean being at the center of the body, where the model diverges.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "(0, 1e12] m"
+    interpretation_role:
+      primary_for: [gravedad_campo_central]
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: "Para problemas en la superficie terrestre, r es el radio de la Tierra: 6.37e6 m."
+
+  - id: P_x
+    symbol: P_x
+    nombre:
+      es: componente x del peso
+      en: x-component of weight
+    descripcion:
+      es: Proyección de la fuerza peso sobre el eje x del sistema de referencia.
+      en: Projection of the weight force onto the x-axis of the reference frame.
+    unidad_si: "N"
+    dimension: "LMT^{-2}"
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: force_projection
+    used_in: [peso_vectorial]
+    common_mistake: "Olvidar el signo según la orientación del eje x."
+    typical_range: "-1e6 - 1e6 N"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica el sentido respecto al eje x.
+        en: The sign indicates the direction relative to the x-axis.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Un valor nulo indica que el peso es perpendicular al eje x.
+        en: A zero value indicates the weight is perpendicular to the x-axis.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: "[-1e6, 1e6] N"
+    interpretation_role:
+      primary_for: []
+      secondary_for: [peso_vectorial]
+    graph_binding:
+      channels: []
+    pedagogical_notes: "Usa P * sen(theta) o P * cos(theta) según el ángulo del plano."
+
+  - id: P_y
+    symbol: P_y
+    nombre:
+      es: componente y del peso
+      en: y-component of weight
+    descripcion:
+      es: Proyección de la fuerza peso sobre el eje y del sistema de referencia.
+      en: Projection of the weight force onto the y-axis of the reference frame.
+    unidad_si: "N"
+    dimension: "LMT^{-2}"
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: force_projection
+    used_in: [peso_vectorial]
+    common_mistake: "Confundir con la fuerza normal en planos horizontales."
+    typical_range: "-1e6 - 1e6 N"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica el sentido respecto al eje y.
+        en: The sign indicates the direction relative to the y-axis.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Un valor nulo indica que el peso es perpendicular al eje y.
+        en: A zero value indicates the weight is perpendicular to the y-axis.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: "[-1e6, 1e6] N"
+    interpretation_role:
+      primary_for: []
+      secondary_for: [peso_vectorial]
+    graph_binding:
+      channels: []
+    pedagogical_notes: "Suele ser la componente que equilibra la normal."
+
+  - id: g_x
+    symbol: g_x
+    nombre:
+      es: componente x de la gravedad
+      en: x-component of gravity
+    descripcion:
+      es: Valor del campo gravitatorio proyectado sobre el eje x.
+      en: Value of the gravitational field projected onto the x-axis.
+    unidad_si: "m/s^2"
+    dimension: "LT^{-2}"
+    is_vector: false
+    components: null
+    category: parameter
+    physical_role: field_projection
+    used_in: [peso_vectorial]
+    common_mistake: "No cambiar el valor si cambia la inclinación del sistema."
+    typical_range: "-30 - 30 m/s^2"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Indica el sentido de la gravedad en el eje x.
+        en: Indicates the gravity direction on the x-axis.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Gravedad cero en el eje x si este es horizontal.
+        en: Zero gravity on the x-axis if it is horizontal.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: "[-30, 30] m/s^2"
+    interpretation_role:
+      primary_for: []
+      secondary_for: [peso_vectorial]
+    graph_binding:
+      channels: []
+    pedagogical_notes: "Permite tratar el peso como una aceleración directa en cinemática."
+
+  - id: g_y
+    symbol: g_y
+    nombre:
+      es: componente y de la gravedad
+      en: y-component of gravity
+    descripcion:
+      es: Valor del campo gravitatorio proyectado sobre el eje y.
+      en: Value of the gravitational field projected onto the y-axis.
+    unidad_si: "m/s^2"
+    dimension: "LT^{-2}"
+    is_vector: false
+    components: null
+    category: parameter
+    physical_role: field_projection
+    used_in: [peso_vectorial]
+    common_mistake: "Supone g siempre negativa sin mirar el eje y elegido."
+    typical_range: "-30 - 30 m/s^2"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Indica el sentido de la gravedad en el eje y.
+        en: Indicates the gravity direction on the y-axis.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Gravedad cero en el eje y si este es vertical y la gravedad es horizontal (raro).
+        en: Zero gravity on the y-axis if it is vertical and gravity is horizontal (rare).
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: "[-30, 30] m/s^2"
+    interpretation_role:
+      primary_for: []
+      secondary_for: [peso_vectorial]
+    graph_binding:
+      channels: []
+    pedagogical_notes: "Suele ser la aceleración de caída libre si el eje y es vertical."

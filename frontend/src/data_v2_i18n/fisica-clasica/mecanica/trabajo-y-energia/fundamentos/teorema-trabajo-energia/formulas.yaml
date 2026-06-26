@@ -1,0 +1,287 @@
+version: 5
+topic:
+  id: teorema-trabajo-energia
+  title:
+    es: Teorema trabajo-energia
+    en: Work-Energy Theorem
+variables:
+- id: Wnet
+  symbol: "W_{net}"
+  name:
+    es: trabajo neto
+    en: net work
+  si_unit: J
+- id: dK
+  symbol: "\\Delta K"
+  name:
+    es: variacion de energia cinetica
+    en: change in kinetic energy
+  si_unit: J
+- id: Ki
+  symbol: "K_i"
+  name:
+    es: energia cinetica inicial
+    en: initial kinetic energy
+  si_unit: J
+- id: Kf
+  symbol: "K_f"
+  name:
+    es: energia cinetica final
+    en: final kinetic energy
+  si_unit: J
+- id: m
+  symbol: m
+  name:
+    es: masa
+    en: mass
+  si_unit: kg
+- id: vi
+  symbol: "v_i"
+  name:
+    es: rapidez inicial
+    en: initial speed
+  si_unit: m/s
+- id: vf
+  symbol: "v_f"
+  name:
+    es: rapidez final
+    en: final speed
+  si_unit: m/s
+formulas:
+- id: variacion_energia_cinetica
+  title:
+    es: Variacion de energia cinetica
+    en: Kinetic-energy change
+  equation: dK = Kf - Ki
+  latex: \Delta K=K_f-K_i
+  rearrangements:
+  - target: dK
+    equation: dK = Kf - Ki
+    latex: \Delta K=K_f-K_i
+  - target: Kf
+    equation: Kf = Ki + dK
+    latex: K_f=K_i+\Delta K
+  - target: Ki
+    equation: Ki = Kf - dK
+    latex: K_i=K_f-\Delta K
+  constraints: []
+  category: fundamental
+  relation_type: energy_relation
+  physical_meaning:
+    es: Expresa el cambio firmado de energia cinetica entre dos estados del mismo sistema.
+    en: Expresses the signed change in kinetic energy between two states of the same system.
+  validity:
+    es: Valida cuando Ki y Kf describen el mismo sistema y el mismo tipo de movimiento.
+    en: Valid when Ki and Kf describe the same system and the same kind of motion.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - comparacion de estados antes y despues de acelerar o frenar
+  - lectura energetica del cambio de movimiento
+  interpretation_tags: [ cambio, energia, estados ]
+  result_semantics:
+    target: dK
+    meaning: El resultado indica si el sistema gano o perdio energia cinetica entre dos estados.
+  domain_checks:
+  - expr: Ki >= 0
+    message:
+      es: Ki debe ser no negativa.
+      en: Ki must be non-negative.
+  - expr: Kf >= 0
+    message:
+      es: Kf debe ser no negativa.
+      en: Kf must be non-negative.
+  coherence_checks:
+  - expr: "true"
+    message:
+      es: dK positiva implica aumento de rapidez o transferencia energetica compatible.
+      en: Positive dK implies increasing speed or a compatible energy transfer.
+  graph_implications:
+  - La lectura del leaf debe interpretar dK como diferencia entre el estado final y el inicial.
+  pedagogical_triggers:
+  - when: "true"
+    message:
+      es: Mantén el signo de dK; no la reemplaces por un modulo salvo que el problema lo pida.
+      en: Keep the sign of dK; do not replace it by a magnitude unless the problem asks for it.
+- id: teorema_trabajo_energia
+  title:
+    es: Teorema trabajo-energia
+    en: Work-energy theorem
+  equation: Wnet = dK
+  latex: W_{net}=\Delta K
+  rearrangements:
+  - target: Wnet
+    equation: Wnet = dK
+    latex: W_{net}=\Delta K
+  - target: dK
+    equation: dK = Wnet
+    latex: \Delta K=W_{net}
+  constraints: []
+  category: fundamental
+  relation_type: energy_relation
+  physical_meaning:
+    es: Conecta el trabajo total de las fuerzas relevantes con el cambio de energia cinetica del sistema.
+    en: Connects total work by the relevant forces with the system's change in kinetic energy.
+  validity:
+    es: Valida para el sistema elegido cuando el trabajo neto se calcula con la misma convencion de signos.
+    en: Valid for the chosen system when net work is computed with the same sign convention.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - frenadas
+  - aceleraciones por fuerza resultante
+  - estimacion de distancias de parada
+  interpretation_tags: [ trabajo, energia, balance ]
+  result_semantics:
+    target: Wnet
+    meaning: El resultado mide el aporte o la extraccion neta de energia mecanica sobre el movimiento.
+  domain_checks:
+  - expr: "true"
+    message:
+      es: Comprueba que todas las fuerzas relevantes esten incluidas en el trabajo neto.
+      en: Check that all relevant forces are included in the net work.
+  coherence_checks:
+  - expr: "true"
+    message:
+      es: Si Wnet es negativo, dK tambien debe ser negativa.
+      en: If Wnet is negative, dK must also be negative.
+  graph_implications:
+  - Un trabajo neto positivo debe corresponder a un aumento de energia cinetica.
+  pedagogical_triggers:
+  - when: "true"
+    message:
+      es: No confundas trabajo neto con trabajo de una sola fuerza si actuan varias interacciones.
+      en: Do not confuse net work with the work of a single force when several interactions act.
+- id: trabajo_neto_desde_estados
+  title:
+    es: Trabajo neto desde velocidades inicial y final
+    en: Net work from initial and final speeds
+  equation: Wnet = 0.5*m*(vf^2 - vi^2)
+  latex: W_{net}=\frac{1}{2}m\left(v_f^2-v_i^2\right)
+  rearrangements:
+  - target: Wnet
+    equation: Wnet = 0.5*m*(vf^2 - vi^2)
+    latex: W_{net}=\frac{1}{2}m\left(v_f^2-v_i^2\right)
+  - target: vf
+    equation: vf = sqrt(vi^2 + 2*Wnet/m)
+    latex: v_f=\sqrt{v_i^2+\frac{2W_{net}}{m}}
+  - target: vi
+    equation: vi = sqrt(vf^2 - 2*Wnet/m)
+    latex: v_i=\sqrt{v_f^2-\frac{2W_{net}}{m}}
+  constraints:
+  - expr: m > 0
+    message:
+      es: m debe ser positiva.
+      en: m must be positive.
+  - expr: vi >= 0
+    message:
+      es: vi debe representarse como rapidez no negativa.
+      en: vi must be represented as a non-negative speed.
+  - expr: vf >= 0
+    message:
+      es: vf debe representarse como rapidez no negativa.
+      en: vf must be represented as a non-negative speed.
+  category: operative
+  relation_type: state_comparison
+  physical_meaning:
+    es: Permite calcular el trabajo neto directamente a partir del cambio de rapidez cuando la masa es constante.
+    en: Lets you compute net work directly from the speed change when mass is constant.
+  validity:
+    es: Valida en mecanica clasica traslacional con masa aproximadamente constante.
+    en: Valid in classical translational mechanics with approximately constant mass.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - cierres por estados
+  - problemas sin detalle temporal del proceso
+  interpretation_tags: [ estados, rapidez, cierre ]
+  result_semantics:
+    target: Wnet
+    meaning: El signo del resultado indica si las fuerzas aportaron o extrajeron energia cinetica neta.
+  domain_checks:
+  - expr: m > 0
+    message:
+      es: No apliques esta forma con masa nula o mal definida.
+      en: Do not apply this form with zero or ill-defined mass.
+  coherence_checks:
+  - expr: "true"
+    message:
+      es: Si vf supera a vi, Wnet debe resultar positiva.
+      en: If vf exceeds vi, Wnet must be positive.
+  graph_implications:
+  - La comparacion entre velocidades debe leerse como cambio entre dos estados, no como evolucion temporal detallada.
+  pedagogical_triggers:
+  - when: "true"
+    message:
+      es: No confundas rapidez con velocidad algebraica; aqui se trabaja con modulos.
+      en: Do not confuse speed with algebraic velocity; this leaf works with magnitudes.
+- id: velocidad_final_desde_trabajo_neto
+  title:
+    es: Rapidez final desde trabajo neto
+    en: Final speed from net work
+  equation: vf = sqrt(vi^2 + 2*Wnet/m)
+  latex: v_f=\sqrt{v_i^2+\frac{2W_{net}}{m}}
+  rearrangements:
+  - target: vf
+    equation: vf = sqrt(vi^2 + 2*Wnet/m)
+    latex: v_f=\sqrt{v_i^2+\frac{2W_{net}}{m}}
+  - target: Wnet
+    equation: Wnet = 0.5*m*(vf^2 - vi^2)
+    latex: W_{net}=\frac{1}{2}m\left(v_f^2-v_i^2\right)
+  - target: m
+    equation: m = 2*Wnet/(vf^2 - vi^2)
+    latex: m=\frac{2W_{net}}{v_f^2-v_i^2}
+  constraints:
+  - expr: m > 0
+    message:
+      es: m debe ser positiva.
+      en: m must be positive.
+  - expr: vi^2 + 2*Wnet/m >= 0
+    message:
+      es: El radicando debe ser no negativo.
+      en: The radicand must be non-negative.
+  category: operative
+  relation_type: solved_form
+  physical_meaning:
+    es: Da la rapidez final al cerrar el balance trabajo-energia sin resolver la trayectoria completa.
+    en: Gives the final speed by closing the work-energy balance without solving the full trajectory.
+  validity:
+    es: Valida cuando el modelo es traslacional clasico y Wnet representa el proceso completo.
+    en: Valid when the model is classical translational and Wnet represents the full process.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - distancias de frenado
+  - cierres de aceleracion media por trabajo
+  interpretation_tags: [ rapidez, cierre, balance ]
+  result_semantics:
+    target: vf
+    meaning: El resultado indica la rapidez compatible con el balance energetico entre los estados inicial y final.
+  domain_checks:
+  - expr: "true"
+    message:
+      es: Usa el trabajo neto total del proceso, no solo una contribucion parcial.
+      en: Use the total net work of the process, not only one partial contribution.
+  coherence_checks:
+  - expr: "true"
+    message:
+      es: Si Wnet es muy negativa, la rapidez final debe disminuir respecto a la inicial.
+      en: If Wnet is strongly negative, final speed must decrease relative to the initial one.
+  graph_implications:
+  - La lectura correcta compara presupuestos energeticos inicial y final.
+  pedagogical_triggers:
+  - when: "true"
+    message:
+      es: Si el radicando sale negativo, revisa signos, datos o el dominio fisico del problema.
+      en: If the radicand becomes negative, recheck signs, data, or the physical domain of the problem.
+ui:
+  default_formula: teorema_trabajo_energia
+  groups:
+  - title: { es: Relaciones nucleares, en: Core relations }
+    items: [ variacion_energia_cinetica, teorema_trabajo_energia ]
+  - title: { es: Cierres operativos, en: Operational closures }
+    items: [ trabajo_neto_desde_estados, velocidad_final_desde_trabajo_neto ]

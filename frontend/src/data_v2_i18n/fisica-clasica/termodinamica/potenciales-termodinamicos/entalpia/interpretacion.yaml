@@ -1,0 +1,448 @@
+version: "2.0"
+id: interp-entalpia
+leaf_id: entalpia
+
+nombre:
+  es: Interpretación de entalpía
+  en: Enthalpy interpretation
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: potenciales-termodinamicos
+  parent_id: potenciales-termodinamicos
+  ruta_relativa: fisica-clasica/termodinamica/potenciales-termodinamicos/entalpia
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    priority: [summary, likely_errors]
+
+dependencies:
+  formulas:
+    - definicion_entalpia
+    - calor_isobarico
+    - ley_hess
+  magnitudes:
+    - H
+    - DeltaH
+    - U
+    - p
+    - V
+    - Qp
+    - T
+
+global_context:
+  physical_domain:
+    es: "Termodinámica de sistemas cerrados a presión constante. Válido para reacciones químicas, procesos físicos y ciclos industriales a presión atmosférica o controlada."
+    en: "Thermodynamics of closed systems at constant pressure. Valid for chemical reactions, physical processes and industrial cycles at atmospheric or controlled pressure."
+  axis_convention:
+    es: "ΔH negativa indica proceso exotérmico (calor cedido al entorno). ΔH positiva indica proceso endotérmico (calor absorbido del entorno)."
+    en: "Negative ΔH indicates exothermic process (heat released to surroundings). Positive ΔH indicates endothermic process (heat absorbed from surroundings)."
+  standard_assumptions:
+    - presión constante durante el proceso
+    - sistema cerrado sin trabajo distinto al de expansión
+    - H es función de estado (independiente de la trayectoria)
+  standard_warnings:
+    - "La igualdad Qp = ΔH solo es válida a p constante; en bomba calorimétrica (V constante) el calor equivale a ΔU."
+    - "Las unidades de ΔH deben ser J o kJ; mezclar J con kJ produce errores de factor 1000."
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen entálpico
+      en: Enthalpic summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del gráfico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  DeltaH:
+    magnitude_type: enthalpy_change
+    semantic_role:
+      es: "Calor intercambiado a presión constante; criterio de clasificación exotérmico/endotérmico."
+      en: "Heat exchanged at constant pressure; criterion for exothermic/endothermic classification."
+    summary_rules:
+      - id: deltah_summary_negative
+        when: "DeltaH < 0"
+        status: ok
+        text:
+          es: "[[DeltaH]] es negativa: el proceso es exotérmico y cede calor al entorno. Indica que los productos son más estables que los reactivos."
+          en: "[[DeltaH]] is negative: the process is exothermic and releases heat to the surroundings. This indicates products are more stable than reactants."
+      - id: deltah_summary_positive
+        when: "DeltaH > 0"
+        status: warning
+        text:
+          es: "[[DeltaH]] es positiva: el proceso es endotérmico y absorbe calor del entorno. El sistema requiere aporte energético externo."
+          en: "[[DeltaH]] is positive: the process is endothermic and absorbs heat from the surroundings. The system requires external energy input."
+      - id: deltah_summary_zero
+        when: "DeltaH == 0"
+        status: ok
+        text:
+          es: "[[DeltaH]] es cero: el proceso es neutro desde el punto de vista entálpico. No hay intercambio de calor a presión constante."
+          en: "[[DeltaH]] is zero: the process is enthalpically neutral. No heat exchange occurs at constant pressure."
+      - id: deltah_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaH]] resume el calor intercambiado a presión constante. Su signo indica la dirección del flujo térmico entre sistema y entorno."
+          en: "[[DeltaH]] summarizes the heat exchanged at constant pressure. Its sign indicates the direction of thermal flow between system and surroundings."
+    physical_reading_rules:
+      - id: deltah_reading_exo
+        when: "DeltaH < 0"
+        status: ok
+        text:
+          es: "El sistema libera energía térmica al entorno. Los enlaces formados en los productos son más fuertes que los rotos en los reactivos."
+          en: "The system releases thermal energy to the surroundings. Bonds formed in products are stronger than those broken in reactants."
+      - id: deltah_reading_endo
+        when: "DeltaH > 0"
+        status: warning
+        text:
+          es: "El sistema absorbe energía térmica del entorno. Los reactivos tienen enlaces más fuertes que los productos; se necesita energía para romperlos."
+          en: "The system absorbs thermal energy from the surroundings. Reactants have stronger bonds than products; energy is needed to break them."
+      - id: deltah_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "La lectura física de [[DeltaH]] depende de su signo: negativo implica flujo de calor hacia el entorno, positivo implica absorción desde el entorno."
+          en: "The physical reading of [[DeltaH]] depends on its sign: negative implies heat flow toward surroundings, positive implies absorption from surroundings."
+    coherence_rules:
+      - id: deltah_coherence_large
+        when: "abs(DeltaH) > 5000000"
+        status: warning
+        text:
+          es: "[[DeltaH]] supera 5 MJ: verificar que las unidades sean J y no kJ. Un error de factor 1000 es la causa más frecuente de resultados desproporcionados."
+          en: "[[DeltaH]] exceeds 5 MJ: verify that units are J and not kJ. A factor-1000 error is the most frequent cause of disproportionate results."
+      - id: deltah_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[DeltaH]] parece dentro del rango esperado para procesos termodinámicos habituales."
+          en: "The value of [[DeltaH]] appears within the expected range for typical thermodynamic processes."
+    model_validity_rules:
+      - id: deltah_model_isobaric
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo es válido cuando la presión permanece constante durante todo el proceso. Si el proceso ocurre en un recipiente rígido (volumen constante), usar [[U]] en lugar de [[H]]."
+          en: "The model is valid when pressure remains constant throughout the process. If the process occurs in a rigid container (constant volume), use [[U]] instead of [[H]]."
+      - id: deltah_model_kirchhoff
+        when: "true"
+        status: warning
+        text:
+          es: "Para rangos de temperatura superiores a 200 K, aplicar la ley de Kirchhoff para corregir [[DeltaH]] con las capacidades caloríficas. El modelo de ΔH constante falla en rangos amplios."
+          en: "For temperature ranges exceeding 200 K, apply Kirchhoff's law to correct [[DeltaH]] with heat capacities. The constant ΔH model fails over wide ranges."
+    graph_rules:
+      - id: deltah_graph_sign
+        when: "DeltaH < 0"
+        status: ok
+        text:
+          es: "En el gráfico ΔH vs T, la curva comienza por debajo del eje horizontal: proceso exotérmico. La pendiente positiva indica que la diferencia ΔH se vuelve menos negativa al aumentar T si Cp(productos) > Cp(reactivos)."
+          en: "In the ΔH vs T graph, the curve starts below the horizontal axis: exothermic process. Positive slope indicates ΔH becomes less negative with increasing T if Cp(products) > Cp(reactants)."
+      - id: deltah_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "El gráfico ΔH vs T muestra la dependencia de la variación entálpica con la temperatura. La pendiente es la diferencia de capacidades caloríficas entre productos y reactivos."
+          en: "The ΔH vs T graph shows the dependence of enthalpy change on temperature. The slope is the difference in heat capacities between products and reactants."
+    likely_errors:
+      - id: deltah_error_units
+        when: "abs(DeltaH) > 1e7"
+        status: error
+        text:
+          es: "Error frecuente: confundir [[DeltaH]] molar con [[DeltaH]] total. Un valor muy grande suele indicar mezcla de J, kJ y mol; comprobar si se introdujo kJ/mol como J/mol o si faltó multiplicar por la cantidad de sustancia."
+          en: "Frequent error: confusing molar [[DeltaH]] with total [[DeltaH]]. A very large value usually means J, kJ and mol were mixed; check whether kJ/mol was entered as J/mol or whether the amount of substance was omitted."
+      - id: deltah_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: aplicar [[DeltaH]] en procesos a volumen constante donde el calor equivale a ΔU. Verificar que la presión sea constante antes de usar esta magnitud."
+          en: "Frequent error: applying [[DeltaH]] in constant-volume processes where heat equals ΔU. Verify that pressure is constant before using this quantity."
+    next_step_rules:
+      - id: deltah_next_gibbs
+        when: "DeltaH < 0"
+        status: ok
+        text:
+          es: "Con [[DeltaH]] negativa, combinar con [[T]] y la entropía de reacción para calcular la energía libre de Gibbs y determinar la espontaneidad completa del proceso."
+          en: "With negative [[DeltaH]], combine with [[T]] and reaction entropy to compute Gibbs free energy and fully determine process spontaneity."
+      - id: deltah_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Siguiente paso recomendado: aplicar la ley de Hess si el proceso puede descomponerse en etapas, o combinar [[DeltaH]] con la variación de entropía para calcular la energía libre de Gibbs."
+          en: "Recommended next step: apply Hess's law if the process can be broken into steps, or combine [[DeltaH]] with entropy change to compute Gibbs free energy."
+
+  H:
+    magnitude_type: state_function
+    semantic_role:
+      es: "Función de estado termodinámico. Solo las diferencias ΔH son operativas."
+      en: "Thermodynamic state function. Only differences ΔH are operational."
+    summary_rules:
+      - id: h_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[H]] resume el contenido entálpico total del sistema. Su valor absoluto depende del estado de referencia; solo las diferencias [[DeltaH]] describen el intercambio real de calor."
+          en: "[[H]] summarizes the total enthalpic content of the system. Its absolute value depends on the reference state; only differences [[DeltaH]] describe the actual heat exchange."
+    physical_reading_rules:
+      - id: h_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[H]] es la suma de la energía interna [[U]] y el término de trabajo de empuje [[p]]·[[V]]. En la práctica, solo su variación ΔH es accesible experimentalmente."
+          en: "[[H]] is the sum of internal energy [[U]] and the push-work term [[p]]·[[V]]. In practice, only its change ΔH is experimentally accessible."
+    coherence_rules:
+      - id: h_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[H]] calculada como suma de [[U]] y [[p]]·[[V]] es coherente si [[p]] está en Pa y [[V]] en metros cúbicos, produciendo H en julios."
+          en: "[[H]] computed as sum of [[U]] and [[p]]·[[V]] is coherent if [[p]] is in Pa and [[V]] in cubic metres, yielding H in joules."
+    model_validity_rules:
+      - id: h_model_default
+        when: "true"
+        status: ok
+        text:
+          es: "El cálculo de [[H]] absoluta requiere un estado de referencia definido. En termodinámica aplicada se trabaja siempre con diferencias [[DeltaH]]."
+          en: "Computing absolute [[H]] requires a defined reference state. In applied thermodynamics one always works with differences [[DeltaH]]."
+    graph_rules:
+      - id: h_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[H]] no aparece directamente en los gráficos habituales; su variación [[DeltaH]] es el eje vertical en los diagramas de entalpía vs temperatura."
+          en: "[[H]] does not appear directly in typical graphs; its change [[DeltaH]] is the vertical axis in enthalpy vs temperature diagrams."
+    likely_errors:
+      - id: h_error_absolute
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: tratar [[H]] como una energía absoluta con significado directo. Solo [[DeltaH]] tiene interpretación física real sin necesidad de estado de referencia."
+          en: "Frequent error: treating [[H]] as an absolute energy with direct meaning. Only [[DeltaH]] has real physical interpretation without requiring a reference state."
+    next_step_rules:
+      - id: h_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Calcular la variación [[DeltaH]] del proceso para obtener información térmica operativa."
+          en: "Compute the process change [[DeltaH]] to obtain operational thermal information."
+
+  Qp:
+    magnitude_type: heat_isobaric
+    semantic_role:
+      es: "Calor intercambiado a presión constante, numéricamente igual a [[DeltaH]]."
+      en: "Heat exchanged at constant pressure, numerically equal to [[DeltaH]]."
+    summary_rules:
+      - id: qp_summary_negative
+        when: "Qp < 0"
+        status: ok
+        text:
+          es: "[[Qp]] negativo indica que el sistema cede calor al entorno. El proceso es exotérmico y la temperatura del entorno aumenta si el recipiente no está aislado."
+          en: "Negative [[Qp]] indicates the system releases heat to the surroundings. The process is exothermic and the surroundings temperature rises if the vessel is not insulated."
+      - id: qp_summary_positive
+        when: "Qp > 0"
+        status: ok
+        text:
+          es: "[[Qp]] positivo indica que el sistema absorbe calor del entorno. El proceso es endotérmico y la temperatura del entorno disminuye si el recipiente no está aislado."
+          en: "Positive [[Qp]] indicates the system absorbs heat from the surroundings. The process is endothermic and the surroundings temperature decreases if the vessel is not insulated."
+      - id: qp_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Qp]] resume el intercambio de calor del proceso isobárico. A presión constante, [[Qp]] es idéntico a [[DeltaH]] y describe la transferencia térmica completa."
+          en: "[[Qp]] summarizes the heat exchange of the isobaric process. At constant pressure, [[Qp]] is identical to [[DeltaH]] and describes the complete thermal transfer."
+    physical_reading_rules:
+      - id: qp_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Qp]] es la magnitud medida directamente en calorimetría isobárica. Su identificación con [[DeltaH]] permite usar tablas termodinámicas estándar para predecir el calor intercambiado."
+          en: "[[Qp]] is the quantity directly measured in isobaric calorimetry. Its identification with [[DeltaH]] allows using standard thermodynamic tables to predict the exchanged heat."
+    coherence_rules:
+      - id: qp_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Si [[Qp]] y [[DeltaH]] tienen signos opuestos en el mismo cálculo, hay un error conceptual: en proceso isobárico son idénticos."
+          en: "If [[Qp]] and [[DeltaH]] have opposite signs in the same calculation, there is a conceptual error: in an isobaric process they are identical."
+    model_validity_rules:
+      - id: qp_model_isobaric
+        when: "true"
+        status: warning
+        text:
+          es: "[[Qp]] equivale a [[DeltaH]] solo a presión constante. En bomba calorimétrica (V constante), el calor medido equivale a ΔU, no a [[DeltaH]]."
+          en: "[[Qp]] equals [[DeltaH]] only at constant pressure. In a bomb calorimeter (constant V), the measured heat equals ΔU, not [[DeltaH]]."
+    graph_rules:
+      - id: qp_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Qp]] coincide con [[DeltaH]] en el gráfico; su valor aparece como la ordenada del punto a la temperatura de referencia."
+          en: "[[Qp]] coincides with [[DeltaH]] in the graph; its value appears as the ordinate at the reference temperature."
+    likely_errors:
+      - id: qp_error_bomb
+        when: "true"
+        status: error
+        text:
+          es: "Error clásico: usar [[Qp]] en lugar de ΔU para interpretar el resultado de una bomba calorimétrica. La bomba opera a volumen constante y mide ΔU, no [[DeltaH]]."
+          en: "Classic error: using [[Qp]] instead of ΔU to interpret bomb calorimeter results. The bomb operates at constant volume and measures ΔU, not [[DeltaH]]."
+    next_step_rules:
+      - id: qp_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[Qp]] calculado, aplicar la ley de Hess si el proceso es compuesto, o combinar con la entropía para obtener la energía libre de Gibbs."
+          en: "With [[Qp]] calculated, apply Hess's law if the process is composite, or combine with entropy to obtain Gibbs free energy."
+
+  U:
+    magnitude_type: internal_energy
+    semantic_role:
+      es: "Componente energética interna en la definición de entalpía."
+      en: "Internal energy component in the definition of enthalpy."
+    summary_rules:
+      - id: u_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[U]] resume la energía almacenada internamente por el sistema. Junto con el término [[p]]·[[V]], describe la entalpía total [[H]]."
+          en: "[[U]] summarizes the energy stored internally by the system. Together with the [[p]]·[[V]] term, it describes total enthalpy [[H]]."
+    physical_reading_rules:
+      - id: u_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[U]] representa la energía cinética y potencial de las moléculas del sistema. Su variación ΔU es el calor intercambiado en procesos a volumen constante."
+          en: "[[U]] represents the kinetic and potential energy of the system molecules. Its change ΔU is the heat exchanged in constant-volume processes."
+    coherence_rules:
+      - id: u_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "ΔU y [[DeltaH]] difieren en el término Δ(pV). Para gases ideales a T constante, Δ(pV) puede calcularse con la ley de los gases perfectos."
+          en: "ΔU and [[DeltaH]] differ by the Δ(pV) term. For ideal gases at constant T, Δ(pV) can be computed using the ideal gas law."
+    model_validity_rules:
+      - id: u_model_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[U]] es la magnitud central del proceso a volumen constante; en procesos a presión constante se combina con [[p]]·[[V]] para dar [[H]]."
+          en: "[[U]] is the central quantity for constant-volume processes; in constant-pressure processes it combines with [[p]]·[[V]] to give [[H]]."
+    graph_rules:
+      - id: u_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[U]] no aparece directamente en los gráficos de entalpía; su diferencia con [[DeltaH]] es el término de trabajo de expansión Δ(pV)."
+          en: "[[U]] does not appear directly in enthalpy graphs; its difference from [[DeltaH]] is the expansion work term Δ(pV)."
+    likely_errors:
+      - id: u_error_confusion
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: usar ΔU en lugar de [[DeltaH]] para calcular el calor en procesos isobáricos. La diferencia es el trabajo de expansión p·ΔV."
+          en: "Frequent error: using ΔU instead of [[DeltaH]] to compute heat in isobaric processes. The difference is expansion work p·ΔV."
+    next_step_rules:
+      - id: u_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Si el proceso es a presión constante, añadir el término p·ΔV a ΔU para obtener [[DeltaH]]."
+          en: "If the process is at constant pressure, add the p·ΔV term to ΔU to obtain [[DeltaH]]."
+
+cross_checks:
+  - id: cc_qp_deltah
+    description:
+      es: "Verificar que Qp y ΔH coinciden cuando la presión es constante."
+      en: "Verify that Qp and ΔH agree when pressure is constant."
+    condition: "Qp == DeltaH"
+    severity: error
+
+error_patterns:
+  - id: ep_units_kj_j
+    description:
+      es: "Mezcla de unidades kJ y J en el cálculo de ΔH."
+      en: "Mixing kJ and J units in the ΔH calculation."
+    detection: "abs(DeltaH) > 1e8 and abs(DeltaH) < 1e10"
+    suggestion:
+      es: "Revisar si los datos se introdujeron en kJ/mol y el resultado se espera en J/mol o viceversa."
+      en: "Check if data was entered in kJ/mol while the result is expected in J/mol or vice versa."
+
+graph_binding:
+  primary_x: T
+  primary_y: DeltaH
+  type: Coord
+  enabled: true
+
+mini_graph:
+  enabled: true
+  type: Coord
+  x_magnitude: T
+  y_magnitude: DeltaH
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true

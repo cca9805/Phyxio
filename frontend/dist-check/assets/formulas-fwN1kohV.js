@@ -1,0 +1,98 @@
+const e=`version: 5
+formulas:
+  - id: onda_basica
+    title:
+      es: "Relación Fundamental de Onda"
+      en: "Fundamental Wave Relationship"
+    equation: "c = f * lambda"
+    latex: "c = f \\\\lambda"
+    rearrangements:
+      - target: c
+        equation: "c = f * lambda"
+        latex: "c = f \\\\lambda"
+      - target: f
+        equation: "f = c / lambda"
+        latex: "f = \\\\frac{c}{\\\\lambda}"
+      - target: lambda
+        equation: "lambda = c / f"
+        latex: "\\\\lambda = \\\\frac{c}{f}"
+    physical_meaning:
+      es: "Vincula la velocidad de propagación con la frecuencia temporal y la longitud de onda espacial."
+      en: "Links propagation speed with temporal frequency and spatial wavelength."
+    category: "cinematica"
+    relation_type: "identidad"
+    constraints: ["f > 0", "lambda > 0"]
+    validity:
+      es: "Válido para cualquier onda periódica armónica en un medio homogéneo."
+      en: "Valid for any periodic harmonic wave in a homogeneous medium."
+    dimension_check: "L T⁻¹ = (T⁻¹) * L"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["acustica", "optica", "telecomunicaciones"]
+    interpretation_tags: ["periodicidad", "propagacion"]
+    result_semantics: "absoluta"
+    domain_checks:
+      - condition: "c > 3e8"
+        severity: "error"
+        message:
+          es: "La velocidad no puede superar la velocidad de la luz."
+          en: "Speed cannot exceed the speed of light."
+    coherence_checks:
+      - condition: "c < 1"
+        severity: "warning"
+        message:
+          es: "Velocidad inusualmente baja para un medio fluido."
+          en: "Unusually low speed for a fluid medium."
+    graph_implications:
+      es: "Define la distancia entre crestas en la representación visual."
+      en: "Defines the distance between crests in the visual representation."
+    pedagogical_triggers: ["tono_vs_longitud", "eco"]
+
+  - id: sonido_compresible
+    title:
+      es: "Velocidad del Sonido en Fluidos (Newton-Laplace)"
+      en: "Sound Speed in Fluids (Newton-Laplace)"
+    equation: "c = sqrt(B / rho)"
+    latex: "c = \\\\sqrt{\\\\frac{B}{\\\\rho}}"
+    rearrangements:
+      - target: c
+        equation: "c = sqrt(B / rho)"
+        latex: "c = \\\\sqrt{\\\\frac{B}{\\\\rho}}"
+      - target: B
+        equation: "B = rho * c^2"
+        latex: "B = \\\\rho c^2"
+      - target: rho
+        equation: "rho = B / c^2"
+        latex: "\\\\rho = \\\\frac{B}{c^2}"
+    physical_meaning:
+      es: "Expresa la velocidad como la raíz de la relación entre la rigidez elástica y la inercia del medio."
+      en: "Expresses speed as the square root of the ratio between elastic stiffness and medium inertia."
+    category: "dinamica"
+    relation_type: "causal"
+    constraints: ["B > 0", "rho > 0"]
+    validity:
+      es: "Válido para fluidos compresibles en régimen lineal y adiabático."
+      en: "Valid for compressible fluids in linear and adiabatic regime."
+    dimension_check: "L T⁻¹ = sqrt((M L⁻¹ T⁻²) / (M L⁻³)) = sqrt(L² T⁻²)"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["ingenieria_acustica", "oceanografia", "medicina"]
+    interpretation_tags: ["elasticidad", "inercia"]
+    result_semantics: "intensiva"
+    domain_checks:
+      - condition: "rho < 0.1"
+        severity: "warning"
+        message:
+          es: "Densidad extremadamente baja; verifique si el medio es un gas a baja presión."
+          en: "Extremely low density; check if the medium is a low-pressure gas."
+    coherence_checks:
+      - condition: "c > 10000"
+        severity: "warning"
+        message:
+          es: "Velocidad extremadamente alta; verifique los valores de B."
+          en: "Extremely high speed; check B values."
+    graph_implications:
+      es: "Determina la rapidez de desplazamiento de los frentes de onda."
+      en: "Determines the displacement speed of the wavefronts."
+    pedagogical_triggers: ["sonido_agua_vs_aire", "vuelo_supersonico"]
+`;export{e as default};

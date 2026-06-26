@@ -1,0 +1,515 @@
+const e=`version: 5
+id: ondas-longitudinales-interp
+leaf_id: ondas-longitudinales
+scope: local
+nombre:
+  es: "Análisis de Ondas Longitudinales"
+  en: "Longitudinal Waves Analysis"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: "Resumen Conceptual"
+      en: "Conceptual Summary"
+  physical_reading:
+    title:
+      es: "Lectura Física"
+      en: "Physical Reading"
+  coherence:
+    title:
+      es: "Coherencia de Datos"
+      en: "Data Coherence"
+  model_validity:
+    title:
+      es: "Validez del Modelo"
+      en: "Model Validity"
+  graph_reading:
+    title:
+      es: "Análisis Visual"
+      en: "Visual Analysis"
+  likely_errors:
+    title:
+      es: "Alertas de Interpretación"
+      en: "Interpretation Alerts"
+  next_step:
+    title:
+      es: "Pasos Sugeridos"
+      en: "Suggested Steps"
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [B, c, f, k, lambda, omega, p_hat, rho, s_hat]
+  formulas: [numero_onda_def, omega_def, onda_fundamental, relacion_amplitudes, velocidad_fluido]
+
+targets:
+  c:
+    summary_rules:
+      - id: c-val
+        when: c > 0
+        status: success
+        text:
+          es: "La velocidad [[c]] de {c} m/s indica que la perturbación mecánica se desplaza a través del medio fluido a dicha rapidez constante."
+          en: "The speed [[c]] of {c} m/s indicates that the mechanical disturbance travels through the fluid medium at that constant speed."
+    physical_reading_rules:
+      - id: c-phys
+        when: c > 0
+        status: success
+        text:
+          es: "Esta rapidez es causada por el balance entre la rigidez elástica [[B]] y la inercia [[rho]] del fluido. En medios más rígidos, la onda viaja más rápido."
+          en: "This speed is caused by the balance between the elastic stiffness [[B]] and the inertia [[rho]] of the fluid. In stiffer media, the wave travels faster."
+    coherence_rules:
+      - id: c-coh
+        when: c == f * lambda
+        status: success
+        text:
+          es: "La cinemática es coherente: el producto de la frecuencia [[f]] y la longitud de onda [[lambda]] coincide con la velocidad de propagación."
+          en: "The kinematics are coherent: the product of frequency [[f]] and wavelength [[lambda]] matches the propagation speed."
+    model_validity_rules:
+      - id: c-valid
+        when: c > 0
+        status: success
+        text:
+          es: "Válido para un medio elástico lineal y continuo. En fluidos muy enrarecidos o a escalas moleculares, este valor de velocidad macroscópica pierde sentido."
+          en: "Valid for a linear and continuous elastic medium. In very rarefied fluids or at molecular scales, this macroscopic speed value loses meaning."
+    graph_rules:
+      - id: c-graph
+        when: c > 0
+        status: success
+        text:
+          es: "En el simulador, [[c]] determina la velocidad con la que las zonas de máxima densidad de partículas avanzan por la pantalla."
+          en: "In the simulator, [[c]] determines the speed at which the particle maximum density zones move across the screen."
+    likely_errors:
+      - id: c-err-part
+        when: c > 0
+        status: warning
+        text:
+          es: "Cuidado: No confunda [[c]] (velocidad de la onda) con la velocidad instantánea de las moléculas del fluido, que es mucho menor."
+          en: "Caution: Do not confuse [[c]] (wave speed) with the instantaneous velocity of the fluid molecules, which is much lower."
+    next_step_rules:
+      - id: f-next
+        when: c > 0
+        status: info
+        text:
+          es: "Use este valor para calcular el tiempo que tardaría el sonido en recorrer una distancia conocida, como en un sistema de eco."
+          en: "Use this value to calculate the time sound would take to travel a known distance, as in an echo system."
+
+  s_hat:
+    summary_rules:
+      - id: s-val
+        when: s_hat > 0
+        status: success
+        text:
+          es: "La amplitud de desplazamiento [[s_hat]] ({s_hat} m) es el máximo alejamiento de una partícula respecto a su equilibrio."
+          en: "The displacement amplitude [[s_hat]] ({s_hat} m) is the maximum distance a particle moves from its equilibrium."
+    physical_reading_rules:
+      - id: s-phys
+        when: s_hat < 1e-6
+        status: success
+        text:
+          es: "El desplazamiento es minúsculo (escala nanométrica), lo cual es típico en ondas sonoras audibles, demostrando la alta sensibilidad del oído."
+          en: "The displacement is minuscule (nanometric scale), which is typical in audible sound waves, demonstrating the ear's high sensitivity."
+    coherence_rules:
+      - id: s-coh
+        when: s_hat > 0
+        status: success
+        text:
+          es: "Valor coherente con el régimen de pequeñas oscilaciones de la acústica lineal."
+          en: "Value coherent with the linear acoustics small oscillations regime."
+    model_validity_rules:
+      - id: s-valid
+        when: s_hat < lambda / 100
+        status: success
+        text:
+          es: "Hipótesis de linealidad válida: el desplazamiento es mucho menor que la longitud de onda [[lambda]]."
+          en: "Linearity hypothesis valid: the displacement is much smaller than the wavelength [[lambda]]."
+    graph_rules:
+      - id: s-graph
+        when: s_hat > 0
+        status: success
+        text:
+          es: "Se visualiza como la amplitud del vaivén de los puntos en la animación de partículas."
+          en: "It is visualized as the swing amplitude of the points in the particle animation."
+    likely_errors:
+      - id: s-err-prop
+        when: s_hat > 0
+        status: error
+        text:
+          es: "Error común: El alumno suele pensar que las partículas viajan junto con la onda. Recuerde que solo oscilan en torno a un punto fijo."
+          en: "Common error: The student often thinks that particles travel along with the wave. Remember they only oscillate around a fixed point."
+    next_step_rules:
+      - id: s-next
+        when: s_hat > 0
+        status: info
+        text:
+          es: "Calcule la amplitud de presión [[p_hat]] resultante para evaluar la intensidad del sonido."
+          en: "Calculate the resulting pressure amplitude [[p_hat]] to evaluate the sound intensity."
+
+  p_hat:
+    summary_rules:
+      - id: p-val
+        when: p_hat > 0
+        status: success
+        text:
+          es: "La amplitud de presión [[p_hat]] ({p_hat} Pa) representa la máxima variación respecto a la presión de equilibrio del fluido."
+          en: "The pressure amplitude [[p_hat]] ({p_hat} Pa) represents the maximum variation from the equilibrium fluid pressure."
+    physical_reading_rules:
+      - id: p-phys
+        when: p_hat > 0
+        status: success
+        text:
+          es: "Esta magnitud causa la percepción de volumen. Es el resultado directo de la compresión del fluido por el movimiento de las partículas."
+          en: "This magnitude causes the perception of loudness. It is the direct result of fluid compression by particle movement."
+    coherence_rules:
+      - id: p-coh
+        when: p_hat < 101325
+        status: success
+        text:
+          es: "La variación de presión es menor que la presión atmosférica estándar, lo que garantiza que no haya vacío parcial en las rarefacciones."
+          en: "The pressure variation is less than the standard atmospheric pressure, ensuring no partial vacuum in rarefactions."
+    model_validity_rules:
+      - id: p-valid
+        when: p_hat < 1000
+        status: success
+        text:
+          es: "Régimen lineal confirmado: para variaciones pequeñas de presión, las leyes de la acústica simple son precisas."
+          en: "Linear regime confirmed: for small pressure variations, simple acoustics laws are accurate."
+    graph_rules:
+      - id: p-graph
+        when: p_hat > 0
+        status: success
+        text:
+          es: "En la gráfica, es el valor máximo de la curva de presión. En el simulador, se nota en la densidad de los puntos."
+          en: "In the graph, it is the maximum value of the pressure curve. In the simulator, it is noticed in the density of the points."
+    likely_errors:
+      - id: p-err-abs
+        when: p_hat > 0
+        status: warning
+        text:
+          es: "Ojo: Esta no es la presión total, sino el exceso o defecto de presión sobre la presión ambiente."
+          en: "Note: This is not the total pressure, but the excess or deficit of pressure over the ambient pressure."
+    next_step_rules:
+      - id: p-next
+        when: p_hat > 0
+        status: info
+        text:
+          es: "Verifique si este nivel de presión es seguro para el oído humano (umbral de dolor ~20-60 Pa según el medio)."
+          en: "Check if this pressure level is safe for the human ear (pain threshold ~20-60 Pa depending on the medium)."
+
+  k:
+    summary_rules:
+      - id: k-val
+        when: k > 0
+        status: success
+        text:
+          es: "El número de onda [[k]] ({k} rad/m) define la periodicidad espacial de la onda en radianes por metro."
+          en: "The wave number [[k]] ({k} rad/m) defines the spatial periodicity of the wave in radians per meter."
+    physical_reading_rules:
+      - id: k-phys
+        when: k > 0
+        status: success
+        text:
+          es: "Indica qué tan 'comprimida' está la onda en el espacio. Un valor alto de [[k]] implica una longitud de onda corta."
+          en: "It indicates how 'compressed' the wave is in space. A high value of [[k]] implies a short wavelength."
+    coherence_rules:
+      - id: k-coh
+        when: k == 2 * 3.14159 / lambda
+        status: success
+        text:
+          es: "Relación inversa con [[lambda]] confirmada matemáticamente."
+          en: "Inverse relationship with [[lambda]] mathematically confirmed."
+    model_validity_rules:
+      - id: k-valid
+        when: k > 0
+        status: success
+        text:
+          es: "Válido para la descripción de fase en ondas armónicas."
+          en: "Valid for phase description in harmonic waves."
+    graph_rules:
+      - id: k-graph
+        when: k > 0
+        status: success
+        text:
+          es: "Dicta cuántas crestas de presión aparecen en un intervalo de distancia dado en el eje x."
+          en: "It dictates how many pressure peaks appear in a given distance interval on the x-axis."
+    likely_errors:
+      - id: k-err
+        when: k > 0
+        status: info
+        text:
+          es: "No olvide que [[k]] incluye el factor 2*pi; no es simplemente el recíproco de la longitud de onda."
+          en: "Do not forget that [[k]] includes the 2*pi factor; it is not simply the reciprocal of the wavelength."
+    next_step_rules:
+      - id: k-next
+        when: k > 0
+        status: info
+        text:
+          es: "Relacione [[k]] con la velocidad angular [[omega]] para obtener la velocidad de fase [[c]]."
+          en: "Relate [[k]] with the angular frequency [[omega]] to obtain the phase velocity [[c]]."
+
+  omega:
+    summary_rules:
+      - id: omega-val
+        when: omega > 0
+        status: success
+        text:
+          es: "La frecuencia angular [[omega]] ({omega} rad/s) cuantifica la rapidez de oscilación temporal."
+          en: "The angular frequency [[omega]] ({omega} rad/s) quantifies the temporal oscillation speed."
+    physical_reading_rules:
+      - id: omega-phys
+        when: omega > 0
+        status: success
+        text:
+          es: "Representa el cambio de fase por unidad de tiempo. Es fundamental para describir la dinámica temporal de las moléculas."
+          en: "It represents the phase change per unit of time. It is fundamental for describing the temporal dynamics of molecules."
+    coherence_rules:
+      - id: omega-coh
+        when: omega == 2 * 3.14159 * f
+        status: success
+        text:
+          es: "Relación directa con la frecuencia lineal [[f]] verificada."
+          en: "Direct relationship with linear frequency [[f]] verified."
+    model_validity_rules:
+      - id: omega-valid
+        when: omega > 0
+        status: success
+        text:
+          es: "Válido para fuentes que oscilan con movimiento armónico simple."
+          en: "Valid for sources oscillating with simple harmonic motion."
+    graph_rules:
+      - id: omega-graph
+        when: omega > 0
+        status: success
+        text:
+          es: "En la animación, [[omega]] determina qué tan rápido parpadean o se mueven los puntos en el tiempo."
+          en: "In the animation, [[omega]] determines how fast the points flicker or move over time."
+    likely_errors:
+      - id: omega-err
+        when: omega > 0
+        status: warning
+        text:
+          es: "Error común: Confundir [[omega]] (rad/s) con f (Hz). Siempre verifique el factor 2*pi."
+          en: "Common error: Confusing [[omega]] (rad/s) with f (Hz). Always check the 2*pi factor."
+    next_step_rules:
+      - id: omega-next
+        when: omega > 0
+        status: info
+        text:
+          es: "Calcule el periodo T = 2*pi / [[omega]] para conocer el tiempo de una oscilación completa."
+          en: "Calculate the period T = 2*pi / [[omega]] to know the time of a full oscillation."
+
+  B:
+    summary_rules:
+      - id: B-val
+        when: B > 0
+        status: success
+        text:
+          es: "El módulo de compresibilidad [[B]] ({B} Pa) mide la resistencia del fluido a ser comprimido."
+          en: "The bulk modulus [[B]] ({B} Pa) measures the fluid's resistance to compression."
+    physical_reading_rules:
+      - id: B-phys
+        when: B > 1e9
+        status: success
+        text:
+          es: "Medio rígido: un valor alto de [[B]] (como en el agua) causa una alta velocidad del sonido."
+          en: "Stiff medium: a high value of [[B]] (like in water) causes a high speed of sound."
+    coherence_rules:
+      - id: B-coh
+        when: B > 0
+        status: success
+        text:
+          es: "Valor elástico coherente con las propiedades termodinámicas del fluido analizado."
+          en: "Elastic value coherent with the thermodynamic properties of the analyzed fluid."
+    model_validity_rules:
+      - id: B-valid
+        when: B > 0
+        status: success
+        text:
+          es: "Apropiado para el régimen elástico lineal."
+          en: "Appropriate for the linear elastic regime."
+    graph_rules:
+      - id: B-graph
+        when: B > 0
+        status: info
+        text:
+          es: "Un mayor [[B]] resulta en frentes de onda que viajan más rápido en la visualización."
+          en: "A higher [[B]] results in wavefronts that travel faster in the visualization."
+    likely_errors:
+      - id: B-err
+        when: B < 0
+        status: error
+        text:
+          es: "Imposibilidad física: un módulo negativo implicaría un fluido inestable que colapsa espontáneamente."
+          en: "Physical impossibility: a negative modulus would imply an unstable fluid that spontaneously collapses."
+    next_step_rules:
+      - id: B-next
+        when: B > 0
+        status: info
+        text:
+          es: "Observe cómo cambia [[B]] entre un gas (adiabático vs isotérmico) y un líquido."
+          en: "Observe how [[B]] changes between a gas (adiabatic vs isothermal) and a liquid."
+
+  rho:
+    summary_rules:
+      - id: rho-val
+        when: rho > 0
+        status: success
+        text:
+          es: "La densidad [[rho]] ({rho} kg/m³) representa la inercia del medio por unidad de volumen."
+          en: "The density [[rho]] ({rho} kg/m³) represents the medium inertia per unit volume."
+    physical_reading_rules:
+      - id: rho-phys
+        when: rho > 0
+        status: success
+        text:
+          es: "A mayor densidad, mayor inercia, lo que tiende a disminuir la velocidad del sonido si la rigidez es constante."
+          en: "Higher density means higher inertia, which tends to decrease the speed of sound if stiffness is constant."
+    coherence_rules:
+      - id: rho-coh
+        when: rho > 0
+        status: success
+        text:
+          es: "Masa volumétrica coherente con un medio material real."
+          en: "Volumetric mass coherent with a real material medium."
+    model_validity_rules:
+      - id: rho-valid
+        when: rho > 0
+        status: success
+        text:
+          es: "Asume homogeneidad perfecta en el fluido."
+          en: "Assumes perfect homogeneity in the fluid."
+    graph_rules:
+      - id: rho-graph
+        when: rho > 0
+        status: info
+        text:
+          es: "La densidad dicta la 'pesadez' de la respuesta del medio ante la perturbación."
+          en: "Density dictates the 'heaviness' of the medium response to the disturbance."
+    likely_errors:
+      - id: rho-err
+        when: rho <= 0
+        status: error
+        text:
+          es: "Error: No existe propagación de ondas mecánicas en un medio sin masa."
+          en: "Error: There is no mechanical wave propagation in a medium without mass."
+    next_step_rules:
+      - id: rho-next
+        when: rho > 0
+        status: info
+        text:
+          es: "Considere cómo la temperatura afecta a [[rho]] en gases y, por ende, a la velocidad acústica."
+          en: "Consider how temperature affects [[rho]] in gases and, therefore, the acoustic velocity."
+
+  lambda:
+    summary_rules:
+      - id: lambda-val
+        when: lambda > 0
+        status: success
+        text:
+          es: "La longitud de onda [[lambda]] ({lambda} m) es la distancia entre dos puntos en fase."
+          en: "The wavelength [[lambda]] ({lambda} m) is the distance between two points in phase."
+    physical_reading_rules:
+      - id: lambda-phys
+        when: lambda > 0
+        status: success
+        text:
+          es: "Define la escala de interacción de la onda. Obstáculos mucho menores que [[lambda]] no causan reflexiones fuertes."
+          en: "It defines the interaction scale of the wave. Obstacles much smaller than [[lambda]] do not cause strong reflections."
+    coherence_rules:
+      - id: lambda-coh
+        when: lambda == c / f
+        status: success
+        text:
+          es: "Relación c = f*lambda satisfecha."
+          en: "c = f*lambda relationship satisfied."
+    model_validity_rules:
+      - id: lambda-valid
+        when: lambda > 0
+        status: success
+        text:
+          es: "Válido para propagación de ondas planas."
+          en: "Valid for plane wave propagation."
+    graph_rules:
+      - id: lambda-graph
+        when: lambda > 0
+        status: success
+        text:
+          es: "Es la distancia entre dos crestas consecutivas en el eje x de la simulación."
+          en: "It is the distance between two consecutive peaks on the x-axis of the simulation."
+    likely_errors:
+      - id: lambda-err
+        when: lambda > 0
+        status: info
+        text:
+          es: "Recuerde: [[lambda]] es una propiedad espacial, no el desplazamiento físico de un átomo."
+          en: "Remember: [[lambda]] is a spatial property, not the physical displacement of an atom."
+    next_step_rules:
+      - id: lambda-next
+        when: lambda > 0
+        status: info
+        text:
+          es: "Compare [[lambda]] con las dimensiones del recipiente para predecir posibles ondas estacionarias."
+          en: "Compare [[lambda]] with the container dimensions to predict possible standing waves."
+
+  f:
+    summary_rules:
+      - id: f-val
+        when: f > 0
+        status: success
+        text:
+          es: "La frecuencia [[f]] ({f} Hz) es el número de ciclos por segundo."
+          en: "The frequency [[f]] ({f} Hz) is the number of cycles per second."
+    physical_reading_rules:
+      - id: f-phys
+        when: f > 0
+        status: success
+        text:
+          es: "Propiedad invariante de la fuente. Define el tono percibido (grave vs agudo)."
+          en: "Invariant source property. Defines the perceived pitch (low vs high)."
+    coherence_rules:
+      - id: f-coh
+        when: f > 0
+        status: success
+        text:
+          es: "Valor positivo consistente con una fuente oscilante."
+          en: "Positive value consistent with an oscillating source."
+    model_validity_rules:
+      - id: f-valid
+        when: f > 20000
+        status: info
+        text:
+          es: "Régimen ultrasónico: frecuencia fuera del rango audible humano."
+          en: "Ultrasonic regime: frequency outside the human audible range."
+    graph_rules:
+      - id: f-graph
+        when: f > 0
+        status: success
+        text:
+          es: "Determina el ritmo de actualización temporal de la animación de partículas."
+          en: "Determines the temporal update rate of the particle animation."
+    likely_errors:
+      - id: f-err
+        when: f <= 0
+        status: error
+        text:
+          es: "Error: Frecuencia no positiva implica ausencia de onda periódica."
+          en: "Error: Non-positive frequency implies absence of periodic wave."
+    next_step_rules:
+      - id: f-next
+        when: f > 0
+        status: info
+        text:
+          es: "Determine la resolución espacial (basada en lambda) que esta [[f]] permite en un sonar."
+          en: "Determine the spatial resolution (based on lambda) that this [[f]] allows in a sonar."
+`;export{e as default};

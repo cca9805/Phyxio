@@ -1,0 +1,192 @@
+const e=`formulas:
+
+  - id: onda_presion_armonica
+    title:
+      es: Onda de presión armónica plana
+      en: Plane harmonic pressure wave
+    equation: "p_ac = p0 * cos(2 * pi * f_son * t - 2 * pi / lambda_son * x)"
+    latex: "p = p_0 \\\\cos\\\\!\\\\left(2\\\\pi f t - \\\\frac{2\\\\pi}{\\\\lambda} x\\\\right)"
+    rearrangements:
+      - target: p0_ac
+        equation: "p0 = p_ac / cos(2 * pi * f_son * t - 2 * pi / lambda_son * x)"
+        latex: "p_0 = \\\\frac{p}{\\\\cos\\\\!\\\\left(2\\\\pi f t - \\\\dfrac{2\\\\pi}{\\\\lambda}x\\\\right)}"
+      - target: f_son
+        equation: "f_son = v_son / lambda_son"
+        latex: "f = \\\\frac{v_s}{\\\\lambda}"
+      - target: lambda_son
+        equation: "lambda_son = v_son / f_son"
+        latex: "\\\\lambda = \\\\frac{v_s}{f}"
+      - target: v_son
+        equation: "v_son = f_son * lambda_son"
+        latex: "v_s = f \\\\lambda"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "Describe la variación de presión en cada punto del espacio y en cada instante para una onda sonora plana y armónica que se propaga en la dirección positiva del eje x."
+      en: "Describes the pressure variation at each point in space and at each instant for a plane harmonic sound wave propagating in the positive x direction."
+    constraints:
+      - "Onda plana (frente de onda plano, alejado de la fuente puntual)"
+      - "Medio homogéneo, isótropo y no dispersivo"
+      - "Amplitudes pequeñas (régimen lineal)"
+    validity:
+      es: "Válida para ondas armónicas en medios lineales donde la amplitud de desplazamiento es mucho menor que la longitud de onda y que la escala de variación de las propiedades del medio."
+      en: "Valid for harmonic waves in linear media where the displacement amplitude is much smaller than the wavelength and the spatial scale of variation of medium properties."
+    dimension_check: "[M L⁻¹ T⁻²] = [M L⁻¹ T⁻²] · [1] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "teoria.md (Nivel formal)"
+      - "ejemplos.md (resolución simbólica)"
+      - "interpretacion.yaml (targets p0_ac, f_son, lambda_son, v_son)"
+    interpretation_tags:
+      - "lectura_presion_instantanea"
+      - "relacion_velocidad_frecuencia_longitud"
+      - "clasificacion_tono"
+    result_semantics:
+      target: p_ac
+      kind: scalar_signed
+      sign_meaning:
+        es: "Positivo indica compresión local; negativo indica rarefacción."
+        en: "Positive indicates local compression; negative indicates rarefaction."
+      absolute_value_meaning:
+        es: "El módulo indica qué tan lejos está la presión local del valor de equilibrio; cuanto mayor, más intenso el sonido en ese punto."
+        en: "The magnitude indicates how far the local pressure is from equilibrium; the larger it is, the more intense the sound at that point."
+    domain_checks:
+      - "p0_ac >= 20e-6 Pa (por encima del umbral de audición)"
+      - "p0_ac <= 20 Pa (por debajo del umbral de dolor)"
+      - "f_son >= 20 Hz (banda audible inferior)"
+      - "f_son <= 20000 Hz (banda audible superior)"
+      - "v_son > 0 m/s"
+      - "lambda_son > 0 m"
+    coherence_checks:
+      - "lambda_son * f_son debe coincidir con v_son dentro del 1 %"
+      - "p_ac no debe exceder p0_ac en módulo"
+    graph_implications:
+      - "En gráfica p vs x: curva sinusoidal con amplitud p0_ac y periodo espacial lambda_son"
+      - "En gráfica p vs t: curva sinusoidal con amplitud p0_ac y periodo 1/f_son"
+    pedagogical_triggers:
+      - "Si lambda_son calculada difiere de v_son/f_son: el alumno probablemente confundió frecuencia angular con frecuencia ordinaria"
+      - "Si p0_ac se confunde con p_rms: advertir sobre el factor sqrt(2) para sinusoides"
+
+  - id: intensidad_acustica
+    title:
+      es: Intensidad acústica de onda plana armónica
+      en: Acoustic intensity of a plane harmonic wave
+    equation: "I_ac = p0 * p0 / (2 * rho * v_son)"
+    latex: "I = \\\\frac{p_0^2}{2 \\\\rho v_s}"
+    rearrangements:
+      - target: I_ac
+        equation: "I_ac = p0 * p0 / (2 * rho * v_son)"
+        latex: "I = \\\\frac{p_0^2}{2 \\\\rho v_s}"
+      - target: p0_ac
+        equation: "p0 = sqrt(2 * I_ac * rho * v_son)"
+        latex: "p_0 = \\\\sqrt{2 I \\\\rho v_s}"
+    category: derived
+    relation_type: average_relation
+    physical_meaning:
+      es: "Relaciona la intensidad acústica promedio con el cuadrado de la amplitud de presión, la densidad del medio y la velocidad del sonido. Refleja la energía transportada por la onda por unidad de área y tiempo."
+      en: "Relates the average acoustic intensity to the square of the pressure amplitude, the medium density, and the speed of sound. Reflects the energy transported by the wave per unit area per unit time."
+    constraints:
+      - "Onda plana armónica"
+      - "Promedio temporal sobre un ciclo completo"
+      - "Medio no absorbente"
+    validity:
+      es: "Válida para ondas planas armónicas en medios lineales; en campos difusos o con reflexiones múltiples, la intensidad neta puede ser mucho menor que la suma de intensidades parciales."
+      en: "Valid for plane harmonic waves in linear media; in diffuse fields or with multiple reflections, the net intensity can be much smaller than the sum of partial intensities."
+    dimension_check: "[M T⁻³] = [M² L⁻² T⁻⁴] / ([M L⁻³] · [L T⁻¹]) = [M T⁻³] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "teoria.md (Nivel formal)"
+      - "ejemplos.md (resolución simbólica)"
+      - "interpretacion.yaml (targets I_ac, p0_ac)"
+    interpretation_tags:
+      - "energia_transportada"
+      - "nivel_sonoro"
+      - "riesgo_auditivo"
+    result_semantics:
+      target: I_ac
+      kind: scalar_unsigned
+      sign_meaning:
+        es: "La intensidad acústica es siempre positiva; indica flujo de energía en la dirección de propagación."
+        en: "Acoustic intensity is always positive; it indicates energy flux in the propagation direction."
+      absolute_value_meaning:
+        es: "Cuanto mayor es la intensidad, mayor es el flujo de energía que atraviesa cada metro cuadrado de frente de onda."
+        en: "The higher the intensity, the greater the energy flux crossing each square metre of wavefront."
+    domain_checks:
+      - "I_ac >= 1e-12 W/m² (umbral de audición)"
+      - "I_ac <= 10 W/m² (límites de daño inmediato)"
+      - "p0_ac > 0"
+      - "rho > 0"
+      - "v_son > 0"
+    coherence_checks:
+      - "Si I_ac > 1 W/m² el sonido es potencialmente dañino incluso en exposición breve"
+      - "I_ac debe crecer con el cuadrado de p0_ac; si no, revisar si se usó p_rms en lugar de p0"
+    graph_implications:
+      - "En gráfica I vs p0: parábola creciente; duplicar p0 cuadruplica I"
+      - "El valor de I puede leerse en el eje resultado de la calculadora"
+    pedagogical_triggers:
+      - "Si el alumno obtiene I proporcional a p0 (no a p0²): ha olvidado el cuadrado en la fórmula"
+      - "Si usa el valor de rho del agua en lugar del aire: advertir que rho_agua es 800 veces mayor y produce I muy distinta"
+
+  - id: relacion_vel_freq_lambda
+    title:
+      es: Relación velocidad, frecuencia y longitud de onda
+      en: Relationship between speed, frequency, and wavelength
+    equation: "v_son = f_son * lambda_son"
+    latex: "v_s = f \\\\lambda"
+    rearrangements:
+      - target: v_son
+        equation: "v_son = f_son * lambda_son"
+        latex: "v_s = f \\\\lambda"
+      - target: f_son
+        equation: "f_son = v_son / lambda_son"
+        latex: "f = \\\\frac{v_s}{\\\\lambda}"
+      - target: lambda_son
+        equation: "lambda_son = v_son / f_son"
+        latex: "\\\\lambda = \\\\frac{v_s}{f}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "Relaciona las tres magnitudes cinemáticas de cualquier onda periódica: la velocidad es el producto de la frecuencia por la longitud de onda. En el sonido, la velocidad depende del medio, la frecuencia depende de la fuente, y la longitud de onda resulta de ambas."
+      en: "Relates the three kinematic quantities of any periodic wave: speed is the product of frequency and wavelength. In sound, speed depends on the medium, frequency depends on the source, and wavelength results from both."
+    constraints:
+      - "Onda monocromática (frecuencia única)"
+      - "Medio no dispersivo (v independiente de f)"
+    validity:
+      es: "Universal para ondas periódicas en medios no dispersivos. En medios dispersivos (como el agua para frecuencias muy altas), la velocidad de fase depende de la frecuencia."
+      en: "Universal for periodic waves in non-dispersive media. In dispersive media (such as water at very high frequencies), phase velocity depends on frequency."
+    dimension_check: "[L T⁻¹] = [T⁻¹] · [L] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "teoria.md (Nivel formal)"
+      - "ejemplos.md (resolución simbólica)"
+      - "interpretacion.yaml (targets v_son, f_son, lambda_son)"
+    interpretation_tags:
+      - "relacion_cinematica"
+      - "clasificacion_tono"
+      - "longitud_onda_en_medio"
+    result_semantics:
+      target: v_son
+      kind: scalar_unsigned
+      sign_meaning:
+        es: "La velocidad de propagación es siempre positiva; no tiene signo en este contexto."
+        en: "Propagation speed is always positive; it has no sign in this context."
+      absolute_value_meaning:
+        es: "Indica qué tan rápido avanza el frente de onda; es una propiedad del medio, no de la fuente."
+        en: "Indicates how fast the wavefront advances; it is a property of the medium, not of the source."
+    domain_checks:
+      - "f_son > 0 Hz"
+      - "lambda_son > 0 m"
+      - "v_son > 0 m/s"
+    coherence_checks:
+      - "v_son debe estar entre 300 y 400 m/s para el aire a temperaturas habituales"
+      - "Si lambda_son resulta mayor de 17 m con f en rango audible, revisar unidades de v_son"
+    graph_implications:
+      - "En gráfica lambda vs f: hipérbola con asíntota cero; a mayor f, menor lambda"
+      - "La pendiente en gráfica lambda vs 1/f es v_son"
+    pedagogical_triggers:
+      - "Si el alumno obtiene lambda mayor a la que correspondería: probablemente confundió f en Hz con omega en rad/s"
+      - "Si usa la misma lambda en el agua que en el aire para la misma nota: ha olvidado que lambda cambia con el medio"
+`;export{e as default};

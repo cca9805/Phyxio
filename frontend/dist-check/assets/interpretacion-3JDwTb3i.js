@@ -1,0 +1,118 @@
+const e=`version: 2
+id: interpretacion-sobreamortiguado
+leaf_id: sobreamortiguado
+nombre:
+  es: Interpretacion del regimen sobreamortiguado
+  en: Overdamped regime interpretation
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: oscilaciones
+  parent_id: amortiguamiento
+  ruta_relativa: fisica-clasica/mecanica/oscilaciones/amortiguamiento/sobreamortiguado
+dependencies:
+  formulas: [condicion_sobreamortiguado, raices_sobreamortiguado, raiz2_sobreamortiguado, solucion_sobreamortiguada]
+  magnitudes: [gamma, omega0, r1, r2, x, C1, C2, t]
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+result_blocks:
+  summary:
+    title: { es: Resumen fisico, en: Physical summary }
+  physical_reading:
+    title: { es: Lectura causal, en: Causal reading }
+  coherence:
+    title: { es: Coherencia del regimen, en: Regime coherence }
+  model_validity:
+    title: { es: Validez del modelo, en: Model validity }
+  graph_reading:
+    title: { es: Lectura de la curva, en: Curve reading }
+  likely_errors:
+    title: { es: Errores probables, en: Likely errors }
+  next_step:
+    title: { es: Siguiente decision, en: Next decision }
+targets:
+  gamma: &gamma_block
+    summary_rules:
+      - id: gamma_summary
+        when: "true"
+        status: info
+        text: { es: "[[gamma]] indica y resume la disipacion efectiva que debe superar a [[omega0]] para que el retorno sea sobreamortiguado y no muestre ciclos sostenidos.", en: "[[gamma]] indicates and summarizes the effective dissipation that must exceed [[omega0]] for the return to be overdamped and show no sustained cycles." }
+    physical_reading_rules:
+      - id: gamma_phys
+        when: "true"
+        status: info
+        text: { es: "Un [[gamma]] alto elimina el cruce oscilatorio, pero tambien puede hacer que el modo lento [[r1]] gobierne durante mucho tiempo.", en: "A high [[gamma]] removes oscillatory crossing, but it can also make the slow mode [[r1]] govern for a long time." }
+    coherence_rules:
+      - id: gamma_coh
+        when: "true"
+        status: ok
+        text: { es: "[[gamma]] debe ser positivo y mayor que [[omega0]]; si no se cumple, no debe usarse este leaf como regimen final.", en: "[[gamma]] must be positive and greater than [[omega0]]; otherwise this leaf should not be used as the final regime." }
+    model_validity_rules:
+      - id: gamma_valid
+        when: "true"
+        status: ok
+        text: { es: "La lectura es valida si el amortiguamiento puede tratarse como viscoso lineal y casi constante.", en: "The reading is valid if damping can be treated as linear viscous damping and nearly constant." }
+    graph_rules:
+      - id: gamma_graph
+        when: "true"
+        status: info
+        text: { es: "En la grafica Coord, aumentar [[gamma]] separa las raices y deja una cola lenta dominada por [[r1]].", en: "In the Coord graph, increasing [[gamma]] separates the roots and leaves a slow tail dominated by [[r1]]." }
+    likely_errors:
+      - id: gamma_err
+        when: "true"
+        status: warning
+        text: { es: "Error comun: creer que mas [[gamma]] siempre significa respuesta mas rapida, olvidando el modo lento.", en: "Common mistake: assuming more [[gamma]] always means a faster response, forgetting the slow mode." }
+    next_step_rules:
+      - id: gamma_next
+        when: "true"
+        status: tip
+        text: { es: "Comparar [[gamma]] con [[omega0]] antes de calcular [[r1]], [[r2]] o [[x]].", en: "Compare [[gamma]] with [[omega0]] before computing [[r1]], [[r2]], or [[x]]." }
+  omega0:
+    <<: *gamma_block
+  r1: &r1_block
+    summary_rules:
+      - id: r1_summary
+        when: "true"
+        status: info
+        text: { es: "[[r1]] es la raiz menos negativa y normalmente controla el asentamiento tardio.", en: "[[r1]] is the less negative root and usually controls late settling." }
+    physical_reading_rules:
+      - id: r1_phys
+        when: "true"
+        status: info
+        text: { es: "Si [[r1]] queda cerca de cero, la curva de [[x]] vuelve sin oscilar pero con una cola larga.", en: "If [[r1]] lies near zero, the [[x]] curve returns without oscillating but with a long tail." }
+    coherence_rules:
+      - id: r1_coh
+        when: "true"
+        status: ok
+        text: { es: "[[r1]] debe ser negativo y mayor que [[r2]] en el sentido numerico.", en: "[[r1]] must be negative and numerically greater than [[r2]]." }
+    model_validity_rules:
+      - id: r1_valid
+        when: "true"
+        status: ok
+        text: { es: "La raiz tiene sentido si procede de un sistema lineal libre de segundo orden.", en: "The root is meaningful if it comes from a free linear second-order system." }
+    graph_rules:
+      - id: r1_graph
+        when: "true"
+        status: info
+        text: { es: "En tiempos largos, la pendiente logaritmica de [[x]] se aproxima a [[r1]].", en: "At long times, the logarithmic slope of [[x]] approaches [[r1]]." }
+    likely_errors:
+      - id: r1_err
+        when: "true"
+        status: warning
+        text: { es: "Error comun: confundir [[r1]] con una frecuencia angular oscilatoria, aunque aqui no hay seno ni coseno.", en: "Common mistake: confusing [[r1]] with an oscillatory angular frequency, although no sine or cosine appears here." }
+    next_step_rules:
+      - id: r1_next
+        when: "true"
+        status: tip
+        text: { es: "Usar [[r1]] para estimar la parte lenta de [[x]] cuando [[t]] es grande.", en: "Use [[r1]] to estimate the slow part of [[x]] when [[t]] is large." }
+  r2:
+    <<: *gamma_block
+  x:
+    <<: *r1_block
+  C1:
+    <<: *r1_block
+  C2:
+    <<: *r1_block
+  t:
+    <<: *r1_block
+`;export{e as default};

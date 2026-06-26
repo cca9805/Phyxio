@@ -1,0 +1,73 @@
+const e=`id: resistencias-en-serie
+nombre:
+  es: Resistencias en serie
+  en: Resistors in Series
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: corriente-electrica
+parent_id: circuitos-de-corriente-continua
+ruta_relativa: fisica-clasica/electromagnetismo/corriente-electrica/circuitos-de-corriente-continua/resistencias-en-serie
+orden: 293410
+type: leaf
+niveles:
+  es:
+  - ESO
+  - BACHILLERATO
+  - UNIVERSIDAD
+  - EXTRACURRICULAR
+  en:
+  - Secondary
+  - Upper Secondary
+  - University
+  - Extracurricular
+icon: 📘
+descripcion: "Subtema: Resistencias en Serie. Teoria, formulas, ejemplos y aplicaciones."
+description_en: "Content about Resistencias In Serie."
+pregunta_fisica_central:
+  es: "¿Como se reparte la tension y como se obtiene la resistencia equivalente en un circuito de resistencias en serie?"
+  en: "How is voltage distributed and how is equivalent resistance obtained in a series resistor circuit?"
+tags:
+  es:
+  - electromagnetismo
+  - corriente
+  - resistencias
+  - circuitos
+  en:
+  - electromagnetism
+  - current
+  - resistors
+  - circuits
+prerequisitos:
+- fisica-clasica/electromagnetismo/corriente-electrica/potencia-electrica
+graficos:
+- Coord
+representacion_dominante: Coord
+magnitud_dominante: Req
+physical_role:
+  es: concepto físico
+  en: physical concept
+dificultad: 3
+tiempo_estimado_min: 45
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

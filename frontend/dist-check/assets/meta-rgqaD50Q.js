@@ -1,0 +1,59 @@
+const n=`id: ejemplos-clasicos-rodadura
+nombre:
+  es: Ejemplos Clásicos de Rodadura
+  en: Standard Rolling Examples
+area: fisica-clasica
+bloque: mecanica
+subbloque: rotacion
+parent_id: dinamica-de-la-rodadura-sin-deslizamiento
+ruta_relativa: fisica-clasica/mecanica/rotacion/rodadura/dinamica-de-la-rodadura-sin-deslizamiento/ejemplos-clasicos
+orden: 212455
+type: leaf
+icon: 📘
+dificultad: 3
+tiempo_estimado_min: 55
+descripcion: Aplicación de la condición de rodadura y dinámica en casos prácticos y sistemas reales.
+description_en: Application of the rolling condition and dynamics in practical cases and real systems.
+tags:
+  es: [rodadura, dinámica, ejemplos, sólida rígido, fricción]
+  en: [rolling, dynamics, examples, rigid body, friction]
+prerequisitos:
+  - fisica-clasica/mecanica/rotacion/rodadura/condicion-de-rodadura-sin-deslizamiento
+  - fisica-clasica/mecanica/rotacion/dinamica/segunda-ley-rotacional/ecuacion-fundamental
+niveles:
+  es: [BACHILLERATO, UNIVERSIDAD]
+  en: [Upper Secondary, University]
+graficos: [Coord]
+physical_role:
+  es: modelo físico
+  en: physical model
+pregunta_fisica_central:
+  es: "¿Cómo se aplican las leyes de la rodadura para resolver problemas típicos de cilindros y esferas en movimiento?"
+  en: "How are the laws of rolling applied to solve typical problems of moving cylinders and spheres?"
+representacion_dominante: Coord
+magnitud_dominante: v
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    tab_label:
+      es: Ver Interpretación
+      en: View Interpretation
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    max_inline_messages: 5
+    show_summary_first: true
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    auto_load_magnitudes: true
+    auto_load_formulas: true
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

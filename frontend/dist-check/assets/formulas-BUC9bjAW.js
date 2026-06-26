@@ -1,0 +1,64 @@
+const e=`- id: ley_pascal
+  title:
+    es: Ley de Pascal (Prensa Hidráulica)
+    en: Pascal's Law (Hydraulic Press)
+  equation: p = F1 / A1 = F2 / A2
+  latex: p = \\frac{F_1}{A_1} = \\frac{F_2}{A_2}
+  rearrangements:
+    - target: F2
+      latex: F_2 = F_1 \\frac{A_2}{A_1}
+    - target: p
+      latex: p = \\frac{F_1}{A_1}
+  category: law
+  relation_type: equality
+  physical_meaning:
+    es: La presión se transmite íntegramente por todo el fluido confinado.
+    en: Pressure is transmitted undiminished throughout the confined fluid.
+  constraints: fluido incompresible, recipiente rígido, equilibrio estático
+  validity:
+    es: Válido para líquidos en reposo. No aplica a gases muy comprimibles sin ajustes.
+    en: Valid for liquids at rest. Does not apply to highly compressible gases without adjustments.
+  dimension_check: "[F/A] = N/m^2 = Pa"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [principio-de-pascal]
+  interpretation_tags: [presion, transmision, equilibrio]
+  result_semantics:
+    es: Indica la igualdad de presiones entre ambos émbolos.
+    en: Indicates the equality of pressures between both pistons.
+  domain_checks: [F1 > 0, A1 > 0, A2 > 0]
+  coherence_checks: [F2 > F1 si A2 > A1]
+  graph_implications: vincula la carga en ambos émbolos del DCL
+  pedagogical_triggers: multiplicador de fuerza, ventaja mecánica
+
+- id: multiplicacion_fuerza
+  title:
+    es: Factor de multiplicación hidráulica
+    en: Hydraulic multiplication factor
+  equation: M = F2 / F1 = A2 / A1
+  latex: M = \\frac{F_2}{F_1} = \\frac{A_2}{A_1}
+  rearrangements:
+    - target: F2
+      latex: F_2 = F_1 \\cdot M
+  category: derivation
+  relation_type: ratio
+  physical_meaning:
+    es: Ganancia de fuerza del sistema proporcional a la relación de áreas.
+    en: Force gain of the system proportional to the area ratio.
+  constraints: sistema ideal sin rozamiento ni viscosidad
+  validity:
+    es: Solo para sistemas con un único fluido conectado.
+    en: Only for systems with a single connected fluid.
+  dimension_check: adimensionado (N/N o m^2/m^2)
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [principio-de-pascal]
+  interpretation_tags: [ventaja-mecanica, eficiencia]
+  result_semantics:
+    es: Representa cuántas veces aumenta la fuerza de salida respecto a la entrada.
+    en: Represents how many times the output force increases relative to the input.
+  domain_checks: [M > 0]
+  coherence_checks: [M > 1 para elevadores]
+  graph_implications: determina la escala relativa de los vectores de fuerza
+  pedagogical_triggers: palanca hidráulica
+`;export{e as default};

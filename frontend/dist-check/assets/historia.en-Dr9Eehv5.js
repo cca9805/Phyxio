@@ -1,0 +1,22 @@
+const e=`# History: Introduction to waves in solids
+
+## Historical problem
+
+The central problem that drove the study of waves in solids was understanding why sound travels faster through solid materials than through air, and how an apparently rigid body can transmit vibrations without itself moving. Ancient miners already knew that pressing an ear against rock could detect distant activities much earlier than hearing them through air, but there was no formal question or theoretical framework to explain it. The challenge was twofold: first, accepting that solids are not perfectly rigid but deform elastically; second, mathematically describing how that deformation propagates in space and time.
+
+## Prior conceptual difficulty
+
+The main difficulty was the dominant belief that solids were perfectly rigid bodies. Under this paradigm, any force applied to a solid should be transmitted instantaneously throughout the entire body, with no delay or wave propagation. This conceptual obstacle prevented formulating the concept of finite wave velocity in a solid. Additionally, confusion between material displacement and disturbance propagation made it difficult to separate particle motion from wave motion. The limitation of thinking in terms of rigid bodies had to be overcome in favour of the concept of a deformable continuous medium. Robert Hooke took the first step in 1660 by establishing the proportional relationship between force and deformation, because without elasticity there is no mechanical wave. Euler, D'Alembert and Bernoulli extended wave equations to strings, but the challenge of generalising them to three-dimensional solids with simultaneous compressional and shear rigidity remained open for over a century.
+
+## What changed
+
+The decisive advance was the formulation of the theory of elasticity by Navier (1821), Cauchy and Poisson. Poisson demonstrated in 1828 that the equations of motion in elastic solids admit two independent types of solution: compression waves (longitudinal) and distortion waves (transverse), travelling at different velocities determined by the material's elastic constants. This discovery radically transformed the understanding of solids: they were no longer rigid bodies but media capable of supporting two simultaneous wave modes. Lord Rayleigh published in 1885 the existence of a third mode (surface waves), further broadening the landscape. In the 20th century, Sokolov proposed in 1929 the use of ultrasonics to detect defects in metals, and Firestone developed in 1940 the first practical pulse-echo inspection equipment, demonstrating that theoretical knowledge could solve concrete industrial problems.
+
+## Impact on physics
+
+The impact was enormous and multidisciplinary. In geophysics, Gutenberg used the absence of S waves in certain zones to deduce that Earth's outer core is liquid (1913), and Lehmann identified the solid inner core in 1936. The consequence of these discoveries was revolutionary: wave propagation in solids went from being an academic problem to a diagnostic tool on a planetary scale. In engineering, non-destructive ultrasonic testing allowed inspection of critical components without damaging them, transforming industrial safety standards. The revolution of acoustic devices in electronics (SAW filters, piezoelectric resonators, delay lines) demonstrated that waves in solids have direct technological applications in telecommunications and signal processing.
+
+## Connection with modern physics
+
+Current research connects waves in solids with advanced materials physics and quantum physics. Acoustic metamaterials manipulate waves with properties impossible in natural materials, such as negative refractive index or acoustic invisibility. Nanoacoustics studies waves at scales where the distinction between phonons (quantum treatment) and classical acoustic waves becomes blurred. Intelligent structural monitoring with embedded sensor networks uses wave propagation principles to detect damage in real time in bridges, aircraft and nuclear reactors. Thus, understanding waves in solids enabled not only diagnosing Earth's interior, but also designing materials with tailored acoustic properties and solving engineering problems that seemed impossible just decades ago.
+`;export{e as default};

@@ -1,0 +1,653 @@
+version: 5
+id: ley-de-gravitacion-universal-interp
+leaf_id: ley-de-gravitacion-universal
+scope: local
+nombre:
+  es: Lectura de ley de gravitacion universal
+  en: Universal gravitation law reading
+
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+
+result_blocks:
+  summary:
+    title: { es: Resumen fisico, en: Physical summary }
+  physical_reading:
+    title: { es: Lectura fisica, en: Physical reading }
+  coherence:
+    title: { es: Coherencia de datos, en: Data coherence }
+  model_validity:
+    title: { es: Validez del modelo, en: Model validity }
+  graph_reading:
+    title: { es: Lectura del grafico, en: Graph reading }
+  likely_errors:
+    title: { es: Errores probables, en: Likely errors }
+  next_step:
+    title: { es: Siguiente paso, en: Next step }
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [ F, G, m1, m2, r, M, m, g, P, a, R, F1, F2, r1, r2 ]
+  formulas: [ ley_newton_gravitacion, campo_gravitatorio, peso_desde_campo, aceleracion_gravitatoria, variacion_inversa_cuadrado, forma_vectorial_conceptual, superposicion_conceptual ]
+
+targets:
+  F:
+    summary_rules:
+    - id: f-summary
+      when: F > 0
+      status: success
+      text:
+        es: La fuerza gravitatoria tiene magnitud positiva y representa interaccion atractiva en modulo.
+        en: Gravitational force has positive magnitude and represents attractive interaction in modulus.
+    physical_reading_rules:
+    - id: f-reading
+      when: r > 0
+      status: info
+      text:
+        es: Si la distancia radial aumenta, la fuerza disminuye con ley inversa cuadratica.
+        en: If radial distance increases, force decreases under inverse-square law.
+    coherence_rules:
+    - id: f-coh
+      when: G > 0 and m1 > 0 and m2 > 0 and r > 0
+      status: success
+      text:
+        es: Parametros base coherentes para aplicar ley de Newton gravitatoria.
+        en: Base parameters are coherent for applying Newton gravitational law.
+    model_validity_rules:
+    - id: f-validity
+      when: r > 0
+      status: success
+      text:
+        es: Valido para masas puntuales o simetria esferica equivalente en regimen clasico.
+        en: Valid for point masses or equivalent spherical symmetry in classical regime.
+    graph_rules:
+    - id: f-graph
+      when: F > 0
+      status: info
+      text:
+        es: En el grafico Coord, la curva F(r) cae con pendiente alta en radios pequenos.
+        en: In the Coord graph, F(r) drops steeply at small radii.
+    likely_errors:
+    - id: f-linear-error
+      when: F2 == F1 / 2 and r2 == 2 * r1
+      status: error
+      text:
+        es: "Error conceptual probable: tratar la ley como inversa lineal en lugar de inversa cuadratica."
+        en: "Likely conceptual error: treating the law as inverse-linear instead of inverse-square."
+    next_step_rules:
+    - id: f-next
+      when: F > 0
+      status: info
+      text:
+        es: Comparar dos estados radiales para estimar cambio de fuerza sin recalculo completo.
+        en: Compare two radial states to estimate force change without full recomputation.
+
+  F2:
+    summary_rules:
+    - id: f2-summary
+      when: F2 > 0
+      status: success
+      text:
+        es: La fuerza final permite evaluar impacto del cambio de distancia.
+        en: Final force enables evaluation of distance-change impact.
+    physical_reading_rules:
+    - id: f2-reading
+      when: r2 > r1
+      status: info
+      text:
+        es: Si el estado final esta mas lejos, la fuerza final debe ser menor.
+        en: If final state is farther away, final force should be lower.
+    coherence_rules:
+    - id: f2-coh
+      when: F2 == F1 * (r1 / r2)^2
+      status: success
+      text:
+        es: Coherencia confirmada con la relacion de variacion inversa cuadratica.
+        en: Coherence confirmed with inverse-square variation relation.
+    model_validity_rules:
+    - id: f2-validity
+      when: r1 > 0 and r2 > 0
+      status: success
+      text:
+        es: Valido cuando las masas del sistema se mantienen constantes entre estados.
+        en: Valid when system masses stay constant across states.
+    graph_rules:
+    - id: f2-graph
+      when: r1 > 0 and r2 > 0
+      status: info
+      text:
+        es: Puede leerse como cambio vertical entre dos puntos de la misma curva F(r).
+        en: It can be read as vertical change between two points on the same F(r) curve.
+    likely_errors:
+    - id: f2-mass-change
+      when: m1 <= 0 or m2 <= 0
+      status: error
+      text:
+        es: "Error de planteamiento: masas no fisicas invalidan comparacion de estados."
+        en: "Setup error: nonphysical masses invalidate state comparison."
+    next_step_rules:
+    - id: f2-next
+      when: F2 > 0
+      status: info
+      text:
+        es: Usar la razon F2/F1 para verificar sensibilidad de diseno orbital.
+        en: Use F2/F1 ratio to verify orbital-design sensitivity.
+
+  g:
+    summary_rules:
+    - id: g-summary
+      when: g > 0
+      status: success
+      text:
+        es: El campo gravitatorio local es coherente y no negativo en modulo.
+        en: Local gravitational field is coherent and nonnegative in magnitude.
+    physical_reading_rules:
+    - id: g-reading
+      when: r > 0
+      status: info
+      text:
+        es: El campo disminuye al aumentar la distancia respecto de la masa fuente.
+        en: Field decreases as distance from source mass increases.
+    coherence_rules:
+    - id: g-coh
+      when: G > 0 and M > 0 and r > 0
+      status: success
+      text:
+        es: Coherencia entre constante, masa fuente y geometria radial.
+        en: Coherence among constant, source mass, and radial geometry.
+    model_validity_rules:
+    - id: g-validity
+      when: r >= R
+      status: success
+      text:
+        es: Lectura valida para condiciones externas o superficiales de la fuente.
+        en: Reading is valid for external or surface conditions of the source.
+    graph_rules:
+    - id: g-graph
+      when: g > 0
+      status: info
+      text:
+        es: La pendiente de g(r) indica sensibilidad alta en radios pequenos.
+        en: Slope of g(r) indicates high sensitivity at small radii.
+    likely_errors:
+    - id: g-constant-everywhere
+      when: g == g
+      status: warning
+      text:
+        es: Revisar supuesto de g constante; fuera de rango local puede ser incorrecto.
+        en: Recheck constant-g assumption; outside local range it can be wrong.
+    next_step_rules:
+    - id: g-next
+      when: g > 0
+      status: info
+      text:
+        es: Convertir campo en peso o aceleracion segun variable objetivo.
+        en: Convert field into weight or acceleration depending on target variable.
+
+  P:
+    summary_rules:
+    - id: p-summary
+      when: P > 0
+      status: success
+      text:
+        es: El peso resume la respuesta gravitatoria de una masa de prueba local.
+        en: Weight summarizes local gravitational response of a test mass.
+    physical_reading_rules:
+    - id: p-reading
+      when: m > 0 and g > 0
+      status: info
+      text:
+        es: Si m se mantiene y g cambia, el peso cambia linealmente con g.
+        en: If m is fixed and g changes, weight changes linearly with g.
+    coherence_rules:
+    - id: p-coh
+      when: P == m * g
+      status: success
+      text:
+        es: Coherencia completa entre masa, campo y fuerza peso.
+        en: Full coherence among mass, field, and weight force.
+    model_validity_rules:
+    - id: p-validity
+      when: m > 0
+      status: success
+      text:
+        es: Valido para masa de prueba definida en un campo local conocido.
+        en: Valid for a defined test mass in a known local field.
+    graph_rules:
+    - id: p-graph
+      when: g > 0
+      status: info
+      text:
+        es: Una lectura de g(r) permite inferir tendencia de P para masa fija.
+        en: Reading g(r) allows inference of P trend for fixed mass.
+    likely_errors:
+    - id: p-mass-confusion
+      when: P == m
+      status: error
+      text:
+        es: "Error conceptual: confundir peso con masa rompe interpretacion fisica."
+        en: "Conceptual error: confusing weight with mass breaks physical interpretation."
+    next_step_rules:
+    - id: p-next
+      when: P > 0
+      status: info
+      text:
+        es: Contrastar peso entre dos radios para evaluar efecto de altitud.
+        en: Compare weight across two radii to evaluate altitude effect.
+
+  a:
+    summary_rules:
+    - id: a-summary
+      when: a > 0
+      status: success
+      text:
+        es: La aceleracion gravitatoria es consistente con el campo local.
+        en: Gravitational acceleration is consistent with local field.
+    physical_reading_rules:
+    - id: a-reading
+      when: r > 0
+      status: info
+      text:
+        es: A mayor distancia radial, menor aceleracion en modulo.
+        en: Greater radial distance implies lower acceleration magnitude.
+    coherence_rules:
+    - id: a-coh
+      when: a == (G * M) / (r^2)
+      status: success
+      text:
+        es: Coherencia con formula radial de aceleracion gravitatoria.
+        en: Coherence with radial gravitational-acceleration formula.
+    model_validity_rules:
+    - id: a-validity
+      when: M > 0 and r > 0
+      status: success
+      text:
+        es: Valido cuando domina la gravedad de una fuente principal.
+        en: Valid when gravity of one dominant source prevails.
+    graph_rules:
+    - id: a-graph
+      when: a > 0
+      status: info
+      text:
+        es: La lectura visual de la curva permite anticipar cambios dinamicos.
+        en: Visual curve reading helps anticipate dynamic changes.
+    likely_errors:
+    - id: a-constant-error
+      when: a == g and r > R
+      status: warning
+      text:
+        es: Revisar si se asumio aceleracion constante fuera de condicion local.
+        en: Check whether constant acceleration was assumed outside local conditions.
+    next_step_rules:
+    - id: a-next
+      when: a > 0
+      status: info
+      text:
+        es: Integrar esta lectura con problemas de trayectoria u orbita.
+        en: Integrate this reading with trajectory or orbit problems.
+
+  F1:
+    summary_rules:
+    - id: f1-summary
+      when: F1 > 0
+      status: info
+      text:
+        es: F1 define el estado inicial para comparacion de fuerza.
+        en: F1 defines the initial state for force comparison.
+    physical_reading_rules:
+    - id: f1-reading
+      when: F1 > 0
+      status: info
+      text:
+        es: Su lectura solo tiene sentido junto con r1 y F2.
+        en: Its reading is meaningful only with r1 and F2.
+    coherence_rules:
+    - id: f1-coh
+      when: F1 > 0 and r1 > 0
+      status: success
+      text:
+        es: Estado inicial coherente para analisis comparativo.
+        en: Initial state is coherent for comparative analysis.
+    model_validity_rules:
+    - id: f1-valid
+      when: F1 > 0
+      status: success
+      text:
+        es: Valido en regimen clasico con masa y distancia bien definidas.
+        en: Valid in classical regime with defined mass and distance.
+    graph_rules:
+    - id: f1-graph
+      when: F1 > 0
+      status: info
+      text:
+        es: Corresponde a un punto inicial sobre la curva F(r).
+        en: It corresponds to an initial point on the F(r) curve.
+    likely_errors:
+    - id: f1-error
+      when: F1 <= 0
+      status: warning
+      text:
+        es: Revisar datos iniciales si F1 no resulta positiva en modulo.
+        en: Recheck initial data if F1 is not positive in magnitude.
+    next_step_rules:
+    - id: f1-next
+      when: F1 > 0
+      status: info
+      text:
+        es: Usar F1 como referencia para estimar F2.
+        en: Use F1 as reference to estimate F2.
+
+  M:
+    summary_rules:
+    - id: M-summary
+      when: M > 0
+      status: success
+      text:
+        es: M representa la masa fuente del campo gravitatorio.
+        en: M represents the source mass of the gravitational field.
+    physical_reading_rules:
+    - id: M-reading
+      when: M > 0
+      status: info
+      text:
+        es: A mayor M, mayor intensidad de campo y aceleracion para igual r.
+        en: Higher M implies stronger field and acceleration at equal r.
+    coherence_rules:
+    - id: M-coh
+      when: M > 0 and G > 0
+      status: success
+      text:
+        es: Fuente y constante coherentes para lectura de campo.
+        en: Source and constant are coherent for field reading.
+    model_validity_rules:
+    - id: M-valid
+      when: M > 0
+      status: success
+      text:
+        es: Valido cuando la fuente domina la interaccion local.
+        en: Valid when source mass dominates local interaction.
+    graph_rules:
+    - id: M-graph
+      when: M > 0
+      status: info
+      text:
+        es: Cambia escala vertical de la curva de fuerza.
+        en: It changes vertical scale of the force curve.
+    likely_errors:
+    - id: M-error
+      when: M <= 0
+      status: error
+      text:
+        es: Masa fuente no positiva invalida el modelo del leaf.
+        en: Nonpositive source mass invalidates the leaf model.
+    next_step_rules:
+    - id: M-next
+      when: M > 0
+      status: info
+      text:
+        es: Contrastar efectos de M y r sobre g y a.
+        en: Contrast effects of M and r on g and a.
+
+  m:
+    summary_rules:
+    - id: m-summary
+      when: m > 0
+      status: success
+      text:
+        es: m es masa de prueba para lectura de peso.
+        en: m is the test mass for weight reading.
+    physical_reading_rules:
+    - id: m-reading
+      when: m > 0
+      status: info
+      text:
+        es: Si g se mantiene, P escala linealmente con m.
+        en: If g is fixed, P scales linearly with m.
+    coherence_rules:
+    - id: m-coh
+      when: m > 0 and P > 0
+      status: success
+      text:
+        es: Masa y peso son coherentes bajo P = m*g.
+        en: Mass and weight are coherent under P = m*g.
+    model_validity_rules:
+    - id: m-valid
+      when: m > 0
+      status: success
+      text:
+        es: Valido para masa de prueba positiva definida.
+        en: Valid for a defined positive test mass.
+    graph_rules:
+    - id: m-graph
+      when: m > 0
+      status: info
+      text:
+        es: No cambia forma de F(r), cambia escala de P.
+        en: It does not change F(r) shape, it changes P scale.
+    likely_errors:
+    - id: m-error
+      when: m <= 0
+      status: error
+      text:
+        es: Masa de prueba no positiva no tiene lectura fisica valida.
+        en: Nonpositive test mass has no valid physical reading.
+    next_step_rules:
+    - id: m-next
+      when: m > 0
+      status: info
+      text:
+        es: Evaluar peso en dos radios para comparar entorno gravitatorio.
+        en: Evaluate weight at two radii to compare gravitational environment.
+
+  m1:
+    summary_rules:
+    - id: m1-summary
+      when: m1 > 0
+      status: success
+      text:
+        es: m1 participa linealmente en la fuerza de interaccion.
+        en: m1 participates linearly in interaction force.
+    physical_reading_rules:
+    - id: m1-reading
+      when: m1 > 0
+      status: info
+      text:
+        es: Si m1 aumenta y r no cambia, F aumenta proporcionalmente.
+        en: If m1 increases with fixed r, F increases proportionally.
+    coherence_rules:
+    - id: m1-coh
+      when: m1 > 0 and m2 > 0
+      status: success
+      text:
+        es: Par de masas coherente para aplicar ley de Newton.
+        en: Mass pair is coherent for Newton law application.
+    model_validity_rules:
+    - id: m1-valid
+      when: m1 > 0
+      status: success
+      text:
+        es: Valido en formulacion de dos cuerpos del leaf.
+        en: Valid in the two-body formulation of the leaf.
+    graph_rules:
+    - id: m1-graph
+      when: m1 > 0
+      status: info
+      text:
+        es: Incrementa amplitud de la curva F(r).
+        en: It increases amplitude of the F(r) curve.
+    likely_errors:
+    - id: m1-error
+      when: m1 <= 0
+      status: error
+      text:
+        es: m1 debe ser positiva para mantener coherencia fisica.
+        en: m1 must be positive to keep physical coherence.
+    next_step_rules:
+    - id: m1-next
+      when: m1 > 0
+      status: info
+      text:
+        es: Analizar sensibilidad de F frente a cambios de m1.
+        en: Analyze F sensitivity to changes in m1.
+
+  m2:
+    summary_rules:
+    - id: m2-summary
+      when: m2 > 0
+      status: success
+      text:
+        es: m2 completa el producto de masas en la ley principal.
+        en: m2 completes the mass product in the main law.
+    physical_reading_rules:
+    - id: m2-reading
+      when: m2 > 0
+      status: info
+      text:
+        es: Para r fijo, variar m2 cambia linealmente la fuerza.
+        en: For fixed r, changing m2 linearly changes force.
+    coherence_rules:
+    - id: m2-coh
+      when: m2 > 0 and m1 > 0
+      status: success
+      text:
+        es: Coherencia de masas para aplicacion directa de la ley.
+        en: Mass coherence for direct law application.
+    model_validity_rules:
+    - id: m2-valid
+      when: m2 > 0
+      status: success
+      text:
+        es: Valido en interaccion gravitatoria de dos masas puntuales.
+        en: Valid in two-point-mass gravitational interaction.
+    graph_rules:
+    - id: m2-graph
+      when: m2 > 0
+      status: info
+      text:
+        es: Ajusta escala vertical sin cambiar forma radial.
+        en: Adjusts vertical scale without changing radial shape.
+    likely_errors:
+    - id: m2-error
+      when: m2 <= 0
+      status: error
+      text:
+        es: m2 no positiva invalida lectura de fuerza newtoniana.
+        en: Nonpositive m2 invalidates Newtonian-force reading.
+    next_step_rules:
+    - id: m2-next
+      when: m2 > 0
+      status: info
+      text:
+        es: Comparar impacto relativo de m2 frente a variacion de r.
+        en: Compare relative impact of m2 against variation in r.
+
+  r:
+    summary_rules:
+    - id: r-summary
+      when: r > 0
+      status: success
+      text:
+        es: r es la variable espacial dominante del leaf.
+        en: r is the dominant spatial variable of the leaf.
+    physical_reading_rules:
+    - id: r-reading
+      when: r > 0
+      status: info
+      text:
+        es: Cambios en r modifican intensidad con sensibilidad cuadratica.
+        en: Changes in r modify intensity with quadratic sensitivity.
+    coherence_rules:
+    - id: r-coh
+      when: r > 0
+      status: success
+      text:
+        es: Distancia radial positiva coherente con el modelo.
+        en: Positive radial distance is coherent with the model.
+    model_validity_rules:
+    - id: r-valid
+      when: r >= R
+      status: success
+      text:
+        es: Lectura valida para puntos externos a la fuente.
+        en: Reading is valid for points external to the source.
+    graph_rules:
+    - id: r-graph
+      when: r > 0
+      status: info
+      text:
+        es: Es el eje horizontal que gobierna toda la curva Coord.
+        en: It is the horizontal axis governing the full Coord curve.
+    likely_errors:
+    - id: r-error
+      when: r <= 0
+      status: error
+      text:
+        es: Distancia no positiva rompe el dominio de la ley.
+        en: Nonpositive distance breaks the law domain.
+    next_step_rules:
+    - id: r-next
+      when: r > 0
+      status: info
+      text:
+        es: Evaluar como pequenas variaciones de r cambian F y g.
+        en: Evaluate how small r variations change F and g.
+
+  r2:
+    summary_rules:
+    - id: r2-summary
+      when: r2 > 0
+      status: success
+      text:
+        es: r2 define el estado radial final de comparacion.
+        en: r2 defines the final radial comparison state.
+    physical_reading_rules:
+    - id: r2-reading
+      when: r2 > r1
+      status: info
+      text:
+        es: Un r2 mayor implica reduccion de F2 respecto de F1.
+        en: A larger r2 implies reduction of F2 relative to F1.
+    coherence_rules:
+    - id: r2-coh
+      when: r2 > 0 and r1 > 0
+      status: success
+      text:
+        es: Par de radios coherente para comparar estados.
+        en: Radius pair is coherent for state comparison.
+    model_validity_rules:
+    - id: r2-valid
+      when: r2 > 0
+      status: success
+      text:
+        es: Valido en problemas de variacion radial del leaf.
+        en: Valid in radial-variation problems of this leaf.
+    graph_rules:
+    - id: r2-graph
+      when: r2 > 0
+      status: info
+      text:
+        es: Representa punto final sobre eje radial del grafico.
+        en: It represents the final point on the graph radial axis.
+    likely_errors:
+    - id: r2-error
+      when: r2 <= 0
+      status: error
+      text:
+        es: r2 no positiva invalida la comparacion fisica.
+        en: Nonpositive r2 invalidates physical comparison.
+    next_step_rules:
+    - id: r2-next
+      when: r2 > 0
+      status: info
+      text:
+        es: Usar r2 con r1 para evaluar razon de cambio de fuerza.
+        en: Use r2 with r1 to evaluate force-change ratio.

@@ -1,0 +1,588 @@
+version: "5.0.0"
+magnitudes:
+  - id: calor_transferido
+    symbol: "Q"
+    nombre:
+      es: "calor transferido"
+      en: "transferred heat"
+    descripcion:
+      es: "Energía térmica total intercambiada por convección durante un intervalo de tiempo."
+      en: "Total thermal energy exchanged by convection during a time interval."
+    unidad_si: "J"
+    dimension: "[M L² T⁻²]"
+    is_vector: false
+    components: []
+    category: "energia"
+    physical_role: "calculable"
+    used_in:
+      - "calor_potencia_tiempo"
+    common_mistake: "Confundir calor transferido con potencia térmica instantánea."
+    typical_range: "Depende del tiempo y de la potencia; desde J en laboratorio hasta MJ en climatización."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo depende del convenio: positivo si el sistema recibe calor."
+        en: "The sign depends on convention: positive if the system receives heat."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Cero indica que no se ha transferido energía térmica neta durante el intervalo."
+        en: "Zero means no net thermal energy has been transferred during the interval."
+    value_nature:
+      kind: "real"
+      nonnegative_only: false
+      expected_interval: "Puede ser positivo, negativo o cero según el convenio térmico."
+    interpretation_role:
+      primary_for:
+        - "balance_energetico"
+      secondary_for:
+        - "estimacion_temporal"
+    graph_binding:
+      channels:
+        - "energia_tiempo"
+    pedagogical_notes:
+      - "Debe leerse como energía acumulada, no como rapidez de transferencia."
+      - "Solo se obtiene a partir de una potencia si el intervalo de tiempo está definido."
+
+  - id: tiempo
+    symbol: "t"
+    nombre:
+      es: "tiempo"
+      en: "time"
+    descripcion:
+      es: "Duración durante la cual se mantiene el intercambio térmico por convección."
+      en: "Duration over which convective heat exchange is maintained."
+    unidad_si: "s"
+    dimension: "[T]"
+    is_vector: false
+    components: []
+    category: "temporal"
+    physical_role: "input"
+    used_in:
+      - "calor_potencia_tiempo"
+    common_mistake: "Usar minutos u horas sin convertir a segundos."
+    typical_range: "Segundos en laboratorio; minutos u horas en climatización."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El tiempo físico transcurrido se toma no negativo."
+        en: "Elapsed physical time is taken as nonnegative."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Si el tiempo es cero, no se acumula calor transferido."
+        en: "If time is zero, no transferred heat accumulates."
+    value_nature:
+      kind: "real"
+      nonnegative_only: true
+      expected_interval: "t ≥ 0"
+    interpretation_role:
+      primary_for:
+        - "calor_acumulado"
+      secondary_for:
+        - "evolucion_termica"
+    graph_binding:
+      channels:
+        - "energia_tiempo"
+    pedagogical_notes:
+      - "Convierte siempre a segundos antes de calcular."
+      - "El tiempo solo convierte potencia en energía si la potencia se mantiene o se usa un valor medio."
+
+  - id: potencia_termica
+    symbol: "P"
+    nombre:
+      es: "potencia térmica"
+      en: "thermal power"
+    descripcion:
+      es: "Rapidez con la que se transfiere energía térmica por convección."
+      en: "Rate at which thermal energy is transferred by convection."
+    unidad_si: "W"
+    dimension: "[M L² T⁻³]"
+    is_vector: false
+    components: []
+    category: "transferencia_termica"
+    physical_role: "calculable"
+    used_in:
+      - "ley_enfriamiento_newton_conveccion"
+      - "calor_potencia_tiempo"
+      - "potencia_resistencia_conveccion"
+      - "flujo_potencia_area"
+    common_mistake: "Confundir potencia térmica con calor total transferido."
+    typical_range: "W en pequeños cuerpos; kW en climatización e intercambiadores."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo indica si el sistema gana o pierde energía térmica según el convenio."
+        en: "The sign indicates whether the system gains or loses thermal energy depending on convention."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Cero indica ausencia de intercambio térmico neto."
+        en: "Zero indicates no net thermal exchange."
+    value_nature:
+      kind: "real"
+      nonnegative_only: false
+      expected_interval: "Puede ser positiva, negativa o cero según el convenio."
+    interpretation_role:
+      primary_for:
+        - "ritmo_transferencia"
+      secondary_for:
+        - "dimensionamiento_termico"
+    graph_binding:
+      channels:
+        - "potencia_diferencia_temperatura"
+        - "potencia_area"
+    pedagogical_notes:
+      - "Es una tasa, no una cantidad acumulada."
+      - "Aumenta con el área, el coeficiente de convección y la diferencia de temperatura."
+
+  - id: flujo_calor
+    symbol: "q"
+    nombre:
+      es: "flujo de calor"
+      en: "heat flux"
+    descripcion:
+      es: "Potencia térmica transferida por unidad de área."
+      en: "Thermal power transferred per unit area."
+    unidad_si: "W/m²"
+    dimension: "[M T⁻³]"
+    is_vector: false
+    components: []
+    category: "transferencia_termica"
+    physical_role: "calculable"
+    used_in:
+      - "flujo_calor_conveccion"
+      - "flujo_potencia_area"
+    common_mistake: "Usarlo como si fuera potencia total sin multiplicar por el área."
+    typical_range: "Decenas a miles de W/m² según el fluido y el régimen."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo depende del sentido elegido para el intercambio térmico."
+        en: "The sign depends on the chosen direction for thermal exchange."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Cero indica que no hay flujo térmico neto por unidad de superficie."
+        en: "Zero means there is no net thermal flux per unit area."
+    value_nature:
+      kind: "real"
+      nonnegative_only: false
+      expected_interval: "Puede ser positivo, negativo o cero según el convenio."
+    interpretation_role:
+      primary_for:
+        - "intensidad_superficial"
+      secondary_for:
+        - "comparacion_superficies"
+    graph_binding:
+      channels:
+        - "flujo_diferencia_temperatura"
+    pedagogical_notes:
+      - "Permite comparar superficies de distinto tamaño."
+      - "No debe confundirse con potencia total."
+
+  - id: coeficiente_conveccion
+    symbol: "h"
+    nombre:
+      es: "coeficiente de convección"
+      en: "convective heat transfer coefficient"
+    descripcion:
+      es: "Parámetro que mide la eficacia del intercambio térmico entre una superficie y un fluido."
+      en: "Parameter measuring the effectiveness of heat exchange between a surface and a fluid."
+    unidad_si: "W/(m²·K)"
+    dimension: "[M T⁻³ Θ⁻¹]"
+    is_vector: false
+    components: []
+    category: "parametro_termico"
+    physical_role: "calculable"
+    used_in:
+      - "ley_enfriamiento_newton_conveccion"
+      - "flujo_calor_conveccion"
+      - "resistencia_termica_conveccion"
+      - "coeficiente_conveccion_nusselt"
+    common_mistake: "Tratarlo como una constante universal independiente del fluido y del régimen."
+    typical_range: "5-25 W/(m²·K) en aire natural; cientos o miles en líquidos forzados."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Se toma positivo porque representa eficacia de intercambio."
+        en: "It is taken as positive because it represents exchange effectiveness."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un valor cero anularía el intercambio convectivo ideal."
+        en: "A zero value would cancel ideal convective exchange."
+    value_nature:
+      kind: "real"
+      nonnegative_only: true
+      expected_interval: "h > 0"
+    interpretation_role:
+      primary_for:
+        - "eficacia_conveccion"
+      secondary_for:
+        - "comparacion_regimenes"
+    graph_binding:
+      channels:
+        - "pendiente_potencia_diferencia_temperatura"
+    pedagogical_notes:
+      - "Depende del fluido, la velocidad, la geometría y el régimen de flujo."
+      - "Es el parámetro más característico de la convección superficial."
+
+  - id: area
+    symbol: "A"
+    nombre:
+      es: "área de intercambio"
+      en: "exchange area"
+    descripcion:
+      es: "Superficie efectiva de contacto térmico entre el sólido y el fluido."
+      en: "Effective thermal contact surface between the solid and the fluid."
+    unidad_si: "m²"
+    dimension: "[L²]"
+    is_vector: false
+    components: []
+    category: "geometria"
+    physical_role: "input"
+    used_in:
+      - "ley_enfriamiento_newton_conveccion"
+      - "resistencia_termica_conveccion"
+      - "flujo_potencia_area"
+    common_mistake: "Usar un área geométrica que no corresponde a la superficie mojada o expuesta al fluido."
+    typical_range: "cm² en sensores; m² en radiadores, paredes e intercambiadores."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El área física se toma positiva."
+        en: "Physical area is taken as positive."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Sin área de contacto no hay intercambio convectivo superficial."
+        en: "Without contact area there is no surface convective exchange."
+    value_nature:
+      kind: "real"
+      nonnegative_only: true
+      expected_interval: "A > 0"
+    interpretation_role:
+      primary_for:
+        - "superficie_intercambio"
+      secondary_for:
+        - "potencia_total"
+    graph_binding:
+      channels:
+        - "potencia_area"
+    pedagogical_notes:
+      - "Debe expresarse en metros cuadrados."
+      - "Solo cuenta el área realmente expuesta al fluido."
+
+  - id: temperatura_superficie
+    symbol: "T_s"
+    nombre:
+      es: "temperatura de la superficie"
+      en: "surface temperature"
+    descripcion:
+      es: "Temperatura de la pared o cuerpo sólido en contacto con el fluido."
+      en: "Temperature of the wall or solid body in contact with the fluid."
+    unidad_si: "K"
+    dimension: "[Θ]"
+    is_vector: false
+    components: []
+    category: "temperatura"
+    physical_role: "input"
+    used_in:
+      - "diferencia_temperatura_conveccion"
+    common_mistake: "Confundirla con la temperatura media del fluido."
+    typical_range: "Depende del sistema; desde temperaturas ambientales hasta cientos de kelvin sobre el ambiente."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Como temperatura absoluta en SI se toma no negativa."
+        en: "As an absolute SI temperature, it is taken as nonnegative."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Cero kelvin es un límite físico ideal."
+        en: "Zero kelvin is an ideal physical limit."
+    value_nature:
+      kind: "real"
+      nonnegative_only: true
+      expected_interval: "T_s ≥ 0 K"
+    interpretation_role:
+      primary_for:
+        - "frontera_termica"
+      secondary_for:
+        - "diferencia_temperatura"
+    graph_binding:
+      channels:
+        - "temperatura_superficie"
+    pedagogical_notes:
+      - "Debe distinguirse de la temperatura del fluido lejos de la pared."
+      - "En problemas simples se considera uniforme en toda la superficie."
+
+  - id: temperatura_fluido
+    symbol: "T_f"
+    nombre:
+      es: "temperatura del fluido"
+      en: "fluid temperature"
+    descripcion:
+      es: "Temperatura representativa del fluido lejos de la superficie o en la corriente principal."
+      en: "Representative fluid temperature away from the surface or in the main stream."
+    unidad_si: "K"
+    dimension: "[Θ]"
+    is_vector: false
+    components: []
+    category: "temperatura"
+    physical_role: "input"
+    used_in:
+      - "diferencia_temperatura_conveccion"
+    common_mistake: "Usar la temperatura local de la capa límite como si fuera la temperatura de referencia del fluido."
+    typical_range: "Depende del fluido y del proceso térmico."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Como temperatura absoluta en SI se toma no negativa."
+        en: "As an absolute SI temperature, it is taken as nonnegative."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Cero kelvin es un límite físico ideal."
+        en: "Zero kelvin is an ideal physical limit."
+    value_nature:
+      kind: "real"
+      nonnegative_only: true
+      expected_interval: "T_f ≥ 0 K"
+    interpretation_role:
+      primary_for:
+        - "referencia_fluido"
+      secondary_for:
+        - "diferencia_temperatura"
+    graph_binding:
+      channels:
+        - "temperatura_fluido"
+    pedagogical_notes:
+      - "En convección externa suele representar la temperatura de la corriente libre."
+      - "En convección interna puede usarse una temperatura media del fluido."
+
+  - id: diferencia_temperatura
+    symbol: "ΔT"
+    nombre:
+      es: "diferencia de temperatura"
+      en: "temperature difference"
+    descripcion:
+      es: "Salto térmico entre la superficie y el fluido que impulsa la convección."
+      en: "Thermal difference between surface and fluid driving convection."
+    unidad_si: "K"
+    dimension: "[Θ]"
+    is_vector: false
+    components: []
+    category: "temperatura"
+    physical_role: "calculable"
+    used_in:
+      - "diferencia_temperatura_conveccion"
+      - "ley_enfriamiento_newton_conveccion"
+      - "flujo_calor_conveccion"
+      - "potencia_resistencia_conveccion"
+    common_mistake: "Confundir una diferencia de temperatura con una temperatura absoluta."
+    typical_range: "De pocos kelvin en climatización a cientos de kelvin en procesos industriales."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo indica si la superficie está más caliente o más fría que el fluido según el convenio."
+        en: "The sign indicates whether the surface is hotter or colder than the fluid depending on convention."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Si es cero, no hay intercambio convectivo neto ideal."
+        en: "If zero, there is no ideal net convective exchange."
+    value_nature:
+      kind: "real"
+      nonnegative_only: false
+      expected_interval: "Puede ser positiva, negativa o cero."
+    interpretation_role:
+      primary_for:
+        - "motor_termico"
+      secondary_for:
+        - "sentido_transferencia"
+    graph_binding:
+      channels:
+        - "potencia_diferencia_temperatura"
+        - "flujo_diferencia_temperatura"
+    pedagogical_notes:
+      - "Su valor numérico es igual en kelvin y grados Celsius cuando se trata de diferencias."
+      - "Determina el sentido y la intensidad del intercambio térmico."
+
+  - id: resistencia_termica_conveccion
+    symbol: "R_conv"
+    nombre:
+      es: "resistencia térmica de convección"
+      en: "convective thermal resistance"
+    descripcion:
+      es: "Oposición equivalente al intercambio térmico convectivo entre superficie y fluido."
+      en: "Equivalent opposition to convective heat exchange between surface and fluid."
+    unidad_si: "K/W"
+    dimension: "[M⁻¹ L⁻² T³ Θ]"
+    is_vector: false
+    components: []
+    category: "resistencia_termica"
+    physical_role: "calculable"
+    used_in:
+      - "resistencia_termica_conveccion"
+      - "potencia_resistencia_conveccion"
+    common_mistake: "Interpretar una resistencia alta como mayor transferencia."
+    typical_range: "Muy variable; disminuye al aumentar h o A."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Se toma positiva porque representa oposición al intercambio."
+        en: "It is taken as positive because it represents opposition to exchange."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Una resistencia cero implicaría intercambio idealmente infinito."
+        en: "Zero resistance would imply ideally infinite exchange."
+    value_nature:
+      kind: "real"
+      nonnegative_only: true
+      expected_interval: "R_conv > 0"
+    interpretation_role:
+      primary_for:
+        - "oposicion_termica"
+      secondary_for:
+        - "analogias_circuito_termico"
+    graph_binding:
+      channels:
+        - "potencia_diferencia_temperatura"
+    pedagogical_notes:
+      - "Es útil para combinar con conducción y otras resistencias térmicas."
+      - "Disminuye si aumenta el coeficiente de convección o el área."
+
+  - id: numero_nusselt
+    symbol: "Nu"
+    nombre:
+      es: "número de Nusselt"
+      en: "Nusselt number"
+    descripcion:
+      es: "Número adimensional que relaciona la convección con la conducción característica del fluido."
+      en: "Dimensionless number relating convection to characteristic conduction in the fluid."
+    unidad_si: "1"
+    dimension: "[1]"
+    is_vector: false
+    components: []
+    category: "adimensional"
+    physical_role: "input"
+    used_in:
+      - "coeficiente_conveccion_nusselt"
+    common_mistake: "Tratarlo como una magnitud con unidades."
+    typical_range: "Cerca de 1 en conducción dominante; mayor que 1 cuando la convección aumenta el intercambio."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Se toma positivo en correlaciones convectivas."
+        en: "It is taken as positive in convective correlations."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un valor cero no representa una correlación convectiva física usual."
+        en: "A zero value does not represent a usual physical convective correlation."
+    value_nature:
+      kind: "real"
+      nonnegative_only: true
+      expected_interval: "Nu > 0"
+    interpretation_role:
+      primary_for:
+        - "correlaciones_conveccion"
+      secondary_for:
+        - "estimacion_coeficiente"
+    graph_binding:
+      channels:
+        - "nusselt_coeficiente"
+    pedagogical_notes:
+      - "No es una propiedad aislada: depende del régimen de flujo y de la geometría."
+      - "Permite estimar h a partir de correlaciones experimentales."
+
+  - id: conductividad_termica_fluido
+    symbol: "k_f"
+    nombre:
+      es: "conductividad térmica del fluido"
+      en: "fluid thermal conductivity"
+    descripcion:
+      es: "Capacidad conductiva del fluido usada como referencia en correlaciones convectivas."
+      en: "Conductive capability of the fluid used as reference in convective correlations."
+    unidad_si: "W/(m·K)"
+    dimension: "[M L T⁻³ Θ⁻¹]"
+    is_vector: false
+    components: []
+    category: "propiedad_fluido"
+    physical_role: "input"
+    used_in:
+      - "coeficiente_conveccion_nusselt"
+    common_mistake: "Confundirla con el coeficiente de convección."
+    typical_range: "Aire ≈ 0,026 W/(m·K); agua ≈ 0,6 W/(m·K) a temperatura ambiente."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Se toma positiva como propiedad de transporte."
+        en: "It is taken as positive as a transport property."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un valor cero eliminaría la referencia conductiva del fluido."
+        en: "A zero value would remove the fluid conductive reference."
+    value_nature:
+      kind: "real"
+      nonnegative_only: true
+      expected_interval: "k_f > 0"
+    interpretation_role:
+      primary_for:
+        - "propiedad_material_fluido"
+      secondary_for:
+        - "calculo_coeficiente_conveccion"
+    graph_binding:
+      channels:
+        - "nusselt_coeficiente"
+    pedagogical_notes:
+      - "No mide por sí sola la convección, sino la conducción interna del fluido."
+      - "Aparece al convertir Nu en h."
+
+  - id: longitud_caracteristica
+    symbol: "L_c"
+    nombre:
+      es: "longitud característica"
+      en: "characteristic length"
+    descripcion:
+      es: "Escala geométrica representativa usada para correlaciones de convección."
+      en: "Representative geometric scale used in convection correlations."
+    unidad_si: "m"
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: "geometria"
+    physical_role: "input"
+    used_in:
+      - "coeficiente_conveccion_nusselt"
+    common_mistake: "Elegir una longitud que no corresponde a la geometría o al flujo."
+    typical_range: "Milímetros en sensores; metros en placas, tubos o intercambiadores."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Se toma positiva como escala geométrica."
+        en: "It is taken as positive as a geometric scale."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Una longitud nula no permite definir la correlación."
+        en: "A zero length cannot define the correlation."
+    value_nature:
+      kind: "real"
+      nonnegative_only: true
+      expected_interval: "L_c > 0"
+    interpretation_role:
+      primary_for:
+        - "escala_geometrica"
+      secondary_for:
+        - "correlaciones_adimensionales"
+    graph_binding:
+      channels:
+        - "nusselt_coeficiente"
+    pedagogical_notes:
+      - "Debe elegirse según la geometría física del problema."
+      - "En tubos, placas y esferas la longitud característica puede definirse de forma distinta."

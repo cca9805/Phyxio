@@ -1,0 +1,368 @@
+const e=`version: 5
+id: tension-interp
+leaf_id: tension-superficial
+scope: local
+nombre:
+  es: "Análisis de Tensión Superficial"
+  en: "Surface Tension Analysis"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: "Resumen Energético"
+      en: "Energetic Summary"
+  physical_reading:
+    title:
+      es: "Lectura Física"
+      en: "Physical Reading"
+  coherence:
+    title:
+      es: "Coherencia del Sistema"
+      en: "System Coherence"
+  model_validity:
+    title:
+      es: "Validez del Modelo"
+      en: "Model Validity"
+  graph_reading:
+    title:
+      es: "Análisis Gráfico"
+      en: "Graphic Analysis"
+  likely_errors:
+    title:
+      es: "Errores Comunes"
+      en: "Common Errors"
+  next_step:
+    title:
+      es: "Progresión Sugerida"
+      en: "Suggested Progression"
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [sigma, F, L, dp, R, h, theta, rho, g, r]
+  formulas: [fuerza_superficial, laplace, ascenso_capilar]
+
+targets:
+  sigma:
+    summary_rules:
+      - id: sigma-val
+        when: sigma > 0
+        status: success
+        text:
+          es: "La tensión superficial [[sigma]] indica la energía necesaria para aumentar el área de la interfaz en una unidad."
+          en: "The surface tension [[sigma]] indicates the energy required to increase the interface area by one unit."
+    physical_reading_rules:
+      - id: sigma-phys
+        when: sigma > 0.07
+        status: success
+        text:
+          es: "El valor es comparable al del agua pura, indicando fuertes enlaces de hidrógeno o fuerzas de cohesión elevadas."
+          en: "The value is comparable to that of pure water, indicating strong hydrogen bonds or high cohesive forces."
+    coherence_rules:
+      - id: sigma-coh
+        when: sigma > 0
+        status: success
+        text:
+          es: "Propiedad intensiva coherente con el fluido seleccionado."
+          en: "Intensive property coherent with the selected fluid."
+    model_validity_rules:
+      - id: sigma-valid
+        when: sigma > 0
+        status: success
+        text:
+          es: "Válido mientras la temperatura se mantenga constante, ya que sigma disminuye al calentar el líquido."
+          en: "Valid as long as the temperature remains constant, as sigma decreases when the liquid is heated."
+    graph_rules:
+      - id: sigma-graph
+        when: sigma > 0
+        status: success
+        text:
+          es: "Representa la resistencia de la membrana superficial en el esquema interactivo."
+          en: "Represents the resistance of the surface membrane in the interactive scheme."
+    likely_errors:
+      - id: sigma-err-neg
+        when: sigma < 0
+        status: error
+        text:
+          es: "Error Conceptual Crítico: La tensión superficial no puede ser negativa; esto implicaría una superficie que se expande espontáneamente hasta el infinito."
+          en: "Critical Conceptual Error: Surface tension cannot be negative; this would imply a surface that expands spontaneously to infinity."
+    next_step_rules:
+      - id: sigma-next
+        when: sigma > 0
+        status: info
+        text:
+          es: "Estudie cómo la adición de surfactantes (detergentes) reduciría este valor."
+          en: "Study how adding surfactants (detergents) would reduce this value."
+
+  dp:
+    summary_rules:
+      - id: dp-val
+        when: dp > 0
+        status: success
+        text:
+          es: "El exceso de presión [[dp]] indica cuánto más alta es la presión interna comparada con la externa debido a la curvatura."
+          en: "The pressure excess [[dp]] indicates how much higher the internal pressure is compared to the external one due to curvature."
+    physical_reading_rules:
+      - id: dp-phys
+        when: dp > 100
+        status: warning
+        text:
+          es: "Existe una sobrepresión significativa que intenta expandir la interfaz contra la tensión de la superficie."
+          en: "There is a significant overpressure trying to expand the interface against surface tension."
+    coherence_rules:
+      - id: dp-coh
+        when: dp > 0
+        status: success
+        text:
+          es: "Salto de presión positivo, consistente con una superficie convexa hacia el exterior."
+          en: "Positive pressure jump, consistent with a surface convex towards the outside."
+    model_validity_rules:
+      - id: dp-valid
+        when: dp > 0
+        status: success
+        text:
+          es: "Válido para gotas o burbujas en equilibrio hidrostático."
+          en: "Valid for drops or bubbles in hydrostatic equilibrium."
+    graph_rules:
+      - id: dp-graph
+        when: dp > 0
+        status: info
+        text:
+          es: "En el gráfico Coord, se observa la relación inversa entre el exceso de presión y el radio."
+          en: "In the Coord graph, the inverse relationship between pressure excess and radius is observed."
+    likely_errors:
+      - id: dp-err-flat
+        when: dp == 0
+        status: info
+        text:
+          es: "Aviso: Un exceso de presión nulo significa que la superficie es perfectamente plana (R infinito)."
+          en: "Notice: A zero pressure excess means the surface is perfectly flat (infinite R)."
+    next_step_rules:
+      - id: dp-next
+        when: dp > 0
+        status: info
+        text:
+          es: "Determine la presión absoluta interna sumando la presión atmosférica."
+          en: "Determine the internal absolute pressure by adding the atmospheric pressure."
+
+  F:
+    summary_rules:
+      - id: f-val
+        when: F > 0
+        status: success
+        text:
+          es: "La fuerza capilar [[F]] es la carga total que la superficie ejerce sobre un objeto o contorno."
+          en: "The capillary force [[F]] is the total load the surface exerts on an object or contour."
+    physical_reading_rules:
+      - id: f-phys
+        when: F > 0
+        status: info
+        text:
+          es: "Esta fuerza es la responsable de sostener pequeños objetos (como clips o insectos) sobre el agua."
+          en: "This force is responsible for supporting small objects (like paperclips or insects) on water."
+    coherence_rules:
+      - id: f-coh
+        when: F > 0
+        status: success
+        text:
+          es: "Fuerza proporcional a la longitud de contacto y a la naturaleza del líquido."
+          en: "Force proportional to the contact length and the nature of the liquid."
+    model_validity_rules:
+      - id: f-valid
+        when: F > 0
+        status: success
+        text:
+          es: "Válido mientras el peso del objeto no supere la componente vertical de la fuerza superficial máxima."
+          en: "Valid as long as the object's weight does not exceed the vertical component of the maximum surface force."
+    graph_rules:
+      - id: f-graph
+        when: F > 0
+        status: success
+        text:
+          es: "Se visualiza como el vector de tensión tangencial en el esquema Svg."
+          en: "Visualized as the tangential tension vector in the Svg scheme."
+    likely_errors:
+      - id: f-err-units
+        when: F > 1000
+        status: warning
+        text:
+          es: "Cuidado: La fuerza capilar suele ser muy pequeña. Verifique si ha usado las unidades correctas."
+          en: "Careful: Capillary force is usually very small. Check if you have used the correct units."
+    next_step_rules:
+      - id: f-next
+        when: F > 0
+        status: info
+        text:
+          es: "Compare esta fuerza con el peso gravitatorio del objeto sumergido."
+          en: "Compare this force with the gravitational weight of the submerged object."
+
+  L:
+    summary_rules:
+      - id: l-val
+        when: L > 0
+        status: success
+        text:
+          es: "La longitud [[L]] es la línea de acción donde la superficie 'tira' del contorno."
+          en: "The length [[L]] is the line of action where the surface 'pulls' the contour."
+    physical_reading_rules:
+      - id: l-phys
+        when: L > 0
+        status: info
+        text:
+          es: "Para una aguja, L es el doble de su longitud (dos líneas de contacto)."
+          en: "For a needle, L is double its length (two contact lines)."
+    coherence_rules:
+      - id: l-coh
+        when: L > 0
+        status: success
+        text:
+          es: "Longitud geométrica consistente con el perímetro de la interfaz."
+          en: "Geometric length consistent with the interface perimeter."
+    model_validity_rules:
+      - id: l-valid
+        when: L > 0
+        status: success
+        text:
+          es: "Supone una línea de contacto continua y uniforme."
+          en: "Assumes a continuous and uniform contact line."
+    graph_rules:
+      - id: l-graph
+        when: L > 0
+        status: info
+        text:
+          es: "Variable independiente que escala la fuerza total de forma lineal."
+          en: "Independent variable that scales the total force linearly."
+    likely_errors:
+      - id: l-err-double
+        when: L > 0
+        status: warning
+        text:
+          es: "Error Común: Olvidar multiplicar por 2 en láminas de jabón o perímetros dobles."
+          en: "Common Error: Forgetting to multiply by 2 in soap films or double perimeters."
+    next_step_rules:
+      - id: l-next
+        when: L > 0
+        status: info
+        text:
+          es: "Calcule el área superficial si desea analizar la energía potencial."
+          en: "Calculate the surface area if you wish to analyze the potential energy."
+
+  R:
+    summary_rules:
+      - id: r-val
+        when: R > 0
+        status: success
+        text:
+          es: "El radio [[R]] define la curvatura de la interfaz."
+          en: "The radius [[R]] defines the interface curvature."
+    physical_reading_rules:
+      - id: r-phys
+        when: R < 0.001
+        status: warning
+        text:
+          es: "Radios muy pequeños generan presiones de Laplace extremadamente altas."
+          en: "Very small radii generate extremely high Laplace pressures."
+    coherence_rules:
+      - id: r-coh
+        when: R > 0
+        status: success
+        text:
+          es: "Radio positivo consistente con la curvatura de la gota o burbuja."
+          en: "Positive radius consistent with the curvature of the drop or bubble."
+    model_validity_rules:
+      - id: r-valid
+        when: R > 0
+        status: success
+        text:
+          es: "Válido para superficies con curvatura esférica uniforme."
+          en: "Valid for surfaces with uniform spherical curvature."
+    graph_rules:
+      - id: r-graph
+        when: R > 0
+        status: success
+        text:
+          es: "Representado como el radio de la esfera en el esquema gráfico."
+          en: "Represented as the sphere's radius in the graphic scheme."
+    likely_errors:
+      - id: r-err-flat
+        when: R > 1e6
+        status: info
+        text:
+          es: "Un radio muy grande indica que la superficie tiende a ser plana."
+          en: "A very large radius indicates that the surface tends to be flat."
+    next_step_rules:
+      - id: r-next
+        when: R > 0
+        status: info
+        text:
+          es: "Use el radio para calcular la altura de ascensión capilar en un tubo."
+          en: "Use the radius to calculate the height of capillary rise in a tube."
+
+  h:
+    summary_rules:
+      - id: h-val
+        when: h != 0
+        status: success
+        text:
+          es: "La altura capilar [[h]] representa la posición final de equilibrio de la columna líquida."
+          en: "The capillary height [[h]] represents the final equilibrium position of the liquid column."
+    physical_reading_rules:
+      - id: h-phys
+        when: h > 0
+        status: success
+        text:
+          es: "Ascenso capilar: Las fuerzas de adhesión dominan, mojando la superficie."
+          en: "Capillary rise: Adhesion forces dominate, wetting the surface."
+      - id: h-phys-neg
+        when: h < 0
+        status: warning
+        text:
+          es: "Descenso capilar: Las fuerzas de cohesión dominan (ej. mercurio), repeliendo la superficie."
+          en: "Capillary fall: Cohesive forces dominate (e.g., mercury), repelling the surface."
+    coherence_rules:
+      - id: h-coh
+        when: abs(h) > 0
+        status: success
+        text:
+          es: "Altura consistente con el radio del tubo y la tensión superficial."
+          en: "Height consistent with the tube radius and surface tension."
+    model_validity_rules:
+      - id: h-valid
+        when: abs(h) > 0
+        status: success
+        text:
+          es: "Válido para tubos cilíndricos donde el efecto de borde es uniforme."
+          en: "Valid for cylindrical tubes where the edge effect is uniform."
+    graph_rules:
+      - id: h-graph
+        when: abs(h) > 0
+        status: info
+        text:
+          es: "Se visualiza como el nivel del líquido en el esquema interactivo."
+          en: "Visualized as the liquid level in the interactive scheme."
+    likely_errors:
+      - id: h-err-zero
+        when: h == 0
+        status: info
+        text:
+          es: "Altura nula: Indica ausencia de efectos capilares o radio infinito."
+          en: "Zero height: Indicates absence of capillary effects or infinite radius."
+    next_step_rules:
+      - id: h-next
+        when: abs(h) > 0
+        status: info
+        text:
+          es: "Compare este valor con la escala macroscópica para ver si el efecto es dominante."
+          en: "Compare this value with the macroscopic scale to see if the effect is dominant."
+`;export{e as default};

@@ -1,0 +1,174 @@
+version: 1
+formulas:
+- id: composicion_aceleracion_galileana
+  title:
+    es: Composición Galileana de Aceleraciones
+    en: Galilean Acceleration Composition
+  equation: a_rel = a_A - a_B
+  latex: \vec{a}_{A/B}(t) = \vec{a}_A(t) - \vec{a}_B(t)
+  rearrangements:
+  - target: a_rel
+    latex: \vec{a}_{A/B}(t) = \vec{a}_A(t) - \vec{a}_B(t)
+    equation: a_rel = a_A - a_B
+    constraints: []
+  - target: a_A
+    latex: \vec{a}_A = \vec{a}_{A/B} + \vec{a}_B
+    equation: a_A = a_rel + a_B
+    constraints: []
+  - target: a_B
+    latex: \vec{a}_B = \vec{a}_A - \vec{a}_{A/B}
+    equation: a_B = a_A - a_rel
+    constraints: []
+  category: fundamental
+  relation_type: kinematic_transformation
+  physical_meaning:
+    es: Establece que la aceleración relativa entre dos objetos (o sistemas) es la
+      diferencia vectorial de sus aceleraciones medidas desde un sistema inercial.
+    en: Establishes that the relative acceleration between two objects (or systems)
+      is the vector difference of their accelerations measured from an inertial frame.
+  constraints:
+  - es: Mecánica clásica (v << c)
+    en: Classical mechanics (v << c)
+  - es: Sistemas en traslación (sin rotación)
+    en: Systems in translation (no rotation)
+  validity:
+    es: Válido para cualquier par de sistemas de referencia en movimiento relativo
+      de traslación. No aplica si hay rotación relativa.
+    en: Valid for any pair of reference frames in relative translational motion. Does
+      not apply if there is relative rotation.
+  dimension_check: '[L T^{-2}] = [L T^{-2}] - [L T^{-2}]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - es: Transformación de aceleraciones entre sistemas
+    en: Transformation of accelerations between systems
+  - es: Análisis de sistemas no inerciales
+    en: Analysis of non-inertial systems
+  - es: Cálculo de fuerzas ficticias
+    en: Calculation of fictitious forces
+  interpretation_tags:
+  - kinematic_composition
+  - reference_frame_transformation
+  - relative_motion
+  result_semantics:
+    target: a_rel
+    meaning: Resulta util para interpretar a_rel en el contexto del leaf.
+  domain_checks:
+  - condition: abs(a_A) < 0.1*c
+    message:
+      es: 'Advertencia: aceleración de A cercana a límites relativistas. Modelo clásico
+        puede no ser válido.'
+      en: 'Warning: acceleration of A near relativistic limits. Classical model may
+        not be valid.'
+  - condition: abs(a_B) < 0.1*c
+    message:
+      es: 'Advertencia: aceleración de B cercana a límites relativistas. Modelo clásico
+        puede no ser válido.'
+      en: 'Warning: acceleration of B near relativistic limits. Classical model may
+        not be valid.'
+  coherence_checks:
+  - check: if a_B == 0 then a_rel == a_A
+    message:
+      es: Si el sistema B es inercial (a_B=0), la aceleración relativa debe coincidir
+        con la de A.
+      en: If system B is inertial (a_B=0), relative acceleration must match that of
+        A.
+  - check: units(a_rel) == units(a_A) == units(a_B)
+    message:
+      es: Todas las aceleraciones deben estar en las mismas unidades.
+      en: All accelerations must be in the same units.
+  graph_implications:
+  - if: a_rel > 0
+    then:
+      es: Flecha de aceleración relativa apunta en dirección positiva del eje.
+      en: Relative acceleration arrow points in positive axis direction.
+  - if: a_rel == 0
+    then:
+      es: Ambos objetos aceleran idénticamente. Velocidad relativa constante.
+      en: Both objects accelerate identically. Constant relative velocity.
+  - if: a_rel < 0
+    then:
+      es: Aceleración relativa apunta en dirección negativa. A desacelera respecto
+        a B.
+      en: Relative acceleration points in negative direction. A decelerates relative
+        to B.
+  pedagogical_triggers:
+  - condition: abs(a_rel) > abs(a_A) and abs(a_rel) > abs(a_B)
+    warning:
+      es: La aceleración relativa puede ser mayor que las individuales si ambas tienen
+        sentidos opuestos.
+      en: Relative acceleration can be greater than individual ones if both have opposite
+        directions.
+  - condition: a_rel == 0 and (a_A != 0 or a_B != 0)
+    hint:
+      es: Si a_rel=0 pero a_A≠0 o a_B≠0, significa que ambos aceleran igual. Están
+        en movimiento relativo uniforme.
+      en: If a_rel=0 but a_A≠0 or a_B≠0, it means both accelerate equally. They are
+        in uniform relative motion.
+- id: invarianza_aceleracion_inercial
+  title:
+    es: Invarianza de Aceleración en Sistemas Inerciales
+    en: Invariance of Acceleration in Inertial Frames
+  equation: a_rel = a_A
+  latex: \vec{a}_{A/B} = \vec{a}_A
+  rearrangements: []
+  category: auxiliary
+  relation_type: physical_law
+  physical_meaning:
+    es: Si el sistema B se mueve con velocidad constante respecto al sistema inercial
+      (a_B=0), ambos observadores miden la misma aceleración para el objeto A.
+    en: If system B moves with constant velocity relative to the inertial system (a_B=0),
+      both observers measure the same acceleration for object A.
+  constraints:
+  - es: a_B = 0 (sistema B inercial)
+    en: a_B = 0 (system B inertial)
+  - es: Sin rotación relativa
+    en: No relative rotation
+  validity:
+    es: Base del Principio de Relatividad de Galileo. Válido en mecánica clásica para
+      transformaciones entre sistemas inerciales.
+    en: Basis of Galileo's Principle of Relativity. Valid in classical mechanics for
+      transformations between inertial systems.
+  dimension_check: '[L T^{-2}] = [L T^{-2}]'
+  calculable: false
+  motivo_no_calculable:
+    es: Es una identidad de invarianza válida solo bajo la condición a_B = 0; no aporta
+      un cálculo independiente sin esa hipótesis del marco.
+    en: It is an invariance identity valid only under the condition a_B = 0; it does
+      not provide an independent computation without that frame hypothesis.
+  used_in:
+  - es: Demostración de que las leyes de Newton tienen la misma forma en todos los
+      sistemas inerciales
+    en: Demonstration that Newton's laws have the same form in all inertial systems
+  interpretation_tags:
+  - galilean_relativity
+  - inertial_invariance
+  - physical_law
+  result_semantics:
+    target: a_rel
+    meaning: Resulta util para interpretar a_rel en el contexto del leaf.
+  domain_checks:
+  - condition: a_B == 0
+    message:
+      es: Esta relación solo es válida si el sistema B es estrictamente inercial (a_B=0).
+      en: This relation is only valid if system B is strictly inertial (a_B=0).
+  coherence_checks:
+  - check: if a_B != 0 then error
+    message:
+      es: Si a_B ≠ 0, esta fórmula no aplica. Usa la fórmula general de composición
+        galileana.
+      en: If a_B ≠ 0, this formula does not apply. Use the general Galilean composition
+        formula.
+  graph_implications:
+  - if: a_B == 0
+    then:
+      es: Los vectores de aceleración de A medidos desde ambos sistemas se superponen
+        completamente.
+      en: The acceleration vectors of A measured from both systems overlap completely.
+  pedagogical_triggers:
+  - condition: a_B != 0
+    error:
+      es: 'ERROR: Intentas usar invarianza de aceleración pero el sistema B no es
+        inercial. La aceleración NO es invariante si el observador acelera.'
+      en: 'ERROR: You''re trying to use acceleration invariance but system B is not
+        inertial. Acceleration is NOT invariant if the observer accelerates.'

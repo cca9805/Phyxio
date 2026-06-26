@@ -1,0 +1,228 @@
+const e=`formulas:
+
+  - id: trabajo_isocorico
+    title:
+      es: Trabajo en proceso isocórico
+      en: Work in isochoric process
+    equation: "W = 0"
+    latex: "W = 0"
+    rearrangements:
+      - target: W
+        equation: "W = 0"
+        latex: "W = 0"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: El trabajo mecánico es nulo en todo proceso isocórico porque el volumen no cambia y no hay desplazamiento de frontera del sistema.
+      en: Mechanical work is zero in any isochoric process because volume does not change and there is no boundary displacement.
+    constraints:
+      - volumen constante durante todo el proceso
+      - gas encerrado en recipiente rígido
+    validity:
+      es: Válido para cualquier gas mientras el volumen permanezca estrictamente constante.
+      en: Valid for any gas as long as volume remains strictly constant.
+    dimension_check: "[M L² T⁻²] = 0"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria
+      - ejemplos
+    interpretation_tags:
+      - trabajo_nulo
+      - restriccion_isocórica
+      - primer_principio
+    result_semantics:
+      target: W
+      kind: constante
+      sign_meaning:
+        es: Siempre cero; no hay energía mecánica transferida al entorno.
+        en: Always zero; no mechanical energy is transferred to the surroundings.
+      absolute_value_meaning:
+        es: El valor absoluto es nulo, confirmando que todo el intercambio energético es térmico.
+        en: The absolute value is zero, confirming that all energy exchange is thermal.
+    domain_checks:
+      - "W == 0"
+    coherence_checks:
+      - "W == 0"
+    graph_implications:
+      - "La línea vertical en el diagrama pV tiene área nula bajo la curva."
+    pedagogical_triggers:
+      - "Si W resulta no nulo, verificar que se está analizando un proceso realmente isocórico."
+
+  - id: energia_interna_isocorica
+    title:
+      es: Variación de energía interna isocórica
+      en: Isochoric internal energy change
+    equation: "DeltaU = n * Cv * DeltaT"
+    latex: "\\\\Delta U = n \\\\cdot C_V \\\\cdot \\\\Delta T"
+    rearrangements:
+      - target: DeltaU
+        equation: "DeltaU = n * Cv * DeltaT"
+        latex: "\\\\Delta U = n \\\\cdot C_V \\\\cdot \\\\Delta T"
+      - target: n
+        equation: "n = DeltaU / (Cv * DeltaT)"
+        latex: "n = \\\\frac{\\\\Delta U}{C_V \\\\cdot \\\\Delta T}"
+      - target: Cv
+        equation: "Cv = DeltaU / (n * DeltaT)"
+        latex: "C_V = \\\\frac{\\\\Delta U}{n \\\\cdot \\\\Delta T}"
+      - target: DeltaT
+        equation: "DeltaT = DeltaU / (n * Cv)"
+        latex: "\\\\Delta T = \\\\frac{\\\\Delta U}{n \\\\cdot C_V}"
+    category: fundamental
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: La energía interna del gas varía proporcionalmente al número de moles, al calor específico molar a volumen constante y a la variación de temperatura. En el proceso isocórico, esta variación es también igual al calor absorbido.
+      en: The internal energy of the gas changes proportionally to the number of moles, the molar heat capacity at constant volume, and the temperature change. In the isochoric process, this change also equals the heat absorbed.
+    constraints:
+      - gas ideal o gas con Cv bien definido
+      - proceso quasi-estático o suficientemente lento
+      - no hay cambios de fase
+    validity:
+      es: Válido para gas ideal; aplicable a gases reales cuando el rango de temperatura es moderado y lejos de la condensación.
+      en: Valid for ideal gas; applicable to real gases when the temperature range is moderate and far from condensation.
+    dimension_check: "[M L² T⁻²] = [N] · [M L² T⁻² Θ⁻¹ N⁻¹] · [Θ] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria
+      - ejemplos
+      - interpretacion
+    interpretation_tags:
+      - energia_interna
+      - calor_isocórico
+      - primer_principio_simplificado
+    result_semantics:
+      target: DeltaU
+      kind: continua_con_signo
+      sign_meaning:
+        es: DeltaU positivo indica que el gas ha absorbido calor y se ha calentado; negativo indica que ha cedido calor y se ha enfriado.
+        en: Positive DeltaU indicates the gas has absorbed heat and warmed up; negative indicates it has released heat and cooled down.
+      absolute_value_meaning:
+        es: El módulo de DeltaU cuantifica la cantidad total de calor intercambiado con el entorno en el proceso isocórico.
+        en: The magnitude of DeltaU quantifies the total heat exchanged with the surroundings in the isochoric process.
+    domain_checks:
+      - "n > 0"
+      - "Cv > 0"
+      - "DeltaT != 0"
+    coherence_checks:
+      - "DeltaU == Q"
+      - "W == 0"
+    graph_implications:
+      - "DeltaU positivo implica desplazamiento hacia arriba en el diagrama pT."
+      - "DeltaU negativo implica desplazamiento hacia abajo en el diagrama pT."
+    pedagogical_triggers:
+      - "Verificar que se usa Cv y no Cp en el proceso isocórico."
+      - "Verificar que DeltaT se calcula como T2 menos T1 en kelvins."
+
+  - id: calor_isocorico
+    title:
+      es: Calor en proceso isocórico
+      en: Heat in isochoric process
+    equation: "Q = n * Cv * DeltaT"
+    latex: "Q = n \\\\cdot C_V \\\\cdot \\\\Delta T"
+    rearrangements:
+      - target: Q
+        equation: "Q = n * Cv * DeltaT"
+        latex: "Q = n \\\\cdot C_V \\\\cdot \\\\Delta T"
+      - target: T2
+        equation: "T2 = T1 + Q / (n * Cv)"
+        latex: "T_2 = T_1 + \\\\frac{Q}{n \\\\cdot C_V}"
+      - target: T1
+        equation: "T1 = T2 - Q / (n * Cv)"
+        latex: "T_1 = T_2 - \\\\frac{Q}{n \\\\cdot C_V}"
+    category: fundamental
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: El calor absorbido por el gas a volumen constante es igual a la variación de energía interna. La identidad entre Q y DeltaU es consecuencia directa de que el trabajo es nulo.
+      en: The heat absorbed by the gas at constant volume equals the change in internal energy. The identity between Q and DeltaU is a direct consequence of zero work.
+    constraints:
+      - proceso isocórico estricto (V constante)
+      - gas ideal con Cv constante en el rango de temperaturas
+    validity:
+      es: Válido para gas ideal. Para gases reales, Cv puede depender de T, pero la relación Q igual a DeltaU siempre se cumple cuando W es nulo.
+      en: Valid for ideal gas. For real gases, Cv may depend on T, but the relation Q equals DeltaU always holds when W is zero.
+    dimension_check: "[M L² T⁻²] = [N] · [M L² T⁻² Θ⁻¹ N⁻¹] · [Θ] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria
+      - ejemplos
+      - interpretacion
+    interpretation_tags:
+      - calor_intercambiado
+      - identidad_Q_DeltaU
+      - primer_principio
+    result_semantics:
+      target: Q
+      kind: continua_con_signo
+      sign_meaning:
+        es: Q positivo indica calor absorbido (proceso endotérmico); negativo indica calor cedido (proceso exotérmico).
+        en: Positive Q indicates heat absorbed (endothermic); negative indicates heat released (exothermic).
+      absolute_value_meaning:
+        es: El módulo de Q es la energía térmica transferida entre el gas y su entorno durante el proceso isocórico.
+        en: The magnitude of Q is the thermal energy transferred between the gas and its surroundings during the isochoric process.
+    domain_checks:
+      - "n > 0"
+      - "Cv > 0"
+      - "DeltaT != 0"
+    coherence_checks:
+      - "Q == DeltaU"
+    graph_implications:
+      - "Q positivo: el punto en el diagrama pT se desplaza hacia temperaturas mayores y presiones mayores."
+    pedagogical_triggers:
+      - "Si Q resulta diferente de DeltaU, revisar si se cometió un error con W."
+
+  - id: variacion_temperatura_isocorica
+    title:
+      es: Variación de temperatura isocórica
+      en: Isochoric temperature change
+    equation: "DeltaT = T2 - T1"
+    latex: "\\\\Delta T = T_2 - T_1"
+    rearrangements:
+      - target: DeltaT
+        equation: "DeltaT = T2 - T1"
+        latex: "\\\\Delta T = T_2 - T_1"
+      - target: T2
+        equation: "T2 = T1 + DeltaT"
+        latex: "T_2 = T_1 + \\\\Delta T"
+      - target: T1
+        equation: "T1 = T2 - DeltaT"
+        latex: "T_1 = T_2 - \\\\Delta T"
+    category: auxiliary
+    relation_type: definition
+    physical_meaning:
+      es: La variación de temperatura es la diferencia entre el estado final y el inicial. Su signo determina si el gas se calienta o se enfría durante el proceso isocórico.
+      en: The temperature change is the difference between the final and initial states. Its sign determines whether the gas heats up or cools down during the isochoric process.
+    constraints:
+      - ambas temperaturas en kelvins
+    validity:
+      es: Válido siempre que las temperaturas se expresen en la misma unidad; la diferencia en kelvins es idéntica a la diferencia en grados Celsius.
+      en: Valid as long as temperatures are expressed in the same unit; the difference in kelvins is identical to the difference in degrees Celsius.
+    dimension_check: "[Θ] = [Θ] - [Θ] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria
+      - ejemplos
+    interpretation_tags:
+      - variacion_termica
+      - signo_proceso
+    result_semantics:
+      target: DeltaT
+      kind: continua_con_signo
+      sign_meaning:
+        es: DeltaT positivo indica calentamiento; negativo indica enfriamiento del gas isocórico.
+        en: Positive DeltaT indicates warming; negative indicates cooling of the isochoric gas.
+      absolute_value_meaning:
+        es: El módulo de DeltaT cuantifica cuánto ha cambiado la temperatura, independientemente del sentido del proceso.
+        en: The magnitude of DeltaT quantifies how much the temperature has changed, regardless of the direction of the process.
+    domain_checks:
+      - "T1 > 0"
+      - "T2 > 0"
+    coherence_checks:
+      - "DeltaT != 0"
+    graph_implications:
+      - "DeltaT determina la longitud del segmento en el diagrama pT isocórico."
+    pedagogical_triggers:
+      - "Verificar que ambas temperaturas están en kelvins antes de calcular DeltaT."
+`;export{e as default};

@@ -1,0 +1,923 @@
+version: 5.0.0
+id: ecuacion-de-onda-electromagnetica
+leaf_id: ecuacion-de-onda-electromagnetica
+nombre:
+  es: Ecuacion de onda electromagnetica
+  en: Electromagnetic Wave Equation
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: ecuaciones-de-maxwell
+  parent_id: ecuaciones-de-maxwell
+  ruta_relativa: fisica-clasica/electromagnetismo/ecuaciones-de-maxwell/ecuacion-de-onda-electromagnetica
+  orden: 295400
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - onda_E
+  - onda_B
+  - velocidad_luz
+  - relacion_dispersion
+  - solucion_onda_plana_E
+  magnitudes:
+  - campo_electrico
+  - campo_magnetico
+  - velocidad_de_la_luz_en_el_vacio
+  - omega
+  - numero_de_onda
+  - lambda
+  - epsilon0
+  - mu0
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+  - Svg
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: velocidad_de_la_luz_en_el_vacio
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  velocidad_de_la_luz_en_el_vacio:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de c
+      en: Result of c
+    summary_rules:
+    - id: c_sum_ok
+      when: abs(result - 299792458) < 1e6
+      status: success
+      text:
+        es: '[[velocidad_de_la_luz_en_el_vacio]] ≈ 2.998×10⁸ m/s. Este resultado indica la velocidad de propagación de las
+          ondas EM en el vacío, que depende únicamente de [[mu0]] y [[epsilon0]].'
+        en: '[[velocidad_de_la_luz_en_el_vacio]] ≈ 2.998×10⁸ m/s. This result indicates the EM wave propagation speed in vacuum,
+          which depends solely on [[mu0]] and [[epsilon0]].'
+    - id: c_sum_default
+      when: 'true'
+      status: info
+      text:
+        es: '[[velocidad_de_la_luz_en_el_vacio]] describe la velocidad de propagación de la onda electromagnética en el vacío.
+          Su valor depende de [[mu0]] y [[epsilon0]]: aumenta si las constantes disminuyen.'
+        en: '[[velocidad_de_la_luz_en_el_vacio]] describes the electromagnetic wave propagation speed in vacuum. Its value
+          depends on [[mu0]] and [[epsilon0]]: it increases if the constants decrease.'
+    physical_reading_rules:
+    - id: c_phys_high
+      when: result > 3.1e8
+      status: error
+      text:
+        es: El valor supera el límite físico. Revisa que [[mu0]] y [[epsilon0]] tengan los valores correctos del vacío.
+        en: The value exceeds the physical limit. Check that [[mu0]] and [[epsilon0]] have the correct vacuum values.
+    - id: c_phys_low
+      when: result < 2.9e8
+      status: warning
+      text:
+        es: El valor es notablemente menor que [[velocidad_de_la_luz_en_el_vacio]]. Un error en [[mu0]] o [[epsilon0]] por
+          un factor de 2π es el origen más frecuente.
+        en: The value is notably lower than [[velocidad_de_la_luz_en_el_vacio]]. An error in [[mu0]] or [[epsilon0]] by a
+          factor of 2π is the most common source.
+    - id: c_phys_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[velocidad_de_la_luz_en_el_vacio]] mide la velocidad a la que [[campo_electrico]] y [[campo_magnetico]] se regeneran
+          mutuamente al propagarse. No hay un soporte material necesario.'
+        en: '[[velocidad_de_la_luz_en_el_vacio]] measures the speed at which [[campo_electrico]] and [[campo_magnetico]] mutually
+          regenerate as they propagate. No material support is needed.'
+    coherence_rules:
+    - id: c_coh_ok
+      when: abs(result - 299792458) < 1e4
+      status: ok
+      text:
+        es: Resultado consistente con la definición del metro en el SI desde 1983.
+        en: Result consistent with the SI metre definition since 1983.
+    - id: c_coh_default
+      when: 'true'
+      status: info
+      text:
+        es: El cociente [[omega]]/[[numero_de_onda]] debe dar siempre [[velocidad_de_la_luz_en_el_vacio]] en el vacío; verificar
+          con la relación de dispersión.
+        en: The ratio [[omega]]/[[numero_de_onda]] must always give [[velocidad_de_la_luz_en_el_vacio]] in vacuum; verify
+          with the dispersion relation.
+    model_validity_rules:
+    - id: c_val_default
+      when: 'true'
+      status: ok
+      text:
+        es: Esta fórmula es válida exclusivamente en el vacío sin cargas ni corrientes libres. En medios materiales, [[velocidad_de_la_luz_en_el_vacio]]
+          se reemplaza por [[velocidad_de_la_luz_en_el_vacio]]/n donde n es el índice de refracción del medio.
+        en: This formula is valid exclusively in vacuum with no free charges or currents. In material media, [[velocidad_de_la_luz_en_el_vacio]]
+          is replaced by [[velocidad_de_la_luz_en_el_vacio]]/n where n is the medium's refractive index.
+    graph_rules:
+    - id: c_graph_default
+      when: 'true'
+      status: info
+      text:
+        es: En el gráfico de la relación de dispersión (eje [[omega]] vs. eje [[numero_de_onda]]), [[velocidad_de_la_luz_en_el_vacio]]
+          es la pendiente de la recta. Una pendiente mayor o menor señalaría un error en el cálculo.
+        en: In the dispersion relation graph ([[omega]] axis vs [[numero_de_onda]] axis), [[velocidad_de_la_luz_en_el_vacio]]
+          is the slope of the line. A larger or smaller slope would indicate an error in the calculation.
+    likely_errors:
+    - id: c_err_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error frecuente: usar [[epsilon0]] = 8.85 en lugar de 8.854×10⁻¹² F/m, omitiendo el exponente. Esto produce un
+          [[velocidad_de_la_luz_en_el_vacio]] diez órdenes de magnitud fuera del valor correcto.'
+        en: 'Common error: using [[epsilon0]] = 8.85 instead of 8.854×10⁻¹² F/m, omitting the exponent. This produces a [[velocidad_de_la_luz_en_el_vacio]]
+          ten orders of magnitude off.'
+    next_step_rules:
+    - id: c_next_default
+      when: 'true'
+      status: info
+      text:
+        es: Con [[velocidad_de_la_luz_en_el_vacio]] calculado, aplicar la relación de dispersión [[omega]] = [[velocidad_de_la_luz_en_el_vacio]]·[[numero_de_onda]]
+          para determinar [[numero_de_onda]] o [[lambda]] de una señal de frecuencia conocida.
+        en: With [[velocidad_de_la_luz_en_el_vacio]] computed, apply the dispersion relation [[omega]] = [[velocidad_de_la_luz_en_el_vacio]]·[[numero_de_onda]]
+          to determine [[numero_de_onda]] or [[lambda]] for a signal of known frequency.
+    physical_intuition:
+    - id: c_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[velocidad_de_la_luz_en_el_vacio]] describe el estado dinámico.
+        en: Intuitively, [[velocidad_de_la_luz_en_el_vacio]] describes the dynamic state.
+    limiting_cases:
+    - id: c_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[velocidad_de_la_luz_en_el_vacio]].
+        en: Check limiting cases of [[velocidad_de_la_luz_en_el_vacio]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  campo_magnetico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de B
+      en: Result of B
+    summary_rules:
+    - id: B_sum_default
+      when: 'true'
+      status: info
+      text:
+        es: '[[campo_magnetico]] describe la oscilación del campo magnético en la onda: indica la fuerza sobre cargas móviles.
+          Su amplitud depende de [[campo_electrico]] y de [[velocidad_de_la_luz_en_el_vacio]]: disminuye si [[velocidad_de_la_luz_en_el_vacio]]
+          aumenta.'
+        en: '[[campo_magnetico]] describes the magnetic field oscillation in the wave: it indicates the force on moving charges.
+          Its amplitude depends on [[campo_electrico]] and [[velocidad_de_la_luz_en_el_vacio]]: it decreases if [[velocidad_de_la_luz_en_el_vacio]]
+          increases.'
+    physical_reading_rules:
+    - id: B_phys_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[campo_magnetico]] es perpendicular a [[campo_electrico]] y a la dirección de propagación [[numero_de_onda]].
+          Su amplitud es siempre E₀/[[velocidad_de_la_luz_en_el_vacio]], lo que indica que [[campo_magnetico]] es mucho menor
+          en unidades SI pero igual en densidad de energía.'
+        en: '[[campo_magnetico]] is perpendicular to [[campo_electrico]] and to the propagation direction [[numero_de_onda]].
+          Its amplitude is always E₀/[[velocidad_de_la_luz_en_el_vacio]], indicating that [[campo_magnetico]] is much smaller
+          in SI units but equal in energy density.'
+    coherence_rules:
+    - id: B_coh_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que la amplitud de [[campo_magnetico]] sea consistente con E₀/[[velocidad_de_la_luz_en_el_vacio]]. Si
+          [[campo_magnetico]] y [[campo_electrico]] no tienen ese cociente, la solución no satisface la ecuación de onda.
+        en: Verify that the amplitude of [[campo_magnetico]] is consistent with E₀/[[velocidad_de_la_luz_en_el_vacio]]. If
+          [[campo_magnetico]] and [[campo_electrico]] do not have that ratio, the solution does not satisfy the wave equation.
+    model_validity_rules:
+    - id: B_val_default
+      when: 'true'
+      status: ok
+      text:
+        es: La relación B₀ = E₀/[[velocidad_de_la_luz_en_el_vacio]] es válida solo en el vacío. En un medio material, B₀ =
+          n·E₀/[[velocidad_de_la_luz_en_el_vacio]] donde n es el índice de refracción, que depende de [[omega]].
+        en: The relation B₀ = E₀/[[velocidad_de_la_luz_en_el_vacio]] is valid only in vacuum. In a material medium, B₀ = n·E₀/[[velocidad_de_la_luz_en_el_vacio]]
+          where n is the refractive index, which depends on [[omega]].
+    graph_rules:
+    - id: B_graph_default
+      when: 'true'
+      status: info
+      text:
+        es: En el gráfico SVG, [[campo_magnetico]] aparece como una sinusoide en el eje perpendicular a [[campo_electrico]].
+          Los picos de [[campo_magnetico]] y [[campo_electrico]] coinciden en fase y posición.
+        en: In the SVG graph, [[campo_magnetico]] appears as a sinusoid on the axis perpendicular to [[campo_electrico]].
+          The peaks of [[campo_magnetico]] and [[campo_electrico]] coincide in phase and position.
+    likely_errors:
+    - id: B_err_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error habitual: calcular solo la densidad de energía de [[campo_electrico]] e ignorar la de [[campo_magnetico]].
+          Ambas contribuyen por igual: u_E = u_B = ε₀E²/2 en cada instante.'
+        en: 'Common error: computing only the energy density of [[campo_electrico]] and ignoring that of [[campo_magnetico]].
+          Both contribute equally: u_E = u_B = ε₀E²/2 at every instant.'
+    next_step_rules:
+    - id: B_next_default
+      when: 'true'
+      status: info
+      text:
+        es: Con [[campo_magnetico]] calculado, obtener el vector de Poynting S = [[campo_electrico]]×[[campo_magnetico]]/[[mu0]]
+          para determinar la intensidad y la dirección de flujo de energía de la onda.
+        en: With [[campo_magnetico]] computed, obtain the Poynting vector S = [[campo_electrico]]×[[campo_magnetico]]/[[mu0]]
+          to determine the intensity and energy flux direction of the wave.
+    physical_intuition:
+    - id: B_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[campo_magnetico]] describe el estado dinámico.
+        en: Intuitively, [[campo_magnetico]] describes the dynamic state.
+    limiting_cases:
+    - id: B_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[campo_magnetico]].
+        en: Check limiting cases of [[campo_magnetico]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  epsilon0:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de epsilon0
+      en: Result of epsilon0
+    summary_rules:
+    - id: eps_sum_default
+      when: 'true'
+      status: info
+      text:
+        es: '[[epsilon0]] describe la respuesta eléctrica del vacío. Indica cuánto campo eléctrico produce una carga; depende
+          inversamente de la fuerza de la interacción coulombiana.'
+        en: '[[epsilon0]] describes the electrical response of vacuum. It indicates how much electric field a charge produces;
+          it depends inversely on the strength of the Coulomb interaction.'
+    physical_reading_rules:
+    - id: eps_phys_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[epsilon0]] cuantifica cuánto campo eléctrico produce una carga unitaria en el vacío. Un valor calculado diferente
+          al estándar indica un error en [[mu0]] o [[velocidad_de_la_luz_en_el_vacio]].'
+        en: '[[epsilon0]] quantifies how much electric field a unit charge produces in vacuum. A calculated value different
+          from the standard indicates an error in [[mu0]] or [[velocidad_de_la_luz_en_el_vacio]].'
+    coherence_rules:
+    - id: eps_coh_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que el resultado sea del orden de 8.85×10⁻¹² F/m. Diferencias mayores a un factor 10 indican error de
+          unidades.
+        en: Verify that the result is of order 8.85×10⁻¹² F/m. Differences greater than a factor of 10 indicate a unit error.
+    model_validity_rules:
+    - id: eps_val_default
+      when: 'true'
+      status: ok
+      text:
+        es: Este despeje es válido solo para el vacío. En un dieléctrico, la permitividad efectiva es ε = εᵣ·[[epsilon0]]
+          con εᵣ > 1.
+        en: This rearrangement is valid only for vacuum. In a dielectric, the effective permittivity is ε = εᵣ·[[epsilon0]]
+          with εᵣ > 1.
+    graph_rules:
+    - id: eps_graph_default
+      when: 'true'
+      status: info
+      text:
+        es: '[[epsilon0]] no tiene representación directa en la gráfica de dispersión, pero fija la pendiente [[velocidad_de_la_luz_en_el_vacio]]
+          junto con [[mu0]].'
+        en: '[[epsilon0]] has no direct representation in the dispersion graph, but it fixes the slope [[velocidad_de_la_luz_en_el_vacio]]
+          together with [[mu0]].'
+    likely_errors:
+    - id: eps_err_default
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[epsilon0]] (vacío) con ε (medio material) es un error habitual. En vacío no hay factor εᵣ.
+        en: Confusing [[epsilon0]] (vacuum) with ε (material medium) is a common mistake. In vacuum there is no εᵣ factor.
+    next_step_rules:
+    - id: eps_next_default
+      when: 'true'
+      status: info
+      text:
+        es: Con [[epsilon0]] verificado, revisar la fuerza de Coulomb o la capacidad de un condensador de placas paralelas
+          para una comprobación experimental independiente.
+        en: With [[epsilon0]] verified, check the Coulomb force or the capacitance of a parallel-plate capacitor for an independent
+          experimental check.
+    physical_intuition:
+    - id: epsilon0_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[epsilon0]] describe el estado dinámico.
+        en: Intuitively, [[epsilon0]] describes the dynamic state.
+    limiting_cases:
+    - id: epsilon0_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[epsilon0]].
+        en: Check limiting cases of [[epsilon0]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  mu0:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de mu0
+      en: Result of mu0
+    summary_rules:
+    - id: mu0_sum_default
+      when: 'true'
+      status: info
+      text:
+        es: '[[mu0]] describe la respuesta magnética del vacío. Indica cuánto campo magnético genera una corriente; domina
+          la fuerza entre conductores paralelos.'
+        en: '[[mu0]] describes the magnetic response of vacuum. It indicates how much magnetic field a current generates;
+          it dominates the force between parallel conductors.'
+    physical_reading_rules:
+    - id: mu0_phys_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[mu0]] cuantifica cuánto campo magnético produce una corriente unitaria en el vacío. Su valor estándar es 4π×10⁻⁷
+          H/m.'
+        en: '[[mu0]] quantifies how much magnetic field a unit current produces in vacuum. Its standard value is 4π×10⁻⁷ H/m.'
+    coherence_rules:
+    - id: mu0_coh_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que el resultado sea del orden de 1.257×10⁻⁶ H/m. Un valor fuera de ese rango indica error de unidades
+          o en [[epsilon0]] o [[velocidad_de_la_luz_en_el_vacio]].
+        en: Verify that the result is of order 1.257×10⁻⁶ H/m. A value outside that range indicates a unit error or an error
+          in [[epsilon0]] or [[velocidad_de_la_luz_en_el_vacio]].
+    model_validity_rules:
+    - id: mu0_val_default
+      when: 'true'
+      status: ok
+      text:
+        es: Este despeje es válido solo para el vacío. En un medio magnético, la permeabilidad efectiva es μ = μᵣ·[[mu0]]
+          con μᵣ ≥ 1.
+        en: This rearrangement is valid only for vacuum. In a magnetic medium, the effective permeability is μ = μᵣ·[[mu0]]
+          with μᵣ ≥ 1.
+    graph_rules:
+    - id: mu0_graph_default
+      when: 'true'
+      status: info
+      text:
+        es: '[[mu0]] no aparece directamente en el eje de la gráfica de dispersión, pero junto con [[epsilon0]] fija la pendiente
+          [[velocidad_de_la_luz_en_el_vacio]] de la recta [[omega]] vs [[numero_de_onda]].'
+        en: '[[mu0]] does not appear directly on the dispersion graph axis, but together with [[epsilon0]] it fixes the slope
+          [[velocidad_de_la_luz_en_el_vacio]] of the [[omega]] vs [[numero_de_onda]] line.'
+    likely_errors:
+    - id: mu0_err_default
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[mu0]] con μᵣ·[[mu0]] al trabajar en medios magnéticos es un error frecuente. En el vacío μᵣ = 1 exactamente.
+        en: Confusing [[mu0]] with μᵣ·[[mu0]] when working in magnetic media is a common error. In vacuum μᵣ = 1 exactly.
+    next_step_rules:
+    - id: mu0_next_default
+      when: 'true'
+      status: info
+      text:
+        es: Con [[mu0]] verificado, calcular la fuerza por unidad de longitud entre dos conductores paralelos a 1 m de separación
+          con 1 A de corriente como comprobación independiente.
+        en: With [[mu0]] verified, compute the force per unit length between two parallel conductors 1 m apart carrying 1
+          A as an independent check.
+    physical_intuition:
+    - id: mu0_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[mu0]] describe el estado dinámico.
+        en: Intuitively, [[mu0]] describes the dynamic state.
+    limiting_cases:
+    - id: mu0_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[mu0]].
+        en: Check limiting cases of [[mu0]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  omega:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de omega
+      en: Result of omega
+    summary_rules:
+    - id: omega_sum_default
+      when: 'true'
+      status: info
+      text:
+        es: '[[omega]] indica la posición de la señal en el espectro EM: describe cuántos radianes oscilan por segundo. Domina
+          la energía del fotón y determina el tipo de interacción con la materia.'
+        en: '[[omega]] indicates the position of the signal in the EM spectrum: it describes how many radians oscillate per
+          second. It dominates the photon energy and determines the type of interaction with matter.'
+    physical_reading_rules:
+    - id: omega_phys_vis
+      when: abs(result - 3.55e15) < 1.15e15
+      status: ok
+      text:
+        es: '[[omega]] en el rango 2.4–4.7×10¹⁵ rad/s corresponde a luz visible (longitud de onda 400–780 nm).'
+        en: '[[omega]] in the range 2.4–4.7×10¹⁵ rad/s corresponds to visible light (wavelength 400–780 nm).'
+    - id: omega_phys_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[omega]] = [[velocidad_de_la_luz_en_el_vacio]]·[[numero_de_onda]] en el vacío. El valor de [[omega]] determina
+          la posición en el espectro EM y, con ella, el tipo de interacción con la materia.'
+        en: '[[omega]] = [[velocidad_de_la_luz_en_el_vacio]]·[[numero_de_onda]] in vacuum. The value of [[omega]] determines
+          the position in the EM spectrum and thereby the type of interaction with matter.'
+    coherence_rules:
+    - id: omega_coh_default
+      when: 'true'
+      status: ok
+      text:
+        es: Comprobar que [[omega]]/[[numero_de_onda]] da [[velocidad_de_la_luz_en_el_vacio]] y que 2π/[[numero_de_onda]]
+          da [[lambda]] razonable para el rango del espectro que se está calculando.
+        en: Check that [[omega]]/[[numero_de_onda]] gives [[velocidad_de_la_luz_en_el_vacio]] and that 2π/[[numero_de_onda]]
+          gives a reasonable [[lambda]] for the spectrum range being calculated.
+    model_validity_rules:
+    - id: omega_val_default
+      when: 'true'
+      status: ok
+      text:
+        es: La relación de dispersión [[omega]] = [[velocidad_de_la_luz_en_el_vacio]]·[[numero_de_onda]] es lineal y exacta
+          en el vacío para todo [[omega]]. En medios materiales [[omega]] y [[numero_de_onda]] están relacionados por [[omega]]
+          = ([[velocidad_de_la_luz_en_el_vacio]]/n)·[[numero_de_onda]].
+        en: The dispersion relation [[omega]] = [[velocidad_de_la_luz_en_el_vacio]]·[[numero_de_onda]] is linear and exact
+          in vacuum for all [[omega]]. In material media [[omega]] and [[numero_de_onda]] are related by [[omega]] = ([[velocidad_de_la_luz_en_el_vacio]]/n)·[[numero_de_onda]].
+    graph_rules:
+    - id: omega_graph_default
+      when: 'true'
+      status: info
+      text:
+        es: En el gráfico de la relación de dispersión, [[omega]] aparece en el eje vertical. El punto ([[numero_de_onda]],
+          [[omega]]) debe estar sobre la recta de pendiente [[velocidad_de_la_luz_en_el_vacio]].
+        en: In the dispersion relation graph, [[omega]] appears on the vertical axis. The point ([[numero_de_onda]], [[omega]])
+          must lie on the line of slope [[velocidad_de_la_luz_en_el_vacio]].
+    likely_errors:
+    - id: omega_err_default
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[omega]] (rad/s) con la frecuencia ordinaria f (Hz). La conversión es [[omega]] = 2πf. Si se usa f
+          directamente en [[omega]] = [[velocidad_de_la_luz_en_el_vacio]]·[[numero_de_onda]], el resultado queda errado por
+          2π.
+        en: Confusing [[omega]] (rad/s) with ordinary frequency f (Hz). The conversion is [[omega]] = 2πf. Using f directly
+          in [[omega]] = [[velocidad_de_la_luz_en_el_vacio]]·[[numero_de_onda]] gives a result off by 2π.
+    next_step_rules:
+    - id: omega_next_default
+      when: 'true'
+      status: info
+      text:
+        es: Con [[omega]] calculado, identificar el rango del espectro EM y las propiedades de interacción con la materia
+          relevantes para la aplicación (visibilidad, absorción, penetración).
+        en: With [[omega]] computed, identify the EM spectrum range and the matter-interaction properties relevant for the
+          application (visibility, absorption, penetration).
+    physical_intuition:
+    - id: omega_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[omega]] describe el estado dinámico.
+        en: Intuitively, [[omega]] describes the dynamic state.
+    limiting_cases:
+    - id: omega_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[omega]].
+        en: Check limiting cases of [[omega]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_de_onda:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de k
+      en: Result of k
+    summary_rules:
+    - id: k_sum_default
+      when: 'true'
+      status: info
+      text:
+        es: '[[numero_de_onda]] resume la densidad espacial de fase de la onda: indica cuántos radianes completa por metro.
+          Depende de [[omega]] y de [[velocidad_de_la_luz_en_el_vacio]]: aumenta con la frecuencia.'
+        en: '[[numero_de_onda]] resumes the spatial phase density of the wave: it indicates how many radians it completes
+          per metre. It depends on [[omega]] and [[velocidad_de_la_luz_en_el_vacio]]: it increases with frequency.'
+    physical_reading_rules:
+    - id: k_phys_ok
+      when: result > 0
+      status: ok
+      text:
+        es: '[[numero_de_onda]] positivo indica onda propagante en la dirección +x. La [[lambda]] correspondiente es 2π/[[numero_de_onda]].'
+        en: Positive [[numero_de_onda]] indicates a propagating wave in the +x direction. The corresponding [[lambda]] is
+          2π/[[numero_de_onda]].
+    - id: k_phys_default
+      when: 'true'
+      status: info
+      text:
+        es: Un [[numero_de_onda]] mayor implica una [[lambda]] más corta (mayor frecuencia [[omega]]). En el vacío la relación
+          [[omega]] = [[velocidad_de_la_luz_en_el_vacio]]·[[numero_de_onda]] es siempre lineal.
+        en: A larger [[numero_de_onda]] implies a shorter [[lambda]] (higher frequency [[omega]]). In vacuum the relation
+          [[omega]] = [[velocidad_de_la_luz_en_el_vacio]]·[[numero_de_onda]] is always linear.
+    coherence_rules:
+    - id: k_coh_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[numero_de_onda]] = [[omega]]/[[velocidad_de_la_luz_en_el_vacio]] sea consistente con [[lambda]]
+          = 2π/[[numero_de_onda]]. Los tres deben dar la misma [[velocidad_de_la_luz_en_el_vacio]] como cociente [[omega]]/[[numero_de_onda]].
+        en: Verify that [[numero_de_onda]] = [[omega]]/[[velocidad_de_la_luz_en_el_vacio]] is consistent with [[lambda]] =
+          2π/[[numero_de_onda]]. All three must give the same [[velocidad_de_la_luz_en_el_vacio]] as the ratio [[omega]]/[[numero_de_onda]].
+    model_validity_rules:
+    - id: k_val_default
+      when: 'true'
+      status: ok
+      text:
+        es: En el vacío [[numero_de_onda]] es siempre real y positivo para ondas propagantes. En medios con pérdidas [[numero_de_onda]]
+          tiene una parte imaginaria que describe atenuación.
+        en: In vacuum [[numero_de_onda]] is always real and positive for propagating waves. In lossy media [[numero_de_onda]]
+          has an imaginary part describing attenuation.
+    graph_rules:
+    - id: k_graph_default
+      when: 'true'
+      status: info
+      text:
+        es: En el gráfico [[omega]] vs [[numero_de_onda]], el punto ([[numero_de_onda]], [[omega]]) debe caer exactamente
+          sobre la recta de pendiente [[velocidad_de_la_luz_en_el_vacio]]. Desviaciones indican dispersión o error de cálculo.
+        en: In the [[omega]] vs [[numero_de_onda]] graph, the point ([[numero_de_onda]], [[omega]]) must fall exactly on the
+          line of slope [[velocidad_de_la_luz_en_el_vacio]]. Deviations indicate dispersion or a calculation error.
+    likely_errors:
+    - id: k_err_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error habitual: usar la frecuencia ordinaria f en lugar de la frecuencia angular [[omega]] = 2πf al calcular
+          [[numero_de_onda]] = [[omega]]/[[velocidad_de_la_luz_en_el_vacio]]. El resultado queda mal por un factor 2π.'
+        en: 'Common error: using ordinary frequency f instead of angular frequency [[omega]] = 2πf when computing [[numero_de_onda]]
+          = [[omega]]/[[velocidad_de_la_luz_en_el_vacio]]. The result is off by a factor of 2π.'
+    next_step_rules:
+    - id: k_next_default
+      when: 'true'
+      status: info
+      text:
+        es: Con [[numero_de_onda]] calculado, obtener [[lambda]] = 2π/[[numero_de_onda]] para conocer el espaciado de la onda
+          y comparar con dimensiones físicas relevantes (longitud de antena, fibra, cavidad).
+        en: With [[numero_de_onda]] computed, obtain [[lambda]] = 2π/[[numero_de_onda]] to know the wave spacing and compare
+          with relevant physical dimensions (antenna length, fibre, cavity).
+    physical_intuition:
+    - id: k_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[numero_de_onda]] describe el estado dinámico.
+        en: Intuitively, [[numero_de_onda]] describes the dynamic state.
+    limiting_cases:
+    - id: k_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[numero_de_onda]].
+        en: Check limiting cases of [[numero_de_onda]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  campo_electrico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de E
+      en: Result of E
+    summary_rules:
+    - id: E_sum_default
+      when: 'true'
+      status: info
+      text:
+        es: '[[campo_electrico]] describe la oscilación del campo eléctrico en la onda: indica la fuerza por unidad de carga
+          en cada punto. Su amplitud domina el transporte de energía junto con [[campo_magnetico]].'
+        en: '[[campo_electrico]] describes the oscillation of the electric field in the wave: it indicates the force per unit
+          charge at each point. Its amplitude dominates energy transport together with [[campo_magnetico]].'
+    physical_reading_rules:
+    - id: E_phys_default
+      when: 'true'
+      status: ok
+      text:
+        es: El valor instantáneo de [[campo_electrico]] determina la fuerza sobre una carga de prueba en ese punto. La intensidad
+          media de la onda es proporcional al cuadrado de la amplitud E₀.
+        en: The instantaneous value of [[campo_electrico]] determines the force on a test charge at that point. The mean wave
+          intensity is proportional to the square of the amplitude E₀.
+    coherence_rules:
+    - id: E_coh_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[campo_electrico]] sea transversal a la dirección de propagación [[numero_de_onda]]. Un [[campo_electrico]]
+          con componente longitudinal indicaría violación de ∇·[[campo_electrico]] = 0.
+        en: Verify that [[campo_electrico]] is transverse to the propagation direction [[numero_de_onda]]. An [[campo_electrico]]
+          with a longitudinal component would indicate violation of ∇·[[campo_electrico]] = 0.
+    model_validity_rules:
+    - id: E_val_default
+      when: 'true'
+      status: ok
+      text:
+        es: La solución [[campo_electrico]] = E₀cos(kx − [[omega]]t) es válida para el vacío. En un medio absorbente, la amplitud
+          E₀ decrece exponencialmente con la distancia de propagación.
+        en: The solution [[campo_electrico]] = E₀cos(kx − [[omega]]t) is valid for vacuum. In an absorbing medium, the amplitude
+          E₀ decreases exponentially with propagation distance.
+    graph_rules:
+    - id: E_graph_default
+      when: 'true'
+      status: info
+      text:
+        es: En el gráfico SVG, [[campo_electrico]] aparece como una sinusoide en el eje transversal. La separación entre crestas
+          es [[lambda]]; la amplitud visual es E₀.
+        en: In the SVG graph, [[campo_electrico]] appears as a sinusoid on the transverse axis. The distance between crests
+          is [[lambda]]; the visual amplitude is E₀.
+    likely_errors:
+    - id: E_err_default
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir la amplitud E₀ con el valor RMS E_rms = E₀/√2. Para calcular intensidad media, usar E_rms²·ε₀·c, no
+          E₀²·ε₀·c.
+        en: Confusing amplitude E₀ with RMS value E_rms = E₀/√2. To compute mean intensity, use E_rms²·ε₀·c, not E₀²·ε₀·c.
+    next_step_rules:
+    - id: E_next_default
+      when: 'true'
+      status: info
+      text:
+        es: Con [[campo_electrico]] en un punto conocido, calcular el [[campo_magnetico]] correspondiente mediante la relación
+          de amplitudes B₀ = E₀/[[velocidad_de_la_luz_en_el_vacio]], y el vector de Poynting para la intensidad.
+        en: With [[campo_electrico]] at a known point, compute the corresponding [[campo_magnetico]] via the amplitude relation
+          B₀ = E₀/[[velocidad_de_la_luz_en_el_vacio]], and the Poynting vector for intensity.
+    physical_intuition:
+    - id: E_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[campo_electrico]] describe el estado dinámico.
+        en: Intuitively, [[campo_electrico]] describes the dynamic state.
+    limiting_cases:
+    - id: E_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[campo_electrico]].
+        en: Check limiting cases of [[campo_electrico]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  lambda:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de lambda
+      en: Result of lambda
+    summary_rules:
+    - id: lambda_sum_default
+      when: 'true'
+      status: info
+      text:
+        es: '[[lambda]] resume la escala espacial de la onda: indica el período de repetición del campo. Depende de [[velocidad_de_la_luz_en_el_vacio]]
+          y de [[omega]]: disminuye al aumentar la frecuencia.'
+        en: '[[lambda]] resumes the spatial scale of the wave: it indicates the field repetition period. It depends on [[velocidad_de_la_luz_en_el_vacio]]
+          and [[omega]]: it decreases as frequency increases.'
+    physical_reading_rules:
+    - id: lambda_phys_nm
+      when: abs(result - 5.8e-7) < 2.0e-7
+      status: ok
+      text:
+        es: '[[lambda]] en el rango 380–780 nm corresponde a luz visible. Esta es la ventana en la que el ojo humano es sensible.'
+        en: '[[lambda]] in the 380–780 nm range corresponds to visible light. This is the window in which the human eye is
+          sensitive.'
+    - id: lambda_phys_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[lambda]] fija la escala espacial de la onda. Objetos mucho menores que [[lambda]] no perturban significativamente
+          la onda; objetos comparables a [[lambda]] producen difracción notable.'
+        en: '[[lambda]] sets the spatial scale of the wave. Objects much smaller than [[lambda]] do not significantly perturb
+          the wave; objects comparable to [[lambda]] produce noticeable diffraction.'
+    coherence_rules:
+    - id: lambda_coh_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[lambda]] = [[velocidad_de_la_luz_en_el_vacio]]/f y [[lambda]] = 2π/[[numero_de_onda]] den el mismo
+          resultado. Una discrepancia indica mezcla de unidades o fórmulas distintas.
+        en: Verify that [[lambda]] = [[velocidad_de_la_luz_en_el_vacio]]/f and [[lambda]] = 2π/[[numero_de_onda]] give the
+          same result. A discrepancy indicates mixed units or different formulae.
+    model_validity_rules:
+    - id: lambda_val_default
+      when: 'true'
+      status: ok
+      text:
+        es: La relación [[lambda]] = 2π/[[numero_de_onda]] es exacta en el vacío. En un medio material, [[lambda]] = [[lambda]]_vacío/n
+          porque [[numero_de_onda]] = n·[[omega]]/[[velocidad_de_la_luz_en_el_vacio]].
+        en: The relation [[lambda]] = 2π/[[numero_de_onda]] is exact in vacuum. In a material medium, [[lambda]] = [[lambda]]_vacuum/n
+          because [[numero_de_onda]] = n·[[omega]]/[[velocidad_de_la_luz_en_el_vacio]].
+    graph_rules:
+    - id: lambda_graph_default
+      when: 'true'
+      status: info
+      text:
+        es: '[[lambda]] es el período espacial visible en el gráfico de [[campo_electrico]] vs x: la distancia entre dos máximos
+          consecutivos del campo. En el gráfico [[omega]] vs [[numero_de_onda]], [[lambda]] = 2π/[[numero_de_onda]] corresponde
+          a la posición horizontal del punto.'
+        en: '[[lambda]] is the spatial period visible in the [[campo_electrico]] vs x graph: the distance between two consecutive
+          field maxima. In the [[omega]] vs [[numero_de_onda]] graph, [[lambda]] = 2π/[[numero_de_onda]] corresponds to the
+          horizontal position of the point.'
+    likely_errors:
+    - id: lambda_err_default
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[lambda]] en el vacío con [[lambda]] en el medio material. En agua (n ≈ 1.33), la [[lambda]] visible
+          es unos 413–585 nm, no 550 nm.
+        en: Confusing [[lambda]] in vacuum with [[lambda]] in the material medium. In water (n ≈ 1.33), visible [[lambda]]
+          is about 413–585 nm, not 550 nm.
+    next_step_rules:
+    - id: lambda_next_default
+      when: 'true'
+      status: info
+      text:
+        es: Con [[lambda]] calculada, comparar con dimensiones físicas del sistema (longitud de antena, apertura, tamaño de
+          obstáculo) para evaluar si la difracción es relevante.
+        en: With [[lambda]] computed, compare with physical dimensions of the system (antenna length, aperture, obstacle size)
+          to assess whether diffraction is relevant.
+    physical_intuition:
+    - id: lambda_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[lambda]] describe el estado dinámico.
+        en: Intuitively, [[lambda]] describes the dynamic state.
+    limiting_cases:
+    - id: lambda_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[lambda]].
+        en: Check limiting cases of [[lambda]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

@@ -1,0 +1,290 @@
+version: 2
+id: interpretacion-condicion-sumatoria-momentos
+leaf_id: condicion-sumatoria-momentos
+nombre:
+  es: Interpretación de la condición de sumatoria de momentos
+  en: Interpretation of the net torque balance condition
+scope:
+  area: mecánica
+  bloque: dinámica
+  subbloque: estática
+  parent_id: equilibrio-rotacion
+  ruta_relativa: fisica-clasica/mecanica/dinamica/estatica/equilibrio-rotacion/condicion-sumatoria-momentos
+dependencies:
+  formulas: [torque_1_definition, torque_2_definition, net_torque_condition, balancing_force_formula]
+  magnitudes: [r1, F1, theta1, r2, F2, theta2, tau1, tau2, tau_net, Feq]
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+result_blocks:
+  summary:
+    title:
+      es: Resumen físico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  tau1:
+    summary_rules:
+      - id: tau1_summary
+        when: "true"
+        status: info
+        text:
+          es: tau1 resume la eficacia rotacional de la primera fuerza alrededor del eje elegido.
+          en: tau1 summarizes the rotational effectiveness of the first force about the chosen axis.
+    physical_reading_rules:
+      - id: tau1_large_arm
+        when: "r1 > r2 && abs(tau1) > abs(tau2)"
+        status: info
+        text:
+          es: Un brazo mayor en la primera fuerza favorece que su momento domine el balance.
+          en: A larger arm for the first force favors its torque dominating the balance.
+    coherence_rules:
+      - id: tau1_zero_colinear
+        when: "(abs(theta1) < 1e-9 || abs(theta1 - pi) < 1e-9) && abs(tau1) < 1e-9"
+        status: ok
+        text:
+          es: Si la primera fuerza es colineal con el radio, su momento debe anularse.
+          en: If the first force is colinear with the radius, its torque must vanish.
+      - id: tau1_nonnegative_inputs
+        when: "r1 >= 0 && F1 >= 0"
+        status: ok
+        text:
+          es: Los datos geométricos y de fuerza de tau1 son físicamente admisibles.
+          en: The geometric and force data for tau1 are physically admissible.
+    model_validity_rules:
+      - id: tau1_same_axis
+        when: "true"
+        status: ok
+        text:
+          es: La lectura de tau1 solo es válida si el eje elegido coincide con el usado en todo el balance.
+          en: The reading of tau1 is valid only if the chosen axis matches the one used in the whole balance.
+    graph_rules:
+      - id: tau1_graph
+        when: "true"
+        status: info
+        text:
+          es: En la gráfica, aumentar r1, F1 o sin(theta1) debe aumentar la contribución visual de tau1.
+          en: In the graph, increasing r1, F1, or sin(theta1) should increase the visual contribution of tau1.
+    likely_errors:
+      - id: tau1_arm_confusion
+        when: "r1 > 0 && abs(tau1) < 1e-9 && abs(theta1 - pi/2) < 1e-3 && F1 > 0"
+        status: warning
+        text:
+          es: Si theta1 es casi perpendicular y tau1 sale casi nulo, es fácil confundir el brazo efectivo con la distancia total.
+          en: If theta1 is nearly perpendicular and tau1 is almost zero, students often confuse the effective arm with the total distance to the axis.
+    next_step_rules:
+      - id: tau1_next
+        when: "true"
+        status: info
+        text:
+          es: El siguiente paso natural es comparar tau1 con tau2 para decidir si el sistema se equilibra o gira.
+          en: The natural next step is to compare tau1 with tau2 to decide whether the system balances or rotates.
+
+  tau2:
+    summary_rules:
+      - id: tau2_summary
+        when: "true"
+        status: info
+        text:
+          es: tau2 resume la capacidad de la segunda fuerza para compensar o reforzar el giro.
+          en: tau2 summarizes the ability of the second force to compensate or reinforce the rotation.
+    physical_reading_rules:
+      - id: tau2_balance_role
+        when: "abs(tau2) > 0"
+        status: info
+        text:
+          es: tau2 debe leerse como una contribución que puede cancelar o superar a tau1 según su signo y magnitud.
+          en: tau2 should be read as a contribution that can cancel or exceed tau1 depending on its sign and magnitude.
+    coherence_rules:
+      - id: tau2_zero_colinear
+        when: "(abs(theta2) < 1e-9 || abs(theta2 - pi) < 1e-9) && abs(tau2) < 1e-9"
+        status: ok
+        text:
+          es: Si la segunda fuerza es colineal con su radio, su momento debe ser nulo.
+          en: If the second force is colinear with its radius, its torque must be zero.
+      - id: tau2_nonnegative_inputs
+        when: "r2 >= 0 && F2 >= 0"
+        status: ok
+        text:
+          es: Los datos de entrada de tau2 son compatibles con el modelo del leaf.
+          en: The input data for tau2 are compatible with the leaf model.
+    model_validity_rules:
+      - id: tau2_same_sign_convention
+        when: "true"
+        status: ok
+        text:
+          es: tau2 solo es comparable con tau1 si ambos usan el mismo convenio de signos.
+          en: tau2 is comparable to tau1 only if both use the same sign convention.
+    graph_rules:
+      - id: tau2_graph
+        when: "true"
+        status: info
+        text:
+          es: En la gráfica, theta2 modifica el brazo efectivo y por tanto la altura visual de tau2.
+          en: In the graph, theta2 changes the effective arm and therefore the visual height of tau2.
+    likely_errors:
+      - id: tau2_force_equalization
+        when: "abs(F2 - F1) < 1e-9 && abs(r1 - r2) > 1e-6"
+        status: warning
+        text:
+          es: Igualar F2 con F1 no garantiza equilibrio si los brazos son distintos.
+          en: Setting F2 equal to F1 does not guarantee equilibrium if the lever arms are different.
+    next_step_rules:
+      - id: tau2_next
+        when: "true"
+        status: info
+        text:
+          es: Usa ahora tau2 junto con tau1 para construir tau_net y decidir si hay equilibrio rotacional.
+          en: Use tau2 together with tau1 to build tau_net and decide whether there is rotational equilibrium.
+
+  tau_net:
+    summary_rules:
+      - id: tau_net_summary
+        when: "true"
+        status: info
+        text:
+          es: tau_net mide la tendencia rotacional residual después de sumar todas las contribuciones.
+          en: tau_net measures the residual rotational tendency after summing all contributions.
+    physical_reading_rules:
+      - id: tau_net_equilibrium
+        when: "abs(tau_net) < 1e-9"
+        status: info
+        text:
+          es: Cuando tau_net es cero, el cuerpo no tiene tendencia neta a girar respecto al eje elegido.
+          en: When tau_net is zero, the body has no net tendency to rotate about the chosen axis.
+      - id: tau_net_residual
+        when: "abs(tau_net) >= 1e-9"
+        status: warning
+        text:
+          es: Si tau_net no es cero, queda un giro residual y la condición de equilibrio no se cumple.
+          en: If tau_net is not zero, a residual rotation remains and the equilibrium condition is not satisfied.
+    coherence_rules:
+      - id: tau_net_match
+        when: "abs(tau_net - (tau1 - tau2)) < 1e-9"
+        status: ok
+        text:
+          es: tau_net es coherente con la suma algebraica del leaf.
+          en: tau_net is consistent with the algebraic sum used in the leaf.
+    model_validity_rules:
+      - id: tau_net_same_pivot
+        when: "true"
+        status: ok
+        text:
+          es: La interpretación de tau_net exige que todos los momentos se hayan calculado respecto al mismo pivote.
+          en: The interpretation of tau_net requires all torques to be computed about the same pivot.
+    graph_rules:
+      - id: tau_net_graph
+        when: "true"
+        status: info
+        text:
+          es: El cruce por cero de la curva o del indicador de tau_net marca la configuración de equilibrio.
+          en: The zero crossing of the tau_net curve or indicator marks the equilibrium configuration.
+    likely_errors:
+      - id: tau_net_sign_error
+        when: "abs(abs(tau1) - abs(tau2)) < 1e-9 && abs(tau_net) > 1e-9"
+        status: warning
+        text:
+          es: Si los módulos coinciden y tau_net no se anula, probablemente hay un error de signos.
+          en: If the magnitudes match and tau_net does not vanish, there is probably a sign error.
+    next_step_rules:
+      - id: tau_net_next
+        when: "abs(tau_net) < 1e-9"
+        status: info
+        text:
+          es: Una vez anulado tau_net, el paso siguiente es comprobar también la sumatoria de fuerzas.
+          en: Once tau_net is canceled, the next step is to also check the force balance.
+
+  Feq:
+    summary_rules:
+      - id: F2eq_summary
+        when: "true"
+        status: info
+        text:
+          es: F2eq da la magnitud exacta de la segunda fuerza necesaria para anular tau_net.
+          en: F2eq gives the exact magnitude of the second force required to cancel tau_net.
+    physical_reading_rules:
+      - id: F2eq_long_arm
+        when: "r2 > r1 && Feq < F1"
+        status: info
+        text:
+          es: Un brazo mayor permite equilibrar con una fuerza menor, que es la lectura física correcta.
+          en: A larger arm allows balance with a smaller force, which is the correct physical reading.
+    coherence_rules:
+      - id: F2eq_positive
+        when: "Feq >= 0"
+        status: ok
+        text:
+          es: La fuerza de equilibrio aparece como magnitud física no negativa.
+          en: The equilibrium force appears as a non-negative physical magnitude.
+      - id: F2eq_balance_check
+        when: "abs(r2*sin(theta2)) > 1e-9"
+        status: ok
+        text:
+          es: Existe brazo efectivo suficiente para que la segunda fuerza pueda equilibrar el sistema.
+          en: There is enough effective arm for the second force to balance the system.
+    model_validity_rules:
+      - id: F2eq_planar_case
+        when: "r2 > 0"
+        status: ok
+        text:
+          es: Esta lectura es válida en el modelo plano del leaf con dos contribuciones principales.
+          en: This reading is valid in the planar model of the leaf with two main contributions.
+    graph_rules:
+      - id: F2eq_graph
+        when: "true"
+        status: info
+        text:
+          es: Si F2 coincide con F2eq, la gráfica debe mostrar tau_net muy cercano a cero.
+          en: If F2 matches F2eq, the graph should show tau_net very close to zero.
+    likely_errors:
+      - id: F2eq_zero_arm
+        when: "abs(sin(theta2)) < 1e-9 || r2 <= 0"
+        status: warning
+        text:
+          es: No puede calcularse una fuerza equilibrante finita si la segunda fuerza no tiene brazo efectivo.
+          en: A finite balancing force cannot be computed if the second force has no effective arm.
+    next_step_rules:
+      - id: F2eq_next
+        when: "r2 > 0 && abs(sin(theta2)) > 1e-9"
+        status: info
+        text:
+          es: El siguiente paso es comparar F2 real con F2eq para saber si el sistema gira o permanece en equilibrio.
+          en: The next step is to compare the actual F2 with F2eq to determine whether the system rotates or remains in balance.
+
+cross_checks:
+  - id: torque_targets_declared
+    affects: [tau1, tau2, tau_net, Feq]
+    when: "true"
+    severity: ok
+    text:
+      es: Los cuatro resultados del leaf están conectados con magnitudes y fórmulas reales.
+      en: The four leaf results are connected to real magnitudes and formulas.
+  - id: net_balance_equivalence
+    affects: [tau_net, Feq]
+    when: "abs(tau_net) < 1e-9"
+    severity: ok
+    text:
+      es: El equilibrio rotacional se lee de forma consistente tanto con tau_net como con la fuerza equilibrante.
+      en: Rotational equilibrium is read consistently through both tau_net and the balancing force.

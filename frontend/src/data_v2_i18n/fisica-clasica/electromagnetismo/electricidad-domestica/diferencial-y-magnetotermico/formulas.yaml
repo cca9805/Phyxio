@@ -1,0 +1,330 @@
+version: 2
+topic:
+  id: diferencial-y-magnetotermico
+  title: Diferencial y magnetotermico
+ui:
+  default_formula: corriente_carga
+  groups:
+  - title: Sobrecarga magnetotérmica
+    items:
+    - corriente_carga
+    - potencia_limite
+    - ratio_termico
+  - title: Fuga diferencial
+    items:
+    - desequilibrio
+    - ratio_diferencial
+formulas:
+- id: corriente_carga
+  title:
+    es: Corriente de carga del circuito
+    en: Circuit load current
+  equation: I = P/V
+  latex: I=\frac{P}{V}
+  rearrangements:
+  - target: potencia_de_carga
+    equation: P = I*V
+    latex: P=I* V
+    constraints:
+    - V != 0
+  - target: tension_de_suministro
+    equation: V = P/I
+    latex: V=\frac{P}{I}
+    constraints:
+    - I != 0
+  category: fundamental
+  relation_type: algebraic
+  physical_meaning:
+    es: La corriente de carga es el cociente entre la potencia activa consumida y la tensión de suministro. Indica cuántos
+      amperios circulan por el circuito cuando se conecta una carga de potencia P.
+    en: The load current is the ratio of active power consumed to supply voltage. It indicates how many amperes flow through
+      the circuit when a load of power P is connected.
+  constraints: V != 0; válido para cargas resistivas puras (factor de potencia = 1).
+  validity:
+    es: Válida para cargas resistivas a tensión nominal constante. Para cargas inductivas o capacitivas, I real puede ser
+      mayor por el factor de potencia.
+    en: Valid for resistive loads at constant nominal voltage. For inductive or capacitive loads, real I may be higher due
+      to the power factor.
+  dimension_check: '[W]/[V] = [W]/[W/A] = A'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - sobrecarga
+  - magnetotermico
+  - corriente
+  result_semantics:
+    target: corriente_de_carga
+    kind: ratio
+    sign_meaning:
+      es: La corriente de carga es siempre positiva en valor absoluto.
+      en: Load current is always positive in absolute value.
+    absolute_value_meaning:
+      es: Cuanto mayor es I respecto a I_n, mayor es el riesgo de disparo del magnetotérmico.
+      en: The larger I relative to I_n, the greater the MCB trip risk.
+  domain_checks:
+  - expr: V > 0
+    message:
+      es: La tensión de suministro debe ser positiva para calcular la corriente.
+      en: Supply voltage must be positive to calculate current.
+  coherence_checks:
+  - expr: result < 100
+    message:
+      es: Corriente superior a 100 A es inusual en instalaciones residenciales; revisa los datos.
+      en: Current above 100 A is unusual in residential installations; check your data.
+  graph_implications:
+  - I se representa en el eje Y del gráfico de corriente; comparar con la línea de referencia I_n.
+  pedagogical_triggers:
+  - when: result > I_n
+    message:
+      es: 'I supera I_n: hay sobrecarga activa. El magnetotérmico puede actuar en minutos.'
+      en: 'I exceeds I_n: active overload. The MCB may trip within minutes.'
+  - when: result/I_n > 0.8 and result/I_n <= 1
+    message:
+      es: Operación con margen reducido (>80% de I_n). Evita añadir más cargas a este circuito.
+      en: Reduced-margin operation (>80% of I_n). Avoid adding more loads to this circuit.
+- id: desequilibrio
+  title:
+    es: Desequilibrio diferencial fase-neutro
+    en: Phase-neutral differential imbalance
+  equation: I_\Delta = |I_{fase} - I_{neutro}|
+  latex: I_{\Delta}=|I_{fase}-I_{neutro}|
+  rearrangements: []
+  category: fundamental
+  relation_type: algebraic
+  physical_meaning:
+    es: El desequilibrio diferencial es la diferencia absoluta entre la corriente de fase y la de neutro. Representa la corriente
+      que no regresa por el camino previsto, es decir, la fuga a tierra.
+    en: The differential imbalance is the absolute difference between phase and neutral current. It represents the current
+      not returning via the intended path, i.e., the earth leakage.
+  constraints: Ambas corrientes deben medirse en el mismo circuito y en el mismo instante.
+  validity:
+    es: Válida para corriente alterna estándar tipo AC. Para corrientes pulsantes de CC (equipos electrónicos), se requiere
+      diferencial tipo A.
+    en: Valid for standard AC type current. For pulsating DC currents (electronic devices), a type-A RCD is required.
+  dimension_check: '[A] - [A] = [A]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - fuga
+  - diferencial
+  - desequilibrio
+  result_semantics:
+    target: desequilibrio_diferencial
+    kind: difference
+    sign_meaning:
+      es: I_\Delta es siempre no negativa por definición (valor absoluto).
+      en: I_\Delta is always non-negative by definition (absolute value).
+    absolute_value_meaning:
+      es: Cuanto mayor es I_\Delta respecto a I_{\Delta n}, mayor es el riesgo de disparo diferencial.
+      en: The larger I_\Delta relative to I_{\Delta n}, the greater the RCD trip risk.
+  domain_checks:
+  - expr: I_{fase} >= 0 and I_{neutro} >= 0
+    message:
+      es: Las corrientes de fase y neutro deben ser no negativas.
+      en: Phase and neutral currents must be non-negative.
+  coherence_checks:
+  - expr: result <= I_{fase}
+    message:
+      es: El desequilibrio no puede superar la corriente de fase medida; revisa las mediciones.
+      en: The imbalance cannot exceed the measured phase current; check measurements.
+  graph_implications:
+  - I_\Delta se muestra como la diferencia entre las curvas de I_{fase} e I_{neutro}; comparar con la línea I_{\Delta n}.
+  pedagogical_triggers:
+  - when: result >= I_{\Delta n}
+    message:
+      es: 'I_\Delta supera I_{\Delta n}: disparo diferencial esperado. Identificar y corregir la fuga antes de rearmar.'
+      en: 'I_\Delta exceeds I_{\Delta n}: RCD trip expected. Identify and correct the leakage before resetting.'
+  - when: result >= 0.5*I_{\Delta n} and result < I_{\Delta n}
+    message:
+      es: Fuga apreciable sin disparo (zona de vigilancia). Puede indicar degradación progresiva del aislamiento.
+      en: Appreciable leakage without trip (monitoring zone). May indicate progressive insulation degradation.
+- id: ratio_diferencial
+  title:
+    es: Ratio de disparo diferencial
+    en: Differential trip ratio
+  equation: margen_dif = I_\Delta/I_{\Delta n}
+  latex: margen_{dif}=\frac{I_{\Delta}}{I_{\Delta n}}
+  rearrangements:
+  - target: desequilibrio_diferencial
+    equation: I_\Delta = margen_dif * I_{\Delta n}
+    latex: I_{\Delta}=margen_{dif}* I_{\Delta n}
+    constraints:
+    - I_{\Delta n} > 0
+  category: derived
+  relation_type: ratio
+  physical_meaning:
+    es: El ratio diferencial indica qué fracción del umbral de disparo I_{\Delta n} ha sido alcanzada por el desequilibrio
+      I_\Delta. Un valor de 1 o superior implica disparo inminente o activo.
+    en: The differential ratio indicates what fraction of the trip threshold I_{\Delta n} has been reached by the imbalance
+      I_\Delta. A value of 1 or above implies imminent or active tripping.
+  constraints: I_{\Delta n} > 0.
+  validity:
+    es: Válido para diferenciales tipo AC con corriente alterna pura. Puede subestimar el riesgo en circuitos con fuentes
+      conmutadas.
+    en: Valid for type-AC RCDs with pure AC. May underestimate risk in circuits with switching power supplies.
+  dimension_check: '[A]/[A] = adimensional'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - margen
+  - diferencial
+  - ratio
+  result_semantics:
+    target: margen_dif
+    kind: ratio
+    sign_meaning:
+      es: margen_dif es siempre no negativo.
+      en: margen_dif is always non-negative.
+    absolute_value_meaning:
+      es: Valores mayores indican mayor proximidad al disparo diferencial.
+      en: Higher values indicate greater proximity to RCD tripping.
+  domain_checks:
+  - expr: I_{\Delta n} > 0
+    message:
+      es: El umbral diferencial I_{\Delta n} debe ser positivo.
+      en: The differential threshold I_{\Delta n} must be positive.
+  coherence_checks:
+  - expr: result >= 0
+    message:
+      es: El ratio diferencial debe ser no negativo.
+      en: The differential ratio must be non-negative.
+  graph_implications:
+  - margen_dif se muestra en el eje Y del gráfico de márgenes; la línea de referencia en 1 marca el umbral de disparo.
+  pedagogical_triggers:
+  - when: result >= 1
+    message:
+      es: Umbral diferencial superado. El diferencial actúa o debe actuar. Corregir la fuga antes de rearmar.
+      en: Differential threshold exceeded. The RCD trips or should trip. Correct leakage before resetting.
+- id: potencia_limite
+  title:
+    es: Potencia límite magnetotérmica
+    en: MCB power limit
+  equation: P_{lim} = V*I_n
+  latex: P_{lim}=V* I_n
+  rearrangements:
+  - target: corriente_nominal_del_magnetotermico
+    equation: I_n = P_{lim}/V
+    latex: I_n=\frac{P_{lim}}{V}
+    constraints:
+    - V != 0
+  category: derived
+  relation_type: algebraic
+  physical_meaning:
+    es: La potencia límite es la potencia máxima aproximada que puede conectarse al circuito sin que el magnetotérmico actúe
+      en régimen sostenido. Es una estimación de primer orden para carga resistiva.
+    en: The power limit is the approximate maximum power connectable to the circuit without the MCB tripping in sustained
+      operation. It is a first-order estimate for resistive load.
+  constraints: V > 0; I_n > 0; estimación válida solo para cargas resistivas.
+  validity:
+    es: Estimación válida para cargas resistivas puras. Para cargas inductivas o con arranques elevados, la potencia admisible
+      real puede ser menor.
+    en: Valid estimate for purely resistive loads. For inductive loads or high-inrush equipment, the real admissible power
+      may be lower.
+  dimension_check: '[V]·[A] = W'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - potencia
+  - magnetotermico
+  - limite
+  result_semantics:
+    target: potencia_limite_magnetotermica
+    kind: product
+    sign_meaning:
+      es: P_{lim} es siempre positiva.
+      en: P_{lim} is always positive.
+    absolute_value_meaning:
+      es: Cuanto mayor es P_{lim}, mayor es la capacidad del circuito para alimentar cargas.
+      en: The larger P_{lim}, the greater the circuit capacity to supply loads.
+  domain_checks:
+  - expr: V > 0 and I_n > 0
+    message:
+      es: La tensión y la corriente nominal deben ser positivas.
+      en: Voltage and nominal current must be positive.
+  coherence_checks:
+  - expr: result > 0
+    message:
+      es: La potencia límite debe ser positiva.
+      en: The power limit must be positive.
+  graph_implications:
+  - P_{lim} se muestra como la línea de potencia umbral en el gráfico de potencia vs carga.
+  pedagogical_triggers:
+  - when: P_carga >= result
+    message:
+      es: La carga supera la potencia límite estimada del circuito. Esperable actuación del magnetotérmico.
+      en: Load exceeds the estimated circuit power limit. MCB trip expected.
+- id: ratio_termico
+  title:
+    es: Ratio de carga térmica del magnetotérmico
+    en: MCB thermal load ratio
+  equation: margen_termico = I/I_n
+  latex: margen_{termico}=\frac{I}{I_n}
+  rearrangements:
+  - target: corriente_de_carga
+    equation: I = margen_termico * I_n
+    latex: I=margen_{termico}* I_n
+    constraints:
+    - I_n > 0
+  category: derived
+  relation_type: ratio
+  physical_meaning:
+    es: El ratio térmico indica qué fracción de la corriente nominal I_n está siendo consumida por el circuito. Un valor de
+      1 o superior indica sobrecarga activa del magnetotérmico.
+    en: The thermal ratio indicates what fraction of the nominal current I_n is being consumed by the circuit. A value of
+      1 or above indicates active MCB overload.
+  constraints: I_n > 0.
+  validity:
+    es: Indicador de régimen estacionario. Los transitorios de arranque pueden superar brevemente 1 sin causar disparo inmediato.
+    en: Steady-state indicator. Startup transients may briefly exceed 1 without causing immediate tripping.
+  dimension_check: '[A]/[A] = adimensional'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - margen
+  - magnetotermico
+  - sobrecarga
+  result_semantics:
+    target: margen_termico
+    kind: ratio
+    sign_meaning:
+      es: margen_termico es siempre no negativo.
+      en: margen_termico is always non-negative.
+    absolute_value_meaning:
+      es: Valores mayores indican mayor proximidad a la sobrecarga del magnetotérmico.
+      en: Higher values indicate greater proximity to MCB overload.
+  domain_checks:
+  - expr: I_n > 0
+    message:
+      es: La corriente nominal I_n debe ser positiva.
+      en: The nominal current I_n must be positive.
+  coherence_checks:
+  - expr: result >= 0
+    message:
+      es: El ratio térmico debe ser no negativo.
+      en: The thermal ratio must be non-negative.
+  graph_implications:
+  - margen_termico se muestra en el eje Y del gráfico de márgenes; la línea de referencia en 1 marca el umbral de sobrecarga.
+  pedagogical_triggers:
+  - when: result >= 1
+    message:
+      es: Sobrecarga activa del magnetotérmico. Reducir carga o revisar calibre con criterio técnico.
+      en: Active MCB overload. Reduce load or review rating with technical justification.
+  - when: result >= 0.8 and result < 1
+    message:
+      es: 'Margen reducido: operación al 80-100% del calibre. Evita añadir más cargas.'
+      en: 'Reduced margin: operation at 80-100% of rating. Avoid adding more loads.'

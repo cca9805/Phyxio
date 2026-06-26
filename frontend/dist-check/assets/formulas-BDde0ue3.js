@@ -1,0 +1,119 @@
+const e=`version: 5
+topic:
+  id: pendulo
+  title:
+    es: Pendulo
+    en: Pendulum
+
+formulas:
+- id: omega
+  title: { es: Frecuencia angular de pequenas oscilaciones, en: Small-angle angular frequency }
+  equation: omega = sqrt(g/L)
+  latex: \\omega=\\sqrt{\\frac{g}{L}}
+  category: oscilaciones
+  relation_type: natural_frequency
+  physical_meaning:
+    es: Estima el ritmo natural del pendulo simple cuando el angulo es pequeno.
+    en: Estimates the natural rhythm of a simple pendulum when the angle is small.
+  constraints: [ g > 0, L > 0 ]
+  validity:
+    es: Valida para hilo inextensible, masa puntual y aproximacion sin(theta) ~ theta.
+    en: Valid for inextensible string, point mass, and the sin(theta) ~ theta approximation.
+  dimension_check: "[1/T] = sqrt([L/T^2]/[L])"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[g]] y [[L]].", en: "Requires [[g]] and [[L]]." }
+  used_in: [ Tper ]
+  interpretation_tags: [ ritmo, gravedad, longitud ]
+  result_semantics:
+    target: omega
+  domain_checks: [ g > 0, L > 0 ]
+  coherence_checks: [ omega > 0 ]
+  graph_implications: Al aumentar [[L]], la curva de [[omega]] desciende; al aumentar [[g]], asciende.
+  pedagogical_triggers: [ longitud_vs_gravedad ]
+  rearrangements:
+  - target: omega
+    equation: omega = sqrt(g/L)
+  - target: L
+    equation: g/omega^2
+  - target: g
+    equation: L*omega^2
+  variables: [ omega, g, L ]
+
+- id: Tper
+  title: { es: Periodo de pequenas oscilaciones, en: Small-angle period }
+  equation: Tper = 2*pi*sqrt(L/g)
+  latex: T=2\\pi\\sqrt{\\frac{L}{g}}
+  category: oscilaciones
+  relation_type: period_relation
+  physical_meaning:
+    es: Convierte la escala gravedad-longitud en tiempo de ciclo completo.
+    en: Converts the gravity-length scale into complete cycle time.
+  constraints: [ g > 0, L > 0 ]
+  validity:
+    es: Valida en el mismo dominio lineal que [[omega]] para angulos pequenos.
+    en: Valid in the same linear domain as [[omega]] for small angles.
+  dimension_check: "[T] = sqrt([L]/[L/T^2])"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[L]] y [[g]].", en: "Requires [[L]] and [[g]]." }
+  used_in: [ omega ]
+  interpretation_tags: [ periodo, ciclo, reloj ]
+  result_semantics:
+    target: Tper
+  domain_checks: [ g > 0, L > 0 ]
+  coherence_checks: [ Tper > 0 ]
+  graph_implications: "[[Tper]] aumenta con [[L]] y disminuye con [[g]]."
+  pedagogical_triggers: [ raiz_no_lineal ]
+  rearrangements:
+  - target: Tper
+    equation: 2*pi*sqrt(L/g)
+  - target: L
+    equation: g*(Tper/(2*pi))^2
+  - target: g
+    equation: 4*pi^2*L/Tper^2
+  variables: [ Tper, L, g ]
+
+- id: tau
+  title: { es: Torque gravitatorio instantaneo, en: Instantaneous gravitational torque }
+  equation: tau = -m*g*L*sin(theta)
+  latex: \\tau=-m\\,g\\,L\\,\\sin(\\theta)
+  category: dinamica
+  relation_type: torque_relation
+  physical_meaning:
+    es: Expresa el momento restaurador respecto al pivote para cada angulo [[theta]].
+    en: Expresses the restoring moment around the pivot for each angle [[theta]].
+  constraints: [ m > 0, g > 0, L > 0 ]
+  validity:
+    es: Valida para masa puntual con hilo inextensible; conserva no linealidad angular.
+    en: Valid for a point mass with inextensible string; keeps angular nonlinearity.
+  dimension_check: "[M*L^2/T^2] = [M]*[L/T^2]*[L]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[m]], [[g]], [[L]] y [[theta]].", en: "Requires [[m]], [[g]], [[L]], and [[theta]]." }
+  used_in: [ omega ]
+  interpretation_tags: [ torque, equilibrio, direccion ]
+  result_semantics:
+    target: tau
+  domain_checks: [ m > 0, g > 0, L > 0 ]
+  coherence_checks: [ sign(tau) = -sign(theta) ]
+  graph_implications: El cambio de signo de [[theta]] invierte el signo de [[tau]].
+  pedagogical_triggers: [ signo_restaurador ]
+  rearrangements:
+  - target: tau
+    equation: -m*g*L*sin(theta)
+  - target: m
+    equation: -tau/(g*L*sin(theta))
+  - target: L
+    equation: -tau/(m*g*sin(theta))
+  variables: [ tau, m, g, L, theta ]
+
+ui:
+  default_formula: omega
+  groups:
+  - title:
+      es: Ritmo temporal
+      en: Temporal rhythm
+    items: [ omega, Tper ]
+  - title:
+      es: Dinamica angular
+      en: Angular dynamics
+    items: [ tau ]
+`;export{e as default};

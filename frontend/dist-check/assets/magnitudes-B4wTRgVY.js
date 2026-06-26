@@ -1,0 +1,304 @@
+const n=`version: v5
+leaf_id: interferencia-constructiva
+magnitudes:
+  - id: I_resultante
+    symbol: "I"
+    nombre:
+      es: Intensidad resultante
+      en: Resultant intensity
+    descripcion:
+      es: Intensidad observada tras superponer dos ondas coherentes.
+      en: Intensity observed after superposing two coherent waves.
+    unidad_si: "W/m²"
+    dimension: "[M T⁻³]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in: [teoria, ejemplos, interpretacion, grafico_coord]
+    common_mistake:
+      es: Sumar intensidades individuales sin considerar la fase relativa.
+      en: Adding individual intensities without considering relative phase.
+    typical_range: "0 a varias veces la intensidad individual"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La intensidad media es no negativa.
+        en: Average intensity is non-negative.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Intensidad nula indica cancelacion completa ideal.
+        en: Zero intensity indicates ideal complete cancellation.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, inf)"
+    interpretation_role:
+      primary_for:
+        - refuerzo_interferencial
+    graph_binding:
+      channels:
+        - resultant_intensity
+    pedagogical_notes:
+      es: "Es la magnitud que permite distinguir refuerzo coherente de suma incoherente."
+      en: "It is the quantity that separates coherent reinforcement from incoherent addition."
+
+  - id: delta_phi
+    symbol: "\\\\Delta\\\\phi"
+    nombre:
+      es: Diferencia de fase
+      en: Phase difference
+    descripcion:
+      es: Desfase angular entre dos ondas coherentes al llegar al punto de observacion.
+      en: Angular phase offset between two coherent waves at the observation point.
+    unidad_si: "rad"
+    dimension: "adimensional"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: core_physical_quantity
+    used_in: [teoria, ejemplos, interpretacion, grafico_coord]
+    common_mistake:
+      es: Tratar el desfase como una distancia y no como una variable angular periodica.
+      en: Treating phase offset as a distance instead of a periodic angular variable.
+    typical_range: "0 a 2π rad por ciclo"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica cual onda adelanta a la otra.
+        en: The sign indicates which wave leads the other.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Fase igual en el punto de observacion.
+        en: Equal phase at the observation point.
+    value_nature:
+      kind: scalar_signed_periodic
+      nonnegative_only: false
+      expected_interval: "periodico"
+    interpretation_role:
+      primary_for:
+        - condicion_refuerzo
+    graph_binding:
+      channels:
+        - phase_slider
+    pedagogical_notes:
+      es: "Controla directamente si las crestas llegan con crestas o desacompasadas."
+      en: "It directly controls whether crests arrive with crests or out of step."
+
+  - id: Delta_r
+    symbol: "\\\\Delta r"
+    nombre:
+      es: Diferencia de camino
+      en: Path difference
+    descripcion:
+      es: Diferencia entre las distancias recorridas por dos ondas hasta el punto de observacion.
+      en: Difference between distances traveled by two waves to the observation point.
+    unidad_si: "m"
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: core_physical_quantity
+    used_in: [teoria, ejemplos, interpretacion, grafico_coord]
+    common_mistake:
+      es: Confundir diferencia de camino con distancia a una sola fuente.
+      en: Confusing path difference with distance to a single source.
+    typical_range: "nanometros a metros segun el sistema"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica que camino es mas largo.
+        en: The sign indicates which path is longer.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Caminos iguales.
+        en: Equal paths.
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-inf, inf)"
+    interpretation_role:
+      primary_for:
+        - diferencia_camino
+    graph_binding:
+      channels:
+        - path_difference
+    pedagogical_notes:
+      es: "Obliga a comparar dos recorridos; por si sola una distancia no decide el maximo."
+      en: "It forces comparison between two paths; one distance alone does not decide the maximum."
+
+  - id: lambda
+    symbol: "\\\\lambda"
+    nombre:
+      es: Longitud de onda
+      en: Wavelength
+    descripcion:
+      es: Periodo espacial de la onda; fija que diferencias de camino equivalen a volver a la misma fase.
+      en: Spatial period of the wave; sets which path differences return to the same phase.
+    unidad_si: "m"
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in: [teoria, ejemplos, interpretacion, aplicaciones]
+    common_mistake:
+      es: Usar una longitud de onda de otro medio o de otro color.
+      en: Using a wavelength from another medium or another color.
+    typical_range: "400 nm a 700 nm en luz visible"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La longitud de onda es positiva.
+        en: Wavelength is positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Longitud de onda nula no representa una onda fisica.
+        en: Zero wavelength does not represent a physical wave.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, inf)"
+    interpretation_role:
+      primary_for:
+        - escala_fase
+    graph_binding:
+      channels:
+        - wavelength_scale
+    pedagogical_notes:
+      es: "Fija la escala espacial que convierte caminos distintos en fases equivalentes."
+      en: "It sets the spatial scale that turns different paths into equivalent phases."
+
+  - id: m_orden
+    symbol: "m"
+    nombre:
+      es: Orden de interferencia
+      en: Interference order
+    descripcion:
+      es: Entero que cuenta los maximos constructivos respecto al maximo central.
+      en: Integer counting constructive maxima relative to the central maximum.
+    unidad_si: "adimensional"
+    dimension: "adimensional"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: derived
+    used_in: [teoria, ejemplos, interpretacion]
+    common_mistake:
+      es: Redondear cualquier cociente y llamar maximo a un punto que no cumple fase.
+      en: Rounding any ratio and calling a non-matching point a maximum.
+    typical_range: "0, ±1, ±2..."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica el lado del patron.
+        en: The sign indicates the side of the pattern.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Orden central.
+        en: Central order.
+    value_nature:
+      kind: integer_signed
+      nonnegative_only: false
+      expected_interval: "enteros"
+    interpretation_role:
+      primary_for:
+        - conteo_maximos
+    graph_binding:
+      channels:
+        - order_markers
+    pedagogical_notes:
+      es: "No es una variable continua; etiqueta maximos donde la condicion constructiva se cumple."
+      en: "It is not a continuous variable; it labels maxima where the constructive condition holds."
+
+  - id: I1
+    symbol: "I_1"
+    nombre:
+      es: Intensidad de la primera onda
+      en: First wave intensity
+    descripcion:
+      es: Intensidad media que aportaria la primera onda por separado.
+      en: Average intensity that the first wave would contribute alone.
+    unidad_si: "W/m²"
+    dimension: "[M T⁻³]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: parameter
+    used_in: [ejemplos, interpretacion, grafico_coord]
+    common_mistake:
+      es: Creer que esta intensidad ya incluye el efecto de interferencia.
+      en: Believing this intensity already includes the interference effect.
+    typical_range: "depende de la fuente"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La intensidad es no negativa.
+        en: Intensity is non-negative.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Primera onda ausente.
+        en: First wave absent.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, inf)"
+    interpretation_role:
+      primary_for:
+        - contribucion_onda_1
+    graph_binding:
+      channels:
+        - intensity_input_1
+    pedagogical_notes:
+      es: "Debe leerse como aporte individual antes de recombinarse con la segunda onda."
+      en: "It must be read as an individual contribution before recombination with the second wave."
+
+  - id: I2
+    symbol: "I_2"
+    nombre:
+      es: Intensidad de la segunda onda
+      en: Second wave intensity
+    descripcion:
+      es: Intensidad media que aportaria la segunda onda por separado.
+      en: Average intensity that the second wave would contribute alone.
+    unidad_si: "W/m²"
+    dimension: "[M T⁻³]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: parameter
+    used_in: [ejemplos, interpretacion, grafico_coord]
+    common_mistake:
+      es: Suponer que si cambia esta contribucion la posicion del maximo cambia necesariamente.
+      en: Assuming that changing this contribution necessarily moves the maximum position.
+    typical_range: "depende de la fuente"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La intensidad es no negativa.
+        en: Intensity is non-negative.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Segunda onda ausente.
+        en: Second wave absent.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, inf)"
+    interpretation_role:
+      primary_for:
+        - contribucion_onda_2
+    graph_binding:
+      channels:
+        - intensity_input_2
+    pedagogical_notes:
+      es: "Modifica la altura y el contraste del maximo, no la condicion geometrica basica."
+      en: "It changes maximum height and contrast, not the basic geometric condition."
+`;export{n as default};

@@ -32,7 +32,7 @@ export const emojiMap = {
   "propiedades_termicas": "🔬",
   "sistemas_termodinamicos": "⚗️",
   "acustica_arquitectonica": "🏛️",
-  "acustica_musical": "🌡️",🚀
+  "acustica_musical": "🌡️",
   "efecto_doppler": "🚗",
   "fenomenos_acusticos": "🎭",
   "psicoacustica": "👂",

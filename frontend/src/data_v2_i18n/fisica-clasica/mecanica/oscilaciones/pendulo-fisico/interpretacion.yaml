@@ -1,0 +1,372 @@
+version: 2
+id: interpretacion-pendulo-fisico
+leaf_id: pendulo-fisico
+nombre:
+  es: Interpretacion del pendulo fisico
+  en: Interpretation of the physical pendulum
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: oscilaciones
+  parent_id: oscilaciones
+  ruta_relativa: fisica-clasica/mecanica/oscilaciones/pendulo-fisico
+dependencies:
+  formulas:
+  - omega0_pf
+  - periodo_pf
+  - frecuencia_pf
+  - ecuacion_no_lineal_pf
+  magnitudes:
+  - I
+  - m
+  - g
+  - d
+  - omega0
+  - T
+  - f
+  - theta
+  - theta_dd
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  omega0:
+    summary_rules:
+    - id: omega0_summary
+      when: "true"
+      status: info
+      text:
+        es: La pulsacion natural fija la escala de rapidez angular del pendulo fisico.
+        en: Natural angular frequency sets the angular speed scale of the physical pendulum.
+    coherence_rules:
+    - id: omega0_coherence
+      when: "true"
+      status: ok
+      text:
+        es: Debe ser positiva y consistente con I, m, g y d.
+        en: It must be positive and consistent with I, m, g and d.
+    physical_reading_rules:
+    - id: omega0_physical
+      when: "true"
+      status: info
+      text:
+        es: A mayor inercia para igual torque restaurador, menor rapidez natural.
+        en: Larger inertia under equal restoring torque gives lower natural rate.
+    model_validity_rules:
+    - id: omega0_validity
+      when: "true"
+      status: ok
+      text:
+        es: La expresion lineal de omega0 asume angulos pequenos.
+        en: The linear omega0 expression assumes small angles.
+    graph_rules:
+    - id: omega0_graph
+      when: "true"
+      status: info
+      text:
+        es: Se relaciona con separacion temporal entre maximos de theta(t).
+        en: It relates to temporal spacing between maxima in theta(t).
+    likely_errors:
+    - id: omega0_warn
+      when: "true"
+      status: warning
+      text:
+        es: No confundas omega0 en rad/s con frecuencia en Hz.
+        en: Do not confuse omega0 in rad/s with frequency in Hz.
+    next_step_rules:
+    - id: omega0_next
+      when: "true"
+      status: info
+      text:
+        es: Usa omega0 para comprobar si la excitacion externa esta cerca de resonancia.
+        en: Use omega0 to check whether external excitation is near resonance.
+
+  I:
+    summary_rules:
+    - id: I_summary
+      when: "true"
+      status: info
+      text:
+        es: I resume como esta distribuida la masa respecto al eje.
+        en: I summarises how mass is distributed relative to the axis.
+    coherence_rules:
+    - id: I_coherence
+      when: "true"
+      status: ok
+      text:
+        es: Debe mantenerse positiva y acorde al eje real de giro.
+        en: It must remain positive and match the real rotation axis.
+    physical_reading_rules:
+    - id: I_physical
+      when: "true"
+      status: info
+      text:
+        es: A mayor I, mayor resistencia a cambiar estado angular.
+        en: Larger I means stronger resistance to angular state change.
+    model_validity_rules:
+    - id: I_validity
+      when: "true"
+      status: ok
+      text:
+        es: Si cambia el eje, cambia I y cambia el periodo.
+        en: If axis changes, I changes and period changes.
+    graph_rules:
+    - id: I_graph
+      when: "true"
+      status: info
+      text:
+        es: Incrementar I desplaza picos de theta(t) a tiempos mas largos.
+        en: Increasing I shifts theta(t) peaks to later times.
+    likely_errors:
+    - id: I_warn
+      when: "true"
+      status: warning
+      text:
+        es: Evita usar I de otro eje sin aplicar teorema de ejes paralelos.
+        en: Avoid using I from another axis without parallel-axis correction.
+    next_step_rules:
+    - id: I_next
+      when: "true"
+      status: info
+      text:
+        es: Contrasta I teorica con medicion dinamica del periodo.
+        en: Contrast theoretical I with dynamic period measurement.
+
+  d:
+    summary_rules:
+    - id: d_summary
+      when: "true"
+      status: info
+      text:
+        es: d determina la palanca gravitatoria del sistema.
+        en: d determines the gravitational lever arm of the system.
+    coherence_rules:
+    - id: d_coherence
+      when: "true"
+      status: ok
+      text:
+        es: Debe ser positiva y medida desde el eje al centro de masas.
+        en: It must be positive and measured from pivot to center of mass.
+    physical_reading_rules:
+    - id: d_physical
+      when: "true"
+      status: info
+      text:
+        es: Reducir d puede aumentar periodo aunque la masa no cambie.
+        en: Decreasing d can increase period even if mass is unchanged.
+    model_validity_rules:
+    - id: d_validity
+      when: "true"
+      status: ok
+      text:
+        es: d nula invalida el modelo de pendulo fisico gravitatorio.
+        en: Zero d invalidates the gravitational physical pendulum model.
+    graph_rules:
+    - id: d_graph
+      when: "true"
+      status: info
+      text:
+        es: Cambios de d afectan amplitud temporal y separacion de ciclos.
+        en: d changes affect temporal amplitude and cycle spacing.
+    likely_errors:
+    - id: d_warn
+      when: "true"
+      status: warning
+      text:
+        es: No midas d sobre proyecciones equivocadas del cuerpo.
+        en: Do not measure d from incorrect body projections.
+    next_step_rules:
+    - id: d_next
+      when: "true"
+      status: info
+      text:
+        es: Reestima d tras cualquier cambio geométrico del montaje.
+        en: Re-estimate d after any geometric change in setup.
+
+  T:
+    summary_rules:
+    - id: T_summary
+      when: "true"
+      status: info
+      text:
+        es: T es la duracion de un ciclo completo de oscilacion angular.
+        en: T is the duration of one full angular oscillation cycle.
+    coherence_rules:
+    - id: T_coherence
+      when: "true"
+      status: ok
+      text:
+        es: T debe ser positiva y consistente con f y omega0.
+        en: T must be positive and consistent with f and omega0.
+    physical_reading_rules:
+    - id: T_physical
+      when: "true"
+      status: info
+      text:
+        es: Si T sube, la respuesta del sistema es mas lenta.
+        en: If T increases, system response is slower.
+    model_validity_rules:
+    - id: T_validity
+      when: "true"
+      status: ok
+      text:
+        es: Grandes amplitudes pueden desviar T respecto al valor lineal esperado.
+        en: Large amplitudes can shift T away from linear expected value.
+    graph_rules:
+    - id: T_graph
+      when: "true"
+      status: info
+      text:
+        es: Se mide entre dos maximos consecutivos de theta.
+        en: It is measured between two consecutive maxima of theta.
+    likely_errors:
+    - id: T_warn
+      when: "true"
+      status: warning
+      text:
+        es: Evita confundir medio periodo con periodo completo.
+        en: Avoid confusing half-period with full period.
+    next_step_rules:
+    - id: T_next
+      when: "true"
+      status: info
+      text:
+        es: Usa T para estimar frecuencia y verificar objetivos de diseno.
+        en: Use T to estimate frequency and verify design targets.
+
+  f:
+    summary_rules:
+    - id: f_summary
+      when: "true"
+      status: info
+      text:
+        es: f cuantifica ciclos por segundo del pendulo fisico.
+        en: f quantifies cycles per second of the physical pendulum.
+    coherence_rules:
+    - id: f_coherence
+      when: "true"
+      status: ok
+      text:
+        es: Debe cumplir reciprocidad con T dentro del error experimental.
+        en: It must satisfy reciprocity with T within experimental error.
+    physical_reading_rules:
+    - id: f_physical
+      when: "true"
+      status: info
+      text:
+        es: Cambios de f revelan variaciones de geometria o inercia efectiva.
+        en: Changes in f reveal variations in geometry or effective inertia.
+    model_validity_rules:
+    - id: f_validity
+      when: "true"
+      status: ok
+      text:
+        es: La frecuencia lineal es fiable en oscilaciones de pequena amplitud.
+        en: Linear frequency is reliable in small-amplitude oscillations.
+    graph_rules:
+    - id: f_graph
+      when: "true"
+      status: info
+      text:
+        es: Contar ciclos en una ventana temporal permite estimar f experimental.
+        en: Counting cycles in a time window estimates experimental f.
+    likely_errors:
+    - id: f_warn
+      when: "true"
+      status: warning
+      text:
+        es: No mezcles Hz con rad/s en reportes comparativos.
+        en: Do not mix Hz with rad/s in comparative reports.
+    next_step_rules:
+    - id: f_next
+      when: "true"
+      status: info
+      text:
+        es: Compara f con frecuencias de excitacion para prevenir resonancia.
+        en: Compare f against excitation frequencies to prevent resonance.
+
+  theta_dd:
+    summary_rules:
+    - id: theta_dd_summary
+      when: "true"
+      status: info
+      text:
+        es: theta_dd representa la curvatura temporal de la respuesta angular.
+        en: theta_dd represents time curvature of angular response.
+    coherence_rules:
+    - id: theta_dd_coherence
+      when: "true"
+      status: ok
+      text:
+        es: Su signo debe ser coherente con el torque restaurador neto.
+        en: Its sign must be coherent with net restoring torque.
+    physical_reading_rules:
+    - id: theta_dd_physical
+      when: "true"
+      status: info
+      text:
+        es: Para oscilaciones pequenas, theta_dd suele ser opuesta a theta.
+        en: For small oscillations, theta_dd is usually opposite in sign to theta.
+    model_validity_rules:
+    - id: theta_dd_validity
+      when: "true"
+      status: ok
+      text:
+        es: En amplitudes grandes, la dinamica deja de ser estrictamente sinusoidal.
+        en: At large amplitudes, dynamics is no longer strictly sinusoidal.
+    graph_rules:
+    - id: theta_dd_graph
+      when: "true"
+      status: info
+      text:
+        es: Las zonas de mayor curvatura en theta(t) sugieren mayor modulo de theta_dd.
+        en: High-curvature zones in theta(t) suggest larger theta_dd magnitude.
+    likely_errors:
+    - id: theta_dd_warn
+      when: "true"
+      status: warning
+      text:
+        es: No confundas theta_dd con velocidad angular theta_dot.
+        en: Do not confuse theta_dd with angular velocity theta_dot.
+    next_step_rules:
+    - id: theta_dd_next
+      when: "true"
+      status: info
+      text:
+        es: Usa theta_dd para analizar torque instantaneo y estabilidad local.
+        en: Use theta_dd to analyse instantaneous torque and local stability.

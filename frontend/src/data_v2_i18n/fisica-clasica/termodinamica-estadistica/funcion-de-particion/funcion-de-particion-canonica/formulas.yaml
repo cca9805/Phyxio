@@ -1,0 +1,348 @@
+version: 5.0.0
+ui:
+  default_formula: funcion_particion_canonica
+formulas:
+- id: beta_inversa_termica
+  title:
+    es: Beta como inversa térmica
+    en: Beta as inverse thermal scale
+  equation: beta=1/(k_B*T)
+  latex: \beta=\frac{1}{k_B T}
+  rearrangements:
+  - id: beta_inversa_termica_base
+    equation: beta=1/(k_B*T)
+    latex: \beta=\frac{1}{k_B T}
+    target: beta
+  - id: temperatura_desde_beta
+    equation: temperatura=1/(constante_boltzmann*beta)
+    latex: T=\frac{1}{k_B\beta}
+    target: temperatura
+  category: termodinamica-estadistica
+  relation_type: definicion
+  physical_meaning:
+    es: Define la escala que compara cada energía microscópica con la agitación térmica.
+    en: Defines the scale comparing each microscopic energy with thermal agitation.
+  constraints:
+    es: Temperatura absoluta positiva, microestados definidos y energías expresadas en joules.
+    en: Positive absolute temperature, defined microstates, and energies expressed in joules.
+  validity:
+    es: Válida para un sistema en equilibrio canónico con baño térmico a temperatura fija.
+    en: Valid for a system in canonical equilibrium with a thermal bath at fixed temperature.
+  dimension_check:
+    status: ok
+    expected_dimension: '1'
+    notes:
+      es: La combinación de unidades respeta la dimensión del resultado.
+      en: The unit combination respects the result dimension.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - temperatura
+  - constante_boltzmann
+  interpretation_tags:
+  - canonical
+  - partition_function
+  - boltzmann_weights
+  result_semantics:
+    target: beta
+    kind: scalar
+    sign_meaning:
+      es: El signo físico procede de la magnitud calculada; Z y probabilidades no son negativas.
+      en: The physical sign comes from the computed quantity; Z and probabilities are nonnegative.
+    absolute_value_meaning:
+      es: El valor absoluto indica tamaño relativo dentro del modelo canónico.
+      en: The absolute value indicates relative size within the canonical model.
+  domain_checks:
+  - id: beta_inversa_termica_temperature_positive
+    condition: temperatura > 0
+    status: required
+    text:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  coherence_checks:
+  - id: beta_inversa_termica_units
+    status: ok
+    text:
+      es: Revisa que energía, temperatura y constante de Boltzmann estén en SI.
+      en: Check that energy, temperature, and Boltzmann constant are in SI.
+  graph_implications:
+    es: La gráfica muestra cómo cambia la contribución estadística al variar la energía de microestado o beta.
+    en: The graph shows how the statistical contribution changes as microstate energy or beta varies.
+  pedagogical_triggers:
+  - es: Si Z se interpreta como energía, recordar que es una suma adimensional de pesos.
+    en: If Z is read as energy, remember that it is a dimensionless sum of weights.
+- id: peso_boltzmann_canonico
+  title:
+    es: Peso de Boltzmann canónico
+    en: Canonical Boltzmann weight
+  equation: peso_boltzmann=exp(-beta*energia_microestado)
+  latex: w_i=e^{-\beta E_i}
+  rearrangements:
+  - id: peso_boltzmann_canonico_base
+    equation: peso_boltzmann=exp(-beta*energia_microestado)
+    latex: w_i=e^{-\beta E_i}
+    target: peso_boltzmann
+  category: termodinamica-estadistica
+  relation_type: derivada
+  physical_meaning:
+    es: Asigna a cada microestado una contribución relativa que disminuye con su energía.
+    en: Assigns each microstate a relative contribution that decreases with its energy.
+  constraints:
+    es: Temperatura absoluta positiva, microestados definidos y energías expresadas en joules.
+    en: Positive absolute temperature, defined microstates, and energies expressed in joules.
+  validity:
+    es: Válida para un sistema en equilibrio canónico con baño térmico a temperatura fija.
+    en: Valid for a system in canonical equilibrium with a thermal bath at fixed temperature.
+  dimension_check:
+    status: ok
+    expected_dimension: '1'
+    notes:
+      es: La combinación de unidades respeta la dimensión del resultado.
+      en: The unit combination respects the result dimension.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - beta
+  - energia_microestado
+  interpretation_tags:
+  - canonical
+  - partition_function
+  - boltzmann_weights
+  result_semantics:
+    target: peso_boltzmann
+    kind: scalar
+    sign_meaning:
+      es: El signo físico procede de la magnitud calculada; Z y probabilidades no son negativas.
+      en: The physical sign comes from the computed quantity; Z and probabilities are nonnegative.
+    absolute_value_meaning:
+      es: El valor absoluto indica tamaño relativo dentro del modelo canónico.
+      en: The absolute value indicates relative size within the canonical model.
+  domain_checks:
+  - id: peso_boltzmann_canonico_temperature_positive
+    condition: temperatura > 0
+    status: required
+    text:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  coherence_checks:
+  - id: peso_boltzmann_canonico_units
+    status: ok
+    text:
+      es: Revisa que energía, temperatura y constante de Boltzmann estén en SI.
+      en: Check that energy, temperature, and Boltzmann constant are in SI.
+  graph_implications:
+    es: La gráfica muestra cómo cambia la contribución estadística al variar la energía de microestado o beta.
+    en: The graph shows how the statistical contribution changes as microstate energy or beta varies.
+  pedagogical_triggers:
+  - es: Si Z se interpreta como energía, recordar que es una suma adimensional de pesos.
+    en: If Z is read as energy, remember that it is a dimensionless sum of weights.
+- id: funcion_particion_canonica
+  title:
+    es: Función de partición canónica
+    en: Canonical partition function
+  equation: funcion_particion=sum(peso_boltzmann)
+  latex: Z=\sum_i e^{-\beta E_i}
+  rearrangements:
+  - id: funcion_particion_canonica_base
+    equation: funcion_particion=sum(peso_boltzmann)
+    latex: Z=\sum_i e^{-\beta E_i}
+    target: funcion_particion
+  category: termodinamica-estadistica
+  relation_type: definicion
+  physical_meaning:
+    es: Suma todos los pesos de Boltzmann y condensa la accesibilidad estadística del sistema.
+    en: Sums all Boltzmann weights and condenses the system statistical accessibility.
+  constraints:
+    es: Temperatura absoluta positiva, microestados definidos y energías expresadas en joules.
+    en: Positive absolute temperature, defined microstates, and energies expressed in joules.
+  validity:
+    es: Válida para un sistema en equilibrio canónico con baño térmico a temperatura fija.
+    en: Valid for a system in canonical equilibrium with a thermal bath at fixed temperature.
+  dimension_check:
+    status: ok
+    expected_dimension: '1'
+    notes:
+      es: La combinación de unidades respeta la dimensión del resultado.
+      en: The unit combination respects the result dimension.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - peso_boltzmann
+  - energia_microestado
+  - beta
+  interpretation_tags:
+  - canonical
+  - partition_function
+  - boltzmann_weights
+  result_semantics:
+    target: funcion_particion
+    kind: scalar
+    sign_meaning:
+      es: El signo físico procede de la magnitud calculada; Z y probabilidades no son negativas.
+      en: The physical sign comes from the computed quantity; Z and probabilities are nonnegative.
+    absolute_value_meaning:
+      es: El valor absoluto indica tamaño relativo dentro del modelo canónico.
+      en: The absolute value indicates relative size within the canonical model.
+  domain_checks:
+  - id: funcion_particion_canonica_temperature_positive
+    condition: temperatura > 0
+    status: required
+    text:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  coherence_checks:
+  - id: funcion_particion_canonica_units
+    status: ok
+    text:
+      es: Revisa que energía, temperatura y constante de Boltzmann estén en SI.
+      en: Check that energy, temperature, and Boltzmann constant are in SI.
+  graph_implications:
+    es: La gráfica muestra cómo cambia la contribución estadística al variar la energía de microestado o beta.
+    en: The graph shows how the statistical contribution changes as microstate energy or beta varies.
+  pedagogical_triggers:
+  - es: Si Z se interpreta como energía, recordar que es una suma adimensional de pesos.
+    en: If Z is read as energy, remember that it is a dimensionless sum of weights.
+- id: probabilidad_microestado_canonico
+  title:
+    es: Probabilidad canónica de microestado
+    en: Canonical microstate probability
+  equation: probabilidad_microestado=peso_boltzmann/funcion_particion
+  latex: p_i=\frac{e^{-\beta E_i}}{Z}
+  rearrangements:
+  - id: probabilidad_microestado_canonico_base
+    equation: probabilidad_microestado=peso_boltzmann/funcion_particion
+    latex: p_i=\frac{e^{-\beta E_i}}{Z}
+    target: probabilidad_microestado
+  - id: peso_desde_probabilidad
+    equation: peso_boltzmann=probabilidad_microestado*funcion_particion
+    latex: w_i=p_i Z
+    target: peso_boltzmann
+  category: termodinamica-estadistica
+  relation_type: derivada
+  physical_meaning:
+    es: Normaliza cada peso para convertirlo en probabilidad física de ocupación.
+    en: Normalizes each weight into a physical occupation probability.
+  constraints:
+    es: Temperatura absoluta positiva, microestados definidos y energías expresadas en joules.
+    en: Positive absolute temperature, defined microstates, and energies expressed in joules.
+  validity:
+    es: Válida para un sistema en equilibrio canónico con baño térmico a temperatura fija.
+    en: Valid for a system in canonical equilibrium with a thermal bath at fixed temperature.
+  dimension_check:
+    status: ok
+    expected_dimension: '1'
+    notes:
+      es: La combinación de unidades respeta la dimensión del resultado.
+      en: The unit combination respects the result dimension.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - peso_boltzmann
+  - funcion_particion
+  interpretation_tags:
+  - canonical
+  - partition_function
+  - boltzmann_weights
+  result_semantics:
+    target: probabilidad_microestado
+    kind: scalar
+    sign_meaning:
+      es: El signo físico procede de la magnitud calculada; Z y probabilidades no son negativas.
+      en: The physical sign comes from the computed quantity; Z and probabilities are nonnegative.
+    absolute_value_meaning:
+      es: El valor absoluto indica tamaño relativo dentro del modelo canónico.
+      en: The absolute value indicates relative size within the canonical model.
+  domain_checks:
+  - id: probabilidad_microestado_canonico_temperature_positive
+    condition: temperatura > 0
+    status: required
+    text:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  coherence_checks:
+  - id: probabilidad_microestado_canonico_units
+    status: ok
+    text:
+      es: Revisa que energía, temperatura y constante de Boltzmann estén en SI.
+      en: Check that energy, temperature, and Boltzmann constant are in SI.
+  graph_implications:
+    es: La gráfica muestra cómo cambia la contribución estadística al variar la energía de microestado o beta.
+    en: The graph shows how the statistical contribution changes as microstate energy or beta varies.
+  pedagogical_triggers:
+  - es: Si Z se interpreta como energía, recordar que es una suma adimensional de pesos.
+    en: If Z is read as energy, remember that it is a dimensionless sum of weights.
+- id: energia_media_canonica
+  title:
+    es: Energía media canónica
+    en: Canonical mean energy
+  equation: energia_media=sum(probabilidad_microestado*energia_microestado)
+  latex: U=\sum_i p_i E_i
+  rearrangements:
+  - id: energia_media_canonica_base
+    equation: energia_media=sum(probabilidad_microestado*energia_microestado)
+    latex: U=\sum_i p_i E_i
+    target: energia_media
+  category: termodinamica-estadistica
+  relation_type: derivada
+  physical_meaning:
+    es: Obtiene el promedio energético ponderado por las probabilidades canónicas.
+    en: Obtains the energy average weighted by canonical probabilities.
+  constraints:
+    es: Temperatura absoluta positiva, microestados definidos y energías expresadas en joules.
+    en: Positive absolute temperature, defined microstates, and energies expressed in joules.
+  validity:
+    es: Válida para un sistema en equilibrio canónico con baño térmico a temperatura fija.
+    en: Valid for a system in canonical equilibrium with a thermal bath at fixed temperature.
+  dimension_check:
+    status: ok
+    expected_dimension: M L^2 T^-2
+    notes:
+      es: La combinación de unidades respeta la dimensión del resultado.
+      en: The unit combination respects the result dimension.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - probabilidad_microestado
+  - energia_microestado
+  interpretation_tags:
+  - canonical
+  - partition_function
+  - boltzmann_weights
+  result_semantics:
+    target: energia_media
+    kind: scalar
+    sign_meaning:
+      es: El signo físico procede de la magnitud calculada; Z y probabilidades no son negativas.
+      en: The physical sign comes from the computed quantity; Z and probabilities are nonnegative.
+    absolute_value_meaning:
+      es: El valor absoluto indica tamaño relativo dentro del modelo canónico.
+      en: The absolute value indicates relative size within the canonical model.
+  domain_checks:
+  - id: energia_media_canonica_temperature_positive
+    condition: temperatura > 0
+    status: required
+    text:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  coherence_checks:
+  - id: energia_media_canonica_units
+    status: ok
+    text:
+      es: Revisa que energía, temperatura y constante de Boltzmann estén en SI.
+      en: Check that energy, temperature, and Boltzmann constant are in SI.
+  graph_implications:
+    es: La gráfica muestra cómo cambia la contribución estadística al variar la energía de microestado o beta.
+    en: The graph shows how the statistical contribution changes as microstate energy or beta varies.
+  pedagogical_triggers:
+  - es: Si Z se interpreta como energía, recordar que es una suma adimensional de pesos.
+    en: If Z is read as energy, remember that it is a dimensionless sum of weights.

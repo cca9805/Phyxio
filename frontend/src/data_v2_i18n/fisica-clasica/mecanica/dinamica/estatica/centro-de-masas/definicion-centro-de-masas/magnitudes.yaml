@@ -1,0 +1,441 @@
+version: 5
+magnitudes:
+  - id: m1
+    symbol: m_1
+    nombre:
+      es: masa del cuerpo 1
+      en: mass of body 1
+    descripcion:
+      es: Masa del primer cuerpo en el modelo introductorio de dos masas sobre un eje.
+      en: Mass of the first body in the introductory two-body model on one axis.
+    unidad_si: kg
+    dimension: M
+    is_vector: false
+    components: null
+    category: fundamental
+    physical_role: inertia_parameter
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Intercambiarla con la masa del segundo cuerpo o usarla con unidades distintas.
+      en: Swapping it with the second body's mass or using inconsistent units.
+    typical_range:
+      es: 10^-3 a 10^6 kg
+      en: 10^-3 to 10^6 kg
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: En mecánica clásica se introduce como cantidad no negativa.
+        en: In classical mechanics it is entered as a non-negative quantity.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Si vale cero, ese cuerpo deja de contribuir al promedio ponderado.
+        en: If it is zero, that body stops contributing to the weighted average.
+    value_nature:
+      kind: scalar_nonnegative
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for: weighted_contribution
+      secondary_for: total_mass_building
+    graph_binding:
+      channels: [body_1_weight, weighted_shift]
+    pedagogical_notes:
+      es: Conviene compararla siempre con m2 antes de anticipar el resultado.
+      en: It should always be compared with m2 before anticipating the result.
+
+  - id: m2
+    symbol: m_2
+    nombre:
+      es: masa del cuerpo 2
+      en: mass of body 2
+    descripcion:
+      es: Masa del segundo cuerpo en el modelo introductorio.
+      en: Mass of the second body in the introductory model.
+    unidad_si: kg
+    dimension: M
+    is_vector: false
+    components: null
+    category: fundamental
+    physical_role: inertia_parameter
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Tomarla como si afectara solo al denominador y no también al numerador.
+      en: Treating it as if it affected only the denominator and not the numerator too.
+    typical_range:
+      es: 10^-3 a 10^6 kg
+      en: 10^-3 to 10^6 kg
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Se interpreta como una masa no negativa del sistema.
+        en: It is interpreted as a non-negative mass of the system.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Si vale cero, el centro de masas coincide con la contribución del otro cuerpo.
+        en: If it is zero, the center of mass matches the other body's contribution.
+    value_nature:
+      kind: scalar_nonnegative
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for: weighted_contribution
+      secondary_for: total_mass_building
+    graph_binding:
+      channels: [body_2_weight, weighted_shift]
+    pedagogical_notes:
+      es: Su comparación con m1 explica por qué el resultado se sesga hacia una posición.
+      en: Its comparison with m1 explains why the result is biased toward one position.
+
+  - id: x1
+    symbol: x_1
+    nombre:
+      es: posición del cuerpo 1
+      en: position of body 1
+    descripcion:
+      es: Coordenada del primer cuerpo medida respecto al origen elegido.
+      en: Coordinate of the first body measured from the chosen origin.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: state
+    physical_role: position_state
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Cambiarle el signo por olvidar la orientación del eje.
+      en: Changing its sign by forgetting the axis orientation.
+    typical_range:
+      es: 10^-6 a 10^6 m
+      en: 10^-6 to 10^6 m
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica en qué lado del origen se sitúa el cuerpo 1.
+        en: The sign indicates on which side of the origin body 1 lies.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Si x1 vale cero, el primer cuerpo coincide con el origen.
+        en: If x1 is zero, the first body coincides with the origin.
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-inf, +inf)"
+    interpretation_role:
+      primary_for: spatial_location
+      secondary_for: interval_check
+    graph_binding:
+      channels: [body_1_position, x_axis]
+    pedagogical_notes:
+      es: Debe usarse con la misma referencia que x2 y xcm.
+      en: It must be used with the same frame as x2 and xcm.
+
+  - id: x2
+    symbol: x_2
+    nombre:
+      es: posición del cuerpo 2
+      en: position of body 2
+    descripcion:
+      es: Coordenada del segundo cuerpo medida sobre el mismo eje que x1.
+      en: Coordinate of the second body measured on the same axis as x1.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: state
+    physical_role: position_state
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Sustituir una distancia entre cuerpos en lugar de la coordenada x2.
+      en: Substituting a distance between bodies instead of the coordinate x2.
+    typical_range:
+      es: 10^-6 a 10^6 m
+      en: 10^-6 to 10^6 m
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Su signo depende solo del sistema de referencia elegido.
+        en: Its sign depends only on the chosen frame of reference.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: x2 = 0 coloca el segundo cuerpo en el origen.
+        en: x2 = 0 places the second body at the origin.
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-inf, +inf)"
+    interpretation_role:
+      primary_for: spatial_location
+      secondary_for: interval_check
+    graph_binding:
+      channels: [body_2_position, x_axis]
+    pedagogical_notes:
+      es: Su lectura aislada no basta; importa cómo se compara con x1.
+      en: Reading it in isolation is not enough; what matters is how it compares with x1.
+
+  - id: xcm
+    symbol: x_{cm}
+    nombre:
+      es: coordenada del centro de masas
+      en: center-of-mass coordinate
+    descripcion:
+      es: Posición representativa del sistema obtenida como promedio ponderado por masa.
+      en: Representative position of the system obtained as a mass-weighted average.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: result
+    physical_role: position_state
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Confundirla con el punto medio aunque m1 y m2 sean distintas.
+      en: Confusing it with the midpoint even when m1 and m2 differ.
+    typical_range:
+      es: 10^-6 a 10^6 m
+      en: 10^-6 to 10^6 m
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica el lado del origen en el que queda la posición colectiva.
+        en: The sign indicates on which side of the origin the collective position lies.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: xcm = 0 significa que el centro de masas coincide con el origen elegido.
+        en: xcm = 0 means the center of mass coincides with the chosen origin.
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-inf, +inf)"
+    interpretation_role:
+      primary_for: collective_position
+      secondary_for: model_validation
+    graph_binding:
+      channels: [center_of_mass_marker, x_axis]
+    pedagogical_notes:
+      es: Hay que leerla comparándola con x1 y x2, no como un número aislado.
+      en: It must be read against x1 and x2, not as an isolated number.
+
+  - id: M
+    symbol: M
+    nombre:
+      es: masa total
+      en: total mass
+    descripcion:
+      es: Suma de las masas del sistema usado para normalizar la definición de xcm.
+      en: Sum of the system masses used to normalize the definition of xcm.
+    unidad_si: kg
+    dimension: M
+    is_vector: false
+    components: null
+    category: fundamental
+    physical_role: inertia_parameter
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Usar solo una masa en el denominador o dejar fuera parte del sistema.
+      en: Using only one mass in the denominator or leaving part of the system out.
+    typical_range:
+      es: 10^-3 a 10^6 kg
+      en: 10^-3 to 10^6 kg
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: En este contexto su valor debe ser no negativo y, para calcular, estrictamente positivo.
+        en: In this context it must be non-negative and, for calculation, strictly positive.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Si M vale cero, la definición operativa deja de ser utilizable.
+        en: If M is zero, the operational definition stops being usable.
+    value_nature:
+      kind: scalar_nonnegative
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for: normalization
+      secondary_for: system_definition
+    graph_binding:
+      channels: [denominator_scale, weighted_shift]
+    pedagogical_notes:
+      es: Comprobar M antes de dividir evita muchos errores algebraicos.
+      en: Checking M before dividing prevents many algebraic mistakes.
+
+  - id: Mxcm
+    symbol: M x_{cm}
+    nombre:
+      es: momento espacial total en una dimensión
+      en: total spatial moment in one dimension
+    descripcion:
+      es: Producto que resume la suma ponderada de aportes espaciales respecto al origen.
+      en: Product that summarizes the weighted sum of spatial contributions with respect to the origin.
+    unidad_si: kg·m
+    dimension: M L
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: structural_relation
+    used_in: [formulas, theory, models]
+    common_mistake:
+      es: Confundirlo con una posición cuando sigue teniendo dimensión de masa por longitud.
+      en: Mistaking it for a position even though it still has dimensions of mass times length.
+    typical_range:
+      es: Depende del origen y de la escala espacial del sistema.
+      en: It depends on the origin and on the spatial scale of the system.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Su signo sigue la orientación espacial del centro de masas respecto al origen.
+        en: Its sign follows the spatial orientation of the center of mass with respect to the origin.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Si vale cero, el balance ponderado respecto al origen se anula.
+        en: If it is zero, the weighted balance with respect to the origin vanishes.
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-inf, +inf)"
+    interpretation_role:
+      primary_for: structural_reading
+      secondary_for: weighted_sum
+    graph_binding:
+      channels: [weighted_lever_balance]
+    pedagogical_notes:
+      es: Ayuda a ver que la definición no es un truco algebraico, sino una condensación estructural.
+      en: It helps show that the definition is not an algebraic trick but a structural condensation.
+
+  - id: m_i
+    symbol: m_i
+    nombre:
+      es: masa individual genérica
+      en: generic individual mass
+    descripcion:
+      es: Masa de la partícula i en la formulación general de un sistema discreto.
+      en: Mass of particle i in the general formulation of a discrete system.
+    unidad_si: kg
+    dimension: M
+    is_vector: false
+    components: null
+    category: fundamental
+    physical_role: inertia_parameter
+    used_in: [formulas, theory, models]
+    common_mistake:
+      es: Asumir sin justificar que todas las masas individuales son iguales.
+      en: Assuming without justification that all individual masses are equal.
+    typical_range:
+      es: 10^-3 a 10^6 kg
+      en: 10^-3 to 10^6 kg
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Mantiene el carácter no negativo de la masa en el caso general.
+        en: It preserves the non-negative character of mass in the general case.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Un término con masa nula no contribuye a la suma ponderada.
+        en: A zero-mass term does not contribute to the weighted sum.
+    value_nature:
+      kind: scalar_nonnegative
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for: general_weighting
+      secondary_for: total_mass_building
+    graph_binding:
+      channels: [general_weight]
+    pedagogical_notes:
+      es: La generalización conserva la idea física de peso relativo.
+      en: The generalization preserves the physical idea of relative weight.
+
+  - id: r_i
+    symbol: \vec r_i
+    nombre:
+      es: posición individual genérica
+      en: generic individual position
+    descripcion:
+      es: Vector posición de la partícula i en la definición general.
+      en: Position vector of particle i in the general definition.
+    unidad_si: m
+    dimension: L
+    is_vector: true
+    components: null
+    category: state
+    physical_role: position_state
+    used_in: [formulas, theory, models]
+    common_mistake:
+      es: Mezclar posiciones medidas con orígenes o ejes diferentes.
+      en: Mixing positions measured with different origins or axes.
+    typical_range:
+      es: 10^-6 a 10^6 m
+      en: 10^-6 to 10^6 m
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Cada componente conserva el signo geométrico del marco elegido.
+        en: Each component keeps the geometric sign of the chosen frame.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Un vector nulo indica que esa partícula está en el origen.
+        en: A zero vector indicates that the particle is at the origin.
+    value_nature:
+      kind: vector_state
+      nonnegative_only: false
+      expected_interval: frame-dependent
+    interpretation_role:
+      primary_for: general_geometry
+      secondary_for: vector_average
+    graph_binding:
+      channels: [vector_position]
+    pedagogical_notes:
+      es: Lo decisivo es la coherencia geométrica entre todas las posiciones.
+      en: What matters is geometric consistency across all positions.
+
+  - id: rcm
+    symbol: \vec r_{cm}
+    nombre:
+      es: vector posición del centro de masas
+      en: center-of-mass position vector
+    descripcion:
+      es: Extensión vectorial de la posición del centro de masas en dos o tres dimensiones.
+      en: Vector extension of the center-of-mass position in two or three dimensions.
+    unidad_si: m
+    dimension: L
+    is_vector: true
+    components: null
+    category: result
+    physical_role: position_state
+    used_in: [formulas, theory, models]
+    common_mistake:
+      es: Reducirlo a una sola coordenada cuando el problema ya no es unidimensional.
+      en: Reducing it to a single coordinate when the problem is no longer one-dimensional.
+    typical_range:
+      es: 10^-6 a 10^6 m
+      en: 10^-6 to 10^6 m
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Cada componente mantiene el significado de su eje correspondiente.
+        en: Each component keeps the meaning of its corresponding axis.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Un vector nulo significa que el centro de masas coincide con el origen.
+        en: A zero vector means the center of mass coincides with the origin.
+    value_nature:
+      kind: vector_state
+      nonnegative_only: false
+      expected_interval: frame-dependent
+    interpretation_role:
+      primary_for: collective_vector_position
+      secondary_for: multidimensional_extension
+    graph_binding:
+      channels: [center_of_mass_vector]
+    pedagogical_notes:
+      es: La generalización cambia la notación, no la idea de promedio ponderado.
+      en: The generalization changes notation, not the idea of weighted averaging.

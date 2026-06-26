@@ -1,0 +1,226 @@
+version: 1
+formulas:
+- id: aceleracion_coriolis_aplicada
+  title:
+    es: Aceleracion de Coriolis en aplicaciones
+    en: Acceleration of Coriolis in Applications
+  equation: a_cor = 2*omega*v_rel*sin(alpha)
+  latex: a_{cor}=2\omega v_{rel}\sin\alpha
+  rearrangements:
+  - target: a_cor
+    equation: a_cor = 2*omega*v_rel*sin(alpha)
+    latex: a_{cor}=2\omega v_{rel}\sin\alpha
+    constraints: []
+  - target: omega
+    equation: omega = a_cor/(2*v_rel*sin(alpha))
+    latex: \omega=\frac{a_{cor}}{2v_{rel}\sin\alpha}
+    constraints: []
+  - target: v_rel
+    equation: v_rel = a_cor/(2*omega*sin(alpha))
+    latex: v_{rel}=\frac{a_{cor}}{2\omega\sin\alpha}
+    constraints: []
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Relacion fisica usada en aplicaciones fisicas.
+    en: Relacion fisica usada en aplicaciones fisicas.
+  constraints: Aplicar solo dentro del modelo descrito.
+  validity:
+    es: Valida dentro del dominio de aplicacion del modelo usado.
+    en: Valida dentro del dominio de aplicacion del modelo usado.
+  dimension_check: Comprobar unidades antes de interpretar.
+  calculable: false
+  motivo_no_calculable: null
+  used_in:
+  - aplicaciones-fisicas
+  interpretation_tags:
+  - aplicaciones-fisicas
+  result_semantics:
+    target: a_cor
+    meaning: Resulta util para interpretar a_cor en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: fuerza_desde_aceleracion
+  title:
+    es: Fuerza de Coriolis desde aceleracion
+    en: Coriolis Force from Acceleration
+  equation: F_cor = m*a_cor
+  latex: F_{cor}=m\,a_{cor}
+  rearrangements:
+  - target: F_cor
+    equation: F_cor = m*a_cor
+    latex: F_{cor}=m\,a_{cor}
+    constraints: []
+  - target: m
+    equation: m = F_cor/a_cor
+    latex: m=\frac{F_{cor}}{a_{cor}}
+    constraints: []
+  - target: a_cor
+    equation: a_cor = F_cor/m
+    latex: a_{cor}=\frac{F_{cor}}{m}
+    constraints: []
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Relacion fisica usada en aplicaciones fisicas.
+    en: Relacion fisica usada en aplicaciones fisicas.
+  constraints:
+  - expr: m > 0
+    message:
+      es: La masa debe ser positiva.
+      en: The mass must be positive.
+  validity:
+    es: Valida dentro del dominio de aplicacion del modelo usado.
+    en: Valida dentro del dominio de aplicacion del modelo usado.
+  dimension_check: Comprobar unidades antes de interpretar.
+  calculable: false
+  motivo_no_calculable: null
+  used_in:
+  - aplicaciones-fisicas
+  interpretation_tags:
+  - aplicaciones-fisicas
+  result_semantics:
+    target: F_cor
+    meaning: Resulta util para interpretar F_cor en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: desvio_lateral_aproximado
+  title:
+    es: Desvio lateral aproximado
+    en: Approximate Lateral Drift
+  equation: y = 0.5*a_cor*t^2
+  latex: y\approx\frac{1}{2}a_{cor}t^2
+  rearrangements:
+  - target: y
+    equation: y = 0.5*a_cor*t^2
+    latex: y\approx\frac{1}{2}a_{cor}t^2
+    constraints: []
+  - target: a_cor
+    equation: a_cor = 2*y/(t^2)
+    latex: a_{cor}\approx\frac{2y}{t^2}
+    constraints: []
+  - target: t
+    equation: t = sqrt(2*y/a_cor)
+    latex: t\approx\sqrt{\frac{2y}{a_{cor}}}
+    constraints: []
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Relacion fisica usada en aplicaciones fisicas.
+    en: Relacion fisica usada en aplicaciones fisicas.
+  constraints:
+  - expr: t >= 0
+    message:
+      es: El tiempo debe ser no negativo.
+      en: The time must be non-negative.
+  - expr: a_cor > 0
+    message:
+      es: a_cor debe ser positiva para despejar t.
+      en: a_cor must be positive to solve for t.
+  validity:
+    es: Valida dentro del dominio de aplicacion del modelo usado.
+    en: Valida dentro del dominio de aplicacion del modelo usado.
+  dimension_check: Comprobar unidades antes de interpretar.
+  calculable: false
+  motivo_no_calculable: null
+  used_in:
+  - aplicaciones-fisicas
+  interpretation_tags:
+  - aplicaciones-fisicas
+  result_semantics:
+    target: y
+    meaning: Resulta util para interpretar y en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: criterio_relevancia_conceptual
+  title:
+    es: Criterio de relevancia (conceptual)
+    en: Relevance Criterion (conceptual)
+  equation: a_cor = 2*omega*v_rel*sin(alpha)
+  latex: a_{cor}=2\omega v_{rel}\sin\alpha
+  rearrangements: []
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Relacion fisica usada en aplicaciones fisicas.
+    en: Relacion fisica usada en aplicaciones fisicas.
+  constraints: Aplicar solo dentro del modelo descrito.
+  validity:
+    es: Valida dentro del dominio de aplicacion del modelo usado.
+    en: Valida dentro del dominio de aplicacion del modelo usado.
+  dimension_check: Comprobar unidades antes de interpretar.
+  calculable: false
+  motivo_no_calculable:
+    es: Es un criterio de modelado por orden de magnitud, no una igualdad cerrada
+      para un resultado unico.
+    en: This is an order-of-magnitude modeling criterion, not a closed equation for
+      a unique result.
+  used_in:
+  - aplicaciones-fisicas
+  interpretation_tags:
+  - aplicaciones-fisicas
+  result_semantics:
+    target: a_cor
+    meaning: Resulta util para interpretar a_cor en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.

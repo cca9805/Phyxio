@@ -1,0 +1,133 @@
+version: 5
+topic:
+  id: ligaduras-y-grados-de-libertad
+  title:
+    es: Ligaduras y grados de libertad
+    en: Constraints and Degrees of Freedom
+
+formulas:
+- id: ligadura_holonomica
+  title: { es: Ligadura holónoma, en: Holonomic constraint }
+  equation: phi = 0
+  latex: \phi_\alpha(q_i,t)=0
+  category: restriccion
+  relation_type: ecuacion_de_ligadura
+  physical_meaning:
+    es: Declara una condición geométrica que selecciona las configuraciones físicamente admisibles.
+    en: Declares a geometric condition selecting physically admissible configurations.
+  constraints: [ ligadura_diferenciable ]
+  validity:
+    es: Válida para restricciones integrables expresables sobre configuración y tiempo.
+    en: Valid for integrable constraints expressible over configuration and time.
+  dimension_check: "[phi] = [phi]"
+  calculable: false
+  motivo_no_calculable: { es: "Requiere especificar la función de restricción.", en: "Requires specifying the constraint function." }
+  used_in: [ conteo_grados_libertad, desplazamiento_virtual_admisible, multiplicadores_lagrange ]
+  interpretation_tags: [ ligadura, holonoma, configuracion ]
+  result_semantics:
+    target: phi
+  domain_checks: [ phi_debe_anularse ]
+  coherence_checks: [ no_contar_ligaduras_equivalentes_dos_veces ]
+  graph_implications: "El gráfico debe mostrar que [[phi]]=0 selecciona el subespacio permitido."
+  pedagogical_triggers: [ confundir_condicion_con_fuerza, redundancia ]
+  rearrangements:
+  - target: phi
+    equation: phi
+  variables: [ phi, q, t ]
+
+- id: conteo_grados_libertad
+  title: { es: Conteo de grados de libertad, en: Degree-of-freedom count }
+  equation: f = Nq - C
+  latex: f=N_q-C
+  category: conteo
+  relation_type: reduccion_dimensional
+  physical_meaning:
+    es: Resta ligaduras independientes al número de coordenadas de configuración antes de reducir el modelo.
+    en: Subtracts independent constraints from the number of configuration coordinates before reducing the model.
+  constraints: [ Nq >= 0, C >= 0, C <= Nq ]
+  validity:
+    es: Válida si las ligaduras son independientes en la región estudiada.
+    en: Valid if constraints are independent in the studied region.
+  dimension_check: "[1] = [1]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[Nq]] y [[C]].", en: "Requires [[Nq]] and [[C]]." }
+  used_in: [ teoria, ejemplos, interpretacion ]
+  interpretation_tags: [ grados_de_libertad, independencia, conteo ]
+  result_semantics:
+    target: f
+  domain_checks: [ C <= Nq ]
+  coherence_checks: [ f >= 0 ]
+  graph_implications: "Con [[Nq]] fijo, [[f]] disminuye cuando aumenta [[C]]."
+  pedagogical_triggers: [ sobreconteo, ligaduras_redundantes ]
+  rearrangements:
+  - target: f
+    equation: Nq - C
+  - target: C
+    equation: Nq - f
+  variables: [ f, Nq, C ]
+
+- id: desplazamiento_virtual_admisible
+  title: { es: Condición de desplazamiento virtual admisible, en: Admissible virtual displacement condition }
+  equation: delta_q = 0
+  latex: \sum_i\frac{\partial\phi_\alpha}{\partial q_i}\,\delta q_i=0
+  category: compatibilidad
+  relation_type: condicion_linealizada
+  physical_meaning:
+    es: Determina qué desplazamientos virtuales respetan la ligadura en primer orden.
+    en: Determines which virtual displacements respect the constraint to first order.
+  constraints: [ linealizacion_local ]
+  validity:
+    es: Válida localmente alrededor de una configuración que satisface la ligadura.
+    en: Locally valid around a configuration satisfying the constraint.
+  dimension_check: "[phi] = [phi]"
+  calculable: false
+  motivo_no_calculable: { es: "Requiere derivadas de la ligadura.", en: "Requires derivatives of the constraint." }
+  used_in: [ teoria, modelos, interpretacion ]
+  interpretation_tags: [ desplazamiento_virtual, compatibilidad, jacobiano ]
+  result_semantics:
+    target: delta_q
+  domain_checks: [ configuracion_satisface_phi ]
+  coherence_checks: [ desplazamiento_no_rompe_ligadura ]
+  graph_implications: "El gráfico debe distinguir direcciones permitidas y bloqueadas por la ligadura."
+  pedagogical_triggers: [ confundir_desplazamiento_real_y_virtual ]
+  rearrangements:
+  - target: delta_q
+    equation: delta_q
+  variables: [ phi, q, delta_q ]
+
+- id: multiplicadores_lagrange
+  title: { es: Ecuación con multiplicadores de Lagrange, en: Equation with Lagrange multipliers }
+  equation: lambda = L
+  latex: \frac{d}{dt}\left(\frac{\partial L}{\partial \dot q_i}\right)-\frac{\partial L}{\partial q_i}=\sum_\alpha\lambda_\alpha\frac{\partial\phi_\alpha}{\partial q_i}
+  category: dinamica_con_ligaduras
+  relation_type: ecuacion_aumentada
+  physical_meaning:
+    es: Introduce fuerzas de ligadura mediante multiplicadores sin resolver explícitamente todas las restricciones.
+    en: Introduces constraint forces through multipliers without explicitly solving all constraints.
+  constraints: [ ligaduras_holonomas, derivabilidad ]
+  validity:
+    es: Válida para sistemas lagrangianos con restricciones holónomas tratadas por multiplicadores.
+    en: Valid for Lagrangian systems with holonomic constraints handled by multipliers.
+  dimension_check: "[F_q] = [F_q]"
+  calculable: false
+  motivo_no_calculable: { es: "Requiere [[L]], ligaduras y condiciones iniciales.", en: "Requires [[L]], constraints, and initial conditions." }
+  used_in: [ teoria, modelos, interpretacion ]
+  interpretation_tags: [ multiplicadores, fuerzas_de_ligadura, lagrangiano ]
+  result_semantics:
+    target: lambda
+  domain_checks: [ sistema_no_singular ]
+  coherence_checks: [ lambda_desaparece_si_no_hay_ligadura_activa ]
+  graph_implications: "El gráfico puede mostrar cómo una ligadura activa genera reacción asociada a [[lambda]]."
+  pedagogical_triggers: [ confundir_lambda_con_constante_arbitraria ]
+  rearrangements:
+  - target: lambda
+    equation: lambda
+  variables: [ lambda, L, q, qdot, phi ]
+
+ui:
+  default_formula: conteo_grados_libertad
+  groups:
+  - title: { es: Restricciones, en: Constraints }
+    items: [ ligadura_holonomica, desplazamiento_virtual_admisible ]
+  - title: { es: Conteo y dinámica, en: Counting and dynamics }
+    items: [ conteo_grados_libertad, multiplicadores_lagrange ]

@@ -1,6 +1,11 @@
+export * as aplicaciones from "./aplicaciones/index.js";
 export * as cinematica from "./cinematica/index.js";
 export * as dinamica from "./dinamica/index.js";
+export * as electromagnetismo from "./electromagnetismo/index.js";
 export * as oscilaciones from "./oscilaciones/index.js";
+export * as rotacion from "./rotacion/index.js";
+export * as termodinamica from "./termodinamica/index.js";
+export * as termodinamicaEstadistica from "./termodinamica-estadistica/index.js";
 export * as trabajoYEnergia from "./trabajo-y-energia/index.js";
 export * as cantidadDeMovimiento from "./cantidad-de-movimiento/index.js";
 export * as gravitacion from "./gravitacion/index.js";

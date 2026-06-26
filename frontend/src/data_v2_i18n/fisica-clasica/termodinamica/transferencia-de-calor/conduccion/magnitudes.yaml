@@ -1,0 +1,534 @@
+version: 5.0.0
+magnitudes:
+- id: calor_transferido
+  symbol: Q
+  nombre:
+    es: calor transferido
+    en: transferred heat
+  descripcion:
+    es: Energía térmica que atraviesa el material durante un intervalo de tiempo.
+    en: Thermal energy crossing the material during a time interval.
+  unidad_si: J
+  dimension: '[M L^2 T^-2]'
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: calculable
+  used_in:
+  - calor_potencia_tiempo
+  common_mistake: Confundir calor transferido con temperatura.
+  typical_range: Desde J hasta MJ según el sistema y el tiempo de conducción.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica el sentido elegido para la transferencia de energía.
+      en: The sign indicates the chosen direction of energy transfer.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: No hay transferencia neta de calor en el intervalo considerado.
+      en: There is no net heat transfer over the considered interval.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Depende del convenio de signos; su valor absoluto suele ser no negativo.
+  interpretation_role:
+    primary_for:
+    - balance_energetico
+    secondary_for:
+    - estimacion_de_perdidas_termicas
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: Es una energía en tránsito, no una propiedad almacenada como la temperatura.
+    en: It is energy in transit, not a stored property like temperature.
+- id: tiempo
+  symbol: t
+  nombre:
+    es: tiempo
+    en: time
+  descripcion:
+    es: Intervalo durante el cual se produce la conducción térmica.
+    en: Interval during which thermal conduction occurs.
+  unidad_si: s
+  dimension: '[T]'
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: input
+  used_in:
+  - calor_potencia_tiempo
+  common_mistake: Usar minutos u horas sin convertir a segundos.
+  typical_range: Segundos, minutos u horas según el proceso térmico.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El tiempo físico transcurrido se toma no negativo.
+      en: Elapsed physical time is taken as nonnegative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: En tiempo cero no se acumula calor transferido.
+      en: At zero time no transferred heat accumulates.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: t >= 0
+  interpretation_role:
+    primary_for:
+    - calculo_de_energia_transferida
+    secondary_for:
+    - escala_temporal_del_proceso
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: Solo interviene cuando se pasa de potencia térmica a energía transferida.
+    en: It only appears when converting thermal power into transferred energy.
+- id: potencia_termica
+  symbol: Q̇
+  nombre:
+    es: potencia térmica
+    en: thermal power
+  descripcion:
+    es: Cantidad de calor transferida por unidad de tiempo.
+    en: Amount of heat transferred per unit time.
+  unidad_si: W
+  dimension: '[M L^2 T^-3]'
+  is_vector: false
+  components: []
+  category: transferencia_termica
+  physical_role: calculable
+  used_in:
+  - ley_fourier_conduccion_1d
+  - flujo_potencia_area
+  - calor_potencia_tiempo
+  - potencia_resistencia_termica
+  common_mistake: Confundir potencia térmica con calor total transferido.
+  typical_range: Desde fracciones de W hasta kW en problemas habituales.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del sentido positivo elegido para el flujo de calor.
+      en: The sign depends on the chosen positive direction for heat flow.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: No hay transferencia neta de calor por conducción.
+      en: There is no net heat transfer by conduction.
+  value_nature:
+    kind: scalar_rate
+    nonnegative_only: false
+    expected_interval: Puede ser positiva o negativa según el convenio; el módulo suele usarse en cálculos prácticos.
+  interpretation_role:
+    primary_for:
+    - rapidez_de_transferencia
+    secondary_for:
+    - perdidas_termicas
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: En conducción estacionaria mide cuánta energía térmica atraviesa una sección cada segundo.
+    en: In steady conduction it measures how much thermal energy crosses a section each second.
+- id: flujo_calor
+  symbol: q
+  nombre:
+    es: flujo de calor
+    en: heat flux
+  descripcion:
+    es: Potencia térmica transferida por unidad de área.
+    en: Thermal power transferred per unit area.
+  unidad_si: W/m^2
+  dimension: '[M T^-3]'
+  is_vector: false
+  components: []
+  category: transferencia_termica
+  physical_role: calculable
+  used_in:
+  - flujo_calor_conduccion
+  - flujo_potencia_area
+  common_mistake: Confundir flujo de calor con potencia térmica total.
+  typical_range: Desde W/m^2 en aislamiento hasta kW/m^2 en paredes muy conductoras.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica el sentido del flujo respecto al eje elegido.
+      en: The sign indicates the flow direction relative to the chosen axis.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: No existe flujo neto de calor a través del material.
+      en: There is no net heat flux through the material.
+  value_nature:
+    kind: scalar_density_rate
+    nonnegative_only: false
+    expected_interval: Puede ser positiva o negativa según el eje; el módulo se usa para intensidad.
+  interpretation_role:
+    primary_for:
+    - intensidad_local_de_transferencia
+    secondary_for:
+    - comparacion_entre_materiales
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: Es útil para comparar conducción sin depender del tamaño total del área.
+    en: It is useful for comparing conduction without depending on total area.
+- id: conductividad_termica
+  symbol: k
+  nombre:
+    es: conductividad térmica
+    en: thermal conductivity
+  descripcion:
+    es: Propiedad del material que mide su facilidad para conducir calor.
+    en: Material property measuring how easily it conducts heat.
+  unidad_si: W/(m·K)
+  dimension: '[M L T^-3 Θ^-1]'
+  is_vector: false
+  components: []
+  category: propiedad_material
+  physical_role: input
+  used_in:
+  - ley_fourier_conduccion_1d
+  - flujo_calor_conduccion
+  - resistencia_termica_conduccion
+  common_mistake: Tratarla como constante universal en lugar de propiedad del material.
+  typical_range: 'Aislantes: cerca de 0.02 W/(m·K); metales: decenas o centenas de W/(m·K).'
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Para materiales ordinarios se toma positiva.
+      en: For ordinary materials it is taken as positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un valor cero idealizaría aislamiento perfecto, no realista en conducción ordinaria.
+      en: A zero value would idealize perfect insulation, unrealistic in ordinary conduction.
+  value_nature:
+    kind: material_parameter
+    nonnegative_only: true
+    expected_interval: k > 0
+  interpretation_role:
+    primary_for:
+    - comparacion_de_materiales
+    secondary_for:
+    - aislamiento_termico
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: Mayor conductividad implica mayor transferencia de calor para la misma geometría y diferencia térmica.
+    en: Higher conductivity implies greater heat transfer for the same geometry and thermal difference.
+- id: area
+  symbol: A
+  nombre:
+    es: área transversal
+    en: cross-sectional area
+  descripcion:
+    es: Superficie atravesada por el calor durante la conducción.
+    en: Surface crossed by heat during conduction.
+  unidad_si: m^2
+  dimension: '[L^2]'
+  is_vector: false
+  components: []
+  category: geometria
+  physical_role: input
+  used_in:
+  - ley_fourier_conduccion_1d
+  - flujo_potencia_area
+  - resistencia_termica_conduccion
+  common_mistake: Usar una longitud en lugar de un área.
+  typical_range: Desde cm^2 en muestras pequeñas hasta m^2 en paredes.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El área física se toma no negativa.
+      en: Physical area is taken as nonnegative.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Sin área de paso no hay conducción macroscópica a través de la sección.
+      en: Without crossing area there is no macroscopic conduction through the section.
+  value_nature:
+    kind: geometric_scalar
+    nonnegative_only: true
+    expected_interval: A > 0
+  interpretation_role:
+    primary_for:
+    - escala_geometrica_de_transferencia
+    secondary_for:
+    - calculo_de_potencia_total
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: Duplicar el área duplica la potencia térmica si todo lo demás permanece igual.
+    en: Doubling the area doubles thermal power if everything else remains unchanged.
+- id: espesor
+  symbol: L
+  nombre:
+    es: espesor
+    en: thickness
+  descripcion:
+    es: Distancia que recorre el calor entre las dos caras del material.
+    en: Distance heat travels between the two faces of the material.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: geometria
+  physical_role: input
+  used_in:
+  - gradiente_temperatura_1d
+  - ley_fourier_conduccion_1d
+  - flujo_calor_conduccion
+  - resistencia_termica_conduccion
+  common_mistake: Confundir espesor con área o usar centímetros sin convertir.
+  typical_range: Milímetros en láminas, centímetros en paredes, metros en aislamientos gruesos.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El espesor físico se toma positivo.
+      en: Physical thickness is taken as positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un espesor cero hace inválido el modelo de conducción 1D.
+      en: Zero thickness makes the 1D conduction model invalid.
+  value_nature:
+    kind: geometric_scalar
+    nonnegative_only: true
+    expected_interval: L > 0
+  interpretation_role:
+    primary_for:
+    - distancia_de_conduccion
+    secondary_for:
+    - resistencia_termica
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: A mayor espesor, menor transferencia de calor para la misma diferencia de temperatura.
+    en: Greater thickness reduces heat transfer for the same temperature difference.
+- id: temperatura_caliente
+  symbol: T_{c}
+  nombre:
+    es: temperatura caliente
+    en: hot-side temperature
+  descripcion:
+    es: Temperatura de la cara o región de mayor temperatura.
+    en: Temperature of the face or region with higher temperature.
+  unidad_si: K
+  dimension: '[Θ]'
+  is_vector: false
+  components: []
+  category: termodinamica
+  physical_role: input
+  used_in:
+  - diferencia_temperatura
+  common_mistake: Usar grados Celsius en diferencias mezclados con kelvin sin criterio claro.
+  typical_range: Depende del sistema; en problemas escolares suele estar entre 250 K y 1000 K.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La temperatura absoluta se toma no negativa.
+      en: Absolute temperature is taken as nonnegative.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: El cero absoluto es un límite ideal fuera de problemas ordinarios de conducción.
+      en: Absolute zero is an ideal limit outside ordinary conduction problems.
+  value_nature:
+    kind: thermodynamic_scalar
+    nonnegative_only: true
+    expected_interval: T_c > 0 K
+  interpretation_role:
+    primary_for:
+    - estado_termico_inicial
+    secondary_for:
+    - calculo_de_diferencia_termica
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: En conducción estacionaria se usa para definir la diferencia térmica entre caras.
+    en: In steady conduction it is used to define the thermal difference between faces.
+- id: temperatura_fria
+  symbol: T_{f}
+  nombre:
+    es: temperatura fría
+    en: cold-side temperature
+  descripcion:
+    es: Temperatura de la cara o región de menor temperatura.
+    en: Temperature of the face or region with lower temperature.
+  unidad_si: K
+  dimension: '[Θ]'
+  is_vector: false
+  components: []
+  category: termodinamica
+  physical_role: input
+  used_in:
+  - diferencia_temperatura
+  common_mistake: Olvidar identificar cuál de las dos temperaturas es la menor.
+  typical_range: Depende del sistema; en problemas escolares suele estar entre 200 K y 500 K.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La temperatura absoluta se toma no negativa.
+      en: Absolute temperature is taken as nonnegative.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: El cero absoluto es un límite ideal fuera de problemas ordinarios de conducción.
+      en: Absolute zero is an ideal limit outside ordinary conduction problems.
+  value_nature:
+    kind: thermodynamic_scalar
+    nonnegative_only: true
+    expected_interval: T_f > 0 K
+  interpretation_role:
+    primary_for:
+    - estado_termico_final
+    secondary_for:
+    - calculo_de_diferencia_termica
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: Debe compararse con la temperatura caliente para fijar el sentido físico del calor.
+    en: It must be compared with the hot-side temperature to set the physical direction of heat.
+- id: diferencia_temperatura
+  symbol: \Delta T
+  nombre:
+    es: diferencia de temperatura
+    en: temperature difference
+  descripcion:
+    es: Separación térmica entre la cara caliente y la cara fría.
+    en: Thermal separation between the hot side and the cold side.
+  unidad_si: K
+  dimension: '[Θ]'
+  is_vector: false
+  components: []
+  category: termodinamica
+  physical_role: calculable
+  used_in:
+  - diferencia_temperatura
+  - gradiente_temperatura_1d
+  - ley_fourier_conduccion_1d
+  - flujo_calor_conduccion
+  - potencia_resistencia_termica
+  common_mistake: Restar temperaturas en orden incorrecto y perder el sentido físico.
+  typical_range: Desde décimas de K hasta cientos de K según el problema.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Con la definición habitual T caliente menos T fría, suele ser positiva.
+      en: With the usual hot-minus-cold definition, it is usually positive.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: No hay fuerza térmica neta para la conducción estacionaria.
+      en: There is no net thermal driving force for steady conduction.
+  value_nature:
+    kind: thermodynamic_difference
+    nonnegative_only: true
+    expected_interval: Delta T >= 0 si se define como T_c - T_f
+  interpretation_role:
+    primary_for:
+    - motor_termico_de_la_conduccion
+    secondary_for:
+    - gradiente_termico
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: 'Es la causa macroscópica de la conducción: sin diferencia de temperatura no hay flujo neto.'
+    en: 'It is the macroscopic cause of conduction: without temperature difference there is no net flux.'
+- id: gradiente_temperatura
+  symbol: \frac{\Delta T}{L}
+  nombre:
+    es: gradiente de temperatura
+    en: temperature gradient
+  descripcion:
+    es: Cambio de temperatura por unidad de longitud en la dirección de conducción.
+    en: Temperature change per unit length along the conduction direction.
+  unidad_si: K/m
+  dimension: '[Θ L^-1]'
+  is_vector: false
+  components: []
+  category: termodinamica
+  physical_role: calculable
+  used_in:
+  - gradiente_temperatura_1d
+  common_mistake: Pensar que depende solo de la temperatura y no del espesor.
+  typical_range: Desde K/m pequeños en paredes hasta valores altos en capas delgadas.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del eje elegido; el calor fluye hacia menor temperatura.
+      en: The sign depends on the chosen axis; heat flows toward lower temperature.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Temperatura uniforme y ausencia de conducción neta estacionaria.
+      en: Uniform temperature and absence of net steady conduction.
+  value_nature:
+    kind: spatial_rate
+    nonnegative_only: false
+    expected_interval: Puede tener signo; su módulo mide intensidad térmica espacial.
+  interpretation_role:
+    primary_for:
+    - variacion_espacial_de_temperatura
+    secondary_for:
+    - ley_de_fourier
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: Una misma diferencia de temperatura produce mayor gradiente si ocurre en menos espesor.
+    en: The same temperature difference produces a larger gradient if it occurs over less thickness.
+- id: resistencia_termica
+  symbol: R_{th}
+  nombre:
+    es: resistencia térmica
+    en: thermal resistance
+  descripcion:
+    es: Oposición geométrica y material al paso del calor por conducción.
+    en: Geometric and material opposition to heat transfer by conduction.
+  unidad_si: K/W
+  dimension: '[M^-1 L^-2 T^3 Θ]'
+  is_vector: false
+  components: []
+  category: transferencia_termica
+  physical_role: calculable
+  used_in:
+  - resistencia_termica_conduccion
+  - potencia_resistencia_termica
+  common_mistake: Confundir resistencia térmica con conductividad térmica.
+  typical_range: Pequeña en metales gruesos y grande en aislantes o capas gruesas.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Para materiales ordinarios y geometrías válidas es positiva.
+      en: For ordinary materials and valid geometries it is positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Resistencia cero implicaría conducción ideal ilimitada.
+      en: Zero resistance would imply ideal unlimited conduction.
+  value_nature:
+    kind: derived_scalar
+    nonnegative_only: true
+    expected_interval: R_th > 0
+  interpretation_role:
+    primary_for:
+    - oposicion_a_la_conduccion
+    secondary_for:
+    - analogias_termicas
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: Aumenta con el espesor y disminuye con la conductividad y el área.
+    en: It increases with thickness and decreases with conductivity and area.

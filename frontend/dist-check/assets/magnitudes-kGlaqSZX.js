@@ -1,0 +1,600 @@
+const e=`- id: alpha
+  symbol: α
+  nombre:
+    es: Coeficiente de atenuación
+    en: Attenuation coefficient
+  descripcion:
+    es: "Magnitud que cuantifica la pérdida de energía de una onda por unidad de distancia recorrida en un material, debida a absorción y scattering."
+    en: "Quantity that quantifies the energy loss of a wave per unit distance traveled in a material, due to absorption and scattering."
+  unidad_si: Np/m
+  dimension: "[L⁻¹]"
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role:
+    es: propiedad del material
+    en: material property
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  common_mistake:
+    es: "Confundir alpha con la pérdida total en decibelios; alpha es por metro, mientras que la pérdida total depende de la distancia."
+    en: "Confusing alpha with total loss in decibels; alpha is per meter, while total loss depends on distance."
+  typical_range: "0.1 a 10 Np/m para metales a MHz; 100 a 1000 Np/m para polímeros"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "El coeficiente de atenuación es siempre positivo; un valor negativo indicaría ganancia de energía, lo cual es físicamente imposible en medios pasivos."
+      en: "The attenuation coefficient is always positive; a negative value would indicate energy gain, which is physically impossible in passive media."
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: "Alpha cero indica un medio ideal sin pérdidas, donde la amplitud de la onda se mantiene constante con la distancia."
+      en: "Zero alpha indicates an ideal lossless medium where wave amplitude remains constant with distance."
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "[0, ∞)"
+  interpretation_role:
+    primary_for:
+      - perdida_por_atenuacion
+      - rango_de_deteccion
+    secondary_for:
+      - seleccion_de_frecuencia
+  graph_binding:
+    channels: ["amplitude_decay"]
+  pedagogical_notes:
+    es: "Alpha es la pendiente de la atenuación exponencial. Un alpha alto significa que la señal se debilita rápidamente, limitando la profundidad de inspección en ensayos no destructivos."
+    en: "Alpha is the slope of exponential attenuation. A high alpha means the signal weakens quickly, limiting inspection depth in non-destructive testing."
+
+- id: A0
+  symbol: A₀
+  nombre:
+    es: Amplitud inicial
+    en: Initial amplitude
+  descripcion:
+    es: "Amplitud de la onda en el punto de origen o en la distancia de referencia cero."
+    en: "Amplitude of the wave at the origin point or at zero reference distance."
+  unidad_si: "Pa (presión) o m/s (velocidad de partícula)"
+  dimension: "[M L⁻¹ T⁻²] o [L T⁻¹]"
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role:
+    es: condición inicial
+    en: initial condition
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  common_mistake:
+    es: "Tomar A0 como la amplitud medida en el transductor en lugar de la amplitud real en el medio."
+    en: "Taking A0 as the amplitude measured at the transducer instead of the actual amplitude in the medium."
+  typical_range: "0.1 a 10 MPa para ondas de presión en metales"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "La amplitud es siempre positiva en magnitud; el signo se maneja por separado en la fase de la onda."
+      en: "Amplitude is always positive in magnitude; the sign is handled separately in the wave phase."
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Amplitud cero significa que no hay onda; el modelo de atenuación no tiene sentido sin una onda inicial."
+      en: "Zero amplitude means there is no wave; the attenuation model is meaningless without an initial wave."
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "(0, ∞)"
+  interpretation_role:
+    primary_for:
+      - calibracion_del_sistema
+      - nivel_de_senal
+    secondary_for:
+      - calculo_de_atenuacion
+  graph_binding:
+    channels: ["initial_amplitude"]
+  pedagogical_notes:
+    es: "A0 es la referencia para calcular pérdidas. En la práctica, se determina mediante un bloque patrón del mismo material sin atenuación apreciable."
+    en: "A0 is the reference for calculating losses. In practice, it is determined using a reference block of the same material with negligible attenuation."
+
+- id: A
+  symbol: A
+  nombre:
+    es: Amplitud a distancia x
+    en: Amplitude at distance x
+  descripcion:
+    es: "Amplitud de la onda después de recorrer una distancia x en el material con atenuación."
+    en: "Amplitude of the wave after traveling a distance x in the material with attenuation."
+  unidad_si: "Pa (presión) o m/s (velocidad de partícula)"
+  dimension: "[M L⁻¹ T⁻²] o [L T⁻¹]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role:
+    es: resultado medido
+    en: measured result
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  common_mistake:
+    es: "Omitir el efecto de la dispersión geométrica al interpretar A como solo atenuación del material."
+    en: "Omitting the effect of geometric dispersion when interpreting A as only material attenuation."
+  typical_range: "0.01 a 10 MPa dependiendo de la distancia y alpha"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "La amplitud es siempre positiva en magnitud; su valor decrece con la distancia en medios con atenuación."
+      en: "Amplitude is always positive in magnitude; its value decreases with distance in attenuating media."
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: "Amplitud cero indica que la onda se ha atenuado completamente por debajo del umbral de detección."
+      en: "Zero amplitude indicates the wave has been completely attenuated below the detection threshold."
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "[0, A₀]"
+  interpretation_role:
+    primary_for:
+      - evaluacion_de_perdidas
+      - limite_de_deteccion
+    secondary_for:
+      - caracterizacion_del_material
+  graph_binding:
+    channels: ["amplitude_vs_distance"]
+  pedagogical_notes:
+    es: "A es la magnitud que realmente se mide en el equipo. Su comparación con A0 permite determinar alpha experimentalmente."
+    en: "A is the quantity actually measured on the equipment. Its comparison with A0 allows experimental determination of alpha."
+
+- id: x
+  symbol: x
+  nombre:
+    es: Distancia de propagación
+    en: Propagation distance
+  descripcion:
+    es: "Distancia recorrida por la onda desde el punto de origen hasta el punto de medición."
+    en: "Distance traveled by the wave from the origin point to the measurement point."
+  unidad_si: m
+  dimension: "[L]"
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role:
+    es: variable espacial
+    en: spatial variable
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  common_mistake:
+    es: "Confundir x con el espesor total de la pieza cuando hay reflexiones múltiples."
+    en: "Confusing x with the total thickness of the part when there are multiple reflections."
+  typical_range: "0.001 a 1 m para ensayos industriales"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "La distancia es siempre positiva en la dirección de propagación de la onda."
+      en: "Distance is always positive in the direction of wave propagation."
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: "Distancia cero corresponde al punto de origen donde la amplitud es A0."
+      en: "Zero distance corresponds to the origin point where the amplitude is A0."
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "[0, ∞)"
+  interpretation_role:
+    primary_for:
+      - calculo_de_atenuacion
+      - perfil_de_penetracion
+    secondary_for:
+      - diseño_de_inspeccion
+  graph_binding:
+    channels: ["distance_axis"]
+  pedagogical_notes:
+    es: "x es la variable independiente en la ecuación de atenuación. En ensayos, corresponde a la profundidad o al espesor atravesado."
+    en: "x is the independent variable in the attenuation equation. In testing, it corresponds to depth or thickness traversed."
+
+- id: f
+  symbol: f
+  nombre:
+    es: Frecuencia
+    en: Frequency
+  descripcion:
+    es: "Frecuencia de la onda ultrasónica, que influye tanto en la atenuación como en la dispersión."
+    en: "Frequency of the ultrasonic wave, which influences both attenuation and dispersion."
+  unidad_si: Hz
+  dimension: "[T⁻¹]"
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role:
+    es: parámetro de onda
+    en: wave parameter
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  common_mistake:
+    es: "Asumir que alpha es constante con la frecuencia cuando en realidad aumenta significativamente con f."
+    en: "Assuming alpha is constant with frequency when it actually increases significantly with f."
+  typical_range: "0.5 MHz a 20 MHz para ensayos no destructivos"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "La frecuencia es siempre positiva para ondas físicas reales."
+      en: "Frequency is always positive for real physical waves."
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Frecuencia cero no corresponde a una onda; sería un campo estático."
+      en: "Zero frequency does not correspond to a wave; it would be a static field."
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "(0, ∞)"
+  interpretation_role:
+    primary_for:
+      - seleccion_de_transductor
+      - resolucion_espacial
+    secondary_for:
+      - optimizacion_de_penetracion
+  graph_binding:
+    channels: ["frequency_parameter"]
+  pedagogical_notes:
+    es: "La frecuencia determina un compromiso entre resolución (mayor f) y penetración (menor f) debido a la dependencia de alpha con f."
+    en: "Frequency determines a trade-off between resolution (higher f) and penetration (lower f) due to the dependence of alpha on f."
+
+- id: v_g
+  symbol: v_g
+  nombre:
+    es: Velocidad de grupo
+    en: Group velocity
+  descripcion:
+    es: "Velocidad a la que se propaga la envolvente de un pulso de ondas, afectada por la dispersión."
+    en: "Velocity at which the envelope of a wave packet propagates, affected by dispersion."
+  unidad_si: m/s
+  dimension: "[L T⁻¹]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role:
+    es: propiedad de propagación
+    en: propagation property
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  common_mistake:
+    es: "Confundir v_g con la velocidad de fase v_f; en medios dispersivos son diferentes."
+    en: "Confusing v_g with the phase velocity v_f; in dispersive media they are different."
+  typical_range: "3000 a 6000 m/s para ondas longitudinales en metales"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "La velocidad de grupo es siempre positiva en la dirección de propagación de energía."
+      en: "Group velocity is always positive in the direction of energy propagation."
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Velocidad de grupo cero indicaría que la energía no se propaga, lo cual no ocurre en medios físicos normales."
+      en: "Zero group velocity would indicate that energy does not propagate, which does not occur in normal physical media."
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "(0, ∞)"
+  interpretation_role:
+    primary_for:
+      - propagacion_de_pulsos
+      - analisis_de_dispersion
+    secondary_for:
+      - diseño_de_sistemas
+  graph_binding:
+    channels: ["group_velocity"]
+  pedagogical_notes:
+    es: "v_g determina cómo viaja la información en un pulso. En medios dispersivos, v_g < v_f o v_g > v_f dependiendo de la relación de dispersión."
+    en: "v_g determines how information travels in a pulse. In dispersive media, v_g < v_f or v_g > v_f depending on the dispersion relation."
+
+- id: v_f
+  symbol: v_f
+  nombre:
+    es: Velocidad de fase
+    en: Phase velocity
+  descripcion:
+    es: "Velocidad a la que se propaga un punto de fase constante de la onda, afectada por la dispersión."
+    en: "Velocity at which a constant phase point of the wave propagates, affected by dispersion."
+  unidad_si: m/s
+  dimension: "[L T⁻¹]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role:
+    es: propiedad de propagación
+    en: propagation property
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  common_mistake:
+    es: "Usar v_f en lugar de v_g para calcular el tiempo de llegada de pulsos en medios dispersivos."
+    en: "Using v_f instead of v_g to calculate arrival time of pulses in dispersive media."
+  typical_range: "3000 a 6000 m/s para ondas longitudinales en metales"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "La velocidad de fase es siempre positiva en la dirección de propagación de la fase."
+      en: "Phase velocity is always positive in the direction of phase propagation."
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Velocidad de fase cero no tiene sentido físico para ondas propagantes."
+      en: "Zero phase velocity has no physical meaning for propagating waves."
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "(0, ∞)"
+  interpretation_role:
+    primary_for:
+      - analisis_de_dispersion
+      - propagacion_de_fase
+    secondary_for:
+      - caracterizacion_de_medios
+  graph_binding:
+    channels: ["phase_velocity"]
+  pedagogical_notes:
+    es: "v_f es importante para fenómenos de interferencia. La diferencia v_g - v_f causa distorsión de pulsos en medios dispersivos."
+    en: "v_f is important for interference phenomena. The difference v_g - v_f causes pulse distortion in dispersive media."
+
+- id: L_d
+  symbol: L_d
+  nombre:
+    es: Longitud de atenuación
+    en: Attenuation length
+  descripcion:
+    es: "Distancia característica a la cual la amplitud de la onda se reduce a 1/e de su valor inicial."
+    en: "Characteristic distance at which the wave amplitude reduces to 1/e of its initial value."
+  unidad_si: m
+  dimension: "[L]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role:
+    es: escala característica
+    en: characteristic scale
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  common_mistake:
+    es: "Confundir L_d con la profundidad máxima de detección, que depende del umbral del equipo."
+    en: "Confusing L_d with maximum detection depth, which depends on equipment threshold."
+  typical_range: "0.01 a 10 m dependiendo del material y frecuencia"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "La longitud de atenuación es siempre positiva; valores más pequeños indican mayor atenuación."
+      en: "Attenuation length is always positive; smaller values indicate higher attenuation."
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Longitud de atenuación cero implicaría atenuación infinita, lo cual no es físico."
+      en: "Zero attenuation length would imply infinite attenuation, which is not physical."
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "(0, ∞)"
+  interpretation_role:
+    primary_for:
+      - evaluacion_de_penetracion
+      - comparacion_de_materiales
+    secondary_for:
+      - diseño_de_inspeccion
+  graph_binding:
+    channels: ["attenuation_length"]
+  pedagogical_notes:
+    es: "L_d es inversamente proporcional a alpha. Es una medida intuitiva de qué tan lejos puede viajar la onda antes de atenuarse significativamente."
+    en: "L_d is inversely proportional to alpha. It is an intuitive measure of how far the wave can travel before significant attenuation."
+
+- id: L_db
+  symbol: L_db
+  nombre:
+    es: Pérdida en decibelios
+    en: Loss in decibels
+  descripcion:
+    es: "Pérdida de amplitud expresada en escala logarítmica de decibelios, común en ingeniería de ultrasonidos."
+    en: "Amplitude loss expressed in logarithmic decibel scale, common in ultrasound engineering."
+  unidad_si: dB
+  dimension: "adimensional"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role:
+    es: medida de pérdida
+    en: loss measure
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  common_mistake:
+    es: "Confundir L_db con la pérdida lineal; 20 dB corresponden a una reducción de amplitud de 10 veces."
+    en: "Confusing L_db with linear loss; 20 dB corresponds to a 10 times amplitude reduction."
+  typical_range: "0 a 80 dB para ensayos industriales típicos"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "La pérdida en dB es siempre positiva o cero; valores mayores indican mayor atenuación."
+      en: "Loss in dB is always positive or zero; higher values indicate greater attenuation."
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: "L_db cero indica que no hay pérdida de amplitud entre A0 y A."
+      en: "Zero L_db indicates no amplitude loss between A0 and A."
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "[0, ∞)"
+  interpretation_role:
+    primary_for:
+      - evaluacion_de_perdidas
+      - especificaciones_de_equipo
+    secondary_for:
+      - comparacion_de_frecuencias
+  graph_binding:
+    channels: ["loss_db"]
+  pedagogical_notes:
+    es: "L_db permite comparar pérdidas en diferentes escalas. Es útil porque el oído humano percibe el sonido logarítmicamente."
+    en: "L_db allows comparing losses on different scales. It's useful because human hearing perceives sound logarithmically."
+
+- id: alpha_0
+  symbol: α₀
+  nombre:
+    es: Coeficiente de atenuación de referencia
+    en: Reference attenuation coefficient
+  descripcion:
+    es: "Valor del coeficiente de atenuación en una frecuencia de referencia f₀, usado para modelar la dependencia con la frecuencia."
+    en: "Value of the attenuation coefficient at a reference frequency f₀, used to model frequency dependence."
+  unidad_si: Np/m
+  dimension: "[L⁻¹]"
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role:
+    es: parámetro de modelo
+    en: model parameter
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  common_mistake:
+    es: "Asumir alpha_0 como el valor a frecuencia cero, cuando realmente es a una frecuencia de referencia finita."
+    en: "Assuming alpha_0 as the value at zero frequency, when it's actually at a finite reference frequency."
+  typical_range: "0.1 a 100 Np/m dependiendo del material y f₀"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "El coeficiente de referencia es siempre positivo; es la base para calcular alpha a otras frecuencias."
+      en: "The reference coefficient is always positive; it's the basis for calculating alpha at other frequencies."
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: "Alpha_0 cero indica que el material no tiene atenuación en la frecuencia de referencia."
+      en: "Zero alpha_0 indicates the material has no attenuation at the reference frequency."
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "[0, ∞)"
+  interpretation_role:
+    primary_for:
+      - modelado_de_frecuencia
+      - extrapolacion_de_datos
+    secondary_for:
+      - seleccion_de_frecuencia_optima
+  graph_binding:
+    channels: ["reference_attenuation"]
+  pedagogical_notes:
+    es: "Alpha_0 es la constante en la ley de potencias que describe cómo varía la atenuación con la frecuencia."
+    en: "Alpha_0 is the constant in the power law that describes how attenuation varies with frequency."
+
+- id: f_0
+  symbol: f₀
+  nombre:
+    es: Frecuencia de referencia
+    en: Reference frequency
+  descripcion:
+    es: "Frecuencia de referencia utilizada para normalizar la dependencia del coeficiente de atenuación con la frecuencia."
+    en: "Reference frequency used to normalize the frequency dependence of the attenuation coefficient."
+  unidad_si: Hz
+  dimension: "[T⁻¹]"
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role:
+    es: parámetro de normalización
+    en: normalization parameter
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  common_mistake:
+    es: "Confundir f_0 con la frecuencia de resonancia del material; es solo una referencia arbitraria."
+    en: "Confusing f_0 with the material's resonance frequency; it's just an arbitrary reference."
+  typical_range: "1 MHz a 10 MHz para caracterización de materiales"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "La frecuencia de referencia es siempre positiva; sirve como punto de anclaje para el modelo."
+      en: "The reference frequency is always positive; it serves as an anchor point for the model."
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Frecuencia cero no sería útil como referencia para modelar la dependencia con la frecuencia."
+      en: "Zero frequency would not be useful as a reference for modeling frequency dependence."
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "(0, ∞)"
+  interpretation_role:
+    primary_for:
+      - normalizacion_de_modelos
+      - comparacion_de_materiales
+    secondary_for:
+      - analisis_de_tendencias
+  graph_binding:
+    channels: ["reference_frequency"]
+  pedagogical_notes:
+    es: "f_0 permite expresar la dependencia de alpha con la frecuencia como una relación adimensional f/f_0."
+    en: "f_0 allows expressing the dependence of alpha with frequency as a dimensionless ratio f/f_0."
+
+- id: n
+  symbol: n
+  nombre:
+    es: Exponente de frecuencia
+    en: Frequency exponent
+  descripcion:
+    es: "Exponente que describe cómo varía el coeficiente de atenuación con la frecuencia en el modelo de potencia."
+    en: "Exponent that describes how the attenuation coefficient varies with frequency in the power law model."
+  unidad_si: adimensional
+  dimension: "adimensional"
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role:
+    es: exponente de modelo
+    en: model exponent
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  common_mistake:
+    es: "Asumir n = 1 para todos los materiales; el exponente depende del mecanismo de atenuación dominante."
+    en: "Assuming n = 1 for all materials; the exponent depends on the dominant attenuation mechanism."
+  typical_range: "1 a 4 para materiales sólidos típicos"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: "El exponente es siempre positivo; valores mayores indican dependencia más fuerte con la frecuencia."
+      en: "The exponent is always positive; higher values indicate stronger frequency dependence."
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: "Exponente cero indicaría que alpha no depende de la frecuencia, lo cual es raro en la práctica."
+      en: "Zero exponent would indicate alpha doesn't depend on frequency, which is rare in practice."
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "(0, ∞)"
+  interpretation_role:
+    primary_for:
+      - caracterizacion_de_mecanismos
+      - prediccion_de_comportamiento
+    secondary_for:
+      - optimizacion_de_frecuencia
+  graph_binding:
+    channels: ["frequency_exponent"]
+  pedagogical_notes:
+    es: "El valor de n revela el mecanismo físico dominante: n≈1 para viscosidad, n≈2 para scattering, n≈4 para scattering Rayleigh."
+    en: "The value of n reveals the dominant physical mechanism: n≈1 for viscosity, n≈2 for scattering, n≈4 for Rayleigh scattering."
+`;export{e as default};

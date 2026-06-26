@@ -1,0 +1,188 @@
+version: v5
+id: interpretacion-cuerdas
+leaf_id: cuerdas
+nombre:
+  es: Interpretacion de cuerdas estacionarias
+  en: Interpretation of standing strings
+scope:
+  area: fisica-clasica
+  bloque: ondas
+  subbloque: ondas-estacionarias
+  parent_id: ejemplos-clasicos
+  ruta_relativa: fisica-clasica/ondas/ondas-estacionarias/ejemplos-clasicos/cuerdas
+ui:
+  enabled: true
+  display_modes: [calculator_inline, graph_inline, dedicated_tab, modal]
+  labels:
+    es: Lectura fisica
+    en: Physical reading
+  priority_order: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  inline_limits:
+    max_messages: 4
+dependencies:
+  formulas: [velocidad_cuerda_tensa, frecuencia_modo_cuerda, longitud_onda_modo_cuerda]
+  magnitudes: [L, T, mu, v, n, lambda_n, f_n]
+global_context:
+  physical_domain:
+    es: "Ondas estacionarias transversales en cuerdas tensas con extremos fijos."
+    en: "Transverse standing waves on taut strings with fixed ends."
+  axis_convention:
+    es: "El eje horizontal representa posicion sobre la cuerda y el eje vertical desplazamiento transversal."
+    en: "The horizontal axis represents position along the string and the vertical axis transverse displacement."
+  standard_assumptions:
+    - { es: "Cuerda flexible, homogenea y de amplitud pequena.", en: "Flexible, homogeneous string with small amplitude." }
+    - { es: "Tension casi uniforme durante la oscilacion.", en: "Nearly uniform tension during the oscillation." }
+  standard_warnings:
+    - { es: "Los modos no enteros no son frecuencias propias de una cuerda fija-fija.", en: "Noninteger modes are not natural frequencies of a fixed-fixed string." }
+    - { es: "Una cuerda real rigida o amortiguada desplaza ligeramente las frecuencias.", en: "A real stiff or damped string slightly shifts the frequencies." }
+result_blocks:
+  summary: { enabled: true, order: 1, title: { es: Resumen, en: Summary } }
+  physical_reading: { enabled: true, order: 2, title: { es: Lectura fisica, en: Physical reading } }
+  coherence: { enabled: true, order: 3, title: { es: Coherencia, en: Coherence } }
+  model_validity: { enabled: true, order: 4, title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { enabled: true, order: 5, title: { es: Lectura del grafico, en: Graph reading } }
+  likely_errors: { enabled: true, order: 6, title: { es: Errores probables, en: Likely errors } }
+  next_step: { enabled: true, order: 7, title: { es: Siguiente paso, en: Next step } }
+targets:
+  L:
+    magnitude_type: parameter
+    semantic_role: { es: longitud que fija el espacio modal, en: length that fixes modal space }
+    summary_rules:
+      - { id: L_sum, when: "true", status: ok, text: { es: "[[L]] indica el tramo vibrante y resume cuanto espacio tienen los modos para equilibrar nodos y vientres.", en: "[[L]] indicates the vibrating span and describes how much space the modes have to balance nodes and antinodes." } }
+    physical_reading_rules:
+      - { id: L_read, when: "true", status: ok, text: { es: "Al crecer [[L]], el mismo modo necesita mas recorrido espacial y por eso baja la frecuencia propia.", en: "When [[L]] grows, the same mode needs more spatial span and therefore its natural frequency decreases." } }
+    coherence_rules:
+      - { id: L_coh, when: "L > 0", status: ok, text: { es: "[[L]] positiva permite dos extremos separados y una cuerda vibrante reconocible.", en: "Positive [[L]] allows separated ends and a recognizable vibrating string." } }
+    model_validity_rules:
+      - { id: L_val, when: "true", status: ok, text: { es: "La lectura es valida si los extremos se comportan aproximadamente como nodos; deja de valer si el apoyo se mueve o resbala.", en: "The reading is valid if the ends behave approximately as nodes; it breaks down if the support moves or slips." } }
+    graph_rules:
+      - { id: L_graph, when: "true", status: ok, text: { es: "En el grafico, [[L]] es la anchura horizontal entre los dos nodos extremos.", en: "On the graph, [[L]] is the horizontal width between the two end nodes." } }
+    likely_errors:
+      - { id: L_err, when: "true", status: warning, text: { es: "Error tipico: usar la longitud total de cuerda sobrante en vez del tramo vibrante [[L]].", en: "Typical mistake: using the total spare string length instead of the vibrating span [[L]]." } }
+    next_step_rules:
+      - { id: L_next, when: "true", status: ok, text: { es: "Compara [[L]] con [[lambda_n]] para verificar cuantas semilongitudes caben.", en: "Compare [[L]] with [[lambda_n]] to check how many half-wavelengths fit." } }
+  T:
+    magnitude_type: parameter
+    semantic_role: { es: traccion que acelera la propagacion, en: pull that speeds propagation }
+    summary_rules:
+      - { id: T_sum, when: "true", status: ok, text: { es: "[[T]] indica la traccion mecanica que domina la rapidez de propagacion junto con la inercia lineal.", en: "[[T]] indicates the mechanical pull that dominates propagation speed together with linear inertia." } }
+    physical_reading_rules:
+      - { id: T_read, when: "true", status: ok, text: { es: "Mayor [[T]] transmite mas eficazmente la perturbacion transversal, asi que eleva [[v]] y eleva [[f_n]].", en: "Larger [[T]] transmits the transverse disturbance more effectively, so it raises [[v]] and [[f_n]]." } }
+    coherence_rules:
+      - { id: T_coh, when: "T > 0", status: ok, text: { es: "[[T]] positiva es coherente con una cuerda estirada.", en: "Positive [[T]] is coherent with a stretched string." } }
+    model_validity_rules:
+      - { id: T_val, when: "true", status: ok, text: { es: "El modelo asume [[T]] uniforme y amplitud pequena; deja de valer si la oscilacion cambia apreciablemente la tension.", en: "The model assumes uniform [[T]] and small amplitude; it breaks down if oscillation noticeably changes the tension." } }
+    graph_rules:
+      - { id: T_graph, when: "true", status: ok, text: { es: "En el grafico, subir [[T]] aumenta la frecuencia marcada sin cambiar el numero de vientres.", en: "On the graph, raising [[T]] increases the marked frequency without changing the antinode count." } }
+    likely_errors:
+      - { id: T_err, when: "true", status: warning, text: { es: "Error tipico: esperar proporcionalidad directa entre [[T]] y [[f_n]] en vez de una dependencia por raiz.", en: "Typical mistake: expecting direct proportionality between [[T]] and [[f_n]] instead of square-root dependence." } }
+    next_step_rules:
+      - { id: T_next, when: "true", status: ok, text: { es: "Revisa [[mu]] antes de atribuir toda la afinacion solo a la tension.", en: "Review [[mu]] before assigning all tuning only to tension." } }
+  mu:
+    magnitude_type: parameter
+    semantic_role: { es: inercia lineal de la cuerda, en: linear inertia of the string }
+    summary_rules:
+      - { id: mu_sum, when: "true", status: ok, text: { es: "[[mu]] describe cuanta masa debe moverse por metro y depende del material y del grosor de la cuerda.", en: "[[mu]] describes how much mass must move per metre and depends on material and string thickness." } }
+    physical_reading_rules:
+      - { id: mu_read, when: "true", status: ok, text: { es: "Al aumentar [[mu]], la misma [[T]] acelera peor la perturbacion y por eso disminuyen [[v]] y [[f_n]].", en: "As [[mu]] increases, the same [[T]] accelerates the disturbance less effectively, so [[v]] and [[f_n]] decrease." } }
+    coherence_rules:
+      - { id: mu_coh, when: "mu > 0", status: ok, text: { es: "[[mu]] positiva representa una cuerda con masa distribuida.", en: "Positive [[mu]] represents a string with distributed mass." } }
+    model_validity_rules:
+      - { id: mu_val, when: "true", status: ok, text: { es: "La lectura es valida si [[mu]] es casi uniforme; falla si la cuerda tiene entorchado irregular o cambios de seccion.", en: "The reading is valid if [[mu]] is nearly uniform; it fails if the string has irregular winding or changing cross-section." } }
+    graph_rules:
+      - { id: mu_graph, when: "true", status: ok, text: { es: "En el grafico, una [[mu]] mayor comprime la escala de frecuencia manteniendo la forma modal.", en: "On the graph, larger [[mu]] compresses the frequency scale while preserving modal shape." } }
+    likely_errors:
+      - { id: mu_err, when: "true", status: warning, text: { es: "Error tipico: sustituir [[mu]] por masa total sin dividirla entre la longitud vibrante.", en: "Typical mistake: replacing [[mu]] by total mass without dividing by vibrating length." } }
+    next_step_rules:
+      - { id: mu_next, when: "true", status: ok, text: { es: "Calcula [[v]] para ver como la inercia lineal se transforma en escala temporal.", en: "Compute [[v]] to see how linear inertia becomes a time scale." } }
+  v:
+    magnitude_type: derived
+    semantic_role: { es: rapidez que conecta cuerda y frecuencia, en: speed linking string and frequency }
+    summary_rules:
+      - { id: v_sum, when: "true", status: ok, text: { es: "[[v]] indica la rapidez de las ondas viajeras y resume el balance entre [[T]] y [[mu]].", en: "[[v]] indicates the speed of traveling waves and summarizes the balance between [[T]] and [[mu]]." } }
+    physical_reading_rules:
+      - { id: v_read, when: "true", status: ok, text: { es: "Si [[v]] aumenta, la cuerda recorre antes cada longitud modal y por eso sube [[f_n]].", en: "If [[v]] increases, the string covers each modal length sooner, so [[f_n]] rises." } }
+    coherence_rules:
+      - { id: v_coh, when: "v > 0", status: ok, text: { es: "[[v]] positiva es necesaria para propagar perturbaciones transversales.", en: "Positive [[v]] is necessary to propagate transverse disturbances." } }
+    model_validity_rules:
+      - { id: v_val, when: "true", status: ok, text: { es: "El resultado es valido en regimen lineal; deja de valer si hay rigidez, amortiguamiento fuerte o tension variable.", en: "The result is valid in the linear regime; it breaks down with stiffness, strong damping, or variable tension." } }
+    graph_rules:
+      - { id: v_graph, when: "true", status: ok, text: { es: "En el grafico, [[v]] cambia la lectura numerica de frecuencia sin mover los nodos fijos.", en: "On the graph, [[v]] changes the frequency readout without moving the fixed nodes." } }
+    likely_errors:
+      - { id: v_err, when: "true", status: warning, text: { es: "Error tipico: confundir [[v]] de propagacion con la velocidad vertical instantanea de un punto.", en: "Typical mistake: confusing propagation [[v]] with the instantaneous vertical speed of a point." } }
+    next_step_rules:
+      - { id: v_next, when: "true", status: ok, text: { es: "Usa [[v]] junto con [[L]] y [[n]] para leer la frecuencia propia.", en: "Use [[v]] together with [[L]] and [[n]] to read the natural frequency." } }
+  n:
+    magnitude_type: integer_index
+    semantic_role: { es: orden entero del modo, en: integer order of the mode }
+    summary_rules:
+      - { id: n_sum, when: "true", status: ok, text: { es: "[[n]] indica el modo entero y significa cuantos vientres aparecen en una cuerda fija ideal.", en: "[[n]] indicates the integer mode and means how many antinodes appear in an ideal fixed string." } }
+    physical_reading_rules:
+      - { id: n_read, when: "true", status: ok, text: { es: "Mayor [[n]] fuerza mas curvatura espacial, reduce [[lambda_n]] y aumenta [[f_n]] para la misma cuerda.", en: "Larger [[n]] forces more spatial curvature, reduces [[lambda_n]], and increases [[f_n]] for the same string." } }
+    coherence_rules:
+      - { id: n_coh, when: "n >= 1", status: ok, text: { es: "[[n]] coherente debe ser positivo y representar un modo completo.", en: "Coherent [[n]] must be positive and represent a complete mode." } }
+    model_validity_rules:
+      - { id: n_val, when: "true", status: ok, text: { es: "La lectura es valida para modos enteros; deja de valer si se introduce un valor intermedio como frecuencia propia.", en: "The reading is valid for integer modes; it breaks down if an intermediate value is introduced as a natural frequency." } }
+    graph_rules:
+      - { id: n_graph, when: "true", status: ok, text: { es: "En el grafico, [[n]] debe coincidir con el numero de vientres visibles.", en: "On the graph, [[n]] should match the number of visible antinodes." } }
+    likely_errors:
+      - { id: n_err, when: "true", status: warning, text: { es: "Error tipico: usar [[n]] decimal para obligar a la cuerda a una frecuencia no permitida.", en: "Typical mistake: using decimal [[n]] to force the string into a nonallowed frequency." } }
+    next_step_rules:
+      - { id: n_next, when: "true", status: ok, text: { es: "Comprueba que [[lambda_n]] encaje con nodos en ambos extremos.", en: "Check that [[lambda_n]] fits with nodes at both ends." } }
+  lambda_n:
+    magnitude_type: derived
+    semantic_role: { es: escala espacial del modo, en: spatial scale of the mode }
+    summary_rules:
+      - { id: la_sum, when: "true", status: ok, text: { es: "[[lambda_n]] describe la escala espacial completa del modo y depende de [[L]] y [[n]].", en: "[[lambda_n]] describes the full spatial scale of the mode and depends on [[L]] and [[n]]." } }
+    physical_reading_rules:
+      - { id: la_read, when: "true", status: ok, text: { es: "Una [[lambda_n]] menor significa que caben mas alternancias de vientres dentro del mismo tramo.", en: "A smaller [[lambda_n]] means more antinode alternations fit inside the same span." } }
+    coherence_rules:
+      - { id: la_coh, when: "lambda_n > 0", status: ok, text: { es: "[[lambda_n]] positiva conserva una separacion espacial fisica.", en: "Positive [[lambda_n]] preserves physical spatial spacing." } }
+    model_validity_rules:
+      - { id: la_val, when: "true", status: ok, text: { es: "La lectura es valida con extremos fijos idealizados; falla si las fronteras no imponen nodos estables.", en: "The reading is valid with idealized fixed ends; it fails if the boundaries do not impose stable nodes." } }
+    graph_rules:
+      - { id: la_graph, when: "true", status: ok, text: { es: "En el grafico, [[lambda_n]] se reconoce por el espaciamiento de crestas equivalentes.", en: "On the graph, [[lambda_n]] is recognized from spacing between equivalent crests." } }
+    likely_errors:
+      - { id: la_err, when: "true", status: warning, text: { es: "Error tipico: tomar [[lambda_n]] igual a [[L]] para el fundamental.", en: "Typical mistake: taking [[lambda_n]] equal to [[L]] for the fundamental." } }
+    next_step_rules:
+      - { id: la_next, when: "true", status: ok, text: { es: "Relaciona [[lambda_n]] con [[v]] para interpretar la frecuencia modal.", en: "Relate [[lambda_n]] to [[v]] to interpret modal frequency." } }
+  f_n:
+    magnitude_type: derived
+    semantic_role: { es: frecuencia propia seleccionada, en: selected natural frequency }
+    summary_rules:
+      - { id: fn_sum, when: "true", status: ok, text: { es: "[[f_n]] resume la frecuencia resultante del balance entre geometria, tension e inercia lineal.", en: "[[f_n]] summarizes the resulting frequency from the balance of geometry, tension, and linear inertia." } }
+    physical_reading_rules:
+      - { id: fn_read, when: "true", status: ok, text: { es: "[[f_n]] crece si sube [[T]] o [[n]], y disminuye si aumentan [[L]] o [[mu]].", en: "[[f_n]] grows if [[T]] or [[n]] rises, and decreases if [[L]] or [[mu]] increases." } }
+    coherence_rules:
+      - { id: fn_coh, when: "f_n > 0", status: ok, text: { es: "[[f_n]] positiva representa una oscilacion propia posible.", en: "Positive [[f_n]] represents a possible natural oscillation." } }
+    model_validity_rules:
+      - { id: fn_val, when: "true", status: ok, text: { es: "El valor es valido para cuerda ideal lineal; deja de valer con rigidez apreciable, grandes amplitudes o amortiguamiento fuerte.", en: "The value is valid for a linear ideal string; it breaks down with appreciable stiffness, large amplitudes, or strong damping." } }
+    graph_rules:
+      - { id: fn_graph, when: "true", status: ok, text: { es: "En el grafico, [[f_n]] aparece como etiqueta de frecuencia del modo seleccionado.", en: "On the graph, [[f_n]] appears as the frequency label of the selected mode." } }
+    likely_errors:
+      - { id: fn_err, when: "true", status: warning, text: { es: "Error tipico: creer que cualquier frecuencia externa produce un patron estacionario estable.", en: "Typical mistake: believing that any external frequency produces a stable standing pattern." } }
+    next_step_rules:
+      - { id: fn_next, when: "true", status: ok, text: { es: "Compara [[f_n]] con otros modos para construir la serie armonica de la cuerda.", en: "Compare [[f_n]] with other modes to build the harmonic series of the string." } }
+cross_checks:
+  - id: positive_string_parameters
+    condition: "L > 0 and T > 0 and mu > 0"
+    message: { es: "Los parametros mecanicos principales deben ser positivos.", en: "The main mechanical parameters must be positive." }
+error_patterns:
+  - id: noninteger_mode
+    detect_when: "n not integer"
+    message: { es: "Modo no entero detectado.", en: "Noninteger mode detected." }
+graph_binding:
+  preferred_type: Coord
+  target: f_n
+  channels: [L, T, mu, v, n, lambda_n, f_n]
+mini_graph:
+  enabled: true
+  type: Coord
+  target: f_n
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true

@@ -1,0 +1,111 @@
+version: 1
+ui:
+  default_formula: trabajo_torque_constante
+formulas:
+  - id: trabajo_torque_constante
+    title: { es: "Trabajo con torque constante", en: "Work with constant torque" }
+    equation: "W = tau*theta"
+    latex: 'W=\tau\Delta\theta'
+    rearrangements:
+      - target: W
+        equation: "W = tau*theta"
+        latex: 'W=\tau\Delta\theta'
+      - target: tau
+        equation: "tau = W/theta"
+        latex: '\tau=\frac{W}{\Delta\theta}'
+      - target: theta
+        equation: "theta = W/tau"
+        latex: '\Delta\theta=\frac{W}{\tau}'
+    category: "work"
+    relation_type: "definition"
+    physical_meaning: { es: "El trabajo rotacional es torque por desplazamiento angular si el torque es constante.", en: "Rotational work is torque times angular displacement when torque is constant." }
+    constraints: ["torque constante", "theta en radianes", "eje fijo"]
+    validity: { es: "Válida cuando tau no cambia durante el giro considerado.", en: "Valid when tau does not change during the considered turn." }
+    dimension_check: "N m = J"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["teoria", "ejemplos", "interpretacion"]
+    interpretation_tags: ["constant_torque", "signed_work"]
+    result_semantics:
+      target: W
+      kind: signed_scalar
+      sign_meaning: { es: "positivo si el torque favorece el giro elegido", en: "positive if torque favors the chosen rotation" }
+      absolute_value_meaning: { es: "energía transferida por el torque", en: "energy transferred by torque" }
+    domain_checks:
+      - { expr: "true", message: { es: "Revisar que theta esté en radianes.", en: "Check theta is in radians." } }
+    coherence_checks:
+      - { expr: "true", message: { es: "Trabajo positivo debe aumentar energía rotacional si no hay pérdidas.", en: "Positive work should increase rotational energy if there are no losses." } }
+    graph_implications:
+      - "En torque constante, el área tau-theta es un rectángulo."
+    pedagogical_triggers:
+      - { when: "true", message: { es: "No usar grados como radianes.", en: "Do not use degrees as radians." } }
+
+  - id: trabajo_torque_variable
+    title: { es: "Trabajo con torque variable", en: "Work with variable torque" }
+    equation: "W = tau*theta"
+    latex: 'W=\int_{\theta_i}^{\theta_f}\tau(\theta)\,d\theta'
+    rearrangements:
+      - target: W
+        equation: "W = tau*theta"
+        latex: 'W=\int_{\theta_i}^{\theta_f}\tau(\theta)\,d\theta'
+    category: "work"
+    relation_type: "integral_balance"
+    physical_meaning: { es: "El trabajo es el área bajo la curva torque frente a ángulo.", en: "Work is the area under the torque versus angle curve." }
+    constraints: ["tau como función de theta", "eje y signo definidos"]
+    validity: { es: "Necesaria cuando tau cambia con la posición angular.", en: "Required when tau changes with angular position." }
+    dimension_check: "N m * rad = J"
+    calculable: false
+    motivo_no_calculable: { es: "Requiere integración de una función.", en: "Requires integration of a function." }
+    used_in: ["teoria", "ejemplos", "interpretacion"]
+    interpretation_tags: ["area", "variable_torque"]
+    result_semantics:
+      target: W
+      kind: signed_scalar
+      sign_meaning: { es: "el signo depende del área algebraica", en: "the sign depends on algebraic area" }
+      absolute_value_meaning: { es: "transferencia angular acumulada", en: "accumulated angular transfer" }
+    domain_checks:
+      - { expr: "true", message: { es: "La curva tau(theta) debe estar definida.", en: "The tau(theta) curve must be defined." } }
+    coherence_checks:
+      - { expr: "true", message: { es: "Si tau cambia de signo, las áreas pueden compensarse.", en: "If tau changes sign, areas may cancel." } }
+    graph_implications:
+      - "El área firmada bajo la curva representa W."
+    pedagogical_triggers:
+      - { when: "true", message: { es: "No reemplazar por tau*theta si tau varía mucho.", en: "Do not replace it with tau*theta if tau varies strongly." } }
+
+  - id: potencia_angular
+    title: { es: "Potencia angular instantánea", en: "Instantaneous angular power" }
+    equation: "P = tau*omega"
+    latex: 'P=\tau\omega'
+    rearrangements:
+      - target: P
+        equation: "P = tau*omega"
+        latex: 'P=\tau\omega'
+      - target: tau
+        equation: "tau = P/omega"
+        latex: '\tau=\frac{P}{\omega}'
+      - target: omega
+        equation: "omega = P/tau"
+        latex: '\omega=\frac{P}{\tau}'
+    category: "power"
+    relation_type: "rate"
+    physical_meaning: { es: "La potencia angular mide la rapidez con que el torque transfiere energía.", en: "Angular power measures how fast torque transfers energy." }
+    constraints: ["tau y omega con el mismo eje", "omega en rad/s"]
+    validity: { es: "Válida para potencia instantánea alrededor de un eje definido.", en: "Valid for instantaneous power about a defined axis." }
+    dimension_check: "N m / s = W"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["teoria", "ejemplos", "aplicaciones", "interpretacion"]
+    interpretation_tags: ["power", "rate"]
+    result_semantics:
+      target: P
+      kind: signed_scalar
+      sign_meaning: { es: "positivo si el torque entrega energía al giro", en: "positive if torque delivers energy to the spin" }
+      absolute_value_meaning: { es: "ritmo de transferencia de energía", en: "rate of energy transfer" }
+    domain_checks:
+      - { expr: "true", message: { es: "Revisar que tau y omega compartan eje.", en: "Check tau and omega share the same axis." } }
+    coherence_checks:
+      - { expr: "true", message: { es: "Si omega es cero, la potencia instantánea es cero aunque haya torque.", en: "If omega is zero, instantaneous power is zero even if torque exists." } }
+    graph_implications:
+      - "P crece linealmente con tau para omega fija."
+    pedagogical_triggers:
+      - { when: "true", message: { es: "Distinguir trabajo acumulado y potencia instantánea.", en: "Distinguish accumulated work and instantaneous power." } }

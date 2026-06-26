@@ -1,0 +1,161 @@
+version: 5.0.0
+ui:
+  default_formula: entropia_boltzmann
+formulas:
+- id: entropia_boltzmann
+  title:
+    es: Definición estadística de Boltzmann
+    en: Boltzmann statistical definition
+  equation: S = k_B*ln(Omega)
+  latex: S = k_B \ln(\Omega)
+  rearrangements:
+  - id: omega_desde_entropia
+    target: numero_microestados
+    equation: Omega = exp(S/k_B)
+    latex: \Omega = e^{S/k_B}
+  - id: k_b_desde_entropia
+    target: k_boltzmann
+    equation: k_B = S/ln(Omega)
+    latex: k_B = \frac{S}{\ln(\Omega)}
+  category: entropia-estadistica
+  relation_type: logarithmic_definition
+  physical_meaning:
+    es: La entropía mide logarítmicamente cuántos microestados compatibles tiene un macroestado.
+    en: Entropy logarithmically measures how many compatible microstates a macrostate has.
+  constraints:
+    es: El número de microestados debe ser positivo y adimensional; el sistema se considera aislado o en equilibrio estadístico.
+    en: The number of microstates must be positive and dimensionless; the system is treated as isolated or statistically equilibrated.
+  validity:
+    es: Válida para macroestados con microestados contables y equiprobables dentro del modelo estadístico elegido.
+    en: Valid for macrostates with countable and equally probable microstates within the chosen statistical model.
+  dimension_check:
+    es: ln(Omega) es adimensional, por tanto S tiene unidades J/K como k_B.
+    en: ln(Omega) is dimensionless, so S has units J/K like k_B.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculo_entropia_macroestado
+  - comparacion_macroestados
+  interpretation_tags:
+  - entropy
+  - microstates
+  - logarithmic_growth
+  - equilibrium
+  result_semantics:
+    target: entropia
+    kind: scalar
+    sign_meaning:
+      es: Suele ser no negativa si Omega >= 1; diferencias de entropía pueden compararse entre macroestados.
+      en: It is usually nonnegative when Omega >= 1; entropy differences can compare macrostates.
+    absolute_value_meaning:
+      es: Indica el tamaño logarítmico del conjunto de microestados accesibles.
+      en: Indicates the logarithmic size of the accessible microstate set.
+  domain_checks:
+  - id: omega_positive
+    status: error
+    condition: Omega > 0
+    message:
+      es: Omega debe ser positivo para que el logaritmo exista.
+      en: Omega must be positive for the logarithm to exist.
+  - id: omega_dimensionless
+    status: warning
+    condition: Omega dimensionless
+    message:
+      es: Omega es un conteo, no una magnitud con unidad.
+      en: Omega is a count, not a quantity with units.
+  coherence_checks:
+  - id: entropy_unit_check
+    status: ok
+    text:
+      es: La unidad final debe ser J/K.
+      en: The final unit must be J/K.
+  - id: monotonic_check
+    status: ok
+    text:
+      es: Si Omega aumenta, S aumenta, aunque de forma logarítmica.
+      en: If Omega increases, S increases, but logarithmically.
+  graph_implications:
+    es: La gráfica S frente a Omega crece siempre, pero con pendiente decreciente.
+    en: The graph of S versus Omega always grows, but with decreasing slope.
+  pedagogical_triggers:
+  - id: confundir_microestado_macroestado
+    text:
+      es: Distinguir microestado individual de macroestado observable.
+      en: Distinguish an individual microstate from an observable macrostate.
+  - id: linealidad_falsa
+    text:
+      es: Recordar que la dependencia no es lineal sino logarítmica.
+      en: Remember the dependence is logarithmic, not linear.
+- id: diferencia_entropia_boltzmann
+  title:
+    es: Diferencia de entropía entre macroestados
+    en: Entropy difference between macrostates
+  equation: Delta_S = k_B*ln(Omega_f/Omega_i)
+  latex: \Delta S = k_B \ln(\frac{\Omega_f}{\Omega_i})
+  rearrangements:
+  - id: ratio_microestados_desde_delta_s
+    target: ratio_microestados
+    equation: Omega_f/Omega_i = exp(Delta_S/k_B)
+    latex: \frac{\Omega_f}{\Omega_i} = e^{\Delta S/k_B}
+  - id: omega_final_desde_delta_s
+    target: numero_microestados_final
+    equation: Omega_f = Omega_i*exp(Delta_S/k_B)
+    latex: \Omega_f = \Omega_i e^{\Delta S/k_B}
+  category: entropia-estadistica
+  relation_type: state_comparison
+  physical_meaning:
+    es: Compara cuántas veces cambia el número de microestados accesibles al pasar de un macroestado a otro.
+    en: Compares how many times the number of accessible microstates changes from one macrostate to another.
+  constraints:
+    es: Omega_i y Omega_f deben ser positivos; la comparación debe hacerse entre macroestados del mismo sistema modelado.
+    en: Omega_i and Omega_f must be positive; the comparison must involve macrostates of the same modeled system.
+  validity:
+    es: Útil cuando importan cambios de entropía y no el cero absoluto convencional de la entropía.
+    en: Useful when entropy changes matter rather than the conventional absolute zero of entropy.
+  dimension_check:
+    es: El cociente Omega_f/Omega_i es adimensional y Delta_S queda en J/K.
+    en: The ratio Omega_f/Omega_i is dimensionless and Delta_S has units J/K.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - comparacion_macroestados
+  - procesos_probables
+  interpretation_tags:
+  - entropy_change
+  - microstate_ratio
+  - probability
+  - irreversibility
+  result_semantics:
+    target: delta_entropia
+    kind: scalar
+    sign_meaning:
+      es: Delta_S positiva indica aumento del número de microestados accesibles; negativa indica reducción.
+      en: Positive Delta_S indicates an increase in accessible microstates; negative means a reduction.
+    absolute_value_meaning:
+      es: Mide la intensidad logarítmica del cambio en multiplicidad.
+      en: Measures the logarithmic strength of the multiplicity change.
+  domain_checks:
+  - id: ratio_positive
+    status: error
+    condition: Omega_f/Omega_i > 0
+    message:
+      es: El cociente de microestados debe ser positivo.
+      en: The microstate ratio must be positive.
+  coherence_checks:
+  - id: sign_ratio_check
+    status: ok
+    text:
+      es: Si Omega_f > Omega_i, entonces Delta_S debe ser positiva.
+      en: If Omega_f > Omega_i, then Delta_S must be positive.
+  graph_implications:
+    es: La comparación se lee como distancia vertical entre dos puntos de la curva S(Omega).
+    en: The comparison is read as a vertical difference between two points on the S(Omega) curve.
+  pedagogical_triggers:
+  - id: signo_delta_s
+    text:
+      es: Usar el orden final/inicial correctamente.
+      en: Use the final/initial order correctly.
+  - id: cociente_no_diferencia
+    text:
+      es: Comparar multiplicidades mediante cociente, no resta.
+      en: Compare multiplicities with a ratio, not subtraction.

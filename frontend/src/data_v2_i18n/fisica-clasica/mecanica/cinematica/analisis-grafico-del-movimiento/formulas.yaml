@@ -1,0 +1,399 @@
+version: 1
+ui:
+  default_formula: velocidad_media_intervalo
+formulas:
+- id: velocidad_inst_pendiente_x_t
+  title:
+    es: Velocidad instantánea como pendiente del gráfico posición-tiempo
+    en: Instantaneous velocity as slope of the position–time graph
+  equation: v = \frac{dx}{dt}
+  latex: v = \frac{dx}{dt}
+  rearrangements:
+  - target: velocidad
+    equation: v = \frac{\Delta x}{\Delta t}
+    latex: v = \frac{\Delta x}{\Delta t}
+    constraints:
+    - "intervalo_tiempo != 0"
+  category: fundamental
+  relation_type: differential_relation
+  physical_meaning:
+    es: La inclinación local de la curva x(t) mide cómo cambia la posición en cada instante; una pendiente pronunciada indica movimiento rápido.
+    en: The local steepness of the x(t) curve measures how position changes at each instant; a steep slope indicates fast motion.
+  constraints: "Requiere que x(t) sea derivable en el instante considerado y que el movimiento se describa respecto a un eje concreto."
+  validity:
+    es: Válida para movimiento unidimensional o para una componente concreta de un movimiento multidimensional; no aplicable en discontinuidades de x(t).
+    en: Valid for one-dimensional motion or for a specific component of multidimensional motion; not applicable at discontinuities in x(t).
+  dimension_check: "[L]/[T] = L T^{-1}"
+  calculable: false
+  motivo_no_calculable: "Es una relación diferencial; la versión calculable es velocidad_media_intervalo."
+  used_in:
+  - teoria
+  - ejemplos
+  - graficos
+  interpretation_tags:
+  - pendiente
+  - velocidad_instantanea
+  - tangente
+  result_semantics:
+    target: velocidad
+    kind: rate_of_change
+    sign_meaning:
+      es: Pendiente positiva implica avance en sentido +x; pendiente negativa implica retroceso.
+      en: Positive slope means advance in the +x direction; negative slope means retreat.
+    absolute_value_meaning:
+      es: Cuanto mayor es el módulo de la pendiente, más rápido se mueve el objeto.
+      en: The larger the slope magnitude, the faster the object moves.
+  domain_checks:
+  - expr: "intervalo_tiempo > 0"
+    message:
+      es: "El intervalo de tiempo debe ser positivo para definir la pendiente."
+      en: "The time interval must be positive to define the slope."
+  coherence_checks:
+  - expr: "abs(result) < 300"
+    message:
+      es: "Velocidad superior a 300 m/s es inusual en cinemática escolar; revisa datos."
+      en: "Velocity above 300 m/s is unusual in school kinematics; check your data."
+  graph_implications:
+  - "La pendiente de la tangente a x-t en el instante considerado debe coincidir con la ordenada de v-t en ese mismo instante."
+  pedagogical_triggers:
+  - when: "result == 0"
+    message:
+      es: "La pendiente es cero: el móvil está momentáneamente en reposo o en un punto de retorno."
+      en: "The slope is zero: the object is momentarily at rest or at a turning point."
+  - when: "result < 0"
+    message:
+      es: "Pendiente negativa: el objeto se mueve en sentido contrario al eje positivo."
+      en: "Negative slope: the object moves opposite to the positive axis direction."
+
+- id: velocidad_media_intervalo
+  title:
+    es: Velocidad media en un intervalo
+    en: Average velocity over an interval
+  equation: v_{\mathrm{med}} = \frac{\Delta x}{\Delta t}
+  latex: v_{\mathrm{med}} = \frac{\Delta x}{\Delta t}
+  rearrangements:
+  - target: velocidad_media
+    equation: v_{\mathrm{med}} = \frac{\Delta x}{\Delta t}
+    latex: v_{\mathrm{med}} = \frac{\Delta x}{\Delta t}
+    constraints:
+    - "intervalo_tiempo != 0"
+  - target: desplazamiento
+    equation: \Delta x = v_{\mathrm{med}} \cdot \Delta t
+    latex: \Delta x = v_{\mathrm{med}} \cdot \Delta t
+    constraints: []
+  - target: intervalo_tiempo
+    equation: \Delta t = \frac{\Delta x}{v_{\mathrm{med}}}
+    latex: \Delta t = \frac{\Delta x}{v_{\mathrm{med}}}
+    constraints:
+    - "velocidad_media != 0"
+  category: fundamental
+  relation_type: average_relation
+  physical_meaning:
+    es: Resume en un único valor la tasa neta de cambio de posición durante un intervalo finito; gráficamente es la pendiente de la secante en x-t.
+    en: Summarizes in a single value the net rate of position change over a finite interval; graphically it is the secant slope on x-t.
+  constraints: "\\Delta t \\neq 0 y el intervalo debe estar claramente definido."
+  validity:
+    es: Válida para cualquier movimiento unidimensional, aunque no proporciona información sobre variaciones internas de velocidad dentro del intervalo.
+    en: Valid for any one-dimensional motion, although it provides no information about velocity variations within the interval.
+  dimension_check: "[L]/[T] = L T^{-1}"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - graficos
+  interpretation_tags:
+  - pendiente_secante
+  - velocidad_media
+  - desplazamiento_neto
+  result_semantics:
+    target: velocidad_media
+    kind: average_rate
+    sign_meaning:
+      es: Positiva si el desplazamiento neto es en el sentido positivo del eje; negativa si es en sentido contrario.
+      en: Positive if the net displacement is in the positive axis direction; negative if in the opposite direction.
+    absolute_value_meaning:
+      es: Cuanto mayor es el módulo, más se desplazó el móvil por unidad de tiempo.
+      en: The larger the magnitude, the more the object displaced per unit time.
+  domain_checks:
+  - expr: "intervalo_tiempo > 0"
+    message:
+      es: "El intervalo de tiempo debe ser positivo."
+      en: "The time interval must be positive."
+  coherence_checks:
+  - expr: "abs(result) < 100"
+    message:
+      es: "Una velocidad media superior a 100 m/s es muy alta para cinemática terrestre; revisa los datos."
+      en: "An average velocity above 100 m/s is very high for terrestrial kinematics; check your data."
+  graph_implications:
+  - "La pendiente de la secante entre los puntos (t_i, x_i) y (t_f, x_f) en la gráfica x-t debe coincidir con este valor."
+  pedagogical_triggers:
+  - when: "result == 0"
+    message:
+      es: "Velocidad media cero: el desplazamiento neto es nulo, aunque el objeto puede haberse movido de ida y vuelta."
+      en: "Zero average velocity: the net displacement is zero, even though the object may have moved back and forth."
+  - when: "true"
+    message:
+      es: "Comprueba que las unidades de desplazamiento y tiempo sean coherentes antes de dividir."
+      en: "Check that displacement and time units are consistent before dividing."
+
+- id: desplazamiento_area_v_t
+  title:
+    es: Desplazamiento como área bajo el gráfico velocidad-tiempo
+    en: Displacement as area under the velocity–time graph
+  equation: \Delta x = \int_{t_i}^{t_f} v(t)\,dt
+  latex: \Delta x = \int_{t_i}^{t_f} v(t)\,dt
+  rearrangements:
+  - target: desplazamiento
+    equation: \Delta x = v \cdot \Delta t
+    latex: \Delta x = v \cdot \Delta t
+    constraints:
+    - "Válido cuando v es constante en el intervalo"
+  category: structural
+  relation_type: integral_relation
+  physical_meaning:
+    es: La suma continua de contribuciones de velocidad durante pequeños intervalos produce el desplazamiento total; gráficamente es el área con signo bajo v-t.
+    en: The continuous sum of velocity contributions over small intervals produces total displacement; graphically it is the signed area under v-t.
+  constraints: "El intervalo temporal debe estar delimitado y v(t) debe ser integrable."
+  validity:
+    es: Válida para cualquier movimiento cuya velocidad como función del tiempo pueda integrarse en el intervalo.
+    en: Valid for any motion whose velocity as a function of time can be integrated over the interval.
+  dimension_check: "[L T^{-1}] \\cdot [T] = [L]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - graficos
+  interpretation_tags:
+  - area_bajo_curva
+  - desplazamiento
+  - integral_grafica
+  result_semantics:
+    target: desplazamiento
+    kind: accumulated_quantity
+    sign_meaning:
+      es: Positivo si el área neta está por encima del eje t; negativo si está por debajo.
+      en: Positive if the net area is above the t-axis; negative if below.
+    absolute_value_meaning:
+      es: Cuanto mayor es el área, mayor es el cambio neto de posición.
+      en: The larger the area, the greater the net change in position.
+  domain_checks:
+  - expr: "intervalo_tiempo > 0"
+    message:
+      es: "Se necesita un intervalo temporal positivo para calcular el área."
+      en: "A positive time interval is needed to compute the area."
+  coherence_checks:
+  - expr: "abs(result) < 10000"
+    message:
+      es: "Desplazamiento superior a 10 km es inusual en problemas cinemáticos escolares."
+      en: "Displacement above 10 km is unusual in school kinematics problems."
+  graph_implications:
+  - "El área geométrica bajo la curva v-t entre t_i y t_f debe coincidir con el desplazamiento calculado."
+  pedagogical_triggers:
+  - when: "result < 0"
+    message:
+      es: "Desplazamiento negativo: el objeto retrocedió más de lo que avanzó en el intervalo."
+      en: "Negative displacement: the object moved backwards more than forwards in the interval."
+  - when: "true"
+    message:
+      es: "Si la curva v-t cruza el eje, hay que separar las áreas positiva y negativa para distinguir desplazamiento de distancia."
+      en: "If the v-t curve crosses the axis, separate positive and negative areas to distinguish displacement from distance."
+
+- id: aceleracion_inst_pendiente_v_t
+  title:
+    es: Aceleración instantánea como pendiente del gráfico velocidad-tiempo
+    en: Instantaneous acceleration as slope of the velocity–time graph
+  equation: a = \frac{dv}{dt}
+  latex: a = \frac{dv}{dt}
+  rearrangements:
+  - target: aceleracion
+    equation: a = \frac{\Delta v}{\Delta t}
+    latex: a = \frac{\Delta v}{\Delta t}
+    constraints:
+    - "intervalo_tiempo != 0"
+  category: fundamental
+  relation_type: differential_relation
+  physical_meaning:
+    es: La pendiente local de v(t) expresa cómo cambia la velocidad en cada instante; una pendiente positiva indica que la velocidad aumenta.
+    en: The local slope of v(t) expresses how velocity changes at each instant; a positive slope indicates increasing velocity.
+  constraints: "Requiere que v(t) sea derivable en el instante considerado."
+  validity:
+    es: Válida para una componente concreta del movimiento o para movimiento unidimensional; no aplicable en puntos angulosos de v(t).
+    en: Valid for a specific motion component or for one-dimensional motion; not applicable at angular points of v(t).
+  dimension_check: "[L T^{-1}]/[T] = L T^{-2}"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - graficos
+  interpretation_tags:
+  - pendiente_v_t
+  - aceleracion
+  - cambio_velocidad
+  result_semantics:
+    target: aceleracion
+    kind: rate_of_change
+    sign_meaning:
+      es: Positiva si la velocidad aumenta en sentido +x; negativa si disminuye o aumenta en sentido -x.
+      en: Positive if velocity increases in the +x direction; negative if it decreases or increases in the -x direction.
+    absolute_value_meaning:
+      es: Cuanto mayor es el módulo, más rápidamente cambia la velocidad.
+      en: The larger the magnitude, the more rapidly velocity changes.
+  domain_checks:
+  - expr: "intervalo_tiempo > 0"
+    message:
+      es: "El intervalo de tiempo debe ser positivo para definir la pendiente de v-t."
+      en: "The time interval must be positive to define the v-t slope."
+  coherence_checks:
+  - expr: "abs(result) < 50"
+    message:
+      es: "Aceleración superior a 50 m/s² es inusual fuera de colisiones; revisa los datos."
+      en: "Acceleration above 50 m/s² is unusual outside collisions; check your data."
+  graph_implications:
+  - "La pendiente de la tangente a v-t en el instante considerado debe coincidir con la ordenada de a-t en ese mismo instante."
+  pedagogical_triggers:
+  - when: "result == 0"
+    message:
+      es: "Aceleración cero: la velocidad no cambia en este instante; movimiento uniforme."
+      en: "Zero acceleration: velocity is not changing at this instant; uniform motion."
+  - when: "result < 0"
+    message:
+      es: "Aceleración negativa no siempre significa frenar; puede significar acelerar en sentido -x."
+      en: "Negative acceleration does not always mean braking; it may mean speeding up in the -x direction."
+
+- id: aceleracion_media_intervalo
+  title:
+    es: Aceleración media en un intervalo
+    en: Average acceleration over an interval
+  equation: a_{\mathrm{med}} = \frac{\Delta v}{\Delta t}
+  latex: a_{\mathrm{med}} = \frac{\Delta v}{\Delta t}
+  rearrangements:
+  - target: aceleracion_media
+    equation: a_{\mathrm{med}} = \frac{\Delta v}{\Delta t}
+    latex: a_{\mathrm{med}} = \frac{\Delta v}{\Delta t}
+    constraints:
+    - "intervalo_tiempo != 0"
+  - target: cambio_velocidad
+    equation: \Delta v = a_{\mathrm{med}} \cdot \Delta t
+    latex: \Delta v = a_{\mathrm{med}} \cdot \Delta t
+    constraints: []
+  - target: intervalo_tiempo
+    equation: \Delta t = \frac{\Delta v}{a_{\mathrm{med}}}
+    latex: \Delta t = \frac{\Delta v}{a_{\mathrm{med}}}
+    constraints:
+    - "aceleracion_media != 0"
+  category: fundamental
+  relation_type: average_relation
+  physical_meaning:
+    es: Resume en un único valor la tasa neta de cambio de velocidad durante un intervalo finito; gráficamente es la pendiente de la secante en v-t.
+    en: Summarises in a single value the net rate of velocity change over a finite interval; graphically it is the secant slope on v-t.
+  constraints: "\\Delta t \\neq 0 y el intervalo debe estar claramente definido."
+  validity:
+    es: Válida para cualquier movimiento unidimensional, aunque no proporciona información sobre variaciones internas de la aceleración dentro del intervalo.
+    en: Valid for any one-dimensional motion, although it provides no information about acceleration variations within the interval.
+  dimension_check: "[L T^{-1}]/[T] = L T^{-2}"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - graficos
+  interpretation_tags:
+  - pendiente_secante
+  - aceleracion_media
+  - cambio_velocidad
+  result_semantics:
+    target: aceleracion_media
+    kind: average_rate
+    sign_meaning:
+      es: Positiva si la velocidad neta aumentó durante el intervalo; negativa si disminuyó.
+      en: Positive if the net velocity increased during the interval; negative if it decreased.
+    absolute_value_meaning:
+      es: Cuanto mayor es el módulo, más cambió la velocidad del móvil por unidad de tiempo.
+      en: The larger the magnitude, the more the object's velocity changed per unit time.
+  domain_checks:
+  - expr: "intervalo_tiempo > 0"
+    message:
+      es: "El intervalo de tiempo debe ser positivo."
+      en: "The time interval must be positive."
+  coherence_checks:
+  - expr: "abs(result) < 50"
+    message:
+      es: "Una aceleración media superior a 50 m/s² es muy alta en cinemática escolar; revisa los datos."
+      en: "An average acceleration above 50 m/s² is very high in school kinematics; check your data."
+  graph_implications:
+  - "La pendiente de la secante entre los puntos (t_i, v_i) y (t_f, v_f) en la gráfica v-t debe coincidir con este valor."
+  pedagogical_triggers:
+  - when: "result == 0"
+    message:
+      es: "Aceleración media cero: el cambio neto de velocidad fue nulo, aunque puede haber habido aceleraciones positivas y negativas que se compensaron."
+      en: "Zero average acceleration: the net velocity change is zero, even though there may have been positive and negative accelerations that cancelled."
+  - when: "true"
+    message:
+      es: "Comprueba que las unidades de cambio de velocidad y tiempo sean coherentes antes de dividir."
+      en: "Check that the velocity change and time units are consistent before dividing."
+
+- id: cambio_velocidad_area_a_t
+  title:
+    es: Cambio de velocidad como área bajo el gráfico aceleración-tiempo
+    en: Change in velocity as area under the acceleration–time graph
+  equation: \Delta v = \int_{t_i}^{t_f} a(t)\,dt
+  latex: \Delta v = \int_{t_i}^{t_f} a(t)\,dt
+  rearrangements:
+  - target: cambio_velocidad
+    equation: \Delta v = a \cdot \Delta t
+    latex: \Delta v = a \cdot \Delta t
+    constraints:
+    - "Válido cuando a es constante en el intervalo"
+  category: structural
+  relation_type: integral_relation
+  physical_meaning:
+    es: La aceleración acumulada a lo largo del tiempo produce la variación neta de velocidad; gráficamente es el área con signo bajo a-t.
+    en: Acceleration accumulated over time produces the net velocity change; graphically it is the signed area under a-t.
+  constraints: "Requiere un intervalo temporal definido y que a(t) sea integrable en ese intervalo."
+  validity:
+    es: Válida cuando la aceleración se conoce como función del tiempo en el intervalo estudiado.
+    en: Valid when acceleration is known as a function of time over the studied interval.
+  dimension_check: "[L T^{-2}] \\cdot [T] = L T^{-1}"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - graficos
+  interpretation_tags:
+  - area_bajo_a_t
+  - cambio_velocidad
+  - integral_grafica
+  result_semantics:
+    target: cambio_velocidad
+    kind: accumulated_quantity
+    sign_meaning:
+      es: Positivo si la velocidad aumentó durante el intervalo; negativo si disminuyó.
+      en: Positive if velocity increased during the interval; negative if it decreased.
+    absolute_value_meaning:
+      es: Cuanto mayor es el área, mayor fue la variación de velocidad en el intervalo.
+      en: The larger the area, the greater the velocity change in the interval.
+  domain_checks:
+  - expr: "intervalo_tiempo > 0"
+    message:
+      es: "Se necesita un intervalo temporal positivo para calcular el área bajo a-t."
+      en: "A positive time interval is needed to compute the area under a-t."
+  coherence_checks:
+  - expr: "abs(result) < 100"
+    message:
+      es: "Un cambio de velocidad superior a 100 m/s es muy alto; revisa la aceleración y el intervalo."
+      en: "A velocity change above 100 m/s is very high; check the acceleration and the interval."
+  graph_implications:
+  - "El área geométrica bajo la curva a-t entre t_i y t_f debe coincidir con el cambio de velocidad calculado."
+  pedagogical_triggers:
+  - when: "result == 0"
+    message:
+      es: "Cambio de velocidad nulo: la aceleración neta en el intervalo fue cero; puede haber habido aceleración positiva y negativa que se compensaron."
+      en: "Zero velocity change: the net acceleration over the interval was zero; there may have been positive and negative accelerations that cancelled."
+  - when: "true"
+    message:
+      es: "Si la curva a-t cambia de signo, las áreas positiva y negativa representan aumentos y disminuciones de velocidad respectivamente."
+      en: "If the a-t curve changes sign, positive and negative areas represent velocity increases and decreases respectively."

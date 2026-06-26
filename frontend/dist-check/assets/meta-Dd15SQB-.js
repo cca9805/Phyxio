@@ -1,0 +1,79 @@
+const n=`id: resonancia-y-modos-en-barras
+nombre:
+  es: Resonancia y modos en barras
+  en: Resonance and Modes in Bars
+area: fisica-clasica
+bloque: ondas
+subbloque: ondas-mecanicas
+parent_id: ondas-en-solidos
+ruta_relativa: fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/resonancia-y-modos-en-barras
+orden: 232430
+type: leaf
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+icon: "🎵"
+descripcion: "Frecuencias naturales y patrones modales de vibracion longitudinal, transversal y torsional en barras con distintas condiciones de contorno."
+description_en: "Natural frequencies and modal patterns of longitudinal, transverse and torsional vibration in bars with various boundary conditions."
+tags:
+  es:
+    - resonancia
+    - modos normales
+    - frecuencia natural
+    - barra
+    - condiciones de contorno
+    - vibracion
+  en:
+    - resonance
+    - normal modes
+    - natural frequency
+    - bar
+    - boundary conditions
+    - vibration
+prerequisitos:
+  - fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/ondas-longitudinales-en-barras
+  - fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/ondas-flexionales-en-vigas
+graficos:
+  - Coord
+  - Svg
+physical_role:
+  es: concepto físico
+  en: physical concept
+dificultad: 3
+tiempo_estimado_min: 35
+representacion_dominante: Coord
+magnitud_dominante: f_n
+pregunta_fisica_central:
+  es: "¿A que frecuencias vibra una barra y como son los patrones espaciales de desplazamiento en cada modo?"
+  en: "At which frequencies does a bar vibrate and what are the spatial displacement patterns of each mode?"
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

@@ -1,0 +1,159 @@
+import React from "react";
+import { createCoordGraphPage } from "../../graphFactories.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraph(
+const uiLang = "es";
+const tt = (es, en, lang = uiLang) => (lang === "en" ? en : es);
+
+export const graphContract = {
+  type: "Coord",
+  title: {
+    es: "Acumulacion en un sistema abierto",
+    en: "Accumulation in an open system",
+  },
+  graph_identity: {
+    graph_type: "Coord",
+    pregunta_principal: {
+      es: "Como cambia la energia de un sistema abierto cuando cruzan masa, calor y trabajo por su frontera?",
+      en: "How does the energy of an open system change when mass, heat, and work cross its boundary?",
+    },
+    keywords: ["energia", "sistema", "abierto", "masa", "calor", "trabajo", "frontera", "energy", "open", "mass", "heat", "work", "boundary"],
+    magnitud_estrella: "m_dot",
+    variable_control: "m_dot",
+    target_interpretable: true,
+  },
+  interpretation_binding: {
+    paramsIn: ["m_dot", "Q_dot", "W_dot", "e_flujo"],
+    stateOut: ["m_sys", "E_sys"],
+  },
+  equation: "dE_sys/dt = Q_dot - W_dot + m_dot_in e_in - m_dot_out e_out",
+  axes: { x: "tiempo", y: "acumulacion" },
+};
+
+const fmt = (value, digits = 1, lang = "es") => {
+  if (!Number.isFinite(value)) return "-";
+  const text = value.toFixed(digits);
+  return lang === "en" ? text : text.replace(".", ",");
+};
+
+const SistemaAbiertoGraphsCoord = createCoordGraphPage({
+  displayName: "SistemaAbiertoGraphsCoord",
+  title: {
+    es: "Sistema abierto: pendientes de acumulacion",
+    en: "Open system: accumulation slopes",
+  },
+  defaultParams: {
+    mIn: 2,
+    mOut: 1.5,
+    eIn: 420,
+    eOut: 380,
+    Qdot: 8,
+    Wdot: 3,
+    tMax: 10,
+  },
+  controls: [
+    { id: "mIn", label: { es: "m_dot entrada", en: "inlet m_dot" }, min: 0, max: 5, step: 0.1 },
+    { id: "mOut", label: { es: "m_dot salida", en: "outlet m_dot" }, min: 0, max: 5, step: 0.1 },
+    { id: "eIn", label: { es: "e entrada", en: "inlet e" }, min: 100, max: 800, step: 10 },
+    { id: "eOut", label: { es: "e salida", en: "outlet e" }, min: 100, max: 800, step: 10 },
+    { id: "Qdot", label: { es: "Q_dot", en: "Q_dot" }, min: -100, max: 100, step: 1 },
+    { id: "Wdot", label: { es: "W_dot", en: "W_dot" }, min: -100, max: 100, step: 1 },
+  ],
+  compute: (pNum) => {
+    const mIn = Number.isFinite(pNum.mIn) ? pNum.mIn : 2;
+    const mOut = Number.isFinite(pNum.mOut) ? pNum.mOut : 1.5;
+    const eIn = Number.isFinite(pNum.eIn) ? pNum.eIn : 420;
+    const eOut = Number.isFinite(pNum.eOut) ? pNum.eOut : 380;
+    const Qdot = Number.isFinite(pNum.Qdot) ? pNum.Qdot : 8;
+    const Wdot = Number.isFinite(pNum.Wdot) ? pNum.Wdot : 3;
+    const tMax = 10;
+    const massRate = mIn - mOut;
+    const energyRate = Qdot - Wdot + mIn * eIn - mOut * eOut;
+    const data = Array.from({ length: 31 }, (_, index) => {
+      const t = (index / 30) * tMax;
+      return {
+        x: t,
+        m_sys: massRate * t,
+        E_sys: energyRate * t,
+      };
+    });
+
+    return {
+      data,
+      extra: {
+        interpretationTarget: "m_dot",
+        interpretationValue: massRate,
+        graphState: {
+          m_dot: massRate,
+          m_sys: data[data.length - 1]?.m_sys ?? 0,
+          E_sys: data[data.length - 1]?.E_sys ?? 0,
+          Q_dot: Qdot,
+          W_dot: Wdot,
+          e_flujo: eIn,
+        },
+      },
+    };
+  },
+  render: ({ data, pNum, lang = "es", linked, loadFromCalculator }) => {
+    const mIn = Number.isFinite(pNum.mIn) ? pNum.mIn : 2;
+    const mOut = Number.isFinite(pNum.mOut) ? pNum.mOut : 1.5;
+    const eIn = Number.isFinite(pNum.eIn) ? pNum.eIn : 420;
+    const eOut = Number.isFinite(pNum.eOut) ? pNum.eOut : 380;
+    const Qdot = Number.isFinite(pNum.Qdot) ? pNum.Qdot : 8;
+    const Wdot = Number.isFinite(pNum.Wdot) ? pNum.Wdot : 3;
+    const massRate = mIn - mOut;
+    const energyRate = Qdot - Wdot + mIn * eIn - mOut * eOut;
+    const maxMass = Math.max(1, ...data.map((d) => Math.abs(d.m_sys)));
+    const maxEnergy = Math.max(1, ...data.map((d) => Math.abs(d.E_sys)));
+    const pointsMass = data.map((d, i) => `${70 + i * 15},${150 - (d.m_sys / maxMass) * 70}`).join(" ");
+    const pointsEnergy = data.map((d, i) => `${70 + i * 15},${330 - (d.E_sys / maxEnergy) * 70}`).join(" ");
+
+    return (
+      <div className="v2-card" style={{ display: "grid", gap: 12 }}>
+        <div className="v2-card-title">
+          {tt("Frontera abierta: que se acumula?", "Open boundary: what accumulates?", lang)}
+        </div>
+        <svg viewBox="0 0 560 390" role="img" aria-label="Sistema abierto acumulacion">
+          <rect x="0" y="0" width="560" height="390" rx="12" fill="#f8fafc" />
+          <text x="280" y="34" textAnchor="middle" fill="#0f172a" fontSize="18" fontWeight="800">
+            {tt("Acumulacion de masa y energia", "Mass and energy accumulation", lang)}
+          </text>
+          <line x1="70" y1="150" x2="520" y2="150" stroke="#94a3b8" strokeWidth="1.5" />
+          <line x1="70" y1="80" x2="70" y2="220" stroke="#94a3b8" strokeWidth="1.5" />
+          <polyline points={pointsMass} fill="none" stroke="#0ea5e9" strokeWidth="4" />
+          <text x="82" y="76" fill="#0f172a" fontSize="13" fontWeight="700">m_sys</text>
+          <text x="430" y="92" fill="#0ea5e9" fontSize="14" fontWeight="800">
+            dm/dt = {fmt(massRate, 2, lang)} kg/s
+          </text>
+          <line x1="70" y1="330" x2="520" y2="330" stroke="#94a3b8" strokeWidth="1.5" />
+          <line x1="70" y1="260" x2="70" y2="370" stroke="#94a3b8" strokeWidth="1.5" />
+          <polyline points={pointsEnergy} fill="none" stroke="#f97316" strokeWidth="4" />
+          <text x="82" y="256" fill="#0f172a" fontSize="13" fontWeight="700">E_sys</text>
+          <text x="392" y="272" fill="#f97316" fontSize="14" fontWeight="800">
+            dE/dt = {fmt(energyRate, 1, lang)} kW
+          </text>
+          <rect x="76" y="176" width="394" height="34" rx="8" fill="#e0f2fe" />
+          <text x="92" y="198" fill="#0f172a" fontSize="13">
+            {tt("m_in, m_out, Q_dot y W_dot cruzan la frontera", "m_in, m_out, Q_dot and W_dot cross the boundary", lang)}
+          </text>
+        </svg>
+        <div style={{ fontSize: 13, opacity: 0.9 }}>
+          {tt("Modo", "Mode", lang)}: <strong>{linked ? "calculator" : "experiment"}</strong>
+          {" · "}
+          {tt("potencia por corrientes", "stream power", lang)}: <strong>{fmt(mIn * eIn - mOut * eOut, 1, lang)} kW</strong>
+        </div>
+        {!linked ? (
+          <button type="button" className="btn btn-sm btn-light" onClick={loadFromCalculator}>
+            {tt("Cargar desde calculadora", "Load from calculator", lang)}
+          </button>
+        ) : null}
+      </div>
+    );
+  },
+});
+
+SistemaAbiertoGraphsCoord.graph_identity = graphContract.graph_identity;
+SistemaAbiertoGraphsCoord.pregunta_principal = graphContract.graph_identity.pregunta_principal;
+SistemaAbiertoGraphsCoord.magnitud_estrella = graphContract.graph_identity.magnitud_estrella;
+
+export default SistemaAbiertoGraphsCoord;

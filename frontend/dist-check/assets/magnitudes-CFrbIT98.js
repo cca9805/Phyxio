@@ -1,0 +1,223 @@
+const e=`version: 5
+magnitudes:
+  - id: G
+    symbol: G
+    nombre: { es: Constante de gravitacion, en: Gravitational Constant }
+    si_unit: N*m^2/kg^2
+    unidad_si: N*m^2/kg^2
+    dimension: L^3/(M*T^2)
+    is_vector: false
+    components: []
+    category: gravitacion
+    physical_role: constante_universal
+    used_in: [energia_potencial, energia_especifica_estado, energia_total_ligada, energia_especifica_ligada, energia_circular]
+    common_mistake: Usar unidades no SI en masas o distancias.
+    typical_range: [6.674e-11, 6.674e-11]
+    sign_behavior: siempre_positivo
+    zero_behavior: sin_interaccion_gravitatoria
+    value_nature: constante
+    interpretation_role: escala_gravitatoria
+    graph_binding: Fija la escala vertical de energia en los graficos.
+    descripcion: { es: Constante universal que escala la interaccion gravitatoria., en: Universal constant scaling gravitational interaction. }
+    pedagogical_notes: { es: Aparece junto a la masa central como parametro gravitatorio., en: It appears with central mass as the gravitational parameter. }
+  - id: M
+    symbol: M
+    nombre: { es: Masa central, en: Central Mass }
+    si_unit: kg
+    unidad_si: kg
+    dimension: M
+    is_vector: false
+    components: []
+    category: gravitacion
+    physical_role: fuente_campo
+    used_in: [energia_potencial, energia_especifica_estado, energia_total_ligada, energia_especifica_ligada, energia_circular]
+    common_mistake: Confundirla con la masa del satelite.
+    typical_range: [1e20, 1e31]
+    sign_behavior: siempre_positivo
+    zero_behavior: sin_cuerpo_central
+    value_nature: parametro_escenario
+    interpretation_role: profundidad_potencial
+    graph_binding: Aumenta la profundidad energetica de las curvas.
+    descripcion: { es: Masa del cuerpo que domina el campo gravitatorio., en: Mass of the body dominating the gravitational field. }
+    pedagogical_notes: { es: En energia especifica importa G*M, no la masa del satelite., en: In specific energy, G*M matters, not satellite mass. }
+  - id: m
+    symbol: m
+    nombre: { es: Masa del satelite, en: Satellite Mass }
+    si_unit: kg
+    unidad_si: kg
+    dimension: M
+    is_vector: false
+    components: []
+    category: sistema_orbital
+    physical_role: masa_prueba
+    used_in: [energia_cinetica, energia_potencial, energia_total_desde_k_u, energia_total_ligada, energia_circular]
+    common_mistake: Creer que cambia la energia especifica de la orbita.
+    typical_range: [1, 1e8]
+    sign_behavior: siempre_positivo
+    zero_behavior: sin_objeto_orbital
+    value_nature: parametro_escenario
+    interpretation_role: escala_energia_total
+    graph_binding: Escala K, U y E totales sin cambiar la clasificacion especifica.
+    descripcion: { es: Masa del objeto que orbita alrededor del cuerpo central., en: Mass of the object orbiting the central body. }
+    pedagogical_notes: { es: La energia total crece con m; la energia especifica no., en: Total energy grows with m; specific energy does not. }
+  - id: r
+    symbol: r
+    nombre: { es: Radio instantaneo, en: Instantaneous Radius }
+    si_unit: m
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: []
+    category: geometria_orbital
+    physical_role: distancia_actual
+    used_in: [energia_potencial, energia_especifica_estado, energia_circular]
+    common_mistake: Usar semieje mayor cuando la formula pide distancia instantanea.
+    typical_range: [1e6, 1e13]
+    sign_behavior: siempre_positivo
+    zero_behavior: colision_o_modelo_invalido
+    value_nature: variable_estado
+    interpretation_role: posicion_energetica
+    graph_binding: Es el eje horizontal natural para curvas energeticas circulares.
+    descripcion: { es: Distancia actual al centro gravitatorio., en: Current distance from the gravitational center. }
+    pedagogical_notes: { es: En orbitas elipticas cambia durante la trayectoria., en: In elliptical orbits it changes along the path. }
+  - id: a
+    symbol: a
+    nombre: { es: Semieje mayor, en: Semi-major Axis }
+    si_unit: m
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: []
+    category: geometria_orbital
+    physical_role: tamano_orbital
+    used_in: [energia_total_ligada, energia_especifica_ligada]
+    common_mistake: Confundirlo con el radio instantaneo en orbitas no circulares.
+    typical_range: [1e6, 1e13]
+    sign_behavior: positivo_en_orbita_ligada
+    zero_behavior: modelo_invalido
+    value_nature: parametro_orbital
+    interpretation_role: medida_de_ligadura
+    graph_binding: Relaciona energia negativa con tamaño de orbita.
+    descripcion: { es: Mitad del eje mayor de una orbita eliptica., en: Half the major axis of an elliptical orbit. }
+    pedagogical_notes: { es: Para una circunferencia coincide con r., en: For a circle it coincides with r. }
+  - id: v
+    symbol: v
+    nombre: { es: Velocidad instantanea, en: Instantaneous Speed }
+    si_unit: m/s
+    unidad_si: m/s
+    dimension: L/T
+    is_vector: false
+    components: []
+    category: cinematica_orbital
+    physical_role: rapidez_estado
+    used_in: [energia_cinetica, energia_especifica_estado]
+    common_mistake: Usar velocidad circular aunque la orbita sea eliptica.
+    typical_range: [1, 1e5]
+    sign_behavior: siempre_positivo_como_modulo
+    zero_behavior: reposo_instantaneo
+    value_nature: variable_estado
+    interpretation_role: energia_cinetica
+    graph_binding: Controla la parte cinetica y la clasificacion energetica.
+    descripcion: { es: Rapidez del satelite en el punto considerado., en: Speed of the satellite at the considered point. }
+    pedagogical_notes: { es: Puede ser mayor en pericentro que en apocentro., en: It may be larger at periapsis than at apoapsis. }
+  - id: K
+    symbol: K
+    nombre: { es: Energia cinetica, en: Kinetic Energy }
+    si_unit: J
+    unidad_si: J
+    dimension: M*L^2/T^2
+    is_vector: false
+    components: []
+    category: energia
+    physical_role: energia_movimiento
+    used_in: [energia_total_desde_k_u, energia_cinetica]
+    common_mistake: Olvidar que siempre es positiva.
+    typical_range: [1e3, 1e20]
+    sign_behavior: siempre_positiva
+    zero_behavior: ausencia_de_movimiento
+    value_nature: resultado
+    interpretation_role: parte_cinetica
+    graph_binding: Curva positiva en el grafico de energia.
+    descripcion: { es: Energia asociada al movimiento orbital., en: Energy associated with orbital motion. }
+    pedagogical_notes: { es: En orbita circular ligada vale la mitad de |U|., en: In a bound circular orbit it equals half of |U|. }
+  - id: U
+    symbol: U
+    nombre: { es: Energia potencial, en: Potential Energy }
+    si_unit: J
+    unidad_si: J
+    dimension: M*L^2/T^2
+    is_vector: false
+    components: []
+    category: energia
+    physical_role: energia_configuracion
+    used_in: [energia_total_desde_k_u, energia_potencial]
+    common_mistake: Perder el signo negativo con referencia cero en infinito.
+    typical_range: [-1e20, -1e3]
+    sign_behavior: negativa_en_gravitacion_atractiva
+    zero_behavior: separacion_infinita
+    value_nature: resultado
+    interpretation_role: profundidad_pozo
+    graph_binding: Curva negativa que se acerca a cero al aumentar r.
+    descripcion: { es: Energia asociada a la posicion en el campo gravitatorio., en: Energy associated with position in the gravitational field. }
+    pedagogical_notes: { es: Mas negativa significa mas ligada, no menos energia util., en: More negative means more bound, not less useful energy. }
+  - id: E
+    symbol: E
+    nombre: { es: Energia total, en: Total Energy }
+    si_unit: J
+    unidad_si: J
+    dimension: M*L^2/T^2
+    is_vector: false
+    components: []
+    category: energia
+    physical_role: energia_mecanica
+    used_in: [energia_total_desde_k_u, energia_total_ligada, energia_circular]
+    common_mistake: Interpretar energia negativa como imposible.
+    typical_range: [-1e20, 1e20]
+    sign_behavior: clasifica_orbita
+    zero_behavior: umbral_escape
+    value_nature: resultado
+    interpretation_role: clasificador_orbital
+    graph_binding: Cruce con cero separa estados ligados y no ligados.
+    descripcion: { es: Suma de energia cinetica y potencial orbital., en: Sum of orbital kinetic and potential energy. }
+    pedagogical_notes: { es: El signo decide ligadura, no solo el valor absoluto., en: The sign decides binding, not only the absolute value. }
+  - id: eps
+    symbol: \\varepsilon
+    nombre: { es: Energia especifica, en: Specific Energy }
+    si_unit: J/kg
+    unidad_si: J/kg
+    dimension: L^2/T^2
+    is_vector: false
+    components: []
+    category: energia
+    physical_role: energia_por_masa
+    used_in: [energia_especifica_estado, energia_especifica_ligada, clasificacion_orbital_conceptual]
+    common_mistake: Confundirla con excentricidad.
+    typical_range: [-1e10, 1e10]
+    sign_behavior: clasifica_orbita
+    zero_behavior: escape_parabolico
+    value_nature: resultado
+    interpretation_role: clasificador_independiente_masa
+    graph_binding: Magnitud dominante de lectura energetica.
+    descripcion: { es: Energia mecanica por unidad de masa del satelite., en: Mechanical energy per unit mass of the satellite. }
+    pedagogical_notes: { es: Permite comparar orbitas sin depender de m., en: It compares orbits without depending on m. }
+  - id: E0
+    symbol: E_0
+    nombre: { es: Energia umbral, en: Threshold Energy }
+    si_unit: J
+    unidad_si: J
+    dimension: M*L^2/T^2
+    is_vector: false
+    components: []
+    category: energia
+    physical_role: frontera_escape
+    used_in: [clasificacion_orbital_conceptual]
+    common_mistake: Pensar que el umbral depende del radio elegido.
+    typical_range: [0, 0]
+    sign_behavior: cero_por_convencion
+    zero_behavior: frontera_ligado_escape
+    value_nature: referencia
+    interpretation_role: limite_clasificacion
+    graph_binding: Linea horizontal de referencia energetica.
+    descripcion: { es: Valor cero que separa orbitas ligadas de escape., en: Zero value separating bound orbits from escape. }
+    pedagogical_notes: { es: Es cero porque la referencia de potencial se toma en infinito., en: It is zero because potential reference is taken at infinity. }
+`;export{e as default};

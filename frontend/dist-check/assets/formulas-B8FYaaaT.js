@@ -1,0 +1,108 @@
+const e=`version: 5
+topic:
+  id: flotacion
+  title:
+    es: Flotación
+    en: Flotation
+formulas:
+- id: fraccion_sumergida
+  title:
+    es: Fracción de Volumen Sumergido
+    en: Submerged Volume Fraction
+  equation: frac_sum = rho_obj / rho_f
+  latex: f_s = \\frac{\\rho_{obj}}{\\rho_f}
+  rearrangements:
+  - id: reord_rho_obj
+    target: rho_obj
+    equation: frac_sum * rho_f
+    latex: \\rho_{obj} = f_s \\cdot \\rho_f
+    descripcion:
+      es: Determina la densidad del objeto a partir de su calado.
+      en: Determines the object density from its draft.
+  - id: reord_rho_f
+    target: rho_f
+    equation: rho_obj / frac_sum
+    latex: \\rho_f = \\frac{\\rho_{obj}}{f_s}
+    descripcion:
+      es: Calcula la densidad del fluido observando la flotación.
+      en: Calculates the fluid density by observing flotation.
+  category: mecanica-fluidos
+  relation_type: ley-fundamental
+  physical_meaning:
+    es: El porcentaje de volumen sumergido es igual a la relación de densidades entre el cuerpo y el fluido.
+    en: The percentage of submerged volume is equal to the density ratio between the body and the fluid.
+  constraints: equilibrio estático, cuerpo flotante parcial o totalmente
+  validity:
+    es: Válido para cuerpos en reposo. No incluye efectos de tensión superficial en micro-escalas.
+    en: Valid for bodies at rest. Does not include surface tension effects at micro-scales.
+  dimension_check: "[1] = [M L^-3] / [M L^-3] = [1]"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [ flotacion ]
+  interpretation_tags: [ equilibrio, densidad-relativa, calado ]
+  result_semantics:
+    target: frac_sum
+    es: Indica qué proporción del cuerpo permanece bajo el nivel del líquido.
+    en: Indicates what proportion of the body remains below the liquid level.
+  domain_checks: [ rho_obj > 0, rho_f > 0, rho_obj <= rho_f ]
+  coherence_checks: [ frac_sum <= 1 ]
+  graph_implications: determina la posición vertical del objeto en el SVG
+  pedagogical_triggers: paradoja del iceberg, densímetros
+  variables_principales: [ frac_sum, rho_obj, rho_f ]
+  unidades_coherentes:
+    es: Ambas densidades deben estar en las mismas unidades (ej. kg/m³).
+    en: Both densities must be in the same units (e.g., kg/m³).
+  relevancia_didactica: 5
+  difficulty_rating: 2
+
+- id: volumen_sumergido
+  title:
+    es: Volumen de Carena
+    en: Submerged Volume (Carena)
+  equation: Vsum = frac_sum * Vtot
+  latex: V_{sum} = f_s \\cdot V_{tot}
+  rearrangements:
+  - id: reord_Vtot
+    target: Vtot
+    equation: Vsum / frac_sum
+    latex: V_{tot} = \\frac{V_{sum}}{f_s}
+    descripcion:
+      es: Calcula el volumen total conociendo la parte sumergida.
+      en: Calculates the total volume knowing the submerged part.
+  category: mecanica-fluidos
+  relation_type: definicion
+  physical_meaning:
+    es: El volumen desplazado es proporcional al volumen total y a la fracción sumergida.
+    en: The displaced volume is proportional to the total volume and the submerged fraction.
+  constraints: geometría rígida
+  validity:
+    es: Válido mientras el cuerpo conserve su integridad estructural.
+    en: Valid as long as the body maintains its structural integrity.
+  dimension_check: "[L^3] = [1] * [L^3] = [L^3]"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [ flotacion ]
+  interpretation_tags: [ geometria, volumen, desplazamiento ]
+  result_semantics:
+    target: Vsum
+    es: Cuantifica el espacio ocupado por el cuerpo dentro del fluido.
+    en: Quantifies the space occupied by the body within the fluid.
+  domain_checks: [ Vtot > 0, frac_sum >= 0 ]
+  coherence_checks: [ Vsum <= Vtot ]
+  graph_implications: escala la zona sombreada del cuerpo en el gráfico
+  pedagogical_triggers: desplazamiento de barcos, calado
+  variables_principales: [ Vsum, frac_sum, Vtot ]
+  unidades_coherentes:
+    es: El volumen sumergido tendrá las mismas unidades que el volumen total.
+    en: The submerged volume will have the same units as the total volume.
+  relevancia_didactica: 4
+  difficulty_rating: 1
+
+ui:
+  default_formula: fraccion_sumergida
+  groups:
+  - title:
+      es: Relaciones de Flotación
+      en: Flotation Relations
+    items: [ fraccion_sumergida, volumen_sumergido ]
+`;export{e as default};

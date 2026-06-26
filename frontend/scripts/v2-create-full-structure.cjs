@@ -1,12 +1,55 @@
 #!/usr/bin/env node
 const fs = require("fs");
 const path = require("path");
+const yaml = require("js-yaml");
 
 const DRY = process.argv.includes("--dry");
 const OVERWRITE = process.argv.includes("--overwrite");
 const basePath = process.cwd();
 
-const ROOT = path.resolve(process.cwd(), "src", "data_v2", "contenido");
+const ROOT = path.resolve(process.cwd(), "src", "data_v2");
+const MAP_PATH = path.resolve(process.cwd(), "src", "v2", "map", "phyxio-map.yaml");
+
+const MAP_BY_ROUTE = (() => {
+  try {
+    const raw = fs.readFileSync(MAP_PATH, "utf8");
+    const doc = yaml.load(raw) || {};
+    const entries = [];
+
+    const walk = (node) => {
+      if (!node || typeof node !== "object") return;
+      if (node.ruta_relativa != null) entries.push(node);
+      if (Array.isArray(node.children)) {
+        for (const child of node.children) walk(child);
+      }
+    };
+
+    walk(doc?.root);
+    return new Map(entries.map((entry) => [String(entry.ruta_relativa || "").replace(/^\/+|\/+$/g, ""), entry]));
+  } catch (err) {
+    console.warn("[WARN] No se pudo cargar phyxio-map.yaml. Se usarán defaults existentes:", err.message);
+    return new Map();
+  }
+})();
+
+function getMapDataByRoute(rel) {
+  if (!rel) return null;
+  return MAP_BY_ROUTE.get(String(rel).replace(/^\/+|\/+$/g, "")) || null;
+}
+
+function normalizeLevels(value) {
+  return Array.isArray(value) && value.length ? value : ["ESO", "Bachillerato"];
+}
+
+function normalizeList(value, fallback = []) {
+  return Array.isArray(value) && value.length ? value : fallback;
+}
+
+function normalizePhysicalRole(value) {
+  return value && typeof value === "object"
+    ? value
+    : { es: "", en: "" };
+}
 
 // Archivos estándar por "hoja" (subtema)
 const LEAF_FILES = [
@@ -44,38 +87,37 @@ function humanizeId(id) {
     .join(" ");
 }
 
-function metaTemplate({ id, nombre, area, bloque, subbloque, rutaRel }) {
-  return `version: 1
-id: ${id}
-nombre: ${nombre}
+function metaTemplate({ id, nombre, area, bloque, subbloque, rutaRel, mapData }) {
+  const niveles = normalizeLevels(mapData?.niveles);
+  const prerequisitos = normalizeList(mapData?.prerequisitos, []);
+  const tags = normalizeList(mapData?.tags, []);
+  const graficos = normalizeList(mapData?.graficos, []);
+  const physicalRole = normalizePhysicalRole(mapData?.physical_role);
 
-area: ${area}
-bloque: ${bloque}
-subbloque: ${subbloque}
-
-# Se rellenan con scripts posteriores:
-# orden:
-# dificultad:
-
-niveles:
-  - ESO
-  - Bachillerato
-
-prerequisitos: []
-
-descripcion_corta: >
-  (Pendiente)
-
-tags: []
-
-objetivos:
-  - (Pendiente)
-
-suposiciones:
-  - (Pendiente)
-
-ruta_relativa: ${rutaRel}
-`;
+  return yaml.dump({
+    id,
+    slug: id,
+    nombre,
+    area,
+    bloque,
+    subbloque,
+    type: "leaf",
+    orden: mapData?.orden ?? 0,
+    niveles,
+    icon: mapData?.icon || "",
+    ruta_relativa: rutaRel,
+    descripcion: "(Pendiente)",
+    description_en: "",
+    tags,
+    prerequisitos,
+    graficos,
+    physical_role: physicalRole,
+    dificultad: mapData?.dificultad || "",
+    tiempo_estimado_min: mapData?.tiempo_estimado_min ?? null,
+    descripcion_corta: mapData?.descripcion_corta || "(Pendiente)",
+    objetivos: [],
+    suposiciones: [],
+  }, { lineWidth: 120, noRefs: true });
 }
 
 function indexTemplate({ id, title, rel, children = [] }) {
@@ -150,8 +192,9 @@ function createLeaf(dir, ctx) {
   const id = path.basename(dir);
   const nombre = ctx.nombre || humanizeId(id);
   const rel = path.relative(ROOT, dir).replace(/\\/g, "/");
+  const mapData = getMapDataByRoute(rel);
 
-  writeFile(path.join(dir, "meta.yaml"), metaTemplate({ ...ctx, id, nombre, rutaRel: rel }));
+  writeFile(path.join(dir, "meta.yaml"), metaTemplate({ ...ctx, id, nombre, rutaRel: rel, mapData }));
   writeFile(path.join(dir, "teoria.md"), mdTemplate(nombre, ["Idea clave (pendiente)", "Explicación (pendiente)"]));
   writeFile(path.join(dir, "modelos.md"), mdTemplate("Modelo y validez", ["Suposiciones (pendiente)", "Cuándo NO aplica (pendiente)"]));
   writeFile(path.join(dir, "errores.md"), mdTemplate("Errores comunes", ["Error típico 1 (pendiente)", "Error típico 2 (pendiente)"]));

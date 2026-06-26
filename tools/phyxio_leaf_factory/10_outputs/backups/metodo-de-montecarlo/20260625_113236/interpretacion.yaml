@@ -1,0 +1,669 @@
+version: 5.0.0
+id: metodo-de-montecarlo
+leaf_id: metodo-de-montecarlo
+nombre:
+  es: Metodo de montecarlo
+  en: Monte Carlo Method
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: modelos-y-metodos
+  parent_id: modelos-y-metodos
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/modelos-y-metodos/metodo-de-montecarlo
+  orden: 277200
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas: estimador_montecarlo_media, error_estandar_montecarlo, varianza_muestral_montecarlo, probabilidad_aceptacion_metropolis,
+    promedio_ponderado_muestras
+  magnitudes: numero_muestras, valor_muestra, estimador_montecarlo, varianza_muestral, error_estandar, probabilidad_aceptacion,
+    peso_muestra, energia_estado, temperatura, constante_boltzmann
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: physical concept
+  axis_convention:
+    es: El signo depende del convenio de ejes elegido cuando intervienen magnitudes vectoriales.
+    en: The sign depends on the chosen axis convention when vector quantities are involved.
+  standard_assumptions:
+  - es: El modelo se interpreta dentro de las hipótesis declaradas en el leaf.
+    en: The model is interpreted within the assumptions declared in the leaf.
+  standard_warnings:
+  - es: No interpretes el resultado sin revisar unidades, signo y validez del modelo.
+    en: Do not interpret the result without checking units, sign, and model validity.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: La interpretación debe respetar la dimensión física de cada resultado.
+      en: The interpretation must respect the physical dimension of each result.
+error_patterns:
+  enabled: true
+  patterns:
+  - id: unit_sign_model_confusion
+    status: warning
+    text:
+      es: Un error frecuente es leer el número sin unidad, signo o modelo físico.
+      en: A common error is reading the number without unit, sign, or physical model.
+graph_reading_policy:
+  enabled: true
+  primary_variable: estimador_montecarlo
+  reading_sequence:
+  - es: Identifica ejes, dirección, sentido y relación entre magnitudes antes de interpretar el resultado.
+    en: Identify axes, direction, sense, and the relation between quantities before interpreting the result.
+  key_points:
+  - es: Conecta la lectura visual con el signo, la unidad y el modelo físico.
+    en: Connect the visual reading with sign, unit, and the physical model.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Compara el resultado con valores cotidianos o escalas físicas conocidas cuando sea posible.
+    en: Compare the result with everyday values or known physical scales when possible.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Comprueba que las unidades finales coinciden con la magnitud interpretada.
+    en: Check that the final units match the interpreted quantity.
+  common_unit_mistakes:
+  - es: Mezclar unidades incompatibles antes de aplicar la fórmula.
+    en: Mixing incompatible units before applying the formula.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  estimador_montecarlo:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: output
+      en: Monte Carlo estimator
+    summary_rules:
+    - id: estimador_montecarlo_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[estimador_montecarlo]] indica la magnitud física principal que se está interpretando.
+        en: The result [[estimador_montecarlo]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: estimador_montecarlo_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[estimador_montecarlo]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[estimador_montecarlo]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: estimador_montecarlo_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[estimador_montecarlo]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[estimador_montecarlo]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: estimador_montecarlo_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[estimador_montecarlo]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[estimador_montecarlo]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: estimador_montecarlo_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[estimador_montecarlo]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[estimador_montecarlo]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: estimador_montecarlo_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[estimador_montecarlo]] como un número aislado. Su sentido depende del modelo, la unidad y el
+          signo.
+        en: Do not interpret [[estimador_montecarlo]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: estimador_montecarlo_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[estimador_montecarlo]], revisa la coherencia física y vuelve a la calculadora si necesitas
+          otro despeje.
+        en: After obtaining [[estimador_montecarlo]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: estimador_montecarlo_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[estimador_montecarlo]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[estimador_montecarlo]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: estimador_montecarlo_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[estimador_montecarlo]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[estimador_montecarlo]] by checking what happens if a dominant quantity grows,
+          decreases, or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  valor_muestra:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: sample value
+    summary_rules:
+    - id: valor_muestra_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[valor_muestra]] indica la magnitud física principal que se está interpretando.
+        en: The result [[valor_muestra]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: valor_muestra_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[valor_muestra]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[valor_muestra]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: valor_muestra_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[valor_muestra]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[valor_muestra]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: valor_muestra_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[valor_muestra]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[valor_muestra]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: valor_muestra_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[valor_muestra]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[valor_muestra]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: valor_muestra_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[valor_muestra]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[valor_muestra]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: valor_muestra_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[valor_muestra]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[valor_muestra]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: valor_muestra_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[valor_muestra]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[valor_muestra]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: valor_muestra_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[valor_muestra]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[valor_muestra]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  error_estandar:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: dominant_result
+      en: standard error
+    summary_rules:
+    - id: error_estandar_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[error_estandar]] indica la magnitud física principal que se está interpretando.
+        en: The result [[error_estandar]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: error_estandar_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[error_estandar]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[error_estandar]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: error_estandar_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[error_estandar]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[error_estandar]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: error_estandar_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[error_estandar]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[error_estandar]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: error_estandar_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[error_estandar]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[error_estandar]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: error_estandar_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[error_estandar]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[error_estandar]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: error_estandar_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[error_estandar]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[error_estandar]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: error_estandar_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[error_estandar]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[error_estandar]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: error_estandar_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[error_estandar]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[error_estandar]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_muestras:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: independent_variable
+      en: number of samples
+    summary_rules:
+    - id: numero_muestras_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[numero_muestras]] indica la magnitud física principal que se está interpretando.
+        en: The result [[numero_muestras]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: numero_muestras_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[numero_muestras]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[numero_muestras]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: numero_muestras_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[numero_muestras]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[numero_muestras]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: numero_muestras_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[numero_muestras]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[numero_muestras]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: numero_muestras_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[numero_muestras]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[numero_muestras]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: numero_muestras_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[numero_muestras]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[numero_muestras]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: numero_muestras_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[numero_muestras]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[numero_muestras]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: numero_muestras_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[numero_muestras]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[numero_muestras]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: numero_muestras_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[numero_muestras]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[numero_muestras]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  varianza_muestral:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: diagnostic
+      en: sample variance
+    summary_rules:
+    - id: varianza_muestral_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[varianza_muestral]] indica la magnitud física principal que se está interpretando.
+        en: The result [[varianza_muestral]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: varianza_muestral_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[varianza_muestral]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[varianza_muestral]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: varianza_muestral_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[varianza_muestral]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[varianza_muestral]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: varianza_muestral_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[varianza_muestral]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[varianza_muestral]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: varianza_muestral_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[varianza_muestral]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[varianza_muestral]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: varianza_muestral_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[varianza_muestral]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[varianza_muestral]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: varianza_muestral_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[varianza_muestral]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[varianza_muestral]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: varianza_muestral_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[varianza_muestral]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[varianza_muestral]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: varianza_muestral_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[varianza_muestral]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[varianza_muestral]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  probabilidad_aceptacion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: criterion
+      en: acceptance probability
+    summary_rules:
+    - id: probabilidad_aceptacion_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[probabilidad_aceptacion]] indica la magnitud física principal que se está interpretando.
+        en: The result [[probabilidad_aceptacion]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: probabilidad_aceptacion_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[probabilidad_aceptacion]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[probabilidad_aceptacion]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: probabilidad_aceptacion_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[probabilidad_aceptacion]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[probabilidad_aceptacion]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: probabilidad_aceptacion_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[probabilidad_aceptacion]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[probabilidad_aceptacion]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: probabilidad_aceptacion_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[probabilidad_aceptacion]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[probabilidad_aceptacion]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: probabilidad_aceptacion_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[probabilidad_aceptacion]] como un número aislado. Su sentido depende del modelo, la unidad y
+          el signo.
+        en: Do not interpret [[probabilidad_aceptacion]] as an isolated number. Its meaning depends on the model, unit, and
+          sign.
+    next_step_rules:
+    - id: probabilidad_aceptacion_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[probabilidad_aceptacion]], revisa la coherencia física y vuelve a la calculadora si necesitas
+          otro despeje.
+        en: After obtaining [[probabilidad_aceptacion]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: probabilidad_aceptacion_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[probabilidad_aceptacion]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[probabilidad_aceptacion]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: probabilidad_aceptacion_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[probabilidad_aceptacion]] comprobando qué ocurre si una magnitud dominante crece,
+          disminuye o se anula.
+        en: Analyze the limiting cases of [[probabilidad_aceptacion]] by checking what happens if a dominant quantity grows,
+          decreases, or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

@@ -1,0 +1,362 @@
+const e=`magnitudes:
+
+  - id: v_rms
+    symbol: "v_{rms}"
+    nombre:
+      es: Velocidad cuadrática media
+      en: Root mean square speed
+    descripcion:
+      es: Raíz cuadrada de la media de los cuadrados de las velocidades moleculares; representativa de la energía cinética media del gas.
+      en: Square root of the mean of the squared molecular speeds; representative of the average kinetic energy of the gas.
+    unidad_si: "m/s"
+    dimension: "[L T^-1]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - presión cinética del gas ideal
+      - energía cinética media molecular
+      - velocidad característica de distribución de Maxwell-Boltzmann
+    common_mistake: "Confundir la velocidad cuadrática media con la velocidad media aritmética; son distintas y la cuadrática media es siempre mayor o igual."
+    typical_range: "Hidrógeno a 300 K: aprox. 1930 m/s. Nitrógeno a 300 K: aprox. 515 m/s. Oxígeno a 300 K: aprox. 484 m/s."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La velocidad cuadrática media es siempre positiva; es una magnitud de módulo."
+        en: "Root mean square speed is always positive; it is a magnitude quantity."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un valor nulo implicaría temperatura absoluta cero, no alcanzable según el tercer principio de la termodinámica."
+        en: "A zero value would imply absolute zero temperature, unachievable according to the third law of thermodynamics."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - determinación de la energía cinética media molecular
+        - caracterización dinámica del estado térmico del gas
+      secondary_for:
+        - comparación entre gases de distinta masa molar
+    graph_binding:
+      channels:
+        - eje_y_vrms
+    pedagogical_notes:
+      es: "La velocidad cuadrática media es la ventana microscópica hacia la temperatura: cuando [[T]] dobla, [[v_rms]] crece por un factor raíz de dos, no por dos. Este comportamiento subraíz es contraintuitivo y es el primer escalón de comprensión de la teoría cinética."
+      en: "Root mean square speed is the microscopic window into temperature: when [[T]] doubles, [[v_rms]] grows by a factor of root two, not two. This sub-linear behavior is counterintuitive and the first step in understanding kinetic theory."
+
+  - id: T
+    symbol: T
+    nombre:
+      es: Temperatura absoluta
+      en: Absolute temperature
+    descripcion:
+      es: Temperatura termodinámica del gas en kelvin; medida macroscópica del contenido de energía cinética media de las moléculas.
+      en: Thermodynamic temperature of the gas in kelvin; macroscopic measure of the average kinetic energy content of the molecules.
+    unidad_si: K
+    dimension: "[Theta]"
+    is_vector: false
+    components: []
+    category: fundamental
+    physical_role: core_physical_quantity
+    used_in:
+      - presión cinética del gas ideal
+      - velocidad cuadrática media
+      - energía cinética media molecular
+    common_mistake: "Usar la temperatura en grados Celsius en lugar de kelvin, produciendo resultados erróneos o negativos en la velocidad cuadrática media."
+    typical_range: "Gas a temperatura ambiente: 293–300 K. Gases industriales: 200–1200 K."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La temperatura absoluta es siempre positiva; valores negativos en kelvin no tienen significado físico."
+        en: "Absolute temperature is always positive; negative values in kelvin carry no physical meaning."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Temperatura cero kelvin es el cero absoluto, inalcanzable en la práctica; implicaría que todas las moléculas están en reposo."
+        en: "Zero kelvin is absolute zero, unachievable in practice; it would imply all molecules are at rest."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - cálculo de la energía cinética media molecular
+        - determinación de la velocidad cuadrática media
+      secondary_for:
+        - verificación de condiciones de aplicabilidad del gas ideal
+    graph_binding:
+      channels:
+        - eje_x_temperatura
+    pedagogical_notes:
+      es: "La temperatura en la teoría cinética no es una sensación ni un grado Celsius arbitrario, sino una medida absoluta de la energía de agitación molecular. Sin convertir a kelvin, el modelo falla cuantitativamente."
+      en: "Temperature in kinetic theory is not a sensation or an arbitrary Celsius degree, but an absolute measure of molecular agitation energy. Without converting to kelvin, the model fails quantitatively."
+
+  - id: m_mol
+    symbol: "m"
+    nombre:
+      es: Masa de una molécula
+      en: Molecular mass
+    descripcion:
+      es: Masa de una sola molécula del gas; se obtiene dividiendo la masa molar entre el número de Avogadro.
+      en: Mass of a single gas molecule; obtained by dividing the molar mass by Avogadro's number.
+    unidad_si: kg
+    dimension: "[M]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: input_parameter
+    used_in:
+      - energía cinética media molecular
+      - presión cinética del gas ideal
+    common_mistake: "Usar la masa molar en kg/mol en lugar de la masa de una molécula en kg, sin dividir entre el número de Avogadro."
+    typical_range: "Hidrógeno: 3.32×10⁻²⁷ kg. Nitrógeno: 4.65×10⁻²⁶ kg. Oxígeno: 5.32×10⁻²⁶ kg."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La masa molecular es siempre positiva; no tiene interpretación de signo."
+        en: "Molecular mass is always positive; it carries no sign interpretation."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Una masa molecular nula es físicamente imposible para partículas con masa en reposo."
+        en: "Zero molecular mass is physically impossible for particles with rest mass."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - cálculo de la energía cinética media molecular
+      secondary_for:
+        - comparación de gases ligeros y pesados
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "La masa molecular conecta la escala atómica con la macroscópica: el gas de hidrógeno tiene moléculas mucho más ligeras que el nitrógeno, lo que explica su velocidad cuadrática media casi cuatro veces mayor a la misma temperatura."
+      en: "Molecular mass connects the atomic scale with the macroscopic: hydrogen gas has much lighter molecules than nitrogen, explaining its root mean square speed nearly four times higher at the same temperature."
+
+  - id: E_k_mol
+    symbol: "E_k"
+    nombre:
+      es: Energía cinética media molecular
+      en: Mean molecular kinetic energy
+    descripcion:
+      es: Energía cinética translacional promedio de una molécula del gas; proporcional a la temperatura absoluta mediante la constante de Boltzmann.
+      en: Average translational kinetic energy of a single gas molecule; proportional to absolute temperature via Boltzmann's constant.
+    unidad_si: J
+    dimension: "[M L^2 T^-2]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - interpretación cinética de la temperatura
+      - relación temperatura-velocidad molecular
+    common_mistake: "Incluir los grados de libertad rotacionales o vibracionales en la expresión de la energía cinética translacional; la fórmula clásica de la teoría cinética considera solo traslación."
+    typical_range: "A 300 K: aprox. 6.21×10⁻²¹ J por molécula. A 1000 K: aprox. 2.07×10⁻²⁰ J por molécula."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La energía cinética es siempre positiva; no tiene interpretación de signo en este contexto."
+        en: "Kinetic energy is always positive; it carries no sign interpretation in this context."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Energía cinética media nula implicaría temperatura absoluta cero, no alcanzable termodinámicamente."
+        en: "Zero mean kinetic energy would imply absolute zero temperature, thermodynamically unachievable."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - interpretación microscópica de la temperatura
+        - lectura del estado energético del gas
+      secondary_for:
+        - conexión con el primer principio de la termodinámica
+    graph_binding:
+      channels:
+        - eje_y_energia_cinetica
+    pedagogical_notes:
+      es: "La energía cinética media molecular es el puente directo entre lo microscópico y lo macroscópico en la teoría cinética: un valor de temperatura macroscópico se traduce literalmente en joules por molécula."
+      en: "Mean molecular kinetic energy is the direct bridge between microscopic and macroscopic in kinetic theory: a macroscopic temperature value translates literally into joules per molecule."
+
+  - id: k_B
+    symbol: "k_B"
+    nombre:
+      es: Constante de Boltzmann
+      en: Boltzmann constant
+    descripcion:
+      es: "Constante fundamental que relaciona la energía cinética media molecular con la temperatura absoluta; vale 1.381×10⁻²³ J/K."
+      en: "Fundamental constant relating mean molecular kinetic energy to absolute temperature; equals 1.381×10⁻²³ J/K."
+    unidad_si: "J/K"
+    dimension: "[M L^2 T^-2 Theta^-1]"
+    is_vector: false
+    components: []
+    category: constant
+    physical_role: input_parameter
+    used_in:
+      - energía cinética media molecular
+      - velocidad cuadrática media
+    common_mistake: "Confundir la constante de Boltzmann con la constante universal de los gases R; R es la constante de Boltzmann multiplicada por el número de Avogadro."
+    typical_range: "1.380649×10⁻²³ J/K (valor exacto definido por el SI desde 2019)."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La constante de Boltzmann es una constante positiva fundamental; no tiene interpretación de signo."
+        en: "Boltzmann's constant is a positive fundamental constant; it carries no sign interpretation."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un valor nulo eliminaría la escala de energía cinética molecular, lo que contradiría toda la física estadística."
+        en: "A zero value would eliminate the molecular kinetic energy scale, contradicting all of statistical physics."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - conversión de kelvin a joules por molécula
+      secondary_for:
+        - conexión con la constante de los gases ideales
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "La constante de Boltzmann es el factor de conversión entre la escala macroscópica de temperatura y la escala microscópica de energía. Su valor diminuto refleja la enorme cantidad de moléculas necesarias para efectos macroscópicos observables."
+      en: "Boltzmann's constant is the conversion factor between the macroscopic temperature scale and the microscopic energy scale. Its tiny value reflects the enormous number of molecules needed for observable macroscopic effects."
+
+  - id: N
+    symbol: N
+    nombre:
+      es: Número de moléculas
+      en: Number of molecules
+    descripcion:
+      es: Cantidad total de moléculas en el volumen del gas; magnitud extensiva que determina la contribución colectiva de las partículas a la presión.
+      en: Total number of molecules in the gas volume; extensive quantity that determines the collective particle contribution to pressure.
+    unidad_si: "adimensional"
+    dimension: "[1]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: input_parameter
+    used_in:
+      - presión cinética del gas ideal
+    common_mistake: "Confundir el número de moléculas N con el número de moles n; difieren por el factor del número de Avogadro."
+    typical_range: "Un mol de gas contiene 6.022×10²³ moléculas. Volúmenes de laboratorio: del orden de 10²² a 10²⁵ moléculas."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El número de moléculas es siempre un entero positivo; no tiene interpretación de signo."
+        en: "The number of molecules is always a positive integer; it carries no sign interpretation."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un número nulo de moléculas equivale a vacío; no hay gas al que aplicar el modelo."
+        en: "Zero molecules means vacuum; there is no gas to which the model applies."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - cálculo de la presión cinética
+      secondary_for:
+        - conversión entre escala molecular y escala molar
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "En la teoría cinética, N aparece siempre como el número bruto de partículas, no en moles. La enormidad de N explica por qué la presión macroscópica emerge de incontables colisiones individuales de magnitud despreciable."
+      en: "In kinetic theory, N always appears as the raw particle count, not in moles. The enormity of N explains why macroscopic pressure emerges from countless individual collisions of negligible magnitude."
+
+  - id: P
+    symbol: P
+    nombre:
+      es: Presión del gas
+      en: Gas pressure
+    descripcion:
+      es: Fuerza por unidad de área ejercida por las moléculas del gas sobre las paredes del recipiente; magnitud macroscópica emergente del movimiento molecular.
+      en: Force per unit area exerted by gas molecules on the container walls; macroscopic quantity emerging from molecular motion.
+    unidad_si: Pa
+    dimension: "[M L^-1 T^-2]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - presión cinética del gas ideal
+      - ecuación de estado del gas ideal
+    common_mistake: "Creer que la presión es una propiedad de las moléculas individuales; en realidad es una magnitud estadística emergente de millones de colisiones por segundo."
+    typical_range: "Presión atmosférica estándar: 101 325 Pa. Gases industriales: 10⁴ Pa a 10⁷ Pa."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La presión es siempre positiva; una presión negativa no tiene significado en gases ideales clásicos."
+        en: "Pressure is always positive; negative pressure carries no meaning in classical ideal gases."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Presión nula implicaría vacío absoluto; el modelo cinético no aplica sin partículas."
+        en: "Zero pressure implies perfect vacuum; the kinetic model does not apply without particles."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - resultado calculado principal de la presión cinética
+        - verificación macroscópica del estado del gas
+      secondary_for:
+        - conexión con la ecuación de estado del gas ideal
+    graph_binding:
+      channels:
+        - eje_y_presion
+    pedagogical_notes:
+      es: "La presión en la teoría cinética es el resultado colectivo de millones de colisiones moleculares aleatorias; es el ejemplo más claro de una propiedad macroscópica emergente de un comportamiento microscópico caótico."
+      en: "Pressure in kinetic theory is the collective result of millions of random molecular collisions; it is the clearest example of a macroscopic property emerging from chaotic microscopic behavior."
+
+  - id: V
+    symbol: V
+    nombre:
+      es: Volumen del gas
+      en: Gas volume
+    descripcion:
+      es: Volumen del recipiente que contiene el gas; determina la densidad numérica de moléculas y, por tanto, la frecuencia de colisiones con las paredes.
+      en: Volume of the container holding the gas; determines the number density of molecules and thus the collision frequency with the walls.
+    unidad_si: "m³"
+    dimension: "[L^3]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: input_parameter
+    used_in:
+      - presión cinética del gas ideal
+    common_mistake: "Usar el volumen en litros o cm³ sin convertir a m³ cuando la presión se expresa en pascales."
+    typical_range: "Recipiente de laboratorio: 0.001 m³ (un litro). Cilindro de motor: 10⁻⁴ a 10⁻³ m³."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El volumen es siempre positivo; no tiene interpretación de signo."
+        en: "Volume is always positive; it carries no sign interpretation."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Volumen nulo implicaría colapso físico del gas; las moléculas tendrían volumen propio que lo impide en la realidad."
+        en: "Zero volume would imply physical collapse of the gas; molecules have their own volume that prevents this in reality."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - determinación de la densidad numérica molecular
+      secondary_for:
+        - relación con la ecuación de estado del gas ideal
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "En la fórmula cinética de la presión, el volumen aparece en el denominador: comprimir el gas aumenta la densidad de moléculas y eleva la presión. Esta relación inversa es la base microscópica de la ley de Boyle."
+      en: "In the kinetic pressure formula, volume appears in the denominator: compressing the gas increases molecular density and raises pressure. This inverse relationship is the microscopic basis of Boyle's law."
+`;export{e as default};

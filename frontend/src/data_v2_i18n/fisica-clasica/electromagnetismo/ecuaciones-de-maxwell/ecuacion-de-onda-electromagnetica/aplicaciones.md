@@ -1,0 +1,38 @@
+# Aplicaciones
+
+## 1. Diseño de antenas para comunicaciones inalámbricas
+
+Las antenas de radio, televisión, WiFi y telefonía móvil se diseñan directamente a partir de la relación de dispersión [[omega]] = [[velocidad_de_la_luz_en_el_vacio]]·[[numero_de_onda]], que conecta la [[lambda]] de la señal con su frecuencia [[omega]]. Un dipolo de media onda, la geometría de antena más utilizada en la práctica, tiene una longitud física igual a la mitad de [[lambda]]. Para una señal WiFi de 2.4 GHz, la [[lambda]] en el vacío es de 12.5 cm, por lo que la longitud del dipolo es aproximadamente 6.25 cm, valor que coincide con las antenas de los routers domésticos. Para el estándar 5G a 28 GHz, la [[lambda]] cae a unos 10.7 mm y los dipolos miden menos de 5.4 mm, lo que permite fabricar matrices de cientos de antenas en un chip del tamaño de un sello de correos.
+
+La magnitud dominante en el diseño de antenas es [[lambda]], que fija las dimensiones físicas del radiador. Cambiar la [[omega]] de emisión sin ajustar la longitud de la antena produce un desajuste de impedancia que reduce drásticamente la eficiencia de transmisión.
+
+Variable dominante: la longitud de onda [[lambda]], que determina las dimensiones físicas de la antena y condiciona el diseño de todo el sistema irradiante.
+Límite de validez: el modelo de onda plana y la relación de dispersión del vacío son válidos cuando la antena opera en el espacio libre o en aire seco. En entornos con objetos conductores cercanos, reflexiones y difracción modifican la distribución de [[campo_electrico]] y [[campo_magnetico]] alrededor de la antena.
+
+## 2. Fibras ópticas y comunicaciones de alta velocidad
+
+Las fibras ópticas de sílice confinan y guían ondas EM en la banda infrarroja, principalmente a [[lambda]] ≈ 1550 nm ([[omega]] ≈ 1.22×10¹⁵ rad/s), donde la atenuación del material es mínima. Dentro de la fibra, la velocidad de fase no es [[velocidad_de_la_luz_en_el_vacio]] sino [[velocidad_de_la_luz_en_el_vacio]] dividida por el índice de refracción n ≈ 1.46, lo que introduce un retardo de propagación de unos 4.88 ns/m respecto al vacío. Pero el problema más limitante no es la velocidad media sino la dispersión cromática: distintos componentes espectrales del pulso ([[omega]] ligeramente distintas) viajan a velocidades de grupo distintas porque n depende de [[omega]]. En una fibra convencional, la dispersión cromática es de unos 17 ps/(nm·km) a 1550 nm, lo que ensancha pulsos de picosegundo en microsegundos tras miles de kilómetros. La solución de ingeniería es usar fibras de dispersión desplazada o compensadores de dispersión para mantener la integridad del pulso.
+
+Variable dominante: la velocidad de grupo d[[omega]]/d[[numero_de_onda]], que controla el ensanchamiento de los pulsos y limita la tasa de transmisión de datos.
+Límite de validez: el modelo de ecuación de onda lineal en la fibra es válido a potencias ópticas por debajo de la umbral de efectos no lineales como la automodulación de fase o la dispersión estimulada de Raman, típicamente por debajo de unos cientos de mW en modos monomodo.
+
+## 3. Radar y medición de distancias con microondas
+
+Los sistemas de radar emiten pulsos de microondas con [[omega]] del orden de 10⁹–10¹⁰ rad/s y miden el tiempo que tarda el pulso en recorrer la distancia hasta el objetivo y regresar. La ecuación de onda garantiza que el pulso viaja a [[velocidad_de_la_luz_en_el_vacio]] en el aire (con corrección inferior al 0.03%), de modo que el tiempo de ida y vuelta dividido entre dos y multiplicado por [[velocidad_de_la_luz_en_el_vacio]] da la distancia con gran precisión. Un radar meteorológico de banda C ([[lambda]] ≈ 5 cm) detecta gotas de lluvia de diámetro comparable a [[lambda]] con la máxima eficiencia de retrodispersión según la teoría de Mie. Un radar de apertura sintética (SAR) aerotransportado logra resoluciones espaciales de decímetros calculando coherentemente la fase de los ecos recibidos en distintas posiciones, lo que solo es posible porque la ecuación de onda predice la fase con precisión.
+
+Variable dominante: la velocidad de propagación [[velocidad_de_la_luz_en_el_vacio]], que convierte el tiempo de vuelo del pulso en distancia con una precisión de centímetros o mejor.
+Límite de validez: la hipótesis de [[velocidad_de_la_luz_en_el_vacio]] constante en el aire falla cuando la troposfera tiene gradientes fuertes de temperatura y humedad (ductos atmosféricos), que pueden redirigir las ondas y producir ecos espurios a distancias aparentes incorrectas.
+
+## 4. Resonancia magnética nuclear e imágenes médicas
+
+En los equipos de resonancia magnética (MRI), la excitación de los núcleos de hidrógeno se realiza mediante pulsos de radiofrecuencia (RF) cuya [[omega]] coincide con la frecuencia de Larmor del protón en el campo estático, típicamente entre 10 y 300 MHz según la intensidad del imán. Estos pulsos son ondas EM que deben penetrar en el cuerpo humano, donde el tejido biológico tiene permitividades relativas de orden 60–80 y conductividades de orden 1 S/m. La ecuación de onda en el tejido predice una longitud de penetración de varios centímetros a 64 MHz (campo de 1.5 T) y de pocos centímetros a 298 MHz (campo de 7 T). A campos muy altos (7 T o más), la [[lambda]] dentro del tejido es comparable al tamaño del cuerpo y aparecen inhomogeneidades de campo que degradan la uniformidad de la imagen, un problema llamado "efecto dieléctrico" que solo puede resolverse mediante diseño avanzado de bobinas o corrección de fase.
+
+Variable dominante: la [[lambda]] efectiva dentro del tejido, que determina si la distribución de campo RF es homogénea o muestra nodos y antinodos visibles en la imagen.
+Límite de validez: el modelo de onda plana con propiedades homogéneas del medio falla en tejidos con interfaces bruscas (hueso-tejido blando, cavidades de aire), donde reflexiones y refracciones distorsionan la distribución del campo.
+
+## 5. Metrología de la velocidad de la luz y definición del metro
+
+Desde 1983, el metro del SI se define exactamente a partir de [[velocidad_de_la_luz_en_el_vacio]]: un metro es la distancia que la luz recorre en el vacío durante 1/299 792 458 de segundo. Este cambio de paradigma invierte la relación entre medida y definición: antes se medía [[velocidad_de_la_luz_en_el_vacio]] y se definía el metro por medición de referencia; ahora [[velocidad_de_la_luz_en_el_vacio]] es un número exacto sin incertidumbre, y cualquier medida de distancia se obtiene midiendo tiempos de tránsito de la luz. Los interferómetros láser de precisión (como los del experimento LIGO para la detección de ondas gravitacionales) explotan directamente la ecuación de onda EM para convertir diferencias de fase óptica en desplazamientos con resolución de 10⁻¹⁸ m, 17 órdenes de magnitud por debajo del metro. La constante [[velocidad_de_la_luz_en_el_vacio]] también fija [[epsilon0]] desde la redefinición del SI de 2019, vinculando la permeabilidad del vacío [[mu0]] a la constante de estructura fina y a la carga elemental.
+
+Variable dominante: [[velocidad_de_la_luz_en_el_vacio]] como constante universal que conecta tiempo y espacio, y que fija la escala de todas las medidas electromagnéticas del SI.
+Límite de validez: la definición metrológica de [[velocidad_de_la_luz_en_el_vacio]] es exacta en el vacío. En medios materiales o en regiones con curvatura del espacio-tiempo apreciable (cerca de objetos masivos), la velocidad efectiva de propagación de la luz difiere de [[velocidad_de_la_luz_en_el_vacio]] y los instrumentos deben corregirse en consecuencia.

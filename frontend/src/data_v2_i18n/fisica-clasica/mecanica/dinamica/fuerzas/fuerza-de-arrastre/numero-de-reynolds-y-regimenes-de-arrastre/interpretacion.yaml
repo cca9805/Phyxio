@@ -1,0 +1,212 @@
+version: 2
+id: interpretacion-reynolds-y-regimenes
+leaf_id: numero-de-reynolds-y-regimenes-de-arrastre
+nombre:
+  es: Interpretacion de Reynolds y regimenes de arrastre
+  en: Interpretation of Reynolds and Drag Regimes
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: dinamica
+  parent_id: fuerza-de-arrastre
+  ruta_relativa: fisica-clasica/mecanica/dinamica/fuerzas/fuerza-de-arrastre/numero-de-reynolds-y-regimenes-de-arrastre
+dependencies:
+  formulas:
+  - reynolds_viscosidad_dinamica
+  - reynolds_viscosidad_cinematica
+  magnitudes:
+  - rho
+  - v
+  - L
+  - eta
+  - nu
+  - Re
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  Re:
+    summary_rules:
+    - id: Re_summary
+      when: 'true'
+      status: info
+      text:
+        es: Re resume si la viscosidad todavia manda o si la inercia del flujo ya pesa mas.
+        en: Re summarizes whether viscosity still rules or whether flow inertia is becoming more important.
+    coherence_rules:
+    - id: Re_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Si suben v o L con el mismo medio, Re no deberia bajar.
+        en: If v or L increase in the same medium, Re should not decrease.
+    physical_reading_rules:
+    - id: Re_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si Re crece, el fluido conserva mejor su impulso y cuesta mas que la viscosidad borre la estela; si Re baja, la viscosidad reorganiza antes el flujo.
+        en: If Re grows, the fluid keeps its momentum better and viscosity has a harder time erasing the wake; if Re drops, viscosity reorganizes the flow earlier.
+    model_validity_rules:
+    - id: Re_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Interpreta Re junto con la longitud caracteristica elegida y no como un numero aislado.
+        en: Interpret Re together with the chosen characteristic length, not as an isolated number.
+    graph_rules:
+    - id: Re_graph
+      when: 'true'
+      status: info
+      text:
+        es: En la grafica, al subir Re deben cambiar tambien la lectura del regimen y el modelo recomendado.
+        en: In the graph, increasing Re should also change the regime reading and the recommended model.
+    likely_errors:
+    - id: Re_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes Re como causa directa de una fuerza grande; usalo primero para diagnosticar el regimen y despues elegir el modelo de arrastre.
+        en: Do not interpret Re as the direct cause of a large force; use it first to diagnose the regime and then choose the drag model.
+    next_step_rules:
+    - id: Re_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa Re para decidir si debes ir al modelo lineal, al cuadratico o a una zona transicional.
+        en: Use Re to decide whether you should move to a linear model, a quadratic one, or a transitional zone.
+  nu:
+    summary_rules:
+    - id: nu_summary
+      when: 'true'
+      status: info
+      text:
+        es: nu resume cuan rapidamente difunde el medio el efecto de la viscosidad.
+        en: nu summarizes how quickly the medium diffuses the effect of viscosity.
+    coherence_rules:
+    - id: nu_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Si nu aumenta con v y L fijos, Re debe bajar.
+        en: If nu increases while v and L stay fixed, Re should go down.
+    physical_reading_rules:
+    - id: nu_physical
+      when: 'true'
+      status: info
+      text:
+        es: Un nu grande favorece una lectura mas viscosa del mismo problema.
+        en: A larger nu favors a more viscous reading of the same problem.
+    model_validity_rules:
+    - id: nu_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Usa nu tabulada solo si coincide con el fluido y la temperatura reales.
+        en: Use tabulated nu only if it matches the actual fluid and temperature.
+    graph_rules:
+    - id: nu_graph
+      when: 'true'
+      status: info
+      text:
+        es: En la grafica, un nu mayor debe desplazar el punto hacia Reynolds menores.
+        en: In the graph, a larger nu should shift the point toward lower Reynolds values.
+    likely_errors:
+    - id: nu_warn
+      when: 'true'
+      status: warning
+      text:
+        es: "No confundas nu con eta: se relacionan, pero no representan exactamente la misma magnitud fisica."
+        en: "Do not confuse nu with eta: they are related, but they do not represent exactly the same physical quantity."
+    next_step_rules:
+    - id: nu_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa nu para comparar como cambia el regimen al cambiar de medio o temperatura.
+        en: Use nu to compare how regime changes when medium or temperature changes.
+  v:
+    summary_rules:
+    - id: v_summary
+      when: 'true'
+      status: info
+      text:
+        es: v resume cuan intensa es la interaccion entre cuerpo y flujo.
+        en: v summarizes how intense the interaction between body and flow is.
+    coherence_rules:
+    - id: v_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Si v aumenta con L y nu fijos, Re debe aumentar en la misma proporcion.
+        en: If v increases while L and nu stay fixed, Re should increase in the same proportion.
+    physical_reading_rules:
+    - id: v_physical
+      when: 'true'
+      status: info
+      text:
+        es: Una velocidad mayor empuja al problema hacia un mapa mas inercial del flujo.
+        en: A larger speed pushes the problem toward a more inertial flow map.
+    model_validity_rules:
+    - id: v_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Usa v como velocidad caracteristica solo si representa de verdad la escena fisica dominante.
+        en: Use v as characteristic speed only if it truly represents the dominant physical scene.
+    graph_rules:
+    - id: v_graph
+      when: 'true'
+      status: info
+      text:
+        es: En Coord, variar v debe mover el punto a traves de los distintos regimenes de Re.
+        en: In Coord, changing v should move the point across the different Re regimes.
+    likely_errors:
+    - id: v_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No uses una velocidad irrelevante del enunciado; toma la que realmente controla el flujo alrededor del cuerpo.
+        en: Do not use an irrelevant speed from the statement; take the one that actually controls the flow around the body.
+    next_step_rules:
+    - id: v_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa v para estimar si una aceleracion del proceso cambiara tambien el modelo de arrastre.
+        en: Use v to estimate whether speeding up the process will also change the drag model.

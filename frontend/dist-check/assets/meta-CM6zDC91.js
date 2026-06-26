@@ -1,0 +1,73 @@
+const e=`version: 5
+id: subamortiguado
+type: leaf
+nombre:
+  es: Subamortiguado
+  en: Underdamped Regime
+titulo:
+  es: Subamortiguado
+  en: Underdamped Regime
+area: fisica-clasica
+bloque: mecanica
+subbloque: oscilaciones
+parent_id: amortiguamiento
+ruta_relativa: fisica-clasica/mecanica/oscilaciones/amortiguamiento/subamortiguado
+orden: 217410
+dificultad: 3
+tiempo_estimado_min: 55
+icon: "🌊"
+descripcion: Oscilacion amortiguada con envolvente decreciente y frecuencia reducida.
+description_en: Damped oscillation with decaying envelope and reduced frequency.
+tags:
+  es: [oscilaciones, amortiguamiento, subamortiguado]
+  en: [oscillations, damping, underdamped]
+prerequisitos:
+  - fisica-clasica/mecanica/oscilaciones/oscilador-masa-muelle
+niveles:
+  es: [BACHILLERATO]
+  en: [Upper Secondary]
+physical_role:
+  es: concepto físico
+  en: physical concept
+graficos: [Coord]
+representacion_dominante: Coord
+magnitud_dominante: omega_d
+pregunta_fisica_central:
+  es: "¿Como predice el regimen subamortiguado una oscilacion cuya amplitud decae con el tiempo?"
+  en: "How does the underdamped regime predict an oscillation whose amplitude decays with time?"
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    show_summary: true
+    show_physical_reading: true
+    show_model_validity: true
+    show_graph_reading: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+    x_axis: t
+    y_axis: x
+  output_policy:
+    show_summary_first: true
+    show_warnings: true
+    show_likely_errors: true
+    require_units: true
+    require_domain_check: true
+    require_graph_link: true
+    max_inline_messages: 4
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+    formulas: [condicion_subamortiguado, pulsacion_amortiguada, envolvente, solucion_subamortiguada]
+    magnitudes: [gamma, omega0, omega_d, x_env, A, x, t, phi]
+    require_formula_context: true
+    require_magnitude_context: true
+`;export{e as default};

@@ -1,483 +1,321 @@
+import { withGraphContextRegistry } from "../shared/withGraphContext.jsx";
 /**
  * Dinamica - Graph Components Index
- * 
- * Auto-generado desde phyxio-map.yaml
- * Fecha: 2026-01-23
- * 
- * Estructura:
- * export const graphs = {
- *   "topic-id": {
- *     Coord: TopicGraphsCoord,
- *     Dcl: TopicGraphsDcl
- *   }
- * };
+ *
+ * WIRING ONLY — los metadatos semánticos (title, xAxis, yAxis, relation,
+ * physicalReading, agentHints, commonMistakes, etc.) viven en graficos.yaml.
+ * Este archivo solo declara { type, graphType, component } por entrada.
  */
 
-// Fundamentos 16 gráficos
-import PrimeraLeyInerciaGraphsDcl from "./PrimeraLeyInerciaGraphsDcl";
-import SegundaLeyFuerzaMasaGraphsCoord from "./SegundaLeyFuerzaMasaGraphsCoord";
-import SegundaLeyFuerzaMasaGraphsDcl from "./SegundaLeyFuerzaMasaGraphsDcl";
-import TerceraLeyAccionReaccionGraphsDcl from "./TerceraLeyAccionReaccionGraphsDcl";
-import TerceraLeyAccionReaccionGraphsSvg from "./TerceraLeyAccionReaccionGraphsSvg";
-import SistemasInercialesGraphsDcl from "./SistemasInercialesGraphsDcl";
-import SistemasInercialesGraphsSvg from "./SistemasInercialesGraphsSvg";
-import SistemasNoInercialesIntroGraphsDcl from "./SistemasNoInercialesIntroGraphsDcl";
-import SistemasNoInercialesIntroGraphsSvg from "./SistemasNoInercialesIntroGraphsSvg";
-import IdentificacionDeFuerzasGraphsDcl from "./IdentificacionDeFuerzasGraphsDcl";
-import IdentificacionDeFuerzasGraphsSvg from "./IdentificacionDeFuerzasGraphsSvg";
-import DiagramasCuerpoLibreGraphsCoord from "./DiagramasCuerpoLibreGraphsCoord";
-import DiagramasCuerpoLibreGraphsDcl from "./DiagramasCuerpoLibreGraphsDcl";
-import DiagramasCuerpoLibreGraphsSvg from "./DiagramasCuerpoLibreGraphsSvg";
-import DescomposicionVectorialGraphsDcl from "./DescomposicionVectorialGraphsDcl";
-import DescomposicionVectorialGraphsSvg from "./DescomposicionVectorialGraphsSvg";
+import PoleasCompuestasGraphsCoord from "./Coord/PoleasCompuestasGraphsCoord.jsx";
+import PoleasCompuestasGraphsSvg from "./Svg/PoleasCompuestasGraphsSvg.jsx";
+import PoleasSimplesGraphsCoord from "./Coord/PoleasSimplesGraphsCoord.jsx";
+import PoleasSimplesGraphsSvg from "./Svg/PoleasSimplesGraphsSvg.jsx";
+import DescomposicionVectorialGraphsCoord from "./Coord/DescomposicionVectorialGraphsCoord.jsx";
+import DescomposicionVectorialGraphsDcl from "./Dcl/DescomposicionVectorialGraphsDcl.jsx";
+import DescomposicionVectorialGraphsSvg from "./Svg/DescomposicionVectorialGraphsSvg.jsx";
+import DiagramasCuerpoLibreGraphsCoord from "./Coord/DiagramasCuerpoLibreGraphsCoord.jsx";
+import DiagramasCuerpoLibreGraphsDcl from "./Dcl/DiagramasCuerpoLibreGraphsDcl.jsx";
+import DiagramasCuerpoLibreGraphsSvg from "./Svg/DiagramasCuerpoLibreGraphsSvg.jsx";
+import IdentificacionDeFuerzasGraphsDcl from "./Dcl/IdentificacionDeFuerzasGraphsDcl.jsx";
+import IdentificacionDeFuerzasGraphsSvg from "./Svg/IdentificacionDeFuerzasGraphsSvg.jsx";
+import PrimeraLeyInerciaGraphsDcl from "./Dcl/PrimeraLeyInerciaGraphsDcl.jsx";
+import SegundaLeyFuerzaMasaGraphsCoord from "./Coord/SegundaLeyFuerzaMasaGraphsCoord.jsx";
+import SegundaLeyFuerzaMasaGraphsDcl from "./Dcl/SegundaLeyFuerzaMasaGraphsDcl.jsx";
+import TerceraLeyAccionReaccionGraphsDcl from "./Dcl/TerceraLeyAccionReaccionGraphsDcl.jsx";
+import TerceraLeyAccionReaccionGraphsSvg from "./Svg/TerceraLeyAccionReaccionGraphsSvg.jsx";
+import AceleracionRelativaGraphsDcl from "./Dcl/AceleracionRelativaGraphsDcl.jsx";
+import SistemasInercialesGraphsDcl from "./Dcl/SistemasInercialesGraphsDcl.jsx";
+import SistemasInercialesGraphsSvg from "./Svg/SistemasInercialesGraphsSvg.jsx";
+import SistemasNoInercialesIntroGraphsDcl from "./Dcl/SistemasNoInercialesIntroGraphsDcl.jsx";
+import SistemasNoInercialesIntroGraphsSvg from "./Svg/SistemasNoInercialesIntroGraphsSvg.jsx";
+import ErroresFrecuentesGraphsCoord from "./Coord/ErroresFrecuentesGraphsCoord.jsx";
+import ProblemasTipoExamenGraphsCoord from "./Coord/ProblemasTipoExamenGraphsCoord.jsx";
+import ProblemasTipoExamenGraphsSvg from "./Svg/ProblemasTipoExamenGraphsSvg.jsx";
+import SistemasRealesGraphsCoord from "./Coord/SistemasRealesGraphsCoord.jsx";
+import SistemasRealesGraphsSvg from "./Svg/SistemasRealesGraphsSvg.jsx";
+import TraslacionYRotacionGraphsCoord from "./Coord/TraslacionYRotacionGraphsCoord.jsx";
+import AnalisisCompletoGraphsCoord from "./Coord/AnalisisCompletoGraphsCoord.jsx";
+import BloqueColganteGraphsCoord from "./Coord/BloqueColganteGraphsCoord.jsx";
+import BloqueSobreSuperficieGraphsCoord from "./Coord/BloqueSobreSuperficieGraphsCoord.jsx";
+import ConRozamientoGraphsCoord from "./Coord/ConRozamientoGraphsCoord.jsx";
+import ConRozamientoGraphsDcl from "./Dcl/ConRozamientoGraphsDcl.jsx";
+import DosMasasUnidasPorCuerdaGraphsCoord from "./Coord/DosMasasUnidasPorCuerdaGraphsCoord.jsx";
+import DosMasasUnidasPorCuerdaGraphsSvg from "./Svg/DosMasasUnidasPorCuerdaGraphsSvg.jsx";
+import SinRozamientoGraphsCoord from "./Coord/SinRozamientoGraphsCoord.jsx";
+import SinRozamientoGraphsDcl from "./Dcl/SinRozamientoGraphsDcl.jsx";
+import CentroDeMasasEnCuerposExtendidosGraphsCoord from "./Coord/CentroDeMasasEnCuerposExtendidosGraphsCoord.jsx";
+import CentroDeMasasEnCuerposExtendidosGraphsSvg from "./Svg/CentroDeMasasEnCuerposExtendidosGraphsSvg.jsx";
+import CentroDeMasasEnSistemasDiscretosGraphsCoord from "./Coord/CentroDeMasasEnSistemasDiscretosGraphsCoord.jsx";
+import CentroDeMasasEnSistemasDiscretosGraphsSvg from "./Svg/CentroDeMasasEnSistemasDiscretosGraphsSvg.jsx";
+import CondicionSumatoriaFuerzasGraphsCoord from "./Coord/CondicionSumatoriaFuerzasGraphsCoord.jsx";
+import CondicionSumatoriaFuerzasGraphsDcl from "./Dcl/CondicionSumatoriaFuerzasGraphsDcl.jsx";
+import CondicionSumatoriaMomentosGraphsCoord from "./Coord/CondicionSumatoriaMomentosGraphsCoord.jsx";
+import DefinicionCentroDeMasasGraphsCoord from "./Coord/DefinicionCentroDeMasasGraphsCoord.jsx";
+import DefinicionCentroDeMasasGraphsSvg from "./Svg/DefinicionCentroDeMasasGraphsSvg.jsx";
+import EjemplosDeEquilibrioGraphsDcl from "./Dcl/EjemplosDeEquilibrioGraphsDcl.jsx";
+import EjemplosDeEquilibrioGraphsSvg from "./Svg/EjemplosDeEquilibrioGraphsSvg.jsx";
+import MomentoDeUnaFuerzaGraphsCoord from "./Coord/MomentoDeUnaFuerzaGraphsCoord.jsx";
+import ArrastreCuadraticoGraphsCoord from "./Coord/ArrastreCuadraticoGraphsCoord.jsx";
+import ArrastreCuadraticoGraphsDcl from "./Dcl/ArrastreCuadraticoGraphsDcl.jsx";
+import ArrastreLinealGraphsCoord from "./Coord/ArrastreLinealGraphsCoord.jsx";
+import ArrastreLinealGraphsDcl from "./Dcl/ArrastreLinealGraphsDcl.jsx";
+import CoeficienteDeArrastreGraphsCoord from "./Coord/CoeficienteDeArrastreGraphsCoord.jsx";
+import CoeficienteDeArrastreGraphsSvg from "./Svg/CoeficienteDeArrastreGraphsSvg.jsx";
+import CoeficienteDeRozamientoGraphsCoord from "./Coord/CoeficienteDeRozamientoGraphsCoord.jsx";
+import CoeficienteDeRozamientoGraphsDcl from "./Dcl/CoeficienteDeRozamientoGraphsDcl.jsx";
+import ConceptoFuerzaCentripetaGraphsCoord from "./Coord/ConceptoFuerzaCentripetaGraphsCoord.jsx";
+import ConceptoFuerzaCentripetaGraphsDcl from "./Dcl/ConceptoFuerzaCentripetaGraphsDcl.jsx";
+import ConceptoFuerzaCentripetaGraphsSvg from "./Svg/ConceptoFuerzaCentripetaGraphsSvg.jsx";
+import CurvasPlanasYPeraltadasGraphsCoord from "./Coord/CurvasPlanasYPeraltadasGraphsCoord.jsx";
+import CurvasPlanasYPeraltadasGraphsDcl from "./Dcl/CurvasPlanasYPeraltadasGraphsDcl.jsx";
+import CurvasPlanasYPeraltadasGraphsSvg from "./Svg/CurvasPlanasYPeraltadasGraphsSvg.jsx";
+import DefinicionYExpresionGraphsDcl from "./Dcl/DefinicionYExpresionGraphsDcl.jsx";
+import DefinicionYExpresionGraphsSvg from "./Svg/DefinicionYExpresionGraphsSvg.jsx";
+import EjemplosTipicosGraphsCoord from "./Coord/EjemplosTipicosGraphsCoord.jsx";
+import LeyDeHookeGraphsCoord from "./Coord/LeyDeHookeGraphsCoord.jsx";
+import LeyDeHookeGraphsDcl from "./Dcl/LeyDeHookeGraphsDcl.jsx";
+import LoopVerticalYCondicionDeContactoGraphsCoord from "./Coord/LoopVerticalYCondicionDeContactoGraphsCoord.jsx";
+import LoopVerticalYCondicionDeContactoGraphsDcl from "./Dcl/LoopVerticalYCondicionDeContactoGraphsDcl.jsx";
+import LoopVerticalYCondicionDeContactoGraphsSvg from "./Svg/LoopVerticalYCondicionDeContactoGraphsSvg.jsx";
+import NormalEnPlanosGraphsCoord from "./Coord/NormalEnPlanosGraphsCoord.jsx";
+import NormalEnPlanosGraphsDcl from "./Dcl/NormalEnPlanosGraphsDcl.jsx";
+import NumeroDeReynoldsYRegimenesDeArrastreGraphsCoord from "./Coord/NumeroDeReynoldsYRegimenesDeArrastreGraphsCoord.jsx";
+import NumeroDeReynoldsYRegimenesDeArrastreGraphsSvg from "./Svg/NumeroDeReynoldsYRegimenesDeArrastreGraphsSvg.jsx";
+import PesoEnDiferentesContextosGraphsCoord from "./Coord/PesoEnDiferentesContextosGraphsCoord.jsx";
+import PesoEnDiferentesContextosGraphsDcl from "./Dcl/PesoEnDiferentesContextosGraphsDcl.jsx";
+import RozamientoDinamicoGraphsCoord from "./Coord/RozamientoDinamicoGraphsCoord.jsx";
+import RozamientoDinamicoGraphsDcl from "./Dcl/RozamientoDinamicoGraphsDcl.jsx";
+import RozamientoEstaticoGraphsCoord from "./Coord/RozamientoEstaticoGraphsCoord.jsx";
+import RozamientoEstaticoGraphsDcl from "./Dcl/RozamientoEstaticoGraphsDcl.jsx";
+import SistemasConMuellesGraphsCoord from "./Coord/SistemasConMuellesGraphsCoord.jsx";
+import SistemasConMuellesGraphsDcl from "./Dcl/SistemasConMuellesGraphsDcl.jsx";
+import SistemasConMuellesGraphsSvg from "./Svg/SistemasConMuellesGraphsSvg.jsx";
+import TensionEnCuerdasYCablesGraphsCoord from "./Coord/TensionEnCuerdasYCablesGraphsCoord.jsx";
+import TensionEnCuerdasYCablesGraphsDcl from "./Dcl/TensionEnCuerdasYCablesGraphsDcl.jsx";
+import VelocidadTerminalGraphsCoord from "./Coord/VelocidadTerminalGraphsCoord.jsx";
+import VelocidadTerminalGraphsDcl from "./Dcl/VelocidadTerminalGraphsDcl.jsx";
+import AplicacionesFisicasGraphsCoord from "./Coord/AplicacionesFisicasGraphsCoord.jsx";
+import ConceptoFuerzasFicticiasGraphsCoord from "./Coord/ConceptoFuerzasFicticiasGraphsCoord.jsx";
+import DefinicionFuerzaCoriolisGraphsCoord from "./Coord/DefinicionFuerzaCoriolisGraphsCoord.jsx";
+import EjemplosFuerzaCentrifugaGraphsCoord from "./Coord/EjemplosFuerzaCentrifugaGraphsCoord.jsx";
+import FuerzaCentrifugaGraphsCoord from "./Coord/FuerzaCentrifugaGraphsCoord.jsx";
+import ConceptoFuerzasFicticiasGraphsDcl from "./Dcl/ConceptoFuerzasFicticiasGraphsDcl.jsx";
+import InterpretacionFuerzasFicticiasGraphsDcl from "./Dcl/InterpretacionFuerzasFicticiasGraphsDcl.jsx";
+import ConceptoFuerzasFicticiasGraphsSvg from "./Svg/ConceptoFuerzasFicticiasGraphsSvg.jsx";
+import DefinicionFuerzaCoriolisGraphsSvg from "./Svg/DefinicionFuerzaCoriolisGraphsSvg.jsx";
+import InterpretacionFuerzasFicticiasGraphsSvg from "./Svg/InterpretacionFuerzasFicticiasGraphsSvg.jsx";
 
-// Fuerzas 20 gráficos
-import PesoEnDiferentesContextosGraphsCoord from "./PesoEnDiferentesContextosGraphsCoord";
-import PesoEnDiferentesContextosGraphsDcl from "./PesoEnDiferentesContextosGraphsDcl";
-import NormalEnPlanosGraphsCoord from "./NormalEnPlanosGraphsCoord";
-import NormalEnPlanosGraphsDcl from "./NormalEnPlanosGraphsDcl";
-import RozamientoEstaticoGraphsCoord from "./RozamientoEstaticoGraphsCoord";
-import RozamientoEstaticoGraphsDcl from "./RozamientoEstaticoGraphsDcl";
-import RozamientoDinamicoGraphsCoord from "./RozamientoDinamicoGraphsCoord";
-import RozamientoDinamicoGraphsDcl from "./RozamientoDinamicoGraphsDcl";
-import CoeficienteDeRozamientoGraphsCoord from "./CoeficienteDeRozamientoGraphsCoord";
-import CoeficienteDeRozamientoGraphsDcl from "./CoeficienteDeRozamientoGraphsDcl";
-import TensionEnCuerdasYCablesGraphsCoord from "./TensionEnCuerdasYCablesGraphsCoord";
-import TensionEnCuerdasYCablesGraphsDcl from "./TensionEnCuerdasYCablesGraphsDcl";
-import LeyDeHookeGraphsCoord from "./LeyDeHookeGraphsCoord";
-import LeyDeHookeGraphsDcl from "./LeyDeHookeGraphsDcl";
-import SistemasConMuellesGraphsCoord from "./SistemasConMuellesGraphsCoord";
-import SistemasConMuellesGraphsSvg from "./SistemasConMuellesGraphsSvg";
-import ConceptoFuerzaCentripetaGraphsCoord from "./ConceptoFuerzaCentripetaGraphsCoord";
-import ConceptoFuerzaCentripetaGraphsDcl from "./ConceptoFuerzaCentripetaGraphsDcl";
-import ConceptoFuerzaCentripetaGraphsSvg from "./ConceptoFuerzaCentripetaGraphsSvg";
-import EjemplosTipicosGraphsCoord from "./EjemplosTipicosGraphsCoord";
-
-// Estática 12 grficos
-import CondicionSumatoriaFuerzasGraphsCoord from "./CondicionSumatoriaFuerzasGraphsCoord";
-import CondicionSumatoriaFuerzasGraphsDcl from "./CondicionSumatoriaFuerzasGraphsDcl";
-import EjemplosDeEquilibrioGraphsDcl from "./EjemplosDeEquilibrioGraphsDcl";
-import EjemplosDeEquilibrioSvg from "./EjemplosDeEquilibrioSvg";
-import MomentoDeUnaFuerzaGraphsCoord from "./MomentoDeUnaFuerzaGraphsCoord";
-import CondicionSumatoriaMomentosGraphsCoord from "./CondicionSumatoriaMomentosGraphsCoord";
-import TiposDePalancasGraphsSvg from "./TiposDePalancasGraphsSvg";
-import VentajaMecanicaGraphsCoord from "./VentajaMecanicaGraphsCoord";
-import CentroDeMasasEnSistemasDiscretosGraphsCoord from "./CentroDeMasasEnSistemasDiscretosGraphsCoord";
-import CentroDeMasasEnSistemasDiscretosGraphsSvg from "./CentroDeMasasEnSistemasDiscretosGraphsSvg";
-import CentroDeMasasEnCuerposExtendidosGraphsCoord from "./CentroDeMasasEnCuerposExtendidosGraphsCoord";
-import CentroDeMasasEnCuerposExtendidosGraphsSvg from "./CentroDeMasasEnCuerposExtendidosGraphsSvg";
-
-// Dinámica rotacional 11 grficos
-import DefinicionTorqueSvg from "./DefinicionTorqueSvg";
-import TorqueMomentoGraphsCoord from "./TorqueMomentoGraphsCoord";
-import AnalogiaTraslacionalGraphsCoord from "./AnalogiaTraslacionalGraphsCoord";
-import EcuacionFundamentalGraphsCoord from "./EcuacionFundamentalGraphsCoord";
-import EjemplosAplicadosGraphsCoord from "./EjemplosAplicadosGraphsCoord";
-import MomentoInerciaDefinicionSvg from "./MomentoInerciaDefinicionSvg";
-import MomentosTipicosGraphsSvg from "./MomentosTipicosGraphsSvg";
-import TeoremaDeEjesParalelosGraphsCoord from "./TeoremaDeEjesParalelosGraphsCoord";
-import CondicionCinematicaGraphsCoord from "./CondicionCinematicaGraphsCoord";
-import CondicionCinematicaGraphsSvg from "./CondicionCinematicaGraphsSvg";
-import EjemplosClasicosGraphsCoord from "./EjemplosClasicosGraphsCoord";
-
-// Dinámica traslacional 14 grficos
-import BloqueSobreSuperficieGraphsCoord from "./BloqueSobreSuperficieGraphsCoord";
-import BloqueColganteGraphsCoord from "./BloqueColganteGraphsCoord";
-import SinRozamientoGraphsCoord from "./SinRozamientoGraphsCoord";
-import SinRozamientoGraphsDcl from "./SinRozamientoGraphsDcl";
-import ConRozamientoGraphsCoord from "./ConRozamientoGraphsCoord";
-import ConRozamientoGraphsDcl from "./ConRozamientoGraphsDcl";
-import AnalisisCompletoGraphsCoord from "./AnalisisCompletoGraphsCoord";
-import AnalisisCompletoGraphsDcl from "./AnalisisCompletoGraphsDcl";
-import DosMasasUnidasPorCuerdaGraphsCoord from "./DosMasasUnidasPorCuerdaGraphsCoord";
-import DosMasasUnidasPorCuerdaGraphsSvg from "./DosMasasUnidasPorCuerdaGraphsSvg";
-import PoleasSimplesGraphsCoord from "./PoleasSimplesGraphsCoord";
-import PoleasSimplesGraphsSvg from "./PoleasSimplesGraphsSvg";
-import PoleasCompuestasGraphsCoord from "./PoleasCompuestasGraphsCoord";
-import PoleasCompuestasGraphsSvg from "./PoleasCompuestasGraphsSvg";
-
-// Marcos no inerciales 7 gráficos
-import ConceptoFuerzasFicticiasGraphsCoord from "./ConceptoFuerzasFicticiasGraphsCoord";
-import ConceptoFuerzasFicticiasGraphsDcl from "./ConceptoFuerzasFicticiasGraphsDcl";
-import ConceptoFuerzasFicticiasGraphsSvg from "./ConceptoFuerzasFicticiasGraphsSvg";
-import FuerzaCentrifugaGraphsCoord from "./FuerzaCentrifugaGraphsCoord";
-import EjemplosFuerzaCentrifugaGraphsCoord from "./EjemplosFuerzaCentrifugaGraphsCoord";
-import DefinicionFuerzaCoriolisGraphsCoord from "./DefinicionFuerzaCoriolisGraphsCoord";
-import AplicacionesFisicasGraphsCoord from "./AplicacionesFisicasGraphsCoord";
-
-// Maquinas simples 11 gráficos
-import PalancasGraphsCoord from "./PalancasGraphsCoord";
-import PoleasGraphsCoord from "./PoleasGraphsCoord";
-import PoleasMaquinasSimplesGraphsSvg from "./PoleasMaquinasSimplesGraphsSvg";
-import PlanosInclinadosGraphsCoord from "./PlanosInclinadosGraphsCoord";
-import PlanosInclinadosGraphsDcl from "./PlanosInclinadosGraphsDcl";
-import PlanosInclinadosGraphsSvg from "./PlanosInclinadosGraphsSvg";
-import TornilloGraphsCoord from "./TornilloGraphsCoord";
-import TornilloGraphsSvg from "./TornilloGraphsSvg";
-import RendimientoVentajaMecanicaGraphsCoord from "./RendimientoVentajaMecanicaGraphsCoord";
-import TraslacionYRotacionGraphsCoord from "./TraslacionYRotacionGraphsCoord";
-import SistemasRealesGraphsCoord from "./SistemasRealesGraphsCoord";
-import SistemasRealesGraphsSvg from "./SistemasRealesGraphsSvg";
-import ProblemasTipoExamenGraphsCoord from "./ProblemasTipoExamenGraphsCoord";
-import ProblemasTipoExamenGraphsSvg from "./ProblemasTipoExamenGraphsSvg";
-import ErroresFrecuentesGraphsCoord from "./ErroresFrecuentesGraphsCoord";
-
-
-export const graphs = {
-  "primera-ley-inercia": {
-    Dcl: PrimeraLeyInerciaGraphsDcl,
-  },
-  "segunda-ley-fuerza-masa": {
-    Coord: SegundaLeyFuerzaMasaGraphsCoord,
-    Dcl: SegundaLeyFuerzaMasaGraphsDcl,
-  },
-  "tercera-ley-accion-reaccion": {
-    Dcl: TerceraLeyAccionReaccionGraphsDcl,
-    Svg: TerceraLeyAccionReaccionGraphsSvg,
-  },
-  "sistemas-inerciales": {
-    Dcl: SistemasInercialesGraphsDcl,
-    Svg: SistemasInercialesGraphsSvg,
-  },
-  "sistemas-no-inerciales-intro": {
-    Dcl: SistemasNoInercialesIntroGraphsDcl,
-    Svg: SistemasNoInercialesIntroGraphsSvg,
-  },
-  "identificacion-de-fuerzas": {
-    Dcl: IdentificacionDeFuerzasGraphsDcl,
-    Svg: IdentificacionDeFuerzasGraphsSvg,
+const rawGraphs = {
+  "descomposicion-vectorial": {
+    Dcl: { type: "Dcl", graphType: "Dcl", component: DescomposicionVectorialGraphsDcl },
+    Svg: { type: "Svg", graphType: "Svg", component: DescomposicionVectorialGraphsSvg },
+    Coord: { type: "Coord", graphType: "Coord", component: DescomposicionVectorialGraphsCoord },
   },
   "diagramas-cuerpo-libre": {
-    Coord: DiagramasCuerpoLibreGraphsCoord,
-    Dcl: DiagramasCuerpoLibreGraphsDcl,
-    Svg: DiagramasCuerpoLibreGraphsSvg,
+    Coord: { type: "Coord", graphType: "Coord", component: DiagramasCuerpoLibreGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: DiagramasCuerpoLibreGraphsDcl },
+    Svg: { type: "Svg", graphType: "Svg", component: DiagramasCuerpoLibreGraphsSvg },
   },
-  "descomposicion-vectorial": {
-    Dcl: DescomposicionVectorialGraphsDcl,
-    Svg: DescomposicionVectorialGraphsSvg,
+  "identificacion-de-fuerzas": {
+    Dcl: { type: "Dcl", graphType: "Dcl", component: IdentificacionDeFuerzasGraphsDcl },
+    Svg: { type: "Svg", graphType: "Svg", component: IdentificacionDeFuerzasGraphsSvg },
   },
-  "peso-en-diferentes-contextos": {
-    Coord: PesoEnDiferentesContextosGraphsCoord,
-    Dcl: PesoEnDiferentesContextosGraphsDcl,
+  "primera-ley-inercia": {
+    Dcl: { type: "Dcl", graphType: "Dcl", component: PrimeraLeyInerciaGraphsDcl },
   },
-  "normal-en-planos": {
-    Coord: NormalEnPlanosGraphsCoord,
-    Dcl: NormalEnPlanosGraphsDcl,
+  "segunda-ley-fuerza-masa": {
+    Coord: { type: "Coord", graphType: "Coord", component: SegundaLeyFuerzaMasaGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: SegundaLeyFuerzaMasaGraphsDcl },
   },
-  "rozamiento-estatico": {
-    Coord: RozamientoEstaticoGraphsCoord,
-    Dcl: RozamientoEstaticoGraphsDcl,
+  "tercera-ley-accion-reaccion": {
+    Dcl: { type: "Dcl", graphType: "Dcl", component: TerceraLeyAccionReaccionGraphsDcl },
+    Svg: { type: "Svg", graphType: "Svg", component: TerceraLeyAccionReaccionGraphsSvg },
   },
-  "rozamiento-dinamico": {
-    Coord: RozamientoDinamicoGraphsCoord,
-    Dcl: RozamientoDinamicoGraphsDcl,
+  "aceleracion-relativa": {
+    Dcl: { type: "Dcl", graphType: "Dcl", component: AceleracionRelativaGraphsDcl },
   },
-  "coeficiente-de-rozamiento": {
-    Coord: CoeficienteDeRozamientoGraphsCoord,
-    Dcl: CoeficienteDeRozamientoGraphsDcl,
+  "sistemas-inerciales": {
+    Dcl: { type: "Dcl", graphType: "Dcl", component: SistemasInercialesGraphsDcl },
+    Svg: { type: "Svg", graphType: "Svg", component: SistemasInercialesGraphsSvg },
   },
-  "tension-en-cuerdas-y-cables": {
-    Coord: TensionEnCuerdasYCablesGraphsCoord,
-    Dcl: TensionEnCuerdasYCablesGraphsDcl,
-  },
-  "ley-de-hooke": {
-    Coord: LeyDeHookeGraphsCoord,
-    Dcl: LeyDeHookeGraphsDcl,
-  },
-  "sistemas-con-muelles": {
-    Coord: SistemasConMuellesGraphsCoord,
-    Svg: SistemasConMuellesGraphsSvg,
-  },
-  "concepto-fuerza-centripeta": {
-    Coord: ConceptoFuerzaCentripetaGraphsCoord,
-    Dcl: ConceptoFuerzaCentripetaGraphsDcl,
-    Svg: ConceptoFuerzaCentripetaGraphsSvg,
-  },
-  "ejemplos-tipicos": {
-    Coord: EjemplosTipicosGraphsCoord,
-  },
-  "condicion-sumatoria-fuerzas": {
-    Coord: CondicionSumatoriaFuerzasGraphsCoord,
-    Dcl: CondicionSumatoriaFuerzasGraphsDcl,
-  },
-  "ejemplos-de-equilibrio": {
-    Dcl: EjemplosDeEquilibrioGraphsDcl,
-    Svg: EjemplosDeEquilibrioSvg,
-  },
-  "momento-de-una-fuerza": {
-    Coord: MomentoDeUnaFuerzaGraphsCoord,
-  },
-  "condicion-sumatoria-momentos": {
-    Coord: CondicionSumatoriaMomentosGraphsCoord,
-  },
-  "tipos-de-palancas": {
-    Svg: TiposDePalancasGraphsSvg,
-  },
-  "ventaja-mecanica": {
-    Coord: VentajaMecanicaGraphsCoord,
-  },
-  "fisica-clasica/mecanica/dinamica/estatica/centro-de-masas/centro-de-masas-en-sistemas-discretos": {
-    Coord: CentroDeMasasEnSistemasDiscretosGraphsCoord,
-    Svg: CentroDeMasasEnSistemasDiscretosGraphsSvg,
-  },
-  "fisica-clasica/mecanica/dinamica/estatica/centro-de-masas/centro-de-masas-en-cuerpos-extendidos": {
-    Coord: CentroDeMasasEnCuerposExtendidosGraphsCoord,
-    Svg: CentroDeMasasEnCuerposExtendidosGraphsSvg,
-  },
-  "centro-de-masas-en-sistemas-discretos": {
-    Coord: CentroDeMasasEnSistemasDiscretosGraphsCoord,
-    Svg: CentroDeMasasEnSistemasDiscretosGraphsSvg,
-  },
-  "centro-de-masas-en-cuerpos-extendidos": {
-    Coord: CentroDeMasasEnCuerposExtendidosGraphsCoord,
-    Svg: CentroDeMasasEnCuerposExtendidosGraphsSvg,
-  },
-  "definicion-torque": {
-    Svg: DefinicionTorqueSvg,
-  },
-  "calculo-del-torque": {
-    Coord: TorqueMomentoGraphsCoord,
-  },
-  "analogia-traslacional": {
-    Coord: AnalogiaTraslacionalGraphsCoord,
-  },
-  "ecuacion-fundamental": {
-    Coord: EcuacionFundamentalGraphsCoord,
-  },
-    "ejemplos-aplicados": {
-    Coord: EjemplosAplicadosGraphsCoord,
-  },
-  "definicion-momento-de-inercia": {
-    Svg: MomentoInerciaDefinicionSvg,
-  },
-  "momentos-tipicos": {
-    Svg: MomentosTipicosGraphsSvg,
-  },
-  "teorema-de-ejes-paralelos": {
-    Coord: TeoremaDeEjesParalelosGraphsCoord,
-  },
-  "condicion-cinematica": {
-    Coord: CondicionCinematicaGraphsCoord,
-    Svg: CondicionCinematicaGraphsSvg,
-  },
-  "ejemplos-clasicos": {
-    Coord: EjemplosClasicosGraphsCoord,
-  },
-  "bloque-sobre-superficie": {
-    Coord: BloqueSobreSuperficieGraphsCoord,
-  },
-  "bloque-colgante": {
-    Coord: BloqueColganteGraphsCoord,
-  },
-  "sin-rozamiento": {
-    Coord: SinRozamientoGraphsCoord,
-    Dcl: SinRozamientoGraphsDcl,
-  },
-  "con-rozamiento": {
-    Coord: ConRozamientoGraphsCoord,
-    Dcl: ConRozamientoGraphsDcl,
-  },
-  "analisis-completo": {
-    Coord: AnalisisCompletoGraphsCoord,
-    Dcl: AnalisisCompletoGraphsDcl,
-  },
-  "dos-masas-unidas-por-cuerda": {
-    Coord: DosMasasUnidasPorCuerdaGraphsCoord,
-    Svg: DosMasasUnidasPorCuerdaGraphsSvg,
-  },
-  "poleas-simples": {
-    Coord: PoleasSimplesGraphsCoord,
-    Svg: PoleasSimplesGraphsSvg,
-  },
-  "poleas-compuestas": {
-    Coord: PoleasCompuestasGraphsCoord,
-    Svg: PoleasCompuestasGraphsSvg,
-  },
-  "concepto-fuerzas-ficticias": {
-    Coord: ConceptoFuerzasFicticiasGraphsCoord,
-    Dcl: ConceptoFuerzasFicticiasGraphsDcl,
-    Svg: ConceptoFuerzasFicticiasGraphsSvg,
-  },
-  "definicion-fuerza-centrifuga": {
-    Coord: FuerzaCentrifugaGraphsCoord,
-  },
-  "ejemplos-fuerza-centrifuga": {
-    Coord: EjemplosFuerzaCentrifugaGraphsCoord,
-  },
-  "definicion-fuerza-coriolis": {
-    Coord: DefinicionFuerzaCoriolisGraphsCoord,
-  },
-  "aplicaciones-fisicas": {
-    Coord: AplicacionesFisicasGraphsCoord,
-  },
-  "fisica-clasica/mecanica/maquinas-simples/palancas": {
-    Coord: PalancasGraphsCoord,
-    Svg: TiposDePalancasGraphsSvg,
-  },
-  "fisica-clasica/mecanica/maquinas-simples/planos-inclinados": {
-    Coord: PlanosInclinadosGraphsCoord,
-    Dcl: PlanosInclinadosGraphsDcl,
-    Svg: PlanosInclinadosGraphsSvg,
-  },
-  "fisica-clasica/mecanica/maquinas-simples/poleas": {
-    Coord: PoleasGraphsCoord,
-    Svg: PoleasMaquinasSimplesGraphsSvg,
-  },
-  "fisica-clasica/mecanica/dinamica/aplicaciones/maquinas-simples/palancas": {
-    Coord: PalancasGraphsCoord,
-    Svg: TiposDePalancasGraphsSvg,
-  },
-  "fisica-clasica/mecanica/dinamica/aplicaciones/maquinas-simples/poleas": {
-    Coord: PoleasGraphsCoord,
-    Svg: PoleasMaquinasSimplesGraphsSvg,
-  },
-  "fisica-clasica/mecanica/dinamica/aplicaciones/maquinas-simples/planos-inclinados": {
-    Coord: PlanosInclinadosGraphsCoord,
-    Dcl: PlanosInclinadosGraphsDcl,
-    Svg: PlanosInclinadosGraphsSvg,
-  },
-  "fisica-clasica/mecanica/maquinas-simples/tornillo": {
-    Coord: TornilloGraphsCoord,
-    Svg: TornilloGraphsSvg,
-  },
-  "fisica-clasica/mecanica/maquinas-simples/rendimiento-y-ventaja-mecanica": {
-    Coord: RendimientoVentajaMecanicaGraphsCoord,
-  },
-  "palancas": {
-    Coord: PalancasGraphsCoord,
-    Svg: TiposDePalancasGraphsSvg,
-  },
-  "poleas": {
-    Coord: PoleasGraphsCoord,
-    Svg: PoleasMaquinasSimplesGraphsSvg,
-  },
-  "planos-inclinados": {
-    Coord: PlanosInclinadosGraphsCoord,
-    Dcl: PlanosInclinadosGraphsDcl,
-    Svg: PlanosInclinadosGraphsSvg,
-  },
-  "traslacion-y-rotacion": {
-    Coord: TraslacionYRotacionGraphsCoord,
-  },
-  "sistemas-reales": {
-    Coord: SistemasRealesGraphsCoord,
-    Svg: SistemasRealesGraphsSvg,
-  },
-  "problemas-tipo-examen": {
-    Coord: ProblemasTipoExamenGraphsCoord,
-    Svg: ProblemasTipoExamenGraphsSvg,
+  "sistemas-no-inerciales-intro": {
+    Dcl: { type: "Dcl", graphType: "Dcl", component: SistemasNoInercialesIntroGraphsDcl },
+    Svg: { type: "Svg", graphType: "Svg", component: SistemasNoInercialesIntroGraphsSvg },
   },
   "errores-frecuentes": {
-    Coord: ErroresFrecuentesGraphsCoord,
+    Coord: { type: "Coord", graphType: "Coord", component: ErroresFrecuentesGraphsCoord },
   },
+  "problemas-tipo-examen": {
+    Coord: { type: "Coord", graphType: "Coord", component: ProblemasTipoExamenGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: ProblemasTipoExamenGraphsSvg },
+  },
+  "sistemas-reales": {
+    Coord: { type: "Coord", graphType: "Coord", component: SistemasRealesGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: SistemasRealesGraphsSvg },
+  },
+  "traslacion-y-rotacion": {
+    Coord: { type: "Coord", graphType: "Coord", component: TraslacionYRotacionGraphsCoord },
+  },
+  "analisis-completo": {
+    Coord: { type: "Coord", graphType: "Coord", component: AnalisisCompletoGraphsCoord },
+  },
+  "bloque-colgante": {
+    Coord: { type: "Coord", graphType: "Coord", component: BloqueColganteGraphsCoord },
+  },
+  "bloque-sobre-superficie": {
+    Coord: { type: "Coord", graphType: "Coord", component: BloqueSobreSuperficieGraphsCoord },
+  },
+  "con-rozamiento": {
+    Coord: { type: "Coord", graphType: "Coord", component: ConRozamientoGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: ConRozamientoGraphsDcl },
+  },
+  "dos-masas-unidas-por-cuerda": {
+    Coord: { type: "Coord", graphType: "Coord", component: DosMasasUnidasPorCuerdaGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: DosMasasUnidasPorCuerdaGraphsSvg },
+  },
+  "sin-rozamiento": {
+    Coord: { type: "Coord", graphType: "Coord", component: SinRozamientoGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: SinRozamientoGraphsDcl },
+  },
+  "centro-de-masas-en-cuerpos-extendidos": {
+    Coord: { type: "Coord", graphType: "Coord", component: CentroDeMasasEnCuerposExtendidosGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: CentroDeMasasEnCuerposExtendidosGraphsSvg },
+  },
+  "centro-de-masas-en-sistemas-discretos": {
+    Coord: { type: "Coord", graphType: "Coord", component: CentroDeMasasEnSistemasDiscretosGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: CentroDeMasasEnSistemasDiscretosGraphsSvg },
+  },
+  "condicion-sumatoria-fuerzas": {
+    Coord: { type: "Coord", graphType: "Coord", component: CondicionSumatoriaFuerzasGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: CondicionSumatoriaFuerzasGraphsDcl },
+  },
+  "condicion-sumatoria-momentos": {
+    Coord: { type: "Coord", graphType: "Coord", component: CondicionSumatoriaMomentosGraphsCoord },
+  },
+  "definicion-centro-de-masas": {
+    Coord: { type: "Coord", graphType: "Coord", component: DefinicionCentroDeMasasGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: DefinicionCentroDeMasasGraphsSvg },
+  },
+  "ejemplos-de-equilibrio": {
+    Dcl: { type: "Dcl", graphType: "Dcl", component: EjemplosDeEquilibrioGraphsDcl },
+    Svg: { type: "Svg", graphType: "Svg", component: EjemplosDeEquilibrioGraphsSvg },
+  },
+  "momento-de-una-fuerza": {
+    Coord: { type: "Coord", graphType: "Coord", component: MomentoDeUnaFuerzaGraphsCoord },
+  },
+  "arrastre-cuadratico": {
+    Coord: { type: "Coord", graphType: "Coord", component: ArrastreCuadraticoGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: ArrastreCuadraticoGraphsDcl },
+  },
+  "arrastre-lineal": {
+    Coord: { type: "Coord", graphType: "Coord", component: ArrastreLinealGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: ArrastreLinealGraphsDcl },
+  },
+  "coeficiente-de-arrastre": {
+    Coord: { type: "Coord", graphType: "Coord", component: CoeficienteDeArrastreGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: CoeficienteDeArrastreGraphsSvg },
+  },
+  "coeficiente-de-rozamiento": {
+    Coord: { type: "Coord", graphType: "Coord", component: CoeficienteDeRozamientoGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: CoeficienteDeRozamientoGraphsDcl },
+  },
+  "concepto-fuerza-centripeta": {
+    Coord: { type: "Coord", graphType: "Coord", component: ConceptoFuerzaCentripetaGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: ConceptoFuerzaCentripetaGraphsDcl },
+    Svg: { type: "Svg", graphType: "Svg", component: ConceptoFuerzaCentripetaGraphsSvg },
+  },
+  "curvas-planas-y-peraltadas": {
+    Coord: { type: "Coord", graphType: "Coord", component: CurvasPlanasYPeraltadasGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: CurvasPlanasYPeraltadasGraphsDcl },
+    Svg: { type: "Svg", graphType: "Svg", component: CurvasPlanasYPeraltadasGraphsSvg },
+  },
+  "definicion-y-expresion": {
+    Dcl: { type: "Dcl", graphType: "Dcl", component: DefinicionYExpresionGraphsDcl },
+    Svg: { type: "Svg", graphType: "Svg", component: DefinicionYExpresionGraphsSvg },
+  },
+  "ejemplos-tipicos": {
+    Coord: { type: "Coord", graphType: "Coord", component: EjemplosTipicosGraphsCoord },
+  },
+  "ley-de-hooke": {
+    Coord: { type: "Coord", graphType: "Coord", component: LeyDeHookeGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: LeyDeHookeGraphsDcl },
+  },
+  "loop-vertical-y-condicion-de-contacto": {
+    Coord: { type: "Coord", graphType: "Coord", component: LoopVerticalYCondicionDeContactoGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: LoopVerticalYCondicionDeContactoGraphsDcl },
+    Svg: { type: "Svg", graphType: "Svg", component: LoopVerticalYCondicionDeContactoGraphsSvg },
+  },
+  "normal-en-planos": {
+    Coord: { type: "Coord", graphType: "Coord", component: NormalEnPlanosGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: NormalEnPlanosGraphsDcl },
+  },
+  "numero-de-reynolds-y-regimenes-de-arrastre": {
+    Coord: { type: "Coord", graphType: "Coord", component: NumeroDeReynoldsYRegimenesDeArrastreGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: NumeroDeReynoldsYRegimenesDeArrastreGraphsSvg },
+  },
+  "peso-en-diferentes-contextos": {
+    Coord: { type: "Coord", graphType: "Coord", component: PesoEnDiferentesContextosGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: PesoEnDiferentesContextosGraphsDcl },
+  },
+  "rozamiento-dinamico": {
+    Coord: { type: "Coord", graphType: "Coord", component: RozamientoDinamicoGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: RozamientoDinamicoGraphsDcl },
+  },
+  "rozamiento-estatico": {
+    Coord: { type: "Coord", graphType: "Coord", component: RozamientoEstaticoGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: RozamientoEstaticoGraphsDcl },
+  },
+  "sistemas-con-muelles": {
+    Coord: { type: "Coord", graphType: "Coord", component: SistemasConMuellesGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: SistemasConMuellesGraphsDcl },
+    Svg: { type: "Svg", graphType: "Svg", component: SistemasConMuellesGraphsSvg },
+  },
+  "tension-en-cuerdas-y-cables": {
+    Coord: { type: "Coord", graphType: "Coord", component: TensionEnCuerdasYCablesGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: TensionEnCuerdasYCablesGraphsDcl },
+  },
+  "velocidad-terminal": {
+    Coord: { type: "Coord", graphType: "Coord", component: VelocidadTerminalGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: VelocidadTerminalGraphsDcl },
+  },
+  "aplicaciones-fisicas": {
+    Coord: { type: "Coord", graphType: "Coord", component: AplicacionesFisicasGraphsCoord },
+  },
+  "concepto-fuerzas-ficticias": {
+    Coord: { type: "Coord", graphType: "Coord", component: ConceptoFuerzasFicticiasGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: ConceptoFuerzasFicticiasGraphsDcl },
+    Svg: { type: "Svg", graphType: "Svg", component: ConceptoFuerzasFicticiasGraphsSvg },
+  },
+  "definicion-fuerza-centrifuga": {
+    Coord: { type: "Coord", graphType: "Coord", component: FuerzaCentrifugaGraphsCoord },
+  },
+  "definicion-fuerza-coriolis": {
+    Coord: { type: "Coord", graphType: "Coord", component: DefinicionFuerzaCoriolisGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: DefinicionFuerzaCoriolisGraphsSvg },
+  },
+  "ejemplos-fuerza-centrifuga": {
+    Coord: { type: "Coord", graphType: "Coord", component: EjemplosFuerzaCentrifugaGraphsCoord },
+  },
+  "interpretacion": {
+    Dcl: { type: "Dcl", graphType: "Dcl", component: InterpretacionFuerzasFicticiasGraphsDcl },
+    Svg: { type: "Svg", graphType: "Svg", component: InterpretacionFuerzasFicticiasGraphsSvg },
+  },
+  
+  "poleas-compuestas": {
+    Coord: { type: "Coord", graphType: "Coord", component: PoleasCompuestasGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: PoleasCompuestasGraphsSvg },
+  },
+  "poleas-simples": {
+    Coord: { type: "Coord", graphType: "Coord", component: PoleasSimplesGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: PoleasSimplesGraphsSvg },
+  },
+  
+  
+  
 };
 
-// Exports individuales para compatibilidad
-// Fundamentos
-export { default as PrimeraLeyInerciaGraphsDcl } from "./PrimeraLeyInerciaGraphsDcl";
-export { default as SegundaLeyFuerzaMasaGraphsCoord } from "./SegundaLeyFuerzaMasaGraphsCoord";
-export { default as SegundaLeyFuerzaMasaGraphsDcl } from "./SegundaLeyFuerzaMasaGraphsDcl";
-export { default as TerceraLeyAccionReaccionGraphsDcl } from "./TerceraLeyAccionReaccionGraphsDcl";
-export { default as TerceraLeyAccionReaccionGraphsSvg } from "./TerceraLeyAccionReaccionGraphsSvg";
-export { default as SistemasInercialesGraphsDcl } from "./SistemasInercialesGraphsDcl";
-export { default as SistemasInercialesGraphsSvg } from "./SistemasInercialesGraphsSvg";
-export { default as SistemasNoInercialesIntroGraphsDcl } from "./SistemasNoInercialesIntroGraphsDcl";
-export { default as SistemasNoInercialesIntroGraphsSvg } from "./SistemasNoInercialesIntroGraphsSvg";
-export { default as IdentificacionDeFuerzasGraphsDcl } from "./IdentificacionDeFuerzasGraphsDcl";
-export { default as IdentificacionDeFuerzasGraphsSvg } from "./IdentificacionDeFuerzasGraphsSvg";
-export { default as DiagramasCuerpoLibreGraphsCoord } from "./DiagramasCuerpoLibreGraphsCoord";
-export { default as DiagramasCuerpoLibreGraphsDcl } from "./DiagramasCuerpoLibreGraphsDcl";
-export { default as DiagramasCuerpoLibreGraphsSvg } from "./DiagramasCuerpoLibreGraphsSvg";
-export { default as DescomposicionVectorialGraphsDcl } from "./DescomposicionVectorialGraphsDcl";
-export { default as DescomposicionVectorialGraphsSvg } from "./DescomposicionVectorialGraphsSvg";
+export const graphs = withGraphContextRegistry(rawGraphs);
+export const dinamicaGraphs = graphs;
 
-// Fuerzas
-export { default as PesoEnDiferentesContextosGraphsCoord } from "./PesoEnDiferentesContextosGraphsCoord";
-export { default as PesoEnDiferentesContextosGraphsDcl } from "./PesoEnDiferentesContextosGraphsDcl";
-export { default as NormalEnPlanosGraphsCoord } from "./NormalEnPlanosGraphsCoord";
-export { default as NormalEnPlanosGraphsDcl } from "./NormalEnPlanosGraphsDcl";
-export { default as RozamientoEstaticoGraphsCoord } from "./RozamientoEstaticoGraphsCoord";
-export { default as RozamientoEstaticoGraphsDcl } from "./RozamientoEstaticoGraphsDcl";
-export { default as RozamientoDinamicoGraphsCoord } from "./RozamientoDinamicoGraphsCoord";
-export { default as RozamientoDinamicoGraphsDcl } from "./RozamientoDinamicoGraphsDcl";
-export { default as CoeficienteDeRozamientoGraphsCoord } from "./CoeficienteDeRozamientoGraphsCoord";
-export { default as CoeficienteDeRozamientoGraphsDcl } from "./CoeficienteDeRozamientoGraphsDcl";
-export { default as TensionEnCuerdasYCablesGraphsCoord } from "./TensionEnCuerdasYCablesGraphsCoord";
-export { default as TensionEnCuerdasYCablesGraphsDcl } from "./TensionEnCuerdasYCablesGraphsDcl";
-export { default as LeyDeHookeGraphsCoord } from "./LeyDeHookeGraphsCoord";
-export { default as LeyDeHookeGraphsDcl } from "./LeyDeHookeGraphsDcl";
-export { default as SistemasConMuellesGraphsCoord } from "./SistemasConMuellesGraphsCoord";
-export { default as SistemasConMuellesGraphsSvg } from "./SistemasConMuellesGraphsSvg";
-export { default as ConceptoFuerzaCentripetaGraphsCoord } from "./ConceptoFuerzaCentripetaGraphsCoord";
-export { default as ConceptoFuerzaCentripetaGraphsDcl } from "./ConceptoFuerzaCentripetaGraphsDcl";
-export { default as ConceptoFuerzaCentripetaGraphsSvg } from "./ConceptoFuerzaCentripetaGraphsSvg";
-export { default as EjemplosTipicosGraphsCoord } from "./EjemplosTipicosGraphsCoord";
-
-// Estática
-export { default as CondicionSumatoriaFuerzasGraphsCoord } from "./CondicionSumatoriaFuerzasGraphsCoord";
-export { default as CondicionSumatoriaFuerzasGraphsDcl } from "./CondicionSumatoriaFuerzasGraphsDcl";
-export { default as EjemplosDeEquilibrioGraphsDcl } from "./EjemplosDeEquilibrioGraphsDcl";
-export { default as EjemplosDeEquilibrioSvg } from "./EjemplosDeEquilibrioSvg";
-export { default as MomentoDeUnaFuerzaGraphsCoord } from "./MomentoDeUnaFuerzaGraphsCoord";
-export { default as CondicionSumatoriaMomentosGraphsCoord } from "./CondicionSumatoriaMomentosGraphsCoord";
-export { default as TiposDePalancasGraphsSvg } from "./TiposDePalancasGraphsSvg";
-export { default as VentajaMecanicaGraphsCoord } from "./VentajaMecanicaGraphsCoord";
-export { default as CentroDeMasasEnSistemasDiscretosGraphsCoord } from "./CentroDeMasasEnSistemasDiscretosGraphsCoord";
-export { default as CentroDeMasasEnSistemasDiscretosGraphsSvg } from "./CentroDeMasasEnSistemasDiscretosGraphsSvg";
-export { default as CentroDeMasasEnCuerposExtendidosGraphsCoord } from "./CentroDeMasasEnCuerposExtendidosGraphsCoord";
-export { default as CentroDeMasasEnCuerposExtendidosGraphsSvg } from "./CentroDeMasasEnCuerposExtendidosGraphsSvg";
-
-// Dinámica rotacional
-export { default as DefinicionTorqueSvg } from "./DefinicionTorqueSvg";
-export { default as TorqueMomentoGraphsCoord } from "./TorqueMomentoGraphsCoord";
-export { default as AnalogiaTraslacionalGraphsCoord } from "./AnalogiaTraslacionalGraphsCoord";
-export { default as EcuacionFundamentalGraphsCoord } from "./EcuacionFundamentalGraphsCoord";
-export { default as EjemplosAplicadosGraphsCoord } from "./EjemplosAplicadosGraphsCoord";
-export { default as MomentoInerciaDefinicionSvg } from "./MomentoInerciaDefinicionSvg";
-export { default as MomentosTipicosGraphsSvg } from "./MomentosTipicosGraphsSvg";
-export { default as TeoremaDeEjesParalelosGraphsCoord } from "./TeoremaDeEjesParalelosGraphsCoord";
-export { default as CondicionCinematicaGraphsCoord } from "./CondicionCinematicaGraphsCoord";
-export { default as CondicionCinematicaGraphsSvg } from "./CondicionCinematicaGraphsSvg";
-export { default as EjemplosClasicosGraphsCoord } from "./EjemplosClasicosGraphsCoord";
-
-// Dinámica traslacional
-export { default as BloqueSobreSuperficieGraphsCoord } from "./BloqueSobreSuperficieGraphsCoord";
-export { default as BloqueColganteGraphsCoord } from "./BloqueColganteGraphsCoord";
-export { default as SinRozamientoGraphsCoord } from "./SinRozamientoGraphsCoord";
-export { default as SinRozamientoGraphsDcl } from "./SinRozamientoGraphsDcl";
-export { default as ConRozamientoGraphsCoord } from "./ConRozamientoGraphsCoord";
-export { default as ConRozamientoGraphsDcl } from "./ConRozamientoGraphsDcl";
-export { default as AnalisisCompletoGraphsCoord } from "./AnalisisCompletoGraphsCoord";
-export { default as AnalisisCompletoGraphsDcl } from "./AnalisisCompletoGraphsDcl";
-export { default as DosMasasUnidasPorCuerdaGraphsCoord } from "./DosMasasUnidasPorCuerdaGraphsCoord";
-export { default as DosMasasUnidasPorCuerdaGraphsSvg } from "./DosMasasUnidasPorCuerdaGraphsSvg";
-export { default as PoleasSimplesGraphsCoord } from "./PoleasSimplesGraphsCoord";
-export { default as PoleasSimplesGraphsSvg } from "./PoleasSimplesGraphsSvg";
-export { default as PoleasCompuestasGraphsCoord } from "./PoleasCompuestasGraphsCoord";
-export { default as PoleasCompuestasGraphsSvg } from "./PoleasCompuestasGraphsSvg";
-
-// Marcos no inerciales
-export { default as ConceptoFuerzasFicticiasGraphsCoord } from "./ConceptoFuerzasFicticiasGraphsCoord";
-export { default as ConceptoFuerzasFicticiasGraphsDcl } from "./ConceptoFuerzasFicticiasGraphsDcl";
-export { default as ConceptoFuerzasFicticiasGraphsSvg } from "./ConceptoFuerzasFicticiasGraphsSvg";
-export { default as FuerzaCentrifugaGraphsCoord } from "./FuerzaCentrifugaGraphsCoord";
-export { default as EjemplosFuerzaCentrifugaGraphsCoord } from "./EjemplosFuerzaCentrifugaGraphsCoord";
-export { default as DefinicionFuerzaCoriolisGraphsCoord } from "./DefinicionFuerzaCoriolisGraphsCoord";
-export { default as AplicacionesFisicasGraphsCoord } from "./AplicacionesFisicasGraphsCoord";
-
-// Maquinas simples
-export { default as PalancasGraphsCoord } from "./PalancasGraphsCoord";
-export { default as PoleasGraphsCoord } from "./PoleasGraphsCoord";
-export { default as PoleasMaquinasSimplesGraphsSvg } from "./PoleasMaquinasSimplesGraphsSvg";
-export { default as PlanosInclinadosGraphsCoord } from "./PlanosInclinadosGraphsCoord";
-export { default as PlanosInclinadosGraphsDcl } from "./PlanosInclinadosGraphsDcl";
-export { default as PlanosInclinadosGraphsSvg } from "./PlanosInclinadosGraphsSvg";
-export { default as TornilloGraphsCoord } from "./TornilloGraphsCoord";
-export { default as TornilloGraphsSvg } from "./TornilloGraphsSvg";
-export { default as RendimientoVentajaMecanicaGraphsCoord } from "./RendimientoVentajaMecanicaGraphsCoord";
-export { default as TraslacionYRotacionGraphsCoord } from "./TraslacionYRotacionGraphsCoord";
-export { default as SistemasRealesGraphsCoord } from "./SistemasRealesGraphsCoord";
-export { default as SistemasRealesGraphsSvg } from "./SistemasRealesGraphsSvg";
-export { default as ProblemasTipoExamenGraphsCoord } from "./ProblemasTipoExamenGraphsCoord";
-export { default as ProblemasTipoExamenGraphsSvg } from "./ProblemasTipoExamenGraphsSvg";
-export { default as ErroresFrecuentesGraphsCoord } from "./ErroresFrecuentesGraphsCoord";
+export default graphs;

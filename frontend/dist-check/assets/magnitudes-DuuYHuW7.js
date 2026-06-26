@@ -1,0 +1,373 @@
+const n=`version: 5
+magnitudes:
+- id: Z
+  symbol: Z
+  nombre:
+    es: impedancia total
+    en: Total Impedance
+  unidad_si: ohm
+  descripcion:
+    es: Modulo de la oposicion global del circuito RLC serie al paso de corriente alterna.
+    en: Magnitude of total opposition in the series RLC circuit.
+  dimension: ML^2T^{-3}I^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in: [ impedancia_rlc, corriente_total ]
+  common_mistake: Tratar Z como suma escalar de resistencia y reactancias.
+  typical_range: Positiva y dependiente de la frecuencia.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se interpreta como modulo no negativo.
+      en: It is interpreted as a non-negative magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Solo aparece en limites ideales extremos sin resistencia.
+      en: It appears only in extreme ideal limits without resistance.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, inf)'
+  interpretation_role:
+    primary_for: [ circuitos-rlc ]
+    secondary_for: [ resonancia-electrica ]
+  graph_binding:
+    channels: [ modulo ]
+  pedagogical_notes: Resume amplitud de oposicion pero no sustituye la lectura de fase.
+- id: R
+  symbol: R
+  nombre:
+    es: resistencia serie
+    en: Series Resistance
+  unidad_si: ohm
+  descripcion:
+    es: Parte disipativa del circuito que fija potencia activa y limita corriente.
+    en: Dissipative part of the circuit that sets active power and limits current.
+  dimension: ML^2T^{-3}I^{-2}
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: physical_quantity
+  used_in: [ impedancia_rlc, desfase_rlc, potencia_activa, potencia_reactiva ]
+  common_mistake: Ignorar resistencias parasitas y usar solo la nominal.
+  typical_range: Positiva en cargas pasivas estables.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En este modelo se toma no negativa.
+      en: In this model it is taken as non-negative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: R nula es un limite ideal extremo.
+      en: Zero resistance is an extreme ideal limit.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, inf)'
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ circuitos-rlc ]
+  graph_binding:
+    channels: [ parametro ]
+  pedagogical_notes: Es la parte que convierte demanda electrica en disipacion media neta.
+- id: Xl
+  symbol: X_L
+  nombre:
+    es: reactancia inductiva
+    en: Inductive Reactance
+  unidad_si: ohm
+  descripcion:
+    es: Oposicion de fase asociada al inductor en regimen sinusoidal.
+    en: Phase opposition associated with the inductor in sinusoidal regime.
+  dimension: ML^2T^{-3}I^{-2}
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: physical_quantity
+  used_in: [ impedancia_rlc, desfase_rlc ]
+  common_mistake: Confundir su efecto con disipacion resistiva.
+  typical_range: No negativa como magnitud.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud positiva; el caracter inductivo surge al compararla con Xc.
+      en: It is used as a positive magnitude; inductive character appears when compared with Xc.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Xl nula elimina el aporte inductivo a esa frecuencia.
+      en: Zero Xl removes inductive contribution at that frequency.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, inf)'
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ circuitos-rlc ]
+  graph_binding:
+    channels: [ reactancia_inductiva ]
+  pedagogical_notes: Solo adquiere sentido operativo completo al compararse con Xc.
+- id: Xc
+  symbol: X_C
+  nombre:
+    es: reactancia capacitiva
+    en: Capacitive Reactance
+  unidad_si: ohm
+  descripcion:
+    es: Oposicion de fase asociada al condensador en corriente alterna.
+    en: Phase opposition associated with the capacitor in alternating current.
+  dimension: ML^2T^{-3}I^{-2}
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: physical_quantity
+  used_in: [ impedancia_rlc, desfase_rlc ]
+  common_mistake: Restarla a R en vez de contrastarla con Xl en cuadratura.
+  typical_range: No negativa como magnitud.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud positiva; el caracter capacitivo aparece cuando domina frente a Xl.
+      en: It is used as a positive magnitude; capacitive character appears when it dominates over Xl.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Xc nula es un limite ideal de frecuencia extrema.
+      en: Zero Xc is an ideal extreme-frequency limit.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, inf)'
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ circuitos-rlc ]
+  graph_binding:
+    channels: [ reactancia_capacitiva ]
+  pedagogical_notes: Entra en la parte reactiva neta del circuito y no en la resistiva.
+- id: I
+  symbol: I
+  nombre:
+    es: corriente rms
+    en: RMS Current
+  unidad_si: A
+  descripcion:
+    es: Corriente eficaz que circula por la rama serie.
+    en: Effective current that flows through the series branch.
+  dimension: I
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in: [ corriente_total, potencia_activa, potencia_reactiva, potencia_aparente ]
+  common_mistake: Calcular I usando solo R aun con desequilibrio reactivo grande.
+  typical_range: Positiva como valor eficaz.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se interpreta como modulo RMS no negativo.
+      en: It is interpreted as a non-negative RMS magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: I nula implica ausencia de excitacion efectiva o impedancia muy alta.
+      en: Zero current implies no effective excitation or very high impedance.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, inf)'
+  interpretation_role:
+    primary_for: [ circuitos-rlc ]
+    secondary_for: []
+  graph_binding:
+    channels: [ amplitud_corriente ]
+  pedagogical_notes: Debe leerse junto con phi para no perder estructura fasorial.
+- id: V
+  symbol: V
+  nombre:
+    es: tension rms
+    en: RMS Voltage
+  unidad_si: V
+  descripcion:
+    es: Tension eficaz aplicada a la rama serie.
+    en: Effective voltage applied to the series branch.
+  dimension: ML^2T^{-3}I^{-1}
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: physical_quantity
+  used_in: [ corriente_total, potencia_activa, potencia_reactiva, potencia_aparente ]
+  common_mistake: Mezclar valor pico con RMS en una misma resolucion.
+  typical_range: Dependiente de la fuente y la aplicacion.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En este leaf se usa como amplitud eficaz no negativa.
+      en: In this leaf it is used as a non-negative effective magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: V nula anula respuestas derivadas.
+      en: Zero voltage cancels derived responses.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, inf)'
+  interpretation_role:
+    primary_for: []
+    secondary_for: [ circuitos-rlc ]
+  graph_binding:
+    channels: [ excitacion ]
+  pedagogical_notes: Debe mantenerse en RMS en toda la cadena de potencia.
+- id: phi
+  symbol: \\phi
+  nombre:
+    es: desfase
+    en: Phase Shift
+  unidad_si: rad
+  descripcion:
+    es: Angulo global entre tension y corriente de la rama.
+    en: Global angle between branch voltage and current.
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in: [ desfase_rlc, potencia_activa, potencia_reactiva ]
+  common_mistake: Perder el signo fisico y conservar solo el modulo del angulo.
+  typical_range: Entre -pi/2 y pi/2 en el modelo serie basico.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Positiva sugiere dominio inductivo; negativa, dominio capacitivo.
+      en: Positive suggests inductive dominance; negative suggests capacitive dominance.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Phi nula indica compensacion reactiva ideal en el modelo.
+      en: Zero phase shift indicates ideal reactive compensation in the model.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: '[-pi/2, pi/2]'
+  interpretation_role:
+    primary_for: [ circuitos-rlc ]
+    secondary_for: [ resonancia-electrica ]
+  graph_binding:
+    channels: [ fase ]
+  pedagogical_notes: Es la puerta de entrada al factor de potencia y a la lectura de regimen.
+- id: P
+  symbol: P
+  nombre:
+    es: potencia activa
+    en: Active Power
+  unidad_si: W
+  descripcion:
+    es: Potencia media neta realmente transferida a la parte resistiva.
+    en: Net average power actually transferred to the resistive part.
+  dimension: ML^2T^{-3}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in: [ potencia_activa ]
+  common_mistake: Confundir P con la demanda total que ve la fuente.
+  typical_range: No negativa en el modelo pasivo.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En cargas pasivas serie se interpreta no negativa.
+      en: In passive series loads it is interpreted as non-negative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser nula si no existe parte resistiva efectiva o excitacion.
+      en: It may be zero if there is no effective resistive part or no excitation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, inf)'
+  interpretation_role:
+    primary_for: [ circuitos-rlc ]
+    secondary_for: []
+  graph_binding:
+    channels: [ potencia_activa ]
+  pedagogical_notes: Debe compararse con S para leer eficiencia de demanda.
+- id: Q
+  symbol: Q
+  nombre:
+    es: potencia reactiva
+    en: Reactive Power
+  unidad_si: var
+  descripcion:
+    es: Potencia asociada al intercambio alterno de energia por desfase.
+    en: Power associated with alternating energy exchange due to phase shift.
+  dimension: ML^2T^{-3}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in: [ potencia_reactiva ]
+  common_mistake: Interpretarla como perdida irreversible en el mismo sentido que calor.
+  typical_range: Positiva en regimen inductivo y negativa en regimen capacitivo.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo codifica el caracter inductivo o capacitivo del circuito.
+      en: The sign encodes inductive or capacitive character of the circuit.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Q nula indica compensacion reactiva ideal.
+      en: Zero reactive power indicates ideal reactive compensation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for: [ circuitos-rlc ]
+    secondary_for: [ resonancia-electrica ]
+  graph_binding:
+    channels: [ potencia_reactiva ]
+  pedagogical_notes: Conecta desfase con criterio operativo de compensacion.
+- id: S
+  symbol: S
+  nombre:
+    es: potencia aparente
+    en: Apparent Power
+  unidad_si: VA
+  descripcion:
+    es: Demanda total de la carga sobre fuente y conductores.
+    en: Total load demand on source and conductors.
+  dimension: ML^2T^{-3}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in: [ potencia_aparente ]
+  common_mistake: Tomarla como potencia util final de la carga.
+  typical_range: No negativa.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se interpreta como modulo de demanda total.
+      en: It is interpreted as magnitude of total demand.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: S nula implica ausencia de excitacion o corriente.
+      en: Zero apparent power implies no excitation or no current.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, inf)'
+  interpretation_role:
+    primary_for: [ circuitos-rlc ]
+    secondary_for: []
+  graph_binding:
+    channels: [ potencia_aparente ]
+  pedagogical_notes: Dimensiona infraestructura aunque no toda la demanda sea activa.
+`;export{n as default};

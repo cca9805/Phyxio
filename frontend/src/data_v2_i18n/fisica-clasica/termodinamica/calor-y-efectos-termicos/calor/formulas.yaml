@@ -1,0 +1,124 @@
+formulas:
+
+  - id: calor_sensible
+    title:
+      es: Calor sensible
+      en: Sensible heat
+    equation: "Q = m * c_esp * DeltaT"
+    latex: "Q = m \\cdot c \\cdot \\Delta T"
+    rearrangements:
+      - target: Q
+        equation: "Q = m * c_esp * DeltaT"
+        latex: "Q = m \\cdot c \\cdot \\Delta T"
+      - target: m
+        equation: "m = Q / (c_esp * DeltaT)"
+        latex: "m = \\dfrac{Q}{c \\cdot \\Delta T}"
+      - target: c_esp
+        equation: "c_esp = Q / (m * DeltaT)"
+        latex: "c_esp = \\dfrac{Q}{m \\cdot \\Delta T}"
+      - target: DeltaT
+        equation: "DeltaT = Q / (m * c_esp)"
+        latex: "\\Delta T = \\dfrac{Q}{m \\cdot c}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "Relaciona el calor transferido con la masa, el calor específico del material y la variación de temperatura. Solo aplica cuando no hay cambio de estado."
+      en: "Relates the heat transferred to the mass, specific heat capacity of the material, and temperature change. Applies only when there is no phase change."
+    constraints:
+      - "Sin cambio de estado durante el proceso"
+      - "Calor específico constante en el rango de temperatura considerado"
+      - "Sistema cerrado o cuasi-estático"
+    validity:
+      es: "Válida para procesos sin cambio de estado y en rangos de temperatura donde c puede considerarse constante. No aplica en transiciones de fase."
+      en: "Valid for processes without phase change and in temperature ranges where c can be considered constant. Does not apply during phase transitions."
+    dimension_check: "[M] · [L^2 T^-2 Theta^-1] · [Theta] = [M L^2 T^-2] = [J] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - calor_sensible
+      - transferencia_termica
+      - cambio_temperatura
+    result_semantics:
+      target: Q
+      kind: scalar_signed
+      sign_meaning:
+        es: "Q > 0 el sistema absorbe calor; Q < 0 el sistema cede calor."
+        en: "Q > 0 the system absorbs heat; Q < 0 the system releases heat."
+      absolute_value_meaning:
+        es: "La magnitud de Q indica la cantidad de energía intercambiada en el proceso térmico."
+        en: "The magnitude of Q indicates the amount of energy exchanged in the thermal process."
+    domain_checks:
+      - "DeltaT != 0 para calor sensible no nulo"
+      - "m > 0"
+      - "c_esp > 0"
+    coherence_checks:
+      - "signo(Q) == signo(DeltaT) siempre que m > 0 y c_esp > 0"
+      - "Si Q > 0 entonces T_final > T_inicial"
+    graph_implications:
+      - "En gráfica Q vs DeltaT la pendiente es m·c_esp"
+      - "La recta pasa por el origen si m y c_esp son constantes"
+    pedagogical_triggers:
+      - "Si el alumno obtiene Q negativo con DeltaT positivo, revisar unidades de c_esp o el orden de la resta en ΔT."
+
+  - id: calor_latente
+    title:
+      es: Calor latente
+      en: Latent heat
+    equation: "Q = m * L"
+    latex: "Q = m \\cdot L"
+    rearrangements:
+      - target: Q
+        equation: "Q = m * L"
+        latex: "Q = m \\cdot L"
+      - target: m
+        equation: "m = Q / L"
+        latex: "m = \\dfrac{Q}{L}"
+      - target: L
+        equation: "L = Q / m"
+        latex: "L = \\dfrac{Q}{m}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "Calor absorbido o cedido durante un cambio de estado a temperatura constante. La temperatura del sistema no varía durante la transición aunque se transfiera energía."
+      en: "Heat absorbed or released during a phase change at constant temperature. The system temperature does not change during the transition even though energy is being transferred."
+    constraints:
+      - "Proceso isotérmico durante el cambio de estado"
+      - "Presión constante (calor latente a presión atmosférica estándar)"
+      - "Sistema en equilibrio termodinámico durante la transición"
+    validity:
+      es: "Válida exclusivamente durante transiciones de fase a temperatura y presión constantes. No aplica a calentamiento o enfriamiento sin cambio de estado."
+      en: "Valid exclusively during phase transitions at constant temperature and pressure. Does not apply to heating or cooling without phase change."
+    dimension_check: "[M] · [L^2 T^-2] = [M L^2 T^-2] = [J] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - calor_latente
+      - cambio_estado
+      - transicion_fase
+    result_semantics:
+      target: Q
+      kind: scalar_signed
+      sign_meaning:
+        es: "Q > 0 proceso endotérmico (fusión, vaporización); Q < 0 proceso exotérmico (solidificación, condensación)."
+        en: "Q > 0 endothermic process (melting, vaporization); Q < 0 exothermic process (solidification, condensation)."
+      absolute_value_meaning:
+        es: "La magnitud indica la energía total requerida o liberada durante la transición de fase completa."
+        en: "The magnitude indicates the total energy required or released during the complete phase transition."
+    domain_checks:
+      - "m > 0"
+      - "L > 0"
+    coherence_checks:
+      - "Durante cambio de estado DeltaT debe ser aproximadamente cero"
+      - "Si se calcula L y el valor supera 5e6 J/kg para agua, verificar unidades"
+    graph_implications:
+      - "En gráfica temperatura vs calor, el calor latente corresponde al tramo horizontal (meseta) donde T no varía"
+    pedagogical_triggers:
+      - "Si el alumno aplica Q = m·c·ΔT durante un cambio de estado, recordar que ΔT es cero en la transición y la fórmula aplicable es Q = m·L."

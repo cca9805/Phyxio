@@ -1,0 +1,72 @@
+const e=`version: 5
+id: capacitiva
+nombre:
+  es: Capacitiva
+  en: Capacitive Reactance
+titulo:
+  es: Capacitiva
+  en: Capacitive Reactance
+titulo_en: Capacitive Reactance
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: corriente-alterna
+parent_id: reactancia
+type: leaf
+ruta_relativa: fisica-clasica/electromagnetismo/corriente-alterna/reactancia/capacitiva
+orden: 294210
+icon: "🔋"
+descripcion: Relaciona frecuencia y capacitancia con oposicion capacitiva, corriente de rama y potencia reactiva en AC.
+description_en: Relates frequency and capacitance with capacitive opposition, branch current, and reactive power in AC.
+dificultad: 3
+tiempo_estimado_min: 75
+niveles:
+  es: [ UNIVERSIDAD ]
+  en: [ University ]
+prerequisitos:
+- fisica-clasica/electromagnetismo/corriente-alterna/magnitudes-alternas
+tags:
+  es: [ reactancia-capacitiva, corriente-alterna, capacitancia, potencia-reactiva, frecuencia ]
+  en: [ capacitive-reactance, alternating-current, capacitance, reactive-power, frequency ]
+physical_role:
+  es: concepto físico
+  en: physical concept
+graficos: []
+representacion_dominante: none
+magnitud_dominante: Xc
+pregunta_fisica_central:
+  es: "¿Cómo determinan frecuencia y capacitancia la oposición capacitiva y su efecto sobre corriente y potencia reactiva en AC?"
+  en: "How do frequency and capacitance determine capacitive opposition and its effect on current and reactive power in AC?"
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    show_tab: true
+    show_inline_cards: true
+    allow_contextual_feedback: true
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+    output_magnitude: Xc
+  output_policy:
+    show_summary: true
+    show_summary_first: true
+    show_physical_reading: true
+    show_coherence_checks: true
+    show_model_limitations: true
+    show_warnings: true
+    show_likely_errors: true
+    max_inline_messages: 4
+  dependencies:
+    require_formulas: true
+    require_magnitudes: true
+    require_examples: true
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

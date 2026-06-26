@@ -1,0 +1,263 @@
+formulas:
+- id: densidad_energia_cuerda
+  title:
+    es: Densidad de energía en onda de cuerda
+    en: Energy density in string wave
+  equation: u = mu * omega^2 * A^2 * sin(omega*t - k*x)^2
+  latex: u = \mu \omega^{2} A^{2} \sin^{2}(\omega t - kx)
+  rearrangements:
+  - target: u_energia
+    equation: u_energia = mu * omega^2 * A^2 * sin(omega*t - k*x)^2
+    latex: u = \mu \omega^{2} A^{2} \sin^{2}(\omega t - kx)
+  - target: amplitud
+    equation: A = sqrt(u_energia / (mu * omega^2 * sin(omega*t - k*x)^2))
+    latex: A = \sqrt{\frac{u}{\mu \omega^{2} \sin^{2}(\omega t - kx)}}
+  - target: omega
+    equation: omega = sqrt(u_energia / (mu * A^2 * sin(omega*t - k*x)^2))
+    latex: \omega = \sqrt{\frac{u}{\mu A^{2} \sin^{2}(\omega t - kx)}}
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: La densidad instantánea de energía en un punto de la cuerda depende cuadráticamente de la amplitud y la frecuencia,
+      y varía armónicamente con el tiempo y la posición.
+    en: The instantaneous energy density at a point on the string depends quadratically on amplitude and frequency, and varies
+      harmonically with time and position.
+  constraints:
+  - Amplitud A mucho menor que longitud de onda (A << lambda)
+  - Cuerda uniforme con densidad lineal constante mu
+  - Pequeñas oscilaciones para validez de aproximación lineal
+  validity:
+    es: Válida para ondas transversales en cuerdas ideales bajo tensión constante, en régimen lineal sin dissipación.
+    en: Valid for transverse waves in ideal strings under constant tension, in linear regime without dissipation.
+  dimension_check: '[u] = [M L⁻¹]·[T⁻¹]²·[L]² = [M L T⁻²] = J/m para una cuerda 1D ✓'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - calculo_energia_local
+  - analisis_temporal_onda
+  interpretation_tags:
+  - densidad_energia
+  - onda_armonica
+  - cuerda_vibrante
+  result_semantics:
+    target: u_energia
+    kind: instantaneous_density
+    sign_meaning:
+      es: Siempre positiva, indica energía almacenada localmente.
+      en: Always positive, indicates locally stored energy.
+    absolute_value_meaning:
+      es: Mayor valor indica mayor perturbación en ese punto y momento.
+      en: Higher value indicates greater disturbance at that point and time.
+  domain_checks:
+  - u_energia >= 0
+  - sin(omega*t - k*x) definido para todo t, x
+  coherence_checks:
+  - Si A = 0 entonces u_energia = 0 (sin perturbación, sin energía)
+  - Si omega = 0 entonces u_energia = 0 (sin oscilación, sin energía)
+  graph_implications:
+  - u_energia vs x muestra nodos y vientres de energía
+  - Máximos de u_energia coinciden con máximos de desplazamiento
+  pedagogical_triggers:
+  - 'Error común: calcular u_energia en un nodo donde sin² = 0'
+  - Verificar que el instante t no corresponda a cruce por cero
+- id: energia_total_ciclo
+  title:
+    es: Energía total por ciclo en cuerda
+    en: Total energy per cycle in string
+  equation: E = (1/2) * mu * omega^2 * A^2 * lambda
+  latex: E = \frac{1}{2} \mu \omega^{2} A^{2} \lambda
+  rearrangements:
+  - target: energia_de_la_onda
+    equation: E = (1/2) * mu * omega^2 * A^2 * lambda
+    latex: E = \frac{1}{2} \mu \omega^{2} A^{2} \lambda
+  - target: amplitud
+    equation: A = sqrt(2 * E / (mu * omega^2 * lambda))
+    latex: A = \sqrt{\frac{2E}{\mu \omega^{2} \lambda}}
+  - target: omega
+    equation: omega = sqrt(2 * E / (mu * A^2 * lambda))
+    latex: \omega = \sqrt{\frac{2E}{\mu A^{2} \lambda}}
+  - target: lambda
+    equation: lambda = 2 * E / (mu * omega^2 * A^2)
+    latex: \lambda = \frac{2E}{\mu \omega^{2} A^{2}}
+  category: derived
+  relation_type: integral_relation
+  physical_meaning:
+    es: La energía total almacenada en una longitud de onda completa de la cuerda vibrante, promediando las contribuciones
+      cinética y potencial.
+    en: Total energy stored in one complete wavelength of the vibrating string, averaging kinetic and potential contributions.
+  constraints:
+  - La integral espacial se realiza sobre un período completo lambda
+  - Promedio temporal de sin² sobre un ciclo es 1/2
+  - Válido para onda estacionaria o viajera armónica
+  validity:
+    es: Exacta para ondas armónicas en régimen lineal. Para pulsos no periódicos, requiere integración numérica sobre el dominio
+      finito.
+    en: Exact for harmonic waves in linear regime. For non-periodic pulses, numerical integration over finite domain is required.
+  dimension_check: '[E] = [M L⁻¹]·[T⁻¹]²·[L]²·[L] = [M L² T⁻²] = J ✓'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - calculo_energia_total
+  - diseno_cuerdas
+  - acustica_musical
+  interpretation_tags:
+  - energia_total
+  - promedio_ciclo
+  - cuerda_vibrante
+  result_semantics:
+    target: energia_de_la_onda
+    kind: integrated_energy
+    sign_meaning:
+      es: Siempre positiva, representa capacidad de trabajo de la onda.
+      en: Always positive, represents the wave's capacity to do work.
+    absolute_value_meaning:
+      es: Escala con amplitud al cuadrado y frecuencia al cuadrado, creciendo rápidamente con ambas.
+      en: Scales with amplitude squared and frequency squared, growing rapidly with both.
+  domain_checks:
+  - E > 0 para onda activa
+  - E = 0 solo si A = 0 o omega = 0
+  coherence_checks:
+  - Verificar que mu * lambda sea la masa de un ciclo (coherencia inercial)
+  - 'Energía por unidad de masa: E / (mu * lambda) = (omega * A)² / 2'
+  graph_implications:
+  - Representación energética muestra distribución uniforme promediada
+  - Área bajo curva u_energia vs x sobre lambda debe coincidir con E
+  pedagogical_triggers:
+  - Distinguir entre energía instantánea u_energia y energía integrada E
+  - 'Error: usar fórmula de onda armónica para pulsos aislados sin justificación'
+- id: potencia_onda_cuerda
+  title:
+    es: Potencia transportada por onda en cuerda
+    en: Power transported by wave in string
+  equation: P = (1/2) * mu * omega^2 * A^2 * v
+  latex: P = \frac{1}{2} \mu \omega^{2} A^{2} v
+  rearrangements:
+  - target: potencia_de_la_onda
+    equation: P = (1/2) * mu * omega^2 * A^2 * v
+    latex: P = \frac{1}{2} \mu \omega^{2} A^{2} v
+  - target: amplitud
+    equation: A = sqrt(2 * P / (mu * omega^2 * v))
+    latex: A = \sqrt{\frac{2P}{\mu \omega^{2} v}}
+  - target: omega
+    equation: omega = sqrt(2 * P / (mu * A^2 * v))
+    latex: \omega = \sqrt{\frac{2P}{\mu A^{2} v}}
+  - target: velocidad_de_propagacion
+    equation: v = 2 * P / (mu * omega^2 * A^2)
+    latex: v = \frac{2P}{\mu \omega^{2} A^{2}}
+  category: derived
+  relation_type: average_relation
+  physical_meaning:
+    es: La tasa media de transferencia de energía a través de una sección de la cuerda, igual a la energía por unidad de longitud
+      multiplicada por la velocidad de propagación.
+    en: Average rate of energy transfer through a section of the string, equal to energy per unit length multiplied by propagation
+      velocity.
+  constraints:
+  - v = sqrt(T/mu) es la velocidad de propagación en la cuerda
+  - Onda unidireccional sin reflexiones
+  - Tensión T constante a lo largo de la cuerda
+  validity:
+    es: Válida para ondas progresivas armónicas en cuerdas sin dissipación. Para ondas estacionarias, la potencia neta es
+      cero por cancelación de flujos opuestos.
+    en: Valid for progressive harmonic waves in strings without dissipation. For standing waves, net power is zero due to
+      cancellation of opposite flows.
+  dimension_check: '[P] = [M L⁻¹]·[T⁻¹]²·[L]²·[L T⁻¹] = [M L² T⁻³] = W ✓'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - calculo_potencia
+  - dispositivos_energia_onda
+  - transmision_acustica
+  interpretation_tags:
+  - potencia_onda
+  - flujo_energia
+  - tasa_transferencia
+  result_semantics:
+    target: potencia_de_la_onda
+    kind: average_power
+    sign_meaning:
+      es: Positiva indica flujo en dirección de propagación; negativa solo si se invierte la convención de dirección.
+      en: Positive indicates flow in propagation direction; negative only if direction convention is inverted.
+    absolute_value_meaning:
+      es: Mayor potencia permite transferir más energía en menos tiempo para aplicaciones como cuerdas musicales o dispositivos
+        de onda.
+      en: Higher power allows transferring more energy in less time for applications such as musical strings or wave devices.
+  domain_checks:
+  - P >= 0 para onda unidireccional
+  - P = 0 para onda estacionaria perfecta
+  coherence_checks:
+  - Verificar que P = E * v / lambda (coherencia espacio-temporal)
+  - Si v aumenta (mayor tensión), P aumenta proporcionalmente
+  graph_implications:
+  - Representación de flujo energético muestra dirección y magnitud
+  - P constante implica conservación de energía en tramo sin fuentes ni sumideros
+  pedagogical_triggers:
+  - 'Confusión común: aplicar a ondas estacionarias donde P neta es cero'
+  - Olvidar que v depende de T y mu, no es independiente
+- id: potencia_onda_general
+  title:
+    es: Potencia de onda en términos generales
+    en: General wave power formula
+  equation: P = u_energia * S * v
+  latex: P = u * S * v
+  rearrangements:
+  - target: potencia_de_la_onda
+    equation: P = u_energia * S * v
+    latex: P = u * S * v
+  - target: u_energia
+    equation: u_energia = P / (S * v)
+    latex: u = \frac{P}{S * v}
+  - target: seccion_transversal
+    equation: S = P / (u_energia * v)
+    latex: S = \frac{P}{u * v}
+  - target: velocidad_de_propagacion
+    equation: v = P / (u_energia * S)
+    latex: v = \frac{P}{u * S}
+  category: structural
+  relation_type: definition
+  physical_meaning:
+    es: Expresión general para la potencia de cualquier tipo de onda (mecánica, electromagnética, acústica) en función de
+      la densidad de energía, la sección de flujo y la velocidad de propagación.
+    en: General expression for power of any wave type (mechanical, electromagnetic, acoustic) in terms of energy density,
+      flow cross-section, and propagation velocity.
+  constraints:
+  - u_energia es densidad de energía promediada espacial y temporalmente; en esta fórmula general debe interpretarse como
+    densidad volumétrica
+  - S es la sección transversal efectiva perpendicular a v
+  - v es la velocidad de grupo para paquetes de ondas, fase para ondas simples
+  validity:
+    es: Universal para ondas en medios lineales sin dissipación. La interpretación de cada magnitud varía según el tipo de
+      onda.
+    en: Universal for waves in linear media without dissipation. Interpretation of each magnitude varies according to wave
+      type.
+  dimension_check: '[P] = [M L⁻¹ T⁻²]·[L²]·[L T⁻¹] = [M L² T⁻³] = W ✓'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - calculo_general_potencia
+  - ingenieria_acustica
+  - fibra_optica
+  interpretation_tags:
+  - potencia_general
+  - transporte_energia
+  - ondas_universales
+  result_semantics:
+    target: potencia_de_la_onda
+    kind: average_power
+    sign_meaning:
+      es: Positiva indica flujo neto de energía en la dirección considerada.
+      en: Positive indicates net energy flow in the considered direction.
+    absolute_value_meaning:
+      es: Representa la capacidad de la onda para realizar trabajo sobre receptores en la trayectoria.
+      en: Represents the wave's capacity to do work on receivers along its path.
+  domain_checks:
+  - P >= 0
+  - u_energia > 0 implica P > 0 si S, v > 0
+  coherence_checks:
+  - Verificar consistencia dimensional en cada factor
+  - u_energia debe ser promedio, no valor instantáneo, para P media
+  graph_implications:
+  - Diagrama de flujo energético muestra vector P en dirección de v
+  - Isosuperficies de potencia constante son planos perpendiculares a v
+  pedagogical_triggers:
+  - 'Error: usar densidad instantánea en lugar de promedio para cálculo de potencia media'
+  - Confusión entre velocidad de fase y de grupo en medios dispersivos

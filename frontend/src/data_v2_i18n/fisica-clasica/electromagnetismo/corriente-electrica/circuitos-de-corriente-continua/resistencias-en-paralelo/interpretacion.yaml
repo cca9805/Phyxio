@@ -1,0 +1,707 @@
+version: 5.0.0
+id: resistencias-en-paralelo
+leaf_id: resistencias-en-paralelo
+nombre:
+  es: Resistencias en paralelo
+  en: Resistors in Parallel
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: corriente-electrica
+  parent_id: circuitos-de-corriente-continua
+  ruta_relativa: fisica-clasica/electromagnetismo/corriente-electrica/circuitos-de-corriente-continua/resistencias-en-paralelo
+  orden: 293420
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - req_reciproco
+  - req_dos_ramas
+  - corriente_rama_1
+  - corriente_rama_2
+  - corriente_rama_3
+  - corriente_total
+  - geq_suma
+  - geq_reciproco
+  magnitudes:
+  - resistencia_equivalente
+  - resistencia_de_rama_1
+  - resistencia_de_rama_2
+  - resistencia_de_rama_3
+  - tension_comun_del_paralelo
+  - corriente_de_rama_1
+  - corriente_de_rama_2
+  - corriente_de_rama_3
+  - corriente_total
+  - conductancia_equivalente
+  - conductancia_de_rama_1
+  - conductancia_de_rama_2
+  - conductancia_de_rama_3
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: resistencia_equivalente
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  resistencia_equivalente:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de resistencia_equivalente
+      en: Result of resistencia_equivalente
+    summary_rules:
+    - id: req_summary
+      when: 'true'
+      status: info
+      text:
+        es: Req resume la oposición total del conjunto paralelo frente a la fuente.
+        en: Req summarizes total opposition of the parallel network seen by source.
+    physical_reading_rules:
+    - id: req_read
+      when: 'true'
+      status: info
+      text:
+        es: Si se añade una rama conductora, Req tiende a disminuir.
+        en: Adding a conductive branch tends to reduce Req.
+    coherence_rules:
+    - id: req_coh
+      when: 'true'
+      status: ok
+      text:
+        es: Debe permanecer por debajo de cada resistencia de rama activa.
+        en: It should remain below each active branch resistance.
+    model_validity_rules:
+    - id: req_val
+      when: 'true'
+      status: ok
+      text:
+        es: Válida para ramas lineales conectadas entre los mismos dos nodos.
+        en: Valid for linear branches connected across the same two nodes.
+    graph_rules:
+    - id: req_graph
+      when: 'true'
+      status: info
+      text:
+        es: Se interpreta como pendiente global entre tensión y corriente total.
+        en: Interpreted as global slope between voltage and total current.
+    likely_errors:
+    - id: req_err
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[resistencia_equivalente]] con una lectura aislada es un error frecuente: Error común: sumar resistencias
+          directamente como si fuera serie.'
+        en: 'A common mistake is to interpret [[resistencia_equivalente]] in isolation: Common error: directly summing resistors
+          as if it were series.'
+    next_step_rules:
+    - id: req_next
+      when: 'true'
+      status: info
+      text:
+        es: Contrastar Req con medición de It para la misma V aplicada.
+        en: Compare Req against measured It for same applied V.
+    physical_intuition:
+    - id: resistencia_equivalente_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[resistencia_equivalente]] describe el estado dinámico.
+        en: Intuitively, [[resistencia_equivalente]] describes the dynamic state.
+    limiting_cases:
+    - id: resistencia_equivalente_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[resistencia_equivalente]].
+        en: Check limiting cases of [[resistencia_equivalente]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  resistencia_de_rama_1:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de resistencia_de_rama_1
+      en: Result of resistencia_de_rama_1
+    summary_rules:
+    - id: r1_summary
+      when: 'true'
+      status: info
+      text:
+        es: R1 es el parámetro resistivo que controla I1 para tensión común.
+        en: R1 is the resistive parameter controlling I1 under common voltage.
+    physical_reading_rules:
+    - id: r1_read
+      when: 'true'
+      status: info
+      text:
+        es: Su disminución aumenta corriente de rama y potencia local.
+        en: Its decrease raises branch current and local power demand.
+    coherence_rules:
+    - id: r1_coh
+      when: 'true'
+      status: ok
+      text:
+        es: Debe corresponder a la rama usada en el cálculo de I1.
+        en: It must match the branch used in I1 computation.
+    model_validity_rules:
+    - id: r1_val
+      when: 'true'
+      status: ok
+      text:
+        es: Modelo válido mientras la rama conserve comportamiento lineal.
+        en: Model remains valid while branch behavior stays linear.
+    graph_rules:
+    - id: r1_graph
+      when: 'true'
+      status: info
+      text:
+        es: Cambia la pendiente efectiva de respuesta corriente-tensión de su rama.
+        en: It changes effective slope of branch current-voltage response.
+    likely_errors:
+    - id: r1_err
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[resistencia_de_rama_1]] con una lectura aislada es un error frecuente: Error conceptual: usar R1
+          nominal sin considerar desvío térmico.'
+        en: 'A common mistake is to interpret [[resistencia_de_rama_1]] in isolation: Conceptual error: using nominal R1 without
+          thermal drift consideration.'
+    next_step_rules:
+    - id: r1_next
+      when: 'true'
+      status: info
+      text:
+        es: Verificar R1 efectiva si el reparto de corriente no coincide con el esperado.
+        en: Verify effective R1 when current sharing does not match expectation.
+    physical_intuition:
+    - id: resistencia_de_rama_1_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[resistencia_de_rama_1]] describe el estado dinámico.
+        en: Intuitively, [[resistencia_de_rama_1]] describes the dynamic state.
+    limiting_cases:
+    - id: resistencia_de_rama_1_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[resistencia_de_rama_1]].
+        en: Check limiting cases of [[resistencia_de_rama_1]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  corriente_de_rama_1:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de corriente_de_rama_1
+      en: Result of corriente_de_rama_1
+    summary_rules:
+    - id: i1_summary
+      when: 'true'
+      status: info
+      text:
+        es: I1 cuantifica la demanda de la rama asociada a R1.
+        en: I1 quantifies branch demand associated with R1.
+    physical_reading_rules:
+    - id: i1_read
+      when: 'true'
+      status: info
+      text:
+        es: Si R1 disminuye con V fija, I1 crece y puede dominar potencia.
+        en: If R1 decreases at fixed V, I1 rises and may dominate power.
+    coherence_rules:
+    - id: i1_coh
+      when: 'true'
+      status: ok
+      text:
+        es: Debe usar la misma referencia de polaridad que I2 e I3.
+        en: Must use same polarity reference as I2 and I3.
+    model_validity_rules:
+    - id: i1_val
+      when: 'true'
+      status: ok
+      text:
+        es: Requiere comportamiento óhmico en la rama 1.
+        en: Requires ohmic behavior in branch 1.
+    graph_rules:
+    - id: i1_graph
+      when: 'true'
+      status: info
+      text:
+        es: Puede representarse como fracción de It frente a variación de R1.
+        en: Can be represented as fraction of It versus R1 variation.
+    likely_errors:
+    - id: i1_err
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[corriente_de_rama_1]] con una lectura aislada es un error frecuente: Error común: usar R2 en la sustitución
+          de I1.'
+        en: 'A common mistake is to interpret [[corriente_de_rama_1]] in isolation: Common error: using R2 while substituting
+          I1.'
+    next_step_rules:
+    - id: i1_next
+      when: 'true'
+      status: info
+      text:
+        es: Compara I1 con límite térmico de la rama 1.
+        en: Compare I1 with branch 1 thermal limit.
+    physical_intuition:
+    - id: corriente_de_rama_1_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[corriente_de_rama_1]] describe el estado dinámico.
+        en: Intuitively, [[corriente_de_rama_1]] describes the dynamic state.
+    limiting_cases:
+    - id: corriente_de_rama_1_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[corriente_de_rama_1]].
+        en: Check limiting cases of [[corriente_de_rama_1]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  corriente_de_rama_2:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de corriente_de_rama_2
+      en: Result of corriente_de_rama_2
+    summary_rules:
+    - id: i2_summary
+      when: 'true'
+      status: info
+      text:
+        es: I2 representa el aporte de corriente de la segunda rama del paralelo.
+        en: I2 represents branch-current contribution of the second parallel path.
+    physical_reading_rules:
+    - id: i2_read
+      when: 'true'
+      status: info
+      text:
+        es: Su valor cae cuando R2 aumenta bajo tensión común constante.
+        en: Its value drops when R2 rises under constant common voltage.
+    coherence_rules:
+    - id: i2_coh
+      when: 'true'
+      status: ok
+      text:
+        es: Debe sumar con I1 e I3 para reproducir It.
+        en: It must sum with I1 and I3 to reproduce It.
+    model_validity_rules:
+    - id: i2_val
+      when: 'true'
+      status: ok
+      text:
+        es: Válida en rama predominantemente óhmica y lineal.
+        en: Valid in predominantly ohmic and linear branch behavior.
+    graph_rules:
+    - id: i2_graph
+      when: 'true'
+      status: info
+      text:
+        es: Se interpreta como porción intermedia del reparto de corriente.
+        en: It is interpreted as intermediate share of current distribution.
+    likely_errors:
+    - id: i2_err
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error conceptual: confundir I2 con It en la lectura de fuente.'
+        en: 'A common mistake is to interpret [[corriente_de_rama_2]] in isolation: Conceptual error: confusing I2 with It
+          at source-level reading.'
+    next_step_rules:
+    - id: i2_next
+      when: 'true'
+      status: info
+      text:
+        es: Contrastar I2 con límites de operación de la rama 2.
+        en: Compare I2 against operational limits of branch 2.
+    physical_intuition:
+    - id: corriente_de_rama_2_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[corriente_de_rama_2]] describe el estado dinámico.
+        en: Intuitively, [[corriente_de_rama_2]] describes the dynamic state.
+    limiting_cases:
+    - id: corriente_de_rama_2_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[corriente_de_rama_2]].
+        en: Check limiting cases of [[corriente_de_rama_2]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  corriente_de_rama_3:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de corriente_de_rama_3
+      en: Result of corriente_de_rama_3
+    summary_rules:
+    - id: i3_summary
+      when: 'true'
+      status: info
+      text:
+        es: I3 es la corriente asociada a la tercera rama del paralelo.
+        en: I3 is the current associated with the third parallel branch.
+    physical_reading_rules:
+    - id: i3_read
+      when: 'true'
+      status: info
+      text:
+        es: Disminuye cuando R3 aumenta para la misma tensión aplicada.
+        en: It decreases as R3 increases under the same applied voltage.
+    coherence_rules:
+    - id: i3_coh
+      when: 'true'
+      status: ok
+      text:
+        es: Debe integrarse al cierre nodal junto con I1 e I2.
+        en: It must integrate nodal closure together with I1 and I2.
+    model_validity_rules:
+    - id: i3_val
+      when: 'true'
+      status: ok
+      text:
+        es: Válida cuando la rama 3 está conectada y modelada como resistiva.
+        en: Valid when branch 3 is connected and modeled as resistive.
+    graph_rules:
+    - id: i3_graph
+      when: 'true'
+      status: info
+      text:
+        es: Aporta la tercera fracción de corriente en la lectura gráfica.
+        en: It contributes the third current fraction in graph reading.
+    likely_errors:
+    - id: i3_err
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[corriente_de_rama_3]] con una lectura aislada es un error frecuente: Error conceptual: dejar I3 fija
+          aunque cambie R3.'
+        en: 'A common mistake is to interpret [[corriente_de_rama_3]] in isolation: Conceptual error: keeping I3 fixed while
+          R3 changes.'
+    next_step_rules:
+    - id: i3_next
+      when: 'true'
+      status: info
+      text:
+        es: Revisar sensibilidad de I3 frente a cambios de carga en rama 3.
+        en: Check I3 sensitivity against load changes in branch 3.
+    physical_intuition:
+    - id: corriente_de_rama_3_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[corriente_de_rama_3]] describe el estado dinámico.
+        en: Intuitively, [[corriente_de_rama_3]] describes the dynamic state.
+    limiting_cases:
+    - id: corriente_de_rama_3_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[corriente_de_rama_3]].
+        en: Check limiting cases of [[corriente_de_rama_3]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  corriente_total:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de corriente_total
+      en: Result of corriente_total
+    summary_rules:
+    - id: it_summary
+      when: 'true'
+      status: info
+      text:
+        es: It es la corriente que la fuente entrega al nodo de distribución.
+        en: It is the current supplied by source to distribution node.
+    physical_reading_rules:
+    - id: it_read
+      when: 'true'
+      status: info
+      text:
+        es: Refleja el consumo agregado de todas las ramas activas.
+        en: It reflects aggregated demand of all active branches.
+    coherence_rules:
+    - id: it_coh
+      when: 'true'
+      status: ok
+      text:
+        es: Debe cerrar la suma nodal con I1, I2 e I3.
+        en: It must close nodal sum with I1, I2 and I3.
+    model_validity_rules:
+    - id: it_val
+      when: 'true'
+      status: ok
+      text:
+        es: Válida en régimen estacionario sin acumulación neta de carga en nodo.
+        en: Valid in steady regime with no net charge accumulation at node.
+    graph_rules:
+    - id: it_graph
+      when: 'true'
+      status: info
+      text:
+        es: Es la ordenada del punto operativo para una tensión de trabajo dada.
+        en: It is the operating-point ordinate for a given working voltage.
+    likely_errors:
+    - id: it_err
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[corriente_total]] con una lectura aislada es un error frecuente: Error común: omitir una rama en
+          la suma total.'
+        en: 'A common mistake is to interpret [[corriente_total]] in isolation: Common error: omitting one branch in total
+          sum.'
+    next_step_rules:
+    - id: it_next
+      when: 'true'
+      status: info
+      text:
+        es: Revisar protección de fuente con margen respecto a It calculada.
+        en: Check source protection margin against computed It.
+    physical_intuition:
+    - id: corriente_total_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[corriente_total]] describe el estado dinámico.
+        en: Intuitively, [[corriente_total]] describes the dynamic state.
+    limiting_cases:
+    - id: corriente_total_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[corriente_total]].
+        en: Check limiting cases of [[corriente_total]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  conductancia_equivalente:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de conductancia_equivalente
+      en: Result of conductancia_equivalente
+    summary_rules:
+    - id: geq_summary
+      when: 'true'
+      status: info
+      text:
+        es: Geq expresa la capacidad total de conducción del paralelo.
+        en: Geq expresses total conduction capability of the parallel network.
+    physical_reading_rules:
+    - id: geq_read
+      when: 'true'
+      status: info
+      text:
+        es: A mayor Geq, menor Req y mayor demanda potencial de corriente.
+        en: Higher Geq means lower Req and potentially higher current demand.
+    coherence_rules:
+    - id: geq_coh
+      when: 'true'
+      status: ok
+      text:
+        es: Debe coincidir con suma de G1, G2 y G3 para ramas activas.
+        en: Must match sum of G1, G2 and G3 for active branches.
+    model_validity_rules:
+    - id: geq_val
+      when: 'true'
+      status: ok
+      text:
+        es: Válida en régimen lineal sin componentes reactivos dominantes.
+        en: Valid in linear regime with no dominant reactive components.
+    graph_rules:
+    - id: geq_graph
+      when: 'true'
+      status: info
+      text:
+        es: Se interpreta como pendiente de la curva I-V equivalente.
+        en: Interpreted as slope of equivalent I-V curve.
+    likely_errors:
+    - id: geq_err
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[conductancia_equivalente]] con una lectura aislada es un error frecuente: Error común: usar siemens
+          y ohm en la misma suma.'
+        en: 'A common mistake is to interpret [[conductancia_equivalente]] in isolation: Common error: mixing siemens and
+          ohms in same sum.'
+    next_step_rules:
+    - id: geq_next
+      when: 'true'
+      status: info
+      text:
+        es: Verificar coherencia de Geq con Req mediante relación recíproca.
+        en: Verify Geq consistency with Req through reciprocal relation.
+    physical_intuition:
+    - id: conductancia_equivalente_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[conductancia_equivalente]] describe el estado dinámico.
+        en: Intuitively, [[conductancia_equivalente]] describes the dynamic state.
+    limiting_cases:
+    - id: conductancia_equivalente_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[conductancia_equivalente]].
+        en: Check limiting cases of [[conductancia_equivalente]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

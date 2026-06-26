@@ -1,0 +1,228 @@
+const e=`version: 5
+id: interpretacion-tubo-de-pitot
+leaf_id: tubo-de-pitot
+nombre:
+  es: Interpretación del Tubo de Pitot
+  en: Pitot Tube Interpretation
+scope: mecanica-fluidos
+
+dependencies:
+  magnitudes: [v, dp, p_t, p, rho]
+  formulas: [delta_pitot, velocidad_pitot]
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: Resumen de Medición
+      en: Measurement Summary
+  physical_reading:
+    title:
+      es: Lectura Física Profunda
+      en: Deep Physical Reading
+  coherence:
+    title:
+      es: Análisis de Coherencia
+      en: Coherence Analysis
+  model_validity:
+    title:
+      es: Validez del Modelo
+      en: Model Validity
+  graph_reading:
+    title:
+      es: Interpretación Gráfica
+      en: Graph Interpretation
+  likely_errors:
+    title:
+      es: Errores Comunes Detectados
+      en: Common Errors Detected
+  next_step:
+    title:
+      es: Siguiente Paso Sugerido
+      en: Suggested Next Step
+
+targets:
+  v:
+    summary_rules:
+      - id: rule-v-summary
+        when: "v > 0"
+        status: info
+        text:
+          es: Este valor indica que el fluido impacta a una velocidad de [[v]], generando una presión dinámica medible.
+          en: This indicates that the fluid impacts at a velocity of [[v]], generating a measurable dynamic pressure.
+    physical_reading_rules:
+      - id: rule-v-high
+        when: "v > 100"
+        status: warning
+        text:
+          es: A esta alta velocidad, la energía cinética es dominante y cualquier pequeña variación en la densidad [[rho]] afectará significativamente la presión total.
+          en: At this high speed, kinetic energy is dominant, and any small variation in density [[rho]] will significantly affect total pressure.
+    coherence_rules:
+      - id: rule-v-neg
+        when: "v < 0"
+        status: error
+        text:
+          es: "ERROR: La velocidad no puede ser negativa en este modelo escalar."
+          en: "ERROR: Velocity cannot be negative in this scalar model."
+    model_validity_rules:
+      - id: rule-v-compresible
+        when: "v > 250"
+        status: warning
+        text:
+          es: CUIDADO. A velocidades cercanas a Mach 0.3, el aire empieza a comportarse como fluido compresible y esta fórmula ideal pierde precisión.
+          en: CAUTION. At speeds near Mach 0.3, air begins to behave as a compressible fluid and this ideal formula loses precision.
+    graph_rules:
+      - id: rule-v-graph
+        when: "true"
+        status: info
+        text:
+          es: En el gráfico de coordenadas, este valor de [[v]] se sitúa en la curva de raíz cuadrada dependiente de [[dp]].
+          en: On the coordinate graph, this value of [[v]] lies on the square root curve dependent on [[dp]].
+    likely_errors:
+      - id: rule-v-ias
+        when: "true"
+        status: info
+        text:
+          es: No confundas la velocidad verdadera con la velocidad indicada si estás volando a gran altitud.
+          en: Do not confuse true airspeed with indicated airspeed if you are flying at high altitude.
+    next_step_rules:
+      - id: rule-v-next
+        when: "true"
+        status: info
+        text:
+          es: Revisa el Efecto Venturi para comparar otros métodos de medición de velocidad.
+          en: Check the Venturi Effect to compare other speed measurement methods.
+
+  dp:
+    summary_rules:
+      - id: rule-dp-summary
+        when: "dp > 0"
+        status: info
+        text:
+          es: Se ha detectado una presión dinámica de [[dp]], resultado de frenar el flujo en la sonda.
+          en: A dynamic pressure of [[dp]] has been detected, resulting from stopping the flow in the probe.
+    physical_reading_rules:
+      - id: rule-dp-energy
+        when: "dp > 500"
+        status: info
+        text:
+          es: Esta presión representa la densidad de energía cinética que el fluido ha transferido al sensor en el impacto.
+          en: This pressure represents the kinetic energy density that the fluid has transferred to the sensor upon impact.
+    coherence_rules:
+      - id: rule-dp-incoherent
+        when: "p_t < p"
+        status: error
+        text:
+          es: "INCOHERENCIA: La presión total [[p_t]] es menor que la estática [[p]]. Esto indica una succión o mala orientación de la sonda."
+          en: "INCOHERENCE: Total pressure [[p_t]] is less than static pressure [[p]]. This indicates suction or poor probe orientation."
+    model_validity_rules:
+      - id: rule-dp-zero
+        when: "dp == 0"
+        status: warning
+        text:
+          es: Sin presión dinámica, el fluido está en reposo relativo a la sonda.
+          en: Without dynamic pressure, the fluid is at rest relative to the probe.
+    graph_rules:
+      - id: rule-dp-graph
+        when: "true"
+        status: info
+        text:
+          es: El valor [[dp]] define el desplazamiento horizontal en el gráfico, marcando el punto de operación.
+          en: The value [[dp]] defines the horizontal displacement on the graph, marking the operating point.
+    likely_errors:
+      - id: rule-dp-hydro
+        when: "true"
+        status: warning
+        text:
+          es: Asegúrate de que [[dp]] no incluya la presión hidrostática si la sonda no está a la misma altura que la toma estática.
+          en: Ensure that [[dp]] does not include hydrostatic pressure if the probe is not at the same height as the static port.
+    next_step_rules:
+      - id: rule-dp-next
+        when: "true"
+        status: info
+        text:
+          es: Estudia la Ecuación de Bernoulli para entender de dónde surge el término de presión dinámica.
+          en: Study the Bernoulli Equation to understand where the dynamic pressure term comes from.
+
+  p_t:
+    summary_rules:
+      - id: rule-pt-summary
+        when: "p_t > 0"
+        status: info
+        text:
+          es: La presión de estancamiento [[p_t]] es el límite superior de presión en el sistema.
+          en: Stagnation pressure [[p_t]] is the upper limit of pressure in the system.
+    physical_reading_rules:
+      - id: rule-pt-impact
+        when: "true"
+        status: info
+        text:
+          es: Esta presión incluye tanto la presión estática ambiental como el efecto del impacto dinámico.
+          en: This pressure includes both ambient static pressure and the dynamic impact effect.
+    coherence_rules:
+      - id: rule-pt-coherence
+        when: "true"
+        status: info
+        text:
+          es: Se verifica que la presión total es mayor o igual a la estática.
+          en: It is verified that total pressure is greater than or equal to static pressure.
+    model_validity_rules:
+      - id: rule-pt-validity
+        when: "true"
+        status: info
+        text:
+          es: El punto de estancamiento debe estar libre de obstrucciones para una medida válida.
+          en: The stagnation point must be clear of obstructions for a valid measurement.
+    graph_rules:
+      - id: rule-pt-graph
+        when: "true"
+        status: info
+        text:
+          es: La presión total define la cota máxima en los perfiles de presión.
+          en: Total pressure defines the maximum level in pressure profiles.
+    likely_errors:
+      - id: rule-pt-error
+        when: "true"
+        status: warning
+        text:
+          es: Cuidado con bloqueos en la entrada de la sonda que falseen la presión total.
+          en: Beware of blockages at the probe inlet that fake the total pressure.
+    next_step_rules:
+      - id: rule-pt-next
+        when: "true"
+        status: info
+        text:
+          es: Investiga cómo varían estas presiones con la altitud.
+          en: Investigate how these pressures vary with altitude.
+
+summary:
+  es: El Tubo de Pitot mide e indica la velocidad del flujo [[v]] traduciendo la presión de impacto [[p_t]] mediante la conservación de la energía.
+  en: The Pitot Tube measures and indicates the flow velocity [[v]] by translating the impact pressure [[p_t]] through energy conservation.
+physical_reading:
+  es: La medición depende críticamente de la densidad [[rho]]; a mayor densidad, el mismo impacto de presión corresponde a una velocidad menor.
+  en: The measurement critically depends on density [[rho]]; with higher density, the same pressure impact corresponds to a lower velocity.
+coherence:
+  es: El sistema es coherente siempre que la presión total sea el límite superior de la presión estática detectada.
+  en: The system is coherent as long as the total pressure is the upper limit of the detected static pressure.
+model_validity:
+  es: Este modelo asume fluido incompresible y flujo ideal (sin fricción viscosa en la punta).
+  en: This model assumes incompressible fluid and ideal flow (no viscous friction at the tip).
+graph_reading:
+  es: La visualización muestra la transferencia de energía desde el flujo libre hasta el punto de estancamiento.
+  en: The visualization shows the energy transfer from the free stream to the stagnation point.
+likely_errors:
+  es: El error más común es usar la densidad incorrecta o no alinear la sonda con las líneas de corriente.
+  en: The most common error is using the incorrect density or not aligning the probe with the streamlines.
+next_step:
+  es: Profundiza en el estudio de capas límite para entender las limitaciones del Pitot en flujos muy lentos.
+  en: Deepen your study of boundary layers to understand Pitot limitations in very slow flows.
+`;export{e as default};

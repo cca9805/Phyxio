@@ -1,0 +1,329 @@
+version: 2
+id: interpretacion-principio-de-conservacion
+leaf_id: principio-de-conservacion
+nombre:
+  es: Interpretacion del principio de conservacion
+  en: Interpretation of the conservation principle
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: trabajo-y-energia
+  parent_id: conservacion-de-la-energia
+  ruta_relativa: fisica-clasica/mecanica/trabajo-y-energia/conservacion-de-la-energia/principio-de-conservacion
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretacion
+    en: Interpretation
+  priority_order:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_limits:
+    max_messages: 3
+dependencies:
+  formulas:
+  - conservacion_mecanica
+  - energia_mecanica_total
+  - balance_con_no_conservativas
+  magnitudes:
+  - Em
+  - K
+  - U
+  - Ki
+  - Kf
+  - Ui
+  - Uf
+  - Wnc
+global_context:
+  physical_domain:
+    es: Balance energetico estado a estado en mecanica clasica.
+    en: State-to-state energetic balance in classical mechanics.
+  axis_convention:
+    es: Definir una unica referencia para potencial y una convencion de trabajo.
+    en: Define one single potential baseline and one work-sign convention.
+  standard_assumptions:
+  - estados inicial y final bien definidos
+  - modelo clasico no relativista
+  - referencias energeticas consistentes
+  standard_warnings:
+  - no imponer conservacion si hay disipacion apreciable
+  - no mezclar referencias de potencial entre estados
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  Kf:
+    magnitude_type: scalar
+    semantic_role:
+      es: energia cinetica final inferida desde el balance
+      en: final kinetic energy inferred from balance
+    summary_rules:
+    - id: kf_summary
+      when: 'true'
+      status: info
+      text:
+        es: Kf resume como se repartio la energia total entre estado inicial y final.
+        en: Kf summarizes how total energy was distributed between initial and final states.
+    physical_reading_rules:
+    - id: kf_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si Kf crece, otra contribucion energetica disminuye o hubo aporte no conservativo positivo.
+        en: If Kf increases, another energy contribution decreases or there was positive non-conservative input.
+    coherence_rules:
+    - id: kf_coherence
+      when: Kf >= 0
+      status: ok
+      text:
+        es: Kf no negativa, consistente con energia cinetica clasica.
+        en: Nonnegative Kf, consistent with classical kinetic energy.
+    - id: kf_coherence_neg
+      when: Kf < 0
+      status: warning
+      text:
+        es: Kf negativa indica error de signos, unidades o referencia.
+        en: Negative Kf indicates sign, unit, or baseline errors.
+    model_validity_rules:
+    - id: kf_validity
+      when: 'true'
+      status: info
+      text:
+        es: Valida Kf solo si el modelo elegido incluye las transferencias relevantes.
+        en: Validate Kf only if the selected model includes relevant transfers.
+    graph_rules:
+    - id: kf_graph
+      when: 'true'
+      status: info
+      text:
+        es: En Coord, K y U deben intercambiarse manteniendo o variando K+U segun Wnc.
+        en: In Coord, K and U should exchange while K+U stays constant or changes according to Wnc.
+    likely_errors:
+    - id: kf_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error frecuente: usar altura final y velocidad final sin coherencia de referencia."
+        en: "Frequent error: using final height and final speed with inconsistent baselines."
+    next_step_rules:
+    - id: kf_next
+      when: 'true'
+      status: info
+      text:
+        es: Contrasta Kf con el dato experimental o con el limite fisico del sistema.
+        en: Compare Kf with experimental data or physical system limits.
+  Em:
+    magnitude_type: scalar
+    semantic_role:
+      es: contenido mecanico total de un estado
+      en: total mechanical content of a state
+    summary_rules:
+    - id: em_summary
+      when: 'true'
+      status: info
+      text:
+        es: Em permite separar que parte del problema es definicion de estado y que parte es conservacion.
+        en: Em separates what in the problem is state definition and what is conservation.
+    physical_reading_rules:
+    - id: em_physical
+      when: 'true'
+      status: info
+      text:
+        es: Em constante no implica K constante; implica compensacion entre K y U.
+        en: Constant Em does not imply constant K; it implies compensation between K and U.
+    coherence_rules:
+    - id: em_coherence
+      when: 'true'
+      status: info
+      text:
+        es: Mantener una sola referencia de potencial es obligatorio para interpretar Em.
+        en: Keeping a single potential baseline is mandatory to interpret Em.
+    model_validity_rules:
+    - id: em_validity
+      when: 'true'
+      status: info
+      text:
+        es: Si aparece disipacion, Em deja de conservarse y debe usarse Wnc.
+        en: If dissipation appears, Em is no longer conserved and Wnc must be used.
+    graph_rules:
+    - id: em_graph
+      when: 'true'
+      status: info
+      text:
+        es: La curva Em ideal es horizontal; con Wnc cambia nivel.
+        en: Ideal Em is a horizontal curve; with Wnc it shifts level.
+    likely_errors:
+    - id: em_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error frecuente: confundir Em con energia interna o termica del sistema."
+        en: "Frequent error: confusing Em with internal or thermal energy."
+    next_step_rules:
+    - id: em_next
+      when: 'true'
+      status: info
+      text:
+        es: Decide si el siguiente modelo requiere separar energia mecanica y no mecanica.
+        en: Decide whether the next model must separate mechanical and non-mechanical energy.
+  Uf:
+    magnitude_type: scalar
+    semantic_role:
+      es: energia potencial final respecto a referencia fija
+      en: final potential energy under a fixed baseline
+    summary_rules:
+    - id: uf_summary
+      when: 'true'
+      status: info
+      text:
+        es: Uf cierra el estado final junto con Kf y define la lectura de balance.
+        en: Uf closes the final state together with Kf and supports balance reading.
+    physical_reading_rules:
+    - id: uf_physical
+      when: 'true'
+      status: info
+      text:
+        es: Cambiar Uf sin cambiar referencia altera la interpretación causal del resultado.
+        en: Changing Uf without changing baseline alters the causal interpretation.
+    coherence_rules:
+    - id: uf_coherence
+      when: 'true'
+      status: info
+      text:
+        es: Verifica que Ui y Uf compartan la misma referencia potencial.
+        en: Verify that Ui and Uf share the same potential baseline.
+    model_validity_rules:
+    - id: uf_validity
+      when: 'true'
+      status: info
+      text:
+        es: La validez del modelo depende de mantener coherencia de referencia.
+        en: Model validity depends on baseline consistency.
+    graph_rules:
+    - id: uf_graph
+      when: 'true'
+      status: info
+      text:
+        es: En Coord, Uf debe leerse en el estado final sin saltos de referencia.
+        en: In Coord, Uf should be read at final state without baseline jumps.
+    likely_errors:
+    - id: uf_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error frecuente: cambiar el cero potencial entre estados."
+        en: "Frequent error: changing the potential zero between states."
+    next_step_rules:
+    - id: uf_next
+      when: 'true'
+      status: info
+      text:
+        es: Después de validar Uf, contrasta el cierre con Kf y Wnc.
+        en: After validating Uf, contrast closure with Kf and Wnc.
+  Wnc:
+    magnitude_type: scalar
+    semantic_role:
+      es: intercambio no conservativo neto entre estados
+      en: net non-conservative exchange between states
+    summary_rules:
+    - id: wnc_summary
+      when: 'true'
+      status: info
+      text:
+        es: Wnc cuantifica la desviación respecto al caso conservativo ideal.
+        en: Wnc quantifies deviation from the ideal conservative case.
+    physical_reading_rules:
+    - id: wnc_physical
+      when: 'true'
+      status: info
+      text:
+        es: Wnc negativo sugiere disipación; positivo sugiere aporte externo.
+        en: Negative Wnc suggests dissipation; positive Wnc suggests external input.
+    coherence_rules:
+    - id: wnc_coherence
+      when: 'true'
+      status: info
+      text:
+        es: Revisa el convenio de signos antes de interpretar Wnc.
+        en: Check sign convention before interpreting Wnc.
+    model_validity_rules:
+    - id: wnc_validity
+      when: 'true'
+      status: warning
+      text:
+        es: Si Wnc domina, no uses conclusión de conservación ideal sin matizar.
+        en: If Wnc dominates, do not use strict ideal-conservation conclusions.
+    graph_rules:
+    - id: wnc_graph
+      when: 'true'
+      status: info
+      text:
+        es: En Coord, un cambio de nivel de K+U indica Wnc acumulado.
+        en: In Coord, a level shift in K+U indicates accumulated Wnc.
+    likely_errors:
+    - id: wnc_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error frecuente: tratar Wnc como ruido sin interpretación física."
+        en: "Frequent error: treating Wnc as noise without physical interpretation."
+    next_step_rules:
+    - id: wnc_next
+      when: 'true'
+      status: info
+      text:
+        es: Tras estimar Wnc, decide si conviene modelo dinámico adicional.
+        en: After estimating Wnc, decide whether an additional dynamic model is needed.
+cross_checks: []
+error_patterns: []
+graph_binding:
+  enabled: true
+  preferred_type: Coord
+mini_graph:
+  enabled: true
+  type: Coord
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step

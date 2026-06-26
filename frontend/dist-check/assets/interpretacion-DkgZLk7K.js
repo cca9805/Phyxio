@@ -1,0 +1,165 @@
+const e=`version: v5
+id: interpretacion_coherencia
+leaf_id: coherencia
+nombre: { es: Coherencia, en: Coherence }
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: optica-fisica
+  parent_id: optica-fisica
+  ruta_relativa: fisica-clasica/electromagnetismo/optica/optica-fisica/coherencia
+ui:
+  enabled: true
+  display_modes: { calculator_inline: true, graph_inline: true, dedicated_tab: true, modal: true }
+  labels: { es: Interpretacion fisica, en: Physical interpretation }
+  priority_order: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  inline_limits: { max_items: 3 }
+dependencies:
+  formulas: [longitud_coherencia, coherencia_relativa, visibilidad_franjas]
+  magnitudes: [c, tau_c, L_c, Delta_L, C_rel, I_max, I_min, V]
+global_context:
+  physical_domain: { es: Interferencia optica con estabilidad de fase finita., en: Optical interference with finite phase stability. }
+  axis_convention: { es: "El eje horizontal usa [[Delta_L]] y el vertical usa [[C_rel]], de modo que aumentar desajuste reduce coherencia.", en: "The horizontal axis uses [[Delta_L]] and the vertical axis uses [[C_rel]], so increasing mismatch reduces coherence." }
+  standard_assumptions:
+    - { es: "La fuente se describe por una escala temporal de coherencia.", en: "The source is described by a temporal coherence scale." }
+    - { es: "El montaje se mantiene mecanicamente estable durante la medida.", en: "The setup remains mechanically stable during measurement." }
+  standard_warnings:
+    - { es: "La visibilidad tambien puede bajar por fondo, vibracion o desequilibrio de intensidades.", en: "Visibility can also fall because of background, vibration, or intensity imbalance." }
+result_blocks:
+  summary: { enabled: true, order: 1, title: { es: Resumen, en: Summary } }
+  physical_reading: { enabled: true, order: 2, title: { es: Lectura fisica, en: Physical reading } }
+  coherence: { enabled: true, order: 3, title: { es: Coherencia, en: Coherence } }
+  model_validity: { enabled: true, order: 4, title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { enabled: true, order: 5, title: { es: Lectura grafica, en: Graph reading } }
+  likely_errors: { enabled: true, order: 6, title: { es: Errores probables, en: Likely errors } }
+  next_step: { enabled: true, order: 7, title: { es: Siguiente paso, en: Next step } }
+targets:
+  L_c:
+    magnitude_type: scalar_unsigned
+    semantic_role: { es: escala espacial de memoria de fase, en: spatial scale of phase memory }
+    summary_rules:
+      - { id: lc_summary_default, when: "true", status: ok, text: { es: "[[L_c]] indica la distancia de coherencia util y describe cuanto desajuste puede tolerar el montaje.", en: "[[L_c]] indicates useful coherence distance and describes how much mismatch the setup can tolerate." } }
+    physical_reading_rules:
+      - { id: lc_reading_default, when: "true", status: ok, text: { es: "Una [[L_c]] mayor significa que la fuente conserva fase durante caminos mas diferentes.", en: "A larger [[L_c]] means the source preserves phase over more different paths." } }
+    coherence_rules:
+      - { id: lc_coherence_default, when: "true", status: ok, text: { es: "[[L_c]] debe compararse con [[Delta_L]] antes de esperar franjas visibles.", en: "[[L_c]] must be compared with [[Delta_L]] before expecting visible fringes." } }
+    model_validity_rules:
+      - { id: lc_validity_default, when: "true", status: ok, text: { es: "La lectura vale si la fuente tiene una escala de coherencia temporal bien definida.", en: "The reading is valid if the source has a well-defined temporal coherence scale." } }
+    graph_rules:
+      - { id: lc_graph_default, when: "true", status: ok, text: { es: "En el grafico, [[L_c]] fija la escala que controla la caida de [[C_rel]].", en: "On the graph, [[L_c]] sets the scale controlling the drop of [[C_rel]]." } }
+    likely_errors:
+      - { id: lc_error_default, when: "true", status: warning, text: { es: "Error tipico: confundir [[L_c]] con distancia recorrida total por la luz.", en: "Typical mistake: confusing [[L_c]] with total distance travelled by light." } }
+    next_step_rules:
+      - { id: lc_next_default, when: "true", status: ok, text: { es: "Despues de [[L_c]], revisa [[Delta_L]] y estima [[C_rel]] o [[V]].", en: "After [[L_c]], check [[Delta_L]] and estimate [[C_rel]] or [[V]]." } }
+  tau_c:
+    magnitude_type: scalar_unsigned
+    semantic_role: { es: intervalo temporal de estabilidad de fase, en: temporal interval of phase stability }
+    summary_rules:
+      - { id: tc_summary_default, when: "true", status: ok, text: { es: "[[tau_c]] describe cuanto tiempo conserva fase la fuente y depende de su anchura espectral.", en: "[[tau_c]] describes how long the source preserves phase and depends on spectral width." } }
+    physical_reading_rules:
+      - { id: tc_reading_default, when: "true", status: ok, text: { es: "Un [[tau_c]] mayor permite una [[L_c]] mayor para la misma velocidad de propagacion.", en: "A larger [[tau_c]] allows larger [[L_c]] for the same propagation speed." } }
+    coherence_rules:
+      - { id: tc_coherence_default, when: "true", status: ok, text: { es: "[[tau_c]] debe ser positivo y no debe confundirse con tiempo total de emision.", en: "[[tau_c]] must be positive and must not be confused with total emission time." } }
+    model_validity_rules:
+      - { id: tc_validity_default, when: "true", status: ok, text: { es: "Si la fuente cambia espectro durante la medida, un unico [[tau_c]] puede ser insuficiente.", en: "If the source spectrum changes during measurement, one [[tau_c]] may be insufficient." } }
+    graph_rules:
+      - { id: tc_graph_default, when: "true", status: ok, text: { es: "En la lectura grafica, [[tau_c]] desplaza la escala de [[L_c]] y la caida de coherencia.", en: "In graph reading, [[tau_c]] shifts the [[L_c]] scale and coherence drop." } }
+    likely_errors:
+      - { id: tc_error_default, when: "true", status: warning, text: { es: "Error frecuente: comparar [[tau_c]] directamente con una distancia experimental.", en: "Frequent error: comparing [[tau_c]] directly with an experimental distance." } }
+    next_step_rules:
+      - { id: tc_next_default, when: "true", status: ok, text: { es: "Convierte [[tau_c]] en [[L_c]] antes de analizar caminos opticos.", en: "Convert [[tau_c]] into [[L_c]] before analyzing optical paths." } }
+  c:
+    magnitude_type: scalar_constant
+    semantic_role: { es: velocidad de conversion temporal espacial, en: temporal-spatial conversion speed }
+    summary_rules:
+      - { id: c_summary_default, when: "true", status: ok, text: { es: "[[c]] indica la velocidad usada para transformar memoria temporal en longitud de coherencia.", en: "[[c]] indicates the speed used to transform temporal memory into coherence length." } }
+    physical_reading_rules:
+      - { id: c_reading_default, when: "true", status: ok, text: { es: "[[c]] actua como puente entre segundos de estabilidad y metros de camino.", en: "[[c]] acts as bridge between seconds of stability and metres of path." } }
+    coherence_rules:
+      - { id: c_coherence_default, when: "true", status: ok, text: { es: "[[c]] debe ser positiva y coherente con el medio usado en el montaje.", en: "[[c]] must be positive and coherent with the medium used in the setup." } }
+    model_validity_rules:
+      - { id: c_validity_default, when: "true", status: ok, text: { es: "Si el montaje esta en un medio material, conviene usar la velocidad efectiva del medio.", en: "If the setup is in a material medium, use the effective speed of the medium." } }
+    graph_rules:
+      - { id: c_graph_default, when: "true", status: ok, text: { es: "En el grafico, [[c]] solo fija la escala de [[L_c]], no el contraste por si sola.", en: "On the graph, [[c]] only sets the [[L_c]] scale, not contrast by itself." } }
+    likely_errors:
+      - { id: c_error_default, when: "true", status: warning, text: { es: "Error tipico: usar [[c]] como si midiera coherencia directamente.", en: "Typical mistake: using [[c]] as if it measured coherence directly." } }
+    next_step_rules:
+      - { id: c_next_default, when: "true", status: ok, text: { es: "Usa [[c]] junto con [[tau_c]] y luego compara con [[Delta_L]].", en: "Use [[c]] with [[tau_c]] and then compare with [[Delta_L]]." } }
+  C_rel:
+    magnitude_type: scalar_unsigned
+    semantic_role: { es: indicador relativo de supervivencia de franjas, en: relative indicator of fringe survival }
+    summary_rules:
+      - { id: cr_summary_default, when: "true", status: ok, text: { es: "[[C_rel]] describe cuanto sobrevive la coherencia cuando aumenta la diferencia de camino.", en: "[[C_rel]] describes how much coherence survives when path difference increases." } }
+    physical_reading_rules:
+      - { id: cr_reading_default, when: "true", status: ok, text: { es: "Un [[C_rel]] cercano a uno significa caminos bien correlacionados; uno bajo anticipa franjas debiles.", en: "A [[C_rel]] near one means well-correlated paths; a low one anticipates weak fringes." } }
+    coherence_rules:
+      - { id: cr_coherence_default, when: "true", status: ok, text: { es: "[[C_rel]] debe estar entre cero y uno en este modelo pedagogico.", en: "[[C_rel]] must lie between zero and one in this pedagogical model." } }
+    model_validity_rules:
+      - { id: cr_validity_default, when: "true", status: ok, text: { es: "El modelo es una aproximacion monotona; no sustituye una funcion de correlacion completa.", en: "The model is a monotonic approximation; it does not replace a full correlation function." } }
+    graph_rules:
+      - { id: cr_graph_default, when: "true", status: ok, text: { es: "En el grafico, [[C_rel]] cae cuando [[Delta_L]] crece respecto a [[L_c]].", en: "On the graph, [[C_rel]] falls when [[Delta_L]] grows relative to [[L_c]]." } }
+    likely_errors:
+      - { id: cr_error_default, when: "true", status: warning, text: { es: "Error frecuente: leer [[C_rel]] como potencia luminosa total.", en: "Frequent error: reading [[C_rel]] as total light power." } }
+    next_step_rules:
+      - { id: cr_next_default, when: "true", status: ok, text: { es: "Contrasta [[C_rel]] con la visibilidad experimental [[V]].", en: "Compare [[C_rel]] with experimental visibility [[V]]." } }
+  Delta_L:
+    magnitude_type: scalar_unsigned
+    semantic_role: { es: desajuste de caminos recombinados, en: mismatch of recombined paths }
+    summary_rules:
+      - { id: dl_summary_default, when: "true", status: ok, text: { es: "[[Delta_L]] indica el desajuste de caminos y aumenta la perdida de coherencia.", en: "[[Delta_L]] indicates path mismatch and increases coherence loss." } }
+    physical_reading_rules:
+      - { id: dl_reading_default, when: "true", status: ok, text: { es: "Una [[Delta_L]] grande exige una fuente con [[L_c]] grande para sostener franjas.", en: "A large [[Delta_L]] requires a source with large [[L_c]] to sustain fringes." } }
+    coherence_rules:
+      - { id: dl_coherence_default, when: "true", status: ok, text: { es: "[[Delta_L]] se toma no negativa y debe compararse con la longitud de coherencia.", en: "[[Delta_L]] is taken nonnegative and must be compared with coherence length." } }
+    model_validity_rules:
+      - { id: dl_validity_default, when: "true", status: ok, text: { es: "Si el camino vibra durante la medida, una sola [[Delta_L]] no describe el experimento.", en: "If the path vibrates during measurement, one [[Delta_L]] does not describe the experiment." } }
+    graph_rules:
+      - { id: dl_graph_default, when: "true", status: ok, text: { es: "[[Delta_L]] es el control horizontal que desplaza el punto hacia menor [[C_rel]].", en: "[[Delta_L]] is the horizontal control that shifts the point toward lower [[C_rel]]." } }
+    likely_errors:
+      - { id: dl_error_default, when: "true", status: warning, text: { es: "Error tipico: medir distancia geometrica sin pensar en camino optico.", en: "Typical mistake: measuring geometric distance without thinking of optical path." } }
+    next_step_rules:
+      - { id: dl_next_default, when: "true", status: ok, text: { es: "Reduce [[Delta_L]] o aumenta [[L_c]] si se buscan franjas mas visibles.", en: "Reduce [[Delta_L]] or increase [[L_c]] if more visible fringes are needed." } }
+  V:
+    magnitude_type: scalar_unsigned
+    semantic_role: { es: contraste experimental de franjas, en: experimental fringe contrast }
+    summary_rules:
+      - { id: v_summary_default, when: "true", status: ok, text: { es: "[[V]] indica el contraste visible de las franjas y resume la calidad experimental del patron.", en: "[[V]] indicates visible fringe contrast and summarizes experimental pattern quality." } }
+    physical_reading_rules:
+      - { id: v_reading_default, when: "true", status: ok, text: { es: "Una [[V]] alta significa maximos y minimos bien distinguibles, no necesariamente mas potencia.", en: "High [[V]] means clearly distinguishable maxima and minima, not necessarily more power." } }
+    coherence_rules:
+      - { id: v_coherence_default, when: "true", status: ok, text: { es: "[[V]] debe ser adimensional y estar entre cero y uno para una medida fisica.", en: "[[V]] must be dimensionless and between zero and one for a physical measurement." } }
+    model_validity_rules:
+      - { id: v_validity_default, when: "true", status: ok, text: { es: "La visibilidad representa coherencia solo si fondo, detector e intensidades estan controlados.", en: "Visibility represents coherence only if background, detector, and intensities are controlled." } }
+    graph_rules:
+      - { id: v_graph_default, when: "true", status: ok, text: { es: "En lectura grafica, [[V]] se compara con [[C_rel]] como contraste observado.", en: "In graph reading, [[V]] is compared with [[C_rel]] as observed contrast." } }
+    likely_errors:
+      - { id: v_error_default, when: "true", status: warning, text: { es: "Error frecuente: confundir [[V]] con intensidad absoluta.", en: "Frequent error: confusing [[V]] with absolute intensity." } }
+    next_step_rules:
+      - { id: v_next_default, when: "true", status: ok, text: { es: "Si [[V]] es baja, revisa coherencia, alineacion, fondo y equilibrio de haces.", en: "If [[V]] is low, check coherence, alignment, background, and beam balance." } }
+cross_checks:
+  - id: path_vs_coherence
+    type: scale_comparison
+    formulas: [coherencia_relativa]
+    magnitudes: [Delta_L, L_c, C_rel]
+    message: { es: "La visibilidad esperada cae cuando el camino supera la escala de coherencia.", en: "Expected visibility falls when path exceeds the coherence scale." }
+error_patterns:
+  - id: intensity_vs_coherence
+    detects: [V, I_max, I_min]
+    message: { es: "La visibilidad mide contraste, no intensidad total.", en: "Visibility measures contrast, not total intensity." }
+graph_binding:
+  preferred_graph: Coord
+  magnitud_estrella: C_rel
+  variable_control: Delta_L
+  visible_magnitudes: [Delta_L, C_rel, L_c]
+  relation: coherencia_relativa
+mini_graph:
+  enabled: true
+  type: Coord
+  x: Delta_L
+  y: C_rel
+  reading: { es: "Curva decreciente de coherencia relativa al aumentar la diferencia de camino.", en: "Decreasing relative coherence curve as path difference increases." }
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  inline_mode: { max_sections: 2, priority: [summary, likely_errors] }
+  extended_mode: { show_all: true }
+`;export{e as default};

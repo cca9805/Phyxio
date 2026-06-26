@@ -1,0 +1,692 @@
+version: 5.0.0
+id: energia-interna
+leaf_id: energia-interna
+nombre:
+  es: Energia interna
+  en: Internal Energy
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: trabajo-y-primera-ley
+  parent_id: trabajo-y-primera-ley
+  ruta_relativa: fisica-clasica/termodinamica/trabajo-y-primera-ley/energia-interna
+  orden: 254200
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - energia_interna_gas_ideal
+  - variacion_energia_interna
+  magnitudes:
+  - energia_interna
+  - variacion_de_energia_interna
+  - temperatura
+  - capacidad_calorifica_a_volumen_constante
+  - variacion_de_temperatura
+  - numero_de_moles
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: energia_interna
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  energia_interna:
+    enabled: true
+    magnitude_type: internal_energy
+    semantic_role:
+      es: Energía almacenada en los movimientos moleculares del sistema. Función de estado.
+      en: Energy stored in the system's molecular motions. State function.
+    summary_rules:
+    - id: U_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[U]] es la energía interna total del sistema. Para gas ideal monoatómico, [[U]] = (3/2)nRT. Solo su variación
+          [[DeltaU]] tiene relevancia directa en el balance energético.'
+        en: '[[U]] is the total internal energy of the system. For monatomic ideal gas, [[U]] = (3/2)nRT. Only its change
+          [[DeltaU]] has direct relevance in the energy balance.'
+    physical_reading_rules:
+    - id: U_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[U]] solo depende del estado actual del sistema, no del camino recorrido para llegar a él. Dos sistemas en el
+          mismo estado tienen la misma [[U]].'
+        en: '[[U]] depends only on the system''s current state, not on the path taken to reach it. Two systems in the same
+          state have the same [[U]].'
+    coherence_rules:
+    - id: U_coherence_positive
+      when: U <= 0
+      status: error
+      text:
+        es: '[[U]] nula o negativa es físicamente imposible para T > 0 K en un gas ideal.'
+        en: Zero or negative [[U]] is physically impossible for T > 0 K in an ideal gas.
+    - id: U_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[U]] positiva y consistente con la temperatura del sistema.'
+        en: Positive [[U]] consistent with the system temperature.
+    model_validity_rules:
+    - id: U_model_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[U]] = (f/2)nRT es válida para gas ideal. Para gases reales en condiciones de alta presión, [[U]] depende también
+          del volumen y la relación no es lineal con T.'
+        en: '[[U]] = (f/2)nRT is valid for ideal gas. For real gases at high pressure, [[U]] also depends on volume and the
+          relationship with T is not linear.'
+    graph_rules:
+    - id: U_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'En el gráfico [[U]] vs [[T]], [[U]] es proporcional a [[T]] para gas ideal. La recta pasa por el origen: [[U]](T
+          = 0) = 0 por convenio del cero de energía.'
+        en: 'In the [[U]] vs [[T]] graph, [[U]] is proportional to [[T]] for ideal gas. The line passes through the origin:
+          [[U]](T = 0) = 0 by energy zero convention.'
+    likely_errors:
+    - id: U_error_celsius
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_interna]] con una lectura aislada es un error frecuente: Error frecuente: usar la temperatura
+          en Celsius en lugar de Kelvin para calcular [[U]]. Siempre convertir a Kelvin: T(K) = T(°C) + 273.15.'
+        en: 'A common mistake is to interpret [[energia_interna]] in isolation: Frequent error: using temperature in Celsius
+          instead of Kelvin to compute [[U]]. Always convert to Kelvin: T(K) = T(°C) + 273.15.'
+    next_step_rules:
+    - id: U_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Calcular [[DeltaU]] entre dos estados y usar la primera ley para determinar el calor o el trabajo del proceso.
+        en: Compute [[DeltaU]] between two states and use the first law to determine process heat or work.
+    physical_intuition:
+    - id: energia_interna_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_interna]] describe el estado dinámico.
+        en: Intuitively, [[energia_interna]] describes the dynamic state.
+    limiting_cases:
+    - id: energia_interna_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[energia_interna]].
+        en: Check limiting cases of [[energia_interna]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de temperatura
+      en: Result of temperatura
+    summary_rules:
+    - id: temperatura_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[temperatura]] indica la magnitud física principal.
+        en: The result [[temperatura]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: temperatura_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura]] junto con su unidad y signo.
+        en: Read [[temperatura]] with its unit and sign.
+    coherence_rules:
+    - id: temperatura_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[temperatura]].
+        en: Check the dimensional consistency of [[temperatura]]
+    model_validity_rules:
+    - id: temperatura_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura]] solo dentro de la validez del modelo.
+        en: Interpret [[temperatura]] only within the validity of the model.
+    graph_rules:
+    - id: temperatura_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[temperatura]] con la lectura gráfica.
+        en: Relate [[temperatura]] to the graph.
+    likely_errors:
+    - id: temperatura_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[temperatura]] con una lectura aislada es un error frecuente; debe interpretarse con el modelo, las
+          unidades y el rango físico.
+        en: A common mistake is to interpret [[temperatura]] in isolation; it must be read with the model, units, and physical
+          range.
+    next_step_rules:
+    - id: temperatura_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[temperatura]], revisa los límites físicos.
+        en: After obtaining [[temperatura]], review the physical limits.
+    physical_intuition:
+    - id: temperatura_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura]] describe el estado dinámico.
+        en: Intuitively, [[temperatura]] describes the dynamic state.
+    limiting_cases:
+    - id: temperatura_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[temperatura]].
+        en: Check limiting cases of [[temperatura]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_de_moles:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Cantidad de sustancia del gas calculada a partir de su energía interna y temperatura
+      en: Amount of substance of the gas computed from its internal energy and temperature
+    summary_rules:
+    - id: numero_de_moles_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[numero_de_moles]] es la cantidad de sustancia del gas. A partir de [[energia_interna]], [[temperatura]] y los grados de libertad f se obtiene n = 2U / (f·R·T).
+        en: The result [[numero_de_moles]] is the amount of substance of the gas. From [[energia_interna]], [[temperatura]] and degrees of freedom f, n = 2U / (f·R·T).
+    physical_reading_rules:
+    - id: numero_de_moles_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[numero_de_moles]] junto con su unidad (mol). Un valor coherente con la escala del sistema confirma que la energía interna y la temperatura están en las unidades correctas.
+        en: Read [[numero_de_moles]] with its unit (mol). A value consistent with the system scale confirms that internal energy and temperature are in the correct units.
+    coherence_rules:
+    - id: numero_de_moles_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_de_moles]] debe ser positivo. Si el resultado es negativo, verificar que [[energia_interna]] > 0 y [[temperatura]] > 0 (en Kelvin).'
+        en: '[[numero_de_moles]] must be positive. If the result is negative, verify that [[energia_interna]] > 0 and [[temperatura]] > 0 (in Kelvin).'
+    model_validity_rules:
+    - id: numero_de_moles_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El despeje de [[numero_de_moles]] asume gas ideal. Para gases reales la energía interna depende también del volumen, por lo que esta estimación solo es válida en condiciones de baja presión.
+        en: Solving for [[numero_de_moles]] assumes an ideal gas. For real gases, internal energy also depends on volume, so this estimate is only valid at low pressures.
+    graph_rules:
+    - id: numero_de_moles_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: En el gráfico [[energia_interna]] vs [[temperatura]], [[numero_de_moles]] determina la pendiente de la recta (pendiente = n·Cv). Mayor [[numero_de_moles]] implica recta más inclinada.
+        en: In the [[energia_interna]] vs [[temperatura]] graph, [[numero_de_moles]] determines the slope of the line (slope = n·Cv). Larger [[numero_de_moles]] implies a steeper line.
+    likely_errors:
+    - id: numero_de_moles_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Error frecuente al despejar [[numero_de_moles]]&#58; usar la masa en gramos en lugar de los moles. Convertir con n = m / M, donde M es la masa molar del gas en g/mol.
+        en: Frequent error when solving for [[numero_de_moles]]&#58; using mass in grams instead of moles. Convert using n = m / M, where M is the molar mass of the gas in g/mol.
+    next_step_rules:
+    - id: numero_de_moles_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Con [[numero_de_moles]] conocido, usar [[variacion_de_energia_interna]] = [[numero_de_moles]]·Cv·ΔT para predecir el cambio de energía interna ante variaciones de temperatura.
+        en: With [[numero_de_moles]] known, use [[variacion_de_energia_interna]] = [[numero_de_moles]]·Cv·ΔT to predict internal energy change for temperature variations.
+    physical_intuition:
+    - id: numero_de_moles_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[numero_de_moles]] es el factor de escala del sistema&#58; doblar [[numero_de_moles]] a temperatura fija dobla exactamente la energía interna, confirmando que U es extensiva.
+        en: Intuitively, [[numero_de_moles]] is the system's scaling factor&#58; doubling [[numero_de_moles]] at fixed temperature exactly doubles the internal energy, confirming U is extensive.
+    limiting_cases:
+    - id: numero_de_moles_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Para [[numero_de_moles]] → 0, [[energia_interna]] → 0 (sistema trivial sin materia). Para [[numero_de_moles]] muy grande, [[energia_interna]] puede superar rangos de laboratorio y requerir verificación de la validez del modelo.
+        en: As [[numero_de_moles]] → 0, [[energia_interna]] → 0 (trivial system with no matter). For very large [[numero_de_moles]], [[energia_interna]] can exceed laboratory ranges and require validity checks.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  variacion_de_energia_interna:
+    enabled: true
+    magnitude_type: internal_energy_change
+    semantic_role:
+      es: Variación de la energía interna del sistema entre dos estados. Para gas ideal depende solo de ΔT.
+      en: Change in the system's internal energy between two states. For an ideal gas it depends only on ΔT.
+    summary_rules:
+    - id: DeltaU_summary_positive
+      when: DeltaU > 0
+      status: ok
+      text:
+        es: '[[DeltaU]] positivo: el sistema ha ganado energía interna. Para un gas ideal, esto implica que la temperatura
+          final es mayor que la inicial.'
+        en: 'Positive [[DeltaU]]: the system has gained internal energy. For an ideal gas this implies the final temperature
+          is higher than the initial.'
+    - id: DeltaU_summary_negative
+      when: DeltaU < 0
+      status: ok
+      text:
+        es: '[[DeltaU]] negativo: el sistema ha perdido energía interna. Para un gas ideal, la temperatura final es menor
+          que la inicial.'
+        en: 'Negative [[DeltaU]]: the system has lost internal energy. For an ideal gas the final temperature is lower than
+          the initial.'
+    - id: DeltaU_summary_zero
+      when: DeltaU == 0
+      status: ok
+      text:
+        es: '[[DeltaU]] nulo: proceso isotérmico de gas ideal (T = cte) o ciclo completo. La energía interna no ha cambiado.'
+        en: 'Zero [[DeltaU]]: isothermal ideal gas process (T = const) or complete cycle. Internal energy has not changed.'
+    - id: DeltaU_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaU]] = n·[[Cv]]·ΔT para gas ideal. Es una magnitud de estado: no depende del proceso seguido entre los
+          estados inicial y final, solo de esos estados.'
+        en: '[[DeltaU]] = n·[[Cv]]·ΔT for ideal gas. It is a state quantity: it does not depend on the process between initial
+          and final states, only on those states.'
+    physical_reading_rules:
+    - id: DeltaU_reading_state_function
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaU]] es la misma independientemente de la trayectoria seguida entre el estado inicial y el final. Mientras
+          que [[W]] y [[Q]] dependen de la ruta, [[DeltaU]] = Q − W es siempre igual para los mismos estados.'
+        en: '[[DeltaU]] is the same regardless of the path between the initial and final states. While [[W]] and Q depend
+          on the route, [[DeltaU]] = Q − W is always equal for the same states.'
+    - id: DeltaU_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: Para un gas ideal, [[DeltaU]] está completamente determinado por la variación de temperatura. Dos procesos con
+          la misma [[DeltaU]] entre los mismos estados pueden tener calores y trabajos muy distintos, pero su diferencia (Q
+          − W) es siempre igual.
+        en: For an ideal gas, [[DeltaU]] is completely determined by the temperature change. Two processes with the same [[DeltaU]]
+          between the same states can have very different heats and works, but their difference (Q − W) is always equal.
+    coherence_rules:
+    - id: DeltaU_coherence_sign_temp
+      when: DeltaU > 0 and DeltaT < 0
+      status: error
+      text:
+        es: '[[DeltaU]] positivo con ΔT negativo es incoherente para un gas ideal. Revisar el cálculo de ΔT o la fórmula usada.'
+        en: Positive [[DeltaU]] with negative ΔT is inconsistent for an ideal gas. Review the ΔT calculation or the formula
+          used.
+    - id: DeltaU_coherence_large
+      when: abs(DeltaU) > 1e8
+      status: warning
+      text:
+        es: '[[DeltaU]] supera 100 MJ. Verificar las unidades de [[n]] (mol), [[Cv]] (J/(mol·K)) y ΔT (K).'
+        en: '[[DeltaU]] exceeds 100 MJ. Check units of [[n]] (mol), [[Cv]] (J/(mol·K)) and ΔT (K).'
+    - id: DeltaU_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaU]] parece dentro del rango esperado para el proceso descrito.'
+        en: '[[DeltaU]] appears within the expected range for the described process.'
+    model_validity_rules:
+    - id: DeltaU_model_ideal_gas
+      when: 'true'
+      status: ok
+      text:
+        es: La fórmula [[DeltaU]] = n·[[Cv]]·ΔT asume gas ideal con [[Cv]] constante. Para gases reales, especialmente a presiones
+          altas o temperaturas extremas, [[U]] depende también del volumen y [[Cv]] puede variar con [[T]].
+        en: The formula [[DeltaU]] = n·[[Cv]]·ΔT assumes an ideal gas with constant [[Cv]]. For real gases, especially at
+          high pressures or extreme temperatures, [[U]] also depends on volume and [[Cv]] may vary with [[T]].
+    graph_rules:
+    - id: DeltaU_graph_linear
+      when: 'true'
+      status: ok
+      text:
+        es: En el gráfico [[U]] vs [[T]] para gas ideal, [[DeltaU]] es la diferencia vertical entre los estados inicial y
+          final. La recta tiene pendiente n·[[Cv]] y pasa por el origen.
+        en: In the [[U]] vs [[T]] graph for ideal gas, [[DeltaU]] is the vertical difference between initial and final states.
+          The line has slope n·[[Cv]] and passes through the origin.
+    likely_errors:
+    - id: DeltaU_error_Cv_vs_Cp
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[variacion_de_energia_interna]] con una lectura aislada es un error frecuente: Error frecuente: usar
+          [[Cp]] en lugar de [[Cv]] para calcular [[DeltaU]]. [[Cp]] = [[Cv]] + R para gas ideal; usar [[Cp]] sobreestima
+          [[DeltaU]] en un factor R·n·ΔT.'
+        en: 'A common mistake is to interpret [[variacion_de_energia_interna]] in isolation: Frequent error: using [[Cp]]
+          instead of [[Cv]] to compute [[DeltaU]]. [[Cp]] = [[Cv]] + R for ideal gas; using [[Cp]] overestimates [[DeltaU]]
+          by R·n·ΔT.'
+    - id: DeltaU_error_state_function
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error frecuente: pensar que [[DeltaU]] depende del proceso (como si fuera [[W]] o [[Q]]). [[DeltaU]] es función
+          de estado; solo depende de los estados inicial y final.'
+        en: 'A common mistake is to interpret [[variacion_de_energia_interna]] in isolation: Frequent error: thinking [[DeltaU]]
+          depends on the process (as if it were [[W]] or Q). [[DeltaU]] is a state function; it depends only on the initial
+          and final states.'
+    next_step_rules:
+    - id: DeltaU_next_first_law
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[DeltaU]] calculado, aplicar la primera ley ΔU = Q − W para encontrar el calor Q si se conoce el trabajo
+          W, o viceversa.
+        en: With [[DeltaU]] computed, apply the first law ΔU = Q − W to find heat Q if work W is known, or vice versa.
+    physical_intuition:
+    - id: variacion_de_energia_interna_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[variacion_de_energia_interna]] describe el estado dinámico.
+        en: Intuitively, [[variacion_de_energia_interna]] describes the dynamic state.
+    limiting_cases:
+    - id: variacion_de_energia_interna_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[variacion_de_energia_interna]].
+        en: Check limiting cases of [[variacion_de_energia_interna]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  variacion_de_temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Variación de temperatura obtenida a partir de la variación de energía interna y la capacidad calorífica del gas ideal
+      en: Temperature change obtained from the internal energy change and the heat capacity of the ideal gas
+    summary_rules:
+    - id: variacion_de_temperatura_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[variacion_de_temperatura]] es el cambio de temperatura asociado a [[variacion_de_energia_interna]]. Se obtiene como ΔT = ΔU / (n·[[capacidad_calorifica_a_volumen_constante]]).
+        en: The result [[variacion_de_temperatura]] is the temperature change associated with [[variacion_de_energia_interna]]. It is obtained as ΔT = ΔU / (n·[[capacidad_calorifica_a_volumen_constante]]).
+    physical_reading_rules:
+    - id: variacion_de_temperatura_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[variacion_de_temperatura]] en Kelvin. El signo indica si el gas se calienta (ΔT > 0) o se enfría (ΔT < 0). El valor numérico en kelvin y en celsius es idéntico para diferencias de temperatura.
+        en: Read [[variacion_de_temperatura]] in Kelvin. The sign indicates whether the gas heats up (ΔT > 0) or cools down (ΔT < 0). The numerical value in kelvin and in Celsius is identical for temperature differences.
+    coherence_rules:
+    - id: variacion_de_temperatura_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Verifica que el signo de [[variacion_de_temperatura]] sea coherente con el de [[variacion_de_energia_interna]]&#58; ambos deben tener el mismo signo para un gas ideal con Cv > 0.
+        en: Verify that the sign of [[variacion_de_temperatura]] is consistent with [[variacion_de_energia_interna]]&#58; both must have the same sign for an ideal gas with Cv > 0.
+    model_validity_rules:
+    - id: variacion_de_temperatura_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El despeje de [[variacion_de_temperatura]] = ΔU / (n·Cv) asume Cv constante. Para rangos amplios de temperatura, Cv puede variar y se debe integrar ΔU = n·∫Cv dT.
+        en: Solving for [[variacion_de_temperatura]] = ΔU / (n·Cv) assumes constant Cv. Over wide temperature ranges, Cv may vary and ΔU = n·∫Cv dT must be integrated.
+    graph_rules:
+    - id: variacion_de_temperatura_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: En el gráfico [[energia_interna]] vs [[temperatura]], [[variacion_de_temperatura]] corresponde a la proyección horizontal entre los estados inicial y final. La recta tiene pendiente n·Cv.
+        en: In the [[energia_interna]] vs [[temperatura]] graph, [[variacion_de_temperatura]] is the horizontal projection between the initial and final states. The line has slope n·Cv.
+    likely_errors:
+    - id: variacion_de_temperatura_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Error frecuente&#58; usar [[temperatura]] absoluta en lugar de [[variacion_de_temperatura]] en la fórmula ΔU = n·Cv·ΔT. ΔT es una diferencia, no la temperatura final.
+        en: Frequent error&#58; using absolute [[temperatura]] instead of [[variacion_de_temperatura]] in the formula ΔU = n·Cv·ΔT. ΔT is a difference, not the final temperature.
+    next_step_rules:
+    - id: variacion_de_temperatura_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Con [[variacion_de_temperatura]] calculado, usar la primera ley ΔU = Q − W para determinar el calor o el trabajo cuando uno de ellos es conocido.
+        en: With [[variacion_de_temperatura]] computed, use the first law ΔU = Q − W to determine heat or work when one of them is known.
+    physical_intuition:
+    - id: variacion_de_temperatura_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[variacion_de_temperatura]] representa cuánto se agita más (o menos) cada molécula al final del proceso. Para un gas ideal monoatómico, un incremento de 1 K por mol requiere exactamente (3/2)R ≈ 12.5 J.
+        en: Intuitively, [[variacion_de_temperatura]] represents how much more (or less) each molecule agitates at the end of the process. For a monatomic ideal gas, a 1 K increase per mole requires exactly (3/2)R ≈ 12.5 J.
+    limiting_cases:
+    - id: variacion_de_temperatura_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: '[[variacion_de_temperatura]] = 0 implica proceso isotérmico: [[variacion_de_energia_interna]] = 0 para gas ideal. Un ΔT muy grande puede indicar que el modelo de gas ideal ha dejado de ser válido.'
+        en: '[[variacion_de_temperatura]] = 0 implies an isothermal process: [[variacion_de_energia_interna]] = 0 for ideal gas. A very large ΔT may indicate that the ideal gas model is no longer valid.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  capacidad_calorifica_a_volumen_constante:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de capacidad_calorifica_a_volumen_constante
+      en: Result of capacidad_calorifica_a_volumen_constante
+    summary_rules:
+    - id: capacidad_calorifica_a_volumen_constante_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[capacidad_calorifica_a_volumen_constante]] indica la magnitud física principal.
+        en: The result [[capacidad_calorifica_a_volumen_constante]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: capacidad_calorifica_a_volumen_constante_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[capacidad_calorifica_a_volumen_constante]] junto con su unidad y signo.
+        en: Read [[capacidad_calorifica_a_volumen_constante]] with its unit and sign.
+    coherence_rules:
+    - id: capacidad_calorifica_a_volumen_constante_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[capacidad_calorifica_a_volumen_constante]].
+        en: Check the dimensional consistency of [[capacidad_calorifica_a_volumen_constante]]
+    model_validity_rules:
+    - id: capacidad_calorifica_a_volumen_constante_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[capacidad_calorifica_a_volumen_constante]] solo dentro de la validez del modelo.
+        en: Interpret [[capacidad_calorifica_a_volumen_constante]] only within the validity of the model.
+    graph_rules:
+    - id: capacidad_calorifica_a_volumen_constante_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[capacidad_calorifica_a_volumen_constante]] con la lectura gráfica.
+        en: Relate [[capacidad_calorifica_a_volumen_constante]] to the graph.
+    likely_errors:
+    - id: capacidad_calorifica_a_volumen_constante_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[capacidad_calorifica_a_volumen_constante]] con una lectura aislada es un error frecuente; debe interpretarse
+          con el modelo, las unidades y el rango físico.
+        en: A common mistake is to interpret [[capacidad_calorifica_a_volumen_constante]] in isolation; it must be read with
+          the model, units, and physical range.
+    next_step_rules:
+    - id: capacidad_calorifica_a_volumen_constante_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[capacidad_calorifica_a_volumen_constante]], revisa los límites físicos.
+        en: After obtaining [[capacidad_calorifica_a_volumen_constante]], review the physical limits.
+    physical_intuition:
+    - id: capacidad_calorifica_a_volumen_constante_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[capacidad_calorifica_a_volumen_constante]] describe el estado dinámico.
+        en: Intuitively, [[capacidad_calorifica_a_volumen_constante]] describes the dynamic state.
+    limiting_cases:
+    - id: capacidad_calorifica_a_volumen_constante_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[capacidad_calorifica_a_volumen_constante]].
+        en: Check limiting cases of [[capacidad_calorifica_a_volumen_constante]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

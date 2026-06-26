@@ -1,0 +1,1071 @@
+version: 5.0.0
+id: interpretacion-probabilistica
+leaf_id: interpretacion-probabilistica
+nombre:
+  es: Interpretacion probabilistica
+  en: Probabilistic Interpretation
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: entropia-estadistica
+  parent_id: entropia-estadistica
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/entropia-estadistica/interpretacion-probabilistica
+  orden: 272200
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - probabilidad_macroestado
+  - peso_relativo_macroestados
+  - probabilidad_entropia
+  magnitudes:
+  - probabilidad_macroestado
+  - numero_microestados_macro
+  - numero_microestados_total
+  - probabilidad_inicial
+  - probabilidad_final
+  - ratio_probabilidades
+  - numero_microestados_inicial
+  - numero_microestados_final
+  - delta_entropia
+  - k_boltzmann
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinámica estadística y entropía probabilística
+    en: statistical thermodynamics and probabilistic entropy
+  axis_convention:
+    es: Las magnitudes son escalares; el signo relevante aparece en variaciones de entropía y cocientes relativos.
+    en: The quantities are scalar; the relevant sign appears in entropy changes and relative ratios.
+  standard_assumptions:
+  - es: Los microestados comparados pertenecen al mismo sistema físico y al mismo conjunto accesible.
+    en: The compared microstates belong to the same physical system and the same accessible set.
+  - es: Cuando se usa conteo directo, los microestados se consideran equiprobables dentro del macroconjunto elegido.
+    en: When direct counting is used, microstates are considered equiprobable within the chosen macroset.
+  standard_warnings:
+  - es: 'No confundas microestado con macroestado: la probabilidad macroscópica nace del conteo microscópico.'
+    en: 'Do not confuse microstate with macrostate: macroscopic probability comes from microscopic counting.'
+  - es: No apliques logaritmos a probabilidades o cocientes nulos o negativos.
+    en: Do not apply logarithms to zero or negative probabilities or ratios.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+  - Svg
+cross_checks:
+  enabled: true
+  checks:
+  - id: probability_bounds
+    status: ok
+    text:
+      es: Toda probabilidad debe estar entre 0 y 1.
+      en: Every probability must lie between 0 and 1.
+  - id: positive_microstates
+    status: ok
+    text:
+      es: Todo conteo de microestados usado en un denominador o logaritmo debe ser positivo.
+      en: Every microstate count used in a denominator or logarithm must be positive.
+  - id: entropy_sign
+    status: ok
+    text:
+      es: El signo de [[delta_entropia]] debe concordar con el crecimiento o decrecimiento de multiplicidad/probabilidad.
+      en: The sign of [[delta_entropia]] must agree with increasing or decreasing multiplicity/probability.
+error_patterns:
+  enabled: true
+  patterns:
+  - id: macro_micro_confusion
+    status: warning
+    text:
+      es: Confundir un macroestado con un microestado borra el origen estadístico de la probabilidad.
+      en: Confusing a macrostate with a microstate erases the statistical origin of probability.
+  - id: ratio_difference_confusion
+    status: warning
+    text:
+      es: Un cociente de probabilidades no es una resta de probabilidades.
+      en: A probability ratio is not a subtraction of probabilities.
+  - id: invalid_log_argument
+    status: error
+    text:
+      es: Un logaritmo de un cociente nulo o negativo no tiene interpretación física en este modelo.
+      en: A logarithm of a zero or negative ratio has no physical interpretation in this model.
+graph_reading_policy:
+  enabled: true
+  primary_variable: probabilidad_macroestado
+  reading_sequence:
+  - es: Lee primero qué microestados pertenecen al macroestado y cuáles forman el total accesible.
+    en: First read which microstates belong to the macrostate and which form the total accessible set.
+  - es: Después interpreta la fracción o el cociente y conecta su valor con la tendencia entrópica.
+    en: Then interpret the fraction or ratio and connect its value with the entropic tendency.
+  key_points:
+  - es: La gráfica Coord muestra cómo la probabilidad aumenta con la multiplicidad relativa.
+    en: The Coord graph shows how probability increases with relative multiplicity.
+  - es: La escena Svg separa visualmente macroestado, microestados compatibles y total accesible.
+    en: The Svg scene visually separates macrostate, compatible microstates, and total accessible set.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Un cociente igual a 1 marca ausencia de preferencia estadística entre estados comparados.
+    en: A ratio equal to 1 marks absence of statistical preference between compared states.
+  - es: Cocientes enormes son habituales en sistemas macroscópicos porque los conteos de microestados crecen explosivamente.
+    en: Huge ratios are common in macroscopic systems because microstate counts grow explosively.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Las probabilidades y cocientes son adimensionales; [[delta_entropia]] tiene dimensión de entropía por [[k_boltzmann]].
+    en: Probabilities and ratios are dimensionless; [[delta_entropia]] has entropy dimension through [[k_boltzmann]].
+  common_unit_mistakes:
+  - es: Dar unidades a una probabilidad o a un cociente de probabilidades.
+    en: Assigning units to a probability or probability ratio.
+  - es: Olvidar la unidad J/K al interpretar [[delta_entropia]].
+    en: Forgetting the J/K unit when interpreting [[delta_entropia]].
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  probabilidad_macroestado:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado probabilístico
+      en: macrostate probability
+    summary_rules:
+    - id: probabilidad_macroestado_summary_statistical_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[probabilidad_macroestado]] expresa qué fracción de los microestados accesibles pertenece al macroestado
+          analizado.'
+        en: '[[probabilidad_macroestado]] expresses what fraction of accessible microstates belongs to the analyzed
+          macrostate.'
+    physical_reading_rules:
+    - id: probabilidad_macroestado_physical_reading_units_and_bounds
+      when: 'true'
+      status: info
+      text:
+        es: 'Interpreta [[probabilidad_macroestado]] como un número adimensional entre 0 y 1: cuanto mayor sea,
+          más representativo es el macroestado.'
+        en: 'Interpret [[probabilidad_macroestado]] as a dimensionless number between 0 and 1: the larger it is,
+          the more representative the macrostate is.'
+    coherence_rules:
+    - id: probabilidad_macroestado_coherence_domain_check
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[numero_microestados_macro]] no supere a [[numero_microestados_total]] y que ambos sean
+          positivos antes de aceptar [[probabilidad_macroestado]].
+        en: Check that [[numero_microestados_macro]] does not exceed [[numero_microestados_total]] and that both
+          are positive before accepting [[probabilidad_macroestado]].
+    model_validity_rules:
+    - id: probabilidad_macroestado_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: La lectura supone microestados equiprobables dentro del conjunto accesible; si hay pesos distintos,
+          esta probabilidad simple deja de bastar.
+        en: The reading assumes equiprobable microstates within the accessible set; if weights differ, this simple
+          probability is no longer enough.
+    graph_rules:
+    - id: probabilidad_macroestado_graph_reading_binding
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, [[probabilidad_macroestado]] debe crecer linealmente con la fracción de microestados
+          del macroestado.
+        en: In the Coord graph, [[probabilidad_macroestado]] should grow linearly with the fraction of microstates
+          of the macrostate.
+    likely_errors:
+    - id: probabilidad_macroestado_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'No confundas [[probabilidad_macroestado]] con certeza: un macroestado dominante puede seguir teniendo
+          probabilidad menor que 1.'
+        en: 'Do not confuse [[probabilidad_macroestado]] with certainty: a dominant macrostate may still have probability
+          below 1.'
+    next_step_rules:
+    - id: probabilidad_macroestado_next_step_operational
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[probabilidad_macroestado]], compara su orden de magnitud con otros macroestados
+          para decidir cuál es físicamente más probable.
+        en: After computing [[probabilidad_macroestado]], compare its order of magnitude with other macrostates
+          to decide which is physically more likely.
+    physical_intuition:
+    - id: probabilidad_macroestado_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Muchos microestados compatibles actúan como muchas rutas microscópicas hacia la misma observación macroscópica.
+        en: Many compatible microstates act like many microscopic routes toward the same macroscopic observation.
+    limiting_cases:
+    - id: probabilidad_macroestado_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Si [[numero_microestados_macro]] tiende a cero, [[probabilidad_macroestado]] desaparece; si coincide
+          con [[numero_microestados_total]], vale 1.
+        en: If [[numero_microestados_macro]] tends to zero, [[probabilidad_macroestado]] vanishes; if it equals
+          [[numero_microestados_total]], it is 1.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_microestados_macro:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: multiplicidad del macroestado
+      en: macrostate multiplicity
+    summary_rules:
+    - id: numero_microestados_macro_summary_statistical_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_microestados_macro]] cuenta cuántas configuraciones microscópicas producen el macroestado
+          elegido.'
+        en: '[[numero_microestados_macro]] counts how many microscopic configurations produce the chosen macrostate.'
+    physical_reading_rules:
+    - id: numero_microestados_macro_physical_reading_units_and_bounds
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[numero_microestados_macro]] como conteo discreto, no como energía ni volumen; su tamaño mide degeneración
+          microscópica.
+        en: Read [[numero_microestados_macro]] as a discrete count, not as energy or volume; its size measures microscopic
+          degeneracy.
+    coherence_rules:
+    - id: numero_microestados_macro_coherence_domain_check
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_microestados_macro]] debe ser entero positivo y estar incluido dentro de [[numero_microestados_total]].'
+        en: '[[numero_microestados_macro]] must be a positive integer and be included within [[numero_microestados_total]].'
+    model_validity_rules:
+    - id: numero_microestados_macro_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: El conteo exige definir claramente el macroestado y la resolución microscópica; cambiar la partición
+          cambia el valor.
+        en: The count requires clearly defining the macrostate and microscopic resolution; changing the partition
+          changes the value.
+    graph_rules:
+    - id: numero_microestados_macro_graph_reading_binding
+      when: 'true'
+      status: info
+      text:
+        es: En la lectura Coord, aumentar [[numero_microestados_macro]] aumenta el peso relativo del macroestado
+          si [[numero_microestados_total]] permanece fijo.
+        en: In the Coord reading, increasing [[numero_microestados_macro]] increases the relative weight of the
+          macrostate if [[numero_microestados_total]] stays fixed.
+    likely_errors:
+    - id: numero_microestados_macro_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: No uses [[numero_microestados_macro]] como si fuera continuo cuando el problema pide contar configuraciones
+          discretas.
+        en: Do not use [[numero_microestados_macro]] as if it were continuous when the problem asks for discrete
+          configurations.
+    next_step_rules:
+    - id: numero_microestados_macro_next_step_operational
+      when: 'true'
+      status: info
+      text:
+        es: Aísla primero qué variables macroscópicas se fijan y después cuenta solo los microestados compatibles.
+        en: First isolate which macroscopic variables are fixed, then count only the compatible microstates.
+    physical_intuition:
+    - id: numero_microestados_macro_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Un macroestado con más microestados tiene más maneras microscópicas de aparecer, por eso pesa más en
+          equilibrio.
+        en: A macrostate with more microstates has more microscopic ways to appear, so it weighs more at equilibrium.
+    limiting_cases:
+    - id: numero_microestados_macro_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: El caso mínimo físico es [[numero_microestados_macro]] igual a 1; el máximo permitido es [[numero_microestados_total]].
+        en: The physical minimum is [[numero_microestados_macro]] equal to 1; the permitted maximum is [[numero_microestados_total]].
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_microestados_total:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: normalizador estadístico
+      en: statistical normalizer
+    summary_rules:
+    - id: numero_microestados_total_summary_statistical_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_microestados_total]] fija el conjunto completo de microestados contra el que se normaliza
+          cada macroestado.'
+        en: '[[numero_microestados_total]] sets the full accessible microstate set against which each macrostate
+          is normalized.'
+    physical_reading_rules:
+    - id: numero_microestados_total_physical_reading_units_and_bounds
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[numero_microestados_total]] como denominador estadístico común; no describe un macroestado
+          concreto.
+        en: Interpret [[numero_microestados_total]] as a common statistical denominator; it does not describe one
+          specific macrostate.
+    coherence_rules:
+    - id: numero_microestados_total_coherence_domain_check
+      when: 'true'
+      status: ok
+      text:
+        es: Debe cumplirse que [[numero_microestados_total]] sea mayor o igual que cualquier [[numero_microestados_macro]]
+          considerado.
+        en: '[[numero_microestados_total]] must be greater than or equal to any considered [[numero_microestados_macro]].'
+    model_validity_rules:
+    - id: numero_microestados_total_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: Solo es válido si el espacio de microestados accesibles está cerrado bajo las restricciones del sistema.
+        en: It is valid only if the accessible microstate space is closed under the system constraints.
+    graph_rules:
+    - id: numero_microestados_total_graph_reading_binding
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, un [[numero_microestados_total]] mayor reduce [[probabilidad_macroestado]] si el numerador
+          permanece fijo.
+        en: On the graph, a larger [[numero_microestados_total]] reduces [[probabilidad_macroestado]] if the numerator
+          stays fixed.
+    likely_errors:
+    - id: numero_microestados_total_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: No mezcles [[numero_microestados_total]] de un sistema con [[numero_microestados_macro]] de otro sistema
+          o de otra restricción.
+        en: Do not mix [[numero_microestados_total]] from one system with [[numero_microestados_macro]] from another
+          system or constraint.
+    next_step_rules:
+    - id: numero_microestados_total_next_step_operational
+      when: 'true'
+      status: info
+      text:
+        es: Verifica que el conjunto total usado para normalizar coincide con el macroestado físico que se compara.
+        en: Verify that the total set used for normalization matches the physical macrostate being compared.
+    physical_intuition:
+    - id: numero_microestados_total_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: El total es el tamaño del tablero microscópico; la probabilidad mide qué parte ocupa el macroestado.
+        en: The total is the size of the microscopic board; probability measures what part the macrostate occupies.
+    limiting_cases:
+    - id: numero_microestados_total_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Si [[numero_microestados_total]] se hace enorme y [[numero_microestados_macro]] no crece igual, la probabilidad
+          se vuelve pequeña.
+        en: If [[numero_microestados_total]] becomes huge and [[numero_microestados_macro]] does not grow similarly,
+          the probability becomes small.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  probabilidad_inicial:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: probabilidad de referencia
+      en: reference probability
+    summary_rules:
+    - id: probabilidad_inicial_summary_statistical_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[probabilidad_inicial]] es el peso estadístico del macroestado de partida en una comparación.'
+        en: '[[probabilidad_inicial]] is the statistical weight of the starting macrostate in a comparison.'
+    physical_reading_rules:
+    - id: probabilidad_inicial_physical_reading_units_and_bounds
+      when: 'true'
+      status: info
+      text:
+        es: 'Debe leerse como referencia: su valor solo cobra sentido completo al compararlo con [[probabilidad_final]].'
+        en: 'It should be read as a reference: its value gains full meaning only when compared with [[probabilidad_final]].'
+    coherence_rules:
+    - id: probabilidad_inicial_coherence_domain_check
+      when: 'true'
+      status: ok
+      text:
+        es: Para formar [[ratio_probabilidades]], [[probabilidad_inicial]] debe ser positiva y no nula.
+        en: To form [[ratio_probabilidades]], [[probabilidad_inicial]] must be positive and nonzero.
+    model_validity_rules:
+    - id: probabilidad_inicial_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: La comparación exige que los estados inicial y final pertenezcan al mismo sistema y al mismo criterio
+          de conteo.
+        en: The comparison requires the initial and final states to belong to the same system and counting criterion.
+    graph_rules:
+    - id: probabilidad_inicial_graph_reading_binding
+      when: 'true'
+      status: info
+      text:
+        es: En una lectura gráfica comparativa, [[probabilidad_inicial]] fija la escala desde la que se mide el
+          cambio relativo.
+        en: In a comparative graph reading, [[probabilidad_inicial]] sets the scale from which the relative change
+          is measured.
+    likely_errors:
+    - id: probabilidad_inicial_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: No tomes [[probabilidad_inicial]] igual a cero si luego quieres calcular un cociente o un logaritmo
+          relativo.
+        en: Do not set [[probabilidad_inicial]] to zero if you later need a ratio or a relative logarithm.
+    next_step_rules:
+    - id: probabilidad_inicial_next_step_operational
+      when: 'true'
+      status: info
+      text:
+        es: Identifica qué macroestado se toma como inicial antes de sustituir valores en el cociente.
+        en: Identify which macrostate is taken as initial before substituting values into the ratio.
+    physical_intuition:
+    - id: probabilidad_inicial_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Es el punto de partida estadístico, la “altura” desde la que se mide si el estado final es más o menos
+          probable.
+        en: It is the statistical starting point, the “height” from which we measure whether the final state is
+          more or less likely.
+    limiting_cases:
+    - id: probabilidad_inicial_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Si [[probabilidad_inicial]] es muy pequeña, pequeños cambios absolutos pueden producir cocientes enormes.
+        en: If [[probabilidad_inicial]] is very small, small absolute changes can produce huge ratios.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  probabilidad_final:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: probabilidad comparada
+      en: compared probability
+    summary_rules:
+    - id: probabilidad_final_summary_statistical_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[probabilidad_final]] describe el peso estadístico del macroestado alcanzado tras la comparación.'
+        en: '[[probabilidad_final]] describes the statistical weight of the macrostate reached after the comparison.'
+    physical_reading_rules:
+    - id: probabilidad_final_physical_reading_units_and_bounds
+      when: 'true'
+      status: info
+      text:
+        es: Su interpretación física depende de si es mayor, igual o menor que [[probabilidad_inicial]].
+        en: Its physical interpretation depends on whether it is larger than, equal to, or smaller than [[probabilidad_inicial]].
+    coherence_rules:
+    - id: probabilidad_final_coherence_domain_check
+      when: 'true'
+      status: ok
+      text:
+        es: '[[probabilidad_final]] debe estar entre 0 y 1 y debe calcularse con el mismo espacio accesible que
+          [[probabilidad_inicial]].'
+        en: '[[probabilidad_final]] must lie between 0 and 1 and be computed with the same accessible space as [[probabilidad_inicial]].'
+    model_validity_rules:
+    - id: probabilidad_final_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: Si el sistema cambia de restricciones externas, la comparación directa entre probabilidades deja de
+          ser limpia.
+        en: If the system changes external constraints, the direct probability comparison is no longer clean.
+    graph_rules:
+    - id: probabilidad_final_graph_reading_binding
+      when: 'true'
+      status: info
+      text:
+        es: La gráfica ayuda a ver si el estado final cae en una región de mayor peso estadístico.
+        en: The graph helps show whether the final state lies in a region of greater statistical weight.
+    likely_errors:
+    - id: probabilidad_final_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'No interpretes una [[probabilidad_final]] mayor como obligación determinista: solo indica mayor peso
+          estadístico.'
+        en: 'Do not interpret a larger [[probabilidad_final]] as deterministic obligation: it only indicates greater
+          statistical weight.'
+    next_step_rules:
+    - id: probabilidad_final_next_step_operational
+      when: 'true'
+      status: info
+      text:
+        es: Compara [[probabilidad_final]] con [[probabilidad_inicial]] y después traduce el resultado a [[delta_entropia]].
+        en: Compare [[probabilidad_final]] with [[probabilidad_inicial]] and then translate the result into [[delta_entropia]].
+    physical_intuition:
+    - id: probabilidad_final_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: El estado final es más natural si posee más rutas microscópicas compatibles que el inicial.
+        en: The final state is more natural if it has more compatible microscopic routes than the initial one.
+    limiting_cases:
+    - id: probabilidad_final_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Si [[probabilidad_final]] es cero, el estado final es inaccesible bajo el modelo elegido.
+        en: If [[probabilidad_final]] is zero, the final state is inaccessible under the chosen model.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  ratio_probabilidades:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: cociente comparativo
+      en: comparative ratio
+    summary_rules:
+    - id: ratio_probabilidades_summary_statistical_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[ratio_probabilidades]] indica cuántas veces más probable es un macroestado final frente a uno inicial.'
+        en: '[[ratio_probabilidades]] indicates how many times more likely a final macrostate is than an initial
+          one.'
+    physical_reading_rules:
+    - id: ratio_probabilidades_physical_reading_units_and_bounds
+      when: 'true'
+      status: info
+      text:
+        es: Un [[ratio_probabilidades]] mayor que 1 favorece el estado final; menor que 1 favorece el inicial.
+        en: A [[ratio_probabilidades]] greater than 1 favors the final state; below 1 favors the initial state.
+    coherence_rules:
+    - id: ratio_probabilidades_coherence_domain_check
+      when: 'true'
+      status: ok
+      text:
+        es: Debe construirse con probabilidades del mismo sistema y con [[probabilidad_inicial]] positiva.
+        en: It must be built from probabilities of the same system and with positive [[probabilidad_inicial]].
+    model_validity_rules:
+    - id: ratio_probabilidades_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: El cociente es significativo si ambos estados se comparan bajo las mismas restricciones macroscópicas.
+        en: The ratio is meaningful if both states are compared under the same macroscopic constraints.
+    graph_rules:
+    - id: ratio_probabilidades_graph_reading_binding
+      when: 'true'
+      status: info
+      text:
+        es: En la lectura Coord, el punto 1 separa ausencia de preferencia relativa y aumento de peso estadístico
+          final.
+        en: In the Coord reading, the point 1 separates no relative preference from increased final statistical
+          weight.
+    likely_errors:
+    - id: ratio_probabilidades_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'No confundas [[ratio_probabilidades]] con diferencia: un cociente 10 significa factor multiplicativo,
+          no diez puntos porcentuales.'
+        en: 'Do not confuse [[ratio_probabilidades]] with a difference: a ratio of 10 means a multiplicative factor,
+          not ten percentage points.'
+    next_step_rules:
+    - id: ratio_probabilidades_next_step_operational
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[ratio_probabilidades]] para decidir el signo de [[delta_entropia]] antes de calcular su tamaño.
+        en: Use [[ratio_probabilidades]] to decide the sign of [[delta_entropia]] before computing its size.
+    physical_intuition:
+    - id: ratio_probabilidades_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: El cociente resume la balanza estadística entre dos macroestados, como un marcador de multiplicidades
+          relativas.
+        en: The ratio summarizes the statistical balance between two macrostates, like a scoreboard of relative
+          multiplicities.
+    limiting_cases:
+    - id: ratio_probabilidades_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Si [[ratio_probabilidades]] es 1, no hay cambio entrópico estadístico; si crece, el cambio se vuelve
+          positivo.
+        en: If [[ratio_probabilidades]] is 1, there is no statistical entropy change; if it grows, the change becomes
+          positive.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo o comparación se interpreta respecto al estado inicial y al cociente elegido.
+        en: The sign or comparison is interpreted relative to the initial state and chosen ratio.
+      common_sign_errors:
+      - es: Invertir estado inicial y final cambia el signo de la variación.
+        en: Swapping initial and final states changes the sign of the change.
+  numero_microestados_inicial:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: multiplicidad inicial
+      en: initial multiplicity
+    summary_rules:
+    - id: numero_microestados_inicial_summary_statistical_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_microestados_inicial]] cuenta los microestados compatibles con el macroestado inicial.'
+        en: '[[numero_microestados_inicial]] counts the microstates compatible with the initial macrostate.'
+    physical_reading_rules:
+    - id: numero_microestados_inicial_physical_reading_units_and_bounds
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[numero_microestados_inicial]] como el punto de referencia microscópico para una variación entrópica.
+        en: Read [[numero_microestados_inicial]] as the microscopic reference point for an entropy change.
+    coherence_rules:
+    - id: numero_microestados_inicial_coherence_domain_check
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser positivo para que el cociente con [[numero_microestados_final]] y el logaritmo asociado tengan
+          sentido.
+        en: It must be positive so the ratio with [[numero_microestados_final]] and the associated logarithm make
+          sense.
+    model_validity_rules:
+    - id: numero_microestados_inicial_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: Solo se compara con [[numero_microestados_final]] si ambos conteos usan el mismo nivel de resolución
+          microscópica.
+        en: It is compared with [[numero_microestados_final]] only if both counts use the same microscopic resolution.
+    graph_rules:
+    - id: numero_microestados_inicial_graph_reading_binding
+      when: 'true'
+      status: info
+      text:
+        es: La escena Svg puede mostrar [[numero_microestados_inicial]] como conjunto inicial de configuraciones
+          accesibles.
+        en: The Svg scene can show [[numero_microestados_inicial]] as the initial set of accessible configurations.
+    likely_errors:
+    - id: numero_microestados_inicial_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: No cambies el criterio de conteo entre estado inicial y final; eso fabrica una [[delta_entropia]] artificial.
+        en: Do not change the counting criterion between initial and final states; that creates an artificial [[delta_entropia]].
+    next_step_rules:
+    - id: numero_microestados_inicial_next_step_operational
+      when: 'true'
+      status: info
+      text:
+        es: Fija el macroestado inicial y cuenta sus configuraciones antes de calcular cualquier cociente.
+        en: Fix the initial macrostate and count its configurations before computing any ratio.
+    physical_intuition:
+    - id: numero_microestados_inicial_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Es el número de maneras microscópicas de “ser” el estado de partida.
+        en: It is the number of microscopic ways of “being” the starting state.
+    limiting_cases:
+    - id: numero_microestados_inicial_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Si [[numero_microestados_inicial]] es 1, el estado inicial es microscópicamente muy específico.
+        en: If [[numero_microestados_inicial]] is 1, the initial state is microscopically very specific.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_microestados_final:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: multiplicidad final
+      en: final multiplicity
+    summary_rules:
+    - id: numero_microestados_final_summary_statistical_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_microestados_final]] cuenta los microestados compatibles con el macroestado final.'
+        en: '[[numero_microestados_final]] counts the microstates compatible with the final macrostate.'
+    physical_reading_rules:
+    - id: numero_microestados_final_physical_reading_units_and_bounds
+      when: 'true'
+      status: info
+      text:
+        es: Su valor indica si el estado final tiene más o menos formas microscópicas que el inicial.
+        en: Its value indicates whether the final state has more or fewer microscopic forms than the initial one.
+    coherence_rules:
+    - id: numero_microestados_final_coherence_domain_check
+      when: 'true'
+      status: ok
+      text:
+        es: La comparación exige que [[numero_microestados_final]] y [[numero_microestados_inicial]] sean positivos
+          y homogéneos en criterio.
+        en: The comparison requires [[numero_microestados_final]] and [[numero_microestados_inicial]] to be positive
+          and homogeneous in criterion.
+    model_validity_rules:
+    - id: numero_microestados_final_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: Si aparecen restricciones nuevas durante el proceso, [[numero_microestados_final]] ya no es comparable
+          sin redefinir el espacio accesible.
+        en: If new constraints appear during the process, [[numero_microestados_final]] is no longer comparable
+          without redefining the accessible space.
+    graph_rules:
+    - id: numero_microestados_final_graph_reading_binding
+      when: 'true'
+      status: info
+      text:
+        es: En Svg, un conjunto final más denso o numeroso representa mayor multiplicidad y tendencia entrópica
+          positiva.
+        en: In Svg, a denser or larger final set represents greater multiplicity and a positive entropy tendency.
+    likely_errors:
+    - id: numero_microestados_final_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: No elijas [[numero_microestados_final]] por intuición macroscópica sin justificar el conteo de configuraciones.
+        en: Do not choose [[numero_microestados_final]] by macroscopic intuition without justifying the configuration
+          count.
+    next_step_rules:
+    - id: numero_microestados_final_next_step_operational
+      when: 'true'
+      status: info
+      text:
+        es: Compara [[numero_microestados_final]] con [[numero_microestados_inicial]] para anticipar el signo de
+          [[delta_entropia]].
+        en: Compare [[numero_microestados_final]] with [[numero_microestados_inicial]] to anticipate the sign of
+          [[delta_entropia]].
+    physical_intuition:
+    - id: numero_microestados_final_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Un final con más microestados no es “mejor”, sino estadísticamente más abundante.
+        en: A final state with more microstates is not “better”, but statistically more abundant.
+    limiting_cases:
+    - id: numero_microestados_final_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Si [[numero_microestados_final]] iguala al inicial, el cambio estadístico de entropía es nulo.
+        en: If [[numero_microestados_final]] equals the initial value, the statistical entropy change is zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  delta_entropia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variación entrópica
+      en: entropy change
+    summary_rules:
+    - id: delta_entropia_summary_statistical_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[delta_entropia]] traduce un cambio de probabilidad o multiplicidad en cambio de entropía.'
+        en: '[[delta_entropia]] translates a change in probability or multiplicity into entropy change.'
+    physical_reading_rules:
+    - id: delta_entropia_physical_reading_units_and_bounds
+      when: 'true'
+      status: info
+      text:
+        es: '[[delta_entropia]] positiva indica paso hacia un macroestado más probable; negativa indica menor peso
+          estadístico.'
+        en: Positive [[delta_entropia]] indicates a move toward a more likely macrostate; negative means lower statistical
+          weight.
+    coherence_rules:
+    - id: delta_entropia_coherence_domain_check
+      when: 'true'
+      status: ok
+      text:
+        es: El signo de [[delta_entropia]] debe coincidir con si [[ratio_probabilidades]] es mayor, igual o menor
+          que 1.
+        en: The sign of [[delta_entropia]] must match whether [[ratio_probabilidades]] is greater than, equal to,
+          or less than 1.
+    model_validity_rules:
+    - id: delta_entropia_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: La relación con probabilidad usa equilibrio estadístico y comparaciones entre macroestados compatibles.
+        en: The relation with probability uses statistical equilibrium and comparisons between compatible macrostates.
+    graph_rules:
+    - id: delta_entropia_graph_reading_binding
+      when: 'true'
+      status: info
+      text:
+        es: La gráfica de [[delta_entropia]] frente al cociente de probabilidades debe mostrar crecimiento logarítmico,
+          no lineal.
+        en: The graph of [[delta_entropia]] versus probability ratio should show logarithmic, not linear, growth.
+    likely_errors:
+    - id: delta_entropia_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'No trates [[delta_entropia]] como probabilidad: tiene unidades de J/K y depende de [[k_boltzmann]].'
+        en: 'Do not treat [[delta_entropia]] as probability: it has units of J/K and depends on [[k_boltzmann]].'
+    next_step_rules:
+    - id: delta_entropia_next_step_operational
+      when: 'true'
+      status: info
+      text:
+        es: Tras obtener [[delta_entropia]], explica su signo antes de comentar su valor numérico.
+        en: After obtaining [[delta_entropia]], explain its sign before commenting on its numerical value.
+    physical_intuition:
+    - id: delta_entropia_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: La entropía condensa en escala termodinámica el sesgo estadístico hacia macroestados más numerosos.
+        en: Entropy condenses the statistical bias toward more numerous macrostates into a thermodynamic scale.
+    limiting_cases:
+    - id: delta_entropia_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Si el cociente de probabilidades vale 1, [[delta_entropia]] es cero; si el cociente tiende a cero, el
+          logaritmo falla físicamente.
+        en: If the probability ratio is 1, [[delta_entropia]] is zero; if the ratio tends to zero, the logarithm
+          fails physically.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo o comparación se interpreta respecto al estado inicial y al cociente elegido.
+        en: The sign or comparison is interpreted relative to the initial state and chosen ratio.
+      common_sign_errors:
+      - es: Invertir estado inicial y final cambia el signo de la variación.
+        en: Swapping initial and final states changes the sign of the change.
+  k_boltzmann:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: constante de escala
+      en: scale constant
+    summary_rules:
+    - id: k_boltzmann_summary_statistical_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[k_boltzmann]] convierte una lectura estadística adimensional en una magnitud termodinámica con unidad
+          de entropía.'
+        en: '[[k_boltzmann]] converts a dimensionless statistical reading into a thermodynamic quantity with entropy
+          units.'
+    physical_reading_rules:
+    - id: k_boltzmann_physical_reading_units_and_bounds
+      when: 'true'
+      status: info
+      text:
+        es: 'No es una variable ajustable del sistema: fija la escala entre microestados y J/K.'
+        en: 'It is not an adjustable system variable: it sets the scale between microstates and J/K.'
+    coherence_rules:
+    - id: k_boltzmann_coherence_domain_check
+      when: 'true'
+      status: ok
+      text:
+        es: Si aparece [[delta_entropia]], la presencia de [[k_boltzmann]] debe producir dimensión de entropía,
+          no una cantidad adimensional.
+        en: If [[delta_entropia]] appears, the presence of [[k_boltzmann]] must produce entropy dimension, not a
+          dimensionless quantity.
+    model_validity_rules:
+    - id: k_boltzmann_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: Su uso es universal, pero el modelo que conecta probabilidad y entropía debe estar bien definido.
+        en: Its use is universal, but the model connecting probability and entropy must be well defined.
+    graph_rules:
+    - id: k_boltzmann_graph_reading_binding
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica de entropía, [[k_boltzmann]] escala la altura vertical sin cambiar la forma logarítmica.
+        en: In the entropy graph, [[k_boltzmann]] scales the vertical height without changing the logarithmic shape.
+    likely_errors:
+    - id: k_boltzmann_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: No sustituyas [[k_boltzmann]] por una unidad cualquiera ni lo confundas con una probabilidad.
+        en: Do not replace [[k_boltzmann]] with an arbitrary unit or confuse it with a probability.
+    next_step_rules:
+    - id: k_boltzmann_next_step_operational
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba al final que cualquier resultado entrópico tenga unidad compatible con J/K.
+        en: At the end, check that any entropy result has units compatible with J/K.
+    physical_intuition:
+    - id: k_boltzmann_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Actúa como un traductor entre conteo microscópico y escala macroscópica medible.
+        en: It acts as a translator between microscopic counting and a measurable macroscopic scale.
+    limiting_cases:
+    - id: k_boltzmann_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Aunque [[k_boltzmann]] sea muy pequeño, multiplicar por logaritmos enormes puede dar entropías macroscópicas
+          apreciables.
+        en: Although [[k_boltzmann]] is very small, multiplying by huge logarithms can give appreciable macroscopic
+          entropies.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

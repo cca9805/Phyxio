@@ -1,0 +1,367 @@
+version: 1
+id: interpretacion-energia-cinetica-rotacional
+leaf_id: energia-cinetica-rotacional
+nombre:
+  es: Interpretacion de energia cinetica rotacional
+  en: Interpretation of rotational kinetic energy
+scope:
+  es: lectura energetica, coherencia de unidades, validez del eje y errores de energia rotacional
+  en: energy reading, unit coherence, axis validity, and rotational-energy errors
+dependencies:
+  magnitudes:
+    - Erot
+    - I
+    - omega
+    - Wrot
+    - Eroti
+    - Erotf
+  formulas:
+    - energia_rotacional_basica
+    - trabajo_rotacional_variacion
+    - energia_rotacional_inicial
+    - energia_rotacional_final
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia fisica
+      en: Physical coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores comunes
+      en: Common errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  Erot:
+    summary_rules:
+      - id: erot_summary
+        when: 'true'
+        status: info
+        text:
+          es: Erot indica energia almacenada en el giro rigido porque ese movimiento puede transformarse en trabajo al frenar, acoplar o elevar una carga.
+          en: Erot indicates energy stored in rigid spin because that motion can become work during braking, coupling, or lifting a load.
+    coherence_rules:
+      - id: erot_nonnegative
+        when: Erot >= 0
+        status: ok
+        text:
+          es: La energia rotacional debe ser no negativa.
+          en: Rotational energy must be non-negative.
+    physical_reading_rules:
+      - id: erot_physical
+        when: 'true'
+        status: info
+        text:
+          es: Mas Erot implica mayor capacidad de realizar trabajo al frenar o acoplar el rotor.
+          en: More Erot means greater ability to do work while braking or coupling the rotor.
+    model_validity_rules:
+      - id: erot_validity
+        when: 'true'
+        status: info
+        text:
+          es: La lectura es valida si el cuerpo puede tratarse como rigido y el eje esta definido.
+          en: The reading is valid when the body can be treated as rigid and the axis is defined.
+    graph_rules:
+      - id: erot_graph
+        when: 'true'
+        status: info
+        text:
+          es: En la grafica, Erot debe crecer como parabola al aumentar omega.
+          en: On the graph, Erot should grow parabolically as omega increases.
+    likely_errors:
+      - id: erot_error_sign
+        when: Erot < 0
+        status: warning
+        text:
+          es: Error conceptual probable - se confundio el signo de omega con el signo de la energia, aunque la energia cinetica rotacional no puede ser negativa.
+          en: Likely conceptual error - the sign of omega was confused with the sign of energy, even though rotational kinetic energy cannot be negative.
+      - id: erot_error_units
+        when: Erot > 1000000000
+        status: warning
+        text:
+          es: Valor muy alto; revisa si omega estaba en rpm y no en rad/s.
+          en: Very large value; check whether omega was in rpm instead of rad/s.
+    next_step_rules:
+      - id: erot_next
+        when: 'true'
+        status: info
+        text:
+          es: Si el centro de masa se mueve, anade energia cinetica traslacional.
+          en: If the center of mass moves, add translational kinetic energy.
+  Wrot:
+    summary_rules:
+      - id: wrot_summary
+        when: 'true'
+        status: info
+        text:
+          es: Wrot es transferencia neta por torques externos entre dos estados.
+          en: Wrot is net transfer by external torques between two states.
+    coherence_rules:
+      - id: wrot_balance
+        when: 'true'
+        status: ok
+        text:
+          es: Debe coincidir con Erotf menos Eroti si no hay terminos ocultos.
+          en: It must match Erotf minus Eroti if no terms are hidden.
+    physical_reading_rules:
+      - id: wrot_physical
+        when: 'true'
+        status: info
+        text:
+          es: Trabajo positivo acelera o carga energeticamente el giro.
+          en: Positive work speeds up or energetically charges the spin.
+    model_validity_rules:
+      - id: wrot_validity
+        when: 'true'
+        status: info
+        text:
+          es: Es necesario declarar perdidas si el trabajo externo no aparece como energia rotacional.
+          en: Losses must be declared if external work does not appear as rotational energy.
+    graph_rules:
+      - id: wrot_graph
+        when: 'true'
+        status: info
+        text:
+          es: La diferencia vertical entre energia final e inicial representa Wrot.
+          en: The vertical difference between final and initial energy represents Wrot.
+    likely_errors:
+      - id: wrot_error_initial
+        when: 'true'
+        status: info
+        text:
+          es: Error comun - igualar Wrot a Erotf aunque Eroti no sea cero.
+          en: Common error - equating Wrot with Erotf even when Eroti is not zero.
+    next_step_rules:
+      - id: wrot_next
+        when: 'true'
+        status: info
+        text:
+          es: Despeja omega final desde Erotf si conoces el momento de inercia.
+          en: Solve final omega from Erotf if moment of inertia is known.
+  I:
+    summary_rules:
+      - id: i_summary
+        when: 'true'
+        status: info
+        text:
+          es: I mide como la masa distribuida alrededor del eje afecta la energia.
+          en: I measures how mass distributed about the axis affects energy.
+    coherence_rules:
+      - id: i_positive
+        when: I > 0
+        status: ok
+        text:
+          es: I debe ser positivo para un eje fisico.
+          en: I must be positive for a physical axis.
+    physical_reading_rules:
+      - id: i_physical
+        when: 'true'
+        status: info
+        text:
+          es: A igual omega, mayor I almacena mas energia.
+          en: At equal omega, larger I stores more energy.
+    model_validity_rules:
+      - id: i_validity
+        when: 'true'
+        status: info
+        text:
+          es: I debe corresponder al eje real; si cambia el eje, cambia el calculo.
+          en: I must match the real axis; if the axis changes, the calculation changes.
+    graph_rules:
+      - id: i_graph
+        when: 'true'
+        status: info
+        text:
+          es: Aumentar I eleva toda la curva Erot frente a omega.
+          en: Increasing I raises the whole Erot versus omega curve.
+    likely_errors:
+      - id: i_error_axis
+        when: 'true'
+        status: info
+        text:
+          es: Error comun - usar I de tabla para un eje distinto.
+          en: Common error - using a table value of I for a different axis.
+    next_step_rules:
+      - id: i_next
+        when: 'true'
+        status: info
+        text:
+          es: Revisa si hace falta Steiner antes de aplicar la formula.
+          en: Check whether the parallel-axis theorem is needed before applying the formula.
+  omega:
+    summary_rules:
+      - id: omega_summary
+        when: 'true'
+        status: info
+        text:
+          es: Omega fija la intensidad cinetica del giro.
+          en: Omega sets the kinetic intensity of spin.
+    coherence_rules:
+      - id: omega_units
+        when: 'true'
+        status: ok
+        text:
+          es: Omega debe introducirse en rad/s para obtener joules.
+          en: Omega must be entered in rad/s to obtain joules.
+    physical_reading_rules:
+      - id: omega_physical
+        when: 'true'
+        status: info
+        text:
+          es: Duplicar omega cuadruplica la energia si I no cambia.
+          en: Doubling omega quadruples energy if I is unchanged.
+    model_validity_rules:
+      - id: omega_validity
+        when: 'true'
+        status: info
+        text:
+          es: Una omega comun supone rotacion rigida sin partes deslizantes.
+          en: A common omega assumes rigid rotation without slipping parts.
+    graph_rules:
+      - id: omega_graph
+        when: 'true'
+        status: info
+        text:
+          es: La grafica debe ser simetrica si se comparan omega positiva y negativa.
+          en: The graph should be symmetric if positive and negative omega are compared.
+    likely_errors:
+      - id: omega_error_rpm
+        when: 'true'
+        status: info
+        text:
+          es: Error comun - usar rpm directamente como rad/s.
+          en: Common error - using rpm directly as rad/s.
+    next_step_rules:
+      - id: omega_next
+        when: 'true'
+        status: info
+        text:
+          es: Convierte rpm a rad/s antes de calcular energia.
+          en: Convert rpm to rad/s before computing energy.
+  Eroti:
+    summary_rules:
+      - id: eroti_summary
+        when: 'true'
+        status: info
+        text:
+          es: Eroti es la energia rotacional antes del proceso.
+          en: Eroti is the rotational energy before the process.
+    coherence_rules:
+      - id: eroti_coherence
+        when: Eroti >= 0
+        status: ok
+        text:
+          es: El estado inicial no debe tener energia negativa.
+          en: The initial state must not have negative energy.
+    physical_reading_rules:
+      - id: eroti_physical
+        when: 'true'
+        status: info
+        text:
+          es: Si Eroti no es cero, el trabajo solo mide el cambio posterior.
+          en: If Eroti is not zero, work only measures the later change.
+    model_validity_rules:
+      - id: eroti_validity
+        when: 'true'
+        status: info
+        text:
+          es: Debe calcularse con el mismo eje que el estado final.
+          en: It must be computed with the same axis as the final state.
+    graph_rules:
+      - id: eroti_graph
+        when: 'true'
+        status: info
+        text:
+          es: En grafica actua como marcador inicial de energia.
+          en: On a graph it acts as the initial energy marker.
+    likely_errors:
+      - id: eroti_error_zero
+        when: 'true'
+        status: info
+        text:
+          es: Error comun - asumir Eroti igual a cero sin leer el enunciado.
+          en: Common error - assuming Eroti is zero without reading the statement.
+    next_step_rules:
+      - id: eroti_next
+        when: 'true'
+        status: info
+        text:
+          es: Calcula Eroti antes de aplicar el balance de trabajo.
+          en: Compute Eroti before applying the work balance.
+  Erotf:
+    summary_rules:
+      - id: erotf_summary
+        when: 'true'
+        status: info
+        text:
+          es: Erotf es la energia rotacional despues del proceso.
+          en: Erotf is the rotational energy after the process.
+    coherence_rules:
+      - id: erotf_coherence
+        when: Erotf >= 0
+        status: ok
+        text:
+          es: El estado final no debe tener energia negativa.
+          en: The final state must not have negative energy.
+    physical_reading_rules:
+      - id: erotf_physical
+        when: 'true'
+        status: info
+        text:
+          es: Erotf permite leer cuanta energia queda almacenada al final.
+          en: Erotf shows how much energy remains stored at the end.
+    model_validity_rules:
+      - id: erotf_validity
+        when: 'true'
+        status: info
+        text:
+          es: Debe usar el I final si la distribucion de masa cambia.
+          en: It must use the final I if mass distribution changes.
+    graph_rules:
+      - id: erotf_graph
+        when: 'true'
+        status: info
+        text:
+          es: En grafica actua como marcador final de energia.
+          en: On a graph it acts as the final energy marker.
+    likely_errors:
+      - id: erotf_error_losses
+        when: 'true'
+        status: info
+        text:
+          es: Error comun - esperar que todo el trabajo llegue a Erotf sin perdidas.
+          en: Common error - expecting all work to reach Erotf without losses.
+    next_step_rules:
+      - id: erotf_next
+        when: 'true'
+        status: info
+        text:
+          es: Compara Erotf con Eroti para cerrar el balance.
+          en: Compare Erotf with Eroti to close the balance.

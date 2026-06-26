@@ -1,0 +1,63 @@
+# Practice
+
+## Level 1: recognition
+
+Identify the unknown before rearranging. In `d = v t`, if the statement asks how long it takes, the unknown is `t`. If it asks what distance is covered, the unknown is `d`. Write a physical sentence for each case.
+
+Exercise: in `P = E / t`, mark which variable should be isolated to answer questions about transferred energy, operating time, and average power. Do not calculate yet; only identify the variable.
+
+## Level 2: direct application
+
+Rearrange formulas where the unknown appears once. From `F = m a`, solve for `a` and then for `m`. Check the units of each result: acceleration must be in `m/s^2`, and mass must be in `kg`.
+
+Exercise: from `p = F / A`, solve for `F` and for `A`. Explain what condition the area must satisfy for the rearrangement to make sense.
+
+Correction criterion: from `F = m a`, the results should be `a = F/m` and `m = F/a`, with the condition `a != 0` in the second rearrangement. From `p = F/A`, the results should be `F = p A` and `A = F/p`, with `A != 0` in the original formula and `p != 0` when solving for area.
+
+## Level 3: choosing the tool
+
+Choose the inverse operation. If the unknown is multiplied, divide. If it is in a denominator, multiply first and then divide if needed. If it is added, subtract. If it is squared, isolate the square before taking the root.
+
+Exercise: compare `E = P t`, `v = v_0 + a t`, and `K = (1/2) m v^2`. State the steps needed to solve for `t` in the first two and for `v` in the third.
+
+Advanced exercise: classify these rearrangements before solving them: `T = 2 pi sqrt(L/g)` for `g`, `I = V/R` for `R`, `q = q_0 e^{-t/tau}` for `t`, and `F = b v + c v^2` for `v`. State whether the case is linear, rational, root-based, exponential, or quadratic.
+
+Correction criterion: in `T = 2 pi sqrt(L/g)`, the unknown is inside a root and in a denominator, so the quotient must be isolated and then squared. In `q = q_0 e^{-t/tau}`, a dimensionless ratio `q/q_0` must be formed before applying the logarithm.
+
+## Level 4: physical interpretation
+
+After rearranging, interpret the dependence. If you obtain `t = d / v`, explain why increasing `d` increases `t` and increasing `v` reduces it. If you obtain `a = F / m`, explain why increasing `m` reduces acceleration for the same force.
+
+Exercise: a final expression gives `I = V / R`. Describe what happens to current if resistance is doubled while voltage remains fixed.
+
+Advanced exercise: from `K = (1/2) m v^2`, the speed result is `v = sqrt(2K/m)`. Explain why doubling `K` does not double speed, and why doubling `m` reduces speed by a factor of `sqrt(2)` if energy remains fixed.
+
+Correction criterion: the answer must refer to square-root dependence, not linear proportionality. It must also distinguish positive speed from signed velocity.
+
+## Level 5: intentional error
+
+Analyse this incorrect rearrangement: from `d = v t`, someone obtains `t = v / d`. Detect the error using units and physical dependence. Write the correct form and explain why time should increase when distance increases.
+
+Analyse another error: from `F = m a`, someone obtains `m = F a`. Check the units, correct the rearrangement, and explain why multiplying by acceleration cannot give mass.
+
+Analyse a third error: from `K = (1/2) m v^2`, someone obtains `v = 2K/m`. Detect that the root has been forgotten, check units, and write the correct form. Explain why the incorrect result has units of `m^2/s^2`, not speed.
+
+Analyse a fourth error: from `q = q_0 e^{-t/tau}`, someone writes `t = -tau e q/q_0`. Explain why the exponential cannot be moved by multiplying by `e`, apply the logarithm correctly, and state the condition `q/q_0 > 0`.
+
+## Mastery path
+
+Basic level: you should recognize the unknown, isolate it in simple linear formulas, and check that the final unit matches the quantity being asked for. If you still hesitate, first write the physical question in words and then mark the symbol that answers it.
+
+Intermediate level: you should choose inverse operations in the correct order, detect denominators that cannot be zero, and interpret direct, inverse, and quadratic dependencies. The goal is not only to obtain an algebraic form, but to explain why the result grows or shrinks when a datum changes.
+
+Advanced level: you should handle unknowns inside roots, powers, exponentials, or logarithms, recognize when several branches appear, and decide whether a symbolic or numerical solution is clearer. Advanced rearranging closes with three checks: mathematical domain, physical unit, and model meaning.
+
+<!-- algebra-depth-v2 -->
+## Deepening practice
+
+Basic level: invent a simple numerical example related to formula rearrangement, solve it, and write one sentence with unit and meaning.
+
+Intermediate level: change one datum by a factor `10` and predict the new result before calculating. Then verify whether the prediction matches.
+
+Advanced level: write a limiting case where the usual procedure may fail. Explain which physical or mathematical condition is no longer satisfied.
+

@@ -1,0 +1,230 @@
+version: '1.0'
+leaf: equilibrio-estadistico
+dcl:
+  id: equilibrio-estadistico-Dcl
+  graphId: equilibrio-estadistico-Dcl
+  type: Dcl
+  graphType: Dcl
+  title:
+    es: Balance de flujos estadísticos
+    en: Balance of statistical flows
+  sceneId: two_state_statistical_balance
+  sceneLabel:
+    es: Dos estados con transiciones opuestas
+    en: Two states with opposite transitions
+  objects:
+    es:
+    - estado i
+    - estado j
+    - flecha i→j
+    - flecha j→i
+    - indicador de flujo neto
+    en:
+    - state i
+    - state j
+    - i→j arrow
+    - j→i arrow
+    - net-flow indicator
+  mainObject: par_de_estados
+  referenceFrame:
+    es: Espacio de estados discretos; las flechas representan flujo de probabilidad, no fuerzas mecánicas.
+    en: Discrete state space; arrows represent probability flow, not mechanical forces.
+  geometry:
+    es: Dos nodos unidos por flechas opuestas de transición.
+    en: Two nodes connected by opposite transition arrows.
+  interactions:
+    es: Las transiciones microscópicas continúan, pero el equilibrio estadístico exige compensación de flujos.
+    en: Microscopic transitions continue, but statistical equilibrium requires flow compensation.
+  modelElements:
+    es:
+    - probabilidades normalizadas
+    - tasas de transición
+    - flujo neto nulo
+    en:
+    - normalized probabilities
+    - transition rates
+    - zero net flow
+  visualCues:
+    es:
+    - flechas iguales indican balance
+    - flecha resultante indica desbalance
+    - nodos estables indican probabilidades estacionarias
+    en:
+    - equal arrows indicate balance
+    - resultant arrow indicates imbalance
+    - stable nodes indicate stationary probabilities
+  scaleMeaning:
+    es: El grosor de flecha representa tránsito probabilístico por unidad de tiempo.
+    en: Arrow thickness represents probabilistic traffic per unit time.
+  relation:
+    es: El equilibrio estadístico se reconoce cuando el flujo de probabilidad entrante y saliente se compensa y las probabilidades
+      dejan de cambiar.
+    en: Statistical equilibrium is recognized when incoming and outgoing probability flow compensates and probabilities stop
+      changing.
+  physicalReading:
+    es: Si las flechas opuestas tienen la misma intensidad, hay transiciones pero no deriva estadística neta.
+    en: If opposite arrows have the same intensity, transitions exist but there is no net statistical drift.
+  modelConnection:
+    es: El DCL traduce el balance detallado y el flujo neto nulo a una lectura visual.
+    en: The DCL translates detailed balance and zero net flow into a visual reading.
+  formulaConnection:
+    es:
+    - '{{f:balance_detallado_dos_estados}}'
+    - '{{f:flujo_probabilidad_neto}}'
+    - '{{f:criterio_probabilidad_estacionaria}}'
+    en:
+    - '{{f:balance_detallado_dos_estados}}'
+    - '{{f:flujo_probabilidad_neto}}'
+    - '{{f:criterio_probabilidad_estacionaria}}'
+  readingFocus:
+    es: Busca si el flujo de probabilidad neto se anula aunque sigan ocurriendo transiciones entre microestados.
+    en: Check whether net probability flow vanishes even though transitions between microstates continue.
+  agentHints:
+    es:
+    - Pregunta primero si las probabilidades están normalizadas.
+    - Distingue transición microscópica de cambio macroscópico de ocupación.
+    - Usa el signo de J_ij para explicar el sentido del desbalance.
+    en:
+    - First ask whether probabilities are normalized.
+    - Distinguish microscopic transition from macroscopic occupation change.
+    - Use the sign of J_ij to explain imbalance direction.
+  commonMistakes:
+    es:
+    - Pensar que equilibrio significa que no ocurre ninguna transición.
+    - Confundir flujo neto cero con tasas de transición nulas.
+    - Olvidar que el convenio i→j fija el signo del flujo.
+    en:
+    - Thinking equilibrium means no transition occurs.
+    - Confusing zero net flow with zero transition rates.
+    - Forgetting that the i→j convention fixes flow sign.
+  forceVectors:
+  - id: flujo_ij
+    label:
+      es: flujo i→j
+      en: i→j flow
+    targetObject: par_de_estados
+    direction: i_to_j
+    magnitudeRef: flujo_probabilidad
+    signConvention:
+      es: Positivo si domina el tránsito i→j.
+      en: Positive if i→j traffic dominates.
+    formulaRefs:
+    - flujo_probabilidad_neto
+  - id: flujo_ji
+    label:
+      es: flujo j→i
+      en: j→i flow
+    targetObject: par_de_estados
+    direction: j_to_i
+    magnitudeRef: flujo_probabilidad
+    signConvention:
+      es: Compensa al flujo directo en equilibrio detallado.
+      en: Compensates direct flow at detailed equilibrium.
+    formulaRefs:
+    - balance_detallado_dos_estados
+  equilibriumState:
+    isEquilibrium: true
+    conditionDescription:
+      es: Equilibrio estadístico cuando J_ij=0 y dp_i/dt=0 para los estados del modelo.
+      en: Statistical equilibrium when J_ij=0 and dp_i/dt=0 for the model states.
+  recommendedTab: graficas
+svg:
+  id: equilibrio-estadistico-Svg
+  graphId: equilibrio-estadistico-Svg
+  type: Svg
+  graphType: Svg
+  title:
+    es: Distribución estacionaria de ocupación
+    en: Stationary occupation distribution
+  sceneId: stationary_distribution_svg
+  sceneLabel:
+    es: Depósitos de probabilidad en equilibrio
+    en: Probability reservoirs at equilibrium
+  objects:
+    es:
+    - depósitos de probabilidad
+    - niveles de energía
+    - flechas de intercambio
+    - barra de entropía
+    en:
+    - probability reservoirs
+    - energy levels
+    - exchange arrows
+    - entropy bar
+  mainObject: distribucion_estadistica
+  referenceFrame:
+    es: Representación abstracta en espacio de estados.
+    en: Abstract representation in state space.
+  geometry:
+    es: Varios depósitos conectados con flechas de transición y alturas proporcionales a probabilidad.
+    en: Several reservoirs connected by transition arrows and heights proportional to probability.
+  interactions:
+    es: El entorno térmico permite intercambios que mantienen una distribución estacionaria.
+    en: The thermal environment allows exchanges that maintain a stationary distribution.
+  modelElements:
+    es:
+    - normalización
+    - estacionariedad
+    - dispersión entrópica
+    en:
+    - normalization
+    - stationarity
+    - entropic spread
+  visualCues:
+    es:
+    - alturas constantes indican equilibrio
+    - anchura repartida indica entropía mayor
+    - flechas simétricas indican balance
+    en:
+    - constant heights indicate equilibrium
+    - spread width indicates larger entropy
+    - symmetric arrows indicate balance
+  scaleMeaning:
+    es: La altura de cada depósito representa probabilidad relativa y no cantidad mecánica.
+    en: Each reservoir height represents relative probability, not a mechanical amount.
+  relation:
+    es: El equilibrio estadístico aparece como una distribución estable de probabilidades con flujo de probabilidad compensado.
+    en: Statistical equilibrium appears as a stable probability distribution with compensated probability flow.
+  physicalReading:
+    es: La imagen muestra que el sistema puede intercambiar microestados sin cambiar su reparto estadístico global.
+    en: The image shows that the system can exchange microstates without changing its global statistical distribution.
+  modelConnection:
+    es: El SVG complementa el DCL mostrando normalización y dispersión de ocupación.
+    en: The SVG complements the DCL by showing normalization and occupation spread.
+  formulaConnection:
+    es:
+    - '{{f:normalizacion_probabilidades}}'
+    - '{{f:entropia_gibbs_equilibrio}}'
+    en:
+    - '{{f:normalizacion_probabilidades}}'
+    - '{{f:entropia_gibbs_equilibrio}}'
+  readingFocus:
+    es: Observa si las ocupaciones se mantienen constantes y si el reparto completo suma una población total normalizada.
+    en: Observe whether occupations stay constant and whether the full distribution sums to a normalized total population.
+  agentHints:
+    es:
+    - Usa el gráfico para separar equilibrio estadístico de reposo.
+    - Relaciona altura de depósitos con probabilidad, no con energía.
+    - Conecta una distribución más extendida con mayor entropía.
+    en:
+    - Use the graph to separate statistical equilibrium from rest.
+    - Relate reservoir height to probability, not energy.
+    - Connect a more spread distribution with larger entropy.
+  commonMistakes:
+    es:
+    - Leer las flechas como fuerzas mecánicas reales.
+    - Creer que todos los estados deben tener la misma probabilidad.
+    - Ignorar estados accesibles de baja ocupación.
+    en:
+    - Reading arrows as real mechanical forces.
+    - Believing all states must have the same probability.
+    - Ignoring accessible states with low occupation.
+  animationTriggers:
+  - increase_transition_rate
+  - perturb_probability
+  - restore_balance
+  interactiveElements:
+  - toggle_net_flow
+  - highlight_normalization
+  - show_entropy_spread
+  recommendedTab: graficas

@@ -1,0 +1,576 @@
+version: 2
+id: interpretacion-colisiones-elasticas
+leaf_id: colisiones-elasticas
+nombre:
+  es: Interpretación de Colisiones Elásticas
+  en: Interpretation of Elastic Collisions
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: cantidad-de-movimiento
+  parent_id: colisiones
+  ruta_relativa: fisica-clasica/mecanica/cantidad-de-movimiento/colisiones/colisiones-elasticas
+dependencies:
+  formulas: [p, K, v1f, v2f, rel, e_definition, energy_transfer, ki_system, kf_system, delta_k]
+  magnitudes: [m1, m2, v1i, v2i, v1f, v2f, Ki, Kf, DeltaK, T_fraction, e]
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+result_blocks:
+  summary: { title: { es: Resumen del Proceso Conservativo, en: Conservative Process Summary } }
+  physical_reading: { title: { es: Lectura de la Interacción, en: Interaction Reading } }
+  coherence: { title: { es: Consistencia de Conservación, en: Conservation Consistency } }
+  model_validity: { title: { es: Límites del Escenario Ideal, en: Ideal Scenario Limits } }
+  graph_reading: { title: { es: Análisis de Trayectorias (v-t), en: Trajectory Analysis (v-t) } }
+  likely_errors: { title: { es: Alertas de Interpretación, en: Interpretation Alerts } }
+  next_step: { title: { es: Conexión con Disipación, en: Connection with Dissipation } }
+targets:
+  v1f:
+    summary_rules:
+      - id: v1f_summary
+        when: "true"
+        status: info
+        text:
+          es: Velocidad final del primer cuerpo tras el intercambio elástico.
+          en: Final velocity of the first body after elastic exchange.
+    physical_reading_rules:
+      - id: v1f_rebound
+        when: "v1f * v1i < 0"
+        status: info
+        text:
+          es: El proyectil rebota; [[m1]] es menor que [[m2]].
+          en: Projectile rebounds; [[m1]] is smaller than [[m2]].
+    coherence_rules:
+      - id: v1f_coherence
+        when: "true"
+        status: ok
+        text:
+          es: Unidades coherentes en m/s.
+          en: Consistent units in m/s.
+    model_validity_rules:
+      - id: v1f_validity
+        when: "true"
+        status: ok
+        text:
+          es: Válida bajo el modelo elástico 1D.
+          en: Valid under the 1D elastic model.
+    graph_rules:
+      - id: v1f_graph
+        when: "true"
+        status: info
+        text:
+          es: La pendiente en v-t cambia bruscamente.
+          en: The slope in v-t changes abruptly.
+    likely_errors:
+      - id: v1f_error
+        when: "true"
+        status: warning
+        text:
+          es: Confundir rapidez con velocidad (signo).
+          en: Confusing speed with velocity (sign).
+    next_step_rules:
+      - id: v1f_next
+        when: "true"
+        status: info
+        text:
+          es: Comparar con el caso inelástico.
+          en: Compare with the inelastic case.
+  v2f:
+    summary_rules:
+      - id: v2f_summary
+        when: "true"
+        status: info
+        text:
+          es: Velocidad final del blanco tras recibir el impulso.
+          en: Final velocity of the target after receiving the impulse.
+    physical_reading_rules:
+      - id: v2f_motion
+        when: "v2f != v2i"
+        status: info
+        text:
+          es: El blanco adquiere movimiento por transferencia de momento.
+          en: The target acquires motion through momentum transfer.
+    coherence_rules:
+      - id: v2f_coherence
+        when: "true"
+        status: ok
+        text:
+          es: Velocidad final consistente con el balance total.
+          en: Final velocity consistent with total balance.
+    model_validity_rules:
+      - id: v2f_validity
+        when: "true"
+        status: ok
+        text:
+          es: Asume contacto impulsivo sin fricción externa.
+          en: Assumes impulsive contact without external friction.
+    graph_rules:
+      - id: v2f_graph
+        when: "true"
+        status: info
+        text:
+          es: Desplazamiento positivo en v-t si el proyectil venía de la izquierda.
+          en: Positive displacement in v-t if the projectile came from the left.
+    likely_errors:
+      - id: v2f_error
+        when: "true"
+        status: warning
+        text:
+          es: Olvidar que el blanco puede estar en movimiento inicial.
+          en: Forgetting that the target may have initial motion.
+    next_step_rules:
+      - id: v2f_next
+        when: "true"
+        status: info
+        text:
+          es: Analizar la energía transferida [[T_fraction]].
+          en: Analyze the transferred energy [[T_fraction]].
+  DeltaK:
+    summary_rules:
+      - id: deltak_check
+        when: "abs(DeltaK) < 1e-6"
+        status: success
+        text:
+          es: Balance de energía perfecto ($ \Delta K = 0 $).
+          en: Perfect energy balance ($ \Delta K = 0 $).
+    physical_reading_rules:
+      - id: no_dissipation
+        when: "true"
+        status: info
+        text:
+          es: No hay disipación de energía en forma de calor o deformación.
+          en: No energy dissipation as heat or deformation.
+    coherence_rules:
+      - id: deltak_coherence
+        when: "true"
+        status: ok
+        text:
+          es: La variación debe ser nula por definición de choque elástico.
+          en: Variation must be zero by definition of elastic collision.
+    model_validity_rules:
+      - id: deltak_validity
+        when: "true"
+        status: ok
+        text:
+          es: Si $ \Delta K < 0 $, el choque es inelástico.
+          en: If $ \Delta K < 0 $, the collision is inelastic.
+    graph_rules:
+      - id: deltak_graph
+        when: "true"
+        status: info
+        text:
+          es: La curva de energía cinética total es plana.
+          en: The total kinetic energy curve is flat.
+    likely_errors:
+      - id: deltak_error
+        when: "abs(DeltaK) > 1e-6"
+        status: error
+        text:
+          es: Error en el cálculo de velocidades finales o masas.
+          en: Error in final velocities or masses calculation.
+    next_step_rules:
+      - id: deltak_next
+        when: "true"
+        status: info
+        text:
+          es: Estudiar el coeficiente de restitución [[e]].
+          en: Study the restitution coefficient [[e]].
+  T_fraction:
+    summary_rules:
+      - id: t_fraction_summary
+        when: "true"
+        status: info
+        text:
+          es: Medida de la eficiencia en la transferencia de energía.
+          en: Measure of energy transfer efficiency.
+    physical_reading_rules:
+      - id: t_max
+        when: "T_fraction > 0.99"
+        status: success
+        text:
+          es: Transferencia máxima por paridad de masas.
+          en: Maximum transfer due to mass parity.
+    coherence_rules:
+      - id: t_coherence
+        when: "true"
+        status: ok
+        text:
+          es: Valor entre 0 y 1.
+          en: Value between 0 and 1.
+    model_validity_rules:
+      - id: t_validity
+        when: "true"
+        status: ok
+        text:
+          es: Solo válida para blanco inicialmente en reposo.
+          en: Only valid for target initially at rest.
+    graph_rules:
+      - id: t_graph
+        when: "true"
+        status: info
+        text:
+          es: Representa el área relativa de energía en el blanco.
+          en: Represents the relative energy area in the target.
+    likely_errors:
+      - id: t_error
+        when: "T_fraction > 1"
+        status: error
+        text:
+          es: Violación de la conservación de energía.
+          en: Violation of energy conservation.
+    next_step_rules:
+      - id: t_next
+        when: "true"
+        status: info
+        text:
+          es: Analizar el caso de masas desiguales.
+          en: Analyze the case of unequal masses.
+  e:
+    summary_rules:
+      - id: e_summary
+        when: "true"
+        status: info
+        text:
+          es: Parámetro de elasticidad del choque.
+          en: Collision elasticity parameter.
+    physical_reading_rules:
+      - id: e_ideal
+        when: "e == 1"
+        status: success
+        text:
+          es: Choque perfectamente elástico (límite ideal).
+          en: Perfectly elastic collision (ideal limit).
+    coherence_rules:
+      - id: e_coherence
+        when: "true"
+        status: ok
+        text:
+          es: Coeficiente unitario por definición.
+          en: Unit coefficient by definition.
+    model_validity_rules:
+      - id: e_validity
+        when: "true"
+        status: ok
+        text:
+          es: Define la frontera del modelo conservativo.
+          en: Defines the boundary of the conservative model.
+    graph_rules:
+      - id: e_graph
+        when: "true"
+        status: info
+        text:
+          es: Determina la simetría de la colisión en el tiempo.
+          en: Determines the time symmetry of the collision.
+    likely_errors:
+      - id: e_error
+        when: "e != 1"
+        status: error
+        text:
+          es: El valor debe ser exactamente 1 en este leaf.
+          en: Value must be exactly 1 in this leaf.
+    next_step_rules:
+      - id: e_next
+        when: "true"
+        status: info
+        text:
+          es: Explorar valores menores a 1 en otros subtemas.
+          en: Explore values less than 1 in other topics.
+  m1:
+    summary_rules:
+      - id: m1_summary
+        when: "true"
+        status: info
+        text:
+          es: Parámetro inercial del proyectil.
+          en: Inertial parameter of the projectile.
+    physical_reading_rules:
+      - id: m1_dominance
+        when: "m1 > m2"
+        status: info
+        text:
+          es: El proyectil domina la dinámica del choque.
+          en: The projectile dominates the collision dynamics.
+    coherence_rules:
+      - id: m1_coherence
+        when: "true"
+        status: ok
+        text:
+          es: Masa siempre positiva.
+          en: Mass always positive.
+    model_validity_rules:
+      - id: m1_validity
+        when: "true"
+        status: ok
+        text:
+          es: Masa constante durante el proceso.
+          en: Constant mass during the process.
+    graph_rules:
+      - id: m1_graph
+        when: "true"
+        status: info
+        text:
+          es: Determina la inercia visual en la simulación.
+          en: Determines the visual inertia in the simulation.
+    likely_errors:
+      - id: m1_error
+        when: "m1 <= 0"
+        status: error
+        text:
+          es: Masa física imposible.
+          en: Impossible physical mass.
+    next_step_rules:
+      - id: m1_next
+        when: "true"
+        status: info
+        text:
+          es: Estudiar el límite de masa infinita.
+          en: Study the infinite mass limit.
+  m2:
+    summary_rules:
+      - id: m2_summary
+        when: "true"
+        status: info
+        text:
+          es: Parámetro inercial del blanco.
+          en: Inertial parameter of the target.
+    physical_reading_rules:
+      - id: m2_dominance
+        when: "m2 > m1"
+        status: info
+        text:
+          es: El blanco actúa como un obstáculo difícil de mover.
+          en: The target acts as an obstacle difficult to move.
+    coherence_rules:
+      - id: m2_coherence
+        when: "true"
+        status: ok
+        text:
+          es: Masa siempre positiva.
+          en: Mass always positive.
+    model_validity_rules:
+      - id: m2_validity
+        when: "true"
+        status: ok
+        text:
+          es: Masa constante durante el impacto.
+          en: Constant mass during impact.
+    graph_rules:
+      - id: m2_graph
+        when: "true"
+        status: info
+        text:
+          es: Determina la reacción visual del blanco.
+          en: Determines the visual reaction of the target.
+    likely_errors:
+      - id: m2_error
+        when: "m2 <= 0"
+        status: error
+        text:
+          es: Masa física imposible.
+          en: Impossible physical mass.
+    next_step_rules:
+      - id: m2_next
+        when: "true"
+        status: info
+        text:
+          es: Considerar colisiones con paredes fijas.
+          en: Consider collisions with fixed walls.
+  v1i:
+    summary_rules:
+      - id: v1i_summary
+        when: "true"
+        status: info
+        text:
+          es: Velocidad de entrada del proyectil.
+          en: Input velocity of the projectile.
+    physical_reading_rules:
+      - id: v1i_direction
+        when: "v1i > 0"
+        status: info
+        text:
+          es: El proyectil se mueve hacia la derecha.
+          en: Projectile moves to the right.
+    coherence_rules:
+      - id: v1i_coherence
+        when: "true"
+        status: ok
+        text:
+          es: Unidades coherentes en m/s.
+          en: Consistent units in m/s.
+    model_validity_rules:
+      - id: v1i_validity
+        when: "true"
+        status: ok
+        text:
+          es: Velocidad relativa inicial mayor a cero para que haya choque.
+          en: Initial relative velocity must be greater than zero for impact.
+    graph_rules:
+      - id: v1i_graph
+        when: "true"
+        status: info
+        text:
+          es: Posición inicial de la partícula en v-t.
+          en: Initial position of the particle in v-t.
+    likely_errors:
+      - id: v1i_error
+        when: "true"
+        status: warning
+        text:
+          es: Error en el signo de la velocidad.
+          en: Error in velocity sign.
+    next_step_rules:
+      - id: v1i_next
+        when: "true"
+        status: info
+        text:
+          es: Analizar el momento lineal inicial.
+          en: Analyze initial linear momentum.
+  v2i:
+    summary_rules:
+      - id: v2i_summary
+        when: "true"
+        status: info
+        text:
+          es: Velocidad inicial del blanco.
+          en: Initial velocity of the target.
+    physical_reading_rules:
+      - id: v2i_static
+        when: "v2i == 0"
+        status: info
+        text:
+          es: Blanco inicialmente estático (escenario estándar).
+          en: Target initially static (standard scenario).
+    coherence_rules:
+      - id: v2i_coherence
+        when: "true"
+        status: ok
+        text:
+          es: Unidades coherentes en m/s.
+          en: Consistent units in m/s.
+    model_validity_rules:
+      - id: v2i_validity
+        when: "true"
+        status: ok
+        text:
+          es: Representa el estado inicial del blanco.
+          en: Represents the initial state of the target.
+    graph_rules:
+      - id: v2i_graph
+        when: "true"
+        status: info
+        text:
+          es: Posición inicial del blanco en v-t.
+          en: Initial position of the target in v-t.
+    likely_errors:
+      - id: v2i_error
+        when: "true"
+        status: warning
+        text:
+          es: Omitir el signo si se mueve a la izquierda.
+          en: Omitting sign if moving to the left.
+    next_step_rules:
+      - id: v2i_next
+        when: "true"
+        status: info
+        text:
+          es: Analizar la transferencia de energía.
+          en: Analyze energy transfer.
+  Ki:
+    summary_rules:
+      - id: ki_summary
+        when: "true"
+        status: info
+        text:
+          es: Presupuesto energético inicial del sistema.
+          en: Initial energy budget of the system.
+    physical_reading_rules:
+      - id: ki_total
+        when: "true"
+        status: info
+        text:
+          es: Suma de energías de traslación.
+          en: Sum of translational energies.
+    coherence_rules:
+      - id: ki_coherence
+        when: "true"
+        status: ok
+        text:
+          es: Siempre positiva.
+          en: Always positive.
+    model_validity_rules:
+      - id: ki_validity
+        when: "true"
+        status: ok
+        text:
+          es: Debe ser igual a [[Kf]] tras el choque.
+          en: Must equal [[Kf]] after impact.
+    graph_rules:
+      - id: ki_graph
+        when: "true"
+        status: info
+        text:
+          es: Área bajo la curva de energía inicial.
+          en: Area under the initial energy curve.
+    likely_errors:
+      - id: ki_error
+        when: "Ki < 0"
+        status: error
+        text:
+          es: Energía física imposible.
+          en: Impossible physical energy.
+    next_step_rules:
+      - id: ki_next
+        when: "true"
+        status: info
+        text:
+          es: Comparar con la energía final.
+          en: Compare with final energy.
+  Kf:
+    summary_rules:
+      - id: kf_summary
+        when: "true"
+        status: info
+        text:
+          es: Energía cinética conservada del sistema.
+          en: Conserved system kinetic energy.
+    physical_reading_rules:
+      - id: kf_total
+        when: "true"
+        status: info
+        text:
+          es: Estado energético tras el intercambio.
+          en: Energy state after exchange.
+    coherence_rules:
+      - id: kf_coherence
+        when: "true"
+        status: ok
+        text:
+          es: Siempre positiva.
+          en: Always positive.
+    model_validity_rules:
+      - id: kf_validity
+        when: "true"
+        status: ok
+        text:
+          es: El sistema es perfectamente conservativo.
+          en: The system is perfectly conservative.
+    graph_rules:
+      - id: kf_graph
+        when: "true"
+        status: info
+        text:
+          es: Área bajo la curva de energía final.
+          en: Area under the final energy curve.
+    likely_errors:
+      - id: kf_error
+        when: "Kf < 0"
+        status: error
+        text:
+          es: Energía física imposible.
+          en: Impossible physical energy.
+    next_step_rules:
+      - id: kf_next
+        when: "true"
+        status: info
+        text:
+          es: Estudiar pérdidas en choques reales.
+          en: Study losses in real collisions.

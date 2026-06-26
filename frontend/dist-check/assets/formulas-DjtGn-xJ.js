@@ -1,0 +1,394 @@
+const e=`version: 1
+formulas:
+- id: friccion_cinetica
+  title:
+    es: Fuerza de rozamiento cinético
+    en: Kinetic friction force
+  equation: f_r = mu_c * N
+  latex: 'f_r = \\mu_c N'
+  rearrangements:
+  - target: f_r
+    equation: f_r = mu_c * N
+    latex: 'f_r = \\mu_c N'
+  - target: mu_c
+    equation: mu_c = f_r / N
+    latex: '\\mu_c = \\frac{f_r}{N}'
+  - target: N
+    equation: N = f_r / mu_c
+    latex: 'N = \\frac{f_r}{\\mu_c}'
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Modela la fuerza tangencial disipativa durante deslizamiento.
+    en: Models tangential dissipative force during sliding.
+  constraints:
+    es: Requiere contacto con deslizamiento relativo.
+    en: Requires contact with relative sliding.
+  validity:
+    es: Aproximación de Coulomb para superficies secas y velocidades moderadas.
+    en: Coulomb approximation for dry surfaces and moderate speeds.
+  dimension_check: '[MLT^-2] = [1]*[MLT^-2]'
+  calculable: true
+  motivo_no_calculable: No aplica.
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  interpretation_tags:
+  - friction
+  - dissipation
+  result_semantics:
+    target: f_r
+    kind: scalar
+    sign_meaning:
+      es: El signo depende del eje, el módulo es positivo por definición.
+      en: Sign depends on axis, magnitude is positive by definition.
+    absolute_value_meaning:
+      es: Intensidad de oposición al movimiento.
+      en: Intensity of opposition to motion.
+  domain_checks:
+  - condition: N > 0 and mu_c >= 0
+    message:
+      es: Verificar normal positiva y coeficiente no negativo.
+      en: Check positive normal and non-negative coefficient.
+  coherence_checks:
+  - check: f_r <= mu_e * N when static_regime
+    warning:
+      es: Si se usa régimen estático, revisar límite superior por mu_e.
+      en: If static regime is used, check upper bound with mu_e.
+  graph_implications:
+  - if: mu_c increases
+    then:
+      es: La curva de aceleración se desplaza hacia valores menores.
+      en: Acceleration curve shifts toward lower values.
+  pedagogical_triggers:
+  - condition: mu_c < 0
+    hint:
+      es: El coeficiente cinético no puede ser negativo.
+      en: Kinetic coefficient cannot be negative.
+
+- id: aceleracion_plano_rozamiento
+  title:
+    es: Aceleración en plano inclinado con rozamiento
+    en: Inclined-plane acceleration with friction
+  equation: a = g * (sin(theta) - mu_c * cos(theta))
+  latex: 'a = g(\\sin\\theta - \\mu_c\\cos\\theta)'
+  rearrangements:
+  - target: a
+    equation: a = g * (sin(theta) - mu_c * cos(theta))
+    latex: 'a = g(\\sin\\theta - \\mu_c\\cos\\theta)'
+  - target: mu_c
+    equation: mu_c = (sin(theta) - a/g) / cos(theta)
+    latex: '\\mu_c = \\frac{\\sin\\theta - a/g}{\\cos\\theta}'
+  - target: g
+    equation: g = a / (sin(theta) - mu_c * cos(theta))
+    latex: 'g = \\frac{a}{\\sin\\theta - \\mu_c\\cos\\theta}'
+  category: dynamic
+  relation_type: physical_law
+  physical_meaning:
+    es: Balancea componente de gravedad y fricción para obtener respuesta neta.
+    en: Balances gravity component and friction to obtain net response.
+  constraints:
+    es: Modelo 2D, bloque rígido, coeficiente cinético constante.
+    en: 2D model, rigid block, constant kinetic coefficient.
+  validity:
+    es: Válido para deslizamiento con contacto mantenido y sin efectos aerodinámicos dominantes.
+    en: Valid for sliding with maintained contact and without dominant aerodynamic effects.
+  dimension_check: '[LT^-2] = [LT^-2]*([1]-[1]*[1])'
+  calculable: true
+  motivo_no_calculable: No aplica.
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  interpretation_tags:
+  - acceleration
+  - incline
+  - friction
+  result_semantics:
+    target: a
+    kind: scalar
+    sign_meaning:
+      es: Signo positivo indica aceleración hacia abajo según eje elegido.
+      en: Positive sign indicates downhill acceleration under chosen axis.
+    absolute_value_meaning:
+      es: Módulo de cambio de velocidad por unidad de tiempo.
+      en: Magnitude of velocity change per unit time.
+  domain_checks:
+  - condition: 0 <= theta and theta <= pi/2 and g > 0 and mu_c >= 0
+    message:
+      es: Verificar dominio geométrico y parámetros físicos básicos.
+      en: Check geometric domain and basic physical parameters.
+  coherence_checks:
+  - check: a <= g
+    warning:
+      es: Si a supera g en módulo, revisar unidades y coeficientes.
+      en: If |a| exceeds g, review units and coefficients.
+  graph_implications:
+  - if: theta increases with fixed mu_c
+    then:
+      es: a tiende a aumentar tras superar el umbral de fricción.
+      en: a tends to increase after friction threshold is exceeded.
+  pedagogical_triggers:
+  - condition: abs(a) < 1e-6
+    hint:
+      es: Estás cerca del régimen de velocidad constante o equilibrio dinámico.
+      en: You are near constant-speed or dynamic-balance regime.
+
+- id: umbral_reposo
+  title:
+    es: Condición de reposo estático
+    en: Static rest condition
+  equation: tan(theta) <= mu_e
+  latex: '\\tan\\theta \\leq \\mu_e'
+  rearrangements:
+  - target: theta
+    equation: theta <= arctan(mu_e)
+    latex: '\\theta \\leq \\arctan(\\mu_e)'
+  - target: mu_e
+    equation: mu_e >= tan(theta)
+    latex: '\\mu_e \\geq \\tan\\theta'
+  category: static
+  relation_type: inequality_criterion
+  physical_meaning:
+    es: Define si el bloque puede mantenerse en reposo sin deslizar.
+    en: Defines whether block can remain at rest without slipping.
+  constraints:
+    es: Solo aplica cuando el bloque parte del reposo.
+    en: Applies only when block starts from rest.
+  validity:
+    es: Equilibrio estático en contacto seco.
+    en: Static equilibrium under dry contact.
+  dimension_check: '[1] <= [1]'
+  calculable: false
+  motivo_no_calculable: Es un criterio de decisión, no una igualdad numérica directa.
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  interpretation_tags:
+  - static
+  - threshold
+  result_semantics:
+    target: theta
+    kind: scalar
+    sign_meaning:
+      es: Se interpreta en valor angular no negativo.
+      en: Interpreted as non-negative angular value.
+    absolute_value_meaning:
+      es: Marca margen de seguridad frente al deslizamiento.
+      en: Marks safety margin against slipping.
+  domain_checks:
+  - condition: mu_e >= 0
+    message:
+      es: mu_e debe ser no negativo.
+      en: mu_e must be non-negative.
+  coherence_checks:
+  - check: theta <= theta_c when rest_expected
+    warning:
+      es: Si theta supera el crítico no puede mantenerse el reposo.
+      en: If theta exceeds critical value, rest cannot be sustained.
+  graph_implications:
+  - if: theta crosses theta_c
+    then:
+      es: Cambia el régimen de estático a deslizante.
+      en: Regime changes from static to sliding.
+  pedagogical_triggers:
+  - condition: theta > theta_c
+    hint:
+      es: Replantea el problema con rozamiento cinético y aceleración no nula.
+      en: Reframe problem with kinetic friction and non-zero acceleration.
+
+- id: angulo_critico
+  title:
+    es: Ángulo crítico de deslizamiento
+    en: Critical sliding angle
+  equation: theta_c = arctan(mu_e)
+  latex: '\\theta_c = \\arctan(\\mu_e)'
+  rearrangements:
+  - target: theta_c
+    equation: theta_c = arctan(mu_e)
+    latex: '\\theta_c = \\arctan(\\mu_e)'
+  - target: mu_e
+    equation: mu_e = tan(theta_c)
+    latex: '\\mu_e = \\tan(\\theta_c)'
+  category: derived
+  relation_type: geometric_relation
+  physical_meaning:
+    es: Convierte adherencia estática en umbral angular de estabilidad.
+    en: Converts static grip into angular stability threshold.
+  constraints:
+    es: Requiere medición consistente del ángulo y el régimen de inicio de deslizamiento.
+    en: Requires consistent angle measurement and incipient-slip regime.
+  validity:
+    es: Materiales con comportamiento aproximable por Coulomb.
+    en: Materials approximately following Coulomb behavior.
+  dimension_check: '[1] = arctan([1])'
+  calculable: true
+  motivo_no_calculable: No aplica.
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  interpretation_tags:
+  - threshold
+  - safety
+  result_semantics:
+    target: theta_c
+    kind: scalar
+    sign_meaning:
+      es: Se usa como ángulo positivo en el primer cuadrante.
+      en: Used as positive angle in first quadrant.
+    absolute_value_meaning:
+      es: Máxima inclinación segura sin deslizamiento espontáneo.
+      en: Maximum safe incline without spontaneous slipping.
+  domain_checks:
+  - condition: mu_e >= 0
+    message:
+      es: El coeficiente estático debe ser no negativo.
+      en: Static coefficient must be non-negative.
+  coherence_checks:
+  - check: 0 <= theta_c and theta_c <= pi/2
+    warning:
+      es: Revisar unidades o datos si el ángulo crítico sale fuera de rango físico.
+      en: Review units or data if critical angle is outside physical range.
+  graph_implications:
+  - if: theta equals theta_c
+    then:
+      es: El punto queda en frontera de estabilidad.
+      en: Point lies on stability boundary.
+  pedagogical_triggers:
+  - condition: theta_c < 0.1
+    hint:
+      es: Contacto muy deslizante; usar factor de seguridad alto.
+      en: Very slippery contact; use a high safety factor.\r
+- id: normal_plano_inclinado
+  title:
+    es: Fuerza normal en plano inclinado
+    en: Normal force on inclined plane
+  equation: N = m * g * cos(theta)
+  latex: 'N = mg\\cos\\theta'
+  rearrangements:
+  - target: N
+    equation: N = m * g * cos(theta)
+    latex: 'N = mg\\cos\\theta'
+  - target: m
+    equation: m = N / (g * cos(theta))
+    latex: 'm = \\frac{N}{g\\cos\\theta}'
+  - target: theta
+    equation: theta = arccos(N / (m * g))
+    latex: '\\theta = \\arccos\\left(\\frac{N}{mg}\\right)'
+  category: fundamental
+  relation_type: physical_law
+  physical_meaning:
+    es: Representa la componente del peso perpendicular a la superficie de apoyo.
+    en: Represents the weight component perpendicular to the support surface.
+  constraints:
+    es: Equilibrio en el eje perpendicular al plano.
+    en: Equilibrium along the axis normal to the plane.
+  validity:
+    es: Válido mientras no existan otras fuerzas con componente normal.
+    en: Valid as long as no other forces have a normal component.
+  dimension_check: '[MLT^-2] = [M][LT^-2][1]'
+  calculable: true
+  motivo_no_calculable: No aplica.
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  interpretation_tags:
+  - force
+  - equilibrium
+  - contact
+  result_semantics:
+    target: N
+    kind: scalar
+    sign_meaning:
+      es: Siempre positiva (fuerza de contacto de empuje).
+      en: Always positive (pushing contact force).
+    absolute_value_meaning:
+      es: Intensidad de la interacción de soporte.
+      en: Intensity of support interaction.
+  domain_checks:
+  - condition: m > 0 and g > 0 and 0 <= theta and theta <= pi/2
+    message:
+      es: Verificar parámetros físicos y ángulo en rango de rampa.
+      en: Check physical parameters and angle within ramp range.
+  coherence_checks:
+  - check: N <= m * g
+    warning:
+      es: La normal no debe superar el peso total en ausencia de otras fuerzas.
+      en: Normal force should not exceed total weight without other forces.
+  graph_implications:
+  - if: theta increases
+    then:
+      es: La fuerza normal N disminuye según el coseno del ángulo.
+      en: Normal force N decreases according to the cosine of the angle.
+  pedagogical_triggers:
+  - condition: N < 0
+    hint:
+      es: La normal no puede ser negativa en este modelo; revisa la proyección del peso.
+      en: Normal force cannot be negative in this model; review weight projection.
+
+- id: friccion_estatica_maxima
+  title:
+    es: Fuerza de rozamiento estático máximo
+    en: Maximum static friction force
+  equation: f_s_max = mu_e * N
+  latex: 'f_{s,max} = \\mu_e N'
+  rearrangements:
+  - target: f_s_max
+    equation: f_s_max = mu_e * N
+    latex: 'f_{s,max} = \\mu_e N'
+  - target: mu_e
+    equation: mu_e = f_s_max / N
+    latex: '\\mu_e = \\frac{f_{s,max}}{N}'
+  - target: N
+    equation: N = f_s_max / mu_e
+    latex: 'N = \\frac{f_{s,max}}{\\mu_e}'
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Define el límite superior del agarre antes del deslizamiento.
+    en: Defines the upper limit of grip before slipping.
+  constraints:
+    es: Solo válida en el umbral de movimiento inminente.
+    en: Only valid at the threshold of incipient motion.
+  validity:
+    es: Modelo de Coulomb para fricción seca.
+    en: Coulomb model for dry friction.
+  dimension_check: '[MLT^-2] = [1][MLT^-2]'
+  calculable: true
+  motivo_no_calculable: No aplica.
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  interpretation_tags:
+  - threshold
+  - friction
+  - static
+  result_semantics:
+    target: f_s_max
+    kind: scalar
+    sign_meaning:
+      es: Módulo positivo por definición.
+      en: Positive magnitude by definition.
+    absolute_value_meaning:
+      es: Capacidad máxima de resistencia estática.
+      en: Maximum static resistance capacity.
+  domain_checks:
+  - condition: mu_e >= 0 and N >= 0
+    message:
+      es: Parámetros de fricción deben ser no negativos.
+      en: Friction parameters must be non-negative.
+  coherence_checks:
+  - check: f_s_max >= mu_c * N
+    warning:
+      es: Físicamente, el agarre estático máximo suele superar al cinético.
+      en: Physically, maximum static grip usually exceeds kinetic grip.
+  graph_implications:
+  - if: mu_e increases
+    then:
+      es: El valor límite del rozamiento estático máximo se eleva.
+      en: The limit value of maximum static friction rises.
+  pedagogical_triggers:
+  - condition: f_s_max == 0
+    hint:
+      es: Si el rozamiento estático máximo es cero, el bloque no tiene adherencia.
+      en: If maximum static friction is zero, the block has no adherence.
+`;export{e as default};

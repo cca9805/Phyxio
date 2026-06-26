@@ -1,0 +1,181 @@
+version: 5
+topic:
+  id: ecuacion-de-navier-stokes-intro
+  title:
+    es: Ecuación de Navier-Stokes (Intro)
+    en: Navier-Stokes Equation (Intro)
+variables:
+- id: a
+  symbol: a
+  nombre:
+    es: aceleración material
+    en: material acceleration
+  unidad_si: m/s^2
+  descripcion:
+    es: Aceleración de la partícula fluida.
+    en: Acceleration of the fluid particle.
+- id: gp
+  symbol: \frac{\partial p}{\partial x}
+  nombre:
+    es: gradiente de presión
+    en: pressure gradient
+  unidad_si: Pa/m
+  descripcion:
+    es: Variación espacial de la presión.
+    en: Spatial variation of pressure.
+- id: mu
+  symbol: \mu
+  nombre:
+    es: viscosidad dinámica
+    en: dynamic viscosity
+  unidad_si: Pa*s
+  descripcion:
+    es: Viscosidad del fluido.
+    en: Fluid viscosity.
+- id: lapu
+  symbol: \nabla^2 u
+  nombre:
+    es: laplaciano de velocidad
+    en: velocity laplacian
+  unidad_si: s^-1
+  descripcion:
+    es: Difusión viscosa del momento.
+    en: Viscous momentum diffusion.
+- id: rho
+  symbol: \rho
+  nombre:
+    es: densidad
+    en: density
+  unidad_si: kg/m^3
+  descripcion:
+    es: Densidad del fluido.
+    en: Fluid density.
+- id: gx
+  symbol: g_x
+  nombre:
+    es: gravedad proyectada
+    en: projected gravity
+  unidad_si: m/s^2
+  descripcion:
+    es: Componente gravitatoria en el eje de flujo.
+    en: Gravitational component on the flow axis.
+- id: Re
+  symbol: Re
+  nombre:
+    es: número de Reynolds
+    en: Reynolds number
+  unidad_si: '1'
+  descripcion:
+    es: Índice de régimen de flujo.
+    en: Flow regime index.
+- id: v
+  symbol: v
+  nombre:
+    es: velocidad característica
+    en: characteristic velocity
+  unidad_si: m/s
+  descripcion:
+    es: Velocidad característica.
+    en: Characteristic velocity.
+- id: L
+  symbol: L
+  nombre:
+    es: longitud característica
+    en: characteristic length
+  unidad_si: m
+  descripcion:
+    es: Longitud característica.
+    en: Characteristic length.
+
+formulas:
+- id: balance_1d
+  title:
+    es: Ecuación de Balance 1D
+    en: 1D Balance Equation
+  equation: a = (-gp + mu*lapu + rho*gx)/rho
+  latex: a = \frac{-\frac{\partial p}{\partial x} + \mu \nabla^2 u + \rho g_x}{\rho}
+  rearrangements:
+  - target: a
+    equation: a = (-gp + mu*lapu + rho*gx)/rho
+    latex: a = \frac{-\frac{\partial p}{\partial x} + \mu \nabla^2 u + \rho g_x}{\rho}
+  category: law
+  relation_type: causal
+  physical_meaning:
+    es: La aceleración de un fluido es el resultado neto del empuje por presión, la difusión por viscosidad y la atracción gravitatoria.
+    en: Fluid acceleration is the net result of pressure push, viscous diffusion, and gravitational attraction.
+  constraints:
+  - es: Fluido incompresible y Newtoniano.
+  - en: Incompressible and Newtonian fluid.
+  validity:
+    es: Válido para flujos desarrollados donde los gradientes transversales son dominantes.
+    en: Valid for developed flows where transverse gradients are dominant.
+  dimension_check: true
+  calculable: true
+  motivo_no_calculable: ""
+  used_in:
+  - ecuacion-de-navier-stokes-intro
+  interpretation_tags: [ dinamica, fluidos-reales ]
+  result_semantics:
+    target: a
+    es: Representa la tasa de cambio de velocidad de una partícula fluida.
+    en: Represents the rate of change of velocity of a fluid particle.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications:
+    es: Define la relación entre el gradiente impulsor y la respuesta del fluido.
+    en: Defines the relationship between the driving gradient and the fluid response.
+  pedagogical_triggers: []
+  descripcion:
+    es: Forma simplificada de Navier-Stokes para flujo unidimensional.
+    en: Simplified form of Navier-Stokes for one-dimensional flow.
+
+- id: re_apoyo
+  title:
+    es: Número de Reynolds
+    en: Reynolds Number
+  equation: Re = rho*v*L/mu
+  latex: Re = \frac{\rho v L}{\mu}
+  rearrangements:
+  - target: Re
+    equation: Re = rho*v*L/mu
+    latex: Re = \frac{\rho v L}{\mu}
+  category: dimensionless_number
+  relation_type: analytical
+  physical_meaning:
+    es: Determina la importancia relativa de la inercia frente a la fricción viscosa.
+    en: Determines the relative importance of inertia versus viscous friction.
+  constraints:
+  - es: Requiere la definición de una longitud característica L.
+  - en: Requires the definition of a characteristic length L.
+  validity:
+    es: Aplicable a cualquier flujo newtoniano.
+    en: Applicable to any Newtonian flow.
+  dimension_check: true
+  calculable: true
+  motivo_no_calculable: ""
+  used_in:
+  - ecuacion-de-navier-stokes-intro
+  interpretation_tags: [ regimen-de-flujo ]
+  result_semantics:
+    target: Re
+    es: Un valor bajo indica flujo laminar; un valor alto indica turbulencia.
+    en: A low value indicates laminar flow; a high value indicates turbulence.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications:
+    es: Indica el cambio de régimen físico.
+    en: Indicates the change in physical regime.
+  pedagogical_triggers: []
+  descripcion:
+    es: Relación adimensional fundamental en mecánica de fluidos.
+    en: Fundamental dimensionless ratio in fluid mechanics.
+
+ui:
+  default_formula: balance_1d
+  groups:
+  - title:
+      es: Ecuaciones del Movimiento
+      en: Equations of Motion
+    items:
+    - balance_1d
+    - re_apoyo

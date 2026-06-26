@@ -1,0 +1,329 @@
+version: 1
+formulas:
+- id: normal_horizontal_base
+  title:
+    es: Normal en plano horizontal base
+    en: Normal force on a horizontal plane
+  equation: N = m*g
+  latex: N=mg
+  rearrangements:
+  - target: N
+    equation: N = m*g
+    latex: N=mg
+    constraints: []
+  - target: m
+    equation: m = N/g
+    latex: m=\frac{N}{g}
+    constraints:
+    - expr: g != 0
+      message:
+        es: g != 0
+        en: g != 0
+  - target: g
+    equation: g = N/m
+    latex: g=\frac{N}{m}
+    constraints:
+    - expr: m != 0
+      message:
+        es: m != 0
+        en: m != 0
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Relacion fisica usada en normal en planos.
+    en: Relacion fisica usada en normal en planos.
+  constraints: Aplicar solo dentro del modelo descrito.
+  validity:
+    es: Valida dentro del dominio de aplicacion del modelo usado.
+    en: Valida dentro del dominio de aplicacion del modelo usado.
+  dimension_check: Comprobar unidades antes de interpretar.
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - normal-en-planos
+  interpretation_tags:
+  - normal-en-planos
+  result_semantics:
+    target: N
+    meaning: Resulta util para interpretar N en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: normal_inclinado_base
+  title:
+    es: Normal en plano inclinado sin aceleracion perpendicular
+    en: Normal force on an inclined plane with no perpendicular acceleration
+  equation: N = m*g*cos(theta)
+  latex: N=mg\cos\theta
+  rearrangements:
+  - target: N
+    equation: N = m*g*cos(theta)
+    latex: N=mg\cos\theta
+    constraints: []
+  - target: m
+    equation: m = N/(g*cos(theta))
+    latex: m=\frac{N}{g\cos\theta}
+    constraints:
+    - expr: g != 0
+      message:
+        es: g != 0
+        en: g != 0
+    - expr: cos(theta) != 0
+      message:
+        es: cos(theta) != 0
+        en: cos(theta) != 0
+  - target: g
+    equation: g = N/(m*cos(theta))
+    latex: g=\frac{N}{m\cos\theta}
+    constraints:
+    - expr: m != 0
+      message:
+        es: m != 0
+        en: m != 0
+    - expr: cos(theta) != 0
+      message:
+        es: cos(theta) != 0
+        en: cos(theta) != 0
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Relacion fisica usada en normal en planos.
+    en: Relacion fisica usada en normal en planos.
+  constraints: Aplicar solo dentro del modelo descrito.
+  validity:
+    es: Valida dentro del dominio de aplicacion del modelo usado.
+    en: Valida dentro del dominio de aplicacion del modelo usado.
+  dimension_check: Comprobar unidades antes de interpretar.
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - normal-en-planos
+  interpretation_tags:
+  - normal-en-planos
+  result_semantics:
+    target: N
+    meaning: Resulta util para interpretar N en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: balance_perpendicular_general
+  title:
+    es: Balance general perpendicular al plano
+    en: General balance perpendicular to the plane
+  equation: N + Fextn - m*g*cos(theta) = m*aperp
+  latex: N + F_{ext,\perp} - mg\cos\theta = m a_{\perp}
+  rearrangements:
+  - target: N
+    equation: N = m*aperp + m*g*cos(theta) - Fextn
+    latex: N = m a_{\perp} + mg\cos\theta - F_{ext,\perp}
+    constraints: []
+  - target: Fextn
+    equation: Fextn = N + m*aperp - m*g*cos(theta)
+    latex: F_{ext,\perp} = N + m a_{\perp} - mg\cos\theta
+    constraints: []
+  - target: aperp
+    equation: aperp = (N + Fextn - m*g*cos(theta))/m
+    latex: a_{\perp} = \frac{N + F_{ext,\perp} - mg\cos\theta}{m}
+    constraints:
+    - expr: m != 0
+      message:
+        es: m != 0
+        en: m != 0
+  - target: g
+    equation: g = (N + Fextn - m*aperp)/(m*cos(theta))
+    latex: g = \frac{N + F_{ext,\perp} - m a_{\perp}}{m\cos\theta}
+    constraints:
+    - expr: m != 0
+      message:
+        es: m != 0
+        en: m != 0
+    - expr: cos(theta) != 0
+      message:
+        es: cos(theta) != 0
+        en: cos(theta) != 0
+  - target: theta
+    equation: theta = arccos(N/(m*g))
+    latex: \theta=\arccos\left(\frac{N}{mg}\right)
+    constraints:
+    - expr: m != 0
+      message:
+        es: m != 0
+        en: m != 0
+    - expr: g != 0
+      message:
+        es: g != 0
+        en: g != 0
+    - expr: abs(N/(m*g)) <= 1
+      message:
+        es: "|N/(m*g)| <= 1"
+        en: "|N/(m*g)| <= 1"
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Relacion fisica usada en normal en planos.
+    en: Relacion fisica usada en normal en planos.
+  constraints:
+    es: Modelo clasico con ejes adaptados al plano y contacto activo.
+    en: Classical model with axes adapted to the plane and an active contact constraint.
+  validity:
+    es: Valida dentro del dominio de aplicacion del modelo usado.
+    en: Valida dentro del dominio de aplicacion del modelo usado.
+  dimension_check: Comprobar unidades antes de interpretar.
+  calculable: false
+  motivo_no_calculable:
+    es: Requiere definir fuerzas externas y dinamica concreta del contacto.
+    en: Requires the specific external forces and the actual perpendicular dynamics
+      of the contact.
+  used_in:
+  - normal-en-planos
+  interpretation_tags:
+  - normal-en-planos
+  result_semantics:
+    target: N
+    meaning: Resulta util para interpretar N en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: condicion_contacto
+  title:
+    es: Condicion de contacto unilateral
+    en: Unilateral contact condition
+  equation: N >= 0
+  latex: N\ge 0
+  rearrangements: []
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Relacion fisica usada en normal en planos.
+    en: Relacion fisica usada en normal en planos.
+  constraints:
+    es: Aplicable a contacto unilateral sin adhesion.
+    en: Applies to unilateral contact without adhesion.
+  validity:
+    es: Valida dentro del dominio de aplicacion del modelo usado.
+    en: Valida dentro del dominio de aplicacion del modelo usado.
+  dimension_check: Comprobar unidades antes de interpretar.
+  calculable: false
+  motivo_no_calculable:
+    es: Criterio de validez fisica del modelo de contacto; si falla, se pierde contacto.
+    en: Physical validity criterion for the contact model; if it fails, the body loses
+      contact with the surface.
+  used_in:
+  - normal-en-planos
+  interpretation_tags:
+  - normal-en-planos
+  result_semantics:
+    target: N
+    meaning: Resulta util para interpretar N en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: gravedad_desde_normal_horizontal
+  title:
+    es: Gravedad local desde la normal horizontal
+    en: Local gravity from horizontal-plane normal force
+  equation: g = N/m
+  latex: g=\frac{N}{m}
+  rearrangements:
+  - target: g
+    equation: g = N/m
+    latex: g=\frac{N}{m}
+    constraints:
+    - expr: m != 0
+      message:
+        es: m != 0
+        en: m != 0
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Permite interpretar g a partir de la normal en el caso horizontal base.
+    en: Allows g to be interpreted from the normal force in the basic horizontal case.
+  constraints:
+    es: Solo aplicable a plano horizontal sin aceleracion vertical.
+    en: Only applies to a horizontal plane with no vertical acceleration.
+  validity:
+    es: Valida cuando el apoyo es horizontal y la normal coincide con el peso.
+    en: Valid when the support is horizontal and the normal force matches weight.
+  dimension_check: Comprobar unidades antes de interpretar.
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - normal-en-planos
+  interpretation_tags:
+  - normal-en-planos
+  result_semantics:
+    target: g
+    meaning: Resulta util para interpretar g en el contexto del leaf.
+  domain_checks:
+  - expr: m != 0
+    message:
+      es: m != 0
+      en: m != 0
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba si el problema pertenece realmente al caso horizontal base.
+      en: Check whether the problem really belongs to the basic horizontal case.

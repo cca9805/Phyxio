@@ -1,0 +1,335 @@
+version: 5.0.0
+leaf: probabilidad-y-ensembles
+ui:
+  default_formula: normalizacion_ensemble
+formulas:
+- id: normalizacion_ensemble
+  title:
+    es: Normalización del ensemble
+    en: Ensemble normalization
+  equation: sum(p_i)=1
+  latex: \sum_i p_i = 1
+  rearrangements:
+  - id: despeje_probabilidad_restante
+    equation: p_j=1-sum(p_i_except_j)
+    latex: p_j=1-\sum_{i\ne j}p_i
+    target: probabilidad_estado
+  category: statistical
+  relation_type: definition
+  physical_meaning:
+    es: Garantiza que el ensemble reparte toda la población estadística entre estados compatibles.
+    en: Ensures that the ensemble distributes the whole statistical population among compatible states.
+  constraints:
+    es: Cada estado contado pertenece al mismo ensemble y los sucesos son excluyentes.
+    en: Each counted state belongs to the same ensemble and the events are exclusive.
+  validity:
+    es: Válida para ensembles discretos con estados bien definidos y probabilidades normalizables.
+    en: Valid for discrete ensembles with well-defined states and normalizable probabilities.
+  dimension_check:
+    status: ok
+    expression: coherent with dimensionless probabilities and ensemble averages
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  - interpretacion.yaml
+  interpretation_tags:
+  - ensemble
+  - probability
+  - statistical-average
+  result_semantics:
+    target: probabilidad_estado
+    kind: scalar
+    sign_meaning:
+      es: El signo solo tiene sentido para desviaciones o promedios de magnitudes con signo; las probabilidades no son negativas.
+      en: The sign only matters for deviations or averages of signed quantities; probabilities are non-negative.
+    absolute_value_meaning:
+      es: El valor absoluto mide tamaño estadístico, peso o promedio dentro del ensemble.
+      en: The absolute value measures statistical size, weight, or average within the ensemble.
+  domain_checks:
+  - id: normalizacion_ensemble_domain_probabilities
+    status: ok
+    text:
+      es: Las probabilidades deben estar entre 0 y 1 y normalizadas.
+      en: Probabilities must lie between 0 and 1 and be normalized.
+  coherence_checks:
+  - id: normalizacion_ensemble_coherence_ids
+    status: ok
+    text:
+      es: Las magnitudes usadas deben pertenecer al mismo ensemble.
+      en: The quantities used must belong to the same ensemble.
+  graph_implications:
+    es: La gráfica muestra cómo una probabilidad o promedio cambia al recorrer estados del ensemble.
+    en: The graph shows how a probability or average changes across ensemble states.
+  pedagogical_triggers:
+  - id: normalizacion_ensemble_trigger_normalization
+    text:
+      es: Pregunta si el alumno ha comprobado la suma total de probabilidades.
+      en: Ask whether the student has checked the total probability sum.
+- id: promedio_ensemble
+  title:
+    es: Promedio de una magnitud en el ensemble
+    en: Ensemble average of a quantity
+  equation: A_prom=sum(p_i*A_i)
+  latex: \langle A\rangle=\sum_i p_i A_i
+  rearrangements:
+  - id: contribucion_estado
+    equation: p_i*A_i=A_contrib_i
+    latex: p_i A_i=A_i^{(\mathrm{contrib})}
+    target: valor_medio_ensemble
+  category: statistical
+  relation_type: definition
+  physical_meaning:
+    es: Convierte muchos valores microscópicos posibles en una predicción macroscópica media.
+    en: Turns many possible microscopic values into one macroscopic average prediction.
+  constraints:
+    es: Las probabilidades deben estar normalizadas y A_i debe referirse a la misma magnitud en cada estado.
+    en: Probabilities must be normalized and A_i must refer to the same quantity in each state.
+  validity:
+    es: Válida cuando el ensemble representa adecuadamente la preparación física del sistema.
+    en: Valid when the ensemble adequately represents the physical preparation of the system.
+  dimension_check:
+    status: ok
+    expression: coherent with dimensionless probabilities and ensemble averages
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  - interpretacion.yaml
+  interpretation_tags:
+  - ensemble
+  - probability
+  - statistical-average
+  result_semantics:
+    target: valor_medio_ensemble
+    kind: scalar
+    sign_meaning:
+      es: El signo solo tiene sentido para desviaciones o promedios de magnitudes con signo; las probabilidades no son negativas.
+      en: The sign only matters for deviations or averages of signed quantities; probabilities are non-negative.
+    absolute_value_meaning:
+      es: El valor absoluto mide tamaño estadístico, peso o promedio dentro del ensemble.
+      en: The absolute value measures statistical size, weight, or average within the ensemble.
+  domain_checks:
+  - id: promedio_ensemble_domain_probabilities
+    status: ok
+    text:
+      es: Las probabilidades deben estar entre 0 y 1 y normalizadas.
+      en: Probabilities must lie between 0 and 1 and be normalized.
+  coherence_checks:
+  - id: promedio_ensemble_coherence_ids
+    status: ok
+    text:
+      es: Las magnitudes usadas deben pertenecer al mismo ensemble.
+      en: The quantities used must belong to the same ensemble.
+  graph_implications:
+    es: La gráfica muestra cómo una probabilidad o promedio cambia al recorrer estados del ensemble.
+    en: The graph shows how a probability or average changes across ensemble states.
+  pedagogical_triggers:
+  - id: promedio_ensemble_trigger_normalization
+    text:
+      es: Pregunta si el alumno ha comprobado la suma total de probabilidades.
+      en: Ask whether the student has checked the total probability sum.
+- id: probabilidad_frecuencia_ensemble
+  title:
+    es: Probabilidad como frecuencia de ensemble
+    en: Probability as ensemble frequency
+  equation: p_i=n_i/N_ens
+  latex: p_i=\frac{n_i}{N_{\mathrm{ens}}}
+  rearrangements:
+  - id: conteo_estado
+    equation: n_i=p_i*N_ens
+    latex: n_i=p_iN_{\mathrm{ens}}
+    target: conteo_sistemas
+  category: statistical
+  relation_type: definition
+  physical_meaning:
+    es: Interpreta la probabilidad como fracción de copias del ensemble que ocupan un estado.
+    en: Interprets probability as the fraction of ensemble copies occupying one state.
+  constraints:
+    es: El número de copias debe ser grande y todas deben prepararse bajo las mismas restricciones macroscópicas.
+    en: The number of copies must be large and all must be prepared under the same macroscopic constraints.
+  validity:
+    es: Es una interpretación estadística útil para ensembles idealizados o experimentos repetidos.
+    en: It is a statistical interpretation useful for idealized ensembles or repeated experiments.
+  dimension_check:
+    status: ok
+    expression: coherent with dimensionless probabilities and ensemble averages
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  - interpretacion.yaml
+  interpretation_tags:
+  - ensemble
+  - probability
+  - statistical-average
+  result_semantics:
+    target: probabilidad_estado
+    kind: scalar
+    sign_meaning:
+      es: El signo solo tiene sentido para desviaciones o promedios de magnitudes con signo; las probabilidades no son negativas.
+      en: The sign only matters for deviations or averages of signed quantities; probabilities are non-negative.
+    absolute_value_meaning:
+      es: El valor absoluto mide tamaño estadístico, peso o promedio dentro del ensemble.
+      en: The absolute value measures statistical size, weight, or average within the ensemble.
+  domain_checks:
+  - id: probabilidad_frecuencia_ensemble_domain_probabilities
+    status: ok
+    text:
+      es: Las probabilidades deben estar entre 0 y 1 y normalizadas.
+      en: Probabilities must lie between 0 and 1 and be normalized.
+  coherence_checks:
+  - id: probabilidad_frecuencia_ensemble_coherence_ids
+    status: ok
+    text:
+      es: Las magnitudes usadas deben pertenecer al mismo ensemble.
+      en: The quantities used must belong to the same ensemble.
+  graph_implications:
+    es: La gráfica muestra cómo una probabilidad o promedio cambia al recorrer estados del ensemble.
+    en: The graph shows how a probability or average changes across ensemble states.
+  pedagogical_triggers:
+  - id: probabilidad_frecuencia_ensemble_trigger_normalization
+    text:
+      es: Pregunta si el alumno ha comprobado la suma total de probabilidades.
+      en: Ask whether the student has checked the total probability sum.
+- id: varianza_ensemble
+  title:
+    es: Varianza dentro del ensemble
+    en: Ensemble variance
+  equation: sigma_A2=sum(p_i*(A_i-A_prom)^2)
+  latex: \sigma_A^2=\sum_i p_i(A_i-\langle A\rangle)^2
+  rearrangements:
+  - id: fluctuacion_rms
+    equation: sigma_A=sqrt(sigma_A2)
+    latex: \sigma_A=\sqrt{\sigma_A^2}
+    target: fluctuacion_ensemble
+  category: statistical
+  relation_type: definition
+  physical_meaning:
+    es: Mide cuánto se dispersan los valores microscópicos alrededor del promedio del ensemble.
+    en: Measures how microscopic values spread around the ensemble average.
+  constraints:
+    es: Usa el mismo observable en todos los estados y una distribución normalizada.
+    en: Use the same observable in all states and a normalized distribution.
+  validity:
+    es: Válida si las fluctuaciones pertenecen al ensemble descrito y no a cambios externos de preparación.
+    en: Valid if fluctuations belong to the described ensemble and not to external preparation changes.
+  dimension_check:
+    status: ok
+    expression: coherent with dimensionless probabilities and ensemble averages
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  - interpretacion.yaml
+  interpretation_tags:
+  - ensemble
+  - probability
+  - statistical-average
+  result_semantics:
+    target: fluctuacion_ensemble
+    kind: scalar
+    sign_meaning:
+      es: El signo solo tiene sentido para desviaciones o promedios de magnitudes con signo; las probabilidades no son negativas.
+      en: The sign only matters for deviations or averages of signed quantities; probabilities are non-negative.
+    absolute_value_meaning:
+      es: El valor absoluto mide tamaño estadístico, peso o promedio dentro del ensemble.
+      en: The absolute value measures statistical size, weight, or average within the ensemble.
+  domain_checks:
+  - id: varianza_ensemble_domain_probabilities
+    status: ok
+    text:
+      es: Las probabilidades deben estar entre 0 y 1 y normalizadas.
+      en: Probabilities must lie between 0 and 1 and be normalized.
+  coherence_checks:
+  - id: varianza_ensemble_coherence_ids
+    status: ok
+    text:
+      es: Las magnitudes usadas deben pertenecer al mismo ensemble.
+      en: The quantities used must belong to the same ensemble.
+  graph_implications:
+    es: La gráfica muestra cómo una probabilidad o promedio cambia al recorrer estados del ensemble.
+    en: The graph shows how a probability or average changes across ensemble states.
+  pedagogical_triggers:
+  - id: varianza_ensemble_trigger_normalization
+    text:
+      es: Pregunta si el alumno ha comprobado la suma total de probabilidades.
+      en: Ask whether the student has checked the total probability sum.
+- id: peso_ensemble_normalizado
+  title:
+    es: Peso estadístico normalizado
+    en: Normalized statistical weight
+  equation: p_i=w_i/sum(w_i)
+  latex: p_i=\frac{w_i}{\sum_j w_j}
+  rearrangements:
+  - id: peso_desde_probabilidad
+    equation: w_i=p_i*sum(w_i)
+    latex: w_i=p_i\sum_j w_j
+    target: peso_estadistico
+  category: statistical
+  relation_type: definition
+  physical_meaning:
+    es: Convierte pesos relativos en probabilidades físicas comparables dentro del ensemble.
+    en: Turns relative weights into physical probabilities comparable within the ensemble.
+  constraints:
+    es: Los pesos deben ser no negativos y pertenecer a la misma regla estadística.
+    en: Weights must be non-negative and belong to the same statistical rule.
+  validity:
+    es: Válida para descripciones donde solo importan pesos relativos antes de normalizar.
+    en: Valid for descriptions where only relative weights matter before normalization.
+  dimension_check:
+    status: ok
+    expression: coherent with dimensionless probabilities and ensemble averages
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  - interpretacion.yaml
+  interpretation_tags:
+  - ensemble
+  - probability
+  - statistical-average
+  result_semantics:
+    target: probabilidad_estado
+    kind: scalar
+    sign_meaning:
+      es: El signo solo tiene sentido para desviaciones o promedios de magnitudes con signo; las probabilidades no son negativas.
+      en: The sign only matters for deviations or averages of signed quantities; probabilities are non-negative.
+    absolute_value_meaning:
+      es: El valor absoluto mide tamaño estadístico, peso o promedio dentro del ensemble.
+      en: The absolute value measures statistical size, weight, or average within the ensemble.
+  domain_checks:
+  - id: peso_ensemble_normalizado_domain_probabilities
+    status: ok
+    text:
+      es: Las probabilidades deben estar entre 0 y 1 y normalizadas.
+      en: Probabilities must lie between 0 and 1 and be normalized.
+  coherence_checks:
+  - id: peso_ensemble_normalizado_coherence_ids
+    status: ok
+    text:
+      es: Las magnitudes usadas deben pertenecer al mismo ensemble.
+      en: The quantities used must belong to the same ensemble.
+  graph_implications:
+    es: La gráfica muestra cómo una probabilidad o promedio cambia al recorrer estados del ensemble.
+    en: The graph shows how a probability or average changes across ensemble states.
+  pedagogical_triggers:
+  - id: peso_ensemble_normalizado_trigger_normalization
+    text:
+      es: Pregunta si el alumno ha comprobado la suma total de probabilidades.
+      en: Ask whether the student has checked the total probability sum.

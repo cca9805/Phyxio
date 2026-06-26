@@ -1,0 +1,1042 @@
+const e=`version: 2
+id: interpretacion-sistemas-reales
+leaf_id: sistemas-reales
+nombre:
+  es: Interpretacion de Sistemas reales
+  en: Interpretation of Real-World Systems
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: dinamica
+  parent_id: sistemas-mixtos
+  ruta_relativa: fisica-clasica/mecanica/dinamica/aplicaciones/sistemas-mixtos/sistemas-reales
+dependencies:
+  formulas:
+  - fuerza_neta_real
+  - segunda_ley_efectiva
+  - rendimiento_potencia
+  - potencia_perdida
+  - aceleracion_con_eficiencia
+  - aceleracion_ideal
+  - fuerza_equivalente_torque
+  - potencia_traslacional
+  - segunda_ley_masa_variable
+  magnitudes:
+  - m
+  - F_ap
+  - F_loss
+  - F_net
+  - eta
+  - a
+  - a_ideal
+  - P_in
+  - P_out
+  - P_loss
+  - tau_fr
+  - m_dot
+  - F
+  - P
+  - v
+  - r
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  a:
+    summary_rules:
+    - id: a_summary_positive
+      when: "a > 0"
+      status: ok
+      text:
+        es: "El sistema acelera a = {a} m/s², que es el {pct:.0%} de la aceleración ideal a_ideal = {a_ideal} m/s². Las pérdidas consumen el {loss_pct:.0%} del potencial de aceleración."
+        en: "The system accelerates at a = {a} m/s², which is {pct:.0%} of the ideal acceleration a_ideal = {a_ideal} m/s². Losses consume {loss_pct:.0%} of the acceleration potential."
+    - id: a_summary_zero
+      when: "a == 0"
+      status: info
+      text:
+        es: "El sistema está en régimen estacionario: a = 0. La fuerza aplicada compensa exactamente las pérdidas. No hay aceleración neta."
+        en: "The system is in steady state: a = 0. The applied force exactly compensates losses. There is no net acceleration."
+    - id: a_summary_negative
+      when: "a < 0"
+      status: warning
+      text:
+        es: "La aceleración resulta negativa (a = {a} m/s²). Esto indica que las pérdidas superan la fuerza motriz y el sistema no puede arrancar con los parámetros actuales."
+        en: "The acceleration is negative (a = {a} m/s²). This means losses exceed the driving force and the system cannot start with the current parameters."
+    coherence_rules:
+    - id: a_coherence_vs_ideal
+      when: "a > a_ideal"
+      status: error
+      text:
+        es: "ERROR: a > a_ideal es físicamente imposible en un sistema con pérdidas (eta <= 1). Revisar el cálculo de F_net o la masa m."
+        en: "ERROR: a > a_ideal is physically impossible in a system with losses (eta <= 1). Check the F_net calculation or mass m."
+    - id: a_coherence_vs_eta
+      when: "abs(a - eta * a_ideal) > 0.01 * a_ideal AND a_ideal > 0"
+      status: warning
+      text:
+        es: "Inconsistencia: la relación a = eta * a_ideal no se cumple con los datos actuales. Verificar que eta, F_ap, F_loss y m sean coherentes entre sí."
+        en: "Inconsistency: the relation a = eta * a_ideal does not hold with the current data. Check that eta, F_ap, F_loss and m are mutually consistent."
+    - id: a_coherence_ok
+      when: "a <= a_ideal AND a >= 0"
+      status: ok
+      text:
+        es: "Coherencia verificada: a <= a_ideal y a >= 0, como es de esperar en un sistema real con pérdidas positivas."
+        en: "Coherence verified: a <= a_ideal and a >= 0, as expected in a real system with positive losses."
+    physical_reading_rules:
+    - id: a_physical_high_efficiency
+      when: "a_ideal > 0 AND a / a_ideal > 0.9"
+      status: ok
+      text:
+        es: "El sistema es muy eficiente: la aceleración real supera el 90% de la ideal. Las pérdidas son pequeñas y el diseño mecánico es satisfactorio."
+        en: "The system is highly efficient: real acceleration exceeds 90% of ideal. Losses are small and the mechanical design is satisfactory."
+    - id: a_physical_medium_efficiency
+      when: "a_ideal > 0 AND a / a_ideal > 0.6 AND a / a_ideal <= 0.9"
+      status: info
+      text:
+        es: "Eficiencia aceptable: la aceleración real está entre el 60% y el 90% de la ideal. Hay margen de mejora reduciendo F_loss."
+        en: "Acceptable efficiency: real acceleration is between 60% and 90% of ideal. There is room for improvement by reducing F_loss."
+    - id: a_physical_low_efficiency
+      when: "a_ideal > 0 AND a / a_ideal <= 0.6"
+      status: warning
+      text:
+        es: "Eficiencia baja: la aceleración real es inferior al 60% de la ideal. Las pérdidas son dominantes; revisar el diseño de la transmisión o la lubricación."
+        en: "Low efficiency: real acceleration is below 60% of ideal. Losses are dominant; review transmission design or lubrication."
+    model_validity_rules:
+    - id: a_validity_ok
+      when: "a > 0 AND a < 20"
+      status: ok
+      text:
+        es: "Resultado en rango operativo normal (0 a 20 m/s²) para sistemas de transporte industrial. El modelo de pérdidas constantes es aplicable."
+        en: "Result in normal operating range (0 to 20 m/s²) for industrial transport systems. The constant-loss model is applicable."
+    - id: a_validity_high
+      when: "a >= 20"
+      status: warning
+      text:
+        es: "Aceleración superior a 20 m/s²: inusual para sistemas de transporte. Verificar que m incluya toda la inercia efectiva y que F_loss no sea subestimada."
+        en: "Acceleration above 20 m/s²: unusual for transport systems. Check that m includes all effective inertia and that F_loss is not underestimated."
+    graph_rules:
+    - id: a_graph_coord
+      when: "a > 0"
+      status: info
+      text:
+        es: "En el gráfico de coordenadas, la pendiente de v(t) refleja a = {a} m/s². La curva real (pendiente a) debe quedar siempre por debajo de la curva ideal (pendiente a_ideal)."
+        en: "In the coordinate graph, the slope of v(t) reflects a = {a} m/s². The real curve (slope a) must always lie below the ideal curve (slope a_ideal)."
+    likely_errors:
+    - id: a_error_ideal_as_real
+      when: "a_ideal > 0 AND abs(a - a_ideal) < 0.001"
+      status: warning
+      text:
+        es: "La aceleración calculada coincide exactamente con a_ideal. Si el enunciado menciona pérdidas o eficiencia, esto indica que F_loss no fue incluida en el balance. Verificar F_net = F_ap - F_loss."
+        en: "The calculated acceleration matches a_ideal exactly. If the problem mentions losses or efficiency, this means F_loss was not included in the balance. Check F_net = F_ap - F_loss."
+    - id: a_error_negative
+      when: "a < 0"
+      status: error
+      text:
+        es: "a negativa con F_ap positiva indica que F_loss > F_ap. El sistema está bloqueado. Revisar los datos o reconocer que el motor es insuficiente para este nivel de pérdidas."
+        en: "Negative a with positive F_ap means F_loss > F_ap. The system is blocked. Review data or acknowledge that the motor is insufficient for this level of losses."
+    next_step_rules:
+    - id: a_next_calculate_power
+      when: "a > 0"
+      status: info
+      text:
+        es: "Con a calculada, el siguiente paso es obtener P_out = F_net * v y verificar el balance de potencias con rendimiento_potencia y potencia_perdida."
+        en: "With a calculated, the next step is to obtain P_out = F_net * v and verify the power balance using rendimiento_potencia and potencia_perdida."
+
+  F_net:
+    summary_rules:
+    - id: F_net_summary_positive
+      when: "F_net > 0"
+      status: ok
+      text:
+        es: "F_net = {F_net} N es positiva: el sistema puede acelerar. Representa el {pct:.0%} de la fuerza aplicada F_ap; el {loss_pct:.0%} restante se disipa como pérdidas."
+        en: "F_net = {F_net} N is positive: the system can accelerate. It represents {pct:.0%} of the applied force F_ap; the remaining {loss_pct:.0%} is dissipated as losses."
+    - id: F_net_summary_zero
+      when: "F_net == 0"
+      status: info
+      text:
+        es: "F_net = 0 N: la fuerza aplicada es exactamente igual a las pérdidas. El sistema está en equilibrio de fuerzas; no hay aceleración."
+        en: "F_net = 0 N: the applied force exactly equals losses. The system is in force equilibrium; there is no acceleration."
+    - id: F_net_summary_negative
+      when: "F_net < 0"
+      status: error
+      text:
+        es: "F_net = {F_net} N es negativa: F_loss supera F_ap. El sistema no puede arrancar. El motor debe suministrar al menos F_ap_min = F_loss = {F_loss} N."
+        en: "F_net = {F_net} N is negative: F_loss exceeds F_ap. The system cannot start. The motor must supply at least F_ap_min = F_loss = {F_loss} N."
+    coherence_rules:
+    - id: F_net_coherence_above_F_ap
+      when: "F_net > F_ap"
+      status: error
+      text:
+        es: "ERROR: F_net > F_ap viola la conservación de energía con pérdidas positivas. Revisar el signo de F_loss en el balance."
+        en: "ERROR: F_net > F_ap violates energy conservation with positive losses. Check the sign of F_loss in the balance."
+    - id: F_net_coherence_ok
+      when: "F_net <= F_ap AND F_net >= 0"
+      status: ok
+      text:
+        es: "Coherencia verificada: 0 <= F_net <= F_ap, como corresponde a un sistema con pérdidas positivas."
+        en: "Coherence verified: 0 <= F_net <= F_ap, as expected for a system with positive losses."
+    physical_reading_rules:
+    - id: F_net_physical_efficiency
+      when: "F_ap > 0"
+      status: info
+      text:
+        es: "La fracción F_net/F_ap = {ratio:.2f} mide la eficiencia de fuerza del sistema. Valores cercanos a 1 indican pocas pérdidas; valores bajos indican diseño ineficiente."
+        en: "The ratio F_net/F_ap = {ratio:.2f} measures the force efficiency of the system. Values close to 1 indicate low losses; low values indicate inefficient design."
+    model_validity_rules:
+    - id: F_net_validity_ok
+      when: "F_net > 0 AND F_loss < F_ap"
+      status: ok
+      text:
+        es: "El modelo es válido: F_net positiva y F_loss < F_ap confirman que el sistema opera en el dominio traslacional con pérdidas manejables."
+        en: "The model is valid: positive F_net and F_loss < F_ap confirm that the system operates in the translational domain with manageable losses."
+    - id: F_net_validity_blocked
+      when: "F_net <= 0"
+      status: error
+      text:
+        es: "El sistema está fuera del dominio de validez del modelo traslacional: F_loss >= F_ap impide el movimiento. El análisis dinámico no aplica."
+        en: "The system is outside the validity domain of the translational model: F_loss >= F_ap prevents motion. Dynamic analysis does not apply."
+    graph_rules:
+    - id: F_net_graph
+      when: "F_net > 0"
+      status: info
+      text:
+        es: "F_net determina la pendiente en el diagrama de cuerpo libre. En el gráfico Coord, F_net positiva genera una curva v(t) con pendiente positiva."
+        en: "F_net determines the slope in the free-body diagram. In the Coord graph, positive F_net generates a v(t) curve with positive slope."
+    likely_errors:
+    - id: F_net_error_ignored
+      when: "F_net > F_ap * 0.98 AND F_ap > 0"
+      status: warning
+      text:
+        es: "F_net es casi igual a F_ap (diferencia < 2%). Si el enunciado menciona pérdidas, verificar que F_loss fue incluida correctamente."
+        en: "F_net is almost equal to F_ap (difference < 2%). If the problem mentions losses, verify that F_loss was correctly included."
+    next_step_rules:
+    - id: F_net_next
+      when: "F_net > 0"
+      status: info
+      text:
+        es: "Con F_net calculada, aplicar segunda_ley_efectiva: a = F_net / m para obtener la aceleración real."
+        en: "With F_net calculated, apply segunda_ley_efectiva: a = F_net / m to obtain the real acceleration."
+
+  eta:
+    summary_rules:
+    - id: eta_summary_high
+      when: "eta > 0.9"
+      status: ok
+      text:
+        es: "Rendimiento alto: eta = {eta:.2f}. El sistema aprovecha el {pct:.0%} de la potencia de entrada como potencia útil. Las pérdidas representan solo el {loss_pct:.0%} de P_in."
+        en: "High efficiency: eta = {eta:.2f}. The system uses {pct:.0%} of input power as useful power. Losses represent only {loss_pct:.0%} of P_in."
+    - id: eta_summary_medium
+      when: "eta > 0.7 AND eta <= 0.9"
+      status: info
+      text:
+        es: "Rendimiento aceptable: eta = {eta:.2f}. Eficiencia industrial estándar. Las pérdidas representan el {loss_pct:.0%} de P_in. Hay margen de mejora con mejor lubricación o transmisión."
+        en: "Acceptable efficiency: eta = {eta:.2f}. Standard industrial efficiency. Losses represent {loss_pct:.0%} of P_in. There is room for improvement with better lubrication or transmission."
+    - id: eta_summary_low
+      when: "eta <= 0.7 AND eta > 0"
+      status: warning
+      text:
+        es: "Rendimiento bajo: eta = {eta:.2f}. Las pérdidas consumen el {loss_pct:.0%} de P_in. El diseño del sistema de transmisión debe revisarse."
+        en: "Low efficiency: eta = {eta:.2f}. Losses consume {loss_pct:.0%} of P_in. The transmission system design should be reviewed."
+    - id: eta_summary_impossible
+      when: "eta > 1"
+      status: error
+      text:
+        es: "ERROR: eta = {eta:.3f} > 1 es físicamente imposible para una máquina pasiva. Revisar si P_out y P_in están intercambiados en el cálculo."
+        en: "ERROR: eta = {eta:.3f} > 1 is physically impossible for a passive machine. Check whether P_out and P_in are swapped in the calculation."
+    coherence_rules:
+    - id: eta_coherence_impossible
+      when: "eta > 1"
+      status: error
+      text:
+        es: "eta > 1 viola el primer principio de la termodinámica. Ningún sistema pasivo puede entregar más potencia útil de la que recibe. Revisar la asignación de P_out y P_in."
+        en: "eta > 1 violates the first law of thermodynamics. No passive system can deliver more useful power than it receives. Check the assignment of P_out and P_in."
+    - id: eta_coherence_ok
+      when: "eta > 0 AND eta <= 1"
+      status: ok
+      text:
+        es: "eta ∈ (0, 1]: coherencia verificada. El valor está en el dominio físicamente admisible."
+        en: "eta ∈ (0, 1]: coherence verified. The value is within the physically admissible domain."
+    physical_reading_rules:
+    - id: eta_physical_meaning
+      when: "eta > 0 AND eta <= 1"
+      status: info
+      text:
+        es: "eta = {eta:.2f} significa que de cada 100 J de energía suministrada al sistema, {useful:.0f} J llegan como trabajo útil y {lost:.0f} J se disipan como calor."
+        en: "eta = {eta:.2f} means that for every 100 J of energy supplied to the system, {useful:.0f} J arrive as useful work and {lost:.0f} J are dissipated as heat."
+    model_validity_rules:
+    - id: eta_validity_range
+      when: "eta >= 0.5 AND eta <= 1"
+      status: ok
+      text:
+        es: "eta dentro del rango operativo del modelo (0.5–1.0). El modelo de pérdidas constantes es aplicable."
+        en: "eta within the model's operating range (0.5–1.0). The constant-loss model is applicable."
+    - id: eta_validity_low_range
+      when: "eta < 0.5 AND eta > 0"
+      status: warning
+      text:
+        es: "eta < 0.5: las pérdidas superan la potencia útil. El modelo de pérdidas constantes pierde fiabilidad; considerar el modelo extendido."
+        en: "eta < 0.5: losses exceed useful power. The constant-loss model loses reliability; consider the extended model."
+    graph_rules:
+    - id: eta_graph
+      when: "eta > 0 AND eta <= 1"
+      status: info
+      text:
+        es: "En el gráfico de potencias, eta determina la brecha entre P_in y P_out. Una eta mayor reduce visualmente la zona de pérdidas."
+        en: "In the power graph, eta determines the gap between P_in and P_out. A higher eta visually reduces the loss area."
+    likely_errors:
+    - id: eta_error_inverted
+      when: "eta > 1"
+      status: error
+      text:
+        es: "eta > 1 es el error más frecuente en este leaf. Indica que el cociente P_in/P_out fue calculado en lugar de P_out/P_in. Corregir invirtiendo el cociente."
+        en: "eta > 1 is the most common error in this leaf. It indicates that P_in/P_out was calculated instead of P_out/P_in. Correct by inverting the ratio."
+    next_step_rules:
+    - id: eta_next_power_balance
+      when: "eta > 0 AND eta <= 1"
+      status: info
+      text:
+        es: "Con eta calculada, verificar el balance: P_loss = P_in * (1 - eta) y que P_in = P_out + P_loss cierra correctamente."
+        en: "With eta calculated, verify the balance: P_loss = P_in * (1 - eta) and that P_in = P_out + P_loss closes correctly."
+
+  P_loss:
+    summary_rules:
+    - id: P_loss_summary_normal
+      when: "P_loss > 0 AND P_in > 0 AND P_loss < P_in"
+      status: info
+      text:
+        es: "P_loss = {P_loss:.1f} W, que representa el {pct:.1%} de P_in. Esta potencia se disipa como calor en la transmisión y los rodamientos."
+        en: "P_loss = {P_loss:.1f} W, representing {pct:.1%} of P_in. This power is dissipated as heat in the transmission and bearings."
+    - id: P_loss_summary_zero
+      when: "P_loss == 0"
+      status: warning
+      text:
+        es: "P_loss = 0 W: esto corresponde a un sistema ideal (eta = 1). Si el enunciado describe un sistema real, revisar el balance de potencias."
+        en: "P_loss = 0 W: this corresponds to an ideal system (eta = 1). If the problem describes a real system, review the power balance."
+    - id: P_loss_summary_high
+      when: "P_in > 0 AND P_loss / P_in > 0.5"
+      status: warning
+      text:
+        es: "P_loss representa más del 50% de P_in. Las pérdidas dominan el balance energético. El sistema es altamente ineficiente o hay un error en los datos."
+        en: "P_loss represents more than 50% of P_in. Losses dominate the energy balance. The system is highly inefficient or there is a data error."
+    coherence_rules:
+    - id: P_loss_coherence_above_P_in
+      when: "P_in > 0 AND P_loss > P_in"
+      status: error
+      text:
+        es: "ERROR: P_loss > P_in es físicamente imposible. No puede disiparse más potencia de la que entra. Revisar los valores de P_out y P_in."
+        en: "ERROR: P_loss > P_in is physically impossible. More power cannot be dissipated than enters. Check the values of P_out and P_in."
+    - id: P_loss_coherence_ok
+      when: "P_loss >= 0 AND P_in > 0 AND P_loss < P_in"
+      status: ok
+      text:
+        es: "Balance de potencias coherente: P_loss < P_in y P_loss >= 0."
+        en: "Coherent power balance: P_loss < P_in and P_loss >= 0."
+    physical_reading_rules:
+    - id: P_loss_physical_maintenance
+      when: "P_loss > 0"
+      status: info
+      text:
+        es: "P_loss es el indicador clave de mantenimiento. Si P_loss aumenta un 15% respecto al valor nominal sin cambio en la carga, indica desgaste en la transmisión o contaminación de los rodamientos."
+        en: "P_loss is the key maintenance indicator. If P_loss increases 15% above the nominal value without change in load, it indicates wear in the transmission or contamination of bearings."
+    model_validity_rules:
+    - id: P_loss_validity_ok
+      when: "P_loss >= 0 AND P_in > 0 AND P_loss <= P_in"
+      status: ok
+      text:
+        es: "P_loss dentro del rango admisible. El balance de potencias se cierra correctamente."
+        en: "P_loss within the admissible range. The power balance closes correctly."
+    graph_rules:
+    - id: P_loss_graph
+      when: "P_loss > 0"
+      status: info
+      text:
+        es: "P_loss se representa como la brecha entre P_in y P_out en el gráfico de potencias. Una brecha constante indica pérdidas estacionarias; una brecha creciente indica deterioro del sistema."
+        en: "P_loss is shown as the gap between P_in and P_out in the power graph. A constant gap indicates stationary losses; a growing gap indicates system deterioration."
+    likely_errors:
+    - id: P_loss_error_zero
+      when: "P_loss == 0 AND P_in > 0"
+      status: warning
+      text:
+        es: "P_loss = 0 en un sistema real es una señal de error. Verificar que P_out < P_in y recalcular P_loss = P_in - P_out."
+        en: "P_loss = 0 in a real system is an error signal. Verify that P_out < P_in and recalculate P_loss = P_in - P_out."
+    next_step_rules:
+    - id: P_loss_next
+      when: "P_loss > 0"
+      status: info
+      text:
+        es: "P_loss calculada permite estimar el calentamiento del sistema: temperatura aproximada proporcional a P_loss. Si P_loss es alta, evaluar si se requiere disipador térmico o refrigeración adicional."
+        en: "Calculated P_loss allows estimating system heating: approximate temperature proportional to P_loss. If P_loss is high, evaluate whether a heat sink or additional cooling is needed."
+
+  F_ap:
+    summary_rules:
+    - id: F_ap_summary
+      when: "F_ap > 0"
+      status: info
+      text:
+        es: "F_ap = {F_ap} N es la fuerza motriz total. De ella, F_net = F_ap - F_loss llega a acelerar el sistema; el resto se disipa como pérdidas."
+        en: "F_ap = {F_ap} N is the total driving force. Of this, F_net = F_ap - F_loss reaches the system to accelerate it; the rest is dissipated as losses."
+    coherence_rules:
+    - id: F_ap_coherence_positive
+      when: "F_ap > 0"
+      status: ok
+      text:
+        es: "F_ap > 0: fuerza motriz positiva en la dirección de movimiento. El balance F_net = F_ap - F_loss puede evaluarse."
+        en: "F_ap > 0: positive driving force in the direction of motion. The balance F_net = F_ap - F_loss can be evaluated."
+    physical_reading_rules:
+    - id: F_ap_physical_vs_F_loss
+      when: "F_ap > 0 AND F_loss > 0"
+      status: info
+      text:
+        es: "La razón F_loss/F_ap = {ratio:.2f} expresa qué fracción de la fuerza motriz se pierde. Reducir F_loss mediante mejor diseño o lubricación aumenta F_net directamente."
+        en: "The ratio F_loss/F_ap = {ratio:.2f} expresses what fraction of driving force is lost. Reducing F_loss through better design or lubrication increases F_net directly."
+    model_validity_rules:
+    - id: F_ap_validity
+      when: "F_ap > 0"
+      status: ok
+      text:
+        es: "F_ap positiva y bien definida. El modelo traslacional con balance de fuerzas es aplicable."
+        en: "F_ap positive and well defined. The translational model with force balance is applicable."
+    graph_rules:
+    - id: F_ap_graph
+      when: "F_ap > 0"
+      status: info
+      text:
+        es: "F_ap no aparece directamente en el gráfico de coordenadas, pero determina a través de F_net la pendiente de la curva v(t)."
+        en: "F_ap does not appear directly in the coordinate graph, but determines through F_net the slope of the v(t) curve."
+    likely_errors:
+    - id: F_ap_warn_used_as_F_net
+      when: "F_ap > 0"
+      status: warning
+      text:
+        es: "Precaución: usar F_ap directamente en a = F_ap/m en lugar de F_net = F_ap - F_loss es el error más frecuente de este leaf."
+        en: "Caution: using F_ap directly in a = F_ap/m instead of F_net = F_ap - F_loss is the most common error in this leaf."
+    next_step_rules:
+    - id: F_ap_next
+      when: "F_ap > 0"
+      status: info
+      text:
+        es: "Calcular F_net = F_ap - F_loss antes de aplicar la segunda ley. No pasar a a = F/m sin verificar que F es la fuerza neta, no la aplicada."
+        en: "Calculate F_net = F_ap - F_loss before applying the second law. Do not proceed to a = F/m without verifying that F is the net force, not the applied force."
+
+  F_loss:
+    summary_rules:
+    - id: F_loss_summary_normal
+      when: "F_loss > 0 AND F_ap > 0 AND F_loss < F_ap"
+      status: info
+      text:
+        es: "F_loss = {F_loss} N representa el {pct:.0%} de F_ap. Esta fracción se convierte en calor y no contribuye al movimiento del sistema."
+        en: "F_loss = {F_loss} N represents {pct:.0%} of F_ap. This fraction converts to heat and does not contribute to system motion."
+    - id: F_loss_summary_blocking
+      when: "F_ap > 0 AND F_loss >= F_ap"
+      status: error
+      text:
+        es: "F_loss >= F_ap: el sistema está bloqueado. Las pérdidas impiden cualquier aceleración positiva."
+        en: "F_loss >= F_ap: the system is blocked. Losses prevent any positive acceleration."
+    coherence_rules:
+    - id: F_loss_coherence_below_F_ap
+      when: "F_ap > 0 AND F_loss >= F_ap"
+      status: error
+      text:
+        es: "F_loss >= F_ap: el sistema está fuera del dominio de operación. Reducir las pérdidas o aumentar la potencia del motor."
+        en: "F_loss >= F_ap: the system is outside its operating domain. Reduce losses or increase motor power."
+    - id: F_loss_coherence_ok
+      when: "F_loss >= 0 AND F_ap > 0 AND F_loss < F_ap"
+      status: ok
+      text:
+        es: "F_loss < F_ap: el sistema tiene potencial de aceleración positiva. El balance de fuerzas es válido."
+        en: "F_loss < F_ap: the system has positive acceleration potential. The force balance is valid."
+    physical_reading_rules:
+    - id: F_loss_physical_source
+      when: "F_loss > 0"
+      status: info
+      text:
+        es: "F_loss agrupa todas las fuerzas disipativas: rozamiento de Coulomb, resistencia viscosa, pares de fricción tau_fr en ejes y poleas. Identificar la fuente dominante es clave para mejorar eta."
+        en: "F_loss groups all dissipative forces: Coulomb friction, viscous resistance, friction torques tau_fr in axes and pulleys. Identifying the dominant source is key to improving eta."
+    model_validity_rules:
+    - id: F_loss_validity
+      when: "F_loss >= 0"
+      status: ok
+      text:
+        es: "F_loss >= 0: condición de validez del modelo satisfecha. Las pérdidas disipativas no pueden ser negativas."
+        en: "F_loss >= 0: model validity condition satisfied. Dissipative losses cannot be negative."
+    graph_rules:
+    - id: F_loss_graph
+      when: "F_loss > 0"
+      status: info
+      text:
+        es: "F_loss reduce la pendiente de v(t) en el gráfico Coord en comparación con la curva ideal. La diferencia de pendientes a_ideal - a = F_loss/m."
+        en: "F_loss reduces the slope of v(t) in the Coord graph compared to the ideal curve. The slope difference a_ideal - a = F_loss/m."
+    likely_errors:
+    - id: F_loss_error_zero
+      when: "F_loss == 0 AND F_ap > 0"
+      status: warning
+      text:
+        es: "F_loss = 0 en un sistema descrito como real indica que las pérdidas no fueron incluidas. Revisar el enunciado para identificar la fuente de disipación."
+        en: "F_loss = 0 in a system described as real indicates that losses were not included. Review the problem to identify the dissipation source."
+    next_step_rules:
+    - id: F_loss_next
+      when: "F_loss > 0"
+      status: info
+      text:
+        es: "Verificar el balance completo: F_net = F_ap - F_loss; a = F_net/m; eta = a/a_ideal. Los tres resultados deben ser mutuamente coherentes."
+        en: "Verify the complete balance: F_net = F_ap - F_loss; a = F_net/m; eta = a/a_ideal. The three results must be mutually consistent."
+
+  m:
+    summary_rules:
+    - id: m_summary
+      when: "m > 0"
+      status: info
+      text:
+        es: "m = {m} kg es la masa efectiva total del sistema, incluyendo la carga y las inercias equivalentes de elementos rotativos."
+        en: "m = {m} kg is the total effective mass of the system, including the load and equivalent inertias of rotating elements."
+    coherence_rules:
+    - id: m_coherence_positive
+      when: "m > 0"
+      status: ok
+      text:
+        es: "m > 0: masa positiva bien definida. El modelo traslacional es aplicable."
+        en: "m > 0: positive mass well defined. The translational model is applicable."
+    - id: m_coherence_zero
+      when: "m <= 0"
+      status: error
+      text:
+        es: "ERROR: m <= 0 no tiene sentido físico. Revisar si se incluyó toda la inercia del sistema."
+        en: "ERROR: m <= 0 has no physical meaning. Check whether all system inertia was included."
+    physical_reading_rules:
+    - id: m_physical_inertia
+      when: "m > 0"
+      status: info
+      text:
+        es: "Una masa efectiva mayor reduce a para el mismo F_net. Si m parece subestimada, verificar si las inercias rotativas de ruedas, poleas o motor fueron sumadas como I/r²."
+        en: "A larger effective mass reduces a for the same F_net. If m seems underestimated, check whether the rotational inertias of wheels, pulleys, or motor were added as I/r²."
+    model_validity_rules:
+    - id: m_validity
+      when: "m > 0"
+      status: ok
+      text:
+        es: "Masa positiva: condición necesaria para aplicar la segunda ley de Newton en forma traslacional."
+        en: "Positive mass: necessary condition for applying Newton's second law in translational form."
+    graph_rules:
+    - id: m_graph
+      when: "m > 0"
+      status: info
+      text:
+        es: "m no aparece directamente en el gráfico Coord, pero una masa mayor aplana la curva v(t) al reducir la pendiente a = F_net/m."
+        en: "m does not appear directly in the Coord graph, but a larger mass flattens the v(t) curve by reducing the slope a = F_net/m."
+    likely_errors:
+    - id: m_warn_missing_inertia
+      when: "m > 0"
+      status: warning
+      text:
+        es: "Verificar que m incluye toda la inercia efectiva. En sistemas con ruedas o poleas, la masa equivalente es m_ef = m_traslacion + sum(I_i / r_i²), que es siempre mayor que la masa de la carga sola."
+        en: "Verify that m includes all effective inertia. In systems with wheels or pulleys, the equivalent mass is m_ef = m_translation + sum(I_i / r_i²), which is always larger than the load mass alone."
+    next_step_rules:
+    - id: m_next
+      when: "m > 0"
+      status: info
+      text:
+        es: "Con m definida correctamente, calcular a = F_net/m. Comparar con a_ideal = F_ap/m para obtener la fracción de aceleración que se pierde por las pérdidas."
+        en: "With m correctly defined, calculate a = F_net/m. Compare with a_ideal = F_ap/m to obtain the fraction of acceleration lost to losses."
+
+  P_out:
+    summary_rules:
+    - id: P_out_summary
+      when: "P_out > 0 AND P_in > 0"
+      status: info
+      text:
+        es: "P_out = {P_out:.1f} W es la potencia mecánica útil entregada al sistema. Representa el {pct:.0%} de la potencia de entrada P_in."
+        en: "P_out = {P_out:.1f} W is the useful mechanical power delivered to the system. It represents {pct:.0%} of the input power P_in."
+    coherence_rules:
+    - id: P_out_coherence_below_P_in
+      when: "P_in > 0 AND P_out > P_in"
+      status: error
+      text:
+        es: "ERROR: P_out > P_in viola la conservación de energía. Ningún sistema pasivo entrega más potencia útil de la que recibe."
+        en: "ERROR: P_out > P_in violates energy conservation. No passive system delivers more useful power than it receives."
+    - id: P_out_coherence_ok
+      when: "P_out >= 0 AND P_in > 0 AND P_out <= P_in"
+      status: ok
+      text:
+        es: "P_out <= P_in: coherencia energética verificada."
+        en: "P_out <= P_in: energy coherence verified."
+    physical_reading_rules:
+    - id: P_out_physical_useful
+      when: "P_out > 0"
+      status: info
+      text:
+        es: "P_out es la potencia que realiza trabajo mecánico útil sobre la carga. Se calcula como P_out = F_net * v en régimen traslacional estacionario."
+        en: "P_out is the power that performs useful mechanical work on the load. It is calculated as P_out = F_net * v in steady-state translational regime."
+    model_validity_rules:
+    - id: P_out_validity
+      when: "P_out >= 0 AND P_in > 0"
+      status: ok
+      text:
+        es: "P_out dentro del dominio admisible (0 <= P_out <= P_in)."
+        en: "P_out within the admissible domain (0 <= P_out <= P_in)."
+    graph_rules:
+    - id: P_out_graph
+      when: "P_out > 0"
+      status: info
+      text:
+        es: "P_out ocupa la parte inferior del balance de potencias. La diferencia P_in - P_out = P_loss se visualiza como la banda de pérdidas en el gráfico."
+        en: "P_out occupies the lower part of the power balance. The difference P_in - P_out = P_loss is shown as the loss band in the graph."
+    likely_errors:
+    - id: P_out_error_using_F_ap
+      when: "P_out > 0"
+      status: warning
+      text:
+        es: "Verificar que P_out se calculó como F_net * v y no como F_ap * v. Usar F_ap en lugar de F_net sobreestima P_out e impide obtener eta correctamente."
+        en: "Verify that P_out was calculated as F_net * v and not as F_ap * v. Using F_ap instead of F_net overestimates P_out and prevents correct eta calculation."
+    next_step_rules:
+    - id: P_out_next
+      when: "P_out > 0 AND P_in > 0"
+      status: info
+      text:
+        es: "Con P_out y P_in definidas, calcular eta = P_out/P_in y P_loss = P_in - P_out. Verificar que P_in = P_out + P_loss cierra el balance."
+        en: "With P_out and P_in defined, calculate eta = P_out/P_in and P_loss = P_in - P_out. Verify that P_in = P_out + P_loss closes the balance."
+
+  P_in:
+    summary_rules:
+    - id: P_in_summary
+      when: "P_in > 0"
+      status: info
+      text:
+        es: "P_in = {P_in:.1f} W es la potencia total suministrada al sistema por el motor. De ella, P_out = eta * P_in llega como potencia útil y P_loss = P_in * (1 - eta) se disipa."
+        en: "P_in = {P_in:.1f} W is the total power supplied to the system by the motor. Of this, P_out = eta * P_in arrives as useful power and P_loss = P_in * (1 - eta) is dissipated."
+    coherence_rules:
+    - id: P_in_coherence_positive
+      when: "P_in > 0"
+      status: ok
+      text:
+        es: "P_in > 0: potencia de entrada positiva. El motor está suministrando energía al sistema."
+        en: "P_in > 0: positive input power. The motor is supplying energy to the system."
+    - id: P_in_coherence_zero
+      when: "P_in <= 0"
+      status: warning
+      text:
+        es: "P_in <= 0: el motor no suministra potencia o actúa como freno. El análisis de aceleración no aplica en este estado."
+        en: "P_in <= 0: the motor supplies no power or acts as a brake. Acceleration analysis does not apply in this state."
+    physical_reading_rules:
+    - id: P_in_physical
+      when: "P_in > 0"
+      status: info
+      text:
+        es: "P_in = F_ap * v en régimen traslacional estacionario. Es el coste energético completo de operar el sistema, incluyendo tanto el trabajo útil como las pérdidas."
+        en: "P_in = F_ap * v in steady-state translational regime. It is the complete energy cost of operating the system, including both useful work and losses."
+    model_validity_rules:
+    - id: P_in_validity
+      when: "P_in > 0"
+      status: ok
+      text:
+        es: "P_in positiva y definida. El análisis de rendimiento y balance de potencias es válido."
+        en: "P_in positive and defined. The efficiency analysis and power balance is valid."
+    graph_rules:
+    - id: P_in_graph
+      when: "P_in > 0"
+      status: info
+      text:
+        es: "P_in representa el techo del balance de potencias. Toda la energía que entra al sistema debe distribuirse entre P_out y P_loss."
+        en: "P_in represents the ceiling of the power balance. All energy entering the system must be distributed between P_out and P_loss."
+    likely_errors:
+    - id: P_in_error_calculated_wrong
+      when: "P_in > 0"
+      status: warning
+      text:
+        es: "Verificar que P_in se calculó como P_out/eta o como F_ap*v, según los datos disponibles. Confundir P_in con P_out lleva a eta > 1."
+        en: "Verify that P_in was calculated as P_out/eta or as F_ap*v, depending on available data. Confusing P_in with P_out leads to eta > 1."
+    next_step_rules:
+    - id: P_in_next
+      when: "P_in > 0"
+      status: info
+      text:
+        es: "Con P_in definida, calcular P_loss = P_in - P_out y verificar el cierre completo del balance de potencias."
+        en: "With P_in defined, calculate P_loss = P_in - P_out and verify the complete closure of the power balance."
+
+  a_ideal:
+    summary_rules:
+    - id: a_ideal_summary
+      when: "a_ideal > 0"
+      status: info
+      text:
+        es: "a_ideal = {a_ideal} m/s² es la cota superior teórica de aceleración, alcanzable solo si eta = 1. La aceleración real es a = eta * a_ideal, siempre menor."
+        en: "a_ideal = {a_ideal} m/s² is the theoretical upper bound of acceleration, achievable only if eta = 1. The real acceleration is a = eta * a_ideal, always smaller."
+    coherence_rules:
+    - id: a_ideal_coherence_positive
+      when: "a_ideal > 0 AND F_ap > 0"
+      status: ok
+      text:
+        es: "a_ideal > 0 coherente con F_ap > 0. El sistema tiene potencial de aceleración en el caso ideal."
+        en: "a_ideal > 0 consistent with F_ap > 0. The system has acceleration potential in the ideal case."
+    physical_reading_rules:
+    - id: a_ideal_physical_comparison
+      when: "a_ideal > 0 AND a > 0"
+      status: info
+      text:
+        es: "La diferencia Delta_a = a_ideal - a = {diff:.3f} m/s² mide el coste dinámico de las pérdidas. Equivale a F_loss/m = {ratio:.3f} m/s²."
+        en: "The difference Delta_a = a_ideal - a = {diff:.3f} m/s² measures the dynamic cost of losses. It equals F_loss/m = {ratio:.3f} m/s²."
+    model_validity_rules:
+    - id: a_ideal_validity
+      when: "a_ideal > 0"
+      status: ok
+      text:
+        es: "a_ideal positiva. Sirve como referencia para verificar que a < a_ideal siempre."
+        en: "a_ideal positive. Serves as reference to verify that a < a_ideal always."
+    graph_rules:
+    - id: a_ideal_graph
+      when: "a_ideal > 0"
+      status: info
+      text:
+        es: "En el gráfico Coord, a_ideal se representa como la pendiente de la curva ideal v(t), que debe quedar siempre por encima de la curva real con pendiente a."
+        en: "In the Coord graph, a_ideal is shown as the slope of the ideal v(t) curve, which must always lie above the real curve with slope a."
+    likely_errors:
+    - id: a_ideal_error_used_as_final
+      when: "a_ideal > 0"
+      status: warning
+      text:
+        es: "No presentar a_ideal como la respuesta final del problema. La aceleración real es a = eta * a_ideal, que es siempre menor cuando eta < 1."
+        en: "Do not present a_ideal as the final answer to the problem. The real acceleration is a = eta * a_ideal, which is always smaller when eta < 1."
+    next_step_rules:
+    - id: a_ideal_next
+      when: "a_ideal > 0"
+      status: info
+      text:
+        es: "Usar a_ideal como verificación: a_real / a_ideal debe coincidir con eta. Si no coincide, revisar F_loss o m."
+        en: "Use a_ideal as verification: a_real / a_ideal should equal eta. If it does not, check F_loss or m."
+  F:
+    summary_rules:
+    - id: F_sum
+      when: "true"
+      status: info
+      text: { es: "Fuerza auxiliar calculada.", en: "Auxiliary force calculated." }
+    physical_reading_rules:
+    - id: F_phys
+      when: "true"
+      status: info
+      text: { es: "Magnitud para balances secundarios.", en: "Magnitude for secondary balances." }
+    coherence_rules:
+    - id: F_coh
+      when: "true"
+      status: info
+      text: { es: "Verificar consistencia.", en: "Verify consistency." }
+    model_validity_rules:
+    - id: F_val
+      when: "true"
+      status: info
+      text: { es: "Válido como paso intermedio.", en: "Valid as an intermediate step." }
+    graph_rules:
+    - id: F_gra
+      when: "true"
+      status: info
+      text: { es: "Sin representación gráfica directa.", en: "No direct graphical representation." }
+    likely_errors:
+    - id: F_err
+      when: "F < 0"
+      status: warning
+      text: { es: "Fuerza negativa inesperada.", en: "Unexpected negative force." }
+    next_step_rules:
+    - id: F_nxt
+      when: "true"
+      status: info
+      text: { es: "Usar en despejes algebraicos.", en: "Use in algebraic rearrangements." }
+  P:
+    summary_rules:
+    - id: P_sum
+      when: "true"
+      status: info
+      text: { es: "Potencia auxiliar calculada.", en: "Auxiliary power calculated." }
+    physical_reading_rules:
+    - id: P_phys
+      when: "true"
+      status: info
+      text: { es: "Potencia vinculada al movimiento.", en: "Power linked to motion." }
+    coherence_rules:
+    - id: P_coh
+      when: "true"
+      status: info
+      text: { es: "Verificar con P_in y P_out.", en: "Verify with P_in and P_out." }
+    model_validity_rules:
+    - id: P_val
+      when: "true"
+      status: info
+      text: { es: "Asume régimen sin pérdidas adicionales.", en: "Assumes regime without additional losses." }
+    graph_rules:
+    - id: P_gra
+      when: "true"
+      status: info
+      text: { es: "Sin gráfica específica.", en: "No specific graph." }
+    likely_errors:
+    - id: P_err
+      when: "P < 0"
+      status: warning
+      text: { es: "Revisar signos de potencia.", en: "Review power signs." }
+    next_step_rules:
+    - id: P_nxt
+      when: "true"
+      status: info
+      text: { es: "Usar para determinar el rendimiento.", en: "Use to determine efficiency." }
+  v:
+    summary_rules:
+    - id: v_sum
+      when: "true"
+      status: info
+      text: { es: "Velocidad calculada.", en: "Velocity calculated." }
+    physical_reading_rules:
+    - id: v_phys
+      when: "true"
+      status: info
+      text: { es: "Rapidez del traslado.", en: "Speed of translation." }
+    coherence_rules:
+    - id: v_coh
+      when: "true"
+      status: info
+      text: { es: "Debe ser coherente con la potencia.", en: "Must be consistent with power." }
+    model_validity_rules:
+    - id: v_val
+      when: "true"
+      status: info
+      text: { es: "Baja velocidad asume roce constante.", en: "Low speed assumes constant friction." }
+    graph_rules:
+    - id: v_gra
+      when: "true"
+      status: info
+      text: { es: "Pendiente de posición.", en: "Slope of position." }
+    likely_errors:
+    - id: v_err
+      when: "v < 0"
+      status: warning
+      text: { es: "Retroceso físico no esperado.", en: "Unexpected physical backward motion." }
+    next_step_rules:
+    - id: v_nxt
+      when: "true"
+      status: info
+      text: { es: "Calcular P = F * v.", en: "Calculate P = F * v." }
+  r:
+    summary_rules:
+    - id: r_sum
+      when: "true"
+      status: info
+      text: { es: "Radio calculado.", en: "Radius calculated." }
+    physical_reading_rules:
+    - id: r_phys
+      when: "true"
+      status: info
+      text: { es: "Brazo de rotación.", en: "Lever arm of rotation." }
+    coherence_rules:
+    - id: r_coh
+      when: "true"
+      status: info
+      text: { es: "Estrictamente positivo.", en: "Strictly positive." }
+    model_validity_rules:
+    - id: r_val
+      when: "true"
+      status: info
+      text: { es: "Geometría rígida asumida.", en: "Rigid geometry assumed." }
+    graph_rules:
+    - id: r_gra
+      when: "true"
+      status: info
+      text: { es: "Parámetro constante.", en: "Constant parameter." }
+    likely_errors:
+    - id: r_err
+      when: "r <= 0"
+      status: warning
+      text: { es: "Radio nulo generaría singularidades.", en: "Zero radius would generate singularities." }
+    next_step_rules:
+    - id: r_nxt
+      when: "true"
+      status: info
+      text: { es: "Usar en balances de par.", en: "Use in torque balances." }
+  tau_fr:
+    summary_rules:
+    - id: tau_sum
+      when: "true"
+      status: info
+      text: { es: "Torque de fricción.", en: "Friction torque." }
+    physical_reading_rules:
+    - id: tau_phys
+      when: "true"
+      status: info
+      text: { es: "Resistencia rotacional.", en: "Rotational resistance." }
+    coherence_rules:
+    - id: tau_coh
+      when: "true"
+      status: info
+      text: { es: "Relacionado con F_loss y r.", en: "Related to F_loss and r." }
+    model_validity_rules:
+    - id: tau_val
+      when: "true"
+      status: info
+      text: { es: "Modelo de rozamiento estricto.", en: "Strict friction model." }
+    graph_rules:
+    - id: tau_gra
+      when: "true"
+      status: info
+      text: { es: "Sin gráfica temporal.", en: "No time graph." }
+    likely_errors:
+    - id: tau_err
+      when: "tau_fr < 0"
+      status: warning
+      text: { es: "El roce siempre se opone.", en: "Friction always opposes." }
+    next_step_rules:
+    - id: tau_nxt
+      when: "true"
+      status: info
+      text: { es: "Extraer la F_loss.", en: "Extract F_loss." }
+  m_dot:
+    summary_rules:
+    - id: mdot_sum
+      when: "true"
+      status: info
+      text: { es: "Flujo másico.", en: "Mass flow." }
+    physical_reading_rules:
+    - id: mdot_phys
+      when: "true"
+      status: info
+      text: { es: "Tasa de carga al sistema.", en: "System load rate." }
+    coherence_rules:
+    - id: mdot_coh
+      when: "true"
+      status: info
+      text: { es: "Positivo para sistemas que ganan masa.", en: "Positive for mass-gaining systems." }
+    model_validity_rules:
+    - id: mdot_val
+      when: "true"
+      status: info
+      text: { es: "Aporte continuo sin salto.", en: "Continuous input without jump." }
+    graph_rules:
+    - id: mdot_gra
+      when: "true"
+      status: info
+      text: { es: "Constante operativa.", en: "Operating constant." }
+    likely_errors:
+    - id: mdot_err
+      when: "m_dot < 0"
+      status: warning
+      text: { es: "Cuidado con pérdida de masa no modelada.", en: "Beware of unmodeled mass loss." }
+    next_step_rules:
+    - id: mdot_nxt
+      when: "true"
+      status: info
+      text: { es: "Multiplicar por v para la fuerza resistente.", en: "Multiply by v for drag force." }
+
+cross_checks:
+- id: check_a_vs_eta_a_ideal
+  detect_when: "a_ideal > 0 AND abs(a - eta * a_ideal) > 0.05 * a_ideal"
+  status: warning
+  text:
+    es: "Inconsistencia entre a, eta y a_ideal: la relación a = eta * a_ideal no se cumple dentro del 5%. Revisar los datos del problema."
+    en: "Inconsistency between a, eta, and a_ideal: the relation a = eta * a_ideal does not hold within 5%. Review problem data."
+- id: check_power_balance
+  detect_when: "P_in > 0 AND P_out > 0 AND abs(P_in - P_out - P_loss) > 0.01 * P_in"
+  status: warning
+  text:
+    es: "El balance de potencias no cierra: P_in != P_out + P_loss dentro del 1%. Revisar el cálculo de las tres potencias."
+    en: "Power balance does not close: P_in != P_out + P_loss within 1%. Review the calculation of all three power quantities."
+- id: check_eta_from_a
+  detect_when: "a_ideal > 0 AND eta > 0 AND abs(a / a_ideal - eta) > 0.05"
+  status: warning
+  text:
+    es: "La eficiencia estimada por a/a_ideal difiere de eta en más del 5%. El modelo de pérdidas proporcionales (aceleracion_con_eficiencia) puede no ser válido; usar segunda_ley_efectiva directamente."
+    en: "The efficiency estimated from a/a_ideal differs from eta by more than 5%. The proportional-loss model (aceleracion_con_eficiencia) may not be valid; use segunda_ley_efectiva directly."
+
+error_patterns:
+- id: pattern_F_ap_as_F_net
+  detect_when: "F_net > F_ap * 0.99 AND F_loss > 0"
+  status: error
+  text:
+    es: "Patrón detectado: F_net casi igual a F_ap con F_loss > 0. Probablemente F_loss no fue restada. Verificar que F_net = F_ap - F_loss."
+    en: "Pattern detected: F_net almost equal to F_ap with F_loss > 0. F_loss was probably not subtracted. Verify that F_net = F_ap - F_loss."
+- id: pattern_eta_inverted
+  detect_when: "eta > 1"
+  status: error
+  text:
+    es: "Patrón detectado: eta > 1. El cociente de potencias está invertido (P_in/P_out en lugar de P_out/P_in). Corregir: eta = P_out/P_in."
+    en: "Pattern detected: eta > 1. The power ratio is inverted (P_in/P_out instead of P_out/P_in). Correct: eta = P_out/P_in."
+- id: pattern_a_equals_a_ideal
+  detect_when: "a_ideal > 0 AND abs(a - a_ideal) < 0.001"
+  status: warning
+  text:
+    es: "Patrón detectado: a = a_ideal en un sistema con pérdidas. Se aplicó el modelo ideal. Incluir F_loss en el balance de fuerzas."
+    en: "Pattern detected: a = a_ideal in a system with losses. The ideal model was applied. Include F_loss in the force balance."
+
+graph_binding:
+  enabled: true
+  graph_types:
+  - Coord
+  primary_variable: a
+  secondary_variables:
+  - F_net
+  - eta
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+  variable_binding: a
+  description:
+    es: Gráfico de coordenadas velocidad-tiempo mostrando la pendiente a (real) vs a_ideal.
+    en: Velocity-time coordinate graph showing slope a (real) vs a_ideal.
+
+global_context:
+  es: >
+    Sistemas reales estudia cómo las pérdidas mecánicas (F_loss) reducen la fuerza
+    neta disponible para acelerar el sistema. La aceleración real a es siempre menor
+    que a_ideal, y la eficiencia eta cuantifica esa reducción. El leaf tiene tres
+    rutas de cálculo principales: (1) balance de fuerzas F_net = F_ap - F_loss → a
+    = F_net/m; (2) balance de potencias eta = P_out/P_in → P_loss = P_in - P_out;
+    (3) estimación rápida a = eta * a_ideal. Las tres rutas deben ser mutuamente
+    coherentes.
+  en: >
+    Real-world systems studies how mechanical losses (F_loss) reduce the net force
+    available to accelerate the system. The real acceleration a is always less than
+    a_ideal, and efficiency eta quantifies that reduction. The leaf has three main
+    calculation routes: (1) force balance F_net = F_ap - F_loss → a = F_net/m;
+    (2) power balance eta = P_out/P_in → P_loss = P_in - P_out; (3) quick estimate
+    a = eta * a_ideal. All three routes must be mutually consistent.
+
+ui:
+  inline_calculator: true
+  inline_graph: true
+  dedicated_tab: true
+  tab_label:
+    es: Interpretacion
+    en: Interpretation
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+`;export{e as default};

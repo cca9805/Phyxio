@@ -1,0 +1,194 @@
+const n=`version: 5
+magnitudes:
+  - id: rho
+    symbol: "\\\\rho"
+    nombre:
+      es: "Densidad absoluta"
+      en: "Absolute density"
+    unidad_si: "kg/m^3"
+    descripcion:
+      es: "Relación entre la masa de una sustancia y el volumen que ocupa."
+      en: "Ratio of the mass of a substance to the volume it occupies."
+    dimension: "M/L^3"
+    is_vector: false
+    components: []
+    category: "propiedad-material"
+    physical_role: "propiedad fundamental"
+    used_in: ["estática", "dinámica", "transporte"]
+    common_mistake: "Confundir densidad con masa total."
+    typical_range: [0.08, 22600]
+    sign_behavior: "estrictamente positiva"
+    zero_behavior: "imposible"
+    value_nature: "intensiva"
+    interpretation_role: "dominant"
+    graph_binding: "slope"
+    pedagogical_notes: "La densidad es independiente del tamaño de la muestra."
+
+  - id: m
+    symbol: "m"
+    nombre:
+      es: "Masa"
+      en: "Mass"
+    unidad_si: "kg"
+    descripcion:
+      es: "Cantidad de materia contenida en el cuerpo o porción de fluido."
+      en: "Amount of matter contained in the body or portion of fluid."
+    dimension: "M"
+    is_vector: false
+    components: []
+    category: "parámetro"
+    physical_role: "inercia"
+    used_in: ["mecánica", "fluidos"]
+    common_mistake: "Confundir masa con peso."
+    typical_range: [1e-6, 1e9]
+    sign_behavior: "estrictamente positiva"
+    zero_behavior: "imposible"
+    value_nature: "extensiva"
+    interpretation_role: "input"
+    graph_binding: "axis_y"
+    pedagogical_notes: "Magnitud escalar que mide la cantidad de materia."
+
+  - id: V
+    symbol: "V"
+    nombre:
+      es: "Volumen"
+      en: "Volume"
+    unidad_si: "m^3"
+    descripcion:
+      es: "Espacio tridimensional que ocupa la masa de fluido."
+      en: "Three-dimensional space occupied by the fluid mass."
+    dimension: "L^3"
+    is_vector: false
+    components: []
+    category: "parámetro"
+    physical_role: "geometría"
+    used_in: ["geometría", "mecánica"]
+    common_mistake: "Confundir volumen con área superficial."
+    typical_range: [1e-9, 1e6]
+    sign_behavior: "estrictamente positiva"
+    zero_behavior: "imposible"
+    value_nature: "extensiva"
+    interpretation_role: "input"
+    graph_binding: "axis_x"
+    pedagogical_notes: "Espacio tridimensional ocupado por el fluido."
+
+  - id: gamma
+    symbol: "\\\\gamma"
+    nombre:
+      es: "Peso específico"
+      en: "Specific weight"
+    unidad_si: "N/m^3"
+    descripcion:
+      es: "Peso por unidad de volumen de una sustancia."
+      en: "Weight per unit volume of a substance."
+    dimension: "ML^{-2}T^{-2}"
+    is_vector: false
+    components: []
+    category: "propiedad-material"
+    physical_role: "fuerza volumétrica"
+    used_in: ["hidrostática", "hidráulica"]
+    common_mistake: "Usar kg/m³ en lugar de N/m³."
+    typical_range: [1, 250000]
+    sign_behavior: "estrictamente positiva"
+    zero_behavior: "imposible"
+    value_nature: "intensiva"
+    interpretation_role: "property"
+    graph_binding: null
+    pedagogical_notes: "Representa la fuerza gravitatoria por unidad de volumen."
+
+  - id: SG
+    symbol: "SG"
+    nombre:
+      es: "Gravedad específica"
+      en: "Specific gravity"
+    unidad_si: "1"
+    descripcion:
+      es: "Relación entre la densidad de una sustancia y la densidad del agua a 4°C."
+      en: "Ratio of the density of a substance to the density of water at 4°C."
+    dimension: "1"
+    is_vector: false
+    components: []
+    category: "propiedad-material"
+    physical_role: "densidad relativa"
+    used_in: ["industria", "laboratorio"]
+    common_mistake: "Asignarle unidades de densidad."
+    typical_range: [0.01, 22]
+    sign_behavior: "estrictamente positiva"
+    zero_behavior: "imposible"
+    value_nature: "intensiva"
+    interpretation_role: "parameter"
+    graph_binding: null
+    pedagogical_notes: "Densidad relativa respecto al agua a 4°C."
+
+  - id: W
+    symbol: "W"
+    nombre:
+      es: "Peso"
+      en: "Weight"
+    unidad_si: "N"
+    descripcion:
+      es: "Fuerza gravitatoria que actúa sobre la masa del fluido."
+      en: "Gravitational force acting on the fluid mass."
+    dimension: "MLT^{-2}"
+    is_vector: true
+    components: [0, 0, "-W"]
+    category: "estado"
+    physical_role: "fuerza"
+    used_in: ["estática", "dinámica"]
+    common_mistake: "Olvidar que depende de la gravedad g."
+    typical_range: [0, 1e9]
+    sign_behavior: "estrictamente positiva"
+    zero_behavior: "vector nulo"
+    value_nature: "extensiva"
+    interpretation_role: "output"
+    graph_binding: null
+    pedagogical_notes: "Fuerza con la que la Tierra atrae a la masa."
+
+  - id: g
+    symbol: "g"
+    nombre:
+      es: "Gravedad"
+      en: "Gravity"
+    unidad_si: "m/s^2"
+    descripcion:
+      es: "Aceleración debida a la atracción gravitatoria terrestre."
+      en: "Acceleration due to Earth's gravitational attraction."
+    dimension: "LT^{-2}"
+    is_vector: true
+    components: [0, 0, -9.81]
+    category: "constante"
+    physical_role: "aceleración"
+    used_in: ["mecánica", "fluidos"]
+    common_mistake: "Considerarla constante universal."
+    typical_range: [9.78, 9.83]
+    sign_behavior: "estrictamente positiva"
+    zero_behavior: "imposible"
+    value_nature: "intensiva"
+    interpretation_role: "parameter"
+    graph_binding: null
+    pedagogical_notes: "Aceleración de caída libre en la Tierra."
+
+  - id: rho_0
+    symbol: "\\\\rho_{0}"
+    nombre:
+      es: "Densidad de referencia"
+      en: "Reference density"
+    unidad_si: "kg/m^3"
+    descripcion:
+      es: "Densidad de una sustancia estándar (agua a 4°C)."
+      en: "Density of a standard substance (water at 4°C)."
+    dimension: "ML^{-3}"
+    is_vector: false
+    components: []
+    category: "parámetro"
+    physical_role: "estándar"
+    used_in: ["cálculos relativos"]
+    common_mistake: "No especificar la temperatura de la referencia."
+    typical_range: [1, 1000]
+    sign_behavior: "estrictamente positiva"
+    zero_behavior: "imposible"
+    value_nature: "intensiva"
+    interpretation_role: "parameter"
+    graph_binding: null
+    pedagogical_notes: "Usualmente 1000 kg/m³ para líquidos."
+`;export{n as default};

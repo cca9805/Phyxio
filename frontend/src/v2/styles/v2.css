@@ -1,64 +1,1697 @@
+/* =============================================================================
+   v2.css — Estilos globales del sistema V2 de Phyxio
+   Organizado por sección / componente afectado
+   =============================================================================
+
+   ÍNDICE
+   ──────────────────────────────────────────────────────────────────────────────
+   1.  BASE                          — .v2-leaf
+   2.  HEADER                        — .v2-header*, .v2-meta*, .v2-header-*
+   3.  TÍTULOS Y CHIPS               — .v2-title, .v2-subtitle, .v2-chips, .v2-chip
+   4.  TABS                          — .v2-tabs, .v2-tab
+   5.  LAYOUT / GRIDS                — .v2-grid*, .v2-stack, .v2-card, .v2-grid-2,
+                                        .v2-grid-fill*, .v2-section-title
+   6.  PANEL PRINCIPAL (v2-panel)
+       6a. Base panel + hover
+       6b. Tipografía (h1–h6, p, listas)
+       6c. Legend cards              — .v2-panel .md-legend-*
+       6d. Callouts                  — .v2-panel .md-callout*
+       6e. Blockquotes
+       6f. Código / pre
+       6g. Tablas + dark mode
+       6h. Formularios / inputs
+   7.  FÓRMULAS KATEX                — .v2-formula*, .v2-panel .katex-*, .katex-muted,
+                                        .angle-converter-formula, .custom-latex-white
+   8.  NODE CARDS (vista browse)     — .v2-node-grid, .v2-node-card*, .v2-node-icon,
+                                        .v2-node-title, .v2-node-desc, .v2-node-overview-*,
+                                        .v2-level-badge*
+   9.  ACCORDION                     — .v2-node-sections, .v2-acc*
+   10. INTERPRETATION PANEL          — .interp-*, InterpretationPanelV2.jsx /
+                                        InterpretationLegendV2.jsx
+   11. DCL CARDS                     — .dcl-*, DclRenderer.jsx
+   12. CONTROLES
+       12a. Toggle / Switch moderno  — .v2-toggle*, .v2-toggle-input*
+       12b. Checkbox moderno         — .v2-check-row, .v2-check-label, .v2-check-hint
+       12c. Slider                   — .range-indigo
+       12d. Botones                  — .btn-play, .btn-primary, .btn-secondary
+   13. CONVERTIDOR DE ÁNGULOS        — .v2-angle-converter*, AngleConverterDetails
+   14. WARNING CARDS                 — .v2-warning*, CalculatorV2.jsx
+   15. SIDEBAR                       — .sidebar-icon-emoji, NavbarSidebar.jsx
+   16. MISCELÁNEA                    — .muted, .muted-formula, .muted-resultado,
+                                        .v2-card-title, .grid-dots
+   17. ANIMACIONES                   — @keyframes fadeIn, @keyframes subtle-pulse
+   18. DUPLICADOS (ver nota al pie)
+   ──────────────────────────────────────────────────────────────────────────────
+*/
 
 
+/* =============================================================================
+   1. BASE
+   ──────────────────────────────────────────────────────────────────────────── */
 
-.v2-leaf { 
-  display: block; 
+/* Wrapper raíz de cualquier leaf V2 */
+.v2-leaf {
+  display: block;
 }
 
-/* Estilos personalizados para checkboxes - Estilo Switch */
-.v2-checkbox-container {
+
+/* =============================================================================
+   2. HEADER  —  LeafHeader / cabecera de leaf
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.v2-header {
+  margin-bottom: 10px;
+  padding: 12px 12px;
+  background: linear-gradient(135deg,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(16, 14, 49, 0.95) 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 115, 0, 0.548);
+  box-shadow: 0 8px 32px rgba(253, 93, 0, 0.3);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.v2-header h1,
+.v2-header h2,
+.v2-header h3 {
+  margin: 20px !important;
+  padding: 0 !important;
+  color: #fd8700;
+}
+
+.v2-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+}
+
+.v2-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+  margin-right: 30px;
+}
+
+.v2-header-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.v2-header-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.v2-header-meta {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+
+/* Cada ítem de metadatos (área, nivel, etc.) */
+.v2-meta-item {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  min-width: 160px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.v2-meta-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.v2-meta-icon {
+  font-size: 28px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.v2-meta-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.v2-meta-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.v2-meta-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Header: responsive */
+@media (max-width: 800px) {
+  .v2-header-content {
+    flex-direction: column;
+  }
+  .v2-header-meta {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .v2-header {
+    padding: 16px;
+  }
+  .v2-meta-item {
+    min-width: 140px;
+    padding: 10px 12px;
+  }
+  .v2-meta-icon {
+    font-size: 24px;
+  }
+  .v2-meta-label {
+    font-size: 10px;
+  }
+  .v2-meta-value {
+    font-size: 13px;
+  }
+}
+
+
+/* =============================================================================
+   3. TÍTULOS Y CHIPS
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Título principal del leaf */
+.v2-title {
+  background: #1202aa00 !important;
+  font-size: 2rem;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-weight: 700;
+  color: #FF6600;
+;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  line-height: 1.1;
+}
+
+/* Subtítulo / descripción corta */
+.v2-subtitle {
+  margin: 25px;
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.5;
+  max-width: 600px;
+}
+
+/* Chips (tags, niveles, etc.) */
+.v2-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.v2-chip {
+  font-size: 0.85rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+
+/* =============================================================================
+   4. TABS
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.v2-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 14px 0 10px;
+  background-color: #00000000;
+}
+
+.v2-tab {
+  border: 1px solid #FF6600 !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.v2-tab.active {
+  background: rgba(0, 0, 0, 0.10);
+  background-color: #FF6600 !important;
+  color: rgb(0, 0, 0) !important;
+}
+
+
+/* =============================================================================
+   5. LAYOUT / GRIDS
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Título de sección dentro de un panel */
+.v2-section-title {
+  margin: 8px 0 12px;
+}
+
+/* Grid auto-fill básico */
+.v2-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+/* Stack vertical: items a ancho completo */
+.v2-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Card genérica */
+.v2-card {
+  margin-top: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid #FF6600;
+  background: #1c1c1c;
+  border-radius: 14px;
+  padding: 12px;
+  color: #ffffff;
+}
+
+.v2-card-title {
+  color: #FF6600 !important;
+  font-size: 1.1em;
+}
+
+/* Card prerequisitos */
+.v2-card-2 {
+  display: grid;
+  gap: 4px;
+  text-decoration: none;
+  margin-top: 10px;
+  width: 100%;
+  height: 80px;
+  align-items: center;
+  font-style: italic;
+  box-sizing: border-box;
+  border: 2px solid #FF6600;
+  background: #000000;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+/* Grid de 2 columnas (3fr + 1fr): calculadora principal + panel lateral */
+.v2-grid-2 {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .v2-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Grid elástico: rellena el ancho disponible — para cards de fórmulas/despejes */
+.v2-grid-fill {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  align-items: stretch;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+/* Grid elástico para inputs (columnas más estrechas) */
+.v2-grid-fill-inputs {
+  margin-top: 12px;
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  align-items: stretch;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+@media (max-width: 1100px) {
+  .v2-grid-fill {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .v2-grid-fill {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .v2-grid-fill,
+  .v2-grid-fill-inputs {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =============================================================================
+   6. PANEL PRINCIPAL  (v2-panel)
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* ── 6a. Base panel + hover ───────────────────────────────────────────────── */
+
+/* NOTA: la clase ".v2-" con selector vacío (línea ~340 del original) es
+   probablemente un error tipográfico; debería ser ".v2-panel". Se conserva
+   aquí con el selector correcto hasta confirmar. */
+.v2-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 30px 15px 30px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(56, 67, 117, 0.95) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 16px;
+  box-shadow:
+    0 4px 16px rgba(247, 244, 244, 0.08),
+    0 2px 8px rgba(78, 78, 78, 0),
+    inset 0 1px 0 rgba(136, 136, 136, 0.8);
+  backdrop-filter: blur(10px);
+  line-height: 1.6;
+  color: #a2bbdf;
+  transition: all 0.3s ease;
+}
+
+.v2-panel:hover {
+  box-shadow:
+    0 6px 24px rgba(255, 255, 255, 0.836),
+    0 4px 12px rgba(59, 130, 246, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  border-color: rgba(59, 130, 246, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ── 6b. Tipografía dentro del panel ─────────────────────────────────────── */
+
+.v2-panel h1,
+.v2-panel h2,
+.v2-panel h3,
+.v2-panel h4,
+.v2-panel h5,
+.v2-panel h6 {
+  color: #ffffff;
+  padding-top: 1.0em;
+  margin-top: 1.0em;
+  margin-bottom: 0.75em;
+  font-weight: 600;
+}
+
+.v2-panel h1 { font-size: 1.8rem; }
+.v2-panel h2 { font-size: 1.5rem; }
+.v2-panel h3 { font-size: 1.3rem; }
+
+/* H1: banner centrado con gradiente naranja */
+.v2-panel h1 {
+  background: linear-gradient(175deg, #FF6600 0%, #ffc380 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 12px 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: 14px;
+  -moz-border-radius: 14px;
+  -ms-border-radius: 14px;
+  -o-border-radius: 14px;
+  color: #000000;
+}
+
+/* H2: banner marrón oscuro, alineado a la izquierda */
+.v2-panel h2 {
+  background: #ffc380 !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  padding: 12px 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: 14px;
+  -moz-border-radius: 14px;
+  -ms-border-radius: 14px;
+  -o-border-radius: 14px;
+  color: #000000 !important;
+}
+
+.v2-panel p {
+  margin-bottom: 1em;
+  text-align: justify;
+}
+
+.v2-panel ul,
+.v2-panel ol {
+  margin: 1em 0;
+  padding-left: 1.5em;
+}
+
+.v2-panel li {
+  margin-bottom: 0.5em;
+}
+
+/* Inline math: nunca romper carácter a carácter */
+.v2-panel .md-inline-math-code,
+.v2-panel .md-inline-math-code .katex,
+.v2-panel .md-inline-math-code .katex * {
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+}
+
+/* Código inline */
+.v2-panel code {
+  background: rgba(205, 221, 247, 0);
+  color: #3956fc;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Roboto Mono';
+  font-style: italic;
+  font-size: 1.2em;
+}
+
+/* Bloques pre */
+.v2-panel pre {
+  background: rgba(0, 0, 0, 0.95);
+  color: #ffffff;
+  padding: 1.0em;
+  border-radius: 12px;
+  overflow-x: auto;
+  margin: 1.5em 0;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  font-size: 1.2em;
+}
+
+.v2-panel pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+
+/* Enlace mejorado */
+.v2-panel a {
+  color: #2563eb;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.v2-panel a:hover {
+  color: #1d4ed8;
+  border-bottom-color: #2563eb;
+}
+
+/* ── 6c. Legend cards (magnitudes, MarkdownRenderer) ─────────────────────── */
+
+/* Afecta a MarkdownRenderer.jsx y el componente de leyenda de magnitudes */
+
+.v2-panel .md-legend-card {
+  padding-bottom: 18px;
+}
+
+.v2-panel .md-legend-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.v2-panel .md-legend-item {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.16);
+}
+
+.v2-panel .md-legend-item__top {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.v2-panel .md-legend-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.v2-panel .md-legend-symbol .katex,
+.v2-panel .md-legend-symbol .katex * {
+  color: inherit !important;
+}
+
+.v2-panel .md-legend-main {
+  min-width: 0;
+}
+
+.v2-panel .md-legend-name-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 8px 0;
+  flex-wrap: wrap;
 }
 
-.v2-checkbox {
-  appearance: none;
-  width: 40px;
+.v2-panel .md-legend-name {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.v2-panel .md-legend-type {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.v2-panel .md-legend-unit {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.92rem;
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+
+.v2-panel .md-legend-description {
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.88);
+  text-align: left;
+}
+
+/* Variantes de tipo de magnitud */
+.v2-panel .md-legend-item--fundamental { border-color: rgba(251, 191, 36, 0.28); }
+.v2-panel .md-legend-symbol--fundamental {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.13);
+  box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.32);
+}
+.v2-panel .md-legend-type--fundamental { color: #1f1300; background: rgba(251, 191, 36, 0.88); }
+
+.v2-panel .md-legend-item--state     { border-color: rgba(56, 189, 248, 0.28); }
+.v2-panel .md-legend-symbol--state {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.3);
+}
+.v2-panel .md-legend-type--state     { color: #03131a; background: rgba(56, 189, 248, 0.9); }
+
+.v2-panel .md-legend-item--derived   { border-color: rgba(244, 114, 182, 0.28); }
+.v2-panel .md-legend-symbol--derived {
+  color: #f472b6;
+  background: rgba(244, 114, 182, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(244, 114, 182, 0.3);
+}
+.v2-panel .md-legend-type--derived   { color: #240813; background: rgba(244, 114, 182, 0.9); }
+
+.v2-panel .md-legend-item--parameter { border-color: rgba(52, 211, 153, 0.28); }
+.v2-panel .md-legend-symbol--parameter {
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(52, 211, 153, 0.3);
+}
+.v2-panel .md-legend-type--parameter { color: #04150f; background: rgba(52, 211, 153, 0.88); }
+
+.v2-panel .md-legend-item--other     { border-color: rgba(167, 139, 250, 0.28); }
+.v2-panel .md-legend-symbol--other {
+  color: #a78bfa;
+  background: rgba(167, 139, 250, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(167, 139, 250, 0.3);
+}
+.v2-panel .md-legend-type--other     { color: #130a26; background: rgba(167, 139, 250, 0.9); }
+
+/* ── 6d. Callouts (MarkdownRenderer / InterpretationPanel) ───────────────── */
+
+.v2-panel .md-callout {
+  margin: 1em 0;
+  padding: 0;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.55);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.v2-panel .md-callout__header {
+  padding: 10px 14px 0;
+}
+
+.v2-panel .md-callout__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #0f172a;
+  background: #93c5fd;
+}
+
+.v2-panel .md-callout__body {
+  padding: 10px 14px 14px;
+  color: #e5eefc;
+}
+
+.v2-panel .md-callout__body > :first-child { margin-top: 0; }
+.v2-panel .md-callout__body > :last-child  { margin-bottom: 0; }
+
+.v2-panel .md-callout__body p,
+.v2-panel .md-callout__body ul,
+.v2-panel .md-callout__body ol {
+  text-align: left;
+}
+
+/* Variantes de callout */
+.v2-panel .md-callout--note {
+  border-left: 5px solid #60a5fa;
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.16), rgba(15, 23, 42, 0.55));
+}
+.v2-panel .md-callout--note .md-callout__badge { background: #93c5fd; }
+
+.v2-panel .md-callout--tip {
+  border-left: 5px solid #34d399;
+  background: linear-gradient(180deg, rgba(5, 150, 105, 0.16), rgba(15, 23, 42, 0.55));
+}
+.v2-panel .md-callout--tip .md-callout__badge { background: #6ee7b7; }
+
+.v2-panel .md-callout--warning,
+.v2-panel .md-callout--important {
+  border-left: 5px solid #f59e0b;
+  background: linear-gradient(180deg, rgba(217, 119, 6, 0.18), rgba(15, 23, 42, 0.55));
+}
+.v2-panel .md-callout--warning .md-callout__badge,
+.v2-panel .md-callout--important .md-callout__badge { background: #fcd34d; }
+
+/* ── 6e. Blockquotes ─────────────────────────────────────────────────────── */
+
+.v2-panel blockquote p {
+  margin: 0;
+}
+
+/* Triple selector para ganar especificidad sin !important en lo posible */
+.v2-panel blockquote,
+.v2-panel .markdown-content blockquote,
+.markdown-content .v2-panel blockquote {
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  border-left: 4px solid #3b82f6 !important;
+  background: rgba(59, 130, 246, 0.05) !important;
+  margin: 1em 0 !important;
+  padding: 1em 1.5em !important;
+  border-radius: 0 8px 8px 0 !important;
+  font-style: italic !important;
+  color: #006aff !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+  overflow-wrap: break-word !important;
+}
+
+/* ── 6f. Tablas + dark mode ──────────────────────────────────────────────── */
+
+.v2-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  background: rgba(240, 245, 255, 0.9);
+  border-radius: 8px;
+  overflow: visible; /* Cambiado de hidden para permitir que los tooltips floten fuera de la tabla */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.v2-panel th,
+.v2-panel td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.v2-panel th {
+  background: rgba(59, 130, 246, 0.25);
+  font-weight: 600;
+  color: #1e40af;
+}
+
+.v2-panel tr:hover {
+  background: rgba(59, 130, 246, 0.12);
+}
+
+/* Dark mode */
+html.dark .v2-panel table,
+.dark .v2-panel table {
+  background: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+html.dark .v2-panel th,
+.dark .v2-panel th,
+html.dark .v2-panel td,
+.dark .v2-panel td {
+  border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+  color: #e2e8f0;
+}
+
+html.dark .v2-panel th,
+.dark .v2-panel th {
+  background: rgba(99, 102, 241, 0.3);
+  color: #c7d2fe;
+}
+
+html.dark .v2-panel tr:hover,
+.dark .v2-panel tr:hover {
+  background: rgba(99, 102, 241, 0.12);
+}
+
+/* ── 6g. Formularios / inputs dentro del panel ───────────────────────────── */
+
+/* Afecta a gráficos embebidos y calculadoras dentro del panel */
+.v2-panel .form-control,
+.v2-panel input[type="text"],
+.v2-panel input[type="number"],
+.v2-panel input[type="range"],
+.v2-panel select {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+  border: 1px solid #475569 !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  transition: all 0.2s ease !important;
+}
+
+.v2-panel .form-control:focus,
+.v2-panel input[type="text"]:focus,
+.v2-panel input[type="number"]:focus,
+.v2-panel select:focus {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  border-color: #3b82f6 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.v2-panel .form-control::placeholder,
+.v2-panel input::placeholder {
+  color: #94a3b8 !important;
+  opacity: 0.7 !important;
+}
+
+.v2-panel label {
+  color: #e2e8f0 !important;
+  font-weight: 500 !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+}
+
+.v2-panel .form-control:disabled,
+.v2-panel input:disabled {
+  background-color: #334155 !important;
+  color: #64748b !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+}
+
+
+/* =============================================================================
+   7. FÓRMULAS KATEX
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Wrapper genérico de fórmula */
+.v2-formula {
+  margin: 10px 0;
+  padding: 10px;
+}
+
+/* Evitar desbordes por fórmulas largas */
+.v2-formula,
+.v2-formula .katex-display {
+  width: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+/* Notas asociadas a la fórmula */
+.v2-notes {
+  margin: 0;
+  padding-left: 18px;
+}
+
+/* Selector de fórmula (principal / despejes) */
+.v2-formula-select {
+  width: 100%;
+  text-align: left;
+}
+
+.v2-formula-select.active {
+  border-color: rgba(0, 0, 0, 0.28);
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* Título encima de la fórmula */
+.v2-formula-title {
+  padding: 10px 0 0 10px;
+}
+
+/* Bloques KaTeX display dentro del panel — estilo "card naranja" */
+.v2-panel .katex-display {
+  font-size: x-large;
+  margin: 14px 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 3px solid #fd8802;
+  background: #000000;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+  color: #ffb272;
+  backdrop-filter: blur(2px);
+}
+
+/* Centrado consistente del bloque display */
+.v2-panel .katex-display > .katex {
+  display: inline-block;
+}
+
+/* Reducir saltos cuando hay varios bloques seguidos */
+.v2-panel .katex-display + .katex-display {
+  margin-top: 10px;
+}
+
+/* KaTeX muted: fórmula pequeña con borde rojo (uso puntual) */
+.katex-muted {
   height: 20px;
-  border: 2px solid rgba(226, 232, 240, 0.3);
-  border-radius: 20px;
-  background: rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  position: relative;
-  transition: all 0.3s ease;
+  font-size: small;
+  border-radius: 14px;
+  border: 2px solid #fd0909;
 }
 
-.v2-checkbox::before {
+/* Responsive: menos padding en móvil */
+@media (max-width: 600px) {
+  .v2-panel .katex-display {
+    padding: 12px 12px;
+    border-radius: 14px;
+  }
+}
+
+/* KaTeX con texto blanco forzado — usado en algunos gráficos embebidos */
+.custom-latex-white .katex {
+  font-size: 0.9em !important;
+  color: white !important;
+}
+
+.custom-latex-white .katex-display {
+  margin: 0.3em 0 !important;
+  text-align: center !important;
+}
+
+.custom-latex-white .katex .mord,
+.custom-latex-white .katex .mbin,
+.custom-latex-white .katex .mrel,
+.custom-latex-white .katex .mop,
+.custom-latex-white .katex .mpunct,
+.custom-latex-white .katex .mopen,
+.custom-latex-white .katex .mclose {
+  color: white !important;
+}
+
+.custom-latex-white .katex .frac-line    { border-bottom-color: white !important; }
+.custom-latex-white .katex .sqrt > .root { color: white !important; }
+.custom-latex-white .katex .accent-body  { color: white !important; }
+
+
+/* =============================================================================
+   8. NODE CARDS  —  vista de browse / listado de temas
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Grid de 3 columnas para las node-cards */
+.v2-node-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .v2-node-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .v2-node-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Card individual de un nodo / tema */
+.v2-node-card {
+  position: relative;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 32px 20px;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #ced4f5 10%, #7d99f5 25%, #4b74fa 50%, #1e40af 75%, #000c7c 100%);
+  box-shadow:
+    0 8px 32px rgba(27, 2, 252, 0.4),
+    0 4px 16px rgba(255, 255, 255, 0.438),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+/* Línea de brillo superior */
+.v2-node-card::before {
   content: '';
   position: absolute;
-  top: 2px;
-  left: 2px;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+}
+
+/* Capa de cristal interior */
+.v2-node-card::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  border-radius: 23px;
+  background: linear-gradient(145deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 50%,
+    rgba(0, 0, 0, 0.02) 100%);
+  pointer-events: none;
+}
+
+/* Hover 3D */
+.v2-node-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 20px 60px rgba(30, 58, 138, 0.6),
+    0 8px 32px rgba(30, 64, 175, 0.4),
+    0 4px 16px rgba(59, 130, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  border-color: rgba(59, 130, 246, 0.6);
+  background: linear-gradient(145deg, #1e40af 0%, #2563eb 25%, #3b82f6 50%, #2563eb 75%, #1e40af 100%);
+}
+
+/* Icono / emoji grande */
+.v2-node-icon {
+  width: 120px;
+  height: 120px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.144),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.205),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-bottom: 20px;
+  font-size: 64px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  animation: subtle-pulse 4s ease-in-out infinite;
+}
+
+/* Pausa animación en hover */
+.v2-node-card:hover .v2-node-icon {
+  animation-play-state: paused;
+  transform: scale(1.1) rotateY(5deg);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow:
+    inset 0 2px 6px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.15),
+    0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Hover en el título */
+.v2-node-card:hover .v2-node-title {
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.v2-node-title {
+  font-weight: 700;
+  font-size: 1.22rem;
+  line-height: 1.25;
+  color: #0b015f;
+}
+
+.v2-node-desc {
+  margin-top: 8px;
+  font-size: 0.92rem;
+  opacity: 0.75;
+  color: #facdcd;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Imagen de icono (PNG alternativo al emoji) */
+.v2-node-icon-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+/* Overview con preview expandible */
+.v2-node-overview-card {
+  position: relative;
+}
+
+.v2-node-overview-preview {
+  position: relative;
+  cursor: pointer;
+  outline: none;
+}
+
+.v2-node-overview-preview-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: calc(1.6em * 3);
+  line-height: 1.6;
+  color: #fef3c7;
+}
+
+.v2-node-overview-preview::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2.8em;
+  background: linear-gradient(180deg,
+    rgba(7, 10, 35, 0) 0%,
+    rgba(7, 10, 35, 0.72) 60%,
+    rgba(7, 10, 35, 0.98) 100%);
+  pointer-events: none;
+}
+
+.v2-node-overview-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+}
+
+.v2-node-overview-toggle {
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.v2-node-overview-toggle:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.34);
+  transform: translateY(-1px);
+}
+
+/* Badges de nivel educativo (ESO, BACH, UNI…) */
+.v2-level-badges {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  z-index: 2;
+}
+
+.v2-level-badge {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.v2-level-badge.bg-blue-500   { background-color: #3b82f6; } /* ESO */
+.v2-level-badge.bg-green-500  { background-color: #10b981; } /* BACHILLERATO */
+.v2-level-badge.bg-orange-500 { background-color: #f59e0b; } /* UNIVERSIDAD */
+.v2-level-badge.bg-red-500    { background-color: #ef4444; } /* EXTRACURRICULAR */
+
+
+/* =============================================================================
+   9. ACCORDION  —  secciones colapsables dentro de node cards
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.v2-node-sections {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.v2-acc {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.v2-acc-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background: transparent;
+  border: 0;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.v2-acc-body {
+  padding: 12px 14px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.v2-acc-body ul,
+.v2-acc-body ol {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.v2-acc-body li {
+  margin: 6px 0;
+}
+
+
+/* =============================================================================
+   10. INTERPRETATION PANEL  —  InterpretationPanelV2.jsx / InterpretationLegendV2.jsx
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Mensaje de interpretación */
+.interp-msg {
+  border-radius: 10px;
+  padding: 10px 12px;
+  line-height: 1.45;
+}
+
+/* Leyenda de estados */
+.interp-legend {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0 16px;
+}
+
+.interp-legend-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.95);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.interp-legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.interp-legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.interp-legend-chip {
   width: 14px;
   height: 14px;
-  border-radius: 50%;
-  background: rgba(226, 232, 240, 0.8);
-  transition: all 0.3s ease;
+  border-radius: 999px;
+  margin-top: 3px;
+  flex: 0 0 14px;
 }
 
-.v2-checkbox:hover {
-  border-color: rgba(96, 165, 250, 0.6);
+.interp-legend-chip.interp-info {
+  border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
-.v2-checkbox:checked {
-  background: rgba(96, 165, 250, 0.8);
-  border-color: rgba(96, 165, 250, 1);
+.interp-legend-copy {
+  display: grid;
+  gap: 2px;
 }
 
-.v2-checkbox:checked::before {
-  left: 22px;
-  background: white;
-}
-
-.v2-checkbox-label {
-  color: rgba(226, 232, 240, 0.8);
+.interp-legend-copy strong {
   font-size: 13px;
-  cursor: pointer;
-  user-select: none;
 }
 
-/* Switch dedicado para evitar colisiones con .v2-checkbox */
+.interp-legend-copy span {
+  font-size: 12px;
+  color: rgba(149, 148, 184, 0.95);
+  line-height: 1.35;
+}
+
+/* Resumen de cálculo */
+.interp-calc-summary {
+  display: grid;
+  gap: 12px;
+  margin: 8px 0 16px;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.interp-calc-summary-title {
+  font-weight: 700;
+}
+
+.interp-calc-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.interp-calc-summary-item {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.interp-calc-summary-item span,
+.interp-calc-inputs-title {
+  font-size: 12px;
+  color: rgba(148, 163, 184, 0.95);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.interp-calc-summary-item strong {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+/* Inputs de la interpretación */
+.interp-calc-inputs {
+  display: grid;
+  gap: 8px;
+}
+
+.interp-calc-inputs-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.interp-calc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  font-size: 13px;
+}
+
+/* Botón "Ver gráfico" */
+.interp-graph-btn,
+.dark button.interp-graph-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background-color: #0300c0 !important;
+  color: #ffffff !important;
+  font-size: 13px;
+  font-weight: 700;
+  border: none !important;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+  letter-spacing: 0.01em;
+}
+
+button.interp-graph-btn:hover,
+.dark button.interp-graph-btn:hover {
+  background-color: #72b4ff !important;
+  color: #000 !important;
+  transform: translateY(-1px);
+}
+
+button.interp-graph-btn:active,
+.dark button.interp-graph-btn:active {
+  transform: translateY(0);
+  background-color: #0E7490 !important;
+}
+
+button.interp-graph-btn:focus-visible,
+.dark button.interp-graph-btn:focus-visible {
+  outline: 2px solid #0891B2;
+  outline-offset: 2px;
+  box-shadow: none !important;
+}
+
+/* Variantes de estado del mensaje */
+.interp-info    { background: rgba(255, 255, 255, 0.04); }
+.interp-ok      { background: rgba(60, 180, 120, 0.12); border: 1px solid rgba(60, 180, 120, 0.28); }
+.interp-warning { background: rgba(255, 180, 60, 0.12); border: 1px solid rgba(255, 180, 60, 0.28); }
+.interp-error   { background: rgba(255, 80, 80, 0.12);  border: 1px solid rgba(255, 80, 80, 0.28); }
+
+
+/* =============================================================================
+   11. DCL CARDS  —  DclRenderer.jsx (Diagrama de Cuerpo Libre)
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Card base */
+.dcl-card {
+  margin-top: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  background: #1C1C1C;
+  border-radius: 14px;
+  padding: 12px;
+  border: 2px solid;
+}
+
+/* Variantes por tipo de información */
+.dcl-card-main          { border-color: #FF6600; }   /* naranja — contenedor principal */
+.dcl-card-interpretation{ border-color: #0891B2; }   /* cyan-600 */
+.dcl-card-reading       { border-color: #0284C7; }   /* sky-600 */
+.dcl-card-analysis      { border-color: #059669; }   /* emerald-600 */
+.dcl-card-graph         { border-color: #9333EA; }   /* purple-600 */
+.dcl-card-physical      { border-color: #4F46E5; }   /* indigo-600 */
+.dcl-card-active        { border-color: #16A34A; }   /* green-600 */
+.dcl-card-inactive      { border-color: #475569; }   /* slate-600 */
+.dcl-card-equilibrium   { border-color: #0D9488; }   /* teal-600 */
+.dcl-card-warning       { border-color: #D97706; }   /* amber-600 */
+.dcl-card-errors        { border-color: #DC2626; }   /* red-600 */
+.dcl-card-step          { border-color: #2563EB; }   /* blue-600 */
+
+.dcl-card-theory {
+  border-color: #7C3AED; /* violet-600 */
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+.dcl-card-theory:hover { border-color: #8B5CF6; }
+
+/* Tooltip del DCL - Estilo Premium */
+.dcl-tooltip {
+  position: absolute;
+  pointer-events: none;
+  z-index: 100;
+  min-width: 200px;
+  backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(17, 24, 39, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 12px 16px;
+  font-size: 13px;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  animation: tooltipFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes tooltipFadeIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Tooltip Premium para Magnitudes (VariableHint) */
+.vh-wrapper {
+  position: relative;
+  display: inline-flex;   /* mejor que inline-block para este caso */
+  align-items: baseline;
+  overflow: visible;
+}
+
+.vh-tooltip-container {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  z-index: 9999; /* Blindado para estar por encima de títulos y banners */
+
+  width: max-content;
+  min-width: 260px;
+  max-width: 420px;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vh-wrapper:hover {
+  position: relative;
+  z-index: 10000; /* Asegura que el contenedor del tooltip gane a los títulos */
+}
+
+.vh-wrapper:hover .vh-tooltip-container {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-16px);
+}
+
+.vh-trigger {
+  color: #3d54ff;
+  font-weight: bold;
+  font-size: large;
+  border-bottom-color: #ff7300 !important;
+}  
+
+.vh-wrapper:hover .vh-trigger {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+  border-bottom-color: #f8b538 !important;
+  color: #ff6600 !important;
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.vh-tooltip-card {
+  display: block;
+  width: 100%;
+  white-space: normal;
+  text-align: left;
+  word-break: normal;
+  overflow-wrap: break-word;
+  background: rgb(7, 7, 7);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid #ff6600;
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.5),
+    0 10px 10px -6px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.vh-tooltip-card strong {
+  display: block;
+  font-size: 14px;
+  color: #ff6600; /* sky-400 */
+  margin-bottom: 2px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.vh-tooltip-card .unit {
+  font-size: 11px;
+  color: #4570ff;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.vh-tooltip-card .desc {
+  margin-top: 10px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #ffffffcc;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 10px;
+}
+
+/* Triángulo decorativo */
+.vh-tooltip-card::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: calc(50% + var(--arrow-offset, 0px));
+  margin-left: -8px;
+  border-width: 8px;
+  border-style: solid;
+  border-color: #ff6600 transparent transparent transparent;
+}
+
+/* Colores de títulos de card */
+.dcl-title-sky     { color: #f88e38; }
+.dcl-title-emerald { color: #34D399; }
+.dcl-title-purple  { color: #C084FC; }
+.dcl-title-indigo  { color: #818CF8; }
+.dcl-title-green   { color: #4ADE80; }
+.dcl-title-slate   { color: #94A3B8; }
+.dcl-title-teal    { color: #2DD4BF; }
+.dcl-title-amber   { color: #FBBF24; }
+.dcl-title-red     { color: #F87171; }
+.dcl-title-violet  { color: #A78BFA; }
+.dcl-title-blue    { color: #60A5FA; }
+.dcl-title-cyan    { color: #22D3EE; }
+.dcl-title-orange  { color: #FB923C; }
+
+/* Utilidades de texto DCL */
+.dcl-text-sm       { font-size: 14px; }
+.dcl-text-xs       { font-size: 12px; }
+.dcl-opacity-80    { opacity: 0.8; }
+.dcl-opacity-70    { opacity: 0.7; }
+.dcl-font-semibold { font-weight: 600; }
+.dcl-mb-1          { margin-bottom: 4px; }
+.dcl-mb-2          { margin-bottom: 8px; }
+.dcl-mt-2          { margin-top: 8px; }
+.dcl-mt-3          { margin-top: 12px; }
+
+.dcl-space-y-1 > * + * { margin-top: 4px; }
+
+/* Grid de 2 columnas para fuerzas */
+.dcl-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .dcl-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Botones de control de pasos */
+.dcl-btn {
+  border-radius: 10px;
+  border: 2px solid;
+  background: #1C1C1C;
+  padding: 4px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.1s ease;
+}
+
+.dcl-btn-blue {
+  border-color: #2563EB;
+  color: #60A5FA;
+}
+
+.dcl-btn-blue:hover:not(:disabled) {
+  border-color: #3B82F6;
+}
+
+.dcl-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.dcl-btn-orange {
+  border-color: #FF6600;
+  color: #FB923C;
+}
+
+/* Label de selección de gráfico */
+.dcl-label-purple {
+  border: 2px solid #9333EA;
+  background: #1C1C1C;
+  border-radius: 10px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #C084FC;
+}
+
+
+/* =============================================================================
+   12. CONTROLES
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* ── 12a. Toggle / Switch moderno  ───────────────────────────────────────── */
+/* Usado en CalculatorV2.jsx / formularios de calculadora */
+
 .v2-toggle-row {
   display: grid;
   gap: 10px;
@@ -72,6 +1705,7 @@
   min-width: 0;
 }
 
+/* Input tipo checkbox estilizado como checkbox cuadrado con check */
 .v2-toggle-input {
   margin-right: 10px;
   appearance: none;
@@ -85,13 +1719,15 @@
   position: relative;
   flex: 0 0 22px;
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
-  transition: border-color 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease, transform 0.08s ease;
+  transition: border-color 0.18s ease, background-color 0.18s ease,
+              box-shadow 0.18s ease, transform 0.08s ease;
 }
 
 .v2-toggle-input::before {
   display: none;
 }
 
+/* Checkmark visible al marcar */
 .v2-toggle-input::after {
   content: "";
   position: absolute;
@@ -135,944 +1771,197 @@
   font-weight: 600;
   line-height: 1.5;
   min-width: 0;
-  overflow-wrap:overflow-wrap;
+  overflow-wrap: break-word; /* NOTA: el original tenía "overflow-wrap:overflow-wrap" (typo) */
   justify-content: center;
 }
 
+/* ── 12b. Checkbox moderno  ──────────────────────────────────────────────── */
+/* .v2-check-row / .v2-checkbox input[type="checkbox"]  — CalculatorV2.jsx   */
+/* Ver SECCIÓN 18 (DUPLICADOS) para la variante switch-pill de .v2-checkbox  */
 
-.v2-header-left {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-}
-
-.v2-header-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 40px;
-  margin-right: 30px;
-}
-
-.v2-header {
-  margin-bottom: 10px;
-  padding: 12px 12px;
-  background: linear-gradient(135deg, 
-    rgba(30, 64, 175, 0.95) 0%, 
-    rgba(79, 70, 229, 0.95) 100%);
-  border-radius: 20px;
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  box-shadow: 
-    0 8px 32px rgba(30, 64, 175, 0.3),
-    0 4px 16px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.v2-header h1,
-.v2-header h2,
-.v2-header h3 {
-  margin: 20px !important;
-  padding: 0 !important;
-}
-
-.v2-header-content {
+.v2-check-row {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 32px;
-  align-items: start;
+  gap: 6px;
 }
 
-.v2-header-main {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.v2-header-meta {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-
-.v2-meta-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  min-width: 160px;
-  transition: all 0.3s ease;
-}
-
-.v2-meta-item:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.v2-meta-icon {
-  font-size: 28px;
-  line-height: 1;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-.v2-meta-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.v2-meta-label {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.v2-meta-value {
-  font-size: 15px;
-  font-weight: 700;
-  color: #ffffff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-/* Responsive: en pantallas pequeñas, stack vertical */
-@media (max-width: 968px) {
-  .v2-header-content {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  .v2-header-meta {
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 640px) {
-  .v2-header {
-    padding: 16px;
-  }
-  
-  .v2-meta-item {
-    min-width: 140px;
-    padding: 10px 12px;
-  }
-  
-  .v2-meta-icon {
-    font-size: 24px;
-  }
-  
-  .v2-meta-label {
-    font-size: 10px;
-  }
-  
-  .v2-meta-value {
-    font-size: 13px;
-  }
-}
-
-
-
-.v2-title { 
-  background: #5544ef00 !important;
-  font-size: 2rem; 
-  margin: 0 !important;
-  padding: 0 !important;
-  font-weight: 700;
-  color: #ffffff;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  line-height: 1.1;
-}
-
-.v2-subtitle { 
-  margin: 25px;
-  font-size: 1.05rem;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.5;
-  max-width: 600px;
-}
-
-.v2-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-.v2-chip {
-  font-size: 0.85rem;
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(0,0,0,0.12);
-  background: rgba(0,0,0,0.03);
-}
-
-.v2-tabs {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin: 14px 0 10px;
-}
-
-.v2-tab {
-  border: 1px solid rgba(0,0,0,0.14);
-  background: rgba(0,0,0,0.03);
-  border-radius: 8px;
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
-.v2-tab.active {
-  background: rgba(0,0,0,0.10);
-  border-color: rgba(0,0,0,0.25);
-}
-
-.v2- {
-  display: flex;
-  flex-direction: column;
-
-  /* Nuevos estilos profesionales para el panel de contenido */
-  padding: 15px 30px 15px 30px;
-  margin-top: 30px;
-  margin-bottom: 10px;
-  
-  /* Fondo con gradiente sutil */
-  background: linear-gradient(135deg, 
-    rgba(0, 0, 0, 0.95) 0%, 
-    rgba(81, 97, 168, 0.95) 100%);
-  
-  /* Bordes y sombras elegantes */
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  border-radius: 16px;
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.08),
-    0 2px 8px rgba(78, 78, 78, 0),
-    inset 0 1px 0 rgba(136, 136, 136, 0.8);
-  
-  /* Efecto cristal sutil */
-  backdrop-filter: blur(10px);
-  
-  /* Tipografía mejorada */
-  line-height: 1.6;
-  color: #a2bbdf;
-  
-  /* Transición suave */
-  transition: all 0.3s ease;
-}
-
-.v2-section-title { margin: 8px 0 12px; }
-
-.v2-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 12px;
-}
-
-/* Stack vertical: cards a ancho completo */
-.v2-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* Asegura que cualquier card ocupe todo el ancho */
-.v2-card {
-  margin-top: 10px;
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid #a998f8;
-  background: #22335c;
-  border-radius: 14px;
-  padding: 12px;
-}
-
-
-/* Grid de 2 columnas para calculadoras */
-.v2-grid-2 {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  gap: 12px;
-  width: 100%;
-}
-
-/* Responsive: en pantallas pequeñas, una sola columna */
-@media (max-width: 768px) {
-  .v2-grid-2 {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Grid elástico: siempre rellena el ancho */
-@media (max-width: 1100px) {
-  .v2-grid-fill { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 700px) {
-  .v2-grid-fill { grid-template-columns: 1fr; }
-}
-
-/* ====== GRIDS RESPONSIVE (rellenan el ancho) ====== */
-
-/* Para cards de fórmulas/despejes */
-.v2-grid-fill {
-  display: grid;
-  gap: 12px;
-  width: 100%;
-  align-items: stretch;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-}
-
-/* Para inputs (más estrechos) */
-.v2-grid-fill-inputs {
-  margin-top: 12px;
-  display: grid;
-  gap: 12px;
-  width: 100%;
-  align-items: stretch;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
-/* Móvil: una columna */
-@media (max-width: 640px) {
-  .v2-grid-fill,
-  .v2-grid-fill-inputs {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ===== V2 Node Cards ===== */
-.v2-node-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-
-@media (max-width: 1200px) {
-  .v2-node-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 900px) {
-  .v2-node-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 560px) {
-  .v2-node-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.v2-node-card {
-  /* Estilos originales comentados
-  margin: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-
-  padding: 38px 14px;
-  border-radius: 20px;
-
-  background: linear-gradient(135deg, #5090f7 0%, #0b4ad1 100%);
-  border: 1px solid rgba(0,0,0,0.08);
-  box-shadow: 10px 16px 28px rgba(31, 1, 201, 0.726);
-
-  transition: transform 120ms ease, box-shadow 120ms ease;
-  */
-
-  /* Nuevos estilos profesionales 3D */
-  position: relative;
-  margin: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 32px 20px;
-  border-radius: 24px;
-  
-  /* Gradiente navy profesional con brillo sutil */
-  background: linear-gradient(145deg, #020063 10%, #1e40af 25%, #6f65f7 50%, #1e40af 75%, #000c7c 100%);
-  
-  /* Efecto 3D con múltiples sombras */
-  box-shadow: 
-    0 8px 32px rgba(27, 2, 252, 0.4),
-    0 4px 16px rgba(255, 255, 255, 0.438),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-  
-  /* Borde con brillo sutil */
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  
-  /* Transiciones suaves */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  /* Efecto de cristal */
-  backdrop-filter: blur(10px);
-  
-  /* Pseudo-elemento para brillo superior */
-  overflow: hidden;
-}
-
-.v2-node-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-}
-
-.v2-node-card::after {
-  content: '';
-  position: absolute;
-  top: 1px;
-  left: 1px;
-  right: 1px;
-  bottom: 1px;
-  border-radius: 23px;
-  background: linear-gradient(145deg, 
-    rgba(255, 255, 255, 0.05) 0%, 
-    rgba(255, 255, 255, 0.02) 50%, 
-    rgba(0, 0, 0, 0.02) 100%);
-  pointer-events: none;
-}
-
-.v2-node-card:hover {
-  /* Estilos originales comentados
-  transform: translateY(-20px);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.10);
-  */
-
-  /* Nuevo efecto hover 3D profesional */
-  transform: translateY(-8px) scale(1.02);
-  
-  /* Sombras más dramáticas en hover */
-  box-shadow: 
-    0 20px 60px rgba(30, 58, 138, 0.6),
-    0 8px 32px rgba(30, 64, 175, 0.4),
-    0 4px 16px rgba(59, 130, 246, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-  
-  /* Brillo más intenso en el borde */
-  border-color: rgba(59, 130, 246, 0.6);
-  
-  /* Gradiente más brillante */
-  background: linear-gradient(145deg, #1e40af 0%, #2563eb 25%, #3b82f6 50%, #2563eb 75%, #1e40af 100%);
-}
-
-.v2-node-icon {
-
-  /* Nuevos estilos profesionales para el icono */
-  width: 120px;
-  height: 120px;
-  border-radius: 20px;
-  
-  display: grid;
-  place-items: center;
-  
-  /* Fondo con gradiente sutil y efecto cristal */
-  background: linear-gradient(135deg, 
-    rgb(255, 255, 255) 0%, 
-    rgba(255, 255, 255, 0) 100%);
-  
-  /* Borde interno brillante */
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  
-  /* Sombra interna para efecto hundido */
-  box-shadow: 
-    inset 0 2px 4px rgba(255, 255, 255, 0.144),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.205),
-    0 4px 12px rgba(0, 0, 0, 0.15);
-  
-  margin-bottom: 20px;
-  
-  /* Tamaño del emoji */
-  font-size: 64px;
-  
-  /* Transición suave */
-  transition: all 0.3s ease;
-  
-  /* Efecto de cristal */
-  backdrop-filter: blur(10px);
-}
-
-.v2-node-title {
-  font-weight: 700;
-  font-size: 1.22rem;
-  line-height: 1.25;
-  color:#0b015f
-}
-
-.v2-node-desc {
-  margin-top: 8px;
-  font-size: 0.92rem;
-  opacity: 0.75;
-  color: #facdcd;
-
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.v2-card-title {
-  padding-top: 15px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #ffffff;
-}
-
-.muted {
-  margin: 10px 0 20px 0;
-  color: rgb(252, 210, 186);
-}
-
-.muted-formula {
-  height: 40px;
-  padding: 6px;
-  color: rgb(194, 111, 211);
-  border: 1px solid #a998f8;
-  border-radius: 6px;
-}
-
-.muted-resultado {
-  height: 25px;
-  padding-left: 5px;
-  margin: 0 0 0 5px;
-  color: rgb(104, 102, 238);
-   border: 1px solid #a998f8;
-}
-
-
-.v2-formula {
-  margin: 10px 0;
-  padding: 10px;
- }
-.v2-notes { 
-  margin: 0; 
-  padding-left: 18px; 
-}
-
-/* Para evitar desbordes por fórmulas largas */
-.v2-formula,
-.v2-formula .katex-display {
-  width: 100%;
-  overflow-x: auto;
-  box-sizing: border-box;
-}
-
-
-/* Cards de fórmula (fundamental y despejes) */
-.v2-formula-select {
-  width: 100%;
-  text-align: left;
-}
-
-.v2-formula-title {
-  padding: 10px 0 0 10px;
-}
-
-/* --- Fórmulas en bloque (KaTeX) como "cards" --- */
-/* Apunta al bloque display de KaTeX */
-.v2-panel .katex-display {
-  font-size: x-large;
-  margin: 14px 0;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 2px solid #a998f8;
-  background: #224eb4;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  overflow-x: auto;       /* por si la fórmula es larga */
- 
-  /* mejora estética */
-  backdrop-filter: blur(2px);
-}
-
-/* Centrado consistente */
-.v2-panel .katex-display > .katex {
-  display: inline-block;
-}
-
-/* Reduce “saltos” cuando hay varias seguidas */
-.v2-panel .katex-display + .katex-display {
-  margin-top: 10px;
-}
-
-.katex-muted {
-  height: 20px;
-  font-size: small;
-  border-radius: 14px;
-  border: 2px solid #fd0909;
-}
-
-/* Si quieres que las fórmulas grandes no rompan el layout en móvil */
-@media (max-width: 600px) {
-  .v2-panel .katex-display {
-    padding: 12px 12px;
-    border-radius: 14px;
-  }
-}
-
-.v2-formula-select.active {
-  border-color: rgba(0,0,0,0.28);
-  background: rgba(0,0,0,0.06);
-}
-
-.v2-node-sections { margin-top: 18px; display: grid; gap: 10px; }
-
-.v2-acc {
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 14px;
-  overflow: hidden;
-  background: rgba(255,255,255,0.7);
-}
-
-.v2-acc-btn{
-  width: 100%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding: 12px 14px;
-  background: transparent;
-  border: 0;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.v2-acc-body{
-  padding: 12px 14px;
-  border-top: 1px solid rgba(0,0,0,0.08);
-}
-
-.v2-acc-body ul, .v2-acc-body ol { margin: 0; padding-left: 18px; }
-.v2-acc-body li { margin: 6px 0; }
-
-/* Estilos personalizados para fórmulas del convertidor de ángulos */
-.angle-converter-formula .katex {
-  font-size: 0.8em !important;
-  color: #f3f3f8 !important;
-  font-weight: 500 !important;
-}
-
-.angle-converter-formula .katex-display {
-  margin: 0.5em 0 !important;
-  text-align: center !important;
-}
-
-.angle-converter-formula .katex .mord {
-  color: #eceaf0 !important;
-}
-
-.angle-converter-formula .katex .mbin,
-.angle-converter-formula .katex .mrel {
-  color: #eceaf0 !important;
-}
-
-.angle-converter-formula .katex .mfrac {
-  border-color: #6366f1 !important;
-}
-
-.angle-converter-formula .katex .frac-line {
-  border-bottom-color: #6366f1 !important;
-}
-/* Estilos personalizados para fórmulas LaTeX con texto blanco */
-.custom-latex-white .katex {
-  font-size: 0.9em !important;
-  color: white !important;
-}
-
-.custom-latex-white .katex-display {
-  margin: 0.3em 0 !important;
-  text-align: center !important;
-}
-
-.custom-latex-white .katex .mord,
-.custom-latex-white .katex .mbin,
-.custom-latex-white .katex .mrel,
-.custom-latex-white .katex .mop,
-.custom-latex-white .katex .mpunct,
-.custom-latex-white .katex .mopen,
-.custom-latex-white .katex .mclose {
-  color: white !important;
-}
-
-.custom-latex-white .katex .frac-line {
-  border-bottom-color: white !important;
-}
-
-.custom-latex-white .katex .sqrt > .root {
-  color: white !important;
-}
-
-.custom-latex-white .katex .accent-body {
-  color: white !important;
-}
-
-.sidebar-icon-emoji {
-  font-size: 1.4rem;
-  line-height: 1;
-  width: 28px;
+/* Wrapper label del checkbox */
+.v2-checkbox-modern {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 10px;
+  user-select: none;
+  cursor: pointer;
 }
 
-
-.sidebar.collapsed .sidebar-icon-emoji {
-  margin: 0 auto;
-}
-
-.v2-level-badges {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  display: flex;
-  gap: 4px;
-  z-index: 2;
-}
-
-.v2-level-badge {
+.v2-checkbox-modern input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
   width: 18px;
   height: 18px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 15px;
+  margin-right: 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(15, 23, 42, 0.25);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  display: inline-grid;
+  place-content: center;
+  transition: background 140ms ease, border-color 140ms ease, transform 80ms ease;
 }
 
-/* Colores para los diferentes niveles educativos */
-.v2-level-badge.bg-blue-500 {
-  background-color: #3b82f6; /* ESO - Azul */
+.v2-checkbox-modern input[type="checkbox"]:hover {
+  border-color: rgba(79, 70, 229, 0.55);
 }
 
-.v2-level-badge.bg-green-500 {
-  background-color: #10b981; /* BACHILLERATO - Verde */
+.v2-checkbox-modern input[type="checkbox"]:active {
+  transform: scale(0.96);
 }
 
-.v2-level-badge.bg-orange-500 {
-  background-color: #f59e0b; /* UNIVERSIDAD - Naranja */
+.v2-checkbox-modern input[type="checkbox"]::after {
+  content: "";
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid rgb(253, 3, 3);
+  border-bottom: 2px solid rgb(247, 3, 3);
+  transform: rotate(-45deg) scale(0);
+  transform-origin: center;
+  transition: transform 120ms ease;
 }
 
-.v2-level-badge.bg-red-500 {
-  background-color: #ef4444; /* EXTRACURRICULAR - Rojo */
+.v2-checkbox-modern input[type="checkbox"]:checked {
+  background: rgba(167, 2, 117, 0.98);
+  border-color: rgba(79, 70, 229, 0.95);
 }
 
-.v2-node-icon-img {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-}
-/* Efectos hover adicionales para las cards profesionales */
-.v2-node-card:hover .v2-node-icon {
-  /* Efecto hover para el icono */
-  transform: scale(1.1) rotateY(5deg);
-  
-  /* Brillo más intenso en hover */
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.25) 0%, 
-    rgba(255, 255, 255, 0.1) 100%);
-  
-  border-color: rgba(255, 255, 255, 0.4);
-  
-  /* Sombra más dramática */
-  box-shadow: 
-    inset 0 2px 6px rgba(255, 255, 255, 0.2),
-    inset 0 -2px 6px rgba(0, 0, 0, 0.15),
-    0 6px 20px rgba(0, 0, 0, 0.25);
+.v2-checkbox-modern input[type="checkbox"]:checked::after {
+  transform: rotate(-45deg) scale(1);
 }
 
-.v2-node-card:hover .v2-node-title {
-  /* Efecto hover para el título */
-  text-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.4),
-    0 2px 6px rgba(0, 0, 0, 0.3),
-    0 0 20px rgba(255, 255, 255, 0.3);
+.v2-check-label {
+  font-size: 13px;
+  font-weight: 650;
+  border: #021ff8;
+  color: rgba(1, 75, 248, 0.88);
 }
 
-/* Efecto de pulsación sutil en el icono */
-.v2-node-icon {
-  animation: subtle-pulse 4s ease-in-out infinite;
+.v2-check-hint {
+  font-size: 12px;
+  color: rgba(100, 116, 139, 0.95);
+  padding-left: 28px;
 }
 
-@keyframes subtle-pulse {
-  0%, 100% {
-    box-shadow: 
-      inset 0 2px 4px rgba(255, 255, 255, 0.1),
-      inset 0 -2px 4px rgba(0, 0, 0, 0.1),
-      0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  50% {
-    box-shadow: 
-      inset 0 2px 6px rgba(255, 255, 255, 0.15),
-      inset 0 -2px 6px rgba(0, 0, 0, 0.05),
-      0 6px 16px rgba(0, 0, 0, 0.2);
-  }
+/* ── 12c. Slider ─────────────────────────────────────────────────────────── */
+/* Tailwind no cubre pseudo-elementos de range; se define aquí */
+
+.range-indigo {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
 }
 
-/* Pausa la animación en hover para evitar conflictos */
-.v2-node-card:hover .v2-node-icon {
-  animation-play-state: paused;
-}
-/* Efectos adicionales para el v2-panel */
-.v2-panel:hover {
-  /* Efecto hover sutil para el panel */
-  box-shadow: 
-    0 6px 24px rgba(0, 0, 0, 0.12),
-    0 4px 12px rgba(59, 130, 246, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  
-  border-color: rgba(59, 130, 246, 0.3);
-  transform: translateY(-2px);
+.range-indigo::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  background: #334155; /* slate-700 */
+  border-radius: 2px;
 }
 
-
-/* Estilos mejorados para el contenido markdown dentro del panel */
-.v2-panel h1,
-.v2-panel h2,
-.v2-panel h3,
-.v2-panel h4,
-.v2-panel h5,
-.v2-panel h6 {
-  color: #1e40af;
-  padding-top: 1.0em;
-  margin-top: 1.0em;
-  margin-bottom: 0.75em;
-  font-weight: 600;
-}
-
-.v2-panel h1 { font-size: 1.8rem; }
-.v2-panel h2 { font-size: 1.5rem; }
-.v2-panel h3 { font-size: 1.3rem; }
-
-.v2-panel p {
-  margin-bottom: 1em;
-  text-align: justify;
-}
-
-.v2-panel ul,
-.v2-panel ol {
-  margin: 1em 0;
-  padding-left: 1.5em;
-}
-
-.v2-panel li {
-  margin-bottom: 0.5em;
-}
-
-
-.v2-panel blockquote p {
-  margin: 0;
-}
-
-.v2-panel blockquote,
-.v2-panel .markdown-content blockquote,
-.markdown-content .v2-panel blockquote {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  border-left: 4px solid #3b82f6 !important;
-  background: rgba(59, 130, 246, 0.05) !important;
-  margin: 1em 0 !important; /* Reducido de 1.5em a 1em para evitar desbordamiento */
-  padding: 1em 1.5em !important;
-  border-radius: 0 8px 8px 0 !important;
-  font-style: italic !important;
-  color: #006aff !important;
-  border-top: none !important;
-  border-right: none !important;
-  border-bottom: none !important;
-  /* Asegurar que se mantenga dentro del contenedor */
-  box-sizing: border-box !important;
-  max-width: 100% !important;
-  overflow-wrap: break-word !important;
-}
-
-.v2-panel code {
-  background: rgba(205, 221, 247, 0);
-  color: #295bff;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 0.9em;
-}
-
-.v2-panel pre {
-  background: rgba(0, 0, 0, 0.95);
-  color: #ffffff;
-  padding: 1.0em;
-  border-radius: 12px;
-  overflow-x: auto;
-  margin: 1.5em 0;
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  font-size: 1.2em;
-}
-
-.v2-panel pre code {
-  background: none;
-  color: inherit;
-  padding: 0;
-}
-
-/* Enlaces mejorados */
-.v2-panel a {
-  color: #2563eb;
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
+.range-indigo::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 18px;
+  width: 18px;
+  border-radius: 9999px;
+  background: #6366f1; /* indigo-500 */
+  cursor: pointer;
+  margin-top: -7px;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
   transition: all 0.2s ease;
 }
 
-.v2-panel a:hover {
-  color: #1d4ed8;
-  border-bottom-color: #2563eb;
+.range-indigo:active::-webkit-slider-thumb {
+  transform: scale(1.2);
 }
 
-/* Tablas mejoradas */
-.v2-panel table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.5em 0;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+/* ── 12d. Botones ────────────────────────────────────────────────────────── */
+
+.btn-play {
+  background-color: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
 }
 
-.v2-panel th,
-.v2-panel td {
-  padding: 12px 16px;
-  text-align: left;
-  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+.btn-primary:hover {
+  filter: brightness(0.95);
 }
 
-.v2-panel th {
-  background: rgba(59, 130, 246, 0.1);
-  font-weight: 600;
-  color: #1e40af;
+.btn-secondary {
+  background-color: var(--surface-2);
+  color: var(--text);
+  border-color: var(--border);
 }
 
-.v2-panel tr:hover {
-  background: rgba(59, 130, 246, 0.05);
+.btn-secondary:hover {
+  filter: brightness(0.98);
 }
 
-/* Warning card para fórmulas no calculables */
+
+/* =============================================================================
+   13. CONVERTIDOR DE ÁNGULOS  —  AngleConverterDetails.animated.jsx
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Estilos específicos para las fórmulas LaTeX del convertidor */
+.angle-converter-formula .katex              { font-size: 0.8em !important; color: #f3f3f8 !important; font-weight: 500 !important; }
+.angle-converter-formula .katex-display      { margin: 0.5em 0 !important; text-align: center !important; }
+.angle-converter-formula .katex .mord        { color: #eceaf0 !important; }
+.angle-converter-formula .katex .mbin,
+.angle-converter-formula .katex .mrel        { color: #eceaf0 !important; }
+.angle-converter-formula .katex .mfrac       { border-color: #6366f1 !important; }
+.angle-converter-formula .katex .frac-line   { border-bottom-color: #6366f1 !important; }
+
+/* Contención del convertidor completo */
+.v2-angle-converter {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+.v2-angle-converter * {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Flex interno responsive */
+.v2-angle-converter div[style*="display: flex"] {
+  flex-wrap: wrap !important;
+  max-width: 100% !important;
+}
+
+/* Anular anchos fijos problemáticos */
+.v2-angle-converter div[style*="width: 150"],
+.v2-angle-converter div[style*="width: 210"],
+.v2-angle-converter div[style*="minWidth: 120"] {
+  max-width: 100% !important;
+  width: auto !important;
+  min-width: auto !important;
+}
+
+
+/* =============================================================================
+   14. WARNING CARDS  —  CalculatorV2.jsx (fórmulas no calculables)
+   ──────────────────────────────────────────────────────────────────────────── */
+
 .v2-warning-card {
   margin-top: 12px;
   background-color: #fef3c7;
-  border-color: #f59e0b;
+  border-color: #ff6600;
   border-width: 2px;
   animation: fadeIn 0.3s ease-in;
+}
+
+.v2-warning-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }
 
 .v2-warning-icon {
@@ -1100,12 +1989,73 @@
   font-size: 0.9em;
 }
 
-.v2-warning-content {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
+
+/* =============================================================================
+   15. SIDEBAR  —  NavbarSidebar.jsx
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.sidebar-icon-emoji {
+  font-size: 1.4rem;
+  line-height: 1;
+  width: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.sidebar.collapsed .sidebar-icon-emoji {
+  margin: 0 auto;
+}
+
+
+/* =============================================================================
+   16. MISCELÁNEA
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Texto muted genérico */
+.muted {
+  margin: 10px 0 20px 0;
+  color: rgb(253, 193, 124);
+}
+
+/* Celda de fórmula en modo compacto */
+.muted-formula {
+  height: 40px;
+  padding: 6px;
+  color: rgb(194, 111, 211);
+  border: 1px solid #a998f8;
+  border-radius: 6px;
+}
+
+/* Celda de resultado en modo compacto */
+.muted-resultado {
+  height: 25px;
+  padding-left: 5px;
+  margin: 0 0 0 5px;
+  color: rgb(104, 102, 238);
+  border: 1px solid #a998f8;
+}
+
+/* Título de card genérico */
+.v2-card-title {
+  padding-top: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #ffffff;
+}
+
+/* Fondo decorativo de puntos (usado en algunos gráficos) */
+.grid-dots {
+  background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+
+/* =============================================================================
+   17. ANIMACIONES
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Entrada suave (warning cards, modales, etc.) */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -1116,196 +2066,102 @@
     transform: translateY(0);
   }
 }
-/* Forzar que el convertidor de ángulos respete los límites del contenedor */
-.v2-angle-converter * {
-  max-width: 100% !important;
-  box-sizing: border-box !important;
+
+/* Pulsación sutil del icono de node-card */
+@keyframes subtle-pulse {
+  0%, 100% {
+    box-shadow:
+      inset 0 2px 4px rgba(255, 255, 255, 0.1),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.1),
+      0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  50% {
+    box-shadow:
+      inset 0 2px 6px rgba(255, 255, 255, 0.15),
+      inset 0 -2px 6px rgba(0, 0, 0, 0.05),
+      0 6px 16px rgba(0, 0, 0, 0.2);
+  }
 }
 
-.v2-angle-converter {
-  width: 100% !important;
-  max-width: 100% !important;
-  overflow: hidden !important;
-}
 
-/* Hacer que todos los elementos flex dentro del convertidor sean responsivos */
-.v2-angle-converter div[style*="display: flex"] {
-  flex-wrap: wrap !important;
-  max-width: 100% !important;
-}
+/* =============================================================================
+   18. DUPLICADOS
+   ─────────────────────────────────────────────────────────────────────────────
+   El selector .v2-checkbox aparece definido con dos significados distintos
+   en el CSS original. Se conservan ambas versiones aquí con etiquetas claras.
 
-/* Limitar anchos fijos problemáticos */
-.v2-angle-converter div[style*="width: 150"],
-.v2-angle-converter div[style*="width: 210"],
-.v2-angle-converter div[style*="minWidth: 120"] {
-  max-width: 100% !important;
-  width: auto !important;
-  min-width: auto !important;
-}
+   VERSIÓN A (switch pill, estilo iOS):
+     → usada como input[type="checkbox"] estilizado como toggle pill.
+     → Requiere que el elemento sea directamente el <input>.
+     → ACTIVA si usas <input class="v2-checkbox"> sin un wrapper.
 
-/* Estilos para inputs en gráficos - fondo oscuro y texto visible */
-.v2-panel .form-control,
-.v2-panel input[type="text"],
-.v2-panel input[type="number"],
-.v2-panel input[type="range"],
-.v2-panel select {
-  background-color: #1e293b !important;
-  color: #ffffff !important;
-  border: 1px solid #475569 !important;
-  border-radius: 6px !important;
-  padding: 8px 12px !important;
-  transition: all 0.2s ease !important;
-}
+   VERSIÓN B (alias de wrapper con .v2-checkbox-modern):
+     → usada como <label class="v2-checkbox"> que envuelve un <input>.
+     → En la sección 12b se renombró a .v2-checkbox-modern para evitar
+       la colisión. ACTIVA si actualizas el JSX al nuevo nombre.
 
-.v2-panel .form-control:focus,
-.v2-panel input[type="text"]:focus,
-.v2-panel input[type="number"]:focus,
-.v2-panel select:focus {
-  background-color: #0f172a !important;
-  color: #ffffff !important;
-  border-color: #3b82f6 !important;
-  outline: none !important;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
-}
+   ACCIÓN RECOMENDADA:
+     - Si el JSX usa .v2-checkbox directamente en el <input>: mantén VERSIÓN A
+       y elimina o renombra la VERSIÓN B en el JSX.
+     - Si el JSX usa .v2-checkbox en un <label>: renombra a .v2-checkbox-modern
+       en JSX y activa la VERSIÓN B de la sección 12b.
+   ──────────────────────────────────────────────────────────────────────────── */
 
-.v2-panel .form-control::placeholder,
-.v2-panel input::placeholder {
-  color: #94a3b8 !important;
-  opacity: 0.7 !important;
-}
-
-/* Estilos para labels de inputs */
-.v2-panel label {
-  color: #e2e8f0 !important;
-  font-weight: 500 !important;
-  margin-bottom: 6px !important;
-  display: block !important;
-}
-
-/* Estilos para inputs deshabilitados */
-.v2-panel .form-control:disabled,
-.v2-panel input:disabled {
-  background-color: #334155 !important;
-  color: #64748b !important;
-  cursor: not-allowed !important;
-  opacity: 0.6 !important;
-}
-
-.btn-play {
-  background-color: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
-}
-.btn-primary:hover { filter: brightness(0.95); }
-
-.btn-secondary {
-  background-color: var(--surface-2);
-  color: var(--text);
-  border-color: var(--border);
-}
-.btn-secondary:hover { filter: brightness(0.98); }
-
-
-/* Slider pro (pseudo-elementos, Tailwind no llega aquí) */
-.range-indigo {
-  -webkit-appearance: none;
-  width: 100%;
-  background: transparent;
-}
-.range-indigo::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 4px;
-  background: #334155; /* slate-700 */
-  border-radius: 2px;
-}
-.range-indigo::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  height: 18px;
-  width: 18px;
-  border-radius: 9999px;
-  background: #6366f1; /* indigo-500 */
-  cursor: pointer;
-  margin-top: -7px;
-  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
-  transition: all 0.2s ease;
-}
-.range-indigo:active::-webkit-slider-thumb {
-  transform: scale(1.2);
-}
-
-/* Fondo de puntos */
-.grid-dots {
-  background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-/* --- Modern checkbox (real checkbox) --- */
-.v2-check-row {
-  display: grid;
-  gap: 6px;
-}
-
-.v2-checkbox {
-  display: inline-flex;
+/* — VERSIÓN A: switch pill (original lines 16–59) — */
+.v2-checkbox-pill-container {
+  display: flex;
   align-items: center;
   gap: 10px;
-  user-select: none;
-  cursor: pointer;
+  margin: 8px 0;
 }
 
-.v2-checkbox input[type="checkbox"] {
+.v2-checkbox-pill {
   appearance: none;
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  padding: 15px;
-  margin-right: 10px;
-  border-radius: 6px;
-  border: 1px solid rgba(15, 23, 42, 0.25);
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
-  display: inline-grid;
-  place-content: center;
-  transition: background 140ms ease, border-color 140ms ease, transform 80ms ease;
+  width: 40px;
+  height: 20px;
+  border: 2px solid rgba(226, 232, 240, 0.3);
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
 }
 
-.v2-checkbox input[type="checkbox"]:hover {
-  border-color: rgba(79, 70, 229, 0.55);
+.v2-checkbox-pill::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(226, 232, 240, 0.8);
+  transition: all 0.3s ease;
 }
 
-.v2-checkbox input[type="checkbox"]:active {
-  transform: scale(0.96);
+.v2-checkbox-pill:hover {
+  border-color: rgba(96, 165, 250, 0.6);
 }
 
-.v2-checkbox input[type="checkbox"]::after {
-  content: "";
-  width: 9px;
-  height: 5px;
-  border-left: 2px solid rgb(253, 3, 3);
-  border-bottom: 2px solid rgb(247, 3, 3);
-  transform: rotate(-45deg) scale(0);
-  transform-origin: center;
-  transition: transform 120ms ease;
+.v2-checkbox-pill:checked {
+  background: rgba(96, 165, 250, 0.8);
+  border-color: rgba(96, 165, 250, 1);
 }
 
-.v2-checkbox input[type="checkbox"]:checked {
-  background: rgba(167, 2, 117, 0.98);
-  border-color: rgba(79, 70, 229, 0.95);
+.v2-checkbox-pill:checked::before {
+  left: 22px;
+  background: white;
 }
 
-.v2-checkbox input[type="checkbox"]:checked::after {
-  transform: rotate(-45deg) scale(1);
-}
-
-.v2-check-label {
+.v2-checkbox-pill-label {
+  color: rgba(226, 232, 240, 0.8);
   font-size: 13px;
-  font-weight: 650;
-  border: #021ff8;
-  color: rgba(1, 75, 248, 0.88);
+  cursor: pointer;
+  user-select: none;
 }
 
-.v2-check-hint {
-  font-size: 12px;
-  color: rgba(100, 116, 139, 0.95);
-  padding-left: 28px;
-}
+/*
+   NOTA ADICIONAL: .v2-node-grid a max-width: 1200px (original line 459)
+   tenía el mismo valor que la definición base (3 columnas), por lo que
+   era una regla redundante. Se eliminó.
+*/

@@ -1,0 +1,804 @@
+version: "5.0.0"
+ui:
+  default_formula: segunda_ley_newton_vectorial
+formulas:
+  - id: segunda_ley_newton_vectorial
+    title:
+      es: "Segunda ley de Newton vectorial"
+      en: "Vector form of Newton's second law"
+    equation: "fuerza_neta = masa * aceleracion"
+    latex: "\\vec{F}_{\\mathrm{net}} = m \\cdot \\vec{a}"
+    magnitudes:
+      - fuerza_neta
+      - masa
+      - aceleracion
+    category: "ley_fundamental"
+    relation_type: "vectorial"
+    physical_meaning:
+      es: "La aceleración de un cuerpo queda determinada por la fuerza neta y su masa."
+      en: "A body's acceleration is determined by the net force and its mass."
+    constraints:
+      - "Sistema de referencia inercial."
+      - "Masa constante."
+      - "Fuerza neta correctamente sumada como vector."
+    validity:
+      es: "Válida en mecánica newtoniana para velocidades pequeñas frente a la luz y masa constante."
+      en: "Valid in Newtonian mechanics for speeds small compared with light and constant mass."
+    dimension_check: "[M L T^-2] = [M] [L T^-2]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "dinamica"
+      - "diagramas_cuerpo_libre"
+      - "planos_inclinados"
+    interpretation_tags:
+      - "fuerza_neta"
+      - "masa"
+      - "aceleracion"
+      - "relacion_vectorial"
+    result_semantics:
+      target: fuerza_neta
+      kind: "vector"
+      sign_meaning: "El sentido de la fuerza neta coincide con el sentido de la aceleración."
+      absolute_value_meaning: "El módulo indica la intensidad del desequilibrio dinámico."
+    domain_checks:
+      - id: masa_positiva
+        rule: "masa > 0"
+        message:
+          es: "La masa debe ser positiva."
+          en: "Mass must be positive."
+      - id: marco_inercial
+        rule: "reference_frame == inertial"
+        message:
+          es: "La segunda ley requiere un sistema inercial o fuerzas ficticias añadidas."
+          en: "Newton's second law requires an inertial frame or added fictitious forces."
+    coherence_checks:
+      - id: direccion_aceleracion
+        rule: "fuerza_neta parallel aceleracion"
+        message:
+          es: "La aceleración debe tener la misma dirección que la fuerza neta."
+          en: "Acceleration must have the same direction as net force."
+    graph_implications:
+      - "En una gráfica fuerza-aceleración, la pendiente representa la masa."
+      - "En un DCL, solo la resultante de todas las fuerzas determina la aceleración."
+    pedagogical_triggers:
+      - "Confundir fuerza aplicada con fuerza neta."
+      - "Olvidar que la ecuación es vectorial."
+      - "Usar masa en gramos en lugar de kilogramos."
+    rearrangements:
+      - target: fuerza_neta
+        equation: "fuerza_neta = masa * aceleracion"
+        latex: "\\vec{F}_{\\mathrm{net}} = m \\cdot \\vec{a}"
+      - target: masa
+        equation: "masa = fuerza_neta / aceleracion"
+        latex: "m = \\frac{\\left|\\vec{F}_{\\mathrm{net}}\\right|}{\\left|\\vec{a}\\right|}"
+      - target: aceleracion
+        equation: "aceleracion = fuerza_neta / masa"
+        latex: "\\vec{a} = \\frac{\\vec{F}_{\\mathrm{net}}}{m}"
+
+  - id: segunda_ley_newton_x
+    title:
+      es: "Segunda ley de Newton en el eje x"
+      en: "Newton's second law along the x-axis"
+    equation: "fuerza_neta_x = masa * aceleracion_x"
+    latex: "F_{\\mathrm{net},x} = m \\cdot a_x"
+    magnitudes:
+      - fuerza_neta_x
+      - masa
+      - aceleracion_x
+    category: "ley_por_componentes"
+    relation_type: "componente"
+    physical_meaning:
+      es: "La componente horizontal de la fuerza neta determina la aceleración horizontal."
+      en: "The horizontal component of net force determines horizontal acceleration."
+    constraints:
+      - "Eje x definido antes de aplicar signos."
+      - "Todas las fuerzas proyectadas sobre el mismo eje x."
+    validity:
+      es: "Válida al descomponer la segunda ley en componentes cartesianas dentro de un sistema inercial."
+      en: "Valid when decomposing Newton's second law into Cartesian components in an inertial frame."
+    dimension_check: "[M L T^-2] = [M] [L T^-2]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "dinamica_por_ejes"
+      - "movimiento_horizontal"
+      - "planos_inclinados"
+    interpretation_tags:
+      - "componente_x"
+      - "signo"
+      - "eje_x"
+    result_semantics:
+      target: fuerza_neta_x
+      kind: "scalar_component"
+      sign_meaning: "El signo indica si la resultante apunta a favor o contra el eje x positivo."
+      absolute_value_meaning: "El valor absoluto mide la intensidad de la resultante horizontal."
+    domain_checks:
+      - id: masa_positiva
+        rule: "masa > 0"
+        message:
+          es: "La masa debe ser positiva."
+          en: "Mass must be positive."
+    coherence_checks:
+      - id: signos_x
+        rule: "signos definidos con el mismo eje x"
+        message:
+          es: "Todos los signos deben referirse al mismo eje x."
+          en: "All signs must refer to the same x-axis."
+    graph_implications:
+      - "En Coord, la pendiente de fuerza frente a aceleración en x representa la masa."
+      - "En DCL, solo cuentan las proyecciones sobre x."
+    pedagogical_triggers:
+      - "Mezclar fuerzas verticales dentro de la ecuación horizontal."
+      - "Cambiar el signo de una fuerza sin cambiar el eje."
+    rearrangements:
+      - target: fuerza_neta_x
+        equation: "fuerza_neta_x = masa * aceleracion_x"
+        latex: "F_{\\mathrm{net},x} = m \\cdot a_x"
+      - target: masa
+        equation: "masa = fuerza_neta_x / aceleracion_x"
+        latex: "m = \\frac{F_{\\mathrm{net},x}}{a_x}"
+      - target: aceleracion_x
+        equation: "aceleracion_x = fuerza_neta_x / masa"
+        latex: "a_x = \\frac{F_{\\mathrm{net},x}}{m}"
+
+  - id: segunda_ley_newton_y
+    title:
+      es: "Segunda ley de Newton en el eje y"
+      en: "Newton's second law along the y-axis"
+    equation: "fuerza_neta_y = masa * aceleracion_y"
+    latex: "F_{\\mathrm{net},y} = m \\cdot a_y"
+    magnitudes:
+      - fuerza_neta_y
+      - masa
+      - aceleracion_y
+    category: "ley_por_componentes"
+    relation_type: "componente"
+    physical_meaning:
+      es: "La componente vertical o normal de la fuerza neta determina la aceleración en ese eje."
+      en: "The vertical or normal component of net force determines acceleration along that axis."
+    constraints:
+      - "Eje y definido antes de aplicar signos."
+      - "Todas las fuerzas proyectadas sobre el mismo eje y."
+    validity:
+      es: "Válida al descomponer la segunda ley por componentes en un sistema inercial."
+      en: "Valid when decomposing Newton's second law into components in an inertial frame."
+    dimension_check: "[M L T^-2] = [M] [L T^-2]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "dinamica_por_ejes"
+      - "equilibrio_vertical"
+      - "planos_inclinados"
+    interpretation_tags:
+      - "componente_y"
+      - "normal"
+      - "equilibrio"
+    result_semantics:
+      target: fuerza_neta_y
+      kind: "scalar_component"
+      sign_meaning: "El signo indica si la resultante apunta a favor o contra el eje y positivo."
+      absolute_value_meaning: "El valor absoluto mide la intensidad de la resultante vertical o normal."
+    domain_checks:
+      - id: masa_positiva
+        rule: "masa > 0"
+        message:
+          es: "La masa debe ser positiva."
+          en: "Mass must be positive."
+    coherence_checks:
+      - id: signos_y
+        rule: "signos definidos con el mismo eje y"
+        message:
+          es: "Todos los signos deben referirse al mismo eje y."
+          en: "All signs must refer to the same y-axis."
+    graph_implications:
+      - "En DCL, la normal y el peso suelen competir en el eje y."
+      - "Si no hay aceleración en y, la suma de fuerzas en y debe ser cero."
+    pedagogical_triggers:
+      - "Suponer normal igual a peso sin analizar la ecuación vertical."
+      - "Olvidar aceleración vertical en ascensores o movimientos curvos."
+    rearrangements:
+      - target: fuerza_neta_y
+        equation: "fuerza_neta_y = masa * aceleracion_y"
+        latex: "F_{\\mathrm{net},y} = m \\cdot a_y"
+      - target: masa
+        equation: "masa = fuerza_neta_y / aceleracion_y"
+        latex: "m = \\frac{F_{\\mathrm{net},y}}{a_y}"
+      - target: aceleracion_y
+        equation: "aceleracion_y = fuerza_neta_y / masa"
+        latex: "a_y = \\frac{F_{\\mathrm{net},y}}{m}"
+
+  - id: segunda_ley_newton_masa
+    title:
+      es: "Masa a partir de fuerza neta y aceleración"
+      en: "Mass from net force and acceleration"
+    equation: "masa = fuerza_neta / aceleracion"
+    latex: "m = \\frac{\\left|\\vec{F}_{\\mathrm{net}}\\right|}{\\left|\\vec{a}\\right|}"
+    magnitudes:
+      - masa
+      - fuerza_neta
+      - aceleracion
+    category: "despeje"
+    relation_type: "algebraica"
+    physical_meaning:
+      es: "La masa mide la oposición del cuerpo a cambiar su movimiento ante una fuerza neta."
+      en: "Mass measures a body's opposition to changing motion under a net force."
+    constraints:
+      - "La aceleración no puede ser nula para este despeje."
+      - "Fuerza neta y aceleración deben ser paralelas en el modelo vectorial."
+    validity:
+      es: "Válida como despeje escalar usando módulos cuando fuerza neta y aceleración son coherentes."
+      en: "Valid as a scalar rearrangement using magnitudes when net force and acceleration are coherent."
+    dimension_check: "[M] = [M L T^-2] / [L T^-2]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "calculo_de_masa"
+      - "laboratorio"
+    interpretation_tags:
+      - "masa"
+      - "inercia"
+      - "despeje"
+    result_semantics:
+      target: masa
+      kind: "scalar"
+      sign_meaning: "La masa no debe salir negativa."
+      absolute_value_meaning: "El valor representa la inercia del cuerpo."
+    domain_checks:
+      - id: aceleracion_no_nula
+        rule: "aceleracion != 0"
+        message:
+          es: "No se puede despejar masa dividiendo por aceleración nula."
+          en: "Mass cannot be solved by dividing by zero acceleration."
+    coherence_checks:
+      - id: masa_positiva
+        rule: "masa > 0"
+        message:
+          es: "Una masa negativa indica error de signos o de modelo."
+          en: "Negative mass indicates a sign or model error."
+    graph_implications:
+      - "En una gráfica fuerza-aceleración, la masa es la pendiente."
+    pedagogical_triggers:
+      - "Conservar signos vectoriales al calcular una masa escalar."
+      - "Dividir por aceleración cero."
+    rearrangements:
+      - target: masa
+        equation: "masa = fuerza_neta / aceleracion"
+        latex: "m = \\frac{\\left|\\vec{F}_{\\mathrm{net}}\\right|}{\\left|\\vec{a}\\right|}"
+      - target: fuerza_neta
+        equation: "fuerza_neta = masa * aceleracion"
+        latex: "\\left|\\vec{F}_{\\mathrm{net}}\\right| = m \\cdot \\left|\\vec{a}\\right|"
+      - target: aceleracion
+        equation: "aceleracion = fuerza_neta / masa"
+        latex: "\\left|\\vec{a}\\right| = \\frac{\\left|\\vec{F}_{\\mathrm{net}}\\right|}{m}"
+
+  - id: segunda_ley_newton_aceleracion
+    title:
+      es: "Aceleración a partir de fuerza neta y masa"
+      en: "Acceleration from net force and mass"
+    equation: "aceleracion = fuerza_neta / masa"
+    latex: "\\vec{a} = \\frac{\\vec{F}_{\\mathrm{net}}}{m}"
+    magnitudes:
+      - aceleracion
+      - fuerza_neta
+      - masa
+    category: "despeje"
+    relation_type: "vectorial"
+    physical_meaning:
+      es: "La aceleración aumenta con la fuerza neta y disminuye al aumentar la masa."
+      en: "Acceleration increases with net force and decreases as mass increases."
+    constraints:
+      - "Masa estrictamente positiva."
+      - "Fuerza neta expresada como vector o por componentes coherentes."
+    validity:
+      es: "Válida en sistemas inerciales con masa constante."
+      en: "Valid in inertial frames with constant mass."
+    dimension_check: "[L T^-2] = [M L T^-2] / [M]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "calculo_de_aceleracion"
+      - "prediccion_del_movimiento"
+    interpretation_tags:
+      - "aceleracion"
+      - "fuerza_neta"
+      - "masa"
+    result_semantics:
+      target: aceleracion
+      kind: "vector"
+      sign_meaning: "El signo por componentes indica hacia dónde cambia la velocidad."
+      absolute_value_meaning: "El módulo mide la rapidez con la que cambia la velocidad."
+    domain_checks:
+      - id: masa_positiva
+        rule: "masa > 0"
+        message:
+          es: "La masa debe ser positiva."
+          en: "Mass must be positive."
+    coherence_checks:
+      - id: direccion_resultante
+        rule: "aceleracion parallel fuerza_neta"
+        message:
+          es: "La aceleración debe apuntar como la fuerza neta."
+          en: "Acceleration must point like the net force."
+    graph_implications:
+      - "En Coord, para masa constante, aceleración y fuerza neta son proporcionales."
+    pedagogical_triggers:
+      - "Creer que más masa implica más aceleración con la misma fuerza."
+      - "Confundir aceleración con velocidad."
+    rearrangements:
+      - target: aceleracion
+        equation: "aceleracion = fuerza_neta / masa"
+        latex: "\\vec{a} = \\frac{\\vec{F}_{\\mathrm{net}}}{m}"
+      - target: fuerza_neta
+        equation: "fuerza_neta = masa * aceleracion"
+        latex: "\\vec{F}_{\\mathrm{net}} = m \\cdot \\vec{a}"
+      - target: masa
+        equation: "masa = fuerza_neta / aceleracion"
+        latex: "m = \\frac{\\left|\\vec{F}_{\\mathrm{net}}\\right|}{\\left|\\vec{a}\\right|}"
+
+  - id: fuerza_neta_sumatoria
+    title:
+      es: "Fuerza neta como suma de fuerzas"
+      en: "Net force as sum of forces"
+    equation: "fuerza_neta = sum(fuerzas)"
+    latex: "\\vec{F}_{\\mathrm{net}} = \\sum_i \\vec{F}_i"
+    magnitudes:
+      - fuerza_neta
+      - fuerza_aplicada
+      - peso
+      - normal
+      - fuerza_rozamiento
+    category: "composicion_vectorial"
+    relation_type: "sumatoria"
+    physical_meaning:
+      es: "La fuerza neta es la suma vectorial de todas las fuerzas reales aplicadas al cuerpo."
+      en: "Net force is the vector sum of all real forces applied to the body."
+    constraints:
+      - "Todas las fuerzas deben actuar sobre el mismo cuerpo."
+      - "Todas las fuerzas deben expresarse en el mismo sistema de ejes."
+    validity:
+      es: "Válida para construir el diagrama dinámico de un cuerpo antes de aplicar la segunda ley."
+      en: "Valid for building the dynamic diagram of a body before applying Newton's second law."
+    dimension_check: "[M L T^-2] = sum([M L T^-2])"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "diagramas_cuerpo_libre"
+      - "dinamica"
+      - "modelado_de_fuerzas"
+    interpretation_tags:
+      - "sumatoria"
+      - "dcl"
+      - "fuerzas_reales"
+    result_semantics:
+      target: fuerza_neta
+      kind: "vector"
+      sign_meaning: "El signo final depende de la suma por componentes."
+      absolute_value_meaning: "El módulo final mide el desequilibrio total."
+    domain_checks:
+      - id: mismo_cuerpo
+        rule: "todas_las_fuerzas_sobre_mismo_cuerpo"
+        message:
+          es: "No se deben sumar fuerzas que actúan sobre cuerpos distintos."
+          en: "Forces acting on different bodies must not be summed."
+    coherence_checks:
+      - id: ejes_comunes
+        rule: "todas_las_fuerzas_mismo_sistema_de_ejes"
+        message:
+          es: "Todas las fuerzas deben estar proyectadas en los mismos ejes."
+          en: "All forces must be projected onto the same axes."
+    graph_implications:
+      - "En DCL, cada flecha aporta una contribución a la resultante."
+      - "La resultante puede ser cero aunque existan fuerzas individuales."
+    pedagogical_triggers:
+      - "Sumar módulos en vez de vectores."
+      - "Incluir pares acción-reacción sobre cuerpos diferentes."
+      - "Olvidar fuerzas de contacto."
+    rearrangements:
+      - target: fuerza_neta
+        equation: "fuerza_neta = sum(fuerzas)"
+        latex: "\\vec{F}_{\\mathrm{net}} = \\sum_i \\vec{F}_i"
+
+  - id: fuerza_neta_x_sumatoria
+    title:
+      es: "Suma de fuerzas en el eje x"
+      en: "Sum of forces along the x-axis"
+    equation: "fuerza_neta_x = sum(fuerzas_x)"
+    latex: "F_{\\mathrm{net},x} = \\sum_i F_{i,x}"
+    magnitudes:
+      - fuerza_neta_x
+      - fuerza_aplicada
+      - fuerza_rozamiento
+      - componente_peso_paralela
+    category: "composicion_por_componentes"
+    relation_type: "sumatoria"
+    physical_meaning:
+      es: "La resultante en x se obtiene sumando solo las componentes sobre el eje x."
+      en: "The resultant along x is obtained by summing only components along the x-axis."
+    constraints:
+      - "Eje x definido."
+      - "Cada fuerza debe estar proyectada sobre x."
+    validity:
+      es: "Válida para aplicar la segunda ley en un eje horizontal o paralelo al plano."
+      en: "Valid for applying Newton's second law along a horizontal or incline-parallel axis."
+    dimension_check: "[M L T^-2] = sum([M L T^-2])"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "dinamica_por_ejes"
+      - "planos_inclinados"
+    interpretation_tags:
+      - "sumatoria_x"
+      - "componentes"
+      - "signos"
+    result_semantics:
+      target: fuerza_neta_x
+      kind: "scalar_component"
+      sign_meaning: "El signo final indica el sentido de la resultante sobre x."
+      absolute_value_meaning: "El valor absoluto mide la intensidad resultante sobre x."
+    domain_checks:
+      - id: eje_x_definido
+        rule: "axis_x != null"
+        message:
+          es: "Debe definirse el eje x antes de sumar componentes."
+          en: "The x-axis must be defined before summing components."
+    coherence_checks:
+      - id: no_sumar_y_en_x
+        rule: "solo_componentes_x"
+        message:
+          es: "No se deben sumar componentes verticales en la ecuación de x."
+          en: "Vertical components must not be included in the x-equation."
+    graph_implications:
+      - "En DCL, las flechas se proyectan sobre el eje x antes de sumarse."
+    pedagogical_triggers:
+      - "Sumar el peso completo en vez de su componente paralela."
+      - "Olvidar el signo del rozamiento."
+    rearrangements:
+      - target: fuerza_neta_x
+        equation: "fuerza_neta_x = sum(fuerzas_x)"
+        latex: "F_{\\mathrm{net},x} = \\sum_i F_{i,x}"
+
+  - id: fuerza_neta_y_sumatoria
+    title:
+      es: "Suma de fuerzas en el eje y"
+      en: "Sum of forces along the y-axis"
+    equation: "fuerza_neta_y = sum(fuerzas_y)"
+    latex: "F_{\\mathrm{net},y} = \\sum_i F_{i,y}"
+    magnitudes:
+      - fuerza_neta_y
+      - peso
+      - normal
+      - componente_peso_perpendicular
+    category: "composicion_por_componentes"
+    relation_type: "sumatoria"
+    physical_meaning:
+      es: "La resultante en y se obtiene sumando solo las componentes sobre el eje y."
+      en: "The resultant along y is obtained by summing only components along the y-axis."
+    constraints:
+      - "Eje y definido."
+      - "Cada fuerza debe estar proyectada sobre y."
+    validity:
+      es: "Válida para analizar equilibrio vertical, apoyo normal o eje perpendicular al plano."
+      en: "Valid for analyzing vertical equilibrium, normal support, or the axis perpendicular to an incline."
+    dimension_check: "[M L T^-2] = sum([M L T^-2])"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "dinamica_por_ejes"
+      - "equilibrio_vertical"
+      - "planos_inclinados"
+    interpretation_tags:
+      - "sumatoria_y"
+      - "normal"
+      - "peso"
+    result_semantics:
+      target: fuerza_neta_y
+      kind: "scalar_component"
+      sign_meaning: "El signo final indica el sentido de la resultante sobre y."
+      absolute_value_meaning: "El valor absoluto mide la intensidad resultante sobre y."
+    domain_checks:
+      - id: eje_y_definido
+        rule: "axis_y != null"
+        message:
+          es: "Debe definirse el eje y antes de sumar componentes."
+          en: "The y-axis must be defined before summing components."
+    coherence_checks:
+      - id: no_sumar_x_en_y
+        rule: "solo_componentes_y"
+        message:
+          es: "No se deben sumar componentes horizontales en la ecuación de y."
+          en: "Horizontal components must not be included in the y-equation."
+    graph_implications:
+      - "En DCL, normal y peso suelen compararse sobre este eje."
+    pedagogical_triggers:
+      - "Dar por hecho que la normal siempre iguala al peso."
+      - "Olvidar aceleración perpendicular cuando existe."
+    rearrangements:
+      - target: fuerza_neta_y
+        equation: "fuerza_neta_y = sum(fuerzas_y)"
+        latex: "F_{\\mathrm{net},y} = \\sum_i F_{i,y}"
+
+  - id: peso
+    title:
+      es: "Peso"
+      en: "Weight"
+    equation: "peso = masa * gravedad"
+    latex: "P = m \\cdot g"
+    magnitudes:
+      - peso
+      - masa
+      - gravedad
+    category: "fuerza_gravitatoria"
+    relation_type: "proporcionalidad"
+    physical_meaning:
+      es: "El peso es la fuerza gravitatoria cuyo módulo crece con la masa y la gravedad local."
+      en: "Weight is the gravitational force whose magnitude grows with mass and local gravity."
+    constraints:
+      - "Usar gravedad como módulo positivo."
+      - "La dirección del peso se asigna hacia abajo o hacia el centro del astro."
+    validity:
+      es: "Válida cerca de la superficie terrestre cuando la gravedad puede considerarse constante."
+      en: "Valid near Earth's surface when gravity can be considered constant."
+    dimension_check: "[M L T^-2] = [M] [L T^-2]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "peso"
+      - "dcl"
+      - "planos_inclinados"
+    interpretation_tags:
+      - "peso"
+      - "gravedad"
+      - "masa"
+    result_semantics:
+      target: peso
+      kind: "vector"
+      sign_meaning: "El signo aparece al proyectar el peso sobre un eje."
+      absolute_value_meaning: "El módulo representa la intensidad de la fuerza gravitatoria."
+    domain_checks:
+      - id: masa_positiva
+        rule: "masa > 0"
+        message:
+          es: "La masa debe ser positiva."
+          en: "Mass must be positive."
+      - id: gravedad_positiva
+        rule: "gravedad > 0"
+        message:
+          es: "La gravedad como módulo debe ser positiva."
+          en: "Gravity as a magnitude must be positive."
+    coherence_checks:
+      - id: peso_no_es_masa
+        rule: "unidad_si == N"
+        message:
+          es: "El peso se mide en newtons, no en kilogramos."
+          en: "Weight is measured in newtons, not kilograms."
+    graph_implications:
+      - "En DCL, el peso apunta verticalmente hacia abajo."
+    pedagogical_triggers:
+      - "Confundir masa y peso."
+      - "Asignar dos veces el signo negativo de la gravedad."
+    rearrangements:
+      - target: peso
+        equation: "peso = masa * gravedad"
+        latex: "P = m \\cdot g"
+      - target: masa
+        equation: "masa = peso / gravedad"
+        latex: "m = \\frac{P}{g}"
+      - target: gravedad
+        equation: "gravedad = peso / masa"
+        latex: "g = \\frac{P}{m}"
+
+  - id: rozamiento_cinetico
+    title:
+      es: "Rozamiento cinético"
+      en: "Kinetic friction"
+    equation: "fuerza_rozamiento = coeficiente_rozamiento * normal"
+    latex: "F_r = \\mu \\cdot N"
+    magnitudes:
+      - fuerza_rozamiento
+      - coeficiente_rozamiento
+      - normal
+    category: "fuerza_contacto"
+    relation_type: "proporcionalidad"
+    physical_meaning:
+      es: "El módulo del rozamiento cinético es proporcional a la normal."
+      en: "The magnitude of kinetic friction is proportional to the normal force."
+    constraints:
+      - "Debe existir contacto."
+      - "Debe haber deslizamiento relativo."
+      - "El sentido del rozamiento se decide aparte."
+    validity:
+      es: "Válida para rozamiento cinético seco con coeficiente aproximadamente constante."
+      en: "Valid for dry kinetic friction with approximately constant coefficient."
+    dimension_check: "[M L T^-2] = [1] [M L T^-2]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "rozamiento"
+      - "planos_inclinados"
+      - "dcl"
+    interpretation_tags:
+      - "rozamiento"
+      - "normal"
+      - "contacto"
+    result_semantics:
+      target: fuerza_rozamiento
+      kind: "vector"
+      sign_meaning: "El signo se asigna contrario al deslizamiento relativo."
+      absolute_value_meaning: "El módulo indica la intensidad de la oposición al deslizamiento."
+    domain_checks:
+      - id: coeficiente_no_negativo
+        rule: "coeficiente_rozamiento >= 0"
+        message:
+          es: "El coeficiente de rozamiento no puede ser negativo."
+          en: "The friction coefficient cannot be negative."
+      - id: normal_no_negativa
+        rule: "normal >= 0"
+        message:
+          es: "El módulo de la normal no puede ser negativo."
+          en: "The magnitude of the normal force cannot be negative."
+    coherence_checks:
+      - id: sentido_rozamiento
+        rule: "rozamiento_opuesto_deslizamiento"
+        message:
+          es: "El rozamiento debe oponerse al deslizamiento relativo."
+          en: "Friction must oppose relative sliding."
+    graph_implications:
+      - "En DCL, el rozamiento es tangencial a la superficie."
+      - "En Coord, aumenta linealmente con la normal para mu constante."
+    pedagogical_triggers:
+      - "Usar rozamiento aunque no haya contacto."
+      - "Confundir módulo de rozamiento con su signo."
+      - "Poner rozamiento siempre en el mismo sentido."
+    rearrangements:
+      - target: fuerza_rozamiento
+        equation: "fuerza_rozamiento = coeficiente_rozamiento * normal"
+        latex: "F_r = \\mu \\cdot N"
+      - target: coeficiente_rozamiento
+        equation: "coeficiente_rozamiento = fuerza_rozamiento / normal"
+        latex: "\\mu = \\frac{F_r}{N}"
+      - target: normal
+        equation: "normal = fuerza_rozamiento / coeficiente_rozamiento"
+        latex: "N = \\frac{F_r}{\\mu}"
+
+  - id: componente_peso_paralela_plano
+    title:
+      es: "Componente paralela del peso en un plano inclinado"
+      en: "Parallel component of weight on an inclined plane"
+    equation: "componente_peso_paralela = masa * gravedad * sin(angulo)"
+    latex: "P_{\\parallel} = m \\cdot g \\cdot \\sin(\\theta)"
+    magnitudes:
+      - componente_peso_paralela
+      - masa
+      - gravedad
+      - angulo
+    category: "plano_inclinado"
+    relation_type: "descomposicion"
+    physical_meaning:
+      es: "Es la parte del peso que tiende a arrastrar el cuerpo a lo largo del plano."
+      en: "It is the part of weight that tends to pull the body along the incline."
+    constraints:
+      - "Ángulo medido respecto a la horizontal."
+      - "Eje paralelo definido sobre el plano."
+    validity:
+      es: "Válida para un plano inclinado recto con gravedad uniforme."
+      en: "Valid for a straight inclined plane with uniform gravity."
+    dimension_check: "[M L T^-2] = [M] [L T^-2] [1]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "planos_inclinados"
+      - "descomposicion_del_peso"
+    interpretation_tags:
+      - "plano_inclinado"
+      - "componente_paralela"
+      - "seno"
+    result_semantics:
+      target: componente_peso_paralela
+      kind: "scalar_component"
+      sign_meaning: "El signo depende de si el eje paralelo positivo apunta cuesta arriba o cuesta abajo."
+      absolute_value_meaning: "El módulo mide la tendencia gravitatoria a deslizar por el plano."
+    domain_checks:
+      - id: angulo_valido
+        rule: "0 <= angulo <= pi/2"
+        message:
+          es: "El ángulo debe estar en el intervalo habitual de plano inclinado."
+          en: "The angle must lie in the usual inclined-plane interval."
+    coherence_checks:
+      - id: trigonometria_correcta
+        rule: "paralela_usa_seno"
+        message:
+          es: "La componente paralela usa seno si el ángulo se mide desde la horizontal."
+          en: "The parallel component uses sine if the angle is measured from the horizontal."
+    graph_implications:
+      - "En DCL, esta componente aparece paralela a la superficie."
+    pedagogical_triggers:
+      - "Intercambiar seno y coseno."
+      - "Usar el peso completo en la ecuación paralela."
+    rearrangements:
+      - target: componente_peso_paralela
+        equation: "componente_peso_paralela = masa * gravedad * sin(angulo)"
+        latex: "P_{\\parallel} = m \\cdot g \\cdot \\sin(\\theta)"
+      - target: masa
+        equation: "masa = componente_peso_paralela / (gravedad * sin(angulo))"
+        latex: "m = \\frac{P_{\\parallel}}{g \\cdot \\sin(\\theta)}"
+      - target: gravedad
+        equation: "gravedad = componente_peso_paralela / (masa * sin(angulo))"
+        latex: "g = \\frac{P_{\\parallel}}{m \\cdot \\sin(\\theta)}"
+      - target: angulo
+        equation: "angulo = arcsin(componente_peso_paralela / (masa * gravedad))"
+        latex: "\\theta = \\arcsin\\left(\\frac{P_{\\parallel}}{m \\cdot g}\\right)"
+
+  - id: componente_peso_perpendicular_plano
+    title:
+      es: "Componente perpendicular del peso en un plano inclinado"
+      en: "Perpendicular component of weight on an inclined plane"
+    equation: "componente_peso_perpendicular = masa * gravedad * cos(angulo)"
+    latex: "P_{\\perp} = m \\cdot g \\cdot \\cos(\\theta)"
+    magnitudes:
+      - componente_peso_perpendicular
+      - masa
+      - gravedad
+      - angulo
+      - normal
+    category: "plano_inclinado"
+    relation_type: "descomposicion"
+    physical_meaning:
+      es: "Es la parte del peso que presiona el cuerpo contra el plano."
+      en: "It is the part of weight pressing the body against the incline."
+    constraints:
+      - "Ángulo medido respecto a la horizontal."
+      - "Sin aceleración perpendicular, la normal iguala el módulo de esta componente."
+    validity:
+      es: "Válida para un plano inclinado recto con gravedad uniforme."
+      en: "Valid for a straight inclined plane with uniform gravity."
+    dimension_check: "[M L T^-2] = [M] [L T^-2] [1]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "planos_inclinados"
+      - "descomposicion_del_peso"
+      - "normal"
+    interpretation_tags:
+      - "plano_inclinado"
+      - "componente_perpendicular"
+      - "coseno"
+      - "normal"
+    result_semantics:
+      target: componente_peso_perpendicular
+      kind: "scalar_component"
+      sign_meaning: "El signo depende de la orientación del eje perpendicular."
+      absolute_value_meaning: "El módulo mide la compresión contra la superficie."
+    domain_checks:
+      - id: angulo_valido
+        rule: "0 <= angulo <= pi/2"
+        message:
+          es: "El ángulo debe estar en el intervalo habitual de plano inclinado."
+          en: "The angle must lie in the usual inclined-plane interval."
+    coherence_checks:
+      - id: trigonometria_correcta
+        rule: "perpendicular_usa_coseno"
+        message:
+          es: "La componente perpendicular usa coseno si el ángulo se mide desde la horizontal."
+          en: "The perpendicular component uses cosine if the angle is measured from the horizontal."
+    graph_implications:
+      - "En DCL, esta componente apunta hacia la superficie y se relaciona con la normal."
+    pedagogical_triggers:
+      - "Intercambiar seno y coseno."
+      - "Suponer normal igual al peso completo."
+    rearrangements:
+      - target: componente_peso_perpendicular
+        equation: "componente_peso_perpendicular = masa * gravedad * cos(angulo)"
+        latex: "P_{\\perp} = m \\cdot g \\cdot \\cos(\\theta)"
+      - target: masa
+        equation: "masa = componente_peso_perpendicular / (gravedad * cos(angulo))"
+        latex: "m = \\frac{P_{\\perp}}{g \\cdot \\cos(\\theta)}"
+      - target: gravedad
+        equation: "gravedad = componente_peso_perpendicular / (masa * cos(angulo))"
+        latex: "g = \\frac{P_{\\perp}}{m \\cdot \\cos(\\theta)}"
+      - target: angulo
+        equation: "angulo = arccos(componente_peso_perpendicular / (masa * gravedad))"
+        latex: "\\theta = \\arccos\\left(\\frac{P_{\\perp}}{m \\cdot g}\\right)"
+      - target: normal
+        equation: "normal = componente_peso_perpendicular"
+        latex: "N = P_{\\perp}"

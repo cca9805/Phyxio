@@ -1,0 +1,395 @@
+const e=`version: 1
+topic:
+  id: coeficiente-de-restitucion
+  title:
+    es: Coeficiente de restitución
+    en: Coefficient of Restitution
+formulas:
+  - id: e
+    title:
+      es: Definición del coeficiente de restitución
+      en: Definition of the coefficient of restitution
+    equation: e = (v2f - v1f)/(v1i - v2i)
+    latex: e = \\frac{v_{2f} - v_{1f}}{v_{1i} - v_{2i}}
+    rearrangements:
+      - target: e
+        equation: e = (v2f - v1f)/(v1i - v2i)
+        latex: e = \\frac{v_{2f} - v_{1f}}{v_{1i} - v_{2i}}
+      - target: v2f
+        equation: v2f = v1f + e*(v1i - v2i)
+        latex: v_{2f} = v_{1f} + e\\,(v_{1i} - v_{2i})
+      - target: v1f
+        equation: v1f = v2f - e*(v1i - v2i)
+        latex: v_{1f} = v_{2f} - e\\,(v_{1i} - v_{2i})
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: Cociente entre la velocidad relativa de separación y la velocidad relativa de acercamiento; mide qué fracción de la rapidez relativa sobrevive al contacto.
+      en: Ratio between relative separation speed and relative approach speed; measures what fraction of relative speed survives the contact.
+    constraints:
+      - expr: v1i != v2i
+        message:
+          es: La velocidad relativa de acercamiento no puede ser cero; sin acercamiento no hay colisión.
+          en: The relative approach speed cannot be zero; without approach there is no collision.
+    validity:
+      es: Colisiones unidimensionales entre dos cuerpos en un marco inercial, sin fuerzas externas netas durante el contacto.
+      en: One-dimensional collisions between two bodies in an inertial frame, with no net external forces during contact.
+    dimension_check:
+      es: "[e] = [L T^-1] / [L T^-1] = [1]"
+      en: "[e] = [L T^-1] / [L T^-1] = [1]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, modelos, aplicaciones]
+    interpretation_tags: [restitution, relative_speed, collision_classification]
+    result_semantics:
+      target: e
+      meaning: Fracción de velocidad relativa conservada tras el impacto.
+    domain_checks: [v1i != v2i]
+    coherence_checks:
+      - expr: e >= 0
+        severity: warning
+        message:
+          es: Un valor negativo de e indica que los cuerpos se atraviesan o que la convención de signos es incorrecta.
+          en: A negative value of e indicates the bodies pass through each other or the sign convention is incorrect.
+      - expr: e <= 1
+        severity: info
+        message:
+          es: Un valor superior a 1 indica una colisión superelástica con fuente interna de energía.
+          en: A value greater than 1 indicates a superelastic collision with an internal energy source.
+    graph_implications: [clasificacion_colision, pendiente_rebote]
+    pedagogical_triggers:
+      - detect_when: sign_error_in_relative_velocity
+        message:
+          es: Comprueba el orden de las velocidades en numerador y denominador; invertir el sentido de la resta cambia el signo de e.
+          en: Check the velocity order in numerator and denominator; reversing the subtraction direction changes the sign of e.
+
+  - id: rango_e
+    title:
+      es: Rango físico ordinario de e
+      en: Ordinary physical range of e
+    equation: 0 <= e <= 1
+    latex: 0 \\le e \\le 1
+    rearrangements: []
+    category: structural
+    relation_type: constraint
+    physical_meaning:
+      es: Restricción que clasifica los choques ordinarios; e igual a cero corresponde a colisión totalmente inelástica y e igual a uno a colisión perfectamente elástica.
+      en: Constraint that classifies ordinary collisions; e equal to zero corresponds to a perfectly inelastic collision and e equal to one to a perfectly elastic collision.
+    constraints: []
+    validity:
+      es: Colisiones sin fuentes internas de energía. Si hay energía interna liberada durante el contacto, e puede superar 1.
+      en: Collisions without internal energy sources. If internal energy is released during contact, e can exceed 1.
+    dimension_check:
+      es: "[1]"
+      en: "[1]"
+    calculable: false
+    motivo_no_calculable:
+      es: Es un criterio de clasificación física, no una ecuación para despejar.
+      en: It is a physical classification criterion, not an equation to solve.
+    used_in: [teoria, modelos, ejemplos, aplicaciones]
+    interpretation_tags: [collision_classification, model_validity, elastic_spectrum]
+    result_semantics:
+      target: null
+      meaning: Validación del tipo de colisión dentro del espectro elástico-inelástico.
+    domain_checks: []
+    coherence_checks: []
+    graph_implications: []
+    pedagogical_triggers: []
+
+  - id: v1f_from_e
+    title:
+      es: Velocidad final del cuerpo 1 desde e
+      en: Final velocity of body 1 from e
+    equation: v1f = v2f - e*(v1i - v2i)
+    latex: v_{1f} = v_{2f} - e\\,(v_{1i} - v_{2i})
+    rearrangements:
+      - target: v1f
+        equation: v1f = v2f - e*(v1i - v2i)
+        latex: v_{1f} = v_{2f} - e\\,(v_{1i} - v_{2i})
+    category: derived
+    relation_type: rearrangement
+    physical_meaning:
+      es: Forma despejada que permite obtener la velocidad final del cuerpo 1 cuando se conocen e, las velocidades iniciales y la velocidad final del cuerpo 2.
+      en: Rearranged form to obtain the final velocity of body 1 when e, the initial velocities and the final velocity of body 2 are known.
+    constraints:
+      - expr: v1i != v2i
+        message:
+          es: La velocidad relativa de acercamiento no puede ser cero.
+          en: The relative approach speed cannot be zero.
+    validity:
+      es: Mismas condiciones que la definición de e; requiere conocer v2f de otra ecuación (normalmente conservación del momento).
+      en: Same conditions as the definition of e; requires knowing v2f from another equation (usually momentum conservation).
+    dimension_check:
+      es: "[v1f] = [L T^-1]"
+      en: "[v1f] = [L T^-1]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, aplicaciones]
+    interpretation_tags: [final_speed, restitution, separation_state]
+    result_semantics:
+      target: v1f
+      meaning: Velocidad final del primer cuerpo tras la colisión.
+    domain_checks: [v1i != v2i]
+    coherence_checks: []
+    graph_implications: []
+    pedagogical_triggers:
+      - detect_when: confused_v1f_with_v2f
+        message:
+          es: Asegúrate de no intercambiar los subíndices 1 y 2 entre cuerpos.
+          en: Make sure you do not swap the subscripts 1 and 2 between bodies.
+
+  - id: vrel_f
+    title:
+      es: Velocidad relativa de separación
+      en: Relative separation speed
+    equation: vrel_f = e*(v1i - v2i)
+    latex: v_{rel,f} = e\\,(v_{1i} - v_{2i})
+    rearrangements:
+      - target: vrel_f
+        equation: vrel_f = e*(v1i - v2i)
+        latex: v_{rel,f} = e\\,(v_{1i} - v_{2i})
+    category: fundamental
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: Velocidad relativa con la que los cuerpos se separan tras el contacto; es la lectura directa de e aplicada a la velocidad relativa de acercamiento.
+      en: Relative speed at which the bodies separate after contact; it is the direct reading of e applied to the relative approach speed.
+    constraints: []
+    validity:
+      es: Válida para colisiones 1D en marco inercial.
+      en: Valid for 1D collisions in an inertial frame.
+    dimension_check:
+      es: "[vrel_f] = [1] * [L T^-1] = [L T^-1]"
+      en: "[vrel_f] = [1] * [L T^-1] = [L T^-1]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, modelos, aplicaciones]
+    interpretation_tags: [relative_speed, restitution, impact_reading]
+    result_semantics:
+      target: vrel_f
+      meaning: Rapidez relativa de separación tras el choque.
+    domain_checks: []
+    coherence_checks:
+      - expr: abs(vrel_f) <= abs(v1i - v2i)
+        severity: warning
+        message:
+          es: Si la velocidad relativa final supera la inicial, el choque es superelástico.
+          en: If the final relative speed exceeds the initial one, the collision is superelastic.
+    graph_implications: [comparacion_vrel]
+    pedagogical_triggers: []
+
+  - id: perdida_energia
+    title:
+      es: Pérdida de energía cinética en la colisión
+      en: Kinetic energy loss in the collision
+    equation: DeltaK = (1/2)*mu*(v1i - v2i)^2*(1 - e^2)
+    latex: \\Delta K = \\frac{1}{2}\\,\\mu\\,(v_{1i}-v_{2i})^{2}\\,(1 - e^{2})
+    rearrangements:
+      - target: DeltaK
+        equation: DeltaK = (1/2)*mu*(v1i - v2i)^2*(1 - e^2)
+        latex: \\Delta K = \\frac{1}{2}\\,\\mu\\,(v_{1i}-v_{2i})^{2}\\,(1 - e^{2})
+      - target: e
+        equation: e = sqrt(1 - 2*DeltaK/(mu*(v1i - v2i)^2))
+        latex: e = \\sqrt{1 - \\frac{2\\,\\Delta K}{\\mu\\,(v_{1i}-v_{2i})^{2}}}
+    category: fundamental
+    relation_type: conservation_law
+    physical_meaning:
+      es: Energía cinética transformada en calor, sonido y deformación permanente durante el impacto; el factor (1 - e²) controla qué fracción de la energía cinética relativa se pierde.
+      en: Kinetic energy transformed into heat, sound and permanent deformation during impact; the factor (1 - e²) controls what fraction of the relative kinetic energy is lost.
+    constraints:
+      - expr: e >= 0
+        message:
+          es: El coeficiente de restitución debe ser no negativo para choques ordinarios.
+          en: The coefficient of restitution must be non-negative for ordinary collisions.
+    validity:
+      es: Colisiones 1D entre dos cuerpos sin fuerzas externas netas. La masa reducida mu es m1*m2/(m1+m2).
+      en: 1D collisions between two bodies without net external forces. The reduced mass mu is m1*m2/(m1+m2).
+    dimension_check:
+      es: "[DeltaK] = [M] * [L T^-1]^2 = [M L^2 T^-2] = [J]"
+      en: "[DeltaK] = [M] * [L T^-1]^2 = [M L^2 T^-2] = [J]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, modelos, aplicaciones]
+    interpretation_tags: [energy_loss, dissipation, elasticity_measure]
+    result_semantics:
+      target: DeltaK
+      meaning: Energía cinética disipada durante el contacto.
+    domain_checks: [mu > 0, e >= 0, e <= 1]
+    coherence_checks:
+      - expr: DeltaK >= 0
+        severity: error
+        message:
+          es: La pérdida de energía no puede ser negativa en un choque ordinario.
+          en: The energy loss cannot be negative in an ordinary collision.
+    graph_implications: [curva_disipacion]
+    pedagogical_triggers:
+      - detect_when: forgot_reduced_mass
+        message:
+          es: La fórmula usa la masa reducida mu, no la masa total ni una masa individual.
+          en: The formula uses the reduced mass mu, not the total mass or an individual mass.
+
+  - id: e_desde_alturas
+    title:
+      es: Coeficiente de restitución desde alturas de rebote
+      en: Coefficient of restitution from bounce heights
+    equation: e = sqrt(hf/h0)
+    latex: e = \\sqrt{\\frac{h_f}{h_0}}
+    rearrangements:
+      - target: e
+        equation: e = sqrt(hf/h0)
+        latex: e = \\sqrt{\\frac{h_f}{h_0}}
+      - target: hf
+        equation: hf = e^2 * h0
+        latex: h_f = e^{2}\\,h_0
+    category: derived
+    relation_type: geometric_interpretation
+    physical_meaning:
+      es: Forma experimental de medir e dejando caer un objeto desde una altura conocida y midiendo la altura del primer rebote; convierte una medida geométrica en el parámetro de colisión.
+      en: Experimental form to measure e by dropping an object from a known height and measuring the first bounce height; converts a geometric measurement into the collision parameter.
+    constraints:
+      - expr: h0 > 0
+        message:
+          es: La altura inicial debe ser positiva.
+          en: The initial height must be positive.
+      - expr: hf >= 0
+        message:
+          es: La altura de rebote no puede ser negativa.
+          en: The bounce height cannot be negative.
+    validity:
+      es: Rebote vertical contra superficie horizontal con resistencia del aire despreciable.
+      en: Vertical bounce against a horizontal surface with negligible air resistance.
+    dimension_check:
+      es: "[e] = sqrt([L]/[L]) = [1]"
+      en: "[e] = sqrt([L]/[L]) = [1]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, modelos, aplicaciones]
+    interpretation_tags: [experimental, measurement, bounce]
+    result_semantics:
+      target: e
+      meaning: Coeficiente de restitución obtenido por medición de alturas.
+    domain_checks: [h0 > 0, hf >= 0, hf <= h0]
+    coherence_checks:
+      - expr: e <= 1
+        severity: warning
+        message:
+          es: Si e supera 1, la altura de rebote supera la de caída; revisar si hay fuente de energía.
+          en: If e exceeds 1, the bounce height exceeds the drop height; check for energy source.
+    graph_implications: []
+    pedagogical_triggers:
+      - detect_when: forgot_square_root
+        message:
+          es: e es la raíz cuadrada del cociente de alturas, no el cociente directo.
+          en: e is the square root of the height ratio, not the direct ratio.
+
+  - id: altura_rebote
+    title:
+      es: Altura tras n rebotes sucesivos
+      en: Height after n successive bounces
+    equation: hn = e^(2*n) * h0
+    latex: h_n = e^{2n}\\,h_0
+    rearrangements:
+      - target: hn
+        equation: hn = e^(2*n) * h0
+        latex: h_n = e^{2n}\\,h_0
+      - target: n
+        equation: n = log(hn/h0)/(2*log(e))
+        latex: n = \\frac{\\ln(h_n / h_0)}{2\\,\\ln e}
+    category: derived
+    relation_type: geometric_interpretation
+    physical_meaning:
+      es: Altura máxima alcanzada después de n rebotes consecutivos contra el suelo; modela la decadencia geométrica de la energía potencial tras cada impacto.
+      en: Maximum height reached after n consecutive bounces against the floor; models the geometric decay of potential energy after each impact.
+    constraints:
+      - expr: e > 0
+        message:
+          es: El coeficiente de restitución debe ser positivo para que exista rebote.
+          en: The coefficient of restitution must be positive for a bounce to exist.
+      - expr: e < 1
+        message:
+          es: Si e es exactamente 1, la altura no disminuye y el modelo de rebotes sucesivos es trivial.
+          en: If e is exactly 1, the height does not decrease and the successive bounce model is trivial.
+    validity:
+      es: Rebotes verticales con e constante entre botes y resistencia del aire despreciable.
+      en: Vertical bounces with constant e between bounces and negligible air resistance.
+    dimension_check:
+      es: "[hn] = [1] * [L] = [L]"
+      en: "[hn] = [1] * [L] = [L]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, aplicaciones]
+    interpretation_tags: [successive_bounces, decay, energy_loss]
+    result_semantics:
+      target: hn
+      meaning: Altura del bote n-ésimo en una secuencia de rebotes.
+    domain_checks: [h0 > 0, e > 0, e < 1, n >= 1]
+    coherence_checks:
+      - expr: hn < h0
+        severity: warning
+        message:
+          es: La altura tras el rebote debe ser menor que la inicial si e es menor que 1.
+          en: The height after the bounce must be less than the initial one if e is less than 1.
+    graph_implications: [decaimiento_exponencial]
+    pedagogical_triggers:
+      - detect_when: confused_exponent
+        message:
+          es: El exponente es 2n (no n), porque e afecta a la velocidad y la altura depende del cuadrado de la velocidad.
+          en: The exponent is 2n (not n), because e affects velocity and height depends on velocity squared.
+
+  - id: mu
+    title:
+      es: Masa reducida del sistema
+      en: Reduced mass of the system
+    equation: mu = (m1 * m2) / (m1 + m2)
+    latex: \\mu = \\frac{m_1 \\, m_2}{m_1 + m_2}
+    rearrangements: []
+    category: derived
+    relation_type: definition
+    physical_meaning:
+      es: Magnitud que permite simplificar el problema de dos cuerpos a uno solo; es la masa efectiva que rige el movimiento relativo y la disipación de energía.
+      en: Magnitude that simplifies the two-body problem to a single one; it is the effective mass that governs relative motion and energy dissipation.
+    constraints:
+      - expr: m1 + m2 > 0
+        message:
+          es: La masa total del sistema debe ser positiva.
+          en: The total mass of the system must be positive.
+    validity:
+      es: Sistemas de dos partículas o cuerpos rígidos en colisión.
+      en: Systems of two particles or rigid bodies in collision.
+    dimension_check:
+      es: "[mu] = [M]^2 / [M] = [M]"
+      en: "[mu] = [M]^2 / [M] = [M]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, aplicaciones]
+    interpretation_tags: [mass, reduced_mass, simplification]
+    result_semantics:
+      target: mu
+      meaning: Masa efectiva del sistema para el movimiento relativo.
+    domain_checks: [m1 > 0, m2 > 0]
+    coherence_checks: []
+    graph_implications: []
+    pedagogical_triggers: []
+
+ui:
+  default_formula: e
+  groups:
+    - title:
+        es: Definición y clasificación
+        en: Definition and classification
+      items:
+        - e
+        - rango_e
+        - vrel_f
+    - title:
+        es: Despejes de velocidad
+        en: Velocity rearrangements
+      items:
+        - v1f_from_e
+    - title:
+        es: Energía y rebotes
+        en: Energy and bounces
+      items:
+        - perdida_energia
+        - e_desde_alturas
+        - altura_rebote
+`;export{e as default};

@@ -1,0 +1,436 @@
+version: 2
+id: formulas-movimiento-del-centro-de-masas
+leaf_id: movimiento-del-centro-de-masas
+
+formulas:
+  - id: newton_cm
+    title:
+      es: Segunda Ley de Newton para el Centro de Masas
+      en: Newton's Second Law for the Center of Mass
+    equation: 'F_{ext} = M a_{cm}'
+    latex: 'F_{ext} = M a_{cm}'
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "La fuerza externa neta sobre un sistema es igual a la masa total multiplicada por la aceleración de su centro de masas."
+      en: "The net external force on a system equals the total mass times the acceleration of its center of mass."
+    constraints: ["Sistema de masa constante", "Marco de referencia inercial"]
+    validity:
+      es: "Válida para cualquier sistema de partículas, rígido o deformable, siempre que M sea constante."
+      en: "Valid for any particle system, rigid or deformable, as long as M is constant."
+    dimension_check: '[M L T⁻²] = [M] * [L T⁻²]'
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["movimiento-del-centro-de-masas"]
+    interpretation_tags: ["traslación", "causalidad externa"]
+    result_semantics:
+      target: a_cm
+      kind: acceleration
+      sign_meaning:
+        es: "Sentido de la aceleración del sistema."
+        en: "Direction of the system's acceleration."
+      absolute_value_meaning:
+        es: "Magnitud de la respuesta inercial del conjunto."
+        en: "Magnitude of the set's inertial response."
+    domain_checks: ["M > 0"]
+    coherence_checks: ["abs(a_cm) < 3e8"]
+    graph_implications: "Determina la curvatura de la trayectoria del CM."
+    pedagogical_triggers: ["Confundir fuerzas internas con externas"]
+    rearrangements:
+      - target: a_cm
+        equation: 'a_{cm} = F_{ext} / M'
+        latex: 'a_{cm} = \frac{F_{ext}}{M}'
+
+  - id: momentum_cm
+    title:
+      es: Momento Lineal Total del Sistema
+      en: Total System Linear Momentum
+    equation: 'p_{tot} = M v_{cm}'
+    latex: 'p_{tot} = M v_{cm}'
+    category: derived
+    relation_type: average_relation
+    physical_meaning:
+      es: "El momento lineal total es el de una partícula de masa M moviéndose a la velocidad del CM."
+      en: "Total linear momentum is that of a mass M particle moving at the CM velocity."
+    constraints: ["Definición cinemática"]
+    validity:
+      es: "Universal para cualquier sistema material."
+      en: "Universal for any material system."
+    dimension_check: '[M L T⁻¹] = [M] * [L T⁻¹]'
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["movimiento-del-centro-de-masas"]
+    interpretation_tags: ["inercia en movimiento"]
+    result_semantics:
+      target: p_tot
+      kind: momentum
+      sign_meaning:
+        es: "Sentido del flujo de masa total."
+        en: "Direction of total mass flow."
+      absolute_value_meaning:
+        es: "Cantidad de movimiento neta del conjunto."
+        en: "Net amount of motion of the set."
+    domain_checks: ["M > 0"]
+    coherence_checks: []
+    graph_implications: "Escala la velocidad para obtener el ímpetu global."
+    pedagogical_triggers: []
+    rearrangements:
+      - target: v_cm
+        equation: 'v_{cm} = p_{tot} / M'
+        latex: 'v_{cm} = \frac{p_{tot}}{M}'
+
+  - id: impulse_momentum_cm
+    title:
+      es: Teorema del Impulso para el CM
+      en: Impulse-Momentum Theorem for the CM
+    equation: 'J_{ext} = M \Delta v_{cm}'
+    latex: 'J_{ext} = M \Delta v_{cm}'
+    category: fundamental
+    relation_type: integral_relation
+    physical_meaning:
+      es: "El impulso externo neto produce una variación proporcional en la velocidad del centro de masas."
+      en: "The net external impulse produces a proportional change in the center-of-mass velocity."
+    constraints: ["Masa constante durante el intervalo"]
+    validity:
+      es: "Eficaz para procesos de corta duración (choques, explosiones)."
+      en: "Effective for short-duration processes (collisions, explosions)."
+    dimension_check: '[M L T⁻¹] = [M] * [L T⁻¹]'
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["movimiento-del-centro-de-masas"]
+    interpretation_tags: ["transferencia de momento"]
+    result_semantics:
+      target: Delta_vcm
+      kind: velocity_change
+      sign_meaning:
+        es: "Sentido del cambio de velocidad."
+        en: "Direction of velocity change."
+      absolute_value_meaning:
+        es: "Magnitud del incremento/decremento de velocidad del CM."
+        en: "Magnitude of the CM velocity increase/decrease."
+    domain_checks: []
+    coherence_checks: []
+    graph_implications: "Salto discreto en la gráfica de velocidad."
+    pedagogical_triggers: []
+    rearrangements:
+      - target: J_ext
+        equation: 'J_{ext} = \Delta p_{tot}'
+        latex: 'J_{ext} = \Delta p_{tot}'
+
+  - id: fext_zero_condition
+    title:
+      es: Condición de Sistema Aislado
+      en: Isolated System Condition
+    equation: 'F_{ext} = 0'
+    latex: 'F_{ext} = 0'
+    category: conceptual
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: "Ausencia de fuerzas externas netas sobre el sistema."
+      en: "Absence of net external forces on the system."
+    constraints: []
+    validity:
+      es: "Sistemas donde las interacciones externas son nulas o compensadas."
+      en: "Systems where external interactions are null or balanced."
+    dimension_check: '[N] = 0'
+    calculable: false
+    motivo_no_calculable: "Es una condición de contorno, no una ley de cálculo."
+    used_in: ["movimiento-del-centro-de-masas"]
+    interpretation_tags: ["equilibrio externo"]
+    result_semantics:
+      target: F_ext
+      kind: condition
+      sign_meaning:
+        es: "Nulo."
+        en: "Null."
+      absolute_value_meaning:
+        es: "Cero."
+        en: "Zero."
+    domain_checks: []
+    coherence_checks: []
+    graph_implications: "Gráfica de momento total horizontal."
+    pedagogical_triggers: []
+    rearrangements: []
+
+  - id: acm_zero_result
+    title:
+      es: Inercia del Centro de Masas
+      en: Center of Mass Inertia
+    equation: 'a_{cm} = 0'
+    latex: 'a_{cm} = 0'
+    category: conceptual
+    relation_type: definition
+    physical_meaning:
+      es: "Consecuencia de la falta de fuerza externa: el CM no acelera."
+      en: "Consequence of lack of external force: the CM does not accelerate."
+    constraints: ["F_ext = 0"]
+    validity:
+      es: "Sistemas aislados."
+      en: "Isolated systems."
+    dimension_check: '[L T⁻²] = 0'
+    calculable: false
+    motivo_no_calculable: "Es un estado cinemático derivado de una condición."
+    used_in: ["movimiento-del-centro-de-masas"]
+    interpretation_tags: ["MRU", "estado inercial"]
+    result_semantics:
+      target: a_cm
+      kind: state
+      sign_meaning:
+        es: "Sin cambio."
+        en: "No change."
+      absolute_value_meaning:
+        es: "Aceleración nula."
+        en: "Zero acceleration."
+    domain_checks: []
+    coherence_checks: []
+    graph_implications: "Velocidad del CM constante."
+    pedagogical_triggers: []
+    rearrangements: []
+
+  - id: newton_general_momentum
+    title:
+      es: Forma General de la Segunda Ley
+      en: General Form of the Second Law
+    equation: 'F_{ext} = dp_{tot}/dt'
+    latex: 'F_{ext} = \frac{d p_{tot}}{dt}'
+    category: fundamental
+    relation_type: differential_relation
+    physical_meaning:
+      es: "La fuerza externa es la rapidez con la que cambia el momento lineal total."
+      en: "External force is the rate at which total linear momentum changes."
+    constraints: []
+    validity:
+      es: "Universal, incluso para sistemas de masa variable."
+      en: "Universal, even for variable mass systems."
+    dimension_check: '[N] = [M L T⁻¹] / [T]'
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["movimiento-del-centro-de-masas"]
+    interpretation_tags: ["variación temporal", "flujo de momento"]
+    result_semantics:
+      target: F_ext
+      kind: force
+      sign_meaning:
+        es: "Sentido del cambio de momento."
+        en: "Direction of momentum change."
+      absolute_value_meaning:
+        es: "Intensidad de la interacción externa."
+        en: "Intensity of external interaction."
+    domain_checks: []
+    coherence_checks: []
+    graph_implications: "Pendiente de la curva p(t)."
+    pedagogical_triggers: []
+    rearrangements: []
+
+  - id: variable_mass_expansion
+    title:
+      es: Expansión para Masa Variable
+      en: Variable Mass Expansion
+    equation: 'F_{ext} = M(dv_{cm}/dt) + v_{cm}(dM/dt)'
+    latex: 'F_{ext} = M \frac{dv_{cm}}{dt} + v_{cm} \frac{dM}{dt}'
+    category: derived
+    relation_type: differential_relation
+    physical_meaning:
+      es: "Descomposición de la fuerza en aceleración de masa y flujo de masa."
+      en: "Decomposition of force into mass acceleration and mass flow."
+    constraints: []
+    validity:
+      es: "Sistemas con pérdida o ganancia de materia (cohetes, lluvia)."
+      en: "Systems with matter loss or gain (rockets, rain)."
+    dimension_check: '[N] = [M][L T⁻²] + [L T⁻¹][M T⁻¹]'
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["movimiento-del-centro-de-masas"]
+    interpretation_tags: ["masa variable", "propulsión"]
+    result_semantics:
+      target: F_ext
+      kind: force
+      sign_meaning:
+        es: "Sentido de la fuerza neta requerida."
+        en: "Direction of required net force."
+      absolute_value_meaning:
+        es: "Carga total de fuerza sobre el sistema."
+        en: "Total force load on the system."
+    domain_checks: []
+    coherence_checks: []
+    graph_implications: "Explica aceleraciones sin fuerzas externas aparentes."
+    pedagogical_triggers: []
+    rearrangements: []
+
+  - id: rocket_momentum_balance
+    title:
+      es: Balance de Momento del Cohete
+      en: Rocket Momentum Balance
+    equation: 'M \Delta v + \Delta M v_{escape} = 0'
+    latex: 'M \Delta v + \Delta M v_{escape} = 0'
+    category: derived
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: "Conservación del momento en la expulsión de gases de un cohete."
+      en: "Momentum conservation in rocket gas ejection."
+    constraints: ["F_ext = 0"]
+    validity:
+      es: "Propulsión a chorro en el vacío."
+      en: "Jet propulsion in vacuum."
+    dimension_check: '[M L T⁻¹] + [M L T⁻¹] = 0'
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["movimiento-del-centro-de-masas"]
+    interpretation_tags: ["retroceso", "conservación"]
+    result_semantics:
+      target: Delta_v
+      kind: velocity_change
+      sign_meaning:
+        es: "Aumento de velocidad del cohete."
+        en: "Rocket velocity increase."
+      absolute_value_meaning:
+        es: "Incremento de rapidez por cada gramo expulsado."
+        en: "Speed increment per ejected gram."
+    domain_checks: ["M > 0", "Delta_M < 0"]
+    coherence_checks: []
+    graph_implications: "Aumento de velocidad no lineal."
+    pedagogical_triggers: []
+    rearrangements: []
+
+  - id: vcm_weighted_average
+    title:
+      es: Definición Cinemática de la Velocidad del CM
+      en: Kinematic Definition of CM Velocity
+    equation: 'v_{cm} = \sum m_i v_i / M'
+    latex: 'v_{cm} = \frac{\sum m_i v_i}{M}'
+    category: structural
+    relation_type: average_relation
+    physical_meaning:
+      es: "Promedio de las velocidades individuales ponderado por la inercia de cada parte."
+      en: "Average of individual velocities weighted by the inertia of each part."
+    constraints: []
+    validity:
+      es: "Sistemas de partículas discretas."
+      en: "Discrete particle systems."
+    dimension_check: '[L T⁻¹] = [M L T⁻¹] / [M]'
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["movimiento-del-centro-de-masas"]
+    interpretation_tags: ["baricentro", "promedio"]
+    result_semantics:
+      target: v_cm
+      kind: velocity
+      sign_meaning:
+        es: "Sentido del movimiento global."
+        en: "Direction of global motion."
+      absolute_value_meaning:
+        es: "Rapidez del punto representante."
+        en: "Speed of the representative point."
+    domain_checks: ["M > 0"]
+    coherence_checks: ["abs(v_cm) <= max(abs(v_i))"]
+    graph_implications: "Posición central de la trayectoria colectiva."
+    pedagogical_triggers: []
+    rearrangements: []
+
+  - id: vcm_two_bodies
+    title:
+      es: Velocidad del CM para Dos Cuerpos
+      en: CM Velocity for Two Bodies
+    equation: 'v_{cm} = (m_1 v_1 + m_2 v_2) / M'
+    latex: 'v_{cm} = \frac{m_1 v_1 + m_2 v_2}{M}'
+    category: derived
+    relation_type: average_relation
+    physical_meaning:
+      es: "Velocidad del CM simplificada para un sistema binario."
+      en: "Simplified CM velocity for a binary system."
+    constraints: []
+    validity:
+      es: "Colisiones o explosiones de dos cuerpos."
+      en: "Two-body collisions or explosions."
+    dimension_check: '[L T⁻¹] = [M L T⁻¹] / [M]'
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["movimiento-del-centro-de-masas"]
+    interpretation_tags: ["sistema binario"]
+    result_semantics:
+      target: v_cm
+      kind: velocity
+      sign_meaning:
+        es: "Sentido del movimiento del par."
+        en: "Direction of the pair's motion."
+      absolute_value_meaning:
+        es: "Rapidez media del par de partículas."
+        en: "Average speed of the particle pair."
+    domain_checks: ["m1 >= 0", "m2 >= 0"]
+    coherence_checks: []
+    graph_implications: "Punto entre las dos trayectorias."
+    pedagogical_triggers: []
+    rearrangements:
+      - target: v2
+        equation: 'v_2 = (M v_{cm} - m_1 v_1) / m_2'
+        latex: 'v_2 = \frac{M v_{cm} - m_1 v_1}{m_2}'
+
+  - id: sum_mass
+    title:
+      es: Suma de Masas del Sistema
+      en: System Mass Summation
+    equation: 'M = \sum m_i'
+    latex: 'M = \sum m_i'
+    category: structural
+    relation_type: definition
+    physical_meaning:
+      es: "La masa total del sistema es la suma aritmética de las masas de todos sus constituyentes."
+      en: "The total system mass is the arithmetic sum of the masses of all its constituents."
+    constraints: []
+    validity:
+      es: "Sistemas discretos."
+      en: "Discrete systems."
+    dimension_check: '[M] = \sum [M]'
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["movimiento-del-centro-de-masas"]
+    interpretation_tags: ["masa total", "inercia"]
+    result_semantics:
+      target: M
+      kind: mass
+      sign_meaning:
+        es: "Positivo."
+        en: "Positive."
+      absolute_value_meaning:
+        es: "Masa total del conjunto."
+        en: "Total ensemble mass."
+    domain_checks: ["m_i > 0"]
+    coherence_checks: []
+    graph_implications: "Determina el factor de escala entre fuerza y aceleración."
+    pedagogical_triggers: []
+    rearrangements: []
+
+  - id: newton_variable_mass
+    title:
+      es: Segunda Ley de Newton para Masa Variable
+      en: Newton's Second Law for Variable Mass
+    equation: 'F_{ext} + v_{rel}(dM/dt) = M a_{cm}'
+    latex: 'F_{ext} + v_{rel} \frac{dM}{dt} = M a_{cm}'
+    category: advanced
+    relation_type: differential_relation
+    physical_meaning:
+      es: "Añade el término de empuje por reacción al balance de fuerzas externas."
+      en: "Adds the reaction thrust term to the external force balance."
+    constraints: ["Sistema abierto"]
+    validity:
+      es: "Cohetes, tanques con fugas, cintas transportadoras."
+      en: "Rockets, leaking tanks, conveyor belts."
+    dimension_check: '[N] + [L T⁻¹][M T⁻¹] = [M][L T⁻²]'
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["movimiento-del-centro-de-masas"]
+    interpretation_tags: ["masa variable", "empuje"]
+    result_semantics:
+      target: a_cm
+      kind: acceleration
+      sign_meaning:
+        es: "Sentido de la aceleración resultante."
+        en: "Direction of resulting acceleration."
+      absolute_value_meaning:
+        es: "Magnitud de la aceleración incluyendo empuje."
+        en: "Acceleration magnitude including thrust."
+    domain_checks: []
+    coherence_checks: []
+    graph_implications: "Permite aceleración sin fuerza externa neta."
+    pedagogical_triggers: ["Olvidar el término de flujo de masa"]
+    rearrangements: []

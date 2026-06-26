@@ -1,0 +1,268 @@
+const e=`formulas:
+
+  - id: capacidad_definicion
+    title:
+      es: Definición de capacidad eléctrica
+      en: Definition of electric capacitance
+    equation: C = Q / V
+    latex: C = \\frac{Q}{V}
+    rearrangements:
+      - target: Q
+        equation: Q = C * V
+        latex: Q = C \\cdot V
+        constraints:
+          - condition: C > 0
+            message:
+              es: La capacidad debe ser positiva.
+              en: Capacitance must be positive.
+          - condition: V != 0
+            message:
+              es: La tensión no puede ser cero para calcular la carga almacenada de forma significativa.
+              en: Voltage cannot be zero to meaningfully calculate stored charge.
+      - target: V
+        equation: V = Q / C
+        latex: V = \\frac{Q}{C}
+        constraints:
+          - condition: C > 0
+            message:
+              es: La capacidad debe ser positiva.
+              en: Capacitance must be positive.
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: La capacidad eléctrica de un condensador es la cantidad de carga que acumula por cada voltio de diferencia de potencial aplicado entre sus armaduras. Es una propiedad intrínseca del condensador, independiente de Q y V por separado.
+      en: The electric capacitance of a capacitor is the amount of charge it accumulates per volt of potential difference applied between its plates. It is an intrinsic property of the capacitor, independent of Q and V separately.
+    constraints:
+      - condition: C > 0
+        message:
+          es: La capacidad es una propiedad positiva del condensador.
+          en: Capacitance is a positive property of the capacitor.
+      - condition: V != 0
+        message:
+          es: La relación C = Q/V no puede evaluarse con V = 0 (condensador descargado).
+          en: The relation C = Q/V cannot be evaluated at V = 0 (discharged capacitor).
+    validity:
+      es: Válida para condensadores ideales en régimen estático o cuasiestático (frecuencias bajas). No aplica cuando la frecuencia es tan alta que la impedancia reactiva domina sobre la capacidad pura.
+      en: Valid for ideal capacitors in static or quasi-static regime (low frequencies). Does not apply when frequency is so high that reactive impedance dominates over pure capacitance.
+    dimension_check: "[F] = [C] / [V] = [T·I] / [M·L²·T⁻³·I⁻¹] = [M⁻¹·L⁻²·T⁴·I²] ✓"
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - definicion_capacidad
+      - relacion_carga_tension
+    result_semantics:
+      target: C
+      kind: material_property
+      sign_meaning:
+        es: La capacidad es siempre positiva; un resultado negativo indica error en los datos de entrada.
+        en: Capacitance is always positive; a negative result indicates an error in the input data.
+      absolute_value_meaning:
+        es: "Valores típicos: pF para componentes discretos de precisión, nF-µF para uso general, mF-F para supercondensadores. Cuanto mayor es C, más carga almacena el condensador por cada voltio adicional."
+        en: "Typical values: pF for precision discrete components, nF-µF for general use, mF-F for supercapacitors. Higher C means more charge stored per additional volt."
+    domain_checks:
+      - condition: C > 0
+        label: capacidad_valida
+        message:
+          es: La capacidad calculada es positiva y físicamente coherente.
+          en: Calculated capacitance is positive and physically coherent.
+      - condition: C <= 0
+        label: capacidad_invalida
+        message:
+          es: Resultado inválido. La capacidad no puede ser negativa ni nula.
+          en: Invalid result. Capacitance cannot be negative or zero.
+    coherence_checks:
+      - condition: C > 1
+        message:
+          es: Capacidad superior a 1 F. Revisar si se trata de un supercondensador o si hay un error de unidades.
+          en: Capacitance above 1 F. Check if this is a supercapacitor or if there is a unit error.
+      - condition: C < 1e-15
+        message:
+          es: Capacidad inferior a 1 fF. Revisar si los datos son correctos; es un valor extremadamente pequeño.
+          en: Capacitance below 1 fF. Check if data is correct; this is an extremely small value.
+    graph_implications:
+      es: "En el gráfico Q vs V: C es la pendiente de la recta. Mayor pendiente → mayor capacidad. El punto (V, Q) debe estar sobre la recta Q = C·V."
+      en: "In the Q vs V graph: C is the slope of the line. Steeper slope → higher capacitance. The point (V, Q) must lie on the line Q = C·V."
+    pedagogical_triggers:
+      - trigger: C > 1
+        message:
+          es: Capacidad en faradios completos. Confirmar si es un supercondensador; la mayoría de condensadores convencionales son del orden de µF o menor.
+          en: Capacitance in whole farads. Confirm if it is a supercapacitor; most conventional capacitors are in the µF range or smaller.
+
+  - id: energia_condensador
+    title:
+      es: Energía almacenada en el condensador
+      en: Energy stored in the capacitor
+    equation: E_cap = (1/2) * C * V^2
+    latex: E = \\frac{1}{2} C V^2
+    rearrangements:
+      - target: C
+        equation: C = 2 * E_cap / V^2
+        latex: C = \\frac{2E}{V^2}
+        constraints:
+          - condition: V != 0
+            message:
+              es: La tensión no puede ser cero para despejar la capacidad.
+              en: Voltage cannot be zero to solve for capacitance.
+          - condition: E_cap >= 0
+            message:
+              es: La energía almacenada debe ser no negativa.
+              en: Stored energy must be non-negative.
+      - target: V
+        equation: V = sqrt(2 * E_cap / C)
+        latex: V = \\sqrt{\\frac{2E}{C}}
+        constraints:
+          - condition: C > 0
+            message:
+              es: La capacidad debe ser positiva para despejar la tensión.
+              en: Capacitance must be positive to solve for voltage.
+          - condition: E_cap >= 0
+            message:
+              es: La energía almacenada debe ser no negativa.
+              en: Stored energy must be non-negative.
+    category: derived
+    relation_type: integral_relation
+    physical_meaning:
+      es: La energía almacenada en el campo eléctrico entre las armaduras del condensador. Se obtiene integrando el trabajo de carga desde V=0 hasta V final; el factor 1/2 refleja que la tensión crece progresivamente durante la carga.
+      en: Energy stored in the electric field between the capacitor plates. Obtained by integrating the charging work from V=0 to final V; the 1/2 factor reflects that voltage grows progressively during charging.
+    constraints:
+      - condition: C > 0
+        message:
+          es: La capacidad debe ser positiva.
+          en: Capacitance must be positive.
+      - condition: V >= 0
+        message:
+          es: Se trabaja con el valor absoluto de la tensión para el cálculo de energía.
+          en: The absolute value of voltage is used for energy calculations.
+    validity:
+      es: Válida para condensadores ideales en régimen cuasiestático. La energía real puede ser menor si hay pérdidas en el dieléctrico (factor de disipación tangδ). No aplicable en régimen pulsado de muy alta frecuencia.
+      en: Valid for ideal capacitors in quasi-static regime. Actual energy may be lower if there are dielectric losses (dissipation factor tanδ). Not applicable in very high frequency pulsed regime.
+    dimension_check: "[J] = [F]·[V²] = [C/V]·[V²] = [C·V] = [J] ✓"
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - energia_almacenada
+      - capacidad_energetica
+    result_semantics:
+      target: E_cap
+      kind: energy_quantity
+      sign_meaning:
+        es: La energía almacenada es siempre positiva o nula. Un resultado negativo indica error de cálculo.
+        en: Stored energy is always positive or zero. A negative result indicates a calculation error.
+      absolute_value_meaning:
+        es: "E_cap pequeño (µJ a mJ): condensadores de señal o referencia. E_cap medio (mJ a J): condensadores de filtrado en fuentes de alimentación. E_cap grande (J a kJ): condensadores de potencia o supercondensadores."
+        en: "Small E_cap (µJ to mJ): signal or reference capacitors. Medium E_cap (mJ to J): filter capacitors in power supplies. Large E_cap (J to kJ): power capacitors or supercapacitors."
+    domain_checks:
+      - condition: E_cap >= 0
+        label: energia_valida
+        message:
+          es: La energía almacenada es no negativa, coherente con el modelo físico.
+          en: Stored energy is non-negative, consistent with the physical model.
+      - condition: E_cap < 0
+        label: energia_invalida
+        message:
+          es: Resultado inválido. La energía almacenada no puede ser negativa.
+          en: Invalid result. Stored energy cannot be negative.
+    coherence_checks:
+      - condition: E_cap > 1000
+        message:
+          es: Energía superior a 1 kJ. Verificar si se trabaja con supercondensadores o si hay un error de unidades.
+          en: Energy above 1 kJ. Check if working with supercapacitors or if there is a unit error.
+    graph_implications:
+      es: "En el gráfico Q vs V: la energía almacenada es el área del triángulo bajo la recta Q = C·V entre V = 0 y V. Área = (1/2)·base·altura = (1/2)·V·Q = (1/2)·C·V²."
+      en: "In the Q vs V graph: stored energy is the area of the triangle below the line Q = C·V between V = 0 and V. Area = (1/2)·base·height = (1/2)·V·Q = (1/2)·C·V²."
+    pedagogical_triggers:
+      - trigger: E_cap > 0
+        message:
+          es: "Recordar que E = (1/2)·C·V² y no E = C·V² ni E = Q·V. El factor 1/2 es físicamente esencial: es el trabajo medio de carga, no el trabajo total a tensión máxima."
+          en: "Remember that E = (1/2)·C·V² and not E = C·V² or E = Q·V. The 1/2 factor is physically essential: it is the average charging work, not the total work at maximum voltage."
+
+  - id: capacidad_plana
+    title:
+      es: Capacidad del condensador plano
+      en: Capacitance of the parallel-plate capacitor
+    equation: C_plana = epsilon * A / d
+    latex: C_0 = \\frac{\\varepsilon \\cdot A}{d}  % epsilon
+    rearrangements:
+      - target: epsilon
+        equation: epsilon = C_plana * d / A
+        latex: \\varepsilon = \\frac{C_0 \\cdot d}{A}
+        constraints:
+          - condition: A > 0
+            message:
+              es: El área de las armaduras debe ser positiva.
+              en: Plate area must be positive.
+          - condition: d > 0
+            message:
+              es: La separación entre armaduras debe ser positiva.
+              en: Plate separation must be positive.
+    category: structural
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: Relaciona la capacidad eléctrica de un condensador de placas planas paralelas con su geometría (área A de las armaduras, separación d) y el material dieléctrico (permitividad ε). Es la fórmula de diseño del condensador ideal.
+      en: Relates the electric capacitance of a parallel-plate capacitor to its geometry (plate area A, separation d) and dielectric material (permittivity ε). It is the design formula of the ideal capacitor.
+    constraints:
+      - condition: A > 0
+        message:
+          es: El área efectiva de las armaduras debe ser mayor que cero.
+          en: Effective plate area must be greater than zero.
+      - condition: d > 0
+        message:
+          es: La separación entre armaduras debe ser mayor que cero.
+          en: Plate separation must be greater than zero.
+      - condition: epsilon > 0
+        message:
+          es: La permitividad del dieléctrico debe ser positiva.
+          en: Dielectric permittivity must be positive.
+    validity:
+      es: Válida solo cuando la separación d es mucho menor que las dimensiones laterales de las armaduras (campo uniforme). Para condensadores reales con efectos de borde o geometrías no planas se requieren correcciones.
+      en: Valid only when separation d is much smaller than the lateral dimensions of the plates (uniform field). For real capacitors with edge effects or non-planar geometries, corrections are required.
+    dimension_check: "[F] = [F/m]·[m²]/[m] = [F/m]·[m] = [F] ✓"
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - capacidad_geometrica
+      - efecto_dielectrico
+    result_semantics:
+      target: C_plana
+      kind: material_property
+      sign_meaning:
+        es: La capacidad geométrica es siempre positiva.
+        en: Geometric capacitance is always positive.
+      absolute_value_meaning:
+        es: "C_plana grande indica armaduras de gran área, muy próximas entre sí, con dieléctrico de alta permitividad. C_plana pequeña indica geometría compacta o dieléctrico de baja permitividad."
+        en: "Large C_plana indicates large-area plates, very close together, with high-permittivity dielectric. Small C_plana indicates compact geometry or low-permittivity dielectric."
+    domain_checks:
+      - condition: C_plana > 0
+        label: capacidad_geometrica_valida
+        message:
+          es: La capacidad geométrica calculada es positiva y coherente.
+          en: Calculated geometric capacitance is positive and coherent.
+    coherence_checks:
+      - condition: C_plana > 1
+        message:
+          es: "Capacidad superior a 1 F con fórmula de condensador plano: verificar unidades de área y separación (deben estar en m y m, no en cm²)."
+          en: "Capacitance above 1 F with parallel-plate formula: check units of area and separation (must be in m and m, not cm²)."
+    graph_implications:
+      es: "En el gráfico Q vs V: la pendiente de la recta es C_plana = ε·A/d. Cambiar d o ε modifica la pendiente."
+      en: "In the Q vs V graph: the slope of the line is C_plana = ε·A/d. Changing d or ε modifies the slope."
+    pedagogical_triggers:
+      - trigger: epsilon > 8.854e-11
+        message:
+          es: Permitividad superior a 10·ε₀. El dieléctrico tiene una constante relativa mayor que 10; verificar que se ha introducido la permitividad absoluta ε = ε₀·εᵣ y no solo εᵣ.
+          en: Permittivity above 10·ε₀. The dielectric has a relative constant above 10; verify that absolute permittivity ε = ε₀·εᵣ has been entered, not just εᵣ.
+
+ui:
+  default_formula: capacidad_definicion
+`;export{e as default};

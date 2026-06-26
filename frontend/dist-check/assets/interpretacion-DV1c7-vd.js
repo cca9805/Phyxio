@@ -1,0 +1,480 @@
+const e=`version: "2.0"
+id: interp-dielectricos
+leaf_id: dielectricos
+
+nombre:
+  es: Interpretación — Dieléctricos
+  en: Interpretation — Dielectrics
+
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: electrostatica
+  parent_id: aplicaciones
+  ruta_relativa: fisica-clasica/electromagnetismo/electrostatica/aplicaciones/dielectricos
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física del dieléctrico
+    en: Physical interpretation of the dielectric
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    priority: [summary, likely_errors]
+
+dependencies:
+  formulas:
+    - capacitancia_dielectrico
+    - campo_en_dielectrico
+    - polarizacion_dielectrico
+  magnitudes:
+    - epsilon_r
+    - C_d
+    - C_0
+    - E_d
+    - P_pol
+
+global_context:
+  physical_domain:
+    es: Electrostática — materiales dieléctricos en condensadores
+    en: Electrostatics — dielectric materials in capacitors
+  axis_convention:
+    es: El campo eléctrico externo se toma como positivo en la dirección de las placas positivas a las negativas.
+    en: The external electric field is taken as positive in the direction from the positive to the negative plate.
+  standard_assumptions:
+    - Dieléctrico lineal, homogéneo e isótropo (LHI)
+    - Campo externo uniforme entre placas planas paralelas
+    - Sin cargas libres en el interior del dieléctrico
+    - Temperatura constante (epsilon_r no varía con T en este modelo)
+  standard_warnings:
+    - epsilon_r depende de la frecuencia de la señal aplicada en régimen dinámico
+    - Cerca de la tensión de ruptura el modelo lineal deja de ser válido
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen del estado del dieléctrico
+      en: Dielectric state summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia física
+      en: Physical coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del gráfico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  C_d:
+    magnitude_type: output_quantity
+    semantic_role:
+      es: Capacitancia resultante del condensador con dieléctrico. Indica cuánta carga almacena el dispositivo por unidad de tensión.
+      en: Resulting capacitance of the capacitor with dielectric. Indicates how much charge the device stores per unit voltage.
+    summary_rules:
+      - id: cd_summary_positive
+        when: "C_d > 0"
+        status: ok
+        text:
+          es: "[[C_d]] indica la capacitancia con dieléctrico. El resultado resume la capacidad de almacenamiento: cuanto mayor, más carga por voltio. Depende directamente de [[epsilon_r]] y de la geometría base [[C_0]]."
+          en: "[[C_d]] indicates the capacitance with dielectric. The result summarises storage capacity: the larger it is, the more charge per volt. It depends directly on [[epsilon_r]] and the base geometry [[C_0]]."
+      - id: cd_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[C_d]] describe el almacenamiento de carga del condensador con dieléctrico. Domina la geometría y el material: aumenta linealmente con [[epsilon_r]]."
+          en: "[[C_d]] describes the charge storage of the capacitor with dielectric. Geometry and material dominate: it increases linearly with [[epsilon_r]]."
+    physical_reading_rules:
+      - id: cd_reading_greater
+        when: "C_d > C_0"
+        status: ok
+        text:
+          es: "[[C_d]] es mayor que [[C_0]]: el dieléctrico amplifica la capacitancia porque sus dipoles reducen el campo interior, permitiendo acumular más carga a la misma tensión."
+          en: "[[C_d]] is larger than [[C_0]]: the dielectric amplifies capacitance because its dipoles reduce the interior field, allowing more charge at the same voltage."
+      - id: cd_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "La capacitancia resultante depende de [[epsilon_r]]: un material con mayor constante dieléctrica produce mayor [[C_d]] a geometría fija."
+          en: "The resulting capacitance depends on [[epsilon_r]]: a material with higher dielectric constant produces larger [[C_d]] at fixed geometry."
+    coherence_rules:
+      - id: cd_coherence_less_c0
+        when: "C_d < C_0"
+        status: warning
+        text:
+          es: "[[C_d]] no puede ser menor que [[C_0]] en el modelo LHI. Si C_d < C_0, revisar si epsilon_r se introdujo correctamente (debe ser ≥ 1)."
+          en: "[[C_d]] cannot be smaller than [[C_0]] in the LHI model. If C_d < C_0, check whether epsilon_r was entered correctly (must be ≥ 1)."
+      - id: cd_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[epsilon_r]] es mayor o igual a 1 y que [[C_0]] es positivo antes de aceptar el resultado."
+          en: "Verify that [[epsilon_r]] is greater than or equal to 1 and that [[C_0]] is positive before accepting the result."
+    model_validity_rules:
+      - id: cd_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo es válido mientras [[epsilon_r]] sea constante (régimen lineal). Falla si el campo supera la tensión de ruptura del material o si la frecuencia de la señal entra en la región de dispersión de epsilon_r."
+          en: "The model is valid as long as [[epsilon_r]] is constant (linear regime). It fails if the field exceeds the breakdown voltage of the material or if the signal frequency enters the dispersion region of epsilon_r."
+    graph_rules:
+      - id: cd_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico [[C_d]] frente a [[epsilon_r]], el resultado debe caer sobre la recta de pendiente [[C_0]]. Si el punto no cae en la recta, revisar los datos de entrada."
+          en: "In the [[C_d]] vs [[epsilon_r]] graph, the result must fall on the line with slope [[C_0]]. If the point does not fall on the line, check the input data."
+    likely_errors:
+      - id: cd_error_additive
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: calcular C_d = C_0 + epsilon_r en lugar de C_d = epsilon_r * C_0. La relación es multiplicativa, no aditiva."
+          en: "Frequent error: calculating C_d = C_0 + epsilon_r instead of C_d = epsilon_r * C_0. The relation is multiplicative, not additive."
+    next_step_rules:
+      - id: cd_next_energy
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[C_d]] conocido, calcular la energía almacenada utilizando la fórmula de energía del condensador. Comparar el resultado con el condensador en vacío para cuantificar la mejora del dieléctrico."
+          en: "With [[C_d]] known, calculate the stored energy using the capacitor energy formula. Compare the result with the vacuum capacitor to quantify the dielectric improvement."
+
+  epsilon_r:
+    magnitude_type: input_parameter
+    semantic_role:
+      es: Constante dieléctrica relativa del material. Indica cuántas veces el material aumenta la capacitancia respecto al vacío.
+      en: Relative dielectric constant of the material. Indicates how many times the material increases the capacitance compared to vacuum.
+    summary_rules:
+      - id: er_summary_gt1
+        when: "epsilon_r > 1"
+        status: ok
+        text:
+          es: "[[epsilon_r]] describe la respuesta polarizante del material. Un valor mayor indica que el material aumenta más la capacitancia y amortigua más el campo eléctrico interior. Domina el resultado de [[C_d]] y de [[E_d]]."
+          en: "[[epsilon_r]] describes the polarising response of the material. A larger value indicates the material increases capacitance more and attenuates the interior field more strongly. It dominates the result of [[C_d]] and [[E_d]]."
+      - id: er_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[epsilon_r]] resume la capacidad de polarización del dieléctrico. Depende del tipo de material y es siempre mayor o igual a 1."
+          en: "[[epsilon_r]] summarises the polarisation capacity of the dielectric. It depends on the material type and is always greater than or equal to 1."
+    physical_reading_rules:
+      - id: er_reading_polar
+        when: "epsilon_r >= 80"
+        status: ok
+        text:
+          es: "[[epsilon_r]] mayor o igual a 80 corresponde a materiales muy polares como el agua líquida. La polarización es intensa y el campo interior queda muy amortiguado."
+          en: "[[epsilon_r]] greater than or equal to 80 corresponds to highly polar materials such as liquid water. Polarisation is intense and the interior field is strongly attenuated."
+      - id: er_reading_low
+        when: "epsilon_r < 10"
+        status: ok
+        text:
+          es: "[[epsilon_r]] menor de 10 es típico de vidrios, cerámicas y polímeros convencionales. La amplificación de capacitancia es moderada."
+          en: "[[epsilon_r]] below 10 is typical of glasses, ceramics, and conventional polymers. Capacitance amplification is moderate."
+      - id: er_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[epsilon_r]] determina el factor de amplificación de [[C_d]] respecto al condensador en vacío."
+          en: "[[epsilon_r]] determines the amplification factor of [[C_d]] relative to the vacuum capacitor."
+    coherence_rules:
+      - id: er_coherence_below1
+        when: "epsilon_r < 1"
+        status: error
+        text:
+          es: "[[epsilon_r]] menor que 1 es físicamente imposible para materiales pasivos. Revisar el valor introducido o las unidades utilizadas."
+          en: "[[epsilon_r]] below 1 is physically impossible for passive materials. Check the entered value or the units used."
+      - id: er_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[epsilon_r]] debe ser adimensional y positivo. Si el valor tiene unidades, se ha confundido con la permitividad absoluta [[epsilon_r]] * epsilon_0."
+          en: "[[epsilon_r]] must be dimensionless and positive. If the value has units, it has been confused with the absolute permittivity [[epsilon_r]] * epsilon_0."
+    model_validity_rules:
+      - id: er_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo LHI asume [[epsilon_r]] constante con el campo y la temperatura. En materiales ferroeléctricos o a campos muy altos, [[epsilon_r]] varía y el modelo deja de ser lineal."
+          en: "The LHI model assumes [[epsilon_r]] is constant with field and temperature. In ferroelectric materials or at very high fields, [[epsilon_r]] varies and the model ceases to be linear."
+    graph_rules:
+      - id: er_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico [[C_d]] frente a [[epsilon_r]], este parámetro es el eje horizontal. Aumentar [[epsilon_r]] desplaza el punto hacia la derecha y hacia arriba sobre la recta."
+          en: "In the [[C_d]] vs [[epsilon_r]] graph, this parameter is the horizontal axis. Increasing [[epsilon_r]] moves the point to the right and upward along the line."
+    likely_errors:
+      - id: er_error_absolute
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: usar la permitividad absoluta en F/m en lugar de [[epsilon_r]] adimensional. Comprobar que el valor sea un número puro, no una cantidad con unidades."
+          en: "Frequent error: using the absolute permittivity in F/m instead of the dimensionless [[epsilon_r]]. Check that the value is a pure number, not a quantity with units."
+    next_step_rules:
+      - id: er_next_cd
+        when: "true"
+        status: ok
+        text:
+          es: "Identificado [[epsilon_r]], calcular [[C_d]] y comparar con [[C_0]] para cuantificar la mejora. También calcular [[E_d]] para evaluar la seguridad frente a la tensión de ruptura del material."
+          en: "With [[epsilon_r]] identified, calculate [[C_d]] and compare with [[C_0]] to quantify the improvement. Also calculate [[E_d]] to assess safety against the material's breakdown field."
+
+  C_0:
+    magnitude_type: input_parameter
+    semantic_role:
+      es: Capacitancia del condensador en vacío. Es el punto de partida geométrico; el dieléctrico la multiplica por epsilon_r.
+      en: Capacitance of the vacuum capacitor. It is the geometric starting point; the dielectric multiplies it by epsilon_r.
+    summary_rules:
+      - id: c0_summary_positive
+        when: "C_0 > 0"
+        status: ok
+        text:
+          es: "[[C_0]] describe la capacitancia de referencia geométrica del condensador sin dieléctrico. Indica el valor base sobre el que el material dieléctrico actúa como amplificador."
+          en: "[[C_0]] describes the geometric reference capacitance of the capacitor without dielectric. It indicates the base value that the dielectric material acts upon as an amplifier."
+      - id: c0_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[C_0]] resume la geometría del condensador. Depende del área de las placas y de la separación entre ellas, no del material entre ellas."
+          en: "[[C_0]] summarises the capacitor geometry. It depends on the plate area and separation, not on the material between them."
+    physical_reading_rules:
+      - id: c0_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[C_0]] determina la escala del efecto del dieléctrico: un condensador con [[C_0]] grande obtiene una ganancia absoluta mayor al introducir el dieléctrico."
+          en: "[[C_0]] determines the scale of the dielectric effect: a capacitor with large [[C_0]] gains more absolute capacitance when the dielectric is inserted."
+    coherence_rules:
+      - id: c0_coherence_zero
+        when: "C_0 <= 0"
+        status: error
+        text:
+          es: "[[C_0]] debe ser positivo. Un valor nulo o negativo indica error en los datos geométricos de entrada."
+          en: "[[C_0]] must be positive. A zero or negative value indicates an error in the geometric input data."
+      - id: c0_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[C_0]] sea coherente con el área y la separación del condensador. Un valor muy grande o muy pequeño puede indicar error de escala en las unidades."
+          en: "Verify that [[C_0]] is consistent with the area and separation of the capacitor. A very large or very small value may indicate a scale error in the units."
+    model_validity_rules:
+      - id: c0_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[C_0]] es independiente del campo y del voltaje en el modelo ideal. En condensadores reales con geometría no plana, [[C_0]] puede depender de la posición."
+          en: "[[C_0]] is independent of field and voltage in the ideal model. In real capacitors with non-planar geometry, [[C_0]] may depend on position."
+    graph_rules:
+      - id: c0_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[C_0]] es la pendiente de la recta en el gráfico [[C_d]] frente a [[epsilon_r]]. Un [[C_0]] mayor produce una recta más empinada."
+          en: "[[C_0]] is the slope of the line in the [[C_d]] vs [[epsilon_r]] graph. A larger [[C_0]] produces a steeper line."
+    likely_errors:
+      - id: c0_error_confuse_cd
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: confundir [[C_0]] con [[C_d]] cuando se mide experimentalmente con aire entre las placas. El aire tiene epsilon_r muy próxima a 1, por lo que la diferencia es pequeña pero no nula."
+          en: "Frequent error: confusing [[C_0]] with [[C_d]] when measuring experimentally with air between the plates. Air has epsilon_r very close to 1, so the difference is small but not zero."
+    next_step_rules:
+      - id: c0_next_vary
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[C_0]] definido, variar [[epsilon_r]] para explorar distintos materiales dieléctricos y comparar sus efectos sobre [[C_d]]."
+          en: "With [[C_0]] defined, vary [[epsilon_r]] to explore different dielectric materials and compare their effects on [[C_d]]."
+
+  E_d:
+    magnitude_type: output_quantity
+    semantic_role:
+      es: Campo eléctrico resultante en el interior del dieléctrico. Indica qué intensidad de campo experimenta realmente el material tras la polarización.
+      en: Resultant electric field inside the dielectric. Indicates the actual field intensity the material experiences after polarisation.
+    summary_rules:
+      - id: ed_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[E_d]] indica el campo resultante en el interior del dieléctrico. Resume el efecto de apantallamiento: cuanto mayor es [[epsilon_r]], más disminuye [[E_d]] respecto al campo externo aplicado."
+          en: "[[E_d]] indicates the resultant field inside the dielectric. It summarises the shielding effect: the larger [[epsilon_r]], the more [[E_d]] decreases compared to the applied external field."
+    physical_reading_rules:
+      - id: ed_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[E_d]] resulta menor que el campo externo porque la polarización del material genera cargas superficiales que se oponen al campo aplicado. Esta reducción es la esencia del efecto dieléctrico."
+          en: "[[E_d]] is smaller than the external field because the polarisation of the material generates surface charges opposing the applied field. This reduction is the essence of the dielectric effect."
+    coherence_rules:
+      - id: ed_coherence_exceeds_ext
+        when: "true"
+        status: ok
+        text:
+          es: "[[E_d]] debe ser menor o igual al campo externo. Si [[E_d]] supera el campo externo, hay un error en [[epsilon_r]] o en los datos de entrada."
+          en: "[[E_d]] must be less than or equal to the external field. If [[E_d]] exceeds the external field, there is an error in [[epsilon_r]] or the input data."
+    model_validity_rules:
+      - id: ed_validity_breakdown
+        when: "true"
+        status: ok
+        text:
+          es: "Cuando [[E_d]] supera la tensión de ruptura dieléctrica del material, el modelo lineal deja de ser válido y el dieléctrico puede ionizarse (ruptura). El modelo solo es fiable por debajo de ese límite."
+          en: "When [[E_d]] exceeds the dielectric breakdown field of the material, the linear model is no longer valid and the dielectric may ionise (breakdown). The model is only reliable below that limit."
+    graph_rules:
+      - id: ed_graph_hyperbola
+        when: "true"
+        status: ok
+        text:
+          es: "En una representación de [[E_d]] frente a [[epsilon_r]], la curva es una hipérbola decreciente. A campo externo fijo, doblar [[epsilon_r]] reduce [[E_d]] a la mitad."
+          en: "In a plot of [[E_d]] vs [[epsilon_r]], the curve is a decreasing hyperbola. At fixed external field, doubling [[epsilon_r]] halves [[E_d]]."
+    likely_errors:
+      - id: ed_error_amplification
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: creer que el campo en el dieléctrico es mayor que el campo externo. La polarización siempre opone su campo al externo, nunca lo amplifica en materiales lineales pasivos."
+          en: "Frequent error: believing the field inside the dielectric is larger than the external field. Polarisation always opposes the external field, never amplifying it in passive linear materials."
+    next_step_rules:
+      - id: ed_next_breakdown_check
+        when: "true"
+        status: ok
+        text:
+          es: "Comparar [[E_d]] con la tensión de ruptura del material seleccionado para garantizar que el diseño opera en el régimen seguro. Si [[E_d]] está cerca del límite, aumentar la separación entre placas o elegir un material de mayor rigidez dieléctrica."
+          en: "Compare [[E_d]] with the breakdown field of the selected material to ensure the design operates in the safe regime. If [[E_d]] is near the limit, increase the plate separation or choose a material with higher dielectric strength."
+
+  P_pol:
+    magnitude_type: output_quantity
+    semantic_role:
+      es: Polarización volumétrica del dieléctrico. Indica el momento dipolar por unidad de volumen inducido por el campo eléctrico interior.
+      en: Volumetric polarisation of the dielectric. Indicates the dipole moment per unit volume induced by the interior electric field.
+    summary_rules:
+      - id: ppol_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[P_pol]] describe la densidad de momento dipolar inducida en el material. Resume la intensidad de la respuesta polarizante: depende del campo interior [[E_d]] y de la susceptibilidad del material, que es [[epsilon_r]] menos uno."
+          en: "[[P_pol]] describes the induced dipole moment density in the material. It summarises the strength of the polarising response: it depends on the interior field [[E_d]] and the material susceptibility, which is [[epsilon_r]] minus one."
+    physical_reading_rules:
+      - id: ppol_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[P_pol]] cuantifica macroscópicamente la alineación de dipolos microscópicos. Un valor alto indica que el material genera muchas cargas superficiales ligadas que reducen el campo interior."
+          en: "[[P_pol]] quantifies macroscopically the alignment of microscopic dipoles. A high value indicates the material generates many bound surface charges that reduce the interior field."
+    coherence_rules:
+      - id: ppol_coherence_sign
+        when: "true"
+        status: ok
+        text:
+          es: "[[P_pol]] debe tener el mismo signo que [[E_d]] en materiales pasivos lineales. Un valor negativo con campo positivo indica error en los datos."
+          en: "[[P_pol]] must have the same sign as [[E_d]] in passive linear materials. A negative value with positive field indicates an error in the data."
+    model_validity_rules:
+      - id: ppol_validity_linear
+        when: "true"
+        status: ok
+        text:
+          es: "La relación lineal entre [[P_pol]] y [[E_d]] es válida solo en el régimen LHI. En materiales ferroeléctricos, [[P_pol]] puede ser distinta de cero incluso con campo externo nulo."
+          en: "The linear relation between [[P_pol]] and [[E_d]] is valid only in the LHI regime. In ferroelectric materials, [[P_pol]] can be non-zero even with zero external field."
+    graph_rules:
+      - id: ppol_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En un gráfico [[P_pol]] frente a [[E_d]], la relación es lineal con pendiente proporcional a [[epsilon_r]] menos uno. La recta pasa por el origen para materiales lineales."
+          en: "In a plot of [[P_pol]] vs [[E_d]], the relation is linear with slope proportional to [[epsilon_r]] minus one. The line passes through the origin for linear materials."
+    likely_errors:
+      - id: ppol_error_confuse_permittivity
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: calcular [[P_pol]] usando [[epsilon_r]] en lugar de ([[epsilon_r]] - 1) como susceptibilidad. Para materiales con [[epsilon_r]] grande la diferencia es pequeña pero para [[epsilon_r]] cercana a 1 es crucial."
+          en: "Frequent error: computing [[P_pol]] using [[epsilon_r]] instead of ([[epsilon_r]] - 1) as susceptibility. For materials with large [[epsilon_r]] the difference is small, but for [[epsilon_r]] close to 1 it is crucial."
+    next_step_rules:
+      - id: ppol_next_surface_charge
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[P_pol]] calculada, se puede estimar la densidad de carga superficial ligada como la componente normal de [[P_pol]] en la interfaz dieléctrico-vacío."
+          en: "With [[P_pol]] calculated, the bound surface charge density can be estimated as the normal component of [[P_pol]] at the dielectric-vacuum interface."
+
+cross_checks:
+  - check: "C_d == epsilon_r * C_0"
+    message:
+      es: Verificar que el resultado de [[C_d]] coincide con el producto de [[epsilon_r]] por [[C_0]].
+      en: Verify that the result of [[C_d]] matches the product of [[epsilon_r]] and [[C_0]].
+
+error_patterns:
+  - id: confundir_epsilon_absoluta
+    description:
+      es: Usar permitividad absoluta (F/m) en lugar de epsilon_r adimensional.
+      en: Using absolute permittivity (F/m) instead of dimensionless epsilon_r.
+  - id: suma_en_lugar_de_producto
+    description:
+      es: Calcular C_d = C_0 + epsilon_r en lugar de C_d = epsilon_r * C_0.
+      en: Calculating C_d = C_0 + epsilon_r instead of C_d = epsilon_r * C_0.
+
+graph_binding:
+  preferred_graph_type: Coord
+  target_variable: C_d
+  control_variable: epsilon_r
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true
+`;export{e as default};

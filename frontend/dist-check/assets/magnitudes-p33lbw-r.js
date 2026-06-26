@@ -1,0 +1,296 @@
+const n=`version: 5
+magnitudes:
+  - id: v_fase
+    symbol: "v"
+    nombre:
+      es: "Velocidad de Fase"
+      en: "Phase Velocity"
+    unidad_si: "m/s"
+    dimension: "L T⁻¹"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Rapidez con la que un frente de onda se desplaza a través del sólido."
+      en: "Speed at which a wavefront travels through the solid."
+    category: "ondas"
+    physical_role: "variable de estado"
+    used_in: ["onda_longitudinal", "onda_transversal"]
+    common_mistake:
+      es: "Confundir con la velocidad de grupo o con la velocidad de las partículas del medio."
+      en: "Confusing with group velocity or with the velocity of medium particles."
+    typical_range: [1000, 12000]
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Siempre positiva; representa rapidez escalar."
+        en: "Always positive; represents scalar speed."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "No existe propagación sin velocidad."
+        en: "No propagation exists without velocity."
+    value_nature:
+      kind: "continuous"
+      nonnegative_only: true
+      expected_interval: [1000, 12000]
+    interpretation_role:
+      primary_for: ["v_fase"]
+      secondary_for: []
+    graph_binding:
+      channels: ["Y"]
+    pedagogical_notes:
+      es: "Relacionar con la rigidez y densidad del material; más rígido y menos denso implica mayor velocidad."
+      en: "Relate to material stiffness and density; stiffer and less dense means higher velocity."
+
+  - id: E_young
+    symbol: "E"
+    nombre:
+      es: "Módulo de Young"
+      en: "Young's Modulus"
+    unidad_si: "Pa"
+    dimension: "M L⁻¹ T⁻²"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Resistencia del sólido a la deformación longitudinal uniaxial."
+      en: "Resistance of the solid to uniaxial longitudinal deformation."
+    category: "elasticidad"
+    physical_role: "propiedad del material"
+    used_in: ["onda_longitudinal"]
+    common_mistake:
+      es: "Usar el módulo de cizalladura en lugar del de Young para ondas longitudinales en barras."
+      en: "Using shear modulus instead of Young's modulus for longitudinal waves in bars."
+    typical_range: [1e9, 400e9]
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Siempre positivo para materiales reales."
+        en: "Always positive for real materials."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un material sin rigidez no puede transmitir ondas."
+        en: "A material with no stiffness cannot transmit waves."
+    value_nature:
+      kind: "continuous"
+      nonnegative_only: true
+      expected_interval: [1e9, 400e9]
+    interpretation_role:
+      primary_for: []
+      secondary_for: ["v_fase"]
+    graph_binding:
+      channels: ["parameter"]
+    pedagogical_notes:
+      es: "Es la pendiente de la curva tensión-deformación en régimen elástico lineal."
+      en: "It is the slope of the stress-strain curve in the linear elastic regime."
+
+  - id: G_mod
+    symbol: "G"
+    nombre:
+      es: "Módulo de Cizalladura"
+      en: "Shear Modulus"
+    unidad_si: "Pa"
+    dimension: "M L⁻¹ T⁻²"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Resistencia del sólido a la deformación tangencial."
+      en: "Resistance of the solid to shear deformation."
+    category: "elasticidad"
+    physical_role: "propiedad del material"
+    used_in: ["onda_transversal"]
+    common_mistake:
+      es: "Confundir con el módulo de Young; el de cizalladura gobierna ondas transversales."
+      en: "Confusing with Young's modulus; shear modulus governs transverse waves."
+    typical_range: [0.4e9, 160e9]
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Siempre positivo para sólidos."
+        en: "Always positive for solids."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Sin rigidez a cortante no hay ondas transversales (como en fluidos)."
+        en: "Without shear stiffness there are no transverse waves (as in fluids)."
+    value_nature:
+      kind: "continuous"
+      nonnegative_only: true
+      expected_interval: [0.4e9, 160e9]
+    interpretation_role:
+      primary_for: []
+      secondary_for: ["v_fase"]
+    graph_binding:
+      channels: ["parameter"]
+    pedagogical_notes:
+      es: "Los fluidos tienen G = 0, por eso no transmiten ondas transversales."
+      en: "Fluids have G = 0, which is why they cannot transmit transverse waves."
+
+  - id: rho
+    symbol: "\\\\rho"
+    nombre:
+      es: "Densidad"
+      en: "Density"
+    unidad_si: "kg/m³"
+    dimension: "M L⁻³"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Masa por unidad de volumen del medio sólido."
+      en: "Mass per unit volume of the solid medium."
+    category: "material"
+    physical_role: "propiedad del material"
+    used_in: ["onda_longitudinal", "onda_transversal"]
+    common_mistake:
+      es: "Confundir densidad volumétrica con densidad lineal en problemas de barras."
+      en: "Confusing volumetric density with linear density in bar problems."
+    typical_range: [900, 22500]
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Siempre positiva."
+        en: "Always positive."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "El vacío no transmite ondas mecánicas."
+        en: "Vacuum does not transmit mechanical waves."
+    value_nature:
+      kind: "continuous"
+      nonnegative_only: true
+      expected_interval: [900, 22500]
+    interpretation_role:
+      primary_for: []
+      secondary_for: ["v_fase"]
+    graph_binding:
+      channels: ["parameter"]
+    pedagogical_notes:
+      es: "Mayor densidad implica mayor inercia y generalmente menor velocidad de onda."
+      en: "Higher density means more inertia and generally lower wave speed."
+
+  - id: f
+    symbol: "f"
+    nombre:
+      es: "Frecuencia"
+      en: "Frequency"
+    unidad_si: "Hz"
+    dimension: "T⁻¹"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Número de oscilaciones completas por segundo en un punto del sólido."
+      en: "Number of complete oscillations per second at a point in the solid."
+    category: "ondas"
+    physical_role: "causa"
+    used_in: ["onda_longitudinal", "onda_transversal"]
+    common_mistake:
+      es: "Creer que la frecuencia cambia al pasar de un medio a otro."
+      en: "Believing that frequency changes when passing from one medium to another."
+    typical_range: [1, 1e7]
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Siempre positiva."
+        en: "Always positive."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Frecuencia cero significa ausencia de oscilación."
+        en: "Zero frequency means no oscillation."
+    value_nature:
+      kind: "continuous"
+      nonnegative_only: true
+      expected_interval: [1, 1e7]
+    interpretation_role:
+      primary_for: []
+      secondary_for: ["lambda"]
+    graph_binding:
+      channels: ["X"]
+    pedagogical_notes:
+      es: "La frecuencia la fija la fuente; no depende del medio."
+      en: "Frequency is set by the source; it does not depend on the medium."
+
+  - id: lambda
+    symbol: "\\\\lambda"
+    nombre:
+      es: "Longitud de Onda"
+      en: "Wavelength"
+    unidad_si: "m"
+    dimension: "L"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Distancia entre dos puntos consecutivos en fase idéntica de la onda."
+      en: "Distance between two consecutive points in identical phase of the wave."
+    category: "ondas"
+    physical_role: "geometría"
+    used_in: ["onda_longitudinal", "onda_transversal"]
+    common_mistake:
+      es: "Confundir longitud de onda con amplitud."
+      en: "Confusing wavelength with amplitude."
+    typical_range: [1e-4, 10]
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Siempre positiva."
+        en: "Always positive."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Longitud de onda cero implicaría frecuencia infinita."
+        en: "Zero wavelength would imply infinite frequency."
+    value_nature:
+      kind: "continuous"
+      nonnegative_only: true
+      expected_interval: [1e-4, 10]
+    interpretation_role:
+      primary_for: ["lambda"]
+      secondary_for: []
+    graph_binding:
+      channels: ["Y"]
+    pedagogical_notes:
+      es: "En sólidos la longitud de onda depende del medio porque la velocidad depende del medio."
+      en: "In solids wavelength depends on the medium because velocity depends on the medium."
+
+  - id: v_transversal
+    symbol: "v_t"
+    nombre:
+      es: "Velocidad Transversal"
+      en: "Transverse Velocity"
+    unidad_si: "m/s"
+    dimension: "L T⁻¹"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Velocidad de propagación de las ondas transversales (de cizalladura) en un sólido."
+      en: "Propagation speed of transverse (shear) waves in a solid."
+    category: "ondas"
+    physical_role: "velocidad"
+    used_in: ["onda_transversal"]
+    common_mistake:
+      es: "Confundir con la velocidad longitudinal o usar el módulo de Young en lugar del de cizalladura."
+      en: "Confusing with longitudinal velocity or using Young's modulus instead of shear modulus."
+    typical_range: [20, 7000]
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Siempre positiva; indica rapidez de propagación del modo transversal."
+        en: "Always positive; indicates propagation speed of the transverse mode."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Velocidad transversal cero indica un fluido (G = 0), no un sólido."
+        en: "Zero transverse velocity indicates a fluid (G = 0), not a solid."
+    value_nature:
+      kind: "continuous"
+      nonnegative_only: true
+      expected_interval: [20, 7000]
+    interpretation_role:
+      primary_for: ["v_transversal"]
+      secondary_for: []
+    graph_binding:
+      channels: ["Y"]
+    pedagogical_notes:
+      es: "Siempre menor que la velocidad longitudinal en el mismo material; la relación típica es 0.5 a 0.6."
+      en: "Always lower than longitudinal velocity in the same material; the typical ratio is 0.5 to 0.6."
+`;export{n as default};

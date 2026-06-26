@@ -1,0 +1,579 @@
+version: "5.0.0"
+ui:
+  default_formula: "ley_enfriamiento_newton_conveccion"
+formulas:
+  - id: "diferencia_temperatura_conveccion"
+    title:
+      es: "Diferencia de temperatura superficie-fluido"
+      en: "Surface-fluid temperature difference"
+    equation: "diferencia_temperatura = temperatura_superficie - temperatura_fluido"
+    latex: "\\Delta T = T_s - T_f"
+    magnitudes:
+      - "diferencia_temperatura"
+      - "temperatura_superficie"
+      - "temperatura_fluido"
+    category: "temperatura"
+    relation_type: "definition"
+    physical_meaning:
+      es: "Define el salto térmico que impulsa el intercambio convectivo."
+      en: "Defines the thermal difference driving convective exchange."
+    constraints:
+      - "temperatura_superficie debe expresarse en K o en una escala coherente con temperatura_fluido."
+      - "temperatura_fluido debe representar la temperatura de referencia del fluido."
+    validity:
+      es: "Válida cuando la superficie y el fluido pueden describirse mediante temperaturas representativas."
+      en: "Valid when the surface and fluid can be described by representative temperatures."
+    dimension_check: "[Θ] = [Θ] - [Θ]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "conveccion"
+      - "transferencia_calor"
+    interpretation_tags:
+      - "motor_termico"
+      - "sentido_transferencia"
+    result_semantics:
+      target: "diferencia_temperatura"
+      kind: "scalar"
+      sign_meaning:
+        es: "Positiva si la superficie está más caliente que el fluido según este convenio."
+        en: "Positive if the surface is hotter than the fluid under this convention."
+      absolute_value_meaning:
+        es: "Indica la intensidad del salto térmico sin considerar el sentido."
+        en: "Indicates the intensity of the thermal difference without direction."
+    domain_checks:
+      - id: "temperaturas_coherentes"
+        status: "warning"
+        text:
+          es: "No mezcles temperaturas absolutas y diferencias de temperatura sin criterio."
+          en: "Do not mix absolute temperatures and temperature differences carelessly."
+    coherence_checks:
+      - id: "delta_t_cero"
+        status: "info"
+        text:
+          es: "Si la diferencia es cero, el intercambio convectivo ideal neto se anula."
+          en: "If the difference is zero, ideal net convective exchange vanishes."
+    graph_implications:
+      - id: "eje_x_delta_t"
+        text:
+          es: "Puede usarse como variable horizontal en una gráfica de potencia o flujo."
+          en: "It can be used as the horizontal variable in a power or flux graph."
+    pedagogical_triggers:
+      - "Revisar el signo antes de interpretar ganancia o pérdida de calor."
+      - "Distinguir temperatura absoluta de diferencia de temperatura."
+    rearrangements:
+      - target: "diferencia_temperatura"
+        equation: "diferencia_temperatura = temperatura_superficie - temperatura_fluido"
+        latex: "\\Delta T = T_s - T_f"
+      - target: "temperatura_superficie"
+        equation: "temperatura_superficie = diferencia_temperatura + temperatura_fluido"
+        latex: "T_s = \\Delta T + T_f"
+      - target: "temperatura_fluido"
+        equation: "temperatura_fluido = temperatura_superficie - diferencia_temperatura"
+        latex: "T_f = T_s - \\Delta T"
+
+  - id: "ley_enfriamiento_newton_conveccion"
+    title:
+      es: "Ley de enfriamiento de Newton para convección"
+      en: "Newton's cooling law for convection"
+    equation: "potencia_termica = coeficiente_conveccion * area * diferencia_temperatura"
+    latex: "P = h \\cdot A \\cdot \\Delta T"
+    magnitudes:
+      - "potencia_termica"
+      - "coeficiente_conveccion"
+      - "area"
+      - "diferencia_temperatura"
+    category: "ley_fundamental"
+    relation_type: "proportionality"
+    physical_meaning:
+      es: "Relaciona la potencia térmica convectiva con el coeficiente de convección, el área y el salto térmico."
+      en: "Relates convective thermal power to the heat transfer coefficient, area, and temperature difference."
+    constraints:
+      - "coeficiente_conveccion > 0"
+      - "area > 0"
+      - "diferencia_temperatura debe ser representativa del intercambio superficie-fluido."
+    validity:
+      es: "Válida para intercambio convectivo superficial modelado con un coeficiente h efectivo."
+      en: "Valid for surface convective exchange modeled with an effective coefficient h."
+    dimension_check: "[M L² T⁻³] = [M T⁻³ Θ⁻¹] · [L²] · [Θ]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "conveccion"
+      - "enfriamiento"
+      - "calentamiento"
+    interpretation_tags:
+      - "potencia"
+      - "conveccion_superficial"
+      - "proporcionalidad"
+    result_semantics:
+      target: "potencia_termica"
+      kind: "scalar"
+      sign_meaning:
+        es: "El signo indica el sentido del intercambio según el convenio de diferencia de temperatura."
+        en: "The sign indicates exchange direction according to the temperature-difference convention."
+      absolute_value_meaning:
+        es: "Indica la rapidez total de transferencia térmica convectiva."
+        en: "Indicates the total rate of convective thermal transfer."
+    domain_checks:
+      - id: "h_positivo"
+        status: "warning"
+        text:
+          es: "El coeficiente de convección debe ser positivo."
+          en: "The convective coefficient must be positive."
+      - id: "area_positiva"
+        status: "warning"
+        text:
+          es: "El área de intercambio debe ser positiva."
+          en: "The exchange area must be positive."
+    coherence_checks:
+      - id: "potencia_crece_con_delta_t"
+        status: "ok"
+        text:
+          es: "Con h y A constantes, la potencia crece linealmente con la diferencia de temperatura."
+          en: "With h and A constant, power grows linearly with temperature difference."
+    graph_implications:
+      - id: "recta_potencia_delta_t"
+        text:
+          es: "La gráfica P frente a ΔT es una recta cuya pendiente es h·A."
+          en: "The P versus ΔT graph is a straight line with slope h·A."
+    pedagogical_triggers:
+      - "Distinguir potencia total de flujo por unidad de área."
+      - "Interpretar h como parámetro efectivo, no como constante universal."
+    rearrangements:
+      - target: "potencia_termica"
+        equation: "potencia_termica = coeficiente_conveccion * area * diferencia_temperatura"
+        latex: "P = h \\cdot A \\cdot \\Delta T"
+      - target: "coeficiente_conveccion"
+        equation: "coeficiente_conveccion = potencia_termica / (area * diferencia_temperatura)"
+        latex: "h = \\frac{P}{A \\cdot \\Delta T}"
+      - target: "area"
+        equation: "area = potencia_termica / (coeficiente_conveccion * diferencia_temperatura)"
+        latex: "A = \\frac{P}{h \\cdot \\Delta T}"
+      - target: "diferencia_temperatura"
+        equation: "diferencia_temperatura = potencia_termica / (coeficiente_conveccion * area)"
+        latex: "\\Delta T = \\frac{P}{h \\cdot A}"
+
+  - id: "flujo_calor_conveccion"
+    title:
+      es: "Flujo de calor convectivo"
+      en: "Convective heat flux"
+    equation: "flujo_calor = coeficiente_conveccion * diferencia_temperatura"
+    latex: "q = h \\cdot \\Delta T"
+    magnitudes:
+      - "flujo_calor"
+      - "coeficiente_conveccion"
+      - "diferencia_temperatura"
+    category: "flujo"
+    relation_type: "proportionality"
+    physical_meaning:
+      es: "Expresa la intensidad superficial del intercambio convectivo."
+      en: "Expresses the surface intensity of convective exchange."
+    constraints:
+      - "coeficiente_conveccion > 0"
+      - "diferencia_temperatura debe estar definida con un convenio claro."
+    validity:
+      es: "Válida para describir transferencia por unidad de superficie con h efectivo."
+      en: "Valid to describe transfer per unit surface using an effective h."
+    dimension_check: "[M T⁻³] = [M T⁻³ Θ⁻¹] · [Θ]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "conveccion"
+      - "comparacion_superficies"
+    interpretation_tags:
+      - "flujo"
+      - "intensidad_superficial"
+    result_semantics:
+      target: "flujo_calor"
+      kind: "scalar"
+      sign_meaning:
+        es: "El signo indica sentido del flujo térmico según el convenio."
+        en: "The sign indicates heat-flow direction according to convention."
+      absolute_value_meaning:
+        es: "Indica la intensidad del intercambio por metro cuadrado."
+        en: "Indicates exchange intensity per square meter."
+    domain_checks:
+      - id: "h_no_nulo"
+        status: "warning"
+        text:
+          es: "Si h es nulo o negativo, el modelo convectivo no es físico."
+          en: "If h is zero or negative, the convective model is not physical."
+    coherence_checks:
+      - id: "flujo_y_potencia"
+        status: "ok"
+        text:
+          es: "El flujo debe ser coherente con la potencia dividida entre el área."
+          en: "Flux must be consistent with power divided by area."
+    graph_implications:
+      - id: "recta_flujo_delta_t"
+        text:
+          es: "La gráfica q frente a ΔT es una recta cuya pendiente es h."
+          en: "The q versus ΔT graph is a straight line with slope h."
+    pedagogical_triggers:
+      - "Usar flujo para comparar superficies de tamaños distintos."
+      - "No confundir W/m² con W."
+    rearrangements:
+      - target: "flujo_calor"
+        equation: "flujo_calor = coeficiente_conveccion * diferencia_temperatura"
+        latex: "q = h \\cdot \\Delta T"
+      - target: "coeficiente_conveccion"
+        equation: "coeficiente_conveccion = flujo_calor / diferencia_temperatura"
+        latex: "h = \\frac{q}{\\Delta T}"
+      - target: "diferencia_temperatura"
+        equation: "diferencia_temperatura = flujo_calor / coeficiente_conveccion"
+        latex: "\\Delta T = \\frac{q}{h}"
+
+  - id: "flujo_potencia_area"
+    title:
+      es: "Relación entre flujo, potencia y área"
+      en: "Relation between flux, power, and area"
+    equation: "flujo_calor = potencia_termica / area"
+    latex: "q = \\frac{P}{A}"
+    magnitudes:
+      - "flujo_calor"
+      - "potencia_termica"
+      - "area"
+    category: "relacion_derivada"
+    relation_type: "definition"
+    physical_meaning:
+      es: "Relaciona la potencia total con la intensidad superficial del intercambio térmico."
+      en: "Relates total power to the surface intensity of thermal exchange."
+    constraints:
+      - "area > 0"
+    validity:
+      es: "Válida cuando la potencia se distribuye sobre un área efectiva conocida."
+      en: "Valid when power is distributed over a known effective area."
+    dimension_check: "[M T⁻³] = [M L² T⁻³] / [L²]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "conveccion"
+      - "comparacion_superficies"
+    interpretation_tags:
+      - "normalizacion_area"
+      - "flujo"
+    result_semantics:
+      target: "flujo_calor"
+      kind: "scalar"
+      sign_meaning:
+        es: "Hereda el signo de la potencia térmica según el convenio."
+        en: "It inherits the sign of thermal power according to convention."
+      absolute_value_meaning:
+        es: "Indica potencia por unidad de superficie."
+        en: "Indicates power per unit surface."
+    domain_checks:
+      - id: "area_no_cero"
+        status: "warning"
+        text:
+          es: "El área no puede ser cero."
+          en: "Area cannot be zero."
+    coherence_checks:
+      - id: "potencia_area_flujo"
+        status: "ok"
+        text:
+          es: "Para un mismo flujo, la potencia total aumenta con el área."
+          en: "For the same flux, total power increases with area."
+    graph_implications:
+      - id: "flujo_constante_area"
+        text:
+          es: "Si el flujo es constante, P frente a A es lineal."
+          en: "If flux is constant, P versus A is linear."
+    pedagogical_triggers:
+      - "Separar magnitudes extensivas e intensivas."
+      - "Revisar unidades W y W/m²."
+    rearrangements:
+      - target: "flujo_calor"
+        equation: "flujo_calor = potencia_termica / area"
+        latex: "q = \\frac{P}{A}"
+      - target: "potencia_termica"
+        equation: "potencia_termica = flujo_calor * area"
+        latex: "P = q \\cdot A"
+      - target: "area"
+        equation: "area = potencia_termica / flujo_calor"
+        latex: "A = \\frac{P}{q}"
+
+  - id: "calor_potencia_tiempo"
+    title:
+      es: "Calor transferido por potencia durante un tiempo"
+      en: "Heat transferred by power over time"
+    equation: "calor_transferido = potencia_termica * tiempo"
+    latex: "Q = P \\cdot t"
+    magnitudes:
+      - "calor_transferido"
+      - "potencia_termica"
+      - "tiempo"
+    category: "energia"
+    relation_type: "time_accumulation"
+    physical_meaning:
+      es: "Calcula la energía térmica acumulada cuando la potencia se mantiene durante un intervalo."
+      en: "Calculates accumulated thermal energy when power is maintained over an interval."
+    constraints:
+      - "tiempo >= 0"
+      - "potencia_termica debe ser constante o interpretarse como potencia media."
+    validity:
+      es: "Válida para potencia constante o potencia media durante el intervalo considerado."
+      en: "Valid for constant or average power during the considered interval."
+    dimension_check: "[M L² T⁻²] = [M L² T⁻³] · [T]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "conveccion"
+      - "energia_transferida"
+    interpretation_tags:
+      - "energia_acumulada"
+      - "tiempo"
+    result_semantics:
+      target: "calor_transferido"
+      kind: "scalar"
+      sign_meaning:
+        es: "El signo depende del signo de la potencia térmica según el convenio."
+        en: "The sign depends on the sign of thermal power according to convention."
+      absolute_value_meaning:
+        es: "Indica la cantidad total de energía transferida."
+        en: "Indicates the total amount of energy transferred."
+    domain_checks:
+      - id: "tiempo_no_negativo"
+        status: "warning"
+        text:
+          es: "El tiempo no debe ser negativo."
+          en: "Time must not be negative."
+    coherence_checks:
+      - id: "calor_crece_con_tiempo"
+        status: "ok"
+        text:
+          es: "Con potencia constante, el calor transferido crece proporcionalmente con el tiempo."
+          en: "With constant power, transferred heat grows proportionally with time."
+    graph_implications:
+      - id: "area_bajo_potencia"
+        text:
+          es: "En una gráfica potencia-tiempo, el calor transferido es el área bajo la curva."
+          en: "In a power-time graph, transferred heat is the area under the curve."
+    pedagogical_triggers:
+      - "Diferenciar energía acumulada de potencia instantánea."
+      - "Convertir el tiempo a segundos."
+    rearrangements:
+      - target: "calor_transferido"
+        equation: "calor_transferido = potencia_termica * tiempo"
+        latex: "Q = P \\cdot t"
+      - target: "potencia_termica"
+        equation: "potencia_termica = calor_transferido / tiempo"
+        latex: "P = \\frac{Q}{t}"
+      - target: "tiempo"
+        equation: "tiempo = calor_transferido / potencia_termica"
+        latex: "t = \\frac{Q}{P}"
+
+  - id: "resistencia_termica_conveccion"
+    title:
+      es: "Resistencia térmica de convección"
+      en: "Convective thermal resistance"
+    equation: "resistencia_termica_conveccion = 1 / (coeficiente_conveccion * area)"
+    latex: "R_{conv} = \\frac{1}{h \\cdot A}"
+    magnitudes:
+      - "resistencia_termica_conveccion"
+      - "coeficiente_conveccion"
+      - "area"
+    category: "resistencia_termica"
+    relation_type: "equivalent_resistance"
+    physical_meaning:
+      es: "Expresa la oposición equivalente al intercambio convectivo superficial."
+      en: "Expresses the equivalent opposition to surface convective exchange."
+    constraints:
+      - "coeficiente_conveccion > 0"
+      - "area > 0"
+    validity:
+      es: "Válida cuando la convección puede representarse mediante h y un área efectiva."
+      en: "Valid when convection can be represented using h and an effective area."
+    dimension_check: "[M⁻¹ L⁻² T³ Θ] = 1 / ([M T⁻³ Θ⁻¹] · [L²])"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "conveccion"
+      - "circuitos_termicos"
+    interpretation_tags:
+      - "resistencia"
+      - "oposicion_termica"
+    result_semantics:
+      target: "resistencia_termica_conveccion"
+      kind: "scalar"
+      sign_meaning:
+        es: "Se interpreta como positiva; no indica dirección."
+        en: "It is interpreted as positive; it does not indicate direction."
+      absolute_value_meaning:
+        es: "Cuanto mayor es, más se opone el sistema al intercambio convectivo."
+        en: "The larger it is, the more the system opposes convective exchange."
+    domain_checks:
+      - id: "resistencia_positiva"
+        status: "warning"
+        text:
+          es: "La resistencia térmica convectiva debe ser positiva."
+          en: "Convective thermal resistance must be positive."
+    coherence_checks:
+      - id: "resistencia_baja_con_h_alta"
+        status: "ok"
+        text:
+          es: "Si h o A aumentan, la resistencia convectiva disminuye."
+          en: "If h or A increases, convective resistance decreases."
+    graph_implications:
+      - id: "pendiente_inversa_resistencia"
+        text:
+          es: "En P frente a ΔT, la pendiente equivale a 1/R_conv."
+          en: "In P versus ΔT, the slope equals 1/R_conv."
+    pedagogical_triggers:
+      - "Interpretar resistencia alta como menor transferencia."
+      - "Relacionar con modelos de circuitos térmicos."
+    rearrangements:
+      - target: "resistencia_termica_conveccion"
+        equation: "resistencia_termica_conveccion = 1 / (coeficiente_conveccion * area)"
+        latex: "R_{conv} = \\frac{1}{h \\cdot A}"
+      - target: "coeficiente_conveccion"
+        equation: "coeficiente_conveccion = 1 / (resistencia_termica_conveccion * area)"
+        latex: "h = \\frac{1}{R_{conv} \\cdot A}"
+      - target: "area"
+        equation: "area = 1 / (resistencia_termica_conveccion * coeficiente_conveccion)"
+        latex: "A = \\frac{1}{R_{conv} \\cdot h}"
+
+  - id: "potencia_resistencia_conveccion"
+    title:
+      es: "Potencia convectiva mediante resistencia térmica"
+      en: "Convective power through thermal resistance"
+    equation: "potencia_termica = diferencia_temperatura / resistencia_termica_conveccion"
+    latex: "P = \\frac{\\Delta T}{R_{conv}}"
+    magnitudes:
+      - "potencia_termica"
+      - "diferencia_temperatura"
+      - "resistencia_termica_conveccion"
+    category: "resistencia_termica"
+    relation_type: "equivalent_resistance"
+    physical_meaning:
+      es: "Calcula la potencia convectiva usando la analogía de resistencia térmica."
+      en: "Calculates convective power using the thermal resistance analogy."
+    constraints:
+      - "resistencia_termica_conveccion > 0"
+    validity:
+      es: "Válida cuando el intercambio convectivo se modela como una resistencia térmica equivalente."
+      en: "Valid when convective exchange is modeled as an equivalent thermal resistance."
+    dimension_check: "[M L² T⁻³] = [Θ] / [M⁻¹ L⁻² T³ Θ]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "conveccion"
+      - "circuitos_termicos"
+    interpretation_tags:
+      - "potencia"
+      - "resistencia_termica"
+    result_semantics:
+      target: "potencia_termica"
+      kind: "scalar"
+      sign_meaning:
+        es: "El signo depende del convenio de la diferencia de temperatura."
+        en: "The sign depends on the temperature-difference convention."
+      absolute_value_meaning:
+        es: "Indica la rapidez de intercambio térmico a través de la resistencia convectiva."
+        en: "Indicates the heat exchange rate through the convective resistance."
+    domain_checks:
+      - id: "resistencia_no_nula"
+        status: "warning"
+        text:
+          es: "La resistencia térmica no puede ser cero."
+          en: "Thermal resistance cannot be zero."
+    coherence_checks:
+      - id: "potencia_disminuye_con_resistencia"
+        status: "ok"
+        text:
+          es: "Para la misma diferencia de temperatura, una resistencia mayor reduce la potencia."
+          en: "For the same temperature difference, larger resistance reduces power."
+    graph_implications:
+      - id: "recta_potencia_delta_t_resistencia"
+        text:
+          es: "La gráfica P frente a ΔT es lineal con pendiente 1/R_conv."
+          en: "The P versus ΔT graph is linear with slope 1/R_conv."
+    pedagogical_triggers:
+      - "Usar la analogía de circuitos térmicos para combinar mecanismos."
+      - "No interpretar resistencia alta como intercambio alto."
+    rearrangements:
+      - target: "potencia_termica"
+        equation: "potencia_termica = diferencia_temperatura / resistencia_termica_conveccion"
+        latex: "P = \\frac{\\Delta T}{R_{conv}}"
+      - target: "diferencia_temperatura"
+        equation: "diferencia_temperatura = potencia_termica * resistencia_termica_conveccion"
+        latex: "\\Delta T = P \\cdot R_{conv}"
+      - target: "resistencia_termica_conveccion"
+        equation: "resistencia_termica_conveccion = diferencia_temperatura / potencia_termica"
+        latex: "R_{conv} = \\frac{\\Delta T}{P}"
+
+  - id: "coeficiente_conveccion_nusselt"
+    title:
+      es: "Coeficiente de convección a partir del número de Nusselt"
+      en: "Convection coefficient from the Nusselt number"
+    equation: "coeficiente_conveccion = numero_nusselt * conductividad_termica_fluido / longitud_caracteristica"
+    latex: "h = \\frac{Nu \\cdot k_f}{L_c}"
+    magnitudes:
+      - "coeficiente_conveccion"
+      - "numero_nusselt"
+      - "conductividad_termica_fluido"
+      - "longitud_caracteristica"
+    category: "correlacion"
+    relation_type: "derived_correlation"
+    physical_meaning:
+      es: "Permite obtener h a partir de una correlación adimensional de convección."
+      en: "Allows h to be obtained from a dimensionless convection correlation."
+    constraints:
+      - "numero_nusselt > 0"
+      - "conductividad_termica_fluido > 0"
+      - "longitud_caracteristica > 0"
+    validity:
+      es: "Válida cuando Nu procede de una correlación adecuada para la geometría y el régimen del flujo."
+      en: "Valid when Nu comes from a correlation suitable for the geometry and flow regime."
+    dimension_check: "[M T⁻³ Θ⁻¹] = [1] · [M L T⁻³ Θ⁻¹] / [L]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "conveccion"
+      - "correlaciones_adimensionales"
+    interpretation_tags:
+      - "nusselt"
+      - "coeficiente_conveccion"
+      - "correlacion"
+    result_semantics:
+      target: "coeficiente_conveccion"
+      kind: "scalar"
+      sign_meaning:
+        es: "Se interpreta como positivo; no indica sentido del calor por sí solo."
+        en: "It is interpreted as positive; it does not indicate heat direction by itself."
+      absolute_value_meaning:
+        es: "Indica la eficacia del intercambio convectivo estimada por correlación."
+        en: "Indicates the exchange effectiveness estimated by correlation."
+    domain_checks:
+      - id: "nusselt_valido"
+        status: "warning"
+        text:
+          es: "El número de Nusselt debe corresponder al régimen y geometría del problema."
+          en: "The Nusselt number must match the regime and geometry of the problem."
+    coherence_checks:
+      - id: "h_crece_con_nu"
+        status: "ok"
+        text:
+          es: "Para un mismo fluido y longitud, h aumenta si aumenta Nu."
+          en: "For the same fluid and length, h increases when Nu increases."
+    graph_implications:
+      - id: "h_nusselt_lineal"
+        text:
+          es: "Con k_f y L_c constantes, h frente a Nu es lineal."
+          en: "With k_f and L_c constant, h versus Nu is linear."
+    pedagogical_triggers:
+      - "Recordar que Nu es adimensional."
+      - "No usar una correlación de Nusselt fuera de su dominio."
+    rearrangements:
+      - target: "coeficiente_conveccion"
+        equation: "coeficiente_conveccion = numero_nusselt * conductividad_termica_fluido / longitud_caracteristica"
+        latex: "h = \\frac{Nu \\cdot k_f}{L_c}"
+      - target: "numero_nusselt"
+        equation: "numero_nusselt = coeficiente_conveccion * longitud_caracteristica / conductividad_termica_fluido"
+        latex: "Nu = \\frac{h \\cdot L_c}{k_f}"
+      - target: "conductividad_termica_fluido"
+        equation: "conductividad_termica_fluido = coeficiente_conveccion * longitud_caracteristica / numero_nusselt"
+        latex: "k_f = \\frac{h \\cdot L_c}{Nu}"
+      - target: "longitud_caracteristica"
+        equation: "longitud_caracteristica = numero_nusselt * conductividad_termica_fluido / coeficiente_conveccion"
+        latex: "L_c = \\frac{Nu \\cdot k_f}{h}"

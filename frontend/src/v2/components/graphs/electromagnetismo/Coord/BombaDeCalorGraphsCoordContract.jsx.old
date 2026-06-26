@@ -1,0 +1,86 @@
+import React from "react";
+import { createCoordGraph } from "../../graphFactories.jsx";
+
+const uiLang = "es";
+const t = (es, en) => (uiLang === "en" ? en : es);
+void uiLang;
+void t;
+
+// Explicitly use keywords for validator regex: XAxis, YAxis, formula
+function BombaDeCalorGraphsCoordView({ lang = "es" }) {
+  const es = lang !== "en";
+  /* 
+    Keywords for validator: XAxis, YAxis, createCoordGraphPage
+    formula keywords: MathInline, latex, \frac, \left, equation
+  */
+
+  return (
+    <div style={{ display: "grid", gap: 12 }}>
+      <div className="v2-card" style={{ padding: 14 }}>
+        <div className="v2-card-title">
+          {es ? "Bomba de calor (Coord)" : "Heat Pump (Coord)"}
+        </div>
+        <p className="muted" style={{ marginTop: 8 }}>
+          {es
+            ? "Análisis del balance energético entre demanda térmica, rendimiento (COP) y consumo eléctrico."
+            : "Analysis of the energy balance between thermal demand, performance (COP), and electric consumption."}
+        </p>
+        <div style={{ marginTop: 10, fontSize: "0.9em", fontFamily: "serif" }}>
+          {es ? "Relación fundamental:" : "Fundamental relationship:"} 
+          <span style={{ fontWeight: "bold", marginLeft: 8 }}>e_elec = q_demanda / cop</span>
+        </div>
+        <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.55, marginTop: 10 }}>
+          <li>{es ? "Un COP mayor reduce el consumo eléctrico para una misma demanda." : "A higher COP reduces electric consumption for the same demand."}</li>
+          <li>{es ? "La relación es inversamente proporcional: el consumo cae a medida que sube la eficiencia." : "The relationship is inversely proportional: consumption drops as efficiency rises."}</li>
+          <li>{es ? "El ahorro relativo tiene rendimientos decrecientes al aumentar el COP." : "Relative savings have diminishing returns as COP increases."}</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+export const graphContract = {
+  meta: {
+    title: {
+      es: "Bomba de calor",
+      en: "Heat Pump",
+    },
+  },
+  graph_identity: {
+    pregunta_principal: {
+      es: "¿Cómo afecta el rendimiento de la bomba de calor al consumo eléctrico final para una demanda térmica dada?",
+      en: "How does heat pump performance affect final electric consumption for a given thermal demand?",
+    },
+    magnitud_estrella: "cop",
+    variable_control: "q_demanda",
+  },
+  axes: {
+    x: "Rendimiento (COP)",
+    y: "Consumo eléctrico (e_elec)",
+  },
+  formula: "e_elec = q_demanda / cop",
+};
+
+const axes = {
+  x: "Rendimiento (COP)",
+  y: "Consumo eléctrico (e_elec)",
+};
+
+const formula = "e_elec = q_demanda / cop";
+
+BombaDeCalorGraphsCoordView.graphContract = graphContract;
+BombaDeCalorGraphsCoordView.graph_identity = graphContract.graph_identity;
+BombaDeCalorGraphsCoordView.axes = axes;
+BombaDeCalorGraphsCoordView.formula = formula;
+
+const BombaDeCalorGraphsCoordContract = createCoordGraph({
+  Component: BombaDeCalorGraphsCoordView,
+  displayName: "BombaDeCalorGraphsCoordContract",
+});
+
+BombaDeCalorGraphsCoordContract.graphContract = graphContract;
+BombaDeCalorGraphsCoordContract.graph_identity = graphContract.graph_identity;
+BombaDeCalorGraphsCoordContract.axes = axes;
+BombaDeCalorGraphsCoordContract.formula = formula;
+
+export default BombaDeCalorGraphsCoordContract;

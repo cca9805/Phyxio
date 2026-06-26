@@ -1,0 +1,181 @@
+const e=`version: v5
+leaf_id: interferencia-destructiva
+ui:
+  default_formula: condicion_destructiva_camino
+formulas:
+  - id: condicion_destructiva_camino
+    title:
+      es: Condición de interferencia destructiva por camino
+      en: Destructive interference condition by path
+    equation: "Delta_r = (m_orden + 0.5) * lambda"
+    latex: "\\\\Delta r = \\\\left(m+\\\\frac{1}{2}\\\\right)\\\\lambda"
+    rearrangements:
+      - target: Delta_r
+        equation: "Delta_r = (m_orden + 0.5) * lambda"
+        latex: "\\\\Delta r = \\\\left(m+\\\\frac{1}{2}\\\\right)\\\\lambda"
+      - target: m_orden
+        equation: "m_orden = Delta_r / lambda - 0.5"
+        latex: "m = \\\\frac{\\\\Delta r}{\\\\lambda} - \\\\frac{1}{2}"
+      - target: lambda
+        equation: "lambda = Delta_r / (m_orden + 0.5)"
+        latex: "\\\\lambda = \\\\frac{\\\\Delta r}{m+\\\\frac{1}{2}}"
+    category: structural
+    relation_type: geometric_interpretation
+    physical_meaning:
+      es: "Dos ondas coherentes se cancelan cuando la diferencia de camino añade medio ciclo respecto a un número entero de ciclos."
+      en: "Two coherent waves cancel when the path difference adds a half-cycle to an integer number of cycles."
+    constraints:
+      - "lambda > 0"
+      - "m_orden entero"
+    validity:
+      es: "Válida para ondas coherentes de frecuencia común, amplitudes compatibles y fase estable."
+      en: "Valid for coherent waves with common frequency, compatible amplitudes, and stable phase."
+    dimension_check: "[L] = adimensional · [L]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, interpretacion]
+    interpretation_tags: [minimo_destructivo, diferencia_camino, medio_ciclo]
+    result_semantics:
+      target: Delta_r
+      kind: path_condition
+      sign_meaning:
+        es: "El signo indica qué camino se toma como más largo."
+        en: "The sign indicates which path is taken as longer."
+      absolute_value_meaning:
+        es: "El valor absoluto mide el camino extra necesario para oposición de fase."
+        en: "The absolute value measures the extra path needed for phase opposition."
+    domain_checks:
+      - id: cdc_lambda_positive
+        condition: "lambda > 0"
+        message:
+          es: "La longitud de onda debe ser positiva."
+          en: "Wavelength must be positive."
+    coherence_checks:
+      - id: cdc_order_integer
+        condition: "m_orden entero"
+        message:
+          es: "El orden destructivo debe ser entero."
+          en: "The destructive order must be an integer."
+    graph_implications:
+      es: "Los mínimos aparecen desplazados medio periodo respecto a los máximos constructivos."
+      en: "Minima appear shifted by half a period relative to constructive maxima."
+    pedagogical_triggers:
+      - id: cdc_trigger_half_cycle
+        text:
+          es: "Si el alumno usa ciclos completos, pedir que añada el medio ciclo destructivo."
+          en: "If the student uses whole cycles, ask for the destructive half-cycle."
+
+  - id: fase_destructiva
+    title:
+      es: Diferencia de fase para cancelación destructiva
+      en: Phase difference for destructive cancellation
+    equation: "delta_phi = (2 * m_orden + 1) * PI"
+    latex: "\\\\Delta\\\\phi = (2m+1)\\\\pi"
+    rearrangements:
+      - target: delta_phi
+        equation: "delta_phi = (2 * m_orden + 1) * PI"
+        latex: "\\\\Delta\\\\phi = (2m+1)\\\\pi"
+      - target: m_orden
+        equation: "m_orden = delta_phi / (2 * PI) - 0.5"
+        latex: "m = \\\\frac{\\\\Delta\\\\phi}{2\\\\pi} - \\\\frac{1}{2}"
+    category: derived
+    relation_type: geometric_interpretation
+    physical_meaning:
+      es: "La cancelación destructiva ideal aparece cuando las ondas llegan con oposición de fase."
+      en: "Ideal destructive cancellation appears when waves arrive in opposite phase."
+    constraints:
+      - "m_orden entero"
+    validity:
+      es: "Válida cuando el desfase se conserva durante el tiempo de observación."
+      en: "Valid when the phase offset is maintained during the observation time."
+    dimension_check: "adimensional = adimensional"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, interpretacion, grafico_coord]
+    interpretation_tags: [fase, oposicion_de_fase, cancelacion]
+    result_semantics:
+      target: delta_phi
+      kind: phase_difference
+      sign_meaning:
+        es: "El signo indica qué onda adelanta antes de reducir el desfase a su valor periódico."
+        en: "The sign indicates which wave leads before reducing the offset to its periodic value."
+      absolute_value_meaning:
+        es: "El valor absoluto mide separación angular entre las dos llegadas."
+        en: "The absolute value measures angular separation between the two arrivals."
+    domain_checks:
+      - id: fd_order_integer
+        condition: "m_orden entero"
+        message:
+          es: "El orden debe representar mínimos discretos del patrón."
+          en: "The order must represent discrete minima of the pattern."
+    coherence_checks:
+      - id: fd_periodic
+        condition: "delta_phi periodico"
+        message:
+          es: "Desfases separados por ciclos completos son equivalentes."
+          en: "Phase offsets separated by whole cycles are equivalent."
+    graph_implications:
+      es: "En una curva de intensidad frente a fase, el mínimo aparece en oposición de fase."
+      en: "On an intensity-versus-phase curve, the minimum appears at phase opposition."
+    pedagogical_triggers:
+      - id: fd_trigger_phase
+        text:
+          es: "Si se confunde retraso temporal con fase, pedir comparación por ciclos."
+          en: "If time delay is confused with phase, ask for comparison by cycles."
+
+  - id: intensidad_interferencia_dos_ondas
+    title:
+      es: Intensidad resultante de dos ondas coherentes
+      en: Resultant intensity of two coherent waves
+    equation: "I_resultante = I1 + I2 + 2 * sqrt(I1 * I2) * cos(delta_phi)"
+    latex: "I = I_1 + I_2 + 2\\\\sqrt{I_1 I_2}\\\\cos(\\\\Delta\\\\phi)"
+    rearrangements:
+      - target: I_resultante
+        equation: "I_resultante = I1 + I2 + 2 * sqrt(I1 * I2) * cos(delta_phi)"
+        latex: "I = I_1 + I_2 + 2\\\\sqrt{I_1 I_2}\\\\cos(\\\\Delta\\\\phi)"
+    category: derived
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: "La intensidad observada depende de las intensidades individuales y del desfase; el término de interferencia puede reducir el resultado."
+      en: "Observed intensity depends on individual intensities and phase offset; the interference term can reduce the result."
+    constraints:
+      - "I1 >= 0"
+      - "I2 >= 0"
+    validity:
+      es: "Válida para dos ondas coherentes, misma frecuencia y polarización o modo compatible."
+      en: "Valid for two coherent waves with the same frequency and compatible polarization or mode."
+    dimension_check: "[M T⁻³] = [M T⁻³]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, interpretacion, grafico_coord]
+    interpretation_tags: [intensidad, superposicion_coherente, cancelacion_parcial]
+    result_semantics:
+      target: I_resultante
+      kind: intensity
+      sign_meaning:
+        es: "La intensidad no tiene signo físico; un valor negativo indica error."
+        en: "Intensity has no physical sign; a negative value indicates an error."
+      absolute_value_meaning:
+        es: "El valor mide intensidad media remanente tras la superposición."
+        en: "The value measures remaining average intensity after superposition."
+    domain_checks:
+      - id: iid_intensities_nonnegative
+        condition: "I1 >= 0 and I2 >= 0"
+        message:
+          es: "Las intensidades individuales deben ser no negativas."
+          en: "Individual intensities must be non-negative."
+    coherence_checks:
+      - id: iid_result_nonnegative
+        condition: "I_resultante >= 0"
+        message:
+          es: "La intensidad resultante no puede ser negativa."
+          en: "Resultant intensity cannot be negative."
+    graph_implications:
+      es: "La curva de intensidad desciende cerca de la oposición de fase y sube al alejarse de ella."
+      en: "The intensity curve drops near phase opposition and rises away from it."
+    pedagogical_triggers:
+      - id: iid_trigger_equal_amplitudes
+        text:
+          es: "Si se espera cero con intensidades desiguales, pedir comparación de amplitudes."
+          en: "If zero is expected with unequal intensities, ask for amplitude comparison."
+`;export{e as default};

@@ -1,0 +1,476 @@
+const e=`version: 1
+magnitudes:
+- id: m_total
+  symbol: m_{tot}
+  nombre:
+    es: masa total del sistema
+    en: total mass of the system
+  descripcion:
+    es: Suma de las masas de todos los componentes que integran el sistema.
+    en: Sum of the masses of all components that make up the system.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - sistemas-aislados
+  common_mistake:
+    es: Olvidar incluir todas las partes del sistema en la suma total.
+    en: Forgetting to include all parts of the system in the total sum.
+  typical_range: 1 - 2000 kg
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Magnitud escalar positiva.
+      en: Positive scalar quantity.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un sistema físico debe tener masa positiva.
+      en: A physical system must have positive mass.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - sistemas-aislados
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: m_total = m1 + m2 + ...
+    en: m_total = m1 + m2 + ...
+- id: m1
+  symbol: m_1
+  nombre:
+    es: masa del cuerpo 1
+    en: mass of body 1
+  descripcion:
+    es: Masa inercial del primer componente del sistema analizado.
+    en: Inertial mass of the first component of the analyzed system.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: physical_quantity
+  used_in:
+  - sistemas-aislados
+  common_mistake:
+    es: Olvidar que la masa debe ser constante para aplicar la conservación del momento en su forma básica.
+    en: Forgetting that mass must be constant to apply momentum conservation in its basic form.
+  typical_range: 0.1 - 1000 kg
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La masa es una magnitud escalar intrínsecamente positiva.
+      en: Mass is an intrinsically positive scalar quantity.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un cuerpo con masa cero no tiene sentido en este modelo de partículas clásicas.
+      en: A body with zero mass makes no sense in this classical particle model.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - sistemas-aislados
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Asegúrate de que las unidades de m1 y m2 sean coherentes antes de sumarlas.
+    en: Ensure units for m1 and m2 are consistent before adding them.
+- id: m2
+  symbol: m_2
+  nombre:
+    es: masa del cuerpo 2
+    en: mass of body 2
+  descripcion:
+    es: Masa inercial del segundo componente del sistema analizado.
+    en: Inertial mass of the second component of the analyzed system.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: physical_quantity
+  used_in:
+  - sistemas-aislados
+  common_mistake:
+    es: Confundir las masas de los cuerpos si el sistema tiene más de dos componentes.
+    en: Confusing body masses if the system has more than two components.
+  typical_range: 0.1 - 1000 kg
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Magnitud escalar positiva.
+      en: Positive scalar quantity.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: La masa debe ser mayor que cero para representar un cuerpo físico.
+      en: Mass must be greater than zero to represent a physical body.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - sistemas-aislados
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: En choques, m2 suele ser el objetivo o blanco del impacto.
+    en: In collisions, m2 is often the target or projectile's objective.
+- id: v1i
+  symbol: v_{1i}
+  nombre:
+    es: velocidad inicial del cuerpo 1
+    en: initial velocity of body 1
+  descripcion:
+    es: Componente de la velocidad del primer cuerpo justo antes de la interacción.
+    en: Velocity component of the first body just before the interaction.
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - sistemas-aislados
+  common_mistake:
+    es: Ignorar el signo de la velocidad; en conservación, la dirección es crítica.
+    en: Ignoring the velocity sign; in conservation, direction is critical.
+  typical_range: -50 - 50 m/s
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Indica el sentido del movimiento respecto al eje de referencia elegido.
+      en: Indicates the direction of motion relative to the chosen reference axis.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El cuerpo 1 parte del reposo en el sistema de referencia.
+      en: Body 1 starts from rest in the reference system.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - sistemas-aislados
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Define siempre un eje positivo (ej. derecha = +) antes de asignar valores a v1i.
+    en: Always define a positive axis (e.g., right = +) before assigning values to v1i.
+- id: v2i
+  symbol: v_{2i}
+  nombre:
+    es: velocidad inicial del cuerpo 2
+    en: initial velocity of body 2
+  descripcion:
+    es: Componente de la velocidad del segundo cuerpo justo antes de la interacción.
+    en: Velocity component of the second body just before the interaction.
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - sistemas-aislados
+  common_mistake:
+    es: Asumir que v2i es siempre cero (como en blancos estáticos).
+    en: Assuming v2i is always zero (as in static targets).
+  typical_range: -50 - 50 m/s
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Indica el sentido del movimiento en el eje unidimensional.
+      en: Indicates the direction of motion in the one-dimensional axis.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El cuerpo 2 está inicialmente en reposo.
+      en: Body 2 is initially at rest.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - sistemas-aislados
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Si los cuerpos se mueven uno hacia el otro, v1i y v2i deben tener signos opuestos.
+    en: If the bodies move toward each other, v1i and v2i must have opposite signs.
+- id: v1f
+  symbol: v_{1f}
+  nombre:
+    es: velocidad final del cuerpo 1
+    en: final velocity of body 1
+  descripcion:
+    es: Componente de la velocidad del primer cuerpo inmediatamente después de la interacción.
+    en: Velocity component of the first body immediately after the interaction.
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - sistemas-aislados
+  common_mistake:
+    es: Confundir el módulo con el componente; si rebota, v1f cambiará de signo respecto a v1i.
+    en: Confusing magnitude with component; if it bounces, v1f will change sign relative to v1i.
+  typical_range: -50 - 50 m/s
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Sentido del movimiento tras el evento.
+      en: Direction of motion after the event.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El cuerpo 1 se detiene completamente tras la interacción.
+      en: Body 1 stops completely after the interaction.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - sistemas-aislados
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Usa la conservación del momento para predecir v1f si conoces el resto de velocidades.
+    en: Use momentum conservation to predict v1f if you know the other velocities.
+- id: v2f
+  symbol: v_{2f}
+  nombre:
+    es: velocidad final del cuerpo 2
+    en: final velocity of body 2
+  descripcion:
+    es: Componente de la velocidad del segundo cuerpo inmediatamente después de la interacción.
+    en: Velocity component of the second body immediately after the interaction.
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - sistemas-aislados
+  common_mistake:
+    es: En choques totalmente inelásticos, v1f y v2f deben ser iguales.
+    en: In perfectly inelastic collisions, v1f and v2f must be equal.
+  typical_range: -50 - 50 m/s
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Sentido del movimiento del segundo cuerpo tras el evento.
+      en: Direction of motion of the second body after the event.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El cuerpo 2 queda en reposo tras la transferencia de momento.
+      en: Body 2 remains at rest after the momentum transfer.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - sistemas-aislados
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Si v2f resulta negativa, el cuerpo 2 se mueve en sentido contrario al eje positivo.
+    en: If v2f turns out negative, body 2 moves in the opposite direction to the positive axis.
+- id: pTotI
+  symbol: p_{tot,i}
+  nombre:
+    es: momento total inicial
+    en: initial total momentum
+  descripcion:
+    es: Suma vectorial de los momentos lineales de todos los componentes antes de la interacción.
+    en: Vector sum of the linear momenta of all components before the interaction.
+  unidad_si: kg·m/s
+  dimension: M L T^-1
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - sistemas-aislados
+  common_mistake:
+    es: Sumar los módulos de los momentos en lugar de sus componentes vectoriales (ignorar signos).
+    en: Adding momentum magnitudes instead of their vector components (ignoring signs).
+  typical_range: -500 - 500 kg·m/s
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Indica la dirección del movimiento neto del sistema antes del evento.
+      en: Indicates the direction of the system's net motion before the event.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El centro de masas del sistema está inicialmente en reposo.
+      en: The system's center of mass is initially at rest.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - sistemas-aislados
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: El momento total es la "huella dactilar" del sistema que se mantendrá constante si está aislado.
+    en: Total momentum is the "fingerprint" of the system that will remain constant if isolated.
+- id: pTotF
+  symbol: p_{tot,f}
+  nombre:
+    es: momento total final
+    en: final total momentum
+  descripcion:
+    es: Suma vectorial de los momentos lineales de todos los componentes después de la interacción.
+    en: Vector sum of the linear momenta of all components after the interaction.
+  unidad_si: kg·m/s
+  dimension: M L T^-1
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - sistemas-aislados
+  common_mistake:
+    es: Pensar que el momento total cambia porque los cuerpos individuales cambian su velocidad.
+    en: Thinking that total momentum changes because individual bodies change their velocity.
+  typical_range: -500 - 500 kg·m/s
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Dirección del movimiento neto tras el evento.
+      en: Direction of net motion after the event.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El sistema queda estacionario tras el evento (ej. choque inelástico hacia reposo).
+      en: The system remains stationary after the event (e.g., inelastic collision to rest).
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - sistemas-aislados
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Si el sistema está aislado, pTotF debe ser idéntico a pTotI.
+    en: If the system is isolated, pTotF must be identical to pTotI.
+- id: DeltaPtot
+  symbol: \\Delta p_{tot}
+  nombre:
+    es: variación del momento total
+    en: change in total momentum
+  descripcion:
+    es: Diferencia neta entre el momento final total y el momento inicial total del sistema.
+    en: Net difference between the total final momentum and the total initial momentum of the system.
+  unidad_si: kg·m/s
+  dimension: M L T^-1
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - sistemas-aislados
+  common_mistake:
+    es: Asumir que es cero sin verificar si existen impulsos externos significativos.
+    en: Assuming it's zero without checking if significant external impulses exist.
+  typical_range: -100 - 100 kg·m/s
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Dirección de la transferencia neta de momento desde el entorno hacia el sistema.
+      en: Direction of the net momentum transfer from the environment to the system.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El momento lineal total se ha conservado (sistema perfectamente aislado).
+      en: Total linear momentum has been conserved (perfectly isolated system).
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - sistemas-aislados
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: DeltaPtot es el indicador de que el modelo de sistema aislado es o no aplicable.
+    en: DeltaPtot is the indicator of whether the isolated system model is applicable or not.
+- id: Jext
+  symbol: J_{ext}
+  nombre:
+    es: impulso externo
+    en: external impulse
+  descripcion:
+    es: Acción acumulada en el tiempo de las fuerzas externas netas sobre el sistema.
+    en: Time-accumulated action of net external forces on the system.
+  unidad_si: N·s
+  dimension: M L T^-1
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - sistemas-aislados
+  common_mistake:
+    es: Olvidar que fuerzas internas intensas (como explosiones) no generan impulso externo.
+    en: Forgetting that intense internal forces (like explosions) do not generate external impulse.
+  typical_range: -100 - 100 N·s
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Dirección en la que el entorno "empuja" al sistema globalmente.
+      en: Direction in which the environment "pushes" the system globally.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: No hay fuerzas externas o su efecto neto es despreciable durante el intervalo.
+      en: There are no external forces or their net effect is negligible during the interval.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - sistemas-aislados
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: En el modelo de sistema aislado, forzamos Jext = 0 por hipótesis.
+    en: In the isolated system model, we force Jext = 0 by hypothesis.
+`;export{e as default};

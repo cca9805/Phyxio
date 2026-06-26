@@ -1,0 +1,180 @@
+const e=`version: v5
+leaf_id: longitud-de-onda
+magnitudes:
+  - id: lambda
+    symbol: "\\\\lambda"
+    nombre: { es: longitud de onda, en: wavelength }
+    unidad: { es: m, en: m }
+    unidad_si: m
+    dimension: "[L]"
+    tipo: escalar
+    is_vector: false
+    components: []
+    category: spatial_period
+    physical_role: core_physical_quantity
+    descripcion: { es: Distancia entre dos estados equivalentes consecutivos de la onda., en: Distance between two consecutive equivalent states of the wave. }
+    rango_tipico: { es: Milímetros a metros en ondas mecánicas habituales., en: Millimetres to metres in common mechanical waves. }
+    typical_range: { es: Centímetros a metros en cuerdas y sonido visible en aula., en: Centimetres to metres in classroom strings and visible sound-scale examples. }
+    used_in: [teoria, ejemplos, interpretacion, formulas, grafico_coord, grafico_svg]
+    common_mistake: { es: Confundir longitud de onda con amplitud., en: Confusing wavelength with amplitude. }
+    sign_behavior: { es: Se interpreta como distancia positiva., en: Interpreted as positive distance. }
+    zero_behavior: { es: Valor cero no describe una onda periódica espacial., en: Zero does not describe a spatially periodic wave. }
+    value_nature: positive_length
+    interpretation_role: Mide la escala espacial de repetición de la onda.
+    graph_binding: { type: Coord, x_axis: x, visual_role: crest_spacing }
+    pedagogical_notes: { es: Leer horizontalmente entre crestas o estados equivalentes., en: Read horizontally between crests or equivalent states. }
+  - id: k
+    symbol: "k"
+    nombre: { es: número de onda, en: wavenumber }
+    unidad: { es: rad/m, en: rad/m }
+    unidad_si: rad/m
+    dimension: "[L^-1]"
+    tipo: escalar
+    is_vector: false
+    components: []
+    category: spatial_phase_rate
+    physical_role: derived
+    descripcion: { es: Ritmo espacial de cambio de fase., en: Spatial rate of phase change. }
+    rango_tipico: { es: Grande para longitudes de onda pequeñas y pequeño para ondas largas., en: Large for short wavelengths and small for long waves. }
+    typical_range: { es: De fracciones a miles de rad/m según la escala espacial., en: From fractions to thousands of rad/m depending on spatial scale. }
+    used_in: [teoria, ejemplos, interpretacion, formulas, grafico_coord]
+    common_mistake: { es: Pensar que crece junto con la longitud de onda., en: Thinking it grows together with wavelength. }
+    sign_behavior: { es: Puede codificar sentido de propagación según convenio., en: May encode propagation direction by convention. }
+    zero_behavior: { es: Valor cero corresponde a repetición espacial infinita o ausente., en: Zero corresponds to infinite or absent spatial repetition. }
+    value_nature: inverse_length_rate
+    interpretation_role: Traduce longitud de onda a ritmo espacial de fase.
+    graph_binding: { type: Coord, x_axis: x, visual_role: spatial_frequency }
+    pedagogical_notes: { es: Presentar como inverso espacial angular de la longitud de onda., en: Present as the angular spatial inverse of wavelength. }
+  - id: f
+    symbol: "f"
+    nombre: { es: frecuencia, en: frequency }
+    unidad: { es: Hz, en: Hz }
+    unidad_si: s^-1
+    dimension: "[T^-1]"
+    tipo: escalar
+    is_vector: false
+    components: []
+    category: temporal_rate
+    physical_role: core_physical_quantity
+    descripcion: { es: Número de ciclos por unidad de tiempo., en: Number of cycles per unit time. }
+    rango_tipico: { es: De pocos Hz en cuerdas lentas a miles de Hz en sonido., en: From a few Hz in slow strings to thousands of Hz in sound. }
+    typical_range: { es: 1 Hz a 20 000 Hz en fenómenos mecánicos y acústicos comunes., en: 1 Hz to 20 000 Hz in common mechanical and acoustic phenomena. }
+    used_in: [teoria, ejemplos, interpretacion, formulas]
+    common_mistake: { es: Confundir frecuencia con longitud de onda sin considerar la velocidad., en: Confusing frequency with wavelength without considering speed. }
+    sign_behavior: { es: Se interpreta como tasa positiva., en: Interpreted as a positive rate. }
+    zero_behavior: { es: Frecuencia cero elimina repetición temporal., en: Zero frequency removes temporal repetition. }
+    value_nature: positive_rate
+    interpretation_role: Conecta escala temporal con escala espacial mediante la rapidez.
+    graph_binding: { type: Coord, visual_role: temporal_density }
+    pedagogical_notes: { es: Recordar que solo con frecuencia no se obtiene longitud si falta rapidez., en: Remember that frequency alone does not give wavelength without speed. }
+  - id: T
+    symbol: "T"
+    nombre: { es: periodo, en: period }
+    unidad: { es: s, en: s }
+    unidad_si: s
+    dimension: "[T]"
+    tipo: escalar
+    is_vector: false
+    components: []
+    category: temporal_period
+    physical_role: core_physical_quantity
+    descripcion: { es: Tiempo de una repetición completa., en: Time of one complete repetition. }
+    rango_tipico: { es: Milisegundos a segundos según el fenómeno., en: Milliseconds to seconds depending on the phenomenon. }
+    typical_range: { es: Milisegundos en sonido y décimas de segundo en ondas lentas., en: Milliseconds in sound and tenths of a second in slow waves. }
+    used_in: [teoria, interpretacion]
+    common_mistake: { es: Mezclar periodo temporal con longitud de onda espacial., en: Mixing temporal period with spatial wavelength. }
+    sign_behavior: { es: Debe ser positivo., en: Must be positive. }
+    zero_behavior: { es: Periodo cero no es válido para una onda periódica., en: Zero period is invalid for a periodic wave. }
+    value_nature: positive_interval
+    interpretation_role: Compara repetición temporal con repetición espacial.
+    graph_binding: { type: Coord, visual_role: temporal_spacing }
+    pedagogical_notes: { es: Contrastar periodo en segundos con longitud de onda en metros., en: Contrast period in seconds with wavelength in metres. }
+  - id: v
+    symbol: "v"
+    nombre: { es: rapidez de propagación, en: propagation speed }
+    unidad: { es: m/s, en: m/s }
+    unidad_si: m/s
+    dimension: "[L T^-1]"
+    tipo: escalar
+    is_vector: false
+    components: []
+    category: propagation_speed
+    physical_role: core_physical_quantity
+    descripcion: { es: Rapidez con la que avanza el patrón ondulatorio., en: Speed at which the wave pattern advances. }
+    rango_tipico: { es: Metros por segundo en cuerdas y cientos de m/s en sonido., en: Metres per second in strings and hundreds of m/s in sound. }
+    typical_range: { es: 1 m/s a 100 m/s en cuerdas; unos 340 m/s en aire., en: 1 m/s to 100 m/s in strings; about 340 m/s in air. }
+    used_in: [teoria, ejemplos, interpretacion, formulas]
+    common_mistake: { es: Pensar que depende solo de la frecuencia., en: Thinking it depends only on frequency. }
+    sign_behavior: { es: Se interpreta como rapidez positiva en el medio., en: Interpreted as positive speed in the medium. }
+    zero_behavior: { es: Valor cero implicaría ausencia de propagación del patrón., en: Zero would imply no pattern propagation. }
+    value_nature: positive_speed
+    interpretation_role: Une frecuencia temporal y longitud espacial.
+    graph_binding: { type: Coord, visual_role: pattern_motion }
+    pedagogical_notes: { es: Explicar que la rapidez depende del medio en el modelo ideal., en: Explain that speed depends on the medium in the ideal model. }
+  - id: Delta_x
+    symbol: "\\\\Delta x"
+    nombre: { es: separación espacial medida, en: measured spatial separation }
+    unidad: { es: m, en: m }
+    unidad_si: m
+    dimension: "[L]"
+    tipo: escalar
+    is_vector: false
+    components: []
+    category: measured_distance
+    physical_role: core_physical_quantity
+    descripcion: { es: Distancia medida entre estados equivalentes o entre varias crestas., en: Distance measured between equivalent states or several crests. }
+    rango_tipico: { es: Fracciones de metro a varios metros en montajes de aula., en: Fractions of a metre to several metres in classroom setups. }
+    typical_range: { es: Centímetros a metros según la escala de la onda., en: Centimetres to metres depending on wave scale. }
+    used_in: [ejemplos, formulas, interpretacion, grafico_coord]
+    common_mistake: { es: Medir entre puntos que no están en el mismo estado de fase., en: Measuring between points that are not in the same phase state. }
+    sign_behavior: { es: Se usa como distancia positiva de medición., en: Used as positive measured distance. }
+    zero_behavior: { es: Valor cero impide estimar longitud de onda por separación., en: Zero prevents estimating wavelength by separation. }
+    value_nature: positive_length
+    interpretation_role: Permite estimar longitud de onda a partir de varias repeticiones.
+    graph_binding: { type: Coord, x_axis: x, visual_role: measured_span }
+    pedagogical_notes: { es: Medir entre estados equivalentes y dividir por el número de intervalos., en: Measure between equivalent states and divide by the number of intervals. }
+  - id: n
+    symbol: "n"
+    nombre: { es: número de intervalos de onda, en: number of wavelength intervals }
+    unidad: { es: intervalo, en: interval }
+    unidad_si: "1"
+    dimension: "[1]"
+    tipo: escalar
+    is_vector: false
+    components: []
+    category: count
+    physical_role: core_physical_quantity
+    descripcion: { es: Cantidad de separaciones completas de longitud de onda medidas., en: Number of complete wavelength separations measured. }
+    rango_tipico: { es: 1 a 10 intervalos en medidas directas., en: 1 to 10 intervals in direct measurements. }
+    typical_range: { es: Varios intervalos para reducir error experimental., en: Several intervals to reduce experimental error. }
+    used_in: [ejemplos, formulas, interpretacion]
+    common_mistake: { es: Contar crestas en vez de intervalos entre crestas., en: Counting crests instead of intervals between crests. }
+    sign_behavior: { es: Es un conteo positivo., en: It is a positive count. }
+    zero_behavior: { es: Cero intervalos no permite estimar longitud de onda., en: Zero intervals do not allow wavelength estimation. }
+    value_nature: positive_count
+    interpretation_role: Convierte una distancia medida en una longitud de onda media.
+    graph_binding: { type: Coord, visual_role: counted_spatial_periods }
+    pedagogical_notes: { es: Si hay tres crestas consecutivas, hay dos intervalos entre ellas., en: If there are three consecutive crests, there are two intervals between them. }
+  - id: x
+    symbol: "x"
+    nombre: { es: posición, en: position }
+    unidad: { es: m, en: m }
+    unidad_si: m
+    dimension: "[L]"
+    tipo: coordenada
+    is_vector: false
+    components: []
+    category: spatial_coordinate
+    physical_role: coordinate
+    descripcion: { es: Coordenada espacial donde se observa el perfil., en: Spatial coordinate where the profile is observed. }
+    rango_tipico: { es: Depende del tamaño del medio observado., en: Depends on the size of the observed medium. }
+    typical_range: { es: Centímetros a metros en montajes escolares., en: Centimetres to metres in school setups. }
+    used_in: [teoria, ejemplos, grafico_coord]
+    common_mistake: { es: Confundir posición con elongación vertical., en: Confusing position with vertical displacement. }
+    sign_behavior: { es: Depende del origen y eje elegido., en: Depends on chosen origin and axis. }
+    zero_behavior: { es: Indica el origen espacial de referencia., en: Indicates the spatial reference origin. }
+    value_nature: coordinate
+    interpretation_role: Localiza el perfil donde se mide la separación espacial.
+    graph_binding: { type: Coord, x_axis: x, visual_role: horizontal_coordinate }
+    pedagogical_notes: { es: Fijar eje antes de medir separaciones., en: Fix the axis before measuring separations. }
+`;export{e as default};

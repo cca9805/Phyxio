@@ -1,0 +1,255 @@
+version: 5.0.0
+ui:
+  default_formula: peso_boltzmann
+formulas:
+- id: peso_boltzmann
+  title:
+    es: Peso de Boltzmann de un microestado
+    en: Boltzmann weight of a microstate
+  equation: w_i=exp(-E_i/(k_B*T))
+  latex: w_i=e^{-E_i/(k_B T)}
+  rearrangements:
+  - id: energia_desde_peso
+    equation: E_i=-k_B*T*ln(w_i)
+    latex: E_i=-k_B T\ln(w_i)
+    target: energia_microestado
+  - id: temperatura_desde_peso
+    equation: T=-E_i/(k_B*ln(w_i))
+    latex: T=-\frac{E_i}{k_B\ln(w_i)}
+    target: temperatura
+  category: statistical_weight
+  relation_type: definition
+  physical_meaning:
+    es: Asigna a cada microestado un peso relativo que decrece con su energía cuando la temperatura es fija.
+    en: Assigns each microstate a relative weight that decreases with its energy at fixed temperature.
+  constraints:
+    es: Requiere temperatura absoluta positiva, energía medida respecto a una referencia y equilibrio térmico canónico.
+    en: Requires positive absolute temperature, energy measured relative to a reference, and canonical thermal equilibrium.
+  validity:
+    es: Válida para sistemas canónicos en contacto con un baño térmico y microestados discretos o discretizables.
+    en: Valid for canonical systems in contact with a heat bath and discrete or discretizable microstates.
+  dimension_check: E_i/(k_B*T) es adimensional; por tanto w_i es adimensional.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculadora
+  - interpretacion
+  - graficas
+  interpretation_tags:
+  - microestado
+  - probabilidad_relativa
+  - temperatura
+  result_semantics:
+    target: peso_boltzmann
+    kind: dimensionless_weight
+    sign_meaning:
+      es: Siempre es positivo; no representa dirección ni signo energético.
+      en: It is always positive; it does not represent direction or energy sign.
+    absolute_value_meaning:
+      es: Cuanto mayor es, más contribuye ese microestado a Z.
+      en: The larger it is, the more that microstate contributes to Z.
+  domain_checks:
+  - id: temperatura_positiva
+    condition: T>0
+    status: warning
+    message:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  coherence_checks:
+  - id: peso_no_negativo
+    condition: w_i>0
+    status: ok
+    message:
+      es: Un peso de Boltzmann negativo no tiene sentido físico.
+      en: A negative Boltzmann weight has no physical meaning.
+  graph_implications:
+    es: En una gráfica frente a la energía, el peso cae de forma exponencial.
+    en: On a graph versus energy, the weight decreases exponentially.
+  pedagogical_triggers:
+  - id: confundir_peso_probabilidad
+    text:
+      es: Aclara que el peso no es aún una probabilidad normalizada.
+      en: Clarify that the weight is not yet a normalized probability.
+- id: funcion_particion_suma_pesos
+  title:
+    es: Función de partición como suma de pesos
+    en: Partition function as a sum of weights
+  equation: Z=sum(w_i)
+  latex: Z=\sum_i w_i=\sum_i e^{-E_i/(k_B T)}
+  rearrangements: []
+  category: partition_function
+  relation_type: definition
+  physical_meaning:
+    es: Suma las contribuciones estadísticas de todos los microestados accesibles y normaliza las probabilidades.
+    en: Sums the statistical contributions of all accessible microstates and normalizes probabilities.
+  constraints:
+    es: Los microestados deben estar definidos sin doble conteo y con energías compatibles con el mismo T.
+    en: Microstates must be defined without double counting and with energies compatible with the same T.
+  validity:
+    es: Adecuada en equilibrio canónico; en continuo la suma se sustituye por una integral con densidad de estados.
+    en: Appropriate in canonical equilibrium; for continuous spectra the sum is replaced by an integral with a density of
+      states.
+  dimension_check: Z es suma de pesos adimensionales, por tanto es adimensional.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculadora
+  - interpretacion
+  - graficas
+  interpretation_tags:
+  - normalizacion
+  - microestados
+  - funcion_particion
+  result_semantics:
+    target: funcion_particion
+    kind: dimensionless_sum
+    sign_meaning:
+      es: Z debe ser positiva; valores nulos indican un modelo imposible o mal definido.
+      en: Z must be positive; zero values indicate an impossible or ill-defined model.
+    absolute_value_meaning:
+      es: Mide la cantidad efectiva de microestados térmicamente accesibles.
+      en: Measures the effective number of thermally accessible microstates.
+  domain_checks:
+  - id: z_positiva
+    condition: Z>0
+    status: warning
+    message:
+      es: La función de partición debe ser positiva.
+      en: The partition function must be positive.
+  coherence_checks:
+  - id: suma_pesos
+    condition: Z>=max(w_i)
+    status: ok
+    message:
+      es: Z no puede ser menor que un peso individual incluido en la suma.
+      en: Z cannot be smaller than an individual weight included in the sum.
+  graph_implications:
+    es: Al aumentar la energía, cada peso disminuye; al aumentar T, pesos altos en energía ganan relevancia.
+    en: As energy increases each weight decreases; as T increases, high-energy weights become more relevant.
+  pedagogical_triggers:
+  - id: z_no_es_microestado
+    text:
+      es: Recalca que Z no es un microestado, sino una suma sobre microestados.
+      en: Emphasize that Z is not a microstate, but a sum over microstates.
+- id: probabilidad_microestado
+  title:
+    es: Probabilidad normalizada de un microestado
+    en: Normalized probability of a microstate
+  equation: p_i=w_i/Z
+  latex: p_i=\frac{w_i}{Z}
+  rearrangements:
+  - id: peso_desde_probabilidad
+    equation: w_i=p_i*Z
+    latex: w_i=p_i Z
+    target: peso_boltzmann
+  category: probability
+  relation_type: normalization
+  physical_meaning:
+    es: Convierte un peso relativo en la probabilidad física de ocupar un microestado concreto.
+    en: Turns a relative weight into the physical probability of occupying a specific microstate.
+  constraints:
+    es: Requiere Z positiva y que todos los microestados incluidos pertenezcan al mismo ensamble.
+    en: Requires positive Z and all included microstates to belong to the same ensemble.
+  validity:
+    es: Válida para el ensamble canónico en equilibrio térmico.
+    en: Valid for the canonical ensemble in thermal equilibrium.
+  dimension_check: p_i es cociente de dos magnitudes adimensionales.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculadora
+  - interpretacion
+  interpretation_tags:
+  - probabilidad
+  - normalizacion
+  - microestado
+  result_semantics:
+    target: probabilidad_microestado
+    kind: probability
+    sign_meaning:
+      es: Debe estar entre 0 y 1; un signo negativo revela un error.
+      en: It must lie between 0 and 1; a negative sign reveals an error.
+    absolute_value_meaning:
+      es: Indica la fracción de veces esperada para ese microestado en equilibrio.
+      en: Indicates the expected fraction of occurrences for that microstate in equilibrium.
+  domain_checks:
+  - id: probabilidad_intervalo
+    condition: 0<=p_i<=1
+    status: warning
+    message:
+      es: La probabilidad debe estar entre 0 y 1.
+      en: Probability must be between 0 and 1.
+  coherence_checks:
+  - id: normalizacion
+    condition: sum(p_i)=1
+    status: ok
+    message:
+      es: La suma de probabilidades debe ser 1.
+      en: The sum of probabilities must be 1.
+  graph_implications:
+    es: La probabilidad conserva la forma decreciente del peso, pero queda escalada por Z.
+    en: Probability keeps the decreasing shape of the weight, but is scaled by Z.
+  pedagogical_triggers:
+  - id: olvidar_normalizar
+    text:
+      es: Detecta si el alumno usa w_i como si ya fuera p_i.
+      en: Detect whether the student uses w_i as if it were already p_i.
+- id: limite_alta_temperatura
+  title:
+    es: Límite cualitativo de alta temperatura
+    en: Qualitative high-temperature limit
+  equation: E_i/(k_B*T)<<1
+  latex: \frac{E_i}{k_B T}\ll 1
+  rearrangements: []
+  category: validity_limit
+  relation_type: criterion
+  physical_meaning:
+    es: Cuando la escala térmica domina sobre las diferencias energéticas, los microestados tienden a pesos parecidos.
+    en: When the thermal scale dominates energy differences, microstates tend toward similar weights.
+  constraints:
+    es: Debe aplicarse comparando diferencias de energía relevantes con k_B*T, no energías absolutas arbitrarias.
+    en: It must be applied by comparing relevant energy differences with k_B*T, not arbitrary absolute energies.
+  validity:
+    es: Es un criterio de lectura, no una fórmula exacta para cualquier sistema.
+    en: It is a reading criterion, not an exact formula for every system.
+  dimension_check: El cociente E_i/(k_B*T) es adimensional.
+  calculable: false
+  motivo_no_calculable: Es un criterio de régimen físico, no una relación pensada para despejar una magnitud única.
+  used_in:
+  - interpretacion
+  - graficas
+  interpretation_tags:
+  - alta_temperatura
+  - microestados_accesibles
+  - limite
+  result_semantics:
+    target: razon_energia_termica
+    kind: dimensionless_ratio
+    sign_meaning:
+      es: El signo no es el foco; importa el tamaño relativo del cociente.
+      en: The sign is not the focus; the relative size of the ratio matters.
+    absolute_value_meaning:
+      es: Un valor pequeño indica que la temperatura suaviza las diferencias entre microestados.
+      en: A small value indicates that temperature smooths differences among microstates.
+  domain_checks:
+  - id: comparar_diferencias
+    condition: Delta_E/(k_B*T)<<1
+    status: info
+    message:
+      es: Compara diferencias de energía físicamente relevantes.
+      en: Compare physically relevant energy differences.
+  coherence_checks:
+  - id: limite_no_probabilidad
+    condition: criterion_only
+    status: info
+    message:
+      es: Este límite no sustituye a la normalización con Z.
+      en: This limit does not replace normalization with Z.
+  graph_implications:
+    es: La curva w frente a E se aplana cuando T es grande.
+    en: The w versus E curve flattens when T is large.
+  pedagogical_triggers:
+  - id: alta_t_no_infinita
+    text:
+      es: Evita interpretar alta temperatura como energía infinita del sistema.
+      en: Avoid interpreting high temperature as infinite system energy.

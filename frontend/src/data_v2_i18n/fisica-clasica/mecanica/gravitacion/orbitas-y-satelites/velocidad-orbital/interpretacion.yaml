@@ -1,0 +1,449 @@
+version: 5
+id: velocidad-orbital-interp
+leaf_id: velocidad-orbital
+scope: local
+nombre:
+  es: Lectura de velocidad orbital
+  en: Orbital velocity reading
+
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+
+result_blocks:
+  summary:
+    title: { es: Resumen fisico, en: Physical summary }
+  physical_reading:
+    title: { es: Lectura fisica, en: Physical reading }
+  coherence:
+    title: { es: Coherencia de datos, en: Data coherence }
+  model_validity:
+    title: { es: Validez del modelo, en: Model validity }
+  graph_reading:
+    title: { es: Lectura del grafico, en: Graph reading }
+  likely_errors:
+    title: { es: Errores probables, en: Likely errors }
+  next_step:
+    title: { es: Siguiente paso, en: Next step }
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [ G, M, r, R, h, v_orb, v_escape, T, a, mu, E ]
+  formulas: [ velocidad_orbital_circular, velocidad_escape, periodo_orbital, parametro_gravitacional, vis_viva, energia_orbital_especifica ]
+
+targets:
+  v_orb:
+    summary_rules:
+    - id: vorb-summary
+      when: v_orb > 0
+      status: success
+      text:
+        es: La velocidad orbital es positiva y describe regimen circular ligado en el radio evaluado.
+        en: Orbital speed is positive and describes a bound circular regime at the evaluated radius.
+    physical_reading_rules:
+    - id: vorb-reading
+      when: r > 0 and M > 0
+      status: info
+      text:
+        es: Si [[r]] aumenta con [[M]] fija, [[v_orb]] disminuye por debilidad radial del campo.
+        en: If [[r]] increases with fixed [[M]], [[v_orb]] decreases due to radial field weakening.
+    coherence_rules:
+    - id: vorb-coh
+      when: v_orb > 0 and G > 0 and M > 0 and r > 0
+      status: success
+      text:
+        es: Datos coherentes con la expresion circular de velocidad orbital.
+        en: Data are coherent with the circular orbital-speed relation.
+    model_validity_rules:
+    - id: vorb-valid
+      when: r >= R
+      status: success
+      text:
+        es: Valido en aproximacion de dos cuerpos con masa central dominante.
+        en: Valid in two-body approximation with dominant central mass.
+    graph_rules:
+    - id: vorb-graph
+      when: v_orb > 0
+      status: info
+      text:
+        es: En Coord, la curva de [[v_orb]] cae al aumentar [[r]].
+        en: In Coord view, the [[v_orb]] curve decreases as [[r]] grows.
+    likely_errors:
+    - id: vorb-err-r
+      when: h > 0 and r == h
+      status: error
+      text:
+        es: "Error probable: confundir altura con radio al centro y usar [[h]] sin sumar [[R]]."
+        en: "Likely mistake: confusing altitude with center radius and using [[h]] without adding [[R]]."
+    next_step_rules:
+    - id: vorb-next
+      when: v_orb > 0
+      status: info
+      text:
+        es: Compara con [[v_escape]] para clasificar margen energetico local.
+        en: Compare with [[v_escape]] to classify local energetic margin.
+
+  v_escape:
+    summary_rules:
+    - id: vesc-summary
+      when: v_escape > 0
+      status: success
+      text:
+        es: Se obtuvo un umbral de escape fisicamente valido para el radio indicado.
+        en: A physically valid escape threshold was obtained for the given radius.
+    physical_reading_rules:
+    - id: vesc-reading
+      when: v_escape > v_orb
+      status: info
+      text:
+        es: El umbral de escape supera la velocidad circular en el mismo punto orbital.
+        en: Escape threshold exceeds circular speed at the same orbital point.
+    coherence_rules:
+    - id: vesc-coh
+      when: G > 0 and M > 0 and r > 0
+      status: success
+      text:
+        es: Coherencia completa para aplicar la expresion de escape.
+        en: Full coherence to apply the escape relation.
+    model_validity_rules:
+    - id: vesc-valid
+      when: r >= R
+      status: success
+      text:
+        es: Valido para campo central ideal sin propulsion posterior.
+        en: Valid for ideal central field without further thrust.
+    graph_rules:
+    - id: vesc-graph
+      when: v_escape > 0
+      status: info
+      text:
+        es: En Coord, [[v_escape]] aparece por encima de [[v_orb]] en todo [[r]] positivo.
+        en: In Coord, [[v_escape]] stays above [[v_orb]] for all positive [[r]].
+    likely_errors:
+    - id: vesc-err-conf
+      when: v_escape == v_orb
+      status: warning
+      text:
+        es: Revisa posible confusion entre velocidad orbital y umbral de escape.
+        en: Recheck potential confusion between orbital speed and escape threshold.
+    next_step_rules:
+    - id: vesc-next
+      when: v_escape > 0
+      status: info
+      text:
+        es: Evalua energia especifica para confirmar regimen ligado o abierto.
+        en: Evaluate specific energy to confirm bound or open regime.
+
+  T:
+    summary_rules:
+    - id: t-summary
+      when: T > 0
+      status: success
+      text:
+        es: El periodo orbital es positivo y compatible con movimiento periodico.
+        en: Orbital period is positive and compatible with periodic motion.
+    physical_reading_rules:
+    - id: t-reading
+      when: T > 0 and r > 0
+      status: info
+      text:
+        es: A mayor [[r]], el periodo [[T]] crece de forma no lineal.
+        en: For larger [[r]], period [[T]] increases nonlinearly.
+    coherence_rules:
+    - id: t-coh
+      when: G > 0 and M > 0 and r > 0
+      status: success
+      text:
+        es: Datos consistentes con la ley temporal orbital circular.
+        en: Data are consistent with circular orbital timing law.
+    model_validity_rules:
+    - id: t-valid
+      when: r >= R
+      status: success
+      text:
+        es: Valido bajo orbita circular estable sin perturbaciones dominantes.
+        en: Valid under stable circular orbit without dominant perturbations.
+    graph_rules:
+    - id: t-graph
+      when: T > 0
+      status: info
+      text:
+        es: El aumento de periodo se interpreta con menor velocidad angular en radios altos.
+        en: Period increase is interpreted as lower angular speed at larger radii.
+    likely_errors:
+    - id: t-err-lin
+      when: T == r
+      status: warning
+      text:
+        es: "Posible error: asumir dependencia lineal directa entre periodo y radio."
+        en: "Possible error: assuming direct linear dependence between period and radius."
+    next_step_rules:
+    - id: t-next
+      when: T > 0
+      status: info
+      text:
+        es: Contrasta dos radios para evaluar sensibilidad temporal de la mision.
+        en: Compare two radii to evaluate mission time sensitivity.
+
+  mu:
+    summary_rules:
+    - id: mu-summary
+      when: mu > 0
+      status: success
+      text:
+        es: El parametro gravitacional es positivo y util para compactar calculos.
+        en: Gravitational parameter is positive and useful for compact calculations.
+    physical_reading_rules:
+    - id: mu-reading
+      when: mu > 0
+      status: info
+      text:
+        es: "[[mu]] fija la escala dinamica global del sistema orbital central."
+        en: "[[mu]] sets global dynamical scale for the central orbital system."
+    coherence_rules:
+    - id: mu-coh
+      when: mu == G * M
+      status: success
+      text:
+        es: Coherencia exacta entre constante universal y masa central.
+        en: Exact coherence between universal constant and central mass.
+    model_validity_rules:
+    - id: mu-valid
+      when: G > 0 and M > 0
+      status: success
+      text:
+        es: Valido cuando la fuente central puede modelarse como dominante.
+        en: Valid when central source can be modeled as dominant.
+    graph_rules:
+    - id: mu-graph
+      when: mu > 0
+      status: info
+      text:
+        es: Un [[mu]] mayor eleva ambas curvas de velocidad en Coord.
+        en: Larger [[mu]] raises both speed curves in Coord.
+    likely_errors:
+    - id: mu-err-unit
+      when: mu > 0
+      status: warning
+      text:
+        es: Revisa unidades de [[mu]] para evitar errores de escala.
+        en: Check [[mu]] units to avoid scale errors.
+    next_step_rules:
+    - id: mu-next
+      when: mu > 0
+      status: info
+      text:
+        es: Usa [[mu]] para resolver vis viva sin recalcular [[G]] y [[M]] en cada paso.
+        en: Use [[mu]] to solve vis-viva without recalculating [[G]] and [[M]] each step.
+
+  E:
+    summary_rules:
+    - id: e-summary
+      when: E < 0
+      status: success
+      text:
+        es: Energia especifica negativa compatible con orbita ligada.
+        en: Negative specific energy is compatible with bound orbit.
+    physical_reading_rules:
+    - id: e-reading
+      when: E < 0 and a > 0
+      status: info
+      text:
+        es: El signo de [[E]] clasifica el regimen orbital junto con [[a]].
+        en: Sign of [[E]] classifies orbital regime together with [[a]].
+    coherence_rules:
+    - id: e-coh
+      when: mu > 0 and a > 0
+      status: success
+      text:
+        es: Coherencia para aplicar lectura energetica kepleriana.
+        en: Coherence to apply Keplerian energetic reading.
+    model_validity_rules:
+    - id: e-valid
+      when: a > 0
+      status: success
+      text:
+        es: Valido en marco clasico sin perturbaciones dominantes.
+        en: Valid in classical frame without dominant perturbations.
+    graph_rules:
+    - id: e-graph
+      when: E < 0
+      status: info
+      text:
+        es: Una lectura de menor [[v_orb]] a gran [[r]] sugiere energia menos negativa.
+        en: Lower [[v_orb]] at large [[r]] suggests less negative energy.
+    likely_errors:
+    - id: e-err-sign
+      when: E > 0
+      status: warning
+      text:
+        es: Si se esperaba orbita ligada, revisa signo de energia y datos.
+        en: If a bound orbit was expected, recheck energy sign and inputs.
+    next_step_rules:
+    - id: e-next
+      when: E < 0
+      status: info
+      text:
+        es: Compara distintos [[a]] para estimar margen respecto al escape.
+        en: Compare different [[a]] values to estimate margin to escape.
+
+  M:
+    summary_rules:
+    - id: m-summary
+      when: M > 0
+      status: success
+      text:
+        es: Masa central positiva coherente con fuente gravitatoria fisica.
+        en: Positive central mass is coherent with a physical gravitational source.
+    physical_reading_rules:
+    - id: m-reading
+      when: M > 0
+      status: info
+      text:
+        es: Al aumentar [[M]], suben [[v_orb]] y [[v_escape]] para un mismo [[r]].
+        en: Increasing [[M]] raises [[v_orb]] and [[v_escape]] for the same [[r]].
+    coherence_rules:
+    - id: m-coh
+      when: M > 0 and G > 0
+      status: success
+      text:
+        es: Coherencia basica de parametros de fuente.
+        en: Basic source-parameter coherence.
+    model_validity_rules:
+    - id: m-valid
+      when: M > 0
+      status: success
+      text:
+        es: Valido para fuente dominante en modelo de dos cuerpos.
+        en: Valid for dominant source in two-body model.
+    graph_rules:
+    - id: m-graph
+      when: M > 0
+      status: info
+      text:
+        es: En grafico Coord, mayor [[M]] desplaza curvas de velocidad hacia arriba.
+        en: In Coord graph, larger [[M]] shifts speed curves upward.
+    likely_errors:
+    - id: m-err-sat
+      when: M <= 0
+      status: error
+      text:
+        es: "Masa central no fisica: revisa seleccion de dato."
+        en: "Nonphysical central mass: recheck data selection."
+    next_step_rules:
+    - id: m-next
+      when: M > 0
+      status: info
+      text:
+        es: Repite lectura para otro cuerpo central y compara [[mu]].
+        en: Repeat reading for another central body and compare [[mu]].
+
+  r:
+    summary_rules:
+    - id: r-summary
+      when: r > 0
+      status: success
+      text:
+        es: Radio orbital positivo coherente con geometria del problema.
+        en: Positive orbital radius is coherent with problem geometry.
+    physical_reading_rules:
+    - id: r-reading
+      when: r > 0
+      status: info
+      text:
+        es: "[[r]] domina la variacion local de [[v_orb]], [[v_escape]] y [[T]]."
+        en: "[[r]] dominates local variation of [[v_orb]], [[v_escape]], and [[T]]."
+    coherence_rules:
+    - id: r-coh
+      when: r >= R
+      status: success
+      text:
+        es: Coherencia geometrica entre radio orbital y radio fisico [[R]].
+        en: Geometric coherence between orbital radius and physical radius [[R]].
+    model_validity_rules:
+    - id: r-valid
+      when: r > 0
+      status: success
+      text:
+        es: Valido para distancia radial definida respecto del centro de masa.
+        en: Valid for radial distance defined from center of mass.
+    graph_rules:
+    - id: r-graph
+      when: r > 0
+      status: info
+      text:
+        es: En el eje horizontal de Coord, aumentar [[r]] reduce las velocidades.
+        en: On Coord horizontal axis, increasing [[r]] lowers speeds.
+    likely_errors:
+    - id: r-err-h
+      when: r == h
+      status: warning
+      text:
+        es: Revisa conversion de altura a radio total.
+        en: Recheck altitude-to-total-radius conversion.
+    next_step_rules:
+    - id: r-next
+      when: r > 0
+      status: info
+      text:
+        es: Evalua dos radios para obtener sensibilidad radial de la mision.
+        en: Evaluate two radii to obtain mission radial sensitivity.
+
+  a:
+    summary_rules:
+    - id: a-summary
+      when: a > 0
+      status: success
+      text:
+        es: Semieje mayor positivo coherente con orbita kepleriana ligada.
+        en: Positive semimajor axis is coherent with a bound Keplerian orbit.
+    physical_reading_rules:
+    - id: a-reading
+      when: a > 0
+      status: info
+      text:
+        es: "[[a]] fija la escala energetica media de la orbita."
+        en: "[[a]] sets the mean energetic scale of the orbit."
+    coherence_rules:
+    - id: a-coh
+      when: a > 0 and mu > 0
+      status: success
+      text:
+        es: Coherencia para aplicar vis viva y energia especifica.
+        en: Coherence for applying vis-viva and specific energy.
+    model_validity_rules:
+    - id: a-valid
+      when: a >= r / 2
+      status: success
+      text:
+        es: Valido dentro de regimenes keplerianos fisicamente realizables.
+        en: Valid within physically realizable Keplerian regimes.
+    graph_rules:
+    - id: a-graph
+      when: a > 0
+      status: info
+      text:
+        es: Cambios en [[a]] modifican lectura de velocidad por vis viva.
+        en: Changes in [[a]] modify speed reading through vis-viva.
+    likely_errors:
+    - id: a-err-eq
+      when: a == r
+      status: info
+      text:
+        es: Igualdad [[a]] igual [[r]] solo aplica a orbita circular ideal.
+        en: Equality [[a]] equals [[r]] applies only to ideal circular orbit.
+    next_step_rules:
+    - id: a-next
+      when: a > 0
+      status: info
+      text:
+        es: Contrasta periapsis y apoapsis para lectura eliptica completa.
+        en: Contrast periapsis and apoapsis for full elliptical reading.

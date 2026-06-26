@@ -1,0 +1,667 @@
+version: 1
+magnitudes:
+- id: v
+  symbol: v
+  nombre:
+    es: velocidad_lineal
+    en: linear_velocity
+  descripcion:
+    es: Velocidad del centro de masas del cuerpo rígido.
+    en: Velocity of the rigid body's center of mass.
+  unidad_si: m/s
+  dimension: L/T
+  is_vector: true
+  components:
+  - v_x
+  - v_y
+  category: state
+  physical_role:
+    es: Magnitud cinemática principal
+    en: Primary kinematic magnitude
+  used_in:
+  - condicion_rodadura
+  - velocidad_contacto
+  - consistencia_rodadura
+  common_mistake:
+    es: Confundir con la velocidad del punto de contacto.
+    en: Confusing it with the contact point velocity.
+  typical_range: 0 - 50 m/s
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del convenio de referencia adoptado.
+      en: Its sign depends on the chosen reference convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El valor cero representa un caso limite fisicamente interpretable.
+      en: Zero represents a physically interpretable limiting case.
+  value_nature:
+    kind: vector
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - comprobacion-de-coherencia
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Verificar unidades SI, signo y contexto fisico al usar v.
+    en: Check SI units, sign, and physical context when using v.
+- id: omega
+  symbol: \omega
+  nombre:
+    es: velocidad_angular
+    en: angular_velocity
+  descripcion:
+    es: Velocidad angular de rotación respecto al centro de masas.
+    en: Angular velocity of rotation about the center of mass.
+  unidad_si: rad/s
+  dimension: 1/T
+  is_vector: true
+  components:
+  - omega_z
+  category: state
+  physical_role:
+    es: Magnitud rotacional
+    en: Rotational magnitude
+  used_in:
+  - condicion_rodadura
+  - velocidad_contacto
+  - consistencia_rodadura
+  common_mistake:
+    es: Usar unidades de rpm o grados/s sin convertir a rad/s.
+    en: Using rpm or degrees/s units without converting to rad/s.
+  typical_range: 0 - 200 rad/s
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del convenio de referencia adoptado.
+      en: Its sign depends on the chosen reference convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El valor cero representa un caso limite fisicamente interpretable.
+      en: Zero represents a physically interpretable limiting case.
+  value_nature:
+    kind: vector
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - comprobacion-de-coherencia
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Verificar unidades SI, signo y contexto fisico al usar \omega.
+    en: Check SI units, sign, and physical context when using \omega.
+- id: R
+  symbol: R
+  nombre:
+    es: radio
+    en: radius
+  descripcion:
+    es: Radio efectivo desde el centro de masas al punto de contacto.
+    en: Effective radius from the center of mass to the contact point.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role:
+    es: Parámetro geométrico
+    en: Geometric parameter
+  used_in:
+  - condicion_rodadura
+  - relacion_aceleracion
+  - consistencia_rodadura
+  common_mistake:
+    es: Usar el diámetro en lugar del radio.
+    en: Using diameter instead of radius.
+  typical_range: 0.01 - 2.0 m
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud no negativa en este leaf.
+      en: Used as a non-negative magnitude in this leaf.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El valor cero representa un caso limite fisicamente interpretable.
+      en: Zero represents a physically interpretable limiting case.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - comprobacion-de-coherencia
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Verificar unidades SI, signo y contexto fisico al usar R.
+    en: Check SI units, sign, and physical context when using R.
+- id: v_contacto
+  symbol: v_c
+  nombre:
+    es: velocidad_punto_contacto
+    en: contact_point_velocity
+  descripcion:
+    es: Velocidad instantánea del punto de contacto respecto a la superficie.
+    en: Instantaneous velocity of the contact point relative to the surface.
+  unidad_si: m/s
+  dimension: L/T
+  is_vector: true
+  components:
+  - v_px
+  - v_py
+  category: derived
+  physical_role:
+    es: Indicador de adherencia
+    en: Adherence indicator
+  used_in:
+  - velocidad_contacto
+  common_mistake:
+    es: Asumir que nunca es cero.
+    en: Assuming it is never zero.
+  typical_range: 0 m/s (en rodadura pura)
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del convenio de referencia adoptado.
+      en: Its sign depends on the chosen reference convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El valor cero representa un caso limite fisicamente interpretable.
+      en: Zero represents a physically interpretable limiting case.
+  value_nature:
+    kind: vector
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - comprobacion-de-coherencia
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Verificar unidades SI, signo y contexto fisico al usar v_c.
+    en: Check SI units, sign, and physical context when using v_c.
+- id: a
+  symbol: a
+  nombre:
+    es: aceleracion_lineal
+    en: linear_acceleration
+  descripcion:
+    es: Aceleración del centro de masas.
+    en: Acceleration of the center of mass.
+  unidad_si: m/s^2
+  dimension: L/T^2
+  is_vector: true
+  components:
+  - a_x
+  - a_y
+  category: state
+  physical_role:
+    es: Tasa de cambio de traslación
+    en: Translation rate of change
+  used_in:
+  - relacion_aceleracion
+  common_mistake:
+    es: Olvidar que es proporcional a la aceleración angular.
+    en: Forgetting it is proportional to angular acceleration.
+  typical_range: 0 - 10 m/s^2
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del convenio de referencia adoptado.
+      en: Its sign depends on the chosen reference convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El valor cero representa un caso limite fisicamente interpretable.
+      en: Zero represents a physically interpretable limiting case.
+  value_nature:
+    kind: vector
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - comprobacion-de-coherencia
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Verificar unidades SI, signo y contexto fisico al usar a.
+    en: Check SI units, sign, and physical context when using a.
+- id: alpha
+  symbol: \alpha
+  nombre:
+    es: aceleracion_angular
+    en: angular_acceleration
+  descripcion:
+    es: Aceleración angular del cuerpo rígido.
+    en: Angular acceleration of the rigid body.
+  unidad_si: rad/s^2
+  dimension: 1/T^2
+  is_vector: true
+  components:
+  - alpha_z
+  category: state
+  physical_role:
+    es: Tasa de cambio rotacional
+    en: Rotational rate of change
+  used_in:
+  - relacion_aceleracion
+  common_mistake:
+    es: Confundir con la velocidad angular.
+    en: Confusing it with angular velocity.
+  typical_range: 0 - 100 rad/s^2
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del convenio de referencia adoptado.
+      en: Its sign depends on the chosen reference convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El valor cero representa un caso limite fisicamente interpretable.
+      en: Zero represents a physically interpretable limiting case.
+  value_nature:
+    kind: vector
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - comprobacion-de-coherencia
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Verificar unidades SI, signo y contexto fisico al usar \alpha.
+    en: Check SI units, sign, and physical context when using \alpha.
+- id: delta
+  symbol: \delta
+  nombre:
+    es: indicador_deslizamiento
+    en: slip_indicator
+  descripcion:
+    es: Desviación de la condición de rodadura pura (v - omega R).
+    en: Deviation from the pure rolling condition (v - omega R).
+  unidad_si: m/s
+  dimension: L/T
+  is_vector: false
+  components: null
+  category: conceptual
+  physical_role:
+    es: Diagnóstico de régimen
+    en: Regime diagnosis
+  used_in:
+  - consistencia_rodadura
+  common_mistake:
+    es: Ignorar su signo para distinguir derrape de patinamiento.
+    en: Ignoring its sign to distinguish skidding from spinning.
+  typical_range: -10 a 10 m/s
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del convenio de referencia adoptado.
+      en: Its sign depends on the chosen reference convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El valor cero representa un caso limite fisicamente interpretable.
+      en: Zero represents a physically interpretable limiting case.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - comprobacion-de-coherencia
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Verificar unidades SI, signo y contexto fisico al usar \delta.
+    en: Check SI units, sign, and physical context when using \delta.
+- id: f_s
+  symbol: f_s
+  nombre:
+    es: fuerza_rozamiento_estatico
+    en: static_friction_force
+  descripcion:
+    es: Fuerza tangencial en el contacto que mantiene el vínculo de rodadura.
+    en: Tangential force at contact that maintains the rolling constraint.
+  unidad_si: N
+  dimension: M*L/T^2
+  is_vector: true
+  components:
+  - f_sx
+  - f_sy
+  category: parameter
+  physical_role:
+    es: Fuerza de vínculo
+    en: Constraint force
+  used_in:
+  - ejemplos
+  - teoria
+  common_mistake:
+    es: Usar la fórmula de fricción cinética mu_k*N.
+    en: Using the kinetic friction formula mu_k*N.
+  typical_range: 0 - 1000 N
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del convenio de referencia adoptado.
+      en: Its sign depends on the chosen reference convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El valor cero representa un caso limite fisicamente interpretable.
+      en: Zero represents a physically interpretable limiting case.
+  value_nature:
+    kind: vector
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - comprobacion-de-coherencia
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Verificar unidades SI, signo y contexto fisico al usar f_s.
+    en: Check SI units, sign, and physical context when using f_s.
+- id: theta
+  symbol: \theta
+  nombre:
+    es: angulo_inclinacion
+    en: incline_angle
+  descripcion:
+    es: Ángulo de la superficie respecto a la horizontal.
+    en: Angle of the surface relative to the horizontal.
+  unidad_si: rad
+  dimension: dimension
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role:
+    es: Parámetro geométrico ambiental
+    en: Geometric environmental parameter
+  used_in:
+  - ejemplos
+  common_mistake:
+    es: Usar grados sin convertir a radianes en cálculos de arco.
+    en: Using degrees without converting to radians in arc calculations.
+  typical_range: 0 - 1.57 rad
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud no negativa en este leaf.
+      en: Used as a non-negative magnitude in this leaf.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El valor cero representa un caso limite fisicamente interpretable.
+      en: Zero represents a physically interpretable limiting case.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - comprobacion-de-coherencia
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Verificar unidades SI, signo y contexto fisico al usar \theta.
+    en: Check SI units, sign, and physical context when using \theta.
+- id: m
+  symbol: m
+  nombre:
+    es: masa
+    en: mass
+  descripcion:
+    es: Masa total del cuerpo rígido.
+    en: Total mass of the rigid body.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role:
+    es: Inercia traslacional
+    en: Translational inertia
+  used_in:
+  - ejemplos
+  common_mistake:
+    es: Confundir con peso (m*g).
+    en: Confusing with weight (m*g).
+  typical_range: 0.1 - 100 kg
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud no negativa en este leaf.
+      en: Used as a non-negative magnitude in this leaf.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El valor cero representa un caso limite fisicamente interpretable.
+      en: Zero represents a physically interpretable limiting case.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - comprobacion-de-coherencia
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Verificar unidades SI, signo y contexto fisico al usar m.
+    en: Check SI units, sign, and physical context when using m.
+- id: I
+  symbol: I
+  nombre:
+    es: momento_inercia
+    en: moment_of_inertia
+  descripcion:
+    es: Medida de la resistencia del cuerpo a cambios en su rotación axial.
+    en: Measure of the body's resistance to changes in its axial rotation.
+  unidad_si: kg*m^2
+  dimension: M*L^2
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role:
+    es: Inercia rotacional
+    en: Rotational inertia
+  used_in:
+  - ejemplos
+  common_mistake:
+    es: No considerar el eje de rotación correcto (Steiner).
+    en: Not considering the correct axis of rotation (Steiner).
+  typical_range: 0.001 - 10 kg*m^2
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud no negativa en este leaf.
+      en: Used as a non-negative magnitude in this leaf.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El valor cero representa un caso limite fisicamente interpretable.
+      en: Zero represents a physically interpretable limiting case.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - comprobacion-de-coherencia
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Verificar unidades SI, signo y contexto fisico al usar I.
+    en: Check SI units, sign, and physical context when using I.
+- id: mu_s
+  symbol: \mu_s
+  nombre:
+    es: coeficiente_friccion_estatica
+    en: static_friction_coefficient
+  descripcion:
+    es: Relación adimensional que define el límite de adherencia entre superficies.
+    en: Dimensionless ratio defining the adhesion limit between surfaces.
+  unidad_si: adimensional
+  dimension: 1
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role:
+    es: Parámetro de interfaz
+    en: Interface parameter
+  used_in:
+  - modelos
+  - ejemplos
+  common_mistake:
+    es: Confundir con el coeficiente cinético mu_k.
+    en: Confusing it with the kinetic coefficient mu_k.
+  typical_range: 0.1 - 1.0
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud no negativa en este leaf.
+      en: Used as a non-negative magnitude in this leaf.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El valor cero representa un caso limite fisicamente interpretable.
+      en: Zero represents a physically interpretable limiting case.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - comprobacion-de-coherencia
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Verificar unidades SI, signo y contexto fisico al usar \mu_s.
+    en: Check SI units, sign, and physical context when using \mu_s.
+- id: g
+  symbol: g
+  nombre:
+    es: gravedad
+    en: gravity
+  descripcion:
+    es: Aceleración debida al campo gravitatorio terrestre.
+    en: Acceleration due to the Earth's gravitational field.
+  unidad_si: m/s^2
+  dimension: L/T^2
+  is_vector: true
+  components:
+  - 0
+  - -g
+  category: constant
+  physical_role:
+    es: Campo de fuerza externo
+    en: External force field
+  used_in:
+  - ejemplos
+  common_mistake:
+    es: Olvidar que es una aceleración, no una fuerza.
+    en: Forgetting it is an acceleration, not a force.
+  typical_range: 0 - 20 m/s^2
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud no negativa en este leaf.
+      en: Used as a non-negative magnitude in this leaf.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El valor cero representa un caso limite fisicamente interpretable.
+      en: Zero represents a physically interpretable limiting case.
+  value_nature:
+    kind: vector
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - comprobacion-de-coherencia
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Verificar unidades SI, signo y contexto fisico al usar g.
+    en: Check SI units, sign, and physical context when using g.
+- id: mu_k
+  symbol: \mu_k
+  nombre:
+    es: coeficiente_friccion_cinetica
+    en: kinetic_friction_coefficient
+  descripcion:
+    es: Relación adimensional que define la fricción durante el deslizamiento relativo.
+    en: Dimensionless ratio defining friction during relative sliding.
+  unidad_si: adimensional
+  dimension: 1
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role:
+    es: Parámetro de interfaz disipativa
+    en: Dissipative interface parameter
+  used_in:
+  - modelos
+  - aplicaciones
+  common_mistake:
+    es: Usarlo en lugar de mu_s dentro del régimen de rodadura pura.
+    en: Using it instead of mu_s within the pure rolling regime.
+  typical_range: 0.05 - 0.8
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud no negativa en este leaf.
+      en: Used as a non-negative magnitude in this leaf.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El valor cero representa un caso limite fisicamente interpretable.
+      en: Zero represents a physically interpretable limiting case.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - comprobacion-de-coherencia
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Verificar unidades SI, signo y contexto fisico al usar \mu_k.
+    en: Check SI units, sign, and physical context when using \mu_k.

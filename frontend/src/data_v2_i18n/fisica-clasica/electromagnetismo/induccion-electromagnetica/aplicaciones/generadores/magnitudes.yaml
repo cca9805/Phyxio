@@ -1,0 +1,524 @@
+magnitudes:
+- id: numero_de_espiras
+  symbol: N
+  nombre:
+    es: Número de espiras
+    en: Number of turns
+  descripcion:
+    es: Cantidad de vueltas activas de la bobina que enlazan el flujo magnético.
+    en: Number of active turns of the coil linking the magnetic flux.
+  unidad_si: '1'
+  dimension: '[1]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: input
+  used_in:
+  - flujo_maximo_generador
+  - amplitud_fem_generador
+  common_mistake: Contar solo una vuelta aunque la bobina tenga muchas espiras conectadas.
+  typical_range: 10 a 1000 espiras en generadores didácticos o técnicos pequeños.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El número de espiras es siempre positivo; no tiene sentido un valor negativo.
+      en: The number of turns is always positive; a negative value is meaningless.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Con cero espiras no hay bobina ni fem inducida útil.
+      en: Zero turns means no coil and no useful induced emf.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: '[1, +inf)'
+  interpretation_role:
+    primary_for:
+    - escala del enlace de flujo
+    - amplitud de la fem máxima
+    secondary_for: []
+  graph_binding:
+    channels:
+    - 'parameter_slider: número de espiras N'
+  pedagogical_notes:
+    es: Debe tratarse como multiplicador de enlace de flujo, no como una carga eléctrica.
+    en: Should be treated as a flux linkage multiplier, not as an electric charge.
+- id: campo_magnetico
+  symbol: B
+  nombre:
+    es: Campo magnético
+    en: Magnetic field
+  descripcion:
+    es: Módulo medio del campo magnético que atraviesa la bobina.
+    en: Average magnitude of the magnetic field threading the coil.
+  unidad_si: T
+  dimension: '[M T^{-2} I^{-1}]'
+  is_vector: true
+  components:
+  - B_x
+  - B_y
+  - B_z
+  category: parameter
+  physical_role: input
+  used_in:
+  - flujo_maximo_generador
+  - amplitud_fem_generador
+  common_mistake: Usar el campo externo sin comprobar si atraviesa realmente el área de la bobina.
+  typical_range: 0.01 T a 1 T en montajes didácticos e imanes técnicos.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende de la orientación elegida para la normal de la bobina.
+      en: The sign depends on the chosen orientation of the coil normal.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Sin campo magnético no hay flujo magnético que variar.
+      en: Without a magnetic field there is no magnetic flux to vary.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, +inf)
+  interpretation_role:
+    primary_for:
+    - fuente magnética del generador
+    - fijación del flujo máximo disponible
+    secondary_for: []
+  graph_binding:
+    channels:
+    - 'parameter_slider: módulo de B'
+  pedagogical_notes:
+    es: Conviene distinguir módulo de campo y componente perpendicular al área.
+    en: It is useful to distinguish field magnitude from the component perpendicular to the area.
+- id: area_de_la_espira
+  symbol: A
+  nombre:
+    es: Área de la espira
+    en: Turn area
+  descripcion:
+    es: Área efectiva encerrada por cada espira de la bobina.
+    en: Effective area enclosed by each turn of the coil.
+  unidad_si: m²
+  dimension: '[L^2]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: input
+  used_in:
+  - flujo_maximo_generador
+  - amplitud_fem_generador
+  common_mistake: Usar el perímetro de la bobina en lugar del área atravesada por el campo.
+  typical_range: 10⁻⁴ m² a 10⁻¹ m² en bobinas pequeñas y de laboratorio.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El área es positiva; la orientación se representa mediante la normal.
+      en: Area is positive; orientation is represented by the normal vector.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un área nula elimina el flujo enlazado.
+      en: Zero area eliminates the linked flux.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, +inf)
+  interpretation_role:
+    primary_for:
+    - superficie disponible para enlazar flujo
+    secondary_for: []
+  graph_binding:
+    channels:
+    - 'parameter_slider: área A'
+  pedagogical_notes:
+    es: El área efectiva puede ser menor que la geométrica si la bobina no está bien orientada.
+    en: The effective area can be less than the geometric area if the coil is not well oriented.
+- id: omega
+  symbol: \omega
+  nombre:
+    es: Velocidad angular
+    en: Angular velocity
+  descripcion:
+    es: Ritmo de giro de la bobina o del campo relativo a la bobina.
+    en: Rate of rotation of the coil or field relative to the coil.
+  unidad_si: rad/s
+  dimension: '[T^{-1}]'
+  is_vector: true
+  components:
+  - omega_x
+  - omega_y
+  - omega_z
+  category: parameter
+  physical_role: input
+  used_in:
+  - amplitud_fem_generador
+  common_mistake: Confundir revoluciones por minuto con radianes por segundo sin convertir.
+  typical_range: 10 rad/s a 400 rad/s en generadores didácticos y máquinas pequeñas.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica sentido de giro respecto a la orientación elegida.
+      en: The sign indicates the direction of rotation relative to the chosen orientation.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Sin giro no hay variación periódica de flujo en el modelo ideal.
+      en: Without rotation there is no periodic flux variation in the ideal model.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, +inf)
+  interpretation_role:
+    primary_for:
+    - control de la rapidez de cambio del flujo
+    - determinación de la fem máxima
+    secondary_for: []
+  graph_binding:
+    channels:
+    - 'x_axis: velocidad angular omega'
+  pedagogical_notes:
+    es: Aumentar la velocidad angular sube la fem máxima, pero también puede activar pérdidas.
+    en: Increasing angular velocity raises peak emf but may also activate losses.
+- id: flujo_magnetico_maximo_enlazado
+  symbol: \Phi_B
+  nombre:
+    es: Flujo magnético máximo enlazado
+    en: Maximum linked magnetic flux
+  descripcion:
+    es: Valor máximo del flujo magnético total que atraviesa la bobina.
+    en: Maximum value of the total magnetic flux threading the coil.
+  unidad_si: Wb
+  dimension: '[M L^2 T^{-2} I^{-1}]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: result
+  used_in:
+  - flujo_maximo_generador
+  - fem_media_generador
+  common_mistake: Tratar el flujo como si fuera el campo magnético sin multiplicar por área ni espiras.
+  typical_range: 10⁻⁵ Wb a 10⁻¹ Wb en dispositivos educativos y técnicos pequeños.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Cambia de signo si se invierte la normal de referencia.
+      en: Changes sign if the reference normal is reversed.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Un flujo nulo puede indicar campo nulo, área nula u orientación tangencial.
+      en: Zero flux may indicate zero field, zero area, or tangential orientation.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: any
+  interpretation_role:
+    primary_for:
+    - reserva magnética disponible para inducir fem
+    secondary_for:
+    - escala de la señal sinusoidal
+  graph_binding:
+    channels:
+    - 'y_axis: flujo Phi_B vs omega'
+  pedagogical_notes:
+    es: Lo importante para inducir fem no es solo el flujo, sino su cambio.
+    en: What matters for inducing emf is not just the flux but its change.
+- id: cambio_de_flujo_magnetico
+  symbol: \Delta\Phi_B
+  nombre:
+    es: Cambio de flujo magnético
+    en: Magnetic flux change
+  descripcion:
+    es: Variación de flujo magnético enlazado durante un intervalo temporal.
+    en: Change in linked magnetic flux over a time interval.
+  unidad_si: Wb
+  dimension: '[M L^2 T^{-2} I^{-1}]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: input
+  used_in:
+  - fem_media_generador
+  common_mistake: Usar el flujo máximo cuando el problema pide el cambio de flujo.
+  typical_range: 10⁻⁶ Wb a 10⁻¹ Wb en escalas de laboratorio.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo expresa si el flujo aumenta o disminuye respecto a la orientación elegida.
+      en: The sign indicates whether flux increases or decreases relative to the chosen orientation.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Si no cambia el flujo, la fem media ideal es nula.
+      en: If flux does not change, the ideal mean emf is zero.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: any
+  interpretation_role:
+    primary_for:
+    - causa directa de la fem inducida media
+    secondary_for: []
+  graph_binding:
+    channels:
+    - 'parameter_slider: cambio de flujo DeltaPhi_B'
+  pedagogical_notes:
+    es: Debe leerse como diferencia entre estados, no como valor absoluto de campo.
+    en: Should be read as a state difference, not as an absolute field value.
+- id: intervalo_temporal
+  symbol: \Delta t
+  nombre:
+    es: Intervalo temporal
+    en: Time interval
+  descripcion:
+    es: Duración durante la cual se produce el cambio de flujo.
+    en: Duration over which the flux change occurs.
+  unidad_si: s
+  dimension: '[T]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: input
+  used_in:
+  - fem_media_generador
+  common_mistake: Usar minutos u horas sin convertir a segundos.
+  typical_range: 10⁻³ s a 10 s según el régimen de giro o conmutación.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El intervalo temporal es siempre positivo como duración.
+      en: The time interval is always positive as a duration.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un intervalo nulo no permite definir una fem media finita.
+      en: A zero interval does not allow a finite mean emf to be defined.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, +inf)
+  interpretation_role:
+    primary_for:
+    - control de la rapidez del cambio de flujo
+    secondary_for: []
+  graph_binding:
+    channels:
+    - 'x_axis: intervalo temporal Delta_t'
+  pedagogical_notes:
+    es: Cuanto menor sea el intervalo, mayor será la fem media para el mismo cambio.
+    en: The shorter the interval, the larger the mean emf for the same flux change.
+- id: epsilon
+  symbol: \varepsilon
+  nombre:
+    es: Fem inducida media
+    en: Mean induced emf
+  descripcion:
+    es: Tensión inducida media asociada a un cambio de flujo en un intervalo.
+    en: Mean induced voltage associated with a flux change over an interval.
+  unidad_si: V
+  dimension: '[M L^2 T^{-3} I^{-1}]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: result
+  used_in:
+  - fem_media_generador
+  common_mistake: Interpretarla como una fuerza mecánica en lugar de una tensión inducida.
+  typical_range: Milivoltios a cientos de voltios según tamaño y velocidad.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende de la convención y de la oposición de Lenz.
+      en: The sign depends on the convention and Lenz's opposition.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Fem nula indica ausencia de cambio de flujo neto en el intervalo.
+      en: Zero emf indicates no net flux change in the interval.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: any
+  interpretation_role:
+    primary_for:
+    - resultado eléctrico de la variación de flujo
+    secondary_for:
+    - lectura gráfica de señal inducida
+  graph_binding:
+    channels:
+    - 'y_axis: fem media epsilon vs Delta_t'
+  pedagogical_notes:
+    es: En muchos problemas interesa el módulo, pero el signo conserva información causal.
+    en: In many problems the magnitude is sufficient, but the sign preserves causal information.
+- id: epsilon_0
+  symbol: \varepsilon_0
+  nombre:
+    es: Amplitud de la fem
+    en: Peak emf
+  descripcion:
+    es: Valor máximo de la fem sinusoidal ideal de un generador rotatorio.
+    en: Maximum value of the ideal sinusoidal emf of a rotating generator.
+  unidad_si: V
+  dimension: '[M L^2 T^{-3} I^{-1}]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: result
+  used_in:
+  - amplitud_fem_generador
+  common_mistake: Confundir amplitud con valor eficaz o con valor instantáneo.
+  typical_range: 1 V a 400 V en modelos educativos e instalaciones pequeñas.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Como amplitud se toma no negativa; el valor instantáneo alterna signo.
+      en: As amplitude it is taken non-negative; the instantaneous value alternates sign.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Cero indica que falta campo, área, espiras o giro efectivo.
+      en: Zero indicates missing field, area, turns, or effective rotation.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, +inf)
+  interpretation_role:
+    primary_for:
+    - magnitud dominante para dimensionar el generador ideal
+    secondary_for:
+    - base para calcular valor eficaz
+  graph_binding:
+    channels:
+    - 'y_axis: amplitud epsilon_0 vs omega'
+  pedagogical_notes:
+    es: Debe distinguirse de la tensión eficaz usada en redes de corriente alterna.
+    en: Must be distinguished from the rms voltage used in AC power networks.
+- id: potencia_mecanica_de_entrada
+  symbol: P_{mec}
+  nombre:
+    es: Potencia mecánica de entrada
+    en: Mechanical input power
+  descripcion:
+    es: Potencia suministrada al eje del generador por una turbina, motor o manivela.
+    en: Power supplied to the generator shaft by a turbine, motor or crank.
+  unidad_si: W
+  dimension: '[M L^2 T^{-3}]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: input
+  used_in:
+  - eficiencia_generador
+  - potencia_util_generador
+  common_mistake: Suponer que toda la potencia mecánica aparece como potencia eléctrica útil.
+  typical_range: 1 W a muchos MW según la escala de la máquina.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Positiva cuando entra energía mecánica al generador.
+      en: Positive when mechanical energy enters the generator.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Sin aporte mecánico no hay salida sostenida en régimen generador.
+      en: Without mechanical input there is no sustained output in generator mode.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, +inf)
+  interpretation_role:
+    primary_for:
+    - techo energético de la potencia eléctrica disponible
+    secondary_for: []
+  graph_binding:
+    channels:
+    - 'x_axis: potencia mecánica P_mec'
+  pedagogical_notes:
+    es: Permite conectar inducción con conservación de la energía.
+    en: Allows connecting induction with energy conservation.
+- id: potencia_electrica_util
+  symbol: P_{elec}
+  nombre:
+    es: Potencia eléctrica útil
+    en: Useful electrical power
+  descripcion:
+    es: Potencia entregada al circuito externo después de pérdidas internas.
+    en: Power delivered to the external circuit after internal losses.
+  unidad_si: W
+  dimension: '[M L^2 T^{-3}]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: result
+  used_in:
+  - eficiencia_generador
+  - potencia_util_generador
+  common_mistake: Calcularla como si la eficiencia siempre fuera perfecta.
+  typical_range: Fracciones de vatio a gigavatios según el generador.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Positiva cuando el dispositivo entrega energía al circuito.
+      en: Positive when the device delivers energy to the circuit.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser nula con circuito abierto o sin potencia mecánica efectiva.
+      en: Can be zero with open circuit or without effective mechanical power.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: '[0, +inf)'
+  interpretation_role:
+    primary_for:
+    - salida energética útil del generador
+    secondary_for: []
+  graph_binding:
+    channels:
+    - 'y_axis: potencia útil P_elec vs P_mec'
+  pedagogical_notes:
+    es: No debe confundirse con la potencia disipada dentro del generador.
+    en: Must not be confused with the power dissipated inside the generator.
+- id: eta
+  symbol: \eta
+  nombre:
+    es: Rendimiento
+    en: Efficiency
+  descripcion:
+    es: Fracción de potencia mecánica que aparece como potencia eléctrica útil.
+    en: Fraction of mechanical power that appears as useful electrical power.
+  unidad_si: '1'
+  dimension: '[1]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: result
+  used_in:
+  - eficiencia_generador
+  - potencia_util_generador
+  common_mistake: Usar un porcentaje como número entero en vez de fracción decimal.
+  typical_range: 0.5 a 0.98 en generadores reales según escala y calidad.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Debe ser positiva en régimen generador útil.
+      en: Must be positive in useful generator mode.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Rendimiento nulo indica que no se entrega potencia eléctrica útil.
+      en: Zero efficiency indicates no useful electrical power is delivered.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, 1]
+  interpretation_role:
+    primary_for:
+    - calidad energética del proceso de conversión
+    secondary_for: []
+  graph_binding:
+    channels:
+    - 'parameter_slider: rendimiento eta'
+  pedagogical_notes:
+    es: Un rendimiento mayor que uno señala error de datos o modelo.
+    en: An efficiency above one signals a data or model error.

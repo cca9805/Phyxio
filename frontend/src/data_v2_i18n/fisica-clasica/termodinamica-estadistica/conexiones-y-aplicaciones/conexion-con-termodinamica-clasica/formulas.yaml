@@ -1,0 +1,301 @@
+version: 5.0.0
+ui:
+  default_formula: entropia_boltzmann
+formulas:
+- id: entropia_boltzmann
+  title:
+    es: Entropía de Boltzmann
+    en: Boltzmann entropy
+  equation: entropia = constante_boltzmann * log(numero_microestados)
+  latex: S = k_B * \ln(\Omega)
+  magnitudes:
+  - entropia
+  - constante_boltzmann
+  - numero_microestados
+  category: fundamental
+  relation_type: logarithmic
+  physical_meaning:
+    es: Conecta la entropía clásica con el número de microestados compatibles.
+    en: Connects classical entropy with the number of compatible microstates.
+  constraints:
+    es:
+    - Equilibrio o cuasiequilibrio.
+    - Magnitudes definidas en SI.
+    - Sistema macroscópico bien delimitado.
+    en:
+    - Equilibrium or quasi-equilibrium.
+    - Quantities defined in SI.
+    - Well-delimited macroscopic system.
+  validity:
+    es: Válida dentro del puente entre termodinámica estadística y termodinámica clásica en equilibrio.
+    en: Valid within the bridge between statistical thermodynamics and classical thermodynamics at equilibrium.
+  dimension_check: '[J K^-1] = [J K^-1] * [1]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - interpretacion_micro_macro
+  - conexion_con_termodinamica_clasica
+  interpretation_tags:
+  - micro_macro
+  - termodinamica_clasica
+  - estadistica
+  result_semantics:
+    target: entropia
+    kind: scalar_relation
+    sign_meaning:
+      es: El signo se interpreta según la definición de la magnitud calculada.
+      en: The sign is interpreted according to the definition of the computed quantity.
+    absolute_value_meaning:
+      es: El valor absoluto mide la escala física del resultado.
+      en: The absolute value measures the physical scale of the result.
+  domain_checks:
+  - id: entropia_boltzmann_dominio
+    condition: temperatura > 0
+    message:
+      es: La temperatura absoluta debe ser positiva cuando interviene.
+      en: Absolute temperature must be positive when involved.
+  coherence_checks:
+  - id: entropia_boltzmann_coherencia
+    condition: units are coherent
+    message:
+      es: Las unidades deben ser coherentes con la magnitud objetivo.
+      en: Units must be coherent with the target quantity.
+  graph_implications:
+  - La representación Coord permite leer la dependencia entre variable microscópica y magnitud clásica.
+  pedagogical_triggers:
+  - Confundir magnitudes microscópicas y macroscópicas.
+  - Olvidar las condiciones de equilibrio.
+  - Interpretar una relación estadística como una trayectoria mecánica.
+  rearrangements:
+  - target: entropia
+    equation: entropia = constante_boltzmann * log(numero_microestados)
+    latex: S = k_B * \ln(\Omega)
+  - target: numero_microestados
+    equation: numero_microestados = exp(entropia / constante_boltzmann)
+    latex: \Omega = e^{S/k_B}
+  - target: constante_boltzmann
+    equation: constante_boltzmann = entropia / log(numero_microestados)
+    latex: k_B = \frac{S}{\ln(\Omega)}
+- id: temperatura_desde_entropia
+  title:
+    es: Temperatura desde la pendiente entrópica
+    en: Temperature from entropy slope
+  equation: temperatura = 1 / derivada_entropia_energia
+  latex: T = \frac{1}{\partial S / \partial U}
+  magnitudes:
+  - temperatura
+  - derivada_entropia_energia
+  category: conexion_macro_micro
+  relation_type: inverse
+  physical_meaning:
+    es: Interpreta la temperatura clásica como inversa de la sensibilidad entrópica respecto a la energía.
+    en: Interprets classical temperature as the inverse entropic sensitivity to energy.
+  constraints:
+    es:
+    - Equilibrio o cuasiequilibrio.
+    - Magnitudes definidas en SI.
+    - Sistema macroscópico bien delimitado.
+    en:
+    - Equilibrium or quasi-equilibrium.
+    - Quantities defined in SI.
+    - Well-delimited macroscopic system.
+  validity:
+    es: Válida dentro del puente entre termodinámica estadística y termodinámica clásica en equilibrio.
+    en: Valid within the bridge between statistical thermodynamics and classical thermodynamics at equilibrium.
+  dimension_check: '[K] = 1 / [K^-1]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - interpretacion_micro_macro
+  - conexion_con_termodinamica_clasica
+  interpretation_tags:
+  - micro_macro
+  - termodinamica_clasica
+  - estadistica
+  result_semantics:
+    target: temperatura
+    kind: scalar_relation
+    sign_meaning:
+      es: El signo se interpreta según la definición de la magnitud calculada.
+      en: The sign is interpreted according to the definition of the computed quantity.
+    absolute_value_meaning:
+      es: El valor absoluto mide la escala física del resultado.
+      en: The absolute value measures the physical scale of the result.
+  domain_checks:
+  - id: temperatura_desde_entropia_dominio
+    condition: temperatura > 0
+    message:
+      es: La temperatura absoluta debe ser positiva cuando interviene.
+      en: Absolute temperature must be positive when involved.
+  coherence_checks:
+  - id: temperatura_desde_entropia_coherencia
+    condition: units are coherent
+    message:
+      es: Las unidades deben ser coherentes con la magnitud objetivo.
+      en: Units must be coherent with the target quantity.
+  graph_implications:
+  - La representación Coord permite leer la dependencia entre variable microscópica y magnitud clásica.
+  pedagogical_triggers:
+  - Confundir magnitudes microscópicas y macroscópicas.
+  - Olvidar las condiciones de equilibrio.
+  - Interpretar una relación estadística como una trayectoria mecánica.
+  rearrangements:
+  - target: temperatura
+    equation: temperatura = 1 / derivada_entropia_energia
+    latex: T = \frac{1}{\partial S / \partial U}
+  - target: derivada_entropia_energia
+    equation: derivada_entropia_energia = 1 / temperatura
+    latex: \partial S / \partial U = \frac{1}{T}
+- id: energia_libre_helmholtz
+  title:
+    es: Energía libre de Helmholtz
+    en: Helmholtz free energy
+  equation: energia_libre = energia_interna - temperatura * entropia
+  latex: F = U - T * S
+  magnitudes:
+  - energia_libre
+  - energia_interna
+  - temperatura
+  - entropia
+  category: potencial_termodinamico
+  relation_type: definition
+  physical_meaning:
+    es: Resume la energía útil bajo restricciones de temperatura constante.
+    en: Summarizes useful energy under constant-temperature constraints.
+  constraints:
+    es:
+    - Equilibrio o cuasiequilibrio.
+    - Magnitudes definidas en SI.
+    - Sistema macroscópico bien delimitado.
+    en:
+    - Equilibrium or quasi-equilibrium.
+    - Quantities defined in SI.
+    - Well-delimited macroscopic system.
+  validity:
+    es: Válida dentro del puente entre termodinámica estadística y termodinámica clásica en equilibrio.
+    en: Valid within the bridge between statistical thermodynamics and classical thermodynamics at equilibrium.
+  dimension_check: '[J] = [J] - [K] * [J K^-1]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - interpretacion_micro_macro
+  - conexion_con_termodinamica_clasica
+  interpretation_tags:
+  - micro_macro
+  - termodinamica_clasica
+  - estadistica
+  result_semantics:
+    target: energia_libre
+    kind: scalar_relation
+    sign_meaning:
+      es: El signo se interpreta según la definición de la magnitud calculada.
+      en: The sign is interpreted according to the definition of the computed quantity.
+    absolute_value_meaning:
+      es: El valor absoluto mide la escala física del resultado.
+      en: The absolute value measures the physical scale of the result.
+  domain_checks:
+  - id: energia_libre_helmholtz_dominio
+    condition: temperatura > 0
+    message:
+      es: La temperatura absoluta debe ser positiva cuando interviene.
+      en: Absolute temperature must be positive when involved.
+  coherence_checks:
+  - id: energia_libre_helmholtz_coherencia
+    condition: units are coherent
+    message:
+      es: Las unidades deben ser coherentes con la magnitud objetivo.
+      en: Units must be coherent with the target quantity.
+  graph_implications:
+  - La representación Coord permite leer la dependencia entre variable microscópica y magnitud clásica.
+  pedagogical_triggers:
+  - Confundir magnitudes microscópicas y macroscópicas.
+  - Olvidar las condiciones de equilibrio.
+  - Interpretar una relación estadística como una trayectoria mecánica.
+  rearrangements:
+  - target: energia_libre
+    equation: energia_libre = energia_interna - temperatura * entropia
+    latex: F = U - T * S
+  - target: energia_interna
+    equation: energia_interna = energia_libre + temperatura * entropia
+    latex: U = F + T * S
+  - target: temperatura
+    equation: temperatura = (energia_interna - energia_libre) / entropia
+    latex: T = \frac{U - F}{S}
+  - target: entropia
+    equation: entropia = (energia_interna - energia_libre) / temperatura
+    latex: S = \frac{U - F}{T}
+- id: probabilidad_boltzmann
+  title:
+    es: Peso relativo de Boltzmann
+    en: Boltzmann relative weight
+  equation: probabilidad_relativa = exp(-energia_estado / (constante_boltzmann * temperatura))
+  latex: P_{rel} = e^{-E/(k_B * T)}
+  magnitudes:
+  - probabilidad_relativa
+  - energia_estado
+  - constante_boltzmann
+  - temperatura
+  category: distribucion_estadistica
+  relation_type: exponential
+  physical_meaning:
+    es: Describe cómo la temperatura clásica controla la ocupación relativa de estados microscópicos.
+    en: Describes how classical temperature controls the relative occupation of microscopic states.
+  constraints:
+    es:
+    - Equilibrio o cuasiequilibrio.
+    - Magnitudes definidas en SI.
+    - Sistema macroscópico bien delimitado.
+    en:
+    - Equilibrium or quasi-equilibrium.
+    - Quantities defined in SI.
+    - Well-delimited macroscopic system.
+  validity:
+    es: Válida dentro del puente entre termodinámica estadística y termodinámica clásica en equilibrio.
+    en: Valid within the bridge between statistical thermodynamics and classical thermodynamics at equilibrium.
+  dimension_check: '[1] = exp(-[J] / ([J K^-1] * [K]))'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - interpretacion_micro_macro
+  - conexion_con_termodinamica_clasica
+  interpretation_tags:
+  - micro_macro
+  - termodinamica_clasica
+  - estadistica
+  result_semantics:
+    target: probabilidad_relativa
+    kind: scalar_relation
+    sign_meaning:
+      es: El signo se interpreta según la definición de la magnitud calculada.
+      en: The sign is interpreted according to the definition of the computed quantity.
+    absolute_value_meaning:
+      es: El valor absoluto mide la escala física del resultado.
+      en: The absolute value measures the physical scale of the result.
+  domain_checks:
+  - id: probabilidad_boltzmann_dominio
+    condition: temperatura > 0
+    message:
+      es: La temperatura absoluta debe ser positiva cuando interviene.
+      en: Absolute temperature must be positive when involved.
+  coherence_checks:
+  - id: probabilidad_boltzmann_coherencia
+    condition: units are coherent
+    message:
+      es: Las unidades deben ser coherentes con la magnitud objetivo.
+      en: Units must be coherent with the target quantity.
+  graph_implications:
+  - La representación Coord permite leer la dependencia entre variable microscópica y magnitud clásica.
+  pedagogical_triggers:
+  - Confundir magnitudes microscópicas y macroscópicas.
+  - Olvidar las condiciones de equilibrio.
+  - Interpretar una relación estadística como una trayectoria mecánica.
+  rearrangements:
+  - target: probabilidad_relativa
+    equation: probabilidad_relativa = exp(-energia_estado / (constante_boltzmann * temperatura))
+    latex: P_{rel} = e^{-E/(k_B * T)}
+  - target: energia_estado
+    equation: energia_estado = -constante_boltzmann * temperatura * log(probabilidad_relativa)
+    latex: E = -k_B * T * \ln(P_{rel})
+  - target: temperatura
+    equation: temperatura = -energia_estado / (constante_boltzmann * log(probabilidad_relativa))
+    latex: T = -\frac{E}{k_B * \ln(P_{rel})}

@@ -1,0 +1,288 @@
+version: 5
+id: interpretacion-navier-stokes-intro
+leaf_id: ecuacion-de-navier-stokes-intro
+nombre:
+  es: Interpretacion de Navier-Stokes
+  en: Navier-Stokes Interpretation
+scope: mecanica-fluidos
+
+dependencies:
+  requires_formulas: true
+  requires_magnitudes: true
+  requires_results: true
+  supports_graph_binding: true
+  magnitudes: [a, gp, mu, lapu, rho, gx, Re, v, L]
+  formulas: [balance_1d, re_apoyo]
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: Resumen de Dinámica
+      en: Dynamics Summary
+  physical_reading:
+    title:
+      es: Lectura Física Profunda
+      en: Deep Physical Reading
+  coherence:
+    title:
+      es: Análisis de Coherencia
+      en: Coherence Analysis
+  model_validity:
+    title:
+      es: Validez del Modelo
+      en: Model Validity
+  graph_reading:
+    title:
+      es: Interpretación Gráfica
+      en: Graph Interpretation
+  likely_errors:
+    title:
+      es: Errores Comunes Detectados
+      en: Common Errors Detected
+  next_step:
+    title:
+      es: Siguiente Paso Sugerido
+      en: Suggested Next Step
+
+targets:
+  a:
+    summary_rules:
+      - id: rule-a-summary
+        when: "true"
+        status: success
+        text:
+          es: "El balance de fuerzas resultante describe cómo la aceleración material [[a]] depende de la competencia entre presión y viscosidad."
+          en: "The resulting force balance describes how material acceleration [[a]] depends on the competition between pressure and viscosity."
+    physical_reading_rules:
+      - id: rule-a-reading
+        when: "true"
+        status: info
+        text:
+          es: "La aceleración material [[a]] indica la tasa de cambio de velocidad de una partícula fluida porque el gradiente de presión [[gp]] impulsa el flujo mientras que la viscosidad [[mu]] se opone al movimiento."
+          en: "Material acceleration [[a]] indicates the rate of change of velocity of a fluid particle because the pressure gradient [[gp]] drives the flow while viscosity [[mu]] opposes the motion."
+    coherence_rules:
+      - id: rule-a-coherence
+        when: "true"
+        status: info
+        text:
+          es: "El valor de [[a]] es coherente con la segunda ley de Newton aplicada al volumen de control del fluido analizado."
+          en: "The value of [[a]] is coherent with Newton's second law applied to the control volume of the analyzed fluid."
+    model_validity_rules:
+      - id: rule-a-validity
+        when: "true"
+        status: success
+        text:
+          es: "Este modelo es válido para un flujo desarrollado donde la aceleración local es despreciable frente a la aceleración material total calculada."
+          en: "This model is valid for a developed flow where local acceleration is negligible compared to the total calculated material acceleration."
+    graph_rules:
+      - id: rule-a-graph
+        when: "true"
+        status: info
+        text:
+          es: "En el gráfico, la curva de aceleración muestra la respuesta dinámica del sistema ante variaciones en el gradiente de presión impulsor."
+          en: "In the graph, the acceleration curve shows the dynamic response of the system to variations in the driving pressure gradient."
+    likely_errors:
+      - id: rule-a-errors
+        when: "true"
+        status: warning
+        text:
+          es: "Es un error común confundir la aceleración de la partícula con el cambio de velocidad en un punto fijo del espacio."
+          en: "It is a common mistake to confuse the particle's acceleration with the change in velocity at a fixed point in space."
+    next_step_rules:
+      - id: rule-a-next
+        when: "true"
+        status: info
+        text:
+          es: "El siguiente paso es integrar esta aceleración para obtener el perfil de velocidades completo a lo largo del conducto."
+          en: "The next step is to integrate this acceleration to obtain the complete velocity profile along the conduit."
+
+  Re:
+    summary_rules:
+      - id: rule-re-summary
+        when: "true"
+        status: success
+        text:
+          es: "El número de Reynolds [[Re]] resume el estado del flujo, comparando la inercia del fluido con su resistencia viscosa interna."
+          en: "The Reynolds number [[Re]] summarizes the flow state, comparing the fluid's inertia with its internal viscous resistance."
+    physical_reading_rules:
+      - id: rule-re-reading
+        when: "Re < 2300"
+        status: success
+        text:
+          es: "El flujo es laminar porque las fuerzas viscosas [[mu]] dominan sobre la inercia [[rho]], lo que significa que el movimiento es ordenado."
+          en: "The flow is laminar because viscous forces [[mu]] dominate over inertia [[rho]], which means the motion is orderly."
+      - id: rule-re-turbulent
+        when: "Re >= 4000"
+        status: warning
+        text:
+          es: "El flujo es turbulento porque la inercia [[rho]] domina sobre la viscosidad [[mu]], lo que indica que se formarán remolinos y caos."
+          en: "The flow is turbulent because inertia [[rho]] dominates over viscosity [[mu]], indicating that eddies and chaos will form."
+    coherence_rules:
+      - id: rule-re-coherence
+        when: "Re >= 0"
+        status: success
+        text:
+          es: "Número de Reynolds coherente (no puede ser negativo)."
+          en: "Coherent Reynolds number (cannot be negative)."
+    model_validity_rules:
+      - id: rule-re-validity
+        when: "Re > 10000"
+        status: danger
+        text:
+          es: "El modelo laminar deja de valer a este número de Reynolds; se requiere un modelo de turbulencia para resultados fiables."
+          en: "The laminar model breaks down at this Reynolds number; a turbulence model is required for reliable results."
+    graph_rules:
+      - id: rule-re-graph
+        when: "true"
+        status: info
+        text:
+          es: "El Reynolds define la posición del sistema en el mapa de regímenes de flujo."
+          en: "Reynolds defines the system's position on the flow regime map."
+    likely_errors:
+      - id: rule-re-mistake
+        when: "true"
+        status: warning
+        text:
+          es: "Asegúrate de no olvidar incluir el diámetro o la longitud característica [[L]] en el cálculo del número de Reynolds."
+          en: "Make sure not to forget to include the diameter or characteristic length [[L]] in the Reynolds number calculation."
+    next_step_rules:
+      - id: rule-re-next
+        when: "true"
+        status: info
+        text:
+          es: "Si Re > 2300, estudia los modelos de fricción turbulenta."
+          en: "If Re > 2300, study turbulent friction models."
+
+  v:
+    summary_rules:
+      - id: rule-v-summary
+        when: "true"
+        status: info
+        text:
+          es: "La velocidad característica [[v]] describe la rapidez con la que el fluido transporta su cantidad de movimiento."
+          en: "The characteristic velocity [[v]] describes the speed at which the fluid transports its momentum."
+    physical_reading_rules:
+      - id: rule-v-physics
+        when: "true"
+        status: info
+        text:
+          es: "La velocidad es una magnitud de estado que indica el transporte convectivo del fluido."
+          en: "Velocity is a state magnitude indicating the convective transport of the fluid."
+    coherence_rules:
+      - id: rule-v-coherence
+        when: "v >= 0"
+        status: success
+        text:
+          es: "Velocidad físicamente coherente (positiva o nula)."
+          en: "Physically coherent velocity (positive or zero)."
+    model_validity_rules:
+      - id: rule-v-validity
+        when: "true"
+        status: info
+        text:
+          es: "El modelo asume que v es la velocidad media en la sección transversal."
+          en: "The model assumes v is the average velocity in the cross section."
+    graph_rules:
+      - id: rule-v-graph
+        when: "true"
+        status: info
+        text:
+          es: "La velocidad se utiliza para el cálculo dinámico del número de Reynolds."
+          en: "Velocity is used for the dynamic calculation of the Reynolds number."
+    likely_errors:
+      - id: rule-v-error
+        when: "true"
+        status: warning
+        text:
+          es: "No confundas la velocidad local con la velocidad media del perfil de Navier-Stokes."
+          en: "Do not confuse local velocity with the average velocity of the Navier-Stokes profile."
+    next_step_rules:
+      - id: rule-v-next
+        when: "true"
+        status: info
+        text:
+          es: "Evalúa cómo cambia la velocidad al variar el diámetro del conducto."
+          en: "Evaluate how velocity changes as the conduit diameter varies."
+
+  L:
+    summary_rules:
+      - id: rule-l-summary
+        when: "true"
+        status: info
+        text:
+          es: "La longitud característica [[L]] define la escala geométrica del problema y es crítica para determinar el régimen del flujo."
+          en: "The characteristic length [[L]] defines the geometric scale of the problem and is critical for determining the flow regime."
+    physical_reading_rules:
+      - id: rule-l-physics
+        when: "true"
+        status: info
+        text:
+          es: "La escala espacial [[L]] determina si las fuerzas viscosas pueden amortiguar las perturbaciones del flujo."
+          en: "The spatial scale [[L]] determines if viscous forces can dampen flow perturbations."
+    coherence_rules:
+      - id: rule-l-coherence
+        when: "L > 0"
+        status: success
+        text:
+          es: "Longitud característica válida y positiva."
+          en: "Valid and positive characteristic length."
+    model_validity_rules:
+      - id: rule-l-validity
+        when: "true"
+        status: info
+        text:
+          es: "El modelo es sensible a la definición de L (ej. diámetro vs radio)."
+          en: "The model is sensitive to the definition of L (e.g., diameter vs radius)."
+    graph_rules:
+      - id: rule-l-graph
+        when: "true"
+        status: info
+        text:
+          es: "L escala linealmente con el número de Reynolds en el análisis adimensional."
+          en: "L scales linearly with the Reynolds number in the dimensionless analysis."
+    likely_errors:
+      - id: rule-l-error
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: Usar el radio en lugar del diámetro al calcular el Reynolds en tuberías."
+          en: "Typical error: Using radius instead of diameter when calculating Reynolds in pipes."
+    next_step_rules:
+      - id: rule-l-next
+        when: "true"
+        status: info
+        text:
+          es: "Considera cómo afecta la escala L a la estabilidad del flujo."
+          en: "Consider how the scale L affects flow stability."
+
+summary:
+  es: "Navier-Stokes describe el balance entre la inercia de la partícula [[rho]], el empuje por presión [[gp]] y la fricción viscosa [[mu]]."
+  en: "Navier-Stokes describes the balance between particle inertia [[rho]], pressure push [[gp]], and viscous friction [[mu]]."
+physical_reading:
+  es: "La aceleración material [[a]] es el resultado neto de la competencia entre el gradiente de presión impulsor y la resistencia viscosa interna."
+  en: "Material acceleration [[a]] is the net result of the competition between the driving pressure gradient and internal viscous resistance."
+coherence:
+  es: "El sistema es coherente si el balance de fuerzas por unidad de volumen cierra según la segunda ley de Newton."
+  en: "The system is coherent if the force balance per unit volume closes according to Newton's second law."
+model_validity:
+  es: "Válido para fluidos incompresibles Newtonianos. Requiere atención especial al número de Reynolds [[Re]] para asegurar que el régimen es laminar."
+  en: "Valid for incompressible Newtonian fluids. Requires special attention to the Reynolds number [[Re]] to ensure the regime is laminar."
+graph_reading:
+  es: "El gráfico muestra cómo la respuesta dinámica del fluido escala con las fuerzas impulsoras y las propiedades del fluido."
+  en: "The graph shows how the fluid's dynamic response scales with driving forces and fluid properties."
+likely_errors:
+  es: "El error más común es ignorar la condición de no deslizamiento o confundir los términos de aceleración local y convectiva."
+  en: "The most common error is ignoring the no-slip condition or confusing the local and convective acceleration terms."
+next_step:
+  es: "Estudia el flujo de Poiseuille para ver cómo este balance genera perfiles de velocidad parabólicos en tuberías."
+  en: "Study Poiseuille flow to see how this balance generates parabolic velocity profiles in pipes."

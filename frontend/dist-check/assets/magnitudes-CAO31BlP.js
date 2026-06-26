@@ -1,0 +1,269 @@
+const e=`version: 5
+magnitudes:
+- id: L
+  symbol: L
+  nombre: { es: lagrangiano, en: Lagrangian }
+  unidad_si: J
+  descripcion: { es: Funcion dinamica que combina energia cinetica y potencial para derivar ecuaciones de movimiento., en: Dynamical function combining kinetic and potential energy to derive equations of motion. }
+  dimension: ML^2T^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: dynamical_function
+  used_in: [ ecuaciones-de-lagrange ]
+  common_mistake: Tratar L como energia total en lugar de diferencia estructurada entre T y V.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: true, meaning: { es: Puede ser positivo o negativo segun el balance entre T y V., en: It may be positive or negative depending on the balance between T and V. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero no implica reposo; solo indica igualdad instantanea entre T y V., en: Zero does not imply rest; it only indicates instantaneous equality between T and V. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: Context-dependent }
+  interpretation_role: { primary_for: [ ecuaciones-de-lagrange ], secondary_for: [] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: L debe leerse como generador de la dinamica, no como una energia conservada.
+- id: T
+  symbol: T
+  nombre: { es: energia cinetica, en: kinetic energy }
+  unidad_si: J
+  descripcion: { es: Parte del lagrangiano asociada al movimiento del sistema., en: Part of the Lagrangian associated with system motion. }
+  dimension: ML^2T^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: energy_term
+  used_in: [ ecuaciones-de-lagrange ]
+  common_mistake: Escribir T sin expresarla en las coordenadas generalizadas elegidas.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: false, meaning: { es: Se toma no negativa en modelos mecanicos ordinarios., en: It is non-negative in ordinary mechanical models. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero representa ausencia instantanea de energia cinetica., en: Zero represents instantaneous absence of kinetic energy. } }
+  value_nature: { kind: scalar, nonnegative_only: true, expected_interval: Context-dependent }
+  interpretation_role: { primary_for: [], secondary_for: [ ecuaciones-de-lagrange ] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: T debe construirse con qi y qdi coherentes.
+- id: V
+  symbol: V
+  nombre: { es: energia potencial, en: potential energy }
+  unidad_si: J
+  descripcion: { es: Parte del lagrangiano asociada a interacciones conservativas., en: Part of the Lagrangian associated with conservative interactions. }
+  dimension: ML^2T^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: energy_term
+  used_in: [ ecuaciones-de-lagrange ]
+  common_mistake: Mezclar varias referencias potenciales dentro del mismo problema.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: true, meaning: { es: Puede cambiar con la referencia elegida., en: It may change with the chosen reference. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero depende de la referencia de potencial., en: Zero depends on the potential-energy reference. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: Context-dependent }
+  interpretation_role: { primary_for: [], secondary_for: [ ecuaciones-de-lagrange ] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: V absorbe fuerzas conservativas; si una fuerza no cabe en V, aparece como Qi.
+- id: qi
+  symbol: q_i
+  nombre: { es: coordenada generalizada, en: generalized coordinate }
+  unidad_si: context-dependent
+  descripcion: { es: Variable independiente elegida para describir la configuracion del sistema., en: Independent variable chosen to describe system configuration. }
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: base_or_parameter
+  physical_role: generalized_coordinate
+  used_in: [ ecuaciones-de-lagrange ]
+  common_mistake: Confundir qi con una coordenada cartesiana obligatoria.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: true, meaning: { es: El signo depende de la convencion de coordenada., en: The sign depends on the chosen coordinate convention. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero depende del origen o configuracion de referencia., en: Zero depends on the origin or reference configuration. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: Context-dependent }
+  interpretation_role: { primary_for: [], secondary_for: [ ecuaciones-de-lagrange ] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: qi debe reducir redundancia y respetar las ligaduras del sistema.
+- id: qdi
+  symbol: \\dot{q}_i
+  nombre: { es: velocidad generalizada, en: generalized velocity }
+  unidad_si: context-dependent
+  descripcion: { es: Derivada temporal de la coordenada generalizada seleccionada., en: Time derivative of the selected generalized coordinate. }
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: generalized_velocity
+  used_in: [ ecuaciones-de-lagrange ]
+  common_mistake: Derivar una coordenada mal definida y atribuirle sentido dinamico.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: true, meaning: { es: Su signo expresa el sentido de evolucion de qi., en: Its sign expresses the evolution direction of qi. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero indica reposo instantaneo en la coordenada elegida., en: Zero indicates instantaneous rest in the chosen coordinate. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: Context-dependent }
+  interpretation_role: { primary_for: [], secondary_for: [ ecuaciones-de-lagrange ] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: qdi alimenta el momento conjugado y la parte cinetica de L.
+- id: qddi
+  symbol: \\ddot{q}_i
+  nombre: { es: aceleracion generalizada, en: generalized acceleration }
+  unidad_si: context-dependent
+  descripcion: { es: Segunda derivada temporal de la coordenada generalizada., en: Second time derivative of the generalized coordinate. }
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: generalized_acceleration
+  used_in: [ ecuaciones-de-lagrange ]
+  common_mistake: Interpretarla siempre como aceleracion cartesiana.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: true, meaning: { es: El signo depende de la orientacion de qi., en: The sign depends on the orientation of qi. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero indica equilibrio instantaneo en la aceleracion de la coordenada., en: Zero indicates instantaneous balance in coordinate acceleration. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: Context-dependent }
+  interpretation_role: { primary_for: [ ecuaciones-de-lagrange ], secondary_for: [] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: qddi permite comprobar que Euler-Lagrange reproduce ecuaciones dinamicas conocidas.
+- id: pi
+  symbol: p_i
+  nombre: { es: momento conjugado, en: conjugate momentum }
+  unidad_si: context-dependent
+  descripcion: { es: Sensibilidad del lagrangiano frente a la velocidad generalizada., en: Lagrangian sensitivity to the generalized velocity. }
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: conjugate_momentum
+  used_in: [ ecuaciones-de-lagrange ]
+  common_mistake: Identificar pi automaticamente con momento lineal cartesiano.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: true, meaning: { es: Puede ser positivo o negativo segun la coordenada., en: It may be positive or negative depending on the coordinate. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero expresa ausencia de respuesta lineal de L respecto de qdi., en: Zero expresses no linear response of L with respect to qdi. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: Context-dependent }
+  interpretation_role: { primary_for: [], secondary_for: [ ecuaciones-de-lagrange ] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: pi es la puerta natural hacia Hamilton y Noether.
+- id: DLv
+  symbol: \\partial L/\\partial \\dot{q}_i
+  nombre: { es: derivada de L respecto a velocidad generalizada, en: derivative of L with respect to generalized velocity }
+  unidad_si: context-dependent
+  descripcion: { es: Termino diferencial que define el momento conjugado., en: Differential term defining conjugate momentum. }
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: auxiliary_derivative
+  used_in: [ ecuaciones-de-lagrange ]
+  common_mistake: Confundir DLv con la derivada respecto de qi.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: true, meaning: { es: Su signo depende de la dependencia de L respecto de qdi., en: Its sign depends on how L depends on qdi. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero indica ausencia de dependencia lineal local respecto de qdi., en: Zero indicates no local linear dependence on qdi. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: Context-dependent }
+  interpretation_role: { primary_for: [], secondary_for: [ ecuaciones-de-lagrange ] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: DLv organiza la transicion desde L hacia pi.
+- id: DtDLv
+  symbol: d(\\partial L/\\partial \\dot{q}_i)/dt
+  nombre: { es: derivada temporal del termino de momento, en: time derivative of the momentum term }
+  unidad_si: context-dependent
+  descripcion: { es: Evolucion temporal del termino asociado a la velocidad generalizada., en: Time evolution of the term associated with generalized velocity. }
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: auxiliary_derivative
+  used_in: [ ecuaciones-de-lagrange ]
+  common_mistake: Olvidar que la derivada temporal actua sobre todo el termino DLv.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: true, meaning: { es: El signo expresa la tendencia temporal del termino conjugado., en: The sign expresses the time trend of the conjugate term. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero indica que DLv no cambia en el instante considerado., en: Zero indicates that DLv does not change at the considered instant. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: Context-dependent }
+  interpretation_role: { primary_for: [], secondary_for: [ ecuaciones-de-lagrange ] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: DtDLv es la mitad inercial del operador lagrangiano.
+- id: DLq
+  symbol: \\partial L/\\partial q_i
+  nombre: { es: derivada de L respecto a coordenada generalizada, en: derivative of L with respect to generalized coordinate }
+  unidad_si: context-dependent
+  descripcion: { es: Sensibilidad configuracional del lagrangiano., en: Configurational sensitivity of the Lagrangian. }
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: auxiliary_derivative
+  used_in: [ ecuaciones-de-lagrange ]
+  common_mistake: Cambiar el signo de DLq al formar el operador.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: true, meaning: { es: El signo depende de como L varia con qi., en: The sign depends on how L varies with qi. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero indica que L no depende localmente de qi., en: Zero indicates that L does not locally depend on qi. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: Context-dependent }
+  interpretation_role: { primary_for: [], secondary_for: [ ecuaciones-de-lagrange ] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: DLq es la mitad configuracional del operador lagrangiano.
+- id: Qi
+  symbol: Q_i
+  nombre: { es: fuerza generalizada, en: generalized force }
+  unidad_si: context-dependent
+  descripcion: { es: Aporte no potencial asociado a la coordenada generalizada qi., en: Non-potential input associated with generalized coordinate qi. }
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: generalized_force
+  used_in: [ ecuaciones-de-lagrange ]
+  common_mistake: Tratar Qi como una fuerza cartesiana comun sin convertirla a la coordenada correcta.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: true, meaning: { es: Su signo expresa el sentido del aporte generalizado., en: Its sign expresses the direction of the generalized input. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero recupera la ecuacion conservativa., en: Zero recovers the conservative equation. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: Context-dependent }
+  interpretation_role: { primary_for: [ ecuaciones-de-lagrange ], secondary_for: [] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: Qi permite introducir fuerzas externas sin abandonar la formulacion lagrangiana.
+- id: Ri
+  symbol: \\mathcal{E}_i
+  nombre: { es: operador de Euler-Lagrange, en: Euler-Lagrange operator }
+  unidad_si: context-dependent
+  descripcion: { es: Residuo dinamico obtenido al aplicar derivadas temporales y parciales al lagrangiano., en: Dynamical residual obtained from time and partial derivatives of the Lagrangian. }
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: euler_lagrange_operator
+  used_in: [ ecuaciones-de-lagrange ]
+  common_mistake: Escribirlo como formula memorizada sin interpretar que debe anularse o igualarse a Qi.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: true, meaning: { es: El signo refleja el desequilibrio dinamico respecto al convenio de qi., en: The sign reflects dynamical imbalance under the qi convention. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero representa satisfaccion de la ecuacion conservativa., en: Zero represents satisfaction of the conservative equation. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: Context-dependent }
+  interpretation_role: { primary_for: [ ecuaciones-de-lagrange ], secondary_for: [] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: Ri conecta derivacion simbolica y criterio fisico de equilibrio variacional.
+- id: m
+  symbol: m
+  nombre: { es: masa, en: mass }
+  unidad_si: kg
+  descripcion: { es: Parametro inercial del ejemplo lineal aplicado., en: Inertial parameter of the applied linear example. }
+  dimension: M
+  is_vector: false
+  components: []
+  category: base_or_parameter
+  physical_role: model_parameter
+  used_in: [ ecuaciones-de-lagrange ]
+  common_mistake: Usar m menor o igual que cero.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: false, meaning: { es: Se toma positiva., en: It is taken as positive. } }
+  zero_behavior: { allowed: false, meaning: { es: Cero queda fuera del dominio mecanico., en: Zero is outside the mechanical domain. } }
+  value_nature: { kind: scalar, nonnegative_only: true, expected_interval: Context-dependent }
+  interpretation_role: { primary_for: [], secondary_for: [ ecuaciones-de-lagrange ] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: m fija cuanta aceleracion produce una fuerza generalizada dada en el ejemplo lineal.
+- id: k
+  symbol: k
+  nombre: { es: rigidez elastica, en: elastic stiffness }
+  unidad_si: N/m
+  descripcion: { es: Parametro del potencial cuadratico en el oscilador lineal aplicado., en: Parameter of the quadratic potential in the applied linear oscillator. }
+  dimension: MT^{-2}
+  is_vector: false
+  components: []
+  category: base_or_parameter
+  physical_role: model_parameter
+  used_in: [ ecuaciones-de-lagrange ]
+  common_mistake: Leer k como una fuerza y no como rigidez.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: false, meaning: { es: Se toma no negativa en el modelo elastico estable., en: It is taken as non-negative in the stable elastic model. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero elimina la restauracion elastica., en: Zero removes elastic restoring action. } }
+  value_nature: { kind: scalar, nonnegative_only: true, expected_interval: Context-dependent }
+  interpretation_role: { primary_for: [], secondary_for: [ ecuaciones-de-lagrange ] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: k permite conectar Euler-Lagrange con una ecuacion de movimiento familiar.
+`;export{e as default};

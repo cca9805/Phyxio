@@ -1,0 +1,31 @@
+# Applications
+
+## 1. Gas sensors in vacuum chambers
+Dominant variable: [[probabilidad_intervalo]]
+Validity limit: dilute equilibrium gas with uniform [[temperatura_absoluta]] and no selected molecular beam
+
+In a vacuum chamber, a detector may respond only to molecules whose [[velocidad]] lies between [[velocidad_minima]] and [[velocidad_maxima]]. The Maxwell-Boltzmann distribution predicts what fraction of the gas enters that window. The measured quantity is not the isolated height of [[densidad_probabilidad_velocidad]], but the area that gives [[probabilidad_intervalo]]. If the gas is heated, the curve shifts and broadens, so the detector signal may rise or fall depending on the window position. The sensor design should compare its sensitivity range with [[velocidad_mas_probable]], [[velocidad_media]], and [[velocidad_rms]]. For heavier gases, the same [[temperatura_absoluta]] gives lower speeds because [[masa_particula]] is larger. This reading helps set pressure, exposure time, and sensor sensitivity without assuming that all molecules arrive with the same speed. It also reveals whether the chamber is too hot for a narrow instrumental window and whether the measured signal should be weak or strong.
+
+## 2. Diffusion of light and heavy gases
+Dominant variable: [[velocidad_media]]
+Validity limit: ideal mixture with enough collisions to maintain thermal equilibrium
+
+The rate at which one gas spreads through another is related to the population of molecular [[velocidad]]. At equal [[temperatura_absoluta]], a light gas has larger [[velocidad_media]] than a heavy gas because its [[masa_particula]] is smaller. This helps explain why helium or hydrogen diffuse faster than heavier gases. The full distribution matters: the fast tail lets some molecules travel farther between collisions. The prediction is statistical, not a single-particle route. In practice, [[velocidad_media]] is compared with collision time and container size. If macroscopic flow, strong gradients, or reactions dominate, the thermal distribution alone is no longer sufficient. In the laboratory, this comparison separates thermal diffusion from transport caused by fans, leaks, or convection. The distribution provides a clean baseline before geometry, boundaries, or gradients are added to the explanation. It also identifies whether the chosen gas is appropriate for a required response time.
+
+## 3. Thermal calibration from molecular speed
+Dominant variable: [[temperatura_absoluta]]
+Validity limit: classical nonrelativistic regime with [[velocidad_rms]] far below light speed
+
+The velocity distribution can be used inversely: measuring the shape of [[densidad_probabilidad_velocidad]] can estimate the gas [[temperatura_absoluta]]. If the curve broadens and its maximum moves toward larger [[velocidad]], the sample is hotter. The scales [[velocidad_mas_probable]], [[velocidad_media]], and [[velocidad_rms]] provide complementary references. The [[energia_cinetica_media]] connects that reading with microscopic energy through [[constante_boltzmann]]. This is useful when the gas temperature must be inferred without direct contact. Validity requires equilibrium; a distribution distorted by expansion or external fields may imitate an apparent temperature that is not a real thermal state. A smooth single-population curve is therefore an important diagnostic before assigning a temperature. If the measured distribution has shoulders or two peaks, the calibration is reading a mixture of processes rather than one thermal gas. In that case, a single [[temperatura_absoluta]] is not enough to summarize the measurement. Additional diagnostics are needed before trusting the inferred thermal scale.
+
+## 4. Molecular selection by speed windows
+Dominant variable: [[velocidad_minima]]
+Validity limit: selected interval narrow compared with the distribution width and weak enough not to disturb the original gas
+
+Some devices select molecules inside a controlled [[velocidad]] range, for instance to create beams with chosen kinetic energy. Maxwell-Boltzmann estimates what fraction passes through a window defined by [[velocidad_minima]] and [[velocidad_maxima]]. If the window lies near [[velocidad_mas_probable]], the selected flux is larger. If it lies in the high-speed tail, the flux is smaller but more energetic. The [[probabilidad_intervalo]] predicts the available fraction before geometric details are added. Changing [[temperatura_absoluta]] shifts the curve and changes the yield. The application fails if the device itself strongly changes the distribution through collisions, fields, or local heating. Then the selected sample represents the instrument filter, not the original thermal population. The original [[densidad_probabilidad_velocidad]] then becomes a reference for quantifying how much the selection device has changed the gas. The selected beam can then be described as a prepared non-equilibrium sample.
+
+## 5. Reading thermal energy in ideal gases
+Dominant variable: [[energia_cinetica_media]]
+Validity limit: translational motion dominant, with no major internal excitation absorbing the thermal energy scale
+
+The speed distribution gives a microscopic reading of thermal energy. Although each molecular [[velocidad]] changes constantly, [[energia_cinetica_media]] is fixed by [[temperatura_absoluta]] in the ideal model. The [[velocidad_rms]] is especially useful because it connects the quadratic speed average with kinetic energy. This application supports the interpretation of pressure, wall collisions, and energy transfer. If the thermal scale increases, the characteristic speeds rise, but not every molecule changes equally; the whole [[densidad_probabilidad_velocidad]] changes shape. The limit appears when energy is stored significantly in rotations, vibrations, ionization, or interactions, because the simple translational model no longer captures the full physics. Even then, the speed curve remains a useful first map linking temperature, motion, and microscopic energy. This is why the same curve supports pressure interpretation, thermal transport estimates, and collision-rate reasoning. It is the bridge between microscopic speeds and macroscopic thermal behavior.

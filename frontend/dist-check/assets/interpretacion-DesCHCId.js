@@ -1,0 +1,263 @@
+const e=`version: 2
+id: interpretacion-relacion-lineal-angular
+leaf_id: relacion-lineal-angular
+nombre:
+  es: Interpretacion de Relacion lineal angular
+  en: Interpretation of Relationships Between Linear and Angular Quantities
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: cinematica
+  parent_id: rotacion
+  ruta_relativa: fisica-clasica/mecanica/cinematica/rotacion/relacion-lineal-angular
+dependencies:
+  formulas:
+  - relacion_v_omega
+  - relacion_at_alpha
+  - aceleracion_normal
+  - aceleracion_total_modulo
+  magnitudes:
+  - v_t
+  - a_t
+  - a_n
+  - a_total
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  v_t:
+    summary_rules:
+    - id: v_t_summary
+      when: 'true'
+      status: info
+      text:
+        es: v_t resume una lectura fisica relevante del leaf.
+        en: v_t summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: v_t_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que v_t sea coherente con unidades y contexto.
+        en: Check that v_t is coherent with units and context.
+    physical_reading_rules:
+    - id: v_t_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de v_t debe mostrar qué cambio físico produce, qué magnitudes lo causan y por qué modifica el comportamiento del sistema.
+        en: The reading of v_t must show which physical change it produces, which magnitudes cause it, and why it modifies the system's behavior.
+    model_validity_rules:
+    - id: v_t_validity
+      when: 'true'
+      status: ok
+      text:
+        es: v_t solo es interpretable dentro del modelo elegido.
+        en: v_t is interpretable only inside the chosen model.
+    graph_rules:
+    - id: v_t_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de v_t.
+        en: The graph must reflect the role of v_t visually.
+    likely_errors:
+    - id: v_t_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas v_t con otra magnitud cercana del problema.
+        en: Do not confuse v_t with another nearby quantity in the problem.
+    next_step_rules:
+    - id: v_t_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa v_t para enlazar con el siguiente paso de interpretacion.
+        en: Use v_t to connect with the next interpretation step.
+  a_t:
+    summary_rules:
+    - id: a_t_summary
+      when: 'true'
+      status: info
+      text:
+        es: a_t resume una lectura fisica relevante del leaf.
+        en: a_t summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: a_t_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que a_t sea coherente con unidades y contexto.
+        en: Check that a_t is coherent with units and context.
+    physical_reading_rules:
+    - id: a_t_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de a_t debe mostrar qué cambio físico produce, qué magnitudes lo causan y por qué modifica el comportamiento del sistema.
+        en: The reading of a_t must show which physical change it produces, which magnitudes cause it, and why it modifies the system's behavior.
+    model_validity_rules:
+    - id: a_t_validity
+      when: 'true'
+      status: ok
+      text:
+        es: a_t solo es interpretable dentro del modelo elegido.
+        en: a_t is interpretable only inside the chosen model.
+    graph_rules:
+    - id: a_t_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de a_t.
+        en: The graph must reflect the role of a_t visually.
+    likely_errors:
+    - id: a_t_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas a_t con otra magnitud cercana del problema.
+        en: Do not confuse a_t with another nearby quantity in the problem.
+    next_step_rules:
+    - id: a_t_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa a_t para enlazar con el siguiente paso de interpretacion.
+        en: Use a_t to connect with the next interpretation step.
+  a_n:
+    summary_rules:
+    - id: a_n_summary
+      when: 'true'
+      status: info
+      text:
+        es: a_n resume una lectura fisica relevante del leaf.
+        en: a_n summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: a_n_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que a_n sea coherente con unidades y contexto.
+        en: Check that a_n is coherent with units and context.
+    physical_reading_rules:
+    - id: a_n_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de a_n debe mostrar qué cambio físico produce, qué magnitudes lo causan y por qué modifica el comportamiento del sistema.
+        en: The reading of a_n must show which physical change it produces, which magnitudes cause it, and why it modifies the system's behavior.
+    model_validity_rules:
+    - id: a_n_validity
+      when: 'true'
+      status: ok
+      text:
+        es: a_n solo es interpretable dentro del modelo elegido.
+        en: a_n is interpretable only inside the chosen model.
+    graph_rules:
+    - id: a_n_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de a_n.
+        en: The graph must reflect the role of a_n visually.
+    likely_errors:
+    - id: a_n_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas a_n con otra magnitud cercana del problema.
+        en: Do not confuse a_n with another nearby quantity in the problem.
+    next_step_rules:
+    - id: a_n_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa a_n para enlazar con el siguiente paso de interpretacion.
+        en: Use a_n to connect with the next interpretation step.
+  a_total:
+    summary_rules:
+    - id: a_total_summary
+      when: 'true'
+      status: info
+      text:
+        es: a_total resume una lectura fisica relevante del leaf.
+        en: a_total summarizes a relevant physical reading of the leaf.
+    coherence_rules:
+    - id: a_total_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que a_total sea coherente con unidades y contexto.
+        en: Check that a_total is coherent with units and context.
+    physical_reading_rules:
+    - id: a_total_physical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de a_total debe mostrar qué cambio físico produce, qué magnitudes lo causan y por qué modifica el comportamiento del sistema.
+        en: The reading of a_total must show which physical change it produces, which magnitudes cause it, and why it modifies the system's behavior.
+    model_validity_rules:
+    - id: a_total_validity
+      when: 'true'
+      status: ok
+      text:
+        es: a_total solo es interpretable dentro del modelo elegido.
+        en: a_total is interpretable only inside the chosen model.
+    graph_rules:
+    - id: a_total_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica debe reflejar visualmente el papel de a_total.
+        en: The graph must reflect the role of a_total visually.
+    likely_errors:
+    - id: a_total_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas a_total con otra magnitud cercana del problema.
+        en: Do not confuse a_total with another nearby quantity in the problem.
+    next_step_rules:
+    - id: a_total_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa a_total para enlazar con el siguiente paso de interpretacion.
+        en: Use a_total to connect with the next interpretation step.
+`;export{e as default};

@@ -1,0 +1,455 @@
+version: 1
+id: interpretacion-condicion-cinematica
+leaf_id: condicion-cinematica
+nombre:
+  es: Interpretacion de condicion cinematica de rodadura
+  en: Interpretation of rolling kinematic condition
+scope:
+  es: lectura de calculadora, coherencia fisica y deteccion de deslizamiento
+  en: calculator reading, physical coherence and slip detection
+dependencies:
+  magnitudes:
+  - R
+  - a
+  - alpha
+  - delta
+  - f_s
+  - omega
+  - v
+  - v_contacto
+  formulas:
+  - condicion_rodadura
+  - consistencia_rodadura
+  - relacion_aceleracion
+  - velocidad_contacto
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia fisica
+      en: Physical coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  v:
+    summary_rules:
+    - id: v_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: Velocidad lineal del centro de masas.
+        en: Linear velocity of the center of mass.
+    coherence_rules:
+    - id: v_coherence_main
+      when: 'true'
+      status: ok
+      text:
+        es: Debe mantener coherencia con omega y R en regimen de rodadura pura.
+        en: It must remain consistent with omega and R in pure rolling regime.
+    physical_reading_rules:
+    - id: v_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: El modulo de v cuantifica la rapidez de avance del centro de masas.
+        en: The magnitude of v quantifies translational advance speed of the center of mass.
+    model_validity_rules:
+    - id: v_validity_main
+      when: R > 0
+      status: info
+      text:
+        es: La lectura es valida si R es positivo y el contacto rueda sobre superficie fija.
+        en: Reading is valid when R is positive and contact rolls on a fixed surface.
+    graph_rules:
+    - id: v_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: En grafica, comparar v con omega*R permite verificar la condicion de rodadura.
+        en: On the graph, comparing v with omega*R helps verify rolling condition.
+    likely_errors:
+    - id: v_error_high
+      when: abs(v) > 150
+      status: warning
+      text:
+        es: Posible confusión entre m/s, km/h o rpm convertidas de forma incorrecta; una v tan alta suele romper la lectura didáctica de v = omega R.
+        en: Possible confusion between m/s, km/h, or badly converted rpm; such a large v usually breaks the didactic reading of v = omega R.
+    - id: v_error_none
+      when: abs(v) <= 150
+      status: info
+      text:
+        es: No se detecta un error probable inmediato en v.
+        en: No immediate likely error detected for v.
+    next_step_rules:
+    - id: v_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Como siguiente paso, calcula v_contacto o delta para diagnosticar deslizamiento.
+        en: As a next step, compute v_contacto or delta to diagnose slip.
+  omega:
+    summary_rules:
+    - id: omega_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: Velocidad angular asociada al giro del cuerpo.
+        en: Angular velocity associated with body rotation.
+    coherence_rules:
+    - id: omega_coherence_main
+      when: 'true'
+      status: ok
+      text:
+        es: Su signo y modulo deben ser compatibles con el convenio de avance.
+        en: Its sign and magnitude must match the adopted motion convention.
+    physical_reading_rules:
+    - id: omega_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: El modulo de omega expresa la intensidad de giro del cuerpo.
+        en: The magnitude of omega expresses rotational intensity of the body.
+    model_validity_rules:
+    - id: omega_validity_main
+      when: R > 0
+      status: info
+      text:
+        es: El resultado mantiene validez en regimen de rodadura con radio positivo.
+        en: Result remains valid in rolling regime with positive radius.
+    graph_rules:
+    - id: omega_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: En grafica, la pendiente angular debe ser coherente con el avance lineal.
+        en: On the graph, angular trend should be consistent with linear advance.
+    likely_errors:
+    - id: omega_error_high
+      when: abs(omega) > 500
+      status: warning
+      text:
+        es: Probable error al confundir rpm con rad/s o al usar el diámetro como si fuera R; revisa la compatibilidad con v = omega R.
+        en: Probable error from confusing rpm with rad/s or from using diameter instead of R; recheck compatibility with v = omega R.
+    - id: omega_error_none
+      when: abs(omega) <= 500
+      status: info
+      text:
+        es: No se detecta un error probable inmediato en omega.
+        en: No immediate likely error detected for omega.
+    next_step_rules:
+    - id: omega_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Verifica v_contacto para confirmar si hay rodadura pura.
+        en: Check v_contacto to confirm whether rolling is pure.
+  R:
+    summary_rules:
+    - id: R_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: Radio efectivo entre centro de masas y punto de contacto.
+        en: Effective radius between center of mass and contact point.
+    coherence_rules:
+    - id: R_coherence_positive
+      when: R > 0
+      status: ok
+      text:
+        es: El radio positivo mantiene sentido fisico de la geometria de rodadura.
+        en: Positive radius preserves physical meaning of rolling geometry.
+    physical_reading_rules:
+    - id: R_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: R fija la conversion entre magnitudes lineales y angulares.
+        en: R sets conversion between linear and angular quantities.
+    model_validity_rules:
+    - id: R_validity_main
+      when: R > 0
+      status: info
+      text:
+        es: El modelo exige radio positivo y constante para la deduccion cinematica.
+        en: Model requires positive and constant radius for kinematic derivation.
+    graph_rules:
+    - id: R_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: Si R cambia, la relacion v-omega deja de tener pendiente fija.
+        en: If R changes, v-omega relation no longer keeps a fixed slope.
+    likely_errors:
+    - id: R_error_non_positive
+      when: R <= 0
+      status: warning
+      text:
+        es: R no debe ser cero ni negativo para este modelo.
+        en: R must not be zero or negative for this model.
+    - id: R_error_none
+      when: R > 0
+      status: info
+      text:
+        es: No se detecta un error probable inmediato en R.
+        en: No immediate likely error detected for R.
+    next_step_rules:
+    - id: R_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Usa R para contrastar simultaneamente condicion_rodadura y relacion_aceleracion.
+        en: Use R to cross-check both condicion_rodadura and relacion_aceleracion.
+  v_contacto:
+    summary_rules:
+    - id: v_contacto_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: Velocidad relativa del punto de contacto respecto al suelo.
+        en: Relative velocity of the contact point with respect to ground.
+    coherence_rules:
+    - id: v_contacto_coherence_zero
+      when: abs(v_contacto) <= 0.01
+      status: ok
+      text:
+        es: Valor cercano a cero compatible con rodadura pura.
+        en: Near-zero value is consistent with pure rolling.
+    physical_reading_rules:
+    - id: v_contacto_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: v_contacto mide si el punto de apoyo patina o queda instantaneamente en reposo.
+        en: v_contacto tells whether contact point slips or remains instantaneously at rest.
+    model_validity_rules:
+    - id: v_contacto_validity_main
+      when: R > 0
+      status: info
+      text:
+        es: La lectura es valida bajo el mismo convenio de signos para v, omega y R.
+        en: Reading is valid under a consistent sign convention for v, omega and R.
+    graph_rules:
+    - id: v_contacto_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: En grafica, la franja alrededor de cero delimita rodadura casi pura.
+        en: On the graph, the near-zero band delimits almost pure rolling.
+    likely_errors:
+    - id: v_contacto_error_slip
+      when: abs(v_contacto) > 0.01
+      status: warning
+      text:
+        es: Hay indicio de deslizamiento; un error típico es imponer v = omega R sin mirar primero que el punto de contacto ya no está casi en reposo.
+        en: There is evidence of slip; a common mistake is to impose v = omega R before noticing that the contact point is no longer almost at rest.
+    - id: v_contacto_error_none
+      when: abs(v_contacto) <= 0.01
+      status: info
+      text:
+        es: No se detecta un error probable inmediato en v_contacto.
+        en: No immediate likely error detected for v_contacto.
+    next_step_rules:
+    - id: v_contacto_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Contrasta ahora delta para clasificar direccion del posible deslizamiento.
+        en: Now compare delta to classify possible slip direction.
+  delta:
+    summary_rules:
+    - id: delta_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: Indicador escalar de desviacion respecto a la condicion ideal.
+        en: Scalar indicator of deviation from the ideal condition.
+    coherence_rules:
+    - id: delta_coherence_main
+      when: 'true'
+      status: ok
+      text:
+        es: Delta mayor o menor que cero distingue derrape y patinamiento.
+        en: Positive or negative delta distinguishes skidding and spin-out.
+    physical_reading_rules:
+    - id: delta_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: Delta cuantifica la desviacion respecto al vinculo ideal v = omega R.
+        en: Delta quantifies deviation from ideal constraint v = omega R.
+    model_validity_rules:
+    - id: delta_validity_main
+      when: R > 0
+      status: info
+      text:
+        es: El diagnostico con delta supone radio constante y contacto bien definido.
+        en: Delta diagnosis assumes constant radius and well-defined contact.
+    graph_rules:
+    - id: delta_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: El cambio de signo de delta marca transicion entre regimens.
+        en: Delta sign change marks transition between regimes.
+    likely_errors:
+    - id: delta_error_large
+      when: abs(delta) > 20
+      status: warning
+      text:
+        es: Delta muy grande; suele indicar que el alumno confundió el signo del giro, mezcló unidades o trató una rueda deslizante como si siguiera en rodadura pura.
+        en: Delta is very large; this often means the student confused rotation sign, mixed units, or treated a slipping wheel as if pure rolling still held.
+    - id: delta_error_none
+      when: abs(delta) <= 20
+      status: info
+      text:
+        es: No se detecta un error probable inmediato en delta.
+        en: No immediate likely error detected for delta.
+    next_step_rules:
+    - id: delta_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Calcula fuerza de rozamiento necesaria para sostener o corregir el regimen.
+        en: Compute required friction force to sustain or correct the regime.
+  a:
+    summary_rules:
+    - id: a_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: Aceleracion lineal del centro de masas.
+        en: Linear acceleration of the center of mass.
+    coherence_rules:
+    - id: a_coherence_main
+      when: 'true'
+      status: ok
+      text:
+        es: Debe respetar el acoplamiento a = alpha R cuando no hay deslizamiento.
+        en: It must satisfy coupling a = alpha R when slipping is absent.
+    physical_reading_rules:
+    - id: a_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: a describe como cambia la rapidez lineal del centro de masas.
+        en: a describes how center-of-mass linear speed changes.
+    model_validity_rules:
+    - id: a_validity_main
+      when: R > 0
+      status: info
+      text:
+        es: La relacion de aceleraciones se aplica con radio constante y contacto sin salto.
+        en: Acceleration relation applies with constant radius and continuous contact.
+    graph_rules:
+    - id: a_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: En grafica, compara a con alpha*R para detectar perdida de acoplamiento.
+        en: On the graph, compare a with alpha*R to detect coupling loss.
+    likely_errors:
+    - id: a_error_high
+      when: abs(a) > 80
+      status: warning
+      text:
+        es: a muy elevada; comprueba si todavía es razonable usar a = alpha R o si el contacto ya perdió adherencia y la ligadura dejó de valer.
+        en: a is very large; check whether it is still reasonable to use a = alpha R or whether contact has already lost adherence.
+    - id: a_error_none
+      when: abs(a) <= 80
+      status: info
+      text:
+        es: No se detecta un error probable inmediato en a.
+        en: No immediate likely error detected for a.
+    next_step_rules:
+    - id: a_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Evalua alpha y compara ambos resultados para cerrar el chequeo cinematico.
+        en: Evaluate alpha and compare both results to close kinematic check.
+  alpha:
+    summary_rules:
+    - id: alpha_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: Aceleracion angular asociada al cambio de giro.
+        en: Angular acceleration associated with rotational change.
+    coherence_rules:
+    - id: alpha_coherence_main
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser compatible con a y R segun alpha = a/R.
+        en: It must be consistent with a and R through alpha = a/R.
+    physical_reading_rules:
+    - id: alpha_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: alpha representa la variacion temporal de la velocidad angular.
+        en: alpha represents temporal variation of angular velocity.
+    model_validity_rules:
+    - id: alpha_validity_main
+      when: R > 0
+      status: info
+      text:
+        es: La interpretacion de alpha requiere mismo convenio de signos que a.
+        en: Interpreting alpha requires the same sign convention as a.
+    graph_rules:
+    - id: alpha_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: En grafica, alpha estable implica cambio angular uniforme.
+        en: On the graph, steady alpha implies uniform angular-rate change.
+    likely_errors:
+    - id: alpha_error_high
+      when: abs(alpha) > 400
+      status: warning
+      text:
+        es: alpha muy alta; un error frecuente es confundir velocidad angular con aceleración angular o usar un intervalo temporal demasiado pequeño sin revisar ruido experimental.
+        en: alpha is very high; a common mistake is to confuse angular speed with angular acceleration or to use an unrealistically small time interval.
+    - id: alpha_error_none
+      when: abs(alpha) <= 400
+      status: info
+      text:
+        es: No se detecta un error probable inmediato en alpha.
+        en: No immediate likely error detected for alpha.
+    next_step_rules:
+    - id: alpha_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba energia y friccion para conectar cinematica con dinamica.
+        en: Check energy and friction to connect kinematics with dynamics.

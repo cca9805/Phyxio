@@ -1,0 +1,277 @@
+version: 5
+topic:
+  id: ley-de-gravitacion-universal
+  title:
+    es: Ley de gravitacion universal
+    en: Universal Law of Gravitation
+
+formulas:
+- id: ley_newton_gravitacion
+  title:
+    es: Ley de gravitacion universal
+    en: Universal law of gravitation
+  equation: F = (G * m1 * m2) / (r^2)
+  latex: F = \frac{G \cdot m_1 \cdot m_2}{r^2}
+  category: gravitacion
+  relation_type: law
+  physical_meaning:
+    es: Fuerza atractiva entre dos masas en funcion de su separacion.
+    en: Attractive force between two masses as a function of separation.
+  constraints: [ G > 0, m1 > 0, m2 > 0, r > 0 ]
+  validity:
+    es: Valida para masas puntuales o distribuciones esfericas equivalentes.
+    en: Valid for point masses or equivalent spherical distributions.
+  dimension_check: "[M*L*T^-2] = ([M^-1*L^3*T^-2]*[M]*[M])/[L^2]"
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere valores numericos de masas y distancia.
+    en: Requires numeric mass and distance values.
+  used_in: [ estimacion_fuerza, comparacion_radial ]
+  interpretation_tags: [ inversa_cuadrado, atraccion ]
+  result_semantics:
+    target: F
+  domain_checks: [ r > 0 ]
+  coherence_checks: [ F > 0 ]
+  graph_implications: Curva F(r) decreciente con pendiente alta en radios pequenos.
+  pedagogical_triggers: [ confusion_masa_peso ]
+  rearrangements:
+  - target: F
+    equation: F = (G * m1 * m2) / (r^2)
+  - target: m1
+    equation: m1 = (F * r^2) / (G * m2)
+  - target: m2
+    equation: m2 = (F * r^2) / (G * m1)
+  - target: r
+    equation: r = sqrt((G * m1 * m2) / F)
+  variables: [ F, G, m1, m2, r ]
+
+- id: campo_gravitatorio
+  title:
+    es: Campo gravitatorio de masa puntual
+    en: Point-mass gravitational field
+  equation: g = (G * M) / (r^2)
+  latex: g = \frac{G \cdot M}{r^2}
+  category: gravitacion
+  relation_type: derived
+  physical_meaning:
+    es: Intensidad del campo producido por una masa fuente.
+    en: Field intensity produced by a source mass.
+  constraints: [ G > 0, M > 0, r > 0 ]
+  validity:
+    es: Modelo clasico de campo radial para simetria esferica.
+    en: Classical radial field model for spherical symmetry.
+  dimension_check: "[L*T^-2] = ([M^-1*L^3*T^-2]*[M])/[L^2]"
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere M y r definidos en SI.
+    en: Requires M and r in SI units.
+  used_in: [ peso_local, aceleracion_local ]
+  interpretation_tags: [ campo, intensidad ]
+  result_semantics:
+    target: g
+  domain_checks: [ r > 0 ]
+  coherence_checks: [ g > 0 ]
+  graph_implications: Misma forma radial que F por unidad de masa.
+  pedagogical_triggers: [ diferencia_fuerza_campo ]
+  rearrangements:
+  - target: g
+    equation: g = (G * M) / (r^2)
+  - target: M
+    equation: M = (g * r^2) / G
+  - target: r
+    equation: r = sqrt((G * M) / g)
+  variables: [ g, G, M, r ]
+
+- id: peso_desde_campo
+  title:
+    es: Peso desde campo gravitatorio
+    en: Weight from gravitational field
+  equation: P = m * g
+  latex: P = m \cdot g
+  category: dinamica
+  relation_type: definition
+  physical_meaning:
+    es: Fuerza gravitatoria que actua sobre un cuerpo de masa m.
+    en: Gravitational force acting on a body of mass m.
+  constraints: [ m > 0, g > 0 ]
+  validity:
+    es: Valida en entorno local donde g se considera conocida.
+    en: Valid in local settings where g is known.
+  dimension_check: "[M*L*T^-2] = [M]*[L*T^-2]"
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere conocer m y g del punto de analisis.
+    en: Requires known m and g at analysis point.
+  used_in: [ peso_superficial, ingenieria_basica ]
+  interpretation_tags: [ peso, respuesta ]
+  result_semantics:
+    target: P
+  domain_checks: [ m > 0 ]
+  coherence_checks: [ P > 0 ]
+  graph_implications: Relacion lineal de P con m para g fijo.
+  pedagogical_triggers: [ peso_no_es_masa ]
+  rearrangements:
+  - target: P
+    equation: P = m * g
+  - target: m
+    equation: m = P / g
+  - target: g
+    equation: g = P / m
+  variables: [ P, m, g ]
+
+- id: aceleracion_gravitatoria
+  title:
+    es: Aceleracion gravitatoria radial
+    en: Radial gravitational acceleration
+  equation: a = (G * M) / (r^2)
+  latex: a = \frac{G \cdot M}{r^2}
+  category: dinamica
+  relation_type: derived
+  physical_meaning:
+    es: Aceleracion radial que experimenta una masa de prueba.
+    en: Radial acceleration experienced by a test body.
+  constraints: [ G > 0, M > 0, r > 0 ]
+  validity:
+    es: Valida cuando domina gravedad newtoniana de una fuente.
+    en: Valid when Newtonian gravity from one source dominates.
+  dimension_check: "[L*T^-2] = ([M^-1*L^3*T^-2]*[M])/[L^2]"
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere M y r sin ambiguedad geometrica.
+    en: Requires M and r with clear geometric definition.
+  used_in: [ caida_libre, dinamica_orbital ]
+  interpretation_tags: [ aceleracion, campo ]
+  result_semantics:
+    target: a
+  domain_checks: [ r > 0 ]
+  coherence_checks: [ a > 0 ]
+  graph_implications: Curva equivalente a g(r) en modulo.
+  pedagogical_triggers: [ a_vs_g ]
+  rearrangements:
+  - target: a
+    equation: a = (G * M) / (r^2)
+  - target: M
+    equation: M = (a * r^2) / G
+  variables: [ a, G, M, r ]
+
+- id: variacion_inversa_cuadrado
+  title:
+    es: Variacion de fuerza por cambio de distancia
+    en: Force variation from distance change
+  equation: F2 = F1 * (r1 / r2)^2
+  latex: F_2 = F_1 \left(\frac{r_1}{r_2}\right)^2
+  category: comparacion
+  relation_type: scaling
+  physical_meaning:
+    es: Compara fuerza gravitatoria entre dos configuraciones radiales.
+    en: Compares gravitational force across two radial configurations.
+  constraints: [ F1 > 0, r1 > 0, r2 > 0 ]
+  validity:
+    es: Valida si m1 y m2 se mantienen constantes entre estados.
+    en: Valid if m1 and m2 remain constant between states.
+  dimension_check: "[M*L*T^-2] = [M*L*T^-2]*([L]/[L])^2"
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere estado inicial coherente y radios comparables.
+    en: Requires coherent initial state and comparable radii.
+  used_in: [ estimacion_rapida, razonamiento_escalar ]
+  interpretation_tags: [ proporcion, inversa_cuadrado ]
+  result_semantics:
+    target: F2
+  domain_checks: [ r1 > 0, r2 > 0 ]
+  coherence_checks: [ F2 > 0 ]
+  graph_implications: Permite lectura de razon F2/F1 en eje radial.
+  pedagogical_triggers: [ error_doble_distancia ]
+  rearrangements:
+  - target: F2
+    equation: F2 = F1 * (r1 / r2)^2
+  - target: F1
+    equation: F1 = F2 * (r2 / r1)^2
+  - target: r2
+    equation: r2 = r1 * sqrt(F1 / F2)
+  variables: [ F2, F1, r1, r2 ]
+
+- id: forma_vectorial_conceptual
+  title:
+    es: Forma vectorial conceptual
+    en: Conceptual vector form
+  equation: F_vec = -(G * m1 * m2 / r^2) * r_hat
+  latex: \vec F = -\frac{G \cdot m_1 \cdot m_2}{r^2} \hat r
+  category: gravitacion
+  relation_type: conceptual
+  physical_meaning:
+    es: Describe direccion atractiva radial de la fuerza gravitatoria.
+    en: Describes radial attractive direction of gravitational force.
+  constraints: [ r > 0 ]
+  validity:
+    es: Requiere marco vectorial y direccion radial definida.
+    en: Requires vector framework and defined radial direction.
+  dimension_check: "[M*L*T^-2]"
+  calculable: false
+  motivo_no_calculable:
+    es: Es relation conceptual sin resolver componentes automaticamente.
+    en: It is conceptual and does not auto-resolve components.
+  used_in: [ interpretacion_direccional ]
+  interpretation_tags: [ direccion, radial ]
+  result_semantics:
+    target: F
+  domain_checks: [ r > 0 ]
+  coherence_checks: []
+  graph_implications: Apoya lectura de direccion sin cambiar modulo de F(r).
+  pedagogical_triggers: [ modulo_vs_vector ]
+  rearrangements:
+  - target: F
+    equation: F = (G * m1 * m2) / (r^2)
+  variables: [ F, G, m1, m2, r ]
+
+- id: superposicion_conceptual
+  title:
+    es: Superposicion de campo gravitatorio
+    en: Gravitational-field superposition
+  equation: g_total = sum(g_i)
+  latex: \vec g_{total} = \sum_i \vec g_i
+  category: gravitacion
+  relation_type: conceptual
+  physical_meaning:
+    es: El campo total resulta de suma vectorial de contribuciones.
+    en: Total field is the vector sum of source contributions.
+  constraints: []
+  validity:
+    es: Valida en regimen clasico lineal de superposicion.
+    en: Valid in classical linear superposition regime.
+  dimension_check: "[L*T^-2]"
+  calculable: false
+  motivo_no_calculable:
+    es: Requiere geometria completa y orientaciones de fuentes.
+    en: Requires full geometry and source orientations.
+  used_in: [ sistemas_multiples ]
+  interpretation_tags: [ superposicion, vectorial ]
+  result_semantics:
+    target: g
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: Explica refuerzo o cancelacion de campos.
+  pedagogical_triggers: [ simetria ]
+  rearrangements:
+  - target: g
+    equation: g_total = sum(g_i)
+  variables: [ g ]
+
+ui:
+  default_formula: ley_newton_gravitacion
+  groups:
+  - title:
+      es: Formulas calculables
+      en: Calculable formulas
+    items:
+    - ley_newton_gravitacion
+    - campo_gravitatorio
+    - peso_desde_campo
+    - aceleracion_gravitatoria
+    - variacion_inversa_cuadrado
+  - title:
+      es: Formulas conceptuales
+      en: Conceptual formulas
+    items:
+    - forma_vectorial_conceptual
+    - superposicion_conceptual

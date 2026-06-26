@@ -1,0 +1,536 @@
+version: "5.0.0"
+id: "microestados-y-macroestados"
+leaf_id: "microestados-y-macroestados"
+nombre:
+  es: "Microestados y macroestados"
+  en: "Microstates and Macrostates"
+scope:
+  area: "fisica-clasica"
+  bloque: "termodinamica-estadistica"
+  subbloque: "fundamentos"
+  parent_id: "fundamentos"
+  ruta_relativa: "fisica-clasica/termodinamica-estadistica/fundamentos/microestados-y-macroestados"
+  orden: 271100
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+      - summary
+      - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: "Resumen"
+      en: "Summary"
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: "Lectura física"
+      en: "Physical reading"
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: "Coherencia"
+      en: "Coherence"
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: "Validez del modelo"
+      en: "Model validity"
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: "Lectura gráfica"
+      en: "Graph reading"
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: "Errores probables"
+      en: "Likely errors"
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: "Siguiente paso"
+      en: "Next step"
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: "Interpretación física"
+    en: "Physical interpretation"
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 3
+    priority:
+      - summary
+      - likely_errors
+      - next_step
+mini_graph:
+  enabled: true
+  preferred_type: "Coord"
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+    - "conteo_microestados_macroestado"
+    - "probabilidad_macroestado_multiplicidad"
+    - "entropia_boltzmann_macroestado"
+    - "normalizacion_macroestados"
+    - "razon_probabilidades_macroestados"
+  magnitudes:
+    - "numero_microestados"
+    - "multiplicidad_macroestado"
+    - "probabilidad_macroestado"
+    - "entropia"
+    - "constante_boltzmann"
+    - "energia_total"
+    - "volumen"
+    - "numero_particulas"
+    - "macroestado"
+    - "microestado"
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: "termodinamica-estadistica"
+    en: "statistical thermodynamics"
+  axis_convention:
+    es: "En este leaf los signos no indican dirección espacial, sino aumento, disminución o comparación estadística."
+    en: "In this leaf signs do not indicate spatial direction, but increase, decrease, or statistical comparison."
+  standard_assumptions:
+    - es: "Los microestados considerados deben ser compatibles con las mismas restricciones macroscópicas."
+      en: "The microstates considered must be compatible with the same macroscopic constraints."
+    - es: "La comparación entre macroestados solo es válida si se usa el mismo criterio de accesibilidad microscópica."
+      en: "Comparison between macrostates is valid only when the same microscopic accessibility criterion is used."
+  standard_warnings:
+    - es: "No confundas un macroestado observable con un único microestado microscópico."
+      en: "Do not confuse an observable macrostate with a single microscopic microstate."
+    - es: "Una multiplicidad grande no significa que se haya contado una magnitud macroscópica grande, sino muchas configuraciones compatibles."
+      en: "A large multiplicity does not mean that a large macroscopic quantity was measured, but that many compatible configurations exist."
+graph_binding:
+  enabled: true
+  type: "Coord"
+  channels:
+    - "Coord"
+cross_checks:
+  enabled: true
+  checks:
+    - id: "dimension_check"
+      status: "ok"
+      text:
+        es: "[[numero_microestados]], [[multiplicidad_macroestado]] y [[probabilidad_macroestado]] son adimensionales; [[entropia]] debe conservar unidad J/K si interviene [[constante_boltzmann]]."
+        en: "[[numero_microestados]], [[multiplicidad_macroestado]], and [[probabilidad_macroestado]] are dimensionless; [[entropia]] must keep J/K units when [[constante_boltzmann]] is involved."
+    - id: "normalization_check"
+      status: "ok"
+      text:
+        es: "La suma de probabilidades de los macroestados compatibles debe representar toda la población estadística considerada."
+        en: "The sum of probabilities of compatible macrostates must represent the whole statistical population considered."
+error_patterns:
+  enabled: true
+  patterns:
+    - id: "micro_macro_confusion"
+      status: "warning"
+      text:
+        es: "Un error frecuente es tratar [[macroestado]] como si fuera un único [[microestado]]."
+        en: "A common error is treating [[macroestado]] as if it were a single [[microestado]]."
+    - id: "multiplicity_probability_confusion"
+      status: "warning"
+      text:
+        es: "Otro error frecuente es leer [[multiplicidad_macroestado]] como probabilidad directa sin normalizarla frente a los demás macroestados."
+        en: "Another common error is reading [[multiplicidad_macroestado]] as a direct probability without normalizing it against the other macrostates."
+graph_reading_policy:
+  enabled: true
+  primary_variable: "multiplicidad_macroestado"
+  reading_sequence:
+    - es: "Identifica qué representa cada punto: un macroestado y su multiplicidad microscópica asociada."
+      en: "Identify what each point represents: a macrostate and its associated microscopic multiplicity."
+    - es: "Compara alturas o valores de [[multiplicidad_macroestado]] antes de concluir qué macroestado es más probable."
+      en: "Compare heights or values of [[multiplicidad_macroestado]] before concluding which macrostate is more probable."
+    - es: "Relaciona la forma de la gráfica con la concentración o dispersión de microestados compatibles."
+      en: "Relate the graph shape to the concentration or spread of compatible microstates."
+  key_points:
+    - es: "Un pico de multiplicidad señala muchos microestados compatibles con el mismo macroestado."
+      en: "A multiplicity peak indicates many microstates compatible with the same macrostate."
+    - es: "La lectura gráfica debe separar conteo microscópico, probabilidad normalizada y entropía derivada."
+      en: "The graph reading must separate microscopic counting, normalized probability, and derived entropy."
+comparative_context:
+  enabled: true
+  reference_values:
+    - es: "Para pocos elementos, las multiplicidades pueden contarse directamente; para sistemas macroscópicos crecen de forma enorme."
+      en: "For few elements, multiplicities can be counted directly; for macroscopic systems they grow enormously."
+    - es: "Un macroestado con el doble de microestados accesibles no tiene el doble de entropía; la relación entrópica es logarítmica."
+      en: "A macrostate with twice as many accessible microstates does not have twice the entropy; the entropic relation is logarithmic."
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: "Revisa que los conteos y probabilidades sean adimensionales, y que [[entropia]] incorpore [[constante_boltzmann]]."
+    en: "Check that counts and probabilities are dimensionless, and that [[entropia]] includes [[constante_boltzmann]]."
+  common_unit_mistakes:
+    - es: "Asignar unidades físicas a [[numero_microestados]] o [[multiplicidad_macroestado]]."
+      en: "Assigning physical units to [[numero_microestados]] or [[multiplicidad_macroestado]]."
+    - es: "Olvidar que [[constante_boltzmann]] convierte el logaritmo de multiplicidad en escala entrópica."
+      en: "Forgetting that [[constante_boltzmann]] converts the logarithm of multiplicity into an entropy scale."
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ""
+    en: ""
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ""
+      en: ""
+    density_meaning:
+      es: ""
+      en: ""
+  superposition_note:
+    es: ""
+    en: ""
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  multiplicidad_macroestado:
+    enabled: true
+    magnitude_type: "scalar"
+    semantic_role:
+      es: "resultado derivado"
+      en: "derived result"
+    summary_rules:
+      - id: "multiplicidad_macroestado_summary_count"
+        when: "true"
+        status: "ok"
+        text:
+          es: "[[multiplicidad_macroestado]] cuenta cuántos microestados producen el mismo [[macroestado]]."
+          en: "[[multiplicidad_macroestado]] counts how many microstates produce the same [[macroestado]]."
+    physical_reading_rules:
+      - id: "multiplicidad_macroestado_reading_more_paths"
+        when: "true"
+        status: "info"
+        text:
+          es: "Un valor mayor de [[multiplicidad_macroestado]] indica más formas microscópicas de realizar el mismo resultado macroscópico."
+          en: "A larger [[multiplicidad_macroestado]] indicates more microscopic ways to realize the same macroscopic outcome."
+    coherence_rules:
+      - id: "multiplicidad_macroestado_coherence_integer"
+        when: "true"
+        status: "ok"
+        text:
+          es: "[[multiplicidad_macroestado]] debe ser no negativa y coherente con el conteo de [[numero_microestados]] accesibles."
+          en: "[[multiplicidad_macroestado]] must be nonnegative and consistent with the count of accessible [[numero_microestados]]."
+    model_validity_rules:
+      - id: "multiplicidad_macroestado_validity_same_constraints"
+        when: "true"
+        status: "info"
+        text:
+          es: "Compara [[multiplicidad_macroestado]] solo entre macroestados definidos con las mismas restricciones de [[energia_total]], [[volumen]] y [[numero_particulas]]."
+          en: "Compare [[multiplicidad_macroestado]] only between macrostates defined under the same [[energia_total]], [[volumen]], and [[numero_particulas]] constraints."
+    graph_rules:
+      - id: "multiplicidad_macroestado_graph_peak"
+        when: "true"
+        status: "info"
+        text:
+          es: "En la gráfica, el máximo de [[multiplicidad_macroestado]] señala el [[macroestado]] con más realizaciones microscópicas."
+          en: "On the graph, the maximum of [[multiplicidad_macroestado]] indicates the [[macroestado]] with the most microscopic realizations."
+    likely_errors:
+      - id: "multiplicidad_macroestado_error_probability"
+        when: "true"
+        status: "warning"
+        text:
+          es: "No leas [[multiplicidad_macroestado]] como [[probabilidad_macroestado]] directa; primero debe compararse con la multiplicidad total disponible."
+          en: "Do not read [[multiplicidad_macroestado]] as direct [[probabilidad_macroestado]]; it must first be compared with the total available multiplicity."
+    next_step_rules:
+      - id: "multiplicidad_macroestado_next_entropy"
+        when: "true"
+        status: "info"
+        text:
+          es: "Después de interpretar [[multiplicidad_macroestado]], relaciona su tamaño con [[probabilidad_macroestado]] y con [[entropia]]."
+          en: "After interpreting [[multiplicidad_macroestado]], relate its size to [[probabilidad_macroestado]] and [[entropia]]."
+    physical_intuition:
+      - id: "multiplicidad_macroestado_intuition_paths"
+        when: "true"
+        status: "info"
+        text:
+          es: "Intuitivamente, [[multiplicidad_macroestado]] mide cuántos caminos microscópicos llevan al mismo aspecto macroscópico."
+          en: "Intuitively, [[multiplicidad_macroestado]] measures how many microscopic paths lead to the same macroscopic appearance."
+    limiting_cases:
+      - id: "multiplicidad_macroestado_limit_one"
+        when: "true"
+        status: "info"
+        text:
+          es: "Si [[multiplicidad_macroestado]] vale uno, el macroestado tiene una sola realización microscópica; si crece mucho, domina la estadística."
+          en: "If [[multiplicidad_macroestado]] is one, the macrostate has a single microscopic realization; if it grows greatly, it dominates the statistics."
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ""
+        en: ""
+      common_sign_errors: []
+  numero_microestados:
+    enabled: true
+    magnitude_type: "scalar"
+    semantic_role:
+      es: "concepto estadístico"
+      en: "statistical concept"
+    summary_rules:
+      - id: "numero_microestados_summary_base"
+        when: "true"
+        status: "ok"
+        text:
+          es: "[[numero_microestados]] representa el conteo microscópico de configuraciones compatibles con las restricciones del sistema."
+          en: "[[numero_microestados]] represents the microscopic count of configurations compatible with the system constraints."
+    physical_reading_rules:
+      - id: "numero_microestados_reading_accessibility"
+        when: "true"
+        status: "info"
+        text:
+          es: "Lee [[numero_microestados]] como accesibilidad microscópica, no como tamaño visible del sistema."
+          en: "Read [[numero_microestados]] as microscopic accessibility, not as the visible size of the system."
+    coherence_rules:
+      - id: "numero_microestados_coherence_count"
+        when: "true"
+        status: "ok"
+        text:
+          es: "[[numero_microestados]] debe ser compatible con el conjunto de [[microestado]] permitidos por [[energia_total]], [[volumen]] y [[numero_particulas]]."
+          en: "[[numero_microestados]] must be compatible with the set of [[microestado]] allowed by [[energia_total]], [[volumen]], and [[numero_particulas]]."
+    model_validity_rules:
+      - id: "numero_microestados_validity_resolution"
+        when: "true"
+        status: "info"
+        text:
+          es: "El conteo de [[numero_microestados]] depende de la resolución con que se distinguen microestados; cambiar esa resolución cambia el modelo."
+          en: "The count of [[numero_microestados]] depends on the resolution used to distinguish microstates; changing that resolution changes the model."
+    graph_rules:
+      - id: "numero_microestados_graph_distribution"
+        when: "true"
+        status: "info"
+        text:
+          es: "En la gráfica, [[numero_microestados]] ayuda a entender cómo se reparte el conteo entre distintos macroestados."
+          en: "On the graph, [[numero_microestados]] helps explain how the count is distributed among different macrostates."
+    likely_errors:
+      - id: "numero_microestados_error_particles"
+        when: "true"
+        status: "warning"
+        text:
+          es: "No confundas [[numero_microestados]] con [[numero_particulas]]; muchas partículas pueden producir una cantidad enorme de configuraciones."
+          en: "Do not confuse [[numero_microestados]] with [[numero_particulas]]; many particles can produce an enormous number of configurations."
+    next_step_rules:
+      - id: "numero_microestados_next_macrostate"
+        when: "true"
+        status: "info"
+        text:
+          es: "Después de contar [[numero_microestados]], agrúpalos por [[macroestado]] para obtener [[multiplicidad_macroestado]]."
+          en: "After counting [[numero_microestados]], group them by [[macroestado]] to obtain [[multiplicidad_macroestado]]."
+    physical_intuition:
+      - id: "numero_microestados_intuition_hidden_detail"
+        when: "true"
+        status: "info"
+        text:
+          es: "[[numero_microestados]] cuantifica el detalle microscópico oculto detrás de una misma descripción macroscópica."
+          en: "[[numero_microestados]] quantifies the hidden microscopic detail behind one macroscopic description."
+    limiting_cases:
+      - id: "numero_microestados_limit_zero"
+        when: "true"
+        status: "info"
+        text:
+          es: "Si [[numero_microestados]] es cero para una restricción dada, ese estado macroscópico no es accesible dentro del modelo."
+          en: "If [[numero_microestados]] is zero for a given constraint, that macroscopic state is not accessible within the model."
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ""
+        en: ""
+      common_sign_errors: []
+  probabilidad_macroestado:
+    enabled: true
+    magnitude_type: "scalar"
+    semantic_role:
+      es: "resultado derivado"
+      en: "derived result"
+    summary_rules:
+      - id: "probabilidad_macroestado_summary_base"
+        when: "true"
+        status: "ok"
+        text:
+          es: "[[probabilidad_macroestado]] expresa qué fracción estadística corresponde a un [[macroestado]] tras contar sus microestados compatibles."
+          en: "[[probabilidad_macroestado]] expresses what statistical fraction belongs to a [[macroestado]] after counting its compatible microstates."
+    physical_reading_rules:
+      - id: "probabilidad_macroestado_reading_normalized"
+        when: "true"
+        status: "info"
+        text:
+          es: "Lee [[probabilidad_macroestado]] como una comparación normalizada entre multiplicidades, no como una propiedad aislada del macroestado."
+          en: "Read [[probabilidad_macroestado]] as a normalized comparison between multiplicities, not as an isolated property of the macrostate."
+    coherence_rules:
+      - id: "probabilidad_macroestado_coherence_bounds"
+        when: "true"
+        status: "ok"
+        text:
+          es: "[[probabilidad_macroestado]] debe estar entre cero y uno, y las probabilidades de macroestados mutuamente excluyentes deben sumar uno."
+          en: "[[probabilidad_macroestado]] must lie between zero and one, and probabilities of mutually exclusive macrostates must sum to one."
+    model_validity_rules:
+      - id: "probabilidad_macroestado_validity_grouping"
+        when: "true"
+        status: "info"
+        text:
+          es: "La validez de [[probabilidad_macroestado]] depende de agrupar microestados sin solapamientos ni omisiones relevantes."
+          en: "The validity of [[probabilidad_macroestado]] depends on grouping microstates without overlap or relevant omissions."
+    graph_rules:
+      - id: "probabilidad_macroestado_graph_relative_height"
+        when: "true"
+        status: "info"
+        text:
+          es: "La gráfica permite inferir qué [[macroestado]] es más probable al comparar su [[multiplicidad_macroestado]] con el total representado."
+          en: "The graph allows inferring which [[macroestado]] is more probable by comparing its [[multiplicidad_macroestado]] with the represented total."
+    likely_errors:
+      - id: "probabilidad_macroestado_error_equal_macro"
+        when: "true"
+        status: "warning"
+        text:
+          es: "No supongas que cada macroestado tienen igual [[probabilidad_macroestado]]; eso solo ocurriría si sus multiplicidades fueran iguales."
+          en: "Do not assume that all macrostates have equal [[probabilidad_macroestado]]; that would occur only if their multiplicities were equal."
+    next_step_rules:
+      - id: "probabilidad_macroestado_next_ratio"
+        when: "true"
+        status: "info"
+        text:
+          es: "Después de obtener [[probabilidad_macroestado]], compara razones entre macroestados para interpretar dominancia estadística."
+          en: "After obtaining [[probabilidad_macroestado]], compare ratios between macrostates to interpret statistical dominance."
+    physical_intuition:
+      - id: "probabilidad_macroestado_intuition_lottery"
+        when: "true"
+        status: "info"
+        text:
+          es: "[[probabilidad_macroestado]] aumenta cuando un macroestado dispone de más boletos microscópicos compatibles."
+          en: "[[probabilidad_macroestado]] increases when a macrostate has more compatible microscopic tickets."
+    limiting_cases:
+      - id: "probabilidad_macroestado_limit_one"
+        when: "true"
+        status: "info"
+        text:
+          es: "Si un macroestado concentra toda la multiplicidad accesible, [[probabilidad_macroestado]] tiende a uno; si no tiene microestados, vale cero."
+          en: "If one macrostate concentrates all accessible multiplicity, [[probabilidad_macroestado]] tends to one; if it has no microstates, it is zero."
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ""
+        en: ""
+      common_sign_errors: []
+  entropia:
+    enabled: true
+    magnitude_type: "scalar"
+    semantic_role:
+      es: "resultado derivado"
+      en: "derived result"
+    summary_rules:
+      - id: "entropia_summary_multiplicity"
+        when: "true"
+        status: "ok"
+        text:
+          es: "[[entropia]] traduce la multiplicidad microscópica de un [[macroestado]] a una magnitud termodinámica."
+          en: "[[entropia]] translates the microscopic multiplicity of a [[macroestado]] into a thermodynamic quantity."
+    physical_reading_rules:
+      - id: "entropia_reading_spread"
+        when: "true"
+        status: "info"
+        text:
+          es: "Una [[entropia]] mayor indica más dispersión microscópica compatible con la misma descripción macroscópica."
+          en: "A larger [[entropia]] indicates greater microscopic spread compatible with the same macroscopic description."
+    coherence_rules:
+      - id: "entropia_coherence_kb"
+        when: "true"
+        status: "ok"
+        text:
+          es: "[[entropia]] debe crecer con [[multiplicidad_macroestado]] y debe usar [[constante_boltzmann]] para tener escala física."
+          en: "[[entropia]] must increase with [[multiplicidad_macroestado]] and must use [[constante_boltzmann]] to have a physical scale."
+    model_validity_rules:
+      - id: "entropia_validity_counting"
+        when: "true"
+        status: "info"
+        text:
+          es: "Interpreta [[entropia]] solo si el conteo de microestados corresponde al mismo modelo y a las mismas restricciones macroscópicas."
+          en: "Interpret [[entropia]] only if the microstate count belongs to the same model and the same macroscopic constraints."
+    graph_rules:
+      - id: "entropia_graph_log_relation"
+        when: "true"
+        status: "info"
+        text:
+          es: "La gráfica de multiplicidad ayuda a prever [[entropia]], pero recuerda que la conversión entrópica es logarítmica."
+          en: "The multiplicity graph helps anticipate [[entropia]], but remember that the entropy conversion is logarithmic."
+    likely_errors:
+      - id: "entropia_error_linear"
+        when: "true"
+        status: "warning"
+        text:
+          es: "No interpretes [[entropia]] como proporcional lineal a [[multiplicidad_macroestado]]; dos veces más multiplicidad no implica dos veces más entropía."
+          en: "Do not interpret [[entropia]] as linearly proportional to [[multiplicidad_macroestado]]; twice the multiplicity does not imply twice the entropy."
+    next_step_rules:
+      - id: "entropia_next_compare"
+        when: "true"
+        status: "info"
+        text:
+          es: "Después de calcular [[entropia]], compara su cambio entre macroestados para leer qué organización es estadísticamente dominante."
+          en: "After calculating [[entropia]], compare its change between macrostates to read which organization is statistically dominant."
+    physical_intuition:
+      - id: "entropia_intuition_hidden_options"
+        when: "true"
+        status: "info"
+        text:
+          es: "[[entropia]] mide cuántas opciones microscópicas quedan escondidas detrás de una descripción macroscópica."
+          en: "[[entropia]] measures how many microscopic options remain hidden behind a macroscopic description."
+    limiting_cases:
+      - id: "entropia_limit_single_microstate"
+        when: "true"
+        status: "info"
+        text:
+          es: "Si solo hay un microestado compatible, la contribución de multiplicidad a [[entropia]] es mínima; si hay muchísimos, aumenta."
+          en: "If only one microstate is compatible, the multiplicity contribution to [[entropia]] is minimal; if there are many, it increases."
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ""
+        en: ""
+      common_sign_errors: []

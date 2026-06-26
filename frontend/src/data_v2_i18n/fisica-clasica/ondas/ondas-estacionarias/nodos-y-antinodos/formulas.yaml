@@ -1,0 +1,354 @@
+formulas:
+  - id: distancia_nodos
+    title:
+      es: Distancia entre nodos consecutivos
+      en: Distance between consecutive nodes
+    equation: "distancia_entre_nodos = lambda_onda / 2"
+    latex: "d_{nodos} = \\frac{\\lambda}{2}"
+    rearrangements:
+      - target: distancia_entre_nodos
+        equation: "distancia_entre_nodos = lambda_onda / 2"
+        latex: "d_{nodos} = \\frac{\\lambda}{2}"
+      - target: lambda_onda
+        equation: "lambda_onda = 2 * distancia_entre_nodos"
+        latex: "\\lambda = 2 d_{nodos}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: Relaciona la separacion espacial entre nodos adyacentes con la longitud de onda. Los nodos aparecen espaciados regularmente a mitad de cada longitud de onda.
+      en: Relates the spatial separation between adjacent nodes to the wavelength. Nodes appear regularly spaced at half of each wavelength.
+    constraints:
+      - La onda debe ser estacionaria
+      - El medio debe ser homogeneo
+      - No deben existir perturbaciones externas significativas
+    validity:
+      es: Valida para ondas estacionarias armonicas en medios lineales sin dispersion. En sistemas reales con perdidas, los nodos pueden no ser perfectamente nulos.
+      en: Valid for harmonic standing waves in linear non-dispersive media. In real systems with losses, nodes may not be perfectly zero.
+    dimension_check: "[L] = [L] / [1]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - Determinacion de longitud de onda a partir de nodos observados
+      - Diseno de instrumentos musicales de cuerda
+      - Analisis de modos de vibracion
+    interpretation_tags:
+      - onda estacionaria
+      - nodos
+      - espaciamiento regular
+    result_semantics:
+      target: distancia_entre_nodos
+      kind: spatial_period
+      sign_meaning:
+        es: Siempre positivo, representa la separacion fisica entre puntos consecutivos
+        en: Always positive, represents the physical separation between consecutive points
+      absolute_value_meaning:
+        es: Distancia real medible entre nodos adyacentes en el medio
+        en: Real measurable distance between adjacent nodes in the medium
+    domain_checks:
+      - condition: "lambda_onda > 0"
+        message:
+          es: La longitud de onda debe ser positiva
+          en: Wavelength must be positive
+      - condition: "distancia_entre_nodos > 0"
+        message:
+          es: La distancia entre nodos debe ser positiva
+          en: Distance between nodes must be positive
+    coherence_checks:
+      - check: "distancia_entre_nodos * 2 == lambda_onda"
+        description:
+          es: La longitud de onda debe ser exactamente el doble de la distancia entre nodos
+          en: Wavelength must be exactly twice the distance between nodes
+    graph_implications:
+      - plot_type: line
+        x_axis: lambda_onda
+        y_axis: distancia_entre_nodos
+        description:
+          es: Grafica lineal proporcional con pendiente 0.5
+          en: Proportional linear plot with slope 0.5
+    pedagogical_triggers:
+      - error_type: longitud_cero
+        trigger: "lambda_onda == 0"
+        message:
+          es: La longitud de onda no puede ser cero
+          en: Wavelength cannot be zero
+
+  - id: distancia_nodo_antinodo
+    title:
+      es: Distancia entre nodo y antinodo
+      en: Distance between node and antinode
+    equation: "distancia_nodo_antinodo = lambda_onda / 4"
+    latex: "d_{na} = \\frac{\\lambda}{4}"
+    rearrangements:
+      - target: distancia_nodo_antinodo
+        equation: "distancia_nodo_antinodo = lambda_onda / 4"
+        latex: "d_{na} = \\frac{\\lambda}{4}"
+      - target: lambda_onda
+        equation: "lambda_onda = 4 * distancia_nodo_antinodo"
+        latex: "\\lambda = 4 d_{na}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: La separacion entre un nodo y el antinodo mas cercano es la mitad de la separacion entre nodos consecutivos, equivalente a un cuarto de longitud de onda.
+      en: The separation between a node and the nearest antinode is half the separation between consecutive nodes, equivalent to one quarter wavelength.
+    constraints:
+      - La onda debe ser estacionaria pura
+      - No debe haber ondas viajeras residuales significativas
+    validity:
+      es: Aplica a ondas estacionarias ideales. En ondas parciales, la relacion puede variar.
+      en: Applies to ideal standing waves. In partial waves, the relationship may vary.
+    dimension_check: "[L] = [L] / [1]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - Localizacion de maximos de amplitud
+      - Diseno de transductores ultrasonicos
+      - Posicionamiento de sensores en sistemas resonantes
+    interpretation_tags:
+      - onda estacionaria
+      - nodo
+      - antinodo
+      - cuarto de onda
+    result_semantics:
+      target: distancia_nodo_antinodo
+      kind: spatial_quarter_period
+      sign_meaning:
+        es: Siempre positivo, indica la cercania espacial entre nodos y antinodos
+        en: Always positive, indicates spatial closeness between nodes and antinodes
+      absolute_value_meaning:
+        es: Separacion fisica entre punto de amplitud nula y punto de amplitud maxima
+        en: Physical separation between zero amplitude point and maximum amplitude point
+    domain_checks:
+      - condition: "lambda_onda > 0"
+        message:
+          es: La longitud de onda debe ser positiva
+          en: Wavelength must be positive
+    coherence_checks:
+      - check: "distancia_nodo_antinodo * 2 == distancia_entre_nodos"
+        description:
+          es: La distancia nodo-antinodo debe ser la mitad de la distancia entre nodos
+          en: Node-antinode distance must be half the distance between nodes
+    graph_implications:
+      - plot_type: line
+        x_axis: lambda_onda
+        y_axis: distancia_nodo_antinodo
+        description:
+          es: Grafica lineal proporcional con pendiente 0.25
+          en: Proportional linear plot with slope 0.25
+    pedagogical_triggers:
+      - error_type: confusion_distancia
+        trigger: "distancia_nodo_antinodo == distancia_entre_nodos"
+        message:
+          es: La distancia nodo-antinodo no puede igualar la distancia entre nodos
+          en: Node-antinode distance cannot equal distance between nodes
+
+  - id: posicion_nodo_lambda
+    title:
+      es: Posicion de un nodo especifico
+      en: Position of a specific node
+    equation: "posicion_nodo = numero_nodo * lambda_onda / 2"
+    latex: "x_{nodo} = n \\frac{\\lambda}{2}"
+    rearrangements:
+      - target: posicion_nodo
+        equation: "posicion_nodo = numero_nodo * lambda_onda / 2"
+        latex: "x_{nodo} = n \\frac{\\lambda}{2}"
+      - target: numero_nodo
+        equation: "numero_nodo = 2 * posicion_nodo / lambda_onda"
+        latex: "n = \\frac{2 x_{nodo}}{\\lambda}"
+    category: derived
+    relation_type: geometric_interpretation
+    physical_meaning:
+      es: Los nodos se ubican en posiciones enteras multiplos de media longitud de onda, comenzando desde cero en un extremo.
+      en: Nodes are located at integer multiples of half wavelength positions, starting from zero at one end.
+    constraints:
+      - El numero de nodo debe ser entero no negativo
+      - La posicion debe estar dentro del sistema fisico
+    validity:
+      es: Valida para sistemas con condiciones de contorno fijas o nodos en extremos.
+      en: Valid for systems with fixed boundary conditions or nodes at ends.
+    dimension_check: "[L] = [1] * [L] / [1]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - Prediccion de ubicacion de nodos
+      - Diseno de sistemas de suspension vibratoria
+      - Analisis de frecuencias de resonancia
+    interpretation_tags:
+      - onda estacionaria
+      - nodo
+      - posicion espacial
+      - indice entero
+    result_semantics:
+      target: posicion_nodo
+      kind: spatial_position
+      sign_meaning:
+        es: Positivo, indica distancia desde el origen
+        en: Positive, indicates distance from origin
+      absolute_value_meaning:
+        es: Distancia fisica medida desde el punto de referencia hasta el nodo especificado
+        en: Physical distance measured from reference point to specified node
+    domain_checks:
+      - condition: "numero_nodo >= 0"
+        message:
+          es: El numero de nodo debe ser no negativo
+          en: Node number must be non-negative
+      - condition: "lambda_onda > 0"
+        message:
+          es: La longitud de onda debe ser positiva
+          en: Wavelength must be positive
+    coherence_checks:
+      - check: "posicion_nodo % (lambda_onda / 2) < 0.01 * lambda_onda"
+        description:
+          es: La posicion debe ser aproximadamente un multiplo entero de media longitud de onda
+          en: Position must be approximately an integer multiple of half wavelength
+    graph_implications:
+      - plot_type: scatter
+        x_axis: numero_nodo
+        y_axis: posicion_nodo
+        description:
+          es: Puntos discretos sobre una recta de pendiente lambda/2
+          en: Discrete points on a line with slope lambda/2
+    pedagogical_triggers:
+      - error_type: indice_negativo
+        trigger: "numero_nodo < 0"
+        message:
+          es: El indice del nodo no puede ser negativo
+          en: Node index cannot be negative
+
+  - id: posicion_antinodo_lambda
+    title:
+      es: Posicion de un antinodo especifico
+      en: Position of a specific antinode
+    equation: "posicion_antinodo = (2 * numero_antinodo + 1) * lambda_onda / 4"
+    latex: "x_{antinodo} = (2m + 1) \\frac{\\lambda}{4}"
+    rearrangements:
+      - target: posicion_antinodo
+        equation: "posicion_antinodo = (2 * numero_antinodo + 1) * lambda_onda / 4"
+        latex: "x_{antinodo} = (2m + 1) \\frac{\\lambda}{4}"
+      - target: numero_antinodo
+        equation: "numero_antinodo = (2 * posicion_antinodo / lambda_onda - 1) / 2"
+        latex: "m = \\frac{1}{2}\\left(\\frac{4 x_{antinodo}}{\\lambda} - 1\\right)"
+    category: derived
+    relation_type: geometric_interpretation
+    physical_meaning:
+      es: Los antinodos se ubican en posiciones intermedias entre nodos, desplazados un cuarto de longitud de onda respecto al origen.
+      en: Antinodes are located at intermediate positions between nodes, shifted by one quarter wavelength from the origin.
+    constraints:
+      - El numero de antinodo debe ser entero no negativo
+      - La posicion debe estar dentro del dominio fisico
+    validity:
+      es: Aplica a ondas estacionarias con nodos en los extremos.
+      en: Applies to standing waves with nodes at the ends.
+    dimension_check: "[L] = [1] * [L] / [1]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - Localizacion de puntos de maxima amplitud
+      - Diseno de emisores de ultrasonido focalizados
+      - Posicionamiento de transductores de alta potencia
+    interpretation_tags:
+      - onda estacionaria
+      - antinodo
+      - posicion espacial
+      - maximo de amplitud
+    result_semantics:
+      target: posicion_antinodo
+      kind: spatial_position_maximum
+      sign_meaning:
+        es: Positivo, indica distancia desde el origen hasta el punto de maxima oscilacion
+        en: Positive, indicates distance from origin to point of maximum oscillation
+      absolute_value_meaning:
+        es: Ubicacion fisica exacta del punto donde la amplitud de oscilacion es maxima
+        en: Exact physical location of the point where oscillation amplitude is maximum
+    domain_checks:
+      - condition: "numero_antinodo >= 0"
+        message:
+          es: El numero de antinodo debe ser no negativo
+          en: Antinode number must be non-negative
+      - condition: "lambda_onda > 0"
+        message:
+          es: La longitud de onda debe ser positiva
+          en: Wavelength must be positive
+    coherence_checks:
+      - check: "abs(posicion_antinodo - posicion_nodo_vecino - lambda_onda / 4) < 0.01 * lambda_onda"
+        description:
+          es: El antinodo debe estar aproximadamente a un cuarto de onda del nodo mas cercano
+          en: Antinode must be approximately one quarter wavelength from nearest node
+    graph_implications:
+      - plot_type: scatter
+        x_axis: numero_antinodo
+        y_axis: posicion_antinodo
+        description:
+          es: Puntos discretos desplazados un cuarto de onda respecto a los nodos
+          en: Discrete points shifted one quarter wavelength from nodes
+    pedagogical_triggers:
+      - error_type: confusion_nodo_antinodo
+        trigger: "posicion_antinodo == posicion_nodo"
+        message:
+          es: Un antinodo no puede coincidir con un nodo
+          en: An antinode cannot coincide with a node
+
+  - id: amplitud_maxima_antinodo
+    title:
+      es: Amplitud maxima en un antinodo
+      en: Maximum amplitude at an antinode
+    equation: "amplitud_maxima = amplitud_maxima"
+    latex: "A_{max} = A_{max}"
+    rearrangements:
+      - target: amplitud_maxima
+        equation: "amplitud_maxima = amplitud_maxima"
+        latex: "A_{max} = A_{max}"
+    category: fundamental
+    relation_type: interference_result
+    physical_meaning:
+      es: En un antinodo la amplitud observable es maxima y debe interpretarse como valor absoluto no negativo del desplazamiento extremo.
+      en: At an antinode the observable amplitude is maximum and must be interpreted as a non-negative absolute value of extreme displacement.
+    constraints:
+      - Onda estacionaria formada
+      - Antinodo identificable
+      - Amplitud interpretada como magnitud no negativa
+    validity:
+      es: Valida para lectura de amplitud maxima en ondas estacionarias lineales.
+      en: Valid for maximum-amplitude reading in linear standing waves.
+    dimension_check: "[L] = [1] * [L]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - Identificacion de antinodos
+      - Estimacion de intensidad vibratoria
+      - Analisis de maxima oscilacion
+    interpretation_tags:
+      - amplitud maxima
+      - antinodo
+      - interferencia constructiva
+    result_semantics:
+      target: amplitud_maxima
+      kind: maximum_oscillation
+      sign_meaning:
+        es: Positiva, representa la magnitud maxima de oscilacion.
+        en: Positive, representing the maximum oscillation magnitude.
+      absolute_value_meaning:
+        es: Desplazamiento maximo medible en un antinodo.
+        en: Measurable maximum displacement at an antinode.
+    domain_checks:
+      - condition: "amplitud_maxima >= 0"
+        message:
+          es: La amplitud maxima no puede ser negativa
+          en: Maximum amplitude cannot be negative
+    coherence_checks:
+      - check: "amplitud_maxima >= 0"
+        description:
+          es: La amplitud maxima debe ser no negativa
+          en: Maximum amplitude must be non-negative
+    graph_implications:
+      - plot_type: line
+        x_axis: posicion_antinodo
+        y_axis: amplitud_maxima
+        description:
+          es: Los antinodos aparecen como maximos de amplitud
+          en: Antinodes appear as amplitude maxima
+    pedagogical_triggers:
+      - error_type: confusion_nodo_antinodo
+        trigger: "amplitud_maxima == 0"
+        message:
+          es: Si la amplitud maxima es cero, no hay antinodo observable
+          en: If maximum amplitude is zero, there is no observable antinode

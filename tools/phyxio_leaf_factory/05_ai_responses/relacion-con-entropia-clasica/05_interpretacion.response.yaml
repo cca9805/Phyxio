@@ -1,0 +1,812 @@
+version: 5.0.0
+id: relacion-con-entropia-clasica
+leaf_id: relacion-con-entropia-clasica
+nombre:
+  es: Relacion con entropia clasica
+  en: Connection with Classical Entropy
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: entropia-estadistica
+  parent_id: entropia-estadistica
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/entropia-estadistica/relacion-con-entropia-clasica
+  orden: 272300
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - variacion_entropia_reversible
+  - entropia_boltzmann_clasica
+  - igualdad_delta_entropia
+  magnitudes:
+  - delta_entropia
+  - entropia
+  - calor_reversible
+  - temperatura
+  - numero_microestados
+  - ratio_microestados
+  - k_boltzmann
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: 'termodinámica estadística: conexión entre entropía clásica reversible y multiplicidad microscópica'
+    en: 'statistical thermodynamics: connection between reversible classical entropy and microscopic multiplicity'
+  axis_convention:
+    es: El signo de [[delta_entropia]] se interpreta según si el sistema gana o pierde dispersión energética o multiplicidad
+      accesible.
+    en: The sign of [[delta_entropia]] is interpreted according to whether the system gains or loses energy dispersal or accessible
+      multiplicity.
+  standard_assumptions:
+  - es: La lectura clásica usa un intercambio de [[calor_reversible]] cuasiestático a [[temperatura]] bien definida.
+    en: The classical reading uses a quasistatic exchange of [[calor_reversible]] at well-defined [[temperatura]].
+  - es: La lectura estadística compara macrostados compatibles con el mismo marco físico y con [[numero_microestados]] contables
+      de forma coherente.
+    en: The statistical reading compares macrostates within the same physical framework and with coherently countable [[numero_microestados]].
+  standard_warnings:
+  - es: No mezcles una lectura irreversible directa de calor con la fórmula reversible sin justificar un camino reversible
+      equivalente.
+    en: Do not mix a direct irreversible heat reading with the reversible formula without justifying an equivalent reversible
+      path.
+  - es: 'No interpretes [[numero_microestados]] como desorden visual: representa multiplicidad microscópica compatible con
+      el macroestado.'
+    en: 'Do not interpret [[numero_microestados]] as visual disorder: it represents microscopic multiplicity compatible with
+      the macrostate.'
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: '[[delta_entropia]] debe quedar en J/K tanto desde [[calor_reversible]]/[[temperatura]] como desde [[k_boltzmann]]
+        multiplicando un logaritmo adimensional.'
+      en: '[[delta_entropia]] must be in J/K both from [[calor_reversible]]/[[temperatura]] and from [[k_boltzmann]] multiplying
+        a dimensionless logarithm.'
+  - id: ratio_dimensionless_check
+    status: warning
+    text:
+      es: '[[ratio_microestados]] debe ser adimensional y positivo antes de aplicar una lectura logarítmica.'
+      en: '[[ratio_microestados]] must be dimensionless and positive before applying a logarithmic reading.'
+error_patterns:
+  enabled: true
+  patterns:
+  - id: irreversible_heat_as_reversible
+    status: warning
+    text:
+      es: Usar cualquier calor real como [[calor_reversible]] puede dar una lectura falsa de [[delta_entropia]].
+      en: Using any real heat transfer as [[calor_reversible]] can give a false reading of [[delta_entropia]].
+  - id: microstates_not_probability
+    status: warning
+    text:
+      es: Confundir [[numero_microestados]] con probabilidad directa borra la función del cociente y del logaritmo.
+      en: Confusing [[numero_microestados]] with direct probability erases the role of the ratio and the logarithm.
+graph_reading_policy:
+  enabled: true
+  primary_variable: delta_entropia
+  reading_sequence:
+  - es: Lee primero si el eje horizontal representa intercambio clásico o cambio de multiplicidad, y después interpreta el
+      signo de [[delta_entropia]].
+    en: First read whether the horizontal axis represents classical exchange or multiplicity change, then interpret the sign
+      of [[delta_entropia]].
+  - es: Comprueba si la gráfica muestra linealidad clásica frente a [[calor_reversible]] o crecimiento logarítmico frente
+      a [[ratio_microestados]].
+    en: Check whether the graph shows classical linearity with [[calor_reversible]] or logarithmic growth with [[ratio_microestados]].
+  key_points:
+  - es: Una [[delta_entropia]] positiva indica aumento de multiplicidad accesible o entrada reversible de calor a [[temperatura]]
+      positiva.
+    en: A positive [[delta_entropia]] indicates increased accessible multiplicity or reversible heat input at positive [[temperatura]].
+  - es: La pendiente clásica depende de [[temperatura]]; la escala estadística depende de [[k_boltzmann]].
+    en: The classical slope depends on [[temperatura]]; the statistical scale depends on [[k_boltzmann]].
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Para procesos macroscópicos, [[delta_entropia]] puede ser del orden de J/K; por partícula, la escala natural es [[k_boltzmann]].
+    en: For macroscopic processes, [[delta_entropia]] may be of order J/K; per particle, the natural scale is [[k_boltzmann]].
+  - es: Si [[ratio_microestados]] es 1, no hay cambio estadístico de entropía aunque el número absoluto de microestados sea
+      grande.
+    en: If [[ratio_microestados]] is 1, there is no statistical entropy change even if the absolute number of microstates
+      is large.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: '[[calor_reversible]]/[[temperatura]] y [[k_boltzmann]] por logaritmo adimensional deben producir la misma dimensión
+      de [[delta_entropia]].'
+    en: '[[calor_reversible]]/[[temperatura]] and [[k_boltzmann]] times a dimensionless logarithm must produce the same dimension
+      for [[delta_entropia]].'
+  common_unit_mistakes:
+  - es: Usar grados Celsius en lugar de kelvin para [[temperatura]].
+    en: Using degrees Celsius instead of kelvin for [[temperatura]].
+  - es: Asignar unidades a [[ratio_microestados]] o al argumento del logaritmo.
+    en: Assigning units to [[ratio_microestados]] or to the logarithm argument.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: true
+  processes:
+  - id: reversible_classical_path
+    status: info
+    text:
+      es: Si el problema da [[calor_reversible]] y [[temperatura]], interpreta [[delta_entropia]] como cambio clásico evaluado
+        por un camino reversible.
+      en: If the problem gives [[calor_reversible]] and [[temperatura]], interpret [[delta_entropia]] as a classical change
+        evaluated along a reversible path.
+  - id: statistical_multiplicity_comparison
+    status: info
+    text:
+      es: Si el problema da [[ratio_microestados]] o [[numero_microestados]], interpreta [[delta_entropia]] como cambio de
+        multiplicidad microscópica.
+      en: If the problem gives [[ratio_microestados]] or [[numero_microestados]], interpret [[delta_entropia]] as a change
+        in microscopic multiplicity.
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  delta_entropia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado que conecta la lectura clásica y estadística
+      en: result connecting classical and statistical readings
+    summary_rules:
+    - id: delta_entropia_summary_connection
+      when: 'true'
+      status: ok
+      text:
+        es: '[[delta_entropia]] resume el mismo cambio físico leído como calor reversible por temperatura o como cambio logarítmico
+          de microestados.'
+        en: '[[delta_entropia]] summarizes the same physical change read as reversible heat over temperature or as a logarithmic
+          change in microstates.'
+    physical_reading_rules:
+    - id: delta_entropia_physical_reading_connection
+      when: 'true'
+      status: info
+      text:
+        es: Si [[delta_entropia]] es positiva, el estado final tiene mayor dispersión energética accesible o mayor multiplicidad
+          compatible.
+        en: If [[delta_entropia]] is positive, the final state has greater accessible energy dispersal or greater compatible
+          multiplicity.
+    coherence_rules:
+    - id: delta_entropia_coherence_connection
+      when: 'true'
+      status: ok
+      text:
+        es: 'Contrasta el signo obtenido con [[calor_reversible]], [[temperatura]] y [[ratio_microestados]]: calor entrante
+          reversible y cociente mayor que 1 deben apuntar a aumento de entropía.'
+        en: 'Compare the sign obtained from [[calor_reversible]], [[temperatura]], and [[ratio_microestados]]: reversible
+          heat input and a ratio greater than 1 should point to entropy increase.'
+    model_validity_rules:
+    - id: delta_entropia_model_validity_connection
+      when: 'true'
+      status: info
+      text:
+        es: La igualdad entre lectura clásica y estadística requiere equilibrio, temperatura bien definida y comparación entre
+          macrostados del mismo sistema.
+        en: The equality between classical and statistical readings requires equilibrium, well-defined temperature, and comparison
+          between macrostates of the same system.
+    graph_rules:
+    - id: delta_entropia_graph_connection
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, [[delta_entropia]] debe crecer linealmente con [[calor_reversible]] a [[temperatura]] fija o logarítmicamente
+          con [[ratio_microestados]].
+        en: On the graph, [[delta_entropia]] should grow linearly with [[calor_reversible]] at fixed [[temperatura]] or logarithmically
+          with [[ratio_microestados]].
+    likely_errors:
+    - id: delta_entropia_likely_error_connection
+      when: 'true'
+      status: warning
+      text:
+        es: 'No trates [[delta_entropia]] como calor: mide cambio de entropía, no energía transferida.'
+        en: 'Do not treat [[delta_entropia]] as heat: it measures entropy change, not transferred energy.'
+    next_step_rules:
+    - id: delta_entropia_next_step_connection
+      when: 'true'
+      status: info
+      text:
+        es: 'Revisa qué lectura pide el problema: camino reversible clásico, comparación estadística o comprobación de que
+          ambas coinciden.'
+        en: 'Check which reading the problem asks for: classical reversible path, statistical comparison, or verification
+          that both coincide.'
+    physical_intuition:
+    - id: delta_entropia_physical_intuition_connection
+      when: 'true'
+      status: info
+      text:
+        es: '[[delta_entropia]] actúa como puente: traduce una transferencia térmica reversible en una lectura microscópica
+          de multiplicidad.'
+        en: '[[delta_entropia]] acts as a bridge: it translates reversible thermal transfer into a microscopic reading of
+          multiplicity.'
+    limiting_cases:
+    - id: delta_entropia_limiting_case_connection
+      when: 'true'
+      status: info
+      text:
+        es: Si [[calor_reversible]] es cero o [[ratio_microestados]] vale 1, el cambio entrópico ideal es nulo.
+        en: If [[calor_reversible]] is zero or [[ratio_microestados]] equals 1, the ideal entropy change is zero.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: Respeta la convención final/inicial y calor hacia el sistema antes de interpretar el signo.
+        en: Respect the final/initial and heat-into-system convention before interpreting the sign.
+      common_sign_errors:
+      - invertir el cociente final/inicial
+      - tomar calor cedido como calor recibido
+  calor_reversible:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable clásica de intercambio
+      en: classical exchange variable
+    summary_rules:
+    - id: calor_reversible_summary_connection
+      when: 'true'
+      status: ok
+      text:
+        es: '[[calor_reversible]] es la energía térmica intercambiada en un camino reversible usado para evaluar la entropía
+          clásica.'
+        en: '[[calor_reversible]] is the thermal energy exchanged along a reversible path used to evaluate classical entropy.'
+    physical_reading_rules:
+    - id: calor_reversible_physical_reading_connection
+      when: 'true'
+      status: info
+      text:
+        es: Su signo indica si el sistema recibe o cede energía térmica en la convención elegida.
+        en: Its sign indicates whether the system receives or releases thermal energy under the chosen convention.
+    coherence_rules:
+    - id: calor_reversible_coherence_connection
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[calor_reversible]] y [[temperatura]] tengan unidades compatibles antes de inferir [[delta_entropia]].
+        en: Check that [[calor_reversible]] and [[temperatura]] have compatible units before inferring [[delta_entropia]].
+    model_validity_rules:
+    - id: calor_reversible_model_validity_connection
+      when: 'true'
+      status: info
+      text:
+        es: Solo debe usarse como calor reversible; un proceso irreversible real necesita un camino reversible equivalente
+          para calcular entropía.
+        en: It must be used only as reversible heat; an actual irreversible process needs an equivalent reversible path to
+          compute entropy.
+    graph_rules:
+    - id: calor_reversible_graph_connection
+      when: 'true'
+      status: info
+      text:
+        es: A [[temperatura]] fija, la pendiente de [[delta_entropia]] frente a [[calor_reversible]] representa el inverso
+          de la temperatura absoluta.
+        en: At fixed [[temperatura]], the slope of [[delta_entropia]] versus [[calor_reversible]] represents the inverse absolute
+          temperature.
+    likely_errors:
+    - id: calor_reversible_likely_error_connection
+      when: 'true'
+      status: warning
+      text:
+        es: No sustituyas calor disipado irreversible directamente como [[calor_reversible]] sin justificar el modelo.
+        en: Do not substitute dissipated irreversible heat directly as [[calor_reversible]] without justifying the model.
+    next_step_rules:
+    - id: calor_reversible_next_step_connection
+      when: 'true'
+      status: info
+      text:
+        es: Identifica si el dato de calor pertenece al sistema y si el proceso se puede representar reversiblemente.
+        en: Identify whether the heat datum belongs to the system and whether the process can be represented reversibly.
+    physical_intuition:
+    - id: calor_reversible_physical_intuition_connection
+      when: 'true'
+      status: info
+      text:
+        es: '[[calor_reversible]] mide una entrada energética ordenada por equilibrio, no cualquier pérdida térmica del entorno.'
+        en: '[[calor_reversible]] measures an equilibrium-ordered energy input, not any thermal loss to the surroundings.'
+    limiting_cases:
+    - id: calor_reversible_limiting_case_connection
+      when: 'true'
+      status: info
+      text:
+        es: Si [[calor_reversible]] cambia de signo, [[delta_entropia]] clásica cambia de signo para [[temperatura]] positiva.
+        en: If [[calor_reversible]] changes sign, classical [[delta_entropia]] changes sign for positive [[temperatura]].
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: Respeta la convención final/inicial y calor hacia el sistema antes de interpretar el signo.
+        en: Respect the final/initial and heat-into-system convention before interpreting the sign.
+      common_sign_errors:
+      - invertir el cociente final/inicial
+      - tomar calor cedido como calor recibido
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro intensivo
+      en: intensive parameter
+    summary_rules:
+    - id: temperatura_summary_connection
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] fija la escala intensiva que convierte calor reversible en cambio de entropía clásica.'
+        en: '[[temperatura]] sets the intensive scale that converts reversible heat into classical entropy change.'
+    physical_reading_rules:
+    - id: temperatura_physical_reading_connection
+      when: 'true'
+      status: info
+      text:
+        es: Una [[temperatura]] mayor hace que el mismo [[calor_reversible]] produzca menor cambio de entropía.
+        en: A higher [[temperatura]] makes the same [[calor_reversible]] produce a smaller entropy change.
+    coherence_rules:
+    - id: temperatura_coherence_connection
+      when: 'true'
+      status: ok
+      text:
+        es: Debe usarse en kelvin y ser positiva para mantener la lectura termodinámica estándar.
+        en: It must be used in kelvin and be positive to preserve the standard thermodynamic reading.
+    model_validity_rules:
+    - id: temperatura_model_validity_connection
+      when: 'true'
+      status: info
+      text:
+        es: La fórmula reversible supone [[temperatura]] definida del sistema o del reservorio durante el intercambio.
+        en: The reversible formula assumes a defined system or reservoir [[temperatura]] during the exchange.
+    graph_rules:
+    - id: temperatura_graph_connection
+      when: 'true'
+      status: info
+      text:
+        es: En una familia de rectas, aumentar [[temperatura]] reduce la pendiente de [[delta_entropia]] frente a [[calor_reversible]].
+        en: In a family of straight lines, increasing [[temperatura]] reduces the slope of [[delta_entropia]] versus [[calor_reversible]].
+    likely_errors:
+    - id: temperatura_likely_error_connection
+      when: 'true'
+      status: warning
+      text:
+        es: 'No uses Celsius: desplaza el cero y destruye la escala física de la entropía.'
+        en: 'Do not use Celsius: it shifts the zero and destroys the physical entropy scale.'
+    next_step_rules:
+    - id: temperatura_next_step_connection
+      when: 'true'
+      status: info
+      text:
+        es: Convierte la temperatura a kelvin y decide si permanece constante o varía durante el proceso.
+        en: Convert the temperature to kelvin and decide whether it stays constant or varies during the process.
+    physical_intuition:
+    - id: temperatura_physical_intuition_connection
+      when: 'true'
+      status: info
+      text:
+        es: '[[temperatura]] mide lo cara que es, entrópicamente, una misma cantidad de energía térmica.'
+        en: '[[temperatura]] measures how expensive the same amount of thermal energy is in entropy terms.'
+    limiting_cases:
+    - id: temperatura_limiting_case_connection
+      when: 'true'
+      status: info
+      text:
+        es: Al acercarse a temperaturas muy bajas, el modelo clásico reversible puede dejar de ser suficiente.
+        en: Near very low temperatures, the classical reversible model may stop being sufficient.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: Respeta la convención final/inicial y calor hacia el sistema antes de interpretar el signo.
+        en: Respect the final/initial and heat-into-system convention before interpreting the sign.
+      common_sign_errors: []
+  entropia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: magnitud de estado
+      en: state quantity
+    summary_rules:
+    - id: entropia_summary_connection
+      when: 'true'
+      status: ok
+      text:
+        es: '[[entropia]] es la magnitud de estado cuya variación puede leerse clásica o estadísticamente.'
+        en: '[[entropia]] is the state quantity whose change can be read classically or statistically.'
+    physical_reading_rules:
+    - id: entropia_physical_reading_connection
+      when: 'true'
+      status: info
+      text:
+        es: No describe desorden visual, sino accesibilidad microscópica y dispersión energética compatible con el macroestado.
+        en: It does not describe visual disorder, but microscopic accessibility and energy dispersal compatible with the macrostate.
+    coherence_rules:
+    - id: entropia_coherence_connection
+      when: 'true'
+      status: ok
+      text:
+        es: Solo las diferencias de [[entropia]] entre estados comparables tienen lectura directa en este leaf.
+        en: Only differences in [[entropia]] between comparable states have a direct reading in this leaf.
+    model_validity_rules:
+    - id: entropia_model_validity_connection
+      when: 'true'
+      status: info
+      text:
+        es: La entropía clásica exige estados de equilibrio; la estadística exige conteo coherente de microestados.
+        en: Classical entropy requires equilibrium states; statistical entropy requires coherent microstate counting.
+    graph_rules:
+    - id: entropia_graph_connection
+      when: 'true'
+      status: info
+      text:
+        es: La gráfica debe mostrar cómo la variación de [[entropia]] conecta el intercambio clásico con el cambio de multiplicidad.
+        en: The graph should show how the variation of [[entropia]] connects classical exchange with multiplicity change.
+    likely_errors:
+    - id: entropia_likely_error_connection
+      when: 'true'
+      status: warning
+      text:
+        es: 'No interpretes [[entropia]] como energía almacenada: sus unidades y su significado son distintos.'
+        en: 'Do not interpret [[entropia]] as stored energy: its units and meaning are different.'
+    next_step_rules:
+    - id: entropia_next_step_connection
+      when: 'true'
+      status: info
+      text:
+        es: Pregunta si necesitas la entropía absoluta o solo el cambio entre dos macrostados.
+        en: Ask whether you need absolute entropy or only the change between two macrostates.
+    physical_intuition:
+    - id: entropia_physical_intuition_connection
+      when: 'true'
+      status: info
+      text:
+        es: '[[entropia]] cuenta, en escala termodinámica, cuántas formas microscópicas sostienen el mismo aspecto macroscópico.'
+        en: '[[entropia]] counts, on a thermodynamic scale, how many microscopic ways support the same macroscopic appearance.'
+    limiting_cases:
+    - id: entropia_limiting_case_connection
+      when: 'true'
+      status: info
+      text:
+        es: Un cambio de estado sin equilibrio bien definido no debe interpretarse con una sola entropía de estado simple.
+        en: A state change without well-defined equilibrium should not be interpreted with a single simple state entropy.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: Respeta la convención final/inicial y calor hacia el sistema antes de interpretar el signo.
+        en: Respect the final/initial and heat-into-system convention before interpreting the sign.
+      common_sign_errors: []
+  numero_microestados:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable estadística
+      en: statistical variable
+    summary_rules:
+    - id: numero_microestados_summary_connection
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_microestados]] representa la multiplicidad compatible con un macroestado y sostiene la lectura estadística
+          de [[entropia]].'
+        en: '[[numero_microestados]] represents the multiplicity compatible with a macrostate and supports the statistical
+          reading of [[entropia]].'
+    physical_reading_rules:
+    - id: numero_microestados_physical_reading_connection
+      when: 'true'
+      status: info
+      text:
+        es: Más [[numero_microestados]] significa más formas microscópicas de realizar el mismo estado macroscópico.
+        en: More [[numero_microestados]] means more microscopic ways to realize the same macroscopic state.
+    coherence_rules:
+    - id: numero_microestados_coherence_connection
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser positivo, contable bajo las mismas restricciones y comparado con estados del mismo sistema.
+        en: It must be positive, counted under the same constraints, and compared with states of the same system.
+    model_validity_rules:
+    - id: numero_microestados_model_validity_connection
+      when: 'true'
+      status: info
+      text:
+        es: El conteo depende del modelo microscópico elegido; cambiar restricciones cambia la multiplicidad.
+        en: The count depends on the chosen microscopic model; changing constraints changes the multiplicity.
+    graph_rules:
+    - id: numero_microestados_graph_connection
+      when: 'true'
+      status: info
+      text:
+        es: Cuando el eje usa [[numero_microestados]] o su cociente, la respuesta entrópica es logarítmica, no lineal simple.
+        en: When the axis uses [[numero_microestados]] or its ratio, the entropy response is logarithmic, not simply linear.
+    likely_errors:
+    - id: numero_microestados_likely_error_connection
+      when: 'true'
+      status: warning
+      text:
+        es: No sumes microestados de modelos distintos ni compares conteos con restricciones diferentes.
+        en: Do not add microstates from different models or compare counts with different constraints.
+    next_step_rules:
+    - id: numero_microestados_next_step_connection
+      when: 'true'
+      status: info
+      text:
+        es: Define primero el macroestado y las restricciones antes de contar o comparar microestados.
+        en: First define the macrostate and constraints before counting or comparing microstates.
+    physical_intuition:
+    - id: numero_microestados_physical_intuition_connection
+      when: 'true'
+      status: info
+      text:
+        es: '[[numero_microestados]] es el tamaño del laberinto microscópico compatible con lo que se observa a escala macroscópica.'
+        en: '[[numero_microestados]] is the size of the microscopic maze compatible with what is observed macroscopically.'
+    limiting_cases:
+    - id: numero_microestados_limiting_case_connection
+      when: 'true'
+      status: info
+      text:
+        es: Si [[numero_microestados]] vale 1, la contribución estadística de multiplicidad es mínima.
+        en: If [[numero_microestados]] equals 1, the statistical contribution of multiplicity is minimal.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: Respeta la convención final/inicial y calor hacia el sistema antes de interpretar el signo.
+        en: Respect the final/initial and heat-into-system convention before interpreting the sign.
+      common_sign_errors: []
+  k_boltzmann:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: constante de escala
+      en: scale constant
+    summary_rules:
+    - id: k_boltzmann_summary_connection
+      when: 'true'
+      status: ok
+      text:
+        es: '[[k_boltzmann]] convierte la información estadística adimensional en unidades termodinámicas de entropía.'
+        en: '[[k_boltzmann]] converts dimensionless statistical information into thermodynamic entropy units.'
+    physical_reading_rules:
+    - id: k_boltzmann_physical_reading_connection
+      when: 'true'
+      status: info
+      text:
+        es: Es la escala microscópica que permite comparar conteos de microestados con J/K macroscópicos.
+        en: It is the microscopic scale that allows microstate counts to be compared with macroscopic J/K.
+    coherence_rules:
+    - id: k_boltzmann_coherence_connection
+      when: 'true'
+      status: ok
+      text:
+        es: Debe aparecer multiplicando un logaritmo adimensional para producir dimensión de entropía.
+        en: It must appear multiplying a dimensionless logarithm to produce entropy dimension.
+    model_validity_rules:
+    - id: k_boltzmann_model_validity_connection
+      when: 'true'
+      status: info
+      text:
+        es: Su valor es constante; los cambios físicos vienen del cociente de microestados, no de variar [[k_boltzmann]].
+        en: Its value is constant; physical changes come from the microstate ratio, not from varying [[k_boltzmann]].
+    graph_rules:
+    - id: k_boltzmann_graph_connection
+      when: 'true'
+      status: info
+      text:
+        es: En la lectura estadística, [[k_boltzmann]] fija la escala vertical de [[delta_entropia]].
+        en: In the statistical reading, [[k_boltzmann]] sets the vertical scale of [[delta_entropia]].
+    likely_errors:
+    - id: k_boltzmann_likely_error_connection
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas [[k_boltzmann]] con una variable ajustable ni con una temperatura.
+        en: Do not confuse [[k_boltzmann]] with an adjustable variable or with a temperature.
+    next_step_rules:
+    - id: k_boltzmann_next_step_connection
+      when: 'true'
+      status: info
+      text:
+        es: Verifica que el argumento logarítmico sea adimensional antes de aplicar la escala de [[k_boltzmann]].
+        en: Verify that the logarithm argument is dimensionless before applying the [[k_boltzmann]] scale.
+    physical_intuition:
+    - id: k_boltzmann_physical_intuition_connection
+      when: 'true'
+      status: info
+      text:
+        es: '[[k_boltzmann]] es el adaptador de enchufe entre el conteo microscópico y la entropía de laboratorio.'
+        en: '[[k_boltzmann]] is the plug adapter between microscopic counting and laboratory entropy.'
+    limiting_cases:
+    - id: k_boltzmann_limiting_case_connection
+      when: 'true'
+      status: info
+      text:
+        es: Si el logaritmo es cero, [[k_boltzmann]] no crea cambio de entropía por sí solo.
+        en: If the logarithm is zero, [[k_boltzmann]] does not create entropy change by itself.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: Respeta la convención final/inicial y calor hacia el sistema antes de interpretar el signo.
+        en: Respect the final/initial and heat-into-system convention before interpreting the sign.
+      common_sign_errors: []
+  ratio_microestados:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable comparativa
+      en: comparative variable
+    summary_rules:
+    - id: ratio_microestados_summary_connection
+      when: 'true'
+      status: ok
+      text:
+        es: '[[ratio_microestados]] compara la multiplicidad final e inicial y decide el signo estadístico de [[delta_entropia]].'
+        en: '[[ratio_microestados]] compares final and initial multiplicity and determines the statistical sign of [[delta_entropia]].'
+    physical_reading_rules:
+    - id: ratio_microestados_physical_reading_connection
+      when: 'true'
+      status: info
+      text:
+        es: Si [[ratio_microestados]] es mayor que 1, el estado final es microscópicamente más accesible.
+        en: If [[ratio_microestados]] is greater than 1, the final state is microscopically more accessible.
+    coherence_rules:
+    - id: ratio_microestados_coherence_connection
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser positivo y adimensional; valores negativos o con unidades no tienen lectura logarítmica física.
+        en: It must be positive and dimensionless; negative or unit-carrying values have no physical logarithmic reading.
+    model_validity_rules:
+    - id: ratio_microestados_model_validity_connection
+      when: 'true'
+      status: info
+      text:
+        es: Solo compara estados bajo el mismo conjunto de restricciones macroscópicas relevantes.
+        en: It compares states only under the same set of relevant macroscopic constraints.
+    graph_rules:
+    - id: ratio_microestados_graph_connection
+      when: 'true'
+      status: info
+      text:
+        es: El punto [[ratio_microestados]] igual a 1 debe corresponder a [[delta_entropia]] nula en la lectura estadística.
+        en: The point [[ratio_microestados]] equal to 1 must correspond to zero [[delta_entropia]] in the statistical reading.
+    likely_errors:
+    - id: ratio_microestados_likely_error_connection
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas un cociente de microestados con una resta de microestados.
+        en: Do not confuse a microstate ratio with a microstate difference.
+    next_step_rules:
+    - id: ratio_microestados_next_step_connection
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba si el cociente representa final sobre inicial o inicial sobre final antes de leer el signo.
+        en: Check whether the ratio represents final over initial or initial over final before reading the sign.
+    physical_intuition:
+    - id: ratio_microestados_physical_intuition_connection
+      when: 'true'
+      status: info
+      text:
+        es: '[[ratio_microestados]] dice cuántas veces más ancho se vuelve el abanico microscópico disponible.'
+        en: '[[ratio_microestados]] says how many times wider the available microscopic fan becomes.'
+    limiting_cases:
+    - id: ratio_microestados_limiting_case_connection
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[ratio_microestados]] tiende a 1, el cambio estadístico de entropía tiende a cero.
+        en: When [[ratio_microestados]] tends to 1, the statistical entropy change tends to zero.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: Respeta la convención final/inicial y calor hacia el sistema antes de interpretar el signo.
+        en: Respect the final/initial and heat-into-system convention before interpreting the sign.
+      common_sign_errors:
+      - invertir el cociente final/inicial
+      - tomar calor cedido como calor recibido

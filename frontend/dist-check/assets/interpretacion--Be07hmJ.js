@@ -1,0 +1,323 @@
+const e=`version: 5
+id: sonido-interp
+leaf_id: introduccion-al-sonido
+scope: local
+nombre:
+  es: "Análisis Acústico Fundamental"
+  en: "Fundamental Acoustic Analysis"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: "Resumen de Propagación"
+      en: "Propagation Summary"
+  physical_reading:
+    title:
+      es: "Lectura Física"
+      en: "Physical Reading"
+  coherence:
+    title:
+      es: "Coherencia de la Onda"
+      en: "Wave Coherence"
+  model_validity:
+    title:
+      es: "Límites del Medio"
+      en: "Medium Limits"
+  graph_reading:
+    title:
+      es: "Análisis Visual"
+      en: "Visual Analysis"
+  likely_errors:
+    title:
+      es: "Alertas de Interpretación"
+      en: "Interpretation Alerts"
+  next_step:
+    title:
+      es: "Pasos Sugeridos"
+      en: "Suggested Steps"
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [c, f, lambda, B, rho]
+  formulas: [onda_basica, sonido_compresible]
+
+targets:
+  c:
+    summary_rules:
+      - id: c-val
+        when: c > 0
+        status: success
+        text:
+          es: "La velocidad [[c]] de {c} m/s indica que la perturbación mecánica recorre {c} metros cada segundo en este medio fluido material."
+          en: "The speed [[c]] of {c} m/s indicates that the mechanical disturbance travels {c} meters every second in this material fluid medium."
+    physical_reading_rules:
+      - id: c-phys
+        when: c > 330 and c < 350
+        status: success
+        text:
+          es: "Este valor de velocidad es causado por la elasticidad y densidad típicas del aire a temperatura ambiente, donde la agitación térmica facilita el transporte de energía."
+          en: "This speed value is caused by the typical elasticity and density of air at room temperature, where thermal agitation facilitates energy transport."
+      - id: c-phys-high
+        when: c > 1000
+        status: info
+        text:
+          es: "La alta velocidad se debe a que el medio es muy rígido (alto [[B]]), lo que provoca una respuesta elástica casi instantánea frente a la compresión."
+          en: "The high speed is due to the medium being very stiff (high [[B]]), causing an almost instantaneous elastic response to compression."
+    coherence_rules:
+      - id: c-coh
+        when: c == f * lambda
+        status: success
+        text:
+          es: "Existe una sincronización perfecta entre la oscilación temporal de la fuente y el desplazamiento espacial de los frentes de onda."
+          en: "There is perfect synchronization between the temporal oscillation of the source and the spatial displacement of the wavefronts."
+    model_validity_rules:
+      - id: c-valid
+        when: c > 0
+        status: success
+        text:
+          es: "Válido bajo la aproximación de medio elástico continuo, donde no se consideran las colisiones moleculares individuales sino la respuesta macroscópica."
+          en: "Valid under the continuous elastic medium approximation, where individual molecular collisions are not considered but the macroscopic response is."
+    graph_rules:
+      - id: c-graph
+        when: c > 0
+        status: success
+        text:
+          es: "En el Svg, [[c]] representa la rapidez con la que las zonas de compresión se alejan del foco emisor."
+          en: "In the Svg, [[c]] represents the speed at which compression zones move away from the emitting focus."
+    likely_errors:
+      - id: c-err-zero
+        when: c <= 0
+        status: error
+        text:
+          es: "Error Conceptual: El alumno suele olvidar que el sonido requiere movimiento. Una velocidad nula o negativa es un malentendido fundamental de la naturaleza de la onda."
+          en: "Conceptual Error: The student often forgets that sound requires movement. A zero or negative speed is a fundamental misunderstanding of the wave nature."
+      - id: c-err-supersonic
+        when: c > 340000
+        status: error
+        text:
+          es: "Fallo de Interpretación: Evite usar valores de [[B]] o [[rho]] inconsistentes. Una velocidad tan alta indica un error de unidades o un malentendido del medio fluido."
+          en: "Interpretation Failure: Avoid using inconsistent [[B]] or [[rho]] values. Such a high speed indicates a unit error or a misunderstanding of the fluid medium."
+    next_step_rules:
+      - id: c-next
+        when: c > 0
+        status: info
+        text:
+          es: "Analice cómo cambiaría la velocidad si el medio pasara de fase gaseosa a líquida (cambio drástico en [[B]])."
+          en: "Analyze how the speed would change if the medium transitioned from gaseous to liquid phase (drastic change in [[B]])."
+
+  f:
+    summary_rules:
+      - id: f-val
+        when: f > 0
+        status: success
+        text:
+          es: "La frecuencia [[f]] de {f} Hz establece el tono del sonido y la rapidez de oscilación de las partículas del fluido."
+          en: "The frequency [[f]] of {f} Hz establishes the sound pitch and the oscillation speed of the fluid particles."
+    physical_reading_rules:
+      - id: f-pitch
+        when: f > 0
+        status: info
+        text:
+          es: "Importante: La frecuencia es una propiedad invariante impuesta por la fuente. Al cambiar de medio, [[c]] y [[lambda]] cambian, pero [[f]] permanece constante."
+          en: "Important: Frequency is an invariant property imposed by the source. When changing media, [[c]] and [[lambda]] change, but [[f]] remains constant."
+    coherence_rules:
+      - id: f-coh
+        when: f > 0
+        status: success
+        text:
+          es: "Escala temporal de oscilación coherente con el régimen acústico lineal."
+          en: "Temporal oscillation scale coherent with the linear acoustic regime."
+    model_validity_rules:
+      - id: f-valid
+        when: f > 20000
+        status: warning
+        text:
+          es: "Límite de Audición: Esta frecuencia entra en el rango de los ultrasonidos, inaudibles para el oído humano pero con aplicaciones médicas e industriales."
+          en: "Hearing Limit: This frequency falls into the ultrasound range, inaudible to the human ear but with medical and industrial applications."
+    graph_rules:
+      - id: f-graph
+        when: f > 0
+        status: success
+        text:
+          es: "En la simulación, [[f]] dicta el ritmo de vaivén de las partículas alrededor de su posición de equilibrio."
+          en: "In the simulation, [[f]] dictates the back-and-forth rhythm of the particles around their equilibrium position."
+    likely_errors:
+      - id: f-err-neg
+        when: f < 0
+        status: error
+        text:
+          es: "Error Conceptual: El alumno suele confundir frecuencia con periodo. Un valor negativo carece de sentido físico en oscilaciones."
+          en: "Conceptual Error: The student often confuses frequency with period. A negative value lacks physical meaning in oscillations."
+    next_step_rules:
+      - id: f-next
+        when: f > 0
+        status: info
+        text:
+          es: "Compare este valor con el umbral de dolor auditivo o las frecuencias típicas de instrumentos musicales."
+          en: "Compare this value with the auditory pain threshold or typical musical instrument frequencies."
+
+  lambda:
+    summary_rules:
+      - id: lambda-val
+        when: lambda > 0
+        status: success
+        text:
+          es: "La longitud de onda [[lambda]] de {lambda} m representa la periodicidad espacial de las compresiones del fluido."
+          en: "The wavelength [[lambda]] of {lambda} m represents the spatial periodicity of the fluid compressions."
+    physical_reading_rules:
+      - id: lambda-phys
+        when: lambda > 0
+        status: info
+        text:
+          es: "Efecto de Resolución: Esta distancia limita la capacidad de la onda para interactuar con obstáculos; es el pilar de la resolución en sistemas de sonar y ecografía."
+          en: "Resolution Effect: This distance limits the wave's ability to interact with obstacles; it is the pillar of resolution in sonar and ultrasound systems."
+    coherence_rules:
+      - id: lambda-coh
+        when: lambda > 0
+        status: success
+        text:
+          es: "Distancia entre frentes de onda consistente con la velocidad del medio y la frecuencia de la fuente."
+          en: "Distance between wavefronts consistent with the medium speed and the source frequency."
+    model_validity_rules:
+      - id: lambda-valid
+        when: lambda < 1e-7
+        status: warning
+        text:
+          es: "Límite del Medio Continuo: A estas escalas microscópicas, la aproximación de fluido continuo falla y se debe considerar la naturaleza atómica del medio."
+          en: "Continuous Medium Limit: At these microscopic scales, the continuous fluid approximation fails and the atomic nature of the medium must be considered."
+    graph_rules:
+      - id: lambda-graph
+        when: lambda > 0
+        status: success
+        text:
+          es: "Se observa visualmente como la separación entre las bandas de color más brillante (máxima presión) en el Svg."
+          en: "It is visually observed as the separation between the brightest color bands (maximum pressure) in the Svg."
+    likely_errors:
+      - id: lambda-err
+        when: lambda <= 0
+        status: error
+        text:
+          es: "Malentendido: El alumno suele olvidar que la longitud de onda debe ser positiva. Un error aquí suele provenir de invertir la relación de frecuencia y velocidad."
+          en: "Misunderstanding: The student often forgets that wavelength must be positive. An error here usually stems from inverting the frequency-speed relationship."
+    next_step_rules:
+      - id: lambda-next
+        when: lambda > 0
+        status: info
+        text:
+          es: "Explore cómo se reduce [[lambda]] al pasar el sonido de un medio rápido (agua) a uno lento (aire)."
+          en: "Explore how [[lambda]] is reduced when sound passes from a fast medium (water) to a slow one (air)."
+
+  B:
+    summary_rules:
+      - id: B-val
+        when: B > 0
+        status: success
+        text:
+          es: "El módulo [[B]] ({B} Pa) cuantifica la rigidez volumétrica; indica cuánta presión se requiere para deformar el fluido."
+          en: "The modulus [[B]] ({B} Pa) quantifies volumetric stiffness; it indicates how much pressure is required to deform the fluid."
+    physical_reading_rules:
+      - id: B-stiff
+        when: B > 1e9
+        status: success
+        text:
+          es: "Propiedad Elástica Dominante: La alta rigidez del fluido (como en el agua) permite que la perturbación se transmita mucho más rápido que en un gas compresible."
+          en: "Dominant Elastic Property: The high fluid stiffness (as in water) allows the disturbance to be transmitted much faster than in a compressible gas."
+    coherence_rules:
+      - id: B-coh
+        when: B > 0
+        status: success
+        text:
+          es: "Valor de elasticidad físicamente plausible para fluidos conocidos."
+          en: "Physically plausible elasticity value for known fluids."
+    model_validity_rules:
+      - id: B-valid
+        when: B > 0
+        status: success
+        text:
+          es: "Compatible con el modelo de acústica lineal para pequeñas deformaciones volumétricas."
+          en: "Compatible with the linear acoustic model for small volumetric deformations."
+    graph_rules:
+      - id: B-graph
+        when: B > 0
+        status: info
+        text:
+          es: "En el simulador, un aumento de [[B]] se traduce en una propagación más veloz de los frentes de onda."
+          en: "In the simulator, an increase in [[B]] translates into faster propagation of the wavefronts."
+    likely_errors:
+      - id: B-err
+        when: B < 0
+        status: error
+        text:
+          es: "Error Conceptual Termodinámico: Un módulo de compresibilidad negativo es físicamente imposible; implicaría que el medio genera energía al ser comprimido."
+          en: "Thermodynamic Conceptual Error: A negative bulk modulus is physically impossible; it would imply the medium generates energy when compressed."
+    next_step_rules:
+      - id: B-next
+        when: B > 0
+        status: info
+        text:
+          es: "Compare la compresibilidad de gases (baja [[B]]) frente a líquidos (alta [[B]]) y su efecto en el sonido."
+          en: "Compare gas compressibility (low [[B]]) versus liquids (high [[B]]) and its effect on sound."
+
+  rho:
+    summary_rules:
+      - id: rho-val
+        when: rho > 0
+        status: success
+        text:
+          es: "La densidad [[rho]] de {rho} kg/m³ es la medida de la inercia del fluido frente al paso de la onda."
+          en: "The density [[rho]] of {rho} kg/m³ is the measure of the fluid's inertia against the wave passage."
+    physical_reading_rules:
+      - id: rho-inertia
+        when: rho > 1000
+        status: info
+        text:
+          es: "Efecto Inercial: A mayor densidad, mayor es la masa que la onda debe mover, lo que tiende a frenar la señal sonora si la elasticidad se mantiene constante."
+          en: "Inertial Effect: The higher the density, the greater the mass the wave must move, which tends to slow down the sound signal if elasticity remains constant."
+    coherence_rules:
+      - id: rho-coh
+        when: rho > 0
+        status: success
+        text:
+          es: "Densidad del medio material coherente con el estado de agregación (gas o líquido)."
+          en: "Material medium density coherent with the state of aggregation (gas or liquid)."
+    model_validity_rules:
+      - id: rho-valid
+        when: rho < 1
+        status: warning
+        text:
+          es: "Límite Atmosférico: Esta densidad es extremadamente baja, cercana a la de gases enrarecidos a gran altitud, donde el sonido se atenúa rápidamente."
+          en: "Atmospheric Limit: This density is extremely low, close to that of rarefied gases at high altitude, where sound attenuates rapidly."
+    graph_rules:
+      - id: rho-graph
+        when: rho > 0
+        status: info
+        text:
+          es: "Visualmente, [[rho]] determina la inercia de las esferas que representan las partículas en la simulación."
+          en: "Visually, [[rho]] determines the inertia of the spheres representing the particles in the simulation."
+    likely_errors:
+      - id: rho-err
+        when: rho <= 0
+        status: error
+        text:
+          es: "Error Conceptual de Materia: El sonido requiere un medio material para propagarse. Sin densidad positiva, no hay masa que oscile ni transporte la energía."
+          en: "Material Conceptual Error: Sound requires a material medium to propagate. Without positive density, there is no mass to oscillate or transport energy."
+    next_step_rules:
+      - id: rho-next
+        when: rho > 0
+        status: info
+        text:
+          es: "Investigue cómo la densidad cambia con la temperatura y cómo esto altera la refracción del sonido en la atmósfera."
+          en: "Investigate how density changes with temperature and how this alters sound refraction in the atmosphere."
+`;export{e as default};

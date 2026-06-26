@@ -1,0 +1,290 @@
+version: 1
+formulas:
+- id: cm_vectorial
+  title:
+    es: definición vectorial del centro de masas
+    en: vector definition of the center of mass
+  equation: R_cm = I_cm / M
+  latex: \vec{R}_{cm} = \frac{1}{M} \int \vec{r} \, dm
+  rearrangements:
+  - target: R_cm
+    equation: R_cm = I_cm / M
+    latex: \vec{R}_{cm} = \frac{\vec{I}_{cm}}{M}
+    constraints: []
+  - target: I_cm
+    equation: I_cm = M * R_cm
+    latex: \vec{I}_{cm} = M \vec{R}_{cm}
+    constraints: []
+  - target: M
+    equation: M = I_cm / R_cm
+    latex: M = \frac{I_{cm}}{R_{cm}}
+    constraints: []
+  category: definition
+  relation_type: weighted_average
+  physical_meaning:
+    es: El centro de masas es la posición promedio ponderada por masa de toda la distribución.
+    en: The center of mass is the mass-weighted average position of the whole distribution.
+  constraints:
+  - M > 0
+  - distribución integrable
+  - origen bien definido
+  validity:
+    es: Válida para distribuciones discretas o continuas cuando la masa total es finita.
+    en: Valid for discrete or continuous distributions when the total mass is finite.
+  dimension_check: '[L] = [ML] / [M]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria.md
+  - teoria.en.md
+  - ejemplos.md
+  - ejemplos.en.md
+  - interpretacion.yaml
+  interpretation_tags:
+  - promedio-ponderado
+  - geometria
+  - masa
+  result_semantics:
+    target: R_cm
+    meaning: Resulta util para interpretar R_cm en el contexto del leaf.
+  domain_checks:
+  - M debe ser positiva
+  - La integral debe converger
+  coherence_checks:
+  - R_cm debe quedar en el rango geométrico compatible con la distribución
+  - Si hay simetría central respecto del origen, R_cm puede anularse
+  graph_implications:
+  - El marcador del centro de masas debe desplazarse hacia las regiones más densas
+    o más extensas en masa.
+  pedagogical_triggers:
+  - Confundir centro geométrico con centro de masas
+  - Olvidar que el origen cambia el signo de las coordenadas.
+- id: cm_x
+  title:
+    es: coordenada x del centro de masas
+    en: x-coordinate of the center of mass
+  equation: xcm = I_x / M
+  latex: x_{cm} = \frac{1}{M} \int x \, dm
+  rearrangements:
+  - target: xcm
+    equation: xcm = I_x / M
+    latex: x_{cm} = \frac{I_x}{M}
+    constraints: []
+  - target: I_x
+    equation: I_x = M * xcm
+    latex: I_x = M x_{cm}
+    constraints: []
+  - target: M
+    equation: M = I_x / xcm
+    latex: M = \frac{I_x}{x_{cm}}
+    constraints: []
+  category: definition
+  relation_type: component_average
+  physical_meaning:
+    es: La coordenada x del centro de masas es el promedio ponderado por masa de la
+      coordenada x.
+    en: The x-coordinate of the center of mass is the mass-weighted average of the
+      x coordinate.
+  constraints:
+  - M > 0
+  - integración sobre el dominio correcto
+  validity:
+    es: Útil cuando basta una componente o cuando el problema es unidimensional.
+    en: Useful when a single component is enough or when the problem is one-dimensional.
+  dimension_check: '[L] = [ML] / [M]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria.md
+  - teoria.en.md
+  - ejemplos.md
+  - ejemplos.en.md
+  - interpretacion.yaml
+  interpretation_tags:
+  - componente
+  - simetria
+  - varilla
+  result_semantics:
+    target: xcm
+    meaning: Resulta util para interpretar xcm en el contexto del leaf.
+  domain_checks:
+  - La distribución debe poder parametrizarse sobre x o proyectarse sobre x
+  coherence_checks:
+  - Si la densidad es mayor hacia x positiva, xcm debe desplazarse hacia x positiva
+  - En una varilla uniforme entre 0 y L, xcm debe ser L/2
+  graph_implications:
+  - El punto xcm debe moverse cuando cambian la densidad o la geometría efectiva.
+  pedagogical_triggers:
+  - Olvidar el factor x dentro de la integral
+  - Usar el centro geométrico cuando la densidad no es uniforme.
+- id: masa_volumen
+  title:
+    es: masa a partir de densidad volumétrica uniforme
+    en: mass from uniform volume density
+  equation: M = rho * V
+  latex: M = \rho V
+  rearrangements:
+  - target: M
+    equation: M = rho * V
+    latex: M = \rho V
+    constraints: []
+  - target: rho
+    equation: rho = M / V
+    latex: \rho = \frac{M}{V}
+    constraints: []
+  - target: V
+    equation: V = M / rho
+    latex: V = \frac{M}{\rho}
+    constraints: []
+  category: model
+  relation_type: constitutive
+  physical_meaning:
+    es: Relaciona masa total y volumen cuando la densidad volumétrica es uniforme.
+    en: It relates total mass and volume when volume density is uniform.
+  constraints:
+  - rho > 0
+  - V > 0
+  - modelo volumétrico uniforme
+  validity:
+    es: Solo válida si la densidad volumétrica puede tomarse constante en todo el
+      cuerpo.
+    en: Valid only if the volume density can be taken as constant throughout the whole
+      body.
+  dimension_check: '[M] = [ML^-3][L^3]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - modelos.md
+  - modelos.en.md
+  - interpretacion.yaml
+  interpretation_tags:
+  - densidad
+  - volumen
+  - uniformidad
+  result_semantics:
+    target: M
+    meaning: Resulta util para interpretar M en el contexto del leaf.
+  domain_checks:
+  - No usar esta relación si la densidad cambia con la posición
+  coherence_checks:
+  - Si V aumenta con rho fija, M debe aumentar
+  - Si rho vale cero, M debe ser cero
+  graph_implications:
+  - Una distribución uniforme desplaza el centro de masas según la geometría, no por
+    gradientes de densidad.
+  pedagogical_triggers:
+  - Usar rho uniforme en un problema con gradiente de densidad
+  - Confundir volumen total con elemento diferencial.
+- id: masa_area
+  title:
+    es: masa a partir de densidad superficial uniforme
+    en: mass from uniform surface density
+  equation: M = sigma * A
+  latex: M = \sigma A
+  rearrangements:
+  - target: M
+    equation: M = sigma * A
+    latex: M = \sigma A
+    constraints: []
+  - target: sigma
+    equation: sigma = M / A
+    latex: \sigma = \frac{M}{A}
+    constraints: []
+  - target: A
+    equation: A = M / sigma
+    latex: A = \frac{M}{\sigma}
+    constraints: []
+  category: model
+  relation_type: constitutive
+  physical_meaning:
+    es: Relaciona masa y área en láminas de densidad superficial uniforme.
+    en: It relates mass and area in sheets with uniform surface density.
+  constraints:
+  - sigma > 0
+  - A > 0
+  - modelo laminar uniforme
+  validity:
+    es: Solo válida en láminas o superficies cuya densidad superficial pueda tomarse
+      constante.
+    en: Valid only in sheets or surfaces whose surface density can be taken as constant.
+  dimension_check: '[M] = [ML^-2][L^2]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - modelos.md
+  - modelos.en.md
+  - interpretacion.yaml
+  interpretation_tags:
+  - lamina
+  - area
+  - uniformidad
+  result_semantics:
+    target: M
+    meaning: Resulta util para interpretar M en el contexto del leaf.
+  domain_checks:
+  - No usar en cuerpos volumétricos si el espesor importa
+  coherence_checks:
+  - Si A aumenta con sigma fija, M debe aumentar
+  graph_implications:
+  - La geometría de la lámina controla el centro de masas cuando sigma es uniforme.
+  pedagogical_triggers:
+  - Aplicar sigma a una varilla o a un volumen
+  - Olvidar que la homogeneidad superficial es una hipótesis.
+- id: masa_longitud
+  title:
+    es: masa a partir de densidad lineal uniforme
+    en: mass from uniform linear density
+  equation: M = lambda * L
+  latex: M = \lambda L
+  rearrangements:
+  - target: M
+    equation: M = lambda * L
+    latex: M = \lambda L
+    constraints: []
+  - target: lambda
+    equation: lambda = M / L
+    latex: \lambda = \frac{M}{L}
+    constraints: []
+  - target: L
+    equation: L = M / lambda
+    latex: L = \frac{M}{\lambda}
+    constraints: []
+  category: model
+  relation_type: constitutive
+  physical_meaning:
+    es: Relaciona masa y longitud cuando la densidad lineal es uniforme.
+    en: It relates mass and length when linear density is uniform.
+  constraints:
+  - lambda > 0
+  - L > 0
+  - modelo lineal uniforme
+  validity:
+    es: Válida para varillas o alambres cuya densidad lineal pueda tomarse constante.
+    en: Valid for rods or wires whose linear density can be taken as constant.
+  dimension_check: '[M] = [ML^-1][L]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria.md
+  - teoria.en.md
+  - ejemplos.md
+  - ejemplos.en.md
+  - interpretacion.yaml
+  interpretation_tags:
+  - varilla
+  - lineal
+  - uniformidad
+  result_semantics:
+    target: M
+    meaning: Resulta util para interpretar M en el contexto del leaf.
+  domain_checks:
+  - No usar cuando lambda depende de x
+  coherence_checks:
+  - Si L aumenta con lambda fija, M debe aumentar
+  - En una varilla uniforme entre 0 y L, xcm debe ser L/2
+  graph_implications:
+  - Con lambda uniforme, el centro de masas depende solo de la geometría del tramo
+    lineal.
+  pedagogical_triggers:
+  - Usar lambda uniforme cuando el enunciado da una ley lambda(x)
+  - Olvidar diferenciar entre longitud total y coordenada local x.

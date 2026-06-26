@@ -1,0 +1,277 @@
+version: 5.0.0
+leaf: fermiones
+ui:
+  default_formula: fermi_dirac_ocupacion
+formulas:
+- id: fermi_dirac_ocupacion
+  title:
+    es: Ocupación fermiónica de un estado
+    en: Fermionic occupation of a state
+  equation: f=1/(exp((E-mu)/(k_B*T))+1)
+  latex: f(E)=\frac{1}{e^{(E-\mu)/(k_B T)}+1}
+  rearrangements:
+  - id: energia_desde_ocupacion
+    target: energia
+    equation: E=mu+k_B*T*ln(1/f-1)
+    latex: E=\mu+k_B T\ln(\frac{1}{f}-1)
+  - id: potencial_quimico_desde_ocupacion
+    target: potencial_quimico
+    equation: mu=E-k_B*T*ln(1/f-1)
+    latex: \mu=E-k_B T\ln(\frac{1}{f}-1)
+  category: estadistica
+  relation_type: constitutiva
+  physical_meaning:
+    es: Da la ocupación media de un estado fermiónico según energía, temperatura y potencial químico.
+    en: Gives the mean occupation of a fermionic state from energy, temperature, and chemical potential.
+  constraints:
+    es: Requiere equilibrio térmico, fermiones indistinguibles y ocupación máxima unitaria por estado cuántico.
+    en: Requires thermal equilibrium, indistinguishable fermions, and maximum unit occupation per quantum state.
+  validity:
+    es: Válida para gases o niveles fermiónicos en equilibrio; falla si hay interacciones fuertes no incluidas o no equilibrio.
+    en: Valid for fermionic gases or levels in equilibrium; fails with omitted strong interactions or nonequilibrium.
+  dimension_check: El cociente (E-mu)/(k_B*T) es adimensional y f no tiene unidad.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - ocupacion_estados
+  - limite_clasico
+  - grafica_ocupacion_energia
+  interpretation_tags:
+  - ocupacion
+  - energia
+  - temperatura
+  - exclusion_pauli
+  result_semantics:
+    target: ocupacion_estado
+    kind: probabilidad_media
+    sign_meaning:
+      es: f no puede ser negativa; siempre está entre 0 y 1.
+      en: f cannot be negative; it always lies between 0 and 1.
+    absolute_value_meaning:
+      es: f cercana a 1 indica estado casi ocupado; f cercana a 0 indica estado casi vacío.
+      en: f near 1 means nearly occupied; f near 0 means nearly empty.
+  domain_checks:
+  - temperatura_absoluta > 0
+  - 0 < ocupacion_estado < 1 para inversion logaritmica
+  - energia, potencial_quimico y k_B*T con mismas unidades
+  coherence_checks:
+  - Si energia = potencial_quimico, ocupacion_estado = 0.5.
+  - Al aumentar energia con temperatura fija, ocupacion_estado disminuye.
+  - Al aumentar temperatura, el cambio alrededor de potencial_quimico se suaviza.
+  graph_implications:
+    es: La curva ocupación-energía es decreciente y pasa por f=0.5 cuando E=μ.
+    en: The occupation-energy curve decreases and passes through f=0.5 when E=μ.
+  pedagogical_triggers:
+  - Confundir ocupación media con número total de partículas.
+  - Olvidar que un estado fermiónico no puede superar f=1.
+  - Tratar μ como constante universal independiente del sistema.
+- id: parametro_reducido_fermi
+  title:
+    es: Energía reducida respecto al potencial químico
+    en: Reduced energy relative to chemical potential
+  equation: eta=(E-mu)/(k_B*T)
+  latex: \eta=\frac{E-\mu}{k_B T}
+  rearrangements:
+  - id: energia_desde_eta
+    target: energia
+    equation: E=mu+eta*k_B*T
+    latex: E=\mu+\eta k_B T
+  category: estadistica
+  relation_type: definicion
+  physical_meaning:
+    es: Mide cuántas energías térmicas separan un estado del potencial químico.
+    en: Measures how many thermal energies separate a state from the chemical potential.
+  constraints:
+    es: Usar temperatura absoluta y magnitudes energéticas coherentes.
+    en: Use absolute temperature and consistent energy quantities.
+  validity:
+    es: Es una variable auxiliar válida para describir la transición de ocupación fermiónica.
+    en: It is a valid auxiliary variable for describing the fermionic occupation transition.
+  dimension_check: eta es adimensional porque energía se divide por energía.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - analisis_de_curva
+  - ocupacion_estados
+  interpretation_tags:
+  - energia_reducida
+  - temperatura
+  - potencial_quimico
+  result_semantics:
+    target: energia_reducida
+    kind: parametro_adimensional
+    sign_meaning:
+      es: eta positiva indica energía por encima de μ; eta negativa indica energía por debajo de μ.
+      en: Positive eta means energy above μ; negative eta means energy below μ.
+    absolute_value_meaning:
+      es: 'Cuanto mayor es |eta|, más decidida es la ocupación: casi llena o casi vacía.'
+      en: 'Larger |eta| means a more definite occupation: nearly full or nearly empty.'
+  domain_checks:
+  - temperatura_absoluta > 0
+  - constante_boltzmann > 0
+  - energia y potencial_quimico con la misma unidad
+  coherence_checks:
+  - eta = 0 implica energia = potencial_quimico.
+  - eta mayor produce menor ocupacion_estado.
+  graph_implications:
+    es: Permite comparar curvas de ocupación con una escala horizontal adimensional.
+    en: Allows occupation curves to be compared using a dimensionless horizontal scale.
+  pedagogical_triggers:
+  - Creer que eta es una energía con unidades.
+  - Olvidar que el signo de eta cambia al cruzar μ.
+- id: energia_fermi_gas_3d
+  title:
+    es: Energía de Fermi de un gas ideal tridimensional
+    en: Fermi energy of a three-dimensional ideal gas
+  equation: E_F=(hbar^2/(2*m))*(3*pi^2*n)^(2/3)
+  latex: E_F=\frac{\hbar^2}{2m}(3\pi^2 n)^{2/3}
+  rearrangements:
+  - id: densidad_desde_energia_fermi
+    target: densidad_numerica
+    equation: n=(1/(3*pi^2))*((2*m*E_F)/(hbar^2))^(3/2)
+    latex: n=\frac{1}{3\pi^2}\left(\frac{2m\,E_F}{\hbar^2}\right)^{3/2}
+  category: gas_fermi
+  relation_type: modelo_ideal
+  physical_meaning:
+    es: Estima la energía hasta la que se llenan estados fermiónicos a temperatura cero.
+    en: Estimates the energy up to which fermionic states are filled at zero temperature.
+  constraints:
+    es: Modelo de gas ideal 3D de fermiones de espín 1/2, no relativista y homogéneo.
+    en: Model of a homogeneous, nonrelativistic, ideal 3D spin-1/2 fermion gas.
+  validity:
+    es: Útil en electrones de metales o gases degenerados ideales; no cubre redes, bandas ni relatividad.
+    en: Useful for metal electrons or ideal degenerate gases; excludes lattices, bands, and relativity.
+  dimension_check: hbar^2/m aporta energía por longitud cuadrada y n^(2/3) aporta longitud^-2.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - gas_fermi_ideal
+  - temperatura_cero
+  interpretation_tags:
+  - energia_fermi
+  - densidad
+  - degeneracion
+  result_semantics:
+    target: energia_fermi
+    kind: energia_caracteristica
+    sign_meaning:
+      es: E_F es positiva en este modelo porque n, m y hbar son positivos.
+      en: E_F is positive in this model because n, m, and hbar are positive.
+    absolute_value_meaning:
+      es: Un E_F mayor indica mayor presión de degeneración y llenado hasta energías más altas.
+      en: A larger E_F indicates stronger degeneracy pressure and filling up to higher energies.
+  domain_checks:
+  - densidad_numerica > 0
+  - masa_particula > 0
+  - modelo tridimensional no relativista
+  coherence_checks:
+  - Si densidad_numerica aumenta, energia_fermi aumenta.
+  - Si masa_particula aumenta con densidad fija, energia_fermi disminuye.
+  graph_implications:
+    es: E_F fija la frontera de ocupación casi escalonada cuando T se aproxima a cero.
+    en: E_F sets the nearly step-like occupation boundary as T approaches zero.
+  pedagogical_triggers:
+  - Aplicar esta fórmula a bosones.
+  - Usarla para sólidos reales sin discutir bandas de energía.
+- id: temperatura_fermi
+  title:
+    es: Temperatura de Fermi
+    en: Fermi temperature
+  equation: T_F=E_F/k_B
+  latex: T_F=\frac{E_F}{k_B}
+  rearrangements:
+  - id: energia_fermi_desde_temperatura
+    target: energia_fermi
+    equation: E_F=k_B*T_F
+    latex: E_F=k_B T_F
+  category: gas_fermi
+  relation_type: escala_caracteristica
+  physical_meaning:
+    es: Convierte la energía de Fermi en una escala de temperatura comparable con T.
+    en: Converts the Fermi energy into a temperature scale comparable with T.
+  constraints:
+    es: Requiere una energía de Fermi bien definida y k_B positiva.
+    en: Requires a well-defined Fermi energy and positive k_B.
+  validity:
+    es: Sirve para diagnosticar degeneración fermiónica en modelos donde E_F es significativa.
+    en: Useful for diagnosing fermionic degeneracy in models where E_F is meaningful.
+  dimension_check: E_F/k_B tiene dimensión de temperatura.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - degeneracion_fermionica
+  interpretation_tags:
+  - temperatura_fermi
+  - energia_fermi
+  - degeneracion
+  result_semantics:
+    target: temperatura_fermi
+    kind: temperatura_caracteristica
+    sign_meaning:
+      es: T_F es positiva si E_F es positiva.
+      en: T_F is positive if E_F is positive.
+    absolute_value_meaning:
+      es: Si T es mucho menor que T_F, el sistema está degenerado.
+      en: If T is much lower than T_F, the system is degenerate.
+  domain_checks:
+  - energia_fermi > 0
+  - constante_boltzmann > 0
+  coherence_checks:
+  - T/T_F pequeño implica comportamiento cuántico fermiónico marcado.
+  - T/T_F grande acerca el sistema al límite clásico.
+  graph_implications:
+    es: T/T_F controla cuánto se redondea la ocupación alrededor de μ.
+    en: T/T_F controls how much occupation is rounded around μ.
+  pedagogical_triggers:
+  - Confundir temperatura real con temperatura de Fermi.
+  - Pensar que T_F significa que el sistema esté a esa temperatura.
+- id: exclusion_pauli_ocupacion_maxima
+  title:
+    es: Límite de ocupación por exclusión de Pauli
+    en: Occupation limit from Pauli exclusion
+  equation: numero_ocupacion<=degeneracion_estado
+  latex: \bar{N} \leq g
+  rearrangements: []
+  category: principio
+  relation_type: desigualdad
+  physical_meaning:
+    es: Un estado cuántico fermiónico no admite más ocupación que la degeneración disponible.
+    en: A fermionic quantum state cannot exceed the available degeneracy.
+  constraints:
+    es: Los estados deben distinguir todos los números cuánticos, incluido el espín.
+    en: States must distinguish all quantum numbers, including spin.
+  validity:
+    es: Principio general para fermiones; la forma de g depende de cómo se agrupen los estados.
+    en: General principle for fermions; the form of g depends on how states are grouped.
+  dimension_check: N_estado y g son conteos adimensionales.
+  calculable: false
+  motivo_no_calculable: Es una restricción lógica de ocupación, no una ecuación de cálculo único.
+  used_in:
+  - exclusion_pauli
+  - clasificacion_fermiones
+  interpretation_tags:
+  - exclusion_pauli
+  - ocupacion_maxima
+  - espin
+  result_semantics:
+    target: numero_ocupacion
+    kind: restriccion
+    sign_meaning:
+      es: N_estado no puede ser negativo y queda acotado por g.
+      en: N_state cannot be negative and is bounded by g.
+    absolute_value_meaning:
+      es: Al alcanzar g, el grupo de estados está completamente ocupado.
+      en: When g is reached, the group of states is fully occupied.
+  domain_checks:
+  - degeneracion_estado >= 1
+  - numero_ocupacion >= 0
+  - identificacion completa del estado cuantico
+  coherence_checks:
+  - Si N_estado supera g, se viola la exclusión de Pauli.
+  - Si se omite espín, puede contarse mal la degeneración.
+  graph_implications:
+    es: La ocupación normalizada no debe superar 1 en el eje vertical.
+    en: Normalized occupation must not exceed 1 on the vertical axis.
+  pedagogical_triggers:
+  - Decir que dos electrones no pueden estar en el mismo orbital sin mencionar el espín.
+  - Confundir estado individual con nivel degenerado.

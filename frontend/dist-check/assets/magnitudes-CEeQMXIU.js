@@ -1,0 +1,315 @@
+const e=`version: 1
+magnitudes:
+- id: Wnc
+  symbol: W_{nc}
+  nombre:
+    es: trabajo no conservativo
+    en: non-conservative work
+  unidad_si: J
+  descripcion:
+    es: Trabajo total realizado por las fuerzas no conservativas sobre el sistema elegido.
+    en: Total work done by non-conservative forces on the chosen system.
+  dimension: ML^2T^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - trabajo-de-fuerzas-no-conservativas
+  common_mistake: Confundir Wnc con una energia almacenada en lugar de leerlo como transferencia mecanica firmada.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Es positivo si aumenta la energia mecanica y negativo si la reduce.
+      en: It is positive when mechanical energy increases and negative when it decreases.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa ausencia de trabajo no conservativo neto.
+      en: Zero represents absence of net non-conservative work.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - trabajo-de-fuerzas-no-conservativas
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Wnc debe leerse siempre junto con el signo de la variacion de energia mecanica.
+- id: Emi
+  symbol: E_{m,i}
+  nombre:
+    es: energia mecanica inicial
+    en: initial mechanical energy
+  unidad_si: J
+  descripcion:
+    es: Energia mecanica disponible al inicio del proceso, formada por las contribuciones relevantes de estado.
+    en: Mechanical energy available at the start of the process, built from the relevant state contributions.
+  dimension: ML^2T^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - trabajo-de-fuerzas-no-conservativas
+  common_mistake: Mezclar datos iniciales y finales al construir Emi.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se interpreta como magnitud energetica del estado inicial.
+      en: It is interpreted as an energy magnitude of the initial state.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero es posible si el estado inicial no contiene energia mecanica relevante respecto a la referencia elegida.
+      en: Zero is possible if the initial state contains no relevant mechanical energy relative to the chosen reference.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - trabajo-de-fuerzas-no-conservativas
+  graph_binding:
+    channels: []
+  pedagogical_notes: Emi es el nivel energetico de partida del balance.
+- id: Emf
+  symbol: E_{m,f}
+  nombre:
+    es: energia mecanica final
+    en: final mechanical energy
+  unidad_si: J
+  descripcion:
+    es: Energia mecanica restante o alcanzada al terminar el proceso considerado.
+    en: Mechanical energy remaining or attained at the end of the process considered.
+  dimension: ML^2T^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - trabajo-de-fuerzas-no-conservativas
+  common_mistake: Interpretar Emf sin comprobar si el trabajo no conservativo aporta o extrae energia.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se interpreta como magnitud energetica del estado final.
+      en: It is interpreted as an energy magnitude of the final state.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede representar un estado final sin energia mecanica relevante respecto a la referencia elegida.
+      en: Zero may represent a final state with no relevant mechanical energy relative to the chosen reference.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - trabajo-de-fuerzas-no-conservativas
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Emf permite saber si el proceso acaba con mas o menos energia mecanica que al principio.
+- id: dEm
+  symbol: \\Delta E_m
+  nombre:
+    es: variacion de energia mecanica
+    en: change in mechanical energy
+  unidad_si: J
+  descripcion:
+    es: Diferencia firmada entre energia mecanica final e inicial.
+    en: Signed difference between final and initial mechanical energy.
+  dimension: ML^2T^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - trabajo-de-fuerzas-no-conservativas
+  common_mistake: Confundir dEm con una perdida positiva acumulada y perder su signo.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Positiva indica ganancia mecanica, negativa indica perdida mecanica.
+      en: Positive indicates mechanical gain, negative indicates mechanical loss.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa conservacion de energia mecanica entre los dos estados.
+      en: Zero represents conservation of mechanical energy between the two states.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - trabajo-de-fuerzas-no-conservativas
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: dEm resume la lectura fisica del signo de Wnc.
+- id: Ki
+  symbol: K_i
+  nombre:
+    es: energia cinetica inicial
+    en: initial kinetic energy
+  unidad_si: J
+  descripcion:
+    es: Contribucion cinetica a la energia mecanica del estado inicial.
+    en: Kinetic contribution to the mechanical energy of the initial state.
+  dimension: ML^2T^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - trabajo-de-fuerzas-no-conservativas
+  common_mistake: Usar Ki cuando el dato corresponde al estado final.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La energia cinetica se toma como no negativa.
+      en: Kinetic energy is taken as non-negative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa reposo inicial.
+      en: Zero represents initial rest.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - trabajo-de-fuerzas-no-conservativas
+  graph_binding:
+    channels: []
+  pedagogical_notes: Ki forma Emi junto con Ui.
+- id: Ui
+  symbol: U_i
+  nombre:
+    es: energia potencial inicial
+    en: initial potential energy
+  unidad_si: J
+  descripcion:
+    es: Contribucion potencial a la energia mecanica del estado inicial segun la referencia elegida.
+    en: Potential contribution to the initial mechanical energy according to the chosen reference.
+  dimension: ML^2T^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - trabajo-de-fuerzas-no-conservativas
+  common_mistake: Cambiar la referencia potencial entre el estado inicial y el final.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Puede ser positiva, nula o negativa segun la referencia potencial escogida.
+      en: It may be positive, zero, or negative depending on the chosen potential reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero depende de la referencia energetica definida.
+      en: Zero depends on the defined energy reference.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - trabajo-de-fuerzas-no-conservativas
+  graph_binding:
+    channels: []
+  pedagogical_notes: Ui solo tiene sentido si la referencia potencial se mantiene coherente.
+- id: Kf
+  symbol: K_f
+  nombre:
+    es: energia cinetica final
+    en: final kinetic energy
+  unidad_si: J
+  descripcion:
+    es: Contribucion cinetica a la energia mecanica del estado final.
+    en: Kinetic contribution to the mechanical energy of the final state.
+  dimension: ML^2T^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - trabajo-de-fuerzas-no-conservativas
+  common_mistake: Despejar Kf sin comprobar si el resultado respeta el signo del balance.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La energia cinetica final se interpreta como no negativa.
+      en: Final kinetic energy is interpreted as non-negative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero representa reposo final.
+      en: Zero represents final rest.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - trabajo-de-fuerzas-no-conservativas
+  graph_binding:
+    channels: []
+  pedagogical_notes: Kf es una salida frecuente del balance completo por estados.
+- id: Uf
+  symbol: U_f
+  nombre:
+    es: energia potencial final
+    en: final potential energy
+  unidad_si: J
+  descripcion:
+    es: Contribucion potencial a la energia mecanica del estado final segun la misma referencia usada al inicio.
+    en: Potential contribution to the final mechanical energy using the same reference adopted initially.
+  dimension: ML^2T^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - trabajo-de-fuerzas-no-conservativas
+  common_mistake: Comparar Uf con Ui usando referencias distintas.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Puede ser positiva, nula o negativa segun la referencia potencial escogida.
+      en: It may be positive, zero, or negative depending on the chosen potential reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero depende de la referencia energetica definida.
+      en: Zero depends on the defined energy reference.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - trabajo-de-fuerzas-no-conservativas
+  graph_binding:
+    channels: []
+  pedagogical_notes: Uf debe cerrarse con la misma referencia de energia potencial que Ui.
+`;export{e as default};

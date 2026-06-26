@@ -1,0 +1,855 @@
+version: 5.0.0
+id: definicion-boltzmann
+leaf_id: definicion-boltzmann
+nombre:
+  es: Definicion boltzmann
+  en: Boltzmann Definition
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: entropia-estadistica
+  parent_id: entropia-estadistica
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/entropia-estadistica/definicion-boltzmann
+  orden: 272100
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - entropia_boltzmann
+  - diferencia_entropia_boltzmann
+  magnitudes:
+  - entropia
+  - numero_microestados
+  - k_boltzmann
+  - delta_entropia
+  - numero_microestados_inicial
+  - numero_microestados_final
+  - ratio_microestados
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: statistical thermodynamics
+  axis_convention:
+    es: En este leaf no hay magnitudes vectoriales; el signo relevante es el de la variación de entropía.
+    en: This leaf has no vector quantities; the relevant sign is the sign of entropy change.
+  standard_assumptions:
+  - es: Los microestados compatibles con el macroestado se consideran equiprobables en equilibrio.
+    en: The microstates compatible with the macrostate are treated as equally probable at equilibrium.
+  - es: El número de microestados debe ser positivo y adimensional antes de aplicar el logaritmo.
+    en: The number of microstates must be positive and dimensionless before applying the logarithm.
+  standard_warnings:
+  - es: No confundas mayor entropía con más energía; aquí mide multiplicidad microscópica.
+    en: Do not confuse higher entropy with higher energy; here it measures microscopic multiplicity.
+  - es: No apliques el logaritmo a una magnitud con unidades ni a un número de microestados nulo.
+    en: Do not apply the logarithm to a dimensional quantity or to a zero number of microstates.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+  - Svg
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: '[[entropia]] y [[delta_entropia]] deben expresarse en J/K porque [[k_boltzmann]] multiplica un logaritmo
+        adimensional.'
+      en: '[[entropia]] and [[delta_entropia]] must be expressed in J/K because [[k_boltzmann]] multiplies a dimensionless
+        logarithm.'
+  - id: log_argument_check
+    status: warning
+    text:
+      es: El argumento del logaritmo debe ser [[numero_microestados]] o [[ratio_microestados]], nunca una magnitud
+        con unidades.
+      en: The logarithm argument must be [[numero_microestados]] or [[ratio_microestados]], never a dimensional
+        quantity.
+  - id: positivity_check
+    status: warning
+    text:
+      es: '[[numero_microestados]], [[numero_microestados_inicial]] y [[numero_microestados_final]] deben ser mayores
+        que cero.'
+      en: '[[numero_microestados]], [[numero_microestados_inicial]], and [[numero_microestados_final]] must be greater
+        than zero.'
+error_patterns:
+  enabled: true
+  patterns:
+  - id: microstates_as_energy
+    status: warning
+    text:
+      es: Un error frecuente es leer [[numero_microestados]] como energía disponible en lugar de multiplicidad compatible.
+      en: A common error is reading [[numero_microestados]] as available energy instead of compatible multiplicity.
+  - id: linear_entropy_error
+    status: warning
+    text:
+      es: Duplicar [[numero_microestados]] no duplica [[entropia]]; la relación es logarítmica.
+      en: Doubling [[numero_microestados]] does not double [[entropia]]; the relation is logarithmic.
+  - id: delta_sign_confusion
+    status: warning
+    text:
+      es: El signo de [[delta_entropia]] depende de si el estado final tiene más o menos microestados que el inicial.
+      en: The sign of [[delta_entropia]] depends on whether the final state has more or fewer microstates than the
+        initial state.
+graph_reading_policy:
+  enabled: true
+  primary_variable: entropia
+  reading_sequence:
+  - es: Lee el eje de [[numero_microestados]] como multiplicidad positiva y el eje de [[entropia]] como respuesta
+      logarítmica.
+    en: Read the [[numero_microestados]] axis as positive multiplicity and the [[entropia]] axis as a logarithmic
+      response.
+  - es: En la escena Svg, interpreta los puntos o cajas como microestados compatibles con un mismo macroestado.
+    en: In the Svg scene, interpret the dots or boxes as microstates compatible with one macrostate.
+  key_points:
+  - es: La pendiente visual decrece porque cada nuevo microestado añade menos [[entropia]] que el anterior en escala
+      lineal.
+    en: The visual slope decreases because each new microstate adds less [[entropia]] than the previous one on a
+      linear scale.
+  - es: Comparar dos estados exige mirar el cociente [[ratio_microestados]], no solo restar cantidades de microestados.
+    en: Comparing two states requires reading the [[ratio_microestados]], not merely subtracting microstate counts.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Si [[numero_microestados_final]] supera a [[numero_microestados_inicial]], [[delta_entropia]] es positiva
+      y el macroestado final es más multiplicado.
+    en: If [[numero_microestados_final]] exceeds [[numero_microestados_inicial]], [[delta_entropia]] is positive
+      and the final macrostate has greater multiplicity.
+  - es: Cuando [[ratio_microestados]] vale 1, ambos macrostados tienen la misma multiplicidad y [[delta_entropia]]
+      se anula.
+    en: When [[ratio_microestados]] equals 1, both macrostates have the same multiplicity and [[delta_entropia]]
+      is zero.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: El logaritmo no aporta dimensión; toda la dimensión de [[entropia]] procede de [[k_boltzmann]].
+    en: The logarithm contributes no dimension; the full dimension of [[entropia]] comes from [[k_boltzmann]].
+  common_unit_mistakes:
+  - es: Asignar unidades a [[numero_microestados]] o a [[ratio_microestados]].
+    en: Assigning units to [[numero_microestados]] or [[ratio_microestados]].
+  - es: Dar [[entropia]] como julios en vez de J/K.
+    en: Reporting [[entropia]] in joules instead of J/K.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  entropia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado estadístico
+      en: entropy
+    summary_rules:
+    - id: entropia_summary_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: '[[entropia]] mide la multiplicidad microscópica compatible con un macroestado, no el desorden visual
+          de una imagen.'
+        en: '[[entropia]] measures the microscopic multiplicity compatible with a macrostate, not the visual disorder
+          of a picture.'
+    physical_reading_rules:
+    - id: entropia_physical_reading_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[entropia]] como una escala energética por temperatura fijada por [[k_boltzmann]] y por el logaritmo
+          de [[numero_microestados]].
+        en: Read [[entropia]] as an energy-per-temperature scale set by [[k_boltzmann]] and by the logarithm of
+          [[numero_microestados]].
+    coherence_rules:
+    - id: entropia_coherence_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[numero_microestados]] sea positivo y adimensional; si no lo es, [[entropia]] no tiene
+          interpretación de Boltzmann.
+        en: Check that [[numero_microestados]] is positive and dimensionless; otherwise [[entropia]] has no Boltzmann
+          interpretation.
+    model_validity_rules:
+    - id: entropia_model_validity_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de [[entropia]] supone equilibrio estadístico y microestados equiprobables dentro del macroestado
+          considerado.
+        en: The reading of [[entropia]] assumes statistical equilibrium and equally probable microstates within
+          the macrostate considered.
+    graph_rules:
+    - id: entropia_graph_reading_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, [[entropia]] aumenta con [[numero_microestados]] pero con curvatura decreciente
+          por la dependencia logarítmica.
+        en: On the Coord graph, [[entropia]] increases with [[numero_microestados]] but with decreasing curvature
+          because of the logarithmic dependence.
+    likely_errors:
+    - id: entropia_likely_error_boltzmann
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[entropia]] como proporcional directa a [[numero_microestados]]; muchas más configuraciones
+          producen aumentos logarítmicos.
+        en: Do not treat [[entropia]] as directly proportional to [[numero_microestados]]; many more configurations
+          produce logarithmic increases.
+    next_step_rules:
+    - id: entropia_next_step_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[entropia]], revisa unidades J/K, positividad de [[numero_microestados]] y coherencia
+          del macroestado elegido.
+        en: After calculating [[entropia]], check J/K units, positivity of [[numero_microestados]], and consistency
+          of the chosen macrostate.
+    physical_intuition:
+    - id: entropia_physical_intuition_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Más [[entropia]] significa que el mismo macroestado puede realizarse de más maneras microscópicas.
+        en: More [[entropia]] means the same macrostate can be realized in more microscopic ways.
+    limiting_cases:
+    - id: entropia_limiting_case_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Si [[numero_microestados]] se acerca a 1, [[entropia]] se acerca a cero; si crece enormemente, [[entropia]]
+          crece lentamente.
+        en: If [[numero_microestados]] approaches 1, [[entropia]] approaches zero; if it grows enormously, [[entropia]]
+          grows slowly.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_microestados:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable independiente
+      en: number of microstates
+    summary_rules:
+    - id: numero_microestados_summary_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_microestados]] cuenta cuántas configuraciones microscópicas son compatibles con el mismo estado
+          macroscópico.'
+        en: '[[numero_microestados]] counts how many microscopic configurations are compatible with the same macroscopic
+          state.'
+    physical_reading_rules:
+    - id: numero_microestados_physical_reading_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Un valor mayor de [[numero_microestados]] indica más alternativas microscópicas y por tanto mayor [[entropia]]
+          en el modelo de Boltzmann.
+        en: A larger [[numero_microestados]] indicates more microscopic alternatives and therefore higher [[entropia]]
+          in the Boltzmann model.
+    coherence_rules:
+    - id: numero_microestados_coherence_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_microestados]] debe ser un número puro mayor que cero; no puede medirse en julios, kelvin
+          ni metros.'
+        en: '[[numero_microestados]] must be a pure number greater than zero; it cannot be measured in joules, kelvin,
+          or meters.'
+    model_validity_rules:
+    - id: numero_microestados_model_validity_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Solo tiene sentido contar [[numero_microestados]] si se ha definido claramente el macroestado y la resolución
+          microscópica usada.
+        en: Counting [[numero_microestados]] only makes sense if the macrostate and microscopic resolution have
+          been clearly defined.
+    graph_rules:
+    - id: numero_microestados_graph_reading_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: En el eje horizontal, aumentos iguales de [[numero_microestados]] generan incrementos cada vez menores
+          de [[entropia]].
+        en: On the horizontal axis, equal increases in [[numero_microestados]] produce smaller and smaller increases
+          in [[entropia]].
+    likely_errors:
+    - id: numero_microestados_likely_error_boltzmann
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas [[numero_microestados]] con [[entropia]]; uno es un conteo adimensional y la otra incluye
+          [[k_boltzmann]].
+        en: Do not confuse [[numero_microestados]] with [[entropia]]; one is a dimensionless count and the other
+          includes [[k_boltzmann]].
+    next_step_rules:
+    - id: numero_microestados_next_step_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Tras fijar [[numero_microestados]], aplica la relación logarítmica y revisa si el conteo representa
+          el macroestado correcto.
+        en: After setting [[numero_microestados]], apply the logarithmic relation and check whether the count represents
+          the correct macrostate.
+    physical_intuition:
+    - id: numero_microestados_physical_intuition_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: '[[numero_microestados]] es el tamaño del menú microscópico escondido tras una descripción macroscópica.'
+        en: '[[numero_microestados]] is the size of the microscopic menu hidden behind a macroscopic description.'
+    limiting_cases:
+    - id: numero_microestados_limiting_case_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: El caso [[numero_microestados]] igual a 1 representa una única configuración compatible; valores menores
+          o nulos no son válidos.
+        en: The case [[numero_microestados]] equal to 1 represents one compatible configuration; smaller or zero
+          values are invalid.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  k_boltzmann:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: constante de proporcionalidad
+      en: Boltzmann constant
+    summary_rules:
+    - id: k_boltzmann_summary_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: '[[k_boltzmann]] convierte el logaritmo de multiplicidad en una entropía con unidades físicas.'
+        en: '[[k_boltzmann]] converts the logarithm of multiplicity into entropy with physical units.'
+    physical_reading_rules:
+    - id: k_boltzmann_physical_reading_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: '[[k_boltzmann]] fija la escala microscópica entre conteo estadístico y magnitud termodinámica medible.'
+        en: '[[k_boltzmann]] sets the microscopic scale between statistical counting and a measurable thermodynamic
+          quantity.'
+    coherence_rules:
+    - id: k_boltzmann_coherence_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: Usar [[k_boltzmann]] asegura que [[entropia]] y [[delta_entropia]] tengan dimensión de energía dividida
+          por temperatura.
+        en: Using [[k_boltzmann]] ensures that [[entropia]] and [[delta_entropia]] have the dimension of energy
+          divided by temperature.
+    model_validity_rules:
+    - id: k_boltzmann_model_validity_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: '[[k_boltzmann]] no depende del material ni del macroestado; el cambio físico entra por los microestados
+          contados.'
+        en: '[[k_boltzmann]] does not depend on material or macrostate; the physical change enters through the counted
+          microstates.'
+    graph_rules:
+    - id: k_boltzmann_graph_reading_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Cambiar [[k_boltzmann]] no es un parámetro experimental; en la gráfica actúa como escala vertical fija.
+        en: Changing [[k_boltzmann]] is not an experimental parameter; on the graph it acts as a fixed vertical
+          scale.
+    likely_errors:
+    - id: k_boltzmann_likely_error_boltzmann
+      when: 'true'
+      status: warning
+      text:
+        es: 'No sustituyas [[k_boltzmann]] por una temperatura ni por una energía: es una constante de conversión
+          estadística.'
+        en: 'Do not replace [[k_boltzmann]] with a temperature or an energy: it is a statistical conversion constant.'
+    next_step_rules:
+    - id: k_boltzmann_next_step_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Antes de interpretar, verifica que el valor usado de [[k_boltzmann]] sea coherente con las unidades
+          finales.
+        en: Before interpreting, verify that the value used for [[k_boltzmann]] is consistent with the final units.
+    physical_intuition:
+    - id: k_boltzmann_physical_intuition_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: '[[k_boltzmann]] pone una regla física sobre un conteo que por sí solo sería solo matemático.'
+        en: '[[k_boltzmann]] puts a physical ruler on a count that would otherwise be only mathematical.'
+    limiting_cases:
+    - id: k_boltzmann_limiting_case_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Si se omitiera [[k_boltzmann]], el resultado sería un logaritmo sin unidades y no una entropía física.
+        en: If [[k_boltzmann]] were omitted, the result would be a unitless logarithm rather than a physical entropy.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  delta_entropia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado comparativo
+      en: entropy change
+    summary_rules:
+    - id: delta_entropia_summary_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: '[[delta_entropia]] compara dos macrostados mediante el cambio logarítmico de multiplicidad.'
+        en: '[[delta_entropia]] compares two macrostates through the logarithmic change in multiplicity.'
+    physical_reading_rules:
+    - id: delta_entropia_physical_reading_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: '[[delta_entropia]] positiva indica que el estado final admite más microestados compatibles que el estado
+          inicial.'
+        en: Positive [[delta_entropia]] indicates that the final state admits more compatible microstates than the
+          initial state.
+    coherence_rules:
+    - id: delta_entropia_coherence_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: 'Su signo debe coincidir con [[ratio_microestados]]: mayor que 1 da aumento, igual a 1 da cero y menor
+          que 1 da descenso.'
+        en: 'Its sign must match [[ratio_microestados]]: greater than 1 gives an increase, equal to 1 gives zero,
+          and less than 1 gives a decrease.'
+    model_validity_rules:
+    - id: delta_entropia_model_validity_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: La comparación exige que [[numero_microestados_inicial]] y [[numero_microestados_final]] describan el
+          mismo tipo de conteo.
+        en: The comparison requires [[numero_microestados_inicial]] and [[numero_microestados_final]] to describe
+          the same kind of count.
+    graph_rules:
+    - id: delta_entropia_graph_reading_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Gráficamente, [[delta_entropia]] se lee como diferencia vertical entre dos puntos de la curva logarítmica.
+        en: Graphically, [[delta_entropia]] is read as the vertical difference between two points on the logarithmic
+          curve.
+    likely_errors:
+    - id: delta_entropia_likely_error_boltzmann
+      when: 'true'
+      status: warning
+      text:
+        es: No calcules [[delta_entropia]] restando microestados; la resta correcta se produce después de aplicar
+          la entropía o mediante el cociente.
+        en: Do not calculate [[delta_entropia]] by subtracting microstates; the correct subtraction occurs after
+          applying entropy or through the ratio.
+    next_step_rules:
+    - id: delta_entropia_next_step_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Tras obtener [[delta_entropia]], interpreta si el proceso aumenta, conserva o reduce la multiplicidad
+          accesible.
+        en: After obtaining [[delta_entropia]], interpret whether the process increases, preserves, or reduces the
+          accessible multiplicity.
+    physical_intuition:
+    - id: delta_entropia_physical_intuition_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: '[[delta_entropia]] es una brújula de multiplicidad: apunta hacia el estado con más formas microscópicas.'
+        en: '[[delta_entropia]] is a multiplicity compass: it points toward the state with more microscopic ways.'
+    limiting_cases:
+    - id: delta_entropia_limiting_case_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Si [[ratio_microestados]] tiende a cero, [[delta_entropia]] se vuelve muy negativa; si crece mucho,
+          aumenta lentamente.
+        en: If [[ratio_microestados]] tends to zero, [[delta_entropia]] becomes very negative; if it grows greatly,
+          it increases slowly.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo se interpreta por comparación de multiplicidades, no por dirección espacial.
+        en: The sign is interpreted by comparing multiplicities, not by spatial direction.
+      common_sign_errors:
+      - es: Pensar que signo negativo significa entropía imposible.
+        en: Thinking that a negative sign means impossible entropy.
+      - es: Invertir estado inicial y final al formar el cociente.
+        en: Reversing initial and final state when forming the ratio.
+  numero_microestados_inicial:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: estado inicial
+      en: initial microstates
+    summary_rules:
+    - id: numero_microestados_inicial_summary_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_microestados_inicial]] fija la multiplicidad de referencia desde la que se mide el cambio
+          entrópico.'
+        en: '[[numero_microestados_inicial]] sets the reference multiplicity from which the entropy change is measured.'
+    physical_reading_rules:
+    - id: numero_microestados_inicial_physical_reading_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Representa cuántas configuraciones microscópicas tenía el macroestado antes de la comparación.
+        en: It represents how many microscopic configurations the macrostate had before the comparison.
+    coherence_rules:
+    - id: numero_microestados_inicial_coherence_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser positivo, adimensional y contado con el mismo criterio que [[numero_microestados_final]].
+        en: It must be positive, dimensionless, and counted with the same criterion as [[numero_microestados_final]].
+    model_validity_rules:
+    - id: numero_microestados_inicial_model_validity_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Si cambia la definición del macroestado entre inicio y final, [[numero_microestados_inicial]] deja de
+          ser una base comparable.
+        en: If the macrostate definition changes between start and finish, [[numero_microestados_inicial]] stops
+          being a comparable baseline.
+    graph_rules:
+    - id: numero_microestados_inicial_graph_reading_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, [[numero_microestados_inicial]] marca el punto de partida sobre la curva de [[entropia]].
+        en: On the graph, [[numero_microestados_inicial]] marks the starting point on the [[entropia]] curve.
+    likely_errors:
+    - id: numero_microestados_inicial_likely_error_boltzmann
+      when: 'true'
+      status: warning
+      text:
+        es: No lo uses como cero arbitrario; un estado inicial con un microestado sigue teniendo significado físico.
+        en: Do not use it as an arbitrary zero; an initial state with one microstate still has physical meaning.
+    next_step_rules:
+    - id: numero_microestados_inicial_next_step_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Verifica el conteo inicial antes de formar [[ratio_microestados]] o calcular [[delta_entropia]].
+        en: Verify the initial count before forming [[ratio_microestados]] or calculating [[delta_entropia]].
+    physical_intuition:
+    - id: numero_microestados_inicial_physical_intuition_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Es el punto de salida del viaje estadístico entre dos macrostados.
+        en: It is the departure point of the statistical journey between two macrostates.
+    limiting_cases:
+    - id: numero_microestados_inicial_limiting_case_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Si [[numero_microestados_inicial]] vale 1, el cambio se mide desde una referencia microscópicamente
+          única.
+        en: If [[numero_microestados_inicial]] equals 1, the change is measured from a microscopically unique reference.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_microestados_final:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: estado final
+      en: final microstates
+    summary_rules:
+    - id: numero_microestados_final_summary_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_microestados_final]] fija la multiplicidad del macroestado al terminar la comparación.'
+        en: '[[numero_microestados_final]] sets the multiplicity of the macrostate at the end of the comparison.'
+    physical_reading_rules:
+    - id: numero_microestados_final_physical_reading_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Si [[numero_microestados_final]] supera a [[numero_microestados_inicial]], el estado final es estadísticamente
+          más amplio.
+        en: If [[numero_microestados_final]] exceeds [[numero_microestados_inicial]], the final state is statistically
+          broader.
+    coherence_rules:
+    - id: numero_microestados_final_coherence_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: Debe contarse con la misma granularidad que [[numero_microestados_inicial]] para que [[ratio_microestados]]
+          tenga sentido.
+        en: It must be counted with the same granularity as [[numero_microestados_inicial]] for [[ratio_microestados]]
+          to make sense.
+    model_validity_rules:
+    - id: numero_microestados_final_model_validity_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: La interpretación falla si el estado final no pertenece al mismo modelo estadístico que el inicial.
+        en: The interpretation fails if the final state does not belong to the same statistical model as the initial
+          one.
+    graph_rules:
+    - id: numero_microestados_final_graph_reading_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, [[numero_microestados_final]] identifica el punto final cuya diferencia vertical da [[delta_entropia]].
+        en: On the graph, [[numero_microestados_final]] identifies the final point whose vertical difference gives
+          [[delta_entropia]].
+    likely_errors:
+    - id: numero_microestados_final_likely_error_boltzmann
+      when: 'true'
+      status: warning
+      text:
+        es: No basta con que sea grande; debe ser comparable con el conteo inicial y estar asociado al macroestado
+          correcto.
+        en: It is not enough for it to be large; it must be comparable with the initial count and associated with
+          the correct macrostate.
+    next_step_rules:
+    - id: numero_microestados_final_next_step_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba si el valor final aumenta o reduce [[ratio_microestados]] antes de explicar el signo de [[delta_entropia]].
+        en: Check whether the final value increases or reduces [[ratio_microestados]] before explaining the sign
+          of [[delta_entropia]].
+    physical_intuition:
+    - id: numero_microestados_final_physical_intuition_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: 'Es el destino microscópico: cuántas formas tiene el sistema de acabar con la misma apariencia macroscópica.'
+        en: 'It is the microscopic destination: how many ways the system can end with the same macroscopic appearance.'
+    limiting_cases:
+    - id: numero_microestados_final_limiting_case_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Si iguala al valor inicial, el cambio de multiplicidad desaparece y [[delta_entropia]] debe ser nula.
+        en: If it equals the initial value, the multiplicity change disappears and [[delta_entropia]] must be zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  ratio_microestados:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro comparativo
+      en: microstate ratio
+    summary_rules:
+    - id: ratio_microestados_summary_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: '[[ratio_microestados]] resume cuántas veces más o menos multiplicidad tiene el estado final frente
+          al inicial.'
+        en: '[[ratio_microestados]] summarizes how many times more or less multiplicity the final state has compared
+          with the initial state.'
+    physical_reading_rules:
+    - id: ratio_microestados_physical_reading_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Es el argumento adimensional del logaritmo que determina el signo y tamaño de [[delta_entropia]].
+        en: It is the dimensionless logarithm argument that determines the sign and size of [[delta_entropia]].
+    coherence_rules:
+    - id: ratio_microestados_coherence_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: '[[ratio_microestados]] debe ser positivo; valores negativos o nulos no pueden entrar en la definición
+          logarítmica.'
+        en: '[[ratio_microestados]] must be positive; negative or zero values cannot enter the logarithmic definition.'
+    model_validity_rules:
+    - id: ratio_microestados_model_validity_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Solo es válido si el numerador y el denominador proceden de conteos compatibles del mismo sistema.
+        en: It is valid only if numerator and denominator come from compatible counts of the same system.
+    graph_rules:
+    - id: ratio_microestados_graph_reading_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: En la lectura gráfica, [[ratio_microestados]] indica el desplazamiento horizontal relativo entre estado
+          inicial y final.
+        en: In the graph reading, [[ratio_microestados]] indicates the relative horizontal shift between initial
+          and final state.
+    likely_errors:
+    - id: ratio_microestados_likely_error_boltzmann
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas [[ratio_microestados]] con una diferencia; el logaritmo usa cocientes porque compara multiplicidades
+          relativas.
+        en: Do not confuse [[ratio_microestados]] with a difference; the logarithm uses ratios because it compares
+          relative multiplicities.
+    next_step_rules:
+    - id: ratio_microestados_next_step_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[ratio_microestados]] para anticipar el signo de [[delta_entropia]] antes de hacer la cuenta completa.
+        en: Use [[ratio_microestados]] to anticipate the sign of [[delta_entropia]] before doing the full calculation.
+    physical_intuition:
+    - id: ratio_microestados_physical_intuition_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: '[[ratio_microestados]] dice si el sistema gana o pierde espacio microscópico disponible.'
+        en: '[[ratio_microestados]] tells whether the system gains or loses available microscopic room.'
+    limiting_cases:
+    - id: ratio_microestados_limiting_case_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[ratio_microestados]] vale 1, no hay cambio entrópico; por encima de 1 aumenta y por debajo
+          disminuye.
+        en: When [[ratio_microestados]] equals 1, there is no entropy change; above 1 it increases and below 1 it
+          decreases.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo se interpreta por comparación de multiplicidades, no por dirección espacial.
+        en: The sign is interpreted by comparing multiplicities, not by spatial direction.
+      common_sign_errors:
+      - es: Pensar que signo negativo significa entropía imposible.
+        en: Thinking that a negative sign means impossible entropy.
+      - es: Invertir estado inicial y final al formar el cociente.
+        en: Reversing initial and final state when forming the ratio.

@@ -1,0 +1,282 @@
+const e=`- id: xcm
+  title:
+    es: "Coordenada del centro de masas para dos masas"
+    en: "Center-of-mass coordinate for two masses"
+  equation: "xcm = (m1*x1 + m2*x2)/M"
+  latex: "x_{cm} = \\\\frac{m_1 x_1 + m_2 x_2}{M}"
+  rearrangements:
+    - target: xcm
+      equation: "xcm = (m1*x1 + m2*x2)/M"
+      latex: "x_{cm} = \\\\frac{m_1 x_1 + m_2 x_2}{M}"
+  category: fundamental
+  relation_type: average_relation
+  physical_meaning:
+    es: "Cálculo de la posición representativa del sistema mediante el promedio de posiciones ponderado por la inercia (masa) de cada componente."
+    en: "Calculation of the system's representative position through the average of positions weighted by the inertia (mass) of each component."
+  constraints:
+    - expr: "M > 0"
+      message:
+        es: "La masa total debe ser estrictamente positiva para definir un centro de masas."
+        en: "Total mass must be strictly positive to define a center of mass."
+  validity:
+    es: "Válida para sistemas de dos partículas puntuales en una dimensión inercial."
+    en: "Valid for two-point particle systems in an inertial one-dimensional frame."
+  dimension_check: "L"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - theory
+    - examples
+    - calculator
+  interpretation_tags:
+    - weighted_average
+    - mass_distribution
+    - barycenter_location
+  result_semantics:
+    target: xcm
+    kind: position
+    sign_meaning:
+      es: "Indica si el centro de masas se encuentra a la derecha (+) o a la izquierda (-) del origen elegido."
+      en: "Indicates whether the center of mass is to the right (+) or left (-) of the chosen origin."
+    absolute_value_meaning:
+      es: "Distancia neta desde el origen hasta el punto donde se concentra la inercia traslacional del sistema."
+      en: "Net distance from the origin to the point where the system's translational inertia is concentrated."
+  domain_checks:
+    - expr: "M > 0"
+      message:
+        es: "La masa total del sistema no puede ser nula ni negativa."
+        en: "The system's total mass cannot be zero or negative."
+  coherence_checks:
+    - expr: "xcm >= min(x1, x2) && xcm <= max(x1, x2)"
+      severity: ok
+      message:
+        es: "El centro de masas se encuentra correctamente ubicado entre ambas partículas."
+        en: "The center of mass is correctly located between both particles."
+    - expr: "abs(xcm - ((x1 + x2)/2)) < 1e-9 && abs(m1 - m2) > 1e-3"
+      severity: warning
+      message:
+        es: "El CM coincide con el punto medio pese a que las masas son distintas. ¿Has usado una media aritmética simple?"
+        en: "The CM matches the midpoint even though the masses are different. Did you use a simple arithmetic average?"
+  graph_implications:
+    - channel: x_axis_marker
+      message:
+        es: "Sitúa un marcador distintivo en el eje X para representar el punto de equilibrio del sistema."
+        en: "Place a distinctive marker on the X-axis to represent the system's balance point."
+  pedagogical_triggers:
+    - detect_when: "xcm < min(x1, x2) || xcm > max(x1, x2)"
+      message:
+        es: "¡Error de rango!: El centro de masas siempre debe caer dentro de la envoltura de las partículas. Revisa los signos de x1 y x2."
+        en: "Range error!: The center of mass must always fall within the particles' envelope. Check the signs of x1 and x2."
+
+- id: M
+  title:
+    es: "Masa total del sistema"
+    en: "Total system mass"
+  equation: "M = m1 + m2"
+  latex: "M = m_1 + m_2"
+  rearrangements:
+    - target: M
+      equation: "M = m1 + m2"
+      latex: "M = m_1 + m_2"
+  category: auxiliary
+  relation_type: definition
+  physical_meaning:
+    es: "Suma escalar de las masas individuales que actúan como normalizador del promedio de posiciones."
+    en: "Scalar sum of individual masses acting as the normalizer for the position average."
+  constraints:
+    - expr: "m1 >= 0 && m2 >= 0"
+      message:
+        es: "Las masas no pueden ser negativas en mecánica clásica."
+        en: "Masses cannot be negative in classical mechanics."
+  validity:
+    es: "Válida para sistemas cerrados donde no hay intercambio de materia con el entorno."
+    en: "Valid for closed systems where there is no exchange of matter with the environment."
+  dimension_check: "M"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - theory
+    - examples
+    - calculator
+  interpretation_tags:
+    - total_inertia
+    - scalar_sum
+  result_semantics:
+    target: M
+    kind: mass
+    sign_meaning:
+      es: "La masa es una magnitud escalar siempre positiva."
+      en: "Mass is an always-positive scalar magnitude."
+    absolute_value_meaning:
+      es: "Inercia traslacional total del conjunto de partículas."
+      en: "Total translational inertia of the particle set."
+  domain_checks:
+    - expr: "m1 >= 0 && m2 >= 0"
+      message:
+        es: "Detección de masa negativa: esto no es posible en el modelo estándar de este leaf."
+        en: "Negative mass detected: this is not possible in this leaf's standard model."
+  coherence_checks:
+    - expr: "M >= max(m1, m2)"
+      severity: ok
+      message:
+        es: "La masa total es consistente con la suma de sus componentes."
+        en: "The total mass is consistent with the sum of its components."
+  graph_implications: []
+  pedagogical_triggers:
+    - detect_when: "M < max(m1, m2)"
+      message:
+        es: "Error de suma: el total es menor que una de las partes. Revisa la operación aritmética."
+        en: "Sum error: the total is less than one of the parts. Check the arithmetic operation."
+
+- id: geometric_centroid
+  title:
+    es: "Centroide geométrico (Simetría)"
+    en: "Geometric centroid (Symmetry)"
+  equation: "xcm = (x1 + x2)/2"
+  latex: "x_{cm} = \\\\frac{x_1 + x_2}{2}"
+  rearrangements: []
+  category: conceptual
+  relation_type: simplification
+  physical_meaning:
+    es: "Simplificación de la posición del centro de masas cuando la distribución de materia es perfectamente uniforme."
+    en: "Simplification of the center-of-mass position when the mass distribution is perfectly uniform."
+  constraints:
+    - expr: "abs(m1 - m2) < 1e-9"
+      message:
+        es: "Esta fórmula solo es físicamente válida si las masas son idénticas."
+        en: "This formula is only physically valid if the masses are identical."
+  validity:
+    es: "Válida como caso límite de simetría especular."
+    en: "Valid as a limiting case of specular symmetry."
+  dimension_check: "L"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - theory
+    - models
+  interpretation_tags:
+    - symmetry_point
+    - midpoint_approximation
+  result_semantics:
+    target: xcm
+    kind: position
+    sign_meaning:
+      es: "Ubicación del eje de simetría respecto al origen."
+      en: "Location of the symmetry axis relative to the origin."
+    absolute_value_meaning:
+      es: "Distancia al punto medio geométrico entre las partículas."
+      en: "Distance to the geometric midpoint between the particles."
+  domain_checks:
+    - expr: "abs(m1 - m2) < 1e-9"
+      message:
+        es: "Uso incorrecto: estás aplicando simetría a masas distintas."
+        en: "Incorrect use: you are applying symmetry to different masses."
+  coherence_checks:
+    - expr: "xcm == (x1 + x2)/2"
+      severity: ok
+      message:
+        es: "El cálculo coincide con el centro geométrico esperado."
+        en: "The calculation matches the expected geometric center."
+  graph_implications: []
+  pedagogical_triggers:
+    - detect_when: "abs(m1 - m2) > 1e-3"
+      message:
+        es: "No uses el punto medio si las masas son diferentes; el CM siempre se desplaza hacia la masa mayor."
+        en: "Do not use the midpoint if the masses are different; the CM always shifts toward the larger mass."
+
+- id: rcm_general
+  title:
+    es: "Definición vectorial general (N-partículas)"
+    en: "General vector definition (N-particles)"
+  equation: "rcm = sum(m_i*r_i)/sum(m_i)"
+  latex: "\\\\vec r_{cm} = \\\\frac{\\\\sum_i m_i \\\\vec r_i}{\\\\sum_i m_i}"
+  rearrangements: []
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: "Generalización del centro de masas a cualquier número de dimensiones y partículas, tratando la inercia como un escalar y la posición como un vector."
+    en: "Generalization of the center of mass to any number of dimensions and particles, treating inertia as a scalar and position as a vector."
+  constraints:
+    - expr: "sum(m_i) > 0"
+      message:
+        es: "El sistema debe poseer una masa total definida y positiva."
+        en: "The system must possess a definite and positive total mass."
+  validity:
+    es: "Válida para cualquier sistema discreto de partículas en el espacio euclídeo."
+    en: "Valid for any discrete system of particles in Euclidean space."
+  dimension_check: "L"
+  calculable: false
+  motivo_no_calculable:
+    es: "Requiere el conjunto completo de datos de N-partículas (no disponible en este calculador simple)."
+    en: "Requires the full N-particle dataset (not available in this simple calculator)."
+  used_in:
+    - theory
+    - models
+  interpretation_tags:
+    - vector_analysis
+    - discrete_systems
+    - spatial_average
+  result_semantics:
+    target: rcm
+    kind: vector_position
+    sign_meaning:
+      es: "Dirección del vector posición respecto al origen vectorial."
+      en: "Direction of the position vector relative to the vector origin."
+    absolute_value_meaning:
+      es: "Módulo del vector que apunta al baricentro del sistema."
+      en: "Magnitude of the vector pointing to the system's barycenter."
+  domain_checks:
+    - expr: "sum(m_i) > 0"
+      message:
+        es: "Error de sistema: masa total inexistente."
+        en: "System error: non-existent total mass."
+  coherence_checks:
+    - expr: "true"
+      severity: info
+      message:
+        es: "Consistencia vectorial garantizada por componentes independientes."
+        en: "Vector consistency guaranteed by independent components."
+  graph_implications: []
+  pedagogical_triggers:
+- id: point_particle_validity
+  title:
+    es: "Criterio de validez de partícula puntual"
+    en: "Point particle validity criterion"
+  equation: "R/d < 0.01"
+  latex: "\\\\frac{R}{d} < 0.01"
+  rearrangements: []
+  category: conceptual
+  relation_type: condition
+  physical_meaning:
+    es: "Establece el límite bajo el cual las dimensiones finitas de un cuerpo pueden despreciarse frente a las distancias de interacción del sistema."
+    en: "Establishes the limit under which a body's finite dimensions can be neglected compared to the system's interaction distances."
+  constraints:
+    - expr: "d > 0"
+      message:
+        es: "La distancia de separación debe ser positiva."
+        en: "The separation distance must be positive."
+  validity:
+    es: "Válido para la transición del modelo de sólido rígido al modelo de partícula puntual."
+    en: "Valid for the transition from the rigid body model to the point particle model."
+  dimension_check: "1"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - models
+  interpretation_tags:
+    - scale_condition
+    - model_limit
+  result_semantics:
+    target: point_particle_validity
+    kind: condition
+    sign_meaning:
+      es: "Verdadero si la aproximación es aceptable."
+      en: "True if the approximation is acceptable."
+    absolute_value_meaning:
+      es: "Grado de cumplimiento de la hipótesis de puntualidad."
+      en: "Degree of compliance with the point-like hypothesis."
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+`;export{e as default};

@@ -1,0 +1,116 @@
+version: 5
+topic:
+  id: oscilador-armonico
+  title:
+    es: Oscilador armonico
+    en: Harmonic Oscillator
+
+formulas:
+- id: omega
+  title: { es: Frecuencia angular natural, en: Natural angular frequency }
+  equation: omega = sqrt(k/m)
+  latex: \omega=\sqrt{\frac{k}{m}}
+  category: oscilaciones
+  relation_type: natural_frequency
+  physical_meaning:
+    es: Determina el ritmo propio de un oscilador masa-resorte lineal.
+    en: Determines the natural rhythm of a linear mass-spring oscillator.
+  constraints: [ k > 0, m > 0 ]
+  validity:
+    es: Valida para muelle lineal, masa constante y rozamiento despreciable.
+    en: Valid for a linear spring, constant mass, and negligible damping.
+  dimension_check: "[1/T] = sqrt([M/T^2]/[M])"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[k]] y [[m]].", en: "Requires [[k]] and [[m]]." }
+  used_in: [ Tper ]
+  interpretation_tags: [ ritmo, frecuencia, equilibrio ]
+  result_semantics:
+    target: omega
+  domain_checks: [ k > 0, m > 0 ]
+  coherence_checks: [ omega > 0 ]
+  graph_implications: Mayor omega comprime los ciclos en el eje temporal.
+  pedagogical_triggers: [ masa_vs_rigidez ]
+  rearrangements:
+  - target: omega
+    equation: omega = sqrt(k/m)
+  - target: k
+    equation: m*omega^2
+  - target: m
+    equation: k/omega^2
+  variables: [ omega, k, m ]
+
+- id: Tper
+  title: { es: Periodo natural, en: Natural period }
+  equation: Tper = 2*pi/omega
+  latex: T=\frac{2\pi}{\omega}
+  category: oscilaciones
+  relation_type: period_relation
+  physical_meaning:
+    es: Convierte frecuencia angular en tiempo de una oscilacion completa.
+    en: Converts angular frequency into the time for one full oscillation.
+  constraints: [ omega > 0 ]
+  validity:
+    es: Valida para oscilacion periodica lineal sin amortiguamiento dominante.
+    en: Valid for linear periodic oscillation without dominant damping.
+  dimension_check: "[T] = 1/[1/T]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[omega]].", en: "Requires [[omega]]." }
+  used_in: [ omega ]
+  interpretation_tags: [ periodo, ciclo, tiempo ]
+  result_semantics:
+    target: Tper
+  domain_checks: [ omega > 0 ]
+  coherence_checks: [ Tper > 0 ]
+  graph_implications: Tper es la separacion entre dos maximos consecutivos.
+  pedagogical_triggers: [ omega_no_hertz ]
+  rearrangements:
+  - target: Tper
+    equation: 2*pi/omega
+  - target: omega
+    equation: 2*pi/Tper
+  variables: [ Tper, omega ]
+
+- id: E
+  title: { es: Energia total por amplitud, en: Total energy from amplitude }
+  equation: E = 0.5*k*A^2
+  latex: E=\frac{1}{2}k A^2
+  category: energia
+  relation_type: energy_amplitude
+  physical_meaning:
+    es: Relaciona energia mecanica conservada con rigidez y amplitud maxima.
+    en: Relates conserved mechanical energy with stiffness and maximum amplitude.
+  constraints: [ k > 0, A >= 0 ]
+  validity:
+    es: Valida para potencial elastico cuadratico y amplitudes dentro del regimen lineal.
+    en: Valid for quadratic elastic potential and amplitudes inside the linear regime.
+  dimension_check: "[M*L^2/T^2] = [M/T^2]*[L^2]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[k]] y [[A]].", en: "Requires [[k]] and [[A]]." }
+  used_in: [ omega ]
+  interpretation_tags: [ energia, amplitud, conservacion ]
+  result_semantics:
+    target: E
+  domain_checks: [ A >= 0, k > 0 ]
+  coherence_checks: [ E >= 0 ]
+  graph_implications: La energia crece cuadraticamente con amplitud.
+  pedagogical_triggers: [ amplitud_cuadratica ]
+  rearrangements:
+  - target: E
+    equation: 0.5*k*A^2
+  - target: A
+    equation: sqrt(2*E/k)
+  - target: k
+    equation: 2*E/A^2
+  variables: [ E, k, A ]
+
+ui:
+  default_formula: omega
+  groups:
+  - title:
+      es: Ritmo
+      en: Rhythm
+    items: [ omega, Tper ]
+  - title:
+      es: Energia
+      en: Energy
+    items: [ E ]

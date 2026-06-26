@@ -1,0 +1,469 @@
+const e=`version: 2
+id: interpretacion-ejemplos-fuerza-centrifuga
+leaf_id: ejemplos-fuerza-centrifuga
+nombre:
+  es: Interpretacion de ejemplos fuerza centrifuga
+  en: Interpretation of examples of centrifugal force
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: dinamica
+  parent_id: fuerza-centrifuga
+  ruta_relativa: fisica-clasica/mecanica/dinamica/marcos-no-inerciales/fuerza-centrifuga/ejemplos-fuerza-centrifuga
+dependencies:
+  formulas:
+  - fuerza_centrifuga_base
+  - conversion_rpm
+  - velocidad_tangencial
+  - factor_por_cambio_omega
+  - criterio_de_aplicacion_conceptual
+  magnitudes:
+  - m
+  - omega
+  - r
+  - v
+  - rpm
+  - F_cf
+  - omega1
+  - omega2
+  - ratio
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  F_cf:
+    summary_rules:
+    - id: fcf_summary
+      when: 'true'
+      status: info
+      text:
+        es: "\`F_cf\` resume el efecto centrifugo una vez que \`rpm\` ya se ha traducido a \`omega\` y el radio \`r\` del caso esta fijado."
+        en: '\`F_cf\` summarizes the centrifugal effect once \`rpm\` has already been translated into \`omega\` and the case radius \`r\` is fixed.'
+    coherence_rules:
+    - id: fcf_coherence
+      when: 'F_cf >= 0'
+      status: ok
+      text:
+        es: Un \`F_cf\` no negativa es coherente con el uso escalar de \`fuerza_centrifuga_base\` en este leaf.
+        en: A non-negative \`F_cf\` is coherent with the scalar use of \`fuerza_centrifuga_base\` in this leaf.
+    physical_reading_rules:
+    - id: fcf_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si \`omega\` o \`r\` crecen, \`F_cf\` crece porque la misma rotacion produce una lectura radial aparente mayor en el marco que gira.
+        en: If \`omega\` or \`r\` increases, \`F_cf\` increases because the same rotation produces a larger apparent radial reading in the rotating frame.
+    model_validity_rules:
+    - id: fcf_validity
+      when: 'true'
+      status: ok
+      text:
+        es: "\`F_cf\` solo debe leerse asi cuando \`criterio_de_aplicacion_conceptual\` es compatible con un marco rotatorio y un radio bien definido."
+        en: '\`F_cf\` should be read this way only when \`criterio_de_aplicacion_conceptual\` is compatible with a rotating frame and a well-defined radius.'
+    graph_rules:
+    - id: fcf_graph
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, una curva cada vez mas empinada muestra que \`F_cf\` no cambia linealmente con \`omega\`.
+        en: In the graph, an increasingly steep curve shows that \`F_cf\` does not change linearly with \`omega\`.
+    likely_errors:
+    - id: fcf_error
+      when: 'true'
+      status: warning
+      text:
+        es: No sustituyas \`rpm\` directamente en \`F_cf\`; primero debe aparecer \`omega\`.
+        en: Do not substitute \`rpm\` directly into \`F_cf\`; \`omega\` must appear first.
+    next_step_rules:
+    - id: fcf_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de \`F_cf\`, comprueba si hace falta interpretar tambien \`v\` o comparar con otro escenario mediante \`ratio\`.
+        en: After \`F_cf\`, check whether \`v\` also needs interpretation or whether a second scenario should be compared through \`ratio\`.
+  omega:
+    summary_rules:
+    - id: omega_summary
+      when: 'true'
+      status: info
+      text:
+        es: "\`omega\` es la variable angular de trabajo a la que se llega desde \`rpm\` usando \`conversion_rpm\`."
+        en: '\`omega\` is the working angular variable reached from \`rpm\` through \`conversion_rpm\`.'
+    coherence_rules:
+    - id: omega_coherence
+      when: 'omega >= 0'
+      status: ok
+      text:
+        es: Un valor no negativo es consistente con el uso de modulos de giro en estos ejemplos.
+        en: A non-negative value is consistent with the use of spin magnitudes in these examples.
+    physical_reading_rules:
+    - id: omega_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si \`omega\` sube, el leaf espera un aumento mas que lineal de \`F_cf\` porque la dependencia entra al cuadrado.
+        en: If \`omega\` increases, the leaf expects a more-than-linear increase in \`F_cf\` because the dependence enters as a square.
+    model_validity_rules:
+    - id: omega_validity
+      when: 'true'
+      status: ok
+      text:
+        es: "\`omega\` debe representar un regimen de giro estable; si el dato instrumental es ambiguo, la comparacion pierde sentido."
+        en: '\`omega\` must represent a stable spin regime; if the instrumental datum is ambiguous, the comparison loses meaning.'
+    graph_rules:
+    - id: omega_graph
+      when: 'true'
+      status: info
+      text:
+        es: El eje horizontal del grafico muestra que mover \`omega\` hacia la derecha dispara la respuesta centrifuga.
+        en: The horizontal axis of the graph shows that moving \`omega\` to the right drives the centrifugal response upward.
+    likely_errors:
+    - id: omega_error
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas \`omega\` con \`rpm\`; son magnitudes relacionadas pero no iguales.
+        en: Do not confuse \`omega\` with \`rpm\`; they are related but not identical magnitudes.
+    next_step_rules:
+    - id: omega_next
+      when: 'true'
+      status: info
+      text:
+        es: Si hay un segundo caso, registra \`omega1\` y \`omega2\` antes de usar \`factor_por_cambio_omega\`.
+        en: If there is a second case, record \`omega1\` and \`omega2\` before using \`factor_por_cambio_omega\`.
+  rpm:
+    summary_rules:
+    - id: rpm_summary
+      when: 'true'
+      status: info
+      text:
+        es: "\`rpm\` es la lectura de instrumento que inicia el procedimiento, no la variable final del calculo dinamico."
+        en: '\`rpm\` is the instrument reading that starts the workflow, not the final variable of the dynamical calculation.'
+    coherence_rules:
+    - id: rpm_coherence
+      when: 'rpm >= 0'
+      status: ok
+      text:
+        es: Un valor de \`rpm\` no negativo es coherente con la lectura escalar de giro usada en el leaf.
+        en: A non-negative \`rpm\` value is coherent with the scalar spin reading used in the leaf.
+    physical_reading_rules:
+    - id: rpm_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si \`rpm\` aumenta, el instrumento esta reportando un regimen de giro mayor que despues se transformara en un \`omega\` mayor.
+        en: If \`rpm\` increases, the instrument is reporting a larger spin regime that will later become a larger \`omega\`.
+    model_validity_rules:
+    - id: rpm_validity
+      when: 'true'
+      status: ok
+      text:
+        es: "\`rpm\` solo sirve como entrada si luego se pasa por \`conversion_rpm\`; usarla cruda en la fuerza rompe el modelo."
+        en: '\`rpm\` only works as an input if it is later passed through \`conversion_rpm\`; using it raw in the force breaks the model.'
+    graph_rules:
+    - id: rpm_graph
+      when: 'true'
+      status: info
+      text:
+        es: Aunque el grafico se exprese en \`omega\`, su lectura puede conectarse hacia atras con el dato \`rpm\` que lo genero.
+        en: Even if the graph is expressed in \`omega\`, its reading can be connected back to the \`rpm\` datum that generated it.
+    likely_errors:
+    - id: rpm_error
+      when: 'true'
+      status: warning
+      text:
+        es: El error mas frecuente es tratar \`rpm\` como si ya estuviera en rad/s.
+        en: The most common error is to treat \`rpm\` as if it were already in rad/s.
+    next_step_rules:
+    - id: rpm_next
+      when: 'true'
+      status: info
+      text:
+        es: El siguiente paso natural despues de leer \`rpm\` es convertirla a \`omega\`.
+        en: The natural next step after reading \`rpm\` is to convert it into \`omega\`.
+  r:
+    summary_rules:
+    - id: r_summary
+      when: 'true'
+      status: info
+      text:
+        es: "\`r\` fija que tan lejos del eje se encuentra el punto donde se interpreta el efecto centrifugo."
+        en: '\`r\` fixes how far from the axis the point is where the centrifugal effect is interpreted.'
+    coherence_rules:
+    - id: r_coherence
+      when: 'r >= 0'
+      status: ok
+      text:
+        es: Un radio no negativo es coherente con la geometria escalar del leaf.
+        en: A non-negative radius is coherent with the scalar geometry of the leaf.
+    physical_reading_rules:
+    - id: r_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si \`r\` aumenta con el mismo \`omega\`, el punto queda mas expuesto al efecto radial y \`F_cf\` aumenta en la misma proporcion.
+        en: If \`r\` increases at the same \`omega\`, the point becomes more exposed to the radial effect and \`F_cf\` increases in the same proportion.
+    model_validity_rules:
+    - id: r_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si entre escenarios cambia \`r\`, ya no basta con \`factor_por_cambio_omega\` y debe recuperarse \`fuerza_centrifuga_base\`.
+        en: If \`r\` changes between scenarios, \`factor_por_cambio_omega\` is no longer enough and \`fuerza_centrifuga_base\` must be recovered.
+    graph_rules:
+    - id: r_graph
+      when: 'true'
+      status: info
+      text:
+        es: Aunque el grafico explore \`omega\`, cambiar \`r\` desplaza toda la curva de \`F_cf\` hacia arriba o hacia abajo.
+        en: Even though the graph explores \`omega\`, changing \`r\` shifts the whole \`F_cf\` curve upward or downward.
+    likely_errors:
+    - id: r_error
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas radio con diametro ni reutilices el mismo \`r\` si la posicion del punto cambia.
+        en: Do not confuse radius with diameter or reuse the same \`r\` if the point position changes.
+    next_step_rules:
+    - id: r_next
+      when: 'true'
+      status: info
+      text:
+        es: Tras fijar \`r\`, decide si el problema pide \`F_cf\` absoluta o una comparacion con otro caso.
+        en: After fixing \`r\`, decide whether the problem asks for absolute \`F_cf\` or comparison with another case.
+  v:
+    summary_rules:
+    - id: v_summary
+      when: 'true'
+      status: info
+      text:
+        es: "\`v\` es la lectura tangencial obtenida desde \`omega\` y \`r\` para interpretar la rapidez del borde."
+        en: '\`v\` is the tangential reading obtained from \`omega\` and \`r\` in order to interpret rim speed.'
+    coherence_rules:
+    - id: v_coherence
+      when: 'v >= 0'
+      status: ok
+      text:
+        es: Una rapidez no negativa es coherente con el uso escalar de \`velocidad_tangencial\`.
+        en: A non-negative speed is coherent with the scalar use of \`velocidad_tangencial\`.
+    physical_reading_rules:
+    - id: v_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si \`omega\` crece a radio fijo, \`v\` crece porque el borde recorre mas trayectoria por unidad de tiempo.
+        en: If \`omega\` grows at fixed radius, \`v\` grows because the rim covers more path per unit time.
+    model_validity_rules:
+    - id: v_validity
+      when: 'true'
+      status: ok
+      text:
+        es: "\`v\` interpreta bien el problema cuando el punto sigue una trayectoria circular clara de radio \`r\`."
+        en: '\`v\` interprets the problem well when the point follows a clear circular path of radius \`r\`.'
+    graph_rules:
+    - id: v_graph
+      when: 'true'
+      status: info
+      text:
+        es: Aunque el grafico principal muestre \`F_cf\`, el punto seleccionado tambien implica un \`v\` asociado por \`velocidad_tangencial\`.
+        en: Even though the main graph shows \`F_cf\`, the selected point also implies an associated \`v\` through \`velocidad_tangencial\`.
+    likely_errors:
+    - id: v_error
+      when: 'true'
+      status: warning
+      text:
+        es: No trates \`v\` como decoracion; ayuda a juzgar la escala fisica del caso.
+        en: Do not treat \`v\` as decoration; it helps judge the physical scale of the case.
+    next_step_rules:
+    - id: v_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa \`v\` para comentar rapidez de borde, seguridad o interpretacion mecanica del montaje.
+        en: Use \`v\` to comment on rim speed, safety, or mechanical interpretation of the setup.
+  ratio:
+    summary_rules:
+    - id: ratio_summary
+      when: 'true'
+      status: info
+      text:
+        es: "\`ratio\` resume cuanto cambia la fuerza centrifuga entre dos escenarios con igual masa y radio."
+        en: '\`ratio\` summarizes how much centrifugal force changes between two scenarios with equal mass and radius.'
+    coherence_rules:
+    - id: ratio_coherence
+      when: 'ratio >= 0'
+      status: ok
+      text:
+        es: Una razon no negativa es coherente con la comparacion cuadratica entre modulos de giro.
+        en: A non-negative ratio is coherent with the quadratic comparison between spin magnitudes.
+    physical_reading_rules:
+    - id: ratio_physical
+      when: 'true'
+      status: info
+      text:
+        es: "Si \`ratio\` vale 4, el segundo escenario no es solo \\"algo mas rapido\\": produce cuatro veces la lectura centrifuga del primero."
+        en: "If \`ratio\` equals 4, the second scenario is not just \\"somewhat faster\\": it produces four times the centrifugal reading of the first."
+    model_validity_rules:
+    - id: ratio_validity
+      when: 'true'
+      status: ok
+      text:
+        es: "\`ratio\` solo representa todo el cambio cuando \`m\` y \`r\` se conservan entre ambos casos."
+        en: '\`ratio\` represents the whole change only when \`m\` and \`r\` are preserved between the two cases.'
+    graph_rules:
+    - id: ratio_graph
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, comparar dos puntos de \`omega\` permite visualizar el mismo salto que resume \`ratio\`.
+        en: In the graph, comparing two \`omega\` points makes visible the same jump summarized by \`ratio\`.
+    likely_errors:
+    - id: ratio_error
+      when: 'true'
+      status: warning
+      text:
+        es: No leas \`ratio\` de manera lineal; es el cuadrado del cociente entre velocidades angulares.
+        en: Do not read \`ratio\` linearly; it is the square of the ratio between angular speeds.
+    next_step_rules:
+    - id: ratio_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa \`ratio\` para decidir si merece la pena recalcular valores absolutos o si la comparacion ya responde la pregunta.
+        en: Use \`ratio\` to decide whether absolute values still need to be computed or whether the comparison already answers the question.
+  omega1:
+    summary_rules:
+    - id: omega1_summary
+      when: 'true'
+      status: info
+      text:
+        es: "\`omega1\` fija el escenario de referencia desde el que se medira el cambio."
+        en: '\`omega1\` fixes the reference scenario from which the change will be measured.'
+    coherence_rules:
+    - id: omega1_coherence
+      when: 'omega1 > 0'
+      status: ok
+      text:
+        es: Un \`omega1\` positivo permite construir una comparacion estable con \`omega2\`.
+        en: A positive \`omega1\` allows a stable comparison with \`omega2\`.
+    physical_reading_rules:
+    - id: omega1_physical
+      when: 'true'
+      status: info
+      text:
+        es: "\`omega1\` no es solo un primer numero; fija la intensidad inicial del regimen de giro."
+        en: '\`omega1\` is not just a first number; it fixes the initial intensity of the spin regime.'
+    model_validity_rules:
+    - id: omega1_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si \`omega1\` no describe un estado estable, \`ratio\` pierde interpretacion.
+        en: If \`omega1\` does not describe a stable state, \`ratio\` loses interpretation.
+    graph_rules:
+    - id: omega1_graph
+      when: 'true'
+      status: info
+      text:
+        es: "\`omega1\` corresponde al primer punto de referencia sobre la curva de \`F_cf\`."
+        en: "\`omega1\` corresponds to the first reference point on the \`F_cf\` curve."
+    likely_errors:
+    - id: omega1_error
+      when: 'true'
+      status: warning
+      text:
+        es: No sustituyas \`omega1\` por \`rpm\` sin conversion previa.
+        en: Do not replace \`omega1\` with \`rpm\` without prior conversion.
+    next_step_rules:
+    - id: omega1_next
+      when: 'true'
+      status: info
+      text:
+        es: Tras fijar \`omega1\`, calcula \`omega2\` o el cociente entre ambas para obtener \`ratio\`.
+        en: After fixing \`omega1\`, compute \`omega2\` or their ratio in order to obtain \`ratio\`.
+  omega2:
+    summary_rules:
+    - id: omega2_summary
+      when: 'true'
+      status: info
+      text:
+        es: "\`omega2\` representa el nuevo regimen de giro que se quiere contrastar con el caso base."
+        en: '\`omega2\` represents the new spin regime to be contrasted with the base case.'
+    coherence_rules:
+    - id: omega2_coherence
+      when: 'omega2 >= 0'
+      status: ok
+      text:
+        es: Un \`omega2\` no negativo encaja con la comparacion escalar que usa este leaf.
+        en: A non-negative \`omega2\` fits the scalar comparison used by this leaf.
+    physical_reading_rules:
+    - id: omega2_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si \`omega2\` supera a \`omega1\`, la escena entra en un regimen centrifugo mas exigente y la fuerza aumenta segun el cuadrado del cambio.
+        en: If \`omega2\` exceeds \`omega1\`, the scene enters a more demanding centrifugal regime and force increases with the square of the change.
+    model_validity_rules:
+    - id: omega2_validity
+      when: 'true'
+      status: ok
+      text:
+        es: "\`omega2\` debe corresponder al mismo tipo de montaje si la comparacion pretende usar \`ratio\` como lectura completa."
+        en: '\`omega2\` must correspond to the same type of setup if the comparison intends to use \`ratio\` as a complete reading.'
+    graph_rules:
+    - id: omega2_graph
+      when: 'true'
+      status: info
+      text:
+        es: "\`omega2\` corresponde al segundo punto de referencia desde el que se visualiza el salto de la curva."
+        en: "\`omega2\` corresponds to the second reference point from which the curve jump is visualized."
+    likely_errors:
+    - id: omega2_error
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes \`omega2\` como un pequeno ajuste sin antes mirar el valor de \`ratio\`.
+        en: Do not interpret \`omega2\` as a minor adjustment before checking the value of \`ratio\`.
+    next_step_rules:
+    - id: omega2_next
+      when: 'true'
+      status: info
+      text:
+        es: Tras fijar \`omega2\`, decide si basta con \`ratio\` o si conviene calcular tambien \`F_cf\` absoluta del segundo caso.
+        en: After fixing \`omega2\`, decide whether \`ratio\` is enough or whether the absolute \`F_cf\` of the second case should also be computed.
+`;export{e as default};

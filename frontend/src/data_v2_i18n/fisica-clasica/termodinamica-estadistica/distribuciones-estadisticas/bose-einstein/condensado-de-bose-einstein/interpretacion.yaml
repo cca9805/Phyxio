@@ -1,0 +1,991 @@
+version: 5.0.0
+id: condensado-de-bose-einstein
+leaf_id: condensado-de-bose-einstein
+nombre:
+  es: Condensado de bose einstein
+  en: Bose-Einstein Condensate
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: distribuciones-estadisticas
+  parent_id: bose-einstein
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/distribuciones-estadisticas/bose-einstein/condensado-de-bose-einstein
+  orden: 273220
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - temperatura_critica_bose
+  - fraccion_condensada_bose
+  - densidad_critica_bose
+  - longitud_onda_termica_de_broglie
+  magnitudes:
+  - fraccion_condensada
+  - temperatura
+  - temperatura_critica
+  - densidad_particulas
+  - masa_particula
+  - constante_planck
+  - constante_boltzmann
+  - longitud_onda_termica
+  - densidad_critica
+  - numero_particulas
+  - numero_condensado
+  - volumen
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: temperatura_critica
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  temperatura_critica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: umbral de condensación
+      en: condensation threshold
+    summary_rules:
+    - id: temperatura_critica_summary_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_critica]] marca la frontera térmica a partir de la cual puede aparecer ocupación macroscópica del
+          estado fundamental. Interprétala con su unidad K y con el régimen ideal de bosones.'
+        en: '[[temperatura_critica]] marks the thermal boundary below which macroscopic occupation of the ground state can
+          appear. Interpret it with its K unit and within the ideal-boson regime.'
+    physical_reading_rules:
+    - id: temperatura_critica_physical_reading_context
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[temperatura_critica]] como parte del equilibrio Bose-Einstein: no es un dato aislado, depende de [[temperatura]],
+          [[densidad_particulas]] y del solapamiento cuántico.'
+        en: 'Read [[temperatura_critica]] as part of Bose-Einstein equilibrium: it is not an isolated number, but depends
+          on [[temperatura]], [[densidad_particulas]], and quantum overlap.'
+    - id: temperatura_critica_physical_reading_unit
+      when: 'true'
+      status: ok
+      text:
+        es: 'Comprueba la unidad esperada de [[temperatura_critica]]: K. Una unidad incompatible suele indicar que se mezclaron
+          densidad, número total o volumen.'
+        en: 'Check the expected unit of [[temperatura_critica]]: K. An incompatible unit usually means density, total number,
+          or volume were mixed.'
+    coherence_rules:
+    - id: temperatura_critica_coherence_condensation_regime
+      when: 'true'
+      status: ok
+      text:
+        es: 'Contrasta [[temperatura_critica]] con [[temperatura_critica]] y [[fraccion_condensada]]: por encima del umbral
+          térmico no debe aparecer condensado ideal.'
+        en: 'Compare [[temperatura_critica]] with [[temperatura_critica]] and [[fraccion_condensada]]: above the thermal threshold
+          an ideal condensate should not appear.'
+    - id: temperatura_critica_coherence_density_volume
+      when: 'true'
+      status: ok
+      text:
+        es: Si intervienen [[numero_particulas]] y [[volumen]], verifica que su cociente sea coherente con [[densidad_particulas]]
+          antes de interpretar [[temperatura_critica]].
+        en: If [[numero_particulas]] and [[volumen]] appear, verify that their ratio is consistent with [[densidad_particulas]]
+          before interpreting [[temperatura_critica]].
+    model_validity_rules:
+    - id: temperatura_critica_model_validity_ideal_gas
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[temperatura_critica]] dentro del gas de bosones ideal o débilmente interactuante; interacciones fuertes,
+          trampas reales o tamaño finito pueden desplazar el umbral.
+        en: Use [[temperatura_critica]] within an ideal or weakly interacting boson gas; strong interactions, real traps,
+          or finite size can shift the threshold.
+    - id: temperatura_critica_model_validity_temperature
+      when: temperatura <= 0
+      status: warning
+      text:
+        es: Una [[temperatura]] no positiva invalida la lectura termodinámica estándar de [[temperatura_critica]].
+        en: A non-positive [[temperatura]] invalidates the standard thermodynamic reading of [[temperatura_critica]].
+    graph_rules:
+    - id: temperatura_critica_graph_temperature_axis
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, localiza [[temperatura]] respecto a [[temperatura_critica]] para decidir si [[temperatura_critica]]
+          pertenece a la zona condensada o térmica.
+        en: On the Coord graph, locate [[temperatura]] relative to [[temperatura_critica]] to decide whether [[temperatura_critica]]
+          belongs to the condensed or thermal region.
+    - id: temperatura_critica_graph_slope_limit
+      when: 'true'
+      status: info
+      text:
+        es: 'Observa la curvatura cerca de [[temperatura_critica]]: un cambio brusco de [[fraccion_condensada]] señala transición
+          ideal, no una fuerza mecánica.'
+        en: 'Observe the curvature near [[temperatura_critica]]: a sharp change in [[fraccion_condensada]] signals an ideal
+          transition, not a mechanical force.'
+    likely_errors:
+    - id: temperatura_critica_likely_error_classical
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura_critica]] con una lectura aislada es un error frecuente: No trates [[temperatura_critica]]
+          con intuición clásica de partículas distinguibles: la condensación surge porque muchos bosones pueden compartir
+          el mismo estado.'
+        en: 'A common mistake is to interpret [[temperatura_critica]] in isolation: Do not treat [[temperatura_critica]] with
+          classical distinguishable-particle intuition: condensation arises because many bosons can share the same state.'
+    - id: temperatura_critica_likely_error_threshold
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura_critica]] con una lectura aislada es un error frecuente: No confundas [[temperatura_critica]]
+          con la [[temperatura]] real: el primero es un umbral y la segunda es el estado actual del sistema.'
+        en: 'Do not confuse [[temperatura_critica]] with the actual [[temperatura]]: the first is a threshold and the second
+          is the current state of the system.'
+    next_step_rules:
+    - id: temperatura_critica_next_step_compare_threshold
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[temperatura_critica]], compara [[temperatura]] con [[temperatura_critica]] y decide si debes
+          leer [[fraccion_condensada]] o revisar la densidad.
+        en: After calculating [[temperatura_critica]], compare [[temperatura]] with [[temperatura_critica]] and decide whether
+          to read [[fraccion_condensada]] or recheck density.
+    physical_intuition:
+    - id: temperatura_critica_intuition_overlap
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura_critica]] cobra sentido cuando la [[longitud_onda_termica]] se vuelve comparable
+          a la separación media entre bosones.
+        en: Intuitively, [[temperatura_critica]] becomes meaningful when [[longitud_onda_termica]] becomes comparable to the
+          mean spacing between bosons.
+    limiting_cases:
+    - id: temperatura_critica_limit_high_temperature
+      when: temperatura >> temperatura_critica
+      status: info
+      text:
+        es: Si [[temperatura]] es mucho mayor que [[temperatura_critica]], la lectura ideal espera [[fraccion_condensada]]
+          prácticamente nula.
+        en: If [[temperatura]] is much larger than [[temperatura_critica]], the ideal reading expects nearly zero [[fraccion_condensada]].
+    - id: temperatura_critica_limit_low_temperature
+      when: temperatura << temperatura_critica
+      status: info
+      text:
+        es: Si [[temperatura]] está muy por debajo de [[temperatura_critica]], el modelo predice una población macroscópica
+          en [[numero_condensado]].
+        en: If [[temperatura]] is far below [[temperatura_critica]], the model predicts a macroscopic population in [[numero_condensado]].
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  densidad_particulas:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro material
+      en: material parameter
+    summary_rules:
+    - id: densidad_particulas_summary_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[densidad_particulas]] mide cuántos bosones disponibles hay por unidad de volumen para solapar sus ondas térmicas.
+          Interprétala con su unidad m^-3 y con el régimen ideal de bosones.'
+        en: '[[densidad_particulas]] measures how many bosons per unit volume are available for thermal-wave overlap. Interpret
+          it with its m^-3 unit and within the ideal-boson regime.'
+    physical_reading_rules:
+    - id: densidad_particulas_physical_reading_context
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[densidad_particulas]] como parte del equilibrio Bose-Einstein: no es un dato aislado, depende de [[temperatura]],
+          [[densidad_particulas]] y del solapamiento cuántico.'
+        en: 'Read [[densidad_particulas]] as part of Bose-Einstein equilibrium: it is not an isolated number, but depends
+          on [[temperatura]], [[densidad_particulas]], and quantum overlap.'
+    - id: densidad_particulas_physical_reading_unit
+      when: 'true'
+      status: ok
+      text:
+        es: 'Comprueba la unidad esperada de [[densidad_particulas]]: m^-3. Una unidad incompatible suele indicar que se mezclaron
+          densidad, número total o volumen.'
+        en: 'Check the expected unit of [[densidad_particulas]]: m^-3. An incompatible unit usually means density, total number,
+          or volume were mixed.'
+    coherence_rules:
+    - id: densidad_particulas_coherence_condensation_regime
+      when: 'true'
+      status: ok
+      text:
+        es: 'Contrasta [[densidad_particulas]] con [[temperatura_critica]] y [[fraccion_condensada]]: por encima del umbral
+          térmico no debe aparecer condensado ideal.'
+        en: 'Compare [[densidad_particulas]] with [[temperatura_critica]] and [[fraccion_condensada]]: above the thermal threshold
+          an ideal condensate should not appear.'
+    - id: densidad_particulas_coherence_density_volume
+      when: 'true'
+      status: ok
+      text:
+        es: Si intervienen [[numero_particulas]] y [[volumen]], verifica que su cociente sea coherente con [[densidad_particulas]]
+          antes de interpretar [[densidad_particulas]].
+        en: If [[numero_particulas]] and [[volumen]] appear, verify that their ratio is consistent with [[densidad_particulas]]
+          before interpreting [[densidad_particulas]].
+    model_validity_rules:
+    - id: densidad_particulas_model_validity_ideal_gas
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[densidad_particulas]] dentro del gas de bosones ideal o débilmente interactuante; interacciones fuertes,
+          trampas reales o tamaño finito pueden desplazar el umbral.
+        en: Use [[densidad_particulas]] within an ideal or weakly interacting boson gas; strong interactions, real traps,
+          or finite size can shift the threshold.
+    - id: densidad_particulas_model_validity_temperature
+      when: temperatura <= 0
+      status: warning
+      text:
+        es: Una [[temperatura]] no positiva invalida la lectura termodinámica estándar de [[densidad_particulas]].
+        en: A non-positive [[temperatura]] invalidates the standard thermodynamic reading of [[densidad_particulas]].
+    graph_rules:
+    - id: densidad_particulas_graph_temperature_axis
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, localiza [[temperatura]] respecto a [[temperatura_critica]] para decidir si [[densidad_particulas]]
+          pertenece a la zona condensada o térmica.
+        en: On the Coord graph, locate [[temperatura]] relative to [[temperatura_critica]] to decide whether [[densidad_particulas]]
+          belongs to the condensed or thermal region.
+    - id: densidad_particulas_graph_slope_limit
+      when: 'true'
+      status: info
+      text:
+        es: 'Observa la curvatura cerca de [[temperatura_critica]]: un cambio brusco de [[fraccion_condensada]] señala transición
+          ideal, no una fuerza mecánica.'
+        en: 'Observe the curvature near [[temperatura_critica]]: a sharp change in [[fraccion_condensada]] signals an ideal
+          transition, not a mechanical force.'
+    likely_errors:
+    - id: densidad_particulas_likely_error_classical
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[densidad_particulas]] con una lectura aislada es un error frecuente: No trates [[densidad_particulas]]
+          con intuición clásica de partículas distinguibles: la condensación surge porque muchos bosones pueden compartir
+          el mismo estado.'
+        en: 'A common mistake is to interpret [[densidad_particulas]] in isolation: Do not treat [[densidad_particulas]] with
+          classical distinguishable-particle intuition: condensation arises because many bosons can share the same state.'
+    - id: densidad_particulas_likely_error_threshold
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[densidad_particulas]] con una lectura aislada es un error frecuente: No confundas [[temperatura_critica]]
+          con la [[temperatura]] real: el primero es un umbral y la segunda es el estado actual del sistema.'
+        en: 'Do not confuse [[temperatura_critica]] with the actual [[temperatura]]: the first is a threshold and the second
+          is the current state of the system.'
+    next_step_rules:
+    - id: densidad_particulas_next_step_compare_threshold
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[densidad_particulas]], compara [[temperatura]] con [[temperatura_critica]] y decide si debes
+          leer [[fraccion_condensada]] o revisar la densidad.
+        en: After calculating [[densidad_particulas]], compare [[temperatura]] with [[temperatura_critica]] and decide whether
+          to read [[fraccion_condensada]] or recheck density.
+    physical_intuition:
+    - id: densidad_particulas_intuition_overlap
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[densidad_particulas]] cobra sentido cuando la [[longitud_onda_termica]] se vuelve comparable
+          a la separación media entre bosones.
+        en: Intuitively, [[densidad_particulas]] becomes meaningful when [[longitud_onda_termica]] becomes comparable to the
+          mean spacing between bosons.
+    limiting_cases:
+    - id: densidad_particulas_limit_high_temperature
+      when: temperatura >> temperatura_critica
+      status: info
+      text:
+        es: Si [[temperatura]] es mucho mayor que [[temperatura_critica]], la lectura ideal espera [[fraccion_condensada]]
+          prácticamente nula.
+        en: If [[temperatura]] is much larger than [[temperatura_critica]], the ideal reading expects nearly zero [[fraccion_condensada]].
+    - id: densidad_particulas_limit_low_temperature
+      when: temperatura << temperatura_critica
+      status: info
+      text:
+        es: Si [[temperatura]] está muy por debajo de [[temperatura_critica]], el modelo predice una población macroscópica
+          en [[numero_condensado]].
+        en: If [[temperatura]] is far below [[temperatura_critica]], the model predicts a macroscopic population in [[numero_condensado]].
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  fraccion_condensada:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado principal
+      en: main result
+    summary_rules:
+    - id: fraccion_condensada_summary_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[fraccion_condensada]] indica qué parte del sistema ocupa colectivamente el estado fundamental. Interprétala
+          con su unidad adimensional y con el régimen ideal de bosones.'
+        en: '[[fraccion_condensada]] indicates what fraction of the system collectively occupies the ground state. Interpret
+          it with its adimensional unit and within the ideal-boson regime.'
+    physical_reading_rules:
+    - id: fraccion_condensada_physical_reading_context
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[fraccion_condensada]] como parte del equilibrio Bose-Einstein: no es un dato aislado, depende de [[temperatura]],
+          [[densidad_particulas]] y del solapamiento cuántico.'
+        en: 'Read [[fraccion_condensada]] as part of Bose-Einstein equilibrium: it is not an isolated number, but depends
+          on [[temperatura]], [[densidad_particulas]], and quantum overlap.'
+    - id: fraccion_condensada_physical_reading_unit
+      when: 'true'
+      status: ok
+      text:
+        es: 'Comprueba la unidad esperada de [[fraccion_condensada]]: adimensional. Una unidad incompatible suele indicar
+          que se mezclaron densidad, número total o volumen.'
+        en: 'Check the expected unit of [[fraccion_condensada]]: adimensional. An incompatible unit usually means density,
+          total number, or volume were mixed.'
+    coherence_rules:
+    - id: fraccion_condensada_coherence_condensation_regime
+      when: 'true'
+      status: ok
+      text:
+        es: 'Contrasta [[fraccion_condensada]] con [[temperatura_critica]] y [[fraccion_condensada]]: por encima del umbral
+          térmico no debe aparecer condensado ideal.'
+        en: 'Compare [[fraccion_condensada]] with [[temperatura_critica]] and [[fraccion_condensada]]: above the thermal threshold
+          an ideal condensate should not appear.'
+    - id: fraccion_condensada_coherence_density_volume
+      when: 'true'
+      status: ok
+      text:
+        es: Si intervienen [[numero_particulas]] y [[volumen]], verifica que su cociente sea coherente con [[densidad_particulas]]
+          antes de interpretar [[fraccion_condensada]].
+        en: If [[numero_particulas]] and [[volumen]] appear, verify that their ratio is consistent with [[densidad_particulas]]
+          before interpreting [[fraccion_condensada]].
+    model_validity_rules:
+    - id: fraccion_condensada_model_validity_ideal_gas
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[fraccion_condensada]] dentro del gas de bosones ideal o débilmente interactuante; interacciones fuertes,
+          trampas reales o tamaño finito pueden desplazar el umbral.
+        en: Use [[fraccion_condensada]] within an ideal or weakly interacting boson gas; strong interactions, real traps,
+          or finite size can shift the threshold.
+    - id: fraccion_condensada_model_validity_temperature
+      when: temperatura <= 0
+      status: warning
+      text:
+        es: Una [[temperatura]] no positiva invalida la lectura termodinámica estándar de [[fraccion_condensada]].
+        en: A non-positive [[temperatura]] invalidates the standard thermodynamic reading of [[fraccion_condensada]].
+    graph_rules:
+    - id: fraccion_condensada_graph_temperature_axis
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, localiza [[temperatura]] respecto a [[temperatura_critica]] para decidir si [[fraccion_condensada]]
+          pertenece a la zona condensada o térmica.
+        en: On the Coord graph, locate [[temperatura]] relative to [[temperatura_critica]] to decide whether [[fraccion_condensada]]
+          belongs to the condensed or thermal region.
+    - id: fraccion_condensada_graph_slope_limit
+      when: 'true'
+      status: info
+      text:
+        es: 'Observa la curvatura cerca de [[temperatura_critica]]: un cambio brusco de [[fraccion_condensada]] señala transición
+          ideal, no una fuerza mecánica.'
+        en: 'Observe the curvature near [[temperatura_critica]]: a sharp change in [[fraccion_condensada]] signals an ideal
+          transition, not a mechanical force.'
+    likely_errors:
+    - id: fraccion_condensada_likely_error_classical
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[fraccion_condensada]] con una lectura aislada es un error frecuente: No trates [[fraccion_condensada]]
+          con intuición clásica de partículas distinguibles: la condensación surge porque muchos bosones pueden compartir
+          el mismo estado.'
+        en: 'A common mistake is to interpret [[fraccion_condensada]] in isolation: Do not treat [[fraccion_condensada]] with
+          classical distinguishable-particle intuition: condensation arises because many bosons can share the same state.'
+    - id: fraccion_condensada_likely_error_threshold
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[fraccion_condensada]] con una lectura aislada es un error frecuente: No confundas [[temperatura_critica]]
+          con la [[temperatura]] real: el primero es un umbral y la segunda es el estado actual del sistema.'
+        en: 'Do not confuse [[temperatura_critica]] with the actual [[temperatura]]: the first is a threshold and the second
+          is the current state of the system.'
+    next_step_rules:
+    - id: fraccion_condensada_next_step_compare_threshold
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[fraccion_condensada]], compara [[temperatura]] con [[temperatura_critica]] y decide si debes
+          leer [[fraccion_condensada]] o revisar la densidad.
+        en: After calculating [[fraccion_condensada]], compare [[temperatura]] with [[temperatura_critica]] and decide whether
+          to read [[fraccion_condensada]] or recheck density.
+    physical_intuition:
+    - id: fraccion_condensada_intuition_overlap
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[fraccion_condensada]] cobra sentido cuando la [[longitud_onda_termica]] se vuelve comparable
+          a la separación media entre bosones.
+        en: Intuitively, [[fraccion_condensada]] becomes meaningful when [[longitud_onda_termica]] becomes comparable to the
+          mean spacing between bosons.
+    limiting_cases:
+    - id: fraccion_condensada_limit_high_temperature
+      when: temperatura >> temperatura_critica
+      status: info
+      text:
+        es: Si [[temperatura]] es mucho mayor que [[temperatura_critica]], la lectura ideal espera [[fraccion_condensada]]
+          prácticamente nula.
+        en: If [[temperatura]] is much larger than [[temperatura_critica]], the ideal reading expects nearly zero [[fraccion_condensada]].
+    - id: fraccion_condensada_limit_low_temperature
+      when: temperatura << temperatura_critica
+      status: info
+      text:
+        es: Si [[temperatura]] está muy por debajo de [[temperatura_critica]], el modelo predice una población macroscópica
+          en [[numero_condensado]].
+        en: If [[temperatura]] is far below [[temperatura_critica]], the model predicts a macroscopic population in [[numero_condensado]].
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable de control
+      en: control variable
+    summary_rules:
+    - id: temperatura_summary_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] compara la agitación térmica real con el umbral de condensación. Interprétala con su unidad K
+          y con el régimen ideal de bosones.'
+        en: '[[temperatura]] compares the actual thermal agitation with the condensation threshold. Interpret it with its
+          K unit and within the ideal-boson regime.'
+    physical_reading_rules:
+    - id: temperatura_physical_reading_context
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[temperatura]] como parte del equilibrio Bose-Einstein: no es un dato aislado, depende de [[temperatura]],
+          [[densidad_particulas]] y del solapamiento cuántico.'
+        en: 'Read [[temperatura]] as part of Bose-Einstein equilibrium: it is not an isolated number, but depends on [[temperatura]],
+          [[densidad_particulas]], and quantum overlap.'
+    - id: temperatura_physical_reading_unit
+      when: 'true'
+      status: ok
+      text:
+        es: 'Comprueba la unidad esperada de [[temperatura]]: K. Una unidad incompatible suele indicar que se mezclaron densidad,
+          número total o volumen.'
+        en: 'Check the expected unit of [[temperatura]]: K. An incompatible unit usually means density, total number, or volume
+          were mixed.'
+    coherence_rules:
+    - id: temperatura_coherence_condensation_regime
+      when: 'true'
+      status: ok
+      text:
+        es: 'Contrasta [[temperatura]] con [[temperatura_critica]] y [[fraccion_condensada]]: por encima del umbral térmico
+          no debe aparecer condensado ideal.'
+        en: 'Compare [[temperatura]] with [[temperatura_critica]] and [[fraccion_condensada]]: above the thermal threshold
+          an ideal condensate should not appear.'
+    - id: temperatura_coherence_density_volume
+      when: 'true'
+      status: ok
+      text:
+        es: Si intervienen [[numero_particulas]] y [[volumen]], verifica que su cociente sea coherente con [[densidad_particulas]]
+          antes de interpretar [[temperatura]].
+        en: If [[numero_particulas]] and [[volumen]] appear, verify that their ratio is consistent with [[densidad_particulas]]
+          before interpreting [[temperatura]].
+    model_validity_rules:
+    - id: temperatura_model_validity_ideal_gas
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[temperatura]] dentro del gas de bosones ideal o débilmente interactuante; interacciones fuertes, trampas
+          reales o tamaño finito pueden desplazar el umbral.
+        en: Use [[temperatura]] within an ideal or weakly interacting boson gas; strong interactions, real traps, or finite
+          size can shift the threshold.
+    - id: temperatura_model_validity_temperature
+      when: temperatura <= 0
+      status: warning
+      text:
+        es: Una [[temperatura]] no positiva invalida la lectura termodinámica estándar de [[temperatura]].
+        en: A non-positive [[temperatura]] invalidates the standard thermodynamic reading of [[temperatura]].
+    graph_rules:
+    - id: temperatura_graph_temperature_axis
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, localiza [[temperatura]] respecto a [[temperatura_critica]] para decidir si [[temperatura]]
+          pertenece a la zona condensada o térmica.
+        en: On the Coord graph, locate [[temperatura]] relative to [[temperatura_critica]] to decide whether [[temperatura]]
+          belongs to the condensed or thermal region.
+    - id: temperatura_graph_slope_limit
+      when: 'true'
+      status: info
+      text:
+        es: 'Observa la curvatura cerca de [[temperatura_critica]]: un cambio brusco de [[fraccion_condensada]] señala transición
+          ideal, no una fuerza mecánica.'
+        en: 'Observe the curvature near [[temperatura_critica]]: a sharp change in [[fraccion_condensada]] signals an ideal
+          transition, not a mechanical force.'
+    likely_errors:
+    - id: temperatura_likely_error_classical
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura]] con una lectura aislada es un error frecuente: No trates [[temperatura]] con intuición
+          clásica de partículas distinguibles: la condensación surge porque muchos bosones pueden compartir el mismo estado.'
+        en: 'A common mistake is to interpret [[temperatura]] in isolation: Do not treat [[temperatura]] with classical distinguishable-particle
+          intuition: condensation arises because many bosons can share the same state.'
+    - id: temperatura_likely_error_threshold
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura]] con una lectura aislada es un error frecuente: No confundas [[temperatura_critica]]
+          con la [[temperatura]] real: el primero es un umbral y la segunda es el estado actual del sistema.'
+        en: 'Do not confuse [[temperatura_critica]] with the actual [[temperatura]]: the first is a threshold and the second
+          is the current state of the system.'
+    next_step_rules:
+    - id: temperatura_next_step_compare_threshold
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[temperatura]], compara [[temperatura]] con [[temperatura_critica]] y decide si debes leer
+          [[fraccion_condensada]] o revisar la densidad.
+        en: After calculating [[temperatura]], compare [[temperatura]] with [[temperatura_critica]] and decide whether to
+          read [[fraccion_condensada]] or recheck density.
+    physical_intuition:
+    - id: temperatura_intuition_overlap
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura]] cobra sentido cuando la [[longitud_onda_termica]] se vuelve comparable a la separación
+          media entre bosones.
+        en: Intuitively, [[temperatura]] becomes meaningful when [[longitud_onda_termica]] becomes comparable to the mean
+          spacing between bosons.
+    limiting_cases:
+    - id: temperatura_limit_high_temperature
+      when: temperatura >> temperatura_critica
+      status: info
+      text:
+        es: Si [[temperatura]] es mucho mayor que [[temperatura_critica]], la lectura ideal espera [[fraccion_condensada]]
+          prácticamente nula.
+        en: If [[temperatura]] is much larger than [[temperatura_critica]], the ideal reading expects nearly zero [[fraccion_condensada]].
+    - id: temperatura_limit_low_temperature
+      when: temperatura << temperatura_critica
+      status: info
+      text:
+        es: Si [[temperatura]] está muy por debajo de [[temperatura_critica]], el modelo predice una población macroscópica
+          en [[numero_condensado]].
+        en: If [[temperatura]] is far below [[temperatura_critica]], the model predicts a macroscopic population in [[numero_condensado]].
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  densidad_critica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: umbral de densidad
+      en: density threshold
+    summary_rules:
+    - id: densidad_critica_summary_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[densidad_critica]] indica la densidad mínima para que el gas ideal pueda condensar a una temperatura dada.
+          Interprétala con su unidad m^-3 y con el régimen ideal de bosones.'
+        en: '[[densidad_critica]] indicates the minimum density for an ideal gas to condense at a given temperature. Interpret
+          it with its m^-3 unit and within the ideal-boson regime.'
+    physical_reading_rules:
+    - id: densidad_critica_physical_reading_context
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[densidad_critica]] como parte del equilibrio Bose-Einstein: no es un dato aislado, depende de [[temperatura]],
+          [[densidad_particulas]] y del solapamiento cuántico.'
+        en: 'Read [[densidad_critica]] as part of Bose-Einstein equilibrium: it is not an isolated number, but depends on
+          [[temperatura]], [[densidad_particulas]], and quantum overlap.'
+    - id: densidad_critica_physical_reading_unit
+      when: 'true'
+      status: ok
+      text:
+        es: 'Comprueba la unidad esperada de [[densidad_critica]]: m^-3. Una unidad incompatible suele indicar que se mezclaron
+          densidad, número total o volumen.'
+        en: 'Check the expected unit of [[densidad_critica]]: m^-3. An incompatible unit usually means density, total number,
+          or volume were mixed.'
+    coherence_rules:
+    - id: densidad_critica_coherence_condensation_regime
+      when: 'true'
+      status: ok
+      text:
+        es: 'Contrasta [[densidad_critica]] con [[temperatura_critica]] y [[fraccion_condensada]]: por encima del umbral térmico
+          no debe aparecer condensado ideal.'
+        en: 'Compare [[densidad_critica]] with [[temperatura_critica]] and [[fraccion_condensada]]: above the thermal threshold
+          an ideal condensate should not appear.'
+    - id: densidad_critica_coherence_density_volume
+      when: 'true'
+      status: ok
+      text:
+        es: Si intervienen [[numero_particulas]] y [[volumen]], verifica que su cociente sea coherente con [[densidad_particulas]]
+          antes de interpretar [[densidad_critica]].
+        en: If [[numero_particulas]] and [[volumen]] appear, verify that their ratio is consistent with [[densidad_particulas]]
+          before interpreting [[densidad_critica]].
+    model_validity_rules:
+    - id: densidad_critica_model_validity_ideal_gas
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[densidad_critica]] dentro del gas de bosones ideal o débilmente interactuante; interacciones fuertes, trampas
+          reales o tamaño finito pueden desplazar el umbral.
+        en: Use [[densidad_critica]] within an ideal or weakly interacting boson gas; strong interactions, real traps, or
+          finite size can shift the threshold.
+    - id: densidad_critica_model_validity_temperature
+      when: temperatura <= 0
+      status: warning
+      text:
+        es: Una [[temperatura]] no positiva invalida la lectura termodinámica estándar de [[densidad_critica]].
+        en: A non-positive [[temperatura]] invalidates the standard thermodynamic reading of [[densidad_critica]].
+    graph_rules:
+    - id: densidad_critica_graph_temperature_axis
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, localiza [[temperatura]] respecto a [[temperatura_critica]] para decidir si [[densidad_critica]]
+          pertenece a la zona condensada o térmica.
+        en: On the Coord graph, locate [[temperatura]] relative to [[temperatura_critica]] to decide whether [[densidad_critica]]
+          belongs to the condensed or thermal region.
+    - id: densidad_critica_graph_slope_limit
+      when: 'true'
+      status: info
+      text:
+        es: 'Observa la curvatura cerca de [[temperatura_critica]]: un cambio brusco de [[fraccion_condensada]] señala transición
+          ideal, no una fuerza mecánica.'
+        en: 'Observe the curvature near [[temperatura_critica]]: a sharp change in [[fraccion_condensada]] signals an ideal
+          transition, not a mechanical force.'
+    likely_errors:
+    - id: densidad_critica_likely_error_classical
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[densidad_critica]] con una lectura aislada es un error frecuente: No trates [[densidad_critica]]
+          con intuición clásica de partículas distinguibles: la condensación surge porque muchos bosones pueden compartir
+          el mismo estado.'
+        en: 'A common mistake is to interpret [[densidad_critica]] in isolation: Do not treat [[densidad_critica]] with classical
+          distinguishable-particle intuition: condensation arises because many bosons can share the same state.'
+    - id: densidad_critica_likely_error_threshold
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[densidad_critica]] con una lectura aislada es un error frecuente: No confundas [[temperatura_critica]]
+          con la [[temperatura]] real: el primero es un umbral y la segunda es el estado actual del sistema.'
+        en: 'Do not confuse [[temperatura_critica]] with the actual [[temperatura]]: the first is a threshold and the second
+          is the current state of the system.'
+    next_step_rules:
+    - id: densidad_critica_next_step_compare_threshold
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[densidad_critica]], compara [[temperatura]] con [[temperatura_critica]] y decide si debes
+          leer [[fraccion_condensada]] o revisar la densidad.
+        en: After calculating [[densidad_critica]], compare [[temperatura]] with [[temperatura_critica]] and decide whether
+          to read [[fraccion_condensada]] or recheck density.
+    physical_intuition:
+    - id: densidad_critica_intuition_overlap
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[densidad_critica]] cobra sentido cuando la [[longitud_onda_termica]] se vuelve comparable a
+          la separación media entre bosones.
+        en: Intuitively, [[densidad_critica]] becomes meaningful when [[longitud_onda_termica]] becomes comparable to the
+          mean spacing between bosons.
+    limiting_cases:
+    - id: densidad_critica_limit_high_temperature
+      when: temperatura >> temperatura_critica
+      status: info
+      text:
+        es: Si [[temperatura]] es mucho mayor que [[temperatura_critica]], la lectura ideal espera [[fraccion_condensada]]
+          prácticamente nula.
+        en: If [[temperatura]] is much larger than [[temperatura_critica]], the ideal reading expects nearly zero [[fraccion_condensada]].
+    - id: densidad_critica_limit_low_temperature
+      when: temperatura << temperatura_critica
+      status: info
+      text:
+        es: Si [[temperatura]] está muy por debajo de [[temperatura_critica]], el modelo predice una población macroscópica
+          en [[numero_condensado]].
+        en: If [[temperatura]] is far below [[temperatura_critica]], the model predicts a macroscopic population in [[numero_condensado]].
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  longitud_onda_termica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: escala cuántica
+      en: quantum scale
+    summary_rules:
+    - id: longitud_onda_termica_summary_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[longitud_onda_termica]] mide la extensión ondulatoria térmica cuyo solapamiento favorece la degeneración cuántica.
+          Interprétala con su unidad m y con el régimen ideal de bosones.'
+        en: '[[longitud_onda_termica]] measures the thermal wave extent whose overlap favors quantum degeneracy. Interpret
+          it with its m unit and within the ideal-boson regime.'
+    physical_reading_rules:
+    - id: longitud_onda_termica_physical_reading_context
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[longitud_onda_termica]] como parte del equilibrio Bose-Einstein: no es un dato aislado, depende de [[temperatura]],
+          [[densidad_particulas]] y del solapamiento cuántico.'
+        en: 'Read [[longitud_onda_termica]] as part of Bose-Einstein equilibrium: it is not an isolated number, but depends
+          on [[temperatura]], [[densidad_particulas]], and quantum overlap.'
+    - id: longitud_onda_termica_physical_reading_unit
+      when: 'true'
+      status: ok
+      text:
+        es: 'Comprueba la unidad esperada de [[longitud_onda_termica]]: m. Una unidad incompatible suele indicar que se mezclaron
+          densidad, número total o volumen.'
+        en: 'Check the expected unit of [[longitud_onda_termica]]: m. An incompatible unit usually means density, total number,
+          or volume were mixed.'
+    coherence_rules:
+    - id: longitud_onda_termica_coherence_condensation_regime
+      when: 'true'
+      status: ok
+      text:
+        es: 'Contrasta [[longitud_onda_termica]] con [[temperatura_critica]] y [[fraccion_condensada]]: por encima del umbral
+          térmico no debe aparecer condensado ideal.'
+        en: 'Compare [[longitud_onda_termica]] with [[temperatura_critica]] and [[fraccion_condensada]]: above the thermal
+          threshold an ideal condensate should not appear.'
+    - id: longitud_onda_termica_coherence_density_volume
+      when: 'true'
+      status: ok
+      text:
+        es: Si intervienen [[numero_particulas]] y [[volumen]], verifica que su cociente sea coherente con [[densidad_particulas]]
+          antes de interpretar [[longitud_onda_termica]].
+        en: If [[numero_particulas]] and [[volumen]] appear, verify that their ratio is consistent with [[densidad_particulas]]
+          before interpreting [[longitud_onda_termica]].
+    model_validity_rules:
+    - id: longitud_onda_termica_model_validity_ideal_gas
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[longitud_onda_termica]] dentro del gas de bosones ideal o débilmente interactuante; interacciones fuertes,
+          trampas reales o tamaño finito pueden desplazar el umbral.
+        en: Use [[longitud_onda_termica]] within an ideal or weakly interacting boson gas; strong interactions, real traps,
+          or finite size can shift the threshold.
+    - id: longitud_onda_termica_model_validity_temperature
+      when: temperatura <= 0
+      status: warning
+      text:
+        es: Una [[temperatura]] no positiva invalida la lectura termodinámica estándar de [[longitud_onda_termica]].
+        en: A non-positive [[temperatura]] invalidates the standard thermodynamic reading of [[longitud_onda_termica]].
+    graph_rules:
+    - id: longitud_onda_termica_graph_temperature_axis
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, localiza [[temperatura]] respecto a [[temperatura_critica]] para decidir si [[longitud_onda_termica]]
+          pertenece a la zona condensada o térmica.
+        en: On the Coord graph, locate [[temperatura]] relative to [[temperatura_critica]] to decide whether [[longitud_onda_termica]]
+          belongs to the condensed or thermal region.
+    - id: longitud_onda_termica_graph_slope_limit
+      when: 'true'
+      status: info
+      text:
+        es: 'Observa la curvatura cerca de [[temperatura_critica]]: un cambio brusco de [[fraccion_condensada]] señala transición
+          ideal, no una fuerza mecánica.'
+        en: 'Observe the curvature near [[temperatura_critica]]: a sharp change in [[fraccion_condensada]] signals an ideal
+          transition, not a mechanical force.'
+    likely_errors:
+    - id: longitud_onda_termica_likely_error_classical
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[longitud_onda_termica]] con una lectura aislada es un error frecuente: No trates [[longitud_onda_termica]]
+          con intuición clásica de partículas distinguibles: la condensación surge porque muchos bosones pueden compartir
+          el mismo estado.'
+        en: 'A common mistake is to interpret [[longitud_onda_termica]] in isolation: Do not treat [[longitud_onda_termica]]
+          with classical distinguishable-particle intuition: condensation arises because many bosons can share the same state.'
+    - id: longitud_onda_termica_likely_error_threshold
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[longitud_onda_termica]] con una lectura aislada es un error frecuente: No confundas [[temperatura_critica]]
+          con la [[temperatura]] real: el primero es un umbral y la segunda es el estado actual del sistema.'
+        en: 'Do not confuse [[temperatura_critica]] with the actual [[temperatura]]: the first is a threshold and the second
+          is the current state of the system.'
+    next_step_rules:
+    - id: longitud_onda_termica_next_step_compare_threshold
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[longitud_onda_termica]], compara [[temperatura]] con [[temperatura_critica]] y decide si
+          debes leer [[fraccion_condensada]] o revisar la densidad.
+        en: After calculating [[longitud_onda_termica]], compare [[temperatura]] with [[temperatura_critica]] and decide whether
+          to read [[fraccion_condensada]] or recheck density.
+    physical_intuition:
+    - id: longitud_onda_termica_intuition_overlap
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[longitud_onda_termica]] cobra sentido cuando la [[longitud_onda_termica]] se vuelve comparable
+          a la separación media entre bosones.
+        en: Intuitively, [[longitud_onda_termica]] becomes meaningful when [[longitud_onda_termica]] becomes comparable to
+          the mean spacing between bosons.
+    limiting_cases:
+    - id: longitud_onda_termica_limit_high_temperature
+      when: temperatura >> temperatura_critica
+      status: info
+      text:
+        es: Si [[temperatura]] es mucho mayor que [[temperatura_critica]], la lectura ideal espera [[fraccion_condensada]]
+          prácticamente nula.
+        en: If [[temperatura]] is much larger than [[temperatura_critica]], the ideal reading expects nearly zero [[fraccion_condensada]].
+    - id: longitud_onda_termica_limit_low_temperature
+      when: temperatura << temperatura_critica
+      status: info
+      text:
+        es: Si [[temperatura]] está muy por debajo de [[temperatura_critica]], el modelo predice una población macroscópica
+          en [[numero_condensado]].
+        en: If [[temperatura]] is far below [[temperatura_critica]], the model predicts a macroscopic population in [[numero_condensado]].
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

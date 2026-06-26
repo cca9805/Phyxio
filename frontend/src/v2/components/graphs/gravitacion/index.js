@@ -1,59 +1,51 @@
-﻿import LeyDeGravitacionUniversalGraphsCoord from "./LeyDeGravitacionUniversalGraphsCoord";
-import CampoYPotencialGravitatorioGraphsCoord from "./CampoYPotencialGravitatorioGraphsCoord";
-import EnergiaPotencialGravitatoriaGravGraphsCoord from "./EnergiaPotencialGravitatoriaGravGraphsCoord";
-import VelocidadOrbitalGraphsCoord from "./VelocidadOrbitalGraphsCoord";
-import VelocidadOrbitalGraphsSvg from "./VelocidadOrbitalGraphsSvg";
-import EnergiaOrbitalGraphsCoord from "./EnergiaOrbitalGraphsCoord";
-import EnergiaOrbitalGraphsSvg from "./EnergiaOrbitalGraphsSvg";
-import LeyesDeKeplerGraphsCoord from "./LeyesDeKeplerGraphsCoord";
-import LeyesDeKeplerGraphsSvg from "./LeyesDeKeplerGraphsSvg";
-import MareasYPerturbacionesGraphsCoord from "./MareasYPerturbacionesGraphsCoord";
+import { withGraphContextRegistry } from "../shared/withGraphContext.jsx";
+/**
+ * Gravitacion - Graph Components Index
+ *
+ * WIRING ONLY — los metadatos semánticos (title, xAxis, yAxis, relation,
+ * physicalReading, agentHints, commonMistakes, etc.) viven en graficos.yaml.
+ * Este archivo solo declara { type, graphType, component } por entrada.
+ */
 
-export const graphs = {
-  "ley-de-gravitacion-universal": {
-    Coord: LeyDeGravitacionUniversalGraphsCoord,
-  },
-  "fisica-clasica/mecanica/gravitacion/ley-de-gravitacion-universal": {
-    Coord: LeyDeGravitacionUniversalGraphsCoord,
-  },
+import CampoYPotencialGravitatorioGraphsCoord from "./Coord/CampoYPotencialGravitatorioGraphsCoord.jsx";
+import EnergiaOrbitalGraphsCoord from "./Coord/EnergiaOrbitalGraphsCoord.jsx";
+import EnergiaPotencialGravitatoriaGravGraphsCoord from "./Coord/EnergiaPotencialGravitatoriaGravGraphsCoord.jsx";
+import LeyDeGravitacionUniversalGraphsCoord from "./Coord/LeyDeGravitacionUniversalGraphsCoord.jsx";
+import LeyesDeKeplerGraphsCoord from "./Coord/LeyesDeKeplerGraphsCoord.jsx";
+import MareasYPerturbacionesGraphsCoord from "./Coord/MareasYPerturbacionesGraphsCoord.jsx";
+import VelocidadOrbitalGraphsCoord from "./Coord/VelocidadOrbitalGraphsCoord.jsx";
+import EnergiaOrbitalGraphsSvg from "./Svg/EnergiaOrbitalGraphsSvg.jsx";
+import LeyesDeKeplerGraphsSvg from "./Svg/LeyesDeKeplerGraphsSvg.jsx";
+import VelocidadOrbitalGraphsSvg from "./Svg/VelocidadOrbitalGraphsSvg.jsx";
+
+const rawGraphs = {
   "campo-y-potencial-gravitatorio": {
-    Coord: CampoYPotencialGravitatorioGraphsCoord,
-  },
-  "fisica-clasica/mecanica/gravitacion/campo-y-potencial-gravitatorio": {
-    Coord: CampoYPotencialGravitatorioGraphsCoord,
-  },
-  // Ruta completa para evitar colisionar con el leaf homonimo de trabajo y energia.
-  "fisica-clasica/mecanica/gravitacion/energia-potencial-gravitatoria": {
-    Coord: EnergiaPotencialGravitatoriaGravGraphsCoord,
-  },
-  "velocidad-orbital": {
-    Coord: VelocidadOrbitalGraphsCoord,
-    Svg: VelocidadOrbitalGraphsSvg,
-  },
-  "fisica-clasica/mecanica/gravitacion/orbitas-y-satelites/velocidad-orbital": {
-    Coord: VelocidadOrbitalGraphsCoord,
-    Svg: VelocidadOrbitalGraphsSvg,
+    Coord: { type: "Coord", graphType: "Coord", component: CampoYPotencialGravitatorioGraphsCoord },
   },
   "energia-orbital": {
-    Coord: EnergiaOrbitalGraphsCoord,
-    Svg: EnergiaOrbitalGraphsSvg,
+    Coord: { type: "Coord", graphType: "Coord", component: EnergiaOrbitalGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: EnergiaOrbitalGraphsSvg },
   },
-  "fisica-clasica/mecanica/gravitacion/orbitas-y-satelites/energia-orbital": {
-    Coord: EnergiaOrbitalGraphsCoord,
-    Svg: EnergiaOrbitalGraphsSvg,
+  "energia-potencial-gravitatoria": {
+    Coord: { type: "Coord", graphType: "Coord", component: EnergiaPotencialGravitatoriaGravGraphsCoord },
+  },
+  "ley-de-gravitacion-universal": {
+    Coord: { type: "Coord", graphType: "Coord", component: LeyDeGravitacionUniversalGraphsCoord },
   },
   "leyes-de-kepler": {
-    Coord: LeyesDeKeplerGraphsCoord,
-    Svg: LeyesDeKeplerGraphsSvg,
-  },
-  "fisica-clasica/mecanica/gravitacion/orbitas-y-satelites/leyes-de-kepler": {
-    Coord: LeyesDeKeplerGraphsCoord,
-    Svg: LeyesDeKeplerGraphsSvg,
+    Coord: { type: "Coord", graphType: "Coord", component: LeyesDeKeplerGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: LeyesDeKeplerGraphsSvg },
   },
   "mareas-y-perturbaciones": {
-    Coord: MareasYPerturbacionesGraphsCoord,
+    Coord: { type: "Coord", graphType: "Coord", component: MareasYPerturbacionesGraphsCoord },
   },
-  "fisica-clasica/mecanica/gravitacion/mareas-y-perturbaciones": {
-    Coord: MareasYPerturbacionesGraphsCoord,
+  "velocidad-orbital": {
+    Coord: { type: "Coord", graphType: "Coord", component: VelocidadOrbitalGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: VelocidadOrbitalGraphsSvg },
   },
 };
+
+export const graphs = withGraphContextRegistry(rawGraphs);
+export const gravitacionGraphs = graphs;
+
+export default graphs;

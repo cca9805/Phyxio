@@ -1,0 +1,273 @@
+const e=`- id: c_vacio
+  symbol: "c"
+  nombre:
+    es: Velocidad de la luz en el vacio
+    en: Speed of light in vacuum
+  descripcion:
+    es: Velocidad maxima de propagacion de ondas electromagneticas en el vacio, constante fundamental de la naturaleza
+    en: Maximum propagation speed of electromagnetic waves in vacuum, fundamental constant of nature
+  unidad_si: "m/s"
+  dimension: "[L T⁻¹]"
+  is_vector: false
+  components: []
+  category: constant
+  physical_role: fundamental_constant
+  used_in:
+    - Calculo de velocidad en medios materiales
+    - Determinacion del indice de refraccion
+    - Optica geometrica y fisica
+  common_mistake: "Confundir c con la velocidad de la luz en un medio material como el agua o el vidrio"
+  typical_range: "299792458 m/s (valor exacto definido)"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La velocidad es siempre positiva, representando la magnitud de propagacion
+      en: Speed is always positive, representing the magnitude of propagation
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Una velocidad nula violaria los principios de la fisica de ondas electromagneticas
+      en: Zero speed would violate the principles of electromagnetic wave physics
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "299792458 m/s (constante exacta)"
+  interpretation_role:
+    primary_for:
+      - Referencia universal para velocidades de ondas electromagneticas
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: "Esta constante es el limite superior de velocidades en el universo y el punto de referencia para calcular como se ralentiza la luz en medios materiales."
+    en: "This constant is the upper speed limit in the universe and the reference point for calculating how light slows down in material media."
+
+- id: v_medio
+  symbol: "v"
+  nombre:
+    es: Velocidad de la onda en el medio
+    en: Wave speed in the medium
+  descripcion:
+    es: Velocidad de propagacion de la onda electromagnetica dentro de un material transparente, menor que en el vacio
+    en: Propagation speed of the electromagnetic wave inside a transparent material, lower than in vacuum
+  unidad_si: "m/s"
+  dimension: "[L T⁻¹]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - Calculo de tiempo de viaje de la luz
+    - Determinacion del indice de refraccion
+    - Analisis de retrasos opticos
+  common_mistake: "Asumir que la velocidad en el medio es igual a c sin considerar el factor del indice de refraccion"
+  typical_range: "2.0×10⁸ m/s a 2.5×10⁸ m/s en vidrio y agua"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La velocidad es siempre positiva, indicando la magnitud de avance de la onda
+      en: Speed is always positive, indicating the magnitude of wave advance
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Velocidad nula implicaria un medio opaco que bloquea completamente la propagacion
+      en: Zero speed would imply an opaque medium completely blocking propagation
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "1.0×10⁸ a 3.0×10⁸ m/s"
+  interpretation_role:
+    primary_for:
+      - Magnitud central del leaf que determina el comportamiento optico
+    secondary_for:
+      - Comparacion entre diferentes medios materiales
+  graph_binding:
+    channels:
+      - velocity_comparison
+      - medium_selector
+  pedagogical_notes:
+    es: "Esta magnitud es el foco del leaf: representa como el medio material afecta la propagacion de la luz. Es menor que c y depende inversamente del indice de refraccion."
+    en: "This quantity is the focus of the leaf: it represents how the material medium affects light propagation. It is smaller than c and inversely depends on the refractive index."
+
+- id: n_indice
+  symbol: "n"
+  nombre:
+    es: Indice de refraccion
+    en: Refractive index
+  descripcion:
+    es: Relacion adimensional entre la velocidad de la luz en el vacio y su velocidad en el medio material
+    en: Dimensionless ratio between the speed of light in vacuum and its speed in the material medium
+  unidad_si: "adimensional"
+  dimension: "[1]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: derived
+  used_in:
+    - Calculo de velocidad en el medio
+    - Ley de Snell para refraccion
+    - Diseño de lentes y sistemas opticos
+  common_mistake: "Confundir n mayor con velocidad mayor, cuando en realidad n mayor implica velocidad menor"
+  typical_range: "1.0 (vacio) a 2.5 (diamante); agua 1.33, vidrio 1.5"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El indice es siempre positivo y mayor o igual a 1
+      en: The index is always positive and greater than or equal to 1
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un indice nulo seria fisicamente imposible, violando la definicion
+      en: A zero index would be physically impossible, violating the definition
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "1.0 a 2.5 para medios transparentes comunes"
+  interpretation_role:
+    primary_for:
+      - Determinar el factor de ralentizacion de la luz
+    secondary_for:
+      - Calcular angulos de refraccion
+  graph_binding:
+    channels:
+      - index_slider
+      - medium_type_selector
+  pedagogical_notes:
+    es: "El indice de refraccion es adimensional pero fisicamente muy significativo: valores mayores indican medios mas refringentes donde la luz se propaga mas lentamente."
+    en: "The refractive index is dimensionless but physically very significant: higher values indicate more refractive media where light propagates more slowly."
+
+- id: lambda_vacio
+  symbol: "\\\\lambda_0"
+  nombre:
+    es: Longitud de onda en el vacio
+    en: Wavelength in vacuum
+  descripcion:
+    es: Distancia espacial entre dos maximos consecutivos de la onda cuando se propaga en el vacio
+    en: Spatial distance between two consecutive maxima of the wave when propagating in vacuum
+  unidad_si: "m"
+  dimension: "[L]"
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: parameter
+  used_in:
+    - Calculo de frecuencia de la radiacion
+    - Determinacion del color de la luz visible
+    - Conversion a longitud de onda en medio
+  common_mistake: "Confundir la longitud de onda en vacio con la longitud de onda reducida en el medio"
+  typical_range: "400 nm (violeta) a 700 nm (rojo) para luz visible"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La longitud de onda es siempre positiva
+      en: Wavelength is always positive
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Longitud de onda nula corresponderia a frecuencia infinita, fisicamente imposible
+      en: Zero wavelength would correspond to infinite frequency, physically impossible
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "10⁻¹² m a 10⁶ m (desde rayos gamma hasta radio)"
+  interpretation_role:
+    primary_for:
+      - Identificar el tipo de radiacion electromagnetica
+    secondary_for:
+      - Calcular la frecuencia correspondiente
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: "La longitud de onda en vacio es la caracteristica fundamental que define el tipo de radiacion. No cambia por el medio, aunque la velocidad y la longitud de onda local si varian."
+    en: "The wavelength in vacuum is the fundamental characteristic that defines the type of radiation. It does not change with the medium, although the local speed and wavelength do vary."
+
+- id: lambda_medio
+  symbol: "\\\\lambda"
+  nombre:
+    es: Longitud de onda en el medio
+    en: Wavelength in the medium
+  descripcion:
+    es: Distancia espacial entre maximos consecutivos de la onda dentro del material, menor que en el vacio
+    en: Spatial distance between consecutive wave maxima inside the material, shorter than in vacuum
+  unidad_si: "m"
+  dimension: "[L]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: derived
+  used_in:
+    - Analisis de interferencia en peliculas delgadas
+    - Calculo de periodos en redes de difraccion
+    - Condiciones de ondas estacionarias
+  common_mistake: "No darse cuenta de que la longitud de onda se reduce en el medio mientras la frecuencia se mantiene"
+  typical_range: "300 nm a 525 nm en agua para luz visible"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La longitud de onda es siempre positiva
+      en: Wavelength is always positive
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Longitud de onda nula seria fisicamente imposible
+      en: Zero wavelength would be physically impossible
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "Proporcional a lambda_vacio dividido por n"
+  interpretation_role:
+    primary_for:
+      - Analisis de fenomenos de interferencia en medios
+    secondary_for:
+      - Calculo de desplazamientos de fase
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: "Aunque la frecuencia no cambia al entrar en el medio, la longitud de onda local disminuye proporcionalmente a la velocidad. Esto es crucial para entender interferencia en capas delgadas."
+    en: "Although frequency does not change when entering the medium, the local wavelength decreases proportionally to the speed. This is crucial for understanding thin film interference."
+
+- id: frecuencia_onda
+  symbol: "f"
+  nombre:
+    es: Frecuencia de la onda
+    en: Wave frequency
+  descripcion:
+    es: Numero de oscilaciones por unidad de tiempo, determinada por la fuente y mantenida constante al cambiar de medio
+    en: Number of oscillations per unit time, determined by the source and maintained constant when changing medium
+  unidad_si: "Hz"
+  dimension: "[T⁻¹]"
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: parameter
+  used_in:
+    - Calculo de energia de fotones
+    - Determinacion del color perceptual
+    - Espectroscopia y analisis de materiales
+  common_mistake: "Pensar que la frecuencia cambia al entrar en un medio diferente"
+  typical_range: "4.3×10¹⁴ Hz (rojo) a 7.5×10¹⁴ Hz (violeta) para luz visible"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La frecuencia es siempre positiva
+      en: Frequency is always positive
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Frecuencia nula implicaria radiacion estatica, no onda propagante
+      en: Zero frequency would imply static radiation, not a propagating wave
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "0 Hz a 10²⁴ Hz (rango electromagnetico completo)"
+  interpretation_role:
+    primary_for:
+      - Identificar la energia de la radiacion
+    secondary_for:
+      - Mantenerse constante al cambiar de medio
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: "La frecuencia es la propiedad conservada cuando la luz pasa de un medio a otro. Esto la convierte en un marcador fundamental del tipo de radiacion, mientras la velocidad y longitud de onda se ajustan."
+    en: "Frequency is the conserved property when light passes from one medium to another. This makes it a fundamental marker of the radiation type, while speed and wavelength adjust."
+`;export{e as default};

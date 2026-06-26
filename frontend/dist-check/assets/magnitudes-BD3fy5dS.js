@@ -1,0 +1,273 @@
+const e=`version: 5
+magnitudes:
+- id: rho
+  symbol: \\rho
+  nombre:
+    es: densidad
+    en: density
+  unidad_si: kg/m^3
+  descripcion:
+    es: densidad dentro del modelo avanzado del leaf.
+    en: density inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: rho
+  used_in: &id001
+  - derivada_material_velocidad
+  - ecuacion_euler_fluidos
+  - continuidad_incompresible
+  - bernoulli_no_estacionario
+  common_mistake: Usar rho sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - ecuacion-de-euler-de-fluidos
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: rho debe interpretarse junto con las hipotesis del leaf.
+- id: v
+  symbol: \\vec v
+  nombre:
+    es: campo de velocidad
+    en: velocity field
+  unidad_si: m/s
+  descripcion:
+    es: campo de velocidad dentro del modelo avanzado del leaf.
+    en: velocity field inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: true
+  components: []
+  category: derived
+  physical_role: v
+  used_in: *id001
+  common_mistake: Usar v sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - ecuacion-de-euler-de-fluidos
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: v debe interpretarse junto con las hipotesis del leaf.
+- id: p
+  symbol: p
+  nombre:
+    es: presion
+    en: pressure
+  unidad_si: Pa
+  descripcion:
+    es: presion dentro del modelo avanzado del leaf.
+    en: pressure inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: p
+  used_in: *id001
+  common_mistake: Usar p sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - ecuacion-de-euler-de-fluidos
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: p debe interpretarse junto con las hipotesis del leaf.
+- id: g
+  symbol: \\vec g
+  nombre:
+    es: campo de fuerzas de volumen
+    en: body force field
+  unidad_si: m/s^2
+  descripcion:
+    es: campo de fuerzas de volumen dentro del modelo avanzado del leaf.
+    en: body force field inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: true
+  components: []
+  category: derived
+  physical_role: g
+  used_in: *id001
+  common_mistake: Usar g sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - ecuacion-de-euler-de-fluidos
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: g debe interpretarse junto con las hipotesis del leaf.
+- id: DvDt
+  symbol: D\\vec v/Dt
+  nombre:
+    es: aceleracion material
+    en: material acceleration
+  unidad_si: m/s^2
+  descripcion:
+    es: aceleracion material dentro del modelo avanzado del leaf.
+    en: material acceleration inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: true
+  components: []
+  category: derived
+  physical_role: DvDt
+  used_in: *id001
+  common_mistake: Usar DvDt sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - ecuacion-de-euler-de-fluidos
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: DvDt debe interpretarse junto con las hipotesis del leaf.
+- id: t
+  symbol: t
+  nombre:
+    es: tiempo
+    en: time
+  unidad_si: s
+  descripcion:
+    es: tiempo dentro del modelo avanzado del leaf.
+    en: time inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: t
+  used_in: *id001
+  common_mistake: Usar t sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - ecuacion-de-euler-de-fluidos
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: t debe interpretarse junto con las hipotesis del leaf.
+- id: Phi
+  symbol: \\Phi
+  nombre:
+    es: potencial de fuerzas
+    en: force potential
+  unidad_si: J/kg
+  descripcion:
+    es: potencial de fuerzas dentro del modelo avanzado del leaf.
+    en: force potential inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: Phi
+  used_in: *id001
+  common_mistake: Usar Phi sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - ecuacion-de-euler-de-fluidos
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Phi debe interpretarse junto con las hipotesis del leaf.
+`;export{e as default};

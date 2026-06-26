@@ -1,0 +1,577 @@
+version: 1
+magnitudes:
+- id: omega
+  symbol: omega
+  nombre:
+    es: velocidad angular
+    en: angular velocity
+  descripcion:
+    es: Rapidez de giro instantanea del sistema alrededor del eje.
+    en: Instantaneous rotation rate around the axis.
+  unidad_si: rad/s
+  dimension: T^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: state
+  used_in:
+  - dinamica_rotacional
+  - torque_viscoso
+  - energia_rotacional
+  common_mistake:
+    es: Mezclar rpm con rad/s sin conversion previa.
+    en: Mixing rpm with rad/s without conversion.
+  typical_range:
+    es: 0.5 a 300 rad/s en problemas docentes.
+    en: 0.5 to 300 rad/s in teaching problems.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo representa el sentido de giro.
+      en: Sign represents rotation direction.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si vale cero el sistema esta en reposo angular.
+      en: If zero the system is at angular rest.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - summary
+    - coherence
+    secondary_for:
+    - likely_errors
+  graph_binding:
+    channels:
+    - omega
+  pedagogical_notes:
+    es: Declarar convenio de signo antes de interpretar torque.
+    en: Declare sign convention before interpreting torque.
+- id: omega0
+  symbol: omega0
+  nombre:
+    es: velocidad angular inicial
+    en: initial angular velocity
+  descripcion:
+    es: Valor de velocidad angular en el instante inicial.
+    en: Angular velocity at initial instant.
+  unidad_si: rad/s
+  dimension: T^-1
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: parameter
+  used_in:
+  - decaimiento_exponencial
+  common_mistake:
+    es: Usar omega0 con signo opuesto al convenio definido.
+    en: Using omega0 with opposite sign convention.
+  typical_range:
+    es: 1 a 500 rad/s segun el caso.
+    en: 1 to 500 rad/s depending on case.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Debe mantener el mismo convenio que omega.
+      en: Must follow same convention as omega.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si es cero no hay evolucion de frenado por inercia inicial.
+      en: If zero there is no initial-spin decay process.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - model_validity
+    secondary_for:
+    - next_step
+  graph_binding:
+    channels:
+    - omega_initial
+  pedagogical_notes:
+    es: Verificar instante de referencia de la medicion.
+    en: Verify measurement reference instant.
+- id: alpha
+  symbol: alpha
+  nombre:
+    es: aceleracion angular
+    en: angular acceleration
+  descripcion:
+    es: Variacion temporal de la velocidad angular.
+    en: Time variation of angular velocity.
+  unidad_si: rad/s^2
+  dimension: T^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: state
+  used_in:
+  - dinamica_rotacional
+  common_mistake:
+    es: Asumir que alpha es constante sin revisar torques.
+    en: Assuming constant alpha without checking torques.
+  typical_range:
+    es: -200 a 200 rad/s^2 en practicas comunes.
+    en: -200 to 200 rad/s^2 in common labs.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Signo negativo indica frenado bajo convenio usual.
+      en: Negative sign indicates braking in usual convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si es cero, omega se mantiene constante localmente.
+      en: If zero, omega remains locally constant.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - coherence
+    secondary_for:
+    - summary
+  graph_binding:
+    channels:
+    - alpha
+  pedagogical_notes:
+    es: Distinguir signo fisico de signo algebraico usado.
+    en: Distinguish physical sign from algebraic sign.
+- id: I
+  symbol: I
+  nombre:
+    es: momento de inercia
+    en: moment of inertia
+  descripcion:
+    es: Inercia rotacional respecto al eje considerado.
+    en: Rotational inertia about the chosen axis.
+  unidad_si: kg*m^2
+  dimension: M L^2
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: parameter
+  used_in:
+  - dinamica_rotacional
+  - decaimiento_exponencial
+  - energia_rotacional
+  common_mistake:
+    es: Confundir I con masa total del cuerpo.
+    en: Confusing I with total mass.
+  typical_range:
+    es: 0.001 a 100 kg*m^2 segun sistema.
+    en: 0.001 to 100 kg*m^2 depending on system.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es no negativo por definicion.
+      en: It is non-negative by definition.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: I igual a cero no describe un rotor fisico real.
+      en: I equal to zero does not describe a real rotor.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '> 0'
+  interpretation_role:
+    primary_for:
+    - model_validity
+    secondary_for:
+    - coherence
+  graph_binding:
+    channels:
+    - inertia
+  pedagogical_notes:
+    es: Confirmar eje de referencia antes de usar I.
+    en: Confirm reference axis before using I.
+- id: tau_roz
+  symbol: tau_roz
+  nombre:
+    es: torque de rozamiento
+    en: friction torque
+  descripcion:
+    es: Torque disipativo total que se opone al giro.
+    en: Total dissipative torque opposing rotation.
+  unidad_si: N*m
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: state
+  used_in:
+  - dinamica_rotacional
+  - torque_coulomb
+  - torque_viscoso
+  common_mistake:
+    es: Ignorar su signo opuesto al movimiento.
+    en: Ignoring its sign opposite to motion.
+  typical_range:
+    es: 0.001 a 2000 N*m segun mecanismo.
+    en: 0.001 to 2000 N*m depending on mechanism.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Bajo convenio usual es opuesto a omega.
+      en: Under usual convention it is opposite to omega.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede anularse en ausencia de contacto disipativo.
+      en: It can vanish without dissipative contact.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - physical_reading
+    - coherence
+    secondary_for:
+    - likely_errors
+  graph_binding:
+    channels:
+    - torque
+  pedagogical_notes:
+    es: Revisar sentido de giro antes de asignar signo.
+    en: Check rotation direction before assigning sign.
+- id: mu_k
+  symbol: mu_k
+  nombre:
+    es: coeficiente de rozamiento cinetico
+    en: kinetic friction coefficient
+  descripcion:
+    es: Relacion adimensional entre friccion cinetica y normal.
+    en: Dimensionless ratio between kinetic friction and normal force.
+  unidad_si: 1
+  dimension: 1
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: parameter
+  used_in:
+  - torque_coulomb
+  common_mistake:
+    es: Tomarlo constante fuera del rango de material.
+    en: Treating it constant outside material range.
+  typical_range:
+    es: 0.02 a 1.0 segun superficies.
+    en: 0.02 to 1.0 depending on surfaces.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud no negativa.
+      en: Used as non-negative magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero idealiza contacto sin friccion.
+      en: Zero idealizes frictionless contact.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - model_validity
+    secondary_for:
+    - next_step
+  graph_binding:
+    channels:
+    - friction_coeff
+  pedagogical_notes:
+    es: Vincular mu_k al par de materiales usado.
+    en: Link mu_k to actual material pair.
+- id: N_normal
+  symbol: N_normal
+  nombre:
+    es: fuerza normal
+    en: normal force
+  descripcion:
+    es: Fuerza normal efectiva en la interfaz de friccion.
+    en: Effective normal force at friction interface.
+  unidad_si: N
+  dimension: M L T^-2
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: parameter
+  used_in:
+  - torque_coulomb
+  common_mistake:
+    es: Igualarla siempre al peso sin revisar geometria.
+    en: Always setting it equal to weight without geometry check.
+  typical_range:
+    es: 1 a 100000 N segun montaje.
+    en: 1 to 100000 N depending on setup.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se utiliza su modulo positivo.
+      en: Its positive magnitude is used.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si es cero no hay torque de Coulomb.
+      en: If zero there is no Coulomb torque.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - model_validity
+    secondary_for:
+    - coherence
+  graph_binding:
+    channels:
+    - normal_force
+  pedagogical_notes:
+    es: Comprobar apoyo real y angulo de contacto.
+    en: Check actual support and contact angle.
+- id: R
+  symbol: R
+  nombre:
+    es: radio efectivo
+    en: effective radius
+  descripcion:
+    es: Brazo de palanca efectivo del torque de friccion.
+    en: Effective lever arm of friction torque.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: parameter
+  used_in:
+  - torque_coulomb
+  common_mistake:
+    es: Usar diametro en lugar de radio.
+    en: Using diameter instead of radius.
+  typical_range:
+    es: 0.005 a 1.0 m segun dispositivo.
+    en: 0.005 to 1.0 m depending on device.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como distancia no negativa.
+      en: Used as non-negative distance.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: R cero anula brazo y rompe el modelo.
+      en: Zero R removes lever arm and breaks model.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '> 0'
+  interpretation_role:
+    primary_for:
+    - model_validity
+    secondary_for:
+    - likely_errors
+  graph_binding:
+    channels:
+    - radius
+  pedagogical_notes:
+    es: Verificar unidad en metros.
+    en: Verify meter units.
+- id: b_rot
+  symbol: b_rot
+  nombre:
+    es: coeficiente viscoso rotacional
+    en: rotational viscous coefficient
+  descripcion:
+    es: Parametro lineal del torque viscoso respecto a omega.
+    en: Linear coefficient of viscous torque with omega.
+  unidad_si: N*m*s
+  dimension: M L^2 T^-1
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: parameter
+  used_in:
+  - torque_viscoso
+  - decaimiento_exponencial
+  common_mistake:
+    es: Tratarlo adimensional o independiente de temperatura.
+    en: Treating it dimensionless or temperature-independent.
+  typical_range:
+    es: 1e-5 a 10 N*m*s.
+    en: 1e-5 to 10 N*m*s.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como coeficiente positivo.
+      en: Used as positive coefficient.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero implica ausencia de disipacion viscosa.
+      en: Zero implies no viscous dissipation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - physical_reading
+    secondary_for:
+    - model_validity
+  graph_binding:
+    channels:
+    - viscous_coeff
+  pedagogical_notes:
+    es: Revisar rango de validez del fluido lubricante.
+    en: Check lubricant validity range.
+- id: t
+  symbol: t
+  nombre:
+    es: tiempo
+    en: time
+  descripcion:
+    es: Variable temporal del proceso rotacional.
+    en: Time variable of rotational process.
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: input
+  used_in:
+  - decaimiento_exponencial
+  common_mistake:
+    es: Confundir instante con intervalo acumulado.
+    en: Confusing instant with accumulated interval.
+  typical_range:
+    es: 0 a 10000 s segun ensayo.
+    en: 0 to 10000 s depending on test.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa no negativo por causalidad.
+      en: Used non-negative by causality.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: t cero define condicion inicial.
+      en: t zero defines initial condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - next_step
+    secondary_for:
+    - summary
+  graph_binding:
+    channels:
+    - time
+  pedagogical_notes:
+    es: Unificar origen temporal de sensores.
+    en: Unify sensor time origin.
+- id: theta
+  symbol: theta
+  nombre:
+    es: desplazamiento angular
+    en: angular displacement
+  descripcion:
+    es: Angulo acumulado recorrido durante el proceso.
+    en: Accumulated angle traveled during process.
+  unidad_si: rad
+  dimension: 1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: state
+  used_in:
+  - trabajo_friccion
+  common_mistake:
+    es: Olvidar relacion entre radianes y vueltas.
+    en: Forgetting relation between radians and turns.
+  typical_range:
+    es: 0.1 a 100000 rad segun duracion.
+    en: 0.1 to 100000 rad depending on duration.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del convenio de giro.
+      en: Sign depends on rotation convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica sin desplazamiento acumulado.
+      en: Zero indicates no accumulated displacement.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - physical_reading
+    secondary_for:
+    - coherence
+  graph_binding:
+    channels:
+    - angle
+  pedagogical_notes:
+    es: Mantener consistencia de signo con omega.
+    en: Keep sign consistent with omega.
+- id: K_rot
+  symbol: K_rot
+  nombre:
+    es: energia cinetica rotacional
+    en: rotational kinetic energy
+  descripcion:
+    es: Energia mecanica asociada al giro del cuerpo.
+    en: Mechanical energy associated with rotation.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: state
+  used_in:
+  - energia_rotacional
+  - balance_energetico
+  common_mistake:
+    es: Tratarla lineal en omega en lugar de cuadratica.
+    en: Treating it linear in omega instead of quadratic.
+  typical_range:
+    es: 1e-3 a 1e6 J segun sistema.
+    en: 1e-3 to 1e6 J depending on system.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es no negativa en el modelo clasico.
+      en: It is non-negative in classical model.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero cuando no hay giro.
+      en: Zero when there is no rotation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - summary
+    - physical_reading
+    secondary_for:
+    - likely_errors
+  graph_binding:
+    channels:
+    - energy
+  pedagogical_notes:
+    es: Revisar coherencia entre I y omega al calcular energia.
+    en: Check coherence between I and omega when computing energy.

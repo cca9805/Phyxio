@@ -1,0 +1,452 @@
+version: "5.0"
+id: interp_definicion_entropia
+leaf_id: definicion
+
+nombre:
+  es: Interpretación — Definición de entropía (Clausius)
+  en: Interpretation — Definition of entropy (Clausius)
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: entropia-y-segunda-ley
+  parent_id: entropia
+  ruta_relativa: fisica-clasica/termodinamica/entropia-y-segunda-ley/entropia/definicion
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    summary:
+      es: Resumen
+      en: Summary
+    physical_reading:
+      es: Lectura física
+      en: Physical reading
+    coherence:
+      es: Coherencia
+      en: Coherence
+    model_validity:
+      es: Validez del modelo
+      en: Model validity
+    graph_reading:
+      es: Lectura gráfica
+      en: Graph reading
+    likely_errors:
+      es: Errores frecuentes
+      en: Likely errors
+    next_step:
+      es: Siguiente paso
+      en: Next step
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    priority: [summary, likely_errors]
+
+dependencies:
+  formulas:
+    - definicion_entropia_clausius
+    - entropia_isotermica
+  magnitudes:
+    - S
+    - DeltaS
+    - Q_rev
+    - T_abs
+
+global_context:
+  physical_domain:
+    es: "Definición macroscópica de la entropía según Clausius: variación de entropía como cociente entre calor reversible y temperatura absoluta. Marco de la segunda ley de la termodinámica para procesos reversibles e irreversibles."
+    en: "Macroscopic definition of entropy according to Clausius: entropy change as the ratio of reversible heat to absolute temperature. Framework of the second law of thermodynamics for reversible and irreversible processes."
+  axis_convention:
+    es: "En el diagrama T-S (temperatura en ordenadas, entropía en abscisas): procesos isotérmicos son líneas horizontales; procesos adiabáticos reversibles son líneas verticales; el área bajo la curva T-S es el calor intercambiado."
+    en: "In the T-S diagram (temperature on vertical axis, entropy on horizontal axis): isothermal processes are horizontal lines; reversible adiabatic processes are vertical lines; the area under the T-S curve is the heat exchanged."
+  standard_assumptions:
+    - "El proceso es reversible (cuasi-estático). Para procesos irreversibles, la fórmula da el límite inferior de DeltaS."
+    - "La temperatura T_abs es la del reservorio térmico con el que interactúa el sistema, expresada en kelvin."
+    - "Para procesos no isotérmicos, DeltaS se obtiene integrando dQ_rev/T a lo largo del proceso."
+  standard_warnings:
+    - "Temperatura siempre en kelvin, nunca en Celsius ni Fahrenheit."
+    - "DeltaS calculado con la fórmula isotérmica solo es exacto si T es constante a lo largo del proceso."
+    - "La segunda ley exige DeltaS_universo ≥ 0; el sistema por sí solo puede tener DeltaS < 0."
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores frecuentes
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  DeltaS:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Variación de entropía del sistema en el proceso termodinámico analizado. Es la magnitud central del leaf: resume el cambio de dispersión energética y determina si el proceso es espontáneo, reversible o imposible."
+      en: "Entropy change of the system in the analysed thermodynamic process. It is the central magnitude of the leaf: it summarises the change in energy dispersal and determines whether the process is spontaneous, reversible, or impossible."
+    summary_rules:
+      - id: deltas_summary_positive
+        when: "DeltaS > 0"
+        status: ok
+        text:
+          es: "[[DeltaS]] positivo indica que la entropía del sistema aumenta: el sistema absorbe calor reversible a temperatura [[T_abs]]. El proceso evoluciona hacia mayor dispersión energética, lo que es coherente con la dirección espontánea de los procesos naturales (segunda ley)."
+          en: "Positive [[DeltaS]] indicates the system entropy increases: the system absorbs reversible heat at temperature [[T_abs]]. The process evolves towards greater energy dispersal, consistent with the spontaneous direction of natural processes (second law)."
+      - id: deltas_summary_negative
+        when: "DeltaS < 0"
+        status: ok
+        text:
+          es: "[[DeltaS]] negativo indica que la entropía del sistema disminuye: el sistema cede calor reversible al entorno. Esto es posible si el entorno aumenta su entropía en mayor cantidad, de modo que la entropía total del universo sigue siendo no negativa."
+          en: "Negative [[DeltaS]] indicates the system entropy decreases: the system releases reversible heat to the surroundings. This is possible if the surroundings increase their entropy by a greater amount, so the total entropy of the universe remains non-negative."
+      - id: deltas_summary_zero
+        when: "DeltaS = 0"
+        status: ok
+        text:
+          es: "[[DeltaS]] igual a cero indica un proceso isentrópico: reversible y adiabático (sin intercambio de calor). La entropía del sistema no cambia. Este resultado resume el estado de mayor reversibilidad posible de un proceso termodinámico."
+          en: "[[DeltaS]] equal to zero indicates an isentropic process: reversible and adiabatic (no heat exchange). The system entropy does not change. This result summarises the state of maximum possible reversibility of a thermodynamic process."
+      - id: deltas_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaS]] resume el cambio de dispersión energética del sistema. Su signo indica la dirección del proceso y su magnitud cuantifica cuántos J/K de entropía se ganan o pierden. Depende directamente de [[Q_rev]] y de [[T_abs]]: mayor temperatura implica menor cambio de entropía para el mismo calor."
+          en: "[[DeltaS]] summarises the change in energy dispersal of the system. Its sign indicates the direction of the process and its magnitude quantifies how many J/K of entropy are gained or lost. It depends directly on [[Q_rev]] and [[T_abs]]: higher temperature implies smaller entropy change for the same heat."
+    physical_reading_rules:
+      - id: deltas_reading_large
+        when: "DeltaS > 100"
+        status: warning
+        text:
+          es: "[[DeltaS]] superior a 100 J/K indica un proceso de gran transferencia de calor o a temperatura muy baja. Verificar si los datos corresponden a una masa considerable de sustancia o a un proceso a temperatura criogénica (por debajo de 100 K), donde el mismo calor produce cambios de entropía mucho mayores."
+          en: "[[DeltaS]] above 100 J/K indicates a process with large heat transfer or at very low temperature. Check whether the data correspond to a substantial mass of substance or a cryogenic process (below 100 K), where the same heat produces much larger entropy changes."
+      - id: deltas_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaS]] expresa físicamente cuánta dispersión energética se añade o se retira del sistema. El denominador [[T_abs]] en la fórmula de Clausius actúa como peso: a temperatura alta, el calor produce poca dispersión adicional (el sistema ya está muy disperso); a temperatura baja, el mismo calor produce gran dispersión porque el sistema estaba muy ordenado."
+          en: "[[DeltaS]] physically expresses how much energy dispersal is added to or removed from the system. The [[T_abs]] denominator in the Clausius formula acts as a weight: at high temperature, heat produces little additional dispersal (the system is already highly dispersed); at low temperature, the same heat produces large dispersal because the system was highly ordered."
+    coherence_rules:
+      - id: deltas_coherence_sign
+        when: "DeltaS * Q_rev < 0"
+        status: error
+        text:
+          es: "Error de coherencia: [[DeltaS]] y [[Q_rev]] deben tener el mismo signo en la definición de Clausius (con [[T_abs]] siempre positivo). Si tienen signos opuestos, hay un error en el signo de uno de los dos valores introducidos."
+          en: "Coherence error: [[DeltaS]] and [[Q_rev]] must have the same sign in the Clausius definition (with [[T_abs]] always positive). If they have opposite signs, there is a sign error in one of the two introduced values."
+      - id: deltas_coherence_celsius
+        when: "T_abs < 273 and T_abs > 0 and DeltaS > 1000"
+        status: warning
+        text:
+          es: "Resultado sospechoso: [[DeltaS]] muy elevado combinado con [[T_abs]] menor de 273 K puede indicar que se está trabajando con temperatura en Celsius (rango 0–100 °C) en lugar de kelvin. Verificar que [[T_abs]] está expresado en kelvin."
+          en: "Suspicious result: very large [[DeltaS]] combined with [[T_abs]] below 273 K may indicate that temperature is being entered in Celsius (0–100 °C range) instead of kelvin. Verify that [[T_abs]] is expressed in kelvin."
+      - id: deltas_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaS]] es coherente si tiene el mismo signo que [[Q_rev]] y si su valor absoluto es razonable para el proceso analizado (J/K, no MJ/K ni μJ/K para procesos cotidianos de gramos o moles de sustancia)."
+          en: "[[DeltaS]] is coherent if it has the same sign as [[Q_rev]] and if its absolute value is reasonable for the analysed process (J/K, not MJ/K or μJ/K for everyday processes involving grams or moles of substance)."
+    model_validity_rules:
+      - id: deltas_validity_irreversible
+        when: "true"
+        status: warning
+        text:
+          es: "La fórmula DeltaS = Q_rev / T_abs es exacta solo para procesos reversibles isotérmicos. Para procesos irreversibles, la variación real de entropía del sistema es la misma (S es función de estado), pero el calor real Q < Q_rev. Nunca usar el calor medido en un proceso irreversible directamente en la fórmula de Clausius para obtener DeltaS del sistema: el resultado sería DeltaS del proceso reversible equivalente, que sí coincide con el real por ser función de estado."
+          en: "The formula DeltaS = Q_rev / T_abs is exact only for reversible isothermal processes. For irreversible processes, the actual system entropy change is the same (S is a state function), but the actual heat Q < Q_rev. Never use the heat measured in an irreversible process directly in the Clausius formula to obtain system DeltaS: the result would be DeltaS of the equivalent reversible process, which does coincide with the actual value since it is a state function."
+      - id: deltas_validity_nonisothermal
+        when: "true"
+        status: warning
+        text:
+          es: "Para procesos no isotérmicos (T varía), la fórmula integrada DeltaS = Q_rev / T_abs no es válida. En ese caso, DeltaS debe calcularse integrando dQ_rev / T a lo largo del proceso, o usando las fórmulas de entropía de calentamiento sensible (con capacidad calorífica)."
+          en: "For non-isothermal processes (T varies), the integrated formula DeltaS = Q_rev / T_abs is not valid. In that case, DeltaS must be calculated by integrating dQ_rev / T along the process, or using the sensible heating entropy formulas (with heat capacity)."
+    graph_rules:
+      - id: deltas_graph_ts_diagram
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama T-S (temperatura frente a entropía), [[DeltaS]] es el desplazamiento horizontal entre el estado inicial y el final. Para un proceso isotérmico, el punto calculado cae sobre una línea horizontal a altura [[T_abs]]. El área del rectángulo formado por [[T_abs]] × [[DeltaS]] es igual a [[Q_rev]], lo que permite verificar el cálculo gráficamente."
+          en: "In the T-S diagram (temperature versus entropy), [[DeltaS]] is the horizontal displacement between the initial and final states. For an isothermal process, the calculated point falls on a horizontal line at height [[T_abs]]. The area of the rectangle formed by [[T_abs]] × [[DeltaS]] equals [[Q_rev]], allowing graphical verification of the calculation."
+    likely_errors:
+      - id: deltas_error_celsius
+        when: "T_abs < 200 and T_abs > 0"
+        status: warning
+        text:
+          es: "Error probable: [[T_abs]] inferior a 200 K puede indicar que se ha introducido la temperatura en Celsius (p. ej., 27 °C en lugar de 300 K). En la definición de Clausius, [[T_abs]] debe estar siempre en kelvin. Con T = 27 en lugar de 300, [[DeltaS]] resulta más de 11 veces mayor del valor correcto."
+          en: "Likely error: [[T_abs]] below 200 K may indicate that temperature was entered in Celsius (e.g., 27 °C instead of 300 K). In the Clausius definition, [[T_abs]] must always be in kelvin. With T = 27 instead of 300, [[DeltaS]] comes out more than 11 times larger than the correct value."
+      - id: deltas_error_universo
+        when: "DeltaS < 0"
+        status: warning
+        text:
+          es: "Atención: [[DeltaS]] negativo para el sistema es físicamente válido, pero no debe confundirse con la segunda ley. La segunda ley establece que la variación de entropía del universo (sistema + entorno) debe ser mayor o igual a cero. Un sistema puede perder entropía si su entorno gana más de la que él pierde."
+          en: "Attention: negative [[DeltaS]] for the system is physically valid, but must not be confused with the second law. The second law states that the entropy change of the universe (system + surroundings) must be greater than or equal to zero. A system can lose entropy if its surroundings gain more than it loses."
+      - id: deltas_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[T_abs]] está en kelvin, que [[Q_rev]] es el calor del proceso reversible equivalente (no el calor real de un proceso irreversible), y que el signo de [[Q_rev]] es positivo cuando el sistema absorbe calor y negativo cuando lo cede."
+          en: "Verify that [[T_abs]] is in kelvin, that [[Q_rev]] is the heat of the equivalent reversible process (not the actual heat of an irreversible process), and that the sign of [[Q_rev]] is positive when the system absorbs heat and negative when it releases it."
+    next_step_rules:
+      - id: deltas_next_universo
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[DeltaS]] del sistema calculado, el siguiente paso natural es calcular la variación de entropía del entorno (DeltaS_entorno = −Q_rev / T_entorno) y sumarlas para obtener DeltaS_universo. Si DeltaS_universo > 0 el proceso es espontáneo; si es 0 es reversible; si fuera negativo (imposible en la realidad) indicaría violación de la segunda ley."
+          en: "With the system [[DeltaS]] calculated, the natural next step is to calculate the entropy change of the surroundings (DeltaS_surroundings = −Q_rev / T_surroundings) and add them to obtain DeltaS_universe. If DeltaS_universe > 0 the process is spontaneous; if 0 it is reversible; if it were negative (impossible in reality) it would indicate a violation of the second law."
+
+  Q_rev:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Calor intercambiado en el proceso reversible equivalente. Parámetro de entrada de la definición de Clausius. Cuando se despeja Q_rev de la fórmula de Clausius, el resultado indica cuánto calor debería haberse intercambiado para producir la variación de entropía observada a la temperatura dada."
+      en: "Heat exchanged in the equivalent reversible process. Input parameter of the Clausius definition. When Q_rev is isolated from the Clausius formula, the result indicates how much heat should have been exchanged to produce the observed entropy change at the given temperature."
+    summary_rules:
+      - id: qrev_summary_positive
+        when: "Q_rev > 0"
+        status: ok
+        text:
+          es: "[[Q_rev]] positivo indica que el proceso absorbe calor del entorno (proceso endotérmico). El sistema gana energía térmica desde el reservorio a [[T_abs]]. Este resultado resume un proceso de calentamiento, fusión, vaporización o expansión isotérmica del gas."
+          en: "Positive [[Q_rev]] indicates the process absorbs heat from the surroundings (endothermic process). The system gains thermal energy from the reservoir at [[T_abs]]. This result summarises a heating, melting, vaporisation, or isothermal expansion process."
+      - id: qrev_summary_negative
+        when: "Q_rev < 0"
+        status: ok
+        text:
+          es: "[[Q_rev]] negativo indica que el proceso cede calor al entorno (proceso exotérmico). El sistema pierde energía térmica hacia el reservorio a [[T_abs]]. Este resultado describe un proceso de enfriamiento, solidificación, condensación o compresión isotérmica."
+          en: "Negative [[Q_rev]] indicates the process releases heat to the surroundings (exothermic process). The system loses thermal energy to the reservoir at [[T_abs]]. This result describes a cooling, solidification, condensation, or isothermal compression process."
+      - id: qrev_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_rev]] resume la energía intercambiada como calor en el proceso reversible equivalente. Depende directamente de [[DeltaS]] y [[T_abs]]: Q_rev = DeltaS × T_abs. A mayor temperatura, el mismo DeltaS implica mayor intercambio de calor. Este resultado indica cuánta energía térmica debe fluir para producir el cambio de entropía observado."
+          en: "[[Q_rev]] summarises the energy exchanged as heat in the equivalent reversible process. It depends directly on [[DeltaS]] and [[T_abs]]: Q_rev = DeltaS × T_abs. At higher temperature, the same DeltaS implies greater heat exchange. This result indicates how much thermal energy must flow to produce the observed entropy change."
+    physical_reading_rules:
+      - id: qrev_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_rev]] despejado de la fórmula de Clausius representa el calor que habría que proporcionar o extraer para producir el cambio de entropía [[DeltaS]] a temperatura [[T_abs]]. Físicamente, es el calor latente mínimo necesario para inducir un cambio de estado a temperatura constante, o la energía mínima de intercambio para un proceso isotérmico reversible."
+          en: "[[Q_rev]] isolated from the Clausius formula represents the heat that would need to be supplied or removed to produce the entropy change [[DeltaS]] at temperature [[T_abs]]. Physically, it is the minimum latent heat required to induce a phase change at constant temperature, or the minimum exchange energy for a reversible isothermal process."
+    coherence_rules:
+      - id: qrev_coherence_sign
+        when: "true"
+        status: ok
+        text:
+          es: "La coherencia de signo exige que [[Q_rev]] y [[DeltaS]] tengan el mismo signo (con [[T_abs]] positivo siempre). Si el resultado de [[Q_rev]] tiene signo contrario al esperado por el contexto físico (p. ej., Q_rev positivo para una condensación), revisar los signos de [[DeltaS]]."
+          en: "Sign coherence requires [[Q_rev]] and [[DeltaS]] to have the same sign (with [[T_abs]] always positive). If the result of [[Q_rev]] has an opposite sign to what the physical context suggests (e.g., positive Q_rev for condensation), review the signs of [[DeltaS]]."
+      - id: qrev_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Para verificar coherencia de [[Q_rev]]: comparar con valores tabulados de calor latente para la sustancia y proceso en cuestión. La fusión del agua a 0 °C requiere Q_rev ≈ 334 J/g; la vaporización a 100 °C requiere Q_rev ≈ 2260 J/g."
+          en: "To verify [[Q_rev]] coherence: compare with tabulated latent heat values for the substance and process in question. Melting ice at 0 °C requires Q_rev ≈ 334 J/g; vaporising water at 100 °C requires Q_rev ≈ 2260 J/g."
+    model_validity_rules:
+      - id: qrev_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_rev]] calculado como DeltaS × T_abs es válido solo para procesos isotérmicos reversibles. Para un proceso no isotérmico, la fórmula no aplica directamente. Para un proceso irreversible, el calor real Q es menor que Q_rev (para absorción de calor), y usar Q en lugar de Q_rev en la fórmula directa daría un resultado incorrecto."
+          en: "[[Q_rev]] calculated as DeltaS × T_abs is valid only for reversible isothermal processes. For a non-isothermal process, the formula does not apply directly. For an irreversible process, the actual heat Q is less than Q_rev (for heat absorption), and using Q instead of Q_rev in the direct formula would give an incorrect result."
+    graph_rules:
+      - id: qrev_graph_area
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama T-S, [[Q_rev]] es el área bajo la curva del proceso. Para un proceso isotérmico a temperatura [[T_abs]], el área es el rectángulo de dimensiones [[T_abs]] (altura) × [[DeltaS]] (anchura). Verificar que el signo del área coincide con el signo de [[Q_rev]]: procesos de absorción de calor tienen área positiva (DeltaS > 0)."
+          en: "In the T-S diagram, [[Q_rev]] is the area under the process curve. For an isothermal process at temperature [[T_abs]], the area is the rectangle with dimensions [[T_abs]] (height) × [[DeltaS]] (width). Verify that the sign of the area matches the sign of [[Q_rev]]: heat absorption processes have positive area (DeltaS > 0)."
+    likely_errors:
+      - id: qrev_error_irreversible
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente al despejar [[Q_rev]]: interpretar el resultado como el calor real de cualquier proceso que conecte esos estados inicial y final. Para procesos irreversibles, el calor real Q ≤ Q_rev (para absorción). [[Q_rev]] es el calor del proceso reversible ideal, no el calor medido en el laboratorio para un proceso irreversible real."
+          en: "Frequent error when isolating [[Q_rev]]: interpreting the result as the actual heat of any process connecting those initial and final states. For irreversible processes, the actual heat Q ≤ Q_rev (for absorption). [[Q_rev]] is the heat of the ideal reversible process, not the heat measured in the laboratory for a real irreversible process."
+      - id: qrev_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que el signo de [[Q_rev]] es coherente con el proceso: positivo para procesos endotérmicos (el sistema absorbe calor), negativo para procesos exotérmicos (el sistema cede calor)."
+          en: "Verify that the sign of [[Q_rev]] is consistent with the process: positive for endothermic processes (system absorbs heat), negative for exothermic processes (system releases heat)."
+    next_step_rules:
+      - id: qrev_next_step
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[Q_rev]] calculado, el siguiente paso es verificar la consistencia con la primera ley (Q_rev = DeltaU + W para el proceso) y determinar si el proceso es termodinámicamente posible calculando DeltaS_universo = [[DeltaS]]_sistema + [[DeltaS]]_entorno."
+          en: "With [[Q_rev]] calculated, the next step is to verify consistency with the first law (Q_rev = DeltaU + W for the process) and determine whether the process is thermodynamically possible by calculating DeltaS_universe = [[DeltaS]]_system + [[DeltaS]]_surroundings."
+
+  T_abs:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Temperatura absoluta del reservorio térmico en kelvin. Cuando se despeja T_abs de la fórmula de Clausius, el resultado indica a qué temperatura absoluta debería estar el reservorio para que el intercambio de calor Q_rev produzca la variación de entropía DeltaS observada."
+      en: "Absolute temperature of the thermal reservoir in kelvin. When T_abs is isolated from the Clausius formula, the result indicates at what absolute temperature the reservoir should be for the heat exchange Q_rev to produce the observed entropy change DeltaS."
+    summary_rules:
+      - id: tabs_summary_low
+        when: "T_abs < 100"
+        status: warning
+        text:
+          es: "[[T_abs]] inferior a 100 K indica un proceso criogénico. A temperaturas tan bajas, la definición de Clausius implica que incluso pequeñas cantidades de calor producen grandes variaciones de entropía. Verificar que [[T_abs]] está en kelvin y que el contexto del problema es realmente criogénico (gases licuados, superconductividad, etc.)."
+          en: "[[T_abs]] below 100 K indicates a cryogenic process. At such low temperatures, the Clausius definition implies that even small amounts of heat produce large entropy changes. Verify that [[T_abs]] is in kelvin and that the problem context is genuinely cryogenic (liquefied gases, superconductivity, etc.)."
+      - id: tabs_summary_high
+        when: "T_abs > 2000"
+        status: ok
+        text:
+          es: "[[T_abs]] superior a 2000 K corresponde a procesos de alta temperatura industrial o de combustión. A estas temperaturas, el mismo calor produce cambios de entropía pequeños (el denominador es grande). Este resultado indica que los procesos a alta temperatura son más 'eficientes' en términos de calidad de la energía."
+          en: "[[T_abs]] above 2000 K corresponds to high-temperature industrial or combustion processes. At these temperatures, the same heat produces small entropy changes (the denominator is large). This result indicates that high-temperature processes are more 'efficient' in terms of energy quality."
+      - id: tabs_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_abs]] resume la temperatura absoluta del proceso termodinámico. Su valor indica la 'calidad' de la energía térmica intercambiada: a mayor [[T_abs]], menor cambio de entropía para el mismo [[Q_rev]]. Depende del cociente Q_rev / DeltaS y describe el nivel energético del reservorio con el que interactúa el sistema."
+          en: "[[T_abs]] summarises the absolute temperature of the thermodynamic process. Its value indicates the 'quality' of the exchanged thermal energy: higher [[T_abs]] implies smaller entropy change for the same [[Q_rev]]. It depends on the ratio Q_rev / DeltaS and describes the energy level of the reservoir with which the system interacts."
+    physical_reading_rules:
+      - id: tabs_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_abs]] despejado de la fórmula de Clausius como Q_rev / DeltaS representa la temperatura a la cual el sistema intercambia calor. Este resultado es útil para determinar la temperatura de un reservorio térmico a partir de medidas de calor y entropía, o para verificar si la temperatura es consistente con el proceso físico descrito."
+          en: "[[T_abs]] isolated from the Clausius formula as Q_rev / DeltaS represents the temperature at which the system exchanges heat. This result is useful to determine the temperature of a thermal reservoir from measurements of heat and entropy, or to verify whether the temperature is consistent with the described physical process."
+    coherence_rules:
+      - id: tabs_coherence_negative
+        when: "T_abs <= 0"
+        status: error
+        text:
+          es: "Error crítico: [[T_abs]] debe ser estrictamente positivo (en kelvin). Un valor negativo o nulo es físicamente imposible según el tercer principio de la termodinámica. Revisar el signo de [[Q_rev]] y de [[DeltaS]] introducidos: si tienen signos opuestos, el cociente resulta negativo."
+          en: "Critical error: [[T_abs]] must be strictly positive (in kelvin). A zero or negative value is physically impossible according to the third law of thermodynamics. Check the signs of [[Q_rev]] and [[DeltaS]] entered: if they have opposite signs, the ratio comes out negative."
+      - id: tabs_coherence_celsius_range
+        when: "T_abs > 0 and T_abs < 50"
+        status: warning
+        text:
+          es: "[[T_abs]] entre 0 y 50 K es posible solo en procesos criogénicos. Si el problema describe condiciones ordinarias (0–100 °C), es probable que la temperatura se haya introducido en Celsius en lugar de kelvin. La temperatura ambiente (20 °C) en kelvin es 293 K, no 20 K."
+          en: "[[T_abs]] between 0 and 50 K is possible only in cryogenic processes. If the problem describes ordinary conditions (0–100 °C), it is likely that temperature was entered in Celsius instead of kelvin. Room temperature (20 °C) in kelvin is 293 K, not 20 K."
+      - id: tabs_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_abs]] calculado es coherente si es positivo y si corresponde al rango físico del proceso descrito: 273 K para fusión del agua, 373 K para ebullición a presión estándar, 300 K para temperatura ambiente. Un resultado fuera del rango esperado requiere verificar los valores de [[Q_rev]] y [[DeltaS]]."
+          en: "Calculated [[T_abs]] is coherent if it is positive and corresponds to the physical range of the described process: 273 K for ice melting, 373 K for boiling at standard pressure, 300 K for room temperature. A result outside the expected range requires verifying the values of [[Q_rev]] and [[DeltaS]]."
+    model_validity_rules:
+      - id: tabs_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El despeje de [[T_abs]] en la fórmula de Clausius es válido cuando el proceso es isotérmico y reversible. Si el proceso no es isotérmico, la temperatura calculada como Q_rev / DeltaS es una temperatura media efectiva del proceso, no la temperatura real en ningún punto específico."
+          en: "Isolating [[T_abs]] in the Clausius formula is valid when the process is isothermal and reversible. If the process is not isothermal, the temperature calculated as Q_rev / DeltaS is an effective average temperature of the process, not the actual temperature at any specific point."
+    graph_rules:
+      - id: tabs_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama T-S, [[T_abs]] despejado determina la altura de la línea horizontal que representa el proceso isotérmico. Si [[T_abs]] calculado sitúa el proceso en una región del diagrama T-S inconsistente con las condiciones del problema (p. ej., por encima del punto de ebullición cuando el proceso es de fusión), revisar los datos."
+          en: "In the T-S diagram, isolated [[T_abs]] determines the height of the horizontal line representing the isothermal process. If the calculated [[T_abs]] places the process in a region of the T-S diagram inconsistent with the problem conditions (e.g., above the boiling point when the process is melting), review the data."
+    likely_errors:
+      - id: tabs_error_celsius
+        when: "T_abs > 0 and T_abs < 200"
+        status: warning
+        text:
+          es: "Error más frecuente al despejar [[T_abs]]: si el resultado es menor de 200 K para un proceso ordinario (agua, metales, gases a temperatura ambiente), comprobar que [[Q_rev]] y [[DeltaS]] tienen el mismo signo y que las unidades son correctas (J para Q_rev, J/K para DeltaS, resultado en K)."
+          en: "Most frequent error when isolating [[T_abs]]: if the result is below 200 K for an ordinary process (water, metals, gases at room temperature), check that [[Q_rev]] and [[DeltaS]] have the same sign and that units are correct (J for Q_rev, J/K for DeltaS, result in K)."
+      - id: tabs_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que el resultado de [[T_abs]] es positivo (obligatorio) y que corresponde en orden de magnitud al proceso físico descrito. Temperatura de fusión del hielo: 273 K. Temperatura de vaporización del agua: 373 K. Temperatura ambiente: 293–298 K."
+          en: "Verify that the result of [[T_abs]] is positive (mandatory) and that it corresponds in order of magnitude to the described physical process. Melting point of ice: 273 K. Vaporisation temperature of water: 373 K. Room temperature: 293–298 K."
+    next_step_rules:
+      - id: tabs_next_carnot
+        when: "T_abs > 0"
+        status: ok
+        text:
+          es: "Con [[T_abs]] calculado, el siguiente paso natural es utilizarlo para calcular la eficiencia de Carnot de un motor hipotético que opere entre este reservorio y otro a temperatura diferente, o para comparar la calidad energética de procesos a diferentes temperaturas usando la relación de Clausius."
+          en: "With [[T_abs]] calculated, the natural next step is to use it to calculate the Carnot efficiency of a hypothetical engine operating between this reservoir and another at a different temperature, or to compare the energy quality of processes at different temperatures using the Clausius relation."
+
+cross_checks:
+  - id: deltaS_universo_espontaneidad
+    description:
+      es: "Para cualquier proceso real, DeltaS_universo = DeltaS_sistema + DeltaS_entorno debe ser mayor o igual a cero. Si el resultado sugiere DeltaS_universo < 0, el proceso es físicamente imposible."
+      en: "For any real process, DeltaS_universe = DeltaS_system + DeltaS_surroundings must be greater than or equal to zero. If the result suggests DeltaS_universe < 0, the process is physically impossible."
+  - id: qrev_primera_ley
+    description:
+      es: "Q_rev calculado debe ser consistente con la primera ley: Q_rev = DeltaU + W para el proceso considerado. Para un gas ideal en expansión isotérmica, DeltaU = 0 y Q_rev = W = n·R·T·ln(V_f/V_i)."
+      en: "Calculated Q_rev must be consistent with the first law: Q_rev = DeltaU + W for the process considered. For an ideal gas in isothermal expansion, DeltaU = 0 and Q_rev = W = n·R·T·ln(V_f/V_i)."
+
+error_patterns:
+  - id: celsius_en_clausius
+    description:
+      es: "Uso de Celsius en lugar de kelvin en la fórmula de Clausius. Error sistemático que produce DeltaS entre 3 y 100 veces mayor del valor correcto según la temperatura del proceso."
+      en: "Using Celsius instead of kelvin in the Clausius formula. Systematic error producing DeltaS between 3 and 100 times larger than the correct value depending on the process temperature."
+  - id: q_irrev_en_clausius
+    description:
+      es: "Uso del calor real de un proceso irreversible en lugar de Q_rev. La desigualdad de Clausius establece que para procesos irreversibles Q < Q_rev (en absorción de calor). Usando Q se obtiene un DeltaS menor del real."
+      en: "Using the actual heat of an irreversible process instead of Q_rev. The Clausius inequality states that for irreversible processes Q < Q_rev (for heat absorption). Using Q gives a DeltaS smaller than the actual value."
+
+graph_binding:
+  preferred_graph: Coord
+  axes:
+    x: DeltaS
+    y: T_abs
+  curve_type: point_and_line
+  annotations:
+    - "Proceso isotérmico: línea horizontal a T = T_abs"
+    - "Área = T_abs × DeltaS = Q_rev"
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+  x_axis: DeltaS
+  y_axis: T_abs
+  display_region: "DeltaS: [-20, 20], T_abs: [200, 1200]"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true

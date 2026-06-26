@@ -1,0 +1,365 @@
+const e=`magnitudes:
+  - id: F_B
+    symbol: F_B
+    nombre:
+      es: fuerza magnetica
+      en: magnetic force
+    descripcion:
+      es: "Modulo de la fuerza que un campo magnetico ejerce sobre una carga en movimiento."
+      en: "Magnitude of the force exerted by a magnetic field on a moving charge."
+    unidad_si: N
+    dimension: "[M L T^-2]"
+    is_vector: true
+    components: ["F_{B,x}", "F_{B,y}", "F_{B,z}"]
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - fuerza_magnetica_lorentz
+      - aceleracion_centripeta_magnetica
+    common_mistake: "Tratarla como paralela a la velocidad, cuando en el modelo magnetico ideal es perpendicular al movimiento y al campo."
+    typical_range: "10^-19 N a 10^-12 N para particulas microscopicas de laboratorio; mucho mayor en haces intensos."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El modulo no tiene signo; el sentido vectorial depende del signo de la carga y de la regla de la mano derecha."
+        en: "The magnitude has no sign; vector direction depends on charge sign and the right-hand rule."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Valor nulo indica ausencia de carga movil efectiva, campo nulo o movimiento paralelo al campo."
+        en: "A zero value indicates no effective moving charge, no field, or motion parallel to the field."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for:
+        - resumen de interaccion magnetica
+        - lectura de intensidad de desviacion
+      secondary_for:
+        - comparacion de curvatura
+    graph_binding:
+      channels:
+        - y_axis
+        - arrow_length
+    pedagogical_notes:
+      es: "Conviene leer [[F_B]] como capacidad de desviar la trayectoria, no como capacidad directa de acelerar en la direccion de [[v]]."
+      en: "Read [[F_B]] as the ability to deflect the path, not as direct acceleration along [[v]]."
+
+  - id: q
+    symbol: q
+    nombre:
+      es: carga electrica
+      en: electric charge
+    descripcion:
+      es: "Carga de la particula que experimenta la fuerza magnetica."
+      en: "Charge of the particle experiencing the magnetic force."
+    unidad_si: C
+    dimension: "[I T]"
+    is_vector: false
+    components: []
+    category: fundamental
+    physical_role: core_physical_quantity
+    used_in:
+      - fuerza_magnetica_lorentz
+      - radio_trayectoria_circular
+    common_mistake: "Usar solo el modulo cuando se pide el sentido de giro; el signo decide el sentido vectorial."
+    typical_range: "1.6e-19 C para cargas elementales; valores efectivos mayores en haces o plasmas."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo de [[q]] invierte el sentido de la fuerza respecto a una carga positiva."
+        en: "The sign of [[q]] reverses the force direction relative to a positive charge."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Si [[q]] es nula, no hay fuerza magnetica de Lorentz sobre esa particula."
+        en: "If [[q]] is zero, there is no magnetic Lorentz force on that particle."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "any"
+    interpretation_role:
+      primary_for:
+        - sentido de la desviacion
+      secondary_for:
+        - escala de fuerza
+    graph_binding:
+      channels:
+        - sign_control
+        - slope_control
+    pedagogical_notes:
+      es: "Separar modulo y signo evita mezclar calculo de intensidad con regla de orientacion."
+      en: "Separating magnitude and sign avoids mixing force size with orientation rules."
+
+  - id: v
+    symbol: v
+    nombre:
+      es: rapidez
+      en: speed
+    descripcion:
+      es: "Rapidez de la carga respecto al sistema donde se describe el campo magnetico."
+      en: "Speed of the charge in the frame where the magnetic field is described."
+    unidad_si: m*s^-1
+    dimension: "[L T^-1]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: core_physical_quantity
+    used_in:
+      - fuerza_magnetica_lorentz
+      - radio_trayectoria_circular
+    common_mistake: "Confundir rapidez con direccion de la velocidad y olvidar que solo cuenta la componente perpendicular al campo."
+    typical_range: "10^3 m/s en iones lentos; 10^6 m/s a 10^7 m/s en haces de laboratorio no relativistas."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Como rapidez es no negativa; la direccion se trata aparte mediante la geometria de la trayectoria."
+        en: "As speed it is nonnegative; direction is handled separately through trajectory geometry."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Si [[v]] es nula, la fuerza magnetica sobre una carga puntual en reposo tambien es nula."
+        en: "If [[v]] is zero, the magnetic force on a point charge at rest is also zero."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for:
+        - escala de fuerza
+        - radio de curvatura
+      secondary_for:
+        - limite relativista
+    graph_binding:
+      channels:
+        - x_axis
+        - slider
+    pedagogical_notes:
+      es: "En este leaf [[v]] mide cuanto campo magnetico atraviesa la carga por unidad de tiempo."
+      en: "In this leaf [[v]] measures how much magnetic field the charge sweeps through per unit time."
+
+  - id: B
+    symbol: B
+    nombre:
+      es: campo magnetico
+      en: magnetic field
+    descripcion:
+      es: "Modulo del campo magnetico externo que actua sobre la carga movil."
+      en: "Magnitude of the external magnetic field acting on the moving charge."
+    unidad_si: T
+    dimension: "[M T^-2 I^-1]"
+    is_vector: true
+    components: ["B_x", "B_y", "B_z"]
+    category: state
+    physical_role: core_physical_quantity
+    used_in:
+      - fuerza_magnetica_lorentz
+      - radio_trayectoria_circular
+    common_mistake: "Pensar que un campo mayor cambia la rapidez por si mismo; en el caso perpendicular ideal cambia la direccion."
+    typical_range: "10^-6 T en campos ambientales; 0.1 T a varios teslas en imanes de laboratorio."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El modulo no tiene signo; la orientacion espacial del vector determina el sentido de la fuerza."
+        en: "The magnitude has no sign; the vector orientation determines the force direction."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Si [[B]] es nulo, desaparece la parte magnetica de la fuerza."
+        en: "If [[B]] is zero, the magnetic part of the force vanishes."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for:
+        - intensidad de interaccion
+        - control de curvatura
+      secondary_for:
+        - comparacion experimental
+    graph_binding:
+      channels:
+        - slope_control
+        - field_symbols
+    pedagogical_notes:
+      es: "[[B]] no empuja en su propia direccion; fija un eje geometrico para el producto vectorial."
+      en: "[[B]] does not push along itself; it sets a geometric axis for the cross product."
+
+  - id: s_theta
+    symbol: sin_theta
+    nombre:
+      es: factor angular
+      en: angular factor
+    descripcion:
+      es: "Seno del angulo entre la velocidad y el campo magnetico."
+      en: "Sine of the angle between velocity and magnetic field."
+    unidad_si: "1"
+    dimension: "[1]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - fuerza_magnetica_lorentz
+    common_mistake: "Tomarlo siempre como uno aunque el movimiento no sea perpendicular al campo."
+    typical_range: "0 a 1 segun la orientacion relativa entre movimiento y campo."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Como seno usado en modulo, [[s_theta]] mide solo eficiencia perpendicular y no sentido."
+        en: "As a sine used in a magnitude, [[s_theta]] measures perpendicular effectiveness, not direction."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Valor cero indica movimiento paralelo al campo y fuerza magnetica nula."
+        en: "A zero value indicates motion parallel to the field and zero magnetic force."
+    value_nature:
+      kind: ratio
+      nonnegative_only: true
+      expected_interval: "[0, 1]"
+    interpretation_role:
+      primary_for:
+        - geometria de acoplamiento
+      secondary_for:
+        - deteccion de fuerza nula
+    graph_binding:
+      channels:
+        - angle_control
+    pedagogical_notes:
+      es: "[[s_theta]] permite explicar por que la misma carga puede desviarse mucho, poco o nada sin cambiar [[q]], [[v]] ni [[B]]."
+      en: "[[s_theta]] explains why the same charge can deflect strongly, weakly, or not at all without changing [[q]], [[v]], or [[B]]."
+
+  - id: m
+    symbol: m
+    nombre:
+      es: masa de la particula
+      en: particle mass
+    descripcion:
+      es: "Masa inercial de la carga que se curva en el campo magnetico."
+      en: "Inertial mass of the charged particle curving in the magnetic field."
+    unidad_si: kg
+    dimension: "[M]"
+    is_vector: false
+    components: []
+    category: fundamental
+    physical_role: core_physical_quantity
+    used_in:
+      - aceleracion_centripeta_magnetica
+      - radio_trayectoria_circular
+    common_mistake: "Olvidar que una particula mas masiva se curva menos aunque tenga la misma carga y rapidez."
+    typical_range: "9.11e-31 kg para electrones; 1.67e-27 kg para protones."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La masa inercial no tiene signo y siempre resiste cambios de direccion."
+        en: "Inertial mass has no sign and always resists changes of direction."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Masa nula queda fuera del modelo mecanico no relativista usado aqui."
+        en: "Zero mass is outside the nonrelativistic mechanical model used here."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +inf)"
+    interpretation_role:
+      primary_for:
+        - inercia de trayectoria
+      secondary_for:
+        - separacion de particulas
+    graph_binding:
+      channels:
+        - radius_control
+    pedagogical_notes:
+      es: "La comparacion entre [[q]] y [[m]] explica la seleccion de particulas por curvatura."
+      en: "Comparing [[q]] and [[m]] explains particle selection by curvature."
+
+  - id: a_c
+    symbol: a_c
+    nombre:
+      es: aceleracion centripeta
+      en: centripetal acceleration
+    descripcion:
+      es: "Aceleracion perpendicular asociada al cambio de direccion de la velocidad."
+      en: "Perpendicular acceleration associated with the change in velocity direction."
+    unidad_si: m*s^-2
+    dimension: "[L T^-2]"
+    is_vector: true
+    components: ["a_{c,x}", "a_{c,y}", "a_{c,z}"]
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - aceleracion_centripeta_magnetica
+    common_mistake: "Interpretarla como aumento de rapidez, aunque en el caso perpendicular ideal cambia solo la direccion."
+    typical_range: "10^8 m*s^-2 a 10^15 m*s^-2 en particulas cargadas de laboratorio."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El modulo no tiene signo; la aceleracion vectorial apunta hacia el centro instantaneo de curvatura."
+        en: "The magnitude has no sign; the vector acceleration points toward the instantaneous center of curvature."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Valor nulo indica que la fuerza magnetica no esta curvando la trayectoria."
+        en: "A zero value indicates that the magnetic force is not curving the path."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for:
+        - curvatura dinamica
+      secondary_for:
+        - estimacion de radio
+    graph_binding:
+      channels:
+        - curvature_indicator
+    pedagogical_notes:
+      es: "[[a_c]] traduce la fuerza magnetica a lenguaje de movimiento curvo."
+      en: "[[a_c]] translates magnetic force into curved-motion language."
+
+  - id: r
+    symbol: r
+    nombre:
+      es: radio de trayectoria
+      en: trajectory radius
+    descripcion:
+      es: "Radio de la trayectoria circular cuando la velocidad es perpendicular al campo uniforme."
+      en: "Radius of the circular path when velocity is perpendicular to a uniform field."
+    unidad_si: m
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - radio_trayectoria_circular
+    common_mistake: "Esperar radio menor para particulas mas rapidas; a carga y campo fijos, la rapidez mayor aumenta el radio."
+    typical_range: "milimetros a metros en haces de laboratorio, segun energia y campo."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El radio es una longitud positiva; el sentido de giro se decide con el signo de [[q]]."
+        en: "Radius is a positive length; rotation sense is decided by the sign of [[q]]."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Radio nulo no describe una orbita fisica del modelo clasico."
+        en: "Zero radius does not describe a physical orbit in the classical model."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +inf)"
+    interpretation_role:
+      primary_for:
+        - curvatura de trayectoria
+      secondary_for:
+        - separacion en espectrometria
+    graph_binding:
+      channels:
+        - orbit_radius
+    pedagogical_notes:
+      es: "[[r]] es la magnitud visual que mejor conecta calculo y trayectoria observada."
+      en: "[[r]] is the visual magnitude that best connects calculation with the observed path."
+`;export{e as default};

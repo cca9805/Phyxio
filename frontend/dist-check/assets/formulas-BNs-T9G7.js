@@ -1,0 +1,323 @@
+const n=`\uFEFFversion: 1
+formulas:
+  - id: dinamica_rotacional
+    title:
+      es: Dinamica rotacional con torque neto
+      en: Rotational dynamics with net torque
+    equation: alpha = tau_roz / I
+    latex: \\alpha = \\frac{\\tau_{roz}}{I}
+    rearrangements:
+      - target: alpha
+        equation: alpha = tau_roz / I
+        latex: \\alpha = \\frac{\\tau_{roz}}{I}
+      - target: tau_roz
+        equation: tau_roz = I * alpha
+        latex: \\tau_{roz} = I\\alpha
+      - target: I
+        equation: I = tau_roz / alpha
+        latex: I = \\frac{\\tau_{roz}}{\\alpha}
+    category: fundamental
+    relation_type: physical_law
+    physical_meaning:
+      es: El torque disipativo neto produce aceleracion angular segun la inercia del sistema.
+      en: Net dissipative torque produces angular acceleration according to system inertia.
+    constraints:
+      es: Eje fijo y momento de inercia constante en la ventana analizada.
+      en: Fixed axis and constant inertia in analyzed window.
+    validity:
+      es: Valida para rotacion de cuerpo rigido con parametros bien definidos.
+      en: Valid for rigid-body rotation with well-defined parameters.
+    dimension_check: '[T^-2] = [M L^2 T^-2] / [M L^2]'
+    calculable: true
+    motivo_no_calculable: No aplica; formula calculable con datos suficientes.
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - aplicaciones.md
+    interpretation_tags:
+      - rotational_dynamics
+      - braking_response
+    result_semantics:
+      target: alpha
+      kind: scalar
+      sign_meaning:
+        es: El signo indica aceleracion o desaceleracion angular segun convenio.
+        en: Sign indicates angular acceleration or deceleration under convention.
+      absolute_value_meaning:
+        es: El modulo mide intensidad del cambio de giro.
+        en: Magnitude measures intensity of spin change.
+    domain_checks:
+      - condition: I > 0
+        message:
+          es: I debe ser positiva para mantener validez fisica.
+          en: I must be positive for physical validity.
+    coherence_checks:
+      - check: abs(tau_roz) >= 0
+        warning:
+          es: Revisar signos y unidades si el resultado contradice el sentido fisico.
+          en: Check signs and units if result contradicts physical direction.
+    graph_implications:
+      - if: graph_available
+        then:
+          es: Relacionar curva de torque con curva de alpha.
+          en: Relate torque curve with alpha curve.
+    pedagogical_triggers:
+      - condition: I <= 0
+        hint:
+          es: Revisar datos geometricos y eje de referencia.
+          en: Recheck geometry data and reference axis.
+
+  - id: torque_coulomb
+    title:
+      es: Torque de Coulomb
+      en: Coulomb torque
+    equation: tau_roz = mu_k * N_normal * R
+    latex: \\tau_{roz} = \\mu_k N_{normal} R
+    rearrangements:
+      - target: tau_roz
+        equation: tau_roz = mu_k * N_normal * R
+        latex: \\tau_{roz} = \\mu_k N_{normal} R
+      - target: mu_k
+        equation: mu_k = tau_roz / (N_normal * R)
+        latex: \\mu_k = \\frac{\\tau_{roz}}{N_{normal}R}
+    category: constitutive
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: Modela torque seco proporcional a normal y radio efectivo.
+      en: Models dry torque proportional to normal force and effective radius.
+    constraints:
+      es: Contacto seco con mu_k aproximadamente constante.
+      en: Dry contact with approximately constant mu_k.
+    validity:
+      es: Util en regimen con deslizamiento seco y temperatura controlada.
+      en: Useful in dry-slip regime under controlled temperature.
+    dimension_check: '[M L^2 T^-2] = [1] * [M L T^-2] * [L]'
+    calculable: true
+    motivo_no_calculable: No aplica; formula calculable con datos suficientes.
+    used_in:
+      - teoria.md
+      - ejemplos.md
+    interpretation_tags:
+      - dry_friction
+      - constitutive_model
+    result_semantics:
+      target: tau_roz
+      kind: scalar
+      sign_meaning:
+        es: Se interpreta con signo opuesto a omega en frenado.
+        en: Interpreted with sign opposite to omega during braking.
+      absolute_value_meaning:
+        es: El modulo mide intensidad de friccion seca.
+        en: Magnitude measures dry-friction intensity.
+    domain_checks:
+      - condition: N_normal >= 0 and R > 0 and mu_k >= 0
+        message:
+          es: Normal, radio y coeficiente deben estar en dominio fisico.
+          en: Normal force, radius, and coefficient must be in physical domain.
+    coherence_checks:
+      - check: abs(tau_roz) >= 0
+        warning:
+          es: Revisar consistencia si el torque no es compatible con contacto declarado.
+          en: Recheck consistency if torque conflicts with declared contact state.
+    graph_implications:
+      - if: graph_available
+        then:
+          es: Mostrar sensibilidad de tau_roz frente a N_normal y R.
+          en: Show tau_roz sensitivity to N_normal and R.
+    pedagogical_triggers:
+      - condition: mu_k > 1.2
+        hint:
+          es: Valor alto de mu_k; validar materiales o unidades.
+          en: High mu_k value; validate materials or units.
+
+  - id: torque_viscoso
+    title:
+      es: Torque viscoso lineal
+      en: Linear viscous torque
+    equation: tau_roz = -b_rot * omega
+    latex: \\tau_{roz} = -b_{rot}\\omega
+    rearrangements:
+      - target: tau_roz
+        equation: tau_roz = -b_rot * omega
+        latex: \\tau_{roz} = -b_{rot}\\omega
+      - target: b_rot
+        equation: b_rot = -tau_roz / omega
+        latex: b_{rot} = -\\frac{\\tau_{roz}}{\\omega}
+    category: constitutive
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: Representa perdida viscosa proporcional a la velocidad angular.
+      en: Represents viscous loss proportional to angular velocity.
+    constraints:
+      es: Coeficiente b_rot aproximadamente constante en rango operativo.
+      en: b_rot approximately constant in operating range.
+    validity:
+      es: Apropiada para lubricacion en regimen cercano a lineal.
+      en: Suitable for lubrication near linear regime.
+    dimension_check: '[M L^2 T^-2] = [M L^2 T^-1] * [T^-1]'
+    calculable: true
+    motivo_no_calculable: No aplica; formula calculable con datos suficientes.
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - aplicaciones.md
+    interpretation_tags:
+      - viscous_friction
+      - damping
+    result_semantics:
+      target: tau_roz
+      kind: scalar
+      sign_meaning:
+        es: El signo negativo expresa oposicion al movimiento.
+        en: Negative sign expresses opposition to motion.
+      absolute_value_meaning:
+        es: El modulo crece con omega para b_rot fija.
+        en: Magnitude grows with omega for fixed b_rot.
+    domain_checks:
+      - condition: b_rot >= 0
+        message:
+          es: b_rot debe ser no negativa.
+          en: b_rot must be non-negative.
+    coherence_checks:
+      - check: tau_roz * omega <= 0
+        warning:
+          es: Si producto es positivo, revisar convenio de signos.
+          en: If product is positive, review sign convention.
+    graph_implications:
+      - if: graph_available
+        then:
+          es: La curva tau_roz versus omega debe ser aproximadamente lineal.
+          en: tau_roz versus omega should be approximately linear.
+    pedagogical_triggers:
+      - condition: b_rot < 0
+        hint:
+          es: Coeficiente negativo no fisico; revisar ajuste.
+          en: Negative coefficient is non-physical; review fit.
+
+  - id: decaimiento_exponencial
+    title:
+      es: Decaimiento exponencial de omega
+      en: Exponential decay of omega
+    equation: omega = omega0 * exp(-b_rot * t / I)
+    latex: \\omega = \\omega_0 e^{-b_{rot}t/I}
+    rearrangements:
+      - target: omega
+        equation: omega = omega0 * exp(-b_rot * t / I)
+        latex: \\omega = \\omega_0 e^{-b_{rot}t/I}
+      - target: t
+        equation: t = -(I / b_rot) * ln(omega / omega0)
+        latex: t = -\\frac{I}{b_{rot}}\\ln\\left(\\frac{\\omega}{\\omega_0}\\right)
+    category: derived
+    relation_type: integral_relation
+    physical_meaning:
+      es: Solucion temporal cuando domina torque viscoso lineal.
+      en: Time solution when linear viscous torque dominates.
+    constraints:
+      es: b_rot e I constantes y ausencia de torque seco dominante.
+      en: Constant b_rot and I with no dominant dry torque.
+    validity:
+      es: Valida en frenado viscoso predominante con parametros estables.
+      en: Valid in predominantly viscous braking with stable parameters.
+    dimension_check: '[T^-1] = [T^-1] * exp([1])'
+    calculable: true
+    motivo_no_calculable: No aplica; formula calculable con datos suficientes.
+    used_in:
+      - teoria.md
+      - ejemplos.md
+    interpretation_tags:
+      - transient_decay
+      - viscous_model
+    result_semantics:
+      target: omega
+      kind: scalar
+      sign_meaning:
+        es: Conserva convenio inicial de omega0.
+        en: Preserves omega0 sign convention.
+      absolute_value_meaning:
+        es: El modulo decae exponencialmente con el tiempo.
+        en: Magnitude decays exponentially with time.
+    domain_checks:
+      - condition: I > 0 and b_rot >= 0 and omega0 != 0
+        message:
+          es: Parametros deben cumplir dominio para decaimiento fisico.
+          en: Parameters must satisfy domain for physical decay.
+    coherence_checks:
+      - check: abs(omega) <= abs(omega0) when t >= 0
+        warning:
+          es: Si omega crece sin aporte externo, revisar datos.
+          en: If omega grows without external input, inspect data.
+    graph_implications:
+      - if: graph_available
+        then:
+          es: En semilog, la envolvente debe ser casi lineal.
+          en: In semilog scale, envelope should be nearly linear.
+    pedagogical_triggers:
+      - condition: b_rot == 0
+        hint:
+          es: Con b_rot cero no hay decaimiento exponencial.
+          en: With b_rot zero there is no exponential decay.
+
+  - id: energia_rotacional
+    title:
+      es: Energia cinetica rotacional
+      en: Rotational kinetic energy
+    equation: K_rot = 0.5 * I * omega^2
+    latex: K_rot = \\frac{1}{2}I\\omega^2
+    rearrangements:
+      - target: K_rot
+        equation: K_rot = 0.5 * I * omega^2
+        latex: K_rot = \\frac{1}{2}I\\omega^2
+      - target: omega
+        equation: omega = sqrt(2 * K_rot / I)
+        latex: \\omega = \\sqrt{\\frac{2K_rot}{I}}
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: Cuantifica energia almacenada en el movimiento de rotacion.
+      en: Quantifies energy stored in rotational motion.
+    constraints:
+      es: Cuerpo rigido con I constante en la evaluacion.
+      en: Rigid body with constant I during evaluation.
+    validity:
+      es: Valida para rotacion clasica con velocidades no relativistas.
+      en: Valid for classical rotation with non-relativistic speeds.
+    dimension_check: '[M L^2 T^-2] = [M L^2] * [T^-2]'
+    calculable: true
+    motivo_no_calculable: No aplica; formula calculable con datos suficientes.
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - aplicaciones.md
+    interpretation_tags:
+      - rotational_energy
+      - dissipation
+    result_semantics:
+      target: K_rot
+      kind: scalar
+      sign_meaning:
+        es: Se interpreta como magnitud no negativa.
+        en: Interpreted as non-negative magnitude.
+      absolute_value_meaning:
+        es: El valor refleja capacidad de realizar trabajo rotacional.
+        en: Value reflects ability to perform rotational work.
+    domain_checks:
+      - condition: I > 0
+        message:
+          es: I debe ser positiva para energia fisica.
+          en: I must be positive for physical energy.
+    coherence_checks:
+      - check: K_rot >= 0
+        warning:
+          es: Energia negativa indica error de datos o formula.
+          en: Negative energy indicates data or formula error.
+    graph_implications:
+      - if: graph_available
+        then:
+          es: K_rot debe decrecer en frenado disipativo puro.
+          en: K_rot should decrease in purely dissipative braking.
+    pedagogical_triggers:
+      - condition: K_rot < 0
+        hint:
+          es: Revisar signo y unidades de omega e I.
+          en: Check sign and units of omega and I.\r
+`;export{n as default};

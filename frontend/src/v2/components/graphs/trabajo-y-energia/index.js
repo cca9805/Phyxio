@@ -1,77 +1,59 @@
+import { withGraphContextRegistry } from "../shared/withGraphContext.jsx";
 /**
- * Trabajo y Energia - Graph Components Index
+ * Trabajo Y Energia - Graph Components Index
+ *
+ * WIRING ONLY — los metadatos semánticos (title, xAxis, yAxis, relation,
+ * physicalReading, agentHints, commonMistakes, etc.) viven en graficos.yaml.
+ * Este archivo solo declara { type, graphType, component } por entrada.
  */
 
-import TrabajoGraphsCoord from "./TrabajoGraphsCoord";
-import TrabajoFuerzaVariableGraphsCoord from "./TrabajoFuerzaVariableGraphsCoord";
-import PotenciaGraphsCoord from "./PotenciaGraphsCoord";
-import EnergiaCineticaGraphsCoord from "./EnergiaCineticaGraphsCoord";
-import EnergiaPotencialGravitatoriaGraphsCoord from "./EnergiaPotencialGravitatoriaGraphsCoord";
-import EnergiaPotencialElasticaGraphsCoord from "./EnergiaPotencialElasticaGraphsCoord";
-import EnergiaPotencialElasticaGraphsDcl from "./EnergiaPotencialElasticaGraphsDcl";
-import PrincipioDeConservacionGraphsCoord from "./PrincipioDeConservacionGraphsCoord";
-import SistemasConservativosGraphsCoord from "./SistemasConservativosGraphsCoord";
-import SistemasConservativosGraphsSvg from "./SistemasConservativosGraphsSvg";
-import RozamientoYDisipacionGraphsCoord from "./RozamientoYDisipacionGraphsCoord";
-import RozamientoYDisipacionGraphsDcl from "./RozamientoYDisipacionGraphsDcl";
-import TrabajoDeFuerzasNoConservativasGraphsCoord from "./TrabajoDeFuerzasNoConservativasGraphsCoord";
-import EnergiaCineticaRotacionalGraphsCoord from "./EnergiaCineticaRotacionalGraphsCoord";
-import TrabajoYTorqueGraphsCoord from "./TrabajoYTorqueGraphsCoord";
+import EnergiaCineticaGraphsCoord from "./Coord/EnergiaCineticaGraphsCoord.jsx";
+import EnergiaPotencialElasticaGraphsCoord from "./Coord/EnergiaPotencialElasticaGraphsCoord.jsx";
+import EnergiaPotencialGravitatoriaGraphsCoord from "./Coord/EnergiaPotencialGravitatoriaGraphsCoord.jsx";
+import PotenciaGraphsCoord from "./Coord/PotenciaGraphsCoord.jsx";
+import PrincipioDeConservacionGraphsCoord from "./Coord/PrincipioDeConservacionGraphsCoord.jsx";
+import RozamientoYDisipacionGraphsCoord from "./Coord/RozamientoYDisipacionGraphsCoord.jsx";
+import SistemasConservativosGraphsCoord from "./Coord/SistemasConservativosGraphsCoord.jsx";
+import TrabajoDeFuerzasNoConservativasGraphsCoord from "./Coord/TrabajoDeFuerzasNoConservativasGraphsCoord.jsx";
+import TrabajoFuerzaVariableGraphsCoord from "./Coord/TrabajoFuerzaVariableGraphsCoord.jsx";
+import SistemasConservativosGraphsSvg from "./Svg/SistemasConservativosGraphsSvg.jsx";
+import EnergiaPotencialElasticaGraphsDcl from "./Dcl/EnergiaPotencialElasticaGraphsDcl.jsx";
+import RozamientoYDisipacionGraphsDcl from "./Dcl/RozamientoYDisipacionGraphsDcl.jsx";
 
-export const graphs = {
-  "trabajo": {
-    Coord: TrabajoGraphsCoord,
-  },
-  "trabajo-fuerza-variable": {
-    Coord: TrabajoFuerzaVariableGraphsCoord,
-  },
-  "potencia": {
-    Coord: PotenciaGraphsCoord,
-  },
+const rawGraphs = {
   "energia-cinetica": {
-    Coord: EnergiaCineticaGraphsCoord,
-  },
-  "energia-potencial-gravitatoria": {
-    Coord: EnergiaPotencialGravitatoriaGraphsCoord,
+    Coord: { type: "Coord", graphType: "Coord", component: EnergiaCineticaGraphsCoord },
   },
   "energia-potencial-elastica": {
-    Coord: EnergiaPotencialElasticaGraphsCoord,
-    Dcl: EnergiaPotencialElasticaGraphsDcl,
+    Coord: { type: "Coord", graphType: "Coord", component: EnergiaPotencialElasticaGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: EnergiaPotencialElasticaGraphsDcl },
+  },
+  "energia-potencial-gravitatoria": {
+    Coord: { type: "Coord", graphType: "Coord", component: EnergiaPotencialGravitatoriaGraphsCoord },
+  },
+  "potencia": {
+    Coord: { type: "Coord", graphType: "Coord", component: PotenciaGraphsCoord },
   },
   "principio-de-conservacion": {
-    Coord: PrincipioDeConservacionGraphsCoord,
-  },
-  "sistemas-conservativos": {
-    Coord: SistemasConservativosGraphsCoord,
-    Svg: SistemasConservativosGraphsSvg,
+    Coord: { type: "Coord", graphType: "Coord", component: PrincipioDeConservacionGraphsCoord },
   },
   "rozamiento-y-disipacion": {
-    Coord: RozamientoYDisipacionGraphsCoord,
-    Dcl: RozamientoYDisipacionGraphsDcl,
+    Coord: { type: "Coord", graphType: "Coord", component: RozamientoYDisipacionGraphsCoord },
+    Dcl: { type: "Dcl", graphType: "Dcl", component: RozamientoYDisipacionGraphsDcl },
+  },
+  "sistemas-conservativos": {
+    Coord: { type: "Coord", graphType: "Coord", component: SistemasConservativosGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: SistemasConservativosGraphsSvg },
   },
   "trabajo-de-fuerzas-no-conservativas": {
-    Coord: TrabajoDeFuerzasNoConservativasGraphsCoord,
+    Coord: { type: "Coord", graphType: "Coord", component: TrabajoDeFuerzasNoConservativasGraphsCoord },
   },
-  "energia-cinetica-rotacional": {
-    Coord: EnergiaCineticaRotacionalGraphsCoord,
-  },
-  "trabajo-y-torque": {
-    Coord: TrabajoYTorqueGraphsCoord,
+  "trabajo-fuerza-variable": {
+    Coord: { type: "Coord", graphType: "Coord", component: TrabajoFuerzaVariableGraphsCoord },
   },
 };
 
-export { default as TrabajoGraphsCoord } from "./TrabajoGraphsCoord";
-export { default as TrabajoFuerzaVariableGraphsCoord } from "./TrabajoFuerzaVariableGraphsCoord";
-export { default as PotenciaGraphsCoord } from "./PotenciaGraphsCoord";
-export { default as EnergiaCineticaGraphsCoord } from "./EnergiaCineticaGraphsCoord";
-export { default as EnergiaPotencialGravitatoriaGraphsCoord } from "./EnergiaPotencialGravitatoriaGraphsCoord";
-export { default as EnergiaPotencialElasticaGraphsCoord } from "./EnergiaPotencialElasticaGraphsCoord";
-export { default as EnergiaPotencialElasticaGraphsDcl } from "./EnergiaPotencialElasticaGraphsDcl";
-export { default as PrincipioDeConservacionGraphsCoord } from "./PrincipioDeConservacionGraphsCoord";
-export { default as SistemasConservativosGraphsCoord } from "./SistemasConservativosGraphsCoord";
-export { default as SistemasConservativosGraphsSvg } from "./SistemasConservativosGraphsSvg";
-export { default as RozamientoYDisipacionGraphsCoord } from "./RozamientoYDisipacionGraphsCoord";
-export { default as RozamientoYDisipacionGraphsDcl } from "./RozamientoYDisipacionGraphsDcl";
-export { default as TrabajoDeFuerzasNoConservativasGraphsCoord } from "./TrabajoDeFuerzasNoConservativasGraphsCoord";
-export { default as EnergiaCineticaRotacionalGraphsCoord } from "./EnergiaCineticaRotacionalGraphsCoord";
-export { default as TrabajoYTorqueGraphsCoord } from "./TrabajoYTorqueGraphsCoord";
+export const graphs = withGraphContextRegistry(rawGraphs);
+export const trabajo_y_energiaGraphs = graphs;
+
+export default graphs;

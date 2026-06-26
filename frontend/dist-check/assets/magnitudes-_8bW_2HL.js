@@ -1,0 +1,619 @@
+const e=`magnitudes:
+- id: L
+  symbol: L
+  nombre:
+    es: sustentación
+    en: lift force
+  descripcion:
+    es: sustentación utilizada para estimar o interpretar la sustentación aerodinámica.
+    en: lift force used to estimate or interpret aerodynamic lift.
+  unidad_si: N
+  dimension: MLT^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: resultante aerodinámica perpendicular al flujo
+  used_in:
+  - sustentacion_general
+  - equilibrio_vuelo
+  common_mistake:
+    es: Usar sustentación fuera de su dominio físico o con unidades incoherentes.
+    en: Using lift force outside its physical domain or with inconsistent units.
+  typical_range: 10^1 - 10^6 N
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica sentido según convenio.
+      en: The sign follows the chosen convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor nulo indica ausencia de contribución correspondiente.
+      en: A zero value indicates absence of the corresponding contribution.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: real
+  interpretation_role:
+    primary_for:
+    - sustentacion
+    - validez_modelo
+    secondary_for:
+    - lectura_grafica
+    - calculadora
+  graph_binding:
+    channels:
+    - lift_arrow
+    - lift_curve
+    - L
+  pedagogical_notes:
+    es: En este leaf, sustentación debe leerse junto con velocidad, presión y geometría
+      del perfil; no como dato aislado.
+    en: In this leaf, lift force must be read together with speed, pressure, and airfoil
+      geometry, not as an isolated datum.
+- id: rho
+  symbol: \\rho
+  nombre:
+    es: densidad del fluido
+    en: fluid density
+  descripcion:
+    es: densidad del fluido utilizada para estimar o interpretar la sustentación aerodinámica.
+    en: fluid density used to estimate or interpret aerodynamic lift.
+  unidad_si: kg/m^3
+  dimension: ML^-3
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: propiedad del medio
+  used_in:
+  - sustentacion_general
+  - bernoulli_diferencia_presion
+  common_mistake:
+    es: Usar densidad del fluido fuera de su dominio físico o con unidades incoherentes.
+    en: Using fluid density outside its physical domain or with inconsistent units.
+  typical_range: 1.2 kg/m^3 en aire al nivel del mar
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No debe tomar valores negativos en este modelo.
+      en: It should not be negative in this model.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor nulo indica ausencia de contribución correspondiente.
+      en: A zero value indicates absence of the corresponding contribution.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: nonnegative
+  interpretation_role:
+    primary_for:
+    - sustentacion
+    - validez_modelo
+    secondary_for:
+    - lectura_grafica
+    - calculadora
+  graph_binding:
+    channels:
+    - density
+    - rho
+  pedagogical_notes:
+    es: En este leaf, densidad del fluido debe leerse junto con velocidad, presión
+      y geometría del perfil; no como dato aislado.
+    en: In this leaf, fluid density must be read together with speed, pressure, and
+      airfoil geometry, not as an isolated datum.
+- id: v
+  symbol: v
+  nombre:
+    es: velocidad relativa
+    en: relative flow speed
+  descripcion:
+    es: velocidad relativa utilizada para estimar o interpretar la sustentación aerodinámica.
+    en: relative flow speed used to estimate or interpret aerodynamic lift.
+  unidad_si: m/s
+  dimension: LT^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: estado cinemático del flujo
+  used_in:
+  - sustentacion_general
+  common_mistake:
+    es: Usar velocidad relativa fuera de su dominio físico o con unidades incoherentes.
+    en: Using relative flow speed outside its physical domain or with inconsistent
+      units.
+  typical_range: 5 - 300 m/s
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No debe tomar valores negativos en este modelo.
+      en: It should not be negative in this model.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor nulo indica ausencia de contribución correspondiente.
+      en: A zero value indicates absence of the corresponding contribution.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: nonnegative
+  interpretation_role:
+    primary_for:
+    - sustentacion
+    - validez_modelo
+    secondary_for:
+    - lectura_grafica
+    - calculadora
+  graph_binding:
+    channels:
+    - speed
+    - v
+  pedagogical_notes:
+    es: En este leaf, velocidad relativa debe leerse junto con velocidad, presión
+      y geometría del perfil; no como dato aislado.
+    en: In this leaf, relative flow speed must be read together with speed, pressure,
+      and airfoil geometry, not as an isolated datum.
+- id: S
+  symbol: S
+  nombre:
+    es: superficie de referencia
+    en: reference area
+  descripcion:
+    es: superficie de referencia utilizada para estimar o interpretar la sustentación
+      aerodinámica.
+    en: reference area used to estimate or interpret aerodynamic lift.
+  unidad_si: m^2
+  dimension: L^2
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: geometría global del ala
+  used_in:
+  - sustentacion_general
+  common_mistake:
+    es: Usar superficie de referencia fuera de su dominio físico o con unidades incoherentes.
+    en: Using reference area outside its physical domain or with inconsistent units.
+  typical_range: 0.01 - 600 m^2
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No debe tomar valores negativos en este modelo.
+      en: It should not be negative in this model.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor nulo indica ausencia de contribución correspondiente.
+      en: A zero value indicates absence of the corresponding contribution.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: nonnegative
+  interpretation_role:
+    primary_for:
+    - sustentacion
+    - validez_modelo
+    secondary_for:
+    - lectura_grafica
+    - calculadora
+  graph_binding:
+    channels:
+    - area
+    - S
+  pedagogical_notes:
+    es: En este leaf, superficie de referencia debe leerse junto con velocidad, presión
+      y geometría del perfil; no como dato aislado.
+    en: In this leaf, reference area must be read together with speed, pressure, and
+      airfoil geometry, not as an isolated datum.
+- id: C_L
+  symbol: C_L
+  nombre:
+    es: coeficiente de sustentación
+    en: lift coefficient
+  descripcion:
+    es: coeficiente de sustentación utilizada para estimar o interpretar la sustentación
+      aerodinámica.
+    en: lift coefficient used to estimate or interpret aerodynamic lift.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: resumen adimensional de perfil y ángulo de ataque
+  used_in:
+  - sustentacion_general
+  common_mistake:
+    es: Usar coeficiente de sustentación fuera de su dominio físico o con unidades
+      incoherentes.
+    en: Using lift coefficient outside its physical domain or with inconsistent units.
+  typical_range: -1 - 3
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica sentido según convenio.
+      en: The sign follows the chosen convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor nulo indica ausencia de contribución correspondiente.
+      en: A zero value indicates absence of the corresponding contribution.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: real
+  interpretation_role:
+    primary_for:
+    - sustentacion
+    - validez_modelo
+    secondary_for:
+    - lectura_grafica
+    - calculadora
+  graph_binding:
+    channels:
+    - cl
+    - C_L
+  pedagogical_notes:
+    es: En este leaf, coeficiente de sustentación debe leerse junto con velocidad,
+      presión y geometría del perfil; no como dato aislado.
+    en: In this leaf, lift coefficient must be read together with speed, pressure,
+      and airfoil geometry, not as an isolated datum.
+- id: dp
+  symbol: \\Delta p
+  nombre:
+    es: diferencia de presión
+    en: pressure difference
+  descripcion:
+    es: diferencia de presión utilizada para estimar o interpretar la sustentación
+      aerodinámica.
+    en: pressure difference used to estimate or interpret aerodynamic lift.
+  unidad_si: Pa
+  dimension: ML^-1T^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: contraste de presión entre intradós y extradós
+  used_in:
+  - bernoulli_diferencia_presion
+  - fuerza_por_presion
+  common_mistake:
+    es: Usar diferencia de presión fuera de su dominio físico o con unidades incoherentes.
+    en: Using pressure difference outside its physical domain or with inconsistent
+      units.
+  typical_range: 10^0 - 10^5 Pa
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica sentido según convenio.
+      en: The sign follows the chosen convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor nulo indica ausencia de contribución correspondiente.
+      en: A zero value indicates absence of the corresponding contribution.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: real
+  interpretation_role:
+    primary_for:
+    - sustentacion
+    - validez_modelo
+    secondary_for:
+    - lectura_grafica
+    - calculadora
+  graph_binding:
+    channels:
+    - pressure_difference
+    - dp
+  pedagogical_notes:
+    es: En este leaf, diferencia de presión debe leerse junto con velocidad, presión
+      y geometría del perfil; no como dato aislado.
+    en: In this leaf, pressure difference must be read together with speed, pressure,
+      and airfoil geometry, not as an isolated datum.
+- id: v_sup
+  symbol: v_{sup}
+  nombre:
+    es: velocidad sobre el extradós
+    en: upper-surface speed
+  descripcion:
+    es: velocidad sobre el extradós utilizada para estimar o interpretar la sustentación
+      aerodinámica.
+    en: upper-surface speed used to estimate or interpret aerodynamic lift.
+  unidad_si: m/s
+  dimension: LT^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: velocidad local sobre el perfil
+  used_in:
+  - bernoulli_diferencia_presion
+  common_mistake:
+    es: Usar velocidad sobre el extradós fuera de su dominio físico o con unidades
+      incoherentes.
+    en: Using upper-surface speed outside its physical domain or with inconsistent
+      units.
+  typical_range: 5 - 300 m/s
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No debe tomar valores negativos en este modelo.
+      en: It should not be negative in this model.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor nulo indica ausencia de contribución correspondiente.
+      en: A zero value indicates absence of the corresponding contribution.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: nonnegative
+  interpretation_role:
+    primary_for:
+    - sustentacion
+    - validez_modelo
+    secondary_for:
+    - lectura_grafica
+    - calculadora
+  graph_binding:
+    channels:
+    - upper_speed
+    - v_sup
+  pedagogical_notes:
+    es: En este leaf, velocidad sobre el extradós debe leerse junto con velocidad,
+      presión y geometría del perfil; no como dato aislado.
+    en: In this leaf, upper-surface speed must be read together with speed, pressure,
+      and airfoil geometry, not as an isolated datum.
+- id: v_inf
+  symbol: v_{inf}
+  nombre:
+    es: velocidad bajo el intradós
+    en: lower-surface speed
+  descripcion:
+    es: velocidad bajo el intradós utilizada para estimar o interpretar la sustentación
+      aerodinámica.
+    en: lower-surface speed used to estimate or interpret aerodynamic lift.
+  unidad_si: m/s
+  dimension: LT^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: velocidad local bajo el perfil
+  used_in:
+  - bernoulli_diferencia_presion
+  common_mistake:
+    es: Usar velocidad bajo el intradós fuera de su dominio físico o con unidades
+      incoherentes.
+    en: Using lower-surface speed outside its physical domain or with inconsistent
+      units.
+  typical_range: 5 - 300 m/s
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No debe tomar valores negativos en este modelo.
+      en: It should not be negative in this model.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor nulo indica ausencia de contribución correspondiente.
+      en: A zero value indicates absence of the corresponding contribution.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: nonnegative
+  interpretation_role:
+    primary_for:
+    - sustentacion
+    - validez_modelo
+    secondary_for:
+    - lectura_grafica
+    - calculadora
+  graph_binding:
+    channels:
+    - lower_speed
+    - v_inf
+  pedagogical_notes:
+    es: En este leaf, velocidad bajo el intradós debe leerse junto con velocidad,
+      presión y geometría del perfil; no como dato aislado.
+    en: In this leaf, lower-surface speed must be read together with speed, pressure,
+      and airfoil geometry, not as an isolated datum.
+- id: m
+  symbol: m
+  nombre:
+    es: masa de la aeronave
+    en: aircraft mass
+  descripcion:
+    es: masa de la aeronave utilizada para estimar o interpretar la sustentación aerodinámica.
+    en: aircraft mass used to estimate or interpret aerodynamic lift.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: peso que debe equilibrar la sustentación
+  used_in:
+  - equilibrio_vuelo
+  common_mistake:
+    es: Usar masa de la aeronave fuera de su dominio físico o con unidades incoherentes.
+    en: Using aircraft mass outside its physical domain or with inconsistent units.
+  typical_range: 10^0 - 10^6 kg
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No debe tomar valores negativos en este modelo.
+      en: It should not be negative in this model.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor nulo indica ausencia de contribución correspondiente.
+      en: A zero value indicates absence of the corresponding contribution.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: nonnegative
+  interpretation_role:
+    primary_for:
+    - sustentacion
+    - validez_modelo
+    secondary_for:
+    - lectura_grafica
+    - calculadora
+  graph_binding:
+    channels:
+    - mass
+    - m
+  pedagogical_notes:
+    es: En este leaf, masa de la aeronave debe leerse junto con velocidad, presión
+      y geometría del perfil; no como dato aislado.
+    en: In this leaf, aircraft mass must be read together with speed, pressure, and
+      airfoil geometry, not as an isolated datum.
+- id: g
+  symbol: g
+  nombre:
+    es: gravedad
+    en: gravitational acceleration
+  descripcion:
+    es: gravedad utilizada para estimar o interpretar la sustentación aerodinámica.
+    en: gravitational acceleration used to estimate or interpret aerodynamic lift.
+  unidad_si: m/s^2
+  dimension: LT^-2
+  is_vector: false
+  components: null
+  category: constant
+  physical_role: constante gravitatoria local
+  used_in:
+  - equilibrio_vuelo
+  common_mistake:
+    es: Usar gravedad fuera de su dominio físico o con unidades incoherentes.
+    en: Using gravitational acceleration outside its physical domain or with inconsistent
+      units.
+  typical_range: 9.8 m/s^2
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No debe tomar valores negativos en este modelo.
+      en: It should not be negative in this model.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor nulo indica ausencia de contribución correspondiente.
+      en: A zero value indicates absence of the corresponding contribution.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: nonnegative
+  interpretation_role:
+    primary_for:
+    - sustentacion
+    - validez_modelo
+    secondary_for:
+    - lectura_grafica
+    - calculadora
+  graph_binding:
+    channels:
+    - gravity
+    - g
+  pedagogical_notes:
+    es: En este leaf, gravedad debe leerse junto con velocidad, presión y geometría
+      del perfil; no como dato aislado.
+    en: In this leaf, gravitational acceleration must be read together with speed,
+      pressure, and airfoil geometry, not as an isolated datum.
+- id: W
+  symbol: W
+  nombre:
+    es: peso
+    en: weight
+  descripcion:
+    es: peso utilizada para estimar o interpretar la sustentación aerodinámica.
+    en: weight used to estimate or interpret aerodynamic lift.
+  unidad_si: N
+  dimension: MLT^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: fuerza que se opone a la sustentación en vuelo nivelado
+  used_in:
+  - equilibrio_vuelo
+  common_mistake:
+    es: Usar peso fuera de su dominio físico o con unidades incoherentes.
+    en: Using weight outside its physical domain or with inconsistent units.
+  typical_range: 10^1 - 10^7 N
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No debe tomar valores negativos en este modelo.
+      en: It should not be negative in this model.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor nulo indica ausencia de contribución correspondiente.
+      en: A zero value indicates absence of the corresponding contribution.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: nonnegative
+  interpretation_role:
+    primary_for:
+    - sustentacion
+    - validez_modelo
+    secondary_for:
+    - lectura_grafica
+    - calculadora
+  graph_binding:
+    channels:
+    - weight_arrow
+    - W
+  pedagogical_notes:
+    es: En este leaf, peso debe leerse junto con velocidad, presión y geometría del
+      perfil; no como dato aislado.
+    en: In this leaf, weight must be read together with speed, pressure, and airfoil
+      geometry, not as an isolated datum.
+- id: alpha
+  symbol: \\alpha
+  nombre:
+    es: ángulo de ataque
+    en: angle of attack
+  descripcion:
+    es: ángulo de ataque utilizada para estimar o interpretar la sustentación aerodinámica.
+    en: angle of attack used to estimate or interpret aerodynamic lift.
+  unidad_si: deg
+  dimension: '1'
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: orientación del perfil respecto al flujo
+  used_in:
+  - coeficiente_lineal_angulo
+  common_mistake:
+    es: Usar ángulo de ataque fuera de su dominio físico o con unidades incoherentes.
+    en: Using angle of attack outside its physical domain or with inconsistent units.
+  typical_range: -5° - 20°
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica sentido según convenio.
+      en: The sign follows the chosen convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor nulo indica ausencia de contribución correspondiente.
+      en: A zero value indicates absence of the corresponding contribution.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: real
+  interpretation_role:
+    primary_for:
+    - sustentacion
+    - validez_modelo
+    secondary_for:
+    - lectura_grafica
+    - calculadora
+  graph_binding:
+    channels:
+    - angle_of_attack
+    - alpha
+  pedagogical_notes:
+    es: En este leaf, ángulo de ataque debe leerse junto con velocidad, presión y
+      geometría del perfil; no como dato aislado.
+    en: In this leaf, angle of attack must be read together with speed, pressure,
+      and airfoil geometry, not as an isolated datum.
+`;export{e as default};

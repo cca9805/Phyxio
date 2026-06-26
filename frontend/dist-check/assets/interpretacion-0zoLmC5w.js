@@ -1,0 +1,443 @@
+const e=`version: "2.0"
+id: interp-lineas-de-campo
+leaf_id: lineas-de-campo
+
+nombre:
+  es: "Interpretación — Líneas de campo"
+  en: "Interpretation — Field Lines"
+
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: electrostatica
+  parent_id: campo-electrostatico
+  ruta_relativa: fisica-clasica/electromagnetismo/electrostatica/campo-electrostatico/lineas-de-campo
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: "Interpretación física de las líneas de campo"
+    en: "Physical interpretation of field lines"
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    priority: [summary, likely_errors]
+
+dependencies:
+  formulas:
+    - flujo_electrico_superficie
+    - densidad_lineas_campo
+    - carga_fuente_gauss
+  magnitudes:
+    - E
+    - rho_lineas
+    - phi_E
+    - q_fuente
+    - angulo_campo
+
+global_context:
+  physical_domain:
+    es: "Representación geométrica del campo eléctrico estático mediante líneas de fuerza."
+    en: "Geometric representation of the static electric field through lines of force."
+  axis_convention:
+    es: "Ejes x e y representan posición espacial en metros."
+    en: "Axes x and y represent spatial position in metres."
+  standard_assumptions:
+    - "Campo electrostático (régimen estático)"
+    - "Medio homogéneo e isótropo"
+  standard_warnings:
+    - "En electrodinámica las líneas se cierran sobre sí mismas; el modelo estático no aplica."
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del gráfico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+  phi_E:
+    summary_rules:
+      - id: phi_E_summary_positive
+        when: "result > 0"
+        status: ok
+        text:
+          es: "[[phi_E]] indica que las líneas de campo salen de la superficie: la carga encerrada es positiva o el campo apunta hacia afuera. El flujo depende de [[E]], del área y del ángulo [[angulo_campo]]."
+          en: "[[phi_E]] indicates that field lines exit the surface: the enclosed charge is positive or the field points outward. Flux depends on [[E]], area, and angle [[angulo_campo]]."
+      - id: phi_E_summary_negative
+        when: "result < 0"
+        status: ok
+        text:
+          es: "[[phi_E]] negativo indica que las líneas de campo entran en la superficie: la carga encerrada es negativa o el campo apunta hacia dentro. Su módulo resume cuántas líneas la atraviesan."
+          en: "Negative [[phi_E]] indicates that field lines enter the surface: the enclosed charge is negative or the field points inward. Its magnitude describes how many lines cross it."
+      - id: phi_E_summary_zero
+        when: "result = 0"
+        status: ok
+        text:
+          es: "[[phi_E]] nulo indica que el campo es tangente a la superficie o que la carga neta encerrada es cero. Ninguna línea de campo la atraviesa neta."
+          en: "Zero [[phi_E]] indicates that the field is tangential to the surface or that the net enclosed charge is zero. No net field line crosses it."
+      - id: phi_E_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[phi_E]] resume el número de líneas de campo que atraviesan la superficie ponderadas por la orientación. Depende de [[E]], el área y [[angulo_campo]]."
+          en: "[[phi_E]] summarises the number of field lines crossing the surface weighted by orientation. It depends on [[E]], area, and [[angulo_campo]]."
+    physical_reading_rules:
+      - id: phi_E_reading_large
+        when: "abs(result) > 1000"
+        status: ok
+        text:
+          es: "Flujo elevado indica que [[E]] es intenso o que la superficie es grande y bien orientada. Físicamente, muchas líneas de campo atraviesan la superficie, lo que implica una carga encerrada significativa si es superficie cerrada."
+          en: "Large flux indicates that [[E]] is strong or the surface is large and well oriented. Physically, many field lines cross the surface, implying significant enclosed charge if it is a closed surface."
+      - id: phi_E_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[phi_E]] resulta del producto de [[E]], el área y el coseno de [[angulo_campo]]. Si el ángulo aumenta hacia π/2, el flujo disminuye aunque [[E]] permanezca constante."
+          en: "The value of [[phi_E]] results from the product of [[E]], area, and cosine of [[angulo_campo]]. If the angle increases toward π/2, flux decreases even though [[E]] remains constant."
+    coherence_rules:
+      - id: phi_E_coherence_angle
+        when: "angulo_campo > 1.5707"
+        status: warning
+        text:
+          es: "El ángulo [[angulo_campo]] supera π/2: el flujo se vuelve negativo porque el campo entra en la superficie. Verificar que la normal exterior esté correctamente definida."
+          en: "Angle [[angulo_campo]] exceeds π/2: flux becomes negative because the field enters the surface. Verify that the outward normal is correctly defined."
+      - id: phi_E_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[phi_E]] y [[E]] deben tener el mismo signo cuando [[angulo_campo]] es menor de π/2. Si difieren, hay un error en la orientación de la normal."
+          en: "[[phi_E]] and [[E]] must have the same sign when [[angulo_campo]] is less than π/2. If they differ, there is an orientation error in the normal."
+    model_validity_rules:
+      - id: phi_E_validity_uniform
+        when: "true"
+        status: ok
+        text:
+          es: "La fórmula del flujo plano es válida solo para campo uniforme sobre superficie plana. Si [[E]] varía sobre la superficie o ésta es curva, el modelo subestima o sobreestima el flujo real."
+          en: "The flat flux formula is valid only for a uniform field over a flat surface. If [[E]] varies over the surface or it is curved, the model underestimates or overestimates the actual flux."
+    graph_rules:
+      - id: phi_E_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama de campo, [[phi_E]] se lee contando las líneas que atraviesan la superficie trazada. Mayor densidad de líneas [[rho_lineas]] implica mayor [[phi_E]] para la misma área."
+          en: "In the field diagram, [[phi_E]] is read by counting the lines crossing the drawn surface. Higher line density [[rho_lineas]] implies larger [[phi_E]] for the same area."
+    likely_errors:
+      - id: phi_E_error_no_coseno
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: calcular [[phi_E]] sin el factor coseno de [[angulo_campo]]. Si el campo es paralelo a la superficie, el flujo es cero aunque [[E]] sea grande."
+          en: "Frequent error: computing [[phi_E]] without the cosine factor of [[angulo_campo]]. If the field is parallel to the surface, flux is zero even if [[E]] is large."
+    next_step_rules:
+      - id: phi_E_next_gauss
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[phi_E]] calculado, el siguiente paso es aplicar la ley de Gauss: el flujo a través de una superficie cerrada es proporcional a la carga encerrada. Esto permite calcular [[E]] sin integrar contribuciones diferenciales."
+          en: "With [[phi_E]] computed, the next step is to apply Gauss's law: flux through a closed surface is proportional to the enclosed charge. This allows computing [[E]] without integrating differential contributions."
+
+  E:
+    summary_rules:
+      - id: E_summary_strong
+        when: "result > 1e4"
+        status: ok
+        text:
+          es: "[[E]] elevado indica que las líneas de campo [[rho_lineas]] están muy densas en esa zona. A este nivel el campo domina la fuerza sobre cualquier carga de prueba presente."
+          en: "High [[E]] indicates that field lines [[rho_lineas]] are very dense in that region. At this level the field dominates the force on any test charge present."
+      - id: E_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[E]] resume la intensidad del campo en la zona analizada. En el diagrama, indica la densidad de líneas: mayor [[E]] implica líneas más apretadas."
+          en: "[[E]] summarises the field intensity in the analysed region. In the diagram, it indicates line density: larger [[E]] implies more crowded lines."
+    physical_reading_rules:
+      - id: E_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[E]] resulta de dividir [[phi_E]] entre el área y el coseno de [[angulo_campo]]. Físicamente indica la fuerza por unidad de carga en ese punto del espacio."
+          en: "The value of [[E]] results from dividing [[phi_E]] by area and cosine of [[angulo_campo]]. Physically it indicates the force per unit charge at that point in space."
+    coherence_rules:
+      - id: E_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[E]] debe ser positivo. Si el cálculo da negativo, hay un error de signo en [[phi_E]] o en el coseno de [[angulo_campo]]."
+          en: "[[E]] must be positive. If the calculation gives a negative value, there is a sign error in [[phi_E]] or in the cosine of [[angulo_campo]]."
+    model_validity_rules:
+      - id: E_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[E]] calculado es válido solo si el campo es uniforme sobre la superficie. Cerca de cargas puntuales el campo varía con 1/r² y la fórmula plana subestima [[E]] en las zonas más próximas a la carga."
+          en: "Computed [[E]] is valid only if the field is uniform over the surface. Near point charges the field varies as 1/r² and the flat formula underestimates [[E]] in regions closest to the charge."
+    graph_rules:
+      - id: E_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico Coord, [[E]] se visualiza como la densidad de líneas [[rho_lineas]]: zonas con líneas más juntas tienen [[E]] mayor."
+          en: "In the Coord graph, [[E]] is visualised as line density [[rho_lineas]]: regions with closer lines have larger [[E]]."
+    likely_errors:
+      - id: E_error_fuerza
+        when: "true"
+        status: warning
+        text:
+          es: "Error habitual: confundir [[E]] con la fuerza sobre la carga. [[E]] es fuerza por unidad de carga; la fuerza real depende también del valor de [[q_fuente]]."
+          en: "Common error: confusing [[E]] with the force on the charge. [[E]] is force per unit charge; the actual force also depends on the value of [[q_fuente]]."
+    next_step_rules:
+      - id: E_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[E]] conocido, el siguiente paso es calcular el flujo [[phi_E]] a través de distintas superficies para aplicar la ley de Gauss y determinar la carga encerrada [[q_fuente]]."
+          en: "With [[E]] known, the next step is to compute flux [[phi_E]] through different surfaces to apply Gauss's law and determine the enclosed charge [[q_fuente]]."
+
+  angulo_campo:
+    summary_rules:
+      - id: angulo_summary_cero
+        when: "result < 0.1"
+        status: ok
+        text:
+          es: "[[angulo_campo]] próximo a cero indica que el campo es casi perpendicular a la superficie: el flujo [[phi_E]] es máximo. Todas las líneas atraviesan la superficie con mínima proyección lateral."
+          en: "[[angulo_campo]] near zero indicates the field is nearly perpendicular to the surface: flux [[phi_E]] is maximum. All lines cross the surface with minimal lateral projection."
+      - id: angulo_summary_noventa
+        when: "result > 1.47"
+        status: warning
+        text:
+          es: "[[angulo_campo]] próximo a π/2 indica que el campo es casi tangente a la superficie: el flujo [[phi_E]] se acerca a cero. Las líneas ya no la atraviesan significativamente."
+          en: "[[angulo_campo]] near π/2 indicates the field is nearly tangential to the surface: flux [[phi_E]] approaches zero. Lines no longer cross it significantly."
+      - id: angulo_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[angulo_campo]] resume la orientación relativa entre [[E]] y la normal exterior. Su coseno determina qué fracción del campo contribuye al flujo [[phi_E]]."
+          en: "[[angulo_campo]] summarises the relative orientation between [[E]] and the outward normal. Its cosine determines what fraction of the field contributes to flux [[phi_E]]."
+    physical_reading_rules:
+      - id: angulo_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[angulo_campo]] resulta de comparar [[phi_E]] con el producto de [[E]] y el área. Físicamente indica si las líneas de campo son más perpendiculares (ángulo pequeño) o más rasantes (ángulo grande) respecto a la superficie."
+          en: "The value of [[angulo_campo]] results from comparing [[phi_E]] with the product of [[E]] and area. Physically it indicates whether field lines are more perpendicular (small angle) or more grazing (large angle) to the surface."
+    coherence_rules:
+      - id: angulo_coherence_range
+        when: "result < 0 or result > 3.1416"
+        status: error
+        text:
+          es: "[[angulo_campo]] fuera del rango [0, π]: el ángulo entre dos vectores siempre está en ese intervalo. Revisar el cálculo del cociente [[phi_E]]/(E·A)."
+          en: "[[angulo_campo]] outside range [0, π]: the angle between two vectors is always in that interval. Review the calculation of [[phi_E]]/(E·A)."
+      - id: angulo_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[angulo_campo]] debe estar entre 0 y π. El resultado del cociente [[phi_E]]/(E·A) debe estar entre −1 y 1 para ser físicamente válido."
+          en: "[[angulo_campo]] must be between 0 and π. The result of [[phi_E]]/(E·A) must be between −1 and 1 to be physically valid."
+    model_validity_rules:
+      - id: angulo_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[angulo_campo]] es un parámetro geométrico, no una magnitud que varíe con el tiempo en electrostática. Solo cambia si se rota la superficie o se modifica la dirección del campo."
+          en: "[[angulo_campo]] is a geometric parameter, not a quantity that varies with time in electrostatics. It only changes if the surface is rotated or the field direction is modified."
+    graph_rules:
+      - id: angulo_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama de campo, [[angulo_campo]] se visualiza como el ángulo entre las líneas de campo y la normal a la superficie dibujada. Cuanto más perpendiculares sean las líneas, menor es [[angulo_campo]] y mayor el flujo."
+          en: "In the field diagram, [[angulo_campo]] is visualised as the angle between field lines and the normal to the drawn surface. The more perpendicular the lines, the smaller [[angulo_campo]] and the larger the flux."
+    likely_errors:
+      - id: angulo_error_superficie
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: medir [[angulo_campo]] respecto al plano de la superficie en lugar de respecto a la normal. Esto invierte el seno por el coseno y distorsiona el flujo calculado."
+          en: "Frequent error: measuring [[angulo_campo]] with respect to the surface plane instead of the normal. This swaps sine for cosine and distorts the computed flux."
+    next_step_rules:
+      - id: angulo_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[angulo_campo]] determinado, el siguiente paso es calcular [[phi_E]] usando la fórmula del flujo y verificar si la superficie elegida maximiza o minimiza el flujo para el propósito del cálculo."
+          en: "With [[angulo_campo]] determined, the next step is to compute [[phi_E]] using the flux formula and verify whether the chosen surface maximises or minimises flux for the purpose of the calculation."
+
+  q_fuente:
+    summary_rules:
+      - id: q_fuente_summary_positive
+        when: "result > 0"
+        status: ok
+        text:
+          es: "[[q_fuente]] positiva: las l\\u00edneas de campo salen de la carga. El flujo [[phi_E]] a trav\\u00e9s de cualquier superficie cerrada que la encierre es positivo. El n\\u00famero de l\\u00edneas es proporcional al valor de [[q_fuente]]."
+          en: "Positive [[q_fuente]]: field lines exit the charge. Flux [[phi_E]] through any closed surface enclosing it is positive. The number of lines is proportional to the value of [[q_fuente]]."
+      - id: q_fuente_summary_negative
+        when: "result < 0"
+        status: ok
+        text:
+          es: "[[q_fuente]] negativa: las l\\u00edneas de campo entran en la carga. El flujo [[phi_E]] a trav\\u00e9s de cualquier superficie cerrada que la encierre es negativo."
+          en: "Negative [[q_fuente]]: field lines enter the charge. Flux [[phi_E]] through any closed surface enclosing it is negative."
+      - id: q_fuente_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[q_fuente]] es el origen de las l\\u00edneas de campo [[rho_lineas]]: mayor valor absoluto implica m\\u00e1s l\\u00edneas y mayor [[phi_E]] total a trav\\u00e9s de cualquier superficie cerrada."
+          en: "[[q_fuente]] is the origin of field lines [[rho_lineas]]: larger absolute value implies more lines and larger total [[phi_E]] through any closed surface."
+    physical_reading_rules:
+      - id: q_fuente_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[q_fuente]] se obtiene de [[phi_E]] multiplicado por la permitividad del vac\\u00edo. F\\u00edsicamente indica cu\\u00e1ntas l\\u00edneas de campo emanan de la fuente o convergen hacia ella."
+          en: "[[q_fuente]] is obtained from [[phi_E]] multiplied by the permittivity of free space. Physically it indicates how many field lines emanate from or converge to the source."
+    coherence_rules:
+      - id: q_fuente_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El signo de [[q_fuente]] debe coincidir con el signo del flujo neto [[phi_E]] a trav\\u00e9s de una superficie cerrada que la encierre. Si difieren, hay un error en la orientaci\\u00f3n de la normal o en la identificaci\\u00f3n de la carga."
+          en: "The sign of [[q_fuente]] must match the sign of the net flux [[phi_E]] through a closed surface enclosing it. If they differ, there is an orientation error in the normal or an error in charge identification."
+    model_validity_rules:
+      - id: q_fuente_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "La relaci\\u00f3n de Gauss es v\\u00e1lida solo en electrost\\u00e1tica. En presencia de diel\\u00e9ctricos, la permitividad efectiva sustituye a la del vac\\u00edo y [[q_fuente]] calculada con epsilon_0 puro sobreestima la carga real libre."
+          en: "Gauss's relation is valid only in electrostatics. In the presence of dielectrics, the effective permittivity replaces that of free space and [[q_fuente]] computed with pure epsilon_0 overestimates the actual free charge."
+    graph_rules:
+      - id: q_fuente_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama de campo, [[q_fuente]] se reconoce como el foco de nacimiento (positiva) o terminaci\\u00f3n (negativa) de las l\\u00edneas de campo [[rho_lineas]]. El n\\u00famero de l\\u00edneas asignadas es proporcional a su valor absoluto."
+          en: "In the field diagram, [[q_fuente]] is recognised as the focus of origination (positive) or termination (negative) of field lines [[rho_lineas]]. The number of lines assigned is proportional to its absolute value."
+    likely_errors:
+      - id: q_fuente_error_lineas
+        when: "true"
+        status: warning
+        text:
+          es: "Error habitual: asignar el mismo n\\u00famero de l\\u00edneas a cargas de distinto valor absoluto. Si [[q_fuente]] es el doble, le corresponden el doble de l\\u00edneas; de lo contrario la densidad [[rho_lineas]] no representa correctamente [[E]]."
+          en: "Common error: assigning the same number of lines to charges of different absolute value. If [[q_fuente]] doubles, it gets twice as many lines; otherwise [[rho_lineas]] does not correctly represent [[E]]."
+    next_step_rules:
+      - id: q_fuente_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[q_fuente]] determinada, el siguiente paso es calcular [[phi_E]] total y usar la ley de Gauss para obtener [[E]] en superficies de alta simetr\\u00eda sin integrar contribuciones diferenciales."
+          en: "With [[q_fuente]] determined, the next step is to compute total [[phi_E]] and use Gauss's law to obtain [[E]] on high-symmetry surfaces without integrating differential contributions."
+
+  rho_lineas:
+    summary_rules:
+      - id: rho_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[rho_lineas]] indica la densidad de líneas de campo por unidad de área, proporcional a [[E]] en esa zona. Mayor densidad significa campo más intenso y mayor contribución al flujo [[phi_E]] por unidad de área."
+          en: "[[rho_lineas]] indicates the density of field lines per unit area, proportional to [[E]] in that region. Higher density means stronger field and greater contribution to flux [[phi_E]] per unit area."
+    physical_reading_rules:
+      - id: rho_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[rho_lineas]] resulta de multiplicar [[E]] por la constante del diagrama. Físicamente indica con qué rapidez varía el campo en el espacio: zonas de alta [[rho_lineas]] son zonas de campo intenso, como las inmediaciones de [[q_fuente]]."
+          en: "[[rho_lineas]] results from multiplying [[E]] by the diagram constant. Physically it indicates how rapidly the field varies in space: high [[rho_lineas]] regions are regions of strong field, such as the vicinity of [[q_fuente]]."
+    coherence_rules:
+      - id: rho_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[rho_lineas]] debe ser mayor en zonas cercanas a [[q_fuente]] y menor en zonas alejadas. Si la distribución es inversa, hay un error en la asignación de líneas."
+          en: "[[rho_lineas]] must be larger in regions near [[q_fuente]] and smaller in distant regions. If the distribution is reversed, there is an error in the line assignment."
+    model_validity_rules:
+      - id: rho_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[rho_lineas]] es una magnitud representacional: su valor absoluto depende del número de líneas elegido en el diagrama. Solo tiene sentido comparativa dentro del mismo diagrama."
+          en: "[[rho_lineas]] is a representational magnitude: its absolute value depends on the number of lines chosen in the diagram. It is only meaningful comparatively within the same diagram."
+    graph_rules:
+      - id: rho_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico Coord, [[rho_lineas]] se visualiza directamente como el espaciado entre líneas de campo: líneas juntas indican alta [[rho_lineas]] y alto [[E]]."
+          en: "In the Coord graph, [[rho_lineas]] is visualised directly as the spacing between field lines: close lines indicate high [[rho_lineas]] and high [[E]]."
+    likely_errors:
+      - id: rho_error_absoluto
+        when: "true"
+        status: warning
+        text:
+          es: "Error habitual: interpretar [[rho_lineas]] como un valor absoluto independiente del diagrama. Dos diagramas del mismo campo pueden tener [[rho_lineas]] numéricamente distintas si usan distinto número de líneas por carga."
+          en: "Common error: interpreting [[rho_lineas]] as an absolute value independent of the diagram. Two diagrams of the same field can have numerically different [[rho_lineas]] if they use different numbers of lines per charge."
+    next_step_rules:
+      - id: rho_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[rho_lineas]] leída del diagrama, el siguiente paso es estimar [[E]] relativo en distintas zonas y usar la ley de Gauss para relacionarlo con [[q_fuente]] encerrada."
+          en: "With [[rho_lineas]] read from the diagram, the next step is to estimate relative [[E]] in different regions and use Gauss's law to relate it to the enclosed [[q_fuente]]."
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true
+`;export{e as default};

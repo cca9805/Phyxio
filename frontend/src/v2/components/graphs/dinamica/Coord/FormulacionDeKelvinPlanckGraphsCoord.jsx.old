@@ -1,0 +1,151 @@
+import React from "react";
+import { createCoordGraphPage } from "@/v2/components/graphs/graphFactories.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraph(
+const uiLang = "es";
+const tt = (es, en) => (uiLang === "en" ? en : es);
+
+const graph_identity = {
+  graph_type: "Coord",
+  pregunta_principal: {
+    es: "Por que una maquina termica ciclica no puede convertir todo el calor de un unico foco en trabajo util?",
+    en: "Why can a cyclic heat engine not convert all heat from one reservoir into useful work?",
+  },
+  keywords: [
+    "maquina",
+    "termica",
+    "ciclica",
+    "convertir",
+    "calor",
+    "unico",
+    "foco",
+    "trabajo",
+    "util",
+    "heat",
+    "engine",
+    "cyclic",
+    "convert",
+    "reservoir",
+    "work",
+  ],
+  magnitud_estrella: "eta",
+  variable_control: "Q_C",
+  formula: "eta = 1 - Q_C / Q_H",
+  target_interpretable: true,
+};
+
+const axes = {
+  xComponent: "XAxis",
+  yComponent: "YAxis",
+  xAxis: "Q_C/Q_H",
+  yAxis: "eta",
+};
+
+const formula = {
+  id: "eficiencia_motor",
+  formula: "eta = W / Q_H",
+  equation: "eta = W / Q_H",
+};
+
+const fmt = (value, digits = 2) =>
+  Number.isFinite(value) ? value.toFixed(digits) : "-";
+
+const FormulacionDeKelvinPlanckGraphsCoord = createCoordGraphPage({
+  displayName: "FormulacionDeKelvinPlanckGraphsCoord",
+  title: {
+    es: "Eficiencia frente a calor rechazado",
+    en: "Efficiency versus rejected heat",
+  },
+  defaultParams: {
+    Q_H: 1000,
+    rejectionRatio: 0.35,
+    eta_carnot: 0.62,
+  },
+  controls: [
+    { id: "Q_H", label: { es: "Calor absorbido", en: "Absorbed heat" }, min: 100, max: 5000, step: 100 },
+    { id: "rejectionRatio", label: { es: "Rechazo relativo", en: "Relative rejection" }, min: 0, max: 0.9, step: 0.05 },
+    { id: "eta_carnot", label: { es: "Limite Carnot", en: "Carnot limit" }, min: 0.1, max: 0.9, step: 0.05 },
+  ],
+  compute: (pNum) => {
+    const qHot = Number.isFinite(pNum.Q_H) ? pNum.Q_H : 1000;
+    const ratio = Math.min(0.95, Math.max(0, Number.isFinite(pNum.rejectionRatio) ? pNum.rejectionRatio : 0.35));
+    const etaCarnot = Math.min(0.95, Math.max(0.05, Number.isFinite(pNum.eta_carnot) ? pNum.eta_carnot : 0.62));
+    const data = Array.from({ length: 40 }, (_, index) => {
+      const x = index / 39;
+      return { x, y: 1 - x };
+    });
+    const eta = 1 - ratio;
+    const qCold = qHot * ratio;
+    const work = qHot - qCold;
+
+    return {
+      data,
+      extra: {
+        interpretationTarget: "eta",
+        interpretationValue: eta,
+        graphState: {
+          target: "eta",
+          graphType: "Coord",
+          graph_identity,
+          axes,
+          formula,
+          Q_H: qHot,
+          Q_C: qCold,
+          W: work,
+          eta,
+          eta_carnot: etaCarnot,
+        },
+      },
+    };
+  },
+  render: ({ data, extra }) => {
+    const state = extra?.graphState ?? {};
+    const width = 520;
+    const height = 260;
+    const points = data
+      .map((point) => {
+        const x = 42 + point.x * (width - 84);
+        const y = height - 34 - point.y * (height - 68);
+        return `${x},${y}`;
+      })
+      .join(" ");
+    const ratio = state.Q_H ? state.Q_C / state.Q_H : 0;
+    const markerX = 42 + ratio * (width - 84);
+    const markerY = height - 34 - (state.eta ?? 0) * (height - 68);
+    const carnotY = height - 34 - (state.eta_carnot ?? 0) * (height - 68);
+
+    return (
+      <div className="v2-card" style={{ display: "grid", gap: 12 }}>
+        <div className="v2-card-title">{tt("Kelvin-Planck: rechazo y eficiencia", "Kelvin-Planck: rejection and efficiency")}</div>
+        <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Formulacion de Kelvin Planck Coord">
+          <rect x="0" y="0" width={width} height={height} rx="10" fill="rgba(15,23,42,0.86)" />
+          <line x1="38" y1={height - 32} x2={width - 28} y2={height - 32} stroke="rgba(255,255,255,0.28)" />
+          <line x1="42" y1="24" x2="42" y2={height - 28} stroke="rgba(255,255,255,0.28)" />
+          <line x1="42" y1={carnotY} x2={width - 42} y2={carnotY} stroke="#22c55e" strokeDasharray="6 5" strokeWidth="2" />
+          <polyline points={points} fill="none" stroke="#f97316" strokeWidth="3" />
+          <circle cx={markerX} cy={markerY} r="5" fill="#38bdf8" />
+          <text x={width - 34} y={height - 42} textAnchor="end" fill="rgba(255,255,255,0.72)" fontSize="12">
+            Q_C/Q_H
+          </text>
+          <text x="52" y="38" fill="rgba(255,255,255,0.72)" fontSize="12">
+            eta
+          </text>
+        </svg>
+        <div style={{ display: "grid", gap: 4, fontSize: 13 }}>
+          <strong>{tt("Lectura fisica", "Physical reading")}</strong>
+          <span>
+            Q_H = {fmt(state.Q_H, 0)} J; Q_C = {fmt(state.Q_C, 0)} J; W = {fmt(state.W, 0)} J; eta = {fmt(state.eta, 2)}
+          </span>
+        </div>
+      </div>
+    );
+  },
+});
+
+FormulacionDeKelvinPlanckGraphsCoord.graph_identity = graph_identity;
+FormulacionDeKelvinPlanckGraphsCoord.pregunta_principal = graph_identity.pregunta_principal;
+FormulacionDeKelvinPlanckGraphsCoord.magnitud_estrella = graph_identity.magnitud_estrella;
+FormulacionDeKelvinPlanckGraphsCoord.axes = axes;
+FormulacionDeKelvinPlanckGraphsCoord.formula = formula;
+
+export default FormulacionDeKelvinPlanckGraphsCoord;

@@ -1,0 +1,273 @@
+const n=`version: 1
+magnitudes:
+- id: Q
+  symbol: Q
+  nombre:
+    es: Caudal volumétrico
+    en: Volumetric flow rate
+  descripcion:
+    es: Volumen de fluido que atraviesa una sección por unidad de tiempo.
+    en: Volume of fluid passing through a section per unit of time.
+  unidad_si: m^3/s
+  dimension: "L^3 T^-1"
+  is_vector: false
+  components: []
+  category: cinetica
+  physical_role: variable_control
+  used_in: [diseño_redes, bombeo]
+  common_mistake:
+    es: Confundir caudal volumétrico con caudal másico.
+    en: Confusing volumetric flow rate with mass flow rate.
+  typical_range: [0.0001, 100]
+  sign_behavior: siempre_positivo
+  zero_behavior: flujo_estatico
+  value_nature: extensiva
+  interpretation_role: input
+  graph_binding: color_densidad
+  pedagogical_notes:
+    es: Base para el cálculo de la velocidad mediante la sección transversal.
+    en: Base for calculating velocity through the cross-section.
+- id: A
+  symbol: A
+  nombre:
+    es: Área de la sección transversal
+    en: Cross-sectional area
+  descripcion:
+    es: Superficie perpendicular a la dirección del flujo.
+    en: Surface perpendicular to the flow direction.
+  unidad_si: m^2
+  dimension: "L^2"
+  is_vector: false
+  components: []
+  category: geometria
+  physical_role: parametro_sistema
+  used_in: [geometria_tubo]
+  common_mistake:
+    es: Usar el radio en lugar del diámetro en la fórmula circular.
+    en: Using radius instead of diameter in the circular formula.
+  typical_range: [0.00001, 10]
+  sign_behavior: siempre_positivo
+  zero_behavior: obstruccion_total
+  value_nature: extensiva
+  interpretation_role: parametro
+  graph_binding: dimension_visual
+  pedagogical_notes:
+    es: Define la capacidad geométrica del conducto.
+    en: Defines the geometric capacity of the duct.
+- id: v
+  symbol: v
+  nombre:
+    es: Velocidad media del flujo
+    en: Average flow velocity
+  descripcion:
+    es: Velocidad promedio de las partículas del fluido en la tubería.
+    en: Average velocity of fluid particles in the pipe.
+  unidad_si: m/s
+  dimension: "L T^-1"
+  is_vector: false
+  components: []
+  category: cinetica
+  physical_role: variable_estado
+  used_in: [reynolds, darcy_weisbach]
+  common_mistake:
+    es: Asumir que la velocidad es uniforme en toda la sección (es un valor medio).
+    en: Assuming velocity is uniform across the section (it is an average value).
+  typical_range: [0.1, 10]
+  sign_behavior: siempre_positivo
+  zero_behavior: reposo
+  value_nature: intensiva
+  interpretation_role: key_result
+  graph_binding: perfil_velocidad
+  pedagogical_notes:
+    es: Variable crítica para determinar el régimen de flujo.
+    en: Critical variable for determining the flow regime.
+- id: dp
+  symbol: \\Delta p
+  nombre:
+    es: Caída de presión
+    en: Pressure drop
+  descripcion:
+    es: Pérdida de energía por unidad de volumen debido a la fricción.
+    en: Energy loss per unit volume due to friction.
+  unidad_si: Pa
+  dimension: "M L^-1 T^-2"
+  is_vector: false
+  components: []
+  category: dinamica
+  physical_role: magnitud_estrella
+  used_in: [darcy_weisbach, calculo_bombas]
+  common_mistake:
+    es: Pensar que la presión sube en el sentido del flujo sin una bomba.
+    en: Thinking pressure rises in the flow direction without a pump.
+  typical_range: [0, 10000000]
+  sign_behavior: positivo_disipativo
+  zero_behavior: flujo_ideal
+  value_nature: intensiva
+  interpretation_role: target
+  graph_binding: gradiente_color
+  pedagogical_notes:
+    es: Objetivo principal del análisis de Darcy-Weisbach.
+    en: Main objective of the Darcy-Weisbach analysis.
+- id: f
+  symbol: f
+  nombre:
+    es: Factor de fricción de Darcy
+    en: Darcy friction factor
+  descripcion:
+    es: Coeficiente adimensional que cuantifica la resistencia al flujo.
+    en: Dimensionless coefficient quantifying resistance to flow.
+  unidad_si: '1'
+  dimension: "1"
+  is_vector: false
+  components: []
+  category: dinamica
+  physical_role: parametro_resistencia
+  used_in: [darcy_weisbach]
+  common_mistake:
+    es: Usar la fórmula laminar (64/Re) para flujo turbulento.
+    en: Using the laminar formula (64/Re) for turbulent flow.
+  typical_range: [0.008, 0.15]
+  sign_behavior: siempre_positivo
+  zero_behavior: sin_friccion
+  value_nature: intensiva
+  interpretation_role: parametro
+  graph_binding: parametro_resistencia
+  pedagogical_notes:
+    es: Depende de Reynolds y la rugosidad relativa.
+    en: Depends on Reynolds and relative roughness.
+- id: L
+  symbol: L
+  nombre:
+    es: Longitud de la tubería
+    en: Pipe length
+  descripcion:
+    es: Distancia total recorrida por el fluido en el conducto.
+    en: Total distance traveled by the fluid in the duct.
+  unidad_si: m
+  dimension: "L"
+  is_vector: false
+  components: []
+  category: geometria
+  physical_role: parametro_sistema
+  used_in: [darcy_weisbach]
+  common_mistake:
+    es: No incluir tramos equivalentes por accesorios.
+    en: Not including equivalent sections for fittings.
+  typical_range: [0.1, 100000]
+  sign_behavior: siempre_positivo
+  zero_behavior: punto_unico
+  value_nature: extensiva
+  interpretation_role: parametro
+  graph_binding: dimension_longitud
+  pedagogical_notes:
+    es: Multiplicador lineal de las pérdidas por fricción.
+    en: Linear multiplier of friction losses.
+- id: rho
+  symbol: \\rho
+  nombre:
+    es: Densidad del fluido
+    en: Fluid density
+  descripcion:
+    es: Masa por unidad de volumen del fluido de trabajo.
+    en: Mass per unit volume of the working fluid.
+  unidad_si: kg/m^3
+  dimension: "M L^-3"
+  is_vector: false
+  components: []
+  category: propiedades_materia
+  physical_role: parametro_fluido
+  used_in: [inercia, darcy_weisbach]
+  common_mistake:
+    es: Ignorar cambios de densidad en gases.
+    en: Ignoring density changes in gases.
+  typical_range: [0.5, 20000]
+  sign_behavior: siempre_positivo
+  zero_behavior: vacio
+  value_nature: intensiva
+  interpretation_role: parametro
+  graph_binding: propiedad_fluido
+  pedagogical_notes:
+    es: Define la inercia del flujo.
+    en: Defines flow inertia.
+- id: D
+  symbol: D
+  nombre:
+    es: Diámetro interno
+    en: Internal diameter
+  descripcion:
+    es: Diámetro geométrico interno de la tubería.
+    en: Internal geometric diameter of the pipe.
+  unidad_si: m
+  dimension: "L"
+  is_vector: false
+  components: []
+  category: geometria
+  physical_role: parametro_sistema
+  used_in: [velocidad, darcy_weisbach]
+  common_mistake:
+    es: Usar el diámetro nominal en lugar del interno real.
+    en: Using nominal diameter instead of actual internal one.
+  typical_range: [0.001, 5]
+  sign_behavior: siempre_positivo
+  zero_behavior: obstruccion_total
+  value_nature: extensiva
+  interpretation_role: parametro
+  graph_binding: dimension_seccion
+  pedagogical_notes:
+    es: Parámetro más influyente en la caída de presión (potencia 5).
+    en: Most influential parameter in pressure drop (power of 5).
+- id: mu
+  symbol: \\mu
+  nombre:
+    es: Viscosidad dinámica
+    en: Dynamic viscosity
+  descripcion:
+    es: Resistencia interna del fluido a las fuerzas cortantes.
+    en: Internal resistance of the fluid to shear forces.
+  unidad_si: Pa \\cdot s
+  dimension: "M L^-1 T^-1"
+  is_vector: false
+  components: []
+  category: propiedades_materia
+  physical_role: parametro_fluido
+  used_in: [reynolds]
+  common_mistake:
+    es: Confundir viscosidad dinámica con cinemática.
+    en: Confusing dynamic with kinematic viscosity.
+  typical_range: [0.00001, 100]
+  sign_behavior: siempre_positivo
+  zero_behavior: fluido_superficial
+  value_nature: intensiva
+  interpretation_role: parametro
+  graph_binding: propiedad_fluido
+  pedagogical_notes:
+    es: Define la resistencia viscosa en régimen laminar.
+    en: Defines viscous resistance in laminar regime.
+- id: Re
+  symbol: Re
+  nombre:
+    es: Número de Reynolds
+    en: Reynolds number
+  descripcion:
+    es: Relación adimensional entre fuerzas de inercia y viscosas.
+    en: Dimensionless ratio of inertial to viscous forces.
+  unidad_si: '1'
+  dimension: "1"
+  is_vector: false
+  components: []
+  category: adimensionale
+  physical_role: criterio_diagnostico
+  used_in: [regimen_flujo, moody]
+  common_mistake:
+    es: Olvidar que es adimensional al verificar unidades.
+    en: Forgetting it is dimensionless when checking units.
+  typical_range: [0, 100000000]
+  sign_behavior: siempre_positivo
+  zero_behavior: flujo_laminar_extremo
+  value_nature: intensiva
+  interpretation_role: diagnostico
+  graph_binding: estado_regimen
+  pedagogical_notes:
+    es: Determina si el flujo es laminar, de transición o turbulento.
+    en: Determines if the flow is laminar, transition, or turbulent.
+`;export{n as default};

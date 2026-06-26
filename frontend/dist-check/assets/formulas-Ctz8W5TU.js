@@ -1,0 +1,199 @@
+const e=`formulas:
+  - id: ecuacion_lente_delgada
+    title:
+      es: Ecuacion de la lente delgada
+      en: Thin lens equation
+    equation: "1/f = 1/d_o + 1/d_i"
+    latex: "\\\\frac{1}{f} = \\\\frac{1}{d_o} + \\\\frac{1}{d_i}"
+    rearrangements:
+      - target: d_i
+        equation: "d_i = f * d_o / (d_o - f)"
+        latex: "d_i = \\\\frac{f \\\\cdot d_o}{d_o - f}"
+      - target: d_o
+        equation: "d_o = f * d_i / (d_i - f)"
+        latex: "d_o = \\\\frac{f \\\\cdot d_i}{d_i - f}"
+      - target: f
+        equation: "f = d_o * d_i / (d_o + d_i)"
+        latex: "f = \\\\frac{d_o \\\\cdot d_i}{d_o + d_i}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "Relaciona la distancia focal de una lente delgada con las distancias del objeto y de la imagen, determinando donde se forma la imagen de un objeto puntual."
+      en: "Relates the focal length of a thin lens to the object and image distances, determining where the image of a point object is formed."
+    constraints:
+      - "d_o > 0"
+      - "f distinto de cero"
+      - "d_o distinto de f"
+    validity:
+      es: "Valida para lentes delgadas en la aproximacion paraxial, con espesor despreciable frente a las distancias focales."
+      en: "Valid for thin lenses in the paraxial approximation, with thickness negligible compared to focal lengths."
+    dimension_check: "[L]^-1 = [L]^-1 + [L]^-1"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria
+      - ejemplos
+      - interpretacion
+    interpretation_tags:
+      - posicion_imagen
+      - convergencia
+      - divergencia
+    result_semantics:
+      target: d_i
+      kind: distance
+      sign_meaning:
+        es: "Positivo indica imagen real al otro lado de la lente; negativo indica imagen virtual del mismo lado que el objeto."
+        en: "Positive indicates a real image on the far side of the lens; negative indicates a virtual image on the same side as the object."
+      absolute_value_meaning:
+        es: "Distancia en metros entre la lente y la imagen."
+        en: "Distance in metres between the lens and the image."
+    domain_checks:
+      - variable: d_o
+        condition: "d_o > 0"
+        message:
+          es: "La distancia del objeto al sistema optico debe ser positiva."
+          en: "The object distance to the optical system must be positive."
+    coherence_checks:
+      - condition: "d_i > 0 and d_o > f"
+        message:
+          es: "Si el objeto esta mas alla del foco de una lente convergente, la imagen es real y positiva."
+          en: "If the object is beyond the focal point of a converging lens, the image is real and positive."
+    graph_implications:
+      es: "La posicion de la imagen en el eje horizontal del grafico cambia de signo al cruzar el foco."
+      en: "The image position on the horizontal graph axis changes sign when the object crosses the focal point."
+    pedagogical_triggers:
+      - trigger: "d_o < f and f > 0"
+        message:
+          es: "El objeto esta entre la lente convergente y el foco, la imagen es virtual y amplificada: este es el principio de la lupa."
+          en: "The object is between the converging lens and the focus, the image is virtual and magnified: this is the principle of the magnifying glass."
+
+  - id: aumento_angular_lupa
+    title:
+      es: Aumento angular de la lupa
+      en: Angular magnification of a magnifying glass
+    equation: "M_angular = d_pp / f_lupa"
+    latex: "M_{angular} = \\\\frac{d_{pp}}{f_{lupa}}"
+    rearrangements:
+      - target: M_angular
+        equation: "M_angular = d_pp / f_lupa"
+        latex: "M_{angular} = \\\\frac{d_{pp}}{f_{lupa}}"
+      - target: f_lupa
+        equation: "f_lupa = d_pp / M_angular"
+        latex: "f_{lupa} = \\\\frac{d_{pp}}{M_{angular}}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "Define el aumento angular de una lupa simple como el cociente entre la distancia del punto proximo y la distancia focal de la lente, indicando cuantas veces mayor es el angulo subtendido por la imagen respecto al del objeto a simple vista."
+      en: "Defines the angular magnification of a simple magnifier as the ratio of the near-point distance to the focal length, indicating how many times larger the angle subtended by the image is compared to the unaided eye."
+    constraints:
+      - "f_lupa > 0"
+      - "d_pp > 0"
+    validity:
+      es: "Valida con el ojo relajado enfocando al infinito; lente delgada convergente en aproximacion paraxial."
+      en: "Valid with the relaxed eye focusing at infinity; thin converging lens in paraxial approximation."
+    dimension_check: "[1] = [L] / [L]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria
+      - ejemplos
+      - interpretacion
+    interpretation_tags:
+      - aumento_angular
+      - lupa
+    result_semantics:
+      target: M_angular
+      kind: ratio
+      sign_meaning:
+        es: "Siempre positivo; mayor que 1 indica que la imagen aparece mas grande que a simple vista."
+        en: "Always positive; greater than 1 means the image appears larger than with the unaided eye."
+      absolute_value_meaning:
+        es: "Factor adimensional de ampliacion angular."
+        en: "Dimensionless angular magnification factor."
+    domain_checks:
+      - variable: f_lupa
+        condition: "f_lupa > 0"
+        message:
+          es: "La distancia focal de la lupa debe ser positiva (lente convergente)."
+          en: "The magnifying-glass focal length must be positive (converging lens)."
+    coherence_checks:
+      - condition: "M_angular > 1"
+        message:
+          es: "Un aumento angular menor que 1 indicaria que la lupa reduce la imagen, lo cual no es fisicamente razonable."
+          en: "An angular magnification below 1 would indicate that the magnifier reduces the image, which is not physically reasonable."
+    graph_implications:
+      es: "En el grafico, el aumento angular crece hiperbolicamente al disminuir la distancia focal."
+      en: "On the graph, the angular magnification increases hyperbolically as the focal length decreases."
+    pedagogical_triggers:
+      - trigger: "M_angular < 1"
+        message:
+          es: "Un aumento menor que 1 sugiere una focal mayor que la distancia del punto proximo: la lupa no cumple su funcion."
+          en: "A magnification below 1 suggests a focal length exceeding the near-point distance: the magnifier does not fulfil its purpose."
+
+  - id: aumento_microscopio
+    title:
+      es: Aumento del microscopio compuesto
+      en: Magnification of a compound microscope
+    equation: "M_micro = (L / f_obj) * (d_pp / f_oc)"
+    latex: "M_{micro} = \\\\frac{L}{f_{obj}} \\\\cdot \\\\frac{d_{pp}}{f_{oc}}"
+    rearrangements:
+      - target: M_micro
+        equation: "M_micro = (L / f_obj) * (d_pp / f_oc)"
+        latex: "M_{micro} = \\\\frac{L}{f_{obj}} \\\\cdot \\\\frac{d_{pp}}{f_{oc}}"
+      - target: f_obj
+        equation: "f_obj = L * d_pp / (M_micro * f_oc)"
+        latex: "f_{obj} = \\\\frac{L \\\\cdot d_{pp}}{M_{micro} \\\\cdot f_{oc}}"
+      - target: f_oc
+        equation: "f_oc = L * d_pp / (M_micro * f_obj)"
+        latex: "f_{oc} = \\\\frac{L \\\\cdot d_{pp}}{M_{micro} \\\\cdot f_{obj}}"
+    category: derived
+    relation_type: definition
+    physical_meaning:
+      es: "El aumento total del microscopio es el producto del aumento lateral del objetivo por el aumento angular del ocular, donde la longitud del tubo determina la separacion optica entre ambas lentes."
+      en: "The total magnification of the microscope is the product of the lateral magnification of the objective and the angular magnification of the eyepiece, where the tube length determines the optical separation between both lenses."
+    constraints:
+      - "f_obj > 0"
+      - "f_oc > 0"
+      - "L > 0"
+    validity:
+      es: "Valida para microscopio compuesto con objetivo y ocular delgados en aproximacion paraxial, con longitud de tubo estandar."
+      en: "Valid for a compound microscope with thin objective and eyepiece in the paraxial approximation, with standard tube length."
+    dimension_check: "[1] = [L]/[L] * [L]/[L]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria
+      - ejemplos
+      - interpretacion
+    interpretation_tags:
+      - aumento_microscopio
+      - resolucion
+    result_semantics:
+      target: M_micro
+      kind: ratio
+      sign_meaning:
+        es: "El signo negativo convencional indica imagen invertida; el modulo es el factor de ampliacion."
+        en: "The conventional negative sign indicates an inverted image; the modulus is the magnification factor."
+      absolute_value_meaning:
+        es: "Factor adimensional de aumento total del microscopio."
+        en: "Dimensionless total magnification factor of the microscope."
+    domain_checks:
+      - variable: f_obj
+        condition: "f_obj > 0"
+        message:
+          es: "La focal del objetivo debe ser positiva (lente convergente)."
+          en: "The objective focal length must be positive (converging lens)."
+    coherence_checks:
+      - condition: "M_micro > 10"
+        message:
+          es: "Un microscopio compuesto tipico tiene aumento superior a 10; valores menores sugieren un error en los parametros."
+          en: "A typical compound microscope has magnification above 10; lower values suggest a parameter error."
+    graph_implications:
+      es: "El aumento total es sensible a la longitud del tubo: en el grafico, la curva crece linealmente con la longitud optica."
+      en: "The total magnification is sensitive to tube length: on the graph, the curve grows linearly with optical length."
+    pedagogical_triggers:
+      - trigger: "M_micro < 10"
+        message:
+          es: "Un aumento total inferior a 10 es inusual para un microscopio compuesto; revisar las distancias focales y la longitud del tubo."
+          en: "A total magnification below 10 is unusual for a compound microscope; check the focal lengths and tube length."
+`;export{e as default};

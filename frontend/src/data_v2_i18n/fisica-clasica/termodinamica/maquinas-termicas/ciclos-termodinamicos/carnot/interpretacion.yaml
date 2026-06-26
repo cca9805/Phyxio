@@ -1,0 +1,537 @@
+version: "1.0"
+id: interpretacion_carnot
+leaf_id: carnot
+
+nombre:
+  es: "Interpretación del ciclo de Carnot"
+  en: "Carnot cycle interpretation"
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: maquinas-termicas
+  parent_id: ciclos-termodinamicos
+  ruta_relativa: fisica-clasica/termodinamica/maquinas-termicas/ciclos-termodinamicos/carnot
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretacion
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    priority:
+      - summary
+      - likely_errors
+
+dependencies:
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+  formulas:
+    - rendimiento_carnot
+    - balance_energetico_carnot
+    - relacion_calores_carnot
+  magnitudes:
+    - eta_C
+    - T_H
+    - T_C
+    - Q_H
+    - Q_C
+    - W_neto
+
+global_context:
+  physical_domain:
+    es: "Termodinámica de ciclos de potencia y límites de rendimiento"
+    en: "Power cycle thermodynamics and efficiency limits"
+  axis_convention:
+    es: "En el diagrama T-s, T_H es la isoterma superior y T_C la inferior; el área encerrada es W_neto"
+    en: "In the T-s diagram, T_H is the upper isotherm and T_C the lower one; the enclosed area is W_neto"
+  standard_assumptions:
+    - "Ciclo completamente reversible"
+    - "Focos de capacidad infinita"
+    - "Temperaturas en kelvin"
+  standard_warnings:
+    - "No aplicar a ciclos irreversibles como rendimiento real"
+    - "Verificar conversión Celsius a kelvin"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen del resultado
+      en: Result summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia del resultado
+      en: Result coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+  eta_C:
+    magnitude_type: ratio
+    semantic_role:
+      es: "Rendimiento máximo teórico del ciclo entre los focos dados"
+      en: "Maximum theoretical cycle efficiency between the given reservoirs"
+    summary_rules:
+      - id: eta_summary_high
+        when: "eta_C > 0.6"
+        status: ok
+        text:
+          es: "[[eta_C]] indica un rendimiento de Carnot elevado, lo que significa que la diferencia entre [[T_H]] y [[T_C]] es grande y el potencial termodinámico para producir trabajo es alto."
+          en: "[[eta_C]] indicates a high Carnot efficiency, meaning the difference between [[T_H]] and [[T_C]] is large and the thermodynamic potential to produce work is high."
+      - id: eta_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[eta_C]] indica el rendimiento máximo teórico del ciclo. Este valor depende exclusivamente de la razón entre [[T_C]] y [[T_H]] y establece el techo absoluto para cualquier máquina entre estos focos."
+          en: "[[eta_C]] indicates the maximum theoretical cycle efficiency. This value depends exclusively on the ratio of [[T_C]] to [[T_H]] and establishes the absolute ceiling for any machine between these reservoirs."
+    physical_reading_rules:
+      - id: eta_reading_meaning
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[eta_C]] representa la fracción máxima de [[Q_H]] que puede convertirse en [[W_neto]]. El complemento a uno (la fracción restante) debe cederse obligatoriamente como [[Q_C]] al foco frío por imposición de la segunda ley."
+          en: "The value of [[eta_C]] represents the maximum fraction of [[Q_H]] that can be converted into [[W_neto]]. The complement to one (the remaining fraction) must be obligatorily rejected as [[Q_C]] to the cold reservoir as imposed by the second law."
+    coherence_rules:
+      - id: eta_coherence_range
+        when: "eta_C >= 1"
+        status: error
+        text:
+          es: "[[eta_C]] mayor o igual a 1 viola la segunda ley. Verificar que [[T_C]] sea mayor que cero kelvin y menor que [[T_H]]."
+          en: "[[eta_C]] greater than or equal to 1 violates the second law. Verify that [[T_C]] is greater than zero kelvin and less than [[T_H]]."
+      - id: eta_coherence_negative
+        when: "eta_C < 0"
+        status: error
+        text:
+          es: "[[eta_C]] negativo indica que [[T_C]] supera [[T_H]], lo cual es incoherente para un motor térmico."
+          en: "Negative [[eta_C]] indicates that [[T_C]] exceeds [[T_H]], which is incoherent for a heat engine."
+      - id: eta_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[eta_C]] se encuentra en el intervalo válido (0, 1), coherente con la segunda ley de la termodinámica."
+          en: "[[eta_C]] lies in the valid interval (0, 1), coherent with the second law of thermodynamics."
+    model_validity_rules:
+      - id: eta_model_reversible
+        when: "true"
+        status: warning
+        text:
+          es: "El rendimiento de Carnot asume reversibilidad total. Cualquier ciclo real entre [[T_H]] y [[T_C]] tendrá un rendimiento menor. La diferencia mide las irreversibilidades del sistema."
+          en: "Carnot efficiency assumes total reversibility. Any real cycle between [[T_H]] and [[T_C]] will have lower efficiency. The difference measures the system's irreversibilities."
+    graph_rules:
+      - id: eta_graph_ts
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama T-s, [[eta_C]] se visualiza como el cociente entre el área del rectángulo encerrado por el ciclo (proporcional a [[W_neto]]) y el área bajo la isoterma superior (proporcional a [[Q_H]])."
+          en: "In the T-s diagram, [[eta_C]] is visualized as the ratio of the rectangle area enclosed by the cycle (proportional to [[W_neto]]) to the area under the upper isotherm (proportional to [[Q_H]])."
+    likely_errors:
+      - id: eta_error_celsius
+        when: "eta_C > 0.85"
+        status: warning
+        text:
+          es: "Un [[eta_C]] superior al 85 % con temperaturas industriales sugiere que se han usado Celsius en lugar de kelvin. Verificar la conversión de temperaturas."
+          en: "An [[eta_C]] above 85 % with industrial temperatures suggests Celsius was used instead of kelvin. Verify temperature conversion."
+      - id: eta_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que el resultado no se interpreta como rendimiento alcanzable, sino como límite teórico superior."
+          en: "Verify that the result is not interpreted as achievable efficiency but as a theoretical upper limit."
+    next_step_rules:
+      - id: eta_next_compare
+        when: "true"
+        status: ok
+        text:
+          es: "Comparar [[eta_C]] con el rendimiento del ciclo específico (Brayton, Rankine, Otto) para cuantificar la eficiencia de segunda ley del sistema analizado."
+          en: "Compare [[eta_C]] with the specific cycle efficiency (Brayton, Rankine, Otto) to quantify the second-law efficiency of the analysed system."
+
+  T_H:
+    magnitude_type: state
+    semantic_role:
+      es: "Temperatura del foco caliente que fija el límite superior del ciclo"
+      en: "Hot reservoir temperature setting the upper limit of the cycle"
+    summary_rules:
+      - id: th_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_H]] indica la temperatura del foco caliente. Cuanto mayor sea [[T_H]] a igualdad de [[T_C]], mayor será el rendimiento de Carnot y el potencial termodinámico disponible."
+          en: "[[T_H]] indicates the hot reservoir temperature. The higher [[T_H]] at constant [[T_C]], the greater the Carnot efficiency and available thermodynamic potential."
+    physical_reading_rules:
+      - id: th_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_H]] determina la calidad térmica del calor suministrado. A mayor [[T_H]], mayor capacidad de ese calor para producir trabajo útil según el teorema de Carnot."
+          en: "[[T_H]] determines the thermal quality of the supplied heat. The higher [[T_H]], the greater that heat's capacity to produce useful work according to Carnot's theorem."
+    coherence_rules:
+      - id: th_coherence_check
+        when: "T_H <= T_C"
+        status: error
+        text:
+          es: "[[T_H]] debe ser estrictamente mayor que [[T_C]] para que exista un ciclo motor. Verificar los datos del enunciado."
+          en: "[[T_H]] must be strictly greater than [[T_C]] for a power cycle to exist. Verify the problem data."
+      - id: th_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_H]] es mayor que [[T_C]], condición necesaria para la operación del ciclo de Carnot como motor térmico."
+          en: "[[T_H]] is greater than [[T_C]], a necessary condition for Carnot cycle operation as a heat engine."
+    model_validity_rules:
+      - id: th_model_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume que [[T_H]] permanece constante durante el proceso isotérmico de absorción de calor (reservorio de capacidad infinita)."
+          en: "The model assumes [[T_H]] remains constant during the isothermal heat absorption process (infinite-capacity reservoir)."
+    graph_rules:
+      - id: th_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama T-s, [[T_H]] corresponde a la isoterma horizontal superior del ciclo rectangular de Carnot."
+          en: "In the T-s diagram, [[T_H]] corresponds to the upper horizontal isotherm of the rectangular Carnot cycle."
+    likely_errors:
+      - id: th_error_celsius
+        when: "T_H < 400"
+        status: warning
+        text:
+          es: "Si [[T_H]] es inferior a 400 K en un contexto industrial, verificar que no se haya olvidado la conversión de Celsius a kelvin."
+          en: "If [[T_H]] is below 400 K in an industrial context, verify that the Celsius to kelvin conversion was not forgotten."
+      - id: th_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Confirmar que [[T_H]] se expresa en kelvin y no en Celsius."
+          en: "Confirm that [[T_H]] is expressed in kelvin and not in Celsius."
+    next_step_rules:
+      - id: th_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[T_H]] determinada, calcular [[eta_C]] y evaluar si el rendimiento real del ciclo se aproxima al límite teórico."
+          en: "With [[T_H]] determined, calculate [[eta_C]] and evaluate whether the real cycle efficiency approaches the theoretical limit."
+
+  T_C:
+    magnitude_type: state
+    semantic_role:
+      es: "Temperatura del foco frío que fija el límite inferior del ciclo"
+      en: "Cold reservoir temperature setting the lower limit of the cycle"
+    summary_rules:
+      - id: tc_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_C]] indica la temperatura del foco frío. Cuanto menor sea [[T_C]], mayor será el rendimiento de Carnot, pero el tercer principio prohíbe alcanzar cero kelvin."
+          en: "[[T_C]] indicates the cold reservoir temperature. The lower [[T_C]], the greater the Carnot efficiency, but the third law forbids reaching zero kelvin."
+    physical_reading_rules:
+      - id: tc_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_C]] fija el suelo termodinámico del ciclo. El calor rechazado [[Q_C]] es proporcional a [[T_C]] dividido entre [[T_H]], de modo que reducir [[T_C]] disminuye las pérdidas obligatorias."
+          en: "[[T_C]] sets the thermodynamic floor of the cycle. The rejected heat [[Q_C]] is proportional to [[T_C]] divided by [[T_H]], so reducing [[T_C]] decreases mandatory losses."
+    coherence_rules:
+      - id: tc_coherence_zero
+        when: "T_C <= 0"
+        status: error
+        text:
+          es: "[[T_C]] debe ser mayor que cero kelvin. Un valor nulo o negativo no tiene sentido físico en la escala absoluta."
+          en: "[[T_C]] must be greater than zero kelvin. A zero or negative value has no physical meaning on the absolute scale."
+      - id: tc_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_C]] es positiva y menor que [[T_H]], condiciones necesarias para el ciclo de Carnot."
+          en: "[[T_C]] is positive and less than [[T_H]], necessary conditions for the Carnot cycle."
+    model_validity_rules:
+      - id: tc_model_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume que [[T_C]] permanece constante durante el proceso isotérmico de cesión de calor (reservorio de capacidad infinita)."
+          en: "The model assumes [[T_C]] remains constant during the isothermal heat rejection process (infinite-capacity reservoir)."
+    graph_rules:
+      - id: tc_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama T-s, [[T_C]] corresponde a la isoterma horizontal inferior del ciclo rectangular de Carnot."
+          en: "In the T-s diagram, [[T_C]] corresponds to the lower horizontal isotherm of the rectangular Carnot cycle."
+    likely_errors:
+      - id: tc_error_celsius
+        when: "T_C > 350"
+        status: warning
+        text:
+          es: "Si [[T_C]] supera 350 K para una aplicación ambiental, verificar que se ha sumado 273.15 al valor en Celsius."
+          en: "If [[T_C]] exceeds 350 K for an environmental application, verify that 273.15 was added to the Celsius value."
+      - id: tc_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Confirmar que [[T_C]] se expresa en kelvin y corresponde al sumidero de calor del sistema."
+          en: "Confirm that [[T_C]] is expressed in kelvin and corresponds to the system's heat sink."
+    next_step_rules:
+      - id: tc_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[T_C]] conocida, calcular [[eta_C]] y determinar [[Q_C]] usando la relación de calores del ciclo de Carnot."
+          en: "With [[T_C]] known, calculate [[eta_C]] and determine [[Q_C]] using the Carnot cycle heat ratio."
+
+  W_neto:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Trabajo útil neto producido por el ciclo de Carnot"
+      en: "Net useful work produced by the Carnot cycle"
+    summary_rules:
+      - id: w_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[W_neto]] indica el trabajo mecánico útil máximo que el ciclo puede producir. Depende del balance entre [[Q_H]] absorbido y [[Q_C]] cedido al foco frío."
+          en: "[[W_neto]] indicates the maximum useful mechanical work the cycle can produce. It depends on the balance between [[Q_H]] absorbed and [[Q_C]] rejected to the cold reservoir."
+    physical_reading_rules:
+      - id: w_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[W_neto]] es la diferencia entre [[Q_H]] y [[Q_C]]. Representa la energía disponible para producir trabajo mecánico tras cumplir la obligación termodinámica de rechazar calor al foco frío."
+          en: "[[W_neto]] is the difference between [[Q_H]] and [[Q_C]]. It represents the energy available to produce mechanical work after fulfilling the thermodynamic obligation to reject heat to the cold reservoir."
+    coherence_rules:
+      - id: w_coherence_exceeds
+        when: "W_neto > Q_H"
+        status: error
+        text:
+          es: "[[W_neto]] no puede superar [[Q_H]]. El trabajo producido no puede exceder el calor suministrado (primera ley)."
+          en: "[[W_neto]] cannot exceed [[Q_H]]. The work produced cannot exceed the heat supplied (first law)."
+      - id: w_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[W_neto]] es menor que [[Q_H]] y positivo, coherente con la primera y segunda ley de la termodinámica."
+          en: "[[W_neto]] is less than [[Q_H]] and positive, coherent with the first and second laws of thermodynamics."
+    model_validity_rules:
+      - id: w_model_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume que todo [[W_neto]] es trabajo útil extraíble. En la realidad, pérdidas mecánicas reducen el trabajo efectivamente aprovechable."
+          en: "The model assumes all [[W_neto]] is extractable useful work. In reality, mechanical losses reduce the effectively usable work."
+    graph_rules:
+      - id: w_graph_area
+        when: "true"
+        status: info
+        text:
+          es: "[[W_neto]] corresponde al área encerrada por el ciclo en el diagrama P-V o al área rectangular en el diagrama T-s entre las isotermas [[T_H]] y [[T_C]]."
+          en: "[[W_neto]] corresponds to the area enclosed by the cycle in the P-V diagram or the rectangular area in the T-s diagram between isotherms [[T_H]] and [[T_C]]."
+    likely_errors:
+      - id: w_error_sign
+        when: "W_neto < 0"
+        status: error
+        text:
+          es: "[[W_neto]] negativo indica que [[Q_C]] supera [[Q_H]], lo cual es imposible en un motor térmico. Verificar el sentido de los calores."
+          en: "Negative [[W_neto]] indicates [[Q_C]] exceeds [[Q_H]], which is impossible in a heat engine. Verify the direction of heats."
+      - id: w_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[W_neto]] coincida con el producto de [[eta_C]] por [[Q_H]] para confirmar coherencia interna."
+          en: "Verify that [[W_neto]] matches the product of [[eta_C]] times [[Q_H]] to confirm internal coherence."
+    next_step_rules:
+      - id: w_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[W_neto]] calculado, dividir por [[Q_H]] para obtener [[eta_C]] y comparar con el rendimiento del ciclo real."
+          en: "With [[W_neto]] calculated, divide by [[Q_H]] to obtain [[eta_C]] and compare with the real cycle efficiency."
+
+  Q_H:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Calor total absorbido del foco caliente"
+      en: "Total heat absorbed from the hot reservoir"
+    summary_rules:
+      - id: qh_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] indica la energía térmica total suministrada al ciclo desde el foco caliente. El rendimiento de Carnot determina qué fracción de [[Q_H]] se convierte en trabajo útil."
+          en: "[[Q_H]] indicates the total thermal energy supplied to the cycle from the hot reservoir. Carnot efficiency determines what fraction of [[Q_H]] is converted into useful work."
+    physical_reading_rules:
+      - id: qh_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] es la entrada energética al ciclo. Su calidad térmica (determinada por [[T_H]]) fija el potencial de conversión. A mayor [[T_H]], mayor fracción de [[Q_H]] transformable en trabajo."
+          en: "[[Q_H]] is the energy input to the cycle. Its thermal quality (determined by [[T_H]]) sets the conversion potential. The higher [[T_H]], the greater the fraction of [[Q_H]] transformable into work."
+    coherence_rules:
+      - id: qh_coherence_positive
+        when: "Q_H <= 0"
+        status: error
+        text:
+          es: "[[Q_H]] debe ser positivo. Sin aporte de calor no existe ciclo motor."
+          en: "[[Q_H]] must be positive. Without heat input there is no power cycle."
+      - id: qh_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] es positivo, coherente con la operación de un motor térmico que absorbe calor del foco caliente."
+          en: "[[Q_H]] is positive, coherent with heat engine operation absorbing heat from the hot reservoir."
+    model_validity_rules:
+      - id: qh_model_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume transferencia isotérmica a [[T_H]] constante. En ciclos reales, la temperatura varía durante la absorción de calor."
+          en: "The model assumes isothermal transfer at constant [[T_H]]. In real cycles, temperature varies during heat absorption."
+    graph_rules:
+      - id: qh_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama T-s, [[Q_H]] se representa como el área bajo la isoterma superior entre los valores extremos de entropía del ciclo."
+          en: "In the T-s diagram, [[Q_H]] is represented as the area under the upper isotherm between the extreme entropy values of the cycle."
+    likely_errors:
+      - id: qh_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[Q_H]] no se confunde con [[W_neto]]. El trabajo siempre es una fracción de [[Q_H]], nunca igual a él."
+          en: "Verify that [[Q_H]] is not confused with [[W_neto]]. Work is always a fraction of [[Q_H]], never equal to it."
+    next_step_rules:
+      - id: qh_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[Q_H]] conocido, aplicar [[eta_C]] para obtener [[W_neto]] y usar el balance energético para verificar [[Q_C]]."
+          en: "With [[Q_H]] known, apply [[eta_C]] to obtain [[W_neto]] and use the energy balance to verify [[Q_C]]."
+
+  Q_C:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Calor inevitable cedido al foco frío"
+      en: "Inevitable heat rejected to the cold reservoir"
+    summary_rules:
+      - id: qc_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] indica el calor que obligatoriamente debe cederse al foco frío. Su existencia resume la imposibilidad de convertir todo el calor en trabajo, consecuencia directa de la segunda ley."
+          en: "[[Q_C]] indicates the heat that must obligatorily be rejected to the cold reservoir. Its existence summarizes the impossibility of converting all heat into work, a direct consequence of the second law."
+    physical_reading_rules:
+      - id: qc_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] es proporcional a [[T_C]] dividido entre [[T_H]] multiplicado por [[Q_H]]. Reducir [[T_C]] o aumentar [[T_H]] disminuye [[Q_C]] relativo, mejorando el rendimiento."
+          en: "[[Q_C]] is proportional to [[T_C]] divided by [[T_H]] multiplied by [[Q_H]]. Reducing [[T_C]] or increasing [[T_H]] decreases relative [[Q_C]], improving efficiency."
+    coherence_rules:
+      - id: qc_coherence_exceeds
+        when: "Q_C >= Q_H"
+        status: error
+        text:
+          es: "[[Q_C]] no puede igualar ni superar [[Q_H]] en un motor térmico. Si esto ocurre, no se produce trabajo neto."
+          en: "[[Q_C]] cannot equal or exceed [[Q_H]] in a heat engine. If this occurs, no net work is produced."
+      - id: qc_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] es positivo y menor que [[Q_H]], coherente con el balance energético del ciclo de Carnot."
+          en: "[[Q_C]] is positive and less than [[Q_H]], coherent with the energy balance of the Carnot cycle."
+    model_validity_rules:
+      - id: qc_model_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el ciclo de Carnot, [[Q_C]] es el mínimo calor posible que debe cederse. Todo ciclo irreversible cederá más calor que este valor mínimo."
+          en: "In the Carnot cycle, [[Q_C]] is the minimum possible heat that must be rejected. Every irreversible cycle will reject more heat than this minimum."
+    graph_rules:
+      - id: qc_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama T-s, [[Q_C]] se representa como el área bajo la isoterma inferior entre los mismos valores de entropía del ciclo."
+          en: "In the T-s diagram, [[Q_C]] is represented as the area under the lower isotherm between the same entropy values of the cycle."
+    likely_errors:
+      - id: qc_error_zero
+        when: "Q_C <= 0"
+        status: error
+        text:
+          es: "[[Q_C]] nulo o negativo viola la segunda ley. Ningún ciclo entre dos focos puede operar sin rechazar calor al foco frío."
+          en: "Zero or negative [[Q_C]] violates the second law. No cycle between two reservoirs can operate without rejecting heat to the cold reservoir."
+      - id: qc_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[Q_C]] dividido entre [[Q_H]] coincida con [[T_C]] dividido entre [[T_H]] para confirmar coherencia con la relación de calores de Carnot."
+          en: "Verify that [[Q_C]] divided by [[Q_H]] matches [[T_C]] divided by [[T_H]] to confirm coherence with the Carnot heat ratio."
+    next_step_rules:
+      - id: qc_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[Q_C]] determinado, calcular [[W_neto]] por balance y verificar que [[eta_C]] sea coherente con las temperaturas de los focos."
+          en: "With [[Q_C]] determined, calculate [[W_neto]] by balance and verify that [[eta_C]] is coherent with the reservoir temperatures."

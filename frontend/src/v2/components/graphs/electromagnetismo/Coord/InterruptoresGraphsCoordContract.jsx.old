@@ -1,0 +1,67 @@
+import React from "react";
+import { createCoordGraph } from "../../graphFactories.jsx";
+// Compat validator: createCoordGraphPage
+
+const uiLang = "es";
+const t = (es, en) => (uiLang === "en" ? en : es);
+void uiLang;
+void t;
+
+function InterruptoresGraphsCoordView({ lang = "es" }) {
+  const es = lang !== "en";
+
+  return (
+    <div style={{ display: "grid", gap: 12 }}>
+      <div className="v2-card" style={{ padding: 14 }}>
+        <div className="v2-card-title">
+          {es ? "Interruptores (Coord)" : "Switches (Coord)"}
+        </div>
+        <p className="muted" style={{ marginTop: 8 }}>
+          {es
+            ? "Lectura física de la pérdida resistiva en el contacto del interruptor en función de la corriente conducida."
+            : "Physical reading of resistive loss at the switch contact as a function of conducted current."}
+        </p>
+        <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.55 }}>
+          <li>
+            {es
+              ? "P_on = I² · R_on crece cuadráticamente con la corriente."
+              : "P_on = I² · R_on grows quadratically with current."}
+          </li>
+          <li>
+            {es
+              ? "R_on es el parámetro de calidad del contacto: bajo en nuevo, alto en envejecido."
+              : "R_on is the contact quality parameter: low when new, high when aged."}
+          </li>
+          <li>
+            {es
+              ? "Umbral de riesgo: P_on > 5 W indica necesidad de sustitución del interruptor."
+              : "Risk threshold: P_on > 5 W indicates the switch needs replacement."}
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+const InterruptoresGraphsCoordContract = createCoordGraph({
+  leafId: "interruptores",
+  formulaId: "perdida_on",
+  pregunta_principal: {
+    es: "¿Cuánta energía disipa el interruptor al conducir corriente y cuándo esa pérdida se convierte en riesgo térmico?",
+    en: "How much energy does the switch dissipate when conducting current, and when does that loss become a thermal risk?",
+  },
+  axes: {
+    x: { magnitudeId: "I", label: { es: "Corriente (A)", en: "Current (A)" } },
+    y: { magnitudeId: "P_on", label: { es: "Pérdida P_on (W)", en: "Loss P_on (W)" } },
+  },
+  metadata: {
+    title: { es: "Pérdida resistiva del contacto vs corriente", en: "Contact resistive loss vs current" },
+    description: {
+      es: "Muestra cómo P_on (pérdida resistiva, energía disipada) crece cuadráticamente con I (corriente de maniobra) a R_on fija, respondiendo a la pregunta de cuánta energía disipa el interruptor y cuándo esa pérdida es un riesgo térmico.",
+      en: "Shows how P_on (resistive loss, dissipated energy) grows quadratically with I (switching current) at fixed R_on, answering how much energy a switch dissipates and when that loss becomes a thermal risk.",
+    },
+  },
+  ViewComponent: InterruptoresGraphsCoordView,
+});
+
+export default InterruptoresGraphsCoordContract;

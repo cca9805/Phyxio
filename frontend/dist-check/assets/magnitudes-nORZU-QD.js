@@ -1,0 +1,238 @@
+const e=`magnitudes:
+  - id: n1
+    symbol: "n_1"
+    nombre:
+      es: "Indice de refraccion del medio 1"
+      en: "Refractive index of medium 1"
+    descripcion:
+      es: "Indice de refraccion del medio donde se propaga el rayo incidente."
+      en: "Refractive index of the medium in which the incident ray propagates."
+    unidad_si: adimensional
+    dimension: "[1]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - ley de Snell
+      - calculo del angulo critico
+    common_mistake:
+      es: "Confundir cual medio es el 1 y cual el 2 al aplicar la formula."
+      en: "Confusing which medium is 1 and which is 2 when applying the formula."
+    typical_range: "1.00 a 2.50"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El indice de refraccion es siempre positivo y mayor o igual a uno en medios convencionales."
+        en: "The refractive index is always positive and greater than or equal to one in conventional media."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un indice cero no tiene significado fisico en optica clasica."
+        en: "A zero index has no physical meaning in classical optics."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[1.00, 2.50]"
+    interpretation_role:
+      primary_for:
+        - velocidad de fase en el medio incidente
+      secondary_for:
+        - angulo critico
+    graph_binding:
+      channels:
+        - param_slider
+    pedagogical_notes:
+      es: "El alumno debe identificar n1 como el medio del rayo incidente, independientemente de si es mas o menos denso opticamente."
+      en: "The student must identify n1 as the medium of the incident ray, regardless of whether it is optically denser or lighter."
+
+  - id: n2
+    symbol: "n_2"
+    nombre:
+      es: "Indice de refraccion del medio 2"
+      en: "Refractive index of medium 2"
+    descripcion:
+      es: "Indice de refraccion del medio donde se propaga el rayo refractado."
+      en: "Refractive index of the medium in which the refracted ray propagates."
+    unidad_si: adimensional
+    dimension: "[1]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - ley de Snell
+      - calculo del angulo critico
+    common_mistake:
+      es: "Asumir que el medio 2 es siempre el mas denso opticamente."
+      en: "Assuming that medium 2 is always the optically denser one."
+    typical_range: "1.00 a 2.50"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El indice de refraccion es siempre positivo en medios convencionales."
+        en: "The refractive index is always positive in conventional media."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un indice cero no tiene significado fisico."
+        en: "A zero index has no physical meaning."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[1.00, 2.50]"
+    interpretation_role:
+      primary_for:
+        - velocidad de fase en el medio refractado
+      secondary_for:
+        - angulo critico
+    graph_binding:
+      channels:
+        - param_slider
+    pedagogical_notes:
+      es: "Si n2 es menor que n1, existe un angulo critico por encima del cual se produce reflexion total interna."
+      en: "If n2 is less than n1, a critical angle exists above which total internal reflection occurs."
+
+  - id: theta_1
+    symbol: "\\\\theta_1"
+    nombre:
+      es: "Angulo de incidencia"
+      en: "Angle of incidence"
+    descripcion:
+      es: "Angulo entre el rayo incidente y la normal a la interfaz en el punto de incidencia."
+      en: "Angle between the incident ray and the normal to the interface at the point of incidence."
+    unidad_si: rad
+    dimension: "[1]"
+    is_vector: false
+    components: []
+    category: fundamental
+    physical_role: core_physical_quantity
+    used_in:
+      - ley de Snell
+      - reflexion especular
+    common_mistake:
+      es: "Medir el angulo respecto a la superficie en vez de la normal."
+      en: "Measuring the angle with respect to the surface instead of the normal."
+    typical_range: "0 a 90 grados (0 a pi/2 rad)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El angulo se define como positivo entre 0 y pi/2 radianes."
+        en: "The angle is defined as positive between 0 and pi/2 radians."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Incidencia normal a la superficie; el rayo no se desvia."
+        en: "Normal incidence; the ray does not deviate."
+    value_nature:
+      kind: angle
+      nonnegative_only: true
+      expected_interval: "[0, 1.5708]"
+    interpretation_role:
+      primary_for:
+        - direccion del rayo incidente
+      secondary_for:
+        - condicion de reflexion total
+    graph_binding:
+      channels:
+        - x_axis
+        - param_slider
+    pedagogical_notes:
+      es: "Insistir en que el angulo siempre se mide desde la normal, no desde la superficie. Error frecuentisimo en alumnos de ESO y Bachillerato."
+      en: "Emphasise that the angle is always measured from the normal, not from the surface. Extremely common error among secondary school students."
+
+  - id: theta_2
+    symbol: "\\\\theta_2"
+    nombre:
+      es: "Angulo de refraccion"
+      en: "Angle of refraction"
+    descripcion:
+      es: "Angulo entre el rayo refractado y la normal a la interfaz en el punto de incidencia."
+      en: "Angle between the refracted ray and the normal to the interface at the point of incidence."
+    unidad_si: rad
+    dimension: "[1]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - ley de Snell
+      - diseno de prismas
+    common_mistake:
+      es: "Suponer que el angulo de refraccion siempre es menor que el de incidencia."
+      en: "Assuming that the angle of refraction is always smaller than the angle of incidence."
+    typical_range: "0 a 90 grados (0 a pi/2 rad)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El angulo refractado es positivo entre 0 y pi/2 radianes."
+        en: "The refracted angle is positive between 0 and pi/2 radians."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Incidencia normal; el rayo continua sin desviarse."
+        en: "Normal incidence; the ray continues without deviation."
+    value_nature:
+      kind: angle
+      nonnegative_only: true
+      expected_interval: "[0, 1.5708]"
+    interpretation_role:
+      primary_for:
+        - direccion del rayo refractado
+      secondary_for:
+        - desviacion angular del rayo
+    graph_binding:
+      channels:
+        - y_axis
+        - result_display
+    pedagogical_notes:
+      es: "El angulo de refraccion es mayor que el de incidencia cuando la luz pasa a un medio menos denso opticamente. Cuando alcanza 90 grados, se produce el angulo critico."
+      en: "The angle of refraction is greater than the angle of incidence when light passes to an optically less dense medium. When it reaches 90 degrees, the critical angle is reached."
+
+  - id: theta_c
+    symbol: "\\\\theta_c"
+    nombre:
+      es: "Angulo critico"
+      en: "Critical angle"
+    descripcion:
+      es: "Angulo de incidencia para el cual el rayo refractado viaja paralelo a la interfaz, marcando el inicio de la reflexion total interna."
+      en: "Angle of incidence for which the refracted ray travels parallel to the interface, marking the onset of total internal reflection."
+    unidad_si: rad
+    dimension: "[1]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - reflexion total interna
+      - fibras opticas
+    common_mistake:
+      es: "Calcular el angulo critico cuando n1 es menor que n2, situacion donde no existe reflexion total."
+      en: "Calculating the critical angle when n1 is less than n2, a situation where total reflection does not exist."
+    typical_range: "24 a 90 grados (depende de n1 y n2)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El angulo critico es un valor positivo definido solo cuando n1 mayor que n2."
+        en: "The critical angle is a positive value defined only when n1 is greater than n2."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un angulo critico nulo implicaria indices iguales, lo que elimina la interfaz optica."
+        en: "A zero critical angle would imply equal indices, eliminating the optical interface."
+    value_nature:
+      kind: angle
+      nonnegative_only: true
+      expected_interval: "(0, 1.5708)"
+    interpretation_role:
+      primary_for:
+        - umbral de reflexion total interna
+      secondary_for:
+        - diseno de guias de onda
+    graph_binding:
+      channels:
+        - threshold_line
+    pedagogical_notes:
+      es: "Solo existe angulo critico cuando la luz va de un medio mas denso a uno menos denso (n1 mayor que n2). Este concepto es clave para fibras opticas y prismas de reflexion total."
+      en: "A critical angle exists only when light travels from a denser to a less dense medium (n1 greater than n2). This concept is key for optical fibres and total reflection prisms."
+`;export{e as default};

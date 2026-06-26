@@ -1,0 +1,89 @@
+const e=`version: "2.0"
+id: ley-de-gauss
+
+nombre:
+  es: Ley de gauss
+  en: Gauss's Law
+
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: electrostatica
+parent_id: electrostatica
+ruta_relativa: fisica-clasica/electromagnetismo/electrostatica/ley-de-gauss
+orden: 292400
+type: leaf
+
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+
+icon: 🧪
+
+descripcion: Relación entre el flujo eléctrico y la carga encerrada en una superficie cerrada.
+description_en: Relation between electric flux and enclosed charge through a closed surface.
+
+tags:
+  es:
+    - flujo eléctrico
+    - superficie gaussiana
+    - carga encerrada
+    - electrostática
+    - campo eléctrico
+    - simetría
+  en:
+    - electric flux
+    - Gaussian surface
+    - enclosed charge
+    - electrostatics
+    - electric field
+    - symmetry
+
+prerequisitos:
+  - fisica-clasica/electromagnetismo/electrostatica/ley-de-coulomb
+
+graficos:
+  - Coord
+
+physical_role:
+  es: ley física
+  en: physical law
+
+dificultad: 3
+tiempo_estimado_min: 50
+
+representacion_dominante: Coord
+magnitud_dominante: Phi_E
+
+pregunta_fisica_central:
+  es: "¿Cómo determina la carga encerrada el flujo eléctrico total a través de cualquier superficie cerrada?"
+  en: "How does the enclosed charge determine the total electric flux through any closed surface?"
+
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

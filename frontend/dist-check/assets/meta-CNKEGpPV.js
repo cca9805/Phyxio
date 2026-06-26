@@ -1,0 +1,71 @@
+const e=`id: marco-del-centro-de-masas
+nombre:
+  es: Marco del centro de masas
+  en: Center-of-Mass Frame
+area: fisica-clasica
+bloque: mecanica
+subbloque: cantidad-de-movimiento
+parent_id: centro-de-masas
+ruta_relativa: fisica-clasica/mecanica/cantidad-de-movimiento/centro-de-masas/marco-del-centro-de-masas
+orden: 215225
+type: leaf
+niveles:
+  es:
+  - UNIVERSIDAD
+  en:
+  - University
+icon: 🧭
+descripcion: Cambio al sistema de referencia donde el momento lineal total es nulo y la lectura del movimiento relativo se simplifica.
+description_en: Change to the reference frame where total linear momentum is zero and the reading of relative motion becomes simpler.
+tags:
+  es:
+  - marco del centro de masas
+  - cambio de referencia
+  - momento total nulo
+  - velocidades relativas
+  - mecanica
+  en:
+  - center of mass frame
+  - frame change
+  - zero total momentum
+  - relative velocities
+  - mechanics
+prerequisitos:
+- fisica-clasica/mecanica/cantidad-de-movimiento/centro-de-masas/movimiento-del-centro-de-masas
+- fisica-clasica/mecanica/cantidad-de-movimiento/fundamentos/momento-lineal
+pregunta_fisica_central:
+  es: "¿Qué simplificación se obtiene al analizar el movimiento desde el centro de masas?"
+  en: "What simplification is obtained by analysing motion from the center-of-mass frame?"
+graficos:
+- Coord
+- Svg
+representacion_dominante: Coord
+magnitud_dominante: v_rel
+physical_role:
+  es: marco de referencia
+  en: reference frame
+dificultad: 4
+tiempo_estimado_min: 45
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

@@ -1,0 +1,699 @@
+version: 5.0.0
+id: definicion-y-significado
+leaf_id: definicion-y-significado
+nombre:
+  es: Definicion y significado
+  en: Definition and Meaning
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: funcion-de-particion
+  parent_id: funcion-de-particion
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/funcion-de-particion/definicion-y-significado
+  orden: 274100
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - peso_boltzmann
+  - funcion_particion_suma_pesos
+  - probabilidad_microestado
+  - limite_alta_temperatura
+  magnitudes:
+  - energia_microestado
+  - temperatura
+  - constante_boltzmann
+  - peso_boltzmann
+  - funcion_particion
+  - probabilidad_microestado
+  - razon_energia_termica
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+  - Svg
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: peso_boltzmann
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  peso_boltzmann:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: dominant_output
+      en: Boltzmann weight
+    summary_rules:
+    - id: peso_boltzmann_summary_thermal_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[peso_boltzmann]] resume cuánto favorece el baño térmico un microestado concreto; al aumentar [[energia_microestado]]
+          baja, y al aumentar [[temperatura]] se suaviza la penalización.'
+        en: '[[peso_boltzmann]] summarizes how strongly the thermal bath favors a specific microstate; it decreases as [[energia_microestado]]
+          increases and softens as [[temperatura]] rises.'
+    physical_reading_rules:
+    - id: peso_boltzmann_physical_reading_units_and_role
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[peso_boltzmann]] como un peso relativo adimensional, no como una energía: compara accesibilidad estadística
+          antes de normalizar con [[funcion_particion]].'
+        en: 'Read [[peso_boltzmann]] as a dimensionless relative weight, not as an energy: it compares statistical accessibility
+          before normalization by [[funcion_particion]].'
+    coherence_rules:
+    - id: peso_boltzmann_coherence_dimension_normalization
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[energia_microestado]] y [[constante_boltzmann]]*[[temperatura]] estén en las mismas unidades de
+          energía; así el exponente que define [[peso_boltzmann]] es adimensional.
+        en: Check that [[energia_microestado]] and [[constante_boltzmann]]*[[temperatura]] use the same energy units; then
+          the exponent defining [[peso_boltzmann]] is dimensionless.
+    model_validity_rules:
+    - id: peso_boltzmann_model_validity_canonical_scope
+      when: 'true'
+      status: info
+      text:
+        es: 'Usa [[peso_boltzmann]] dentro del ensamble canónico: sistema en equilibrio térmico con [[temperatura]] fija,
+          microestados discretos o contables y energías comparables.'
+        en: 'Use [[peso_boltzmann]] within the canonical ensemble: thermal equilibrium at fixed [[temperatura]], discrete
+          or countable microstates, and comparable energies.'
+    graph_rules:
+    - id: peso_boltzmann_graph_reading_weight_accessibility
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica de [[peso_boltzmann]] frente a [[energia_microestado]], la caída muestra que los microestados más
+          energéticos contribuyen menos a [[funcion_particion]].
+        en: In the graph of [[peso_boltzmann]] versus [[energia_microestado]], the drop shows that higher-energy microstates
+          contribute less to [[funcion_particion]].
+    likely_errors:
+    - id: peso_boltzmann_likely_error_specific_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[peso_boltzmann]] con una lectura aislada es un error frecuente: No confundas [[peso_boltzmann]] con
+          [[probabilidad_microestado]]: falta dividir por [[funcion_particion]], que normaliza el conjunto de pesos.'
+        en: 'Do not confuse [[peso_boltzmann]] with [[probabilidad_microestado]]: division by [[funcion_particion]] is still
+          needed to normalize all weights.'
+    next_step_rules:
+    - id: peso_boltzmann_next_step_interpretation_path
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[peso_boltzmann]], súmalo con los pesos de los demás microestados para obtener [[funcion_particion]]
+          o normalízalo para hallar [[probabilidad_microestado]].
+        en: After computing [[peso_boltzmann]], add it to the weights of the other microstates to obtain [[funcion_particion]]
+          or normalize it to find [[probabilidad_microestado]].
+    physical_intuition:
+    - id: peso_boltzmann_physical_intuition_accessibility
+      when: 'true'
+      status: info
+      text:
+        es: 'Intuitivamente, [[peso_boltzmann]] es un filtro térmico: cuando [[razon_energia_termica]] es grande, el filtro
+          deja pasar muy poco de ese microestado.'
+        en: 'Intuitively, [[peso_boltzmann]] is a thermal filter: when [[razon_energia_termica]] is large, the filter lets
+          very little of that microstate through.'
+    limiting_cases:
+    - id: peso_boltzmann_limiting_case_temperature_energy
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura]] tiende a valores muy altos, [[peso_boltzmann]] se acerca a 1 para energías finitas; si [[temperatura]]
+          baja, los estados de menor [[energia_microestado]] dominan.
+        en: If [[temperatura]] becomes very high, [[peso_boltzmann]] approaches 1 for finite energies; if [[temperatura]]
+          is low, states with smaller [[energia_microestado]] dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: Las magnitudes de este leaf son escalares; el signo relevante procede de referencias energéticas, no de ejes vectoriales.
+        en: The quantities in this leaf are scalar; the relevant sign comes from energy references, not vector axes.
+      common_sign_errors: []
+  energia_microestado:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: microstate energy
+    summary_rules:
+    - id: energia_microestado_summary_thermal_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_microestado]] fija la penalización térmica de cada microestado y controla su contribución a [[peso_boltzmann]].'
+        en: '[[energia_microestado]] sets the thermal penalty of each microstate and controls its contribution to [[peso_boltzmann]].'
+    physical_reading_rules:
+    - id: energia_microestado_physical_reading_units_and_role
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[energia_microestado]] como energía microscópica del estado, no como energía media del sistema completo;
+          su relevancia depende de [[temperatura]].
+        en: Read [[energia_microestado]] as the microscopic energy of the state, not as the mean energy of the whole system;
+          its relevance depends on [[temperatura]].
+    coherence_rules:
+    - id: energia_microestado_coherence_dimension_normalization
+      when: 'true'
+      status: ok
+      text:
+        es: Debe expresarse en julios o en una unidad energética convertida antes de combinarla con [[constante_boltzmann]]*[[temperatura]].
+        en: It must be expressed in joules or in a converted energy unit before combining it with [[constante_boltzmann]]*[[temperatura]].
+    model_validity_rules:
+    - id: energia_microestado_model_validity_canonical_scope
+      when: 'true'
+      status: info
+      text:
+        es: 'El valor de [[energia_microestado]] depende del modelo de niveles: si el espectro cambia con volumen, campo externo
+          o interacción, cambian los pesos.'
+        en: 'The value of [[energia_microestado]] depends on the level model: if the spectrum changes with volume, external
+          field, or interaction, the weights change.'
+    graph_rules:
+    - id: energia_microestado_graph_reading_weight_accessibility
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, aumentar [[energia_microestado]] desplaza el punto hacia zonas de menor [[peso_boltzmann]], salvo
+          en límites de alta [[temperatura]].
+        en: In the graph, increasing [[energia_microestado]] moves the point toward smaller [[peso_boltzmann]], except in
+          high-[[temperatura]] limits.
+    likely_errors:
+    - id: energia_microestado_likely_error_specific_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_microestado]] con una lectura aislada es un error frecuente: No compares [[energia_microestado]]
+          solo por su número: compara su tamaño con la escala térmica definida por [[constante_boltzmann]] y [[temperatura]].'
+        en: 'A common mistake is to interpret [[energia_microestado]] in isolation: Do not compare [[energia_microestado]]
+          by its number alone: compare it with the thermal scale set by [[constante_boltzmann]] and [[temperatura]].'
+    next_step_rules:
+    - id: energia_microestado_next_step_interpretation_path
+      when: 'true'
+      status: info
+      text:
+        es: Calcula [[razon_energia_termica]] para decidir si el microestado está térmicamente accesible o fuertemente suprimido.
+        en: Compute [[razon_energia_termica]] to decide whether the microstate is thermally accessible or strongly suppressed.
+    physical_intuition:
+    - id: energia_microestado_physical_intuition_accessibility
+      when: 'true'
+      status: info
+      text:
+        es: '[[energia_microestado]] es el coste microscópico que el sistema debe pagar para ocupar ese microestado.'
+        en: '[[energia_microestado]] is the microscopic cost the system must pay to occupy that microstate.'
+    limiting_cases:
+    - id: energia_microestado_limiting_case_temperature_energy
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[energia_microestado]] es mucho menor que [[constante_boltzmann]]*[[temperatura]], el estado no queda
+          muy penalizado; si es mucho mayor, casi desaparece.
+        en: When [[energia_microestado]] is much smaller than [[constante_boltzmann]]*[[temperatura]], the state is not strongly
+          penalized; if it is much larger, it almost disappears.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: Las magnitudes de este leaf son escalares; el signo relevante procede de referencias energéticas, no de ejes vectoriales.
+        en: The quantities in this leaf are scalar; the relevant sign comes from energy references, not vector axes.
+      common_sign_errors: []
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input_parameter
+      en: absolute temperature
+    summary_rules:
+    - id: temperatura_summary_thermal_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] controla la escala térmica que decide si las diferencias de energía importan mucho o poco.'
+        en: '[[temperatura]] controls the thermal scale that decides whether energy differences matter strongly or weakly.'
+    physical_reading_rules:
+    - id: temperatura_physical_reading_units_and_role
+      when: 'true'
+      status: info
+      text:
+        es: 'Interpreta [[temperatura]] en kelvin como parámetro del baño térmico: al crecer, reduce la discriminación entre
+          microestados de distinta [[energia_microestado]].'
+        en: 'Interpret [[temperatura]] in kelvin as the heat-bath parameter: as it increases, it reduces discrimination between
+          microstates of different [[energia_microestado]].'
+    coherence_rules:
+    - id: temperatura_coherence_dimension_normalization
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] debe ser positiva en el modelo canónico ordinario; usar grados Celsius directamente en los pesos
+          rompe la escala energética.'
+        en: '[[temperatura]] must be positive in the ordinary canonical model; using Celsius directly in the weights breaks
+          the energy scale.'
+    model_validity_rules:
+    - id: temperatura_model_validity_canonical_scope
+      when: 'true'
+      status: info
+      text:
+        es: El sistema debe estar en equilibrio con un baño a [[temperatura]] fija; si hay gradientes térmicos internos, una
+          única función canónica puede no bastar.
+        en: The system must be in equilibrium with a bath at fixed [[temperatura]]; if internal thermal gradients exist, one
+          canonical function may not be enough.
+    graph_rules:
+    - id: temperatura_graph_reading_weight_accessibility
+      when: 'true'
+      status: info
+      text:
+        es: Al modificar [[temperatura]], la curva de [[peso_boltzmann]] frente a [[energia_microestado]] se aplana o se vuelve
+          más abrupta.
+        en: When [[temperatura]] changes, the curve of [[peso_boltzmann]] versus [[energia_microestado]] flattens or becomes
+          steeper.
+    likely_errors:
+    - id: temperatura_likely_error_specific_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura]] con una lectura aislada es un error frecuente: No pienses que subir [[temperatura]]
+          aumenta el conjunto de pesos sin matiz: acerca pesos relativos entre niveles finitos y cambia la normalización.'
+        en: 'A common mistake is to interpret [[temperatura]] in isolation: Do not think that raising [[temperatura]] simply
+          increases all weights; it brings relative weights for finite levels closer and changes normalization.'
+    next_step_rules:
+    - id: temperatura_next_step_interpretation_path
+      when: 'true'
+      status: info
+      text:
+        es: Contrasta [[temperatura]] con [[energia_microestado]] mediante [[razon_energia_termica]] antes de interpretar
+          accesibilidad.
+        en: Compare [[temperatura]] with [[energia_microestado]] through [[razon_energia_termica]] before interpreting accessibility.
+    physical_intuition:
+    - id: temperatura_physical_intuition_accessibility
+      when: 'true'
+      status: info
+      text:
+        es: '[[temperatura]] mide la agitación térmica disponible para explorar microestados.'
+        en: '[[temperatura]] measures the thermal agitation available for exploring microstates.'
+    limiting_cases:
+    - id: temperatura_limiting_case_temperature_energy
+      when: 'true'
+      status: info
+      text:
+        es: En el límite de alta [[temperatura]], los pesos tienden a igualarse; en el límite de baja [[temperatura]], domina
+          la mínima [[energia_microestado]].
+        en: In the high-[[temperatura]] limit, weights tend to equalize; in the low-[[temperatura]] limit, the minimum [[energia_microestado]]
+          dominates.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: Las magnitudes de este leaf son escalares; el signo relevante procede de referencias energéticas, no de ejes vectoriales.
+        en: The quantities in this leaf are scalar; the relevant sign comes from energy references, not vector axes.
+      common_sign_errors: []
+  funcion_particion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: central_concept
+      en: partition function
+    summary_rules:
+    - id: funcion_particion_summary_thermal_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[funcion_particion]] es la suma de los pesos estadísticos y actúa como puente entre microestados y predicciones
+          macroscópicas.'
+        en: '[[funcion_particion]] is the sum of statistical weights and acts as the bridge between microstates and macroscopic
+          predictions.'
+    physical_reading_rules:
+    - id: funcion_particion_physical_reading_units_and_role
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[funcion_particion]] como un contador ponderado: no cuenta microestados por igual, sino según su [[peso_boltzmann]]
+          a la [[temperatura]] dada.'
+        en: 'Read [[funcion_particion]] as a weighted counter: it does not count all microstates equally, but according to
+          their [[peso_boltzmann]] at the given [[temperatura]].'
+    coherence_rules:
+    - id: funcion_particion_coherence_dimension_normalization
+      when: 'true'
+      status: ok
+      text:
+        es: '[[funcion_particion]] debe ser positivo y adimensional; si aparece negativo, con unidades, o menor que un único
+          [[peso_boltzmann]] positivo, hay incoherencia.'
+        en: '[[funcion_particion]] must be positive and dimensionless; if it is negative, has units, or is smaller than one
+          positive [[peso_boltzmann]], the result is inconsistent.'
+    model_validity_rules:
+    - id: funcion_particion_model_validity_canonical_scope
+      when: 'true'
+      status: info
+      text:
+        es: Su interpretación exige un conjunto de microestados definido y pesos canónicos; si cambian partículas, volumen
+          o degeneraciones, la suma debe actualizarse.
+        en: Its interpretation requires a defined set of microstates and canonical weights; if particles, volume, or degeneracies
+          change, the sum must be updated.
+    graph_rules:
+    - id: funcion_particion_graph_reading_weight_accessibility
+      when: 'true'
+      status: info
+      text:
+        es: 'En la lectura gráfica o visual, [[funcion_particion]] representa la acumulación global de contribuciones: cada
+          barra o nivel aporta mediante [[peso_boltzmann]].'
+        en: 'In the graph or visual reading, [[funcion_particion]] represents the global accumulation of contributions: each
+          bar or level contributes through [[peso_boltzmann]].'
+    likely_errors:
+    - id: funcion_particion_likely_error_specific_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[funcion_particion]] con una lectura aislada es un error frecuente: No trates [[funcion_particion]]
+          como una probabilidad; puede ser mayor que 1 porque normaliza las [[probabilidad_microestado]].'
+        en: 'A common mistake is to interpret [[funcion_particion]] in isolation: Do not treat [[funcion_particion]] as a
+          probability; it may be greater than 1 because it normalizes the [[probabilidad_microestado]] values.'
+    next_step_rules:
+    - id: funcion_particion_next_step_interpretation_path
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[funcion_particion]] para normalizar pesos, comparar temperaturas o conectar con magnitudes termodinámicas
+          en hojas posteriores.
+        en: Use [[funcion_particion]] to normalize weights, compare temperatures, or connect with thermodynamic quantities
+          in later leaves.
+    physical_intuition:
+    - id: funcion_particion_physical_intuition_accessibility
+      when: 'true'
+      status: info
+      text:
+        es: '[[funcion_particion]] mide cuántas opciones microscópicas efectivas tiene el sistema, una vez aplicado el sesgo
+          térmico.'
+        en: '[[funcion_particion]] measures how many effective microscopic options the system has after the thermal bias is
+          applied.'
+    limiting_cases:
+    - id: funcion_particion_limiting_case_temperature_energy
+      when: 'true'
+      status: info
+      text:
+        es: A alta [[temperatura]], más microestados contribuyen de forma parecida; a baja [[temperatura]], [[funcion_particion]]
+          queda dominada por los niveles de menor energía.
+        en: At high [[temperatura]], more microstates contribute similarly; at low [[temperatura]], [[funcion_particion]]
+          is dominated by the lowest-energy levels.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: Las magnitudes de este leaf son escalares; el signo relevante procede de referencias energéticas, no de ejes vectoriales.
+        en: The quantities in this leaf are scalar; the relevant sign comes from energy references, not vector axes.
+      common_sign_errors: []
+  probabilidad_microestado:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: derived_output
+      en: microstate probability
+    summary_rules:
+    - id: probabilidad_microestado_summary_thermal_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[probabilidad_microestado]] indica la fracción normalizada de presencia estadística de un microestado dentro
+          del conjunto canónico.'
+        en: '[[probabilidad_microestado]] indicates the normalized statistical presence of one microstate within the canonical
+          set.'
+    physical_reading_rules:
+    - id: probabilidad_microestado_physical_reading_units_and_role
+      when: 'true'
+      status: info
+      text:
+        es: 'Interpreta [[probabilidad_microestado]] como probabilidad entre 0 y 1: compara el [[peso_boltzmann]] de ese estado
+          con la suma total [[funcion_particion]].'
+        en: 'Interpret [[probabilidad_microestado]] as a probability between 0 and 1: it compares that state''s [[peso_boltzmann]]
+          with the total sum [[funcion_particion]].'
+    coherence_rules:
+    - id: probabilidad_microestado_coherence_dimension_normalization
+      when: 'true'
+      status: ok
+      text:
+        es: La suma de todas las [[probabilidad_microestado]] debe ser 1; si no ocurre, revisa [[funcion_particion]] y los
+          pesos incluidos.
+        en: The sum of all [[probabilidad_microestado]] values must be 1; if not, check [[funcion_particion]] and the included
+          weights.
+    model_validity_rules:
+    - id: probabilidad_microestado_model_validity_canonical_scope
+      when: 'true'
+      status: info
+      text:
+        es: Solo tiene sentido para microestados definidos bajo la misma [[temperatura]] y el mismo modelo energético; mezclar
+          sistemas rompe la normalización.
+        en: It only makes sense for microstates defined at the same [[temperatura]] and within the same energy model; mixing
+          systems breaks normalization.
+    graph_rules:
+    - id: probabilidad_microestado_graph_reading_weight_accessibility
+      when: 'true'
+      status: info
+      text:
+        es: 'En un diagrama de microestados, [[probabilidad_microestado]] aparece como reparto relativo: las áreas o alturas
+          deben sumar una unidad.'
+        en: 'In a microstate diagram, [[probabilidad_microestado]] appears as a relative distribution: areas or heights should
+          add to one.'
+    likely_errors:
+    - id: probabilidad_microestado_likely_error_specific_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[probabilidad_microestado]] con una lectura aislada es un error frecuente: No asignes la mayor [[probabilidad_microestado]]
+          al microestado de mayor [[energia_microestado]] salvo que exista una degeneración que compense el peso.'
+        en: 'A common mistake is to interpret [[probabilidad_microestado]] in isolation: Do not assign the largest [[probabilidad_microestado]]
+          to the highest [[energia_microestado]] unless degeneracy compensates for the weight.'
+    next_step_rules:
+    - id: probabilidad_microestado_next_step_interpretation_path
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[probabilidad_microestado]], compárala con otras probabilidades y pregunta qué microestados
+          dominan el comportamiento observable.
+        en: After obtaining [[probabilidad_microestado]], compare it with other probabilities and ask which microstates dominate
+          the observable behavior.
+    physical_intuition:
+    - id: probabilidad_microestado_physical_intuition_accessibility
+      when: 'true'
+      status: info
+      text:
+        es: '[[probabilidad_microestado]] transforma el peso relativo en una lectura de frecuencia esperada en equilibrio
+          térmico.'
+        en: '[[probabilidad_microestado]] turns relative weight into an expected frequency reading in thermal equilibrium.'
+    limiting_cases:
+    - id: probabilidad_microestado_limiting_case_temperature_energy
+      when: 'true'
+      status: info
+      text:
+        es: Si el conjunto de [[peso_boltzmann]] es parecido, las probabilidades se igualan; si uno domina, su [[probabilidad_microestado]]
+          se aproxima a 1.
+        en: If all [[peso_boltzmann]] values are similar, probabilities become comparable; if one dominates, its [[probabilidad_microestado]]
+          approaches 1.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: Las magnitudes de este leaf son escalares; el signo relevante procede de referencias energéticas, no de ejes vectoriales.
+        en: The quantities in this leaf are scalar; the relevant sign comes from energy references, not vector axes.
+      common_sign_errors: []
+  razon_energia_termica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: validity_indicator
+      en: thermal energy ratio
+    summary_rules:
+    - id: razon_energia_termica_summary_thermal_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[razon_energia_termica]] compara el coste energético de un microestado con la energía térmica disponible.'
+        en: '[[razon_energia_termica]] compares the energetic cost of a microstate with the available thermal energy.'
+    physical_reading_rules:
+    - id: razon_energia_termica_physical_reading_units_and_role
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[razon_energia_termica]] como indicador adimensional de accesibilidad: valores pequeños significan estado
+          térmicamente fácil; valores grandes implican supresión.'
+        en: 'Read [[razon_energia_termica]] as a dimensionless accessibility indicator: small values mean a thermally easy
+          state; large values imply suppression.'
+    coherence_rules:
+    - id: razon_energia_termica_coherence_dimension_normalization
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser adimensional y positiva si [[energia_microestado]] se mide respecto a una referencia no negativa; revisa
+          signos y origen de energía.
+        en: It must be dimensionless and positive if [[energia_microestado]] is measured from a nonnegative reference; check
+          signs and the energy zero.
+    model_validity_rules:
+    - id: razon_energia_termica_model_validity_canonical_scope
+      when: 'true'
+      status: info
+      text:
+        es: Su lectura depende de la referencia energética elegida; desplazar todas las energías cambia pesos absolutos, pero
+          no probabilidades si la normalización es coherente.
+        en: Its reading depends on the chosen energy reference; shifting all energies changes absolute weights, but not probabilities
+          if normalization is consistent.
+    graph_rules:
+    - id: razon_energia_termica_graph_reading_weight_accessibility
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica, [[razon_energia_termica]] controla la rapidez de caída de [[peso_boltzmann]]: mayor razón, menor
+          contribución.'
+        en: 'In the graph, [[razon_energia_termica]] controls how fast [[peso_boltzmann]] falls: larger ratio, smaller contribution.'
+    likely_errors:
+    - id: razon_energia_termica_likely_error_specific_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[razon_energia_termica]] con una lectura aislada es un error frecuente: No lo trates como energía
+          ni como temperatura: [[razon_energia_termica]] es una comparación pura entre dos escalas.'
+        en: 'A common mistake is to interpret [[razon_energia_termica]] in isolation: Do not treat it as energy or temperature:
+          [[razon_energia_termica]] is a pure comparison between two scales.'
+    next_step_rules:
+    - id: razon_energia_termica_next_step_interpretation_path
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[razon_energia_termica]] para anticipar si [[peso_boltzmann]] será cercano a 1, moderado o prácticamente
+          nulo.
+        en: Use [[razon_energia_termica]] to anticipate whether [[peso_boltzmann]] will be close to 1, moderate, or practically
+          zero.
+    physical_intuition:
+    - id: razon_energia_termica_physical_intuition_accessibility
+      when: 'true'
+      status: info
+      text:
+        es: '[[razon_energia_termica]] dice cuántas unidades térmicas cuesta entrar en un microestado.'
+        en: '[[razon_energia_termica]] says how many thermal units it costs to enter a microstate.'
+    limiting_cases:
+    - id: razon_energia_termica_limiting_case_temperature_energy
+      when: 'true'
+      status: info
+      text:
+        es: Si [[razon_energia_termica]] es mucho menor que 1, los niveles son casi igualmente accesibles; si es mucho mayor
+          que 1, el estado queda congelado fuera de la estadística efectiva.
+        en: If [[razon_energia_termica]] is much less than 1, levels are almost equally accessible; if it is much greater
+          than 1, the state is frozen out of the effective statistics.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: Las magnitudes de este leaf son escalares; el signo relevante procede de referencias energéticas, no de ejes vectoriales.
+        en: The quantities in this leaf are scalar; the relevant sign comes from energy references, not vector axes.
+      common_sign_errors: []

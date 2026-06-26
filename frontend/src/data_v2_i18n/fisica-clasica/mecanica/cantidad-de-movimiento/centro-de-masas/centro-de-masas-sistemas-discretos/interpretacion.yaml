@@ -1,0 +1,274 @@
+version: 2
+id: interpretacion-centro-de-masas-sistemas-discretos
+leaf_id: centro-de-masas-sistemas-discretos
+nombre:
+  es: "Interpretación de Sistemas Discretos"
+  en: "Interpretation of Discrete Systems"
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: cantidad-de-movimiento
+  parent_id: centro-de-masas
+  ruta_relativa: fisica-clasica/mecanica/cantidad-de-movimiento/centro-de-masas/centro-de-masas-sistemas-discretos
+dependencies:
+  formulas:
+    - xcm_sum
+    - ycm_sum
+    - M_sum
+    - rcm_vector
+  magnitudes:
+    - m_i
+    - x_i
+    - y_i
+    - r_i
+    - xcm
+    - ycm
+    - rcm
+    - M
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+result_blocks:
+  summary:
+    title:
+      es: "Resumen del Sistema de Partículas"
+      en: "Particle System Summary"
+  physical_reading:
+    title:
+      es: "Análisis de la Distribución Discreta"
+      en: "Discrete Distribution Analysis"
+  coherence:
+    title:
+      es: "Validación de Consistencia Vectorial"
+      en: "Vector Consistency Validation"
+  model_validity:
+    title:
+      es: "Auditoría de Validez de Modelo"
+      en: "Model Validity Audit"
+  graph_reading:
+    title:
+      es: "Diagnóstico de la Nube de Masas"
+      en: "Mass Cloud Diagnosis"
+  likely_errors:
+    title:
+      es: "Alerta de Sesgos en Sumatorias"
+      en: "Summation Bias Alert"
+  next_step:
+    title:
+      es: "Extensión a Medios Continuos"
+      en: "Extension to Continuous Media"
+
+targets:
+  xcm:
+    magnitude_id: xcm
+    summary_rules:
+      - id: xcm_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "La coordenada [[xcm]] localiza el promedio ponderado de la distribución de masa en el eje horizontal, indicando el punto de equilibrio lateral del sistema."
+          en: "The [[xcm]] coordinate locates the weighted average of the mass distribution on the horizontal axis, indicating the system's lateral equilibrium point."
+    physical_reading_rules:
+      - id: xcm_read_cluster
+        when: 'true'
+        status: info
+        text:
+          es: "Si un grupo de partículas (cluster) tiene mucha más masa que el resto, el centro de masas se verá fuertemente atraído hacia su posición colectiva."
+          en: "If a group of particles (cluster) has much more mass than the rest, the center of mass will be strongly attracted to its collective position."
+    coherence_rules:
+      - id: xcm_coh_bound
+        when: 'result < min(x_i) || result > max(x_i)'
+        status: danger
+        text:
+          es: "Error crítico: El centro de masas debe estar obligatoriamente entre la x mínima y la x máxima del sistema."
+          en: "Critical error: The center of mass must strictly lie between the minimum and maximum x of the system."
+    model_validity_rules:
+      - id: xcm_val_disc
+        when: 'true'
+        status: ok
+        text:
+          es: "Tratamiento de partículas puntuales validado para N cuerpos."
+          en: "Point particle treatment validated for N bodies."
+    graph_rules:
+      - id: xcm_graph_center
+        when: 'true'
+        status: info
+        text:
+          es: "En el diagrama, xcm marca el punto de equilibrio donde el sistema no tendría tendencia a rotar si fuera un cuerpo rígido apoyado en ese eje."
+          en: "In the diagram, xcm marks the balance point where the system would have no tendency to rotate if it were a rigid body supported on that axis."
+    likely_errors:
+      - id: xcm_err_sign
+        when: 'true'
+        status: warning
+        text:
+          es: "Cuidado con los signos de las posiciones; una partícula en el lado negativo resta al numerador del promedio."
+          en: "Watch the signs of the positions; a particle on the negative side subtracts from the average's numerator."
+    next_step_rules:
+      - id: xcm_next_continuous
+        when: 'true'
+        status: info
+        text:
+          es: "Prueba a imaginar qué sucede si N aumenta indefinidamente; esto te preparará para el cálculo integral en sólidos."
+          en: "Try to imagine what happens if N increases indefinitely; this will prepare you for integral calculus in solids."
+
+  ycm:
+    magnitude_id: ycm
+    summary_rules:
+      - id: ycm_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "La coordenada [[ycm]] localiza el centro de masas en la dimensión vertical, representando la altura media de la inercia del conjunto de partículas."
+          en: "The [[ycm]] coordinate locates the center of mass in the vertical dimension, representing the average inertia height of the particle set."
+    physical_reading_rules:
+      - id: ycm_read_height
+        when: 'true'
+        status: info
+        text:
+          es: "La altura ycm indica el nivel medio de la inercia del sistema; valores altos sugieren una concentración de masa en la parte superior del conjunto."
+          en: "The ycm height indicates the system's average inertia level; high values suggest a mass concentration in the upper part of the set."
+    coherence_rules:
+      - id: ycm_coh_bound
+        when: 'result < min(y_i) || result > max(y_i)'
+        status: danger
+        text:
+          es: "Error crítico: El centro de masas vertical debe estar dentro del rango de alturas de las partículas."
+          en: "Critical error: The vertical center of mass must lie within the height range of the particles."
+    model_validity_rules:
+      - id: ycm_val_planar
+        when: 'true'
+        status: ok
+        text:
+          es: "El modelo asume que todas las partículas están en el mismo campo gravitatorio uniforme."
+          en: "The model assumes all particles are in the same uniform gravitational field."
+    graph_rules:
+      - id: ycm_graph_line
+        when: 'true'
+        status: info
+        text:
+          es: "La línea y = ycm divide al sistema en dos regiones con momentos de masa equilibrados respecto al eje horizontal."
+          en: "The y = ycm line divides the system into two regions with balanced mass moments relative to the horizontal axis."
+    likely_errors:
+      - id: ycm_err_mass
+        when: 'true'
+        status: warning
+        text:
+          es: "No olvides que la masa total M debe ser la misma suma que usaste para la componente x."
+          en: "Don't forget that the total mass M must be the same sum you used for the x-component."
+    next_step_rules:
+      - id: ycm_next_motion
+        when: 'true'
+        status: info
+        text:
+          es: "El siguiente paso es analizar cómo se mueve este punto ycm cuando se aplican fuerzas externas netas."
+          en: "The next step is to analyze how this ycm point moves when net external forces are applied."
+
+  rcm:
+    magnitude_id: rcm
+    summary_rules:
+      - id: rcm_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "El vector rcm define la posición central del sistema en el espacio multidimensional."
+          en: "The rcm vector defines the central position of the system in multidimensional space."
+    graph_rules:
+      - id: rcm_graph_hull
+        when: 'true'
+        status: info
+        text:
+          es: "Geométricamente, el punto rcm debe caer siempre dentro de la envoltura convexa formada por la nube de puntos del sistema."
+          en: "Geometrically, the rcm point must always fall within the convex hull formed by the system's point cloud."
+    likely_errors:
+      - id: rcm_err_scalar
+        when: 'true'
+        status: warning
+        text:
+          es: "Asegúrate de sumar los vectores componente a componente; no sumes los módulos de los vectores de posición."
+          en: "Ensure you sum the vectors component by component; do not sum the magnitudes of the position vectors."
+    coherence_rules:
+      - id: rcm_coh_vector
+        when: 'true'
+        status: ok
+        text:
+          es: "La consistencia entre las componentes escalares (xcm, ycm) y el vector rcm ha sido verificada."
+          en: "Consistency between the scalar components (xcm, ycm) and the rcm vector has been verified."
+    physical_reading_rules:
+      - id: rcm_read_symmetry
+        when: 'true'
+        status: info
+        text:
+          es: "Si el sistema presenta simetría geométrica y de masas, el vector rcm debe apuntar directamente al centro de simetría."
+          en: "If the system exhibits geometric and mass symmetry, the rcm vector must point directly to the center of symmetry."
+    model_validity_rules:
+      - id: rcm_val_origin
+        when: 'true'
+        status: info
+        text:
+          es: "El vector rcm es dependiente del sistema de coordenadas, pero la posición física del CM es intrínseca al sistema."
+          en: "The rcm vector is coordinate-system dependent, but the CM's physical position is intrinsic to the system."
+    next_step_rules:
+      - id: rcm_next_momentum
+        when: 'true'
+        status: info
+        text:
+          es: "Usa rcm para simplificar la descripción del momento lineal total del sistema como P = M * Vcm."
+          en: "Use rcm to simplify the description of the system's total linear momentum as P = M * Vcm."
+
+  M:
+    magnitude_id: M
+    summary_rules:
+      - id: M_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "La masa total [[M]] representa la inercia traslacional completa del sistema y es el factor de normalización para el cálculo del centro de masas."
+          en: "The total mass [[M]] represents the system's complete translational inertia and is the normalization factor for the center-of-mass calculation."
+    physical_reading_rules:
+      - id: M_read_total
+        when: 'true'
+        status: ok
+        text:
+          es: "Un valor elevado de [[M]] implica que el sistema requerirá una fuerza neta mayor para lograr la misma aceleración del centro de masas."
+          en: "A high [[M]] value implies the system will require a greater net force to achieve the same center-of-mass acceleration."
+    coherence_rules:
+      - id: M_coh_sum
+        when: 'true'
+        status: ok
+        text:
+          es: "La masa total es consistente con la suma de las masas individuales [[m1]], [[m2]], etc."
+          en: "The total mass is consistent with the sum of individual masses [[m1]], [[m2]], etc."
+    model_validity_rules:
+      - id: M_val_positive
+        when: 'result <= 0'
+        status: danger
+        text:
+          es: "Error: La masa total de un sistema físico real debe ser estrictamente positiva."
+          en: "Error: The total mass of a real physical system must be strictly positive."
+    graph_rules:
+      - id: M_graph_scale
+        when: 'true'
+        status: info
+        text:
+          es: "En el gráfico, el tamaño relativo de la nube de puntos suele estar escalado por la magnitud de [[M]]."
+          en: "In the graph, the relative size of the point cloud is usually scaled by the magnitude of [[M]]."
+    likely_errors:
+      - id: M_err_missing
+        when: 'true'
+        status: warning
+        text:
+          es: "Asegúrate de haber incluido todas las partículas del sistema en la suma final de [[M]]."
+          en: "Ensure you have included all particles of the system in the final sum of [[M]]."
+    next_step_rules:
+      - id: M_next_dynamics
+        when: 'true'
+        status: info
+        text:
+          es: "El valor de [[M]] es fundamental para aplicar la segunda ley de Newton al sistema completo: ΣFext = [[M]] * Acm."
+          en: "The value of [[M]] is fundamental for applying Newton's second law to the entire system: ΣFext = [[M]] * Acm."

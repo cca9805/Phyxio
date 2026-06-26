@@ -1,0 +1,784 @@
+version: 5.0.0
+id: oscilador-armonico-estadistico
+leaf_id: oscilador-armonico-estadistico
+nombre:
+  es: Oscilador armonico estadistico
+  en: Statistical Harmonic Oscillator
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: sistemas-modelo
+  parent_id: sistemas-modelo
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/sistemas-modelo/oscilador-armonico-estadistico
+  orden: 275200
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - energia_media_cuantica
+  - limite_clasico_equiparticion
+  - beta_inversa_termica
+  - funcion_particion_cuantica
+  - probabilidad_ocupacion_n
+  magnitudes:
+  - energia_media
+  - temperatura
+  - frecuencia_angular
+  - constante_boltzmann
+  - hbar
+  - beta
+  - funcion_particion
+  - numero_cuantico
+  - probabilidad_ocupacion
+  - energia_cuantica
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinámica estadística de un oscilador armónico ideal
+    en: statistical thermodynamics of an ideal harmonic oscillator
+  axis_convention:
+    es: Este leaf usa magnitudes escalares positivas; los signos no indican dirección espacial.
+    en: This leaf uses positive scalar quantities; signs do not indicate spatial direction.
+  standard_assumptions:
+  - es: Oscilador armónico ideal, equilibrio térmico canónico y temperatura absoluta positiva.
+    en: Ideal harmonic oscillator, canonical thermal equilibrium, and positive absolute temperature.
+  - es: La frecuencia angular se mantiene fija al leer la dependencia con la temperatura.
+    en: Angular frequency is held fixed when reading the temperature dependence.
+  standard_warnings:
+  - es: No interpretes resultados sin revisar unidades, régimen cuántico-clásico y dominio de temperatura.
+    en: Do not interpret results without checking units, the quantum-classical regime, and temperature domain.
+  - es: Comprueba que los exponentes estadísticos sean adimensionales antes de leer probabilidades.
+    en: Check that statistical exponents are dimensionless before reading probabilities.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+  - Svg
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Energías en J, temperatura en K, beta en 1/J y probabilidades sin unidad.
+      en: Energies in J, temperature in K, beta in 1/J, and probabilities dimensionless.
+  - id: quantum_classical_regime_check
+    status: info
+    text:
+      es: Compara energia_cuantica con k_B*T para distinguir régimen cuántico, transición y límite clásico.
+      en: Compare energia_cuantica with k_B*T to distinguish quantum regime, transition, and classical limit.
+error_patterns:
+  enabled: true
+  patterns:
+  - id: celsius_temperature_error
+    status: warning
+    text:
+      es: Usar grados Celsius en lugar de kelvin distorsiona beta, la función de partición y las probabilidades.
+      en: Using Celsius instead of kelvin distorts beta, the partition function, and probabilities.
+  - id: z_probability_confusion
+    status: warning
+    text:
+      es: Confundir la función de partición con una probabilidad borra la normalización estadística.
+      en: Confusing the partition function with a probability erases statistical normalization.
+  - id: classical_limit_overuse
+    status: warning
+    text:
+      es: Aplicar equipartición cuando energia_cuantica es comparable o mayor que k_B*T oculta la cuantización.
+      en: Applying equipartition when energia_cuantica is comparable to or larger than k_B*T hides quantization.
+graph_reading_policy:
+  enabled: true
+  primary_variable: energia_media
+  reading_sequence:
+  - es: Lee primero [[temperatura]] en el eje horizontal y [[energia_media]] en el eje vertical.
+    en: First read [[temperatura]] on the horizontal axis and [[energia_media]] on the vertical axis.
+  - es: Después compara la curva cuántica con el límite clásico k_B*T y con la escala [[energia_cuantica]].
+    en: Then compare the quantum curve with the classical limit k_B*T and with the [[energia_cuantica]] scale.
+  - es: Usa la escena Svg para recordar que la curva procede de niveles energéticos discretos.
+    en: Use the Svg scene to remember that the curve comes from discrete energy levels.
+  key_points:
+  - es: La curva debe crecer con temperatura y conservar energía de punto cero a baja temperatura.
+    en: The curve should rise with temperature and retain zero-point energy at low temperature.
+  - es: La pendiente alta se interpreta como transición hacia equipartición, no como desaparición del modelo cuántico.
+    en: The high-temperature slope is read as transition toward equipartition, not as disappearance of the quantum model.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Compara k_B*T con hbar*omega para decidir qué escala gobierna.
+    en: Compare k_B*T with hbar*omega to decide which scale governs.
+  - es: Si la energía media se aproxima a k_B*T, el resultado está cerca del límite clásico.
+    en: If mean energy approaches k_B*T, the result is close to the classical limit.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Los argumentos de exponentes como beta*energia_cuantica deben ser adimensionales.
+    en: Exponential arguments such as beta*energia_cuantica must be dimensionless.
+  common_unit_mistakes:
+  - es: Usar Celsius en vez de kelvin.
+    en: Using Celsius instead of kelvin.
+  - es: Confundir rad/s con Hz al usar la frecuencia angular.
+    en: Confusing rad/s with Hz when using angular frequency.
+  - es: Leer beta como kelvin en lugar de inverso de energía.
+    en: Reading beta as kelvin instead of inverse energy.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  energia_media:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado principal
+      en: mean energy
+    summary_rules:
+    - id: energia_media_summary_specific
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_media]] es la energía esperada del oscilador en equilibrio térmico, no la energía de una oscilación
+          concreta.'
+        en: '[[energia_media]] is the oscillator expected energy in thermal equilibrium, not the energy of one particular
+          oscillation.'
+    physical_reading_rules:
+    - id: energia_media_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Léela en joule y compárala con k_B T y con [[energia_cuantica]] para saber si domina el régimen clásico o cuántico.
+        en: Read it in joules and compare it with k_B T and [[energia_cuantica]] to decide whether the classical or quantum
+          regime dominates.
+    coherence_rules:
+    - id: energia_media_coherence_specific
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser positiva y, en el modelo cuántico completo, no debe caer por debajo de la energía de punto cero.
+        en: It must be positive and, in the full quantum model, must not fall below the zero-point energy.
+    model_validity_rules:
+    - id: energia_media_model_validity_specific
+      when: 'true'
+      status: info
+      text:
+        es: Usa esta lectura para un oscilador armónico ideal en equilibrio con un baño térmico, con [[temperatura]] absoluta
+          y [[frecuencia_angular]] fija.
+        en: Use this reading for an ideal harmonic oscillator in equilibrium with a heat bath, with absolute [[temperatura]]
+          and fixed [[frecuencia_angular]].
+    graph_rules:
+    - id: energia_media_graph_specific
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, [[energia_media]] debe crecer con [[temperatura]] y acercarse al límite k_B T a temperaturas
+          altas.
+        en: In the Coord graph, [[energia_media]] must increase with [[temperatura]] and approach the k_B T limit at high
+          temperatures.
+    likely_errors:
+    - id: energia_media_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: No la confundas con la energía clásica instantánea ni elimines la energía de punto cero cuando el régimen cuántico
+          importa.
+        en: Do not confuse it with instantaneous classical energy or remove zero-point energy when the quantum regime matters.
+    next_step_rules:
+    - id: energia_media_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: 'Revisa el cociente energia_cuantica/(k_B*T): si es pequeño, compara con equipartición; si es grande, interpreta
+          niveles discretos.'
+        en: 'Check the ratio energia_cuantica/(k_B*T): if it is small, compare with equipartition; if large, interpret discrete
+          levels.'
+    physical_intuition:
+    - id: energia_media_physical_intuition_specific
+      when: 'true'
+      status: info
+      text:
+        es: Al subir [[temperatura]], se ocupan más niveles; al subir [[frecuencia_angular]], cada salto energético pesa más.
+        en: As [[temperatura]] rises, more levels are occupied; as [[frecuencia_angular]] rises, each energy jump weighs more.
+    limiting_cases:
+    - id: energia_media_limiting_case_specific
+      when: 'true'
+      status: info
+      text:
+        es: Cuando T tiende a valores altos, [[energia_media]] se aproxima a k_B*T; cuando T tiende a cero, queda la energía
+          de punto cero.
+        en: As T becomes high, [[energia_media]] approaches k_B*T; as T approaches zero, zero-point energy remains.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable independiente
+      en: temperature
+    summary_rules:
+    - id: temperatura_summary_specific
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] es la temperatura absoluta del baño térmico que controla la ocupación estadística de niveles.'
+        en: '[[temperatura]] is the absolute heat-bath temperature controlling statistical occupation of levels.'
+    physical_reading_rules:
+    - id: temperatura_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Debe leerse en kelvin; aumentar [[temperatura]] aumenta k_B*T y facilita ocupar estados excitados.
+        en: It must be read in kelvin; increasing [[temperatura]] raises k_B*T and makes excited states easier to occupy.
+    coherence_rules:
+    - id: temperatura_coherence_specific
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] debe ser mayor que cero cuando aparecen beta, función de partición o probabilidades canónicas.'
+        en: '[[temperatura]] must be greater than zero when beta, the partition function, or canonical probabilities appear.'
+    model_validity_rules:
+    - id: temperatura_model_validity_specific
+      when: 'true'
+      status: info
+      text:
+        es: No uses grados Celsius ni temperaturas negativas en este modelo canónico básico.
+        en: Do not use Celsius degrees or negative temperatures in this basic canonical model.
+    graph_rules:
+    - id: temperatura_graph_specific
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica, [[temperatura]] es el eje horizontal: su aumento debe suavizar la cuantización y acercar la curva
+          al límite clásico.'
+        en: 'In the graph, [[temperatura]] is the horizontal axis: increasing it should smooth quantization and bring the
+          curve toward the classical limit.'
+    likely_errors:
+    - id: temperatura_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: El error típico es introducir Celsius o interpretar T = 0 como un valor ordinario de cálculo.
+        en: The typical error is entering Celsius or treating T = 0 as an ordinary calculation value.
+    next_step_rules:
+    - id: temperatura_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Convierte siempre a kelvin y compara k_B*T con [[energia_cuantica]] antes de elegir una lectura clásica o cuántica.
+        en: Always convert to kelvin and compare k_B*T with [[energia_cuantica]] before choosing a classical or quantum reading.
+    physical_intuition:
+    - id: temperatura_physical_intuition_specific
+      when: 'true'
+      status: info
+      text:
+        es: La temperatura mide la energía térmica disponible para poblar niveles, no una amplitud mecánica directa.
+        en: Temperature measures thermal energy available to populate levels, not a direct mechanical amplitude.
+    limiting_cases:
+    - id: temperatura_limiting_case_specific
+      when: 'true'
+      status: info
+      text:
+        es: A temperatura alta aparecen muchos niveles ocupados; a temperatura baja domina el estado fundamental.
+        en: At high temperature many levels are occupied; at low temperature the ground state dominates.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_cuantica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: escala energética
+      en: energy quantum
+    summary_rules:
+    - id: energia_cuantica_summary_specific
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_cuantica]] fija el salto energético hbar*omega entre niveles vecinos del oscilador.'
+        en: '[[energia_cuantica]] sets the hbar*omega energy spacing between neighboring oscillator levels.'
+    physical_reading_rules:
+    - id: energia_cuantica_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Léela en joule como escala cuántica que debe compararse con k_B*T.
+        en: Read it in joules as the quantum scale that must be compared with k_B*T.
+    coherence_rules:
+    - id: energia_cuantica_coherence_specific
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser positiva si [[frecuencia_angular]] y hbar son positivas; un valor nulo rompe el modelo de niveles separados.
+        en: It must be positive if [[frecuencia_angular]] and hbar are positive; a zero value breaks the separated-level model.
+    model_validity_rules:
+    - id: energia_cuantica_model_validity_specific
+      when: 'true'
+      status: info
+      text:
+        es: Su interpretación presupone un oscilador armónico cuántico ideal con frecuencia angular fija.
+        en: Its interpretation assumes an ideal quantum harmonic oscillator with fixed angular frequency.
+    graph_rules:
+    - id: energia_cuantica_graph_specific
+      when: 'true'
+      status: info
+      text:
+        es: Una [[energia_cuantica]] mayor desplaza la transición cuántico-clásica hacia temperaturas más altas.
+        en: A larger [[energia_cuantica]] shifts the quantum-to-classical transition toward higher temperatures.
+    likely_errors:
+    - id: energia_cuantica_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: No sustituyas hbar por h ni trates omega como frecuencia ordinaria f sin el factor 2*pi.
+        en: Do not replace hbar with h or treat omega as ordinary frequency f without the 2*pi factor.
+    next_step_rules:
+    - id: energia_cuantica_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Calcula energia_cuantica/(k_B*T) para decidir si la discreción energética será visible.
+        en: Compute energia_cuantica/(k_B*T) to decide whether energy discreteness will be visible.
+    physical_intuition:
+    - id: energia_cuantica_physical_intuition_specific
+      when: 'true'
+      status: info
+      text:
+        es: Cuanto mayor es el salto entre niveles, más difícil resulta excitar el oscilador térmicamente.
+        en: The larger the level spacing, the harder it is to thermally excite the oscillator.
+    limiting_cases:
+    - id: energia_cuantica_limiting_case_specific
+      when: 'true'
+      status: info
+      text:
+        es: Si energia_cuantica es mucho menor que k_B*T, el comportamiento parece clásico; si es mucho mayor, domina el nivel
+          bajo.
+        en: If energia_cuantica is much smaller than k_B*T, behavior looks classical; if much larger, the low level dominates.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  beta:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro auxiliar
+      en: thermodynamic beta
+    summary_rules:
+    - id: beta_summary_specific
+      when: 'true'
+      status: ok
+      text:
+        es: '[[beta]] representa 1/(k_B*T), el peso inverso de la energía térmica en el ensamble canónico.'
+        en: '[[beta]] represents 1/(k_B*T), the inverse thermal-energy weight in the canonical ensemble.'
+    physical_reading_rules:
+    - id: beta_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Tiene unidades de 1/J y aumenta cuando la temperatura baja.
+        en: It has units of 1/J and increases as temperature decreases.
+    coherence_rules:
+    - id: beta_coherence_specific
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser positiva para T positiva; si T aumenta, [[beta]] debe disminuir.
+        en: It must be positive for positive T; if T increases, [[beta]] must decrease.
+    model_validity_rules:
+    - id: beta_model_validity_specific
+      when: 'true'
+      status: info
+      text:
+        es: Solo tiene sentido aquí en equilibrio térmico canónico con temperatura absoluta bien definida.
+        en: Here it only makes sense in canonical thermal equilibrium with a well-defined absolute temperature.
+    graph_rules:
+    - id: beta_graph_specific
+      when: 'true'
+      status: info
+      text:
+        es: Un beta grande anticipa una curva de energía media casi pegada al régimen cuántico bajo.
+        en: A large beta predicts a mean-energy curve close to the low-temperature quantum regime.
+    likely_errors:
+    - id: beta_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: 'No confundas beta con temperatura: beta varía en sentido contrario y no se mide en kelvin.'
+        en: 'Do not confuse beta with temperature: beta varies in the opposite direction and is not measured in kelvin.'
+    next_step_rules:
+    - id: beta_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Úsala para construir exponentes adimensionales como beta*energia_cuantica antes de evaluar probabilidades.
+        en: Use it to build dimensionless exponents such as beta*energia_cuantica before evaluating probabilities.
+    physical_intuition:
+    - id: beta_physical_intuition_specific
+      when: 'true'
+      status: info
+      text:
+        es: 'Beta actúa como una lupa de penalización energética: cuanto mayor es, más castiga estados excitados.'
+        en: 'Beta acts as an energy-penalty magnifier: the larger it is, the more it suppresses excited states.'
+    limiting_cases:
+    - id: beta_limiting_case_specific
+      when: 'true'
+      status: info
+      text:
+        es: Cuando T crece, beta tiende a cero; cuando T se acerca a cero, beta crece sin límite.
+        en: As T grows, beta approaches zero; as T approaches zero, beta grows without bound.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  funcion_particion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: normalización estadística
+      en: partition function
+    summary_rules:
+    - id: funcion_particion_summary_specific
+      when: 'true'
+      status: ok
+      text:
+        es: '[[funcion_particion]] normaliza los pesos de Boltzmann y resume cuántos estados contribuyen térmicamente.'
+        en: '[[funcion_particion]] normalizes Boltzmann weights and summarizes how many states contribute thermally.'
+    physical_reading_rules:
+    - id: funcion_particion_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Es adimensional y positiva; no es energía, probabilidad ni número de partículas.
+        en: It is dimensionless and positive; it is not energy, probability, or particle number.
+    coherence_rules:
+    - id: funcion_particion_coherence_specific
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser mayor que cero y compatible con exponentes adimensionales beta*energia_cuantica.
+        en: It must be greater than zero and consistent with dimensionless exponents beta*energia_cuantica.
+    model_validity_rules:
+    - id: funcion_particion_model_validity_specific
+      when: 'true'
+      status: info
+      text:
+        es: La fórmula cerrada vale para el espectro del oscilador armónico ideal y equilibrio canónico.
+        en: The closed formula is valid for the ideal harmonic-oscillator spectrum and canonical equilibrium.
+    graph_rules:
+    - id: funcion_particion_graph_specific
+      when: 'true'
+      status: info
+      text:
+        es: Cuando aumenta [[temperatura]], [[funcion_particion]] debe reflejar que más niveles tienen peso apreciable.
+        en: As [[temperatura]] increases, [[funcion_particion]] should reflect that more levels have appreciable weight.
+    likely_errors:
+    - id: funcion_particion_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes Z como probabilidad; las probabilidades se obtienen dividiendo cada peso por Z.
+        en: Do not interpret Z as a probability; probabilities are obtained by dividing each weight by Z.
+    next_step_rules:
+    - id: funcion_particion_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: 'Comprueba Z antes de leer probabilidades: un Z mal normalizado contamina toda la distribución.'
+        en: 'Check Z before reading probabilities: a wrongly normalized Z contaminates the whole distribution.'
+    physical_intuition:
+    - id: funcion_particion_physical_intuition_specific
+      when: 'true'
+      status: info
+      text:
+        es: Z cuenta de forma ponderada las puertas energéticas abiertas por la temperatura.
+        en: Z is a weighted count of the energy doors opened by temperature.
+    limiting_cases:
+    - id: funcion_particion_limiting_case_specific
+      when: 'true'
+      status: info
+      text:
+        es: A baja temperatura dominan pocos estados; a alta temperatura crece la contribución de muchos niveles.
+        en: At low temperature few states dominate; at high temperature many levels contribute.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  probabilidad_ocupacion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado estadístico
+      en: occupation probability
+    summary_rules:
+    - id: probabilidad_ocupacion_summary_specific
+      when: 'true'
+      status: ok
+      text:
+        es: '[[probabilidad_ocupacion]] indica la fracción esperada de osciladores en el nivel cuántico elegido.'
+        en: '[[probabilidad_ocupacion]] gives the expected fraction of oscillators in the chosen quantum level.'
+    physical_reading_rules:
+    - id: probabilidad_ocupacion_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Debe estar entre 0 y 1 y no lleva unidad.
+        en: It must lie between 0 and 1 and has no unit.
+    coherence_rules:
+    - id: probabilidad_ocupacion_coherence_specific
+      when: 'true'
+      status: ok
+      text:
+        es: La suma de probabilidades sobre todos los niveles debe normalizarse a 1 mediante [[funcion_particion]].
+        en: The sum of probabilities over all levels must normalize to 1 through [[funcion_particion]].
+    model_validity_rules:
+    - id: probabilidad_ocupacion_model_validity_specific
+      when: 'true'
+      status: info
+      text:
+        es: Su lectura presupone el ensamble canónico y niveles energéticos del oscilador armónico ideal.
+        en: Its reading assumes the canonical ensemble and ideal harmonic-oscillator energy levels.
+    graph_rules:
+    - id: probabilidad_ocupacion_graph_specific
+      when: 'true'
+      status: info
+      text:
+        es: En una visualización de niveles, las probabilidades de niveles altos crecen con [[temperatura]] pero siguen penalizadas
+          por energía.
+        en: In a level visualization, high-level probabilities grow with [[temperatura]] but remain penalized by energy.
+    likely_errors:
+    - id: probabilidad_ocupacion_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas probabilidad de ocupación con energía media ni permitas valores negativos o mayores que 1.
+        en: Do not confuse occupation probability with mean energy or allow negative values or values above 1.
+    next_step_rules:
+    - id: probabilidad_ocupacion_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba el [[numero_cuantico]] usado y compara probabilidades de niveles vecinos para leer la distribución.
+        en: Check the chosen [[numero_cuantico]] and compare neighboring-level probabilities to read the distribution.
+    physical_intuition:
+    - id: probabilidad_ocupacion_physical_intuition_specific
+      when: 'true'
+      status: info
+      text:
+        es: La temperatura reparte ocupación hacia arriba, pero los niveles más energéticos siguen siendo menos probables.
+        en: Temperature spreads occupation upward, but more energetic levels remain less probable.
+    limiting_cases:
+    - id: probabilidad_ocupacion_limiting_case_specific
+      when: 'true'
+      status: info
+      text:
+        es: A baja temperatura P_0 domina; a alta temperatura la distribución se ensancha entre más niveles.
+        en: At low temperature P_0 dominates; at high temperature the distribution broadens over more levels.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_cuantico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: etiqueta de estado
+      en: quantum number
+    summary_rules:
+    - id: numero_cuantico_summary_specific
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_cuantico]] identifica el nivel discreto n del oscilador, empezando normalmente en n = 0.'
+        en: '[[numero_cuantico]] identifies the oscillator discrete level n, usually starting at n = 0.'
+    physical_reading_rules:
+    - id: numero_cuantico_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Es un entero no negativo; no mide una longitud, frecuencia ni energía por sí solo.
+        en: It is a nonnegative integer; by itself it does not measure length, frequency, or energy.
+    coherence_rules:
+    - id: numero_cuantico_coherence_specific
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser 0, 1, 2, ...; valores fraccionarios o negativos no representan niveles permitidos en este modelo.
+        en: It must be 0, 1, 2, ...; fractional or negative values do not represent allowed levels in this model.
+    model_validity_rules:
+    - id: numero_cuantico_model_validity_specific
+      when: 'true'
+      status: info
+      text:
+        es: La etiqueta n vale para el espectro cuántico ideal; no describe amplitudes continuas clásicas.
+        en: The label n is valid for the ideal quantum spectrum; it does not describe continuous classical amplitudes.
+    graph_rules:
+    - id: numero_cuantico_graph_specific
+      when: 'true'
+      status: info
+      text:
+        es: En la escena Svg, [[numero_cuantico]] ordena niveles discretos y ayuda a visualizar qué estados se ocupan.
+        en: In the Svg scene, [[numero_cuantico]] orders discrete levels and helps visualize which states are occupied.
+    likely_errors:
+    - id: numero_cuantico_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: No empieces en n = 1 si la fórmula usa el estado fundamental n = 0.
+        en: Do not start at n = 1 if the formula uses the n = 0 ground state.
+    next_step_rules:
+    - id: numero_cuantico_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Verifica el nivel elegido antes de calcular [[probabilidad_ocupacion]] o energía de estado.
+        en: Verify the chosen level before computing [[probabilidad_ocupacion]] or state energy.
+    physical_intuition:
+    - id: numero_cuantico_physical_intuition_specific
+      when: 'true'
+      status: info
+      text:
+        es: 'n es una etiqueta de escalón: subir n significa saltar a estados de mayor energía.'
+        en: 'n is a step label: increasing n means jumping to higher-energy states.'
+    limiting_cases:
+    - id: numero_cuantico_limiting_case_specific
+      when: 'true'
+      status: info
+      text:
+        es: n pequeño domina a baja temperatura; niveles altos solo pesan de forma apreciable cuando k_B*T compite con energia_cuantica.
+        en: Small n dominates at low temperature; high levels matter appreciably only when k_B*T competes with energia_cuantica.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

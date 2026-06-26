@@ -1,0 +1,369 @@
+const e=`version: 1
+scope: local
+id: interpretacion-dispersion-angular-en-colisiones-2d
+leaf_id: dispersion-angular-en-colisiones-2d
+nombre:
+  es: Análisis de la dispersión angular en 2D
+  en: 2D Angular Scattering Analysis
+dependencies:
+  magnitudes: [m1, m2, v1i, v1f, v2f, theta1, theta2, Ki, Kf, theta_total, p]
+  formulas: [p_x_balance, p_y_balance, k_initial, k_final, k_balance_elastic, theta_sum]
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+  config:
+    axes: { x: { label: { es: "v1i", en: "v1i" } }, y: { label: { es: "v1f", en: "v1f" } } }
+
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+
+result_blocks:
+  summary: { title: { es: Resumen físico, en: Physical summary } }
+  physical_reading: { title: { es: Lectura física, en: Physical reading } }
+  coherence: { title: { es: Coherencia, en: Coherence } }
+  model_validity: { title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { title: { es: Lectura gráfica, en: Graph reading } }
+  likely_errors: { title: { es: Errores probables, en: Likely errors } }
+  next_step: { title: { es: Siguiente paso, en: Next step } }
+
+targets:
+  v1f:
+    summary_rules:
+      - id: v1f_sum_phys
+        when: 'true'
+        status: info
+        text:
+          es: "La rapidez final del proyectil es [[v1f]] = {value} {unit}, lo que indica qué parte de la inercia incidente ha conservado el cuerpo tras la dispersión lateral."
+          en: "The projectile's final speed is [[v1f]] = {value} {unit}, which indicates what part of the incident inertia the body has retained after lateral scattering."
+    physical_reading_rules:
+      - id: v1f_causal_phys
+        when: 'true'
+        status: info
+        text:
+          es: "La deflexión lateral [[theta1]] provoca directamente la reducción observada en [[v1f]] porque el balance en {{f:p_y_balance}} obliga a transferir parte del impulso al eje perpendicular."
+          en: "The lateral deflection [[theta1]] directly provokes the observed reduction in [[v1f]] because the balance in {{f:p_y_balance}} forces a momentum transfer to the perpendicular axis."
+    coherence_rules:
+      - id: v1f_coh
+        when: 'v1f > v1i'
+        status: fail
+        text: { es: "La rapidez final no puede ser mayor que la inicial por conservación de energía.", en: "Final speed cannot be greater than initial due to energy conservation." }
+    model_validity_rules:
+      - id: v1f_mod
+        when: 'abs(Ki - Kf) < 0.01'
+        status: ok
+        text: { es: "Límite elástico confirmado.", en: "Elastic limit confirmed." }
+    graph_rules:
+      - id: v1f_graph
+        when: 'true'
+        status: info
+        text: { es: "Vector [[v1f]] visualizado en Coord.", en: "Vector [[v1f]] visualized in Coord." }
+    likely_errors:
+      - id: v1f_err_phys
+        when: 'abs(v1f + v2f - v1i) < 0.1'
+        status: error
+        text:
+          es: "Has obtenido un resultado incompatible con la geometría del choque al sumar las rapideces como escalares. En 2D, el momento se conserva vectorialmente, lo que impide una suma aritmética directa de los módulos."
+          en: "You obtained a result incompatible with the collision geometry by adding the speeds as scalars. In 2D, momentum is conserved vectorially, which prevents a direct arithmetic sum of the magnitudes."
+    next_step_rules:
+      - id: v1f_next
+        when: 'true'
+        status: info
+        text: { es: "Analizar Kf.", en: "Analyze Kf." }
+
+  theta_total:
+    summary_rules:
+      - id: tt_sum_phys
+        when: 'true'
+        status: info
+        text: { es: "El ángulo total es [[theta_total]] = {value} {unit}, lo que indica la amplitud de la zona de dispersión geométrica post-impacto.", en: "The total angle is [[theta_total]] = {value} {unit}, which indicates the width of the post-impact geometric scattering zone." }
+    physical_reading_rules:
+      - id: tt_causal_phys
+        when: 'true'
+        status: info
+        text: { es: "Esta apertura angular surge como consecuencia física del intercambio de impulsos laterales en el plano según {{f:p_y_balance}}.", en: "This angular opening arises as a physical consequence of the lateral impulse exchange in the plane according to {{f:p_y_balance}}." }
+    coherence_rules:
+      - id: tt_coh
+        when: 'theta_total > 3.14159'
+        status: fail
+        text: { es: "Ángulo físicamente imposible.", en: "Physically impossible angle." }
+    model_validity_rules:
+      - id: tt_mod
+        when: 'm1 == m2 and abs(theta_total - 1.57) < 0.05'
+        status: ok
+        text: { es: "Ortogonalidad elástica confirmada.", en: "Elastic orthogonality confirmed." }
+    graph_rules:
+      - id: tt_graph
+        when: 'true'
+        status: info
+        text: { es: "Sector de apertura en Svg.", en: "Opening sector in Svg." }
+    likely_errors:
+      - id: tt_err
+        when: 'm1 != m2 and abs(theta_total - 1.57) < 0.1'
+        status: warning
+        text: { es: "Has asumido erróneamente un ángulo de 90 grados; esta condición de ortogonalidad solo se cumple si las masas m1 y m2 son idénticas.", en: "You erroneously assumed a 90-degree angle; this orthogonality condition is only met if the masses m1 and m2 are identical." }
+    next_step_rules:
+      - id: tt_next
+        when: 'true'
+        status: info
+        text: { es: "Analizar m1/m2.", en: "Analyze m1/m2." }
+
+  Ki:
+    summary_rules:
+      - id: ki_sum_phys
+        when: 'true'
+        status: info
+        text: { es: "La energía inicial es [[Ki]] = {value} {unit}, lo que indica el presupuesto energético total disponible para el choque.", en: "The initial energy is [[Ki]] = {value} {unit}, which indicates the total energy budget available for the collision." }
+    physical_reading_rules:
+      - id: ki_phys
+        when: 'true'
+        status: info
+        text: { es: "Determina el presupuesto energético total del choque mediante {{f:k_initial}}.", en: "Determines the total energy budget of the collision via {{f:k_initial}}." }
+    coherence_rules:
+      - id: ki_coh
+        when: 'Ki < 0'
+        status: fail
+        text: { es: "Energía negativa imposible.", en: "Impossible negative energy." }
+    model_validity_rules:
+      - id: ki_mod
+        when: 'true'
+        status: ok
+        text: { es: "Referencia base validada.", en: "Base reference validated." }
+    graph_rules:
+      - id: ki_graph
+        when: 'true'
+        status: info
+        text: { es: "Nivel inicial en el gráfico.", en: "Initial level in graph." }
+    likely_errors:
+      - id: ki_err
+        when: 'Ki < 0.01'
+        status: error
+        text: { es: "Has definido un sistema sin energía incidente. Sin movimiento inicial no puede ocurrir una colisión física.", en: "You defined a system without incident energy. Without initial motion, a physical collision cannot occur." }
+    next_step_rules:
+      - id: ki_next
+        when: 'true'
+        status: info
+        text: { es: "Comparar con Kf.", en: "Compare with Kf." }
+
+  Kf:
+    summary_rules:
+      - id: kf_sum_phys
+        when: 'true'
+        status: info
+        text: { es: "La energía final es [[Kf]] = {value} {unit}, lo que indica la energía mecánica remanente tras la interacción.", en: "The final energy is [[Kf]] = {value} {unit}, which indicates the remaining mechanical energy after the interaction." }
+    physical_reading_rules:
+      - id: kf_phys
+        when: 'true'
+        status: info
+        text: { es: "Revela la energía mecánica remanente tras la interacción calculada por {{f:k_final}}.", en: "Reveals the remaining mechanical energy after the interaction calculated by {{f:k_final}}." }
+    coherence_rules:
+      - id: kf_coh
+        when: 'Kf > Ki + 0.1'
+        status: fail
+        text: { es: "Ganancia de energía prohibida.", en: "Forbidden energy gain." }
+    model_validity_rules:
+      - id: kf_mod
+        when: 'abs(Ki - Kf) < 0.01'
+        status: ok
+        text: { es: "Conservación energética elástica.", en: "Elastic energy conservation." }
+    graph_rules:
+      - id: kf_graph
+        when: 'true'
+        status: info
+        text: { es: "Nivel post-impacto visualizado.", en: "Post-impact level visualized." }
+    likely_errors:
+      - id: kf_err
+        when: 'Kf < 0'
+        status: error
+        text: { es: "Has obtenido una energía negativa. Este es un error matemático crítico ya que la energía cinética es siempre una magnitud positiva.", en: "You obtained a negative energy. This is a critical mathematical error since kinetic energy is always a positive magnitude." }
+    next_step_rules:
+      - id: kf_next
+        when: 'true'
+        status: info
+        text: { es: "Analizar p.", en: "Analyze p." }
+
+  v1i:
+    summary_rules:
+      - id: v1i_sum_phys
+        when: 'true'
+        status: info
+        text: { es: "La rapidez incidente es [[v1i]] = {value} {unit}, lo que indica la causa dinámica de todo el intercambio posterior.", en: "The incident speed is [[v1i]] = {value} {unit}, which indicates the dynamic cause of all subsequent exchange." }
+    physical_reading_rules:
+      - id: v1i_phys
+        when: 'true'
+        status: info
+        text: { es: "Actúa como la causa dinámica de todo el intercambio de impulsos posterior.", en: "Acts as the dynamic cause of all subsequent impulse exchange." }
+    coherence_rules:
+      - id: v1i_coh
+        when: 'v1i < 0'
+        status: fail
+        text: { es: "Módulo negativo inválido.", en: "Invalid negative magnitude." }
+    model_validity_rules:
+      - id: v1i_mod
+        when: 'true'
+        status: ok
+        text: { es: "Condición de entrada validada.", en: "Input condition validated." }
+    graph_rules:
+      - id: v1i_graph
+        when: 'true'
+        status: info
+        text: { es: "Vector inicial en Coord.", en: "Initial vector in Coord." }
+    likely_errors:
+      - id: v1i_err
+        when: 'v1i < 0.01'
+        status: error
+        text: { es: "Has obtenido un proyectil en reposo absoluto. Se requiere una velocidad inicial finita para iniciar la colisión.", en: "You obtained a projectile at absolute rest. A finite initial velocity is required to start the collision." }
+    next_step_rules:
+      - id: v1i_next
+        when: 'true'
+        status: info
+        text: { es: "Iniciar colisión.", en: "Start collision." }
+
+  v2f:
+    summary_rules:
+      - id: v2f_sum_phys
+        when: 'true'
+        status: info
+        text: { es: "La rapidez de retroceso es [[v2f]] = {value} {unit}, lo que indica la cantidad de movimiento transferida al blanco.", en: "The recoil speed is [[v2f]] = {value} {unit}, which indicates the amount of momentum transferred to the target." }
+    physical_reading_rules:
+      - id: v2f_phys
+        when: 'true'
+        status: info
+        text: { es: "Surge como resultado de la absorción de momento por parte del blanco.", en: "Arises as a result of momentum absorption by the target." }
+    coherence_rules:
+      - id: v2f_coh
+        when: 'v2f < 0'
+        status: fail
+        text: { es: "Rapidez negativa inválida.", en: "Invalid negative speed." }
+    model_validity_rules:
+      - id: v2f_mod
+        when: 'true'
+        status: ok
+        text: { es: "Retroceso consistente.", en: "Consistent recoil." }
+    graph_rules:
+      - id: v2f_graph
+        when: 'true'
+        status: info
+        text: { es: "Vector de blanco en Coord.", en: "Target vector in Coord." }
+    likely_errors:
+      - id: v2f_err
+        when: 'v2f > v1i + 1.0'
+        status: warning
+        text: { es: "Has obtenido una rapidez de retroceso excesiva. Revisa el balance de masas y la conservación de la energía.", en: "You obtained an excessive recoil speed. Check the mass balance and energy conservation." }
+    next_step_rules:
+      - id: v2f_next
+        when: 'true'
+        status: info
+        text: { es: "Calcular theta2.", en: "Calculate theta2." }
+
+  theta1:
+    summary_rules:
+      - id: t1_sum_phys
+        when: 'true'
+        status: info
+        text: { es: "El ángulo de dispersión es [[theta1]] = {value} {unit}, lo que indica la magnitud de la desviación lateral tras el impacto.", en: "The scattering angle is [[theta1]] = {value} {unit}, which indicates the magnitude of the lateral deviation after impact." }
+    physical_reading_rules:
+      - id: t1_phys
+        when: 'true'
+        status: info
+        text: { es: "Determina el reparto de momento entre los ejes tras el impacto.", en: "Determines the momentum distribution between axes after impact." }
+    coherence_rules:
+      - id: t1_coh
+        when: 'theta1 > 3.15'
+        status: fail
+        text: { es: "Ángulo fuera de límites.", en: "Angle out of limits." }
+    model_validity_rules:
+      - id: t1_mod
+        when: 'true'
+        status: ok
+        text: { es: "Desviación dentro del modelo.", en: "Deviation within model." }
+    graph_rules:
+      - id: t1_graph
+        when: 'true'
+        status: info
+        text: { es: "Visualizado en Svg.", en: "Visualized in Svg." }
+    likely_errors:
+      - id: t1_err
+        when: 'theta1 < 0'
+        status: error
+        text: { es: "Has obtenido un signo angular inconsistente. Revisa la dirección de desviación lateral en el balance Y.", en: "You obtained an inconsistent angular sign. Check the lateral deviation direction in the Y balance." }
+    next_step_rules:
+      - id: t1_next
+        when: 'true'
+        status: info
+        text: { es: "Verificar v1f.", en: "Verify v1f." }
+
+  theta2:
+    summary_rules:
+      - id: t2_sum_phys
+        when: 'true'
+        status: info
+        text: { es: "El ángulo de retroceso es [[theta2]] = {value} {unit}, lo que indica la dirección de compensación del momento lateral.", en: "The recoil angle is [[theta2]] = {value} {unit}, which indicates the lateral momentum compensation direction." }
+    physical_reading_rules:
+      - id: t2_phys
+        when: 'true'
+        status: info
+        text: { es: "Asegura la compensación lateral del momento según {{f:p_y_balance}}.", en: "Ensures the lateral compensation of momentum according to {{f:p_y_balance}}." }
+    coherence_rules:
+      - id: t2_coh
+        when: 'theta2 > 3.15'
+        status: fail
+        text: { es: "Ángulo inválido.", en: "Invalid angle." }
+    model_validity_rules:
+      - id: t2_mod
+        when: 'true'
+        status: ok
+        text: { es: "Dirección consistente.", en: "Consistent direction." }
+    graph_rules:
+      - id: t2_graph
+        when: 'true'
+        status: info
+        text: { es: "Arco de retroceso en Svg.", en: "Recoil arc in Svg." }
+    likely_errors:
+      - id: t2_err
+        when: 'theta2 < 0'
+        status: error
+        text: { es: "Has obtenido un ángulo de retroceso negativo. Se espera un valor absoluto que defina la dirección hacia el lado opuesto del proyectil.", en: "You obtained a negative recoil angle. An absolute value is expected defining the direction towards the opposite side of the projectile." }
+    next_step_rules:
+      - id: t2_next
+        when: 'true'
+        status: info
+        text: { es: "Analizar balance Y.", en: "Analyze Y balance." }
+
+  p:
+    summary_rules:
+      - id: p_sum_phys
+        when: 'true'
+        status: info
+        text: { es: "El momento lineal total es [[p]], lo que indica la cantidad de movimiento total conservada en el sistema.", en: "The total linear momentum is [[p]], which indicates the total momentum conserved in the system." }
+    physical_reading_rules:
+      - id: p_phys
+        when: 'true'
+        status: info
+        text: { es: "Representa la cantidad de movimiento total conservada en el sistema.", en: "Represents the total momentum conserved in the system." }
+    coherence_rules:
+      - id: p_coh
+        when: 'p < 0'
+        status: fail
+        text: { es: "Magnitud inválida.", en: "Invalid magnitude." }
+    model_validity_rules:
+      - id: p_mod
+        when: 'true'
+        status: ok
+        text: { es: "Conservación validada.", en: "Conservation validated." }
+    graph_rules:
+      - id: p_graph
+        when: 'true'
+        status: info
+        text: { es: "Vector de momento.", en: "Momentum vector." }
+    likely_errors:
+      - id: p_err
+        when: 'p < 0.01'
+        status: warning
+        text: { es: "Has obtenido un momento nulo. Este es un error conceptual porque un sistema con proyectiles en movimiento siempre tiene momento lineal total.", en: "You obtained zero momentum. This is a conceptual error because a system with moving projectiles always has total linear momentum." }
+    next_step_rules:
+      - id: p_next
+        when: 'true'
+        status: info
+        text: { es: "Verificar componentes.", en: "Verify components." }
+`;export{e as default};

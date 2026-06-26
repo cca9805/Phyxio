@@ -1,0 +1,783 @@
+const n=`version: 1
+magnitudes:
+- id: t
+  symbol: 't'
+  nombre:
+    es: tiempo
+    en: time
+  descripcion:
+    es: Tiempo transcurrido desde el instante del lanzamiento.
+    en: Time elapsed since the launch instant.
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: No confundas el instante[[t]]con el tiempo total de vuelo[[T]].
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Fluye siempre hacia adelante.
+      en: Always flows forward.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Instante inicial del disparo.
+      en: Initial shot instant.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: El tiempo[[t]]es el parámetro que vincula el movimiento horizontal con el vertical.
+- id: x
+  symbol: 'x'
+  nombre:
+    es: posición horizontal
+    en: horizontal position
+  descripcion:
+    es: Coordenada horizontal del proyectil en un instante dado.
+    en: Horizontal coordinate of the projectile at a given instant.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: geometric
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: Olvidar que la posición[[x]]depende del origen[[x0]]elegido.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Posición a la derecha (+) o izquierda (-) del origen.
+      en: Position to the right (+) or left (-) of the origin.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El proyectil está en la vertical del origen.
+      en: The projectile is on the vertical of the origin.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: En horizontal, el movimiento es un MRU (velocidad constante).
+- id: y
+  symbol: 'y'
+  nombre:
+    es: altura o posición vertical
+    en: vertical position
+  descripcion:
+    es: Altitud del proyectil respecto al nivel de referencia.
+    en: Altitude of the projectile relative to the reference level.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: No confundas la altura[[y]]con la distancia total recorrida.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Altura por encima (+) o debajo (-) del origen.
+      en: Height above (+) or below (-) the origin.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El proyectil está a nivel del suelo o referencia.
+      en: The projectile is at ground level or reference.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: En vertical, el movimiento es un MRUA (bajo la acción de la gravedad).
+- id: v0
+  symbol: 'v_0'
+  nombre:
+    es: rapidez inicial
+    en: initial speed
+  descripcion:
+    es: Magnitud de la velocidad con la que se dispara el proyectil.
+    en: Magnitude of the velocity at which the projectile is fired.
+  unidad_si: m/s
+  dimension: LT^{-1}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: "La[[v0]]es el módulo; para las ecuaciones necesitas sus componentes."
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Módulo siempre positivo.
+      en: Magnitude always positive.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El proyectil no se lanza (reposo).
+      en: The projectile is not launched (at rest).
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Combinada con el ángulo[[theta]], define toda la trayectoria.
+- id: theta
+  symbol: '\\theta'
+  nombre:
+    es: ángulo de lanzamiento
+    en: launch angle
+  descripcion:
+    es: Ángulo de elevación del disparo respecto a la horizontal.
+    en: Elevation angle of the shot relative to the horizontal.
+  unidad_si: rad
+  dimension: '1'
+  is_vector: false
+  components: null
+  category: geometric
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: "Asegúrate de si el ángulo[[theta]]está en grados o radianes antes de calcular."
+  typical_range: 0 to pi/2 rad.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Elevación positiva o depresión negativa.
+      en: Positive elevation or negative depression.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Lanzamiento puramente horizontal.
+      en: Purely horizontal launch.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: El ángulo de 45° maximiza el alcance horizontal en terreno plano.
+- id: vx0
+  symbol: 'v_{x0}'
+  nombre:
+    es: componente horizontal de la velocidad
+    en: horizontal velocity component
+  descripcion:
+    es: Parte de la velocidad inicial que actúa en el eje X (constante).
+    en: Part of the initial velocity acting on the X axis (constant).
+  unidad_si: m/s
+  dimension: LT^{-1}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: En ausencia de aire, la[[vx0]]no cambia durante todo el vuelo.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Indica si el proyectil avanza (+) o retrocede (-) horizontalmente.
+      en: Indicates if the projectile moves forward (+) or backward (-) horizontally.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Lanzamiento puramente vertical.
+      en: Purely vertical launch.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Se calcula como[[v0]]multiplicado por el coseno del ángulo[[theta]].
+- id: vy0
+  symbol: 'v_{y0}'
+  nombre:
+    es: componente vertical inicial de la velocidad
+    en: initial vertical velocity component
+  descripcion:
+    es: Parte de la velocidad inicial que actúa en el eje Y.
+    en: Part of the initial velocity acting on the Y axis.
+  unidad_si: m/s
+  dimension: LT^{-1}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: La[[vy0]]cambia cada instante debido a la gravedad.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Positivo si se lanza hacia arriba, negativo hacia abajo.
+      en: Positive if thrown upwards, negative downwards.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Lanzamiento horizontal (tiro horizontal).
+      en: Horizontal launch (horizontal shot).
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Se calcula como[[v0]]multiplicado por el seno del ángulo[[theta]].
+- id: g
+  symbol: 'g'
+  nombre:
+    es: aceleración de la gravedad
+    en: gravitational acceleration
+  descripcion:
+    es: Aceleración constante hacia abajo que curva la trayectoria (9.8 m/s²).
+    en: Constant downward acceleration that curves the trajectory (9.8 m/s²).
+  unidad_si: m/s^2
+  dimension: LT^{-2}
+  is_vector: false
+  components: null
+  category: field
+  physical_role: field_strength
+  used_in:
+  - tiro-parabolico
+  common_mistake: "No olvides que la[[g]]solo afecta a la componente vertical[[vy]]."
+  typical_range: 9.8 m/s².
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Magnitud de la aceleración.
+      en: Magnitude of the acceleration.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Sin gravedad no habría parábola, sino una línea recta.
+      en: Without gravity there would be no parabola, but a straight line.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: 9.8
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: En las ecuaciones suele aparecer con signo negativo si el eje Y apunta arriba.
+- id: R
+  symbol: 'R'
+  nombre:
+    es: alcance horizontal
+    en: horizontal range
+  descripcion:
+    es: Distancia horizontal total recorrida por el proyectil hasta el impacto.
+    en: Total horizontal distance traveled by the projectile until impact.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: geometric
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: La fórmula clásica de[[R]]solo sirve si el proyectil aterriza a la misma altura inicial.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Distancia total.
+      en: Total distance.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El proyectil cae en el mismo punto horizontal (lanzamiento vertical).
+      en: The projectile falls at the same horizontal point (vertical launch).
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Se obtiene multiplicando la velocidad horizontal[[vx0]]por el tiempo total de vuelo.
+- id: h_max
+  symbol: 'h_{max}'
+  nombre:
+    es: altura máxima
+    en: maximum height
+  descripcion:
+    es: Máxima altura vertical alcanzada respecto al punto de lanzamiento.
+    en: Maximum vertical height reached relative to the launch point.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: "En el ápice (altura máxima), la velocidad vertical es cero, pero la horizontal[[vx0]]sigue existiendo."
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Magnitud del ascenso máximo.
+      en: Magnitude of the maximum ascent.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Lanzamiento horizontal o hacia abajo.
+      en: Horizontal or downward launch.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Ocurre cuando la velocidad vertical[[vy]]se anula momentáneamente.
+- id: t_impacto
+  symbol: 't_{impacto}'
+  nombre:
+    es: tiempo de impacto
+    en: impact time
+  descripcion:
+    es: Tiempo total que el proyectil permanece en el aire.
+    en: Total time the projectile remains in the air.
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: Si se lanza desde el suelo, el tiempo de impacto es el doble del tiempo al ápice.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Duración total.
+      en: Total duration.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Impacto instantáneo.
+      en: Instantaneous impact.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Se calcula resolviendo la ecuación de posición vertical para la altura final de impacto.
+- id: x0
+  symbol: 'x_0'
+  nombre:
+    es: posición horizontal inicial
+    en: initial horizontal position
+  descripcion:
+    es: Coordenada horizontal del punto de lanzamiento.
+    en: Horizontal coordinate of the launch point.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: initial_condition
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: Suele tomarse [[x0]] = 0 por convenio; si no es así, todas las fórmulas de posición deben ajustarse.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Posición a la derecha (+) o izquierda (-) del origen.
+      en: Position to the right (+) or left (-) of the origin.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El lanzamiento ocurre en el origen horizontal.
+      en: The launch occurs at the horizontal origin.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Fijar [[x0]] = 0 simplifica el álgebra sin perder generalidad.
+- id: y0
+  symbol: 'y_0'
+  nombre:
+    es: posición vertical inicial
+    en: initial vertical position
+  descripcion:
+    es: Altura del punto de lanzamiento respecto al nivel de referencia.
+    en: Height of the launch point relative to the reference level.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: initial_condition
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: Si [[y0]] es distinto de cero, la fórmula de alcance básico deja de ser válida.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Altura por encima (+) o por debajo (-) del nivel de referencia.
+      en: Height above (+) or below (-) the reference level.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El lanzamiento ocurre al nivel del suelo o referencia.
+      en: Launch occurs at ground level or reference.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Diferencia [[y0]] de [[h_max]] para no confundir la posición de partida con la altura ganada.
+- id: vx
+  symbol: 'v_x'
+  nombre:
+    es: componente horizontal de la velocidad en el instante t
+    en: horizontal velocity component at instant t
+  descripcion:
+    es: Valor de la velocidad en el eje X en cualquier instante. En ausencia de resistencia del aire es igual a [[vx0]] durante todo el vuelo.
+    en: Value of velocity along the X axis at any instant. In the absence of air resistance it equals [[vx0]] throughout the flight.
+  unidad_si: m/s
+  dimension: LT^{-1}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: "[[vx]] = [[vx0]] siempre bajo el modelo ideal; errores aparecen si se aplica g también al eje horizontal."
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Indica la dirección horizontal del movimiento.
+      en: Indicates the horizontal direction of motion.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Sin componente horizontal (lanzamiento vertical puro).
+      en: No horizontal component (purely vertical launch).
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: En la gráfica vx-t la curva es una recta horizontal constante igual a [[vx0]].
+- id: vy
+  symbol: 'v_y'
+  nombre:
+    es: componente vertical de la velocidad en el instante t
+    en: vertical velocity component at instant t
+  descripcion:
+    es: Valor de la velocidad en el eje Y en el instante t. Decrece linealmente con el tiempo por efecto de [[g]].
+    en: Value of velocity along the Y axis at instant t. Decreases linearly with time due to [[g]].
+  unidad_si: m/s
+  dimension: LT^{-1}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: "[[vy]] se anula en el ápice pero [[vx]] no; la velocidad total en el ápice es [[vx0]], no cero."
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Positivo en la fase ascendente, negativo en la fase descendente.
+      en: Positive during ascent, negative during descent.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El proyectil está en el ápice (altura máxima).
+      en: The projectile is at the apex (maximum height).
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: En la gráfica vy-t es una recta con pendiente −g que cruza el cero en t = [[t_ap]].
+- id: v
+  symbol: 'v'
+  nombre:
+    es: módulo de la velocidad instantánea
+    en: instantaneous speed magnitude
+  descripcion:
+    es: Rapidez del proyectil en cualquier instante, obtenida por el teorema de Pitágoras a partir de [[vx]] y [[vy]].
+    en: Speed of the projectile at any instant, obtained via the Pythagorean theorem from [[vx]] and [[vy]].
+  unidad_si: m/s
+  dimension: LT^{-1}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: "[[v]] es mínimo en el ápice (vale [[vx0]]), no cero; solo [[vy]] se anula ahí."
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Magnitud siempre positiva.
+      en: Magnitude always positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Imposible si hay velocidad horizontal no nula.
+      en: Impossible if there is non-zero horizontal velocity.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Mínima en el ápice (= [[vx0]]), máxima al impactar cuando [[y0]] = 0.
+- id: t_ap
+  symbol: 't_{ap}'
+  nombre:
+    es: tiempo hasta el ápice
+    en: time to apex
+  descripcion:
+    es: Instante en que el proyectil alcanza su punto más alto (cuando [[vy]] = 0).
+    en: Instant at which the projectile reaches its highest point (when [[vy]] = 0).
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: El tiempo de vuelo total sobre terreno plano es 2·[[t_ap]], no [[t_ap]].
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Duración positiva hasta el punto más alto.
+      en: Positive duration up to the highest point.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Lanzamiento horizontal sin componente vertical inicial.
+      en: Horizontal launch with no initial vertical component.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Se obtiene igualando [[vy]] = 0 en la ecuación de velocidad vertical.
+- id: y_max
+  symbol: 'y_{max}'
+  nombre:
+    es: altura máxima absoluta
+    en: absolute maximum height
+  descripcion:
+    es: Coordenada vertical máxima alcanzada por el proyectil, incluyendo la altura de lanzamiento [[y0]].
+    en: Maximum vertical coordinate reached by the projectile, including the launch height [[y0]].
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: "[[y_max]] = [[y0]] + [[h_max]]; confundirlos genera errores cuando [[y0]] ≠ 0."
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Altitud máxima absoluta, positiva sobre el nivel de referencia.
+      en: Absolute maximum altitude, positive above the reference level.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El proyectil no asciende (lanzamiento horizontal desde el suelo).
+      en: The projectile does not ascend (horizontal launch from ground level).
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Cuando [[y0]] = 0, [[y_max]] y [[h_max]] son equivalentes.
+- id: T
+  symbol: 'T'
+  nombre:
+    es: tiempo de vuelo en terreno plano
+    en: flight time on flat ground
+  descripcion:
+    es: Tiempo total de vuelo cuando el proyectil aterriza a la misma altura desde la que se lanzó ([[y0]] = [[y_impacto]]).
+    en: Total flight time when the projectile lands at the same height from which it was launched ([[y0]] = [[y_impacto]]).
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: "[[T]] = 2·[[t_ap]] solo cuando el aterrizaje es al mismo nivel; en general usa [[t_impacto]]."
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Duración total del vuelo.
+      en: Total flight duration.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: El proyectil no puede tener tiempo de vuelo nulo si tiene velocidad vertical inicial.
+      en: The projectile cannot have zero flight time with a non-zero initial vertical velocity.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: En terreno plano [[T]] = 2·[[t_ap]] = 2·[[vy0]]/g.
+- id: y_impacto
+  symbol: 'y_{impacto}'
+  nombre:
+    es: altura de impacto
+    en: impact height
+  descripcion:
+    es: Coordenada vertical del punto donde el proyectil aterriza. Puede ser igual, mayor o menor que [[y0]].
+    en: Vertical coordinate of the landing point. May be equal to, greater than, or less than [[y0]].
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: boundary_condition
+  physical_role: physical_quantity
+  used_in:
+  - tiro-parabolico
+  common_mistake: Si [[y_impacto]] = [[y0]] se puede usar la fórmula simple de alcance; en cualquier otro caso es necesaria la ecuación cuadrática.
+  typical_range: Context-dependent.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Puede ser positiva o negativa respecto al nivel de referencia.
+      en: Can be positive or negative relative to the reference level.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El proyectil aterriza al nivel de referencia.
+      en: The projectile lands at the reference level.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - tiro-parabolico
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Define la condición de cierre del problema de tiro parabólico junto con [[t_impacto]].
+`;export{n as default};

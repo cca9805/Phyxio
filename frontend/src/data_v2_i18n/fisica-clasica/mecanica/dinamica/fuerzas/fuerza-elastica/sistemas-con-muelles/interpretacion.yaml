@@ -1,0 +1,776 @@
+version: 5
+id: interpretacion-sistemas-con-muelles
+leaf_id: sistemas-con-muelles
+
+nombre:
+  es: Interpretacion de sistemas con muelles
+  en: Spring systems interpretation
+
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: dinamica
+  parent_id: fuerza-elastica
+  ruta_relativa: fisica-clasica/mecanica/dinamica/fuerzas/fuerza-elastica/sistemas-con-muelles
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretacion
+    en: Interpretation
+  priority_order:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+
+dependencies:
+  formulas:
+  - hooke_equivalente_1d
+  - hooke_equivalente_modulo
+  - paralelo_dos_muelles
+  - serie_dos_muelles
+  - reparto_serie
+  - reparto_paralelo
+  - equilibrio_vertical
+  magnitudes:
+  - Fel
+  - Fm
+  - keq
+  - k1
+  - k2
+  - x
+  - x1
+  - x2
+  - F1
+  - F2
+  - x_eq
+  - m
+  - g
+
+graph_binding:
+  enabled: false
+
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+  keq:
+    summary_rules:
+    - id: keq_s1
+      when: "true"
+      status: info
+      text:
+        es: "La rigidez equivalente vale {keq} N/m."
+        en: "The equivalent stiffness is {keq} N/m."
+    physical_reading_rules:
+    - id: keq_pr1
+      when: "keq > 10000"
+      status: warning
+      text:
+        es: "Sistema muy rigido; deformacion pequena incluso con fuerzas grandes."
+        en: "Very stiff system; small deformation even under large forces."
+    - id: keq_pr2
+      when: "true"
+      status: info
+      text:
+        es: "Rigidez en rango intermedio."
+        en: "Stiffness in intermediate range."
+    coherence_rules:
+    - id: keq_c1
+      when: "keq <= 0"
+      status: error
+      text:
+        es: "La rigidez no puede ser cero o negativa."
+        en: "Stiffness cannot be zero or negative."
+    - id: keq_c2
+      when: "true"
+      status: ok
+      text:
+        es: "Valor positivo y coherente."
+        en: "Positive and coherent value."
+    model_validity_rules:
+    - id: keq_mv1
+      when: "true"
+      status: ok
+      text:
+        es: "El modelo lineal es valido para esta rigidez."
+        en: "The linear model is valid for this stiffness."
+    graph_rules:
+    - id: keq_g1
+      when: "true"
+      status: info
+      text:
+        es: "La pendiente de la recta F vs x equivale a K."
+        en: "The slope of the F vs x line equals K."
+    likely_errors:
+    - id: keq_le1
+      when: "true"
+      status: warning
+      text:
+        es: "Verifica que no sumaste directamente las k en serie."
+        en: "Verify you did not directly add k in series."
+    next_step_rules:
+    - id: keq_ns1
+      when: "true"
+      status: info
+      text:
+        es: "Usa K en la ley de Hooke equivalente."
+        en: "Use K in the equivalent Hooke law."
+  Fel:
+    summary_rules:
+    - id: Fel_s1
+      when: "true"
+      status: info
+      text:
+        es: "La fuerza elastica total vale {Fel} N."
+        en: "The total elastic force is {Fel} N."
+    physical_reading_rules:
+    - id: Fel_pr1
+      when: "true"
+      status: info
+      text:
+        es: "Fuerza restauradora proporcional a la deformacion."
+        en: "Restoring force proportional to the deformation."
+    coherence_rules:
+    - id: Fel_c1
+      when: "true"
+      status: ok
+      text:
+        es: "Signo coherente con la deformacion."
+        en: "Sign coherent with the deformation."
+    model_validity_rules:
+    - id: Fel_mv1
+      when: "true"
+      status: ok
+      text:
+        es: "Modelo lineal valido."
+        en: "Linear model valid."
+    graph_rules:
+    - id: Fel_g1
+      when: "true"
+      status: info
+      text:
+        es: "Punto sobre la recta F vs x."
+        en: "Point on the F vs x line."
+    likely_errors:
+    - id: Fel_le1
+      when: "true"
+      status: warning
+      text:
+        es: "Comprueba el signo de la deformacion."
+        en: "Check the sign of the deformation."
+    next_step_rules:
+    - id: Fel_ns1
+      when: "true"
+      status: info
+      text:
+        es: "Compara con el peso para el equilibrio."
+        en: "Compare with the weight for equilibrium."
+  Fm:
+    summary_rules:
+    - id: Fm_s1
+      when: "true"
+      status: info
+      text:
+        es: "El modulo de la fuerza elastica vale {Fm} N."
+        en: "The elastic force magnitude is {Fm} N."
+    physical_reading_rules:
+    - id: Fm_pr1
+      when: "true"
+      status: info
+      text:
+        es: "Modulo siempre positivo de la fuerza elastica."
+        en: "Always-positive magnitude of the elastic force."
+    coherence_rules:
+    - id: Fm_c1
+      when: "true"
+      status: ok
+      text:
+        es: "Modulo positivo y coherente."
+        en: "Positive and coherent magnitude."
+    model_validity_rules:
+    - id: Fm_mv1
+      when: "true"
+      status: ok
+      text:
+        es: "Modelo lineal valido."
+        en: "Linear model valid."
+    graph_rules:
+    - id: Fm_g1
+      when: "true"
+      status: info
+      text:
+        es: "Valor absoluto sobre la recta."
+        en: "Absolute value on the line."
+    likely_errors:
+    - id: Fm_le1
+      when: "true"
+      status: warning
+      text:
+        es: "No confundir modulo con componente vectorial."
+        en: "Do not confuse magnitude with vector component."
+    next_step_rules:
+    - id: Fm_ns1
+      when: "true"
+      status: info
+      text:
+        es: "Usa el modulo para calcular energia."
+        en: "Use the magnitude to compute energy."
+  x_eq:
+    summary_rules:
+    - id: xeq_s1
+      when: "true"
+      status: info
+      text:
+        es: "La deformacion de equilibrio vale {x_eq} m."
+        en: "The equilibrium deformation is {x_eq} m."
+    physical_reading_rules:
+    - id: xeq_pr1
+      when: "true"
+      status: info
+      text:
+        es: "Deformacion estatica bajo el peso propio."
+        en: "Static deformation under own weight."
+    coherence_rules:
+    - id: xeq_c1
+      when: "true"
+      status: ok
+      text:
+        es: "Deformacion positiva bajo gravedad."
+        en: "Positive deformation under gravity."
+    model_validity_rules:
+    - id: xeq_mv1
+      when: "true"
+      status: ok
+      text:
+        es: "Valido si la deformacion es pequena."
+        en: "Valid if deformation is small."
+    graph_rules:
+    - id: xeq_g1
+      when: "true"
+      status: info
+      text:
+        es: "Interseccion con la recta de peso."
+        en: "Intersection with the weight line."
+    likely_errors:
+    - id: xeq_le1
+      when: "true"
+      status: warning
+      text:
+        es: "Comprueba que usaste K y no k individual."
+        en: "Check that you used K and not individual k."
+    next_step_rules:
+    - id: xeq_ns1
+      when: "true"
+      status: info
+      text:
+        es: "A partir de x0 calcula la frecuencia natural."
+        en: "From x0 compute the natural frequency."
+  x:
+    summary_rules:
+    - id: x_s1
+      when: "true"
+      status: info
+      text:
+        es: "La deformacion total vale {x} m."
+        en: "The total deformation is {x} m."
+    physical_reading_rules:
+    - id: x_pr1
+      when: "true"
+      status: info
+      text:
+        es: "Deformacion total del sistema equivalente."
+        en: "Total deformation of the equivalent system."
+    coherence_rules:
+    - id: x_c1
+      when: "true"
+      status: ok
+      text:
+        es: "Coherente con la fuerza y la rigidez."
+        en: "Coherent with force and stiffness."
+    model_validity_rules:
+    - id: x_mv1
+      when: "true"
+      status: ok
+      text:
+        es: "Modelo valido si la deformacion es lineal."
+        en: "Model valid if deformation is linear."
+    graph_rules:
+    - id: x_g1
+      when: "true"
+      status: info
+      text:
+        es: "Eje horizontal del grafico F vs x."
+        en: "Horizontal axis of the F vs x graph."
+    likely_errors:
+    - id: x_le1
+      when: "true"
+      status: warning
+      text:
+        es: "No confundir deformacion parcial con total."
+        en: "Do not confuse partial with total deformation."
+    next_step_rules:
+    - id: x_ns1
+      when: "true"
+      status: info
+      text:
+        es: "Usa x para obtener la fuerza con Hooke."
+        en: "Use x to find the force via Hooke law."
+  k1:
+    summary_rules:
+    - id: k1_s1
+      when: "true"
+      status: info
+      text:
+        es: "La rigidez del muelle 1 vale {k1} N/m."
+        en: "The stiffness of spring 1 is {k1} N/m."
+    physical_reading_rules:
+    - id: k1_pr1
+      when: "true"
+      status: info
+      text:
+        es: "Rigidez individual del primer muelle."
+        en: "Individual stiffness of the first spring."
+    coherence_rules:
+    - id: k1_c1
+      when: "true"
+      status: ok
+      text:
+        es: "Valor positivo."
+        en: "Positive value."
+    model_validity_rules:
+    - id: k1_mv1
+      when: "true"
+      status: ok
+      text:
+        es: "Muelle lineal dentro del rango elastico."
+        en: "Linear spring within elastic range."
+    graph_rules:
+    - id: k1_g1
+      when: "true"
+      status: info
+      text:
+        es: "Pendiente del muelle individual."
+        en: "Slope of the individual spring."
+    likely_errors:
+    - id: k1_le1
+      when: "true"
+      status: warning
+      text:
+        es: "No confundir k1 con K."
+        en: "Do not confuse k1 with K."
+    next_step_rules:
+    - id: k1_ns1
+      when: "true"
+      status: info
+      text:
+        es: "Combina con k2 para obtener K."
+        en: "Combine with k2 to get K."
+  k2:
+    summary_rules:
+    - id: k2_s1
+      when: "true"
+      status: info
+      text:
+        es: "La rigidez del muelle 2 vale {k2} N/m."
+        en: "The stiffness of spring 2 is {k2} N/m."
+    physical_reading_rules:
+    - id: k2_pr1
+      when: "true"
+      status: info
+      text:
+        es: "Rigidez individual del segundo muelle."
+        en: "Individual stiffness of the second spring."
+    coherence_rules:
+    - id: k2_c1
+      when: "true"
+      status: ok
+      text:
+        es: "Valor positivo."
+        en: "Positive value."
+    model_validity_rules:
+    - id: k2_mv1
+      when: "true"
+      status: ok
+      text:
+        es: "Muelle lineal dentro del rango elastico."
+        en: "Linear spring within elastic range."
+    graph_rules:
+    - id: k2_g1
+      when: "true"
+      status: info
+      text:
+        es: "Pendiente del muelle individual."
+        en: "Slope of the individual spring."
+    likely_errors:
+    - id: k2_le1
+      when: "true"
+      status: warning
+      text:
+        es: "No confundir k2 con K."
+        en: "Do not confuse k2 with K."
+    next_step_rules:
+    - id: k2_ns1
+      when: "true"
+      status: info
+      text:
+        es: "Combina con k1 para obtener K."
+        en: "Combine with k1 to get K."
+  m:
+    summary_rules:
+    - id: m_s1
+      when: "true"
+      status: info
+      text:
+        es: "La masa del bloque vale {m} kg."
+        en: "The block mass is {m} kg."
+    physical_reading_rules:
+    - id: m_pr1
+      when: "true"
+      status: info
+      text:
+        es: "Masa suspendida del sistema de muelles."
+        en: "Mass suspended from the spring system."
+    coherence_rules:
+    - id: m_c1
+      when: "true"
+      status: ok
+      text:
+        es: "Masa positiva."
+        en: "Positive mass."
+    model_validity_rules:
+    - id: m_mv1
+      when: "true"
+      status: ok
+      text:
+        es: "Masa puntual valida."
+        en: "Valid point mass."
+    graph_rules:
+    - id: m_g1
+      when: "true"
+      status: info
+      text:
+        es: "Parametro en el eje del grafico."
+        en: "Parameter on the graph axis."
+    likely_errors:
+    - id: m_le1
+      when: "true"
+      status: warning
+      text:
+        es: "No incluir la masa de los muelles."
+        en: "Do not include spring mass."
+    next_step_rules:
+    - id: m_ns1
+      when: "true"
+      status: info
+      text:
+        es: "Usa m para el equilibrio vertical."
+        en: "Use m for vertical equilibrium."
+  x1:
+    summary_rules:
+    - id: x1_s1
+      when: "true"
+      status: info
+      text:
+        es: "La deformacion del muelle 1 vale {x1} m."
+        en: "The deformation of spring 1 is {x1} m."
+    physical_reading_rules:
+    - id: x1_pr1
+      when: "true"
+      status: info
+      text:
+        es: "Deformacion parcial del primer muelle en serie."
+        en: "Partial deformation of the first spring in series."
+    coherence_rules:
+    - id: x1_c1
+      when: "true"
+      status: ok
+      text:
+        es: "Coherente con la fuerza y la rigidez."
+        en: "Coherent with force and stiffness."
+    model_validity_rules:
+    - id: x1_mv1
+      when: "true"
+      status: ok
+      text:
+        es: "Modelo valido."
+        en: "Model valid."
+    graph_rules:
+    - id: x1_g1
+      when: "true"
+      status: info
+      text:
+        es: "Contribucion parcial a la deformacion total."
+        en: "Partial contribution to total deformation."
+    likely_errors:
+    - id: x1_le1
+      when: "true"
+      status: warning
+      text:
+        es: "Comprobar que x1 y x2 suman x."
+        en: "Check that x1 and x2 add up to x."
+    next_step_rules:
+    - id: x1_ns1
+      when: "true"
+      status: info
+      text:
+        es: "Suma x1 y x2 para la deformacion total."
+        en: "Add x1 and x2 for total deformation."
+  x2:
+    summary_rules:
+    - id: x2_s1
+      when: "true"
+      status: info
+      text:
+        es: "La deformacion del muelle 2 vale {x2} m."
+        en: "The deformation of spring 2 is {x2} m."
+    physical_reading_rules:
+    - id: x2_pr1
+      when: "true"
+      status: info
+      text:
+        es: "Deformacion parcial del segundo muelle en serie."
+        en: "Partial deformation of the second spring in series."
+    coherence_rules:
+    - id: x2_c1
+      when: "true"
+      status: ok
+      text:
+        es: "Coherente con la fuerza y la rigidez."
+        en: "Coherent with force and stiffness."
+    model_validity_rules:
+    - id: x2_mv1
+      when: "true"
+      status: ok
+      text:
+        es: "Modelo valido."
+        en: "Model valid."
+    graph_rules:
+    - id: x2_g1
+      when: "true"
+      status: info
+      text:
+        es: "Contribucion parcial a la deformacion total."
+        en: "Partial contribution to total deformation."
+    likely_errors:
+    - id: x2_le1
+      when: "true"
+      status: warning
+      text:
+        es: "Comprobar que x1 y x2 suman x."
+        en: "Check that x1 and x2 add up to x."
+    next_step_rules:
+    - id: x2_ns1
+      when: "true"
+      status: info
+      text:
+        es: "Suma x1 y x2 para la deformacion total."
+        en: "Add x1 and x2 for total deformation."
+  F1:
+    summary_rules:
+    - id: F1_s1
+      when: "true"
+      status: info
+      text:
+        es: "La fuerza del muelle 1 vale {F1} N."
+        en: "The force of spring 1 is {F1} N."
+    physical_reading_rules:
+    - id: F1_pr1
+      when: "true"
+      status: info
+      text:
+        es: "Fuerza parcial del primer muelle en paralelo."
+        en: "Partial force of the first spring in parallel."
+    coherence_rules:
+    - id: F1_c1
+      when: "true"
+      status: ok
+      text:
+        es: "Coherente con la rigidez y la deformacion."
+        en: "Coherent with stiffness and deformation."
+    model_validity_rules:
+    - id: F1_mv1
+      when: "true"
+      status: ok
+      text:
+        es: "Modelo valido."
+        en: "Model valid."
+    graph_rules:
+    - id: F1_g1
+      when: "true"
+      status: info
+      text:
+        es: "Contribucion parcial a la fuerza total."
+        en: "Partial contribution to total force."
+    likely_errors:
+    - id: F1_le1
+      when: "true"
+      status: warning
+      text:
+        es: "Comprobar que F1 y F2 suman Fm."
+        en: "Check that F1 and F2 add up to Fm."
+    next_step_rules:
+    - id: F1_ns1
+      when: "true"
+      status: info
+      text:
+        es: "Suma F1 y F2 para la fuerza total."
+        en: "Add F1 and F2 for total force."
+  F2:
+    summary_rules:
+    - id: F2_s1
+      when: "true"
+      status: info
+      text:
+        es: "La fuerza del muelle 2 vale {F2} N."
+        en: "The force of spring 2 is {F2} N."
+    physical_reading_rules:
+    - id: F2_pr1
+      when: "true"
+      status: info
+      text:
+        es: "Fuerza parcial del segundo muelle en paralelo."
+        en: "Partial force of the second spring in parallel."
+    coherence_rules:
+    - id: F2_c1
+      when: "true"
+      status: ok
+      text:
+        es: "Coherente con la rigidez y la deformacion."
+        en: "Coherent with stiffness and deformation."
+    model_validity_rules:
+    - id: F2_mv1
+      when: "true"
+      status: ok
+      text:
+        es: "Modelo valido."
+        en: "Model valid."
+    graph_rules:
+    - id: F2_g1
+      when: "true"
+      status: info
+      text:
+        es: "Contribucion parcial a la fuerza total."
+        en: "Partial contribution to total force."
+    likely_errors:
+    - id: F2_le1
+      when: "true"
+      status: warning
+      text:
+        es: "Comprobar que F1 y F2 suman Fm."
+        en: "Check that F1 and F2 add up to Fm."
+    next_step_rules:
+    - id: F2_ns1
+      when: "true"
+      status: info
+      text:
+        es: "Suma F1 y F2 para la fuerza total."
+        en: "Add F1 and F2 for total force."
+  g:
+    summary_rules:
+    - id: g_s1
+      when: "true"
+      status: info
+      text:
+        es: "La aceleracion gravitatoria es {g} m/s2."
+        en: "The gravitational acceleration is {g} m/s2."
+    physical_reading_rules:
+    - id: g_pr1
+      when: "true"
+      status: info
+      text:
+        es: "Gravedad local utilizada en el equilibrio vertical."
+        en: "Local gravity used in vertical equilibrium."
+    coherence_rules:
+    - id: g_c1
+      when: "true"
+      status: ok
+      text:
+        es: "Valor positivo."
+        en: "Positive value."
+    model_validity_rules:
+    - id: g_mv1
+      when: "true"
+      status: ok
+      text:
+        es: "Gravedad constante."
+        en: "Constant gravity."
+    graph_rules:
+    - id: g_g1
+      when: "true"
+      status: info
+      text:
+        es: "No aparece directamente en el grafico."
+        en: "Does not appear directly in the graph."
+    likely_errors:
+    - id: g_le1
+      when: "true"
+      status: warning
+      text:
+        es: "No olvidar las unidades de g."
+        en: "Do not forget the units of g."
+    next_step_rules:
+    - id: g_ns1
+      when: "true"
+      status: info
+      text:
+        es: "Usa g para el equilibrio vertical."
+        en: "Use g for vertical equilibrium."
+
+output_contract:
+  version: 1
+  sections:
+  - summary
+  - coherence
+  - physical_reading
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+
+cross_checks:
+- pair: [ keq, Fel ]
+  condition: "Fel == -keq * x"
+  message:
+    es: "La fuerza debe cumplir F = -K x."
+    en: "The force must satisfy F = -K x."
+
+error_patterns:
+- id: serie_sum
+  trigger: "keq > k1 and keq > k2"
+  message:
+    es: "En serie K debe ser menor que cada k individual."
+    en: "In series K must be less than each individual k."

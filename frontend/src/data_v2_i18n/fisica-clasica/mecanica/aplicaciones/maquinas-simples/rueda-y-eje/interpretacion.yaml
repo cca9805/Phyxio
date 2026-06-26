@@ -1,0 +1,800 @@
+version: 5
+id: interpretacion-rueda-y-eje
+leaf_id: rueda-y-eje
+nombre:
+  es: "Interpretación experta de la física de la rueda y el eje"
+  en: "Expert interpretation of wheel-and-axle physics"
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: aplicaciones
+  parent_id: maquinas-simples
+  ruta_relativa: fisica-clasica/mecanica/aplicaciones/maquinas-simples/rueda-y-eje
+
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: "Resumen del equilibrio de torques"
+      en: "Torque balance summary"
+  physical_reading:
+    title:
+      es: "Análisis físico profundo"
+      en: "Deep physical analysis"
+  coherence:
+    title:
+      es: "Validación de coherencia"
+      en: "Coherence validation"
+  model_validity:
+    title:
+      es: "Límites del modelo y suposiciones"
+      en: "Model limits and assumptions"
+  graph_reading:
+    title:
+      es: "Lectura del diagrama rueda-eje"
+      en: "Wheel-axle diagram reading"
+  likely_errors:
+    title:
+      es: "Detección proactiva de errores"
+      en: "Proactive error detection"
+  next_step:
+    title:
+      es: "Ruta de aprendizaje sugerida"
+      en: "Suggested learning path"
+
+ui:
+  enabled: true
+  display_modes:
+  - calculator_inline
+  - graph_inline
+  - dedicated_tab
+  - modal
+  labels:
+  - wheel_and_axle
+  - mechanical_advantage
+  - torque_balance
+  priority_order:
+  - summary_rules
+  - physical_reading_rules
+  - coherence_rules
+  - model_validity_rules
+  - graph_rules
+  - likely_errors
+  - next_step_rules
+  inline_limits: 3
+
+dependencies:
+  formulas:
+  - ley_rueda_ideal
+  - ventaja_mecanica_ideal
+  - ley_rueda_real
+  - ventaja_mecanica_real
+  - relacion_desplazamientos
+  - balance_energia_rueda
+  - torque
+  magnitudes:
+  - FR
+  - Fr
+  - R
+  - r
+  - eta
+  - VM
+  - VM_real
+  - sR
+  - sr
+  - tau
+
+global_context:
+  physical_domain:
+    es: "Estática y cinemática de la rueda y el eje; equilibrio de torques, ventaja mecánica y rendimiento."
+    en: "Statics and kinematics of the wheel and axle; torque balance, mechanical advantage, and efficiency."
+  axis_convention:
+    es: "Fuerzas tangenciales positivas en la dirección del giro útil. Torques medidos respecto al eje de rotación común."
+    en: "Tangential forces positive in the direction of useful rotation. Torques measured about the common axis of rotation."
+  standard_assumptions:
+  - Rueda y eje son rígidos y solidarios: comparten el mismo ángulo de giro.
+  - Masa de la rueda y del eje despreciables frente a las fuerzas aplicadas.
+  - Rozamiento modelado exclusivamente mediante el rendimiento eta.
+  - El radio de la rueda es siempre mayor que el radio del eje (R > r).
+  standard_warnings:
+  - "Regla de Oro: lo que ganas en fuerza lo pagas en recorrido de arco en la rueda."
+  - "El torque de entrada y el torque de salida se miden sobre el mismo eje; no son independientes."
+  - "Un rendimiento bajo (eta < 0.7) puede hacer que la ventaja mecánica real sea menor que 1, convirtiendo la máquina en un multiplicador de recorrido en vez de fuerza."
+
+targets:
+  FR:
+    magnitude_type: fuerza
+    semantic_role:
+      es: "Esfuerzo aplicado en la rueda"
+      en: "Effort applied at the wheel"
+    summary_rules:
+    - id: fr_sum_ideal_ok
+      when: "result < Fr"
+      status: ok
+      text:
+        es: "El esfuerzo [[FR]] es menor que la resistencia [[Fr]], lo que confirma ventaja mecánica positiva. La razón de radios R/r amplifica la fuerza en el eje."
+        en: "Effort [[FR]] is less than resistance [[Fr]], confirming positive mechanical advantage. The radius ratio R/r amplifies force at the axle."
+    - id: fr_sum_equal
+      when: "result == Fr"
+      status: info
+      text:
+        es: "El esfuerzo coincide con la resistencia: la razón de radios es 1 o el rendimiento compensa exactamente la ventaja geométrica. No hay beneficio mecánico neto."
+        en: "Effort equals resistance: the radius ratio is 1 or efficiency exactly offsets the geometric advantage. No net mechanical benefit."
+    - id: fr_sum_high
+      when: "result > Fr"
+      status: warning
+      text:
+        es: "El esfuerzo [[FR]] supera la resistencia [[Fr]]. Si R > r, esto apunta a un rendimiento muy bajo. Verifica el valor de [[eta]]."
+        en: "Effort [[FR]] exceeds resistance [[Fr]]. If R > r, this points to very low efficiency. Check the value of [[eta]]."
+    physical_reading_rules:
+    - id: fr_read_torque
+      when: "true"
+      status: info
+      text:
+        es: "El esfuerzo [[FR]] genera un torque FR·R que debe igualar el torque de la resistencia Fr·r. A mayor radio de rueda, menor esfuerzo necesario para el mismo torque en el eje."
+        en: "Effort [[FR]] generates a torque FR·R that must balance the resistance torque Fr·r. The larger the wheel radius, the less effort needed for the same axle torque."
+    - id: fr_read_energy
+      when: "true"
+      status: info
+      text:
+        es: "Por la regla de oro, [[FR]] se aplica en un radio grande y recorre un arco grande [[sR]]; el producto FR·sR es el trabajo de entrada que parcialmente se convierte en trabajo útil Fr·sr."
+        en: "By the golden rule, [[FR]] is applied at a large radius and travels a large arc [[sR]]; the product FR·sR is the input work that is partially converted into useful work Fr·sr."
+    coherence_rules:
+    - id: fr_coh_neg
+      when: "result <= 0"
+      status: danger
+      text:
+        es: "Incoherencia: el esfuerzo debe ser estrictamente positivo."
+        en: "Incoherent: effort must be strictly positive."
+    - id: fr_coh_ok
+      when: "true"
+      status: ok
+      text:
+        es: "[[FR]] positivo y coherente con la geometría del sistema."
+        en: "[[FR]] positive and coherent with the system geometry."
+    model_validity_rules:
+    - id: fr_mod_real
+      when: "true"
+      status: info
+      text:
+        es: "En el modelo ideal (eta = 1), [[FR]] = Fr·r/R. En sistemas reales, [[FR]] aumenta porque parte del torque de entrada se disipa en rozamiento."
+        en: "In the ideal model (eta = 1), [[FR]] = Fr·r/R. In real systems, [[FR]] increases because part of the input torque is dissipated by friction."
+    graph_rules:
+    - id: fr_graph
+      when: "true"
+      status: info
+      text:
+        es: "[[FR]] se representa como una flecha tangencial sobre el borde exterior de la rueda grande, apuntando en el sentido del giro útil."
+        en: "[[FR]] is shown as a tangential arrow on the outer edge of the large wheel, pointing in the direction of useful rotation."
+    likely_errors:
+    - id: fr_err_radii
+      when: "true"
+      status: warning
+      text:
+        es: "Error frecuente: confundir qué radio corresponde a la rueda y cuál al eje. [[FR]] siempre actúa sobre el radio mayor [[R]]."
+        en: "Common error: confusing which radius belongs to the wheel and which to the axle. [[FR]] always acts on the larger radius [[R]]."
+    next_step_rules:
+    - id: fr_next
+      when: "true"
+      status: info
+      text:
+        es: "Calcula el arco recorrido [[sR]] para verificar la regla de oro: FR·sR debe ser mayor o igual que Fr·sr."
+        en: "Calculate the arc traveled [[sR]] to verify the golden rule: FR·sR must be greater than or equal to Fr·sr."
+
+  Fr:
+    magnitude_type: fuerza
+    semantic_role:
+      es: "Resistencia o fuerza de salida en el eje"
+      en: "Resistance or output force at the axle"
+    summary_rules:
+    - id: frr_sum_ok
+      when: "true"
+      status: ok
+      text:
+        es: "La resistencia [[Fr]] en el eje es la fuerza útil obtenida. Es [[VM]] veces el esfuerzo [[FR]] aplicado en la rueda, en el modelo ideal."
+        en: "The resistance [[Fr]] at the axle is the useful output force. It equals [[VM]] times the effort [[FR]] applied at the wheel, in the ideal model."
+    physical_reading_rules:
+    - id: frr_read_ok
+      when: "true"
+      status: info
+      text:
+        es: "[[Fr]] actúa sobre el eje de radio pequeño [[r]]. Su torque resistente Fr·r debe ser equilibrado por el torque motor FR·R. Cuanto mayor sea la razón R/r, mayor puede ser [[Fr]] para el mismo [[FR]]."
+        en: "[[Fr]] acts on the small-radius axle [[r]]. Its resistive torque Fr·r must be balanced by the driving torque FR·R. The greater the ratio R/r, the larger [[Fr]] can be for the same [[FR]]."
+    coherence_rules:
+    - id: frr_coh_neg
+      when: "result <= 0"
+      status: danger
+      text:
+        es: "La resistencia debe ser positiva."
+        en: "The resistance must be positive."
+    - id: frr_coh_vm
+      when: "result > FR * (R / r) * 1.05"
+      status: warning
+      text:
+        es: "[[Fr]] supera en más de un 5% la predicción del modelo ideal. Revisa si los datos de radios son correctos."
+        en: "[[Fr]] exceeds the ideal model prediction by more than 5%. Check whether the radius data are correct."
+    - id: frr_coh_ok
+      when: "true"
+      status: ok
+      text:
+        es: "[[Fr]] coherente con la razón de radios y el esfuerzo aplicado."
+        en: "[[Fr]] coherent with the radius ratio and applied effort."
+    model_validity_rules:
+    - id: frr_mod_ok
+      when: "true"
+      status: info
+      text:
+        es: "Válido mientras la masa del eje y sus cargas dinámicas sean despreciables. En aplicaciones de alta velocidad, los efectos inerciales modifican el balance."
+        en: "Valid as long as axle mass and dynamic loads are negligible. In high-speed applications, inertial effects modify the balance."
+    graph_rules:
+    - id: frr_graph
+      when: "true"
+      status: info
+      text:
+        es: "[[Fr]] se representa como una flecha tangencial sobre el eje pequeño, opuesta al sentido del giro, indicando su carácter resistente."
+        en: "[[Fr]] is shown as a tangential arrow on the small axle, opposite to the rotation direction, indicating its resistive character."
+    likely_errors:
+    - id: frr_err_weight
+      when: "true"
+      status: warning
+      text:
+        es: "Error frecuente: en muchos problemas [[Fr]] representa el peso de una carga que cuelga del eje. Asegúrate de convertir la masa a Newtons antes de sustituir."
+        en: "Common error: in many problems [[Fr]] represents the weight of a load hanging from the axle. Make sure to convert mass to Newtons before substituting."
+    next_step_rules:
+    - id: frr_next
+      when: "true"
+      status: info
+      text:
+        es: "Calcula la ventaja mecánica real [[VM_real]] para saber cuánto afecta el rozamiento al rendimiento del sistema."
+        en: "Calculate the real mechanical advantage [[VM_real]] to see how much friction affects system efficiency."
+
+  VM:
+    magnitude_type: adimensional
+    semantic_role:
+      es: "Ventaja mecánica ideal"
+      en: "Ideal mechanical advantage"
+    summary_rules:
+    - id: vm_sum_high
+      when: "result >= 5"
+      status: ok
+      text:
+        es: "Ventaja mecánica [[VM]] elevada: la rueda multiplica la fuerza por un factor de [[VM]]. Recuerda que el arco de entrada es [[VM]] veces el arco de salida."
+        en: "High mechanical advantage [[VM]]: the wheel multiplies force by a factor of [[VM]]. Remember the input arc is [[VM]] times the output arc."
+    - id: vm_sum_low
+      when: "result < 2"
+      status: warning
+      text:
+        es: "Ventaja mecánica [[VM]] menor que 2: la rueda apenas amplifica la fuerza. Considera aumentar la relación R/r si el objetivo es reducir el esfuerzo."
+        en: "Mechanical advantage [[VM]] less than 2: the wheel barely amplifies force. Consider increasing the R/r ratio if the goal is to reduce effort."
+    - id: vm_sum_ok
+      when: "true"
+      status: ok
+      text:
+        es: "La ventaja mecánica ideal [[VM]] es igual a la razón de radios R/r. Cuanto mayor sea esta razón, menor esfuerzo requiere el operador."
+        en: "The ideal mechanical advantage [[VM]] equals the radius ratio R/r. The greater this ratio, the less effort the operator needs."
+    physical_reading_rules:
+    - id: vm_read_ok
+      when: "true"
+      status: info
+      text:
+        es: "[[VM]] no depende de las fuerzas ni de la velocidad, solo de la geometría del sistema. Es una propiedad intrínseca del diseño. En el modelo real, la VM efectiva es [[VM]] multiplicada por [[eta]]."
+        en: "[[VM]] depends only on the geometry of the system, not on forces or speed. It is an intrinsic design property. In the real model, the effective MA is [[VM]] multiplied by [[eta]]."
+    coherence_rules:
+    - id: vm_coh_lt1
+      when: "result < 1"
+      status: danger
+      text:
+        es: "VM menor que 1: la rueda pierde fuerza en vez de ganarla. Verifica que R > r; si es intencional, el sistema es un multiplicador de velocidad."
+        en: "MA less than 1: the wheel loses force instead of gaining it. Check that R > r; if intentional, the system is a speed multiplier."
+    - id: vm_coh_ok
+      when: "true"
+      status: ok
+      text:
+        es: "[[VM]] mayor o igual que 1, coherente con R ≥ r."
+        en: "[[VM]] greater than or equal to 1, coherent with R ≥ r."
+    model_validity_rules:
+    - id: vm_mod_ok
+      when: "true"
+      status: info
+      text:
+        es: "Esta es la VM ideal. Para obtener la VM real, multiplica por [[eta]]: VM_real = eta · R/r."
+        en: "This is the ideal MA. To obtain the real MA, multiply by [[eta]]: VM_real = eta · R/r."
+    graph_rules:
+    - id: vm_graph
+      when: "true"
+      status: info
+      text:
+        es: "En el diagrama, [[VM]] se lee como la razón visual entre las longitudes de los dos radios representados."
+        en: "In the diagram, [[VM]] is read as the visual ratio between the lengths of the two represented radii."
+    likely_errors:
+    - id: vm_err_eta
+      when: "true"
+      status: warning
+      text:
+        es: "Error frecuente: usar [[VM]] ideal en problemas reales sin aplicar [[eta]]. La VM real es siempre menor que la ideal."
+        en: "Common error: using ideal [[VM]] in real problems without applying [[eta]]. Real MA is always less than ideal MA."
+    next_step_rules:
+    - id: vm_next
+      when: "true"
+      status: info
+      text:
+        es: "Calcula ahora [[VM_real]] multiplicando [[VM]] por [[eta]] para conocer la ventaja efectiva en el sistema real."
+        en: "Now calculate [[VM_real]] by multiplying [[VM]] by [[eta]] to find the effective advantage in the real system."
+
+  VM_real:
+    magnitude_type: adimensional
+    semantic_role:
+      es: "Ventaja mecánica real"
+      en: "Real mechanical advantage"
+    summary_rules:
+    - id: vmr_sum_gt1
+      when: "result >= 1"
+      status: ok
+      text:
+        es: "Ventaja mecánica real [[VM_real]] ≥ 1: a pesar de las pérdidas, el sistema sigue amplificando la fuerza. El rendimiento [[eta]] es suficientemente alto."
+        en: "Real mechanical advantage [[VM_real]] ≥ 1: despite losses, the system still amplifies force. Efficiency [[eta]] is sufficiently high."
+    - id: vmr_sum_lt1
+      when: "result < 1"
+      status: warning
+      text:
+        es: "Ventaja mecánica real [[VM_real]] menor que 1: las pérdidas superan la ganancia geométrica. El sistema no es eficaz para amplificar fuerza en estas condiciones."
+        en: "Real mechanical advantage [[VM_real]] less than 1: losses exceed the geometric gain. The system is not effective for force amplification under these conditions."
+    physical_reading_rules:
+    - id: vmr_read_ok
+      when: "true"
+      status: info
+      text:
+        es: "[[VM_real]] integra la geometría ([[R]]/[[r]]) y el rendimiento ([[eta]]). La diferencia VM - VM_real cuantifica la penalización por rozamiento: es la fracción de ventaja mecánica 'consumida' por la fricción."
+        en: "[[VM_real]] integrates geometry ([[R]]/[[r]]) and efficiency ([[eta]]). The difference VM - VM_real quantifies the friction penalty: the fraction of mechanical advantage 'consumed' by friction."
+    coherence_rules:
+    - id: vmr_coh_gt_vm
+      when: "result > VM * 1.01"
+      status: danger
+      text:
+        es: "La VM real no puede superar la VM ideal. Revisa el valor de [[eta]]: debe estar entre 0 y 1."
+        en: "Real MA cannot exceed ideal MA. Check the value of [[eta]]: it must be between 0 and 1."
+    - id: vmr_coh_ok
+      when: "true"
+      status: ok
+      text:
+        es: "[[VM_real]] coherente: está entre 0 y [[VM]], conforme a eta ∈ (0, 1]."
+        en: "[[VM_real]] coherent: it is between 0 and [[VM]], consistent with eta ∈ (0, 1]."
+    model_validity_rules:
+    - id: vmr_mod_ok
+      when: "true"
+      status: info
+      text:
+        es: "Válido cuando el rozamiento es estacionario y uniforme, modelable con un único [[eta]]. En mecanismos con múltiples contactos, cada par tiene su propio rendimiento parcial."
+        en: "Valid when friction is steady and uniform, modelable with a single [[eta]]. In mechanisms with multiple contacts, each pair has its own partial efficiency."
+    graph_rules:
+    - id: vmr_graph
+      when: "true"
+      status: info
+      text:
+        es: "En el gráfico de ventaja frente a radios, [[VM_real]] aparece como una recta de pendiente [[eta]]·(1/r) en función de [[R]]."
+        en: "In the advantage-vs-radius plot, [[VM_real]] appears as a line with slope [[eta]]·(1/r) as a function of [[R]]."
+    likely_errors:
+    - id: vmr_err_swap
+      when: "true"
+      status: warning
+      text:
+        es: "Error frecuente: calcular VM_real como R/(eta·r) en vez de eta·R/r. La fórmula correcta es VM_real = eta·R/r."
+        en: "Common error: computing VM_real as R/(eta·r) instead of eta·R/r. The correct formula is VM_real = eta·R/r."
+    next_step_rules:
+    - id: vmr_next
+      when: "true"
+      status: info
+      text:
+        es: "Verifica el balance energético: compara FR·sR con Fr·sr y comprueba que la diferencia equivale a (1-eta)·Fr·sr."
+        en: "Verify the energy balance: compare FR·sR with Fr·sr and check that the difference equals (1-eta)·Fr·sr."
+
+  eta:
+    magnitude_type: adimensional
+    semantic_role:
+      es: "Rendimiento mecánico del sistema"
+      en: "Mechanical efficiency of the system"
+    summary_rules:
+    - id: eta_sum_high
+      when: "result >= 0.9"
+      status: ok
+      text:
+        es: "Rendimiento [[eta]] ≥ 90%: sistema bien lubricado y con tolerancias ajustadas. Las pérdidas son menores del 10%."
+        en: "Efficiency [[eta]] ≥ 90%: well-lubricated system with tight tolerances. Losses are less than 10%."
+    - id: eta_sum_mid
+      condition:
+        variable: result
+        gte: 0.7
+        lt: 0.9
+      status: info
+      text:
+        es: "Rendimiento [[eta]] entre 70% y 90%: valor típico de mecanismos industriales con rozamiento moderado."
+        en: "Efficiency [[eta]] between 70% and 90%: typical value for industrial mechanisms with moderate friction."
+    - id: eta_sum_low
+      when: "result < 0.7"
+      status: warning
+      text:
+        es: "Rendimiento [[eta]] por debajo del 70%: sistema con rozamiento elevado. Más de 30% de la energía de entrada se disipa como calor. Considerar relubricación o rediseño."
+        en: "Efficiency [[eta]] below 70%: system with high friction. More than 30% of input energy is dissipated as heat. Consider re-lubrication or redesign."
+    physical_reading_rules:
+    - id: eta_read_ok
+      when: "true"
+      status: info
+      text:
+        es: "[[eta]] resume todas las pérdidas internas: rozamiento en los cojinetes del eje, rigidez de transmisiones y deformaciones elásticas. No es una propiedad geométrica sino una característica del material y el mantenimiento."
+        en: "[[eta]] summarizes all internal losses: bearing friction, transmission stiffness, and elastic deformations. It is not a geometric property but a characteristic of the material and maintenance."
+    coherence_rules:
+    - id: eta_coh_range
+      when: "result <= 0 or result > 1"
+      status: danger
+      text:
+        es: "El rendimiento debe estar en (0, 1]. Un valor fuera de este rango indica error de datos o de fórmula."
+        en: "Efficiency must be in (0, 1]. A value outside this range indicates a data or formula error."
+    - id: eta_coh_ok
+      when: "true"
+      status: ok
+      text:
+        es: "[[eta]] dentro del rango físicamente admisible (0, 1]."
+        en: "[[eta]] within the physically admissible range (0, 1]."
+    model_validity_rules:
+    - id: eta_mod_ok
+      when: "true"
+      status: info
+      text:
+        es: "Este modelo asume [[eta]] constante e independiente de la velocidad y la carga. En sistemas reales, [[eta]] disminuye a velocidades muy bajas (rozamiento estático) y a cargas muy altas (deformación)."
+        en: "This model assumes constant [[eta]] independent of speed and load. In real systems, [[eta]] decreases at very low speeds (static friction) and at very high loads (deformation)."
+    graph_rules:
+    - id: eta_graph
+      when: "true"
+      status: info
+      text:
+        es: "En el gráfico de [[VM_real]] frente a R/r, [[eta]] es la pendiente de la recta; un [[eta]] menor rota la recta hacia el eje horizontal."
+        en: "In the [[VM_real]] vs R/r plot, [[eta]] is the slope of the line; a lower [[eta]] rotates the line toward the horizontal axis."
+    likely_errors:
+    - id: eta_err_ideal
+      when: "true"
+      status: warning
+      text:
+        es: "Error frecuente: asumir [[eta]] = 1 en todos los problemas. Salvo que el enunciado indique explícitamente 'sistema ideal', siempre hay pérdidas."
+        en: "Common error: assuming [[eta]] = 1 in all problems. Unless the problem explicitly states 'ideal system', there are always losses."
+    next_step_rules:
+    - id: eta_next
+      when: "result < 0.85"
+      status: info
+      text:
+        es: "Con [[eta]] < 0.85 el efecto sobre la VM real es significativo. Evalúa si aumentar R para compensar las pérdidas es factible en el diseño."
+        en: "With [[eta]] < 0.85 the effect on real MA is significant. Evaluate whether increasing R to compensate for losses is feasible in the design."
+    - id: eta_next_ok
+      when: "true"
+      status: info
+      text:
+        es: "Usa [[eta]] para calcular [[VM_real]] y el esfuerzo [[FR]] real que debe aplicar el operador."
+        en: "Use [[eta]] to calculate [[VM_real]] and the real effort [[FR]] the operator must apply."
+
+  R:
+    magnitude_type: longitud
+    semantic_role:
+      es: "Radio de la rueda (brazo de entrada)"
+      en: "Wheel radius (input arm)"
+    summary_rules:
+    - id: R_sum_ok
+      when: "true"
+      status: ok
+      text:
+        es: "El radio de la rueda [[R]] define el brazo de entrada. Aumentarlo es la palanca de diseño más directa para incrementar la ventaja mecánica sin cambiar el eje."
+        en: "The wheel radius [[R]] defines the input arm. Increasing it is the most direct design lever for raising mechanical advantage without changing the axle."
+    physical_reading_rules:
+    - id: R_read_ok
+      when: "true"
+      status: info
+      text:
+        es: "[[R]] determina cuánto arco recorre la mano del operador por cada vuelta completa (2π·R). A mayor [[R]], mayor recorrido pero menor fuerza requerida."
+        en: "[[R]] determines how much arc the operator's hand travels per full turn (2π·R). Greater [[R]] means greater travel but less required force."
+    coherence_rules:
+    - id: R_coh_lt_r
+      when: "result <= r"
+      status: danger
+      text:
+        es: "[[R]] debe ser mayor que [[r]] para que haya ventaja mecánica. Si R ≤ r el sistema pierde fuerza."
+        en: "[[R]] must be greater than [[r]] for mechanical advantage to exist. If R ≤ r the system loses force."
+    - id: R_coh_ok
+      when: "true"
+      status: ok
+      text:
+        es: "[[R]] mayor que [[r]], condición necesaria para ventaja mecánica positiva."
+        en: "[[R]] greater than [[r]], necessary condition for positive mechanical advantage."
+    model_validity_rules:
+    - id: R_mod_ok
+      when: "true"
+      status: info
+      text:
+        es: "El modelo trata [[R]] como constante. En sistemas con cuerda enrollada, el radio efectivo varía con el número de capas; en ese caso usar el radio promedio."
+        en: "The model treats [[R]] as constant. In rope-winding systems, the effective radius varies with the number of layers; in that case use the average radius."
+    graph_rules:
+    - id: R_graph
+      when: "true"
+      status: info
+      text:
+        es: "[[R]] se visualiza en el diagrama como la distancia desde el centro de rotación hasta el punto de aplicación de [[FR]] en la rueda exterior."
+        en: "[[R]] is visualized in the diagram as the distance from the rotation center to the point of application of [[FR]] on the outer wheel."
+    likely_errors:
+    - id: R_err_diameter
+      when: "true"
+      status: warning
+      text:
+        es: "Error frecuente: confundir radio con diámetro. Si el enunciado da el diámetro de la rueda, divide entre 2 antes de usarlo en la fórmula."
+        en: "Common error: confusing radius with diameter. If the problem gives the wheel diameter, divide by 2 before using it in the formula."
+    next_step_rules:
+    - id: R_next
+      when: "true"
+      status: info
+      text:
+        es: "Con [[R]] y [[r]] conocidos, calcula [[VM]] = R/r y compara con el valor requerido por el diseño."
+        en: "With [[R]] and [[r]] known, calculate [[VM]] = R/r and compare with the value required by the design."
+
+  r:
+    magnitude_type: longitud
+    semantic_role:
+      es: "Radio del eje (brazo de salida)"
+      en: "Axle radius (output arm)"
+    summary_rules:
+    - id: r_sum_ok
+      when: "true"
+      status: ok
+      text:
+        es: "El radio del eje [[r]] define el brazo de salida. Reducirlo aumenta la ventaja mecánica pero disminuye la resistencia mecánica del eje y el arco de salida por vuelta."
+        en: "The axle radius [[r]] defines the output arm. Reducing it increases mechanical advantage but decreases the axle's mechanical strength and output arc per turn."
+    physical_reading_rules:
+    - id: r_read_ok
+      when: "true"
+      status: info
+      text:
+        es: "[[r]] determina el arco que recorre el punto de aplicación de [[Fr]] por vuelta completa (2π·r). A menor [[r]], mayor fuerza disponible pero menor recorrido por vuelta."
+        en: "[[r]] determines the arc traveled by the application point of [[Fr]] per full turn (2π·r). Smaller [[r]] means greater available force but less travel per turn."
+    coherence_rules:
+    - id: r_coh_gt_R
+      when: "result >= R"
+      status: danger
+      text:
+        es: "[[r]] debe ser menor que [[R]]. Si r ≥ R la máquina no amplifica la fuerza."
+        en: "[[r]] must be less than [[R]]. If r ≥ R the machine does not amplify force."
+    - id: r_coh_ok
+      when: "true"
+      status: ok
+      text:
+        es: "[[r]] menor que [[R]], condición correcta para ventaja mecánica positiva."
+        en: "[[r]] less than [[R]], correct condition for positive mechanical advantage."
+    model_validity_rules:
+    - id: r_mod_ok
+      when: "true"
+      status: info
+      text:
+        es: "[[r]] debe ser suficientemente grande para soportar el torque Fr·r sin deformarse. La resistencia estructural del eje impone un mínimo práctico para [[r]]."
+        en: "[[r]] must be large enough to withstand the torque Fr·r without deforming. The structural strength of the axle imposes a practical minimum for [[r]]."
+    graph_rules:
+    - id: r_graph
+      when: "true"
+      status: info
+      text:
+        es: "[[r]] se visualiza en el diagrama como la distancia desde el centro de rotación hasta el punto de aplicación de [[Fr]] en el eje interior."
+        en: "[[r]] is visualized as the distance from the rotation center to the point of application of [[Fr]] on the inner axle."
+    likely_errors:
+    - id: r_err_swap
+      when: "true"
+      status: warning
+      text:
+        es: "Error frecuente: intercambiar [[R]] y [[r]] en la fórmula. Recuerda: el esfuerzo actúa en el radio grande [[R]] y la resistencia en el radio pequeño [[r]]."
+        en: "Common error: swapping [[R]] and [[r]] in the formula. Remember: effort acts on the large radius [[R]] and resistance on the small radius [[r]]."
+    next_step_rules:
+    - id: r_next
+      when: "true"
+      status: info
+      text:
+        es: "Con [[R]] y [[r]] definidos, computa la VM ideal y evalúa si el diseño cumple el requerimiento de reducción de esfuerzo."
+        en: "With [[R]] and [[r]] defined, compute the ideal MA and evaluate whether the design meets the effort-reduction requirement."
+
+  sR:
+    magnitude_type: longitud
+    semantic_role:
+      es: "Arco recorrido en la rueda (entrada)"
+      en: "Arc traveled at the wheel (input)"
+    summary_rules:
+    - id: sR_sum_ok
+      when: "true"
+      status: ok
+      text:
+        es: "El arco de entrada [[sR]] es el recorrido que realiza la mano del operador. Es [[VM]] veces mayor que el arco de salida [[sr]]: esa es la contrapartida cinemática de la ventaja mecánica."
+        en: "The input arc [[sR]] is the travel of the operator's hand. It is [[VM]] times greater than the output arc [[sr]]: that is the kinematic trade-off of mechanical advantage."
+    physical_reading_rules:
+    - id: sR_read_ok
+      when: "true"
+      status: info
+      text:
+        es: "[[sR]] y [[sr]] se relacionan por la restricción cinemática sR = (R/r)·sr. Esta ecuación expresa la regla de oro: trabajo de entrada ≈ trabajo de salida (en el modelo ideal)."
+        en: "[[sR]] and [[sr]] are related by the kinematic constraint sR = (R/r)·sr. This equation expresses the golden rule: input work ≈ output work (in the ideal model)."
+    coherence_rules:
+    - id: sR_coh_lt_sr
+      when: "result < sr"
+      status: warning
+      text:
+        es: "[[sR]] menor que [[sr]] implica VM < 1: la rueda está perdiendo fuerza. Verifica que R > r."
+        en: "[[sR]] less than [[sr]] implies VM < 1: the wheel is losing force. Check that R > r."
+    - id: sR_coh_ok
+      when: "true"
+      status: ok
+      text:
+        es: "[[sR]] mayor que [[sr]], coherente con [[R]] > [[r]] y ventaja mecánica positiva."
+        en: "[[sR]] greater than [[sr]], coherent with [[R]] > [[r]] and positive mechanical advantage."
+    model_validity_rules:
+    - id: sR_mod_ok
+      when: "true"
+      status: info
+      text:
+        es: "Válido para giro rígido. Si hay deslizamiento entre la cuerda y la rueda, el arco real puede ser menor que el calculado."
+        en: "Valid for rigid rotation. If there is slip between the rope and the wheel, the actual arc may be less than calculated."
+    graph_rules:
+    - id: sR_graph
+      when: "true"
+      status: info
+      text:
+        es: "[[sR]] se visualiza como la longitud del arco trazado sobre el borde de la rueda grande para el ángulo de giro considerado."
+        en: "[[sR]] is visualized as the length of the arc traced on the outer wheel edge for the considered rotation angle."
+    likely_errors:
+    - id: sR_err_angle
+      when: "true"
+      status: warning
+      text:
+        es: "Error frecuente: usar el ángulo en grados en vez de radianes. La fórmula sR = R·θ requiere θ en radianes."
+        en: "Common error: using angle in degrees instead of radians. The formula sR = R·θ requires θ in radians."
+    next_step_rules:
+    - id: sR_next
+      when: "true"
+      status: info
+      text:
+        es: "Comprueba el balance energético: FR·[[sR]] debe ser mayor o igual que Fr·[[sr]], siendo la diferencia la energía disipada (1-eta)·Fr·sr."
+        en: "Check the energy balance: FR·[[sR]] must be greater than or equal to Fr·[[sr]], the difference being the dissipated energy (1-eta)·Fr·sr."
+
+  sr:
+    magnitude_type: longitud
+    semantic_role:
+      es: "Arco recorrido en el eje (salida)"
+      en: "Arc traveled at the axle (output)"
+    summary_rules:
+    - id: sr_sum_ok
+      when: "true"
+      status: ok
+      text:
+        es: "El arco de salida [[sr]] es el desplazamiento útil obtenido en el eje. Es el recorrido de la carga, el tornillo o el cable que el sistema mueve."
+        en: "The output arc [[sr]] is the useful displacement obtained at the axle. It is the travel of the load, screw, or cable the system moves."
+    physical_reading_rules:
+    - id: sr_read_ok
+      when: "true"
+      status: info
+      text:
+        es: "[[sr]] = sR·(r/R). Para obtener más recorrido en el eje por vuelta hay que aumentar [[r]] o reducir [[R]], lo que reduce la ventaja mecánica. Este es el compromiso diseño-fuerza-recorrido."
+        en: "[[sr]] = sR·(r/R). To get more axle travel per turn, [[r]] must increase or [[R]] decrease, which reduces mechanical advantage. This is the design force-travel trade-off."
+    coherence_rules:
+    - id: sr_coh_neg
+      when: "result <= 0"
+      status: danger
+      text:
+        es: "El arco de salida debe ser positivo."
+        en: "The output arc must be positive."
+    - id: sr_coh_ok
+      when: "true"
+      status: ok
+      text:
+        es: "[[sr]] positivo y menor que [[sR]], coherente con la restricción cinemática."
+        en: "[[sr]] positive and less than [[sR]], coherent with the kinematic constraint."
+    model_validity_rules:
+    - id: sr_mod_ok
+      when: "true"
+      status: info
+      text:
+        es: "[[sr]] es lineal en el ángulo de giro. Para movimientos angulares grandes conviene verificar que el sistema no llega a sus topes mecánicos."
+        en: "[[sr]] is linear in the rotation angle. For large angular movements, verify that the system does not reach its mechanical stops."
+    graph_rules:
+    - id: sr_graph
+      when: "true"
+      status: info
+      text:
+        es: "[[sr]] se visualiza como el arco trazado en el eje pequeño; es proporcional a [[sR]] con factor r/R."
+        en: "[[sr]] is visualized as the arc traced on the small axle; it is proportional to [[sR]] with factor r/R."
+    likely_errors:
+    - id: sr_err_full_turn
+      when: "true"
+      status: warning
+      text:
+        es: "Error frecuente: calcular [[sr]] para media vuelta usando el arco de vuelta completa. Verifica que el ángulo usado corresponde al movimiento real del sistema."
+        en: "Common error: computing [[sr]] for half a turn using the full-turn arc. Verify that the angle used corresponds to the system's actual movement."
+    next_step_rules:
+    - id: sr_next
+      when: "true"
+      status: info
+      text:
+        es: "Verifica que [[sr]] sea consistente con [[sR]]: el cociente [[sR]]/[[sr]] debe ser igual a R/r. Si el enunciado da [θ], convierte primero a arco con sr = [[r]]·θ."
+        en: "Verify that [[sr]] is consistent with [[sR]]: the ratio [[sR]]/[[sr]] must equal R/r. If the problem gives [θ], convert to arc first with sr = [[r]]·θ."
+
+  tau:
+    magnitude_type: momento
+    semantic_role:
+      es: "Torque o momento de fuerza generado en la rueda o el eje"
+      en: "Torque or moment of force generated at the wheel or axle"
+    summary_rules:
+    - id: tau_sum_ok
+      when: "true"
+      status: ok
+      text:
+        es: "El torque [[tau]] representa la capacidad de giro. En equilibrio, el torque en la rueda y en el eje son iguales."
+        en: "Torque [[tau]] represents the rotational capacity. At equilibrium, the torques at the wheel and axle are equal."
+    physical_reading_rules:
+    - id: tau_read_ok
+      when: "true"
+      status: info
+      text:
+        es: "[[tau]] igual a FR multiplicado por R. Aumentar [[R]] aumenta el torque disponible sin incrementar [[FR]]."
+        en: "[[tau]] equals FR multiplied by R. Increasing [[R]] increases available torque without raising [[FR]]."
+    coherence_rules:
+    - id: tau_coh_pos
+      when: "result <= 0"
+      status: danger
+      text:
+        es: "El torque debe ser positivo para que exista efecto de giro útil."
+        en: "Torque must be positive for useful rotation to exist."
+    - id: tau_coh_ok
+      when: "true"
+      status: ok
+      text:
+        es: "[[tau]] positivo y coherente con la geometría del sistema."
+        en: "[[tau]] positive and coherent with the system geometry."
+    model_validity_rules:
+    - id: tau_mod_ok
+      when: "true"
+      status: info
+      text:
+        es: "La fórmula de torque asume fuerza tangencial pura. Si la fuerza tiene componente radial, el torque efectivo es menor."
+        en: "The torque formula assumes pure tangential force. If the force has a radial component, the effective torque is smaller."
+    graph_rules:
+    - id: tau_graph
+      when: "true"
+      status: info
+      text:
+        es: "[[tau]] no se visualiza directamente; se infiere del equilibrio entre los vectores de fuerza y los radios en el diagrama."
+        en: "[[tau]] is not directly visualized; it is inferred from the force-vector and radius equilibrium in the diagram."
+    likely_errors:
+    - id: tau_err_sum
+      when: "true"
+      status: warning
+      text:
+        es: "Error frecuente: sumar torques en lugar de igualarlos. En equilibrio, torque de rueda igual a torque de eje."
+        en: "Common error: adding torques instead of equating them. At equilibrium, wheel torque equals axle torque."
+    next_step_rules:
+    - id: tau_next
+      when: "true"
+      status: info
+      text:
+        es: "Usa el equilibrio de torques para deducir [[FR]] si conoces [[Fr]], [[R]] y [[r]]."
+        en: "Use torque equilibrium to derive [[FR]] if you know [[Fr]], [[R]], and [[r]]."
+    next_step_rules:
+    - id: sr_next
+      when: "true"
+      status: info
+      text:
+        es: "Con [[sr]] calculado, evalúa si el recorrido útil es suficiente para la aplicación. Si no lo es, considera aumentar [[r]] o usar un tren de engranajes en cascada."
+        en: "With [[sr]] calculated, assess whether the useful travel is sufficient for the application. If not, consider increasing [[r]] or using a cascaded gear train."
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+  fallback_type: Svg
+  caption:
+    es: "Ventaja mecánica real frente a razón de radios R/r"
+    en: "Real mechanical advantage vs radius ratio R/r"

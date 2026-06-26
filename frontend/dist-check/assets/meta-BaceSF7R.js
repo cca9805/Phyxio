@@ -1,0 +1,75 @@
+const n=`id: condicion-sumatoria-momentos
+nombre:
+  es: Condicion sumatoria momentos
+  en: Net Torque Balance Condition
+area: fisica-clasica
+bloque: mecanica
+subbloque: dinamica
+parent_id: equilibrio-rotacion
+ruta_relativa: fisica-clasica/mecanica/dinamica/estatica/equilibrio-rotacion/condicion-sumatoria-momentos
+orden: 212322
+type: leaf
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+icon: 🧪
+descripcion: "Condición de equilibrio rotacional: el momento neto debe anularse respecto al eje elegido."
+description_en: "Rotational equilibrium condition: net torque must vanish about the chosen axis."
+tags:
+  es:
+    - equilibrio-rotacional
+    - torque
+    - sumatoria-de-momentos
+    - vigas
+    - palancas
+  en:
+    - rotational-equilibrium
+    - torque
+    - net-torque
+    - beams
+    - levers
+pregunta_fisica_central:
+  es: "¿Qué condición sobre la suma algebraica de momentos garantiza que un cuerpo rígido plano no rota?"
+  en: "What condition on the algebraic sum of torques guarantees that a rigid body does not rotate?"
+representacion_dominante: Coord
+magnitud_dominante: tau_net
+prerequisitos:
+  - momento-de-una-fuerza
+  - condicion-sumatoria-fuerzas
+  - diagramas-de-cuerpo-libre
+graficos:
+  - Coord
+physical_role:
+  es: ley física
+  en: physical law
+dificultad: 3
+tiempo_estimado_min: 45
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

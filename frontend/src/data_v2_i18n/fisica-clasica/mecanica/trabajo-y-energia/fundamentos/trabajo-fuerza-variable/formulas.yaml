@@ -1,0 +1,211 @@
+version: 5
+topic:
+  id: trabajo-fuerza-variable
+  title:
+    es: Trabajo fuerza variable
+    en: Work by a Variable Force
+variables:
+- id: W
+  symbol: W
+  name:
+    es: trabajo
+    en: Work
+  si_unit: J
+- id: x1
+  symbol: x_1
+  name:
+    es: posicion inicial
+    en: Initial Position
+  si_unit: m
+- id: x2
+  symbol: x_2
+  name:
+    es: posicion final
+    en: Final Position
+  si_unit: m
+- id: k
+  symbol: k
+  name:
+    es: constante elastica
+    en: Spring Constant
+  si_unit: N/m
+- id: Fmed
+  symbol: F_{med}
+  name:
+    es: fuerza media
+    en: Average Force
+  si_unit: N
+formulas:
+- id: trabajo_integral
+  title:
+    es: Trabajo como integral de fuerza variable
+    en: Work as variable-force integral
+  equation: W = integral(F(x),x,x1,x2)
+  latex: W=\int_{x_1}^{x_2}F(x)\,dx
+  rearrangements:
+  - target: W
+    equation: W = integral(F(x),x,x1,x2)
+    latex: W=\int_{x_1}^{x_2}F(x)\,dx
+  constraints:
+  - expr: x2 != x1
+    message:
+      es: El intervalo debe tener amplitud no nula para interpretar area acumulada.
+      en: The interval must be non-zero to interpret accumulated area.
+  category: fundamental
+  relation_type: integral_relation
+  physical_meaning:
+    es: Representa el trabajo como acumulacion continua del aporte local de fuerza en cada posicion.
+    en: Represents work as continuous accumulation of local force contribution at each position.
+  validity:
+    es: Requiere una funcion F(x) bien definida en el intervalo entre x1 y x2.
+    en: Requires a well-defined F(x) function over the interval between x1 and x2.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - fuerzas dependientes de posicion
+  - perfiles experimentales fuerza-desplazamiento
+  - calculo por area bajo curva
+  interpretation_tags: [ integral, area, acumulacion, trabajo ]
+  result_semantics:
+    target: W
+    meaning: El resultado integra aportes positivos y negativos de fuerza a lo largo del tramo.
+  domain_checks:
+  - expr: "true"
+    message:
+      es: F(x) debe ser integrable o aproximable por tramos en el intervalo.
+      en: F(x) must be integrable or piecewise-approximable in the interval.
+  coherence_checks:
+  - expr: "true"
+    message:
+      es: El signo de W debe ser compatible con el balance de area orientada bajo F(x).
+      en: W sign must be consistent with oriented area balance under F(x).
+  graph_implications:
+  - La lectura visual principal es el area orientada entre x1 y x2.
+  pedagogical_triggers:
+  - when: "true"
+    message:
+      es: Si la fuerza cambia de signo, separa por tramos antes de concluir el trabajo total.
+      en: If force changes sign, split into segments before concluding total work.
+- id: trabajo_hooke_intervalo
+  title:
+    es: Trabajo para resorte lineal en intervalo
+    en: Interval work for linear spring
+  equation: W = 0.5*k*(x2^2 - x1^2)
+  latex: W=\frac{k}{2}\left(x_2^2-x_1^2\right)
+  rearrangements:
+  - target: W
+    equation: W = 0.5*k*(x2^2 - x1^2)
+    latex: W=\frac{k}{2}\left(x_2^2-x_1^2\right)
+  - target: k
+    equation: k = 2*W/(x2^2 - x1^2)
+    latex: k=\frac{2W}{x_2^2-x_1^2}
+  constraints:
+  - expr: k >= 0
+    message:
+      es: En el modelo ideal de Hooke, k se toma no negativa.
+      en: In the ideal Hooke model, k is taken non-negative.
+  - expr: x2 != x1
+    message:
+      es: x2 debe ser distinto de x1 para evitar intervalo degenerado.
+      en: x2 must differ from x1 to avoid a degenerate interval.
+  category: operative
+  relation_type: closed_form
+  physical_meaning:
+    es: Cierra analiticamente el trabajo cuando la fuerza crece linealmente con la posicion.
+    en: Provides analytic closure for work when force grows linearly with position.
+  validity:
+    es: Valida en el rango donde la aproximacion lineal de Hooke es razonable.
+    en: Valid in the range where Hooke linear approximation is reasonable.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - resortes lineales
+  - almacenamiento elastico elemental
+  - comparacion con energia potencial elastica
+  interpretation_tags: [ hooke, lineal, intervalo, trabajo ]
+  result_semantics:
+    target: W
+    meaning: El resultado muestra como el trabajo depende del cambio cuadratico entre posiciones limite.
+  domain_checks:
+  - expr: "true"
+    message:
+      es: Debe declararse claramente la orientacion del eje y el signo de x1 y x2.
+      en: Axis orientation and signs of x1 and x2 must be clearly stated.
+  coherence_checks:
+  - expr: "true"
+    message:
+      es: Si x2 aumenta en magnitud respecto a x1, el trabajo del agente externo suele aumentar.
+      en: If x2 magnitude increases relative to x1, external-agent work usually increases.
+  graph_implications:
+  - Corresponde al area bajo una recta F(x)=k x entre x1 y x2.
+  pedagogical_triggers:
+  - when: "true"
+    message:
+      es: Verifica siempre si estas calculando trabajo del resorte o del agente externo.
+      en: Always verify whether you compute spring work or external-agent work.
+- id: trabajo_aprox_fuerza_media
+  title:
+    es: Aproximacion de trabajo con fuerza media
+    en: Work approximation using average force
+  equation: W = Fmed*(x2-x1)
+  latex: W=F_{med}(x_2-x_1)
+  rearrangements:
+  - target: W
+    equation: W = Fmed*(x2-x1)
+    latex: W=F_{med}(x_2-x_1)
+  - target: Fmed
+    equation: Fmed = W/(x2-x1)
+    latex: F_{med}=\frac{W}{x_2-x_1}
+  constraints:
+  - expr: x2 != x1
+    message:
+      es: El desplazamiento neto del tramo no debe ser nulo.
+      en: Net displacement over the segment must be non-zero.
+  category: approximate
+  relation_type: average_equivalent
+  physical_meaning:
+    es: Sustituye la fuerza variable por un promedio equivalente para estimar el area efectiva.
+    en: Replaces variable force by an equivalent average to estimate effective area.
+  validity:
+    es: Recomendada cuando la variacion no es extrema o se acepta una estimacion de primer orden.
+    en: Recommended when variation is moderate or first-order estimation is acceptable.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - estimacion rapida de trabajo
+  - lectura preliminar de datos experimentales
+  - comparacion con integral exacta
+  interpretation_tags: [ aproximacion, fuerza-media, estimacion, trabajo ]
+  result_semantics:
+    target: W
+    meaning: El resultado aproxima el trabajo total mediante una fuerza representativa del tramo.
+  domain_checks:
+  - expr: "true"
+    message:
+      es: Debe explicitarse el criterio usado para construir Fmed.
+      en: The criterion used to build Fmed must be explicit.
+  coherence_checks:
+  - expr: "true"
+    message:
+      es: Contrasta el error esperado frente a la integral exacta cuando sea posible.
+      en: Contrast expected error against exact integral whenever possible.
+  graph_implications:
+  - Equivale a un rectangulo de base x2-x1 y altura Fmed.
+  pedagogical_triggers:
+  - when: "true"
+    message:
+      es: La fuerza media no reemplaza automaticamente la integral en perfiles muy no lineales.
+      en: Average force does not automatically replace integral in highly nonlinear profiles.
+ui:
+  default_formula: trabajo_integral
+  groups:
+  - title:
+      es: Basicas
+      en: Basics
+    items:
+    - trabajo_integral
+    - trabajo_hooke_intervalo
+    - trabajo_aprox_fuerza_media

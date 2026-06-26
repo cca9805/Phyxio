@@ -1,0 +1,245 @@
+version: 5
+id: perdidas-de-carga-interp
+leaf_id: perdidas-de-carga
+scope: local
+nombre:
+  es: "Análisis de Pérdidas de Carga"
+  en: "Head Loss Analysis"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title: { es: "Resumen Energético", en: "Energy Summary" }
+  physical_reading:
+    title: { es: "Lectura Física", en: "Physical Reading" }
+  coherence:
+    title: { es: "Coherencia de Datos", en: "Data Coherence" }
+  model_validity:
+    title: { es: "Validez del Modelo", en: "Model Validity" }
+  graph_reading:
+    title: { es: "Interpretación Gráfica", en: "Graphic Interpretation" }
+  likely_errors:
+    title: { es: "Errores Probables", en: "Likely Errors" }
+  next_step:
+    title: { es: "Siguiente Paso Sugerido", en: "Suggested Next Step" }
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [hf, f, L, D, v, g, dp, rho]
+  formulas: [darcy_weisbach, conversion_presion]
+
+targets:
+  hf:
+    summary_rules:
+      - id: hf-val
+        when: hf > 0
+        status: success
+        text:
+          es: "La pérdida de carga [[hf]] indica que el fluido ha disipado energía equivalente a una columna de líquido de {hf} metros."
+          en: "The head loss [[hf]] indicates that the fluid has dissipated energy equivalent to a liquid column of {hf} meters."
+    physical_reading_rules:
+      - id: hf-phys
+        when: hf > 0
+        status: success
+        text:
+          es: "Esta disipación ocurre porque el trabajo realizado contra la fricción viscosa en las paredes transforma energía mecánica en calor."
+          en: "This dissipation occurs because the work done against viscous friction at the walls transforms mechanical energy into heat."
+    coherence_rules:
+      - id: hf-coh
+        when: hf >= 0
+        status: success
+        text:
+          es: "El valor es coherente con la segunda ley de la termodinámica, ya que las pérdidas de energía siempre son positivas o nulas."
+          en: "The value is coherent with the second law of thermodynamics, as energy losses are always positive or zero."
+    model_validity_rules:
+      - id: hf-valid
+        when: hf > 0
+        status: success
+        text:
+          es: "Válido para flujo totalmente desarrollado donde la disipación es proporcional a la longitud del conducto."
+          en: "Valid for fully developed flow where dissipation is proportional to the duct length."
+    graph_rules:
+      - id: hf-graph
+        when: hf > 0
+        status: success
+        text:
+          es: "En el gráfico de perfiles, esto se traduce en una pendiente negativa de la línea de energía (EGL)."
+          en: "In the profile graph, this translates to a negative slope of the energy grade line (EGL)."
+    likely_errors:
+      - id: hf-err-neg
+        when: hf < 0
+        status: error
+        text:
+          es: "Error: Una pérdida de carga negativa implicaría que el fluido gana energía sin una bomba, lo cual es imposible."
+          en: "Error: A negative head loss would imply that the fluid gains energy without a pump, which is impossible."
+    next_step_rules:
+      - id: hf-next
+        when: hf > 0
+        status: info
+        text:
+          es: "Utilice este valor para dimensionar la potencia de la bomba necesaria para compensar la fricción."
+          en: "Use this value to size the pump power required to compensate for friction."
+
+  dp:
+    summary_rules:
+      - id: dp-val
+        when: dp > 0
+        status: success
+        text:
+          es: "La caída de presión [[dp]] representa la pérdida de fuerza por unidad de área a lo largo de la tubería."
+          en: "The pressure drop [[dp]] represents the loss of force per unit area along the pipe."
+    physical_reading_rules:
+      - id: dp-phys
+        when: dp > 0
+        status: success
+        text:
+          es: "Esta caída de presión es el motor que debe vencer la resistencia viscosa para mantener el fluido en movimiento."
+          en: "This pressure drop is the engine that must overcome viscous resistance to keep the fluid in motion."
+    coherence_rules:
+      - id: dp-coh
+        when: dp > 0
+        status: success
+        text:
+          es: "Coherente con un flujo real donde la presión aguas abajo es siempre menor que aguas arriba en tramos rectos."
+          en: "Coherent with a real flow where downstream pressure is always lower than upstream pressure in straight sections."
+    model_validity_rules:
+      - id: dp-valid
+        when: dp > 0
+        status: success
+        text:
+          es: "El modelo asume un fluido de densidad constante [[rho]]; si hubiera gases comprimiéndose, la relación variaría."
+          en: "The model assumes a constant density fluid [[rho]]; if there were compressing gases, the relationship would vary."
+    graph_rules:
+      - id: dp-graph
+        when: dp > 0
+        status: success
+        text:
+          es: "La caída de presión determina el decalaje vertical entre los puntos inicial y final del perfil piezométrico."
+          en: "The pressure drop determines the vertical offset between the start and end points of the piezometric profile."
+    likely_errors:
+      - id: dp-err-unit
+        when: dp > 1000000
+        status: warning
+        text:
+          es: "Advertencia: El valor de presión es muy alto. Verifique si ha confundido pascales con bares."
+          en: "Warning: The pressure value is very high. Check if you have confused Pascals with bars."
+    next_step_rules:
+      - id: dp-next
+        when: dp > 0
+        status: info
+        text:
+          es: "Compare este valor con la resistencia mecánica de la tubería para asegurar que no haya fallos estructurales."
+          en: "Compare this value with the pipe's mechanical strength to ensure no structural failures."
+
+  v:
+    summary_rules:
+      - id: v-val
+        when: v > 0
+        status: success
+        text:
+          es: "La velocidad [[v]] es el factor cinético que determina la magnitud de los remolinos y la fricción."
+          en: "The velocity [[v]] is the kinetic factor that determines the magnitude of eddies and friction."
+    physical_reading_rules:
+      - id: v-phys
+        when: v > 0
+        status: success
+        text:
+          es: "Al aumentar la velocidad, la pérdida de carga crece de forma cuadrática ($v^2$) debido al aumento de la turbulencia."
+          en: "As velocity increases, head loss grows quadratically ($v^2$) due to increased turbulence."
+    coherence_rules:
+      - id: v-coh
+        when: v > 0
+        status: success
+        text:
+          es: "Velocidad positiva coherente con un flujo unidireccional estable."
+          en: "Positive velocity coherent with stable unidirectional flow."
+    model_validity_rules:
+      - id: v-valid
+        when: v > 0
+        status: success
+        text:
+          es: "El modelo es válido siempre que la velocidad sea inferior a la velocidad del sonido en el fluido (Mach < 0.3)."
+          en: "The model is valid as long as the velocity is less than the speed of sound in the fluid (Mach < 0.3)."
+    graph_rules:
+      - id: v-graph
+        when: v > 0
+        status: success
+        text:
+          es: "En el simulador Svg, la velocidad controla la frecuencia de paso de las partículas de fluido."
+          en: "In the Svg simulator, velocity controls the flow frequency of the fluid particles."
+    likely_errors:
+      - id: v-err-high
+        when: v > 10
+        status: warning
+        text:
+          es: "Atención: Velocidades mayores a 10 m/s pueden causar cavitación o ruido excesivo en tuberías comerciales."
+          en: "Attention: Velocities greater than 10 m/s can cause cavitation or excessive noise in commercial pipes."
+    next_step_rules:
+      - id: v-next
+        when: v > 0
+        status: info
+        text:
+          es: "Verifique el Número de Reynolds [[Re]] para confirmar si el régimen es laminar o turbulento."
+          en: "Check the Reynolds Number [[Re]] to confirm whether the regime is laminar or turbulent."
+
+  f:
+    summary_rules:
+      - id: f-val
+        when: f > 0
+        status: success
+        text:
+          es: "El factor de fricción [[f]] cuantifica la aspereza de la tubería y la turbulencia del flujo."
+          en: "The friction factor [[f]] quantifies pipe roughness and flow turbulence."
+    physical_reading_rules:
+      - id: f-phys
+        when: f > 0
+        status: success
+        text:
+          es: "Un factor f mayor implica una mayor pérdida de energía por cada metro de tubería."
+          en: "A higher f factor implies a greater energy loss for each meter of pipe."
+    coherence_rules:
+      - id: f-coh
+        when: f > 0
+        status: success
+        text:
+          es: "Valor adimensional coherente con los rangos típicos de Moody (0.01 - 0.1)."
+          en: "Dimensionless value coherent with typical Moody ranges (0.01 - 0.1)."
+    model_validity_rules:
+      - id: f-valid
+        when: f > 0
+        status: success
+        text:
+          es: "El cálculo de f es válido según el régimen detectado (Laminar o Turbulento)."
+          en: "The f calculation is valid according to the detected regime (Laminar or Turbulent)."
+    graph_rules:
+      - id: f-graph
+        when: f > 0
+        status: success
+        text:
+          es: "Este factor determina la pendiente de la caída de presión en el gráfico Coord."
+          en: "This factor determines the slope of the pressure drop in the Coord graph."
+    likely_errors:
+      - id: f-err-range
+        when: f > 0.5
+        status: warning
+        text:
+          es: "Advertencia: El factor f es inusualmente alto. Revise la rugosidad o el Reynolds."
+          en: "Warning: The f factor is unusually high. Check the roughness or Reynolds number."
+    next_step_rules:
+      - id: f-next
+        when: f > 0
+        status: info
+        text:
+          es: "Use este valor en la ecuación de Darcy-Weisbach para hallar la pérdida de carga total."
+          en: "Use this value in the Darcy-Weisbach equation to find the total head loss."

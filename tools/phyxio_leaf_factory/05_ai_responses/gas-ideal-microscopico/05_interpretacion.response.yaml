@@ -1,0 +1,919 @@
+version: 5.0.0
+id: gas-ideal-microscopico
+leaf_id: gas-ideal-microscopico
+nombre:
+  es: Gas ideal microscopico
+  en: Microscopic Ideal Gas
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: sistemas-modelo
+  parent_id: sistemas-modelo
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/sistemas-modelo/gas-ideal-microscopico
+  orden: 275100
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - energia_cinetica_media_temperatura
+  - presion_microscopica_gas_ideal
+  - ecuacion_estado_gas_ideal_particulas
+  - velocidad_cuadratica_media
+  magnitudes:
+  - temperatura
+  - energia_cinetica_media
+  - constante_boltzmann
+  - presion
+  - volumen
+  - numero_particulas
+  - masa_particula
+  - velocidad_rms
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinámica estadística clásica de gases ideales
+    en: classical statistical thermodynamics of ideal gases
+  axis_convention:
+    es: Las magnitudes de este leaf son escalares; el signo no representa dirección mecánica.
+    en: The quantities in this leaf are scalar; sign does not represent mechanical direction.
+  standard_assumptions:
+  - es: Gas diluido, partículas puntuales, choques elásticos y equilibrio térmico.
+    en: Dilute gas, pointlike particles, elastic collisions, and thermal equilibrium.
+  - es: Las velocidades son no relativistas y la descripción clásica es válida.
+    en: Speeds are nonrelativistic and the classical description is valid.
+  standard_warnings:
+  - es: No mezcles constantes por mol con constantes por partícula.
+    en: Do not mix per-mole constants with per-particle constants.
+  - es: Comprueba que la temperatura esté en kelvin antes de interpretar cualquier resultado microscópico.
+    en: Check that temperature is in kelvin before interpreting any microscopic result.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: La energía debe quedar en J, la presión en Pa y la rapidez en m/s.
+      en: Energy must be in J, pressure in Pa, and speed in m/s.
+  - id: particle_mole_scale_check
+    status: warning
+    text:
+      es: Si usas [[constante_boltzmann]], las masas y conteos deben ser por partícula, no por mol.
+      en: If [[constante_boltzmann]] is used, masses and counts must be per particle, not per mole.
+error_patterns:
+  enabled: true
+  patterns:
+  - id: kelvin_celsius_confusion
+    status: warning
+    text:
+      es: Usar °C en lugar de K destruye la proporcionalidad entre [[temperatura]] y [[energia_cinetica_media]].
+      en: Using °C instead of K destroys the proportionality between [[temperatura]] and [[energia_cinetica_media]].
+  - id: rms_velocity_confusion
+    status: warning
+    text:
+      es: Confundir [[velocidad_rms]] con velocidad media vectorial oculta que el gas no tiene movimiento neto en
+        equilibrio.
+      en: Confusing [[velocidad_rms]] with mean vector velocity hides that the gas has no net motion at equilibrium.
+graph_reading_policy:
+  enabled: true
+  primary_variable: energia_cinetica_media
+  reading_sequence:
+  - es: Lee primero [[temperatura]] en el eje horizontal y después cómo cambia [[energia_cinetica_media]] o [[presion]].
+    en: First read [[temperatura]] on the horizontal axis and then how [[energia_cinetica_media]] or [[presion]]
+      changes.
+  - es: Comprueba si la curva esperada es lineal para energía o presión, o de tipo raíz para [[velocidad_rms]].
+    en: Check whether the expected curve is linear for energy or pressure, or root-shaped for [[velocidad_rms]].
+  key_points:
+  - es: La pendiente de [[energia_cinetica_media]] frente a [[temperatura]] codifica la conversión microscópica
+      mediante [[constante_boltzmann]].
+    en: The slope of [[energia_cinetica_media]] versus [[temperatura]] encodes the microscopic conversion through
+      [[constante_boltzmann]].
+  - es: Cambios de [[numero_particulas]] o [[volumen]] modifican la presión sin cambiar la energía media por partícula
+      a temperatura fija.
+    en: Changes in [[numero_particulas]] or [[volumen]] modify pressure without changing per-particle mean energy
+      at fixed temperature.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: A temperatura ambiente, las energías por partícula son del orden de 10^-21 J.
+    en: At room temperature, per-particle energies are of order 10^-21 J.
+  - es: Las velocidades moleculares típicas pueden ser cientos de m/s en gases ligeros.
+    en: Typical molecular speeds can be hundreds of m/s in light gases.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: '[[constante_boltzmann]]·[[temperatura]] debe tener unidades de J; [[presion]]·[[volumen]] también tiene
+      unidades de energía.'
+    en: '[[constante_boltzmann]]·[[temperatura]] must have units of J; [[presion]]·[[volumen]] also has units of
+      energy.'
+  common_unit_mistakes:
+  - es: Introducir [[temperatura]] en °C en vez de K.
+    en: Entering [[temperatura]] in °C instead of K.
+  - es: Usar masa molar en lugar de [[masa_particula]] en kg.
+    en: Using molar mass instead of [[masa_particula]] in kg.
+  - es: Usar litros sin convertir [[volumen]] a m³.
+    en: Using liters without converting [[volumen]] to m³.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable térmica de control
+      en: thermal control variable
+    summary_rules:
+    - id: temperatura_summary_control
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] fija la escala energética microscópica del gas ideal y controla [[energia_cinetica_media]]
+          y [[velocidad_rms]].'
+        en: '[[temperatura]] sets the microscopic energy scale of the ideal gas and controls [[energia_cinetica_media]]
+          and [[velocidad_rms]].'
+    physical_reading_rules:
+    - id: temperatura_physical_reading_kelvin
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura]] siempre en kelvin; usar grados Celsius directamente rompe la proporcionalidad microscópica.
+        en: Always read [[temperatura]] in kelvin; using Celsius directly breaks the microscopic proportionality.
+    coherence_rules:
+    - id: temperatura_coherence_nonnegative
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] debe ser positiva en el modelo de gas ideal clásico usado aquí.'
+        en: '[[temperatura]] must be positive in the classical ideal-gas model used here.'
+    model_validity_rules:
+    - id: temperatura_model_validity_equilibrium
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura]] como temperatura de equilibrio; si el gas no está equilibrado, una sola temperatura
+          puede no describir la distribución de velocidades.
+        en: Interpret [[temperatura]] as an equilibrium temperature; if the gas is not equilibrated, one temperature
+          may not describe the velocity distribution.
+    graph_rules:
+    - id: temperatura_graph_axis
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[temperatura]] está en el eje horizontal, desplazarse a la derecha debe elevar [[energia_cinetica_media]]
+          y [[velocidad_rms]].
+        en: When [[temperatura]] is on the horizontal axis, moving right should raise [[energia_cinetica_media]]
+          and [[velocidad_rms]].
+    likely_errors:
+    - id: temperatura_likely_error_heat
+      when: 'true'
+      status: warning
+      text:
+        es: 'No confundas [[temperatura]] con calor: aquí es una escala de energía microscópica, no energía transferida.'
+        en: 'Do not confuse [[temperatura]] with heat: here it is a microscopic energy scale, not transferred energy.'
+    next_step_rules:
+    - id: temperatura_next_step_check_units
+      when: 'true'
+      status: info
+      text:
+        es: Convierte la temperatura a K antes de aplicar fórmulas y verifica si el resultado queda en J, Pa o m/s
+          según el despeje.
+        en: Convert temperature to K before applying formulas and verify whether the result is in J, Pa, or m/s
+          depending on the rearrangement.
+    physical_intuition:
+    - id: temperatura_intuition_distribution
+      when: 'true'
+      status: info
+      text:
+        es: 'Una [[temperatura]] mayor ensancha la distribución de velocidades: hay más partículas rápidas, aunque
+          también sigan existiendo partículas lentas.'
+        en: 'A larger [[temperatura]] broadens the speed distribution: there are more fast particles, although slow
+          particles still exist.'
+    limiting_cases:
+    - id: temperatura_limiting_high_low
+      when: 'true'
+      status: info
+      text:
+        es: A temperaturas muy bajas o muy altas pueden fallar, respectivamente, la aproximación clásica o la aproximación
+          no relativista.
+        en: At very low or very high temperatures, the classical approximation or the nonrelativistic approximation
+          may fail, respectively.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_cinetica_media:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: magnitud dominante
+      en: dominant magnitude
+    summary_rules:
+    - id: energia_cinetica_media_summary_thermal_energy
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_cinetica_media]] resume la energía traslacional media asociada al movimiento microscópico
+          de una partícula del gas ideal.'
+        en: '[[energia_cinetica_media]] summarizes the mean translational energy associated with the microscopic
+          motion of one ideal-gas particle.'
+    physical_reading_rules:
+    - id: energia_cinetica_media_physical_reading_temperature_link
+      when: 'true'
+      status: info
+      text:
+        es: Si aumenta [[temperatura]], debe aumentar [[energia_cinetica_media]] de forma lineal; no significa que
+          todas las partículas tengan la misma energía.
+        en: If [[temperatura]] increases, [[energia_cinetica_media]] must increase linearly; this does not mean
+          every particle has the same energy.
+    coherence_rules:
+    - id: energia_cinetica_media_coherence_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[energia_cinetica_media]] se exprese en J y sea compatible con [[constante_boltzmann]]
+          por [[temperatura]].
+        en: Check that [[energia_cinetica_media]] is expressed in J and is consistent with [[constante_boltzmann]]
+          times [[temperatura]].
+    model_validity_rules:
+    - id: energia_cinetica_media_model_validity_classical
+      when: 'true'
+      status: info
+      text:
+        es: La lectura vale para un gas ideal clásico, diluido y no relativista; falla si hay interacciones fuertes,
+          degeneración cuántica o velocidades relativistas.
+        en: The reading is valid for a classical, dilute, nonrelativistic ideal gas; it fails with strong interactions,
+          quantum degeneracy, or relativistic speeds.
+    graph_rules:
+    - id: energia_cinetica_media_graph_slope
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica [[energia_cinetica_media]] frente a [[temperatura]], la pendiente representa el factor
+          microscópico fijado por [[constante_boltzmann]].
+        en: In the graph of [[energia_cinetica_media]] versus [[temperatura]], the slope represents the microscopic
+          factor set by [[constante_boltzmann]].
+    likely_errors:
+    - id: energia_cinetica_media_likely_error_total_energy
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas [[energia_cinetica_media]] por partícula con la energía total del gas; para el total interviene
+          [[numero_particulas]].
+        en: Do not confuse per-particle [[energia_cinetica_media]] with the total gas energy; total energy involves
+          [[numero_particulas]].
+    next_step_rules:
+    - id: energia_cinetica_media_next_step_compare_speed
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona el valor con [[velocidad_rms]] para comprobar si la escala de rapidez microscópica es razonable.
+        en: Relate the value to [[velocidad_rms]] to check whether the microscopic speed scale is reasonable.
+    physical_intuition:
+    - id: energia_cinetica_media_intuition_agitation
+      when: 'true'
+      status: info
+      text:
+        es: Mayor [[energia_cinetica_media]] significa mayor agitación microscópica promedio, no una dirección preferente
+          de movimiento.
+        en: Larger [[energia_cinetica_media]] means greater average microscopic agitation, not a preferred direction
+          of motion.
+    limiting_cases:
+    - id: energia_cinetica_media_limiting_zero_temp
+      when: 'true'
+      status: info
+      text:
+        es: Al aproximarse [[temperatura]] a cero, el modelo clásico predice energía traslacional media muy pequeña,
+          pero pueden aparecer límites cuánticos.
+        en: As [[temperatura]] approaches zero, the classical model predicts very small mean translational energy,
+          but quantum limits may appear.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  constante_boltzmann:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: constante universal
+      en: universal constant
+    summary_rules:
+    - id: constante_boltzmann_summary_bridge
+      when: 'true'
+      status: ok
+      text:
+        es: '[[constante_boltzmann]] convierte la escala térmica [[temperatura]] en escala energética microscópica.'
+        en: '[[constante_boltzmann]] converts the thermal scale [[temperatura]] into a microscopic energy scale.'
+    physical_reading_rules:
+    - id: constante_boltzmann_physical_reading_constant
+      when: 'true'
+      status: info
+      text:
+        es: '[[constante_boltzmann]] no describe el gas concreto: es una constante universal que fija la proporción
+          entre K y J.'
+        en: '[[constante_boltzmann]] does not describe a particular gas: it is a universal constant setting the
+          proportion between K and J.'
+    coherence_rules:
+    - id: constante_boltzmann_coherence_dimensions
+      when: 'true'
+      status: ok
+      text:
+        es: Sus unidades deben permitir que [[constante_boltzmann]] por [[temperatura]] tenga dimensión de energía.
+        en: Its units must make [[constante_boltzmann]] times [[temperatura]] have energy dimension.
+    model_validity_rules:
+    - id: constante_boltzmann_model_validity_universal
+      when: 'true'
+      status: info
+      text:
+        es: No se ajusta experimentalmente dentro del ejercicio; cualquier variación aparente suele indicar error
+          de unidades o de despeje.
+        en: It is not fitted inside the exercise; any apparent variation usually indicates a unit or rearrangement
+          error.
+    graph_rules:
+    - id: constante_boltzmann_graph_slope_constant
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica energía-temperatura, [[constante_boltzmann]] aparece como parte de la pendiente, no como
+          una variable de eje.
+        en: In the energy-temperature graph, [[constante_boltzmann]] appears as part of the slope, not as an axis
+          variable.
+    likely_errors:
+    - id: constante_boltzmann_likely_error_wrong_constant
+      when: 'true'
+      status: warning
+      text:
+        es: No sustituyas [[constante_boltzmann]] por la constante de los gases si trabajas con partículas individuales.
+        en: Do not replace [[constante_boltzmann]] with the gas constant when working with individual particles.
+    next_step_rules:
+    - id: constante_boltzmann_next_step_particle_or_mole
+      when: 'true'
+      status: info
+      text:
+        es: Decide si el problema está planteado por partícula o por mol antes de escoger la constante adecuada.
+        en: Decide whether the problem is written per particle or per mole before choosing the proper constant.
+    physical_intuition:
+    - id: constante_boltzmann_intuition_scale
+      when: 'true'
+      status: info
+      text:
+        es: Su valor pequeño recuerda que la energía térmica de una sola partícula a temperatura ambiente es microscópica.
+        en: Its small value reminds us that the thermal energy of one particle at room temperature is microscopic.
+    limiting_cases:
+    - id: constante_boltzmann_limiting_not_variable
+      when: 'true'
+      status: info
+      text:
+        es: 'No existe un caso límite físico en el que [[constante_boltzmann]] se haga cero dentro del modelo: sería
+          cambiar la teoría.'
+        en: 'There is no physical limiting case where [[constante_boltzmann]] becomes zero inside the model: that
+          would change the theory.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  presion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado macroscópico
+      en: macroscopic result
+    summary_rules:
+    - id: presion_summary_collisions
+      when: 'true'
+      status: ok
+      text:
+        es: '[[presion]] es la lectura macroscópica de los choques microscópicos de muchas partículas contra las
+          paredes.'
+        en: '[[presion]] is the macroscopic reading of microscopic collisions of many particles against the walls.'
+    physical_reading_rules:
+    - id: presion_physical_reading_density_temp
+      when: 'true'
+      status: info
+      text:
+        es: A [[volumen]] fijo, [[presion]] aumenta si crecen [[numero_particulas]] o [[temperatura]].
+        en: At fixed [[volumen]], [[presion]] increases if [[numero_particulas]] or [[temperatura]] grows.
+    coherence_rules:
+    - id: presion_coherence_units
+      when: 'true'
+      status: ok
+      text:
+        es: Verifica que [[presion]] queda en Pa y que el cociente entre escala energética y [[volumen]] tiene dimensión
+          de presión.
+        en: Verify that [[presion]] is in Pa and that energy scale divided by [[volumen]] has pressure dimension.
+    model_validity_rules:
+    - id: presion_model_validity_dilute
+      when: 'true'
+      status: info
+      text:
+        es: La interpretación microscópica supone gas diluido, choques elásticos y ausencia de fuerzas intermoleculares
+          relevantes.
+        en: The microscopic interpretation assumes a dilute gas, elastic collisions, and no relevant intermolecular
+          forces.
+    graph_rules:
+    - id: presion_graph_linear
+      when: 'true'
+      status: info
+      text:
+        es: Si la gráfica muestra [[presion]] frente a [[temperatura]] con [[numero_particulas]] y [[volumen]] constantes,
+          la relación debe ser lineal.
+        en: If the graph shows [[presion]] versus [[temperatura]] with [[numero_particulas]] and [[volumen]] constant,
+          the relation should be linear.
+    likely_errors:
+    - id: presion_likely_error_force_only
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[presion]] como una fuerza total; es fuerza media por unidad de área producida por choques.
+        en: Do not interpret [[presion]] as a total force; it is mean force per unit area produced by collisions.
+    next_step_rules:
+    - id: presion_next_step_hold_variables
+      when: 'true'
+      status: info
+      text:
+        es: 'Antes de comparar presiones, identifica qué magnitudes permanecen constantes: [[volumen]], [[numero_particulas]]
+          o [[temperatura]].'
+        en: 'Before comparing pressures, identify which quantities remain constant: [[volumen]], [[numero_particulas]],
+          or [[temperatura]].'
+    physical_intuition:
+    - id: presion_intuition_more_hits
+      when: 'true'
+      status: info
+      text:
+        es: Mayor [[presion]] significa más transferencia de momento por unidad de área y tiempo, causada por más
+          partículas o partículas más rápidas.
+        en: Greater [[presion]] means more momentum transfer per unit area and time, caused by more particles or
+          faster particles.
+    limiting_cases:
+    - id: presion_limiting_volume
+      when: 'true'
+      status: info
+      text:
+        es: Si [[volumen]] se hace muy pequeño a [[numero_particulas]] fijo, el modelo ideal puede fallar por interacciones
+          y tamaño molecular.
+        en: If [[volumen]] becomes very small at fixed [[numero_particulas]], the ideal model may fail because of
+          interactions and molecular size.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  volumen:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro geométrico
+      en: geometric parameter
+    summary_rules:
+    - id: volumen_summary_space
+      when: 'true'
+      status: ok
+      text:
+        es: '[[volumen]] mide el espacio disponible para las partículas y controla la densidad microscópica del
+          gas.'
+        en: '[[volumen]] measures the space available to particles and controls the microscopic density of the gas.'
+    physical_reading_rules:
+    - id: volumen_physical_reading_inverse_pressure
+      when: 'true'
+      status: info
+      text:
+        es: Con [[numero_particulas]] y [[temperatura]] fijos, aumentar [[volumen]] reduce [[presion]] porque los
+          choques se reparten en más espacio.
+        en: With fixed [[numero_particulas]] and [[temperatura]], increasing [[volumen]] reduces [[presion]] because
+          collisions are spread over more space.
+    coherence_rules:
+    - id: volumen_coherence_positive
+      when: 'true'
+      status: ok
+      text:
+        es: '[[volumen]] debe ser positivo y expresarse en m³ para mantener coherente la ecuación microscópica.'
+        en: '[[volumen]] must be positive and expressed in m³ to keep the microscopic equation coherent.'
+    model_validity_rules:
+    - id: volumen_model_validity_large_enough
+      when: 'true'
+      status: info
+      text:
+        es: Debe ser grande frente al volumen molecular total; si no, el gas deja de comportarse idealmente.
+        en: It must be large compared with the total molecular volume; otherwise the gas stops behaving ideally.
+    graph_rules:
+    - id: volumen_graph_parameter
+      when: 'true'
+      status: info
+      text:
+        es: En gráficos frente a [[temperatura]], [[volumen]] suele actuar como parámetro que cambia la pendiente
+          de [[presion]].
+        en: In graphs versus [[temperatura]], [[volumen]] usually acts as a parameter changing the slope of [[presion]].
+    likely_errors:
+    - id: volumen_likely_error_liters
+      when: 'true'
+      status: warning
+      text:
+        es: No uses litros como si fueran m³; una conversión incorrecta desplaza [[presion]] por factores grandes.
+        en: Do not use liters as if they were m³; a wrong conversion shifts [[presion]] by large factors.
+    next_step_rules:
+    - id: volumen_next_step_density
+      when: 'true'
+      status: info
+      text:
+        es: Calcula mentalmente si la densidad [[numero_particulas]] por [[volumen]] parece compatible con un gas
+          diluido.
+        en: Mentally check whether the density [[numero_particulas]] per [[volumen]] seems compatible with a dilute
+          gas.
+    physical_intuition:
+    - id: volumen_intuition_room
+      when: 'true'
+      status: info
+      text:
+        es: Más [[volumen]] da más recorrido libre medio y menos choques por área, si las demás magnitudes no cambian.
+        en: More [[volumen]] gives more mean free room and fewer collisions per area, if the other quantities do
+          not change.
+    limiting_cases:
+    - id: volumen_limiting_large_small
+      when: 'true'
+      status: info
+      text:
+        es: Volúmenes enormes llevan a presiones pequeñas; volúmenes demasiado pequeños invalidan la hipótesis de
+          partículas puntuales sin interacción.
+        en: Huge volumes lead to small pressures; too-small volumes invalidate the assumption of pointlike noninteracting
+          particles.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_particulas:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: conteo microscópico
+      en: microscopic count
+    summary_rules:
+    - id: numero_particulas_summary_count
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_particulas]] indica cuántas partículas microscópicas contribuyen a la presión y a la energía
+          total del gas.'
+        en: '[[numero_particulas]] indicates how many microscopic particles contribute to the gas pressure and total
+          energy.'
+    physical_reading_rules:
+    - id: numero_particulas_physical_reading_extensive
+      when: 'true'
+      status: info
+      text:
+        es: '[[numero_particulas]] multiplica magnitudes extensivas, pero no cambia la energía media por partícula
+          si [[temperatura]] permanece fija.'
+        en: '[[numero_particulas]] multiplies extensive quantities but does not change the mean energy per particle
+          if [[temperatura]] stays fixed.'
+    coherence_rules:
+    - id: numero_particulas_coherence_integer
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser no negativo y enorme en gases macroscópicos; valores pequeños representan modelos microscópicos
+          o simulaciones.
+        en: It must be nonnegative and huge in macroscopic gases; small values represent microscopic models or simulations.
+    model_validity_rules:
+    - id: numero_particulas_model_validity_many_particles
+      when: 'true'
+      status: info
+      text:
+        es: La presión estable requiere muchas partículas; con pocas partículas dominan fluctuaciones y la presión
+          instantánea no es suave.
+        en: Stable pressure requires many particles; with few particles, fluctuations dominate and instantaneous
+          pressure is not smooth.
+    graph_rules:
+    - id: numero_particulas_graph_slope
+      when: 'true'
+      status: info
+      text:
+        es: Al aumentar [[numero_particulas]] a [[volumen]] fijo, la pendiente de [[presion]] frente a [[temperatura]]
+          aumenta.
+        en: Increasing [[numero_particulas]] at fixed [[volumen]] increases the slope of [[presion]] versus [[temperatura]].
+    likely_errors:
+    - id: numero_particulas_likely_error_moles
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas [[numero_particulas]] con número de moles; cambiar de escala exige cambiar también la constante
+          usada.
+        en: Do not confuse [[numero_particulas]] with number of moles; changing scale also requires changing the
+          constant used.
+    next_step_rules:
+    - id: numero_particulas_next_step_particle_scale
+      when: 'true'
+      status: info
+      text:
+        es: Decide si la respuesta se pide por partícula, por conjunto completo o por mol antes de interpretar el
+          resultado.
+        en: Decide whether the answer is requested per particle, for the whole set, or per mole before interpreting
+          the result.
+    physical_intuition:
+    - id: numero_particulas_intuition_more_colliders
+      when: 'true'
+      status: info
+      text:
+        es: Más [[numero_particulas]] significa más colisiones contra las paredes, no necesariamente partículas
+          más rápidas.
+        en: More [[numero_particulas]] means more wall collisions, not necessarily faster particles.
+    limiting_cases:
+    - id: numero_particulas_limiting_zero
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[numero_particulas]] es cero, no hay gas: [[presion]] y energía total pierden sentido físico macroscópico.'
+        en: 'If [[numero_particulas]] is zero, there is no gas: [[presion]] and total energy lose macroscopic physical
+          meaning.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  masa_particula:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro microscópico
+      en: microscopic parameter
+    summary_rules:
+    - id: masa_particula_summary_mass
+      when: 'true'
+      status: ok
+      text:
+        es: '[[masa_particula]] conecta la misma energía térmica con una escala de rapidez diferente para cada tipo
+          de partícula.'
+        en: '[[masa_particula]] connects the same thermal energy with a different speed scale for each particle
+          type.'
+    physical_reading_rules:
+    - id: masa_particula_physical_reading_speed
+      when: 'true'
+      status: info
+      text:
+        es: A igual [[temperatura]], una [[masa_particula]] mayor implica menor [[velocidad_rms]].
+        en: At equal [[temperatura]], a larger [[masa_particula]] implies a smaller [[velocidad_rms]].
+    coherence_rules:
+    - id: masa_particula_coherence_kg
+      when: 'true'
+      status: ok
+      text:
+        es: Debe expresarse en kg por partícula, no en masa molar, cuando se usa [[constante_boltzmann]].
+        en: It must be expressed in kg per particle, not molar mass, when [[constante_boltzmann]] is used.
+    model_validity_rules:
+    - id: masa_particula_model_validity_species
+      when: 'true'
+      status: info
+      text:
+        es: El modelo supone partículas idénticas; mezclas de gases requieren tratar cada especie con su propia
+          [[masa_particula]].
+        en: The model assumes identical particles; gas mixtures require treating each species with its own [[masa_particula]].
+    graph_rules:
+    - id: masa_particula_graph_parameter
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica de [[velocidad_rms]] frente a [[temperatura]], [[masa_particula]] cambia la curvatura
+          o escala vertical.
+        en: In a graph of [[velocidad_rms]] versus [[temperatura]], [[masa_particula]] changes the curvature or
+          vertical scale.
+    likely_errors:
+    - id: masa_particula_likely_error_molar_mass
+      when: 'true'
+      status: warning
+      text:
+        es: Usar g/mol como [[masa_particula]] produce velocidades absurdas; convierte a kg por molécula.
+        en: Using g/mol as [[masa_particula]] gives absurd speeds; convert to kg per molecule.
+    next_step_rules:
+    - id: masa_particula_next_step_check_species
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba qué gas se está modelando antes de aceptar una [[velocidad_rms]] como razonable.
+        en: Check which gas is being modeled before accepting a [[velocidad_rms]] as reasonable.
+    physical_intuition:
+    - id: masa_particula_intuition_heavier_slower
+      when: 'true'
+      status: info
+      text:
+        es: Las partículas más pesadas reparten la energía térmica en más inercia y por eso se mueven más despacio
+          en promedio.
+        en: Heavier particles spread thermal energy over more inertia and therefore move more slowly on average.
+    limiting_cases:
+    - id: masa_particula_limiting_mass
+      when: 'true'
+      status: info
+      text:
+        es: Si [[masa_particula]] se aproxima artificialmente a cero, la predicción de rapidez puede volverse no
+          relativista inválida.
+        en: If [[masa_particula]] is artificially driven toward zero, the predicted speed may become invalidly nonrelativistic.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  velocidad_rms:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: escala de rapidez
+      en: speed scale
+    summary_rules:
+    - id: velocidad_rms_summary_speed
+      when: 'true'
+      status: ok
+      text:
+        es: '[[velocidad_rms]] da una escala positiva de rapidez microscópica ligada a [[temperatura]] y [[masa_particula]].'
+        en: '[[velocidad_rms]] gives a positive microscopic speed scale linked to [[temperatura]] and [[masa_particula]].'
+    physical_reading_rules:
+    - id: velocidad_rms_physical_reading_not_average_velocity
+      when: 'true'
+      status: info
+      text:
+        es: '[[velocidad_rms]] no es la velocidad vectorial media; en equilibrio la velocidad media puede ser cero
+          aunque la rapidez sea grande.'
+        en: '[[velocidad_rms]] is not the mean vector velocity; at equilibrium the mean velocity may be zero even
+          when speed is large.'
+    coherence_rules:
+    - id: velocidad_rms_coherence_ms
+      when: 'true'
+      status: ok
+      text:
+        es: Debe quedar en m/s y crecer con [[temperatura]] mientras disminuye con [[masa_particula]].
+        en: It must be in m/s and grow with [[temperatura]] while decreasing with [[masa_particula]].
+    model_validity_rules:
+    - id: velocidad_rms_model_validity_nonrelativistic
+      when: 'true'
+      status: info
+      text:
+        es: La lectura clásica exige que [[velocidad_rms]] sea mucho menor que la velocidad de la luz.
+        en: The classical reading requires [[velocidad_rms]] to be much smaller than the speed of light.
+    graph_rules:
+    - id: velocidad_rms_graph_root
+      when: 'true'
+      status: info
+      text:
+        es: 'La gráfica [[velocidad_rms]] frente a [[temperatura]] no es lineal: crece como una raíz, más despacio
+          a temperaturas altas.'
+        en: 'The graph of [[velocidad_rms]] versus [[temperatura]] is not linear: it grows like a root, more slowly
+          at high temperatures.'
+    likely_errors:
+    - id: velocidad_rms_likely_error_direction
+      when: 'true'
+      status: warning
+      text:
+        es: No asignes signo direccional a [[velocidad_rms]]; es una rapidez RMS y por definición no negativa.
+        en: Do not assign directional sign to [[velocidad_rms]]; it is an RMS speed and is nonnegative by definition.
+    next_step_rules:
+    - id: velocidad_rms_next_step_compare_gas
+      when: 'true'
+      status: info
+      text:
+        es: Compara la rapidez obtenida con valores típicos de moléculas a temperatura ambiente para detectar errores
+          de escala.
+        en: Compare the obtained speed with typical molecular values at room temperature to detect scale errors.
+    physical_intuition:
+    - id: velocidad_rms_intuition_typical_speed
+      when: 'true'
+      status: info
+      text:
+        es: '[[velocidad_rms]] representa una rapidez típica energética, no la rapidez exacta de todas las partículas.'
+        en: '[[velocidad_rms]] represents an energetic typical speed, not the exact speed of every particle.'
+    limiting_cases:
+    - id: velocidad_rms_limiting_zero_temp
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura]] tiende a cero, la predicción clásica tiende a rapidez nula, aunque pueden aparecer
+          efectos cuánticos.
+        en: If [[temperatura]] tends to zero, the classical prediction tends toward zero speed, although quantum
+          effects may appear.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

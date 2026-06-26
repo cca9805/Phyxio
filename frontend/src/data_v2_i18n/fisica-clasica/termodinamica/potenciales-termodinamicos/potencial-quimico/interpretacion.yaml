@@ -1,0 +1,475 @@
+version: "2.0"
+id: interp-potencial-quimico
+leaf_id: potencial-quimico
+
+nombre:
+  es: Interpretación de potencial químico
+  en: Chemical potential interpretation
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: potenciales-termodinamicos
+  parent_id: potenciales-termodinamicos
+  ruta_relativa: fisica-clasica/termodinamica/potenciales-termodinamicos/potencial-quimico
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    priority: [summary, likely_errors]
+
+dependencies:
+  formulas:
+    - mu_actividad
+    - equilibrio_fases
+    - mu_definicion
+  magnitudes:
+    - mu
+    - mu_std
+    - a
+    - T
+    - R
+    - G
+    - mu_alfa
+    - mu_beta
+    - dG_dni
+
+global_context:
+  physical_domain:
+    es: "Termodinámica de sistemas multicomponente a T y p constantes. Válido para mezclas de gases ideales, soluciones ideales y sistemas no ideales con coeficientes de actividad."
+    en: "Thermodynamics of multicomponent systems at constant T and p. Valid for ideal gas mixtures, ideal solutions and non-ideal systems with activity coefficients."
+  axis_convention:
+    es: "µ mayor implica mayor tendencia del componente a abandonar esa fase. El flujo espontáneo de materia siempre ocurre desde la fase de mayor µ hacia la de menor µ."
+    en: "Higher µ implies greater tendency of the component to leave that phase. Spontaneous matter flow always occurs from the phase of higher µ to the phase of lower µ."
+  standard_assumptions:
+    - T y p constantes durante la evaluación
+    - mezcla ideal o actividades corregidas con coeficientes γ
+    - actividad siempre estrictamente positiva
+  standard_warnings:
+    - "µ es una magnitud intensiva; confundirla con G (extensiva) produce errores de escala."
+    - "El término RT·ln(a) requiere T en kelvin; usar Celsius produce errores sistemáticos."
+    - "La actividad de un componente puro en su estado estándar es 1 por definición, por lo que µ = µ° para el componente puro."
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen del potencial químico
+      en: Chemical potential summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del gráfico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  mu:
+    magnitude_type: chemical_potential
+    semantic_role:
+      es: "Potencial que rige el equilibrio y el flujo de materia entre fases o componentes de una mezcla."
+      en: "Potential governing equilibrium and matter flow between phases or components of a mixture."
+    summary_rules:
+      - id: mu_summary_high_activity
+        when: "a > 1"
+        status: warning
+        text:
+          es: "[[mu]] indica un estado de alta actividad: el componente tiene mayor tendencia a escapar de la fase que en su estado estándar. El sistema busca reducir [[a]] hasta restaurar el equilibrio."
+          en: "[[mu]] indicates a high-activity state: the component has a greater tendency to escape from the phase than in its standard state. The system seeks to reduce [[a]] until equilibrium is restored."
+      - id: mu_summary_low_activity
+        when: "a < 1"
+        status: ok
+        text:
+          es: "[[mu]] indica un estado de baja actividad: el componente tiende a ser retenido en la fase. El sistema está por debajo del estado estándar de referencia."
+          en: "[[mu]] indicates a low-activity state: the component tends to be retained in the phase. The system is below the standard reference state."
+      - id: mu_summary_standard
+        when: "a == 1"
+        status: ok
+        text:
+          es: "[[mu]] es igual a [[mu_std]]: el componente se encuentra en su estado estándar de referencia. La actividad unitaria indica concentración o presión estándar."
+          en: "[[mu]] equals [[mu_std]]: the component is at its standard reference state. Unit activity indicates standard concentration or pressure."
+      - id: mu_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[mu]] resume la energía libre por mol del componente en las condiciones actuales. Su diferencia con [[mu_std]] depende logarítmicamente de [[a]] y describe cuánto se aparta el sistema del estado de referencia."
+          en: "[[mu]] summarizes the free energy per mole of the component under current conditions. Its difference from [[mu_std]] depends logarithmically on [[a]] and describes how far the system departs from the reference state."
+    physical_reading_rules:
+      - id: mu_reading_equilibrium_driver
+        when: "true"
+        status: ok
+        text:
+          es: "[[mu]] es el motor del equilibrio de fases: la materia fluye espontáneamente desde la fase de mayor [[mu]] hacia la de menor [[mu]], igual que el calor fluye de mayor a menor temperatura."
+          en: "[[mu]] is the driver of phase equilibrium: matter flows spontaneously from the phase of higher [[mu]] to the one of lower [[mu]], just as heat flows from higher to lower temperature."
+      - id: mu_reading_entropy_contribution
+        when: "a < 1"
+        status: ok
+        text:
+          es: "El término logarítmico negativo en la expresión de [[mu]] refleja la contribución entrópica de la mezcla: diluir un componente reduce su [[mu]] y favorece su retención en la fase."
+          en: "The negative logarithmic term in the expression of [[mu]] reflects the entropic contribution of mixing: diluting a component lowers its [[mu]] and favours its retention in the phase."
+      - id: mu_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[mu]] depende de [[T]], [[mu_std]] y [[a]]. A [[T]] alta el término logarítmico domina; a [[T]] baja, [[mu_std]] impone el comportamiento."
+          en: "[[mu]] depends on [[T]], [[mu_std]] and [[a]]. At high [[T]] the logarithmic term dominates; at low [[T]], [[mu_std]] governs the behaviour."
+    coherence_rules:
+      - id: mu_coherence_activity_positive
+        when: "a <= 0"
+        status: error
+        text:
+          es: "Actividad nula o negativa es físicamente imposible. [[a]] debe ser estrictamente positiva para que [[mu]] esté definido."
+          en: "Zero or negative activity is physically impossible. [[a]] must be strictly positive for [[mu]] to be defined."
+      - id: mu_coherence_T_positive
+        when: "T <= 0"
+        status: error
+        text:
+          es: "Temperatura nula o negativa en kelvin es físicamente imposible. [[T]] debe ser positiva para que el término RT sea válido."
+          en: "Zero or negative temperature in kelvin is physically impossible. [[T]] must be positive for the RT term to be valid."
+      - id: mu_coherence_large
+        when: "abs(mu) > 5e5"
+        status: warning
+        text:
+          es: "[[mu]] supera 500 kJ/mol. Verificar que [[mu_std]] está en J/mol y no en kJ/mol, y que [[T]] está en kelvin."
+          en: "[[mu]] exceeds 500 kJ/mol. Verify that [[mu_std]] is in J/mol and not kJ/mol, and that [[T]] is in kelvin."
+      - id: mu_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[mu]] parece dentro del rango esperado para sistemas termodinámicos habituales."
+          en: "The value of [[mu]] appears within the expected range for typical thermodynamic systems."
+    model_validity_rules:
+      - id: mu_model_ideal
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo es válido para mezclas ideales (actividad igual a fracción molar o presión parcial reducida). Para soluciones concentradas o gases reales a alta presión, la actividad debe corregirse con el coeficiente de actividad γ."
+          en: "The model is valid for ideal mixtures (activity equal to mole fraction or reduced partial pressure). For concentrated solutions or real gases at high pressure, activity must be corrected with the activity coefficient γ."
+      - id: mu_model_nonideal
+        when: "a > 2"
+        status: warning
+        text:
+          es: "Actividad mayor que 2 sugiere comportamiento no ideal. El modelo de solución ideal puede subestimar [[mu]]; considerar la corrección con coeficiente de actividad."
+          en: "Activity greater than 2 suggests non-ideal behaviour. The ideal solution model may underestimate [[mu]]; consider the activity coefficient correction."
+    graph_rules:
+      - id: mu_graph_vs_T
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico [[mu]] vs [[T]], las curvas de las distintas fases se cruzan en las temperaturas de transición de fase. La fase estable a cada T es la de menor [[mu]]."
+          en: "In the [[mu]] vs [[T]] graph, curves of different phases cross at phase transition temperatures. The stable phase at each T is the one with lower [[mu]]."
+      - id: mu_graph_vs_lna
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico [[mu]] vs ln([[a]]), la relación es lineal con pendiente R·[[T]] y ordenada en el origen [[mu_std]]."
+          en: "In the [[mu]] vs ln([[a]]) graph, the relation is linear with slope R·[[T]] and y-intercept [[mu_std]]."
+    likely_errors:
+      - id: mu_error_celsius
+        when: "T < 200"
+        status: error
+        text:
+          es: "Posible uso de Celsius en lugar de kelvin. [[T]] menor de 200 en la escala absoluta es inusual para procesos termodinámicos estándar."
+          en: "Possible use of Celsius instead of kelvin. [[T]] below 200 on the absolute scale is unusual for standard thermodynamic processes."
+      - id: mu_error_units
+        when: "abs(mu) > 1e6"
+        status: error
+        text:
+          es: "[[mu]] supera 1 MJ/mol. Error probable de unidades: verificar que [[mu_std]] se introdujo en J/mol y no en kJ/mol."
+          en: "[[mu]] exceeds 1 MJ/mol. Probable unit error: verify that [[mu_std]] was entered in J/mol and not kJ/mol."
+      - id: mu_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: omitir el término RT·ln([[a]]) y usar solo [[mu_std]] como si el componente estuviera en estado puro estándar. Siempre incluir el término de composición salvo que [[a]] sea explícitamente 1."
+          en: "Frequent error: omitting the RT·ln([[a]]) term and using only [[mu_std]] as if the component were in the pure standard state. Always include the composition term unless [[a]] is explicitly 1."
+    next_step_rules:
+      - id: mu_next_equilibrium
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[mu]] calculado, comparar con [[mu]] de la misma especie en otras fases o puntos del sistema para determinar la dirección del flujo espontáneo de materia y el estado de equilibrio."
+          en: "With [[mu]] computed, compare with [[mu]] of the same species in other phases or system points to determine the direction of spontaneous matter flow and the equilibrium state."
+
+  mu_alfa:
+    magnitude_type: chemical_potential_phase
+    semantic_role:
+      es: "Potencial químico del componente en la fase alfa; su igualdad con µ_beta define el equilibrio de fases."
+      en: "Chemical potential of the component in phase alpha; its equality with µ_beta defines phase equilibrium."
+    summary_rules:
+      - id: mu_alfa_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[mu_alfa]] resume la energía libre por mol del componente en la fase alfa. El equilibrio con la fase beta requiere que [[mu_alfa]] sea igual a µ_beta, indicando que la transferencia de materia entre fases no produce variación neta de la energía libre."
+          en: "[[mu_alfa]] summarizes the free energy per mole of the component in phase alpha. Equilibrium with phase beta requires [[mu_alfa]] to equal µ_beta, indicating that matter transfer between phases produces no net change in free energy."
+    physical_reading_rules:
+      - id: mu_alfa_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Si [[mu_alfa]] es mayor que µ_beta, el componente migra espontáneamente de la fase alfa a la beta. El sistema evoluciona reduciendo la diferencia hasta que ambos potenciales se igualan."
+          en: "If [[mu_alfa]] is greater than µ_beta, the component spontaneously migrates from phase alpha to beta. The system evolves reducing the difference until both potentials equalise."
+    coherence_rules:
+      - id: mu_alfa_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "La diferencia entre [[mu_alfa]] y µ_beta debe ser nula en el equilibrio. Una diferencia mayor de 100 J/mol indica que el sistema está lejos del equilibrio."
+          en: "The difference between [[mu_alfa]] and µ_beta must be zero at equilibrium. A difference greater than 100 J/mol indicates the system is far from equilibrium."
+    model_validity_rules:
+      - id: mu_alfa_model_default
+        when: "true"
+        status: ok
+        text:
+          es: "El criterio de igualdad de potenciales químicos es válido para cualquier sistema en equilibrio termodinámico, independientemente de la idealidad. Requiere que T y p sean iguales en ambas fases (equilibrio térmico y mecánico previos)."
+          en: "The equal chemical potential criterion is valid for any system in thermodynamic equilibrium, regardless of ideality. It requires T and p to be equal in both phases (prior thermal and mechanical equilibrium)."
+    graph_rules:
+      - id: mu_alfa_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama [[mu]] vs T, el cruce de las curvas de µ de dos fases indica la temperatura de transición. Por debajo del cruce, la fase con menor [[mu]] es la estable."
+          en: "In the [[mu]] vs T diagram, the crossing of the µ curves of two phases indicates the transition temperature. Below the crossing, the phase with lower [[mu]] is stable."
+    likely_errors:
+      - id: mu_alfa_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: asumir que el equilibrio de fases requiere igual concentración en ambas fases en lugar de igual potencial químico. La igualdad es de [[mu]], no de concentración."
+          en: "Frequent error: assuming phase equilibrium requires equal concentration in both phases instead of equal chemical potential. The equality is of [[mu]], not of concentration."
+    next_step_rules:
+      - id: mu_alfa_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Calcular µ_beta para la misma especie en la otra fase y comparar. Si son iguales, el sistema está en equilibrio. Si no, la diferencia indica la fuerza impulsora de la transferencia de materia."
+          en: "Compute µ_beta for the same species in the other phase and compare. If equal, the system is at equilibrium. If not, the difference indicates the driving force for matter transfer."
+
+  mu_beta:
+    magnitude_type: chemical_potential_phase
+    semantic_role:
+      es: "Potencial químico del componente en la fase beta; contrapartida de µ_alfa en la condición de equilibrio de fases."
+      en: "Chemical potential of the component in phase beta; counterpart of µ_alfa in the phase equilibrium condition."
+    summary_rules:
+      - id: mu_beta_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[mu_beta]] resume la energía libre por mol en la fase beta. El equilibrio requiere que [[mu_beta]] sea igual a µ_alfa; cualquier diferencia indica que el componente fluye espontáneamente hacia la fase de menor potencial."
+          en: "[[mu_beta]] summarizes the free energy per mole in phase beta. Equilibrium requires [[mu_beta]] to equal µ_alfa; any difference indicates the component flows spontaneously toward the phase of lower potential."
+    physical_reading_rules:
+      - id: mu_beta_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[mu_beta]] refleja las condiciones de composición, T y p de la fase beta. Si [[mu_beta]] es menor que µ_alfa, la fase beta atrae materia del componente hasta alcanzar el equilibrio."
+          en: "[[mu_beta]] reflects the composition, T and p conditions of phase beta. If [[mu_beta]] is lower than µ_alfa, phase beta attracts matter of the component until equilibrium is reached."
+    coherence_rules:
+      - id: mu_beta_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[mu_beta]] debe calcularse con los mismos datos de [[mu_std]] y [[R]] que [[mu_alfa]] para que la comparación tenga sentido; cambiar el estado de referencia entre fases introduce un error sistemático."
+          en: "[[mu_beta]] must be computed with the same [[mu_std]] and [[R]] data as [[mu_alfa]] for the comparison to be meaningful; changing the reference state between phases introduces a systematic error."
+    model_validity_rules:
+      - id: mu_beta_model_default
+        when: "true"
+        status: ok
+        text:
+          es: "La condición de equilibrio µ_alfa = [[mu_beta]] requiere que ambas fases estén a la misma T y p. Si hay gradientes de temperatura o presión, el criterio de equilibrio se modifica con términos adicionales."
+          en: "The equilibrium condition µ_alfa = [[mu_beta]] requires both phases to be at the same T and p. If temperature or pressure gradients exist, the equilibrium criterion is modified with additional terms."
+    graph_rules:
+      - id: mu_beta_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "La curva [[mu_beta]] vs T en el diagrama de fases tiene pendiente distinta a µ_alfa si la fase beta tiene diferente entropía molar. El cruce define la temperatura de transición de fase."
+          en: "The [[mu_beta]] vs T curve in the phase diagram has a different slope from µ_alfa if phase beta has a different molar entropy. The crossing defines the phase transition temperature."
+    likely_errors:
+      - id: mu_beta_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: usar [[mu_beta]] calculado a una temperatura diferente a la de [[mu_alfa]]. Las comparaciones de potenciales entre fases deben hacerse siempre a la misma T y p."
+          en: "Frequent error: using [[mu_beta]] computed at a different temperature from [[mu_alfa]]. Comparisons of potentials between phases must always be made at the same T and p."
+    next_step_rules:
+      - id: mu_beta_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Igualar [[mu_beta]] con µ_alfa para determinar la condición de equilibrio y calcular la temperatura o composición de coexistencia de fases."
+          en: "Equate [[mu_beta]] with µ_alfa to determine the equilibrium condition and compute the coexistence temperature or composition."
+
+  a:
+    magnitude_type: activity
+    semantic_role:
+      es: "Actividad del componente; argumento del término logarítmico en la expresión de µ."
+      en: "Activity of the component; argument of the logarithmic term in the expression of µ."
+    summary_rules:
+      - id: a_summary_dilute
+        when: "a < 0.1"
+        status: ok
+        text:
+          es: "[[a]] indica solución muy diluida. [[mu]] es significativamente menor que [[mu_std]], lo que indica que el componente tiene baja tendencia a escapar de la fase."
+          en: "[[a]] indicates a very dilute solution. [[mu]] is significantly lower than [[mu_std]], indicating the component has low tendency to escape from the phase."
+      - id: a_summary_concentrated
+        when: "a > 0.9"
+        status: warning
+        text:
+          es: "[[a]] indica que el componente está cerca de su estado puro o en alta concentración. [[mu]] se aproxima a [[mu_std]]; en soluciones concentradas pueden ser relevantes las correcciones de no idealidad."
+          en: "[[a]] indicates the component is near its pure state or at high concentration. [[mu]] approaches [[mu_std]]; in concentrated solutions non-ideality corrections may be relevant."
+      - id: a_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[a]] resume la concentración efectiva del componente en relación con su estado estándar. Junto con [[mu_std]] y [[T]], determina completamente [[mu]] mediante la expresión logarítmica."
+          en: "[[a]] summarizes the effective concentration of the component relative to its standard state. Together with [[mu_std]] and [[T]], it completely determines [[mu]] through the logarithmic expression."
+    physical_reading_rules:
+      - id: a_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[a]] es el puente entre la termodinámica formal y los datos experimentales de concentración o presión parcial. Para gases ideales [[a]] es la presión parcial en bares; para soluciones ideales [[a]] es la fracción molar."
+          en: "[[a]] is the bridge between formal thermodynamics and experimental data on concentration or partial pressure. For ideal gases [[a]] is the partial pressure in bars; for ideal solutions [[a]] is the mole fraction."
+    coherence_rules:
+      - id: a_coherence_positive
+        when: "a <= 0"
+        status: error
+        text:
+          es: "[[a]] nula o negativa es físicamente imposible y hace indefinido el logaritmo en la expresión de [[mu]]."
+          en: "Zero or negative [[a]] is physically impossible and makes the logarithm in the [[mu]] expression undefined."
+      - id: a_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[a]] positiva y definida. Para verificar coherencia, comprobar que se usó la escala de actividad correcta (fracción molar, presión en bares, concentración en mol/L según la convención del sistema)."
+          en: "Positive and defined [[a]]. To verify coherence, check that the correct activity scale was used (mole fraction, pressure in bars, concentration in mol/L according to the system convention)."
+    model_validity_rules:
+      - id: a_model_ideal
+        when: "true"
+        status: ok
+        text:
+          es: "La actividad igual a la fracción molar (o presión parcial reducida) es válida para mezclas ideales. En soluciones concentradas o electrolitos, usar [[a]] corregida con coeficiente de actividad γ."
+          en: "Activity equal to mole fraction (or reduced partial pressure) is valid for ideal mixtures. In concentrated solutions or electrolytes, use [[a]] corrected with activity coefficient γ."
+    graph_rules:
+      - id: a_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico [[mu]] vs ln([[a]]), [[a]] define la posición horizontal. Valores de [[a]] menores de 1 dan ln([[a]]) negativo y [[mu]] menor que [[mu_std]]."
+          en: "In the [[mu]] vs ln([[a]]) graph, [[a]] defines the horizontal position. Values of [[a]] below 1 give negative ln([[a]]) and [[mu]] lower than [[mu_std]]."
+    likely_errors:
+      - id: a_error_scale
+        when: "a > 1000"
+        status: error
+        text:
+          es: "[[a]] mayor de 1000 es físicamente inusual en soluciones estándar. Verificar que se usó la escala de actividad correcta y no se confundió con la concentración en mmol/L."
+          en: "[[a]] greater than 1000 is physically unusual in standard solutions. Verify that the correct activity scale was used and that concentration in mmol/L was not confused with activity."
+      - id: a_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: usar la concentración molar directamente como [[a]] sin verificar la escala de referencia estándar. Para soluciones acuosas el estado estándar es 1 mol/L; para gases, 1 bar."
+          en: "Frequent error: using molar concentration directly as [[a]] without verifying the standard reference scale. For aqueous solutions the standard state is 1 mol/L; for gases, 1 bar."
+    next_step_rules:
+      - id: a_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[a]] determinada, sustituir en la expresión de [[mu]] para obtener el potencial químico en las condiciones actuales y comparar con el de otras fases."
+          en: "With [[a]] determined, substitute into the [[mu]] expression to obtain the chemical potential under current conditions and compare with other phases."
+
+cross_checks:
+  - id: cc_equilibrium_mu
+    description:
+      es: "En el equilibrio de fases, µ_alfa debe ser igual a µ_beta."
+      en: "At phase equilibrium, µ_alfa must equal µ_beta."
+    condition: "abs(mu_alfa - mu_beta) < 1"
+    severity: warning
+
+error_patterns:
+  - id: ep_celsius_vs_kelvin
+    description:
+      es: "Uso de Celsius en lugar de kelvin en el término RT."
+      en: "Use of Celsius instead of kelvin in the RT term."
+    detection: "T < 200"
+    suggestion:
+      es: "Verificar que T está en kelvin. A 25 °C la T correcta es 298.15 K."
+      en: "Verify T is in kelvin. At 25 °C the correct T is 298.15 K."
+
+graph_binding:
+  primary_x: T
+  primary_y: mu
+  type: Coord
+  enabled: true
+
+mini_graph:
+  enabled: true
+  type: Coord
+  x_magnitude: T
+  y_magnitude: mu
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true

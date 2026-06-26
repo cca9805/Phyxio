@@ -1,0 +1,694 @@
+version: 5.0.0
+id: ley-de-lenz
+leaf_id: ley-de-lenz
+nombre:
+  es: Ley de lenz
+  en: Lenz's Law
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: induccion-electromagnetica
+  parent_id: induccion-electromagnetica
+  ruta_relativa: fisica-clasica/electromagnetismo/induccion-electromagnetica/ley-de-lenz
+  orden: 2100300
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - ley_lenz_faraday
+  - tasa_cambio_flujo
+  - ley_lenz_tasa
+  - regla_signos_lenz
+  magnitudes:
+  - epsilon_ind
+  - cambio_de_flujo_magnetico
+  - intervalo_de_tiempo
+  - rapidez_media_de_cambio_de_flujo
+  - numero_de_espiras
+  - s_flujo
+  - s_ind
+  - flujo_magnetico
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: epsilon_ind
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  epsilon_ind:
+    enabled: true
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: fem cuya polaridad expresa Lenz
+      en: emf whose polarity expresses Lenz
+    summary_rules:
+    - id: eps_summary
+      when: 'true'
+      status: ok
+      text:
+        es: '[[epsilon_ind]] debe leerse con signo porque representa polaridad inducida.'
+        en: '[[epsilon_ind]] must be read with sign because it represents induced polarity.'
+    physical_reading_rules:
+    - id: eps_reading
+      when: 'true'
+      status: ok
+      text:
+        es: Su signo se opone al cambio de flujo, no necesariamente al flujo existente.
+        en: Its sign opposes flux change, not necessarily existing flux.
+    coherence_rules:
+    - id: eps_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[epsilon_ind]] y [[r_Phi]] deben tener signos opuestos en la convencion elegida.'
+        en: '[[epsilon_ind]] and [[r_Phi]] must have opposite signs in the chosen convention.'
+    model_validity_rules:
+    - id: eps_validity
+      when: 'true'
+      status: ok
+      text:
+        es: La polaridad solo es interpretable si normal y sentido de corriente estan definidos.
+        en: Polarity is interpretable only if normal and current direction are defined.
+    graph_rules:
+    - id: eps_graph
+      when: 'true'
+      status: ok
+      text:
+        es: En el grafico, [[epsilon_ind]] baja cuando [[r_Phi]] sube si [[N]] es positivo.
+        en: In the graph, [[epsilon_ind]] decreases when [[r_Phi]] increases if [[N]] is positive.
+    likely_errors:
+    - id: eps_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[epsilon_ind]] con una lectura aislada es un error frecuente: Error tipico: dar solo el modulo y perder
+          la polaridad.'
+        en: 'A common mistake is to interpret [[epsilon_ind]] in isolation: Typical error: giving only magnitude and losing
+          polarity.'
+    next_step_rules:
+    - id: eps_next
+      when: 'true'
+      status: ok
+      text:
+        es: Interpreta que corriente inducida produciria esa polaridad.
+        en: Interpret what induced current would produce that polarity.
+    physical_intuition:
+    - id: epsilon_ind_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[epsilon_ind]] describe el estado dinámico.
+        en: Intuitively, [[epsilon_ind]] describes the dynamic state.
+    limiting_cases:
+    - id: epsilon_ind_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[epsilon_ind]].
+        en: Check limiting cases of [[epsilon_ind]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  cambio_de_flujo_magnetico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de DeltaPhi_B
+      en: Result of DeltaPhi_B
+    summary_rules:
+    - id: DeltaPhi_B_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[DeltaPhi_B]] indica la magnitud física principal.
+        en: The result [[DeltaPhi_B]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: DeltaPhi_B_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[DeltaPhi_B]] junto con su unidad y signo.
+        en: Read [[DeltaPhi_B]] with its unit and sign.
+    coherence_rules:
+    - id: DeltaPhi_B_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[DeltaPhi_B]].
+        en: Check the dimensional consistency of [[DeltaPhi_B]]
+    model_validity_rules:
+    - id: DeltaPhi_B_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[DeltaPhi_B]] solo dentro de la validez del modelo.
+        en: Interpret [[DeltaPhi_B]] only within the validity of the model.
+    graph_rules:
+    - id: DeltaPhi_B_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[DeltaPhi_B]] con la lectura gráfica.
+        en: Relate [[DeltaPhi_B]] to the graph.
+    likely_errors:
+    - id: DeltaPhi_B_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[DeltaPhi_B]] con una lectura aislada es un error frecuente; debe interpretarse con el modelo, las
+          unidades y el rango físico.
+        en: A common mistake is to interpret [[DeltaPhi_B]] in isolation; it must be read with the model, units, and physical
+          range.
+    next_step_rules:
+    - id: DeltaPhi_B_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[DeltaPhi_B]], revisa los límites físicos.
+        en: After obtaining [[DeltaPhi_B]], review the physical limits.
+    physical_intuition:
+    - id: DeltaPhi_B_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[DeltaPhi_B]] describe el estado dinámico.
+        en: Intuitively, [[DeltaPhi_B]] describes the dynamic state.
+    limiting_cases:
+    - id: DeltaPhi_B_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[DeltaPhi_B]].
+        en: Check limiting cases of [[DeltaPhi_B]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  intervalo_de_tiempo:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de Deltat
+      en: Result of Deltat
+    summary_rules:
+    - id: Deltat_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[Deltat]] indica la magnitud física principal.
+        en: The result [[Deltat]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: Deltat_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[Deltat]] junto con su unidad y signo.
+        en: Read [[Deltat]] with its unit and sign.
+    coherence_rules:
+    - id: Deltat_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[Deltat]].
+        en: Check the dimensional consistency of [[Deltat]]
+    model_validity_rules:
+    - id: Deltat_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[Deltat]] solo dentro de la validez del modelo.
+        en: Interpret [[Deltat]] only within the validity of the model.
+    graph_rules:
+    - id: Deltat_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[Deltat]] con la lectura gráfica.
+        en: Relate [[Deltat]] to the graph.
+    likely_errors:
+    - id: Deltat_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[Deltat]] con una lectura aislada es un error frecuente; debe interpretarse con el modelo, las unidades
+          y el rango físico.
+        en: A common mistake is to interpret [[Deltat]] in isolation; it must be read with the model, units, and physical
+          range.
+    next_step_rules:
+    - id: Deltat_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[Deltat]], revisa los límites físicos.
+        en: After obtaining [[Deltat]], review the physical limits.
+    physical_intuition:
+    - id: Deltat_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[Deltat]] describe el estado dinámico.
+        en: Intuitively, [[Deltat]] describes the dynamic state.
+    limiting_cases:
+    - id: Deltat_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[Deltat]].
+        en: Check limiting cases of [[Deltat]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_de_espiras:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de N
+      en: Result of N
+    summary_rules:
+    - id: N_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[N]] indica la magnitud física principal.
+        en: The result [[N]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: N_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[N]] junto con su unidad y signo.
+        en: Read [[N]] with its unit and sign.
+    coherence_rules:
+    - id: N_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[N]].
+        en: Check the dimensional consistency of [[N]]
+    model_validity_rules:
+    - id: N_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[N]] solo dentro de la validez del modelo.
+        en: Interpret [[N]] only within the validity of the model.
+    graph_rules:
+    - id: N_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[N]] con la lectura gráfica.
+        en: Relate [[N]] to the graph.
+    likely_errors:
+    - id: N_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[N]] con una lectura aislada es un error frecuente; debe interpretarse con el modelo, las unidades
+          y el rango físico.
+        en: A common mistake is to interpret [[N]] in isolation; it must be read with the model, units, and physical range.
+    next_step_rules:
+    - id: N_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[N]], revisa los límites físicos.
+        en: After obtaining [[N]], review the physical limits.
+    physical_intuition:
+    - id: N_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[N]] describe el estado dinámico.
+        en: Intuitively, [[N]] describes the dynamic state.
+    limiting_cases:
+    - id: N_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[N]].
+        en: Check limiting cases of [[N]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  rapidez_media_de_cambio_de_flujo:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de r_Phi
+      en: Result of r_Phi
+    summary_rules:
+    - id: r_Phi_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[r_Phi]] indica la magnitud física principal.
+        en: The result [[r_Phi]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: r_Phi_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[r_Phi]] junto con su unidad y signo.
+        en: Read [[r_Phi]] with its unit and sign.
+    coherence_rules:
+    - id: r_Phi_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[r_Phi]].
+        en: Check the dimensional consistency of [[r_Phi]]
+    model_validity_rules:
+    - id: r_Phi_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[r_Phi]] solo dentro de la validez del modelo.
+        en: Interpret [[r_Phi]] only within the validity of the model.
+    graph_rules:
+    - id: r_Phi_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[r_Phi]] con la lectura gráfica.
+        en: Relate [[r_Phi]] to the graph.
+    likely_errors:
+    - id: r_Phi_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[r_Phi]] con una lectura aislada es un error frecuente; debe interpretarse con el modelo, las unidades
+          y el rango físico.
+        en: A common mistake is to interpret [[r_Phi]] in isolation; it must be read with the model, units, and physical range.
+    next_step_rules:
+    - id: r_Phi_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[r_Phi]], revisa los límites físicos.
+        en: After obtaining [[r_Phi]], review the physical limits.
+    physical_intuition:
+    - id: r_Phi_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[r_Phi]] describe el estado dinámico.
+        en: Intuitively, [[r_Phi]] describes the dynamic state.
+    limiting_cases:
+    - id: r_Phi_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[r_Phi]].
+        en: Check limiting cases of [[r_Phi]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  s_ind:
+    enabled: true
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: signo conceptual inducido
+      en: conceptual induced sign
+    summary_rules:
+    - id: si_summary
+      when: 'true'
+      status: ok
+      text:
+        es: '[[s_ind]] resume la orientacion inducida por Lenz.'
+        en: '[[s_ind]] summarizes the orientation induced by Lenz.'
+    physical_reading_rules:
+    - id: si_reading
+      when: 'true'
+      status: ok
+      text:
+        es: Debe oponerse a [[s_flujo]], no copiarlo.
+        en: It must oppose [[s_flujo]], not copy it.
+    coherence_rules:
+    - id: si_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Mismo signo que [[s_flujo]] sugiere error conceptual.
+        en: Same sign as [[s_flujo]] suggests conceptual error.
+    model_validity_rules:
+    - id: si_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Requiere convencion de signo clara.
+        en: Requires clear sign convention.
+    graph_rules:
+    - id: si_graph
+      when: 'true'
+      status: ok
+      text:
+        es: '[[s_ind]] representa la respuesta opuesta.'
+        en: '[[s_ind]] represents the opposite response.'
+    likely_errors:
+    - id: si_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[s_ind]] con una lectura aislada es un error frecuente: Error tipico: orientar la corriente para reforzar
+          el cambio.'
+        en: 'A common mistake is to interpret [[s_ind]] in isolation: Typical error: orienting current to reinforce the change.'
+    next_step_rules:
+    - id: si_next
+      when: 'true'
+      status: ok
+      text:
+        es: Traduce [[s_ind]] a polaridad o sentido de corriente inducida.
+        en: Translate [[s_ind]] into polarity or induced current direction.
+    physical_intuition:
+    - id: s_ind_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[s_ind]] describe el estado dinámico.
+        en: Intuitively, [[s_ind]] describes the dynamic state.
+    limiting_cases:
+    - id: s_ind_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[s_ind]].
+        en: Check limiting cases of [[s_ind]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  s_flujo:
+    enabled: true
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: signo conceptual del cambio de flujo
+      en: conceptual sign of flux change
+    summary_rules:
+    - id: sf_summary
+      when: 'true'
+      status: ok
+      text:
+        es: '[[s_flujo]] codifica si el flujo aumenta o disminuye.'
+        en: '[[s_flujo]] encodes whether flux increases or decreases.'
+    physical_reading_rules:
+    - id: sf_reading
+      when: 'true'
+      status: ok
+      text:
+        es: Es la causa de la orientacion opuesta de [[s_ind]].
+        en: It is the cause of the opposite orientation of [[s_ind]].
+    coherence_rules:
+    - id: sf_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe definirse respecto a una normal.
+        en: It must be defined relative to a normal.
+    model_validity_rules:
+    - id: sf_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Sirve como regla de signo, no como magnitud de modulo.
+        en: It serves as sign rule, not as magnitude quantity.
+    graph_rules:
+    - id: sf_graph
+      when: 'true'
+      status: ok
+      text:
+        es: '[[s_flujo]] y [[s_ind]] aparecen en sentidos opuestos.'
+        en: '[[s_flujo]] and [[s_ind]] appear in opposite senses.'
+    likely_errors:
+    - id: sf_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[s_flujo]] con una lectura aislada es un error frecuente: Error tipico: asignar [[s_flujo]] sin normal.'
+        en: 'A common mistake is to interpret [[s_flujo]] in isolation: Typical error: assigning [[s_flujo]] without normal.'
+    next_step_rules:
+    - id: sf_next
+      when: 'true'
+      status: ok
+      text:
+        es: Invierte el signo para obtener [[s_ind]].
+        en: Reverse the sign to obtain [[s_ind]].
+    physical_intuition:
+    - id: s_flujo_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[s_flujo]] describe el estado dinámico.
+        en: Intuitively, [[s_flujo]] describes the dynamic state.
+    limiting_cases:
+    - id: s_flujo_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[s_flujo]].
+        en: Check limiting cases of [[s_flujo]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

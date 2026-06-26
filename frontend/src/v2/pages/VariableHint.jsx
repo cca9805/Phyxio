@@ -1,4 +1,4 @@
-import Latex from "react-latex-next";
+import Latex from "../components/shared/SafeLatex.jsx";
 
 export default function VariableHint({ id, mag }) {
   if (!mag) return <code>{id}</code>;
@@ -8,19 +8,28 @@ export default function VariableHint({ id, mag }) {
   const unit = mag.unidad_si || mag.si_unit || "";
   const desc = mag.descripcion || mag.description || "";
 
-  const tooltip = `${nombre}${unit ? ` (${unit})` : ""}${desc ? ` — ${desc}` : ""}`;
-
   return (
-    <span
-      title={tooltip}
-      style={{
-        cursor: "help",
-        borderBottom: "1px dotted rgba(255,255,255,0.35)",
-        padding: "0 2px",
-        borderRadius: 4,
-      }}
-    >
-      <Latex>{`$${sym}$`}</Latex>
+    <span className="vh-wrapper">
+      <span
+        className="vh-trigger"
+        style={{
+          cursor: "help",
+          borderBottom: "1.5px dotted rgba(56, 189, 248, 0.4)",
+          padding: "0 2px",
+          borderRadius: 2,
+          transition: "all 0.2s ease"
+        }}
+      >
+        <Latex>{`$${sym}$`}</Latex>
+      </span>
+      
+      <div className="vh-tooltip-container">
+        <div className="vh-tooltip-card">
+          <strong>{nombre}</strong>
+          {unit && <div className="unit">[{unit}]</div>}
+          {desc && <div className="desc">{desc}</div>}
+        </div>
+      </div>
     </span>
   );
 }

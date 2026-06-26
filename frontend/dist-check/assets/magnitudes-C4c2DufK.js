@@ -1,0 +1,322 @@
+const e=`magnitudes:
+
+  - id: alpha
+    symbol: "\\\\alpha"
+    nombre:
+      es: Coeficiente de dilatación lineal
+      en: Linear expansion coefficient
+    descripcion:
+      es: Propiedad intensiva del material que cuantifica la variación relativa de longitud por unidad de variación de temperatura. Determina cuánto se alarga cada metro del material por cada kelvin de aumento térmico.
+      en: Intensive property of the material quantifying the relative length change per unit temperature change. It determines how much each metre of the material elongates per kelvin of thermal increase.
+    unidad_si: "K^-1"
+    dimension: "[Theta^-1]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - cálculo de elongación de barras y raíles
+      - diseño de juntas de dilatación
+      - ingeniería de materiales y estructuras
+    common_mistake: "Confundir alpha (coeficiente lineal, K⁻¹) con beta (coeficiente volumétrico, K⁻¹). Para sólidos isótropos beta es aproximadamente tres veces alpha, no el mismo valor."
+    typical_range: "Metales: 5×10⁻⁶ a 25×10⁻⁶ K⁻¹. Aluminio: 23×10⁻⁶ K⁻¹, acero: 12×10⁻⁶ K⁻¹, invar: 1×10⁻⁶ K⁻¹."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El coeficiente de dilatación lineal es siempre positivo para la gran mayoría de materiales sólidos convencionales. Materiales con alpha negativo (contracción al calentarse) son rarísimos y no se consideran en el modelo estándar de este leaf."
+        en: "The linear expansion coefficient is always positive for the vast majority of conventional solid materials. Materials with negative alpha (contraction on heating) are extremely rare and are not considered in the standard model of this leaf."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un alpha nulo implicaría que el material no dilata al calentarse, lo cual es físicamente imposible para materiales reales a temperatura de uso normal."
+        en: "Zero alpha would imply the material does not expand when heated, which is physically impossible for real materials at normal operating temperatures."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - predicción de la elongación de un sólido ante un cambio de temperatura
+        - comparación de la sensibilidad térmica dimensional entre materiales
+      secondary_for:
+        - cálculo del coeficiente de dilatación volumétrica via relación beta-alpha
+    graph_binding:
+      channels:
+        - pendiente_DeltaL_vs_DeltaT
+    pedagogical_notes:
+      es: "El coeficiente de dilatación lineal es la propiedad central de este leaf. Su valor extremadamente pequeño (del orden de 10⁻⁵ K⁻¹) explica por qué la dilatación es inapreciable en objetos cotidianos a pequeñas variaciones de temperatura, pero se vuelve crítica en estructuras grandes como puentes o raíles ferroviarios sometidos a amplias variaciones estacionales."
+      en: "The linear expansion coefficient is the central property of this leaf. Its extremely small value (of order 10⁻⁵ K⁻¹) explains why expansion is imperceptible in everyday objects at small temperature changes, yet becomes critical in large structures such as bridges or railway rails subjected to wide seasonal temperature variations."
+
+  - id: L0
+    symbol: "L_0"
+    nombre:
+      es: Longitud inicial
+      en: Initial length
+    descripcion:
+      es: Longitud del sólido a la temperatura de referencia, antes del proceso de calentamiento o enfriamiento. Es el factor de escala que multiplica alpha para determinar la elongación absoluta.
+      en: Length of the solid at the reference temperature, before the heating or cooling process. It is the scale factor that multiplies alpha to determine the absolute elongation.
+    unidad_si: m
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: fundamental
+    physical_role: input_parameter
+    used_in:
+      - cálculo de elongación lineal
+      - diseño de estructuras con juntas de dilatación
+    common_mistake: "Usar L0 en centímetros o milímetros mientras alpha está en K⁻¹ referido a metros, obteniendo un DeltaL en unidades mixtas incoherentes."
+    typical_range: "Desde milímetros en piezas de relojería hasta centenares de metros en puentes y raíles."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La longitud inicial es siempre positiva. No tiene significado físico de signo en este contexto."
+        en: "Initial length is always positive. It carries no sign meaning in this context."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Una longitud inicial nula no tiene significado físico; haría la fórmula de dilatación lineal trivialmente cero independientemente de alpha y DeltaT."
+        en: "Zero initial length has no physical meaning; it would make the linear expansion formula trivially zero regardless of alpha and DeltaT."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - factor de escala en la fórmula de dilatación lineal
+      secondary_for:
+        - cálculo de la longitud final tras la dilatación
+    graph_binding:
+      channels:
+        - parametro_escala_L0
+    pedagogical_notes:
+      es: "L0 actúa como amplificador de alpha: una barra diez veces más larga experimenta diez veces más elongación ante el mismo DeltaT. Esto explica por qué los puentes colgantes necesitan juntas de dilatación de decenas de centímetros, mientras una regla metálica de laboratorio apenas se alarga un milímetro."
+      en: "L0 acts as an amplifier of alpha: a rod ten times longer experiences ten times more elongation for the same DeltaT. This explains why suspension bridges need expansion joints of tens of centimetres, while a metal laboratory ruler barely elongates by one millimetre."
+
+  - id: DeltaL
+    symbol: "\\\\Delta L"
+    nombre:
+      es: Variación de longitud
+      en: Length change
+    descripcion:
+      es: Diferencia entre la longitud final y la longitud inicial del sólido tras el cambio de temperatura. Es el resultado calculable de la dilatación lineal, directamente medible con calibre o comparador.
+      en: Difference between the final and initial length of the solid after the temperature change. It is the calculable result of linear expansion, directly measurable with calipers or a comparator.
+    unidad_si: m
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: output_quantity
+    used_in:
+      - verificación experimental de la ley de dilatación lineal
+      - cálculo de holguras y tolerancias en ingeniería
+    common_mistake: "Interpretar DeltaL como la longitud final en lugar de la variación. La longitud final es L0 + DeltaL, no DeltaL por sí sola."
+    typical_range: "Para una barra de acero de 1 m con DeltaT de 100 K: DeltaL ≈ 1.2 mm. Para un puente de 500 m y variación estacional de 50 K: DeltaL ≈ 30 cm."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "DeltaL positivo indica elongación (calentamiento); DeltaL negativo indica contracción (enfriamiento). El signo coincide siempre con el de DeltaT si alpha es positivo."
+        en: "Positive DeltaL indicates elongation (heating); negative DeltaL indicates contraction (cooling). The sign always matches that of DeltaT when alpha is positive."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "DeltaL nulo ocurre cuando DeltaT es nulo (proceso isotérmico) o, teóricamente, si alpha fuera cero. En la práctica indica ausencia de cambio térmico."
+        en: "Zero DeltaL occurs when DeltaT is zero (isothermal process) or, theoretically, if alpha were zero. In practice it indicates absence of thermal change."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "any"
+    interpretation_role:
+      primary_for:
+        - resultado de la ley de dilatación lineal
+        - verificación experimental de la predicción del modelo
+      secondary_for:
+        - cálculo de la longitud final del sólido
+    graph_binding:
+      channels:
+        - eje_y_DeltaL
+    pedagogical_notes:
+      es: "DeltaL es la magnitud observable del fenómeno de dilatación. Su relación lineal con DeltaT (la gráfica DeltaL vs DeltaT es una recta de pendiente alpha·L0) es la firma experimental característica que justifica el modelo lineal de dilatación."
+      en: "DeltaL is the observable quantity of the expansion phenomenon. Its linear relationship with DeltaT (the DeltaL vs DeltaT graph is a straight line of slope alpha·L0) is the characteristic experimental signature that justifies the linear expansion model."
+
+  - id: DeltaT
+    symbol: "\\\\Delta T"
+    nombre:
+      es: Variación de temperatura
+      en: Temperature change
+    descripcion:
+      es: Diferencia entre la temperatura final y la temperatura inicial del sólido. Variable independiente del proceso de dilatación, medida en kelvins o grados Celsius (el intervalo es el mismo).
+      en: Difference between the final and initial temperature of the solid. Independent variable of the expansion process, measured in kelvins or degrees Celsius (the interval is the same).
+    unidad_si: K
+    dimension: "[Theta]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: input_parameter
+    used_in:
+      - cálculo de dilatación lineal y volumétrica
+      - predicción de tensiones térmicas en materiales embridados
+    common_mistake: "Calcular DeltaT como T_inicial − T_final en lugar de T_final − T_inicial, obteniendo el signo contrario y por tanto una contracción donde debería haber elongación."
+    typical_range: "Desde fracciones de kelvin en instrumentos de precisión hasta 200 K en ciclos térmicos industriales extremos."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "DeltaT positivo indica calentamiento (la temperatura aumenta); DeltaT negativo indica enfriamiento (la temperatura disminuye). El signo determina directamente si el sólido se dilata o se contrae."
+        en: "Positive DeltaT indicates heating (temperature increases); negative DeltaT indicates cooling (temperature decreases). The sign directly determines whether the solid expands or contracts."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un DeltaT nulo produce una dilatación nula: el sólido no cambia de tamaño. Es el caso trivialmente consistente pero sin interés físico para el análisis de dilatación."
+        en: "Zero DeltaT produces zero expansion: the solid does not change size. This is the trivially consistent case but carries no physical interest for the expansion analysis."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "any"
+    interpretation_role:
+      primary_for:
+        - variable de control del proceso de dilatación
+        - indicador del sentido del cambio dimensional
+      secondary_for: []
+    graph_binding:
+      channels:
+        - eje_x_DeltaT
+    pedagogical_notes:
+      es: "DeltaT es el estímulo térmico que activa la dilatación. La linealidad de DeltaL con DeltaT es lo que permite que la gráfica DeltaL vs DeltaT sea una recta y que alpha sea una constante del material a temperatura moderada."
+      en: "DeltaT is the thermal stimulus that drives expansion. The linearity of DeltaL with DeltaT is what allows the DeltaL vs DeltaT graph to be a straight line and alpha to be a material constant at moderate temperatures."
+
+  - id: beta
+    symbol: "\\\\beta"
+    nombre:
+      es: Coeficiente de dilatación volumétrica
+      en: Volumetric expansion coefficient
+    descripcion:
+      es: Propiedad intensiva que cuantifica la variación relativa de volumen de un cuerpo por unidad de variación de temperatura. Para sólidos isótropos, es aproximadamente tres veces el coeficiente de dilatación lineal.
+      en: Intensive property quantifying the relative volume change of a body per unit temperature change. For isotropic solids, it is approximately three times the linear expansion coefficient.
+    unidad_si: "K^-1"
+    dimension: "[Theta^-1]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - cálculo de expansión de recipientes y fluidos encerrados
+      - análisis de presión en sistemas cerrados al variar la temperatura
+    common_mistake: "Usar beta igual a alpha en lugar de beta aproximadamente igual a tres veces alpha, subestimando en un factor tres la dilatación volumétrica del sólido."
+    typical_range: "Para sólidos metálicos: 30×10⁻⁶ a 75×10⁻⁶ K⁻¹. Agua líquida: 207×10⁻⁶ K⁻¹ a 20 °C."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El coeficiente volumétrico es positivo para casi todos los materiales sólidos y líquidos convencionales. El agua entre 0 °C y 4 °C es una excepción notable con comportamiento anómalo."
+        en: "The volumetric coefficient is positive for almost all conventional solid and liquid materials. Water between 0 °C and 4 °C is a notable exception with anomalous behaviour."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un beta nulo indicaría que el material no cambia de volumen con la temperatura, lo cual es imposible para materiales reales convencionales."
+        en: "Zero beta would indicate the material does not change volume with temperature, which is impossible for conventional real materials."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - cálculo de la variación de volumen de sólidos y líquidos
+        - diseño de depósitos y recipientes sometidos a cambios térmicos
+      secondary_for:
+        - verificación de la coherencia entre dilatación lineal y volumétrica
+    graph_binding:
+      channels:
+        - pendiente_DeltaV_vs_DeltaT
+    pedagogical_notes:
+      es: "La relación beta ≈ 3·alpha para sólidos isótropos es la conexión conceptual clave entre dilatación lineal y volumétrica. Demostrar geométricamente que el volumen de un cubo de lado L0 aumenta en 3·alpha·L0³·DeltaT (despreciando términos de orden superior) consolida la comprensión del modelo."
+      en: "The relation beta ≈ 3·alpha for isotropic solids is the key conceptual link between linear and volumetric expansion. Showing geometrically that the volume of a cube of side L0 increases by 3·alpha·L0³·DeltaT (neglecting higher-order terms) consolidates understanding of the model."
+
+  - id: V0
+    symbol: "V_0"
+    nombre:
+      es: Volumen inicial
+      en: Initial volume
+    descripcion:
+      es: Volumen del sólido o líquido a la temperatura de referencia, antes del proceso de cambio térmico. Junto con beta y DeltaT, determina la variación de volumen.
+      en: Volume of the solid or liquid at the reference temperature, before the thermal change process. Together with beta and DeltaT, it determines the volume change.
+    unidad_si: "m^3"
+    dimension: "[L^3]"
+    is_vector: false
+    components: []
+    category: fundamental
+    physical_role: input_parameter
+    used_in:
+      - cálculo de dilatación volumétrica
+      - análisis de recipientes y tuberías cerradas
+    common_mistake: "Usar el volumen en litros o centímetros cúbicos cuando beta está en K⁻¹ referido al SI, produciendo un DeltaV en unidades inconsistentes."
+    typical_range: "Desde 10⁻⁶ m³ (un centímetro cúbico) para muestras de laboratorio hasta cientos de metros cúbicos en depósitos industriales."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El volumen inicial es siempre positivo. No tiene interpretación de signo en el contexto de la dilatación volumétrica."
+        en: "Initial volume is always positive. It carries no sign interpretation in the context of volumetric expansion."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un volumen inicial nulo no tiene significado físico y haría la fórmula de dilatación volumétrica trivialmente cero."
+        en: "Zero initial volume has no physical meaning and would make the volumetric expansion formula trivially zero."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - factor de escala en la fórmula de dilatación volumétrica
+      secondary_for:
+        - cálculo del volumen final del cuerpo dilatado
+    graph_binding:
+      channels:
+        - parametro_escala_V0
+    pedagogical_notes:
+      es: "V0 en la fórmula de dilatación volumétrica desempeña el papel análogo al de L0 en la dilatación lineal: es el factor de escala que convierte el coeficiente relativo beta en variación absoluta de volumen. La comprensión paralela de ambas fórmulas refuerza el patrón general del modelo de dilatación."
+      en: "V0 in the volumetric expansion formula plays the same role as L0 in linear expansion: it is the scale factor that converts the relative coefficient beta into an absolute volume change. The parallel understanding of both formulas reinforces the general pattern of the expansion model."
+
+  - id: DeltaV
+    symbol: "\\\\Delta V"
+    nombre:
+      es: Variación de volumen
+      en: Volume change
+    descripcion:
+      es: Diferencia entre el volumen final y el volumen inicial del cuerpo tras el cambio de temperatura. Es el resultado observable de la dilatación volumétrica.
+      en: Difference between the final and initial volume of the body after the temperature change. It is the observable result of volumetric expansion.
+    unidad_si: "m^3"
+    dimension: "[L^3]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: output_quantity
+    used_in:
+      - verificación experimental del modelo de dilatación volumétrica
+      - cálculo de presiones en recipientes cerrados
+    common_mistake: "Interpretar DeltaV como el volumen final en lugar de la variación. El volumen final es V0 + DeltaV."
+    typical_range: "Para 1 litro de agua calentado 80 K (de 20 °C a 100 °C): DeltaV ≈ 34 mL. Para 1 m³ de acero con DeltaT de 100 K: DeltaV ≈ 3.6×10⁻³ m³."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "DeltaV positivo indica expansión (calentamiento con beta positivo); DeltaV negativo indica contracción (enfriamiento). El signo coincide con el de DeltaT para materiales con beta positivo."
+        en: "Positive DeltaV indicates expansion (heating with positive beta); negative DeltaV indicates contraction (cooling). The sign matches that of DeltaT for materials with positive beta."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "DeltaV nulo corresponde a un proceso isotérmico (DeltaT nulo). No implica que el material no tenga beta; simplemente no hubo variación térmica."
+        en: "Zero DeltaV corresponds to an isothermal process (zero DeltaT). It does not imply the material has no beta; there was simply no thermal variation."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "any"
+    interpretation_role:
+      primary_for:
+        - resultado de la ley de dilatación volumétrica
+        - detección experimental de expansión o contracción térmica de volúmenes
+      secondary_for:
+        - cálculo del volumen final del cuerpo
+    graph_binding:
+      channels:
+        - eje_y_DeltaV
+    pedagogical_notes:
+      es: "DeltaV es el análogo volumétrico de DeltaL. La comparación directa entre los valores de DeltaL (elongación de una dimensión) y DeltaV (cambio del conjunto de tres dimensiones) ilustra de forma concreta la diferencia entre el coeficiente lineal y el volumétrico, y por qué beta ≈ 3·alpha en sólidos isótropos."
+      en: "DeltaV is the volumetric analogue of DeltaL. The direct comparison between DeltaL (elongation in one dimension) and DeltaV (change across all three dimensions) concretely illustrates the difference between the linear and volumetric coefficients, and why beta ≈ 3·alpha for isotropic solids."
+`;export{e as default};

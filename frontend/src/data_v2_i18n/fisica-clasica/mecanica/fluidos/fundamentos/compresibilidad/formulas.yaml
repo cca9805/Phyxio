@@ -1,0 +1,120 @@
+version: 5
+topic:
+  id: compresibilidad
+  title:
+    es: "Compresibilidad"
+    en: "Compressibility"
+variables:
+  - id: beta
+    symbol: "\\beta"
+    nombre:
+      es: "Compresibilidad"
+      en: "Compressibility"
+    unidad_si: "Pa^{-1}"
+  - id: B
+    symbol: "B"
+    nombre:
+      es: "Módulo Volumétrico"
+      en: "Bulk Modulus"
+    unidad_si: "Pa"
+  - id: V
+    symbol: "V"
+    nombre:
+      es: "Volumen"
+      en: "Volume"
+    unidad_si: "m^3"
+  - id: dV
+    symbol: "dV"
+    nombre:
+      es: "Cambio Volumen"
+      en: "Volume Change"
+    unidad_si: "m^3"
+  - id: dp
+    symbol: "dp"
+    nombre:
+      es: "Cambio Presión"
+      en: "Pressure Change"
+    unidad_si: "Pa"
+formulas:
+  - id: compresibilidad_def
+    target: beta
+    title:
+      es: "Definición de Compresibilidad"
+      en: "Compressibility Definition"
+    equation: "beta = -dV / (V * dp)"
+    latex: "\\beta = -\\frac{dV}{V \\cdot dp}"
+    rearrangements:
+      - target: beta
+        equation: "beta = -dV / (V * dp)"
+        latex: "\\beta = -\\frac{dV}{V \\cdot dp}"
+      - target: dV
+        equation: "dV = -beta * V * dp"
+        latex: "dV = -\\beta \\cdot V \\cdot dp"
+      - target: dp
+        equation: "dp = -dV / (V * beta)"
+        latex: "dp = -\\frac{dV}{V \\cdot \\beta}"
+    category: "definición"
+    relation_type: "respuesta-elástica"
+    physical_meaning:
+      es: "Relaciona el cambio relativo de volumen con el incremento de presión aplicada."
+      en: "Relates the relative volume change to the applied pressure increase."
+    constraints: ["V > 0", "dp > 0"]
+    validity:
+      es: "Válido para fluidos homogéneos y cambios de presión moderados (régimen lineal)."
+      en: "Valid for homogeneous fluids and moderate pressure changes (linear regime)."
+    dimension_check: "L^2 T^2 M^{-1}"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["fundamentos"]
+    interpretation_tags: ["elasticidad", "fluido"]
+    result_semantics: "sensibilidad a la presión"
+    domain_checks:
+      - "V != 0"
+      - "dp != 0"
+    coherence_checks:
+      - "beta > 0"
+    graph_implications: "Define la pendiente negativa en el diagrama V-P."
+    pedagogical_triggers: ["compresión", "incompresibilidad"]
+
+  - id: modulo_volumetrico_def
+    target: B
+    title:
+      es: "Módulo Volumétrico"
+      en: "Bulk Modulus"
+    equation: "B = 1 / beta"
+    latex: "B = \\frac{1}{\\beta}"
+    rearrangements:
+      - target: B
+        equation: "B = 1 / beta"
+        latex: "B = \\frac{1}{\\beta}"
+      - target: beta
+        equation: "beta = 1 / B"
+        latex: "\\beta = \\frac{1}{B}"
+    category: "propiedad"
+    relation_type: "inversión"
+    physical_meaning:
+      es: "El módulo volumétrico es el recíproco de la compresibilidad e indica rigidez."
+      en: "The bulk modulus is the reciprocal of compressibility and indicates stiffness."
+    constraints: ["beta > 0"]
+    validity:
+      es: "Válido siempre que la compresibilidad sea distinta de cero."
+      en: "Valid as long as compressibility is non-zero."
+    dimension_check: "M L^{-1} T^{-2}"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["fundamentos"]
+    interpretation_tags: ["rigidez", "módulo-elástico"]
+    result_semantics: "resistencia a la compresión"
+    domain_checks:
+      - "beta != 0"
+    coherence_checks:
+      - "B > 0"
+    graph_implications: "Determina el factor de escala en las deformaciones."
+    pedagogical_triggers: ["rigidez-volumétrica"]
+ui:
+  default_formula: compresibilidad_def
+  groups:
+    - title:
+        es: "Leyes fundamentales"
+        en: "Fundamental Laws"
+      items: ["compresibilidad_def", "modulo_volumetrico_def"]

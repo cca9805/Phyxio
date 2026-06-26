@@ -1,0 +1,30 @@
+## Modelo ideal
+
+El modelo más básico y universalmente utilizado en la enseñanza de la física es el del componente óhmico ideal. En este escenario simplificado, se asume que la [[resistencia]] del material es una constante perfecta que permanece invariable sin importar las condiciones externas. Este modelo postula que el flujo de carga responde de manera instantánea y lineal a cualquier variación en el potencial aplicado. Es una abstracción extremadamente poderosa que permite el análisis rápido de mallas de circuitos y el diseño preliminar de sistemas electrónicos de baja potencia, donde las desviaciones respecto a la linealidad son lo suficientemente pequeñas como para ser ignoradas en el cálculo de primer orden.
+
+## Hipótesis
+
+Para que el modelo ideal sea aplicable, deben cumplirse las siguientes hipótesis fundamentales:
+- **Linealidad absoluta**: Se asume que la relación entre la [[tension]] y la corriente es una línea recta perfecta que pasa por el origen (0,0) del plano cartesiano, lo que implica que no existe una [[tension]] de umbral para iniciar la conducción.
+- **Isotropía y homogeneidad estructural**: Se supone que las propiedades resistivas del material son idénticas en todas las direcciones del espacio y que no existen variaciones locales en la densidad de impurezas o en la estructura cristalina que puedan desviar el flujo de carga de forma impredecible.
+- **Independencia térmica total**: El modelo ignora por completo el calor generado por el paso de la corriente (efecto Joule). Se asume que el sistema de refrigeración es infinitamente eficiente o que la potencia disipada es tan baja que no produce un incremento de temperatura capaz de alterar la [[rho]] del material.
+- **Régimen estacionario puro**: No se consideran efectos de retardo temporal, capacidades parásitas ni inductancias asociadas a la geometría del componente, tratando la respuesta eléctrica como puramente resistiva y simultánea al estímulo.
+
+## Dominio de validez cuantitativo
+
+La aplicación del modelo óhmico lineal es físicamente aceptable siempre que la densidad de corriente se mantenga por debajo de los límites de saturación del material. Como regla general en ingeniería, el modelo se considera válido si la temperatura del conductor no varía más de un 10 % respecto a la temperatura de referencia ambiental (normalmente 20 o 25 grados Celsius). En términos de [[intensidad]] de campo eléctrico, para metales comunes como el cobre, el modelo es robusto para campos inferiores a 10⁵ V/m. Asimismo, en términos de frecuencia, el modelo es aplicable siempre que el radio del conductor sea significativamente menor que la profundidad de piel (skin depth), que para cobre a 50 Hz es de unos 8.5 mm. Por encima de estos valores, los efectos de choque y saturación invalidan la proporcionalidad simple.
+
+## Señales de fallo del modelo
+
+Existen indicadores claros de que el modelo ideal ha dejado de ser representativo de la realidad física:
+- **Deriva térmica observable**: La [[intensidad]] de corriente [[intensidad]] medida con instrumentos de precisión comienza a disminuir gradualmente a pesar de que la [[tension]] [[tension]] de la fuente se mantiene rigurosamente constante. Esto indica que el calor generado está aumentando la agitación térmica de los iones, elevando la [[resistencia]] real.
+- **Discrepancia de proporcionalidad**: Al realizar una toma de datos barriendo diferentes voltajes, se observa que al duplicar la [[tension]], la corriente resultante aumenta en un factor significativamente distinto de dos. Esto es típico en filamentos de bombillas o en semiconductores operando cerca de sus límites de potencia.
+- **Inconsistencia de escala en baja impedancia**: Cuando se calculan resistencias extremadamente bajas (del orden de microohmios), el modelo ideal suele fallar al no incluir la [[resistencia]] de contacto de las terminales, que en esas escalas puede ser la componente dominante del error.
+
+## Modelo extendido o alternativo
+
+Cuando el error del modelo ideal supera el margen de tolerancia aceptable para un diseño (generalmente fijado en el 5 %), el ingeniero debe transicionar hacia modelos de mayor fidelidad física. El modelo extendido electrotérmico incorpora la dependencia de la [[resistencia]] con la temperatura mediante un coeficiente de temperatura alfa. Por otro lado, para componentes que presentan un comportamiento intrínsecamente no lineal, como los diodos semiconductores, se abandona la [[resistencia]] estática en favor del modelo de [[resistencia]] dinámica o de pequeña señal, que define la oposición como la derivada de la [[tension]] respecto a la corriente en un punto de trabajo específico. En aplicaciones de alta frecuencia, se utiliza el modelo de parámetros distribuidos de líneas de transmisión.
+
+## Comparación operativa
+
+La elección entre el modelo ideal y sus versiones extendidas es un ejercicio de balance entre simplicidad y precisión. El modelo ideal permite resolver sistemas complejos de cientos de nodos en milisegundos, siendo ideal para la fase de diseño lógico y prototipado rápido. Sin embargo, para la validación final de sistemas de potencia, motores eléctricos o electrónica de alta frecuencia, el uso del modelo ideal es peligroso y puede llevar a fallos catastróficos por sobrecalentamiento. El profesional debe ser capaz de identificar el punto donde la ganancia en precisión del modelo extendido compensa el aumento en la complejidad del cálculo, asegurando siempre que la seguridad térmica del sistema esté garantizada por encima de la elegancia matemática de la ley de Ohm original.

@@ -1,0 +1,321 @@
+id: red-electrica
+nombre:
+  es: Red electrica
+  en: Household Electrical Network
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: electricidad-domestica
+parent_id: electricidad-domestica
+ruta_relativa: fisica-clasica/electromagnetismo/electricidad-domestica/red-electrica
+orden: 298100
+type: leaf
+niveles:
+  es:
+  - ESO
+  - BACHILLERATO
+  - UNIVERSIDAD
+  - EXTRACURRICULAR
+  en:
+  - Secondary
+  - Upper Secondary
+  - University
+  - Extracurricular
+icon: 🧪
+descripcion: La red doméstica es una fuente de tensión alterna prácticamente constante 230 V 50 Hz Cada receptor conectado.
+description_en: The household network is a nearly constant AC voltage source 230 V 50 Hz Each load connected in.
+tags:
+  es:
+  - red electrica
+  - electricidad-domestica
+  - modelo
+  - cálculo
+  en:
+  - household electrical network
+  - electricidad-domestica
+  - model
+  - calculation
+prerequisitos: []
+graficos: []
+physical_role:
+  es: concepto físico
+  en: physical concept
+dificultad: 3
+tiempo_estimado_min: 35
+tipo_conceptual: concepto físico
+pregunta_fisica_central:
+  es: ¿Cómo distribuye la red eléctrica doméstica la energía entre los receptores y qué limita la potencia total que puede
+    suministrar sin riesgo?
+  en: How does the household electrical network distribute energy among loads, and what limits the total power it can safely
+    supply?
+idea_fisica_dominante:
+  es: 'La red doméstica es una fuente de tensión alterna prácticamente constante (230 V / 50 Hz). Cada receptor conectado
+    en paralelo extrae una corriente proporcional a su potencia. La suma de esas corrientes es la corriente total de línea,
+    que no puede superar el calibre del magnetotérmico sin activar la protección. La tensión no cambia al añadir receptores;
+    lo que cambia es la corriente total.
+
+    '
+  en: 'The household network is a nearly constant AC voltage source (230 V / 50 Hz). Each load connected in parallel draws
+    a current proportional to its power. The sum of those currents is the total line current, which cannot exceed the MCB
+    rating without triggering protection. Voltage does not change when loads are added; what changes is the total current.
+
+    '
+magnitud_dominante: corriente_total_de_linea
+representacion_dominante: none
+nucleo_operativo:
+  magnitudes_nucleo:
+  - tension_de_red
+  - corriente_total_de_linea
+  - potencia_total_conectada
+  - corriente_maxima_del_circuito
+  - margen_uso
+  formulas_nucleo:
+  - corriente_total
+  - potencia_total
+  - margen_capacidad
+  error_conceptual_dominante:
+    es: 'Creer que la tensión de la red disminuye cuando se conectan más receptores. La red doméstica actúa como fuente de
+      tensión constante: al añadir receptores en paralelo la tensión permanece en 230 V y lo que aumenta es la corriente total,
+      no la tensión.
+
+      '
+    en: 'Believing that network voltage decreases when more loads are connected. The household network acts as a constant
+      voltage source: when loads are added in parallel, voltage remains at 230 V and what increases is the total current,
+      not the voltage.
+
+      '
+  criterio_de_aplicabilidad:
+    es: Válido para receptores resistivos (factor de potencia = 1) conectados en paralelo a la misma fase de una instalación
+      doméstica europea estándar (230 V / 50 Hz) con impedancia de línea despreciable y sin desequilibrio de fases.
+    en: Valid for resistive loads (power factor = 1) connected in parallel to the same phase of a standard European household
+      installation (230 V / 50 Hz) with negligible line impedance and no phase imbalance.
+  criterio_de_fallo_del_modelo:
+    es: El modelo falla cuando la impedancia del cableado no es despreciable (líneas largas o de sección insuficiente), cuando
+      los receptores son inductivos o capacitivos (factor de potencia distinto de 1), o cuando la tensión real difiere significativamente
+      de 230 V por caída en la línea.
+    en: The model fails when wiring impedance is not negligible (long runs or insufficient cross-section), when loads are
+      inductive or capacitive (power factor different from 1), or when actual voltage differs significantly from 230 V due
+      to line drop.
+calculadora:
+  enabled: true
+  source: formulas.yaml
+  primary_formula: corriente_total
+  primary_target: corriente_total_de_linea
+  secondary_targets:
+  - potencia_total_conectada
+  - margen_uso
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: false
+    preferred_type: none
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+graph_integration:
+  enabled: false
+  declared_graphs: []
+  main_graph:
+    type: none
+    profile_id: null
+    component_expected: null
+    pregunta_principal:
+      es: ''
+      en: ''
+  bindings:
+    x_axis:
+      magnitude: corriente_total_de_linea
+      channel: coord_x_i_tot
+      unit: null
+    y_axis:
+      magnitude: margen_uso
+      channel: coord_y_margen_uso
+      unit: null
+    threshold:
+      magnitude: corriente_maxima_del_circuito
+      channel: coord_threshold_i_max
+      unit: null
+    derived_overlay:
+      magnitude: potencia_total_conectada
+      channel: coord_p_tot
+  formula_bindings:
+    primary_curve: margen_capacidad
+    threshold_reading: potencia_total
+  interpretation_bindings:
+    graph_reading_enabled: true
+    targets:
+    - margen_uso
+    - potencia_total_conectada
+  calculator_sync:
+    follow_calculator: true
+    experimental_mode: true
+    inputs_from_calculator:
+    - corriente_total_de_linea
+    - corriente_maxima_del_circuito
+  graph_binding_required: true
+  calculator_sync_required: true
+  interpretation_sync_required: true
+markdown_contract:
+  teoria:
+    sections_required:
+    - '## Contexto conceptual'
+    - '## 🟢 Nivel esencial'
+    - '## 🔵 Nivel formal'
+    - '## 🔴 Nivel estructural'
+    - '## Interpretación física profunda'
+    - '## Orden de magnitud'
+    - '## Método de resolución personalizado'
+    - '## Casos especiales y ejemplo extendido'
+    - '## Preguntas reales del alumno'
+    - '## Conexiones transversales y rutas de estudio'
+    - '## Síntesis final'
+    sections_required_en:
+    - '## Conceptual context'
+    - '## 🟢 Essential level'
+    - '## 🔵 Formal level'
+    - '## 🔴 Structural level'
+    - '## Deep physical interpretation'
+    - '## Order of magnitude'
+    - '## Personalized resolution method'
+    - '## Special cases and extended example'
+    - '## Real student questions'
+    - '## Cross-cutting connections and study paths'
+    - '## Final synthesis'
+  required_formula_refs:
+    teoria.md:
+    - corriente_total
+    - potencia_total
+    - margen_capacidad
+    teoria.en.md:
+    - corriente_total
+    - potencia_total
+    - margen_capacidad
+    modelos.md:
+    - corriente_total
+    modelos.en.md:
+    - corriente_total
+    errores.md:
+    - corriente_total
+    - potencia_total
+    errores.en.md:
+    - corriente_total
+    - potencia_total
+    ejemplos.md:
+    - corriente_total
+    - potencia_total
+    ejemplos.en.md:
+    - corriente_total
+    - potencia_total
+    aplicaciones.md:
+    - corriente_total
+    - potencia_total
+    aplicaciones.en.md:
+    - corriente_total
+    - potencia_total
+    historia.md: []
+    historia.en.md: []
+  required_magnitude_refs:
+    teoria.md:
+    - tension_de_red
+    - frecuencia_de_red
+    - corriente_total_de_linea
+    - potencia_total_conectada
+    - corriente_maxima_del_circuito
+    - margen_uso
+    teoria.en.md:
+    - tension_de_red
+    - frecuencia_de_red
+    - corriente_total_de_linea
+    - potencia_total_conectada
+    - corriente_maxima_del_circuito
+    - margen_uso
+    modelos.md:
+    - tension_de_red
+    - corriente_total_de_linea
+    - potencia_total_conectada
+    - corriente_maxima_del_circuito
+    - margen_uso
+    modelos.en.md:
+    - tension_de_red
+    - corriente_total_de_linea
+    - potencia_total_conectada
+    - corriente_maxima_del_circuito
+    - margen_uso
+    errores.md:
+    - tension_de_red
+    - corriente_total_de_linea
+    - potencia_total_conectada
+    - corriente_maxima_del_circuito
+    - margen_uso
+    errores.en.md:
+    - tension_de_red
+    - corriente_total_de_linea
+    - potencia_total_conectada
+    - corriente_maxima_del_circuito
+    - margen_uso
+    ejemplos.md:
+    - tension_de_red
+    - corriente_total_de_linea
+    - potencia_total_conectada
+    - corriente_maxima_del_circuito
+    - margen_uso
+    ejemplos.en.md:
+    - tension_de_red
+    - corriente_total_de_linea
+    - potencia_total_conectada
+    - corriente_maxima_del_circuito
+    - margen_uso
+    aplicaciones.md:
+    - tension_de_red
+    - corriente_total_de_linea
+    - potencia_total_conectada
+    - corriente_maxima_del_circuito
+    - margen_uso
+    aplicaciones.en.md:
+    - tension_de_red
+    - corriente_total_de_linea
+    - potencia_total_conectada
+    - corriente_maxima_del_circuito
+    - margen_uso
+    historia.md: []
+    historia.en.md: []
+  forbidden_markdown:
+    manual_latex_blocks: true
+    inline_formula_refs: true
+    undeclared_magnitude_tooltips: true
+    bare_equations: true
+    latex_commands_outside_math: true
+validation_contract:
+  yaml_stage_must_pass:
+  - meta_map_sync
+  - meta_interpretacion_block
+  - meta_operational_identity
+  - magnitudes_formulas_targets
+  - interpretation_dependencies
+  - graph_binding_sync
+  - markdown_contract_ready
+  hard_fail_on:
+  - duplicate_ids
+  - missing_targets
+  - missing_magnitudes_in_formulas
+  - invalid_yaml_syntax
+  - inline_formula_references
+  - manual_latex_blocks
+  - formula_reference_to_unknown_id
+  - undeclared_magnitude_tooltips
+  - aliases_for_core_magnitudes
+  - cosmetic_interpretation
+  - graph_channels_not_synchronized

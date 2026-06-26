@@ -1,0 +1,366 @@
+const n=`version: 1
+formulas:
+- id: cons_principle
+  title:
+    es: Principio de Conservación del Momento Lineal
+    en: Principle of Conservation of Linear Momentum
+  equation: Pinitial = Pfinal
+  latex: \\vec{P}_i = \\vec{P}_f
+  rearrangements:
+  - target: Pfinal
+    equation: Pfinal = Pinitial
+    latex: \\vec{P}_f = \\vec{P}_i
+    constraints: []
+  category: fundamental
+  relation_type: balance_law
+  physical_meaning:
+    es: En ausencia de fuerzas externas netas, el momento lineal total de un sistema permanece constante en el tiempo.
+    en: In the absence of net external forces, the total linear momentum of a system remains constant over time.
+  constraints:
+  - expr: Fext == 0
+    message:
+      es: Solo es aplicable si la fuerza externa neta es nula o despreciable durante el intervalo.
+      en: Only applicable if the net external force is zero or negligible during the interval.
+  validity:
+    es: Universal en mecánica clásica para sistemas aislados.
+    en: Universal in classical mechanics for isolated systems.
+  dimension_check:
+    es: M L T^-1
+    en: M L T^-1
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - theory
+  - models
+  - examples
+  - calculator
+  interpretation_tags:
+  - conservacion
+  - balance
+  result_semantics:
+    target: Pfinal
+    meaning: Estado dinámico final del sistema tras la interacción.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications:
+  - La línea de momento total en función del tiempo debe ser horizontal (constante).
+  pedagogical_triggers: []
+
+- id: recoil_law
+  title:
+    es: Ley de Retroceso (Explosión desde el reposo)
+    en: Recoil Law (Explosion from rest)
+  equation: m1*v1f + m2*v2f = 0
+  latex: m_1 v_{1f} + m_2 v_{2f} = 0
+  rearrangements:
+  - target: v1f
+    equation: v1f = -m2*v2f/m1
+    latex: v_{1f} = -\\frac{m_2 v_{2f}}{m_1}
+    constraints:
+    - expr: m1 > 0
+  - target: v2f
+    equation: v2f = -m1*v1f/m2
+    latex: v_{2f} = -\\frac{m_1 v_{1f}}{m_2}
+    constraints:
+    - expr: m2 > 0
+  category: derived
+  relation_type: conservation_consequence
+  physical_meaning:
+    es: Describe el movimiento de dos cuerpos que se separan impulsados por una fuerza interna partiendo del reposo. El signo negativo indica direcciones opuestas.
+    en: Describes the motion of two bodies separating driven by an internal force starting from rest. The negative sign indicates opposite directions.
+  constraints:
+  - expr: v1i == 0 && v2i == 0
+    message:
+      es: Esta forma simplificada asume que el sistema estaba inicialmente en reposo.
+      en: This simplified form assumes the system was initially at rest.
+  validity:
+    es: Típica en disparos de armas, saltos desde botes o desprendimiento de etapas.
+    en: Typical in gun shots, jumping from boats, or stage separation.
+  dimension_check:
+    es: M L T^-1
+    en: M L T^-1
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - theory
+  - examples
+  - applications
+  interpretation_tags:
+  - retroceso
+  - explosion
+  result_semantics:
+    target: v1f
+    meaning: Velocidad de retroceso del cuerpo principal.
+  domain_checks: []
+  coherence_checks:
+  - expr: v1f * v2f <= 0
+    message:
+      es: Por conservación, los cuerpos deben alejarse en sentidos opuestos.
+      en: By conservation, the bodies must move away in opposite directions.
+  graph_implications: []
+  pedagogical_triggers: []
+
+- id: inelastic_collision
+  title:
+    es: Colisión Perfectamente Inelástica (Acoplamiento)
+    en: Perfectly Inelastic Collision (Coupling)
+  equation: m1*v1i + m2*v2i = (m1 + m2)*vf
+  latex: m_1 v_{1i} + m_2 v_{2i} = (m_1 + m_2) v_f
+  rearrangements:
+  - target: vf
+    equation: vf = (m1*v1i + m2*v2i)/(m1 + m2)
+    latex: v_f = \\frac{m_1 v_{1i} + m_2 v_{2i}}{m_1 + m_2}
+    constraints:
+    - expr: m1 + m2 > 0
+  category: derived
+  relation_type: conservation_consequence
+  physical_meaning:
+    es: Caso donde dos cuerpos chocan y quedan unidos, moviéndose con una velocidad común vf.
+    en: Case where two bodies collide and stick together, moving with a common velocity vf.
+  constraints: []
+  validity:
+    es: Válida para choques donde se maximiza la pérdida de energía cinética pero se conserva el momento.
+    en: Valid for collisions where kinetic energy loss is maximized but momentum is conserved.
+  dimension_check:
+    es: M L T^-1
+    en: M L T^-1
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - theory
+  - examples
+  - applications
+  interpretation_tags:
+  - choque-inelastico
+  - acoplamiento
+  result_semantics:
+    target: vf
+    meaning: Velocidad final del conjunto unido.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+
+- id: general_1d_balance
+  title:
+    es: Balance General de Momento 1D (2 cuerpos)
+    en: General 1D Momentum Balance (2 bodies)
+  equation: m1*v1i + m2*v2i = m1*v1f + m2*v2f
+  latex: m_1 v_{1i} + m_2 v_{2i} = m_1 v_{1f} + m_2 v_{2f}
+  rearrangements:
+  - target: v1f
+    equation: v1f = (m1*v1i + m2*v2i - m2*v2f)/m1
+    latex: v_{1f} = \\frac{m_1 v_{1i} + m_2 v_{2i} - m_2 v_{2f}}{m_1}
+    constraints:
+    - expr: m1 > 0
+  category: fundamental
+  relation_type: balance_law
+  physical_meaning:
+    es: Ecuación maestra para cualquier interacción aislada entre dos masas en una dimensión.
+    en: Master equation for any isolated interaction between two masses in one dimension.
+  constraints: []
+  validity:
+    es: Aplicable a choques elásticos, inelásticos o explosiones.
+    en: Applicable to elastic, inelastic collisions or explosions.
+  dimension_check:
+    es: M L T^-1
+    en: M L T^-1
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - theory
+  - models
+  - examples
+  interpretation_tags:
+  - balance
+  - colision
+  result_semantics:
+    target: v1f
+    meaning: Velocidad final de una de las partículas tras el proceso.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+
+- id: P
+  title:
+    es: Definición de Momento Lineal
+    en: Definition of Linear Momentum
+  equation: P = m*v
+  latex: \\vec{p} = m \\vec{v}
+  rearrangements:
+  - target: velocidad_individual
+    equation: velocidad_individual = P/m
+    latex: \\vec{v} = \\frac{\\vec{p}}{m}
+    constraints:
+    - expr: m > 0
+      message:
+        es: La masa debe ser positiva.
+        en: Mass must be positive.
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: Cantidad de movimiento de un cuerpo de masa m y velocidad v.
+    en: Quantity of motion of a body with mass m and velocity v.
+  constraints:
+  - expr: m > 0
+    message:
+      es: La masa debe ser positiva para que el momento esté bien definido.
+      en: Mass must be positive for momentum to be well defined.
+  validity:
+    es: Válida en mecánica clásica para cualquier cuerpo con masa no nula y velocidad no relativista.
+    en: Valid in classical mechanics for any body with non-zero mass and non-relativistic velocity.
+  dimension_check:
+    es: M L T^-1
+    en: M L T^-1
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ theory ]
+  interpretation_tags:
+  - definicion
+  - momento
+  result_semantics:
+    target: momento_lineal_individual
+    meaning: Cantidad de movimiento de un cuerpo individual.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+
+- id: DeltaP
+  title:
+    es: Variación del Momento Lineal
+    en: Variation of Linear Momentum
+  equation: DeltaP = Pfinal - Pinitial
+  latex: \\Delta \\vec{P} = \\vec{P}_f - \\vec{P}_i
+  rearrangements:
+  - target: Pfinal
+    equation: Pfinal = Pinitial + DeltaP
+    latex: \\vec{P}_f = \\vec{P}_i + \\Delta \\vec{P}
+    constraints: []
+  - target: Pinitial
+    equation: Pinitial = Pfinal - DeltaP
+    latex: \\vec{P}_i = \\vec{P}_f - \\Delta \\vec{P}
+    constraints: []
+  category: fundamental
+  relation_type: physical_change
+  physical_meaning:
+    es: Cambio en la cantidad de movimiento total del sistema durante un intervalo.
+    en: Change in the total quantity of motion of the system during an interval.
+  constraints: []
+  validity:
+    es: Siempre válida; en sistemas aislados DeltaP = 0 por definición del principio de conservación.
+    en: Always valid; in isolated systems DeltaP = 0 by definition of the conservation principle.
+  dimension_check:
+    es: M L T^-1
+    en: M L T^-1
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ theory ]
+  interpretation_tags:
+  - variacion
+  - impulso
+  result_semantics:
+    target: variacion_momento_lineal
+    meaning: Cambio neto del estado dinámico del sistema.
+  domain_checks: []
+  coherence_checks:
+  - expr: DeltaP == 0
+    message:
+      es: En un sistema aislado, la variación de momento debe ser nula.
+      en: In an isolated system, the momentum variation must be zero.
+  graph_implications:
+  - Si DeltaP = 0, la línea de momento total es horizontal en el gráfico P vs t.
+  pedagogical_triggers: []
+
+- id: cond
+  title:
+    es: Condición de Aislamiento
+    en: Isolation Condition
+  equation: Fext = 0
+  latex: \\sum \\vec{F}_{ext} = 0
+  rearrangements: []
+  category: formal
+  relation_type: constraint
+  physical_meaning:
+    es: Ausencia de fuerzas externas netas, requisito para la conservación del momento lineal.
+    en: Absence of net external forces, requirement for linear momentum conservation.
+  constraints: []
+  validity:
+    es: Prerrequisito para aplicar cons_principle; verificar antes de cualquier cálculo de balance.
+    en: Prerequisite for applying cons_principle; verify before any balance calculation.
+  dimension_check:
+    es: N (kg·m/s²)
+    en: N (kg·m/s²)
+  calculable: false
+  motivo_no_calculable: "Es una condición lógica de verificación, no una ecuación resoluble para una variable numérica."
+  used_in: [ theory ]
+  interpretation_tags:
+  - condicion
+  - aislamiento
+  result_semantics:
+    target: fuerza_externa_neta
+    meaning: Verificación de que la fuerza externa neta es nula.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications:
+  - Si Fext = 0, el momento total en cualquier gráfico P vs t debe ser constante (pendiente nula).
+  pedagogical_triggers: []
+
+- id: pi
+  title:
+    es: Momento Lineal Inicial (Suma)
+    en: Initial Linear Momentum (Sum)
+  equation: Pinitial = m1*v1i + m2*v2i
+  latex: \\vec{P}_i = m_1 \\vec{v}_{1i} + m_2 \\vec{v}_{2i}
+  rearrangements:
+  - target: v1i
+    equation: v1i = (Pinitial - m2*v2i) / m1
+    latex: v_{1i} = \\frac{P_i - m_2 v_{2i}}{m_1}
+    constraints:
+    - expr: m1 > 0
+      message:
+        es: La masa del primer cuerpo debe ser positiva.
+        en: The mass of the first body must be positive.
+  - target: v2i
+    equation: v2i = (Pinitial - m1*v1i) / m2
+    latex: v_{2i} = \\frac{P_i - m_1 v_{1i}}{m_2}
+    constraints:
+    - expr: m2 > 0
+      message:
+        es: La masa del segundo cuerpo debe ser positiva.
+        en: The mass of the second body must be positive.
+  category: formal
+  relation_type: definition
+  physical_meaning:
+    es: Suma de los momentos de las partículas antes de la interacción.
+    en: Sum of the momenta of the particles before the interaction.
+  constraints:
+  - expr: m1 > 0
+    message:
+      es: La masa del primer cuerpo debe ser positiva.
+      en: The mass of the first body must be positive.
+  - expr: m2 > 0
+    message:
+      es: La masa del segundo cuerpo debe ser positiva.
+      en: The mass of the second body must be positive.
+  validity:
+    es: Aplicable a cualquier sistema de dos cuerpos en mecánica clásica, antes de la interacción.
+    en: Applicable to any two-body system in classical mechanics, before the interaction.
+  dimension_check:
+    es: M L T^-1
+    en: M L T^-1
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ theory ]
+  interpretation_tags:
+  - momento-inicial
+  - suma
+  result_semantics:
+    target: Pinitial
+    meaning: Estado dinámico total del sistema antes de la interacción.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+`;export{n as default};

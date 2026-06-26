@@ -1,0 +1,105 @@
+version: 5
+id: manometros
+formulas:
+  - id: manometro
+    title:
+      es: Ecuación Manométrica
+      en: Manometric Equation
+    equation: dp = rho * g * dh
+    latex: \Delta p = \rho \cdot g \cdot \Delta h
+    rearrangements:
+      - target: dp
+        equation: rho * g * dh
+        latex: \rho \cdot g \cdot \Delta h
+      - target: dh
+        equation: dp / (rho * g)
+        latex: \frac{\Delta p}{\rho \cdot g}
+      - target: rho
+        equation: dp / (g * dh)
+        latex: \frac{\Delta p}{g \cdot \Delta h}
+    category: mecanica-fluidos
+    relation_type: ley-fundamental
+    physical_meaning:
+      es: La diferencia de presión es proporcional al desnivel de la columna de líquido.
+      en: The pressure difference is proportional to the liquid column level gap.
+    constraints: [fluido-estatico, liquido-incompresible]
+    validity:
+      es: Válido para manómetros en equilibrio hidrostático.
+      en: Valid for manometers in hydrostatic equilibrium.
+    dimension_check: "[M L^-1 T^-2] = [M L^-3] * [L T^-2] * [L] = [M L^-1 T^-2]"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: [manometros, barometros]
+    interpretation_tags: [presion, desnivel, densidad]
+    result_semantics:
+      target: dp
+      description:
+        es: Presión manométrica (diferencia).
+        en: Gauge pressure (difference).
+    domain_checks:
+      - variable: rho
+        min: 0
+      - variable: dh
+        min: 0
+    coherence_checks:
+      - message: "Un desnivel mayor debe implicar una diferencia de presión mayor."
+        condition: "dp >= 0 if dh >= 0"
+    graph_implications:
+      es: Determina la pendiente de la recta en el gráfico Coord.
+      en: Determines the slope of the line in the Coord graph.
+    pedagogical_triggers:
+      es: "¿Qué pasaría si usáramos un líquido menos denso para medir la misma presión?"
+      en: "What would happen if we used a less dense liquid to measure the same pressure?"
+
+  - id: presion_relativa
+    title:
+      es: Balance de Presión Absoluta
+      en: Absolute Pressure Balance
+    equation: p2 = p1 + dp
+    latex: p_2 = p_1 + \Delta p
+    rearrangements:
+      - target: p2
+        equation: p1 + dp
+        latex: p_1 + \Delta p
+      - target: dp
+        equation: p2 - p1
+        latex: p_2 - p_1
+    category: mecanica-fluidos
+    relation_type: definicion
+    physical_meaning:
+      es: La presión absoluta es la suma de la presión de referencia y la manométrica.
+      en: Absolute pressure is the sum of reference and gauge pressure.
+    constraints: [referencia-consistente]
+    validity:
+      es: Aplicable a cualquier sistema de medición de presión.
+      en: Applicable to any pressure measurement system.
+    dimension_check: "[M L^-1 T^-2] = [M L^-1 T^-2] + [M L^-1 T^-2]"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: [manometros]
+    interpretation_tags: [presion-absoluta, referencia]
+    result_semantics:
+      target: p2
+      description:
+        es: Presión final absoluta.
+        en: Final absolute pressure.
+    domain_checks:
+      - variable: p1
+        min: 0
+    coherence_checks:
+      - message: "La presión absoluta no puede ser negativa."
+        condition: "p2 >= 0"
+    graph_implications:
+      es: Establece el punto de operación en el eje de presiones.
+      en: Establishes the operating point on the pressure axis.
+    pedagogical_triggers:
+      es: "¿Es p1 siempre la presión atmosférica?"
+      en: "Is p1 always atmospheric pressure?"
+
+ui:
+  default_formula: manometro
+  groups:
+    - title:
+        es: Relaciones Principales
+        en: Main Relations
+      items: [manometro, presion_relativa]

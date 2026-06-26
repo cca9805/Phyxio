@@ -1,0 +1,273 @@
+const e=`version: 5
+magnitudes:
+- id: Aai
+  symbol: A_{\\alpha i}
+  nombre:
+    es: coeficiente de ligadura
+    en: constraint coefficient
+  unidad_si: context-dependent
+  descripcion:
+    es: coeficiente de ligadura dentro del modelo avanzado del leaf.
+    en: constraint coefficient inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: Aai
+  used_in: &id001
+  - ligadura_no_holonoma_lineal
+  - desplazamiento_virtual_compatible
+  - lagrange_dalembert_no_holonomo
+  - potencia_ligadura_ideal
+  common_mistake: Usar Aai sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - no-holonomas
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Aai debe interpretarse junto con las hipotesis del leaf.
+- id: qdot_i
+  symbol: \\dot q_i
+  nombre:
+    es: velocidad generalizada
+    en: generalized velocity
+  unidad_si: context-dependent
+  descripcion:
+    es: velocidad generalizada dentro del modelo avanzado del leaf.
+    en: generalized velocity inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: qdot_i
+  used_in: *id001
+  common_mistake: Usar qdot_i sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - no-holonomas
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: qdot_i debe interpretarse junto con las hipotesis del leaf.
+- id: aa
+  symbol: a_\\alpha
+  nombre:
+    es: termino independiente
+    en: independent term
+  unidad_si: context-dependent
+  descripcion:
+    es: termino independiente dentro del modelo avanzado del leaf.
+    en: independent term inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: aa
+  used_in: *id001
+  common_mistake: Usar aa sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - no-holonomas
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: aa debe interpretarse junto con las hipotesis del leaf.
+- id: lambda_a
+  symbol: \\lambda_\\alpha
+  nombre:
+    es: multiplicador de ligadura
+    en: constraint multiplier
+  unidad_si: context-dependent
+  descripcion:
+    es: multiplicador de ligadura dentro del modelo avanzado del leaf.
+    en: constraint multiplier inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: lambda_a
+  used_in: *id001
+  common_mistake: Usar lambda_a sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - no-holonomas
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: lambda_a debe interpretarse junto con las hipotesis del leaf.
+- id: Lagr
+  symbol: L
+  nombre:
+    es: lagrangiano
+    en: Lagrangian
+  unidad_si: J
+  descripcion:
+    es: lagrangiano dentro del modelo avanzado del leaf.
+    en: Lagrangian inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: Lagr
+  used_in: *id001
+  common_mistake: Usar Lagr sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - no-holonomas
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Lagr debe interpretarse junto con las hipotesis del leaf.
+- id: Qi
+  symbol: Q_i
+  nombre:
+    es: fuerza generalizada
+    en: generalized force
+  unidad_si: context-dependent
+  descripcion:
+    es: fuerza generalizada dentro del modelo avanzado del leaf.
+    en: generalized force inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: Qi
+  used_in: *id001
+  common_mistake: Usar Qi sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - no-holonomas
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Qi debe interpretarse junto con las hipotesis del leaf.
+- id: dqi
+  symbol: \\delta q_i
+  nombre:
+    es: desplazamiento virtual
+    en: virtual displacement
+  unidad_si: context-dependent
+  descripcion:
+    es: desplazamiento virtual dentro del modelo avanzado del leaf.
+    en: virtual displacement inside the advanced model of the leaf.
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: dqi
+  used_in: *id001
+  common_mistake: Usar dqi sin comprobar dominio, unidades y significado fisico.
+  typical_range: Depende del sistema y de la escala elegida.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la convencion y del eje o referencia elegidos.
+      en: It depends on the convention and chosen axis or reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser un limite fisico, una referencia o una condicion especial.
+      en: It may be a physical limit, a reference, or a special condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - no-holonomas
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: dqi debe interpretarse junto con las hipotesis del leaf.
+`;export{e as default};

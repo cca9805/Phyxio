@@ -1,0 +1,919 @@
+version: 2
+id: interpretacion-momento-lineal
+leaf_id: momento-lineal
+nombre:
+  es: Interpretación del Momento Lineal
+  en: Interpretation of Linear Momentum
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: cantidad-de-movimiento
+  parent_id: fundamentos
+  ruta_relativa: mecanica/cantidad-de-movimiento/fundamentos/momento-lineal
+dependencies:
+  formulas:
+    - momentum_definition
+    - momentum_x
+    - momentum_y
+    - momentum_magnitude
+    - momentum_change
+    - average_force_definition
+    - kinetic_energy_momentum
+    - instantaneous_force
+  magnitudes:
+    - p
+    - m
+    - v
+    - px
+    - py
+    - DeltaP
+    - Fnet
+    - DeltaT
+    - K
+    - F
+    - Pinicial
+    - Pfinal
+    - vx
+    - vy
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen Físico-Técnico
+      en: Physical-Technical Summary
+  physical_reading:
+    title:
+      es: Análisis del Transporte de Inercia
+      en: Inertia Transport Analysis
+  coherence:
+    title:
+      es: Validación de Consistencia Dinámica
+      en: Dynamic Consistency Validation
+  model_validity:
+    title:
+      es: Auditoría de Validez de Régimen
+      en: Regime Validity Audit
+  graph_reading:
+    title:
+      es: Diagnóstico de la Evolución Dinámica
+      en: Dynamic Evolution Diagnosis
+  likely_errors:
+    title:
+      es: Alerta de Sesgo y Errores Críticos
+      en: Bias and Critical Error Alert
+  next_step:
+    title:
+      es: Optimización y Siguiente Escenario
+      en: Optimization and Next Scenario
+
+targets:
+  p:
+    magnitude_id: p
+    summary_rules:
+      - id: p_sum_zero
+        when: 'result == 0'
+        status: info
+        text:
+          es: "El cuerpo se encuentra en reposo absoluto; no hay transporte de inercia."
+          en: "The body is at absolute rest; there is no inertia transport."
+      - id: p_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "El momento lineal p describe el transporte de inercia del sistema; es la propiedad fundamental que acopla masa y velocidad en un único estado dinámico."
+          en: "The linear momentum p describes the system's inertia transport; it is the fundamental property that couples mass and velocity into a single dynamic state."
+    physical_reading_rules:
+      - id: p_read_pos
+        when: 'result > 0'
+        status: info
+        text:
+          es: "La inercia se desplaza en el sentido positivo del eje elegido."
+          en: "Inertia moves in the positive direction of the chosen axis."
+      - id: p_read_default
+        when: "true"
+        status: info
+        text:
+          es: "El valor obtenido representa la inercia dinámica acumulada; define la capacidad del sistema para resistir cambios en su estado de movimiento por impacto."
+          en: "The obtained value represents the accumulated dynamic inertia; it defines the system's capacity to resist changes in its state of motion by impact."
+    coherence_rules:
+      - id: p_coh_mass
+        when: 'm <= 0'
+        status: error
+        text:
+          es: "Error crítico: La masa debe ser positiva para un sistema físico real."
+          en: "Critical error: Mass must be positive for a real physical system."
+      - id: p_coh_default
+        when: "true"
+        status: ok
+        text:
+          es: "El resultado es consistente con los parámetros de masa y velocidad."
+          en: "The result is consistent with mass and velocity parameters."
+    model_validity_rules:
+      - id: p_val_rel
+        when: 'v > 3e7'
+        status: warning
+        text:
+          es: "Aviso: Se requiere corrección relativista para estas velocidades extremas."
+          en: "Warning: Relativistic correction is required for these extreme speeds."
+      - id: p_val_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo clásico de Newton es aplicable en este rango."
+          en: "Newton's classical model is applicable in this range."
+    graph_rules:
+      - id: p_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "El vector p se representa como una flecha alineada con el vector v."
+          en: "The p vector is represented as an arrow aligned with the v vector."
+    likely_errors:
+      - id: p_err_energy
+        when: "true"
+        status: warning
+        text:
+          es: "Ojo: No confundas p (vectorial) con K (escalar); sus leyes de conservación difieren."
+          en: "Note: Do not confuse p (vectorial) with K (scalar); their conservation laws differ."
+    next_step_rules:
+      - id: p_next_default
+        when: "true"
+        status: tip
+        text:
+          es: "Analiza ahora cómo cambia este estado ante una fuerza externa (Impulso) o si se transfiere a otros cuerpos por colisión."
+          en: "Now analyze how this state changes under an external force (Impulse) or if it is transferred to other bodies by collision."
+
+  px:
+    magnitude_id: px
+    summary_rules:
+      - id: px_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "Análisis de la componente X del momento lineal finalizado."
+          en: "X-component of linear momentum analysis finished."
+    physical_reading_rules:
+      - id: px_read_right
+        when: 'result > 0'
+        status: info
+        text:
+          es: "La inercia proyectada se dirige hacia la derecha del observador."
+          en: "Projected inertia is directed to the observer's right."
+      - id: px_read_default
+        when: "true"
+        status: info
+        text:
+          es: "Representa la cantidad de movimiento efectiva sobre el eje horizontal."
+          en: "Represents the effective quantity of motion on the horizontal axis."
+    coherence_rules:
+      - id: px_coh_default
+        when: "true"
+        status: ok
+        text:
+          es: "Valor coherente con la masa y la velocidad horizontal."
+          en: "Value coherent with mass and horizontal velocity."
+    model_validity_rules:
+      - id: px_val_default
+        when: "true"
+        status: ok
+        text:
+          es: "Válido para el sistema de coordenadas cartesianas definido."
+          en: "Valid for the defined Cartesian coordinate system."
+    graph_rules:
+      - id: px_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "Esta componente se visualiza proyectada sobre el eje X."
+          en: "This component is visualized projected on the X axis."
+    likely_errors:
+      - id: px_err_sign
+        when: "true"
+        status: warning
+        text:
+          es: "Cuidado: No olvides el signo si el movimiento es hacia la izquierda."
+          en: "Caution: Do not forget the sign if motion is to the left."
+    next_step_rules:
+      - id: px_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Calcula la componente Y para hallar la magnitud del vector total."
+          en: "Calculate the Y-component to find the total vector magnitude."
+
+  py:
+    magnitude_id: py
+    summary_rules:
+      - id: py_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "Análisis de la componente Y del momento lineal finalizado."
+          en: "Y-component of linear momentum analysis finished."
+    physical_reading_rules:
+      - id: py_read_up
+        when: 'result > 0'
+        status: info
+        text:
+          es: "La inercia proyectada se dirige hacia la parte superior del sistema."
+          en: "Projected inertia is directed towards the top of the system."
+      - id: py_read_default
+        when: "true"
+        status: info
+        text:
+          es: "Representa la cantidad de movimiento efectiva sobre el eje vertical."
+          en: "Represents the effective quantity of motion on the vertical axis."
+    coherence_rules:
+      - id: py_coh_default
+        when: "true"
+        status: ok
+        text:
+          es: "Valor coherente con la masa y la velocidad vertical."
+          en: "Value coherent with mass and vertical velocity."
+    model_validity_rules:
+      - id: py_val_default
+        when: "true"
+        status: ok
+        text:
+          es: "Válido para el sistema de coordenadas cartesianas definido."
+          en: "Valid for the defined Cartesian coordinate system."
+    graph_rules:
+      - id: py_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "Esta componente se visualiza proyectada sobre el eje Y."
+          en: "This component is visualized projected on the Y axis."
+    likely_errors:
+      - id: py_err_sign
+        when: "true"
+        status: warning
+        text:
+          es: "Cuidado: El signo negativo es crítico en rebotes contra el suelo."
+          en: "Caution: The negative sign is critical in ground bounces."
+    next_step_rules:
+      - id: py_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Calcula la componente X para hallar la dirección total del vector."
+          en: "Calculate the X-component to find the total vector direction."
+
+  DeltaP:
+    magnitude_id: DeltaP
+    summary_rules:
+      - id: dp_sum_zero
+        when: 'result == 0'
+        status: ok
+        text:
+          es: "El momento lineal se conserva; no hay fuerza externa neta."
+          en: "Linear momentum is conserved; there is no net external force."
+      - id: dp_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "Evaluación del balance dinámico (impulso neto) completada."
+          en: "Evaluation of the dynamic balance (net impulse) completed."
+    physical_reading_rules:
+      - id: dp_read_pos
+        when: 'result > 0'
+        status: info
+        text:
+          es: "El sistema ha ganado cantidad de movimiento en el sentido del eje."
+          en: "The system has gained motion quantity in the axis direction."
+      - id: dp_read_default
+        when: "true"
+        status: info
+        text:
+          es: "Este valor representa el efecto total de las fuerzas externas."
+          en: "This value represents the total effect of external forces."
+    coherence_rules:
+      - id: dp_coh_default
+        when: "true"
+        status: ok
+        text:
+          es: "Balance verificado correctamente entre estado inicial y final."
+          en: "Balance correctly verified between initial and final state."
+    model_validity_rules:
+      - id: dp_val_default
+        when: "true"
+        status: ok
+        text:
+          es: "Válido para interacciones impulsivas de cualquier naturaleza."
+          en: "Valid for impulsive interactions of any nature."
+    graph_rules:
+      - id: dp_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "Representa el área neta bajo la curva fuerza-tiempo."
+          en: "Represents the net area under the force-time curve."
+    likely_errors:
+      - id: dp_err_vectors
+        when: "true"
+        status: warning
+        text:
+          es: "Error común: Restar módulos en rebotes en lugar de vectores."
+          en: "Common error: Subtracting magnitudes in bounces instead of vectors."
+    next_step_rules:
+      - id: dp_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Usa este cambio para calcular la fuerza neta media del impacto."
+          en: "Use this change to calculate the average net force of the impact."
+
+  Fnet:
+    magnitude_id: Fnet
+    summary_rules:
+      - id: fn_sum_zero
+        when: 'result == 0'
+        status: ok
+        text:
+          es: "Equilibrio dinámico; no hay aceleración del centro de masas."
+          en: "Dynamic equilibrium; no center of mass acceleration."
+      - id: fn_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "Análisis de la fuerza media de interacción finalizado."
+          en: "Average interaction force analysis finished."
+    physical_reading_rules:
+      - id: fn_read_time
+        when: 'DeltaT < 0.05'
+        status: warning
+        text:
+          es: "Impacto breve: La fuerza media es muy elevada por la rapidez del cambio."
+          en: "Short impact: Average force is very high due to the rate of change."
+      - id: fn_read_default
+        when: "true"
+        status: info
+        text:
+          es: "Representa el esfuerzo necesario para desviar o detener el cuerpo."
+          en: "Represents the effort needed to deflect or stop the body."
+    coherence_rules:
+      - id: fn_coh_time
+        when: 'DeltaT <= 0'
+        status: error
+        text:
+          es: "Error: El intervalo de tiempo de interacción debe ser positivo."
+          en: "Error: Interaction time interval must be positive."
+      - id: fn_coh_default
+        when: "true"
+        status: ok
+        text:
+          es: "Relación Causa-Efecto consistente entre fuerza y tiempo."
+          en: "Consistent Cause-Effect relationship between force and time."
+    model_validity_rules:
+      - id: fn_val_default
+        when: "true"
+        status: ok
+        text:
+          es: "Válido como aproximación macroscópica de la interacción."
+          en: "Valid as a macroscopic approximation of the interaction."
+    graph_rules:
+      - id: fn_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "Corresponde a la pendiente de la secante en la gráfica p-t."
+          en: "Corresponds to the slope of the secant in the p-t graph."
+    likely_errors:
+      - id: fn_err_peak
+        when: "true"
+        status: warning
+        text:
+          es: "No confundas esta fuerza media con la fuerza pico real del choque."
+          en: "Do not confuse this average force with the real peak force of the collision."
+    next_step_rules:
+      - id: fn_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Estudia cómo varía la fuerza al amortiguar el impacto aumentando dt."
+          en: "Study how force varies by cushioning the impact increasing dt."
+
+  K:
+    magnitude_id: K
+    summary_rules:
+      - id: k_sum_zero
+        when: 'result == 0'
+        status: ok
+        text:
+          es: "El cuerpo carece de energía cinética traslacional."
+          en: "The body lacks translational kinetic energy."
+      - id: k_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "Cálculo de la energía cinética traslacional completado."
+          en: "Translational kinetic energy calculation completed."
+    physical_reading_rules:
+      - id: k_read_v2
+        when: "true"
+        status: info
+        text:
+          es: "La energía escala con el cuadrado de v; dobla la rapidez y cuadriplicarás K."
+          en: "Energy scales with the square of v; double the speed and you quadruple K."
+    coherence_rules:
+      - id: k_coh_neg
+        when: 'result < 0'
+        status: error
+        text:
+          es: "Error: La energía cinética no puede ser negativa en este modelo."
+          en: "Error: Kinetic energy cannot be negative in this model."
+      - id: k_coh_default
+        when: "true"
+        status: ok
+        text:
+          es: "Energía consistente con la masa y el momento del sistema."
+          en: "Energy consistent with system mass and momentum."
+    model_validity_rules:
+      - id: k_val_default
+        when: "true"
+        status: ok
+        text:
+          es: "Válido para partículas rígidas en régimen no relativista."
+          en: "Valid for rigid particles in non-relativistic regime."
+    graph_rules:
+      - id: k_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "Se visualiza como un escalar en barras de energía."
+          en: "Visualized as a scalar in energy bars."
+    likely_errors:
+      - id: k_err_cons
+        when: "true"
+        status: warning
+        text:
+          es: "Recuerda que K no se conserva en choques inelásticos aunque p sí lo haga."
+          en: "Remember that K is not conserved in inelastic collisions even if p is."
+    next_step_rules:
+      - id: k_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Compara K antes y después para determinar la elasticidad del choque."
+          en: "Compare K before and after to determine collision elasticity."
+
+  m:
+    magnitude_id: m
+    summary_rules:
+      - id: m_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "Masa del sistema identificada para el cálculo de inercia."
+          en: "System mass identified for inertia calculation."
+    physical_reading_rules:
+      - id: m_read_large
+        when: 'result > 1000'
+        status: info
+        text:
+          es: "Masa elevada; se requiere gran momento para cambiar su estado."
+          en: "High mass; great momentum is required to change its state."
+      - id: m_read_default
+        when: "true"
+        status: info
+        text:
+          es: "Representa la resistencia inercial al cambio de movimiento."
+          en: "Represents inertial resistance to motion change."
+    coherence_rules:
+      - id: m_coh_neg
+        when: 'result <= 0'
+        status: error
+        text:
+          es: "La masa debe ser estrictamente positiva."
+          en: "Mass must be strictly positive."
+      - id: m_coh_default
+        when: "true"
+        status: ok
+        text:
+          es: "Valor de masa físicamente aceptable."
+          en: "Physically acceptable mass value."
+    model_validity_rules:
+      - id: m_val_default
+        when: "true"
+        status: ok
+        text:
+          es: "Masa constante según las hipótesis del modelo ideal."
+          en: "Constant mass according to ideal model hypotheses."
+    graph_rules:
+      - id: m_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "Actúa como el factor de proporcionalidad entre v y p."
+          en: "Acts as the proportionality factor between v and p."
+    likely_errors:
+      - id: m_err_weight
+        when: "true"
+        status: warning
+        text:
+          es: "No confundas masa (kg) con peso (N)."
+          en: "Do not confuse mass (kg) with weight (N)."
+    next_step_rules:
+      - id: m_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Usa la masa para vincular la cinemática con la dinámica del sistema."
+          en: "Use mass to link kinematics with system dynamics."
+
+  v:
+    magnitude_id: v
+    summary_rules:
+      - id: v_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "Velocidad del sistema analizada como vector de estado."
+          en: "System velocity analyzed as a state vector."
+    physical_reading_rules:
+      - id: v_read_default
+        when: "true"
+        status: info
+        text:
+          es: "Rapidez y dirección del desplazamiento instantáneo."
+          en: "Instantaneous displacement speed and direction."
+    coherence_rules:
+      - id: v_coh_light
+        when: 'result > 3e8'
+        status: error
+        text:
+          es: "Velocidad físicamente imposible (superior a c)."
+          en: "Physically impossible velocity (greater than c)."
+      - id: v_coh_default
+        when: "true"
+        status: ok
+        text:
+          es: "Valor de velocidad dentro de rangos clásicos."
+          en: "Velocity value within classical ranges."
+    model_validity_rules:
+      - id: v_val_rel
+        when: 'result > 3e7'
+        status: warning
+        text:
+          es: "Velocidad cercana al límite relativista."
+          en: "Velocity close to relativistic limit."
+      - id: v_val_default
+        when: "true"
+        status: ok
+        text:
+          es: "Válida para mecánica Newtoniana."
+          en: "Valid for Newtonian mechanics."
+    graph_rules:
+      - id: v_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "El vector velocidad define la dirección del vector momento."
+          en: "The velocity vector defines the direction of the momentum vector."
+    likely_errors:
+      - id: v_err_scalar
+        when: "true"
+        status: warning
+        text:
+          es: "Recuerda que la velocidad tiene dirección; el signo importa."
+          en: "Remember that velocity has direction; the sign matters."
+    next_step_rules:
+      - id: v_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Multiplica por la masa para hallar el transporte de inercia."
+          en: "Multiply by mass to find inertia transport."
+
+  vx:
+    magnitude_id: vx
+    summary_rules:
+      - id: vx_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "Componente horizontal de la velocidad identificada."
+          en: "Horizontal velocity component identified."
+    physical_reading_rules:
+      - id: vx_read_default
+        when: "true"
+        status: info
+        text:
+          es: "Proyección del movimiento sobre el eje X."
+          en: "Motion projection onto the X-axis."
+    coherence_rules:
+      - id: vx_coh_default
+        when: "true"
+        status: ok
+        text:
+          es: "Coherente con el sistema de coordenadas."
+          en: "Coherent with the coordinate system."
+    model_validity_rules:
+      - id: vx_val_default
+        when: "true"
+        status: ok
+        text:
+          es: "Válida para el análisis cartesiano."
+          en: "Valid for Cartesian analysis."
+    graph_rules:
+      - id: vx_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "Define la componente px del momento lineal."
+          en: "Defines the px component of linear momentum."
+    likely_errors:
+      - id: vx_err_default
+        when: "true"
+        status: warning
+        text:
+          es: "Mantén el convenio de signos (+ derecha, - izquierda)."
+          en: "Keep the sign convention (+ right, - left)."
+    next_step_rules:
+      - id: vx_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Úsala para realizar el balance de momento en el eje X."
+          en: "Use it to perform the momentum balance on the X-axis."
+
+  vy:
+    magnitude_id: vy
+    summary_rules:
+      - id: vy_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "Componente vertical de la velocidad identificada."
+          en: "Vertical velocity component identified."
+    physical_reading_rules:
+      - id: vy_read_default
+        when: "true"
+        status: info
+        text:
+          es: "Proyección del movimiento sobre el eje Y."
+          en: "Motion projection onto the Y-axis."
+    coherence_rules:
+      - id: vy_coh_default
+        when: "true"
+        status: ok
+        text:
+          es: "Coherente con el sistema de coordenadas."
+          en: "Coherent with the coordinate system."
+    model_validity_rules:
+      - id: vy_val_default
+        when: "true"
+        status: ok
+        text:
+          es: "Válida para el análisis cartesiano."
+          en: "Valid for Cartesian analysis."
+    graph_rules:
+      - id: vy_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "Define la componente py del momento lineal."
+          en: "Defines the py component of linear momentum."
+    likely_errors:
+      - id: vy_err_default
+        when: "true"
+        status: warning
+        text:
+          es: "Mantén el convenio de signos (+ arriba, - abajo)."
+          en: "Keep the sign convention (+ up, - down)."
+    next_step_rules:
+      - id: vy_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Úsala para realizar el balance de momento en el eje Y."
+          en: "Use it to perform the momentum balance on the Y-axis."
+
+  Pinicial:
+    magnitude_id: Pinicial
+    summary_rules:
+      - id: Pinicial_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "Estado de movimiento inicial antes de la interacción."
+          en: "Initial motion state before the interaction."
+    physical_reading_rules:
+      - id: Pinicial_read_default
+        when: "true"
+        status: info
+        text:
+          es: "Cantidad de movimiento de partida del sistema."
+          en: "System's starting quantity of motion."
+    coherence_rules:
+      - id: Pinicial_coh_default
+        when: "true"
+        status: ok
+        text:
+          es: "Estado inicial definido correctamente."
+          en: "Initial state correctly defined."
+    model_validity_rules:
+      - id: Pinicial_val_default
+        when: "true"
+        status: ok
+        text:
+          es: "Punto de referencia para el balance de fuerzas externas."
+          en: "Reference point for external forces balance."
+    graph_rules:
+      - id: Pinicial_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "Se representa como el vector de entrada en el diagrama de balance."
+          en: "Represented as the input vector in the balance diagram."
+    likely_errors:
+      - id: Pinicial_err_default
+        when: "true"
+        status: warning
+        text:
+          es: "Asegúrate de que el sentido coincide con el planteamiento del problema."
+          en: "Ensure the direction matches the problem statement."
+    next_step_rules:
+      - id: Pinicial_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Réstalo del momento final para hallar la variación total."
+          en: "Subtract it from the final momentum to find total variation."
+
+  Pfinal:
+    magnitude_id: Pfinal
+    summary_rules:
+      - id: Pfinal_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "Estado de movimiento final tras la interacción."
+          en: "Final motion state after the interaction."
+    physical_reading_rules:
+      - id: Pfinal_read_default
+        when: "true"
+        status: info
+        text:
+          es: "Resultado dinámico de la acción de las fuerzas externas."
+          en: "Dynamic result of external forces' action."
+    coherence_rules:
+      - id: Pfinal_coh_default
+        when: "true"
+        status: ok
+        text:
+          es: "Estado final definido correctamente."
+          en: "Final state correctly defined."
+    model_validity_rules:
+      - id: Pfinal_val_default
+        when: "true"
+        status: ok
+        text:
+          es: "Cierre del balance de cantidad de movimiento."
+          en: "Closure of the quantity of motion balance."
+    graph_rules:
+      - id: Pfinal_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "Se representa como el vector resultante en el diagrama."
+          en: "Represented as the resulting vector in the diagram."
+    likely_errors:
+      - id: Pfinal_err_default
+        when: "true"
+        status: warning
+        text:
+          es: "Verifica si el sentido ha cambiado respecto al estado inicial."
+          en: "Verify if the direction has changed relative to the initial state."
+    next_step_rules:
+      - id: Pfinal_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Valida la conservación del momento si no hubo fuerzas externas netas."
+          en: "Validate momentum conservation if there were no net external forces."
+
+  DeltaT:
+    magnitude_id: DeltaT
+    summary_rules:
+      - id: dt_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "Duración temporal del intercambio de movimiento."
+          en: "Time duration of motion exchange."
+    physical_reading_rules:
+      - id: dt_read_short
+        when: 'result < 0.1'
+        status: info
+        text:
+          es: "Interacción impulsiva muy breve; espera fuerzas elevadas."
+          en: "Very brief impulsive interaction; expect high forces."
+      - id: dt_read_default
+        when: "true"
+        status: info
+        text:
+          es: "Tiempo durante el cual la fuerza neta modifica el sistema."
+          en: "Time during which net force modifies the system."
+    coherence_rules:
+      - id: dt_coh_neg
+        when: 'result <= 0'
+        status: error
+        text:
+          es: "El intervalo de tiempo debe ser positivo."
+          en: "Time interval must be positive."
+      - id: dt_coh_default
+        when: "true"
+        status: ok
+        text:
+          es: "Duración físicamente consistente."
+          en: "Physically consistent duration."
+    model_validity_rules:
+      - id: dt_val_default
+        when: "true"
+        status: ok
+        text:
+          es: "Define el régimen de fuerza media para el impacto."
+          en: "Defines the average force regime for the impact."
+    graph_rules:
+      - id: dt_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "Corresponde a la base del área bajo la curva F-t."
+          en: "Corresponds to the base of the area under the F-t curve."
+    likely_errors:
+      - id: dt_err_default
+        when: "true"
+        status: warning
+        text:
+          es: "No confundas duración con instante de tiempo."
+          en: "Do not confuse duration with time instant."
+    next_step_rules:
+      - id: dt_next_god
+        when: "true"
+        status: tip
+        text:
+          es: "Úsalo para despejar la fuerza media o el impulso recibido; recuerda que a menor dt, mayor es la violencia del impacto."
+          en: "Use it to solve for average force or received impulse; remember that the smaller the dt, the greater the impact violence."
+
+  F:
+    magnitude_id: F
+    summary_rules:
+      - id: f_sum_default
+        when: "true"
+        status: info
+        text:
+          es: "Fuerza instantánea aplicada sobre el sistema."
+          en: "Instantaneous force applied on the system."
+    physical_reading_rules:
+      - id: f_read_default
+        when: "true"
+        status: info
+        text:
+          es: "Acción externa que provoca la rapidez de cambio de momento."
+          en: "External action causing the rate of momentum change."
+    coherence_rules:
+      - id: f_coh_default
+        when: "true"
+        status: ok
+        text:
+          es: "Fuerza definida según la dinámica de Newton."
+          en: "Force defined according to Newton's dynamics."
+    model_validity_rules:
+      - id: f_val_default
+        when: "true"
+        status: ok
+        text:
+          es: "Válida para la descripción del estado dinámico."
+          en: "Valid for describing the dynamic state."
+    graph_rules:
+      - id: f_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "La pendiente de la curva p(t) es igual a esta fuerza."
+          en: "The slope of the p(t) curve is equal to this force."
+    likely_errors:
+      - id: f_err_default
+        when: "true"
+        status: warning
+        text:
+          es: "Asegúrate de que la fuerza es la neta externa."
+          en: "Ensure the force is the net external force."
+    next_step_rules:
+      - id: f_next_god
+        when: "true"
+        status: tip
+        text:
+          es: "Integra en el tiempo para hallar el impulso total o analiza la aceleración instantánea producida."
+          en: "Integrate over time to find total impulse or analyze the produced instantaneous acceleration."
+

@@ -1,0 +1,292 @@
+version: v5
+formulas:
+- id: potencia_joule
+  title:
+    es: Potencia térmica disipada
+    en: Dissipated thermal power
+  equation: P_{joule} = I^2 * R
+  latex: P_{joule} = I^2 R
+  rearrangements:
+  - target: potencia_termica_disipada
+    equation: P_{joule} = I^2 * R
+    latex: P_{joule} = I^2 R
+    constraints: []
+  - target: corriente_electrica
+    equation: I = sqrt(P_{joule} / R)
+    latex: I = \sqrt{\frac{P_{joule}}{R}}
+    constraints:
+    - expr: R > 0
+      message:
+        es: La resistencia debe ser positiva para extraer la corriente.
+        en: Resistance must be positive to extract current.
+  - target: resistencia_electrica_local
+    equation: R = P_{joule} / I^2
+    latex: R = \frac{P_{joule}}{I^2}
+    constraints:
+    - expr: I != 0
+      message:
+        es: La corriente no puede ser cero para extraer la resistencia.
+        en: Current cannot be zero to extract resistance.
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: 'La potencia térmica generada en un punto de resistencia eléctrica local [[R]] por el paso de corriente [[I]].
+
+      Esta potencia determina el calentamiento local y es el indicador físico directo del riesgo térmico.
+
+      '
+    en: 'The thermal power generated at a point of local electrical resistance [[R]] by the passage of current [[I]].
+
+      This power determines local heating and is the direct physical indicator of thermal risk.
+
+      '
+  constraints:
+  - expr: I >= 0
+    message:
+      es: La corriente debe ser no negativa (se usa valor absoluto).
+      en: Current must be non-negative (absolute value is used).
+  - expr: R >= 0
+    message:
+      es: La resistencia debe ser no negativa.
+      en: Resistance must be non-negative.
+  validity:
+    es: Válida para corriente continua y resistencias óhmicas constantes. En corriente alterna, aplica al valor eficaz de
+      corriente y resistencia equivalente.
+    en: Valid for direct current and constant ohmic resistances. In alternating current, applies to RMS current value and
+      equivalent resistance.
+  dimension_check: M L^2 T^-3 = I^2 * (M L^2 T^-3 I^-2) = M L^2 T^-3
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - potencia_termica_disipada
+  - thermal_risk
+  - joule_heating
+  result_semantics:
+    target: potencia_termica_disipada
+    meaning: Thermal power indicating local heating intensity at a connection point.
+    kind: scalar
+    absolute_value_meaning:
+      es: Thermal power indicating local heating intensity at a connection point.
+      en: Thermal power indicating local heating intensity at a connection point.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: P_{joule} < 1000
+    message:
+      es: Potencia térmica superior a 1 kW es inusual en instalación doméstica (verificar unidades).
+      en: Thermal power above 1 kW is unusual in domestic installation (verify units).
+  coherence_checks:
+  - expr: P_{joule} >= 0
+    message:
+      es: La potencia térmica debe ser positiva o cero.
+      en: Thermal power must be positive or zero.
+  graph_implications:
+  - La potencia térmica crece cuadráticamente con la corriente.
+  pedagogical_triggers:
+  - when: value_too_high
+    message:
+      es: Una potencia térmica elevada indica riesgo significativo de calentamiento.
+      en: High thermal power indicates significant heating risk.
+- id: energia_joule
+  title:
+    es: Energía térmica acumulada
+    en: Accumulated thermal energy
+  equation: E_{joule} = P_{joule} * t
+  latex: E_{joule} = P_{joule} * t
+  rearrangements:
+  - target: energia_termica_acumulada
+    equation: E_{joule} = P_{joule} * t
+    latex: E_{joule} = P_{joule} t
+    constraints: []
+  - target: potencia_termica_disipada
+    equation: P_{joule} = E_{joule} / t
+    latex: P_{joule} = \frac{E_{joule}}{t}
+    constraints:
+    - expr: t > 0
+      message:
+        es: El tiempo debe ser positivo para extraer la potencia.
+        en: Time must be positive to extract power.
+  - target: tiempo_de_exposicion
+    equation: t = E_{joule} / P_{joule}
+    latex: t = \frac{E_{joule}}{P_{joule}}
+    constraints:
+    - expr: P_{joule} > 0
+      message:
+        es: La potencia térmica debe ser positiva para extraer el tiempo.
+        en: Thermal power must be positive to extract time.
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: 'La energía térmica total acumulada durante un tiempo de exposición [[t]] a potencia constante [[P_{joule}]].
+
+      Esta energía determina el daño térmico acumulado y debe considerarse junto con la potencia instantánea.
+
+      '
+    en: 'The total thermal energy accumulated during an exposure time [[t]] at constant power [[P_{joule}]].
+
+      This energy determines accumulated thermal damage and must be considered along with instantaneous power.
+
+      '
+  constraints:
+  - expr: P_{joule} >= 0
+    message:
+      es: La potencia térmica debe ser no negativa.
+      en: Thermal power must be non-negative.
+  - expr: t >= 0
+    message:
+      es: El tiempo debe ser no negativo.
+      en: Time must be non-negative.
+  validity:
+    es: Válida cuando la potencia térmica se mantiene aproximadamente constante durante el intervalo considerado.
+    en: Valid when thermal power remains approximately constant during the considered interval.
+  dimension_check: M L^2 T^-2 = (M L^2 T^-3) * T = M L^2 T^-2
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - energia_termica_acumulada
+  - accumulated_energy
+  - thermal_damage
+  result_semantics:
+    target: energia_termica_acumulada
+    meaning: Accumulated thermal energy determining total heat exposure.
+    kind: scalar
+    absolute_value_meaning:
+      es: Accumulated thermal energy determining total heat exposure.
+      en: Accumulated thermal energy determining total heat exposure.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: E_{joule} < 1e9
+    message:
+      es: Energía térmica superior a 1 GJ es inusual (verificar unidades).
+      en: Thermal energy above 1 GJ is unusual (verify units).
+  coherence_checks:
+  - expr: E_{joule} >= 0
+    message:
+      es: La energía térmica debe ser positiva o cero.
+      en: Thermal energy must be positive or zero.
+  graph_implications:
+  - La energía crece linealmente con el tiempo a potencia constante.
+  pedagogical_triggers:
+  - when: result_outside_expected_range
+    message:
+      es: La energía acumulada puede ser elevada incluso con potencia moderada si el tiempo es largo.
+      en: Accumulated energy can be high even with moderate power if time is long.
+- id: incremento_termico
+  title:
+    es: Incremento de temperatura
+    en: Temperature rise
+  equation: \Delta T = P_{joule} * R_{th}
+  latex: \Delta T = P_{joule} * R_{th}
+  rearrangements:
+  - target: incremento_de_temperatura
+    equation: \Delta T = P_{joule} * R_{th}
+    latex: \Delta T = P_{joule} R_{th}
+    constraints: []
+  - target: potencia_termica_disipada
+    equation: P_{joule} = \Delta T / R_{th}
+    latex: P_{joule} = \frac{\Delta T}{R_{th}}
+    constraints:
+    - expr: R_{th} > 0
+      message:
+        es: La resistencia térmica debe ser positiva.
+        en: Thermal resistance must be positive.
+  - target: resistencia_termica
+    equation: R_{th} = \Delta T / P_{joule}
+    latex: R_{th} = \frac{\Delta T}{P_{joule}}
+    constraints:
+    - expr: P_{joule} > 0
+      message:
+        es: La potencia térmica debe ser positiva para extraer la resistencia térmica.
+        en: Thermal power must be positive to extract thermal resistance.
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: 'El incremento de temperatura en un punto de conexión debido a la disipación de potencia térmica [[P_{joule}]]
+
+      y la resistencia térmica local [[R_{th}]]. Es el indicador observable directo del riesgo.
+
+      '
+    en: 'The temperature rise at a connection point due to thermal power dissipation [[P_{joule}]]
+
+      and local thermal resistance [[R_{th}]]. It is the direct observable indicator of risk.
+
+      '
+  constraints:
+  - expr: P_{joule} >= 0
+    message:
+      es: La potencia térmica debe ser no negativa.
+      en: Thermal power must be non-negative.
+  - expr: R_{th} > 0
+    message:
+      es: La resistencia térmica debe ser positiva.
+      en: Thermal resistance must be positive.
+  validity:
+    es: 'Válida en régimen térmico estacionario. En transitorios térmicos, la temperatura evoluciona
+
+      con constante de tiempo térmica. La resistencia térmica depende del material y geometría.
+
+      '
+    en: 'Valid in stationary thermal regime. In thermal transients, temperature evolves
+
+      with thermal time constant. Thermal resistance depends on material and geometry.
+
+      '
+  dimension_check: K = (M L^2 T^-3) * (K / (M L^2 T^-3)) = K
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - incremento_de_temperatura
+  - temperature_rise
+  - observable_indicator
+  result_semantics:
+    target: incremento_de_temperatura
+    meaning: Temperature rise above ambient as direct observable risk indicator.
+    kind: scalar
+    absolute_value_meaning:
+      es: Temperature rise above ambient as direct observable risk indicator.
+      en: Temperature rise above ambient as direct observable risk indicator.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: \Delta T < 200
+    message:
+      es: Incremento térmico superior a 200 K es inusual en instalación doméstica (verificar unidades).
+      en: Temperature rise above 200 K is unusual in domestic installation (verify units).
+  coherence_checks:
+  - expr: \Delta T >= 0
+    message:
+      es: El incremento térmico debe ser positivo o cero.
+      en: Temperature rise must be positive or zero.
+  graph_implications:
+  - El incremento térmico es proporcional a la potencia disipada.
+  pedagogical_triggers:
+  - when: value_too_high
+    message:
+      es: Un incremento térmico superior a 40-50 K justifica intervención inmediata.
+      en: A temperature rise above 40-50 K justifies immediate intervention.
+ui:
+  default_formula: potencia_joule
+  groups:
+  - title:
+      es: Ecuaciones base
+      en: Base equations
+    items:
+    - potencia_joule
+    - energia_joule
+    - incremento_termico

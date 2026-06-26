@@ -1,0 +1,821 @@
+version: 5.0.0
+id: energia-media
+leaf_id: energia-media
+nombre:
+  es: Energia media
+  en: Average Energy
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: distribuciones-estadisticas
+  parent_id: maxwell-boltzmann
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/distribuciones-estadisticas/maxwell-boltzmann/energia-media
+  orden: 273120
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - energia_media_particula
+  - energia_total_gas_ideal
+  - energia_total_temperatura
+  magnitudes:
+  - energia_media
+  - temperatura
+  - k_boltzmann
+  - numero_particulas
+  - energia_total
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: energia_media
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  energia_media:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado intensivo por partícula
+      en: intensive per-particle result
+    summary_rules:
+    - id: energia_media_summary_linear_temperature
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_media]] resume la energía cinética traslacional media de una partícula del gas ideal clásico.'
+        en: '[[energia_media]] summarizes the mean translational kinetic energy of one particle in the classical ideal gas.'
+    - id: energia_media_summary_not_total
+      when: 'true'
+      status: info
+      text:
+        es: 'Es una magnitud por partícula: no debe leerse como energía total de la muestra.'
+        en: 'It is a per-particle quantity: it must not be read as the total energy of the sample.'
+    physical_reading_rules:
+    - id: energia_media_physical_temperature_link
+      when: 'true'
+      status: info
+      text:
+        es: Una [[energia_media]] mayor indica mayor agitación térmica asociada a mayor [[temperatura]].
+        en: A larger [[energia_media]] indicates stronger thermal agitation associated with higher [[temperatura]].
+    - id: energia_media_physical_unit
+      when: 'true'
+      status: ok
+      text:
+        es: El valor debe interpretarse en J por partícula, aunque la unidad SI siga siendo el julio.
+        en: The value should be interpreted as J per particle, even though the SI unit remains the joule.
+    coherence_rules:
+    - id: energia_media_coherence_dimension
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[k_boltzmann]]·[[temperatura]] dé julios; si no, hay un error de unidades.
+        en: Check that [[k_boltzmann]]·[[temperatura]] gives joules; otherwise there is a unit error.
+    - id: energia_media_coherence_nonnegative
+      when: 'true'
+      status: warning
+      text:
+        es: En este modelo [[energia_media]] no puede ser negativa porque [[temperatura]] absoluta tampoco puede serlo.
+        en: In this model [[energia_media]] cannot be negative because absolute [[temperatura]] cannot be negative.
+    model_validity_rules:
+    - id: energia_media_model_classical_limit
+      when: 'true'
+      status: info
+      text:
+        es: La lectura vale para un gas ideal clásico en equilibrio, sin efectos cuánticos dominantes.
+        en: The reading applies to a classical ideal gas in equilibrium, without dominant quantum effects.
+    - id: energia_media_model_translational_only
+      when: 'true'
+      status: info
+      text:
+        es: La fórmula describe energía traslacional media; otros grados de libertad exigen un modelo extendido.
+        en: The formula describes mean translational energy; other degrees of freedom require an extended model.
+    graph_rules:
+    - id: energia_media_graph_linear
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, [[energia_media]] debe crecer linealmente con [[temperatura]].
+        en: In the Coord graph, [[energia_media]] should grow linearly with [[temperatura]].
+    - id: energia_media_graph_origin
+      when: 'true'
+      status: ok
+      text:
+        es: El origen representa la extrapolación ideal donde T = 0 K implica energía media traslacional nula.
+        en: The origin represents the ideal extrapolation where T = 0 K implies zero mean translational energy.
+    likely_errors:
+    - id: energia_media_error_celsius
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_media]] con una lectura aislada es un error frecuente: No uses grados Celsius directamente:
+          la fórmula necesita [[temperatura]] absoluta en kelvin.'
+        en: 'A common mistake is to interpret [[energia_media]] in isolation: Do not use degrees Celsius directly: the formula
+          requires absolute [[temperatura]] in kelvin.'
+    - id: energia_media_error_total_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_media]] con una lectura aislada es un error frecuente: No multipliques por [[numero_particulas]]
+          si el resultado pedido es [[energia_media]].'
+        en: 'A common mistake is to interpret [[energia_media]] in isolation: Do not multiply by [[numero_particulas]] if
+          the requested result is [[energia_media]].'
+    next_step_rules:
+    - id: energia_media_next_compare_order
+      when: 'true'
+      status: info
+      text:
+        es: Compara el resultado con el orden 10^-21 J por partícula a temperatura ambiente.
+        en: Compare the result with the order of 10^-21 J per particle at room temperature.
+    - id: energia_media_next_total_if_needed
+      when: 'true'
+      status: info
+      text:
+        es: Si necesitas la energía del conjunto, calcula después [[energia_total]] usando [[numero_particulas]].
+        en: If you need the energy of the ensemble, then calculate [[energia_total]] using [[numero_particulas]].
+    physical_intuition:
+    - id: energia_media_intuition_thermal_motion
+      when: 'true'
+      status: info
+      text:
+        es: La temperatura funciona como una medida macroscópica de la agitación microscópica media.
+        en: Temperature acts as a macroscopic measure of mean microscopic agitation.
+    - id: energia_media_intuition_slope
+      when: 'true'
+      status: info
+      text:
+        es: La pendiente de la recta codifica cuánta energía media añade cada kelvin.
+        en: The slope of the line encodes how much average energy each kelvin adds.
+    limiting_cases:
+    - id: energia_media_limit_zero_temperature
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura]] tiende a 0 K, el modelo clásico lleva [[energia_media]] hacia cero.
+        en: If [[temperatura]] tends to 0 K, the classical model takes [[energia_media]] toward zero.
+    - id: energia_media_limit_high_temperature
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura]] aumenta mucho, [[energia_media]] crece proporcionalmente mientras el gas siga siendo ideal
+          clásico.
+        en: If [[temperatura]] increases greatly, [[energia_media]] grows proportionally as long as the gas remains classical
+          and ideal.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable independiente absoluta
+      en: absolute independent variable
+    summary_rules:
+    - id: temperatura_summary_input
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] es la entrada que fija la escala de [[energia_media]] en el modelo de Maxwell-Boltzmann.'
+        en: '[[temperatura]] is the input that sets the scale of [[energia_media]] in the Maxwell-Boltzmann model.'
+    - id: temperatura_summary_kelvin
+      when: 'true'
+      status: info
+      text:
+        es: Debe leerse como temperatura absoluta, no como lectura Celsius cotidiana.
+        en: It must be read as absolute temperature, not as an everyday Celsius reading.
+    physical_reading_rules:
+    - id: temperatura_physical_agitation
+      when: 'true'
+      status: info
+      text:
+        es: Mayor [[temperatura]] significa mayor energía cinética media de las partículas.
+        en: Higher [[temperatura]] means higher mean kinetic energy of the particles.
+    - id: temperatura_physical_zero
+      when: 'true'
+      status: info
+      text:
+        es: T = 0 K actúa como límite ideal de ausencia de energía traslacional clásica.
+        en: T = 0 K acts as an ideal limit of no classical translational energy.
+    coherence_rules:
+    - id: temperatura_coherence_nonnegative
+      when: 'true'
+      status: warning
+      text:
+        es: Una [[temperatura]] negativa en kelvin no es coherente con este leaf.
+        en: A negative [[temperatura]] in kelvin is not consistent with this leaf.
+    - id: temperatura_coherence_unit
+      when: 'true'
+      status: ok
+      text:
+        es: Antes de aplicar la fórmula, convierte cualquier dato Celsius a kelvin.
+        en: Before applying the formula, convert any Celsius datum to kelvin.
+    model_validity_rules:
+    - id: temperatura_model_equilibrium
+      when: 'true'
+      status: info
+      text:
+        es: La interpretación supone que el sistema está en equilibrio térmico y tiene una sola temperatura definida.
+        en: The interpretation assumes the system is in thermal equilibrium and has one defined temperature.
+    - id: temperatura_model_classical_range
+      when: 'true'
+      status: info
+      text:
+        es: A temperaturas muy bajas, la predicción clásica puede fallar por efectos cuánticos.
+        en: At very low temperatures, the classical prediction can fail because of quantum effects.
+    graph_rules:
+    - id: temperatura_graph_x_axis
+      when: 'true'
+      status: info
+      text:
+        es: En Coord, [[temperatura]] ocupa el eje horizontal y controla el avance de la recta.
+        en: In Coord, [[temperatura]] occupies the horizontal axis and controls the progression of the line.
+    - id: temperatura_graph_proportionality
+      when: 'true'
+      status: ok
+      text:
+        es: Intervalos iguales de [[temperatura]] producen incrementos iguales de [[energia_media]].
+        en: Equal intervals of [[temperatura]] produce equal increases in [[energia_media]].
+    likely_errors:
+    - id: temperatura_error_celsius
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura]] con una lectura aislada es un error frecuente: Restar o sumar 273 después de calcular
+          la energía es incorrecto; la conversión se hace antes.'
+        en: 'A common mistake is to interpret [[temperatura]] in isolation: Adding or subtracting 273 after calculating the
+          energy is wrong; conversion is done first.'
+    - id: temperatura_error_relative_temperature
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura]] con una lectura aislada es un error frecuente: No interpretes una diferencia de °C
+          como una temperatura absoluta salvo que el problema lo pida.'
+        en: 'A common mistake is to interpret [[temperatura]] in isolation: Do not interpret a °C difference as an absolute
+          temperature unless the problem asks for it.'
+    next_step_rules:
+    - id: temperatura_next_check_kelvin
+      when: 'true'
+      status: info
+      text:
+        es: Revisa que el valor introducido esté en K antes de aceptar la interpretación.
+        en: Check that the entered value is in K before accepting the interpretation.
+    - id: temperatura_next_read_graph
+      when: 'true'
+      status: info
+      text:
+        es: Usa la gráfica para verificar si el cambio de [[energia_media]] es proporcional al cambio de [[temperatura]].
+        en: Use the graph to verify whether the change in [[energia_media]] is proportional to the change in [[temperatura]].
+    physical_intuition:
+    - id: temperatura_intuition_micro_macro
+      when: 'true'
+      status: info
+      text:
+        es: '[[temperatura]] conecta la lectura macroscópica del termómetro con el movimiento microscópico promedio.'
+        en: '[[temperatura]] connects the macroscopic thermometer reading with average microscopic motion.'
+    - id: temperatura_intuition_not_heat
+      when: 'true'
+      status: info
+      text:
+        es: 'No es calor transferido: es una variable de estado que fija una escala energética.'
+        en: 'It is not transferred heat: it is a state variable that sets an energy scale.'
+    limiting_cases:
+    - id: temperatura_limit_zero
+      when: 'true'
+      status: info
+      text:
+        es: Al aproximarse a 0 K, la extrapolación clásica reduce la energía media traslacional a cero.
+        en: Near 0 K, the classical extrapolation reduces mean translational energy to zero.
+    - id: temperatura_limit_double
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura]] se duplica, [[energia_media]] se duplica en la misma proporción.
+        en: If [[temperatura]] doubles, [[energia_media]] doubles in the same proportion.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  k_boltzmann:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: constante de proporcionalidad microscópica
+      en: microscopic proportionality constant
+    summary_rules:
+    - id: k_boltzmann_summary_scale
+      when: 'true'
+      status: ok
+      text:
+        es: '[[k_boltzmann]] convierte temperatura absoluta en escala de energía por partícula.'
+        en: '[[k_boltzmann]] converts absolute temperature into an energy scale per particle.'
+    - id: k_boltzmann_summary_constant
+      when: 'true'
+      status: info
+      text:
+        es: 'No es una variable ajustable del gas: es una constante universal.'
+        en: 'It is not an adjustable gas variable: it is a universal constant.'
+    physical_reading_rules:
+    - id: k_boltzmann_physical_bridge
+      when: 'true'
+      status: info
+      text:
+        es: Su papel físico es tender un puente entre kelvin macroscópicos y julios microscópicos.
+        en: Its physical role is to bridge macroscopic kelvins and microscopic joules.
+    - id: k_boltzmann_physical_small
+      when: 'true'
+      status: info
+      text:
+        es: Su valor diminuto explica por qué la energía por partícula es muy pequeña en julios.
+        en: Its tiny value explains why per-particle energy is very small in joules.
+    coherence_rules:
+    - id: k_boltzmann_coherence_unit
+      when: 'true'
+      status: ok
+      text:
+        es: La unidad de [[k_boltzmann]] debe ser J/K para que [[k_boltzmann]]·[[temperatura]] sea energía.
+        en: The unit of [[k_boltzmann]] must be J/K so that [[k_boltzmann]]·[[temperatura]] is energy.
+    - id: k_boltzmann_coherence_not_R
+      when: 'true'
+      status: warning
+      text:
+        es: No sustituyas [[k_boltzmann]] por la constante de los gases R si trabajas por partícula.
+        en: Do not replace [[k_boltzmann]] with the gas constant R when working per particle.
+    model_validity_rules:
+    - id: k_boltzmann_model_constant
+      when: 'true'
+      status: info
+      text:
+        es: La constante conserva su valor; lo que cambia con el modelo es el factor de grados de libertad.
+        en: The constant keeps its value; what changes with the model is the degrees-of-freedom factor.
+    - id: k_boltzmann_model_classical
+      when: 'true'
+      status: info
+      text:
+        es: En este leaf aparece dentro de una relación clásica de equipartición traslacional.
+        en: In this leaf it appears in a classical translational equipartition relation.
+    graph_rules:
+    - id: k_boltzmann_graph_slope
+      when: 'true'
+      status: info
+      text:
+        es: '[[k_boltzmann]] aparece en la pendiente de la gráfica [[energia_media]] frente a [[temperatura]].'
+        en: '[[k_boltzmann]] appears in the slope of the [[energia_media]] versus [[temperatura]] graph.'
+    - id: k_boltzmann_graph_not_axis
+      when: 'true'
+      status: info
+      text:
+        es: 'Normalmente no se representa como eje: actúa como constante del modelo.'
+        en: 'It is normally not represented as an axis: it acts as a model constant.'
+    likely_errors:
+    - id: k_boltzmann_error_wrong_constant
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[k_boltzmann]] con una lectura aislada es un error frecuente: Usar R en lugar de [[k_boltzmann]] cambia
+          de escala por partícula a escala por mol.'
+        en: 'A common mistake is to interpret [[k_boltzmann]] in isolation: Using R instead of [[k_boltzmann]] changes from
+          per-particle scale to per-mole scale.'
+    - id: k_boltzmann_error_rounding
+      when: 'true'
+      status: info
+      text:
+        es: 'Confundir [[k_boltzmann]] con una lectura aislada es un error frecuente: Redondear demasiado [[k_boltzmann]]
+          puede ocultar órdenes de magnitud en energías microscópicas.'
+        en: 'A common mistake is to interpret [[k_boltzmann]] in isolation: Over-rounding [[k_boltzmann]] can hide orders
+          of magnitude in microscopic energies.'
+    next_step_rules:
+    - id: k_boltzmann_next_dimension
+      when: 'true'
+      status: info
+      text:
+        es: Después de usarla, verifica que el resultado final tenga dimensión de energía.
+        en: After using it, verify that the final result has energy dimension.
+    - id: k_boltzmann_next_scale
+      when: 'true'
+      status: info
+      text:
+        es: Compara el orden obtenido con valores microscópicos esperables, no con energías cotidianas macroscópicas.
+        en: Compare the obtained order with expected microscopic values, not with everyday macroscopic energies.
+    physical_intuition:
+    - id: k_boltzmann_intuition_translator
+      when: 'true'
+      status: info
+      text:
+        es: '[[k_boltzmann]] es el traductor entre la escala térmica y la escala energética de una partícula.'
+        en: '[[k_boltzmann]] is the translator between the thermal scale and the energy scale of one particle.'
+    - id: k_boltzmann_intuition_slope
+      when: 'true'
+      status: info
+      text:
+        es: Su presencia en la pendiente hace que la recta sea muy poco inclinada en unidades SI.
+        en: Its presence in the slope makes the line very shallow in SI units.
+    limiting_cases:
+    - id: k_boltzmann_limit_fixed
+      when: 'true'
+      status: info
+      text:
+        es: 'No tiene caso límite dinámico dentro del cálculo: permanece constante al variar [[temperatura]].'
+        en: 'It has no dynamic limiting case in the calculation: it remains constant as [[temperatura]] changes.'
+    - id: k_boltzmann_limit_missing
+      when: 'true'
+      status: warning
+      text:
+        es: Si se omite [[k_boltzmann]], la expresión pierde el puente dimensional entre K y J.
+        en: If [[k_boltzmann]] is omitted, the expression loses the dimensional bridge between K and J.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_total:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado extensivo del conjunto
+      en: extensive ensemble result
+    summary_rules:
+    - id: energia_total_summary_ensemble
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_total]] representa la energía traslacional total del conjunto de partículas del gas ideal.'
+        en: '[[energia_total]] represents the total translational energy of the ensemble of ideal-gas particles.'
+    - id: energia_total_summary_extensive
+      when: 'true'
+      status: info
+      text:
+        es: 'Es extensiva: crece proporcionalmente con [[numero_particulas]].'
+        en: 'It is extensive: it grows proportionally with [[numero_particulas]].'
+    physical_reading_rules:
+    - id: energia_total_physical_sum
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente equivale a sumar la energía media traslacional de todas las partículas.
+        en: Physically, it is equivalent to summing the mean translational energy of all particles.
+    - id: energia_total_physical_energy_content
+      when: 'true'
+      status: info
+      text:
+        es: Un valor mayor puede deberse a mayor [[temperatura]], más partículas, o ambas cosas.
+        en: A larger value can come from higher [[temperatura]], more particles, or both.
+    coherence_rules:
+    - id: energia_total_coherence_N
+      when: 'true'
+      status: ok
+      text:
+        es: Si [[numero_particulas]] se duplica con [[temperatura]] fija, [[energia_total]] debe duplicarse.
+        en: If [[numero_particulas]] doubles at fixed [[temperatura]], [[energia_total]] must double.
+    - id: energia_total_coherence_average
+      when: 'true'
+      status: ok
+      text:
+        es: La razón [[energia_total]]/[[numero_particulas]] debe recuperar [[energia_media]].
+        en: The ratio [[energia_total]]/[[numero_particulas]] must recover [[energia_media]].
+    model_validity_rules:
+    - id: energia_total_model_ideal_gas
+      when: 'true'
+      status: info
+      text:
+        es: La interpretación supone que las interacciones entre partículas son despreciables.
+        en: The interpretation assumes interactions among particles are negligible.
+    - id: energia_total_model_translational
+      when: 'true'
+      status: info
+      text:
+        es: No incluye energías internas moleculares adicionales si el modelo no las declara.
+        en: It does not include additional molecular internal energies unless the model declares them.
+    graph_rules:
+    - id: energia_total_graph_parameter
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica de [[energia_media]], [[energia_total]] no es el eje principal; aparece al escalar por [[numero_particulas]].
+        en: In the [[energia_media]] graph, [[energia_total]] is not the main axis; it appears by scaling with [[numero_particulas]].
+    - id: energia_total_graph_same_linearity
+      when: 'true'
+      status: info
+      text:
+        es: Para [[numero_particulas]] fijo, [[energia_total]] también sería lineal con [[temperatura]].
+        en: For fixed [[numero_particulas]], [[energia_total]] would also be linear with [[temperatura]].
+    likely_errors:
+    - id: energia_total_error_missing_N
+      when: 'true'
+      status: warning
+      text:
+        es: Olvidar [[numero_particulas]] deja una energía por partícula, no una energía total.
+        en: Forgetting [[numero_particulas]] leaves a per-particle energy, not a total energy.
+    - id: energia_total_error_moles
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_total]] con una lectura aislada es un error frecuente: No confundas número de partículas
+          con cantidad de sustancia en moles.'
+        en: Do not confuse number of particles with amount of substance in moles.
+    next_step_rules:
+    - id: energia_total_next_per_particle
+      when: 'true'
+      status: info
+      text:
+        es: Divide por [[numero_particulas]] si quieres volver a interpretar la energía media por partícula.
+        en: Divide by [[numero_particulas]] if you want to interpret the average energy per particle again.
+    - id: energia_total_next_check_scale
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba si el orden de magnitud es razonable para el tamaño de la muestra.
+        en: Check whether the order of magnitude is reasonable for the sample size.
+    physical_intuition:
+    - id: energia_total_intuition_many_tiny
+      when: 'true'
+      status: info
+      text:
+        es: Muchas energías microscópicas diminutas pueden sumar una energía macroscópica apreciable.
+        en: Many tiny microscopic energies can add up to an appreciable macroscopic energy.
+    - id: energia_total_intuition_extensive
+      when: 'true'
+      status: info
+      text:
+        es: 'Es una lupa de cantidad: no cambia la energía por partícula, solo suma más partículas.'
+        en: 'It is a quantity magnifier: it does not change per-particle energy, it only adds more particles.'
+    limiting_cases:
+    - id: energia_total_limit_zero_N
+      when: 'true'
+      status: info
+      text:
+        es: Si [[numero_particulas]] es cero, [[energia_total]] debe ser cero aunque la temperatura esté definida formalmente.
+        en: If [[numero_particulas]] is zero, [[energia_total]] must be zero even if temperature is formally defined.
+    - id: energia_total_limit_fixed_T
+      when: 'true'
+      status: info
+      text:
+        es: Con [[temperatura]] fija, [[energia_total]] crece linealmente con [[numero_particulas]].
+        en: At fixed [[temperatura]], [[energia_total]] grows linearly with [[numero_particulas]].
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_particulas:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro extensivo discreto
+      en: discrete extensive parameter
+    summary_rules:
+    - id: numero_particulas_summary_count
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_particulas]] cuenta cuántas partículas contribuyen a la energía total del gas.'
+        en: '[[numero_particulas]] counts how many particles contribute to the total energy of the gas.'
+    - id: numero_particulas_summary_not_moles
+      when: 'true'
+      status: info
+      text:
+        es: Es un conteo de partículas, no una cantidad de sustancia en mol.
+        en: It is a particle count, not an amount of substance in moles.
+    physical_reading_rules:
+    - id: numero_particulas_physical_scaling
+      when: 'true'
+      status: info
+      text:
+        es: A igual [[temperatura]], más partículas implican más [[energia_total]] pero la misma [[energia_media]].
+        en: At the same [[temperatura]], more particles imply more [[energia_total]] but the same [[energia_media]].
+    - id: numero_particulas_physical_dimensionless
+      when: 'true'
+      status: ok
+      text:
+        es: Debe interpretarse como número adimensional y no negativo.
+        en: It must be interpreted as a non-negative dimensionless number.
+    coherence_rules:
+    - id: numero_particulas_coherence_integer
+      when: 'true'
+      status: warning
+      text:
+        es: En sentido físico microscópico, [[numero_particulas]] debe ser entero o una aproximación macroscópica muy grande.
+        en: In a microscopic physical sense, [[numero_particulas]] must be an integer or a very large macroscopic approximation.
+    - id: numero_particulas_coherence_total_average
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_total]] debe ser proporcional a [[numero_particulas]] si [[temperatura]] permanece fija.'
+        en: '[[energia_total]] must be proportional to [[numero_particulas]] if [[temperatura]] remains fixed.'
+    model_validity_rules:
+    - id: numero_particulas_model_large_system
+      when: 'true'
+      status: info
+      text:
+        es: La estadística de Maxwell-Boltzmann suele interpretarse mejor para conjuntos con muchas partículas.
+        en: Maxwell-Boltzmann statistics are usually best interpreted for ensembles with many particles.
+    - id: numero_particulas_model_dilute
+      when: 'true'
+      status: info
+      text:
+        es: 'El conteo por sí solo no basta: el gas también debe estar en régimen ideal y diluido.'
+        en: 'The count alone is not enough: the gas must also be in an ideal and dilute regime.'
+    graph_rules:
+    - id: numero_particulas_graph_parameter
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica de [[energia_media]] frente a [[temperatura]], [[numero_particulas]] no altera la curva por partícula.
+        en: In the graph of [[energia_media]] versus [[temperatura]], [[numero_particulas]] does not alter the per-particle
+          curve.
+    - id: numero_particulas_graph_total_family
+      when: 'true'
+      status: info
+      text:
+        es: Para [[energia_total]], distintos valores de [[numero_particulas]] producirían rectas con pendientes distintas.
+        en: For [[energia_total]], different [[numero_particulas]] values would produce lines with different slopes.
+    likely_errors:
+    - id: numero_particulas_error_mol_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[numero_particulas]] con una lectura aislada es un error frecuente: No introduzcas moles donde la
+          fórmula espera partículas individuales.'
+        en: 'A common mistake is to interpret [[numero_particulas]] in isolation: Do not enter moles where the formula expects
+          individual particles.'
+    - id: numero_particulas_error_affects_average
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[numero_particulas]] con una lectura aislada es un error frecuente: No hagas depender [[energia_media]]
+          de [[numero_particulas]]: la media por partícula depende de [[temperatura]].'
+        en: 'A common mistake is to interpret [[numero_particulas]] in isolation: Do not make [[energia_media]] depend on
+          [[numero_particulas]]: per-particle average depends on [[temperatura]].'
+    next_step_rules:
+    - id: numero_particulas_next_convert_if_needed
+      when: 'true'
+      status: info
+      text:
+        es: Si el dato viene en moles, conviértelo a partículas antes de usar estas fórmulas.
+        en: If the datum is given in moles, convert it to particles before using these formulas.
+    - id: numero_particulas_next_extensive_check
+      when: 'true'
+      status: info
+      text:
+        es: Revisa si el resultado solicitado es intensivo ([[energia_media]]) o extensivo ([[energia_total]]).
+        en: Check whether the requested result is intensive ([[energia_media]]) or extensive ([[energia_total]]).
+    physical_intuition:
+    - id: numero_particulas_intuition_counter
+      when: 'true'
+      status: info
+      text:
+        es: '[[numero_particulas]] actúa como contador de copias microscópicas de la misma contribución media.'
+        en: '[[numero_particulas]] acts as a counter of microscopic copies of the same average contribution.'
+    - id: numero_particulas_intuition_not_temperature
+      when: 'true'
+      status: info
+      text:
+        es: Añadir partículas no calienta el gas por sí mismo; aumenta la energía total si la temperatura se mantiene.
+        en: Adding particles does not heat the gas by itself; it increases total energy if temperature is maintained.
+    limiting_cases:
+    - id: numero_particulas_limit_one
+      when: 'true'
+      status: info
+      text:
+        es: Para una partícula, [[energia_total]] coincide con [[energia_media]] en interpretación estadística media.
+        en: For one particle, [[energia_total]] coincides with [[energia_media]] in mean statistical interpretation.
+    - id: numero_particulas_limit_large
+      when: 'true'
+      status: info
+      text:
+        es: Para números enormes de partículas, la energía total se vuelve macroscópica aunque la energía media sea microscópica.
+        en: For enormous particle numbers, total energy becomes macroscopic even if average energy is microscopic.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

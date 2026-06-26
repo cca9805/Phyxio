@@ -1,0 +1,528 @@
+version: 1
+id: concepto-fuerza-centripeta
+leaf_id: concepto-fuerza-centripeta
+nombre:
+  es: Concepto de fuerza centripeta
+  en: Centripetal force concept
+scope: leaf
+result_blocks:
+  summary:
+    title:
+      es: Resumen del resultado
+      en: Result summary
+    type: text
+  coherence:
+    title:
+      es: Coherencia del resultado
+      en: Result coherence
+    type: text
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+    type: text
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+    type: text
+  graph_reading:
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+    type: text
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+    type: text
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+    type: text
+
+output_contract:
+  sections:
+    - summary
+    - coherence
+    - physical_reading
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+dependencies:
+  formulas:
+    - aceleracion_centripeta_v
+    - aceleracion_centripeta_omega
+    - relacion_v_omega
+    - relacion_omega_periodo
+    - newton_radial
+    - fuerza_centripeta_modulo
+  magnitudes:
+    - m
+    - r
+    - v
+    - omega
+    - T
+    - ac
+    - Frad
+    - Fc
+    - pi
+
+targets:
+  ac:
+    summary_rules:
+      - id: ac_summary_high
+        when: "ac > 100"
+        status: warning
+        text:
+          es: "Este valor indica una curvatura muy exigente y resume que el sistema necesita doblar la velocidad con mucha intensidad; conviene verificar datos y contexto."
+          en: "This value indicates very demanding curvature and means the system must bend velocity strongly; the data and context should be checked."
+      - id: ac_summary_normal
+        when: "ac <= 100"
+        status: ok
+        text:
+          es: "El valor de ac describe una curvatura compatible con el escenario y resume cuanta desviacion radial exige la trayectoria."
+          en: "The value of ac describes curvature compatible with the scenario and summarizes how much radial deflection the trajectory demands."
+    coherence_rules:
+      - id: ac_coh_positive
+        when: "ac >= 0"
+        status: ok
+        text:
+          es: "ac es positivo, coherente."
+          en: "ac is positive, coherent."
+      - id: ac_coh_negative
+        when: "ac < 0"
+        status: error
+        text:
+          es: "ac negativo no tiene sentido como modulo."
+          en: "Negative ac does not make sense as a magnitude."
+    physical_reading_rules:
+      - id: ac_phys_meaning
+        when: "ac > 0"
+        status: ok
+        text:
+          es: "Esto significa que la velocidad cambia de direccion porque existe una causa radial; cuanto mayor sea ac, mas rapidamente se curva la trayectoria hacia el centro."
+          en: "This means velocity changes direction because a radial cause exists; the larger ac is, the faster the trajectory bends toward the centre."
+    model_validity_rules:
+      - id: ac_model_valid
+        when: "ac >= 0"
+        status: ok
+        text:
+          es: "Modelo valido para movimiento circular."
+          en: "Model valid for circular motion."
+    graph_rules:
+      - id: ac_graph_coord
+        when: "ac > 0"
+        status: ok
+        text:
+          es: "Representar ac en el grafico de coordenadas."
+          en: "Plot ac on the coordinate graph."
+    likely_errors:
+      - id: ac_err_units
+        when: "ac > 0"
+        status: warning
+        text:
+          es: "Verificar que v estaba en m/s y r en m."
+          en: "Verify that v was in m/s and r in m."
+    next_step_rules:
+      - id: ac_next_force
+        when: "ac > 0"
+        status: ok
+        text:
+          es: "Usa ac para obtener la fuerza radial con Frad = m ac."
+          en: "Use ac to obtain the radial force via Frad = m ac."
+  v:
+    summary_rules:
+      - id: v_summary_high
+        when: "v > 100"
+        status: warning
+        text:
+          es: "Rapidez tangencial muy alta, comprobar."
+          en: "Very high tangential speed, check."
+      - id: v_summary_normal
+        when: "v <= 100"
+        status: ok
+        text:
+          es: "Rapidez tangencial en rango razonable."
+          en: "Tangential speed in reasonable range."
+    coherence_rules:
+      - id: v_coh_positive
+        when: "v >= 0"
+        status: ok
+        text:
+          es: "Rapidez positiva, coherente."
+          en: "Positive speed, coherent."
+    physical_reading_rules:
+      - id: v_phys_meaning
+        when: "v > 0"
+        status: ok
+        text:
+          es: "El objeto se desplaza a esta rapidez a lo largo de la circunferencia."
+          en: "The object travels at this speed along the circumference."
+    model_validity_rules:
+      - id: v_model_valid
+        when: "v > 0"
+        status: ok
+        text:
+          es: "Modelo circular valido con rapidez no nula."
+          en: "Circular model valid with non-zero speed."
+    graph_rules:
+      - id: v_graph_arrow
+        when: "v > 0"
+        status: ok
+        text:
+          es: "Representar v como flecha tangente."
+          en: "Plot v as a tangent arrow."
+    likely_errors:
+      - id: v_err_units
+        when: "v > 0"
+        status: warning
+        text:
+          es: "Verificar unidades de ac y r antes de despejar v."
+          en: "Check units of ac and r before solving for v."
+    next_step_rules:
+      - id: v_next_omega
+        when: "v > 0"
+        status: ok
+        text:
+          es: "Calcula omega con omega = v / r."
+          en: "Calculate omega with omega = v / r."
+  r:
+    summary_rules:
+      - id: r_summary_small
+        when: "r < 0.01"
+        status: warning
+        text:
+          es: "Radio muy pequeno, verificar datos."
+          en: "Very small radius, check data."
+      - id: r_summary_ok
+        when: "r >= 0.01"
+        status: ok
+        text:
+          es: "Radio en rango razonable."
+          en: "Radius in reasonable range."
+    coherence_rules:
+      - id: r_coh_positive
+        when: "r > 0"
+        status: ok
+        text:
+          es: "Radio positivo, coherente."
+          en: "Positive radius, coherent."
+    physical_reading_rules:
+      - id: r_phys_meaning
+        when: "r > 0"
+        status: ok
+        text:
+          es: "Distancia del objeto al centro de curvatura."
+          en: "Distance from the object to the centre of curvature."
+    model_validity_rules:
+      - id: r_model_valid
+        when: "r > 0"
+        status: ok
+        text:
+          es: "Radio valido para trayectoria circular."
+          en: "Radius valid for circular path."
+    graph_rules:
+      - id: r_graph_circle
+        when: "r > 0"
+        status: ok
+        text:
+          es: "El radio define la circunferencia en el grafico."
+          en: "The radius defines the circumference on the graph."
+    likely_errors:
+      - id: r_err_diameter
+        when: "r > 0"
+        status: warning
+        text:
+          es: "Asegurate de no haber usado el diametro."
+          en: "Make sure you did not use the diameter."
+    next_step_rules:
+      - id: r_next_ac
+        when: "r > 0"
+        status: ok
+        text:
+          es: "Calcula ac con la rapidez o velocidad angular."
+          en: "Calculate ac using the speed or angular velocity."
+  omega:
+    summary_rules:
+      - id: omega_summary_high
+        when: "omega > 500"
+        status: warning
+        text:
+          es: "Velocidad angular muy alta, revisar."
+          en: "Very high angular velocity, review."
+      - id: omega_summary_ok
+        when: "omega <= 500"
+        status: ok
+        text:
+          es: "Velocidad angular razonable."
+          en: "Reasonable angular velocity."
+    coherence_rules:
+      - id: omega_coh_positive
+        when: "omega > 0"
+        status: ok
+        text:
+          es: "omega positivo, coherente."
+          en: "omega positive, coherent."
+    physical_reading_rules:
+      - id: omega_phys_meaning
+        when: "omega > 0"
+        status: ok
+        text:
+          es: "El objeto barre este angulo por segundo."
+          en: "The object sweeps this angle per second."
+    model_validity_rules:
+      - id: omega_model_valid
+        when: "omega > 0"
+        status: ok
+        text:
+          es: "Modelo circular con giro activo."
+          en: "Circular model with active rotation."
+    graph_rules:
+      - id: omega_graph_arrow
+        when: "omega > 0"
+        status: ok
+        text:
+          es: "Representar omega como arco angular."
+          en: "Plot omega as an angular arc."
+    likely_errors:
+      - id: omega_err_rpm
+        when: "omega > 0"
+        status: warning
+        text:
+          es: "Verifica que convertiste rpm a rad/s."
+          en: "Verify that you converted rpm to rad/s."
+    next_step_rules:
+      - id: omega_next_v
+        when: "omega > 0"
+        status: ok
+        text:
+          es: "Obtener v = omega r."
+          en: "Get v = omega r."
+  T:
+    summary_rules:
+      - id: T_summary_small
+        when: "T < 0.001"
+        status: warning
+        text:
+          es: "Periodo extremadamente corto, revisar."
+          en: "Extremely short period, review."
+      - id: T_summary_ok
+        when: "T >= 0.001"
+        status: ok
+        text:
+          es: "Periodo razonable."
+          en: "Reasonable period."
+    coherence_rules:
+      - id: T_coh_positive
+        when: "T > 0"
+        status: ok
+        text:
+          es: "Periodo positivo, coherente."
+          en: "Positive period, coherent."
+    physical_reading_rules:
+      - id: T_phys_meaning
+        when: "T > 0"
+        status: ok
+        text:
+          es: "Tiempo para completar una vuelta."
+          en: "Time to complete one revolution."
+    model_validity_rules:
+      - id: T_model_valid
+        when: "T > 0"
+        status: ok
+        text:
+          es: "Periodo valido para movimiento periodico."
+          en: "Period valid for periodic motion."
+    graph_rules:
+      - id: T_graph_period
+        when: "T > 0"
+        status: ok
+        text:
+          es: "T marca el intervalo temporal de un ciclo."
+          en: "T marks the time interval of one cycle."
+    likely_errors:
+      - id: T_err_freq
+        when: "T > 0"
+        status: warning
+        text:
+          es: "No confundas T con la frecuencia f."
+          en: "Do not confuse T with frequency f."
+    next_step_rules:
+      - id: T_next_omega
+        when: "T > 0"
+        status: ok
+        text:
+          es: "Calcula omega = 2 pi / T."
+          en: "Calculate omega = 2 pi / T."
+  Frad:
+    summary_rules:
+      - id: Frad_summary_high
+        when: "Frad > 10000"
+        status: warning
+        text:
+          es: "La resultante radial es muy grande, lo que indica una exigencia mecanica fuerte y depende de una curvatura intensa o de una masa elevada."
+          en: "The radial resultant is very large, which indicates a strong mechanical demand and depends on intense curvature or a large mass."
+      - id: Frad_summary_ok
+        when: "Frad <= 10000"
+        status: ok
+        text:
+          es: "La resultante radial esta en un rango razonable y resume de forma coherente la accion hacia el centro que mantiene el giro."
+          en: "The radial resultant is in a reasonable range and coherently summarizes the inward action that keeps the turn."
+    coherence_rules:
+      - id: Frad_coh_positive
+        when: "Frad >= 0"
+        status: ok
+        text:
+          es: "Fuerza radial positiva, coherente."
+          en: "Positive radial force, coherent."
+    physical_reading_rules:
+      - id: Frad_phys_meaning
+        when: "Frad > 0"
+        status: ok
+        text:
+          es: "La lectura fisica correcta es que una o varias fuerzas reales se combinan porque deben compensar la tendencia inercial a seguir la tangente; por eso aparece esta resultante radial."
+          en: "The correct physical reading is that one or more real forces combine because they must oppose the inertial tendency to follow the tangent; that is why this radial resultant appears."
+    model_validity_rules:
+      - id: Frad_model_valid
+        when: "Frad >= 0"
+        status: ok
+        text:
+          es: "Modelo newtoniano valido."
+          en: "Newtonian model valid."
+    graph_rules:
+      - id: Frad_graph_dcl
+        when: "Frad > 0"
+        status: ok
+        text:
+          es: "Mostrar Frad en el DCL como resultante."
+          en: "Show Frad on the FBD as resultant."
+    likely_errors:
+      - id: Frad_err_extra
+        when: "Frad > 0"
+        status: warning
+        text:
+          es: "No anadas fuerza centripeta como fuerza separada."
+          en: "Do not add centripetal force as a separate force."
+    next_step_rules:
+      - id: Frad_next_check
+        when: "Frad > 0"
+        status: ok
+        text:
+          es: "Compara Frad con m ac para cerrar el problema."
+          en: "Compare Frad with m ac to close the problem."
+  m:
+    summary_rules:
+      - id: m_summary_extreme
+        when: "m > 10000"
+        status: warning
+        text:
+          es: "Masa muy grande para un problema de centripeta habitual."
+          en: "Very large mass for a typical centripetal problem."
+      - id: m_summary_ok
+        when: "m <= 10000"
+        status: ok
+        text:
+          es: "Masa en rango razonable."
+          en: "Mass in reasonable range."
+    coherence_rules:
+      - id: m_coh_positive
+        when: "m > 0"
+        status: ok
+        text:
+          es: "Masa positiva, coherente."
+          en: "Positive mass, coherent."
+    physical_reading_rules:
+      - id: m_phys_meaning
+        when: "m > 0"
+        status: ok
+        text:
+          es: "Inercia del objeto que gira."
+          en: "Inertia of the rotating object."
+    model_validity_rules:
+      - id: m_model_valid
+        when: "m > 0"
+        status: ok
+        text:
+          es: "Masa valida para modelo puntual."
+          en: "Mass valid for point-mass model."
+    graph_rules:
+      - id: m_graph_label
+        when: "m > 0"
+        status: ok
+        text:
+          es: "La masa se indica junto al objeto en el diagrama."
+          en: "The mass is labelled next to the object in the diagram."
+    likely_errors:
+      - id: m_err_units
+        when: "m > 0"
+        status: warning
+        text:
+          es: "Verifica que m esta en kg."
+          en: "Verify that m is in kg."
+    next_step_rules:
+      - id: m_next_force
+        when: "m > 0"
+        status: ok
+        text:
+          es: "Usa m y ac para obtener Frad."
+          en: "Use m and ac to get Frad."
+  Fc:
+    summary_rules:
+      - id: Fc_summary_high
+        when: "Fc > 10000"
+        status: warning
+        text:
+          es: "Fuerza centripeta muy grande, verificar datos."
+          en: "Very large centripetal force, check data."
+      - id: Fc_summary_ok
+        when: "Fc <= 10000"
+        status: ok
+        text:
+          es: "Fuerza centripeta en rango razonable."
+          en: "Centripetal force in reasonable range."
+    coherence_rules:
+      - id: Fc_coh_positive
+        when: "Fc >= 0"
+        status: ok
+        text:
+          es: "Fuerza centripeta positiva, coherente."
+          en: "Positive centripetal force, coherent."
+    physical_reading_rules:
+      - id: Fc_phys_meaning
+        when: "Fc > 0"
+        status: ok
+        text:
+          es: "Fuerza neta necesaria para mantener el giro."
+          en: "Net force needed to maintain the turn."
+    model_validity_rules:
+      - id: Fc_model_valid
+        when: "Fc >= 0"
+        status: ok
+        text:
+          es: "Modelo valido para movimiento circular uniforme."
+          en: "Model valid for uniform circular motion."
+    graph_rules:
+      - id: Fc_graph_dcl
+        when: "Fc > 0"
+        status: ok
+        text:
+          es: "Fc representada como resultado en el DCL."
+          en: "Fc shown as resultant on the FBD."
+    likely_errors:
+      - id: Fc_err_fictitious
+        when: "Fc > 0"
+        status: warning
+        text:
+          es: "Recuerda que Fc no es una fuerza nueva sino la resultante."
+          en: "Remember Fc is not a new force but the resultant."
+    next_step_rules:
+      - id: Fc_next_identify
+        when: "Fc > 0"
+        status: ok
+        text:
+          es: "Identifica que fuerzas reales producen esta Fc."
+          en: "Identify which real forces produce this Fc."

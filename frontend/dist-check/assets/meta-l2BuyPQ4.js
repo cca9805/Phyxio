@@ -1,0 +1,92 @@
+const n=`id: velocidad-del-sonido
+
+nombre:
+  es: Velocidad del sonido
+  en: Speed of Sound
+
+area: fisica-clasica
+bloque: ondas
+subbloque: sonido
+parent_id: sonido
+ruta_relativa: fisica-clasica/ondas/sonido/velocidad-del-sonido
+orden: 235200
+type: leaf
+
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+
+icon: 🧪
+
+descripcion: "Velocidad de propagación del sonido en gases, líquidos y sólidos: dependencia de la temperatura, el medio y sus propiedades elásticas."
+description_en: "Speed of sound propagation in gases, liquids, and solids: dependence on temperature, medium, and its elastic properties."
+
+pregunta_fisica_central:
+  es: "Como determinan la rigidez, la densidad y la temperatura la velocidad del sonido?"
+  en: "How do stiffness, density, and temperature determine the speed of sound?"
+
+tags:
+  es:
+    - velocidad del sonido
+    - módulo de compresibilidad
+    - temperatura
+    - propagación acústica
+    - medio elástico
+    - fórmula de Newton-Laplace
+  en:
+    - speed of sound
+    - bulk modulus
+    - temperature
+    - acoustic propagation
+    - elastic medium
+    - Newton-Laplace formula
+
+prerequisitos:
+  - fisica-clasica/ondas/sonido/naturaleza-del-sonido
+  - fisica-clasica/mecanica/dinamica/gases-ideales
+
+graficos:
+  - Coord
+  - Svg
+
+physical_role:
+  es: concepto físico
+  en: physical concept
+
+dificultad: 3
+tiempo_estimado_min: 35
+
+representacion_dominante: Coord
+magnitud_dominante: v_son
+
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

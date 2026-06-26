@@ -1,0 +1,113 @@
+# Ejemplo tipo examen
+
+## Enunciado
+
+Dos satelites puntuales interactuan gravitatoriamente con una masa planetaria dominante [[M]]. En una primera parte, se pide la fuerza [[F]] entre el planeta y un satelite de masa [[m1]] a una distancia [[r1]]. En una segunda parte, ese satelite pasa a una distancia [[r2]] y se solicita estimar la nueva fuerza [[F2]] a partir de [[F1]]. En una tercera parte, se pide estimar el campo [[g]] y la aceleracion [[a]] en ambas posiciones, y finalmente calcular el peso [[P]] de una masa de prueba [[m]] ubicada en la posicion final.
+
+El objetivo del problema no es solo calcular. Tambien se debe justificar la seleccion de ecuaciones y verificar que las tendencias sean fisicamente coherentes con la ley inversa cuadratica.
+
+## Datos
+
+Se conocen [[G]], [[M]], [[m1]], [[m2]], [[r1]], [[r2]] y [[m]]. Para la parte de comparacion, se asume que las masas del sistema central se mantienen constantes. Ademas, se aclara que las distancias son centro a centro y que [[r2]] es mayor que [[r1]].
+
+Se pide utilizar unidades SI en todas las sustituciones y reportar resultados con notacion cientifica razonable. Tambien se solicita una frase final de interpretacion para cada bloque de calculo.
+
+## Definicion del sistema
+
+Sistema principal: interaccion gravitatoria newtoniana entre una fuente dominante y un cuerpo de prueba orbital. Variables nucleares del bloque de fuerza directa: [[F]], [[G]], [[m1]], [[m2]], [[r]]. Variables del bloque de campo-respuesta: [[g]], [[a]], [[P]], [[m]], [[M]], [[r]]. Variables de comparacion de estados: [[F1]], [[F2]], [[r1]], [[r2]].
+
+La geometria se modela como radial y central. No se consideran rozamiento, propulsion ni perturbaciones de terceros cuerpos en el calculo base.
+
+## Modelo fisico
+
+Se usa gravitacion newtoniana clasica con simetria radial. Para fuerza directa entre dos masas, se aplica la ley general. Para campo y aceleracion, se usa formulacion de masa fuente. Para comparacion entre estados con masas constantes, se usa relacion de escalado inverso cuadratico.
+
+Este modelo es coherente porque el enunciado ofrece distancias radiales claras y no exige precision relativista ni interaccion multipolar.
+
+## Justificacion del modelo
+
+La eleccion del modelo se justifica por cuatro razones. Primera, la escala del problema es clasica. Segunda, la simetria radial permite resumir la geometria en [[r]]. Tercera, los datos entregados coinciden con los parametros de las formulas del leaf. Cuarta, la pregunta pide tendencia entre dos estados, lo que hace especialmente util la relacion entre [[F1]], [[F2]], [[r1]] y [[r2]].
+
+El modelo dejaria de ser valido si el problema exigiera efectos relativistas fuertes, si la distribucion de masa fuera altamente asimetrica o si se incluyeran perturbaciones no despreciables de otros cuerpos.
+
+## Resolucion simbolica
+
+Bloque de fuerza directa:
+
+{{f:ley_newton_gravitacion}}
+
+Bloque de comparacion de estados:
+
+{{f:variacion_inversa_cuadrado}}
+
+Bloque de intensidad de campo:
+
+{{f:campo_gravitatorio}}
+
+Bloque de aceleracion radial:
+
+{{f:aceleracion_gravitatoria}}
+
+Bloque de peso sobre masa de prueba:
+
+{{f:peso_desde_campo}}
+
+Bloque direccional conceptual:
+
+{{f:forma_vectorial_conceptual}}
+
+Bloque de composicion de contribuciones:
+
+{{f:superposicion_conceptual}}
+
+## Sustitucion numerica
+
+Se calcula primero [[F1]] con los datos de [[m1]], [[m2]] y [[r1]]. Luego, usando [[r2]], se obtiene [[F2]] por comparacion radial para validar tendencia. De forma paralela, se puede recalcular [[F2]] desde la ley general y comparar ambos resultados; esta redundancia sirve como control de consistencia.
+
+Con [[M]] y cada radio, se evalua [[g]] y [[a]] en ambos estados. En la posicion final, se obtiene [[P]] para la masa de prueba [[m]]. El valor de [[P]] debe disminuir cuando la distancia radial aumenta, coherente con la caida de [[g]].
+
+Si algun resultado contradice estas tendencias, no se debe redondear y seguir. Debe revisarse inmediatamente conversion de unidades, exponentes y definicion geometrica de distancias.
+
+## Validacion dimensional
+
+Las cinco comprobaciones minimas son:
+
+1. [[F]], [[F1]], [[F2]] en newton.
+2. [[g]] y [[a]] en metros por segundo cuadrado.
+3. [[P]] en newton.
+4. [[r]], [[r1]], [[r2]], [[R]] en metros.
+5. [[G]] en unidades SI compatibles.
+
+Ademas, el cociente [[F2]] sobre [[F1]] debe ser adimensional y coincidir con el cociente cuadratico de radios. Esta validacion detecta errores algebraicos incluso cuando las unidades parecen correctas.
+
+## Interpretacion fisica
+
+El resultado completo debe leerse como una historia causal. Al pasar de [[r1]] a [[r2]] mayor, la intensidad gravitatoria cae, por lo que [[F2]] es menor que [[F1]]. Esa misma estructura aparece en [[g]] y [[a]], y por eso [[P]] de la masa de prueba tambien disminuye en la posicion final.
+
+La lectura direccional agrega que la fuerza apunta hacia la fuente. En problemas de una sola dimension radial, se suele trabajar con modulos y signo externo; en problemas de superposicion, la direccion no puede omitirse.
+
+Conclusión de examen: la solucion es correcta cuando numero, unidades y tendencia fisica apuntan al mismo relato. Si una de esas tres capas falla, la respuesta queda incompleta.
+
+# Ejemplo de aplicacion real
+
+## Contexto
+
+Una mision de observacion planetaria necesita reconfigurar la orbita de una sonda. El equipo de dinamica de vuelo debe estimar rapidamente como cambiara la fuerza gravitatoria sobre la nave al subir de una orbita baja a una media. Tambien necesita anticipar el nuevo campo local para planificar ventanas de maniobra y tolerancias de instrumentos sensibles a aceleracion.
+
+Adicionalmente, el equipo educativo del proyecto usa este mismo caso para entrenar estudiantes en lectura de modelo. El objetivo didactico es mostrar que una sola ley puede alimentar decisiones de fuerza, campo y peso sin perder coherencia simbolica.
+
+## Estimacion fisica
+
+El flujo de trabajo usa dos capas. Capa uno: calculo base de [[F]] con la ley principal en cada radio. Capa dos: comprobacion de razon de cambio mediante la expresion [[F2]]-[[F1]]. Si ambas capas coinciden, el equipo gana confianza en el pronostico.
+
+Luego se calcula [[g]] y [[a]] para el radio de operacion final. Con esa informacion se estima [[P]] para equipos internos de masa [[m]] montados en la sonda. Esto permite verificar cargas mecanicas esperadas durante fases de estabilizacion.
+
+Cuando la mision incluye efectos de terceros cuerpos, se activa lectura de superposicion para campo total. Aunque el caso de entrenamiento mantiene una fuente dominante, esta extension se presenta para que el estudiante entienda como escalar el modelo sin romper la estructura conceptual.
+
+## Interpretacion
+
+La decision operativa se toma con tres preguntas. Primera: la nueva orbita reduce [[F]] lo suficiente para cumplir objetivo de seguridad termica. Segunda: el cambio de [[g]] mantiene estabilidad de sensores dentro de tolerancia. Tercera: la interpretacion de tendencia coincide con lo esperado por la ley inversa cuadratica.
+
+Si las tres respuestas son positivas, la reconfiguracion se aprueba. Si no, se ajusta el plan orbital antes de ejecutar.
+
+El valor didactico del caso es que el estudiante ve una conexion directa entre teoria y decision real. [[F]], [[g]], [[a]] y [[P]] dejan de ser simbolos aislados y pasan a ser indicadores de riesgo, costo y viabilidad tecnica. Esa traduccion de ecuaciones a criterio de ingenieria es precisamente la competencia que este leaf busca consolidar.

@@ -1,0 +1,83 @@
+const e=`id: resistiva
+nombre:
+  es: Resistiva
+  en: Resistive Heating
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: electricidad-domestica
+parent_id: climatizacion
+ruta_relativa: fisica-clasica/electromagnetismo/electricidad-domestica/climatizacion/resistiva
+orden: 298810
+type: leaf
+dificultad: 2
+tiempo_estimado_min: 35
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+icon: 💪
+descripcion: "Conversión directa de electricidad en calor mediante efecto Joule: potencia, consumo estacional y comparativa con sistemas de mayor rendimiento."
+description_en: "Direct conversion of electricity into heat via the Joule effect: power, seasonal consumption, and comparison with higher-performance systems."
+tags:
+  es:
+    - resistiva
+    - efecto Joule
+    - consumo eléctrico
+    - calefacción
+    - COP
+  en:
+    - resistive
+    - Joule effect
+    - electrical consumption
+    - heating
+    - COP
+prerequisitos:
+  - fisica-clasica/electromagnetismo/electricidad-domestica/tension-y-potencia-en-casa
+graficos: []
+physical_role:
+  es: "concepto físico"
+  en: "physical concept"
+representacion_dominante: none
+magnitud_dominante: "E"
+pregunta_fisica_central:
+  es: "¿Por qué un sistema de conversión casi perfecta sigue siendo costoso si se usa durante toda la temporada?"
+  en: "Why does a near-perfect conversion system remain expensive when used throughout the entire season?"
+interpretacion:
+  enabled: true
+  archivo: "interpretacion.yaml"
+  ui:
+    dedicated_tab: true
+    inline_calculator: true
+    inline_graph: true
+    tab_label:
+      es: "Interpretación"
+      en: "Interpretation"
+    show_summary: true
+    show_physical_reading: true
+    show_coherence: true
+    show_model_validity: true
+    show_graph_reading: true
+    show_likely_errors: true
+    show_next_step: true
+    allow_export: true
+    collapsible: false
+  mini_graph:
+    enabled: true
+    preferred_type: none
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

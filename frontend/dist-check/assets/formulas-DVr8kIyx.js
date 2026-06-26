@@ -1,0 +1,262 @@
+const e=`formulas:
+
+  - id: corriente_corporal
+    title:
+      es: Corriente a través del cuerpo humano
+      en: Current through the human body
+    equation: I_cuerpo = V_contacto / R_cuerpo
+    latex: I_{cuerpo} = \\frac{V_c}{R_{cuerpo}}
+    rearrangements:
+      - target: V_contacto
+        equation: V_contacto = I_cuerpo * R_cuerpo
+        latex: V_c = I_{cuerpo} \\cdot R_{cuerpo}
+        constraints:
+          - condition: R_cuerpo > 0
+            message:
+              es: La resistencia corporal debe ser positiva para calcular la tensión de contacto.
+              en: Body resistance must be positive to calculate contact voltage.
+      - target: R_cuerpo
+        equation: R_cuerpo = V_contacto / I_cuerpo
+        latex: R_{cuerpo} = \\frac{V_c}{I_{cuerpo}}
+        constraints:
+          - condition: I_cuerpo > 0
+            message:
+              es: La corriente corporal debe ser positiva para calcular la resistencia.
+              en: Body current must be positive to calculate resistance.
+    category: fundamental
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: "Aplica la Ley de Ohm al cuerpo humano como resistencia en el circuito de contacto eléctrico. La corriente resultante determina la gravedad de los efectos fisiológicos: por debajo de 10 mA es imperceptible o produce cosquilleo leve; entre 10 y 30 mA provoca tetanización muscular que impide soltar el conductor; por encima de 30 mA puede causar fibrilación ventricular si la exposición dura más de 30 ms."
+      en: "Applies Ohm's Law to the human body as a resistance in the electrical contact circuit. The resulting current determines the severity of physiological effects: below 10 mA it is imperceptible or produces mild tingling; between 10 and 30 mA it causes muscle tetanization preventing release of the conductor; above 30 mA it can cause ventricular fibrillation if exposure lasts more than 30 ms."
+    constraints:
+      - condition: R_cuerpo >= 500
+        message:
+          es: "La resistencia corporal mínima en condiciones húmedas es aproximadamente 500 Ω. Valores menores son físicamente irrealistas en contexto doméstico."
+          en: "Minimum body resistance under wet conditions is approximately 500 Ω. Lower values are physically unrealistic in domestic context."
+      - condition: V_contacto >= 0
+        message:
+          es: Se usa el valor absoluto de la tensión de contacto para evaluar el peligro.
+          en: The absolute value of contact voltage is used to evaluate hazard.
+    validity:
+      es: "Válida para corriente alterna a 50 Hz en rango doméstico (0–230 V). No aplica a descargas de alta tensión ni a corriente continua, donde los umbrales fisiológicos difieren. Asume resistencia corporal constante durante el contacto, lo cual es una simplificación conservadora."
+      en: "Valid for 50 Hz alternating current in domestic range (0–230 V). Does not apply to high-voltage discharge or direct current, where physiological thresholds differ. Assumes constant body resistance during contact, which is a conservative simplification."
+    dimension_check: "[I] = [V] / [Ω] = [M L² T⁻³ I⁻¹] / [M L² T⁻³ I⁻²] = [I] ✓"
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - peligrosidad_contacto
+      - nivel_proteccion_diferencial
+      - efecto_humedad_resistencia
+    result_semantics:
+      target: I_cuerpo
+      kind: safety_threshold
+      sign_meaning:
+        es: La corriente corporal es positiva; su magnitud determina el nivel de peligro según los umbrales IEC 60479.
+        en: Body current is positive; its magnitude determines the danger level according to IEC 60479 thresholds.
+      absolute_value_meaning:
+        es: "< 0.001 A: imperceptible. 0.001–0.010 A: cosquilleo, sin peligro. 0.010–0.030 A: tetanización, peligroso. 0.030–0.100 A: fibrilación posible, muy peligroso. > 0.100 A: fibrilación segura, potencialmente mortal."
+        en: "< 0.001 A: imperceptible. 0.001–0.010 A: tingling, no danger. 0.010–0.030 A: tetanization, dangerous. 0.030–0.100 A: possible fibrillation, very dangerous. > 0.100 A: certain fibrillation, potentially fatal."
+    domain_checks:
+      - condition: I_cuerpo < 0.001
+        label: imperceptible
+        message:
+          es: Corriente inferior a 1 mA. No produce efecto fisiológico perceptible.
+          en: Current below 1 mA. No perceptible physiological effect.
+      - condition: I_cuerpo >= 0.001 and I_cuerpo < 0.010
+        label: percepcion_leve
+        message:
+          es: "Corriente entre 1 mA y 10 mA. Percepción de cosquilleo o vibración, sin peligro para adultos sanos."
+          en: "Current between 1 mA and 10 mA. Tingling or vibration sensation, no danger for healthy adults."
+      - condition: I_cuerpo >= 0.010 and I_cuerpo < 0.030
+        label: tetanizacion
+        message:
+          es: "Corriente entre 10 mA y 30 mA. Zona de tetanización: los músculos se contraen involuntariamente y la persona puede no poder soltar el conductor. Peligroso."
+          en: "Current between 10 mA and 30 mA. Tetanization zone: muscles contract involuntarily and the person may be unable to release the conductor. Dangerous."
+      - condition: I_cuerpo >= 0.030 and I_cuerpo < 0.100
+        label: fibrilacion_posible
+        message:
+          es: "Corriente entre 30 mA y 100 mA. Riesgo de fibrilación ventricular si la exposición supera 30 ms. El diferencial estándar de 30 mA debe desconectar antes de este umbral."
+          en: "Current between 30 mA and 100 mA. Risk of ventricular fibrillation if exposure exceeds 30 ms. The standard 30 mA differential must disconnect before this threshold."
+      - condition: I_cuerpo >= 0.100
+        label: fibrilacion_segura
+        message:
+          es: "Corriente superior a 100 mA. Fibrilación ventricular casi segura en más de 30 ms de exposición. Potencialmente mortal sin intervención inmediata."
+          en: "Current above 100 mA. Almost certain ventricular fibrillation with more than 30 ms exposure. Potentially fatal without immediate intervention."
+    coherence_checks:
+      - condition: V_contacto > 50 and I_cuerpo < 0.050
+        message:
+          es: "Inconsistencia posible: tensión superior a 50 V con corriente inferior a 50 mA implica resistencia corporal superior a 1000 Ω. Verificar si las condiciones de contacto son inusualmente secas."
+          en: "Possible inconsistency: voltage above 50 V with current below 50 mA implies body resistance above 1000 Ω. Verify if contact conditions are unusually dry."
+      - condition: I_cuerpo > 0.100 and R_cuerpo > 5000
+        message:
+          es: Corriente superior a 100 mA con resistencia mayor de 5000 Ω requeriría tensión superior a 500 V. Verificar los valores de entrada.
+          en: Current above 100 mA with resistance above 5000 Ω would require voltage above 500 V. Verify input values.
+    graph_implications:
+      es: Sin gráfico asignado. La relación lineal I = V/R puede visualizarse conceptualmente como una recta en el plano V-I, donde la pendiente es 1/R_cuerpo.
+      en: No assigned graph. The linear relationship I = V/R can be conceptually visualized as a line in the V-I plane, where the slope is 1/R_cuerpo.
+    pedagogical_triggers:
+      - trigger: R_cuerpo < 1000
+        message:
+          es: "Resistencia corporal baja (< 1000 Ω): condiciones de riesgo elevado. Piel húmeda, heridas o superficies de contacto amplias reducen la resistencia y aumentan la corriente peligrosa."
+          en: "Low body resistance (< 1000 Ω): high-risk conditions. Wet skin, wounds or large contact surfaces reduce resistance and increase dangerous current."
+      - trigger: V_contacto > 50
+        message:
+          es: "Tensión de contacto superior al umbral de seguridad (50 V AC). Incluso con resistencia corporal alta, existe riesgo real de electrocución."
+          en: "Contact voltage above safety threshold (50 V AC). Even with high body resistance, there is real electrocution risk."
+
+  - id: margen_proteccion
+    title:
+      es: Margen de protección del diferencial
+      en: Differential protection margin
+    equation: margen = I_diferencial / I_cuerpo
+    latex: margen = \\frac{I_{diff}}{I_{cuerpo}}
+    rearrangements:
+      - target: I_diferencial
+        equation: I_diferencial = margen * I_cuerpo
+        latex: I_{diff} = margen \\cdot I_{cuerpo}
+        constraints:
+          - condition: I_cuerpo > 0
+            message:
+              es: La corriente corporal debe ser positiva para calcular el umbral del diferencial necesario.
+              en: Body current must be positive to calculate the required differential threshold.
+    category: derived
+    relation_type: definition
+    physical_meaning:
+      es: Cociente entre la corriente de disparo del diferencial y la corriente corporal calculada. Un margen superior a 1 indica que el diferencial dispararía antes de que la corriente alcance el valor calculado; un margen menor que 1 indica que el diferencial no protegería en ese escenario.
+      en: Ratio between the differential trip current and the calculated body current. A margin above 1 indicates the differential would trip before current reaches the calculated value; a margin below 1 indicates the differential would not protect in that scenario.
+    constraints:
+      - condition: I_cuerpo > 0
+        message:
+          es: Se requiere corriente corporal positiva para calcular el margen.
+          en: Positive body current is required to calculate the margin.
+    validity:
+      es: "Válida para protecciones de tipo AC y A (diferenciales domésticos estándar). No aplica a corriente continua ni a frecuencias fuera del rango 50–60 Hz sin corrección de factor de frecuencia."
+      en: "Valid for type AC and A protections (standard domestic differentials). Does not apply to direct current or frequencies outside 50–60 Hz range without frequency factor correction."
+    dimension_check: "[adimensional] = [I] / [I] ✓"
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria.md
+      - ejemplos.md
+    interpretation_tags:
+      - evaluacion_proteccion
+      - adecuacion_diferencial
+    result_semantics:
+      target: margen
+      kind: safety_ratio
+      sign_meaning:
+        es: Margen positivo indica diferencial más sensible que la corriente calculada (protección efectiva); negativo es físicamente imposible en este modelo.
+        en: Positive margin indicates differential more sensitive than calculated current (effective protection); negative is physically impossible in this model.
+      absolute_value_meaning:
+        es: "margen > 1: el diferencial dispara antes de que la corriente alcance el nivel de peligro calculado. margen < 1: el diferencial no protege en ese escenario concreto."
+        en: "margin > 1: the differential trips before current reaches the calculated danger level. margin < 1: the differential does not protect in that specific scenario."
+    domain_checks:
+      - condition: margen >= 1
+        label: proteccion_efectiva
+        message:
+          es: El diferencial instalado protegería en este escenario. La corriente de disparo es superior a la corriente corporal calculada.
+          en: The installed differential would protect in this scenario. The trip current is higher than the calculated body current.
+      - condition: margen < 1
+        label: proteccion_insuficiente
+        message:
+          es: "ADVERTENCIA: El diferencial instalado no dispararía ante esta corriente corporal. La corriente de fuga supera el umbral del diferencial sin activarlo. Revisar la instalación."
+          en: "WARNING: The installed differential would not trip at this body current. The leakage current exceeds the differential threshold without triggering it. Review installation."
+    coherence_checks:
+      - condition: margen > 10
+        message:
+          es: Margen muy elevado (> 10x). Verificar que se están usando las unidades correctas para ambas corrientes (ambas en amperios).
+          en: Very high margin (> 10x). Verify that correct units are being used for both currents (both in amperes).
+    graph_implications:
+      es: Sin gráfico asignado en este leaf.
+      en: No graph assigned in this leaf.
+    pedagogical_triggers:
+      - trigger: margen < 1
+        message:
+          es: "El diferencial no es suficientemente sensible para este escenario. Un diferencial de 30 mA no protege si la corriente de fuga supera los 30 mA antes de que dispare."
+          en: "The differential is not sensitive enough for this scenario. A 30 mA differential does not protect if the leakage current exceeds 30 mA before it trips."
+
+  - id: ratio_seguridad
+    title:
+      es: Cociente de seguridad fisiológica
+      en: Physiological safety ratio
+    equation: ratio_seguridad = I_cuerpo / I_segura
+    latex: S_r = \\frac{I_{cuerpo}}{I_{seg}}
+    rearrangements:
+      - target: I_cuerpo
+        equation: I_cuerpo = ratio_seguridad * I_segura
+        latex: I_{cuerpo} = S_r \\cdot I_{seg}
+        constraints:
+          - condition: I_segura > 0
+            message:
+              es: La corriente de seguridad debe ser positiva.
+              en: Safety current must be positive.
+      - target: I_segura
+        equation: I_segura = I_cuerpo / ratio_seguridad
+        latex: I_{seg} = \\frac{I_{cuerpo}}{S_r}
+        constraints:
+          - condition: ratio_seguridad > 0
+            message:
+              es: El ratio de seguridad debe ser positivo.
+              en: Safety ratio must be positive.
+    category: derived
+    relation_type: definition
+    physical_meaning:
+      es: Relación entre la corriente calculada que recorre el cuerpo y el límite máximo de seguridad fisiológica (30 mA).
+      en: Relation between the calculated current flowing through the body and the maximum physiological safety limit (30 mA).
+    constraints:
+      - condition: I_segura > 0
+        message:
+          es: La corriente de seguridad debe ser mayor que cero.
+          en: Safety current must be greater than zero.
+    validity:
+      es: Válida para contactos de corriente alterna de baja frecuencia.
+      en: Valid for low-frequency alternating current contacts.
+    dimension_check: "[adimensional] = [I] / [I] ✓"
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - teoria.md
+      - ejemplos.md
+    interpretation_tags:
+      - evaluacion_fisiologica
+    result_semantics:
+      target: ratio_seguridad
+      kind: safety_ratio
+      sign_meaning:
+        es: Siempre positivo.
+        en: Always positive.
+      absolute_value_meaning:
+        es: "ratio_seguridad < 1: escenario seguro fisiológicamente. ratio_seguridad > 1: escenario peligroso (límite superado)."
+        en: "ratio_seguridad < 1: physiologically safe scenario. ratio_seguridad > 1: dangerous scenario (limit exceeded)."
+    domain_checks:
+      - condition: ratio_seguridad <= 1
+        label: fisiologicamente_seguro
+        message:
+          es: La corriente corporal no supera el límite de seguridad establecido.
+          en: Body current does not exceed the safety limit.
+      - condition: ratio_seguridad > 1
+        label: fisiologicamente_peligroso
+        message:
+          es: "¡PELIGRO! La corriente corporal supera el límite máximo de seguridad de 30 mA."
+          en: "DANGER! Body current exceeds the maximum safety limit of 30 mA."
+    coherence_checks:
+      - condition: ratio_seguridad > 100
+        message:
+          es: Ratio extremadamente alto. Verificar unidades de corriente.
+          en: Extremely high ratio. Verify current units.
+    graph_implications:
+      es: Sin gráficos.
+      en: No graphs.
+    pedagogical_triggers:
+      - trigger: ratio_seguridad > 1
+        message:
+          es: "Riesgo biológico real: superado el umbral seguro. Se requiere desconexión automática."
+          en: "Real biological risk: safety threshold exceeded. Automatic disconnection required."
+
+ui:
+  default_formula: corriente_corporal
+`;export{e as default};

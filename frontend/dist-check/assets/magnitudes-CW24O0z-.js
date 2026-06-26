@@ -1,0 +1,694 @@
+const n=`version: 1
+magnitudes:
+  - id: posicion
+    symbol: 'x'
+    nombre:
+      es: posición
+      en: position
+    descripcion:
+      es: Coordenada que localiza un objeto respecto a un origen definido en un sistema de referencia.
+      en: Coordinate that locates an object relative to a defined origin in a reference frame.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: No confundas la posición con la distancia recorrida; la posición puede ser negativa según el sistema de referencia.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Indica si el objeto está a la derecha o izquierda del origen en una dimensión.
+        en: Indicates if the object is to the right or left of the origin in one dimension.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: El objeto se encuentra exactamente en el origen del sistema de referencia.
+        en: The object is located exactly at the origin of the reference system.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: Define siempre el origen antes de asignar valores a la posición.
+  - id: posicion_vectorial
+    symbol: '\\vec{r}'
+    nombre:
+      es: vector posición
+      en: position vector
+    descripcion:
+      es: Vector que indica la posición espacial completa de un objeto respecto al origen del sistema.
+      en: Vector that specifies the full spatial position of an object relative to the system origin.
+    unidad_si: m
+    dimension: L
+    is_vector: true
+    components:
+      - posicion_x
+      - posicion_y
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: No confundas el vector posición con el desplazamiento; el primero depende del origen elegido.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Los signos de las componentes indican el cuadrante o dirección en el espacio.
+        en: Component signs indicate the quadrant or direction in space.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Significa que la partícula coincide con el origen del sistema de coordenadas.
+        en: Means the particle coincides with the origin of the coordinate system.
+    value_nature:
+      kind: vector
+      nonnegative_only: false
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: El vector posición es la base para definir todas las magnitudes vectoriales de la cinemática.
+  - id: desplazamiento
+    symbol: '\\Delta x'
+    nombre:
+      es: desplazamiento
+      en: displacement
+    descripcion:
+      es: Cambio de posición entre dos instantes; depende solo de las posiciones inicial y final.
+      en: Change in position between two instants; it depends only on the initial and final positions.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: El desplazamiento puede ser cero en una trayectoria cerrada, aunque la distancia recorrida sea grande.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Indica el sentido del movimiento neto respecto al eje de referencia.
+        en: Indicates the direction of net movement relative to the reference axis.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Significa que la posición final coincide con la posición inicial.
+        en: Means the final position coincides with the initial position.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: El desplazamiento es independiente del camino seguido, a diferencia de la distancia recorrida.
+  - id: distancia
+    symbol: 's'
+    nombre:
+      es: distancia recorrida
+      en: distance traveled
+    descripcion:
+      es: Longitud total del camino realmente seguido por el objeto durante el movimiento.
+      en: Total length of the path followed by the object during its motion.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: No confundas la distancia con el desplazamiento; en una trayectoria cerrada, la distancia es el perímetro pero el desplazamiento es cero.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La distancia es siempre positiva o cero.
+        en: Distance is always positive or zero.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: El objeto ha permanecido en reposo absoluto.
+        en: The object has remained in absolute rest.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: La distancia es una magnitud escalar que acumula todo el recorrido sin importar la dirección.
+  - id: velocidad_media
+    symbol: 'v_{med}'
+    nombre:
+      es: velocidad media
+      en: average velocity
+    descripcion:
+      es: Cociente entre el desplazamiento vectorial y el intervalo de tiempo transcurrido.
+      en: Ratio between vector displacement and time interval.
+    unidad_si: m/s
+    dimension: LT^{-1}
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: La velocidad media no es el promedio de las velocidades; es el cambio neto de posición dividido por el tiempo total.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Su signo coincide con el del desplazamiento neto.
+        en: Its sign coincides with that of net displacement.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Significa que el objeto regresó exactamente al punto de partida.
+        en: Means the object returned exactly to the starting point.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: No uses la velocidad media para describir lo que sucede en cada instante del trayecto.
+  - id: rapidez_media
+    symbol: 'v_{esc,med}'
+    nombre:
+      es: rapidez media
+      en: average speed
+    descripcion:
+      es: Cociente entre la distancia total recorrida y el tiempo total empleado.
+      en: Ratio between total distance traveled and total time spent.
+    unidad_si: m/s
+    dimension: LT^{-1}
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: En trayectorias no rectilíneas, la rapidez media es siempre mayor que el módulo de la velocidad media.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Es siempre positiva o cero.
+        en: It is always positive or zero.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: El objeto no se ha movido durante el intervalo estudiado.
+        en: The object has not moved during the studied interval.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: La rapidez media es lo que mide el velocímetro promedio de un viaje.
+  - id: tiempo
+    symbol: 't'
+    nombre:
+      es: tiempo
+      en: time
+    descripcion:
+      es: Instante medido respecto a un evento de referencia (t=0).
+      en: Instant measured relative to a reference event (t=0).
+    unidad_si: s
+    dimension: T
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: No confundas un instante de tiempo con la duración del movimiento o intervalo.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Generalmente se toma como positivo tras el inicio del cronómetro.
+        en: Usually taken as positive after the stopwatch starts.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Inicio de la medición o evento de referencia.
+        en: Start of measurement or reference event.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: El tiempo es la variable independiente fundamental en la cinemática.
+  - id: intervalo_tiempo
+    symbol: '\\Delta t'
+    nombre:
+      es: intervalo de tiempo
+      en: time interval
+    descripcion:
+      es: Duración o transcurso de tiempo entre dos instantes definidos.
+      en: Duration or time lapse between two defined instants.
+    unidad_si: s
+    dimension: T
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: Olvidar que un intervalo de tiempo es una diferencia (final menos inicial).
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Siempre positivo, el tiempo fluye en un solo sentido.
+        en: Always positive, time flows in only one direction.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Suceso instantáneo o sin duración apreciable.
+        en: Instantaneous event or with no appreciable duration.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: El intervalo de tiempo es el denominador en casi todas las tasas de cambio de la cinemática.
+  - id: velocidad
+    symbol: 'v'
+    nombre:
+      es: velocidad
+      en: velocity
+    descripcion:
+      es: Magnitud vectorial que describe la variación instantánea de la posición.
+      en: Vector quantity that describes the instantaneous rate of change of position.
+    unidad_si: m/s
+    dimension: LT^{-1}
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: Creer que la velocidad es lo mismo que la rapidez; la velocidad incluye el sentido del movimiento.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Indica el sentido del movimiento instantáneo respecto a los ejes.
+        en: Indicates the instantaneous direction of motion relative to the axes.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Reposo instantáneo.
+        en: Instantaneous rest.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: La velocidad instantánea es siempre tangente a la trayectoria en cada punto.
+  - id: rapidez
+    symbol: 'v'
+    nombre:
+      es: rapidez
+      en: speed
+    descripcion:
+      es: Módulo o magnitud escalar de la velocidad en un instante dado.
+      en: Scalar magnitude of the velocity at a given instant.
+    unidad_si: m/s
+    dimension: LT^{-1}
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: La rapidez es siempre positiva o cero, mientras que la velocidad puede ser negativa.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Valor absoluto, siempre positivo.
+        en: Absolute value, always positive.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: La partícula no se mueve en ese instante.
+        en: The particle is not moving at that instant.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: El velocímetro de un coche marca la rapidez instantánea.
+  - id: aceleracion
+    symbol: 'a'
+    nombre:
+      es: aceleración
+      en: acceleration
+    descripcion:
+      es: Magnitud vectorial que describe la variación instantánea de la velocidad.
+      en: Vector quantity that describes the instantaneous rate of change of velocity.
+    unidad_si: m/s^2
+    dimension: LT^{-2}
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: Asociar aceleración solo con ir más rápido; frenar también es una aceleración.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Indica el sentido del cambio de velocidad.
+        en: Indicates the direction of velocity change.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Velocidad constante o reposo absoluto.
+        en: Constant velocity or absolute rest.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: La aceleración mide qué tan rápido cambia el vector velocidad.
+  - id: aceleracion_media
+    symbol: 'a_{med}'
+    nombre:
+      es: aceleración media
+      en: average acceleration
+    descripcion:
+      es: Cociente entre el cambio de velocidad y el intervalo de tiempo transcurrido.
+      en: Ratio between velocity change and elapsed time interval.
+    unidad_si: m/s^2
+    dimension: LT^{-2}
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: No confundir aceleración media con la instantánea en trayectorias variables.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Indica el sentido promedio del cambio de velocidad.
+        en: Indicates the average direction of velocity change.
+    zero_behavior:
+      allowed: true
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: Es la pendiente de la cuerda en una gráfica de velocidad-tiempo.
+  - id: cambio_velocidad
+    symbol: '\\Delta v'
+    nombre:
+      es: cambio de velocidad
+      en: velocity change
+    descripcion:
+      es: Diferencia entre la velocidad final e inicial en un tramo.
+      en: Difference between final and initial velocity in a segment.
+    unidad_si: m/s
+    dimension: LT^{-1}
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: Olvidar restar los vectores o componentes correctamente.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: true
+    zero_behavior:
+      allowed: true
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: El cambio de velocidad es el numerador en la definición de aceleración media.
+  - id: posicion_inicial
+    symbol: 'x_0'
+    nombre:
+      es: posición inicial
+      en: initial position
+    descripcion:
+      es: Posición de la partícula al inicio del intervalo.
+      en: Particle position at the start of the interval.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: No siempre es cero; depende del origen elegido.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: true
+    zero_behavior:
+      allowed: true
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: Es el punto de partida en la gráfica de posición-tiempo.
+  - id: posicion_final
+    symbol: 'x_f'
+    nombre:
+      es: posición final
+      en: final position
+    descripcion:
+      es: Posición de la partícula al final del intervalo.
+      en: Particle position at the end of the interval.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: Es el punto de llegada en el sistema de referencia.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: true
+    zero_behavior:
+      allowed: true
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: Se usa para calcular el desplazamiento neto del tramo.
+  - id: velocidad_inicial
+    symbol: 'v_0'
+    nombre:
+      es: velocidad inicial
+      en: initial velocity
+    descripcion:
+      es: Velocidad de la partícula al inicio del intervalo.
+      en: Particle velocity at the start of the interval.
+    unidad_si: m/s
+    dimension: LT^{-1}
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: "Si parte del reposo, su valor es cero."
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: true
+    zero_behavior:
+      allowed: true
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: Determina la pendiente inicial de la curva de posición.
+  - id: velocidad_final
+    symbol: 'v_f'
+    nombre:
+      es: velocidad final
+      en: final velocity
+    descripcion:
+      es: Velocidad de la partícula al final del intervalo.
+      en: Particle velocity at the end of the interval.
+    unidad_si: m/s
+    dimension: LT^{-1}
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: Es la velocidad que posee justo al terminar el tramo estudiado.
+    typical_range: Context-dependent.
+    sign_behavior:
+      has_sign: true
+    zero_behavior:
+      allowed: true
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+    interpretation_role:
+      primary_for:
+        - magnitudes-cinematicas
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: Es el dato necesario para calcular el cambio de velocidad.
+  - id: c
+    symbol: 'c'
+    nombre:
+      es: velocidad de la luz
+      en: speed of light
+    descripcion:
+      es: Velocidad máxima universal en el vacío.
+      en: Maximum universal speed in vacuum.
+    unidad_si: m/s
+    dimension: LT^{-1}
+    is_vector: false
+    components: null
+    category: constant
+    physical_role: physical_constant
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: Es una constante inalcanzable para cuerpos con masa.
+    typical_range: 299792458 m/s
+    sign_behavior:
+      has_sign: false
+    zero_behavior:
+      allowed: false
+    value_nature:
+      kind: constant
+      nonnegative_only: true
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - magnitudes-cinematicas
+    graph_binding:
+      channels: []
+    pedagogical_notes: Define el límite superior absoluto para cualquier velocidad cinemática.
+  - id: g
+    symbol: 'g'
+    nombre:
+      es: gravedad
+      en: gravity
+    descripcion:
+      es: Aceleración de caída libre cerca de la superficie terrestre.
+      en: Free-fall acceleration near the Earth's surface.
+    unidad_si: m/s^2
+    dimension: LT^{-2}
+    is_vector: false
+    components: null
+    category: constant
+    physical_role: physical_constant
+    used_in:
+      - magnitudes-cinematicas
+    common_mistake: Su valor estándar es 9.81 m/s².
+    typical_range: 9.81 m/s^2
+    sign_behavior:
+      has_sign: true
+    zero_behavior:
+      allowed: false
+    value_nature:
+      kind: constant
+      nonnegative_only: true
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - magnitudes-cinematicas
+    graph_binding:
+      channels: []
+    pedagogical_notes: Es la aceleración constante más estudiada en cinemática clásica.
+`;export{n as default};

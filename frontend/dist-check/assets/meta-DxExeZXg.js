@@ -1,0 +1,84 @@
+const e=`version: 5
+id: energia-orbital
+nombre:
+  es: Energia orbital
+  en: Orbital Energy
+titulo:
+  es: Energia orbital
+  en: Orbital Energy
+type: leaf
+area: fisica-clasica
+bloque: mecanica
+subbloque: gravitacion
+parent_id: orbitas-y-satelites
+ruta_relativa: fisica-clasica/mecanica/gravitacion/orbitas-y-satelites/energia-orbital
+orden: 216420
+dificultad: 3
+tiempo_estimado_min: 55
+niveles:
+  es: [ESO, BACHILLERATO, UNIVERSIDAD, EXTRACURRICULAR]
+  en: [Secondary, Upper Secondary, University, Extracurricular]
+icon: "🧪"
+descripcion: Analiza energia mecanica, energia especifica y criterio energetico de orbitas.
+description_en: Analyzes mechanical energy, specific energy, and energetic criteria for orbits.
+descripcion_corta: Energia total y especifica para clasificar orbitas y escape.
+magnitud_dominante: eps
+representacion_dominante: Coord
+physical_role:
+  es: concepto físico
+  en: physical concept
+pregunta_fisica_central:
+  es: "¿Como decide la energia orbital si una trayectoria queda ligada, circulariza, se abre o alcanza escape?"
+  en: "How does orbital energy decide whether a trajectory remains bound, circularizes, opens, or reaches escape?"
+prerequisitos:
+  - fisica-clasica/mecanica/gravitacion/orbitas-y-satelites/velocidad-orbital
+  - fisica-clasica/mecanica/gravitacion/energia-potencial-gravitatoria
+tags:
+  es: [energia-orbital, orbitas, vis-viva, escape, gravitacion]
+  en: [orbital-energy, orbits, vis-viva, escape, gravitation]
+objetivos:
+  - es: Calcular energia total y especifica en un estado orbital.
+    en: Calculate total and specific energy in an orbital state.
+  - es: Clasificar orbitas por el signo de la energia.
+    en: Classify orbits by the sign of energy.
+  - es: Relacionar energia ligada con semieje mayor y escape.
+    en: Relate bound energy with semi-major axis and escape.
+suposiciones:
+  - es: Regimen newtoniano de dos cuerpos con masa central dominante.
+    en: Newtonian two-body regime with dominant central mass.
+  - es: Referencia energetica nula en el infinito.
+    en: Zero energy reference at infinity.
+competencias_lomloe: [STEM, razonamiento_cientifico, modelizacion, resolucion_problemas]
+graficos: [Coord, Svg]
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    tab_label:
+      es: Lectura energetica
+      en: Energy Reading
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    show_summary: true
+    show_physical_reading: true
+    show_coherence: true
+    show_model_validity: true
+    show_graph_reading: true
+    show_likely_errors: true
+    show_next_step: true
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    show_warnings: true
+    show_likely_errors: true
+    max_inline_messages: 3
+    show_status_icons: true
+    allow_collapsible_sections: true
+  dependencies:
+    requires_magnitudes: true
+    requires_formulas: true
+    supports_graph_binding: true
+`;export{e as default};

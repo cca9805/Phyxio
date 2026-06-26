@@ -1,0 +1,204 @@
+version: 5.0.0
+leaf: interpretacion-probabilistica
+ui:
+  default_formula: probabilidad_macroestado
+formulas:
+- id: probabilidad_macroestado
+  title:
+    es: Probabilidad de un macroestado
+    en: Probability of a macrostate
+  equation: P_macro=Omega_macro/Omega_total
+  latex: P_{macro}=\frac{\Omega_{macro}}{\Omega_{total}}
+  rearrangements:
+  - target: Omega_macro
+    equation: Omega_macro=P_macro*Omega_total
+    latex: \Omega_{macro}=P_{macro}\,\Omega_{total}
+  - target: Omega_total
+    equation: Omega_total=Omega_macro/P_macro
+    latex: \Omega_{total}=\frac{\Omega_{macro}}{P_{macro}}
+  category: estadistica
+  relation_type: proportional_ratio
+  physical_meaning:
+    es: La probabilidad de observar un macroestado es proporcional a cuántos microestados compatibles contiene frente al total
+      accesible.
+    en: The probability of observing a macrostate is proportional to how many compatible microstates it contains relative
+      to the accessible total.
+  constraints:
+    es: Requiere microestados equiprobables, Omega_total positivo y conteos compatibles con el mismo sistema.
+    en: Requires equiprobable microstates, positive Omega_total, and counts compatible with the same system.
+  validity:
+    es: Válida en ensambles donde todos los microestados accesibles tienen el mismo peso estadístico.
+    en: Valid in ensembles where all accessible microstates have the same statistical weight.
+  dimension_check: dimensionless/dimensionless=dimensionless
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculator
+  - interpretation
+  - coord
+  - svg
+  interpretation_tags:
+  - probability
+  - multiplicity
+  - macrostate
+  result_semantics:
+    target: probabilidad_macroestado
+    kind: dimensionless_ratio
+    sign_meaning:
+      es: Debe ser no negativa; un valor negativo no tiene significado probabilístico.
+      en: It must be non-negative; a negative value has no probabilistic meaning.
+    absolute_value_meaning:
+      es: Mide la fracción de microestados accesibles que pertenecen al macroestado.
+      en: Measures the fraction of accessible microstates belonging to the macrostate.
+  domain_checks:
+  - id: omega_total_positive
+    condition: Omega_total>0
+    message:
+      es: El total de microestados accesibles debe ser positivo.
+      en: The total number of accessible microstates must be positive.
+  - id: probability_range
+    condition: P_macro>=0 and P_macro<=1
+    message:
+      es: La probabilidad debe estar entre 0 y 1.
+      en: The probability must lie between 0 and 1.
+  coherence_checks:
+  - id: macro_not_exceed_total
+    condition: Omega_macro<=Omega_total
+    message:
+      es: Los microestados del macroestado no pueden superar el total accesible.
+      en: Microstates in one macrostate cannot exceed the accessible total.
+  graph_implications:
+    es: En una gráfica P frente a Omega_macro, la pendiente es 1/Omega_total si el total permanece fijo.
+    en: In a graph of P versus Omega_macro, the slope is 1/Omega_total if the total remains fixed.
+  pedagogical_triggers:
+  - id: confundir_probabilidad_con_entropia
+    text:
+      es: Recordar que probabilidad y entropía están conectadas por multiplicidad, pero no son la misma magnitud.
+      en: Remind that probability and entropy are connected through multiplicity, but are not the same quantity.
+- id: peso_relativo_macroestados
+  title:
+    es: Peso relativo entre macrostados
+    en: Relative weight between macrostates
+  equation: P_f/P_i=Omega_f/Omega_i
+  latex: \frac{P_f}{P_i}=\frac{\Omega_f}{\Omega_i}
+  rearrangements:
+  - target: P_f
+    equation: P_f=P_i*Omega_f/Omega_i
+    latex: P_f=P_i\,\frac{\Omega_f}{\Omega_i}
+  - target: Omega_f
+    equation: Omega_f=Omega_i*P_f/P_i
+    latex: \Omega_f=\Omega_i\,\frac{P_f}{P_i}
+  category: estadistica
+  relation_type: relative_ratio
+  physical_meaning:
+    es: Compara la probabilidad de dos macrostados mediante el cociente de sus multiplicidades microscópicas.
+    en: Compares the probability of two macrostates through the ratio of their microscopic multiplicities.
+  constraints:
+    es: Ambos macrostados deben pertenecer al mismo espacio accesible y tener microestados con igual peso.
+    en: Both macrostates must belong to the same accessible space and have equally weighted microstates.
+  validity:
+    es: Adecuada para comparar tendencias de equilibrio cuando la multiplicidad domina la observación macroscópica.
+    en: Suitable for comparing equilibrium tendencies when multiplicity dominates macroscopic observation.
+  dimension_check: dimensionless/dimensionless=dimensionless
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculator
+  - interpretation
+  - svg
+  interpretation_tags:
+  - relative_probability
+  - microstate_ratio
+  result_semantics:
+    target: ratio_probabilidades
+    kind: dimensionless_ratio
+    sign_meaning:
+      es: Debe ser positivo; un cociente negativo indica uso imposible de probabilidades.
+      en: It must be positive; a negative ratio signals an impossible use of probabilities.
+    absolute_value_meaning:
+      es: Indica cuántas veces es más probable un macroestado que otro bajo igualdad de pesos microscópicos.
+      en: Indicates how many times more probable one macrostate is than another under equal microscopic weights.
+  domain_checks:
+  - id: positive_probabilities
+    condition: P_i>0 and P_f>=0
+    message:
+      es: La probabilidad inicial debe ser positiva para formar el cociente.
+      en: The initial probability must be positive to form the ratio.
+  coherence_checks:
+  - id: same_system_comparison
+    condition: same_accessible_space
+    message:
+      es: Solo se comparan macrostados del mismo sistema estadístico.
+      en: Only macrostates of the same statistical system are compared.
+  graph_implications:
+    es: El cociente crece linealmente con Omega_f/Omega_i cuando se mantienen pesos iguales.
+    en: The ratio grows linearly with Omega_f/Omega_i when equal weights are preserved.
+  pedagogical_triggers:
+  - id: olvidar_mismo_sistema
+    text:
+      es: Evitar comparar multiplicidades de sistemas distintos sin normalización común.
+      en: Avoid comparing multiplicities of different systems without common normalization.
+- id: probabilidad_entropia
+  title:
+    es: Probabilidad relativa y entropía
+    en: Relative probability and entropy
+  equation: Delta_S=k_B*ln(P_f/P_i)
+  latex: \Delta S=k_B\ln\left(\frac{P_f}{P_i}\right)
+  rearrangements:
+  - target: P_f/P_i
+    equation: P_f/P_i=exp(Delta_S/k_B)
+    latex: \frac{P_f}{P_i}=e^{\Delta S/k_B}
+  - target: Delta_S
+    equation: Delta_S=k_B*ln(ratio_probabilidades)
+    latex: \Delta S=k_B\ln(r_P)
+  category: estadistica
+  relation_type: logarithmic
+  physical_meaning:
+    es: Conecta la preferencia probabilística por macrostados más multiplicados con la variación de entropía.
+    en: Connects the probabilistic preference for more numerous macrostates with entropy change.
+  constraints:
+    es: Exige probabilidades positivas y comparación entre macrostados bajo el mismo modelo estadístico.
+    en: Requires positive probabilities and comparison between macrostates under the same statistical model.
+  validity:
+    es: Se usa cuando la entropía de Boltzmann describe la multiplicidad compatible y los microestados son equiprobables.
+    en: Used when Boltzmann entropy describes compatible multiplicity and microstates are equiprobable.
+  dimension_check: J/K=J/K*dimensionless
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculator
+  - interpretation
+  - coord
+  interpretation_tags:
+  - entropy
+  - probability
+  - logarithm
+  result_semantics:
+    target: delta_entropia
+    kind: signed_scalar
+    sign_meaning:
+      es: Positiva si el macroestado final es más probable; negativa si es menos probable.
+      en: Positive if the final macrostate is more probable; negative if it is less probable.
+    absolute_value_meaning:
+      es: Mide la intensidad logarítmica del cambio de peso probabilístico.
+      en: Measures the logarithmic intensity of the change in probabilistic weight.
+  domain_checks:
+  - id: positive_ratio
+    condition: ratio_probabilidades>0
+    message:
+      es: El logaritmo solo admite cocientes positivos.
+      en: The logarithm only accepts positive ratios.
+  coherence_checks:
+  - id: zero_entropy_change
+    condition: ratio_probabilidades=1 implies Delta_S=0
+    message:
+      es: Si las probabilidades son iguales, la variación de entropía es nula.
+      en: If probabilities are equal, entropy change is zero.
+  graph_implications:
+    es: Delta S crece de forma logarítmica con el cociente de probabilidades, no linealmente.
+    en: Delta S grows logarithmically with the probability ratio, not linearly.
+  pedagogical_triggers:
+  - id: leer_logaritmo_lineal
+    text:
+      es: Insistir en que duplicar el cociente no duplica siempre la entropía acumulada.
+      en: Emphasize that doubling the ratio does not always double the accumulated entropy.

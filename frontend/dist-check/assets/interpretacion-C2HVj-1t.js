@@ -1,0 +1,416 @@
+const e=`version: 2
+id: interpretacion-potencial-efectivo-y-ecuacion-radial
+leaf_id: potencial-efectivo-y-ecuacion-radial
+nombre:
+  es: Interpretacion de Potencial efectivo y ecuacion radial
+  en: Interpretation of Effective Potential and Radial Equation
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: gravitacion
+  parent_id: fuerzas-centrales
+  ruta_relativa: fisica-clasica/mecanica/gravitacion/fuerzas-centrales/potencial-efectivo-y-ecuacion-radial
+dependencies:
+  formulas:
+  - potencial_efectivo
+  - energia_radial
+  - condicion_orbita_circular
+  - velocidad_areal_central
+  magnitudes:
+  - Ueff
+  - U
+  - L
+  - m
+  - r
+  - E
+  - rdot
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  Ueff:
+    summary_rules:
+    - id: Ueff_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[Ueff]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[Ueff]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: Ueff_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[Ueff]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[Ueff]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: Ueff_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[Ueff]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[Ueff]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: Ueff_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el potencial efectivo convierte la geometria de una orbita central en una lectura energetica radial; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while effective potential converts the geometry of a central orbit into a radial energy reading; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: Ueff_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[Ueff]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[Ueff]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: Ueff_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[Ueff]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[Ueff]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: Ueff_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[Ueff]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[Ueff]] with a limiting case and state what observable change it would produce.
+  U:
+    summary_rules:
+    - id: U_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[U]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[U]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: U_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[U]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[U]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: U_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[U]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[U]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: U_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el potencial efectivo convierte la geometria de una orbita central en una lectura energetica radial; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while effective potential converts the geometry of a central orbit into a radial energy reading; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: U_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[U]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[U]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: U_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[U]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[U]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: U_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[U]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[U]] with a limiting case and state what observable change it would produce.
+  L:
+    summary_rules:
+    - id: L_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[L]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[L]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: L_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[L]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[L]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: L_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[L]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[L]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: L_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el potencial efectivo convierte la geometria de una orbita central en una lectura energetica radial; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while effective potential converts the geometry of a central orbit into a radial energy reading; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: L_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[L]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[L]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: L_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[L]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[L]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: L_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[L]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[L]] with a limiting case and state what observable change it would produce.
+  m:
+    summary_rules:
+    - id: m_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[m]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[m]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: m_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[m]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[m]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: m_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[m]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[m]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: m_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el potencial efectivo convierte la geometria de una orbita central en una lectura energetica radial; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while effective potential converts the geometry of a central orbit into a radial energy reading; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: m_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[m]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[m]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: m_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[m]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[m]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: m_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[m]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[m]] with a limiting case and state what observable change it would produce.
+  r:
+    summary_rules:
+    - id: r_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[r]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[r]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: r_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[r]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[r]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: r_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[r]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[r]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: r_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el potencial efectivo convierte la geometria de una orbita central en una lectura energetica radial; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while effective potential converts the geometry of a central orbit into a radial energy reading; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: r_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[r]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[r]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: r_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[r]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[r]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: r_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[r]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[r]] with a limiting case and state what observable change it would produce.
+  E:
+    summary_rules:
+    - id: E_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[E]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[E]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: E_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[E]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[E]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: E_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[E]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[E]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: E_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el potencial efectivo convierte la geometria de una orbita central en una lectura energetica radial; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while effective potential converts the geometry of a central orbit into a radial energy reading; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: E_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[E]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[E]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: E_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[E]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[E]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: E_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[E]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[E]] with a limiting case and state what observable change it would produce.
+  rdot:
+    summary_rules:
+    - id: rdot_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[rdot]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[rdot]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: rdot_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[rdot]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[rdot]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: rdot_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[rdot]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[rdot]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: rdot_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras el potencial efectivo convierte la geometria de una orbita central en una lectura energetica radial; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while effective potential converts the geometry of a central orbit into a radial energy reading; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: rdot_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[rdot]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[rdot]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: rdot_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[rdot]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[rdot]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: rdot_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[rdot]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[rdot]] with a limiting case and state what observable change it would produce.
+`;export{e as default};

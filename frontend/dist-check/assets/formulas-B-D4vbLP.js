@@ -1,0 +1,288 @@
+const e=`version: 5
+id: polea
+nombre:
+  es: Polea y aparejos
+  en: Pulley and tackles
+area: mecanica
+bloque: aplicaciones
+subbloque: maquinas-simples
+
+formulas:
+- id: ley_polea_ideal
+  title:
+    es: Esfuerzo en sistema ideal
+    en: Ideal system effort
+  equation: P = W / n
+  latex: "P = \\\\frac{W}{n}"
+  rearrangements:
+  - target: P
+    equation: P = W / n
+    latex: "P = \\\\frac{W}{n}"
+  - target: W
+    equation: W = P * n
+    latex: "W = P \\\\cdot n"
+  - target: n
+    equation: n = W / P
+    latex: "n = \\\\frac{W}{P}"
+  physical_meaning:
+    es: Determina la fuerza necesaria para equilibrar la carga en función del número de tramos de cuerda.
+    en: Determines the force needed to balance the load based on the number of rope segments.
+  category: "estatica"
+  relation_type: "ley"
+  constraints: [ "n >= 1" ]
+  validity:
+    es: Modelo sin rozamiento en los ejes y cuerda ideal.
+    en: Frictionless model on axles and ideal rope.
+  dimension_check: "F = F / 1"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [ "maquinas-simples", "construccion" ]
+  interpretation_tags: [ "equilibrio", "ventaja-mecanica" ]
+  result_semantics: "fuerza"
+  domain_checks:
+  - condition: "n < 1"
+    severity: "error"
+    message:
+      es: "El número de tramos efectivos debe ser al menos 1."
+      en: "The number of effective segments must be at least 1."
+  coherence_checks: []
+  graph_implications:
+    es: "Define el factor de escala entre el vector carga y el vector esfuerzo."
+    en: "Defines the scale factor between the load vector and the effort vector."
+  pedagogical_triggers: [ "regla_de_oro", "tramos_efectivos" ]
+
+- id: ley_polea_real
+  title:
+    es: Esfuerzo en sistema real
+    en: Real system effort
+  equation: P = W / (n * eta)
+  latex: "P = \\\\frac{W}{n \\\\cdot \\\\eta}"
+  rearrangements:
+  - target: P
+    equation: P = W / (n * eta)
+    latex: "P = \\\\frac{W}{n \\\\cdot \\\\eta}"
+  - target: eta
+    equation: eta = W / (n * P)
+    latex: "\\\\eta = \\\\frac{W}{n \\\\cdot P}"
+  physical_meaning:
+    es: Calcula el esfuerzo real considerando las pérdidas por fricción y rigidez.
+    en: Calculates the real effort considering friction and stiffness losses.
+  category: "dinamica"
+  relation_type: "ley"
+  constraints: [ "eta > 0", "eta <= 1" ]
+  validity:
+    es: Máquinas con rozamiento en los ejes.
+    en: Machines with axle friction.
+  dimension_check: "F = F / 1"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [ "ingenieria", "logistica" ]
+  interpretation_tags: [ "rendimiento", "friccion" ]
+  result_semantics: "fuerza"
+  domain_checks:
+  - condition: "eta <= 0"
+    severity: "error"
+    message:
+      es: "El rendimiento debe ser positivo para que el sistema opere."
+      en: "Efficiency must be positive for the system to operate."
+  coherence_checks: []
+  graph_implications:
+    es: "Aumenta la longitud del vector esfuerzo en comparación con el modelo ideal."
+    en: "Increases the length of the effort vector compared to the ideal model."
+  pedagogical_triggers: [ "perdidas_por_friccion" ]
+
+- id: aparejo_factorial
+  title:
+    es: Ventaja en aparejo factorial
+    en: Factorial tackle advantage
+  equation: n = 2 * Np
+  latex: "n = 2 \\\\cdot N_p"
+  rearrangements:
+  - target: n
+    equation: n = 2 * Np
+    latex: "n = 2 \\\\cdot N_p"
+  - target: Np
+    equation: Np = n / 2
+    latex: "N_p = \\\\frac{n}{2}"
+  physical_meaning:
+    es: Relaciona el número de poleas móviles con los tramos efectivos en un polispasto de poleas paralelas.
+    en: Relates the number of moving pulleys to the effective segments in a parallel pulley tackle.
+  category: "geometria"
+  relation_type: "definicion"
+  constraints: [ "Np >= 1" ]
+  validity:
+    es: Configuración de aparejo factorial o polispasto común.
+    en: Factorial tackle or common block and tackle configuration.
+  dimension_check: "1 = 1 * 1"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [ "maquinas-simples" ]
+  interpretation_tags: [ "conteo", "aparejo" ]
+  result_semantics: "conteo"
+  domain_checks: []
+  coherence_checks: []
+  graph_implications:
+    es: "Determina el número de cuerdas visualizadas sosteniendo la carga móvil."
+    en: "Determines the number of visualized ropes supporting the moving load."
+  pedagogical_triggers: [ "geometria_aparejos" ]
+
+- id: aparejo_potencial
+  title:
+    es: Ventaja en aparejo potencial
+    en: Potential tackle advantage
+  equation: n = 2^Np
+  latex: "n = 2^{N_p}"
+  rearrangements:
+  - target: n
+    equation: n = 2^Np
+    latex: "n = 2^{N_p}"
+  - target: Np
+    equation: Np = log2(n)
+    latex: "N_p = \\\\log_2(n)"
+  physical_meaning:
+    es: Determina la ventaja mecánica en un sistema donde cada polea móvil cuelga de la anterior.
+    en: Determines the mechanical advantage in a system where each moving pulley hangs from the previous one.
+  category: "geometria"
+  relation_type: "definicion"
+  constraints: [ "Np >= 1" ]
+  validity:
+    es: Configuración de aparejo potencial.
+    en: Potential tackle configuration.
+  dimension_check: "1 = 1"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [ "maquinas-simples" ]
+  interpretation_tags: [ "exponencial", "aparejo" ]
+  result_semantics: "conteo"
+  domain_checks: []
+  coherence_checks: []
+  graph_implications:
+    es: "Muestra una cascada de poleas móviles."
+    en: "Shows a cascade of moving pulleys."
+  pedagogical_triggers: [ "crecimiento_exponencial" ]
+
+- id: ventaja_mecanica_ideal
+  title:
+    es: Ventaja mecánica ideal
+    en: Ideal mechanical advantage
+  equation: VM = n
+  latex: "VM = n"
+  rearrangements:
+  - target: VM
+    equation: VM = n
+    latex: "VM = n"
+  - target: n
+    equation: n = VM
+    latex: "n = VM"
+  physical_meaning:
+    es: Factor teórico por el que se multiplica la fuerza en ausencia de pérdidas.
+    en: Theoretical factor by which the force is multiplied in the absence of losses.
+  category: "estatica"
+  relation_type: "ratio"
+  constraints: [ "n >= 1" ]
+  validity:
+    es: Válida para sistemas ideales sin rozamiento.
+    en: Valid for ideal frictionless systems.
+  dimension_check: "1 = 1"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [ "maquinas-simples" ]
+  interpretation_tags: [ "ventaja", "teoria" ]
+  result_semantics: "ratio"
+  domain_checks: []
+  coherence_checks: []
+  graph_implications:
+    es: "Inversa de la relación de vectores fuerza."
+    en: "Inverse of the force vector ratio."
+  pedagogical_triggers: [ "ventaja_mecanica" ]
+
+- id: relacion_desplazamientos
+  title:
+    es: Relación de desplazamientos
+    en: Displacement relationship
+  equation: sP = n * sW
+  latex: "s_P = n \\\\cdot s_W"
+  rearrangements:
+  - target: sP
+    equation: sP = n * sW
+    latex: "s_P = n \\\\cdot s_W"
+  - target: sW
+    equation: sW = sP / n
+    latex: "s_W = \\\\frac{s_P}{n}"
+  physical_meaning:
+    es: Establece que para ganar fuerza se debe recorrer una distancia mayor de cuerda.
+    en: Establishes that to gain force, a greater rope distance must be traveled.
+  category: "cinematica"
+  relation_type: "restriccion"
+  constraints: []
+  validity:
+    es: Cuerda inextensible.
+    en: Inextensible rope.
+  dimension_check: "L = 1 * L"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [ "cinematica" ]
+  interpretation_tags: [ "distancia", "costo" ]
+  result_semantics: "distancia"
+  domain_checks: []
+  coherence_checks: []
+  graph_implications:
+    es: "Determina cuánto debe bajar el extremo libre para que la carga suba una altura dada."
+    en: "Determines how much the free end must go down for the load to go up a given height."
+  pedagogical_triggers: [ "regla_de_oro" ]
+
+- id: balance_energia_polea
+  title:
+    es: Balance de energía en polea
+    en: Energy balance in pulley
+  equation: P * sP = (W * sW) / eta
+  latex: "P \\\\cdot s_P = \\\\frac{W \\\\cdot s_W}{\\\\eta}"
+  rearrangements:
+  - target: P
+    equation: P = (W * sW) / (sP * eta)
+    latex: "P = \\\\frac{W \\\\cdot s_W}{s_P \\\\cdot \\\\eta}"
+  physical_meaning:
+    es: Expresa que el trabajo de entrada se reparte entre el trabajo útil y el calor disipado.
+    en: Expresses that input work is distributed between useful work and dissipated heat.
+  category: "energia"
+  relation_type: "balance"
+  constraints: []
+  validity:
+    es: Conservación de la energía con pérdidas.
+    en: Energy conservation with losses.
+  dimension_check: "F L = F L / 1"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [ "energia" ]
+  interpretation_tags: [ "trabajo", "conservacion" ]
+  result_semantics: "energia"
+  domain_checks: []
+  coherence_checks: []
+  graph_implications:
+    es: "Representado en balances de barras de energía."
+    en: "Represented in energy bar balances."
+  pedagogical_triggers: [ "trabajo_y_energia" ]
+
+ui:
+  default_formula: ley_polea_real
+  groups:
+  - title:
+      es: Fuerzas y equilibrio
+      en: Forces and equilibrium
+    items:
+    - ley_polea_ideal
+    - ley_polea_real
+  - title:
+      es: Configuración y aparejos
+      en: Configuration and tackles
+    items:
+    - aparejo_factorial
+    - aparejo_potencial
+    - ventaja_mecanica_ideal
+  - title:
+      es: Cinemática y energía
+      en: Kinematics and energy
+    items:
+    - relacion_desplazamientos
+    - balance_energia_polea
+`;export{e as default};

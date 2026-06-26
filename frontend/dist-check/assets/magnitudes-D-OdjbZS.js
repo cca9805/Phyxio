@@ -1,0 +1,434 @@
+const e=`version: 5
+magnitudes:
+- id: G
+  symbol: G
+  nombre:
+    es: Constante de gravitacion universal
+    en: Universal gravitation constant
+  si_unit: N*m^2/kg^2
+  unidad_si: N*m^2/kg^2
+  dimension: M^-1*L^3*T^-2
+  is_vector: false
+  components: []
+  category: gravitacion
+  physical_role: constante_fundamental
+  used_in: [ energia_potencial_general, cambio_energia_potencial ]
+  common_mistake: Usar G con unidades no SI mezcladas con radios en metros.
+  typical_range: [ 6.6743e-11, 6.6743e-11 ]
+  sign_behavior: siempre_positivo
+  zero_behavior: sin_interaccion_gravitatoria
+  value_nature: constante
+  interpretation_role: escala_interaccion
+  graph_binding: Escala la profundidad energetica en funcion de r.
+  descripcion:
+    es: Constante universal que fija la intensidad de la interaccion gravitatoria clasica.
+    en: Universal constant that sets classical gravitational interaction strength.
+  pedagogical_notes:
+    es: Conviene mantener precision consistente en notacion cientifica.
+    en: Keep precision consistent when using scientific notation.
+
+- id: M
+  symbol: M
+  nombre:
+    es: Masa fuente
+    en: Source mass
+  si_unit: kg
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: []
+  category: gravitacion
+  physical_role: origen_campo
+  used_in: [ energia_potencial_general, cambio_energia_potencial ]
+  common_mistake: Intercambiar M con m en despejes.
+  typical_range: [ 1e+3, 1e+30 ]
+  sign_behavior: siempre_positivo
+  zero_behavior: ausencia_fuente
+  value_nature: parametro
+  interpretation_role: controla_curvatura
+  graph_binding: A mayor M mayor pendiente energetica radial.
+  descripcion:
+    es: Masa del cuerpo que genera el campo gravitatorio dominante.
+    en: Mass of the body generating the dominant gravitational field.
+  pedagogical_notes:
+    es: M determina la escala principal de energia potencial en el sistema.
+    en: M sets the main potential-energy scale in the system.
+
+- id: m
+  symbol: m
+  nombre:
+    es: Masa de prueba
+    en: Test mass
+  si_unit: kg
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: cuerpo_analizado
+  used_in: [ energia_potencial_general, cambio_energia_potencial, aproximacion_superficial ]
+  common_mistake: Omitir m en U y DeltaU por confundir con potencial V.
+  typical_range: [ 1e-6, 1e+9 ]
+  sign_behavior: siempre_positivo
+  zero_behavior: sin_energia_asociada
+  value_nature: parametro
+  interpretation_role: factor_escala_energetico
+  graph_binding: Escala vertical de U sin cambiar forma de la curva en r.
+  descripcion:
+    es: Masa del objeto cuya energia potencial se evalua en el campo.
+    en: Mass of the object whose potential energy is evaluated in the field.
+  pedagogical_notes:
+    es: Distinguir m (prueba) de M (fuente) evita errores de signo y escala.
+    en: Distinguishing m (test) from M (source) avoids sign and scale mistakes.
+
+- id: r
+  symbol: r
+  nombre:
+    es: Distancia radial
+    en: Radial distance
+  si_unit: m
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: geometria
+  physical_role: coordenada
+  used_in: [ energia_potencial_general ]
+  common_mistake: Usar altura sobre superficie sin sumar radio planetario.
+  typical_range: [ 1, 1e+12 ]
+  sign_behavior: siempre_positivo
+  zero_behavior: singularidad_modelo
+  value_nature: variable
+  interpretation_role: eje_espacial
+  graph_binding: Eje horizontal de lectura energetica.
+  descripcion:
+    es: Distancia al centro de la masa fuente en modelos centrales.
+    en: Distance to source-mass center in central-field models.
+  pedagogical_notes:
+    es: La dependencia 1/r vuelve muy sensible la energia a cambios cerca de la fuente.
+    en: The 1/r dependence makes energy highly sensitive near the source.
+
+- id: ri
+  symbol: r_i
+  nombre:
+    es: Radio inicial
+    en: Initial radius
+  si_unit: m
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: geometria
+  physical_role: estado_inicial
+  used_in: [ cambio_energia_potencial ]
+  common_mistake: Tomar ri desde referencia distinta que rf.
+  typical_range: [ 1, 1e+12 ]
+  sign_behavior: siempre_positivo
+  zero_behavior: invalida_modelo
+  value_nature: dato_estado
+  interpretation_role: define_estado_inicio
+  graph_binding: Punto inicial en curva U(r).
+  descripcion:
+    es: Distancia radial del estado inicial.
+    en: Radial distance at the initial state.
+  pedagogical_notes:
+    es: Ri y rf deben medirse con la misma referencia geometrica.
+    en: Ri and rf must be measured with the same geometric reference.
+
+- id: rf
+  symbol: r_f
+  nombre:
+    es: Radio final
+    en: Final radius
+  si_unit: m
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: geometria
+  physical_role: estado_final
+  used_in: [ cambio_energia_potencial ]
+  common_mistake: Invertir ri y rf al interpretar el signo de DeltaU.
+  typical_range: [ 1, 1e+12 ]
+  sign_behavior: siempre_positivo
+  zero_behavior: invalida_modelo
+  value_nature: dato_estado
+  interpretation_role: define_estado_fin
+  graph_binding: Punto final en curva U(r).
+  descripcion:
+    es: Distancia radial del estado final.
+    en: Radial distance at the final state.
+  pedagogical_notes:
+    es: El orden ri a rf determina la lectura energetica del proceso.
+    en: The ri to rf order determines the process energy reading.
+
+- id: U
+  symbol: U
+  nombre:
+    es: Energia potencial gravitatoria
+    en: Gravitational potential energy
+  si_unit: J
+  unidad_si: J
+  dimension: M*L^2*T^-2
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: energia_estado
+  used_in: [ energia_potencial_general, energia_mecanica ]
+  common_mistake: Suponer que U siempre es positiva por ser energia.
+  typical_range: [ -1e+12, 1e+12 ]
+  sign_behavior: depende_referencia
+  zero_behavior: nivel_referencia
+  value_nature: variable
+  interpretation_role: estado_configuracion
+  graph_binding: Curva principal de lectura energetica radial.
+  descripcion:
+    es: Energia asociada a la configuracion gravitatoria del sistema.
+    en: Energy associated with the system gravitational configuration.
+  pedagogical_notes:
+    es: Con referencia en infinito, U suele ser negativa en sistemas ligados.
+    en: With infinity reference, U is usually negative in bound systems.
+
+- id: Ui
+  symbol: U_i
+  nombre:
+    es: Energia potencial inicial
+    en: Initial potential energy
+  si_unit: J
+  unidad_si: J
+  dimension: M*L^2*T^-2
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: estado_inicial_energetico
+  used_in: [ cambio_energia_potencial ]
+  common_mistake: Confundir Ui con DeltaU en balances.
+  typical_range: [ -1e+12, 1e+12 ]
+  sign_behavior: depende_referencia
+  zero_behavior: nivel_referencia
+  value_nature: dato_estado
+  interpretation_role: referencia_inicio
+  graph_binding: Lectura de energia en ri.
+  descripcion:
+    es: Energia potencial del estado inicial del movimiento.
+    en: Potential energy at the initial motion state.
+  pedagogical_notes:
+    es: Ui se obtiene evaluando U en ri, no en rf.
+    en: Ui is obtained by evaluating U at ri, not at rf.
+
+- id: Uf
+  symbol: U_f
+  nombre:
+    es: Energia potencial final
+    en: Final potential energy
+  si_unit: J
+  unidad_si: J
+  dimension: M*L^2*T^-2
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: estado_final_energetico
+  used_in: [ cambio_energia_potencial ]
+  common_mistake: Tomar Uf con radio equivocado por error de unidades.
+  typical_range: [ -1e+12, 1e+12 ]
+  sign_behavior: depende_referencia
+  zero_behavior: nivel_referencia
+  value_nature: dato_estado
+  interpretation_role: referencia_fin
+  graph_binding: Lectura de energia en rf.
+  descripcion:
+    es: Energia potencial del estado final del movimiento.
+    en: Potential energy at the final motion state.
+  pedagogical_notes:
+    es: El contraste Uf-Ui determina DeltaU.
+    en: The contrast Uf-Ui determines DeltaU.
+
+- id: DeltaU
+  symbol: \\Delta U
+  nombre:
+    es: Cambio de energia potencial
+    en: Potential-energy change
+  si_unit: J
+  unidad_si: J
+  dimension: M*L^2*T^-2
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: transferencia_energetica
+  used_in: [ cambio_energia_potencial, conservacion_energia, trabajo_gravitatorio, aproximacion_superficial ]
+  common_mistake: Confundir signo de DeltaU con signo de Wg.
+  typical_range: [ -1e+12, 1e+12 ]
+  sign_behavior: depende_proceso
+  zero_behavior: sin_cambio_estado
+  value_nature: diferencia
+  interpretation_role: lectura_proceso
+  graph_binding: Diferencia vertical entre dos estados de la curva U(r).
+  descripcion:
+    es: Variacion de energia potencial entre dos estados radiales.
+    en: Potential-energy variation between two radial states.
+  pedagogical_notes:
+    es: DeltaU positiva suele indicar alejamiento de la fuente.
+    en: Positive DeltaU usually indicates moving away from the source.
+
+- id: K
+  symbol: K
+  nombre:
+    es: Energia cinetica
+    en: Kinetic energy
+  si_unit: J
+  unidad_si: J
+  dimension: M*L^2*T^-2
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: energia_movimiento
+  used_in: [ energia_mecanica, conservacion_energia ]
+  common_mistake: Perder el cambio de K al pasar de enfoque dinamico a energetico.
+  typical_range: [ 0, 1e+12 ]
+  sign_behavior: no_negativa
+  zero_behavior: reposo_relativo
+  value_nature: variable
+  interpretation_role: respuesta_dinamica
+  graph_binding: Se infiere por diferencia entre E y U.
+  descripcion:
+    es: Energia asociada al movimiento del cuerpo de prueba.
+    en: Energy associated with test-body motion.
+  pedagogical_notes:
+    es: Si no hay disipacion, cambios en K compensan cambios en U.
+    en: Without dissipation, K changes compensate U changes.
+
+- id: DeltaK
+  symbol: \\Delta K
+  nombre:
+    es: Cambio de energia cinetica
+    en: Kinetic-energy change
+  si_unit: J
+  unidad_si: J
+  dimension: M*L^2*T^-2
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: transferencia_cinetica
+  used_in: [ conservacion_energia ]
+  common_mistake: Usar DeltaK con signo opuesto al convenido sin justificar.
+  typical_range: [ -1e+12, 1e+12 ]
+  sign_behavior: depende_proceso
+  zero_behavior: velocidad_constante
+  value_nature: diferencia
+  interpretation_role: balance_movimiento
+  graph_binding: Se deduce del opuesto de DeltaU en sistema conservativo.
+  descripcion:
+    es: Variacion de energia cinetica entre dos estados.
+    en: Kinetic-energy variation between two states.
+  pedagogical_notes:
+    es: DeltaK = -DeltaU si solo actua gravedad conservativa.
+    en: DeltaK = -DeltaU if only conservative gravity acts.
+
+- id: E
+  symbol: E
+  nombre:
+    es: Energia mecanica total
+    en: Total mechanical energy
+  si_unit: J
+  unidad_si: J
+  dimension: M*L^2*T^-2
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: invariante_sistema
+  used_in: [ energia_mecanica, conservacion_energia ]
+  common_mistake: Tratar E como variable libre cuando no hay trabajo no conservativo.
+  typical_range: [ -1e+12, 1e+12 ]
+  sign_behavior: depende_estado_orbital
+  zero_behavior: frontera_escape
+  value_nature: estado
+  interpretation_role: clasificacion_orbital
+  graph_binding: Referencia global del balance K+U.
+  descripcion:
+    es: Suma de energia cinetica y potencial del sistema.
+    en: Sum of kinetic and potential energy of the system.
+  pedagogical_notes:
+    es: E negativa sugiere estado ligado; E positiva sugiere no ligado.
+    en: Negative E suggests bound states; positive E suggests unbound states.
+
+- id: Wg
+  symbol: W_g
+  nombre:
+    es: Trabajo gravitatorio
+    en: Gravitational work
+  si_unit: J
+  unidad_si: J
+  dimension: M*L^2*T^-2
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: transferencia_por_fuerza
+  used_in: [ trabajo_gravitatorio ]
+  common_mistake: Escribir Wg = DeltaU sin signo negativo.
+  typical_range: [ -1e+12, 1e+12 ]
+  sign_behavior: opuesto_a_DeltaU
+  zero_behavior: trayectoria_isoenergetica
+  value_nature: proceso
+  interpretation_role: puente_dinamica_energia
+  graph_binding: Relaciona cambio de altura del pozo con trabajo neto.
+  descripcion:
+    es: Trabajo realizado por la fuerza gravitatoria durante el desplazamiento.
+    en: Work done by gravity during displacement.
+  pedagogical_notes:
+    es: Wg positivo indica que el campo entrega energia cinetica.
+    en: Positive Wg indicates the field delivers kinetic energy.
+
+- id: h
+  symbol: h
+  nombre:
+    es: Variacion de altura
+    en: Height change
+  si_unit: m
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: aproximacion
+  physical_role: variable_local
+  used_in: [ aproximacion_superficial ]
+  common_mistake: Aplicar mgh para alturas comparables al radio planetario.
+  typical_range: [ 0, 1e+6 ]
+  sign_behavior: depende_convencion
+  zero_behavior: mismo_nivel
+  value_nature: diferencia
+  interpretation_role: simplificacion_local
+  graph_binding: Aproxima tramo casi lineal de U(r) en entorno local.
+  descripcion:
+    es: Cambio de altura en aproximacion de campo local casi uniforme.
+    en: Height change under near-uniform local-field approximation.
+  pedagogical_notes:
+    es: La validez de mgh requiere h mucho menor que r terrestre.
+    en: mgh validity requires h to be much smaller than Earth radius.
+
+- id: g
+  symbol: g
+  nombre:
+    es: Aceleracion gravitatoria local
+    en: Local gravitational acceleration
+  si_unit: m/s^2
+  unidad_si: m/s^2
+  dimension: L*T^-2
+  is_vector: false
+  components: []
+  category: gravitacion
+  physical_role: campo_local
+  used_in: [ aproximacion_superficial ]
+  common_mistake: Suponer g estrictamente constante para cambios grandes de altitud.
+  typical_range: [ 1, 25 ]
+  sign_behavior: positivo_en_modulo
+  zero_behavior: microgravedad
+  value_nature: parametro_local
+  interpretation_role: pendiente_local_energia
+  graph_binding: Pendiente local de U respecto de h en aproximacion lineal.
+  descripcion:
+    es: Valor local del campo gravitatorio usado en aproximaciones cercanas a superficie.
+    en: Local field value used in near-surface approximations.
+  pedagogical_notes:
+    es: En este leaf, g aparece como aproximacion local de una ley radial.
+    en: In this leaf, g appears as a local approximation of a radial law.
+`;export{e as default};

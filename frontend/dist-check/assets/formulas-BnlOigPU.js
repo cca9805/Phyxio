@@ -1,0 +1,283 @@
+const n=`formulas:
+  - id: longitud_onda_armonica
+    title:
+      es: Longitud de onda de un armónico
+      en: Wavelength of a harmonic
+    equation: "lambda_n = 2 * L / n"
+    latex: "\\\\lambda_n = \\\\frac{2L}{n}"
+    rearrangements:
+      - target: lambda_n
+        equation: "lambda_n = 2 * L / n"
+        latex: "\\\\lambda_n = \\\\frac{2L}{n}"
+      - target: L
+        equation: "L = n * lambda_n / 2"
+        latex: "L = \\\\frac{n \\\\lambda_n}{2}"
+      - target: n
+        equation: "n = 2 * L / lambda_n"
+        latex: "n = \\\\frac{2L}{\\\\lambda_n}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: La longitud de onda de cada armónico es un múltiplo fraccionario de la longitud de la cuerda, garantizando nodos en los extremos fijos
+      en: The wavelength of each harmonic is a fractional multiple of the string length, guaranteeing nodes at the fixed ends
+    constraints:
+      - La cuerda debe tener extremos fijos (nodos en x=0 y x=L)
+      - n debe ser entero positivo (n = 1, 2, 3, ...)
+      - La cuerda debe ser homogénea y tensa
+    validity:
+      es: Válida para ondas estacionarias transversales en cuerdas con extremos fijos, en régimen lineal sin amortiguamiento significativo
+      en: Valid for transverse standing waves on strings with fixed ends, in linear regime without significant damping
+    dimension_check:
+      es: "[L] = [L] / [1] → coherente dimensionalmente"
+      en: "[L] = [L] / [1] → dimensionally consistent"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - cálculo de patrones de vibración
+      - diseño de instrumentos musicales
+      - análisis modal
+    interpretation_tags:
+      - standing_wave_pattern
+      - spatial_discretization
+      - boundary_conditions
+    result_semantics:
+      target: lambda_n
+      kind: length_parameter
+      sign_meaning:
+        es: No aplica, la longitud de onda es siempre positiva
+        en: Not applicable, wavelength is always positive
+      absolute_value_meaning:
+        es: Distancia espacial entre puntos de igual fase en el patrón estacionario
+        en: Spatial distance between points of equal phase in the standing pattern
+    domain_checks:
+      - condition: "n >= 1"
+        message:
+          es: "El número de armónico debe ser al menos 1"
+          en: "Harmonic number must be at least 1"
+      - condition: "L > 0"
+        message:
+          es: "La longitud de la cuerda debe ser positiva"
+          en: "String length must be positive"
+    coherence_checks:
+      - check: "lambda_n <= 2 * L"
+        description:
+          es: La longitud de onda del primer armónico no puede exceder 2L
+          en: Wavelength of first harmonic cannot exceed 2L
+    graph_implications:
+      - La longitud de onda determina el período espacial del patrón de onda mostrado
+      - n controla el número de vientres visibles en el gráfico
+    pedagogical_triggers:
+      - Confundir n con el número de nodos (que es n+1)
+      - Olvidar que lambda decrece al aumentar n
+
+  - id: frecuencia_armonica
+    title:
+      es: Frecuencia de un armónico
+      en: Frequency of a harmonic
+    equation: "f_n = n * v / (2 * L)"
+    latex: "f_n = \\\\frac{n v}{2 L}"
+    rearrangements:
+      - target: f_n
+        equation: "f_n = n * v / (2 * L)"
+        latex: "f_n = \\\\frac{n v}{2 L}"
+      - target: v
+        equation: "v = 2 * L * f_n / n"
+        latex: "v = \\\\frac{2 L f_n}{n}"
+      - target: L
+        equation: "L = n * v / (2 * f_n)"
+        latex: "L = \\\\frac{n v}{2 f_n}"
+      - target: n
+        equation: "n = 2 * L * f_n / v"
+        latex: "n = \\\\frac{2 L f_n}{v}"
+    category: fundamental
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: La frecuencia de cada armónico es un múltiplo entero de la frecuencia fundamental, creando la serie armónica característica
+      en: The frequency of each harmonic is an integer multiple of the fundamental frequency, creating the characteristic harmonic series
+    constraints:
+      - v debe ser la velocidad de propagación en la cuerda tensa
+      - n debe ser entero positivo
+      - Los extremos deben estar fijos
+    validity:
+      es: Aplica a cuerdas ideales con extremos fijos, tensión uniforme y oscilaciones de pequeña amplitud
+      en: Applies to ideal strings with fixed ends, uniform tension and small amplitude oscillations
+    dimension_check:
+      es: "[T⁻¹] = [1]·[L T⁻¹]·[L⁻¹] → coherente dimensionalmente"
+      en: "[T⁻¹] = [1]·[L T⁻¹]·[L⁻¹] → dimensionally consistent"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - afinación de instrumentos de cuerda
+      - análisis espectral
+      - diseño acústico
+    interpretation_tags:
+      - pitch_determination
+      - harmonic_series
+      - frequency_quantization
+    result_semantics:
+      target: f_n
+      kind: frequency_value
+      sign_meaning:
+        es: No aplica, la frecuencia es siempre positiva
+        en: Not applicable, frequency is always positive
+      absolute_value_meaning:
+        es: Número de oscilaciones completas por segundo del modo n-ésimo
+        en: Number of complete oscillations per second of the n-th mode
+    domain_checks:
+      - condition: "n >= 1"
+        message:
+          es: "El armónico debe ser al menos el primero"
+          en: "Harmonic must be at least the first"
+      - condition: "v > 0"
+        message:
+          es: "La velocidad de propagación debe ser positiva"
+          en: "Propagation velocity must be positive"
+    coherence_checks:
+      - check: "f_n == n * f_1"
+        description:
+          es: La frecuencia del armónico n debe ser exactamente n veces la fundamental
+          en: Frequency of harmonic n must be exactly n times the fundamental
+    graph_implications:
+      - f_n determina la velocidad de oscilación temporal mostrada en animaciones
+      - Múltiples armónicos pueden superponerse visualmente
+    pedagogical_triggers:
+      - Creer que las frecuencias son continuas en vez de discretas
+      - Confundir la serie armónica con la escala musical cromática
+
+  - id: frecuencia_fundamental
+    title:
+      es: Frecuencia fundamental
+      en: Fundamental frequency
+    equation: "f_1 = v / (2 * L)"
+    latex: "f_1 = \\\\frac{v}{2L}"
+    rearrangements:
+      - target: f_1
+        equation: "f_1 = v / (2 * L)"
+        latex: "f_1 = \\\\frac{v}{2L}"
+      - target: v
+        equation: "v = 2 * L * f_1"
+        latex: "v = 2 L f_1"
+      - target: L
+        equation: "L = v / (2 * f_1)"
+        latex: "L = \\\\frac{v}{2f_1}"
+    category: derived
+    relation_type: definition
+    physical_meaning:
+      es: La frecuencia más baja de la serie armónica, correspondiente al modo con un único vientre entre los extremos
+      en: The lowest frequency of the harmonic series, corresponding to the mode with a single antinode between the ends
+    constraints:
+      - Caso particular de la fórmula general con n=1
+      - Extremos fijos obligatorios
+    validity:
+      es: Caso límite de la fórmula de frecuencia armónica cuando n=1; válida bajo las mismas condiciones
+      en: Limit case of harmonic frequency formula when n=1; valid under the same conditions
+    dimension_check:
+      es: "[T⁻¹] = [L T⁻¹]·[L⁻¹] → coherente dimensionalmente"
+      en: "[T⁻¹] = [L T⁻¹]·[L⁻¹] → dimensionally consistent"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - afinación de instrumentos
+      - determinación de la nota base
+      - calibración de sistemas acústicos
+    interpretation_tags:
+      - pitch_reference
+      - base_tone
+      - fundamental_mode
+    result_semantics:
+      target: f_1
+      kind: frequency_value
+      sign_meaning:
+        es: No aplica
+        en: Not applicable
+      absolute_value_meaning:
+        es: Frecuencia percibida como altura musical fundamental del tono
+        en: Frequency perceived as the fundamental musical pitch of the tone
+    domain_checks:
+      - condition: "L > 0"
+        message:
+          es: "La longitud debe ser positiva"
+          en: "Length must be positive"
+    coherence_checks:
+      - check: "f_1 < f_2"
+        description:
+          es: La fundamental debe ser menor que el segundo armónico
+          en: Fundamental must be lower than second harmonic
+    graph_implications:
+      - f_1 corresponde al patrón con un solo vientre central
+    pedagogical_triggers:
+      - Identificar erróneamente el armónico más fuerte como la fundamental
+      - Ignorar que la fundamental determina la nota percibida
+
+  - id: relacion_frecuencias
+    title:
+      es: Relación entre armónicos consecutivos
+      en: Relation between consecutive harmonics
+    equation: "f_n = n * f_1"
+    latex: "f_n = n \\\\cdot f_1"
+    rearrangements:
+      - target: f_n
+        equation: "f_n = n * f_1"
+        latex: "f_n = n \\\\cdot f_1"
+      - target: f_1
+        equation: "f_1 = f_n / n"
+        latex: "f_1 = \\\\frac{f_n}{n}"
+      - target: n
+        equation: "n = f_n / f_1"
+        latex: "n = \\\\frac{f_n}{f_1}"
+    category: conceptual
+    relation_type: geometric_interpretation
+    physical_meaning:
+      es: Las frecuencias armónicas forman una serie discreta donde cada término es múltiplo entero de la fundamental
+      en: Harmonic frequencies form a discrete series where each term is an integer multiple of the fundamental
+    constraints:
+      - Solo válida para sistemas con extremos fijos (condiciones de contorno homogéneas)
+    validity:
+      es: Propiedad matemática derivada de las condiciones de contorno; válida para cualquier cuerda ideal con extremos fijos
+      en: Mathematical property derived from boundary conditions; valid for any ideal string with fixed ends
+    dimension_check:
+      es: "[T⁻¹] = [1]·[T⁻¹] → coherente"
+      en: "[T⁻¹] = [1]·[T⁻¹] → consistent"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - identificación espectral de armónicos
+      - verificación de la calidad del sonido
+      - análisis de timbre
+    interpretation_tags:
+      - harmonic_series
+      - integer_multiples
+      - spectral_analysis
+    result_semantics:
+      target: f_n
+      kind: frequency_value
+      sign_meaning:
+        es: No aplica
+        en: Not applicable
+      absolute_value_meaning:
+        es: Posición del armónico n en la escala de frecuencias relativa a la fundamental
+        en: Position of harmonic n on the frequency scale relative to the fundamental
+    domain_checks:
+      - condition: "f_1 > 0"
+        message:
+          es: "La fundamental debe ser positiva"
+          en: "Fundamental must be positive"
+    coherence_checks:
+      - check: "n == round(n)"
+        description:
+          es: El cociente f_n/f_1 debe ser aproximadamente entero
+          en: The ratio f_n/f_1 must be approximately integer
+    graph_implications:
+      - Las líneas espectrales aparecen equiespaciadas en frecuencia
+    pedagogical_triggers:
+      - Esperar que los armónicos sigan una progresión logarítmica en lugar de lineal
+      - Confundir el número n con el intervalo musical
+
+ui:
+  default_formula: frecuencia_armonica
+  formula_order:
+    - frecuencia_armonica
+    - frecuencia_fundamental
+    - longitud_onda_armonica
+    - relacion_frecuencias
+`;export{n as default};

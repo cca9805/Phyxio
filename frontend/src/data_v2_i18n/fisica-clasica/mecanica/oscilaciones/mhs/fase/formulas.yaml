@@ -1,0 +1,135 @@
+version: 5
+topic:
+  id: fase
+  title:
+    es: Fase
+    en: Phase
+
+formulas:
+- id: fase_instante
+  title: { es: Fase instantánea, en: Instantaneous phase }
+  equation: phi_t = omega*t + phi
+  latex: \phi_t=\omega t+\phi
+  category: evolucion_de_fase
+  relation_type: definicion_operativa
+  physical_meaning:
+    es: Describe cómo evoluciona el estado angular del oscilador a partir de una pulsación constante y una fase inicial.
+    en: Describes how the oscillator angular state evolves from constant angular frequency and an initial phase.
+  constraints: [ omega > 0 ]
+  validity:
+    es: Válida para un MHS ideal con frecuencia angular constante y referencia temporal fija.
+    en: Valid for ideal SHM with constant angular frequency and a fixed temporal reference.
+  dimension_check: "[1] = [T^-1]*[T] + [1]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[omega]], [[t]] y [[phi]].", en: "Requires [[omega]], [[t]], and [[phi]]." }
+  used_in: [ posicion_con_fase, velocidad_con_fase ]
+  interpretation_tags: [ fase, estado_angular, evolucion ]
+  result_semantics:
+    target: phi_t
+  domain_checks: [ omega > 0 ]
+  coherence_checks: [ phi_t == omega*t + phi ]
+  graph_implications: "[[phi_t]] ubica el sistema en el ciclo y permite leer si el estado se acerca a equilibrio o extremo."
+  pedagogical_triggers: [ lectura_del_ciclo, estado_instantaneo ]
+  rearrangements:
+  - target: phi_t
+    equation: omega*t + phi
+  variables: [ phi_t, omega, t, phi ]
+
+- id: posicion_con_fase
+  title: { es: Posición con fase, en: Position from phase }
+  equation: x = A*cos(omega*t + phi)
+  latex: x=A\cos(\omega t+\phi)
+  category: proyeccion_del_estado
+  relation_type: relacion_estado_observable
+  physical_meaning:
+    es: Proyecta el estado de fase sobre la coordenada espacial del oscilador.
+    en: Projects the phase state onto the oscillator spatial coordinate.
+  constraints: [ A >= 0, omega > 0 ]
+  validity:
+    es: Válida para oscilaciones sinusoidales lineales con amplitud constante.
+    en: Valid for linear sinusoidal oscillations with constant amplitude.
+  dimension_check: "[L] = [L]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[A]], [[omega]], [[t]] y [[phi]].", en: "Requires [[A]], [[omega]], [[t]], and [[phi]]." }
+  used_in: [ fase_instante ]
+  interpretation_tags: [ fase, posicion, proyeccion ]
+  result_semantics:
+    target: x
+  domain_checks: [ A >= 0, omega > 0 ]
+  coherence_checks: [ abs(x) <= A ]
+  graph_implications: "[[x]] cambia con [[phi_t]] y muestra qué parte del ciclo se observa sobre el eje espacial."
+  pedagogical_triggers: [ relacion_fase_posicion, lectura_espacial ]
+  rearrangements:
+  - target: x
+    equation: A*cos(omega*t + phi)
+  variables: [ x, A, omega, t, phi ]
+
+- id: velocidad_con_fase
+  title: { es: Velocidad con fase, en: Velocity from phase }
+  equation: v = -A*omega*sin(omega*t + phi)
+  latex: v=-A\omega\sin(\omega t+\phi)
+  category: proyeccion_dinamica
+  relation_type: relacion_estado_observable
+  physical_meaning:
+    es: Expresa cómo la fase determina el sentido y la rapidez instantánea del oscilador.
+    en: Expresses how phase determines the oscillator instantaneous direction and speed.
+  constraints: [ A >= 0, omega > 0 ]
+  validity:
+    es: Válida para MHS ideal donde la evolución temporal es sinusoidal y derivable.
+    en: Valid for ideal SHM where temporal evolution is sinusoidal and differentiable.
+  dimension_check: "[L T^-1] = [L]*[T^-1]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[A]], [[omega]], [[t]] y [[phi]].", en: "Requires [[A]], [[omega]], [[t]], and [[phi]]." }
+  used_in: [ fase_instante ]
+  interpretation_tags: [ fase, velocidad, sentido ]
+  result_semantics:
+    target: v
+  domain_checks: [ A >= 0, omega > 0 ]
+  coherence_checks: [ abs(v) <= A*omega ]
+  graph_implications: "[[v]] permite distinguir si dos estados con igual [[x]] corresponden a avance o retorno dentro del ciclo."
+  pedagogical_triggers: [ relacion_fase_velocidad, sentido_del_movimiento ]
+  rearrangements:
+  - target: v
+    equation: -A*omega*sin(omega*t + phi)
+  variables: [ v, A, omega, t, phi ]
+
+- id: desfase_entre_osciladores
+  title: { es: Desfase entre osciladores, en: Phase difference between oscillators }
+  equation: delta_phi = phi2 - phi1
+  latex: \Delta\phi=\phi_2-\phi_1
+  category: comparacion_de_senales
+  relation_type: diferencia_de_estados
+  physical_meaning:
+    es: Cuantifica el adelanto o retraso angular entre dos osciladores comparados con la misma referencia temporal.
+    en: Quantifies angular lead or lag between two oscillators compared with the same time reference.
+  constraints: []
+  validity:
+    es: Válida cuando [[phi1]] y [[phi2]] se miden bajo la misma convención y referencia temporal.
+    en: Valid when [[phi1]] and [[phi2]] are measured under the same convention and time reference.
+  dimension_check: "[1] = [1] - [1]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[phi1]] y [[phi2]] con convención compatible.", en: "Requires [[phi1]] and [[phi2]] under a compatible convention." }
+  used_in: []
+  interpretation_tags: [ desfase, adelanto, retraso ]
+  result_semantics:
+    target: delta_phi
+  domain_checks: []
+  coherence_checks: [ delta_phi == phi2 - phi1 ]
+  graph_implications: "El signo de [[delta_phi]] indica qué oscilador adelanta en la lectura de fase."
+  pedagogical_triggers: [ comparacion_de_senales, sincronizacion ]
+  rearrangements:
+  - target: delta_phi
+    equation: phi2 - phi1
+  variables: [ delta_phi, phi2, phi1 ]
+
+ui:
+  default_formula: fase_instante
+  groups:
+  - title:
+      es: Estado y evolución de fase
+      en: State and phase evolution
+    items: [ fase_instante, posicion_con_fase, velocidad_con_fase ]
+  - title:
+      es: Comparación entre osciladores
+      en: Oscillator comparison
+    items: [ desfase_entre_osciladores ]

@@ -1,0 +1,146 @@
+import React from "react";
+import { createCoordGraphPage } from "@/v2/components/graphs/graphFactories.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraph(
+const uiLang = "es";
+const tt = (es, en) => (uiLang === "en" ? en : es);
+
+const graph_identity = {
+  graph_type: "Coord",
+  pregunta_principal: {
+    es: "Cuanta energia necesita absorber o ceder un cuerpo concreto para cambiar su temperatura en un grado?",
+    en: "How much energy does a specific body need to absorb or release to change its temperature by one degree?",
+  },
+  keywords: [
+    "energia",
+    "absorber",
+    "ceder",
+    "cuerpo",
+    "temperatura",
+    "grado",
+    "capacidad",
+    "calorifica",
+    "energy",
+    "absorb",
+    "release",
+    "body",
+    "temperature",
+    "degree",
+    "capacity",
+    "heat",
+  ],
+  magnitud_estrella: "C",
+  variable_control: "DeltaT",
+  formula: "Q = C * DeltaT",
+  target_interpretable: true,
+};
+
+const axes = {
+  xComponent: "XAxis",
+  yComponent: "YAxis",
+  xAxis: "DeltaT",
+  yAxis: "Q",
+};
+
+const formula = {
+  id: "definicion_capacidad_calorifica",
+  formula: "Q = C * DeltaT",
+  equation: "Q = C * DeltaT",
+};
+
+const fmt = (value, digits = 1) =>
+  Number.isFinite(value) ? value.toFixed(digits) : "-";
+
+const CapacidadCalorificaGraphsCoord = createCoordGraphPage({
+  displayName: "CapacidadCalorificaGraphsCoord",
+  title: {
+    es: "Pendiente de capacidad calorifica",
+    en: "Heat capacity slope",
+  },
+  defaultParams: {
+    C: 1200,
+    DeltaT: 20,
+  },
+  controls: [
+    { id: "C", label: { es: "Capacidad calorifica", en: "Heat capacity" }, min: 50, max: 5000, step: 50 },
+    { id: "DeltaT", label: { es: "Cambio de temperatura", en: "Temperature change" }, min: -60, max: 60, step: 1 },
+  ],
+  compute: (pNum) => {
+    const capacity = Number.isFinite(pNum.C) ? pNum.C : 1200;
+    const deltaT = Number.isFinite(pNum.DeltaT) ? pNum.DeltaT : 20;
+    const q = capacity * deltaT;
+    const data = Array.from({ length: 41 }, (_, index) => {
+      const x = -60 + index * 3;
+      return { x, y: capacity * x };
+    });
+
+    return {
+      data,
+      extra: {
+        interpretationTarget: "C",
+        interpretationValue: capacity,
+        graphState: {
+          target: "C",
+          graphType: "Coord",
+          graph_identity,
+          axes,
+          formula,
+          C: capacity,
+          DeltaT: deltaT,
+          Q: q,
+        },
+      },
+    };
+  },
+  render: ({ data, pNum, extra }) => {
+    const q = extra?.graphState?.Q ?? 0;
+    const capacity = extra?.graphState?.C ?? 1200;
+    const maxAbs = Math.max(...data.map((point) => Math.abs(point.y)), 1);
+    const width = 520;
+    const height = 260;
+    const x0 = width / 2;
+    const y0 = height / 2;
+    const points = data
+      .map((point) => {
+        const x = x0 + (point.x / 60) * (width * 0.42);
+        const y = y0 - (point.y / maxAbs) * (height * 0.42);
+        return `${x},${y}`;
+      })
+      .join(" ");
+    const currentX = x0 + ((pNum.DeltaT ?? 20) / 60) * (width * 0.42);
+    const currentY = y0 - (q / maxAbs) * (height * 0.42);
+
+    return (
+      <div className="v2-card" style={{ display: "grid", gap: 12 }}>
+        <div className="v2-card-title">{tt("Q frente a DeltaT", "Q versus DeltaT")}</div>
+        <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Capacidad calorifica Coord">
+          <rect x="0" y="0" width={width} height={height} rx="10" fill="rgba(15,23,42,0.86)" />
+          <line x1="34" y1={y0} x2={width - 28} y2={y0} stroke="rgba(255,255,255,0.28)" />
+          <line x1={x0} y1="24" x2={x0} y2={height - 28} stroke="rgba(255,255,255,0.28)" />
+          <polyline points={points} fill="none" stroke="#a78bfa" strokeWidth="3" />
+          <circle cx={currentX} cy={currentY} r="6" fill="#fbbf24" stroke="#fff7ed" strokeWidth="2" />
+          <text x={width - 32} y={y0 - 8} textAnchor="end" fill="rgba(255,255,255,0.72)" fontSize="12">
+            DeltaT
+          </text>
+          <text x={x0 + 10} y="38" fill="rgba(255,255,255,0.72)" fontSize="12">
+            Q
+          </text>
+        </svg>
+        <div style={{ display: "grid", gap: 4, fontSize: 13 }}>
+          <strong>{tt("Lectura fisica", "Physical reading")}</strong>
+          <span>
+            C = {fmt(capacity, 0)} J/K; Q = {fmt(q / 1000, 2)} kJ
+          </span>
+        </div>
+      </div>
+    );
+  },
+});
+
+CapacidadCalorificaGraphsCoord.graph_identity = graph_identity;
+CapacidadCalorificaGraphsCoord.pregunta_principal = graph_identity.pregunta_principal;
+CapacidadCalorificaGraphsCoord.magnitud_estrella = graph_identity.magnitud_estrella;
+CapacidadCalorificaGraphsCoord.axes = axes;
+CapacidadCalorificaGraphsCoord.formula = formula;
+
+export default CapacidadCalorificaGraphsCoord;

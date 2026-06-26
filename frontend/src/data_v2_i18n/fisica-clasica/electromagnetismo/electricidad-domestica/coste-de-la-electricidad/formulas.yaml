@@ -1,0 +1,306 @@
+version: 2
+topic:
+  id: coste-de-la-electricidad
+  title:
+    es: Coste de la electricidad
+    en: Cost of Electricity
+variables:
+- id: energia_por_periodo_tarifario
+  symbol: E_i
+  nombre:
+    es: energía por franja
+    en: energy per tariff band
+  unidad_si: kWh
+- id: precio_i
+  symbol: p_i
+  nombre:
+    es: precio por franja
+    en: price per tariff band
+  unidad_si: EUR/kWh
+- id: coste_de_energia
+  symbol: C_e
+  nombre:
+    es: coste de energía
+    en: energy cost
+  unidad_si: EUR
+- id: potencia_contratada
+  symbol: P_c
+  nombre:
+    es: potencia contratada
+    en: contracted power
+  unidad_si: kW
+- id: tarifa_potencia
+  symbol: t_p
+  nombre:
+    es: tarifa de potencia
+    en: power tariff
+  unidad_si: EUR/(kW·día)
+- id: dias
+  symbol: d
+  nombre:
+    es: días del periodo
+    en: billing period days
+  unidad_si: días
+- id: coste_de_potencia
+  symbol: C_p
+  nombre:
+    es: coste de potencia
+    en: power cost
+  unidad_si: EUR
+- id: costes_adicionales_y_peajes
+  symbol: C_x
+  nombre:
+    es: costes adicionales
+    en: additional charges
+  unidad_si: EUR
+- id: coste_total_de_la_factura
+  symbol: C_T
+  nombre:
+    es: coste total
+    en: total cost
+  unidad_si: EUR
+- id: coste_del_escenario_de_referencia
+  symbol: C_0
+  nombre:
+    es: coste de referencia
+    en: reference cost
+  unidad_si: EUR
+- id: coste_del_escenario_nuevo
+  symbol: C_1
+  nombre:
+    es: coste nuevo
+    en: new cost
+  unidad_si: EUR
+- id: ahorro_porcentual
+  symbol: A_%
+  nombre:
+    es: ahorro porcentual
+    en: percentage savings
+  unidad_si: '%'
+formulas:
+- id: coste_energia
+  title:
+    es: Coste de energía
+    en: Energy cost
+  equation: C_e = sum(E_i * precio_i)
+  latex: C_e = \sum_i E_i * p_i
+  rearrangements:
+  - target: coste_de_energia
+    equation: C_e = sum(E_i * precio_i)
+    latex: C_e = \sum_i E_i * p_i
+  category: fundamental
+  relation_type: physical_definition
+  physical_meaning:
+    es: El coste variable es la suma del consumo de cada franja multiplicado por su precio unitario.
+    en: The variable cost is the sum of each band's consumption multiplied by its unit price.
+  constraints: E_i >= 0, precio_i > 0
+  validity:
+    es: Válida para tarifas con discriminación horaria; con tarifa plana, se simplifica a C_e = E_total * p.
+    en: Valid for time-of-use tariffs; with flat tariff, simplifies to C_e = E_total * p.
+  dimension_check: '[C_e] = kWh * EUR/kWh = EUR'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  - graficos
+  interpretation_tags:
+  - coste
+  - energia
+  - franja
+  - tarifa
+  result_semantics:
+    target: coste_de_energia
+    kind: scalar
+    absolute_value_meaning:
+      es: El valor numerico indica la intensidad de la magnitud calculada.
+      en: The numerical value indicates the intensity of the calculated quantity.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: E_i >= 0
+    message:
+      es: El consumo por franja no puede ser negativo.
+      en: Consumption per band cannot be negative.
+  - expr: precio_i > 0
+    message:
+      es: El precio de la energía debe ser positivo.
+      en: Energy price must be positive.
+  coherence_checks: []
+  graph_implications:
+  - Relación lineal entre consumo total y coste de energía con pendiente igual al precio medio ponderado.
+  pedagogical_triggers: []
+- id: coste_potencia
+  title:
+    es: Coste de potencia
+    en: Power cost
+  equation: C_p = P_c * tarifa_potencia * dias
+  latex: C_p = P_c * t_p * d
+  rearrangements:
+  - target: coste_de_potencia
+    equation: C_p = P_c * tarifa_potencia * dias
+    latex: C_p = P_c * t_p * d
+  category: fundamental
+  relation_type: physical_definition
+  physical_meaning:
+    es: El término fijo se paga por tener capacidad de suministro disponible, independientemente del consumo real.
+    en: The fixed term is paid for having supply capacity available, regardless of actual consumption.
+  constraints: P_c > 0, tarifa_potencia > 0, dias > 0
+  validity:
+    es: Válida para contratos residenciales con tarifa regulada; en contratos de mercado libre puede variar la estructura.
+    en: Valid for residential contracts with regulated tariff; free-market contracts may have different structures.
+  dimension_check: '[C_p] = kW * EUR/(kW·día) * días = EUR'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - potencia
+  - fijo
+  - contrato
+  - capacidad
+  result_semantics:
+    target: coste_de_potencia
+    kind: scalar
+    absolute_value_meaning:
+      es: El valor numerico indica la intensidad de la magnitud calculada.
+      en: The numerical value indicates the intensity of the calculated quantity.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: P_c > 0
+    message:
+      es: La potencia contratada debe ser positiva.
+      en: Contracted power must be positive.
+  - expr: dias > 0
+    message:
+      es: El periodo de facturación debe tener al menos un día.
+      en: Billing period must have at least one day.
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+- id: coste_total
+  title:
+    es: Coste total de la factura
+    en: Total bill cost
+  equation: C_T = C_e + C_p + C_x
+  latex: C_T = C_e + C_p + C_x
+  rearrangements:
+  - target: coste_total_de_la_factura
+    equation: C_T = C_e + C_p + C_x
+    latex: C_T = C_e + C_p + C_x
+  category: fundamental
+  relation_type: additive_decomposition
+  physical_meaning:
+    es: 'La factura eléctrica es la suma de tres componentes: parte variable por consumo, parte fija por potencia y extras
+      regulatorios.'
+    en: 'The electricity bill is the sum of three components: variable part for consumption, fixed part for power, and regulatory
+      extras.'
+  constraints: C_e >= 0, C_p > 0, C_x >= 0
+  validity:
+    es: Válida para el modelo simplificado de factura residencial española; puede variar según contrato y regulación vigente.
+    en: Valid for the simplified model of a Spanish residential electricity bill; may vary by contract and current regulation.
+  dimension_check: '[C_T] = EUR + EUR + EUR = EUR'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  - graficos
+  interpretation_tags:
+  - total
+  - factura
+  - desglose
+  - suma
+  result_semantics:
+    target: coste_total_de_la_factura
+    kind: scalar
+    absolute_value_meaning:
+      es: El valor numerico indica la intensidad de la magnitud calculada.
+      en: The numerical value indicates the intensity of the calculated quantity.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: C_p > 0
+    message:
+      es: El coste de potencia debe ser positivo; revisa la potencia contratada.
+      en: Power cost must be positive; check contracted power.
+  coherence_checks:
+  - expr: C_T > C_p
+    message:
+      es: El coste total debe ser mayor que el término de potencia solo.
+      en: Total cost must be greater than the power term alone.
+  graph_implications:
+  - El coste total como función del consumo es una línea con pendiente positiva y origen no nulo (término fijo).
+  pedagogical_triggers: []
+- id: ahorro_pct
+  title:
+    es: Ahorro porcentual respecto al escenario base
+    en: Percentage savings relative to baseline scenario
+  equation: A_% = 100 * (1 - C_1 / C_0)
+  latex: A_\% = 100(1 - \frac{C_1}{C_0})
+  rearrangements:
+  - target: ahorro_porcentual
+    equation: A_% = 100 * (1 - C_1 / C_0)
+    latex: A_\% = 100(1 - \frac{C_1}{C_0})
+  category: analysis
+  relation_type: comparative_indicator
+  physical_meaning:
+    es: Cuantifica en porcentaje cuánto se ha reducido el coste total respecto a la situación de referencia comparable.
+    en: Quantifies as a percentage how much the total cost has been reduced relative to the comparable reference situation.
+  constraints: C_0 > 0
+  validity:
+    es: Solo válida si el escenario base y el nuevo son comparables en servicio, condiciones y periodo.
+    en: Only valid if the baseline and new scenarios are comparable in service, conditions, and period.
+  dimension_check: '[A_%] = EUR/EUR * 100 = % (adimensional)'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  - graficos
+  interpretation_tags:
+  - ahorro
+  - porcentaje
+  - comparativa
+  - baseline
+  result_semantics:
+    target: ahorro_porcentual
+    kind: scalar
+    absolute_value_meaning:
+      es: El valor numerico indica la intensidad de la magnitud calculada.
+      en: The numerical value indicates the intensity of the calculated quantity.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: C_0 > 0
+    message:
+      es: El coste de referencia debe ser positivo para calcular el ahorro porcentual.
+      en: Reference cost must be positive to calculate percentage savings.
+  coherence_checks:
+  - expr: C_1 >= 0
+    message:
+      es: El coste nuevo no puede ser negativo.
+      en: New cost cannot be negative.
+  graph_implications: []
+  pedagogical_triggers: []
+ui:
+  default_formula: coste_total
+  groups:
+  - title:
+      es: Ecuaciones fundamentales
+      en: Fundamental equations
+    items:
+    - coste_energia
+    - coste_potencia
+    - coste_total
+    - ahorro_pct

@@ -1,0 +1,82 @@
+const n=`id: mcu
+nombre:
+  es: Mcu
+  en: Uniform Circular Motion
+area: fisica-clasica
+bloque: mecanica
+subbloque: cinematica
+parent_id: movimiento-circular
+ruta_relativa: fisica-clasica/mecanica/cinematica/movimiento-circular/mcu
+orden: 211210
+type: leaf
+niveles:
+  es:
+  - ESO
+  - BACHILLERATO
+  en:
+  - Secondary
+  - Upper Secondary
+icon: ⏲️
+descripcion: Modelo cinemático de trayectoria circular con velocidad angular constante
+  y aceleración únicamente centrípeta.
+description_en: Kinematic model of a circular path with constant angular velocity
+  and exclusively centripetal acceleration.
+tags:
+  es:
+  - cinematica
+  - mcu
+  - velocidad-angular
+  - periodo
+  - frecuencia
+  - aceleracion-centripeta
+  en:
+  - kinematics
+  - ucm
+  - angular-velocity
+  - period
+  - frequency
+  - centripetal-acceleration
+prerequisitos:
+- fisica-clasica/mecanica/cinematica/movimiento-rectilineo/mru
+- matematicas/trigonometria-y-geometria/funciones-trigonometricas
+- fisica-clasica/mecanica/cinematica/rotacion/magnitudes-angulares
+- fisica-clasica/mecanica/cinematica/rotacion/relacion-lineal-angular
+- matematicas/derivadas-en-fisica
+graficos:
+- Coord
+- Svg
+physical_role:
+  es: modelo cinemático de movimiento
+  en: kinematic motion model
+dificultad: 3
+tiempo_estimado_min: 55
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+pregunta_fisica_central:
+  es: ¿Cómo se relacionan la velocidad angular, el período y la aceleración centrípeta
+    en un movimiento circular uniforme?
+  en: How are angular speed, period, and centripetal acceleration related in uniform
+    circular motion?
+representacion_dominante: Coord
+magnitud_dominante: ac
+`;export{n as default};

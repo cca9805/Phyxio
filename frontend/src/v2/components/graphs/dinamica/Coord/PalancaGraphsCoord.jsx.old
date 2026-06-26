@@ -1,0 +1,155 @@
+import React, { useMemo, useCallback } from "react";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ReferenceDot,
+  ReferenceLine,
+} from "recharts";
+import MathInline from "@/v2/components/shared/MathInline";
+import { useExperimentParams } from "@/v2/components/graphs_shared/experiment/useExperimentParams";
+
+const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+const toNum = (v, fb) => {
+  const n = typeof v === "number" ? v : Number(String(v ?? "").replace(",", "."));
+  return Number.isFinite(n) ? n : fb;
+};
+
+const pickNum = (obj, keys, fb) => {
+  for (const k of keys) {
+    const v = obj?.[k];
+    if (v === undefined || v === null || v === "") continue;
+    const n = toNum(v, NaN);
+    if (Number.isFinite(n)) return n;
+  }
+  return fb;
+};
+
+function Pill({ active, children, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      style={{
+        padding: "8px 10px",
+        borderRadius: 14,
+        border: "1px solid rgba(255,255,255,0.14)",
+        background: active ? "rgba(99,102,241,0.25)" : "rgba(0,0,0,0.35)",
+        color: "rgba(255,255,255,0.90)",
+        fontWeight: 900,
+        cursor: "pointer",
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+const graphIdentity = {
+  pregunta_principal: {
+    es: "¿Cómo se utiliza el equilibrio de momentos para amplificar la fuerza y el desplazamiento en una palanca?",
+    en: "How is torque equilibrium used to amplify force and displacement in a lever?",
+  },
+};
+
+export default function PalancaGraphsCoord(props) {
+  void graphIdentity;
+  const uiLang = props.lang === "en" ? "en" : "es";
+  const decSep = uiLang === "en" ? "." : ",";
+  const fmt = (n, d = 3) => (Number.isFinite(n) ? n.toFixed(d).replace(".", decSep) : "-");
+  
+  const tt = (es, en) => (uiLang === "en" ? en : es);
+
+  const p = props.params ?? props.sharedParams ?? {};
+
+  const schema = useMemo(
+    () => [
+      { key: "mode", aliases: ["vista"], default: p.mode || "ratio" },
+      { key: "R", aliases: ["resistencia"], default: pickNum(p, ["R", "resistencia"], 300) },
+      { key: "bP", aliases: ["b_P", "brazoP"], default: pickNum(p, ["bP", "b_P", "brazoP"], 4) },
+      { key: "bR", aliases: ["b_R", "brazoR"], default: pickNum(p, ["bR", "b_R", "brazoR"], 1) },
+      { key: "eta", aliases: ["rendimiento"], default: pickNum(p, ["eta", "rendimiento"], 1) },
+      { key: "showP", aliases: ["mostrarP"], default: p.showP ?? true },
+      { key: "showVM", aliases: ["mostrarVM"], default: p.showVM ?? true },
+    ],
+    [p.mode, p.R, p.bP, p.bR, p.eta, p.showP, p.showVM]
+  );
+
+  const exp = useExperimentParams({ params: p, schema, modeDefault: "experiment" });
+  const ep = exp.effectiveParams;
+
+  const mode = ep.mode === "load" ? "load" : "ratio";
+  const R = clamp(toNum(ep.R, 300), 0, 2000);
+  const bP = clamp(toNum(ep.bP, 4), 0.1, 20);
+  const bR = clamp(toNum(ep.bR, 1), 0.1, 20);
+  const eta = clamp(toNum(ep.eta, 1), 0.1, 1);
+  const showP = !!ep.showP;
+  const showVM = !!ep.showVM;
+
+  const VM_ideal = bP / bR;
+  const VM_real = VM_ideal * eta;
+  const P_real = VM_real > 0 ? R / VM_real : 0;
+
+  const data = useMemo(() => {
+    const out = [];
+    if (mode === "load") {
+      for (let rVal = 0; rVal <= 2000; rVal += 50) {
+        out.push({ x: rVal, P: VM_real > 0 ? rVal / VM_real : 0, VM: VM_real });
+      }
+    } else {
+      for (let brVal = 0.1; brVal <= 10; brVal += 0.2) {
+        const vm = (bP / brVal) * eta;
+        out.push({ x: brVal, VM: vm, P: vm > 0 ? R / vm : 0 });
+      }
+    }
+    return out;
+  }, [mode, bP, eta, VM_real, R]);
+
+  const setValue = useCallback((k, v) => { exp.startExperiment(); exp.setValue(k, v); }, [exp]);
+
+  const xNow = mode === "load" ? R : bR;
+  const yPoint = mode === "load" ? (showP ? P_real : VM_real) : (showVM ? VM_real : P_real);
+
+  return (
+    <div style={{ display: "grid", gap: 12 }}>
+      <div className="v2-card" style={{ padding: 12 }}>
+        <div className="v2-card-title">{tt("Análisis de Palanca (Coord)", "Lever Analysis (Coord)")}</div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 10 }}>
+          <Pill active={mode === "ratio"} onClick={() => setValue("mode", "ratio")}>VM vs b_R</Pill>
+          <Pill active={mode === "load"} onClick={() => setValue("mode", "load")}>P vs R</Pill>
+          <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+            <span style={{ fontSize: 13, opacity: 0.85 }}>b_P</span>
+            <input className="form-control" style={{ width: 70 }} value={fmt(bP, 2).replace(",", ".")} onChange={(e) => setValue("bP", e.target.value)} />
+          </div>
+          <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+            <span style={{ fontSize: 13, opacity: 0.85 }}>η</span>
+            <input className="form-control" style={{ width: 70 }} value={fmt(eta, 2).replace(",", ".")} onChange={(e) => setValue("eta", e.target.value)} />
+          </div>
+        </div>
+        <div className="v2-panel" style={{ marginTop: 12, padding: 10 }}>
+          VM Real = <b>{fmt(VM_real, 2)}</b> | P = <b>{fmt(P_real, 1)}</b> N
+        </div>
+      </div>
+
+      <div className="v2-card" style={{ padding: 12 }}>
+        <div style={{ width: "100%", height: 300 }}>
+          <ResponsiveContainer>
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="x" label={{ value: mode === "load" ? "R (N)" : "b_R (m)", position: "insideBottom", offset: -5 }} />
+              <YAxis />
+              <Tooltip formatter={(v) => fmt(v, 2)} />
+              {showVM && <Line type="monotone" dataKey="VM" stroke="#3b82f6" dot={false} strokeWidth={2} />}
+              {showP && mode === "load" && <Line type="monotone" dataKey="P" stroke="#f97316" dot={false} strokeWidth={2} />}
+              <ReferenceDot x={xNow} y={yPoint} r={6} fill="#22c55e" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,807 @@
+version: 1
+formulas:
+- id: mcua_omega_t
+  title:
+    es: Velocidad angular en función del tiempo
+    en: Angular velocity as function of time
+  equation: omega = omega_0 + alpha*t
+  latex: \omega = \omega_0 + \alpha t
+  rearrangements:
+  - target: omega
+    equation: omega = omega_0 + alpha*t
+    latex: \omega = \omega_0 + \alpha t
+    constraints: []
+  - target: omega_0
+    equation: omega_0 = omega - alpha*t
+    latex: \omega_0 = \omega - \alpha t
+    constraints: []
+  - target: alpha
+    equation: alpha = (omega - omega_0)/t
+    latex: \alpha = \frac{\omega - \omega_0}{t}
+    constraints: []
+  - target: t
+    equation: t = (omega - omega_0)/alpha
+    latex: t = \frac{\omega - \omega_0}{\alpha}
+    constraints: []
+  category: fundamental
+  relation_type: differential_relation
+  physical_meaning:
+    es: Integra una aceleración angular constante en una velocidad angular que crece o decrece linealmente.
+    en: Integrates constant angular acceleration into a linearly increasing or decreasing angular velocity.
+  constraints:
+  - expr: t != 0
+    message:
+      es: t no puede ser cero si despejas alpha o omega_0.
+      en: t cannot be zero when solving for alpha or omega_0.
+  validity:
+    es: Válida en intervalos con aceleración angular constante aproximada.
+    en: Valid in intervals where angular acceleration is approximately constant.
+  dimension_check: T^-1 = T^-1 + (T^-2)(T)
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - mcua
+  result_semantics:
+    target: omega
+    meaning: Resulta util para interpretar omega en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mcua_theta_t
+  title:
+    es: Posición angular en función del tiempo
+    en: Angular position as function of time
+  equation: theta = theta_0 + omega_0*t + 0.5*alpha*t^2
+  latex: \theta = \theta_0 + \omega_0 t + \frac{1}{2}\alpha t^2
+  rearrangements:
+  - target: theta
+    equation: theta = theta_0 + omega_0*t + 0.5*alpha*t^2
+    latex: \theta = \theta_0 + \omega_0 t + \frac{1}{2}\alpha t^2
+    constraints: []
+  - target: theta_0
+    equation: theta_0 = theta - omega_0*t - 0.5*alpha*t^2
+    latex: \theta_0 = \theta - \omega_0 t - \frac{1}{2}\alpha t^2
+    constraints: []
+  - target: omega_0
+    equation: omega_0 = (theta - theta_0 - 0.5*alpha*t^2)/t
+    latex: \omega_0 = \frac{\theta - \theta_0 - \frac{1}{2}\alpha t^2}{t}
+    constraints: []
+  - target: alpha
+    equation: alpha = 2*(theta - theta_0 - omega_0*t)/(t^2)
+    latex: \alpha = \frac{2(\theta - \theta_0 - \omega_0 t)}{t^2}
+    constraints: []
+  - target: t
+    equation: t = sqrt(2*(theta - theta_0)/alpha + (omega_0^2)/(alpha^2)) - (omega_0/alpha)
+    latex: t = \sqrt{\frac{2(\theta - \theta_0)}{\alpha} + \left(\frac{\omega_0}{\alpha}\right)^2} - \frac{\omega_0}{\alpha}
+    constraints: []
+  category: fundamental
+  relation_type: differential_relation
+  physical_meaning:
+    es: 'Integra dos contribuciones: la parte proporcional al estado inicial y el término cuadrático de la aceleración.'
+    en: 'Integrates two contributions: the initial-state term and the quadratic acceleration contribution.'
+  constraints:
+  - expr: t != 0
+    message:
+      es: t no puede ser cero si despejas omega_0 o alpha.
+      en: t cannot be zero when solving for omega_0 or alpha.
+  validity:
+    es: Válida cuando \(\alpha\) y \(R\) son aproximadamente constantes.
+    en: Valid when \(\alpha\) and \(R\) are approximately constant.
+  dimension_check: 1 = 1 + (T^-1)(T) + (T^-2)(T^2)
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - mcua
+  result_semantics:
+    target: theta
+    meaning: Resulta util para interpretar theta en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mcua_sin_t
+  title:
+    es: Relación sin tiempo entre velocidades y desplazamiento angular
+    en: Time-free relation between angular speeds and angular displacement
+  equation: omega^2 = omega_0^2 + 2*alpha*(theta - theta_0)
+  latex: \omega^2 = \omega_0^2 + 2\alpha\left(\theta - \theta_0\right)
+  rearrangements:
+  - target: omega
+    equation: omega = sqrt(omega_0^2 + 2*alpha*(theta - theta_0))
+    latex: \omega = \sqrt{\omega_0^2 + 2\alpha\left(\theta - \theta_0\right)}
+    constraints: []
+  - target: omega_0
+    equation: omega_0 = sqrt(omega^2 - 2*alpha*(theta - theta_0))
+    latex: \omega_0 = \sqrt{\omega^2 - 2\alpha\left(\theta - \theta_0\right)}
+    constraints: []
+  - target: alpha
+    equation: alpha = (omega^2 - omega_0^2)/(2*(theta - theta_0))
+    latex: \alpha = \frac{\omega^2 - \omega_0^2}{2\left(\theta - \theta_0\right)}
+    constraints: []
+  - target: delta_theta
+    equation: delta_theta = (omega^2 - omega_0^2)/(2*alpha)
+    latex: \Delta\theta = \frac{\omega^2 - \omega_0^2}{2\alpha}
+    constraints: []
+  category: derived
+  relation_type: structural
+  physical_meaning:
+    es: Relaciona estados angulares inicial y final sin necesidad del tiempo explícito.
+    en: Relates initial and final angular states without explicit time.
+  constraints:
+  - expr: alpha != 0
+    message:
+      es: alpha no puede ser cero para este despeje.
+      en: alpha cannot be zero for this rearrangement.
+  - expr: theta != theta_0
+    message:
+      es: theta y theta_0 no pueden ser idénticos si despejas alpha.
+      en: theta and theta_0 must not be equal when solving for alpha.
+  validity:
+    es: Válida cuando el movimiento presenta \(\alpha\) constante dentro del intervalo.
+    en: Valid when the motion has constant alpha over the interval.
+  dimension_check: (T^-1)^2 = (T^-1)^2 + (T^-2)(1)
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - mcua
+  result_semantics:
+    target: omega
+    meaning: Resulta util para interpretar omega en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mcua_dtheta
+  title:
+    es: Desplazamiento angular
+    en: Angular displacement
+  equation: delta_theta = theta - theta_0
+  latex: \Delta\theta = \theta - \theta_0
+  rearrangements:
+  - target: delta_theta
+    equation: delta_theta = theta - theta_0
+    latex: \Delta\theta = \theta - \theta_0
+    constraints: []
+  - target: theta
+    equation: theta = delta_theta + theta_0
+    latex: \theta = \Delta\theta + \theta_0
+    constraints: []
+  - target: theta_0
+    equation: theta_0 = theta - delta_theta
+    latex: \theta_0 = \theta - \Delta\theta
+    constraints: []
+  category: derived
+  relation_type: geometric_interpretation
+  physical_meaning:
+    es: Convierte dos estados angulares en desplazamiento angular del movimiento circular.
+    en: Converts two angular states into displacement during a time interval.
+  constraints:
+  - expr: 1
+    message:
+      es: Relación siempre válida por definición del desplazamiento angular.
+      en: Relation is always valid by definition of angular displacement.
+  validity:
+    es: Válida siempre para el movimiento circular.
+    en: Always valid for circular motion.
+  dimension_check: 1 = 1 - 1
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - mcua
+  result_semantics:
+    target: delta_theta
+    meaning: Resulta util para interpretar delta_theta en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mcua_v_omega
+  title:
+    es: Velocidad lineal y velocidad angular
+    en: Linear speed and angular speed
+  equation: v = omega*R
+  latex: v = \omega R
+  rearrangements:
+  - target: v
+    equation: v = omega*R
+    latex: v = \omega R
+    constraints: []
+  - target: omega
+    equation: omega = v/R
+    latex: \omega = \frac{v}{R}
+    constraints: []
+  - target: R
+    equation: R = v/omega
+    latex: R = \frac{v}{\omega}
+    constraints: []
+  category: derived
+  relation_type: geometric_interpretation
+  physical_meaning:
+    es: Conecta la tasa angular del giro con rapidez tangencial observable.
+    en: Connects angular rate with observable tangential speed.
+  constraints:
+  - expr: R > 0
+    message:
+      es: R debe ser positivo.
+      en: R must be positive.
+  - expr: omega != 0
+    message:
+      es: omega no puede ser cero si despejas el radio por esta vía.
+      en: omega cannot be zero when solving radius using this equation.
+  validity:
+    es: Válida para cualquier movimiento circular con radio constante.
+    en: Valid for circular motion with constant radius.
+  dimension_check: L T^-1 = (T^-1)L
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - mcua
+  result_semantics:
+    target: v
+    meaning: Resulta util para interpretar v en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mcua_at
+  title:
+    es: Aceleración tangencial
+    en: Tangential acceleration
+  equation: a_t = alpha*R
+  latex: a_t = \alpha R
+  rearrangements:
+  - target: a_t
+    equation: a_t = alpha*R
+    latex: a_t = \alpha R
+    constraints: []
+  - target: alpha
+    equation: alpha = a_t/R
+    latex: \alpha = \frac{a_t}{R}
+    constraints: []
+  - target: R
+    equation: R = a_t/alpha
+    latex: R = \frac{a_t}{\alpha}
+    constraints: []
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Relaciona aceleración angular con variación de magnitud lineal en el borde.
+    en: Links angular acceleration with linear speed variation at the radius.
+  constraints:
+  - expr: R > 0
+    message:
+      es: R debe ser positivo.
+      en: R must be positive.
+  - expr: alpha != 0
+    message:
+      es: alpha no puede ser cero si despejas R con esta expresión.
+      en: alpha cannot be zero if solving for R in this expression.
+  validity:
+    es: Válida en MCUA y tramos con radio aproximadamente constante.
+    en: Valid in MCUA and segments with approximately constant radius.
+  dimension_check: L T^-2 = (T^-2)L
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - mcua
+  result_semantics:
+    target: a_t
+    meaning: Resulta util para interpretar a_t en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mcua_ac
+  title:
+    es: Aceleración centrípeta
+    en: Centripetal acceleration
+  equation: a_c = omega^2*R
+  latex: a_c = \omega^2 R
+  rearrangements:
+  - target: a_c
+    equation: a_c = omega^2*R
+    latex: a_c = \omega^2 R
+    constraints: []
+  - target: omega
+    equation: omega = sqrt(a_c/R)
+    latex: \omega = \sqrt{\frac{a_c}{R}}
+    constraints: []
+  - target: R
+    equation: R = a_c/(omega^2)
+    latex: R = \frac{a_c}{\omega^2}
+    constraints: []
+  category: derived
+  relation_type: structural
+  physical_meaning:
+    es: Expresa la aceleración centrípeta necesaria para sostener la curvatura del movimiento.
+    en: Expresses the centripetal acceleration needed to sustain curved motion.
+  constraints:
+  - expr: R > 0
+    message:
+      es: R debe ser positiva.
+      en: R must be positive.
+  - expr: a_c >= 0
+    message:
+      es: a_c debe ser no negativa.
+      en: a_c must be non-negative.
+  validity:
+    es: Válida cuando el centro y la trayectoria circular están definidos.
+    en: Valid when center and circular trajectory are defined.
+  dimension_check: L T^-2 = (T^-1)^2 L
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - mcua
+  result_semantics:
+    target: a_c
+    meaning: Resulta util para interpretar a_c en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mcua_delta_t_theta
+  title:
+    es: Velocidad angular media
+    en: Average angular speed
+  equation: delta_theta = omega_med * delta_t
+  latex: \Delta\theta = \omega_{\mathrm{med}} \Delta t
+  rearrangements:
+  - target: omega_med
+    equation: omega_med = delta_theta/delta_t
+    latex: \omega_{\mathrm{med}} = \frac{\Delta\theta}{\Delta t}
+    constraints: []
+  - target: delta_theta
+    equation: delta_theta = omega_med*delta_t
+    latex: \Delta\theta = \omega_{\mathrm{med}} \Delta t
+    constraints: []
+  - target: delta_t
+    equation: delta_t = delta_theta/omega_med
+    latex: \Delta t = \frac{\Delta\theta}{\omega_{\mathrm{med}}}
+    constraints: []
+  category: derived
+  relation_type: average_relation
+  physical_meaning:
+    es: Relación de promedio angular útil cuando se conoce cambio global sobre un intervalo.
+    en: Average angular-speed relation useful when only interval change is known.
+  constraints:
+  - expr: delta_t > 0
+    message:
+      es: El intervalo de tiempo debe ser positivo.
+      en: The time interval must be positive.
+  - expr: omega_med != 0
+    message:
+      es: omega_med no puede ser cero si despejas delta_t.
+      en: omega_med cannot be zero when solving for delta_t.
+  validity:
+    es: Útil para intervalos completos o medición promedio; no reemplaza detalles instantáneos.
+    en: Useful for complete intervals or averaged data; does not replace instantaneous description.
+  dimension_check: 1 = (T^-1)(T)
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - mcua
+  result_semantics:
+    target: omega_med
+    meaning: Resulta util para interpretar omega_med en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mcua_a_total
+  title:
+    es: Aceleracion total en MCUA
+    en: Total acceleration in UACM
+  equation: a = sqrt(a_t^2 + a_c^2)
+  latex: a = \sqrt{a_t^2 + a_c^2}
+  rearrangements:
+  - target: a
+    equation: a = sqrt(a_t^2 + a_c^2)
+    latex: a = \sqrt{a_t^2 + a_c^2}
+    constraints: []
+  category: derived
+  relation_type: geometric_interpretation
+  physical_meaning:
+    es: En MCUA el vector aceleracion tiene dos componentes perpendiculares entre si. La tangencial at cambia la rapidez y la centripeta ac cambia la direccion. El modulo total se obtiene por Pitagoras.
+    en: In UACM the acceleration vector has two mutually perpendicular components. The tangential at changes speed and the centripetal ac changes direction. The total magnitude follows from Pythagoras.
+  constraints:
+  - at = alpha * R
+  - ac = omega^2 * R
+  validity:
+    es: Valida en cualquier instante del MCUA para un punto del circulo de radio R.
+    en: Valid at any instant of UACM for a point on the circle of radius R.
+  dimension_check: L T^-2 = sqrt((L T^-2)^2 + (L T^-2)^2)
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - mcua
+  result_semantics:
+    target: a
+    meaning: Resulta util para calcular la aceleracion total del movil en cualquier instante del MCUA.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La aceleracion total es maxima al inicio del movimiento si at domina y minima cuando el movil es casi circular.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mcua_omega_med
+  title:
+    es: Definición de velocidad angular media
+    en: Average angular velocity definition
+  equation: omega_med = (omega + omega_0)/2
+  latex: \omega_{\text{med}} = \frac{\omega + \omega_0}{2}
+  rearrangements:
+  - target: omega_med
+    equation: omega_med = (omega + omega_0)/2
+    latex: \omega_{\text{med}} = \frac{\omega + \omega_0}{2}
+    constraints: []
+  - target: omega
+    equation: omega = 2*omega_med - omega_0
+    latex: \omega = 2\omega_{\text{med}} - \omega_0
+    constraints: []
+  - target: omega_0
+    equation: omega_0 = 2*omega_med - omega
+    latex: \omega_0 = 2\omega_{\text{med}} - \omega
+    constraints: []
+  category: fundamental
+  relation_type: average_relation
+  physical_meaning:
+    es: En MCUA, la velocidad media es exactamente el promedio de las velocidades extremas del intervalo.
+    en: In UACM, the average velocity is exactly the average of the extreme velocities of the interval.
+  constraints: []
+  validity:
+    es: Válida exclusivamente para movimientos con aceleración angular constante.
+    en: Valid exclusively for motions with constant angular acceleration.
+  dimension_check: T^-1 = (T^-1 + T^-1)
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - mcua
+  result_semantics:
+    target: omega_med
+    meaning: Útil para simplificar el cálculo de desplazamientos angulares.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mcua_longitud_arco
+  title:
+    es: Longitud de arco en MCUA
+    en: Arc length in UACM
+  equation: s = delta_theta*R
+  latex: s = \Delta\theta R
+  rearrangements:
+  - target: s
+    equation: s = delta_theta*R
+    latex: s = \Delta\theta R
+    constraints: []
+  - target: delta_theta
+    equation: delta_theta = s/R
+    latex: \Delta\theta = \frac{s}{R}
+    constraints: []
+  - target: R
+    equation: R = s/delta_theta
+    latex: R = \frac{s}{\Delta\theta}
+    constraints: []
+  category: derived
+  relation_type: geometric_interpretation
+  physical_meaning:
+    es: Traduce el ángulo barrido en metros reales recorridos sobre la circunferencia.
+    en: Translates the swept angle into real meters traveled on the circumference.
+  constraints:
+  - expr: R > 0
+    message:
+      es: El radio debe ser positivo.
+      en: The radius must be positive.
+  - expr: delta_theta != 0
+    message:
+      es: El desplazamiento debe ser no nulo para despejar el radio.
+      en: Displacement must be non-zero to solve for the radius.
+  validity:
+    es: Válida para cualquier tramo de trayectoria circular.
+    en: Valid for any segment of circular trajectory.
+  dimension_check: L = (1)L
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - mcua
+  result_semantics:
+    target: s
+    meaning: Representa la distancia física lineal "desenrollada".
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mcua_vueltas
+  title:
+    es: Número de vueltas en MCUA
+    en: Number of revolutions in UACM
+  equation: N = delta_theta/(2*pi)
+  latex: N = \frac{\Delta\theta}{2\pi}
+  rearrangements:
+  - target: N
+    equation: N = delta_theta/(2*pi)
+    latex: N = \frac{\Delta\theta}{2\pi}
+    constraints: []
+  - target: delta_theta
+    equation: delta_theta = N*2*pi
+    latex: \Delta\theta = 2\pi N
+    constraints: []
+  category: basic
+  relation_type: geometric_interpretation
+  physical_meaning:
+    es: Convierte el ángulo barrido en radianes a una unidad más intuitiva como es el conteo de vueltas.
+    en: Converts the swept angle in radians to a more intuitive unit such as turn counting.
+  constraints: []
+  validity:
+    es: Siempre válida para rotaciones cíclicas.
+    en: Always valid for cyclic rotations.
+  dimension_check: 1 = 1 / 1
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - mcua
+  result_semantics:
+    target: N
+    meaning: Expresa el resultado en ciclos completos o parciales.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mcua_delta_omega
+  title:
+    es: Variación de velocidad angular
+    en: Angular velocity variation
+  equation: omega - omega_0 = alpha*delta_t
+  latex: \omega - \omega_0 = \alpha \Delta t
+  rearrangements:
+  - target: omega
+    equation: omega = omega_0 + alpha*delta_t
+    latex: \omega = \omega_0 + \alpha \Delta t
+    constraints: []
+  - target: alpha
+    equation: alpha = (omega - omega_0)/delta_t
+    latex: \alpha = \frac{\omega - \omega_0}{\Delta t}
+    constraints: []
+  - target: delta_t
+    equation: delta_t = (omega - omega_0)/alpha
+    latex: \Delta t = \frac{\omega - \omega_0}{\alpha}
+    constraints: []
+  category: basic
+  relation_type: differential_relation
+  physical_meaning:
+    es: Describe el incremento de rapidez de giro como producto de la aceleración por el tiempo.
+    en: Describes the rotation speed increase as the product of acceleration and time.
+  constraints:
+  - expr: delta_t > 0
+    message:
+      es: La duración debe ser positiva.
+      en: Duration must be positive.
+  validity:
+    es: Válida para cualquier intervalo con aceleración constante.
+    en: Valid for any interval with constant acceleration.
+  dimension_check: T^-1 = (T^-2)T
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  interpretation_tags:
+  - mcua
+  result_semantics:
+    target: omega
+    meaning: Velocidad angular final tras el intervalo.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.

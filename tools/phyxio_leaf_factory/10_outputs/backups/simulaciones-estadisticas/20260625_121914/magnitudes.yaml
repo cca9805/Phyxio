@@ -1,0 +1,597 @@
+version: 5.0.0
+leaf: simulaciones-estadisticas
+magnitudes:
+- id: numero_muestras
+  symbol: N
+  nombre:
+    es: número de muestras
+    en: number of samples
+  descripcion:
+    es: Cantidad de estados, configuraciones o medidas usadas en la estimación estadística.
+    en: Number of states, configurations, or measurements used in the statistical estimate.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: estadistica
+  physical_role: variable_independiente
+  used_in:
+  - media_muestral_observable
+  - error_estadistico_media
+  common_mistake: Confundir muchas muestras con exactitud absoluta o con independencia garantizada.
+  typical_range: 10^2 a 10^8 muestras según coste computacional
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: N es un conteo y no puede tener signo.
+      en: N is a count and cannot have a sign.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Con N igual a cero no existe estimación estadística.
+      en: With N equal to zero there is no statistical estimate.
+  value_nature:
+    kind: entero_positivo
+    nonnegative_only: true
+    expected_interval: N>0
+  interpretation_role:
+    primary_for:
+    - convergencia
+    - incertidumbre
+    secondary_for:
+    - coste_computacional
+  graph_binding:
+    channels:
+    - xAxis
+    preferred_axis: x
+    graph_refs:
+    - simulaciones-estadisticas-Coord
+  pedagogical_notes:
+    es: Aumentar N mejora la estimación lentamente, con ley de raíz cuadrada.
+    en: Increasing N improves the estimate slowly, with a square-root law.
+- id: observable
+  symbol: X
+  nombre:
+    es: observable
+    en: observable
+  descripcion:
+    es: Magnitud física medida o calculada en cada muestra de la simulación.
+    en: Physical quantity measured or computed in each simulation sample.
+  unidad_si: depende del observable
+  dimension: variable
+  is_vector: false
+  components: []
+  category: fisica_estadistica
+  physical_role: cantidad_medida
+  used_in:
+  - media_muestral_observable
+  common_mistake: Olvidar que sus unidades y dimensión dependen de qué se mida.
+  typical_range: dependiente del sistema
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del observable concreto.
+      en: The sign depends on the specific observable.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede representar ausencia, referencia o cancelación según el observable.
+      en: Zero may represent absence, reference, or cancellation depending on the observable.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: depende del observable
+  interpretation_role:
+    primary_for:
+    - lectura_fisica
+    secondary_for:
+    - promedios
+  graph_binding:
+    channels:
+    - none
+    preferred_axis: none
+    graph_refs: []
+  pedagogical_notes:
+    es: Antes de promediar, hay que saber qué representa físicamente cada muestra.
+    en: Before averaging, one must know what each sample physically represents.
+- id: suma_observable
+  symbol: sum_X
+  nombre:
+    es: suma de observables
+    en: sum of observables
+  descripcion:
+    es: Suma acumulada de los valores del observable en las muestras.
+    en: Accumulated sum of the observable values over samples.
+  unidad_si: depende del observable
+  dimension: variable
+  is_vector: false
+  components: []
+  category: estadistica
+  physical_role: acumulador
+  used_in:
+  - media_muestral_observable
+  common_mistake: Interpretar la suma acumulada como una magnitud intensiva.
+  typical_range: proporcional a N
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Puede tener signo si el observable lo tiene.
+      en: It may have a sign if the observable has one.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede anularse por valores nulos o por cancelaciones.
+      en: It may vanish due to zero values or cancellations.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: dependiente de N y X
+  interpretation_role:
+    primary_for:
+    - calculo_media
+    secondary_for:
+    - control_numerico
+  graph_binding:
+    channels:
+    - none
+    preferred_axis: none
+    graph_refs: []
+  pedagogical_notes:
+    es: La suma crece con el número de muestras; la media divide ese crecimiento por N.
+    en: The sum grows with sample number; the mean divides that growth by N.
+- id: media_muestral
+  symbol: X_bar
+  nombre:
+    es: media muestral
+    en: sample mean
+  descripcion:
+    es: Estimación finita del valor medio del observable.
+    en: Finite-sample estimate of the observable average.
+  unidad_si: depende del observable
+  dimension: variable
+  is_vector: false
+  components: []
+  category: estadistica
+  physical_role: resultado_estimado
+  used_in:
+  - media_muestral_observable
+  common_mistake: Tratar una media con pocas muestras como valor exacto.
+  typical_range: cercano al promedio físico esperado si N es grande
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo hereda la interpretación del observable.
+      en: The sign inherits the observable's interpretation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede indicar promedio nulo o cancelación estadística.
+      en: It may indicate a zero average or statistical cancellation.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: depende del observable
+  interpretation_role:
+    primary_for:
+    - estimacion
+    secondary_for:
+    - comparacion_modelo
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: none
+    graph_refs:
+    - simulaciones-estadisticas-Coord
+  pedagogical_notes:
+    es: Debe leerse junto con su error estadístico, no aislada.
+    en: It should be read together with its statistical error, not in isolation.
+- id: desviacion_estandar
+  symbol: s_X
+  nombre:
+    es: desviación estándar muestral
+    en: sample standard deviation
+  descripcion:
+    es: Medida de la dispersión de las muestras del observable.
+    en: Measure of the dispersion of observable samples.
+  unidad_si: depende del observable
+  dimension: variable
+  is_vector: false
+  components: []
+  category: estadistica
+  physical_role: dispersion
+  used_in:
+  - error_estadistico_media
+  common_mistake: Confundir dispersión de datos con error de la media.
+  typical_range: no negativa; escala con las fluctuaciones del sistema
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La desviación estándar es siempre no negativa.
+      en: Standard deviation is always nonnegative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero significa muestras idénticas para ese observable.
+      en: Zero means identical samples for that observable.
+  value_nature:
+    kind: real_no_negativo
+    nonnegative_only: true
+    expected_interval: s_X>=0
+  interpretation_role:
+    primary_for:
+    - fluctuaciones
+    secondary_for:
+    - incertidumbre
+  graph_binding:
+    channels:
+    - constant
+    preferred_axis: none
+    graph_refs:
+    - simulaciones-estadisticas-Coord
+  pedagogical_notes:
+    es: Puede ser grande aunque el error de la media sea pequeño si N es grande.
+    en: It may be large even when the mean error is small if N is large.
+- id: error_estadistico
+  symbol: delta_X
+  nombre:
+    es: error estadístico
+    en: statistical error
+  descripcion:
+    es: Incertidumbre de la media estimada debida al número finito de muestras.
+    en: Uncertainty of the estimated mean due to finite sample number.
+  unidad_si: depende del observable
+  dimension: variable
+  is_vector: false
+  components: []
+  category: estadistica
+  physical_role: magnitud_dominante
+  used_in:
+  - error_estadistico_media
+  common_mistake: Esperar que el error baje proporcionalmente a N en vez de a sqrt(N).
+  typical_range: s_X/sqrt(N)
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El error estadístico se expresa como tamaño positivo.
+      en: Statistical error is expressed as a positive size.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero solo aparece idealmente con dispersión nula o límite infinito de muestras.
+      en: Zero appears only ideally with zero dispersion or the infinite-sample limit.
+  value_nature:
+    kind: real_no_negativo
+    nonnegative_only: true
+    expected_interval: delta_X>=0
+  interpretation_role:
+    primary_for:
+    - incertidumbre
+    - convergencia
+    secondary_for:
+    - planificacion_simulacion
+  graph_binding:
+    channels:
+    - yAxis
+    preferred_axis: y
+    graph_refs:
+    - simulaciones-estadisticas-Coord
+  pedagogical_notes:
+    es: 'Es la brújula numérica del gráfico: muestra cuánto falta para una estimación fiable.'
+    en: 'It is the graph''s numerical compass: it shows how far the estimate is from being reliable.'
+- id: temperatura
+  symbol: T
+  nombre:
+    es: temperatura absoluta
+    en: absolute temperature
+  descripcion:
+    es: Parámetro térmico que controla la ponderación estadística de estados energéticos.
+    en: Thermal parameter controlling the statistical weighting of energy states.
+  unidad_si: K
+  dimension: Θ
+  is_vector: false
+  components: []
+  category: termodinamica
+  physical_role: parametro_control
+  used_in:
+  - factor_boltzmann
+  - aceptacion_monte_carlo
+  common_mistake: Usar grados Celsius en fórmulas que requieren temperatura absoluta.
+  typical_range: T>0 K
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En este modelo se usa temperatura absoluta positiva.
+      en: This model uses positive absolute temperature.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: T igual a cero no es válido para estas expresiones de muestreo.
+      en: T equal to zero is not valid for these sampling expressions.
+  value_nature:
+    kind: real_positivo
+    nonnegative_only: true
+    expected_interval: T>0
+  interpretation_role:
+    primary_for:
+    - peso_boltzmann
+    secondary_for:
+    - aceptacion
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: none
+    graph_refs: []
+  pedagogical_notes:
+    es: La temperatura no mide velocidad de cálculo, sino tolerancia energética del muestreo.
+    en: Temperature does not measure computation speed, but the energetic tolerance of sampling.
+- id: energia
+  symbol: E
+  nombre:
+    es: energía
+    en: energy
+  descripcion:
+    es: Energía asociada a un estado o configuración del sistema simulado.
+    en: Energy associated with a simulated state or configuration.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: termodinamica_estadistica
+  physical_role: variable_estado
+  used_in:
+  - factor_boltzmann
+  common_mistake: Comparar energías sin fijar la referencia o la temperatura.
+  typical_range: dependiente del sistema
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende de la referencia de energía elegida.
+      en: The sign depends on the chosen energy reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede ser una referencia arbitraria de energía.
+      en: Zero may be an arbitrary energy reference.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: dependiente del sistema
+  interpretation_role:
+    primary_for:
+    - boltzmann
+    secondary_for:
+    - estado
+  graph_binding:
+    channels:
+    - none
+    preferred_axis: none
+    graph_refs: []
+  pedagogical_notes:
+    es: En Boltzmann importa la energía comparada con k_B*T.
+    en: In Boltzmann weighting, energy matters compared with k_B*T.
+- id: diferencia_energia
+  symbol: delta_E
+  nombre:
+    es: diferencia de energía
+    en: energy difference
+  descripcion:
+    es: Cambio de energía entre una propuesta de simulación y el estado actual.
+    en: Energy change between a simulation proposal and the current state.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: monte_carlo
+  physical_role: criterio_cambio
+  used_in:
+  - aceptacion_monte_carlo
+  common_mistake: Olvidar que delta_E negativa implica aceptación automática en Metropolis.
+  typical_range: comparable con k_B*T
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Negativa favorece el cambio; positiva lo penaliza térmicamente.
+      en: Negative favors the move; positive thermally penalizes it.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Sin cambio energético, la propuesta no se penaliza.
+      en: With no energy change, the proposal is not penalized.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: dependiente del sistema
+  interpretation_role:
+    primary_for:
+    - aceptacion
+    secondary_for:
+    - equilibrio
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: none
+    graph_refs: []
+  pedagogical_notes:
+    es: Su signo decide si una propuesta es favorable o debe competir contra el factor térmico.
+    en: Its sign decides whether a proposal is favorable or must compete against the thermal factor.
+- id: constante_boltzmann
+  symbol: k_B
+  nombre:
+    es: constante de Boltzmann
+    en: Boltzmann constant
+  descripcion:
+    es: Constante que convierte temperatura en escala energética microscópica.
+    en: Constant converting temperature into microscopic energy scale.
+  unidad_si: J K^-1
+  dimension: M L^2 T^-2 Θ^-1
+  is_vector: false
+  components: []
+  category: constante
+  physical_role: constante_fisica
+  used_in:
+  - factor_boltzmann
+  - aceptacion_monte_carlo
+  common_mistake: Omitir k_B y dejar exponentes con dimensiones.
+  typical_range: 1.380649e-23 J K^-1
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es una constante positiva.
+      en: It is a positive constant.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: No puede anularse en el modelo físico.
+      en: It cannot vanish in the physical model.
+  value_nature:
+    kind: constante_positiva
+    nonnegative_only: true
+    expected_interval: k_B>0
+  interpretation_role:
+    primary_for:
+    - escala_energetica
+    secondary_for:
+    - adimensionalidad
+  graph_binding:
+    channels:
+    - constant
+    preferred_axis: none
+    graph_refs: []
+  pedagogical_notes:
+    es: Asegura que E/(k_B*T) sea un número puro.
+    en: It ensures that E/(k_B*T) is a pure number.
+- id: probabilidad_boltzmann
+  symbol: P
+  nombre:
+    es: probabilidad de Boltzmann
+    en: Boltzmann probability
+  descripcion:
+    es: Peso relativo de un estado en equilibrio térmico canónico.
+    en: Relative weight of a state in canonical thermal equilibrium.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: probabilidad
+  physical_role: peso_estadistico
+  used_in:
+  - factor_boltzmann
+  common_mistake: Confundir peso no normalizado con probabilidad ya normalizada.
+  typical_range: 0<=P<=1 si está normalizada
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Una probabilidad no tiene signo físico.
+      en: A probability has no physical sign.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica estado imposible o peso despreciable en el modelo.
+      en: Zero indicates an impossible or negligible-weight state in the model.
+  value_nature:
+    kind: real_intervalo
+    nonnegative_only: true
+    expected_interval: 0<=P<=1 si normalizada
+  interpretation_role:
+    primary_for:
+    - muestreo
+    secondary_for:
+    - equilibrio
+  graph_binding:
+    channels:
+    - none
+    preferred_axis: none
+    graph_refs: []
+  pedagogical_notes:
+    es: Un peso relativo necesita normalización para convertirse en probabilidad absoluta.
+    en: A relative weight needs normalization to become an absolute probability.
+- id: constante_normalizacion
+  symbol: C
+  nombre:
+    es: constante de normalización
+    en: normalization constant
+  descripcion:
+    es: Factor que ajusta pesos estadísticos para obtener probabilidades coherentes.
+    en: Factor adjusting statistical weights to obtain coherent probabilities.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: normalizacion
+  physical_role: factor_modelo
+  used_in:
+  - factor_boltzmann
+  common_mistake: Ignorar la normalización al comparar probabilidades absolutas.
+  typical_range: positivo; depende del conjunto de estados
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se toma positiva para pesos probabilísticos.
+      en: It is taken positive for probabilistic weights.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Cero eliminaría todas las probabilidades.
+      en: Zero would eliminate all probabilities.
+  value_nature:
+    kind: real_positivo
+    nonnegative_only: true
+    expected_interval: C>0
+  interpretation_role:
+    primary_for:
+    - normalizacion
+    secondary_for:
+    - probabilidad
+  graph_binding:
+    channels:
+    - none
+    preferred_axis: none
+    graph_refs: []
+  pedagogical_notes:
+    es: No cambia qué estados son relativamente más probables, solo la escala normalizada.
+    en: It does not change which states are relatively more probable, only the normalized scale.
+- id: probabilidad_aceptacion
+  symbol: p_acc
+  nombre:
+    es: probabilidad de aceptación
+    en: acceptance probability
+  descripcion:
+    es: Probabilidad de aceptar una propuesta en un algoritmo Monte Carlo.
+    en: Probability of accepting a proposal in a Monte Carlo algorithm.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: monte_carlo
+  physical_role: decision_probabilistica
+  used_in:
+  - aceptacion_monte_carlo
+  common_mistake: Interpretarla como velocidad real de evolución del sistema.
+  typical_range: 0<=p_acc<=1
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es una probabilidad y no tiene signo.
+      en: It is a probability and has no sign.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero significa rechazo seguro de esa propuesta.
+      en: Zero means certain rejection of that proposal.
+  value_nature:
+    kind: real_intervalo
+    nonnegative_only: true
+    expected_interval: 0<=p_acc<=1
+  interpretation_role:
+    primary_for:
+    - metropolis
+    secondary_for:
+    - eficiencia_muestreo
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: none
+    graph_refs: []
+  pedagogical_notes:
+    es: Controla el muestreo de configuraciones, no una dinámica temporal microscópica.
+    en: It controls configuration sampling, not microscopic time dynamics.

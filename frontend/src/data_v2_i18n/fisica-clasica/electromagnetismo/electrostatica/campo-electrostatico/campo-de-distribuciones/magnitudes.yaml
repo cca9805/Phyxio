@@ -1,0 +1,285 @@
+version: 1
+magnitudes:
+- id: campo_electrico_resultante
+  symbol: \vec{E}
+  nombre:
+    es: campo eléctrico resultante
+    en: resultant electric field
+  descripcion:
+    es: Campo eléctrico total en un punto del espacio producido por la superposición vectorial de las contribuciones de todos
+      los elementos diferenciales de la distribución.
+    en: Total electric field at a point in space produced by the vectorial superposition of contributions from all differential
+      elements of the distribution.
+  unidad_si: V/m
+  dimension: M L T^{-3} I^{-1}
+  is_vector: true
+  components:
+  - E_x
+  - E_y
+  - E_z
+  category: output
+  physical_role: physical_quantity
+  used_in:
+  - campo-de-distribuciones
+  common_mistake: Sumar los módulos de los vectores dE en lugar de sumar sus componentes cartesianas antes de calcular el
+    módulo final.
+  typical_range: 'De microvoltios/metro en entornos blindados hasta megavoltios/metro cerca de conductores cargados: 10⁻⁶
+    – 10⁶ V/m.'
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo de cada componente indica la dirección del campo; el campo apunta alejándose de cargas positivas y hacia
+        cargas negativas.
+      en: The sign of each component indicates the field direction; the field points away from positive charges and towards
+        negative charges.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: E = 0 en puntos de simetría donde las contribuciones se cancelan exactamente por superposición vectorial.
+      en: E = 0 at symmetry points where contributions cancel exactly by vectorial superposition.
+  value_nature:
+    kind: vector
+    nonnegative_only: false
+    expected_interval: (-∞, +∞) por componente
+  interpretation_role:
+    primary_for:
+    - campo-de-distribuciones
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_vertical_E_vs_r
+  pedagogical_notes:
+    es: Es el resultado final de la integración; su módulo y dirección determinan la fuerza sobre una carga de prueba. La
+      forma de la curva E vs r identifica la geometría de la distribución fuente.
+    en: It is the final result of the integration; its magnitude and direction determine the force on a test charge. The shape
+      of the E vs r curve identifies the geometry of the source distribution.
+- id: contribucion_diferencial_de_campo
+  symbol: d\vec{E}
+  nombre:
+    es: contribución diferencial de campo
+    en: differential field contribution
+  descripcion:
+    es: Campo eléctrico aportado por un único elemento diferencial de carga dq al punto de observación. Es el integrando del
+      cálculo del campo total.
+    en: Electric field contributed by a single differential charge element dq to the observation point. It is the integrand
+      of the total field calculation.
+  unidad_si: V/m
+  dimension: M L T^{-3} I^{-1}
+  is_vector: true
+  components:
+  - dE_x
+  - dE_y
+  - dE_z
+  category: auxiliary
+  physical_role: physical_quantity
+  used_in:
+  - campo-de-distribuciones
+  common_mistake: Olvidar la dirección vectorial de dE al escribir el integrando, tratando dE como escalar.
+  typical_range: Depende de la geometría y la distancia; típicamente mucho menor que E salvo en entornos muy simétricos.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Apunta del elemento de carga dq hacia el punto campo si dq > 0, y en sentido contrario si dq < 0.
+      en: Points from the charge element dq towards the field point if dq > 0, and in the opposite direction if dq < 0.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: dE = 0 solo si dq = 0, lo que es un punto de la distribución sin carga.
+      en: dE = 0 only if dq = 0, which is a point in the distribution with no charge.
+  value_nature:
+    kind: vector
+    nonnegative_only: false
+    expected_interval: (-∞, +∞) por componente
+  interpretation_role:
+    primary_for:
+    - campo-de-distribuciones
+    secondary_for: []
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: La integral de dE sobre toda la distribución da E; el estudiante debe descomponer dE en componentes antes de integrar.
+      Los elementos más próximos al punto campo dominan la integral.
+    en: The integral of dE over the entire distribution gives E; the student must decompose dE into components before integrating.
+      Elements closest to the field point dominate the integral.
+- id: r_dist
+  symbol: r
+  nombre:
+    es: distancia fuente-punto
+    en: source-point distance
+  descripcion:
+    es: Distancia entre el elemento diferencial de carga dq (fuente) y el punto del espacio donde se calcula el campo (punto
+      campo).
+    en: Distance between the differential charge element dq (source) and the point in space where the field is evaluated (field
+      point).
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: geometric
+  physical_role: physical_quantity
+  used_in:
+  - campo-de-distribuciones
+  common_mistake: Confundir la distancia al origen de coordenadas con la distancia fuente-punto cuando la fuente no está en
+    el origen.
+  typical_range: Desde nanómetros en contexto atómico hasta metros en geometrías macroscópicas.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La distancia es siempre positiva; nunca puede ser cero en el punto campo (singularidad física).
+      en: Distance is always positive; it can never be zero at the field point (physical singularity).
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: r = 0 implica que el punto campo coincide con la fuente, produciendo una singularidad no física en el modelo puntual.
+      en: r = 0 means the field point coincides with the source, producing a non-physical singularity in the point model.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, +∞)
+  interpretation_role:
+    primary_for:
+    - campo-de-distribuciones
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_horizontal_E_vs_r
+  pedagogical_notes:
+    es: r aparece elevado al cuadrado en el denominador de dE; duplicar r reduce dE a un cuarto del valor. Elegir bien el
+      sistema de coordenadas es clave para que r tenga una expresión algebraica simple.
+    en: r appears squared in the denominator of dE; doubling r reduces dE to one quarter. Choosing the right coordinate system
+      is key so that r has a simple algebraic expression.
+- id: lambda
+  symbol: \lambda
+  nombre:
+    es: densidad lineal de carga
+    en: linear charge density
+  descripcion:
+    es: Carga por unidad de longitud de una distribución lineal (hilo, arco, segmento). Permite expresar dq = λ dl.
+    en: Charge per unit length of a linear distribution (wire, arc, segment). Allows expressing dq = λ dl.
+  unidad_si: C/m
+  dimension: I T L^{-1}
+  is_vector: false
+  components: []
+  category: input
+  physical_role: physical_quantity
+  used_in:
+  - campo-de-distribuciones
+  common_mistake: Confundir λ (C/m) con σ (C/m²) o ρ (C/m³); el tipo de densidad determina la variable de integración.
+  typical_range: Desde picocoulombios/metro en cables a baja carga hasta nanocoulombios/metro en demostraciones de laboratorio.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: λ > 0 para distribuciones positivas, λ < 0 para negativas. El signo afecta la dirección de dE.
+      en: λ > 0 for positive distributions, λ < 0 for negative ones. The sign affects the direction of dE.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: λ = 0 implica ausencia de carga lineal; la integral es trivialmente nula.
+      en: λ = 0 implies no linear charge; the integral is trivially zero.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: (-∞, +∞)
+  interpretation_role:
+    primary_for:
+    - campo-de-distribuciones
+    secondary_for: []
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: Para un hilo infinito uniforme, el campo resultante no depende de ninguna componente axial por simetría cilíndrica.
+      Confundir lambda (C/m) con sigma (C/m²) es el error de tipo más frecuente.
+    en: For a uniform infinite wire, the resultant field has no axial component by cylindrical symmetry. Confusing lambda
+      (C/m) with sigma (C/m²) is the most frequent type error.
+- id: sigma
+  symbol: \sigma
+  nombre:
+    es: densidad superficial de carga
+    en: surface charge density
+  descripcion:
+    es: Carga por unidad de área de una distribución superficial. Permite expresar dq = σ dA.
+    en: Charge per unit area of a surface distribution. Allows expressing dq = σ dA.
+  unidad_si: C/m²
+  dimension: I T L^{-2}
+  is_vector: false
+  components: []
+  category: input
+  physical_role: physical_quantity
+  used_in:
+  - campo-de-distribuciones
+  common_mistake: Usar σ en lugar de λ para una distribución lineal o viceversa, cambiando incorrectamente la potencia de
+    r en dE.
+  typical_range: Nanocoulombios/m² a microcoulombios/m² en superficies conductoras cargadas en laboratorio.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: σ > 0 para superficies con exceso de carga positiva, σ < 0 para negativas.
+      en: σ > 0 for surfaces with positive charge excess, σ < 0 for negative ones.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: σ = 0 implica plano neutro; E a ambos lados es igual y opuesto al de las cargas contiguas.
+      en: σ = 0 implies neutral plane; E on both sides equals and opposes that of adjacent charges.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: (-∞, +∞)
+  interpretation_role:
+    primary_for:
+    - campo-de-distribuciones
+    secondary_for: []
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: Para un plano infinito uniforme, el campo es perpendicular al plano e independiente de la distancia. Olvidar el factor
+      2 en el denominador (confundir un plano con dos placas) es el error más frecuente.
+    en: For a uniform infinite plane, the field is perpendicular to the plane and independent of distance. Forgetting the
+      factor 2 in the denominator (confusing one plane with two plates) is the most frequent error.
+- id: rho_vol
+  symbol: \rho
+  nombre:
+    es: densidad volumétrica de carga
+    en: volume charge density
+  descripcion:
+    es: Carga por unidad de volumen de una distribución tridimensional. Permite expresar dq = ρ dV.
+    en: Charge per unit volume of a three-dimensional distribution. Allows expressing dq = ρ dV.
+  unidad_si: C/m³
+  dimension: I T L^{-3}
+  is_vector: false
+  components: []
+  category: input
+  physical_role: physical_quantity
+  used_in:
+  - campo-de-distribuciones
+  common_mistake: Confundir ρ con la densidad másica; en electrostática ρ siempre es densidad de carga, no de masa.
+  typical_range: Picacoulombios/m³ en gases ionizados tenues hasta coulombios/m³ en plasmas densos.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: ρ > 0 para distribuciones con carga neta positiva, ρ < 0 para negativas.
+      en: ρ > 0 for distributions with positive net charge, ρ < 0 for negative ones.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: ρ = 0 implica ausencia de carga volumétrica; el campo en el interior de esa región se calcula solo con las cargas
+        del entorno.
+      en: ρ = 0 implies no volume charge; the field inside that region is computed only from surrounding charges.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: (-∞, +∞)
+  interpretation_role:
+    primary_for:
+    - campo-de-distribuciones
+    secondary_for: []
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: Para una esfera uniformemente cargada, la ley de Gauss es más eficiente que la integración directa de dE. Confundir
+      rho con la densidad másica es el error conceptual más común en contextos mixtos.
+    en: For a uniformly charged sphere, Gauss's law is more efficient than direct integration of dE. Confusing rho with mass
+      density is the most common conceptual error in mixed contexts.

@@ -1,0 +1,266 @@
+version: 1
+ui:
+  default_formula: tau_rc
+formulas:
+- id: tau_rc
+  title:
+    es: Constante de tiempo del circuito RC
+    en: RC circuit time constant
+  equation: \tau = R C
+  latex: \tau = R C
+  variables:
+  - tau
+  - resistencia
+  - capacitancia
+  rearrangements:
+  - target: resistencia
+    equation: R = \frac{\tau}{C}
+    latex: R = \frac{\tau}{C}
+    constraints:
+    - C != 0
+  - target: capacitancia
+    equation: C = \frac{\tau}{R}
+    latex: C = \frac{\tau}{R}
+    constraints:
+    - R != 0
+  category: fundamental
+  relation_type: algebraic_relation
+  physical_meaning:
+    es: Relaciona parametros de diseno con la rapidez de la evolucion temporal; mayor producto implica respuesta mas lenta.
+    en: Links design parameters to temporal evolution speed; larger product implies slower response.
+  constraints: R y C deben ser positivas en el modelo pasivo lineal.
+  validity:
+    es: Valida en circuitos de primer orden dominados por una resistencia equivalente y una capacitancia equivalente.
+    en: Valid for first-order circuits dominated by one equivalent resistance and one equivalent capacitance.
+  dimension_check: '[ohm] x [F] = [s]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - escala_temporal
+  - rapidez
+  result_semantics:
+    target: tau
+    kind: characteristic_scale
+    sign_meaning:
+      es: Debe resultar positiva para un sistema pasivo.
+      en: It must be positive for a passive system.
+    absolute_value_meaning:
+      es: Valores mayores implican transitorio mas extendido.
+      en: Larger values imply a more extended transient.
+  domain_checks:
+  - expr: R > 0
+    message:
+      es: La resistencia debe ser positiva.
+      en: Resistance must be positive.
+  - expr: C > 0
+    message:
+      es: La capacitancia debe ser positiva.
+      en: Capacitance must be positive.
+  coherence_checks:
+  - expr: result > 0
+    message:
+      es: La constante de tiempo no puede ser negativa en este modelo.
+      en: Time constant cannot be negative in this model.
+  graph_implications:
+  - El eje temporal se interpreta respecto de multiples de tau para comparar velocidad de convergencia.
+  pedagogical_triggers:
+  - when: result > 1
+    message:
+      es: Transitorio relativamente lento para aplicaciones de conmutacion rapida.
+      en: Relatively slow transient for fast switching applications.
+- id: carga
+  title:
+    es: Evolucion de la tension del capacitor en carga
+    en: Capacitor voltage during charging
+  equation: V_c(t) = V_f(1-e^{-t/\tau})
+  latex: V_c(t) = V_f(1-e^{-t/\tau})
+  variables:
+  - tension_del_capacitor
+  - tension_final_de_carga
+  - tiempo
+  - tau
+  rearrangements:
+  - target: tension_final_de_carga
+    equation: V_f = \frac{V_c}{1-e^{-t/\tau}}
+    latex: V_f = \frac{V_c}{1-e^{-t/\tau}}
+    constraints:
+    - t > 0
+  category: fundamental
+  relation_type: exponential_response
+  physical_meaning:
+    es: La tension del capacitor crece de forma asintotica desde su condicion inicial hacia el valor final de excitacion.
+    en: Capacitor voltage increases asymptotically from initial condition toward final excitation value.
+  constraints: Requiere excitacion escalon y parametros aproximadamente constantes en el intervalo.
+  validity:
+    es: Valida para modelo de primer orden sin saturacion ni elementos no lineales dominantes.
+    en: Valid for first-order model without saturation or dominant nonlinear elements.
+  dimension_check: '[V] = [V]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - carga
+  - convergencia
+  - exponencial
+  result_semantics:
+    target: tension_del_capacitor
+    kind: state_evolution
+    sign_meaning:
+      es: El signo depende de polaridad elegida para la tension.
+      en: Sign depends on chosen voltage polarity.
+    absolute_value_meaning:
+      es: Mide proximidad al valor final de carga.
+      en: Measures proximity to final charging value.
+  domain_checks:
+  - expr: t >= 0
+    message:
+      es: El tiempo del modelo debe ser no negativo.
+      en: Model time must be non-negative.
+  coherence_checks:
+  - expr: abs(result) <= max(abs(V_f), abs(V_0)) + 1e-9
+    message:
+      es: En carga pasiva simple la tension no debe sobrepasar de forma sostenida la excitacion.
+      en: In simple passive charging, voltage should not sustain overshoot above excitation.
+  graph_implications:
+  - La curva V_c frente a t es creciente cuando la excitacion final supera la condicion inicial.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Alrededor de cinco constantes de tiempo se alcanza practicamente el estado estacionario.
+      en: Around five time constants the steady state is practically reached.
+- id: descarga
+  title:
+    es: Evolucion de la tension del capacitor en descarga
+    en: Capacitor voltage during discharging
+  equation: V_c(t) = V_0 e^{-t/\tau}
+  latex: V_c(t) = V_0 e^{-t/\tau}
+  variables:
+  - tension_del_capacitor
+  - tension_inicial
+  - tiempo
+  - tau
+  rearrangements:
+  - target: tension_inicial
+    equation: V_0 = V_c e^{t/\tau}
+    latex: V_0 = V_c e^{t/\tau}
+    constraints: []
+  category: fundamental
+  relation_type: exponential_decay
+  physical_meaning:
+    es: La energia almacenada en el capacitor se libera y la tension cae exponencialmente hacia el nivel de referencia.
+    en: Stored capacitor energy is released and voltage decays exponentially toward reference level.
+  constraints: Parametros lineales constantes y ausencia de fuentes activas dominantes durante la descarga.
+  validity:
+    es: Valida en descarga de primer orden cuando la resistencia equivalente y la capacitancia equivalente son constantes.
+    en: Valid in first-order discharge when equivalent resistance and capacitance are constant.
+  dimension_check: '[V] = [V]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - descarga
+  - decaimiento
+  result_semantics:
+    target: tension_del_capacitor
+    kind: state_evolution
+    sign_meaning:
+      es: Conserva la polaridad inicial mientras no haya cambio de referencia.
+      en: Keeps initial polarity while reference is unchanged.
+    absolute_value_meaning:
+      es: Disminuye con el tiempo al vaciarse el almacenamiento electrostatico.
+      en: Decreases with time as electrostatic storage is emptied.
+  domain_checks:
+  - expr: t >= 0
+    message:
+      es: El tiempo de evaluacion debe ser no negativo.
+      en: Evaluation time must be non-negative.
+  coherence_checks:
+  - expr: abs(result) <= abs(V_0) + 1e-9
+    message:
+      es: En descarga pasiva la magnitud de tension no debe crecer respecto al valor inicial.
+      en: In passive discharge voltage magnitude should not grow over initial value.
+  graph_implications:
+  - La curva V_c frente a t decrece en magnitud y se aproxima asintoticamente a cero.
+  pedagogical_triggers:
+  - when: result == 0
+    message:
+      es: Estado final alcanzado dentro de precision numerica del problema.
+      en: Final state reached within numerical precision of the problem.
+- id: corriente_carga
+  title:
+    es: Corriente transitoria durante la carga
+    en: Transient current during charging
+  equation: I(t) = \frac{V_f}{R} e^{-t/\tau}
+  latex: I(t) = \frac{V_f}{R} e^{-t/\tau}
+  variables:
+  - corriente_transitoria
+  - tension_final_de_carga
+  - resistencia
+  - tiempo
+  - tau
+  rearrangements:
+  - target: tension_final_de_carga
+    equation: V_f = I R e^{t/\tau}
+    latex: V_f = I R e^{t/\tau}
+    constraints: []
+  - target: resistencia
+    equation: R = \frac{V_f}{I} e^{-t/\tau}
+    latex: R = \frac{V_f}{I} e^{-t/\tau}
+    constraints:
+    - I != 0
+  category: structural
+  relation_type: exponential_decay
+  physical_meaning:
+    es: La corriente es maxima al inicio y decae segun el estado de carga del capacitor.
+    en: Current is maximum at startup and decays as capacitor charge state evolves.
+  constraints: Forma valida para circuito RC serie ideal excitado con escalon de tension.
+  validity:
+    es: Valida durante fase transitoria cuando la inductancia y otros efectos de alta frecuencia no dominan.
+    en: Valid during transient phase when inductive and high-frequency effects are not dominant.
+  dimension_check: '[A] = [V]/[ohm]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - corriente
+  - arranque
+  - decaimiento
+  result_semantics:
+    target: corriente_transitoria
+    kind: flux_state
+    sign_meaning:
+      es: El signo depende de la convencion de sentido de la rama.
+      en: Sign depends on branch direction convention.
+    absolute_value_meaning:
+      es: Cuantifica exigencia de corriente instantanea en la resistencia durante el transitorio.
+      en: Quantifies instantaneous current demand in resistor during transient.
+  domain_checks:
+  - expr: R > 0
+    message:
+      es: La resistencia debe ser positiva.
+      en: Resistance must be positive.
+  coherence_checks:
+  - expr: abs(result) <= abs(V_f/R) + 1e-9
+    message:
+      es: El modulo de corriente no debe superar el valor inicial ideal.
+      en: Current magnitude should not exceed ideal initial value.
+  graph_implications:
+  - La curva I frente a t comienza en valor maximo y cae de modo exponencial hacia cero.
+  pedagogical_triggers:
+  - when: t == 0
+    message:
+      es: El valor inicial de corriente es util para estimar pico de potencia en componentes.
+      en: Initial current value is useful to estimate component power peak.

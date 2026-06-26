@@ -1,0 +1,286 @@
+version: 5
+topic:
+  id: trabajo
+  title:
+    es: Trabajo
+    en: Work
+variables:
+- id: W
+  symbol: W
+  name:
+    es: trabajo
+    en: Work
+  si_unit: J
+- id: F
+  symbol: F
+  name:
+    es: fuerza
+    en: Force
+  si_unit: N
+- id: d
+  symbol: d
+  name:
+    es: desplazamiento
+    en: Displacement
+  si_unit: m
+- id: theta
+  symbol: \theta
+  name:
+    es: angulo entre fuerza y desplazamiento
+    en: Angle Between Force and Displacement
+  si_unit: rad
+- id: Wnet
+  symbol: "W_{net}"
+  name:
+    es: trabajo neto
+    en: Net Work
+  si_unit: J
+- id: dK
+  symbol: "\\Delta K"
+  name:
+    es: cambio de energia cinetica
+    en: Change in Kinetic Energy
+  si_unit: J
+formulas:
+- id: trabajo_fuerza_constante
+  title:
+    es: Trabajo de una fuerza constante
+    en: Work Done by a Constant Force
+  equation: W = F*d*cos(theta)
+  latex: W=F\cdot d\cos\theta
+  rearrangements:
+  - target: W
+    equation: W = F*d*cos(theta)
+    latex: W=F\cdot d\cos\theta
+  - target: F
+    equation: F = W/(d*cos(theta))
+    latex: F=\frac{W}{d\cos\theta}
+  - target: d
+    equation: d = W/(F*cos(theta))
+    latex: d=\frac{W}{F\cos\theta}
+  - target: theta
+    equation: theta = cos^-1(W/(F*d))
+    latex: \theta=\cos^{-1}\left(\frac{W}{F\cdot d}\right)
+  constraints:
+  - expr: F > 0
+    message:
+      es: F debe ser mayor que 0.
+      en: F must be greater than 0.
+  - expr: d > 0
+    message:
+      es: d debe ser mayor que 0.
+      en: d must be greater than 0.
+  - expr: -1 <= W/(F*d) <= 1
+    message:
+      es: La razon W/(F*d) debe estar entre -1 y 1 para definir el angulo.
+      en: The ratio W/(F*d) must be between -1 and 1 to define the angle.
+  category: fundamental
+  relation_type: scalar_product
+  physical_meaning:
+    es: Expresa la transferencia energetica producida por la componente de la fuerza paralela al desplazamiento.
+    en: Expresses energy transfer produced by the force component parallel to the displacement.
+  validity:
+    es: Valida para fuerza aproximadamente constante y desplazamiento bien definido en el intervalo estudiado.
+    en: Valid for approximately constant force and a well-defined displacement in the studied interval.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - arrastre de cargas
+  - levantamiento y descenso
+  - compresion o extension mecanica idealizada
+  interpretation_tags: [ trabajo, fuerza, desplazamiento, angulo ]
+  result_semantics:
+    target: W
+    meaning: El resultado indica energia entregada al sistema, extraida de el o transferida nula segun su signo.
+  domain_checks:
+  - expr: d >= 0
+    message:
+      es: d debe ser no negativa como magnitud de desplazamiento en este modelo.
+      en: d must be non-negative as a displacement magnitude in this model.
+  coherence_checks:
+  - expr: "true"
+    message:
+      es: Si theta es cercana a 90 grados, el trabajo debe tender a cero.
+      en: If theta is close to 90 degrees, work should tend to zero.
+  graph_implications:
+  - La proyeccion de la fuerza sobre la direccion del desplazamiento controla el signo de W.
+  pedagogical_triggers:
+  - when: "true"
+    message:
+      es: No multipliques F por d sin revisar el angulo; perderias el contenido fisico del producto escalar.
+      en: Do not multiply F by d without checking the angle; you would lose the scalar-product physics.
+- id: angulo_desde_trabajo
+  title:
+    es: Angulo desde trabajo, fuerza y desplazamiento
+    en: Angle from work, force, and displacement
+  equation: theta = cos^-1(W/(F*d))
+  latex: \theta=\cos^{-1}\left(\frac{W}{F\cdot d}\right)
+  rearrangements:
+  - target: theta
+    equation: theta = cos^-1(W/(F*d))
+    latex: \theta=\cos^{-1}\left(\frac{W}{F\cdot d}\right)
+  - target: W
+    equation: W = F*d*cos(theta)
+    latex: W=F\cdot d\cos\theta
+  constraints:
+  - expr: F > 0
+    message:
+      es: F debe ser mayor que 0.
+      en: F must be greater than 0.
+  - expr: d > 0
+    message:
+      es: d debe ser mayor que 0.
+      en: d must be greater than 0.
+  - expr: -1 <= W/(F*d) <= 1
+    message:
+      es: El cociente debe quedar en el dominio del arccos.
+      en: The ratio must remain within the arccos domain.
+  category: operative
+  relation_type: solved_form
+  physical_meaning:
+    es: Permite inferir si la fuerza ayuda, se opone o es casi perpendicular al movimiento.
+    en: Lets you infer whether the force helps, opposes, or is nearly perpendicular to the motion.
+  validity:
+    es: Requiere modelo de fuerza constante y datos consistentes de trabajo, fuerza y desplazamiento.
+    en: Requires a constant-force model and consistent work, force, and displacement data.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - inferencia de orientacion de una fuerza aplicada
+  - verificacion de consistencia experimental
+  interpretation_tags: [ angulo, orientacion, consistencia ]
+  result_semantics:
+    target: theta
+    meaning: El resultado clasifica la orientacion relativa entre fuerza y desplazamiento.
+  domain_checks:
+  - expr: "true"
+    message:
+      es: Revisa unidades antes de formar W/(F*d).
+      en: Check units before forming W/(F*d).
+  coherence_checks:
+  - expr: "true"
+    message:
+      es: Theta menor a 90 grados implica trabajo positivo en este convenio.
+      en: Theta below 90 degrees implies positive work in this convention.
+  graph_implications:
+  - El valor de theta controla la proyeccion efectiva de la fuerza sobre el desplazamiento.
+  pedagogical_triggers:
+  - when: "true"
+    message:
+      es: Si el argumento de arccos sale fuera de rango, revisa datos o modelo.
+      en: If the arccos argument falls out of range, review data or model.
+- id: trabajo_neto_sumatoria
+  title:
+    es: Trabajo neto como suma
+    en: Net Work as a Sum
+  equation: Wnet = dK
+  latex: W_{net}=\Delta K
+  rearrangements:
+  - target: Wnet
+    equation: Wnet = dK
+    latex: W_{net}=\Delta K
+  - target: dK
+    equation: dK = Wnet
+    latex: \Delta K=W_{net}
+  constraints: []
+  category: fundamental
+  relation_type: energy_relation
+  physical_meaning:
+    es: Resume el trabajo total de todas las fuerzas efectivas mediante el cambio de energia cinetica.
+    en: Summarizes total work by all effective forces through the kinetic-energy change.
+  validity:
+    es: Valida cuando el sistema y la convencion de signos se mantienen consistentes entre estados.
+    en: Valid when system choice and sign convention remain consistent between states.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - balances globales entre estado inicial y final
+  - chequeo de coherencia entre dinamica y energia
+  interpretation_tags: [ trabajo-neto, energia, balance ]
+  result_semantics:
+    target: Wnet
+    meaning: El resultado expresa el saldo energetico total de las interacciones sobre el movimiento.
+  domain_checks:
+  - expr: "true"
+    message:
+      es: Incluye todas las fuerzas relevantes para no subestimar o sobreestimar Wnet.
+      en: Include all relevant forces to avoid underestimating or overestimating Wnet.
+  coherence_checks:
+  - expr: "true"
+    message:
+      es: El signo de Wnet debe coincidir con el de dK.
+      en: The sign of Wnet must match that of dK.
+  graph_implications:
+  - Un trabajo neto positivo debe reflejar ganancia de energia cinetica.
+  pedagogical_triggers:
+  - when: "true"
+    message:
+      es: No confundas trabajo neto con el trabajo de una sola fuerza parcial.
+      en: Do not confuse net work with work by a single partial force.
+- id: teorema_trabajo_energia
+  title:
+    es: Teorema trabajo-energia
+    en: Work-Energy Theorem
+  equation: Wnet = dK
+  latex: W_{net}=\Delta K
+  rearrangements:
+  - target: Wnet
+    equation: Wnet = dK
+    latex: W_{net}=\Delta K
+  - target: dK
+    equation: dK = Wnet
+    latex: \Delta K=W_{net}
+  constraints: []
+  category: operative
+  relation_type: consistency_bridge
+  physical_meaning:
+    es: Actua como puente entre el calculo de trabajo mecanico y el cambio de estado cinetico.
+    en: Acts as a bridge between mechanical-work computation and kinetic-state change.
+  validity:
+    es: Util para verificar consistencia cuando ya se obtuvo W por via de fuerza y desplazamiento.
+    en: Useful as a consistency check after obtaining W from force and displacement.
+  dimension_check: coherente dimensionalmente en unidades SI
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - verificacion cruzada en ejercicios de trabajo
+  - enlace con el leaf teorema-trabajo-energia
+  interpretation_tags: [ puente, chequeo, energia ]
+  result_semantics:
+    target: dK
+    meaning: El resultado interpreta el trabajo neto como variacion de energia cinetica del sistema.
+  domain_checks:
+  - expr: "true"
+    message:
+      es: Deben usarse el mismo sistema y el mismo intervalo en ambos lados de la igualdad.
+      en: The same system and interval must be used on both sides of the equality.
+  coherence_checks:
+  - expr: "true"
+    message:
+      es: Si Wnet es cercana a cero, dK tambien debe ser cercana a cero.
+      en: If Wnet is near zero, dK must also be near zero.
+  graph_implications:
+  - Permite leer si el trabajo observado en una situacion produce ganancia o perdida de rapidez.
+  pedagogical_triggers:
+  - when: "true"
+    message:
+      es: Usa esta formula para interpretar, no para ocultar un mal planteo del sistema.
+      en: Use this formula for interpretation, not to hide a poor system definition.
+ui:
+  default_formula: trabajo_fuerza_constante
+  groups:
+  - title:
+      es: Relaciones nucleares
+      en: Core relations
+    items:
+    - trabajo_fuerza_constante
+    - trabajo_neto_sumatoria
+  - title:
+      es: Despejes y lectura geometrica
+      en: Solved forms and geometric reading
+    items:
+    - angulo_desde_trabajo
+    - teorema_trabajo_energia

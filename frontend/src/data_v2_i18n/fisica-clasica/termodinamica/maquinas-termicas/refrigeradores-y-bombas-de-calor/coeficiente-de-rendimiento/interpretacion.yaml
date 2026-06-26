@@ -1,0 +1,573 @@
+version: "1.0"
+id: interpretacion_coeficiente_de_rendimiento
+leaf_id: coeficiente-de-rendimiento
+
+nombre:
+  es: "Interpretación del coeficiente de rendimiento"
+  en: "Coefficient of performance interpretation"
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: maquinas-termicas
+  parent_id: refrigeradores-y-bombas-de-calor
+  ruta_relativa: fisica-clasica/termodinamica/maquinas-termicas/refrigeradores-y-bombas-de-calor/coeficiente-de-rendimiento
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretacion
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    priority:
+      - summary
+      - likely_errors
+
+dependencies:
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+  formulas:
+    - cop_refrigeracion
+    - cop_bomba_calor
+    - cop_carnot_ref
+    - cop_carnot_bc
+    - relacion_cop
+    - balance_energetico_cop
+  magnitudes:
+    - COP_ref
+    - COP_bc
+    - T_H
+    - T_C
+    - Q_H
+    - Q_C
+    - W
+
+global_context:
+  physical_domain:
+    es: "Termodinámica de ciclos invertidos y eficiencia de refrigeradores y bombas de calor"
+    en: "Reversed cycle thermodynamics and efficiency of refrigerators and heat pumps"
+  axis_convention:
+    es: "En el diagrama COP vs T_C, el COP crece cuando T_C se acerca a T_H y cae cuando T_C se aleja"
+    en: "In the COP vs T_C diagram, COP increases when T_C approaches T_H and decreases when T_C moves away"
+  standard_assumptions:
+    - "Ciclo completamente reversible para COP de Carnot"
+    - "Focos de capacidad infinita"
+    - "Temperaturas en kelvin"
+  standard_warnings:
+    - "No aplicar COP de Carnot como predicción de rendimiento real"
+    - "Verificar conversión Celsius a kelvin"
+    - "Distinguir COP de refrigeración y COP de bomba de calor"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen del resultado
+      en: Result summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia del resultado
+      en: Result coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+  COP_ref:
+    magnitude_type: ratio
+    semantic_role:
+      es: "Eficiencia del refrigerador: calor extraído del foco frío por unidad de trabajo"
+      en: "Refrigerator efficiency: heat extracted from cold reservoir per unit of work"
+    summary_rules:
+      - id: cop_ref_summary_high
+        when: "COP_ref > 5"
+        status: ok
+        text:
+          es: "[[COP_ref]] elevado indica que la diferencia entre [[T_H]] y [[T_C]] es pequeña y la refrigeración es termodinámicamente favorable."
+          en: "High [[COP_ref]] indicates that the difference between [[T_H]] and [[T_C]] is small and refrigeration is thermodynamically favorable."
+      - id: cop_ref_summary_low
+        when: "COP_ref < 1"
+        status: warning
+        text:
+          es: "[[COP_ref]] menor que 1 indica que se consume más trabajo que calor extraído. Esto ocurre a temperaturas muy bajas del foco frío."
+          en: "[[COP_ref]] less than 1 indicates more work consumed than heat extracted. This occurs at very low cold reservoir temperatures."
+      - id: cop_ref_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[COP_ref]] indica cuántas unidades de calor se extraen del foco frío por cada unidad de trabajo consumido. El COP de Carnot entre [[T_H]] y [[T_C]] es el techo teórico."
+          en: "[[COP_ref]] indicates how many units of heat are extracted from the cold reservoir per unit of work consumed. The Carnot COP between [[T_H]] and [[T_C]] is the theoretical ceiling."
+    physical_reading_rules:
+      - id: cop_ref_reading
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[COP_ref]] representa el multiplicador de eficiencia del refrigerador: por cada julio de trabajo, se extraen [[COP_ref]] julios de calor del espacio refrigerado."
+          en: "The value of [[COP_ref]] represents the refrigerator efficiency multiplier: for each joule of work, [[COP_ref]] joules of heat are extracted from the refrigerated space."
+    coherence_rules:
+      - id: cop_ref_coherence_negative
+        when: "COP_ref <= 0"
+        status: error
+        text:
+          es: "[[COP_ref]] negativo o nulo es físicamente imposible. Verificar que [[T_H]] sea mayor que [[T_C]] y que ambas estén en kelvin."
+          en: "Negative or zero [[COP_ref]] is physically impossible. Verify that [[T_H]] is greater than [[T_C]] and both are in kelvin."
+      - id: cop_ref_coherence_exceeds_carnot
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[COP_ref]] no supere el COP de Carnot de refrigeración entre [[T_H]] y [[T_C]]. Si lo supera, viola la segunda ley."
+          en: "Verify that [[COP_ref]] does not exceed the Carnot refrigeration COP between [[T_H]] and [[T_C]]. If it does, it violates the second law."
+    model_validity_rules:
+      - id: cop_ref_model
+        when: "true"
+        status: warning
+        text:
+          es: "El COP de Carnot asume reversibilidad total. Los ciclos reales de compresión de vapor alcanzan un 30 a 60 % del COP de Carnot."
+          en: "The Carnot COP assumes total reversibility. Real vapor-compression cycles achieve 30 to 60 % of the Carnot COP."
+    graph_rules:
+      - id: cop_ref_graph
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama COP vs [[T_C]], [[COP_ref]] crece cuando [[T_C]] se acerca a [[T_H]] y tiende a cero cuando [[T_C]] se acerca al cero absoluto."
+          en: "In the COP vs [[T_C]] diagram, [[COP_ref]] increases when [[T_C]] approaches [[T_H]] and tends to zero when [[T_C]] approaches absolute zero."
+    likely_errors:
+      - id: cop_ref_error_celsius
+        when: "COP_ref < 0"
+        status: error
+        text:
+          es: "Un [[COP_ref]] negativo sugiere que se han usado temperaturas en Celsius en lugar de kelvin. Verificar la conversión."
+          en: "A negative [[COP_ref]] suggests Celsius temperatures were used instead of kelvin. Verify the conversion."
+      - id: cop_ref_error_confusion
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que no se haya confundido [[COP_ref]] con [[COP_bc]]. La diferencia entre ambos debe ser exactamente 1."
+          en: "Verify that [[COP_ref]] has not been confused with [[COP_bc]]. The difference between them must be exactly 1."
+    next_step_rules:
+      - id: cop_ref_next
+        when: "true"
+        status: info
+        text:
+          es: "Calcular ahora [[COP_bc]] sumando 1 a [[COP_ref]], y verificar el balance energético con [[Q_H]], [[Q_C]] y [[W]]."
+          en: "Now calculate [[COP_bc]] by adding 1 to [[COP_ref]], and verify the energy balance with [[Q_H]], [[Q_C]] and [[W]]."
+
+  COP_bc:
+    magnitude_type: ratio
+    semantic_role:
+      es: "Eficiencia de la bomba de calor: calor entregado al foco caliente por unidad de trabajo"
+      en: "Heat pump efficiency: heat delivered to hot reservoir per unit of work"
+    summary_rules:
+      - id: cop_bc_summary_high
+        when: "COP_bc > 5"
+        status: ok
+        text:
+          es: "[[COP_bc]] elevado indica calefacción muy eficiente. La bomba de calor entrega mucho más calor que el trabajo consumido."
+          en: "High [[COP_bc]] indicates very efficient heating. The heat pump delivers much more heat than the consumed work."
+      - id: cop_bc_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[COP_bc]] indica cuántas unidades de calor se entregan al foco caliente por cada unidad de trabajo. Siempre es [[COP_ref]] más 1."
+          en: "[[COP_bc]] indicates how many units of heat are delivered to the hot reservoir per unit of work. It is always [[COP_ref]] plus 1."
+    physical_reading_rules:
+      - id: cop_bc_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[COP_bc]] mayor que 1 siempre, porque el foco caliente recibe el calor extraído [[Q_C]] más el trabajo [[W]] del compresor."
+          en: "[[COP_bc]] always greater than 1, because the hot reservoir receives the extracted heat [[Q_C]] plus the compressor work [[W]]."
+    coherence_rules:
+      - id: cop_bc_coherence_below_one
+        when: "COP_bc <= 1"
+        status: error
+        text:
+          es: "[[COP_bc]] menor o igual a 1 es físicamente imposible para una bomba de calor. Verificar datos de entrada."
+          en: "[[COP_bc]] less than or equal to 1 is physically impossible for a heat pump. Verify input data."
+      - id: cop_bc_coherence_relation
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[COP_bc]] menos [[COP_ref]] sea exactamente 1. Si no lo es, hay error en los cálculos."
+          en: "Verify that [[COP_bc]] minus [[COP_ref]] equals exactly 1. If not, there is a calculation error."
+    model_validity_rules:
+      - id: cop_bc_model
+        when: "true"
+        status: warning
+        text:
+          es: "El COP de Carnot de bomba de calor asume reversibilidad total. Las bombas de calor reales alcanzan un 30 a 55 % del COP de Carnot."
+          en: "The Carnot heat pump COP assumes total reversibility. Real heat pumps achieve 30 to 55 % of the Carnot COP."
+    graph_rules:
+      - id: cop_bc_graph
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama COP vs [[T_C]], la curva de [[COP_bc]] siempre está una unidad por encima de la de [[COP_ref]]."
+          en: "In the COP vs [[T_C]] diagram, the [[COP_bc]] curve is always one unit above the [[COP_ref]] curve."
+    likely_errors:
+      - id: cop_bc_error_confusion
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que no se haya usado la fórmula de refrigeración en lugar de la de bomba de calor (numerador [[Q_H]] en vez de [[Q_C]])."
+          en: "Verify that the refrigeration formula was not used instead of the heat pump formula (numerator [[Q_H]] instead of [[Q_C]])."
+    next_step_rules:
+      - id: cop_bc_next
+        when: "true"
+        status: info
+        text:
+          es: "Verificar que [[COP_bc]] menos [[COP_ref]] sea exactamente 1 y comparar con el COP de Carnot de bomba de calor."
+          en: "Verify that [[COP_bc]] minus [[COP_ref]] equals exactly 1 and compare with the Carnot heat pump COP."
+
+  T_H:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Temperatura del foco caliente que recibe calor"
+      en: "Hot reservoir temperature receiving heat"
+    summary_rules:
+      - id: th_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_H]] es la temperatura del foco caliente. En refrigeración es el ambiente exterior; en bomba de calor es el espacio calefactado."
+          en: "[[T_H]] is the hot reservoir temperature. In refrigeration it is the outdoor environment; in heat pump it is the heated space."
+    physical_reading_rules:
+      - id: th_reading
+        when: "true"
+        status: ok
+        text:
+          es: "Cuanto mayor es [[T_H]] respecto a [[T_C]], menor es el COP y mayor el trabajo necesario."
+          en: "The greater [[T_H]] relative to [[T_C]], the lower the COP and the greater the required work."
+    coherence_rules:
+      - id: th_coherence
+        when: "T_H <= T_C"
+        status: error
+        text:
+          es: "[[T_H]] debe ser estrictamente mayor que [[T_C]]. Si no lo es, no se necesita ciclo invertido."
+          en: "[[T_H]] must be strictly greater than [[T_C]]. If not, no reversed cycle is needed."
+      - id: th_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_H]] mayor que [[T_C]], coherente con la definición de ciclo invertido."
+          en: "[[T_H]] greater than [[T_C]], coherent with the reversed cycle definition."
+    model_validity_rules:
+      - id: th_model
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume [[T_H]] constante durante el intercambio de calor. En sistemas reales, la temperatura del condensador varía."
+          en: "The model assumes constant [[T_H]] during heat exchange. In real systems, condenser temperature varies."
+    graph_rules:
+      - id: th_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[T_H]] aparece como parámetro fijo en el diagrama COP vs [[T_C]]; cambiar [[T_H]] desplaza toda la curva."
+          en: "[[T_H]] appears as a fixed parameter in the COP vs [[T_C]] diagram; changing [[T_H]] shifts the entire curve."
+    likely_errors:
+      - id: th_error_celsius
+        when: "T_H < 200"
+        status: warning
+        text:
+          es: "[[T_H]] inferior a 200 K es inusual para aplicaciones de climatización. Verificar que se haya convertido de Celsius a kelvin."
+          en: "[[T_H]] below 200 K is unusual for HVAC applications. Verify conversion from Celsius to kelvin."
+    next_step_rules:
+      - id: th_next
+        when: "true"
+        status: info
+        text:
+          es: "Con [[T_H]] definida, calcular el COP de Carnot y comparar con el COP real del sistema."
+          en: "With [[T_H]] defined, calculate the Carnot COP and compare with the real system COP."
+
+  T_C:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Temperatura del foco frío del que se extrae calor"
+      en: "Cold reservoir temperature from which heat is extracted"
+    summary_rules:
+      - id: tc_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_C]] es la temperatura del foco frío. En refrigeración es el espacio refrigerado; en bomba de calor es el ambiente exterior."
+          en: "[[T_C]] is the cold reservoir temperature. In refrigeration it is the refrigerated space; in heat pump it is the outdoor environment."
+    physical_reading_rules:
+      - id: tc_reading
+        when: "true"
+        status: ok
+        text:
+          es: "Cuanto menor es [[T_C]], más difícil es extraer calor y menor es el COP. Enfriar a temperaturas criogénicas es termodinámicamente muy costoso."
+          en: "The lower [[T_C]], the harder it is to extract heat and the lower the COP. Cooling to cryogenic temperatures is thermodynamically very costly."
+    coherence_rules:
+      - id: tc_coherence_zero
+        when: "T_C <= 0"
+        status: error
+        text:
+          es: "[[T_C]] debe ser positiva en kelvin. Verificar que no se hayan usado temperaturas negativas en Celsius."
+          en: "[[T_C]] must be positive in kelvin. Verify that negative Celsius temperatures were not used."
+      - id: tc_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_C]] positiva y menor que [[T_H]], coherente con el funcionamiento del ciclo invertido."
+          en: "[[T_C]] positive and less than [[T_H]], coherent with reversed cycle operation."
+    model_validity_rules:
+      - id: tc_model
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume [[T_C]] constante. En refrigeradores reales, la temperatura del evaporador fluctúa con la carga."
+          en: "The model assumes constant [[T_C]]. In real refrigerators, evaporator temperature fluctuates with load."
+    graph_rules:
+      - id: tc_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[T_C]] es la variable del eje horizontal en el diagrama COP vs [[T_C]]; al aumentar [[T_C]], el COP crece."
+          en: "[[T_C]] is the horizontal axis variable in the COP vs [[T_C]] diagram; as [[T_C]] increases, COP grows."
+    likely_errors:
+      - id: tc_error_celsius
+        when: "T_C < 200"
+        status: warning
+        text:
+          es: "[[T_C]] inferior a 200 K es inusual salvo en congelación industrial o criogenia. Verificar conversión de unidades."
+          en: "[[T_C]] below 200 K is unusual except in industrial freezing or cryogenics. Verify unit conversion."
+    next_step_rules:
+      - id: tc_next
+        when: "true"
+        status: info
+        text:
+          es: "Con [[T_C]] y [[T_H]] definidas, calcular los COP de Carnot de refrigeración y bomba de calor."
+          en: "With [[T_C]] and [[T_H]] defined, calculate the Carnot refrigeration and heat pump COPs."
+
+  Q_H:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Calor total entregado al foco caliente"
+      en: "Total heat delivered to hot reservoir"
+    summary_rules:
+      - id: qh_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] es el calor total entregado al foco caliente, siempre igual a [[Q_C]] más [[W]]."
+          en: "[[Q_H]] is the total heat delivered to the hot reservoir, always equal to [[Q_C]] plus [[W]]."
+    physical_reading_rules:
+      - id: qh_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] es el efecto útil en bomba de calor. Su valor siempre supera [[Q_C]] porque incluye el trabajo aportado."
+          en: "[[Q_H]] is the useful effect in heat pump mode. Its value always exceeds [[Q_C]] because it includes the work input."
+    coherence_rules:
+      - id: qh_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[Q_H]] sea igual a [[Q_C]] más [[W]]. Si no lo es, se viola la primera ley."
+          en: "Verify that [[Q_H]] equals [[Q_C]] plus [[W]]. If not, the first law is violated."
+    model_validity_rules:
+      - id: qh_model
+        when: "true"
+        status: ok
+        text:
+          es: "En el modelo ideal, [[Q_H]] se calcula exactamente desde el COP. En sistemas reales, medir [[Q_H]] requiere calorimetría."
+          en: "In the ideal model, [[Q_H]] is calculated exactly from COP. In real systems, measuring [[Q_H]] requires calorimetry."
+    graph_rules:
+      - id: qh_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[Q_H]] no se grafica directamente pero se lee como el producto [[COP_bc]] por [[W]]."
+          en: "[[Q_H]] is not directly graphed but is read as the product [[COP_bc]] times [[W]]."
+    likely_errors:
+      - id: qh_error
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[Q_H]] sea mayor que [[Q_C]]. Si son iguales, se ha olvidado el trabajo [[W]]."
+          en: "Verify that [[Q_H]] is greater than [[Q_C]]. If equal, the work [[W]] has been forgotten."
+    next_step_rules:
+      - id: qh_next
+        when: "true"
+        status: info
+        text:
+          es: "Con [[Q_H]] conocido, calcular [[COP_bc]] dividiendo entre [[W]] y verificar el balance energético."
+          en: "With [[Q_H]] known, calculate [[COP_bc]] by dividing by [[W]] and verify the energy balance."
+
+  Q_C:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Calor extraído del foco frío"
+      en: "Heat extracted from cold reservoir"
+    summary_rules:
+      - id: qc_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] es el calor extraído del foco frío, efecto útil en refrigeración. Se calcula como [[COP_ref]] multiplicado por [[W]]."
+          en: "[[Q_C]] is the heat extracted from the cold reservoir, useful effect in refrigeration. Calculated as [[COP_ref]] times [[W]]."
+    physical_reading_rules:
+      - id: qc_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] cuantifica la capacidad de refrigeración. Cuanto mayor sea [[Q_C]] por unidad de [[W]], mayor el COP."
+          en: "[[Q_C]] quantifies the refrigeration capacity. The greater [[Q_C]] per unit of [[W]], the higher the COP."
+    coherence_rules:
+      - id: qc_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] debe ser positivo y menor que [[Q_H]]. Si [[Q_C]] es mayor que [[Q_H]], los datos son incoherentes."
+          en: "[[Q_C]] must be positive and less than [[Q_H]]. If [[Q_C]] is greater than [[Q_H]], the data is incoherent."
+    model_validity_rules:
+      - id: qc_model
+        when: "true"
+        status: ok
+        text:
+          es: "En el modelo ideal, [[Q_C]] depende del COP y del trabajo. En sistemas reales, [[Q_C]] se mide como capacidad frigorífica."
+          en: "In the ideal model, [[Q_C]] depends on COP and work. In real systems, [[Q_C]] is measured as refrigeration capacity."
+    graph_rules:
+      - id: qc_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[Q_C]] no se grafica directamente pero se lee como el producto [[COP_ref]] por [[W]]."
+          en: "[[Q_C]] is not directly graphed but is read as the product [[COP_ref]] times [[W]]."
+    likely_errors:
+      - id: qc_error
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[Q_C]] no sea mayor que [[Q_H]]. El foco frío siempre cede menos calor del que recibe el caliente."
+          en: "Verify that [[Q_C]] is not greater than [[Q_H]]. The cold reservoir always gives up less heat than the hot one receives."
+    next_step_rules:
+      - id: qc_next
+        when: "true"
+        status: info
+        text:
+          es: "Con [[Q_C]] conocido, calcular [[COP_ref]] dividiendo entre [[W]] y comparar con el COP de Carnot."
+          en: "With [[Q_C]] known, calculate [[COP_ref]] by dividing by [[W]] and compare with the Carnot COP."
+
+  W:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Trabajo consumido por el compresor"
+      en: "Work consumed by the compressor"
+    summary_rules:
+      - id: w_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[W]] es el trabajo del compresor, denominador de ambos COP. [[W]] es siempre [[Q_H]] menos [[Q_C]]."
+          en: "[[W]] is the compressor work, denominator of both COPs. [[W]] is always [[Q_H]] minus [[Q_C]]."
+    physical_reading_rules:
+      - id: w_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[W]] es el coste energético de transferir calor del foco frío al caliente. Cuanto menor sea [[W]] para el mismo [[Q_C]], mayor COP."
+          en: "[[W]] is the energy cost of transferring heat from cold to hot reservoir. The smaller [[W]] for the same [[Q_C]], the higher the COP."
+    coherence_rules:
+      - id: w_coherence_negative
+        when: "W <= 0"
+        status: error
+        text:
+          es: "[[W]] negativo o nulo viola la segunda ley: no se puede transferir calor del frío al caliente sin trabajo."
+          en: "Negative or zero [[W]] violates the second law: heat cannot be transferred from cold to hot without work."
+      - id: w_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[W]] positivo, coherente con la necesidad de trabajo para el ciclo invertido."
+          en: "Positive [[W]], coherent with the need for work in the reversed cycle."
+    model_validity_rules:
+      - id: w_model
+        when: "true"
+        status: ok
+        text:
+          es: "En el modelo ideal, [[W]] es mínimo para las temperaturas dadas. Los compresores reales consumen más por irreversibilidades."
+          en: "In the ideal model, [[W]] is minimum for the given temperatures. Real compressors consume more due to irreversibilities."
+    graph_rules:
+      - id: w_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[W]] se lee en el diagrama como la separación entre las curvas de [[Q_H]] y [[Q_C]] a temperatura fija."
+          en: "[[W]] is read in the diagram as the separation between the [[Q_H]] and [[Q_C]] curves at fixed temperature."
+    likely_errors:
+      - id: w_error
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[W]] sea la diferencia [[Q_H]] menos [[Q_C]], no la suma."
+          en: "Verify that [[W]] is the difference [[Q_H]] minus [[Q_C]], not the sum."
+    next_step_rules:
+      - id: w_next
+        when: "true"
+        status: info
+        text:
+          es: "Con [[W]] conocido, calcular ambos COP y verificar que [[Q_H]] sea [[Q_C]] más [[W]]."
+          en: "With [[W]] known, calculate both COPs and verify that [[Q_H]] equals [[Q_C]] plus [[W]]."

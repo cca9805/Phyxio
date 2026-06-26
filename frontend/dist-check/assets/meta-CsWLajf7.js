@@ -1,0 +1,87 @@
+const n=`id: gas-ideal
+
+nombre:
+  es: Gas ideal
+  en: Ideal Gas
+
+area: fisica-clasica
+bloque: termodinamica
+subbloque: gases-y-modelos
+parent_id: gases-y-modelos
+ruta_relativa: fisica-clasica/termodinamica/gases-y-modelos/gas-ideal
+orden: 253100
+type: leaf
+
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+  en:
+    - Secondary
+    - Upper Secondary
+
+icon: ✅
+
+descripcion: "Modelo físico que describe un gas formado por partículas puntuales sin interacciones, fundamento de la termodinámica de gases."
+description_en: "Physical model describing a gas of point particles with no interactions, the foundation of gas thermodynamics."
+
+tags:
+  es:
+    - gas ideal
+    - modelo molecular
+    - partículas puntuales
+    - ley del gas ideal
+    - condiciones de idealidad
+    - termodinámica
+  en:
+    - ideal gas
+    - molecular model
+    - point particles
+    - ideal gas law
+    - ideality conditions
+    - thermodynamics
+
+prerequisitos:
+  - fisica-clasica/termodinamica/calor-y-efectos-termicos/temperatura
+  - fisica-clasica/termodinamica/fundamentos/variables-termodinamicas
+
+graficos:
+  - Coord
+
+physical_role:
+  es: concepto físico
+  en: physical concept
+
+dificultad: 1
+tiempo_estimado_min: 25
+
+pregunta_fisica_central:
+  es: "¿Qué condiciones físicas debe satisfacer un gas para comportarse como un gas ideal y cómo se manifiesta esa idealidad en la relación entre presión y temperatura?"
+  en: "What physical conditions must a gas satisfy to behave as an ideal gas, and how does that ideality manifest in the relationship between pressure and temperature?"
+
+representacion_dominante: Coord
+magnitud_dominante: P
+
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

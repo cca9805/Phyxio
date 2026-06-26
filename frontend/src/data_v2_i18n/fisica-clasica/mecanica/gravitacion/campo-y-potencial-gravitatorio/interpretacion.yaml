@@ -1,0 +1,318 @@
+version: 5
+id: campo-y-potencial-gravitatorio-interp
+leaf_id: campo-y-potencial-gravitatorio
+scope: local
+nombre:
+  es: "Análisis de Campo y Potencial"
+  en: "Field and Potential Analysis"
+
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+
+result_blocks:
+  summary:
+    title: { es: "Resumen físico", en: "Physical summary" }
+  physical_reading:
+    title: { es: "Lectura física", en: "Physical reading" }
+  coherence:
+    title: { es: "Coherencia de datos", en: "Data coherence" }
+  model_validity:
+    title: { es: "Validez del modelo", en: "Model validity" }
+  graph_reading:
+    title: { es: "Lectura del gráfico", en: "Graph reading" }
+  likely_errors:
+    title: { es: "Errores probables", en: "Likely errors" }
+  next_step:
+    title: { es: "Siguiente paso", en: "Next step" }
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [ G, M, m, r, g, V, U, DeltaV, DeltaU, Wg, ri, rf, gi, gf ]
+  formulas: [ campo_puntual, potencial_puntual, energia_desde_potencial, cambio_energia_potencial, trabajo_gravitatorio, relacion_campo_potencial_conceptual, superposicion_campos_conceptual, superposicion_potenciales_conceptual ]
+
+targets:
+  g:
+    summary_rules:
+    - id: g-range-ok
+      when: g > 0
+      status: success
+      text:
+        es: "El campo [[g]] es físicamente coherente y describe aceleración radial hacia la fuente."
+        en: "Field [[g]] is physically coherent and describes radial acceleration toward the source."
+    physical_reading_rules:
+    - id: g-distance-link
+      when: g > 0
+      status: info
+      text:
+        es: "Si la distancia [[r]] aumenta, [[g]] debe disminuir de forma marcada por dependencia inversa cuadrática."
+        en: "If distance [[r]] increases, [[g]] must decrease strongly due to inverse-square dependence."
+    coherence_rules:
+    - id: g-coherence
+      when: g > 0 and r > 0 and M > 0
+      status: success
+      text:
+        es: "Coherencia confirmada entre [[g]], [[r]] y [[M]] en régimen clásico."
+        en: "Coherence confirmed among [[g]], [[r]], and [[M]] in the classical regime."
+    model_validity_rules:
+    - id: g-validity
+      when: r > 0
+      status: success
+      text:
+        es: "Válido para masa puntual o distribución esférica equivalente."
+        en: "Valid for a point mass or equivalent spherical distribution."
+    graph_rules:
+    - id: g-graph
+      when: g > 0
+      status: info
+      text:
+        es: "En Coord, la curva de [[g]] se empina cerca de radios pequeños."
+        en: "In Coord, the [[g]] curve steepens at small radii."
+    likely_errors:
+    - id: g-neg
+      when: g <= 0
+      status: error
+      text:
+        es: "Error conceptual: confundir signo vectorial con módulo de [[g]] genera lectura física incorrecta. Revisar unidades y distancia [[r]]."
+        en: "Conceptual error: confusing vector sign with [[g]] magnitude leads to wrong physical reading. Check units and distance [[r]]."
+    - id: g-m-swap
+      when: M <= m
+      status: warning
+      text:
+        es: "Posible error conceptual: revisar si se intercambiaron [[M]] y [[m]] en el planteamiento."
+        en: "Possible conceptual mistake: check whether [[M]] and [[m]] were swapped in setup."
+    next_step_rules:
+    - id: g-next
+      when: g > 0
+      status: info
+      text:
+        es: "Comparar [[gi]] y [[gf]] para estimar variación de aceleración entre estados."
+        en: "Compare [[gi]] and [[gf]] to estimate acceleration variation between states."
+
+  V:
+    summary_rules:
+    - id: v-sign
+      when: V < 0
+      status: success
+      text:
+        es: "Con referencia en infinito, [[V]] negativo es el resultado esperado."
+        en: "With infinity as reference, negative [[V]] is expected."
+    physical_reading_rules:
+    - id: v-well
+      when: V < 0
+      status: info
+      text:
+        es: "Un [[V]] más negativo indica un pozo gravitatorio más profundo."
+        en: "A more negative [[V]] indicates a deeper gravitational well."
+    coherence_rules:
+    - id: v-coh
+      when: V < 0 and r > 0
+      status: success
+      text:
+        es: "Coherencia entre signo de [[V]] y distancia radial [[r]]."
+        en: "Coherence between [[V]] sign and radial distance [[r]]."
+    model_validity_rules:
+    - id: v-validity
+      when: r > 0
+      status: success
+      text:
+        es: "Modelo compatible con referencia energética explícita y régimen clásico."
+        en: "Model compatible with explicit energy reference and classical regime."
+    graph_rules:
+    - id: v-graph
+      when: V < 0
+      status: info
+      text:
+        es: "La lectura de [[DeltaV]] entre dos radios anticipa cambio de trabajo por unidad de masa."
+        en: "Reading [[DeltaV]] between two radii anticipates work change per unit mass."
+    likely_errors:
+    - id: v-positive
+      when: V > 0
+      status: warning
+      text:
+        es: "Error conceptual probable: [[V]] positiva sugiere referencia distinta o confusión de signo en potencial gravitatorio."
+        en: "Likely conceptual error: positive [[V]] suggests a different reference or a gravitational-potential sign mistake."
+    - id: v-ref-missing
+      when: V != 0
+      status: info
+      text:
+        es: "Comprobación conceptual: validar que la referencia energética esté declarada antes de interpretar [[V]]."
+        en: "Conceptual check: confirm energy reference is declared before interpreting [[V]]."
+    next_step_rules:
+    - id: v-next
+      when: V < 0 and m > 0
+      status: info
+      text:
+        es: "Usar [[U]] con [[m]] para cerrar el balance energético del caso."
+        en: "Use [[U]] with [[m]] to close the case energy balance."
+
+  DeltaU:
+    summary_rules:
+    - id: du-summary
+      when: ri > 0
+      status: success
+      text:
+        es: "El cambio [[DeltaU]] conecta de forma directa estado inicial y final del sistema."
+        en: "The [[DeltaU]] change directly connects the initial and final system states."
+    physical_reading_rules:
+    - id: du-reading
+      when: ri > 0 and rf > 0
+      status: info
+      text:
+        es: "Si [[rf]] es mayor que [[ri]], el sistema suele ganar energía potencial."
+        en: "If [[rf]] is greater than [[ri]], the system typically gains potential energy."
+    coherence_rules:
+    - id: du-coh
+      when: Wg + DeltaU == 0
+      status: success
+      text:
+        es: "Coherencia energética: [[Wg]] y [[DeltaU]] cumplen conservación en régimen conservativo."
+        en: "Energy coherence: [[Wg]] and [[DeltaU]] satisfy conservation in a conservative regime."
+    model_validity_rules:
+    - id: du-validity
+      when: ri > 0 and rf > 0
+      status: success
+      text:
+        es: "Válido mientras ri y rf se midan desde la misma referencia geométrica."
+        en: "Valid as long as ri and rf are measured from the same geometric reference."
+    graph_rules:
+    - id: du-graph
+      when: ri > 0 and rf > 0
+      status: info
+      text:
+        es: "El área efectiva entre niveles de potencial resume el signo de [[DeltaU]]."
+        en: "Effective area between potential levels summarizes the sign of [[DeltaU]]."
+    likely_errors:
+    - id: du-order
+      when: ri == rf
+      status: warning
+      text:
+        es: "Caso degenerado: si [[ri]] coincide con [[rf]], [[DeltaU]] debe anularse."
+        en: "Degenerate case: if [[ri]] equals [[rf]], [[DeltaU]] should vanish."
+    - id: du-sign-link
+      when: Wg == DeltaU
+      status: warning
+      text:
+        es: "Error conceptual: en interacción conservativa, [[Wg]] no debe tener el mismo signo que [[DeltaU]]."
+        en: "Conceptual error: in conservative interaction, [[Wg]] should not share the same sign as [[DeltaU]]."
+    next_step_rules:
+    - id: du-next
+      when: ri > 0 and rf > 0
+      status: info
+      text:
+        es: "Verificar consistencia con la relación de trabajo [[Wg]] para cerrar interpretación."
+        en: "Check consistency with work relation [[Wg]] to close interpretation."
+
+  U:
+    summary_rules:
+    - id: u-summary
+      when: m > 0
+      status: success
+      text:
+        es: "[[U]] resume la energía gravitatoria del estado para la masa de prueba."
+        en: "[[U]] summarizes the state's gravitational energy for the test mass."
+    physical_reading_rules:
+    - id: u-reading
+      when: m > 0
+      status: info
+      text:
+        es: "Cambios en [[U]] reflejan cambios reales de configuración espacial del sistema."
+        en: "Changes in [[U]] reflect real spatial-configuration changes of the system."
+    coherence_rules:
+    - id: u-coh
+      when: m > 0
+      status: success
+      text:
+        es: "Coherencia: [[U]] escala linealmente con la masa de prueba [[m]]."
+        en: "Coherence: [[U]] scales linearly with test mass [[m]]."
+    model_validity_rules:
+    - id: u-valid
+      when: m > 0
+      status: success
+      text:
+        es: "Válido si la masa de prueba no altera de forma apreciable el campo de la fuente."
+        en: "Valid if the test mass does not significantly alter the source field."
+    graph_rules:
+    - id: u-graph
+      when: m > 0
+      status: info
+      text:
+        es: "[[U]] puede inferirse desde la lectura de [[V]] multiplicada por [[m]]."
+        en: "[[U]] can be inferred from [[V]] reading multiplied by [[m]]."
+    likely_errors:
+    - id: u-miss-m
+      when: m <= 0
+      status: error
+      text:
+        es: "Error conceptual: [[U]] requiere una masa de prueba [[m]] positiva y definida."
+        en: "Conceptual error: [[U]] requires a positive, defined test mass [[m]]."
+    next_step_rules:
+    - id: u-next
+      when: m > 0
+      status: info
+      text:
+        es: "Comparar [[U]] entre estados para interpretar el signo de [[DeltaU]]."
+        en: "Compare [[U]] across states to interpret the sign of [[DeltaU]]."
+
+  Wg:
+    summary_rules:
+    - id: wg-summary
+      when: Wg == Wg
+      status: success
+      text:
+        es: "[[Wg]] cuantifica el trabajo gravitatorio entre estados."
+        en: "[[Wg]] quantifies gravitational work between states."
+    physical_reading_rules:
+    - id: wg-reading
+      when: Wg == Wg
+      status: info
+      text:
+        es: "El signo de [[Wg]] se interpreta junto con [[DeltaU]] y sentido del desplazamiento radial."
+        en: "The sign of [[Wg]] is interpreted together with [[DeltaU]] and radial-motion direction."
+    coherence_rules:
+    - id: wg-coh
+      when: Wg + DeltaU == 0
+      status: success
+      text:
+        es: "Coherencia conservativa entre trabajo y cambio de energía potencial."
+        en: "Conservative coherence between work and potential-energy change."
+    model_validity_rules:
+    - id: wg-valid
+      when: Wg == Wg
+      status: success
+      text:
+        es: "Válido en interacción gravitatoria conservativa sin disipación relevante."
+        en: "Valid under conservative gravitational interaction without relevant dissipation."
+    graph_rules:
+    - id: wg-graph
+      when: Wg == Wg
+      status: info
+      text:
+        es: "La separación de niveles de potencial sugiere el trabajo intercambiado."
+        en: "Potential-level separation suggests exchanged work."
+    likely_errors:
+    - id: wg-sign
+      when: Wg == DeltaU
+      status: warning
+      text:
+        es: "Error conceptual probable: revisar relación de signo entre [[Wg]] y [[DeltaU]]."
+        en: "Likely conceptual mistake: check sign relation between [[Wg]] and [[DeltaU]]."
+    next_step_rules:
+    - id: wg-next
+      when: Wg == Wg
+      status: info
+      text:
+        es: "Usar [[Wg]] para cerrar balance con cambios de energía cinética si el problema lo requiere."
+        en: "Use [[Wg]] to close balance with kinetic-energy changes when required."
+
+config:
+  decimal_places: 3
+  show_graphs: true

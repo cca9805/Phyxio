@@ -1,0 +1,169 @@
+const e=`version: 5
+topic:
+  id: potencia
+  title:
+    es: Potencia
+    en: Power
+variables:
+  - { id: P, symbol: P, name: { es: potencia, en: power }, si_unit: W }
+  - { id: W, symbol: W, name: { es: trabajo, en: work }, si_unit: J }
+  - { id: t, symbol: t, name: { es: tiempo, en: time }, si_unit: s }
+  - { id: F, symbol: F, name: { es: fuerza, en: force }, si_unit: N }
+  - { id: v, symbol: v, name: { es: rapidez, en: speed }, si_unit: m/s }
+  - { id: theta, symbol: \\theta, name: { es: angulo fuerza-velocidad, en: force-velocity angle }, si_unit: rad }
+formulas:
+  - id: potencia_media
+    title:
+      es: Potencia media
+      en: Average power
+    equation: P = W/t
+    latex: P=\\frac{W}{t}
+    rearrangements:
+      - target: P
+        equation: P = W/t
+        latex: P=\\frac{W}{t}
+        constraints:
+          - expr: t > 0
+            message: { es: t debe ser positivo, en: t must be positive }
+      - target: W
+        equation: W = P*t
+        latex: W=P\\cdot t
+        constraints: []
+      - target: t
+        equation: t = W/P
+        latex: t=\\frac{W}{P}
+        constraints:
+          - expr: P != 0
+            message: { es: P no puede ser cero para despejar t, en: P cannot be zero when solving for t }
+    category: operative
+    relation_type: average_rate
+    physical_meaning:
+      es: Mide cuanto trabajo se realiza por unidad de tiempo en un intervalo finito.
+      en: Measures how much work is done per unit time over a finite interval.
+    constraints:
+      - expr: t > 0
+        message: { es: El intervalo temporal debe ser positivo, en: The time interval must be positive }
+    validity:
+      es: Valida para procesos donde el trabajo total y el intervalo corresponden al mismo sistema.
+      en: Valid when total work and time interval refer to the same system.
+    dimension_check: W = J/s
+    calculable: true
+    motivo_no_calculable: null
+    used_in: [teoria.md, teoria.en.md, ejemplos.md, ejemplos.en.md, interpretacion.yaml]
+    interpretation_tags: [average_power, energy_rate]
+    result_semantics:
+      target: P
+      meaning: Permite comparar maquinas que realizan el mismo trabajo en tiempos distintos.
+    domain_checks:
+      - expr: t > 0
+        message: { es: Revisa que el tiempo no sea nulo, en: Check that time is not zero }
+    coherence_checks:
+      - expr: "true"
+        message: { es: Para el mismo W, menor t implica mayor P, en: For the same W, smaller t implies larger P }
+    graph_implications:
+      - La pendiente de W frente a t representa potencia media si el crecimiento es uniforme.
+    pedagogical_triggers:
+      - when: "true"
+        message: { es: No confundas energia total con rapidez de transferencia, en: Do not confuse total energy with transfer rate }
+  - id: potencia_instantanea_mecanica
+    title:
+      es: Potencia instantanea mecanica
+      en: Instantaneous mechanical power
+    equation: P = F*v*cos(theta)
+    latex: P=F\\cdot v\\cdot \\cos\\theta
+    rearrangements:
+      - target: P
+        equation: P = F*v*cos(theta)
+        latex: P=F\\cdot v\\cdot \\cos\\theta
+        constraints: []
+      - target: F
+        equation: F = P/(v*cos(theta))
+        latex: F=\\frac{P}{v\\cos\\theta}
+        constraints:
+          - expr: v != 0
+            message: { es: v no puede ser cero, en: v cannot be zero }
+      - target: v
+        equation: v = P/(F*cos(theta))
+        latex: v=\\frac{P}{F\\cos\\theta}
+        constraints:
+          - expr: F != 0
+            message: { es: F no puede ser cero, en: F cannot be zero }
+    category: operative
+    relation_type: instantaneous_rate
+    physical_meaning:
+      es: Mide la transferencia instantanea de energia por la componente de la fuerza paralela al movimiento.
+      en: Measures instantaneous energy transfer by the force component parallel to motion.
+    constraints:
+      - expr: "true"
+        message: { es: theta debe representar el angulo real entre fuerza y velocidad, en: theta must represent the real angle between force and velocity }
+    validity:
+      es: Valida para mecanica clasica cuando la fuerza y la velocidad corresponden al mismo punto de aplicacion.
+      en: Valid in classical mechanics when force and velocity belong to the same point of application.
+    dimension_check: W = N m/s
+    calculable: true
+    motivo_no_calculable: null
+    used_in: [teoria.md, teoria.en.md, ejemplos.md, ejemplos.en.md, interpretacion.yaml]
+    interpretation_tags: [instantaneous_power, projection]
+    result_semantics:
+      target: P
+      meaning: Indica si una fuerza esta entregando energia, extrayendola o no transfiriendola.
+    domain_checks:
+      - expr: "true"
+        message: { es: Comprueba que F y v pertenecen al mismo instante, en: Check that F and v belong to the same instant }
+    coherence_checks:
+      - expr: "true"
+        message: { es: Si theta es pi/2, la potencia instantanea debe anularse, en: If theta is pi/2, instantaneous power must vanish }
+    graph_implications:
+      - Para theta fijo, la grafica P frente a v es lineal.
+    pedagogical_triggers:
+      - when: "true"
+        message: { es: La fuerza perpendicular no cambia la energia cinetica instantaneamente, en: A perpendicular force does not instantaneously change kinetic energy }
+  - id: potencia_definicion_diferencial
+    title:
+      es: Definicion diferencial de potencia
+      en: Differential definition of power
+    equation: P = dW/dt
+    latex: P=\\frac{dW}{dt}
+    rearrangements:
+      - target: P
+        equation: P = dW/dt
+        latex: P=\\frac{dW}{dt}
+        constraints: []
+    category: structural
+    relation_type: differential_definition
+    physical_meaning:
+      es: Define la potencia instantanea como tasa temporal de cambio del trabajo acumulado.
+      en: Defines instantaneous power as the time rate of accumulated work.
+    constraints:
+      - expr: "true"
+        message: { es: W debe variar de forma diferenciable respecto al tiempo, en: W must vary differentiably with time }
+    validity:
+      es: Apropiada cuando se modela una transferencia continua de energia mecanica.
+      en: Appropriate when modeling continuous mechanical energy transfer.
+    dimension_check: W = J/s
+    calculable: false
+    motivo_no_calculable:
+      es: Requiere conocer la funcion W(t) o una ley instantanea equivalente.
+      en: Requires knowing W(t) or an equivalent instantaneous law.
+    used_in: [teoria.md, teoria.en.md, ejemplos.md, ejemplos.en.md, interpretacion.yaml]
+    interpretation_tags: [differential_rate, continuous_process]
+    result_semantics:
+      target: P
+      meaning: Conecta la potencia con la pendiente local de una curva trabajo-tiempo.
+    domain_checks:
+      - expr: "true"
+        message: { es: Verifica continuidad temporal suficiente, en: Check sufficient time continuity }
+    coherence_checks:
+      - expr: "true"
+        message: { es: Si W crece linealmente con t, la potencia es constante, en: If W grows linearly with t, power is constant }
+    graph_implications:
+      - La potencia instantanea es la pendiente local de W(t).
+    pedagogical_triggers:
+      - when: "true"
+        message: { es: No uses una media cuando el problema pide lectura instantanea, en: Do not use an average when the problem asks for an instantaneous reading }
+ui:
+  default_formula: potencia_media
+  groups:
+    - title: { es: Potencia mecanica, en: Mechanical power }
+      items: [potencia_media, potencia_instantanea_mecanica, potencia_definicion_diferencial]
+`;export{e as default};

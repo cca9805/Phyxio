@@ -22,7 +22,7 @@ import "./v2/styles/v2.css";
 const root = createRoot(document.getElementById('root'));
 root.render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <App />
     </BrowserRouter>
   </StrictMode>

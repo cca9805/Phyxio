@@ -1,0 +1,77 @@
+const e=`id: indice-de-refraccion
+nombre:
+  es: Indice de refraccion
+  en: Refractive Index
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: optica
+parent_id: refraccion
+ruta_relativa: fisica-clasica/electromagnetismo/optica/optica-geometrica/refraccion/indice-de-refraccion
+orden: 297122
+type: leaf
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+icon: "\\U0001F526"
+descripcion: "Indice de refraccion como cociente entre la velocidad de la luz en el vacio y en un medio material."
+description_en: "Refractive index as the ratio of the speed of light in vacuum to that in a material medium."
+physical_role:
+  es: "concepto físico"
+  en: "physical concept"
+tags:
+  es:
+    - indice de refraccion
+    - velocidad de la luz
+    - medio material
+    - optica geometrica
+    - ley de Snell
+    - dispersion
+  en:
+    - refractive index
+    - speed of light
+    - material medium
+    - geometrical optics
+    - Snell's law
+    - dispersion
+prerequisitos:
+  - fisica-clasica/electromagnetismo/optica/optica-geometrica/refraccion/ley-de-snell
+graficos:
+  - Svg
+dificultad: 2
+tiempo_estimado_min: 20
+representacion_dominante: Svg
+magnitud_dominante: n
+pregunta_fisica_central:
+  es: "Como determina el indice de refraccion la velocidad y la trayectoria de la luz al atravesar un medio material?"
+  en: "How does the refractive index determine the speed and trajectory of light as it passes through a material medium?"
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: "Interpretación"
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Svg
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 4
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

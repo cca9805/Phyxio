@@ -1,0 +1,88 @@
+const e=`id: diferencial-y-magnetotermico
+nombre:
+  es: Diferencial y magnetotermico
+  en: Differential and Thermal-Magnetic Breakers
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: electricidad-domestica
+parent_id: electricidad-domestica
+ruta_relativa: fisica-clasica/electromagnetismo/electricidad-domestica/diferencial-y-magnetotermico
+orden: 298500
+type: leaf
+dificultad: 2
+tiempo_estimado_min: 30
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+icon: "🔌"
+descripcion: "Diferencial detecta fuga de corriente; magnetotérmico protege contra sobrecarga y cortocircuito."
+description_en: "Differential detects leakage current; thermal-magnetic breaker protects against overload and short circuit."
+tags:
+  es:
+    - diferencial
+    - magnetotérmico
+    - protección eléctrica
+    - fuga de corriente
+    - sobrecarga
+    - cuadro eléctrico
+  en:
+    - differential breaker
+    - thermal-magnetic breaker
+    - electrical protection
+    - leakage current
+    - overload
+    - consumer unit
+prerequisitos:
+  - fisica-clasica/electromagnetismo/corriente-electrica/intensidad-de-corriente
+  - fisica-clasica/electromagnetismo/corriente-electrica/resistencia-y-ley-de-ohm
+  - fisica-clasica/electromagnetismo/electricidad-domestica/tension-y-potencia-en-casa
+  - fisica-clasica/electromagnetismo/electricidad-domestica/seguridad-electrica
+graficos: []
+physical_role:
+  es: "concepto físico"
+  en: "physical concept"
+representacion_dominante: none
+magnitud_dominante: "I_delta"
+pregunta_fisica_central:
+  es: "¿Qué magnitud física vigila cada protección y en qué condición actúa para interrumpir el circuito?"
+  en: "What physical quantity does each protection device monitor, and under what condition does it trip to interrupt the circuit?"
+interpretacion:
+  enabled: true
+  archivo: "interpretacion.yaml"
+  ui:
+    dedicated_tab: true
+    inline_calculator: true
+    inline_graph: true
+    tab_label:
+      es: "Interpretación"
+      en: "Interpretation"
+    show_summary: true
+    show_physical_reading: true
+    show_coherence: true
+    show_model_validity: true
+    show_graph_reading: true
+    show_likely_errors: true
+    show_next_step: true
+    allow_export: true
+    collapsible: false
+  mini_graph:
+    enabled: true
+    preferred_type: none
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

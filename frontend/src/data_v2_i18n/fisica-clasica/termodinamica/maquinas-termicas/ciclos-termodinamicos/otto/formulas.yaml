@@ -1,0 +1,172 @@
+- id: rendimiento_otto
+  title:
+    es: Rendimiento térmico del ciclo Otto
+    en: Otto cycle thermal efficiency
+  equation: "eta_O = 1 - 1 / r^(gamma - 1)"
+  latex: "\\eta_O = 1 - \\frac{1}{r^{\\gamma - 1}}"
+  rearrangements:
+    - target: eta_O
+      equation: "eta_O = 1 - 1 / r^(gamma - 1)"
+      latex: "\\eta_O = 1 - \\frac{1}{r^{\\gamma - 1}}"
+    - target: r
+      equation: "r = (1 / (1 - eta_O))^(1 / (gamma - 1))"
+      latex: "r = \\left(\\frac{1}{1 - \\eta_O}\\right)^{\\frac{1}{\\gamma - 1}}"
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: "El rendimiento del ciclo Otto depende únicamente de la relación de compresión y del índice adiabático; es independiente de la cantidad de calor suministrado"
+    en: "Otto cycle efficiency depends solely on the compression ratio and the adiabatic index; it is independent of the amount of heat supplied"
+  constraints:
+    - "r > 1"
+    - "gamma > 1"
+  validity:
+    es: "Gas ideal con propiedades constantes y procesos reversibles"
+    en: "Ideal gas with constant properties and reversible processes"
+  dimension_check: "[1] = [1] - [1]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - evaluación de rendimiento de motores de gasolina
+    - comparación con ciclo Diesel y Carnot
+    - diseño termodinámico conceptual
+  interpretation_tags:
+    - rendimiento
+    - ciclo Otto
+    - relación de compresión
+  result_semantics:
+    target: eta_O
+    kind: ratio
+    sign_meaning:
+      es: "Siempre positivo, fracción de calor convertida en trabajo"
+      en: "Always positive, fraction of heat converted to work"
+    absolute_value_meaning:
+      es: "Cercano a 0.6 indica alta compresión; cercano a 0.4 indica baja compresión"
+      en: "Close to 0.6 indicates high compression; close to 0.4 indicates low compression"
+  domain_checks:
+    - "[[r]] debe ser estrictamente mayor que 1"
+    - "[[gamma]] debe ser mayor que 1"
+    - "[[eta_O]] debe quedar en el intervalo abierto (0, 1)"
+  coherence_checks:
+    - "Si [[eta_O]] supera 0.65 con parámetros de gasolina típicos, verificar modelo de aire frío vs caliente"
+    - "Si [[eta_O]] resulta negativo, probablemente [[r]] es menor que 1 lo cual es incorrecto"
+  graph_implications:
+    - "En el diagrama Coord, [[eta_O]] crece como curva cóncava con [[r]]; mayor [[gamma]] eleva la curva"
+  pedagogical_triggers:
+    - "La fórmula no depende de Q_H: el rendimiento Otto es puramente geométrico"
+    - "Al aumentar r, la curva se aplana y los incrementos marginales de rendimiento son cada vez menores"
+
+- id: balance_energetico_otto
+  title:
+    es: Balance energético del ciclo Otto
+    en: Otto cycle energy balance
+  equation: "W_neto = Q_H - Q_C"
+  latex: "W_{neto} = Q_H - Q_C"
+  rearrangements:
+    - target: W_neto
+      equation: "W_neto = Q_H - Q_C"
+      latex: "W_{neto} = Q_H - Q_C"
+    - target: Q_H
+      equation: "Q_H = W_neto + Q_C"
+      latex: "Q_H = W_{neto} + Q_C"
+    - target: Q_C
+      equation: "Q_C = Q_H - W_neto"
+      latex: "Q_C = Q_H - W_{neto}"
+  category: fundamental
+  relation_type: conservation
+  physical_meaning:
+    es: "El trabajo neto producido por el ciclo es la diferencia entre el calor absorbido y el calor rechazado"
+    en: "The net work produced by the cycle is the difference between absorbed and rejected heat"
+  constraints:
+    - "Q_H > 0"
+    - "Q_C > 0"
+    - "W_neto < Q_H"
+  validity:
+    es: "Cualquier ciclo cerrado de potencia"
+    en: "Any closed power cycle"
+  dimension_check: "[J] = [J] - [J]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - verificación del balance térmico del ciclo
+    - cálculo de calor rechazado
+    - evaluación de pérdidas energéticas
+  interpretation_tags:
+    - balance
+    - primera ley
+    - trabajo
+  result_semantics:
+    target: W_neto
+    kind: extensive
+    sign_meaning:
+      es: "Positivo para ciclo motor, negativo si consume trabajo"
+      en: "Positive for power cycle, negative if it consumes work"
+    absolute_value_meaning:
+      es: "Cuanto mayor es [[W_neto]] respecto a [[Q_H]], más eficiente es el ciclo"
+      en: "The larger [[W_neto]] relative to [[Q_H]], the more efficient the cycle"
+  domain_checks:
+    - "[[Q_H]] debe ser estrictamente positivo"
+    - "[[Q_C]] debe ser estrictamente positivo"
+  coherence_checks:
+    - "[[W_neto]] debe ser positivo para un ciclo motor"
+    - "[[W_neto]] no puede exceder [[Q_H]]"
+  graph_implications:
+    - "[[W_neto]] corresponde al área encerrada por el ciclo en el diagrama P-V"
+  pedagogical_triggers:
+    - "[[W_neto]] no puede ser mayor que [[Q_H]]"
+    - "[[Q_C]] siempre es positivo por segunda ley"
+
+- id: rendimiento_alternativo_otto
+  title:
+    es: Rendimiento como cociente de energías
+    en: Efficiency as energy ratio
+  equation: "eta_O = W_neto / Q_H"
+  latex: "\\eta_O = \\frac{W_{neto}}{Q_H}"
+  rearrangements:
+    - target: eta_O
+      equation: "eta_O = W_neto / Q_H"
+      latex: "\\eta_O = \\frac{W_{neto}}{Q_H}"
+    - target: W_neto
+      equation: "W_neto = eta_O * Q_H"
+      latex: "W_{neto} = \\eta_O \\cdot Q_H"
+    - target: Q_H
+      equation: "Q_H = W_neto / eta_O"
+      latex: "Q_H = \\frac{W_{neto}}{\\eta_O}"
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: "El rendimiento es la fracción del calor absorbido que se convierte en trabajo útil"
+    en: "Efficiency is the fraction of absorbed heat converted into useful work"
+  constraints:
+    - "Q_H > 0"
+    - "W_neto >= 0"
+  validity:
+    es: "Cualquier ciclo de potencia"
+    en: "Any power cycle"
+  dimension_check: "[1] = [J] / [J]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - verificación cruzada con la fórmula principal
+    - cálculo inverso de [[Q_H]] o [[W_neto]]
+  interpretation_tags:
+    - rendimiento
+    - verificación
+  result_semantics:
+    target: eta_O
+    kind: ratio
+    sign_meaning:
+      es: "Siempre positivo"
+      en: "Always positive"
+    absolute_value_meaning:
+      es: "Fracción de energía aprovechada como trabajo"
+      en: "Fraction of energy harnessed as work"
+  domain_checks:
+    - "[[Q_H]] debe ser estrictamente positivo"
+    - "[[W_neto]] debe ser no negativo"
+  coherence_checks:
+    - "[[eta_O]] debe coincidir con el valor de la fórmula explícita"
+    - "0 <= [[eta_O]] <= 1"
+  graph_implications:
+    - "Punto en la curva [[eta_O]]([[r]]) que debe coincidir con el cociente [[W_neto]] entre [[Q_H]]"
+  pedagogical_triggers:
+    - "Usar para verificar coherencia con la fórmula explícita"

@@ -1,0 +1,177 @@
+formulas:
+
+  - id: principio_calorimetria
+    title:
+      es: Principio de calorimetría (sistema aislado)
+      en: Calorimetry principle (isolated system)
+    equation: "sum_Qi = 0"
+    latex: "\\sum_{i} Q_i = 0"
+    rearrangements:
+      - target: Q_i
+        equation: "Q_i = -sum_Qj"
+        latex: "Q_i = -\\sum_{j \\neq i} Q_j"
+    category: fundamental
+    relation_type: conservation_law
+    physical_meaning:
+      es: "En un sistema calorimétrico aislado, la energía total se conserva: la suma algebraica de los calores intercambiados por todos los cuerpos es exactamente cero. Los cuerpos que ceden calor (Q < 0) compensan exactamente a los que lo absorben (Q > 0)."
+      en: "In an isolated calorimetric system, total energy is conserved: the algebraic sum of the heats exchanged by all bodies is exactly zero. Bodies that release heat (Q < 0) exactly compensate those that absorb it (Q > 0)."
+    constraints:
+      - "Sistema térmicamente aislado del entorno (sin pérdidas al calorímetro ni al ambiente)"
+      - "Sin cambio de estado en ninguno de los cuerpos durante el proceso"
+      - "Calores específicos constantes en el rango de temperatura del proceso"
+      - "Todos los cuerpos alcanzan el mismo T_eq final"
+    validity:
+      es: "Válido para sistemas aislados sin cambios de estado. Cuando hay transiciones de fase, la suma incluye también los calores latentes de cada transición."
+      en: "Valid for isolated systems without phase changes. When phase transitions occur, the sum also includes the latent heats of each transition."
+    dimension_check: "[M L^2 T^-2] sumado sobre todos los cuerpos = 0 ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - conservacion_energia
+      - sistema_aislado
+      - balance_termico
+    result_semantics:
+      target: Q_i
+      kind: scalar_signed
+      sign_meaning:
+        es: "Q_i positivo: el cuerpo i absorbe calor y se calienta. Q_i negativo: el cuerpo i cede calor y se enfría."
+        en: "Positive Q_i: body i absorbs heat and warms up. Negative Q_i: body i releases heat and cools down."
+      absolute_value_meaning:
+        es: "El valor absoluto de Q_i indica la energía intercambiada por ese cuerpo. La suma de los valores absolutos de los calores cedidos es igual a la suma de los absorbidos."
+        en: "The absolute value of Q_i indicates the energy exchanged by that body. The sum of the absolute values of heats released equals the sum of those absorbed."
+    domain_checks:
+      - "T_eq debe estar entre T_min_inicial y T_max_inicial"
+      - "La suma de todos los Q_i debe ser cero como verificación"
+    coherence_checks:
+      - "Los cuerpos con T_inicial > T_eq deben tener Q_i < 0"
+      - "Los cuerpos con T_inicial < T_eq deben tener Q_i > 0"
+    graph_implications:
+      - "En la gráfica Q vs DeltaT, cada cuerpo aporta un punto. La suma de todos los Q debe ser cero."
+    pedagogical_triggers:
+      - "Si la suma de los Q_i no es cero, hay un error de signo en alguno de los calores o se ha omitido un cuerpo del sistema."
+
+  - id: calor_sensible_i
+    title:
+      es: Calor sensible del cuerpo i
+      en: Sensible heat of body i
+    equation: "Q_i = m_i * c_i * DeltaT_i"
+    latex: "Q_i = m_i c_i \\Delta T_i"
+    rearrangements:
+      - target: Q_i
+        equation: "Q_i = m_i * c_i * DeltaT_i"
+        latex: "Q_i = m_i c_i \\Delta T_i"
+      - target: c_i
+        equation: "c_i = Q_i / (m_i * DeltaT_i)"
+        latex: "c_i = \\dfrac{Q_i}{m_i \\Delta T_i}"
+      - target: m_i
+        equation: "m_i = Q_i / (c_i * DeltaT_i)"
+        latex: "m_i = \\dfrac{Q_i}{c_i \\Delta T_i}"
+    category: derived
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: "El calor intercambiado por cada cuerpo en un tramo sin cambio de estado es proporcional a su masa, a su calor específico y a su variación de temperatura. El signo de DeltaT_i fija si Q_i es absorbido o cedido."
+      en: "The heat exchanged by each body in a segment without phase change is proportional to its mass, specific heat capacity, and temperature change. The sign of DeltaT_i determines whether Q_i is absorbed or released."
+    constraints:
+      - "Sin cambio de estado en el cuerpo i"
+      - "c_i aproximadamente constante en el rango de temperatura"
+      - "DeltaT_i calculado como T_eq - T_inicial_i"
+    validity:
+      es: "Válida para calor sensible en cada cuerpo del sistema. Si hay transición de fase, debe añadirse el calor latente correspondiente en una etapa separada."
+      en: "Valid for sensible heat in each body of the system. If a phase transition occurs, the corresponding latent heat must be added in a separate stage."
+    dimension_check: "[M] [L^2 T^-2 Theta^-1] [Theta] = [M L^2 T^-2] = J ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - calor_sensible
+      - signos
+      - balance_termico
+    result_semantics:
+      target: Q_i
+      kind: scalar_signed
+      sign_meaning:
+        es: "Q_i positivo indica absorción de calor; Q_i negativo indica cesión de calor."
+        en: "Positive Q_i indicates heat absorption; negative Q_i indicates heat release."
+      absolute_value_meaning:
+        es: "El valor absoluto de Q_i es la energía intercambiada por el cuerpo i."
+        en: "The absolute value of Q_i is the energy exchanged by body i."
+    domain_checks:
+      - "m_i > 0"
+      - "c_i > 0"
+      - "DeltaT_i coherente con T_eq - T_inicial_i"
+    coherence_checks:
+      - "Q_i y DeltaT_i deben tener el mismo signo"
+      - "La suma de todos los Q_i debe ser cero en sistema aislado"
+    graph_implications:
+      - "En una gráfica Q_i vs DeltaT_i, la pendiente de cada cuerpo es m_i * c_i."
+    pedagogical_triggers:
+      - "Si un cuerpo que se enfría tiene Q_i positivo, se invirtió el signo de DeltaT_i."
+
+  - id: temperatura_equilibrio_dos_cuerpos
+    title:
+      es: Temperatura de equilibrio para dos cuerpos
+      en: Equilibrium temperature for two bodies
+    equation: "T_eq = (m1 * c1 * T1 + m2 * c2 * T2) / (m1 * c1 + m2 * c2)"
+    latex: "T_{eq} = \\dfrac{m_1 c_1 T_1 + m_2 c_2 T_2}{m_1 c_1 + m_2 c_2}"
+    rearrangements:
+      - target: T_eq
+        equation: "T_eq = (m1 * c1 * T1 + m2 * c2 * T2) / (m1 * c1 + m2 * c2)"
+        latex: "T_{eq} = \\dfrac{m_1 c_1 T_1 + m_2 c_2 T_2}{m_1 c_1 + m_2 c_2}"
+      - target: c_i
+        equation: "c1 = m2 * c2 * (T_eq - T2) / (m1 * (T1 - T_eq))"
+        latex: "c_1 = \\dfrac{m_2 c_2 (T_{eq} - T_2)}{m_1 (T_1 - T_{eq})}"
+      - target: m_i
+        equation: "m1 = m2 * c2 * (T_eq - T2) / (c1 * (T1 - T_eq))"
+        latex: "m_1 = \\dfrac{m_2 c_2 (T_{eq} - T_2)}{c_1 (T_1 - T_{eq})}"
+    category: derived
+    relation_type: equilibrium_condition
+    physical_meaning:
+      es: "La temperatura de equilibrio de un sistema de dos cuerpos es la media ponderada de sus temperaturas iniciales, donde los pesos son las capacidades caloríficas totales (m_i · c_i) de cada cuerpo. El cuerpo con mayor capacidad calorífica total arrastra la temperatura de equilibrio hacia su temperatura inicial."
+      en: "The equilibrium temperature of a two-body system is the weighted average of their initial temperatures, where the weights are the total heat capacities (m_i · c_i) of each body. The body with greater total heat capacity pulls the equilibrium temperature toward its initial temperature."
+    constraints:
+      - "Solo dos cuerpos en el sistema (para N cuerpos, generalizar la suma en el numerador y denominador)"
+      - "Sin pérdidas al calorímetro ni al entorno"
+      - "Sin cambio de estado en ninguno de los cuerpos"
+      - "T1 distinto de T2 (si son iguales, T_eq = T1 = T2 trivialmente)"
+    validity:
+      es: "Válida para sistemas de dos cuerpos sin cambios de estado. Para N cuerpos, la fórmula se generaliza sumando m_i · c_i · T_i en el numerador y m_i · c_i en el denominador sobre todos los cuerpos i."
+      en: "Valid for two-body systems without phase changes. For N bodies, the formula generalizes by summing m_i · c_i · T_i in the numerator and m_i · c_i in the denominator over all bodies i."
+    dimension_check: "[M · L^2 T^-2 Theta^-1 · Theta] / [M · L^2 T^-2 Theta^-1] = [Theta] = K ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - temperatura_equilibrio
+      - media_ponderada
+      - capacidad_calorifica
+    result_semantics:
+      target: T_eq
+      kind: scalar_unsigned
+      sign_meaning:
+        es: "La temperatura de equilibrio no tiene interpretación de signo; siempre es positiva en kelvin. En grados Celsius puede ser negativa si el equilibrio es por debajo de 0 °C."
+        en: "Equilibrium temperature carries no sign interpretation; it is always positive in kelvin. In degrees Celsius it can be negative if equilibrium is below 0 °C."
+      absolute_value_meaning:
+        es: "T_eq indica la temperatura final de todo el sistema. Debe estar estrictamente entre las temperaturas iniciales de los dos cuerpos. Si está fuera de ese intervalo, hay un error."
+        en: "T_eq indicates the final temperature of the entire system. It must lie strictly between the initial temperatures of the two bodies. If it falls outside that interval, there is an error."
+    domain_checks:
+      - "m1 > 0 y m2 > 0"
+      - "c1 > 0 y c2 > 0"
+      - "T_eq resultado entre min(T1, T2) y max(T1, T2)"
+    coherence_checks:
+      - "Si m1·c1 >> m2·c2, entonces T_eq ≈ T1 (el cuerpo 1 domina el equilibrio)"
+      - "Si m1·c1 = m2·c2, entonces T_eq = (T1 + T2) / 2 (media aritmética)"
+    graph_implications:
+      - "En la gráfica T vs tiempo, T_eq es el valor asintótico al que convergen todas las curvas de temperatura de los cuerpos del sistema"
+    pedagogical_triggers:
+      - "Si T_eq está fuera del intervalo (T_min, T_max), el alumno probablemente sumó en lugar de restar en el principio, o asignó mal los signos de DeltaT."
+      - "Si T_eq coincide con la media aritmética de T1 y T2, verificar que no se hayan igualado accidentalmente las capacidades caloríficas."

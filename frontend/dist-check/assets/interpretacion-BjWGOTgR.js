@@ -1,0 +1,369 @@
+const e=`version: 2
+id: interpretacion-trabajo-de-fuerzas-no-conservativas
+leaf_id: trabajo-de-fuerzas-no-conservativas
+nombre:
+  es: Interpretacion del trabajo no conservativo
+  en: Interpretation of non-conservative work
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: trabajo-y-energia
+  parent_id: fuerzas-no-conservativas
+  ruta_relativa: fisica-clasica/mecanica/trabajo-y-energia/fuerzas-no-conservativas/trabajo-de-fuerzas-no-conservativas
+dependencies:
+  formulas:
+  - balance_general_no_conservativo
+  - trabajo_no_conservativo_por_estados
+  - energia_mecanica_inicial_componentes
+  - energia_mecanica_final_componentes
+  - variacion_energia_mecanica_no_conservativa
+  - relacion_completa_entre_estados
+  magnitudes:
+  - Wnc
+  - Emi
+  - Emf
+  - dEm
+  - Ki
+  - Ui
+  - Kf
+  - Uf
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  Wnc:
+    summary_rules:
+    - id: wnc_summary
+      when: 'true'
+      status: info
+      text:
+        es: Wnc resume el trabajo total de las fuerzas no conservativas sobre el sistema.
+        en: Wnc summarizes the total work done by non-conservative forces on the system.
+    physical_reading_rules:
+    - id: wnc_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si Wnc es negativo, la energia mecanica disminuye; si es positivo, un agente externo la incrementa.
+        en: If Wnc is negative, mechanical energy decreases; if it is positive, an external agent increases it.
+    coherence_rules:
+    - id: wnc_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Wnc debe coincidir con Emf menos Emi y con la variacion dEm.
+        en: Wnc must match Emf minus Emi and the change dEm.
+    model_validity_rules:
+    - id: wnc_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Interpreta Wnc solo despues de delimitar el sistema y clasificar que fuerzas se tratan como no conservativas.
+        en: Interpret Wnc only after defining the system and classifying which forces are treated as non-conservative.
+    graph_rules:
+    - id: wnc_graph
+      when: 'true'
+      status: info
+      text:
+        es: En la grafica, el trabajo no conservativo acumulado explica el salto entre la energia mecanica inicial y la final.
+        en: On the graph, accumulated non-conservative work explains the gap between initial and final mechanical energy.
+    likely_errors:
+    - id: wnc_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Un error frecuente es creer que Wnc debe ser siempre negativo: motores y empujes externos pueden hacerlo positivo.'
+        en: 'A common mistake is to believe that Wnc must always be negative: motors and external drives may make it positive.'
+    next_step_rules:
+    - id: wnc_next
+      when: 'true'
+      status: info
+      text:
+        es: Tras fijar Wnc, decide si conviene resolver Emf, dEm o una componente final como Kf.
+        en: After fixing Wnc, decide whether to solve Emf, dEm, or a final component such as Kf.
+  Emf:
+    summary_rules:
+    - id: emf_summary
+      when: 'true'
+      status: info
+      text:
+        es: Emf es la energia mecanica que queda o se alcanza al cerrar el proceso.
+        en: Emf is the mechanical energy remaining or attained at the end of the process.
+    physical_reading_rules:
+    - id: emf_physical
+      when: 'true'
+      status: info
+      text:
+        es: Comparar Emf con Emi permite ver si el sistema ha perdido, conservado o ganado energia mecanica.
+        en: Comparing Emf with Emi shows whether the system lost, preserved, or gained mechanical energy.
+    coherence_rules:
+    - id: emf_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Emf debe ser coherente con Kf mas Uf y con el signo de Wnc.
+        en: Emf must be coherent with Kf plus Uf and with the sign of Wnc.
+    model_validity_rules:
+    - id: emf_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El estado final debe referirse al mismo sistema y a la misma referencia potencial que el estado inicial.
+        en: The final state must refer to the same system and potential-energy reference as the initial state.
+    graph_rules:
+    - id: emf_graph
+      when: 'true'
+      status: info
+      text:
+        es: Emf se lee como nivel energetico final de la curva mecanica.
+        en: Emf is read as the final energy level of the mechanical-energy curve.
+    likely_errors:
+    - id: emf_error
+      when: 'true'
+      status: warning
+      text:
+        es: No compares Emf con Emi si has cambiado la frontera del sistema durante la resolucion.
+        en: Do not compare Emf with Emi if you changed the system boundary during the solution.
+    next_step_rules:
+    - id: emf_next
+      when: 'true'
+      status: info
+      text:
+        es: Una vez hallada Emf, descompone en Kf y Uf si el problema pide velocidad, altura o deformacion final.
+        en: Once Emf is found, split it into Kf and Uf if the problem asks for final speed, height, or deformation.
+  Emi:
+    summary_rules:
+    - id: emi_summary
+      when: 'true'
+      status: info
+      text:
+        es: Emi es el punto de partida energetico construido con Ki y Ui.
+        en: Emi is the energetic starting point built from Ki and Ui.
+    physical_reading_rules:
+    - id: emi_physical
+      when: 'true'
+      status: info
+      text:
+        es: Su valor fija cuanta energia mecanica habia disponible antes de que actuaran los agentes no conservativos.
+        en: Its value fixes how much mechanical energy was available before non-conservative agents acted.
+    coherence_rules:
+    - id: emi_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Emi debe coincidir con Ki mas Ui sin mezclar datos del estado final.
+        en: Emi must equal Ki plus Ui without mixing final-state data.
+    model_validity_rules:
+    - id: emi_validity
+      when: 'true'
+      status: ok
+      text:
+        es: La referencia de Ui debe mantenerse cuando luego se construye Uf.
+        en: The reference used for Ui must be preserved when Uf is later built.
+    graph_rules:
+    - id: emi_graph
+      when: 'true'
+      status: info
+      text:
+        es: Emi aparece como la cota inicial de la lectura energetica.
+        en: Emi appears as the initial level in the energy reading.
+    likely_errors:
+    - id: emi_error
+      when: 'true'
+      status: warning
+      text:
+        es: No ocultes en Emi una perdida posterior; la perdida pertenece a Wnc.
+        en: Do not hide a later loss inside Emi; that loss belongs to Wnc.
+    next_step_rules:
+    - id: emi_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de Emi, formula el balance general para decidir Emf.
+        en: After Emi, formulate the general balance to determine Emf.
+  dEm:
+    summary_rules:
+    - id: dem_summary
+      when: 'true'
+      status: info
+      text:
+        es: dEm expresa el cambio firmado de energia mecanica entre los dos estados.
+        en: dEm expresses the signed change in mechanical energy between the two states.
+    physical_reading_rules:
+    - id: dem_physical
+      when: 'true'
+      status: info
+      text:
+        es: dEm negativa implica degradacion mecanica neta; positiva implica aporte mecanico neto.
+        en: Negative dEm implies net mechanical degradation; positive dEm implies net mechanical input.
+    coherence_rules:
+    - id: dem_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: dEm debe coincidir con Wnc y con Emf menos Emi.
+        en: dEm must match Wnc and Emf minus Emi.
+    model_validity_rules:
+    - id: dem_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si intervienen procesos internos no modelados, dEm sigue siendo util, pero Wnc debe justificarse mejor.
+        en: If unmodeled internal processes intervene, dEm remains useful, but Wnc requires stronger justification.
+    graph_rules:
+    - id: dem_graph
+      when: 'true'
+      status: info
+      text:
+        es: La variacion entre la energia inicial y final debe leerse con el mismo signo que dEm.
+        en: The variation between initial and final energy must be read with the same sign as dEm.
+    likely_errors:
+    - id: dem_error
+      when: 'true'
+      status: warning
+      text:
+        es: No sustituyas dEm por un modulo positivo si el problema exige distinguir ganancia y perdida.
+        en: Do not replace dEm with a positive magnitude when the problem requires distinguishing gain and loss.
+    next_step_rules:
+    - id: dem_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa dEm para comunicar la conclusion fisica antes de presentar el numero final.
+        en: Use dEm to communicate the physical conclusion before presenting the final number.
+  Kf:
+    summary_rules:
+    - id: kf_summary
+      when: 'true'
+      status: info
+      text:
+        es: Kf es una salida operativa frecuente cuando el balance termina pidiendo velocidad final.
+        en: Kf is a common operational output when the balance ultimately asks for final speed.
+    physical_reading_rules:
+    - id: kf_physical
+      when: 'true'
+      status: info
+      text:
+        es: Su valor refleja cuanta parte de la energia final queda en movimiento tras sumar Wnc.
+        en: Its value reflects how much final energy remains in motion after accounting for Wnc.
+    coherence_rules:
+    - id: kf_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Kf no puede ser negativa y debe cerrar con Uf dentro de Emf.
+        en: Kf cannot be negative and must close with Uf inside Emf.
+    model_validity_rules:
+    - id: kf_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si el balance produce Kf negativa, el modelo o los datos se han interpretado mal.
+        en: If the balance produces negative Kf, the model or data have been interpreted incorrectly.
+    graph_rules:
+    - id: kf_graph
+      when: 'true'
+      status: info
+      text:
+        es: Una Kf menor tras Wnc negativo refleja que el trabajo no conservativo ha retirado energia mecanica.
+        en: A smaller Kf after negative Wnc reflects that non-conservative work removed mechanical energy.
+    likely_errors:
+    - id: kf_error
+      when: 'true'
+      status: warning
+      text:
+        es: No aceptes un Kf negativo como resultado fisico final.
+        en: Do not accept a negative Kf as a physical final result.
+    next_step_rules:
+    - id: kf_next
+      when: 'true'
+      status: info
+      text:
+        es: Si Kf es la salida, traducela despues a la magnitud mecanica que pida el problema.
+        en: If Kf is the output, translate it afterward into the mechanical quantity requested by the problem.
+  Uf:
+    summary_rules:
+    - id: uf_summary
+      when: 'true'
+      status: info
+      text:
+        es: Uf representa la contribucion potencial del estado final dentro del balance completo.
+        en: Uf represents the final potential-energy contribution inside the complete balance.
+    physical_reading_rules:
+    - id: uf_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si Uf aumenta, parte del saldo energetico final queda almacenado como energia potencial.
+        en: If Uf increases, part of the final energy balance remains stored as potential energy.
+    coherence_rules:
+    - id: uf_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Uf debe compartir referencia potencial con Ui y cerrar junto con Kf dentro de Emf.
+        en: Uf must share the potential reference used by Ui and close together with Kf inside Emf.
+    model_validity_rules:
+    - id: uf_validity
+      when: 'true'
+      status: ok
+      text:
+        es: La lectura de Uf deja de ser valida si se cambia la referencia de potencial sin declararlo.
+        en: The reading of Uf breaks down if the potential-energy reference is changed without stating it.
+    graph_rules:
+    - id: uf_graph
+      when: 'true'
+      status: info
+      text:
+        es: En una lectura por estados, Uf ayuda a explicar por que Emf puede crecer aunque Kf disminuya.
+        en: In a state-based reading, Uf helps explain why Emf may grow even when Kf decreases.
+    likely_errors:
+    - id: uf_error
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas Uf con Ui ni cambies la referencia potencial entre estados.
+        en: Do not confuse Uf with Ui or change the potential-energy reference between states.
+    next_step_rules:
+    - id: uf_next
+      when: 'true'
+      status: info
+      text:
+        es: Tras fijar Uf, revisa si la energia final restante corresponde a Kf o a otra magnitud del problema.
+        en: After fixing Uf, check whether the remaining final energy corresponds to Kf or to another problem quantity.
+`;export{e as default};

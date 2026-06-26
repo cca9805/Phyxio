@@ -1,0 +1,442 @@
+const e=`version: 5
+magnitudes:
+  - id: r1
+    symbol: r1
+    nombre:
+      es: brazo 1
+      en: lever arm 1
+    descripcion:
+      es: Distancia desde el eje al punto de aplicación de la primera fuerza.
+      en: Distance from the axis to the point where the first force is applied.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: state
+    physical_role: geometric_parameter
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Usar la longitud total de la barra en vez del brazo efectivo de la fuerza.
+      en: Using the full bar length instead of the force's effective arm.
+    typical_range:
+      es: 10^-2 a 10^1 m
+      en: 10^-2 to 10^1 m
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Se introduce como distancia positiva; el signo del momento lo fija el convenio de giro.
+        en: It is entered as a positive distance; torque sign is set by the rotation convention.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Si vale cero, la primera fuerza pasa por el eje y no genera momento.
+        en: If it is zero, the first force passes through the axis and generates no torque.
+    value_nature:
+      kind: scalar_nonnegative
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for: moment_arm
+      secondary_for: equilibrium_geometry
+    graph_binding:
+      channels: [arm_1, beam_geometry]
+    pedagogical_notes:
+      es: Debe medirse desde el eje elegido, no desde un extremo arbitrario.
+      en: It must be measured from the chosen axis, not from an arbitrary end.
+
+  - id: F1
+    symbol: F1
+    nombre:
+      es: fuerza 1
+      en: force 1
+    descripcion:
+      es: Primera fuerza externa que contribuye al balance rotacional.
+      en: First external force contributing to rotational balance.
+    unidad_si: N
+    dimension: M L T^-2
+    is_vector: false
+    components: null
+    category: state
+    physical_role: external_force
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Olvidar si su efecto es horario o antihorario respecto al eje elegido.
+      en: Forgetting whether its effect is clockwise or counterclockwise about the chosen axis.
+    typical_range:
+      es: 10^-1 a 10^5 N
+      en: 10^-1 to 10^5 N
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Su magnitud se toma positiva; el sentido de giro se incorpora después en el momento.
+        en: Its magnitude is taken as positive; rotation sense is introduced later in torque.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Si vale cero, desaparece su contribución al balance.
+        en: If it is zero, its contribution to the balance disappears.
+    value_nature:
+      kind: scalar_nonnegative
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for: torque_source
+      secondary_for: load_intensity
+    graph_binding:
+      channels: [force_1, torque_balance]
+    pedagogical_notes:
+      es: Hay que separar la magnitud de la fuerza del signo del momento que produce.
+      en: Magnitude of force must be separated from the sign of the torque it produces.
+
+  - id: theta1
+    symbol: theta1
+    nombre:
+      es: ángulo de la fuerza 1
+      en: angle of force 1
+    descripcion:
+      es: Ángulo entre la dirección de la primera fuerza y el radio respecto al eje.
+      en: Angle between the first force direction and the radius from the axis.
+    unidad_si: rad
+    dimension: 1
+    is_vector: false
+    components: null
+    category: state
+    physical_role: geometric_parameter
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Confundirlo con el ángulo respecto al suelo o respecto a la barra cuando no coincide.
+      en: Confusing it with the angle relative to the ground or to the bar when that is not the same.
+    typical_range:
+      es: 0 a pi rad
+      en: 0 to pi rad
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Se usa por su seno; lo importante es cómo modifica el brazo efectivo.
+        en: It is used through its sine; what matters is how it modifies the effective arm.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Si theta1 vale cero o pi, la fuerza no produce momento respecto a ese eje.
+        en: If theta1 is zero or pi, the force produces no torque about that axis.
+    value_nature:
+      kind: scalar_nonnegative
+      nonnegative_only: true
+      expected_interval: "[0, pi]"
+    interpretation_role:
+      primary_for: effective_arm
+      secondary_for: torque_modulation
+    graph_binding:
+      channels: [angle_1, force_1]
+    pedagogical_notes:
+      es: El máximo momento aparece cuando la fuerza es perpendicular al radio.
+      en: Maximum torque appears when the force is perpendicular to the radius.
+
+  - id: r2
+    symbol: r2
+    nombre:
+      es: brazo 2
+      en: lever arm 2
+    descripcion:
+      es: Distancia desde el eje al punto de aplicación de la segunda fuerza.
+      en: Distance from the axis to the point where the second force is applied.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: state
+    physical_role: geometric_parameter
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Tomarlo desde el extremo equivocado o usar la separación entre fuerzas.
+      en: Taking it from the wrong end or using the separation between forces.
+    typical_range:
+      es: 10^-2 a 10^1 m
+      en: 10^-2 to 10^1 m
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Se usa como distancia positiva; el signo lo determina el convenio de giro.
+        en: It is used as a positive distance; sign is determined by the rotation convention.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Si vale cero, la segunda fuerza no genera momento.
+        en: If it is zero, the second force generates no torque.
+    value_nature:
+      kind: scalar_nonnegative
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for: moment_arm
+      secondary_for: equilibrium_geometry
+    graph_binding:
+      channels: [arm_2, beam_geometry]
+    pedagogical_notes:
+      es: Debe compararse con r1 para anticipar qué fuerza necesita mayor magnitud.
+      en: It should be compared with r1 to anticipate which force needs greater magnitude.
+
+  - id: F2
+    symbol: F2
+    nombre:
+      es: fuerza 2
+      en: force 2
+    descripcion:
+      es: Segunda fuerza externa incluida en el balance de momentos.
+      en: Second external force included in the torque balance.
+    unidad_si: N
+    dimension: M L T^-2
+    is_vector: false
+    components: null
+    category: state
+    physical_role: external_force
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Dar por hecho que equilibra a F1 sin comprobar brazos y ángulos.
+      en: Assuming it balances F1 without checking arms and angles.
+    typical_range:
+      es: 10^-1 a 10^5 N
+      en: 10^-1 to 10^5 N
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Su sentido de giro se incorpora en el signo del momento asociado.
+        en: Its rotation sense is incorporated in the sign of the associated torque.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Si vale cero, solo la primera fuerza contribuye al balance.
+        en: If it is zero, only the first force contributes to the balance.
+    value_nature:
+      kind: scalar_nonnegative
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for: torque_source
+      secondary_for: support_or_counterforce
+    graph_binding:
+      channels: [force_2, torque_balance]
+    pedagogical_notes:
+      es: No basta con igualar fuerzas; hay que igualar momentos.
+      en: It is not enough to equalize forces; torques must be equalized.
+
+  - id: theta2
+    symbol: theta2
+    nombre:
+      es: ángulo de la fuerza 2
+      en: angle of force 2
+    descripcion:
+      es: Ángulo entre la segunda fuerza y el radio asociado al eje.
+      en: Angle between the second force and the radius associated with the axis.
+    unidad_si: rad
+    dimension: 1
+    is_vector: false
+    components: null
+    category: state
+    physical_role: geometric_parameter
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Olvidar que cambiar el ángulo modifica el seno y, por tanto, el momento efectivo.
+      en: Forgetting that changing the angle modifies the sine and therefore the effective torque.
+    typical_range:
+      es: 0 a pi rad
+      en: 0 to pi rad
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: El ángulo actúa a través de su seno en la expresión del momento.
+        en: The angle acts through its sine in the torque expression.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Si theta2 vale cero o pi, la fuerza no genera momento.
+        en: If theta2 is zero or pi, the force generates no torque.
+    value_nature:
+      kind: scalar_nonnegative
+      nonnegative_only: true
+      expected_interval: "[0, pi]"
+    interpretation_role:
+      primary_for: effective_arm
+      secondary_for: torque_modulation
+    graph_binding:
+      channels: [angle_2, force_2]
+    pedagogical_notes:
+      es: Cuando theta2 se acerca a 90°, la misma fuerza produce más momento.
+      en: When theta2 approaches 90°, the same force produces more torque.
+
+  - id: tau1
+    symbol: tau1
+    nombre:
+      es: momento de la fuerza 1
+      en: torque of force 1
+    descripcion:
+      es: Contribución rotacional de la primera fuerza respecto al eje escogido.
+      en: Rotational contribution of the first force with respect to the chosen axis.
+    unidad_si: N·m
+    dimension: M L^2 T^-2
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: rotational_effect
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Omitir el factor seno o usar la distancia equivocada.
+      en: Omitting the sine factor or using the wrong distance.
+    typical_range:
+      es: Depende del sistema; puede ser positivo o negativo según el convenio.
+      en: It depends on the system; it can be positive or negative depending on the convention.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica si la fuerza tiende a girar en el sentido positivo o negativo definido.
+        en: The sign indicates whether the force tends to rotate in the defined positive or negative sense.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Si vale cero, la primera fuerza no aporta giro neto respecto a ese eje.
+        en: If it is zero, the first force adds no rotational effect about that axis.
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-inf, +inf)"
+    interpretation_role:
+      primary_for: individual_torque
+      secondary_for: rotation_sense
+    graph_binding:
+      channels: [torque_1, torque_balance]
+    pedagogical_notes:
+      es: Debe leerse junto al convenio de signos elegido al inicio.
+      en: It must be read together with the sign convention chosen at the start.
+
+  - id: tau2
+    symbol: tau2
+    nombre:
+      es: momento de la fuerza 2
+      en: torque of force 2
+    descripcion:
+      es: Contribución rotacional de la segunda fuerza respecto al mismo eje.
+      en: Rotational contribution of the second force about the same axis.
+    unidad_si: N·m
+    dimension: M L^2 T^-2
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: rotational_effect
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Asignarle el mismo signo que tau1 cuando gira en sentido contrario.
+      en: Assigning it the same sign as tau1 when it rotates in the opposite sense.
+    typical_range:
+      es: Depende de la fuerza, del brazo y del ángulo.
+      en: It depends on force, arm, and angle.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo distingue el sentido de giro que aporta la segunda fuerza.
+        en: The sign distinguishes the rotation sense contributed by the second force.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Si vale cero, la segunda fuerza no modifica el balance de giro.
+        en: If it is zero, the second force does not modify the rotational balance.
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-inf, +inf)"
+    interpretation_role:
+      primary_for: individual_torque
+      secondary_for: balance_comparison
+    graph_binding:
+      channels: [torque_2, torque_balance]
+    pedagogical_notes:
+      es: Compararlo con tau1 es la lectura mínima antes de sumar momentos.
+      en: Comparing it with tau1 is the minimum reading before summing torques.
+
+  - id: tau_net
+    symbol: tau_net
+    nombre:
+      es: momento neto
+      en: net torque
+    descripcion:
+      es: Suma algebraica de todos los momentos respecto al eje elegido.
+      en: Algebraic sum of all torques about the chosen axis.
+    unidad_si: N·m
+    dimension: M L^2 T^-2
+    is_vector: false
+    components: null
+    category: result
+    physical_role: equilibrium_indicator
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Sumar módulos de momentos en vez de respetar el signo de cada contribución.
+      en: Adding torque magnitudes instead of respecting the sign of each contribution.
+    typical_range:
+      es: Debe ser cercano a cero en equilibrio rotacional.
+      en: It should be close to zero in rotational equilibrium.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo informa del sentido de giro residual del sistema.
+        en: The sign indicates the residual rotation sense of the system.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Si vale cero, la condición de equilibrio rotacional queda satisfecha.
+        en: If it is zero, the rotational equilibrium condition is satisfied.
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-inf, +inf)"
+    interpretation_role:
+      primary_for: equilibrium_check
+      secondary_for: residual_rotation
+    graph_binding:
+      channels: [net_torque_curve, equilibrium_point]
+    pedagogical_notes:
+      es: "Es la variable decisiva del leaf: todo el análisis converge en anularla."
+      en: "It is the decisive variable of the leaf: the whole analysis aims to make it vanish."
+
+  - id: Feq
+    symbol: F_eq
+    nombre:
+      es: fuerza 2 para equilibrio
+      en: force 2 required for equilibrium
+    descripcion:
+      es: Valor de la segunda fuerza que hace cero el momento neto para una geometría dada.
+      en: Value of the second force that makes net torque vanish for a given geometry.
+    unidad_si: N
+    dimension: M L T^-2
+    is_vector: false
+    components: null
+    category: result
+    physical_role: equilibrium_requirement
+    used_in: [formulas, theory, examples, calculator]
+    common_mistake:
+      es: Calcularla igualando fuerzas en vez de igualar momentos.
+      en: Computing it by equalizing forces instead of equalizing torques.
+    typical_range:
+      es: Depende del cociente entre brazos y del seno de los ángulos.
+      en: It depends on the arm ratio and on the sine of the angles.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Se interpreta como magnitud necesaria de la fuerza equilibrante.
+        en: It is interpreted as the required magnitude of the balancing force.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Solo sería cero si la primera fuerza no generara momento.
+        en: It would be zero only if the first force generated no torque.
+    value_nature:
+      kind: scalar_nonnegative
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for: design_requirement
+      secondary_for: balancing_condition
+    graph_binding:
+      channels: [equilibrium_solution, torque_balance]
+    pedagogical_notes:
+      es: Es útil para diseño y para ver que una fuerza pequeña puede equilibrar si el brazo es grande.
+      en: It is useful for design and for seeing that a small force can balance if its arm is large.
+`;export{e as default};

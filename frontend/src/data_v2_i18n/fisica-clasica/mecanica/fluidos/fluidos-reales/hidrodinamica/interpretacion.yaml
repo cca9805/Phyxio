@@ -1,0 +1,361 @@
+version: 5
+id: hidrodinamica-interp
+leaf_id: hidrodinamica
+scope: local
+nombre:
+  es: "Análisis Hidrodinámico"
+  en: "Hydrodynamic Analysis"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: "Resumen de Flujo"
+      en: "Flow Summary"
+  physical_reading:
+    title:
+      es: "Lectura Física"
+      en: "Physical Reading"
+  coherence:
+    title:
+      es: "Coherencia"
+      en: "Coherence"
+  model_validity:
+    title:
+      es: "Validez"
+      en: "Validity"
+  graph_reading:
+    title:
+      es: "Gráfica"
+      en: "Graph"
+  likely_errors:
+    title:
+      es: "Errores"
+      en: "Errors"
+  next_step:
+    title:
+      es: "Siguiente Paso"
+      en: "Next Step"
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [Q, A, v, p, rho, g, z, H, D]
+  formulas: [caudal_hidro, head_hidro, area_circular]
+
+targets:
+  Q:
+    summary_rules:
+      - id: q-val
+        when: Q > 0
+        status: success
+        text:
+          es: "El caudal volumétrico [[Q]] indica que el fluido transporta masa de forma constante debido a la conservación de la materia."
+          en: "The volumetric flow rate [[Q]] indicates that the fluid transports mass constantly due to matter conservation."
+    physical_reading_rules:
+      - id: q-phys
+        when: Q > 0
+        status: success
+        text:
+          es: "Dado que el fluido es incompresible, el caudal determina la velocidad necesaria para atravesar cada sección transversal."
+          en: "Since the fluid is incompressible, the flow rate determines the necessary velocity to cross each cross-section."
+    coherence_rules:
+      - id: q-coh
+        when: Q > 0
+        status: success
+        text:
+          es: "Es coherente que el caudal sea positivo, indicando un transporte neto de materia en el sentido del flujo."
+          en: "It is coherent that the flow rate is positive, indicating a net material transport in the flow direction."
+    model_validity_rules:
+      - id: q-valid
+        when: Q > 0
+        status: success
+        text:
+          es: "Válido para un sistema en régimen estacionario donde no existe acumulación ni pérdida de masa."
+          en: "Valid for a system in steady state where there is no mass accumulation or loss."
+    graph_rules:
+      - id: q-graph
+        when: Q > 0
+        status: success
+        text:
+          es: "Representado en el gráfico Coord como la magnitud del flujo constante a través del tiempo."
+          en: "Represented on the Coord graph as the constant flow magnitude over time."
+    likely_errors:
+      - id: q-err-neg
+        when: Q < 0
+        status: error
+        text:
+          es: "Error conceptual: Un valor negativo de caudal es físicamente imposible bajo este sistema de referencia unidireccional."
+          en: "Conceptual error: A negative flow rate value is physically impossible under this unidirectional reference system."
+    next_step_rules:
+      - id: q-next
+        when: Q > 0
+        status: info
+        text:
+          es: "Use este valor para calcular las velocidades locales y completar el balance de Bernoulli."
+          en: "Use this value to calculate local velocities and complete the Bernoulli balance."
+
+  v:
+    summary_rules:
+      - id: v-val
+        when: v > 0
+        status: success
+        text:
+          es: "La velocidad media [[v]] representa el transporte de cantidad de movimiento del líquido en la sección."
+          en: "The mean velocity [[v]] represents the liquid's momentum transport in the section."
+    physical_reading_rules:
+      - id: v-phys
+        when: v > 0
+        status: success
+        text:
+          es: "Como la velocidad aumenta en los estrechamientos, la energía cinética crece a expensas de la presión estática."
+          en: "As velocity increases in narrowings, kinetic energy grows at the expense of static pressure."
+    coherence_rules:
+      - id: v-coh
+        when: v > 0
+        status: success
+        text:
+          es: "La velocidad es consistente con el caudal [[Q]] y el área [[A]] definidos geométricamente."
+          en: "The velocity is consistent with the geometrically defined flow rate [[Q]] and area [[A]]."
+    model_validity_rules:
+      - id: v-valid
+        when: v < 250
+        status: success
+        text:
+          es: "Válido para flujo incompresible ya que la velocidad es muy inferior a la velocidad del sonido en el agua."
+          en: "Valid for incompressible flow as velocity is much lower than the speed of sound in water."
+    graph_rules:
+      - id: v-graph
+        when: v > 0
+        status: success
+        text:
+          es: "Visualizado en el esquema Svg como vectores de flujo proporcionales a la rapidez calculada."
+          en: "Visualized in the Svg scheme as flow vectors proportional to the calculated speed."
+    likely_errors:
+      - id: v-err-high
+        when: v > 340
+        status: error
+        text:
+          es: "Error conceptual: Régimen supersónico detectado, lo que invalida el modelo de Bernoulli para líquidos comunes."
+          en: "Conceptual error: Supersonic regime detected, invalidating the Bernoulli model for common liquids."
+    next_step_rules:
+      - id: v-next
+        when: v > 0
+        status: info
+        text:
+          es: "Verifique el número de Reynolds para determinar si el régimen es laminar o turbulento."
+          en: "Verify the Reynolds number to determine if the regime is laminar or turbulent."
+
+  p:
+    summary_rules:
+      - id: p-val
+        when: p > 0
+        status: success
+        text:
+          es: "La presión estática [[p]] mide la energía potencial de presión almacenada en el fluido."
+          en: "The static pressure [[p]] measures the potential pressure energy stored in the fluid."
+    physical_reading_rules:
+      - id: p-phys
+        when: p > 0
+        status: success
+        text:
+          es: "Dado que la presión es positiva, el fluido puede vencer resistencias gravitatorias o mantener el flujo en tuberías."
+          en: "Since pressure is positive, the fluid can overcome gravitational resistances or maintain flow in pipes."
+    coherence_rules:
+      - id: p-coh
+        when: p > 0
+        status: success
+        text:
+          es: "Presión consistente con el nivel de energía total y la altura geométrica del sistema."
+          en: "Pressure consistent with the total energy level and the system's geometric height."
+    model_validity_rules:
+      - id: p-valid
+        when: p > -101325
+        status: success
+        text:
+          es: "La presión se mantiene por encima del límite de cavitación, asegurando la integridad mecánica del fluido."
+          en: "The pressure stays above the cavitation limit, ensuring the fluid's mechanical integrity."
+    graph_rules:
+      - id: p-graph
+        when: p > 0
+        status: success
+        text:
+          es: "Representado gráficamente mediante la línea piezométrica en el perfil de energía."
+          en: "Represented graphically by the piezometric line in the energy profile."
+    likely_errors:
+      - id: p-err-neg
+        when: p < -101325
+        status: error
+        text:
+          es: "Error conceptual: Una presión absoluta negativa es imposible; revise si ha omitido el término de altura cinemática."
+          en: "Conceptual error: A negative absolute pressure is impossible; check if you've omitted the kinetic head term."
+    next_step_rules:
+      - id: p-next
+        when: p > 0
+        status: info
+        text:
+          es: "Evalúe si la presión cumple con los requisitos técnicos de las boquillas o grifos."
+          en: "Evaluate if the pressure meets the technical requirements for nozzles or taps."
+
+  H:
+    summary_rules:
+      - id: h-val
+        when: H > 0
+        status: success
+        text:
+          es: "La altura de energía [[H]] representa la carga total de energía mecánica disponible en la sección."
+          en: "The energy head [[H]] represents the total mechanical energy load available in the section."
+    physical_reading_rules:
+      - id: h-phys
+        when: H > 0
+        status: success
+        text:
+          es: "Como esta carga suma presión, velocidad y altura, indica el potencial de flujo hacia zonas de menor carga."
+          en: "As this load sums pressure, velocity, and height, it indicates the flow potential toward lower load zones."
+    coherence_rules:
+      - id: h-coh
+        when: H > 0
+        status: success
+        text:
+          es: "Energía total positiva, requisito indispensable para mantener el movimiento contra la gravedad."
+          en: "Positive total energy, an essential requirement to maintain movement against gravity."
+    model_validity_rules:
+      - id: h-valid
+        when: H > 0
+        status: success
+        text:
+          es: "Válido para fluidos reales mientras se considere la degradación de energía por fricción."
+          en: "Valid for real fluids as long as energy degradation by friction is considered."
+    graph_rules:
+      - id: h-graph
+        when: H > 0
+        status: success
+        text:
+          es: "Define la Línea de Energía Total (EGL) en los perfiles hidráulicos del gráfico."
+          en: "Defines the Total Energy Line (EGL) in the graph's hydraulic profiles."
+    likely_errors:
+      - id: h-err-zero
+        when: H <= 0
+        status: error
+        text:
+          es: "Error conceptual: Energía total nula o negativa; revise la consistencia de las unidades SI."
+          en: "Conceptual error: Zero or negative total energy; check the consistency of SI units."
+    next_step_rules:
+      - id: h-next
+        when: H > 0
+        status: info
+        text:
+          es: "Calcule las pérdidas de carga si el tramo de tubería es largo o rugoso."
+          en: "Calculate head losses if the pipe section is long or rough."
+
+  A:
+    summary_rules:
+      - id: a-val
+        when: A > 0
+        status: success
+        text:
+          es: "El área transversal [[A]] define la superficie disponible para el paso del caudal volumétrico."
+          en: "The cross-sectional area [[A]] defines the surface available for volumetric flow passage."
+    physical_reading_rules:
+      - id: a-phys
+        when: A > 0
+        status: success
+        text:
+          es: "Dado que el área disminuye, la velocidad debe aumentar por continuidad para conservar la masa."
+          en: "Since the area decreases, velocity must increase by continuity to conserve mass."
+    coherence_rules:
+      - id: a-coh
+        when: A > 0
+        status: success
+        text:
+          es: "Área positiva consistente con las dimensiones geométricas reales del sistema."
+          en: "Positive area consistent with the system's real geometric dimensions."
+    model_validity_rules:
+      - id: a-valid
+        when: A > 0
+        status: success
+        text:
+          es: "Válido para secciones transversales planas en conductos de pared indeformable."
+          en: "Valid for flat cross-sections in non-deformable walled conduits."
+    graph_rules:
+      - id: a-graph
+        when: A > 0
+        status: success
+        text:
+          es: "Representado en el Svg mediante el escalado de la sección del tubo."
+          en: "Represented in the Svg by scaling the tube section."
+    likely_errors:
+      - id: a-err-zero
+        when: A <= 0
+        status: error
+        text:
+          es: "Error conceptual: El área transversal no puede ser nula en un fluido continuo."
+          en: "Conceptual error: Cross-sectional area cannot be zero in a continuous fluid."
+    next_step_rules:
+      - id: a-next
+        when: A > 0
+        status: info
+        text:
+          es: "Use esta área para determinar la velocidad media a partir del caudal."
+          en: "Use this area to determine mean velocity from the flow rate."
+
+  D:
+    summary_rules:
+      - id: d-val
+        when: D > 0
+        status: success
+        text:
+          es: "El diámetro interno [[D]] es el parámetro geométrico que escala las fuerzas viscosas."
+          en: "The internal diameter [[D]] is the geometric parameter scaling viscous forces."
+    physical_reading_rules:
+      - id: d-phys
+        when: D > 0
+        status: success
+        text:
+          es: "Como el diámetro es pequeño, el gradiente de velocidad es mayor, incrementando la fricción interna."
+          en: "As the diameter is small, the velocity gradient is higher, increasing internal friction."
+    coherence_rules:
+      - id: d-coh
+        when: D > 0
+        status: success
+        text:
+          es: "Dimensión lineal positiva coherente con el área transversal calculada."
+          en: "Positive linear dimension coherent with the calculated cross-sectional area."
+    model_validity_rules:
+      - id: d-valid
+        when: D > 0
+        status: success
+        text:
+          es: "Válido para conductos de sección circular constante o tramos rectos."
+          en: "Valid for constant circular section conduits or straight sections."
+    graph_rules:
+      - id: d-graph
+        when: D > 0
+        status: success
+        text:
+          es: "Determina el ancho de visualización del fluido en el esquema Svg."
+          en: "Determines the fluid visualization width in the Svg scheme."
+    likely_errors:
+      - id: d-err-neg
+        when: D <= 0
+        status: error
+        text:
+          es: "Error conceptual: Diámetro inválido; revise si ha confundido radio con diámetro."
+          en: "Conceptual error: Invalid diameter; check if you have confused radius with diameter."
+    next_step_rules:
+      - id: d-next
+        when: D > 0
+        status: info
+        text:
+          es: "Verifique si el diámetro satisface la norma comercial de tuberías."
+          en: "Verify if the diameter satisfies the commercial pipe standard."

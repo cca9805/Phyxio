@@ -1,0 +1,192 @@
+const e=`version: 1
+magnitudes:
+- id: m
+  symbol: m
+  nombre: {es: masa, en: mass}
+  descripcion: {es: Masa del vehiculo o cuerpo en movimiento circular por la curva., en: Mass of the vehicle or body in circular motion on the curve.}
+  unidad_si: "kg"
+  dimension: "M"
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: inertia
+  used_in: [radial_base]
+  common_mistake: "Creer que la masa afecta la velocidad maxima en curva plana."
+  typical_range: "0.1 - 100000 kg"
+  sign_behavior: {has_sign: false, meaning: {es: Siempre positiva., en: Always positive.}}
+  zero_behavior: {allowed: false, meaning: {es: Sin masa no hay fuerza centripeta., en: Without mass there is no centripetal force.}}
+  value_nature: {kind: scalar, nonnegative_only: true, expected_interval: "[0.1, 100000] kg"}
+  interpretation_role: {primary_for: [radial_base], secondary_for: []}
+  graph_binding: {channels: []}
+  pedagogical_notes: "Se cancela al calcular la velocidad maxima en curva plana."
+- id: r
+  symbol: r
+  nombre: {es: radio de la curva, en: curve radius}
+  descripcion: {es: Radio de curvatura de la trayectoria circular., en: Radius of curvature of the circular path.}
+  unidad_si: "m"
+  dimension: "L"
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: geometric_parameter
+  used_in: [radial_base, curva_plana_vmax, peralte_ideal]
+  common_mistake: "Confundir radio de la curva con anchura de la calzada."
+  typical_range: "5 - 5000 m"
+  sign_behavior: {has_sign: false, meaning: {es: Siempre positivo., en: Always positive.}}
+  zero_behavior: {allowed: false, meaning: {es: Radio nulo no define curva., en: Zero radius defines no curve.}}
+  value_nature: {kind: scalar, nonnegative_only: true, expected_interval: "[5, 5000] m"}
+  interpretation_role: {primary_for: [radial_base, curva_plana_vmax], secondary_for: [peralte_ideal]}
+  graph_binding: {channels: []}
+  pedagogical_notes: "A mayor radio menor fuerza centripeta necesaria."
+- id: v
+  symbol: v
+  nombre: {es: velocidad, en: speed}
+  descripcion: {es: Rapidez del vehiculo en la curva., en: Vehicle speed on the curve.}
+  unidad_si: "m/s"
+  dimension: "LT^{-1}"
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: kinematic_variable
+  used_in: [radial_base, curva_plana_vmax, peralte_ideal]
+  common_mistake: "No convertir de km/h a m/s al sustituir."
+  typical_range: "1 - 100 m/s"
+  sign_behavior: {has_sign: false, meaning: {es: Rapidez siempre positiva., en: Speed always positive.}}
+  zero_behavior: {allowed: false, meaning: {es: Sin velocidad no hay fuerza centripeta., en: Without speed there is no centripetal force.}}
+  value_nature: {kind: scalar, nonnegative_only: true, expected_interval: "[1, 100] m/s"}
+  interpretation_role: {primary_for: [curva_plana_vmax, peralte_ideal], secondary_for: [radial_base]}
+  graph_binding: {channels: []}
+  pedagogical_notes: "Aparece al cuadrado en la ecuacion radial."
+- id: g
+  symbol: g
+  nombre: {es: gravedad, en: gravitational acceleration}
+  descripcion: {es: Aceleracion gravitatoria terrestre., en: Terrestrial gravitational acceleration.}
+  unidad_si: "m/s^2"
+  dimension: "LT^{-2}"
+  is_vector: false
+  components: []
+  category: constant
+  physical_role: gravitational_field
+  used_in: [curva_plana_vmax, peralte_ideal, adherencia_maxima]
+  common_mistake: "Usar un valor incorrecto o confundir con la G universal."
+  typical_range: "9.78 - 9.82 m/s^2"
+  sign_behavior: {has_sign: false, meaning: {es: Siempre positivo en modulo., en: Always positive in magnitude.}}
+  zero_behavior: {allowed: false, meaning: {es: Sin gravedad no hay peso ni friccion., en: Without gravity there is no weight or friction.}}
+  value_nature: {kind: scalar, nonnegative_only: true, expected_interval: "[9.78, 9.82] m/s^2"}
+  interpretation_role: {primary_for: [], secondary_for: [curva_plana_vmax, peralte_ideal]}
+  graph_binding: {channels: []}
+  pedagogical_notes: "Se toma 9.8 m/s^2 salvo indicacion contraria."
+- id: mu
+  symbol: "\\u03BC_s"
+  nombre: {es: coeficiente de rozamiento estatico, en: static friction coefficient}
+  descripcion: {es: Coeficiente que limita la friccion maxima., en: Coefficient that limits maximum friction.}
+  unidad_si: "1"
+  dimension: "1"
+  is_vector: false
+  components: []
+  category: material_property
+  physical_role: friction_coefficient
+  used_in: [curva_plana_vmax, adherencia_maxima]
+  common_mistake: "Confundir coeficiente estatico con cinetico."
+  typical_range: "0.05 - 1.2"
+  sign_behavior: {has_sign: false, meaning: {es: Siempre positivo., en: Always positive.}}
+  zero_behavior: {allowed: false, meaning: {es: Sin friccion no se puede tomar la curva plana., en: Without friction the flat curve cannot be taken.}}
+  value_nature: {kind: scalar, nonnegative_only: true, expected_interval: "[0.05, 1.2]"}
+  interpretation_role: {primary_for: [curva_plana_vmax], secondary_for: [adherencia_maxima]}
+  graph_binding: {channels: []}
+  pedagogical_notes: "Depende de las superficies en contacto."
+- id: th
+  symbol: "\\u03B8"
+  nombre: {es: angulo de peralte, en: banking angle}
+  descripcion: {es: Inclinacion transversal de la calzada., en: Transverse inclination of the road.}
+  unidad_si: "rad"
+  dimension: "1"
+  is_vector: false
+  components: []
+  category: geometric
+  physical_role: banking_angle
+  used_in: [peralte_ideal]
+  common_mistake: "Usar el angulo en lugar de su tangente en la ecuacion."
+  typical_range: "0 - 0.70 rad"
+  sign_behavior: {has_sign: false, meaning: {es: Positivo por convencion., en: Positive by convention.}}
+  zero_behavior: {allowed: true, meaning: {es: Sin peralte la curva depende solo de la friccion., en: Without banking the curve depends only on friction.}}
+  value_nature: {kind: scalar, nonnegative_only: true, expected_interval: "[0, 0.70] rad"}
+  interpretation_role: {primary_for: [peralte_ideal], secondary_for: []}
+  graph_binding: {channels: []}
+  pedagogical_notes: "Los angulos deben estar en radianes para la funcion tangente."
+- id: Nn
+  symbol: "N"
+  nombre: {es: fuerza normal, en: normal force}
+  descripcion: {es: Fuerza de contacto perpendicular a la superficie., en: Contact force perpendicular to the surface.}
+  unidad_si: "N"
+  dimension: "MLT^{-2}"
+  is_vector: false
+  components: []
+  category: contact_force
+  physical_role: normal_force
+  used_in: [adherencia_maxima]
+  common_mistake: "Suponer que la normal siempre iguala al peso."
+  typical_range: "0 - 1000000 N"
+  sign_behavior: {has_sign: false, meaning: {es: Siempre positiva en modulo., en: Always positive in magnitude.}}
+  zero_behavior: {allowed: false, meaning: {es: Normal nula implica perdida de contacto., en: Zero normal implies loss of contact.}}
+  value_nature: {kind: scalar, nonnegative_only: true, expected_interval: "[0, 1000000] N"}
+  interpretation_role: {primary_for: [adherencia_maxima], secondary_for: []}
+  graph_binding: {channels: []}
+  pedagogical_notes: "En curva peraltada tiene componentes radial y vertical."
+- id: fs
+  symbol: "f_s"
+  nombre: {es: rozamiento estatico, en: static friction}
+  descripcion: {es: Fuerza de friccion que aporta componente centripeta en curva plana., en: Friction force providing centripetal component on a flat curve.}
+  unidad_si: "N"
+  dimension: "MLT^{-2}"
+  is_vector: false
+  components: []
+  category: contact_force
+  physical_role: friction_force
+  used_in: [adherencia_maxima, curva_plana_vmax]
+  common_mistake: "Olvidar que la friccion estatica tiene un valor maximo."
+  typical_range: "0 - 100000 N"
+  sign_behavior: {has_sign: false, meaning: {es: Dirigida hacia el centro de la curva., en: Directed toward the centre of the curve.}}
+  zero_behavior: {allowed: true, meaning: {es: Sin friccion el vehiculo derrapa inmediatamente., en: Without friction the vehicle skids immediately.}}
+  value_nature: {kind: scalar, nonnegative_only: true, expected_interval: "[0, 100000] N"}
+  interpretation_role: {primary_for: [adherencia_maxima], secondary_for: [curva_plana_vmax]}
+  graph_binding: {channels: []}
+  pedagogical_notes: "En curva plana es la unica fuente de fuerza centripeta."
+- id: Frad
+  symbol: "F_{rad}"
+  nombre: {es: resultante radial, en: radial resultant}
+  descripcion: {es: Fuerza neta hacia el centro de la curva., en: Net force toward the centre of the curve.}
+  unidad_si: "N"
+  dimension: "MLT^{-2}"
+  is_vector: false
+  components: []
+  category: resultant
+  physical_role: centripetal_resultant
+  used_in: [radial_base]
+  common_mistake: "Anadir una fuerza centripeta extra al diagrama de cuerpo libre."
+  typical_range: "0 - 1000000 N"
+  sign_behavior: {has_sign: false, meaning: {es: Siempre hacia el centro., en: Always toward the centre.}}
+  zero_behavior: {allowed: false, meaning: {es: Sin resultante radial no hay movimiento circular., en: Without radial resultant there is no circular motion.}}
+  value_nature: {kind: scalar, nonnegative_only: true, expected_interval: "[0, 1000000] N"}
+  interpretation_role: {primary_for: [radial_base], secondary_for: []}
+  graph_binding: {channels: []}
+  pedagogical_notes: "Es la suma de componentes radiales de fuerzas reales."
+- id: ac
+  symbol: "a_c"
+  nombre: {es: aceleracion centripeta, en: centripetal acceleration}
+  descripcion: {es: Aceleracion dirigida hacia el centro de la curva., en: Acceleration directed toward the centre of the curve.}
+  unidad_si: "m/s^2"
+  dimension: "LT^{-2}"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: centripetal_acceleration
+  used_in: [radial_base]
+  common_mistake: "Confundir aceleracion centripeta con tangencial."
+  typical_range: "0.1 - 50 m/s^2"
+  sign_behavior: {has_sign: false, meaning: {es: Siempre hacia el centro., en: Always toward the centre.}}
+  zero_behavior: {allowed: false, meaning: {es: Sin aceleracion centripeta la trayectoria es recta., en: Without centripetal acceleration the path is straight.}}
+  value_nature: {kind: scalar, nonnegative_only: true, expected_interval: "[0.1, 50] m/s^2"}
+  interpretation_role: {primary_for: [radial_base], secondary_for: []}
+  graph_binding: {channels: []}
+  pedagogical_notes: "Igual a v^2/r."`;export{e as default};

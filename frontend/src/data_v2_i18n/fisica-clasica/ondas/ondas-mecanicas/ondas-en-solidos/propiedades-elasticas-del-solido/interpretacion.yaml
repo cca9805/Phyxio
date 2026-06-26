@@ -1,0 +1,1098 @@
+version: 5.0.0
+id: propiedades-elasticas-del-solido
+leaf_id: propiedades-elasticas-del-solido
+nombre:
+  es: Propiedades elasticas del solido
+  en: Elastic Properties of Solids
+scope:
+  area: fisica-clasica
+  bloque: ondas
+  subbloque: ondas-mecanicas
+  parent_id: ondas-en-solidos
+  ruta_relativa: fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/propiedades-elasticas-del-solido
+  orden: 232320
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - modulo_young
+  - modulo_cizalla
+  - modulo_compresibilidad
+  - relacion_poisson
+  - relacion_E_G_nu
+  magnitudes:
+  - modulo_de_young
+  - modulo_de_cizalla
+  - modulo_de_compresibilidad
+  - nu_poisson
+  - sigma
+  - epsilon
+  - tau
+  - gamma
+  - variacion_de_presion
+  - variacion_relativa_de_volumen
+  - epsilon_transv
+  - epsilon_long
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: ondas
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+  - Svg
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: modulo_de_young
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  modulo_de_young:
+    enabled: true
+    magnitude_type: modulus
+    semantic_role:
+      es: Rigidez del material frente a traccion o compresion uniaxial.
+      en: Material stiffness against uniaxial tension or compression.
+    summary_rules:
+    - id: ey_summary_high
+      when: E_young > 100e9
+      status: ok
+      text:
+        es: '[[E_young]] indica un material muy rigido. Valores superiores a 100 GPa son tipicos de metales y ceramicas de
+          alta rigidez.'
+        en: '[[E_young]] indicates a very stiff material. Values above 100 GPa are typical of metals and high-stiffness ceramics.'
+    - id: ey_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[E_young]] describe la rigidez del material frente a traccion uniaxial. Un valor alto indica que el material
+          apenas se deforma bajo carga.'
+        en: '[[E_young]] describes the material stiffness against uniaxial tension. A high value indicates the material barely
+          deforms under load.'
+    physical_reading_rules:
+    - id: ey_reading_stiff
+      when: E_young > 150e9
+      status: ok
+      text:
+        es: El material es muy rigido. La deformacion bajo cargas tipicas de ingenieria sera muy pequeña, del orden de milesimas.
+        en: The material is very stiff. Deformation under typical engineering loads will be very small, on the order of thousandths.
+    - id: ey_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[E_young]] depende de la naturaleza de los enlaces interatomicos. Cuanto mas fuerte el enlace, mayor el modulo.'
+        en: '[[E_young]] depends on the nature of interatomic bonds. The stronger the bond, the higher the modulus.'
+    coherence_rules:
+    - id: ey_coherence_positive
+      when: E_young > 0
+      status: ok
+      text:
+        es: '[[E_young]] es positivo, coherente con un material estable.'
+        en: '[[E_young]] is positive, consistent with a stable material.'
+    - id: ey_coherence_negative
+      when: E_young <= 0
+      status: error
+      text:
+        es: '[[E_young]] negativo o nulo carece de sentido fisico para un material estable.'
+        en: Negative or zero [[E_young]] has no physical meaning for a stable material.
+    - id: ey_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[E_young]] es positivo y del orden de GPa para materiales solidos.
+        en: Verify that [[E_young]] is positive and on the order of GPa for solid materials.
+    model_validity_rules:
+    - id: ey_validity_elastic
+      when: sigma > 0 && epsilon > 0.01
+      status: warning
+      text:
+        es: La deformacion supera el 1 %. El modelo elastico lineal puede no ser valido.
+        en: Strain exceeds 1%. The linear elastic model may not be valid.
+    - id: ey_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo es valido si la deformacion esta dentro del regimen elastico lineal.
+        en: The model is valid if the strain is within the linear elastic regime.
+    graph_rules:
+    - id: ey_graph_slope
+      when: 'true'
+      status: ok
+      text:
+        es: En la grafica tension-deformacion, [[E_young]] corresponde a la pendiente de la recta en el tramo elastico.
+        en: On the stress-strain graph, [[E_young]] corresponds to the slope of the line in the elastic range.
+    likely_errors:
+    - id: ey_error_stiffness_strength
+      when: 'true'
+      status: warning
+      text:
+        es: No confundir rigidez con resistencia. Un material rigido (alto [[E_young]]) no es necesariamente resistente a
+          la fractura.
+        en: Do not confuse stiffness with strength. A stiff material (high [[E_young]]) is not necessarily fracture-resistant.
+    next_step_rules:
+    - id: ey_next_shear
+      when: 'true'
+      status: ok
+      text:
+        es: Calcular [[G_shear]] usando la relacion fundamental con [[nu_poisson]] para verificar coherencia.
+        en: Calculate [[G_shear]] using the fundamental relation with [[nu_poisson]] to verify coherence.
+    physical_intuition:
+    - id: modulo_de_young_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[modulo_de_young]] describe el estado dinámico.
+        en: Intuitively, [[modulo_de_young]] describes the dynamic state.
+    limiting_cases:
+    - id: modulo_de_young_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[modulo_de_young]].
+        en: Check limiting cases of [[modulo_de_young]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  sigma:
+    enabled: true
+    magnitude_type: stress
+    semantic_role:
+      es: Tension normal aplicada al material.
+      en: Normal stress applied to the material.
+    summary_rules:
+    - id: sig_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[sigma]] indica la tension normal aplicada. Su magnitud determina si el material permanece en regimen elastico.'
+        en: '[[sigma]] indicates the applied normal stress. Its magnitude determines whether the material remains in the elastic
+          regime.'
+    physical_reading_rules:
+    - id: sig_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: La tension depende de la fuerza aplicada y del area de la seccion transversal.
+        en: Stress depends on the applied force and the cross-sectional area.
+    coherence_rules:
+    - id: sig_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[sigma]] tiene unidades de presion (Pa) y es del orden esperado para el material.
+        en: Verify that [[sigma]] has pressure units (Pa) and is of the expected order for the material.
+    model_validity_rules:
+    - id: sig_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: Valido mientras [[sigma]] no supere el limite elastico del material.
+        en: Valid as long as [[sigma]] does not exceed the material elastic limit.
+    graph_rules:
+    - id: sig_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[sigma]] aparece en el eje vertical de la curva tension-deformacion.'
+        en: '[[sigma]] appears on the vertical axis of the stress-strain curve.'
+    likely_errors:
+    - id: sig_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[sigma]] con una lectura aislada es un error frecuente: Verificar las unidades de la fuerza y del
+          area al calcular [[sigma]].'
+        en: 'A common mistake is to interpret [[sigma]] in isolation: Check the units of force and area when calculating [[sigma]].'
+    next_step_rules:
+    - id: sig_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[sigma]] y [[E_young]], calcular la deformacion longitudinal.
+        en: With [[sigma]] and [[E_young]], calculate the longitudinal strain.
+    physical_intuition:
+    - id: sigma_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[sigma]] describe el estado dinámico.
+        en: Intuitively, [[sigma]] describes the dynamic state.
+    limiting_cases:
+    - id: sigma_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[sigma]].
+        en: Check limiting cases of [[sigma]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  epsilon:
+    enabled: true
+    magnitude_type: strain
+    semantic_role:
+      es: Deformacion longitudinal del material bajo carga uniaxial.
+      en: Longitudinal strain of the material under uniaxial load.
+    summary_rules:
+    - id: eps_summary_small
+      when: abs(epsilon) < 0.001
+      status: ok
+      text:
+        es: '[[epsilon]] indica una deformacion muy pequeña, tipica de metales rigidos bajo cargas moderadas.'
+        en: '[[epsilon]] indicates a very small strain, typical of stiff metals under moderate loads.'
+    - id: eps_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[epsilon]] describe la deformacion relativa del material. Su magnitud indica si el regimen es elastico.'
+        en: '[[epsilon]] describes the relative deformation of the material. Its magnitude indicates whether the regime is
+          elastic.'
+    physical_reading_rules:
+    - id: eps_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: La deformacion depende del cociente entre la tension aplicada y el modulo de Young.
+        en: Strain depends on the ratio of applied stress to Young modulus.
+    coherence_rules:
+    - id: eps_coherence_large
+      when: abs(epsilon) > 0.01
+      status: warning
+      text:
+        es: '[[epsilon]] supera el 1 %. Revisar si el material sigue en regimen elastico.'
+        en: '[[epsilon]] exceeds 1%. Check whether the material is still in the elastic regime.'
+    - id: eps_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[epsilon]] sea adimensional y del orden esperado.
+        en: Verify that [[epsilon]] is dimensionless and of the expected order.
+    model_validity_rules:
+    - id: eps_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo lineal es valido mientras [[epsilon]] permanezca inferior a 0.01.
+        en: The linear model is valid as long as [[epsilon]] remains below 0.01.
+    graph_rules:
+    - id: eps_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[epsilon]] aparece en el eje horizontal de la curva tension-deformacion.'
+        en: '[[epsilon]] appears on the horizontal axis of the stress-strain curve.'
+    likely_errors:
+    - id: eps_error_displacement
+      when: 'true'
+      status: warning
+      text:
+        es: No confundir deformacion (adimensional) con desplazamiento (metros). Dividir el cambio de longitud entre la longitud
+          original.
+        en: Do not confuse strain (dimensionless) with displacement (metres). Divide the length change by the original length.
+    next_step_rules:
+    - id: eps_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Usar [[epsilon]] con [[nu_poisson]] para calcular la deformacion transversal.
+        en: Use [[epsilon]] with [[nu_poisson]] to calculate the transverse strain.
+    physical_intuition:
+    - id: epsilon_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[epsilon]] describe el estado dinámico.
+        en: Intuitively, [[epsilon]] describes the dynamic state.
+    limiting_cases:
+    - id: epsilon_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[epsilon]].
+        en: Check limiting cases of [[epsilon]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  modulo_de_cizalla:
+    enabled: true
+    magnitude_type: modulus
+    semantic_role:
+      es: Rigidez del material frente a deformacion de cizalla.
+      en: Material stiffness against shear deformation.
+    summary_rules:
+    - id: gs_summary_zero
+      when: G_shear <= 0
+      status: error
+      text:
+        es: '[[G_shear]] nulo o negativo indica un fluido o un dato erroneo. Los solidos siempre tienen [[G_shear]] positivo.'
+        en: Zero or negative [[G_shear]] indicates a fluid or erroneous data. Solids always have positive [[G_shear]].
+    - id: gs_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[G_shear]] describe la resistencia del material al cambio de forma. Un valor positivo indica un solido capaz
+          de propagar ondas transversales.'
+        en: '[[G_shear]] describes the material resistance to shape change. A positive value indicates a solid capable of
+          propagating transverse waves.'
+    physical_reading_rules:
+    - id: gs_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[G_shear]] depende de la rigidez de los enlaces interatomicos frente a distorsion angular.'
+        en: '[[G_shear]] depends on the stiffness of interatomic bonds against angular distortion.'
+    coherence_rules:
+    - id: gs_coherence_vs_E
+      when: E_young > 0 && G_shear > 0 && abs(E_young / (2 * G_shear) - 1) > 0.5
+      status: warning
+      text:
+        es: La relacion [[E_young]] / [[G_shear]] difiere mucho del valor esperado (entre 2 y 3). Revisar datos.
+        en: The [[E_young]] / [[G_shear]] ratio differs greatly from the expected value (between 2 and 3). Review data.
+    - id: gs_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[G_shear]] es positivo y coherente con [[E_young]] y [[nu_poisson]].
+        en: Verify that [[G_shear]] is positive and consistent with [[E_young]] and [[nu_poisson]].
+    model_validity_rules:
+    - id: gs_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo es valido mientras la deformacion angular permanezca infinitesimal.
+        en: The model is valid as long as the angular strain remains infinitesimal.
+    graph_rules:
+    - id: gs_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[G_shear]] determina la pendiente de la curva tension tangencial frente a deformacion angular.'
+        en: '[[G_shear]] determines the slope of the shear stress versus angular strain curve.'
+    likely_errors:
+    - id: gs_error_fluid
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[modulo_de_cizalla]] con una lectura aislada es un error frecuente: Recordar que los fluidos ideales
+          tienen [[G_shear]] nulo. Solo los solidos propagan ondas transversales.'
+        en: 'A common mistake is to interpret [[modulo_de_cizalla]] in isolation: Remember that ideal fluids have zero [[G_shear]].
+          Only solids propagate transverse waves.'
+    next_step_rules:
+    - id: gs_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar coherencia calculando [[E_young]] a partir de [[G_shear]] y [[nu_poisson]].
+        en: Verify coherence by calculating [[E_young]] from [[G_shear]] and [[nu_poisson]].
+    physical_intuition:
+    - id: modulo_de_cizalla_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[modulo_de_cizalla]] describe el estado dinámico.
+        en: Intuitively, [[modulo_de_cizalla]] describes the dynamic state.
+    limiting_cases:
+    - id: modulo_de_cizalla_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[modulo_de_cizalla]].
+        en: Check limiting cases of [[modulo_de_cizalla]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  tau:
+    enabled: true
+    magnitude_type: stress
+    semantic_role:
+      es: Tension tangencial aplicada al material.
+      en: Shear stress applied to the material.
+    summary_rules:
+    - id: tau_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[tau]] indica la tension tangencial. Su magnitud, comparada con el limite de fluencia a cizalla, determina si
+          el material permanece elastico.'
+        en: '[[tau]] indicates the shear stress. Its magnitude, compared to the shear yield limit, determines whether the
+          material remains elastic.'
+    physical_reading_rules:
+    - id: tau_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: La tension tangencial depende de la fuerza aplicada tangencialmente y del area sobre la que actua.
+        en: Shear stress depends on the tangentially applied force and the area over which it acts.
+    coherence_rules:
+    - id: tau_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[tau]] tiene unidades de presion y es del orden esperado.
+        en: Verify that [[tau]] has pressure units and is of the expected order.
+    model_validity_rules:
+    - id: tau_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo lineal es valido mientras [[tau]] no supere el limite de fluencia a cizalla.
+        en: The linear model is valid as long as [[tau]] does not exceed the shear yield limit.
+    graph_rules:
+    - id: tau_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[tau]] aparece en el eje vertical de la curva tension tangencial-deformacion angular.'
+        en: '[[tau]] appears on the vertical axis of the shear stress-angular strain curve.'
+    likely_errors:
+    - id: tau_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: No confundir [[tau]] (tension tangencial) con [[sigma]] (tension normal). Actuan en planos diferentes.
+        en: Do not confuse [[tau]] (shear stress) with [[sigma]] (normal stress). They act on different planes.
+    next_step_rules:
+    - id: tau_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[tau]] y [[G_shear]], calcular la deformacion angular [[gamma]].
+        en: With [[tau]] and [[G_shear]], calculate the angular strain [[gamma]].
+    physical_intuition:
+    - id: tau_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[tau]] describe el estado dinámico.
+        en: Intuitively, [[tau]] describes the dynamic state.
+    limiting_cases:
+    - id: tau_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[tau]].
+        en: Check limiting cases of [[tau]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  gamma:
+    enabled: true
+    magnitude_type: strain
+    semantic_role:
+      es: Deformacion angular del material bajo esfuerzo tangencial.
+      en: Angular strain of the material under shear stress.
+    summary_rules:
+    - id: gam_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[gamma]] describe la distorsion angular del material. Un valor pequeño indica regimen elastico lineal.'
+        en: '[[gamma]] describes the angular distortion of the material. A small value indicates linear elastic regime.'
+    physical_reading_rules:
+    - id: gam_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: La deformacion angular depende del cociente entre la tension tangencial y el modulo de cizalla.
+        en: Angular strain depends on the ratio of shear stress to shear modulus.
+    coherence_rules:
+    - id: gam_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[gamma]] es adimensional y del orden de 10⁻³ o inferior para regimen elastico.
+        en: Verify that [[gamma]] is dimensionless and on the order of 10⁻³ or less for elastic regime.
+    model_validity_rules:
+    - id: gam_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo lineal requiere [[gamma]] muy inferior a la unidad.
+        en: The linear model requires [[gamma]] much less than unity.
+    graph_rules:
+    - id: gam_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[gamma]] aparece en el eje horizontal de la curva de cizalla.'
+        en: '[[gamma]] appears on the horizontal axis of the shear curve.'
+    likely_errors:
+    - id: gam_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: No confundir [[gamma]] (deformacion angular, adimensional) con un angulo de giro. Es un cociente de desplazamiento
+          entre longitud.
+        en: Do not confuse [[gamma]] (angular strain, dimensionless) with a rotation angle. It is a displacement-to-length
+          ratio.
+    next_step_rules:
+    - id: gam_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Comparar [[gamma]] con el limite elastico a cizalla del material para evaluar seguridad.
+        en: Compare [[gamma]] with the material shear elastic limit to evaluate safety.
+    physical_intuition:
+    - id: gamma_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[gamma]] describe el estado dinámico.
+        en: Intuitively, [[gamma]] describes the dynamic state.
+    limiting_cases:
+    - id: gamma_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[gamma]].
+        en: Check limiting cases of [[gamma]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  modulo_de_compresibilidad:
+    enabled: true
+    magnitude_type: modulus
+    semantic_role:
+      es: Resistencia del material a la compresion volumetrica uniforme.
+      en: Material resistance to uniform volumetric compression.
+    summary_rules:
+    - id: kb_summary_high
+      when: K_bulk > 100e9
+      status: ok
+      text:
+        es: '[[K_bulk]] indica un material casi incompresible. Valores superiores a 100 GPa son tipicos de metales densos.'
+        en: '[[K_bulk]] indicates a nearly incompressible material. Values above 100 GPa are typical of dense metals.'
+    - id: kb_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[K_bulk]] describe la resistencia del material al cambio de volumen bajo presion hidrostatica. Un valor alto
+          indica incompresibilidad.'
+        en: '[[K_bulk]] describes the material resistance to volume change under hydrostatic pressure. A high value indicates
+          incompressibility.'
+    physical_reading_rules:
+    - id: kb_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[K_bulk]] depende de la rigidez volumetrica de los enlaces. Existe tanto en solidos como en fluidos.'
+        en: '[[K_bulk]] depends on the volumetric stiffness of bonds. It exists in both solids and fluids.'
+    coherence_rules:
+    - id: kb_coherence_positive
+      when: K_bulk > 0
+      status: ok
+      text:
+        es: '[[K_bulk]] es positivo, coherente con estabilidad termodinamica.'
+        en: '[[K_bulk]] is positive, consistent with thermodynamic stability.'
+    - id: kb_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[K_bulk]] es positivo y del orden de GPa para materiales solidos.
+        en: Verify that [[K_bulk]] is positive and on the order of GPa for solid materials.
+    model_validity_rules:
+    - id: kb_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo es valido para compresiones hidrostaticas moderadas dentro del regimen elastico.
+        en: The model is valid for moderate hydrostatic compressions within the elastic regime.
+    graph_rules:
+    - id: kb_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[K_bulk]] determina la pendiente de la curva presion frente a cambio de volumen relativo.'
+        en: '[[K_bulk]] determines the slope of the pressure versus relative volume change curve.'
+    likely_errors:
+    - id: kb_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: No confundir [[K_bulk]] (resistencia a compresion volumetrica) con [[E_young]] (resistencia a traccion uniaxial).
+        en: Do not confuse [[K_bulk]] (resistance to volumetric compression) with [[E_young]] (resistance to uniaxial tension).
+    next_step_rules:
+    - id: kb_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Comparar [[K_bulk]] con [[G_shear]] para estimar el [[nu_poisson]] y el tipo de comportamiento del material.
+        en: Compare [[K_bulk]] with [[G_shear]] to estimate [[nu_poisson]] and the type of material behaviour.
+    physical_intuition:
+    - id: modulo_de_compresibilidad_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[modulo_de_compresibilidad]] describe el estado dinámico.
+        en: Intuitively, [[modulo_de_compresibilidad]] describes the dynamic state.
+    limiting_cases:
+    - id: modulo_de_compresibilidad_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[modulo_de_compresibilidad]].
+        en: Check limiting cases of [[modulo_de_compresibilidad]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  variacion_de_presion:
+    enabled: true
+    magnitude_type: stress
+    semantic_role:
+      es: Variacion de presion hidrostatica aplicada.
+      en: Applied hydrostatic pressure change.
+    summary_rules:
+    - id: dp_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaP]] indica la presion hidrostatica aplicada. Su magnitud, combinada con [[K_bulk]], determina el cambio
+          de volumen.'
+        en: '[[DeltaP]] indicates the applied hydrostatic pressure. Its magnitude, combined with [[K_bulk]], determines the
+          volume change.'
+    physical_reading_rules:
+    - id: dp_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: La presion actua uniformemente en todas las direcciones sobre el material.
+        en: Pressure acts uniformly in all directions on the material.
+    coherence_rules:
+    - id: dp_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[DeltaP]] tiene unidades de presion (Pa).
+        en: Verify that [[DeltaP]] has pressure units (Pa).
+    model_validity_rules:
+    - id: dp_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: Valido mientras la presion no induzca transiciones de fase o cambios de estado.
+        en: Valid as long as pressure does not induce phase transitions or state changes.
+    graph_rules:
+    - id: dp_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaP]] aparece en el eje vertical de la curva de compresibilidad.'
+        en: '[[DeltaP]] appears on the vertical axis of the compressibility curve.'
+    likely_errors:
+    - id: dp_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[variacion_de_presion]] con una lectura aislada es un error frecuente: Verificar el signo de [[DeltaP]]:
+          positivo en compresion.'
+        en: 'A common mistake is to interpret [[variacion_de_presion]] in isolation: Check the sign of [[DeltaP]]: positive
+          in compression.'
+    next_step_rules:
+    - id: dp_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[DeltaP]] y [[K_bulk]], calcular el cambio de volumen relativo.
+        en: With [[DeltaP]] and [[K_bulk]], calculate the relative volume change.
+    physical_intuition:
+    - id: variacion_de_presion_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[variacion_de_presion]] describe el estado dinámico.
+        en: Intuitively, [[variacion_de_presion]] describes the dynamic state.
+    limiting_cases:
+    - id: variacion_de_presion_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[variacion_de_presion]].
+        en: Check limiting cases of [[variacion_de_presion]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  variacion_relativa_de_volumen:
+    enabled: true
+    magnitude_type: strain
+    semantic_role:
+      es: Cambio relativo de volumen del material.
+      en: Relative volume change of the material.
+    summary_rules:
+    - id: dvr_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaV_rel]] indica el cambio de volumen relativo. Un valor pequeño y negativo es tipico de compresion elastica.'
+        en: '[[DeltaV_rel]] indicates the relative volume change. A small negative value is typical of elastic compression.'
+    physical_reading_rules:
+    - id: dvr_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: El cambio de volumen depende del cociente entre la presion aplicada y el modulo de compresibilidad.
+        en: Volume change depends on the ratio of applied pressure to bulk modulus.
+    coherence_rules:
+    - id: dvr_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[DeltaV_rel]] es negativo en compresion y adimensional.
+        en: Verify that [[DeltaV_rel]] is negative in compression and dimensionless.
+    model_validity_rules:
+    - id: dvr_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo lineal requiere cambios de volumen relativos pequeños (inferiores al 1 %).
+        en: The linear model requires small relative volume changes (below 1%).
+    graph_rules:
+    - id: dvr_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaV_rel]] aparece en el eje horizontal de la curva de compresibilidad.'
+        en: '[[DeltaV_rel]] appears on the horizontal axis of the compressibility curve.'
+    likely_errors:
+    - id: dvr_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'No olvidar el signo negativo: la compresion reduce el volumen.'
+        en: 'Do not forget the negative sign: compression reduces volume.'
+    next_step_rules:
+    - id: dvr_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Comparar el cambio de volumen con limites tipicos de compresibilidad del material.
+        en: Compare the volume change with typical compressibility limits of the material.
+    physical_intuition:
+    - id: variacion_relativa_de_volumen_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[variacion_relativa_de_volumen]] describe el estado dinámico.
+        en: Intuitively, [[variacion_relativa_de_volumen]] describes the dynamic state.
+    limiting_cases:
+    - id: variacion_relativa_de_volumen_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[variacion_relativa_de_volumen]].
+        en: Check limiting cases of [[variacion_relativa_de_volumen]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  nu_poisson:
+    enabled: true
+    magnitude_type: coefficient
+    semantic_role:
+      es: Acoplamiento entre deformacion longitudinal y contraccion transversal.
+      en: Coupling between longitudinal deformation and transverse contraction.
+    summary_rules:
+    - id: nu_summary_incomp
+      when: nu_poisson > 0.45
+      status: ok
+      text:
+        es: '[[nu_poisson]] cercano a 0.5 indica un material casi incompresible. La deformacion conserva el volumen.'
+        en: '[[nu_poisson]] close to 0.5 indicates a nearly incompressible material. Deformation conserves volume.'
+    - id: nu_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[nu_poisson]] describe el grado de acoplamiento transversal-longitudinal. Su valor determina las relaciones
+          entre todos los modulos elasticos.'
+        en: '[[nu_poisson]] describes the degree of transverse-longitudinal coupling. Its value determines the relationships
+          between all elastic moduli.'
+    physical_reading_rules:
+    - id: nu_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[nu_poisson]] depende de la estructura cristalina y los enlaces del material. Valores tipicos entre 0.2 y 0.45.'
+        en: '[[nu_poisson]] depends on the crystal structure and bonds of the material. Typical values between 0.2 and 0.45.'
+    coherence_rules:
+    - id: nu_coherence_out_of_range
+      when: nu_poisson > 0.5 || nu_poisson < -1
+      status: error
+      text:
+        es: '[[nu_poisson]] fuera del rango fisico (-1, 0.5). El material seria termodinamicamente inestable.'
+        en: '[[nu_poisson]] outside the physical range (-1, 0.5). The material would be thermodynamically unstable.'
+    - id: nu_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[nu_poisson]] esta entre -1 y 0.5 para garantizar estabilidad.
+        en: Verify that [[nu_poisson]] is between -1 and 0.5 to ensure stability.
+    model_validity_rules:
+    - id: nu_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo isotropo es valido si el material no presenta anisotropia direccional.
+        en: The isotropic model is valid if the material does not exhibit directional anisotropy.
+    graph_rules:
+    - id: nu_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[nu_poisson]] controla la separacion entre curvas de velocidad longitudinal y transversal.'
+        en: '[[nu_poisson]] controls the separation between longitudinal and transverse velocity curves.'
+    likely_errors:
+    - id: nu_error_range
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[nu_poisson]] con una lectura aislada es un error frecuente: El limite superior de 0.5 corresponde
+          a material incompresible. Valores superiores indican error de calculo o datos.'
+        en: 'A common mistake is to interpret [[nu_poisson]] in isolation: The upper limit of 0.5 corresponds to incompressible
+          material. Higher values indicate calculation or data error.'
+    next_step_rules:
+    - id: nu_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Usar [[nu_poisson]] con [[E_young]] para calcular [[G_shear]] y [[K_bulk]] mediante las relaciones del isotropo.
+        en: Use [[nu_poisson]] with [[E_young]] to calculate [[G_shear]] and [[K_bulk]] through the isotropic relations.
+    physical_intuition:
+    - id: nu_poisson_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[nu_poisson]] describe el estado dinámico.
+        en: Intuitively, [[nu_poisson]] describes the dynamic state.
+    limiting_cases:
+    - id: nu_poisson_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[nu_poisson]].
+        en: Check limiting cases of [[nu_poisson]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  epsilon_transv:
+    enabled: true
+    magnitude_type: strain
+    semantic_role:
+      es: Deformacion en la direccion perpendicular a la carga.
+      en: Strain in the direction perpendicular to the load.
+    summary_rules:
+    - id: et_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[epsilon_transv]] indica la contraccion lateral del material. Su signo opuesto a [[epsilon]] confirma el efecto
+          Poisson.'
+        en: '[[epsilon_transv]] indicates the lateral contraction of the material. Its sign opposite to [[epsilon]] confirms
+          the Poisson effect.'
+    physical_reading_rules:
+    - id: et_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: La deformacion transversal depende del producto de [[nu_poisson]] por la deformacion longitudinal.
+        en: Transverse strain depends on the product of [[nu_poisson]] and longitudinal strain.
+    coherence_rules:
+    - id: et_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[epsilon_transv]] tiene signo opuesto a la deformacion longitudinal para materiales con Poisson
+          positivo.
+        en: Verify that [[epsilon_transv]] has opposite sign to longitudinal strain for materials with positive Poisson.
+    model_validity_rules:
+    - id: et_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: Valido en regimen elastico lineal con deformaciones infinitesimales.
+        en: Valid in linear elastic regime with infinitesimal strains.
+    graph_rules:
+    - id: et_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[epsilon_transv]] puede visualizarse como el estrechamiento lateral de la barra en la grafica de deformacion.'
+        en: '[[epsilon_transv]] can be visualised as the lateral narrowing of the bar in the deformation graph.'
+    likely_errors:
+    - id: et_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: No olvidar el signo negativo al calcular [[epsilon_transv]] en traccion.
+        en: Do not forget the negative sign when calculating [[epsilon_transv]] in tension.
+    next_step_rules:
+    - id: et_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que el cambio de volumen total es coherente con [[nu_poisson]].
+        en: Verify that the total volume change is consistent with [[nu_poisson]].
+    physical_intuition:
+    - id: epsilon_transv_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[epsilon_transv]] describe el estado dinámico.
+        en: Intuitively, [[epsilon_transv]] describes the dynamic state.
+    limiting_cases:
+    - id: epsilon_transv_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[epsilon_transv]].
+        en: Check limiting cases of [[epsilon_transv]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

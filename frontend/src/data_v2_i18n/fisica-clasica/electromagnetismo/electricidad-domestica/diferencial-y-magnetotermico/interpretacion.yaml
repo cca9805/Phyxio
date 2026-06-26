@@ -1,0 +1,851 @@
+version: 5.0.0
+id: diferencial-y-magnetotermico
+leaf_id: diferencial-y-magnetotermico
+nombre:
+  es: Diferencial y magnetotermico
+  en: Differential and Thermal-Magnetic Breakers
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: electricidad-domestica
+  parent_id: electricidad-domestica
+  ruta_relativa: fisica-clasica/electromagnetismo/electricidad-domestica/diferencial-y-magnetotermico
+  orden: 298500
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: false
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: false
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: false
+  preferred_type: none
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - corriente_carga
+  - desequilibrio
+  - ratio_diferencial
+  - potencia_limite
+  - ratio_termico
+  magnitudes:
+  - corriente_de_carga
+  - desequilibrio_diferencial
+  - umbral_diferencial_nominal
+  - corriente_nominal_del_magnetotermico
+  - corriente_de_fase
+  - corriente_de_neutro
+  - potencia_de_carga
+  - potencia_limite_magnetotermica
+  - tension_de_suministro
+  - margen_dif
+  - margen_termico
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: false
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: false
+  type: none
+  channels: []
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: false
+  primary_variable: corriente_de_carga
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  corriente_de_carga:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de corriente_de_carga
+      en: Result of corriente_de_carga
+    summary_rules:
+    - id: I_summary
+      when: 'true'
+      status: info
+      text:
+        es: La corriente de carga I indica cuanta corriente circula por el circuito al conectar una potencia P a la tension
+          V de suministro.
+        en: The load current I indicates how much current flows through the circuit when power P is connected at supply voltage
+          V.
+    physical_reading_rules:
+    - id: I_physical
+      when: 'true'
+      status: info
+      text:
+        es: Una I elevada indica que los equipos conectados consumen mucha potencia. Si I/I_n supera 1, el magnetotermico
+          puede actuar en minutos.
+        en: A high I indicates that connected appliances consume a lot of power. If I/I_n exceeds 1, the MCB may trip within
+          minutes.
+    coherence_rules:
+    - id: I_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: I debe ser coherente con la potencia conectada y la tension nominal. Si I supera I_n, hay sobrecarga del magnetotermico.
+        en: I must be consistent with connected power and nominal voltage. If I exceeds I_n, the MCB is overloaded.
+    model_validity_rules:
+    - id: I_validity
+      when: 'true'
+      status: ok
+      text:
+        es: La formula I=P/V es valida para cargas resistivas puras. En cargas inductivas la corriente real puede ser algo
+          mayor por el factor de potencia.
+        en: The formula I=P/V is valid for purely resistive loads. For inductive loads, the real current may be slightly higher
+          due to the power factor.
+    graph_rules:
+    - id: I_graph
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, I se representa como la corriente total del circuito. Compara su valor con I_n para visualizar
+          el margen termico disponible.
+        en: On the graph, I is represented as the total circuit current. Compare its value with I_n to visualise the available
+          thermal margin.
+    likely_errors:
+    - id: I_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas la corriente total I con el desequilibrio diferencial I_delta. Son magnitudes fisicamente distintas
+          que se comparan con umbrales distintos.
+        en: Do not confuse the total current I with the differential imbalance I_delta. They are physically distinct quantities
+          compared against different thresholds.
+    next_step_rules:
+    - id: I_next
+      when: 'true'
+      status: info
+      text:
+        es: Calcula margen_termico = I / I_n para cuantificar que tan cerca esta el circuito del limite de disparo del magnetotermico.
+        en: Calculate margen_termico = I / I_n to quantify how close the circuit is to the MCB trip threshold.
+    physical_intuition:
+    - id: corriente_de_carga_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[corriente_de_carga]] describe el estado dinámico.
+        en: Intuitively, [[corriente_de_carga]] describes the dynamic state.
+    limiting_cases:
+    - id: corriente_de_carga_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[corriente_de_carga]].
+        en: Check limiting cases of [[corriente_de_carga]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  potencia_de_carga:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de potencia_de_carga
+      en: Result of potencia_de_carga
+    summary_rules:
+    - id: P_summary
+      when: 'true'
+      status: info
+      text:
+        es: La potencia de carga P es el dato de entrada para estimar la corriente de carga I del circuito mediante la formula
+          I = P/V.
+        en: Load power P is the input data for estimating the circuit load current I using the formula I = P/V.
+    physical_reading_rules:
+    - id: P_physical
+      when: 'true'
+      status: info
+      text:
+        es: Una P elevada implica una I elevada. Si P supera P_lim, la corriente resultante superara I_n y el magnetotermico
+          podra actuar.
+        en: A high P implies a high I. If P exceeds P_lim, the resulting current will exceed I_n and the MCB may trip.
+    coherence_rules:
+    - id: P_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: P debe corresponder a la suma de potencias de los equipos conectados al circuito concreto, no a la vivienda completa.
+        en: P must correspond to the sum of powers of equipment connected to the specific circuit, not the entire household.
+    model_validity_rules:
+    - id: P_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El uso de P como dato de entrada asume factor de potencia unitario. Para cargas inductivas, la potencia aparente
+          puede ser mayor que P.
+        en: Using P as input assumes unity power factor. For inductive loads, apparent power may be greater than P.
+    graph_rules:
+    - id: P_graph
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico de potencia, P se muestra como la potencia actual del circuito. Comparar con P_lim para evaluar
+          el margen disponible.
+        en: On the power graph, P is shown as the current circuit power. Compare with P_lim to evaluate the available margin.
+    likely_errors:
+    - id: P_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No uses la potencia total contratada de la vivienda como P del circuito. Cada circuito tiene su propia P segun
+          los equipos conectados.
+        en: Do not use the total contracted household power as the circuit P. Each circuit has its own P based on connected
+          equipment.
+    next_step_rules:
+    - id: P_next
+      when: 'true'
+      status: info
+      text:
+        es: Con P y V conocidos, calcula I usando la formula de corriente de carga y compara con I_n para evaluar margen_termico.
+        en: With P and V known, calculate I using the load current formula and compare with I_n to evaluate margen_termico.
+    physical_intuition:
+    - id: potencia_de_carga_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[potencia_de_carga]] describe el estado dinámico.
+        en: Intuitively, [[potencia_de_carga]] describes the dynamic state.
+    limiting_cases:
+    - id: potencia_de_carga_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[potencia_de_carga]].
+        en: Check limiting cases of [[potencia_de_carga]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  tension_de_suministro:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de tension_de_suministro
+      en: Result of tension_de_suministro
+    summary_rules:
+    - id: V_summary
+      when: 'true'
+      status: info
+      text:
+        es: V es la tension nominal de suministro, tipicamente 230 V en Europa. Es el parametro fijo de referencia para todos
+          los calculos de corriente y potencia del circuito.
+        en: V is the nominal supply voltage, typically 230 V in Europe. It is the fixed reference parameter for all circuit
+          current and power calculations.
+    physical_reading_rules:
+    - id: V_physical
+      when: 'true'
+      status: info
+      text:
+        es: Una V inferior a la nominal reduce I para la misma P, lo que puede ocultar una sobrecarga si se calcula con V
+          = 230 V y la tension real es menor.
+        en: A V lower than nominal reduces I for the same P, which may hide an overload if calculated with V = 230 V when
+          the actual voltage is lower.
+    coherence_rules:
+    - id: V_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: V debe ser coherente con la instalacion. En instalaciones europeas post-1987, V = 230 V nominal con tolerancia
+          de mas menos 10 porciento.
+        en: V must be consistent with the installation. In post-1987 European installations, V = 230 V nominal with tolerance
+          of plus minus 10 percent.
+    model_validity_rules:
+    - id: V_validity
+      when: 'true'
+      status: ok
+      text:
+        es: V = 230 V es una aproximacion para calculo de primer orden. Para dimensionamiento preciso, usar la tension medida
+          en el punto de consumo.
+        en: V = 230 V is a first-order calculation approximation. For precise sizing, use the voltage measured at the point
+          of consumption.
+    graph_rules:
+    - id: V_graph
+      when: 'true'
+      status: info
+      text:
+        es: V aparece como parametro fijo en el grafico de corriente vs potencia. Cambios en V desplazan la curva de I proporcionalmente.
+        en: V appears as a fixed parameter in the current vs power graph. Changes in V shift the I curve proportionally.
+    likely_errors:
+    - id: V_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No uses V = 220 V para instalaciones europeas modernas. El error sistematico en I calculada es del 4 porciento,
+          suficiente para errores de clasificacion en casos limite.
+        en: Do not use V = 220 V for modern European installations. The systematic error in calculated I is 4 percent, enough
+          for classification errors in borderline cases.
+    next_step_rules:
+    - id: V_next
+      when: 'true'
+      status: info
+      text:
+        es: Con V y I_n conocidos, calcula P_lim para obtener la potencia maxima del circuito antes de recurrir al magnetotermico.
+        en: With V and I_n known, calculate P_lim to obtain the circuit maximum power before the MCB trips.
+    physical_intuition:
+    - id: tension_de_suministro_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[tension_de_suministro]] describe el estado dinámico.
+        en: Intuitively, [[tension_de_suministro]] describes the dynamic state.
+    limiting_cases:
+    - id: tension_de_suministro_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[tension_de_suministro]].
+        en: Check limiting cases of [[tension_de_suministro]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  desequilibrio_diferencial:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de desequilibrio_diferencial
+      en: Result of desequilibrio_diferencial
+    summary_rules:
+    - id: I_delta_summary
+      when: 'true'
+      status: info
+      text:
+        es: El desequilibrio diferencial I_delta es la diferencia absoluta entre la corriente de fase y la corriente de neutro.
+          Representa la corriente que escapa por un camino no previsto.
+        en: The differential imbalance I_delta is the absolute difference between phase and neutral current. It represents
+          the current escaping via an unintended path.
+    physical_reading_rules:
+    - id: I_delta_physical
+      when: 'true'
+      status: info
+      text:
+        es: I_delta representa la corriente que recorre el cuerpo de una persona en caso de contacto con un conductor con
+          fuga. Por eso el umbral I_dn de 30 mA es el limite de seguridad personal.
+        en: I_delta represents the current that would flow through a person's body upon contact with a leaking conductor.
+          That is why the 30 mA I_dn threshold is the personal safety limit.
+    coherence_rules:
+    - id: I_delta_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: En una instalacion sin fugas, I_delta debe ser practicamente cero. Un valor apreciable indica defecto de aislamiento
+          o fuga real a tierra.
+        en: In a leak-free installation, I_delta should be practically zero. An appreciable value indicates insulation defect
+          or real earth leakage.
+    model_validity_rules:
+    - id: I_delta_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El calculo I_delta = |I_fase - I_neutro| es valido para corriente alterna estandar. Para corrientes pulsantes
+          de CC (equipos electronicos) se requiere diferencial tipo A.
+        en: The calculation I_delta = |I_fase - I_neutro| is valid for standard AC. For pulsating DC currents (electronic
+          devices) a type-A RCD is required.
+    graph_rules:
+    - id: I_delta_graph
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, I_delta se visualiza como la diferencia entre las curvas de I_fase e I_neutro. Cualquier separacion
+          visible entre ellas indica fuga.
+        en: On the graph, I_delta is visualised as the difference between the I_fase and I_neutro curves. Any visible separation
+          between them indicates leakage.
+    likely_errors:
+    - id: I_delta_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No compares I_delta en mA con la corriente de carga I en A sin convertir unidades. El diferencial actua con diferencias
+          del 0,3% o menos de la corriente total del circuito.
+        en: Do not compare I_delta in mA with load current I in A without converting units. The RCD trips with differences
+          of 0.3% or less of the total circuit current.
+    next_step_rules:
+    - id: I_delta_next
+      when: 'true'
+      status: info
+      text:
+        es: Calcula margen_dif = I_delta / I_dn para cuantificar la proximidad al disparo diferencial e identificar si hay
+          degradacion progresiva del aislamiento.
+        en: Calculate margen_dif = I_delta / I_dn to quantify proximity to RCD trip and identify whether there is progressive
+          insulation degradation.
+    physical_intuition:
+    - id: desequilibrio_diferencial_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[desequilibrio_diferencial]] describe el estado dinámico.
+        en: Intuitively, [[desequilibrio_diferencial]] describes the dynamic state.
+    limiting_cases:
+    - id: desequilibrio_diferencial_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[desequilibrio_diferencial]].
+        en: Check limiting cases of [[desequilibrio_diferencial]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  margen_dif:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de margen_dif
+      en: Result of margen_dif
+    summary_rules:
+    - id: margen_dif_summary
+      when: 'true'
+      status: info
+      text:
+        es: El margen diferencial indica que fraccion del umbral I_dn ha sido alcanzada por el desequilibrio I_delta. Un valor
+          igual o superior a 1 implica disparo inminente o activo.
+        en: The differential margin indicates what fraction of the threshold I_dn has been reached by the imbalance I_delta.
+          A value equal to or above 1 implies imminent or active tripping.
+    physical_reading_rules:
+    - id: margen_dif_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Un margen_dif de 0,6 indica que la fuga actual es el 60% del umbral: no dispara, pero senala que el aislamiento
+          no esta en condiciones ideales y la situacion puede empeorar.'
+        en: 'A margen_dif of 0.6 indicates current leakage is 60% of the threshold: no trip yet, but signals insulation is
+          not in ideal condition and the situation may worsen.'
+    coherence_rules:
+    - id: margen_dif_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: margen_dif debe ser coherente con I_delta calculado y la sensibilidad I_dn del diferencial instalado en el circuito.
+        en: margen_dif must be consistent with calculated I_delta and the sensitivity I_dn of the RCD installed on the circuit.
+    model_validity_rules:
+    - id: margen_dif_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El calculo es valido para diferencial tipo AC con corriente alterna pura. En circuitos con mucha electronica puede
+          subestimar el riesgo real por componentes de CC pulsante.
+        en: The calculation is valid for type-AC RCDs with pure AC. In circuits with significant electronics, it may underestimate
+          real risk due to pulsating DC components.
+    graph_rules:
+    - id: margen_dif_graph
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, margen_dif se representa como I_delta/I_dn. La zona entre 0,5 y 1 es de vigilancia; por encima
+          de 1 el diferencial actua.
+        en: On the graph, margen_dif is represented as I_delta/I_dn. The zone between 0.5 and 1 is the monitoring zone; above
+          1 the RCD trips.
+    likely_errors:
+    - id: margen_dif_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes margen_dif < 1 como ausencia total de fuga. La fuga existe; solo no es suficiente para disparar
+          en ese instante. Un valor de 0,8 ya merece inspeccion.
+        en: Do not interpret margen_dif < 1 as complete absence of leakage. The leakage exists; it is just not enough to trip
+          at that moment. A value of 0.8 already warrants inspection.
+    next_step_rules:
+    - id: margen_dif_next
+      when: 'true'
+      status: info
+      text:
+        es: Si margen_dif supera 0,5, inspecciona los aparatos del circuito y los puntos de conexion para identificar el origen
+          de la fuga antes de que alcance el umbral.
+        en: If margen_dif exceeds 0.5, inspect the circuit's appliances and connection points to identify the leakage source
+          before it reaches the threshold.
+    physical_intuition:
+    - id: margen_dif_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[margen_dif]] describe el estado dinámico.
+        en: Intuitively, [[margen_dif]] describes the dynamic state.
+    limiting_cases:
+    - id: margen_dif_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[margen_dif]].
+        en: Check limiting cases of [[margen_dif]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  potencia_limite_magnetotermica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de potencia_limite_magnetotermica
+      en: Result of potencia_limite_magnetotermica
+    summary_rules:
+    - id: P_lim_summary
+      when: 'true'
+      status: info
+      text:
+        es: P_lim es la potencia maxima aproximada que puede conectarse al circuito antes de que el magnetotermico actue por
+          sobrecorriente. Es una estimacion de primer orden para carga resistiva.
+        en: P_lim is the approximate maximum power that can be connected to the circuit before the MCB trips for overcurrent.
+          It is a first-order estimate for resistive load.
+    physical_reading_rules:
+    - id: P_lim_physical
+      when: 'true'
+      status: info
+      text:
+        es: P_lim indica el techo de consumo seguro del circuito. Si la suma de potencias de los equipos conectados se acerca
+          a P_lim, el margen de seguridad es reducido.
+        en: P_lim indicates the safe consumption ceiling of the circuit. If the sum of connected equipment powers approaches
+          P_lim, the safety margin is reduced.
+    coherence_rules:
+    - id: P_lim_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: P_lim debe ser coherente con V nominal y el calibre I_n del magnetotermico del circuito. Valores de P_lim muy
+          distintos de V*I_n indican error de calculo.
+        en: P_lim must be consistent with nominal V and the I_n of the circuit MCB. Values of P_lim very different from V*I_n
+          indicate a calculation error.
+    model_validity_rules:
+    - id: P_lim_validity
+      when: 'true'
+      status: ok
+      text:
+        es: P_lim es valida como estimacion para cargas resistivas. Para cargas inductivas o con arranques elevados, la potencia
+          admisible real puede ser menor por los picos de corriente transitorios.
+        en: P_lim is valid as an estimate for resistive loads. For inductive loads or high-inrush equipment, the real admissible
+          power may be lower due to transient current peaks.
+    graph_rules:
+    - id: P_lim_graph
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, P_lim se muestra como la potencia umbral del circuito. Compara la carga actual con P_lim para visualizar
+          el margen disponible.
+        en: On the graph, P_lim is shown as the circuit power threshold. Compare the current load with P_lim to visualise
+          the available margin.
+    likely_errors:
+    - id: P_lim_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No uses P_lim como limite exacto para planificacion de instalaciones. Para dimensionamiento preciso se requiere
+          la curva de tiempo-corriente del magnetotermico especifico.
+        en: Do not use P_lim as an exact limit for installation planning. Precise sizing requires the time-current curve of
+          the specific MCB.
+    next_step_rules:
+    - id: P_lim_next
+      when: 'true'
+      status: info
+      text:
+        es: Si la carga prevista supera 0,8 * P_lim, considera redistribuir cargas a otros circuitos o revisar si el calibre
+          I_n debe aumentarse con criterio tecnico completo.
+        en: If the planned load exceeds 0.8 * P_lim, consider redistributing loads to other circuits or reviewing whether
+          I_n should be increased with full technical justification.
+    physical_intuition:
+    - id: potencia_limite_magnetotermica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[potencia_limite_magnetotermica]] describe el estado dinámico.
+        en: Intuitively, [[potencia_limite_magnetotermica]] describes the dynamic state.
+    limiting_cases:
+    - id: potencia_limite_magnetotermica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[potencia_limite_magnetotermica]].
+        en: Check limiting cases of [[potencia_limite_magnetotermica]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  corriente_nominal_del_magnetotermico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de corriente_nominal_del_magnetotermico
+      en: Result of corriente_nominal_del_magnetotermico
+    summary_rules:
+    - id: I_n_summary
+      when: 'true'
+      status: info
+      text:
+        es: 'I_n es el calibre nominal del magnetotermico: la corriente maxima sostenida antes del disparo termico.'
+        en: 'I_n is the nominal MCB rating: the maximum sustained current before thermal tripping.'
+    physical_reading_rules:
+    - id: I_n_physical
+      when: 'true'
+      status: info
+      text:
+        es: Un I_n mayor permite mas carga pero reduce la proteccion del cableado. Aumentar I_n sin recalcular el cable es
+          una decision peligrosa.
+        en: A higher I_n allows more load but reduces wiring protection. Raising I_n without recalculating the cable is a
+          dangerous decision.
+    coherence_rules:
+    - id: I_n_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: I_n debe ser coherente con la seccion del cableado del circuito. Un I_n mayor que la capacidad del cable deja
+          el conductor desprotegido.
+        en: I_n must be consistent with the circuit wiring cross-section. An I_n higher than the cable capacity leaves the
+          conductor unprotected.
+    model_validity_rules:
+    - id: I_n_validity
+      when: 'true'
+      status: ok
+      text:
+        es: I_n es valido como umbral de regimen permanente. Para cortocircuitos, el disparo es instantaneo independientemente
+          del calibre nominal.
+        en: I_n is valid as a steady-state threshold. For short circuits, tripping is instantaneous regardless of the nominal
+          rating.
+    graph_rules:
+    - id: I_n_graph
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, I_n se representa como la linea de referencia horizontal del magnetotermico. La corriente de carga
+          I se compara visualmente con esta linea.
+        en: On the graph, I_n is represented as the MCB horizontal reference line. Load current I is compared visually against
+          this line.
+    likely_errors:
+    - id: I_n_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No uses el I_n del magnetotermico general de vivienda para evaluar un circuito concreto. Cada circuito tiene su
+          propio I_n.
+        en: Do not use the I_n of the main household MCB to evaluate a specific circuit. Each circuit has its own I_n.
+    next_step_rules:
+    - id: I_n_next
+      when: 'true'
+      status: info
+      text:
+        es: Con I_n conocido, calcula P_lim para estimar la capacidad de carga del circuito antes de conectar nuevos equipos.
+        en: With I_n known, calculate P_lim to estimate circuit load capacity before connecting new equipment.
+    physical_intuition:
+    - id: corriente_nominal_del_magnetotermico_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[corriente_nominal_del_magnetotermico]] describe el estado dinámico.
+        en: Intuitively, [[corriente_nominal_del_magnetotermico]] describes the dynamic state.
+    limiting_cases:
+    - id: corriente_nominal_del_magnetotermico_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[corriente_nominal_del_magnetotermico]].
+        en: Check limiting cases of [[corriente_nominal_del_magnetotermico]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  margen_termico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de margen_termico
+      en: Result of margen_termico
+    summary_rules:
+    - id: margen_termico_summary
+      when: 'true'
+      status: info
+      text:
+        es: El margen termico indica que fraccion de la corriente nominal I_n esta siendo consumida. Un valor de 1 o superior
+          indica sobrecarga del magnetotermico.
+        en: The thermal margin indicates what fraction of the nominal current I_n is being consumed. A value of 1 or above
+          indicates MCB overload.
+    physical_reading_rules:
+    - id: margen_termico_physical
+      when: 'true'
+      status: info
+      text:
+        es: Un margen_termico de 0,9 indica que el circuito opera al 90% de su capacidad. Un transitorio breve puede superarlo
+          sin disparo inmediato, pero la carga sostenida provocara actuacion del magnetotermico en minutos.
+        en: A margen_termico of 0.9 indicates the circuit operates at 90% capacity. A brief transient may exceed it without
+          immediate tripping, but sustained load will cause MCB actuation within minutes.
+    coherence_rules:
+    - id: margen_termico_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: margen_termico debe ser coherente con I calculada y el calibre I_n del magnetotermico del circuito concreto, no
+          del cuadro general.
+        en: margen_termico must be consistent with calculated I and the I_n of the circuit-specific MCB, not the main MCB.
+    model_validity_rules:
+    - id: margen_termico_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El margen_termico es un indicador de regimen estacionario. Los transitorios de arranque pueden superar brevemente
+          1 sin causar disparo porque el bimetalico necesita tiempo para calentarse.
+        en: margen_termico is a steady-state indicator. Startup transients may briefly exceed 1 without causing a trip because
+          the bimetallic element needs time to heat up.
+    graph_rules:
+    - id: margen_termico_graph
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, margen_termico se representa como la fraccion I/I_n. La linea de referencia en 1 marca el umbral
+          de disparo; valores por encima indican zona de riesgo.
+        en: On the graph, margen_termico is represented as the fraction I/I_n. The reference line at 1 marks the trip threshold;
+          values above indicate the risk zone.
+    likely_errors:
+    - id: margen_termico_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No calcules margen_termico con la corriente total de la vivienda. Usa la I del circuito concreto y el I_n del
+          magnetotermico de ese circuito.
+        en: Do not calculate margen_termico with the total household current. Use the I of the specific circuit and the I_n
+          of that circuit's MCB.
+    next_step_rules:
+    - id: margen_termico_next
+      when: 'true'
+      status: info
+      text:
+        es: Si margen_termico supera 0,8, revisa si hay cargas que puedan redistribuirse a otros circuitos o si el calibre
+          del magnetotermico debe revisarse con criterio tecnico.
+        en: If margen_termico exceeds 0.8, check whether loads can be redistributed to other circuits or whether the MCB rating
+          should be reviewed with technical justification.
+    physical_intuition:
+    - id: margen_termico_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[margen_termico]] describe el estado dinámico.
+        en: Intuitively, [[margen_termico]] describes the dynamic state.
+    limiting_cases:
+    - id: margen_termico_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[margen_termico]].
+        en: Check limiting cases of [[margen_termico]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

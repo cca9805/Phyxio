@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Latex from 'react-latex-next';
 import 'katex/dist/katex.min.css';
 import { useContentInteraction } from '../contexts/ContentInteractionContext';
+import { getUiLanguage, tr } from '../v2/utils/uiLanguage';
 
 // --- Helpers ---
 function formatNumber(num) {
@@ -12,6 +13,7 @@ function formatNumber(num) {
 // --- Componente Principal Modificado ---
 export default function CalculadoraCommon({ calculators = [], initialSelectedCalcId = null }) {
     const [selectedCalcId, setSelectedCalcId] = useState(null);
+    const lang = getUiLanguage();
 
     useEffect(() => {
       if (!calculators || calculators.length === 0) {
@@ -32,13 +34,13 @@ export default function CalculadoraCommon({ calculators = [], initialSelectedCal
       setSelectedCalcId(calculators[0].id);
     }, [calculators, initialSelectedCalcId]);
 
-    // --- LÓGICA CONDICIONAL ---
+    // --- LOGICA CONDICIONAL ---
     if (calculators.length === 1) {
         const calculator = calculators[0];
         if (calculator.isOperative === false) {
             return (
                 <div className='alert alert-warning'>
-                    <h5 className='alert-heading'>Calculadora no disponible</h5>
+                    <h5 className='alert-heading'>{tr(lang, 'Calculadora no disponible', 'Calculator unavailable')}</h5>
                     <p>{calculator.warning}</p>
                 </div>
             );
@@ -47,10 +49,10 @@ export default function CalculadoraCommon({ calculators = [], initialSelectedCal
     }
 
     if (!calculators || calculators.length === 0) {
-        return <div className='alert alert-info'>No hay calculadoras disponibles.</div>;
+        return <div className='alert alert-info'>{tr(lang, 'No hay calculadoras disponibles.', 'No calculators available.')}</div>;
     }
     
-    // --- LÓGICA PARA MÚLTIPLES CALCULADORAS (con selector) ---
+    // --- LOGICA PARA MULTIPLES CALCULADORAS (con selector) ---
     const handleSelectChange = (event) => {
         setSelectedCalcId(event.target.value);
     };
@@ -62,7 +64,7 @@ export default function CalculadoraCommon({ calculators = [], initialSelectedCal
     return (
         <div className='calculator-common'>
             <div className='mb-3'>
-                <label htmlFor='calculator-select' className='form-label fw-bold'>Selecciona una calculadora:</label>
+                <label htmlFor='calculator-select' className='form-label fw-bold'>{tr(lang, 'Selecciona una calculadora:', 'Select a calculator:')}</label>
                 <select 
                     id='calculator-select' 
                     value={selectedCalcId || ''} 
@@ -80,7 +82,7 @@ export default function CalculadoraCommon({ calculators = [], initialSelectedCal
             {selectedCalculator && (
                 selectedCalculator.isOperative === false ? (
                     <div className='alert alert-warning'>
-                        <h5 className='alert-heading'>Calculadora no disponible</h5>
+                        <h5 className='alert-heading'>{tr(lang, 'Calculadora no disponible', 'Calculator unavailable')}</h5>
                         <p>{selectedCalculator.warning}</p>
                     </div>
                 ) : (
@@ -103,6 +105,7 @@ function CalculatorInterface({ calculator }) {
 function FormBasedCalculator({ calculator }) {
   const { id, title, description, variables, output, resolve, constants } = calculator;
   const { trackCalculation } = useContentInteraction();
+  const lang = getUiLanguage();
   
   const initialValues = useMemo(() => {
     const initial = {};
@@ -138,7 +141,7 @@ function FormBasedCalculator({ calculator }) {
     // Verificar y registrar el uso
     const canCalculate = await trackCalculation();
     if (!canCalculate) {
-      return; // No permitir el cálculo si se alcanzó el límite
+      return; // No permitir el calculo si se alcanzo el limite
     }
     
     const resolved = resolve(values);
@@ -190,7 +193,7 @@ function FormBasedCalculator({ calculator }) {
 
         {constants && constants.length > 0 && (
             <div className='mt-3'>
-                <h6>Constantes utilizadas:</h6>
+                <h6>{tr(lang, 'Constantes utilizadas:', 'Constants used:')}</h6>
                 <ul className='list-unstyled list-inline'>
                     {constants.map(c => (
                         <li key={c.symbol} className='list-inline-item me-3'>
@@ -202,7 +205,7 @@ function FormBasedCalculator({ calculator }) {
         )}
 
         <div className='d-grid gap-2 col-6 mx-auto mt-4'>
-          <button type='submit' className='btn btn-primary'>Calcular</button>
+          <button type='submit' className='btn btn-primary'>{tr(lang, 'Calcular', 'Calculate')}</button>
         </div>
       </form>
 
@@ -212,7 +215,7 @@ function FormBasedCalculator({ calculator }) {
             <div className='alert alert-danger'>{result.error}</div>
           ) : (
             <div className='resultados-card'>
-              <h5 className='alert-heading'>Resultados:</h5>
+              <h5 className='alert-heading'>{tr(lang, 'Resultados:', 'Results:')}</h5>
               {outputArray.map(o => {
                 const resultValue = result.result[o.symbol];
                 const displayValue = typeof resultValue === 'number' ? formatNumber(resultValue) : resultValue;
@@ -224,7 +227,7 @@ function FormBasedCalculator({ calculator }) {
               })}
               <hr />
               <details>
-                <summary>Ver pasos del cálculo</summary>
+                <summary>{tr(lang, 'Ver pasos del cálculo', 'View calculation steps')}</summary>
                 <div className='pasos'>
                   {result.steps && result.steps.map((step, index) => {
                       const content = step.includes('=') ? `$${step}$` : step;
@@ -246,6 +249,7 @@ function FormBasedCalculator({ calculator }) {
 
 // --- Calculadora Interactiva (Sin cambios) ---
 function InteractiveCalculator({ calculator }) {
-  // ... (código sin cambios)
+  // ... (codigo sin cambios)
   return <div>...</div>;
 }
+

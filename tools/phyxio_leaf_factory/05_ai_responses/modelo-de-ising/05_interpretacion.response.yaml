@@ -1,0 +1,700 @@
+version: 5.0.0
+id: modelo-de-ising
+leaf_id: modelo-de-ising
+nombre:
+  es: Modelo de ising
+  en: Ising Model
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: modelos-y-metodos
+  parent_id: modelos-y-metodos
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/modelos-y-metodos/modelo-de-ising
+  orden: 277100
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - energia_ising_hamiltoniano
+  - magnetizacion_total_ising
+  - magnetizacion_media_ising
+  - peso_boltzmann_ising
+  - beta_termica_ising
+  magnitudes:
+  - espin
+  - acoplamiento
+  - campo_externo
+  - temperatura
+  - constante_boltzmann
+  - energia_ising
+  - magnetizacion_total
+  - magnetizacion_media
+  - numero_espines
+  - probabilidad_configuracion
+  - beta_termica
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinámica estadística y modelos de espines
+    en: statistical thermodynamics and spin models
+  axis_convention:
+    es: El signo de la magnetización depende del convenio elegido para espín arriba y espín abajo.
+    en: The sign of magnetization depends on the convention chosen for spin up and spin down.
+  standard_assumptions:
+  - es: La red, vecindad, condiciones de contorno y valores posibles de [[espin]] están fijados antes de interpretar resultados.
+    en: The lattice, neighborhood, boundary conditions, and possible [[espin]] values are fixed before interpreting results.
+  - es: La interpretación estadística presupone equilibrio térmico cuando se usan pesos de Boltzmann.
+    en: The statistical interpretation assumes thermal equilibrium when Boltzmann weights are used.
+  standard_warnings:
+  - es: 'No confundas el modelo de Ising con un imán real completo: es una representación discreta y simplificada.'
+    en: 'Do not confuse the Ising model with a complete real magnet: it is a discrete simplified representation.'
+  - es: Revisa siempre signos de [[acoplamiento]] y [[campo_externo]] antes de concluir si hay orden o desorden.
+    en: Always check the signs of [[acoplamiento]] and [[campo_externo]] before concluding whether there is order or disorder.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: ising_dimension_check
+    status: ok
+    text:
+      es: La [[energia_ising]] debe conservar dimensión de energía y [[beta_termica]] dimensión inversa de energía.
+      en: '[[energia_ising]] must keep energy dimension and [[beta_termica]] inverse-energy dimension.'
+  - id: magnetization_bounds_check
+    status: ok
+    text:
+      es: '[[magnetizacion_media]] debe permanecer dentro del intervalo permitido por los valores de [[espin]].'
+      en: '[[magnetizacion_media]] must remain within the interval allowed by the values of [[espin]].'
+error_patterns:
+  enabled: true
+  patterns:
+  - id: double_count_neighbors
+    status: warning
+    text:
+      es: Contar dos veces vecinos altera la [[energia_ising]] y cambia la interpretación de [[acoplamiento]].
+      en: Counting neighbors twice alters [[energia_ising]] and changes the interpretation of [[acoplamiento]].
+  - id: temperature_units_confusion
+    status: warning
+    text:
+      es: Usar Celsius en lugar de kelvin rompe la lectura física de [[beta_termica]].
+      en: Using Celsius instead of kelvin breaks the physical reading of [[beta_termica]].
+  - id: magnetization_energy_confusion
+    status: warning
+    text:
+      es: Confundir [[magnetizacion_media]] con [[energia_ising]] mezcla orden colectivo con coste configuracional.
+      en: Confusing [[magnetizacion_media]] with [[energia_ising]] mixes collective order with configurational cost.
+graph_reading_policy:
+  enabled: true
+  primary_variable: energia_ising
+  reading_sequence:
+  - es: Identifica si la gráfica lee [[energia_ising]], [[magnetizacion_media]] o [[probabilidad_configuracion]] frente a
+      [[temperatura]] o [[beta_termica]].
+    en: Identify whether the graph reads [[energia_ising]], [[magnetizacion_media]], or [[probabilidad_configuracion]] versus
+      [[temperatura]] or [[beta_termica]].
+  - es: Relaciona pendientes, mesetas o cambios bruscos con orden de espines, desorden térmico y peso estadístico.
+    en: Relate slopes, plateaus, or sharp changes to spin order, thermal disorder, and statistical weight.
+  key_points:
+  - es: A baja [[temperatura]] suelen dominar configuraciones de menor [[energia_ising]].
+    en: At low [[temperatura]], lower-[[energia_ising]] configurations usually dominate.
+  - es: La lectura de [[magnetizacion_media]] ayuda a distinguir fases ordenadas y desordenadas.
+    en: Reading [[magnetizacion_media]] helps distinguish ordered and disordered phases.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Compara redes con igual [[numero_espines]] antes de comparar [[magnetizacion_total]].
+    en: Compare lattices with equal [[numero_espines]] before comparing [[magnetizacion_total]].
+  - es: Usa [[magnetizacion_media]] para comparar tamaños distintos sin arrastrar el factor de escala.
+    en: Use [[magnetizacion_media]] to compare different sizes without carrying the scale factor.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: '[[energia_ising]] se expresa en energía; [[beta_termica]] en energía inversa; las probabilidades son adimensionales.'
+    en: '[[energia_ising]] is expressed in energy; [[beta_termica]] in inverse energy; probabilities are dimensionless.'
+  common_unit_mistakes:
+  - es: Mezclar julios y electrón-voltios sin convertir [[acoplamiento]] o [[campo_externo]].
+    en: Mixing joules and electronvolts without converting [[acoplamiento]] or [[campo_externo]].
+  - es: Calcular [[beta_termica]] con [[temperatura]] en grados Celsius.
+    en: Computing [[beta_termica]] with [[temperatura]] in degrees Celsius.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  energia_ising:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: energía configuracional
+      en: configurational energy
+    summary_rules:
+    - id: energia_ising_summary_signo_configuracion
+      when: 'true'
+      status: ok
+      text:
+        es: La [[energia_ising]] resume si la configuración de espines resulta favorecida o penalizada por [[acoplamiento]]
+          y [[campo_externo]].
+        en: '[[energia_ising]] summarizes whether the spin configuration is favored or penalized by [[acoplamiento]] and [[campo_externo]].'
+    physical_reading_rules:
+    - id: energia_ising_physical_alineacion
+      when: 'true'
+      status: info
+      text:
+        es: Una [[energia_ising]] más baja suele indicar alineaciones compatibles con el signo de [[acoplamiento]] y con la
+          orientación del [[campo_externo]].
+        en: A lower [[energia_ising]] usually indicates alignments compatible with the sign of [[acoplamiento]] and with the
+          orientation of [[campo_externo]].
+    - id: energia_ising_physical_no_es_calor
+      when: 'true'
+      status: warning
+      text:
+        es: 'No leas [[energia_ising]] como calor intercambiado: es energía configuracional del modelo para una disposición
+          concreta de [[espin]].'
+        en: 'Do not read [[energia_ising]] as exchanged heat: it is configurational model energy for a concrete arrangement
+          of [[espin]].'
+    coherence_rules:
+    - id: energia_ising_coherence_dimension
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[acoplamiento]], [[campo_externo]] y la escala térmica generen una [[energia_ising]] con dimensión
+          de energía.
+        en: Check that [[acoplamiento]], [[campo_externo]], and the thermal scale generate an [[energia_ising]] with energy
+          dimension.
+    - id: energia_ising_coherence_signo_j
+      when: 'true'
+      status: warning
+      text:
+        es: Si al invertir el signo de [[acoplamiento]] no cambia la lectura ferro o antiferromagnética, probablemente se
+          ha usado mal el convenio de signos.
+        en: If changing the sign of [[acoplamiento]] does not change the ferro or antiferromagnetic reading, the sign convention
+          was probably misused.
+    model_validity_rules:
+    - id: energia_ising_validity_red_discreta
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia_ising]] solo para espines discretos en una red con vecindades y condiciones de contorno declaradas.
+        en: Interpret [[energia_ising]] only for discrete spins on a lattice with declared neighborhoods and boundary conditions.
+    - id: energia_ising_validity_sin_dinamica_real
+      when: 'true'
+      status: warning
+      text:
+        es: El modelo no describe trayectorias microscópicas reales; clasifica pesos estadísticos de configuraciones permitidas.
+        en: The model does not describe real microscopic trajectories; it classifies statistical weights of allowed configurations.
+    graph_rules:
+    - id: energia_ising_graph_minimos
+      when: 'true'
+      status: info
+      text:
+        es: En una gráfica de [[energia_ising]], los mínimos señalan configuraciones más probables a baja [[temperatura]],
+          no estados obligatorios.
+        en: In a graph of [[energia_ising]], minima mark more probable configurations at low [[temperatura]], not mandatory
+          states.
+    - id: energia_ising_graph_curvatura
+      when: 'true'
+      status: info
+      text:
+        es: La curvatura o cambios bruscos frente a [[temperatura]] sugieren reorganización colectiva de [[espin]] cerca de
+          una transición.
+        en: Curvature or sharp changes versus [[temperatura]] suggest collective reorganization of [[espin]] near a transition.
+    likely_errors:
+    - id: energia_ising_error_olvidar_campo
+      when: 'true'
+      status: warning
+      text:
+        es: Un error típico es contar solo vecinos y olvidar que [[campo_externo]] también desplaza la [[energia_ising]].
+        en: A typical error is counting only neighbors and forgetting that [[campo_externo]] also shifts [[energia_ising]].
+    - id: energia_ising_error_doble_conteo
+      when: 'true'
+      status: warning
+      text:
+        es: Evita contar dos veces los pares de espines vecinos; duplicaría la contribución de [[acoplamiento]].
+        en: Avoid counting neighboring spin pairs twice; that would duplicate the contribution of [[acoplamiento]].
+    next_step_rules:
+    - id: energia_ising_next_boltzmann
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[energia_ising]], usa [[beta_termica]] para leer el peso de Boltzmann y la [[probabilidad_configuracion]].
+        en: After computing [[energia_ising]], use [[beta_termica]] to read the Boltzmann weight and [[probabilidad_configuracion]].
+    physical_intuition:
+    - id: energia_ising_intuition_competencia
+      when: 'true'
+      status: info
+      text:
+        es: La intuición clave es la competencia entre orden por [[acoplamiento]], sesgo por [[campo_externo]] y desorden
+          térmico por [[temperatura]].
+        en: The key intuition is the competition between ordering by [[acoplamiento]], bias by [[campo_externo]], and thermal
+          disorder by [[temperatura]].
+    limiting_cases:
+    - id: energia_ising_limit_temperatura_baja
+      when: 'true'
+      status: info
+      text:
+        es: A [[temperatura]] baja dominan configuraciones de baja [[energia_ising]]; a [[temperatura]] alta muchas configuraciones
+          pesan de forma parecida.
+        en: At low [[temperatura]], low-[[energia_ising]] configurations dominate; at high [[temperatura]], many configurations
+          have similar weights.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  magnetizacion_total:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: orden total
+      en: total order
+    summary_rules:
+    - id: magnetizacion_total_summary_orden
+      when: 'true'
+      status: ok
+      text:
+        es: La [[magnetizacion_total]] mide el balance global de orientaciones de [[espin]] en toda la red.
+        en: '[[magnetizacion_total]] measures the global balance of [[espin]] orientations across the whole lattice.'
+    physical_reading_rules:
+    - id: magnetizacion_total_physical_signo
+      when: 'true'
+      status: info
+      text:
+        es: El signo de [[magnetizacion_total]] indica la orientación dominante; el valor absoluto indica grado de alineación
+          colectiva.
+        en: The sign of [[magnetizacion_total]] indicates the dominant orientation; the absolute value indicates collective
+          alignment degree.
+    coherence_rules:
+    - id: magnetizacion_total_coherence_rango
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[magnetizacion_total]] no exceda el rango permitido por [[numero_espines]] y por los valores posibles
+          de [[espin]].
+        en: Check that [[magnetizacion_total]] does not exceed the range allowed by [[numero_espines]] and the possible values
+          of [[espin]].
+    model_validity_rules:
+    - id: magnetizacion_total_validity_tamano
+      when: 'true'
+      status: info
+      text:
+        es: En redes pequeñas, [[magnetizacion_total]] puede fluctuar mucho y no representar todavía un límite termodinámico
+          estable.
+        en: In small lattices, [[magnetizacion_total]] can fluctuate strongly and may not yet represent a stable thermodynamic
+          limit.
+    graph_rules:
+    - id: magnetizacion_total_graph_transicion
+      when: 'true'
+      status: info
+      text:
+        es: Una caída de [[magnetizacion_total]] al aumentar [[temperatura]] indica pérdida progresiva de orden ferromagnético.
+        en: A drop in [[magnetizacion_total]] as [[temperatura]] increases indicates progressive loss of ferromagnetic order.
+    likely_errors:
+    - id: magnetizacion_total_error_promedio
+      when: 'true'
+      status: warning
+      text:
+        es: 'No confundas [[magnetizacion_total]] con [[magnetizacion_media]]: una crece con el tamaño de la red y la otra
+          normaliza por [[numero_espines]].'
+        en: 'Do not confuse [[magnetizacion_total]] with [[magnetizacion_media]]: one grows with lattice size and the other
+          normalizes by [[numero_espines]].'
+    next_step_rules:
+    - id: magnetizacion_total_next_normalizar
+      when: 'true'
+      status: info
+      text:
+        es: Tras leer [[magnetizacion_total]], calcula [[magnetizacion_media]] si necesitas comparar redes con distinto [[numero_espines]].
+        en: After reading [[magnetizacion_total]], compute [[magnetizacion_media]] if you need to compare lattices with different
+          [[numero_espines]].
+    physical_intuition:
+    - id: magnetizacion_total_intuition_votos
+      when: 'true'
+      status: info
+      text:
+        es: 'Puede leerse como una votación colectiva de espines: orientaciones opuestas se cancelan y orientaciones iguales
+          se refuerzan.'
+        en: 'It can be read as a collective vote of spins: opposite orientations cancel and equal orientations reinforce.'
+    limiting_cases:
+    - id: magnetizacion_total_limit_cero
+      when: 'true'
+      status: info
+      text:
+        es: '[[magnetizacion_total]] cercana a cero no implica ausencia de espines, sino compensación entre orientaciones.'
+        en: '[[magnetizacion_total]] near zero does not imply absence of spins, but compensation between orientations.'
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo positivo o negativo solo tiene sentido después de fijar qué orientación de [[espin]] se toma como positiva.
+        en: The positive or negative sign only makes sense after fixing which [[espin]] orientation is taken as positive.
+      common_sign_errors:
+      - es: Cambiar la convención de espín sin cambiar la lectura del signo.
+        en: Changing the spin convention without changing the sign reading.
+      - es: Interpretar magnetización negativa como error matemático.
+        en: Interpreting negative magnetization as a mathematical error.
+  magnetizacion_media:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: orden por espín
+      en: order per spin
+    summary_rules:
+    - id: magnetizacion_media_summary_normalizada
+      when: 'true'
+      status: ok
+      text:
+        es: La [[magnetizacion_media]] expresa el orden magnético por espín y permite comparar sistemas de distinto tamaño.
+        en: '[[magnetizacion_media]] expresses magnetic order per spin and allows systems of different sizes to be compared.'
+    physical_reading_rules:
+    - id: magnetizacion_media_physical_saturacion
+      when: 'true'
+      status: info
+      text:
+        es: Valores cercanos a la saturación indican casi todos los [[espin]] alineados; valores cercanos a cero indican desorden
+          o dominios compensados.
+        en: Values near saturation indicate almost all [[espin]] aligned; values near zero indicate disorder or compensated
+          domains.
+    coherence_rules:
+    - id: magnetizacion_media_coherence_cota
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[magnetizacion_media]] quede dentro de la cota física fijada por el valor unitario de cada [[espin]].
+        en: Check that [[magnetizacion_media]] remains inside the physical bound set by the unit value of each [[espin]].
+    model_validity_rules:
+    - id: magnetizacion_media_validity_simetrias
+      when: 'true'
+      status: info
+      text:
+        es: En ausencia de [[campo_externo]], el signo de [[magnetizacion_media]] puede cambiar por simetría en simulaciones
+          finitas.
+        en: Without [[campo_externo]], the sign of [[magnetizacion_media]] may flip by symmetry in finite simulations.
+    graph_rules:
+    - id: magnetizacion_media_graph_parametro_orden
+      when: 'true'
+      status: info
+      text:
+        es: La gráfica de [[magnetizacion_media]] frente a [[temperatura]] actúa como lectura del parámetro de orden del modelo.
+        en: The graph of [[magnetizacion_media]] versus [[temperatura]] acts as a reading of the model order parameter.
+    likely_errors:
+    - id: magnetizacion_media_error_cero
+      when: 'true'
+      status: warning
+      text:
+        es: 'No interpretes [[magnetizacion_media]] cero como energía cero: orden magnético y [[energia_ising]] son magnitudes
+          distintas.'
+        en: 'Do not interpret zero [[magnetizacion_media]] as zero energy: magnetic order and [[energia_ising]] are different
+          quantities.'
+    next_step_rules:
+    - id: magnetizacion_media_next_comparar_tc
+      when: 'true'
+      status: info
+      text:
+        es: Compara [[magnetizacion_media]] a distintas [[temperatura]] para localizar pérdida de orden y posibles regiones
+          críticas.
+        en: Compare [[magnetizacion_media]] at different [[temperatura]] to locate loss of order and possible critical regions.
+    physical_intuition:
+    - id: magnetizacion_media_intuition_termometro_orden
+      when: 'true'
+      status: info
+      text:
+        es: 'Funciona como un termómetro de orden colectivo: no mira cada espín aislado, sino el sesgo global promedio.'
+        en: 'It works as a thermometer of collective order: it does not inspect each isolated spin, but the global average
+          bias.'
+    limiting_cases:
+    - id: magnetizacion_media_limit_alta_t
+      when: 'true'
+      status: info
+      text:
+        es: A [[temperatura]] muy alta se espera [[magnetizacion_media]] pequeña por agitación térmica, salvo si [[campo_externo]]
+          impone sesgo.
+        en: At very high [[temperatura]], small [[magnetizacion_media]] is expected because of thermal agitation, unless [[campo_externo]]
+          imposes a bias.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo positivo o negativo solo tiene sentido después de fijar qué orientación de [[espin]] se toma como positiva.
+        en: The positive or negative sign only makes sense after fixing which [[espin]] orientation is taken as positive.
+      common_sign_errors:
+      - es: Cambiar la convención de espín sin cambiar la lectura del signo.
+        en: Changing the spin convention without changing the sign reading.
+      - es: Interpretar magnetización negativa como error matemático.
+        en: Interpreting negative magnetization as a mathematical error.
+  probabilidad_configuracion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: peso estadístico normalizado
+      en: normalized statistical weight
+    summary_rules:
+    - id: probabilidad_configuracion_summary_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: La [[probabilidad_configuracion]] indica qué peso estadístico recibe una configuración concreta del modelo de
+          Ising.
+        en: '[[probabilidad_configuracion]] indicates which statistical weight a concrete Ising-model configuration receives.'
+    physical_reading_rules:
+    - id: probabilidad_configuracion_physical_energia_beta
+      when: 'true'
+      status: info
+      text:
+        es: Disminuye para configuraciones energéticamente costosas cuando [[beta_termica]] es grande, y se iguala más cuando
+          [[temperatura]] aumenta.
+        en: It decreases for energetically costly configurations when [[beta_termica]] is large, and becomes more even as
+          [[temperatura]] increases.
+    coherence_rules:
+    - id: probabilidad_configuracion_coherence_normalizacion
+      when: 'true'
+      status: ok
+      text:
+        es: La suma de [[probabilidad_configuracion]] sobre configuraciones accesibles debe ser compatible con una distribución
+          normalizada.
+        en: The sum of [[probabilidad_configuracion]] over accessible configurations must be compatible with a normalized
+          distribution.
+    model_validity_rules:
+    - id: probabilidad_configuracion_validity_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: Interprétala como probabilidad de equilibrio térmico, no como frecuencia instantánea de una trayectoria corta.
+        en: Interpret it as a thermal equilibrium probability, not as an instantaneous frequency in a short trajectory.
+    graph_rules:
+    - id: probabilidad_configuracion_graph_peso
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, mayor [[probabilidad_configuracion]] identifica configuraciones favorecidas por baja [[energia_ising]]
+          y escala térmica adecuada.
+        en: In the graph, larger [[probabilidad_configuracion]] identifies configurations favored by low [[energia_ising]]
+          and the appropriate thermal scale.
+    likely_errors:
+    - id: probabilidad_configuracion_error_olvidar_z
+      when: 'true'
+      status: warning
+      text:
+        es: No uses pesos de Boltzmann como probabilidades sin normalizar; falta dividir por la suma de pesos accesibles.
+        en: Do not use Boltzmann weights as probabilities without normalization; division by the sum of accessible weights
+          is missing.
+    next_step_rules:
+    - id: probabilidad_configuracion_next_promedios
+      when: 'true'
+      status: info
+      text:
+        es: Una vez leída [[probabilidad_configuracion]], úsala para ponderar observables como [[magnetizacion_media]] o [[energia_ising]].
+        en: Once [[probabilidad_configuracion]] is read, use it to weight observables such as [[magnetizacion_media]] or [[energia_ising]].
+    physical_intuition:
+    - id: probabilidad_configuracion_intuition_filtro
+      when: 'true'
+      status: info
+      text:
+        es: 'Actúa como un filtro estadístico: no prohíbe configuraciones de alta energía, pero las vuelve menos influyentes
+          a baja [[temperatura]].'
+        en: 'It acts as a statistical filter: it does not forbid high-energy configurations, but makes them less influential
+          at low [[temperatura]].'
+    limiting_cases:
+    - id: probabilidad_configuracion_limit_uniforme
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[beta_termica]] tiende a cero, las diferencias de [[energia_ising]] pesan menos y las configuraciones
+          tienden a igualarse.
+        en: When [[beta_termica]] tends to zero, [[energia_ising]] differences matter less and configurations tend to become
+          equally weighted.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  beta_termica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: inversa térmica
+      en: thermal inverse
+    summary_rules:
+    - id: beta_termica_summary_escala
+      when: 'true'
+      status: ok
+      text:
+        es: '[[beta_termica]] mide cuánta importancia tienen las diferencias de [[energia_ising]] frente a la agitación térmica.'
+        en: '[[beta_termica]] measures how important [[energia_ising]] differences are compared with thermal agitation.'
+    physical_reading_rules:
+    - id: beta_termica_physical_inversa_t
+      when: 'true'
+      status: info
+      text:
+        es: '[[beta_termica]] grande corresponde a baja [[temperatura]]; [[beta_termica]] pequeña corresponde a alta [[temperatura]].'
+        en: Large [[beta_termica]] corresponds to low [[temperatura]]; small [[beta_termica]] corresponds to high [[temperatura]].
+    coherence_rules:
+    - id: beta_termica_coherence_unidades
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[beta_termica]] tenga dimensión inversa de energía, usando [[constante_boltzmann]] y [[temperatura]]
+          en unidades coherentes.
+        en: Check that [[beta_termica]] has inverse-energy dimension, using [[constante_boltzmann]] and [[temperatura]] in
+          coherent units.
+    model_validity_rules:
+    - id: beta_termica_validity_tpositiva
+      when: 'true'
+      status: info
+      text:
+        es: Este uso presupone [[temperatura]] absoluta positiva y un baño térmico compatible con el ensemble canónico.
+        en: This use assumes positive absolute [[temperatura]] and a thermal bath compatible with the canonical ensemble.
+    graph_rules:
+    - id: beta_termica_graph_pendiente
+      when: 'true'
+      status: info
+      text:
+        es: Al variar [[beta_termica]], la gráfica muestra cómo se separan pesos de configuraciones con distinta [[energia_ising]].
+        en: When [[beta_termica]] varies, the graph shows how weights of configurations with different [[energia_ising]] separate.
+    likely_errors:
+    - id: beta_termica_error_temperatura_celsius
+      when: 'true'
+      status: warning
+      text:
+        es: 'No calcules [[beta_termica]] con grados Celsius: [[temperatura]] debe estar en kelvin para que la escala energética
+          sea física.'
+        en: 'Do not compute [[beta_termica]] with Celsius degrees: [[temperatura]] must be in kelvin for the energy scale
+          to be physical.'
+    next_step_rules:
+    - id: beta_termica_next_probabilidad
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[beta_termica]], úsala junto con [[energia_ising]] para estimar [[probabilidad_configuracion]].
+        en: After obtaining [[beta_termica]], use it with [[energia_ising]] to estimate [[probabilidad_configuracion]].
+    physical_intuition:
+    - id: beta_termica_intuition_selector
+      when: 'true'
+      status: info
+      text:
+        es: '[[beta_termica]] es el dial que decide si el sistema distingue mucho o poco entre configuraciones energéticas.'
+        en: '[[beta_termica]] is the dial deciding whether the system strongly or weakly distinguishes energetic configurations.'
+    limiting_cases:
+    - id: beta_termica_limit_extremos
+      when: 'true'
+      status: info
+      text:
+        es: En el límite de [[beta_termica]] muy grande dominan mínimos de energía; en el límite pequeño domina el desorden
+          térmico.
+        en: In the limit of very large [[beta_termica]], energy minima dominate; in the small limit, thermal disorder dominates.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

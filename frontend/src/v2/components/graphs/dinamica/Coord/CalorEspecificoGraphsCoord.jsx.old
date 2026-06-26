@@ -1,0 +1,153 @@
+import React from "react";
+import { createCoordGraphPage } from "@/v2/components/graphs/graphFactories.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraph(
+const uiLang = "es";
+const tt = (es, en) => (uiLang === "en" ? en : es);
+
+const graph_identity = {
+  graph_type: "Coord",
+  pregunta_principal: {
+    es: "Cuanta energia necesita absorber un kilogramo de una sustancia para aumentar su temperatura en un kelvin?",
+    en: "How much energy must one kilogram of a substance absorb to raise its temperature by one kelvin?",
+  },
+  keywords: [
+    "energia",
+    "absorber",
+    "kilogramo",
+    "sustancia",
+    "temperatura",
+    "kelvin",
+    "calor",
+    "especifico",
+    "energy",
+    "absorb",
+    "kilogram",
+    "substance",
+    "temperature",
+    "specific",
+    "heat",
+  ],
+  magnitud_estrella: "c",
+  variable_control: "m",
+  formula: "C_total = m * c",
+  target_interpretable: true,
+};
+
+const axes = {
+  xComponent: "XAxis",
+  yComponent: "YAxis",
+  xAxis: "m",
+  yAxis: "C_total",
+};
+
+const formula = {
+  id: "capacidad_calorifica_total",
+  formula: "C_total = m * c",
+  equation: "C_total = m * c",
+};
+
+const fmt = (value, digits = 1) =>
+  Number.isFinite(value) ? value.toFixed(digits) : "-";
+
+const CalorEspecificoGraphsCoord = createCoordGraphPage({
+  displayName: "CalorEspecificoGraphsCoord",
+  title: {
+    es: "Capacidad calorifica y masa",
+    en: "Heat capacity and mass",
+  },
+  defaultParams: {
+    c: 900,
+    m: 1.5,
+    DeltaT: 25,
+  },
+  controls: [
+    { id: "c", label: { es: "Calor especifico", en: "Specific heat capacity" }, min: 100, max: 5000, step: 10 },
+    { id: "m", label: { es: "Masa", en: "Mass" }, min: 0.1, max: 10, step: 0.1 },
+    { id: "DeltaT", label: { es: "Cambio de temperatura", en: "Temperature change" }, min: 1, max: 100, step: 1 },
+  ],
+  compute: (pNum) => {
+    const c = Number.isFinite(pNum.c) ? pNum.c : 900;
+    const m = Number.isFinite(pNum.m) ? pNum.m : 1.5;
+    const deltaT = Number.isFinite(pNum.DeltaT) ? pNum.DeltaT : 25;
+    const cTotal = m * c;
+    const q = cTotal * deltaT;
+    const data = Array.from({ length: 41 }, (_, index) => {
+      const x = index * 0.25;
+      return { x, y: x * c };
+    });
+
+    return {
+      data,
+      extra: {
+        interpretationTarget: "c",
+        interpretationValue: c,
+        graphState: {
+          target: "c",
+          graphType: "Coord",
+          graph_identity,
+          axes,
+          formula,
+          c,
+          m,
+          DeltaT: deltaT,
+          C_total: cTotal,
+          Q: q,
+        },
+      },
+    };
+  },
+  render: ({ data, pNum, extra }) => {
+    const cTotal = extra?.graphState?.C_total ?? 0;
+    const q = extra?.graphState?.Q ?? 0;
+    const maxY = Math.max(...data.map((point) => point.y), 1);
+    const width = 520;
+    const height = 260;
+    const left = 46;
+    const right = width - 28;
+    const bottom = height - 36;
+    const top = 24;
+    const points = data
+      .map((point) => {
+        const x = left + (point.x / 10) * (right - left);
+        const y = bottom - (point.y / maxY) * (bottom - top);
+        return `${x},${y}`;
+      })
+      .join(" ");
+    const currentX = left + ((pNum.m ?? 1.5) / 10) * (right - left);
+    const currentY = bottom - (cTotal / maxY) * (bottom - top);
+
+    return (
+      <div className="v2-card" style={{ display: "grid", gap: 12 }}>
+        <div className="v2-card-title">{tt("C_total frente a masa", "C_total versus mass")}</div>
+        <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Calor especifico Coord">
+          <rect x="0" y="0" width={width} height={height} rx="10" fill="rgba(15,23,42,0.86)" />
+          <line x1={left} y1={bottom} x2={right} y2={bottom} stroke="rgba(255,255,255,0.28)" />
+          <line x1={left} y1={top} x2={left} y2={bottom} stroke="rgba(255,255,255,0.28)" />
+          <polyline points={points} fill="none" stroke="#22c55e" strokeWidth="3" />
+          <circle cx={currentX} cy={currentY} r="6" fill="#fbbf24" stroke="#fff7ed" strokeWidth="2" />
+          <text x={right} y={bottom - 8} textAnchor="end" fill="rgba(255,255,255,0.72)" fontSize="12">
+            m
+          </text>
+          <text x={left + 8} y={top + 12} fill="rgba(255,255,255,0.72)" fontSize="12">
+            C_total
+          </text>
+        </svg>
+        <div style={{ display: "grid", gap: 4, fontSize: 13 }}>
+          <strong>{tt("Lectura fisica", "Physical reading")}</strong>
+          <span>
+            C_total = {fmt(cTotal, 0)} J/K; Q = {fmt(q / 1000, 2)} kJ
+          </span>
+        </div>
+      </div>
+    );
+  },
+});
+
+CalorEspecificoGraphsCoord.graph_identity = graph_identity;
+CalorEspecificoGraphsCoord.pregunta_principal = graph_identity.pregunta_principal;
+CalorEspecificoGraphsCoord.magnitud_estrella = graph_identity.magnitud_estrella;
+CalorEspecificoGraphsCoord.axes = axes;
+CalorEspecificoGraphsCoord.formula = formula;
+
+export default CalorEspecificoGraphsCoord;

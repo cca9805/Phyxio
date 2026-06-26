@@ -1,0 +1,590 @@
+const n=`version: 1
+magnitudes:
+- id: mu
+  symbol: \\mu
+  nombre:
+    es: viscosidad dinámica
+    en: dynamic viscosity
+  descripcion:
+    es: Medida de la resistencia de un fluido a las deformaciones graduales producidas por tensiones cortantes.
+    en: Measure of the resistance of a fluid to gradual deformations produced by shear stresses.
+  unidad_si: Pa·s
+  dimension: M*L^-1*T^-1
+  is_vector: false
+  components: null
+  category: dynamic
+  physical_role: parameter
+  used_in:
+  - concepto-de-fluido
+  common_mistake:
+    es: Confundir con la viscosidad cinemática (nu).
+    en: Confusing with kinematic viscosity (nu).
+  typical_range:
+    es: "0.001 Pa·s para agua a 20°C."
+    en: "0.001 Pa·s for water at 20°C."
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Magnitud de la fricción interna.
+      en: Magnitude of internal friction.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un fluido con viscosidad cero es un superfluido ideal.
+      en: A fluid with zero viscosity is an ideal superfluid.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - concepto-de-fluido
+    secondary_for: []
+  graph_binding:
+    channels:
+    - y_axis
+  pedagogical_notes:
+    es: Es la constante de proporcionalidad en la ley de Newton de la viscosidad.
+    en: The proportionality constant in Newton's law of viscosity.
+- id: tau
+  symbol: \\tau
+  nombre:
+    es: esfuerzo cortante
+    en: shear stress
+  descripcion:
+    es: Fuerza aplicada tangencialmente a una superficie por unidad de área.
+    en: Force applied tangentially to a surface per unit area.
+  unidad_si: Pa
+  dimension: M*L^-1*T^-2
+  is_vector: false
+  components: null
+  category: dynamic
+  physical_role: state_variable
+  used_in:
+  - concepto-de-fluido
+  common_mistake:
+    es: Confundir con la presión (esfuerzo normal).
+    en: Confusing with pressure (normal stress).
+  typical_range:
+    es: Depende de la velocidad del flujo.
+    en: Depends on flow velocity.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Dirección de la fuerza tangencial.
+      en: Direction of the tangential force.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Fluido en reposo (en fluidos ideales).
+      en: Fluid at rest (in ideal fluids).
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - concepto-de-fluido
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Los fluidos no pueden resistir este esfuerzo en reposo sin deformarse.
+    en: Fluids cannot resist this stress at rest without deforming.
+- id: du_dy
+  symbol: \\frac{du}{dy}
+  nombre:
+    es: gradiente de velocidad
+    en: velocity gradient
+  descripcion:
+    es: Variación de la velocidad con respecto a la distancia perpendicular al flujo.
+    en: Variation of velocity with respect to the distance perpendicular to the flow.
+  unidad_si: s^-1
+  dimension: T^-1
+  is_vector: false
+  components: null
+  category: kinematic
+  physical_role: state_variable
+  used_in:
+  - concepto-de-fluido
+  common_mistake:
+    es: Olvidar que representa una tasa de deformación.
+    en: Forgetting it represents a strain rate.
+  typical_range:
+    es: Alto cerca de las paredes (capa límite).
+    en: High near walls (boundary layer).
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Perfil de velocidad creciente o decreciente.
+      en: Increasing or decreasing velocity profile.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Flujo uniforme o reposo.
+      en: Uniform flow or rest.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - concepto-de-fluido
+    secondary_for: []
+  graph_binding:
+    channels:
+    - x_axis
+  pedagogical_notes:
+    es: Vincula la cinemática del flujo con la dinámica de la viscosidad.
+    en: Links flow kinematics with viscosity dynamics.
+- id: rho
+  symbol: \\rho
+  nombre:
+    es: densidad
+    en: density
+  descripcion:
+    es: Masa por unidad de volumen del fluido.
+    en: Mass per unit volume of the fluid.
+  unidad_si: kg/m^3
+  dimension: M*L^-3
+  is_vector: false
+  components: null
+  category: dynamic
+  physical_role: parameter
+  used_in:
+  - concepto-de-fluido
+  common_mistake:
+    es: Confundir con la viscosidad.
+    en: Confusing with viscosity.
+  typical_range:
+    es: 1000 kg/m^3 para el agua.
+    en: 1000 kg/m^3 for water.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Concentración de masa.
+      en: Mass concentration.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un fluido debe tener masa.
+      en: A fluid must have mass.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: 0.5 to 20000
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - concepto-de-fluido
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Influye en la inercia del fluido y en la viscosidad cinemática.
+    en: Influences fluid inertia and kinematic viscosity.
+- id: nu
+  symbol: \\nu
+  nombre:
+    es: viscosidad cinemática
+    en: kinematic viscosity
+  descripcion:
+    es: Relación entre la viscosidad dinámica y la densidad.
+    en: Ratio between dynamic viscosity and density.
+  unidad_si: m^2/s
+  dimension: L^2*T^-1
+  is_vector: false
+  components: null
+  category: dynamic
+  physical_role: parameter
+  used_in:
+  - concepto-de-fluido
+  common_mistake:
+    es: Usar unidades de viscosidad dinámica.
+    en: Using dynamic viscosity units.
+  typical_range:
+    es: 10^-6 m^2/s para agua.
+    en: 10^-6 m^2/s for water.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Capacidad de difusión de momento.
+      en: Momentum diffusion capacity.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Representa la fricción interna normalizada.
+      en: Represents normalized internal friction.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - concepto-de-fluido
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Es fundamental en el cálculo del número de Reynolds.
+    en: Fundamental in Reynolds number calculation.
+- id: A
+  symbol: A
+  nombre:
+    es: área
+    en: area
+  descripcion:
+    es: Superficie de contacto entre el fluido y la pared.
+    en: Contact surface between the fluid and the wall.
+  unidad_si: m^2
+  dimension: L^2
+  is_vector: false
+  components: null
+  category: geometric
+  physical_role: parameter
+  used_in:
+  - concepto-de-fluido
+  common_mistake:
+    es: Usar el volumen en lugar del área.
+    en: Using volume instead of area.
+  typical_range:
+    es: 0.01 a 10 m^2.
+    en: 0.01 to 10 m^2.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Extensión de la superficie.
+      en: Surface extension.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Debe haber una superficie de contacto.
+      en: There must be a contact surface.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - concepto-de-fluido
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: El esfuerzo cortante se distribuye uniformemente por esta área.
+    en: Shear stress is uniformly distributed over this area.
+- id: F
+  symbol: F
+  nombre:
+    es: fuerza
+    en: force
+  descripcion:
+    es: Fuerza tangencial resultante del esfuerzo cortante.
+    en: Tangential force resulting from shear stress.
+  unidad_si: N
+  dimension: M*L*T^-2
+  is_vector: true
+  components: null
+  category: dynamic
+  physical_role: state_variable
+  used_in:
+  - concepto-de-fluido
+  common_mistake:
+    es: Confundir con el esfuerzo (presión).
+    en: Confusing with stress (pressure).
+  typical_range:
+    es: 0 a 10000 N.
+    en: 0 to 10000 N.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Dirección de la tracción.
+      en: Direction of traction.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Sin esfuerzo cortante no hay fuerza tangencial.
+      en: Without shear stress there is no tangential force.
+  value_nature:
+    kind: vector
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - concepto-de-fluido
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Es la magnitud observable que el alumno puede medir o sentir.
+    en: The observable magnitude the student can measure or feel.
+- id: V
+  symbol: V
+  nombre:
+    es: velocidad
+    en: velocity
+  descripcion:
+    es: Velocidad tangencial de la superficie móvil.
+    en: Tangential velocity of the moving surface.
+  unidad_si: m/s
+  dimension: L*T^-1
+  is_vector: false
+  components: null
+  category: kinematic
+  physical_role: parameter
+  used_in:
+  - concepto-de-fluido
+  common_mistake:
+    es: Confundir con la velocidad angular.
+    en: Confusing with angular velocity.
+  typical_range:
+    es: 0 a 100 m/s.
+    en: 0 to 100 m/s.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Sentido del movimiento.
+      en: Direction of movement.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Reposo.
+      en: Rest.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - concepto-de-fluido
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Define la condición de contorno superior del fluido.
+    en: Defines the upper boundary condition of the fluid.
+- id: h
+  symbol: h
+  nombre:
+    es: espesor
+    en: thickness
+  descripcion:
+    es: Distancia entre las placas o espesor de la película fluida.
+    en: Distance between plates or fluid film thickness.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: geometric
+  physical_role: parameter
+  used_in:
+  - concepto-de-fluido
+  common_mistake:
+    es: Confundir con la longitud del eje.
+    en: Confusing with shaft length.
+  typical_range:
+    es: 10^-4 a 10^-2 m.
+    en: 10^-4 to 10^-2 m.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Dimensión espacial.
+      en: Spatial dimension.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Debe haber un espacio para el fluido.
+      en: There must be a space for the fluid.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - concepto-de-fluido
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Determina la magnitud del gradiente de velocidad para una V fija.
+    en: Determines the magnitude of the velocity gradient for a fixed V.
+- id: omega
+  symbol: \\omega
+  nombre:
+    es: velocidad angular
+    en: angular velocity
+  descripcion:
+    es: Rapidez de rotación del eje.
+    en: Rotation speed of the shaft.
+  unidad_si: rad/s
+  dimension: T^-1
+  is_vector: false
+  components: null
+  category: kinematic
+  physical_role: parameter
+  used_in:
+  - concepto-de-fluido
+  common_mistake:
+    es: Confundir con la velocidad tangencial.
+    en: Confusing with tangential velocity.
+  typical_range:
+    es: 0 a 500 rad/s.
+    en: 0 to 500 rad/s.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Sentido de rotación.
+      en: Direction of rotation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Eje estacionario.
+      en: Stationary shaft.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - concepto-de-fluido
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Relacionada con la velocidad tangencial mediante el radio.
+    en: Related to tangential velocity via the radius.
+- id: R
+  symbol: R
+  nombre:
+    es: radio
+    en: radius
+  descripcion:
+    es: Radio del eje o del cojinete.
+    en: Radius of the shaft or bearing.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: geometric
+  physical_role: parameter
+  used_in:
+  - concepto-de-fluido
+  common_mistake:
+    es: Confundir con el diámetro.
+    en: Confusing with diameter.
+  typical_range:
+    es: 0 a 1 m.
+    en: 0 to 1 m.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Dimensión geométrica.
+      en: Geometric dimension.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: El eje debe tener un tamaño físico.
+      en: The shaft must have a physical size.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - concepto-de-fluido
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Determina el brazo de palanca y la velocidad tangencial.
+    en: Determines the lever arm and tangential velocity.
+- id: N
+  symbol: N
+  nombre:
+    es: revoluciones por minuto
+    en: revolutions per minute
+  descripcion:
+    es: Frecuencia de rotación del eje.
+    en: Rotation frequency of the shaft.
+  unidad_si: min^-1
+  dimension: T^-1
+  is_vector: false
+  components: null
+  category: kinematic
+  physical_role: parameter
+  used_in:
+  - concepto-de-fluido
+  common_mistake:
+    es: Olvidar convertir a rad/s para los cálculos.
+    en: Forgetting to convert to rad/s for calculations.
+  typical_range:
+    es: 0 a 10000 RPM.
+    en: 0 to 10000 RPM.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Intensidad de rotación.
+      en: Rotation intensity.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Sin rotación.
+      en: No rotation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - concepto-de-fluido
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Es la unidad técnica más común en ingeniería.
+    en: The most common technical unit in engineering.
+- id: L
+  symbol: L
+  nombre:
+    es: longitud
+    en: length
+  descripcion:
+    es: Extensión axial del cojinete.
+    en: Axial extension of the bearing.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: geometric
+  physical_role: parameter
+  used_in:
+  - concepto-de-fluido
+  common_mistake:
+    es: Confundir con el espesor del fluido.
+    en: Confusing with fluid thickness.
+  typical_range:
+    es: 0 a 10 m.
+    en: 0 to 10 m.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Dimensión geométrica.
+      en: Geometric dimension.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: El cojinete debe tener una longitud física.
+      en: The bearing must have a physical length.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - concepto-de-fluido
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Determina el área de contacto total A = 2*pi*R*L.
+    en: Determines the total contact area A = 2*pi*R*L.
+`;export{n as default};

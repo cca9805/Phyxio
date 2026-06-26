@@ -2,7 +2,7 @@
 const legacyDefs = import.meta.glob("/src/data/**/definitions.js");
 
 // B) V2 calculadoras (cuando existan)
-const v2Defs = import.meta.glob("/src/data_v2/**/calculadoras.js");
+const v2Defs = import.meta.glob("/src/data_v2_i18n/**/calculadoras.js");
 
 function legacyPath(fullPath) {
   // fullPath: "/mecanica/cinematica/mru"
@@ -11,8 +11,8 @@ function legacyPath(fullPath) {
 
 function v2Path(kind, fullPath) {
   const root = kind === "moderna"
-    ? "/src/data_v2/contenido/fisica-moderna"
-    : "/src/data_v2/contenido/fisica-clasica";
+    ? "/src/data_v2_i18n/contenido/fisica-moderna"
+    : "/src/data_v2_i18n/contenido/fisica-clasica";
   return `${root}${fullPath}/calculadoras.js`;
 }
 

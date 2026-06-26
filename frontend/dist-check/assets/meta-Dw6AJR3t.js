@@ -1,0 +1,86 @@
+const e=`id: seguridad-electrica
+
+nombre:
+  es: Seguridad electrica
+  en: Electrical Safety
+
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: electricidad-domestica
+parent_id: electricidad-domestica
+ruta_relativa: fisica-clasica/electromagnetismo/electricidad-domestica/seguridad-electrica
+orden: 298600
+type: leaf
+
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+
+icon: "🧲"
+graficos: []
+
+physical_role:
+  es: concepto físico
+  en: physical concept
+
+descripcion: "Normas y principios de seguridad en instalaciones eléctricas domésticas."
+description_en: "Safety norms and principles in domestic electrical installations."
+
+tags:
+  es:
+    - seguridad-electrica
+    - electricidad-domestica
+    - corriente-electrica
+    - protecciones
+    - electromagnetismo
+  en:
+    - electrical-safety
+    - domestic-electricity
+    - electric-current
+    - circuit-protection
+    - electromagnetism
+
+prerequisitos:
+  - fisica-clasica/electromagnetismo/electricidad-domestica/diferencial-y-magnetotermico
+
+dificultad: 3
+tiempo_estimado_min: 45
+
+representacion_dominante: none
+magnitud_dominante: I_segura
+
+pregunta_fisica_central:
+  es: "¿Qué nivel de corriente eléctrica es peligroso para el cuerpo humano y cómo lo limitan las protecciones domésticas?"
+  en: "What level of electric current is dangerous to the human body and how do domestic protections limit it?"
+
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: false
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: false
+    preferred_type: none
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: false
+`;export{e as default};

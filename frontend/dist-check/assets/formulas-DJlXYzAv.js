@@ -1,0 +1,294 @@
+const e=`version: 1
+formulas:
+- id: peso_local_vectorial
+  title:
+    es: Peso local en forma vectorial
+    en: Local weight in vector form
+  equation: P = m*g
+  latex: \\vec P = m\\vec g
+  rearrangements:
+  - target: P
+    equation: P = m*g
+    latex: \\vec P = m\\vec g
+    constraints: []
+  - target: m
+    equation: m = P/g
+    latex: m = \\frac{P}{g}
+    constraints:
+    - expr: g != 0
+      message:
+        es: g != 0
+        en: g != 0
+  - target: g
+    equation: g = P/m
+    latex: \\vec g = \\frac{\\vec P}{m}
+    constraints:
+    - expr: m != 0
+      message:
+        es: m != 0
+        en: m != 0
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Relacion fundamental que une la masa con la fuerza gravitatoria local.
+    en: Fundamental relation linking mass with local gravitational force.
+  constraints: Aplicar en marcos de referencia locales donde g es constante.
+  validity:
+    es: Válida en mecánica clásica newtoniana.
+    en: Valid in Newtonian classical mechanics.
+  dimension_check: "[N] = [kg] * [m/s^2]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - peso-en-diferentes-contextos
+  interpretation_tags:
+  - peso
+  result_semantics:
+    target: P
+    meaning: Fuerza de atracción real e inevitable entre el astro y el cuerpo.
+  domain_checks:
+  - expr: "m > 0"
+    message:
+      es: La masa debe ser mayor que cero.
+      en: Mass must be greater than zero.
+  coherence_checks:
+  - expr: "P >= 0"
+    message:
+      es: El peso en módulo no puede ser negativo.
+      en: Weight magnitude cannot be negative.
+  graph_implications:
+  - Representar como flecha vertical hacia el centro del astro.
+  pedagogical_triggers:
+  - when: "g == 0"
+    message:
+      es: En ausencia de campo el peso real es nulo (espacio profundo).
+      en: In the absence of a field, real weight is zero (deep space).
+
+- id: peso_superficie
+  title:
+    es: Módulo del peso en superficie local
+    en: Weight magnitude near the local surface
+  equation: Pmod = m*g0
+  latex: P = m g_0
+  rearrangements:
+  - target: Pmod
+    equation: Pmod = m*g0
+    latex: P = m g_0
+    constraints: []
+  - target: g0
+    equation: g0 = Pmod/m
+    latex: g_0 = \\frac{P}{m}
+    constraints:
+    - expr: m != 0
+      message:
+        es: m != 0
+        en: m != 0
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Peso estándar de un objeto en la superficie de un astro.
+    en: Standard weight of an object on the surface of a body.
+  constraints: Solo para alturas despreciables frente al radio del astro.
+  validity:
+    es: Aproximación local de superficie.
+    en: Local surface approximation.
+  dimension_check: "[N] = [kg] * [m/s^2]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - peso-en-diferentes-contextos
+  interpretation_tags:
+  - peso-superficie
+  result_semantics:
+    target: Pmod
+    meaning: Valor máximo del peso en la proximidad del astro.
+  domain_checks:
+  - expr: "g0 > 0"
+    message:
+      es: La gravedad de superficie debe ser positiva.
+      en: Surface gravity must be positive.
+  coherence_checks:
+  - expr: "Pmod > 0"
+    message:
+      es: Un objeto con masa siempre pesa en la superficie.
+      en: An object with mass always has weight on the surface.
+  graph_implications:
+  - Fuerza constante mientras no cambie significativamente la altura.
+  pedagogical_triggers:
+  - when: "true"
+    message:
+      es: Recuerda que g0 varía de un planeta a otro.
+      en: Remember that g0 varies from one planet to another.
+
+- id: gravedad_altura
+  title:
+    es: Variación de g con altura
+    en: Variation of g with altitude
+  equation: gmod = g0*(R/(R+h))^2
+  latex: g(h)=g_0\\left(\\frac{R}{R+h}\\right)^2
+  rearrangements:
+  - target: gmod
+    equation: gmod = g0*(R/(R+h))^2
+    latex: g(h)=g_0\\left(\\frac{R}{R+h}\\right)^2
+    constraints: []
+  - target: h
+    equation: h = R*(sqrt(g0/gmod) - 1)
+    latex: h = R\\left(\\sqrt{\\frac{g_0}{g}} - 1\\right)
+    constraints:
+    - expr: gmod > 0
+      message:
+        es: g debe ser mayor que cero.
+        en: g must be greater than zero.
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Describe cómo la gravedad se debilita al aumentar la distancia a la superficie.
+    en: Describes how gravity weakens as distance from the surface increases.
+  constraints: h >= 0 (sobre la superficie).
+  validity:
+    es: Válida en el exterior del astro asumiendo simetría esférica.
+    en: Valid outside the body assuming spherical symmetry.
+  dimension_check: "[m/s^2] = [m/s^2] * ([m]/[m])^2"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - peso-en-diferentes-contextos
+  interpretation_tags:
+  - gravedad-altura
+  result_semantics:
+    target: gmod
+    meaning: Intensidad del campo a una cota determinada.
+  domain_checks:
+  - expr: "h >= 0"
+    message:
+      es: El modelo es para alturas sobre la superficie.
+      en: The model is for heights above the surface.
+  coherence_checks:
+  - expr: "gmod <= g0"
+    message:
+      es: La gravedad debe ser menor o igual a la de superficie.
+      en: Gravity must be less than or equal to surface gravity.
+  graph_implications:
+  - Curva decreciente que tiende a cero en el infinito.
+  pedagogical_triggers:
+  - when: "h > R"
+    message:
+      es: A grandes alturas el peso cae drásticamente debido al cuadrado de la distancia.
+      en: At high altitudes, weight drops drastically due to the inverse square law.
+
+- id: gravedad_campo_central
+  title:
+    es: Gravedad en campo central
+    en: Gravity in a central-field model
+  equation: gmod = G*M/r^2
+  latex: g=\\frac{G M}{r^2}
+  rearrangements:
+  - target: gmod
+    equation: gmod = G*M/r^2
+    latex: g=\\frac{G M}{r^2}
+    constraints: []
+  - target: M
+    equation: M = gmod*r^2/G
+    latex: M = \\frac{g r^2}{G}
+    constraints: []
+  - target: r
+    equation: r = sqrt(G*M/gmod)
+    latex: r = \\sqrt{\\frac{G M}{g}}
+    constraints:
+    - expr: gmod > 0
+      message:
+        es: g != 0
+        en: g != 0
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Expresión general de la gravedad basada en la masa del astro y la distancia al centro.
+    en: General gravity expression based on astronomical body mass and distance to center.
+  constraints: Región exterior al astro modeled as a point mass.
+  validity:
+    es: Ley de Gravitación Universal de Newton.
+    en: Newton's Law of Universal Gravitation.
+  dimension_check: "[m/s^2] = [N*m^2/kg^2] * [kg] / [m^2]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - peso-en-diferentes-contextos
+  interpretation_tags:
+  - gravedad-central
+  result_semantics:
+    target: gmod
+    meaning: Valor absoluto de la aceleración radial.
+  domain_checks:
+  - expr: "r > 0"
+    message:
+      es: r debe ser mayor que cero para evitar división por cero.
+      en: r must be greater than zero to avoid division by zero.
+  coherence_checks:
+  - expr: "true"
+    message:
+      es: Verifica la consistencia con las masas planetarias conocidas.
+      en: Check consistency with known planetary masses.
+  graph_implications:
+  - Gráfica asintótica respecto a los ejes.
+  pedagogical_triggers:
+  - when: "true"
+    message:
+      es: Nota que g depende de la masa que genera el campo, no de la masa que cae.
+      en: Note that g depends on the mass generating the field, not the falling mass.
+
+- id: peso_aparente_concepto
+  title:
+    es: Relación dinámica de peso aparente
+    en: Dynamic relation for apparent weight
+  equation: Pap = m*(gmod+a)
+  latex: P_{ap} = m(g + a)
+  rearrangements:
+  - target: Pap
+    equation: Pap = m*(gmod+a)
+    latex: P_{ap} = m(g + a)
+    constraints: []
+  - target: a
+    equation: a = Pap/m - gmod
+    latex: a = \\frac{P_{ap}}{m} - g
+    constraints:
+    - expr: m != 0
+      message:
+        es: m != 0
+        en: m != 0
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Fuerza de contacto que siente un observador en un marco acelerado.
+    en: Contact force felt by an observer in an accelerated frame.
+  constraints: Aceleración vertical (a) paralela al campo g.
+  validity:
+    es: Segunda Ley de Newton en marcos no inerciales.
+    en: Newton's Second Law in non-inertial frames.
+  dimension_check: "[N] = [kg] * ([m/s^2] + [m/s^2])"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - peso-en-diferentes-contextos
+  interpretation_tags:
+  - peso-aparente
+  result_semantics:
+    target: Pap
+    meaning: Sensación de carga o ligereza (peso aparente).
+  domain_checks:
+  - expr: "m > 0"
+    message:
+      es: La masa debe ser positiva.
+      en: Mass must be positive.
+  coherence_checks:
+  - expr: "Pap >= 0"
+    message:
+      es: Un valor negativo indicaría que el cuerpo despega del suelo.
+      en: A negative value would indicate the body lifting off the floor.
+  graph_implications:
+  - La fuerza normal representada en el DCL coincidirá con Pap.
+  pedagogical_triggers:
+  - when: "a == -gmod"
+    message:
+      es: El sistema está en caída libre; el peso aparente es nulo.
+      en: The system is in free fall; apparent weight is zero.
+`;export{e as default};

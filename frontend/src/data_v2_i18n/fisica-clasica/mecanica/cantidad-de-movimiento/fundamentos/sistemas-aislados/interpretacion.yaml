@@ -1,0 +1,387 @@
+version: 2
+id: interpretacion-sistemas-aislados
+leaf_id: sistemas-aislados
+nombre:
+  es: Interpretación de Sistemas Aislados
+  en: Interpretation of Isolated Systems
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: cantidad-de-movimiento
+  parent_id: fundamentos
+  ruta_relativa: fisica-clasica/mecanica/cantidad-de-movimiento/fundamentos/sistemas-aislados
+dependencies:
+  formulas:
+  - Pinicial
+  - Pfinal
+  - cons
+  - balance
+  - cons_completa
+  - cons_solve_pTotF
+  magnitudes:
+  - m1
+  - m2
+  - v1i
+  - v2i
+  - v1f
+  - v2f
+  - pTotI
+  - pTotF
+  - DeltaPtot
+  - Jext
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Diagnóstico del Aislamiento y Balance de Momento
+      en: Isolation Diagnosis and Momentum Balance
+  physical_reading:
+    title:
+      es: Análisis del Intercambio Interno de Momento
+      en: Internal Momentum Exchange Analysis
+  coherence:
+    title:
+      es: Validación de la Conservación Cinemática
+      en: Kinematic Conservation Validation
+  model_validity:
+    title:
+      es: Auditoría de la Hipótesis de Sistema Aislado
+      en: Isolated System Hypothesis Audit
+  graph_reading:
+    title:
+      es: Lectura del Gráfico de Momento Vectorial
+      en: Vector Momentum Graph Reading
+  likely_errors:
+    title:
+      es: Alerta de Errores Conceptuales y de Modelo
+      en: Conceptual and Model Error Alert
+  next_step:
+    title:
+      es: Continuación del Análisis Dinámico
+      en: Dynamic Analysis Continuation
+targets:
+  pTotF:
+    summary_rules:
+    - id: pTotF_summary_iso
+      when: 'true'
+      status: info
+      text:
+        es: "El momento final total [[pTotF]] cuantifica el estado de traslación del sistema tras la interacción. En un sistema idealmente aislado, este valor debe ser una copia exacta de [[pTotI]], indicando que el entorno no ha 'empujado' ni 'frenado' el conjunto de cuerpos."
+        en: "The total final momentum [[pTotF]] quantifies the system's translational state after interaction. In an ideally isolated system, this value must be an exact copy of [[pTotI]], indicating that the environment has neither 'pushed' nor 'braked' the set of bodies."
+    physical_reading_rules:
+    - id: pTotF_physical_iso
+      when: 'abs(pTotF - pTotI) < 1e-6'
+      status: ok
+      text:
+        es: "Conservación perfecta confirmada: El sistema ha redistribuido su movimiento mediante fuerzas internas. Esto demuestra que cualquier 'empuje' recibido por un cuerpo fue compensado por un 'retroceso' igual y opuesto en el otro."
+        en: "Perfect conservation confirmed: The system has redistributed its motion through internal forces. This demonstrates that any 'push' received by one body was compensated by an equal and opposite 'recoil' in the other."
+    - id: pTotF_physical_non_iso
+      when: 'abs(pTotF - pTotI) >= 1e-6'
+      status: warning
+      text:
+        es: "Detección de fuga de momento: El balance final [[pTotF]] no coincide con el inicial. Esto delata la presencia de un impulso externo [[Jext]], lo que significa que el entorno (probablemente fricción o gravedad no compensada) ha alterado el movimiento global."
+        en: "Momentum leak detected: The final balance [[pTotF]] does not match the initial one. This reveals the presence of an external impulse [[Jext]], meaning the environment (likely friction or uncompensated gravity) has altered the global motion."
+    coherence_rules:
+    - id: pTotF_coherence_iso
+      when: 'true'
+      status: ok
+      text:
+        es: "La magnitud [[pTotF]] es matemáticamente coherente con la suma de momentos individuales m1·v1f + m2·v2f. El balance entre masas y velocidades tras el evento es sólido."
+        en: "The [[pTotF]] magnitude is mathematically consistent with the sum of individual momenta m1·v1f + m2·v2f. The balance between masses and velocities after the event is solid."
+    model_validity_rules:
+    - id: pTotF_validity_iso
+      when: 'true'
+      status: info
+      text:
+        es: "La hipótesis de sistema aislado es válida si el tiempo de interacción es despreciable (aproximación impulsiva). En este intervalo, las fuerzas externas no tienen tiempo de generar un impulso significativo comparado con las fuerzas internas."
+        en: "The isolated system hypothesis is valid if the interaction time is negligible (impulsive approximation). In this interval, external forces do not have time to generate a significant impulse compared to internal forces."
+    graph_rules:
+    - id: pTotF_graph_iso
+      when: 'true'
+      status: info
+      text:
+        es: "En el diagrama vectorial, el vector [[pTotF]] debe tener la misma longitud y dirección que [[pTotI]]. Los cambios en las velocidades individuales deben anularse vectorialmente."
+        en: "In the vector diagram, the [[pTotF]] vector must have the same length and direction as [[pTotI]]. Changes in individual velocities must cancel each other out vectorially."
+    likely_errors:
+    - id: error_internal_external_iso
+      when: 'true'
+      status: danger
+      text:
+        es: "Confusión causa-efecto: No incluyas la fuerza que genera el movimiento (ej. la explosión) como externa. Si el sistema incluye todos los cuerpos que interactúan, esa fuerza es interna y su efecto neto sobre el momento total es NULO."
+        en: "Cause-effect confusion: Do not include the force generating the motion (e.g., the explosion) as external. If the system includes all interacting bodies, that force is internal and its net effect on total momentum is ZERO."
+    - id: error_sign_recoil_iso
+      when: 'true'
+      status: danger
+      text:
+        es: "Error de dirección en retroceso: Es común olvidar que tras una explosión desde el reposo, los fragmentos DEBEN moverse en sentidos opuestos. Si tus resultados tienen el mismo signo, revisa el balance vectorial [[m1]]·[[v1f]] + [[m2]]·[[v2f]] = 0."
+        en: "Recoil direction error: It is common to forget that after an explosion from rest, fragments MUST move in opposite directions. If your results have the same sign, check the vector balance [[m1]]·[[v1f]] + [[m2]]·[[v2f]] = 0."
+    next_step_rules:
+    - id: pTotF_next_cm_iso
+      when: 'true'
+      status: tip
+      text:
+        es: "Como siguiente paso, analiza el movimiento del Centro de Masas (CM). En un sistema aislado, la velocidad del CM no cambia nunca, independientemente de lo violenta que sea la interacción interna."
+        en: "As a next step, analyze the Center of Mass (CM) motion. In an isolated system, the CM velocity never changes, regardless of how violent the internal interaction is."
+
+  DeltaPtot:
+    summary_rules:
+    - id: DeltaPtot_summary_iso
+      when: 'DeltaPtot == 0'
+      status: ok
+      text:
+        es: "Variación neta cero: El aislamiento es perfecto. El sistema es una 'caja negra' donde lo que sucede dentro no afecta al movimiento del conjunto respecto al exterior."
+        en: "Zero net variation: Isolation is perfect. The system is a 'black box' where what happens inside does not affect the assembly's motion relative to the outside."
+    physical_reading_rules:
+    - id: DeltaPtot_physical_iso
+      when: 'true'
+      status: info
+      text:
+        es: "DeltaPtot mide la transferencia neta de momento desde el entorno hacia el sistema."
+        en: "DeltaPtot measures the net momentum transfer from the environment to the system."
+    coherence_rules:
+    - id: DeltaPtot_coherence_iso
+      when: 'true'
+      status: ok
+      text:
+        es: "DeltaPtot debe coincidir con la diferencia vectorial pTotF - pTotI."
+        en: "DeltaPtot must match the vector difference pTotF - pTotI."
+    model_validity_rules:
+    - id: DeltaPtot_validity_iso
+      when: 'abs(DeltaPtot) > 0.1 * abs(pTotI)'
+      status: danger
+      text:
+        es: "Invalidez del modelo: La variación del momento es demasiado grande (>10%) para ignorar el entorno."
+        en: "Model invalidity: The momentum variation is too large (>10%) to ignore the environment."
+    graph_rules:
+    - id: DeltaPtot_graph_iso
+      when: 'true'
+      status: info
+      text:
+        es: "Visualmente, DeltaPtot es el vector que cierra el polígono entre pTotI y pTotF."
+        en: "Visually, DeltaPtot is the vector that closes the polygon between pTotI and pTotF."
+    likely_errors:
+    - id: error_delta_p_unit
+      when: 'true'
+      status: warning
+      text:
+        es: "Asegúrate de que DeltaPtot tenga unidades de momento (kg·m/s) y no solo de fuerza."
+        en: "Ensure DeltaPtot has units of momentum (kg·m/s) and not just force."
+    next_step_rules:
+    - id: DeltaPtot_next_force
+      when: 'true'
+      status: tip
+      text:
+        es: "Si conoces el tiempo, usa DeltaPtot para calcular la fuerza externa media."
+        en: "If you know the time, use DeltaPtot to calculate the average external force."
+
+  pTotI:
+    summary_rules:
+    - id: pTotI_summary
+      when: 'true'
+      status: info
+      text:
+        es: "El momento inicial [[pTotI]] establece el estado de referencia del sistema."
+        en: "The initial momentum [[pTotI]] establishes the system's reference state."
+    physical_reading_rules:
+    - id: pTotI_physical
+      when: 'pTotI == 0'
+      status: ok
+      text:
+        es: "Sistema inicialmente en reposo o con momentos compensados."
+        en: "System initially at rest or with compensated momenta."
+    coherence_rules:
+    - id: pTotI_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: "pTotI debe ser igual a m1·v1i + m2·v2i."
+        en: "pTotI must be equal to m1·v1i + m2·v2i."
+    model_validity_rules:
+    - id: pTotI_validity
+      when: 'true'
+      status: ok
+      text:
+        es: "Definición válida para sistemas discretos."
+        en: "Valid definition for discrete systems."
+    graph_rules:
+    - id: pTotI_graph
+      when: 'true'
+      status: info
+      text:
+        es: "pTotI se representa como el vector suma inicial."
+        en: "pTotI is represented as the initial sum vector."
+    likely_errors:
+    - id: error_pTotI_sign
+      when: 'true'
+      status: danger
+      text:
+        es: "Revisa los signos de v1i y v2i al calcular el momento inicial."
+        en: "Check the signs of v1i and v2i when calculating initial momentum."
+    next_step_rules:
+    - id: pTotI_next
+      when: 'true'
+      status: tip
+      text:
+        es: "Compara pTotI con pTotF para verificar aislamiento."
+        en: "Compare pTotI with pTotF to verify isolation."
+
+  v1f:
+    summary_rules:
+    - id: v1f_summary
+      when: 'true'
+      status: info
+      text:
+        es: "Velocidad final del primer cuerpo tras la interacción."
+        en: "Final velocity of the first body after interaction."
+    physical_reading_rules:
+    - id: v1f_reading
+      when: 'true'
+      status: info
+      text:
+        es: "Indica el sentido y rapidez del primer objeto tras el proceso."
+        en: "Indicates the direction and speed of the first object after the process."
+    coherence_rules:
+    - id: v1f_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: "Debe satisfacer la ecuación completa de conservación."
+        en: "Must satisfy the complete conservation equation."
+    model_validity_rules:
+    - id: v1f_validity
+      when: 'true'
+      status: ok
+      text:
+        es: "Válida si la masa m1 no cambia."
+        en: "Valid if mass m1 does not change."
+    graph_rules:
+    - id: v1f_graph
+      when: 'true'
+      status: info
+      text:
+        es: "Representada como un vector de velocidad en el estado final."
+        en: "Represented as a velocity vector in the final state."
+    likely_errors:
+    - id: error_v1f_recoil
+      when: 'v1f * v1i < 0'
+      status: warning
+      text:
+        es: "El objeto ha cambiado de sentido (retroceso o rebote)."
+        en: "The object has changed direction (recoil or bounce)."
+    next_step_rules:
+    - id: v1f_next_energy
+      when: 'true'
+      status: tip
+      text:
+        es: "Calcula la energía cinética final con esta velocidad."
+        en: "Calculate the final kinetic energy with this velocity."
+
+  v2f:
+    summary_rules:
+    - id: v2f_summary
+      when: 'true'
+      status: info
+      text:
+        es: "Velocidad final del segundo cuerpo tras la interacción."
+        en: "Final velocity of the second body after interaction."
+    physical_reading_rules:
+    - id: v2f_reading
+      when: 'true'
+      status: info
+      text:
+        es: "Indica el sentido y rapidez del segundo objeto."
+        en: "Indicates the direction and speed of the second object."
+    coherence_rules:
+    - id: v2f_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: "Debe satisfacer el balance de momento del sistema."
+        en: "Must satisfy the system's momentum balance."
+    model_validity_rules:
+    - id: v2f_validity
+      when: 'true'
+      status: ok
+      text:
+        es: "Válida para colisiones y explosiones unidimensionales."
+        en: "Valid for one-dimensional collisions and explosions."
+    graph_rules:
+    - id: v2f_graph
+      when: 'true'
+      status: info
+      text:
+        es: "Representada como un vector de velocidad en el estado final."
+        en: "Represented as a velocity vector in the final state."
+    likely_errors:
+    - id: error_v2f_sign
+      when: 'true'
+      status: danger
+      text:
+        es: "Verifica si el signo de v2f es opuesto al de v1f en explosiones."
+        en: "Check if the sign of v2f is opposite to v1f in explosions."
+    next_step_rules:
+    - id: v2f_next_rel
+      when: 'true'
+      status: tip
+      text:
+        es: "Calcula la velocidad relativa entre ambos cuerpos."
+        en: "Calculate the relative velocity between both bodies."
+
+  Jext:
+    summary_rules:
+    - id: Jext_summary
+      when: 'true'
+      status: info
+      text:
+        es: "Impulso neto recibido por el sistema desde el exterior."
+        en: "Net impulse received by the system from the outside."
+    physical_reading_rules:
+    - id: Jext_reading
+      when: 'Jext == 0'
+      status: ok
+      text:
+        es: "Confirmación de sistema aislado: el entorno no interviene."
+        en: "Confirmation of isolated system: the environment does not intervene."
+    coherence_rules:
+    - id: Jext_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: "Debe ser igual a la variación de momento total DeltaPtot."
+        en: "Must be equal to the total momentum variation DeltaPtot."
+    model_validity_rules:
+    - id: Jext_validity
+      when: 'true'
+      status: ok
+      text:
+        es: "Válida si se identifican todas las fuerzas externas."
+        en: "Valid if all external forces are identified."
+    graph_rules:
+    - id: Jext_graph
+      when: 'true'
+      status: info
+      text:
+        es: "Jext es el vector de cierre en el polígono de momentos."
+        en: "Jext is the closing vector in the momentum polygon."
+    likely_errors:
+    - id: error_Jext_internal
+      when: 'true'
+      status: danger
+      text:
+        es: "No incluyas fuerzas internas (como choques) en el cálculo de Jext."
+        en: "Do not include internal forces (like collisions) in the calculation of Jext."
+    next_step_rules:
+    - id: Jext_next_force
+      when: 'true'
+      status: tip
+      text:
+        es: "Determina qué fuerza externa específica causó este impulso."
+        en: "Determine which specific external force caused this impulse."

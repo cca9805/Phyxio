@@ -1,0 +1,389 @@
+version: 5
+id: mareas-y-perturbaciones-interp
+leaf_id: mareas-y-perturbaciones
+scope: local
+nombre:
+  es: Análisis de mareas y perturbaciones
+  en: Tides and perturbations analysis
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title: { es: Resumen del resultado, en: Result summary }
+  physical_reading:
+    title: { es: Lectura física causal, en: Causal physical reading }
+  coherence:
+    title: { es: Coherencia de datos, en: Data coherence }
+  model_validity:
+    title: { es: Validez del modelo, en: Model validity }
+  graph_reading:
+    title: { es: Lectura gráfica, en: Graph reading }
+  likely_errors:
+    title: { es: Errores probables, en: Likely errors }
+  next_step:
+    title: { es: Siguiente paso, en: Next step }
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [G, M, R, d, am, ac, ap, eps, M1, M2, d1, d2, am1, am2, tau]
+  formulas: [aceleracion_mareal, parametro_perturbativo, comparacion_perturbadores, torque_mareal_conceptual, aceleracion_total_conceptual]
+
+targets:
+  am:
+    summary_rules:
+      - id: am-positive
+        when: am > 0
+        status: success
+        text:
+          es: "La aceleración mareal [[am]] vale {am} m/s2; físicamente indica que la causa real es el gradiente gravitatorio dentro del cuerpo afectado."
+          en: "The tidal acceleration [[am]] is {am} m/s2; physically it indicates that the real cause is the gravitational gradient inside the affected body."
+    physical_reading_rules:
+      - id: am-causal
+        when: am > 0
+        status: success
+        text:
+          es: "El valor aumenta con la masa perturbadora [[M]] y con el radio [[R]], pero cae muy rápido al crecer la distancia [[d]]."
+          en: "The value increases with perturbing mass [[M]] and radius [[R]], but decreases very rapidly as distance [[d]] grows."
+    coherence_rules:
+      - id: am-coherence
+        when: d > R
+        status: success
+        text:
+          es: "La condición [[d]] mayor que [[R]] es coherente con una aproximación mareal de primer orden."
+          en: "The condition [[d]] greater than [[R]] is coherent with a first-order tidal approximation."
+    model_validity_rules:
+      - id: am-validity
+        when: d > R
+        status: success
+        text:
+          es: "El modelo es útil como estimación de gradiente; no predice deformación real sin elasticidad y disipación."
+          en: "The model is useful as a gradient estimate; it does not predict real deformation without elasticity and dissipation."
+    graph_rules:
+      - id: am-graph
+        when: am > 0
+        status: info
+        text:
+          es: "En el gráfico Coord, la curva debe descender de forma pronunciada al aumentar [[d]]."
+          en: "In the Coord graph, the curve should drop sharply as [[d]] increases."
+    likely_errors:
+      - id: am-error
+        when: d <= R
+        status: error
+        text:
+          es: "Error conceptual probable: usar [[d]] comparable o menor que [[R]] confunde marea de primer orden con campo completo cercano."
+          en: "Likely conceptual error: using [[d]] comparable to or smaller than [[R]] confuses first-order tide with the full nearby field."
+    next_step_rules:
+      - id: am-next
+        when: am > 0
+        status: info
+        text:
+          es: "Compare [[am]] con una aceleración central [[ac]] si quiere decidir si el efecto es perturbativo."
+          en: "Compare [[am]] with a central acceleration [[ac]] if you want to decide whether the effect is perturbative."
+
+  eps:
+    summary_rules:
+      - id: eps-value
+        when: eps >= 0
+        status: success
+        text:
+          es: "El parámetro perturbativo [[eps]] vale {eps}; mide el tamaño relativo de [[ap]] frente a [[ac]]."
+          en: "The perturbative parameter [[eps]] is {eps}; it measures the relative size of [[ap]] compared with [[ac]]."
+    physical_reading_rules:
+      - id: eps-small
+        when: eps < 0.01
+        status: success
+        text:
+          es: "La perturbación es pequeña como escala instantánea, aunque puede acumularse si actúa durante muchas órbitas."
+          en: "The perturbation is small as an instantaneous scale, although it may accumulate if it acts over many orbits."
+      - id: eps-large
+        when: eps >= 0.1
+        status: warning
+        text:
+          es: "La perturbación ya no es claramente pequeña; conviene abandonar el modelo escalar simple."
+          en: "The perturbation is no longer clearly small; the simple scalar model should be abandoned."
+    coherence_rules:
+      - id: eps-coherence
+        when: ac > 0
+        status: success
+        text:
+          es: "El cociente es coherente porque la aceleración central [[ac]] es positiva."
+          en: "The ratio is coherent because central acceleration [[ac]] is positive."
+    model_validity_rules:
+      - id: eps-valid
+        when: eps < 0.01
+        status: success
+        text:
+          es: "La jerarquía de escalas permite una primera teoría de perturbaciones."
+          en: "The scale hierarchy supports a first perturbation theory."
+    graph_rules:
+      - id: eps-graph
+        when: eps >= 0
+        status: info
+        text:
+          es: "La lectura gráfica debe mostrar la perturbación como desviación respecto a la dinámica central."
+          en: "The graph reading should show the perturbation as a deviation from central dynamics."
+    likely_errors:
+      - id: eps-error
+        when: ac <= 0
+        status: error
+        text:
+          es: "No se puede formar [[eps]] con una aceleración central nula o negativa."
+          en: "One cannot form [[eps]] with a zero or negative central acceleration."
+    next_step_rules:
+      - id: eps-next
+        when: eps >= 0
+        status: info
+        text:
+          es: "Si el resultado se acumula durante muchas órbitas, estudie dirección y fase de [[ap]]."
+          en: "If the result accumulates over many orbits, study the direction and phase of [[ap]]."
+
+  am1:
+    summary_rules:
+      - id: compare-value
+        when: am1 >= 0
+        status: success
+        text:
+          es: "La contribución [[am1]] permite comparar dos perturbadores manteniendo la misma escala física."
+          en: "The contribution [[am1]] allows two perturbers to be compared while keeping the same physical scale."
+    physical_reading_rules:
+      - id: compare-phys
+        when: am1 >= 0
+        status: success
+        text:
+          es: "La comparación depende tanto de [[M1]] y [[M2]] como de [[d1]] y [[d2]], con sensibilidad fuerte a la distancia."
+          en: "The comparison depends on [[M1]] and [[M2]] as well as [[d1]] and [[d2]], with strong distance sensitivity."
+    coherence_rules:
+      - id: compare-coh
+        when: d1 > 0 and d2 > 0
+        status: success
+        text:
+          es: "Las distancias positivas permiten una comparación mareal físicamente coherente."
+          en: "Positive distances allow a physically coherent tidal comparison."
+    model_validity_rules:
+      - id: compare-valid
+        when: d1 > 0 and d2 > 0
+        status: success
+        text:
+          es: "La comparación es válida si ambos perturbadores actúan sobre el mismo cuerpo afectado."
+          en: "The comparison is valid if both perturbers act on the same affected body."
+    graph_rules:
+      - id: compare-graph
+        when: am1 >= 0
+        status: info
+        text:
+          es: "Dos curvas normalizadas ayudan a ver cuándo domina cada perturbador."
+          en: "Two normalized curves help show when each perturber dominates."
+    likely_errors:
+      - id: compare-error
+        when: d1 <= 0 or d2 <= 0
+        status: error
+        text:
+          es: "Las distancias de comparación [[d1]] y [[d2]] deben ser positivas."
+          en: "The comparison distances [[d1]] and [[d2]] must be positive."
+    next_step_rules:
+      - id: compare-next
+        when: am1 >= 0
+        status: info
+        text:
+          es: "Revise si el resultado cambia mucho al variar ligeramente las distancias."
+          en: "Check whether the result changes strongly when the distances vary slightly."
+
+  M:
+    summary_rules:
+      - id: M-summary
+        when: M > 0
+        status: success
+        text: { es: "La masa perturbadora [[M]] fija la intensidad de la fuente gravitatoria externa.", en: "The perturbing mass [[M]] sets the strength of the external gravitational source." }
+    physical_reading_rules:
+      - id: M-phys
+        when: M > 0
+        status: success
+        text: { es: "A mayor [[M]], mayor gradiente, pero la distancia puede dominar la lectura física.", en: "Larger [[M]] increases the gradient, but distance may dominate the physical reading." }
+    coherence_rules:
+      - id: M-coh
+        when: M > 0
+        status: success
+        text: { es: "Una masa positiva es coherente con el modelo gravitatorio.", en: "A positive mass is coherent with the gravitational model." }
+    model_validity_rules:
+      - id: M-valid
+        when: M > 0
+        status: success
+        text: { es: "El modelo usa [[M]] como fuente externa concentrada.", en: "The model uses [[M]] as a concentrated external source." }
+    graph_rules:
+      - id: M-graph
+        when: M > 0
+        status: info
+        text: { es: "En el gráfico, aumentar [[M]] eleva la curva de [[am]].", en: "On the graph, increasing [[M]] raises the [[am]] curve." }
+    likely_errors:
+      - id: M-error
+        when: M <= 0
+        status: error
+        text: { es: "Error conceptual: una masa perturbadora nula o negativa no representa un perturbador gravitatorio clásico.", en: "Conceptual error: a zero or negative perturbing mass does not represent a classical gravitational perturber." }
+    next_step_rules:
+      - id: M-next
+        when: M > 0
+        status: info
+        text: { es: "Compare [[M]] con la distancia [[d]] antes de decidir dominio mareal.", en: "Compare [[M]] with distance [[d]] before deciding tidal dominance." }
+
+  d:
+    summary_rules:
+      - id: d-summary
+        when: d > 0
+        status: success
+        text: { es: "La distancia [[d]] controla la caída rápida de la marea.", en: "The distance [[d]] controls the rapid decay of the tide." }
+    physical_reading_rules:
+      - id: d-phys
+        when: d > 0
+        status: success
+        text: { es: "La causa física es que el campo cambia menos dentro del cuerpo cuando el perturbador está lejos.", en: "The physical cause is that the field changes less across the body when the perturber is far away." }
+    coherence_rules:
+      - id: d-coh
+        when: d > R
+        status: success
+        text: { es: "[[d]] mayor que [[R]] mantiene coherencia geométrica.", en: "[[d]] greater than [[R]] keeps geometric coherence." }
+    model_validity_rules:
+      - id: d-valid
+        when: d > R
+        status: success
+        text: { es: "La aproximación de primer orden exige separación grande.", en: "The first-order approximation requires large separation." }
+    graph_rules:
+      - id: d-graph
+        when: d > 0
+        status: info
+        text: { es: "El eje horizontal debe mostrar que [[am]] cae al aumentar [[d]].", en: "The horizontal axis should show [[am]] decreasing as [[d]] grows." }
+    likely_errors:
+      - id: d-error
+        when: d <= 0
+        status: error
+        text: { es: "Error conceptual: una distancia no positiva invalida la geometría orbital.", en: "Conceptual error: a non-positive distance invalidates orbital geometry." }
+    next_step_rules:
+      - id: d-next
+        when: d > 0
+        status: info
+        text: { es: "Pruebe una variación pequeña de [[d]] para ver sensibilidad cúbica.", en: "Try a small variation in [[d]] to see cubic sensitivity." }
+
+  ac:
+    summary_rules:
+      - id: ac-summary
+        when: ac > 0
+        status: success
+        text: { es: "[[ac]] es la escala central que permite juzgar si una perturbación es pequeña.", en: "[[ac]] is the central scale used to judge whether a perturbation is small." }
+    physical_reading_rules:
+      - id: ac-phys
+        when: ac > 0
+        status: success
+        text: { es: "Sin [[ac]] no hay referencia física para interpretar [[ap]].", en: "Without [[ac]] there is no physical reference for interpreting [[ap]]." }
+    coherence_rules:
+      - id: ac-coh
+        when: ac > 0
+        status: success
+        text: { es: "Una escala central positiva permite formar [[eps]].", en: "A positive central scale allows [[eps]] to be formed." }
+    model_validity_rules:
+      - id: ac-valid
+        when: ac > 0
+        status: success
+        text: { es: "El modelo perturbativo requiere una dinámica central dominante.", en: "The perturbative model requires a dominant central dynamics." }
+    graph_rules:
+      - id: ac-graph
+        when: ac > 0
+        status: info
+        text: { es: "[[ac]] funciona como escala de referencia, aunque no sea el eje principal.", en: "[[ac]] works as a reference scale, even if it is not the main axis." }
+    likely_errors:
+      - id: ac-error
+        when: ac <= 0
+        status: error
+        text: { es: "Error conceptual: no se puede comparar una perturbación con una escala central nula.", en: "Conceptual error: a perturbation cannot be compared with a zero central scale." }
+    next_step_rules:
+      - id: ac-next
+        when: ac > 0
+        status: info
+        text: { es: "Calcule [[eps]] para clasificar la corrección.", en: "Compute [[eps]] to classify the correction." }
+
+  ap:
+    summary_rules:
+      - id: ap-summary
+        when: ap >= 0
+        status: success
+        text: { es: "[[ap]] es la aceleración secundaria que intenta modificar la órbita ideal.", en: "[[ap]] is the secondary acceleration attempting to modify the ideal orbit." }
+    physical_reading_rules:
+      - id: ap-phys
+        when: ap >= 0
+        status: success
+        text: { es: "Su importancia depende de su razón con [[ac]] y de su acumulación temporal.", en: "Its importance depends on its ratio with [[ac]] and on temporal accumulation." }
+    coherence_rules:
+      - id: ap-coh
+        when: ap >= 0
+        status: success
+        text: { es: "Como módulo, [[ap]] debe ser no negativa.", en: "As a magnitude, [[ap]] must be non-negative." }
+    model_validity_rules:
+      - id: ap-valid
+        when: ap >= 0
+        status: success
+        text: { es: "La perturbación es escalar aquí; para dirección se requiere modelo vectorial.", en: "The perturbation is scalar here; direction requires a vector model." }
+    graph_rules:
+      - id: ap-graph
+        when: ap >= 0
+        status: info
+        text: { es: "[[ap]] puede representarse como desviación respecto a la curva central.", en: "[[ap]] may be represented as a deviation from the central curve." }
+    likely_errors:
+      - id: ap-error
+        when: ap < 0
+        status: error
+        text: { es: "Error conceptual: si se trabaja con módulos, [[ap]] no debe introducirse negativa.", en: "Conceptual error: when using magnitudes, [[ap]] should not be entered as negative." }
+    next_step_rules:
+      - id: ap-next
+        when: ap >= 0
+        status: info
+        text: { es: "Compare [[ap]] con [[ac]] mediante [[eps]].", en: "Compare [[ap]] with [[ac]] through [[eps]]." }
+
+  am2:
+    summary_rules:
+      - id: am2-summary
+        when: am2 >= 0
+        status: success
+        text: { es: "[[am2]] actúa como contribución de referencia para comparar perturbadores.", en: "[[am2]] acts as the reference contribution for comparing perturbers." }
+    physical_reading_rules:
+      - id: am2-phys
+        when: am2 >= 0
+        status: success
+        text: { es: "La causa física se lee por contraste con [[am1]], separando masas y distancias.", en: "The physical cause is read by contrast with [[am1]], separating masses and distances." }
+    coherence_rules:
+      - id: am2-coh
+        when: am2 >= 0
+        status: success
+        text: { es: "Una contribución mareal de referencia no negativa es coherente.", en: "A non-negative reference tidal contribution is coherent." }
+    model_validity_rules:
+      - id: am2-valid
+        when: am2 >= 0
+        status: success
+        text: { es: "La comparación exige mismo cuerpo afectado y misma escala interna.", en: "The comparison requires the same affected body and internal scale." }
+    graph_rules:
+      - id: am2-graph
+        when: am2 >= 0
+        status: info
+        text: { es: "[[am2]] puede usarse para normalizar una segunda curva.", en: "[[am2]] may be used to normalize a second curve." }
+    likely_errors:
+      - id: am2-error
+        when: am2 < 0
+        status: error
+        text: { es: "Error conceptual: una contribución mareal usada como módulo no debe ser negativa.", en: "Conceptual error: a tidal contribution used as a magnitude should not be negative." }
+    next_step_rules:
+      - id: am2-next
+        when: am2 >= 0
+        status: info
+        text: { es: "Use [[am2]] junto con [[M1]], [[M2]], [[d1]] y [[d2]] para comparar.", en: "Use [[am2]] together with [[M1]], [[M2]], [[d1]], and [[d2]] for comparison." }
+
+config:
+  decimal_places: 4
+  show_graphs: true

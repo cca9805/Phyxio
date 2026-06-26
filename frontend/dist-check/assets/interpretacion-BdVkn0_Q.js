@@ -1,0 +1,87 @@
+const e=`version: 2
+id: interpretacion-principio-de-dalembert-y-trabajo-virtual
+leaf_id: principio-de-dalembert-y-trabajo-virtual
+nombre:
+  es: Interpretacion del principio de D'Alembert y trabajo virtual
+  en: Interpretation of D'Alembert's principle and virtual work
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: mecanica-analitica
+  parent_id: mecanica-analitica
+  ruta_relativa: fisica-clasica/mecanica/mecanica-analitica/principio-de-dalembert-y-trabajo-virtual
+dependencies:
+  formulas: [ fuerza_efectiva_dalembert, trabajo_virtual_dinamico, fuerza_generalizada_desde_trabajo_virtual, lagrange_dalembert ]
+  magnitudes: [ F, m, a, Feff, dr, Wv, Qj, qi, Ri ]
+output_contract:
+  sections: [ summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step ]
+result_blocks:
+  summary: { title: { es: Resumen virtual, en: Virtual-work summary } }
+  physical_reading: { title: { es: Lectura fisica, en: Physical reading } }
+  coherence: { title: { es: Coherencia, en: Coherence } }
+  model_validity: { title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { title: { es: Lectura grafica, en: Graph reading } }
+  likely_errors: { title: { es: Errores probables, en: Likely errors } }
+  next_step: { title: { es: Siguiente paso, en: Next step } }
+targets:
+  Feff:
+    summary_rules:
+    - { id: feff_summary, when: "true", status: info, text: { es: "Feff reorganiza fuerza aplicada e inercia como equilibrio dinamico.", en: "Feff reorganizes applied force and inertia as dynamic equilibrium." } }
+    physical_reading_rules:
+    - { id: feff_physical, when: "true", status: info, text: { es: "No es una interaccion nueva; es una forma de escribir Newton para usar trabajo virtual.", en: "It is not a new interaction; it is a way to write Newton for virtual-work use." } }
+    coherence_rules:
+    - { id: feff_coherence, when: "true", status: ok, text: { es: "F, m y a deben pertenecer al mismo elemento.", en: "F, m, and a must belong to the same element." } }
+    model_validity_rules:
+    - { id: feff_validity, when: "true", status: ok, text: { es: "La masa se asume constante y positiva.", en: "Mass is assumed constant and positive." } }
+    graph_rules:
+    - { id: feff_graph, when: "true", status: info, text: { es: "Sin grafico declarado, la lectura se centra en signos y compatibilidad virtual.", en: "With no declared graph, the reading focuses on signs and virtual compatibility." } }
+    likely_errors:
+    - { id: feff_error, when: "true", status: warning, text: { es: "Error frecuente: imaginar una fuerza ficticia ejercida por otro cuerpo.", en: "Common mistake: imagining a fictitious force exerted by another body." } }
+    next_step_rules:
+    - { id: feff_next, when: "true", status: info, text: { es: "Proyecta Feff solo sobre desplazamientos virtuales compatibles.", en: "Project Feff only onto compatible virtual displacements." } }
+  Wv:
+    summary_rules:
+    - { id: wv_summary, when: "true", status: info, text: { es: "Wv es el balance de trabajo virtual dinamico.", en: "Wv is the dynamic virtual-work balance." } }
+    physical_reading_rules:
+    - { id: wv_physical, when: "true", status: info, text: { es: "Wv igual a cero elimina reacciones ideales porque no aportan trabajo virtual neto.", en: "Wv equal to zero removes ideal reactions because they contribute no net virtual work." } }
+    coherence_rules:
+    - { id: wv_coherence, when: "true", status: ok, text: { es: "dr debe respetar las ligaduras; si no, el balance no es valido.", en: "dr must respect constraints; otherwise the balance is invalid." } }
+    model_validity_rules:
+    - { id: wv_validity, when: "true", status: ok, text: { es: "La lectura requiere ligaduras ideales.", en: "The reading requires ideal constraints." } }
+    graph_rules:
+    - { id: wv_graph, when: "true", status: info, text: { es: "Una direccion virtual no compatible no debe aparecer en la lectura.", en: "A non-compatible virtual direction must not appear in the reading." } }
+    likely_errors:
+    - { id: wv_error, when: "true", status: warning, text: { es: "Error frecuente: confundir trabajo virtual con trabajo real durante un desplazamiento temporal.", en: "Common mistake: confusing virtual work with real work during a time displacement." } }
+    next_step_rules:
+    - { id: wv_next, when: "true", status: info, text: { es: "Extrae de Wv los coeficientes asociados a cada coordenada generalizada.", en: "Extract from Wv the coefficients associated with each generalized coordinate." } }
+  Qj:
+    summary_rules:
+    - { id: qj_summary, when: "true", status: info, text: { es: "Qj es el coeficiente de trabajo virtual en la coordenada elegida.", en: "Qj is the virtual-work coefficient in the chosen coordinate." } }
+    physical_reading_rules:
+    - { id: qj_physical, when: "true", status: info, text: { es: "La unidad de Qj depende de la unidad de qi.", en: "The unit of Qj depends on the unit of qi." } }
+    coherence_rules:
+    - { id: qj_coherence, when: "true", status: ok, text: { es: "La proyeccion geometrica debe salir de la misma parametrizacion de la ligadura.", en: "The geometric projection must come from the same constraint parametrization." } }
+    model_validity_rules:
+    - { id: qj_validity, when: "true", status: ok, text: { es: "Qj es valido si la fuerza activa puede proyectarse sobre qi.", en: "Qj is valid if the active force can be projected onto qi." } }
+    graph_rules:
+    - { id: qj_graph, when: "true", status: info, text: { es: "El signo de Qj cambia al invertir la orientacion de qi.", en: "The sign of Qj changes when the orientation of qi is reversed." } }
+    likely_errors:
+    - { id: qj_error, when: "true", status: warning, text: { es: "Error frecuente: medir Qj siempre en newtons aunque qi sea angular.", en: "Common mistake: measuring Qj always in newtons even when qi is angular." } }
+    next_step_rules:
+    - { id: qj_next, when: "true", status: info, text: { es: "Introduce Qj en la forma de Lagrange-D'Alembert.", en: "Insert Qj into the Lagrange-D'Alembert form." } }
+  Ri:
+    summary_rules:
+    - { id: ri_summary, when: "true", status: info, text: { es: "Ri es el residuo lagrangiano que queda equilibrado por Qj.", en: "Ri is the Lagrangian residual balanced by Qj." } }
+    physical_reading_rules:
+    - { id: ri_physical, when: "true", status: info, text: { es: "Si Qj desaparece, Ri vuelve al caso conservativo.", en: "If Qj disappears, Ri returns to the conservative case." } }
+    coherence_rules:
+    - { id: ri_coherence, when: "true", status: ok, text: { es: "Ri y Qj deben estar asociados a la misma coordenada.", en: "Ri and Qj must be associated with the same coordinate." } }
+    model_validity_rules:
+    - { id: ri_validity, when: "true", status: ok, text: { es: "La forma supone fuerzas representables por trabajo virtual.", en: "The form assumes forces representable by virtual work." } }
+    graph_rules:
+    - { id: ri_graph, when: "true", status: info, text: { es: "La lectura compara residuo dinamico y aporte generalizado.", en: "The reading compares dynamical residual and generalized input." } }
+    likely_errors:
+    - { id: ri_error, when: "true", status: warning, text: { es: "Error frecuente: imponer Ri igual a cero cuando hay una fuerza generalizada activa.", en: "Common mistake: imposing Ri equal to zero when an active generalized force exists." } }
+    next_step_rules:
+    - { id: ri_next, when: "true", status: info, text: { es: "Comprueba si el problema pertenece al caso conservativo o al forzado.", en: "Check whether the problem belongs to the conservative or forced case." } }
+`;export{e as default};

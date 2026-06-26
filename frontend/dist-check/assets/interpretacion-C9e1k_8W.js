@@ -1,0 +1,947 @@
+const e=`version: 2
+id: interpretacion-colision-con-pared
+leaf_id: colision-con-pared
+nombre:
+  es: "Interpretación de Colisión con pared"
+  en: "Interpretation of Collision with a Wall"
+scope:
+  area: "fisica-clasica"
+  bloque: "mecanica"
+  subbloque: "cantidad-de-movimiento"
+  parent_id: "colisiones"
+  ruta_relativa: "fisica-clasica/mecanica/cantidad-de-movimiento/colisiones/colision-con-pared"
+dependencies:
+  formulas:
+  - "vf"
+  - "vfn"
+  - "vft"
+  - "impulse_wall"
+  - "energy_loss_wall"
+  - "rebound_height"
+  - "average_force_wall"
+  - "rebound_angle"
+  - "rango_e"
+  magnitudes:
+  - "m"
+  - "vi"
+  - "vf"
+  - "e"
+  - "vin"
+  - "vfn"
+  - "vit"
+  - "vft"
+  - "K"
+  - "DeltaK"
+  - "J"
+  - "h0"
+  - "hf"
+  - "Delta_t"
+  - "F_avg"
+  - "theta_i"
+  - "theta_f"
+output_contract:
+  sections:
+  - "summary"
+  - "physical_reading"
+  - "coherence"
+  - "model_validity"
+  - "graph_reading"
+  - "likely_errors"
+  - "next_step"
+result_blocks:
+  summary:
+    title:
+      es: "Análisis del impacto"
+      en: "Impact analysis"
+  physical_reading:
+    title:
+      es: "Significado físico"
+      en: "Physical meaning"
+  coherence:
+    title:
+      es: "Consistencia"
+      en: "Consistency"
+  model_validity:
+    title:
+      es: "Límites del modelo"
+      en: "Model limits"
+  graph_reading:
+    title:
+      es: "Lectura gráfica"
+      en: "Graphical reading"
+  likely_errors:
+    title:
+      es: "Alertas de error"
+      en: "Error alerts"
+  next_step:
+    title:
+      es: "Siguiente paso"
+      en: "Next step"
+targets:
+  vf:
+    summary_rules:
+    - id: "vf_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "El valor de la velocidad final [[vf]] determina la respuesta cinemática del cuerpo tras el impacto."
+        en: "The value of final velocity [[vf]] determines the body's kinematic response after impact."
+    physical_reading_rules:
+    - id: "vf_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Indica el retroceso del cuerpo tras el impacto, siendo un vector opuesto a la velocidad incidente en colisiones frontales."
+        en: "Indicates the body's recoil after impact, being a vector opposite to the incident velocity in head-on collisions."
+    coherence_rules:
+    - id: "vf_coh"
+      when: "abs(vf) > abs(vi)"
+      status: "error"
+      text:
+        es: "Incoherencia física: la rapidez final no puede ser mayor que la inicial en un choque pasivo."
+        en: "Physical inconsistency: final speed cannot be higher than initial speed in a passive collision."
+    model_validity_rules:
+    - id: "vf_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Válido para paredes de masa infinita fijas en el marco de laboratorio."
+        en: "Valid for fixed infinite mass walls in the laboratory frame."
+    graph_rules:
+    - id: "vf_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Se observa un salto discontinuo en la velocidad en el instante del choque."
+        en: "A discontinuous jump in velocity is observed at the impact instant."
+    likely_errors:
+    - id: "vf_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "Error frecuente: omitir el signo negativo que indica el cambio de sentido del movimiento."
+        en: "Common error: omitting the negative sign that indicates the change in direction of motion."
+    next_step_rules:
+    - id: "vf_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Procede a calcular la pérdida de energía cinética DeltaK para evaluar la disipación térmica."
+        en: "Proceed to calculate kinetic energy loss DeltaK to evaluate thermal dissipation."
+
+  e:
+    summary_rules:
+    - id: "e_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "El coeficiente [[e]] mide la eficiencia elástica del contacto, dictando cuánta rapidez se conserva en la componente normal."
+        en: "The coefficient [[e]] measures the contact's elastic efficiency, dictating how much speed is preserved in the normal component."
+    physical_reading_rules:
+    - id: "e_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Representa la resiliencia del material; un valor cercano a 1 indica una recuperación casi total de la forma y energía."
+        en: "Represents material resilience; a value close to 1 indicates almost total recovery of shape and energy."
+    coherence_rules:
+    - id: "e_coh"
+      when: "e < 0 or e > 1"
+      status: "error"
+      text:
+        es: "Inconsistencia: e debe estar estrictamente en el rango [0, 1] para sistemas pasivos."
+        en: "Inconsistency: e must be strictly in the range [0, 1] for passive systems."
+    model_validity_rules:
+    - id: "e_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Asume un comportamiento constante para el rango de velocidades de impacto analizado."
+        en: "Assumes constant behavior for the analyzed range of impact velocities."
+    graph_rules:
+    - id: "e_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Controla la reducción de la amplitud en los botes sucesivos en un diagrama de posición."
+        en: "Controls the reduction in amplitude of successive bounces in a position diagram."
+    likely_errors:
+    - id: "e_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "Error de concepto: e no es la fracción de energía conservada, sino de rapidez normal."
+        en: "Conceptual error: e is not the fraction of conserved energy, but of normal speed."
+    next_step_rules:
+    - id: "e_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Utiliza este valor para predecir la altura máxima de rebote hf o el ángulo de salida."
+        en: "Use this value to predict the maximum rebound height hf or the exit angle."
+
+  DeltaK:
+    summary_rules:
+    - id: "dk_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "La pérdida [[DeltaK]] cuantifica la energía degradada en calor, sonido y deformación interna durante el impacto."
+        en: "The loss [[DeltaK]] quantifies energy degraded into heat, sound, and internal deformation during impact."
+    physical_reading_rules:
+    - id: "dk_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Representa el trabajo de las fuerzas no conservativas en el instante del choque."
+        en: "Represents the work of non-conservative forces at the instant of collision."
+    coherence_rules:
+    - id: "dk_coh"
+      when: "DeltaK < 0"
+      status: "error"
+      text:
+        es: "Violación termodinámica: la pérdida de energía no puede ser negativa en un proceso pasivo."
+        en: "Thermodynamic violation: energy loss cannot be negative in a passive process."
+    model_validity_rules:
+    - id: "dk_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Desprecia la energía sonora si esta es órdenes de magnitud menor que la térmica."
+        en: "Neglects sound energy if it is orders of magnitude smaller than thermal energy."
+    graph_rules:
+    - id: "dk_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Se visualiza como una caída brusca en el nivel de energía mecánica total."
+        en: "Visualized as a sharp drop in the total mechanical energy level."
+    likely_errors:
+    - id: "dk_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "Cuidado: recuerda que la energía depende del cuadrado de la velocidad."
+        en: "Caution: remember that energy depends on the square of velocity."
+    next_step_rules:
+    - id: "dk_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Calcula la eficiencia térmica del impacto para estudios de seguridad de materiales."
+        en: "Calculate the impact's thermal efficiency for material safety studies."
+
+  J:
+    summary_rules:
+    - id: "j_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "El impulso [[J]] representa la transferencia total de momento lineal desde la pared hacia el cuerpo."
+        en: "The impulse [[J]] represents the total linear momentum transfer from the wall to the body."
+    physical_reading_rules:
+    - id: "j_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Es la medida de la 'violencia' de la interacción en términos de cambio de movimiento."
+        en: "Is the measure of the interaction's 'violence' in terms of motion change."
+    coherence_rules:
+    - id: "j_coh"
+      when: "true"
+      status: "ok"
+      text:
+        es: "La dirección del impulso debe ser normal a la superficie para paredes lisas."
+        en: "The impulse direction must be normal to the surface for smooth walls."
+    model_validity_rules:
+    - id: "j_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Asume que la masa m no cambia durante el brevísimo proceso de impacto."
+        en: "Assumes that mass m does not change during the very brief impact process."
+    graph_rules:
+    - id: "j_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Corresponde al área bajo la curva de fuerza frente a tiempo."
+        en: "Corresponds to the area under the force versus time curve."
+    likely_errors:
+    - id: "j_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "Error táctico: restar magnitudes de rapidez en lugar de considerar los sentidos vectoriales."
+        en: "Tactical error: subtracting speed magnitudes instead of considering vector directions."
+    next_step_rules:
+    - id: "j_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Utiliza J para estimar la fuerza media de impacto si conoces el tiempo de contacto."
+        en: "Use J to estimate the average impact force if you know the contact time."
+
+  hf:
+    summary_rules:
+    - id: "hf_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "La altura de rebote [[hf]] mide la respuesta elástica macroscópica tras el impacto vertical."
+        en: "The bounce height [[hf]] measures the macroscopic elastic response after vertical impact."
+    physical_reading_rules:
+    - id: "hf_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Determina cuánta energía potencial es capaz de recuperar el sistema."
+        en: "Determines how much potential energy the system is able to recover."
+    coherence_rules:
+    - id: "hf_coh"
+      when: "hf > h0"
+      status: "error"
+      text:
+        es: "Error: la altura de rebote no puede superar la altura de caída."
+        en: "Error: the bounce height cannot exceed the drop height."
+    model_validity_rules:
+    - id: "hf_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Requiere despreciar la fricción con el aire durante el vuelo."
+        en: "Requires neglecting air friction during flight."
+    graph_rules:
+    - id: "hf_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Corresponde al pico de la parábola de posición tras el choque."
+        en: "Corresponds to the peak of the position parabola after the collision."
+    likely_errors:
+    - id: "hf_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "No supongas una relación lineal entre e y la altura."
+        en: "Do not assume a linear relationship between e and height."
+    next_step_rules:
+    - id: "hf_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Usa hf para calcular el coeficiente e experimentalmente."
+        en: "Use hf to calculate the coefficient e experimentally."
+
+  F_avg:
+    summary_rules:
+    - id: "f_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "La fuerza media [[F_avg]] indica la carga mecánica promedio durante el contacto."
+        en: "The average force [[F_avg]] indicates the average mechanical load during contact."
+    physical_reading_rules:
+    - id: "f_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Representa la intensidad del golpe suavizada en el tiempo de contacto."
+        en: "Represents the hit's intensity smoothed over the contact time."
+    coherence_rules:
+    - id: "f_coh"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Debe ser consistente con el impulso y la duración del choque."
+        en: "Must be consistent with the impulse and the collision duration."
+    model_validity_rules:
+    - id: "f_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Válida si el tiempo de contacto Delta_t es conocido."
+        en: "Valid if the contact time Delta_t is known."
+    graph_rules:
+    - id: "f_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Simplifica el área del impulso como un rectángulo constante."
+        en: "Simplifies the impulse area as a constant rectangle."
+    likely_errors:
+    - id: "f_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "No es la fuerza máxima real; la fuerza de pico suele ser mucho mayor."
+        en: "It is not the real maximum force; the peak force is usually much higher."
+    next_step_rules:
+    - id: "f_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Evalúa la resistencia de materiales ante este nivel de carga."
+        en: "Evaluate material resistance against this load level."
+
+  theta_f:
+    summary_rules:
+    - id: "t_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "El ángulo [[theta_f]] define la dirección de salida del cuerpo tras el impacto oblicuo."
+        en: "The angle [[theta_f]] defines the body's exit direction after the oblique impact."
+    physical_reading_rules:
+    - id: "t_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Muestra cómo la disipación 'abre' la trayectoria alejándola de la normal."
+        en: "Shows how dissipation 'opens' the trajectory moving it away from the normal."
+    coherence_rules:
+    - id: "t_coh"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Para colisiones inelásticas, theta_f debe ser mayor que el ángulo incidente."
+        en: "For inelastic collisions, theta_f must be greater than the incident angle."
+    model_validity_rules:
+    - id: "t_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Válido para superficies lisas; la rugosidad altera esta dirección."
+        en: "Valid for smooth surfaces; roughness alters this direction."
+    graph_rules:
+    - id: "t_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Define la pendiente de la trayectoria cinemática 2D."
+        en: "Defines the 2D kinematic trajectory's slope."
+    likely_errors:
+    - id: "t_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "Error: medir respecto a la pared y no respecto a la normal."
+        en: "Error: measuring with respect to the wall and not with respect to the normal."
+    next_step_rules:
+    - id: "t_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Calcula el rango del proyectil tras el rebote."
+        en: "Calculate the projectile's range after the rebound."
+
+  vfn:
+    summary_rules:
+    - id: "vfn_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "La componente [[vfn]] es la parte del movimiento directamente afectada por el choque."
+        en: "The component [[vfn]] is the part of motion directly affected by the collision."
+    physical_reading_rules:
+    - id: "vfn_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Responsable del cambio de sentido y de la mayor parte de la disipación térmica."
+        en: "Responsible for the direction change and most of the thermal dissipation."
+    coherence_rules:
+    - id: "vfn_coh"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Debe tener signo opuesto a la componente incidente para indicar rebote."
+        en: "Must have opposite sign to the incident component to indicate rebound."
+    model_validity_rules:
+    - id: "vfn_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Asume que la interacción de restitución es la fuerza dominante en el eje normal."
+        en: "Assumes that the restitution interaction is the dominant force on the normal axis."
+    graph_rules:
+    - id: "vfn_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Se visualiza como el eje de cambio brusco en el espacio de fases."
+        en: "Visualized as the axis of sharp change in phase space."
+    likely_errors:
+    - id: "vfn_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "Fallo procedural: olvidar que el coeficiente e solo se aplica a esta componente."
+        en: "Procedural failure: forgetting that the e coefficient only applies to this component."
+    next_step_rules:
+    - id: "vfn_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Combina este valor con vft para obtener la rapidez total de salida vf."
+        en: "Combine this value with vft to obtain the total exit speed vf."
+
+  vft:
+    summary_rules:
+    - id: "vft_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "La componente [[vft]] representa el movimiento paralelo a la pared."
+        en: "The component [[vft]] represents the motion parallel to the wall."
+    physical_reading_rules:
+    - id: "vft_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "En una pared lisa, se conserva íntegramente debido a la ausencia de fuerzas de fricción impulsivas."
+        en: "In a smooth wall, it is fully preserved due to the absence of impulsive friction forces."
+    coherence_rules:
+    - id: "vft_coh"
+      when: "true"
+      status: "ok"
+      text:
+        es: "vft debe ser igual a vit bajo la hipótesis de pared lisa."
+        en: "vft must be equal to vit under the smooth wall hypothesis."
+    model_validity_rules:
+    - id: "vft_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Esta igualdad falla si la pared es rugosa o si el cuerpo tiene rotación."
+        en: "This equality fails if the wall is rough or if the body has rotation."
+    graph_rules:
+    - id: "vft_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Se muestra como una línea horizontal constante a través del impacto."
+        en: "Shown as a constant horizontal line through the impact."
+    likely_errors:
+    - id: "vft_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "Error de aplicación: intentar reducir esta componente usando e."
+        en: "Application error: trying to reduce this component using e."
+    next_step_rules:
+    - id: "vft_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Estudia el rozamiento si los resultados experimentales muestran variaciones en vft."
+        en: "Study friction if experimental results show variations in vft."
+
+  vi:
+    summary_rules:
+    - id: "vi_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "La velocidad [[vi]] fija las condiciones iniciales y la energía disponible."
+        en: "Velocity [[vi]] sets initial conditions and energy available."
+    physical_reading_rules:
+    - id: "vi_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Velocidad de ataque que determina el impulso recibido."
+        en: "Attack speed that determines the received impulse."
+    coherence_rules:
+    - id: "vi_coh"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Definida en un marco de referencia inercial donde la pared está en reposo."
+        en: "Defined in an inertial reference frame where the wall is at rest."
+    model_validity_rules:
+    - id: "vi_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Debe medirse justo antes del contacto físico."
+        en: "Must be measured just before physical contact."
+    graph_rules:
+    - id: "vi_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Inicio de la discontinuidad cinemática en el diagrama temporal."
+        en: "Start of the kinematic discontinuity in the temporal diagram."
+    likely_errors:
+    - id: "vi_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "Error común: usar la velocidad inicial de lanzamiento en lugar de la de choque."
+        en: "Common error: using initial launch velocity instead of impact velocity."
+    next_step_rules:
+    - id: "vi_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Calcula las componentes normal y tangencial para iniciar el análisis vectorial."
+        en: "Calculate normal and tangential components to start vectorial analysis."
+
+  h0:
+    summary_rules:
+    - id: "h0_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "La altura inicial [[h0]] determina la energía potencial disponible."
+        en: "The initial height [[h0]] determines the potential energy available."
+    physical_reading_rules:
+    - id: "h0_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Define la velocidad de impacto mediante la conversión de energía potencial."
+        en: "Defines the impact velocity through potential energy conversion."
+    coherence_rules:
+    - id: "h0_coh"
+      when: "h0 < 0"
+      status: "error"
+      text:
+        es: "Incoherencia: la altura debe medirse desde el nivel del suelo."
+        en: "Inconsistency: height must be measured from the ground level."
+    model_validity_rules:
+    - id: "h0_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Válido bajo aceleración gravitatoria constante."
+        en: "Valid under constant gravitational acceleration."
+    graph_rules:
+    - id: "h0_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Representa el punto de partida en el diagrama de posición vertical."
+        en: "Represents the starting point in the vertical position diagram."
+    likely_errors:
+    - id: "h0_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "No confundir con la altura máxima tras el primer rebote."
+        en: "Do not confuse with the maximum height after the first bounce."
+    next_step_rules:
+    - id: "h0_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Relaciona h0 con hf para obtener el coeficiente de restitución e."
+        en: "Relate h0 to hf to obtain the coefficient of restitution e."
+
+  K:
+    summary_rules:
+    - id: "k_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "La energía [[K]] representa la capacidad del cuerpo para interactuar con la pared."
+        en: "Energy [[K]] represents the body's ability to interact with the wall."
+    physical_reading_rules:
+    - id: "k_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Energía asociada al movimiento macroscópico del centro de masas."
+        en: "Energy associated with the macroscopic motion of the center of mass."
+    coherence_rules:
+    - id: "k_coh"
+      when: "K < 0"
+      status: "error"
+      text:
+        es: "Error: la energía cinética es siempre positiva."
+        en: "Error: kinetic energy is always positive."
+    model_validity_rules:
+    - id: "k_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Válido para velocidades clásicas."
+        en: "Valid for classical velocities."
+    graph_rules:
+    - id: "k_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Se muestra como una función continua excepto en el impacto."
+        en: "Shown as a continuous function except at the impact."
+    likely_errors:
+    - id: "k_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "Olvido común: no elevar la rapidez al cuadrado."
+        en: "Common oversight: not squaring the speed."
+    next_step_rules:
+    - id: "k_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Compara con la energía final para determinar la disipación."
+        en: "Compare with final energy to determine dissipation."
+
+  m:
+    summary_rules:
+    - id: "m_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "La masa [[m]] es la propiedad intrínseca que determina la inercia del proyectil."
+        en: "Mass [[m]] is the intrinsic property that determines the projectile's inertia."
+    physical_reading_rules:
+    - id: "m_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Define la escala del impulso y la energía cinética."
+        en: "Defines the scale of impulse and kinetic energy."
+    coherence_rules:
+    - id: "m_coh"
+      when: "m <= 0"
+      status: "error"
+      text:
+        es: "Error: la masa debe ser un valor positivo."
+        en: "Error: mass must be a positive value."
+    model_validity_rules:
+    - id: "m_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Se asume constante durante el proceso de colisión."
+        en: "Assumed constant during the collision process."
+    graph_rules:
+    - id: "m_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Actúa como factor de proporcionalidad entre v y J."
+        en: "Acts as a proportionality factor between v and J."
+    likely_errors:
+    - id: "m_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "No confundir con el peso."
+        en: "Do not confuse with weight."
+    next_step_rules:
+    - id: "m_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Usa la masa para calcular el impulso."
+        en: "Use mass to calculate impulse."
+
+  vin:
+    summary_rules:
+    - id: "vin_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "La componente normal inicial [[vin]] es la parte de la velocidad dirigida hacia la pared."
+        en: "The initial normal component [[vin]] is the part of the velocity directed towards the wall."
+    physical_reading_rules:
+    - id: "vin_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Determina la violencia del choque."
+        en: "Determines the collision's violence."
+    coherence_rules:
+    - id: "vin_coh"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Debe ser consistente con la proyección de vi."
+        en: "Must be consistent with vi projection."
+    model_validity_rules:
+    - id: "vin_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Válida para cualquier ángulo theta_i."
+        en: "Valid for any angle theta_i."
+    graph_rules:
+    - id: "vin_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Valor de la velocidad normal antes de la discontinuidad."
+        en: "Normal velocity value before the discontinuity."
+    likely_errors:
+    - id: "vin_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "Error: usar la rapidez total vi."
+        en: "Error: using the total speed vi."
+    next_step_rules:
+    - id: "vin_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Aplica el coeficiente e para obtener vfn."
+        en: "Apply the e coefficient to obtain vfn."
+
+  vit:
+    summary_rules:
+    - id: "vit_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "La componente tangencial inicial [[vit]] describe el movimiento paralelo a la pared."
+        en: "The initial tangential component [[vit]] describes the motion parallel to the wall."
+    physical_reading_rules:
+    - id: "vit_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "No participa en la disipación normal."
+        en: "Does not participate in normal dissipation."
+    coherence_rules:
+    - id: "vit_coh"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Debe ser igual a vft en pared lisa."
+        en: "Must be equal to vft in smooth wall."
+    model_validity_rules:
+    - id: "vit_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Asume que la pared no ejerce rozamiento."
+        en: "Assumes the wall exerts no friction."
+    graph_rules:
+    - id: "vit_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Permanece constante en el tiempo de contacto."
+        en: "Remains constant throughout contact time."
+    likely_errors:
+    - id: "vit_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "Olvido: no considerar la componente tangencial."
+        en: "Oversight: not considering the tangential component."
+    next_step_rules:
+    - id: "vit_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Verifica la hipótesis de pared lisa."
+        en: "Verify the smooth wall hypothesis."
+
+  Delta_t:
+    summary_rules:
+    - id: "dt_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "El tiempo de contacto [[Delta_t]] es la duración del intervalo de interacción."
+        en: "The contact time [[Delta_t]] is the duration of the interaction interval."
+    physical_reading_rules:
+    - id: "dt_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Un tiempo corto implica fuerzas intensas."
+        en: "A short time implies intense forces."
+    coherence_rules:
+    - id: "dt_coh"
+      when: "Delta_t <= 0"
+      status: "error"
+      text:
+        es: "Error: el tiempo debe ser positivo."
+        en: "Error: the time must be positive."
+    model_validity_rules:
+    - id: "dt_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Asume que es mucho menor que los tiempos de vuelo."
+        en: "Assumed much smaller than flight times."
+    graph_rules:
+    - id: "dt_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Define el ancho del pulso de fuerza."
+        en: "Defines the force pulse width."
+    likely_errors:
+    - id: "dt_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "No confundir con el tiempo total de vuelo."
+        en: "Do not confuse with the total flight time."
+    next_step_rules:
+    - id: "dt_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Usa Delta_t para hallar la fuerza media F_avg."
+        en: "Use Delta_t to find the average force F_avg."
+
+  theta_i:
+    summary_rules:
+    - id: "ti_sum"
+      when: "true"
+      status: "info"
+      text:
+        es: "El ángulo de incidencia [[theta_i]] define la dirección de llegada."
+        en: "The incident angle [[theta_i]] defines the arrival direction."
+    physical_reading_rules:
+    - id: "ti_phys"
+      when: "true"
+      status: "info"
+      text:
+        es: "Determina el reparto de componentes de velocidad."
+        en: "Determines the velocity components distribution."
+    coherence_rules:
+    - id: "ti_coh"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Rango [0, 90] grados para impacto frontal."
+        en: "Range [0, 90] degrees for frontal impact."
+    model_validity_rules:
+    - id: "ti_valid"
+      when: "true"
+      status: "ok"
+      text:
+        es: "Válido para cualquier orientación de la normal."
+        en: "Valid for any normal orientation."
+    graph_rules:
+    - id: "ti_graph"
+      when: "true"
+      status: "info"
+      text:
+        es: "Pendiente inicial de la trayectoria."
+        en: "Initial trajectory slope."
+    likely_errors:
+    - id: "ti_err"
+      when: "true"
+      status: "warning"
+      text:
+        es: "Error: medir respecto a la pared."
+        en: "Error: measuring relative to the wall."
+    next_step_rules:
+    - id: "ti_next"
+      when: "true"
+      status: "info"
+      text:
+        es: "Predice el ángulo de rebote theta_f."
+        en: "Predict the rebound angle theta_f."
+`;export{e as default};

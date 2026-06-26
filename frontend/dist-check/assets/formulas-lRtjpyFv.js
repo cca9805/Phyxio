@@ -1,0 +1,133 @@
+const e=`version: 5
+topic:
+  id: sobreamortiguado
+  title:
+    es: Sobreamortiguado
+    en: Overdamped Regime
+formulas:
+  - id: condicion_sobreamortiguado
+    title: { es: Condicion de regimen sobreamortiguado, en: Overdamped regime condition }
+    equation: gamma > omega0
+    latex: \\gamma>\\omega_0
+    category: criterio_de_regimen
+    relation_type: desigualdad_de_clasificacion
+    physical_meaning:
+      es: Indica que la disipacion supera el umbral critico y evita oscilacion sostenida.
+      en: Indicates that dissipation exceeds the critical threshold and prevents sustained oscillation.
+    constraints: [gamma > 0, omega0 > 0]
+    validity:
+      es: Valida para oscilador lineal de segundo orden con amortiguamiento viscoso equivalente.
+      en: Valid for a linear second-order oscillator with equivalent viscous damping.
+    dimension_check: "[T^-1] > [T^-1]"
+    calculable: false
+    motivo_no_calculable: { es: "Es una desigualdad de clasificacion entre [[gamma]] y [[omega0]].", en: "It is a classification inequality between [[gamma]] and [[omega0]]." }
+    used_in: [raices_sobreamortiguado, raiz2_sobreamortiguado]
+    interpretation_tags: [regimen, sobreamortiguado, no_oscilatorio]
+    result_semantics: clasificacion_de_regimen
+    domain_checks: [gamma > omega0, omega0 > 0]
+    coherence_checks: [gamma > omega0]
+    graph_implications: "La curva de [[x]] no debe mostrar oscilacion sostenida."
+    pedagogical_triggers: [frontera_critica, exceso_amortiguamiento]
+    rearrangements:
+      - target: gamma
+        equation: omega0
+      - target: omega0
+        equation: gamma
+    variables: [gamma, omega0]
+  - id: raices_sobreamortiguado
+    title: { es: Raiz lenta, en: Slow root }
+    equation: r1 = -gamma + sqrt(gamma^2 - omega0^2)
+    latex: r_1=-\\gamma+\\sqrt{\\gamma^2-\\omega_0^2}
+    category: exponentes
+    relation_type: raiz_caracteristica
+    physical_meaning:
+      es: Calcula el exponente menos negativo que domina el asentamiento tardio.
+      en: Computes the less negative exponent that dominates late settling.
+    constraints: [gamma > omega0, omega0 > 0]
+    validity:
+      es: Valida cuando las raices son reales negativas y el modelo lineal no forzado aplica.
+      en: Valid when roots are real negative and the unforced linear model applies.
+    dimension_check: "[T^-1] = [T^-1]"
+    calculable: true
+    motivo_no_calculable: { es: "Requiere [[gamma]] y [[omega0]] con [[gamma]] > [[omega0]].", en: "Requires [[gamma]] and [[omega0]] with [[gamma]] > [[omega0]]." }
+    used_in: [solucion_sobreamortiguada]
+    interpretation_tags: [modo_lento, asentamiento, raiz]
+    result_semantics: modo_lento
+    domain_checks: [gamma > omega0]
+    coherence_checks: [r1 < 0]
+    graph_implications: "[[r1]] controla la cola lenta de la curva."
+    pedagogical_triggers: [modo_dominante, lentitud_sin_oscilacion]
+    rearrangements:
+      - target: r1
+        equation: -gamma + sqrt(gamma^2 - omega0^2)
+    variables: [r1, gamma, omega0]
+  - id: raiz2_sobreamortiguado
+    title: { es: Raiz rapida, en: Fast root }
+    equation: r2 = -gamma - sqrt(gamma^2 - omega0^2)
+    latex: r_2=-\\gamma-\\sqrt{\\gamma^2-\\omega_0^2}
+    category: exponentes
+    relation_type: raiz_caracteristica
+    physical_meaning:
+      es: Calcula el exponente mas negativo que se amortigua rapido al inicio.
+      en: Computes the more negative exponent that decays rapidly at the beginning.
+    constraints: [gamma > omega0, omega0 > 0]
+    validity:
+      es: Valida en regimen sobreamortiguado lineal con raices reales negativas.
+      en: Valid in the linear overdamped regime with real negative roots.
+    dimension_check: "[T^-1] = [T^-1]"
+    calculable: true
+    motivo_no_calculable: { es: "Requiere [[gamma]] y [[omega0]] con [[gamma]] > [[omega0]].", en: "Requires [[gamma]] and [[omega0]] with [[gamma]] > [[omega0]]." }
+    used_in: [solucion_sobreamortiguada]
+    interpretation_tags: [modo_rapido, transitorio, raiz]
+    result_semantics: modo_rapido
+    domain_checks: [gamma > omega0]
+    coherence_checks: [r2 < r1]
+    graph_implications: "[[r2]] desaparece antes y deja dominar a [[r1]]."
+    pedagogical_triggers: [modo_rapido, doble_exponencial]
+    rearrangements:
+      - target: r2
+        equation: -gamma - sqrt(gamma^2 - omega0^2)
+    variables: [r2, gamma, omega0, r1]
+  - id: solucion_sobreamortiguada
+    title: { es: Solucion temporal sobreamortiguada, en: Overdamped time solution }
+    equation: x = C1*exp(r1*t) + C2*exp(r2*t)
+    latex: x=C_1 e^{r_1 t}+C_2 e^{r_2 t}
+    category: respuesta_temporal
+    relation_type: suma_de_modos
+    physical_meaning:
+      es: Describe el retorno no oscilatorio como suma de dos decaimientos exponenciales reales.
+      en: Describes non-oscillatory return as a sum of two real exponential decays.
+    constraints: [r1 < 0, r2 < 0, t >= 0]
+    validity:
+      es: Valida para respuesta libre sobreamortiguada con condiciones iniciales codificadas en C1 y C2.
+      en: Valid for free overdamped response with initial conditions encoded in C1 and C2.
+    dimension_check: "[L] = [L]*1 + [L]*1"
+    calculable: true
+    motivo_no_calculable: { es: "Requiere [[C1]], [[C2]], [[r1]], [[r2]] y [[t]].", en: "Requires [[C1]], [[C2]], [[r1]], [[r2]], and [[t]]." }
+    used_in: []
+    interpretation_tags: [respuesta, doble_exponencial, no_oscilatorio]
+    result_semantics: desplazamiento_temporal
+    domain_checks: [t >= 0, r1 < 0, r2 < 0]
+    coherence_checks: [x]
+    graph_implications: "[[x]] converge sin cruces oscilatorios sostenidos."
+    pedagogical_triggers: [modo_lento_vs_rapido, respuesta_no_oscilatoria]
+    rearrangements:
+      - target: x
+        equation: C1*exp(r1*t) + C2*exp(r2*t)
+      - target: C1
+        equation: (x - C2*exp(r2*t))/exp(r1*t)
+      - target: C2
+        equation: (x - C1*exp(r1*t))/exp(r2*t)
+    variables: [x, C1, C2, r1, r2, t]
+ui:
+  default_formula: solucion_sobreamortiguada
+  groups:
+    - title:
+        es: Clasificacion y raices
+        en: Classification and roots
+      items: [condicion_sobreamortiguado, raices_sobreamortiguado, raiz2_sobreamortiguado]
+    - title:
+        es: Respuesta temporal
+        en: Time response
+      items: [solucion_sobreamortiguada]
+`;export{e as default};

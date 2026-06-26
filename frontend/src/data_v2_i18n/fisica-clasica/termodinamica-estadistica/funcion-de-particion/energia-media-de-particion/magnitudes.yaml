@@ -1,0 +1,461 @@
+version: 5.0.0
+magnitudes:
+- id: energia_media
+  symbol: U
+  nombre:
+    es: energía media
+    en: mean energy
+  descripcion:
+    es: Energía promedio del sistema ponderada por los pesos canónicos de sus microestados.
+    en: Average system energy weighted by canonical microstate weights.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: thermodynamic_state
+  physical_role: output
+  used_in: &id001
+  - energia_media_desde_derivada_beta
+  - energia_media_desde_derivada_temperatura
+  common_mistake: Confundirla con una energía de microestado individual.
+  typical_range: Depende del sistema; debe ser finita.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del cero de energía elegido.
+      en: The sign depends on the chosen energy zero.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser cero si el origen energético coincide con el promedio.
+      en: It can be zero if the energy origin equals the average.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: finite real value
+  interpretation_role:
+    primary_for: *id001
+    secondary_for: []
+  graph_binding:
+    channels:
+    - yAxis
+    preferred_graph: Coord
+    role: output
+  pedagogical_notes:
+    es: Debe leerse como promedio estadístico, no como energía común de todos los estados.
+    en: It must be read as a statistical average, not as one common energy for all states.
+- id: temperatura
+  symbol: T
+  nombre:
+    es: temperatura absoluta
+    en: absolute temperature
+  descripcion:
+    es: Variable térmica que controla la ocupación relativa de microestados energéticos.
+    en: Thermal variable controlling relative occupation of energy microstates.
+  unidad_si: K
+  dimension: Theta
+  is_vector: false
+  components: []
+  category: thermal_parameter
+  physical_role: input
+  used_in: &id002
+  - beta_inversa_termica
+  - energia_media_desde_derivada_temperatura
+  - capacidad_calorifica_desde_energia_media
+  common_mistake: Usar grados Celsius en relaciones canónicas.
+  typical_range: T > 0 K.
+  sign_behavior: &id003
+    has_sign: false
+    meaning:
+      es: Es positiva en el dominio canónico ordinario.
+      en: It is positive in the ordinary canonical domain.
+  zero_behavior: &id004
+    allowed: false
+    meaning:
+      es: El valor cero rompe la definición física o matemática usada.
+      en: Zero breaks the physical or mathematical definition used.
+  value_nature:
+    kind: positive_real
+    nonnegative_only: true
+    expected_interval: T > 0
+  interpretation_role:
+    primary_for: *id002
+    secondary_for: []
+  graph_binding:
+    channels:
+    - xAxis
+    preferred_graph: Coord
+    role: input
+  pedagogical_notes:
+    es: Subir T cambia pesos estadísticos, no añade energía manualmente.
+    en: Raising T changes statistical weights, not energy by hand.
+- id: constante_boltzmann
+  symbol: k_B
+  nombre:
+    es: constante de Boltzmann
+    en: Boltzmann constant
+  descripcion:
+    es: Constante que convierte temperatura absoluta en escala energética microscópica.
+    en: Constant converting absolute temperature into microscopic energy scale.
+  unidad_si: J/K
+  dimension: M L^2 T^-2 Theta^-1
+  is_vector: false
+  components: []
+  category: constant
+  physical_role: constant
+  used_in: &id005
+  - beta_inversa_termica
+  - energia_media_desde_derivada_temperatura
+  common_mistake: Tratarla como variable ajustable.
+  typical_range: 1.380649e-23 J/K.
+  sign_behavior: *id003
+  zero_behavior: *id004
+  value_nature:
+    kind: constant
+    nonnegative_only: true
+    expected_interval: k_B = 1.380649e-23 J/K
+  interpretation_role:
+    primary_for: *id005
+    secondary_for: []
+  graph_binding:
+    channels:
+    - constant
+    preferred_graph: Coord
+    role: constant
+  pedagogical_notes:
+    es: Garantiza coherencia dimensional entre energía y temperatura.
+    en: It ensures dimensional coherence between energy and temperature.
+- id: beta
+  symbol: β
+  nombre:
+    es: beta térmica
+    en: thermal beta
+  descripcion:
+    es: Inversa de la energía térmica k_B T.
+    en: Inverse of thermal energy k_B T.
+  unidad_si: 1/J
+  dimension: M^-1 L^-2 T^2
+  is_vector: false
+  components: []
+  category: thermal_parameter
+  physical_role: intermediate
+  used_in: &id006
+  - beta_inversa_termica
+  common_mistake: Pensar que beta aumenta con la temperatura.
+  typical_range: beta > 0.
+  sign_behavior: *id003
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Solo tiende a cero cuando T tiende a infinito.
+      en: It only tends to zero as T tends to infinity.
+  value_nature:
+    kind: positive_real
+    nonnegative_only: true
+    expected_interval: beta > 0
+  interpretation_role:
+    primary_for: *id006
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+    preferred_graph: Coord
+    role: intermediate
+  pedagogical_notes:
+    es: Beta baja cuando T sube; es una inversión conceptual importante.
+    en: Beta decreases when T rises; it is an important conceptual inversion.
+- id: funcion_particion
+  symbol: Z
+  nombre:
+    es: función de partición
+    en: partition function
+  descripcion:
+    es: Suma adimensional de pesos canónicos que genera promedios termodinámicos.
+    en: Dimensionless sum of canonical weights generating thermodynamic averages.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: statistical_sum
+  physical_role: source
+  used_in: &id007
+  - funcion_particion_canonica
+  common_mistake: Interpretarla como una probabilidad.
+  typical_range: Z > 0.
+  sign_behavior: *id003
+  zero_behavior: *id004
+  value_nature:
+    kind: positive_real
+    nonnegative_only: true
+    expected_interval: Z > 0
+  interpretation_role:
+    primary_for: *id007
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+    preferred_graph: Coord
+    role: source
+  pedagogical_notes:
+    es: No es observable directo, pero su forma determina magnitudes medibles.
+    en: It is not a direct observable, but its shape determines measurable quantities.
+- id: energia_microestado
+  symbol: E_i
+  nombre:
+    es: energía de microestado
+    en: microstate energy
+  descripcion:
+    es: Energía asociada a un estado microscópico concreto.
+    en: Energy associated with a concrete microscopic state.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: microscopic_quantity
+  physical_role: input
+  used_in: &id008
+  - funcion_particion_canonica
+  common_mistake: Creer que todos los microestados tienen la energía media.
+  typical_range: Espectro finito o suma convergente.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del cero elegido.
+      en: The sign depends on the chosen zero.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Un estado puede definir el cero energético.
+      en: One state may define the energy zero.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: finite or convergent spectrum
+  interpretation_role:
+    primary_for: *id008
+    secondary_for: []
+  graph_binding:
+    channels:
+    - none
+    preferred_graph: Coord
+    role: input
+  pedagogical_notes:
+    es: Las energías individuales alimentan Z; el promedio sale después.
+    en: Individual energies feed Z; the average comes afterward.
+- id: derivada_log_particion_beta
+  symbol: dlnZ_dbeta
+  nombre:
+    es: derivada de ln Z respecto a beta
+    en: derivative of ln Z with respect to beta
+  descripcion:
+    es: Pendiente de ln Z frente a beta, cuyo opuesto da la energía media.
+    en: Slope of ln Z versus beta, whose negative gives mean energy.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: slope
+  physical_role: intermediate
+  used_in: &id009
+  - energia_media_desde_derivada_beta
+  common_mistake: Olvidar el signo opuesto.
+  typical_range: Debe ser finita.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Suele ser negativa si las energías accesibles son positivas.
+      en: It is often negative if accessible energies are positive.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero implica U nula respecto al origen.
+      en: Zero implies zero U relative to the origin.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: finite real value
+  interpretation_role:
+    primary_for: *id009
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+    preferred_graph: Coord
+    role: intermediate
+  pedagogical_notes:
+    es: La pendiente no es U hasta aplicar el signo menos.
+    en: The slope is not U until the minus sign is applied.
+- id: derivada_log_particion_temperatura
+  symbol: dlnZ_dT
+  nombre:
+    es: derivada térmica de ln Z
+    en: thermal derivative of ln Z
+  descripcion:
+    es: Sensibilidad de ln Z ante cambios de temperatura a volumen fijo.
+    en: Sensitivity of ln Z to temperature changes at fixed volume.
+  unidad_si: 1/K
+  dimension: Theta^-1
+  is_vector: false
+  components: []
+  category: slope
+  physical_role: intermediate
+  used_in: &id010
+  - energia_media_desde_derivada_temperatura
+  common_mistake: Derivar Z en lugar de ln Z.
+  typical_range: Debe ser finita.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Refleja si al subir T aumenta el peso estadístico efectivo.
+      en: Reflects whether increasing T raises effective statistical weight.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede anularse en rangos sin cambio energético medio.
+      en: It may vanish in ranges with no mean-energy change.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: finite real value
+  interpretation_role:
+    primary_for: *id010
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+    preferred_graph: Coord
+    role: intermediate
+  pedagogical_notes:
+    es: Debe evaluarse manteniendo fijos los parámetros externos.
+    en: It must be evaluated while holding external parameters fixed.
+- id: capacidad_calorifica
+  symbol: C_V
+  nombre:
+    es: capacidad calorífica a volumen constante
+    en: constant-volume heat capacity
+  descripcion:
+    es: Pendiente de la energía media respecto a la temperatura.
+    en: Slope of mean energy with respect to temperature.
+  unidad_si: J/K
+  dimension: M L^2 T^-2 Theta^-1
+  is_vector: false
+  components: []
+  category: response
+  physical_role: derived
+  used_in: &id011
+  - capacidad_calorifica_desde_energia_media
+  common_mistake: Confundirla con U.
+  typical_range: Usualmente positiva en estabilidad canónica.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Normalmente positiva en sistemas estables.
+      en: Usually positive in stable systems.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica que U apenas cambia con T.
+      en: Zero indicates U barely changes with T.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: usually C_V >= 0
+  interpretation_role:
+    primary_for: *id011
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+    preferred_graph: Coord
+    role: derived
+  pedagogical_notes:
+    es: En la gráfica es la inclinación local, no la altura.
+    en: On the graph it is the local steepness, not the height.
+- id: peso_boltzmann
+  symbol: w_i
+  nombre:
+    es: peso de Boltzmann
+    en: Boltzmann weight
+  descripcion:
+    es: Peso estadístico no normalizado de un microestado en el ensamble canónico.
+    en: Unnormalized statistical weight of a microstate in the canonical ensemble.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: statistical_weight
+  physical_role: intermediate
+  used_in:
+  - funcion_particion_canonica
+  common_mistake: Confundirlo con una probabilidad; le falta dividir por Z.
+  typical_range: Entre 0 (exclusivo) y 1 si el cero energético coincide con el estado fundamental.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es positivo por definición como exponencial negativa de energía positiva.
+      en: It is positive by definition as the negative exponential of positive energy.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: No puede ser cero porque la exponencial siempre es positiva.
+      en: It cannot be zero because the exponential is always positive.
+  value_nature:
+    kind: positive_real
+    nonnegative_only: true
+    expected_interval: 0 < w_i <= 1 for nonnegative reference energy
+  interpretation_role:
+    primary_for:
+    - funcion_particion_canonica
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+    preferred_graph: Coord
+    role: intermediate
+  pedagogical_notes:
+    es: Es la moneda estadística de cada microestado; su suma total da la función de partición.
+    en: It is the statistical currency of each microstate; their sum gives the partition function.
+- id: derivada_energia_temperatura
+  symbol: dU_dT
+  nombre:
+    es: derivada de la energía media respecto a la temperatura
+    en: derivative of mean energy with respect to temperature
+  descripcion:
+    es: Pendiente de la energía media frente a la temperatura a volumen constante; equivale a la capacidad calorífica.
+    en: Slope of mean energy versus temperature at constant volume; equivalent to heat capacity.
+  unidad_si: J/K
+  dimension: M L^2 T^-2 Theta^-1
+  is_vector: false
+  components: []
+  category: slope
+  physical_role: intermediate
+  used_in:
+  - capacidad_calorifica_desde_energia_media
+  common_mistake: Confundirla con la energía media en lugar de su pendiente térmica.
+  typical_range: Positiva en sistemas canónicos estables.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Normalmente positiva; negativa en sistemas con espectro acotado superior y alta saturación.
+      en: Usually positive; negative in systems with bounded spectrum under high saturation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero cuando la energía media no varía con la temperatura en un rango dado.
+      en: Zero when mean energy does not change with temperature over a given range.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: usually >= 0 in canonical stability
+  interpretation_role:
+    primary_for:
+    - capacidad_calorifica_desde_energia_media
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+    preferred_graph: Coord
+    role: intermediate
+  pedagogical_notes:
+    es: Es la pendiente local de la curva de energía media; su lectura directa da la capacidad calorífica.
+    en: It is the local slope of the mean-energy curve; reading it directly gives the heat capacity.

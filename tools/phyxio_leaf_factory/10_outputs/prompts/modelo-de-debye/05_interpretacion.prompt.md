@@ -1,0 +1,706 @@
+# PROMPT YAML 05 | interpretacion.yaml
+
+Create a downloadable YAML file named `modelo-de-debye_interpretacion.yaml`.
+The file content must be the completed `interpretacion.yaml`.
+Do not print the YAML content in the chat.
+Do not wrap the YAML in Markdown fences.
+Complete and improve `interpretacion.yaml` without changing synced identity/dependency fields.
+The downloaded file must contain raw valid YAML only.
+
+Current synchronized interpretacion.yaml:
+INTERPRETACION_ACTUAL_INICIO
+version: 5.0.0
+id: modelo-de-debye
+leaf_id: modelo-de-debye
+nombre:
+  es: Modelo de debye
+  en: Debye Model
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: sistemas-modelo
+  parent_id: solidos-y-calor-especifico
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/sistemas-modelo/solidos-y-calor-especifico/modelo-de-debye
+  orden: 275320
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas: temperatura_debye, variable_reducida_debye, calor_especifico_debye_baja_temperatura, limite_dulong_petit, calor_especifico_debye_integral
+  magnitudes: calor_especifico, calor_especifico_molar, temperatura, temperatura_debye, frecuencia_debye, hbar, constante_boltzmann,
+    constante_gases, numero_atomos, temperatura_reducida, funcion_debye
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: physical concept
+  axis_convention:
+    es: El signo depende del convenio de ejes elegido cuando intervienen magnitudes vectoriales.
+    en: The sign depends on the chosen axis convention when vector quantities are involved.
+  standard_assumptions:
+  - es: El modelo se interpreta dentro de las hipótesis declaradas en el leaf.
+    en: The model is interpreted within the assumptions declared in the leaf.
+  standard_warnings:
+  - es: No interpretes el resultado sin revisar unidades, signo y validez del modelo.
+    en: Do not interpret the result without checking units, sign, and model validity.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: La interpretación debe respetar la dimensión física de cada resultado.
+      en: The interpretation must respect the physical dimension of each result.
+error_patterns:
+  enabled: true
+  patterns:
+  - id: unit_sign_model_confusion
+    status: warning
+    text:
+      es: Un error frecuente es leer el número sin unidad, signo o modelo físico.
+      en: A common error is reading the number without unit, sign, or physical model.
+graph_reading_policy:
+  enabled: true
+  primary_variable: temperatura_debye
+  reading_sequence:
+  - es: Identifica ejes, dirección, sentido y relación entre magnitudes antes de interpretar el resultado.
+    en: Identify axes, direction, sense, and the relation between quantities before interpreting the result.
+  key_points:
+  - es: Conecta la lectura visual con el signo, la unidad y el modelo físico.
+    en: Connect the visual reading with sign, unit, and the physical model.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Compara el resultado con valores cotidianos o escalas físicas conocidas cuando sea posible.
+    en: Compare the result with everyday values or known physical scales when possible.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Comprueba que las unidades finales coinciden con la magnitud interpretada.
+    en: Check that the final units match the interpreted quantity.
+  common_unit_mistakes:
+  - es: Mezclar unidades incompatibles antes de aplicar la fórmula.
+    en: Mixing incompatible units before applying the formula.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  temperatura_debye:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro de material
+      en: Debye temperature
+    summary_rules:
+    - id: temperatura_debye_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[temperatura_debye]] indica la magnitud física principal que se está interpretando.
+        en: The result [[temperatura_debye]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: temperatura_debye_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura_debye]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[temperatura_debye]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: temperatura_debye_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura_debye]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[temperatura_debye]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: temperatura_debye_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura_debye]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[temperatura_debye]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: temperatura_debye_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[temperatura_debye]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[temperatura_debye]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: temperatura_debye_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[temperatura_debye]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[temperatura_debye]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: temperatura_debye_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[temperatura_debye]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[temperatura_debye]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: temperatura_debye_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura_debye]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[temperatura_debye]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: temperatura_debye_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[temperatura_debye]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[temperatura_debye]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  frecuencia_debye:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: corte espectral
+      en: Debye frequency
+    summary_rules:
+    - id: frecuencia_debye_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[frecuencia_debye]] indica la magnitud física principal que se está interpretando.
+        en: The result [[frecuencia_debye]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: frecuencia_debye_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[frecuencia_debye]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[frecuencia_debye]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: frecuencia_debye_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[frecuencia_debye]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[frecuencia_debye]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: frecuencia_debye_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[frecuencia_debye]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[frecuencia_debye]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: frecuencia_debye_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[frecuencia_debye]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[frecuencia_debye]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: frecuencia_debye_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[frecuencia_debye]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[frecuencia_debye]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: frecuencia_debye_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[frecuencia_debye]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[frecuencia_debye]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: frecuencia_debye_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[frecuencia_debye]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[frecuencia_debye]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: frecuencia_debye_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[frecuencia_debye]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[frecuencia_debye]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  hbar:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: constante física
+      en: reduced Planck constant
+    summary_rules:
+    - id: hbar_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[hbar]] indica la magnitud física principal que se está interpretando.
+        en: The result [[hbar]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: hbar_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[hbar]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[hbar]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: hbar_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[hbar]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[hbar]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: hbar_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[hbar]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[hbar]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: hbar_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[hbar]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[hbar]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: hbar_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[hbar]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[hbar]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: hbar_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[hbar]], revisa la coherencia física y vuelve a la calculadora si necesitas otro despeje.
+        en: After obtaining [[hbar]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: hbar_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[hbar]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[hbar]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: hbar_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[hbar]] comprobando qué ocurre si una magnitud dominante crece, disminuye o se anula.
+        en: Analyze the limiting cases of [[hbar]] by checking what happens if a dominant quantity grows, decreases, or becomes
+          zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_reducida:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable de escala
+      en: reduced temperature
+    summary_rules:
+    - id: temperatura_reducida_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[temperatura_reducida]] indica la magnitud física principal que se está interpretando.
+        en: The result [[temperatura_reducida]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: temperatura_reducida_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura_reducida]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[temperatura_reducida]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: temperatura_reducida_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura_reducida]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[temperatura_reducida]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: temperatura_reducida_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura_reducida]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[temperatura_reducida]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: temperatura_reducida_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[temperatura_reducida]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[temperatura_reducida]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: temperatura_reducida_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[temperatura_reducida]] como un número aislado. Su sentido depende del modelo, la unidad y el
+          signo.
+        en: Do not interpret [[temperatura_reducida]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: temperatura_reducida_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[temperatura_reducida]], revisa la coherencia física y vuelve a la calculadora si necesitas
+          otro despeje.
+        en: After obtaining [[temperatura_reducida]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: temperatura_reducida_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura_reducida]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[temperatura_reducida]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: temperatura_reducida_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[temperatura_reducida]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[temperatura_reducida]] by checking what happens if a dominant quantity grows,
+          decreases, or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable independiente
+      en: temperature
+    summary_rules:
+    - id: temperatura_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[temperatura]] indica la magnitud física principal que se está interpretando.
+        en: The result [[temperatura]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: temperatura_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[temperatura]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: temperatura_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[temperatura]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: temperatura_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[temperatura]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: temperatura_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[temperatura]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[temperatura]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: temperatura_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[temperatura]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[temperatura]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: temperatura_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[temperatura]], revisa la coherencia física y vuelve a la calculadora si necesitas otro despeje.
+        en: After obtaining [[temperatura]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: temperatura_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[temperatura]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: temperatura_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[temperatura]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[temperatura]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  calor_especifico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado térmico
+      en: heat capacity
+    summary_rules:
+    - id: calor_especifico_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[calor_especifico]] indica la magnitud física principal que se está interpretando.
+        en: The result [[calor_especifico]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: calor_especifico_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[calor_especifico]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[calor_especifico]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: calor_especifico_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[calor_especifico]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[calor_especifico]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: calor_especifico_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[calor_especifico]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[calor_especifico]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: calor_especifico_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[calor_especifico]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[calor_especifico]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: calor_especifico_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[calor_especifico]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[calor_especifico]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: calor_especifico_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[calor_especifico]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[calor_especifico]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: calor_especifico_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[calor_especifico]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[calor_especifico]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: calor_especifico_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[calor_especifico]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[calor_especifico]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_atomos:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: tamaño del sistema
+      en: number of atoms
+    summary_rules:
+    - id: numero_atomos_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[numero_atomos]] indica la magnitud física principal que se está interpretando.
+        en: The result [[numero_atomos]] indicates the main physical quantity being interpreted.
+
+[RECORTADO: usa el archivo real como autoridad si necesitas mas detalle]
+INTERPRETACION_ACTUAL_FIN
+
+Required contract:
+- version must remain "5.0.0".
+- id, leaf_id, nombre, scope, dependencies, and target keys must remain synchronized.
+- dependencies.formulas and dependencies.magnitudes must be YAML lists of real ids.
+- output_contract.sections must be exactly: ['summary', 'physical_reading', 'coherence', 'model_validity', 'graph_reading', 'likely_errors', 'next_step']
+- result_blocks must include summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step.
+- Every target must contain rules for summary, physical_reading, coherence, model_validity, likely_errors, and next_step.
+- Every rule must include id, when, status, text.es, text.en.
+- graph_reading_policy.enabled must match whether graph reading is useful for this leaf.
+- free_body_diagram_hint.enabled is true only for Dcl-oriented leaves.
+- No placeholders like <target_id>, TODO, PENDING, completar.
+
+Physics quality:
+- Write interpretation rules that diagnose meaning, signs, units, assumptions, limits, and common misconceptions.
+- Keep rules concise but specific enough for an assistant to explain student calculator results.

@@ -1,0 +1,362 @@
+ui:
+  default_formula: segunda_ley_rotacional
+
+formulas:
+  - id: segunda_ley_rotacional
+    title:
+      es: Segunda Ley de Newton para la Rotación
+      en: Newton's Second Law for Rotation
+    equation: tau = I * alpha
+    latex: '\tau = I \alpha'
+    rearrangements:
+      - target: alpha
+        equation: alpha = tau / I
+        latex: '\alpha = \frac{\tau}{I}'
+      - target: tau
+        equation: tau = I * alpha
+        latex: '\tau = I \alpha'
+      - target: I
+        equation: I = tau / alpha
+        latex: 'I = \frac{\tau}{\alpha}'
+    category: fundamental
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: El torque neto aplicado es proporcional a la aceleración angular, siendo I la resistencia del sistema.
+      en: Net applied torque is proportional to angular acceleration, with I being the system's resistance.
+    constraints:
+      es: Cuerpo rígido, eje de rotación fijo.
+      en: Rigid body, fixed rotation axis.
+    validity:
+      es: Dinámica clásica de rotación.
+      en: Classical rotational dynamics.
+    dimension_check: "[M L^2 T^-2] = [M L^2] * [T^-2]"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: [teoria.md, ejemplos.md]
+    interpretation_tags:
+      - causalidad_rotacional
+      - resistencia_inercial
+      - segunda_ley_analogia
+    result_semantics:
+      - target: alpha
+        kind: respuesta_dinamica
+        sign_meaning:
+          es: Positivo indica aceleración en el sentido de referencia; negativo, desaceleración.
+          en: Positive indicates acceleration in the reference direction; negative means deceleration.
+        absolute_value_meaning:
+          es: Cuán rápido cambia la velocidad angular; mayor |α| implica cambio más brusco del movimiento.
+          en: How quickly angular velocity changes; larger |α| implies more abrupt motion change.
+      - target: I
+        kind: identificacion_inercia
+        sign_meaning:
+          es: Siempre positivo; un I negativo indica datos de entrada físicamente imposibles.
+          en: Always positive; a negative I indicates physically impossible input data.
+        absolute_value_meaning:
+          es: Mayor I indica mayor resistencia al cambio rotacional para ese eje y esa distribución de masa.
+          en: Larger I indicates greater resistance to rotational change for that axis and mass distribution.
+    domain_checks:
+      - condition: "I > 0"
+        message:
+          es: El momento de inercia debe ser siempre positivo. Revisa los datos de entrada.
+          en: Moment of inertia must always be positive. Check input data.
+      - condition: "result != 0 or tau == 0"
+        message:
+          es: Si τ ≠ 0, α no puede ser cero para un cuerpo con inercia finita.
+          en: If τ ≠ 0, α cannot be zero for a body with finite inertia.
+    coherence_checks:
+      - check: "abs(alpha) < 1000"
+        warning:
+          es: Aceleración angular superior a 1000 rad/s² es inusual para sistemas macroscópicos; verifica las unidades.
+          en: Angular acceleration above 1000 rad/s² is unusual for macroscopic systems; verify units.
+      - check: "abs(tau) < 1e6"
+        warning:
+          es: Torque superior a 10⁶ N·m corresponde a maquinaria industrial pesada; confirma el contexto del problema.
+          en: Torque above 10⁶ N·m corresponds to heavy industrial machinery; confirm problem context.
+    graph_implications:
+      - if_increasing: I
+        then:
+          es: Para el mismo τ, α disminuye. El sistema responde más lentamente. Curva más plana en gráfico τ–α.
+          en: For the same τ, α decreases. The system responds more slowly. Flatter curve in τ–α graph.
+      - if_increasing: tau
+        then:
+          es: α aumenta linealmente. Relación de proporcionalidad directa visible en gráfico α–τ con pendiente 1/I.
+          en: α increases linearly. Direct proportionality visible in α–τ graph with slope 1/I.
+    pedagogical_triggers:
+      - when: "I > 100"
+        suggest:
+          es: "Valor de I alto (>100 kg·m²): corresponde a maquinaria industrial, ruedas de vehículos o estructuras grandes. ¿Tiene sentido con el problema planteado?"
+          en: "High I value (>100 kg·m²): corresponds to industrial machinery, vehicle wheels or large structures. Does it match the stated problem?"
+      - when: "alpha < 0.01 and tau > 1"
+        suggest:
+          es: "Aceleración angular muy baja con torque significativo: el momento de inercia es muy grande. ¿Es un sistema masivo distribuido?"
+          en: "Very low angular acceleration with significant torque: moment of inertia is very large. Is it a massive distributed system?"
+
+  - id: definicion_discreta
+    title:
+      es: Definición Discreta del Momento de Inercia
+      en: Discrete Definition of the Moment of Inertia
+    equation: I = sum(m_i * r_i^2)
+    latex: 'I = \sum m_i r_i^2'
+    rearrangements: []
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: Suma de las contribuciones de inercia de cada masa puntual ponderada por el cuadrado de su distancia al eje.
+      en: Sum of inertia contributions of each point mass weighted by the square of its distance from the axis.
+    constraints:
+      es: Masas puntuales, distancias fijas al eje.
+      en: Point masses, fixed distances to the axis.
+    validity:
+      es: Sistemas discretos de partículas.
+      en: Discrete particle systems.
+    dimension_check: "[M L^2] = [M] * [L^2]"
+    calculable: false
+    motivo_no_calculable:
+      es: Requiere una sumatoria sobre varias particulas (m_i, r_i). No es operable en esta calculadora escalar.
+      en: It requires a summation over multiple particles (m_i, r_i). It is not operable in this scalar calculator.
+    used_in: [ejemplos.md, teoria.md]
+    interpretation_tags:
+      - suma_discreta
+      - distribucion_masa
+      - peso_cuadratico_distancia
+    result_semantics:
+      - target: I
+        kind: acumulacion_inercia
+        sign_meaning:
+          es: Siempre positivo; es suma de términos no negativos.
+          en: Always positive; it is a sum of non-negative terms.
+        absolute_value_meaning:
+          es: Cada masa contribuye según r²; un solo elemento lejano puede dominar la inercia total.
+          en: Each mass contributes by r²; a single distant element can dominate the total inertia.
+    domain_checks:
+      - condition: "all(r_i >= 0)"
+        message:
+          es: Todas las distancias deben ser no negativas; distancias negativas no tienen sentido físico.
+          en: All distances must be non-negative; negative distances have no physical meaning.
+      - condition: "all(m_i > 0)"
+        message:
+          es: Las masas individuales deben ser positivas.
+          en: Individual masses must be positive.
+    coherence_checks:
+      - check: "I > 0"
+        warning:
+          es: El resultado debe ser estrictamente positivo salvo que todas las masas estén sobre el eje.
+          en: Result must be strictly positive unless all masses are on the axis.
+    graph_implications:
+      - if_increasing: r_i
+        then:
+          es: La contribución de esa partícula crece cuadráticamente; la inercia total sube de forma no lineal.
+          en: That particle's contribution grows quadratically; total inertia rises non-linearly.
+    pedagogical_triggers:
+      - when: "true"
+        suggest:
+          es: Calcula primero la contribución de la partícula más lejana. Suele ser dominante por la dependencia r².
+          en: First calculate the contribution of the farthest particle. It usually dominates due to r² dependence.
+
+  - id: definicion_continua
+    title:
+      es: Definición Integral del Momento de Inercia
+      en: Integral Definition of the Moment of Inertia
+    equation: I = int(r^2 dm)
+    latex: 'I = \int r^2 \, dm'
+    rearrangements: []
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: Distribución continua de masa integrada con peso cuadrático en la distancia al eje.
+      en: Continuous mass distribution integrated with quadratic weight on distance from axis.
+    constraints:
+      es: Cuerpo rígido continuo; se requiere función de densidad y geometría conocidas.
+      en: Continuous rigid body; density function and geometry must be known.
+    validity:
+      es: Sólidos rígidos de geometría analítica regular o numérica.
+      en: Rigid solids with regular analytic or numerical geometry.
+    dimension_check: "[M L^2] = [L^2] * [M]"
+    calculable: false
+    motivo_no_calculable:
+      es: Requiere integracion simbolica o numerica segun la geometria especifica del cuerpo.
+      en: It requires symbolic or numerical integration depending on the specific body geometry.
+    used_in: [teoria.md, modelos.md]
+    interpretation_tags:
+      - integral_volumen
+      - geometria_continua
+      - modelo_solido_rigido
+    result_semantics:
+      - target: I
+        kind: integral_geometrica
+        sign_meaning:
+          es: Siempre positivo; el integrando r²dm es no negativo en todo el dominio.
+          en: Always positive; the integrand r²dm is non-negative throughout the domain.
+        absolute_value_meaning:
+          es: Refleja cómo la geometría del cuerpo distribuye la masa respecto al eje. Formas huecas dan I mayor que formas sólidas del mismo radio y masa.
+          en: Reflects how the body's geometry distributes mass relative to the axis. Hollow shapes yield larger I than solid shapes of the same radius and mass.
+    domain_checks:
+      - condition: "dm >= 0"
+        message:
+          es: La densidad local debe ser no negativa en todo el dominio de integración.
+          en: Local density must be non-negative throughout the integration domain.
+    coherence_checks:
+      - check: "I >= I_cm"
+        warning:
+          es: I respecto a cualquier eje no puede ser menor que I_cm. Si el resultado es menor, el eje elegido es incorrecto.
+          en: I relative to any axis cannot be less than I_cm. If result is smaller, the chosen axis is incorrect.
+    graph_implications:
+      - if_increasing: geometry_radius
+        then:
+          es: I crece como la potencia 4 del radio para cuerpos con geometría circular (R⁴ en el numerador de la integral).
+          en: I grows as the 4th power of radius for circular-geometry bodies (R⁴ in the integral numerator).
+    pedagogical_triggers:
+      - when: "true"
+        suggest:
+          es: Para cuerpos estándar usa directamente las fórmulas tabuladas. La integral se necesita solo para formas no convencionales.
+          en: For standard bodies use tabulated formulas directly. The integral is only needed for non-conventional shapes.
+
+  - id: radio_giro
+    title:
+      es: Momento de Inercia mediante Radio de Giro
+      en: Moment of Inertia via Radius of Gyration
+    equation: I = m * k^2
+    latex: 'I = m k^2'
+    rearrangements:
+      - target: k
+        equation: k = sqrt(I / m)
+        latex: 'k = \sqrt{\frac{I}{m}}'
+      - target: I
+        equation: I = m * k^2
+        latex: 'I = m k^2'
+      - target: m
+        equation: m = I / k^2
+        latex: 'm = \frac{I}{k^2}'
+    category: auxiliary
+    relation_type: definition
+    physical_meaning:
+      es: Condensa la inercia del cuerpo en un radio equivalente donde se podría concentrar toda la masa.
+      en: Condenses body inertia into an equivalent radius where all mass could be concentrated.
+    constraints:
+      es: Conocimiento previo del momento de inercia total y la masa total.
+      en: Prior knowledge of total moment of inertia and total mass required.
+    validity:
+      es: Ingeniería estructural y diseño mecánico; catálogos de perfiles.
+      en: Structural engineering and mechanical design; profile catalogs.
+    dimension_check: "[M L^2] = [M] * [L^2]"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: [modelos.md, teoria.md]
+    interpretation_tags:
+      - radio_equivalente
+      - simplificacion_geometrica
+      - herramienta_ingenieria
+    result_semantics:
+      - target: k
+        kind: longitud_efectiva
+        sign_meaning:
+          es: Siempre positivo; es una distancia efectiva.
+          en: Always positive; it is an effective distance.
+        absolute_value_meaning:
+          es: k ≤ r_max de la geometría real. Si k supera el radio máximo del objeto, la inercia I o la masa m tienen error.
+          en: k ≤ r_max of the real geometry. If k exceeds the object's maximum radius, I or m has an error.
+    domain_checks:
+      - condition: "m > 0"
+        message:
+          es: La masa debe ser positiva para calcular el radio de giro.
+          en: Mass must be positive to calculate the radius of gyration.
+      - condition: "I >= 0"
+        message:
+          es: El momento de inercia debe ser no negativo.
+          en: Moment of inertia must be non-negative.
+    coherence_checks:
+      - check: "k <= r_max_object"
+        warning:
+          es: El radio de giro no puede ser mayor que la dimensión máxima del objeto. Un valor mayor indica error en I o m.
+          en: Radius of gyration cannot exceed the object's maximum dimension. A higher value indicates error in I or m.
+    graph_implications:
+      - if_increasing: I
+        then:
+          es: k aumenta como √I; la relación no es lineal.
+          en: k increases as √I; the relationship is not linear.
+    pedagogical_triggers:
+      - when: "true"
+        suggest:
+          es: Compara k con el radio máximo geométrico del objeto para validar el resultado.
+          en: Compare k with the object's maximum geometric radius to validate the result.
+
+  - id: energia_rotacional
+    title:
+      es: Energía Cinética de Rotación
+      en: Rotational Kinetic Energy
+    equation: K_rot = 0.5 * I * omega^2
+    latex: 'K_{rot} = \frac{1}{2} I \omega^2'
+    rearrangements:
+      - target: omega
+        equation: omega = sqrt(2 * K_rot / I)
+        latex: '\omega = \sqrt{\frac{2 K_{rot}}{I}}'
+      - target: K_rot
+        equation: K_rot = 0.5 * I * omega^2
+        latex: 'K_{rot} = \frac{1}{2} I \omega^2'
+      - target: I
+        equation: I = 2 * K_rot / omega^2
+        latex: 'I = \frac{2 K_{rot}}{\omega^2}'
+    category: derived
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: Energía cinética almacenada en el movimiento rotacional; análoga a ½mv² pero para la rotación.
+      en: Kinetic energy stored in rotational motion; analogous to ½mv² but for rotation.
+    constraints:
+      es: Eje fijo, cuerpo rígido, velocidad angular uniforme o instantánea.
+      en: Fixed axis, rigid body, uniform or instantaneous angular velocity.
+    validity:
+      es: Balances de energía mecánica en sistemas rotativos.
+      en: Mechanical energy balances in rotating systems.
+    dimension_check: "[M L^2 T^-2] = [M L^2] * [T^-1]^2"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: [aplicaciones.md, teoria.md]
+    interpretation_tags:
+      - energia_cinetica_rotacional
+      - almacenamiento_energia
+      - volante_inercia
+    result_semantics:
+      - target: omega
+        kind: velocidad_rotacional
+        sign_meaning:
+          es: ω siempre positivo aquí (raíz cuadrada). El sentido de giro no afecta K_rot.
+          en: ω always positive here (square root). Direction of rotation does not affect K_rot.
+        absolute_value_meaning:
+          es: Cuanto mayor sea ω, más energía está almacenada en el giro. Relación cuadrática.
+          en: The larger ω, the more energy is stored in the rotation. Quadratic relationship.
+    domain_checks:
+      - condition: "K_rot >= 0"
+        message:
+          es: La energía cinética rotacional debe ser no negativa.
+          en: Rotational kinetic energy must be non-negative.
+      - condition: "I > 0"
+        message:
+          es: Momento de inercia debe ser positivo para calcular la velocidad angular.
+          en: Moment of inertia must be positive to calculate angular velocity.
+    coherence_checks:
+      - check: "omega < 1e5"
+        warning:
+          es: Velocidad angular superior a 10⁵ rad/s es extrema (>955 000 RPM). Verifica las unidades y el contexto.
+          en: Angular velocity above 10⁵ rad/s is extreme (>955,000 RPM). Check units and context.
+      - check: "K_rot < 1e9"
+        warning:
+          es: Energía cinética rotacional superior a 10⁹ J equivale a cientos de kg de TNT. ¿Es coherente con el sistema?
+          en: Rotational kinetic energy above 10⁹ J equals hundreds of kg of TNT. Is this consistent with the system?
+    graph_implications:
+      - if_increasing: omega
+        then:
+          es: K_rot crece cuadráticamente con ω. Duplicar ω cuadruplica la energía almacenada.
+          en: K_rot grows quadratically with ω. Doubling ω quadruples the stored energy.
+      - if_increasing: I
+        then:
+          es: K_rot aumenta linealmente con I para ω constante. Gran inercia = gran reserva energética.
+          en: K_rot increases linearly with I at constant ω. Large inertia = large energy reserve.
+    pedagogical_triggers:
+      - when: "omega > 100"
+        suggest:
+          es: "Alta velocidad angular (>100 rad/s ≈ 955 RPM): la energía cinética rotacional puede ser muy significativa; considera si necesitas también la energía traslacional si el cuerpo también se mueve."
+          en: "High angular velocity (>100 rad/s ≈ 955 RPM): rotational kinetic energy may be very significant; consider whether translational kinetic energy is also needed if the body also translates."
+      - when: "K_rot > 1000"
+        suggest:
+          es: "Energía rotacional superior a 1 kJ: este sistema podría almacenar energía útil como un volante de inercia."
+          en: "Rotational energy above 1 kJ: this system could store useful energy like a flywheel."

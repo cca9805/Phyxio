@@ -1,0 +1,421 @@
+﻿version: 5.0.0
+id: interruptores
+leaf_id: interruptores
+nombre:
+  es: Interruptores
+  en: Switches
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: electricidad-domestica
+  parent_id: electricidad-domestica
+  ruta_relativa: fisica-clasica/electromagnetismo/electricidad-domestica/interruptores
+  orden: 298400
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: false
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: false
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: false
+  preferred_type: none
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - corriente
+  - perdida_on
+  - energia_on
+  magnitudes:
+  - potencia_de_la_carga
+  - tension_de_alimentacion
+  - corriente_de_maniobra
+  - resistencia_en_estado_on
+  - perdida_resistiva_en_on
+  - t_on
+  - energia_disipada_en_conduccion
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: false
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: false
+  type: none
+  channels: []
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: false
+  primary_variable: corriente_de_maniobra
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  corriente_de_maniobra:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de corriente_de_maniobra
+      en: Result of corriente_de_maniobra
+    summary_rules:
+    - id: I_summary
+      when: 'true'
+      status: info
+      text:
+        es: I es la corriente que el interruptor debe conducir. Se calcula como P/V para cargas resistivas. Define el dimensionamiento
+          del interruptor y es la entrada para calcular P_on.
+        en: I is the current the switch must conduct. Calculated as P/V for resistive loads. Defines switch sizing and is
+          the input for calculating P_on.
+    physical_reading_rules:
+    - id: I_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'I determina cuanto se calienta el interruptor: P_on crece con I al cuadrado. Un interruptor de calefactor conduce
+          30-50 veces mas corriente que uno de iluminacion, generando 900-2500 veces mas calor en el contacto.'
+        en: 'I determines how much the switch heats up: P_on grows with I squared. A heater switch conducts 30-50 times more
+          current than a lighting switch, generating 900-2500 times more heat at the contact.'
+    coherence_rules:
+    - id: I_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: I = P/V. Con V = 230 V, un equipo de 2300 W demanda I = 10 A. Verificar que P esta en vatios y V en voltios.
+        en: I = P/V. With V = 230 V, a 2300 W device demands I = 10 A. Verify P is in watts and V in volts.
+    model_validity_rules:
+    - id: I_validity
+      when: 'true'
+      status: ok
+      text:
+        es: I = P/V es valido para cargas con factor de potencia unitario. Para cargas inductivas o capacitivas, la corriente
+          real puede ser mayor que P/V.
+        en: I = P/V is valid for unity power factor loads. For inductive or capacitive loads, actual current may be greater
+          than P/V.
+    graph_rules:
+    - id: I_graph
+      when: 'true'
+      status: info
+      text:
+        es: I crece linealmente con P a V fija. En el eje horizontal P (vatios), el eje vertical I (amperios) tiene pendiente
+          1/V.
+        en: I grows linearly with P at fixed V. On the horizontal axis P (watts), the vertical axis I (amperes) has slope
+          1/V.
+    likely_errors:
+    - id: I_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir la resistencia interna R_on del interruptor con la resistencia de la carga lleva a incluir R_on en el calculo de I. R_on es tipicamente 0.01-0.1 ohm frente a R_carga de cientos de ohmios, por lo que su efecto sobre I es despreciable.'
+        en: 'A common mistake is to confuse the switch internal resistance R_on with the load resistance and include R_on in the calculation of I. R_on is typically 0.01-0.1 ohm vs R_load of hundreds of ohms, so its effect on I is negligible.'
+    next_step_rules:
+    - id: I_next
+      when: 'true'
+      status: info
+      text:
+        es: Con I calculada, verificar que I <= I_nominal del interruptor y calcular P_on = I^2 * R_on para estimar el riesgo
+          termico.
+        en: With I calculated, verify I <= nominal switch current and calculate P_on = I^2 * R_on to estimate thermal risk.
+    physical_intuition:
+    - id: corriente_de_maniobra_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[corriente_de_maniobra]] describe el estado dinámico.
+        en: Intuitively, [[corriente_de_maniobra]] describes the dynamic state.
+    limiting_cases:
+    - id: corriente_de_maniobra_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[corriente_de_maniobra]].
+        en: Check limiting cases of [[corriente_de_maniobra]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  perdida_resistiva_en_on:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de perdida_resistiva_en_on
+      en: Result of perdida_resistiva_en_on
+    summary_rules:
+    - id: Pon_high
+      when: P_on > 5
+      status: error
+      text:
+        es: 'P_on > 5 W: disipacion de contacto elevada. Riesgo termico local significativo. Inspeccionar y sustituir el interruptor.'
+        en: 'P_on > 5 W: high contact dissipation. Significant local thermal risk. Inspect and replace the switch.'
+    - id: Pon_medium
+      when: 'true'
+      status: warning
+      text:
+        es: 'P_on entre 1 y 5 W: disipacion moderada. Vigilar la temperatura del interruptor en uso continuo.'
+        en: 'P_on between 1 and 5 W: moderate dissipation. Monitor switch temperature in continuous use.'
+    - id: Pon_ok
+      when: P_on < 1
+      status: ok
+      text:
+        es: 'P_on < 1 W: disipacion de contacto baja. Sin riesgo termico apreciable en condiciones normales.'
+        en: 'P_on < 1 W: low contact dissipation. No appreciable thermal risk under normal conditions.'
+    physical_reading_rules:
+    - id: Pon_physical
+      when: P_on >= 1
+      status: warning
+      text:
+        es: P_on >= 1 W indica calentamiento apreciable del contacto. La dependencia cuadratica en I hace que duplicar la
+          carga cuadruplique la disipacion.
+        en: P_on >= 1 W indicates noticeable contact heating. The quadratic dependence on I means doubling the load quadruples
+          dissipation.
+    coherence_rules:
+    - id: Pon_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: P_on = I^2 * R_on. Verificar que I esta en amperios y R_on en ohmios para obtener P_on en vatios.
+        en: P_on = I^2 * R_on. Verify I is in amperes and R_on in ohms to get P_on in watts.
+    model_validity_rules:
+    - id: Pon_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo P_on = I^2 * R_on es valido en regimen permanente con carga resistiva. Para cargas inductivas o ciclos
+          frecuentes, el modelo estatico puede subestimar la degradacion real.
+        en: The model P_on = I^2 * R_on is valid in steady state with resistive load. For inductive loads or frequent cycles,
+          the static model may underestimate actual degradation.
+    graph_rules:
+    - id: Pon_graph
+      when: 'true'
+      status: info
+      text:
+        es: P_on se puede representar como curva parabolica en funcion de I a R_on fija. La forma parabolica ilustra la dependencia
+          cuadratica.
+        en: P_on can be represented as a parabolic curve vs I at fixed R_on. The parabolic shape illustrates the quadratic
+          dependence.
+    likely_errors:
+    - id: Pon_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error frecuente: calcular P_on = I * R_on omitiendo el cuadrado de I. Verificar dimensionalmente: A^2 * ohm =
+          W, no A * ohm = V.'
+        en: 'Frequent error: calculating P_on = I * R_on omitting the square of I. Check dimensionally: A^2 * ohm = W, not
+          A * ohm = V.'
+    next_step_rules:
+    - id: Pon_next
+      when: P_on >= 1
+      status: warning
+      text:
+        es: Con P_on >= 1 W, calcular E_on = P_on * t_on para el periodo de uso y evaluar si la disipacion acumulada es relevante.
+        en: With P_on >= 1 W, calculate E_on = P_on * t_on for the usage period and evaluate whether accumulated dissipation
+          is relevant.
+    physical_intuition:
+    - id: perdida_resistiva_en_on_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[perdida_resistiva_en_on]] describe el estado dinámico.
+        en: Intuitively, [[perdida_resistiva_en_on]] describes the dynamic state.
+    limiting_cases:
+    - id: perdida_resistiva_en_on_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[perdida_resistiva_en_on]].
+        en: Check limiting cases of [[perdida_resistiva_en_on]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_disipada_en_conduccion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de energia_disipada_en_conduccion
+      en: Result of energia_disipada_en_conduccion
+    summary_rules:
+    - id: Eon_summary
+      when: 'true'
+      status: info
+      text:
+        es: E_on es la energia total disipada en los contactos durante el periodo de conduccion. Se usa para analisis energetico,
+          no como criterio de riesgo termico (ese es P_on).
+        en: E_on is the total energy dissipated in the contacts during the conduction period. Used for energy analysis, not
+          as thermal risk criterion (that is P_on).
+    physical_reading_rules:
+    - id: Eon_physical
+      when: 'true'
+      status: info
+      text:
+        es: E_on grande no implica riesgo termico alto. El riesgo depende de P_on (potencia instantanea), no de E_on (energia
+          acumulada). Un calentamiento de 0.1 W durante un dia da E_on grande pero temperatura de equilibrio baja.
+        en: Large E_on does not imply high thermal risk. Risk depends on P_on (instantaneous power), not E_on (accumulated
+          energy). Heating of 0.1 W for a day gives large E_on but low equilibrium temperature.
+    coherence_rules:
+    - id: Eon_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: 'E_on = P_on * t_on. Con t_on en segundos y P_on en vatios, E_on en julios. Para convertir a Wh: E_on / 3600.'
+        en: 'E_on = P_on * t_on. With t_on in seconds and P_on in watts, E_on in joules. To convert to Wh: E_on / 3600.'
+    model_validity_rules:
+    - id: Eon_validity
+      when: 'true'
+      status: ok
+      text:
+        es: E_on = P_on * t_on es valido cuando P_on es aproximadamente constante durante t_on. Para ciclos de carga variable,
+          E_on = integral de P_on dt.
+        en: E_on = P_on * t_on is valid when P_on is approximately constant during t_on. For variable load cycles, E_on =
+          integral of P_on dt.
+    graph_rules:
+    - id: Eon_graph
+      when: 'true'
+      status: info
+      text:
+        es: E_on crece linealmente con t_on a P_on fija. La pendiente es P_on.
+        en: E_on grows linearly with t_on at fixed P_on. The slope is P_on.
+    likely_errors:
+    - id: Eon_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error frecuente: interpretar E_on grande como riesgo termico alto. E_on es energia acumulada; el riesgo termico
+          lo determina P_on (la tasa de disipacion instantanea).'
+        en: 'Frequent error: interpreting large E_on as high thermal risk. E_on is accumulated energy; thermal risk is determined
+          by P_on (the instantaneous dissipation rate).'
+    next_step_rules:
+    - id: Eon_next
+      when: 'true'
+      status: info
+      text:
+        es: Con E_on calculada, dividir entre 3 600 000 para obtener kWh y estimar el coste energetico de las perdidas del
+          interruptor.
+        en: With E_on calculated, divide by 3,600,000 to get kWh and estimate the energy cost of switch losses.
+    physical_intuition:
+    - id: energia_disipada_en_conduccion_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_disipada_en_conduccion]] describe el estado dinámico.
+        en: Intuitively, [[energia_disipada_en_conduccion]] describes the dynamic state.
+    limiting_cases:
+    - id: energia_disipada_en_conduccion_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[energia_disipada_en_conduccion]].
+        en: Check limiting cases of [[energia_disipada_en_conduccion]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

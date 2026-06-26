@@ -1,0 +1,182 @@
+const e=`version: 1
+id: curvas-planas-y-peraltadas
+leaf_id: curvas-planas-y-peraltadas
+nombre:
+  es: Curvas planas y peraltadas
+  en: Flat and Banked Curves
+scope: leaf
+result_blocks:
+  summary:
+    title: {es: Resumen del resultado, en: Result summary}
+    type: text
+  coherence:
+    title: {es: Coherencia del resultado, en: Result coherence}
+    type: text
+  physical_reading:
+    title: {es: Lectura fisica, en: Physical reading}
+    type: text
+  model_validity:
+    title: {es: Validez del modelo, en: Model validity}
+    type: text
+  graph_reading:
+    title: {es: Lectura del grafico, en: Graph reading}
+    type: text
+  likely_errors:
+    title: {es: Errores probables, en: Likely errors}
+    type: text
+  next_step:
+    title: {es: Siguiente paso, en: Next step}
+    type: text
+output_contract:
+  sections:
+    - summary
+    - coherence
+    - physical_reading
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+dependencies:
+  formulas:
+    - radial_base
+    - curva_plana_vmax
+    - peralte_ideal
+    - adherencia_maxima
+  magnitudes:
+    - m
+    - r
+    - v
+    - g
+    - mu
+    - th
+    - Nn
+    - fs
+    - Frad
+    - ac
+targets:
+  v:
+    summary_rules:
+      - {id: v_high, when: "v > 50", status: warning, text: {es: "Velocidad muy alta para un vehiculo terrestre.", en: "Very high speed for a ground vehicle."}}
+      - {id: v_ok, when: "v <= 50", status: ok, text: {es: "La velocidad es razonable y resume la exigencia radial que debera compensar la curva.", en: "The speed is reasonable and summarizes the radial demand that the curve must compensate."}}
+    coherence_rules:
+      - {id: v_pos, when: "v >= 0", status: ok, text: {es: "Velocidad positiva.", en: "Speed is positive."}}
+    physical_reading_rules:
+      - {id: v_phys, when: "v > 0", status: ok, text: {es: "La lectura fisica correcta es que, al aumentar v, crece porque tambien aumenta la Frad necesaria para doblar la trayectoria.", en: "The correct physical reading is that as v increases, the required Frad also increases because the path must bend more strongly."}}
+    model_validity_rules:
+      - {id: v_valid, when: "v < 100", status: ok, text: {es: "Modelo valido para velocidades terrestres.", en: "Model valid for land speeds."}}
+    graph_rules:
+      - {id: v_graph, when: "v > 0", status: ok, text: {es: "v crece con la raiz de r.", en: "v grows with the square root of r."}}
+    likely_errors:
+      - {id: v_err_units, when: "v > 200", status: warning, text: {es: "Un error probable es confundir km/h con m/s o creer que una curva plana y una peraltada responden igual a la misma velocidad.", en: "A likely mistake is to confuse km/h with m/s or to believe that a flat and a banked curve respond the same way at the same speed."}}
+    next_step_rules:
+      - {id: v_next, when: "v > 0", status: ok, text: {es: "Comparar con la velocidad real de circulacion.", en: "Compare with the actual traffic speed."}}
+  r:
+    summary_rules:
+      - {id: r_small, when: "r < 10", status: warning, text: {es: "Radio muy pequeno.", en: "Very small radius."}}
+      - {id: r_ok, when: "r >= 10", status: ok, text: {es: "Radio razonable.", en: "Reasonable radius."}}
+    coherence_rules:
+      - {id: r_pos, when: "r > 0", status: ok, text: {es: "Radio positivo.", en: "Radius is positive."}}
+    physical_reading_rules:
+      - {id: r_phys, when: "r > 0", status: ok, text: {es: "Radio minimo para esa velocidad y coeficiente.", en: "Minimum radius for that speed and coefficient."}}
+    model_validity_rules:
+      - {id: r_valid, when: "r > 1", status: ok, text: {es: "Modelo valido en escala de carretera.", en: "Model valid at road scale."}}
+    graph_rules:
+      - {id: r_graph, when: "r > 0", status: ok, text: {es: "r crece con v al cuadrado.", en: "r grows with v squared."}}
+    likely_errors:
+      - {id: r_err, when: "r < 1", status: warning, text: {es: "Radio menor que 1 m es inusual para un vehiculo.", en: "Radius less than 1 m is unusual for a vehicle."}}
+    next_step_rules:
+      - {id: r_next, when: "r > 0", status: ok, text: {es: "Verificar que el radio es compatible con el trazado real.", en: "Verify the radius is compatible with the real layout."}}
+  m:
+    summary_rules:
+      - {id: m_ok, when: "m > 0", status: ok, text: {es: "Masa positiva.", en: "Mass is positive."}}
+    coherence_rules:
+      - {id: m_pos, when: "m > 0", status: ok, text: {es: "Masa positiva coherente.", en: "Positive mass is coherent."}}
+    physical_reading_rules:
+      - {id: m_phys, when: "m > 0", status: ok, text: {es: "m se cancela en la velocidad maxima.", en: "m cancels in the maximum speed."}}
+    model_validity_rules:
+      - {id: m_valid, when: "m > 0", status: ok, text: {es: "Modelo valido para cualquier masa.", en: "Model valid for any mass."}}
+    graph_rules:
+      - {id: m_graph, when: "m > 0", status: ok, text: {es: "La masa no afecta la velocidad maxima en curva plana.", en: "Mass does not affect maximum speed on a flat curve."}}
+    likely_errors:
+      - {id: m_err, when: "m < 0.01", status: warning, text: {es: "Masa muy pequena para un vehiculo.", en: "Very small mass for a vehicle."}}
+    next_step_rules:
+      - {id: m_next, when: "m > 0", status: ok, text: {es: "Calcular la fuerza centripeta necesaria.", en: "Calculate the required centripetal force."}}
+  mu:
+    summary_rules:
+      - {id: mu_high, when: "mu > 1", status: warning, text: {es: "Coeficiente inusualmente alto.", en: "Unusually high coefficient."}}
+      - {id: mu_ok, when: "mu <= 1", status: ok, text: {es: "Coeficiente razonable.", en: "Reasonable coefficient."}}
+    coherence_rules:
+      - {id: mu_pos, when: "mu > 0", status: ok, text: {es: "Coeficiente positivo.", en: "Coefficient is positive."}}
+    physical_reading_rules:
+      - {id: mu_phys, when: "mu > 0", status: ok, text: {es: "mu minimo necesario para no derrapar.", en: "Minimum mu needed to avoid skidding."}}
+    model_validity_rules:
+      - {id: mu_valid, when: "mu < 1.5", status: ok, text: {es: "Modelo valido para coeficientes reales.", en: "Model valid for real coefficients."}}
+    graph_rules:
+      - {id: mu_graph, when: "mu > 0", status: ok, text: {es: "v crece con la raiz de mu.", en: "v grows with the square root of mu."}}
+    likely_errors:
+      - {id: mu_err, when: "mu > 1.2", status: warning, text: {es: "Revisar que no se haya confundido con coeficiente cinetico.", en: "Check that kinetic coefficient was not used."}}
+    next_step_rules:
+      - {id: mu_next, when: "mu > 0", status: ok, text: {es: "Comparar con los coeficientes del material.", en: "Compare with material coefficients."}}
+  th:
+    summary_rules:
+      - {id: th_high, when: "th > 0.5", status: warning, text: {es: "Angulo de peralte muy alto.", en: "Very high banking angle."}}
+      - {id: th_ok, when: "th <= 0.5", status: ok, text: {es: "Angulo razonable.", en: "Reasonable angle."}}
+    coherence_rules:
+      - {id: th_pos, when: "th >= 0", status: ok, text: {es: "Angulo no negativo.", en: "Angle is non-negative."}}
+    physical_reading_rules:
+      - {id: th_phys, when: "th > 0", status: ok, text: {es: "Angulo de peralte optimo.", en: "Optimal banking angle."}}
+    model_validity_rules:
+      - {id: th_valid, when: "th < 1", status: ok, text: {es: "Modelo valido para angulos menores que pi/4.", en: "Model valid for angles less than pi/4."}}
+    graph_rules:
+      - {id: th_graph, when: "th > 0", status: ok, text: {es: "th crece con v al cuadrado.", en: "th grows with v squared."}}
+    likely_errors:
+      - {id: th_err, when: "th > 0.8", status: warning, text: {es: "Angulo muy grande; revisar unidades.", en: "Very large angle; check units."}}
+    next_step_rules:
+      - {id: th_next, when: "th >= 0", status: ok, text: {es: "Verificar la velocidad para la que se optimiza.", en: "Check the speed for which it is optimised."}}
+  Frad:
+    summary_rules:
+      - {id: Frad_high, when: "Frad > 10000", status: warning, text: {es: "La resultante radial es muy alta e indica que la curva exige mucha adherencia o una ayuda geometrica clara del peralte.", en: "The radial resultant is very high and indicates that the curve demands strong grip or clear geometric help from banking."}}
+      - {id: Frad_ok, when: "Frad <= 10000", status: ok, text: {es: "La resultante radial resume de forma coherente la accion hacia el centro que la carretera debe suministrar.", en: "The radial resultant coherently summarizes the inward action that the road must supply."}}
+    coherence_rules:
+      - {id: Frad_pos, when: "Frad >= 0", status: ok, text: {es: "Fuerza radial positiva.", en: "Radial force is positive."}}
+    physical_reading_rules:
+      - {id: Frad_phys, when: "Frad > 0", status: ok, text: {es: "Frad es la fuerza centripeta necesaria.", en: "Frad is the required centripetal force."}}
+    model_validity_rules:
+      - {id: Frad_valid, when: "Frad > 0", status: ok, text: {es: "Modelo valido.", en: "Model valid."}}
+    graph_rules:
+      - {id: Frad_graph, when: "Frad > 0", status: ok, text: {es: "Frad crece con v al cuadrado.", en: "Frad grows with v squared."}}
+    likely_errors:
+      - {id: Frad_err, when: "Frad < 0", status: warning, text: {es: "Fuerza centripeta no puede ser negativa.", en: "Centripetal force cannot be negative."}}
+    next_step_rules:
+      - {id: Frad_next, when: "Frad > 0", status: ok, text: {es: "Identificar las fuerzas reales que aportan esa resultante.", en: "Identify the real forces providing that resultant."}}
+  fs:
+    summary_rules:
+      - {id: fs_ok, when: "fs >= 0", status: ok, text: {es: "Friccion positiva.", en: "Friction is positive."}}
+    coherence_rules:
+      - {id: fs_pos, when: "fs >= 0", status: ok, text: {es: "Friccion coherente.", en: "Friction is coherent."}}
+    physical_reading_rules:
+      - {id: fs_phys, when: "fs > 0", status: ok, text: {es: "fs es la maxima friccion disponible.", en: "fs is the maximum available friction."}}
+    model_validity_rules:
+      - {id: fs_valid, when: "fs > 0", status: ok, text: {es: "Modelo valido si fs no supera mu por N.", en: "Model valid if fs does not exceed mu times N."}}
+    graph_rules:
+      - {id: fs_graph, when: "fs >= 0", status: ok, text: {es: "fs crece linealmente con N.", en: "fs grows linearly with N."}}
+    likely_errors:
+      - {id: fs_err, when: "fs < 0", status: warning, text: {es: "Friccion no puede ser negativa en modulo.", en: "Friction cannot be negative in magnitude."}}
+    next_step_rules:
+      - {id: fs_next, when: "fs >= 0", status: ok, text: {es: "Comparar con la fuerza centripeta necesaria.", en: "Compare with the required centripetal force."}}
+  Nn:
+    summary_rules:
+      - {id: Nn_ok, when: "Nn > 0", status: ok, text: {es: "Normal positiva.", en: "Normal force is positive."}}
+    coherence_rules:
+      - {id: Nn_pos, when: "Nn > 0", status: ok, text: {es: "Normal positiva coherente.", en: "Positive normal is coherent."}}
+    physical_reading_rules:
+      - {id: Nn_phys, when: "Nn > 0", status: ok, text: {es: "N es la fuerza de contacto perpendicular.", en: "N is the perpendicular contact force."}}
+    model_validity_rules:
+      - {id: Nn_valid, when: "Nn > 0", status: ok, text: {es: "Modelo valido con contacto.", en: "Model valid with contact."}}
+    graph_rules:
+      - {id: Nn_graph, when: "Nn > 0", status: ok, text: {es: "fs crece con N.", en: "fs grows with N."}}
+    likely_errors:
+      - {id: Nn_err, when: "Nn <= 0", status: warning, text: {es: "Normal nula o negativa indica perdida de contacto.", en: "Zero or negative normal indicates loss of contact."}}
+    next_step_rules:
+      - {id: Nn_next, when: "Nn > 0", status: ok, text: {es: "Calcular la friccion maxima disponible.", en: "Calculate the maximum available friction."}}
+`;export{e as default};

@@ -1,0 +1,174 @@
+const e=`version: 5
+magnitudes:
+- id: F
+  symbol: F_i
+  nombre: { es: fuerza aplicada, en: applied force }
+  unidad_si: N
+  descripcion: { es: Fuerza activa aplicada sobre la particula o elemento i., en: Active force applied to particle or element i. }
+  dimension: MLT^{-2}
+  is_vector: true
+  components: [ Fx, Fy, Fz ]
+  category: base_or_parameter
+  physical_role: applied_force
+  used_in: [ fuerza_efectiva_dalembert, trabajo_virtual_dinamico, fuerza_generalizada_desde_trabajo_virtual ]
+  common_mistake: Incluir fuerzas de ligadura ideales como si aportaran trabajo virtual neto.
+  typical_range: Depende del sistema.
+  sign_behavior: { has_sign: true, meaning: { es: Depende del eje y sentido elegido., en: It depends on axis and orientation. } }
+  zero_behavior: { allowed: true, meaning: { es: Puede no haber fuerza activa en una direccion., en: There may be no active force in a direction. } }
+  value_nature: { kind: vector, nonnegative_only: false, expected_interval: context-dependent }
+  interpretation_role: { primary_for: [], secondary_for: [ principio-de-dalembert-y-trabajo-virtual ] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: Separar fuerzas activas de reacciones ideales es el punto critico.
+- id: m
+  symbol: m_i
+  nombre: { es: masa, en: mass }
+  unidad_si: kg
+  descripcion: { es: Masa de la particula o elemento i., en: Mass of particle or element i. }
+  dimension: M
+  is_vector: false
+  components: []
+  category: base_or_parameter
+  physical_role: inertia
+  used_in: [ fuerza_efectiva_dalembert, trabajo_virtual_dinamico ]
+  common_mistake: Usar masas inconsistentes entre fuerza de inercia y aceleracion.
+  typical_range: Positiva.
+  sign_behavior: { has_sign: false, meaning: { es: La masa inercial ordinaria es positiva., en: Ordinary inertial mass is positive. } }
+  zero_behavior: { allowed: false, meaning: { es: Masa nula no pertenece al modelo mecanico clasico usado., en: Zero mass is outside this classical mechanical model. } }
+  value_nature: { kind: scalar, nonnegative_only: true, expected_interval: m > 0 }
+  interpretation_role: { primary_for: [], secondary_for: [] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: La masa escala el termino inercial que se resta.
+- id: a
+  symbol: a_i
+  nombre: { es: aceleracion, en: acceleration }
+  unidad_si: m/s^2
+  descripcion: { es: Aceleracion real de la particula o elemento i., en: Real acceleration of particle or element i. }
+  dimension: LT^{-2}
+  is_vector: true
+  components: [ ax, ay, az ]
+  category: derived
+  physical_role: acceleration
+  used_in: [ fuerza_efectiva_dalembert, trabajo_virtual_dinamico ]
+  common_mistake: Confundir aceleracion real con desplazamiento virtual.
+  typical_range: Depende del sistema.
+  sign_behavior: { has_sign: true, meaning: { es: Depende del sentido elegido., en: It depends on the chosen direction. } }
+  zero_behavior: { allowed: true, meaning: { es: Puede haber equilibrio estatico o velocidad constante., en: Static equilibrium or constant velocity may occur. } }
+  value_nature: { kind: vector, nonnegative_only: false, expected_interval: context-dependent }
+  interpretation_role: { primary_for: [], secondary_for: [] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: La fuerza de inercia usa la aceleracion real con signo opuesto.
+- id: Feff
+  symbol: F_i^{eff}
+  nombre: { es: fuerza efectiva de D'Alembert, en: D'Alembert effective force }
+  unidad_si: N
+  descripcion: { es: Diferencia entre fuerza aplicada y termino inercial., en: Difference between applied force and inertial term. }
+  dimension: MLT^{-2}
+  is_vector: true
+  components: []
+  category: derived
+  physical_role: dynamic_equilibrium_force
+  used_in: [ fuerza_efectiva_dalembert ]
+  common_mistake: Interpretarla como una fuerza nueva ejercida por otro cuerpo.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: true, meaning: { es: Indica desequilibrio dinamico compatible con la variacion., en: It indicates dynamic imbalance compatible with the variation. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero indica balance local en esa direccion., en: Zero indicates local balance in that direction. } }
+  value_nature: { kind: vector, nonnegative_only: false, expected_interval: context-dependent }
+  interpretation_role: { primary_for: [ principio-de-dalembert-y-trabajo-virtual ], secondary_for: [] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: Feff reorganiza Newton como equilibrio dinamico.
+- id: dr
+  symbol: \\delta r_i
+  nombre: { es: desplazamiento virtual, en: virtual displacement }
+  unidad_si: m
+  descripcion: { es: Desplazamiento instantaneo compatible con las ligaduras., en: Instantaneous displacement compatible with constraints. }
+  dimension: L
+  is_vector: true
+  components: []
+  category: base_or_parameter
+  physical_role: virtual_displacement
+  used_in: [ trabajo_virtual_dinamico, fuerza_generalizada_desde_trabajo_virtual ]
+  common_mistake: Tratarlo como desplazamiento real durante un intervalo de tiempo.
+  typical_range: Infinitesimal.
+  sign_behavior: { has_sign: true, meaning: { es: Depende del sentido virtual elegido., en: It depends on the chosen virtual direction. } }
+  zero_behavior: { allowed: true, meaning: { es: Puede ser nulo para una coordenada restringida., en: It may be zero for a restricted coordinate. } }
+  value_nature: { kind: vector, nonnegative_only: false, expected_interval: infinitesimal }
+  interpretation_role: { primary_for: [ principio-de-dalembert-y-trabajo-virtual ], secondary_for: [] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: dr no avanza el reloj; prueba compatibilidad instantanea.
+- id: Wv
+  symbol: \\delta W
+  nombre: { es: trabajo virtual dinamico, en: dynamic virtual work }
+  unidad_si: J
+  descripcion: { es: Suma de trabajos virtuales de fuerzas efectivas compatibles., en: Sum of virtual works of compatible effective forces. }
+  dimension: ML^2T^{-2}
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: virtual_work_balance
+  used_in: [ trabajo_virtual_dinamico ]
+  common_mistake: Confundirlo con trabajo real a lo largo de una trayectoria.
+  typical_range: Cero para variaciones admisibles en el principio ideal.
+  sign_behavior: { has_sign: true, meaning: { es: Depende de la direccion virtual ensayada., en: It depends on the tested virtual direction. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero expresa equilibrio dinamico virtual., en: Zero expresses virtual dynamic equilibrium. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: context-dependent }
+  interpretation_role: { primary_for: [ principio-de-dalembert-y-trabajo-virtual ], secondary_for: [] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: Wv es el criterio que elimina reacciones ideales.
+- id: Qj
+  symbol: Q_j
+  nombre: { es: fuerza generalizada, en: generalized force }
+  unidad_si: context-dependent
+  descripcion: { es: Coeficiente de trabajo virtual asociado a una coordenada generalizada., en: Virtual-work coefficient associated with a generalized coordinate. }
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: generalized_force
+  used_in: [ fuerza_generalizada_desde_trabajo_virtual, lagrange_dalembert ]
+  common_mistake: Tratarla siempre como fuerza en newtons.
+  typical_range: Depende de la coordenada.
+  sign_behavior: { has_sign: true, meaning: { es: Indica sentido de aporte en la coordenada., en: It indicates contribution direction in the coordinate. } }
+  zero_behavior: { allowed: true, meaning: { es: No hay aporte virtual en esa coordenada., en: There is no virtual contribution in that coordinate. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: context-dependent }
+  interpretation_role: { primary_for: [ principio-de-dalembert-y-trabajo-virtual ], secondary_for: [] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: Qj es el puente operativo hacia Lagrange.
+- id: qi
+  symbol: q_j
+  nombre: { es: coordenada generalizada, en: generalized coordinate }
+  unidad_si: context-dependent
+  descripcion: { es: Coordenada que parametriza desplazamientos virtuales compatibles., en: Coordinate parameterizing compatible virtual displacements. }
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: base_or_parameter
+  physical_role: generalized_coordinate
+  used_in: [ fuerza_generalizada_desde_trabajo_virtual ]
+  common_mistake: Elegir una coordenada incompatible con la ligadura.
+  typical_range: Depende del sistema.
+  sign_behavior: { has_sign: true, meaning: { es: Depende de la orientacion coordenada., en: It depends on coordinate orientation. } }
+  zero_behavior: { allowed: true, meaning: { es: Puede ser configuracion de referencia., en: It may be a reference configuration. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: context-dependent }
+  interpretation_role: { primary_for: [], secondary_for: [ principio-de-dalembert-y-trabajo-virtual ] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: Una buena qi absorbe la ligadura en la geometria.
+- id: Ri
+  symbol: R_j
+  nombre: { es: residuo lagrangiano, en: Lagrangian residual }
+  unidad_si: context-dependent
+  descripcion: { es: Residuo dinamico que se iguala a la fuerza generalizada no potencial., en: Dynamical residual equal to the non-potential generalized force. }
+  dimension: context-dependent
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: lagrangian_residual
+  used_in: [ lagrange_dalembert ]
+  common_mistake: Imponerlo cero aunque existan fuerzas generalizadas activas.
+  typical_range: Context-dependent.
+  sign_behavior: { has_sign: true, meaning: { es: Depende del sentido de qi., en: It depends on the direction of qi. } }
+  zero_behavior: { allowed: true, meaning: { es: Cero corresponde a caso conservativo sin fuerza generalizada externa., en: Zero corresponds to a conservative case with no external generalized force. } }
+  value_nature: { kind: scalar, nonnegative_only: false, expected_interval: context-dependent }
+  interpretation_role: { primary_for: [], secondary_for: [ principio-de-dalembert-y-trabajo-virtual ] }
+  graph_binding: { channels: [] }
+  pedagogical_notes: Ri conecta el balance virtual con Euler-Lagrange.
+`;export{e as default};

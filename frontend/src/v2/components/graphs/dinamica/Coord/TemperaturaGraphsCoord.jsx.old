@@ -1,0 +1,136 @@
+import React from "react";
+import { createCoordGraphPage } from "@/v2/components/graphs/graphFactories.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraph(
+const uiLang = "es";
+const tt = (es, en) => (uiLang === "en" ? en : es);
+
+const graph_identity = {
+  graph_type: "Coord",
+  pregunta_principal: {
+    es: "Que es la temperatura y como se convierte entre Celsius, Kelvin y Fahrenheit?",
+    en: "What is temperature and how do you convert between Celsius, Kelvin, and Fahrenheit?",
+  },
+  keywords: [
+    "temperatura",
+    "convierte",
+    "celsius",
+    "kelvin",
+    "fahrenheit",
+    "escala",
+    "temperature",
+    "convert",
+    "conversion",
+    "scale",
+  ],
+  magnitud_estrella: "T_K",
+  variable_control: "T_C",
+  formula: "T_K = T_C + 273.15",
+  target_interpretable: true,
+};
+
+const axes = {
+  xComponent: "XAxis",
+  yComponent: "YAxis",
+  xAxis: "T_C",
+  yAxis: "T_K",
+};
+
+const formula = {
+  id: "conversion_celsius_kelvin",
+  formula: "T_K = T_C + 273.15",
+  equation: "T_K = T_C + 273.15",
+};
+
+const fmt = (value, digits = 2) =>
+  Number.isFinite(value) ? value.toFixed(digits) : "-";
+
+const TemperaturaGraphsCoord = createCoordGraphPage({
+  displayName: "TemperaturaGraphsCoord",
+  title: {
+    es: "Conversion Celsius a kelvin",
+    en: "Celsius to kelvin conversion",
+  },
+  defaultParams: {
+    T_C: 20,
+  },
+  controls: [
+    { id: "T_C", label: { es: "Temperatura Celsius", en: "Celsius temperature" }, min: -80, max: 120, step: 5 },
+  ],
+  compute: (pNum) => {
+    const tc = Number.isFinite(pNum.T_C) ? pNum.T_C : 20;
+    const tk = tc + 273.15;
+    const tf = (9 / 5) * tc + 32;
+    const data = Array.from({ length: 41 }, (_, index) => {
+      const x = -80 + index * 5;
+      return { x, y: x + 273.15 };
+    });
+
+    return {
+      data,
+      extra: {
+        interpretationTarget: "T_K",
+        interpretationValue: tk,
+        graphState: {
+          target: "T_K",
+          graphType: "Coord",
+          graph_identity,
+          axes,
+          formula,
+          T_C: tc,
+          T_K: tk,
+          T_F: tf,
+        },
+      },
+    };
+  },
+  render: ({ data, pNum, extra }) => {
+    const tc = pNum.T_C ?? 20;
+    const tk = extra?.graphState?.T_K ?? 293.15;
+    const tf = extra?.graphState?.T_F ?? 68;
+    const width = 520;
+    const height = 260;
+    const points = data
+      .map((point) => {
+        const x = 38 + ((point.x + 80) / 200) * (width - 76);
+        const y = height - 32 - ((point.y - 193.15) / 200) * (height - 64);
+        return `${x},${y}`;
+      })
+      .join(" ");
+    const currentX = 38 + ((tc + 80) / 200) * (width - 76);
+    const currentY = height - 32 - ((tk - 193.15) / 200) * (height - 64);
+
+    return (
+      <div className="v2-card" style={{ display: "grid", gap: 12 }}>
+        <div className="v2-card-title">{tt("T_K frente a T_C", "T_K versus T_C")}</div>
+        <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Temperatura Coord">
+          <rect x="0" y="0" width={width} height={height} rx="10" fill="rgba(15,23,42,0.86)" />
+          <line x1="34" y1={height - 32} x2={width - 28} y2={height - 32} stroke="rgba(255,255,255,0.28)" />
+          <line x1="38" y1="24" x2="38" y2={height - 28} stroke="rgba(255,255,255,0.28)" />
+          <polyline points={points} fill="none" stroke="#22c55e" strokeWidth="3" />
+          <circle cx={currentX} cy={currentY} r="6" fill="#fbbf24" stroke="#fff7ed" strokeWidth="2" />
+          <text x={width - 34} y={height - 42} textAnchor="end" fill="rgba(255,255,255,0.72)" fontSize="12">
+            T_C
+          </text>
+          <text x="48" y="38" fill="rgba(255,255,255,0.72)" fontSize="12">
+            T_K
+          </text>
+        </svg>
+        <div style={{ display: "grid", gap: 4, fontSize: 13 }}>
+          <strong>{tt("Lectura fisica", "Physical reading")}</strong>
+          <span>
+            {fmt(tc, 1)} C = {fmt(tk, 2)} K = {fmt(tf, 1)} F
+          </span>
+        </div>
+      </div>
+    );
+  },
+});
+
+TemperaturaGraphsCoord.graph_identity = graph_identity;
+TemperaturaGraphsCoord.pregunta_principal = graph_identity.pregunta_principal;
+TemperaturaGraphsCoord.magnitud_estrella = graph_identity.magnitud_estrella;
+TemperaturaGraphsCoord.axes = axes;
+TemperaturaGraphsCoord.formula = formula;
+
+export default TemperaturaGraphsCoord;

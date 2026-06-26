@@ -1,0 +1,395 @@
+const e=`magnitudes:
+
+  - id: DeltaS_univ
+    symbol: "\\\\Delta S_{\\\\mathrm{univ}}"
+
+    nombre:
+      es: Variación de entropía del universo
+      en: Universe entropy change
+
+    descripcion:
+      es: "Suma de la variación de entropía del sistema y del entorno. Magnitud que cuantifica la irreversibilidad total de un proceso termodinámico."
+      en: "Sum of entropy change of the system and surroundings. Quantity that quantifies the total irreversibility of a thermodynamic process."
+
+    unidad_si: "J/K"
+    dimension: "[M L^2 T^-2 Θ^-1]"
+
+    is_vector: false
+    components: null
+
+    category: derived
+    physical_role: core_physical_quantity
+
+    used_in:
+      - criterio_irreversibilidad
+      - generacion_entropia_transferencia_calor
+
+    common_mistake: "Confundir DeltaS_univ con DeltaS_sistema. El sistema puede perder entropía; lo que la segunda ley impone es DeltaS_univ ≥ 0."
+
+    typical_range: "Procesos cotidianos: de 0.01 J/K (casi reversibles) a miles de J/K (combustiones, mezclas violentas). DeltaS_univ = 0 solo en procesos ideales reversibles."
+
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "DeltaS_univ > 0 indica proceso irreversible (espontáneo, genera entropía). DeltaS_univ = 0 indica proceso reversible (límite ideal). DeltaS_univ < 0 es imposible según la segunda ley."
+        en: "DeltaS_univ > 0 indicates irreversible process (spontaneous, generates entropy). DeltaS_univ = 0 indicates reversible process (ideal limit). DeltaS_univ < 0 is impossible according to the second law."
+
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "DeltaS_univ = 0 corresponde al límite reversible: proceso cuasi-estático ideal sin generación de entropía. Es un caso límite inalcanzable en la práctica."
+        en: "DeltaS_univ = 0 corresponds to the reversible limit: ideal quasi-static process with no entropy generation. It is a limiting case unattainable in practice."
+
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: true
+      expected_interval: "[0, 10000] J/K"
+
+    interpretation_role:
+      primary_for:
+        - criterio_irreversibilidad
+        - generacion_entropia_transferencia_calor
+      secondary_for: []
+
+    graph_binding:
+      channels:
+        - axis_y
+
+    pedagogical_notes: "Es la magnitud central del leaf. El alumno debe comprender que DeltaS_univ es el criterio universal de posibilidad termodinámica: positivo = posible y espontáneo, cero = reversible ideal, negativo = imposible."
+
+  - id: DeltaS_sis
+    symbol: "\\\\Delta S_{\\\\mathrm{sis}}"
+
+    nombre:
+      es: Variación de entropía del sistema
+      en: System entropy change
+
+    descripcion:
+      es: "Cambio de entropía del sistema aislado o subsistema bajo estudio. Es función de estado: depende solo de los estados inicial y final."
+      en: "Entropy change of the isolated system or subsystem under study. It is a state function: depends only on initial and final states."
+
+    unidad_si: "J/K"
+    dimension: "[M L^2 T^-2 Θ^-1]"
+
+    is_vector: false
+    components: null
+
+    category: derived
+    physical_role: core_physical_quantity
+
+    used_in:
+      - criterio_irreversibilidad
+      - generacion_entropia_transferencia_calor
+
+    common_mistake: "Creer que DeltaS_sis debe ser siempre positivo. La segunda ley impone DeltaS_univ ≥ 0, no DeltaS_sis ≥ 0. El sistema puede perder entropía si el entorno gana más."
+
+    typical_range: "Puede ser positivo, negativo o cero. Rango típico: [-1000, 1000] J/K para procesos de laboratorio."
+
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "DeltaS_sis > 0 indica que el sistema gana dispersión energética (absorción de calor, expansión). DeltaS_sis < 0 indica pérdida de dispersión (cesión de calor, compresión). DeltaS_sis = 0 para procesos isentrópicos del sistema."
+        en: "DeltaS_sis > 0 indicates the system gains energy dispersal (heat absorption, expansion). DeltaS_sis < 0 indicates loss of dispersal (heat release, compression). DeltaS_sis = 0 for isentropic system processes."
+
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "DeltaS_sis = 0 indica que el estado del sistema no ha cambiado en términos de dispersión energética (proceso isentrópico del sistema)."
+        en: "DeltaS_sis = 0 indicates the system state has not changed in terms of energy dispersal (system isentropic process)."
+
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "[-5000, 5000] J/K"
+
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - criterio_irreversibilidad
+        - generacion_entropia_transferencia_calor
+
+    graph_binding:
+      channels: []
+
+    pedagogical_notes: "Distinguir claramente entre DeltaS_sis y DeltaS_univ es el paso cognitivo crítico para comprender procesos irreversibles. Muchos errores provienen de aplicar la segunda ley al sistema en lugar del universo."
+
+  - id: DeltaS_ent
+    symbol: "\\\\Delta S_{\\\\mathrm{ent}}"
+
+    nombre:
+      es: Variación de entropía del entorno
+      en: Surroundings entropy change
+
+    descripcion:
+      es: "Cambio de entropía del entorno (reservorio térmico) durante el proceso. Para un reservorio a temperatura constante T_ent, se calcula como DeltaS_ent = -Q_sis / T_ent."
+      en: "Entropy change of the surroundings (thermal reservoir) during the process. For a reservoir at constant temperature T_sur, calculated as DeltaS_sur = -Q_sys / T_sur."
+
+    unidad_si: "J/K"
+    dimension: "[M L^2 T^-2 Θ^-1]"
+
+    is_vector: false
+    components: null
+
+    category: derived
+    physical_role: core_physical_quantity
+
+    used_in:
+      - criterio_irreversibilidad
+      - generacion_entropia_transferencia_calor
+
+    common_mistake: "Olvidar el signo negativo: si el sistema absorbe calor (Q_sis > 0), el entorno cede ese mismo calor, por lo que DeltaS_ent = -Q_sis/T_ent < 0."
+
+    typical_range: "Puede ser positivo o negativo. Signo opuesto al flujo de calor hacia el sistema. Rango: [-5000, 5000] J/K."
+
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "DeltaS_ent > 0 indica que el entorno gana entropía (el sistema le cede calor). DeltaS_ent < 0 indica que el entorno pierde entropía (el sistema le absorbe calor)."
+        en: "DeltaS_ent > 0 indicates surroundings gain entropy (system releases heat to it). DeltaS_ent < 0 indicates surroundings lose entropy (system absorbs heat from it)."
+
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "DeltaS_ent = 0 indica que no hubo intercambio de calor con el entorno (proceso adiabático)."
+        en: "DeltaS_ent = 0 indicates no heat exchange with surroundings (adiabatic process)."
+
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "[-5000, 5000] J/K"
+
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - criterio_irreversibilidad
+        - generacion_entropia_transferencia_calor
+
+    graph_binding:
+      channels: []
+
+    pedagogical_notes: "El entorno se modela como reservorio a temperatura constante: su temperatura no cambia apreciablemente al absorber o ceder calor. Esto simplifica DeltaS_ent a una simple división Q/T."
+
+  - id: Q_sis
+    symbol: "Q_{\\\\mathrm{sis}}"
+
+    nombre:
+      es: Calor intercambiado por el sistema
+      en: Heat exchanged by the system
+
+    descripcion:
+      es: "Calor neto absorbido por el sistema durante el proceso. Positivo si el sistema absorbe calor del entorno, negativo si cede calor al entorno."
+      en: "Net heat absorbed by the system during the process. Positive if the system absorbs heat from surroundings, negative if it releases heat to surroundings."
+
+    unidad_si: "J"
+    dimension: "[M L^2 T^-2]"
+
+    is_vector: false
+    components: null
+
+    category: fundamental
+    physical_role: core_physical_quantity
+
+    used_in:
+      - criterio_irreversibilidad
+      - generacion_entropia_transferencia_calor
+
+    common_mistake: "Confundir Q_sis (calor real del proceso) con Q_rev (calor del proceso reversible equivalente). En procesos irreversibles, Q_sis ≠ Q_rev."
+
+    typical_range: "Desde julios (procesos microscópicos) hasta MJ (procesos industriales). Puede ser positivo o negativo."
+
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Q_sis > 0 indica absorción de calor (proceso endotérmico). Q_sis < 0 indica cesión de calor (proceso exotérmico)."
+        en: "Q_sis > 0 indicates heat absorption (endothermic). Q_sis < 0 indicates heat release (exothermic)."
+
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Q_sis = 0 corresponde a un proceso adiabático: no hay intercambio de calor con el entorno."
+        en: "Q_sis = 0 corresponds to an adiabatic process: no heat exchange with surroundings."
+
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "[-1e7, 1e7] J"
+
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - criterio_irreversibilidad
+        - generacion_entropia_transferencia_calor
+
+    graph_binding:
+      channels: []
+
+    pedagogical_notes: "En procesos irreversibles, Q_sis es el calor real medido, no el del camino reversible. La diferencia entre ambos es lo que genera la irreversibilidad."
+
+  - id: T_sis
+    symbol: "T_{\\\\mathrm{sis}}"
+
+    nombre:
+      es: Temperatura del sistema
+      en: System temperature
+
+    descripcion:
+      es: "Temperatura del sistema durante el proceso. En un proceso irreversible, puede no estar bien definida globalmente si el sistema no está en equilibrio interno."
+      en: "System temperature during the process. In an irreversible process, it may not be globally well-defined if the system is not in internal equilibrium."
+
+    unidad_si: "K"
+    dimension: "[Θ]"
+
+    is_vector: false
+    components: null
+
+    category: state
+    physical_role: parameter
+
+    used_in:
+      - generacion_entropia_transferencia_calor
+
+    common_mistake: "Asumir que T_sis está bien definida durante un proceso irreversible. Solo en estados de equilibrio (inicial y final) la temperatura es uniforme y medible."
+
+    typical_range: "Procesos cotidianos: 200–2000 K. Siempre positiva (kelvin)."
+
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La temperatura absoluta es siempre positiva."
+        en: "Absolute temperature is always positive."
+
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "T = 0 K es inalcanzable (tercer principio)."
+        en: "T = 0 K is unattainable (third law)."
+
+    value_nature:
+      kind: scalar_positive
+      nonnegative_only: true
+      expected_interval: "[1, 10000] K"
+
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - generacion_entropia_transferencia_calor
+
+    graph_binding:
+      channels:
+        - axis_x
+
+    pedagogical_notes: "La temperatura solo está bien definida en equilibrio. En procesos fuertemente irreversibles, el sistema puede tener gradientes internos y T_sis es una aproximación."
+
+  - id: T_ent
+    symbol: "T_{\\\\mathrm{ent}}"
+
+    nombre:
+      es: Temperatura del entorno
+      en: Surroundings temperature
+
+    descripcion:
+      es: "Temperatura del reservorio térmico con el que el sistema intercambia calor. Se modela como constante (reservorio infinito)."
+      en: "Temperature of the thermal reservoir with which the system exchanges heat. Modelled as constant (infinite reservoir)."
+
+    unidad_si: "K"
+    dimension: "[Θ]"
+
+    is_vector: false
+    components: null
+
+    category: parameter
+    physical_role: parameter
+
+    used_in:
+      - criterio_irreversibilidad
+      - generacion_entropia_transferencia_calor
+
+    common_mistake: "Usar la temperatura del sistema como T_ent. El entorno es un reservorio separado con su propia temperatura (generalmente constante)."
+
+    typical_range: "Temperatura ambiente: 293–300 K. Reservorios industriales: hasta 1000 K."
+
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La temperatura del entorno es siempre positiva."
+        en: "Surroundings temperature is always positive."
+
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "T_ent = 0 K es inalcanzable y haría diverger DeltaS_ent."
+        en: "T_ent = 0 K is unattainable and would make DeltaS_ent diverge."
+
+    value_nature:
+      kind: scalar_positive
+      nonnegative_only: true
+      expected_interval: "[1, 10000] K"
+
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - criterio_irreversibilidad
+        - generacion_entropia_transferencia_calor
+
+    graph_binding:
+      channels: []
+
+    pedagogical_notes: "El modelo de reservorio ideal (T constante) es una simplificación fundamental en termodinámica. Permite calcular DeltaS_ent como una simple división sin necesidad de integrar."
+
+  - id: S_gen
+    symbol: "S_{\\\\mathrm{gen}}"
+
+    nombre:
+      es: Entropía generada
+      en: Generated entropy
+
+    descripcion:
+      es: "Entropía creada internamente por las irreversibilidades del proceso. Es la diferencia entre DeltaS_univ y cero (caso reversible). Siempre no negativa."
+      en: "Entropy created internally by process irreversibilities. It is the difference between DeltaS_univ and zero (reversible case). Always non-negative."
+
+    unidad_si: "J/K"
+    dimension: "[M L^2 T^-2 Θ^-1]"
+
+    is_vector: false
+    components: null
+
+    category: derived
+    physical_role: core_physical_quantity
+
+    used_in:
+      - criterio_irreversibilidad
+      - generacion_entropia_transferencia_calor
+
+    common_mistake: "Confundir S_gen con DeltaS_sis. La entropía generada es siempre ≥ 0 y corresponde a DeltaS_univ, no al cambio del sistema solo."
+
+    typical_range: "Siempre ≥ 0. Procesos cuasi-reversibles: S_gen ≈ 0. Procesos violentos (explosiones, mezcla turbulenta): S_gen >> 0."
+
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "S_gen es siempre no negativa por la segunda ley. S_gen = 0 solo en procesos reversibles."
+        en: "S_gen is always non-negative by the second law. S_gen = 0 only in reversible processes."
+
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "S_gen = 0 indica proceso reversible ideal: sin fricción, sin gradientes finitos de temperatura, sin mezcla espontánea."
+        en: "S_gen = 0 indicates ideal reversible process: no friction, no finite temperature gradients, no spontaneous mixing."
+
+    value_nature:
+      kind: scalar_positive
+      nonnegative_only: true
+      expected_interval: "[0, 10000] J/K"
+
+    interpretation_role:
+      primary_for:
+        - criterio_irreversibilidad
+      secondary_for:
+        - generacion_entropia_transferencia_calor
+
+    graph_binding:
+      channels:
+        - axis_y
+
+    pedagogical_notes: "S_gen es numéricamente igual a DeltaS_univ para procesos en universo aislado. Mide cuánto trabajo potencial se ha degradado irreversiblemente. La exergía destruida es T_0 · S_gen."
+`;export{e as default};

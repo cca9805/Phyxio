@@ -1,0 +1,596 @@
+version: 5.0.0
+leaf: fermiones
+magnitudes:
+- id: ocupacion_estado
+  symbol: f
+  nombre:
+    es: ocupación media del estado
+    en: mean state occupation
+  descripcion:
+    es: Probabilidad media de que un estado fermiónico esté ocupado.
+    en: Mean probability that a fermionic state is occupied.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: estadistica
+  physical_role: resultado
+  used_in:
+  - fermi_dirac_ocupacion
+  common_mistake: Tratarla como número total de fermiones en todo el sistema.
+  typical_range: 0 <= f <= 1
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No tiene signo físico; es una ocupación normalizada.
+      en: It has no physical sign; it is a normalized occupation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: f=0 representa un estado vacío en promedio.
+      en: f=0 represents an empty state on average.
+  value_nature:
+    kind: probabilidad_media
+    nonnegative_only: true
+    expected_interval: '[0, 1]'
+  interpretation_role:
+    primary_for:
+    - ocupacion_estados
+    - grafica_ocupacion_energia
+    secondary_for:
+    - exclusion_pauli
+  graph_binding:
+    channels:
+    - yAxis
+    preferred_axis: y
+    role: variable_dependiente
+  pedagogical_notes:
+    es: 'Es el corazón del gráfico: muestra cómo el carácter fermiónico impide ocupaciones mayores que uno.'
+    en: 'It is the heart of the graph: it shows how fermionic character prevents occupations above one.'
+- id: energia
+  symbol: E
+  nombre:
+    es: energía del estado
+    en: state energy
+  descripcion:
+    es: Energía del estado cuántico cuya ocupación se evalúa.
+    en: Energy of the quantum state whose occupation is evaluated.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: variable independiente
+  used_in:
+  - fermi_dirac_ocupacion
+  - parametro_reducido_fermi
+  common_mistake: Confundirla con la energía total del sistema completo.
+  typical_range: Depende del sistema; suele compararse con mu o E_F.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El cero de energía puede elegirse; importa la diferencia E-mu.
+      en: The energy zero can be chosen; the difference E-mu matters.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: E=0 solo marca el origen energético elegido.
+      en: E=0 only marks the chosen energy origin.
+  value_nature:
+    kind: escalar
+    nonnegative_only: false
+    expected_interval: sistema dependiente
+  interpretation_role:
+    primary_for:
+    - grafica_ocupacion_energia
+    secondary_for:
+    - ocupacion_estados
+  graph_binding:
+    channels:
+    - xAxis
+    preferred_axis: x
+    role: variable_independiente
+  pedagogical_notes:
+    es: La ocupación cae al subir E respecto a mu, no por energía absoluta aislada.
+    en: Occupation falls as E rises relative to mu, not because of absolute energy alone.
+- id: potencial_quimico
+  symbol: mu
+  nombre:
+    es: potencial químico
+    en: chemical potential
+  descripcion:
+    es: Energía de referencia que fija la ocupación media en equilibrio.
+    en: Reference energy that sets mean occupation in equilibrium.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: termodinamica
+  physical_role: parametro
+  used_in:
+  - fermi_dirac_ocupacion
+  - parametro_reducido_fermi
+  common_mistake: Tratarlo como una constante universal en lugar de una propiedad del sistema.
+  typical_range: Cercano a E_F a baja temperatura en gases degenerados.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su signo depende del origen energético y del régimen físico.
+      en: Its sign depends on the energy origin and physical regime.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: mu=0 indica la referencia energética elegida, no ausencia de partículas.
+      en: mu=0 indicates the chosen energy reference, not absence of particles.
+  value_nature:
+    kind: escalar
+    nonnegative_only: false
+    expected_interval: sistema dependiente
+  interpretation_role:
+    primary_for:
+    - ocupacion_estados
+    secondary_for:
+    - degeneracion_fermionica
+  graph_binding:
+    channels:
+    - parameter
+    - constant
+    preferred_axis: none
+    role: referencia_horizontal
+  pedagogical_notes:
+    es: En la curva, E=mu marca f=0.5 y separa estados preferentemente llenos y vacíos.
+    en: On the curve, E=mu marks f=0.5 and separates mostly filled from mostly empty states.
+- id: temperatura_absoluta
+  symbol: T
+  nombre:
+    es: temperatura absoluta
+    en: absolute temperature
+  descripcion:
+    es: Temperatura termodinámica que suaviza la transición de ocupación.
+    en: Thermodynamic temperature that smooths the occupation transition.
+  unidad_si: K
+  dimension: Theta
+  is_vector: false
+  components: []
+  category: termodinamica
+  physical_role: parametro
+  used_in:
+  - fermi_dirac_ocupacion
+  - parametro_reducido_fermi
+  common_mistake: Usar grados Celsius en la fórmula de Fermi-Dirac.
+  typical_range: T > 0 K
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La temperatura absoluta no es negativa en este modelo.
+      en: Absolute temperature is not negative in this model.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: T=0 requiere tratar el límite escalonado, no dividir por cero.
+      en: T=0 requires the step-limit treatment, not division by zero.
+  value_nature:
+    kind: escalar
+    nonnegative_only: true
+    expected_interval: (0, +infinito)
+  interpretation_role:
+    primary_for:
+    - analisis_de_curva
+    secondary_for:
+    - degeneracion_fermionica
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: none
+    role: control_de_curvatura
+  pedagogical_notes:
+    es: A mayor T, la frontera de ocupación cerca de mu se vuelve menos brusca.
+    en: At higher T, the occupation boundary near mu becomes less abrupt.
+- id: constante_boltzmann
+  symbol: k_B
+  nombre:
+    es: constante de Boltzmann
+    en: Boltzmann constant
+  descripcion:
+    es: Constante que convierte temperatura en escala energética térmica.
+    en: Constant converting temperature into a thermal energy scale.
+  unidad_si: J K^-1
+  dimension: M L^2 T^-2 Theta^-1
+  is_vector: false
+  components: []
+  category: constante
+  physical_role: constante
+  used_in:
+  - fermi_dirac_ocupacion
+  - parametro_reducido_fermi
+  - temperatura_fermi
+  common_mistake: Omitirla y mezclar kelvin directamente con julios.
+  typical_range: 1.380649e-23 J K^-1
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es una constante positiva.
+      en: It is a positive constant.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: No puede anularse; define la escala térmica microscópica.
+      en: It cannot vanish; it defines the microscopic thermal scale.
+  value_nature:
+    kind: constante
+    nonnegative_only: true
+    expected_interval: positivo fijo
+  interpretation_role:
+    primary_for:
+    - escala_termica
+    secondary_for:
+    - ocupacion_estados
+  graph_binding:
+    channels:
+    - constant
+    preferred_axis: none
+    role: constante_de_escala
+  pedagogical_notes:
+    es: Hace que k_B*T sea una energía comparable con E y mu.
+    en: It makes k_B*T an energy comparable with E and mu.
+- id: energia_reducida
+  symbol: eta
+  nombre:
+    es: energía reducida
+    en: reduced energy
+  descripcion:
+    es: Separación adimensional entre energía del estado y potencial químico.
+    en: Dimensionless separation between state energy and chemical potential.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: estadistica
+  physical_role: variable auxiliar
+  used_in:
+  - parametro_reducido_fermi
+  common_mistake: Asignarle unidades de energía.
+  typical_range: De valores negativos a positivos alrededor de 0.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Negativa bajo mu, positiva sobre mu.
+      en: Negative below mu, positive above mu.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: eta=0 equivale a E=mu.
+      en: eta=0 is equivalent to E=mu.
+  value_nature:
+    kind: adimensional
+    nonnegative_only: false
+    expected_interval: (-infinito, +infinito)
+  interpretation_role:
+    primary_for:
+    - analisis_de_curva
+    secondary_for:
+    - ocupacion_estados
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: x
+    role: escala_horizontal_alternativa
+  pedagogical_notes:
+    es: Resume la competencia entre energía y agitación térmica en una sola variable.
+    en: It condenses the competition between energy and thermal agitation into one variable.
+- id: energia_fermi
+  symbol: E_F
+  nombre:
+    es: energía de Fermi
+    en: Fermi energy
+  descripcion:
+    es: Energía máxima ocupada a temperatura cero en un gas de Fermi ideal.
+    en: Highest occupied energy at zero temperature in an ideal Fermi gas.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: escala característica
+  used_in:
+  - energia_fermi_gas_3d
+  - temperatura_fermi
+  common_mistake: Pensar que todos los fermiones tienen exactamente esa energía.
+  typical_range: Sistema dependiente; en metales suele ser del orden de eV.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En el modelo ideal usado es positiva.
+      en: In the ideal model used here it is positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: E_F=0 no describe un gas degenerado con densidad positiva.
+      en: E_F=0 does not describe a degenerate gas with positive density.
+  value_nature:
+    kind: energia_caracteristica
+    nonnegative_only: true
+    expected_interval: (0, +infinito)
+  interpretation_role:
+    primary_for:
+    - gas_fermi_ideal
+    secondary_for:
+    - grafica_ocupacion_energia
+  graph_binding:
+    channels:
+    - parameter
+    - constant
+    preferred_axis: x
+    role: marca_de_referencia
+  pedagogical_notes:
+    es: A baja temperatura se aproxima al papel de mu y marca la frontera de llenado.
+    en: At low temperature it approaches the role of mu and marks the filling boundary.
+- id: densidad_numerica
+  symbol: n
+  nombre:
+    es: densidad numérica
+    en: number density
+  descripcion:
+    es: Número de fermiones por unidad de volumen.
+    en: Number of fermions per unit volume.
+  unidad_si: m^-3
+  dimension: L^-3
+  is_vector: false
+  components: []
+  category: densidad
+  physical_role: parametro
+  used_in:
+  - energia_fermi_gas_3d
+  common_mistake: Confundirla con masa por unidad de volumen.
+  typical_range: Depende del sistema; positiva.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No tiene signo; cuenta partículas por volumen.
+      en: It has no sign; it counts particles per volume.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: n=0 elimina el gas de fermiones del modelo.
+      en: n=0 removes the fermion gas from the model.
+  value_nature:
+    kind: densidad
+    nonnegative_only: true
+    expected_interval: (0, +infinito)
+  interpretation_role:
+    primary_for:
+    - gas_fermi_ideal
+    secondary_for:
+    - degeneracion_fermionica
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: none
+    role: parametro_de_modelo
+  pedagogical_notes:
+    es: Aumentar n obliga a ocupar estados de energía más alta por exclusión de Pauli.
+    en: Increasing n forces higher-energy states to be occupied because of Pauli exclusion.
+- id: masa_particula
+  symbol: m
+  nombre:
+    es: masa de la partícula
+    en: particle mass
+  descripcion:
+    es: Masa de cada fermión en el modelo no relativista.
+    en: Mass of each fermion in the nonrelativistic model.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: []
+  category: mecanica
+  physical_role: parametro
+  used_in:
+  - energia_fermi_gas_3d
+  common_mistake: Usar masa total del sistema en lugar de masa de una partícula.
+  typical_range: Positiva; depende del fermión considerado.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La masa usada es positiva.
+      en: The mass used is positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: m=0 invalida la expresión no relativista.
+      en: m=0 invalidates the nonrelativistic expression.
+  value_nature:
+    kind: escalar
+    nonnegative_only: true
+    expected_interval: (0, +infinito)
+  interpretation_role:
+    primary_for:
+    - gas_fermi_ideal
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: none
+    role: parametro_de_modelo
+  pedagogical_notes:
+    es: Con la misma densidad, fermiones más masivos tienen menor energía de Fermi.
+    en: At the same density, heavier fermions have lower Fermi energy.
+- id: constante_planck_reducida
+  symbol: hbar
+  nombre:
+    es: constante de Planck reducida
+    en: reduced Planck constant
+  descripcion:
+    es: Constante cuántica que fija la escala de energía por confinamiento de estados.
+    en: Quantum constant setting the energy scale from state confinement.
+  unidad_si: J s
+  dimension: M L^2 T^-1
+  is_vector: false
+  components: []
+  category: constante
+  physical_role: constante
+  used_in:
+  - energia_fermi_gas_3d
+  common_mistake: Confundir hbar con h sin el factor 2*pi.
+  typical_range: 1.054571817e-34 J s
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es una constante positiva.
+      en: It is a positive constant.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: hbar=0 eliminaría el carácter cuántico del modelo.
+      en: hbar=0 would remove the quantum character of the model.
+  value_nature:
+    kind: constante
+    nonnegative_only: true
+    expected_interval: positivo fijo
+  interpretation_role:
+    primary_for:
+    - gas_fermi_ideal
+    secondary_for:
+    - exclusion_pauli
+  graph_binding:
+    channels:
+    - constant
+    preferred_axis: none
+    role: constante_cuantica
+  pedagogical_notes:
+    es: Aparece porque el llenado de estados es un fenómeno cuántico, no clásico.
+    en: It appears because state filling is quantum, not classical.
+- id: temperatura_fermi
+  symbol: T_F
+  nombre:
+    es: temperatura de Fermi
+    en: Fermi temperature
+  descripcion:
+    es: Temperatura equivalente a la energía de Fermi.
+    en: Temperature equivalent to the Fermi energy.
+  unidad_si: K
+  dimension: Theta
+  is_vector: false
+  components: []
+  category: termodinamica
+  physical_role: escala característica
+  used_in:
+  - temperatura_fermi
+  common_mistake: Interpretarla como la temperatura real del sistema.
+  typical_range: Sistema dependiente; positiva.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es positiva si E_F es positiva.
+      en: It is positive if E_F is positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: T_F=0 no caracteriza un gas degenerado con E_F positivo.
+      en: T_F=0 does not characterize a degenerate gas with positive E_F.
+  value_nature:
+    kind: temperatura_caracteristica
+    nonnegative_only: true
+    expected_interval: (0, +infinito)
+  interpretation_role:
+    primary_for:
+    - degeneracion_fermionica
+    secondary_for:
+    - gas_fermi_ideal
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: none
+    role: escala_comparativa
+  pedagogical_notes:
+    es: Comparar T con T_F indica si el sistema se comporta como gas cuántico degenerado.
+    en: Comparing T with T_F shows whether the system behaves as a degenerate quantum gas.
+- id: numero_ocupacion
+  symbol: N_estado
+  nombre:
+    es: número de ocupación del estado
+    en: state occupation number
+  descripcion:
+    es: Conteo de fermiones asociados a un estado o grupo degenerado.
+    en: Count of fermions associated with a state or degenerate group.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: conteo
+  physical_role: resultado
+  used_in:
+  - exclusion_pauli_ocupacion_maxima
+  common_mistake: Permitir ocupaciones superiores a la degeneración por no distinguir espines.
+  typical_range: 0 <= N_estado <= g
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No tiene signo; es un conteo.
+      en: It has no sign; it is a count.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: N_estado=0 significa que el estado está vacío.
+      en: N_state=0 means the state is empty.
+  value_nature:
+    kind: conteo
+    nonnegative_only: true
+    expected_interval: '[0, g]'
+  interpretation_role:
+    primary_for:
+    - exclusion_pauli
+    secondary_for:
+    - ocupacion_estados
+  graph_binding:
+    channels:
+    - none
+    preferred_axis: none
+    role: restriccion_conceptual
+  pedagogical_notes:
+    es: Distingue entre probabilidad media f y conteo real en un conjunto de estados.
+    en: It distinguishes mean probability f from an actual count in a set of states.
+- id: degeneracion_estado
+  symbol: g
+  nombre:
+    es: degeneración del estado
+    en: state degeneracy
+  descripcion:
+    es: Número de subestados disponibles dentro de un mismo nivel agrupado.
+    en: Number of substates available within a grouped level.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: conteo
+  physical_role: parametro
+  used_in:
+  - exclusion_pauli_ocupacion_maxima
+  common_mistake: Ignorar que el espín puede duplicar la degeneración de un nivel espacial.
+  typical_range: Entero positivo
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No tiene signo; es un número de estados.
+      en: It has no sign; it is a number of states.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: g=0 significaría que no hay estado disponible.
+      en: g=0 would mean no state is available.
+  value_nature:
+    kind: conteo
+    nonnegative_only: true
+    expected_interval: entero positivo
+  interpretation_role:
+    primary_for:
+    - exclusion_pauli
+    secondary_for:
+    - clasificacion_fermiones
+  graph_binding:
+    channels:
+    - none
+    preferred_axis: none
+    role: limite_de_ocupacion
+  pedagogical_notes:
+    es: Permite explicar por qué un orbital puede alojar dos electrones con espines opuestos.
+    en: It explains why an orbital can hold two electrons with opposite spins.

@@ -1,0 +1,802 @@
+version: 5.0.0
+id: ley-de-gauss
+leaf_id: ley-de-gauss
+nombre:
+  es: Ley de gauss
+  en: Gauss's Law
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: electrostatica
+  parent_id: electrostatica
+  ruta_relativa: fisica-clasica/electromagnetismo/electrostatica/ley-de-gauss
+  orden: 292400
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - ley_gauss
+  - campo_gaussiano
+  magnitudes:
+  - flujo_electrico
+  - carga_encerrada
+  - epsilon_0
+  - campo_electrico_gaussiano
+  - area_de_la_superficie_gaussiana
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: flujo_electrico
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  flujo_electrico:
+    enabled: true
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: Flujo eléctrico total a través de la superficie gaussiana
+      en: Total electric flux through the Gaussian surface
+    summary_rules:
+    - id: phi_summary_positive
+      when: Phi_E > 0
+      status: ok
+      text:
+        es: '[[Phi_E]] es positivo, lo que indica que la carga encerrada neta es positiva: el campo eléctrico sale neto de
+          la superficie gaussiana. El resultado depende directamente de [[Q_enc]] dividida entre [[epsilon_0]].'
+        en: '[[Phi_E]] is positive, indicating that the net enclosed charge is positive: the electric field exits the Gaussian
+          surface on net. The result depends directly on [[Q_enc]] divided by [[epsilon_0]].'
+    - id: phi_summary_negative
+      when: Phi_E < 0
+      status: ok
+      text:
+        es: '[[Phi_E]] es negativo, lo que indica que la carga encerrada neta es negativa: el campo eléctrico entra neto en
+          la superficie gaussiana. El flujo describe el sentido dominante del campo respecto a la superficie.'
+        en: '[[Phi_E]] is negative, indicating that the net enclosed charge is negative: the electric field enters the Gaussian
+          surface on net. The flux describes the dominant sense of the field relative to the surface.'
+    - id: phi_summary_zero
+      when: Phi_E == 0
+      status: ok
+      text:
+        es: '[[Phi_E]] es cero, lo que resume que la carga encerrada total es nula. Puede haber cargas positivas y negativas
+          que se compensan, o simplemente no hay cargas dentro de la superficie.'
+        en: '[[Phi_E]] is zero, summarizing that the total enclosed charge is zero. There may be positive and negative charges
+          that cancel each other, or there are simply no charges inside the surface.'
+    - id: phi_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[Phi_E]] indica la magnitud y el sentido del flujo eléctrico neto. Su valor depende exclusivamente de [[Q_enc]]
+          y [[epsilon_0]], no de la forma de la superficie gaussiana.'
+        en: '[[Phi_E]] indicates the magnitude and direction of the net electric flux. Its value depends exclusively on [[Q_enc]]
+          and [[epsilon_0]], not on the shape of the Gaussian surface.'
+    physical_reading_rules:
+    - id: phi_reading_positive
+      when: Phi_E > 0
+      status: ok
+      text:
+        es: 'Un flujo positivo significa que la distribución de campo es principalmente divergente respecto a la superficie:
+          más líneas de campo salen que entran. Físicamente, las cargas positivas son fuentes de líneas de campo.'
+        en: 'A positive flux means the field distribution is mainly divergent with respect to the surface: more field lines
+          exit than enter. Physically, positive charges are sources of field lines.'
+    - id: phi_reading_negative
+      when: Phi_E < 0
+      status: ok
+      text:
+        es: 'Un flujo negativo indica que el campo converge hacia el interior de la superficie: más líneas de campo entran
+          que salen. Las cargas negativas actúan como sumideros de líneas de campo.'
+        en: 'A negative flux indicates that the field converges toward the interior of the surface: more field lines enter
+          than exit. Negative charges act as sinks for field lines.'
+    - id: phi_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'El flujo eléctrico cuantifica la intensidad neta del campo que atraviesa la superficie. La causalidad es directa:
+          [[Q_enc]] genera el campo y el campo produce el flujo.'
+        en: 'Electric flux quantifies the net intensity of the field crossing the surface. The causality is direct: [[Q_enc]]
+          generates the field and the field produces the flux.'
+    coherence_rules:
+    - id: phi_coherence_sign
+      when: Phi_E > 0 && Q_enc < 0
+      status: error
+      text:
+        es: 'Incoherencia detectada: [[Phi_E]] positivo con [[Q_enc]] negativo es imposible en la ley de Gauss. Verificar
+          el signo de la carga encerrada.'
+        en: 'Incoherence detected: positive [[Phi_E]] with negative [[Q_enc]] is impossible in Gauss''s law. Check the sign
+          of the enclosed charge.'
+    - id: phi_coherence_sign_neg
+      when: Phi_E < 0 && Q_enc > 0
+      status: error
+      text:
+        es: 'Incoherencia detectada: [[Phi_E]] negativo con [[Q_enc]] positivo contradice la ley de Gauss. Revisar el planteamiento
+          del problema.'
+        en: 'Incoherence detected: negative [[Phi_E]] with positive [[Q_enc]] contradicts Gauss''s law. Review the problem
+          setup.'
+    - id: phi_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: El signo de [[Phi_E]] es coherente con el signo de [[Q_enc]]. La relación lineal entre ambas magnitudes es consistente
+          con la ley de Gauss.
+        en: The sign of [[Phi_E]] is coherent with the sign of [[Q_enc]]. The linear relationship between both quantities
+          is consistent with Gauss's law.
+    model_validity_rules:
+    - id: phi_validity_static
+      when: 'true'
+      status: ok
+      text:
+        es: La ley de Gauss en forma integral es válida para cargas estáticas en el vacío. Si las cargas están en movimiento
+          o el medio no es homogéneo, el modelo requiere la forma diferencial con la permitividad del medio.
+        en: Gauss's law in integral form is valid for static charges in vacuum. If charges are moving or the medium is inhomogeneous,
+          the model requires the differential form with the medium permittivity.
+    - id: phi_validity_quantum
+      when: abs(Q_enc) < 1.6e-19
+      status: warning
+      text:
+        es: La carga encerrada es menor que la carga del electrón. En esta escala la electrostática clásica puede no ser válida;
+          considerar efectos cuánticos.
+        en: The enclosed charge is smaller than the electron charge. At this scale classical electrostatics may not be valid;
+          consider quantum effects.
+    - id: phi_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo clásico de la ley de Gauss es aplicable. Las condiciones de régimen estático y medio homogéneo se cumplen
+          en la mayoría de los problemas estándar.
+        en: The classical Gauss's law model is applicable. The conditions of static regime and homogeneous medium are met
+          in most standard problems.
+    graph_rules:
+    - id: phi_graph_linear
+      when: 'true'
+      status: ok
+      text:
+        es: En el gráfico [[Phi_E]] frente a [[Q_enc]] la relación es lineal con pendiente positiva proporcional a la inversa
+          de [[epsilon_0]]. Una curva no lineal indica un error en el modelo o en los datos.
+        en: In the graph of [[Phi_E]] versus [[Q_enc]] the relationship is linear with a positive slope proportional to the
+          inverse of [[epsilon_0]]. A non-linear curve indicates an error in the model or data.
+    - id: phi_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'El gráfico de [[Phi_E]] vs [[Q_enc]] pasa por el origen: flujo cero corresponde a carga nula. La pendiente de
+          la recta es el recíproco de [[epsilon_0]].'
+        en: 'The graph of [[Phi_E]] vs [[Q_enc]] passes through the origin: zero flux corresponds to zero charge. The slope
+          of the line is the reciprocal of [[epsilon_0]].'
+    likely_errors:
+    - id: phi_error_shape
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error frecuente: creer que cambiar la forma de la superficie gaussiana cambia [[Phi_E]]. La ley de Gauss garantiza
+          que el flujo solo depende de [[Q_enc]], no de la geometría de la superficie.'
+        en: 'A common mistake is to interpret [[flujo_electrico]] in isolation: Frequent error: believing that changing the
+          shape of the Gaussian surface changes [[Phi_E]]. Gauss''s law guarantees that the flux depends only on [[Q_enc]],
+          not on the surface geometry.'
+    - id: phi_error_external
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[flujo_electrico]] con una lectura aislada es un error frecuente: Error frecuente: incluir en [[Q_enc]]
+          las cargas situadas fuera de la superficie gaussiana. Solo las cargas interiores contribuyen al flujo neto.'
+        en: 'A common mistake is to interpret [[flujo_electrico]] in isolation: Frequent error: including charges outside
+          the Gaussian surface in [[Q_enc]]. Only interior charges contribute to the net flux.'
+    - id: phi_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[flujo_electrico]] con una lectura aislada es un error frecuente: Verificar que [[Q_enc]] es la suma
+          algebraica de todas las cargas interiores, con sus signos correctos. Un error de signo invierte el sentido del flujo.'
+        en: 'A common mistake is to interpret [[flujo_electrico]] in isolation: Verify that [[Q_enc]] is the algebraic sum
+          of all interior charges, with correct signs. A sign error reverses the direction of the flux.'
+    next_step_rules:
+    - id: phi_next_field
+      when: 'true'
+      status: ok
+      text:
+        es: Con el flujo calculado, el siguiente paso es determinar [[E_G]] si la geometría tiene simetría suficiente. Elegir
+          la superficie gaussiana adecuada para que el campo sea uniforme sobre ella.
+        en: With the flux computed, the next step is to determine [[E_G]] if the geometry has sufficient symmetry. Choose
+          the appropriate Gaussian surface so that the field is uniform over it.
+    - id: phi_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Profundizar en la conexión entre el flujo y la distribución de líneas de campo usando el leaf de campo eléctrico
+          de distribuciones.
+        en: Explore the connection between flux and field line distribution using the electric field distributions leaf.
+    physical_intuition:
+    - id: flujo_electrico_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[flujo_electrico]] describe el estado dinámico.
+        en: Intuitively, [[flujo_electrico]] describes the dynamic state.
+    limiting_cases:
+    - id: flujo_electrico_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[flujo_electrico]].
+        en: Check limiting cases of [[flujo_electrico]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  carga_encerrada:
+    enabled: true
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: Carga eléctrica total encerrada por la superficie gaussiana
+      en: Total electric charge enclosed by the Gaussian surface
+    summary_rules:
+    - id: qenc_summary_positive
+      when: Q_enc > 0
+      status: ok
+      text:
+        es: '[[Q_enc]] positiva indica que domina la carga positiva en el interior de la superficie. El flujo resultante es
+          positivo y el campo sale neto de la región encerrada.'
+        en: Positive [[Q_enc]] indicates that positive charge dominates the interior of the surface. The resulting flux is
+          positive and the field exits the enclosed region on net.
+    - id: qenc_summary_negative
+      when: Q_enc < 0
+      status: ok
+      text:
+        es: '[[Q_enc]] negativa indica dominio de carga negativa en el interior. El flujo resultante es negativo: el campo
+          entra neto en la región encerrada.'
+        en: 'Negative [[Q_enc]] indicates negative charge dominates the interior. The resulting flux is negative: the field
+          enters the enclosed region on net.'
+    - id: qenc_summary_zero
+      when: Q_enc == 0
+      status: ok
+      text:
+        es: '[[Q_enc]] nula resume que el flujo neto es cero. Puede tratarse de una región sin cargas o de cargas opuestas
+          que se cancelan exactamente dentro de la superficie gaussiana.'
+        en: Zero [[Q_enc]] summarises that the net flux is zero. This may be a region with no charges or with opposite charges
+          that cancel exactly inside the Gaussian surface.
+    - id: qenc_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[Q_enc]] es la causa directa del flujo eléctrico. Su valor resume la distribución de carga dentro de la superficie
+          elegida.'
+        en: '[[Q_enc]] is the direct cause of the electric flux. Its value summarises the charge distribution inside the chosen
+          surface.'
+    physical_reading_rules:
+    - id: qenc_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: Físicamente [[Q_enc]] representa la fuente del campo eléctrico encerrada. Cada coulombio de carga contribuye con
+          un flujo de 1/epsilon_0 a través de cualquier superficie que la encierre.
+        en: Physically [[Q_enc]] represents the enclosed source of the electric field. Each coulomb of charge contributes
+          a flux of 1/epsilon_0 through any surface enclosing it.
+    coherence_rules:
+    - id: qenc_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[Q_enc]] debe ser la suma algebraica correcta de todas las cargas interiores. Si el resultado del flujo calculado
+          difiere del esperado, verificar si se han incluido cargas exteriores por error.'
+        en: '[[Q_enc]] must be the correct algebraic sum of all interior charges. If the computed flux differs from expected,
+          verify that exterior charges have not been included by mistake.'
+    model_validity_rules:
+    - id: qenc_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El concepto de carga encerrada es válido en electrostática clásica. A escalas subatómicas la discretización de
+          la carga requiere tratamiento cuántico.
+        en: The concept of enclosed charge is valid in classical electrostatics. At subatomic scales the discretization of
+          charge requires quantum treatment.
+    graph_rules:
+    - id: qenc_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[Q_enc]] es la variable de control natural del gráfico flujo-carga. Variando [[Q_enc]] se traza la dependencia
+          lineal del flujo con la carga encerrada.'
+        en: '[[Q_enc]] is the natural control variable of the flux-charge graph. By varying [[Q_enc]] one traces the linear
+          dependence of flux on enclosed charge.'
+    likely_errors:
+    - id: qenc_error_external
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[carga_encerrada]] con una lectura aislada es un error frecuente: Error clásico: sumar cargas que
+          están fuera de la superficie gaussiana. Identificar cuidadosamente qué cargas pertenecen al interior antes de calcular
+          [[Q_enc]].'
+        en: 'A common mistake is to interpret [[carga_encerrada]] in isolation: Classic error: summing charges that are outside
+          the Gaussian surface. Carefully identify which charges belong to the interior before computing [[Q_enc]].'
+    - id: qenc_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[carga_encerrada]] con una lectura aislada es un error frecuente: Verificar el signo de cada carga
+          al sumar [[Q_enc]]. Un error de signo en una sola carga cambia por completo el resultado del flujo.'
+        en: 'A common mistake is to interpret [[carga_encerrada]] in isolation: Check the sign of each charge when summing
+          [[Q_enc]]. A sign error in a single charge completely changes the flux result.'
+    next_step_rules:
+    - id: qenc_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Una vez determinado [[Q_enc]], aplicar la ley de Gauss para calcular [[Phi_E]] y, si hay simetría, obtener [[E_G]]
+          dividiendo entre el área de la superficie gaussiana [[A_G]].
+        en: Once [[Q_enc]] is determined, apply Gauss's law to compute [[Phi_E]] and, if there is symmetry, obtain [[E_G]]
+          by dividing by the Gaussian surface area [[A_G]].
+    physical_intuition:
+    - id: carga_encerrada_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[carga_encerrada]] describe el estado dinámico.
+        en: Intuitively, [[carga_encerrada]] describes the dynamic state.
+    limiting_cases:
+    - id: carga_encerrada_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[carga_encerrada]].
+        en: Check limiting cases of [[carga_encerrada]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  epsilon_0:
+    enabled: true
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: Permitividad del vacío en la ley de Gauss
+      en: Permittivity of free space in Gauss's law
+    summary_rules:
+    - id: eps_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[epsilon_0]] es una constante universal que indica la escala de la interacción electrostática en el vacío. Su
+          valor fijo actúa como factor de conversión entre carga y flujo. No depende de ninguna condición del problema.'
+        en: '[[epsilon_0]] is a universal constant indicating the scale of electrostatic interaction in vacuum. Its fixed
+          value acts as a conversion factor between charge and flux. It does not depend on any condition of the problem.'
+    physical_reading_rules:
+    - id: eps_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[epsilon_0]] define qué tan eficientemente el vacío transmite las interacciones electrostáticas. Un valor mayor
+          de permitividad en un medio dieléctrico reduce el flujo y el campo para la misma carga encerrada.'
+        en: '[[epsilon_0]] defines how efficiently vacuum transmits electrostatic interactions. A larger permittivity value
+          in a dielectric medium reduces the flux and field for the same enclosed charge.'
+    coherence_rules:
+    - id: eps_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[epsilon_0]] debe usarse con su valor correcto de 8.854×10⁻¹² C²·N⁻¹·m⁻². Confundirla con la constante de Coulomb
+          k_e es un error frecuente que produce resultados incorrectos.'
+        en: '[[epsilon_0]] must be used with its correct value of 8.854×10⁻¹² C²·N⁻¹·m⁻². Confusing it with Coulomb''s constant
+          k_e is a frequent error that yields incorrect results.'
+    model_validity_rules:
+    - id: eps_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[epsilon_0]] es válida en el vacío. En medios dieléctricos debe reemplazarse por la permitividad del medio para
+          mantener la ley de Gauss en su forma general.'
+        en: '[[epsilon_0]] is valid in vacuum. In dielectric media it must be replaced by the medium permittivity to maintain
+          Gauss''s law in its general form.'
+    graph_rules:
+    - id: eps_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[epsilon_0]] fija la pendiente del gráfico flujo-carga. La recta [[Phi_E]] vs [[Q_enc]] tiene pendiente igual
+          al recíproco de [[epsilon_0]], que es aproximadamente 1.13×10¹¹ N·m²·C⁻².'
+        en: '[[epsilon_0]] sets the slope of the flux-charge graph. The line [[Phi_E]] vs [[Q_enc]] has slope equal to the
+          reciprocal of [[epsilon_0]], which is approximately 1.13×10¹¹ N·m²·C⁻².'
+    likely_errors:
+    - id: eps_error_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[epsilon_0]] con una lectura aislada es un error frecuente: Error frecuente: usar la constante de
+          Coulomb k_e en lugar de [[epsilon_0]] al aplicar la ley de Gauss directamente. Recordar que k_e es el recíproco
+          de 4π[[epsilon_0]].'
+        en: 'A common mistake is to interpret [[epsilon_0]] in isolation: Frequent error: using Coulomb''s constant k_e instead
+          of [[epsilon_0]] when applying Gauss''s law directly. Remember that k_e is the reciprocal of 4π[[epsilon_0]].'
+    - id: eps_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[epsilon_0]] con una lectura aislada es un error frecuente: Verificar que se usa [[epsilon_0]] y no
+          una permitividad relativa arbitraria cuando el problema es en el vacío.'
+        en: 'A common mistake is to interpret [[epsilon_0]] in isolation: Verify that [[epsilon_0]] is used and not an arbitrary
+          relative permittivity when the problem is in vacuum.'
+    next_step_rules:
+    - id: eps_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Para medios dieléctricos, el paso siguiente es aprender a sustituir [[epsilon_0]] por la permitividad del medio.
+          Ver el leaf de dieléctricos.
+        en: For dielectric media, the next step is learning to replace [[epsilon_0]] with the medium permittivity. See the
+          dielectrics leaf.
+    physical_intuition:
+    - id: epsilon_0_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[epsilon_0]] describe el estado dinámico.
+        en: Intuitively, [[epsilon_0]] describes the dynamic state.
+    limiting_cases:
+    - id: epsilon_0_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[epsilon_0]].
+        en: Check limiting cases of [[epsilon_0]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  campo_electrico_gaussiano:
+    enabled: true
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: Campo eléctrico calculado a partir de la ley de Gauss con simetría
+      en: Electric field computed from Gauss's law with symmetry
+    summary_rules:
+    - id: eg_summary_positive
+      when: E_G > 0
+      status: ok
+      text:
+        es: '[[E_G]] es positivo e indica el módulo del campo eléctrico sobre la superficie gaussiana. El resultado depende
+          de [[Q_enc]], [[epsilon_0]] y el área [[A_G]], y resume la intensidad del campo en la región de interés.'
+        en: '[[E_G]] is positive and indicates the electric field magnitude over the Gaussian surface. The result depends
+          on [[Q_enc]], [[epsilon_0]] and the area [[A_G]], and summarises the field intensity in the region of interest.'
+    - id: eg_summary_zero
+      when: E_G == 0
+      status: ok
+      text:
+        es: '[[E_G]] nulo indica que no hay campo en la región considerada. Este resultado es característico del interior
+          de conductores en equilibrio electrostático.'
+        en: Zero [[E_G]] indicates no field in the considered region. This result is characteristic of the interior of conductors
+          in electrostatic equilibrium.
+    - id: eg_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[E_G]] indica el campo eléctrico calculado por la ley de Gauss. Su cálculo solo es directo cuando la geometría
+          garantiza campo uniforme sobre la superficie gaussiana.'
+        en: '[[E_G]] indicates the electric field computed by Gauss''s law. Its direct calculation is only possible when the
+          geometry guarantees uniform field over the Gaussian surface.'
+    physical_reading_rules:
+    - id: eg_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[E_G]] cuantifica la fuerza por unidad de carga en la superficie gaussiana. Un campo mayor indica una distribución
+          de carga más concentrada o una superficie más pequeña para la misma carga encerrada.'
+        en: '[[E_G]] quantifies the force per unit charge on the Gaussian surface. A larger field indicates a more concentrated
+          charge distribution or a smaller surface for the same enclosed charge.'
+    coherence_rules:
+    - id: eg_coherence_conductor
+      when: E_G > 0 && Q_enc == 0
+      status: warning
+      text:
+        es: Campo no nulo con carga encerrada nula puede indicar que la superficie gaussiana está dentro de un conductor o
+          que hay error en la identificación de las cargas encerradas.
+        en: Non-zero field with zero enclosed charge may indicate that the Gaussian surface is inside a conductor or that
+          there is an error identifying the enclosed charges.
+    - id: eg_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[E_G]] es coherente si aumenta cuando [[Q_enc]] aumenta con [[A_G]] fija, y disminuye si [[A_G]] aumenta con
+          [[Q_enc]] fija.'
+        en: '[[E_G]] is coherent if it increases when [[Q_enc]] increases with fixed [[A_G]], and decreases if [[A_G]] increases
+          with fixed [[Q_enc]].'
+    model_validity_rules:
+    - id: eg_validity_symmetry
+      when: 'true'
+      status: warning
+      text:
+        es: '[[E_G]] solo es calculable directamente si la distribución de carga tiene simetría esférica, cilíndrica o planar.
+          Sin simetría, la ley de Gauss no permite extraer el campo de la integral.'
+        en: '[[E_G]] is only directly computable if the charge distribution has spherical, cylindrical or planar symmetry.
+          Without symmetry, Gauss''s law does not allow the field to be factored out of the integral.'
+    - id: eg_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo es válido para geometrías simétricas en electrostática clásica. Para distribuciones arbitrarias se requiere
+          integración numérica o el principio de superposición.
+        en: The model is valid for symmetric geometries in classical electrostatics. For arbitrary distributions numerical
+          integration or the superposition principle is required.
+    graph_rules:
+    - id: eg_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'En el gráfico [[E_G]] frente a [[A_G]] la curva es hiperbólica decreciente para [[Q_enc]] fija: doblar el área
+          reduce el campo a la mitad. Esto refleja la disolución del flujo sobre una superficie mayor.'
+        en: 'In the graph of [[E_G]] versus [[A_G]] the curve is a decreasing hyperbola for fixed [[Q_enc]]: doubling the
+          area halves the field. This reflects the dilution of flux over a larger surface.'
+    likely_errors:
+    - id: eg_error_no_symmetry
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[campo_electrico_gaussiano]] con una lectura aislada es un error frecuente: Error frecuente: calcular
+          [[E_G]] por la ley de Gauss cuando la distribución de carga no tiene simetría. Sin simetría el campo no es uniforme
+          sobre la superficie y no puede extraerse de la integral.'
+        en: 'A common mistake is to interpret [[campo_electrico_gaussiano]] in isolation: Frequent error: computing [[E_G]]
+          from Gauss''s law when the charge distribution lacks symmetry. Without symmetry the field is not uniform over the
+          surface and cannot be factored from the integral.'
+    - id: eg_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[campo_electrico_gaussiano]] con una lectura aislada es un error frecuente: Verificar que [[A_G]]
+          corresponde solo a las partes de la superficie donde el campo es perpendicular a ella. Las tapas de un cilindro
+          no contribuyen si el campo es paralelo a ellas.'
+        en: 'A common mistake is to interpret [[campo_electrico_gaussiano]] in isolation: Verify that [[A_G]] corresponds
+          only to the parts of the surface where the field is perpendicular to it. The caps of a cylinder do not contribute
+          if the field is parallel to them.'
+    next_step_rules:
+    - id: eg_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[E_G]] calculado, el siguiente paso natural es determinar la fuerza sobre una carga de prueba o calcular
+          la energía almacenada en el campo eléctrico de la distribución.
+        en: With [[E_G]] computed, the natural next step is to determine the force on a test charge or calculate the energy
+          stored in the electric field of the distribution.
+    physical_intuition:
+    - id: campo_electrico_gaussiano_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[campo_electrico_gaussiano]] describe el estado dinámico.
+        en: Intuitively, [[campo_electrico_gaussiano]] describes the dynamic state.
+    limiting_cases:
+    - id: campo_electrico_gaussiano_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[campo_electrico_gaussiano]].
+        en: Check limiting cases of [[campo_electrico_gaussiano]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  area_de_la_superficie_gaussiana:
+    enabled: true
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: Área de la superficie gaussiana para el cálculo del campo
+      en: Area of the Gaussian surface for field calculation
+    summary_rules:
+    - id: ag_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[A_G]] indica el área de la superficie cerrada elegida para aplicar la ley de Gauss. Su valor resume la extensión
+          geométrica de la superficie y determina, junto con [[Q_enc]] y [[epsilon_0]], el campo calculado.'
+        en: '[[A_G]] indicates the area of the closed surface chosen to apply Gauss''s law. Its value summarises the geometric
+          extent of the surface and determines, together with [[Q_enc]] and [[epsilon_0]], the computed field.'
+    physical_reading_rules:
+    - id: ag_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[A_G]] representa la capacidad de la superficie para interceptar las líneas de campo. Una superficie mayor intercepta
+          el mismo flujo total pero con menor densidad de campo por unidad de área.'
+        en: '[[A_G]] represents the capacity of the surface to intercept field lines. A larger surface intercepts the same
+          total flux but with lower field density per unit area.'
+    coherence_rules:
+    - id: ag_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[A_G]] debe corresponder al área real de la superficie gaussiana con la simetría elegida. Para una esfera de
+          radio r, el área es proporcional al cuadrado del radio.'
+        en: '[[A_G]] must correspond to the real area of the Gaussian surface with the chosen symmetry. For a sphere of radius
+          r, the area is proportional to the square of the radius.'
+    model_validity_rules:
+    - id: ag_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[A_G]] debe ser el área activa de la superficie, donde el campo es perpendicular a ella. En geometrías asimétricas
+          la integral no se simplifica y [[A_G]] pierde su papel de factor simple.'
+        en: '[[A_G]] must be the active area of the surface, where the field is perpendicular to it. In asymmetric geometries
+          the integral does not simplify and [[A_G]] loses its role as a simple factor.'
+    graph_rules:
+    - id: ag_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: En el gráfico [[E_G]] frente a [[A_G]] se observa que [[E_G]] disminuye hiperbólicamente al aumentar [[A_G]] con
+          [[Q_enc]] fija. Este comportamiento refleja la conservación del flujo.
+        en: In the graph of [[E_G]] versus [[A_G]] it is observed that [[E_G]] decreases hyperbolically as [[A_G]] increases
+          with fixed [[Q_enc]]. This behaviour reflects flux conservation.
+    likely_errors:
+    - id: ag_error_full_area
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[area_de_la_superficie_gaussiana]] con una lectura aislada es un error frecuente: Error frecuente:
+          usar el área total de la superficie en lugar del área activa. Por ejemplo, en un cilindro, las tapas no contribuyen
+          si el campo es tangencial en ellas; solo contribuye la superficie lateral.'
+        en: 'A common mistake is to interpret [[area_de_la_superficie_gaussiana]] in isolation: Frequent error: using the
+          total surface area instead of the active area. For example, in a cylinder, the end caps do not contribute if the
+          field is tangential there; only the lateral surface contributes.'
+    - id: ag_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[area_de_la_superficie_gaussiana]] con una lectura aislada es un error frecuente: Verificar que [[A_G]]
+          corresponde a la parte de la superficie donde el vector campo es perpendicular al diferencial de área. Solo esa
+          parte contribuye al flujo.'
+        en: 'A common mistake is to interpret [[area_de_la_superficie_gaussiana]] in isolation: Verify that [[A_G]] corresponds
+          to the part of the surface where the field vector is perpendicular to the area differential. Only that part contributes
+          to the flux.'
+    next_step_rules:
+    - id: ag_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[A_G]] determinado, combinar con [[Q_enc]] y [[epsilon_0]] en la fórmula del campo gaussiano para obtener
+          [[E_G]]. Si la geometría varía, explorar cómo cambia el campo al cambiar el radio de la superficie.
+        en: With [[A_G]] determined, combine with [[Q_enc]] and [[epsilon_0]] in the Gaussian field formula to obtain [[E_G]].
+          If the geometry varies, explore how the field changes as the surface radius changes.
+    physical_intuition:
+    - id: area_de_la_superficie_gaussiana_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[area_de_la_superficie_gaussiana]] describe el estado dinámico.
+        en: Intuitively, [[area_de_la_superficie_gaussiana]] describes the dynamic state.
+    limiting_cases:
+    - id: area_de_la_superficie_gaussiana_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[area_de_la_superficie_gaussiana]].
+        en: Check limiting cases of [[area_de_la_superficie_gaussiana]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

@@ -1,0 +1,254 @@
+version: 1
+magnitudes:
+- id: v
+  symbol: v
+  nombre:
+    es: velocidad lineal
+    en: linear velocity
+  descripcion:
+    es: Velocidad del centro de masas respecto al suelo.
+    en: Velocity of the center of mass with respect to the ground.
+  unidad_si: m/s
+  dimension: L/T
+  is_vector: false
+  components: null
+  category: state
+  physical_role:
+    es: variable de estado
+    en: state variable
+  used_in:
+  - condicion_rodadura
+  - residuo_rodadura
+  common_mistake:
+    es: Mezclar su signo con un convenio angular opuesto.
+    en: Mixing its sign with an opposite angular convention.
+  typical_range:
+    es: 0.1 a 40 m/s en problemas didacticos.
+    en: 0.1 to 40 m/s in didactic problems.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del eje positivo elegido para el avance.
+      en: Sign depends on the selected positive translation axis.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si vale cero, no hay avance lineal instantaneo.
+      en: If zero, there is no instantaneous linear advance.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - summary
+    - physical_reading
+    secondary_for:
+    - coherence
+  graph_binding:
+    channels:
+    - x
+  pedagogical_notes:
+    es: Conviene fijar sentido positivo antes de operar con omega y R.
+    en: Fix the positive direction before combining v with omega and R.
+- id: omega
+  symbol: \omega
+  nombre:
+    es: velocidad angular
+    en: angular velocity
+  descripcion:
+    es: Tasa de giro del solido alrededor de su eje.
+    en: Rotation rate of the solid around its axis.
+  unidad_si: rad/s
+  dimension: T^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role:
+    es: variable de estado
+    en: state variable
+  used_in:
+  - condicion_rodadura
+  - residuo_rodadura
+  - conversion_rpm_rad
+  common_mistake:
+    es: Introducir rpm sin convertir a rad/s cuando la formula lo requiere.
+    en: Introducing rpm without converting to rad/s when required.
+  typical_range:
+    es: 0.1 a 300 rad/s para casos de clase.
+    en: 0.1 to 300 rad/s for classroom cases.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo representa el sentido de giro segun el convenio.
+      en: Sign represents rotation sense under the chosen convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si vale cero, no hay giro instantaneo.
+      en: If zero, there is no instantaneous rotation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - summary
+    - model_validity
+    secondary_for:
+    - likely_errors
+  graph_binding:
+    channels:
+    - angular_rate
+  pedagogical_notes:
+    es: Revisar consistencia de signo con el avance lineal v.
+    en: Check sign consistency with linear advance v.
+- id: R
+  symbol: R
+  nombre:
+    es: radio efectivo
+    en: effective radius
+  descripcion:
+    es: Distancia entre el centro de giro y el punto de contacto.
+    en: Distance between rotation center and contact point.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role:
+    es: parametro geometrico
+    en: geometric parameter
+  used_in:
+  - condicion_rodadura
+  - residuo_rodadura
+  common_mistake:
+    es: Usar diametro cuando la ecuacion exige radio.
+    en: Using diameter when the equation requires radius.
+  typical_range:
+    es: 0.01 a 1.5 m en sistemas de movilidad.
+    en: 0.01 to 1.5 m in mobility systems.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud no negativa en el modelo.
+      en: It is used as a non-negative magnitude in the model.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: R igual a cero invalida la geometria de rodadura.
+      en: R equal to zero invalidates rolling geometry.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '> 0'
+  interpretation_role:
+    primary_for:
+    - model_validity
+    secondary_for:
+    - coherence
+  graph_binding:
+    channels:
+    - radius
+  pedagogical_notes:
+    es: Verificar unidades y conversiones antes de calcular omega o v.
+    en: Check units and conversions before solving for omega or v.
+- id: delta
+  symbol: \Delta
+  nombre:
+    es: residuo de rodadura
+    en: rolling residual
+  descripcion:
+    es: Diferencia entre velocidad medida y velocidad predicha por rodadura pura.
+    en: Difference between measured velocity and pure rolling prediction.
+  unidad_si: m/s
+  dimension: L/T
+  is_vector: false
+  components: null
+  category: derived
+  physical_role:
+    es: indicador de coherencia
+    en: coherence indicator
+  used_in:
+  - residuo_rodadura
+  common_mistake:
+    es: Ignorar su signo y perder el diagnostico de derrape o patinamiento.
+    en: Ignoring its sign and losing skid or spin diagnostics.
+  typical_range:
+    es: -5 a 5 m/s en ensayos docentes.
+    en: -5 to 5 m/s in teaching tests.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Signo positivo o negativo separa regimenes de deslizamiento.
+      en: Positive or negative sign separates slip regimes.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica compatibilidad con rodadura pura.
+      en: Zero indicates compatibility with pure rolling.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - coherence
+    - likely_errors
+    secondary_for:
+    - next_step
+  graph_binding:
+    channels:
+    - residual
+  pedagogical_notes:
+    es: Fijar un umbral experimental para decidir cuando delta es practicamente cero.
+    en: Define an experimental threshold to decide when delta is practically zero.
+- id: n
+  symbol: n
+  nombre:
+    es: frecuencia de rotacion
+    en: rotation frequency
+  descripcion:
+    es: Numero de revoluciones por minuto medido por el sistema.
+    en: Revolutions per minute measured by the system.
+  unidad_si: rpm
+  dimension: T^-1
+  is_vector: false
+  components: null
+  category: input
+  physical_role:
+    es: dato de entrada
+    en: input datum
+  used_in:
+  - conversion_rpm_rad
+  common_mistake:
+    es: Tratar rpm como si fuera rad/s sin conversion previa.
+    en: Treating rpm as rad/s without prior conversion.
+  typical_range:
+    es: 10 a 6000 rpm segun el sistema.
+    en: 10 to 6000 rpm depending on system.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En este leaf se usa como modulo de frecuencia.
+      en: In this leaf it is used as a frequency magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si vale cero, la rueda esta detenida.
+      en: If zero, the wheel is stopped.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - next_step
+    secondary_for:
+    - summary
+  graph_binding:
+    channels:
+    - rpm
+  pedagogical_notes:
+    es: Convertir n a omega antes de usar la condicion v = omega * R.
+    en: Convert n to omega before applying v = omega * R.

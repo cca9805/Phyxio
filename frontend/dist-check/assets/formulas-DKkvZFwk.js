@@ -1,0 +1,270 @@
+const e=`version: 5
+topic:
+  id: ecuaciones-de-lagrange
+  title:
+    es: Ecuaciones de Lagrange
+    en: Lagrange's equations
+variables:
+- id: L
+  symbol: L
+  name: { es: lagrangiano, en: Lagrangian }
+  si_unit: J
+- id: T
+  symbol: T
+  name: { es: energia cinetica, en: kinetic energy }
+  si_unit: J
+- id: V
+  symbol: V
+  name: { es: energia potencial, en: potential energy }
+  si_unit: J
+- id: qi
+  symbol: q_i
+  name: { es: coordenada generalizada, en: generalized coordinate }
+  si_unit: context-dependent
+- id: qdi
+  symbol: \\dot{q}_i
+  name: { es: velocidad generalizada, en: generalized velocity }
+  si_unit: context-dependent
+- id: qddi
+  symbol: a_{q_i}
+  name: { es: aceleracion generalizada, en: generalized acceleration }
+  si_unit: context-dependent
+- id: pi
+  symbol: p_i
+  name: { es: momento conjugado, en: conjugate momentum }
+  si_unit: context-dependent
+- id: DLv
+  symbol: \\partial L/\\partial \\dot{q}_i
+  name: { es: derivada de L respecto a velocidad generalizada, en: derivative of L with respect to generalized velocity }
+  si_unit: context-dependent
+- id: DtDLv
+  symbol: d(\\partial L/\\partial \\dot{q}_i)/dt
+  name: { es: derivada temporal del momento conjugado, en: time derivative of conjugate momentum term }
+  si_unit: context-dependent
+- id: DLq
+  symbol: \\partial L/\\partial q_i
+  name: { es: derivada de L respecto a coordenada generalizada, en: derivative of L with respect to generalized coordinate }
+  si_unit: context-dependent
+- id: Qi
+  symbol: Q_i
+  name: { es: fuerza generalizada, en: generalized force }
+  si_unit: context-dependent
+- id: Ri
+  symbol: R_i
+  name: { es: operador de Euler-Lagrange, en: Euler-Lagrange operator }
+  si_unit: context-dependent
+- id: m
+  symbol: m
+  name: { es: masa, en: mass }
+  si_unit: kg
+- id: k
+  symbol: k
+  name: { es: rigidez elastica, en: elastic stiffness }
+  si_unit: N/m
+formulas:
+- id: lagrangiano_mecanico
+  title: { es: Lagrangiano mecanico, en: Mechanical Lagrangian }
+  equation: L = T - V
+  latex: L=T-V
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: Define la funcion que codifica la diferencia entre energia cinetica y potencial.
+    en: Defines the function encoding the difference between kinetic and potential energy.
+  constraints: []
+  validity:
+    es: Valido para sistemas mecanicos clasicos donde la dinamica puede formularse mediante T y V.
+    en: Valid for classical mechanical systems whose dynamics can be formulated through T and V.
+  dimension_check: "[J]=[J]-[J]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ momento_conjugado_lagrangiano, operador_euler_lagrange ]
+  interpretation_tags: [ lagrangiano, energia, dinamica ]
+  result_semantics: { target: L, meaning: El resultado fija la funcion dinamica que alimenta la formulacion variacional. }
+  domain_checks:
+  - expr: "true"
+    message: { es: Comprueba que T y V describen el mismo sistema y la misma configuracion., en: Check that T and V describe the same system and configuration. }
+  coherence_checks:
+  - expr: "true"
+    message: { es: El lagrangiano debe conservar dimension de energia., en: The Lagrangian must retain energy dimension. }
+  graph_implications: El signo y la pendiente de L cambian cuando se modifica el equilibrio entre T y V.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: Antes de derivar, explica que parte del problema entra en T y cual en V., en: Before differentiating, explain which part of the problem enters T and which enters V. }
+  rearrangements:
+  - target: L
+    equation: L = T - V
+    latex: L=T-V
+- id: momento_conjugado_lagrangiano
+  title: { es: Momento conjugado, en: Conjugate momentum }
+  equation: pi = DLv
+  latex: p_i=\\frac{\\partial L}{\\partial \\dot{q}_i}
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: Define el momento asociado a una coordenada generalizada a partir de la sensibilidad del lagrangiano a su velocidad.
+    en: Defines the momentum associated with a generalized coordinate from the Lagrangian sensitivity to its velocity.
+  constraints: []
+  validity:
+    es: Valido cuando L depende de la velocidad generalizada correspondiente.
+    en: Valid when L depends on the corresponding generalized velocity.
+  dimension_check: dimensionalmente coherente segun la naturaleza de qi
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ operador_euler_lagrange ]
+  interpretation_tags: [ momento, velocidad-generalizada, derivada ]
+  result_semantics: { target: pi, meaning: El resultado identifica la variable conjugada que participa en la ecuacion de movimiento. }
+  domain_checks:
+  - expr: "true"
+    message: { es: Verifica la dependencia real de L respecto de qdi., en: Check the actual dependence of L on qdi. }
+  coherence_checks:
+  - expr: "true"
+    message: { es: El momento conjugado no tiene por que coincidir con mv en coordenadas no cartesianas., en: Conjugate momentum need not equal mv in non-Cartesian coordinates. }
+  graph_implications: Cambiar qdi modifica pi segun la estructura del lagrangiano.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: Distingue momento conjugado de momento lineal cartesiano., en: Distinguish conjugate momentum from Cartesian linear momentum. }
+  rearrangements:
+  - target: pi
+    equation: pi = DLv
+    latex: p_i=\\frac{\\partial L}{\\partial \\dot{q}_i}
+- id: operador_euler_lagrange
+  title: { es: Operador de Euler-Lagrange, en: Euler-Lagrange operator }
+  equation: Ri = DtDLv - DLq
+  latex: R_i=\\frac{d}{dt}\\left(\\frac{\\partial L}{\\partial \\dot{q}_i}\\right)-\\frac{\\partial L}{\\partial q_i}
+  category: fundamental
+  relation_type: operator
+  physical_meaning:
+    es: Resume el desequilibrio variacional que debe anularse o igualarse a una fuerza generalizada.
+    en: Summarizes the variational imbalance that must vanish or equal a generalized force.
+  constraints: []
+  validity:
+    es: Valido para coordenadas generalizadas diferenciables y lagrangiano suficientemente regular.
+    en: Valid for differentiable generalized coordinates and a sufficiently regular Lagrangian.
+  dimension_check: coincide con la dimension de fuerza generalizada asociada
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ ecuacion_lagrange_conservativa, ecuacion_lagrange_forzada ]
+  interpretation_tags: [ euler-lagrange, operador, ecuacion-movimiento ]
+  result_semantics: { target: Ri, meaning: El resultado mide el residuo dinamico antes de imponer la ecuacion de movimiento. }
+  domain_checks:
+  - expr: "true"
+    message: { es: Revisa que qi y qdi sean coordenadas consistentes del mismo sistema., en: Check that qi and qdi are consistent coordinates of the same system. }
+  coherence_checks:
+  - expr: "true"
+    message: { es: Si no hay fuerza generalizada, Ri debe anularse., en: If there is no generalized force, Ri must vanish. }
+  graph_implications: El residuo cruza cero en los estados compatibles con la ecuacion conservativa.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: Lee Ri como residuo dinamico, no como una magnitud decorativa., en: Read Ri as a dynamical residual, not as a decorative quantity. }
+  rearrangements:
+  - target: Ri
+    equation: Ri = DtDLv - DLq
+    latex: R_i=\\frac{d}{dt}\\left(\\frac{\\partial L}{\\partial \\dot{q}_i}\\right)-\\frac{\\partial L}{\\partial q_i}
+- id: ecuacion_lagrange_conservativa
+  title: { es: Ecuacion de Lagrange sin fuerza generalizada, en: Lagrange equation without generalized force }
+  equation: Ri = 0
+  latex: \\frac{d}{dt}\\left(\\frac{\\partial L}{\\partial \\dot{q}_i}\\right)-\\frac{\\partial L}{\\partial q_i}=0
+  category: fundamental
+  relation_type: equation_of_motion
+  physical_meaning:
+    es: Impone la estacionariedad dinamica en sistemas conservativos o con fuerzas incorporadas en el potencial.
+    en: Imposes dynamical stationarity for conservative systems or forces already incorporated into the potential.
+  constraints: []
+  validity:
+    es: Valida cuando no hay fuerzas generalizadas no potenciales activas.
+    en: Valid when no active non-potential generalized forces are present.
+  dimension_check: ambos lados tienen la dimension de Qi
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ derivacion_de_ecuaciones_de_movimiento ]
+  interpretation_tags: [ conservativo, euler-lagrange, movimiento ]
+  result_semantics: { target: Ri, meaning: El resultado afirma que el residuo dinamico se anula. }
+  domain_checks:
+  - expr: "true"
+    message: { es: Confirma que las fuerzas relevantes se han absorbido en V o no actuan., en: Confirm that relevant forces are absorbed into V or absent. }
+  coherence_checks:
+  - expr: "true"
+    message: { es: La ecuacion debe recuperar la dinamica conocida en casos simples., en: The equation should recover known dynamics in simple cases. }
+  graph_implications: Los estados fisicamente compatibles se leen donde el residuo es cero.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: Comprueba que no falta una fuerza no conservativa antes de imponer cero., en: Check that no non-conservative force is missing before setting the residual to zero. }
+  rearrangements:
+  - target: Ri
+    equation: Ri = 0
+    latex: R_i=0
+- id: ecuacion_lagrange_forzada
+  title: { es: Ecuacion de Lagrange con fuerza generalizada, en: Lagrange equation with generalized force }
+  equation: Qi = Ri
+  latex: \\frac{d}{dt}\\left(\\frac{\\partial L}{\\partial \\dot{q}_i}\\right)-\\frac{\\partial L}{\\partial q_i}=Q_i
+  category: fundamental
+  relation_type: equation_of_motion
+  physical_meaning:
+    es: Incorpora fuerzas generalizadas externas o no potenciales al balance variacional.
+    en: Incorporates external or non-potential generalized forces into the variational balance.
+  constraints: []
+  validity:
+    es: Valida cuando las fuerzas no potenciales pueden representarse mediante Qi.
+    en: Valid when non-potential forces can be represented through Qi.
+  dimension_check: Ri y Qi comparten dimension
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ aceleracion_oscilador_forzado ]
+  interpretation_tags: [ fuerza-generalizada, forzado, euler-lagrange ]
+  result_semantics: { target: Qi, meaning: El resultado fija la fuerza generalizada requerida por la ecuacion de movimiento. }
+  domain_checks:
+  - expr: "true"
+    message: { es: Declara que agente fisico produce Qi., en: State which physical agent produces Qi. }
+  coherence_checks:
+  - expr: "true"
+    message: { es: Si Qi es cero, se recupera la ecuacion conservativa., en: If Qi is zero, the conservative equation is recovered. }
+  graph_implications: La fuerza generalizada desplaza el equilibrio dinamico del sistema.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: No confundas Qi con una fuerza cartesiana sin revisar la coordenada asociada., en: Do not confuse Qi with a Cartesian force without checking the associated coordinate. }
+  rearrangements:
+  - target: Qi
+    equation: Qi = Ri
+    latex: Q_i=R_i
+- id: aceleracion_oscilador_forzado
+  title: { es: Aceleracion generalizada en oscilador lineal forzado, en: Generalized acceleration in a forced linear oscillator }
+  equation: qddi = (Qi - k*qi)/m
+  latex: a_q=\\frac{Q_i-k\\cdot q_i}{m}
+  category: applied
+  relation_type: equation_of_motion
+  physical_meaning:
+    es: Muestra como la ecuacion de Lagrange recupera la aceleracion de un sistema lineal con aporte externo.
+    en: Shows how Lagrange's equation recovers the acceleration of a linear system with external input.
+  constraints: [ m > 0 ]
+  validity:
+    es: Valida para una coordenada lineal con energia potencial elastica cuadratica y fuerza generalizada externa Q.
+    en: Valid for one linear coordinate with quadratic elastic potential and external generalized force Q.
+  dimension_check: "[q]/[t]^2"
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ lectura_grafica_del_leaf ]
+  interpretation_tags: [ oscilador, fuerza-generalizada, aceleracion ]
+  result_semantics: { target: qddi, meaning: El resultado traduce el residuo lagrangiano a una aceleracion interpretable. }
+  domain_checks:
+  - expr: m > 0
+    message: { es: La masa debe ser positiva., en: Mass must be positive. }
+  coherence_checks:
+  - expr: "true"
+    message: { es: Si Qi y k por qi se equilibran, la aceleracion se anula., en: If Qi and k times qi balance, acceleration vanishes. }
+  graph_implications: La grafica muestra donde Qi menos k por qi cambia de signo y con ello la aceleracion.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: Usa este caso para verificar que el formalismo reproduce una dinamica conocida., en: Use this case to verify that the formalism reproduces familiar dynamics. }
+  rearrangements:
+  - target: qddi
+    equation: qddi = (Qi - k*qi)/m
+    latex: a_q=\\frac{Q_i-k\\cdot q_i}{m}
+ui:
+  default_formula: ecuacion_lagrange_forzada
+  groups:
+  - title: { es: Núcleo lagrangiano, en: Lagrangian core }
+    items: [ lagrangiano_mecanico, momento_conjugado_lagrangiano, operador_euler_lagrange ]
+  - title: { es: Ecuaciones de movimiento, en: Equations of motion }
+    items: [ ecuacion_lagrange_conservativa, ecuacion_lagrange_forzada, aceleracion_oscilador_forzado ]
+`;export{e as default};

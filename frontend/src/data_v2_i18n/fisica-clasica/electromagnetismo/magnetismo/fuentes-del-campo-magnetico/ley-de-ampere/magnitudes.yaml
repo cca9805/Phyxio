@@ -1,0 +1,448 @@
+magnitudes:
+- id: campo_magnetico
+  symbol: B
+  nombre:
+    es: Campo magnetico
+    en: Magnetic field
+  descripcion:
+    es: Campo magnetico tangente a una curva amperiana simetrica o campo calculado alrededor de un hilo largo.
+    en: Magnetic field tangent to a symmetric Amperian curve or field calculated around a long wire.
+  unidad_si: T
+  dimension: '[M T^-2 I^-1]'
+  is_vector: true
+  components:
+  - B_x
+  - B_y
+  - B_z
+  category: state
+  physical_role: core_physical_quantity
+  used_in:
+  - teoria.md
+  - teoria.en.md
+  - ejemplos.md
+  - ejemplos.en.md
+  - campo_hilo_ampere
+  - graph_y_axis
+  common_mistake:
+    es: Confundir el modulo de campo calculado con la circulacion completa de la curva.
+    en: Confusing the calculated field magnitude with the complete circulation around the curve.
+  typical_range: 1e-6 T a 10 T
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo de una componente depende de la orientacion elegida para la curva y de la regla de la mano derecha.
+      en: The sign of a component depends on the chosen path orientation and the right-hand rule.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede anularse localmente por simetria, cancelacion o ausencia de corriente efectiva.
+      en: It may vanish locally by symmetry, cancellation, or absence of effective current.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: '[0, inf) T'
+  interpretation_role:
+    primary_for:
+    - field_strength
+    - wire_field_result
+    - graph_output
+    secondary_for:
+    - circulation_reading
+    - symmetry_check
+  graph_binding:
+    channels:
+    - y_axis
+    - curve_height
+  pedagogical_notes:
+    es: En este leaf se usa como modulo calculable solo despues de justificar que la curva amperiana hace constante el campo.
+    en: In this leaf it is used as a calculable magnitude only after justifying that the Amperian curve makes the field constant.
+- id: dl
+  symbol: dl
+  nombre:
+    es: Elemento de longitud amperiano
+    en: Amperian path element
+  descripcion:
+    es: Elemento orientado de la curva cerrada sobre la que se evalua la circulacion magnetica.
+    en: Oriented element of the closed curve on which magnetic circulation is evaluated.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: true
+  components:
+  - dl_x
+  - dl_y
+  - dl_z
+  category: dimension
+  physical_role: core_physical_quantity
+  used_in:
+  - ampere_integral
+  - teoria.md
+  - teoria.en.md
+  common_mistake:
+    es: Tratarlo como una longitud total sin orientacion y perder el signo de la circulacion.
+    en: Treating it as a total length without orientation and losing the sign of circulation.
+  typical_range: depende de la curva amperiana elegida
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su orientacion fija el sentido positivo de recorrido de la integral cerrada.
+      en: Its orientation fixes the positive traversal direction of the closed integral.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un elemento nulo no representa avance sobre la curva y no aporta a la integral.
+      en: A zero element represents no advance along the curve and contributes nothing to the integral.
+  value_nature:
+    kind: vector_component
+    nonnegative_only: false
+    expected_interval: any oriented path element
+  interpretation_role:
+    primary_for:
+    - orientation_of_circulation
+    - integral_path
+    secondary_for:
+    - sign_convention
+  graph_binding:
+    channels:
+    - path_tangent
+  pedagogical_notes:
+    es: Sirve para recordar que Ampere no suma campo en puntos sueltos, sino componente tangencial sobre una vuelta cerrada.
+    en: It reminds the learner that Ampere's law sums tangential field along a closed loop, not isolated field values.
+- id: circulacion_magnetica
+  symbol: C_B
+  nombre:
+    es: Circulacion magnetica
+    en: Magnetic circulation
+  descripcion:
+    es: Suma orientada de la componente tangencial de campo magnetico alrededor de una curva cerrada.
+    en: Oriented sum of the tangential magnetic-field component around a closed curve.
+  unidad_si: T*m
+  dimension: '[M L T^-2 I^-1]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+  - ampere_integral
+  - interpretacion.yaml
+  - teoria.md
+  - aplicaciones.md
+  common_mistake:
+    es: Interpretarla como campo local en vez de como resultado global de una vuelta cerrada.
+    en: Interpreting it as a local field instead of a global closed-loop result.
+  typical_range: 1e-9 T*m a 10 T*m
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica si la circulacion acompana el sentido positivo elegido para la curva.
+      en: The sign indicates whether circulation follows the chosen positive direction along the curve.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Circulacion nula significa corriente neta encerrada nula, aunque pueda existir campo local.
+      en: Zero circulation means zero net enclosed current, although local field may still exist.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: (-inf, inf) T*m
+  interpretation_role:
+    primary_for:
+    - integral_law_result
+    - enclosed_current_reading
+    secondary_for:
+    - emc_loop_reasoning
+  graph_binding:
+    channels:
+    - summary_panel
+  pedagogical_notes:
+    es: Es la magnitud que evita reducir la ley a una formula de campo puntual.
+    en: It is the quantity that prevents reducing the law to a point-field formula.
+- id: mu0
+  symbol: \mu_0
+  nombre:
+    es: Permeabilidad magnetica del vacio
+    en: Magnetic permeability of vacuum
+  descripcion:
+    es: Constante positiva que fija el acoplamiento entre corriente y campo magnetico en vacio.
+    en: Positive constant setting the coupling between current and magnetic field in vacuum.
+  unidad_si: N*A^-2
+  dimension: '[M L T^-2 I^-2]'
+  is_vector: false
+  components: []
+  category: constant
+  physical_role: core_physical_quantity
+  used_in:
+  - ampere_integral
+  - campo_hilo_ampere
+  - campo_solenoide_largo
+  common_mistake:
+    es: Usarla como si tambien describiera sin cambios materiales ferromagneticos saturados.
+    en: Using it as if it also described saturated ferromagnetic materials without modification.
+  typical_range: 4*pi*1e-7 N*A^-2
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es una constante positiva del modelo en vacio.
+      en: It is a positive constant of the vacuum model.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un valor nulo eliminaria el acoplamiento amperiano entre corriente y campo.
+      en: A zero value would remove the Amperian coupling between current and field.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, inf) N*A^-2
+  interpretation_role:
+    primary_for:
+    - proportionality_constant
+    - vacuum_model
+    secondary_for:
+    - unit_check
+  graph_binding:
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Debe leerse como constante del medio ideal; en nucleos reales se sustituye por una respuesta material efectiva.
+    en: It must be read as the ideal-medium constant; in real cores it is replaced by an effective material response.
+- id: corriente_encerrada
+  symbol: I_enc
+  nombre:
+    es: Corriente encerrada
+    en: Enclosed current
+  descripcion:
+    es: Corriente neta que atraviesa la superficie limitada por la curva amperiana.
+    en: Net current crossing the surface bounded by the Amperian curve.
+  unidad_si: A
+  dimension: '[I]'
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: core_physical_quantity
+  used_in:
+  - ampere_integral
+  - teoria.md
+  - ejemplos.md
+  - interpretacion.yaml
+  common_mistake:
+    es: Sumar corrientes cercanas que no atraviesan la superficie encerrada por la curva.
+    en: Adding nearby currents that do not cross the surface enclosed by the curve.
+  typical_range: 1e-3 A a 1e4 A
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende de la direccion de cruce respecto a la normal asociada al recorrido.
+      en: The sign depends on crossing direction relative to the normal associated with the path.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Corriente neta nula implica circulacion neta nula en la version magnetostatica.
+      en: Zero net current implies zero net circulation in the magnetostatic version.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: (-inf, inf) A
+  interpretation_role:
+    primary_for:
+    - magnetic_source
+    - circulation_sign
+    secondary_for:
+    - current_cancellation
+  graph_binding:
+    channels:
+    - source_indicator
+  pedagogical_notes:
+    es: Es la fuente topologica de la ley; no coincide necesariamente con toda corriente cercana al camino.
+    en: It is the topological source of the law; it does not necessarily equal every current near the path.
+- id: corriente_del_conductor
+  symbol: I
+  nombre:
+    es: Corriente del conductor
+    en: Conductor current
+  descripcion:
+    es: Corriente estacionaria que actua como fuente en el hilo largo o en las espiras del solenoide.
+    en: Steady current acting as source in the long wire or in solenoid turns.
+  unidad_si: A
+  dimension: '[I]'
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: core_physical_quantity
+  used_in:
+  - campo_hilo_ampere
+  - campo_solenoide_largo
+  - ejemplos.md
+  - aplicaciones.md
+  common_mistake:
+    es: Cambiar su signo sin cambiar el sentido fisico del campo indicado por la regla de la mano derecha.
+    en: Changing its sign without changing the physical field direction given by the right-hand rule.
+  typical_range: 0.1 A a 1000 A
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su signo fija el sentido de giro del campo segun la orientacion elegida.
+      en: Its sign fixes the circulation direction of the field under the chosen orientation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Sin corriente no hay campo amperiano asociado al hilo ni al solenoide ideal.
+      en: Without current there is no Amperian field associated with the wire or ideal solenoid.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: (-inf, inf) A
+  interpretation_role:
+    primary_for:
+    - source_strength
+    - field_scaling
+    secondary_for:
+    - sign_direction
+  graph_binding:
+    channels:
+    - input_parameter
+  pedagogical_notes:
+    es: En las formulas de modulo se suele usar su valor positivo y se deja el sentido para la regla de orientacion.
+    en: In magnitude formulas its positive value is often used while direction is handled by the orientation rule.
+- id: radio_amperiano
+  symbol: r
+  nombre:
+    es: Radio amperiano
+    en: Amperian radius
+  descripcion:
+    es: Distancia perpendicular al hilo y radio de la circunferencia elegida por simetria.
+    en: Perpendicular distance from the wire and radius of the circle chosen by symmetry.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: dimension
+  physical_role: core_physical_quantity
+  used_in:
+  - campo_hilo_ampere
+  - graph_x_axis
+  - ejemplos.md
+  common_mistake:
+    es: Usar el diametro o una distancia no perpendicular como si fuera el radio amperiano.
+    en: Using diameter or a nonperpendicular distance as if it were the Amperian radius.
+  typical_range: 1e-3 m a 10 m
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es una distancia y se toma positiva.
+      en: It is a distance and is taken as positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Radio nulo queda fuera del modelo de hilo ideal y produciria una singularidad.
+      en: Zero radius is outside the ideal-wire model and would produce a singularity.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, inf) m
+  interpretation_role:
+    primary_for:
+    - wire_distance
+    - inverse_field_decay
+    secondary_for:
+    - graph_input
+  graph_binding:
+    channels:
+    - x_axis
+  pedagogical_notes:
+    es: Controla la caida espacial del campo de un hilo largo y debe pertenecer a la circunferencia amperiana.
+    en: It controls the spatial decrease of the long-wire field and must belong to the Amperian circle.
+- id: densidad_de_espiras
+  symbol: n
+  nombre:
+    es: Densidad de espiras
+    en: Turn density
+  descripcion:
+    es: Numero de espiras por unidad de longitud en el modelo de solenoide largo.
+    en: Number of turns per unit length in the long-solenoid model.
+  unidad_si: m^-1
+  dimension: '[L^-1]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: core_physical_quantity
+  used_in:
+  - campo_solenoide_largo
+  - ejemplos.md
+  - aplicaciones.md
+  common_mistake:
+    es: Usar el numero total de espiras sin dividirlo por la longitud del solenoide.
+    en: Using the total number of turns without dividing by solenoid length.
+  typical_range: 10 m^-1 a 10000 m^-1
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es una densidad geometrica positiva.
+      en: It is a positive geometric density.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Sin espiras por longitud no hay solenoide en este modelo.
+      en: Without turns per length there is no solenoid in this model.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, inf) m^-1
+  interpretation_role:
+    primary_for:
+    - solenoid_geometry
+    - field_scaling
+    secondary_for:
+    - design_parameter
+  graph_binding:
+    channels:
+    - input_parameter
+  pedagogical_notes:
+    es: Permite distinguir un solenoide largo de una sola espira; es una densidad, no un conteo bruto.
+    en: It separates a long solenoid from a single loop; it is a density, not a raw count.
+- id: campo_de_solenoide_largo
+  symbol: B_sol
+  nombre:
+    es: Campo de solenoide largo
+    en: Long-solenoid field
+  descripcion:
+    es: Campo magnetico interior aproximado de un solenoide largo ideal, lejos de los bordes.
+    en: Approximate internal magnetic field of an ideal long solenoid, far from the ends.
+  unidad_si: T
+  dimension: '[M T^-2 I^-1]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+  - campo_solenoide_largo
+  - ejemplos.md
+  - aplicaciones.md
+  common_mistake:
+    es: Aplicarlo cerca de los extremos o en solenoides cortos como si el campo fuera uniforme.
+    en: Applying it near the ends or in short solenoids as if the field were uniform.
+  typical_range: 1e-4 T a 1 T
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su sentido se fija con la orientacion de la corriente en las espiras.
+      en: Its direction is fixed by the current orientation in the turns.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Se anula si la corriente o la densidad de espiras se anulan.
+      en: It vanishes if current or turn density vanishes.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: '[0, inf) T'
+  interpretation_role:
+    primary_for:
+    - solenoid_field_result
+    - uniform_field_model
+    secondary_for:
+    - coil_design
+  graph_binding:
+    channels:
+    - result_panel
+  pedagogical_notes:
+    es: Solo representa el campo interior ideal; no debe confundirse con el campo exterior ni con efectos de borde.
+    en: It represents only the ideal internal field; it should not be confused with exterior field or edge effects.

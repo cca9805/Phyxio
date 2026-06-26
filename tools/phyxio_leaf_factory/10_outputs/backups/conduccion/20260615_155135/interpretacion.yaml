@@ -1,0 +1,1137 @@
+version: 5.0.0
+id: conduccion
+leaf_id: conduccion
+nombre:
+  es: Conducción
+  en: Conduction
+scope:
+  area: ''
+  bloque: ''
+  subbloque: ''
+  parent_id: ''
+  ruta_relativa: ''
+  orden: 257100
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: false
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: false
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: false
+  preferred_type: none
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas: diferencia_temperatura, gradiente_temperatura_1d, ley_fourier_conduccion_1d, flujo_calor_conduccion, flujo_potencia_area,
+    calor_potencia_tiempo, resistencia_termica_conduccion, potencia_resistencia_termica
+  magnitudes: calor_transferido, tiempo, potencia_termica, flujo_calor, conductividad_termica, area, espesor, temperatura_caliente,
+    temperatura_fria, diferencia_temperatura, gradiente_temperatura, resistencia_termica
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: false
+global_context:
+  enabled: true
+  physical_domain:
+    es: ''
+    en: ''
+  axis_convention:
+    es: El signo depende del convenio de ejes elegido cuando intervienen magnitudes vectoriales.
+    en: The sign depends on the chosen axis convention when vector quantities are involved.
+  standard_assumptions:
+  - es: El modelo se interpreta dentro de las hipótesis declaradas en el leaf.
+    en: The model is interpreted within the assumptions declared in the leaf.
+  standard_warnings:
+  - es: No interpretes el resultado sin revisar unidades, signo y validez del modelo.
+    en: Do not interpret the result without checking units, sign, and model validity.
+graph_binding:
+  enabled: false
+  type: none
+  channels: []
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: La interpretación debe respetar la dimensión física de cada resultado.
+      en: The interpretation must respect the physical dimension of each result.
+error_patterns:
+  enabled: true
+  patterns:
+  - id: unit_sign_model_confusion
+    status: warning
+    text:
+      es: Un error frecuente es leer el número sin unidad, signo o modelo físico.
+      en: A common error is reading the number without unit, sign, or physical model.
+graph_reading_policy:
+  enabled: false
+  primary_variable: diferencia_temperatura
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Compara el resultado con valores cotidianos o escalas físicas conocidas cuando sea posible.
+    en: Compare the result with everyday values or known physical scales when possible.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Comprueba que las unidades finales coinciden con la magnitud interpretada.
+    en: Check that the final units match the interpreted quantity.
+  common_unit_mistakes:
+  - es: Mezclar unidades incompatibles antes de aplicar la fórmula.
+    en: Mixing incompatible units before applying the formula.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  diferencia_temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: temperature difference
+    summary_rules:
+    - id: diferencia_temperatura_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[diferencia_temperatura]] indica la magnitud física principal que se está interpretando.
+        en: The result [[diferencia_temperatura]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: diferencia_temperatura_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[diferencia_temperatura]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[diferencia_temperatura]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: diferencia_temperatura_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[diferencia_temperatura]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[diferencia_temperatura]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: diferencia_temperatura_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[diferencia_temperatura]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[diferencia_temperatura]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: diferencia_temperatura_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: No hay una lectura gráfica prioritaria para [[diferencia_temperatura]] en este leaf.
+        en: There is no primary graph reading for [[diferencia_temperatura]] in this leaf.
+    likely_errors:
+    - id: diferencia_temperatura_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[diferencia_temperatura]] como un número aislado. Su sentido depende del modelo, la unidad y el
+          signo.
+        en: Do not interpret [[diferencia_temperatura]] as an isolated number. Its meaning depends on the model, unit, and
+          sign.
+    next_step_rules:
+    - id: diferencia_temperatura_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[diferencia_temperatura]], revisa la coherencia física y vuelve a la calculadora si necesitas
+          otro despeje.
+        en: After obtaining [[diferencia_temperatura]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: diferencia_temperatura_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[diferencia_temperatura]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[diferencia_temperatura]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: diferencia_temperatura_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[diferencia_temperatura]] comprobando qué ocurre si una magnitud dominante crece,
+          disminuye o se anula.
+        en: Analyze the limiting cases of [[diferencia_temperatura]] by checking what happens if a dominant quantity grows,
+          decreases, or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_caliente:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: hot-side temperature
+    summary_rules:
+    - id: temperatura_caliente_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[temperatura_caliente]] indica la magnitud física principal que se está interpretando.
+        en: The result [[temperatura_caliente]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: temperatura_caliente_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura_caliente]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[temperatura_caliente]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: temperatura_caliente_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura_caliente]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[temperatura_caliente]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: temperatura_caliente_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura_caliente]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[temperatura_caliente]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: temperatura_caliente_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: No hay una lectura gráfica prioritaria para [[temperatura_caliente]] en este leaf.
+        en: There is no primary graph reading for [[temperatura_caliente]] in this leaf.
+    likely_errors:
+    - id: temperatura_caliente_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[temperatura_caliente]] como un número aislado. Su sentido depende del modelo, la unidad y el
+          signo.
+        en: Do not interpret [[temperatura_caliente]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: temperatura_caliente_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[temperatura_caliente]], revisa la coherencia física y vuelve a la calculadora si necesitas
+          otro despeje.
+        en: After obtaining [[temperatura_caliente]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: temperatura_caliente_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura_caliente]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[temperatura_caliente]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: temperatura_caliente_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[temperatura_caliente]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[temperatura_caliente]] by checking what happens if a dominant quantity grows,
+          decreases, or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_fria:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: cold-side temperature
+    summary_rules:
+    - id: temperatura_fria_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[temperatura_fria]] indica la magnitud física principal que se está interpretando.
+        en: The result [[temperatura_fria]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: temperatura_fria_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura_fria]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[temperatura_fria]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: temperatura_fria_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura_fria]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[temperatura_fria]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: temperatura_fria_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura_fria]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[temperatura_fria]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: temperatura_fria_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: No hay una lectura gráfica prioritaria para [[temperatura_fria]] en este leaf.
+        en: There is no primary graph reading for [[temperatura_fria]] in this leaf.
+    likely_errors:
+    - id: temperatura_fria_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[temperatura_fria]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[temperatura_fria]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: temperatura_fria_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[temperatura_fria]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[temperatura_fria]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: temperatura_fria_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura_fria]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[temperatura_fria]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: temperatura_fria_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[temperatura_fria]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[temperatura_fria]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  gradiente_temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: temperature gradient
+    summary_rules:
+    - id: gradiente_temperatura_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[gradiente_temperatura]] indica la magnitud física principal que se está interpretando.
+        en: The result [[gradiente_temperatura]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: gradiente_temperatura_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[gradiente_temperatura]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[gradiente_temperatura]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: gradiente_temperatura_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[gradiente_temperatura]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[gradiente_temperatura]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: gradiente_temperatura_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[gradiente_temperatura]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[gradiente_temperatura]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: gradiente_temperatura_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: No hay una lectura gráfica prioritaria para [[gradiente_temperatura]] en este leaf.
+        en: There is no primary graph reading for [[gradiente_temperatura]] in this leaf.
+    likely_errors:
+    - id: gradiente_temperatura_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[gradiente_temperatura]] como un número aislado. Su sentido depende del modelo, la unidad y el
+          signo.
+        en: Do not interpret [[gradiente_temperatura]] as an isolated number. Its meaning depends on the model, unit, and
+          sign.
+    next_step_rules:
+    - id: gradiente_temperatura_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[gradiente_temperatura]], revisa la coherencia física y vuelve a la calculadora si necesitas
+          otro despeje.
+        en: After obtaining [[gradiente_temperatura]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: gradiente_temperatura_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[gradiente_temperatura]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[gradiente_temperatura]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: gradiente_temperatura_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[gradiente_temperatura]] comprobando qué ocurre si una magnitud dominante crece,
+          disminuye o se anula.
+        en: Analyze the limiting cases of [[gradiente_temperatura]] by checking what happens if a dominant quantity grows,
+          decreases, or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  espesor:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: thickness
+    summary_rules:
+    - id: espesor_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[espesor]] indica la magnitud física principal que se está interpretando.
+        en: The result [[espesor]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: espesor_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[espesor]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[espesor]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: espesor_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[espesor]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[espesor]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: espesor_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[espesor]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[espesor]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: espesor_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: No hay una lectura gráfica prioritaria para [[espesor]] en este leaf.
+        en: There is no primary graph reading for [[espesor]] in this leaf.
+    likely_errors:
+    - id: espesor_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[espesor]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[espesor]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: espesor_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[espesor]], revisa la coherencia física y vuelve a la calculadora si necesitas otro despeje.
+        en: After obtaining [[espesor]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: espesor_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[espesor]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[espesor]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: espesor_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[espesor]] comprobando qué ocurre si una magnitud dominante crece, disminuye o se
+          anula.
+        en: Analyze the limiting cases of [[espesor]] by checking what happens if a dominant quantity grows, decreases, or
+          becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  potencia_termica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: thermal power
+    summary_rules:
+    - id: potencia_termica_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[potencia_termica]] indica la magnitud física principal que se está interpretando.
+        en: The result [[potencia_termica]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: potencia_termica_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[potencia_termica]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[potencia_termica]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: potencia_termica_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[potencia_termica]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[potencia_termica]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: potencia_termica_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[potencia_termica]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[potencia_termica]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: potencia_termica_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: No hay una lectura gráfica prioritaria para [[potencia_termica]] en este leaf.
+        en: There is no primary graph reading for [[potencia_termica]] in this leaf.
+    likely_errors:
+    - id: potencia_termica_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[potencia_termica]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[potencia_termica]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: potencia_termica_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[potencia_termica]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[potencia_termica]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: potencia_termica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[potencia_termica]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[potencia_termica]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: potencia_termica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[potencia_termica]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[potencia_termica]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  conductividad_termica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: thermal conductivity
+    summary_rules:
+    - id: conductividad_termica_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[conductividad_termica]] indica la magnitud física principal que se está interpretando.
+        en: The result [[conductividad_termica]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: conductividad_termica_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[conductividad_termica]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[conductividad_termica]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: conductividad_termica_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[conductividad_termica]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[conductividad_termica]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: conductividad_termica_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[conductividad_termica]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[conductividad_termica]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: conductividad_termica_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: No hay una lectura gráfica prioritaria para [[conductividad_termica]] en este leaf.
+        en: There is no primary graph reading for [[conductividad_termica]] in this leaf.
+    likely_errors:
+    - id: conductividad_termica_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[conductividad_termica]] como un número aislado. Su sentido depende del modelo, la unidad y el
+          signo.
+        en: Do not interpret [[conductividad_termica]] as an isolated number. Its meaning depends on the model, unit, and
+          sign.
+    next_step_rules:
+    - id: conductividad_termica_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[conductividad_termica]], revisa la coherencia física y vuelve a la calculadora si necesitas
+          otro despeje.
+        en: After obtaining [[conductividad_termica]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: conductividad_termica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[conductividad_termica]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[conductividad_termica]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: conductividad_termica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[conductividad_termica]] comprobando qué ocurre si una magnitud dominante crece,
+          disminuye o se anula.
+        en: Analyze the limiting cases of [[conductividad_termica]] by checking what happens if a dominant quantity grows,
+          decreases, or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  area:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: cross-sectional area
+    summary_rules:
+    - id: area_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[area]] indica la magnitud física principal que se está interpretando.
+        en: The result [[area]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: area_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[area]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[area]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: area_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[area]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[area]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: area_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[area]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[area]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: area_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: No hay una lectura gráfica prioritaria para [[area]] en este leaf.
+        en: There is no primary graph reading for [[area]] in this leaf.
+    likely_errors:
+    - id: area_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[area]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[area]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: area_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[area]], revisa la coherencia física y vuelve a la calculadora si necesitas otro despeje.
+        en: After obtaining [[area]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: area_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[area]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[area]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: area_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[area]] comprobando qué ocurre si una magnitud dominante crece, disminuye o se anula.
+        en: Analyze the limiting cases of [[area]] by checking what happens if a dominant quantity grows, decreases, or becomes
+          zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  flujo_calor:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: heat flux
+    summary_rules:
+    - id: flujo_calor_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[flujo_calor]] indica la magnitud física principal que se está interpretando.
+        en: The result [[flujo_calor]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: flujo_calor_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[flujo_calor]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[flujo_calor]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: flujo_calor_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[flujo_calor]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[flujo_calor]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: flujo_calor_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[flujo_calor]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[flujo_calor]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: flujo_calor_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: No hay una lectura gráfica prioritaria para [[flujo_calor]] en este leaf.
+        en: There is no primary graph reading for [[flujo_calor]] in this leaf.
+    likely_errors:
+    - id: flujo_calor_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[flujo_calor]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[flujo_calor]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: flujo_calor_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[flujo_calor]], revisa la coherencia física y vuelve a la calculadora si necesitas otro despeje.
+        en: After obtaining [[flujo_calor]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: flujo_calor_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[flujo_calor]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[flujo_calor]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: flujo_calor_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[flujo_calor]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[flujo_calor]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  calor_transferido:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: transferred heat
+    summary_rules:
+    - id: calor_transferido_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[calor_transferido]] indica la magnitud física principal que se está interpretando.
+        en: The result [[calor_transferido]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: calor_transferido_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[calor_transferido]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[calor_transferido]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: calor_transferido_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[calor_transferido]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[calor_transferido]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: calor_transferido_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[calor_transferido]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[calor_transferido]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: calor_transferido_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: No hay una lectura gráfica prioritaria para [[calor_transferido]] en este leaf.
+        en: There is no primary graph reading for [[calor_transferido]] in this leaf.
+    likely_errors:
+    - id: calor_transferido_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[calor_transferido]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[calor_transferido]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: calor_transferido_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[calor_transferido]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[calor_transferido]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: calor_transferido_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[calor_transferido]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[calor_transferido]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: calor_transferido_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[calor_transferido]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[calor_transferido]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  tiempo:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: time
+    summary_rules:
+    - id: tiempo_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[tiempo]] indica la magnitud física principal que se está interpretando.
+        en: The result [[tiempo]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: tiempo_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[tiempo]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[tiempo]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: tiempo_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[tiempo]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[tiempo]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: tiempo_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[tiempo]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[tiempo]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: tiempo_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: No hay una lectura gráfica prioritaria para [[tiempo]] en este leaf.
+        en: There is no primary graph reading for [[tiempo]] in this leaf.
+    likely_errors:
+    - id: tiempo_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[tiempo]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[tiempo]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: tiempo_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[tiempo]], revisa la coherencia física y vuelve a la calculadora si necesitas otro despeje.
+        en: After obtaining [[tiempo]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: tiempo_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[tiempo]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[tiempo]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: tiempo_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[tiempo]] comprobando qué ocurre si una magnitud dominante crece, disminuye o se
+          anula.
+        en: Analyze the limiting cases of [[tiempo]] by checking what happens if a dominant quantity grows, decreases, or
+          becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  resistencia_termica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: thermal resistance
+    summary_rules:
+    - id: resistencia_termica_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[resistencia_termica]] indica la magnitud física principal que se está interpretando.
+        en: The result [[resistencia_termica]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: resistencia_termica_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[resistencia_termica]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[resistencia_termica]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: resistencia_termica_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[resistencia_termica]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[resistencia_termica]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: resistencia_termica_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[resistencia_termica]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[resistencia_termica]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: resistencia_termica_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: No hay una lectura gráfica prioritaria para [[resistencia_termica]] en este leaf.
+        en: There is no primary graph reading for [[resistencia_termica]] in this leaf.
+    likely_errors:
+    - id: resistencia_termica_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[resistencia_termica]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[resistencia_termica]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: resistencia_termica_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[resistencia_termica]], revisa la coherencia física y vuelve a la calculadora si necesitas
+          otro despeje.
+        en: After obtaining [[resistencia_termica]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: resistencia_termica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[resistencia_termica]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[resistencia_termica]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: resistencia_termica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[resistencia_termica]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[resistencia_termica]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

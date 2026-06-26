@@ -1,0 +1,143 @@
+version: 2
+formulas:
+  - id: masa_total_discreta
+    title:
+      es: masa total de un sistema discreto
+      en: total mass of a discrete system
+    equation: M = sum_i m_i
+    latex: M = \sum_{i=1}^{n} m_i
+    rearrangements: []
+    category: definition
+    relation_type: accumulation
+    physical_meaning:
+      es: La masa total es la suma de todas las masas puntuales que pertenecen al sistema definido.
+      en: Total mass is the sum of all point masses that belong to the defined system.
+    constraints:
+      - m_i >= 0
+      - n finito
+    validity:
+      es: Válida cuando el sistema está formado por un número finito de masas discretas bien identificadas.
+      en: Valid when the system is made of a finite number of well-identified discrete masses.
+    dimension_check: "[M] = [M]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria.md
+      - teoria.en.md
+      - ejemplos.md
+      - ejemplos.en.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - suma
+      - masa-total
+      - normalizacion
+    result_semantics:
+      target: M
+      es: Entrega la masa total que normaliza el promedio ponderado.
+      en: It returns the total mass that normalizes the weighted average.
+    domain_checks:
+      - Todas las masas incluidas deben pertenecer al mismo sistema físico.
+      - No deben omitirse contribuciones discretas relevantes.
+    coherence_checks:
+      - M debe ser igual a la suma de las masas declaradas.
+      - M debe ser positiva si existe al menos una masa positiva.
+    graph_implications:
+      - El peso visual total del sistema debe corresponder a la suma de los marcadores discretos.
+    pedagogical_triggers:
+      - Olvidar una masa en la suma total.
+      - Usar una diferencia de masas cuando el modelo pide una suma.
+
+  - id: centro_masas_general
+    title:
+      es: centro de masas general en una dimensión
+      en: general center of mass in one dimension
+    equation: xcm = sum_i m_i x_i / M
+    latex: x_{cm} = \frac{\sum_{i=1}^{n} m_i x_i}{M}
+    rearrangements: []
+    category: definition
+    relation_type: weighted_average
+    physical_meaning:
+      es: La coordenada del centro de masas es la media ponderada de las posiciones, usando cada masa como peso físico.
+      en: The center-of-mass coordinate is the weighted mean of positions, using each mass as a physical weight.
+    constraints:
+      - M > 0
+      - Todas las posiciones deben medirse desde el mismo origen.
+    validity:
+      es: Válida para sistemas discretos sobre un eje cuando las masas puntuales están bien definidas.
+      en: Valid for discrete systems on one axis when the point masses are well defined.
+    dimension_check: "[L] = [ML] / [M]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria.md
+      - teoria.en.md
+      - ejemplos.md
+      - ejemplos.en.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - promedio-ponderado
+      - posicion-efectiva
+      - eje-x
+    result_semantics:
+      target: xcm
+      es: Ubica la posición efectiva del sistema discreto sobre el eje x.
+      en: It locates the system's effective position on the x axis.
+    domain_checks:
+      - M debe ser positiva antes de dividir.
+      - Las coordenadas x_i deben pertenecer al mismo sistema de referencia.
+    coherence_checks:
+      - Con masas positivas, xcm debe quedar entre la posición mínima y la máxima.
+      - La masa mayor debe arrastrar el resultado hacia su propia posición.
+    graph_implications:
+      - El punto xcm debe desplazarse hacia el lado del conjunto de masas más dominante.
+    pedagogical_triggers:
+      - Promediar posiciones sin ponderarlas por masa.
+      - Cambiar el origen entre datos y sustitución.
+
+  - id: centro_masas_dos_masas
+    title:
+      es: centro de masas explícito para dos masas
+      en: explicit center of mass for two masses
+    equation: xcm = (m_1*x_1 + m_2*x_2) / (m_1 + m_2)
+    latex: x_{cm} = \frac{m_1 x_1 + m_2 x_2}{m_1 + m_2}
+    rearrangements: []
+    category: application
+    relation_type: specialized_weighted_average
+    physical_meaning:
+      es: Expresa con claridad cómo cada masa pondera su propia posición en el caso mínimo de dos cuerpos.
+      en: It clearly shows how each mass weights its own position in the minimal two-body case.
+    constraints:
+      - m_1 >= 0
+      - m_2 >= 0
+      - m_1 + m_2 > 0
+    validity:
+      es: Útil cuando el sistema discreto se reduce a dos masas puntuales sobre una recta.
+      en: Useful when the discrete system reduces to two point masses on a line.
+    dimension_check: "[L] = [ML] / [M]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - teoria.md
+      - teoria.en.md
+      - ejemplos.md
+      - ejemplos.en.md
+      - interpretacion.yaml
+    interpretation_tags:
+      - dos-cuerpos
+      - sesgo-masivo
+      - caso-operativo
+    result_semantics:
+      target: xcm
+      es: Permite leer con rapidez hacia qué lado queda el centro de masas en un sistema de dos cuerpos.
+      en: It lets you quickly read on which side the center of mass lies in a two-body system.
+    domain_checks:
+      - x_1 y x_2 deben estar medidos desde el mismo origen.
+      - Las masas deben corresponder a los cuerpos cuyas posiciones se usan.
+    coherence_checks:
+      - Si m_1 = m_2, xcm debe coincidir con el punto medio.
+      - Si m_2 > m_1, xcm debe quedar más cerca de x_2 que de x_1.
+    graph_implications:
+      - Al aumentar m_2 con x_2 fijo, el punto xcm debe moverse hacia x_2.
+    pedagogical_triggers:
+      - Intercambiar los pares m_1 x_1 y m_2 x_2.
+      - Usar la distancia entre masas como si fuera una coordenada absoluta.

@@ -1,0 +1,649 @@
+version: "2.0"
+id: interp-energia-libre-de-helmholtz
+leaf_id: energia-libre-de-helmholtz
+
+nombre:
+  es: Interpretación de la energía libre de Helmholtz
+  en: Helmholtz free energy interpretation
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: potenciales-termodinamicos
+  parent_id: potenciales-termodinamicos
+  ruta_relativa: fisica-clasica/termodinamica/potenciales-termodinamicos/energia-libre-de-helmholtz
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 3
+    priority: [summary, likely_errors, next_step]
+
+dependencies:
+  formulas:
+    - definicion_helmholtz
+    - temperatura_inversion
+  magnitudes:
+    - A
+    - DeltaA
+    - DeltaU
+    - T
+    - DeltaS
+    - T_inv
+
+global_context:
+  physical_domain:
+    es: "Termodinámica de procesos a volumen y temperatura constantes en sistemas cerrados."
+    en: "Thermodynamics of processes at constant volume and temperature in closed systems."
+  axis_convention:
+    es: "El eje horizontal representa la temperatura T en kelvin; el eje vertical representa la variación de energía libre [[DeltaA]] en julios."
+    en: "The horizontal axis represents temperature T in kelvin; the vertical axis represents the change in free energy [[DeltaA]] in joules."
+  standard_assumptions:
+    - "DeltaU y DeltaS se consideran independientes de la temperatura en el rango de interés"
+    - "El sistema es cerrado y el volumen permanece constante durante el proceso"
+    - "Temperatura constante durante el proceso"
+  standard_warnings:
+    - "La dependencia de DeltaU y DeltaS con T puede ser significativa en rangos amplios"
+    - "En mezclas o reacciones complejas, DeltaA debe calcularse con potenciales químicos parciales"
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen del proceso
+      en: Process summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del gráfico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  DeltaA:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Criterio central de espontaneidad del proceso a V y T constantes"
+      en: "Central spontaneity criterion of the process at constant V and T"
+
+    summary_rules:
+      - id: da_summary_negative
+        when: "DeltaA < 0"
+        status: ok
+        text:
+          es: "[[DeltaA]] es negativa: el proceso es espontáneo y libera energía útil al entorno. El sistema evoluciona hacia el equilibrio sin aporte externo de trabajo no expansivo."
+          en: "[[DeltaA]] is negative: the process is spontaneous and releases useful energy to the surroundings. The system evolves toward equilibrium without external non-expansion work input."
+      - id: da_summary_positive
+        when: "DeltaA > 0"
+        status: warning
+        text:
+          es: "[[DeltaA]] es positiva: el proceso no es espontáneo en las condiciones actuales. Para que ocurra se requiere aporte externo de energía o cambio de condiciones."
+          en: "[[DeltaA]] is positive: the process is not spontaneous under current conditions. External energy input or a change of conditions is required for it to occur."
+      - id: da_summary_zero
+        when: "DeltaA == 0"
+        status: ok
+        text:
+          es: "[[DeltaA]] es nula: el sistema se encuentra en equilibrio termodinámico. Ni avance ni retroceso espontáneo describe el estado del sistema."
+          en: "[[DeltaA]] is zero: the system is at thermodynamic equilibrium. Neither spontaneous advance nor retreat describes the system's state."
+      - id: da_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaA]] resume el balance entre impulso energético y entrópico; su signo indica espontaneidad y su magnitud cuán lejos del equilibrio se encuentra el sistema."
+          en: "[[DeltaA]] summarizes the balance between energetic and entropic drives; its sign indicates spontaneity and its magnitude indicates how far the system is from equilibrium."
+
+    physical_reading_rules:
+      - id: da_reading_spontaneous
+        when: "DeltaA < 0"
+        status: ok
+        text:
+          es: "La contribución entrópica o energética (o ambas) favorece la evolución. La energía máxima de trabajo útil no expansivo extraíble del proceso es igual al valor absoluto de [[DeltaA]]."
+          en: "The entropic or energetic contribution (or both) favors the evolution. The maximum non-expansion useful work extractable from the process equals the absolute value of [[DeltaA]]."
+      - id: da_reading_nonspontaneous
+        when: "DeltaA > 0"
+        status: warning
+        text:
+          es: "El proceso requiere un trabajo mínimo externo igual a [[DeltaA]] para ser forzado. Los impulsos energético y entrópico se oponen a la dirección de la transformación."
+          en: "The process requires a minimum external work equal to [[DeltaA]] to be driven. The energetic and entropic drives oppose the transformation direction."
+      - id: da_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaA]] cuantifica el desequilibrio entre el estado inicial y el final; depende simultáneamente de [[DeltaU]], [[T]] y [[DeltaS]]."
+          en: "[[DeltaA]] quantifies the imbalance between initial and final states; it depends simultaneously on [[DeltaU]], [[T]] and [[DeltaS]]."
+
+    coherence_rules:
+      - id: da_coherence_extreme
+        when: "abs(DeltaA) > 1000000"
+        status: warning
+        text:
+          es: "El valor absoluto de [[DeltaA]] supera 1 MJ. Verificar que [[DeltaU]] esté en J y [[DeltaS]] en J/K, y que [[T]] sea en kelvin."
+          en: "The absolute value of [[DeltaA]] exceeds 1 MJ. Verify that [[DeltaU]] is in J and [[DeltaS]] in J/K, and that [[T]] is in kelvin."
+      - id: da_coherence_sign_check
+        when: "DeltaU < 0 && DeltaS > 0 && DeltaA > 0"
+        status: error
+        text:
+          es: "Incoherencia detectada: cuando [[DeltaU]] es negativa y [[DeltaS]] es positiva, [[DeltaA]] debe ser negativa para cualquier temperatura. Verificar los datos de entrada."
+          en: "Incoherence detected: when [[DeltaU]] is negative and [[DeltaS]] is positive, [[DeltaA]] must be negative at any temperature. Verify input data."
+      - id: da_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Los valores de [[DeltaA]] son coherentes con las entradas de [[DeltaU]], [[T]] y [[DeltaS]]."
+          en: "The values of [[DeltaA]] are consistent with the [[DeltaU]], [[T]] and [[DeltaS]] inputs."
+
+    model_validity_rules:
+      - id: da_validity_low_temp
+        when: "T < 50"
+        status: warning
+        text:
+          es: "A temperaturas inferiores a 50 K, la aproximación de [[DeltaU]] y [[DeltaS]] constantes puede ser imprecisa por efectos cuánticos en las capacidades caloríficas."
+          en: "At temperatures below 50 K, the assumption of constant [[DeltaU]] and [[DeltaS]] may be imprecise due to quantum effects in heat capacities."
+      - id: da_validity_high_temp
+        when: "T > 2500"
+        status: warning
+        text:
+          es: "Por encima de 2500 K pueden producirse cambios de fase, disociación molecular o ionización que alteran significativamente [[DeltaU]] y [[DeltaS]]."
+          en: "Above 2500 K, phase changes, molecular dissociation or ionization may occur, significantly altering [[DeltaU]] and [[DeltaS]]."
+      - id: da_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo de Helmholtz es válido para sistemas cerrados a V y T constantes sin trabajo de expansión frente al entorno. La linealidad de [[DeltaA]] respecto a [[T]] es una buena aproximación cuando [[DeltaU]] y [[DeltaS]] no varían fuertemente con la temperatura."
+          en: "The Helmholtz model is valid for closed systems at constant V and T without expansion work against the surroundings. The linearity of [[DeltaA]] with respect to [[T]] is a good approximation when [[DeltaU]] and [[DeltaS]] do not vary strongly with temperature."
+
+    graph_rules:
+      - id: da_graph_negative_slope
+        when: "DeltaS > 0"
+        status: ok
+        text:
+          es: "La recta [[DeltaA]] vs [[T]] tiene pendiente negativa (pendiente igual a menos [[DeltaS]]). Al aumentar [[T]], [[DeltaA]] disminuye y el proceso se vuelve más espontáneo."
+          en: "The [[DeltaA]] vs [[T]] line has negative slope (slope equals minus [[DeltaS]]). As [[T]] increases, [[DeltaA]] decreases and the process becomes more spontaneous."
+      - id: da_graph_positive_slope
+        when: "DeltaS < 0"
+        status: ok
+        text:
+          es: "La recta [[DeltaA]] vs [[T]] tiene pendiente positiva. Al aumentar [[T]], [[DeltaA]] aumenta y el proceso se vuelve menos espontáneo."
+          en: "The [[DeltaA]] vs [[T]] line has positive slope. As [[T]] increases, [[DeltaA]] increases and the process becomes less spontaneous."
+      - id: da_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico, la intersección de la recta con el eje horizontal indica la temperatura de inversión [[T_inv]], que separa el dominio espontáneo del no espontáneo."
+          en: "In the graph, the intersection of the line with the horizontal axis indicates the inversion temperature [[T_inv]], which separates the spontaneous from the non-spontaneous domain."
+
+    likely_errors:
+      - id: da_error_energy_only
+        when: "DeltaU < 0 && DeltaA > 0"
+        status: warning
+        text:
+          es: "Error probable: el alumno puede asumir que [[DeltaU]] negativa garantiza espontaneidad, pero el término [[T]]·[[DeltaS]] puede dominar y hacer [[DeltaA]] positiva a [[T]] alta."
+          en: "Likely error: the student may assume negative [[DeltaU]] guarantees spontaneity, but the [[T]]·[[DeltaS]] term can dominate and make [[DeltaA]] positive at high [[T]]."
+      - id: da_error_celsius
+        when: "T < 273 && T > 0"
+        status: warning
+        text:
+          es: "Posible error de unidades: [[T]] menor de 273 K puede indicar que se introdujo en grados Celsius en vez de kelvin."
+          en: "Possible unit error: [[T]] below 273 K may indicate the temperature was entered in Celsius instead of kelvin."
+      - id: da_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[DeltaU]] esté en J (no en kJ) y [[DeltaS]] en J/K (no en kJ/K) antes de calcular [[DeltaA]]."
+          en: "Verify that [[DeltaU]] is in J (not kJ) and [[DeltaS]] in J/K (not kJ/K) before computing [[DeltaA]]."
+
+    next_step_rules:
+      - id: da_next_spontaneous
+        when: "DeltaA < 0"
+        status: ok
+        text:
+          es: "El proceso es espontáneo. El siguiente paso es calcular [[T_inv]] para conocer el rango de temperaturas en que se mantiene la espontaneidad, y estudiar el trabajo máximo no expansivo."
+          en: "The process is spontaneous. The next step is to compute [[T_inv]] to identify the temperature range where spontaneity holds, and to study the maximum non-expansion work."
+      - id: da_next_nonspontaneous
+        when: "DeltaA > 0"
+        status: warning
+        text:
+          es: "El proceso no es espontáneo. Considerar si es posible modificar [[T]] para superar [[T_inv]], o si se requiere acoplamiento con otro proceso espontáneo."
+          en: "The process is not spontaneous. Consider whether changing [[T]] to exceed [[T_inv]] is feasible, or whether coupling to another spontaneous process is required."
+      - id: da_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Usar el resultado de [[DeltaA]] para calcular el trabajo máximo útil no expansivo extraíble, o para analizar la estabilidad de fases en recipientes rígidos."
+          en: "Use the [[DeltaA]] result to calculate the maximum extractable non-expansion useful work, or to analyze phase stability in rigid containers."
+
+  DeltaU:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Contribución energética al potencial de Helmholtz; impulso energético del proceso"
+      en: "Energetic contribution to the Helmholtz potential; energetic drive of the process"
+
+    summary_rules:
+      - id: du_summary_negative
+        when: "DeltaU < 0"
+        status: ok
+        text:
+          es: "[[DeltaU]] negativa indica que el sistema libera energía interna al entorno a volumen constante. Este impulso energético favorece la espontaneidad a temperaturas bajas."
+          en: "Negative [[DeltaU]] indicates the system releases internal energy to the surroundings at constant volume. This energetic drive favors spontaneity at low temperatures."
+      - id: du_summary_positive
+        when: "DeltaU > 0"
+        status: warning
+        text:
+          es: "[[DeltaU]] positiva indica que el sistema absorbe energía interna del entorno. La espontaneidad depende entonces del término entrópico [[T]]·[[DeltaS]]."
+          en: "Positive [[DeltaU]] indicates the system absorbs internal energy from the surroundings. Spontaneity then depends on the entropy term [[T]]·[[DeltaS]]."
+      - id: du_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaU]] resume el cambio de energía interna a volumen constante e indica el impulso energético que contribuye a la variación de [[DeltaA]]."
+          en: "[[DeltaU]] summarizes the internal energy change at constant volume and indicates the energetic drive contributing to the change in [[DeltaA]]."
+
+    physical_reading_rules:
+      - id: du_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaU]] cuantifica la variación de energía interna del sistema a volumen constante. En la fórmula de Helmholtz actúa como el término de energía pura, sin corrección entrópica."
+          en: "[[DeltaU]] quantifies the change in the system's internal energy at constant volume. In the Helmholtz formula it acts as the pure energy term, without entropic correction."
+
+    coherence_rules:
+      - id: du_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaU]] debe ser coherente con el tipo de proceso: liberación de energía interna en reacciones exotérmicas a V constante, absorción en fusiones y algunas disoluciones."
+          en: "[[DeltaU]] should be consistent with the process type: internal energy release in exothermic reactions at constant V, absorption in melting and some dissolutions."
+
+    model_validity_rules:
+      - id: du_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaU]] se considera constante en el modelo estándar de Helmholtz. Para rangos amplios de temperatura es necesario usar la ley de Kirchhoff con capacidades caloríficas."
+          en: "[[DeltaU]] is considered constant in the standard Helmholtz model. For wide temperature ranges the Kirchhoff law with heat capacities is required."
+
+    graph_rules:
+      - id: du_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaU]] determina la ordenada en el origen de la recta [[DeltaA]] vs [[T]]: a temperatura cero (extrapolación), [[DeltaA]] coincide con [[DeltaU]]."
+          en: "[[DeltaU]] determines the intercept of the [[DeltaA]] vs [[T]] line at zero temperature (extrapolation): [[DeltaA]] equals [[DeltaU]] at T zero."
+
+    likely_errors:
+      - id: du_error_units
+        when: "abs(DeltaU) > 10000000"
+        status: warning
+        text:
+          es: "Valor de [[DeltaU]] inusualmente alto. Verificar que las unidades sean J y no kJ; un factor de 1000 es el error de unidades más frecuente."
+          en: "Unusually high [[DeltaU]] value. Verify that the units are J and not kJ; a factor of 1000 is the most frequent unit error."
+      - id: du_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Confirmar que [[DeltaU]] se refiere al proceso completo (no por mol si el problema no lo especifica) y que el signo es consistente con el sentido de liberación o absorción de energía interna."
+          en: "Confirm that [[DeltaU]] refers to the complete process (not per mole unless the problem specifies it) and that the sign is consistent with internal energy release or absorption."
+
+    next_step_rules:
+      - id: du_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[DeltaU]] calculada, el siguiente paso es determinar [[DeltaS]] para obtener [[DeltaA]] completa y establecer el criterio de espontaneidad."
+          en: "With [[DeltaU]] computed, the next step is to determine [[DeltaS]] to obtain the full [[DeltaA]] and establish the spontaneity criterion."
+
+  DeltaS:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Contribución entrópica al potencial de Helmholtz; controla la dependencia de la espontaneidad con la temperatura"
+      en: "Entropic contribution to the Helmholtz potential; controls the temperature dependence of spontaneity"
+
+    summary_rules:
+      - id: ds_summary_positive
+        when: "DeltaS > 0"
+        status: ok
+        text:
+          es: "[[DeltaS]] positiva indica aumento de desorden o dispersión del sistema. A temperaturas altas este término domina [[DeltaA]] y favorece la espontaneidad."
+          en: "Positive [[DeltaS]] indicates increased disorder or energy dispersal. At high temperatures this term dominates [[DeltaA]] and favors spontaneity."
+      - id: ds_summary_negative
+        when: "DeltaS < 0"
+        status: warning
+        text:
+          es: "[[DeltaS]] negativa indica mayor ordenación del sistema. El término entrópico se opone a la espontaneidad; esta solo puede ocurrir si [[DeltaU]] es suficientemente negativa."
+          en: "Negative [[DeltaS]] indicates greater ordering of the system. The entropy term opposes spontaneity; it can only occur if [[DeltaU]] is sufficiently negative."
+      - id: ds_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaS]] determina la pendiente de la recta [[DeltaA]] vs [[T]] y describe cómo la espontaneidad depende de la temperatura en este proceso."
+          en: "[[DeltaS]] determines the slope of the [[DeltaA]] vs [[T]] line and describes how spontaneity depends on temperature in this process."
+
+    physical_reading_rules:
+      - id: ds_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaS]] cuantifica la variación del grado de dispersión del sistema. Su producto con [[T]] es la corrección entrópica que se resta de [[DeltaU]] para obtener [[DeltaA]]."
+          en: "[[DeltaS]] quantifies the change in the system's degree of dispersal. Its product with [[T]] is the entropic correction subtracted from [[DeltaU]] to yield [[DeltaA]]."
+
+    coherence_rules:
+      - id: ds_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaS]] debe ser consistente con los cambios de fase y de número de partículas del proceso: la fusión y la evaporación siempre tienen [[DeltaS]] positiva."
+          en: "[[DeltaS]] must be consistent with phase changes and particle count changes: melting and evaporation always have positive [[DeltaS]]."
+
+    model_validity_rules:
+      - id: ds_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaS]] se asume constante en el modelo estándar de Helmholtz. En procesos con cambios de fase o mezclas complejas, [[DeltaS]] varía apreciablemente con [[T]]."
+          en: "[[DeltaS]] is assumed constant in the standard Helmholtz model. In processes with phase changes or complex mixtures, [[DeltaS]] varies appreciably with [[T]]."
+
+    graph_rules:
+      - id: ds_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[DeltaS]] es numéricamente igual (con signo opuesto) a la pendiente de la recta [[DeltaA]] vs [[T]] en el gráfico de Coord."
+          en: "The value of [[DeltaS]] is numerically equal (with opposite sign) to the slope of the [[DeltaA]] vs [[T]] line in the Coord graph."
+
+    likely_errors:
+      - id: ds_error_units
+        when: "abs(DeltaS) > 10000"
+        status: warning
+        text:
+          es: "Valor de [[DeltaS]] inusualmente alto. Verificar que las unidades sean J/K y no kJ/K; un error de factor 1000 es muy frecuente."
+          en: "Unusually high [[DeltaS]] value. Verify that the units are J/K and not kJ/K; a factor-of-1000 error is very common."
+      - id: ds_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "El signo de [[DeltaS]] debe reflejar si el proceso produce mayor dispersión (positivo) o mayor orden (negativo). Un error de signo invierte la predicción de espontaneidad a alta temperatura."
+          en: "The sign of [[DeltaS]] must reflect whether the process produces greater dispersal (positive) or greater order (negative). A sign error reverses the spontaneity prediction at high temperature."
+
+    next_step_rules:
+      - id: ds_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[DeltaS]] determinada, calcular [[T_inv]] para identificar el régimen de temperatura en que el proceso es espontáneo."
+          en: "With [[DeltaS]] determined, compute [[T_inv]] to identify the temperature regime where the process is spontaneous."
+
+  T:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Temperatura absoluta que escala el término entrópico en la energía de Helmholtz"
+      en: "Absolute temperature that scales the entropy term in the Helmholtz energy"
+
+    summary_rules:
+      - id: t_summary_high
+        when: "T > 1000"
+        status: ok
+        text:
+          es: "[[T]] elevada: el término entrópico [[T]]·[[DeltaS]] domina el balance de [[DeltaA]]. La espontaneidad depende principalmente del signo de [[DeltaS]]."
+          en: "High [[T]]: the entropy term [[T]]·[[DeltaS]] dominates the [[DeltaA]] balance. Spontaneity depends mainly on the sign of [[DeltaS]]."
+      - id: t_summary_low
+        when: "T < 300"
+        status: ok
+        text:
+          es: "[[T]] baja: el término energético [[DeltaU]] domina sobre el término entrópico. La espontaneidad depende principalmente del signo de [[DeltaU]]."
+          en: "Low [[T]]: the energetic term [[DeltaU]] dominates over the entropy term. Spontaneity depends mainly on the sign of [[DeltaU]]."
+      - id: t_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T]] es el amplificador del término entrópico; indica en qué régimen —energético o entrópico— domina el criterio de espontaneidad de [[DeltaA]]."
+          en: "[[T]] is the amplifier of the entropy term; it indicates which regime —energetic or entropic— dominates the spontaneity criterion of [[DeltaA]]."
+
+    physical_reading_rules:
+      - id: t_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T]] modula la contribución de [[DeltaS]] al criterio de Helmholtz: cuanto mayor es [[T]], mayor peso tiene el desorden del sistema en determinar la espontaneidad."
+          en: "[[T]] modulates the contribution of [[DeltaS]] to the Helmholtz criterion: the higher [[T]], the greater the weight of the system's disorder in determining spontaneity."
+
+    coherence_rules:
+      - id: t_coherence_celsius
+        when: "T < 200 && T > 0"
+        status: warning
+        text:
+          es: "[[T]] menor de 200 K es inusual en la mayoría de procesos físico-químicos. Verificar que la temperatura no esté en grados Celsius."
+          en: "[[T]] below 200 K is unusual for most physicochemical processes. Verify that the temperature is not in Celsius degrees."
+      - id: t_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T]] debe ser mayor que cero en la escala absoluta. Un valor negativo es físicamente imposible."
+          en: "[[T]] must be greater than zero on the absolute scale. A negative value is physically impossible."
+
+    model_validity_rules:
+      - id: t_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo de Helmholtz con [[DeltaU]] y [[DeltaS]] constantes es más preciso cuando [[T]] varía en un rango estrecho. Para variaciones superiores al 50% en [[T]], considerar la dependencia con la temperatura."
+          en: "The Helmholtz model with constant [[DeltaU]] and [[DeltaS]] is most accurate when [[T]] varies in a narrow range. For variations exceeding 50% in [[T]], consider temperature dependence."
+
+    graph_rules:
+      - id: t_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T]] es la variable independiente en el gráfico de [[DeltaA]] frente a temperatura. La posición del sistema en el eje [[T]] determina si está en el dominio espontáneo o no espontáneo."
+          en: "[[T]] is the independent variable in the [[DeltaA]] versus temperature graph. The system's position on the [[T]] axis determines whether it is in the spontaneous or non-spontaneous domain."
+
+    likely_errors:
+      - id: t_error_celsius
+        when: "T < 273 && T > 0"
+        status: warning
+        text:
+          es: "Temperatura posiblemente en Celsius. Añadir 273.15 para convertir a kelvin antes de calcular [[DeltaA]]."
+          en: "Temperature possibly in Celsius. Add 273.15 to convert to kelvin before computing [[DeltaA]]."
+      - id: t_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Comprobar que [[T]] está en kelvin. El error de unidades de temperatura es el más frecuente en cálculos de energía libre de Helmholtz."
+          en: "Check that [[T]] is in kelvin. The temperature unit error is the most frequent mistake in Helmholtz free energy calculations."
+
+    next_step_rules:
+      - id: t_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Usar [[T]] junto con [[DeltaU]] y [[DeltaS]] para trazar la recta [[DeltaA]] vs [[T]] y localizar [[T_inv]], el umbral de cambio de espontaneidad."
+          en: "Use [[T]] together with [[DeltaU]] and [[DeltaS]] to plot the [[DeltaA]] vs [[T]] line and locate [[T_inv]], the spontaneity inversion threshold."
+
+  T_inv:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Temperatura exacta en la que el proceso invierte su espontaneidad"
+      en: "Exact temperature at which the process reverses its spontaneity"
+
+    summary_rules:
+      - id: tinv_summary_found
+        when: "T_inv > 0"
+        status: ok
+        text:
+          es: "[[T_inv]] positiva indica que existe un umbral de temperatura real en el que el proceso cambia de espontáneo a no espontáneo (o viceversa). Por encima o por debajo de [[T_inv]], la dirección de la espontaneidad se invierte."
+          en: "Positive [[T_inv]] indicates there is a real temperature threshold at which the process switches from spontaneous to non-spontaneous (or vice versa). Above or below [[T_inv]], the spontaneity direction reverses."
+      - id: tinv_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_inv]] resume el equilibrio entre [[DeltaU]] y [[DeltaS]]: es la temperatura a la que ambas contribuciones se anulan mutuamente y [[DeltaA]] vale cero."
+          en: "[[T_inv]] summarizes the balance between [[DeltaU]] and [[DeltaS]]: it is the temperature at which both contributions cancel each other and [[DeltaA]] is zero."
+
+    physical_reading_rules:
+      - id: tinv_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_inv]] es la intersección de la recta [[DeltaA]] vs [[T]] con el eje horizontal. Por encima de [[T_inv]] (si [[DeltaS]] es positiva) el proceso es espontáneo; por debajo no lo es."
+          en: "[[T_inv]] is the intersection of the [[DeltaA]] vs [[T]] line with the horizontal axis. Above [[T_inv]] (if [[DeltaS]] is positive) the process is spontaneous; below it is not."
+
+    coherence_rules:
+      - id: tinv_coherence_negative
+        when: "T_inv < 0"
+        status: error
+        text:
+          es: "[[T_inv]] negativa es físicamente imposible. Indica que [[DeltaU]] y [[DeltaS]] tienen signos opuestos, lo que significa que el proceso es siempre o nunca espontáneo sin umbral de inversión."
+          en: "Negative [[T_inv]] is physically impossible. It indicates [[DeltaU]] and [[DeltaS]] have opposite signs, meaning the process is always or never spontaneous with no inversion threshold."
+      - id: tinv_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_inv]] solo tiene sentido físico cuando [[DeltaU]] y [[DeltaS]] tienen el mismo signo (ambos positivos o ambos negativos)."
+          en: "[[T_inv]] is physically meaningful only when [[DeltaU]] and [[DeltaS]] have the same sign (both positive or both negative)."
+
+    model_validity_rules:
+      - id: tinv_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_inv]] es precisa mientras [[DeltaU]] y [[DeltaS]] sean aproximadamente constantes. Si el proceso atraviesa un cambio de fase cerca de [[T_inv]], el valor real puede diferir notablemente."
+          en: "[[T_inv]] is accurate as long as [[DeltaU]] and [[DeltaS]] are approximately constant. If the process crosses a phase transition near [[T_inv]], the real value may differ significantly."
+
+    graph_rules:
+      - id: tinv_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico de [[DeltaA]] vs [[T]], el marcador [[T_inv]] señala el cruce de la recta con [[DeltaA]] nulo. A la izquierda o derecha del marcador, el color de la curva cambia para indicar el régimen de espontaneidad."
+          en: "In the [[DeltaA]] vs [[T]] graph, the [[T_inv]] marker indicates the crossing of the line at zero [[DeltaA]]. Left or right of the marker, the curve color changes to indicate the spontaneity regime."
+
+    likely_errors:
+      - id: tinv_error_negative
+        when: "T_inv < 0"
+        status: error
+        text:
+          es: "Error de signo en [[DeltaU]] o [[DeltaS]]. Cuando [[T_inv]] resulta negativa, revisar que los signos de [[DeltaU]] y [[DeltaS]] sean físicamente coherentes con el proceso descrito."
+          en: "Sign error in [[DeltaU]] or [[DeltaS]]. When [[T_inv]] is negative, review that the signs of [[DeltaU]] and [[DeltaS]] are physically consistent with the described process."
+      - id: tinv_error_units
+        when: "T_inv > 10000"
+        status: warning
+        text:
+          es: "[[T_inv]] mayor de 10 000 K es posible pero infrecuente. Verificar que [[DeltaS]] esté en J/K (no en J/(mol·K) si se usa un mol) y no en kJ/K."
+          en: "[[T_inv]] above 10 000 K is possible but uncommon. Verify that [[DeltaS]] is in J/K (not J/(mol·K) if one mole is used) and not in kJ/K."
+      - id: tinv_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[T_inv]] es coherente. Comparar con la temperatura del proceso real para determinar si el proceso es espontáneo en las condiciones de trabajo."
+          en: "The value of [[T_inv]] is consistent. Compare with the actual process temperature to determine whether the process is spontaneous under working conditions."
+
+    next_step_rules:
+      - id: tinv_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[T_inv]] calculada, determinar si la temperatura real del proceso está por encima o por debajo del umbral, y concluir sobre la viabilidad espontánea del proceso."
+          en: "With [[T_inv]] computed, determine whether the actual process temperature is above or below the threshold, and conclude on the spontaneous feasibility of the process."
+
+cross_checks:
+  - id: cc_helmholtz_triangle
+    description:
+      es: "Coherencia triangular entre DeltaA, DeltaU y T·DeltaS"
+      en: "Triangular coherence between DeltaA, DeltaU and T·DeltaS"
+    condition: "abs(DeltaA - (DeltaU - T * DeltaS)) < 1"
+    on_fail:
+      es: "La variación de Helmholtz calculada no coincide con la diferencia entre energía interna y el término entrópico. Verificar todos los valores de entrada."
+      en: "The computed Helmholtz change does not match the difference between internal energy and the entropy term. Verify all input values."
+
+error_patterns:
+  - id: ep_celsius_temperature
+    description:
+      es: "Temperatura en Celsius en lugar de kelvin"
+      en: "Temperature in Celsius instead of kelvin"
+    detect_when: "T < 200"
+    message:
+      es: "Probable error de unidades: usar kelvin para [[T]]."
+      en: "Probable unit error: use kelvin for [[T]]."
+  - id: ep_unit_mismatch
+    description:
+      es: "Unidades inconsistentes entre DeltaU (J) y DeltaS (kJ/K)"
+      en: "Inconsistent units between DeltaU (J) and DeltaS (kJ/K)"
+    detect_when: "abs(DeltaA) > abs(DeltaU) * 1000"
+    message:
+      es: "La variación de Helmholtz es desproporcionadamente mayor que la energía interna. Posible mezcla de J y kJ."
+      en: "The Helmholtz change is disproportionately larger than the internal energy. Possible mixing of J and kJ."
+
+graph_binding:
+  enabled: true
+  channels:
+    - DeltaA_vs_temperature
+    - T_inv_marker
+    - DeltaU_axis
+    - DeltaS_axis
+    - temperature_axis
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true

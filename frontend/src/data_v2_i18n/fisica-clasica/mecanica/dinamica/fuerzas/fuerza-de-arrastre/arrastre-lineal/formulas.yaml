@@ -1,0 +1,128 @@
+version: 1
+formulas:
+  - id: arrastre_lineal_estandar
+    title:
+      es: Fuerza de arrastre lineal
+      en: Linear drag force
+    equation: F_d = b*v
+    latex: F_d = b v
+    rearrangements:
+      - target: F_d
+        equation: F_d = b*v
+        latex: F_d = b v
+        constraints:
+          - expr: b >= 0
+            message:
+              es: b >= 0
+              en: b >= 0
+      - target: b
+        equation: b = F_d/v
+        latex: b = \frac{F_d}{v}
+        constraints:
+          - expr: v != 0
+            message:
+              es: v != 0
+              en: v != 0
+      - target: v
+        equation: v = F_d/b
+        latex: v = \frac{F_d}{b}
+        constraints:
+          - expr: b != 0
+            message:
+              es: b != 0
+              en: b != 0
+    category: operative
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: Relacion del modelo lineal valida cuando la resistencia del fluido crece de forma aproximadamente proporcional a la rapidez.
+      en: Linear-model relation valid when fluid resistance grows approximately in proportion to speed.
+    constraints: Usar solo dentro del regimen de baja inercia del fluido y cambios suaves de velocidad.
+    validity:
+      es: Suele ser apropiada en fluidos viscosos, objetos pequenos y numeros de Reynolds modestos.
+      en: It is usually appropriate in viscous fluids, small objects, and modest Reynolds numbers.
+    dimension_check: El coeficiente b debe tener unidades de N s/m.
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - arrastre-lineal
+    interpretation_tags:
+      - arrastre-lineal
+    result_semantics:
+      target: F_d
+      meaning: Permite leer cuanto aumenta la resistencia al aumentar la rapidez dentro del modelo lineal.
+    domain_checks:
+      - expr: 'true'
+        message:
+          es: Verifica que el problema este en un regimen donde el arrastre sea aproximadamente lineal.
+          en: Check that the problem is in a regime where drag is approximately linear.
+    coherence_checks:
+      - expr: 'true'
+        message:
+          es: Comprueba que F_d se oponga al movimiento aunque aqui se use su modulo.
+          en: Check that F_d opposes motion even though the formula is written for its magnitude.
+    graph_implications:
+      - La grafica F_d contra v debe ser una recta que pasa por el origen.
+    pedagogical_triggers:
+      - when: 'true'
+        message:
+          es: Si duplicas v y todo lo demas queda fijo, F_d tambien debe duplicarse.
+          en: If you double v while keeping everything else fixed, F_d must also double.
+  - id: tiempo_relajacion_lineal
+    title:
+      es: Tiempo caracteristico del arrastre lineal
+      en: Characteristic time for linear drag
+    equation: tau = m/b
+    latex: \tau = \frac{m}{b}
+    rearrangements:
+      - target: tau
+        equation: tau = m/b
+        latex: \tau = \frac{m}{b}
+        constraints:
+          - expr: b != 0
+            message:
+              es: b != 0
+              en: b != 0
+      - target: b
+        equation: b = m/tau
+        latex: b = \frac{m}{\tau}
+        constraints:
+          - expr: tau != 0
+            message:
+              es: tau != 0
+              en: tau != 0
+    category: structural
+    relation_type: characteristic_scale
+    physical_meaning:
+      es: Escala temporal que indica cuan rapido el medio viscoso amortigua la velocidad del cuerpo.
+      en: Time scale indicating how quickly the viscous medium damps the body's speed.
+    constraints: Requiere que b pueda tratarse como aproximadamente constante.
+    validity:
+      es: Es util cuando el modelo lineal domina y la geometria no cambia durante el proceso.
+      en: It is useful when the linear model dominates and geometry does not change during the process.
+    dimension_check: tau debe salir en segundos.
+    calculable: true
+    motivo_no_calculable: null
+    used_in:
+      - arrastre-lineal
+    interpretation_tags:
+      - arrastre-lineal
+    result_semantics:
+      target: tau
+      meaning: Permite decidir si el sistema se adapta rapido o lentamente a la accion del fluido.
+    domain_checks:
+      - expr: 'true'
+        message:
+          es: Revisa que el coeficiente b no cambie de forma importante durante el fenomeno.
+          en: Check that coefficient b does not change significantly during the phenomenon.
+    coherence_checks:
+      - expr: 'true'
+        message:
+          es: Una masa mayor o un b menor deben aumentar tau.
+          en: A larger mass or a smaller b should increase tau.
+    graph_implications:
+      - La lectura grafica puede relacionar pendientes suaves con tiempos caracteristicos grandes.
+    pedagogical_triggers:
+      - when: 'true'
+        message:
+          es: tau no es una fuerza sino una escala temporal del modelo.
+          en: tau is not a force but a time scale of the model.

@@ -1,0 +1,649 @@
+version: "2.0"
+id: interp-energia-libre-de-gibbs
+leaf_id: energia-libre-de-gibbs
+
+nombre:
+  es: Interpretación de la energía libre de Gibbs
+  en: Gibbs free energy interpretation
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: potenciales-termodinamicos
+  parent_id: potenciales-termodinamicos
+  ruta_relativa: fisica-clasica/termodinamica/potenciales-termodinamicos/energia-libre-de-gibbs
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 3
+    priority: [summary, likely_errors, next_step]
+
+dependencies:
+  formulas:
+    - definicion_gibbs
+    - temperatura_inversion
+  magnitudes:
+    - G
+    - DeltaG
+    - DeltaH
+    - T
+    - DeltaS
+    - T_inv
+
+global_context:
+  physical_domain:
+    es: "Termodinámica de procesos a presión y temperatura constantes en sistemas cerrados."
+    en: "Thermodynamics of processes at constant pressure and temperature in closed systems."
+  axis_convention:
+    es: "El eje horizontal representa la temperatura T en kelvin; el eje vertical representa la variación de energía libre [[DeltaG]] en julios."
+    en: "The horizontal axis represents temperature T in kelvin; the vertical axis represents the change in free energy [[DeltaG]] in joules."
+  standard_assumptions:
+    - "DeltaH y DeltaS se consideran independientes de la temperatura en el rango de interés"
+    - "El sistema es cerrado y no realiza trabajo no expansivo"
+    - "Presión constante durante el proceso"
+  standard_warnings:
+    - "La dependencia de DeltaH y DeltaS con T puede ser significativa en rangos amplios"
+    - "En mezclas o reacciones complejas, DeltaG debe calcularse con potenciales químicos parciales"
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen del proceso
+      en: Process summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del gráfico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  DeltaG:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Criterio central de espontaneidad del proceso a P y T constantes"
+      en: "Central spontaneity criterion of the process at constant P and T"
+
+    summary_rules:
+      - id: dg_summary_negative
+        when: "DeltaG < 0"
+        status: ok
+        text:
+          es: "[[DeltaG]] es negativa: el proceso es espontáneo y libera energía útil al entorno. El sistema evoluciona hacia el equilibrio sin aporte externo de trabajo."
+          en: "[[DeltaG]] is negative: the process is spontaneous and releases useful energy to the surroundings. The system evolves toward equilibrium without external work input."
+      - id: dg_summary_positive
+        when: "DeltaG > 0"
+        status: warning
+        text:
+          es: "[[DeltaG]] es positiva: el proceso no es espontáneo en las condiciones actuales. Para que ocurra se requiere aporte externo de energía o cambio de condiciones."
+          en: "[[DeltaG]] is positive: the process is not spontaneous under current conditions. External energy input or a change of conditions is required for it to occur."
+      - id: dg_summary_zero
+        when: "DeltaG == 0"
+        status: ok
+        text:
+          es: "[[DeltaG]] es nula: el sistema se encuentra en equilibrio termodinámico. Ni avance ni retroceso espontáneo describe el estado del sistema."
+          en: "[[DeltaG]] is zero: the system is at thermodynamic equilibrium. Neither spontaneous advance nor retreat describes the system's state."
+      - id: dg_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaG]] resume el balance entre impulso entálpico y entrópico; su signo indica espontaneidad y su magnitud cuán lejos del equilibrio se encuentra el sistema."
+          en: "[[DeltaG]] summarizes the balance between enthalpic and entropic drives; its sign indicates spontaneity and its magnitude indicates how far the system is from equilibrium."
+
+    physical_reading_rules:
+      - id: dg_reading_spontaneous
+        when: "DeltaG < 0"
+        status: ok
+        text:
+          es: "La contribución entrópica o entálpica (o ambas) favorece la evolución. La energía máxima de trabajo útil extraíble del proceso es igual al valor absoluto de [[DeltaG]]."
+          en: "The entropic or enthalpic contribution (or both) favors the evolution. The maximum useful work extractable from the process equals the absolute value of [[DeltaG]]."
+      - id: dg_reading_nonspontaneous
+        when: "DeltaG > 0"
+        status: warning
+        text:
+          es: "El proceso requiere un trabajo mínimo externo igual a [[DeltaG]] para ser forzado. Los impulsos entálpico y entrópico se oponen a la dirección de la reacción."
+          en: "The process requires a minimum external work equal to [[DeltaG]] to be driven. The enthalpic and entropic drives oppose the reaction direction."
+      - id: dg_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaG]] cuantifica el desequilibrio entre el estado inicial y el final; depende simultáneamente de [[DeltaH]], [[T]] y [[DeltaS]]."
+          en: "[[DeltaG]] quantifies the imbalance between initial and final states; it depends simultaneously on [[DeltaH]], [[T]] and [[DeltaS]]."
+
+    coherence_rules:
+      - id: dg_coherence_extreme
+        when: "abs(DeltaG) > 1000000"
+        status: warning
+        text:
+          es: "El valor absoluto de [[DeltaG]] supera 1 MJ. Verificar que [[DeltaH]] esté en J y [[DeltaS]] en J/K, y que [[T]] sea en kelvin."
+          en: "The absolute value of [[DeltaG]] exceeds 1 MJ. Verify that [[DeltaH]] is in J and [[DeltaS]] in J/K, and that [[T]] is in kelvin."
+      - id: dg_coherence_sign_check
+        when: "DeltaH < 0 && DeltaS > 0 && DeltaG > 0"
+        status: error
+        text:
+          es: "Incoherencia detectada: cuando [[DeltaH]] es negativa y [[DeltaS]] es positiva, [[DeltaG]] debe ser negativa para cualquier temperatura. Verificar los datos de entrada."
+          en: "Incoherence detected: when [[DeltaH]] is negative and [[DeltaS]] is positive, [[DeltaG]] must be negative at any temperature. Verify input data."
+      - id: dg_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Los valores de [[DeltaG]] son coherentes con las entradas de [[DeltaH]], [[T]] y [[DeltaS]]."
+          en: "The values of [[DeltaG]] are consistent with the [[DeltaH]], [[T]] and [[DeltaS]] inputs."
+
+    model_validity_rules:
+      - id: dg_validity_low_temp
+        when: "T < 50"
+        status: warning
+        text:
+          es: "A temperaturas inferiores a 50 K, la aproximación de [[DeltaH]] y [[DeltaS]] constantes puede ser imprecisa por efectos cuánticos en las capacidades caloríficas."
+          en: "At temperatures below 50 K, the assumption of constant [[DeltaH]] and [[DeltaS]] may be imprecise due to quantum effects in heat capacities."
+      - id: dg_validity_high_temp
+        when: "T > 2500"
+        status: warning
+        text:
+          es: "Por encima de 2500 K pueden producirse cambios de fase, disociación molecular o ionización que alteran significativamente [[DeltaH]] y [[DeltaS]]."
+          en: "Above 2500 K, phase changes, molecular dissociation or ionization may occur, significantly altering [[DeltaH]] and [[DeltaS]]."
+      - id: dg_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo de Gibbs es válido para sistemas cerrados a P y T constantes sin trabajo no expansivo. La linealidad de [[DeltaG]] respecto a [[T]] es una buena aproximación cuando [[DeltaH]] y [[DeltaS]] no varían fuertemente con la temperatura."
+          en: "The Gibbs model is valid for closed systems at constant P and T without non-expansion work. The linearity of [[DeltaG]] with respect to [[T]] is a good approximation when [[DeltaH]] and [[DeltaS]] do not vary strongly with temperature."
+
+    graph_rules:
+      - id: dg_graph_negative_slope
+        when: "DeltaS > 0"
+        status: ok
+        text:
+          es: "La recta [[DeltaG]] vs [[T]] tiene pendiente negativa (pendiente igual a menos [[DeltaS]]). Al aumentar [[T]], [[DeltaG]] disminuye y el proceso se vuelve más espontáneo."
+          en: "The [[DeltaG]] vs [[T]] line has negative slope (slope equals minus [[DeltaS]]). As [[T]] increases, [[DeltaG]] decreases and the process becomes more spontaneous."
+      - id: dg_graph_positive_slope
+        when: "DeltaS < 0"
+        status: ok
+        text:
+          es: "La recta [[DeltaG]] vs [[T]] tiene pendiente positiva. Al aumentar [[T]], [[DeltaG]] aumenta y el proceso se vuelve menos espontáneo."
+          en: "The [[DeltaG]] vs [[T]] line has positive slope. As [[T]] increases, [[DeltaG]] increases and the process becomes less spontaneous."
+      - id: dg_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico, la intersección de la recta con el eje horizontal indica la temperatura de inversión [[T_inv]], que separa el dominio espontáneo del no espontáneo."
+          en: "In the graph, the intersection of the line with the horizontal axis indicates the inversion temperature [[T_inv]], which separates the spontaneous from the non-spontaneous domain."
+
+    likely_errors:
+      - id: dg_error_enthalpy_only
+        when: "DeltaH < 0 && DeltaG > 0"
+        status: warning
+        text:
+          es: "Error probable: el alumno puede asumir que [[DeltaH]] negativa garantiza espontaneidad, pero el término [[T]]·[[DeltaS]] puede dominar y hacer [[DeltaG]] positiva a [[T]] alta."
+          en: "Likely error: the student may assume negative [[DeltaH]] guarantees spontaneity, but the [[T]]·[[DeltaS]] term can dominate and make [[DeltaG]] positive at high [[T]]."
+      - id: dg_error_celsius
+        when: "T < 273 && T > 0"
+        status: warning
+        text:
+          es: "Posible error de unidades: [[T]] menor de 273 K puede indicar que se introdujo en grados Celsius en vez de kelvin."
+          en: "Possible unit error: [[T]] below 273 K may indicate the temperature was entered in Celsius instead of kelvin."
+      - id: dg_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[DeltaH]] esté en J (no en kJ) y [[DeltaS]] en J/K (no en kJ/K) antes de calcular [[DeltaG]]."
+          en: "Verify that [[DeltaH]] is in J (not kJ) and [[DeltaS]] in J/K (not kJ/K) before computing [[DeltaG]]."
+
+    next_step_rules:
+      - id: dg_next_spontaneous
+        when: "DeltaG < 0"
+        status: ok
+        text:
+          es: "El proceso es espontáneo. El siguiente paso es calcular [[T_inv]] para conocer el rango de temperaturas en que se mantiene la espontaneidad, y estudiar la constante de equilibrio."
+          en: "The process is spontaneous. The next step is to compute [[T_inv]] to identify the temperature range where spontaneity holds, and to study the equilibrium constant."
+      - id: dg_next_nonspontaneous
+        when: "DeltaG > 0"
+        status: warning
+        text:
+          es: "El proceso no es espontáneo. Considerar si es posible modificar [[T]] para superar [[T_inv]], o si se requiere acoplamiento con otro proceso espontáneo."
+          en: "The process is not spontaneous. Consider whether changing [[T]] to exceed [[T_inv]] is feasible, or whether coupling to another spontaneous process is required."
+      - id: dg_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Usar el resultado de [[DeltaG]] para estimar la constante de equilibrio mediante la relación de la termodinámica estadística, o para calcular el trabajo máximo útil extraíble."
+          en: "Use the [[DeltaG]] result to estimate the equilibrium constant via the statistical thermodynamics relation, or to calculate the maximum extractable useful work."
+
+  DeltaH:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Contribución energética al potencial de Gibbs; impulso entálpico del proceso"
+      en: "Energetic contribution to the Gibbs potential; enthalpic drive of the process"
+
+    summary_rules:
+      - id: dh_summary_negative
+        when: "DeltaH < 0"
+        status: ok
+        text:
+          es: "[[DeltaH]] negativa indica proceso exotérmico: el sistema libera calor al entorno a presión constante. Este impulso entálpico favorece la espontaneidad a temperaturas bajas."
+          en: "Negative [[DeltaH]] indicates an exothermic process: the system releases heat to the surroundings at constant pressure. This enthalpic drive favors spontaneity at low temperatures."
+      - id: dh_summary_positive
+        when: "DeltaH > 0"
+        status: warning
+        text:
+          es: "[[DeltaH]] positiva indica proceso endotérmico: el sistema absorbe calor del entorno. La espontaneidad depende entonces del término entrópico [[T]]·[[DeltaS]]."
+          en: "Positive [[DeltaH]] indicates an endothermic process: the system absorbs heat from the surroundings. Spontaneity then depends on the entropy term [[T]]·[[DeltaS]]."
+      - id: dh_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaH]] resume el intercambio de calor a presión constante e indica el impulso energético que contribuye a la variación de [[DeltaG]]."
+          en: "[[DeltaH]] summarizes heat exchange at constant pressure and indicates the energetic drive contributing to the change in [[DeltaG]]."
+
+    physical_reading_rules:
+      - id: dh_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaH]] cuantifica el calor absorbido o liberado por el sistema a presión constante. En la fórmula de Gibbs actúa como el término de energía pura, sin corrección entrópica."
+          en: "[[DeltaH]] quantifies the heat absorbed or released by the system at constant pressure. In the Gibbs formula it acts as the pure energy term, without entropic correction."
+
+    coherence_rules:
+      - id: dh_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaH]] debe ser coherente con el tipo de proceso: exotérmico para combustiones y oxidaciones, endotérmico para fusiones y algunas disoluciones."
+          en: "[[DeltaH]] should be consistent with the process type: exothermic for combustions and oxidations, endothermic for melting and some dissolutions."
+
+    model_validity_rules:
+      - id: dh_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaH]] se considera constante en el modelo estándar de Gibbs. Para rangos amplios de temperatura es necesario usar la ley de Kirchhoff con capacidades caloríficas."
+          en: "[[DeltaH]] is considered constant in the standard Gibbs model. For wide temperature ranges the Kirchhoff law with heat capacities is required."
+
+    graph_rules:
+      - id: dh_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaH]] determina la ordenada en el origen de la recta [[DeltaG]] vs [[T]]: a temperatura cero (extrapolación), [[DeltaG]] coincide con [[DeltaH]]."
+          en: "[[DeltaH]] determines the intercept of the [[DeltaG]] vs [[T]] line at zero temperature (extrapolation): [[DeltaG]] equals [[DeltaH]] at T zero."
+
+    likely_errors:
+      - id: dh_error_units
+        when: "abs(DeltaH) > 10000000"
+        status: warning
+        text:
+          es: "Valor de [[DeltaH]] inusualmente alto. Verificar que las unidades sean J y no kJ; un factor de 1000 es el error de unidades más frecuente."
+          en: "Unusually high [[DeltaH]] value. Verify that the units are J and not kJ; a factor of 1000 is the most frequent unit error."
+      - id: dh_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Confirmar que [[DeltaH]] se refiere al proceso completo (no por mol si el problema no lo especifica) y que el signo es consistente con el sentido exo/endotérmico del proceso."
+          en: "Confirm that [[DeltaH]] refers to the complete process (not per mole unless the problem specifies it) and that the sign is consistent with the exo/endothermic character."
+
+    next_step_rules:
+      - id: dh_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[DeltaH]] calculada, el siguiente paso es determinar [[DeltaS]] para obtener [[DeltaG]] completa y establecer el criterio de espontaneidad."
+          en: "With [[DeltaH]] computed, the next step is to determine [[DeltaS]] to obtain the full [[DeltaG]] and establish the spontaneity criterion."
+
+  DeltaS:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Contribución entrópica al potencial de Gibbs; controla la dependencia de la espontaneidad con la temperatura"
+      en: "Entropic contribution to the Gibbs potential; controls the temperature dependence of spontaneity"
+
+    summary_rules:
+      - id: ds_summary_positive
+        when: "DeltaS > 0"
+        status: ok
+        text:
+          es: "[[DeltaS]] positiva indica aumento de desorden o dispersión del sistema. A temperaturas altas este término domina [[DeltaG]] y favorece la espontaneidad."
+          en: "Positive [[DeltaS]] indicates increased disorder or energy dispersal. At high temperatures this term dominates [[DeltaG]] and favors spontaneity."
+      - id: ds_summary_negative
+        when: "DeltaS < 0"
+        status: warning
+        text:
+          es: "[[DeltaS]] negativa indica mayor ordenación del sistema. El término entrópico se opone a la espontaneidad; esta solo puede ocurrir si [[DeltaH]] es suficientemente negativa."
+          en: "Negative [[DeltaS]] indicates greater ordering of the system. The entropy term opposes spontaneity; it can only occur if [[DeltaH]] is sufficiently negative."
+      - id: ds_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaS]] determina la pendiente de la recta [[DeltaG]] vs [[T]] y describe cómo la espontaneidad depende de la temperatura en este proceso."
+          en: "[[DeltaS]] determines the slope of the [[DeltaG]] vs [[T]] line and describes how spontaneity depends on temperature in this process."
+
+    physical_reading_rules:
+      - id: ds_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaS]] cuantifica la variación del grado de dispersión del sistema. Su producto con [[T]] es la corrección entrópica que se resta de [[DeltaH]] para obtener [[DeltaG]]."
+          en: "[[DeltaS]] quantifies the change in the system's degree of dispersal. Its product with [[T]] is the entropic correction subtracted from [[DeltaH]] to yield [[DeltaG]]."
+
+    coherence_rules:
+      - id: ds_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaS]] debe ser consistente con los cambios de fase y de número de partículas del proceso: la fusión y la evaporación siempre tienen [[DeltaS]] positiva."
+          en: "[[DeltaS]] must be consistent with phase changes and particle count changes: melting and evaporation always have positive [[DeltaS]]."
+
+    model_validity_rules:
+      - id: ds_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaS]] se asume constante en el modelo estándar de Gibbs. En procesos con cambios de fase o mezclas complejas, [[DeltaS]] varía apreciablemente con [[T]]."
+          en: "[[DeltaS]] is assumed constant in the standard Gibbs model. In processes with phase changes or complex mixtures, [[DeltaS]] varies appreciably with [[T]]."
+
+    graph_rules:
+      - id: ds_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[DeltaS]] es numéricamente igual (con signo opuesto) a la pendiente de la recta [[DeltaG]] vs [[T]] en el gráfico de Coord."
+          en: "The value of [[DeltaS]] is numerically equal (with opposite sign) to the slope of the [[DeltaG]] vs [[T]] line in the Coord graph."
+
+    likely_errors:
+      - id: ds_error_units
+        when: "abs(DeltaS) > 10000"
+        status: warning
+        text:
+          es: "Valor de [[DeltaS]] inusualmente alto. Verificar que las unidades sean J/K y no kJ/K; un error de factor 1000 es muy frecuente."
+          en: "Unusually high [[DeltaS]] value. Verify that the units are J/K and not kJ/K; a factor-of-1000 error is very common."
+      - id: ds_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "El signo de [[DeltaS]] debe reflejar si el proceso produce mayor dispersión (positivo) o mayor orden (negativo). Un error de signo invierte la predicción de espontaneidad a alta temperatura."
+          en: "The sign of [[DeltaS]] must reflect whether the process produces greater dispersal (positive) or greater order (negative). A sign error reverses the spontaneity prediction at high temperature."
+
+    next_step_rules:
+      - id: ds_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[DeltaS]] determinada, calcular [[T_inv]] para identificar el régimen de temperatura en que el proceso es espontáneo."
+          en: "With [[DeltaS]] determined, compute [[T_inv]] to identify the temperature regime where the process is spontaneous."
+
+  T:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Temperatura absoluta que escala el término entrópico en la energía de Gibbs"
+      en: "Absolute temperature that scales the entropy term in the Gibbs energy"
+
+    summary_rules:
+      - id: t_summary_high
+        when: "T > 1000"
+        status: ok
+        text:
+          es: "[[T]] elevada: el término entrópico [[T]]·[[DeltaS]] domina el balance de [[DeltaG]]. La espontaneidad depende principalmente del signo de [[DeltaS]]."
+          en: "High [[T]]: the entropy term [[T]]·[[DeltaS]] dominates the [[DeltaG]] balance. Spontaneity depends mainly on the sign of [[DeltaS]]."
+      - id: t_summary_low
+        when: "T < 300"
+        status: ok
+        text:
+          es: "[[T]] baja: el término entálpico [[DeltaH]] domina sobre el término entrópico. La espontaneidad depende principalmente del signo de [[DeltaH]]."
+          en: "Low [[T]]: the enthalpic term [[DeltaH]] dominates over the entropy term. Spontaneity depends mainly on the sign of [[DeltaH]]."
+      - id: t_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T]] es el amplificador del término entrópico; indica en qué régimen —entálpico o entrópico— domina el criterio de espontaneidad de [[DeltaG]]."
+          en: "[[T]] is the amplifier of the entropy term; it indicates which regime —enthalpic or entropic— dominates the spontaneity criterion of [[DeltaG]]."
+
+    physical_reading_rules:
+      - id: t_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T]] modula la contribución de [[DeltaS]] al criterio de Gibbs: cuanto mayor es [[T]], mayor peso tiene el desorden del sistema en determinar la espontaneidad."
+          en: "[[T]] modulates the contribution of [[DeltaS]] to the Gibbs criterion: the higher [[T]], the greater the weight of the system's disorder in determining spontaneity."
+
+    coherence_rules:
+      - id: t_coherence_celsius
+        when: "T < 200 && T > 0"
+        status: warning
+        text:
+          es: "[[T]] menor de 200 K es inusual en la mayoría de procesos físico-químicos. Verificar que la temperatura no esté en grados Celsius."
+          en: "[[T]] below 200 K is unusual for most physicochemical processes. Verify that the temperature is not in Celsius degrees."
+      - id: t_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T]] debe ser mayor que cero en la escala absoluta. Un valor negativo es físicamente imposible."
+          en: "[[T]] must be greater than zero on the absolute scale. A negative value is physically impossible."
+
+    model_validity_rules:
+      - id: t_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo de Gibbs con [[DeltaH]] y [[DeltaS]] constantes es más preciso cuando [[T]] varía en un rango estrecho. Para variaciones superiores al 50% en [[T]], considerar la dependencia con la temperatura."
+          en: "The Gibbs model with constant [[DeltaH]] and [[DeltaS]] is most accurate when [[T]] varies in a narrow range. For variations exceeding 50% in [[T]], consider temperature dependence."
+
+    graph_rules:
+      - id: t_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T]] es la variable independiente en el gráfico de [[DeltaG]] frente a temperatura. La posición del sistema en el eje [[T]] determina si está en el dominio espontáneo o no espontáneo."
+          en: "[[T]] is the independent variable in the [[DeltaG]] versus temperature graph. The system's position on the [[T]] axis determines whether it is in the spontaneous or non-spontaneous domain."
+
+    likely_errors:
+      - id: t_error_celsius
+        when: "T < 273 && T > 0"
+        status: warning
+        text:
+          es: "Temperatura posiblemente en Celsius. Añadir 273.15 para convertir a kelvin antes de calcular [[DeltaG]]."
+          en: "Temperature possibly in Celsius. Add 273.15 to convert to kelvin before computing [[DeltaG]]."
+      - id: t_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Comprobar que [[T]] está en kelvin. El error de unidades de temperatura es el más frecuente en cálculos de energía libre de Gibbs."
+          en: "Check that [[T]] is in kelvin. The temperature unit error is the most frequent mistake in Gibbs free energy calculations."
+
+    next_step_rules:
+      - id: t_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Usar [[T]] junto con [[DeltaH]] y [[DeltaS]] para trazar la recta [[DeltaG]] vs [[T]] y localizar [[T_inv]], el umbral de cambio de espontaneidad."
+          en: "Use [[T]] together with [[DeltaH]] and [[DeltaS]] to plot the [[DeltaG]] vs [[T]] line and locate [[T_inv]], the spontaneity inversion threshold."
+
+  T_inv:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Temperatura exacta en la que el proceso invierte su espontaneidad"
+      en: "Exact temperature at which the process reverses its spontaneity"
+
+    summary_rules:
+      - id: tinv_summary_found
+        when: "T_inv > 0"
+        status: ok
+        text:
+          es: "[[T_inv]] positiva indica que existe un umbral de temperatura real en el que el proceso cambia de espontáneo a no espontáneo (o viceversa). Por encima o por debajo de [[T_inv]], la dirección de la espontaneidad se invierte."
+          en: "Positive [[T_inv]] indicates there is a real temperature threshold at which the process switches from spontaneous to non-spontaneous (or vice versa). Above or below [[T_inv]], the spontaneity direction reverses."
+      - id: tinv_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_inv]] resume el equilibrio entre [[DeltaH]] y [[DeltaS]]: es la temperatura a la que ambas contribuciones se anulan mutuamente y [[DeltaG]] vale cero."
+          en: "[[T_inv]] summarizes the balance between [[DeltaH]] and [[DeltaS]]: it is the temperature at which both contributions cancel each other and [[DeltaG]] is zero."
+
+    physical_reading_rules:
+      - id: tinv_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_inv]] es la intersección de la recta [[DeltaG]] vs [[T]] con el eje horizontal. Por encima de [[T_inv]] (si [[DeltaS]] es positiva) el proceso es espontáneo; por debajo no lo es."
+          en: "[[T_inv]] is the intersection of the [[DeltaG]] vs [[T]] line with the horizontal axis. Above [[T_inv]] (if [[DeltaS]] is positive) the process is spontaneous; below it is not."
+
+    coherence_rules:
+      - id: tinv_coherence_negative
+        when: "T_inv < 0"
+        status: error
+        text:
+          es: "[[T_inv]] negativa es físicamente imposible. Indica que [[DeltaH]] y [[DeltaS]] tienen signos opuestos, lo que significa que el proceso es siempre o nunca espontáneo sin umbral de inversión."
+          en: "Negative [[T_inv]] is physically impossible. It indicates [[DeltaH]] and [[DeltaS]] have opposite signs, meaning the process is always or never spontaneous with no inversion threshold."
+      - id: tinv_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_inv]] solo tiene sentido físico cuando [[DeltaH]] y [[DeltaS]] tienen el mismo signo (ambos positivos o ambos negativos)."
+          en: "[[T_inv]] is physically meaningful only when [[DeltaH]] and [[DeltaS]] have the same sign (both positive or both negative)."
+
+    model_validity_rules:
+      - id: tinv_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_inv]] es precisa mientras [[DeltaH]] y [[DeltaS]] sean aproximadamente constantes. Si el proceso atraviesa un cambio de fase cerca de [[T_inv]], el valor real puede diferir notablemente."
+          en: "[[T_inv]] is accurate as long as [[DeltaH]] and [[DeltaS]] are approximately constant. If the process crosses a phase transition near [[T_inv]], the real value may differ significantly."
+
+    graph_rules:
+      - id: tinv_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico de [[DeltaG]] vs [[T]], el marcador [[T_inv]] señala el cruce de la recta con [[DeltaG]] nulo. A la izquierda o derecha del marcador, el color de la curva cambia para indicar el régimen de espontaneidad."
+          en: "In the [[DeltaG]] vs [[T]] graph, the [[T_inv]] marker indicates the crossing of the line at zero [[DeltaG]]. Left or right of the marker, the curve color changes to indicate the spontaneity regime."
+
+    likely_errors:
+      - id: tinv_error_negative
+        when: "T_inv < 0"
+        status: error
+        text:
+          es: "Error de signo en [[DeltaH]] o [[DeltaS]]. Cuando [[T_inv]] resulta negativa, revisar que los signos de [[DeltaH]] y [[DeltaS]] sean físicamente coherentes con el proceso descrito."
+          en: "Sign error in [[DeltaH]] or [[DeltaS]]. When [[T_inv]] is negative, review that the signs of [[DeltaH]] and [[DeltaS]] are physically consistent with the described process."
+      - id: tinv_error_units
+        when: "T_inv > 10000"
+        status: warning
+        text:
+          es: "[[T_inv]] mayor de 10 000 K es posible pero infrecuente. Verificar que [[DeltaS]] esté en J/K (no en J/(mol·K) si se usa un mol) y no en kJ/K."
+          en: "[[T_inv]] above 10 000 K is possible but uncommon. Verify that [[DeltaS]] is in J/K (not J/(mol·K) if one mole is used) and not in kJ/K."
+      - id: tinv_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[T_inv]] es coherente. Comparar con la temperatura del proceso real para determinar si el proceso es espontáneo en las condiciones de trabajo."
+          en: "The value of [[T_inv]] is consistent. Compare with the actual process temperature to determine whether the process is spontaneous under working conditions."
+
+    next_step_rules:
+      - id: tinv_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[T_inv]] calculada, determinar si la temperatura real del proceso está por encima o por debajo del umbral, y concluir sobre la viabilidad espontánea del proceso."
+          en: "With [[T_inv]] computed, determine whether the actual process temperature is above or below the threshold, and conclude on the spontaneous feasibility of the process."
+
+cross_checks:
+  - id: cc_gibbs_triangle
+    description:
+      es: "Coherencia triangular entre DeltaG, DeltaH y T·DeltaS"
+      en: "Triangular coherence between DeltaG, DeltaH and T·DeltaS"
+    condition: "abs(DeltaG - (DeltaH - T * DeltaS)) < 1"
+    on_fail:
+      es: "La variación de Gibbs calculada no coincide con la diferencia entre entalpía y el término entrópico. Verificar todos los valores de entrada."
+      en: "The computed Gibbs change does not match the difference between enthalpy and the entropy term. Verify all input values."
+
+error_patterns:
+  - id: ep_celsius_temperature
+    description:
+      es: "Temperatura en Celsius en lugar de kelvin"
+      en: "Temperature in Celsius instead of kelvin"
+    detect_when: "T < 200"
+    message:
+      es: "Probable error de unidades: usar kelvin para [[T]]."
+      en: "Probable unit error: use kelvin for [[T]]."
+  - id: ep_unit_mismatch
+    description:
+      es: "Unidades inconsistentes entre DeltaH (J) y DeltaS (kJ/K)"
+      en: "Inconsistent units between DeltaH (J) and DeltaS (kJ/K)"
+    detect_when: "abs(DeltaG) > abs(DeltaH) * 1000"
+    message:
+      es: "La variación de Gibbs es desproporcionadamente mayor que la entalpía. Posible mezcla de J y kJ."
+      en: "The Gibbs change is disproportionately larger than the enthalpy. Possible mixing of J and kJ."
+
+graph_binding:
+  enabled: true
+  channels:
+    - DeltaG_vs_temperature
+    - T_inv_marker
+    - DeltaH_axis
+    - DeltaS_axis
+    - temperature_axis
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true

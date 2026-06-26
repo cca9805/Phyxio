@@ -1,0 +1,73 @@
+const e=`version: 5
+id: potencia
+nombre:
+  es: Potencia
+  en: Power
+titulo:
+  es: Potencia
+  en: Power
+titulo_en: Power
+area: fisica-clasica
+bloque: mecanica
+subbloque: trabajo-y-energia
+parent_id: fundamentos
+type: leaf
+ruta_relativa: fisica-clasica/mecanica/trabajo-y-energia/fundamentos/potencia
+orden: 214130
+icon: "🔧"
+descripcion: Rapidez con la que se realiza trabajo o se transfiere energia.
+description_en: Rate at which work is done or energy is transferred.
+dificultad: 2
+tiempo_estimado_min: 35
+niveles:
+  es: [ESO, BACHILLERATO, UNIVERSIDAD]
+  en: [Secondary, Upper Secondary, University]
+prerequisitos:
+  - fisica-clasica/mecanica/trabajo-y-energia/fundamentos/trabajo
+tags:
+  es: [potencia, trabajo, energia, fuerza, velocidad]
+  en: [power, work, energy, force, speed]
+physical_role:
+  es: magnitud física
+  en: physical quantity
+graficos:
+  - Coord
+representacion_dominante: Coord
+magnitud_dominante: P
+pregunta_fisica_central:
+  es: "¿Como mide la potencia la rapidez real con la que una fuerza transfiere energia?"
+  en: "How does power measure the real rate at which a force transfers energy?"
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    show_tab: true
+    show_inline_cards: true
+    allow_contextual_feedback: true
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+    output_magnitude: P
+  output_policy:
+    show_summary: true
+    show_summary_first: true
+    show_physical_reading: true
+    show_coherence_checks: true
+    show_model_limitations: true
+    show_warnings: true
+    show_likely_errors: true
+    max_inline_messages: 4
+  dependencies:
+    require_formulas: true
+    require_magnitudes: true
+    require_examples: true
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

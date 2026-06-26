@@ -1,0 +1,176 @@
+const e=`version: 2
+id: interpretacion-momento-de-una-fuerza
+leaf_id: momento-de-una-fuerza
+nombre:
+  es: Interpretación del momento de una fuerza
+  en: Interpretation of the moment of a force
+scope:
+  area: mecánica
+  bloque: dinámica
+  subbloque: estática
+  parent_id: equilibrio-rotacion
+  ruta_relativa: fisica-clasica/mecanica/dinamica/estatica/equilibrio-rotacion/momento-de-una-fuerza
+dependencies:
+  formulas: [torque_perpendicular_definition, torque_trigonometric_definition, lever_arm_relation]
+  magnitudes: [r, F, theta, d_perp, tau]
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+result_blocks:
+  summary:
+    title:
+      es: Resumen físico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  tau:
+    summary_rules:
+      - id: tau_summary
+        when: "true"
+        status: info
+        text:
+          es: tau resume la capacidad de una fuerza para hacer girar un cuerpo respecto a un eje.
+          en: tau summarizes the ability of a force to make a body rotate about an axis.
+    physical_reading_rules:
+      - id: tau_large_value
+        when: "abs(tau) > 0"
+        status: info
+        text:
+          es: Un tau mayor significa una tendencia de giro más intensa para ese eje.
+          en: A larger tau means a stronger turning tendency for that axis.
+      - id: tau_zero
+        when: "abs(tau) < 1e-9"
+        status: info
+        text:
+          es: Si tau vale cero, la fuerza no produce giro respecto al eje elegido.
+          en: If tau is zero, the force produces no rotation about the chosen axis.
+    coherence_rules:
+      - id: tau_zero_no_arm
+        when: "d_perp == 0 ? abs(tau) < 1e-9 : true"
+        status: ok
+        text:
+          es: Sin brazo perpendicular, el momento debe anularse.
+          en: Without a perpendicular arm, torque must vanish.
+      - id: tau_nonnegative_inputs
+        when: "r >= 0 && F >= 0"
+        status: ok
+        text:
+          es: La lectura de tau parte de magnitudes geométricas y dinámicas válidas.
+          en: The reading of tau starts from valid geometric and dynamic magnitudes.
+    model_validity_rules:
+      - id: tau_same_axis
+        when: "true"
+        status: ok
+        text:
+          es: El resultado solo es válido si eje, radio y fuerza pertenecen al mismo planteamiento; el modelo asume cuerpo rígido plano.
+          en: The result is valid only if axis, radius, and force belong to the same planar setup; the model assumes a rigid body and neglects deformation.
+    graph_rules:
+      - id: tau_graph
+        when: "true"
+        status: info
+        text:
+          es: En la gráfica, tau debe crecer hasta un máximo cerca de 90 grados y caer a cero en 0 y 180.
+          en: In the graph, tau should grow to a maximum near 90 degrees and fall to zero at 0 and 180.
+    likely_errors:
+      - id: tau_ignore_angle
+        when: "abs(theta - pi/2) > 1e-3 && abs(tau - r*F) < 1e-9"
+        status: warning
+        text:
+          es: Parece que se ha olvidado el seno del ángulo al calcular el momento.
+          en: It looks like the sine of the angle was forgotten when computing torque.
+    next_step_rules:
+      - id: tau_next
+        when: "true"
+        status: info
+        text:
+          es: El siguiente paso natural es sumar varios momentos para estudiar equilibrio rotacional.
+          en: The natural next step is to sum several torques to study rotational equilibrium.
+
+  d_perp:
+    summary_rules:
+      - id: d_summary
+        when: "true"
+        status: info
+        text:
+          es: d_perp es el brazo efectivo que convierte una fuerza en capacidad de giro.
+          en: d_perp is the effective arm that turns a force into rotational capability.
+    physical_reading_rules:
+      - id: d_perp_equal_r
+        when: "abs(theta - pi/2) < 1e-3 && abs(d_perp - r) < 1e-9"
+        status: info
+        text:
+          es: Cuando la fuerza es perpendicular al radio, el brazo efectivo coincide con r.
+          en: When the force is perpendicular to the radius, the effective arm matches r.
+      - id: d_perp_zero
+        when: "abs(d_perp) < 1e-9"
+        status: info
+        text:
+          es: Un brazo nulo indica que la línea de acción pasa por el eje.
+          en: A zero arm indicates that the line of action passes through the axis.
+    coherence_rules:
+      - id: d_perp_bound
+        when: "d_perp <= r + 1e-9"
+        status: ok
+        text:
+          es: El brazo perpendicular no puede superar la distancia radial.
+          en: The perpendicular arm cannot exceed the radial distance.
+    model_validity_rules:
+      - id: d_perp_planar
+        when: "theta >= 0 && theta <= pi"
+        status: ok
+        text:
+          es: La interpretación de d_perp usa la geometría plana del leaf.
+          en: The interpretation of d_perp uses the planar geometry of the leaf.
+    graph_rules:
+      - id: d_graph
+        when: "true"
+        status: info
+        text:
+          es: En la curva de tau, d_perp se lee indirectamente como la parte de r que realmente genera giro.
+          en: In the tau curve, d_perp is read indirectly as the part of r that actually generates rotation.
+    likely_errors:
+      - id: d_confusion_r
+        when: "abs(theta - pi/2) > 1e-3 && abs(d_perp - r) < 1e-9"
+        status: warning
+        text:
+          es: Puede haberse confundido la distancia radial con el brazo perpendicular.
+          en: Radial distance may have been confused with the perpendicular arm.
+    next_step_rules:
+      - id: d_next
+        when: "true"
+        status: info
+        text:
+          es: Usa ahora d_perp para decidir rápidamente cuándo una fuerza será eficaz para girar.
+          en: Use d_perp now to quickly decide when a force will be effective at turning.
+
+cross_checks:
+  - id: torque_geometry_match
+    affects: [tau, d_perp]
+    when: "abs(d_perp - r*sin(theta)) < 1e-9"
+    severity: ok
+    text:
+      es: La geometría del brazo y la definición trigonométrica del momento son coherentes.
+      en: The arm geometry and the trigonometric definition of torque are consistent.
+`;export{e as default};

@@ -1,0 +1,85 @@
+const n=`id: isotermico
+
+nombre:
+  es: Isotermico
+  en: Isothermal Process
+
+area: fisica-clasica
+bloque: termodinamica
+subbloque: gases-y-modelos
+parent_id: procesos-termodinamicos
+ruta_relativa: fisica-clasica/termodinamica/gases-y-modelos/procesos-termodinamicos/isotermico
+orden: 253410
+type: leaf
+
+niveles:
+  es:
+    - BACHILLERATO
+    - EXTRACURRICULAR
+  en:
+    - Upper Secondary
+    - Extracurricular
+
+icon: ✅
+
+descripcion: Proceso termodinamico a temperatura constante en gas ideal.
+description_en: Thermodynamic process at constant temperature in an ideal gas.
+
+tags:
+  es:
+    - proceso isotermico
+    - ley de Boyle
+    - gas ideal
+    - trabajo termodinamico
+    - presion volumen
+  en:
+    - isothermal process
+    - Boyle law
+    - ideal gas
+    - thermodynamic work
+    - pressure volume
+
+prerequisitos:
+  - fisica-clasica/termodinamica/gases-y-modelos/gas-ideal
+  - fisica-clasica/termodinamica/fundamentos/primer-principio
+
+graficos:
+  - Coord
+
+physical_role:
+  es: concepto físico
+  en: physical concept
+
+dificultad: 2
+tiempo_estimado_min: 35
+
+representacion_dominante: Coord
+magnitud_dominante: W
+
+pregunta_fisica_central:
+  es: "¿Como cambia la presion de un gas cuando su volumen varia manteniendo constante la temperatura?"
+  en: "How does the pressure of a gas change when its volume varies while keeping temperature constant?"
+
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

@@ -1,0 +1,369 @@
+const n=`version: 1
+id: interpretacion-bloque-sobre-superficie
+leaf_id: bloque-sobre-superficie
+nombre:
+  es: Interpretacion de bloque sobre superficie
+  en: Interpretation of block on surface
+scope:
+  es: Lectura causal entre fuerza aplicada, friccion y aceleracion horizontal.
+  en: Causal reading between applied force, friction, and horizontal acceleration.
+dependencies:
+  magnitudes:
+  - m
+  - F
+  - N
+  - mu_s
+  - mu_k
+  - f_s
+  - f_k
+  - a
+  - g
+  - W
+  formulas:
+  - peso_gravitatorio
+  - normal_superficie
+  - umbral_estatico
+  - friccion_cinetica
+  - segunda_ley_horizontal
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia fisica
+      en: Physical coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores comunes
+      en: Common errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  F:
+    summary_rules:
+    - id: F_summary
+      when: always
+      status: info
+      text:
+        es: F representa el esfuerzo externo que intenta iniciar o mantener el movimiento.
+        en: F represents external effort that tries to start or sustain motion.
+    coherence_rules:
+    - id: F_coherence
+      when: F >= 0
+      status: ok
+      text:
+        es: Un valor no negativo es consistente con un empuje en modulo.
+        en: A non-negative value is consistent with push magnitude.
+    physical_reading_rules:
+    - id: F_physical
+      when: always
+      status: info
+      text:
+        es: Si F supera f_s el sistema pasa del reposo al deslizamiento.
+        en: If F exceeds f_s the system moves from rest to sliding.
+    model_validity_rules:
+    - id: F_validity
+      when: always
+      status: info
+      text:
+        es: Esta lectura asume contacto continuo y friccion seca.
+        en: This reading assumes continuous contact and dry friction.
+    graph_rules:
+    - id: F_graph
+      when: always
+      status: info
+      text:
+        es: En la curva a(F), F es la variable horizontal principal.
+        en: In a(F) curve, F is the main horizontal variable.
+    likely_errors:
+    - id: F_error
+      when: always
+      status: warning
+      text:
+        es: Error comun - usar F dinamica sin verificar el umbral estatico.
+        en: Common error - using dynamic F without checking static threshold.
+    next_step_rules:
+    - id: F_next
+      when: always
+      status: info
+      text:
+        es: Compara F con f_s y luego calcula a con la ley dinamica.
+        en: Compare F with f_s and then compute a with dynamic law.
+  N:
+    summary_rules:
+    - id: N_summary
+      when: always
+      status: info
+      text:
+        es: N fija la escala de friccion del contacto.
+        en: N sets contact friction scale.
+    coherence_rules:
+    - id: N_coherence
+      when: N >= 0
+      status: ok
+      text:
+        es: N no negativa es coherente con reaccion de contacto.
+        en: Non-negative N is coherent with contact reaction.
+    physical_reading_rules:
+    - id: N_physical
+      when: always
+      status: info
+      text:
+        es: Si N aumenta, tambien pueden aumentar f_s y f_k.
+        en: If N increases, f_s and f_k can also increase.
+    model_validity_rules:
+    - id: N_validity
+      when: always
+      status: info
+      text:
+        es: Se asume superficie rigida y sin perdida de contacto.
+        en: A rigid surface and no contact loss are assumed.
+    graph_rules:
+    - id: N_graph
+      when: always
+      status: info
+      text:
+        es: N afecta el desplazamiento de la frontera de arranque.
+        en: N affects displacement of start boundary.
+    likely_errors:
+    - id: N_error
+      when: always
+      status: warning
+      text:
+        es: Error comun - tomar N=mg cuando hay fuerza vertical extra.
+        en: Common error - taking N=mg when extra vertical force exists.
+    next_step_rules:
+    - id: N_next
+      when: always
+      status: info
+      text:
+        es: Recalcula f_s y f_k tras cualquier cambio en N.
+        en: Recompute f_s and f_k after any change in N.
+  f_s:
+    summary_rules:
+    - id: fs_summary
+      when: always
+      status: info
+      text:
+        es: f_s es la frontera entre reposo y deslizamiento.
+        en: f_s is boundary between rest and sliding.
+    coherence_rules:
+    - id: fs_coherence
+      when: f_s >= 0
+      status: ok
+      text:
+        es: f_s no negativa es consistente con un umbral de modulo.
+        en: Non-negative f_s is consistent with a magnitude threshold.
+    physical_reading_rules:
+    - id: fs_physical
+      when: always
+      status: info
+      text:
+        es: Si F no supera f_s, la aceleracion debe ser nula.
+        en: If F does not exceed f_s, acceleration should be zero.
+    model_validity_rules:
+    - id: fs_validity
+      when: always
+      status: info
+      text:
+        es: Solo aplica como maximo estatico antes de deslizar.
+        en: It only applies as static maximum before sliding.
+    graph_rules:
+    - id: fs_graph
+      when: always
+      status: info
+      text:
+        es: f_s marca el punto de quiebre en el grafico.
+        en: f_s marks break point in graph.
+    likely_errors:
+    - id: fs_error
+      when: always
+      status: warning
+      text:
+        es: Error comun - usar f_s como friccion real durante deslizamiento.
+        en: Common error - using f_s as real friction during sliding.
+    next_step_rules:
+    - id: fs_next
+      when: always
+      status: info
+      text:
+        es: Si F supera f_s, cambia al modelo con f_k.
+        en: If F exceeds f_s, switch to model with f_k.
+  f_k:
+    summary_rules:
+    - id: fk_summary
+      when: always
+      status: info
+      text:
+        es: f_k es la resistencia activa durante movimiento relativo.
+        en: f_k is active resistance during relative motion.
+    coherence_rules:
+    - id: fk_coherence
+      when: f_k >= 0
+      status: ok
+      text:
+        es: El modulo de friccion cinetica debe ser no negativo.
+        en: Kinetic-friction magnitude must be non-negative.
+    physical_reading_rules:
+    - id: fk_physical
+      when: always
+      status: info
+      text:
+        es: A mayor f_k, menor fuerza neta util para acelerar.
+        en: Higher f_k means lower useful net force to accelerate.
+    model_validity_rules:
+    - id: fk_validity
+      when: always
+      status: info
+      text:
+        es: Requiere deslizamiento y coeficiente mu_k aproximadamente constante.
+        en: It requires sliding and approximately constant mu_k coefficient.
+    graph_rules:
+    - id: fk_graph
+      when: always
+      status: info
+      text:
+        es: Incrementar f_k desplaza la curva a(F) hacia abajo.
+        en: Increasing f_k shifts a(F) curve downward.
+    likely_errors:
+    - id: fk_error
+      when: always
+      status: warning
+      text:
+        es: Error comun - confundir mu_k con mu_s.
+        en: Common error - mixing up mu_k and mu_s.
+    next_step_rules:
+    - id: fk_next
+      when: always
+      status: info
+      text:
+        es: Verifica consistencia entre f_k, mu_k y N.
+        en: Verify consistency among f_k, mu_k, and N.
+  a:
+    summary_rules:
+    - id: a_summary
+      when: always
+      status: info
+      text:
+        es: a resume la respuesta dinamica final del sistema.
+        en: a summarizes final dynamic response of the system.
+    coherence_rules:
+    - id: a_coherence
+      when: a <= 20 and a >= -20
+      status: ok
+      text:
+        es: El valor esta en rango fisico razonable para ejercicios base.
+        en: Value is in reasonable physical range for base exercises.
+    physical_reading_rules:
+    - id: a_physical
+      when: always
+      status: info
+      text:
+        es: El signo de a depende del eje elegido y del balance neto.
+        en: Sign of a depends on chosen axis and net balance.
+    model_validity_rules:
+    - id: a_validity
+      when: always
+      status: info
+      text:
+        es: Se interpreta con modelo traslacional sin rotacion relevante.
+        en: It is interpreted with translational model without relevant rotation.
+    graph_rules:
+    - id: a_graph
+      when: always
+      status: info
+      text:
+        es: El punto actual en la curva indica regimen y margen de cambio.
+        en: Current point on curve indicates regime and change margin.
+    likely_errors:
+    - id: a_error
+      when: always
+      status: warning
+      text:
+        es: Error comun - no anular a cuando F no supera f_s.
+        en: Common error - not setting a to zero when F does not exceed f_s.
+    next_step_rules:
+    - id: a_next
+      when: always
+      status: info
+      text:
+        es: Con a validada, conecta con cinematica para tiempo y distancia.
+        en: With validated a, connect to kinematics for time and distance.
+  W:
+    summary_rules:
+    - id: W_summary
+      when: always
+      status: info
+      text:
+        es: W es el peso del bloque, que determina la fuerza normal.
+        en: W is the block weight, which determines the normal force.
+    coherence_rules:
+    - id: W_coherence
+      when: W > 0
+      status: ok
+      text:
+        es: El peso debe ser positivo.
+        en: Weight must be positive.
+    physical_reading_rules:
+    - id: W_physical
+      when: always
+      status: info
+      text:
+        es: El peso es la causa de la reaccion normal en este leaf.
+        en: Weight is the cause of the normal reaction in this leaf.
+    model_validity_rules:
+    - id: W_validity
+      when: always
+      status: info
+      text:
+        es: Se asume que el peso es constante y vertical.
+        en: It is assumed that weight is constant and vertical.
+    graph_rules:
+    - id: W_graph
+      when: always
+      status: info
+      text:
+        es: El peso desplaza el umbral de arranque.
+        en: Weight shifts the startup threshold.
+    likely_errors:
+    - id: W_error
+      when: always
+      status: warning
+      text:
+        es: Error comun - confundir peso con masa.
+        en: Common error - confusing weight with mass.
+    next_step_rules:
+    - id: W_next
+      when: always
+      status: info
+      text:
+        es: Usa W para obtener N.
+        en: Use W to obtain N.\r
+\r
+\r
+`;export{n as default};

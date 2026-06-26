@@ -1,0 +1,229 @@
+formulas:
+- id: flujo_uniforme
+  title:
+    es: Flujo magnetico en campo uniforme
+    en: Magnetic flux in a uniform field
+  equation: \Phi_B = B * A * cos_theta
+  latex: \\Phi_B = B A c_\theta % \Phi_B B A cos_theta
+  rearrangements:
+  - target: flujo_magnetico
+    equation: \Phi_B = B * A * cos_theta
+    latex: \\Phi_B = B A c_\theta % \Phi_B B A cos_theta
+  category: fundamental
+  relation_type: geometric_interpretation
+  physical_meaning:
+    es: El flujo mide cuanto campo magnetico atraviesa una superficie, ponderado por area y orientacion.
+    en: Flux measures how much magnetic field crosses a surface, weighted by area and orientation.
+  constraints:
+  - Campo magnetico uniforme sobre la superficie
+  - Superficie plana o area efectiva bien definida
+  - cos_theta representa la proyeccion respecto a la normal
+  validity:
+    es: Valido para campo uniforme y superficie plana. Para campos no uniformes debe usarse una suma o integral de aportes
+      locales.
+    en: Valid for uniform field and flat surface. For nonuniform fields, a sum or integral of local contributions is required.
+  dimension_check: T por m² produce Wb
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculo_flujo
+  - lectura_orientacion
+  - ley_de_faraday
+  interpretation_tags:
+  - flujo
+  - orientacion
+  - area
+  result_semantics:
+    target: flujo_magnetico
+    kind: scalar_signed
+    sign_meaning:
+      es: Signo positivo si el campo cruza en el sentido de la normal elegida; negativo si cruza en sentido contrario.
+      en: Positive if the field crosses along the chosen normal; negative if it crosses in the opposite direction.
+    absolute_value_meaning:
+      es: El valor absoluto indica la cantidad de campo enlazada por la superficie.
+      en: The absolute value indicates the amount of field linked by the surface.
+  domain_checks:
+  - condition: A < 0
+    message:
+      es: El area no puede ser negativa.
+      en: Area cannot be negative.
+  - condition: cos_theta < -1 or cos_theta > 1
+    message:
+      es: El factor de orientacion debe estar entre -1 y 1.
+      en: The orientation factor must lie between -1 and 1.
+  coherence_checks:
+  - condition: B == 0 and \Phi_B != 0
+    message:
+      es: Con campo nulo no puede haber flujo magnetico.
+      en: With zero field there can be no magnetic flux.
+  graph_implications:
+  - \Phi_B varia linealmente con B, A y cos_theta
+  - El signo de \Phi_B cambia al invertir la normal o el sentido del campo
+  pedagogical_triggers:
+  - Usar el angulo con el plano en vez de usar la normal
+  - Confundir campo magnetico con flujo magnetico
+- id: componente_normal
+  title:
+    es: Componente normal del campo
+    en: Normal component of the field
+  equation: B_\perp = B * cos_theta
+  latex: B_\perp = B c_\theta % B_\perp B cos_theta
+  rearrangements:
+  - target: componente_normal_del_campo
+    equation: B_\perp = B * cos_theta
+    latex: B_\perp = B c_\theta % B_\perp B cos_theta
+  category: derived
+  relation_type: geometric_interpretation
+  physical_meaning:
+    es: Solo la componente perpendicular del campo atraviesa la superficie y contribuye al flujo.
+    en: Only the perpendicular component of the field crosses the surface and contributes to flux.
+  constraints:
+  - Campo uniforme
+  - Orientacion definida por una normal
+  validity:
+    es: Valido cuando la direccion del campo y la normal son constantes sobre la superficie.
+    en: Valid when the field direction and the normal are constant over the surface.
+  dimension_check: T por factor adimensional produce T
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - lectura_de_orientacion
+  - diagnostico_flujo_nulo
+  interpretation_tags:
+  - proyeccion
+  - componente_normal
+  result_semantics:
+    target: componente_normal_del_campo
+    kind: scalar_signed
+    sign_meaning:
+      es: El signo indica el sentido de cruce respecto a la normal.
+      en: The sign indicates crossing direction relative to the normal.
+    absolute_value_meaning:
+      es: El valor absoluto indica la parte efectiva del campo para generar flujo.
+      en: The absolute value indicates the effective part of the field for producing flux.
+  domain_checks:
+  - condition: cos_theta < -1 or cos_theta > 1
+    message:
+      es: El factor de orientacion debe estar entre -1 y 1.
+      en: The orientation factor must lie between -1 and 1.
+  coherence_checks:
+  - condition: B == 0 and B_\perp != 0
+    message:
+      es: Sin campo magnetico no puede existir componente normal.
+      en: Without magnetic field there can be no normal component.
+  graph_implications:
+  - B_\perp cruza por cero cuando el campo es tangente a la superficie
+  pedagogical_triggers:
+  - Olvidar que una superficie paralela al campo tiene flujo nulo
+- id: flujo_maximo
+  title:
+    es: Flujo maximo de referencia
+    en: Maximum reference flux
+  equation: \Phi_{max} = B * A
+  latex: \Phi_{max} = BA % \Phi_{max} B A
+  rearrangements:
+  - target: flujo_maximo
+    equation: \Phi_{max} = B * A
+    latex: \Phi_{max} = BA % \Phi_{max} B A
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: El flujo maximo fija la escala cuando la superficie esta perpendicular al campo.
+    en: Maximum flux sets the scale when the surface is perpendicular to the field.
+  constraints:
+  - Campo uniforme
+  - Orientacion de cruce maximo
+  validity:
+    es: Sirve como referencia de escala; el flujo real puede ser menor o cambiar de signo por orientacion.
+    en: Used as a scale reference; real flux may be smaller or change sign because of orientation.
+  dimension_check: T por m² produce Wb
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - estimacion_rapida
+  - comparacion_orientacion
+  interpretation_tags:
+  - escala
+  - maximo
+  result_semantics:
+    target: flujo_maximo
+    kind: scalar_unsigned
+    sign_meaning:
+      es: No usa signo porque representa una escala maxima positiva.
+      en: It has no sign because it represents a positive maximum scale.
+    absolute_value_meaning:
+      es: Indica el mayor flujo posible para ese campo y esa area.
+      en: Indicates the largest possible flux for that field and area.
+  domain_checks:
+  - condition: A < 0
+    message:
+      es: El area no puede ser negativa.
+      en: Area cannot be negative.
+  coherence_checks:
+  - condition: \Phi_{max} < 0
+    message:
+      es: El flujo maximo no puede ser negativo.
+      en: Maximum flux cannot be negative.
+  graph_implications:
+  - \Phi_{max} aparece como envolvente positiva de la curva de flujo
+  pedagogical_triggers:
+  - Tomar \Phi_{max} como flujo real aunque la superficie este inclinada
+- id: variacion_flujo
+  title:
+    es: Variacion de flujo magnetico
+    en: Magnetic flux change
+  equation: \Delta\Phi_B = \Phi_f - \Phi_i
+  latex: \Delta\\Phi_B = \\Phi_f - \\Phi_i % \Delta\Phi_B \Phi_f \Phi_i
+  rearrangements:
+  - target: variacion_de_flujo_magnetico
+    equation: \Delta\Phi_B = \Phi_f - \Phi_i
+    latex: \Delta\\Phi_B = \\Phi_f - \\Phi_i % \Delta\Phi_B \Phi_f \Phi_i
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: La induccion electromagnetica depende del cambio de flujo, no del flujo aislado.
+    en: Electromagnetic induction depends on flux change, not on flux alone.
+  constraints:
+  - Misma orientacion de normal para estado inicial y final
+  - Valores de flujo comparables en la misma superficie
+  validity:
+    es: Valido para comparar dos estados de una misma superficie o bobina con la misma convencion de signo.
+    en: Valid for comparing two states of the same surface or coil with the same sign convention.
+  dimension_check: Diferencia de Wb produce Wb
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - ley_de_faraday
+  - deteccion_induccion
+  interpretation_tags:
+  - cambio
+  - induccion
+  - signo
+  result_semantics:
+    target: variacion_de_flujo_magnetico
+    kind: scalar_signed
+    sign_meaning:
+      es: Signo positivo si el flujo aumenta respecto a la normal; negativo si disminuye.
+      en: Positive if flux increases relative to the normal; negative if it decreases.
+    absolute_value_meaning:
+      es: Indica el tamano del cambio que puede producir induccion.
+      en: Indicates the size of the change that can produce induction.
+  domain_checks:
+  - condition: 'false'
+    message:
+      es: Sin restricciones adicionales si ambos flujos usan la misma convencion.
+      en: No additional restriction if both fluxes use the same convention.
+  coherence_checks:
+  - condition: \Phi_f == \Phi_i and \Delta\Phi_B != 0
+    message:
+      es: Si los flujos inicial y final coinciden, la variacion debe ser nula.
+      en: If initial and final flux are equal, the change must be zero.
+  graph_implications:
+  - \Delta\Phi_B se representa como salto vertical entre dos estados de flujo
+  pedagogical_triggers:
+  - Usar el flujo final como si fuera la variacion de flujo
+ui:
+  default_formula: flujo_uniforme
+  show_formula_selector: true
+  show_rearrangements: true
+  show_result_semantics: true

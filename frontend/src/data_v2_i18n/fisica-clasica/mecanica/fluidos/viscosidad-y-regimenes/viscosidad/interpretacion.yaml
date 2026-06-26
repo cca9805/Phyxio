@@ -1,0 +1,347 @@
+version: 5
+id: viscosidad-interp
+leaf_id: viscosidad
+scope: local
+nombre:
+  es: "Análisis de Viscosidad"
+  en: "Viscosity Analysis"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title: { es: "Resumen Reológico", en: "Rheological Summary" }
+  physical_reading:
+    title: { es: "Lectura Física", en: "Physical Reading" }
+  coherence:
+    title: { es: "Coherencia de Datos", en: "Data Coherence" }
+  model_validity:
+    title: { es: "Validez del Modelo", en: "Model Validity" }
+  graph_reading:
+    title: { es: "Interpretación Gráfica", en: "Graphic Interpretation" }
+  likely_errors:
+    title: { es: "Errores Probables", en: "Likely Errors" }
+  next_step:
+    title: { es: "Siguiente Paso Sugerido", en: "Suggested Next Step" }
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [mu, nu, rho, tau, dudy, Re]
+  formulas: [tau_mu, dudy_mu, nu_mu, re_mu]
+
+targets:
+  mu:
+    summary_rules:
+      - id: mu-val
+        when: mu > 0
+        status: success
+        text:
+          es: "La viscosidad dinámica [[mu]] cuantifica la fricción interna del fluido en movimiento."
+          en: "Dynamic viscosity [[mu]] quantifies the internal friction of the fluid in motion."
+    physical_reading_rules:
+      - id: mu-phys
+        when: mu > 0.1
+        status: success
+        text:
+          es: "Este fluido es altamente viscoso; las fuerzas intermoleculares dificultan el deslizamiento entre capas."
+          en: "This fluid is highly viscous; intermolecular forces hinder sliding between layers."
+    coherence_rules:
+      - id: mu-coh
+        when: mu > 0
+        status: success
+        text:
+          es: "Valor positivo coherente con la naturaleza disipativa de los fluidos reales."
+          en: "Positive value coherent with the dissipative nature of real fluids."
+    model_validity_rules:
+      - id: mu-valid
+        when: mu > 0
+        status: success
+        text:
+          es: "Se asume un coeficiente constante (fluido Newtoniano) independiente de la tasa de cizalla."
+          en: "A constant coefficient (Newtonian fluid) is assumed, independent of the shear rate."
+    graph_rules:
+      - id: mu-graph
+        when: mu > 0
+        status: success
+        text:
+          es: "En el diagrama de flujo, [[mu]] es la pendiente de la recta que relaciona esfuerzo y deformación."
+          en: "In the flow diagram, [[mu]] is the slope of the line relating stress and strain."
+    likely_errors:
+      - id: mu-err-neg
+        when: mu < 0
+        status: error
+        text:
+          es: "Error: La viscosidad no puede ser negativa; esto violaría la termodinámica clásica."
+          en: "Error: Viscosity cannot be negative; this would violate classical thermodynamics."
+    next_step_rules:
+      - id: mu-next
+        when: mu > 0
+        status: info
+        text:
+          es: "Considere cómo cambia este valor con la temperatura: disminuye en líquidos y aumenta en gases."
+          en: "Consider how this value changes with temperature: it decreases in liquids and increases in gases."
+
+  tau:
+    summary_rules:
+      - id: tau-val
+        when: tau >= 0
+        status: success
+        text:
+          es: "El esfuerzo cortante [[tau]] es la fuerza tangencial que el fluido ejerce sobre una superficie o capa adyacente."
+          en: "Shear stress [[tau]] is the tangential force the fluid exerts on a surface or adjacent layer."
+    physical_reading_rules:
+      - id: tau-phys
+        when: tau > 0
+        status: success
+        text:
+          es: "La presencia de esfuerzo cortante indica que hay una transferencia de cantidad de movimiento entre capas."
+          en: "The presence of shear stress indicates momentum transfer between layers."
+    coherence_rules:
+      - id: tau-coh
+        when: tau >= 0
+        status: success
+        text:
+          es: "El esfuerzo es proporcional al gradiente de velocidad según la ley de Newton."
+          en: "Stress is proportional to the velocity gradient according to Newton's law."
+    model_validity_rules:
+      - id: tau-valid
+        when: tau >= 0
+        status: success
+        text:
+          es: "Válido mientras no se superen los límites de elasticidad (para fluidos no-Newtonianos) o de turbulencia."
+          en: "Valid as long as elasticity limits (for non-Newtonian fluids) or turbulence limits are not exceeded."
+    graph_rules:
+      - id: tau-graph
+        when: tau >= 0
+        status: success
+        text:
+          es: "Representado en el eje vertical del gráfico de comportamiento reológico."
+          en: "Represented on the vertical axis of the rheological behavior graph."
+    likely_errors:
+      - id: tau-err-norm
+        when: tau > 0
+        status: info
+        text:
+          es: "Cuidado: no confunda esfuerzo cortante (tangencial) con presión (normal)."
+          en: "Careful: do not confuse shear stress (tangential) with pressure (normal)."
+    next_step_rules:
+      - id: tau-next
+        when: tau > 0
+        status: info
+        text:
+          es: "Relacione este esfuerzo con la pérdida de carga en tuberías o la fricción en rodamientos."
+          en: "Relate this stress to head loss in pipes or friction in bearings."
+
+  nu:
+    summary_rules:
+      - id: nu-val
+        when: nu > 0
+        status: success
+        text:
+          es: "La viscosidad cinemática [[nu]] mide la difusión de la cantidad de movimiento en relación a la inercia."
+          en: "Kinematic viscosity [[nu]] measures momentum diffusion relative to inertia."
+    physical_reading_rules:
+      - id: nu-phys
+        when: nu > 1e-3
+        status: success
+        text:
+          es: "Un valor alto sugiere que los efectos viscosos se propagan rápidamente por el volumen del fluido."
+          en: "A high value suggests that viscous effects propagate quickly through the fluid volume."
+    coherence_rules:
+      - id: nu-coh
+        when: nu > 0
+        status: success
+        text:
+          es: "Consistente con la relación mu/rho para fluidos homogéneos."
+          en: "Consistent with the mu/rho ratio for homogeneous fluids."
+    model_validity_rules:
+      - id: nu-valid
+        when: nu > 0
+        status: success
+        text:
+          es: "Útil principalmente en problemas de flujo dominados por la gravedad o fuerzas inerciales."
+          en: "Useful mainly in flow problems dominated by gravity or inertial forces."
+    graph_rules:
+      - id: nu-graph
+        when: nu > 0
+        status: info
+        text:
+          es: "A menudo se utiliza para escalar la escala de longitud de los vórtices en simulaciones SVG."
+          en: "Often used to scale the length scale of vortices in SVG simulations."
+    likely_errors:
+      - id: nu-err-rho
+        when: nu > 0
+        status: info
+        text:
+          es: "Asegúrese de usar la densidad [[rho]] correcta a la temperatura de operación."
+          en: "Make sure to use the correct density [[rho]] at the operating temperature."
+    next_step_rules:
+      - id: nu-next
+        when: nu > 0
+        status: info
+        text:
+          es: "Calcule el Número de Reynolds [[Re]] usando este valor para determinar el régimen de flujo."
+          en: "Calculate the Reynolds Number [[Re]] using this value to determine the flow regime."
+
+  dudy:
+    summary_rules:
+      - id: dudy-val
+        when: dudy >= 0
+        status: success
+        text:
+          es: "La tasa de deformación [[dudy]] indica la rapidez con la que las capas de fluido se deslizan unas sobre otras."
+          en: "The shear rate [[dudy]] indicates the speed at which fluid layers slide over each other."
+    physical_reading_rules:
+      - id: dudy-phys
+        when: dudy > 1000
+        status: warning
+        text:
+          es: "Una tasa de deformación muy alta puede provocar calentamiento viscoso significativo."
+          en: "A very high shear rate can cause significant viscous heating."
+    coherence_rules:
+      - id: dudy-coh
+        when: dudy >= 0
+        status: success
+        text:
+          es: "Gradiente coherente con el movimiento relativo impuesto."
+          en: "Gradient coherent with the imposed relative motion."
+    model_validity_rules:
+      - id: dudy-valid
+        when: dudy >= 0
+        status: success
+        text:
+          es: "Válido para perfiles laminares donde no hay mezcla turbulenta."
+          en: "Valid for laminar profiles where there is no turbulent mixing."
+    graph_rules:
+      - id: dudy-graph
+        when: dudy >= 0
+        status: success
+        text:
+          es: "Representado como el eje de abscisas en el diagrama de flujo reológico."
+          en: "Represented as the abscissa axis in the rheological flow diagram."
+    likely_errors:
+      - id: dudy-err-flat
+        when: dudy == 0
+        status: info
+        text:
+          es: "Si la tasa es cero, el fluido se mueve como un sólido rígido o está en reposo."
+          en: "If the rate is zero, the fluid moves as a rigid body or is at rest."
+    next_step_rules:
+      - id: dudy-next
+        when: dudy > 0
+        status: info
+        text:
+          es: "Multiplique por la viscosidad [[mu]] para hallar el esfuerzo cortante [[tau]]."
+          en: "Multiply by viscosity [[mu]] to find the shear stress [[tau]]."
+
+  rho:
+    summary_rules:
+      - id: rho-val
+        when: rho > 0
+        status: success
+        text:
+          es: "La densidad [[rho]] determina la inercia del fluido y su respuesta a fuerzas externas."
+          en: "Density [[rho]] determines the fluid's inertia and its response to external forces."
+    physical_reading_rules:
+      - id: rho-phys
+        when: rho > 0
+        status: success
+        text:
+          es: "Una densidad mayor implica que el fluido requiere más energía para ser acelerado."
+          en: "A higher density implies that the fluid requires more energy to be accelerated."
+    coherence_rules:
+      - id: rho-coh
+        when: rho > 0
+        status: success
+        text:
+          es: "Valor dentro del rango esperado para fluidos incompresibles comunes."
+          en: "Value within the expected range for common incompressible fluids."
+    model_validity_rules:
+      - id: rho-valid
+        when: rho > 0
+        status: success
+        text:
+          es: "Se asume densidad constante en todo el dominio del flujo."
+          en: "Constant density is assumed throughout the flow domain."
+    graph_rules:
+      - id: rho-graph
+        when: rho > 0
+        status: info
+        text:
+          es: "La densidad actúa como un factor de escala en la conversión entre viscosidad dinámica y cinemática."
+          en: "Density acts as a scaling factor in the conversion between dynamic and kinematic viscosity."
+    likely_errors:
+      - id: rho-err-mu
+        when: rho > 0
+        status: info
+        text:
+          es: "No confunda densidad con viscosidad; son propiedades físicamente independientes."
+          en: "Do not confuse density with viscosity; they are physically independent properties."
+    next_step_rules:
+      - id: rho-next
+        when: rho > 0
+        status: info
+        text:
+          es: "Use este valor para calcular la viscosidad cinemática [[nu]] o el número de Reynolds [[Re]]."
+          en: "Use this value to calculate the kinematic viscosity [[nu]] or the Reynolds number [[Re]]."
+
+  Re:
+    summary_rules:
+      - id: re-val
+        when: Re >= 0
+        status: success
+        text:
+          es: "El número de Reynolds [[Re]] caracteriza el régimen de flujo."
+          en: "The Reynolds number [[Re]] characterizes the flow regime."
+    physical_reading_rules:
+      - id: re-phys
+        when: Re < 2300
+        status: success
+        text:
+          es: "Flujo laminar: las fuerzas viscosas dominan y el flujo es ordenado."
+          en: "Laminar flow: viscous forces dominate and the flow is ordered."
+    coherence_rules:
+      - id: re-coh
+        when: Re >= 0
+        status: success
+        text:
+          es: "Número adimensional coherente."
+          en: "Coherent dimensionless number."
+    model_validity_rules:
+      - id: re-valid
+        when: Re >= 0
+        status: success
+        text:
+          es: "Válido para la clasificación de regímenes en conductos."
+          en: "Valid for regime classification in ducts."
+    graph_rules:
+      - id: re-graph
+        when: Re >= 0
+        status: info
+        text:
+          es: "Determina el punto de operación en mapas de fricción."
+          en: "Determines the operating point in friction maps."
+    likely_errors:
+      - id: re-err-unit
+        when: Re >= 0
+        status: info
+        text:
+          es: "Asegúrese de que todas las unidades se cancelen; Re no tiene dimensiones."
+          en: "Ensure all units cancel out; Re has no dimensions."
+    next_step_rules:
+      - id: re-next
+        when: Re > 2300
+        status: warning
+        text:
+          es: "El flujo está en transición o es turbulento; los modelos laminares simples ya no aplican."
+          en: "The flow is in transition or turbulent; simple laminar models no longer apply."

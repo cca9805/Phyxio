@@ -1,0 +1,229 @@
+const e=`version: "2.0"
+magnitudes:
+
+  - id: Phi_E
+    symbol: \\Phi_E
+    nombre:
+      es: Flujo eléctrico
+      en: Electric flux
+    descripcion:
+      es: Integral de superficie del campo eléctrico a través de una superficie cerrada. Mide cuánto campo eléctrico atraviesa la superficie.
+      en: Surface integral of the electric field through a closed surface. Measures how much electric field passes through the surface.
+    unidad_si: "N·m²·C⁻¹"
+    dimension: "[M L³ T⁻³ I⁻¹]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - enunciado de la ley de Gauss
+      - cálculo del campo eléctrico en geometrías simétricas
+      - determinación de la carga encerrada a partir del campo medido
+    common_mistake: "Creer que el flujo depende de la forma o tamaño de la superficie gaussiana, cuando en realidad solo depende de la carga encerrada."
+    typical_range: "Desde valores muy pequeños en sistemas atómicos hasta 10⁶ N·m²·C⁻¹ en condensadores macroscópicos."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El flujo es positivo cuando el campo neto sale de la superficie (carga encerrada positiva neta) y negativo cuando entra (carga encerrada negativa neta)."
+        en: "Flux is positive when the net field exits the surface (net positive enclosed charge) and negative when it enters (net negative enclosed charge)."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Flujo nulo indica que la carga encerrada total es cero: puede haber cargas positivas y negativas que se cancelan, o simplemente no hay cargas dentro de la superficie."
+        en: "Zero flux means the total enclosed charge is zero: positive and negative charges may cancel each other, or there are simply no charges inside the surface."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-∞, +∞)"
+    interpretation_role:
+      primary_for:
+        - lectura del flujo calculado y su relación con la carga encerrada
+        - determinación del campo eléctrico en la superficie gaussiana
+      secondary_for:
+        - verificación de la consistencia del modelo electrostático
+    graph_binding:
+      channels:
+        - y_axis
+    pedagogical_notes:
+      es: "[[Phi_E]] es la magnitud central de la ley de Gauss. El error conceptual más frecuente es confundir el flujo con el campo: el flujo integra el campo sobre una superficie y su valor no depende de la geometría de la superficie gaussiana, solo de la carga encerrada."
+      en: "[[Phi_E]] is the central magnitude of Gauss's law. The most frequent conceptual error is confusing flux with field: flux integrates the field over a surface and its value does not depend on the shape of the Gaussian surface, only on the enclosed charge."
+
+  - id: Q_enc
+    symbol: Q_{enc}
+    nombre:
+      es: Carga encerrada
+      en: Enclosed charge
+    descripcion:
+      es: Suma algebraica de todas las cargas eléctricas contenidas en el interior de la superficie gaussiana.
+      en: Algebraic sum of all electric charges contained inside the Gaussian surface.
+    unidad_si: C
+    dimension: "[I T]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - enunciado de la ley de Gauss
+      - cálculo del flujo eléctrico a través de una superficie cerrada
+    common_mistake: "Incluir en [[Q_enc]] cargas que están fuera de la superficie gaussiana, o no sumar algebraicamente cargas de diferente signo dentro de ella."
+    typical_range: "Desde la carga del electrón (1.6×10⁻¹⁹ C) hasta microcoulombios en objetos cargados macroscópicamente."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Positiva si domina la carga positiva en el interior; negativa si domina la negativa. El signo de [[Q_enc]] determina directamente el signo del flujo."
+        en: "Positive if positive charge dominates the interior; negative if negative charge dominates. The sign of [[Q_enc]] directly determines the sign of the flux."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Carga encerrada nula implica flujo neto cero. No significa que el campo sea cero en la superficie, sino que las contribuciones positivas y negativas se compensan exactamente."
+        en: "Zero enclosed charge implies zero net flux. This does not mean the field is zero on the surface, but that positive and negative contributions cancel exactly."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-∞, +∞)"
+    interpretation_role:
+      primary_for:
+        - determinación del flujo total a través de la superficie
+        - clasificación del sistema como fuente o sumidero de campo
+      secondary_for:
+        - estimación del campo eléctrico en superficies con simetría
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "[[Q_enc]] es la causa física del flujo. La elección de la superficie gaussiana no cambia [[Q_enc]]; solo debe incluir las cargas relevantes para el problema. El estudiante debe aprender a identificar qué cargas están dentro y cuáles fuera antes de aplicar la ley."
+      en: "[[Q_enc]] is the physical cause of the flux. The choice of Gaussian surface does not change [[Q_enc]]; it must only include the charges relevant to the problem. Students must learn to identify which charges are inside and which are outside before applying the law."
+
+  - id: epsilon_0
+    symbol: \\varepsilon_0
+    nombre:
+      es: Permitividad del vacío
+      en: Permittivity of free space
+    descripcion:
+      es: Constante fundamental que relaciona el flujo eléctrico con la carga que lo genera en el vacío. Aparece en la forma diferencial e integral de la ley de Gauss.
+      en: Fundamental constant relating electric flux to the charge generating it in vacuum. Appears in both differential and integral forms of Gauss's law.
+    unidad_si: "C²·N⁻¹·m⁻²"
+    dimension: "[M⁻¹ L⁻³ T⁴ I²]"
+    is_vector: false
+    components: []
+    category: constant
+    physical_role: universal_constant
+    used_in:
+      - ley de Gauss en forma integral
+      - relación entre [[Phi_E]] y [[Q_enc]]
+    common_mistake: "Confundir [[epsilon_0]] con la constante de Coulomb k_e. Son inversamente proporcionales: una permitividad mayor implica una constante de Coulomb menor y fuerzas más débiles."
+    typical_range: "8.854×10⁻¹² C²·N⁻¹·m⁻² (valor fijo, constante universal en el vacío)."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "[[epsilon_0]] es siempre positiva. No tiene signo porque es una constante de proporcionalidad del vacío físico."
+        en: "[[epsilon_0]] is always positive. It has no sign because it is a proportionality constant of physical vacuum."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "[[epsilon_0]] nunca es cero. Un valor nulo haría diverger la ley de Gauss y eliminaría la física electrostática clásica."
+        en: "[[epsilon_0]] is never zero. A zero value would make Gauss's law diverge and would eliminate classical electrostatic physics."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[8.854×10⁻¹², 8.854×10⁻¹²]"
+    interpretation_role:
+      primary_for:
+        - escala de la interacción electrostática en el vacío
+      secondary_for:
+        - conexión con la constante de Coulomb k_e
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "[[epsilon_0]] aparece en el denominador de la ley de Gauss. Su valor numérico muy pequeño (aprox. 8.85×10⁻¹²) se compensa con la escala de [[Q_enc]] para dar flujos razonables. El alumno debe memorizarlo como constante, no intentar calcularlo en el problema."
+      en: "[[epsilon_0]] appears in the denominator of Gauss's law. Its very small numerical value (approx. 8.85×10⁻¹²) is offset by the scale of [[Q_enc]] to give reasonable flux values. Students should memorize it as a constant rather than trying to compute it during a problem."
+
+  - id: E_G
+    symbol: E_G
+    nombre:
+      es: Campo eléctrico (gaussiano)
+      en: Electric field (Gaussian)
+    descripcion:
+      es: Módulo del campo eléctrico uniforme sobre la superficie gaussiana cuando existe simetría suficiente para extraerlo de la integral de flujo.
+      en: Magnitude of the uniform electric field over the Gaussian surface when sufficient symmetry allows it to be factored out of the flux integral.
+    unidad_si: "N/C"
+    dimension: "[M L T⁻³ I⁻¹]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: derived
+    used_in:
+      - cálculo del campo en geometrías simétricas mediante la ley de Gauss
+      - determinación del campo dentro y fuera de esferas, cilindros y planos cargados
+    common_mistake: "Aplicar la ley de Gauss para calcular [[E_G]] cuando la geometría no tiene simetría suficiente. Sin simetría, el campo no es uniforme sobre la superficie y no puede extraerse de la integral."
+    typical_range: "Desde 10⁻³ N/C en campos ambientales hasta 3×10⁶ N/C (campo de ruptura del aire)."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "[[E_G]] representa el módulo del campo, siempre positivo. La dirección se determina por la geometría y el signo de la carga fuente."
+        en: "[[E_G]] represents the field magnitude, always positive. The direction is determined by the geometry and the sign of the source charge."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "[[E_G]] nulo indica que no hay campo en esa región, lo que ocurre por ejemplo en el interior de un conductor en equilibrio electrostático."
+        en: "Zero [[E_G]] means there is no field in that region, which occurs for example inside a conductor in electrostatic equilibrium."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, +∞)"
+    interpretation_role:
+      primary_for:
+        - lectura del campo calculado a partir del flujo y la geometría
+      secondary_for:
+        - verificación del campo en conductores y cavidades
+    graph_binding:
+      channels:
+        - y_axis
+    pedagogical_notes:
+      es: "[[E_G]] se obtiene de la ley de Gauss solo cuando la simetría garantiza que el campo es constante en módulo sobre la superficie. Sin esa condición, la ley de Gauss sigue siendo válida pero no permite calcular [[E_G]] directamente."
+      en: "[[E_G]] is obtained from Gauss's law only when symmetry guarantees that the field is constant in magnitude over the surface. Without that condition, Gauss's law still holds but does not allow direct computation of [[E_G]]."
+
+  - id: A_G
+    symbol: A_G
+    nombre:
+      es: Área de la superficie gaussiana
+      en: Area of the Gaussian surface
+    descripcion:
+      es: Área total de la superficie cerrada elegida para aplicar la ley de Gauss. Para superficies simétricas equivale a la suma de las partes activas donde el campo es perpendicular a la superficie.
+      en: Total area of the closed surface chosen to apply Gauss's law. For symmetric surfaces it equals the sum of active parts where the field is perpendicular to the surface.
+    unidad_si: "m²"
+    dimension: "[L²]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: input_parameter
+    used_in:
+      - cálculo del campo eléctrico a partir de la ley de Gauss con simetría
+      - determinación del flujo como producto de campo por área
+    common_mistake: "Usar el área total de la superficie en lugar del área donde el campo es perpendicular. En superficies como cilindros, las tapas no contribuyen al flujo si el campo es paralelo a ellas."
+    typical_range: "Desde 10⁻²⁰ m² (escala atómica) hasta varios metros cuadrados en geometrías macroscópicas."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "[[A_G]] es siempre positiva por ser un área geométrica."
+        en: "[[A_G]] is always positive as it is a geometric area."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un área nula no tiene sentido físico en este contexto; implica que la superficie gaussiana no existe."
+        en: "A zero area has no physical meaning in this context; it implies that the Gaussian surface does not exist."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - cálculo del campo a partir del flujo y la simetría
+      secondary_for:
+        - diseño de la superficie gaussiana óptima para el problema
+    graph_binding:
+      channels:
+        - x_axis
+    pedagogical_notes:
+      es: "[[A_G]] solo interviene en el cálculo cuando la simetría permite factorizar [[E_G]] de la integral. El alumno debe elegir la superficie gaussiana para que [[E_G]] sea constante sobre ella, haciendo que [[A_G]] sea el único factor geométrico relevante."
+      en: "[[A_G]] only enters the calculation when symmetry allows [[E_G]] to be factored out of the integral. Students should choose the Gaussian surface so that [[E_G]] is constant over it, making [[A_G]] the only relevant geometric factor."
+`;export{e as default};

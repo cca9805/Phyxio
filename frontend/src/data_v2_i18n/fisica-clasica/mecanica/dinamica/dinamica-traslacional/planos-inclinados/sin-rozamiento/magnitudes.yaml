@@ -1,0 +1,579 @@
+version: 1
+magnitudes:
+- id: m
+  symbol: m
+  nombre:
+    es: Masa del bloque
+    en: Block mass
+  descripcion:
+    es: Cantidad de materia del cuerpo que se desplaza por el plano.
+    en: Amount of matter of the body moving along the incline.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: parameter
+  used_in:
+  - descomposicion_paralela
+  - descomposicion_perpendicular
+  - normal_plano_ideal
+  common_mistake:
+    es: Pensar que la masa cambia la aceleración final en el modelo ideal.
+    en: Thinking mass changes final acceleration in the ideal model.
+  typical_range:
+    es: 0.1 a 1000 kg en problemas didácticos y técnicos.
+    en: 0.1 to 1000 kg in didactic and technical problems.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud positiva.
+      en: Used as a positive magnitude.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: m = 0 no representa un cuerpo físico en este leaf.
+      en: m = 0 does not represent a physical body in this leaf.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '> 0'
+  interpretation_role:
+    primary_for:
+    - escala-de-fuerzas
+    secondary_for:
+    - validacion-de-datos
+  graph_binding:
+    channels:
+    - mass_input
+  pedagogical_notes:
+    es: Se cancela en a, pero no en P ni en N.
+    en: It cancels in a, but not in P or N.
+- id: g
+  symbol: g
+  nombre:
+    es: Aceleración gravitatoria
+    en: Gravitational acceleration
+  descripcion:
+    es: Intensidad local del campo gravitatorio terrestre.
+    en: Local intensity of the Earth's gravitational field.
+  unidad_si: m/s^2
+  dimension: LT^-2
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: parameter
+  used_in:
+  - descomposicion_paralela
+  - descomposicion_perpendicular
+  - aceleracion_plano_ideal
+  common_mistake:
+    es: Usar 10 sin indicar que se trata de una aproximación.
+    en: Using 10 without stating it is an approximation.
+  typical_range:
+    es: 9.78 a 9.83 m/s^2 en la Tierra.
+    en: 9.78 to 9.83 m/s^2 on Earth.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa el módulo positivo.
+      en: Positive magnitude is used.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: g = 0 queda fuera del dominio terrestre del modelo.
+      en: g = 0 is outside the terrestrial domain of the model.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '> 0'
+  interpretation_role:
+    primary_for:
+    - escala-dinamica
+    secondary_for:
+    - comparacion-planetaria
+  graph_binding:
+    channels:
+    - gravity_input
+  pedagogical_notes:
+    es: Es el factor de escala principal de la aceleración.
+    en: It is the main scale factor for acceleration.
+- id: theta
+  symbol: \theta
+  nombre:
+    es: Ángulo de inclinación
+    en: Inclination angle
+  descripcion:
+    es: Ángulo entre el plano y la horizontal.
+    en: Angle between the plane and the horizontal.
+  unidad_si: rad
+  dimension: '1'
+  is_vector: false
+  components: null
+  category: state
+  physical_role: state
+  used_in:
+  - descomposicion_paralela
+  - descomposicion_perpendicular
+  - aceleracion_plano_ideal
+  common_mistake:
+    es: Mezclar grados y radianes en el cálculo trigonométrico.
+    en: Mixing degrees and radians in trigonometric calculations.
+  typical_range:
+    es: 0 a 1.57 rad para rampas convencionales.
+    en: 0 to 1.57 rad for conventional ramps.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se toma no negativo en esta convención.
+      en: Taken as non-negative under this convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si theta = 0, la componente paralela del peso es nula.
+      en: If theta = 0, the parallel weight component is zero.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, pi/2]'
+  interpretation_role:
+    primary_for:
+    - control-geometrico
+    secondary_for:
+    - lectura-de-sensibilidad
+  graph_binding:
+    channels:
+    - x_axis_angle
+  pedagogical_notes:
+    es: Es la variable de barrido principal en el gráfico Coord.
+    en: It is the main sweep variable in the Coord graph.
+- id: P
+  symbol: P
+  nombre:
+    es: Peso total
+    en: Total weight
+  descripcion:
+    es: Fuerza gravitatoria total aplicada al bloque.
+    en: Total gravitational force acting on the block.
+  unidad_si: N
+  dimension: MLT^-2
+  is_vector: true
+  components:
+  - P_par
+  - P_perp
+  category: fundamental
+  physical_role: cause
+  used_in:
+  - descomposicion_paralela
+  - descomposicion_perpendicular
+  common_mistake:
+    es: Confundir el peso total con su componente paralela.
+    en: Confusing total weight with its parallel component.
+  typical_range:
+    es: Depende de m y g; normalmente 1 a 10000 N.
+    en: Depends on m and g; typically 1 to 10000 N.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa módulo; la dirección se representa en el DCL.
+      en: Magnitude is used; direction is represented in the FBD.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: P = 0 implicaría ausencia de masa o gravedad.
+      en: P = 0 would imply absence of mass or gravity.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '> 0'
+  interpretation_role:
+    primary_for:
+    - causa-primaria
+    secondary_for:
+    - descomposicion-vectorial
+  graph_binding:
+    channels:
+    - weight_vector
+  pedagogical_notes:
+    es: En este leaf, la dinámica surge de su proyección sobre el plano.
+    en: In this leaf, dynamics arises from its projection on the incline.
+- id: P_par
+  symbol: P_par
+  nombre:
+    es: Componente paralela del peso
+    en: Parallel weight component
+  descripcion:
+    es: Parte del peso alineada con la dirección de deslizamiento.
+    en: Portion of weight aligned with sliding direction.
+  unidad_si: N
+  dimension: MLT^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: cause
+  used_in:
+  - descomposicion_paralela
+  - aceleracion_plano_ideal
+  common_mistake:
+    es: Usar cos(theta) en lugar de sin(theta).
+    en: Using cos(theta) instead of sin(theta).
+  typical_range:
+    es: 0 a mg según theta.
+    en: 0 to mg depending on theta.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa el módulo positivo en esta convención.
+      en: Positive magnitude is used in this convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Es cero si la superficie es horizontal.
+      en: It is zero if the surface is horizontal.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - fuerza-motriz
+    secondary_for:
+    - lectura-causal
+  graph_binding:
+    channels:
+    - driving_force
+  pedagogical_notes:
+    es: Es la magnitud que realmente acelera al bloque en x.
+    en: It is the magnitude that truly accelerates the block along x.
+- id: P_perp
+  symbol: P_perp
+  nombre:
+    es: Componente perpendicular del peso
+    en: Perpendicular weight component
+  descripcion:
+    es: Parte del peso que comprime el bloque contra el plano.
+    en: Portion of weight pressing the block against the incline.
+  unidad_si: N
+  dimension: MLT^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: constraint
+  used_in:
+  - descomposicion_perpendicular
+  - normal_plano_ideal
+  common_mistake:
+    es: Tomarla como responsable de acelerar en la dirección del plano.
+    en: Taking it as responsible for accelerating along the incline.
+  typical_range:
+    es: 0 a mg según theta.
+    en: 0 to mg depending on theta.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se maneja como módulo positivo.
+      en: It is handled as a positive magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Tiende a cero cuando theta se acerca a 90 grados.
+      en: Tends to zero as theta approaches 90 degrees.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - cierre-en-y
+    secondary_for:
+    - estimacion-de-contacto
+  graph_binding:
+    channels:
+    - normal_projection
+  pedagogical_notes:
+    es: Determina directamente el valor de la normal en el modelo ideal.
+    en: Directly determines the normal value in the ideal model.
+- id: N
+  symbol: N
+  nombre:
+    es: Fuerza normal
+    en: Normal force
+  descripcion:
+    es: Fuerza de contacto perpendicular al plano ejercida por la superficie.
+    en: Contact force perpendicular to the incline exerted by the surface.
+  unidad_si: N
+  dimension: MLT^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: constraint
+  used_in:
+  - normal_plano_ideal
+  common_mistake:
+    es: Igualarla siempre al peso total mg.
+    en: Always setting it equal to total weight mg.
+  typical_range:
+    es: 0 a mg.
+    en: 0 to mg.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud positiva de reacción.
+      en: Used as positive reaction magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: N = 0 en el límite de plano vertical sin apoyo.
+      en: N = 0 at the vertical-plane support limit.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - reaccion-de-apoyo
+    secondary_for:
+    - control-de-consistencia
+  graph_binding:
+    channels:
+    - normal_vector
+  pedagogical_notes:
+    es: Es esencial para interpretar el DCL aunque no cause aceleración en x.
+    en: It is essential for FBD reading even if it does not cause x-acceleration.
+- id: a
+  symbol: a
+  nombre:
+    es: Aceleración del bloque
+    en: Block acceleration
+  descripcion:
+    es: Tasa de cambio de velocidad del bloque a lo largo de la pendiente.
+    en: Rate of change of block velocity along the incline.
+  unidad_si: m/s^2
+  dimension: LT^-2
+  is_vector: false
+  components: null
+  category: state
+  physical_role: dependent
+  used_in:
+  - aceleracion_plano_ideal
+  - tiempo_deslizamiento
+  - velocidad_final_desde_reposo
+  common_mistake:
+    es: Darla negativa por error de convenio sin revisar ejes.
+    en: Giving it negative due to convention errors without checking axes.
+  typical_range:
+    es: 0 a g en este modelo.
+    en: 0 to g in this model.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se reporta como módulo en el sentido positivo elegido.
+      en: Reported as magnitude in the chosen positive direction.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: a = 0 cuando theta = 0.
+      en: a = 0 when theta = 0.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, g]'
+  interpretation_role:
+    primary_for:
+    - resultado-principal
+    secondary_for:
+    - comparacion-entre-rampas
+  graph_binding:
+    channels:
+    - y_axis_acceleration
+  pedagogical_notes:
+    es: Resume la traducción entre geometría y dinámica.
+    en: It summarizes the translation between geometry and dynamics.
+- id: L
+  symbol: L
+  nombre:
+    es: Longitud recorrida en la rampa
+    en: Travel distance along ramp
+  descripcion:
+    es: Distancia medida sobre la superficie inclinada.
+    en: Distance measured along the inclined surface.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: state
+  physical_role: state
+  used_in:
+  - tiempo_deslizamiento
+  - velocidad_final_desde_reposo
+  common_mistake:
+    es: Confundirla con altura vertical h.
+    en: Confusing it with vertical height h.
+  typical_range:
+    es: 0.1 a 100 m en ejercicios estándar.
+    en: 0.1 to 100 m in standard exercises.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como distancia positiva.
+      en: Used as positive distance.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: L = 0 no describe desplazamiento útil.
+      en: L = 0 does not describe useful displacement.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '> 0'
+  interpretation_role:
+    primary_for:
+    - escala-de-recorrido
+    secondary_for:
+    - calculo-cinematico
+  graph_binding:
+    channels:
+    - distance_input
+  pedagogical_notes:
+    es: Es la variable espacial usada en las ecuaciones de descenso.
+    en: It is the spatial variable used in descent equations.
+- id: t
+  symbol: t
+  nombre:
+    es: Tiempo de descenso
+    en: Descent time
+  descripcion:
+    es: Tiempo requerido para recorrer una longitud L desde reposo.
+    en: Time required to travel length L from rest.
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: dependent
+  used_in:
+  - tiempo_deslizamiento
+  common_mistake:
+    es: Usar fórmula de MRU cuando hay aceleración constante no nula.
+    en: Using constant-speed formula when acceleration is non-zero.
+  typical_range:
+    es: 0.1 a 60 s según L y theta.
+    en: 0.1 to 60 s depending on L and theta.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El tiempo físico se toma positivo.
+      en: Physical time is taken as positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: t = 0 solo corresponde al instante inicial.
+      en: t = 0 only corresponds to the initial instant.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '> 0'
+  interpretation_role:
+    primary_for:
+    - lectura-temporal
+    secondary_for:
+    - planificacion-operativa
+  graph_binding:
+    channels:
+    - time_output
+  pedagogical_notes:
+    es: Debe interpretarse junto con L y a, no de forma aislada.
+    en: It should be interpreted with L and a, not in isolation.
+- id: v_f
+  symbol: v_f
+  nombre:
+    es: Velocidad final
+    en: Final speed
+  descripcion:
+    es: Velocidad del bloque al final del tramo analizado.
+    en: Block speed at the end of the analyzed segment.
+  unidad_si: m/s
+  dimension: LT^-1
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: dependent
+  used_in:
+  - velocidad_final_desde_reposo
+  common_mistake:
+    es: Interpretarla como media en lugar de valor final instantáneo.
+    en: Interpreting it as average instead of final instantaneous value.
+  typical_range:
+    es: 0 a 60 m/s en contextos didácticos.
+    en: 0 to 60 m/s in didactic contexts.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se informa como módulo de rapidez en el sentido elegido.
+      en: Reported as speed magnitude in the chosen direction.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser cero si no hay recorrido o no hay aceleración.
+      en: It can be zero if there is no path or no acceleration.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - resultado-cinematico
+    secondary_for:
+    - criterio-de-seguridad
+  graph_binding:
+    channels:
+    - speed_output
+  pedagogical_notes:
+    es: Es clave para estimar impacto y control al final de la rampa.
+    en: It is key to estimate impact and control at the end of the ramp.
+- id: v
+  symbol: v
+  nombre:
+    es: Velocidad instantánea
+    en: Instantaneous speed
+  descripcion:
+    es: Rapidez del bloque en cualquier punto de su trayectoria.
+    en: Block speed at any point of its trajectory.
+  unidad_si: m/s
+  dimension: LT^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: state
+  used_in: []
+  common_mistake:
+    es: Confundirla con la velocidad media en el tramo.
+    en: Confusing it with average speed along the segment.
+  typical_range:
+    es: 0 a 60 m/s en contextos didácticos.
+    en: 0 to 60 m/s in didactic contexts.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se reporta como módulo de rapidez.
+      en: Reported as speed magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El bloque está instantáneamente en reposo.
+      en: The block is instantaneously at rest.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - estado-cinematico
+    secondary_for:
+    - validacion-de-limites
+  graph_binding:
+    channels:
+    - velocity_input
+  pedagogical_notes:
+    es: Se usa para evaluar límites de validez de modelos (ej. resistencia del aire).
+    en: Used to evaluate model validity limits (e.g., air resistance).

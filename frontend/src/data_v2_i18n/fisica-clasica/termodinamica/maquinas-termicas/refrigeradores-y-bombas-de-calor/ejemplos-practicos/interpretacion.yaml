@@ -1,0 +1,644 @@
+version: "5.0"
+id: interpretacion-ejemplos-practicos
+leaf_id: ejemplos-practicos
+nombre:
+  es: Interpretacion de ejemplos practicos
+  en: Practical examples interpretation
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: maquinas-termicas
+  parent_id: refrigeradores-y-bombas-de-calor
+  ruta_relativa: fisica-clasica/termodinamica/maquinas-termicas/refrigeradores-y-bombas-de-calor/ejemplos-practicos
+
+ui:
+  inline_calculator: true
+  inline_graph: true
+  dedicated_tab: true
+  tab_label:
+    es: Interpretacion
+    en: Interpretation
+
+dependencies:
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+  formulas:
+    - cop_real_refrigeracion
+    - cop_real_bomba_calor
+    - fraccion_carnot
+    - balance_energetico_practico
+    - cop_carnot_referencia
+    - consumo_energetico
+  magnitudes:
+    - COP_real
+    - COP_Carnot
+    - W_comp
+    - Q_C
+    - Q_H
+    - T_C
+    - T_H
+    - eta_Carnot
+    - E_dia
+
+global_context:
+  physical_domain:
+    es: "Dimensionado y evaluación práctica de refrigeradores y bombas de calor reales"
+    en: "Practical sizing and evaluation of real refrigerators and heat pumps"
+  axis_convention:
+    es: "En el diagrama COP vs T_C, la curva real está siempre por debajo de la de Carnot. La zona sombreada indica la brecha de eficiencia."
+    en: "In the COP vs T_C diagram, the real curve is always below the Carnot curve. The shaded area indicates the efficiency gap."
+  standard_assumptions:
+    - "COP de Carnot como referencia teórica"
+    - "Temperaturas en kelvin"
+    - "Operación en estado estacionario"
+  standard_warnings:
+    - "No usar COP de Carnot como predicción de rendimiento real"
+    - "Verificar conversión Celsius a kelvin"
+    - "Distinguir COP de refrigeración de COP de bomba de calor"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen del resultado
+      en: Result summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia del resultado
+      en: Result coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+  COP_real:
+    magnitude_type: ratio
+    semantic_role:
+      es: "Eficiencia energética real del sistema de refrigeración o bomba de calor"
+      en: "Real energy efficiency of the refrigeration or heat pump system"
+    summary_rules:
+      - id: cop_real_summary_high
+        when: "COP_real > 4"
+        status: ok
+        text:
+          es: "[[COP_real]] elevado indica un sistema eficiente con buena fracción de Carnot."
+          en: "High [[COP_real]] indicates an efficient system with good Carnot fraction."
+      - id: cop_real_summary_low
+        when: "COP_real < 1.5"
+        status: warning
+        text:
+          es: "[[COP_real]] muy bajo indica operación a gran salto térmico o sistema poco eficiente."
+          en: "Very low [[COP_real]] indicates operation at large thermal gap or an inefficient system."
+      - id: cop_real_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[COP_real]] indica cuántas unidades de calor se transfieren por cada unidad de potencia eléctrica consumida por el compresor [[W_comp]]."
+          en: "[[COP_real]] indicates how many units of heat are transferred per unit of electrical power consumed by the compressor [[W_comp]]."
+    physical_reading_rules:
+      - id: cop_real_reading
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[COP_real]] representa el multiplicador de eficiencia: por cada vatio de [[W_comp]], el sistema transfiere [[COP_real]] vatios de calor."
+          en: "The value of [[COP_real]] represents the efficiency multiplier: for each watt of [[W_comp]], the system transfers [[COP_real]] watts of heat."
+    coherence_rules:
+      - id: cop_real_coherence_exceeds
+        when: "COP_real > COP_Carnot"
+        status: error
+        text:
+          es: "[[COP_real]] supera [[COP_Carnot]], lo cual viola la segunda ley. Verificar datos y cálculos."
+          en: "[[COP_real]] exceeds [[COP_Carnot]], which violates the second law. Verify data and calculations."
+      - id: cop_real_coherence_negative
+        when: "COP_real <= 0"
+        status: error
+        text:
+          es: "[[COP_real]] negativo o nulo es físicamente imposible. Verificar datos de entrada."
+          en: "Negative or zero [[COP_real]] is physically impossible. Verify input data."
+    model_validity_rules:
+      - id: cop_real_model
+        when: "true"
+        status: info
+        text:
+          es: "El modelo es válido cuando el sistema opera en régimen estacionario. Deja de valer si las temperaturas de los focos varían rápidamente o si el compresor opera en ciclos de arranque y parada frecuentes. Se asume que las pérdidas son aproximadamente constantes."
+          en: "The model is valid when the system operates in steady-state regime. It breaks down if reservoir temperatures vary rapidly or if the compressor operates in frequent start-stop cycles. It assumes losses are approximately constant."
+    graph_rules:
+      - id: cop_real_graph
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama COP vs [[T_C]], [[COP_real]] crece cuando [[T_C]] se acerca a [[T_H]], siempre por debajo de la curva de Carnot."
+          en: "In the COP vs [[T_C]] diagram, [[COP_real]] increases as [[T_C]] approaches [[T_H]], always below the Carnot curve."
+    likely_errors:
+      - id: cop_real_error_carnot
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[COP_real]] no supere [[COP_Carnot]]. Si lo supera, viola la segunda ley o hay error en los datos."
+          en: "Verify that [[COP_real]] does not exceed [[COP_Carnot]]. If it does, it violates the second law or there is a data error."
+    next_step_rules:
+      - id: cop_real_next
+        when: "true"
+        status: info
+        text:
+          es: "Calcular [[eta_Carnot]] dividiendo [[COP_real]] entre [[COP_Carnot]] y verificar que esté en el rango 30 a 60 %."
+          en: "Calculate [[eta_Carnot]] by dividing [[COP_real]] by [[COP_Carnot]] and verify it falls in the 30 to 60 % range."
+
+  COP_Carnot:
+    magnitude_type: ratio
+    semantic_role:
+      es: "Límite teórico superior de la eficiencia del sistema"
+      en: "Theoretical upper limit of system efficiency"
+    summary_rules:
+      - id: cop_carnot_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[COP_Carnot]] establece el techo de eficiencia: ningún sistema real entre [[T_H]] y [[T_C]] puede superarlo."
+          en: "[[COP_Carnot]] sets the efficiency ceiling: no real system between [[T_H]] and [[T_C]] can exceed it."
+    physical_reading_rules:
+      - id: cop_carnot_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[COP_Carnot]] depende exclusivamente de las temperaturas absolutas de los focos. Menor diferencia entre [[T_H]] y [[T_C]], mayor [[COP_Carnot]]."
+          en: "[[COP_Carnot]] depends exclusively on the absolute temperatures of the reservoirs. Smaller difference between [[T_H]] and [[T_C]], higher [[COP_Carnot]]."
+    coherence_rules:
+      - id: cop_carnot_coherence
+        when: "COP_Carnot <= 0"
+        status: error
+        text:
+          es: "[[COP_Carnot]] negativo o nulo indica error en las temperaturas. Verificar que [[T_H]] sea mayor que [[T_C]] y que ambas estén en kelvin."
+          en: "Negative or zero [[COP_Carnot]] indicates a temperature error. Verify [[T_H]] is greater than [[T_C]] and both are in kelvin."
+    model_validity_rules:
+      - id: cop_carnot_model
+        when: "true"
+        status: warning
+        text:
+          es: "[[COP_Carnot]] es una cota superior teórica. Los sistemas reales alcanzan un 30 a 60 % de este valor."
+          en: "[[COP_Carnot]] is a theoretical upper bound. Real systems achieve 30 to 60 % of this value."
+    graph_rules:
+      - id: cop_carnot_graph
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama COP vs [[T_C]], [[COP_Carnot]] es la curva envolvente superior que diverge cuando [[T_C]] se acerca a [[T_H]]."
+          en: "In the COP vs [[T_C]] diagram, [[COP_Carnot]] is the upper envelope curve that diverges as [[T_C]] approaches [[T_H]]."
+    likely_errors:
+      - id: cop_carnot_error_celsius
+        when: "COP_Carnot < 0"
+        status: error
+        text:
+          es: "[[COP_Carnot]] negativo indica uso de Celsius en lugar de kelvin."
+          en: "Negative [[COP_Carnot]] indicates use of Celsius instead of kelvin."
+    next_step_rules:
+      - id: cop_carnot_next
+        when: "true"
+        status: info
+        text:
+          es: "Comparar [[COP_real]] con [[COP_Carnot]] para obtener [[eta_Carnot]] y evaluar la calidad del diseño."
+          en: "Compare [[COP_real]] with [[COP_Carnot]] to obtain [[eta_Carnot]] and evaluate design quality."
+
+  W_comp:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Potencia eléctrica consumida por el compresor"
+      en: "Electrical power consumed by the compressor"
+    summary_rules:
+      - id: w_comp_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[W_comp]] es la potencia eléctrica de entrada al sistema. La capacidad útil es [[COP_real]] veces este valor."
+          en: "[[W_comp]] is the electrical power input to the system. The useful capacity is [[COP_real]] times this value."
+    physical_reading_rules:
+      - id: w_comp_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[W_comp]] se lee directamente de la placa de datos del compresor o se mide con un vatímetro."
+          en: "[[W_comp]] is read directly from the compressor nameplate or measured with a wattmeter."
+    coherence_rules:
+      - id: w_comp_coherence
+        when: "W_comp <= 0"
+        status: error
+        text:
+          es: "[[W_comp]] debe ser positivo. Un valor nulo o negativo indica error en los datos."
+          en: "[[W_comp]] must be positive. A zero or negative value indicates a data error."
+    model_validity_rules:
+      - id: w_comp_model
+        when: "true"
+        status: info
+        text:
+          es: "[[W_comp]] varía con las condiciones de operación. En compresores inverter, se ajusta continuamente a la demanda."
+          en: "[[W_comp]] varies with operating conditions. In inverter compressors, it adjusts continuously to demand."
+    graph_rules:
+      - id: w_comp_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[W_comp]] aparece como parámetro fijo en el diagrama COP vs [[T_C]]."
+          en: "[[W_comp]] appears as a fixed parameter in the COP vs [[T_C]] diagram."
+    likely_errors:
+      - id: w_comp_error
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[W_comp]] no se confunda con [[Q_C]] o [[Q_H]]. La potencia del compresor es siempre menor que la capacidad útil."
+          en: "Verify that [[W_comp]] is not confused with [[Q_C]] or [[Q_H]]. Compressor power is always less than useful capacity."
+    next_step_rules:
+      - id: w_comp_next
+        when: "true"
+        status: info
+        text:
+          es: "Multiplicar [[W_comp]] por [[COP_real]] para obtener [[Q_C]] y verificar el balance energético."
+          en: "Multiply [[W_comp]] by [[COP_real]] to obtain [[Q_C]] and verify the energy balance."
+
+  Q_C:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Capacidad de refrigeración del sistema"
+      en: "Cooling capacity of the system"
+    summary_rules:
+      - id: qc_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] es la capacidad frigorífica: calor extraído del espacio refrigerado por unidad de tiempo."
+          en: "[[Q_C]] is the cooling capacity: heat extracted from the refrigerated space per unit time."
+    physical_reading_rules:
+      - id: qc_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] se calcula como [[COP_real]] multiplicado por [[W_comp]], o se mide directamente en el evaporador."
+          en: "[[Q_C]] is calculated as [[COP_real]] times [[W_comp]], or measured directly at the evaporator."
+    coherence_rules:
+      - id: qc_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[Q_C]] sea menor que [[Q_H]]. Si son iguales, se ha olvidado [[W_comp]] en el balance."
+          en: "Verify that [[Q_C]] is less than [[Q_H]]. If equal, [[W_comp]] has been forgotten in the balance."
+    model_validity_rules:
+      - id: qc_model
+        when: "true"
+        status: info
+        text:
+          es: "[[Q_C]] depende del [[COP_real]] y de [[W_comp]]. Ambos varían con las condiciones de operación."
+          en: "[[Q_C]] depends on [[COP_real]] and [[W_comp]]. Both vary with operating conditions."
+    graph_rules:
+      - id: qc_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[Q_C]] no se grafica directamente pero se lee como [[COP_real]] multiplicado por [[W_comp]]."
+          en: "[[Q_C]] is not directly graphed but is read as [[COP_real]] times [[W_comp]]."
+    likely_errors:
+      - id: qc_error
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[Q_C]] no sea mayor que [[Q_H]]. El foco frío siempre cede menos calor del que recibe el caliente."
+          en: "Verify that [[Q_C]] is not greater than [[Q_H]]. The cold reservoir always yields less heat than the hot one receives."
+    next_step_rules:
+      - id: qc_next
+        when: "true"
+        status: info
+        text:
+          es: "Sumar [[W_comp]] a [[Q_C]] para obtener [[Q_H]] y verificar el balance energético."
+          en: "Add [[W_comp]] to [[Q_C]] to obtain [[Q_H]] and verify the energy balance."
+
+  Q_H:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Capacidad de calefacción o calor rechazado al ambiente"
+      en: "Heating capacity or heat rejected to the environment"
+    summary_rules:
+      - id: qh_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] es el calor total entregado al foco caliente, suma de [[Q_C]] y [[W_comp]]."
+          en: "[[Q_H]] is the total heat delivered to the hot reservoir, sum of [[Q_C]] and [[W_comp]]."
+    physical_reading_rules:
+      - id: qh_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] se calcula como [[Q_C]] más [[W_comp]], o como [[COP_real]] (bomba de calor) multiplicado por [[W_comp]]."
+          en: "[[Q_H]] is calculated as [[Q_C]] plus [[W_comp]], or as [[COP_real]] (heat pump) times [[W_comp]]."
+    coherence_rules:
+      - id: qh_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[Q_H]] sea exactamente [[Q_C]] más [[W_comp]]. Si no cuadra, hay error en algún cálculo."
+          en: "Verify that [[Q_H]] is exactly [[Q_C]] plus [[W_comp]]. If it does not match, there is a calculation error."
+    model_validity_rules:
+      - id: qh_model
+        when: "true"
+        status: info
+        text:
+          es: "[[Q_H]] siempre es mayor que [[Q_C]] y mayor que [[W_comp]] para cualquier sistema con [[COP_real]] mayor que uno."
+          en: "[[Q_H]] is always greater than [[Q_C]] and greater than [[W_comp]] for any system with [[COP_real]] greater than one."
+    graph_rules:
+      - id: qh_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[Q_H]] no se grafica directamente pero se deduce del balance energético."
+          en: "[[Q_H]] is not directly graphed but is deduced from the energy balance."
+    likely_errors:
+      - id: qh_error
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[Q_H]] sea mayor que [[Q_C]]. Si son iguales, se ha olvidado sumar [[W_comp]]."
+          en: "Verify that [[Q_H]] is greater than [[Q_C]]. If equal, [[W_comp]] has been forgotten."
+    next_step_rules:
+      - id: qh_next
+        when: "true"
+        status: info
+        text:
+          es: "Con [[Q_H]] y [[W_comp]] conocidos, calcular el COP de bomba de calor y verificar coherencia."
+          en: "With [[Q_H]] and [[W_comp]] known, calculate the heat pump COP and verify coherence."
+
+  T_C:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Temperatura del foco frío en kelvin"
+      en: "Cold reservoir temperature in kelvin"
+    summary_rules:
+      - id: tc_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_C]] define la temperatura del espacio refrigerado o del foco frío exterior. Debe estar en kelvin."
+          en: "[[T_C]] defines the temperature of the refrigerated space or the cold outdoor reservoir. Must be in kelvin."
+    physical_reading_rules:
+      - id: tc_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_C]] es la variable del eje horizontal en el diagrama COP vs [[T_C]]. Al aumentar [[T_C]], el COP crece."
+          en: "[[T_C]] is the horizontal axis variable in the COP vs [[T_C]] diagram. As [[T_C]] increases, COP grows."
+    coherence_rules:
+      - id: tc_coherence
+        when: "T_C >= T_H"
+        status: error
+        text:
+          es: "[[T_C]] debe ser menor que [[T_H]] para que el sistema tenga sentido termodinámico."
+          en: "[[T_C]] must be less than [[T_H]] for the system to be thermodynamically meaningful."
+    model_validity_rules:
+      - id: tc_model
+        when: "true"
+        status: info
+        text:
+          es: "[[T_C]] debe expresarse en kelvin. Convertir desde Celsius sumando 273.15."
+          en: "[[T_C]] must be expressed in kelvin. Convert from Celsius by adding 273.15."
+    graph_rules:
+      - id: tc_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[T_C]] es el eje horizontal del diagrama. Al desplazarse hacia [[T_H]], el COP diverge."
+          en: "[[T_C]] is the horizontal axis of the diagram. As it moves toward [[T_H]], COP diverges."
+    likely_errors:
+      - id: tc_error
+        when: "T_C < 200"
+        status: warning
+        text:
+          es: "[[T_C]] inferior a 200 K es inusual salvo en criogenia. Verificar conversión de unidades."
+          en: "[[T_C]] below 200 K is unusual except in cryogenics. Verify unit conversion."
+    next_step_rules:
+      - id: tc_next
+        when: "true"
+        status: info
+        text:
+          es: "Con [[T_C]] y [[T_H]] definidas, calcular [[COP_Carnot]] como referencia."
+          en: "With [[T_C]] and [[T_H]] defined, calculate [[COP_Carnot]] as reference."
+
+  T_H:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Temperatura del foco caliente en kelvin"
+      en: "Hot reservoir temperature in kelvin"
+    summary_rules:
+      - id: th_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_H]] define la temperatura del ambiente exterior o del espacio calentado. Debe estar en kelvin."
+          en: "[[T_H]] defines the temperature of the outdoor environment or heated space. Must be in kelvin."
+    physical_reading_rules:
+      - id: th_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_H]] aparece como parámetro fijo en el diagrama COP vs [[T_C]]. Cambiar [[T_H]] desplaza toda la curva."
+          en: "[[T_H]] appears as a fixed parameter in the COP vs [[T_C]] diagram. Changing [[T_H]] shifts the entire curve."
+    coherence_rules:
+      - id: th_coherence
+        when: "T_H <= T_C"
+        status: error
+        text:
+          es: "[[T_H]] debe ser mayor que [[T_C]]. Verificar que no se hayan intercambiado los focos."
+          en: "[[T_H]] must be greater than [[T_C]]. Verify the reservoirs have not been swapped."
+    model_validity_rules:
+      - id: th_model
+        when: "true"
+        status: info
+        text:
+          es: "[[T_H]] debe expresarse en kelvin. Convertir desde Celsius sumando 273.15."
+          en: "[[T_H]] must be expressed in kelvin. Convert from Celsius by adding 273.15."
+    graph_rules:
+      - id: th_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[T_H]] fija la posición de la curva envolvente de Carnot en el diagrama."
+          en: "[[T_H]] fixes the position of the Carnot envelope curve in the diagram."
+    likely_errors:
+      - id: th_error
+        when: "T_H < 250"
+        status: warning
+        text:
+          es: "[[T_H]] inferior a 250 K es inusual para climatización. Verificar conversión de unidades."
+          en: "[[T_H]] below 250 K is unusual for HVAC. Verify unit conversion."
+    next_step_rules:
+      - id: th_next
+        when: "true"
+        status: info
+        text:
+          es: "Con [[T_H]] definida, calcular [[COP_Carnot]] y comparar con [[COP_real]]."
+          en: "With [[T_H]] defined, calculate [[COP_Carnot]] and compare with [[COP_real]]."
+
+  eta_Carnot:
+    magnitude_type: ratio
+    semantic_role:
+      es: "Fracción del COP de Carnot alcanzada por el sistema real"
+      en: "Fraction of Carnot COP achieved by the real system"
+    summary_rules:
+      - id: eta_summary_good
+        when: "eta_Carnot > 45"
+        status: ok
+        text:
+          es: "[[eta_Carnot]] por encima del 45 % indica un diseño eficiente y bien optimizado."
+          en: "[[eta_Carnot]] above 45 % indicates an efficient and well-optimized design."
+      - id: eta_summary_low
+        when: "eta_Carnot < 30"
+        status: warning
+        text:
+          es: "[[eta_Carnot]] por debajo del 30 % indica margen significativo de mejora en el sistema."
+          en: "[[eta_Carnot]] below 30 % indicates significant room for improvement in the system."
+      - id: eta_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[eta_Carnot]] mide qué porcentaje del límite teórico alcanza el sistema real."
+          en: "[[eta_Carnot]] measures what percentage of the theoretical limit the real system achieves."
+    physical_reading_rules:
+      - id: eta_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[eta_Carnot]] se interpreta como indicador de calidad del diseño termodinámico. Valores del 40 al 60 % son típicos de sistemas bien diseñados."
+          en: "[[eta_Carnot]] is interpreted as an indicator of thermodynamic design quality. Values of 40 to 60 % are typical of well-designed systems."
+    coherence_rules:
+      - id: eta_coherence_high
+        when: "eta_Carnot > 65"
+        status: warning
+        text:
+          es: "[[eta_Carnot]] superior al 65 % es excepcional. Verificar que los datos de entrada sean correctos."
+          en: "[[eta_Carnot]] above 65 % is exceptional. Verify that the input data are correct."
+      - id: eta_coherence_over
+        when: "eta_Carnot >= 100"
+        status: error
+        text:
+          es: "[[eta_Carnot]] del 100 % o más significa que [[COP_real]] iguala o supera [[COP_Carnot]], lo cual es imposible."
+          en: "[[eta_Carnot]] of 100 % or more means [[COP_real]] equals or exceeds [[COP_Carnot]], which is impossible."
+    model_validity_rules:
+      - id: eta_model
+        when: "true"
+        status: info
+        text:
+          es: "La [[eta_Carnot]] depende del tipo de sistema. Bombas geotérmicas: 35 a 50 %. Splits: 45 a 60 %. Criogenia: 20 a 35 %."
+          en: "The [[eta_Carnot]] depends on system type. Geothermal pumps: 35 to 50 %. Splits: 45 to 60 %. Cryogenics: 20 to 35 %."
+    graph_rules:
+      - id: eta_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[eta_Carnot]] se visualiza como la distancia relativa entre la curva real y la de Carnot en el diagrama."
+          en: "[[eta_Carnot]] is visualized as the relative distance between the real and Carnot curves in the diagram."
+    likely_errors:
+      - id: eta_error
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[eta_Carnot]] sea un porcentaje, no un decimal. Un valor de 0.45 debería ser 45 %."
+          en: "Verify that [[eta_Carnot]] is a percentage, not a decimal. A value of 0.45 should be 45 %."
+    next_step_rules:
+      - id: eta_next
+        when: "true"
+        status: info
+        text:
+          es: "Usar [[eta_Carnot]] para evaluar si el sistema tiene margen de mejora o está cerca de su límite práctico."
+          en: "Use [[eta_Carnot]] to evaluate whether the system has room for improvement or is near its practical limit."
+
+  E_dia:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Energía total consumida por el compresor en un período de operación"
+      en: "Total energy consumed by the compressor over an operating period"
+    summary_rules:
+      - id: e_dia_summary
+        when: "true"
+        status: ok
+        text:
+          es: "[[E_dia]] es la energía total consumida, convertible a kWh para estimar el coste eléctrico."
+          en: "[[E_dia]] is the total energy consumed, convertible to kWh to estimate electricity cost."
+    physical_reading_rules:
+      - id: e_dia_reading
+        when: "true"
+        status: ok
+        text:
+          es: "[[E_dia]] se calcula multiplicando [[W_comp]] por el tiempo de operación diario."
+          en: "[[E_dia]] is calculated by multiplying [[W_comp]] by the daily operating time."
+    coherence_rules:
+      - id: e_dia_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[E_dia]] sea consistente con [[W_comp]] y las horas de operación declaradas."
+          en: "Verify that [[E_dia]] is consistent with [[W_comp]] and the declared operating hours."
+    model_validity_rules:
+      - id: e_dia_model
+        when: "true"
+        status: info
+        text:
+          es: "El modelo asume potencia aproximadamente constante durante la operación. Deja de ser válido si el compresor opera a carga variable con grandes fluctuaciones."
+          en: "The model assumes approximately constant power during operation. It breaks down if the compressor operates at variable load with large fluctuations."
+    graph_rules:
+      - id: e_dia_graph
+        when: "true"
+        status: info
+        text:
+          es: "[[E_dia]] no se grafica directamente; es un resultado derivado del COP y la potencia."
+          en: "[[E_dia]] is not directly graphed; it is a derived result from COP and power."
+    likely_errors:
+      - id: e_dia_error
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar conversión de unidades: W por horas da Wh, no kWh. Dividir entre 1000 para obtener kWh."
+          en: "Verify unit conversion: W times hours gives Wh, not kWh. Divide by 1000 to get kWh."
+    next_step_rules:
+      - id: e_dia_next
+        when: "true"
+        status: info
+        text:
+          es: "Multiplicar [[E_dia]] en kWh por el precio del kWh para obtener el coste eléctrico diario."
+          en: "Multiply [[E_dia]] in kWh by the price per kWh to obtain the daily electricity cost."

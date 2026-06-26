@@ -1,0 +1,170 @@
+const e=`version: 5
+magnitudes:
+  - id: p
+    symbol: "p"
+    nombre:
+      es: "Presión"
+      en: "Pressure"
+    unidad_si: "Pa"
+    dimension: "M L⁻¹ T⁻²"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Fuerza normal ejercida por unidad de área."
+      en: "Normal force exerted per unit area."
+    category: "fluidos"
+    physical_role: "variable de estado"
+    used_in: ["presion_mec"]
+    common_mistake:
+      es: "Confundir con la fuerza total aplicada."
+      en: "Confusing with the total applied force."
+    typical_range: [0, 1e7]
+    sign_behavior: "siempre positivo"
+    zero_behavior: "vacio absoluto"
+    value_nature: "continuo"
+    interpretation_role: "target"
+    graph_binding: "Y"
+    pedagogical_notes:
+      es: "Enfatizar que es una magnitud escalar."
+      en: "Emphasize that it is a scalar magnitude."
+
+  - id: F
+    symbol: "F"
+    nombre:
+      es: "Fuerza Normal"
+      en: "Normal Force"
+    unidad_si: "N"
+    dimension: "M L T⁻²"
+    is_vector: true
+    components: ["Fx", "Fy", "Fz"]
+    descripcion:
+      es: "Componente perpendicular de la fuerza sobre la superficie."
+      en: "Perpendicular component of force on the surface."
+    category: "mecanica"
+    physical_role: "causa"
+    used_in: ["presion_mec"]
+    common_mistake:
+      es: "Usar la fuerza total si esta no es perpendicular."
+      en: "Using total force if it is not perpendicular."
+    typical_range: [0, 10000]
+    sign_behavior: "magnitud siempre positiva"
+    zero_behavior: "ausencia de carga"
+    value_nature: "continuo"
+    interpretation_role: "input"
+    graph_binding: "X"
+    pedagogical_notes:
+      es: "Aclarar que solo la componente normal contribuye a la presión."
+      en: "Clarify that only the normal component contributes to pressure."
+
+  - id: A
+    symbol: "A"
+    nombre:
+      es: "Área"
+      en: "Area"
+    unidad_si: "m²"
+    dimension: "L²"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Superficie sobre la cual se distribuye la fuerza."
+      en: "Surface over which the force is distributed."
+    category: "geometria"
+    physical_role: "geometria"
+    used_in: ["presion_mec"]
+    common_mistake:
+      es: "No convertir unidades correctamente (ej. cm² a m²)."
+      en: "Not converting units correctly (e.g., cm² to m²)."
+    typical_range: [1e-6, 100]
+    sign_behavior: "siempre positivo"
+    zero_behavior: "indefinido"
+    value_nature: "continuo"
+    interpretation_role: "input"
+    graph_binding: "X"
+    pedagogical_notes:
+      es: "A menor área, mayor presión para una misma fuerza."
+      en: "Smaller area means higher pressure for the same force."
+
+  - id: p_abs
+    symbol: "p_{abs}"
+    nombre:
+      es: "Presión Absoluta"
+      en: "Absolute Pressure"
+    unidad_si: "Pa"
+    dimension: "M L⁻¹ T⁻²"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Presión total medida respecto al vacío absoluto."
+      en: "Total pressure measured relative to absolute vacuum."
+    category: "fluidos"
+    physical_role: "variable de estado"
+    used_in: ["presion_abs"]
+    common_mistake:
+      es: "Olvidar sumar la presión atmosférica."
+      en: "Forgetting to add atmospheric pressure."
+    typical_range: [0, 1e7]
+    sign_behavior: "siempre positivo"
+    zero_behavior: "vacio absoluto"
+    value_nature: "continuo"
+    interpretation_role: "target"
+    graph_binding: "Y"
+    pedagogical_notes:
+      es: "Es la referencia física real."
+      en: "It is the real physical reference."
+
+  - id: p_atm
+    symbol: "p_{atm}"
+    nombre:
+      es: "Presión Atmosférica"
+      en: "Atmospheric Pressure"
+    unidad_si: "Pa"
+    dimension: "M L⁻¹ T⁻²"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Presión ejercida por el peso de la atmósfera terrestre."
+      en: "Pressure exerted by the weight of the Earth's atmosphere."
+    category: "fluidos"
+    physical_role: "referencia"
+    used_in: ["presion_abs"]
+    common_mistake:
+      es: "Asumir que siempre es exactamente 1 atm."
+      en: "Assuming it is always exactly 1 atm."
+    typical_range: [8e4, 1.1e5]
+    sign_behavior: "siempre positivo"
+    zero_behavior: "espacio exterior"
+    value_nature: "continuo"
+    interpretation_role: "input"
+    graph_binding: "constant"
+    pedagogical_notes:
+      es: "Valor estándar: 101325 Pa."
+      en: "Standard value: 101325 Pa."
+
+  - id: p_man
+    symbol: "p_{man}"
+    nombre:
+      es: "Presión Manométrica"
+      en: "Gauge Pressure"
+    unidad_si: "Pa"
+    dimension: "M L⁻¹ T⁻²"
+    is_vector: false
+    components: []
+    descripcion:
+      es: "Diferencia entre la presión absoluta y la atmosférica."
+      en: "Difference between absolute and atmospheric pressure."
+    category: "fluidos"
+    physical_role: "variable de estado"
+    used_in: ["presion_abs"]
+    common_mistake:
+      es: "Confundir con la presión absoluta."
+      en: "Confusing with absolute pressure."
+    typical_range: [-1e5, 1e7]
+    sign_behavior: "puede ser negativo (vacío)"
+    zero_behavior: "igual a la atmosfera"
+    value_nature: "continuo"
+    interpretation_role: "input"
+    graph_binding: "Y"
+    pedagogical_notes:
+      es: "Es la que miden la mayoría de instrumentos."
+      en: "It is what most instruments measure."
+`;export{e as default};

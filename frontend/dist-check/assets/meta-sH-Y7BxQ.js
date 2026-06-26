@@ -1,0 +1,89 @@
+const n=`id: difraccion-de-la-luz
+
+nombre:
+  es: "Difraccion de la luz"
+  en: "Diffraction of Light"
+
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: optica
+parent_id: optica-fisica
+ruta_relativa: fisica-clasica/electromagnetismo/optica/optica-fisica/difraccion-de-la-luz
+orden: 297220
+type: leaf
+
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+
+icon: "💡"
+graficos:
+  - Coord
+
+physical_role:
+  es: "concepto físico"
+  en: "physical concept"
+
+descripcion: "Fenómeno ondulatorio donde la luz se desvía al pasar por rendijas u obstáculos de tamaño micro."
+description_en: "Wave phenomenon where light bends when passing through micro-sized slits or obstacles."
+
+tags:
+  es:
+    - "difracción"
+    - "rendija única"
+    - "óptica física"
+    - "longitud de onda"
+    - "máximo central"
+    - "obstáculo"
+  en:
+    - "diffraction"
+    - "single slit"
+    - "physical optics"
+    - "wavelength"
+    - "central maximum"
+    - "obstacle"
+
+prerequisitos:
+  - fisica-clasica/electromagnetismo/optica/optica-fisica/interferencia-de-la-luz
+
+dificultad: 3
+tiempo_estimado_min: 45
+
+representacion_dominante: Coord
+magnitud_dominante: a
+
+pregunta_fisica_central:
+  es: "¿Cómo influyen el ancho de la rendija y la longitud de onda de la luz en el tamaño del patrón de difracción?"
+  en: "How do the slit width and the wavelength of light influence the size of the diffraction pattern?"
+
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: "Interpretación"
+      en: "Interpretation"
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

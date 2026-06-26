@@ -1,0 +1,314 @@
+version: 5.0.0
+magnitudes:
+- id: energia_microestado
+  symbol: E_i
+  nombre:
+    es: energía del microestado
+    en: microstate energy
+  descripcion:
+    es: Energía asociada a un microestado concreto dentro del conjunto accesible.
+    en: Energy associated with a specific microstate within the accessible set.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: state_variable
+  physical_role: input
+  used_in:
+  - peso_boltzmann
+  - limite_alta_temperatura
+  common_mistake: Confundir energía absoluta con diferencia energética físicamente relevante.
+  typical_range: 10^-23 J a 10^-18 J por microestado en ejemplos térmicos simples.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende de la referencia elegida para la energía.
+      en: The sign depends on the chosen energy reference.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede ser el nivel de referencia; no implica ausencia de microestado.
+      en: It may be the reference level; it does not imply absence of a microstate.
+  value_nature:
+    kind: real
+    nonnegative_only: false
+    expected_interval: depende de la referencia
+  interpretation_role:
+    primary_for:
+    - peso_boltzmann
+    secondary_for:
+    - funcion_particion_suma_pesos
+    - limite_alta_temperatura
+  graph_binding:
+    channels:
+    - xAxis
+    - parameter
+  pedagogical_notes:
+    es: Úsala para leer qué microestados quedan penalizados por el factor exponencial.
+    en: Use it to read which microstates are penalized by the exponential factor.
+- id: temperatura
+  symbol: T
+  nombre:
+    es: temperatura absoluta
+    en: absolute temperature
+  descripcion:
+    es: Variable térmica que controla cuánto importan las diferencias de energía entre microestados.
+    en: Thermal variable controlling how much energy differences among microstates matter.
+  unidad_si: K
+  dimension: Theta
+  is_vector: false
+  components: []
+  category: thermodynamic_variable
+  physical_role: input_parameter
+  used_in:
+  - peso_boltzmann
+  - limite_alta_temperatura
+  common_mistake: Usar grados Celsius en lugar de Kelvin dentro del factor de Boltzmann.
+  typical_range: 1 K a 1000 K en sistemas térmicos no extremos.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En este modelo T es absoluta y positiva.
+      en: In this model T is absolute and positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: T=0 queda fuera del uso directo de las fórmulas canónicas simples.
+      en: T=0 is outside direct use of simple canonical formulas.
+  value_nature:
+    kind: positive_real
+    nonnegative_only: true
+    expected_interval: T>0
+  interpretation_role:
+    primary_for:
+    - peso_boltzmann
+    - limite_alta_temperatura
+    secondary_for:
+    - funcion_particion_suma_pesos
+  graph_binding:
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Al aumentar T, la penalización por energía alta se reduce y más microestados contribuyen.
+    en: As T increases, the penalty for high energy decreases and more microstates contribute.
+- id: constante_boltzmann
+  symbol: k_B
+  nombre:
+    es: constante de Boltzmann
+    en: Boltzmann constant
+  descripcion:
+    es: Constante que conecta la escala de temperatura con la escala de energía microscópica.
+    en: Constant connecting the temperature scale with the microscopic energy scale.
+  unidad_si: J/K
+  dimension: M L^2 T^-2 Theta^-1
+  is_vector: false
+  components: []
+  category: constant
+  physical_role: conversion_constant
+  used_in:
+  - peso_boltzmann
+  - limite_alta_temperatura
+  common_mistake: Tratarla como una variable ajustable del sistema.
+  typical_range: 1.380649e-23 J/K exacto en SI.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es positiva por definición en el SI.
+      en: It is positive by definition in SI.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Si se anula, desaparece la escala térmica de energía.
+      en: If it were zero, the thermal energy scale would disappear.
+  value_nature:
+    kind: constant
+    nonnegative_only: true
+    expected_interval: k_B=1.380649e-23 J/K
+  interpretation_role:
+    primary_for:
+    - peso_boltzmann
+    secondary_for:
+    - limite_alta_temperatura
+  graph_binding:
+    channels:
+    - constant
+  pedagogical_notes:
+    es: Sirve como puente de unidades entre Kelvin y joules.
+    en: It acts as a unit bridge between kelvin and joules.
+- id: peso_boltzmann
+  symbol: w_i
+  nombre:
+    es: peso de Boltzmann
+    en: Boltzmann weight
+  descripcion:
+    es: Contribución relativa de un microestado antes de normalizarla como probabilidad.
+    en: Relative contribution of a microstate before normalizing it as a probability.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: statistical_weight
+  physical_role: dominant_output
+  used_in:
+  - peso_boltzmann
+  - funcion_particion_suma_pesos
+  - probabilidad_microestado
+  common_mistake: Pensar que w_i ya es una probabilidad entre todas las alternativas.
+  typical_range: 0<w_i<=varios según referencia energética; si E_i>=0, 0<w_i<=1.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre es positivo en el modelo canónico.
+      en: It is always positive in the canonical model.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Puede aproximarse a cero para energías muy altas, pero no es exactamente cero para energía finita.
+      en: It may approach zero for very high energies, but is not exactly zero for finite energy.
+  value_nature:
+    kind: positive_real
+    nonnegative_only: true
+    expected_interval: w_i>0
+  interpretation_role:
+    primary_for:
+    - peso_boltzmann
+    - funcion_particion_suma_pesos
+    secondary_for:
+    - probabilidad_microestado
+  graph_binding:
+    channels:
+    - yAxis
+  pedagogical_notes:
+    es: Es el ladrillo estadístico que luego se suma en Z y se normaliza como probabilidad.
+    en: It is the statistical brick that is later summed into Z and normalized as probability.
+- id: funcion_particion
+  symbol: Z
+  nombre:
+    es: función de partición
+    en: partition function
+  descripcion:
+    es: Suma adimensional de pesos de microestados accesibles en equilibrio térmico.
+    en: Dimensionless sum of weights of accessible microstates in thermal equilibrium.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: partition_function
+  physical_role: central_concept
+  used_in:
+  - funcion_particion_suma_pesos
+  - probabilidad_microestado
+  common_mistake: Interpretarla como una energía o como un microestado concreto.
+  typical_range: Z>0; desde valores cercanos a 1 hasta números enormes según el número de estados.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Debe ser positiva porque suma pesos positivos.
+      en: It must be positive because it sums positive weights.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Z=0 indicaría que no hay estados accesibles o que el modelo está mal construido.
+      en: Z=0 would indicate no accessible states or an ill-built model.
+  value_nature:
+    kind: positive_real
+    nonnegative_only: true
+    expected_interval: Z>0
+  interpretation_role:
+    primary_for:
+    - funcion_particion_suma_pesos
+    secondary_for:
+    - probabilidad_microestado
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: Resume cuántos microestados pesan de verdad a la temperatura dada.
+    en: It summarizes how many microstates effectively matter at the given temperature.
+- id: probabilidad_microestado
+  symbol: p_i
+  nombre:
+    es: probabilidad del microestado
+    en: microstate probability
+  descripcion:
+    es: Probabilidad normalizada de encontrar el sistema en un microestado concreto.
+    en: Normalized probability of finding the system in a specific microstate.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: probability
+  physical_role: derived_output
+  used_in:
+  - probabilidad_microestado
+  common_mistake: Olvidar dividir por Z y perder la normalización.
+  typical_range: 0<=p_i<=1
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No puede ser negativa.
+      en: It cannot be negative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Probabilidad casi nula significa microestado prácticamente inaccesible en ese régimen.
+      en: Nearly zero probability means the microstate is practically inaccessible in that regime.
+  value_nature:
+    kind: probability
+    nonnegative_only: true
+    expected_interval: 0<=p_i<=1
+  interpretation_role:
+    primary_for:
+    - probabilidad_microestado
+    secondary_for:
+    - funcion_particion_suma_pesos
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: Solo después de normalizar con Z el peso se convierte en probabilidad física.
+    en: Only after normalization by Z does the weight become a physical probability.
+- id: razon_energia_termica
+  symbol: E_i/(k_B T)
+  nombre:
+    es: razón energía térmica
+    en: thermal energy ratio
+  descripcion:
+    es: Cociente adimensional que compara la energía del microestado con la escala térmica.
+    en: Dimensionless ratio comparing microstate energy with the thermal scale.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: dimensionless_ratio
+  physical_role: validity_indicator
+  used_in:
+  - peso_boltzmann
+  - limite_alta_temperatura
+  common_mistake: Leer el cociente sin comprobar que k_B*T tiene unidades de energía.
+  typical_range: <<1 en alta T efectiva, >>1 para estados muy penalizados.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende de la referencia energética; normalmente se comparan diferencias positivas.
+      en: It depends on the energy reference; usually positive differences are compared.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Indica energía igual a la referencia o diferencias despreciables frente a k_B*T.
+      en: It indicates energy equal to the reference or negligible differences compared with k_B*T.
+  value_nature:
+    kind: real_ratio
+    nonnegative_only: false
+    expected_interval: depende de E_i y T
+  interpretation_role:
+    primary_for:
+    - limite_alta_temperatura
+    secondary_for:
+    - peso_boltzmann
+  graph_binding:
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: 'Es la aguja del mapa: decide si una energía queda castigada o se vuelve accesible.'
+    en: 'It is the map needle: it decides whether an energy is penalized or becomes accessible.'

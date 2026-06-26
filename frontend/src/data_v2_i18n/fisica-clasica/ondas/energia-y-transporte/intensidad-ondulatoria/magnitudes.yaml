@@ -1,0 +1,355 @@
+version: v5
+leaf_id: intensidad-ondulatoria
+magnitudes:
+- id: intensidad_ondulatoria
+  symbol: I
+  nombre:
+    es: Intensidad ondulatoria
+    en: Wave intensity
+  descripcion:
+    es: Potencia transportada por la onda por unidad de área perpendicular a la dirección de propagación. Magnitud escalar
+      que cuantifica la fuerza de la onda.
+    en: Power transported by the wave per unit area perpendicular to the propagation direction. Scalar magnitude that quantifies
+      the strength of the wave.
+  unidad_si: W/m²
+  dimension: '[M T⁻³]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+  - Medición de sonoridad en acústica
+  - Irradiancia en óptica
+  - Seguridad radiométrica
+  - Nivel sonoro en decibelios
+  common_mistake: Confundir intensidad con presión acústica. La presión oscila y puede ser negativa; la intensidad es siempre
+    positiva y proporcional al cuadrado de la presión.
+  typical_range: 10⁻¹² W/m² (umbral auditivo) hasta 10³ W/m² (láser de alta potencia)
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La intensidad es siempre no negativa por definición física.
+      en: Intensity is always non-negative by physical definition.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Intensidad nula indica ausencia de onda o silencio absoluto.
+      en: Zero intensity indicates absence of wave or absolute silence.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: '[0, ∞)'
+  interpretation_role:
+    primary_for:
+    - intensidad_onda
+    - transporte_energetico_3d
+    secondary_for:
+    - nivel_sonoro
+    - dosis_energetica
+  graph_binding:
+    channels:
+    - intensity_indicator
+    - intensity_radial_visualization
+  pedagogical_notes:
+    es: La intensidad es la magnitud clave para entender cuán 'fuerte' es una onda. En acústica, determina si percibimos un
+      susurro o un estruendo. En óptica, distingue entre luz tenue y rayo láser potente.
+    en: Intensity is the key magnitude for understanding how 'strong' a wave is. In acoustics, it determines whether we perceive
+      a whisper or a roar. In optics, it distinguishes between dim light and powerful laser beams.
+- id: potencia_de_la_fuente
+  symbol: P
+  nombre:
+    es: Potencia de la fuente
+    en: Source power
+  descripcion:
+    es: Energía emitida por la fuente ondulatoria por unidad de tiempo. Representa la capacidad total de generación de ondas.
+    en: Energy emitted by the wave source per unit time. Represents the total capacity for wave generation.
+  unidad_si: W
+  dimension: '[M L² T⁻³]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: parameter
+  used_in:
+  - Cálculo de intensidad a distancia
+  - Balance energético de sistemas
+  - Diseño de fuentes sonoras
+  common_mistake: Asumir que la potencia se conserva en la onda sin considerar la divergencia geométrica. La misma potencia
+    se distribuye sobre áreas mayores a mayor distancia.
+  typical_range: 10⁻⁶ W (reloj de pulsera) hasta 10⁹ W (transmisor de radio)
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La potencia es siempre no negativa.
+      en: Power is always non-negative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Potencia nula indica fuente apagada o inactiva.
+      en: Zero power indicates off or inactive source.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: '[0, ∞)'
+  interpretation_role:
+    primary_for:
+    - emision_energetica
+    secondary_for:
+    - intensidad_a_distancia
+  graph_binding:
+    channels:
+    - power_source_indicator
+  pedagogical_notes:
+    es: La potencia de la fuente es el 'combustible' total disponible. La intensidad que experimenta un receptor depende de
+      cuánta potencia llega a él, lo cual depende de la distancia y de la geometría de propagación.
+    en: Source power is the total available 'fuel'. The intensity experienced by a receiver depends on how much power reaches
+      it, which depends on distance and propagation geometry.
+- id: r_distancia
+  symbol: r
+  nombre:
+    es: Distancia a la fuente
+    en: Distance from source
+  descripcion:
+    es: Separación entre la fuente emisora y el punto de observación. Determina el área sobre la cual se distribuye la potencia
+      emitida.
+    en: Separation between the emitting source and the observation point. Determines the area over which the emitted power
+      is distributed.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: state
+  physical_role: state
+  used_in:
+  - Ley de inversa del cuadrado
+  - Cálculo de atenuación geométrica
+  - Planificación de seguridad radiométrica
+  common_mistake: Olvidar que la intensidad depende del cuadrado de la distancia inversa. Duplicar la distancia reduce la
+    intensidad a un cuarto, no a la mitad.
+  typical_range: 10⁻² m (cerca del altavoz) hasta 10⁶ m (transmisiones de radio lejanas)
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La distancia es siempre positiva.
+      en: Distance is always positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Distancia nula implicaría estar en la fuente puntual misma, donde el modelo de onda esférica diverge.
+      en: Zero distance would imply being at the point source itself, where the spherical wave model diverges.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, ∞)
+  interpretation_role:
+    primary_for:
+    - atenuacion_geometrica
+    secondary_for:
+    - campo_lejano
+    - campo_cercano
+  graph_binding:
+    channels:
+    - distance_indicator
+    - radial_distance_scale
+  pedagogical_notes:
+    es: La distancia es la 'palanca' de control de la intensidad. Alejarse de una fuente reduce la intensidad drásticamente
+      debido a la divergencia geométrica. Esta es la razón por la cual los sonidos se debilitan al alejarnos de ellos.
+    en: Distance is the 'lever' for controlling intensity. Moving away from a source reduces intensity drastically due to
+      geometric divergence. This is why sounds weaken as we move away from them.
+- id: area_de_la_onda_esferica
+  symbol: A
+  nombre:
+    es: Área de la onda esférica
+    en: Spherical wave area
+  descripcion:
+    es: Superficie de la esfera a distancia r de una fuente puntual isotrópica. Representa el área sobre la cual se distribuye
+      la potencia emitida.
+    en: Surface of the sphere at distance r from an isotropic point source. Represents the area over which the emitted power
+      is distributed.
+  unidad_si: m²
+  dimension: '[L²]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: derived
+  used_in:
+  - Distribución espacial de energía
+  - Ley de inversa del cuadrado
+  - Cálculo de dosis radiométrica
+  common_mistake: Confundir el área de la onda esférica con el área de un objeto receptor. El área de la onda crece con r²;
+    el área del receptor es fija.
+  typical_range: 10⁻⁴ m² (esfera de 3 cm) hasta 10¹² m² (esfera de 560 km de radio)
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El área es siempre positiva.
+      en: Area is always positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Área nula solo en r = 0, punto singular no físico.
+      en: Zero area only at r = 0, non-physical singular point.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, ∞)
+  interpretation_role:
+    primary_for:
+    - expansion_geometrica
+    secondary_for:
+    - densidad_flujo_energia
+  graph_binding:
+    channels:
+    - area_visualization
+  pedagogical_notes:
+    es: El área esférica es la 'membrana' que crece con la distancia y diluye la energía. Entender que el área crece con r²
+      es clave para comprender por qué la intensidad decae con 1/r².
+    en: Spherical area is the 'membrane' that grows with distance and dilutes energy. Understanding that area grows with r²
+      is key to understanding why intensity decays as 1/r².
+- id: beta_nivel
+  symbol: \beta
+  nombre:
+    es: Nivel de intensidad sonora
+    en: Sound intensity level
+  descripcion:
+    es: Medida logarítmica de la intensidad sonora expresada en decibelios (dB). Referenciada al umbral de audición humana.
+    en: Logarithmic measure of sound intensity expressed in decibels (dB). Referenced to the human hearing threshold.
+  unidad_si: dB
+  dimension: adimensional
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: derived
+  used_in:
+  - Medición de ruido ambiental
+  - Salud ocupacional
+  - Diseño acústico
+  - Normativas de protección auditiva
+  common_mistake: Pensar que un aumento de 10 dB significa el doble de intensidad. En realidad, +10 dB implica 10 veces más
+    intensidad, y +3 dB aproximadamente el doble.
+  typical_range: 0 dB (umbral auditivo) hasta 140 dB (dolor e inmediato daño)
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Valores positivos indican intensidades audibles; valores negativos intensidades sub-umbral.
+      en: Positive values indicate audible intensities; negative values sub-threshold intensities.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: 0 dB corresponde exactamente al umbral de audición estándar (10⁻¹² W/m²).
+      en: 0 dB corresponds exactly to the standard hearing threshold (10⁻¹² W/m²).
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: (-∞, ∞)
+  interpretation_role:
+    primary_for:
+    - percepcion_sonora
+    secondary_for:
+    - seguridad_acustica
+    - confort_sonoro
+  graph_binding:
+    channels:
+    - decibel_scale_indicator
+  pedagogical_notes:
+    es: Los decibelios compressen el enorme rango de intensidades audibles (factor 10¹³) en una escala más manejable. Cada
+      10 dB adicionales representan 10 veces más intensidad física, pero solo el doble de sensación subjetiva de 'sonoridad'.
+    en: Decibels compress the enormous range of audible intensities (factor 10¹³) into a more manageable scale. Each additional
+      10 dB represents 10 times more physical intensity, but only double the subjective sensation of 'loudness'.
+- id: p_presion
+  symbol: p
+  nombre:
+    es: Presión acústica
+    en: Acoustic pressure
+  descripcion:
+    es: Variación de presión respecto a la presión atmosférica estática causada por la onda sonora. Magnitud oscilatoria que
+      caracteriza la perturbación mecánica.
+    en: Pressure variation with respect to static atmospheric pressure caused by the sound wave. Oscillatory magnitude that
+      characterizes the mechanical disturbance.
+  unidad_si: Pa
+  dimension: '[M L⁻¹ T⁻²]'
+  is_vector: false
+  components: []
+  category: state
+  physical_role: state
+  used_in:
+  - Caracterización de ondas sonoras
+  - Relación con intensidad acústica
+  - Diseño de micrófonos
+  common_mistake: Usar presión máxima en lugar de presión eficaz (RMS) al calcular intensidad. La intensidad depende del promedio
+    temporal del cuadrado de la presión.
+  typical_range: 20 µPa (umbral auditivo a 1 kHz) hasta 20 Pa (umbral de dolor, ~120 dB)
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: La presión puede ser positiva (compresión) o negativa (rarefacción) respecto a la media.
+      en: Pressure can be positive (compression) or negative (rarefaction) with respect to the mean.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Presión nula instantánea corresponde a presión atmosférica estática; ausencia de onda.
+      en: Instantaneous zero pressure corresponds to static atmospheric pressure; absence of wave.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: (-∞, ∞)
+  interpretation_role:
+    primary_for:
+    - perturbacion_mecanica
+    secondary_for:
+    - intensidad_acustica
+  graph_binding:
+    channels:
+    - pressure_waveform
+  pedagogical_notes:
+    es: La presión acústica es lo que realmente detectan nuestros oídos y los micrófonos. La intensidad, siendo proporcional
+      al cuadrado de la presión, es una medida de la 'energía' transportada por esa perturbación de presión.
+    en: Acoustic pressure is what our ears and microphones actually detect. Intensity, being proportional to the square of
+      pressure, is a measure of the 'energy' transported by that pressure disturbance.
+- id: rho
+  symbol: \rho
+  nombre:
+    es: Densidad del medio
+    en: Medium density
+  descripcion:
+    es: Masa por unidad de volumen del medio material (aire, agua, tejido) que soporta la propagación de la onda.
+    en: Mass per unit volume of the material medium (air, water, tissue) that supports wave propagation.
+  unidad_si: kg/m³
+  dimension: '[M L⁻³]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: parameter
+  used_in:
+  - Relación entre presión e intensidad
+  - Impedancia acústica
+  - Velocidad del sonido
+  common_mistake: Confundir densidad del medio con densidad de energía. Son magnitudes físicamente distintas con unidades
+    diferentes.
+  typical_range: 1.2 kg/m³ (aire) hasta 1000 kg/m³ (agua) y 1000-2000 kg/m³ (tejidos biológicos)
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La densidad es siempre positiva.
+      en: Density is always positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Densidad nula implicaría ausencia de medio, imposible para ondas mecánicas.
+      en: Zero density would imply absence of medium, impossible for mechanical waves.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: (0, ∞)
+  interpretation_role:
+    primary_for:
+    - inercia_del_medio
+    secondary_for:
+    - impedancia_acustica
+  graph_binding:
+    channels:
+    - medium_property_indicator
+  pedagogical_notes:
+    es: La densidad del medio aparece en la relación entre presión e intensidad. Medios más densos requieren menos presión
+      para transportar la misma intensidad, lo que afecta la eficiencia de transmisión energética.
+    en: Medium density appears in the relationship between pressure and intensity. Denser media require less pressure to transport
+      the same intensity, affecting energy transmission efficiency.

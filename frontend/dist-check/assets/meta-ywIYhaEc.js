@@ -1,0 +1,75 @@
+const n=`id: principio-de-conservacion
+nombre:
+  es: Principio de conservacion
+  en: Principle of Energy Conservation
+area: fisica-clasica
+bloque: mecanica
+subbloque: trabajo-y-energia
+parent_id: conservacion-de-la-energia
+ruta_relativa: fisica-clasica/mecanica/trabajo-y-energia/conservacion-de-la-energia/principio-de-conservacion
+orden: 214410
+type: leaf
+niveles:
+  es:
+  - ESO
+  - BACHILLERATO
+  - UNIVERSIDAD
+  en:
+  - Secondary
+  - Upper Secondary
+  - University
+icon: ⚖️
+descripcion: Balancea energia mecanica entre estados y delimita cuando la conservacion es valida.
+description_en: Balances mechanical energy between states and defines when conservation remains valid.
+tags:
+  es:
+  - conservacion
+  - energia-mecanica
+  - balance
+  - trabajo-no-conservativo
+  - estados
+  en:
+  - conservation
+  - mechanical-energy
+  - balance
+  - non-conservative-work
+  - states
+prerequisitos:
+- fisica-clasica/mecanica/trabajo-y-energia/energia-cinetica
+- fisica-clasica/mecanica/trabajo-y-energia/energia-potencial/energia-potencial-gravitatoria
+- fisica-clasica/mecanica/trabajo-y-energia/energia-potencial/energia-potencial-elastica
+physical_role:
+  es: ley de conservación
+  en: conservation law
+dificultad: 3
+tiempo_estimado_min: 50
+graficos:
+- Coord
+pregunta_fisica_central:
+  es: ¿En qué condiciones se conserva la energia mecanica entre dos estados?
+  en: Under which conditions is mechanical energy conserved between two states?
+representacion_dominante: Coord
+magnitud_dominante: Em
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

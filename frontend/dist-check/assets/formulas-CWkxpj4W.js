@@ -1,0 +1,262 @@
+const e=`version: 5
+topic:
+  id: leyes-de-kepler
+  title:
+    es: Leyes de kepler
+    en: Kepler's Laws
+
+formulas:
+  - id: parametro_gravitatorio
+    title: { es: Parametro gravitatorio, en: Gravitational parameter }
+    equation: mu = G*M
+    latex: \\mu = G M
+    category: escala_gravitatoria
+    relation_type: definition
+    physical_meaning:
+      es: Resume la intensidad gravitatoria de la masa central en un unico parametro orbital.
+      en: Summarizes the gravitational strength of the central mass in one orbital parameter.
+    constraints: [G > 0, M > 0]
+    validity:
+      es: Valido cuando una masa central domina el movimiento orbital.
+      en: Valid when a central mass dominates orbital motion.
+    dimension_check: "[L^3/T^2] = [L^3/(M*T^2)]*[M]"
+    calculable: true
+    motivo_no_calculable: { es: Requiere conocer G y M., en: Requires G and M. }
+    used_in: [tercera_ley_mu, primera_ley_polar]
+    interpretation_tags: [escala, masa_central]
+    result_semantics: parametro_orbital
+    domain_checks: [G > 0, M > 0]
+    coherence_checks: [mu > 0]
+    graph_implications: Cambia la pendiente efectiva entre a^3 y T^2.
+    pedagogical_triggers: [GM_no_es_masa]
+    rearrangements:
+      - target: mu
+        equation: mu = G*M
+      - target: M
+        equation: M = mu/G
+    variables: [mu, G, M]
+
+  - id: primera_ley_polar
+    title: { es: Primera ley en forma polar, en: First law in polar form }
+    equation: r = a*(1 - e^2)/(1 + e*cos(theta))
+    latex: r(\\theta)=\\frac{a(1-e^2)}{1+e\\cos\\theta}
+    category: geometria_orbital
+    relation_type: orbital_geometry
+    physical_meaning:
+      es: Describe una elipse con la masa central situada en un foco, no en el centro geometrico.
+      en: Describes an ellipse with the central mass at one focus, not at the geometric center.
+    constraints: [a > 0, e >= 0, e < 1, r > 0]
+    validity:
+      es: Orbita eliptica ligada kepleriana sin perturbaciones relevantes.
+      en: Bound Keplerian elliptical orbit without relevant perturbations.
+    dimension_check: "[L] = [L]*(1)/(1)"
+    calculable: true
+    motivo_no_calculable: { es: Requiere a, e y theta., en: Requires a, e, and theta. }
+    used_in: [relacion_semiejes]
+    interpretation_tags: [elipse, foco, radio]
+    result_semantics: distancia_focal
+    domain_checks: [a > 0, e < 1]
+    coherence_checks: [r > 0]
+    graph_implications: En Svg cambia la distancia al foco a medida que avanza theta.
+    pedagogical_triggers: [foco_no_centro]
+    rearrangements:
+      - target: r
+        equation: r = a*(1 - e^2)/(1 + e*cos(theta))
+      - target: a
+        equation: a = r*(1 + e*cos(theta))/(1 - e^2)
+    variables: [r, a, e, theta]
+
+  - id: relacion_semiejes
+    title: { es: Relacion entre semiejes y excentricidad, en: Relation between axes and eccentricity }
+    equation: b = a*sqrt(1 - e^2)
+    latex: b=a\\sqrt{1-e^2}
+    category: geometria_orbital
+    relation_type: geometry_constraint
+    physical_meaning:
+      es: Vincula la forma de la elipse con el achatamiento producido por la excentricidad.
+      en: Links ellipse shape with the flattening produced by eccentricity.
+    constraints: [a > 0, e >= 0, e < 1]
+    validity:
+      es: Solo para elipses, no para trayectorias parabolicas o hiperbolicas.
+      en: Only for ellipses, not for parabolic or hyperbolic paths.
+    dimension_check: "[L] = [L]"
+    calculable: true
+    motivo_no_calculable: { es: Requiere a y e., en: Requires a and e. }
+    used_in: [primera_ley_polar]
+    interpretation_tags: [elipse, forma]
+    result_semantics: semieje_menor
+    domain_checks: [0 <= e, e < 1]
+    coherence_checks: [b <= a]
+    graph_implications: En Svg controla la altura de la elipse.
+    pedagogical_triggers: [excentricidad_no_periodo]
+    rearrangements:
+      - target: b
+        equation: b = a*sqrt(1 - e^2)
+      - target: e
+        equation: e = sqrt(1 - (b/a)^2)
+    variables: [b, a, e]
+
+  - id: velocidad_areal_constante
+    title: { es: Segunda ley de Kepler, en: Kepler's second law }
+    equation: dA_dt = dA_dt
+    latex: \\frac{dA}{dt}=\\mathrm{constante}
+    category: geometria_temporal
+    relation_type: conservation_law
+    physical_meaning:
+      es: Indica que el radio vector barre areas iguales en tiempos iguales.
+      en: States that the radius vector sweeps equal areas in equal times.
+    constraints: [dA_dt > 0]
+    validity:
+      es: Movimiento bajo fuerza central sin par externo apreciable.
+      en: Motion under a central force with no appreciable external torque.
+    dimension_check: "[L^2/T] = [L^2/T]"
+    calculable: false
+    motivo_no_calculable:
+      es: Es una ley de conservacion; para calcular areas concretas se necesita el intervalo temporal o la geometria del sector.
+      en: It is a conservation law; computing concrete areas requires a time interval or sector geometry.
+    used_in: [relacion_momento_angular_conceptual]
+    interpretation_tags: [area, rapidez_variable, conservacion]
+    result_semantics: criterio_temporal
+    domain_checks: []
+    coherence_checks: []
+    graph_implications: En Svg el sector barrido mantiene el mismo significado temporal.
+    pedagogical_triggers: [areas_no_arcos]
+    rearrangements: []
+    variables: [A, dA_dt]
+
+  - id: relacion_momento_angular_conceptual
+    title: { es: Lectura dinamica de la segunda ley, en: Dynamical reading of the second law }
+    equation: dA_dt = L/(2*m)
+    latex: \\frac{dA}{dt}=\\frac{L}{2m}
+    category: dinamica_orbital
+    relation_type: conceptual_bridge
+    physical_meaning:
+      es: Conecta el barrido areal constante con la conservacion del momento angular en fuerza central.
+      en: Connects constant areal sweep with angular momentum conservation in a central force.
+    constraints: [m > 0]
+    validity:
+      es: Orbita plana con momento angular conservado y masa orbital constante.
+      en: Planar orbit with conserved angular momentum and constant orbiting mass.
+    dimension_check: "[L^2/T] = [M*L^2/T]/[M]"
+    calculable: false
+    motivo_no_calculable:
+      es: Requiere el momento angular orbital, que no es la variable principal del leaf.
+      en: Requires orbital angular momentum, which is not the leaf's main variable.
+    used_in: [velocidad_areal_constante]
+    interpretation_tags: [momento_angular, fuerza_central]
+    result_semantics: puente_dinamico
+    domain_checks: [m > 0]
+    coherence_checks: []
+    graph_implications: Explica por que el sector areal tiene valor fisico, no solo geometrico.
+    pedagogical_triggers: [kepler_newton]
+    rearrangements: []
+    variables: [dA_dt, L, m]
+
+  - id: tercera_ley_absoluta
+    title: { es: Tercera ley absoluta, en: Absolute third law }
+    equation: T = 2*pi*sqrt(a^3/(G*M))
+    latex: T=2\\pi\\sqrt{\\frac{a^3}{G M}}
+    category: escala_temporal
+    relation_type: orbital_period
+    physical_meaning:
+      es: Relaciona el periodo orbital con el semieje mayor y la masa central.
+      en: Relates orbital period to semi-major axis and central mass.
+    constraints: [a > 0, G > 0, M > 0]
+    validity:
+      es: Orbita kepleriana alrededor de una masa central dominante.
+      en: Keplerian orbit around a dominant central mass.
+    dimension_check: "[T] = sqrt([L^3]/[L^3/T^2])"
+    calculable: true
+    motivo_no_calculable: { es: Requiere a, G y M., en: Requires a, G, and M. }
+    used_in: [tercera_ley_mu]
+    interpretation_tags: [periodo, semieje, masa_central]
+    result_semantics: periodo_orbital
+    domain_checks: [a > 0, M > 0]
+    coherence_checks: [T > 0]
+    graph_implications: En Coord, T^2 crece linealmente con a^3.
+    pedagogical_triggers: [potencia_tres_medios]
+    rearrangements:
+      - target: T
+        equation: T = 2*pi*sqrt(a^3/(G*M))
+      - target: a
+        equation: (G*M*T^2/(4*pi^2))^(1/3)
+      - target: M
+        equation: 4*pi^2*a^3/(G*T^2)
+    variables: [T, a, G, M]
+
+  - id: tercera_ley_mu
+    title: { es: Tercera ley con parametro gravitatorio, en: Third law with gravitational parameter }
+    equation: T = 2*pi*sqrt(a^3/mu)
+    latex: T=2\\pi\\sqrt{\\frac{a^3}{\\mu}}
+    category: escala_temporal
+    relation_type: orbital_period
+    physical_meaning:
+      es: Escribe la tercera ley usando la escala gravitatoria compacta del sistema.
+      en: Writes the third law using the compact gravitational scale of the system.
+    constraints: [a > 0, mu > 0]
+    validity:
+      es: Mismo dominio que la tercera ley absoluta, con mu conocido.
+      en: Same domain as the absolute third law, with known mu.
+    dimension_check: "[T] = sqrt([L^3]/[L^3/T^2])"
+    calculable: true
+    motivo_no_calculable: { es: Requiere a y mu., en: Requires a and mu. }
+    used_in: [parametro_gravitatorio]
+    interpretation_tags: [periodo, mu]
+    result_semantics: periodo_orbital
+    domain_checks: [a > 0, mu > 0]
+    coherence_checks: [T > 0]
+    graph_implications: Cambiar mu comprime o estira la curva T(a).
+    pedagogical_triggers: [parametro_gravitatorio]
+    rearrangements:
+      - target: T
+        equation: T = 2*pi*sqrt(a^3/mu)
+      - target: a
+        equation: (mu*T^2/(4*pi^2))^(1/3)
+    variables: [T, a, mu]
+
+  - id: tercera_ley_comparativa
+    title: { es: Tercera ley comparativa, en: Comparative third law }
+    equation: T2 = T1*(a2/a1)^(3/2)
+    latex: T_2=T_1\\left(\\frac{a_2}{a_1}\\right)^{3/2}
+    category: comparacion_orbital
+    relation_type: ratio_law
+    physical_meaning:
+      es: Compara periodos de dos orbitas alrededor de la misma masa central sin calcular G ni M.
+      en: Compares periods of two orbits around the same central mass without computing G or M.
+    constraints: [T1 > 0, a1 > 0, a2 > 0]
+    validity:
+      es: Solo si ambas orbitas comparten la misma masa central dominante.
+      en: Only if both orbits share the same dominant central mass.
+    dimension_check: "[T] = [T]*(1)^(3/2)"
+    calculable: true
+    motivo_no_calculable: { es: Requiere T1, a1 y a2., en: Requires T1, a1, and a2. }
+    used_in: [tercera_ley_absoluta]
+    interpretation_tags: [comparacion, escala]
+    result_semantics: periodo_comparado
+    domain_checks: [a1 > 0, a2 > 0, T1 > 0]
+    coherence_checks: [T2 > 0]
+    graph_implications: Muestra que duplicar semieje no duplica el periodo.
+    pedagogical_triggers: [no_linealidad]
+    rearrangements:
+      - target: T2
+        equation: T2 = T1*(a2/a1)^(3/2)
+      - target: a2
+        equation: a1*(T2/T1)^(2/3)
+    variables: [T1, T2, a1, a2]
+
+ui:
+  default_formula: tercera_ley_absoluta
+  groups:
+    - title:
+        es: Geometria orbital
+        en: Orbital Geometry
+      items: [primera_ley_polar, relacion_semiejes]
+    - title:
+        es: Barrido areal
+        en: Areal Sweep
+      items: [velocidad_areal_constante, relacion_momento_angular_conceptual]
+    - title:
+        es: Periodos
+        en: Periods
+      items: [parametro_gravitatorio, tercera_ley_absoluta, tercera_ley_mu, tercera_ley_comparativa]
+`;export{e as default};

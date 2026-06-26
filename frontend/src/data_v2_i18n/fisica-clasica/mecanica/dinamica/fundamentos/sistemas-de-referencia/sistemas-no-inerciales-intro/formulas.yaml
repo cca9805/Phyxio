@@ -1,0 +1,506 @@
+version: 1
+formulas:
+- id: criterio_no_inercial
+  title:
+    es: Criterio de no inercialidad
+    en: Non-inertial-frame criterion
+  equation: a_marco != 0
+  latex: \vec{a}_{marco} \neq \vec{0}
+  rearrangements: []
+  category: kinematic_law
+  relation_type: equation
+  physical_meaning:
+    es: Relación física fundamental de este leaf.
+    en: Fundamental physical relationship of this leaf.
+  constraints:
+  - Classical mechanics validity conditions.
+  validity:
+    es: Válido en mecánica clásica newtoniana.
+    en: Valid in classical Newtonian mechanics.
+  dimension_check: dimensionally consistent
+  calculable: false
+  motivo_no_calculable:
+    es: Criterio conceptual de clasificación. Identifica si un marco es no inercial
+      al medir su aceleración respecto a un marco inercial.
+    en: Conceptual classification criterion. Identifies if a frame is non-inertial
+      by measuring its acceleration relative to an inertial frame.
+  used_in:
+  - sistemas-no-inerciales-intro
+  interpretation_tags:
+  - diagnostic_criterion
+  - frame_classification
+  - non_inertiality_test
+  result_semantics:
+    target: a_marco
+    meaning: Resulta util para interpretar a_marco en el contexto del leaf.
+  domain_checks:
+  - condition: can_measure_frame_acceleration
+    message:
+      es: Para aplicar este criterio, necesitas identificar un sistema inercial de
+        referencia externo desde el cual medir a_marco.
+      en: To apply this criterion, you need to identify an external inertial reference
+        system from which to measure a_frame.
+  - condition: a_marco > 0.01 m/s²
+    message:
+      es: Aceleraciones detectables con instrumentos comunes. El marco es claramente
+        no inercial.
+      en: Detectable accelerations with common instruments. Frame is clearly non-inertial.
+  - condition: a_marco < 0.001 m/s²
+    message:
+      es: Aceleraciones muy pequeñas. El marco es aproximadamente inercial para la
+        mayoría de experimentos.
+      en: Very small accelerations. Frame is approximately inertial for most experiments.
+  coherence_checks:
+  - check: if a_marco == 0 and fictitious_forces_present
+    critical:
+      es: 'INCOHERENCIA CRÍTICA: Si a_marco = 0, NO deben existir fuerzas ficticias.
+        Revisa tu identificación del marco.'
+      en: 'CRITICAL INCOHERENCE: If a_frame = 0, fictitious forces must NOT exist.
+        Review your frame identification.'
+  - check: if measuring_from_non_inertial_frame
+    warning:
+      es: 'ADVERTENCIA: Estás midiendo a_marco desde otro marco no inercial. Primero
+        identifica un marco inercial válido.'
+      en: 'WARNING: You''re measuring a_frame from another non-inertial frame. First
+        identify a valid inertial frame.'
+  graph_implications:
+  - if: a_marco != 0
+    then:
+      es: Todos los objetos en reposo dentro del marco experimentan aparentemente
+        una fuerza ficticia -m·a_marco (vectores hacia atrás).
+      en: All objects at rest within frame apparently experience a fictitious force
+        -m·a_frame (vectors backward).
+  - if: a_marco increases_with_time
+    then:
+      es: La fuerza ficticia varía en el tiempo. Graficar F_ficticia(t) = -m·a_marco(t).
+      en: Fictitious force varies with time. Plot F_fictitious(t) = -m·a_frame(t).
+  pedagogical_triggers:
+  - condition: user_thinks_constant_velocity_is_non_inertial
+    error:
+      es: 'ERROR CONCEPTUAL: Velocidad constante del marco NO implica no inercialidad.
+        Solo la ACELERACIÓN lo hace.'
+      en: 'CONCEPTUAL ERROR: Constant frame velocity does NOT imply non-inertiality.
+        Only ACCELERATION does.'
+  - condition: user_only_checks_rotation
+    warning:
+      es: 'ADVERTENCIA: No olvides revisar traslación acelerada. Un marco puede ser
+        no inercial sin rotar.'
+      en: 'WARNING: Don''t forget to check accelerated translation. A frame can be
+        non-inertial without rotating.'
+  - condition: confused_about_earth_reference
+    hint:
+      es: 'PISTA: La Tierra rota a ω=7.27×10⁻⁵ rad/s, así que es aproximadamente inercial
+        solo para experimentos < 1 minuto.'
+      en: 'HINT: Earth rotates at ω=7.27×10⁻⁵ rad/s, so it''s approximately inertial
+        only for experiments < 1 minute.'
+- id: fuerza_ficticia_traslacion
+  title:
+    es: Fuerza ficticia en traslación acelerada
+    en: Fictitious force in accelerated translation
+  equation: F_ficticia = -m * a_marco
+  latex: \vec{F}_f = -m \vec{a}_{marco}
+  rearrangements:
+  - target: F_ficticia
+    equation: F_ficticia = -m * a_marco
+    latex: \vec{F}_f = -m \vec{a}_{marco}
+    constraints: []
+  - target: a_marco
+    equation: a_marco = -F_ficticia / m
+    latex: \vec{a}_{marco} = -\frac{\vec{F}_f}{m}
+    constraints: []
+  - target: m
+    equation: m = -F_ficticia / a_marco
+    latex: m = -\frac{\vec{F}_f}{\vec{a}_{marco}}
+    constraints: []
+  category: kinematic_law
+  relation_type: equation
+  physical_meaning:
+    es: Relación física fundamental de este leaf.
+    en: Fundamental physical relationship of this leaf.
+  constraints:
+  - Classical mechanics validity conditions.
+  validity:
+    es: Válido en mecánica clásica newtoniana.
+    en: Valid in classical Newtonian mechanics.
+  dimension_check: dimensionally consistent
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - sistemas-no-inerciales-intro
+  interpretation_tags:
+  - fictitious_force
+  - translational_acceleration
+  - inertial_effect
+  result_semantics:
+    target: F_ficticia
+    meaning: Resulta util para interpretar F_ficticia en el contexto del leaf.
+  domain_checks:
+  - condition: m <= 0
+    message:
+      es: 'ERROR: La masa debe ser positiva. Revisar valor de entrada.'
+      en: 'ERROR: Mass must be positive. Check input value.'
+  - condition: a_marco_varies_with_time
+    message:
+      es: 'ADVERTENCIA: Si a_marco varía con el tiempo, F_ficticia también varía.
+        Recalcular para cada instante.'
+      en: 'WARNING: If a_frame varies with time, F_fictitious also varies. Recalculate
+        for each instant.'
+  - condition: frame_also_rotating
+    message:
+      es: 'ADVERTENCIA: Si el marco también rota, deben añadirse F_centrífuga y F_Coriolis.
+        Esta fórmula solo cubre traslación.'
+      en: 'WARNING: If frame also rotates, F_centrifugal and F_Coriolis must be added.
+        This formula only covers translation.'
+  coherence_checks:
+  - check: vector_direction(F_ficticia) == -vector_direction(a_marco)
+    critical:
+      es: 'CRÍTICO: F_ficticia debe apuntar exactamente opuesta a a_marco. Si no,
+        error de signo.'
+      en: 'CRITICAL: F_fictitious must point exactly opposite to a_frame. If not,
+        sign error.'
+  - check: if a_marco == 0
+    info:
+      es: Si a_marco = 0, entonces F_ficticia = 0. El marco es inercial.
+      en: If a_frame = 0, then F_fictitious = 0. Frame is inertial.
+  graph_implications:
+  - if: a_marco constant
+    then:
+      es: F_ficticia es uniforme en todo el espacio del marco. Todos los objetos sienten
+        la misma fuerza por unidad de masa (-a_marco).
+      en: F_fictitious is uniform throughout frame space. All objects feel same force
+        per unit mass (-a_frame).
+  - if: a_marco accelerating_forward
+    then:
+      es: Visualizar vector F_ficticia apuntando hacia atrás en todos los objetos.
+        Graficar como campo vectorial uniforme.
+      en: Visualize F_fictitious vector pointing backward on all objects. Plot as
+        uniform vector field.
+  pedagogical_triggers:
+  - condition: user_forgets_minus_sign
+    error:
+      es: 'ERROR MUY COMÚN: Olvidar el signo negativo. F_ficticia = -m·a_marco, NO
+        +m·a_marco.'
+      en: 'VERY COMMON ERROR: Forgetting minus sign. F_fictitious = -m·a_frame, NOT
+        +m·a_frame.'
+  - condition: user_includes_in_inertial_FBD
+    error:
+      es: 'ERROR GRAVE: Intentas dibujar F_ficticia en un diagrama de cuerpo libre
+        inercial. Esta fuerza SOLO existe dentro del marco acelerado.'
+      en: 'SERIOUS ERROR: Trying to draw F_fictitious in inertial free-body diagram.
+        This force ONLY exists inside accelerated frame.'
+  - condition: user_asks_what_exerts_force
+    clarification:
+      es: 'ACLARACIÓN: F_ficticia NO tiene agente físico. No hay cuerpo que la ejerza.
+        Es un artificio matemático para mantener ΣF=ma en el marco acelerado.'
+      en: 'CLARIFICATION: F_fictitious has NO physical agent. No body exerts it. It''s
+        a mathematical device to maintain ΣF=ma in accelerated frame.'
+- id: dinamica_en_no_inercial
+  title:
+    es: Segunda ley en marco no inercial
+    en: Second law in non-inertial frame
+  equation: F_real + F_ficticia = m * a_rel
+  latex: \sum \vec{F}_{reales} + \vec{F}_f = m \vec{a}_{rel}
+  rearrangements:
+  - target: a_rel
+    equation: a_rel = (F_real + F_ficticia) / m
+    latex: \vec{a}_{rel} = \frac{\sum \vec{F}_{reales} + \vec{F}_f}{m}
+    constraints: []
+  - target: F_real
+    equation: F_real = m * a_rel - F_ficticia
+    latex: \sum \vec{F}_{reales} = m \vec{a}_{rel} - \vec{F}_f
+    constraints: []
+  - target: F_ficticia
+    equation: F_ficticia = m * a_rel - F_real
+    latex: \vec{F}_f = m \vec{a}_{rel} - \sum \vec{F}_{reales}
+    constraints: []
+  category: kinematic_law
+  relation_type: equation
+  physical_meaning:
+    es: Relación física fundamental de este leaf.
+    en: Fundamental physical relationship of this leaf.
+  constraints:
+  - Classical mechanics validity conditions.
+  validity:
+    es: Válido en mecánica clásica newtoniana.
+    en: Valid in classical Newtonian mechanics.
+  dimension_check: dimensionally consistent
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - sistemas-no-inerciales-intro
+  interpretation_tags:
+  - modified_newtons_second_law
+  - non_inertial_dynamics
+  - force_balance_with_fictitious
+  result_semantics:
+    target: a_rel
+    meaning: Resulta util para interpretar a_rel en el contexto del leaf.
+  domain_checks:
+  - condition: m <= 0
+    message:
+      es: 'ERROR: Masa debe ser positiva.'
+      en: 'ERROR: Mass must be positive.'
+  - condition: forgot_to_include_fictitious_force
+    message:
+      es: 'ERROR COMÚN: ¿Incluiste F_ficticia = -m·a_marco en la suma? Sin ella, la
+        ecuación solo es válida en sistemas inerciales.'
+      en: 'COMMON ERROR: Did you include F_fictitious = -m·a_frame in sum? Without
+        it, equation only valid in inertial systems.'
+  - condition: object_at_rest_in_frame
+    message:
+      es: Si el objeto está en reposo dentro del marco (a_rel=0), entonces F_real
+        + F_ficticia = 0. Fuerzas se cancelan exactamente.
+      en: If object is at rest within frame (a_rel=0), then F_real + F_fictitious
+        = 0. Forces cancel exactly.
+  coherence_checks:
+  - check: if a_rel == 0 then F_real + F_ficticia == 0
+    info:
+      es: Equilibrio dinámico dentro del marco. Las fuerzas reales compensan exactamente
+        la fuerza ficticia.
+      en: Dynamic equilibrium within frame. Real forces exactly compensate fictitious
+        force.
+  - check: if F_ficticia == 0 and a_marco != 0
+    critical:
+      es: 'INCOHERENCIA: Si el marco acelera (a_marco≠0), debe existir F_ficticia.
+        Revisa tu cálculo.'
+      en: 'INCOHERENCE: If frame accelerates (a_frame≠0), F_fictitious must exist.
+        Check your calculation.'
+  graph_implications:
+  - if: a_rel == 0
+    then:
+      es: Objeto en reposo dentro del marco. Visualizar F_real y F_ficticia como vectores
+        opuestos de igual magnitud.
+      en: Object at rest within frame. Visualize F_real and F_fictitious as opposite
+        vectors of equal magnitude.
+  - if: a_rel != 0
+    then:
+      es: 'Objeto acelerando dentro del marco. Visualizar suma vectorial: F_real +
+        F_ficticia apunta en dirección de a_rel.'
+      en: 'Object accelerating within frame. Visualize vector sum: F_real + F_fictitious
+        points in direction of a_rel.'
+  pedagogical_triggers:
+  - condition: user_uses_in_inertial_frame
+    error:
+      es: 'ERROR: Esta ecuación es para marcos NO inerciales. En sistemas inerciales
+        usa ΣF_reales = m·a (sin términos ficticios).'
+      en: 'ERROR: This equation is for NON-inertial frames. In inertial systems use
+        ΣF_real = m·a (no fictitious terms).'
+  - condition: user_confuses_a_rel_with_a_marco
+    error:
+      es: 'ERROR CONCEPTUAL: a_rel es la aceleración del OBJETO dentro del marco.
+        a_marco es la aceleración del MARCO respecto a un SRI.'
+      en: 'CONCEPTUAL ERROR: a_rel is OBJECT''s acceleration within frame. a_frame
+        is FRAME''s acceleration relative to IRF.'
+  - condition: pendulum_example
+    hint:
+      es: 'EJEMPLO CLÁSICO: Péndulo inclinado en vagón acelerando. Si péndulo en reposo
+        (a_rel=0), entonces Tensión + Peso + F_ficticia = 0.'
+      en: 'CLASSIC EXAMPLE: Tilted pendulum in accelerating carriage. If pendulum
+        at rest (a_rel=0), then Tension + Weight + F_fictitious = 0.'
+- id: fuerza_centrifuga
+  title:
+    es: Fuerza centrífuga en marcos rotantes
+    en: Centrifugal force in rotating frames
+  equation: F_centrifuga = m * omega^2 * r
+  latex: \vec{F}_{cf} = m \omega^2 \vec{r}
+  rearrangements:
+  - target: F_centrifuga
+    equation: F_centrifuga = m * omega^2 * r
+    latex: \vec{F}_{cf} = m \omega^2 \vec{r}
+    constraints: []
+  - target: omega
+    equation: omega = sqrt(F_centrifuga / (m * r))
+    latex: \omega = \sqrt{\frac{F_{cf}}{m \cdot r}}
+    constraints: []
+  - target: r
+    equation: r = F_centrifuga / (m * omega^2)
+    latex: r = \frac{F_{cf}}{m \omega^2}
+    constraints: []
+  category: kinematic_law
+  relation_type: equation
+  physical_meaning:
+    es: Relación física fundamental de este leaf.
+    en: Fundamental physical relationship of this leaf.
+  constraints:
+  - Classical mechanics validity conditions.
+  validity:
+    es: Válido en mecánica clásica newtoniana.
+    en: Valid in classical Newtonian mechanics.
+  dimension_check: dimensionally consistent
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - sistemas-no-inerciales-intro
+  interpretation_tags:
+  - centrifugal_force
+  - rotating_frame
+  - radial_fictitious_force
+  result_semantics:
+    target: F_centrifuga
+    meaning: Resulta util para interpretar F_centrifuga en el contexto del leaf.
+  domain_checks:
+  - condition: m <= 0 or r <= 0
+    message:
+      es: 'ERROR: Masa y radio deben ser positivos.'
+      en: 'ERROR: Mass and radius must be positive.'
+  - condition: omega == 0
+    message:
+      es: Si ω = 0, no hay rotación. F_centrífuga = 0. El marco no es rotante.
+      en: If ω = 0, no rotation. F_centrifugal = 0. Frame is not rotating.
+  - condition: r == 0
+    message:
+      es: Si r = 0, el objeto está sobre el eje de rotación. F_centrífuga = 0, pero
+        puede sentir F_Coriolis si se mueve.
+      en: If r = 0, object is on rotation axis. F_centrifugal = 0, but may feel F_Coriolis
+        if moving.
+  - condition: omega very_large
+    message:
+      es: 'ADVERTENCIA: ω muy grande puede generar fuerzas centrífugas extremas. Centrífugas
+        de laboratorio alcanzan 10⁵ g.'
+      en: 'WARNING: Very large ω can generate extreme centrifugal forces. Lab centrifuges
+        reach 10⁵ g.'
+  coherence_checks:
+  - check: vector_direction(F_centrifuga) == radial_outward
+    critical:
+      es: 'CRÍTICO: F_centrífuga debe apuntar radialmente hacia afuera. Si apunta
+        hacia dentro, confundes con fuerza centrípeta (real).'
+      en: 'CRITICAL: F_centrifugal must point radially outward. If pointing inward,
+        you''re confusing with centripetal force (real).'
+  - check: if in_inertial_frame
+    error:
+      es: 'ERROR: F_centrífuga NO existe en marcos inerciales. Solo usa esta fuerza
+        dentro del marco rotante.'
+      en: 'ERROR: F_centrifugal does NOT exist in inertial frames. Only use this force
+        inside rotating frame.'
+  graph_implications:
+  - if: omega constant
+    then:
+      es: F_centrífuga aumenta linealmente con r. Graficar como vectores radiales
+        crecientes hacia afuera.
+      en: F_centrifugal increases linearly with r. Plot as radial vectors growing
+        outward.
+  - if: comparing different_masses
+    then:
+      es: Masas mayores sienten mayor F_centrífuga (proporcional a m). Visualizar
+        vectores más largos para objetos más masivos.
+      en: Greater masses feel greater F_centrifugal (proportional to m). Visualize
+        longer vectors for more massive objects.
+  pedagogical_triggers:
+  - condition: user_confuses_with_centripetal
+    error:
+      es: 'ERROR GRAVÍSIMO: F_centrífuga (ficticia, hacia afuera) ≠ F_centrípeta (real,
+        hacia adentro). En SRI solo existe la centrípeta.'
+      en: 'VERY SERIOUS ERROR: F_centrifugal (fictitious, outward) ≠ F_centripetal
+        (real, inward). In IRF only centripetal exists.'
+  - condition: carousel_example
+    hint:
+      es: 'EJEMPLO: En un carrusel, sientes que ''te empujan hacia afuera''. Eso es
+        F_centrífuga (dentro del marco rotante). Desde fuera, es solo tu inercia.'
+      en: 'EXAMPLE: On carousel, you feel ''pushed outward''. That''s F_centrifugal
+        (inside rotating frame). From outside, it''s just your inertia.'
+  - condition: earth_example
+    hint:
+      es: En la Tierra (ω=7.27×10⁻⁵ rad/s, r_ecuador=6.37×10⁶ m), F_cf ≈ 0.3% del
+        peso. Perceptible en básculas de precisión.
+      en: On Earth (ω=7.27×10⁻⁵ rad/s, r_equator=6.37×10⁶ m), F_cf ≈ 0.3% of weight.
+        Noticeable on precision scales.
+- id: fuerza_coriolis
+  title:
+    es: Fuerza de Coriolis en marcos rotantes
+    en: Coriolis force in rotating frames
+  equation: F_coriolis = -2 * m * (omega × v_rel)
+  latex: \vec{F}_{cor} = -2m (\vec{\omega} \times \vec{v}_{rel})
+  rearrangements: []
+  category: kinematic_law
+  relation_type: equation
+  physical_meaning:
+    es: Relación física fundamental de este leaf.
+    en: Fundamental physical relationship of this leaf.
+  constraints:
+  - Classical mechanics validity conditions.
+  validity:
+    es: Válido en mecánica clásica newtoniana.
+    en: Valid in classical Newtonian mechanics.
+  dimension_check: dimensionally consistent
+  calculable: false
+  motivo_no_calculable:
+    es: Requiere producto vectorial completo y conocimiento de la dirección de ω y
+      v_rel. Generalmente se resuelve por componentes en problemas específicos.
+    en: Requires full vector product and knowledge of ω and v_rel directions. Generally
+      solved component-wise in specific problems.
+  used_in:
+  - sistemas-no-inerciales-intro
+  interpretation_tags:
+  - coriolis_force
+  - rotating_frame
+  - velocity_dependent_fictitious
+  result_semantics:
+    target: F_coriolis
+    meaning: Resulta util para interpretar F_coriolis en el contexto del leaf.
+  domain_checks:
+  - condition: v_rel == 0
+    message:
+      es: Si v_rel = 0, entonces F_Coriolis = 0. La fuerza de Coriolis SOLO actúa
+        sobre objetos en movimiento dentro del marco rotante.
+      en: If v_rel = 0, then F_Coriolis = 0. Coriolis force ONLY acts on moving objects
+        within rotating frame.
+  - condition: omega == 0
+    message:
+      es: Si ω = 0, no hay rotación. F_Coriolis = 0.
+      en: If ω = 0, no rotation. F_Coriolis = 0.
+  - condition: v_rel_parallel_to_omega
+    message:
+      es: Si v_rel ‖ ω, el producto vectorial es cero. F_Coriolis = 0 (movimiento
+        paralelo al eje de rotación no siente Coriolis).
+      en: If v_rel ‖ ω, vector product is zero. F_Coriolis = 0 (motion parallel to
+        rotation axis doesn't feel Coriolis).
+  - condition: earth_scale_phenomenon
+    message:
+      es: 'En la Tierra, F_Coriolis es pequeña (~10⁻⁴ N para persona caminando) pero
+        crucial en fenómenos de gran escala: huracanes, corrientes oceánicas.'
+      en: 'On Earth, F_Coriolis is small (~10⁻⁴ N for walking person) but crucial
+        in large-scale phenomena: hurricanes, ocean currents.'
+  coherence_checks:
+  - check: vector_perpendicular(F_coriolis, v_rel)
+    info:
+      es: F_Coriolis siempre perpendicular a v_rel. Esto causa DESVIACIÓN de trayectorias,
+        no cambio de rapidez.
+      en: F_Coriolis always perpendicular to v_rel. This causes trajectory DEVIATION,
+        not speed change.
+  - check: if_rotating_hemisphere
+    info:
+      es: En Hemisferio Norte (ω apunta hacia arriba), objetos moviéndose hacia adelante
+        se desvían a la DERECHA.
+      en: In Northern Hemisphere (ω points upward), objects moving forward deviate
+        to the RIGHT.
+  graph_implications:
+  - if: v_rel increasing
+    then:
+      es: F_Coriolis aumenta linealmente con v_rel. Objetos rápidos sienten mayor
+        desviación.
+      en: F_Coriolis increases linearly with v_rel. Fast objects feel greater deviation.
+  - if: trajectory_plot
+    then:
+      es: Graficar trayectorias curvas en el marco rotante. Desde marco inercial,
+        la trayectoria es recta (sin fuerzas laterales reales).
+      en: Plot curved trajectories in rotating frame. From inertial frame, trajectory
+        is straight (no real lateral forces).
+  pedagogical_triggers:
+  - condition: user_expects_coriolis_on_stationary_object
+    error:
+      es: 'ERROR: F_Coriolis es CERO si el objeto está quieto en el marco rotante.
+        Solo actúa sobre objetos en movimiento relativo.'
+      en: 'ERROR: F_Coriolis is ZERO if object is still in rotating frame. Only acts
+        on objects in relative motion.'
+  - condition: hurricane_example
+    hint:
+      es: 'EJEMPLO: Huracanes giran por F_Coriolis. Aire se mueve hacia el centro
+        (v_rel grande), Coriolis lo desvía → rotación antihoraria (HN) / horaria (HS).'
+      en: 'EXAMPLE: Hurricanes rotate due to F_Coriolis. Air moves toward center (large
+        v_rel), Coriolis deflects it → counterclockwise (NH) / clockwise (SH).'
+  - condition: sink_drain_myth
+    clarification:
+      es: 'MITO PARCIAL: Remolinos en lavabos NO son por Coriolis (demasiado pequeño).
+        Son por asimetrías del lavabo. Coriolis solo domina en escalas > 1 km.'
+      en: 'PARTIAL MYTH: Sink vortices are NOT due to Coriolis (too small). They''re
+        from sink asymmetries. Coriolis only dominates at scales > 1 km.'

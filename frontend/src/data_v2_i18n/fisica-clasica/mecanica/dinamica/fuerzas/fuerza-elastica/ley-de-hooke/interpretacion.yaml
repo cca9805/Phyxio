@@ -1,0 +1,373 @@
+version: 2
+id: interpretacion-ley-de-hooke
+leaf_id: ley-de-hooke
+nombre:
+  es: Interpretacion de Ley de hooke
+  en: Interpretation of Hooke's Law
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: dinamica
+  parent_id: fuerza-elastica
+  ruta_relativa: fisica-clasica/mecanica/dinamica/fuerzas/fuerza-elastica/ley-de-hooke
+dependencies:
+  formulas:
+  - hooke_1d
+  - hooke_modulo
+  - equilibrio_vertical_muelle
+  - energia_potencial_elastica
+  - criterio_restaurador
+  magnitudes:
+  - Fel
+  - Fm
+  - k
+  - x
+  - x_eq
+  - m
+  - g
+  - Uel
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  Fel:
+    summary_rules:
+    - id: Fel_summary
+      when: "true"
+      status: info
+      text:
+        es: "Esta fuerza resume la respuesta restauradora del muelle frente a la deformacion."
+        en: "This force summarizes the spring's restoring response to deformation."
+    coherence_rules:
+    - id: Fel_coherence
+      when: "Fel * x <= 0"
+      status: ok
+      text:
+        es: "El signo es coherente con una fuerza restauradora."
+        en: "The sign is coherent with a restoring force."
+    - id: Fel_coherence_fail
+      when: "Fel * x > 0"
+      status: warning
+      text:
+        es: "Si Fel y x tienen el mismo signo, revisa eje y convencion."
+        en: "If Fel and x have the same sign, review the axis and convention."
+    physical_reading_rules:
+    - id: Fel_physical
+      when: "true"
+      status: info
+      text:
+        es: "Fel no acompaña la deformacion: la combate y trata de devolver el sistema al equilibrio."
+        en: "Fel does not follow the deformation: it opposes it and tries to bring the system back to equilibrium."
+    model_validity_rules:
+    - id: Fel_validity
+      when: "true"
+      status: ok
+      text:
+        es: "Fel solo se interpreta asi mientras el muelle siga en regimen elastico lineal."
+        en: "Fel can be interpreted this way only while the spring remains in the linear elastic regime."
+    graph_rules:
+    - id: Fel_graph
+      when: "true"
+      status: info
+      text:
+        es: "En la grafica F-x, Fel se lee como una recta con pendiente ligada a k."
+        en: "In the F-x graph, Fel is read as a straight line whose slope is tied to k."
+    likely_errors:
+    - id: Fel_warn
+      when: "true"
+      status: warning
+      text:
+        es: "No confundas Fel con su modulo Fm cuando el signo importa."
+        en: "Do not confuse Fel with its magnitude Fm when the sign matters."
+    next_step_rules:
+    - id: Fel_next
+      when: "true"
+      status: info
+      text:
+        es: "Usa Fel para discutir equilibrio o sentido de la fuerza."
+        en: "Use Fel to discuss equilibrium or force direction."
+  k:
+    summary_rules:
+    - id: k_summary
+      when: "true"
+      status: info
+      text:
+        es: "k mide cuanta fuerza hace falta para deformar el muelle una cierta cantidad."
+        en: "k measures how much force is needed to deform the spring by a given amount."
+    coherence_rules:
+    - id: k_coherence
+      when: "k > 0"
+      status: ok
+      text:
+        es: "La rigidez es positiva y coherente."
+        en: "The stiffness is positive and coherent."
+    physical_reading_rules:
+    - id: k_physical
+      when: "true"
+      status: info
+      text:
+        es: "Cuanto mayor es k, menos cede el muelle para la misma carga."
+        en: "The larger k is, the less the spring yields under the same load."
+    model_validity_rules:
+    - id: k_validity
+      when: "true"
+      status: ok
+      text:
+        es: "k se interpreta como constante solo si la respuesta sigue siendo lineal."
+        en: "k can be interpreted as a constant only if the response stays linear."
+    graph_rules:
+    - id: k_graph
+      when: "true"
+      status: info
+      text:
+        es: "En F frente a x, k fija la pendiente en modulo."
+        en: "In F versus x, k sets the slope magnitude."
+    likely_errors:
+    - id: k_warn
+      when: "true"
+      status: warning
+      text:
+        es: "Una k grande no significa siempre mejor; depende del uso del muelle."
+        en: "A large k is not always better; it depends on the spring's purpose."
+    next_step_rules:
+    - id: k_next
+      when: "true"
+      status: info
+      text:
+        es: "Con k puedes enlazar fuerza, equilibrio y energia."
+        en: "With k you can connect force, equilibrium, and energy."
+  x:
+    summary_rules:
+    - id: x_summary
+      when: "true"
+      status: info
+      text:
+        es: "x mide cuanto se ha separado el muelle de su referencia."
+        en: "x measures how far the spring has moved from its reference state."
+    coherence_rules:
+    - id: x_coherence
+      when: "true"
+      status: ok
+      text:
+        es: "La deformacion debe leerse siempre desde una referencia declarada."
+        en: "Deformation must always be read from a declared reference."
+    physical_reading_rules:
+    - id: x_physical
+      when: "true"
+      status: info
+      text:
+        es: "Cambiar x cambia la respuesta elastica y la energia almacenada."
+        en: "Changing x changes the elastic response and the stored energy."
+    model_validity_rules:
+    - id: x_validity
+      when: "true"
+      status: ok
+      text:
+        es: "x se interpreta con Hooke mientras la deformacion siga en rango lineal."
+        en: "x is interpreted with Hooke as long as deformation stays within the linear range."
+    graph_rules:
+    - id: x_graph
+      when: "true"
+      status: info
+      text:
+        es: "x suele ser la variable horizontal de la grafica fuerza-deformacion."
+        en: "x is usually the horizontal variable in the force-deformation graph."
+    likely_errors:
+    - id: x_warn
+      when: "true"
+      status: warning
+      text:
+        es: "No confundas elongacion respecto a la referencia con longitud total del muelle."
+        en: "Do not confuse elongation from the reference with the total spring length."
+    next_step_rules:
+    - id: x_next
+      when: "true"
+      status: info
+      text:
+        es: "Usa x para obtener Fel, Fm o Uel segun la pregunta."
+        en: "Use x to obtain Fel, Fm, or Uel depending on the question."
+  Fm:
+    summary_rules:
+    - id: Fm_summary
+      when: "true"
+      status: info
+      text:
+        es: "Fm expresa la intensidad de la fuerza elastica sin informacion direccional."
+        en: "Fm expresses the intensity of the elastic force without directional information."
+    coherence_rules:
+    - id: Fm_coherence
+      when: "Fm >= 0"
+      status: ok
+      text:
+        es: "El modulo es coherente como magnitud no negativa."
+        en: "The magnitude is coherent as a non-negative quantity."
+    physical_reading_rules:
+    - id: Fm_physical
+      when: "true"
+      status: info
+      text:
+        es: "Fm sirve cuando interesa cuanta fuerza actua, no hacia donde actua."
+        en: "Fm is useful when the question is how much force acts, not in which direction."
+    model_validity_rules:
+    - id: Fm_validity
+      when: "true"
+      status: ok
+      text:
+        es: "Fm sigue el modelo lineal si la proporcionalidad con x se conserva."
+        en: "Fm follows the linear model if proportionality with x is preserved."
+    graph_rules:
+    - id: Fm_graph
+      when: "true"
+      status: info
+      text:
+        es: "La lectura en modulo pierde el signo de la recta F-x."
+        en: "The magnitude reading loses the sign of the F-x line."
+    likely_errors:
+    - id: Fm_warn
+      when: "true"
+      status: warning
+      text:
+        es: "No uses Fm si el problema exige direccion o equilibrio vectorial."
+        en: "Do not use Fm if the problem requires direction or vector equilibrium."
+    next_step_rules:
+    - id: Fm_next
+      when: "true"
+      status: info
+      text:
+        es: "Fm es util para diseño instrumental o comparacion de intensidades."
+        en: "Fm is useful for instrument design or intensity comparison."
+  x_eq:
+    summary_rules:
+    - id: xeq_summary
+      when: "true"
+      status: info
+      text:
+        es: "x_eq resume la deformacion necesaria para equilibrar el peso con la fuerza elastica."
+        en: "x_eq summarizes the deformation needed to balance weight with elastic force."
+    coherence_rules:
+    - id: xeq_coherence
+      when: "x_eq >= 0"
+      status: ok
+      text:
+        es: "La deformacion de equilibrio es coherente con una masa suspendida."
+        en: "The equilibrium deformation is coherent with a hanging mass."
+    physical_reading_rules:
+    - id: xeq_physical
+      when: "true"
+      status: info
+      text:
+        es: "Si m o g aumentan, x_eq crece; si k aumenta, x_eq disminuye."
+        en: "If m or g increase, x_eq grows; if k increases, x_eq decreases."
+    model_validity_rules:
+    - id: xeq_validity
+      when: "true"
+      status: ok
+      text:
+        es: "x_eq solo es fiable si el muelle sigue dentro del rango lineal."
+        en: "x_eq is reliable only if the spring stays inside the linear range."
+    graph_rules:
+    - id: xeq_graph
+      when: "true"
+      status: info
+      text:
+        es: "Graficamente, x_eq aparece donde peso y respuesta elastica se compensan."
+        en: "Graphically, x_eq appears where weight and elastic response balance."
+    likely_errors:
+    - id: xeq_warn
+      when: "true"
+      status: warning
+      text:
+        es: "No confundas x_eq con una deformacion dinamica cualquiera."
+        en: "Do not confuse x_eq with an arbitrary dynamical deformation."
+    next_step_rules:
+    - id: xeq_next
+      when: "true"
+      status: info
+      text:
+        es: "x_eq sirve para conectar elasticidad con equilibrio estatico."
+        en: "x_eq connects elasticity with static equilibrium."
+  Uel:
+    summary_rules:
+    - id: Uel_summary
+      when: "true"
+      status: info
+      text:
+        es: "Uel mide cuanta energia ha quedado almacenada por la deformacion."
+        en: "Uel measures how much energy has been stored by deformation."
+    coherence_rules:
+    - id: Uel_coherence
+      when: "Uel >= 0"
+      status: ok
+      text:
+        es: "La energia elastica es no negativa."
+        en: "Elastic energy is non-negative."
+    physical_reading_rules:
+    - id: Uel_physical
+      when: "true"
+      status: info
+      text:
+        es: "Uel crece con x^2, asi que estirar o comprimir igual almacenan la misma energia ideal."
+        en: "Uel grows with x^2, so equal stretching or compression store the same ideal energy."
+    model_validity_rules:
+    - id: Uel_validity
+      when: "true"
+      status: ok
+      text:
+        es: "Uel representa energia recuperable solo si las perdidas son despreciables."
+        en: "Uel represents recoverable energy only if losses are negligible."
+    graph_rules:
+    - id: Uel_graph
+      when: "true"
+      status: info
+      text:
+        es: "En grafica, Uel se lee como una parabola simetrica."
+        en: "In a graph, Uel is read as a symmetric parabola."
+    likely_errors:
+    - id: Uel_warn
+      when: "true"
+      status: warning
+      text:
+        es: "No interpretes Uel como fuerza; es energia almacenada."
+        en: "Do not interpret Uel as a force; it is stored energy."
+    next_step_rules:
+    - id: Uel_next
+      when: "true"
+      status: info
+      text:
+        es: "Uel es la puerta de entrada a trabajo y oscilaciones."
+        en: "Uel is the gateway to work and oscillations."

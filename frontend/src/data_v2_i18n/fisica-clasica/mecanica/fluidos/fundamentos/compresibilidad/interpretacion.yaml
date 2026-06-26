@@ -1,0 +1,259 @@
+version: 5
+id: compresibilidad-interp
+leaf_id: compresibilidad
+scope: local
+nombre:
+  es: "Análisis de Compresibilidad"
+  en: "Compressibility Analysis"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: "Resumen de Compresión"
+      en: "Compression Summary"
+  physical_reading:
+    title:
+      es: "Lectura Física"
+      en: "Physical Reading"
+  coherence:
+    title:
+      es: "Coherencia"
+      en: "Coherence"
+  model_validity:
+    title:
+      es: "Validez"
+      en: "Validity"
+  graph_reading:
+    title:
+      es: "Gráfica"
+      en: "Graph"
+  likely_errors:
+    title:
+      es: "Errores"
+      en: "Errors"
+  next_step:
+    title:
+      es: "Siguiente Paso"
+      en: "Next Step"
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [beta, B, V, dp, dV]
+  formulas: [compresibilidad_def, modulo_volumetrico_def]
+
+targets:
+  beta:
+    summary_rules:
+      - id: beta-val
+        when: beta > 0
+        status: success
+        text:
+          es: "La compresibilidad [[beta]] indica la sensibilidad del fluido ante cambios de presión externa."
+          en: "Compressibility [[beta]] indicates the fluid's sensitivity to external pressure changes."
+    physical_reading_rules:
+      - id: beta-phys
+        when: beta < 1e-9
+        status: success
+        text:
+          es: "Dado que el valor es muy bajo, el fluido se comporta como casi incompresible, resistiendo la deformación."
+          en: "Since the value is very low, the fluid behaves as almost incompressible, resisting deformation."
+    coherence_rules:
+      - id: beta-coh
+        when: beta > 0
+        status: success
+        text:
+          es: "Es coherente que la compresibilidad sea positiva, indicando una respuesta elástica natural del medio."
+          en: "It is coherent that compressibility is positive, indicating a natural elastic response of the medium."
+    model_validity_rules:
+      - id: beta-valid
+        when: beta > 1e-12
+        status: success
+        text:
+          es: "Válido para un modelo lineal siempre que la deformación total no exceda el límite elástico del fluido."
+          en: "Valid for a linear model as long as total deformation does not exceed the fluid's elastic limit."
+    graph_rules:
+      - id: beta-graph
+        when: beta > 0
+        status: success
+        text:
+          es: "Observe cómo en el gráfico la pendiente de la curva de contracción aumenta con el valor de beta."
+          en: "Observe how in the graph the slope of the contraction curve increases with the beta value."
+    likely_errors:
+      - id: beta-err-neg
+        when: beta < 0
+        status: error
+        text:
+          es: "Error: El alumno suele confundir el signo. Una compresibilidad negativa implicaría expansión al comprimir."
+          en: "Error: The student often confuses the sign. A negative compressibility would imply expansion when compressing."
+    next_step_rules:
+      - id: beta-next
+        when: beta > 0
+        status: info
+        text:
+          es: "Utilice este valor para estimar la velocidad del sonido en el medio o calcular el módulo volumétrico B."
+          en: "Use this value to estimate the speed of sound in the medium or calculate the bulk modulus B."
+
+  B:
+    summary_rules:
+      - id: b-val
+        when: B > 0
+        status: success
+        text:
+          es: "El módulo volumétrico [[B]] indica la rigidez del fluido frente a la compresión tridimensional."
+          en: "The bulk modulus [[B]] indicates the fluid's stiffness against three-dimensional compression."
+    physical_reading_rules:
+      - id: b-phys
+        when: B > 1e8
+        status: success
+        text:
+          es: "Debido a que el módulo es elevado, se requieren presiones inmensas para lograr cambios de volumen notables."
+          en: "Because the modulus is high, immense pressures are required to achieve noticeable volume changes."
+    coherence_rules:
+      - id: b-coh
+        when: B > 0
+        status: success
+        text:
+          es: "El valor de B es consistente con el recíproco de la compresibilidad beta medida experimentalmente."
+          en: "The value of B is consistent with the reciprocal of the experimentally measured compressibility beta."
+    model_validity_rules:
+      - id: b-valid
+        when: B > 0
+        status: success
+        text:
+          es: "El modelo lineal asume que B es constante, lo cual es una buena aproximación para líquidos comunes."
+          en: "The linear model assumes B is constant, which is a good approximation for common liquids."
+    graph_rules:
+      - id: b-graph
+        when: B > 0
+        status: success
+        text:
+          es: "La rigidez del fluido se manifiesta gráficamente como una menor pendiente en la curva de deformación."
+          en: "The fluid's stiffness manifests graphically as a lower slope in the deformation curve."
+    likely_errors:
+      - id: b-err-low
+        when: B < 1e5
+        status: warning
+        text:
+          es: "Evite confundir el módulo B con la presión absoluta; B mide la resistencia al cambio, no el estado."
+          en: "Avoid confusing the modulus B with absolute pressure; B measures resistance to change, not state."
+    next_step_rules:
+      - id: b-next
+        when: B > 0
+        status: info
+        text:
+          es: "Compare este valor con otros fluidos para decidir cuál es mejor para un sistema de transmisión de potencia."
+          en: "Compare this value with other fluids to decide which is better for a power transmission system."
+
+  dp:
+    summary_rules:
+      - id: dp-val
+        when: dp > 0
+        status: success
+        text:
+          es: "El incremento de presión [[dp]] indica la fuerza motriz que provoca la contracción del fluido."
+          en: "The pressure increment [[dp]] indicates the driving force that causes the fluid's contraction."
+    physical_reading_rules:
+      - id: dp-phys
+        when: dp > 0
+        status: success
+        text:
+          es: "Como la presión aumenta, las moléculas del fluido son obligadas a ocupar un espacio más reducido."
+          en: "As pressure increases, the fluid molecules are forced to occupy a smaller space."
+    coherence_rules:
+      - id: dp-coh
+        when: dp > 0
+        status: success
+        text:
+          es: "Carga de presión coherente con la capacidad elástica del sistema y los límites del recipiente."
+          en: "Pressure load coherent with the system's elastic capacity and the container's limits."
+    model_validity_rules:
+      - id: dp-valid
+        when: dp < 1e8
+        status: success
+        text:
+          es: "Límite de validez: Para presiones extremas, el modelo lineal puede requerir correcciones de gas real."
+          en: "Validity limit: For extreme pressures, the linear model may require real gas corrections."
+    graph_rules:
+      - id: dp-graph
+        when: dp > 0
+        status: success
+        text:
+          es: "El incremento de presión se visualiza como el eje horizontal del gráfico de respuesta volumétrica."
+          en: "The pressure increment is visualized as the horizontal axis of the volumetric response graph."
+    likely_errors:
+      - id: dp-err-abs
+        when: dp > 0
+        status: info
+        text:
+          es: "No olvide tomar la diferencia entre presión final e inicial, no crea que se usa la presión absoluta."
+          en: "Do not forget to take the difference between final and initial pressure, do not believe absolute pressure is used."
+    next_step_rules:
+      - id: dp-next
+        when: dp > 0
+        status: info
+        text:
+          es: "Verifique si el incremento de presión supera la resistencia mecánica de las tuberías o tanques."
+          en: "Verify if the pressure increment exceeds the mechanical strength of the pipes or tanks."
+
+  dV:
+    summary_rules:
+      - id: dv-val
+        when: dV != 0
+        status: success
+        text:
+          es: "La variación de volumen [[dV]] indica el resultado geométrico final de la compresión del fluido."
+          en: "The volume variation [[dV]] indicates the final geometric result of the fluid compression."
+    physical_reading_rules:
+      - id: dv-phys
+        when: dV < 0
+        status: success
+        text:
+          es: "Debido a la carga de presión, el fluido ha experimentado una reducción neta de su espacio ocupado."
+          en: "Due to the pressure load, the fluid has experienced a net reduction in its occupied space."
+    coherence_rules:
+      - id: dv-coh
+        when: dV < 0
+        status: success
+        text:
+          es: "El signo negativo es consistente con una contracción, cumpliendo con la ley fundamental elástica."
+          en: "The negative sign is consistent with a contraction, fulfilling the fundamental elastic law."
+    model_validity_rules:
+      - id: dv-valid
+        when: abs(dV) < 0.1 * V
+        status: success
+        text:
+          es: "Válido mientras la deformación relativa sea pequeña; de lo contrario, el fluido cambia sus propiedades."
+          en: "Valid as long as relative deformation is small; otherwise, the fluid changes its properties."
+    graph_rules:
+      - id: dv-graph
+        when: dV < 0
+        status: success
+        text:
+          es: "La magnitud del cambio de volumen se representa como el desplazamiento vertical en la curva del gráfico."
+          en: "The magnitude of the volume change is represented as the vertical displacement on the graph's curve."
+    likely_errors:
+      - id: dv-err-pos
+        when: dV > 0
+        status: error
+        text:
+          es: "Error: Si el volumen aumenta al presionar, probablemente olvidó el signo negativo en la fórmula."
+          en: "Error: If volume increases when pressing, you likely forgot the negative sign in the formula."
+    next_step_rules:
+      - id: dv-next
+        when: dV < 0
+        status: info
+        text:
+          es: "Calcule el volumen final sumando dV al volumen inicial para obtener el estado final del sistema."
+          en: "Calculate the final volume by adding dV to the initial volume to obtain the system's final state."

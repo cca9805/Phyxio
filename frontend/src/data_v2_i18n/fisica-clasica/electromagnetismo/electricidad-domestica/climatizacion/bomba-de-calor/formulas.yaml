@@ -1,0 +1,295 @@
+version: 2
+id: bomba-de-calor-domestica
+leaf_id: bomba-de-calor
+nombre:
+  es: Ecuaciones de la bomba de calor
+  en: Heat pump equations
+formulas:
+- id: cop_definicion
+  title:
+    es: Definición de COP
+    en: COP definition
+  description:
+    es: Relación entre el calor útil entregado y el trabajo eléctrico consumido.
+    en: Ratio between useful heat delivered and electric work consumed.
+  equation: cop = q_calor / w_elec
+  latex: '[[cop]] = \frac{[[q_calor]]}{[[w_elec]]}'
+  rearrangements:
+  - target: cop
+    equation: cop = q_calor / w_elec
+    latex: '[[cop]] = \frac{[[q_calor]]}{[[w_elec]]}'
+  - target: q_calor
+    equation: q_calor = cop * w_elec
+    latex: '[[q_calor]] = [[cop]] * [[w_elec]]'
+  - target: w_elec
+    equation: w_elec = q_calor / cop
+    latex: '[[w_elec]] = \frac{[[q_calor]]}{[[cop]]}'
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: Define cuántas unidades de energía térmica movemos por cada unidad de energía eléctrica pagada.
+    en: Defines how many thermal energy units we move for each paid electric energy unit.
+  constraints: Válido para ciclos cerrados de compresión. Ignora pérdidas por transporte externo.
+  validity:
+    es: Universal para máquinas térmicas de bombeo. Limitado por el ciclo de Carnot.
+    en: Universal for heat pump machines. Limited by the Carnot cycle.
+  dimension_check: '[1] = [L^2 M T^-2] / [L^2 M T^-2]. Adimensional.'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - Análisis de eficiencia
+  - Selección de equipos
+  interpretation_tags:
+  - eficiencia
+  - termodinámica
+  - ahorro
+  result_semantics:
+    target: cop
+    kind: ratio
+    sign_meaning:
+      es: Siempre positivo.
+      en: Always positive.
+    absolute_value_meaning:
+      es: Grado de multiplicación energética.
+      en: Degree of energy multiplication.
+  domain_checks:
+  - condition: cop >= 1
+    message:
+      es: El COP debe ser al menos 1 (límite de estufa eléctrica).
+      en: COP must be at least 1 (electric heater limit).
+  coherence_checks:
+  - condition: cop < 10
+    message:
+      es: Un COP superior a 10 es físicamente improbable en condiciones residenciales.
+      en: A COP above 10 is physically unlikely in residential conditions.
+  graph_implications: Determina la pendiente de la curva de calor frente a trabajo.
+  pedagogical_triggers:
+  - violación de segunda ley
+  - confusión con rendimiento térmico
+- id: consumo_equivalente
+  title:
+    es: Consumo eléctrico equivalente
+    en: Equivalent electric consumption
+  description:
+    es: Calcula la energía eléctrica necesaria para cubrir una demanda térmica específica.
+    en: Calculates the electric energy needed to cover a specific thermal demand.
+  equation: e_elec = q_demanda / cop
+  latex: '[[e_elec]] = \frac{[[q_demanda]]}{[[cop]]}'
+  rearrangements:
+  - target: e_elec
+    equation: e_elec = q_demanda / cop
+    latex: '[[e_elec]] = \frac{[[q_demanda]]}{[[cop]]}'
+  - target: q_demanda
+    equation: q_demanda = e_elec * cop
+    latex: '[[q_demanda]] = [[e_elec]] * [[cop]]'
+  - target: cop
+    equation: cop = q_demanda / e_elec
+    latex: '[[cop]] = \frac{[[q_demanda]]}{[[e_elec]]}'
+  category: derived
+  relation_type: average_relation
+  physical_meaning:
+    es: Traduce la necesidad de calor del edificio en consumo real de red.
+    en: Translates the building's heat need into real grid consumption.
+  constraints: Asume que el COP es el rendimiento estacional medio (SCOP).
+  validity:
+    es: Válido para periodos de tiempo donde la temperatura exterior se mantenga estable en promedio.
+    en: Valid for time periods where the average outdoor temperature remains stable.
+  dimension_check: '[L^2 M T^-2] = [L^2 M T^-2] / [1]. Coherente.'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - Facturación
+  - Previsión de gasto
+  interpretation_tags:
+  - economía
+  - consumo
+  - balance
+  result_semantics:
+    target: e_elec
+    kind: energy
+    sign_meaning:
+      es: Gasto de energía.
+      en: Energy expenditure.
+    absolute_value_meaning:
+      es: Cantidad de electricidad comprada.
+      en: Amount of electricity purchased.
+  domain_checks:
+  - condition: e_elec <= q_demanda
+    message:
+      es: El consumo debe ser menor o igual a la demanda si el COP es >= 1.
+      en: Consumption must be less than or equal to demand if COP is >= 1.
+  coherence_checks:
+  - condition: e_elec > 0
+    message:
+      es: El consumo no puede ser negativo.
+      en: Consumption cannot be negative.
+  graph_implications: Determina el punto de trabajo en el eje de consumo.
+  pedagogical_triggers:
+  - error de dimensionado
+  - mal aislamiento
+- id: ahorro_relativo
+  title:
+    es: Ahorro relativo frente a resistiva
+    en: Relative savings vs resistive
+  description:
+    es: Porcentaje de energía eléctrica ahorrada al comparar con un sistema de COP = 1.
+    en: Percentage of electric energy saved when comparing with a COP = 1 system.
+  equation: ahorro = 1 - 1 / cop
+  latex: '[[ahorro]] = 1 - \frac{1}{[[cop]]}'
+  rearrangements:
+  - target: ahorro
+    equation: ahorro = 1 - 1 / cop
+    latex: '[[ahorro]] = 1 - \frac{1}{[[cop]]}'
+  - target: cop
+    equation: cop = 1 / (1 - ahorro)
+    latex: '[[cop]] = \frac{1}{1 - [[ahorro]]}'
+  category: derived
+  relation_type: average_relation
+  physical_meaning:
+    es: Cuantifica la ventaja competitiva de la bomba de calor.
+    en: Quantifies the competitive advantage of the heat pump.
+  constraints: 'Sistema de referencia: calefacción eléctrica por resistencia.'
+  validity:
+    es: Siempre válido para COP > 0.
+    en: Always valid for COP > 0.
+  dimension_check: '[1] = 1 - 1/[1]. Adimensional.'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - Estudios de rentabilidad
+  interpretation_tags:
+  - ahorro
+  - eficiencia
+  result_semantics:
+    target: ahorro
+    kind: ratio
+    sign_meaning:
+      es: Positivo para ahorro real.
+      en: Positive for real savings.
+    absolute_value_meaning:
+      es: Fracción de energía evitada.
+      en: Fraction of avoided energy.
+  domain_checks:
+  - condition: ahorro < 1
+    message:
+      es: El ahorro nunca puede ser del 100% (siempre hay consumo eléctrico).
+      en: Savings can never be 100% (there is always electric consumption).
+  coherence_checks:
+  - condition: ahorro > 0
+    message:
+      es: Si el ahorro es negativo, la bomba de calor es menos eficiente que una estufa.
+      en: If savings are negative, the heat pump is less efficient than a heater.
+  graph_implications: Se visualiza como la brecha entre el consumo real y el resistivo.
+  pedagogical_triggers:
+  - error de base de comparación
+- id: facturacion_total
+  title:
+    es: Coste económico total
+    en: Total economic cost
+  description:
+    es: Traduce el consumo de energía en gasto monetario directo.
+    en: Translates energy consumption into direct monetary expenditure.
+  equation: coste = e_elec * precio_kwh
+  latex: '[[coste]] = [[e_elec]] * [[precio_kwh]]'
+  rearrangements:
+  - target: coste
+    equation: coste = e_elec * precio_kwh
+    latex: '[[coste]] = [[e_elec]] * [[precio_kwh]]'
+  - target: e_elec
+    equation: e_elec = coste / precio_kwh
+    latex: '[[e_elec]] = \frac{[[coste]]}{[[precio_kwh]]}'
+  category: derived
+  relation_type: average_relation
+  physical_meaning:
+    es: Convierte unidades de energía en unidades monetarias.
+    en: Converts energy units into monetary units.
+  constraints: Precio unitario constante durante el periodo.
+  validity:
+    es: Válido para tarifas fijas o promedios ponderados.
+    en: Valid for fixed rates or weighted averages.
+  dimension_check: '[EUR] = [J] * [EUR/J]. Coherente.'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - Presupuesto
+  - Economía doméstica
+  interpretation_tags:
+  - dinero
+  - economía
+  result_semantics:
+    target: coste
+    kind: currency
+    sign_meaning:
+      es: Gasto.
+      en: Expenditure.
+    absolute_value_meaning:
+      es: Cantidad de euros a pagar.
+      en: Amount of euros to pay.
+  domain_checks:
+  - condition: coste >= 0
+    message:
+      es: El coste no puede ser negativo.
+      en: Cost cannot be negative.
+  coherence_checks:
+  - condition: coste < 10000
+    message:
+      es: Un coste mensual superior a 10.000 EUR es anómalo para una vivienda.
+      en: A monthly cost above 10,000 EUR is anomalous for a home.
+  graph_implications: Factor de escala vertical en gráficos económicos.
+  pedagogical_triggers:
+  - error de conversión de unidades
+- id: balance_primera_ley
+  title:
+    es: Balance de energía (1ª Ley)
+    en: Energy balance (1st Law)
+  description:
+    es: Establece que el calor entregado es la suma del trabajo eléctrico y el calor ambiental.
+    en: States that the heat delivered is the sum of the electrical work and the ambient heat.
+  equation: q_calor = w_elec + q_ambiente
+  latex: '[[q_calor]] = [[w_elec]] + [[q_ambiente]]'
+  rearrangements:
+  - target: q_ambiente
+    equation: q_ambiente = q_calor - w_elec
+    latex: '[[q_ambiente]] = [[q_calor]] - [[w_elec]]'
+  category: fundamental
+  relation_type: balance
+  physical_meaning:
+    es: Conservación de la energía en el ciclo inverso.
+    en: Energy conservation in the inverse cycle.
+  constraints: Válido para estado estacionario.
+  validity:
+    es: Universal.
+    en: Universal.
+  dimension_check: '[L^2 M T^-2] = [L^2 M T^-2] + [L^2 M T^-2]. Coherente.'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - Análisis de fuentes
+  interpretation_tags:
+  - balance
+  - termodinámica
+  result_semantics:
+    target: q_calor
+    kind: energy
+    sign_meaning:
+      es: Entrada/salida de energía.
+      en: Energy input/output.
+    absolute_value_meaning:
+      es: Flujo total.
+      en: Total flow.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: Relación lineal entre flujos.
+  pedagogical_triggers:
+  - violación de balance
+ui:
+  default_formula: cop_definicion
+  groups:
+  - title:
+      es: Balances energéticos
+      en: Energy balances
+    items:
+    - cop_definicion
+    - consumo_equivalente
+    - ahorro_relativo
+    - facturacion_total

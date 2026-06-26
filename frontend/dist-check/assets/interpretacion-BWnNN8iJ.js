@@ -1,0 +1,573 @@
+const e=`version: "1.0"
+id: interpretacion_lentes
+leaf_id: lentes
+
+nombre:
+  es: Interpretacion de lentes delgadas
+  en: Thin lens interpretation
+
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: optica
+  parent_id: optica-geometrica
+  ruta_relativa: fisica-clasica/electromagnetismo/optica/optica-geometrica/lentes
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: "Interpretación"
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    priority:
+      - summary
+      - likely_errors
+
+dependencies:
+  formulas:
+    - ecuacion_lente_delgada
+    - aumento_lateral
+    - ecuacion_fabricante_lentes
+  magnitudes:
+    - f
+    - d_o
+    - d_i
+    - m
+    - n
+    - R1
+    - R2
+
+global_context:
+  physical_domain:
+    es: "Optica geometrica paraxial con lentes delgadas"
+    en: "Paraxial geometrical optics with thin lenses"
+  axis_convention:
+    es: "Eje optico horizontal, luz de izquierda a derecha. Distancias positivas en el sentido de propagacion."
+    en: "Horizontal optical axis, light left to right. Positive distances in the direction of propagation."
+  standard_assumptions:
+    - "Lente delgada (espesor despreciable)"
+    - "Aproximacion paraxial"
+    - "Medio homogeneo (aire) a ambos lados"
+  standard_warnings:
+    - "Si d_o se acerca a f, d_i diverge"
+    - "La convencion de signos debe respetarse estrictamente"
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: "Lectura física"
+      en: "Physical reading"
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: "Validez del modelo"
+      en: "Model validity"
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: "Lectura del gráfico"
+      en: "Graph reading"
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: "Errores probables"
+      en: "Likely errors"
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: "Siguiente paso"
+      en: "Next step"
+
+targets:
+  d_i:
+    magnitude_type: distance
+    semantic_role:
+      es: "Posicion de la imagen formada por la lente"
+      en: "Position of the image formed by the lens"
+    summary_rules:
+      - id: di_summary_real
+        when: "d_i > 0"
+        status: ok
+        text:
+          es: "[[d_i]] positivo indica imagen real formada al lado opuesto del objeto. Esta imagen puede proyectarse en pantalla."
+          en: "[[d_i]] positive indicates a real image formed on the opposite side from the object. This image can be projected onto a screen."
+      - id: di_summary_virtual
+        when: "d_i < 0"
+        status: ok
+        text:
+          es: "[[d_i]] negativo indica imagen virtual del mismo lado que el objeto. Solo se observa mirando a traves de la lente."
+          en: "[[d_i]] negative indicates a virtual image on the same side as the object. It can only be observed by looking through the lens."
+      - id: di_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[d_i]] indica la posicion donde la lente forma la imagen. Su signo depende de la relacion entre [[d_o]] y [[f]]."
+          en: "[[d_i]] indicates the position where the lens forms the image. Its sign depends on the relationship between [[d_o]] and [[f]]."
+    physical_reading_rules:
+      - id: di_reading_convergent
+        when: "d_i > 0 and f > 0"
+        status: ok
+        text:
+          es: "La lente convergente forma imagen real porque [[d_o]] supera [[f]]. Los rayos convergen efectivamente detras de la lente."
+          en: "The converging lens forms a real image because [[d_o]] exceeds [[f]]. Rays effectively converge behind the lens."
+      - id: di_reading_divergent
+        when: "f < 0"
+        status: ok
+        text:
+          es: "La lente divergente siempre produce imagen virtual con objeto real: los rayos divergen y la imagen aparece del lado del objeto."
+          en: "The diverging lens always produces a virtual image with a real object: rays diverge and the image appears on the object side."
+      - id: di_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "La posicion de la imagen depende del equilibrio entre la potencia optica (inverso de [[f]]) y la posicion del objeto [[d_o]]."
+          en: "The image position depends on the balance between optical power (inverse of [[f]]) and the object position [[d_o]]."
+    coherence_rules:
+      - id: di_coherence_divergent_positive
+        when: "f < 0 and d_i > 0"
+        status: error
+        text:
+          es: "Incoherencia: lente divergente no puede producir d_i positivo con objeto real. Revisar datos."
+          en: "Incoherence: diverging lens cannot produce positive d_i with a real object. Check data."
+      - id: di_coherence_huge
+        when: "d_o > 0 and d_i > 100 * d_o"
+        status: warning
+        text:
+          es: "[[d_i]] extremadamente grande: el objeto esta muy cerca del foco. Resultado inestable."
+          en: "[[d_i]] extremely large: the object is very close to the focus. Unstable result."
+      - id: di_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Signo y magnitud de [[d_i]] son coherentes con la configuracion de lente y objeto."
+          en: "Sign and magnitude of [[d_i]] are coherent with the lens and object configuration."
+    model_validity_rules:
+      - id: di_validity_paraxial
+        when: "true"
+        status: ok
+        text:
+          es: "Modelo valido mientras los rayos formen angulos pequenos con el eje y el espesor de la lente sea despreciable frente a [[f]]."
+          en: "Model valid as long as rays form small angles with the axis and lens thickness is negligible compared to [[f]]."
+      - id: di_validity_near_focus
+        when: "d_o > 0 and d_i > 50 * f"
+        status: warning
+        text:
+          es: "Objeto muy cerca del foco: el modelo paraxial pierde precision por aberraciones."
+          en: "Object very close to the focus: the paraxial model loses precision due to aberrations."
+    graph_rules:
+      - id: di_graph_real
+        when: "d_i > 0"
+        status: ok
+        text:
+          es: "En el Svg la imagen aparece a la derecha de la lente con rayos principales convergiendo."
+          en: "In the Svg the image appears to the right of the lens with principal rays converging."
+      - id: di_graph_virtual
+        when: "d_i < 0"
+        status: ok
+        text:
+          es: "En el Svg la imagen aparece a la izquierda de la lente con prolongaciones a trazos."
+          en: "In the Svg the image appears to the left of the lens with dashed ray extensions."
+      - id: di_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "El Svg muestra la posicion de la imagen respecto a la lente y al foco."
+          en: "The Svg shows the image position relative to the lens and focus."
+    likely_errors:
+      - id: di_error_sign
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: aplicar convencion de espejos a lentes. En lentes, d_i positivo siempre es imagen real al lado opuesto."
+          en: "Common error: applying mirror convention to lenses. For lenses, positive d_i always means real image on the opposite side."
+      - id: di_error_focus
+        when: "d_o > 0 and d_i > 100 * d_o"
+        status: warning
+        text:
+          es: "El objeto esta practicamente en el foco. La imagen se desplaza rapidamente con cambios minimos de [[d_o]]."
+          en: "The object is practically at the focus. The image shifts rapidly with minimal changes in [[d_o]]."
+    next_step_rules:
+      - id: di_next_magnification
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[d_i]] conocido, calcular el aumento lateral [[m]] para determinar tamano y orientacion de la imagen."
+          en: "With [[d_i]] known, calculate the lateral magnification [[m]] to determine image size and orientation."
+
+  d_o:
+    magnitude_type: distance
+    semantic_role:
+      es: "Posicion del objeto respecto a la lente"
+      en: "Object position relative to the lens"
+    summary_rules:
+      - id: do_summary_real
+        when: "d_o > 0"
+        status: ok
+        text:
+          es: "[[d_o]] positivo indica objeto real frente a la lente. La imagen depende de la relacion entre [[d_o]] y [[f]]."
+          en: "[[d_o]] positive indicates a real object in front of the lens. The image depends on the relationship between [[d_o]] and [[f]]."
+      - id: do_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[d_o]] describe la posicion del objeto. Su valor respecto a [[f]] determina el tipo de imagen."
+          en: "[[d_o]] describes the object position. Its value relative to [[f]] determines the image type."
+    physical_reading_rules:
+      - id: do_reading_far
+        when: "d_o > 2 * f and f > 0"
+        status: ok
+        text:
+          es: "Objeto lejos del foco: imagen real, invertida y reducida, con [[d_i]] entre [[f]] y dos veces [[f]]."
+          en: "Object far from the focus: real, inverted and reduced image, with [[d_i]] between [[f]] and twice [[f]]."
+      - id: do_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "La posicion del objeto determina donde la lente refracta los rayos para formar la imagen."
+          en: "The object position determines where the lens refracts rays to form the image."
+    coherence_rules:
+      - id: do_coherence_negative
+        when: "d_o < 0"
+        status: warning
+        text:
+          es: "[[d_o]] negativo implica objeto virtual: verificar si es un sistema de lentes en serie."
+          en: "Negative [[d_o]] implies a virtual object: verify if this is a multi-lens system."
+      - id: do_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Valor de [[d_o]] coherente con objeto real frente a la lente."
+          en: "Value of [[d_o]] coherent with a real object in front of the lens."
+    model_validity_rules:
+      - id: do_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "Modelo valido mientras [[d_o]] sea mucho mayor que el espesor de la lente."
+          en: "Model valid as long as [[d_o]] is much greater than the lens thickness."
+    graph_rules:
+      - id: do_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el Svg el objeto aparece como flecha a la izquierda de la lente, a distancia [[d_o]] del centro optico."
+          en: "In the Svg the object appears as an arrow to the left of the lens, at distance [[d_o]] from the optical centre."
+    likely_errors:
+      - id: do_error_zero
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: colocar objeto en la lente (d_o cercano a cero). La ecuacion diverge y pierde sentido fisico."
+          en: "Common error: placing object at the lens (d_o near zero). The equation diverges and loses physical meaning."
+    next_step_rules:
+      - id: do_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Conocido [[d_o]], aplicar la ecuacion de la lente para obtener [[d_i]] y luego [[m]]."
+          en: "With [[d_o]] known, apply the lens equation to obtain [[d_i]] and then [[m]]."
+
+  f:
+    magnitude_type: distance
+    semantic_role:
+      es: "Distancia focal que caracteriza la potencia optica de la lente"
+      en: "Focal length characterizing the optical power of the lens"
+    summary_rules:
+      - id: f_summary_convergent
+        when: "f > 0"
+        status: ok
+        text:
+          es: "[[f]] positivo indica lente convergente. Los rayos paralelos convergen en el foco."
+          en: "[[f]] positive indicates a converging lens. Parallel rays converge at the focus."
+      - id: f_summary_divergent
+        when: "f < 0"
+        status: ok
+        text:
+          es: "[[f]] negativo indica lente divergente. Solo forma imagenes virtuales con objeto real."
+          en: "[[f]] negative indicates a diverging lens. It only forms virtual images with a real object."
+      - id: f_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[f]] resume la potencia optica de la lente. Su signo indica el tipo y su magnitud determina las distancias de imagen."
+          en: "[[f]] summarizes the optical power of the lens. Its sign indicates the type and its magnitude determines image distances."
+    physical_reading_rules:
+      - id: f_reading_short
+        when: "f > 0 and f < 0.05"
+        status: ok
+        text:
+          es: "Focal corta indica gran potencia optica, capaz de formar imagenes muy cerca de la lente."
+          en: "Short focal length indicates high optical power, capable of forming images very close to the lens."
+      - id: f_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "La distancia focal depende del indice de refraccion y los radios de curvatura segun la ecuacion del fabricante."
+          en: "The focal length depends on the refractive index and radii of curvature according to the lensmaker's equation."
+    coherence_rules:
+      - id: f_coherence_biconvex
+        when: "n > 1 and R1 > 0 and R2 < 0 and f > 0"
+        status: ok
+        text:
+          es: "Lente biconvexa con n mayor que 1: focal positiva coherente."
+          en: "Biconvex lens with n greater than 1: coherent positive focal length."
+      - id: f_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[f]] es coherente con las propiedades geometricas y materiales de la lente."
+          en: "The value of [[f]] is coherent with the geometric and material properties of the lens."
+    model_validity_rules:
+      - id: f_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "Ecuacion del fabricante valida para lentes delgadas en aire con superficies esfericas. Para lentes gruesas se requiere formalismo matricial."
+          en: "Lensmaker's equation valid for thin lenses in air with spherical surfaces. For thick lenses the matrix formalism is required."
+    graph_rules:
+      - id: f_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el Svg los focos aparecen como puntos marcados sobre el eje a distancia [[f]] del centro optico."
+          en: "In the Svg the foci appear as marked points on the axis at distance [[f]] from the optical centre."
+    likely_errors:
+      - id: f_error_sign_radii
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: confundir signos de R1 y R2 al calcular f con la ecuacion del fabricante."
+          en: "Common error: confusing R1 and R2 signs when calculating f with the lensmaker's equation."
+    next_step_rules:
+      - id: f_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[f]] conocido, colocar el objeto a distancia [[d_o]] y aplicar la ecuacion de la lente para hallar [[d_i]]."
+          en: "With [[f]] known, place the object at distance [[d_o]] and apply the lens equation to find [[d_i]]."
+
+  m:
+    magnitude_type: ratio
+    semantic_role:
+      es: "Aumento lateral de la imagen"
+      en: "Lateral magnification of the image"
+    summary_rules:
+      - id: m_summary_inverted
+        when: "m < 0"
+        status: ok
+        text:
+          es: "[[m]] negativo indica imagen invertida. Su modulo indica el factor de ampliacion o reduccion."
+          en: "[[m]] negative indicates an inverted image. Its magnitude indicates the magnification or reduction factor."
+      - id: m_summary_upright
+        when: "m > 0"
+        status: ok
+        text:
+          es: "[[m]] positivo indica imagen derecha (misma orientacion que el objeto)."
+          en: "[[m]] positive indicates an upright image (same orientation as the object)."
+      - id: m_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[m]] describe tamano y orientacion de la imagen. Su signo indica inversion y su modulo indica ampliacion."
+          en: "[[m]] describes image size and orientation. Its sign indicates inversion and its magnitude indicates magnification."
+    physical_reading_rules:
+      - id: m_reading_amplified
+        when: "m > 1 or m < -1"
+        status: ok
+        text:
+          es: "Modulo de [[m]] mayor que 1: la imagen es mas grande que el objeto."
+          en: "Magnitude of [[m]] greater than 1: the image is larger than the object."
+      - id: m_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "El aumento lateral resulta del cociente entre [[d_i]] y [[d_o]] con signo negativo."
+          en: "The lateral magnification results from the ratio of [[d_i]] to [[d_o]] with a negative sign."
+    coherence_rules:
+      - id: m_coherence_real_inverted
+        when: "d_i > 0 and m > 0"
+        status: error
+        text:
+          es: "Incoherencia: imagen real (d_i positivo) debe dar m negativo (invertida). Revisar signos."
+          en: "Incoherence: real image (positive d_i) must give negative m (inverted). Check signs."
+      - id: m_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Signo de [[m]] coherente con el tipo de imagen formada."
+          en: "Sign of [[m]] coherent with the type of image formed."
+    model_validity_rules:
+      - id: m_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "Valido en regimen paraxial. Para objetos extensos la aberracion puede distorsionar el aumento en los bordes."
+          en: "Valid in the paraxial regime. For extended objects aberration may distort magnification at the edges."
+    graph_rules:
+      - id: m_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el Svg la flecha de imagen tiene altura proporcional al modulo de [[m]] y orientacion segun su signo."
+          en: "In the Svg the image arrow has height proportional to the magnitude of [[m]] and orientation according to its sign."
+    likely_errors:
+      - id: m_error_sign
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: olvidar el signo negativo en la definicion de m, obteniendo orientacion incorrecta."
+          en: "Common error: forgetting the negative sign in the definition of m, obtaining incorrect orientation."
+    next_step_rules:
+      - id: m_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[m]] conocido, evaluar si la imagen cumple los requisitos del sistema optico (tamano y orientacion deseados)."
+          en: "With [[m]] known, evaluate whether the image meets the optical system requirements (desired size and orientation)."
+
+  n:
+    magnitude_type: ratio
+    semantic_role:
+      es: "Indice de refraccion del material de la lente"
+      en: "Refractive index of the lens material"
+    summary_rules:
+      - id: n_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[n]] describe las propiedades opticas del material. Mayor [[n]] indica mayor capacidad de desviar la luz."
+          en: "[[n]] describes the optical properties of the material. Higher [[n]] indicates greater ability to bend light."
+    physical_reading_rules:
+      - id: n_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "El indice de refraccion determina la potencia optica de la lente junto con los radios de curvatura."
+          en: "The refractive index determines the optical power of the lens together with the radii of curvature."
+    coherence_rules:
+      - id: n_coherence_low
+        when: "n < 1"
+        status: error
+        text:
+          es: "Incoherencia: n menor que 1 no es fisicamente realizable para vidrios opticos."
+          en: "Incoherence: n less than 1 is not physically achievable for optical glasses."
+      - id: n_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[n]] dentro del rango tipico para vidrios opticos."
+          en: "[[n]] within the typical range for optical glasses."
+    model_validity_rules:
+      - id: n_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume n constante (sin dispersion). Para luz policromatica, n varia con la longitud de onda (aberracion cromatica)."
+          en: "The model assumes constant n (no dispersion). For polychromatic light, n varies with wavelength (chromatic aberration)."
+    graph_rules:
+      - id: n_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el Svg el indice no se representa directamente, pero afecta la forma y comportamiento de la lente mostrada."
+          en: "In the Svg the index is not directly represented, but affects the shape and behaviour of the displayed lens."
+    likely_errors:
+      - id: n_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: usar n del medio exterior en lugar del n del material de la lente en la ecuacion del fabricante."
+          en: "Common error: using the external medium n instead of the lens material n in the lensmaker's equation."
+    next_step_rules:
+      - id: n_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[n]] y los radios [[R1]] y [[R2]], calcular [[f]] usando la ecuacion del fabricante."
+          en: "With [[n]] and radii [[R1]] and [[R2]], calculate [[f]] using the lensmaker's equation."
+
+cross_checks:
+  - id: sign_consistency
+    description:
+      es: "Si d_i es positivo, m debe ser negativo (imagen real invertida)"
+      en: "If d_i is positive, m must be negative (inverted real image)"
+    condition: "(d_i > 0 and m < 0) or (d_i < 0 and m > 0)"
+    on_fail:
+      es: "Revisar la coherencia de signos entre d_i y m"
+      en: "Check sign coherence between d_i and m"
+
+error_patterns:
+  - id: mirror_convention
+    description:
+      es: "Aplicar convencion de espejos a lentes"
+      en: "Applying mirror convention to lenses"
+    detect_when: "d_i < 0 and f > 0 and d_o > f"
+    message:
+      es: "El resultado sugiere imagen virtual cuando deberia ser real. Posible mezcla de convenciones."
+      en: "The result suggests a virtual image when it should be real. Possible convention mix-up."
+
+graph_binding:
+  enabled: true
+  graph_type: Svg
+  channels:
+    - posicion_objeto
+    - posicion_imagen
+    - forma_lente
+    - tamano_flecha_imagen
+    - parametro_lente
+
+mini_graph:
+  enabled: true
+  type: Svg
+  bindings:
+    - d_o
+    - d_i
+    - f
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true
+`;export{e as default};

@@ -1,0 +1,84 @@
+const e=`id: materiales-magneticos
+nombre:
+  es: Materiales magneticos
+  en: Magnetic Materials
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: magnetismo
+parent_id: magnetismo
+ruta_relativa: fisica-clasica/electromagnetismo/magnetismo/materiales-magneticos
+orden: 299400
+type: leaf
+niveles:
+  es:
+    - BACHILLERATO
+    - UNIVERSIDAD
+  en:
+    - Upper Secondary
+    - University
+icon: 🌀
+descripcion: Respuesta magnetica lineal de materiales mediante permeabilidad, susceptibilidad y magnetizacion.
+description_en: Linear magnetic response of materials through permeability, susceptibility, and magnetization.
+tags:
+  es:
+    - magnetismo
+    - permeabilidad
+    - susceptibilidad
+    - magnetizacion
+    - materiales
+  en:
+    - magnetism
+    - permeability
+    - susceptibility
+    - magnetization
+    - materials
+prerequisitos:
+  - fisica-clasica/electromagnetismo/magnetismo/campo-magnetico
+  - fisica-clasica/electromagnetismo/magnetismo/fuentes-del-campo-magnetico/ley-de-ampere
+graficos:
+  - Coord
+physical_role:
+  es: concepto físico
+  en: physical concept
+dificultad: 3
+tiempo_estimado_min: 35
+representacion_dominante: Coord
+magnitud_dominante: mu_r
+idea_fisica_dominante:
+  es: Un material magnetico modifica el campo porque su magnetizacion se organiza bajo la accion de la intensidad magnetica aplicada.
+  en: A magnetic material modifies the field because its magnetization organizes under the applied magnetic field strength.
+pregunta_fisica_central:
+  es: ¿Como se decide si un material refuerza, debilita o concentra un campo magnetico aplicado?
+  en: How do we decide whether a material strengthens, weakens, or concentrates an applied magnetic field?
+error_conceptual_dominante:
+  es: Confundir campo magnetico total con intensidad magnetica aplicada, como si el material no aportara respuesta propia.
+  en: Confusing total magnetic field with applied magnetic field strength, as if the material had no internal response.
+criterio_de_aplicabilidad:
+  es: El modelo lineal aplica cuando la respuesta es reversible, homogenea y lejos de saturacion o histeresis apreciable.
+  en: The linear model applies when the response is reversible, homogeneous, and far from appreciable saturation or hysteresis.
+criterio_de_fallo_del_modelo:
+  es: El modelo falla si aparecen saturacion, remanencia, ciclos de histeresis o calentamiento por perdidas magneticas.
+  en: The model fails when saturation, remanence, hysteresis loops, or heating by magnetic losses appear.
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 2
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

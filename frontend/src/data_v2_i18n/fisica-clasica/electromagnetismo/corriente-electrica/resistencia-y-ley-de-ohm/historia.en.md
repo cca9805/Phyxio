@@ -1,0 +1,19 @@
+## Historical problem
+
+In the early 19th century, the understanding of electricity was purely qualitative and fragmented. Following the invention of the Voltaic pile in the year 1800, scientists had a direct [[intensidad]] source for the first time but lacked a mathematical language to describe its behavior. This was the central physical problem of the era: what rule governs the movement of charge through a conductor? It was known that some materials conducted "better" than others, but there was no way to quantify that difference or predict how much [[intensidad]] would flow by connecting a wire of a given length. Electricity was treated more as a mysterious fluid with magical properties than as a physical quantity subject to nature's laws.
+
+## Prior conceptual difficulty
+
+The great conceptual difficulty for Ohm's contemporaries was the lack of accepted mechanical or thermal analogies for electrical phenomena. In a scientific community dominated by German "Naturphilosophie," which preferred descriptive and romantic views of nature, the idea of applying mathematical calculation rigor to an invisible phenomenon like electricity was perceived as an unnecessary abstraction lacking a real physical basis. There was deep confusion between [[tension]] and [[intensidad]] concepts; many believed that the "force" of electricity depended solely on the source and not on the path it had to travel. Introducing the notion of "[[resistencia]]" as a measurable and extrinsic property was an intellectual leap most were not prepared to take.
+
+## What changed
+
+In 1826, Georg Simon Ohm, a humble mathematics and physics teacher, changed the paradigm forever by applying the rigorous experimental method. Inspired by Joseph Fourier's work on heat propagation, Ohm suspected that charge flow must follow laws similar to thermal flow. Using a thermocouple to ensure constant [[tension]] (avoiding chemical pile fluctuations) and wires of different sections and materials, he demonstrated that [[intensidad]] intensity was directly proportional to [[tension]] and inversely proportional to wire length. In 1827 he published his major work, "The Galvanic Circuit Investigated Mathematically," where [[resistencia]] was defined for the first time as a fundamental quantity, providing electrodynamics with a predictive structure.
+
+## Impact on physics
+
+Ohm's Law's impact was tectonic, though not immediate. By providing a robust calculation tool, it enabled the birth of modern electrical engineering. It facilitated the design of the first transatlantic telegraph networks, where controlling [[resistencia]] in thousands of kilometers of cable was a matter of absolute success or failure. Although Ohm was initially ridiculed and forced to resign from his teaching position in Berlin due to his colleagues' misunderstanding, his work eventually became recognized by the Royal Society of London. His mathematical approach laid the groundwork for later scientists like James Clerk Maxwell and Gustav Kirchhoff to formalize the complete theory of electromagnetism, making Ohm one of the founding fathers of the technological age.
+
+## Connection with modern physics
+
+Today, Ohm's Law's validity remains the most important first-order approximation in electronics. However, modern physics has taken this concept to scales Ohm never imagined. Through quantum mechanics and the band model, we understand that [[resistencia]] arises from the scattering of electron wave functions by lattice ions. We explore frontiers such as superconductivity, where electron pairing (Cooper pairs) allows for exactly zero [[resistencia]], and nanoscale electronics, where transport becomes "ballistic" and Ohm's Law must be replaced by the Landauer formalism. Despite these advances, the ohm (Ω) remains the universal unit reminding us that the elegance of a simple linear relationship was the key that opened the door to understanding electrical energy.

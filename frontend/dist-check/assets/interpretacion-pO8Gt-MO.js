@@ -1,0 +1,218 @@
+const e=`version: 2
+id: interpretacion-critico
+leaf_id: critico
+nombre:
+  es: Interpretacion de amortiguamiento critico
+  en: Critical damping interpretation
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: oscilaciones
+  parent_id: amortiguamiento
+  ruta_relativa: fisica-clasica/mecanica/oscilaciones/amortiguamiento/critico
+dependencies:
+  formulas: [condicion_critica, tiempo_caracteristico, solucion_critica]
+  magnitudes: [omega0, gamma, tau, x, t, A]
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+result_blocks:
+  summary:
+    title: { es: Resumen fisico, en: Physical summary }
+  physical_reading:
+    title: { es: Lectura causal, en: Causal reading }
+  coherence:
+    title: { es: Coherencia del regimen, en: Regime coherence }
+  model_validity:
+    title: { es: Validez del modelo, en: Model validity }
+  graph_reading:
+    title: { es: Lectura de la curva, en: Curve reading }
+  likely_errors:
+    title: { es: Errores probables, en: Likely errors }
+  next_step:
+    title: { es: Siguiente decision, en: Next decision }
+targets:
+  gamma: &gamma_block
+    summary_rules:
+      - id: gamma_summary
+        when: "true"
+        status: info
+        text: { es: "[[gamma]] resume la intensidad disipativa que decide si el sistema queda por debajo, en, o por encima del umbral critico.", en: "[[gamma]] summarizes dissipative intensity and decides whether the system lies below, at, or above the critical threshold." }
+    physical_reading_rules:
+      - id: gamma_phys
+        when: "true"
+        status: info
+        text: { es: "Si [[gamma]] iguala [[omega0]], el retorno evita oscilacion sostenida porque la perdida de energia compensa justo la tendencia a cruzar el equilibrio.", en: "If [[gamma]] equals [[omega0]], return avoids sustained oscillation because energy loss exactly balances the tendency to cross equilibrium." }
+    coherence_rules:
+      - id: gamma_coh
+        when: "true"
+        status: ok
+        text: { es: "[[gamma]] debe ser positivo, comparable en unidades a [[omega0]] y cercano a ese valor para sostener la lectura critica.", en: "[[gamma]] must be positive, comparable in units to [[omega0]], and close to that value to support the critical reading." }
+    model_validity_rules:
+      - id: gamma_valid
+        when: "true"
+        status: ok
+        text: { es: "La interpretacion es valida si el amortiguamiento puede tratarse como viscoso lineal y constante durante el transitorio.", en: "The interpretation is valid if damping can be treated as linear viscous damping and constant during the transient." }
+    graph_rules:
+      - id: gamma_graph
+        when: "true"
+        status: info
+        text: { es: "En la grafica Coord, ajustar [[gamma]] hacia [[omega0]] elimina cruces oscilatorios visibles en [[x]].", en: "In the Coord graph, tuning [[gamma]] toward [[omega0]] removes visible oscillatory crossings in [[x]]." }
+    likely_errors:
+      - id: gamma_err
+        when: "true"
+        status: warning
+        text: { es: "Error comun: creer que mas [[gamma]] siempre mejora el diseño, olvidando que exceso de amortiguamiento puede hacerlo lento.", en: "Common mistake: believing that more [[gamma]] always improves design, forgetting that excessive damping may make it slow." }
+    next_step_rules:
+      - id: gamma_next
+        when: "true"
+        status: tip
+        text: { es: "Comparar ahora [[gamma]] con [[omega0]] y decidir si el problema pide clasificacion, tiempo de respuesta o valor de [[x]].", en: "Next compare [[gamma]] with [[omega0]] and decide whether the problem asks for classification, response time, or [[x]] value." }
+
+  omega0:
+    summary_rules:
+      - id: omega0_summary
+        when: "true"
+        status: info
+        text: { es: "[[omega0]] fija la escala natural del sistema y define con que rapidez podria responder si el amortiguamiento queda en frontera critica.", en: "[[omega0]] sets the system natural scale and defines how fast it could respond if damping lies at the critical boundary." }
+    physical_reading_rules:
+      - id: omega0_phys
+        when: "true"
+        status: info
+        text: { es: "A mayor [[omega0]], menor [[tau]] y mas rapida la caida de [[x]], porque la escala interna comprime el transitorio.", en: "Larger [[omega0]] gives smaller [[tau]] and faster decay of [[x]] because the internal scale compresses the transient." }
+    coherence_rules:
+      - id: omega0_coh
+        when: "true"
+        status: ok
+        text: { es: "[[omega0]] debe ser positiva y compartir dimension temporal inversa con [[gamma]].", en: "[[omega0]] must be positive and share inverse-time dimension with [[gamma]]." }
+    model_validity_rules:
+      - id: omega0_valid
+        when: "true"
+        status: ok
+        text: { es: "La lectura es valida si masa y rigidez efectivas permanecen constantes y no hay forzamiento externo dominante.", en: "The reading is valid if effective mass and stiffness remain constant and no dominant external forcing is present." }
+    graph_rules:
+      - id: omega0_graph
+        when: "true"
+        status: info
+        text: { es: "En la curva, aumentar [[omega0]] comprime el eje temporal de la convergencia de [[x]].", en: "On the curve, increasing [[omega0]] compresses the time axis of [[x]] convergence." }
+    likely_errors:
+      - id: omega0_err
+        when: "true"
+        status: warning
+        text: { es: "Error comun: confundir [[omega0]] con frecuencia en hertz o usarla sin comparar primero con [[gamma]].", en: "Common mistake: confusing [[omega0]] with frequency in hertz or using it before comparison with [[gamma]]." }
+    next_step_rules:
+      - id: omega0_next
+        when: "true"
+        status: tip
+        text: { es: "Traducir [[omega0]] a [[tau]] para conectar el parametro con una escala temporal observable.", en: "Translate [[omega0]] into [[tau]] to connect the parameter with an observable time scale." }
+
+  tau:
+    summary_rules:
+      - id: tau_summary
+        when: "true"
+        status: info
+        text: { es: "[[tau]] resume la escala temporal de asentamiento y convierte el parametro [[omega0]] en tiempo interpretable.", en: "[[tau]] summarizes the settling time scale and converts parameter [[omega0]] into interpretable time." }
+    physical_reading_rules:
+      - id: tau_phys
+        when: "true"
+        status: info
+        text: { es: "Un [[tau]] pequeño indica retorno rapido porque la escala natural del sistema es alta.", en: "A small [[tau]] indicates fast return because the system natural scale is high." }
+    coherence_rules:
+      - id: tau_coh
+        when: "true"
+        status: ok
+        text: { es: "[[tau]] debe ser positivo y disminuir cuando aumenta [[omega0]].", en: "[[tau]] must be positive and decrease as [[omega0]] increases." }
+    model_validity_rules:
+      - id: tau_valid
+        when: "true"
+        status: ok
+        text: { es: "Es valido como reloj de referencia si domina un unico modo critico lineal.", en: "It is valid as a reference clock if one linear critical mode dominates." }
+    graph_rules:
+      - id: tau_graph
+        when: "true"
+        status: info
+        text: { es: "En la grafica, marcas en multiplos de [[tau]] muestran la rapidez de asentamiento de [[x]].", en: "In the graph, marks at multiples of [[tau]] show the settling speed of [[x]]." }
+    likely_errors:
+      - id: tau_err
+        when: "true"
+        status: warning
+        text: { es: "Error comun: tomar [[tau]] como periodo de oscilacion, aunque el regimen critico no describe ciclos repetidos.", en: "Common mistake: taking [[tau]] as an oscillation period, although the critical regime does not describe repeated cycles." }
+    next_step_rules:
+      - id: tau_next
+        when: "true"
+        status: tip
+        text: { es: "Usar [[tau]] para elegir tiempos de evaluacion y criterio practico de asentamiento.", en: "Use [[tau]] to choose evaluation times and a practical settling criterion." }
+
+  x:
+    summary_rules:
+      - id: x_summary
+        when: "true"
+        status: info
+        text: { es: "[[x]] es la salida temporal que revela si el retorno es rapido, monotono y compatible con amortiguamiento critico.", en: "[[x]] is the time output that reveals whether return is fast, monotonic, and compatible with critical damping." }
+    physical_reading_rules:
+      - id: x_phys
+        when: "true"
+        status: info
+        text: { es: "La forma de [[x]] combina escala inicial [[A]], tiempo [[t]] y decaimiento controlado por [[omega0]].", en: "The shape of [[x]] combines initial scale [[A]], time [[t]], and decay controlled by [[omega0]]." }
+    coherence_rules:
+      - id: x_coh
+        when: "true"
+        status: ok
+        text: { es: "La salida debe tender al equilibrio sin oscilacion persistente cuando el modelo critico ideal es valido.", en: "The output should approach equilibrium without persistent oscillation when the ideal critical model is valid." }
+    model_validity_rules:
+      - id: x_valid
+        when: "true"
+        status: ok
+        text: { es: "La curva es valida para parametros constantes, amplitudes lineales y ausencia de forzamiento dominante.", en: "The curve is valid for constant parameters, linear amplitudes, and no dominant forcing." }
+    graph_rules:
+      - id: x_graph
+        when: "true"
+        status: info
+        text: { es: "En la grafica Coord, [[x]] debe mostrar caida amortiguada hacia cero sin rebote sostenido.", en: "In the Coord graph, [[x]] should show damped decay toward zero without sustained rebound." }
+    likely_errors:
+      - id: x_err
+        when: "true"
+        status: warning
+        text: { es: "Error comun: interpretar cualquier pequeño sobrepaso numerico como prueba de subamortiguamiento real.", en: "Common mistake: interpreting any tiny numerical overshoot as proof of real underdamping." }
+    next_step_rules:
+      - id: x_next
+        when: "true"
+        status: tip
+        text: { es: "Comparar [[x]] en varios tiempos con [[tau]] para justificar el tiempo de respuesta de diseño.", en: "Compare [[x]] at several times with [[tau]] to justify design response time." }
+
+  A:
+    summary_rules:
+      - id: A_summary
+        when: "true"
+        status: info
+        text: { es: "[[A]] fija la escala inicial de la respuesta y multiplica [[x]] sin definir el regimen dinamico.", en: "[[A]] sets the initial response scale and multiplies [[x]] without defining the dynamic regime." }
+    physical_reading_rules:
+      - id: A_phys
+        when: "true"
+        status: info
+        text: { es: "Cambiar [[A]] modifica la magnitud del transitorio porque cambia la perturbacion inicial, pero no sustituye la comparacion entre [[gamma]] y [[omega0]].", en: "Changing [[A]] modifies transient magnitude because it changes the initial perturbation, but it does not replace the comparison between [[gamma]] and [[omega0]]." }
+    coherence_rules:
+      - id: A_coh
+        when: "true"
+        status: ok
+        text: { es: "[[A]] y [[x]] deben compartir unidad; si [[A]] es cero, la respuesta ideal es nula.", en: "[[A]] and [[x]] must share units; if [[A]] is zero, the ideal response is zero." }
+    model_validity_rules:
+      - id: A_valid
+        when: "true"
+        status: ok
+        text: { es: "La amplitud debe permanecer dentro del rango lineal para que la solucion critica sea aplicable.", en: "Amplitude must remain within the linear range for the critical solution to apply." }
+    graph_rules:
+      - id: A_graph
+        when: "true"
+        status: info
+        text: { es: "En la grafica, [[A]] escala verticalmente la curva de [[x]] sin cambiar su forma temporal normalizada.", en: "In the graph, [[A]] vertically scales the [[x]] curve without changing its normalized time shape." }
+    likely_errors:
+      - id: A_err
+        when: "true"
+        status: warning
+        text: { es: "Error comun: creer que una [[A]] mayor cambia por si sola la condicion critica.", en: "Common mistake: believing that larger [[A]] by itself changes the critical condition." }
+    next_step_rules:
+      - id: A_next
+        when: "true"
+        status: tip
+        text: { es: "Revisar si [[A]] mantiene el sistema en linealidad antes de confiar en la salida [[x]].", en: "Check whether [[A]] keeps the system linear before trusting output [[x]]." }
+`;export{e as default};

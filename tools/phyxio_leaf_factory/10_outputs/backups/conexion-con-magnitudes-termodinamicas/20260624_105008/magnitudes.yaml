@@ -1,0 +1,509 @@
+version: 5.0.0
+leaf: conexion-con-magnitudes-termodinamicas
+magnitudes:
+- id: funcion_particion
+  symbol: Z
+  nombre:
+    es: función de partición
+    en: partition function
+  descripcion:
+    es: Suma adimensional de pesos estadísticos que codifica los microestados accesibles.
+    en: Dimensionless sum of statistical weights encoding accessible microstates.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: statistical_quantity
+  physical_role: source_quantity
+  used_in:
+  - energia_libre_desde_particion
+  common_mistake: Tratar Z como una energía o asignarle unidades SI.
+  typical_range: Z > 0; puede variar desde valores próximos a 1 hasta números enormes.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Z no puede ser negativa porque suma pesos de Boltzmann positivos.
+      en: Z cannot be negative because it sums positive Boltzmann weights.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Z=0 haría indefinido ln(Z) y no describe un sistema canónico válido.
+      en: Z=0 would make ln(Z) undefined and does not describe a valid canonical system.
+  value_nature:
+    kind: positive_scalar
+    nonnegative_only: true
+    expected_interval: (0, +∞)
+  interpretation_role:
+    primary_for:
+    - energia_libre_helmholtz
+    secondary_for:
+    - energia_interna
+    - entropia
+    - presion
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: none
+    graph_role: microscopic_input
+  pedagogical_notes:
+    es: 'Z es el puente: no se observa como una magnitud macroscópica directa, pero genera los potenciales.'
+    en: 'Z is the bridge: it is not observed as a direct macroscopic quantity, but it generates potentials.'
+- id: temperatura
+  symbol: T
+  nombre:
+    es: temperatura absoluta
+    en: absolute temperature
+  descripcion:
+    es: Variable térmica que controla el peso relativo de los microestados.
+    en: Thermal variable controlling the relative weight of microstates.
+  unidad_si: K
+  dimension: Theta
+  is_vector: false
+  components: []
+  category: state_variable
+  physical_role: independent_variable
+  used_in:
+  - energia_libre_desde_particion
+  - energia_interna_desde_particion
+  common_mistake: Usar grados Celsius dentro de fórmulas con k_B.
+  typical_range: T > 0 K; en problemas de aula, desde pocos kelvin hasta miles de kelvin.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La temperatura absoluta canónica se toma positiva en este modelo.
+      en: Canonical absolute temperature is taken as positive in this model.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: T=0 requiere tratamiento límite; las expresiones con división por T no se evalúan directamente.
+      en: T=0 requires a limiting treatment; expressions with division by T are not directly evaluated.
+  value_nature:
+    kind: positive_scalar
+    nonnegative_only: true
+    expected_interval: (0, +∞)
+  interpretation_role:
+    primary_for:
+    - energia_libre_helmholtz
+    - energia_interna
+    - entropia
+    secondary_for:
+    - funcion_particion
+  graph_binding:
+    channels:
+    - xAxis
+    preferred_axis: x
+    graph_role: control_variable
+  pedagogical_notes:
+    es: Al variar T, cambia la importancia de los estados excitados y por tanto las magnitudes termodinámicas.
+    en: As T varies, excited states change their importance and therefore thermodynamic quantities change.
+- id: constante_boltzmann
+  symbol: k_B
+  nombre:
+    es: constante de Boltzmann
+    en: Boltzmann constant
+  descripcion:
+    es: Constante que convierte temperatura en escala energética microscópica.
+    en: Constant converting temperature into microscopic energy scale.
+  unidad_si: J/K
+  dimension: M L^2 T^-2 Theta^-1
+  is_vector: false
+  components: []
+  category: constant
+  physical_role: conversion_factor
+  used_in:
+  - energia_libre_desde_particion
+  - energia_interna_desde_particion
+  common_mistake: Omitir k_B y mezclar temperatura con energía sin conversión.
+  typical_range: k_B = 1.380649e-23 J/K.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es una constante positiva.
+      en: It is a positive constant.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: No puede anularse porque conecta la escala térmica y energética.
+      en: It cannot vanish because it links thermal and energy scales.
+  value_nature:
+    kind: positive_constant
+    nonnegative_only: true
+    expected_interval: 1.380649e-23 J/K
+  interpretation_role:
+    primary_for:
+    - temperatura
+    secondary_for:
+    - energia_libre_helmholtz
+    - energia_interna
+  graph_binding:
+    channels:
+    - constant
+    preferred_axis: none
+    graph_role: scale_factor
+  pedagogical_notes:
+    es: Su presencia recuerda que la temperatura no es energía hasta multiplicarla por una constante adecuada.
+    en: Its presence reminds us that temperature is not energy until multiplied by the proper constant.
+- id: energia_libre_helmholtz
+  symbol: F
+  nombre:
+    es: energía libre de Helmholtz
+    en: Helmholtz free energy
+  descripcion:
+    es: Potencial termodinámico generado por Z a temperatura y volumen constantes.
+    en: Thermodynamic potential generated by Z at constant temperature and volume.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: thermodynamic_potential
+  physical_role: dominant_output
+  used_in:
+  - energia_libre_desde_particion
+  - entropia_desde_energia_libre
+  - presion_desde_energia_libre
+  common_mistake: Leer F como toda la energía interna del sistema.
+  typical_range: Depende del cero energético; puede ser positiva o negativa.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del cero de energía; valores más bajos favorecen el equilibrio a T,V constantes.
+      en: The sign depends on the energy zero; lower values favor equilibrium at fixed T,V.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: F=0 solo indica una elección de referencia o equilibrio particular, no ausencia de sistema.
+      en: F=0 only indicates a reference choice or particular equilibrium, not absence of a system.
+  value_nature:
+    kind: signed_scalar
+    nonnegative_only: false
+    expected_interval: (-∞, +∞)
+  interpretation_role:
+    primary_for:
+    - entropia
+    - presion
+    secondary_for:
+    - energia_interna
+  graph_binding:
+    channels:
+    - yAxis
+    preferred_axis: y
+    graph_role: dominant_magnitude
+  pedagogical_notes:
+    es: 'F concentra la información de Z: sus pendientes revelan entropía y presión según qué variable se cambie.'
+    en: 'F concentrates the information in Z: its slopes reveal entropy and pressure depending on which variable changes.'
+- id: energia_interna
+  symbol: U
+  nombre:
+    es: energía interna
+    en: internal energy
+  descripcion:
+    es: Energía media microscópica del sistema en equilibrio canónico.
+    en: Average microscopic energy of the system in canonical equilibrium.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: state_function
+  physical_role: derived_output
+  used_in:
+  - energia_interna_desde_particion
+  common_mistake: Confundir energía interna con energía libre de Helmholtz.
+  typical_range: Depende del sistema y del cero de energía; suele crecer con T en modelos simples.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del origen elegido para las energías microscópicas.
+      en: The sign depends on the chosen origin for microscopic energies.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: U=0 puede ser una referencia energética o un límite físico particular.
+      en: U=0 may be an energy reference or a particular physical limit.
+  value_nature:
+    kind: signed_scalar
+    nonnegative_only: false
+    expected_interval: model-dependent
+  interpretation_role:
+    primary_for:
+    - thermal_energy_content
+    secondary_for:
+    - capacidad_calorifica
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: none
+    graph_role: derived_curve_reading
+  pedagogical_notes:
+    es: U se obtiene de cómo cambia ln(Z) con T, no del valor de Z aislado.
+    en: U comes from how ln(Z) changes with T, not from the isolated value of Z.
+- id: entropia
+  symbol: S
+  nombre:
+    es: entropía
+    en: entropy
+  descripcion:
+    es: Medida macroscópica del número de microestados accesibles y de la pendiente térmica de F.
+    en: Macroscopic measure of accessible microstates and of the thermal slope of F.
+  unidad_si: J/K
+  dimension: M L^2 T^-2 Theta^-1
+  is_vector: false
+  components: []
+  category: state_function
+  physical_role: derived_output
+  used_in:
+  - entropia_desde_energia_libre
+  common_mistake: Identificar S con dF/dT sin el signo menos.
+  typical_range: S ≥ 0 en sistemas ordinarios con referencia entrópica adecuada.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En el enfoque habitual, la entropía física se interpreta como no negativa.
+      en: In the usual approach, physical entropy is interpreted as nonnegative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: S=0 puede representar un estado perfectamente ordenado ideal en el límite de baja temperatura.
+      en: S=0 may represent an ideal perfectly ordered state in the low-temperature limit.
+  value_nature:
+    kind: nonnegative_scalar
+    nonnegative_only: true
+    expected_interval: '[0, +∞)'
+  interpretation_role:
+    primary_for:
+    - slope_reading
+    secondary_for:
+    - microstate_count
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: none
+    graph_role: slope_meaning
+  pedagogical_notes:
+    es: 'En F(T), una pendiente más negativa significa mayor entropía: el signo es la trampa principal.'
+    en: 'In F(T), a more negative slope means larger entropy: the sign is the main trap.'
+- id: volumen
+  symbol: V
+  nombre:
+    es: volumen
+    en: volume
+  descripcion:
+    es: Extensión espacial disponible para los microestados del sistema.
+    en: Spatial extent available to the system microstates.
+  unidad_si: m^3
+  dimension: L^3
+  is_vector: false
+  components: []
+  category: state_variable
+  physical_role: control_parameter
+  used_in:
+  - presion_desde_energia_libre
+  common_mistake: Cambiar V al leer derivadas que deben hacerse a volumen constante.
+  typical_range: V > 0; depende de la escala del sistema.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El volumen físico es positivo.
+      en: Physical volume is positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: V=0 no describe un sistema macroscópico con espacio accesible.
+      en: V=0 does not describe a macroscopic system with accessible space.
+  value_nature:
+    kind: positive_scalar
+    nonnegative_only: true
+    expected_interval: (0, +∞)
+  interpretation_role:
+    primary_for:
+    - presion
+    secondary_for:
+    - funcion_particion
+  graph_binding:
+    channels:
+    - constant
+    - parameter
+    preferred_axis: none
+    graph_role: held_fixed_for_coord
+  pedagogical_notes:
+    es: En la gráfica principal F(T), V se mantiene fijo; si se varía V, la pendiente relevante da presión.
+    en: In the main F(T) graph, V is held fixed; if V varies, the relevant slope gives pressure.
+- id: presion
+  symbol: P
+  nombre:
+    es: presión
+    en: pressure
+  descripcion:
+    es: Respuesta mecánica intensiva asociada a la variación de F con el volumen.
+    en: Intensive mechanical response associated with the variation of F with volume.
+  unidad_si: Pa
+  dimension: M L^-1 T^-2
+  is_vector: false
+  components: []
+  category: intensive_variable
+  physical_role: derived_output
+  used_in:
+  - presion_desde_energia_libre
+  common_mistake: Confundir presión con fuerza total o con energía libre.
+  typical_range: P puede ir desde valores muy bajos hasta presiones enormes según el sistema.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Presión positiva indica tendencia expansiva; presión efectiva negativa requiere interpretación del modelo.
+      en: Positive pressure indicates expansive tendency; effective negative pressure requires model interpretation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: P=0 indica ausencia de respuesta mecánica neta en la variable de volumen.
+      en: P=0 indicates absence of net mechanical response in the volume variable.
+  value_nature:
+    kind: signed_scalar
+    nonnegative_only: false
+    expected_interval: model-dependent
+  interpretation_role:
+    primary_for:
+    - equation_of_state
+    secondary_for:
+    - volume_response
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: none
+    graph_role: volume_slope_meaning
+  pedagogical_notes:
+    es: La presión sale de la pendiente de F respecto a V, no de la pendiente frente a T.
+    en: Pressure comes from the slope of F with respect to V, not from the slope versus T.
+- id: derivada_log_particion_temperatura
+  symbol: dlnZ_dT
+  nombre:
+    es: derivada térmica de ln Z
+    en: thermal derivative of ln Z
+  descripcion:
+    es: Sensibilidad del logaritmo de la función de partición ante cambios de temperatura.
+    en: Sensitivity of the logarithm of the partition function to temperature changes.
+  unidad_si: 1/K
+  dimension: Theta^-1
+  is_vector: false
+  components: []
+  category: derivative
+  physical_role: intermediate_quantity
+  used_in:
+  - energia_interna_desde_particion
+  common_mistake: Derivar Z en vez de ln(Z), o no fijar V y N.
+  typical_range: Finita en regiones sin singularidades del modelo.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su signo indica si ln(Z) aumenta o disminuye con la temperatura.
+      en: Its sign indicates whether ln(Z) increases or decreases with temperature.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor cero implica que ln(Z) no cambia localmente con T.
+      en: Zero value means ln(Z) does not locally change with T.
+  value_nature:
+    kind: signed_scalar
+    nonnegative_only: false
+    expected_interval: model-dependent
+  interpretation_role:
+    primary_for:
+    - energia_interna
+    secondary_for:
+    - temperature_response
+  graph_binding:
+    channels:
+    - none
+    preferred_axis: none
+    graph_role: not_directly_plotted
+  pedagogical_notes:
+    es: 'Es una magnitud intermedia: aparece para calcular U, pero no suele ser el resultado final mostrado.'
+    en: 'It is an intermediate quantity: it appears to compute U, but is usually not the final displayed result.'
+- id: pendiente_energia_libre_temperatura
+  symbol: dF_dT
+  nombre:
+    es: pendiente térmica de la energía libre
+    en: thermal slope of free energy
+  descripcion:
+    es: Derivada de F respecto a T a volumen y número de partículas constantes.
+    en: Derivative of F with respect to T at constant volume and particle number.
+  unidad_si: J/K
+  dimension: M L^2 T^-2 Theta^-1
+  is_vector: false
+  components: []
+  category: derivative
+  physical_role: graph_reading_quantity
+  used_in:
+  - entropia_desde_energia_libre
+  common_mistake: Olvidar que S es menos esta pendiente.
+  typical_range: Suele ser no positiva si la entropía es no negativa.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Pendiente negativa corresponde a entropía positiva.
+      en: Negative slope corresponds to positive entropy.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Pendiente cero implica entropía nula en ese punto o intervalo idealizado.
+      en: Zero slope implies zero entropy at that point or idealized interval.
+  value_nature:
+    kind: signed_scalar
+    nonnegative_only: false
+    expected_interval: (-∞, +∞)
+  interpretation_role:
+    primary_for:
+    - entropia
+    secondary_for:
+    - graph_reading
+  graph_binding:
+    channels:
+    - none
+    preferred_axis: none
+    graph_role: slope_of_coord
+  pedagogical_notes:
+    es: En el gráfico Coord, esta pendiente es la lectura local más importante.
+    en: In the Coord graph, this slope is the most important local reading.
+- id: pendiente_energia_libre_volumen
+  symbol: dF_dV
+  nombre:
+    es: pendiente volumétrica de la energía libre
+    en: volumetric slope of free energy
+  descripcion:
+    es: Derivada de F respecto al volumen a temperatura y número de partículas constantes.
+    en: Derivative of F with respect to volume at constant temperature and particle number.
+  unidad_si: Pa
+  dimension: M L^-1 T^-2
+  is_vector: false
+  components: []
+  category: derivative
+  physical_role: intermediate_quantity
+  used_in:
+  - presion_desde_energia_libre
+  common_mistake: Usarla en una gráfica F(T) como si fuera la misma pendiente.
+  typical_range: Depende de la ecuación de estado del sistema.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su opuesto es la presión termodinámica.
+      en: Its opposite is the thermodynamic pressure.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor cero implica presión nula en esa condición del modelo.
+      en: Zero value implies zero pressure in that model condition.
+  value_nature:
+    kind: signed_scalar
+    nonnegative_only: false
+    expected_interval: model-dependent
+  interpretation_role:
+    primary_for:
+    - presion
+    secondary_for:
+    - volume_response
+  graph_binding:
+    channels:
+    - none
+    preferred_axis: none
+    graph_role: not_main_coord
+  pedagogical_notes:
+    es: Solo se interpreta como presión si la variable independiente es V y T se mantiene fija.
+    en: It is interpreted as pressure only if the independent variable is V and T is held fixed.

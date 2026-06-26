@@ -1,0 +1,87 @@
+const e=`id: temperatura
+
+nombre:
+  es: Temperatura
+  en: Temperature
+
+area: fisica-clasica
+bloque: termodinamica
+subbloque: calor-y-efectos-termicos
+parent_id: calor-y-efectos-termicos
+ruta_relativa: fisica-clasica/termodinamica/calor-y-efectos-termicos/temperatura
+orden: 252100
+type: leaf
+
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+
+icon: 🧪
+
+descripcion: "Magnitud que cuantifica el estado térmico de un cuerpo y determina el sentido del flujo de calor."
+description_en: "Quantity measuring the thermal state of a body and determining the direction of heat flow."
+
+tags:
+  es:
+    - temperatura
+    - escala de temperatura
+    - cero absoluto
+    - termodinámica
+    - conversión de escalas
+    - equilibrio térmico
+  en:
+    - temperature
+    - temperature scale
+    - absolute zero
+    - thermodynamics
+    - scale conversion
+    - thermal equilibrium
+
+prerequisitos: []
+
+graficos:
+  - Coord
+
+physical_role:
+  es: concepto físico
+  en: physical concept
+
+dificultad: 1
+tiempo_estimado_min: 25
+
+pregunta_fisica_central:
+  es: "¿Qué es la temperatura y cómo se convierte entre las escalas Celsius, Kelvin y Fahrenheit?"
+  en: "What is temperature and how do you convert between the Celsius, Kelvin, and Fahrenheit scales?"
+
+representacion_dominante: Coord
+magnitud_dominante: T_K
+
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

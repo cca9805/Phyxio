@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 
 function toNum(v) {
   if (v === null || v === undefined || v === "") return null;
+  // Si es un objeto de magnitud { value, unit, ... }, extraemos el valor
+  if (typeof v === "object" && "value" in v) return toNum(v.value);
   const n = typeof v === "number" ? v : Number(String(v).replace(",", "."));
   return Number.isFinite(n) ? n : null;
 }

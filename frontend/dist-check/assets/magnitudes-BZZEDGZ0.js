@@ -1,0 +1,212 @@
+const e=`version: 5
+magnitudes:
+  - id: F0
+    symbol: F_0
+    nombre: { es: amplitud de fuerza externa, en: external force amplitude }
+    unidad_si: N
+    descripcion: { es: Intensidad maxima de la fuerza periodica aplicada., en: Maximum intensity of the applied periodic force. }
+    dimension: M L T^-2
+    is_vector: false
+    components: []
+    category: excitacion
+    physical_role: escala la energia inyectada en regimen estacionario
+    used_in: [ecuacion_diferencial_forzada, amplitud_forzada]
+    common_mistake: confundir fuerza maxima con fuerza media
+    typical_range: F0 > 0
+    sign_behavior: se usa positiva como amplitud
+    zero_behavior: sin fuerza no hay respuesta estacionaria forzada
+    value_nature: parametro
+    interpretation_role: controla la escala vertical de X
+    graph_binding: altura de la curva de amplitud
+    pedagogical_notes: "[[F0]] cambia la respuesta sin cambiar la frecuencia de excitacion."
+  - id: omega_f
+    symbol: \\omega_f
+    nombre: { es: pulsacion de forzado, en: driving angular frequency }
+    unidad_si: rad/s
+    descripcion: { es: Frecuencia angular impuesta por la fuerza externa., en: Angular frequency imposed by the external force. }
+    dimension: T^-1
+    is_vector: false
+    components: []
+    category: excitacion
+    physical_role: decide la relacion entre fuerza aplicada y respuesta
+    used_in: [ecuacion_diferencial_forzada, amplitud_forzada, desfase_forzada, respuesta_estacionaria]
+    common_mistake: confundirla con la frecuencia natural
+    typical_range: omega_f > 0
+    sign_behavior: positiva
+    zero_behavior: fuerza casi estatica
+    value_nature: parametro
+    interpretation_role: eje de comparacion de la respuesta estacionaria
+    graph_binding: eje horizontal
+    pedagogical_notes: "[[omega_f]] la fija la fuente, no el oscilador."
+  - id: m
+    symbol: m
+    nombre: { es: masa, en: mass }
+    unidad_si: kg
+    descripcion: { es: Inercia efectiva del oscilador., en: Effective inertia of the oscillator. }
+    dimension: M
+    is_vector: false
+    components: []
+    category: parametro_sistema
+    physical_role: aporta oposicion inercial al forzado
+    used_in: [ecuacion_diferencial_forzada, amplitud_forzada, desfase_forzada]
+    common_mistake: ignorar su efecto a altas frecuencias
+    typical_range: m > 0
+    sign_behavior: positiva
+    zero_behavior: no hay oscilador material
+    value_nature: parametro
+    interpretation_role: controla el termino inercial
+    graph_binding: curvatura de respuesta con frecuencia
+    pedagogical_notes: "El termino inercial crece con [[omega_f]] al cuadrado."
+  - id: k
+    symbol: k
+    nombre: { es: constante elastica, en: stiffness }
+    unidad_si: N/m
+    descripcion: { es: Rigidez restauradora del sistema., en: Restoring stiffness of the system. }
+    dimension: M T^-2
+    is_vector: false
+    components: []
+    category: parametro_sistema
+    physical_role: aporta oposicion elastica a la excitacion
+    used_in: [ecuacion_diferencial_forzada, amplitud_forzada, desfase_forzada]
+    common_mistake: usarla sin comprobar unidades N/m
+    typical_range: k > 0
+    sign_behavior: positiva
+    zero_behavior: sin rigidez no hay retorno elastico
+    value_nature: parametro
+    interpretation_role: domina en baja frecuencia
+    graph_binding: respuesta cuasiestatica
+    pedagogical_notes: "[[k]] fija la respuesta cuando el forzado es lento."
+  - id: b
+    symbol: b
+    nombre: { es: amortiguamiento viscoso, en: viscous damping coefficient }
+    unidad_si: N*s/m
+    descripcion: { es: Coeficiente que multiplica la velocidad en la fuerza disipativa., en: Coefficient multiplying velocity in the dissipative force. }
+    dimension: M T^-1
+    is_vector: false
+    components: []
+    category: parametro_sistema
+    physical_role: disipa energia y suaviza la respuesta estacionaria
+    used_in: [ecuacion_diferencial_forzada, amplitud_forzada, desfase_forzada]
+    common_mistake: pensar que solo reduce amplitud y no cambia fase
+    typical_range: b >= 0
+    sign_behavior: no negativo
+    zero_behavior: sin disipacion el modelo estacionario puede divergir cerca de resonancia ideal
+    value_nature: parametro
+    interpretation_role: controla anchura y desfase
+    graph_binding: suavizado de la curva
+    pedagogical_notes: "[[b]] evita amplitudes estacionarias no fisicas en el modelo ideal."
+  - id: X
+    symbol: X
+    nombre: { es: amplitud estacionaria, en: steady-state amplitude }
+    unidad_si: m
+    descripcion: { es: Amplitud de la respuesta permanente a la frecuencia de forzado., en: Amplitude of the steady response at the driving frequency. }
+    dimension: L
+    is_vector: false
+    components: []
+    category: salida
+    physical_role: mide cuanto responde el sistema tras desaparecer el transitorio
+    used_in: [amplitud_forzada, respuesta_estacionaria]
+    common_mistake: confundirla con la amplitud transitoria inicial
+    typical_range: X >= 0
+    sign_behavior: no negativa
+    zero_behavior: respuesta nula si no hay excitacion
+    value_nature: resultado
+    interpretation_role: magnitud principal del leaf
+    graph_binding: eje vertical de amplitud
+    pedagogical_notes: "[[X]] pertenece al regimen estacionario, no al arranque."
+  - id: delta
+    symbol: \\delta
+    nombre: { es: desfase, en: phase lag }
+    unidad_si: rad
+    descripcion: { es: Retraso angular de la respuesta respecto a la fuerza aplicada., en: Angular lag of the response relative to the applied force. }
+    dimension: "1"
+    is_vector: false
+    components: []
+    category: salida
+    physical_role: expresa si el sistema acompana o retrasa al forzado
+    used_in: [desfase_forzada, respuesta_estacionaria]
+    common_mistake: ignorar el cuadrante del desfase
+    typical_range: 0 a pi rad
+    sign_behavior: se toma como retraso positivo
+    zero_behavior: respuesta casi en fase
+    value_nature: resultado
+    interpretation_role: lectura temporal de la respuesta
+    graph_binding: desplazamiento horizontal de x
+    pedagogical_notes: "[[delta]] es tan importante como [[X]] para leer la respuesta."
+  - id: x
+    symbol: x
+    nombre: { es: desplazamiento, en: displacement }
+    unidad_si: m
+    descripcion: { es: Posicion instantanea de la respuesta estacionaria., en: Instantaneous position of the steady response. }
+    dimension: L
+    is_vector: false
+    components: []
+    category: salida_temporal
+    physical_role: variable observable en el tiempo
+    used_in: [ecuacion_diferencial_forzada, respuesta_estacionaria]
+    common_mistake: mezclar respuesta transitoria y estacionaria
+    typical_range: -X <= x <= X
+    sign_behavior: puede cambiar de signo
+    zero_behavior: cruce de equilibrio
+    value_nature: funcion
+    interpretation_role: muestra la oscilacion ya sincronizada con la fuerza
+    graph_binding: curva temporal
+    pedagogical_notes: "[[x]] usa la misma frecuencia que la fuente en regimen estacionario."
+  - id: t
+    symbol: t
+    nombre: { es: tiempo, en: time }
+    unidad_si: s
+    descripcion: { es: Variable temporal., en: Time variable. }
+    dimension: T
+    is_vector: false
+    components: []
+    category: independiente
+    physical_role: ordena la fase temporal de fuerza y respuesta
+    used_in: [ecuacion_diferencial_forzada, respuesta_estacionaria]
+    common_mistake: usar milisegundos como segundos
+    typical_range: t >= 0
+    sign_behavior: no negativo en el analisis posterior al inicio
+    zero_behavior: origen temporal
+    value_nature: variable
+    interpretation_role: permite comparar fuerza y respuesta
+    graph_binding: eje temporal
+    pedagogical_notes: "[[omega_f]][[t]] debe ser adimensional."
+  - id: x_d
+    symbol: \\dot{x}
+    nombre: { es: velocidad, en: velocity }
+    unidad_si: m/s
+    descripcion: { es: Primera derivada temporal del desplazamiento., en: First time derivative of displacement. }
+    dimension: L T^-1
+    is_vector: false
+    components: []
+    category: derivada
+    physical_role: activa la fuerza disipativa
+    used_in: [ecuacion_diferencial_forzada]
+    common_mistake: olvidarla en el termino de amortiguamiento
+    typical_range: depende de la amplitud y frecuencia
+    sign_behavior: cambia de signo
+    zero_behavior: aparece en extremos de desplazamiento
+    value_nature: funcion
+    interpretation_role: conecta movimiento con disipacion
+    graph_binding: no dominante
+    pedagogical_notes: "[[x_d]] explica por que [[b]] afecta amplitud y fase."
+  - id: x_dd
+    symbol: \\ddot{x}
+    nombre: { es: aceleracion, en: acceleration }
+    unidad_si: m/s^2
+    descripcion: { es: Segunda derivada temporal del desplazamiento., en: Second time derivative of displacement. }
+    dimension: L T^-2
+    is_vector: false
+    components: []
+    category: derivada
+    physical_role: activa el termino inercial
+    used_in: [ecuacion_diferencial_forzada]
+    common_mistake: perder el signo del termino inercial
+    typical_range: depende de X y omega_f
+    sign_behavior: cambia de signo
+    zero_behavior: aparece en cruces de velocidad extrema
+    value_nature: funcion
+    interpretation_role: conecta masa con respuesta forzada
+    graph_binding: no dominante
+    pedagogical_notes: "[[x_dd]] es necesario para entender la ecuacion completa."
+`;export{e as default};

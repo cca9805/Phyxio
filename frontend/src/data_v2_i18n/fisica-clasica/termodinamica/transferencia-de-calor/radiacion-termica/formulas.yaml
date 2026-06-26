@@ -1,0 +1,253 @@
+version: 5.0.0
+leaf: radiacion-termica
+ui:
+  default_formula: ley_stefan_boltzmann
+formulas:
+- id: ley_stefan_boltzmann
+  title:
+    es: Ley de Stefan-Boltzmann
+    en: Stefan-Boltzmann law
+  equation: P=epsilon*sigma*A*T^4
+  latex: P=\varepsilon\sigma A T^4
+  rearrangements:
+  - id: temperatura_desde_potencia
+    target: temperatura_absoluta
+    equation: T=(P/(epsilon*sigma*A))^(1/4)
+    latex: T=(\frac{P}{\varepsilon\sigma A})^{1/4}
+  - id: area_desde_potencia
+    target: area_superficie
+    equation: A=P/(epsilon*sigma*T^4)
+    latex: A=\frac{P}{\varepsilon\sigma T^4}
+  - id: emisividad_desde_potencia
+    target: emisividad
+    equation: epsilon=P/(sigma*A*T^4)
+    latex: \varepsilon=\frac{P}{\sigma A T^4}
+  category: thermal_radiation
+  relation_type: power_law
+  physical_meaning:
+    es: Calcula la potencia radiada bruta emitida por una superficie gris.
+    en: Computes the gross radiated power emitted by a gray surface.
+  constraints:
+    es: Usar T en kelvin, A en m², 0≤ε≤1 y σ en unidades SI.
+    en: Use T in kelvin, A in m², 0≤ε≤1, and σ in SI units.
+  validity:
+    es: Superficie gris, temperatura uniforme, emisividad efectiva conocida y medio transparente.
+    en: Gray surface, uniform temperature, known effective emissivity, and transparent medium.
+  dimension_check:
+    es: ε es adimensional; σ·A·T⁴ deja W.
+    en: ε is dimensionless; σ·A·T⁴ leaves W.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - potencia_radiada
+  - emisividad
+  - constante_stefan_boltzmann
+  - area_superficie
+  - temperatura_absoluta
+  interpretation_tags:
+  - emision_bruta
+  - temperatura_absoluta
+  - emisividad
+  - area
+  result_semantics:
+    target: potencia_radiada
+    kind: scalar_nonnegative_power
+    sign_meaning:
+      es: La emisión bruta no es negativa.
+      en: Gross emission is non-negative.
+    absolute_value_meaning:
+      es: El valor absoluto no cambia el sentido físico porque P≥0.
+      en: Absolute value does not change physical meaning because P≥0.
+  domain_checks:
+  - id: temperature_kelvin
+    condition: T>=0
+    text:
+      es: La temperatura absoluta debe estar en kelvin.
+      en: Absolute temperature must be in kelvin.
+  - id: emissivity_range
+    condition: 0<=epsilon<=1
+    text:
+      es: La emisividad debe estar entre 0 y 1.
+      en: Emissivity must lie between 0 and 1.
+  coherence_checks:
+  - id: gross_power_nonnegative
+    text:
+      es: Una potencia radiada bruta negativa indica error.
+      en: Negative gross radiated power indicates an error.
+  - id: temperature_sensitivity
+    text:
+      es: Duplicar T multiplica P por 16 si ε y A no cambian.
+      en: Doubling T multiplies P by 16 if ε and A do not change.
+  graph_implications:
+    es: La gráfica P(T) responde cómo la potencia radiada depende de temperatura absoluta, área y emisividad.
+    en: The P(T) graph answers how radiated power depends on absolute temperature, area, and emissivity.
+  pedagogical_triggers:
+  - es: Comprobar que T no esté en Celsius.
+    en: Check that T is not in Celsius.
+  - es: Distinguir potencia radiada de intercambio neto.
+    en: Distinguish radiated power from net exchange.
+- id: radiacion_neta
+  title:
+    es: Potencia radiada neta
+    en: Net radiated power
+  equation: P_net=epsilon*sigma*A*(T^4-T_amb^4)
+  latex: P_{net}=\varepsilon\sigma A(T^4-T_{amb}^4)
+  rearrangements:
+  - id: equilibrio_radiativo
+    target: temperatura_absoluta
+    equation: T=T_amb
+    latex: T=T_{amb}\quad\text{si}\quad P_{net}=0
+  - id: temperatura_desde_potencia_neta
+    target: temperatura_absoluta
+    equation: T=(P_net/(epsilon*sigma*A)+T_amb^4)^(1/4)
+    latex: T=(\frac{P_{net}}{\varepsilon\sigma A}+T_{amb}^4)^{1/4}
+  category: thermal_radiation
+  relation_type: net_balance
+  physical_meaning:
+    es: Calcula el intercambio neto entre una superficie y un entorno radiativo.
+    en: Computes the net exchange between a surface and radiative surroundings.
+  constraints:
+    es: Usar T y T_amb en kelvin con un convenio de signo claro.
+    en: Use T and T_amb in kelvin with a clear sign convention.
+  validity:
+    es: Entorno radiativo equivalente a temperatura uniforme y superficie gris.
+    en: Radiative surroundings equivalent to a uniform temperature and a gray surface.
+  dimension_check:
+    es: σ·A·(T⁴−T_amb⁴) deja W.
+    en: σ·A·(T⁴−T_amb⁴) leaves W.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - potencia_neta
+  - emisividad
+  - constante_stefan_boltzmann
+  - area_superficie
+  - temperatura_absoluta
+  - temperatura_ambiente
+  interpretation_tags:
+  - intercambio_neto
+  - temperatura_ambiente
+  - signo
+  - balance
+  result_semantics:
+    target: potencia_neta
+    kind: signed_scalar_power
+    sign_meaning:
+      es: Positiva si el cuerpo pierde energía neta con convenio saliente.
+      en: Positive if the body loses net energy under the outward convention.
+    absolute_value_meaning:
+      es: El valor absoluto elimina el sentido de pérdida o ganancia.
+      en: Absolute value removes the direction of loss or gain.
+  domain_checks:
+  - id: temperatures_kelvin
+    condition: T>=0 and T_amb>=0
+    text:
+      es: Ambas temperaturas deben estar en kelvin.
+      en: Both temperatures must be in kelvin.
+  - id: net_equilibrium
+    condition: P_net=0 when T=T_amb
+    text:
+      es: El balance ideal se anula cuando T=T_amb.
+      en: The ideal balance vanishes when T=T_amb.
+  coherence_checks:
+  - id: fourth_power_difference
+    text:
+      es: Restar T⁴−T_amb⁴, no T−T_amb.
+      en: Subtract T⁴−T_amb⁴, not T−T_amb.
+  - id: signed_power
+    text:
+      es: Un valor negativo puede indicar ganancia neta.
+      en: A negative value can indicate net gain.
+  graph_implications:
+    es: El intercambio neto usa la misma dependencia T⁴ que la curva P(T), comparada con la temperatura ambiente.
+    en: Net exchange uses the same T⁴ dependence as the P(T) curve, compared with ambient temperature.
+  pedagogical_triggers:
+  - es: No tomar valor absoluto sin interpretar signo.
+    en: Do not take absolute value without interpreting sign.
+  - es: Buscar T_amb en el enunciado.
+    en: Look for T_amb in the statement.
+- id: flujo_radiativo_emitido
+  title:
+    es: Flujo radiativo emitido
+    en: Emitted radiative flux
+  equation: j=P/A=epsilon*sigma*T^4
+  latex: j=\frac{P}{A}=\varepsilon\sigma T^4
+  rearrangements:
+  - id: potencia_desde_flujo
+    target: potencia_radiada
+    equation: P=j*A
+    latex: P=j*A
+  - id: temperatura_desde_flujo
+    target: temperatura_absoluta
+    equation: T=(j/(epsilon*sigma))^(1/4)
+    latex: T=(\frac{j}{\varepsilon\sigma})^{1/4}
+  category: thermal_radiation
+  relation_type: surface_flux
+  physical_meaning:
+    es: Expresa la emisión térmica por unidad de superficie.
+    en: Expresses thermal emission per unit surface area.
+  constraints:
+    es: Usar superficie uniforme y distinguir W/m² de W.
+    en: Use a uniform surface and distinguish W/m² from W.
+  validity:
+    es: Superficie gris uniforme o valor promedio sobre la superficie.
+    en: Uniform gray surface or average value over the surface.
+  dimension_check:
+    es: ε·σ·T⁴ deja W/m².
+    en: ε·σ·T⁴ leaves W/m².
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - flujo_radiativo
+  - potencia_radiada
+  - area_superficie
+  - emisividad
+  - constante_stefan_boltzmann
+  - temperatura_absoluta
+  interpretation_tags:
+  - flujo
+  - por_area
+  - emision_bruta
+  result_semantics:
+    target: flujo_radiativo
+    kind: scalar_nonnegative_flux
+    sign_meaning:
+      es: El flujo emitido bruto no es negativo.
+      en: Gross emitted flux is non-negative.
+    absolute_value_meaning:
+      es: El valor absoluto no cambia el sentido físico porque j≥0.
+      en: Absolute value does not change physical meaning because j≥0.
+  domain_checks:
+  - id: flux_nonnegative
+    condition: j>=0
+    text:
+      es: El flujo emitido bruto no puede ser negativo.
+      en: Gross emitted flux cannot be negative.
+  - id: area_positive_for_ratio
+    condition: A>0 if j=P/A
+    text:
+      es: Para usar P/A, el área debe ser positiva.
+      en: To use P/A, area must be positive.
+  coherence_checks:
+  - id: flux_units
+    text:
+      es: Si la unidad es W, no es flujo radiativo sino potencia.
+      en: If the unit is W, it is not radiative flux but power.
+  - id: power_flux_relation
+    text:
+      es: La potencia total se recupera como P=j*A.
+      en: Total power is recovered as P=j*A.
+  graph_implications:
+    es: El flujo frente a temperatura tiene la misma forma T⁴ que la potencia radiada, sin factor de área.
+    en: Flux versus temperature has the same T⁴ shape as radiated power, without the area factor.
+  pedagogical_triggers:
+  - es: Distinguir W de W/m².
+    en: Distinguish W from W/m².
+  - es: Usar flujo para comparar materiales.
+    en: Use flux to compare materials.

@@ -1,0 +1,353 @@
+version: 2
+id: interpretacion-definicion-y-expresion
+leaf_id: definicion-y-expresion
+nombre:
+  es: Interpretacion del peso
+  en: Weight interpretation
+scope: leaf
+ui:
+  inline_calculator: true
+  inline_graph: false
+  dedicated_tab: true
+  tab_label:
+    es: Interpretacion
+    en: Interpretation
+dependencies:
+  formulas:
+    - peso_vectorial
+    - modulo_peso
+    - gravedad_campo_central
+    - direccion_peso
+  magnitudes:
+    - P
+    - m
+    - g
+    - Pmod
+    - gmod
+    - G
+    - M_astro
+    - r
+global_context:
+  es: El peso es la fuerza gravitatoria sobre un cuerpo. Para interpretar un resultado numerico hay que compararlo con escalas conocidas y verificar coherencia dimensional.
+  en: Weight is the gravitational force on a body. Interpreting a numerical result requires comparing it with known scales and verifying dimensional coherence.
+result_blocks:
+  summary:
+    title:
+      es: Resumen del resultado
+      en: Result summary
+  coherence:
+    title:
+      es: Verificacion de coherencia
+      en: Coherence verification
+  physical_reading:
+    title:
+      es: Lectura fisica del resultado
+      en: Physical reading of the result
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+output_contract:
+  sections:
+    - summary
+    - coherence
+    - physical_reading
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+targets:
+  P:
+    summary_rules:
+      - id: P_sum_v5
+        when: always
+        status: info
+        text:
+          es: "El peso vectorial representa la fuerza neta de atracción hacia el centro del astro, esencial para el balance de fuerzas."
+          en: "The vector weight represents the net attractive force toward the body's center, essential for force balance."
+    physical_reading_rules:
+      - id: P_phys_v5
+        when: "true"
+        status: info
+        text:
+          es: "La dirección del vector peso define la vertical local; su sentido es siempre hacia el centro de masas del planeta."
+          en: "The weight vector's direction defines the local vertical; its sense is always toward the planet's center of mass."
+    coherence_rules:
+      - id: P_coh_v5
+        when: "true"
+        status: ok
+        text:
+          es: "Debe estar alineado con el campo g local."
+          en: "It must be aligned with the local g field."
+    model_validity_rules: [{id: P_val_v5, when: always, status: ok, text: {es: "Valido en campo uniforme.", en: "Valid in uniform field."}}]
+    graph_rules: [{id: P_gra_v5, when: always, status: info, text: {es: "Vector radial.", en: "Radial vector."}}]
+    likely_errors: [{id: P_err_v5, when: always, status: warning, text: {es: "Confundir P con masa m.", en: "Confusing P with mass m."}}]
+    next_step_rules: [{id: P_nxt_v5, when: always, status: info, text: {es: "Dinámica.", en: "Dynamics."}}]
+
+  Pmod:
+    summary_rules:
+      - id: peso_resumen_v5
+        when: always
+        status: info
+        text:
+          es: "El valor final indica la intensidad de la fuerza atractiva total que el astro ejerce sobre la masa puntual del cuerpo."
+          en: "The final value indicates the intensity of the total attractive force that the attracting body exerts on the point mass."
+    coherence_rules:
+      - id: peso_positivo_v5
+        when: "Pmod <= 0"
+        status: error
+        text:
+          es: "El peso no puede ser negativo o nulo; esto indica un error crítico en los datos de masa o intensidad de campo."
+          en: "Weight cannot be negative or null; this indicates a critical error in the mass or field intensity data."
+    physical_reading_rules:
+      - id: peso_lectura_v5
+        when: "true"
+        status: info
+        text:
+          es: "Porque el peso es una interacción entre dos masas, su valor depende directamente de la intensidad del campo local; esto implica que el cuerpo se sentira más pesado si g aumenta."
+          en: "Because weight is an interaction between two masses, its value depends directly on the local field intensity; this implies that the body will feel heavier if g increases."
+    model_validity_rules:
+      - id: campo_uniforme_v5
+        when: always
+        status: ok
+        text:
+          es: "El modelo es válido mientras se asuma un campo uniforme. Si el objeto fuera tan alto como una montaña, el peso disminuiría ligeramente con la altura."
+          en: "The model is valid as long as a uniform field is assumed. If the object were as tall as a mountain, the weight would slightly decrease with height."
+    graph_rules:
+      - id: dcl_peso_v5
+        when: always
+        status: info
+        graph_binding: true
+        text:
+          es: "En el gráfico DCL, este valor se representa con un vector dirigido al centro del astro. Indica la causa de la aceleración en caída libre."
+          en: "In the DCL graph, this value is represented by a vector directed toward the center of the planet. It indicates the cause of free-fall acceleration."
+    likely_errors:
+      - id: confundir_masa_v5
+        when: always
+        status: warning
+        text:
+          es: "Es común confundir el peso con la masa, pero piensa que el peso es lo que el suelo debe compensar mediante la normal."
+          en: "It is common to confuse weight with mass, but think of weight as what the ground must compensate for through the normal force."
+    next_step_rules:
+      - id: usar_en_dcl_v5
+        when: always
+        status: info
+        text:
+          es: "Explora cómo este peso afecta al equilibrio estático si introducimos tensiones o fuerzas de fricción externas."
+          en: "Explore how this weight affects static equilibrium if we introduce external tensions or frictional forces."
+
+  m:
+    summary_rules:
+      - id: m_sum_v5
+        when: "true"
+        status: info
+        text:
+          es: "La masa resume la cantidad de inercia que posee el sistema para resistirse a cambios en su estado de movimiento."
+          en: "Mass summarizes the amount of inertia the system possesses to resist changes in its state of motion."
+    physical_reading_rules:
+      - id: m_phys_v5
+        when: "true"
+        status: info
+        text:
+          es: "Porque la masa es una propiedad intrínseca, su valor no depende de la gravedad del planeta; esto indica que m es constante en todo el universo."
+          en: "Because mass is an intrinsic property, its value does not depend on the planet's gravity; this indicates that m is constant throughout the universe."
+    coherence_rules:
+      - id: m_coh_v5
+        when: "true"
+        status: ok
+        text:
+          es: "La masa debe ser positiva para mantener el sentido físico de la inercia según las leyes de Newton."
+          en: "Mass must be positive to maintain the physical sense of inertia according to Newton's laws."
+    model_validity_rules:
+      - id: m_val_v5
+        when: "true"
+        status: ok
+        text:
+          es: "Válido mientras no estemos en regímenes de alta energía donde la masa podría transformarse según la relatividad."
+          en: "Valid as long as we are not in high-energy regimes where mass could transform according to relativity."
+    graph_rules:
+      - id: m_gra_v5
+        when: "true"
+        status: info
+        text:
+          es: "En el dibujo, la masa determina la escala visual del objeto pero no genera flechas propias en el diagrama de fuerzas."
+          en: "In the drawing, mass determines the object's visual scale but does not generate its own arrows in the force diagram."
+    likely_errors:
+      - id: m_err_v5
+        when: "true"
+        status: warning
+        text:
+          es: "Muchos alumnos creen que la masa cambia en la Luna; confunden la materia con el tirón gravitatorio."
+          en: "Many students believe mass changes on the Moon; they confuse matter with the gravitational pull."
+    next_step_rules:
+      - id: m_nxt_v5
+        when: "true"
+        status: info
+        text:
+          es: "Utiliza esta masa para determinar la aceleración si el sistema se ve sometido a una fuerza neta distinta de cero."
+          en: "Use this mass to determine acceleration if the system is subjected to a non-zero net force."
+
+  gmod:
+    summary_rules:
+      - id: g_sum_v5
+        when: "true"
+        status: info
+        text:
+          es: "La intensidad del campo indica cuánto acelerará un objeto si se le permite caer libremente en ese punto del espacio."
+          en: "The field intensity indicates how much an object will accelerate if allowed to fall freely at that point in space."
+    physical_reading_rules:
+      - id: g_phys_v5
+        when: "true"
+        status: info
+        text:
+          es: "Porque el campo gravitatorio depende de la masa central, un astro más masivo genera una g mayor; esto indica que la gravedad es una propiedad del entorno."
+          en: "Because the gravitational field depends on the central mass, a more massive planet generates a higher g; this indicates that gravity is a property of the environment."
+    coherence_rules:
+      - id: g_coh_v5
+        when: "true"
+        status: ok
+        text:
+          es: "El valor debe ser consistente con la distancia radial r y la masa M_astro según el modelo de campo central."
+          en: "The value must be consistent with the radial distance r and the mass M_astro according to the central field model."
+    model_validity_rules:
+      - id: g_val_v5
+        when: "true"
+        status: ok
+        text:
+          es: "Se asume simetría esférica en el astro para que el campo sea puramente radial y su módulo sea constante en esa cota."
+          en: "Spherical symmetry is assumed in the planet so that the field is purely radial and its magnitude is constant at that altitude."
+    graph_rules:
+      - id: g_gra_v5
+        when: "true"
+        status: info
+        text:
+          es: "En el gráfico vectorial, g indica la orientación hacia la cual se deben dibujar todas las fuerzas de peso del sistema."
+          en: "In the vector graph, g indicates the orientation toward which all weight forces of the system must be drawn."
+    likely_errors:
+      - id: g_err_v5
+        when: "true"
+        status: warning
+        text:
+          es: "Es común creer que g es constante universalmente, pero depende inversamente del cuadrado de la distancia r."
+          en: "It is common to believe that g is universally constant, but it depends inversely on the square of the distance r."
+    next_step_rules:
+      - id: g_nxt_v5
+        when: "true"
+        status: info
+        text:
+          es: "Calcula el peso P = mg para ver cómo este campo se traduce en una fuerza medible sobre un objeto real."
+          en: "Calculate weight P = mg to see how this field translates into a measurable force on a real object."
+
+  M_astro:
+    summary_rules:
+      - id: Ma_sum_v5
+        when: "true"
+        status: info
+        text:
+          es: "La masa del astro resume la capacidad del cuerpo celeste para curvar el espacio y generar atracción gravitatoria."
+          en: "The attracting body mass summarizes the celestial body's capacity to curve space and generate gravitational attraction."
+    physical_reading_rules:
+      - id: Ma_phys_v5
+        when: "true"
+        status: info
+        text:
+          es: "Porque M_astro es la fuente del campo, domina la intensidad g; esto implica que planetas gigantes como Júpiter tienen pesos superficiales extremos."
+          en: "Because M_astro is the field source, it dominates the g intensity; this implies that giant planets like Jupiter have extreme surface weights."
+    coherence_rules:
+      - id: Ma_coh_v5
+        when: "true"
+        status: ok
+        text:
+          es: "Debe ser coherente con los valores conocidos para planetas o satélites del sistema solar."
+          en: "It must be consistent with known values for planets or satellites in the solar system."
+    model_validity_rules:
+      - id: Ma_val_v5
+        when: "true"
+        status: ok
+        text:
+          es: "Válido mientras se trate de cuerpos con masas macroscópicas donde la gravitación domina sobre otras interacciones."
+          en: "Valid as long as they are bodies with macroscopic masses where gravitation dominates over other interactions."
+    graph_rules:
+      - id: Ma_gra_v5
+        when: "true"
+        status: info
+        text:
+          es: "Normalmente se representa como el cuerpo central inamovible que dicta el movimiento de los objetos menores a su alrededor."
+          en: "Normally represented as the immovable central body that dictates the movement of minor objects around it."
+    likely_errors:
+      - id: Ma_err_v5
+        when: "true"
+        status: warning
+        text:
+          es: "No confundas esta masa (la que atrae) con m (la que es atraída); son roles distintos en la ecuación."
+          en: "Do not confuse this mass (the one attracting) with m (the one being attracted); they are different roles in the equation."
+    next_step_rules:
+      - id: Ma_nxt_v5
+        when: "true"
+        status: info
+        text:
+          es: "Puedes calcular la densidad media del astro si conoces su volumen junto con esta masa M."
+          en: "You can calculate the planet's average density if you know its volume along with this mass M."
+
+  r:
+    summary_rules:
+      - id: r_sum_v5
+        when: "true"
+        status: info
+        text:
+          es: "La distancia r indica la posición relativa respecto al centro de masas del cuerpo atractor."
+          en: "The distance r indicates the relative position with respect to the center of mass of the attracting body."
+    physical_reading_rules:
+      - id: r_phys_v5
+        when: "true"
+        status: info
+        text:
+          es: "Porque la gravedad se debilita con la distancia, un aumento en r disminuye g; esto significa que el peso cae rápidamente al alejarse del planeta."
+          en: "Because gravity weakens with distance, an increase in r decreases g; this means that weight drops rapidly when moving away from the planet."
+    coherence_rules:
+      - id: r_coh_v5
+        when: "true"
+        status: ok
+        text:
+          es: "Debe ser mayor que el radio físico del astro para que el modelo de campo exterior sea aplicable."
+          en: "It must be greater than the body's physical radius for the exterior field model to be applicable."
+    model_validity_rules:
+      - id: r_val_v5
+        when: "true"
+        status: ok
+        text:
+          es: "Válido mientras el objeto atraido sea pequeño frente a r, permitiendo tratarlo como una masa puntual."
+          en: "Valid as long as the attracted object is small compared to r, allowing it to be treated as a point mass."
+    graph_rules:
+      - id: r_gra_v5
+        when: "true"
+        status: info
+        text:
+          es: "En los gráficos de campo central, r es la coordenada horizontal que define la caída de la curva de potencia."
+          en: "In central field graphs, r is the horizontal coordinate that defines the drop of the power curve."
+    likely_errors:
+      - id: r_err_v5
+        when: "true"
+        status: warning
+        text:
+          es: "Es común olvidar sumar el radio del planeta si el problema solo te da la altura sobre la superficie."
+          en: "It is common to forget to add the planet's radius if the problem only gives you the height above the surface."
+    next_step_rules:
+      - id: r_nxt_v5
+        when: "true"
+        status: info
+        text:
+          es: "Utiliza r para determinar la velocidad orbital necesaria en ese punto si el objeto estuviera en satelización."
+          en: "Use r to determine the orbital speed required at that point if the object were in satellization."

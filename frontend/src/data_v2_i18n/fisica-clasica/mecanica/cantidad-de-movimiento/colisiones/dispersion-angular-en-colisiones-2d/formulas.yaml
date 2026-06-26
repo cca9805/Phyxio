@@ -1,0 +1,199 @@
+version: 2
+id: formulas-dispersion-angular-en-colisiones-2d
+leaf_id: dispersion-angular-en-colisiones-2d
+formulas:
+
+- id: p_x_balance
+  title:
+    es: Balance de momento lineal en el eje X
+    en: Linear momentum balance along X-axis
+  equation: m1*v1i = m1*v1f*cos(theta1) + m2*v2f*cos(theta2)
+  latex: m_1 v_{1i} = m_1 v_{1f} \cos \theta_1 + m_2 v_{2f} \cos \theta_2
+  rearrangements:
+    - target: v1f
+      equation: v1f = (m1*v1i - m2*v2f*cos(theta2)) / (m1*cos(theta1))
+      latex: v_{1f} = \frac{m_1 v_{1i} - m_2 v_{2f} \cos \theta_2}{m_1 \cos \theta_1}
+    - target: v2f
+      equation: v2f = (m1*v1i - m1*v1f*cos(theta1)) / (m2*cos(theta2))
+      latex: v_{2f} = \frac{m_1 v_{1i} - m_1 v_{1f} \cos \theta_1}{m_2 \cos \theta_2}
+    - target: v1i
+      equation: v1i = v1f*cos(theta1) + (m2/m1)*v2f*cos(theta2)
+      latex: v_{1i} = v_{1f} \cos \theta_1 + \frac{m_2}{m_1} v_{2f} \cos \theta_2
+  category: fundamental
+  relation_type: conservation_law
+  physical_meaning:
+    es: Conservación de la componente horizontal del momento lineal total del sistema.
+    en: Conservation of the horizontal component of the system's total linear momentum.
+  constraints: Válido para sistemas aislados (sin fuerzas externas netas en X).
+  validity:
+    es: Aplicable a cualquier tipo de colisión (elástica o inelástica) en 2D.
+    en: Applicable to any type of collision (elastic or inelastic) in 2D.
+  dimension_check: { es: "M L T⁻¹", en: "M L T⁻¹" }
+  calculable: true
+  motivo_no_calculable: null
+  graph_implications: { es: "Define el vector de avance neto.", en: "Defines the net forward vector." }
+  pedagogical_triggers: [x_momentum_conservation]
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [momentum_conservation, vector_components, x_axis]
+  result_semantics: { target: v1f, score: 5 }
+  domain_checks:
+    - { expr: 'm1 > 0 and m2 > 0', message: { es: Las masas deben ser positivas., en: Masses must be positive. } }
+  coherence_checks:
+    - { expr: 'v1i >= 0', severity: warning, message: { es: Se asume que el cuerpo 1 incide desde la izquierda., en: Body 1 is assumed to incident from the left. } }
+
+- id: p_y_balance
+  title:
+    es: Balance de momento lineal en el eje Y
+    en: Linear momentum balance along Y-axis
+  equation: 0 = m1*v1f*sin(theta1) - m2*v2f*sin(theta2)
+  latex: 0 = m_1 v_{1f} \sin \theta_1 - m_2 v_{2f} \sin \theta_2
+  rearrangements:
+    - target: v1f
+      equation: v1f = (m2*v2f*sin(theta2)) / (m1*sin(theta1))
+      latex: v_{1f} = \frac{m_2 v_{2f} \sin \theta_2}{m_1 \sin \theta_1}
+    - target: v2f
+      equation: v2f = (m1*v1f*sin(theta1)) / (m2*sin(theta2))
+      latex: v_{2f} = \frac{m_1 v_{1f} \sin \theta_1}{m_2 \sin \theta_2}
+  category: fundamental
+  relation_type: conservation_law
+  physical_meaning:
+    es: Conservación de la componente vertical del momento lineal total del sistema.
+    en: Conservation of the vertical component of the system's total linear momentum.
+  constraints: Válido para sistemas aislados sin momento vertical inicial.
+  validity:
+    es: Aplicable a colisiones 2D donde el proyectil incide sobre el eje X.
+    en: Applicable to 2D collisions where the projectile strikes along the X-axis.
+  dimension_check: { es: "M L T⁻¹", en: "M L T⁻¹" }
+  calculable: true
+  motivo_no_calculable: null
+  graph_implications: { es: "Fuerza la compensación de componentes laterales.", en: "Forces compensation of lateral components." }
+  pedagogical_triggers: [y_momentum_compensation]
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [momentum_conservation, vector_components, y_axis]
+  result_semantics: { target: v1f, score: 5 }
+  domain_checks:
+    - { expr: 'theta1 != 0', message: { es: Evita la división por cero si el ángulo es nulo., en: Avoid division by zero if the angle is null. } }
+  coherence_checks:
+    - { expr: 'v1f >= 0 and v2f >= 0', severity: error, message: { es: Las rapideces deben ser positivas., en: Speeds must be positive. } }
+
+- id: k_initial
+  title:
+    es: Energía cinética inicial del proyectil
+    en: Projectile initial kinetic energy
+  equation: Ki = 0.5 * m1 * v1i^2
+  latex: K_i = \frac{1}{2} m_1 v_{1i}^2
+  rearrangements:
+    - target: v1i
+      equation: v1i = sqrt(2*Ki/m1)
+      latex: v_{1i} = \sqrt{\frac{2K_i}{m_1}}
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: Energía de movimiento del sistema antes del contacto (blanco en reposo).
+    en: Motion energy of the system before contact (target at rest).
+  constraints: No considera energías rotacionales.
+  validity: { es: Válido para partículas puntuales., en: Valid for point particles. }
+  dimension_check: { es: "M L² T⁻²", en: "M L² T⁻²" }
+  calculable: true
+  motivo_no_calculable: null
+  graph_implications: { es: "Escala de energía de partida.", en: "Starting energy scale." }
+  pedagogical_triggers: [initial_energy_state]
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [energy_state, initial_conditions]
+  result_semantics: { target: Ki, score: 4 }
+  domain_checks:
+    - { expr: 'm1 > 0', message: { es: Masa positiva., en: Positive mass. } }
+  coherence_checks:
+    - { expr: 'Ki >= 0', severity: error, message: { es: Energía cinética positiva., en: Positive kinetic energy. } }
+
+- id: k_final
+  title:
+    es: Energía cinética final total
+    en: Total final kinetic energy
+  equation: Kf = 0.5 * m1 * v1f^2 + 0.5 * m2 * v2f^2
+  latex: K_f = \frac{1}{2} m_1 v_{1f}^2 + \frac{1}{2} m_2 v_{2f}^2
+  rearrangements:
+    - target: v1f
+      equation: v1f = sqrt((2*Kf - m2*v2f^2)/m1)
+      latex: v_{1f} = \sqrt{\frac{2K_f - m_2 v_{2f}^2}{m_1}}
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: Suma de las energías de movimiento de ambos cuerpos tras la colisión.
+    en: Sum of the motion energies of both bodies after the collision.
+  constraints: No considera disipación térmica interna en esta fórmula.
+  validity: { es: Aplicable a cualquier estado post-impacto., en: Applicable to any post-impact state. }
+  dimension_check: { es: "M L² T⁻²", en: "M L² T⁻²" }
+  calculable: true
+  motivo_no_calculable: null
+  graph_implications: { es: "Energía útil remanente.", en: "Remaining useful energy." }
+  pedagogical_triggers: [final_energy_state]
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [energy_state, post_collision]
+  result_semantics: { target: Kf, score: 4 }
+  domain_checks:
+    - { expr: 'm1 > 0 and m2 > 0', message: { es: Masas positivas., en: Positive masses. } }
+  coherence_checks:
+    - { expr: 'Kf >= 0', severity: error, message: { es: Energía cinética positiva., en: Positive kinetic energy. } }
+
+- id: k_balance_elastic
+  title:
+    es: Conservación de energía (Choque Elástico)
+    en: Energy Conservation (Elastic Collision)
+  equation: Ki = Kf
+  latex: K_i = K_f
+  rearrangements:
+    - target: Ki
+      equation: Ki = Kf
+      latex: K_i = K_f
+  category: fundamental
+  relation_type: conservation_law
+  physical_meaning:
+    es: En un choque perfectamente elástico, la energía cinética total se mantiene constante.
+    en: In a perfectly elastic collision, the total kinetic energy remains constant.
+  constraints: Asume coeficiente de restitución e = 1.
+  validity:
+    es: Solo para colisiones donde no hay deformación permanente ni calor generado.
+    en: Only for collisions where no permanent deformation or heat is generated.
+  dimension_check: { es: "M L² T⁻²", en: "M L² T⁻²" }
+  calculable: true
+  motivo_no_calculable: null
+  graph_implications: { es: "Vincula los estados energéticos inicial y final.", en: "Links initial and final energy states." }
+  pedagogical_triggers: [elasticity_condition]
+  used_in: [theory, examples]
+  interpretation_tags: [elasticity, thermodynamic_limit]
+  result_semantics: { target: Kf, score: 3 }
+  domain_checks: []
+  coherence_checks:
+    - { expr: 'Ki == Kf', severity: warning, message: { es: Verifica la elasticidad del choque., en: Verify collision elasticity. } }
+
+- id: theta_sum
+  title:
+    es: Ángulo entre partículas (Caso masas iguales elástico)
+    en: Angle between particles (Elastic equal masses case)
+  equation: theta_total = theta1 + theta2
+  latex: \theta_{total} = \theta_1 + \theta_2
+  rearrangements:
+    - target: theta1
+      equation: theta1 = theta_total - theta2
+      latex: \theta_1 = \theta_{total} - \theta_2
+  category: derived
+  relation_type: geometric_relation
+  physical_meaning:
+    es: Ángulo de apertura total entre las trayectorias de salida de ambos cuerpos.
+    en: Total opening angle between the output trajectories of both bodies.
+  constraints: Válido para blanco inicialmente en reposo.
+  validity:
+    es: En choques elásticos de masas iguales, este ángulo tiende a ser 90 grados.
+    en: In elastic collisions of equal masses, this angle tends to be 90 degrees.
+  dimension_check: { es: "1", en: "1" }
+  calculable: true
+  motivo_no_calculable: null
+  graph_implications: { es: "Define la geometría del abanico de salida.", en: "Defines the geometry of the exit fan." }
+  pedagogical_triggers: [geometric_scattering_pattern]
+  used_in: [theory, examples]
+  interpretation_tags: [geometry, scattering_pattern]
+  result_semantics: { target: theta_total, score: 3 }
+  domain_checks: []
+  coherence_checks:
+    - { expr: 'theta_total <= 3.14159', severity: error, message: { es: El ángulo no puede exceder 180 grados., en: Angle cannot exceed 180 degrees. } }

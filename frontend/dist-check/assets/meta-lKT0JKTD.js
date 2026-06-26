@@ -1,0 +1,77 @@
+const n=`version: v5
+id: interferencia-destructiva
+nombre:
+  es: Interferencia destructiva
+  en: Destructive Interference
+area: fisica-clasica
+bloque: ondas
+subbloque: fenomenos-ondulatorios
+parent_id: interferencia
+ruta_relativa: fisica-clasica/ondas/fenomenos-ondulatorios/interferencia/interferencia-destructiva
+orden: 233420
+type: leaf
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+icon: "🧪"
+descripcion: Cancelación de ondas coherentes cuando llegan en oposición de fase.
+description_en: Cancellation of coherent waves when they arrive in opposite phase.
+tags:
+  es:
+    - ondas
+    - interferencia
+    - cancelacion
+    - fase
+    - intensidad
+  en:
+    - waves
+    - interference
+    - cancellation
+    - phase
+    - intensity
+prerequisitos:
+  - fisica-clasica/ondas/fenomenos-ondulatorios/superposicion
+  - fisica-clasica/ondas/fenomenos-ondulatorios/interferencia/interferencia-constructiva
+graficos:
+  - Coord
+physical_role:
+  es: concepto físico
+  en: physical concept
+dificultad: 3
+tiempo_estimado_min: 25
+pregunta_fisica_central:
+  es: ¿Cuándo dos ondas coherentes se cancelan y cómo se predice la intensidad mínima resultante?
+  en: When do two coherent waves cancel and how is the resulting minimum intensity predicted?
+representacion_dominante: Coord
+magnitud_dominante: I_resultante
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 4
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

@@ -1,0 +1,116 @@
+const e=`version: 5
+topic:
+  id: flujo-turbulento
+  title:
+    es: Flujo Turbulento
+    en: Turbulent Flow
+
+formulas:
+  - id: blasius
+    title:
+      es: Correlación de Blasius
+      en: Blasius Correlation
+    equation: f = 0.3164 * Re^(-0.25)
+    latex: f = 0.3164 \\cdot Re^{-0.25}
+    category: friction_models
+    relation_type: constitutive
+    physical_meaning:
+      es: Proporciona el factor de fricción para tuberías lisas en régimen turbulento moderado.
+      en: Provides the friction factor for smooth pipes in a moderate turbulent regime.
+    constraints: [Re > 4000, Re < 100000]
+    validity:
+      es: Tuberías hidráulicamente lisas.
+      en: Hydraulically smooth pipes.
+    dimension_check: "[1] = [1] * [1]^-0.25 = [1]"
+    calculable: true
+    motivo_no_calculable:
+      es: No se puede calcular si el número de Reynolds es cero o negativo.
+      en: Cannot be calculated if the Reynolds number is zero or negative.
+    used_in: [darcy_turb]
+    interpretation_tags: [friction, scaling, smooth]
+    result_semantics: friction_coefficient
+    domain_checks: [Re > 0]
+    coherence_checks: [f > 0]
+    graph_implications: "Define la posición vertical de la curva de base en el diagrama de Moody."
+    pedagogical_triggers: [scaling_law]
+    rearrangements:
+      - target: f
+        equation: f = 0.3164 * Re^(-0.25)
+    variables: [f, Re]
+
+  - id: darcy_turb
+    title:
+      es: Ecuación de Darcy-Weisbach
+      en: Darcy-Weisbach Equation
+    equation: dp = f * (L / D) * (rho * v^2 / 2)
+    latex: \\Delta p = f \\frac{L}{D} \\frac{\\rho v^2}{2}
+    category: pressure_loss
+    relation_type: balance
+    physical_meaning:
+      es: Relaciona la caída de presión con la fricción, geometría y energía cinética del flujo turbulento.
+      en: Relates pressure drop to friction, geometry, and turbulent flow kinetic energy.
+    constraints: [D > 0, L > 0]
+    validity:
+      es: Cualquier conducto circular con flujo totalmente desarrollado.
+      en: Any circular duct with fully developed flow.
+    dimension_check: "[M/(L*T^2)] = [1] * [L/L] * ([M/L^3] * [L/T]^2) = [M/(L*T^2)]"
+    calculable: true
+    motivo_no_calculable:
+      es: Requiere dimensiones geométricas y propiedades del fluido positivas.
+      en: Requires positive geometric dimensions and fluid properties.
+    used_in: [pumping_power]
+    interpretation_tags: [energy_loss, piping, quadratic]
+    result_semantics: pressure_difference
+    domain_checks: [D > 0, L > 0, rho > 0]
+    coherence_checks: [dp > 0]
+    graph_implications: "Determina la pendiente de la línea de energía total."
+    pedagogical_triggers: [quadratic_drag]
+    rearrangements:
+      - target: dp
+        equation: dp = f * (L / D) * (rho * v^2 / 2)
+    variables: [dp, f, L, rho, v, D]
+
+  - id: kolmogorov_length
+    title:
+      es: Escala de Kolmogorov
+      en: Kolmogorov Scale
+    equation: eta = (nu^3 / epsilon)^(0.25)
+    latex: \\eta = \\left( \\frac{\\nu^3}{\\varepsilon} \\right)^{1/4}
+    category: turbulence_scales
+    relation_type: scaling
+    physical_meaning:
+      es: Define el tamaño de los remolinos más pequeños donde la energía se disipa por viscosidad.
+      en: Defines the size of the smallest eddies where energy is dissipated by viscosity.
+    constraints: [epsilon > 0, nu > 0]
+    validity:
+      es: Rango de disipación de la cascada de energía en turbulencia isótropa.
+      en: Dissipation range of the energy cascade in isotropic turbulence.
+    dimension_check: "[L] = ([L^2/T]^3 / [L^2/T^3])^0.25 = ([L^6/T^3] / [L^2/T^3])^0.25 = [L^4]^0.25 = [L]"
+    calculable: true
+    motivo_no_calculable:
+      es: No se puede calcular si la tasa de disipación es cero.
+      en: Cannot be calculated if the dissipation rate is zero.
+    used_in: [dns_simulation]
+    interpretation_tags: [microscale, dissipation, cascade]
+    result_semantics: length_scale
+    domain_checks: [epsilon > 0, nu > 0]
+    coherence_checks: [eta < 1]
+    graph_implications: "Representa el límite de resolución para capturar la disipación viscosa."
+    pedagogical_triggers: [viscous_limit]
+    rearrangements:
+      - target: eta
+        equation: eta = (nu^3 / epsilon)^(0.25)
+    variables: [eta, nu, epsilon]
+
+ui:
+  default_formula: darcy_turb
+  groups:
+    - title:
+        es: Dinámica de Tuberías
+        en: Piping Dynamics
+      items: [darcy_turb, blasius]
+    - title:
+        es: Escalas de Turbulencia
+        en: Turbulence Scales
+      items: [kolmogorov_length]
+`;export{e as default};

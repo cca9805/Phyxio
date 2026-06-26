@@ -1,0 +1,148 @@
+version: 1
+ui:
+  default_formula: energia_total_rodadura
+formulas:
+  - id: energia_total_rodadura
+    title: { es: "Energía cinética total en rodadura", en: "Total kinetic energy in rolling" }
+    equation: "K_total = 0.5*m*v_cm^2 + 0.5*I*omega^2"
+    latex: 'K_{total}=\frac{1}{2}mv_{cm}^{2}+\frac{1}{2}I\omega^{2}'
+    rearrangements:
+      - target: K_total
+        equation: "K_total = 0.5*m*v_cm^2 + 0.5*I*omega^2"
+        latex: 'K_{total}=\frac{1}{2}mv_{cm}^{2}+\frac{1}{2}I\omega^{2}'
+    category: "energy"
+    relation_type: "definition"
+    physical_meaning:
+      es: "La energía de rodadura suma la parte traslacional del centro de masas y la parte rotacional alrededor del centro."
+      en: "Rolling energy adds the translational part of the center of mass and the rotational part about the center."
+    constraints: ["rodadura sin deslizamiento si se usa v_cm = R*omega", "I corresponde al eje central", "m > 0"]
+    validity:
+      es: "Válida para sólido rígido que rueda sin deslizar o para balances donde traslación y rotación se separan explícitamente."
+      en: "Valid for a rigid body rolling without slipping or for balances where translation and rotation are separated explicitly."
+    dimension_check: "kg*(m/s)^2 + kg*m^2*(1/s)^2 = J"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["teoria", "ejemplos", "aplicaciones", "interpretacion"]
+    interpretation_tags: ["rolling", "energy_split", "nonnegative"]
+    result_semantics:
+      target: K_total
+      kind: scalar_nonnegative
+      sign_meaning: { es: "no tiene signo de orientación", en: "it has no orientation sign" }
+      absolute_value_meaning: { es: "energía cinética total asociada a la rodadura", en: "total kinetic energy associated with rolling" }
+    domain_checks:
+      - { expr: "m > 0", message: { es: "La masa debe ser positiva.", en: "Mass must be positive." } }
+      - { expr: "I >= 0", message: { es: "El momento de inercia no puede ser negativo.", en: "Moment of inertia cannot be negative." } }
+    coherence_checks:
+      - { expr: "K_total >= 0", message: { es: "La energía cinética total debe ser no negativa.", en: "Total kinetic energy must be non-negative." } }
+    graph_implications:
+      - "La barra total debe ser la suma de contribución traslacional y contribución rotacional."
+    pedagogical_triggers:
+      - { when: "true", message: { es: "Distingue siempre traslación y rotación antes de sumar energía.", en: "Always distinguish translation and rotation before adding energy." } }
+
+  - id: condicion_rodadura_energia
+    title: { es: "Condición cinemática de rodadura", en: "Rolling kinematic condition" }
+    equation: "v_cm = R*omega"
+    latex: 'v_{cm}=R\omega'
+    rearrangements:
+      - target: R
+        equation: "R = v_cm/omega"
+        latex: 'R=\frac{v_{cm}}{\omega}'
+    category: "constraint"
+    relation_type: "kinematic_constraint"
+    physical_meaning:
+      es: "Relaciona avance y giro cuando el punto de contacto no desliza."
+      en: "Relates forward motion and spin when the contact point does not slip."
+    constraints: ["R > 0", "omega en rad/s", "contacto sin deslizamiento"]
+    validity:
+      es: "Solo debe imponerse si el contacto mantiene rodadura pura."
+      en: "It should only be imposed if the contact maintains pure rolling."
+    dimension_check: "m = m"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["teoria", "ejemplos", "interpretacion"]
+    interpretation_tags: ["rolling_constraint", "contact"]
+    result_semantics:
+      target: R
+      kind: scalar_positive
+      sign_meaning: { es: "el radio no tiene signo", en: "radius has no sign" }
+      absolute_value_meaning: { es: "tamaño geométrico que conecta avance y giro", en: "geometric size connecting advance and spin" }
+    domain_checks:
+      - { expr: "R > 0", message: { es: "El radio debe ser positivo.", en: "Radius must be positive." } }
+    coherence_checks:
+      - { expr: "abs(v_cm - R*omega) small", message: { es: "Si no se cumple, hay deslizamiento o datos incompatibles.", en: "If it is not satisfied, there is slipping or incompatible data." } }
+    graph_implications:
+      - "La curva de rodadura pura debe ligar v_cm y omega mediante R."
+    pedagogical_triggers:
+      - { when: "true", message: { es: "No impongas la condición de rodadura si el cuerpo patina.", en: "Do not impose rolling condition if the body slips." } }
+
+  - id: aceleracion_cm_rodadura
+    title: { es: "Aceleración del centro de masas en rodadura", en: "Center-of-mass acceleration in rolling" }
+    equation: "a_cm = R*alpha"
+    latex: 'a_{cm}=R\alpha'
+    rearrangements:
+      - target: a_cm
+        equation: "a_cm = R*alpha"
+        latex: 'a_{cm}=R\alpha'
+    category: "constraint"
+    relation_type: "kinematic_constraint"
+    physical_meaning:
+      es: "Conecta aceleración lineal del centro de masas y aceleración angular cuando no hay deslizamiento."
+      en: "Connects center-of-mass linear acceleration and angular acceleration when there is no slipping."
+    constraints: ["R > 0", "rodadura sin deslizamiento"]
+    validity:
+      es: "Válida en el mismo régimen que la condición v_cm = R*omega."
+      en: "Valid in the same regime as the condition v_cm = R*omega."
+    dimension_check: "m/s^2 = m/s^2"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["teoria", "ejemplos", "interpretacion"]
+    interpretation_tags: ["acceleration", "rolling_constraint"]
+    result_semantics:
+      target: a_cm
+      kind: signed_scalar
+      sign_meaning: { es: "el signo depende del eje de avance elegido", en: "the sign depends on the chosen forward axis" }
+      absolute_value_meaning: { es: "intensidad de cambio de la velocidad del centro de masas", en: "intensity of change of center-of-mass velocity" }
+    domain_checks:
+      - { expr: "R > 0", message: { es: "Radio positivo requerido.", en: "Positive radius required." } }
+    coherence_checks:
+      - { expr: "true", message: { es: "El signo de alpha debe ser compatible con el de a_cm.", en: "The sign of alpha must be compatible with a_cm." } }
+    graph_implications:
+      - "Si R aumenta con alpha fijo, a_cm aumenta linealmente."
+    pedagogical_triggers:
+      - { when: "true", message: { es: "No confundas alpha con omega.", en: "Do not confuse alpha with omega." } }
+
+  - id: energia_mecanica_total_rodadura
+    title: { es: "Energía mecánica total en una rampa", en: "Total mechanical energy on an incline" }
+    equation: "E_total = K_total + m*g*R*sin(phi)"
+    latex: 'E_{total}=K_{total}+m\,g\,R\sin(\phi)'
+    rearrangements:
+      - target: E_total
+        equation: "E_total = K_total + m*g*R*sin(phi)"
+        latex: 'E_{total}=K_{total}+m\,g\,R\sin(\phi)'
+    category: "energy_balance"
+    relation_type: "balance"
+    physical_meaning:
+      es: "Añade a la energía cinética de rodadura una referencia potencial útil para rampas o cambios de altura."
+      en: "Adds to rolling kinetic energy a potential reference useful for inclines or height changes."
+    constraints: ["g > 0", "phi definido", "sin pérdidas si E_total se conserva"]
+    validity:
+      es: "Útil como balance ideal si no hay disipación por deslizamiento o deformación."
+      en: "Useful as an ideal balance if there is no dissipation by slipping or deformation."
+    dimension_check: "J + kg*m/s^2*m = J"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["teoria", "ejemplos", "aplicaciones", "interpretacion"]
+    interpretation_tags: ["mechanical_energy", "incline", "balance"]
+    result_semantics:
+      target: E_total
+      kind: scalar
+      sign_meaning: { es: "depende del cero de energía potencial elegido", en: "depends on the chosen zero of potential energy" }
+      absolute_value_meaning: { es: "energía mecánica total del modelo", en: "total mechanical energy of the model" }
+    domain_checks:
+      - { expr: "g > 0", message: { es: "La gravedad debe ser positiva.", en: "Gravity must be positive." } }
+    coherence_checks:
+      - { expr: "true", message: { es: "Si E_total se conserva, toda pérdida de altura debe aparecer como K_total o pérdidas declaradas.", en: "If E_total is conserved, every height loss must appear as K_total or declared losses." } }
+    graph_implications:
+      - "E_total fija el techo del reparto entre traslación y rotación."
+    pedagogical_triggers:
+      - { when: "true", message: { es: "Separa energía cinética total de energía mecánica total.", en: "Separate total kinetic energy from total mechanical energy." } }

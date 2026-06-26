@@ -1,0 +1,481 @@
+formulas:
+- id: longitud_onda_estacionaria
+  title:
+    es: Longitud de onda cuantizada
+    en: Quantized wavelength
+  equation: lambda_n = 2 * L / n
+  latex: \lambda_n = \frac{2L}{n}
+  rearrangements:
+  - target: longitud_onda_estacionaria
+    equation: lambda_n = 2 * L / n
+    latex: \lambda_n = \frac{2L}{n}
+  - target: longitud_cuerda
+    equation: L = n * lambda_n / 2
+    latex: L = \frac{n \lambda_n}{2}
+  - target: numero_armonico
+    equation: n = 2 * L / lambda_n
+    latex: n = \frac{2L}{\lambda_n}
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Relacion que cuantiza las longitudes de onda permitidas en una cuerda con extremos fijos. Solo aquellas ondas cuya
+      mitad cabe un numero entero de veces en la longitud de la cuerda pueden establecerse.
+    en: Relation that quantizes allowed wavelengths in a string with fixed ends. Only waves whose half fits an integer number
+      of times in the string length can establish themselves.
+  constraints:
+  - target: numero_armonico
+    condition: n > 0
+    strict: true
+  - target: longitud_cuerda
+    condition: L > 0
+    strict: true
+  validity:
+    es: Valida para cuerdas con ambos extremos fijos en el modelo lineal de pequenas oscilaciones.
+    en: Valid for strings with both ends fixed in the linear small oscillations model.
+  dimension_check:
+    LHS: '[L]'
+    RHS: '[L] / adimensional = [L]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - frecuencia_estacionaria
+  - nodos_espaciado
+  - funcion_onda
+  interpretation_tags:
+    es:
+    - cuantizacion
+    - condicion de contorno
+    - modo normal
+    - espectro discreto
+    en:
+    - quantization
+    - boundary condition
+    - normal mode
+    - discrete spectrum
+  result_semantics:
+    target: longitud_onda_estacionaria
+    kind: spatial_period
+    sign_meaning:
+      es: La longitud de onda siempre es positiva, representando una distancia espacial.
+      en: Wavelength is always positive, representing a spatial distance.
+    absolute_value_meaning:
+      es: Magnitud de la periodicidad espacial del patron estacionario.
+      en: Magnitude of spatial periodicity of the standing pattern.
+  domain_checks:
+    check_zero:
+      es: lambda_n no puede ser cero para n finito
+      en: lambda_n cannot be zero for finite n
+    check_negative:
+      es: lambda_n siempre positiva
+      en: lambda_n always positive
+  coherence_checks:
+  - check: L / lambda_n debe ser n/2 (medio entero)
+    severity: error
+  graph_implications:
+  - action: highlight_nodes
+    target: spatial_pattern
+  pedagogical_triggers:
+  - condition: n >> 1
+    message:
+      es: En modos altos, la longitud de onda es muy pequena comparada con la cuerda.
+      en: In high modes, wavelength is very small compared to the string.
+- id: frecuencia_estacionaria
+  title:
+    es: Frecuencia del modo estacionario
+    en: Frequency of stationary mode
+  equation: f_n = n * v / (2 * L)
+  latex: f_n = \frac{n v}{2L}
+  rearrangements:
+  - target: frecuencia_modo
+    equation: f_n = n * v / (2 * L)
+    latex: f_n = \frac{n v}{2L}
+  - target: velocidad_propagacion
+    equation: v = 2 * L * f_n / n
+    latex: v = \frac{2 L f_n}{n}
+  - target: longitud_cuerda
+    equation: L = n * v / (2 * f_n)
+    latex: L = \frac{n v}{2 f_n}
+  - target: numero_armonico
+    equation: n = 2 * L * f_n / v
+    latex: n = \frac{2 L f_n}{v}
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Frecuencias discretas permitidas para ondas estacionarias en una cuerda con extremos fijos. Forman una serie armonica
+      donde cada modo es multiplo entero de la frecuencia fundamental.
+    en: Discrete allowed frequencies for standing waves in a string with fixed ends. Form a harmonic series where each mode
+      is an integer multiple of the fundamental frequency.
+  constraints:
+  - target: numero_armonico
+    condition: n > 0
+    strict: true
+  - target: longitud_cuerda
+    condition: L > 0
+    strict: true
+  - target: velocidad_propagacion
+    condition: v > 0
+    strict: true
+  validity:
+    es: Valida para cuerdas con ambos extremos fijos en el modelo lineal de pequenas oscilaciones.
+    en: Valid for strings with both ends fixed in the linear small oscillations model.
+  dimension_check:
+    LHS: '[T]^-1'
+    RHS: adimensional * [L][T]^-1 / [L] = [T]^-1
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - periodo_oscilacion
+  - energia_vibracion
+  - frecuencia_angular
+  interpretation_tags:
+    es:
+    - cuantizacion temporal
+    - serie armonica
+    - frecuencias propias
+    - espectro discreto
+    en:
+    - temporal quantization
+    - harmonic series
+    - natural frequencies
+    - discrete spectrum
+  result_semantics:
+    target: frecuencia_modo
+    kind: frequency
+    sign_meaning:
+      es: La frecuencia siempre es positiva, representando oscilaciones en el tiempo.
+      en: Frequency is always positive, representing oscillations in time.
+    absolute_value_meaning:
+      es: Tasa de repeticion temporal del patron estacionario.
+      en: Temporal repetition rate of the standing pattern.
+  domain_checks:
+    check_zero:
+      es: f_n no puede ser cero para ondas estacionarias
+      en: f_n cannot be zero for standing waves
+    check_negative:
+      es: f_n siempre positiva
+      en: f_n always positive
+  coherence_checks:
+  - check: f_n debe ser multiplo entero de f_1
+    severity: error
+  graph_implications:
+  - action: highlight_frequency
+    target: temporal_pattern
+  pedagogical_triggers:
+  - condition: n == 1
+    message:
+      es: La frecuencia fundamental es la mas grave y audible.
+      en: The fundamental frequency is the lowest and most audible.
+- id: funcion_onda_estacionaria
+  title:
+    es: Funcion de onda estacionaria
+    en: Standing wave function
+  equation: y = 2 * A * sin(n * pi * x / L) * cos(2 * pi * f_n * t)
+  latex: y(x,t) = 2A \sin(\frac{n\pi x}{L}) \cos(2\pi f_n t)
+  rearrangements:
+  - target: desplazamiento_transversal
+    equation: y = 2 * A * sin(n * pi * x / L) * cos(2 * pi * f_n * t)
+    latex: y(x,t) = 2A \sin(\frac{n\pi x}{L}) \cos(2\pi f_n t)
+  - target: amplitud_maxima
+    equation: A = y / (2 * sin(n * pi * x / L) * cos(2 * pi * f_n * t))
+    latex: A = \frac{y}{2 \sin(\frac{n\pi x}{L}) \cos(2\pi f_n t)}
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Descripcion matematica completa del desplazamiento transversal de la cuerda en cualquier punto y momento. Separa variables
+      espaciales y temporales.
+    en: Complete mathematical description of the string's transverse displacement at any point and time. Separates spatial
+      and temporal variables.
+  constraints:
+  - target: numero_armonico
+    condition: n > 0
+    strict: true
+  - target: longitud_cuerda
+    condition: L > 0
+    strict: true
+  - target: amplitud_maxima
+    condition: A >= 0
+    strict: false
+  validity:
+    es: Valida para pequenas oscilaciones donde la tension permanece aproximadamente constante.
+    en: Valid for small oscillations where tension remains approximately constant.
+  dimension_check:
+    LHS: '[L]'
+    RHS: '[L] * adimensional * adimensional = [L]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - nodos_ubicacion
+  - vientres_ubicacion
+  - amplitud_perfil
+  interpretation_tags:
+    es:
+    - superposicion
+    - descripcion completa
+    - variables separadas
+    - perfil espacial
+    en:
+    - superposition
+    - complete description
+    - separated variables
+    - spatial profile
+  result_semantics:
+    target: desplazamiento_transversal
+    kind: displacement
+    sign_meaning:
+      es: El signo indica la direccion del desplazamiento transversal respecto a la posicion de equilibrio.
+      en: Sign indicates the direction of transverse displacement from equilibrium position.
+    absolute_value_meaning:
+      es: Magnitud del desplazamiento en un punto y momento dados.
+      en: Magnitude of displacement at a given point and time.
+  domain_checks:
+    check_zero:
+      es: y puede ser cero en nodos y en instantes especificos
+      en: y can be zero at nodes and at specific instants
+    check_negative:
+      es: y puede ser positivo o negativo segun la direccion del desplazamiento
+      en: y can be positive or negative depending on displacement direction
+  coherence_checks:
+  - check: La parte espacial debe tener nodos en x=0 y x=L
+    severity: error
+  graph_implications:
+  - action: show_standing_profile
+    target: displacement_visual
+  pedagogical_triggers:
+  - condition: A es muy grande
+    message:
+      es: Amplitudes grandes violan la aproximacion de pequenas oscilaciones.
+      en: Large amplitudes violate the small oscillations approximation.
+- id: posicion_nodos
+  title:
+    es: Posicion de los nodos
+    en: Position of nodes
+  equation: x_nodo = m * L / n
+  latex: x_{\mathrm{j}} = \frac{mL}{n}, \quad m = 0, 1, 2, ..., n
+  rearrangements:
+  - target: posicion_nodo
+    equation: x_nodo = m * L / n
+    latex: x_{\mathrm{j}} = \frac{mL}{n}
+  - target: indice_nodo
+    equation: m = n * x_nodo / L
+    latex: m = \frac{n x_{\mathrm{j}}}{L}
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Ubicaciones a lo largo de la cuerda donde la amplitud de oscilacion es siempre nula. Son puntos de interferencia destructiva
+      permanente.
+    en: Locations along the string where oscillation amplitude is always null. Points of permanent destructive interference.
+  constraints:
+  - target: numero_armonico
+    condition: n > 0
+    strict: true
+  - target: longitud_cuerda
+    condition: L > 0
+    strict: true
+  - target: indice_nodo
+    condition: m >= 0 && m <= n
+    strict: true
+  validity:
+    es: Valida para cuerdas con ambos extremos fijos.
+    en: Valid for strings with both ends fixed.
+  dimension_check:
+    LHS: '[L]'
+    RHS: adimensional * [L] / adimensional = [L]
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - numero_nodos
+  - espaciado_nodal
+  - patron_estacionario
+  interpretation_tags:
+    es:
+    - nodos
+    - interferencia destructiva
+    - puntos fijos
+    - patron espacial
+    en:
+    - nodes
+    - destructive interference
+    - fixed points
+    - spatial pattern
+  result_semantics:
+    target: posicion_nodo
+    kind: position
+    sign_meaning:
+      es: La posicion medida desde un extremo fijo de referencia.
+      en: Position measured from a fixed reference end.
+    absolute_value_meaning:
+      es: Distancia a lo largo de la cuerda desde el extremo x=0.
+      en: Distance along the string from end x=0.
+  domain_checks:
+    check_zero:
+      es: x_nodo = 0 corresponde al primer extremo fijo
+      en: x_nodo = 0 corresponds to the first fixed end
+    check_negative:
+      es: x_nodo debe estar en [0, L]
+      en: x_nodo must be in [0, L]
+  coherence_checks:
+  - check: Numero de nodos debe ser n+1 incluyendo extremos
+    severity: error
+  graph_implications:
+  - action: highlight_nodes
+    target: spatial_positions
+  pedagogical_triggers:
+  - condition: m == 0 || m == n
+    message:
+      es: Los nodos en los extremos son puntos fijos por la condicion de contorno.
+      en: Nodes at the ends are fixed points by boundary condition.
+- id: posicion_vientres
+  title:
+    es: Posicion de los vientres
+    en: Position of antinodes
+  equation: x_vientre = (2 * m - 1) * L / (2 * n)
+  latex: x_{\mathrm{k}} = \frac{(2m-1)L}{2n}, \quad m = 1, 2, ..., n
+  rearrangements:
+  - target: posicion_vientre
+    equation: x_vientre = (2 * m - 1) * L / (2 * n)
+    latex: x_{\mathrm{k}} = \frac{(2m-1)L}{2n}
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Ubicaciones donde la amplitud de oscilacion es maxima (igual a 2A). Son puntos de interferencia constructiva permanente.
+    en: Locations where oscillation amplitude is maximum (equal to 2A). Points of permanent constructive interference.
+  constraints:
+  - target: numero_armonico
+    condition: n > 0
+    strict: true
+  - target: longitud_cuerda
+    condition: L > 0
+    strict: true
+  - target: indice_nodo
+    condition: m >= 1 && m <= n
+    strict: true
+  validity:
+    es: Valida para cuerdas con ambos extremos fijos.
+    en: Valid for strings with both ends fixed.
+  dimension_check:
+    LHS: '[L]'
+    RHS: adimensional * [L] / adimensional = [L]
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - numero_vientres
+  - amplitud_maxima
+  - patron_estacionario
+  interpretation_tags:
+    es:
+    - vientres
+    - antinodos
+    - interferencia constructiva
+    - amplitud maxima
+    en:
+    - antinodes
+    - constructive interference
+    - maximum amplitude
+  result_semantics:
+    target: posicion_vientre
+    kind: position
+    sign_meaning:
+      es: La posicion medida desde un extremo fijo de referencia.
+      en: Position measured from a fixed reference end.
+    absolute_value_meaning:
+      es: Distancia a la que la amplitud de oscilacion es maxima.
+      en: Distance where oscillation amplitude is maximum.
+  domain_checks:
+    check_zero:
+      es: x_vientre nunca es cero, siempre entre nodos
+      en: x_vientre is never zero, always between nodes
+    check_negative:
+      es: x_vientre debe estar en (0, L)
+      en: x_vientre must be in (0, L)
+  coherence_checks:
+  - check: Numero de vientres debe ser igual a n
+    severity: error
+  graph_implications:
+  - action: highlight_antinodes
+    target: spatial_positions
+  pedagogical_triggers:
+  - condition: m == 1
+    message:
+      es: El primer vientre esta a L/(2n) del primer extremo.
+      en: The first antinode is at L/(2n) from the first end.
+- id: frecuencia_fundamental
+  title:
+    es: Frecuencia fundamental
+    en: Fundamental frequency
+  equation: f_1 = v / (2 * L)
+  latex: f_1 = \frac{v}{2L}
+  rearrangements:
+  - target: frecuencia_fundamental
+    equation: f_1 = v / (2 * L)
+    latex: f_1 = \frac{v}{2L}
+  - target: velocidad_propagacion
+    equation: v = 2 * L * f_1
+    latex: v = 2 L f_1
+  - target: longitud_cuerda
+    equation: L = v / (2 * f_1)
+    latex: L = \frac{v}{2f_1}
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Frecuencia del primer modo estacionario. Es la frecuencia mas baja posible y la base de la serie armonica.
+    en: Frequency of the first stationary mode. Is the lowest possible frequency and the base of the harmonic series.
+  constraints:
+  - target: velocidad_propagacion
+    condition: v > 0
+    strict: true
+  - target: longitud_cuerda
+    condition: L > 0
+    strict: true
+  - target: frecuencia_fundamental
+    condition: f_1 > 0
+    strict: true
+  validity:
+    es: Valida para cuerdas con ambos extremos fijos.
+    en: Valid for strings with both ends fixed.
+  dimension_check:
+    LHS: '[T]^-1'
+    RHS: '[L][T]^-1 / [L] = [T]^-1'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - frecuencia_estacionaria
+  - periodo_fundamental
+  - afinacion_instrumentos
+  interpretation_tags:
+    es:
+    - frecuencia base
+    - primer modo
+    - tono fundamental
+    - serie armonica
+    en:
+    - base frequency
+    - first mode
+    - fundamental tone
+    - harmonic series
+  result_semantics:
+    target: frecuencia_fundamental
+    kind: frequency
+    sign_meaning:
+      es: La frecuencia fundamental siempre es positiva.
+      en: The fundamental frequency is always positive.
+    absolute_value_meaning:
+      es: Frecuencia mas baja posible en la cuerda con extremos fijos.
+      en: Lowest possible frequency in the string with fixed ends.
+  domain_checks:
+    check_zero:
+      es: f_1 = 0 solo si v = 0 (ausencia de ondas)
+      en: f_1 = 0 only if v = 0 (absence of waves)
+    check_negative:
+      es: f_1 siempre positiva
+      en: f_1 always positive
+  coherence_checks:
+  - check: f_1 debe ser igual a f_n cuando n=1
+    severity: error
+  graph_implications:
+  - action: highlight_fundamental
+    target: frequency_axis
+  pedagogical_triggers:
+  - condition: f_1 es muy alta
+    message:
+      es: Frecuencias muy altas pueden indicar cuerda muy tensa o muy corta.
+      en: Very high frequencies may indicate very tense or very short string.

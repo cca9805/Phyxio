@@ -1,0 +1,103 @@
+version: v5
+id: fase
+leaf_id: fase
+nombre:
+  es: Fase
+  en: Phase
+scope:
+  es: Interpretar fase, desfase y rapidez de fase en ondas armónicas.
+  en: Interpret phase, phase difference, and phase speed in harmonic waves.
+ui:
+  display_modes: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  preferred_mode: physical_reading
+dependencies:
+  magnitudes: [phi, phi0, Delta_phi, k, omega, v_phi, t]
+  formulas: [fase_armonica, diferencia_fase, velocidad_fase_phi]
+global_context:
+  es: La fase indica el estado de avance dentro del ciclo, no una altura por sí sola.
+  en: Phase indicates state of advance within the cycle, not height by itself.
+result_blocks:
+  summary:
+    title: { es: Resumen, en: Summary }
+  physical_reading:
+    title: { es: Lectura física, en: Physical reading }
+  coherence:
+    title: { es: Coherencia, en: Coherence }
+  model_validity:
+    title: { es: Validez del modelo, en: Model validity }
+  graph_reading:
+    title: { es: Lectura gráfica, en: Graph reading }
+  likely_errors:
+    title: { es: Errores probables, en: Likely errors }
+  next_step:
+    title: { es: Siguiente paso, en: Next step }
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  summary_first: true
+  include_units: true
+  include_warnings: true
+targets:
+  phi:
+    label: { es: fase, en: phase }
+    summary_rules:
+      - { id: phi_summary, when: always, status: ok, text: { es: "[[phi]] describe el estado del ciclo en una lectura concreta.", en: "[[phi]] describes the cycle state at a specific reading." } }
+    physical_reading_rules:
+      - { id: phi_reading, when: always, status: ok, text: { es: "Un cambio de fase indica avance o retraso dentro de la oscilación.", en: "A phase change indicates advance or delay within the oscillation." } }
+    coherence_rules:
+      - { id: phi_coherence, when: always, status: ok, text: { es: "Debe interpretarse junto con [[k]], [[omega]] y [[phi0]].", en: "It must be interpreted together with [[k]], [[omega]], and [[phi0]]." } }
+    model_validity_rules:
+      - { id: phi_validity, when: always, status: warning, text: { es: "La lectura es directa solo si la onda tiene fase armónica definida.", en: "The reading is direct only if the wave has a defined harmonic phase." } }
+    graph_rules:
+      - { id: phi_graph, when: always, status: ok, text: { es: "En el gráfico, puntos con fase equivalente tienen el mismo estado de ciclo.", en: "On the graph, points with equivalent phase have the same cycle state." } }
+    likely_errors:
+      - { id: phi_error, when: always, status: warning, text: { es: "Error probable: confundir fase con amplitud.", en: "Likely mistake: confusing phase with amplitude." } }
+    next_step_rules:
+      - { id: phi_next, when: always, status: ok, text: { es: "Compara dos lecturas mediante [[Delta_phi]].", en: "Compare two readings using [[Delta_phi]]." } }
+  Delta_phi:
+    label: { es: diferencia de fase, en: phase difference }
+    summary_rules:
+      - { id: dphi_summary, when: always, status: ok, text: { es: "[[Delta_phi]] resume cuánto se separan dos estados de oscilación.", en: "[[Delta_phi]] summarizes how far two oscillation states are separated." } }
+    physical_reading_rules:
+      - { id: dphi_reading, when: always, status: ok, text: { es: "Cerca de cero indica lecturas en fase; cerca de pi indica oposición.", en: "Near zero indicates in-phase readings; near pi indicates opposition." } }
+    coherence_rules:
+      - { id: dphi_coherence, when: always, status: ok, text: { es: "Debe calcularse con la misma convención de signo para ambas lecturas.", en: "It must be calculated with the same sign convention for both readings." } }
+    model_validity_rules:
+      - { id: dphi_validity, when: always, status: warning, text: { es: "Si la onda es dispersiva, el desfase depende de la componente observada.", en: "If the wave is dispersive, phase difference depends on the observed component." } }
+    graph_rules:
+      - { id: dphi_graph, when: always, status: ok, text: { es: "El desfase se lee como desplazamiento horizontal dentro del ciclo.", en: "Phase difference is read as horizontal displacement within the cycle." } }
+    likely_errors:
+      - { id: dphi_error, when: always, status: warning, text: { es: "Error probable: confundir separación espacial con desfase sin usar [[k]].", en: "Likely mistake: confusing spatial separation with phase difference without using [[k]]." } }
+    next_step_rules:
+      - { id: dphi_next, when: always, status: ok, text: { es: "Reduce la lectura al intervalo de un ciclo si quieres comparar estados equivalentes.", en: "Reduce the reading to one cycle interval if you want to compare equivalent states." } }
+  v_phi:
+    label: { es: rapidez de fase, en: phase speed }
+    summary_rules:
+      - { id: vphi_summary, when: always, status: ok, text: { es: "[[v_phi]] indica cuánto avanza una fase constante.", en: "[[v_phi]] indicates how far a constant phase advances." } }
+    physical_reading_rules:
+      - { id: vphi_reading, when: always, status: ok, text: { es: "No mide necesariamente transporte de materia; mide avance del estado de fase.", en: "It does not necessarily measure material transport; it measures phase-state advance." } }
+    coherence_rules:
+      - { id: vphi_coherence, when: always, status: ok, text: { es: "Debe ser compatible con [[omega]] y [[k]].", en: "It must be compatible with [[omega]] and [[k]]." } }
+    model_validity_rules:
+      - { id: vphi_validity, when: always, status: warning, text: { es: "En medios dispersivos puede diferir de la rapidez de grupo.", en: "In dispersive media it may differ from group speed." } }
+    graph_rules:
+      - { id: vphi_graph, when: always, status: ok, text: { es: "El gráfico debe mostrar el avance de un mismo punto de fase.", en: "The graph should show the advance of the same phase point." } }
+    likely_errors:
+      - { id: vphi_error, when: always, status: warning, text: { es: "Error probable: confundir rapidez de fase con rapidez de una partícula del medio.", en: "Likely mistake: confusing phase speed with the speed of a medium particle." } }
+    next_step_rules:
+      - { id: vphi_next, when: always, status: ok, text: { es: "Relaciona la lectura con longitud de onda y periodo si el problema los da.", en: "Relate the reading to wavelength and period if the problem provides them." } }
+  t:
+    label: { es: tiempo, en: time }
+    summary_rules:
+      - { id: t_summary, when: always, status: ok, text: { es: "[[t]] describe el instante usado para leer el estado de fase.", en: "[[t]] describes the instant used to read the phase state." } }
+    physical_reading_rules:
+      - { id: t_reading, when: always, status: ok, text: { es: "Cambiar [[t]] desplaza la fase temporalmente mediante [[omega]].", en: "Changing [[t]] shifts phase in time through [[omega]]." } }
+    coherence_rules:
+      - { id: t_coherence, when: always, status: ok, text: { es: "Debe usar el mismo origen temporal que [[phi0]].", en: "It must use the same time origin as [[phi0]]." } }
+    model_validity_rules:
+      - { id: t_validity, when: always, status: warning, text: { es: "La lectura temporal es estable solo si el ritmo de fase se mantiene durante la observación.", en: "The time reading is stable only if the phase rate remains steady during observation." } }
+    graph_rules:
+      - { id: t_graph, when: always, status: ok, text: { es: "En el gráfico, variar [[t]] desplaza el patrón de fase.", en: "On the graph, changing [[t]] shifts the phase pattern." } }
+    likely_errors:
+      - { id: t_error, when: always, status: warning, text: { es: "Error probable: confundir cambio temporal de fase con cambio de amplitud.", en: "Likely mistake: confusing temporal phase change with amplitude change." } }
+    next_step_rules:
+      - { id: t_next, when: always, status: ok, text: { es: "Compara instantes distintos con [[Delta_t]] si el problema pide desfase temporal.", en: "Compare different instants with [[Delta_t]] if the problem asks for temporal phase difference." } }

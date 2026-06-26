@@ -1,0 +1,681 @@
+# PROMPT YAML 05 | interpretacion.yaml
+
+Create a downloadable YAML file named `clasificacion-de-transiciones_interpretacion.yaml`.
+The file content must be the completed `interpretacion.yaml`.
+Do not print the YAML content in the chat.
+Do not wrap the YAML in Markdown fences.
+Complete and improve `interpretacion.yaml` without changing synced identity/dependency fields.
+The downloaded file must contain raw valid YAML only.
+
+Current synchronized interpretacion.yaml:
+INTERPRETACION_ACTUAL_INICIO
+version: 5.0.0
+id: clasificacion-de-transiciones
+leaf_id: clasificacion-de-transiciones
+nombre:
+  es: Clasificacion de transiciones
+  en: Classification of Transitions
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: transiciones-de-fase
+  parent_id: transiciones-de-fase
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/transiciones-de-fase/clasificacion-de-transiciones
+  orden: 276100
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Svg
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas: salto_entropia_latente, salto_parametro_orden, criterio_derivada_energia_libre, exponente_parametro_orden
+  magnitudes: temperatura, temperatura_critica, parametro_de_orden, salto_parametro_de_orden, calor_latente, salto_entropia,
+    energia_libre_gibbs, orden_de_transicion, exponente_critico_beta, amplitud_critica
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: physical concept
+  axis_convention:
+    es: El signo depende del convenio de ejes elegido cuando intervienen magnitudes vectoriales.
+    en: The sign depends on the chosen axis convention when vector quantities are involved.
+  standard_assumptions:
+  - es: El modelo se interpreta dentro de las hipótesis declaradas en el leaf.
+    en: The model is interpreted within the assumptions declared in the leaf.
+  standard_warnings:
+  - es: No interpretes el resultado sin revisar unidades, signo y validez del modelo.
+    en: Do not interpret the result without checking units, sign, and model validity.
+graph_binding:
+  enabled: true
+  type: Svg
+  channels:
+  - Svg
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: La interpretación debe respetar la dimensión física de cada resultado.
+      en: The interpretation must respect the physical dimension of each result.
+error_patterns:
+  enabled: true
+  patterns:
+  - id: unit_sign_model_confusion
+    status: warning
+    text:
+      es: Un error frecuente es leer el número sin unidad, signo o modelo físico.
+      en: A common error is reading the number without unit, sign, or physical model.
+graph_reading_policy:
+  enabled: true
+  primary_variable: calor_latente
+  reading_sequence:
+  - es: Identifica ejes, dirección, sentido y relación entre magnitudes antes de interpretar el resultado.
+    en: Identify axes, direction, sense, and the relation between quantities before interpreting the result.
+  key_points:
+  - es: Conecta la lectura visual con el signo, la unidad y el modelo físico.
+    en: Connect the visual reading with sign, unit, and the physical model.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Compara el resultado con valores cotidianos o escalas físicas conocidas cuando sea posible.
+    en: Compare the result with everyday values or known physical scales when possible.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Comprueba que las unidades finales coinciden con la magnitud interpretada.
+    en: Check that the final units match the interpreted quantity.
+  common_unit_mistakes:
+  - es: Mezclar unidades incompatibles antes de aplicar la fórmula.
+    en: Mixing incompatible units before applying the formula.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  calor_latente:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+      en: Quantity used to classify or diagnose phase transitions.
+    summary_rules:
+    - id: calor_latente_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[calor_latente]] indica la magnitud física principal que se está interpretando.
+        en: The result [[calor_latente]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: calor_latente_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[calor_latente]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[calor_latente]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: calor_latente_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[calor_latente]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[calor_latente]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: calor_latente_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[calor_latente]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[calor_latente]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: calor_latente_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[calor_latente]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[calor_latente]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: calor_latente_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[calor_latente]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[calor_latente]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: calor_latente_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[calor_latente]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[calor_latente]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: calor_latente_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[calor_latente]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[calor_latente]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: calor_latente_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[calor_latente]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[calor_latente]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  salto_entropia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+      en: Quantity used to classify or diagnose phase transitions.
+    summary_rules:
+    - id: salto_entropia_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[salto_entropia]] indica la magnitud física principal que se está interpretando.
+        en: The result [[salto_entropia]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: salto_entropia_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[salto_entropia]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[salto_entropia]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: salto_entropia_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[salto_entropia]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[salto_entropia]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: salto_entropia_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[salto_entropia]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[salto_entropia]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: salto_entropia_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[salto_entropia]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[salto_entropia]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: salto_entropia_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[salto_entropia]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[salto_entropia]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: salto_entropia_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[salto_entropia]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[salto_entropia]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: salto_entropia_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[salto_entropia]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[salto_entropia]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: salto_entropia_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[salto_entropia]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[salto_entropia]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_critica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+      en: Quantity used to classify or diagnose phase transitions.
+    summary_rules:
+    - id: temperatura_critica_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[temperatura_critica]] indica la magnitud física principal que se está interpretando.
+        en: The result [[temperatura_critica]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: temperatura_critica_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura_critica]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[temperatura_critica]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: temperatura_critica_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura_critica]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[temperatura_critica]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: temperatura_critica_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura_critica]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[temperatura_critica]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: temperatura_critica_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[temperatura_critica]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[temperatura_critica]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: temperatura_critica_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[temperatura_critica]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[temperatura_critica]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: temperatura_critica_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[temperatura_critica]], revisa la coherencia física y vuelve a la calculadora si necesitas
+          otro despeje.
+        en: After obtaining [[temperatura_critica]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: temperatura_critica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura_critica]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[temperatura_critica]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: temperatura_critica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[temperatura_critica]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[temperatura_critica]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  salto_parametro_de_orden:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+      en: Quantity used to classify or diagnose phase transitions.
+    summary_rules:
+    - id: salto_parametro_de_orden_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[salto_parametro_de_orden]] indica la magnitud física principal que se está interpretando.
+        en: The result [[salto_parametro_de_orden]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: salto_parametro_de_orden_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[salto_parametro_de_orden]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[salto_parametro_de_orden]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: salto_parametro_de_orden_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[salto_parametro_de_orden]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[salto_parametro_de_orden]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: salto_parametro_de_orden_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[salto_parametro_de_orden]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[salto_parametro_de_orden]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: salto_parametro_de_orden_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[salto_parametro_de_orden]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[salto_parametro_de_orden]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: salto_parametro_de_orden_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[salto_parametro_de_orden]] como un número aislado. Su sentido depende del modelo, la unidad y
+          el signo.
+        en: Do not interpret [[salto_parametro_de_orden]] as an isolated number. Its meaning depends on the model, unit, and
+          sign.
+    next_step_rules:
+    - id: salto_parametro_de_orden_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[salto_parametro_de_orden]], revisa la coherencia física y vuelve a la calculadora si necesitas
+          otro despeje.
+        en: After obtaining [[salto_parametro_de_orden]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: salto_parametro_de_orden_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[salto_parametro_de_orden]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[salto_parametro_de_orden]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: salto_parametro_de_orden_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[salto_parametro_de_orden]] comprobando qué ocurre si una magnitud dominante crece,
+          disminuye o se anula.
+        en: Analyze the limiting cases of [[salto_parametro_de_orden]] by checking what happens if a dominant quantity grows,
+          decreases, or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  parametro_de_orden:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+      en: Quantity used to classify or diagnose phase transitions.
+    summary_rules:
+    - id: parametro_de_orden_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[parametro_de_orden]] indica la magnitud física principal que se está interpretando.
+        en: The result [[parametro_de_orden]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: parametro_de_orden_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[parametro_de_orden]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[parametro_de_orden]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: parametro_de_orden_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[parametro_de_orden]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[parametro_de_orden]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: parametro_de_orden_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[parametro_de_orden]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[parametro_de_orden]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: parametro_de_orden_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[parametro_de_orden]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[parametro_de_orden]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: parametro_de_orden_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[parametro_de_orden]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[parametro_de_orden]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: parametro_de_orden_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[parametro_de_orden]], revisa la coherencia física y vuelve a la calculadora si necesitas
+          otro despeje.
+        en: After obtaining [[parametro_de_orden]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: parametro_de_orden_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[parametro_de_orden]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[parametro_de_orden]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: parametro_de_orden_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[parametro_de_orden]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[parametro_de_orden]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  orden_de_transicion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+      en: Quantity used to classify or diagnose phase transitions.
+    summary_rules:
+    - id: orden_de_transicion_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[orden_de_transicion]] indica la magnitud física principal que se está interpretando.
+        en: The result [[orden_de_transicion]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: orden_de_transicion_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[orden_de_transicion]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[orden_de_transicion]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: orden_de_transicion_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[orden_de_transicion]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[orden_de_transicion]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: orden_de_transicion_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[orden_de_transicion]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[orden_de_transicion]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: orden_de_transicion_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[orden_de_transicion]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[orden_de_transicion]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: orden_de_transicion_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[orden_de_transicion]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[orden_de_transicion]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: orden_de_transicion_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[orden_de_transicion]], revisa la coherencia física y vuelve a la calculadora si necesitas
+          otro despeje.
+        en: After obtaining [[orden_de_transicion]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: orden_de_transicion_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es:
+
+[RECORTADO: usa el archivo real como autoridad si necesitas mas detalle]
+INTERPRETACION_ACTUAL_FIN
+
+Required contract:
+- version must remain "5.0.0".
+- id, leaf_id, nombre, scope, dependencies, and target keys must remain synchronized.
+- dependencies.formulas and dependencies.magnitudes must be YAML lists of real ids.
+- output_contract.sections must be exactly: ['summary', 'physical_reading', 'coherence', 'model_validity', 'graph_reading', 'likely_errors', 'next_step']
+- result_blocks must include summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step.
+- Every target must contain rules for summary, physical_reading, coherence, model_validity, likely_errors, and next_step.
+- Every rule must include id, when, status, text.es, text.en.
+- graph_reading_policy.enabled must match whether graph reading is useful for this leaf.
+- free_body_diagram_hint.enabled is true only for Dcl-oriented leaves.
+- No placeholders like <target_id>, TODO, PENDING, completar.
+
+Physics quality:
+- Write interpretation rules that diagnose meaning, signs, units, assumptions, limits, and common misconceptions.
+- Keep rules concise but specific enough for an assistant to explain student calculator results.

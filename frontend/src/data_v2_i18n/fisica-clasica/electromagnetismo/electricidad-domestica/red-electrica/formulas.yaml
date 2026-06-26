@@ -1,0 +1,250 @@
+version: 1
+formulas:
+- id: corriente_total
+  title:
+    es: Corriente total de línea
+    en: Total line current
+  equation: I_{\mathrm{tot}} = P_{\mathrm{tot}} / V
+  latex: I_{\mathrm{tot}} = \frac{P_{\mathrm{tot}}}{V}
+  variables:
+  - potencia_total_conectada
+  - tension_de_red
+  - frecuencia_de_red
+  rearrangements:
+  - target: corriente_total_de_linea
+    equation: I_{\mathrm{tot}} = P_{\mathrm{tot}} / V
+    latex: I_{\mathrm{tot}} = \frac{P_{\mathrm{tot}}}{V}
+    constraints: []
+  - target: potencia_total_conectada
+    equation: P_{\mathrm{tot}} = I_{\mathrm{tot}} * V
+    latex: P_{\mathrm{tot}} = I_{\mathrm{tot}} V
+    constraints: []
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: Relaciona la potencia total consumida por los receptores con la corriente que debe transportar el conductor. La tensión
+      constante de la red implica que la corriente depende linealmente de la potencia.
+    en: Relates the total power consumed by receptors to the current the conductor must carry. The constant network voltage
+      implies that current depends linearly on power.
+  constraints:
+  - expr: V > 0
+    message:
+      es: La tensión debe ser positiva para que la división tenga sentido físico.
+      en: Voltage must be positive for the division to have physical meaning.
+  validity:
+    es: Válida para receptores resistivos en paralelo a [[V]] = 230 V, [[f]] = 50 Hz, con impedancia de línea despreciable
+      y factor de potencia unitario.
+    en: Valid for resistive loads in parallel at [[V]] = 230 V, [[f]] = 50 Hz, with negligible line impedance and unity power
+      factor.
+  dimension_check: I = (M L^2 T^-3) / (M L^2 T^-3 I^-1) = I
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - corriente_total_de_linea
+  - model_validity
+  - physical_reading
+  result_semantics:
+    target: corriente_total_de_linea
+    meaning: Total current required by the connected load.
+    kind: scalar
+    absolute_value_meaning:
+      es: Total current required by the connected load.
+      en: Total current required by the connected load.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido físico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La gráfica debe reflejar la relación lineal entre potencia y corriente.
+  pedagogical_triggers:
+  - when: result_outside_expected_range
+    message:
+      es: Revisar si el modelo físico se está aplicando dentro de su dominio de validez.
+      en: Check whether the physical model is being applied within its validity domain.
+- id: potencia_total
+  title:
+    es: Potencia total suministrada
+    en: Total supplied power
+  equation: P_{\mathrm{tot}} = V * I_{\mathrm{tot}}
+  latex: P_{\mathrm{tot}} = V I_{\mathrm{tot}}
+  rearrangements:
+  - target: potencia_total_conectada
+    equation: P_{\mathrm{tot}} = V * I_{\mathrm{tot}}
+    latex: P_{\mathrm{tot}} = V I_{\mathrm{tot}}
+    constraints: []
+  - target: corriente_total_de_linea
+    equation: I_{\mathrm{tot}} = P_{\mathrm{tot}} / V
+    latex: I_{\mathrm{tot}} = \frac{P_{\mathrm{tot}}}{V}
+    constraints: []
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: La potencia total que la red suministra a los receptores conectados. En el modelo resistivo, toda la potencia se disipa
+      en los receptores.
+    en: The total power the network supplies to connected receptors. In the resistive model, all power is dissipated in the
+      receptors.
+  constraints: []
+  validity:
+    es: Válida para el modelo resistivo con factor de potencia unitario.
+    en: Valid for the resistive model with unity power factor.
+  dimension_check: M L^2 T^-3 = (M L^2 T^-3 I^-1)(I) = M L^2 T^-3
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - potencia_total_conectada
+  - model_validity
+  - physical_reading
+  result_semantics:
+    target: potencia_total_conectada
+    meaning: Total power supplied to all connected loads.
+    kind: scalar
+    absolute_value_meaning:
+      es: Total power supplied to all connected loads.
+      en: Total power supplied to all connected loads.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido físico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La gráfica muestra la relación entre corriente y potencia.
+  pedagogical_triggers:
+  - when: result_outside_expected_range
+    message:
+      es: Revisar si el modelo físico se está aplicando dentro de su dominio de validez.
+      en: Check whether the physical model is being applied within its validity domain.
+- id: margen_capacidad
+  title:
+    es: Margen de capacidad del circuito
+    en: Circuit capacity margin
+  equation: margen_uso = I_{\mathrm{tot}} / I_{\max}
+  latex: \eta_I = \frac{I_{\mathrm{tot}}}{I_{\max}}
+  rearrangements:
+  - target: margen_uso
+    equation: margen_uso = I_{\mathrm{tot}} / I_{\max}
+    latex: \eta_I = \frac{I_{\mathrm{tot}}}{I_{\max}}
+    constraints: []
+  - target: corriente_total_de_linea
+    equation: I_{\mathrm{tot}} = margen_uso * I_{\max}
+    latex: I_{\mathrm{tot}} = \eta_I I_{\max}
+    constraints: []
+  category: structural
+  relation_type: average_relation
+  physical_meaning:
+    es: Indica qué fracción de la capacidad máxima del circuito está siendo utilizada. Es un índice adimensional de seguridad
+      operativa.
+    en: Indicates what fraction of the circuit's maximum capacity is being used. It is a dimensionless index of operational
+      safety.
+  constraints:
+  - expr: I_{\max} > 0
+    message:
+      es: El calibre del magnetotérmico debe ser positivo.
+      en: The circuit breaker rating must be positive.
+  validity:
+    es: Válida siempre que I_{\max} sea el calibre real del magnetotérmico de línea.
+    en: Valid as long as I_{\max} is the actual rating of the line MCB.
+  dimension_check: 1 = I / I = 1
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - margen_uso
+  - model_validity
+  - physical_reading
+  result_semantics:
+    target: margen_uso
+    meaning: Fraction of circuit capacity being used.
+    kind: scalar
+    absolute_value_meaning:
+      es: Fraction of circuit capacity being used.
+      en: Fraction of circuit capacity being used.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido físico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La gráfica muestra el margen de uso respecto al límite de protección.
+  pedagogical_triggers:
+  - when: result_outside_expected_range
+    message:
+      es: Revisar si el modelo físico se está aplicando dentro de su dominio de validez.
+      en: Check whether the physical model is being applied within its validity domain.
+- id: frecuencia_contexto
+  title:
+    es: Frecuencia de red (contexto)
+    en: Network frequency (context)
+  equation: f = 50 Hz
+  latex: f = 50~\mathrm{Hz}
+  rearrangements: []
+  category: contextual
+  relation_type: definition
+  physical_meaning:
+    es: La frecuencia de la red eléctrica europea es 50 Hz. No interviene en los cálculos del modelo resistivo pero caracteriza
+      el suministro.
+    en: The European electrical network frequency is 50 Hz. It does not participate in resistive model calculations but characterizes
+      the supply.
+  constraints: []
+  validity:
+    es: Válido para instalaciones europeas estándar.
+    en: Valid for standard European installations.
+  dimension_check: T^-1
+  calculable: false
+  motivo_no_calculable:
+    es: Es un valor constante del contexto, no una variable calculable.
+    en: It is a constant value of the context, not a calculable variable.
+  used_in:
+  - teoria
+  interpretation_tags:
+  - frecuencia_de_red
+  - model_validity
+  result_semantics:
+    target: frecuencia_de_red
+    meaning: Network frequency for context reference.
+    kind: scalar
+    absolute_value_meaning:
+      es: Network frequency for context reference.
+      en: Network frequency for context reference.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []

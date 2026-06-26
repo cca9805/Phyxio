@@ -1,0 +1,371 @@
+version: 5
+id: flotacion-interp
+leaf_id: flotacion
+scope: local
+nombre:
+  es: Análisis de Flotación
+  en: Flotation Analysis
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: Resumen de Flotación
+      en: Flotation Summary
+  physical_reading:
+    title:
+      es: Significado Físico
+      en: Physical Meaning
+  coherence:
+    title:
+      es: Coherencia del Sistema
+      en: System Coherence
+  model_validity:
+    title:
+      es: Validez del Modelo
+      en: Model Validity
+  graph_reading:
+    title:
+      es: Interpretación Visual
+      en: Visual Interpretation
+  likely_errors:
+    title:
+      es: Posibles Errores
+      en: Possible Errors
+  next_step:
+    title:
+      es: Pasos Siguientes
+      en: Next Steps
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [frac_sum, rho_obj, rho_f, Vsum, Vtot]
+  formulas: [fraccion_sumergida, volumen_sumergido]
+
+targets:
+  frac_sum:
+    summary_rules:
+      - id: frac-sum-val
+        condition:
+          variable: frac_sum
+          gte: 0
+          lte: 1
+        status: success
+        text:
+          es: "El cuerpo alcanza el equilibrio de flotación con una fracción sumergida [[frac_sum]] de {{frac_sum}}, lo que indica que el peso del fluido desalojado compensa exactamente su peso gravitatorio."
+          en: "The body reaches flotation equilibrium with a submerged fraction [[frac_sum]] of {{frac_sum}}, indicating that the weight of the displaced fluid exactly offsets its gravitational weight."
+      - id: frac-sum-sink
+        when: frac_sum > 1
+        status: warning
+        text:
+          es: "La fracción teórica calculada por {{f:fraccion_sumergida}} supera la unidad: el cuerpo es más denso que el fluido y se hundirá irremediablemente hasta el fondo."
+          en: "The theoretical fraction calculated by {{f:fraccion_sumergida}} exceeds unity: the body is denser than the fluid and will inevitably sink to the bottom."
+    physical_reading_rules:
+      - id: frac-meaning
+        when: frac_sum < 0.1
+        status: info
+        text:
+          es: "Esto se debe a la ínfima densidad relativa del objeto, lo que genera un desequilibrio inicial masivo que se compensa rápidamente; en consecuencia, el sistema alcanza el equilibrio estático sumergiendo apenas una fracción mínima de su cuerpo."
+          en: "This is due to the object's negligible relative density, which generates a massive initial imbalance that is quickly compensated; consequently, the system reaches static equilibrium by submerging only a minimal fraction of its body."
+    coherence_rules:
+      - id: frac-coh
+        when: frac_sum > 0
+        status: success
+        text:
+          es: "Coherente con la relación de densidades {{f:fraccion_sumergida}}."
+          en: "Coherent with the density ratio {{f:fraccion_sumergida}}."
+    model_validity_rules:
+      - id: frac-valid
+        when: frac_sum > 0
+        status: success
+        text:
+          es: "Válido para equilibrio estático sin oleaje."
+          en: "Valid for static equilibrium without waves."
+    graph_rules:
+      - id: frac-graph
+        when: frac_sum > 0
+        status: success
+        text:
+          es: "Determina el calado visual en el esquema."
+          en: "Determines the visual draft in the diagram."
+    likely_errors:
+      - id: err-frac-neg
+        when: frac_sum < 0
+        status: error
+        text:
+          es: "Error: La fracción sumergida no puede ser negativa."
+          en: "Error: The submerged fraction cannot be negative."
+      - id: err-frac-mass
+        when: frac_sum > 0
+        status: warning
+        text:
+          es: "Fallo: Pensar que duplicar el volumen del objeto duplicará su fracción sumergida."
+          en: "Failure: Thinking that doubling the object's volume will double its submerged fraction."
+      - id: err-frac-shape
+        when: frac_sum > 0
+        status: warning
+        text:
+          es: "Confusión: Creer que la forma del objeto (si es compacto) afecta el porcentaje sumergido."
+          en: "Confusion: Believing that the object's shape (if compact) affects the submerged percentage."
+      - id: err-frac-rel
+        when: frac_sum > 1
+        status: error
+        text:
+          es: "Error: No interpretar que una fracción > 1 significa pérdida de flotabilidad."
+          en: "Error: Not interpreting that a fraction > 1 means loss of buoyancy."
+    next_step_rules:
+      - id: next-frac
+        when: frac_sum > 0
+        status: info
+        text:
+          es: "Aumenta la densidad del fluido [[rho_f]] para ver cómo el objeto sube."
+          en: "Increase the fluid density [[rho_f]] to see how the object rises."
+
+  rho_obj:
+    summary_rules:
+      - id: rho-obj-val
+        when: rho_obj > 0
+        status: success
+        text:
+          es: "Densidad del cuerpo [[rho_obj]] = {{rho_obj}} kg/m³."
+          en: "Body density [[rho_obj]] = {{rho_obj}} kg/m³."
+    physical_reading_rules:
+      - id: rho-obj-meaning
+        when: rho_obj < 500
+        status: info
+        text:
+          es: "Densidad baja; típica de maderas ligeras o corcho."
+          en: "Low density; typical of light woods or cork."
+    coherence_rules:
+      - id: rho-obj-coh
+        when: rho_obj > 0
+        status: success
+        text:
+          es: "Magnitud consistente con la masa y volumen total."
+          en: "Magnitude consistent with mass and total volume."
+    model_validity_rules:
+      - id: rho-obj-hom
+        when: rho_obj > 0
+        status: success
+        text:
+          es: "Se asume densidad promedio uniforme."
+          en: "Uniform average density is assumed."
+    graph_rules:
+      - id: rho-obj-viz
+        when: rho_obj > 0
+        status: success
+        text:
+          es: "Representa el material del bloque."
+          en: "Represents the block material."
+    likely_errors:
+      - id: err-rho-zero
+        when: rho_obj <= 0
+        status: error
+        text:
+          es: "Error: Un cuerpo real debe tener densidad positiva."
+          en: "Error: A real body must have positive density."
+      - id: err-rho-hollow
+        when: rho_obj > 0
+        status: warning
+        text:
+          es: "Riesgo: Olvidar que [[rho_obj]] es la densidad total (incluyendo aire interno)."
+          en: "Risk: Forgetting that [[rho_obj]] is the total density (including internal air)."
+      - id: err-rho-extreme
+        when: rho_obj > 22000
+        status: warning
+        text:
+          es: "Aviso: Densidad superior a la del osmio (improbable)."
+          en: "Warning: Density higher than osmium (unlikely)."
+    next_step_rules:
+      - id: next-rho-obj
+        when: rho_obj > 0
+        status: info
+        text:
+          es: "Compara con la densidad del agua (1000 kg/m³)."
+          en: "Compare with water density (1000 kg/m³)."
+
+  Vsum:
+    summary_rules:
+      - id: vsum-val
+        when: Vsum >= 0
+        status: success
+        text:
+          es: "El volumen de carena [[Vsum]] es de {{Vsum}} m³, definiendo la magnitud del empuje ascendente."
+          en: "The carena volume [[Vsum]] is {{Vsum}} m³, defining the magnitude of the upward thrust."
+    physical_reading_rules:
+      - id: vsum-meaning
+        when: Vsum > 0
+        status: success
+        text:
+          es: "Este volumen desplazado genera una fuerza de flotación que actúa en el centro de carena para oponerse al peso gravitatorio."
+          en: "This displaced volume generates a buoyancy force acting at the center of buoyancy to oppose the gravitational weight."
+    coherence_rules:
+      - id: vsum-coh
+        when: Vsum >= 0
+        status: success
+        text:
+          es: "Coherente con la relación geométrica {{f:volumen_sumergido}} entre la fracción y el volumen total."
+          en: "Coherent with the geometric relationship {{f:volumen_sumergido}} between the fraction and the total volume."
+    model_validity_rules:
+      - id: vsum-mod
+        when: Vsum > 0
+        status: success
+        text:
+          es: "Válido para cuerpos con geometría rígida y volumen definido."
+          en: "Valid for bodies with rigid geometry and defined volume."
+    graph_rules:
+      - id: vsum-graph
+        when: Vsum > 0
+        status: success
+        text:
+          es: "Representa visualmente la parte del cuerpo sumergida bajo la superficie libre."
+          en: "Visually represents the part of the body submerged below the free surface."
+    likely_errors:
+      - id: err-vsum-high
+        when: Vsum > Vtot
+        status: error
+        text:
+          es: "Error crítico: El volumen sumergido no puede ser físicamente mayor que el volumen total del objeto."
+          en: "Critical error: The submerged volume cannot physically exceed the object's total volume."
+      - id: err-vsum-mass
+        when: Vsum > 0
+        status: warning
+        text:
+          es: "Error conceptual: Suponer que el empuje depende de la masa interna del objeto y no del volumen desplazado [[Vsum]]."
+          en: "Conceptual error: Assuming that thrust depends on the object's internal mass and not on the displaced volume [[Vsum]]."
+      - id: err-vsum-empty
+        when: Vsum == 0
+        status: error
+        text:
+          es: "Incoherencia: Si el cuerpo tiene densidad positiva, debe desplazar un volumen finito para flotar en equilibrio."
+          en: "Incoherence: If the body has positive density, it must displace a finite volume to float in equilibrium."
+    next_step_rules:
+      - id: next-vsum
+        when: Vsum > 0
+        status: info
+        text:
+          es: "Calcula la fuerza de empuje multiplicando este volumen por [[rho_f]] y [[g]]."
+          en: "Calculate the buoyancy force by multiplying this volume by [[rho_f]] and [[g]]."
+
+  Vtot:
+    summary_rules:
+      - id: vtot-val
+        when: Vtot > 0
+        status: success
+        text:
+          es: "Volumen total [[Vtot]] = {{Vtot}} m³."
+          en: "Total volume [[Vtot]] = {{Vtot}} m³."
+    physical_reading_rules:
+      - id: vtot-meaning
+        when: Vtot > 0
+        status: success
+        text:
+          es: "Establece el límite máximo de empuje que el cuerpo puede generar antes de hundirse por completo."
+          en: "Sets the maximum thrust limit the body can generate before sinking completely."
+    coherence_rules:
+      - id: vtot-coh
+        when: Vtot > 0
+        status: success
+        text:
+          es: "Consistente con las dimensiones geométricas del objeto."
+          en: "Consistent with the object's geometric dimensions."
+    model_validity_rules:
+      - id: vtot-valid
+        when: Vtot > 0
+        status: success
+        text:
+          es: "Se asume un volumen constante e indeformable."
+          en: "A constant and non-deformable volume is assumed."
+    graph_rules:
+      - id: vtot-graph
+        when: Vtot > 0
+        status: success
+        text:
+          es: "Define la escala total del cuerpo en el gráfico."
+          en: "Defines the total scale of the body in the graph."
+    likely_errors:
+      - id: err-vtot-zero
+        when: Vtot <= 0
+        status: error
+        text:
+          es: "Error: El volumen total debe ser una cantidad positiva."
+          en: "Error: The total volume must be a positive quantity."
+    next_step_rules:
+      - id: next-vtot
+        when: Vtot > 0
+        status: info
+        text:
+          es: "Considera cómo cambiaría el equilibrio si el volumen total fuera mayor pero la masa fuera la misma."
+          en: "Consider how the equilibrium would change if the total volume were larger but the mass were the same."
+
+  rho_f:
+    summary_rules:
+      - id: rhof-val
+        when: rho_f > 0
+        status: success
+        text:
+          es: "Densidad del fluido [[rho_f]] = {{rho_f}} kg/m³."
+          en: "Fluid density [[rho_f]] = {{rho_f}} kg/m³."
+    physical_reading_rules:
+      - id: rhof-meaning
+        when: rho_f > 1000
+        status: info
+        text:
+          es: "El fluido es más denso que el agua dulce, lo que facilita la flotación de cuerpos menos densos."
+          en: "The fluid is denser than fresh water, facilitating the flotation of less dense bodies."
+    coherence_rules:
+      - id: rhof-coh
+        when: rho_f > 0
+        status: success
+        text:
+          es: "Propiedad del medio consistente con las condiciones de entorno."
+          en: "Medium property consistent with environmental conditions."
+    model_validity_rules:
+      - id: rhof-valid
+        when: rho_f > 0
+        status: success
+        text:
+          es: "Se asume un fluido homogéneo e incompresible."
+          en: "A homogeneous and incompressible fluid is assumed."
+    graph_rules:
+      - id: rhof-graph
+        when: rho_f > 0
+        status: success
+        text:
+          es: "Representa el medio en el que se encuentra sumergiendo el cuerpo."
+          en: "Represents the medium in which the body is being submerged."
+    likely_errors:
+      - id: err-rhof-neg
+        when: rho_f <= 0
+        status: error
+        text:
+          es: "Error: La densidad del fluido debe ser mayor que cero para que exista empuje."
+          en: "Error: The fluid density must be greater than zero for thrust to exist."
+    next_step_rules:
+      - id: next-rhof
+        when: rho_f > 0
+        status: info
+        text:
+          es: "Prueba con diferentes fluidos para observar el cambio en la fracción sumergida."
+          en: "Try different fluids to observe the change in the submerged fraction."
+
+guidance:
+  es: Ajusta la densidad del objeto para observar cómo varía su profundidad de calado en el fluido.
+  en: Adjust the object's density to observe how its draft depth varies in the fluid.
+physical_summary:
+  es: El equilibrio de flotación se logra cuando el peso del fluido desplazado compensa exactamente el peso del cuerpo.
+  en: Flotation equilibrium is achieved when the weight of the displaced fluid exactly offsets the weight of the body.
+didactic_analysis:
+  es: Este módulo enfatiza la relación entre densidad relativa y volumen sumergido como base del calado industrial.
+  en: This module emphasizes the relationship between relative density and submerged volume as the basis for industrial draft.

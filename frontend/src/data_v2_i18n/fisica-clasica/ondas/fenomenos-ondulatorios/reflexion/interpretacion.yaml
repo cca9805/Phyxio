@@ -1,0 +1,437 @@
+version: v5
+id: interpretacion_reflexion
+leaf_id: reflexion
+nombre:
+  es: Interpretación de reflexión
+  en: Reflection interpretation
+scope:
+  area: fisica-clasica
+  bloque: ondas
+  subbloque: fenomenos-ondulatorios
+  parent_id: fenomenos-ondulatorios
+  ruta_relativa: fisica-clasica/ondas/fenomenos-ondulatorios/reflexion
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación
+    en: Interpretation
+  priority_order: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  inline_limits:
+    max_messages: 4
+    prefer: [summary, likely_errors]
+dependencies:
+  formulas:
+    - ley_reflexion
+    - intensidad_reflejada
+  magnitudes:
+    - theta_i
+    - theta_r
+    - I_incidente
+    - I_reflejada
+    - R_reflectancia
+global_context:
+  physical_domain:
+    es: "Reflexión especular de ondas en una frontera localmente regular."
+    en: "Specular reflection of waves at a locally regular boundary."
+  axis_convention:
+    es: "Los ángulos se miden desde la normal, nunca desde la superficie."
+    en: "Angles are measured from the normal, never from the surface."
+  standard_assumptions:
+    - "Frontera lisa frente a la longitud de onda."
+    - "Medio incidente definido y normal local conocida."
+    - "Reflectancia efectiva entre cero y uno para fronteras pasivas."
+  standard_warnings:
+    - "La ley angular no implica reflexión total de energía."
+    - "Medir desde la superficie cambia el ángulo complementario."
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  theta_r:
+    magnitude_type: angle
+    semantic_role:
+      es: "Dirección angular que describe hacia dónde sale la onda reflejada."
+      en: "Angular direction that describes where the reflected wave leaves."
+    summary_rules:
+      - id: tr_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[theta_r]] indica la dirección reflejada y depende directamente de [[theta_i]]."
+          en: "[[theta_r]] indicates the reflected direction and depends directly on [[theta_i]]."
+    physical_reading_rules:
+      - id: tr_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "La frontera actúa como eje de simetría angular respecto a la normal."
+          en: "The boundary acts through angular symmetry with respect to the normal."
+    coherence_rules:
+      - id: tr_coherence_negative
+        when: "theta_r < 0"
+        status: error
+        text:
+          es: "[[theta_r]] debe leerse como abertura positiva respecto a la normal."
+          en: "[[theta_r]] must be read as a positive opening from the normal."
+      - id: tr_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "La dirección es coherente si se mide con la misma normal que [[theta_i]]."
+          en: "The direction is coherent if measured from the same normal as [[theta_i]]."
+    model_validity_rules:
+      - id: tr_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "La lectura supone reflexión especular y una superficie lisa frente a la longitud de onda."
+          en: "The reading assumes specular reflection and a surface smooth compared with wavelength."
+    graph_rules:
+      - id: tr_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el esquema Svg, el rayo reflejado debe ser simétrico al incidente respecto a la normal."
+          en: "In the Svg diagram, the reflected ray should be symmetric to the incident ray about the normal."
+    likely_errors:
+      - id: tr_error_surface
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: medir [[theta_r]] desde la superficie en vez de desde la normal."
+          en: "Typical mistake: measuring [[theta_r]] from the surface instead of from the normal."
+    next_step_rules:
+      - id: tr_next_intensity
+        when: "true"
+        status: ok
+        text:
+          es: "Después de fijar la dirección, revisa [[R_reflectancia]] para saber cuánta intensidad vuelve."
+          en: "After fixing direction, review [[R_reflectancia]] to know how much intensity returns."
+
+  theta_i:
+    magnitude_type: angle
+    semantic_role:
+      es: "Dirección de entrada que controla la orientación del rayo reflejado."
+      en: "Incoming direction that controls the orientation of the reflected ray."
+    summary_rules:
+      - id: ti_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[theta_i]] describe la incidencia y determina el equilibrio angular de la reflexión."
+          en: "[[theta_i]] describes incidence and determines the angular balance of reflection."
+    physical_reading_rules:
+      - id: ti_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "A mayor [[theta_i]], más rasante es la llegada y más rasante será la salida especular."
+          en: "A larger [[theta_i]] means a more grazing arrival and a more grazing specular exit."
+    coherence_rules:
+      - id: ti_coherence_domain
+        when: "theta_i < 0"
+        status: error
+        text:
+          es: "[[theta_i]] negativo indica una convención mal aplicada."
+          en: "Negative [[theta_i]] indicates a misapplied convention."
+      - id: ti_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[theta_i]] es coherente si se define respecto a la normal local."
+          en: "[[theta_i]] is coherent if defined with respect to the local normal."
+    model_validity_rules:
+      - id: ti_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "Si la superficie es rugosa, un solo [[theta_i]] no predice una única dirección saliente."
+          en: "If the surface is rough, one [[theta_i]] does not predict a single outgoing direction."
+    graph_rules:
+      - id: ti_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "El rayo incidente del Svg debe formar [[theta_i]] con la normal dibujada."
+          en: "The incident ray in the Svg should form [[theta_i]] with the drawn normal."
+    likely_errors:
+      - id: ti_error_complement
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: usar el ángulo complementario medido desde la superficie."
+          en: "Typical mistake: using the complementary angle measured from the surface."
+    next_step_rules:
+      - id: ti_next_reflected
+        when: "true"
+        status: ok
+        text:
+          es: "Usa [[theta_i]] para obtener [[theta_r]] y construir la dirección reflejada."
+          en: "Use [[theta_i]] to obtain [[theta_r]] and construct the reflected direction."
+
+  I_reflejada:
+    magnitude_type: intensity
+    semantic_role:
+      es: "Intensidad que vuelve tras interactuar con la frontera."
+      en: "Intensity that returns after interacting with the boundary."
+    summary_rules:
+      - id: ir_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[I_reflejada]] resume la energía que depende de [[I_incidente]] y [[R_reflectancia]]."
+          en: "[[I_reflejada]] summarizes the energy that depends on [[I_incidente]] and [[R_reflectancia]]."
+    physical_reading_rules:
+      - id: ir_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Una dirección reflejada clara puede coexistir con intensidad débil si la frontera transmite o absorbe mucho."
+          en: "A clear reflected direction can coexist with weak intensity if the boundary transmits or absorbs strongly."
+    coherence_rules:
+      - id: ir_coherence_negative
+        when: "I_reflejada < 0"
+        status: error
+        text:
+          es: "[[I_reflejada]] no puede ser negativa."
+          en: "[[I_reflejada]] cannot be negative."
+      - id: ir_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "En una frontera pasiva, [[I_reflejada]] no debe superar [[I_incidente]]."
+          en: "At a passive boundary, [[I_reflejada]] should not exceed [[I_incidente]]."
+    model_validity_rules:
+      - id: ir_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "La lectura supone que [[R_reflectancia]] resume pérdidas, transmisión y absorción de forma efectiva."
+          en: "The reading assumes [[R_reflectancia]] effectively summarizes losses, transmission, and absorption."
+    graph_rules:
+      - id: ir_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el Svg, el brillo o grosor del rayo reflejado puede representar [[I_reflejada]]."
+          en: "In the Svg, reflected ray brightness or thickness can represent [[I_reflejada]]."
+    likely_errors:
+      - id: ir_error_total
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: creer que toda reflexión geométrica implica [[R_reflectancia]] máxima."
+          en: "Typical mistake: believing every geometric reflection implies maximum [[R_reflectancia]]."
+    next_step_rules:
+      - id: ir_next_balance
+        when: "true"
+        status: ok
+        text:
+          es: "Compara [[I_reflejada]] con [[I_incidente]] para decidir si la frontera refleja mucho o poco."
+          en: "Compare [[I_reflejada]] with [[I_incidente]] to decide whether the boundary reflects strongly or weakly."
+
+  R_reflectancia:
+    magnitude_type: ratio
+    semantic_role:
+      es: "Fracción que controla cuánta intensidad incidente se refleja."
+      en: "Fraction controlling how much incident intensity is reflected."
+    summary_rules:
+      - id: rr_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[R_reflectancia]] indica qué parte de la intensidad incidente domina la onda reflejada."
+          en: "[[R_reflectancia]] indicates what part of incident intensity dominates the reflected wave."
+    physical_reading_rules:
+      - id: rr_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Valores altos significan frontera reflectante; valores bajos significan transmisión o absorción dominante."
+          en: "High values mean a reflective boundary; low values mean dominant transmission or absorption."
+    coherence_rules:
+      - id: rr_coherence_range
+        when: "R_reflectancia < 0 or R_reflectancia > 1"
+        status: error
+        text:
+          es: "[[R_reflectancia]] fuera del intervalo pasivo indica una entrada incoherente."
+          en: "[[R_reflectancia]] outside the passive interval indicates incoherent input."
+      - id: rr_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[R_reflectancia]] es coherente como fracción adimensional entre cero y uno."
+          en: "[[R_reflectancia]] is coherent as a dimensionless fraction between zero and one."
+    model_validity_rules:
+      - id: rr_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "En medios activos o amplificadores, la lectura pasiva de [[R_reflectancia]] deja de valer."
+          en: "In active or amplifying media, the passive reading of [[R_reflectancia]] no longer applies."
+    graph_rules:
+      - id: rr_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "El control gráfico de [[R_reflectancia]] debe modificar la intensidad visual del rayo reflejado."
+          en: "The graphical [[R_reflectancia]] control should modify the visual intensity of the reflected ray."
+    likely_errors:
+      - id: rr_error_percent
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: introducir un porcentaje sin convertirlo en fracción."
+          en: "Typical mistake: entering a percentage without converting it to a fraction."
+    next_step_rules:
+      - id: rr_next_reflected
+        when: "true"
+        status: ok
+        text:
+          es: "Usa [[R_reflectancia]] junto con [[I_incidente]] para estimar [[I_reflejada]]."
+          en: "Use [[R_reflectancia]] with [[I_incidente]] to estimate [[I_reflejada]]."
+
+  I_incidente:
+    magnitude_type: intensity
+    semantic_role:
+      es: "Intensidad disponible antes de que la onda alcance la frontera."
+      en: "Intensity available before the wave reaches the boundary."
+    summary_rules:
+      - id: ii_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[I_incidente]] describe la energía entrante y determina el máximo reflejable."
+          en: "[[I_incidente]] describes incoming energy and determines the maximum reflectable amount."
+    physical_reading_rules:
+      - id: ii_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "La frontera no puede devolver más intensidad que la que recibe si es pasiva."
+          en: "A passive boundary cannot return more intensity than it receives."
+    coherence_rules:
+      - id: ii_coherence_negative
+        when: "I_incidente < 0"
+        status: error
+        text:
+          es: "[[I_incidente]] no puede ser negativa."
+          en: "[[I_incidente]] cannot be negative."
+      - id: ii_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[I_incidente]] debe expresarse en la misma escala que [[I_reflejada]]."
+          en: "[[I_incidente]] must be expressed on the same scale as [[I_reflejada]]."
+    model_validity_rules:
+      - id: ii_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "La intensidad incidente debe representar la onda que realmente alcanza la frontera."
+          en: "Incident intensity must represent the wave that actually reaches the boundary."
+    graph_rules:
+      - id: ii_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el Svg, [[I_incidente]] puede representarse como grosor o brillo del rayo entrante."
+          en: "In the Svg, [[I_incidente]] can be represented as thickness or brightness of the incoming ray."
+    likely_errors:
+      - id: ii_error_source
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: usar la potencia de la fuente como si fuera intensidad local en la frontera."
+          en: "Typical mistake: using source power as if it were local intensity at the boundary."
+    next_step_rules:
+      - id: ii_next_reflectance
+        when: "true"
+        status: ok
+        text:
+          es: "Combina [[I_incidente]] con [[R_reflectancia]] para obtener la intensidad reflejada."
+          en: "Combine [[I_incidente]] with [[R_reflectancia]] to obtain reflected intensity."
+cross_checks:
+  - id: passive_intensity_balance
+    condition: "I_reflejada <= I_incidente"
+    status: warning
+    text:
+      es: "En una frontera pasiva, la intensidad reflejada no debe superar la incidente."
+      en: "At a passive boundary, reflected intensity should not exceed incident intensity."
+error_patterns:
+  - id: angle_from_surface
+    detect_when: "true"
+    text:
+      es: "Si el ángulo se midió desde la superficie, usa el complementario respecto a la normal."
+      en: "If the angle was measured from the surface, use the complement relative to the normal."
+graph_binding:
+  enabled: true
+  preferred_type: Svg
+  channels:
+    - incident_angle
+    - reflected_angle
+    - incident_intensity
+    - reflected_intensity
+    - reflectance_control
+mini_graph:
+  enabled: true
+  preferred_type: Svg

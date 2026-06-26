@@ -1,0 +1,81 @@
+const n=`id: estrategia-para-problemas-de-rodadura
+nombre:
+  es: Estrategia para problemas de rodadura
+  en: Strategy for Rolling Problems
+area: fisica-clasica
+bloque: mecanica
+subbloque: rotacion
+parent_id: rodadura
+ruta_relativa: fisica-clasica/mecanica/rotacion/rodadura/estrategia-para-problemas-de-rodadura
+orden: 213425
+type: leaf
+niveles:
+  es:
+  - BACHILLERATO
+  - UNIVERSIDAD
+  en:
+  - Upper Secondary
+  - University
+icon: 🎯
+descripcion: Decide cuándo resolver una rodadura con cinemática, dinámica, energía
+  o momento angular.
+description_en: Decides when to solve rolling with kinematics, dynamics, energy, or
+  angular momentum.
+tags:
+  es:
+  - rodadura
+  - metodo
+  - dinamica
+  - energia
+  - estrategia
+  en:
+  - rolling
+  - method
+  - dynamics
+  - energy
+  - strategy
+prerequisitos:
+- fisica-clasica/mecanica/rotacion/rodadura/rodadura-como-puente-entre-traslacion-y-rotacion
+- fisica-clasica/mecanica/rotacion/rodadura/condicion-de-rodadura-sin-deslizamiento
+- fisica-clasica/mecanica/rotacion/rodadura/dinamica-de-la-rodadura-sin-deslizamiento/analisis-dinamico-de-la-rodadura
+graficos:
+- Svg
+- Dcl
+- Coord
+physical_role:
+  es: método de resolución
+  en: solution method
+dificultad: 3
+tiempo_estimado_min: 45
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Svg
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+pregunta_fisica_central:
+  es: ¿Cómo se elige el método adecuado para resolver un problema de rodadura?
+  en: How do we choose the appropriate method to solve a rolling problem?
+representacion_dominante: Svg
+magnitud_dominante: a_cm
+graph_profile_sugerido:
+  tipo_principal: Svg
+  descripcion: SVG de diagrama de decisión; DCL para plano inclinado con rozamiento
+    estático; Coord para comparar resultados por energía y dinámica.
+`;export{n as default};

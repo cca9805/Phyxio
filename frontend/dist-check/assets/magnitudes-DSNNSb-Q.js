@@ -1,0 +1,233 @@
+const e=`magnitudes:
+
+  - id: P
+    symbol: P
+    nombre:
+      es: Presión
+      en: Pressure
+    descripcion:
+      es: Fuerza ejercida por el gas por unidad de área sobre las paredes del recipiente. Variable macroscópica de estado que refleja la frecuencia e intensidad de los choques moleculares con la superficie.
+      en: Force exerted by the gas per unit area on the walls of the container. Macroscopic state variable reflecting the frequency and intensity of molecular collisions with the surface.
+    unidad_si: Pa
+    dimension: "[M L^-1 T^-2]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: core_physical_quantity
+    used_in:
+      - ley del gas ideal
+      - ecuación de Van der Waals
+      - procesos termodinámicos
+    common_mistake: "Usar presiones en atmósferas o bar en la ley del gas ideal sin convertir a pascales, produciendo resultados inconsistentes con R = 8.314 J/(mol·K)."
+    typical_range: "101 325 Pa (1 atm) en condiciones normales; de 10 Pa en vacío técnico a 10⁷ Pa en procesos industriales de alta presión."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La presión termodinámica es siempre positiva. Una presión negativa no tiene significado físico en gases ideales y señala un error de cálculo o un régimen fuera del modelo."
+        en: "Thermodynamic pressure is always positive. A negative pressure has no physical meaning for ideal gases and signals a calculation error or a regime outside the model."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Presión nula implicaría ausencia total de moléculas (vacío perfecto), límite idealizado que no se alcanza en la práctica."
+        en: "Zero pressure would imply complete absence of molecules (perfect vacuum), an idealised limit not achieved in practice."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - cálculo del estado del gas dadas las otras variables de estado
+        - verificación de condiciones de operación de recipientes a presión
+      secondary_for:
+        - diagnóstico de desviaciones del comportamiento ideal
+    graph_binding:
+      channels:
+        - eje_y_P
+    pedagogical_notes:
+      es: "La presión es la variable de estado más visible experimentalmente (manómetros, barómetros) y la que más intuitivamente conecta la escala microscópica con la macroscópica: más moléculas o más rápidas implican mayor P."
+      en: "Pressure is the most experimentally visible state variable (manometers, barometers) and the one that most intuitively connects the microscopic to the macroscopic scale: more molecules or faster ones mean higher P."
+
+  - id: V
+    symbol: V
+    nombre:
+      es: Volumen
+      en: Volume
+    descripcion:
+      es: Espacio tridimensional ocupado por el gas. En recipientes rígidos es fijo; en émbolos o globos puede variar ajustándose al equilibrio de presiones.
+      en: Three-dimensional space occupied by the gas. In rigid containers it is fixed; in pistons or balloons it can vary by adjusting to pressure equilibrium.
+    unidad_si: "m³"
+    dimension: "[L^3]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: core_physical_quantity
+    used_in:
+      - ley del gas ideal
+      - ecuación de Van der Waals
+      - trabajo en procesos termodinámicos
+    common_mistake: "Usar volúmenes en litros directamente con R en J/(mol·K) y P en Pa, sin convertir 1 L = 10⁻³ m³."
+    typical_range: "Desde 10⁻³ m³ (1 L) en laboratorio hasta centenares de m³ en tanques industriales."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El volumen es siempre positivo. Un volumen nulo o negativo indica error de conversión de unidades o aplicación del modelo fuera de su dominio."
+        en: "Volume is always positive. Zero or negative volume indicates a unit-conversion error or application of the model outside its domain."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Volumen nulo implicaría colapso físico de la muestra, incompatible con un gas en equilibrio termodinámico."
+        en: "Zero volume would imply physical collapse of the sample, incompatible with a gas in thermodynamic equilibrium."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - cálculo del estado del gas a partir de las condiciones de presión y temperatura
+        - interpretación de procesos isobáricos o isotérmicos
+      secondary_for:
+        - estimación del trabajo realizado en expansión o compresión
+    graph_binding:
+      channels:
+        - eje_x_V
+    pedagogical_notes:
+      es: "El volumen molar a condiciones normales (0 °C, 1 atm) es 22.4 L/mol para cualquier gas ideal: este dato es una de las verificaciones más directas de la ley del gas ideal y la más útil para estimaciones rápidas."
+      en: "The molar volume at standard conditions (0 °C, 1 atm) is 22.4 L/mol for any ideal gas: this datum is one of the most direct verifications of the ideal gas law and the most useful for quick estimates."
+
+  - id: T
+    symbol: T
+    nombre:
+      es: Temperatura termodinámica
+      en: Thermodynamic temperature
+    descripcion:
+      es: Medida de la energía cinética media traslacional de las moléculas del gas. Debe expresarse siempre en kelvin en la ley del gas ideal; el uso de grados Celsius produce resultados erróneos.
+      en: Measure of the mean translational kinetic energy of the gas molecules. Must always be expressed in kelvin in the ideal gas law; use of degrees Celsius produces incorrect results.
+    unidad_si: K
+    dimension: "[Theta]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: core_physical_quantity
+    used_in:
+      - ley del gas ideal
+      - ecuación de Van der Waals
+      - teoría cinética de gases
+    common_mistake: "Sustituir la temperatura en grados Celsius (p. ej. 25 °C) directamente en PV = nRT en lugar de convertir a kelvin (298 K). Este error produce cálculos incorrectos en todo el rango de temperaturas cotidianas."
+    typical_range: "100 K a 1000 K en la mayoría de aplicaciones termodinámicas; 273 K a 373 K en condiciones de laboratorio ordinarias."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La temperatura termodinámica es siempre positiva en la escala kelvin; el cero absoluto (0 K) es un límite inalcanzable, no un valor operativo."
+        en: "Thermodynamic temperature is always positive on the kelvin scale; absolute zero (0 K) is an unattainable limit, not an operational value."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "T = 0 K corresponde al cero absoluto, límite teórico no alcanzable. En la práctica, T ≪ 300 K señala que el modelo de gas ideal puede dejar de ser válido antes de llegar a ese límite."
+        en: "T = 0 K corresponds to absolute zero, an unattainable theoretical limit. In practice, T ≪ 300 K signals that the ideal gas model may cease to be valid before reaching that limit."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - determinación del estado térmico del gas
+        - predicción de cambios de presión o volumen al calentar o enfriar
+      secondary_for:
+        - diagnóstico de condensación o transición de fase
+    graph_binding:
+      channels:
+        - param_T
+    pedagogical_notes:
+      es: "La conversión T(K) = T(°C) + 273.15 es obligatoria antes de cualquier cálculo con PV = nRT. El alumno que la omite obtiene valores de P o V entre 10 y 30 veces demasiado pequeños a temperatura ambiente, lo que debería alertarle del error."
+      en: "The conversion T(K) = T(°C) + 273.15 is mandatory before any calculation with PV = nRT. A student who omits it obtains P or V values 10 to 30 times too small at room temperature, which should alert them to the error."
+
+  - id: n
+    symbol: n
+    nombre:
+      es: Cantidad de sustancia
+      en: Amount of substance
+    descripcion:
+      es: Número de moles del gas, que cuantifica la cantidad de materia de forma proporcional al número de moléculas mediante la constante de Avogadro.
+      en: Number of moles of gas, quantifying the amount of matter in proportion to the number of molecules via Avogadro's constant.
+    unidad_si: mol
+    dimension: "[N]"
+    is_vector: false
+    components: []
+    category: fundamental
+    physical_role: core_physical_quantity
+    used_in:
+      - ley del gas ideal
+      - ecuación de Van der Waals
+    common_mistake: "Confundir la masa del gas (en kg o g) con el número de moles; para convertir se necesita la masa molar M del gas: n = masa / M."
+    typical_range: "De 10⁻³ mol en muestras pequeñas de laboratorio a centenares de moles en recipientes industriales."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La cantidad de sustancia es siempre positiva. No tiene sentido físico un número de moles negativo."
+        en: "Amount of substance is always positive. A negative number of moles has no physical meaning."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "n = 0 correspondería a vacío perfecto; la ley del gas ideal no aplica para un sistema sin materia."
+        en: "n = 0 would correspond to a perfect vacuum; the ideal gas law does not apply to a system without matter."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - determinación del estado del gas cuando la masa del sistema es la variable controlada
+      secondary_for:
+        - conversión entre propiedades extensivas e intensivas del gas
+    graph_binding:
+      channels:
+        - param_n
+    pedagogical_notes:
+      es: "n conecta la escala macroscópica (moles) con la microscópica (moléculas): N_moléculas = n · N_A. En la ley del gas ideal, duplicar n a P y T constantes duplica exactamente V: la linealidad en n es directamente verificable."
+      en: "n connects the macroscopic scale (moles) with the microscopic one (molecules): N_molecules = n · N_A. In the ideal gas law, doubling n at constant P and T exactly doubles V: linearity in n is directly verifiable."
+
+  - id: R
+    symbol: R
+    nombre:
+      es: Constante universal de los gases
+      en: Universal gas constant
+    descripcion:
+      es: Constante física fundamental que relaciona la energía térmica por mol con la temperatura en la ley del gas ideal. Su valor es exacto en el SI desde 2019.
+      en: Fundamental physical constant relating thermal energy per mole to temperature in the ideal gas law. Its value is exact in the SI since 2019.
+    unidad_si: "J/(mol·K)"
+    dimension: "[M L^2 T^-2 N^-1 Theta^-1]"
+    is_vector: false
+    components: []
+    category: constant
+    physical_role: auxiliary_quantity
+    used_in:
+      - ley del gas ideal
+      - ecuación de Van der Waals
+      - termodinámica estadística
+    common_mistake: "Usar R = 0.08206 L·atm/(mol·K) cuando el resto de magnitudes está en unidades SI (Pa, m³), produciendo un error de factor de ~100."
+    typical_range: "R = 8.314 J/(mol·K) en unidades SI. También: 0.08206 L·atm/(mol·K) en unidades mixtas de laboratorio."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "R es una constante positiva. No tiene signo variable."
+        en: "R is a positive constant. It has no variable sign."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "R no puede ser cero; es una constante fundamental de la naturaleza."
+        en: "R cannot be zero; it is a fundamental constant of nature."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "8.314"
+    interpretation_role:
+      primary_for:
+        - conversión dimensional entre las variables de estado del gas ideal
+      secondary_for:
+        - verificación de consistencia de unidades en cálculos termodinámicos
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "La elección del valor de R depende del sistema de unidades usado. En el SI (P en Pa, V en m³, T en K) se usa R = 8.314 J/(mol·K). Cambiar de unidades sin cambiar R es el error de unidades más frecuente en termodinámica de gases."
+      en: "The choice of R value depends on the unit system used. In the SI (P in Pa, V in m³, T in K) one uses R = 8.314 J/(mol·K). Changing units without changing R is the most frequent unit error in gas thermodynamics."
+`;export{e as default};

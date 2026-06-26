@@ -1,0 +1,484 @@
+version: 2
+magnitudes:
+- id: corriente_de_carga
+  symbol: I
+  nombre:
+    es: corriente de carga
+    en: load current
+  descripcion:
+    es: Corriente total que circula por el circuito al conectar una carga de potencia P a la tensión V de suministro.
+    en: Total current flowing through the circuit when a load of power P is connected at supply voltage V.
+  unidad_si: A
+  dimension: I
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - diferencial-y-magnetotermico
+  common_mistake: Confundir la corriente total I con el desequilibrio diferencial I_delta; son magnitudes distintas comparadas
+    con umbrales distintos.
+  typical_range: 0 A a 100 A en instalaciones residenciales estándar.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La corriente de carga es siempre positiva en valor absoluto; el signo físico indica dirección pero no se usa en
+        el cálculo de protección.
+      en: Load current is always positive in absolute value; the physical sign indicates direction but is not used in protection
+        calculations.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: I = 0 A indica que no hay carga conectada o el circuito está abierto.
+      en: I = 0 A indicates no load connected or the circuit is open.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, 100]'
+  interpretation_role:
+    primary_for:
+    - diferencial-y-magnetotermico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_corriente
+  pedagogical_notes:
+    es: Usa [[corriente_de_carga]] para leer el papel fisico de corriente de carga y comprobar unidad, signo y rango.
+    en: Use [[corriente_de_carga]] to read the physical role of corriente de carga and check unit, sign and range.
+- id: desequilibrio_diferencial
+  symbol: I_\Delta
+  nombre:
+    es: desequilibrio diferencial
+    en: differential imbalance
+  descripcion:
+    es: Diferencia absoluta entre la corriente de fase y la corriente de neutro; representa la corriente que escapa por un
+      camino no previsto.
+    en: Absolute difference between phase and neutral current; represents the current escaping via an unintended path.
+  unidad_si: A
+  dimension: I
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - diferencial-y-magnetotermico
+  common_mistake: Comparar I_delta en mA con la corriente I en A sin convertir; I_dn = 30 mA = 0.030 A.
+  typical_range: 0 mA a 300 mA; umbral de disparo residencial típico 30 mA.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: I_delta es siempre positiva por definición (valor absoluto). No tiene sentido de dirección.
+      en: I_delta is always positive by definition (absolute value). It has no directional meaning.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: I_delta = 0 indica instalación sin fugas; toda la corriente que entra por fase regresa por neutro.
+      en: I_delta = 0 indicates a leak-free installation; all current entering via phase returns via neutral.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, 0.3]'
+  interpretation_role:
+    primary_for:
+    - diferencial-y-magnetotermico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_desequilibrio
+  pedagogical_notes:
+    es: Usa [[desequilibrio_diferencial]] para leer el papel fisico de desequilibrio diferencial y comprobar unidad, signo
+      y rango.
+    en: Use [[desequilibrio_diferencial]] to read the physical role of desequilibrio diferencial and check unit, sign and
+      range.
+- id: umbral_diferencial_nominal
+  symbol: I_{\Delta n}
+  nombre:
+    es: umbral diferencial nominal
+    en: nominal differential threshold
+  descripcion:
+    es: Sensibilidad nominal del diferencial; valor mínimo de I_delta que garantiza el disparo del dispositivo.
+    en: Nominal sensitivity of the RCD; minimum I_delta value that guarantees device tripping.
+  unidad_si: A
+  dimension: I
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: threshold
+  used_in:
+  - diferencial-y-magnetotermico
+  common_mistake: Confundir I_dn (umbral del diferencial) con I_n (calibre del magnetotérmico); son umbrales de dispositivos
+    distintos.
+  typical_range: 30 mA (alta sensibilidad, protección personal) o 300 mA (media sensibilidad, protección contra incendios).
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: I_dn es siempre positivo; define el umbral de actuación del diferencial.
+      en: I_dn is always positive; defines the RCD trip threshold.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: I_dn = 0 no tiene sentido físico; implicaría que el diferencial actúa con cualquier fuga infinitesimal.
+      en: I_dn = 0 has no physical meaning; it would imply the RCD trips with any infinitesimal leakage.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0.01, 0.5]'
+  interpretation_role:
+    primary_for:
+    - diferencial-y-magnetotermico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - linea_umbral_diferencial
+  pedagogical_notes:
+    es: Usa [[umbral_diferencial_nominal]] para leer el papel fisico de umbral diferencial nominal y comprobar unidad, signo
+      y rango.
+    en: Use [[umbral_diferencial_nominal]] to read the physical role of umbral diferencial nominal and check unit, sign and
+      range.
+- id: corriente_nominal_del_magnetotermico
+  symbol: I_n
+  nombre:
+    es: corriente nominal del magnetotérmico
+    en: nominal current of the MCB
+  descripcion:
+    es: Corriente nominal del magnetotérmico; calibre a partir del cual el dispositivo actúa en régimen sostenido.
+    en: Nominal current of the MCB; rating above which the device trips in sustained operation.
+  unidad_si: A
+  dimension: I
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: threshold
+  used_in:
+  - diferencial-y-magnetotermico
+  common_mistake: Usar I_n del magnetotérmico general en vez del del circuito concreto; cada circuito tiene su propio I_n.
+  typical_range: 10 A (iluminación), 16 A (tomas generales), 25 A (cocina), 40 A (general).
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: I_n es siempre positivo; define el calibre de protección del circuito.
+      en: I_n is always positive; defines the circuit protection rating.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: I_n = 0 no tiene sentido físico en un circuito operativo.
+      en: I_n = 0 has no physical meaning in an operational circuit.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[6, 63]'
+  interpretation_role:
+    primary_for:
+    - diferencial-y-magnetotermico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - linea_umbral_termico
+  pedagogical_notes:
+    es: Usa [[corriente_nominal_del_magnetotermico]] para leer el papel fisico de corriente nominal del magnetotérmico y comprobar
+      unidad, signo y rango.
+    en: Use [[corriente_nominal_del_magnetotermico]] to read the physical role of corriente nominal del magnetotérmico and
+      check unit, sign and range.
+- id: corriente_de_fase
+  symbol: I_{fase}
+  nombre:
+    es: corriente de fase
+    en: phase current
+  descripcion:
+    es: Corriente medida en el conductor de fase del circuito; parte de I que entra al circuito por la línea viva.
+    en: Current measured in the phase conductor of the circuit; part of I entering the circuit via the live wire.
+  unidad_si: A
+  dimension: I
+  is_vector: false
+  components: null
+  category: observable
+  physical_role: physical_quantity
+  used_in:
+  - diferencial-y-magnetotermico
+  common_mistake: Asumir que I_fase = I_neutro sin medir; la diferencia es precisamente I_delta que detecta el diferencial.
+  typical_range: 0 A a 100 A en instalaciones residenciales.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa el valor absoluto para calcular I_delta.
+      en: Absolute value is used to calculate I_delta.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: I_fase = 0 indica que no hay carga activa en el circuito.
+      en: I_fase = 0 indicates no active load on the circuit.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, 100]'
+  interpretation_role:
+    primary_for:
+    - diferencial-y-magnetotermico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_corriente_fase
+  pedagogical_notes:
+    es: Usa [[corriente_de_fase]] para leer el papel fisico de corriente de fase y comprobar unidad, signo y rango.
+    en: Use [[corriente_de_fase]] to read the physical role of corriente de fase and check unit, sign and range.
+- id: corriente_de_neutro
+  symbol: I_{neutro}
+  nombre:
+    es: corriente de neutro
+    en: neutral current
+  descripcion:
+    es: Corriente medida en el conductor de neutro del circuito; parte de I que regresa al origen por la línea neutra.
+    en: Current measured in the neutral conductor of the circuit; part of I returning to the source via the neutral wire.
+  unidad_si: A
+  dimension: I
+  is_vector: false
+  components: null
+  category: observable
+  physical_role: physical_quantity
+  used_in:
+  - diferencial-y-magnetotermico
+  common_mistake: Ignorar la medición de I_neutro y asumir que es igual a I_fase; esa asunción impide detectar fugas.
+  typical_range: 0 A a 100 A en instalaciones residenciales.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa el valor absoluto para calcular I_delta.
+      en: Absolute value is used to calculate I_delta.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: I_neutro = 0 con I_fase > 0 indicaría fuga total de la corriente, situación de emergencia.
+      en: I_neutro = 0 with I_fase > 0 would indicate total current leakage, an emergency situation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, 100]'
+  interpretation_role:
+    primary_for:
+    - diferencial-y-magnetotermico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_corriente_neutro
+  pedagogical_notes:
+    es: Usa [[corriente_de_neutro]] para leer el papel fisico de corriente de neutro y comprobar unidad, signo y rango.
+    en: Use [[corriente_de_neutro]] to read the physical role of corriente de neutro and check unit, sign and range.
+- id: potencia_de_carga
+  symbol: P
+  nombre:
+    es: potencia de carga
+    en: load power
+  descripcion:
+    es: Potencia activa consumida por los equipos conectados al circuito; dato de partida para calcular la corriente de carga.
+    en: Active power consumed by equipment connected to the circuit; starting data for calculating load current.
+  unidad_si: W
+  dimension: ML^2T^{-3}
+  is_vector: false
+  components: null
+  category: observable
+  physical_role: physical_quantity
+  used_in:
+  - diferencial-y-magnetotermico
+  common_mistake: Usar la potencia total de la vivienda en vez de la del circuito concreto para calcular I del circuito.
+  typical_range: 100 W (iluminación) a 8000 W (cocina eléctrica).
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La potencia consumida es siempre positiva en cargas resistivas e inductivas pasivas.
+      en: Consumed power is always positive for passive resistive and inductive loads.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: P = 0 indica que no hay carga activa conectada al circuito.
+      en: P = 0 indicates no active load connected to the circuit.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, 10000]'
+  interpretation_role:
+    primary_for:
+    - diferencial-y-magnetotermico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_potencia
+  pedagogical_notes:
+    es: Usa [[potencia_de_carga]] para leer el papel fisico de potencia de carga y comprobar unidad, signo y rango.
+    en: Use [[potencia_de_carga]] to read the physical role of potencia de carga and check unit, sign and range.
+- id: potencia_limite_magnetotermica
+  symbol: P_{lim}
+  nombre:
+    es: potencia límite magnetotérmica
+    en: MCB power limit
+  descripcion:
+    es: Potencia máxima aproximada que puede conectarse al circuito antes de que el magnetotérmico actúe por sobrecorriente;
+      estimación para carga resistiva a tensión nominal.
+    en: Approximate maximum power connectable to the circuit before the MCB trips for overcurrent; estimate for resistive
+      load at nominal voltage.
+  unidad_si: W
+  dimension: ML^2T^{-3}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: threshold
+  used_in:
+  - diferencial-y-magnetotermico
+  common_mistake: Usar P_lim como límite exacto e ignorar los transitorios de arranque y el factor de potencia de cargas inductivas.
+  typical_range: 1380 W (6 A) a 9200 W (40 A) a 230 V.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: P_lim es siempre positiva; define el techo de consumo del circuito.
+      en: P_lim is always positive; defines the circuit consumption ceiling.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: P_lim = 0 no tiene sentido; implicaría un magnetotérmico de calibre cero.
+      en: P_lim = 0 has no meaning; it would imply a zero-rating MCB.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[1000, 15000]'
+  interpretation_role:
+    primary_for:
+    - diferencial-y-magnetotermico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - linea_potencia_limite
+  pedagogical_notes:
+    es: Usa [[potencia_limite_magnetotermica]] para leer el papel fisico de potencia límite magnetotérmica y comprobar unidad,
+      signo y rango.
+    en: Use [[potencia_limite_magnetotermica]] to read the physical role of potencia límite magnetotérmica and check unit,
+      sign and range.
+- id: tension_de_suministro
+  symbol: V
+  nombre:
+    es: tensión de suministro
+    en: supply voltage
+  descripcion:
+    es: Tensión eficaz de la red de suministro eléctrico doméstico; parámetro de referencia para calcular corrientes de carga
+      y potencias límite.
+    en: RMS voltage of the domestic electricity supply network; reference parameter for calculating load currents and power
+      limits.
+  unidad_si: V
+  dimension: ML^2T^{-3}I^{-1}
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: physical_quantity
+  used_in:
+  - diferencial-y-magnetotermico
+  common_mistake: Usar 220 V en vez de 230 V para instalaciones europeas post-1987; el error en I resultante es del 4%.
+  typical_range: 230 V (Europa); tolerancia ±10% según norma EN 50160.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa el valor eficaz (RMS) siempre positivo para cálculos de potencia y corriente.
+      en: The always-positive RMS value is used for power and current calculations.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: V = 0 indica ausencia de suministro eléctrico; no aplica para cálculos de carga.
+      en: V = 0 indicates absence of electrical supply; does not apply for load calculations.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[207, 253]'
+  interpretation_role:
+    primary_for:
+    - diferencial-y-magnetotermico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_tension
+  pedagogical_notes:
+    es: Usa [[tension_de_suministro]] para leer el papel fisico de tensión de suministro y comprobar unidad, signo y rango.
+    en: Use [[tension_de_suministro]] to read the physical role of tensión de suministro and check unit, sign and range.
+- id: margen_dif
+  symbol: margen_{dif}
+  nombre:
+    es: ratio diferencial
+    en: differential ratio
+  descripcion:
+    es: Fracción del umbral diferencial I_dn alcanzada por el desequilibrio I_delta; valores iguales o superiores a 1 indican
+      disparo inminente o activo del diferencial.
+    en: Fraction of the differential threshold I_dn reached by the imbalance I_delta; values equal to or above 1 indicate
+      imminent or active RCD tripping.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: diagnostic_index
+  used_in:
+  - diferencial-y-magnetotermico
+  common_mistake: Interpretar margen_dif < 1 como ausencia total de fuga; la fuga existe aunque no dispare aún.
+  typical_range: 0 (sin fuga) a valores superiores a 1 (disparo activo).
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: margen_dif es siempre no negativo; es el cociente de dos magnitudes positivas.
+      en: margen_dif is always non-negative; it is the ratio of two positive quantities.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: margen_dif = 0 indica ausencia completa de desequilibrio diferencial.
+      en: margen_dif = 0 indicates complete absence of differential imbalance.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, 2]'
+  interpretation_role:
+    primary_for:
+    - diferencial-y-magnetotermico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_margen_dif
+  pedagogical_notes:
+    es: Usa [[margen_dif]] para leer el papel fisico de ratio diferencial y comprobar unidad, signo y rango.
+    en: Use [[margen_dif]] to read the physical role of ratio diferencial and check unit, sign and range.
+- id: margen_termico
+  symbol: margen_{termico}
+  nombre:
+    es: ratio térmico
+    en: thermal ratio
+  descripcion:
+    es: Fracción de la corriente nominal I_n consumida por el circuito; valores iguales o superiores a 1 indican sobrecarga
+      del magnetotérmico.
+    en: Fraction of the nominal current I_n consumed by the circuit; values equal to or above 1 indicate MCB overload.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: diagnostic_index
+  used_in:
+  - diferencial-y-magnetotermico
+  common_mistake: Calcular margen_termico con la I total de la vivienda en vez de la I del circuito concreto.
+  typical_range: 0 (sin carga) a valores superiores a 1 (sobrecarga activa).
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: margen_termico es siempre no negativo; es el cociente de dos magnitudes positivas.
+      en: margen_termico is always non-negative; it is the ratio of two positive quantities.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: margen_termico = 0 indica que no hay carga activa en el circuito.
+      en: margen_termico = 0 indicates no active load on the circuit.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, 2]'
+  interpretation_role:
+    primary_for:
+    - diferencial-y-magnetotermico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_margen_termico
+  pedagogical_notes:
+    es: Usa [[margen_termico]] para leer el papel fisico de ratio térmico y comprobar unidad, signo y rango.
+    en: Use [[margen_termico]] to read the physical role of ratio térmico and check unit, sign and range.

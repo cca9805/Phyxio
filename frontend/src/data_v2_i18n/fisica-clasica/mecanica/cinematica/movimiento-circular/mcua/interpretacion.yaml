@@ -1,0 +1,883 @@
+version: 2
+id: interpretacion-mcua
+leaf_id: mcua
+nombre:
+  es: Interpretacion de Mcua
+  en: Interpretation of Uniformly Accelerated Circular Motion
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: cinematica
+  parent_id: movimiento-circular
+  ruta_relativa: fisica-clasica/mecanica/cinematica/movimiento-circular/mcua
+dependencies:
+  formulas:
+  - mcua_omega_t
+  - mcua_theta_t
+  - mcua_sin_t
+  - mcua_dtheta
+  - mcua_v_omega
+  - mcua_at
+  - mcua_ac
+  - mcua_delta_t_theta
+  - mcua_a_total
+  - mcua_omega_med
+  - mcua_longitud_arco
+  - mcua_vueltas
+  - mcua_delta_omega
+  magnitudes:
+  - R
+  - theta
+  - theta_0
+  - delta_theta
+  - omega
+  - omega_med
+  - omega_0
+  - alpha
+  - t
+  - delta_t
+  - v
+  - a_t
+  - a_c
+  - a
+  - s
+  - N
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen físico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  omega:
+    summary_rules:
+    - id: omega_summary
+      when: 'true'
+      status: info
+      text:
+        es: Representa el ritmo de giro instantáneo del sistema en el momento analizado.
+        en: Represents the system's instantaneous rotation rate at the moment analyzed.
+    coherence_rules:
+    - id: omega_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Su valor debe cambiar linealmente con el tiempo debido a la aceleración angular.
+        en: Its value must change linearly with time due to angular acceleration.
+    physical_reading_rules:
+    - id: omega_physical
+      when: 'true'
+      status: info
+      text:
+        es: Indica cuántos radianes por segundo barre el objeto; un aumento sugiere un sistema acelerado.
+        en: Indicates how many radians per second the object sweeps; an increase suggests an accelerated system.
+    model_validity_rules:
+    - id: omega_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo asume que no hay fluctuaciones aleatorias en el ritmo de cambio.
+        en: The model assumes there are no random fluctuations in the rate of change.
+    graph_rules:
+    - id: omega_graph
+      when: 'true'
+      status: info
+      text:
+        es: Se visualiza como una línea recta con pendiente no nula en el diagrama omega-t.
+        en: It is visualized as a straight line with non-zero slope in the omega-t diagram.
+    likely_errors:
+    - id: omega_warn
+      when: 'true'
+      status: warning
+      text:
+        es: Asegúrate de no usar la omega inicial si el problema pide el estado final.
+        en: Make sure not to use the initial omega if the problem asks for the final state.
+    next_step_rules:
+    - id: omega_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa la velocidad para determinar la aceleración centrípeta instantánea.
+        en: Use the velocity to determine the instantaneous centripetal acceleration.
+  alpha:
+    summary_rules:
+    - id: alpha_summary
+      when: 'true'
+      status: info
+      text:
+        es: Define la aceleración angular constante que gobierna el cambio de ritmo de giro.
+        en: Defines the constant angular acceleration governing the rotation rate change.
+    coherence_rules:
+    - id: alpha_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Si es positiva y coincide con el signo de la velocidad, el giro se vuelve más rápido.
+        en: If positive and matching the velocity sign, the rotation becomes faster.
+    physical_reading_rules:
+    - id: alpha_physical
+      when: 'true'
+      status: info
+      text:
+        es: Es la causa cinemática de que el volante aumente o disminuya su rapidez de rotación.
+        en: It is the kinematic cause for the flywheel to increase or decrease its rotation speed.
+    model_validity_rules:
+    - id: alpha_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El MCUA exige que esta magnitud sea estrictamente constante durante el intervalo.
+        en: UACM requires this quantity to be strictly constant during the interval.
+    graph_rules:
+    - id: alpha_graph
+      when: 'true'
+      status: info
+      text:
+        es: Representa la pendiente constante de la gráfica de velocidad angular.
+        en: Represents the constant slope of the angular velocity graph.
+    likely_errors:
+    - id: alpha_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas aceleración angular con aceleración tangencial lineal.
+        en: Do not confuse angular acceleration with linear tangential acceleration.
+    next_step_rules:
+    - id: alpha_next
+      when: 'true'
+      status: info
+      text:
+        es: Calcula la aceleración tangencial multiplicando por el radio.
+        en: Calculate tangential acceleration by multiplying by the radius.
+  theta:
+    summary_rules:
+    - id: theta_summary
+      when: 'true'
+      status: info
+      text:
+        es: Posición angular final alcanzada tras el proceso acelerado.
+        en: Final angular position reached after the accelerated process.
+    coherence_rules:
+    - id: theta_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe mostrar una evolución parabólica respecto al tiempo.
+        en: Must show a parabolic evolution with respect to time.
+    physical_reading_rules:
+    - id: theta_physical
+      when: 'true'
+      status: info
+      text:
+        es: Indica la orientación exacta del móvil en el espacio circular.
+        en: Indicates the exact orientation of the object in circular space.
+    model_validity_rules:
+    - id: theta_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Requiere que el ángulo se exprese en radianes para que las ecuaciones sean válidas.
+        en: Requires the angle to be expressed in radians for the equations to be valid.
+    graph_rules:
+    - id: theta_graph
+      when: 'true'
+      status: info
+      text:
+        es: Se representa como una parábola (arco de curva) en la gráfica theta-t.
+        en: It is represented as a parabola (curve arc) in the theta-t graph.
+    likely_errors:
+    - id: theta_warn
+      when: 'true'
+      status: warning
+      text:
+        es: Verifica si el resultado incluye o no la posición inicial theta_0.
+        en: Check if the result includes the initial position theta_0 or not.
+    next_step_rules:
+    - id: theta_next
+      when: 'true'
+      status: info
+      text:
+        es: Determina el número de vueltas completadas a partir de este ángulo.
+        en: Determine the number of revolutions completed from this angle.
+  a_c:
+    summary_rules:
+    - id: ac_summary
+      when: 'true'
+      status: info
+      text:
+        es: Aceleración centrípeta instantánea necesaria para curvar la trayectoria.
+        en: Instantaneous centripetal acceleration needed to curve the path.
+    coherence_rules:
+    - id: ac_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: En MCUA, esta magnitud no es constante y aumenta si el giro se acelera.
+        en: In UACM, this quantity is not constant and increases if the rotation accelerates.
+    physical_reading_rules:
+    - id: ac_physical
+      when: 'true'
+      status: info
+      text:
+        es: Refleja la "fuerza de giro" hacia el centro; a mayor rapidez, mayor es la curvatura forzada.
+        en: Reflects the "rotation force" toward the center; the higher the speed, the greater the forced curvature.
+    model_validity_rules:
+    - id: ac_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Válido para cualquier instante donde exista una velocidad angular definida.
+        en: Valid for any instant where a defined angular velocity exists.
+    graph_rules:
+    - id: ac_graph
+      when: 'true'
+      status: info
+      text:
+        es: Su evolución es cuadrática respecto a la velocidad angular.
+        en: Its evolution is quadratic with respect to angular velocity.
+    likely_errors:
+    - id: ac_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No olvides que depende de la omega actual, no de la inicial.
+        en: Do not forget that it depends on the current omega, not the initial one.
+    next_step_rules:
+    - id: ac_next
+      when: 'true'
+      status: info
+      text:
+        es: Combínala con la aceleración tangencial para hallar la aceleración total.
+        en: Combine it with tangential acceleration to find total acceleration.
+  a_t:
+    summary_rules:
+    - id: at_summary
+      when: 'true'
+      status: info
+      text:
+        es: Aceleración tangencial que modifica la rapidez lineal del objeto.
+        en: Tangential acceleration that modifies the object's linear speed.
+    coherence_rules:
+    - id: at_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Permanece constante en el MCUA si la aceleración angular es constante.
+        en: Remains constant in UACM if angular acceleration is constant.
+    physical_reading_rules:
+    - id: at_physical
+      when: 'true'
+      status: info
+      text:
+        es: Indica cuántos metros por segundo de rapidez se ganan o pierden cada segundo.
+        en: Indicates how many meters per second of speed are gained or lost each second.
+    model_validity_rules:
+    - id: at_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Se asume que el radio de giro es invariable.
+        en: The turning radius is assumed to be invariable.
+    graph_rules:
+    - id: at_graph
+      when: 'true'
+      status: info
+      text:
+        es: En una gráfica de rapidez vs tiempo, es la pendiente de la recta.
+        en: In a speed vs time graph, it is the slope of the line.
+    likely_errors:
+    - id: at_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No la sumes aritméticamente a la aceleración centrípeta.
+        en: Do not add it arithmetically to centripetal acceleration.
+    next_step_rules:
+    - id: at_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa este valor para calcular la fuerza tangencial neta en dinámica.
+        en: Use this value to calculate net tangential force in dynamics.
+  a:
+    summary_rules:
+    - id: a_summary
+      when: 'true'
+      status: info
+      text:
+        es: Módulo de la aceleración total resultante (vector suma de at y ac).
+        en: Magnitude of the resulting total acceleration (vector sum of at and ac).
+    coherence_rules:
+    - id: a_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Siempre será mayor o igual que cualquiera de sus componentes individuales.
+        en: It will always be greater than or equal to any of its individual components.
+    physical_reading_rules:
+    - id: a_physical
+      when: 'true'
+      status: info
+      text:
+        es: Es la aceleración neta real sentida por el móvil en su marco de referencia.
+        en: It is the real net acceleration felt by the object in its reference frame.
+    model_validity_rules:
+    - id: a_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Válido mientras las componentes sean perpendiculares (trayectoria circular).
+        en: Valid as long as components are perpendicular (circular path).
+    graph_rules:
+    - id: a_graph
+      when: 'true'
+      status: info
+      text:
+        es: Representa la magnitud del vector aceleración total en el plano.
+        en: Represents the magnitude of the total acceleration vector in the plane.
+    likely_errors:
+    - id: a_warn
+      when: 'true'
+      status: warning
+      text:
+        es: El cálculo requiere la raíz cuadrada de la suma de los cuadrados.
+        en: Calculation requires the square root of the sum of squares.
+    next_step_rules:
+    - id: a_next
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona con la segunda ley de Newton para hallar la fuerza total.
+        en: Relate with Newton's second law to find total force.
+  s:
+    summary_rules:
+    - id: s_summary
+      when: 'true'
+      status: info
+      text:
+        es: Distancia lineal total recorrida sobre la curva de la circunferencia.
+        en: Total linear distance traveled along the circumference curve.
+    coherence_rules:
+    - id: s_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser proporcional al ángulo barrido y al radio del círculo.
+        en: Must be proportional to the swept angle and the circle's radius.
+    physical_reading_rules:
+    - id: s_physical
+      when: 'true'
+      status: info
+      text:
+        es: Metros acumulados de trayecto; es la "huella" física del movimiento.
+        en: Accumulated meters of travel; it is the "physical" footprint of the motion.
+    model_validity_rules:
+    - id: s_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Solo válido si el móvil no retrocede ni cambia de radio.
+        en: Only valid if the object does not go back or change radius.
+    graph_rules:
+    - id: s_graph
+      when: 'true'
+      status: info
+      text:
+        es: Crece de forma no lineal (cuadrática) en el tiempo en MCUA.
+        en: Grows non-linearly (quadratically) in time in UACM.
+    likely_errors:
+    - id: s_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas la distancia curva s con el vector desplazamiento recto.
+        en: Do not confuse curved distance s with the straight displacement vector.
+    next_step_rules:
+    - id: s_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa la distancia para calcular el trabajo realizado por fuerzas tangenciales.
+        en: Use distance to calculate work done by tangential forces.
+  N:
+    summary_rules:
+    - id: N_summary
+      when: 'true'
+      status: info
+      text:
+        es: Conteo total de vueltas o ciclos completados en el intervalo.
+        en: Total count of turns or cycles completed in the interval.
+    coherence_rules:
+    - id: N_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: N es el ángulo total dividido por 2*pi.
+        en: N is the total angle divided by 2*pi.
+    physical_reading_rules:
+    - id: N_physical
+      when: 'true'
+      status: info
+      text:
+        es: Indica cuántas veces el sistema ha repetido su orientación inicial.
+        en: Indicates how many times the system has repeated its initial orientation.
+    model_validity_rules:
+    - id: N_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Interpretación válida tanto para vueltas enteras como fracciones.
+        en: Valid interpretation for both full turns and fractions.
+    graph_rules:
+    - id: N_graph
+      when: 'true'
+      status: info
+      text:
+        es: Cuantifica la repetición cíclica del fenómeno físico.
+        en: Quantifies the cyclic repetition of the physical phenomenon.
+    likely_errors:
+    - id: N_warn
+      when: 'true'
+      status: warning
+      text:
+        es: Asegúrate de trabajar con ángulos en radianes antes de hallar N.
+        en: Make sure to work with angles in radians before finding N.
+    next_step_rules:
+    - id: N_next
+      when: 'true'
+      status: info
+      text:
+        es: Útil para determinar el desgaste de componentes rotativos.
+        en: Useful for determining wear on rotating components.
+  delta_t:
+    summary_rules:
+    - id: dt_summary
+      when: 'true'
+      status: info
+      text:
+        es: Duración del intervalo de tiempo en el que ocurre la aceleración.
+        en: Duration of the time interval in which acceleration occurs.
+    coherence_rules:
+    - id: dt_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: El intervalo debe ser consistente con el cambio observado en omega.
+        en: The interval must be consistent with the change observed in omega.
+    physical_reading_rules:
+    - id: dt_physical
+      when: 'true'
+      status: info
+      text:
+        es: Tiempo transcurrido; es el "escenario temporal" del suceso.
+        en: Elapsed time; it is the "temporal setting" of the event.
+    model_validity_rules:
+    - id: dt_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Se asume que no hay interrupciones en el flujo del tiempo.
+        en: It is assumed that there are no interruptions in the flow of time.
+    graph_rules:
+    - id: dt_graph
+      when: 'true'
+      status: info
+      text:
+        es: Es el ancho del intervalo en el eje horizontal de cualquier gráfica temporal.
+        en: It is the interval width on the horizontal axis of any temporal graph.
+    likely_errors:
+    - id: dt_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas el intervalo dt con el instante absoluto t.
+        en: Do not confuse the dt interval with the absolute instant t.
+    next_step_rules:
+    - id: dt_next
+      when: 'true'
+      status: info
+      text:
+        es: Útil para calcular potencias o tasas de cambio medias.
+        en: Useful for calculating powers or average rates of change.
+  omega_0:
+    summary_rules:
+    - id: omega_0_summary
+      when: 'true'
+      status: info
+      text:
+        es: Estado inicial de rotación antes de que la aceleración angular surta efecto.
+        en: Initial rotation state before angular acceleration takes effect.
+    coherence_rules:
+    - id: omega_0_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Marca el origen de la rampa de velocidad en el tiempo.
+        en: Marks the origin of the velocity ramp over time.
+    physical_reading_rules:
+    - id: omega_0_physical
+      when: 'true'
+      status: info
+      text:
+        es: Indica si el sistema ya estaba en movimiento o parte del reposo.
+        en: Indicates if the system was already in motion or starts from rest.
+    model_validity_rules:
+    - id: omega_0_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Fundamental para definir la dirección de la aceleración (acelerado vs frenado).
+        en: Fundamental for defining acceleration direction (speeding up vs braking).
+    graph_rules:
+    - id: omega_0_graph
+      when: 'true'
+      status: info
+      text:
+        es: Es el punto de intersección con el eje vertical en la gráfica omega-t.
+        en: It is the intersection point with the vertical axis in the omega-t graph.
+    likely_errors:
+    - id: omega_0_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas la velocidad inicial con la velocidad media del tramo.
+        en: Do not confuse initial velocity with the segment's average velocity.
+    next_step_rules:
+    - id: omega_0_next
+      when: 'true'
+      status: info
+      text:
+        es: Combínala con alpha y t para predecir la velocidad futura.
+        en: Combine it with alpha and t to predict future velocity.
+  theta_0:
+    summary_rules:
+    - id: theta_0_summary
+      when: 'true'
+      status: info
+      text:
+        es: Referencia angular desde la cual se empieza a medir el desplazamiento.
+        en: Angular reference from which displacement measurement begins.
+    coherence_rules:
+    - id: theta_0_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Define el "piso" inicial de la trayectoria parabólica angular.
+        en: Defines the initial "floor" of the angular parabolic path.
+    physical_reading_rules:
+    - id: theta_0_physical
+      when: 'true'
+      status: info
+      text:
+        es: Determina la fase inicial del objeto en el círculo.
+        en: Determines the initial phase of the object on the circle.
+    model_validity_rules:
+    - id: theta_0_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Su elección es arbitraria pero debe mantenerse constante en el análisis.
+        en: Its choice is arbitrary but must remain constant during analysis.
+    graph_rules:
+    - id: theta_0_graph
+      when: 'true'
+      status: info
+      text:
+        es: Es el valor de la ordenada en el origen en la gráfica theta-t.
+        en: It is the intercept value on the theta-t graph.
+    likely_errors:
+    - id: theta_0_warn
+      when: 'true'
+      status: warning
+      text:
+        es: Ignorarla resultará en una posición angular incorrecta si no se busca solo el delta.
+        en: Ignoring it will result in an incorrect angular position if not looking only for delta.
+    next_step_rules:
+    - id: theta_0_next
+      when: 'true'
+      status: info
+      text:
+        es: Suma el desplazamiento calculado a este valor para hallar la posición final.
+        en: Add calculated displacement to this value to find the final position.
+  v:
+    summary_rules:
+    - id: v_summary
+      when: 'true'
+      status: info
+      text:
+        es: Rapidez tangencial instantánea del punto periférico del móvil.
+        en: Instantaneous tangential speed of the object's peripheral point.
+    coherence_rules:
+    - id: v_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Evoluciona proporcionalmente a la velocidad angular omega.
+        en: Evolves proportionally to the angular velocity omega.
+    physical_reading_rules:
+    - id: v_physical
+      when: 'true'
+      status: info
+      text:
+        es: Indica cuán rápido pasaría el objeto frente a un observador lineal exterior.
+        en: Indicates how fast the object would pass in front of an external linear observer.
+    model_validity_rules:
+    - id: v_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Solo válida para puntos situados a distancia R del centro.
+        en: Only valid for points located at distance R from the center.
+    graph_rules:
+    - id: v_graph
+      when: 'true'
+      status: info
+      text:
+        es: Muestra una progresión lineal en el tiempo en este modelo.
+        en: Shows a linear progression in time in this model.
+    likely_errors:
+    - id: v_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas esta rapidez escalar con el vector velocidad vectorial.
+        en: Do not confuse this scalar speed with the velocity vector.
+    next_step_rules:
+    - id: v_next
+      when: 'true'
+      status: info
+      text:
+        es: Útil para calcular la energía cinética del móvil.
+        en: Useful for calculating the object's kinetic energy.
+  R:
+    summary_rules:
+    - id: R_summary
+      when: 'true'
+      status: info
+      text:
+        es: Radio de curvatura constante que define la trayectoria circular.
+        en: Constant curvature radius defining the circular path.
+    coherence_rules:
+    - id: R_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Es el parámetro que escala las magnitudes angulares a lineales.
+        en: It is the parameter that scales angular magnitudes to linear ones.
+    physical_reading_rules:
+    - id: R_physical
+      when: 'true'
+      status: info
+      text:
+        es: Define el tamaño de la órbita o rueda analizada.
+        en: Defines the size of the orbit or wheel analyzed.
+    model_validity_rules:
+    - id: R_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si R cambia, el movimiento deja de ser circular puro y el modelo no aplica.
+        en: If R changes, the motion is no longer pure circular and the model doesn't apply.
+    graph_rules:
+    - id: R_graph
+      when: 'true'
+      status: info
+      text:
+        es: No suele graficarse, pero determina las pendientes de las gráficas lineales.
+        en: Not usually graphed, but determines the slopes of linear graphs.
+    likely_errors:
+    - id: R_warn
+      when: 'true'
+      status: warning
+      text:
+        es: Asegúrate de que el radio esté en metros para que las unidades sean consistentes.
+        en: Ensure the radius is in meters for units to be consistent.
+    next_step_rules:
+    - id: R_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa el radio para convertir cualquier dato angular a su equivalente en el borde.
+        en: Use the radius to convert any angular data to its edge equivalent.
+  omega_med:
+    summary_rules:
+    - id: omega_med_summary
+      when: 'true'
+      status: info
+      text:
+        es: Velocidad angular promedio durante el transcurso del intervalo acelerado.
+        en: Average angular velocity during the course of the accelerated interval.
+    coherence_rules:
+    - id: omega_med_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser el valor medio exacto entre la velocidad inicial y la final.
+        en: Must be the exact average value between initial and final velocity.
+    physical_reading_rules:
+    - id: omega_med_physical
+      when: 'true'
+      status: info
+      text:
+        es: Representa el ritmo de giro constante que produciría el mismo desplazamiento.
+        en: Represents the constant rotation rate that would produce the same displacement.
+    model_validity_rules:
+    - id: omega_med_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Solo es aplicable si la aceleración angular es uniforme.
+        en: Only applicable if angular acceleration is uniform.
+    graph_rules:
+    - id: omega_med_graph
+      when: 'true'
+      status: info
+      text:
+        es: Se visualiza como la altura media del trapecio en la gráfica omega-t.
+        en: It is visualized as the trapezoid's mean height in the omega-t graph.
+    likely_errors:
+    - id: omega_med_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No asumas que la velocidad media es simplemente (omega/2) si omega_0 no es cero.
+        en: Do not assume average velocity is simply (omega/2) if omega_0 is not zero.
+    next_step_rules:
+    - id: omega_med_next
+      when: 'true'
+      status: info
+      text:
+        es: Útil para despejar tiempos sin recurrir a la ecuación cuadrática.
+        en: Useful for solving times without resorting to the quadratic equation.
+  t:
+    summary_rules:
+    - id: t_summary
+      when: 'true'
+      status: info
+      text:
+        es: Instante temporal específico para el cual se calculan las magnitudes de estado.
+        en: Specific temporal instant for which state quantities are calculated.
+    coherence_rules:
+    - id: t_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser no negativo en la mayoría de contextos físicos reales.
+        en: Must be non-negative in most real physical contexts.
+    physical_reading_rules:
+    - id: t_physical
+      when: 'true'
+      status: info
+      text:
+        es: Indica el momento exacto de la "foto" tomada al sistema circular.
+        en: Indicates the exact moment of the "snapshot" taken of the circular system.
+    model_validity_rules:
+    - id: t_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Define la variable independiente fundamental del modelo cinemático.
+        en: Defines the fundamental independent variable of the kinematic model.
+    graph_rules:
+    - id: t_graph
+      when: 'true'
+      status: info
+      text:
+        es: Corresponde al eje de abscisas en todos los diagramas de evolución.
+        en: Corresponds to the abscissa axis in all evolution diagrams.
+    likely_errors:
+    - id: t_warn
+      when: 'true'
+      status: warning
+      text:
+        es: Verifica si el tiempo t incluye o no un desfase inicial.
+        en: Check if time t includes an initial offset or not.
+    next_step_rules:
+    - id: t_next
+      when: 'true'
+      status: info
+      text:
+        es: Evalúa la posición o velocidad en este instante para completar el análisis.
+        en: Evaluate position or velocity at this instant to complete analysis.
+  delta_theta:
+    summary_rules:
+    - id: delta_theta_summary
+      when: 'true'
+      status: info
+      text:
+        es: Ángulo neto barrido por el móvil durante el intervalo analizado.
+        en: Net angle swept by the object during the analyzed interval.
+    coherence_rules:
+    - id: delta_theta_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser consistente con las velocidades angulares y el tiempo del intervalo.
+        en: Must be consistent with the angular velocities and the time interval.
+    physical_reading_rules:
+    - id: delta_theta_physical
+      when: 'true'
+      status: info
+      text:
+        es: Representa cuántos radianes ha girado el sistema desde el instante inicial hasta el final.
+        en: Represents how many radians the system has rotated from the initial to the final instant.
+    model_validity_rules:
+    - id: delta_theta_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Siempre válido para movimiento circular; se mide en radianes para que las ecuaciones sean correctas.
+        en: Always valid for circular motion; measured in radians for the equations to be correct.
+    graph_rules:
+    - id: delta_theta_graph
+      when: 'true'
+      status: info
+      text:
+        es: Corresponde al área bajo la curva en la gráfica de velocidad angular frente al tiempo.
+        en: Corresponds to the area under the curve in the angular velocity versus time graph.
+    likely_errors:
+    - id: delta_theta_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas el desplazamiento angular delta_theta con la posición angular final theta.
+        en: Do not confuse the angular displacement delta_theta with the final angular position theta.
+    next_step_rules:
+    - id: delta_theta_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa este valor para calcular la longitud de arco recorrida o el número de vueltas completadas.
+        en: Use this value to calculate the arc length traveled or the number of revolutions completed.

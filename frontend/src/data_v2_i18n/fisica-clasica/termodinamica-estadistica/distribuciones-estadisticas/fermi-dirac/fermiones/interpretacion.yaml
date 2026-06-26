@@ -1,0 +1,860 @@
+version: 5.0.0
+id: fermiones
+leaf_id: fermiones
+nombre:
+  es: Fermiones
+  en: Fermions
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: distribuciones-estadisticas
+  parent_id: fermi-dirac
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/distribuciones-estadisticas/fermi-dirac/fermiones
+  orden: 273310
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - fermi_dirac_ocupacion
+  - parametro_reducido_fermi
+  - energia_fermi_gas_3d
+  - temperatura_fermi
+  - exclusion_pauli_ocupacion_maxima
+  magnitudes:
+  - ocupacion_estado
+  - energia
+  - potencial_quimico
+  - temperatura_absoluta
+  - constante_boltzmann
+  - energia_reducida
+  - energia_fermi
+  - densidad_numerica
+  - masa_particula
+  - constante_planck_reducida
+  - temperatura_fermi
+  - numero_ocupacion
+  - degeneracion_estado
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: ocupacion_estado
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  ocupacion_estado:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado principal
+      en: main result
+    summary_rules:
+    - id: ocupacion_estado_summary_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[ocupacion_estado]] indica la probabilidad media de ocupación de un estado fermiónico: aumenta cuando [[energia]]
+          cae bajo [[potencial_quimico]] y disminuye cuando lo supera, siempre acotada entre 0 y 1 por la exclusión de Pauli.'
+        en: '[[ocupacion_estado]] indicates the mean occupation probability of a fermionic state: it increases when [[energia]]
+          falls below [[potencial_quimico]] and decreases when it exceeds it, always bounded between 0 and 1 by Pauli exclusion.'
+    physical_reading_rules:
+    - id: ocupacion_estado_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: Si [[energia]] queda por debajo de [[potencial_quimico]], [[ocupacion_estado]] tiende a 1; si queda por encima,
+          tiende a 0.
+        en: If [[energia]] is below [[potencial_quimico]], [[ocupacion_estado]] tends to 1; if it is above, it tends to 0.
+    coherence_rules:
+    - id: ocupacion_estado_coherence_formula_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[ocupacion_estado]] sea adimensional y esté en 0 ≤ f ≤ 1; fuera de ese intervalo hay error algebraico
+          o de unidades.
+        en: Check that [[ocupacion_estado]] is dimensionless and lies in 0 ≤ f ≤ 1; outside that range there is an algebra
+          or unit error.
+    model_validity_rules:
+    - id: ocupacion_estado_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: La lectura supone fermiones indistinguibles en equilibrio térmico, con [[temperatura_absoluta]] positiva y estados
+          cuánticos bien definidos.
+        en: The reading assumes indistinguishable fermions in thermal equilibrium, positive [[temperatura_absoluta]], and
+          well-defined quantum states.
+    graph_rules:
+    - id: ocupacion_estado_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, lee cómo [[ocupacion_estado]] cae con [[energia]] alrededor de [[potencial_quimico]].
+        en: In the Coord graph, read how [[ocupacion_estado]] falls with [[energia]] around [[potencial_quimico]].
+    likely_errors:
+    - id: ocupacion_estado_likely_error_interpretation
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[ocupacion_estado]] con una lectura aislada es un error frecuente: No confundas [[ocupacion_estado]]
+          con probabilidad clásica independiente: la exclusión de Pauli impide superar una ocupación media de 1.'
+        en: 'Do not confuse [[ocupacion_estado]] with an independent classical probability: Pauli exclusion prevents a mean
+          occupation above 1.'
+    next_step_rules:
+    - id: ocupacion_estado_next_step_check
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular f, compara [[energia]] con [[potencial_quimico]] y revisa si el régimen térmico suaviza o
+          aproxima un escalón.
+        en: After computing f, compare [[energia]] with [[potencial_quimico]] and check whether the thermal regime smooths
+          or approximates a step.
+    physical_intuition:
+    - id: ocupacion_estado_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: 'Fermiones llenan primero estados bajos: [[ocupacion_estado]] actúa como una puerta que se cierra al subir la
+          energía.'
+        en: 'Fermions fill low states first: [[ocupacion_estado]] behaves like a gate that closes as energy rises.'
+    limiting_cases:
+    - id: ocupacion_estado_limiting_cases
+      when: 'true'
+      status: info
+      text:
+        es: 'Cuando T → 0, la ocupación se aproxima a un escalón: 1 por debajo de μ y 0 por encima.'
+        en: 'As T → 0, the occupation approaches a step: 1 below μ and 0 above it.'
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable independiente
+      en: independent variable
+    summary_rules:
+    - id: energia_summary_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia]] representa energía del estado dentro del modelo fermiónico del leaf.'
+        en: '[[energia]] represents state energy within the fermionic model of this leaf.'
+    physical_reading_rules:
+    - id: energia_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: '[[energia]] se compara con [[potencial_quimico]]; esa diferencia decide si el estado tiende a estar ocupado o
+          vacío.'
+        en: '[[energia]] is compared with [[potencial_quimico]]; that difference decides whether the state tends to be occupied
+          or empty.'
+    coherence_rules:
+    - id: energia_coherence_formula_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[energia]] sea compatible con {{f:fermi_dirac_ocupacion}} y con las unidades SI de las entradas.
+        en: Check that [[energia]] is consistent with {{f:fermi_dirac_ocupacion}} and with the SI units of the inputs.
+    model_validity_rules:
+    - id: energia_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia]] solo bajo equilibrio estadístico y dentro de las hipótesis de Fermi-Dirac o gas de Fermi
+          usadas.
+        en: Interpret [[energia]] only under statistical equilibrium and within the Fermi-Dirac or Fermi-gas assumptions used.
+    graph_rules:
+    - id: energia_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: Si aparece en la gráfica, relaciona [[energia]] con la curva de ocupación frente a energía y con el cambio cerca
+          de μ.
+        en: If it appears in the graph, relate [[energia]] to the occupation curve versus energy and the change near μ.
+    likely_errors:
+    - id: energia_likely_error_interpretation
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia]] con una lectura aislada es un error frecuente: No uses eV y J mezclados al evaluar exponentes:
+          E, μ y k_B T deben estar en la misma unidad de energía.'
+        en: 'A common mistake is to interpret [[energia]] in isolation: Do not mix eV and J when evaluating exponents: E,
+          μ, and k_B T must use the same energy unit.'
+    next_step_rules:
+    - id: energia_next_step_check
+      when: 'true'
+      status: info
+      text:
+        es: 'Usa [[energia]] para decidir la siguiente comprobación: unidades, orden de magnitud, límite físico o comparación
+          con otra escala.'
+        en: 'Use [[energia]] to choose the next check: units, order of magnitude, physical limit, or comparison with another
+          scale.'
+    physical_intuition:
+    - id: energia_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia]] ayuda a traducir la estadística cuántica a una lectura física observable o comparable.
+        en: Intuitively, [[energia]] helps translate quantum statistics into a physical reading that can be observed or compared.
+    limiting_cases:
+    - id: energia_limiting_cases
+      when: 'true'
+      status: info
+      text:
+        es: Explora [[energia]] en límites de baja temperatura, alta temperatura, baja densidad o alta densidad según la fórmula
+          usada.
+        en: Explore [[energia]] in low-temperature, high-temperature, low-density, or high-density limits according to the
+          formula used.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  potencial_quimico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: umbral energético
+      en: energy threshold
+    summary_rules:
+    - id: potencial_quimico_summary_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[potencial_quimico]] representa potencial químico dentro del modelo fermiónico del leaf.'
+        en: '[[potencial_quimico]] represents chemical potential within the fermionic model of this leaf.'
+    physical_reading_rules:
+    - id: potencial_quimico_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: '[[potencial_quimico]] marca la frontera energética efectiva de ocupación; no es una energía mecánica cualquiera.'
+        en: '[[potencial_quimico]] marks the effective occupation energy boundary; it is not just any mechanical energy.'
+    coherence_rules:
+    - id: potencial_quimico_coherence_formula_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[potencial_quimico]] sea compatible con {{f:fermi_dirac_ocupacion}} y con las unidades SI de las
+          entradas.
+        en: Check that [[potencial_quimico]] is consistent with {{f:fermi_dirac_ocupacion}} and with the SI units of the inputs.
+    model_validity_rules:
+    - id: potencial_quimico_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[potencial_quimico]] solo bajo equilibrio estadístico y dentro de las hipótesis de Fermi-Dirac o gas
+          de Fermi usadas.
+        en: Interpret [[potencial_quimico]] only under statistical equilibrium and within the Fermi-Dirac or Fermi-gas assumptions
+          used.
+    graph_rules:
+    - id: potencial_quimico_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: Si aparece en la gráfica, relaciona [[potencial_quimico]] con la curva de ocupación frente a energía y con el
+          cambio cerca de μ.
+        en: If it appears in the graph, relate [[potencial_quimico]] to the occupation curve versus energy and the change
+          near μ.
+    likely_errors:
+    - id: potencial_quimico_likely_error_interpretation
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[potencial_quimico]] con una lectura aislada es un error frecuente: No trates [[potencial_quimico]]
+          como un número aislado: revisa si es parámetro, constante, escala o resultado antes de concluir.'
+        en: 'A common mistake is to interpret [[potencial_quimico]] in isolation: Do not treat [[potencial_quimico]] as an
+          isolated number: check whether it is a parameter, constant, scale, or result before concluding.'
+    next_step_rules:
+    - id: potencial_quimico_next_step_check
+      when: 'true'
+      status: info
+      text:
+        es: 'Usa [[potencial_quimico]] para decidir la siguiente comprobación: unidades, orden de magnitud, límite físico
+          o comparación con otra escala.'
+        en: 'Use [[potencial_quimico]] to choose the next check: units, order of magnitude, physical limit, or comparison
+          with another scale.'
+    physical_intuition:
+    - id: potencial_quimico_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[potencial_quimico]] ayuda a traducir la estadística cuántica a una lectura física observable
+          o comparable.
+        en: Intuitively, [[potencial_quimico]] helps translate quantum statistics into a physical reading that can be observed
+          or compared.
+    limiting_cases:
+    - id: potencial_quimico_limiting_cases
+      when: 'true'
+      status: info
+      text:
+        es: A temperatura muy baja, μ se aproxima a la energía de Fermi en un gas de fermiones ideal.
+        en: At very low temperature, μ approaches the Fermi energy in an ideal fermion gas.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_reducida:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro adimensional
+      en: dimensionless parameter
+    summary_rules:
+    - id: energia_reducida_summary_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_reducida]] es el exponente adimensional (E − μ)/(k_B T) que controla la ocupación Fermi-Dirac.'
+        en: '[[energia_reducida]] is the dimensionless exponent (E − μ)/(k_B T) that controls Fermi-Dirac occupation.'
+    physical_reading_rules:
+    - id: energia_reducida_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: η < 0 favorece ocupación; η > 0 favorece vacío; η = 0 da f = 1/2.
+        en: η < 0 favors occupation; η > 0 favors vacancy; η = 0 gives f = 1/2.
+    coherence_rules:
+    - id: energia_reducida_coherence_formula_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[energia_reducida]] sea compatible con {{f:parametro_reducido_fermi}} y con las unidades SI de
+          las entradas.
+        en: Check that [[energia_reducida]] is consistent with {{f:parametro_reducido_fermi}} and with the SI units of the
+          inputs.
+    model_validity_rules:
+    - id: energia_reducida_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia_reducida]] solo bajo equilibrio estadístico y dentro de las hipótesis de Fermi-Dirac o gas
+          de Fermi usadas.
+        en: Interpret [[energia_reducida]] only under statistical equilibrium and within the Fermi-Dirac or Fermi-gas assumptions
+          used.
+    graph_rules:
+    - id: energia_reducida_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: Si aparece en la gráfica, relaciona [[energia_reducida]] con la curva de ocupación frente a energía y con el cambio
+          cerca de μ.
+        en: If it appears in the graph, relate [[energia_reducida]] to the occupation curve versus energy and the change near
+          μ.
+    likely_errors:
+    - id: energia_reducida_likely_error_interpretation
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_reducida]] con una lectura aislada es un error frecuente: No trates [[energia_reducida]]
+          como un número aislado: revisa si es parámetro, constante, escala o resultado antes de concluir.'
+        en: 'A common mistake is to interpret [[energia_reducida]] in isolation: Do not treat [[energia_reducida]] as an isolated
+          number: check whether it is a parameter, constant, scale, or result before concluding.'
+    next_step_rules:
+    - id: energia_reducida_next_step_check
+      when: 'true'
+      status: info
+      text:
+        es: 'Usa [[energia_reducida]] para decidir la siguiente comprobación: unidades, orden de magnitud, límite físico o
+          comparación con otra escala.'
+        en: 'Use [[energia_reducida]] to choose the next check: units, order of magnitude, physical limit, or comparison with
+          another scale.'
+    physical_intuition:
+    - id: energia_reducida_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_reducida]] ayuda a traducir la estadística cuántica a una lectura física observable
+          o comparable.
+        en: Intuitively, [[energia_reducida]] helps translate quantum statistics into a physical reading that can be observed
+          or compared.
+    limiting_cases:
+    - id: energia_reducida_limiting_cases
+      when: 'true'
+      status: info
+      text:
+        es: Explora [[energia_reducida]] en límites de baja temperatura, alta temperatura, baja densidad o alta densidad según
+          la fórmula usada.
+        en: Explore [[energia_reducida]] in low-temperature, high-temperature, low-density, or high-density limits according
+          to the formula used.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_fermi:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: escala característica
+      en: characteristic scale
+    summary_rules:
+    - id: energia_fermi_summary_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_fermi]] representa energía de Fermi dentro del modelo fermiónico del leaf.'
+        en: '[[energia_fermi]] represents Fermi energy within the fermionic model of this leaf.'
+    physical_reading_rules:
+    - id: energia_fermi_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: '[[energia_fermi]] fija hasta qué escala energética se llenan los estados a temperatura casi nula.'
+        en: '[[energia_fermi]] sets the energy scale up to which states are filled at nearly zero temperature.'
+    coherence_rules:
+    - id: energia_fermi_coherence_formula_units
+      when: 'true'
+      status: ok
+      text:
+        es: En el gas 3D ideal, [[energia_fermi]] debe crecer con [[densidad_numerica]] y disminuir con [[masa_particula]].
+        en: In the ideal 3D gas, [[energia_fermi]] must increase with [[densidad_numerica]] and decrease with [[masa_particula]].
+    model_validity_rules:
+    - id: energia_fermi_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia_fermi]] solo bajo equilibrio estadístico y dentro de las hipótesis de Fermi-Dirac o gas de
+          Fermi usadas.
+        en: Interpret [[energia_fermi]] only under statistical equilibrium and within the Fermi-Dirac or Fermi-gas assumptions
+          used.
+    graph_rules:
+    - id: energia_fermi_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: Si aparece en la gráfica, relaciona [[energia_fermi]] con la curva de ocupación frente a energía y con el cambio
+          cerca de μ.
+        en: If it appears in the graph, relate [[energia_fermi]] to the occupation curve versus energy and the change near
+          μ.
+    likely_errors:
+    - id: energia_fermi_likely_error_interpretation
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_fermi]] con una lectura aislada es un error frecuente: No trates [[energia_fermi]] como un
+          número aislado: revisa si es parámetro, constante, escala o resultado antes de concluir.'
+        en: 'A common mistake is to interpret [[energia_fermi]] in isolation: Do not treat [[energia_fermi]] as an isolated
+          number: check whether it is a parameter, constant, scale, or result before concluding.'
+    next_step_rules:
+    - id: energia_fermi_next_step_check
+      when: 'true'
+      status: info
+      text:
+        es: 'Usa [[energia_fermi]] para decidir la siguiente comprobación: unidades, orden de magnitud, límite físico o comparación
+          con otra escala.'
+        en: 'Use [[energia_fermi]] to choose the next check: units, order of magnitude, physical limit, or comparison with
+          another scale.'
+    physical_intuition:
+    - id: energia_fermi_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_fermi]] ayuda a traducir la estadística cuántica a una lectura física observable o comparable.
+        en: Intuitively, [[energia_fermi]] helps translate quantum statistics into a physical reading that can be observed
+          or compared.
+    limiting_cases:
+    - id: energia_fermi_limiting_cases
+      when: 'true'
+      status: info
+      text:
+        es: Explora [[energia_fermi]] en límites de baja temperatura, alta temperatura, baja densidad o alta densidad según
+          la fórmula usada.
+        en: Explore [[energia_fermi]] in low-temperature, high-temperature, low-density, or high-density limits according
+          to the formula used.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  densidad_numerica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro de densidad
+      en: density parameter
+    summary_rules:
+    - id: densidad_numerica_summary_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[densidad_numerica]] representa densidad numérica dentro del modelo fermiónico del leaf.'
+        en: '[[densidad_numerica]] represents number density within the fermionic model of this leaf.'
+    physical_reading_rules:
+    - id: densidad_numerica_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: '[[densidad_numerica]] mide cuántos fermiones caben por volumen; mayor densidad empuja hacia mayor energía de
+          Fermi.'
+        en: '[[densidad_numerica]] measures how many fermions fit per volume; higher density pushes the Fermi energy upward.'
+    coherence_rules:
+    - id: densidad_numerica_coherence_formula_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[densidad_numerica]] sea compatible con {{f:energia_fermi_gas_3d}} y con las unidades SI de las
+          entradas.
+        en: Check that [[densidad_numerica]] is consistent with {{f:energia_fermi_gas_3d}} and with the SI units of the inputs.
+    model_validity_rules:
+    - id: densidad_numerica_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[densidad_numerica]] solo bajo equilibrio estadístico y dentro de las hipótesis de Fermi-Dirac o gas
+          de Fermi usadas.
+        en: Interpret [[densidad_numerica]] only under statistical equilibrium and within the Fermi-Dirac or Fermi-gas assumptions
+          used.
+    graph_rules:
+    - id: densidad_numerica_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: Si aparece en la gráfica, relaciona [[densidad_numerica]] con la curva de ocupación frente a energía y con el
+          cambio cerca de μ.
+        en: If it appears in the graph, relate [[densidad_numerica]] to the occupation curve versus energy and the change
+          near μ.
+    likely_errors:
+    - id: densidad_numerica_likely_error_interpretation
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[densidad_numerica]] con una lectura aislada es un error frecuente: No uses número total de partículas
+          donde la fórmula pide densidad: n debe estar en m^-3.'
+        en: 'A common mistake is to interpret [[densidad_numerica]] in isolation: Do not use total particle number where the
+          formula requires density: n must be in m^-3.'
+    next_step_rules:
+    - id: densidad_numerica_next_step_check
+      when: 'true'
+      status: info
+      text:
+        es: 'Usa [[densidad_numerica]] para decidir la siguiente comprobación: unidades, orden de magnitud, límite físico
+          o comparación con otra escala.'
+        en: 'Use [[densidad_numerica]] to choose the next check: units, order of magnitude, physical limit, or comparison
+          with another scale.'
+    physical_intuition:
+    - id: densidad_numerica_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[densidad_numerica]] ayuda a traducir la estadística cuántica a una lectura física observable
+          o comparable.
+        en: Intuitively, [[densidad_numerica]] helps translate quantum statistics into a physical reading that can be observed
+          or compared.
+    limiting_cases:
+    - id: densidad_numerica_limiting_cases
+      when: 'true'
+      status: info
+      text:
+        es: Explora [[densidad_numerica]] en límites de baja temperatura, alta temperatura, baja densidad o alta densidad
+          según la fórmula usada.
+        en: Explore [[densidad_numerica]] in low-temperature, high-temperature, low-density, or high-density limits according
+          to the formula used.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_fermi:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: escala térmica característica
+      en: characteristic thermal scale
+    summary_rules:
+    - id: temperatura_fermi_summary_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_fermi]] representa temperatura de Fermi dentro del modelo fermiónico del leaf.'
+        en: '[[temperatura_fermi]] represents Fermi temperature within the fermionic model of this leaf.'
+    physical_reading_rules:
+    - id: temperatura_fermi_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: '[[temperatura_fermi]] permite comparar T con la escala cuántica: si T << T_F, el sistema está degenerado.'
+        en: '[[temperatura_fermi]] lets T be compared with the quantum scale: if T << T_F, the system is degenerate.'
+    coherence_rules:
+    - id: temperatura_fermi_coherence_formula_units
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura_fermi]] sea compatible con {{f:temperatura_fermi}} y con las unidades SI de las entradas.
+        en: Check that [[temperatura_fermi]] is consistent with {{f:temperatura_fermi}} and with the SI units of the inputs.
+    model_validity_rules:
+    - id: temperatura_fermi_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura_fermi]] solo bajo equilibrio estadístico y dentro de las hipótesis de Fermi-Dirac o gas
+          de Fermi usadas.
+        en: Interpret [[temperatura_fermi]] only under statistical equilibrium and within the Fermi-Dirac or Fermi-gas assumptions
+          used.
+    graph_rules:
+    - id: temperatura_fermi_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: Si aparece en la gráfica, relaciona [[temperatura_fermi]] con la curva de ocupación frente a energía y con el
+          cambio cerca de μ.
+        en: If it appears in the graph, relate [[temperatura_fermi]] to the occupation curve versus energy and the change
+          near μ.
+    likely_errors:
+    - id: temperatura_fermi_likely_error_interpretation
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura_fermi]] con una lectura aislada es un error frecuente: No trates [[temperatura_fermi]]
+          como un número aislado: revisa si es parámetro, constante, escala o resultado antes de concluir.'
+        en: 'A common mistake is to interpret [[temperatura_fermi]] in isolation: Do not treat [[temperatura_fermi]] as an
+          isolated number: check whether it is a parameter, constant, scale, or result before concluding.'
+    next_step_rules:
+    - id: temperatura_fermi_next_step_check
+      when: 'true'
+      status: info
+      text:
+        es: Compara [[temperatura_absoluta]]/[[temperatura_fermi]] para decidir si una aproximación clásica sería razonable.
+        en: Compare [[temperatura_absoluta]]/[[temperatura_fermi]] to decide whether a classical approximation would be reasonable.
+    physical_intuition:
+    - id: temperatura_fermi_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura_fermi]] ayuda a traducir la estadística cuántica a una lectura física observable
+          o comparable.
+        en: Intuitively, [[temperatura_fermi]] helps translate quantum statistics into a physical reading that can be observed
+          or compared.
+    limiting_cases:
+    - id: temperatura_fermi_limiting_cases
+      when: 'true'
+      status: info
+      text:
+        es: Explora [[temperatura_fermi]] en límites de baja temperatura, alta temperatura, baja densidad o alta densidad
+          según la fórmula usada.
+        en: Explore [[temperatura_fermi]] in low-temperature, high-temperature, low-density, or high-density limits according
+          to the formula used.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_ocupacion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado de ocupación discreta
+      en: discrete occupation result
+    summary_rules:
+    - id: numero_ocupacion_summary_meaning
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_ocupacion]] cuenta cuántos fermiones ocupan un grupo degenerado de estados, acotado por [[degeneracion_estado]].'
+        en: '[[numero_ocupacion]] counts how many fermions occupy a degenerate group of states, bounded by [[degeneracion_estado]].'
+    physical_reading_rules:
+    - id: numero_ocupacion_physical_reading_units
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[numero_ocupacion]] con unidad 1 y dimensión 1; su valor solo tiene sentido junto al estado físico considerado.
+        en: Read [[numero_ocupacion]] with unit 1 and dimension 1; its value only makes sense with the physical state considered.
+    coherence_rules:
+    - id: numero_ocupacion_coherence_formula_units
+      when: 'true'
+      status: ok
+      text:
+        es: Debe cumplirse 0 ≤ [[numero_ocupacion]] ≤ [[degeneracion_estado]]; superar g viola la exclusión de Pauli.
+        en: It must satisfy 0 ≤ [[numero_ocupacion]] ≤ [[degeneracion_estado]]; exceeding g violates Pauli exclusion.
+    model_validity_rules:
+    - id: numero_ocupacion_model_validity_assumptions
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[numero_ocupacion]] solo bajo equilibrio estadístico y dentro de las hipótesis de Fermi-Dirac o gas
+          de Fermi usadas.
+        en: Interpret [[numero_ocupacion]] only under statistical equilibrium and within the Fermi-Dirac or Fermi-gas assumptions
+          used.
+    graph_rules:
+    - id: numero_ocupacion_graph_reading_coord
+      when: 'true'
+      status: info
+      text:
+        es: Si aparece en la gráfica, relaciona [[numero_ocupacion]] con la curva de ocupación frente a energía y con el cambio
+          cerca de μ.
+        en: If it appears in the graph, relate [[numero_ocupacion]] to the occupation curve versus energy and the change near
+          μ.
+    likely_errors:
+    - id: numero_ocupacion_likely_error_interpretation
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[numero_ocupacion]] con una lectura aislada es un error frecuente: No trates [[numero_ocupacion]]
+          como un número aislado: revisa si es parámetro, constante, escala o resultado antes de concluir.'
+        en: 'A common mistake is to interpret [[numero_ocupacion]] in isolation: Do not treat [[numero_ocupacion]] as an isolated
+          number: check whether it is a parameter, constant, scale, or result before concluding.'
+    next_step_rules:
+    - id: numero_ocupacion_next_step_check
+      when: 'true'
+      status: info
+      text:
+        es: 'Usa [[numero_ocupacion]] para decidir la siguiente comprobación: unidades, orden de magnitud, límite físico o
+          comparación con otra escala.'
+        en: 'Use [[numero_ocupacion]] to choose the next check: units, order of magnitude, physical limit, or comparison with
+          another scale.'
+    physical_intuition:
+    - id: numero_ocupacion_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[numero_ocupacion]] ayuda a traducir la estadística cuántica a una lectura física observable
+          o comparable.
+        en: Intuitively, [[numero_ocupacion]] helps translate quantum statistics into a physical reading that can be observed
+          or compared.
+    limiting_cases:
+    - id: numero_ocupacion_limiting_cases
+      when: 'true'
+      status: info
+      text:
+        es: Explora [[numero_ocupacion]] en límites de baja temperatura, alta temperatura, baja densidad o alta densidad según
+          la fórmula usada.
+        en: Explore [[numero_ocupacion]] in low-temperature, high-temperature, low-density, or high-density limits according
+          to the formula used.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

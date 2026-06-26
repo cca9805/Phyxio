@@ -1,0 +1,39 @@
+# Guided example
+
+## Physical situation
+
+A cart moves along a straight line. The position-time graph passes through `(t = 2 s, x = 4 m)` and `(t = 6 s, x = 16 m)`. Then another velocity-time graph shows `v = 3 m/s` constant between `t = 0 s` and `t = 5 s`.
+
+The first question asks at what rate position changes. The second asks how much displacement accumulates during five seconds.
+
+## Mathematical translation
+
+On the position-time graph, slope is needed because the question asks for a rate of change. The operation is `Delta x / Delta t` and the expected unit is `m/s`.
+
+On the velocity-time graph, area is needed because the question asks for accumulated displacement. The operation is base times height and the expected unit is `(m/s) s = m`.
+
+## Step-by-step calculation
+
+For the slope: `Delta x = 16 m - 4 m = 12 m` and `Delta t = 6 s - 2 s = 4 s`. Therefore the average slope is `12 m / 4 s = 3 m/s`.
+
+For the area: the region under `v = 3 m/s` between `0 s` and `5 s` is a rectangle. Its base is `5 s` and its height is `3 m/s`, so the area is `15 m`.
+
+## Reading the result
+
+The slope of `3 m/s` means that, on that segment, position increases three meters each second. The area of `15 m` means the cart accumulates fifteen meters of displacement over the interval.
+
+The numerical similarity must not confuse the meaning: a slope `3 m/s` and an area `15 m` are different physical objects. One measures rate; the other measures accumulation.
+
+## Common error avoided
+
+The avoided error is using slope on the velocity-time graph to answer displacement. The slope of that graph would be acceleration, and here it would be zero because velocity is constant. But zero acceleration does not mean zero displacement: the cart moves with constant velocity and accumulates area.
+
+# Inverse example
+
+## Given result
+
+On a force-time graph, a signed area of `-8 N s` is calculated between `t = 1 s` and `t = 3 s`. The negative sign appears because the force lies below the horizontal axis during that interval.
+
+## What physical question it can answer
+
+This result answers what impulse acts on the body in that interval and in which sense. The physical question would be: "what change in momentum does the force produce between `1 s` and `3 s`?". It does not answer the maximum instantaneous force or whether energy increased; those questions require other data or another graph.

@@ -1,0 +1,311 @@
+const e=`version: 5
+id: densidad-interp
+leaf_id: densidad
+scope: local
+nombre:
+  es: "Análisis de Densidad"
+  en: "Density Analysis"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: "Resumen de Masa-Volumen"
+      en: "Mass-Volume Summary"
+  physical_reading:
+    title:
+      es: "Lectura Física"
+      en: "Physical Reading"
+  coherence:
+    title:
+      es: "Coherencia"
+      en: "Coherence"
+  model_validity:
+    title:
+      es: "Validez"
+      en: "Validity"
+  graph_reading:
+    title:
+      es: "Gráfica"
+      en: "Graph"
+  likely_errors:
+    title:
+      es: "Errores"
+      en: "Errors"
+  next_step:
+    title:
+      es: "Siguiente Paso"
+      en: "Next Step"
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [rho, m, V, SG, gamma, g, rho_0]
+  formulas: [densidad, peso_especifico, densidad_relativa]
+
+targets:
+  rho:
+    summary_rules:
+      - id: rho-val
+        when: rho > 0
+        status: success
+        text:
+          es: "La densidad absoluta [[rho]] indica la cantidad de masa concentrada en cada unidad de volumen del fluido."
+          en: "The absolute density [[rho]] indicates the amount of mass concentrated in each unit of volume of the fluid."
+    physical_reading_rules:
+      - id: rho-phys
+        when: rho > 1000
+        status: success
+        text:
+          es: "Dado que su densidad es elevada, este fluido tenderá a hundirse en el agua, acumulando una gran masa en poco espacio."
+          en: "Given its high density, this fluid will tend to sink in water, accumulating a large mass in little space."
+    coherence_rules:
+      - id: rho-coh
+        when: rho > 0
+        status: success
+        text:
+          es: "Es coherente que la densidad sea positiva, ya que representa una propiedad intrínseca de la materia real."
+          en: "It is coherent that the density is positive, as it represents an intrinsic property of real matter."
+    model_validity_rules:
+      - id: rho-valid
+        when: rho > 0
+        status: success
+        text:
+          es: "Válido para un modelo de medio continuo donde la masa se distribuye uniformemente en el volumen [[V]]."
+          en: "Valid for a continuous medium model where mass is uniformly distributed in the volume [[V]]."
+    graph_rules:
+      - id: rho-graph
+        when: rho > 0
+        status: success
+        text:
+          es: "En el gráfico Coord, la densidad se visualiza directamente como la pendiente de la curva de masa."
+          en: "In the Coord graph, density is visualized directly as the slope of the mass curve."
+    likely_errors:
+      - id: rho-err-neg
+        when: rho < 0
+        status: error
+        text:
+          es: "Error: El alumno suele confundir el concepto. Una densidad negativa es físicamente imposible."
+          en: "Error: The student often confuses the concept. A negative density is physically impossible."
+    next_step_rules:
+      - id: rho-next
+        when: rho > 0
+        status: info
+        text:
+          es: "Utilice este valor para determinar las presiones hidrostáticas o para calcular el peso específico [[gamma]]."
+          en: "Use this value to determine hydrostatic pressures or to calculate the specific weight [[gamma]]."
+
+  m:
+    summary_rules:
+      - id: m-val
+        when: m > 0
+        status: success
+        text:
+          es: "La masa [[m]] describe la cantidad total de materia que compone la porción de fluido bajo estudio."
+          en: "The mass [[m]] describes the total amount of matter making up the fluid portion under study."
+    physical_reading_rules:
+      - id: m-phys
+        when: m > 0
+        status: success
+        text:
+          es: "Dado que la masa es proporcional al volumen, aumentar el espacio ocupado implica un incremento de inercia."
+          en: "Since mass is proportional to volume, increasing the occupied space implies an increase in inertia."
+    coherence_rules:
+      - id: m-coh
+        when: m > 0
+        status: success
+        text:
+          es: "Masa positiva consistente con la conservación de la materia en un sistema de referencia clásico."
+          en: "Positive mass consistent with matter conservation in a classical reference system."
+    model_validity_rules:
+      - id: m-valid
+        when: m > 0
+        status: success
+        text:
+          es: "El cálculo es exacto siempre que el fluido sea homogéneo y no existan huecos de aire en el volumen."
+          en: "The calculation is accurate as long as the fluid is homogeneous and no air gaps exist in the volume."
+    graph_rules:
+      - id: m-graph
+        when: m > 0
+        status: success
+        text:
+          es: "La masa actúa como la variable dependiente situada en el eje vertical del gráfico de densidad."
+          en: "Mass acts as the dependent variable located on the vertical axis of the density graph."
+    likely_errors:
+      - id: m-err-weight
+        when: m > 0
+        status: info
+        text:
+          es: "Evite confundir masa con peso; la masa es invariable mientras que el peso depende de la gravedad [[g]]."
+          en: "Avoid confusing mass with weight; mass is invariable while weight depends on gravity [[g]]."
+    next_step_rules:
+      - id: m-next
+        when: m > 0
+        status: info
+        text:
+          es: "Multiplique la masa por la gravedad [[g]] para obtener el peso total [[W]] del fluido."
+          en: "Multiply the mass by gravity [[g]] to obtain the total weight [[W]] of the fluid."
+
+  V:
+    summary_rules:
+      - id: v-val
+        when: V > 0
+        status: success
+        text:
+          es: "El volumen [[V]] indica el espacio tridimensional que ocupa la muestra de fluido analizada."
+          en: "The volume [[V]] indicates the three-dimensional space occupied by the analyzed fluid sample."
+    physical_reading_rules:
+      - id: v-phys
+        when: V > 0
+        status: success
+        text:
+          es: "Como el fluido ocupa un volumen finito, desplaza una cantidad igual de espacio en cualquier recipiente."
+          en: "As the fluid occupies a finite volume, it displaces an equal amount of space in any container."
+    coherence_rules:
+      - id: v-coh
+        when: V > 0
+        status: success
+        text:
+          es: "Volumen positivo coherente con las dimensiones geométricas reales del sistema bajo estudio."
+          en: "Positive volume coherent with the real geometric dimensions of the system under study."
+    model_validity_rules:
+      - id: v-valid
+        when: V > 0
+        status: success
+        text:
+          es: "Válido mientras se asuma que el fluido llena completamente el contenedor definido."
+          en: "Valid as long as it is assumed that the fluid completely fills the defined container."
+    graph_rules:
+      - id: v-graph
+        when: V > 0
+        status: success
+        text:
+          es: "El volumen se representa como la variable independiente en el eje horizontal del gráfico Coord."
+          en: "Volume is represented as the independent variable on the horizontal axis of the Coord graph."
+    likely_errors:
+      - id: v-err-zero
+        when: V <= 0
+        status: error
+        text:
+          es: "Error: El volumen no puede ser nulo o negativo. Revise si olvidó restar el volumen del recipiente."
+          en: "Error: Volume cannot be zero or negative. Check if you forgot to subtract the container volume."
+    next_step_rules:
+      - id: v-next
+        when: V > 0
+        status: info
+        text:
+          es: "Use el volumen para determinar el empuje de Arquímedes si el cuerpo está sumergido."
+          en: "Use volume to determine the Archimedes buoyancy if the body is submerged."
+
+  SG:
+    summary_rules:
+      - id: sg-val
+        when: SG > 0
+        status: success
+        text:
+          es: "La gravedad específica [[SG]] indica la densidad relativa del fluido respecto al agua estándar."
+          en: "Specific gravity [[SG]] indicates the relative density of the fluid compared to standard water."
+    physical_reading_rules:
+      - id: sg-phys
+        when: SG < 1
+        status: success
+        text:
+          es: "Debido a que SG es menor que 1, el fluido es más ligero que el agua y flotará en su superficie."
+          en: "Since SG is less than 1, the fluid is lighter than water and will float on its surface."
+    coherence_rules:
+      - id: sg-coh
+        when: SG > 0
+        status: success
+        text:
+          es: "Valor adimensional coherente para comparaciones rápidas de pureza y composición de sustancias."
+          en: "Dimensionless value coherent for quick purity and substance composition comparisons."
+    model_validity_rules:
+      - id: sg-valid
+        when: SG > 0
+        status: success
+        text:
+          es: "Válido siempre que se use la densidad de referencia [[rho_0]] a la temperatura estándar de 4°C."
+          en: "Valid as long as the reference density [[rho_0]] at the standard temperature of 4°C is used."
+    graph_rules:
+      - id: sg-graph
+        when: SG > 0
+        status: success
+        text:
+          es: "En el esquema Svg, este valor suele representarse mediante el nivel de flotación de un objeto."
+          en: "In the Svg scheme, this value is usually represented by an object's flotation level."
+    likely_errors:
+      - id: sg-err-unit
+        when: SG > 0
+        status: info
+        text:
+          es: "No olvide que SG es una magnitud sin unidades; no crea que debe asignarle kg/m³."
+          en: "Do not forget that SG is a unitless magnitude; do not think you must assign it kg/m³."
+    next_step_rules:
+      - id: sg-next
+        when: SG > 0
+        status: info
+        text:
+          es: "Multiplique SG por la densidad del agua para obtener la densidad absoluta en unidades SI."
+          en: "Multiply SG by water density to obtain the absolute density in SI units."
+
+  gamma:
+    summary_rules:
+      - id: gamma-val
+        when: gamma > 0
+        status: success
+        text:
+          es: "El peso específico [[gamma]] indica la fuerza gravitatoria ejercida por cada unidad de volumen de fluido."
+          en: "The specific weight [[gamma]] indicates the gravitational force exerted by each unit of fluid volume."
+    physical_reading_rules:
+      - id: gamma-phys
+        when: gamma > 0
+        status: success
+        text:
+          es: "Dado que el peso específico depende de la gravedad [[g]], este valor cambiaría en otros planetas."
+          en: "Given that specific weight depends on gravity [[g]], this value would change on other planets."
+    coherence_rules:
+      - id: gamma-coh
+        when: gamma > 0
+        status: success
+        text:
+          es: "Valor coherente para determinar la carga estática sobre el fondo de recipientes o tuberías."
+          en: "Coherent value for determining static load on the bottom of containers or pipes."
+    model_validity_rules:
+      - id: gamma-valid
+        when: gamma > 0
+        status: success
+        text:
+          es: "Válido para fluidos en reposo bajo la influencia de un campo gravitatorio uniforme."
+          en: "Valid for fluids at rest under the influence of a uniform gravitational field."
+    graph_rules:
+      - id: gamma-graph
+        when: gamma > 0
+        status: info
+        text:
+          es: "Magnitud relacionada con la pendiente de la presión en diagramas de profundidad."
+          en: "Magnitude related to the pressure slope in depth diagrams."
+    likely_errors:
+      - id: gamma-err-rho
+        when: gamma > 0
+        status: info
+        text:
+          es: "Cuidado: no use [[gamma]] cuando la fórmula requiera explícitamente densidad absoluta [[rho]]."
+          en: "Careful: do not use [[gamma]] when the formula explicitly requires absolute density [[rho]]."
+    next_step_rules:
+      - id: gamma-next
+        when: gamma > 0
+        status: info
+        text:
+          es: "Utilice [[gamma]] para calcular la presión hidrostática mediante el producto gamma * h."
+          en: "Use [[gamma]] to calculate hydrostatic pressure through the product gamma * h."
+`;export{e as default};

@@ -1,0 +1,773 @@
+version: 5.0.0
+id: bomba-de-calor
+leaf_id: bomba-de-calor
+nombre:
+  es: Bomba de calor
+  en: Heat Pump
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: electricidad-domestica
+  parent_id: climatizacion
+  ruta_relativa: fisica-clasica/electromagnetismo/electricidad-domestica/climatizacion/bomba-de-calor
+  orden: 298820
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: false
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: false
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: false
+  preferred_type: none
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - cop_definicion
+  - consumo_equivalente
+  - ahorro_relativo
+  - facturacion_total
+  - balance_primera_ley
+  magnitudes:
+  - cop
+  - q_calor
+  - w_elec
+  - q_ambiente
+  - q_demanda
+  - e_elec
+  - ahorro
+  - precio_kwh
+  - coste
+  - hora
+  - kilovatio_hora
+  - megajulio
+  - kilovatio
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: false
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: false
+  type: none
+  channels: []
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: false
+  primary_variable: cop
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  cop:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de cop
+      en: Result of cop
+    summary_rules:
+    - id: eficiencia_ciclo
+      when: 'true'
+      status: info
+      text:
+        es: El [[cop]] indica la eficiencia del transporte de calor. Un valor alto implica que el sistema domina el flujo
+          térmico con poco esfuerzo eléctrico.
+        en: The [[cop]] indicates the efficiency of heat transport. A high value implies that the system dominates the thermal
+          flow with little electrical effort.
+    physical_reading_rules:
+    - id: lectura_cop
+      when: 'true'
+      status: info
+      text:
+        es: Significa cuántas unidades de calor útil se entregan por cada unidad de [[w_elec]] consumida. Es coherente con
+          la segunda ley.
+        en: It means how many units of useful heat are delivered for each unit of [[w_elec]] consumed. It is coherent with
+          the second law.
+    coherence_rules:
+    - id: cop_vs_temperatura
+      when: 'true'
+      status: warning
+      text:
+        es: El [[cop]] disminuye físicamente cuando aumenta el salto térmico entre el foco frío y el caliente.
+        en: The [[cop]] physically decreases when the thermal jump between the cold and hot source increases.
+    model_validity_rules:
+    - id: validez_cop
+      when: 'true'
+      status: info
+      text:
+        es: El modelo es válido físicamente siempre que el [[cop]] sea mayor que 1.0. Si disminuye por debajo de este límite,
+          el sistema no es una bomba de calor.
+        en: The model is physically valid as long as [[cop]] is greater than 1.0. If it decreases below this limit, the system
+          is not a heat pump.
+    graph_rules:
+    - id: graph_cop
+      when: 'true'
+      status: info
+      text:
+        es: La gráfica indica la pendiente de la curva de calor frente a trabajo, lo que implica una relación lineal de diseño.
+        en: The graph indicates the slope of the heat versus work curve, which implies a linear design relationship.
+    likely_errors:
+    - id: err_cop_eficiencia
+      when: 'true'
+      status: error
+      text:
+        es: Confundir [[cop]] con eficiencia porcentual (siempre > 100%). Esto implica un error de escala.
+        en: Confusing [[cop]] with percentage efficiency (always > 100%). This implies a scale error.
+    next_step_rules:
+    - id: next_cop
+      when: 'true'
+      status: info
+      text:
+        es: Analiza el SCOP para promedios estacionales, lo que significa integrar variaciones externas.
+        en: Analyze the SCOP for seasonal averages, which means integrating external variations.
+    physical_intuition:
+    - id: cop_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[cop]] describe el estado dinámico.
+        en: Intuitively, [[cop]] describes the dynamic state.
+    limiting_cases:
+    - id: cop_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[cop]].
+        en: Check limiting cases of [[cop]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  q_calor:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de q_calor
+      en: Result of q_calor
+    summary_rules:
+    - id: calor_total
+      when: 'true'
+      status: info
+      text:
+        es: El [[q_calor]] es el flujo total entregado. Por tanto, determina la capacidad del sistema para satisfacer la [[q_demanda]].
+        en: The [[q_calor]] is the total flow delivered. Therefore, it determines the system's ability to satisfy the [[q_demanda]].
+    physical_reading_rules:
+    - id: lectura_q_calor
+      when: 'true'
+      status: info
+      text:
+        es: Indica la energía térmica neta inyectada en el recinto. Esto implica un aumento de la temperatura interior.
+        en: Indicates the net thermal energy injected into the room. This implies an increase in the indoor temperature.
+    coherence_rules:
+    - id: balance_calor
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, el [[q_calor]] se compone de la suma del [[w_elec]] y el [[q_ambiente]].
+        en: Physically, [[q_calor]] consists of the sum of [[w_elec]] and [[q_ambiente]].
+    model_validity_rules:
+    - id: validez_q_calor
+      when: 'true'
+      status: info
+      text:
+        es: Significa que el modelo depende de que el condensador esté limpio físicamente.
+        en: It means that the model physically depends on the condenser being clean.
+    graph_rules:
+    - id: graph_q_calor
+      when: 'true'
+      status: info
+      text:
+        es: La barra indica la salida térmica dominante.
+        en: The bar indicates the dominant thermal output.
+    likely_errors:
+    - id: err_q_calor
+      when: 'true'
+      status: error
+      text:
+        es: Confundirlo con el calor extraído, lo que indica falta de balance.
+        en: Confusing it with extracted heat, which indicates lack of balance.
+    next_step_rules:
+    - id: next_q_calor
+      when: 'true'
+      status: info
+      text:
+        es: Verificar aislamiento de tuberías para que el resultado sea coherente.
+        en: Check pipe insulation so the result is coherent.
+    physical_intuition:
+    - id: q_calor_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[q_calor]] describe el estado dinámico.
+        en: Intuitively, [[q_calor]] describes the dynamic state.
+    limiting_cases:
+    - id: q_calor_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[q_calor]].
+        en: Check limiting cases of [[q_calor]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  w_elec:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de w_elec
+      en: Result of w_elec
+    summary_rules:
+    - id: trabajo_pagado
+      when: 'true'
+      status: info
+      text:
+        es: El [[w_elec]] es el motor del ciclo. Por tanto, representa el coste energético que debemos pagar.
+        en: The [[w_elec]] is the cycle's engine. Therefore, it represents the energy cost we must pay.
+    physical_reading_rules:
+    - id: lectura_w_elec
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, es el área encerrada en el diagrama P-V del ciclo de compresión.
+        en: Physically, it is the area enclosed in the P-V diagram of the compression cycle.
+    coherence_rules:
+    - id: w_elec_limite
+      when: 'true'
+      status: info
+      text:
+        es: Se opone al flujo natural de calor. Esto implica que el sistema debe realizar trabajo para vencer el gradiente.
+        en: It opposes the natural flow of heat. This implies the system must perform work to overcome the gradient.
+    model_validity_rules:
+    - id: validez_w_elec
+      when: 'true'
+      status: info
+      text:
+        es: Significa que es válido dentro de la potencia nominal.
+        en: It means it is valid within the nominal power.
+    graph_rules:
+    - id: graph_w_elec
+      when: 'true'
+      status: info
+      text:
+        es: Indica el coste de entrada.
+        en: Indicates the input cost.
+    likely_errors:
+    - id: err_w_elec
+      when: 'true'
+      status: error
+      text:
+        es: Sumarlo dos veces, lo que indica error de cálculo.
+        en: Adding it twice, which indicates a calculation error.
+    next_step_rules:
+    - id: next_w_elec
+      when: 'true'
+      status: info
+      text:
+        es: Instalar vatímetro físicamente.
+        en: Install wattmeter physically.
+    physical_intuition:
+    - id: w_elec_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[w_elec]] describe el estado dinámico.
+        en: Intuitively, [[w_elec]] describes the dynamic state.
+    limiting_cases:
+    - id: w_elec_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[w_elec]].
+        en: Check limiting cases of [[w_elec]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  e_elec:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de e_elec
+      en: Result of e_elec
+    summary_rules:
+    - id: energia_total
+      when: 'true'
+      status: info
+      text:
+        es: La [[e_elec]] es la integral del [[w_elec]] en el tiempo. Significa el consumo total facturado.
+        en: The [[e_elec]] is the integral of [[w_elec]] over time. It means the total billed consumption.
+    physical_reading_rules:
+    - id: pr_eelec
+      when: 'true'
+      status: info
+      text:
+        es: Indica la energía comprada físicamente.
+        en: Indicates energy purchased physically.
+    coherence_rules:
+    - id: coh_eelec
+      when: 'true'
+      status: info
+      text:
+        es: Por tanto es coherente con tiempo de uso.
+        en: Therefore it is coherent with usage time.
+    model_validity_rules:
+    - id: val_eelec
+      when: 'true'
+      status: info
+      text:
+        es: Esto implica lectura de contador.
+        en: This implies meter reading.
+    graph_rules:
+    - id: gr_eelec
+      when: 'true'
+      status: info
+      text:
+        es: Indica el acumulado energético.
+        en: Indicates the energy accumulation.
+    likely_errors:
+    - id: err_eelec
+      when: 'true'
+      status: error
+      text:
+        es: Confundir con potencia, lo que significa error de unidad.
+        en: Confusing with power, which means a unit error.
+    next_step_rules:
+    - id: next_eelec
+      when: 'true'
+      status: info
+      text:
+        es: Optimizar horarios físicamente.
+        en: Optimize schedules physically.
+    physical_intuition:
+    - id: e_elec_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[e_elec]] describe el estado dinámico.
+        en: Intuitively, [[e_elec]] describes the dynamic state.
+    limiting_cases:
+    - id: e_elec_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[e_elec]].
+        en: Check limiting cases of [[e_elec]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  q_demanda:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de q_demanda
+      en: Result of q_demanda
+    summary_rules:
+    - id: demanda_edificio
+      when: 'true'
+      status: info
+      text:
+        es: La [[q_demanda]] es la carga que el sistema debe compensar. Indica las pérdidas térmicas de la vivienda.
+        en: The [[q_demanda]] is the load the system must compensate for. It indicates the home's thermal losses.
+    physical_reading_rules:
+    - id: lectura_q_demanda
+      when: 'true'
+      status: info
+      text:
+        es: Esto implica la necesidad de una fuente de calor externa para mantener el equilibrio térmico.
+        en: This implies the need for an external heat source to maintain thermal equilibrium.
+    coherence_rules:
+    - id: demanda_vs_clima
+      when: 'true'
+      status: info
+      text:
+        es: Aumenta cuando la temperatura exterior disminuye. Por tanto, exige un mayor esfuerzo al equipo.
+        en: It increases when the outdoor temperature decreases. Therefore, it demands greater effort from the equipment.
+    model_validity_rules:
+    - id: validez_q_demanda
+      when: 'true'
+      status: info
+      text:
+        es: Asume estado estacionario físicamente.
+        en: Assumes steady state physically.
+    graph_rules:
+    - id: graph_q_demanda
+      when: 'true'
+      status: info
+      text:
+        es: Indica el objetivo térmico dominante.
+        en: Indicates the dominant thermal goal.
+    likely_errors:
+    - id: err_q_demanda
+      when: 'true'
+      status: error
+      text:
+        es: Subestimar infiltraciones, lo que significa falta de rigor.
+        en: Underestimating infiltrations, which means lack of rigor.
+    next_step_rules:
+    - id: next_q_demanda
+      when: 'true'
+      status: info
+      text:
+        es: Mejorar ventanas para que el resultado sea coherente.
+        en: Improve windows so the result is coherent.
+    physical_intuition:
+    - id: q_demanda_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[q_demanda]] describe el estado dinámico.
+        en: Intuitively, [[q_demanda]] describes the dynamic state.
+    limiting_cases:
+    - id: q_demanda_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[q_demanda]].
+        en: Check limiting cases of [[q_demanda]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  ahorro:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de ahorro
+      en: Result of ahorro
+    summary_rules:
+    - id: ahorro_efecto
+      when: 'true'
+      status: success
+      text:
+        es: El [[ahorro]] indica la reducción de consumo frente a sistemas convencionales. Es coherente con un [[cop]] > 1.
+        en: The [[ahorro]] indicates the reduction in consumption compared to conventional systems. It is coherent with a
+          [[cop]] > 1.
+    physical_reading_rules:
+    - id: lectura_ahorro
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente representa el calor ambiental gratuito. Esto implica un beneficio neto.
+        en: Physically represents the free ambient heat. This implies a net benefit.
+    coherence_rules:
+    - id: coh_ahorro
+      when: 'true'
+      status: info
+      text:
+        es: Significa que aumenta con el [[cop]].
+        en: It means it increases with [[cop]].
+    model_validity_rules:
+    - id: val_ahorro
+      when: 'true'
+      status: info
+      text:
+        es: Comparación física frente a estufa eléctrica.
+        en: Physical comparison against electric heater.
+    graph_rules:
+    - id: gr_ahorro
+      when: 'true'
+      status: info
+      text:
+        es: Indica la diferencia de consumos.
+        en: Indicates the consumption difference.
+    likely_errors:
+    - id: err_ahorro
+      when: 'true'
+      status: error
+      text:
+        es: Creer que es lineal, lo que indica error de concepto.
+        en: Believing it is linear, which indicates a concept error.
+    next_step_rules:
+    - id: next_ahorro
+      when: 'true'
+      status: info
+      text:
+        es: Verificar facturas físicamente.
+        en: Verify bills physically.
+    physical_intuition:
+    - id: ahorro_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[ahorro]] describe el estado dinámico.
+        en: Intuitively, [[ahorro]] describes the dynamic state.
+    limiting_cases:
+    - id: ahorro_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[ahorro]].
+        en: Check limiting cases of [[ahorro]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  coste:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de coste
+      en: Result of coste
+    summary_rules:
+    - id: factura_final
+      when: 'true'
+      status: info
+      text:
+        es: El [[coste]] es el resultado monetario de la operación física. Por tanto, integra eficiencia y mercado.
+        en: The [[coste]] is the monetary result of the physical operation. Therefore, it integrates efficiency and market.
+    physical_reading_rules:
+    - id: pr_coste
+      when: 'true'
+      status: info
+      text:
+        es: Indica el gasto real.
+        en: Indicates real spending.
+    coherence_rules:
+    - id: coh_coste
+      when: 'true'
+      status: info
+      text:
+        es: Disminuye físicamente si el [[cop]] aumenta.
+        en: Physically decreases if [[cop]] increases.
+    model_validity_rules:
+    - id: val_coste
+      when: 'true'
+      status: info
+      text:
+        es: Esto implica cálculo mensual.
+        en: This implies monthly calculation.
+    graph_rules:
+    - id: gr_coste
+      when: 'true'
+      status: info
+      text:
+        es: Indica el resultado financiero.
+        en: Indicates the financial result.
+    likely_errors:
+    - id: err_coste
+      when: 'true'
+      status: error
+      text:
+        es: Ignorar término fijo, lo que significa error de factura.
+        en: Ignoring fixed term, which means a billing error.
+    next_step_rules:
+    - id: next_coste
+      when: 'true'
+      status: info
+      text:
+        es: Presupuestar invierno físicamente.
+        en: Budget winter physically.
+    physical_intuition:
+    - id: coste_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[coste]] describe el estado dinámico.
+        en: Intuitively, [[coste]] describes the dynamic state.
+    limiting_cases:
+    - id: coste_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[coste]].
+        en: Check limiting cases of [[coste]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  q_ambiente:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de q_ambiente
+      en: Result of q_ambiente
+    summary_rules:
+    - id: calor_gratis
+      when: 'true'
+      status: success
+      text:
+        es: El [[q_ambiente]] es la energía capturada del entorno. Significa el componente renovable y gratuito del sistema.
+        en: The [[q_ambiente]] is the energy captured from the environment. It means the renewable and free component of the
+          system.
+    physical_reading_rules:
+    - id: lectura_q_ambiente
+      when: 'true'
+      status: info
+      text:
+        es: Esto indica cuánto calor se ha 'bombeado' desde el foco frío. Es el beneficio físico neto.
+        en: This indicates how much heat has been 'pumped' from the cold source. It is the net physical benefit.
+    coherence_rules:
+    - id: q_ambiente_posible
+      when: 'true'
+      status: info
+      text:
+        es: Depende directamente de la temperatura de la fuente externa. Disminuye físicamente en climas gélidos.
+        en: It directly depends on the temperature of the external source. It physically decreases in freezing climates.
+    model_validity_rules:
+    - id: validez_q_ambiente
+      when: 'true'
+      status: info
+      text:
+        es: Esto implica que es válido si no hay formación de hielo masiva.
+        en: This implies it is valid if there is no massive ice formation.
+    graph_rules:
+    - id: graph_q_ambiente
+      when: 'true'
+      status: info
+      text:
+        es: Indica la entrada renovable dominante.
+        en: Indicates the dominant renewable input.
+    likely_errors:
+    - id: err_q_ambiente
+      when: 'true'
+      status: error
+      text:
+        es: Ignorar su existencia, lo que significa un balance incompleto.
+        en: Ignoring its existence, which means an incomplete balance.
+    next_step_rules:
+    - id: next_q_ambiente
+      when: 'true'
+      status: info
+      text:
+        es: Evaluar fuente geotérmica físicamente.
+        en: Evaluate geothermal source physically.
+    physical_intuition:
+    - id: q_ambiente_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[q_ambiente]] describe el estado dinámico.
+        en: Intuitively, [[q_ambiente]] describes the dynamic state.
+    limiting_cases:
+    - id: q_ambiente_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[q_ambiente]].
+        en: Check limiting cases of [[q_ambiente]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

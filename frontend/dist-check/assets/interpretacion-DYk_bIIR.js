@@ -1,0 +1,102 @@
+const e=`version: 2
+id: interpretacion-transformacion-legendre
+leaf_id: transformacion-legendre
+nombre:
+  es: Interpretacion de la transformacion de Legendre
+  en: Interpretation of the Legendre transformation
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: mecanica-analitica
+  parent_id: hamiltoniano
+  ruta_relativa: fisica-clasica/mecanica/mecanica-analitica/hamiltoniano/transformacion-legendre
+dependencies:
+  formulas: [ lagrangiano_cuadratico, momento_conjugado_legendre, momento_cuadratico, velocidad_desde_momento, hamiltoniano_legendre, hamiltoniano_cuadratico, condicion_regularidad_legendre ]
+  magnitudes: [ L, H, qi, qdi, p, DLv, m, V, W ]
+output_contract:
+  sections: [ summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step ]
+result_blocks:
+  summary: { title: { es: Resumen de transformacion, en: Transformation summary } }
+  physical_reading: { title: { es: Lectura fisica, en: Physical reading } }
+  coherence: { title: { es: Coherencia, en: Coherence } }
+  model_validity: { title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { title: { es: Lectura grafica, en: Graph reading } }
+  likely_errors: { title: { es: Errores probables, en: Likely errors } }
+  next_step: { title: { es: Siguiente paso, en: Next step } }
+targets:
+  L:
+    summary_rules:
+    - { id: l_summary, when: "true", status: info, text: { es: "L significa la respuesta fisica del sistema ante movimiento y configuracion; su pendiente causa la aparicion de p como variable conjugada que conserva la informacion dinamica.", en: "L represents the physical response of the system to motion and configuration; its slope causes p to appear as the conjugate variable preserving dynamical information." } }
+    physical_reading_rules:
+    - { id: l_physical, when: "true", status: info, text: { es: "La forma de L decide que pendiente se interpreta como momento conjugado.", en: "The form of L decides which slope is interpreted as conjugate momentum." } }
+    coherence_rules:
+    - { id: l_coherence, when: "true", status: ok, text: { es: "L debe usar la misma coordenada q y la misma velocidad qdot en todo el calculo.", en: "L must use the same coordinate q and velocity qdot throughout the calculation." } }
+    model_validity_rules:
+    - { id: l_validity, when: "true", status: ok, text: { es: "La transformacion exige que L sea diferenciable respecto de la velocidad.", en: "The transformation requires L to be differentiable with respect to velocity." } }
+    graph_rules:
+    - { id: l_graph, when: "true", status: info, text: { es: "En el grafico, L actua como parametro que desplaza el valor de H.", en: "In the graph, L acts as a parameter shifting the value of H." } }
+    likely_errors:
+    - { id: l_error, when: "true", status: warning, text: { es: "Error frecuente: tratar L como energia total y no como funcion que se transforma.", en: "Common mistake: treating L as total energy rather than as the function being transformed." } }
+    next_step_rules:
+    - { id: l_next, when: "true", status: info, text: { es: "Deriva L respecto de qdot para obtener p.", en: "Differentiate L with respect to qdot to obtain p." } }
+  p:
+    summary_rules:
+    - { id: p_summary, when: "true", status: info, text: { es: "p es la variable conjugada que sustituye a la velocidad en la descripcion hamiltoniana.", en: "p is the conjugate variable replacing velocity in the Hamiltonian description." } }
+    physical_reading_rules:
+    - { id: p_physical, when: "true", status: info, text: { es: "Cambiar p cambia el estado dinamico aunque la coordenada q sea la misma.", en: "Changing p changes the dynamical state even if the coordinate q is the same." } }
+    coherence_rules:
+    - { id: p_coherence, when: "true", status: ok, text: { es: "p debe proceder de la pendiente de L, no de una formula newtoniana copiada.", en: "p must come from the slope of L, not from a copied Newtonian formula." } }
+    model_validity_rules:
+    - { id: p_validity, when: "true", status: ok, text: { es: "La lectura es regular si p permite recuperar una velocidad unica.", en: "The reading is regular if p allows a unique velocity to be recovered." } }
+    graph_rules:
+    - { id: p_graph, when: "true", status: info, text: { es: "En el grafico p aparece como respuesta lineal frente a qdot en el caso cuadratico.", en: "In the graph p appears as a linear response versus qdot in the quadratic case." } }
+    likely_errors:
+    - { id: p_error, when: "true", status: warning, text: { es: "Error frecuente: creer que p siempre tiene interpretacion de momento lineal cartesiano.", en: "Common mistake: believing p always has the meaning of Cartesian linear momentum." } }
+    next_step_rules:
+    - { id: p_next, when: "true", status: info, text: { es: "Usa p para invertir el mapa y eliminar qdot de H.", en: "Use p to invert the map and remove qdot from H." } }
+  qdi:
+    summary_rules:
+    - { id: qdi_summary, when: "true", status: info, text: { es: "qdot es la velocidad que debe ser reemplazada por una funcion de p.", en: "qdot is the velocity that must be replaced by a function of p." } }
+    physical_reading_rules:
+    - { id: qdi_physical, when: "true", status: info, text: { es: "La velocidad describe como cambia la configuracion; p describe el estado conjugado equivalente si la inversion existe.", en: "Velocity describes how configuration changes; p describes the equivalent conjugate state if the inversion exists." } }
+    coherence_rules:
+    - { id: qdi_coherence, when: "true", status: ok, text: { es: "qdot no debe quedar como variable libre en el hamiltoniano final.", en: "qdot must not remain as a free variable in the final Hamiltonian." } }
+    model_validity_rules:
+    - { id: qdi_validity, when: "true", status: ok, text: { es: "Si qdot no puede despejarse de forma unica, hay una degeneracion.", en: "If qdot cannot be uniquely solved, there is a degeneracy." } }
+    graph_rules:
+    - { id: qdi_graph, when: "true", status: info, text: { es: "El eje horizontal muestra como p y H cambian al variar la velocidad generalizada.", en: "The horizontal axis shows how p and H change as generalized velocity varies." } }
+    likely_errors:
+    - { id: qdi_error, when: "true", status: warning, text: { es: "Error frecuente: usar qdot numericamente pero no sustituirlo simbolicamente.", en: "Common mistake: using qdot numerically but not substituting it symbolically." } }
+    next_step_rules:
+    - { id: qdi_next, when: "true", status: info, text: { es: "Comprueba la inversion antes de pasar a ecuaciones de Hamilton.", en: "Check the inversion before moving to Hamilton's equations." } }
+  H:
+    summary_rules:
+    - { id: h_summary, when: "true", status: info, text: { es: "H es la funcion de fase que resulta al cambiar velocidades por momentos conjugados.", en: "H is the phase-space function obtained by replacing velocities with conjugate momenta." } }
+    physical_reading_rules:
+    - { id: h_physical, when: "true", status: info, text: { es: "H organiza la evolucion desde el estado formado por q y p; en el caso conservativo regular coincide con energia.", en: "H organizes evolution from the state formed by q and p; in the regular conservative case it equals energy." } }
+    coherence_rules:
+    - { id: h_coherence, when: "true", status: ok, text: { es: "H debe tener unidades de energia y no contener velocidades sin eliminar.", en: "H must have energy units and contain no unremoved velocities." } }
+    model_validity_rules:
+    - { id: h_validity, when: "true", status: ok, text: { es: "La interpretacion energetica de H requiere potencial independiente de la velocidad y ausencia de dependencia temporal problematica.", en: "The energy interpretation of H requires velocity-independent potential and no problematic time dependence." } }
+    graph_rules:
+    - { id: h_graph, when: "true", status: info, text: { es: "En el grafico, H crece cuadraticamente con p para V fija y masa constante.", en: "In the graph, H grows quadratically with p for fixed V and constant mass." } }
+    likely_errors:
+    - { id: h_error, when: "true", status: warning, text: { es: "Error frecuente: aceptar H como energia sin revisar las hipotesis del lagrangiano.", en: "Common mistake: accepting H as energy without checking the Lagrangian hypotheses." } }
+    next_step_rules:
+    - { id: h_next, when: "true", status: info, text: { es: "Con H cerrada, el siguiente paso natural son las ecuaciones de Hamilton.", en: "With H closed, the natural next step is Hamilton's equations." } }
+  W:
+    summary_rules:
+    - { id: w_summary, when: "true", status: info, text: { es: "W resume la curvatura de L respecto de las velocidades y decide si el paso a variables de fase conserva informacion.", en: "W summarizes the curvature of L with respect to velocities and decides whether the move to phase variables preserves information." } }
+    physical_reading_rules:
+    - { id: w_physical, when: "true", status: info, text: { es: "Si W es singular, momentos distintos no separan correctamente las velocidades y aparecen restricciones.", en: "If W is singular, momenta do not correctly separate velocities and constraints appear." } }
+    coherence_rules:
+    - { id: w_coherence, when: "true", status: ok, text: { es: "W debe calcularse con derivadas respecto de qdot, no respecto de q.", en: "W must be computed with derivatives with respect to qdot, not q." } }
+    model_validity_rules:
+    - { id: w_validity, when: "true", status: ok, text: { es: "La transformacion ordinaria de Legendre requiere det(W) distinto de cero localmente.", en: "The ordinary Legendre transformation requires det(W) to be locally nonzero." } }
+    graph_rules:
+    - { id: w_graph, when: "true", status: info, text: { es: "En una lectura grafica, W mide si la pendiente p cambia de forma distinguible al variar qdot.", en: "Graphically, W measures whether the slope p changes distinguishably when qdot varies." } }
+    likely_errors:
+    - { id: w_error, when: "true", status: warning, text: { es: "Error frecuente: construir H aunque el mapa velocidad-momento no sea invertible.", en: "Common mistake: building H even when the velocity-momentum map is not invertible." } }
+    next_step_rules:
+    - { id: w_next, when: "true", status: info, text: { es: "Si W es singular, estudia restricciones antes de usar ecuaciones de Hamilton ordinarias.", en: "If W is singular, study constraints before using ordinary Hamilton equations." } }
+`;export{e as default};

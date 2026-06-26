@@ -1,0 +1,335 @@
+version: 5.0.0
+ui:
+  default_formula: energia_media_desde_derivada_beta
+formulas:
+- id: beta_inversa_termica
+  title:
+    es: Beta como inversa de la escala térmica
+    en: Beta as inverse thermal scale
+  equation: beta=1/(k_B*T)
+  latex: \beta=\frac{1}{k_B T}
+  rearrangements:
+  - id: temperatura_desde_beta
+    equation: T=1/(k_B*beta)
+    latex: T=\frac{1}{k_B\beta}
+    target: temperatura
+  category: termodinamica_estadistica
+  relation_type: definition
+  physical_meaning:
+    es: Define la variable térmica que penaliza los microestados de energía alta.
+    en: Defines the thermal variable that penalizes high-energy microstates.
+  constraints:
+    es: Requiere [[temperatura]] positiva y [[constante_boltzmann]] positiva.
+    en: Requires positive [[temperatura]] and positive [[constante_boltzmann]].
+  validity:
+    es: Válida en equilibrio térmico canónico con temperatura absoluta.
+    en: Valid in canonical thermal equilibrium with absolute temperature.
+  dimension_check:
+    expected: '[E]^-1'
+    text:
+      es: La dimensión final coincide con la magnitud interpretada.
+      en: The final dimension matches the interpreted quantity.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - energia_media_desde_derivada_beta
+  - energia_media_desde_derivada_temperatura
+  interpretation_tags:
+  - escala_termica
+  - modelo_canonico
+  result_semantics:
+    target: beta
+    kind: parameter
+    sign_meaning:
+      es: Debe ser positiva para temperatura absoluta positiva.
+      en: It must be positive for positive absolute temperature.
+    absolute_value_meaning:
+      es: Valores grandes indican baja temperatura y selección fuerte de energías bajas.
+      en: Large values indicate low temperature and strong selection of low energies.
+  domain_checks:
+  - id: temperatura_positiva
+    condition: T>0
+    status: error
+    text:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  coherence_checks:
+  - id: beta_dimension
+    condition: dimension(beta)==1/J
+    status: ok
+    text:
+      es: Beta debe tener dimensión J^-1.
+      en: Beta must have dimension J^-1.
+  graph_implications:
+    es: Al aumentar [[temperatura]], [[beta]] disminuye.
+    en: As [[temperatura]] increases, [[beta]] decreases.
+  pedagogical_triggers:
+  - id: trigger_beta_inversa_termica
+    status: warning
+    text:
+      es: Usa kelvin, no grados Celsius.
+      en: Use kelvin, not Celsius.
+- id: funcion_particion_canonica
+  title:
+    es: Función de partición canónica
+    en: Canonical partition function
+  equation: Z=sum(exp(-beta*E_i))
+  latex: Z=\sum_i e^{-\beta E_i}
+  rearrangements:
+  - id: peso_microestado
+    equation: w_i=exp(-beta*E_i)
+    latex: w_i=e^{-\beta E_i}
+    target: peso_boltzmann
+  category: termodinamica_estadistica
+  relation_type: definition
+  physical_meaning:
+    es: Suma los pesos de todos los microestados accesibles y condensa la información estadística.
+    en: Sums the weights of all accessible microstates and condenses statistical information.
+  constraints:
+    es: Los microestados deben estar definidos y la suma debe converger.
+    en: Microstates must be defined and the sum must converge.
+  validity:
+    es: Aplica al ensamble canónico con equilibrio térmico y número de partículas fijado.
+    en: Applies to the canonical ensemble with thermal equilibrium and fixed particle number.
+  dimension_check:
+    expected: dimensionless
+    text:
+      es: La dimensión final coincide con la magnitud interpretada.
+      en: The final dimension matches the interpreted quantity.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - energia_media_desde_derivada_beta
+  - energia_media_desde_derivada_temperatura
+  interpretation_tags:
+  - normalizacion
+  - microestados
+  result_semantics:
+    target: funcion_particion
+    kind: parameter
+    sign_meaning:
+      es: Siempre es positiva si existen microestados accesibles.
+      en: It is always positive when accessible microstates exist.
+    absolute_value_meaning:
+      es: Un valor mayor indica más peso estadístico total disponible.
+      en: A larger value indicates more total statistical weight. available
+  domain_checks:
+  - id: Z_positivo
+    condition: Z>0
+    status: error
+    text:
+      es: Z debe ser positiva para calcular ln(Z).
+      en: Z must be positive to compute ln(Z).
+  coherence_checks:
+  - id: exponente_adimensional
+    condition: dimension(beta*E_i)==1
+    status: ok
+    text:
+      es: El producto beta por energía debe ser adimensional.
+      en: Beta times energy must be dimensionless.
+  graph_implications:
+    es: La curvatura de ln([[funcion_particion]]) frente a [[beta]] contiene información sobre [[energia_media]].
+    en: The curvature of ln([[funcion_particion]]) versus [[beta]] contains information about [[energia_media]].
+  pedagogical_triggers:
+  - id: trigger_funcion_particion_canonica
+    status: warning
+    text:
+      es: Z no es una probabilidad; es un normalizador.
+      en: Z is not a probability; it is a normalizer.
+- id: energia_media_desde_derivada_beta
+  title:
+    es: Energía media desde la derivada de ln Z respecto a beta
+    en: Mean energy from the derivative of ln Z with respect to beta
+  equation: U=-dlnZ_dbeta
+  latex: U=-\frac{\partial \ln Z}{\partial \beta}
+  rearrangements:
+  - id: derivada_beta_desde_energia_media
+    equation: dlnZ_dbeta=-U
+    latex: \frac{\partial \ln Z}{\partial\beta}=-U
+    target: derivada_log_particion_beta
+  category: termodinamica_estadistica
+  relation_type: derivative
+  physical_meaning:
+    es: La energía media aparece como respuesta de ln(Z) al endurecer la selección térmica mediante beta.
+    en: Mean energy appears as the response of ln(Z) when thermal selection is tightened through beta.
+  constraints:
+    es: La derivada se toma a volumen, número de partículas y espectro fijos.
+    en: The derivative is taken at fixed volume, particle number, and spectrum.
+  validity:
+    es: Válida para sistemas canónicos en equilibrio con Z diferenciable respecto a beta.
+    en: Valid for canonical systems in equilibrium with Z differentiable with respect to beta.
+  dimension_check:
+    expected: J
+    text:
+      es: La dimensión final coincide con la magnitud interpretada.
+      en: The final dimension matches the interpreted quantity.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - capacidad_calorifica_desde_energia_media
+  interpretation_tags:
+  - energia_media
+  - pendiente
+  result_semantics:
+    target: energia_media
+    kind: average
+    sign_meaning:
+      es: El signo depende del cero elegido para las energías del sistema.
+      en: The sign depends on the chosen zero of system energy.
+    absolute_value_meaning:
+      es: Mide la energía promedio ponderada por pesos de Boltzmann.
+      en: Measures the average energy weighted by Boltzmann factors.
+  domain_checks:
+  - id: derivada_existente
+    condition: dlnZ_dbeta is finite
+    status: error
+    text:
+      es: La derivada debe ser finita.
+      en: The derivative must be finite.
+  coherence_checks:
+  - id: signo_pendiente_beta
+    condition: U==-dlnZ_dbeta
+    status: ok
+    text:
+      es: La pendiente en beta lleva signo opuesto.
+      en: The beta slope carries the opposite sign.
+  graph_implications:
+    es: La pendiente de ln([[funcion_particion]]) frente a [[beta]] determina [[energia_media]].
+    en: The slope of ln([[funcion_particion]]) versus [[beta]] determines [[energia_media]].
+  pedagogical_triggers:
+  - id: trigger_energia_media_desde_derivada_beta
+    status: warning
+    text:
+      es: No olvides el signo menos.
+      en: Do not forget the minus sign.
+- id: energia_media_desde_derivada_temperatura
+  title:
+    es: Energía media desde la derivada térmica de ln Z
+    en: Mean energy from the thermal derivative of ln Z
+  equation: U=k_B*T^2*dlnZ_dT
+  latex: U=k_B T^2\frac{\partial \ln Z}{\partial T}
+  rearrangements:
+  - id: derivada_temperatura_desde_energia_media
+    equation: dlnZ_dT=U/(k_B*T^2)
+    latex: \frac{\partial\ln Z}{\partial T}=\frac{U}{k_B T^2}
+    target: derivada_log_particion_temperatura
+  category: termodinamica_estadistica
+  relation_type: derivative
+  physical_meaning:
+    es: Expresa la energía media mediante la sensibilidad de la función de partición ante cambios de temperatura.
+    en: Expresses mean energy through the sensitivity of the partition function to temperature changes.
+  constraints:
+    es: Requiere T positiva, Z positiva y derivada térmica a volumen y partículas constantes.
+    en: Requires positive T, positive Z, and thermal derivative at fixed volume and particle number.
+  validity:
+    es: Válida cuando la dependencia térmica de Z procede del ensamble canónico.
+    en: Valid when the thermal dependence of Z comes from the canonical ensemble.
+  dimension_check:
+    expected: J
+    text:
+      es: La dimensión final coincide con la magnitud interpretada.
+      en: The final dimension matches the interpreted quantity.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - capacidad_calorifica_desde_energia_media
+  interpretation_tags:
+  - temperatura
+  - sensibilidad_termica
+  result_semantics:
+    target: energia_media
+    kind: average
+    sign_meaning:
+      es: Si ln(Z) aumenta con T, U es positiva respecto al cero usado.
+      en: If ln(Z) increases with T, U is positive relative to the chosen zero.
+    absolute_value_meaning:
+      es: Cuantifica la energía promedio accesible por el baño térmico.
+      en: Quantifies the average energy made accessible by the heat bath.
+  domain_checks:
+  - id: temperatura_valida
+    condition: T>0
+    status: error
+    text:
+      es: La temperatura debe estar en kelvin y ser positiva.
+      en: Temperature must be in kelvin and positive.
+  coherence_checks:
+  - id: unidades_energia
+    condition: dimension(k_B*T^2*dlnZ_dT)==J
+    status: ok
+    text:
+      es: El resultado debe tener dimensión de energía.
+      en: The result must have energy dimension.
+  graph_implications:
+    es: Una gráfica de [[energia_media]] frente a [[temperatura]] muestra activación de microestados de mayor energía.
+    en: A graph of [[energia_media]] versus [[temperatura]] shows activation of higher-energy microstates.
+  pedagogical_triggers:
+  - id: trigger_energia_media_desde_derivada_temperatura
+    status: warning
+    text:
+      es: Deriva ln(Z), no Z sin normalizar.
+      en: Differentiate ln(Z), not unnormalized Z.
+- id: capacidad_calorifica_desde_energia_media
+  title:
+    es: Capacidad calorífica desde la energía media
+    en: Heat capacity from mean energy
+  equation: C_V=dU_dT
+  latex: C_V=\left(\frac{\partial U}{\partial T}\right)_V
+  rearrangements:
+  - id: incremento_energia_desde_capacidad
+    equation: dU=C_V*dT
+    latex: dU=C_V\,dT
+    target: energia_media
+  category: termodinamica_estadistica
+  relation_type: derivative
+  physical_meaning:
+    es: Mide cuánto cambia la energía media cuando cambia la temperatura a volumen constante.
+    en: Measures how mean energy changes when temperature changes at constant volume.
+  constraints:
+    es: Se evalúa a volumen constante y sin cambios de fase en el intervalo considerado.
+    en: It is evaluated at constant volume and without phase changes in the interval.
+  validity:
+    es: Útil cuando U(T) es suave y el sistema permanece en la misma fase estadística.
+    en: Useful when U(T) is smooth and the system remains in the same statistical phase.
+  dimension_check:
+    expected: J/K
+    text:
+      es: La dimensión final coincide con la magnitud interpretada.
+      en: The final dimension matches the interpreted quantity.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in: []
+  interpretation_tags:
+  - pendiente
+  - respuesta
+  result_semantics:
+    target: capacidad_calorifica
+    kind: parameter
+    sign_meaning:
+      es: Normalmente positiva en sistemas canónicos estables.
+      en: Usually positive in stable canonical systems.
+    absolute_value_meaning:
+      es: Un valor grande indica que U cambia mucho por kelvin.
+      en: A large value indicates that U changes strongly per kelvin.
+  domain_checks:
+  - id: sin_singularidad
+    condition: dU_dT is finite
+    status: warning
+    text:
+      es: Cerca de transiciones puede no ser suave.
+      en: Near transitions it may cease to be smooth.
+  coherence_checks:
+  - id: pendiente_U_T
+    condition: C_V==dU_dT
+    status: ok
+    text:
+      es: La pendiente de U(T) debe coincidir con C_V.
+      en: The slope of U(T) must match C_V.
+  graph_implications:
+    es: La pendiente local de [[energia_media]] frente a [[temperatura]] representa [[capacidad_calorifica]].
+    en: The local slope of [[energia_media]] versus [[temperatura]] represents [[capacidad_calorifica]].
+  pedagogical_triggers:
+  - id: trigger_capacidad_calorifica_desde_energia_media
+    status: warning
+    text:
+      es: No confundas energía media con capacidad calorífica.
+      en: Do not confuse mean energy with heat capacity.

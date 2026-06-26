@@ -1,0 +1,389 @@
+﻿version: 5.0.0
+id: eficiencia
+leaf_id: eficiencia
+nombre:
+  es: Eficiencia
+  en: Efficiency
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: electricidad-domestica
+  parent_id: climatizacion
+  ruta_relativa: fisica-clasica/electromagnetismo/electricidad-domestica/climatizacion/eficiencia
+  orden: 298830
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: false
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: false
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: false
+  preferred_type: none
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - consumo_estacional
+  - facturacion_estacional
+  - ahorro_porcentual
+  magnitudes:
+  - demanda_termica_estacional
+  - rendimiento_estacional_scop
+  - consumo_electrico_estacional
+  - precio_medio
+  - coste_economico_estacional
+  - ahorro_energetico_porcentual
+  - consumo_escenario_base
+  - consumo_escenario_nuevo
+  - base
+  - nuevo
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: false
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: false
+  type: none
+  channels: []
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: false
+  primary_variable: consumo_electrico_estacional
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  consumo_electrico_estacional:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de consumo_electrico_estacional
+      en: Result of consumo_electrico_estacional
+    summary_rules:
+    - id: sum_eest
+      when: 'true'
+      status: info
+      text:
+        es: "El [[consumo_electrico_estacional]] mide la causa energética directa de la factura: disminuye cuando baja la [[demanda_termica_estacional]] o aumenta el [[rendimiento_estacional_scop]]."
+        en: "The [[consumo_electrico_estacional]] measures the direct energy cause of the bill: it decreases when [[demanda_termica_estacional]] falls or [[rendimiento_estacional_scop]] rises."
+    physical_reading_rules:
+    - id: read_eest
+      when: 'true'
+      status: info
+      text:
+        es: Cuantifica el esfuerzo energético neto del equipo, que es menor que la demanda térmica gracias al rendimiento.
+        en: It quantifies the net energy effort of the equipment, which is lower than the thermal demand thanks to the performance.
+    coherence_rules:
+    - id: coher_eest
+      when: result > 20000
+      status: warning
+      text:
+        es: Un valor extremadamente alto sugiere un fallo en el aislamiento o un cálculo incorrecto.
+        en: An extremely high value suggests an insulation failure or an incorrect calculation.
+    model_validity_rules:
+    - id: model_eest
+      when: 'true'
+      status: info
+      text:
+        es: Válido para un régimen estacional asumiendo condiciones estándar de uso.
+        en: Valid for a seasonal regime assuming standard conditions of use.
+    graph_rules:
+    - id: graph_eest
+      when: 'true'
+      status: info
+      text:
+        es: Es la variable en el eje Y que decrece asintóticamente a medida que aumenta el SCOP.
+        en: It is the variable on the Y-axis that asymptotically decreases as SCOP increases.
+    likely_errors:
+    - id: err_eest_demanda
+      when: 'true'
+      status: error
+      text:
+        es: Confundir el consumo eléctrico con la demanda térmica del edificio.
+        en: Confusing electrical consumption with the building's thermal demand.
+    next_step_rules:
+    - id: next_eest
+      when: 'true'
+      status: tip
+      text:
+        es: Multiplica este valor por el precio medio para obtener el gasto monetario.
+        en: Multiply this value by the average price to obtain the monetary expense.
+    physical_intuition:
+    - id: consumo_electrico_estacional_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[consumo_electrico_estacional]] describe el estado dinámico.
+        en: Intuitively, [[consumo_electrico_estacional]] describes the dynamic state.
+    limiting_cases:
+    - id: consumo_electrico_estacional_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[consumo_electrico_estacional]].
+        en: Check limiting cases of [[consumo_electrico_estacional]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  coste_economico_estacional:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de coste_economico_estacional
+      en: Result of coste_economico_estacional
+    summary_rules:
+    - id: facturacion
+      when: 'true'
+      status: info
+      text:
+        es: El [[coste_economico_estacional]] es el coste final facturado en la temporada.
+        en: The [[coste_economico_estacional]] is the final billed cost for the season.
+    physical_reading_rules:
+    - id: read_cest
+      when: 'true'
+      status: info
+      text:
+        es: Es la traducción de la energía consumida a su impacto económico real en el usuario.
+        en: It is the translation of the energy consumed into its real economic impact on the user.
+    coherence_rules:
+    - id: coher_cest
+      when: result < 0
+      status: error
+      text:
+        es: El coste estacional debe ser siempre positivo.
+        en: Seasonal cost must always be positive.
+    model_validity_rules:
+    - id: model_cest
+      when: 'true'
+      status: info
+      text:
+        es: Supone un precio medio de la energía constante.
+        en: Assumes a constant average energy price.
+    graph_rules:
+    - id: graph_cest
+      when: 'true'
+      status: info
+      text:
+        es: El coste escala linealmente con el consumo si el precio es constante.
+        en: The cost scales linearly with consumption if the price is constant.
+    likely_errors:
+    - id: err_cest_fijo
+      when: 'true'
+      status: error
+      text:
+        es: Olvidar que el coste incluye peajes y cargos fijos que no se reducen al mejorar la eficiencia.
+        en: Forgetting that the cost includes tolls and fixed charges that do not decrease when improving efficiency.
+    next_step_rules:
+    - id: next_audit
+      when: result > 1000
+      status: tip
+      text:
+        es: Si el coste supera los 1000 euros, es probable que la envolvente tenga fugas térmicas graves; considera una auditoría.
+        en: If the cost exceeds 1000 euros, the envelope likely has severe thermal leaks; consider an audit.
+    physical_intuition:
+    - id: coste_economico_estacional_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[coste_economico_estacional]] describe el estado dinámico.
+        en: Intuitively, [[coste_economico_estacional]] describes the dynamic state.
+    limiting_cases:
+    - id: coste_economico_estacional_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[coste_economico_estacional]].
+        en: Check limiting cases of [[coste_economico_estacional]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  ahorro_energetico_porcentual:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de ahorro_energetico_porcentual
+      en: Result of ahorro_energetico_porcentual
+    summary_rules:
+    - id: impacto_ahorro
+      when: 'true'
+      status: success
+      text:
+        es: El [[ahorro_energetico_porcentual]] refleja la mejora porcentual respecto a la base.
+        en: The [[ahorro_energetico_porcentual]] reflects the percentage improvement compared to the base.
+    physical_reading_rules:
+    - id: physical_ahorro
+      when: 'true'
+      status: info
+      text:
+        es: Representa qué fracción de la energía demandada originalmente ya no se consume.
+        en: It represents what fraction of the originally demanded energy is no longer consumed.
+    coherence_rules:
+    - id: check_ahorro_max
+      when: result > 95
+      status: warning
+      text:
+        es: Un ahorro superior al 95% es poco realista; revisa si has ignorado los consumos base inevitables o auxiliares
+          del sistema.
+        en: Savings above 95% are unrealistic; check if you have ignored unavoidable base or auxiliary system consumptions.
+    model_validity_rules:
+    - id: limit_rebound
+      when: 'true'
+      status: info
+      text:
+        es: Este ahorro asume que se mantiene el mismo nivel de servicio térmico. Subir la temperatura tras la mejora (efecto
+          rebote) reducirá el ahorro real.
+        en: This saving assumes that the same thermal service level is maintained. Raising the temperature after the improvement
+          (rebound effect) will reduce real savings.
+    graph_rules:
+    - id: graph_ahorro
+      when: 'true'
+      status: info
+      text:
+        es: Se visualizaría como la diferencia relativa entre las curvas de los dos escenarios.
+        en: It would be visualized as the relative difference between the curves of the two scenarios.
+    likely_errors:
+    - id: err_ahorro_suma
+      when: 'true'
+      status: error
+      text:
+        es: Asumir que al instalar dos medidas del 20% el ahorro total será del 40%, ignorando los rendimientos marginales
+          decrecientes.
+        en: Assuming that installing two 20% measures the total saving will be 40%, ignoring diminishing marginal returns.
+    next_step_rules:
+    - id: next_ahorro
+      when: 'true'
+      status: tip
+      text:
+        es: Cruza este dato con el coste de inversión para determinar el periodo de retorno.
+        en: Cross this data with the investment cost to determine the payback period.
+    physical_intuition:
+    - id: ahorro_energetico_porcentual_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[ahorro_energetico_porcentual]] describe el estado dinámico.
+        en: Intuitively, [[ahorro_energetico_porcentual]] describes the dynamic state.
+    limiting_cases:
+    - id: ahorro_energetico_porcentual_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[ahorro_energetico_porcentual]].
+        en: Check limiting cases of [[ahorro_energetico_porcentual]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

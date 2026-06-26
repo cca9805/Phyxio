@@ -1,0 +1,357 @@
+const e=`- id: F_L
+  symbol: "F_L"
+  nombre:
+    es: Fuerza de Lorentz
+    en: Lorentz force
+  descripcion:
+    es: Fuerza total que actúa sobre una carga eléctrica en presencia simultánea de campo eléctrico y magnético; suma vectorial de la componente eléctrica y la magnética.
+    en: Total force acting on an electric charge in the simultaneous presence of electric and magnetic fields; vector sum of the electric and magnetic components.
+  unidad_si: "N"
+  dimension: "[M L T⁻²]"
+  is_vector: true
+  components: ["F_Lx", "F_Ly", "F_Lz"]
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - fuerza lorentz total
+    - selector de velocidades de Wien
+    - espectrómetro de masas
+  common_mistake: Calcular solo la componente magnética e ignorar la eléctrica cuando hay campo eléctrico presente; la fuerza de Lorentz incluye siempre ambas cuando E no es nulo.
+  typical_range: "10⁻²⁰ N (electrones en campos débiles) a varios N (partículas en aceleradores)"
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El módulo de F_L es positivo; la dirección depende de la geometría relativa de E, B, v y el signo de q.
+      en: The magnitude of F_L is positive; the direction depends on the relative geometry of E, B, v and the sign of q.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: F_L es nula en el selector de velocidades de Wien cuando la componente eléctrica y la magnética se cancelan exactamente.
+      en: F_L is zero in Wien's velocity selector when the electric and magnetic components cancel exactly.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "[0, ∞)"
+  interpretation_role:
+    primary_for:
+      - determinar la aceleración de la partícula cargada en el campo electromagnético
+    secondary_for:
+      - diseño del selector de velocidades
+      - análisis de trayectorias en campos cruzados
+  graph_binding:
+    channels:
+      - y_axis
+  pedagogical_notes:
+    es: "F_L unifica fuerza eléctrica y magnética. La magnética nunca realiza trabajo; la eléctrica sí puede. Su balance determina si la partícula acelera, frena o describe una curva."
+    en: "F_L unifies electric and magnetic force. The magnetic component never does work; the electric one can. Their balance determines whether the particle accelerates, decelerates or curves."
+
+- id: F_E
+  symbol: "F_E"
+  nombre:
+    es: Fuerza eléctrica
+    en: Electric force
+  descripcion:
+    es: Componente eléctrica de la fuerza de Lorentz; fuerza que ejerce el campo eléctrico sobre la carga independientemente de su velocidad.
+    en: Electric component of the Lorentz force; force exerted by the electric field on the charge regardless of its velocity.
+  unidad_si: "N"
+  dimension: "[M L T⁻²]"
+  is_vector: true
+  components: ["F_Ex", "F_Ey", "F_Ez"]
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - fuerza lorentz total
+    - selector de velocidades de Wien
+  common_mistake: Omitir F_E cuando el campo eléctrico está presente pero la partícula se mueve; F_E actúa sobre cargas en reposo y en movimiento por igual.
+  typical_range: "10⁻¹⁹ N (electrón en campo débil) a 10⁻¹³ N (partícula en campo de ruptura)"
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: La dirección de F_E es paralela a E para carga positiva y antiparalela para negativa.
+      en: The direction of F_E is parallel to E for positive charge and antiparallel for negative charge.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: F_E es nula cuando no hay campo eléctrico o cuando la carga es nula.
+      en: F_E is zero when there is no electric field or when the charge is zero.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: "any"
+  interpretation_role:
+    primary_for:
+      - determinar la componente de fuerza que puede cambiar la energía cinética
+    secondary_for:
+      - equilibrio con la fuerza magnética en el selector de Wien
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: "F_E depende solo de q y E, no de v. Es la única componente que puede acelerar o frenar la partícula. A diferencia de F_m, sí realiza trabajo."
+    en: "F_E depends only on q and E, not on v. It is the only component that can accelerate or decelerate the particle. Unlike F_m, it does do work."
+
+- id: F_m
+  symbol: "F_m"
+  nombre:
+    es: Fuerza magnética
+    en: Magnetic force
+  descripcion:
+    es: Componente magnética de la fuerza de Lorentz; fuerza que ejerce el campo magnético sobre la carga en movimiento, siempre perpendicular a la velocidad.
+    en: Magnetic component of the Lorentz force; force exerted by the magnetic field on the moving charge, always perpendicular to velocity.
+  unidad_si: "N"
+  dimension: "[M L T⁻²]"
+  is_vector: true
+  components: ["F_mx", "F_my", "F_mz"]
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - fuerza magnetica modulo
+    - movimiento circular de cargas
+    - espectrómetro de masas
+  common_mistake: Creer que F_m puede acelerar la partícula; al ser perpendicular a v en todo instante, su potencia instantánea es siempre cero.
+  typical_range: "10⁻²⁰ N (electrón en campo terrestre) a 10⁻¹³ N (partícula en acelerador de laboratorio)"
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: La dirección de F_m depende del signo de q y del producto vectorial v×B; el módulo es siempre no negativo.
+      en: The direction of F_m depends on the sign of q and the cross product v×B; the magnitude is always non-negative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: F_m es nula cuando v es paralela a B (sin_theta = 0) o cuando la partícula está en reposo (v = 0).
+      en: F_m is zero when v is parallel to B (sin_theta = 0) or when the particle is at rest (v = 0).
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "[0, ∞)"
+  interpretation_role:
+    primary_for:
+      - describir la desviación de trayectoria sin cambio de energía cinética
+    secondary_for:
+      - diseño de espectrómetros de masas y ciclotrones
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: "F_m nunca realiza trabajo: la rapidez de la partícula no cambia en campo magnético puro. Esto distingue radicalmente el efecto del campo magnético del eléctrico."
+    en: "F_m never does work: the particle speed does not change in a pure magnetic field. This radically distinguishes the effect of the magnetic field from the electric field."
+
+- id: q
+  symbol: "q"
+  nombre:
+    es: Carga eléctrica
+    en: Electric charge
+  descripcion:
+    es: Propiedad intrínseca de la partícula que determina su respuesta a los campos eléctrico y magnético; factor de acoplamiento entre la partícula y el campo electromagnético.
+    en: Intrinsic property of the particle determining its response to electric and magnetic fields; coupling factor between the particle and the electromagnetic field.
+  unidad_si: "C"
+  dimension: "[I T]"
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: parameter
+  used_in:
+    - fuerza lorentz total
+    - fuerza magnetica modulo
+  common_mistake: Usar el valor absoluto de q sin cuidar el signo; el signo de q invierte la dirección de F_m y determina si F_E es paralela o antiparalela a E.
+  typical_range: "1.6×10⁻¹⁹ C (carga elemental) a 10⁻⁶ C (cargas macroscópicas)"
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Positiva coloca F_E en la dirección de E y F_m en la dirección de v×B; negativa invierte ambas.
+      en: Positive places F_E in the direction of E and F_m in the direction of v×B; negative inverts both.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Una partícula sin carga no interactúa con ningún campo electromagnético; la fuerza de Lorentz es siempre nula para q = 0.
+      en: An uncharged particle does not interact with any electromagnetic field; the Lorentz force is always zero for q = 0.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: "any"
+  interpretation_role:
+    primary_for:
+      - determinar la magnitud y el sentido de ambas componentes de la fuerza de Lorentz
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: "El signo de q invierte completamente la dirección de F_m. Electrones y protones en los mismos campos se curvan en sentidos opuestos, lo que es la base de los espectrómetros de masas."
+    en: "The sign of q completely reverses the direction of F_m. Electrons and protons in the same fields curve in opposite directions, which is the basis of mass spectrometers."
+
+- id: E
+  symbol: "E"
+  nombre:
+    es: Campo eléctrico
+    en: Electric field
+  descripcion:
+    es: Intensidad del campo eléctrico en la posición de la carga; fuente de la componente eléctrica de la fuerza de Lorentz, actúa sobre cargas en reposo y en movimiento.
+    en: Electric field intensity at the position of the charge; source of the electric component of the Lorentz force, acts on charges at rest and in motion.
+  unidad_si: "V/m"
+  dimension: "[M L T⁻³ I⁻¹]"
+  is_vector: true
+  components: ["E_x", "E_y", "E_z"]
+  category: state
+  physical_role: core_physical_quantity
+  used_in:
+    - fuerza lorentz total
+    - selector de velocidades de Wien
+  common_mistake: Confundir el campo eléctrico E con la fuerza eléctrica F_E; E es el campo fuente, F_E = q·E es la fuerza resultante.
+  typical_range: "10 V/m (campo atmosférico) a 10⁶ V/m (campo de ruptura del aire)"
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: La dirección de E determina la dirección de F_E para carga positiva; campo positivo y carga positiva dan fuerza en la dirección del campo.
+      en: The direction of E determines the direction of F_E for positive charge; positive field and positive charge give force in the field direction.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: E = 0 implica que no hay contribución eléctrica a la fuerza de Lorentz; la fuerza total se reduce a la componente magnética.
+      en: E = 0 means no electric contribution to the Lorentz force; the total force reduces to the magnetic component.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "[0, ∞)"
+  interpretation_role:
+    primary_for:
+      - determinar la componente eléctrica de la fuerza de Lorentz
+    secondary_for:
+      - controlar la velocidad de selección en el selector de Wien
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: "E actúa sobre la carga independientemente de su velocidad, a diferencia de B. Esta asimetría es la base del selector de velocidades: se ajusta E para compensar exactamente la fuerza magnética a una velocidad determinada."
+    en: "E acts on the charge regardless of its velocity, unlike B. This asymmetry is the basis of the velocity selector: E is adjusted to exactly compensate the magnetic force at a given speed."
+
+- id: B
+  symbol: "B"
+  nombre:
+    es: Campo magnético
+    en: Magnetic field
+  descripcion:
+    es: Intensidad del campo magnético en la posición de la carga; fuente de la componente magnética de la fuerza de Lorentz, solo actúa sobre cargas en movimiento.
+    en: Magnetic field strength at the position of the charge; source of the magnetic component of the Lorentz force, acts only on moving charges.
+  unidad_si: "T"
+  dimension: "[M T⁻² I⁻¹]"
+  is_vector: true
+  components: ["B_x", "B_y", "B_z"]
+  category: state
+  physical_role: core_physical_quantity
+  used_in:
+    - fuerza magnetica modulo
+    - fuerza lorentz total
+    - movimiento circular de cargas
+  common_mistake: Creer que B ejerce fuerza sobre cargas en reposo; el campo magnético solo interactúa con cargas que se mueven.
+  typical_range: "5×10⁻⁵ T (campo terrestre) a varios T (imanes superconductores)"
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El módulo de B es positivo; la dirección determina el sentido de la fuerza magnética mediante la regla de la mano derecha.
+      en: The magnitude of B is positive; the direction determines the sense of the magnetic force via the right-hand rule.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: B = 0 implica que no hay componente magnética en la fuerza de Lorentz; la fuerza total se reduce a la componente eléctrica.
+      en: B = 0 means no magnetic component in the Lorentz force; the total force reduces to the electric component.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "[0, ∞)"
+  interpretation_role:
+    primary_for:
+      - determinar la componente magnética de la fuerza de Lorentz
+    secondary_for:
+      - control de trayectorias circulares en espectrómetros y aceleradores
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: "B no ejerce fuerza sobre cargas en reposo y nunca realiza trabajo. Su efecto es puramente geométrico: curva la trayectoria sin cambiar la energía cinética."
+    en: "B exerts no force on charges at rest and never does work. Its effect is purely geometric: it curves the trajectory without changing kinetic energy."
+
+- id: v
+  symbol: "v"
+  nombre:
+    es: Velocidad de la partícula
+    en: Particle velocity
+  descripcion:
+    es: Módulo de la velocidad de la partícula cargada en el instante de evaluación de la fuerza; controla la magnitud de la componente magnética de la fuerza de Lorentz.
+    en: Magnitude of the charged particle's velocity at the instant of force evaluation; controls the magnitude of the magnetic component of the Lorentz force.
+  unidad_si: "m/s"
+  dimension: "[L T⁻¹]"
+  is_vector: true
+  components: ["v_x", "v_y", "v_z"]
+  category: state
+  physical_role: core_physical_quantity
+  used_in:
+    - fuerza magnetica modulo
+    - fuerza lorentz total
+    - movimiento circular en campo magnético
+  common_mistake: Usar v como variable independiente de la fuerza eléctrica; F_E no depende de v, solo F_m lo hace.
+  typical_range: "10⁻³ m/s (iones lentos) a 10⁷ m/s (electrones en aceleradores de laboratorio)"
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: La dirección de v junto con B determina la dirección de F_m mediante el producto vectorial q(v×B).
+      en: The direction of v together with B determines the direction of F_m via the cross product q(v×B).
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: v = 0 anula la componente magnética; la fuerza de Lorentz se reduce a la fuerza eléctrica pura cuando la partícula está en reposo.
+      en: v = 0 cancels the magnetic component; the Lorentz force reduces to the pure electric force when the particle is at rest.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "[0, c)"
+  interpretation_role:
+    primary_for:
+      - calcular la componente magnética de la fuerza de Lorentz
+    secondary_for:
+      - determinar la velocidad de selección en el selector de Wien
+  graph_binding:
+    channels:
+      - x_axis
+  pedagogical_notes:
+    es: "Cuando v tiende a cero, F_L se reduce a la fuerza puramente eléctrica. La condición v << c delimita la validez del modelo clásico; por encima del 10 % de c las correcciones relativistas superan el 1 %."
+    en: "When v approaches zero, F_L reduces to the purely electric force. The condition v << c delimits the classical model validity; above 10 % of c relativistic corrections exceed 1 %."
+
+- id: sin_theta
+  symbol: "\\\\sin\\\\theta"
+  nombre:
+    es: Seno del ángulo entre v y B
+    en: Sine of the angle between v and B
+  descripcion:
+    es: Factor adimensional igual al seno del ángulo entre el vector velocidad y el vector campo magnético; modula la magnitud de la fuerza magnética según la orientación relativa de v y B.
+    en: Dimensionless factor equal to the sine of the angle between the velocity vector and the magnetic field vector; modulates the magnetic force magnitude according to the relative orientation of v and B.
+  unidad_si: "1"
+  dimension: "[1]"
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: parameter
+  used_in:
+    - fuerza magnetica modulo
+    - fuerza lorentz total
+  common_mistake: Olvidar este factor y usar F_m = q·v·B sin considerar el ángulo; esto da el valor máximo posible cuando el ángulo real no es 90°.
+  typical_range: "0 a 1 (adimensional)"
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre entre 0 y 1; el signo de la fuerza lo determina el signo de q mediante el producto vectorial.
+      en: Always between 0 and 1; the force sign is determined by the sign of q via the cross product.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: sin_theta = 0 cuando v es paralela a B; la fuerza magnética es nula aunque haya campo y velocidad.
+      en: sin_theta = 0 when v is parallel to B; the magnetic force is zero even if there is field and velocity.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "[0, 1]"
+  interpretation_role:
+    primary_for:
+      - modular la fuerza magnética según la orientación relativa de v y B
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: "El factor sin_theta es el que hace que la fuerza magnética sea nula para movimiento paralelo al campo. Es el error más frecuente en cálculos de primer curso: asumir sin_theta = 1 sin verificar el ángulo del problema."
+    en: "The sin_theta factor is what makes the magnetic force zero for motion parallel to the field. It is the most common error in first-course calculations: assuming sin_theta = 1 without verifying the problem angle."
+`;export{e as default};

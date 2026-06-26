@@ -1,0 +1,261 @@
+version: 5
+id: numero-de-reynolds-interp
+leaf_id: numero-de-reynolds
+scope: local
+nombre:
+  es: "Análisis del Número de Reynolds"
+  en: "Reynolds Number Analysis"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title: { es: "Resumen del Régimen", en: "Regime Summary" }
+  physical_reading:
+    title: { es: "Lectura Física", en: "Physical Reading" }
+  coherence:
+    title: { es: "Coherencia de Datos", en: "Data Coherence" }
+  model_validity:
+    title: { es: "Validez del Modelo", en: "Model Validity" }
+  graph_reading:
+    title: { es: "Lectura Gráfica", en: "Graph Reading" }
+  likely_errors:
+    title: { es: "Alertas de Interpretación", en: "Interpretation Alerts" }
+  next_step:
+    title: { es: "Pasos Sugeridos", en: "Suggested Steps" }
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [Re, rho, v, L, eta, nu]
+  formulas: [re_dinamico, re_cinematico]
+
+targets:
+  Re:
+    summary_rules:
+      - id: re-laminar
+        when: Re < 2300
+        status: success
+        text:
+          es: "El flujo es **Laminar** (Re = {Re}). Esto significa que la viscosidad amortigua cualquier perturbación, manteniendo trayectorias ordenadas."
+          en: "The flow is **Laminar** (Re = {Re}). This means that viscosity dampens any disturbance, maintaining orderly trajectories."
+      - id: re-turbulent
+        when: Re > 4000
+        status: danger
+        text:
+          es: "El flujo es **Turbulento** (Re = {Re}). Esto implica que la inercia genera remolinos caóticos y una mezcla intensa del fluido."
+          en: "The flow is **Turbulent** (Re = {Re}). This implies that inertia generates chaotic eddies and intense fluid mixing."
+    physical_reading_rules:
+      - id: re-phys
+        when: Re > 0
+        status: success
+        text:
+          es: "El valor de [[Re]] **indica** cómo el balance entre inercia y viscosidad **determina** la estabilidad del sistema dinámico."
+          en: "The value of [[Re]] **indicates** how the balance between inertia and viscosity **determines** system stability."
+    coherence_rules:
+      - id: re-coh
+        when: Re >= 0
+        status: success
+        text:
+          es: "Resultado coherente: el número de Reynolds es una magnitud adimensional positiva que escala la física del flujo."
+          en: "Coherent result: the Reynolds number is a positive dimensionless magnitude that scales flow physics."
+    model_validity_rules:
+      - id: re-valid
+        when: Re > 0
+        status: success
+        text:
+          es: "Válido para fluidos newtonianos. Este modelo **implica** que la viscosidad es constante en todo el dominio analizado."
+          en: "Valid for Newtonian fluids. This model **implies** that viscosity is constant throughout the analyzed domain."
+    graph_rules:
+      - id: re-graph
+        when: Re > 0
+        status: info
+        text:
+          es: "La animación visualiza cómo el flujo pasa de líneas suaves a caos inercial al aumentar el valor de [[Re]]."
+          en: "The animation visualizes how the flow shifts from smooth lines to inertial chaos as the [[Re]] value increases."
+    likely_errors:
+      - id: re-trans-alert
+        when: Re > 2300 and Re < 4000
+        status: warning
+        text:
+          es: "Zona de transición: El régimen es inestable. Esto **significa** que las leyes laminares dejan de cumplirse con precisión."
+          en: "Transition zone: The regime is unstable. This **means** that laminar laws cease to be fulfilled with precision."
+      - id: re-neg-err
+        when: Re < 0
+        status: error
+        text:
+          es: "Error crítico: Un Reynolds negativo es físicamente imposible. Revise el signo de la velocidad [[v]] o la longitud [[L]]."
+          en: "Critical error: A negative Reynolds is physically impossible. Check the sign of velocity [[v]] or length [[L]]."
+    next_step_rules:
+      - id: re-next
+        when: Re > 0
+        status: info
+        text:
+          es: "Use este valor de [[Re]] para buscar el factor de fricción en un diagrama de Moody y determinar la pérdida de carga."
+          en: "Use this [[Re]] value to look up the friction factor in a Moody diagram and determine head loss."
+
+  eta:
+    summary_rules:
+      - id: eta-val
+        when: eta > 0
+        status: success
+        text:
+          es: "La viscosidad dinámica [[eta]] actúa como el 'pegamento' que intenta mantener el flujo en estado laminar."
+          en: "Dynamic viscosity [[eta]] acts as the 'glue' that tries to keep the flow in a laminar state."
+    physical_reading_rules:
+      - id: eta-phys
+        when: eta > 0
+        status: success
+        text:
+          es: "Un fluido muy viscoso (como el aceite) genera un [[Re]] bajo, lo que **indica** un predominio del orden sobre el caos."
+          en: "A very viscous fluid (like oil) generates a low [[Re]], which **indicates** a predominance of order over chaos."
+    coherence_rules:
+      - id: eta-coh
+        when: eta > 0
+        status: success
+        text:
+          es: "Viscosidad positiva consistente con las propiedades de los fluidos reales macroscópicos."
+          en: "Positive viscosity consistent with the properties of real macroscopic fluids."
+    model_validity_rules:
+      - id: eta-valid
+        when: eta > 0
+        status: success
+        text:
+          es: "Válido mientras el fluido sea homogéneo. La viscosidad suele variar fuertemente con la temperatura."
+          en: "Valid as long as the fluid is homogeneous. Viscosity usually varies strongly with temperature."
+    graph_rules:
+      - id: eta-graph
+        when: eta > 0
+        status: info
+        text:
+          es: "En el visualizador, una mayor viscosidad se traduce en una mayor amortiguación de las oscilaciones del tinte."
+          en: "In the visualizer, higher viscosity translates into greater damping of the dye oscillations."
+    likely_errors:
+      - id: eta-err-neg
+        when: eta <= 0
+        status: error
+        text:
+          es: "Error: La viscosidad debe ser estrictamente positiva. Un valor nulo implicaría un fluido ideal sin fricción."
+          en: "Error: Viscosity must be strictly positive. A zero value would imply a frictionless ideal fluid."
+    next_step_rules:
+      - id: eta-next
+        when: eta > 0
+        status: info
+        text:
+          es: "Calcule la viscosidad cinemática [[nu]] dividiendo por la densidad [[rho]] para simplificar los cálculos de [[Re]]."
+          en: "Calculate the kinematic viscosity [[nu]] by dividing by density [[rho]] to simplify [[Re]] calculations."
+
+  L:
+    summary_rules:
+      - id: l-val
+        when: L > 0
+        status: success
+        text:
+          es: "La longitud característica [[L]] define la escala geométrica donde se desarrolla la competencia de fuerzas."
+          en: "The characteristic length [[L]] defines the geometric scale where the competition of forces takes place."
+    physical_reading_rules:
+      - id: l-phys
+        when: L > 0
+        status: success
+        text:
+          es: "Al aumentar el diámetro [[L]], se incrementa el volumen de fluido que aporta inercia, favoreciendo la turbulencia."
+          en: "Increasing the diameter [[L]] increases the fluid volume that provides inertia, favoring turbulence."
+    coherence_rules:
+      - id: l-coh
+        when: L > 0
+        status: success
+        text:
+          es: "Dimensión espacial positiva coherente con el confinamiento del fluido en el conducto."
+          en: "Positive spatial dimension consistent with fluid confinement in the duct."
+    model_validity_rules:
+      - id: l-valid
+        when: L > 0
+        status: success
+        text:
+          es: "Válido para geometrías de sección constante. En canales no circulares, use el diámetro hidráulico."
+          en: "Valid for constant section geometries. In non-circular channels, use the hydraulic diameter."
+    graph_rules:
+      - id: l-graph
+        when: L > 0
+        status: info
+        text:
+          es: "La escala visual del experimento en pantalla se ajusta proporcionalmente al valor de [[L]]."
+          en: "The visual scale of the experiment on screen adjusts proportionally to the [[L]] value."
+    likely_errors:
+      - id: l-err-radius
+        when: L > 0
+        status: info
+        text:
+          es: "Cuidado: Asegúrese de usar el **diámetro** y no el radio. El uso del radio es un error común que reduce [[Re]] a la mitad."
+          en: "Careful: Make sure to use the **diameter** and not the radius. Using the radius is a common error that halves [[Re]]."
+    next_step_rules:
+      - id: l-next
+        when: L > 0
+        status: info
+        text:
+          es: "Multiplique por la sección transversal para determinar el caudal volumétrico del sistema."
+          en: "Multiply by the cross section to determine the system's volumetric flow rate."
+
+  rho:
+    summary_rules:
+      - id: rho-val
+        when: rho > 0
+        status: success
+        text:
+          es: "La densidad [[rho]] cuantifica la inercia volumétrica del fluido en movimiento."
+          en: "Density [[rho]] quantifies the volumetric inertia of the moving fluid."
+    physical_reading_rules:
+      - id: rho-phys
+        when: rho > 0
+        status: success
+        text:
+          es: "Un fluido denso (como el agua frente al aire) posee mayor inercia a la misma velocidad, lo que **implica** mayor [[Re]]."
+          en: "A dense fluid (like water vs air) has higher inertia at the same velocity, which **implies** higher [[Re]]."
+    coherence_rules:
+      - id: rho-coh
+        when: rho > 0
+        status: success
+        text:
+          es: "Densidad positiva coherente con la conservación de la masa en mecánica clásica."
+          en: "Positive density consistent with mass conservation in classical mechanics."
+    model_validity_rules:
+      - id: rho-valid
+        when: rho > 0
+        status: success
+        text:
+          es: "El modelo asume un fluido incompresible con densidad constante en todo el campo de flujo."
+          en: "The model assumes an incompressible fluid with constant density throughout the flow field."
+    graph_rules:
+      - id: rho-graph
+        when: rho > 0
+        status: success
+        text:
+          es: "En el esquema Svg, la densidad puede visualizarse mediante la densidad de partículas trazadoras."
+          en: "In the Svg scheme, density can be visualized through the density of tracer particles."
+    likely_errors:
+      - id: rho-err-neg
+        when: rho <= 0
+        status: error
+        text:
+          es: "Error: La densidad no puede ser negativa. Revise si confundió la densidad absoluta con el peso específico."
+          en: "Error: Density cannot be negative. Check if you confused absolute density with specific weight."
+    next_step_rules:
+      - id: rho-next
+        when: rho > 0
+        status: info
+        text:
+          es: "Combine la densidad con [[v]] para calcular la presión dinámica del fluido."
+          en: "Combine density with [[v]] to calculate the fluid's dynamic pressure."
+
+config:
+  decimal_places: 2
+  show_graphs: true

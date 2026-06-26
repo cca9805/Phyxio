@@ -1,0 +1,363 @@
+version: 2
+id: interpretacion-trabajo
+leaf_id: trabajo
+nombre:
+  es: Interpretacion de trabajo mecanico
+  en: Interpretation of mechanical work
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: trabajo-y-energia
+  parent_id: fundamentos
+  ruta_relativa: fisica-clasica/mecanica/trabajo-y-energia/fundamentos/trabajo
+dependencies:
+  formulas:
+  - trabajo_fuerza_constante
+  - angulo_desde_trabajo
+  - trabajo_neto_sumatoria
+  - teorema_trabajo_energia
+  magnitudes:
+  - W
+  - F
+  - d
+  - theta
+  - Wnet
+  - dK
+output_contract:
+  sections: [ summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step ]
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura estructural
+      en: Structural reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  W:
+    summary_rules:
+    - id: w_summary
+      when: 'true'
+      status: info
+      text:
+        es: Si W > 0 el sistema recibe energia mecanica; si W < 0 la cede; y si W = 0 no hay transferencia neta por esa fuerza en ese tramo.
+        en: If W > 0 the system receives mechanical energy; if W < 0 it gives it away; if W = 0 there is no net transfer by that force on that segment.
+    - id: w_summary_causal
+      when: 'true'
+      status: info
+      text:
+        es: Esa lectura depende causalmente de la orientacion relativa, porque theta fija la proyeccion efectiva de F sobre d y por tanto el signo y escala de W.
+        en: This reading is causal because theta sets the effective projection of F on d, which determines the sign and scale of W.
+    physical_reading_rules:
+    - id: w_reading
+      when: 'true'
+      status: info
+      text:
+        es: W positiva aporta energia al movimiento; W negativa la extrae; W nula no cambia el presupuesto cinetico por esa fuerza.
+        en: Positive W adds energy to motion; negative W removes it; zero W means no kinetic-budget change by that force.
+    coherence_rules:
+    - id: w_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: El signo de W debe ser coherente con el signo de cos(theta).
+        en: The sign of W must be coherent with the sign of cos(theta).
+    model_validity_rules:
+    - id: w_validity
+      when: 'true'
+      status: ok
+      text:
+        es: La lectura es valida cuando F y d corresponden al mismo tramo y sistema.
+        en: The reading is valid when F and d correspond to the same segment and system.
+    graph_rules:
+    - id: w_graph
+      when: 'true'
+      status: info
+      text:
+        es: Aunque no haya grafico declarado, interpreta W como proyeccion efectiva de la fuerza sobre el desplazamiento.
+        en: Even without a declared graph, interpret W as the effective projection of force on displacement.
+    likely_errors:
+    - id: w_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error comun: usar solo F por d sin considerar theta."
+        en: "Common mistake: using only F times d without considering theta."
+    next_step_rules:
+    - id: w_next
+      when: 'true'
+      status: info
+      text:
+        es: Tras calcular W, verifica si debes sumar otras contribuciones para hallar Wnet.
+        en: After computing W, check whether you must add other contributions to obtain Wnet.
+  F:
+    summary_rules:
+    - id: f_summary
+      when: 'true'
+      status: info
+      text:
+        es: F aporta intensidad de interaccion, pero no determina por si sola el trabajo.
+        en: F provides interaction intensity, but does not determine work by itself.
+    physical_reading_rules:
+    - id: f_reading
+      when: 'true'
+      status: info
+      text:
+        es: A igual F, cambios en theta o d pueden invertir o anular W.
+        en: For fixed F, changes in theta or d can invert or cancel W.
+    coherence_rules:
+    - id: f_coherence
+      when: F >= 0
+      status: ok
+      text:
+        es: F se interpreta como modulo no negativo.
+        en: F is interpreted as a non-negative magnitude.
+    model_validity_rules:
+    - id: f_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si F varia notablemente en el tramo, conviene cambiar a modelo de fuerza variable.
+        en: If F varies strongly along the segment, switch to a variable-force model.
+    graph_rules:
+    - id: f_graph
+      when: 'true'
+      status: info
+      text:
+        es: F entra como amplitud de la proyeccion efectiva sobre d.
+        en: F enters as the amplitude of the effective projection over d.
+    likely_errors:
+    - id: f_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error frecuente: confundir modulo de F con su componente paralela al desplazamiento."
+        en: "Frequent error: confusing force magnitude with its displacement-parallel component."
+    next_step_rules:
+    - id: f_next
+      when: 'true'
+      status: info
+      text:
+        es: Revisa theta y d antes de interpretar F en terminos de trabajo.
+        en: Check theta and d before interpreting F in work terms.
+  d:
+    summary_rules:
+    - id: d_summary
+      when: 'true'
+      status: info
+      text:
+        es: d fija la escala espacial de la transferencia energetica por trabajo.
+        en: d sets the spatial scale of work-based energy transfer.
+    physical_reading_rules:
+    - id: d_reading
+      when: 'true'
+      status: info
+      text:
+        es: Si d es nula, el trabajo de esa fuerza es nulo aunque la fuerza exista.
+        en: If d is zero, that force does zero work even if the force exists.
+    coherence_rules:
+    - id: d_coherence
+      when: d >= 0
+      status: ok
+      text:
+        es: d es no negativa como magnitud en este leaf.
+        en: d is non-negative as a magnitude in this leaf.
+    model_validity_rules:
+    - id: d_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Debe usarse el desplazamiento del punto de aplicacion de la fuerza considerada.
+        en: Use the displacement of the application point of the considered force.
+    graph_rules:
+    - id: d_graph
+      when: 'true'
+      status: info
+      text:
+        es: d define el eje de referencia para decidir el angulo efectivo theta.
+        en: d defines the reference axis used to decide the effective angle theta.
+    likely_errors:
+    - id: d_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error comun: reemplazar desplazamiento por distancia recorrida sin justificar."
+        en: "Common error: replacing displacement with path length without justification."
+    next_step_rules:
+    - id: d_next
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba que d corresponde al mismo intervalo usado para F y theta.
+        en: Check that d matches the same interval used for F and theta.
+  theta:
+    summary_rules:
+    - id: theta_summary
+      when: 'true'
+      status: info
+      text:
+        es: Theta controla la fraccion de F que realmente transfiere energia por trabajo.
+        en: Theta controls the fraction of F that actually transfers energy through work.
+    physical_reading_rules:
+    - id: theta_reading
+      when: 'true'
+      status: info
+      text:
+        es: Theta menor de 90 grados tiende a W positiva; mayor de 90 grados, a W negativa.
+        en: Theta below 90 degrees tends to positive W; above 90 degrees, to negative W.
+    coherence_rules:
+    - id: theta_coherence
+      when: 0 <= theta <= 3.1415926535
+      status: ok
+      text:
+        es: Theta se mantiene en el rango fisico esperado para el modelo.
+        en: Theta remains in the physically expected range for the model.
+    model_validity_rules:
+    - id: theta_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Debe corresponder al angulo entre F y d en el mismo instante o tramo modelado.
+        en: It must correspond to the angle between F and d in the same modeled instant or segment.
+    graph_rules:
+    - id: theta_graph
+      when: 'true'
+      status: info
+      text:
+        es: Theta sintetiza la geometria de la interaccion y gobierna el coseno de la formula.
+        en: Theta summarizes interaction geometry and governs the cosine in the formula.
+    likely_errors:
+    - id: theta_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error frecuente: usar el angulo con el eje equivocado y cambiar el signo de W."
+        en: "Frequent error: using the angle with the wrong axis and flipping W sign."
+    next_step_rules:
+    - id: theta_next
+      when: 'true'
+      status: info
+      text:
+        es: Tras fijar theta, valida si el signo esperado de W coincide con la situacion fisica.
+        en: After fixing theta, validate whether the expected W sign matches the physical scenario.
+  Wnet:
+    summary_rules:
+    - id: wnet_summary
+      when: 'true'
+      status: info
+      text:
+        es: Wnet agrega los aportes de trabajo de todas las fuerzas relevantes.
+        en: Wnet aggregates work contributions from all relevant forces.
+    physical_reading_rules:
+    - id: wnet_reading
+      when: 'true'
+      status: info
+      text:
+        es: Su signo indica ganancia o perdida neta de presupuesto cinetico.
+        en: Its sign indicates net gain or loss of kinetic budget.
+    coherence_rules:
+    - id: wnet_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe coincidir en signo y valor con dK cuando aplica el teorema.
+        en: It must match dK in sign and value when the theorem applies.
+    model_validity_rules:
+    - id: wnet_validity
+      when: 'true'
+      status: ok
+      text:
+        es: No olvides incluir trabajos negativos por fuerzas resistentes.
+        en: Do not forget negative work by resistive forces.
+    graph_rules:
+    - id: wnet_graph
+      when: 'true'
+      status: info
+      text:
+        es: Wnet conecta este leaf con la lectura por estados energeticos.
+        en: Wnet connects this leaf with state-based energetic reading.
+    likely_errors:
+    - id: wnet_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error comun: sumar modulos y perder el signo de cada contribucion."
+        en: "Common error: summing magnitudes and losing each contribution sign."
+    next_step_rules:
+    - id: wnet_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa Wnet para interpretar dK o para validar el resultado dinamico.
+        en: Use Wnet to interpret dK or validate the dynamical result.
+  dK:
+    summary_rules:
+    - id: dk_summary
+      when: 'true'
+      status: info
+      text:
+        es: dK expresa el cambio de energia cinetica entre estado inicial y final.
+        en: dK expresses kinetic-energy change between initial and final states.
+    physical_reading_rules:
+    - id: dk_reading
+      when: 'true'
+      status: info
+      text:
+        es: dK positiva indica aumento de rapidez neta; dK negativa, frenado neto.
+        en: Positive dK indicates net speed increase; negative dK indicates net braking.
+    coherence_rules:
+    - id: dk_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: dK debe compartir signo con Wnet.
+        en: dK must share sign with Wnet.
+    model_validity_rules:
+    - id: dk_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Requiere mismo sistema y mismo intervalo al comparar estado inicial y final.
+        en: Requires the same system and interval when comparing initial and final states.
+    graph_rules:
+    - id: dk_graph
+      when: 'true'
+      status: info
+      text:
+        es: dK es la lectura por estados que confirma el balance de trabajo.
+        en: dK is the state-based reading that confirms the work balance.
+    likely_errors:
+    - id: dk_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error frecuente: reportar solo modulo de dK y borrar su interpretacion causal."
+        en: "Frequent error: reporting only the magnitude of dK and erasing its causal interpretation."
+    next_step_rules:
+    - id: dk_next
+      when: 'true'
+      status: info
+      text:
+        es: Si dK no coincide con Wnet, revisa signos, sistema y omisiones de fuerzas.
+        en: If dK does not match Wnet, review signs, system choice, and omitted forces.

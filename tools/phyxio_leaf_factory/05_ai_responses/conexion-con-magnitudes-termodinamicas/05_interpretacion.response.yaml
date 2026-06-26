@@ -1,0 +1,1271 @@
+version: 5.0.0
+id: conexion-con-magnitudes-termodinamicas
+leaf_id: conexion-con-magnitudes-termodinamicas
+nombre:
+  es: Conexion con magnitudes termodinamicas
+  en: Connection with Thermodynamic Quantities
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: funcion-de-particion
+  parent_id: funcion-de-particion
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/funcion-de-particion/conexion-con-magnitudes-termodinamicas
+  orden: 274500
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - energia_libre_desde_particion
+  - energia_interna_desde_particion
+  - entropia_desde_energia_libre
+  - presion_desde_energia_libre
+  magnitudes:
+  - funcion_particion
+  - temperatura
+  - constante_boltzmann
+  - energia_libre_helmholtz
+  - energia_interna
+  - entropia
+  - volumen
+  - presion
+  - derivada_log_particion_temperatura
+  - pendiente_energia_libre_temperatura
+  - pendiente_energia_libre_volumen
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinámica estadística en ensamble canónico
+    en: statistical thermodynamics in the canonical ensemble
+  axis_convention:
+    es: En este leaf las magnitudes son escalares; el signo procede de definiciones termodinámicas como F=-k_B*T*ln(Z), S=-dF/dT
+      y p=-dF/dV.
+    en: In this leaf quantities are scalar; signs come from thermodynamic definitions such as F=-k_B*T*ln(Z), S=-dF/dT, and
+      p=-dF/dV.
+  standard_assumptions:
+  - es: Sistema en equilibrio térmico descrito por una función de partición canónica positiva.
+    en: System in thermal equilibrium described by a positive canonical partition function.
+  - es: La temperatura absoluta es positiva y las derivadas se leen manteniendo fijas las variables indicadas por el modelo.
+    en: Absolute temperature is positive and derivatives are read while holding fixed the variables stated by the model.
+  standard_warnings:
+  - es: No confundas una derivada de ln(Z) con una magnitud macroscópica antes de aplicar los factores k_B y T.
+    en: Do not confuse a derivative of ln(Z) with a macroscopic quantity before applying the k_B and T factors.
+  - es: Una pendiente gráfica solo tiene significado físico si se conocen las variables mantenidas constantes.
+    en: A graph slope has physical meaning only if the held-fixed variables are known.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: F y U deben quedar en J, S en J/K, p en Pa y Z sin unidades.
+      en: F and U must be in J, S in J/K, p in Pa, and Z dimensionless.
+  - id: thermodynamic_sign_check
+    status: warning
+    text:
+      es: Revisa los signos negativos de F=-k_B*T*ln(Z), S=-dF/dT y p=-dF/dV antes de interpretar el resultado.
+      en: Check the negative signs in F=-k_B*T*ln(Z), S=-dF/dT, and p=-dF/dV before interpreting the result.
+error_patterns:
+  enabled: true
+  patterns:
+  - id: partition_function_as_energy
+    status: warning
+    text:
+      es: Tratar [[funcion_particion]] como si tuviera unidades de energía rompe la lectura física del leaf.
+      en: Treating [[funcion_particion]] as if it had energy units breaks the physical reading of the leaf.
+  - id: slope_without_constant_variable
+    status: warning
+    text:
+      es: Leer una pendiente sin indicar si T, V o N permanecen constantes suele producir una magnitud equivocada.
+      en: Reading a slope without stating whether T, V, or N is held constant often produces the wrong quantity.
+graph_reading_policy:
+  enabled: true
+  primary_variable: energia_libre_helmholtz
+  reading_sequence:
+  - es: Identifica que el eje horizontal representa [[temperatura]] y el vertical [[energia_libre_helmholtz]].
+    en: Identify that the horizontal axis represents [[temperatura]] and the vertical axis [[energia_libre_helmholtz]].
+  - es: Lee la pendiente local de F frente a T como [[pendiente_energia_libre_temperatura]] y conecta su signo con [[entropia]].
+    en: Read the local slope of F versus T as [[pendiente_energia_libre_temperatura]] and connect its sign to [[entropia]].
+  key_points:
+  - es: La curva F(T) resume cómo la función de partición genera magnitudes termodinámicas al variar la temperatura.
+    en: The F(T) curve summarizes how the partition function generates thermodynamic quantities as temperature varies.
+  - es: Una curva descendente de F con T suele indicar entropía positiva porque S=-dF/dT.
+    en: A decreasing F curve with T usually indicates positive entropy because S=-dF/dT.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Compara energías térmicas con k_B*T antes de decidir si el valor obtenido es grande o pequeño.
+    en: Compare thermal energies with k_B*T before deciding whether the obtained value is large or small.
+  - es: Para sistemas macroscópicos, F, U y S suelen escalar con el tamaño del sistema.
+    en: For macroscopic systems, F, U, and S usually scale with system size.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Comprueba que ln(Z) sea adimensional y que cada derivada añada la unidad inversa de la variable derivada.
+    en: Check that ln(Z) is dimensionless and that each derivative adds the inverse unit of the differentiation variable.
+  common_unit_mistakes:
+  - es: Usar temperatura en grados Celsius dentro de expresiones con k_B*T.
+    en: Using temperature in degrees Celsius inside expressions with k_B*T.
+  - es: Asignar julios a Z o a ln(Z).
+    en: Assigning joules to Z or ln(Z).
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: true
+  processes:
+  - id: fixed_temperature_volume
+    label:
+      es: T y V fijados
+      en: fixed T and V
+    meaning:
+      es: El potencial adecuado es la energía libre de Helmholtz.
+      en: The appropriate potential is Helmholtz free energy.
+  - id: thermal_variation
+    label:
+      es: variación con temperatura
+      en: temperature variation
+    meaning:
+      es: La pendiente de F respecto de T permite leer la entropía.
+      en: The slope of F with respect to T allows entropy to be read.
+  - id: volume_variation
+    label:
+      es: variación con volumen
+      en: volume variation
+    meaning:
+      es: La pendiente de F respecto de V permite leer la presión con signo opuesto.
+      en: The slope of F with respect to V allows pressure to be read with opposite sign.
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  funcion_particion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: fuente estadística
+      en: statistical source
+    summary_rules:
+    - id: funcion_particion_summary_main
+      when: 'true'
+      status: ok
+      text:
+        es: '[[funcion_particion]] representa fuente estadística en la conexión entre la función de partición y las magnitudes
+          termodinámicas.'
+        en: '[[funcion_particion]] represents the statistical source in the connection between the partition function and
+          thermodynamic quantities.'
+    physical_reading_rules:
+    - id: funcion_particion_physical_reading_unit_sign
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[funcion_particion]] como Z, con unidad 1, dimensión 1 y significado ligado al ensamble canónico.
+        en: Read [[funcion_particion]] as Z, with unit 1, dimension 1, and meaning tied to the canonical ensemble.
+    coherence_rules:
+    - id: funcion_particion_coherence_dimensions
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que las fórmulas que producen [[funcion_particion]] respetan su unidad 1 y no mezclan una cantidad microscópica
+          con una macroscópica.
+        en: Check that formulas producing [[funcion_particion]] respect its unit 1 and do not mix a microscopic quantity with
+          a macroscopic one.
+    - id: funcion_particion_coherence_positive
+      when: 'true'
+      status: ok
+      text:
+        es: '[[funcion_particion]] debe ser positiva; si Z≤0, ln(Z) no es válido y falla el modelo canónico.'
+        en: '[[funcion_particion]] must be positive; if Z≤0, ln(Z) is invalid and the canonical model fails.'
+    model_validity_rules:
+    - id: funcion_particion_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[funcion_particion]] solo si Z>0, T>0 K y el sistema puede describirse por equilibrio canónico.
+        en: Interpret [[funcion_particion]] only if Z>0, T>0 K, and the system can be described by canonical equilibrium.
+    graph_rules:
+    - id: funcion_particion_graph_coord_connection
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[funcion_particion]] con la curva F(T) y con las pendientes que generan entropía
+          o presión cuando corresponda.
+        en: In the Coord graph, relate [[funcion_particion]] to the F(T) curve and to the slopes that generate entropy or
+          pressure when applicable.
+    likely_errors:
+    - id: funcion_particion_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'No leas [[funcion_particion]] como un número aislado: revisa unidad, signo, variable mantenida constante y fórmula
+          usada.'
+        en: 'Do not read [[funcion_particion]] as an isolated number: check unit, sign, held-fixed variable, and formula used.'
+    next_step_rules:
+    - id: funcion_particion_next_step_compare
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[funcion_particion]], compara el resultado con k_B*T, con la escala del sistema o con la
+          pendiente gráfica relevante.
+        en: After calculating [[funcion_particion]], compare the result with k_B*T, with system scale, or with the relevant
+          graph slope.
+    physical_intuition:
+    - id: funcion_particion_intuition_bridge
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[funcion_particion]] muestra una pieza del puente entre microestados accesibles y comportamiento
+          macroscópico.
+        en: Intuitively, [[funcion_particion]] shows one piece of the bridge between accessible microstates and macroscopic
+          behavior.
+    limiting_cases:
+    - id: funcion_particion_limiting_case_positive_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En casos límite, revisa qué ocurre con [[funcion_particion]] cuando T aumenta, Z cambia mucho o la pendiente de
+          F se aproxima a cero.
+        en: In limiting cases, check what happens to [[funcion_particion]] when T increases, Z changes strongly, or the slope
+          of F approaches zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable térmica
+      en: thermal variable
+    summary_rules:
+    - id: temperatura_summary_main
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] representa variable térmica en la conexión entre la función de partición y las magnitudes termodinámicas.'
+        en: '[[temperatura]] represents the thermal variable in the connection between the partition function and thermodynamic
+          quantities.'
+    physical_reading_rules:
+    - id: temperatura_physical_reading_unit_sign
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura]] como T, con unidad K, dimensión Θ y significado ligado al ensamble canónico.
+        en: Read [[temperatura]] as T, with unit K, dimension Θ, and meaning tied to the canonical ensemble.
+    coherence_rules:
+    - id: temperatura_coherence_dimensions
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que las fórmulas que producen [[temperatura]] respetan su unidad K y no mezclan una cantidad microscópica
+          con una macroscópica.
+        en: Check that formulas producing [[temperatura]] respect its unit K and do not mix a microscopic quantity with a
+          macroscopic one.
+    model_validity_rules:
+    - id: temperatura_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura]] solo si Z>0, T>0 K y el sistema puede describirse por equilibrio canónico.
+        en: Interpret [[temperatura]] only if Z>0, T>0 K, and the system can be described by canonical equilibrium.
+    graph_rules:
+    - id: temperatura_graph_coord_connection
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[temperatura]] con la curva F(T) y con las pendientes que generan entropía o presión
+          cuando corresponda.
+        en: In the Coord graph, relate [[temperatura]] to the F(T) curve and to the slopes that generate entropy or pressure
+          when applicable.
+    likely_errors:
+    - id: temperatura_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'No leas [[temperatura]] como un número aislado: revisa unidad, signo, variable mantenida constante y fórmula
+          usada.'
+        en: 'Do not read [[temperatura]] as an isolated number: check unit, sign, held-fixed variable, and formula used.'
+    - id: temperatura_likely_error_celsius
+      when: 'true'
+      status: warning
+      text:
+        es: 'No uses Celsius en k_B*T: la [[temperatura]] debe introducirse en kelvin y ser positiva.'
+        en: 'Do not use Celsius in k_B*T: [[temperatura]] must be entered in kelvin and be positive.'
+    next_step_rules:
+    - id: temperatura_next_step_compare
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[temperatura]], compara el resultado con k_B*T, con la escala del sistema o con la pendiente
+          gráfica relevante.
+        en: After calculating [[temperatura]], compare the result with k_B*T, with system scale, or with the relevant graph
+          slope.
+    physical_intuition:
+    - id: temperatura_intuition_bridge
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura]] muestra una pieza del puente entre microestados accesibles y comportamiento macroscópico.
+        en: Intuitively, [[temperatura]] shows one piece of the bridge between accessible microstates and macroscopic behavior.
+    limiting_cases:
+    - id: temperatura_limiting_case_positive_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En casos límite, revisa qué ocurre con [[temperatura]] cuando T aumenta, Z cambia mucho o la pendiente de F se
+          aproxima a cero.
+        en: In limiting cases, check what happens to [[temperatura]] when T increases, Z changes strongly, or the slope of
+          F approaches zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  constante_boltzmann:
+    enabled: true
+    magnitude_type: constant
+    semantic_role:
+      es: constante de escala energía-temperatura
+      en: energy-temperature scale constant
+    summary_rules:
+    - id: constante_boltzmann_summary_main
+      when: 'true'
+      status: ok
+      text:
+        es: '[[constante_boltzmann]] representa constante de escala energía-temperatura en la conexión entre la función de
+          partición y las magnitudes termodinámicas.'
+        en: '[[constante_boltzmann]] represents the energy-temperature scale constant in the connection between the partition
+          function and thermodynamic quantities.'
+    physical_reading_rules:
+    - id: constante_boltzmann_physical_reading_unit_sign
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[constante_boltzmann]] como k_B, con unidad J/K, dimensión M L2 T-2 Θ-1 y significado ligado al ensamble
+          canónico.
+        en: Read [[constante_boltzmann]] as k_B, with unit J/K, dimension M L2 T-2 Θ-1, and meaning tied to the canonical
+          ensemble.
+    coherence_rules:
+    - id: constante_boltzmann_coherence_dimensions
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que las fórmulas que producen [[constante_boltzmann]] respetan su unidad J/K y no mezclan una cantidad
+          microscópica con una macroscópica.
+        en: Check that formulas producing [[constante_boltzmann]] respect its unit J/K and do not mix a microscopic quantity
+          with a macroscopic one.
+    model_validity_rules:
+    - id: constante_boltzmann_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[constante_boltzmann]] solo si Z>0, T>0 K y el sistema puede describirse por equilibrio canónico.
+        en: Interpret [[constante_boltzmann]] only if Z>0, T>0 K, and the system can be described by canonical equilibrium.
+    graph_rules:
+    - id: constante_boltzmann_graph_coord_connection
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[constante_boltzmann]] con la curva F(T) y con las pendientes que generan entropía
+          o presión cuando corresponda.
+        en: In the Coord graph, relate [[constante_boltzmann]] to the F(T) curve and to the slopes that generate entropy or
+          pressure when applicable.
+    likely_errors:
+    - id: constante_boltzmann_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'No leas [[constante_boltzmann]] como un número aislado: revisa unidad, signo, variable mantenida constante y
+          fórmula usada.'
+        en: 'Do not read [[constante_boltzmann]] as an isolated number: check unit, sign, held-fixed variable, and formula
+          used.'
+    next_step_rules:
+    - id: constante_boltzmann_next_step_compare
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[constante_boltzmann]], compara el resultado con k_B*T, con la escala del sistema o con la
+          pendiente gráfica relevante.
+        en: After calculating [[constante_boltzmann]], compare the result with k_B*T, with system scale, or with the relevant
+          graph slope.
+    physical_intuition:
+    - id: constante_boltzmann_intuition_bridge
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[constante_boltzmann]] muestra una pieza del puente entre microestados accesibles y comportamiento
+          macroscópico.
+        en: Intuitively, [[constante_boltzmann]] shows one piece of the bridge between accessible microstates and macroscopic
+          behavior.
+    limiting_cases:
+    - id: constante_boltzmann_limiting_case_positive_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En casos límite, revisa qué ocurre con [[constante_boltzmann]] cuando T aumenta, Z cambia mucho o la pendiente
+          de F se aproxima a cero.
+        en: In limiting cases, check what happens to [[constante_boltzmann]] when T increases, Z changes strongly, or the
+          slope of F approaches zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_libre_helmholtz:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: potencial termodinámico dominante
+      en: dominant thermodynamic potential
+    summary_rules:
+    - id: energia_libre_helmholtz_summary_main
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_libre_helmholtz]] representa potencial termodinámico dominante en la conexión entre la función de partición
+          y las magnitudes termodinámicas.'
+        en: '[[energia_libre_helmholtz]] represents the dominant thermodynamic potential in the connection between the partition
+          function and thermodynamic quantities.'
+    physical_reading_rules:
+    - id: energia_libre_helmholtz_physical_reading_unit_sign
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[energia_libre_helmholtz]] como F, con unidad J, dimensión M L2 T-2 y significado ligado al ensamble canónico.
+        en: Read [[energia_libre_helmholtz]] as F, with unit J, dimension M L2 T-2, and meaning tied to the canonical ensemble.
+    - id: energia_libre_helmholtz_physical_reading_sign
+      when: 'true'
+      status: info
+      text:
+        es: Un [[energia_libre_helmholtz]] más negativo suele indicar mayor peso estadístico accesible mediante ln(Z).
+        en: A more negative [[energia_libre_helmholtz]] usually indicates greater accessible statistical weight through ln(Z).
+    coherence_rules:
+    - id: energia_libre_helmholtz_coherence_dimensions
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que las fórmulas que producen [[energia_libre_helmholtz]] respetan su unidad J y no mezclan una cantidad
+          microscópica con una macroscópica.
+        en: Check that formulas producing [[energia_libre_helmholtz]] respect its unit J and do not mix a microscopic quantity
+          with a macroscopic one.
+    model_validity_rules:
+    - id: energia_libre_helmholtz_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia_libre_helmholtz]] solo si Z>0, T>0 K y el sistema puede describirse por equilibrio canónico.
+        en: Interpret [[energia_libre_helmholtz]] only if Z>0, T>0 K, and the system can be described by canonical equilibrium.
+    graph_rules:
+    - id: energia_libre_helmholtz_graph_coord_connection
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[energia_libre_helmholtz]] con la curva F(T) y con las pendientes que generan
+          entropía o presión cuando corresponda.
+        en: In the Coord graph, relate [[energia_libre_helmholtz]] to the F(T) curve and to the slopes that generate entropy
+          or pressure when applicable.
+    - id: energia_libre_helmholtz_graph_slope_entropy
+      when: 'true'
+      status: info
+      text:
+        es: En F(T), la pendiente [[pendiente_energia_libre_temperatura]] tiene signo opuesto a [[entropia]].
+        en: In F(T), the slope [[pendiente_energia_libre_temperatura]] has the opposite sign to [[entropia]].
+    likely_errors:
+    - id: energia_libre_helmholtz_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'No leas [[energia_libre_helmholtz]] como un número aislado: revisa unidad, signo, variable mantenida constante
+          y fórmula usada.'
+        en: 'Do not read [[energia_libre_helmholtz]] as an isolated number: check unit, sign, held-fixed variable, and formula
+          used.'
+    next_step_rules:
+    - id: energia_libre_helmholtz_next_step_compare
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[energia_libre_helmholtz]], compara el resultado con k_B*T, con la escala del sistema o con
+          la pendiente gráfica relevante.
+        en: After calculating [[energia_libre_helmholtz]], compare the result with k_B*T, with system scale, or with the relevant
+          graph slope.
+    physical_intuition:
+    - id: energia_libre_helmholtz_intuition_bridge
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_libre_helmholtz]] muestra una pieza del puente entre microestados accesibles y comportamiento
+          macroscópico.
+        en: Intuitively, [[energia_libre_helmholtz]] shows one piece of the bridge between accessible microstates and macroscopic
+          behavior.
+    limiting_cases:
+    - id: energia_libre_helmholtz_limiting_case_positive_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En casos límite, revisa qué ocurre con [[energia_libre_helmholtz]] cuando T aumenta, Z cambia mucho o la pendiente
+          de F se aproxima a cero.
+        en: In limiting cases, check what happens to [[energia_libre_helmholtz]] when T increases, Z changes strongly, or
+          the slope of F approaches zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_interna:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: energía media derivada
+      en: derived mean energy
+    summary_rules:
+    - id: energia_interna_summary_main
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_interna]] representa energía media derivada en la conexión entre la función de partición y las magnitudes
+          termodinámicas.'
+        en: '[[energia_interna]] represents the derived mean energy in the connection between the partition function and thermodynamic
+          quantities.'
+    physical_reading_rules:
+    - id: energia_interna_physical_reading_unit_sign
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[energia_interna]] como U, con unidad J, dimensión M L2 T-2 y significado ligado al ensamble canónico.
+        en: Read [[energia_interna]] as U, with unit J, dimension M L2 T-2, and meaning tied to the canonical ensemble.
+    - id: energia_interna_physical_reading_derivative
+      when: 'true'
+      status: info
+      text:
+        es: '[[energia_interna]] resume la energía media compatible con la sensibilidad térmica de ln(Z).'
+        en: '[[energia_interna]] summarizes the mean energy compatible with the thermal sensitivity of ln(Z).'
+    coherence_rules:
+    - id: energia_interna_coherence_dimensions
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que las fórmulas que producen [[energia_interna]] respetan su unidad J y no mezclan una cantidad microscópica
+          con una macroscópica.
+        en: Check that formulas producing [[energia_interna]] respect its unit J and do not mix a microscopic quantity with
+          a macroscopic one.
+    model_validity_rules:
+    - id: energia_interna_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia_interna]] solo si Z>0, T>0 K y el sistema puede describirse por equilibrio canónico.
+        en: Interpret [[energia_interna]] only if Z>0, T>0 K, and the system can be described by canonical equilibrium.
+    graph_rules:
+    - id: energia_interna_graph_coord_connection
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[energia_interna]] con la curva F(T) y con las pendientes que generan entropía
+          o presión cuando corresponda.
+        en: In the Coord graph, relate [[energia_interna]] to the F(T) curve and to the slopes that generate entropy or pressure
+          when applicable.
+    likely_errors:
+    - id: energia_interna_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'No leas [[energia_interna]] como un número aislado: revisa unidad, signo, variable mantenida constante y fórmula
+          usada.'
+        en: 'Do not read [[energia_interna]] as an isolated number: check unit, sign, held-fixed variable, and formula used.'
+    next_step_rules:
+    - id: energia_interna_next_step_compare
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[energia_interna]], compara el resultado con k_B*T, con la escala del sistema o con la pendiente
+          gráfica relevante.
+        en: After calculating [[energia_interna]], compare the result with k_B*T, with system scale, or with the relevant
+          graph slope.
+    physical_intuition:
+    - id: energia_interna_intuition_bridge
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_interna]] muestra una pieza del puente entre microestados accesibles y comportamiento
+          macroscópico.
+        en: Intuitively, [[energia_interna]] shows one piece of the bridge between accessible microstates and macroscopic
+          behavior.
+    limiting_cases:
+    - id: energia_interna_limiting_case_positive_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En casos límite, revisa qué ocurre con [[energia_interna]] cuando T aumenta, Z cambia mucho o la pendiente de
+          F se aproxima a cero.
+        en: In limiting cases, check what happens to [[energia_interna]] when T increases, Z changes strongly, or the slope
+          of F approaches zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  entropia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: respuesta térmica derivada
+      en: derived thermal response
+    summary_rules:
+    - id: entropia_summary_main
+      when: 'true'
+      status: ok
+      text:
+        es: '[[entropia]] representa respuesta térmica derivada en la conexión entre la función de partición y las magnitudes
+          termodinámicas.'
+        en: '[[entropia]] represents the derived thermal response in the connection between the partition function and thermodynamic
+          quantities.'
+    physical_reading_rules:
+    - id: entropia_physical_reading_unit_sign
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[entropia]] como S, con unidad J/K, dimensión M L2 T-2 Θ-1 y significado ligado al ensamble canónico.
+        en: Read [[entropia]] as S, with unit J/K, dimension M L2 T-2 Θ-1, and meaning tied to the canonical ensemble.
+    coherence_rules:
+    - id: entropia_coherence_dimensions
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que las fórmulas que producen [[entropia]] respetan su unidad J/K y no mezclan una cantidad microscópica
+          con una macroscópica.
+        en: Check that formulas producing [[entropia]] respect its unit J/K and do not mix a microscopic quantity with a macroscopic
+          one.
+    - id: entropia_coherence_slope
+      when: 'true'
+      status: ok
+      text:
+        es: '[[entropia]] debe ser coherente con S=-dF/dT; si F baja al aumentar T, S sale positiva.'
+        en: '[[entropia]] must be consistent with S=-dF/dT; if F decreases as T increases, S is positive.'
+    model_validity_rules:
+    - id: entropia_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[entropia]] solo si Z>0, T>0 K y el sistema puede describirse por equilibrio canónico.
+        en: Interpret [[entropia]] only if Z>0, T>0 K, and the system can be described by canonical equilibrium.
+    graph_rules:
+    - id: entropia_graph_coord_connection
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[entropia]] con la curva F(T) y con las pendientes que generan entropía o presión
+          cuando corresponda.
+        en: In the Coord graph, relate [[entropia]] to the F(T) curve and to the slopes that generate entropy or pressure
+          when applicable.
+    likely_errors:
+    - id: entropia_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'No leas [[entropia]] como un número aislado: revisa unidad, signo, variable mantenida constante y fórmula usada.'
+        en: 'Do not read [[entropia]] as an isolated number: check unit, sign, held-fixed variable, and formula used.'
+    next_step_rules:
+    - id: entropia_next_step_compare
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[entropia]], compara el resultado con k_B*T, con la escala del sistema o con la pendiente
+          gráfica relevante.
+        en: After calculating [[entropia]], compare the result with k_B*T, with system scale, or with the relevant graph slope.
+    physical_intuition:
+    - id: entropia_intuition_bridge
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[entropia]] muestra una pieza del puente entre microestados accesibles y comportamiento macroscópico.
+        en: Intuitively, [[entropia]] shows one piece of the bridge between accessible microstates and macroscopic behavior.
+    limiting_cases:
+    - id: entropia_limiting_case_positive_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En casos límite, revisa qué ocurre con [[entropia]] cuando T aumenta, Z cambia mucho o la pendiente de F se aproxima
+          a cero.
+        en: In limiting cases, check what happens to [[entropia]] when T increases, Z changes strongly, or the slope of F
+          approaches zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  volumen:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro mecánico de estado
+      en: mechanical state parameter
+    summary_rules:
+    - id: volumen_summary_main
+      when: 'true'
+      status: ok
+      text:
+        es: '[[volumen]] representa parámetro mecánico de estado en la conexión entre la función de partición y las magnitudes
+          termodinámicas.'
+        en: '[[volumen]] represents the mechanical state parameter in the connection between the partition function and thermodynamic
+          quantities.'
+    physical_reading_rules:
+    - id: volumen_physical_reading_unit_sign
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[volumen]] como V, con unidad m^3, dimensión L3 y significado ligado al ensamble canónico.
+        en: Read [[volumen]] as V, with unit m^3, dimension L3, and meaning tied to the canonical ensemble.
+    coherence_rules:
+    - id: volumen_coherence_dimensions
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que las fórmulas que producen [[volumen]] respetan su unidad m^3 y no mezclan una cantidad microscópica
+          con una macroscópica.
+        en: Check that formulas producing [[volumen]] respect its unit m^3 and do not mix a microscopic quantity with a macroscopic
+          one.
+    model_validity_rules:
+    - id: volumen_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[volumen]] solo si Z>0, T>0 K y el sistema puede describirse por equilibrio canónico.
+        en: Interpret [[volumen]] only if Z>0, T>0 K, and the system can be described by canonical equilibrium.
+    graph_rules:
+    - id: volumen_graph_coord_connection
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[volumen]] con la curva F(T) y con las pendientes que generan entropía o presión
+          cuando corresponda.
+        en: In the Coord graph, relate [[volumen]] to the F(T) curve and to the slopes that generate entropy or pressure when
+          applicable.
+    likely_errors:
+    - id: volumen_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'No leas [[volumen]] como un número aislado: revisa unidad, signo, variable mantenida constante y fórmula usada.'
+        en: 'Do not read [[volumen]] as an isolated number: check unit, sign, held-fixed variable, and formula used.'
+    next_step_rules:
+    - id: volumen_next_step_compare
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[volumen]], compara el resultado con k_B*T, con la escala del sistema o con la pendiente
+          gráfica relevante.
+        en: After calculating [[volumen]], compare the result with k_B*T, with system scale, or with the relevant graph slope.
+    physical_intuition:
+    - id: volumen_intuition_bridge
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[volumen]] muestra una pieza del puente entre microestados accesibles y comportamiento macroscópico.
+        en: Intuitively, [[volumen]] shows one piece of the bridge between accessible microstates and macroscopic behavior.
+    limiting_cases:
+    - id: volumen_limiting_case_positive_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En casos límite, revisa qué ocurre con [[volumen]] cuando T aumenta, Z cambia mucho o la pendiente de F se aproxima
+          a cero.
+        en: In limiting cases, check what happens to [[volumen]] when T increases, Z changes strongly, or the slope of F approaches
+          zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  presion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: respuesta mecánica derivada
+      en: derived mechanical response
+    summary_rules:
+    - id: presion_summary_main
+      when: 'true'
+      status: ok
+      text:
+        es: '[[presion]] representa respuesta mecánica derivada en la conexión entre la función de partición y las magnitudes
+          termodinámicas.'
+        en: '[[presion]] represents the derived mechanical response in the connection between the partition function and thermodynamic
+          quantities.'
+    physical_reading_rules:
+    - id: presion_physical_reading_unit_sign
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[presion]] como p, con unidad Pa, dimensión M L-1 T-2 y significado ligado al ensamble canónico.
+        en: Read [[presion]] as p, with unit Pa, dimension M L-1 T-2, and meaning tied to the canonical ensemble.
+    coherence_rules:
+    - id: presion_coherence_dimensions
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que las fórmulas que producen [[presion]] respetan su unidad Pa y no mezclan una cantidad microscópica
+          con una macroscópica.
+        en: Check that formulas producing [[presion]] respect its unit Pa and do not mix a microscopic quantity with a macroscopic
+          one.
+    - id: presion_coherence_volume_slope
+      when: 'true'
+      status: ok
+      text:
+        es: '[[presion]] se obtiene como p=-dF/dV; una pendiente dF/dV negativa produce presión positiva.'
+        en: '[[presion]] is obtained as p=-dF/dV; a negative dF/dV slope produces positive pressure.'
+    model_validity_rules:
+    - id: presion_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[presion]] solo si Z>0, T>0 K y el sistema puede describirse por equilibrio canónico.
+        en: Interpret [[presion]] only if Z>0, T>0 K, and the system can be described by canonical equilibrium.
+    graph_rules:
+    - id: presion_graph_coord_connection
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[presion]] con la curva F(T) y con las pendientes que generan entropía o presión
+          cuando corresponda.
+        en: In the Coord graph, relate [[presion]] to the F(T) curve and to the slopes that generate entropy or pressure when
+          applicable.
+    likely_errors:
+    - id: presion_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'No leas [[presion]] como un número aislado: revisa unidad, signo, variable mantenida constante y fórmula usada.'
+        en: 'Do not read [[presion]] as an isolated number: check unit, sign, held-fixed variable, and formula used.'
+    next_step_rules:
+    - id: presion_next_step_compare
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[presion]], compara el resultado con k_B*T, con la escala del sistema o con la pendiente
+          gráfica relevante.
+        en: After calculating [[presion]], compare the result with k_B*T, with system scale, or with the relevant graph slope.
+    physical_intuition:
+    - id: presion_intuition_bridge
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[presion]] muestra una pieza del puente entre microestados accesibles y comportamiento macroscópico.
+        en: Intuitively, [[presion]] shows one piece of the bridge between accessible microstates and macroscopic behavior.
+    limiting_cases:
+    - id: presion_limiting_case_positive_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En casos límite, revisa qué ocurre con [[presion]] cuando T aumenta, Z cambia mucho o la pendiente de F se aproxima
+          a cero.
+        en: In limiting cases, check what happens to [[presion]] when T increases, Z changes strongly, or the slope of F approaches
+          zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  derivada_log_particion_temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: sensibilidad térmica microscópica
+      en: microscopic thermal sensitivity
+    summary_rules:
+    - id: derivada_log_particion_temperatura_summary_main
+      when: 'true'
+      status: ok
+      text:
+        es: '[[derivada_log_particion_temperatura]] representa sensibilidad térmica microscópica en la conexión entre la función
+          de partición y las magnitudes termodinámicas.'
+        en: '[[derivada_log_particion_temperatura]] represents the microscopic thermal sensitivity in the connection between
+          the partition function and thermodynamic quantities.'
+    physical_reading_rules:
+    - id: derivada_log_particion_temperatura_physical_reading_unit_sign
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[derivada_log_particion_temperatura]] como d ln Z/dT, con unidad K^-1, dimensión Θ-1 y significado ligado
+          al ensamble canónico.
+        en: Read [[derivada_log_particion_temperatura]] as d ln Z/dT, with unit K^-1, dimension Θ-1, and meaning tied to the
+          canonical ensemble.
+    coherence_rules:
+    - id: derivada_log_particion_temperatura_coherence_dimensions
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que las fórmulas que producen [[derivada_log_particion_temperatura]] respetan su unidad K^-1 y no mezclan
+          una cantidad microscópica con una macroscópica.
+        en: Check that formulas producing [[derivada_log_particion_temperatura]] respect its unit K^-1 and do not mix a microscopic
+          quantity with a macroscopic one.
+    model_validity_rules:
+    - id: derivada_log_particion_temperatura_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[derivada_log_particion_temperatura]] solo si Z>0, T>0 K y el sistema puede describirse por equilibrio
+          canónico.
+        en: Interpret [[derivada_log_particion_temperatura]] only if Z>0, T>0 K, and the system can be described by canonical
+          equilibrium.
+    graph_rules:
+    - id: derivada_log_particion_temperatura_graph_coord_connection
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[derivada_log_particion_temperatura]] con la curva F(T) y con las pendientes que
+          generan entropía o presión cuando corresponda.
+        en: In the Coord graph, relate [[derivada_log_particion_temperatura]] to the F(T) curve and to the slopes that generate
+          entropy or pressure when applicable.
+    likely_errors:
+    - id: derivada_log_particion_temperatura_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'No leas [[derivada_log_particion_temperatura]] como un número aislado: revisa unidad, signo, variable mantenida
+          constante y fórmula usada.'
+        en: 'Do not read [[derivada_log_particion_temperatura]] as an isolated number: check unit, sign, held-fixed variable,
+          and formula used.'
+    next_step_rules:
+    - id: derivada_log_particion_temperatura_next_step_compare
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[derivada_log_particion_temperatura]], compara el resultado con k_B*T, con la escala del
+          sistema o con la pendiente gráfica relevante.
+        en: After calculating [[derivada_log_particion_temperatura]], compare the result with k_B*T, with system scale, or
+          with the relevant graph slope.
+    physical_intuition:
+    - id: derivada_log_particion_temperatura_intuition_bridge
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[derivada_log_particion_temperatura]] muestra una pieza del puente entre microestados accesibles
+          y comportamiento macroscópico.
+        en: Intuitively, [[derivada_log_particion_temperatura]] shows one piece of the bridge between accessible microstates
+          and macroscopic behavior.
+    limiting_cases:
+    - id: derivada_log_particion_temperatura_limiting_case_positive_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En casos límite, revisa qué ocurre con [[derivada_log_particion_temperatura]] cuando T aumenta, Z cambia mucho
+          o la pendiente de F se aproxima a cero.
+        en: In limiting cases, check what happens to [[derivada_log_particion_temperatura]] when T increases, Z changes strongly,
+          or the slope of F approaches zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  pendiente_energia_libre_temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: pendiente gráfica térmica
+      en: thermal graph slope
+    summary_rules:
+    - id: pendiente_energia_libre_temperatura_summary_main
+      when: 'true'
+      status: ok
+      text:
+        es: '[[pendiente_energia_libre_temperatura]] representa pendiente gráfica térmica en la conexión entre la función
+          de partición y las magnitudes termodinámicas.'
+        en: '[[pendiente_energia_libre_temperatura]] represents the thermal graph slope in the connection between the partition
+          function and thermodynamic quantities.'
+    physical_reading_rules:
+    - id: pendiente_energia_libre_temperatura_physical_reading_unit_sign
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[pendiente_energia_libre_temperatura]] como dF/dT, con unidad J/K, dimensión M L2 T-2 Θ-1 y significado ligado
+          al ensamble canónico.
+        en: Read [[pendiente_energia_libre_temperatura]] as dF/dT, with unit J/K, dimension M L2 T-2 Θ-1, and meaning tied
+          to the canonical ensemble.
+    coherence_rules:
+    - id: pendiente_energia_libre_temperatura_coherence_dimensions
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que las fórmulas que producen [[pendiente_energia_libre_temperatura]] respetan su unidad J/K y no mezclan
+          una cantidad microscópica con una macroscópica.
+        en: Check that formulas producing [[pendiente_energia_libre_temperatura]] respect its unit J/K and do not mix a microscopic
+          quantity with a macroscopic one.
+    model_validity_rules:
+    - id: pendiente_energia_libre_temperatura_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[pendiente_energia_libre_temperatura]] solo si Z>0, T>0 K y el sistema puede describirse por equilibrio
+          canónico.
+        en: Interpret [[pendiente_energia_libre_temperatura]] only if Z>0, T>0 K, and the system can be described by canonical
+          equilibrium.
+    graph_rules:
+    - id: pendiente_energia_libre_temperatura_graph_coord_connection
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[pendiente_energia_libre_temperatura]] con la curva F(T) y con las pendientes
+          que generan entropía o presión cuando corresponda.
+        en: In the Coord graph, relate [[pendiente_energia_libre_temperatura]] to the F(T) curve and to the slopes that generate
+          entropy or pressure when applicable.
+    likely_errors:
+    - id: pendiente_energia_libre_temperatura_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'No leas [[pendiente_energia_libre_temperatura]] como un número aislado: revisa unidad, signo, variable mantenida
+          constante y fórmula usada.'
+        en: 'Do not read [[pendiente_energia_libre_temperatura]] as an isolated number: check unit, sign, held-fixed variable,
+          and formula used.'
+    next_step_rules:
+    - id: pendiente_energia_libre_temperatura_next_step_compare
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[pendiente_energia_libre_temperatura]], compara el resultado con k_B*T, con la escala del
+          sistema o con la pendiente gráfica relevante.
+        en: After calculating [[pendiente_energia_libre_temperatura]], compare the result with k_B*T, with system scale, or
+          with the relevant graph slope.
+    physical_intuition:
+    - id: pendiente_energia_libre_temperatura_intuition_bridge
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[pendiente_energia_libre_temperatura]] muestra una pieza del puente entre microestados accesibles
+          y comportamiento macroscópico.
+        en: Intuitively, [[pendiente_energia_libre_temperatura]] shows one piece of the bridge between accessible microstates
+          and macroscopic behavior.
+    limiting_cases:
+    - id: pendiente_energia_libre_temperatura_limiting_case_positive_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En casos límite, revisa qué ocurre con [[pendiente_energia_libre_temperatura]] cuando T aumenta, Z cambia mucho
+          o la pendiente de F se aproxima a cero.
+        en: In limiting cases, check what happens to [[pendiente_energia_libre_temperatura]] when T increases, Z changes strongly,
+          or the slope of F approaches zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  pendiente_energia_libre_volumen:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: pendiente gráfica mecánica
+      en: mechanical graph slope
+    summary_rules:
+    - id: pendiente_energia_libre_volumen_summary_main
+      when: 'true'
+      status: ok
+      text:
+        es: '[[pendiente_energia_libre_volumen]] representa pendiente gráfica mecánica en la conexión entre la función de
+          partición y las magnitudes termodinámicas.'
+        en: '[[pendiente_energia_libre_volumen]] represents the mechanical graph slope in the connection between the partition
+          function and thermodynamic quantities.'
+    physical_reading_rules:
+    - id: pendiente_energia_libre_volumen_physical_reading_unit_sign
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[pendiente_energia_libre_volumen]] como dF/dV, con unidad Pa, dimensión M L-1 T-2 y significado ligado al
+          ensamble canónico.
+        en: Read [[pendiente_energia_libre_volumen]] as dF/dV, with unit Pa, dimension M L-1 T-2, and meaning tied to the
+          canonical ensemble.
+    coherence_rules:
+    - id: pendiente_energia_libre_volumen_coherence_dimensions
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que las fórmulas que producen [[pendiente_energia_libre_volumen]] respetan su unidad Pa y no mezclan
+          una cantidad microscópica con una macroscópica.
+        en: Check that formulas producing [[pendiente_energia_libre_volumen]] respect its unit Pa and do not mix a microscopic
+          quantity with a macroscopic one.
+    model_validity_rules:
+    - id: pendiente_energia_libre_volumen_model_validity_canonical
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[pendiente_energia_libre_volumen]] solo si Z>0, T>0 K y el sistema puede describirse por equilibrio
+          canónico.
+        en: Interpret [[pendiente_energia_libre_volumen]] only if Z>0, T>0 K, and the system can be described by canonical
+          equilibrium.
+    graph_rules:
+    - id: pendiente_energia_libre_volumen_graph_coord_connection
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, relaciona [[pendiente_energia_libre_volumen]] con la curva F(T) y con las pendientes que
+          generan entropía o presión cuando corresponda.
+        en: In the Coord graph, relate [[pendiente_energia_libre_volumen]] to the F(T) curve and to the slopes that generate
+          entropy or pressure when applicable.
+    likely_errors:
+    - id: pendiente_energia_libre_volumen_likely_error_isolated_number
+      when: 'true'
+      status: warning
+      text:
+        es: 'No leas [[pendiente_energia_libre_volumen]] como un número aislado: revisa unidad, signo, variable mantenida
+          constante y fórmula usada.'
+        en: 'Do not read [[pendiente_energia_libre_volumen]] as an isolated number: check unit, sign, held-fixed variable,
+          and formula used.'
+    next_step_rules:
+    - id: pendiente_energia_libre_volumen_next_step_compare
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[pendiente_energia_libre_volumen]], compara el resultado con k_B*T, con la escala del sistema
+          o con la pendiente gráfica relevante.
+        en: After calculating [[pendiente_energia_libre_volumen]], compare the result with k_B*T, with system scale, or with
+          the relevant graph slope.
+    physical_intuition:
+    - id: pendiente_energia_libre_volumen_intuition_bridge
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[pendiente_energia_libre_volumen]] muestra una pieza del puente entre microestados accesibles
+          y comportamiento macroscópico.
+        en: Intuitively, [[pendiente_energia_libre_volumen]] shows one piece of the bridge between accessible microstates
+          and macroscopic behavior.
+    limiting_cases:
+    - id: pendiente_energia_libre_volumen_limiting_case_positive_temperature
+      when: 'true'
+      status: info
+      text:
+        es: En casos límite, revisa qué ocurre con [[pendiente_energia_libre_volumen]] cuando T aumenta, Z cambia mucho o
+          la pendiente de F se aproxima a cero.
+        en: In limiting cases, check what happens to [[pendiente_energia_libre_volumen]] when T increases, Z changes strongly,
+          or the slope of F approaches zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

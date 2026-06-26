@@ -1,0 +1,71 @@
+const n=`id: plano-inclinado
+nombre:
+  es: Plano inclinado
+  en: Inclined Plane
+area: fisica-clasica
+bloque: mecanica
+subbloque: aplicaciones
+parent_id: maquinas-simples
+ruta_relativa: fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado
+orden: 210513
+type: leaf
+niveles:
+  es: [ ESO ]
+  en: [ Secondary ]
+icon: 📏
+descripcion: "Análisis vectorial del plano inclinado: ventaja mecánica, componentes de fuerza, rozamiento y balances energéticos en máquinas simples."
+description_en: "Vectorial analysis of the inclined plane: mechanical advantage, force components, friction, and energy balances in simple machines."
+tags:
+  es:
+  - planos inclinados
+  - máquinas simples
+  - ventaja mecánica
+  - rozamiento
+  - estática
+  - dinámica
+  en:
+  - inclined planes
+  - simple machines
+  - mechanical advantage
+  - friction
+  - statics
+  - dynamics
+prerequisitos:
+- fisica-clasica/mecanica/dinamica/fuerzas/normal/normal-en-planos
+- fisica-clasica/mecanica/dinamica/fuerzas/rozamiento/rozamiento-dinamico
+pregunta_fisica_central:
+  es: ¿Cómo influyen la ventaja mecánica y el rozamiento en la fuerza necesaria para elevar una carga en una rampa de plano inclinado?
+  en: How do mechanical advantage and friction influence the force required to lift a load on an inclined plane ramp?
+graficos:
+- Dcl
+- Svg
+representacion_dominante: Dcl
+magnitud_dominante: ventaja mecánica
+physical_role:
+  es: aplicacion mecanica
+  en: mechanical application
+dificultad: 2
+tiempo_estimado_min: 50
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Svg
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

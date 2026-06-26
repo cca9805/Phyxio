@@ -1,0 +1,457 @@
+version: 5.0.0
+id: red-electrica
+leaf_id: red-electrica
+nombre:
+  es: Red electrica
+  en: Household Electrical Network
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: electricidad-domestica
+  parent_id: electricidad-domestica
+  ruta_relativa: fisica-clasica/electromagnetismo/electricidad-domestica/red-electrica
+  orden: 298100
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: false
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: false
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: false
+  preferred_type: none
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - corriente_total
+  - potencia_total
+  - margen_capacidad
+  - frecuencia_contexto
+  magnitudes:
+  - tension_de_red
+  - frecuencia_de_red
+  - corriente_total_de_linea
+  - potencia_total_conectada
+  - corriente_maxima_del_circuito
+  - margen_uso
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: false
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: false
+  type: none
+  channels: []
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: false
+  primary_variable: corriente_total_de_linea
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  corriente_total_de_linea:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de corriente_total_de_linea
+      en: Result of corriente_total_de_linea
+    summary_rules:
+    - id: summary_i_tot
+      when: 'true'
+      status: info
+      text:
+        es: La corriente total indica cuántos amperios debe transportar el conductor.
+        en: The total current indicates how many amperes the conductor must carry.
+    physical_reading_rules:
+    - id: physical_i_tot
+      when: 'true'
+      status: info
+      text:
+        es: Cada receptor en paralelo aporta su corriente a la suma total.
+        en: Each parallel receptor contributes its current to the total sum.
+    coherence_rules:
+    - id: coherence_i_tot
+      when: 'true'
+      status: info
+      text:
+        es: La dimensión es consistente con potencia dividida por tensión.
+        en: The dimension is consistent with power divided by voltage.
+    model_validity_rules:
+    - id: validity_i_tot
+      when: 'true'
+      status: info
+      text:
+        es: Válido para receptores resistivos con impedancia de línea despreciable.
+        en: Valid for resistive loads with negligible line impedance.
+    graph_rules:
+    - id: graph_i_tot
+      when: 'true'
+      status: info
+      text:
+        es: El eje X representa la corriente total del circuito.
+        en: The X axis represents the total circuit current.
+    likely_errors:
+    - id: error_i_tot
+      when: 'true'
+      status: warning
+      text:
+        es: No confundir corriente total con corriente de un solo receptor.
+        en: Do not confuse total current with current of a single receptor.
+    next_step_rules:
+    - id: next_i_tot
+      when: 'true'
+      status: info
+      text:
+        es: Comparar con el calibre del magnetotérmico para verificar seguridad.
+        en: Compare with the circuit breaker rating to verify safety.
+    physical_intuition:
+    - id: corriente_total_de_linea_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[corriente_total_de_linea]] describe el estado dinámico.
+        en: Intuitively, [[corriente_total_de_linea]] describes the dynamic state.
+    limiting_cases:
+    - id: corriente_total_de_linea_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[corriente_total_de_linea]].
+        en: Check limiting cases of [[corriente_total_de_linea]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  potencia_total_conectada:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de potencia_total_conectada
+      en: Result of potencia_total_conectada
+    summary_rules:
+    - id: summary_p_tot
+      when: 'true'
+      status: info
+      text:
+        es: La potencia total cuantifica la energía suministrada por unidad de tiempo.
+        en: The total power quantifies the energy supplied per unit time.
+    physical_reading_rules:
+    - id: physical_p_tot
+      when: 'true'
+      status: info
+      text:
+        es: La suma de potencias individuales es la potencia total consumida.
+        en: The sum of individual powers is the total power consumed.
+    coherence_rules:
+    - id: coherence_p_tot
+      when: 'true'
+      status: info
+      text:
+        es: El producto de tensión por corriente da potencia correctamente.
+        en: The product of voltage and current gives power correctly.
+    model_validity_rules:
+    - id: validity_p_tot
+      when: 'true'
+      status: info
+      text:
+        es: Válido cuando todos los receptores comparten la misma tensión.
+        en: Valid when all receptors share the same voltage.
+    graph_rules:
+    - id: graph_p_tot
+      when: 'true'
+      status: info
+      text:
+        es: La potencia se muestra como variable derivada en el gráfico.
+        en: Power is shown as a derived variable in the graph.
+    likely_errors:
+    - id: error_p_tot
+      when: 'true'
+      status: warning
+      text:
+        es: No sumar potencias sin verificar que todos operen simultáneamente.
+        en: Do not sum powers without verifying all operate simultaneously.
+    next_step_rules:
+    - id: next_p_tot
+      when: 'true'
+      status: info
+      text:
+        es: Verificar que la instalación puede soportar la potencia total.
+        en: Verify the installation can support the total power.
+    physical_intuition:
+    - id: potencia_total_conectada_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[potencia_total_conectada]] describe el estado dinámico.
+        en: Intuitively, [[potencia_total_conectada]] describes the dynamic state.
+    limiting_cases:
+    - id: potencia_total_conectada_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[potencia_total_conectada]].
+        en: Check limiting cases of [[potencia_total_conectada]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  margen_uso:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de margen_uso
+      en: Result of margen_uso
+    summary_rules:
+    - id: summary_margen
+      when: 'true'
+      status: info
+      text:
+        es: El margen de uso indica la fracción de capacidad utilizada.
+        en: The usage margin indicates the fraction of capacity used.
+    physical_reading_rules:
+    - id: physical_margen
+      when: 'true'
+      status: info
+      text:
+        es: Un valor cercano a 1 indica que el circuito está al límite.
+        en: A value close to 1 indicates the circuit is at the limit.
+    coherence_rules:
+    - id: coherence_margen
+      when: 'true'
+      status: info
+      text:
+        es: La razón entre corriente y límite es adimensional correctamente.
+        en: The ratio between current and limit is correctly dimensionless.
+    model_validity_rules:
+    - id: validity_margen
+      when: 'true'
+      status: info
+      text:
+        es: El margen es válido cuando el calibre es el real del magnetotérmico.
+        en: The margin is valid when the rating is the actual breaker rating.
+    graph_rules:
+    - id: graph_margen
+      when: 'true'
+      status: info
+      text:
+        es: El margen se representa en el eje Y del gráfico.
+        en: The margin is represented on the Y axis of the graph.
+    likely_errors:
+    - id: error_margen
+      when: 'true'
+      status: warning
+      text:
+        es: No ignorar los picos de arranque que pueden superar temporalmente el margen.
+        en: Do not ignore starting peaks that may temporarily exceed the margin.
+    next_step_rules:
+    - id: next_margen
+      when: 'true'
+      status: info
+      text:
+        es: Mantener margen suficiente para absorber picos de arranque.
+        en: Keep sufficient margin to absorb starting peaks.
+    physical_intuition:
+    - id: margen_uso_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[margen_uso]] describe el estado dinámico.
+        en: Intuitively, [[margen_uso]] describes the dynamic state.
+    limiting_cases:
+    - id: margen_uso_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[margen_uso]].
+        en: Check limiting cases of [[margen_uso]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  frecuencia_de_red:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de frecuencia_de_red
+      en: Result of frecuencia_de_red
+    summary_rules:
+    - id: summary_f
+      when: 'true'
+      status: info
+      text:
+        es: La frecuencia de red europea es 50 Hz, característica del suministro alterno.
+        en: The European network frequency is 50 Hz, a characteristic of AC supply.
+    physical_reading_rules:
+    - id: physical_f
+      when: 'true'
+      status: info
+      text:
+        es: La frecuencia caracteriza el tipo de corriente pero no afecta cálculos resistivos.
+        en: The frequency characterizes the current type but does not affect resistive calculations.
+    coherence_rules:
+    - id: coherence_f
+      when: 'true'
+      status: info
+      text:
+        es: La dimensión temporal inversa es consistente con el periodo de 20 ms.
+        en: The inverse time dimension is consistent with a 20 ms period.
+    model_validity_rules:
+    - id: validity_f
+      when: 'true'
+      status: info
+      text:
+        es: Válido para instalaciones europeas estándar. No aplica en redes de 60 Hz.
+        en: Valid for standard European installations. Does not apply to 60 Hz networks.
+    graph_rules:
+    - id: graph_f
+      when: 'true'
+      status: info
+      text:
+        es: La frecuencia aparece como parámetro contextual en la descripción del sistema.
+        en: Frequency appears as a contextual parameter in the system description.
+    likely_errors:
+    - id: error_f
+      when: 'true'
+      status: warning
+      text:
+        es: No confundir frecuencia de red con frecuencia de operación de receptores específicos.
+        en: Do not confuse network frequency with operating frequency of specific receptors.
+    next_step_rules:
+    - id: next_f
+      when: 'true'
+      status: info
+      text:
+        es: Verificar compatibilidad de receptores importados con frecuencia local.
+        en: Verify compatibility of imported receptors with local frequency.
+    physical_intuition:
+    - id: frecuencia_de_red_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[frecuencia_de_red]] describe el estado dinámico.
+        en: Intuitively, [[frecuencia_de_red]] describes the dynamic state.
+    limiting_cases:
+    - id: frecuencia_de_red_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[frecuencia_de_red]].
+        en: Check limiting cases of [[frecuencia_de_red]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

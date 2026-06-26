@@ -1,0 +1,73 @@
+# Applications
+
+## 1. Vibracion de estructuras
+
+Dominant variable: [[omega]].
+
+Validity limit: desplazamientos pequenos respecto al equilibrio.
+
+En puentes y edificios, las frecuencias normales indican que excitaciones son peligrosas. El modo [[phi]] muestra la forma de deformacion asociada. The application ensena que no basta saber cuanto vibra un punto; hay que saber que patron colectivo se activa.
+
+The professional question is which deformation pattern concentrates risk. The criterion joins frequency and modal shape so local displacements are not read in isolation.
+
+## 2. Moleculas y espectros
+
+Dominant variable: [[phi]].
+
+Validity limit: enlaces cerca de equilibrio y respuesta aproximadamente armonica.
+
+Las moleculas vibran mediante modos colectivos que pueden asociarse a senales espectroscopicas. La matriz [[K]] representa curvaturas del potencial y [[M]] pondera masas atomicas. The student conecta autovalores con informacion fisica medible.
+
+The professional question is which molecular mode produces an observable signal. The criterion connects masses, curvatures, and spectrum in an interpretable way.
+
+## 3. Instrumentos musicales
+
+Dominant variable: [[omega]].
+
+Validity limit: amplitudes moderadas y material casi lineal.
+
+Una cuerda, membrana o caja resonante produce tonos por modos normales. The application muestra por que cambiar masa, tension efectiva o rigidez desplaza frecuencias. El objetivo didactico es separar tono, forma modal y amplitud.
+
+The professional question is which vibrational shape creates the tone. The criterion separates frequency, amplitude, and instrument geometry.
+
+## 4. Suspension de vehiculos
+
+Dominant variable: [[A]].
+
+Validity limit: oscilaciones pequenas alrededor de la posicion de trabajo.
+
+Un vehiculo puede tener modos de cabeceo, balanceo y rebote. La amplitud modal indica que modo domina bajo una excitacion concreta. Esta lectura ayuda a disenar sistemas que evitan resonancias incomodas o peligrosas.
+
+The professional question is which mode dominates comfort or safety. The criterion turns modal amplitude into a design decision.
+
+## 5. Robots y estabilidad
+
+Dominant variable: [[eta]].
+
+Validity limit: linealizacion local alrededor de una postura estable.
+
+En robots articulados, los modos normales permiten estudiar pequenas desviaciones de equilibrio. Si el modo crece o la frecuencia no es real, la postura no es estable bajo el modelo lineal. The application conecta mecanica analitica con control y diseno.
+
+The professional question is whether the posture returns to equilibrium or amplifies perturbations. The criterion uses modes to read local stability.
+
+
+## Cross-application reading
+
+Across these applications, normal modes act as a language of stability and collective response. Frequency is not interpreted alone: it must be tied to a modal shape, a small scale, and an equilibrium around which linearization is meaningful. In structures, molecules, instruments, vehicles, or robots, the common question is which pattern is activated and why that activation matters. For students, the benefit is moving from many coupled coordinates to intelligible collective motions. For teachers, the benefit is a clear sequence: equilibrium, matrices, eigenvalues, modes, amplitudes, and validity limit. When that sequence holds, the application teaches real vibration reading, not only matrix algebra.
+
+
+## Transfer criterion
+
+Transfer to new problems requires recognizing equilibrium and the scale where linearization is honest. First, define displacement from equilibrium and check that it is small. Then build the matrices representing inertia and stiffness, solve the modal problem, and interpret each frequency together with its shape. Finally, decide which modes participate according to initial conditions or external excitation. This criterion works in structures, molecules, instruments, vehicles, and robots. The advanced application does not end with eigenvalues, but with reading collective patterns and validity limits.
+
+
+## Advanced application closure
+
+Advanced use of normal modes must end each application with a decision about stability and collective response. It is not enough to compute frequencies; one must explain which modal shape vibrates, which amplitude participates, which scale keeps linearization valid, and what would happen if excitation grew. In real problems, this separates a table of eigenvalues from mechanical interpretation. A student can transfer the criterion to buildings, molecules, instruments, vehicles, or robots by preserving the common chain: equilibrium, small displacement, matrices, eigenvalues, modes, and superposition. That chain turns calculation into physical reading of complex systems.
+
+## Advanced Modeling Criterion
+
+Small-oscillation analysis is used when a real system can be understood as a controlled deviation around an equilibrium configuration. The central physical decision is to check that the amplitude of [[eta]] is small enough for linear terms to dominate and that the matrices [[M]] and [[K]] faithfully represent local inertia and stiffness. In that regime, normal modes are not just a mathematical technique: they identify collective patterns that the system can sustain with a definite frequency and a stable spatial shape.
+
+This criterion appears in structures, molecules, crystal lattices, musical instruments, machine vibration, and the stability of mechanical configurations. If a frequency [[omega]] is real and positive, the equilibrium can respond through organized oscillation; if a zero or imaginary frequency appears, the model points to an unconstrained freedom or an instability. That is why the leaf must teach students to read the modal spectrum as a physical diagnosis rather than as a list of roots. The advanced objective is to recognize which parts of a system move together, which couplings transmit energy, and which conditions make a linear approximation unreliable.
+

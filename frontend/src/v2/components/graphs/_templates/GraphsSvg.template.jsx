@@ -1,25 +1,22 @@
-import React from "react";
+import { createSvgGraph } from "../graphFactories.jsx";
+import profile from "@/v2/components/SVG/profiles/poleasSimples.svg.profile.jsx";
+import {
+  SVG_GRAPH_CONTRACT_TEMPLATE_V1,
+  GRAPH_COHERENCE_PROTOCOL_V1,
+} from "./graphContractTemplates.js";
 
-export default function GraphsSvgTemplate({ title = "Esquema (Svg)", params = {} }) {
-  return (
-    <div className="rounded-2xl border p-4">
-      <div className="font-semibold">{title}</div>
-      <div className="text-sm opacity-70 mt-1">
-        Svg: esquema geométrico/físico para comprensión
-      </div>
+// Plantilla operativa:
+// 1. Sustituye el import de `profile` por el profile real del leaf.
+// 2. Ajusta `displayName` al nombre final del wrapper.
+// 3. Si el leaf necesita mutar meta/opciones del profile, usa `mapProfile`.
+// 4. Rellena la ficha SVG en `SVG_GRAPH_CONTRACT_TEMPLATE_V1` y verifica cada bloque del
+//    protocolo `GRAPH_COHERENCE_PROTOCOL_V1` antes de dar el grafico por cerrado.
 
-      <div className="mt-3 rounded-xl bg-black/5 p-3">
-        <svg viewBox="0 0 300 160" className="w-full h-auto">
-          <rect x="10" y="10" width="280" height="140" rx="12" fill="none" stroke="currentColor" opacity="0.3" />
-          <text x="150" y="85" textAnchor="middle" fontSize="12" fill="currentColor" opacity="0.6">
-            SVG placeholder
-          </text>
-        </svg>
-      </div>
+export const graphContract = {
+  ...SVG_GRAPH_CONTRACT_TEMPLATE_V1,
+};
 
-      <pre className="text-xs mt-3 overflow-auto rounded-xl bg-black/5 p-3">
-        {JSON.stringify(params, null, 2)}
-      </pre>
-    </div>
-  );
-}
+export default createSvgGraph({
+  displayName: "GraphsSvgTemplate",
+  profile,
+});

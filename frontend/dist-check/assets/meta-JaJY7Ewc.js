@@ -1,0 +1,73 @@
+const e=`version: 5
+id: flujo-turbulento
+nombre:
+  es: Flujo turbulento
+  en: Turbulent Flow
+titulo:
+  es: Flujo turbulento
+  en: Turbulent Flow
+type: leaf
+area: fisica-clasica
+bloque: mecanica
+subbloque: fluidos
+orden: 218430
+parent_id: viscosidad-y-regimenes
+niveles:
+  es: [UNIVERSIDAD, EXTRACURRICULAR]
+  en: [University, Extracurricular]
+icon: 💧
+ruta_relativa: fisica-clasica/mecanica/fluidos/viscosidad-y-regimenes/flujo-turbulento
+descripcion: Estructura y escalas del flujo turbulento.
+description_en: Structure and scales of turbulent flow.
+descripcion_corta: Estructura y escalas del flujo turbulento.
+dificultad: 2
+tiempo_estimado_min: 55
+magnitud_dominante: Re
+representacion_dominante: Coord
+physical_role:
+  es: concepto físico
+  en: physical concept
+pregunta_fisica_central:
+  es: "¿Cómo se disipa la energía en las escalas de Kolmogorov?"
+  en: "How is energy dissipated at Kolmogorov scales?"
+prerequisitos:
+- fisica-clasica/mecanica/fluidos/viscosidad-y-regimenes/viscosidad
+- fisica-clasica/mecanica/fluidos/viscosidad-y-regimenes/numero-de-reynolds
+tags:
+  es: [fluidos, viscosidad-y-regimenes, flujo-turbulento]
+  en: [fluids, viscosity-and-regimes, turbulent-flow]
+graficos:
+- Coord
+- Svg
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    tab_label:
+      es: Análisis
+      en: Analysis
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    show_summary: true
+    show_physical_reading: true
+    show_coherence: true
+    show_model_validity: true
+    show_graph_reading: true
+    show_likely_errors: true
+    show_next_step: true
+  mini_graph:
+    enabled: true
+    preferred_type: Svg
+  output_policy:
+    show_summary_first: true
+    show_warnings: true
+    show_likely_errors: true
+    max_inline_messages: 3
+    show_status_icons: true
+    allow_collapsible_sections: true
+  dependencies:
+    requires_magnitudes: true
+    requires_formulas: true
+    supports_graph_binding: true
+`;export{e as default};

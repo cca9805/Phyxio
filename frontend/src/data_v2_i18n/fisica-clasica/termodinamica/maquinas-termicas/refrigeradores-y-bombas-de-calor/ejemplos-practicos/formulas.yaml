@@ -1,0 +1,293 @@
+- id: cop_real_refrigeracion
+  title:
+    es: COP real de refrigeracion
+    en: Real refrigeration COP
+  equation: "COP_real = Q_C / W_comp"
+  latex: "COP_{real} = \\frac{Q_C}{W_{comp}}"
+  rearrangements:
+    - target: COP_real
+      equation: "COP_real = Q_C / W_comp"
+      latex: "COP_{real} = \\frac{Q_C}{W_{comp}}"
+    - target: Q_C
+      equation: "Q_C = COP_real * W_comp"
+      latex: "Q_C = COP_{real} \\cdot W_{comp}"
+    - target: W_comp
+      equation: "W_comp = Q_C / COP_real"
+      latex: "W_{comp} = \\frac{Q_C}{COP_{real}}"
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: "Define la eficiencia real del refrigerador como el cociente entre la capacidad de refrigeración medida y la potencia eléctrica consumida"
+    en: "Defines the real efficiency of the refrigerator as the ratio between the measured cooling capacity and the consumed electrical power"
+  constraints:
+    - "W_comp > 0"
+    - "Q_C > 0"
+  validity:
+    es: "Válida para cualquier sistema de refrigeración en operación estacionaria"
+    en: "Valid for any refrigeration system in steady-state operation"
+  dimension_check: "[W]/[W] = adimensional"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  interpretation_tags:
+    - efficiency
+    - practical
+  result_semantics:
+    es: "Cuántas unidades de calor se extraen del foco frío por cada unidad de potencia eléctrica consumida en condiciones reales"
+    en: "How many units of heat are extracted from the cold reservoir per unit of electrical power consumed under real conditions"
+  domain_checks:
+    - "COP_real > 0"
+    - "COP_real < COP_Carnot"
+  coherence_checks:
+    - "COP_real <= COP_Carnot"
+    - "Q_C = COP_real * W_comp"
+  graph_implications:
+    - "En el diagrama COP_real vs T_C, la curva es creciente y siempre por debajo de la curva de Carnot"
+  pedagogical_triggers:
+    - "Alumno confunde COP real con COP de Carnot"
+    - "Alumno olvida incluir pérdidas del compresor"
+
+- id: cop_real_bomba_calor
+  title:
+    es: COP real de bomba de calor
+    en: Real heat pump COP
+  equation: "COP_real = Q_H / W_comp"
+  latex: "COP_{real} = \\frac{Q_H}{W_{comp}}"
+  rearrangements:
+    - target: COP_real
+      equation: "COP_real = Q_H / W_comp"
+      latex: "COP_{real} = \\frac{Q_H}{W_{comp}}"
+    - target: Q_H
+      equation: "Q_H = COP_real * W_comp"
+      latex: "Q_H = COP_{real} \\cdot W_{comp}"
+    - target: W_comp
+      equation: "W_comp = Q_H / COP_real"
+      latex: "W_{comp} = \\frac{Q_H}{COP_{real}}"
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: "Define la eficiencia real de la bomba de calor como el cociente entre la capacidad de calefacción entregada y la potencia eléctrica consumida"
+    en: "Defines the real efficiency of the heat pump as the ratio between the delivered heating capacity and the consumed electrical power"
+  constraints:
+    - "W_comp > 0"
+    - "Q_H > 0"
+  validity:
+    es: "Válida para cualquier sistema de bomba de calor en operación estacionaria"
+    en: "Valid for any heat pump system in steady-state operation"
+  dimension_check: "[W]/[W] = adimensional"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  interpretation_tags:
+    - efficiency
+    - practical
+  result_semantics:
+    es: "Cuántas unidades de calor se entregan al foco caliente por cada unidad de potencia eléctrica consumida en condiciones reales"
+    en: "How many units of heat are delivered to the hot reservoir per unit of electrical power consumed under real conditions"
+  domain_checks:
+    - "COP_real > 1"
+  coherence_checks:
+    - "Q_H = Q_C + W_comp"
+    - "COP_real(bomba) = COP_real(ref) + 1 solo en Carnot"
+  graph_implications:
+    - "La curva de COP de bomba de calor real es paralela a la de refrigeración pero desplazada hacia arriba"
+  pedagogical_triggers:
+    - "Alumno confunde COP de refrigeración con COP de bomba de calor"
+    - "Alumno no suma W_comp al calcular Q_H"
+
+- id: fraccion_carnot
+  title:
+    es: Fraccion de Carnot
+    en: Carnot fraction
+  equation: "eta_Carnot = COP_real / COP_Carnot * 100"
+  latex: "\\eta_{Carnot} = \\frac{COP_{real}}{COP_{Carnot}} \\times 100\\%"
+  rearrangements:
+    - target: eta_Carnot
+      equation: "eta_Carnot = COP_real / COP_Carnot * 100"
+      latex: "\\eta_{Carnot} = \\frac{COP_{real}}{COP_{Carnot}} \\times 100\\%"
+    - target: COP_real
+      equation: "COP_real = eta_Carnot * COP_Carnot / 100"
+      latex: "COP_{real} = \\frac{\\eta_{Carnot} \\cdot COP_{Carnot}}{100}"
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: "Cuantifica qué fracción del límite teórico de Carnot alcanza el sistema real, expresada como porcentaje"
+    en: "Quantifies what fraction of the Carnot theoretical limit the real system achieves, expressed as a percentage"
+  constraints:
+    - "COP_Carnot > 0"
+    - "0 < eta_Carnot < 100"
+  validity:
+    es: "Válida para cualquier sistema de refrigeración o bomba de calor con COP de Carnot definido"
+    en: "Valid for any refrigeration or heat pump system with a defined Carnot COP"
+  dimension_check: "adimensional / adimensional = adimensional"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  interpretation_tags:
+    - efficiency
+    - comparison
+  result_semantics:
+    es: "Porcentaje del límite termodinámico que alcanza el sistema. Valores típicos: 30 a 60 %"
+    en: "Percentage of the thermodynamic limit reached by the system. Typical values: 30 to 60 %"
+  domain_checks:
+    - "eta_Carnot > 0"
+    - "eta_Carnot < 100"
+  coherence_checks:
+    - "Si eta_Carnot > 65 %, verificar datos de entrada"
+  graph_implications:
+    - "En el diagrama, la fracción de Carnot indica la distancia vertical entre la curva real y la curva de Carnot"
+  pedagogical_triggers:
+    - "Alumno presenta COP real igual al de Carnot"
+    - "Alumno no entiende qué significa la fracción de Carnot"
+
+- id: balance_energetico_practico
+  title:
+    es: Balance energetico practico
+    en: Practical energy balance
+  equation: "Q_H = Q_C + W_comp"
+  latex: "Q_H = Q_C + W_{comp}"
+  rearrangements:
+    - target: Q_H
+      equation: "Q_H = Q_C + W_comp"
+      latex: "Q_H = Q_C + W_{comp}"
+    - target: Q_C
+      equation: "Q_C = Q_H - W_comp"
+      latex: "Q_C = Q_H - W_{comp}"
+    - target: W_comp
+      equation: "W_comp = Q_H - Q_C"
+      latex: "W_{comp} = Q_H - Q_C"
+  category: fundamental
+  relation_type: conservation_law
+  physical_meaning:
+    es: "El calor entregado al foco caliente es la suma del calor extraído del foco frío y el trabajo del compresor, por conservación de energía"
+    en: "The heat delivered to the hot reservoir is the sum of the heat extracted from the cold reservoir and the compressor work, by energy conservation"
+  constraints:
+    - "Q_H > Q_C"
+    - "W_comp > 0"
+  validity:
+    es: "Válida para cualquier sistema de refrigeración o bomba de calor en estado estacionario"
+    en: "Valid for any refrigeration or heat pump system in steady state"
+  dimension_check: "[W] = [W] + [W]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  interpretation_tags:
+    - conservation
+    - energy_balance
+  result_semantics:
+    es: "El foco caliente siempre recibe más calor del que se extrae del foco frío, la diferencia es el trabajo del compresor"
+    en: "The hot reservoir always receives more heat than is extracted from the cold reservoir, the difference is the compressor work"
+  domain_checks:
+    - "Q_H > Q_C"
+  coherence_checks:
+    - "Q_H - Q_C = W_comp"
+  graph_implications:
+    - "La distancia vertical entre Q_H y Q_C en un diagrama de barras es exactamente W_comp"
+  pedagogical_triggers:
+    - "Alumno iguala Q_H con Q_C olvidando W_comp"
+    - "Alumno no comprende de dónde viene la energía extra"
+
+- id: cop_carnot_referencia
+  title:
+    es: COP de Carnot de referencia
+    en: Reference Carnot COP
+  equation: "COP_Carnot = T_C / (T_H - T_C)"
+  latex: "COP_{Carnot} = \\frac{T_C}{T_H - T_C}"
+  rearrangements:
+    - target: COP_Carnot
+      equation: "COP_Carnot = T_C / (T_H - T_C)"
+      latex: "COP_{Carnot} = \\frac{T_C}{T_H - T_C}"
+    - target: T_C
+      equation: "T_C = COP_Carnot * T_H / (COP_Carnot + 1)"
+      latex: "T_C = \\frac{COP_{Carnot} \\cdot T_H}{COP_{Carnot} + 1}"
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: "Establece el COP máximo teórico de refrigeración entre dos focos a temperaturas absolutas T_H y T_C"
+    en: "Establishes the maximum theoretical refrigeration COP between two reservoirs at absolute temperatures T_H and T_C"
+  constraints:
+    - "T_H > T_C > 0"
+  validity:
+    es: "Válida como referencia para cualquier sistema de refrigeración entre dos focos térmicos"
+    en: "Valid as reference for any refrigeration system between two thermal reservoirs"
+  dimension_check: "[K]/[K] = adimensional"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - teoria
+    - ejemplos
+    - interpretacion
+  interpretation_tags:
+    - theoretical_limit
+    - reference
+  result_semantics:
+    es: "Límite superior absoluto del COP de refrigeración. Ningún sistema real puede superar este valor."
+    en: "Absolute upper limit of refrigeration COP. No real system can exceed this value."
+  domain_checks:
+    - "T_H > T_C"
+    - "COP_Carnot > 0"
+  coherence_checks:
+    - "COP_real <= COP_Carnot"
+  graph_implications:
+    - "La curva de Carnot es la envolvente superior en el diagrama COP vs T_C"
+  pedagogical_triggers:
+    - "Alumno usa Celsius en lugar de kelvin"
+    - "Alumno confunde COP de refrigeración con COP de bomba de calor"
+
+- id: consumo_energetico
+  title:
+    es: Consumo energetico diario
+    en: Daily energy consumption
+  equation: "E_dia = W_comp * t_op"
+  latex: "E_{dia} = W_{comp} \\cdot t_{op}"
+  rearrangements:
+    - target: E_dia
+      equation: "E_dia = W_comp * t_op"
+      latex: "E_{dia} = W_{comp} \\cdot t_{op}"
+    - target: W_comp
+      equation: "W_comp = E_dia / t_op"
+      latex: "W_{comp} = \\frac{E_{dia}}{t_{op}}"
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: "Calcula la energía total consumida por el compresor en un período de operación, base para estimar costes eléctricos"
+    en: "Calculates the total energy consumed by the compressor over an operating period, basis for estimating electricity costs"
+  constraints:
+    - "W_comp > 0"
+    - "t_op > 0"
+  validity:
+    es: "Válida para operación a potencia constante o promediada en el período"
+    en: "Valid for constant or averaged power operation over the period"
+  dimension_check: "[W] * [s] = [J]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+    - ejemplos
+    - interpretacion
+  interpretation_tags:
+    - energy
+    - cost
+  result_semantics:
+    es: "Energía total consumida en el período, convertible a kWh para estimar coste eléctrico"
+    en: "Total energy consumed in the period, convertible to kWh to estimate electricity cost"
+  domain_checks:
+    - "E_dia > 0"
+  coherence_checks:
+    - "E_dia en kWh = W_comp en kW multiplicado por t_op en horas"
+  graph_implications:
+    - "No se grafica directamente; es un resultado derivado del COP y la potencia"
+  pedagogical_triggers:
+    - "Alumno no convierte unidades a kWh"
+    - "Alumno confunde potencia con energía"

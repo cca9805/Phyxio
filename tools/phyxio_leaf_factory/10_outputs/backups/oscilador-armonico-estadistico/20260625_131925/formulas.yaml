@@ -1,0 +1,315 @@
+version: 5.0.0
+leaf: oscilador-armonico-estadistico
+ui:
+  default_formula: energia_media_cuantica
+formulas:
+- id: energia_media_cuantica
+  title:
+    es: Energía media cuántica
+    en: Quantum mean energy
+  equation: energia_media = hbar*frecuencia_angular*(0.5 + 1/(exp(hbar*frecuencia_angular/(constante_boltzmann*temperatura))-1))
+  latex: \langle E\rangle=\hbar\omega\left(\frac{1}{2}+\frac{1}{e^{\hbar\omega/(k_B T)}-1}\right)
+  rearrangements:
+  - target: temperatura
+    equation: temperatura = hbar*frecuencia_angular/(constante_boltzmann*ln(1 + 1/(energia_media/(hbar*frecuencia_angular)-0.5)))
+    latex: T=\frac{\hbar\omega}{k_B\ln\left(1+\frac{1}{\langle E\rangle/(\hbar\omega)-1/2}\right)
+  - target: energia_cuantica
+    equation: energia_cuantica = hbar*frecuencia_angular
+    latex: \epsilon=\hbar\omega
+  category: termodinamica-estadistica
+  relation_type: modelo_cuantico
+  physical_meaning:
+    es: Da la energía media de un oscilador armónico en equilibrio térmico, incluyendo energía de punto cero y excitaciones.
+    en: Gives the mean energy of a harmonic oscillator in thermal equilibrium, including zero-point energy and excitations.
+  constraints:
+    es: Temperatura positiva, frecuencia angular positiva y equilibrio con un baño térmico canónico.
+    en: Positive temperature, positive angular frequency, and canonical equilibrium with a heat bath.
+  validity:
+    es: Válida para un oscilador armónico cuántico no interactuante con niveles igualmente espaciados.
+    en: Valid for a non-interacting quantum harmonic oscillator with equally spaced levels.
+  dimension_check: '[M L^2 T^-2] = [M L^2 T^-1]*[T^-1]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria.md
+  - modelos.md
+  - ejemplos.md
+  - interpretacion.yaml
+  - graficos.yaml
+  interpretation_tags:
+  - energia_media
+  - temperatura
+  - frecuencia_angular
+  - cuantizacion
+  result_semantics:
+    target: energia_media
+    kind: scalar_nonnegative
+    sign_meaning:
+      es: La energía media es no negativa; no cambia de signo porque representa contenido energético.
+      en: Mean energy is nonnegative; it does not change sign because it represents energy content.
+    absolute_value_meaning:
+      es: Su tamaño mide cuántos cuantos térmicos están ocupados sobre la energía de punto cero.
+      en: Its size measures how many thermal quanta are occupied above the zero-point energy.
+  domain_checks:
+  - id: temperatura_positiva
+    condition: temperatura > 0
+    severity: error
+  - id: frecuencia_angular_positiva
+    condition: frecuencia_angular > 0
+    severity: error
+  coherence_checks:
+  - id: limite_alta_temperatura
+    expected: energia_media ≈ constante_boltzmann*temperatura cuando constante_boltzmann*temperatura >> hbar*frecuencia_angular
+  - id: limite_baja_temperatura
+    expected: energia_media ≈ 0.5*hbar*frecuencia_angular cuando constante_boltzmann*temperatura << hbar*frecuencia_angular
+  graph_implications:
+    coord: La curva energia_media frente a temperatura crece desde 0.5*hbar*frecuencia_angular y se vuelve casi lineal a alta
+      temperatura.
+  pedagogical_triggers:
+  - id: confundir_cero_clasico
+    message:
+      es: 'A temperatura baja no desaparece la energía: queda energía de punto cero.'
+      en: 'At low temperature energy does not vanish: zero-point energy remains.'
+  - id: olvidar_frecuencia
+    message:
+      es: La frecuencia angular fija la separación entre niveles y cambia la escala vertical.
+      en: Angular frequency fixes level spacing and changes the vertical scale.
+- id: limite_clasico_equiparticion
+  title:
+    es: Límite clásico por equipartición
+    en: Classical equipartition limit
+  equation: energia_media = constante_boltzmann*temperatura
+  latex: \langle E\rangle=k_B T
+  rearrangements:
+  - target: temperatura
+    equation: temperatura = energia_media/constante_boltzmann
+    latex: T=\langle E\rangle/k_B
+  category: termodinamica-estadistica
+  relation_type: limite_clasico
+  physical_meaning:
+    es: En el régimen clásico, la energía media total suma dos contribuciones cuadráticas de medio kBT.
+    en: In the classical regime, total mean energy adds two quadratic half-kBT contributions.
+  constraints:
+    es: Requiere constante_boltzmann*temperatura mucho mayor que hbar*frecuencia_angular.
+    en: Requires constante_boltzmann*temperatura much larger than hbar*frecuencia_angular.
+  validity:
+    es: Aproximación de alta temperatura o baja frecuencia respecto a la escala cuántica.
+    en: High-temperature or low-frequency approximation relative to the quantum scale.
+  dimension_check: '[M L^2 T^-2] = [M L^2 T^-2 K^-1]*[K]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria.md
+  - modelos.md
+  - ejemplos.md
+  - interpretacion.yaml
+  - graficos.yaml
+  interpretation_tags:
+  - equiparticion
+  - energia_media
+  - temperatura
+  result_semantics:
+    target: energia_media
+    kind: scalar_nonnegative
+    sign_meaning:
+      es: Un valor positivo indica energía térmica media almacenada en el oscilador.
+      en: A positive value indicates mean thermal energy stored in the oscillator.
+    absolute_value_meaning:
+      es: Es proporcional a la temperatura absoluta y no depende de la frecuencia en este límite.
+      en: It is proportional to absolute temperature and independent of frequency in this limit.
+  domain_checks:
+  - id: temperatura_positiva
+    condition: temperatura > 0
+    severity: error
+  - id: regimen_clasico
+    condition: constante_boltzmann*temperatura >> hbar*frecuencia_angular
+    severity: warning
+  coherence_checks:
+  - id: pendiente_kb
+    expected: La pendiente energia_media-temperatura debe ser constante_boltzmann.
+  graph_implications:
+    coord: A alta temperatura la curva energia_media frente a temperatura se aproxima a una recta de pendiente constante_boltzmann.
+  pedagogical_triggers:
+  - id: usar_con_T_celsius
+    message:
+      es: 'No se usa temperatura Celsius: la temperatura debe ser absoluta.'
+      en: 'Celsius temperature is not used: temperature must be absolute.'
+  - id: aplicar_fuera_de_regimen
+    message:
+      es: Si la frecuencia angular es grande, el límite clásico puede fallar.
+      en: If angular frequency is large, the classical limit can fail.
+- id: beta_inversa_termica
+  title:
+    es: Beta termodinámica
+    en: Thermodynamic beta
+  equation: beta = 1/(constante_boltzmann*temperatura)
+  latex: \beta=\frac{1}{k_B T}
+  rearrangements:
+  - target: temperatura
+    equation: temperatura = 1/(constante_boltzmann*beta)
+    latex: T=1/(k_B\beta)
+  category: termodinamica-estadistica
+  relation_type: definicion
+  physical_meaning:
+    es: Define la escala inversa de energía térmica que pondera los niveles del oscilador.
+    en: Defines the inverse thermal energy scale that weights oscillator levels.
+  constraints:
+    es: Temperatura absoluta positiva y constante de Boltzmann positiva.
+    en: Positive absolute temperature and positive Boltzmann constant.
+  validity:
+    es: Válida en ensambles canónicos de equilibrio térmico.
+    en: Valid in canonical ensembles at thermal equilibrium.
+  dimension_check: '[M^-1 L^-2 T^2] = 1/[M L^2 T^-2]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria.md
+  - modelos.md
+  - ejemplos.md
+  - interpretacion.yaml
+  - graficos.yaml
+  interpretation_tags:
+  - beta
+  - temperatura
+  - boltzmann
+  result_semantics:
+    target: beta
+    kind: scalar_positive
+    sign_meaning:
+      es: Beta positiva corresponde a temperaturas absolutas positivas.
+      en: Positive beta corresponds to positive absolute temperatures.
+    absolute_value_meaning:
+      es: Cuanto mayor es beta, más fuerte se penalizan los niveles excitados.
+      en: Larger beta more strongly suppresses excited levels.
+  domain_checks:
+  - id: temperatura_positiva
+    condition: temperatura > 0
+    severity: error
+  coherence_checks:
+  - id: beta_decrece_con_T
+    expected: beta debe disminuir cuando aumenta temperatura.
+  graph_implications:
+    coord: Beta no es el eje dominante, pero explica por qué la energía media crece al aumentar temperatura.
+  pedagogical_triggers:
+  - id: confundir_beta_T
+    message:
+      es: 'Beta no es temperatura: es su escala inversa energética.'
+      en: 'Beta is not temperature: it is its inverse energy scale.'
+- id: funcion_particion_cuantica
+  title:
+    es: Función de partición cuántica
+    en: Quantum partition function
+  equation: funcion_particion = exp(-0.5*hbar*frecuencia_angular/(constante_boltzmann*temperatura))/(1 - exp(-hbar*frecuencia_angular/(constante_boltzmann*temperatura)))
+  latex: Z=\frac{e^{-\hbar\omega/(2k_B T)}}{1-e^{-\hbar\omega/(k_B T)}}
+  rearrangements:
+  - target: energia_cuantica
+    equation: energia_cuantica = hbar*frecuencia_angular
+    latex: \epsilon=\hbar\omega
+  category: termodinamica-estadistica
+  relation_type: funcion_particion
+  physical_meaning:
+    es: Resume la contribución estadística de todos los niveles energéticos del oscilador.
+    en: Summarizes the statistical contribution of all oscillator energy levels.
+  constraints:
+    es: Temperatura y frecuencia angular positivas; niveles armónicos igualmente espaciados.
+    en: Positive temperature and angular frequency; equally spaced harmonic levels.
+  validity:
+    es: Ensambles canónicos sin interacción entre osciladores.
+    en: Canonical ensembles without interaction between oscillators.
+  dimension_check: '[1] = [1]/[1]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria.md
+  - modelos.md
+  - ejemplos.md
+  - interpretacion.yaml
+  - graficos.yaml
+  interpretation_tags:
+  - funcion_particion
+  - niveles
+  - boltzmann
+  result_semantics:
+    target: funcion_particion
+    kind: dimensionless_positive
+    sign_meaning:
+      es: La función de partición es positiva y adimensional.
+      en: The partition function is positive and dimensionless.
+    absolute_value_meaning:
+      es: Su valor mide el peso estadístico total disponible al equilibrio.
+      en: Its value measures the total statistical weight available at equilibrium.
+  domain_checks:
+  - id: denominador_no_nulo
+    condition: 1 - exp(-hbar*frecuencia_angular/(constante_boltzmann*temperatura)) > 0
+    severity: error
+  coherence_checks:
+  - id: Z_crece_con_T
+    expected: funcion_particion debe aumentar al aumentar temperatura.
+  graph_implications:
+    coord: Aunque no sea el eje principal, la función de partición gobierna la forma de energia_media frente a temperatura.
+  pedagogical_triggers:
+  - id: interpretar_Z_como_energia
+    message:
+      es: Z no es una energía; es una suma estadística adimensional.
+      en: Z is not an energy; it is a dimensionless statistical sum.
+- id: probabilidad_ocupacion_n
+  title:
+    es: Probabilidad de ocupación del nivel n
+    en: Occupation probability of level n
+  equation: probabilidad_ocupacion = (1 - exp(-hbar*frecuencia_angular/(constante_boltzmann*temperatura)))*exp(-numero_cuantico*hbar*frecuencia_angular/(constante_boltzmann*temperatura))
+  latex: P_n=\left(1-e^{-\hbar\omega/(k_B T)}\right)e^{-n\hbar\omega/(k_B T)}
+  rearrangements:
+  - target: numero_cuantico
+    equation: numero_cuantico = -ln(probabilidad_ocupacion/(1 - exp(-hbar*frecuencia_angular/(constante_boltzmann*temperatura))))*(constante_boltzmann*temperatura)/(hbar*frecuencia_angular)
+    latex: n=-\ln\left(P_n/(1-e^{-\hbar\omega/(k_BT)})\right)k_BT/(\hbar\omega)
+  category: termodinamica-estadistica
+  relation_type: distribucion_boltzmann
+  physical_meaning:
+    es: Expresa cómo se reparte la población térmica entre niveles separados por hbar por frecuencia angular.
+    en: Expresses how thermal population is distributed among levels spaced by hbar times angular frequency.
+  constraints:
+    es: Número cuántico entero no negativo, temperatura positiva y frecuencia angular positiva.
+    en: Nonnegative integer quantum number, positive temperature, and positive angular frequency.
+  validity:
+    es: Válida para un único oscilador armónico cuántico en equilibrio canónico.
+    en: Valid for a single quantum harmonic oscillator in canonical equilibrium.
+  dimension_check: '[1] = [1]*[1]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria.md
+  - modelos.md
+  - ejemplos.md
+  - interpretacion.yaml
+  - graficos.yaml
+  interpretation_tags:
+  - ocupacion
+  - probabilidad
+  - numero_cuantico
+  - temperatura
+  result_semantics:
+    target: probabilidad_ocupacion
+    kind: probability
+    sign_meaning:
+      es: La probabilidad no tiene signo; debe estar entre 0 y 1.
+      en: Probability has no sign; it must lie between 0 and 1.
+    absolute_value_meaning:
+      es: Su valor indica la fracción esperada de veces que aparece el nivel n.
+      en: Its value indicates the expected fraction of times level n appears.
+  domain_checks:
+  - id: numero_cuantico_entero
+    condition: numero_cuantico >= 0
+    severity: error
+  - id: probabilidad_rango
+    condition: 0 <= probabilidad_ocupacion <= 1
+    severity: error
+  coherence_checks:
+  - id: monotonia_n
+    expected: probabilidad_ocupacion debe decrecer cuando aumenta numero_cuantico.
+  graph_implications:
+    coord: Ayuda a interpretar por qué la energía media aumenta con temperatura al poblar niveles más altos.
+  pedagogical_triggers:
+  - id: tratar_n_continuo
+    message:
+      es: El número cuántico n etiqueta niveles discretos, no una coordenada continua.
+      en: Quantum number n labels discrete levels, not a continuous coordinate.

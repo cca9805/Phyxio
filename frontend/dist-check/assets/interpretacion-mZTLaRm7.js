@@ -1,0 +1,640 @@
+const e=`version: 1.1
+id: interpretacion-marco-cm
+leaf_id: marco-del-centro-de-masas
+nombre:
+  es: "Interpretación del Marco del Centro de Masas"
+  en: "CM Frame Interpretation"
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: cantidad-de-movimiento
+  parent_id: centro-de-masas
+  ruta_relativa: fisica-clasica/mecanica/cantidad-de-movimiento/centro-de-masas/marco-del-centro-de-masas
+
+dependencies:
+  formulas:
+    - M_sum
+    - vcm_formula
+    - total_momentum_sum
+    - relative_velocity
+    - velocity_transformation
+    - u_balance
+    - konig_energy
+    - internal_energy_reduced
+    - lab_kinetic_energy
+    - total_momentum_vcm
+    - reduced_mass_formula
+    - K_trans
+  magnitudes:
+    - vcm
+    - u_i
+    - mu
+    - K_cm
+    - K_lab
+    - M
+    - v_rel
+    - ptot
+    - v_i
+    - p_cm_total
+    - K_trans
+    - m1
+    - m2
+    - v1
+    - v2
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+targets:
+  vcm:
+    summary_rules:
+      - id: rule_vcm_summary
+        when: "true"
+        status: ok
+        text:
+          es: "La velocidad del centro de masas vcm indica el promedio de movimiento. La fórmula vcm_formula permite hallar la traslación global del sistema masivo M_sum."
+          en: "The center-of-mass velocity vcm indicates the average motion. The vcm_formula allows finding the global translation of the massive system M_sum."
+    coherence_rules:
+      - id: rule_vcm_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "El momento total ptot debe ser coherente con la relación total_momentum_vcm. Verificamos que M_sum por vcm coincida con el impulso total."
+          en: "Total momentum ptot must be consistent with the total_momentum_vcm relationship. We verify that M_sum times vcm matches the total impulse."
+    physical_reading_rules:
+      - id: rule_vcm_reading
+        when: "true"
+        status: info
+        text:
+          es: "El valor de vcm define el marco inercial. Usamos velocity_transformation para pasar al marco CM y anular el momento neto mediante u_balance."
+          en: "The value of vcm defines the inertial frame. We use velocity_transformation to move to the CM frame and cancel net momentum via u_balance."
+    model_validity_rules:
+      - id: rule_vcm_validity
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo es válido si vcm es constante. Si hay fuerzas externas, el baricentro acelera y la transformación velocity_transformation debe ser no inercial."
+          en: "The model is valid if vcm is constant. If there are external forces, the barycenter accelerates and the velocity_transformation must be non-inertial."
+    graph_rules:
+      - id: rule_vcm_graph
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico, vcm es el vector de arrastre. Las velocidades relativas u_i se miden desde el extremo de este vector de traslación."
+          en: "In the graph, vcm is the drift vector. The relative velocities u_i are measured from the end of this translation vector."
+    likely_errors:
+      - id: rule_vcm_errors
+        when: "true"
+        status: warning
+        text:
+          es: "No confundir vcm con las velocidades individuales. vcm_formula requiere ponderar cada masa m_i por su propia velocidad v_i."
+          en: "Do not confuse vcm with individual velocities. vcm_formula requires weighting each mass m_i by its own velocity v_i."
+    next_step_rules:
+      - id: rule_vcm_next
+        when: "true"
+        status: ok
+        text:
+          es: "Como siguiente paso, estudia sistemas con vcm variable. Aplica la segunda ley de Newton a la masa total M_sum para hallar la aceleración."
+          en: "As a next step, study systems with variable vcm. Apply Newton's second law to the total mass M_sum to find the acceleration."
+
+  K_cm:
+    summary_rules:
+      - id: rule_kcm_summary
+        when: "true"
+        status: ok
+        text:
+          es: "La energía interna K_cm mide la agitación. Se calcula con internal_energy_reduced usando la masa reducida reduced_mass_formula y v_rel. Ejemplo: 7. **Energía interna**: [[K_cm]] de 12.5 x 10^6 unidades."
+          en: "Internal energy K_cm measures agitation. It is calculated with internal_energy_reduced using the reduced mass reduced_mass_formula and v_rel. Example: 7. **Internal energy**: [[K_cm]] of 12.5 x 10^6 units."
+    coherence_rules:
+      - id: rule_kcm_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "El balance de konig_energy exige que K_lab sea la suma de K_cm y la traslación. K_cm debe ser siempre positiva o nula."
+          en: "The konig_energy balance requires K_lab to be the sum of K_cm and translation. K_cm must always be positive or zero."
+    physical_reading_rules:
+      - id: rule_kcm_reading
+        when: "true"
+        status: info
+        text:
+          es: "La energía K_cm es la única disponible para procesos internos. Depende de mu y del cuadrado de la velocidad relativa v_rel."
+          en: "Energy K_cm is the only one available for internal processes. Depends on mu and the square of the relative velocity v_rel."
+    model_validity_rules:
+      - id: rule_kcm_validity
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo de agitación asume partículas puntuales. En sistemas reales, K_cm incluye rotación interna no descrita por reduced_mass_formula."
+          en: "The agitation model assumes point particles. In real systems, K_cm includes internal rotation not described by reduced_mass_formula."
+    graph_rules:
+      - id: rule_kcm_graph
+        when: "true"
+        status: ok
+        text:
+          es: "Gráficamente, una mayor K_cm implica vectores u_i más largos. El balance u_balance garantiza que la energía interna sea mínima en el CM."
+          en: "Graphically, higher K_cm implies longer u_i vectors. The u_balance ensures that internal energy is minimal in the CM."
+    likely_errors:
+      - id: rule_kcm_errors
+        when: "true"
+        status: warning
+        text:
+          es: "Error: olvidar que K_cm es menor que K_lab. La diferencia es la energía de traslación del CM descrita en konig_energy."
+          en: "Error: forgetting that K_cm is less than K_lab. The difference is the CM translation energy described in konig_energy."
+    next_step_rules:
+      - id: rule_kcm_next
+        when: "true"
+        status: ok
+        text:
+          es: "Analiza choques inelásticos. Verás que K_cm disminuye mientras el momento total ptot y vcm se conservan perfectamente."
+          en: "Analyze inelastic collisions. You will see that K_cm decreases while the total momentum ptot and vcm are perfectly conserved."
+
+  M:
+    summary_rules:
+      - id: rule_m_summary
+        when: "true"
+        status: ok
+        text:
+          es: "La masa total M del sistema es la suma M_sum de todas las masas individuales involucradas en la dinámica."
+          en: "The total mass M of the system is the sum M_sum of all individual masses involved in the dynamics."
+    physical_reading_rules:
+      - id: rule_m_reading
+        when: "true"
+        status: info
+        text:
+          es: "La masa total M_sum actúa como la inercia efectiva del centro de masas para describir el momento total ptot."
+          en: "The total mass M_sum acts as the effective inertia of the center of mass to describe the total momentum ptot."
+    coherence_rules:
+      - id: rule_m_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "La masa total debe ser la suma exacta de las partes. M_sum garantiza la conservación de la materia en el sistema."
+          en: "Total mass must be the exact sum of the parts. M_sum guarantees the conservation of matter in the system."
+    model_validity_rules:
+      - id: rule_m_validity
+        when: "true"
+        status: ok
+        text:
+          es: "Se asume que M es constante. En procesos nucleares extremos, la masa total podría no conservarse estrictamente."
+          en: "It is assumed that M is constant. In extreme nuclear processes, total mass might not be strictly conserved."
+    graph_rules:
+      - id: rule_m_graph
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico, M determina la ponderación de las velocidades para ubicar el centro de masas dinámico."
+          en: "In the graph, M determines the weighting of velocities to locate the dynamic center of mass."
+    likely_errors:
+      - id: rule_m_errors
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: usar una masa parcial en lugar de M_sum al calcular la energía de traslación global."
+          en: "Typical error: using a partial mass instead of M_sum when calculating the global translation energy."
+    next_step_rules:
+      - id: rule_m_next
+        when: "true"
+        status: ok
+        text:
+          es: "Estudia sistemas de masa variable, como cohetes, donde M cambia con el tiempo por eyección de combustible."
+          en: "Study variable mass systems, such as rockets, where M changes over time due to fuel ejection."
+
+  u_i:
+    summary_rules:
+      - id: rule_ui_summary
+        when: "true"
+        status: ok
+        text:
+          es: "Las velocidades internas u_i se obtienen restando la traslación vcm mediante la transformación velocity_transformation."
+          en: "Internal velocities u_i are obtained by subtracting the translation vcm using the velocity_transformation."
+    physical_reading_rules:
+      - id: rule_ui_reading
+        when: "true"
+        status: info
+        text:
+          es: "En el marco CM, el balance u_balance asegura que el momento interno neto sea idénticamente nulo."
+          en: "In the CM frame, the u_balance ensures that the net internal momentum is identically zero."
+    coherence_rules:
+      - id: rule_ui_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "Cada u_i debe ser coherente con v_i y vcm según la ley de transformación de velocidades galileana."
+          en: "Each u_i must be consistent with v_i and vcm according to the Galilean velocity transformation law."
+    model_validity_rules:
+      - id: rule_ui_validity
+        when: "true"
+        status: ok
+        text:
+          es: "El cálculo de u_i es válido en marcos inerciales. Si el CM acelera, aparecen fuerzas ficticias adicionales."
+          en: "The calculation of u_i is valid in inertial frames. If the CM accelerates, additional fictitious forces appear."
+    graph_rules:
+      - id: rule_ui_graph
+        when: "true"
+        status: ok
+        text:
+          es: "Los vectores u_i en el gráfico siempre apuntan en sentidos opuestos para un sistema de dos partículas."
+          en: "The u_i vectors in the graph always point in opposite directions for a two-particle system."
+    likely_errors:
+      - id: rule_ui_errors
+        when: "true"
+        status: warning
+        text:
+          es: "Error de signo: sumar vcm en lugar de restarla al intentar obtener la velocidad relativa u_i."
+          en: "Sign error: adding vcm instead of subtracting it when trying to obtain the relative velocity u_i."
+    next_step_rules:
+      - id: rule_ui_next
+        when: "true"
+        status: ok
+        text:
+          es: "Usa u_i para calcular el momento angular interno, que es independiente del origen en el marco CM."
+          en: "Use u_i to calculate the internal angular momentum, which is independent of the origin in the CM frame."
+
+  v_i:
+    summary_rules:
+      - id: rule_vi_summary
+        when: "true"
+        status: ok
+        text:
+          es: "La velocidad de laboratorio v_i es la referencia absoluta desde la cual se calcula la velocidad del centro de masas vcm_formula."
+          en: "The laboratory velocity v_i is the absolute reference from which the center-of-mass velocity vcm_formula is calculated."
+    physical_reading_rules:
+      - id: rule_vi_reading
+        when: "true"
+        status: info
+        text:
+          es: "Conociendo v_i y las masas, podemos aplicar velocity_transformation para encontrar el movimiento relativo u_i del sistema."
+          en: "Knowing v_i and the masses, we can apply velocity_transformation to find the relative motion u_i of the system."
+    coherence_rules:
+      - id: rule_vi_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "La suma ponderada de todas las v_i debe resultar exactamente en el valor de vcm por la definición de M_sum."
+          en: "The weighted sum of all v_i must result exactly in the value of vcm by the definition of M_sum."
+    model_validity_rules:
+      - id: rule_vi_validity
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume que v_i es mucho menor que la velocidad de la luz para usar adición galileana simple."
+          en: "The model assumes that v_i is much less than the speed of light to use simple Galilean addition."
+    graph_rules:
+      - id: rule_vi_graph
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico del laboratorio, v_i es la velocidad observada respecto al suelo antes de cualquier transformación."
+          en: "In the laboratory graph, v_i is the observed velocity relative to the ground before any transformation."
+    likely_errors:
+      - id: rule_vi_errors
+        when: "true"
+        status: warning
+        text:
+          es: "Confundir v_i con la velocidad relativa entre partículas. v_i es respecto al origen fijo del laboratorio."
+          en: "Confusing v_i with the relative velocity between particles. v_i is relative to the fixed laboratory origin."
+    next_step_rules:
+      - id: rule_vi_next
+        when: "true"
+        status: ok
+        text:
+          es: "Aplica la cinemática relativista si v_i supera el 10% de la velocidad de la luz en el vacío."
+          en: "Apply relativistic kinematics if v_i exceeds 10% of the speed of light in a vacuum."
+
+  v_rel:
+    summary_rules:
+      - id: rule_vrel_summary
+        when: "true"
+        status: ok
+        text:
+          es: "La velocidad relativa v_rel se obtiene con relative_velocity y mide el movimiento interno entre las dos partículas."
+          en: "The relative velocity v_rel is obtained with relative_velocity and measures the internal motion between the two particles."
+    physical_reading_rules:
+      - id: rule_vrel_reading
+        when: "true"
+        status: info
+        text:
+          es: "v_rel no cambia al saltar de un laboratorio inercial a otro; por eso gobierna K_cm en internal_energy_reduced."
+          en: "v_rel does not change when moving from one inertial laboratory to another; that is why it governs K_cm in internal_energy_reduced."
+    coherence_rules:
+      - id: rule_vrel_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "El valor debe coincidir con la diferencia galileana entre v1 y v2, y ser compatible con las velocidades internas u_i."
+          en: "The value must match the Galilean difference between v1 and v2 and be compatible with the internal velocities u_i."
+    model_validity_rules:
+      - id: rule_vrel_validity
+        when: "true"
+        status: ok
+        text:
+          es: "La lectura es clásica: si las velocidades se acercan a la de la luz, relative_velocity debe sustituirse por cinemática relativista."
+          en: "The reading is classical: if speeds approach the speed of light, relative_velocity must be replaced by relativistic kinematics."
+    graph_rules:
+      - id: rule_vrel_graph
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico, v_rel fija la separación entre los vectores internos y la escala de energía disponible."
+          en: "In the graph, v_rel fixes the separation between internal vectors and the available-energy scale."
+    likely_errors:
+      - id: rule_vrel_errors
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: confundir v_rel con vcm. v_rel describe interacción interna; vcm describe arrastre global."
+          en: "Typical error: confusing v_rel with vcm. v_rel describes internal interaction; vcm describes global drift."
+    next_step_rules:
+      - id: rule_vrel_next
+        when: "true"
+        status: ok
+        text:
+          es: "Usa v_rel junto con mu para estimar la energía interna disponible antes de estudiar el choque."
+          en: "Use v_rel together with mu to estimate the available internal energy before studying the collision."
+
+  p_cm_total:
+    summary_rules:
+      - id: rule_pcm_summary
+        when: "true"
+        status: ok
+        text:
+          es: "El momento total en el marco CM p_cm_total es siempre nulo por definición del balance u_balance."
+          en: "The total momentum in the CM frame p_cm_total is always zero by definition of the u_balance."
+    physical_reading_rules:
+      - id: rule_pcm_reading
+        when: "true"
+        status: info
+        text:
+          es: "Esta propiedad de p_cm_total permite simplificar colisiones complejas al eliminar el movimiento de arrastre global vcm."
+          en: "This property of p_cm_total allows simplifying complex collisions by eliminating the global drift motion vcm."
+    coherence_rules:
+      - id: rule_pcm_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "Verifica que la suma de m_i por u_i sea cero. Si p_cm_total no es nulo, el marco no es el CM."
+          en: "Verify that the sum of m_i times u_i is zero. If p_cm_total is not zero, the frame is not the CM."
+    model_validity_rules:
+      - id: rule_pcm_validity
+        when: "true"
+        status: ok
+        text:
+          es: "Válido por construcción geométrica del baricentro. No depende de la naturaleza de las fuerzas internas."
+          en: "Valid by geometric construction of the barycenter. Does not depend on the nature of internal forces."
+    graph_rules:
+      - id: rule_pcm_graph
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico CM, los vectores de momento se cancelan visualmente, mostrando el equilibrio traslacional del sistema."
+          en: "In the CM graph, momentum vectors visually cancel out, showing the translational balance of the system."
+    likely_errors:
+      - id: rule_pcm_errors
+        when: "true"
+        status: warning
+        text:
+          es: "Error: intentar asignar un momento neto al sistema cuando se está operando dentro del marco CM."
+          en: "Error: trying to assign a net momentum to the system when operating within the CM frame."
+    next_step_rules:
+      - id: rule_pcm_next
+        when: "true"
+        status: ok
+        text:
+          es: "Explora el concepto de centro de energía en relatividad especial, donde p_cm_total también se anula."
+          en: "Explore the concept of center of energy in special relativity, where p_cm_total also vanishes."
+
+  mu:
+    summary_rules:
+      - id: rule_mu_summary
+        when: "true"
+        status: ok
+        text:
+          es: "La masa reducida mu, calculada mediante reduced_mass_formula, representa la inercia equivalente del movimiento relativo del sistema."
+          en: "The reduced mass mu, calculated via reduced_mass_formula, represents the equivalent inertia of the relative motion of the system."
+    physical_reading_rules:
+      - id: rule_mu_reading
+        when: "true"
+        status: info
+        text:
+          es: "Usar mu permite calcular la energía cinética interna K_cm mediante la relación compacta internal_energy_reduced. Ejemplo: 5. **Relative velocity**: [[v_rel]] of 5000 m/s."
+          en: "Using mu allows calculating the internal kinetic energy K_cm using the compact relation internal_energy_reduced. Example: 5. **Relative velocity**: [[v_rel]] of 5000 m/s."
+    coherence_rules:
+      - id: rule_mu_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "La masa reducida mu debe ser siempre menor que la menor de las masas individuales m1 o m2."
+          en: "The reduced mass mu must always be less than the smaller of the individual masses m1 or m2."
+    model_validity_rules:
+      - id: rule_mu_validity
+        when: "true"
+        status: ok
+        text:
+          es: "El concepto de mu es específico para problemas de dos cuerpos. No se generaliza directamente a tres o más."
+          en: "The concept of mu is specific to two-body problems. It does not generalize directly to three or more."
+    graph_rules:
+      - id: rule_mu_graph
+        when: "true"
+        status: ok
+        text:
+          es: "Gráficamente, mu representa la inercia de una partícula ficticia que se mueve con la velocidad relativa v_rel."
+          en: "Graphically, mu represents the inertia of a fictitious particle moving with the relative velocity v_rel."
+    likely_errors:
+      - id: rule_mu_errors
+        when: "true"
+        status: warning
+        text:
+          es: "Error: confundir masa reducida con masa total M_sum. mu es para el movimiento relativo, M es para la traslación."
+          en: "Error: confusing reduced mass with total mass M_sum. mu is for relative motion, M is for translation."
+    next_step_rules:
+      - id: rule_mu_next
+        when: "true"
+        status: ok
+        text:
+          es: "Aplica mu al estudio del átomo de hidrógeno, donde la masa del electrón se corrige por la del núcleo."
+          en: "Apply mu to the study of the hydrogen atom, where the electron mass is corrected by the nucleus mass."
+
+  K_lab:
+    summary_rules:
+      - id: rule_klab_summary
+        when: "true"
+        status: ok
+        text:
+          es: "La energía total del laboratorio K_lab incluye la traslación global y la agitación interna K_cm según konig_energy."
+          en: "The total laboratory energy K_lab includes the global translation and internal agitation K_cm according to konig_energy."
+    physical_reading_rules:
+      - id: rule_klab_reading
+        when: "true"
+        status: info
+        text:
+          es: "Comparar K_lab con K_cm revela qué fracción de energía es útil para interacciones internas e intercambios de momento."
+          en: "Comparing K_lab with K_cm reveals what fraction of energy is useful for internal interactions and momentum exchanges."
+    coherence_rules:
+      - id: rule_klab_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "La suma de las energías cinéticas individuales en el laboratorio debe ser idéntica al resultado de konig_energy."
+          en: "The sum of individual kinetic energies in the laboratory must be identical to the result of konig_energy."
+    model_validity_rules:
+      - id: rule_klab_validity
+        when: "true"
+        status: ok
+        text:
+          es: "K_lab es válida mientras no haya efectos relativistas o disipación interna no contabilizada en el modelo."
+          en: "K_lab is valid as long as there are no relativistic effects or internal dissipation not accounted for in the model."
+    graph_rules:
+      - id: rule_klab_graph
+        when: "true"
+        status: ok
+        text:
+          es: "En el gráfico, K_lab es el área bajo los vectores de velocidad absoluta en un diagrama de energía."
+          en: "In the graph, K_lab is the area under the absolute velocity vectors in an energy diagram."
+    likely_errors:
+      - id: rule_klab_errors
+        when: "true"
+        status: warning
+        text:
+          es: "Error: sumar directamente las velocidades en lugar de sus cuadrados al calcular la energía total K_lab."
+          en: "Error: adding velocities directly instead of their squares when calculating the total energy K_lab."
+    next_step_rules:
+      - id: rule_klab_next
+        when: "true"
+        status: ok
+        text:
+          es: "Estudia la conservación de la energía en choques elásticos, donde K_lab se mantiene constante antes y después."
+          en: "Study the conservation of energy in elastic collisions, where K_lab remains constant before and after."
+
+  ptot:
+    summary_rules:
+      - id: rule_ptot_summary
+        when: "true"
+        status: ok
+        text:
+          es: "El momento lineal total ptot es una constante del sistema aislado, vinculada a vcm por la relación total_momentum_vcm."
+          en: "The total linear momentum ptot is a constant of the isolated system, linked to vcm by the total_momentum_vcm relationship."
+    physical_reading_rules:
+      - id: rule_ptot_reading
+        when: "true"
+        status: info
+        text:
+          es: "El valor de ptot determina la velocidad de arrastre del marco de momento cero según la masa total M_sum."
+          en: "The value of ptot determines the drift velocity of the zero-momentum frame according to the total mass M_sum."
+    coherence_rules:
+      - id: rule_ptot_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "ptot debe ser igual a la suma vectorial de m_i por v_i. Esta igualdad es la base de la dinámica de sistemas."
+          en: "ptot must be equal to the vector sum of m_i times v_i. This equality is the basis of system dynamics."
+    model_validity_rules:
+      - id: rule_ptot_validity
+        when: "true"
+        status: ok
+        text:
+          es: "ptot es constante si y solo si la fuerza externa neta es cero durante el intervalo de análisis."
+          en: "ptot is constant if and only if the net external force is zero during the analysis interval."
+    graph_rules:
+      - id: rule_ptot_graph
+        when: "true"
+        status: ok
+        text:
+          es: "Gráficamente, ptot es el vector resultante de concatenar los momentos de todas las partículas del sistema."
+          en: "Graphically, ptot is the resultant vector of concatenating the momenta of all particles in the system."
+    likely_errors:
+      - id: rule_ptot_errors
+        when: "true"
+        status: warning
+        text:
+          es: "Error: olvidar que ptot es un vector. No se deben sumar las magnitudes escalarmente si hay diferentes direcciones."
+          en: "Error: forgetting that ptot is a vector. Magnitudes should not be added scalarly if there are different directions."
+    next_step_rules:
+      - id: rule_ptot_next
+        when: "true"
+        status: ok
+        text:
+          es: "Aplica el teorema del impulso para ver cómo ptot cambia cuando el sistema deja de estar aislado."
+          en: "Apply the impulse theorem to see how ptot changes when the system is no longer isolated."
+
+  K_trans:
+    summary_rules:
+      - id: rule_k_translation_summary
+        when: "true"
+        status: ok
+        text:
+          es: "La energía de traslación del CM representa el movimiento de conjunto. Se calcula mediante K_trans y es parte de konig_energy."
+          en: "The CM translation energy represents the bulk motion. It is calculated via K_trans and is part of konig_energy."
+    physical_reading_rules:
+      - id: rule_k_translation_physical
+        when: "true"
+        status: ok
+        text:
+          es: "Este valor indica cuánta energía no está disponible para choques internos."
+          en: "This value indicates how much energy is not available for internal collisions."
+    coherence_rules:
+      - id: rule_k_translation_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "Debe ser siempre menor o igual a K_lab."
+          en: "It must always be less than or equal to K_lab."
+    model_validity_rules:
+      - id: rule_k_translation_validity
+        when: "true"
+        status: ok
+        text:
+          es: "Modelo clásico K_trans válido para velocidades no relativistas."
+          en: "Classical K_trans model valid for non-relativistic velocities."
+    graph_rules:
+      - id: rule_k_translation_graph
+        when: "true"
+        status: ok
+        text:
+          es: "Se visualiza como la traslación global del sistema masivo."
+          en: "It is visualized as the global translation of the massive system."
+    likely_errors:
+      - id: err_k_translation_neg
+        when: "target < 0"
+        status: fail
+        text:
+          es: "La energía cinética no puede ser negativa."
+          en: "Kinetic energy cannot be negative."
+    next_step_rules:
+      - id: step_k_translation_done
+        when: "true"
+        status: info
+        text:
+          es: "Usa este valor para completar la partición de König."
+          en: "Use this value to complete Konig's partition."
+
+
+result_blocks:
+  summary:
+    title: { es: "Resumen de agitación y traslación", en: "Agitation and translation summary" }
+    rules: [rule_vcm_summary, rule_kcm_summary, rule_m_summary, rule_ui_summary, rule_vi_summary, rule_vrel_summary, rule_pcm_summary, rule_mu_summary, rule_klab_summary, rule_ptot_summary, rule_k_translation_summary]
+  physical_reading:
+    title: { es: "Lectura de la dinámica interna", en: "Internal dynamics reading" }
+    rules: [rule_vcm_reading, rule_kcm_reading, rule_m_reading, rule_ui_reading, rule_vi_reading, rule_vrel_reading, rule_pcm_reading, rule_mu_reading, rule_klab_reading, rule_ptot_reading, rule_k_translation_physical]
+  coherence:
+    title: { es: "Coherencia del balance dinámico", en: "Dynamic balance coherence" }
+    rules: [rule_vcm_coherence, rule_kcm_coherence, rule_m_coherence, rule_ui_coherence, rule_vi_coherence, rule_vrel_coherence, rule_pcm_coherence, rule_mu_coherence, rule_klab_coherence, rule_ptot_coherence, rule_k_translation_coherence]
+  model_validity:
+    title: { es: "Límites de la aproximación inercial", en: "Inertial approximation limits" }
+    rules: [rule_vcm_validity, rule_kcm_validity, rule_m_validity, rule_ui_validity, rule_vi_validity, rule_vrel_validity, rule_pcm_validity, rule_mu_validity, rule_klab_validity, rule_ptot_validity, rule_k_translation_validity]
+  graph_reading:
+    title: { es: "Análisis visual de vectores", en: "Visual vector analysis" }
+    rules: [rule_vcm_graph, rule_kcm_graph, rule_m_graph, rule_ui_graph, rule_vi_graph, rule_vrel_graph, rule_pcm_graph, rule_mu_graph, rule_klab_graph, rule_ptot_graph, rule_k_translation_graph]
+  likely_errors:
+    title: { es: "Errores típicos detectados", en: "Typical errors detected" }
+    rules: [rule_vcm_errors, rule_kcm_errors, rule_m_errors, rule_ui_errors, rule_vi_errors, rule_vrel_errors, rule_pcm_errors, rule_mu_errors, rule_klab_errors, rule_ptot_errors, err_k_translation_neg]
+  next_step:
+    title: { es: "Siguientes pasos sugeridos", en: "Suggested next steps" }
+    rules: [rule_vcm_next, rule_kcm_next, rule_m_next, rule_ui_next, rule_vi_next, rule_vrel_next, rule_pcm_next, rule_mu_next, rule_klab_next, rule_ptot_next, step_k_translation_done]
+`;export{e as default};

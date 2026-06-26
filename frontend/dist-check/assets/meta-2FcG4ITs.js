@@ -1,0 +1,73 @@
+const e=`version: 5
+id: numero-de-reynolds
+nombre:
+  es: Numero de reynolds
+  en: Reynolds Number
+titulo:
+  es: Numero de reynolds
+  en: Reynolds Number
+type: leaf
+area: fisica-clasica
+bloque: mecanica
+subbloque: fluidos
+orden: 218440
+parent_id: viscosidad-y-regimenes
+niveles:
+  es: [UNIVERSIDAD, EXTRACURRICULAR]
+  en: [University, Extracurricular]
+icon: "💧"
+ruta_relativa: fisica-clasica/mecanica/fluidos/viscosidad-y-regimenes/numero-de-reynolds
+descripcion: Definición, escalas y regímenes basados en el número de Reynolds.
+description_en: Definition, scales, and regimes based on the Reynolds number.
+descripcion_corta: Criterio de transición entre flujo laminar y turbulento.
+dificultad: 1
+tiempo_estimado_min: 45
+magnitud_dominante: Re
+representacion_dominante: Coord
+physical_role:
+  es: concepto físico
+  en: physical concept
+pregunta_fisica_central:
+  es: "¿Cómo determina el número de reynolds el caos del fluido?"
+  en: "How does the reynolds number determine fluid chaos?"
+prerequisitos:
+- fisica-clasica/mecanica/fluidos/fundamentos/densidad
+- fisica-clasica/mecanica/fluidos/viscosidad-y-regimenes/viscosidad
+tags:
+  es: [fluidos, viscosidad, reynolds, regimen-flujo]
+  en: [fluids, viscosity, reynolds, flow-regime]
+graficos:
+- Coord
+- Svg
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    tab_label:
+      es: Análisis de Reynolds
+      en: Reynolds Analysis
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    show_summary: true
+    show_physical_reading: true
+    show_coherence: true
+    show_model_validity: true
+    show_graph_reading: true
+    show_likely_errors: true
+    show_next_step: true
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    show_warnings: true
+    show_likely_errors: true
+    max_inline_messages: 3
+    show_status_icons: true
+    allow_collapsible_sections: true
+  dependencies:
+    requires_magnitudes: true
+    requires_formulas: true
+    supports_graph_binding: true
+`;export{e as default};

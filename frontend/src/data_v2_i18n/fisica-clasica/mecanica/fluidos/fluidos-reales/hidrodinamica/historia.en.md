@@ -1,0 +1,16 @@
+# Hydrodynamics - Evolution of Thought on Flow
+
+## Historical problem
+For centuries, the movement of liquids was a mystery solved only through intuition or the empirical experience of aqueduct and mill builders. The great historical problem was understanding why water, when flowing, did not behave like solids: how was it possible for its pressure to change as the conduit size varied? Ancient Roman engineers were capable of moving colossal masses of water across hundreds of kilometers, but they lacked a theoretical basis explaining the relationship between velocity [[v]] and pressure [[p]]. The challenge was to unify the laws of mechanics with the continuous and deformable nature of liquids.
+
+## Prior conceptual difficulty
+Before the 18th century, the main difficulty lay in the lack of a clear concept of "energy" and "continuous medium." Fluids were thought of as a collection of independent particles or as a mystical substance that "hated vacuum." It was not understood that pressure was a form of potential energy that could be exchanged with velocity. Furthermore, d'Alembert's paradox baffled scientists: according to early theories (without viscosity), an object moving through a fluid should experience no resistance, something that directly contradicted everyday reality where water slows down any movement.
+
+## What changed
+The fundamental change occurred in 1738 with the publication of *Hydrodynamica* by Daniel Bernoulli. Bernoulli applied Leibniz's principle of conservation of energy to fluid flow, demonstrating that in a closed system, the sum of pressure, kinetic, and potential energies is constant. Shortly after, Leonhard Euler formalized these ideas in precise differential equations describing fluid motion as a velocity field. Finally, in the 19th century, Claude-Louis Navier and George Gabriel Stokes added the internal viscosity term, solving the resistance problem and allowing the modeling of real fluids for the first time.
+
+## Impact on physics
+The development of hydrodynamics was the first major success of **Continuum Mechanics**. It allowed physics to move from studying isolated particles to studying infinitely deformable systems. The introduction of "streamlines" and "flow tubes" concepts provided visual and mathematical tools that were later exported to electromagnetism (where Faraday and Maxwell used hydrodynamic analogies to imagine electric fields) and thermodynamics. Hydrodynamics demonstrated that energy conservation is a universal law governing even the most chaotic and complex media.
+
+## Connection with modern physics
+Today, hydrodynamics is not a closed discipline but a vibrant area of research. It connects with modern physics through the study of **turbulence**, which remains one of the great unsolved problems of classical physics. Furthermore, **microfluidics** and **nanofluidynamics** explore how liquids move on scales where molecular and quantum forces overcome Bernoulli's laws. In astrophysics, magnetohydrodynamics (MHD) explains plasma behavior in stars, demonstrating that the principles Bernoulli discovered in his lab's water are the same ones governing the dance of matter in the heart of galaxies.

@@ -1,0 +1,603 @@
+const e=`magnitudes:
+
+  - id: F_L
+    symbol: "F_L"
+    nombre:
+      es: Fuerza de Laplace
+      en: Laplace force
+    descripcion:
+      es: Fuerza magnética sobre el conductor activo que transporta corriente en el campo del estátor.
+      en: Magnetic force on the active conductor carrying current in the stator field.
+    unidad_si: N
+    dimension: "[M L T⁻²]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - calculo_par_motor
+      - analisis_fuerza_laplace
+    common_mistake: "Confundir la fuerza de Laplace con el par: multiplicar por el radio es el paso adicional necesario."
+    typical_range: "0.1 N – 500 N según el motor"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Positivo indica fuerza en la dirección de giro de diseño. Negativo indica fuerza de frenada."
+        en: "Positive indicates force in the design rotation direction. Negative indicates a braking force."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Fuerza nula cuando la corriente, el campo o el ángulo del conductor son cero. El motor no produce aceleración."
+        en: "Zero force when current, field, or conductor angle is zero. The motor produces no acceleration."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-500, 500) N para motores de laboratorio"
+    interpretation_role:
+      primary_for:
+        - lectura_fuerza_activa
+        - calculo_par
+      secondary_for:
+        - verificacion_corriente
+    graph_binding:
+      channels:
+        - eje_y_fuerza_vs_angulo
+    pedagogical_notes:
+      es: "La fuerza de Laplace actúa sobre los lados activos de la bobina que están perpendiculares al eje de giro. Los lados pasivos no contribuyen al par porque son paralelos al eje."
+      en: "The Laplace force acts on the active sides of the coil that are perpendicular to the rotation axis. The passive sides do not contribute to torque because they are parallel to the axis."
+
+  - id: tau_m
+    symbol: "\\\\tau_m"
+    nombre:
+      es: Par motor
+      en: Motor torque
+    descripcion:
+      es: Momento de fuerza que el motor ejerce sobre el eje y que impulsa la rotación de la carga.
+      en: Moment of force that the motor exerts on the shaft, driving load rotation.
+    unidad_si: "N·m"
+    dimension: "[M L² T⁻²]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - calculo_par_motor
+      - eficiencia_motor
+      - potencia_mecanica_motor
+    common_mistake: "Usar la fuerza en lugar del par al calcular la potencia mecánica. La potencia requiere tau_m, no F_L."
+    typical_range: "0.01 N·m – 1000 N·m según el motor"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Par positivo produce rotación en el sentido de diseño. Par negativo indica frenada o inversión."
+        en: "Positive torque produces rotation in the design direction. Negative torque indicates braking or reversal."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Par nulo cuando la corriente, el campo o el ángulo son cero. El motor no imprime movimiento a la carga."
+        en: "Zero torque when current, field, or angle is zero. The motor imparts no motion to the load."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-1000, 1000) N·m"
+    interpretation_role:
+      primary_for:
+        - calculo_potencia_mecanica
+        - comparacion_con_carga
+      secondary_for:
+        - diagnostico_arranque
+    graph_binding:
+      channels:
+        - eje_y_par_vs_velocidad
+        - eje_y_par_vs_angulo
+    pedagogical_notes:
+      es: "El par es la magnitud central del motor: relaciona la acción electromecánica con el movimiento. Un motor que no produce par suficiente no puede mover la carga aunque consuma potencia eléctrica."
+      en: "Torque is the central quantity of the motor: it links the electromechanical action with motion. A motor that does not produce enough torque cannot move the load even if it consumes electrical power."
+
+  - id: epsilon_c
+    symbol: "\\\\varepsilon_c"
+    nombre:
+      es: Fuerza contraelectromotriz
+      en: Back-EMF
+    descripcion:
+      es: Tensión inducida en el bobinado del motor al girar en el campo, que se opone a la tensión de alimentación.
+      en: Voltage induced in the motor winding as it rotates in the field, opposing the supply voltage.
+    unidad_si: V
+    dimension: "[M L² T⁻³ I⁻¹]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - balance_tension_motor
+      - calculo_corriente_regimen
+      - fem_contragiro_motor
+    common_mistake: "Ignorar la fem contraelectromotriz al calcular la corriente en régimen estacionario, lo que sobreestima la corriente."
+    typical_range: "0 V – 500 V según el motor y la velocidad"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Positiva cuando el motor gira en la dirección de diseño. Negativa en inversión de giro."
+        en: "Positive when the motor rotates in the design direction. Negative when rotation is reversed."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Fem contraelectromotriz nula en reposo. En ese instante toda la tensión de red cae en la resistencia interna y la corriente de arranque es máxima."
+        en: "Zero back-EMF at rest. At that instant the full supply voltage drops across the internal resistance and the start-up current is maximum."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "[0, 500) V en motores típicos de CC"
+    interpretation_role:
+      primary_for:
+        - autorregulacion_velocidad
+        - calculo_corriente_regimen
+      secondary_for:
+        - diagnostico_velocidad
+    graph_binding:
+      channels:
+        - eje_y_fem_vs_velocidad
+    pedagogical_notes:
+      es: "La fem contraelectromotriz es el mecanismo por el cual el motor se autorregula: a mayor velocidad, mayor fem y menor corriente, lo que limita el par y estabiliza la velocidad."
+      en: "Back-EMF is the mechanism by which the motor self-regulates: the higher the speed, the greater the back-EMF and the lower the current, limiting torque and stabilising speed."
+
+  - id: P_mec
+    symbol: "P_{mec}"
+    nombre:
+      es: Potencia mecánica
+      en: Mechanical power
+    descripcion:
+      es: Potencia entregada al eje del motor en forma de trabajo mecánico por unidad de tiempo.
+      en: Power delivered to the motor shaft as mechanical work per unit time.
+    unidad_si: W
+    dimension: "[M L² T⁻³]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - eficiencia_motor
+      - balance_energetico_motor
+      - potencia_mecanica_motor
+    common_mistake: "Calcular la potencia mecánica sin convertir rpm a rad/s antes de multiplicar por el par."
+    typical_range: "1 W – 100 kW según el motor"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "En modo motor la potencia mecánica es positiva. Un valor negativo indicaría operación como generador."
+        en: "In motor mode mechanical power is positive. A negative value would indicate operation as a generator."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Potencia mecánica nula cuando la velocidad angular o el par son cero. El motor está parado o sin carga."
+        en: "Zero mechanical power when angular speed or torque is zero. The motor is stopped or unloaded."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "[0, 100000) W en motores de laboratorio e industriales"
+    interpretation_role:
+      primary_for:
+        - calculo_rendimiento
+        - comparacion_potencia_electrica
+      secondary_for:
+        - diagnostico_carga
+    graph_binding:
+      channels:
+        - eje_y_potencia_vs_velocidad
+    pedagogical_notes:
+      es: "La potencia mecánica es el resultado práctico del motor: lo que finalmente mueve la carga. Conocerla permite dimensionar el sistema mecánico accionado."
+      en: "Mechanical power is the practical output of the motor: what ultimately moves the load. Knowing it allows sizing of the driven mechanical system."
+
+  - id: P_elec
+    symbol: "P_{elec}"
+    nombre:
+      es: Potencia eléctrica consumida
+      en: Consumed electrical power
+    descripcion:
+      es: Potencia eléctrica absorbida por el motor desde la red o fuente de alimentación.
+      en: Electrical power absorbed by the motor from the supply network or source.
+    unidad_si: W
+    dimension: "[M L² T⁻³]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - eficiencia_motor
+      - balance_energetico_motor
+    common_mistake: "Confundir la potencia eléctrica con la potencia mecánica, ignorando las pérdidas del motor."
+    typical_range: "1 W – 150 kW según el motor"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La potencia eléctrica consumida es siempre positiva en modo motor."
+        en: "Consumed electrical power is always positive in motor mode."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Potencia eléctrica nula implicaría motor apagado. No es un estado de operación normal."
+        en: "Zero electrical power would imply the motor is off. Not a normal operating state."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, 150000) W"
+    interpretation_role:
+      primary_for:
+        - calculo_rendimiento
+        - factura_energetica
+      secondary_for:
+        - comparacion_motores
+    graph_binding:
+      channels:
+        - eje_x_potencia_electrica
+    pedagogical_notes:
+      es: "La potencia eléctrica es la entrada del balance energético del motor. Siempre supera a la potencia mecánica por las pérdidas inevitables."
+      en: "Electrical power is the input to the motor energy balance. It always exceeds mechanical power due to unavoidable losses."
+
+  - id: eta
+    symbol: "\\\\eta"
+    nombre:
+      es: Rendimiento del motor
+      en: Motor efficiency
+    descripcion:
+      es: Fracción adimensional de la potencia eléctrica consumida que se transforma en potencia mecánica útil.
+      en: Dimensionless fraction of consumed electrical power that is converted into useful mechanical power.
+    unidad_si: "-"
+    dimension: adimensional
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - eficiencia_motor
+      - comparacion_motores
+    common_mistake: "Usar el rendimiento como porcentaje (85) en lugar de decimal (0.85) en las fórmulas."
+    typical_range: "0.50 – 0.97 en motores modernos"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El rendimiento es adimensional positivo. Un valor fuera del intervalo (0,1) indica error de datos."
+        en: "Efficiency is a dimensionless positive quantity. A value outside (0,1) indicates data error."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Rendimiento cero implicaría que toda la energía eléctrica se disipa como calor, imposible en un motor funcional."
+        en: "Zero efficiency would imply all electrical energy is dissipated as heat, impossible in a functional motor."
+    value_nature:
+      kind: ratio
+      nonnegative_only: true
+      expected_interval: "(0, 1)"
+    interpretation_role:
+      primary_for:
+        - evaluacion_energetica
+        - comparacion_motores
+      secondary_for:
+        - estimacion_perdidas
+    graph_binding:
+      channels:
+        - eje_y_eficiencia_vs_carga
+    pedagogical_notes:
+      es: "El rendimiento sintetiza en un solo número la calidad de la conversión energética del motor. Un motor con mayor rendimiento consume menos electricidad para el mismo trabajo útil."
+      en: "Efficiency summarises the quality of the motor's energy conversion in a single number. A higher-efficiency motor consumes less electricity for the same useful work."
+
+  - id: omega
+    symbol: "\\\\omega"
+    nombre:
+      es: Velocidad angular
+      en: Angular speed
+    descripcion:
+      es: Velocidad de rotación del eje del motor expresada en radianes por segundo.
+      en: Rotation speed of the motor shaft expressed in radians per second.
+    unidad_si: "rad/s"
+    dimension: "[T⁻¹]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: core_physical_quantity
+    used_in:
+      - fem_contragiro_motor
+      - potencia_mecanica_motor
+    common_mistake: "No convertir rpm a rad/s antes de aplicar las fórmulas (multiplicar por 2π/60)."
+    typical_range: "10 rad/s – 1500 rad/s en motores de uso general"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Signo positivo corresponde al sentido de giro de diseño. Signo negativo indica inversión."
+        en: "Positive sign corresponds to the design rotation direction. Negative sign indicates reversal."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Velocidad nula indica motor en reposo. La fem contraelectromotriz es cero y la corriente de arranque es máxima."
+        en: "Zero speed indicates motor at rest. Back-EMF is zero and start-up current is maximum."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-1500, 1500) rad/s"
+    interpretation_role:
+      primary_for:
+        - fem_contragiro
+        - potencia_mecanica
+      secondary_for:
+        - diagnostico_arranque
+    graph_binding:
+      channels:
+        - eje_x_velocidad_angular
+    pedagogical_notes:
+      es: "La velocidad angular en rad/s es la variable de estado del eje del motor. Convertir rpm correctamente es el primer paso operativo en cualquier cálculo de potencia o fem contraelectromotriz."
+      en: "Angular speed in rad/s is the state variable of the motor shaft. Converting rpm correctly is the first operational step in any power or back-EMF calculation."
+
+  - id: I
+    symbol: "I"
+    nombre:
+      es: Corriente de armadura
+      en: Armature current
+    descripcion:
+      es: Corriente eléctrica que circula por el bobinado del motor y genera la fuerza de Laplace.
+      en: Electric current flowing through the motor winding, generating the Laplace force.
+    unidad_si: A
+    dimension: "[I]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: core_physical_quantity
+    used_in:
+      - fuerza_laplace_motor
+      - par_motor_electrico
+    common_mistake: "Calcular la corriente de régimen sin restar la fem contraelectromotriz a la tensión de alimentación antes de dividir por la resistencia interna."
+    typical_range: "0.1 A – 500 A según el motor"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Corriente positiva genera fuerza motriz. Corriente negativa genera fuerza de frenada."
+        en: "Positive current generates driving force. Negative current generates braking force."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Corriente nula implica que el motor no produce ninguna fuerza. El motor está desconectado o en circuito abierto."
+        en: "Zero current implies the motor produces no force. The motor is disconnected or in open circuit."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-500, 500) A"
+    interpretation_role:
+      primary_for:
+        - calculo_fuerza_laplace
+        - calculo_par
+      secondary_for:
+        - diagnostico_sobreintensidad
+    graph_binding:
+      channels:
+        - eje_y_corriente_vs_velocidad
+    pedagogical_notes:
+      es: "La corriente de armadura es el nexo entre el circuito eléctrico y la acción mecánica. Controlar la corriente equivale a controlar el par, lo cual es la base de los variadores de velocidad."
+      en: "Armature current is the link between the electrical circuit and mechanical action. Controlling current is equivalent to controlling torque, which is the basis of variable-speed drives."
+
+  - id: B
+    symbol: "B"
+    nombre:
+      es: Campo magnético del estátor
+      en: Stator magnetic field
+    descripcion:
+      es: Inducción magnética en el entrehierro generada por el estátor del motor.
+      en: Magnetic induction in the air gap generated by the motor stator.
+    unidad_si: T
+    dimension: "[M T⁻² I⁻¹]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - fuerza_laplace_motor
+      - par_motor_electrico
+      - fem_contragiro_motor
+    common_mistake: "Confundir el campo en el entrehierro con el campo en el hierro del estátor, que es diferente por la permeabilidad del núcleo."
+    typical_range: "0.5 T – 1.5 T en entrehierros de motores de CC"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El módulo del campo en el entrehierro es positivo. Su dirección está fijada por el diseño del estátor."
+        en: "The magnitude of the air-gap field is positive. Its direction is fixed by the stator design."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Campo nulo implica ausencia de excitación magnética y ninguna fuerza de Laplace."
+        en: "Zero field implies absence of magnetic excitation and no Laplace force."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0.1, 2.0) T"
+    interpretation_role:
+      primary_for:
+        - calculo_fuerza_laplace
+        - calculo_par
+        - calculo_fem_contra
+      secondary_for:
+        - diseño_magnetico
+    graph_binding:
+      channels:
+        - parametro_campo_magnetico
+    pedagogical_notes:
+      es: "El campo del estátor es el parámetro de diseño más importante del motor. Un campo más intenso aumenta linealmente tanto el par como la fem contraelectromotriz."
+      en: "The stator field is the most important design parameter of the motor. A stronger field increases both torque and back-EMF linearly."
+
+  - id: N_c
+    symbol: "N_c"
+    nombre:
+      es: Número de conductores activos
+      en: Number of active conductors
+    descripcion:
+      es: Número total de conductores del bobinado del rotor situados en la zona de campo activo del entrehierro.
+      en: Total number of rotor winding conductors located in the active field region of the air gap.
+    unidad_si: "-"
+    dimension: adimensional
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - fuerza_laplace_motor
+      - par_motor_electrico
+      - fem_contragiro_motor
+    common_mistake: "Confundir N_c con el número de espiras o vueltas del bobinado, que es la mitad del número de conductores activos."
+    typical_range: "10 – 1000 conductores según el motor"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "N_c es siempre un entero positivo. No tiene signo."
+        en: "N_c is always a positive integer. It has no sign."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un motor sin conductores activos no puede producir fuerza ni par."
+        en: "A motor without active conductors cannot produce force or torque."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(1, 2000)"
+    interpretation_role:
+      primary_for:
+        - calculo_fuerza_laplace
+        - calculo_par
+      secondary_for:
+        - diseño_bobinado
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "N_c multiplica linealmente la fuerza y el par: duplicar el número de conductores activos duplica la capacidad motriz sin cambiar el campo ni la corriente."
+      en: "N_c multiplies force and torque linearly: doubling the number of active conductors doubles the drive capacity without changing field or current."
+
+  - id: L_c
+    symbol: "L_c"
+    nombre:
+      es: Longitud activa del conductor
+      en: Active conductor length
+    descripcion:
+      es: Longitud del tramo de conductor situado en el campo magnético del entrehierro que contribuye a la fuerza de Laplace.
+      en: Length of the conductor segment located in the air-gap magnetic field that contributes to the Laplace force.
+    unidad_si: m
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - fuerza_laplace_motor
+      - par_motor_electrico
+      - fem_contragiro_motor
+    common_mistake: "Usar la longitud total del conductor en lugar de la longitud activa en el campo. Los extremos del bobinado no producen par."
+    typical_range: "0.01 m – 0.5 m según el tamaño del motor"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La longitud activa es siempre positiva."
+        en: "Active length is always positive."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Longitud nula implicaría que no hay conductor en el campo: sin fuerza ni par."
+        en: "Zero length would imply no conductor in the field: no force or torque."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0.005, 1.0) m"
+    interpretation_role:
+      primary_for:
+        - calculo_fuerza_laplace
+      secondary_for:
+        - diseño_geometrico
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "La distinción entre longitud activa y longitud total es crítica en el diseño de motores. Solo la parte del conductor que está dentro del campo produce fuerza útil."
+      en: "The distinction between active length and total length is critical in motor design. Only the conductor portion inside the field produces useful force."
+
+  - id: r_a
+    symbol: "r_a"
+    nombre:
+      es: Radio de armadura
+      en: Armature radius
+    descripcion:
+      es: Distancia del conductor activo al eje de rotación del rotor.
+      en: Distance from the active conductor to the rotor rotation axis.
+    unidad_si: m
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - par_motor_electrico
+      - fem_contragiro_motor
+    common_mistake: "Confundir el radio de armadura con el radio exterior del rotor o con el diámetro del motor."
+    typical_range: "0.01 m – 0.5 m según el tamaño del motor"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El radio de armadura es siempre positivo por ser una distancia geométrica."
+        en: "Armature radius is always positive as it is a geometric distance."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Radio nulo implicaría que el conductor está en el eje de giro: sin palanca y sin par posible."
+        en: "Zero radius would mean the conductor is on the rotation axis: no lever arm and no possible torque."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0.005, 0.6) m"
+    interpretation_role:
+      primary_for:
+        - calculo_par
+        - calculo_fem_contra
+      secondary_for:
+        - diseño_geometrico
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "El radio de armadura es el brazo de palanca que convierte fuerza en par. Junto con N_c y L_c determina la constante de máquina del motor."
+      en: "The armature radius is the lever arm that converts force into torque. Together with N_c and L_c it determines the motor's machine constant."
+
+  - id: sin_theta
+    symbol: "\\\\sin\\\\theta"
+    nombre:
+      es: Seno del ángulo conductor-campo
+      en: Sine of conductor-field angle
+    descripcion:
+      es: Seno del ángulo entre la dirección del conductor activo y la dirección del campo magnético del estátor.
+      en: Sine of the angle between the active conductor direction and the stator magnetic field direction.
+    unidad_si: "-"
+    dimension: adimensional
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - fuerza_laplace_motor
+      - par_motor_electrico
+    common_mistake: "Olvidar el factor sin_theta en la fórmula de fuerza cuando el conductor no es perpendicular al campo, lo que sobreestima la fuerza."
+    typical_range: "0 – 1 (el máximo es sin 90° cuando el conductor es perpendicular al campo)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El valor del seno está entre 0 y 1 para ángulos en el primer cuadrante. Se considera positivo en el análisis de fuerza."
+        en: "The sine value is between 0 and 1 for first-quadrant angles. It is taken as positive in the force analysis."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Seno nulo cuando el conductor es paralelo al campo. La fuerza de Laplace es cero en esa posición."
+        en: "Zero sine when the conductor is parallel to the field. The Laplace force is zero at that position."
+    value_nature:
+      kind: ratio
+      nonnegative_only: true
+      expected_interval: "[0, 1]"
+    interpretation_role:
+      primary_for:
+        - modulo_fuerza_laplace
+      secondary_for:
+        - analisis_posicion_angular
+    graph_binding:
+      channels:
+        - modulador_angulo_en_curva
+    pedagogical_notes:
+      es: "El factor sin_theta es el que hace que la fuerza sobre el conductor sea máxima cuando es perpendicular al campo y nula cuando es paralelo. En el modelo de motor real, el conmutador mantiene el ángulo siempre próximo a 90°."
+      en: "The sin_theta factor makes the conductor force maximum when perpendicular to the field and zero when parallel. In the real motor model, the commutator keeps the angle always close to 90°."
+`;export{e as default};

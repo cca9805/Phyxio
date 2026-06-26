@@ -1,0 +1,46 @@
+import React from "react";
+import SvgProfileRenderer from "../../../SVG/SvgProfileRenderer.jsx";
+import profile from "./velocidad-de-propagacion.svg.profile.js";
+
+// Extractor hints: createSvgGraph(
+export default function VelocidadDePropagacionGraphsSvg({
+  lang = "es",
+  sharedParams = {},
+  params,
+  paramsIn,
+  onSharedParamsChange,
+  onApplyToCalculator,
+  onInterpretationContextChange,
+  onGraphStateChange,
+}) {
+  const uiLang = lang === "en" ? "en" : "es";
+  const input = paramsIn ?? params ?? sharedParams ?? {};
+  const calc = sharedParams?.__calc ?? params?.__calc ?? paramsIn?.__calc ?? {};
+  const paramsOut = {
+    ...input,
+    v: input?.v ?? calc?.v ?? 2.4,
+    Delta_x: input?.Delta_x ?? calc?.Delta_x ?? 2.4,
+    Delta_t: input?.Delta_t ?? calc?.Delta_t ?? 1,
+    lambda: input?.lambda ?? calc?.lambda ?? 0.8,
+    f: input?.f ?? calc?.f ?? 3,
+  };
+
+  return (
+    <SvgProfileRenderer
+      profile={profile}
+      lang={uiLang}
+      sharedParams={sharedParams}
+      paramsIn={paramsOut}
+      onApplyToCalculator={onApplyToCalculator ?? onSharedParamsChange}
+      onInterpretationContextChange={onInterpretationContextChange}
+      onGraphStateChange={onGraphStateChange}
+    />
+  );
+}
+
+VelocidadDePropagacionGraphsSvg.profile = profile;
+VelocidadDePropagacionGraphsSvg.graph_identity = profile.graph_identity;
+VelocidadDePropagacionGraphsSvg.pregunta_principal = profile.graph_identity.pregunta_principal;
+VelocidadDePropagacionGraphsSvg.magnitud_estrella = profile.graph_identity.magnitud_estrella;
+
+

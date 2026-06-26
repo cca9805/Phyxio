@@ -1,0 +1,67 @@
+const e=`version: 5
+id: aplicaciones-ingenieriles
+nombre:
+  es: Aplicaciones ingenieriles
+  en: Engineering Applications
+titulo:
+  es: aplicaciones-ingenieriles
+  en: engineering-applications
+type: leaf
+area: fisica-clasica
+bloque: mecanica
+subbloque: fluidos
+parent_id: fluidos-reales
+orden: 218540
+niveles:
+  es: [ESO, BACHILLERATO, UNIVERSIDAD]
+  en: [Secondary, Upper Secondary, University]
+icon: "💧"
+ruta_relativa: fisica-clasica/mecanica/fluidos/fluidos-reales/aplicaciones-ingenieriles
+descripcion: Potencia y eficiencia en sistemas hidráulicos reales.
+description_en: Power and efficiency in real hydraulic systems.
+descripcion_corta:
+  es: Bombas y turbinas reales.
+  en: Real pumps and turbines.
+dificultad: 3
+tiempo_estimado_min: 55
+physical_role:
+  es: concepto físico
+  en: physical concept
+prerequisitos:
+  - fisica-clasica/mecanica/fluidos/fluidos-reales/flujo-en-tuberias
+  - fisica-clasica/mecanica/fluidos/fluidos-reales/aerodinamica-basica
+  - fisica-clasica/mecanica/fluidos/fluidos-reales/hidrodinamica
+tags:
+  es: [fluidos, potencia, bombas]
+  en: [fluids, power, pumps]
+graficos:
+  - Coord
+  - Svg
+pregunta_fisica_central:
+  es: "¿Cómo se calcula la potencia necesaria para mover un fluido real?"
+  en: "How do we calculate the power needed to move a real fluid?"
+representacion_dominante: Coord
+magnitud_dominante: P_util
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    tab_label:
+      es: Análisis
+      en: Analysis
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    show_warnings: true
+    show_likely_errors: true
+    max_inline_messages: 3
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

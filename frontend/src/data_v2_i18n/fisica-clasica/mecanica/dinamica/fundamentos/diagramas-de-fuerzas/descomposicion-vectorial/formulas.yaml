@@ -1,0 +1,477 @@
+version: 1
+formulas:
+- id: comp_cartesianas
+  title:
+    es: descomposición cartesiana completa
+    en: complete Cartesian decomposition
+  equation: Fx = Fm*cos(theta); Fy = Fm*sin(theta)
+  latex: F_x = F\cos\theta,\quad F_y = F\sin\theta
+  rearrangements: []
+  category: fundamental
+  relation_type: geometric_projection
+  physical_meaning:
+    es: Una fuerza inclinada puede proyectarse sobre dos ejes ortogonales para analizar
+      por separado sus efectos sobre cada dirección.
+    en: An inclined force can be projected onto two orthogonal axes to analyze separately
+      its effects along each direction.
+  constraints:
+  - expr: Fm >= 0
+    message:
+      es: El módulo de la fuerza debe ser no negativo.
+      en: The force magnitude must be non-negative.
+  validity:
+    es: Válida cuando el ángulo se mide desde el eje x positivo de un sistema ortogonal
+      y la fuerza se proyecta sobre esos mismos ejes.
+    en: Valid when the angle is measured from the positive x axis of an orthogonal
+      system and the force is projected onto those same axes.
+  dimension_check: N = N
+  calculable: false
+  motivo_no_calculable:
+    es: Resume dos proyecciones distintas; el motor las resuelve por separado para
+      cada target.
+    en: It summarizes two different projections; the engine solves them separately
+      for each target.
+  used_in:
+  - theory
+  - examples
+  - interpretation
+  interpretation_tags:
+  - projection
+  - orthogonal_axes
+  - trig_choice
+  result_semantics:
+    target: Fx
+    meaning: Resulta util para interpretar Fx en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica siempre desde qué eje se mide el ángulo antes de usar seno y coseno.
+      en: Always verify from which axis the angle is measured before using sine and
+        cosine.
+  coherence_checks:
+  - expr: abs(Fm*Fm - (Fx*Fx + Fy*Fy)) < 1e-6
+    severity: ok
+    message:
+      es: Las componentes reconstruyen el módulo con consistencia pitagórica.
+      en: The components reconstruct the magnitude with Pythagorean consistency.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - detect_when: abs(Fx) > Fm || abs(Fy) > Fm
+    message:
+      es: Si una componente supera al módulo total, la función trigonométrica o el
+        ángulo están mal elegidos.
+      en: If a component exceeds the total magnitude, the trigonometric function or
+        the angle choice is wrong.
+- id: comp_cartesianas_fx
+  title:
+    es: componente x desde ángulo horizontal
+    en: x component from horizontal angle
+  equation: Fx = Fm*cos(theta)
+  latex: F_x = F\cos\theta
+  rearrangements:
+  - target: Fx
+    equation: Fx = Fm*cos(theta)
+    latex: F_x = F\cos\theta
+    constraints: []
+  - target: Fm
+    equation: Fm = Fx/cos(theta)
+    latex: F = \frac{F_x}{\cos\theta}
+    constraints:
+    - expr: cos(theta) != 0
+      message:
+        es: cos(theta) != 0
+        en: cos(theta) != 0
+  category: derived
+  relation_type: geometric_projection
+  physical_meaning:
+    es: Esta proyección extrae la parte de la fuerza total que realmente actúa sobre
+      el eje x.
+    en: This projection extracts the part of the total force that actually acts along
+      the x axis.
+  constraints:
+  - expr: Fm >= 0
+    message:
+      es: El módulo de la fuerza debe ser no negativo.
+      en: The force magnitude must be non-negative.
+  validity:
+    es: Válida cuando theta se mide desde el eje x positivo y el sistema de ejes es
+      ortogonal.
+    en: Valid when theta is measured from the positive x axis and the axis system
+      is orthogonal.
+  dimension_check: N = N
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - calculator
+  - examples
+  - interpretation
+  interpretation_tags:
+  - x_projection
+  - sign_consistency
+  - horizontal_effect
+  result_semantics:
+    target: Fx
+    meaning: Resulta util para interpretar Fx en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Si el ángulo no se mide desde la horizontal, esta ecuación debe reemplazarse
+        por la variante geométrica correcta.
+      en: If the angle is not measured from the horizontal, this equation must be
+        replaced by the proper geometric variant.
+  coherence_checks:
+  - expr: abs(Fx) <= abs(Fm) + 1e-9
+    severity: ok
+    message:
+      es: La componente x no supera al módulo total, como exige una proyección física
+        correcta.
+      en: The x component does not exceed the total magnitude, as required by a correct
+        physical projection.
+  - expr: abs(Fx) > abs(Fm) + 1e-9
+    severity: warning
+    message:
+      es: Si |Fx| supera a Fm, hay un error de trigonometría, unidades o referencia
+        angular.
+      en: If |Fx| exceeds Fm, there is a trigonometric, unit, or angular-reference
+        error.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - detect_when: abs(Fx) < 1e-9 && abs(theta) > 1e-9 && abs(theta-1.57079632679) >
+      1e-3
+    message:
+      es: Una componente x casi nula con un ángulo no próximo a 90° suele indicar
+        un seno/coseno intercambiado.
+      en: An almost-zero x component with an angle not close to 90° usually indicates
+        sine/cosine were swapped.
+- id: comp_cartesianas_fy
+  title:
+    es: componente y desde ángulo horizontal
+    en: y component from horizontal angle
+  equation: Fy = Fm*sin(theta)
+  latex: F_y = F\sin\theta
+  rearrangements:
+  - target: Fy
+    equation: Fy = Fm*sin(theta)
+    latex: F_y = F\sin\theta
+    constraints: []
+  - target: Fm
+    equation: Fm = Fy/sin(theta)
+    latex: F = \frac{F_y}{\sin\theta}
+    constraints:
+    - expr: sin(theta) != 0
+      message:
+        es: sin(theta) != 0
+        en: sin(theta) != 0
+  category: derived
+  relation_type: geometric_projection
+  physical_meaning:
+    es: Esta proyección identifica la parte de la fuerza que modifica el balance vertical
+      o lateral del sistema.
+    en: This projection identifies the part of the force that modifies the vertical
+      or lateral balance of the system.
+  constraints:
+  - expr: Fm >= 0
+    message:
+      es: El módulo de la fuerza debe ser no negativo.
+      en: The force magnitude must be non-negative.
+  validity:
+    es: Válida cuando theta se mide desde el eje x positivo y el sistema de ejes es
+      ortogonal.
+    en: Valid when theta is measured from the positive x axis and the axis system
+      is orthogonal.
+  dimension_check: N = N
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - calculator
+  - examples
+  - interpretation
+  interpretation_tags:
+  - y_projection
+  - contact_effect
+  - sign_consistency
+  result_semantics:
+    target: Fy
+    meaning: Resulta util para interpretar Fy en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Si el ángulo viene dado desde la vertical o desde el plano, revisa la geometría
+        antes de usar esta forma estándar.
+      en: If the angle is given from the vertical or from the plane, check the geometry
+        before using this standard form.
+  coherence_checks:
+  - expr: abs(Fy) <= abs(Fm) + 1e-9
+    severity: ok
+    message:
+      es: La componente y no supera al módulo total.
+      en: The y component does not exceed the total magnitude.
+  - expr: abs(Fy) > abs(Fm) + 1e-9
+    severity: warning
+    message:
+      es: Si |Fy| supera a Fm, la descomposición no es físicamente coherente.
+      en: If |Fy| exceeds Fm, the decomposition is not physically coherent.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - detect_when: abs(Fy) < 1e-9 && abs(theta) > 1e-9 && abs(theta-3.14159265359/2)
+      > 1e-3
+    message:
+      es: Una componente y casi nula con un ángulo no próximo a 0° suele señalar una
+        referencia angular mal leída.
+      en: An almost-zero y component with an angle not close to 0° usually signals
+        a misread angular reference.
+- id: modulo_desde_componentes
+  title:
+    es: módulo desde componentes ortogonales
+    en: Magnitude from components
+  equation: Fm = sqrt(Fx^2 + Fy^2)
+  latex: F = \sqrt{F_x^2 + F_y^2}
+  rearrangements:
+  - target: Fm
+    equation: Fm = sqrt(Fx^2 + Fy^2)
+    latex: F = \sqrt{F_x^2 + F_y^2}
+    constraints: []
+  category: derived
+  relation_type: reconstruction
+  physical_meaning:
+    es: El módulo total puede reconstruirse a partir de componentes ortogonales usando
+      el teorema de Pitágoras.
+    en: The total magnitude can be reconstructed from orthogonal components using
+      the Pythagorean theorem.
+  constraints:
+  - expr: 'true'
+    message:
+      es: Fx y Fy deben pertenecer a la misma fuerza y al mismo sistema ortogonal
+        de ejes.
+      en: Fx and Fy must belong to the same force and to the same orthogonal axis
+        system.
+  validity:
+    es: Válida solo si Fx y Fy son proyecciones ortogonales de un mismo vector.
+    en: Valid only if Fx and Fy are orthogonal projections of the same vector.
+  dimension_check: N = N
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - calculator
+  - examples
+  - interpretation
+  interpretation_tags:
+  - magnitude_reconstruction
+  - pythagorean_check
+  - orthogonality
+  result_semantics:
+    target: Fm
+    meaning: Resulta util para interpretar Fm en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Si las componentes provienen de ejes no ortogonales, esta reconstrucción
+        deja de ser válida.
+      en: If the components come from non-orthogonal axes, this reconstruction is
+        no longer valid.
+  coherence_checks:
+  - expr: Fm >= 0
+    severity: ok
+    message:
+      es: El módulo reconstruido es no negativo, como exige una magnitud física.
+      en: The reconstructed magnitude is non-negative, as required by a physical magnitude.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - detect_when: abs(Fx) < 1e-9 && abs(Fy) < 1e-9
+    message:
+      es: Si ambas componentes son nulas, el vector total también debe ser nulo.
+      en: If both components are zero, the total vector must also be zero.
+- id: comp_plano_inclinado
+  title:
+    es: proyección del peso en plano inclinado
+    en: Weight projection on an inclined plane
+  equation: Ppar = m*g*sin(theta); Pperp = m*g*cos(theta)
+  latex: P_{\parallel}=mg\sin\theta,\quad P_{\perp}=mg\cos\theta
+  rearrangements: []
+  category: applied
+  relation_type: geometric_projection
+  physical_meaning:
+    es: El peso puede separarse en una parte que hace deslizar al cuerpo y otra que
+      lo comprime contra la superficie.
+    en: Weight can be separated into one part that makes the body slide and another
+      that presses it against the surface.
+  constraints:
+  - expr: m > 0 && g > 0
+    message:
+      es: La masa y la gravedad deben ser positivas en el dominio usual del modelo.
+      en: Mass and gravity must be positive in the usual model domain.
+  validity:
+    es: Válida cuando theta coincide con el ángulo geométrico del plano y los ejes
+      se toman paralelo y perpendicular a la rampa.
+    en: Valid when theta matches the geometric angle of the plane and the axes are
+      chosen parallel and perpendicular to the ramp.
+  dimension_check: N = kg·m/s^2
+  calculable: false
+  motivo_no_calculable:
+    es: Resume dos fórmulas aplicadas a objetivos distintos; el motor las maneja por
+      separado para cada componente.
+    en: It summarizes two formulas applied to different targets; the engine handles
+      them separately for each component.
+  used_in:
+  - theory
+  - examples
+  - interpretation
+  interpretation_tags:
+  - inclined_plane
+  - weight_projection
+  - contact_reading
+  result_semantics:
+    target: Ppar
+    meaning: Resulta util para interpretar Ppar en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Si los ejes no son paralelo-perpendicular al plano, estas expresiones ya
+        no se leen de forma directa.
+      en: If the axes are not chosen parallel-perpendicular to the plane, these expressions
+        can no longer be read directly.
+  coherence_checks:
+  - expr: abs(Ppar) <= m*g + 1e-9 && abs(Pperp) <= m*g + 1e-9
+    severity: ok
+    message:
+      es: Ninguna componente del peso supera al propio peso total.
+      en: No component of weight exceeds the total weight itself.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - detect_when: abs(Ppar) > m*g + 1e-9 || abs(Pperp) > m*g + 1e-9
+    message:
+      es: Si una componente del peso supera a mg, el ángulo, la función trigonométrica
+        o las unidades están mal planteados.
+      en: If a weight component exceeds mg, the angle, trigonometric function, or
+        units are misused.
+- id: comp_plano_inclinado_paralela
+  title:
+    es: componente paralela del peso
+    en: parallel component of weight
+  equation: Ppar = m*g*sin(theta)
+  latex: P_{\parallel}=mg\sin\theta
+  rearrangements:
+  - target: Ppar
+    equation: Ppar = m*g*sin(theta)
+    latex: P_{\parallel}=mg\sin\theta
+    constraints: []
+  category: applied
+  relation_type: geometric_projection
+  physical_meaning:
+    es: Identifica la parte del peso que tiende a acelerar el cuerpo a lo largo de
+      la rampa.
+    en: It identifies the part of the weight that tends to accelerate the body along
+      the ramp.
+  constraints:
+  - expr: m > 0 && g > 0
+    message:
+      es: La masa y la gravedad deben ser positivas.
+      en: Mass and gravity must be positive.
+  validity:
+    es: Válida con ejes alineados con el plano y con theta igual al ángulo de inclinación.
+    en: Valid with axes aligned with the plane and with theta equal to the inclination
+      angle.
+  dimension_check: N = kg·m/s^2
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - calculator
+  - examples
+  - interpretation
+  interpretation_tags:
+  - inclined_plane
+  - downhill_component
+  - driving_force
+  result_semantics:
+    target: Ppar
+    meaning: Resulta util para interpretar Ppar en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Si el ángulo dado no es el de la rampa sino el complementario, la función
+        trigonométrica debe revisarse.
+      en: If the given angle is not the ramp angle but the complementary one, the
+        trigonometric function must be revised.
+  coherence_checks:
+  - expr: abs(Ppar) <= m*g + 1e-9
+    severity: ok
+    message:
+      es: La componente paralela es físicamente compatible con el peso total.
+      en: The parallel component is physically compatible with total weight.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - detect_when: abs(Ppar) < 1e-9 && abs(theta) > 1e-9
+    message:
+      es: Una componente paralela casi nula con una rampa no horizontal suele indicar
+        función trigonométrica intercambiada.
+      en: An almost-zero parallel component on a non-horizontal ramp usually indicates
+        the trigonometric function was swapped.
+- id: comp_plano_inclinado_perpendicular
+  title:
+    es: componente perpendicular del peso
+    en: perpendicular component of weight
+  equation: Pperp = m*g*cos(theta)
+  latex: P_{\perp}=mg\cos\theta
+  rearrangements:
+  - target: Pperp
+    equation: Pperp = m*g*cos(theta)
+    latex: P_{\perp}=mg\cos\theta
+    constraints: []
+  category: applied
+  relation_type: geometric_projection
+  physical_meaning:
+    es: Identifica la parte del peso que carga el contacto normal entre cuerpo y superficie.
+    en: It identifies the part of the weight that loads the normal contact between
+      body and surface.
+  constraints:
+  - expr: m > 0 && g > 0
+    message:
+      es: La masa y la gravedad deben ser positivas.
+      en: Mass and gravity must be positive.
+  validity:
+    es: Válida con ejes paralelo-perpendicular al plano y con theta igual al ángulo
+      del plano.
+    en: Valid with axes parallel-perpendicular to the plane and with theta equal to
+      the plane angle.
+  dimension_check: N = kg·m/s^2
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - calculator
+  - examples
+  - interpretation
+  interpretation_tags:
+  - inclined_plane
+  - contact_loading
+  - normal_relation
+  result_semantics:
+    target: Pperp
+    meaning: Resulta util para interpretar Pperp en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Si el problema usa un eje vertical-horizontal, esta fórmula no puede leerse
+        sin rotar antes los ejes.
+      en: If the problem uses vertical-horizontal axes, this formula cannot be read
+        without rotating the axes first.
+  coherence_checks:
+  - expr: abs(Pperp) <= m*g + 1e-9
+    severity: ok
+    message:
+      es: La componente perpendicular es físicamente compatible con el peso total.
+      en: The perpendicular component is physically compatible with total weight.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - detect_when: abs(Pperp) < 1e-9 && abs(theta) < 1.56
+    message:
+      es: Una componente perpendicular casi nula con una rampa no casi vertical suele
+        señalar un error geométrico.
+      en: An almost-zero perpendicular component on a ramp that is not nearly vertical
+        usually signals a geometric error.

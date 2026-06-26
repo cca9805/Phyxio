@@ -1,0 +1,269 @@
+const e=`version: "2.0"
+magnitudes:
+
+  - id: V_AB
+    symbol: V_{AB}
+    nombre:
+      es: Diferencia de potencial
+      en: Potential difference
+    descripcion:
+      es: "Trabajo por unidad de carga positiva realizado por el campo eléctrico al mover una carga del punto A al punto B. Equivale a la diferencia entre los potenciales eléctricos en A y B."
+      en: "Work per unit positive charge done by the electric field when moving a charge from point A to point B. Equals the difference between the electric potentials at A and B."
+    unidad_si: "V"
+    dimension: "[M L² T⁻³ I⁻¹]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - cálculo del trabajo eléctrico entre dos puntos
+      - determinación de la energía ganada o perdida por una carga
+      - análisis de circuitos eléctricos
+    common_mistake: "Confundir la diferencia de potencial con el potencial absoluto. La diferencia de potencial es la magnitud medible; el potencial absoluto solo tiene sentido con un cero de referencia elegido."
+    typical_range: "Desde microvolts en señales biológicas hasta miles de voltios en alta tensión."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Positiva si el punto A está a mayor potencial que B: el campo realiza trabajo positivo sobre una carga positiva que se mueve de A a B. Negativa en caso contrario."
+        en: "Positive if point A is at higher potential than B: the field does positive work on a positive charge moving from A to B. Negative otherwise."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Diferencia de potencial nula significa que A y B están al mismo potencial: no se requiere trabajo externo para mover una carga entre ellos."
+        en: "Zero potential difference means A and B are at the same potential: no external work is required to move a charge between them."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-∞, +∞)"
+    interpretation_role:
+      primary_for:
+        - lectura del voltaje entre dos puntos del campo
+        - cálculo del trabajo eléctrico
+      secondary_for:
+        - análisis de la energía del sistema carga-campo
+    graph_binding:
+      channels:
+        - y_axis
+    pedagogical_notes:
+      es: "[[V_AB]] es la magnitud central de este leaf. El error más frecuente es invertir el orden de los subíndices: [[V_AB]] es el potencial en A menos el potencial en B, no al revés."
+      en: "[[V_AB]] is the central magnitude of this leaf. The most frequent error is reversing the subscript order: [[V_AB]] is the potential at A minus the potential at B, not the other way around."
+
+  - id: W_AB
+    symbol: W_{AB}
+    nombre:
+      es: Trabajo eléctrico
+      en: Electric work
+    descripcion:
+      es: "Trabajo realizado por la fuerza eléctrica al desplazar una carga q del punto A al punto B en un campo eléctrico."
+      en: "Work done by the electric force when displacing a charge q from point A to point B in an electric field."
+    unidad_si: "J"
+    dimension: "[M L² T⁻²]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: derived
+    used_in:
+      - cálculo de la energía transferida al mover una carga
+      - relación entre campo eléctrico y diferencia de potencial
+    common_mistake: "Confundir el trabajo del campo con el trabajo externo. Si el campo realiza trabajo positivo, un agente externo hace trabajo negativo de igual módulo."
+    typical_range: "Desde joules en sistemas macroscópicos hasta electronvoltios (1 eV = 1.6×10⁻¹⁹ J) en física atómica."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Positivo si la fuerza eléctrica actúa en el sentido del desplazamiento (la carga se mueve de mayor a menor potencial). Negativo en caso contrario."
+        en: "Positive if the electric force acts in the direction of displacement (charge moves from higher to lower potential). Negative otherwise."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Trabajo nulo si la carga se mueve sobre una superficie equipotencial o si la carga es cero."
+        en: "Zero work if the charge moves along an equipotential surface or if the charge is zero."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-∞, +∞)"
+    interpretation_role:
+      primary_for:
+        - cálculo del trabajo del campo al mover una carga
+      secondary_for:
+        - estimación de la energía cinética ganada por la carga
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "[[W_AB]] se obtiene como producto de la carga q por [[V_AB]]. El alumno debe prestar atención al signo de q: una carga negativa invertirá el signo del trabajo respecto al de la diferencia de potencial."
+      en: "[[W_AB]] is obtained as the product of charge q and [[V_AB]]. Students must pay attention to the sign of q: a negative charge reverses the sign of the work relative to the potential difference."
+
+  - id: q
+    symbol: q
+    nombre:
+      es: Carga de prueba
+      en: Test charge
+    descripcion:
+      es: "Carga eléctrica que se desplaza entre dos puntos del campo para definir el trabajo y la diferencia de potencial."
+      en: "Electric charge that moves between two points of the field to define work and potential difference."
+    unidad_si: "C"
+    dimension: "[I T]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: input_parameter
+    used_in:
+      - relación entre trabajo y diferencia de potencial
+      - energía potencial eléctrica
+    common_mistake: "Asumir que la diferencia de potencial depende del valor de q. La diferencia de potencial es una propiedad del campo, independiente de la carga de prueba."
+    typical_range: "Desde la carga del electrón (1.6×10⁻¹⁹ C) hasta valores macroscópicos en microcoulombios."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Positiva para cargas positivas, negativa para cargas negativas. El signo de q determina si el trabajo del campo favorece o dificulta el movimiento."
+        en: "Positive for positive charges, negative for negative charges. The sign of q determines whether the field work favors or opposes the motion."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Una carga nula no tiene sentido como carga de prueba; la diferencia de potencial existiría pero no podría medirse con esta carga."
+        en: "A zero charge makes no sense as a test charge; the potential difference would exist but could not be measured with this charge."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-∞, +∞) \\\\ {0}"
+    interpretation_role:
+      primary_for:
+        - cálculo del trabajo eléctrico al mover la carga
+      secondary_for:
+        - conversión entre trabajo y diferencia de potencial
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "[[q]] es el parámetro que conecta la diferencia de potencial con el trabajo mecánico medible. El alumno debe recordar que [[V_AB]] no depende de [[q]]; solo [[W_AB]] lo hace."
+      en: "[[q]] is the parameter connecting potential difference to measurable mechanical work. Students must remember that [[V_AB]] does not depend on [[q]]; only [[W_AB]] does."
+
+  - id: E_unif
+    symbol: E
+    nombre:
+      es: Campo eléctrico uniforme
+      en: Uniform electric field
+    descripcion:
+      es: "Módulo del campo eléctrico uniforme entre dos placas paralelas o en una región de campo constante. Permite calcular la diferencia de potencial como producto del campo por la distancia."
+      en: "Magnitude of the uniform electric field between two parallel plates or in a region of constant field. Allows computing the potential difference as the product of field and distance."
+    unidad_si: "N/C"
+    dimension: "[M L T⁻³ I⁻¹]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: input_parameter
+    used_in:
+      - cálculo de la diferencia de potencial en campo uniforme
+      - diseño de condensadores planos
+    common_mistake: "Usar la fórmula campo × distancia para calcular la diferencia de potencial cuando el campo no es uniforme. En campos no uniformes es necesaria la integral de línea."
+    typical_range: "Desde 10⁻³ N/C en campos ambientales hasta 3×10⁶ N/C (campo de ruptura del aire)."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "[[E_unif]] representa el módulo del campo, siempre positivo. La dirección se especifica por separado."
+        en: "[[E_unif]] represents the field magnitude, always positive. Direction is specified separately."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un campo nulo implica diferencia de potencial nula para cualquier separación, lo que no genera energía ni trabajo."
+        en: "A zero field implies zero potential difference for any separation, generating no energy or work."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - cálculo de la diferencia de potencial en campo uniforme
+      secondary_for:
+        - estimación de la fuerza sobre una carga
+    graph_binding:
+      channels:
+        - x_axis
+    pedagogical_notes:
+      es: "[[E_unif]] aparece en la fórmula simplificada para campo uniforme. El alumno debe verificar siempre si el campo es realmente uniforme antes de aplicar esta fórmula."
+      en: "[[E_unif]] appears in the simplified formula for uniform field. Students must always verify whether the field is truly uniform before applying this formula."
+
+  - id: V_BA
+    symbol: V_{BA}
+    nombre:
+      es: Diferencia de potencial inversa
+      en: Reverse potential difference
+    descripcion:
+      es: "Diferencia de potencial de B a A. Es el opuesto de [[V_AB]]: mide el trabajo por unidad de carga positiva al mover la carga de B a A."
+      en: "Potential difference from B to A. It is the opposite of [[V_AB]]: measures work per unit positive charge when moving the charge from B to A."
+    unidad_si: "V"
+    dimension: "[M L² T⁻³ I⁻¹]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: external_reference
+    used_in:
+      - contraste pedagógico con V_AB para ilustrar el signo
+    common_mistake: "Tratar V_BA como sinónimo de V_AB ignorando que son opuestos en signo."
+    typical_range: "Igual módulo que V_AB, signo opuesto."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "V_BA es el negativo de V_AB. Si V_AB es positivo, V_BA es negativo."
+        en: "V_BA is the negative of V_AB. If V_AB is positive, V_BA is negative."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "V_BA nulo si A y B están al mismo potencial."
+        en: "V_BA is zero if A and B are at the same potential."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-∞, +∞)"
+    interpretation_role:
+      primary_for:
+        - ilustración del signo de la diferencia de potencial
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "[[V_BA]] se usa exclusivamente para contrastar con [[V_AB]] y mostrar que invertir los subíndices cambia el signo."
+      en: "[[V_BA]] is used exclusively to contrast with [[V_AB]] and show that reversing the subscripts changes the sign."
+
+  - id: d_AB
+    symbol: d_{AB}
+    nombre:
+      es: Distancia entre puntos
+      en: Distance between points
+    descripcion:
+      es: "Separación entre los puntos A y B medida en la dirección del campo eléctrico uniforme. En campo uniforme, la diferencia de potencial es proporcional a esta distancia."
+      en: "Separation between points A and B measured along the direction of the uniform electric field. In a uniform field, the potential difference is proportional to this distance."
+    unidad_si: "m"
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: input_parameter
+    used_in:
+      - fórmula de la diferencia de potencial en campo uniforme
+      - diseño de condensadores
+    common_mistake: "Usar la distancia total de la trayectoria en lugar de la proyección sobre la dirección del campo. Solo la componente del desplazamiento a lo largo del campo contribuye a la diferencia de potencial."
+    typical_range: "Desde micrómetros en condensadores a nanómetros en membranas biológicas."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "[[d_AB]] es una longitud, siempre positiva."
+        en: "[[d_AB]] is a length, always positive."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Una separación nula implica que A y B son el mismo punto, por lo que la diferencia de potencial es cero."
+        en: "Zero separation means A and B are the same point, so the potential difference is zero."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - cálculo de la diferencia de potencial en campo uniforme
+      secondary_for:
+        - diseño de la geometría del condensador
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "[[d_AB]] es la proyección del desplazamiento A→B sobre la dirección del campo. Si el desplazamiento es perpendicular al campo, [[d_AB]] es cero y la diferencia de potencial es nula."
+      en: "[[d_AB]] is the projection of the displacement A→B onto the field direction. If the displacement is perpendicular to the field, [[d_AB]] is zero and the potential difference is zero."
+`;export{e as default};

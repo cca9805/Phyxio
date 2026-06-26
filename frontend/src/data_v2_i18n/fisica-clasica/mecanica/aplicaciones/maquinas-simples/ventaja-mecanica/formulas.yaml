@@ -1,0 +1,284 @@
+version: 5
+formulas:
+  - id: ideal_mechanical_advantage
+    title:
+      es: ventaja mecánica ideal
+      en: ideal mechanical advantage
+    equation: VM = d_P/d_R
+    latex: VM = \frac{d_P}{d_R}
+    rearrangements:
+      - target: VM
+        equation: VM = d_P/d_R
+        latex: \frac{d_P}{d_R}
+      - target: d_P
+        equation: d_P = VM*d_R
+        latex: VM d_R
+      - target: d_R
+        equation: d_R = d_P/VM
+        latex: \frac{d_P}{VM}
+    category: definition
+    relation_type: geometric_ratio
+    physical_meaning:
+      es: La ventaja mecánica ideal depende solo de la geometría del sistema.
+      en: Ideal mechanical advantage depends only on system geometry.
+    constraints:
+      - expr: d_P >= 0 && d_R > 0
+        message:
+          es: Para formar la razón, d_R debe ser positivo y d_P no negativo.
+          en: To form the ratio, d_R must be positive and d_P non-negative.
+    validity:
+      es: Válida en máquinas ideales o cuando se quiere leer la ayuda geométrica sin pérdidas.
+      en: Valid in ideal machines or when reading geometric help without losses.
+    dimension_check:
+      es: 1
+      en: 1
+    calculable: true
+    motivo_no_calculable:
+      es: ""
+      en: ""
+    used_in: [theory, examples, calculator]
+    interpretation_tags: [mechanical_advantage, geometry, ideal_model]
+    result_semantics:
+      target: VM
+      kind: scalar_nonnegative
+      sign_meaning:
+        es: VM se interpreta como una razón positiva sin dirección.
+        en: VM is interpreted as a positive ratio without direction.
+      absolute_value_meaning:
+        es: El valor expresa cuánta ayuda geométrica ofrece la máquina.
+        en: The value expresses how much geometric help the machine provides.
+    domain_checks:
+      - expr: d_R > 0
+        message:
+          es: No puede leerse VM si el brazo resistente es nulo.
+          en: VM cannot be read if the load arm is zero.
+    coherence_checks:
+      - expr: VM >= 0
+        severity: ok
+        message:
+          es: La ventaja ideal no debe salir negativa en este modelo.
+          en: Ideal advantage should not become negative in this model.
+    graph_implications:
+      - channel: curve
+        message:
+          es: Si d_R disminuye manteniendo d_P, la curva debe mostrar aumento de VM.
+          en: If d_R decreases while d_P is fixed, the curve should show an increase in VM.
+    pedagogical_triggers:
+      - detect_when: VM > 1
+        message:
+          es: "VM mayor que 1 indica ganancia ideal en fuerza y sacrificio en recorrido."
+          en: "VM greater than 1 indicates ideal force gain and displacement sacrifice."
+
+  - id: real_mechanical_advantage
+    title:
+      es: ventaja mecánica real
+      en: real mechanical advantage
+    equation: VM_r = R/P
+    latex: VM_r = \frac{R}{P}
+    rearrangements:
+      - target: VM_r
+        equation: VM_r = R/P
+        latex: \frac{R}{P}
+      - target: R
+        equation: R = VM_r*P
+        latex: VM_r P
+      - target: P
+        equation: P = R/VM_r
+        latex: \frac{R}{VM_r}
+    category: definition
+    relation_type: measured_force_ratio
+    physical_meaning:
+      es: La ventaja real compara la carga útil con la fuerza de entrada medida.
+      en: Real mechanical advantage compares useful load with measured input force.
+    constraints:
+      - expr: R >= 0 && P > 0
+        message:
+          es: Para leer VM_r se necesitan fuerzas no negativas y una entrada no nula.
+          en: Reading VM_r requires non-negative forces and a nonzero input.
+    validity:
+      es: Válida cuando P y R representan fuerzas efectivamente medidas sobre la máquina real.
+      en: Valid when P and R represent forces actually measured on the real machine.
+    dimension_check:
+      es: 1
+      en: 1
+    calculable: true
+    motivo_no_calculable:
+      es: ""
+      en: ""
+    used_in: [theory, examples, calculator]
+    interpretation_tags: [real_performance, measured_ratio, efficiency]
+    result_semantics:
+      target: VM_r
+      kind: scalar_nonnegative
+      sign_meaning:
+        es: VM_r es una razón positiva entre fuerzas reales.
+        en: VM_r is a positive ratio between real forces.
+      absolute_value_meaning:
+        es: El valor indica la ventaja que de verdad entrega la máquina.
+        en: The value indicates the advantage actually delivered by the machine.
+    domain_checks:
+      - expr: P > 0
+        message:
+          es: No puede calcularse VM_r si la fuerza de entrada es nula.
+          en: VM_r cannot be computed if the input force is zero.
+    coherence_checks:
+      - expr: VM_r >= 0
+        severity: ok
+        message:
+          es: La ventaja real debe mantenerse no negativa en este tema.
+          en: Real mechanical advantage must remain non-negative in this topic.
+    graph_implications:
+      - channel: summary
+        message:
+          es: Si R aumenta manteniendo la geometría ideal, la lectura de P debe crecer con él.
+          en: If R grows while ideal geometry is fixed, the reading of P should grow with it.
+    pedagogical_triggers:
+      - detect_when: VM_r < 1
+        message:
+          es: "VM_r menor que 1 no implica fallo: puede responder a un diseño orientado a control o velocidad."
+          en: "VM_r smaller than 1 does not imply failure: it may reflect a design aimed at control or speed."
+
+  - id: efficiency_from_advantages
+    title:
+      es: eficiencia a partir de ventajas
+      en: efficiency from advantages
+    equation: eta = VM_r/VM
+    latex: \eta = \frac{VM_r}{VM}
+    rearrangements:
+      - target: eta
+        equation: eta = VM_r/VM
+        latex: \frac{VM_r}{VM}
+      - target: VM_r
+        equation: VM_r = eta*VM
+        latex: \eta VM
+      - target: VM
+        equation: VM = VM_r/eta
+        latex: \frac{VM_r}{\eta}
+    category: auxiliary
+    relation_type: efficiency_ratio
+    physical_meaning:
+      es: La eficiencia mide qué fracción de la ventaja ideal se conserva en la práctica.
+      en: Efficiency measures what fraction of ideal advantage is preserved in practice.
+    constraints:
+      - expr: VM > 0 && VM_r >= 0
+        message:
+          es: La ventaja ideal debe ser positiva para comparar el sistema real con el ideal.
+          en: Ideal advantage must be positive to compare the real system with the ideal one.
+    validity:
+      es: Válida cuando VM y VM_r se refieren al mismo dispositivo y a la misma configuración.
+      en: Valid when VM and VM_r refer to the same device and the same configuration.
+    dimension_check:
+      es: 1
+      en: 1
+    calculable: true
+    motivo_no_calculable:
+      es: ""
+      en: ""
+    used_in: [theory, examples, calculator]
+    interpretation_tags: [efficiency, losses, ideal_vs_real]
+    result_semantics:
+      target: eta
+      kind: scalar_nonnegative
+      sign_meaning:
+        es: Eta se interpreta como razón positiva y acotada en condiciones normales.
+        en: Eta is interpreted as a positive bounded ratio under normal conditions.
+      absolute_value_meaning:
+        es: El valor muestra cuánta parte del diseño ideal se aprovecha realmente.
+        en: The value shows how much of the ideal design is really being used.
+    domain_checks:
+      - expr: eta >= 0
+        message:
+          es: La eficiencia no debe salir negativa.
+          en: Efficiency should not be negative.
+      - expr: eta <= 1.000001
+        message:
+          es: Si eta supera 1 de forma apreciable, hay incoherencia de datos o de modelo.
+          en: If eta significantly exceeds 1, the data or the model is inconsistent.
+    coherence_checks:
+      - expr: VM_r <= VM + 1e-9
+        severity: ok
+        message:
+          es: En el modelo ordinario, la ventaja real no debe superar a la ideal.
+          en: In the standard model, real advantage should not exceed ideal advantage.
+    graph_implications:
+      - channel: summary
+        message:
+          es: Una eficiencia baja explica por qué la curva ideal no basta para describir la máquina real.
+          en: Low efficiency explains why the ideal curve is insufficient to describe the real machine.
+    pedagogical_triggers:
+      - detect_when: eta < 0.7
+        message:
+          es: "Una eficiencia baja sugiere pérdidas importantes por fricción, deformación o mala alineación."
+          en: "Low efficiency suggests important losses due to friction, deformation, or poor alignment."
+
+  - id: ideal_effort_requirement
+    title:
+      es: esfuerzo ideal necesario para una carga dada
+      en: ideal effort needed for a given load
+    equation: P = (R*d_R)/d_P
+    latex: P = \frac{R d_R}{d_P}
+    rearrangements:
+      - target: P
+        equation: P = (R*d_R)/d_P
+        latex: \frac{R d_R}{d_P}
+      - target: R
+        equation: R = (P*d_P)/d_R
+        latex: \frac{P d_P}{d_R}
+      - target: d_P
+        equation: d_P = (R*d_R)/P
+        latex: \frac{R d_R}{P}
+      - target: d_R
+        equation: d_R = (P*d_P)/R
+        latex: \frac{P d_P}{R}
+    category: operative
+    relation_type: ideal_equilibrium_requirement
+    physical_meaning:
+      es: Permite estimar la fuerza ideal de entrada a partir de la carga y la geometría.
+      en: It estimates the ideal input force from load and geometry.
+    constraints:
+      - expr: R >= 0 && d_R >= 0 && d_P > 0
+        message:
+          es: Para despejar P debe existir un brazo de potencia no nulo.
+          en: Solving for P requires a nonzero effort arm.
+    validity:
+      es: Válida para lectura ideal de palancas o máquinas equivalentes con la misma lógica geométrica.
+      en: Valid for ideal reading of levers or equivalent machines with the same geometric logic.
+    dimension_check:
+      es: M L T^-2
+      en: M L T^-2
+    calculable: true
+    motivo_no_calculable:
+      es: ""
+      en: ""
+    used_in: [theory, examples, calculator]
+    interpretation_tags: [input_requirement, load_response, geometry]
+    result_semantics:
+      target: P
+      kind: scalar_nonnegative
+      sign_meaning:
+        es: P se reporta como magnitud positiva de fuerza requerida.
+        en: P is reported as a positive magnitude of required force.
+      absolute_value_meaning:
+        es: El valor cuantifica cuánto esfuerzo ideal exige la configuración.
+        en: The value quantifies how much ideal effort the configuration requires.
+    domain_checks:
+      - expr: d_P > 0
+        message:
+          es: Un brazo de potencia nulo impediría generar ventaja útil.
+          en: A zero effort arm would prevent useful advantage.
+    coherence_checks:
+      - expr: abs(P - R/VM) < 1e-9 || VM == 0
+        severity: ok
+        message:
+          es: La fuerza requerida debe ser coherente con la lectura de VM.
+          en: The required force should be consistent with the reading of VM.
+    graph_implications:
+      - channel: force_curve
+        message:
+          es: Si R aumenta con VM fija, la curva de P debe crecer de forma proporcional.
+          en: If R increases with fixed VM, the curve of P should grow proportionally.
+    pedagogical_triggers:
+      - detect_when: d_P < d_R && P > R
+        message:
+          es: "Una máquina con brazo de entrada corto puede exigir más fuerza que la propia carga."
+          en: "A machine with a short input arm may require more force than the load itself."

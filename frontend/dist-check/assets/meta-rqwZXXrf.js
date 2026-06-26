@@ -1,0 +1,76 @@
+const n=`version: 5
+id: ecuacion-de-continuidad
+parent_id: dinamica-de-fluidos
+nombre:
+  es: Ecuacion de continuidad
+  en: Continuity Equation
+titulo:
+  es: Ecuacion de continuidad
+  en: Continuity Equation
+type: leaf
+area: fisica-clasica
+bloque: mecanica
+subbloque: fluidos
+orden: 218310
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+icon: 💧
+ruta_relativa: fisica-clasica/mecanica/fluidos/dinamica-de-fluidos/ecuacion-de-continuidad
+descripcion: Estudio de la conservación del caudal y la relación entre sección y velocidad en fluidos incompresibles.
+description_en: Study of flow rate conservation and the relationship between section and velocity in incompressible fluids.
+descripcion_corta: Conservación de caudal y masa en conductos.
+physical_role:
+  es: ley física
+  en: physical law
+pregunta_fisica_central:
+  es: ¿Cómo cambia la velocidad de un fluido al variar el área de la sección transversal de un conducto?
+  en: How does fluid velocity change when the cross-sectional area of a conduit varies?
+representacion_dominante: Coord
+magnitud_dominante: Q
+dificultad: 2
+tiempo_estimado_min: 55
+prerequisitos:
+  - fisica-clasica/mecanica/fluidos/fundamentos/densidad
+tags:
+  es:
+    - fluidos
+    - dinamica-de-fluidos
+    - ecuacion-de-continuidad
+  en:
+    - fluids
+    - fluid-dynamics
+    - continuity-equation
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 4
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    requires_results: true
+    supports_graph_binding: true
+graficos:
+  - Coord
+  - Svg
+`;export{n as default};

@@ -1,0 +1,426 @@
+version: 2
+id: interpretacion-energia-cinetica
+leaf_id: energia-cinetica
+nombre:
+  es: Interpretacion de energia cinetica
+  en: Interpretation of kinetic energy
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: trabajo-y-energia
+  parent_id: trabajo-y-energia
+  ruta_relativa: fisica-clasica/mecanica/trabajo-y-energia/energia-cinetica
+dependencies:
+  formulas:
+  - energia_cinetica_basica
+  - variacion_energia_cinetica
+  - teorema_trabajo_energia
+  magnitudes:
+  - K
+  - m
+  - v
+  - Ki
+  - Kf
+  - dK
+  - Wnet
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  K:
+    summary_rules:
+    - id: k_summary
+      when: 'true'
+      status: info
+      text:
+        es: K resume cuanta energia mecanica esta ligada al estado de movimiento.
+        en: K summarizes how much mechanical energy is tied to the state of motion.
+    physical_reading_rules:
+    - id: k_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si v aumenta con la misma m, K crece muy deprisa porque depende del cuadrado de la rapidez.
+        en: If v increases with the same m, K rises quickly because it depends on the square of speed.
+    coherence_rules:
+    - id: k_coherence
+      when: K >= 0
+      status: ok
+      text:
+        es: K no negativa, consistente con energia cinetica clasica.
+        en: Non-negative K, consistent with classical kinetic energy.
+    - id: k_coherence_neg
+      when: K < 0
+      status: warning
+      text:
+        es: K negativa indica error de signos, unidades o sustitucion indebida de una componente de velocidad.
+        en: Negative K indicates a sign, unit, or velocity-component substitution error.
+    model_validity_rules:
+    - id: k_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Interpreta K con esta formula solo en movimiento clasico no relativista y masa aproximadamente constante.
+        en: Interpret K with this formula only for classical non-relativistic motion and approximately constant mass.
+    graph_rules:
+    - id: k_graph
+      when: 'true'
+      status: info
+      text:
+        es: En la grafica, K frente a v debe curvarse hacia arriba y no crecer linealmente.
+        en: On the graph, K versus v must curve upward rather than grow linearly.
+    likely_errors:
+    - id: k_error
+      when: 'true'
+      status: warning
+      text:
+        es: No leas una velocidad negativa como energia negativa; el signo de la direccion no cambia K.
+        en: Do not read a negative velocity as negative energy; direction sign does not change K.
+    next_step_rules:
+    - id: k_next
+      when: 'true'
+      status: info
+      text:
+        es: Tras obtener K, compara si el cambio entre estados exige calcular dK o Wnet.
+        en: After obtaining K, decide whether the change between states requires dK or Wnet.
+  dK:
+    summary_rules:
+    - id: dk_summary
+      when: 'true'
+      status: info
+      text:
+        es: dK indica si el sistema gana, pierde o conserva energia cinetica entre dos estados.
+        en: dK indicates whether the system gains, loses, or preserves kinetic energy between two states.
+    physical_reading_rules:
+    - id: dk_physical
+      when: 'true'
+      status: info
+      text:
+        es: dK positiva suele asociarse a trabajo motor neto; dK negativa, a frenado o disipacion.
+        en: Positive dK usually corresponds to net driving work; negative dK to braking or dissipation.
+    coherence_rules:
+    - id: dk_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: dK debe coincidir con Kf menos Ki usando el mismo sistema y los mismos datos de estado.
+        en: dK must match Kf minus Ki using the same system and the same state data.
+    model_validity_rules:
+    - id: dk_validity
+      when: 'true'
+      status: ok
+      text:
+        es: La lectura de dK es fiable si Ki y Kf describen exactamente el mismo objeto o sistema.
+        en: Reading dK is reliable if Ki and Kf describe exactly the same object or system.
+    graph_rules:
+    - id: dk_graph
+      when: 'true'
+      status: info
+      text:
+        es: En Coord, dK se interpreta como salto entre el nivel inicial y el final de la curva de K.
+        en: In Coord, dK is read as the jump between the initial and final levels of the K curve.
+    likely_errors:
+    - id: dk_error
+      when: 'true'
+      status: warning
+      text:
+        es: No conviertas dK en modulo si el signo decide si hubo aceleracion o frenado.
+        en: Do not turn dK into a magnitude if the sign decides whether there was acceleration or braking.
+    next_step_rules:
+    - id: dk_next
+      when: 'true'
+      status: info
+      text:
+        es: Si ya tienes dK, comprueba si el problema pide identificar la causa mediante Wnet.
+        en: If you already have dK, check whether the problem asks you to identify the cause through Wnet.
+  Wnet:
+    summary_rules:
+    - id: wnet_summary
+      when: 'true'
+      status: info
+      text:
+        es: Wnet resume el efecto conjunto de todas las fuerzas sobre la energia cinetica.
+        en: Wnet summarizes the combined effect of all forces on kinetic energy.
+    physical_reading_rules:
+    - id: wnet_physical
+      when: 'true'
+      status: info
+      text:
+        es: Wnet positiva aporta energia al movimiento; Wnet negativa la extrae.
+        en: Positive Wnet adds energy to motion; negative Wnet removes it.
+    coherence_rules:
+    - id: wnet_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Wnet debe tener el mismo signo y la misma unidad que dK si el teorema se aplico bien.
+        en: Wnet must have the same sign and unit as dK if the theorem was applied correctly.
+    model_validity_rules:
+    - id: wnet_validity
+      when: 'true'
+      status: ok
+      text:
+        es: La validez exige incluir el trabajo de todas las fuerzas relevantes, no solo de la mas visible.
+        en: Validity requires including the work of all relevant forces, not only the most obvious one.
+    graph_rules:
+    - id: wnet_graph
+      when: 'true'
+      status: info
+      text:
+        es: En una lectura grafica, un trabajo neto acumulado positivo debe corresponder a un aumento de K.
+        en: In a graphical reading, positive accumulated net work must correspond to an increase in K.
+    likely_errors:
+    - id: wnet_error
+      when: 'true'
+      status: warning
+      text:
+        es: El error comun es olvidar una fuerza resistiva y atribuir todo el cambio a la fuerza motora.
+        en: The common error is to forget a resistive force and attribute the whole change to the driving one.
+    next_step_rules:
+    - id: wnet_next
+      when: 'true'
+      status: info
+      text:
+        es: Tras hallar Wnet, decide si conviene descomponerlo por fuerzas o cerrar ya el balance cinetico.
+        en: After finding Wnet, decide whether to decompose it by forces or close the kinetic balance.
+  v:
+    summary_rules:
+    - id: v_summary
+      when: 'true'
+      status: info
+      text:
+        es: v es la variable de control mas sensible en K porque aparece elevada al cuadrado.
+        en: v is the most sensitive control variable in K because it appears squared.
+    physical_reading_rules:
+    - id: v_physical
+      when: 'true'
+      status: info
+      text:
+        es: Pequeños aumentos relativos de v producen cambios mucho mayores en K que cambios equivalentes de m.
+        en: Small relative increases in v produce much larger changes in K than equivalent changes in m.
+    coherence_rules:
+    - id: v_coherence
+      when: v >= 0
+      status: ok
+      text:
+        es: v se esta usando como rapidez y por tanto debe ser no negativa.
+        en: v is being used as speed magnitude and must therefore be non-negative.
+    model_validity_rules:
+    - id: v_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si el problema usa componentes con signo, convierte primero a rapidez antes de calcular K.
+        en: If the problem uses signed components, convert them to speed before computing K.
+    graph_rules:
+    - id: v_graph
+      when: 'true'
+      status: info
+      text:
+        es: La lectura K-v debe reforzar que la pendiente aumenta al crecer v.
+        en: The K-v reading must reinforce that the slope increases as v grows.
+    likely_errors:
+    - id: v_error
+      when: 'true'
+      status: warning
+      text:
+        es: No sustituyas una velocidad media por la rapidez instantanea si el estado pedido es puntual.
+        en: Do not substitute average velocity for instantaneous speed if the requested state is pointwise.
+    next_step_rules:
+    - id: v_next
+      when: 'true'
+      status: info
+      text:
+        es: Si conoces v y m, el siguiente paso natural es estimar K y despues comparar estados.
+        en: If you know v and m, the natural next step is to estimate K and then compare states.
+  Ki:
+    summary_rules:
+    - id: ki_summary
+      when: 'true'
+      status: info
+      text:
+        es: Ki fija el presupuesto inicial de energia cinetica con el que arranca el proceso.
+        en: Ki fixes the initial kinetic-energy budget from which the process starts.
+    physical_reading_rules:
+    - id: ki_physical
+      when: 'true'
+      status: info
+      text:
+        es: Una Ki grande implica mayor capacidad inicial para acelerar, impactar o vencer resistencias.
+        en: A large Ki implies greater initial capacity to accelerate, impact, or overcome resistance.
+    coherence_rules:
+    - id: ki_coherence
+      when: Ki >= 0
+      status: ok
+      text:
+        es: Ki no negativa, consistente con una energia cinetica inicial clasica.
+        en: Non-negative Ki, consistent with classical initial kinetic energy.
+    model_validity_rules:
+    - id: ki_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Ki solo tiene sentido si el estado inicial esta bien definido y usa la misma masa que el estado final.
+        en: Ki only makes sense if the initial state is well defined and uses the same mass as the final state.
+    graph_rules:
+    - id: ki_graph
+      when: 'true'
+      status: info
+      text:
+        es: En Coord, Ki es el nivel de partida desde el que se mide el salto hacia Kf.
+        en: In Coord, Ki is the starting level from which the jump toward Kf is measured.
+    likely_errors:
+    - id: ki_error
+      when: 'true'
+      status: warning
+      text:
+        es: No mezcles velocidad inicial de un objeto con masa de otro al calcular Ki.
+        en: Do not mix the initial speed of one object with the mass of another when computing Ki.
+    next_step_rules:
+    - id: ki_next
+      when: 'true'
+      status: info
+      text:
+        es: Con Ki ya establecida, compara con Kf para cerrar dK y después Wnet.
+        en: Once Ki is set, compare it with Kf to close dK and then Wnet.
+  Kf:
+    summary_rules:
+    - id: kf_summary
+      when: 'true'
+      status: info
+      text:
+        es: Kf expresa el presupuesto final de energia cinetica con el que el sistema sale del proceso.
+        en: Kf expresses the final kinetic-energy budget with which the system leaves the process.
+    physical_reading_rules:
+    - id: kf_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si Kf es menor que Ki, el sistema ha cedido parte de su capacidad mecanica durante el proceso.
+        en: If Kf is smaller than Ki, the system has given up part of its mechanical capability during the process.
+    coherence_rules:
+    - id: kf_coherence
+      when: Kf >= 0
+      status: ok
+      text:
+        es: Kf no negativa, consistente con una energia cinetica final clasica.
+        en: Non-negative Kf, consistent with classical final kinetic energy.
+    model_validity_rules:
+    - id: kf_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Kf solo es interpretable si el estado final esta bien definido y pertenece al mismo sistema que Ki.
+        en: Kf is only interpretable if the final state is well defined and belongs to the same system as Ki.
+    graph_rules:
+    - id: kf_graph
+      when: 'true'
+      status: info
+      text:
+        es: En Coord, Kf debe leerse como el nivel final alcanzado por la curva energetica.
+        en: In Coord, Kf must be read as the final level reached by the energy curve.
+    likely_errors:
+    - id: kf_error
+      when: 'true'
+      status: warning
+      text:
+        es: No uses una rapidez final de otro instante o de otro cuerpo al calcular Kf.
+        en: Do not use a final speed from another instant or another body when computing Kf.
+    next_step_rules:
+    - id: kf_next
+      when: 'true'
+      status: info
+      text:
+        es: Una vez fijada Kf, compara con Ki para interpretar dK y luego identifica la causa mediante Wnet.
+        en: Once Kf is fixed, compare it with Ki to interpret dK and then identify the cause through Wnet.
+  m:
+    summary_rules:
+    - id: m_summary
+      when: 'true'
+      status: info
+      text:
+        es: m escala linealmente la energia cinetica asociada a una misma rapidez.
+        en: m scales linearly the kinetic energy associated with a given speed.
+    physical_reading_rules:
+    - id: m_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si duplicas m manteniendo v, duplicas K y tambien la energia que debe absorber un frenado.
+        en: If you double m while keeping v, you double K and also the energy a brake must absorb.
+    coherence_rules:
+    - id: m_coherence
+      when: m > 0
+      status: ok
+      text:
+        es: m positiva, consistente con el dominio operativo del modelo clasico.
+        en: Positive m, consistent with the operational domain of the classical model.
+    model_validity_rules:
+    - id: m_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si la masa cambia durante el proceso, la formula basica de K deja de ser el cierre suficiente.
+        en: If mass changes during the process, the basic K formula ceases to be a sufficient closure.
+    graph_rules:
+    - id: m_graph
+      when: 'true'
+      status: info
+      text:
+        es: En una familia de curvas K-v, masas mayores desplazan la curva hacia arriba.
+        en: In a family of K-v curves, larger masses shift the curve upward.
+    likely_errors:
+    - id: m_error
+      when: 'true'
+      status: warning
+      text:
+        es: No compares energias de dos cuerpos sin revisar si la diferencia viene de m, de v, o de ambas.
+        en: Do not compare energies of two bodies without checking whether the difference comes from m, v, or both.
+    next_step_rules:
+    - id: m_next
+      when: 'true'
+      status: info
+      text:
+        es: Si m y v ya son fiables, el paso siguiente es obtener K y analizar su cambio entre estados.
+        en: If m and v are already reliable, the next step is to obtain K and analyze its state-to-state change.
+graph_binding:
+  enabled: true
+  preferred_type: Coord
+mini_graph:
+  enabled: true
+  type: Coord

@@ -1,0 +1,195 @@
+- id: rapidez_gravedad
+  title:
+    es: Rapidez en regimen gravitatorio
+    en: Gravity-dominated wave speed
+  equation: v = sqrt(g / k)
+  latex: v = \sqrt{\frac{g}{k}}  % g k v
+  rearrangements:
+  - target: rapidez_de_propagacion_de_ondas_superficiales
+    equation: v = sqrt(g / k)
+    latex: v = \sqrt{\frac{g}{k}}
+  - target: numero_de_onda
+    equation: k = g / v^2
+    latex: k = \frac{g}{v^2}
+  - target: aceleracion_gravitatoria
+    equation: g = v^2 * k
+    latex: g = v^2 k
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: En ondas donde la gravedad domina (longitudes de onda grandes), la rapidez de propagacion [[v]] crece con la raiz
+      cuadrada de [[g]] y decrece con la raiz de [[k]]. Ondas mas largas viajan mas rapido.
+    en: In gravity-dominated waves (large wavelengths), propagation speed [[v]] grows with the square root of [[g]] and decreases
+      with the square root of [[k]]. Longer waves travel faster.
+  constraints:
+  - g > 0
+  - k > 0
+  - lambda >> sqrt(sigma / (rho * g))
+  validity:
+    es: Valido cuando la longitud de onda es mucho mayor que la longitud capilar critica, aproximadamente 1.7 cm en agua pura.
+      Falla para ondas capilares (milimetros).
+    en: Valid when wavelength is much larger than the critical capillary length, approximately 1.7 cm in pure water. Fails
+      for capillary waves (millimetres).
+  dimension_check: '[L T⁻¹] = sqrt([L T⁻²] / [L⁻¹]) = sqrt([L² T⁻²]) = [L T⁻¹] ✓'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - gravedad
+  - dispersion
+  - regimen_largo
+  result_semantics:
+    target: rapidez_de_propagacion_de_ondas_superficiales
+    kind: scalar_unsigned
+    sign_meaning:
+      es: La rapidez es siempre positiva; representa la celeridad de propagacion de la cresta.
+      en: Speed is always positive; it represents the celerity of crest propagation.
+    absolute_value_meaning:
+      es: El modulo da directamente los metros por segundo a los que viaja la perturbacion de la interfaz.
+      en: The magnitude gives directly the metres per second at which the interface disturbance travels.
+  domain_checks:
+  - v > 0
+  - k > 0
+  - g > 0
+  coherence_checks:
+  - 'v aumenta al aumentar g: verificar que mayor g produce mayor v'
+  - 'v disminuye al aumentar k: onda mas corta viaja mas lento en regimen gravitatorio'
+  graph_implications:
+  - En grafica v vs k, la curva cae como 1/sqrt(k) para k grande en regimen gravitatorio
+  - El punto de cruce con la curva capilar marca la longitud critica
+  pedagogical_triggers:
+  - Si v calculada supera 20 m/s con parametros tipicos de agua, verificar conversion de lambda a k
+  - Si el alumno usa esta formula con ondas de milimetros, alertar sobre regimen capilar
+- id: rapidez_capilares
+  title:
+    es: Rapidez en regimen capilar
+    en: Capillary-dominated wave speed
+  equation: v = sqrt((sigma * k) / rho)
+  latex: v = \sqrt{\frac{\sigma k}{\rho}}  % sigma k rho v
+  rearrangements:
+  - target: rapidez_de_propagacion_de_ondas_superficiales
+    equation: v = sqrt((sigma * k) / rho)
+    latex: v = \sqrt{\frac{\sigma k}{\rho}}
+  - target: sigma
+    equation: sigma = rho * v^2 / k
+    latex: \sigma = \frac{\rho v^2}{k}
+  - target: rho
+    equation: rho = sigma * k / v^2
+    latex: \rho = \frac{\sigma k}{v^2}
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: En ondas cortas dominadas por tension superficial, la rapidez [[v]] crece con la raiz de [[sigma]] y con la raiz de
+      [[k]]. A diferencia del regimen gravitatorio, aqui ondas mas cortas viajan mas rapido.
+    en: In short waves dominated by surface tension, speed [[v]] grows with the square root of [[sigma]] and with the square
+      root of [[k]]. Unlike the gravity regime, shorter waves travel faster here.
+  constraints:
+  - sigma > 0
+  - rho > 0
+  - k > 0
+  - lambda << sqrt(sigma / (rho * g))
+  validity:
+    es: Valido cuando la longitud de onda es mucho menor que la longitud capilar critica (~1.7 cm en agua). Falla para olas
+      marinas largas.
+    en: Valid when wavelength is much smaller than the critical capillary length (~1.7 cm in water). Fails for long ocean
+      waves.
+  dimension_check: '[L T⁻¹] = sqrt([M T⁻²] · [L⁻¹] / [M L⁻³]) = sqrt([L² T⁻²]) = [L T⁻¹] ✓'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - tension_superficial
+  - dispersion
+  - regimen_corto
+  result_semantics:
+    target: sigma
+    kind: scalar_unsigned
+    sign_meaning:
+      es: La tension superficial es siempre positiva; un valor negativo indicaria error de calculo.
+      en: Surface tension is always positive; a negative value would indicate a calculation error.
+    absolute_value_meaning:
+      es: El valor indica la elasticidad interfacial en N/m; valores tipicos del agua son 0.072 N/m.
+      en: The value indicates interfacial elasticity in N/m; typical water values are 0.072 N/m.
+  domain_checks:
+  - v > 0
+  - sigma > 0
+  - rho > 0
+  - k > 0
+  coherence_checks:
+  - 'v aumenta al aumentar sigma: mayor elasticidad interfacial acelera la onda capilar'
+  - 'v aumenta al aumentar k: onda capilar mas corta viaja mas rapido'
+  - 'v disminuye al aumentar rho: mayor inercia frena la propagacion'
+  graph_implications:
+  - En grafica v vs k, la curva capilar crece como sqrt(k) para k grande
+  - El cruce con la curva gravitatoria marca el minimo global de velocidad
+  pedagogical_triggers:
+  - Si sigma calculada supera 0.1 N/m, verificar que se esta en regimen capilar real
+  - Si el alumno aplica esta formula a olas de metros, alertar sobre regimen gravitatorio
+- id: rapidez_combinada
+  title:
+    es: Rapidez combinada con dispersion completa
+    en: Combined wave speed with full dispersion
+  equation: v = sqrt((g / k) + (sigma * k / rho))
+  latex: v = \sqrt{\frac{g}{k} + \frac{\sigma k}{\rho}}  % g k sigma rho v f lambda
+  rearrangements:
+  - target: rapidez_de_propagacion_de_ondas_superficiales
+    equation: v = sqrt((g / k) + (sigma * k / rho))
+    latex: v = \sqrt{\frac{g}{k} + \frac{\sigma k}{\rho}}
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Formula general que combina la contribucion gravitatoria y la capilar. La rapidez [[v]] resulta de la suma de ambas
+      fuerzas restauradoras. Permite identificar el regimen dominante segun el valor de [[k]].
+    en: General formula combining gravitational and capillary contributions. Speed [[v]] results from the sum of both restoring
+      forces. Allows identifying the dominant regime from the value of [[k]].
+  constraints:
+  - g > 0
+  - sigma > 0
+  - rho > 0
+  - k > 0
+  validity:
+    es: Valido para profundidades mucho mayores que la longitud de onda (agua profunda). Falla en aguas poco profundas donde
+      interviene el fondo.
+    en: Valid for depths much greater than the wavelength (deep water). Fails in shallow water where the bottom intervenes.
+  dimension_check: '[L T⁻¹] = sqrt([L² T⁻²] + [L² T⁻²]) = [L T⁻¹] ✓'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - dispersion_completa
+  - regimenes
+  - agua_profunda
+  result_semantics:
+    target: rapidez_de_propagacion_de_ondas_superficiales
+    kind: scalar_unsigned
+    sign_meaning:
+      es: La rapidez combinada es siempre positiva; incluye ambas contribuciones restauradoras.
+      en: Combined speed is always positive; it includes both restoring contributions.
+    absolute_value_meaning:
+      es: Indica la celeridad real de la onda superficial considerando gravedad y tension superficial simultaneamente.
+      en: Indicates the real celerity of the surface wave considering gravity and surface tension simultaneously.
+  domain_checks:
+  - v > 0
+  - g > 0
+  - sigma > 0
+  - rho > 0
+  - k > 0
+  coherence_checks:
+  - v debe ser mayor o igual que min(v_gravedad, v_capilar) para ese k
+  - En el minimo de v, la longitud de onda critica separa los dos regimenes
+  - Para k muy pequeno, el termino gravitatorio domina; para k muy grande, el capilar domina
+  graph_implications:
+  - La curva v vs k tiene un minimo pronunciado en la longitud de onda critica
+  - El grafico muestra claramente la transicion entre regimen gravitatorio y capilar
+  pedagogical_triggers:
+  - Si ambos terminos bajo la raiz son comparables en magnitud, el alumno esta en la zona de transicion
+  - Recordar que esta formula asume agua profunda; verificar que la profundidad supera lambda

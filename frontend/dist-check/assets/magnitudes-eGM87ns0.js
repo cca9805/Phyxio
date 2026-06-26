@@ -1,0 +1,811 @@
+const e=`version: 1
+magnitudes:
+- id: m
+  symbol: m
+  nombre:
+    es: Masa efectiva del sistema
+    en: Effective system mass
+  descripcion:
+    es: Masa total inercial del sistema móvil considerando todos sus componentes (bloque,
+      cable, polea).
+    en: Total inertial mass of the moving system considering all its components (block,
+      cable, pulley).
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: physical_quantity
+  used_in:
+  - segunda_ley_efectiva
+  - segunda_ley_masa_variable
+  common_mistake: Usar solo la masa de la carga y olvidar las inercias de los elementos
+    rotativos (poleas, ruedas, motor); la masa efectiva siempre es mayor que la masa
+    de la carga sola.
+  typical_range: 1 kg a 50 000 kg según el sistema; vehículo ligero ~1000 kg, grúa
+    industrial ~20 000 kg.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La masa siempre es positiva. Un valor cero o negativo indica error de modelización.
+      en: Mass is always positive. A zero or negative value indicates a modelling error.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: m = 0 no tiene sentido físico en dinámica traslacional; indica que se olvidó
+        incluir al menos una parte del sistema.
+      en: m = 0 has no physical meaning in translational dynamics; it indicates that
+        at least one part of the system was omitted.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, +inf)
+  interpretation_role:
+    primary_for:
+    - segunda_ley_efectiva
+    - segunda_ley_masa_variable
+    secondary_for:
+    - aceleracion_con_eficiencia
+  graph_binding:
+    channels: []
+  pedagogical_notes: Identificar m_ef antes de aplicar a = F_net/m. En sistemas con
+    ruedas o poleas, añadir I/r² a la masa traslacional.
+
+- id: F_ap
+  symbol: F_{ap}
+  nombre:
+    es: Fuerza aplicada
+    en: Applied force
+  descripcion:
+    es: Fuerza total externa suministrada al sistema por el motor o actuador para
+      generar movimiento.
+    en: Total external force supplied to the system by the motor or actuator to generate
+      motion.
+  unidad_si: N
+  dimension: MLT^{-2}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - fuerza_neta_real
+  - potencia_traslacional
+  common_mistake: Confundir F_ap con F_net y aplicar directamente a = F_ap/m, ignorando
+    que parte de F_ap se disipa como F_loss antes de llegar a acelerar la masa.
+  typical_range: 10 N a 500 000 N según el sistema; motor de juguete ~10 N, motor
+    de grúa ~200 000 N.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: F_ap actúa en la dirección del movimiento positivo. Si F_ap es negativa
+        en el enunciado, el motor está frenando activamente, lo que cambia el balance.
+      en: F_ap acts in the direction of positive motion. A negative F_ap means the
+        motor is actively braking, which changes the force balance.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: F_ap = 0 indica que no hay fuente activa de fuerza; el sistema se mueve
+        solo por inercia y F_loss lo detiene.
+      en: F_ap = 0 means no active force source; the system moves by inertia and
+        F_loss decelerates it.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, +inf)
+  interpretation_role:
+    primary_for:
+    - fuerza_neta_real
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: F_ap es la causa; F_net es la consecuencia. Siempre calcular
+    F_net antes de aplicar la segunda ley.
+
+- id: F_loss
+  symbol: F_{loss}
+  nombre:
+    es: Fuerza de pérdidas (resistencia disipativa)
+    en: Loss force (dissipative resistance)
+  descripcion:
+    es: Resistencia total disipativa expresada como fuerza equivalente lineal que
+      se opone al movimiento.
+    en: Total dissipative resistance expressed as an equivalent linear force opposing
+      motion.
+  unidad_si: N
+  dimension: MLT^{-2}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - fuerza_neta_real
+  - fuerza_equivalente_torque
+  common_mistake: Asumir F_loss = 0 en sistemas que el enunciado describe como "reales"
+    o "con rozamiento". Todo sistema real tiene F_loss > 0; si F_loss = 0, el sistema
+    es ideal.
+  typical_range: 2% a 50% de F_ap. En transmisiones bien lubricadas 5–15%; en sistemas
+    con alta fricción o arrastre aerodinámico hasta 40%.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: F_loss siempre se opone al movimiento y se resta a F_ap. Nunca es negativa
+        en el balance F_net = F_ap - F_loss.
+      en: F_loss always opposes motion and is subtracted from F_ap. It is never negative
+        in the balance F_net = F_ap - F_loss.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: F_loss = 0 define el modelo ideal. Si el enunciado menciona pérdidas, rozamiento
+        o eficiencia < 1, entonces F_loss > 0 obligatoriamente.
+      en: F_loss = 0 defines the ideal model. If the problem mentions losses, friction,
+        or efficiency < 1, then F_loss > 0 is mandatory.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, F_ap)
+  interpretation_role:
+    primary_for:
+    - fuerza_neta_real
+    - fuerza_equivalente_torque
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Calcular F_loss sumando todas las fuentes de disipación (rozamiento
+    de Coulomb, resistencia viscosa, par de fricción reducido) antes de aplicar el
+    balance de fuerzas.
+
+- id: F_net
+  symbol: F_{net}
+  nombre:
+    es: Fuerza neta real
+    en: Real net force
+  descripcion:
+    es: Fuerza resultante que realmente acelera al sistema tras restar todas las pérdidas
+      a la fuerza aplicada.
+    en: Resultant force that actually accelerates the system after subtracting all
+      losses from the applied force.
+  unidad_si: N
+  dimension: MLT^{-2}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - fuerza_neta_real
+  - segunda_ley_efectiva
+  - segunda_ley_masa_variable
+  - potencia_traslacional
+  common_mistake: Confundir F_net con F_ap. F_net es siempre menor que F_ap en un
+    sistema real (F_net < F_ap siempre que F_loss > 0).
+  typical_range: F_net ∈ (0, F_ap). Si F_net ≤ 0, el sistema está bloqueado y no
+    puede arrancar.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: F_net > 0 indica aceleración positiva. F_net = 0 indica equilibrio o régimen
+        estacionario. F_net < 0 indica que las pérdidas superan la fuerza motriz
+        y el sistema no puede arrancar.
+      en: F_net > 0 indicates positive acceleration. F_net = 0 indicates equilibrium
+        or steady state. F_net < 0 means losses exceed driving force and the system
+        cannot start.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: F_net = 0 en régimen estacionario (velocidad constante); la fuerza aplicada
+        justo compensa las pérdidas sin producir aceleración.
+      en: F_net = 0 in steady state (constant velocity); applied force exactly compensates
+        losses without producing acceleration.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: (-F_ap, F_ap)
+  interpretation_role:
+    primary_for:
+    - fuerza_neta_real
+    - segunda_ley_efectiva
+    - segunda_ley_masa_variable
+    - potencia_traslacional
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Calcular F_net siempre como primer paso. Si F_net ≤ 0, detener
+    el cálculo y reportar que el sistema está bloqueado.
+
+- id: eta
+  symbol: \\eta
+  nombre:
+    es: Rendimiento mecánico
+    en: Mechanical efficiency
+  descripcion:
+    es: Fracción de la potencia de entrada que se convierte en trabajo útil de salida.
+    en: Fraction of input power that is converted into useful output work.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - rendimiento_potencia
+  - aceleracion_con_eficiencia
+  - potencia_traslacional
+  common_mistake: Calcular eta como P_in/P_out en lugar de P_out/P_in. El error da
+    un valor mayor que 1, lo cual es físicamente imposible para una máquina pasiva.
+  typical_range: 0.5 a 0.98. Transmisión de cadena bien engrasada ~0.97; caja de
+    engranajes ~0.90–0.95; motor eléctrico a carga nominal ~0.85–0.92; correa plana
+    ~0.94.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: eta ∈ (0, 1]. Cualquier resultado eta > 1 indica error de cálculo o de
+        asignación de P_out y P_in.
+      en: eta ∈ (0, 1]. Any result eta > 1 indicates a calculation error or wrong
+        assignment of P_out and P_in.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: eta = 0 significaría que toda la potencia se disipa y ninguna llega a la
+        carga; física y prácticamente imposible en sistemas en movimiento.
+      en: eta = 0 would mean all power is dissipated and none reaches the load; physically
+        and practically impossible in moving systems.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, 1]
+  interpretation_role:
+    primary_for:
+    - rendimiento_potencia
+    - aceleracion_con_eficiencia
+    - potencia_traslacional
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: eta es siempre P_out/P_in, nunca al revés. Verificar que el
+    valor calculado esté en el rango típico del dispositivo descrito en el enunciado.
+
+- id: a
+  symbol: a
+  nombre:
+    es: Aceleración efectiva del sistema
+    en: Effective system acceleration
+  descripcion:
+    es: Aceleración real del sistema mecánico tras descontar las fuerzas disipativas
+      del balance de fuerzas.
+    en: Real acceleration of the mechanical system after discounting dissipative forces
+      from the force balance.
+  unidad_si: m/s²
+  dimension: LT^{-2}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: frame_effect
+  used_in:
+  - segunda_ley_efectiva
+  - segunda_ley_masa_variable
+  - aceleracion_con_eficiencia
+  common_mistake: Presentar a_ideal = F_ap/m como la respuesta final olvidando que
+    la aceleración real es a = F_net/m < a_ideal. Este error es especialmente frecuente
+    cuando el enunciado da eta pero no F_loss explícitamente.
+  typical_range: 0.5 a 10 m/s² en sistemas de transporte industrial; arranque de
+    ascensor ~0.5–1.5 m/s²; vehículo urbano ~2–4 m/s²; cinta transportadora ~1–3 m/s².
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: a > 0 indica aceleración en el sentido del movimiento positivo. a = 0 indica
+        régimen estacionario. a < 0 indica deceleración o que las pérdidas superan
+        la fuerza motriz.
+      en: a > 0 means acceleration in the direction of positive motion. a = 0 means
+        steady state. a < 0 means deceleration or that losses exceed the driving force.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: a = 0 en régimen estacionario; F_ap = F_loss exactamente. No implica que
+        el sistema esté parado, sino que la velocidad es constante.
+      en: a = 0 in steady state; F_ap exactly equals F_loss. It does not mean the
+        system is stopped, only that velocity is constant.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: Context-dependent
+  interpretation_role:
+    primary_for:
+    - segunda_ley_efectiva
+    - segunda_ley_masa_variable
+    - aceleracion_con_eficiencia
+    secondary_for: []
+  graph_binding:
+    channels:
+    - axis: y_slope
+      graph_id: Coord
+      description: pendiente de v(t) en el gráfico de coordenadas velocidad-tiempo
+  pedagogical_notes: Comparar siempre a calculado con a_ideal. La diferencia Δa = a_ideal
+    - a = F_loss/m cuantifica el coste dinámico de las pérdidas.
+
+- id: a_ideal
+  symbol: a_{ideal}
+  nombre:
+    es: Aceleración ideal (sin pérdidas)
+    en: Ideal acceleration (loss-free)
+  descripcion:
+    es: Aceleración que alcanzaría el sistema en un escenario sin fricción ni pérdidas
+      mecánicas.
+    en: Acceleration the system would reach in a scenario without friction or mechanical
+      losses.
+  unidad_si: m/s²
+  dimension: LT^{-2}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - aceleracion_con_eficiencia
+  common_mistake: Confundir a_ideal con a real y presentarla como el resultado final
+    del problema. a_ideal es la cota superior teórica; la aceleración real a = eta * a_ideal
+    es siempre menor.
+  typical_range: "Mismo rango que a pero siempre mayor (a_ideal = F_ap/m). Para F_ap\\
+    \\ = 3600 N y m = 1200 kg, a_ideal = 3 m/s²."
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: a_ideal siempre es positiva (o cero si F_ap = 0). Representa el máximo
+        teórico de aceleración.
+      en: a_ideal is always positive (or zero if F_ap = 0). It represents the theoretical
+        maximum acceleration.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: a_ideal = 0 solo si F_ap = 0. En otro caso, indica que el sistema tiene
+        masa infinita o fuerza nula, lo que no es físicamente posible en operación.
+      en: a_ideal = 0 only if F_ap = 0. Otherwise it indicates infinite mass or zero
+        force, not physically possible in operation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, +inf)
+  interpretation_role:
+    primary_for:
+    - aceleracion_con_eficiencia
+    secondary_for:
+    - segunda_ley_efectiva
+  graph_binding:
+    channels: []
+  pedagogical_notes: Calcular a_ideal como primer paso para tener una referencia superior.
+    La relación a/a_ideal = eta es la manera más rápida de detectar si el resultado
+    es coherente con el rendimiento declarado.
+
+- id: P_in
+  symbol: P_{in}
+  nombre:
+    es: Potencia de entrada
+    en: Input power
+  descripcion:
+    es: Trabajo por unidad de tiempo suministrado por el motor o fuente de energía
+      al sistema mecánico.
+    en: Work per unit of time supplied by the motor or energy source to the mechanical
+      system.
+  unidad_si: W
+  dimension: ML^2T^{-3}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - rendimiento_potencia
+  - potencia_perdida
+  common_mistake: Confundir P_in con la potencia nominal del motor en la ficha técnica.
+    P_in es la potencia instantánea suministrada en el régimen de análisis, que puede
+    diferir de la nominal si el motor no opera a plena carga.
+  typical_range: 100 W a 1 MW según la aplicación; motor de cinta transportadora
+    pequeña ~5–15 kW; motor de grúa de pórtico ~50–500 kW.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: P_in siempre es positiva; es la potencia que el motor introduce al sistema.
+        Un valor negativo indicaría que el sistema está devolviendo energía al motor
+        (modo regenerativo), lo que requiere un modelo diferente.
+      en: P_in is always positive; it is the power the motor introduces into the
+        system. A negative value would indicate the system is returning energy to
+        the motor (regenerative mode), requiring a different model.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: P_in = 0 significa que el motor no suministra potencia; el sistema se mueve
+        solo por inercia y las pérdidas lo detienen.
+      en: P_in = 0 means the motor supplies no power; the system moves by inertia
+        and losses bring it to a stop.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, +inf)
+  interpretation_role:
+    primary_for:
+    - rendimiento_potencia
+    - potencia_perdida
+    - potencia_traslacional
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: P_in = F_ap * v en régimen traslacional estacionario. Verificar
+    que P_in > P_out siempre; si P_out > P_in, hay un error de asignación.
+
+- id: P_out
+  symbol: P_{out}
+  nombre:
+    es: Potencia de salida útil
+    en: Useful output power
+  descripcion:
+    es: Trabajo útil por unidad de tiempo realizado por el sistema sobre la carga
+      externa.
+    en: Useful work per unit of time performed by the system on the external load.
+  unidad_si: W
+  dimension: ML^2T^{-3}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - rendimiento_potencia
+  - potencia_perdida
+  common_mistake: Calcular P_out como F_ap * v en lugar de F_net * v. La potencia
+    útil entregada a la carga es F_net * v, no F_ap * v, porque F_loss consume parte
+    de la potencia antes de llegar a la carga.
+  typical_range: Siempre P_out < P_in; para eta = 0.85, P_out = 0.85 * P_in. Motor
+    de 10 kW de entrada entrega ~8.5 kW útiles.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: P_out siempre es positiva y menor que P_in. Si P_out > P_in, hay un error
+        de modelización o de datos.
+      en: P_out is always positive and less than P_in. If P_out > P_in, there is
+        a modelling or data error.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: P_out = 0 en régimen estacionario cuando F_net = 0; toda P_in se convierte
+        en P_loss. El sistema trabaja solo para vencer las pérdidas sin acelerar la
+        carga.
+      en: P_out = 0 in steady state when F_net = 0; all P_in converts to P_loss.
+        The system works only to overcome losses without accelerating the load.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, P_in)
+  interpretation_role:
+    primary_for:
+    - rendimiento_potencia
+    - potencia_traslacional
+    secondary_for:
+    - potencia_perdida
+  graph_binding:
+    channels: []
+  pedagogical_notes: P_out = F_net * v es la forma de calcular la potencia útil traslacional.
+    Comparar P_out con P_in para obtener eta directamente.
+
+- id: P_loss
+  symbol: P_{loss}
+  nombre:
+    es: Potencia de pérdida
+    en: Loss power
+  descripcion:
+    es: Tasa a la que la energía se disipa como calor por fricción y resistencias
+      internas del sistema.
+    en: Rate at which energy is dissipated as heat by friction and internal resistances
+      of the system.
+  unidad_si: W
+  dimension: ML^2T^{-3}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - potencia_perdida
+  common_mistake: Ignorar P_loss como irrelevante y no verificar que P_in = P_out
+    + P_loss. El balance de potencias siempre debe cerrarse; P_loss nunca puede ser
+    cero en un sistema real.
+  typical_range: 2% a 50% de P_in; en transmisiones industriales típicas, P_loss
+    = (1 - eta) * P_in. Para eta = 0.80 y P_in = 10 kW, P_loss = 2 kW.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: P_loss siempre es positiva y representa energía degradada a calor. Un valor
+        negativo sería físicamente absurdo.
+      en: P_loss is always positive and represents energy degraded to heat. A negative
+        value would be physically absurd.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: P_loss = 0 equivale a eta = 1 (sistema ideal). En sistemas reales, P_loss
+        > 0 siempre; cualquier resultado P_loss = 0 indica que se aplicó el modelo
+        ideal.
+      en: P_loss = 0 is equivalent to eta = 1 (ideal system). In real systems, P_loss
+        > 0 always; any result P_loss = 0 means the ideal model was applied.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, P_in)
+  interpretation_role:
+    primary_for:
+    - potencia_perdida
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: P_loss = P_in * (1 - eta) es la forma más directa de calcular
+    las pérdidas si se conoce eta. Un incremento anómalo de P_loss indica desgaste
+    del sistema de transmisión.
+
+- id: tau_fr
+  symbol: \\tau_{fr}
+  nombre:
+    es: Torque de fricción en ejes
+    en: Axis friction torque
+  descripcion:
+    es: Momento de fuerza resistivo en los ejes de giro de poleas o motores que disipa
+      energía como calor.
+    en: Resistive force moment on the rotation axes of pulleys or motors that dissipates
+      energy as heat.
+  unidad_si: N·m
+  dimension: ML^2T^{-2}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - fuerza_neta_real
+  common_mistake: "Ignorar tau_fr en sistemas con poleas y motores. El par de fricción\\
+    \\ contribuye a F_loss cuando se reduce al eje de traslación (F_loss += tau_fr /\\
+    \\ r), donde r es el radio de la polea o rueda."
+  typical_range: 0.1 N·m a 500 N·m según el tamaño del eje; rodamiento de bola de
+    precisión ~0.01–0.5 N·m; cojinete de deslizamiento industrial ~5–100 N·m.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: tau_fr siempre se opone a la rotación y contribuye positivamente a F_loss
+        al ser reducido a la traslación.
+      en: tau_fr always opposes rotation and contributes positively to F_loss when
+        reduced to translation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: tau_fr = 0 en el modelo ideal. En sistemas reales con rodamientos, tau_fr
+        > 0 siempre, aunque puede ser pequeño en rodamientos de alta precisión.
+      en: tau_fr = 0 in the ideal model. In real systems with bearings, tau_fr > 0
+        always, though it may be small in high-precision bearings.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, +inf)
+  interpretation_role:
+    primary_for:
+    - fuerza_equivalente_torque
+    secondary_for:
+    - fuerza_neta_real
+  graph_binding:
+    channels: []
+  pedagogical_notes: Reducir tau_fr al eje de traslación dividiendo por el radio de
+    la polea antes de sumarlo a F_loss. Usar tau_fr / r como la contribución equivalente
+    traslacional.
+
+- id: m_dot
+  symbol: \\dot{m}
+  nombre:
+    es: Caudal másico
+    en: Mass flow rate
+  descripcion:
+    es: Cantidad de masa que atraviesa una sección por unidad de tiempo; clave en
+      procesos de carga continua como cintas transportadoras.
+    en: Amount of mass passing through a section per unit of time; key in continuous
+      loading processes like conveyor belts.
+  unidad_si: kg/s
+  dimension: MT^{-1}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - fuerza_neta_real
+  common_mistake: Ignorar el efecto de m_dot en la masa efectiva del sistema. En
+    una cinta transportadora en carga continua, la masa del sistema aumenta con el
+    tiempo a razón de m_dot, lo que reduce a progresivamente incluso con F_ap constante.
+  typical_range: 0.1 kg/s a 50 kg/s en procesos industriales; cinta ligera de laboratorio
+    ~0.1–1 kg/s; cinta de planta de distribución ~2–20 kg/s.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: m_dot siempre es positivo en procesos de carga. Un flujo negativo indicaría
+        descarga del sistema, lo que cambia el signo de la contribución a la masa
+        efectiva.
+      en: m_dot is always positive during loading. A negative flow would indicate
+        system unloading, changing the sign of its contribution to effective mass.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: m_dot = 0 significa masa efectiva constante; el sistema está en carga completa
+        o sin carga pero estable. La segunda ley estándar aplica directamente.
+      en: m_dot = 0 means constant effective mass; the system is at full load or
+        no load but stable. The standard second law applies directly.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, +inf)
+  interpretation_role:
+    primary_for:
+    - segunda_ley_masa_variable
+    secondary_for:
+    - fuerza_neta_real
+  graph_binding:
+    channels: []
+  pedagogical_notes: m_dot es relevante en análisis de arranque de cintas transportadoras
+    con carga continua. Si m_dot > 0, la masa efectiva crece con t y la aceleración
+    disminuye progresivamente.
+- id: r
+  symbol: r
+  nombre:
+    es: Radio de polea o rueda
+    en: Pulley or wheel radius
+  descripcion:
+    es: Distancia desde el eje de rotación hasta el punto de aplicación de la fuerza
+      traslacional o del par de fricción.
+    en: Distance from the rotation axis to the point of application of the translational
+      force or friction torque.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: physical_quantity
+  used_in:
+  - fuerza_equivalente_torque
+  common_mistake: Confundir el radio r con el diámetro D; el torque se relaciona siempre
+    con el radio para la conversión de fuerzas traslacionales.
+  typical_range: 0.01 m a 2 m según el componente; eje de motor pequeño ~0.02 m, polea
+    de grúa ~0.5 m, rueda de vehículo industrial ~0.3 m.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El radio siempre es una magnitud positiva.
+      en: The radius is always a positive quantity.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: r = 0 no tiene sentido físico para una polea o rueda en rotación; produciría
+        una fuerza equivalente infinita.
+      en: r = 0 has no physical meaning for a rotating pulley or wheel; it would
+        produce an infinite equivalent force.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, +inf)
+  interpretation_role:
+    primary_for:
+    - fuerza_equivalente_torque
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: El radio r es la palanca que convierte el torque tau_fr en una
+    fuerza disipativa equivalente F_loss.
+- id: v
+  symbol: v
+  nombre:
+    es: Velocidad del sistema
+    en: System velocity
+  descripcion:
+    es: Rapidez con la que se desplaza el sistema en la dirección del movimiento.
+    en: Speed at which the system moves in the direction of motion.
+  unidad_si: m/s
+  dimension: LT^-1
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: physical_quantity
+  used_in:
+  - potencia_traslacional
+  - segunda_ley_masa_variable
+  common_mistake: Confundir velocidad con aceleración; la velocidad determina la potencia
+    disipada, pero no la fuerza neta requerida para el cambio de estado.
+  typical_range: 0.1 m/s a 100 m/s según el vehículo o máquina.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En este modelo, la velocidad se considera positiva en el sentido del movimiento.
+      en: In this model, velocity is considered positive in the direction of motion.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: v = 0 indica que el sistema está en reposo; las pérdidas por potencia son
+        nulas aunque existan fuerzas de pérdida estáticas.
+      en: v = 0 means the system is at rest; power losses are zero even if static
+        loss forces exist.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, +inf)'
+  interpretation_role:
+    primary_for:
+    - potencia_traslacional
+    - segunda_ley_masa_variable
+    secondary_for: []
+  graph_binding:
+    channels:
+    - axis: y
+      graph_id: Coord
+  pedagogical_notes: La velocidad es necesaria para calcular el balance de potencias
+    P = F * v.
+
+- id: F
+  symbol: F
+  nombre:
+    es: Fuerza
+    en: Force
+  descripcion:
+    es: Fuerza genérica para despejes matemáticos.
+    en: Generic force for mathematical rearrangements.
+  unidad_si: N
+  dimension: MLT^{-2}
+  is_vector: false
+  components: null
+  category: auxiliary
+  physical_role: math_variable
+  used_in:
+  - potencia_traslacional
+  common_mistake: Ninguno, magnitud auxiliar.
+  typical_range: N/A
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Magnitud algebraica.
+      en: Algebraic magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Magnitud nula.
+      en: Null magnitude.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: '(-inf, +inf)'
+  interpretation_role:
+    primary_for: []
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Variable de apoyo algebraico.
+
+- id: P
+  symbol: P
+  nombre:
+    es: Potencia genérica
+    en: Generic power
+  descripcion:
+    es: Potencia genérica para despejes matemáticos.
+    en: Generic power for mathematical rearrangements.
+  unidad_si: W
+  dimension: ML^2T^{-3}
+  is_vector: false
+  components: null
+  category: auxiliary
+  physical_role: math_variable
+  used_in:
+  - potencia_traslacional
+  common_mistake: Ninguno, magnitud auxiliar.
+  typical_range: N/A
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Magnitud algebraica.
+      en: Algebraic magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Magnitud nula.
+      en: Null magnitude.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: '(-inf, +inf)'
+  interpretation_role:
+    primary_for: []
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes: Variable de apoyo algebraico.
+`;export{e as default};

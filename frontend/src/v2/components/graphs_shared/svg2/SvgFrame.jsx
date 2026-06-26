@@ -18,6 +18,7 @@ export default function SvgFrame({
   className = "",
   viewBox = "0 0 850 600",
   svgHeight = 900,
+  lang = "es",
 }) {
   return (
     <div className={`v2-leaf ${className}`}>
@@ -92,7 +93,7 @@ export default function SvgFrame({
                 color: "rgba(255,255,255,0.55)",
                 fontWeight: 700
               }}>
-                CONTROLES
+                {lang === "en" ? "CONTROLS" : "CONTROLES"}
               </div>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 {controls}

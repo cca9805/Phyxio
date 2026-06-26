@@ -1,0 +1,175 @@
+const e=`version: 1.0.0
+leaf_id: sistema-abierto
+magnitudes:
+  - id: m_dot
+    symbol: "\\\\dot m"
+    nombre: { es: Caudal masico, en: Mass flow rate }
+    descripcion: { es: Masa que cruza la frontera del sistema por unidad de tiempo., en: Mass crossing the system boundary per unit time. }
+    unidad_si: "kg/s"
+    dimension: "[M T⁻¹]"
+    is_vector: false
+    components: []
+    category: flujo
+    physical_role: { es: flujo de masa a traves de frontera, en: mass flow through boundary }
+    used_in: [balance_masa_abierto, balance_energia_flujo]
+    common_mistake: { es: Confundir caudal masico con masa total contenida., en: Confusing mass flow rate with total contained mass. }
+    typical_range: { es: "0.001 a 100 kg/s segun escala", en: "0.001 to 100 kg/s depending on scale" }
+    sign_behavior: { es: Positivo para entrada o salida segun convenio declarado., en: Positive for inlet or outlet according to stated convention. }
+    zero_behavior: { es: Si es cero, el canal de masa queda cerrado., en: If zero, the mass channel is closed. }
+    value_nature: variable
+    interpretation_role: entrada_salida
+    graph_binding: { type: Coord, role: control }
+    pedagogical_notes: { es: "Debe asociarse siempre a una seccion de frontera.", en: "It must always be tied to a boundary section." }
+  - id: m_sys
+    symbol: "m"
+    nombre: { es: Masa del sistema, en: System mass }
+    descripcion: { es: Masa contenida instantaneamente dentro del volumen de control., en: Instantaneous mass contained inside the control volume. }
+    unidad_si: "kg"
+    dimension: "[M]"
+    is_vector: false
+    components: []
+    category: estado
+    physical_role: { es: contenido material acumulado, en: accumulated material content }
+    used_in: [balance_masa_abierto]
+    common_mistake: { es: Suponer que siempre es constante en un sistema abierto., en: Assuming it is always constant in an open system. }
+    typical_range: { es: "depende del deposito o equipo", en: "depends on vessel or device" }
+    sign_behavior: { es: No negativa., en: Non-negative. }
+    zero_behavior: { es: Sistema vacio dentro del modelo., en: Empty system in the model. }
+    value_nature: state
+    interpretation_role: acumulacion
+    graph_binding: { type: Coord, role: output }
+    pedagogical_notes: { es: "Puede ser constante aunque haya flujo si entradas y salidas se compensan.", en: "It can be constant even with flow if inlets and outlets balance." }
+  - id: E_sys
+    symbol: "E"
+    nombre: { es: Energia del sistema, en: System energy }
+    descripcion: { es: Energia total contenida dentro del sistema abierto o volumen de control., en: Total energy contained inside the open system or control volume. }
+    unidad_si: "J"
+    dimension: "[M L² T⁻²]"
+    is_vector: false
+    components: []
+    category: energia
+    physical_role: { es: acumulacion energetica, en: energy accumulation }
+    used_in: [balance_energia_flujo]
+    common_mistake: { es: Olvidar que la masa que entra trae energia., en: Forgetting that incoming mass carries energy. }
+    typical_range: { es: "J a MJ segun escala", en: "J to MJ depending on scale" }
+    sign_behavior: { es: Cambia segun balance neto de energia., en: Changes according to net energy balance. }
+    zero_behavior: { es: Referencia energetica elegida., en: Chosen energy reference. }
+    value_nature: state
+    interpretation_role: acumulacion
+    graph_binding: { type: Coord, role: output }
+    pedagogical_notes: { es: "No es solo energia interna si hay velocidad o altura relevantes.", en: "It is not only internal energy if velocity or height matter." }
+  - id: dm_sys
+    symbol: "dm/dt"
+    nombre: { es: Tasa de acumulacion de masa, en: Mass accumulation rate }
+    descripcion: { es: Cambio temporal de la masa contenida dentro del volumen de control., en: Time change of mass contained inside the control volume. }
+    unidad_si: "kg/s"
+    dimension: "[M T⁻¹]"
+    is_vector: false
+    components: []
+    category: acumulacion
+    physical_role: { es: respuesta del balance de masa, en: response of the mass balance }
+    used_in: [balance_masa_abierto]
+    common_mistake: { es: Confundir acumulacion nula con ausencia de flujo., en: Confusing zero accumulation with absence of flow. }
+    typical_range: { es: "-100 a 100 kg/s segun escala", en: "-100 to 100 kg/s depending on scale" }
+    sign_behavior: { es: Positiva si entra mas masa de la que sale., en: Positive if more mass enters than leaves. }
+    zero_behavior: { es: Masa interna estacionaria., en: Steady internal mass. }
+    value_nature: derived
+    interpretation_role: acumulacion
+    graph_binding: { type: Coord, role: output }
+    pedagogical_notes: { es: "Es la pendiente de [[m_sys]] en el tiempo.", en: "It is the time slope of [[m_sys]]." }
+  - id: dE_sys
+    symbol: "dE/dt"
+    nombre: { es: Tasa de acumulacion de energia, en: Energy accumulation rate }
+    descripcion: { es: Cambio temporal de la energia almacenada en el volumen de control., en: Time change of energy stored in the control volume. }
+    unidad_si: "W"
+    dimension: "[M L² T⁻³]"
+    is_vector: false
+    components: []
+    category: acumulacion
+    physical_role: { es: respuesta del balance de energia, en: response of the energy balance }
+    used_in: [balance_energia_flujo]
+    common_mistake: { es: Omitir energia de corrientes al calcularla., en: Omitting stream energy when calculating it. }
+    typical_range: { es: "W a MW", en: "W to MW" }
+    sign_behavior: { es: Positiva si el sistema gana energia neta., en: Positive if the system gains net energy. }
+    zero_behavior: { es: Energia interna estacionaria del volumen de control., en: Steady internal energy of the control volume. }
+    value_nature: derived
+    interpretation_role: acumulacion
+    graph_binding: { type: Coord, role: output }
+    pedagogical_notes: { es: "Es la pendiente de [[E_sys]] en el tiempo.", en: "It is the time slope of [[E_sys]]." }
+  - id: Q_dot
+    symbol: "\\\\dot Q"
+    nombre: { es: Potencia termica, en: Heat transfer rate }
+    descripcion: { es: Energia que cruza la frontera como calor por unidad de tiempo., en: Energy crossing the boundary as heat per unit time. }
+    unidad_si: "W"
+    dimension: "[M L² T⁻³]"
+    is_vector: false
+    components: []
+    category: transferencia
+    physical_role: { es: intercambio energetico por temperatura, en: energy exchange due to temperature }
+    used_in: [balance_energia_flujo]
+    common_mistake: { es: Confundir calor con temperatura del fluido., en: Confusing heat with fluid temperature. }
+    typical_range: { es: "W a MW", en: "W to MW" }
+    sign_behavior: { es: Positiva hacia el sistema por convenio usual., en: Positive into the system by common convention. }
+    zero_behavior: { es: Frontera adiabatica para ese canal., en: Adiabatic boundary for that channel. }
+    value_nature: variable
+    interpretation_role: entrada_energia
+    graph_binding: { type: Coord, role: input }
+    pedagogical_notes: { es: "No sustituye al termino de energia transportada por masa.", en: "It does not replace the energy carried by mass." }
+  - id: W_dot
+    symbol: "\\\\dot W"
+    nombre: { es: Potencia de trabajo, en: Work rate }
+    descripcion: { es: Energia transferida como trabajo por unidad de tiempo., en: Energy transferred as work per unit time. }
+    unidad_si: "W"
+    dimension: "[M L² T⁻³]"
+    is_vector: false
+    components: []
+    category: transferencia
+    physical_role: { es: intercambio energetico mecanico o electrico, en: mechanical or electrical energy exchange }
+    used_in: [balance_energia_flujo]
+    common_mistake: { es: No declarar si el trabajo sale o entra al sistema., en: Not stating whether work leaves or enters the system. }
+    typical_range: { es: "W a MW", en: "W to MW" }
+    sign_behavior: { es: Positiva saliendo del sistema en el convenio de potencia producida., en: Positive leaving the system in the produced-power convention. }
+    zero_behavior: { es: Sin eje, electricidad ni trabajo de frontera relevante., en: No shaft, electricity, or relevant boundary work. }
+    value_nature: variable
+    interpretation_role: salida_energia
+    graph_binding: { type: Coord, role: input }
+    pedagogical_notes: { es: "En turbinas suele ser salida; en compresores suele ser entrada.", en: "In turbines it is often output; in compressors it is often input." }
+  - id: h
+    symbol: "h"
+    nombre: { es: Entalpia especifica, en: Specific enthalpy }
+    descripcion: { es: Energia especifica transportada por la masa que cruza una frontera de flujo., en: Specific energy carried by mass crossing a flow boundary. }
+    unidad_si: "J/kg"
+    dimension: "[L² T⁻²]"
+    is_vector: false
+    components: []
+    category: propiedad
+    physical_role: { es: energia de flujo por unidad de masa, en: flow energy per unit mass }
+    used_in: [balance_energia_flujo]
+    common_mistake: { es: Usar energia interna cuando el flujo realiza trabajo de empuje., en: Using internal energy when flow performs push work. }
+    typical_range: { es: "10^3 a 10^6 J/kg", en: "10^3 to 10^6 J/kg" }
+    sign_behavior: { es: Depende de la referencia termodinamica., en: Depends on thermodynamic reference. }
+    zero_behavior: { es: Referencia de propiedad elegida., en: Chosen property reference. }
+    value_nature: property
+    interpretation_role: transporte_energia
+    graph_binding: { type: Coord, role: parameter }
+    pedagogical_notes: { es: "Es la propiedad natural del balance de energia en flujo.", en: "It is the natural property in flow energy balances." }
+  - id: e_flujo
+    symbol: "e"
+    nombre: { es: Energia especifica de flujo, en: Specific flow energy }
+    descripcion: { es: Energia por unidad de masa que entra o sale con una corriente., en: Energy per unit mass entering or leaving with a stream. }
+    unidad_si: "J/kg"
+    dimension: "[L² T⁻²]"
+    is_vector: false
+    components: []
+    category: propiedad
+    physical_role: { es: contenido energetico de corriente, en: energy content of a stream }
+    used_in: [energia_especifica_flujo]
+    common_mistake: { es: Ignorar velocidad o altura cuando son comparables a la entalpia., en: Ignoring velocity or elevation when comparable to enthalpy. }
+    typical_range: { es: "10^3 a 10^6 J/kg", en: "10^3 to 10^6 J/kg" }
+    sign_behavior: { es: Positiva o negativa segun referencia de energia potencial y entalpia., en: Positive or negative depending on potential energy and enthalpy reference. }
+    zero_behavior: { es: Energia especifica nula respecto a referencia elegida., en: Zero specific energy relative to chosen reference. }
+    value_nature: derived
+    interpretation_role: transporte_energia
+    graph_binding: { type: Coord, role: output }
+    pedagogical_notes: { es: "Multiplicada por [[m_dot]] da potencia transportada por masa.", en: "Multiplied by [[m_dot]] gives power carried by mass." }
+`;export{e as default};

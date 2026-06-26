@@ -1,0 +1,252 @@
+const e=`version: 5
+magnitudes:
+- id: phi_t
+  symbol: phi_t
+  nombre: { es: Fase instantánea, en: Instantaneous phase }
+  si_unit: rad
+  unidad_si: rad
+  dimension: 1
+  is_vector: false
+  components: []
+  category: estado_angular
+  physical_role: variable_de_estado
+  used_in: [ fase_instante, posicion_con_fase, velocidad_con_fase ]
+  common_mistake: Confundir [[phi_t]] con amplitud o con una posición lineal.
+  typical_range: [ -12.57, 12.57 ]
+  sign_behavior: depende_de_referencia
+  zero_behavior: origen_de_fase_convencional
+  value_nature: estado
+  interpretation_role: ubica_el_sistema_en_el_ciclo
+  graph_binding: "[[phi_t]] organiza el estado instantáneo y permite leer adelanto o retraso en el ciclo."
+  descripcion:
+    es: "Variable angular que identifica la posición instantánea dentro del ciclo oscilatorio."
+    en: "Angular variable that identifies the instantaneous position within the oscillatory cycle."
+  pedagogical_notes:
+    es: "Es la magnitud central para distinguir estado instantáneo y desfase conceptual."
+    en: "It is the central quantity for distinguishing instantaneous state and conceptual phase difference."
+
+- id: phi
+  symbol: phi
+  nombre: { es: Fase inicial, en: Initial phase }
+  si_unit: rad
+  unidad_si: rad
+  dimension: 1
+  is_vector: false
+  components: []
+  category: condicion_inicial
+  physical_role: parametro_de_estado
+  used_in: [ fase_instante, posicion_con_fase, velocidad_con_fase ]
+  common_mistake: Leer [[phi]] como si cambiara con el tiempo dentro del mismo modelo ideal.
+  typical_range: [ -6.28, 6.28 ]
+  sign_behavior: depende_de_referencia
+  zero_behavior: referencia_inicial_sin_desfase
+  value_nature: parametro
+  interpretation_role: fija_el_corrimiento_inicial
+  graph_binding: "[[phi]] desplaza el arranque del ciclo sin cambiar amplitud ni frecuencia."
+  descripcion:
+    es: "Corrimiento angular que fija el estado del oscilador en el instante inicial."
+    en: "Angular offset that fixes the oscillator state at the initial instant."
+  pedagogical_notes:
+    es: "Ayuda a comparar osciladores con la misma dinámica pero distinto arranque temporal."
+    en: "It helps compare oscillators with the same dynamics but different temporal starts."
+
+- id: delta_phi
+  symbol: delta_phi
+  nombre: { es: Desfase, en: Phase difference }
+  si_unit: rad
+  unidad_si: rad
+  dimension: 1
+  is_vector: false
+  components: []
+  category: comparacion_de_estados
+  physical_role: diferencia_angular
+  used_in: [ desfase_entre_osciladores ]
+  common_mistake: Interpretar [[delta_phi]] como diferencia de amplitudes o como error experimental puro.
+  typical_range: [ -6.28, 6.28 ]
+  sign_behavior: depende_de_convencion
+  zero_behavior: osciladores_en_fase
+  value_nature: estado_relativo
+  interpretation_role: compara_adelanto_y_retraso
+  graph_binding: "El signo de [[delta_phi]] permite leer qué oscilador adelanta dentro del mismo ciclo."
+  descripcion:
+    es: "Diferencia angular entre dos osciladores o entre dos señales oscilatorias comparables."
+    en: "Angular difference between two oscillators or between two comparable oscillatory signals."
+  pedagogical_notes:
+    es: "Debe interpretarse junto con la convención de signo y la referencia temporal elegida."
+    en: "It should be interpreted together with the chosen sign convention and temporal reference."
+
+- id: omega
+  symbol: omega
+  nombre: { es: Pulsación angular, en: Angular frequency }
+  si_unit: rad/s
+  unidad_si: rad/s
+  dimension: T^-1
+  is_vector: false
+  components: []
+  category: parametro_dinamico
+  physical_role: tasa_de_avance_angular
+  used_in: [ fase_instante, posicion_con_fase, velocidad_con_fase ]
+  common_mistake: Confundir [[omega]] con frecuencia en hertz sin convertir correctamente.
+  typical_range: [ 0.1, 100 ]
+  sign_behavior: positiva_en_modelo_estandar
+  zero_behavior: sin_oscilacion_periodica
+  value_nature: parametro
+  interpretation_role: fija_ritmo_del_ciclo
+  graph_binding: "[[omega]] controla cuán rápido cambia [[phi_t]] y, por tanto, la rapidez del barrido de fase."
+  descripcion:
+    es: "Velocidad angular con la que avanza la fase en un movimiento armónico simple ideal."
+    en: "Angular rate at which phase advances in ideal simple harmonic motion."
+  pedagogical_notes:
+    es: "Es clave separar [[omega]] de la fase misma: una regula el ritmo y la otra el estado angular."
+    en: "It is key to separate [[omega]] from phase itself: one sets the rate and the other the angular state."
+
+- id: x
+  symbol: x
+  nombre: { es: Desplazamiento, en: Displacement }
+  si_unit: m
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: estado_lineal
+  physical_role: coordenada_de_estado
+  used_in: [ posicion_con_fase ]
+  common_mistake: Creer que [[x]] por sí sola determina la fase sin considerar el sentido del movimiento.
+  typical_range: [ -2, 2 ]
+  sign_behavior: depende_de_eje
+  zero_behavior: equilibrio
+  value_nature: estado
+  interpretation_role: proyecta_la_fase_en_posicion
+  graph_binding: "[[x]] es la proyección espacial del estado de fase sobre el eje de movimiento."
+  descripcion:
+    es: "Posición instantánea del oscilador medida respecto del equilibrio."
+    en: "Instantaneous position of the oscillator measured from equilibrium."
+  pedagogical_notes:
+    es: "No basta para reconstruir el estado completo si no se añade información sobre velocidad o fase."
+    en: "It is not enough to reconstruct the full state unless velocity or phase information is added."
+
+- id: v
+  symbol: v
+  nombre: { es: Velocidad, en: Velocity }
+  si_unit: m/s
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: false
+  components: []
+  category: estado_lineal
+  physical_role: tasa_de_cambio
+  used_in: [ velocidad_con_fase ]
+  common_mistake: Suponer que [[v]] es máxima donde [[x]] también lo es.
+  typical_range: [ -20, 20 ]
+  sign_behavior: depende_de_sentido
+  zero_behavior: extremos_del_movimiento
+  value_nature: estado
+  interpretation_role: distingue_sentido_y_tramo_del_ciclo
+  graph_binding: "[[v]] permite diferenciar si el oscilador avanza o retrocede en el ciclo de fase."
+  descripcion:
+    es: "Tasa temporal de cambio del desplazamiento en el estado oscilatorio."
+    en: "Time rate of change of displacement in the oscillatory state."
+  pedagogical_notes:
+    es: "Su signo es decisivo para distinguir estados con el mismo [[x]] pero distinta evolución."
+    en: "Its sign is decisive for distinguishing states with the same [[x]] but different evolution."
+
+- id: A
+  symbol: A
+  nombre: { es: Amplitud, en: Amplitude }
+  si_unit: m
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: parametro_dinamico
+  physical_role: escala_de_osciliacion
+  used_in: [ posicion_con_fase, velocidad_con_fase ]
+  common_mistake: Tratar [[A]] como si definiera la fase en lugar de la escala del movimiento.
+  typical_range: [ 0.01, 2 ]
+  sign_behavior: no_negativa_en_magnitud
+  zero_behavior: sin_oscilacion
+  value_nature: parametro
+  interpretation_role: fija_la_escala_espacial
+  graph_binding: "[[A]] fija el tamaño del ciclo espacial sin determinar por sí sola el punto del ciclo."
+  descripcion:
+    es: "Máximo desplazamiento respecto del equilibrio en el movimiento armónico simple ideal."
+    en: "Maximum displacement from equilibrium in ideal simple harmonic motion."
+  pedagogical_notes:
+    es: "Conviene separar siempre escala de oscilación y estado de fase."
+    en: "It is always useful to separate oscillation scale from phase state."
+
+- id: t
+  symbol: t
+  nombre: { es: Tiempo, en: Time }
+  si_unit: s
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: []
+  category: variable_independiente
+  physical_role: parametro_de_evolucion
+  used_in: [ fase_instante, posicion_con_fase, velocidad_con_fase ]
+  common_mistake: Mezclar unidades de tiempo o cambiar referencia temporal a mitad del problema.
+  typical_range: [ 0, 100 ]
+  sign_behavior: depende_de_referencia
+  zero_behavior: origen_temporal
+  value_nature: variable_independiente
+  interpretation_role: recorre_la_evolucion_del_estado
+  graph_binding: "[[t]] parametriza el avance de [[phi_t]] y ordena la lectura temporal del movimiento."
+  descripcion:
+    es: "Variable independiente que marca la evolución temporal del sistema oscilatorio."
+    en: "Independent variable that marks the temporal evolution of the oscillatory system."
+  pedagogical_notes:
+    es: "Una referencia temporal mal elegida altera la interpretación de [[phi]] y [[delta_phi]]."
+    en: "A poorly chosen temporal reference alters interpretation of [[phi]] and [[delta_phi]]."
+
+- id: phi1
+  symbol: phi1
+  nombre: { es: Fase del oscilador 1, en: Phase of oscillator 1 }
+  si_unit: rad
+  unidad_si: rad
+  dimension: 1
+  is_vector: false
+  components: []
+  category: estado_relativo
+  physical_role: referencia_angular_1
+  used_in: [ desfase_entre_osciladores ]
+  common_mistake: Intercambiar [[phi1]] y [[phi2]] sin fijar convención de resta.
+  typical_range: [ -6.28, 6.28 ]
+  sign_behavior: depende_de_referencia
+  zero_behavior: referencia_angular_nula
+  value_nature: estado
+  interpretation_role: fija_uno_de_los_estados_comparados
+  graph_binding: "[[phi1]] aporta una de las referencias angulares necesarias para leer [[delta_phi]]."
+  descripcion:
+    es: "Fase asociada al primer oscilador al comparar sincronización relativa."
+    en: "Phase associated with the first oscillator when comparing relative synchronization."
+  pedagogical_notes:
+    es: "Siempre debe leerse junto con la convención usada para formar [[delta_phi]]."
+    en: "It should always be read together with the convention used to form [[delta_phi]]."
+
+- id: phi2
+  symbol: phi2
+  nombre: { es: Fase del oscilador 2, en: Phase of oscillator 2 }
+  si_unit: rad
+  unidad_si: rad
+  dimension: 1
+  is_vector: false
+  components: []
+  category: estado_relativo
+  physical_role: referencia_angular_2
+  used_in: [ desfase_entre_osciladores ]
+  common_mistake: Interpretar [[phi2]] aislada sin compararla con [[phi1]] o con la misma referencia temporal.
+  typical_range: [ -6.28, 6.28 ]
+  sign_behavior: depende_de_referencia
+  zero_behavior: referencia_angular_nula
+  value_nature: estado
+  interpretation_role: fija_el_segundo_estado_comparado
+  graph_binding: "[[phi2]] permite completar la comparación que produce [[delta_phi]]."
+  descripcion:
+    es: "Fase asociada al segundo oscilador al estudiar sincronización relativa."
+    en: "Phase associated with the second oscillator when studying relative synchronization."
+  pedagogical_notes:
+    es: "Su interpretación es comparativa: por sí sola no define adelanto o retraso."
+    en: "Its interpretation is comparative: by itself it does not define lead or lag."
+`;export{e as default};

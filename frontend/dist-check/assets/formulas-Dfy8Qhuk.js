@@ -1,0 +1,143 @@
+const e=`version: 5
+formulas:
+  - id: fuerza_superficial
+    title:
+      es: "Definición de Tensión Superficial"
+      en: "Surface Tension Definition"
+    equation: "F = sigma * L"
+    latex: "F = \\\\sigma \\\\cdot L"
+    rearrangements:
+      - target: F
+        equation: "F = sigma * L"
+        latex: "F = \\\\sigma \\\\cdot L"
+      - target: sigma
+        equation: "sigma = F / L"
+        latex: "\\\\sigma = \\\\frac{F}{L}"
+      - target: L
+        equation: "L = F / sigma"
+        latex: "L = \\\\frac{F}{\\\\sigma}"
+    physical_meaning:
+      es: "La tensión superficial es la fuerza tangencial por unidad de longitud que intenta contraer la superficie libre."
+      en: "Surface tension is the tangential force per unit length that attempts to contract the free surface."
+    category: "definicion"
+    relation_type: "causal"
+    constraints: ["sigma >= 0", "L > 0"]
+    validity:
+      es: "Válido para interfaces estáticas entre dos fluidos inmiscibles."
+      en: "Valid for static interfaces between two immiscible fluids."
+    dimension_check: "M L T⁻² = (M T⁻²) * L"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["capilaridad", "ascension_capilar"]
+    interpretation_tags: ["cohesion", "contraccion"]
+    result_semantics: "intensiva"
+    domain_checks:
+      - condition: "L < 1e-9"
+        severity: "error"
+        message:
+          es: "Longitud por debajo de la escala molecular."
+          en: "Length below molecular scale."
+    coherence_checks:
+      - condition: "sigma > 1"
+        severity: "warning"
+        message:
+          es: "Valor de tensión superficial inusualmente alto para líquidos comunes."
+          en: "Unusually high surface tension value for common liquids."
+    graph_implications:
+      es: "Pendiente de la recta F vs L."
+      en: "Slope of the F vs L line."
+    pedagogical_triggers: ["pompas_jabon", "insectos_sobre_agua"]
+
+  - id: laplace
+    title:
+      es: "Ley de Young-Laplace (Interfaz Esférica)"
+      en: "Young-Laplace Law (Spherical Interface)"
+    equation: "dp = 2 * sigma / R"
+    latex: "\\\\Delta p = \\\\frac{2\\\\sigma}{R}"
+    rearrangements:
+      - target: dp
+        equation: "dp = 2 * sigma / R"
+        latex: "\\\\Delta p = \\\\frac{2\\\\sigma}{R}"
+      - target: sigma
+        equation: "sigma = dp * R / 2"
+        latex: "\\\\sigma = \\\\frac{\\\\Delta p \\\\cdot R}{2}"
+      - target: R
+        equation: "R = 2 * sigma / dp"
+        latex: "R = \\\\frac{2\\\\sigma}{\\\\Delta p}"
+    physical_meaning:
+      es: "Describe el salto de presión a través de una interfaz curva debido a la tensión superficial."
+      en: "Describes the pressure jump across a curved interface due to surface tension."
+    category: "balance"
+    relation_type: "identidad"
+    constraints: ["R > 0"]
+    validity:
+      es: "Válido para gotas esféricas o burbujas sumergidas (una sola interfaz)."
+      en: "Valid for spherical drops or submerged bubbles (single interface)."
+    dimension_check: "M L⁻¹ T⁻² = (M T⁻²) / L"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["gotas", "burbujas", "cavitacion"]
+    interpretation_tags: ["curvatura", "exceso_presion"]
+    result_semantics: "absoluta"
+    domain_checks:
+      - condition: "R < 1e-7"
+        severity: "warning"
+        message:
+          es: "Efectos de nano-escala pueden invalidar la ley macroscópica."
+          en: "Nano-scale effects might invalidate the macroscopic law."
+    coherence_checks:
+      - condition: "dp > 1e6"
+        severity: "warning"
+        message:
+          es: "La diferencia de presión es extremadamente alta; verifique el radio."
+          en: "The pressure difference is extremely high; check the radius."
+    graph_implications:
+      es: "Relación hiperbólica entre dp y R."
+      en: "Hyperbolic relationship between dp and R."
+    pedagogical_triggers: ["presion_interior_burbuja", "coalescencia"]
+
+  - id: ascenso_capilar
+    title:
+      es: "Ley de Jurin (Ascenso Capilar)"
+      en: "Jurin's Law (Capillary Rise)"
+    equation: "h = (2 * sigma * cos(theta)) / (rho * g * r)"
+    latex: "h = \\\\frac{2\\\\sigma \\\\cos \\\\theta}{\\\\rho g r}"
+    rearrangements:
+      - target: h
+        equation: "h = (2 * sigma * cos(theta)) / (rho * g * r)"
+        latex: "h = \\\\frac{2\\\\sigma \\\\cos \\\\theta}{\\\\rho g r}"
+      - target: sigma
+        equation: "sigma = (h * rho * g * r) / (2 * cos(theta))"
+        latex: "\\\\sigma = \\\\frac{h \\\\rho g r}{2 \\\\cos \\\\theta}"
+    physical_meaning:
+      es: "Predice la altura que alcanza un líquido en un tubo capilar debido al equilibrio entre la tensión superficial y el peso del fluido."
+      en: "Predicts the height a liquid reaches in a capillary tube due to the balance between surface tension and fluid weight."
+    category: "balance"
+    relation_type: "causal"
+    constraints: ["rho > 0", "g > 0", "r > 0"]
+    validity:
+      es: "Válido para tubos cilíndricos estrechos donde el menisco es aproximadamente esférico."
+      en: "Valid for narrow cylindrical tubes where the meniscus is approximately spherical."
+    dimension_check: "L = (M T⁻²) / (M L⁻³ * L T⁻² * L)"
+    calculable: true
+    motivo_no_calculable: null
+    used_in: ["capilaridad"]
+    interpretation_tags: ["mojado", "menisco"]
+    result_semantics: "absoluta"
+    domain_checks:
+      - condition: "r > 0.01"
+        severity: "warning"
+        message:
+          es: "Para tubos anchos, la aproximación de Jurin pierde precisión."
+          en: "For wide tubes, Jurin's approximation loses precision."
+    coherence_checks:
+      - condition: "abs(h) > 10"
+        severity: "warning"
+        message:
+          es: "Altura de ascenso/descenso extremadamente alta."
+          en: "Extremely high rise/fall height."
+    graph_implications:
+      es: "Relación inversa con el radio del tubo."
+      en: "Inverse relationship with the tube radius."
+    pedagogical_triggers: ["ascenso_agua_plantas", "terrones_de_azucar"]
+`;export{e as default};

@@ -1,0 +1,264 @@
+const e=`version: 2
+id: interpretacion-velocidad-terminal
+leaf_id: velocidad-terminal
+nombre:
+  es: Interpretacion de Velocidad terminal
+  en: Interpretation of Terminal Velocity
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: dinamica
+  parent_id: fuerza-de-arrastre
+  ruta_relativa: fisica-clasica/mecanica/dinamica/fuerzas/fuerza-de-arrastre/velocidad-terminal
+dependencies:
+  formulas:
+  - velocidad_terminal_lineal
+  - velocidad_terminal_cuadratica
+  magnitudes:
+  - m
+  - g
+  - b
+  - rho
+  - C_d
+  - A
+  - v_t
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  v_t:
+    summary_rules:
+    - id: v_t_summary
+      when: 'true'
+      status: info
+      text:
+        es: v_t resume la rapidez a la que el peso deja de ganar la pelea porque el fluido ya frena lo suficiente.
+        en: v_t summarizes the speed at which weight stops winning because the fluid already brakes strongly enough.
+    coherence_rules:
+    - id: v_t_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que v_t aumente al subir m y disminuya si crecen rho, C_d o A.
+        en: Check that v_t increases with m and decreases when rho, C_d, or A grow.
+    physical_reading_rules:
+    - id: v_t_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si v_t es grande, el cuerpo necesita mucha rapidez antes de que el arrastre compense al peso; si v_t es pequena, el fluido domina antes.
+        en: If v_t is large, the body needs a high speed before drag balances weight; if v_t is small, the fluid takes control earlier.
+    model_validity_rules:
+    - id: v_t_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Interpreta v_t solo si el regimen de arrastre elegido coincide con el medio, la geometria y la postura reales.
+        en: Interpret v_t only if the chosen drag regime matches the actual medium, geometry, and posture.
+    graph_rules:
+    - id: v_t_graph
+      when: 'true'
+      status: info
+      text:
+        es: En la grafica, v_t debe aparecer como la rapidez hacia la que la curva se aplana o el sistema deja de acelerar.
+        en: In the graph, v_t should appear as the speed toward which the curve flattens or the system stops accelerating.
+    likely_errors:
+    - id: v_t_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas v_t con velocidad instantanea inicial ni con velocidad maxima posible en cualquier medio.
+        en: Do not confuse v_t with the initial instantaneous speed or with a maximum speed valid in any medium.
+    next_step_rules:
+    - id: v_t_next
+      when: 'true'
+      status: info
+      text:
+        es: "Usa v_t para decidir que cambio conviene explorar: masa, area, forma o densidad del fluido."
+        en: "Use v_t to decide which change should be explored next: mass, area, shape, or fluid density."
+  b:
+    summary_rules:
+    - id: b_summary
+      when: 'true'
+      status: info
+      text:
+        es: b resume cuanta resistencia lineal ofrece el medio por cada unidad de rapidez.
+        en: b summarizes how much linear resistance the medium offers per unit speed.
+    coherence_rules:
+    - id: b_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Si b aumenta con m y g fijos, la velocidad terminal lineal debe bajar.
+        en: If b increases while m and g stay fixed, linear terminal velocity should decrease.
+    physical_reading_rules:
+    - id: b_physical
+      when: 'true'
+      status: info
+      text:
+        es: Un b grande significa que incluso a baja rapidez el medio disipa con fuerza y reduce pronto la aceleracion.
+        en: A large b means that even at low speed the medium dissipates strongly and quickly reduces acceleration.
+    model_validity_rules:
+    - id: b_validity
+      when: 'true'
+      status: ok
+      text:
+        es: b solo resume bien al medio cuando el arrastre lineal es defendible; fuera de ese regimen puede ocultar la fisica real.
+        en: b summarizes the medium well only when linear drag is defensible; outside that regime it can hide the real physics.
+    graph_rules:
+    - id: b_graph
+      when: 'true'
+      status: info
+      text:
+        es: En una lectura grafica, un b mayor debe acercar antes la curva a su meseta.
+        en: In a graph reading, a larger b should bring the curve to its plateau sooner.
+    likely_errors:
+    - id: b_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No uses b para un problema donde el arrastre real dependa con fuerza de rho, C_d y A.
+        en: Do not use b for a problem where the actual drag depends strongly on rho, C_d, and A.
+    next_step_rules:
+    - id: b_next
+      when: 'true'
+      status: info
+      text:
+        es: Si b deja de resumir bien al medio, compara con el modelo cuadratico.
+        en: If b no longer summarizes the medium well, compare with the quadratic model.
+  C_d:
+    summary_rules:
+    - id: C_d_summary
+      when: 'true'
+      status: info
+      text:
+        es: C_d resume cuan afinada o torpe es la forma del cuerpo para atravesar el fluido.
+        en: C_d summarizes how streamlined or inefficient the body shape is when moving through the fluid.
+    coherence_rules:
+    - id: C_d_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que al aumentar C_d disminuya v_t si m, rho y A permanecen fijos.
+        en: Check that increasing C_d lowers v_t when m, rho, and A stay fixed.
+    physical_reading_rules:
+    - id: C_d_physical
+      when: 'true'
+      status: info
+      text:
+        es: Un C_d mayor indica que la forma entrega mas impulso al fluido y alcanza antes el equilibrio dinamico.
+        en: A larger C_d means that the shape gives more momentum to the fluid and reaches dynamical balance sooner.
+    model_validity_rules:
+    - id: C_d_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Trata C_d como constante solo si la orientacion y el regimen de flujo no cambian demasiado.
+        en: Treat C_d as constant only if orientation and flow regime do not change too much.
+    graph_rules:
+    - id: C_d_graph
+      when: 'true'
+      status: info
+      text:
+        es: En la grafica, un C_d mayor debe desplazar la rapidez limite a valores menores.
+        en: In the graph, a larger C_d should shift the limiting speed toward lower values.
+    likely_errors:
+    - id: C_d_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No leas C_d como constante universal del objeto; cambia con la forma, la orientacion y el flujo.
+        en: Do not read C_d as a universal object constant; it changes with shape, orientation, and flow.
+    next_step_rules:
+    - id: C_d_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa C_d para comparar posturas o disenos si quieres modificar la rapidez terminal sin cambiar la masa.
+        en: Use C_d to compare postures or designs if you want to modify terminal speed without changing mass.
+  rho:
+    summary_rules:
+    - id: rho_summary
+      when: 'true'
+      status: info
+      text:
+        es: rho resume cuanta masa de fluido entra en juego al frenar al cuerpo.
+        en: rho summarizes how much fluid mass comes into play when braking the body.
+    coherence_rules:
+    - id: rho_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que un rho mayor reduzca v_t cuando el resto de parametros no cambian.
+        en: Check that a larger rho reduces v_t when the other parameters do not change.
+    physical_reading_rules:
+    - id: rho_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si el medio es mas denso, puede generar la misma fuerza de arrastre a menor rapidez y por eso la terminal baja.
+        en: If the medium is denser, it can generate the same drag force at lower speed, so terminal velocity drops.
+    model_validity_rules:
+    - id: rho_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Usa rho como constante solo si el medio es aproximadamente uniforme en la zona recorrida.
+        en: Use rho as a constant only if the medium is approximately uniform along the traveled region.
+    graph_rules:
+    - id: rho_graph
+      when: 'true'
+      status: info
+      text:
+        es: En la grafica, una rho mayor debe desplazar la rapidez limite hacia valores menores.
+        en: In the graph, a larger rho should shift the limiting speed toward lower values.
+    likely_errors:
+    - id: rho_warn
+      when: 'true'
+      status: warning
+      text:
+        es: No reutilices rho de otro fluido o de otras condiciones atmosfericas sin justificarlo.
+        en: Do not reuse rho from another fluid or atmospheric condition without justification.
+    next_step_rules:
+    - id: rho_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa rho para comparar el mismo cuerpo en aire, agua u otros medios.
+        en: Use rho to compare the same body in air, water, or other media.
+`;export{e as default};

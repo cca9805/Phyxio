@@ -1,0 +1,232 @@
+const e=`version: 1
+id: interpretacion-dos-masas-unidas-por-cuerda
+leaf_id: dos-masas-unidas-por-cuerda
+nombre:
+  es: Interpretación de dos masas unidas por cuerda
+  en: Interpretation of two masses connected by a rope
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: dinamica
+  parent_id: sistemas-de-varios-cuerpos
+  ruta_relativa: fisica-clasica/mecanica/dinamica/dinamica-traslacional/sistemas-de-varios-cuerpos/dos-masas-unidas-por-cuerda
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación
+    en: Interpretation
+  priority_order: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  inline_limits:
+    calculator: 4
+    graph: 3
+dependencies:
+  formulas: [aceleracion_atwood, tension_atwood]
+  magnitudes: [m1, m2, g, a, T]
+global_context:
+  physical_domain:
+    es: Dinámica de sistemas acoplados por cuerda ideal y polea ideal.
+    en: Dynamics of systems coupled by an ideal rope and an ideal pulley.
+  axis_convention:
+    es: Se toma positivo el sentido en el que descendería m2; si el resultado sale negativo, el sentido real es el contrario.
+    en: The positive direction is the one in which m2 would descend; if the result is negative, the real direction is the opposite.
+  standard_assumptions:
+    - cuerda ideal e inextensible
+    - polea sin masa ni rozamiento
+    - tensión uniforme
+    - mismo módulo de aceleración en ambas masas
+  standard_warnings:
+    - No analizar cada masa como si estuviera desacoplada.
+    - No olvidar que la tensión es una fuerza interna del sistema completo.
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  brief_mode: calculator_inline
+  extended_mode: dedicated_tab
+  language_support: [es, en]
+targets:
+  a:
+    magnitude_type: state
+    semantic_role:
+      es: aceleración del sistema acoplado
+      en: acceleration of the coupled system
+    summary_rules:
+      - id: a_summary_default
+        when: "true"
+        status: info
+        text:
+          es: "La aceleración resume cuánto desequilibrio gravitatorio existe entre ambas masas comparado con la inercia total."
+          en: "Acceleration summarizes how much gravitational imbalance exists between both masses compared with the total inertia."
+    physical_reading_rules:
+      - id: a_zero_case
+        when: "a == 0"
+        status: ok
+        text:
+          es: "Si a = 0, las masas están equilibradas en el modelo ideal y no hay sentido preferente de movimiento."
+          en: "If a = 0, the masses are balanced in the ideal model and there is no preferred direction of motion."
+      - id: a_positive_case
+        when: "a > 0"
+        status: info
+        text:
+          es: "Si a > 0, el sentido supuesto coincide con la caída de m2 y el ascenso de m1."
+          en: "If a > 0, the assumed direction matches the fall of m2 and the rise of m1."
+      - id: a_negative_case
+        when: "a < 0"
+        status: info
+        text:
+          es: "Si a < 0, el sistema se mueve en el sentido contrario al inicialmente supuesto."
+          en: "If a < 0, the system moves in the direction opposite to the one initially assumed."
+    coherence_rules:
+      - id: a_bound_rule
+        when: "abs(a) <= g"
+        status: ok
+        text:
+          es: "El módulo de la aceleración es coherente: no supera el valor de la gravedad."
+          en: "The acceleration magnitude is coherent: it does not exceed gravity."
+      - id: a_bound_warning
+        when: "abs(a) > g"
+        status: warning
+        text:
+          es: "Resultado sospechoso: en el modelo ideal |a| no debe superar g."
+          en: "Suspicious result: in the ideal model |a| should not exceed g."
+    model_validity_rules:
+      - id: a_validity_default
+        when: "true"
+        status: warning
+        text:
+          es: "Esta lectura deja de ser fiable si la polea tiene inercia, la cuerda se estira o aparece rozamiento."
+          en: "This reading stops being reliable if the pulley has inertia, the rope stretches, or friction appears."
+    graph_rules:
+      - id: a_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "En el gráfico, el cruce m1 = m2 debe corresponder a a = 0 y a un cambio de signo."
+          en: "In the graph, the crossing m1 = m2 should correspond to a = 0 and to a sign change."
+    likely_errors:
+      - id: a_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: dividir la diferencia de pesos por una sola masa y no por la masa total."
+          en: "Typical mistake: dividing the weight difference by only one mass instead of the total mass."
+    next_step_rules:
+      - id: a_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Tras interpretar a, calcula o revisa la tensión T para comprobar la coherencia interna del sistema."
+          en: "After interpreting a, compute or review tension T to check the internal consistency of the system."
+
+  T:
+    magnitude_type: state
+    semantic_role:
+      es: tensión interna de la cuerda
+      en: internal rope tension
+    summary_rules:
+      - id: T_summary_default
+        when: "true"
+        status: info
+        text:
+          es: "La tensión es la fuerza interna que acopla el movimiento de ambas masas."
+          en: "Tension is the internal force coupling the motion of both masses."
+    physical_reading_rules:
+      - id: T_physical_default
+        when: "true"
+        status: info
+        text:
+          es: "T debe quedar entre ambos pesos si la cuerda es ideal y el sistema acelera de forma coherente."
+          en: "T should lie between both weights if the rope is ideal and the system accelerates coherently."
+    coherence_rules:
+      - id: T_positive_rule
+        when: "T > 0"
+        status: ok
+        text:
+          es: "La tensión positiva es coherente con una cuerda ideal tensa."
+          en: "Positive tension is coherent with a taut ideal rope."
+      - id: T_range_rule
+        when: "T >= min(m1*g, m2*g) and T <= max(m1*g, m2*g)"
+        status: ok
+        text:
+          es: "La tensión está en el rango esperado entre los dos pesos."
+          en: "Tension is in the expected range between both weights."
+    model_validity_rules:
+      - id: T_validity_default
+        when: "true"
+        status: warning
+        text:
+          es: "Si la cuerda tiene masa o la polea no es ideal, la tensión puede dejar de ser uniforme."
+          en: "If the rope has mass or the pulley is not ideal, tension may stop being uniform."
+    graph_rules:
+      - id: T_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "Un gráfico útil debe mostrar a T como valor intermedio entre m1 g y m2 g."
+          en: "A useful graph should show T as an intermediate value between m1 g and m2 g."
+    likely_errors:
+      - id: T_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: identificar T con el peso de una de las masas sin resolver antes el sistema completo."
+          en: "Typical mistake: identifying T with the weight of one of the masses without first solving the complete system."
+    next_step_rules:
+      - id: T_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Comprueba después que el signo y el módulo de a cuentan la misma historia física que T."
+          en: "Then check that the sign and magnitude of a tell the same physical story as T."
+
+cross_checks:
+  - id: acceleration_and_tension_consistency
+    when: "true"
+    text:
+      es: "La aceleración y la tensión deben ser compatibles con una sola elección de sentido y con una cuerda ideal."
+      en: "Acceleration and tension must be compatible with a single choice of direction and with an ideal rope."
+error_patterns:
+  - id: uncoupled_masses
+    detect_when: "false"
+    text:
+      es: "Has tratado las masas como problemas independientes y has roto la restricción cinemática de la cuerda."
+      en: "You treated the masses as independent problems and broke the rope kinematic constraint."
+graph_binding:
+  enabled: true
+  graph_type: Coord
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+`;export{e as default};

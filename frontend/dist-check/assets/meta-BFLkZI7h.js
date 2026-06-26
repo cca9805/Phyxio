@@ -1,0 +1,74 @@
+const e=`area: fisica-clasica
+bloque: mecanica
+descripcion: Modelo de arrastre proporcional al cuadrado de la rapidez en regimens inerciales del flujo.
+description_en: Drag model proportional to the square of speed in inertial flow regimes.
+dificultad: 3
+graficos:
+- Coord
+- Dcl
+icon: 🌪️
+id: arrastre-cuadratico
+interpretacion:
+  archivo: interpretacion.yaml
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+  enabled: true
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    max_inline_messages: 3
+    show_likely_errors: true
+    show_summary_first: true
+    show_warnings: true
+  ui:
+    dedicated_tab: true
+    inline_calculator: true
+    inline_graph: true
+    tab_label:
+      en: Interpretation
+      es: Interpretacion
+magnitud_dominante: F_d
+niveles:
+  en:
+  - Secondary
+  - Upper Secondary
+  es:
+  - ESO
+  - BACHILLERATO
+nombre:
+  en: Quadratic Drag
+  es: Arrastre cuadratico
+orden: 212272
+parent_id: fuerza-de-arrastre
+physical_role:
+  en: physical model
+  es: modelo fisico
+pregunta_fisica_central:
+  en: How can we read in an F_d-versus-v graph and in an FBD that quadratic drag makes F_d grow with the square of v and that coefficient c summarizes the medium?
+  es: ¿Como leer en un grafico F_d frente a v y en un DCL que el arrastre cuadratico hace crecer F_d como v al cuadrado y que el coeficiente c resume el medio?
+prerequisitos:
+- fundamentos/conceptos-estructurales/modelo-fisico-y-dominio-de-validez
+- fisica-clasica/mecanica/dinamica/fundamentos/leyes-de-newton/segunda-ley-fuerza-masa
+representacion_dominante: Coord
+ruta_relativa: fisica-clasica/mecanica/dinamica/fuerzas/fuerza-de-arrastre/arrastre-cuadratico
+subbloque: dinamica
+tags:
+  en:
+  - dynamics
+  - drag
+  - quadratic-model
+  - aerodynamics
+  - inertial-flow
+  es:
+  - dinamica
+  - arrastre
+  - modelo-cuadratico
+  - aerodinamica
+  - flujo-inercial
+tiempo_estimado_min: 55
+type: leaf
+version: 5
+`;export{e as default};

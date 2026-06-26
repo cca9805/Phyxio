@@ -1,0 +1,677 @@
+version: '1.0'
+leaf_id: propiedades-elasticas-del-solido
+magnitudes:
+- id: modulo_de_young
+  nombre:
+    es: Modulo de Young
+    en: Young modulus
+  simbolo: E
+  unidad: Pa
+  dimension: '[M L⁻¹ T⁻²]'
+  tipo: escalar
+  physical_role: core_physical_quantity
+  symbol: E
+  unidad_si: Pa
+  is_vector: false
+  components: []
+  category: material_parameter
+  used_in:
+  - modulo_young
+  - relacion_modulos
+  common_mistake:
+    es: Usar E como resistencia maxima del material en vez de como pendiente elastica tension-deformacion.
+    en: Using E as the material strength instead of the elastic stress-strain slope.
+  typical_range: 0.01e9 a 1200e9 Pa; acero tipico 200e9 Pa
+  value_nature:
+    kind: continuous
+    nonnegative_only: true
+    expected_interval: '[1e7, 1.2e12]'
+  descripcion:
+    es: Constante elastica que mide la rigidez de un material frente a traccion o compresion uniaxial. Es el cociente entre
+      la tension normal aplicada y la deformacion longitudinal resultante en el regimen elastico lineal.
+    en: Elastic constant measuring the stiffness of a material against uniaxial tension or compression. It is the ratio of
+      normal stress to resulting longitudinal strain in the linear elastic regime.
+  rango:
+    min: 0.01e9
+    max: 1200e9
+    tipico: 200e9
+    nota:
+      es: Desde elastomeros blandos (decenas de MPa) hasta diamante (aprox. 1200 GPa). Acero tipico 200 GPa.
+      en: From soft elastomers (tens of MPa) to diamond (approx. 1200 GPa). Typical steel 200 GPa.
+  sign_behavior:
+    es: Siempre positivo. Un valor nulo o negativo carece de sentido fisico en materiales estables.
+    en: Always positive. A zero or negative value has no physical meaning in stable materials.
+  zero_behavior:
+    es: Un modulo de Young nulo implicaria que el material no resiste traccion alguna, lo que corresponde a un fluido ideal.
+    en: A zero Young modulus would imply the material does not resist any tension, corresponding to an ideal fluid.
+  interpretation_role:
+    es: Un modulo alto indica un material rigido que apenas se deforma; un modulo bajo indica un material flexible.
+    en: A high modulus indicates a stiff material that barely deforms; a low modulus indicates a flexible material.
+  graph_binding:
+    axis: y
+    label:
+      es: E (GPa)
+      en: E (GPa)
+    channels:
+    - none
+  pedagogical_notes:
+    es: Es la propiedad elastica mas intuitiva porque se mide directamente en un ensayo de traccion. Su valor determina cuanto
+      se alarga una barra bajo carga.
+    en: It is the most intuitive elastic property because it is directly measured in a tensile test. Its value determines
+      how much a bar elongates under load.
+- id: modulo_de_cizalla
+  nombre:
+    es: Modulo de cizalla
+    en: Shear modulus
+  simbolo: G
+  unidad: Pa
+  dimension: '[M L⁻¹ T⁻²]'
+  tipo: escalar
+  physical_role: core_physical_quantity
+  symbol: G
+  unidad_si: Pa
+  is_vector: false
+  components: []
+  category: material_parameter
+  used_in:
+  - modulo_cizalla
+  - relacion_modulos
+  common_mistake:
+    es: Confundir G con el modulo de Young; G mide respuesta a cizalla, no a traccion uniaxial.
+    en: Confusing G with Young modulus; G measures shear response, not uniaxial tension.
+  typical_range: 0 a 550e9 Pa; acero tipico 80e9 Pa
+  value_nature:
+    kind: continuous
+    nonnegative_only: true
+    expected_interval: '[0, 5.5e11]'
+  descripcion:
+    es: Modulo elastico que mide la resistencia de un material a la deformacion de cizalla (cambio de forma a volumen constante).
+      Cociente entre la tension tangencial y la deformacion angular.
+    en: Elastic modulus measuring the resistance of a material to shear deformation (shape change at constant volume). Ratio
+      of shear stress to angular strain.
+  rango:
+    min: 0
+    max: 550e9
+    tipico: 80e9
+    nota:
+      es: Cero en fluidos ideales. Acero tipico 80 GPa, diamante aprox. 550 GPa.
+      en: Zero in ideal fluids. Typical steel 80 GPa, diamond approx. 550 GPa.
+  sign_behavior:
+    es: Siempre positivo en solidos. En fluidos ideales es exactamente cero.
+    en: Always positive in solids. In ideal fluids it is exactly zero.
+  zero_behavior:
+    es: 'Un modulo de cizalla nulo define un fluido: el material no resiste esfuerzos tangenciales y no propaga ondas transversales.'
+    en: 'A zero shear modulus defines a fluid: the material does not resist tangential stresses and does not propagate transverse
+      waves.'
+  interpretation_role:
+    es: Determina la velocidad de las ondas transversales y la resistencia al cambio de forma.
+    en: Determines the velocity of transverse waves and resistance to shape change.
+  graph_binding:
+    axis: y
+    label:
+      es: G (GPa)
+      en: G (GPa)
+    channels:
+    - none
+  pedagogical_notes:
+    es: Es la clave para entender por que las ondas S solo viajan en solidos. Sin modulo de cizalla, no hay fuerza restauradora
+      para el desplazamiento transversal.
+    en: It is the key to understanding why S waves only travel in solids. Without shear modulus, there is no restoring force
+      for transverse displacement.
+- id: modulo_de_compresibilidad
+  nombre:
+    es: Modulo de compresibilidad
+    en: Bulk modulus
+  simbolo: K
+  unidad: Pa
+  dimension: '[M L⁻¹ T⁻²]'
+  tipo: escalar
+  physical_role: core_physical_quantity
+  symbol: K
+  unidad_si: Pa
+  is_vector: false
+  components: []
+  category: material_parameter
+  used_in:
+  - modulo_compresibilidad
+  common_mistake:
+    es: Interpretar K como rigidez de cizalla; K describe cambio de volumen bajo presion hidrostatica.
+    en: Interpreting K as shear stiffness; K describes volume change under hydrostatic pressure.
+  typical_range: 0.1e9 a 440e9 Pa; agua 2.2e9 Pa, acero 160e9 Pa
+  value_nature:
+    kind: continuous
+    nonnegative_only: true
+    expected_interval: '[1e8, 4.4e11]'
+  descripcion:
+    es: Modulo elastico que mide la resistencia de un material a la compresion volumetrica uniforme (hidrostatica). Relaciona
+      el incremento de presion con la reduccion relativa de volumen.
+    en: Elastic modulus measuring the resistance of a material to uniform volumetric (hydrostatic) compression. Relates pressure
+      increase to relative volume reduction.
+  rango:
+    min: 0.1e9
+    max: 440e9
+    tipico: 160e9
+    nota:
+      es: Agua aprox. 2.2 GPa, acero aprox. 160 GPa, diamante aprox. 440 GPa.
+      en: Water approx. 2.2 GPa, steel approx. 160 GPa, diamond approx. 440 GPa.
+  sign_behavior:
+    es: Siempre positivo. Termodinamicamente, un modulo de compresibilidad negativo implicaria inestabilidad.
+    en: Always positive. Thermodynamically, a negative bulk modulus would imply instability.
+  zero_behavior:
+    es: Un valor nulo significaria que cualquier presion infinitesimal colapsa el material, fisicamente irreal para materia
+      condensada.
+    en: A zero value would mean any infinitesimal pressure collapses the material, physically unrealistic for condensed matter.
+  interpretation_role:
+    es: Cuanto mayor es K, mas incompresible es el material. Los fluidos tambien poseen K, a diferencia de G.
+    en: The higher K is, the more incompressible the material. Fluids also have K, unlike G.
+  graph_binding:
+    axis: y
+    label:
+      es: K (GPa)
+      en: K (GPa)
+    channels:
+    - none
+  pedagogical_notes:
+    es: A diferencia de G, el modulo de compresibilidad existe tanto en solidos como en fluidos. Es fundamental para la velocidad
+      de las ondas longitudinales.
+    en: Unlike G, bulk modulus exists in both solids and fluids. It is fundamental for the velocity of longitudinal waves.
+- id: nu_poisson
+  nombre:
+    es: Coeficiente de Poisson
+    en: Poisson ratio
+  simbolo: \nu
+  unidad: adimensional
+  dimension: '[1]'
+  tipo: escalar
+  physical_role: core_physical_quantity
+  symbol: \nu
+  unidad_si: adimensional
+  is_vector: false
+  category: material_parameter
+  used_in:
+  - relacion_poisson
+  - relacion_modulos
+  common_mistake:
+    es: Tratar nu como un numero libre; en solidos isotropos estables queda acotado por la estabilidad elastica.
+    en: Treating nu as a free number; in stable isotropic solids it is bounded by elastic stability.
+  typical_range: -1 a 0.5; materiales comunes 0.2 a 0.45
+  value_nature:
+    kind: continuous
+    nonnegative_only: false
+    expected_interval: (-1, 0.5]
+  descripcion:
+    es: Razon entre la contraccion transversal y la elongacion longitudinal, cambiada de signo. Cuantifica el acoplamiento
+      entre deformaciones en direcciones perpendiculares.
+    en: Ratio of transverse contraction to longitudinal elongation, with sign change. Quantifies the coupling between deformations
+      in perpendicular directions.
+  rango:
+    min: -1.0
+    max: 0.5
+    tipico: 0.3
+    nota:
+      es: Materiales comunes entre 0.2 y 0.45. Materiales auxeticos tienen nu negativo. El limite 0.5 corresponde a material
+        incompresible.
+      en: Common materials between 0.2 and 0.45. Auxetic materials have negative nu. The limit 0.5 corresponds to incompressible
+        material.
+  sign_behavior:
+    es: Tipicamente positivo (el material se contrae al estirarse). Valores negativos existen en materiales auxeticos.
+    en: Typically positive (material contracts when stretched). Negative values exist in auxetic materials.
+  zero_behavior:
+    es: Un coeficiente nulo significa que la deformacion longitudinal no produce contraccion transversal, como el corcho.
+    en: A zero coefficient means longitudinal deformation produces no transverse contraction, like cork.
+  interpretation_role:
+    es: Conecta todos los modulos elasticos entre si. Es el parametro que fija la relacion E/G/K.
+    en: Connects all elastic moduli to each other. It is the parameter that fixes the E/G/K relationship.
+  graph_binding:
+    axis: x
+    label:
+      es: nu
+      en: nu
+    channels:
+    - none
+  pedagogical_notes:
+    es: Es adimensional y tiene limites fisicos estrictos impuestos por la estabilidad termodinamica del material.
+    en: It is dimensionless and has strict physical limits imposed by the thermodynamic stability of the material.
+  components:
+    es: Magnitud escalar adimensional. No tiene componentes vectoriales.
+    en: Dimensionless scalar quantity. Has no vector components.
+- id: sigma
+  nombre:
+    es: Tension normal
+    en: Normal stress
+  simbolo: \sigma
+  unidad: Pa
+  dimension: '[M L⁻¹ T⁻²]'
+  tipo: escalar
+  physical_role: derived
+  symbol: \sigma
+  unidad_si: Pa
+  is_vector: false
+  components: []
+  category: mechanical_load
+  used_in:
+  - modulo_young
+  common_mistake:
+    es: Confundir tension normal con presion hidrostatica; la tension normal actua sobre una direccion material definida.
+    en: Confusing normal stress with hydrostatic pressure; normal stress acts along a defined material direction.
+  typical_range: -1e10 a 1e10 Pa; limite elastico comun 200e6 a 600e6 Pa
+  value_nature:
+    kind: continuous
+    nonnegative_only: false
+    expected_interval: '[-1e10, 1e10]'
+  descripcion:
+    es: Fuerza por unidad de area aplicada perpendicularmente a una seccion del material. Positiva en traccion, negativa en
+      compresion.
+    en: Force per unit area applied perpendicularly to a cross-section of the material. Positive in tension, negative in compression.
+  rango:
+    min: -1e10
+    max: 1e10
+    tipico: 100e6
+    nota:
+      es: Limite elastico del acero comun entre 200 y 600 MPa.
+      en: Yield strength of common steel between 200 and 600 MPa.
+  sign_behavior:
+    es: Positiva en traccion, negativa en compresion.
+    en: Positive in tension, negative in compression.
+  zero_behavior:
+    es: Tension nula indica ausencia de carga aplicada en esa direccion.
+    en: Zero stress indicates no applied load in that direction.
+  interpretation_role:
+    es: Variable de entrada para determinar la deformacion del material.
+    en: Input variable to determine material deformation.
+  graph_binding:
+    axis: y
+    label:
+      es: sigma (MPa)
+      en: sigma (MPa)
+    channels:
+    - none
+  pedagogical_notes:
+    es: No confundir con presion. La tension puede ser de traccion (positiva) o compresion (negativa) y actua en una direccion
+      definida.
+    en: Not to be confused with pressure. Stress can be tensile (positive) or compressive (negative) and acts in a defined
+      direction.
+- id: epsilon
+  nombre:
+    es: Deformacion longitudinal
+    en: Longitudinal strain
+  simbolo: \varepsilon
+  unidad: adimensional
+  dimension: '[1]'
+  tipo: escalar
+  physical_role: derived
+  symbol: \varepsilon
+  unidad_si: adimensional
+  is_vector: false
+  category: deformation
+  used_in:
+  - modulo_young
+  common_mistake:
+    es: Confundir deformacion con desplazamiento absoluto; epsilon es un cociente de longitudes.
+    en: Confusing strain with absolute displacement; epsilon is a ratio of lengths.
+  typical_range: -0.1 a 0.1; en regimen elastico suele ser menor que 0.01
+  value_nature:
+    kind: continuous
+    nonnegative_only: false
+    expected_interval: '[-0.1, 0.1]'
+  descripcion:
+    es: Cambio relativo de longitud de un elemento material bajo carga uniaxial. Es la relacion entre el alargamiento y la
+      longitud original.
+    en: Relative change in length of a material element under uniaxial load. It is the ratio of elongation to original length.
+  rango:
+    min: -0.1
+    max: 0.1
+    tipico: 0.001
+    nota:
+      es: En regimen elastico, tipicamente inferior al 1 %. Deformaciones mayores indican plasticidad.
+      en: In the elastic regime, typically below 1%. Larger strains indicate plasticity.
+  sign_behavior:
+    es: Positiva en elongacion, negativa en compresion.
+    en: Positive in elongation, negative in compression.
+  zero_behavior:
+    es: Deformacion nula indica que el material mantiene su longitud original.
+    en: Zero strain indicates the material retains its original length.
+  interpretation_role:
+    es: Salida directa del cociente tension/modulo. Su magnitud indica si el material esta en regimen elastico.
+    en: Direct output of the stress/modulus ratio. Its magnitude indicates whether the material is in the elastic regime.
+  graph_binding:
+    axis: x
+    label:
+      es: epsilon
+      en: epsilon
+    channels:
+    - none
+  pedagogical_notes:
+    es: Es adimensional porque es un cociente de longitudes. No confundir con desplazamiento absoluto.
+    en: It is dimensionless because it is a ratio of lengths. Not to be confused with absolute displacement.
+  components:
+    es: Magnitud escalar adimensional.
+    en: Dimensionless scalar quantity.
+- id: tau
+  nombre:
+    es: Tension tangencial
+    en: Shear stress
+  simbolo: \tau
+  unidad: Pa
+  dimension: '[M L⁻¹ T⁻²]'
+  tipo: escalar
+  physical_role: derived
+  symbol: \tau
+  unidad_si: Pa
+  is_vector: false
+  components: []
+  category: mechanical_load
+  used_in:
+  - modulo_cizalla
+  common_mistake:
+    es: Usar tau como tension normal; tau es tangencial y produce distorsion angular.
+    en: Using tau as normal stress; tau is tangential and produces angular distortion.
+  typical_range: 0 a 1e9 Pa; ensayos comunes del orden de 50e6 Pa
+  value_nature:
+    kind: continuous
+    nonnegative_only: false
+    expected_interval: '[-1e9, 1e9]'
+  descripcion:
+    es: Fuerza por unidad de area aplicada tangencialmente a una seccion del material. Causa deformacion angular (cizalla).
+    en: Force per unit area applied tangentially to a cross-section of the material. Causes angular (shear) deformation.
+  rango:
+    min: 0
+    max: 1e9
+    tipico: 50e6
+    nota:
+      es: En metales, la tension tangencial limite es tipicamente la mitad del limite elastico a traccion.
+      en: In metals, the limiting shear stress is typically half the tensile yield strength.
+  sign_behavior:
+    es: Convencionalmente positiva en la direccion de aplicacion.
+    en: Conventionally positive in the direction of application.
+  zero_behavior:
+    es: Tension tangencial nula indica ausencia de carga de cizalla.
+    en: Zero shear stress indicates no shear load.
+  interpretation_role:
+    es: Variable de entrada para calcular la deformacion angular y el modulo de cizalla.
+    en: Input variable to calculate angular strain and shear modulus.
+  graph_binding:
+    axis: y
+    label:
+      es: tau (MPa)
+      en: tau (MPa)
+    channels:
+    - none
+  pedagogical_notes:
+    es: Aparece en pares conjugados sobre caras perpendiculares del elemento de volumen (simetria del tensor de tensiones).
+    en: Appears in conjugate pairs on perpendicular faces of the volume element (stress tensor symmetry).
+- id: gamma
+  nombre:
+    es: Deformacion angular
+    en: Angular strain
+  simbolo: \gamma
+  unidad: rad
+  dimension: '[1]'
+  tipo: escalar
+  physical_role: derived
+  symbol: \gamma
+  unidad_si: rad
+  is_vector: false
+  category: deformation
+  used_in:
+  - modulo_cizalla
+  common_mistake:
+    es: Leer gamma como desplazamiento lateral; gamma es un angulo pequeno de distorsion.
+    en: Reading gamma as lateral displacement; gamma is a small distortion angle.
+  typical_range: 0 a 0.1 rad; en regimen elastico suele ser menor que 0.01 rad
+  value_nature:
+    kind: continuous
+    nonnegative_only: false
+    expected_interval: '[-0.1, 0.1]'
+  descripcion:
+    es: Angulo de distorsion de un elemento material bajo esfuerzo tangencial. Mide el cambio de forma sin cambio de volumen.
+    en: Distortion angle of a material element under shear stress. Measures shape change without volume change.
+  rango:
+    min: 0
+    max: 0.1
+    tipico: 0.001
+    nota:
+      es: En regimen elastico, tipicamente inferior a 0.01 rad.
+      en: In the elastic regime, typically below 0.01 rad.
+  sign_behavior:
+    es: Positiva en la direccion del esfuerzo tangencial aplicado.
+    en: Positive in the direction of applied shear stress.
+  zero_behavior:
+    es: Deformacion angular nula indica ausencia de distorsion.
+    en: Zero angular strain indicates no distortion.
+  interpretation_role:
+    es: Indica cuanto se distorsiona la geometria del elemento sin cambiar su volumen.
+    en: Indicates how much the element geometry distorts without changing its volume.
+  graph_binding:
+    axis: x
+    label:
+      es: gamma (rad)
+      en: gamma (rad)
+    channels:
+    - none
+  pedagogical_notes:
+    es: Es la componente de deformacion que responde al esfuerzo de cizalla. Un cubo se convierte en un romboide.
+    en: It is the deformation component responding to shear stress. A cube becomes a rhomboid.
+  components:
+    es: Magnitud escalar adimensional (angulo en radianes).
+    en: Dimensionless scalar quantity (angle in radians).
+- id: variacion_de_presion
+  nombre:
+    es: Variacion de presion
+    en: Pressure change
+  simbolo: \Delta P
+  unidad: Pa
+  dimension: '[M L⁻¹ T⁻²]'
+  tipo: escalar
+  physical_role: auxiliary
+  symbol: \Delta P
+  unidad_si: Pa
+  is_vector: false
+  components: []
+  category: mechanical_load
+  used_in:
+  - modulo_compresibilidad
+  common_mistake:
+    es: 'Olvidar el convenio de signo: en compresion, DeltaP positiva suele producir DeltaV_rel negativa.'
+    en: 'Forgetting the sign convention: in compression, positive DeltaP usually produces negative DeltaV_rel.'
+  typical_range: -1e10 a 1e10 Pa; laboratorio entre MPa y GPa
+  value_nature:
+    kind: continuous
+    nonnegative_only: false
+    expected_interval: '[-1e10, 1e10]'
+  descripcion:
+    es: Cambio de presion hidrostatica aplicado al material, positivo en compresion.
+    en: Hydrostatic pressure change applied to the material, positive in compression.
+  rango:
+    min: -1e10
+    max: 1e10
+    tipico: 1e8
+    nota:
+      es: Presiones tipicas de laboratorio entre MPa y GPa.
+      en: Typical laboratory pressures between MPa and GPa.
+  sign_behavior:
+    es: Positiva en compresion.
+    en: Positive in compression.
+  zero_behavior:
+    es: Sin variacion de presion no hay cambio de volumen.
+    en: Without pressure change there is no volume change.
+  interpretation_role:
+    es: Variable de entrada para el modulo de compresibilidad.
+    en: Input variable for bulk modulus.
+  graph_binding:
+    axis: y
+    label:
+      es: DeltaP (MPa)
+      en: DeltaP (MPa)
+    channels:
+    - none
+  pedagogical_notes:
+    es: Es el estimulo mecanico que produce el cambio de volumen uniforme.
+    en: It is the mechanical stimulus producing uniform volume change.
+- id: variacion_relativa_de_volumen
+  nombre:
+    es: Variacion relativa de volumen
+    en: Relative volume change
+  simbolo: \Delta V / V
+  unidad: adimensional
+  dimension: '[1]'
+  tipo: escalar
+  physical_role: auxiliary
+  symbol: \Delta V / V
+  unidad_si: adimensional
+  is_vector: false
+  category: deformation
+  used_in:
+  - modulo_compresibilidad
+  common_mistake:
+    es: Confundir DeltaV_rel con un volumen absoluto; es una fraccion respecto al volumen inicial.
+    en: Confusing DeltaV_rel with an absolute volume; it is a fraction relative to the initial volume.
+  typical_range: -0.1 a 0.1; en regimen elastico suele ser menor que 0.01 en magnitud
+  value_nature:
+    kind: continuous
+    nonnegative_only: false
+    expected_interval: '[-0.1, 0.1]'
+  descripcion:
+    es: Fraccion de cambio de volumen respecto al volumen original. Negativa cuando el material se comprime.
+    en: Fraction of volume change relative to original volume. Negative when the material is compressed.
+  rango:
+    min: -0.1
+    max: 0.1
+    tipico: -0.001
+    nota:
+      es: En regimen elastico, tipicamente inferior al 1 % en magnitud.
+      en: In the elastic regime, typically below 1% in magnitude.
+  sign_behavior:
+    es: Negativa en compresion (reduccion de volumen), positiva en expansion.
+    en: Negative in compression (volume reduction), positive in expansion.
+  zero_behavior:
+    es: Cambio nulo indica volumen invariante, propio de deformaciones puramente isocoricas.
+    en: Zero change indicates invariant volume, characteristic of purely isochoric deformations.
+  interpretation_role:
+    es: Salida directa del cociente presion/modulo de compresibilidad.
+    en: Direct output of the pressure/bulk modulus ratio.
+  graph_binding:
+    axis: x
+    label:
+      es: DeltaV/V
+      en: DeltaV/V
+    channels:
+    - none
+  pedagogical_notes:
+    es: Se expresa frecuentemente en porcentaje para facilitar la lectura. No confundir con cambio de volumen absoluto.
+    en: Often expressed as a percentage for easier reading. Not to be confused with absolute volume change.
+  components:
+    es: Magnitud escalar adimensional.
+    en: Dimensionless scalar quantity.
+- id: epsilon_transv
+  nombre:
+    es: Deformacion transversal
+    en: Transverse strain
+  simbolo: \varepsilon_{\mathrm{transv}}
+  unidad: adimensional
+  dimension: '[1]'
+  tipo: escalar
+  physical_role: auxiliary
+  symbol: \varepsilon_{transv}
+  unidad_si: adimensional
+  is_vector: false
+  category: deformation
+  used_in:
+  - relacion_poisson
+  common_mistake:
+    es: Omitir el signo de la deformacion transversal al calcular el coeficiente de Poisson.
+    en: Omitting the sign of transverse strain when computing Poisson ratio.
+  typical_range: -0.05 a 0.05; tipicamente unas decimas de epsilon_long
+  value_nature:
+    kind: continuous
+    nonnegative_only: false
+    expected_interval: '[-0.05, 0.05]'
+  descripcion:
+    es: Cambio relativo de longitud en la direccion perpendicular a la carga. Negativa cuando el material se contrae lateralmente
+      al ser estirado.
+    en: Relative change in length in the direction perpendicular to the load. Negative when the material contracts laterally
+      upon stretching.
+  rango:
+    min: -0.05
+    max: 0.05
+    tipico: -0.0003
+    nota:
+      es: Tipicamente del orden de 0.3 veces la deformacion longitudinal en materiales comunes.
+      en: Typically of the order of 0.3 times the longitudinal strain in common materials.
+  sign_behavior:
+    es: Negativa en traccion (contraccion lateral), positiva en compresion (expansion lateral).
+    en: Negative in tension (lateral contraction), positive in compression (lateral expansion).
+  zero_behavior:
+    es: Deformacion transversal nula indica que no hay acoplamiento transversal (Poisson nulo).
+    en: Zero transverse strain indicates no transverse coupling (zero Poisson).
+  interpretation_role:
+    es: Variable auxiliar para definir el coeficiente de Poisson.
+    en: Auxiliary variable for defining Poisson ratio.
+  graph_binding:
+    axis: y
+    label:
+      es: epsilon_transv
+      en: epsilon_transv
+    channels:
+    - none
+  pedagogical_notes:
+    es: Es la deformacion que experimenta una seccion transversal cuando la carga actua en la direccion longitudinal.
+    en: It is the deformation experienced by a cross-section when the load acts in the longitudinal direction.
+  components:
+    es: Magnitud escalar adimensional.
+    en: Dimensionless scalar quantity.
+- id: epsilon_long
+  nombre:
+    es: Deformacion longitudinal (para Poisson)
+    en: Longitudinal strain (for Poisson)
+  simbolo: \varepsilon_{\mathrm{long}}
+  unidad: adimensional
+  dimension: '[1]'
+  tipo: escalar
+  physical_role: auxiliary
+  symbol: \varepsilon_{long}
+  unidad_si: adimensional
+  is_vector: false
+  category: deformation
+  used_in:
+  - relacion_poisson
+  common_mistake:
+    es: Usar epsilon_long igual a cero en el denominador de la definicion de Poisson.
+    en: Using epsilon_long equal to zero in the denominator of the Poisson definition.
+  typical_range: -0.1 a 0.1; en traccion elastica suele ser positiva y menor que 0.01
+  value_nature:
+    kind: continuous
+    nonnegative_only: false
+    expected_interval: '[-0.1, 0.1]'
+  descripcion:
+    es: Deformacion en la direccion de la carga uniaxial, usada como denominador en la definicion del coeficiente de Poisson.
+    en: Strain in the direction of uniaxial load, used as denominator in the Poisson ratio definition.
+  rango:
+    min: -0.1
+    max: 0.1
+    tipico: 0.001
+    nota:
+      es: Misma magnitud que epsilon general, pero aqui distinguida como referencia longitudinal.
+      en: Same quantity as general epsilon, but here distinguished as longitudinal reference.
+  sign_behavior:
+    es: Positiva en traccion, negativa en compresion.
+    en: Positive in tension, negative in compression.
+  zero_behavior:
+    es: No puede ser nula si se quiere definir el coeficiente de Poisson (denominador).
+    en: Cannot be zero if Poisson ratio is to be defined (denominator).
+  interpretation_role:
+    es: Denominador del cociente de Poisson.
+    en: Denominator of the Poisson ratio.
+  graph_binding:
+    axis: x
+    label:
+      es: epsilon_long
+      en: epsilon_long
+    channels:
+    - none
+  pedagogical_notes:
+    es: Es la deformacion de referencia respecto a la cual se define el coeficiente de Poisson.
+    en: It is the reference strain relative to which the Poisson ratio is defined.
+  components:
+    es: Magnitud escalar adimensional.
+    en: Dimensionless scalar quantity.

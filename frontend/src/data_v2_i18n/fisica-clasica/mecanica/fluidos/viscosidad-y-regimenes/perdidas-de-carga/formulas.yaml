@@ -1,0 +1,138 @@
+version: 5
+topic:
+  id: perdidas-de-carga
+  title:
+    es: "Pérdidas de Carga"
+    en: "Head Loss"
+variables:
+  - id: hf
+    symbol: "h_f"
+    nombre:
+      es: "Pérdida de carga"
+      en: "Head loss"
+    unidad_si: "m"
+  - id: f
+    symbol: "f"
+    nombre:
+      es: "Factor de fricción"
+      en: "Friction factor"
+    unidad_si: "1"
+  - id: L
+    symbol: "L"
+    nombre:
+      es: "Longitud"
+      en: "Length"
+    unidad_si: "m"
+  - id: D
+    symbol: "D"
+    nombre:
+      es: "Diámetro"
+      en: "Diameter"
+    unidad_si: "m"
+  - id: v
+    symbol: "v"
+    nombre:
+      es: "Velocidad"
+      en: "Velocity"
+    unidad_si: "m/s"
+  - id: g
+    symbol: "g"
+    nombre:
+      es: "Gravedad"
+      en: "Gravity"
+    unidad_si: "m/s^2"
+  - id: dp
+    symbol: "\\Delta p"
+    nombre:
+      es: "Caída de presión"
+      en: "Pressure drop"
+    unidad_si: "Pa"
+  - id: rho
+    symbol: "\\rho"
+    nombre:
+      es: "Densidad"
+      en: "Density"
+    unidad_si: "kg/m^3"
+  - id: Re
+    symbol: "Re"
+    nombre:
+      es: "Número de Reynolds"
+      en: "Reynolds number"
+    unidad_si: "1"
+
+formulas:
+  - id: darcy_weisbach
+    target: hf
+    title:
+      es: "Ecuación de Darcy-Weisbach"
+      en: "Darcy-Weisbach Equation"
+    equation: "hf = f * (L/D) * (v^2 / (2*g))"
+    latex: "h_f = f \\cdot \\frac{L}{D} \\cdot \\frac{v^2}{2g}"
+    rearrangements:
+      - target: hf
+        equation: "hf = f * (L/D) * (v^2 / (2*g))"
+        latex: "h_f = f \\cdot \\frac{L}{D} \\cdot \\frac{v^2}{2g}"
+      - target: f
+        equation: "f = (hf * D * 2 * g) / (L * v^2)"
+        latex: "f = \\frac{h_f \\cdot D \\cdot 2g}{L \\cdot v^2}"
+    category: "dinámica"
+    relation_type: "ley"
+    physical_meaning:
+      es: "Expresa la pérdida de energía mecánica por unidad de peso debida a la fricción viscosa."
+      en: "Expresses the loss of mechanical energy per unit weight due to viscous friction."
+    constraints: ["f > 0", "L > 0", "D > 0", "v >= 0"]
+    validity:
+      es: "Válida para flujo monofásico e incompresible en conductos cerrados."
+      en: "Valid for single-phase, incompressible flow in closed ducts."
+    dimension_check: "L"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["ingeniería civil", "mecánica de fluidos", "diseño de tuberías"]
+    interpretation_tags: ["fricción", "energía", "disipación"]
+    result_semantics: "pérdida energética"
+    domain_checks: ["L > 0", "D > 0"]
+    coherence_checks: ["hf >= 0"]
+    graph_implications: "Determina la pendiente de la línea de energía."
+    pedagogical_triggers: ["fricción", "resistencia"]
+
+  - id: conversion_presion
+    target: dp
+    title:
+      es: "Conversión a Presión"
+      en: "Pressure Conversion"
+    equation: "dp = rho * g * hf"
+    latex: "\\Delta p = \\rho \\cdot g \\cdot h_f"
+    rearrangements:
+      - target: dp
+        equation: "dp = rho * g * hf"
+        latex: "\\Delta p = \\rho \\cdot g \\cdot h_f"
+      - target: hf
+        equation: "hf = dp / (rho * g)"
+        latex: "h_f = \\frac{\\Delta p}{\\rho \\cdot g}"
+    category: "conversión"
+    relation_type: "equivalencia"
+    physical_meaning:
+      es: "Convierte la altura de carga perdida en una caída de presión efectiva."
+      en: "Converts the lost head into an effective pressure drop."
+    constraints: ["rho > 0", "g > 0", "hf >= 0"]
+    validity:
+      es: "Válida para fluidos en reposo o movimiento donde el nivel de referencia es el mismo."
+      en: "Valid for fluids at rest or motion where the reference level is the same."
+    dimension_check: "ML^{-1}T^{-2}"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["fontanería", "procesos industriales"]
+    interpretation_tags: ["presión", "hidrostática", "carga"]
+    result_semantics: "caída de presión"
+    domain_checks: ["rho > 0"]
+    coherence_checks: ["dp >= 0"]
+    graph_implications: "Desplazamiento vertical de la presión local."
+    pedagogical_triggers: ["presión", "energía"]
+
+ui:
+  default_formula: darcy_weisbach
+  groups:
+    - title:
+        es: "Cálculo de Pérdidas"
+        en: "Loss Calculation"
+      items: ["darcy_weisbach", "conversion_presion"]

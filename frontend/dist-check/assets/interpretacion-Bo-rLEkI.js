@@ -1,0 +1,411 @@
+const e=`version: 5
+id: interpretacion-analisis-completo
+leaf_id: analisis-completo
+nombre:
+  es: Interpretación del análisis completo con rozamiento
+  en: Interpretation of complete friction analysis
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: dinamica
+  parent_id: sistemas-con-rozamiento
+  ruta_relativa: fisica-clasica/mecanica/dinamica/dinamica-traslacional/sistemas-con-rozamiento/analisis-completo
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    calculator: 4
+    graph: 3
+dependencies:
+  formulas: [normal_horizontal, friccion_estatica_max, umbral_deslizamiento, aceleracion_dinamica, friccion_estatica_reposo, friccion_cinetica]
+  magnitudes: [m, g, N, mu_e, mu_c, F_ext, f_emax, F_ext_crit, a, f_r]
+global_context:
+  physical_domain:
+    es: Dinámica traslacional con contacto seco idealizado.
+    en: Translational dynamics with idealized dry contact.
+  axis_convention:
+    es: El eje positivo coincide con el sentido elegido para la posible tracción externa.
+    en: The positive axis matches the chosen direction for the possible external drive.
+  standard_assumptions:
+    - superficie horizontal
+    - contacto seco
+    - coeficientes constantes por tramos
+    - una dimensión dinámica dominante
+  standard_warnings:
+    - No usar la ecuación cinética antes de decidir el régimen.
+    - No confundir el máximo estático con la fricción real en reposo.
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  brief_mode: calculator_inline
+  extended_mode: dedicated_tab
+  language_support: [es, en]
+targets:
+  N:
+    magnitude_type: state
+    semantic_role:
+      es: normal force
+      en: normal force
+    summary_rules:
+      - id: N_summary_default
+        when: "true"
+        status: info
+        text:
+          es: "La normal es la fuerza de reacción perpendicular de la que depende la capacidad límite de adherencia f_emax del sistema."
+          en: "The normal is the perpendicular reaction force that determines and depends proportionally on the system's adherence limit capacity f_emax."
+    physical_reading_rules:
+      - id: N_physical_default
+        when: "true"
+        status: info
+        text:
+          es: "Si N aumenta, también crecen el máximo estático y la fricción cinética disponible para el mismo material."
+          en: "If N increases, both the static maximum and the kinetic friction available for the same material increase."
+    coherence_rules:
+      - id: N_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el modelo horizontal simple, N debe ser no negativa y del orden de m·g."
+          en: "In the simple horizontal model, N must be non-negative and of the order of m·g."
+    model_validity_rules:
+      - id: N_validity_default
+        when: "true"
+        status: warning
+        text:
+          es: "Esta lectura deja de ser fiable si existen componentes normales adicionales, inclinación o pérdida de contacto."
+          en: "This reading stops being reliable if additional normal components, incline effects, or contact loss appear."
+    graph_rules:
+      - id: N_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "En la gráfica a(F_ext), la normal determina la posición de la ruptura (el umbral estático)."
+          en: "In the a(F_ext) graph, the normal force determines the rupture position (static threshold)."
+    likely_errors:
+      - id: N_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: suponer N = m·g en cualquier problema de rozamiento sin revisar primero la geometría."
+          en: "Typical mistake: assuming N = m·g in every friction problem without first reviewing geometry."
+    next_step_rules:
+      - id: N_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Usa N para calcular f_emax y decidir si el sistema puede seguir en reposo."
+          en: "Use N to compute f_emax and decide whether the system can remain at rest."
+  f_emax:
+    magnitude_type: state
+    semantic_role:
+      es: rozamiento estático máximo
+      en: maximum static friction
+    summary_rules:
+      - id: f_emax_summary_default
+        when: "true"
+        status: info
+        text:
+          es: "f_emax es la cota superior del régimen estático, no la fricción real en cualquier instante."
+          en: "f_emax is the upper bound of the static regime, not the actual friction at every instant."
+    physical_reading_rules:
+      - id: f_emax_physical_default
+        when: "true"
+        status: info
+        text:
+          es: "Comparar la fuerza aplicada con f_emax permite saber si el contacto todavía puede sostener el reposo."
+          en: "Comparing the applied force with f_emax tells us whether the contact can still sustain rest."
+    coherence_rules:
+      - id: f_emax_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Su valor debe ser no negativo y proporcional a mu_e y a N."
+          en: "Its value must be non-negative and proportional to mu_e and N."
+    model_validity_rules:
+      - id: f_emax_validity_default
+        when: "true"
+        status: warning
+        text:
+          es: "Solo se interpreta como umbral estático en contacto seco idealizado."
+          en: "It is interpreted as a static threshold only in idealized dry contact."
+    graph_rules:
+      - id: f_emax_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "Representa el valor de la meseta de adherencia justo antes del salto cinético."
+          en: "It represents the adherence plateau value just before the kinetic jump."
+    likely_errors:
+      - id: f_emax_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: sustituir la fricción estática real por f_emax incluso cuando el empuje es menor."
+          en: "Typical mistake: replacing the real static friction by f_emax even when the push is smaller."
+    next_step_rules:
+      - id: f_emax_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Compáralo con F_ext para decidir si sigues en reposo o debes pasar al régimen cinético."
+          en: "Compare it with F_ext to decide whether you remain at rest or must move to the kinetic regime."
+  F_ext_crit:
+    magnitude_type: state
+    semantic_role:
+      es: fuerza crítica externa
+      en: critical external force
+    summary_rules:
+      - id: F_ext_crit_summary_default
+        when: "true"
+        status: info
+        text:
+          es: "F_ext_crit marca la frontera entre sostener el reposo y empezar a deslizar."
+          en: "F_ext_crit marks the frontier between sustaining rest and starting to slide."
+    physical_reading_rules:
+      - id: F_ext_crit_physical_default
+        when: "true"
+        status: info
+        text:
+          es: "Si F_ext no supera este umbral, el sistema se mantiene en reposo gracias a la adherencia."
+          en: "If F_ext does not exceed this threshold, the system remains at rest thanks to adherence."
+    coherence_rules:
+      - id: F_ext_crit_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Debe ser no negativa y del mismo orden que f_emax en superficies horizontales."
+          en: "It must be non-negative and of the same order as f_emax on horizontal surfaces."
+    model_validity_rules:
+      - id: F_ext_crit_validity_default
+        when: "true"
+        status: warning
+        text:
+          es: "Este umbral solo es válido para el inicio del movimiento desde el reposo absoluto."
+          en: "This threshold is only valid for starting motion from absolute rest."
+    graph_rules:
+      - id: F_ext_crit_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "Es la coordenada F_ext donde la gráfica de aceleración deja de ser nula."
+          en: "It is the F_ext coordinate where the acceleration graph stops being zero."
+    likely_errors:
+      - id: F_ext_crit_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: olvidar que el umbral depende tanto de los materiales como de la carga perpendicular."
+          en: "Typical mistake: forgetting that the threshold depends on both materials and perpendicular load."
+    next_step_rules:
+      - id: F_ext_crit_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Si F_ext supera este valor, cambia de régimen y usa la ecuación dinámica con mu_c."
+          en: "If F_ext exceeds this value, switch regime and use the dynamic equation with mu_c."
+  a:
+    magnitude_type: state
+    semantic_role:
+      es: aceleración
+      en: acceleration
+    summary_rules:
+      - id: a_summary_rest
+        when: "result == 0"
+        status: ok
+        text:
+          es: "El sistema está en reposo; el empuje no ha vencido la resistencia estática."
+          en: "The system is at rest; the push has not overcome static resistance."
+      - id: a_summary_motion
+        when: "result > 0"
+        status: success
+        text:
+          es: "El sistema está en movimiento acelerado tras superar el umbral de adherencia."
+          en: "The system is in accelerated motion after overcoming the adherence threshold."
+    physical_reading_rules:
+      - id: a_physical_default
+        when: "true"
+        status: info
+        text:
+          es: "Mide cuán rápido cambia la velocidad del bloque una vez que se inicia el deslizamiento."
+          en: "It measures how fast the block's velocity changes once sliding starts."
+    coherence_rules:
+      - id: a_coherence_limit
+        when: "result > 9.8"
+        status: warning
+        text:
+          es: "Aceleración muy alta; comprueba si la fuerza externa es realista para este sistema."
+          en: "Very high acceleration; check if the external force is realistic for this system."
+      - id: a_coherence_fallback
+        when: "true"
+        status: ok
+        text:
+          es: "Valor dentro del rango esperado para dinámica traslacional estándar."
+          en: "Value within the expected range for standard translational dynamics."
+    model_validity_rules:
+      - id: a_validity_default
+        when: "true"
+        status: info
+        text:
+          es: "Válido para deslizamiento macroscópico con rozamiento de Coulomb constante."
+          en: "Valid for macroscopic sliding with constant Coulomb friction."
+    graph_rules:
+      - id: a_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "En la gráfica, representa la rama de respuesta dinámica tras el punto de ruptura."
+          en: "On the graph, it represents the dynamic response branch after the rupture point."
+    likely_errors:
+      - id: a_error_static
+        when: "result == 0"
+        status: warning
+        text:
+          es: "Cuidado: no intentes calcular una aceleración distinta de cero si no has superado el umbral F_ext_crit."
+          en: "Careful: do not try to calculate a non-zero acceleration if you have not exceeded the F_ext_crit threshold."
+      - id: a_error_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Error común: olvidar restar la fricción cinética en el numerador de la segunda ley."
+          en: "Common error: forgetting to subtract kinetic friction in the numerator of the second law."
+    next_step_rules:
+      - id: a_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Usa este valor para predecir la posición y velocidad futuras mediante cinemática."
+          en: "Use this value to predict future position and velocity through kinematics."
+  f_r:
+    magnitude_type: state
+    semantic_role:
+      es: fuerza de rozamiento real
+      en: actual friction force
+    summary_rules:
+      - id: f_r_summary_default
+        when: "true"
+        status: info
+        text:
+          es: "Es la fuerza de oposición que el contacto ejerce realmente, y que equilibra o frena el sistema en este instante."
+          en: "It is the opposing force that the contact actually exerts, which balances or slows the system at this instant."
+    physical_reading_rules:
+      - id: f_r_physical_default
+        when: "true"
+        status: info
+        text:
+          es: "Si f_r iguala a F_ext, el sistema está en equilibrio; si es constante mu_c*N, está deslizando."
+          en: "If f_r equals F_ext, the system is in equilibrium; if it is constant mu_c*N, it is sliding."
+    coherence_rules:
+      - id: f_r_coherence_limit
+        when: "true"
+        status: ok
+        text:
+          es: "El rozamiento real nunca debe superar la capacidad máxima estática del contacto."
+          en: "Actual friction must never exceed the contact's maximum static capacity."
+    model_validity_rules:
+      - id: f_r_validity_default
+        when: "true"
+        status: info
+        text:
+          es: "Este modelo de rozamiento por tramos es válido para contactos secos sin lubricación."
+          en: "This piecewise friction model is valid for dry contacts without lubrication."
+    graph_rules:
+      - id: f_r_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "En un diagrama f_r frente a F_ext, observarás una recta de 45° seguida de un escalón horizontal."
+          en: "In a f_r vs F_ext diagram, you will observe a 45° line followed by a horizontal step."
+    likely_errors:
+      - id: f_r_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: pensar que el rozamiento cinético es mayor que el estático máximo."
+          en: "Typical mistake: thinking that kinetic friction is greater than the maximum static friction."
+    next_step_rules:
+      - id: f_r_next_default
+        when: "true"
+        status: info
+        text:
+          es: "Calcula el trabajo disipado por esta fuerza si el bloque se desplaza una distancia dada."
+          en: "Calculate the work dissipated by this force if the block moves a given distance."
+cross_checks:
+  - id: dependencias_completas
+    when: "true"
+    text:
+      es: Todas las fórmulas del leaf están declaradas como dependencias y sus targets existen en magnitudes.
+      en: All formulas in the leaf are declared as dependencies and their targets exist in magnitudes.
+error_patterns:
+  - id: mezclar_regimenes
+    detect_when: "true"
+    text:
+      es: El error central del tema es mezclar régimen estático y cinético en una sola línea de cálculo.
+      en: The core mistake in this topic is mixing static and kinetic regimes in a single calculation line.
+graph_binding:
+  enabled: true
+  graph_type: Coord
+  consumes:
+    - m
+    - g
+    - mu_e
+    - mu_c
+    - F_ext
+    - N
+    - F_ext_crit
+    - a
+  produces:
+    - regime
+    - threshold_crossed
+    - dynamic_response
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  brief_mode: calculator_inline
+  extended_mode: dedicated_tab
+  language_support: [es, en]
+`;export{e as default};

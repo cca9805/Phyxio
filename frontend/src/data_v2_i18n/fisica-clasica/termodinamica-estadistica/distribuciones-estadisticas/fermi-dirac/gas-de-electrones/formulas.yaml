@@ -1,0 +1,393 @@
+version: 5.0.0
+leaf: gas-de-electrones
+ui:
+  default_formula: energia_fermi_gas_electrones_3d
+formulas:
+- id: energia_fermi_gas_electrones_3d
+  title:
+    es: Energía de Fermi del gas de electrones 3D
+    en: Fermi energy of a 3D electron gas
+  equation: E_F=(hbar^2/(2*m_e))*(3*pi^2*n_e)^(2/3)
+  latex: E_F=\frac{\hbar^2}{2m_e}(3\pi^2 n_e)^{2/3}
+  rearrangements:
+  - id: densidad_desde_energia_fermi
+    target: densidad_electronica
+    equation: n_e=(1/(3*pi^2))*((2*m_e*E_F)/(hbar^2))^(3/2)
+    latex: n_e=\frac{1}{3\pi^2}(\frac{2m_eE_F}{\hbar^2})^{3/2}
+  - id: masa_desde_energia_fermi
+    target: masa_electron
+    equation: m_e=(hbar^2*(3*pi^2*n_e)^(2/3))/(2*E_F)
+    latex: m_e=\frac{\hbar^2(3\pi^2 n_e)^{2/3}}{2E_F}
+  category: estadistica-cuantica
+  relation_type: power_law
+  physical_meaning:
+    es: La energía de Fermi crece con la densidad electrónica porque la exclusión de Pauli obliga a llenar estados de momento
+      cada vez mayor.
+    en: Fermi energy grows with electron density because Pauli exclusion forces higher-momentum states to be filled.
+  constraints:
+    es: Gas ideal tridimensional, electrones no relativistas, equilibrio, espín 1/2 y temperatura mucho menor que la temperatura
+      de Fermi.
+    en: Three-dimensional ideal gas, nonrelativistic electrons, equilibrium, spin 1/2, and temperature much lower than the
+      Fermi temperature.
+  validity:
+    es: Válida para electrones casi libres, densidades macroscópicas y energías no relativistas; no describe bandas cristalinas
+      detalladas ni interacciones fuertes.
+    en: Valid for nearly free electrons, macroscopic densities, and nonrelativistic energies; it does not describe detailed
+      crystal bands or strong interactions.
+  dimension_check:
+    expected: M L^2 T^-2
+    analysis:
+      es: hbar^2/m_e aporta energía por longitud al cuadrado inversa, y n_e^(2/3) aporta longitud inversa al cuadrado.
+      en: hbar squared over m_e gives energy times length squared, while n_e^(2/3) supplies inverse length squared.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - calculo_energia_fermi
+  - lectura_densidad
+  - modelo_metalico
+  interpretation_tags:
+  - fermi_energy
+  - electron_density
+  - pauli_filling
+  result_semantics:
+    target: energia_fermi
+    kind: energy_scale
+    sign_meaning:
+      es: Debe ser positiva; una energía negativa indicaría datos o convenio incompatibles con este modelo.
+      en: It must be positive; a negative value would indicate data or convention incompatible with this model.
+    absolute_value_meaning:
+      es: Mide la escala energética hasta la que se llenan estados electrónicos a temperatura cero.
+      en: It measures the energy scale up to which electronic states are filled at zero temperature.
+  domain_checks:
+  - id: densidad_positiva
+    condition: n_e>0
+    status: error
+    message:
+      es: La densidad electrónica debe ser positiva.
+      en: Electron density must be positive.
+  - id: regimen_no_relativista
+    condition: E_F<<m_e*c^2
+    status: warning
+    message:
+      es: Si la energía de Fermi se acerca a la energía de reposo, el modelo no relativista falla.
+      en: If Fermi energy approaches rest energy, the nonrelativistic model fails.
+  coherence_checks:
+  - id: crecimiento_con_densidad
+    condition: E_F increases when n_e increases
+    status: ok
+    message:
+      es: Más electrones por volumen implican estados ocupados de mayor energía.
+      en: More electrons per volume imply occupied states of higher energy.
+  graph_implications:
+    x: densidad_electronica
+    y: energia_fermi
+    shape:
+      es: Curva creciente cóncava hacia abajo proporcional a n_e^(2/3).
+      en: Increasing curve concave downward proportional to n_e^(2/3).
+  pedagogical_triggers:
+  - id: no_linealidad
+    text:
+      es: 'No esperes una recta: duplicar densidad no duplica la energía de Fermi.'
+      en: 'Do not expect a straight line: doubling density does not double Fermi energy.'
+- id: temperatura_fermi_gas_electrones
+  title:
+    es: Temperatura de Fermi del gas de electrones
+    en: Fermi temperature of the electron gas
+  equation: T_F=E_F/k_B
+  latex: T_F=\frac{E_F}{k_B}
+  rearrangements:
+  - id: energia_desde_temperatura_fermi
+    target: energia_fermi
+    equation: E_F=k_B*T_F
+    latex: E_F=k_BT_F
+  category: estadistica-cuantica
+  relation_type: scale_conversion
+  physical_meaning:
+    es: Convierte la energía de Fermi en una temperatura equivalente para comparar el gas electrónico con la agitación térmica.
+    en: It converts Fermi energy into an equivalent temperature for comparing the electron gas with thermal agitation.
+  constraints:
+    es: Usar unidades SI coherentes para energía y constante de Boltzmann.
+    en: Use coherent SI units for energy and Boltzmann constant.
+  validity:
+    es: Es una escala de comparación; no significa que el sistema tenga que estar a esa temperatura real.
+    en: It is a comparison scale; it does not mean the system must actually be at that temperature.
+  dimension_check:
+    expected: Theta
+    analysis:
+      es: E_F dividido por k_B deja unidad de temperatura.
+      en: E_F divided by k_B leaves a temperature unit.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - comparacion_termica
+  - degeneracion_cuantica
+  interpretation_tags:
+  - fermi_temperature
+  - thermal_comparison
+  result_semantics:
+    target: temperatura_fermi
+    kind: temperature_scale
+    sign_meaning:
+      es: Debe ser positiva si la energía de Fermi es positiva.
+      en: It must be positive when Fermi energy is positive.
+    absolute_value_meaning:
+      es: Indica a qué escala térmica se perdería claramente la degeneración fermiónica.
+      en: It indicates the thermal scale at which fermionic degeneracy would be strongly weakened.
+  domain_checks:
+  - id: energia_positiva
+    condition: E_F>0
+    status: error
+    message:
+      es: La energía de Fermi debe ser positiva.
+      en: Fermi energy must be positive.
+  coherence_checks:
+  - id: misma_escala
+    condition: T_F*k_B=E_F
+    status: ok
+    message:
+      es: La conversión debe conservar la escala energética.
+      en: The conversion must preserve the energy scale.
+  graph_implications:
+    x: energia_fermi
+    y: temperatura_fermi
+    shape:
+      es: Relación lineal creciente.
+      en: Increasing linear relation.
+  pedagogical_triggers:
+  - id: confundir_temperatura_real
+    text:
+      es: La temperatura de Fermi no es necesariamente la temperatura del gas.
+      en: Fermi temperature is not necessarily the actual gas temperature.
+- id: ocupacion_fermi_dirac_electrones
+  title:
+    es: Ocupación electrónica Fermi-Dirac
+    en: Fermi-Dirac electron occupation
+  equation: f=1/(exp((E-mu)/(k_B*T))+1)
+  latex: f=\frac{1}{\exp(\frac{E-\mu}{k_BT})+1}
+  rearrangements:
+  - id: energia_desde_ocupacion
+    target: energia_estado
+    equation: E=mu+k_B*T*ln((1/f)-1)
+    latex: E=\mu+k_BT\ln(\frac{1}{f}-1)
+  - id: potencial_desde_ocupacion
+    target: potencial_quimico
+    equation: mu=E-k_B*T*ln((1/f)-1)
+    latex: \mu=E-k_BT\ln(\frac{1}{f}-1)
+  category: estadistica-cuantica
+  relation_type: distribution
+  physical_meaning:
+    es: Da la probabilidad media de ocupación de un estado electrónico y muestra la transición alrededor del potencial químico.
+    en: It gives the mean occupation probability of an electronic state and shows the transition around the chemical potential.
+  constraints:
+    es: Equilibrio térmico, fermiones indistinguibles, ocupación máxima por estado y temperatura positiva.
+    en: Thermal equilibrium, indistinguishable fermions, maximum occupation per state, and positive temperature.
+  validity:
+    es: Describe ocupación media de estados disponibles; no sustituye el cálculo de estructura de bandas en sólidos reales.
+    en: It describes mean occupation of available states; it does not replace band-structure calculations in real solids.
+  dimension_check:
+    expected: '1'
+    analysis:
+      es: El exponente es adimensional y la ocupación resultante no tiene unidad.
+      en: The exponent is dimensionless and the resulting occupation has no unit.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - ocupacion_estado
+  - lectura_grafica
+  - comparacion_termica
+  interpretation_tags:
+  - occupation
+  - fermi_dirac
+  - chemical_potential
+  result_semantics:
+    target: ocupacion_estado
+    kind: probability_like
+    sign_meaning:
+      es: La ocupación debe estar entre 0 y 1 para un estado simple.
+      en: Occupation must lie between 0 and 1 for a single state.
+    absolute_value_meaning:
+      es: Indica qué fracción media de estados equivalentes está ocupada.
+      en: It indicates the mean fraction of equivalent states that is occupied.
+  domain_checks:
+  - id: temperatura_positiva
+    condition: T>0
+    status: error
+    message:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  - id: ocupacion_acotada
+    condition: 0<=f<=1
+    status: error
+    message:
+      es: Una ocupación simple no puede superar 1.
+      en: A single-state occupation cannot exceed 1.
+  coherence_checks:
+  - id: mitad_en_mu
+    condition: E=mu implies f=0.5
+    status: ok
+    message:
+      es: En el potencial químico la ocupación media es un medio.
+      en: At the chemical potential the mean occupation is one half.
+  graph_implications:
+    x: energia_estado
+    y: ocupacion_estado
+    shape:
+      es: Curva sigmoide decreciente que se suaviza al aumentar la temperatura.
+      en: Decreasing sigmoid curve that broadens as temperature increases.
+  pedagogical_triggers:
+  - id: probabilidad_no_particulas
+    text:
+      es: f no cuenta electrones totales; mide ocupación media de un estado.
+      en: f does not count total electrons; it measures mean occupation of one state.
+- id: energia_reducida_electrones
+  title:
+    es: Energía reducida electrónica
+    en: Reduced electron energy
+  equation: eta=(E-mu)/(k_B*T)
+  latex: \eta=\frac{E-\mu}{k_BT}
+  rearrangements:
+  - id: energia_desde_eta
+    target: energia_estado
+    equation: E=mu+eta*k_B*T
+    latex: E=\mu+\eta k_BT
+  - id: temperatura_desde_eta
+    target: temperatura_absoluta
+    equation: T=(E-mu)/(eta*k_B)
+    latex: T=\frac{E-\mu}{\eta k_B}
+  category: estadistica-cuantica
+  relation_type: dimensionless_parameter
+  physical_meaning:
+    es: Mide cuántas escalas térmicas separan el estado del potencial químico.
+    en: It measures how many thermal scales separate the state from the chemical potential.
+  constraints:
+    es: Temperatura absoluta positiva y unidades coherentes de energía.
+    en: Positive absolute temperature and coherent energy units.
+  validity:
+    es: Útil cuando la ocupación se controla por equilibrio Fermi-Dirac.
+    en: Useful when occupation is controlled by Fermi-Dirac equilibrium.
+  dimension_check:
+    expected: '1'
+    analysis:
+      es: Numerador y denominador son energías, por tanto eta es adimensional.
+      en: Numerator and denominator are energies, so eta is dimensionless.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - diagnostico_ocupacion
+  - lectura_transicion
+  interpretation_tags:
+  - dimensionless
+  - thermal_distance
+  result_semantics:
+    target: energia_reducida
+    kind: dimensionless_ratio
+    sign_meaning:
+      es: eta positiva indica estado por encima del potencial químico; eta negativa indica estado por debajo.
+      en: Positive eta indicates a state above the chemical potential; negative eta indicates a state below it.
+    absolute_value_meaning:
+      es: Cuanto mayor es su módulo, más extrema es la ocupación hacia 0 o 1.
+      en: The larger its magnitude, the more extreme the occupation toward 0 or 1.
+  domain_checks:
+  - id: eta_singular
+    condition: eta defined only if T>0
+    status: error
+    message:
+      es: No se define con temperatura absoluta nula en esta forma.
+      en: It is not defined at zero absolute temperature in this form.
+  coherence_checks:
+  - id: eta_cero
+    condition: eta=0 implies E=mu
+    status: ok
+    message:
+      es: eta igual a cero marca el centro de la transición de ocupación.
+      en: eta equal to zero marks the center of the occupation transition.
+  graph_implications:
+    x: energia_estado
+    y: energia_reducida
+    shape:
+      es: Relación lineal para temperatura y potencial químico fijos.
+      en: Linear relation for fixed temperature and chemical potential.
+  pedagogical_triggers:
+  - id: escala_adimensional
+    text:
+      es: 'eta no lleva julios: ya compara energías con k_B*T.'
+      en: 'eta has no joules: it already compares energies with k_B*T.'
+- id: velocidad_fermi
+  title:
+    es: Velocidad de Fermi del gas de electrones
+    en: Fermi velocity of the electron gas
+  equation: v_F=sqrt((2*E_F)/m_e)
+  latex: v_F=\sqrt{\frac{2E_F}{m_e}}
+  rearrangements:
+  - id: energia_desde_velocidad_fermi
+    target: energia_fermi
+    equation: E_F=(1/2)*m_e*v_F^2
+    latex: E_F=\frac{1}{2}m_ev_F^2
+  category: estadistica-cuantica
+  relation_type: kinematic_scale
+  physical_meaning:
+    es: Asocia la energía de Fermi con una escala de velocidad típica de los electrones más energéticos ocupados.
+    en: It associates Fermi energy with a typical velocity scale of the most energetic occupied electrons.
+  constraints:
+    es: Modelo no relativista y gas ideal de electrones libres.
+    en: Nonrelativistic model and ideal free-electron gas.
+  validity:
+    es: Falla si la velocidad calculada se acerca de forma apreciable a la velocidad de la luz o si dominan bandas/interacciones.
+    en: It fails if the computed speed approaches the speed of light appreciably or if bands/interactions dominate.
+  dimension_check:
+    expected: L T^-1
+    analysis:
+      es: E_F/m_e tiene dimensión de velocidad al cuadrado.
+      en: E_F/m_e has the dimension of speed squared.
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - escala_dinamica
+  - comparacion_metalica
+  interpretation_tags:
+  - fermi_velocity
+  - energy_scale
+  result_semantics:
+    target: velocidad_fermi
+    kind: speed_scale
+    sign_meaning:
+      es: Se toma positiva como módulo de velocidad característica.
+      en: It is taken positive as a characteristic speed magnitude.
+    absolute_value_meaning:
+      es: Indica la escala de rapidez de los electrones cerca del borde de Fermi.
+      en: It indicates the speed scale of electrons near the Fermi edge.
+  domain_checks:
+  - id: no_relativista
+    condition: v_F<<c
+    status: warning
+    message:
+      es: Si v_F no es mucho menor que c, hace falta tratamiento relativista.
+      en: If v_F is not much smaller than c, a relativistic treatment is needed.
+  coherence_checks:
+  - id: crece_con_energia
+    condition: v_F increases when E_F increases
+    status: ok
+    message:
+      es: Una energía de Fermi mayor implica una velocidad característica mayor.
+      en: A larger Fermi energy implies a larger characteristic speed.
+  graph_implications:
+    x: energia_fermi
+    y: velocidad_fermi
+    shape:
+      es: Curva de raíz cuadrada creciente.
+      en: Increasing square-root curve.
+  pedagogical_triggers:
+  - id: velocidad_no_termica
+    text:
+      es: No confundas velocidad de Fermi con velocidad media térmica clásica.
+      en: Do not confuse Fermi velocity with classical thermal mean speed.

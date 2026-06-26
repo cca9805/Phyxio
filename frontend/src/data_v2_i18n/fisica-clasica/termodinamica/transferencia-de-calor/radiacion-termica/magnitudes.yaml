@@ -1,0 +1,374 @@
+version: 5.0.0
+leaf: radiacion-termica
+magnitudes:
+- id: potencia_radiada
+  symbol: P
+  nombre:
+    es: potencia radiada
+    en: radiated power
+  descripcion:
+    es: Energía emitida por radiación térmica por unidad de tiempo.
+    en: Energy emitted by thermal radiation per unit time.
+  unidad_si: W
+  dimension: M L^2 T^-3
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: resultado
+  used_in:
+  - ley_stefan_boltzmann
+  - flujo_radiativo_emitido
+  common_mistake: Confundir potencia con energía acumulada.
+  typical_range: Fracciones de W a kW según temperatura y superficie.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La emisión bruta no tiene signo negativo.
+      en: Gross emission has no negative sign.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede anularse si T=0 K, A=0 o ε=0.
+      en: Can vanish if T=0 K, A=0, or ε=0.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: P ≥ 0
+  interpretation_role:
+    primary_for:
+    - ley_stefan_boltzmann
+    secondary_for:
+    - flujo_radiativo_emitido
+  graph_binding:
+    enabled: true
+    graphId: radiacion-termica-Coord
+    channels:
+    - yAxis
+  pedagogical_notes:
+    es: Magnitud dominante para leer temperatura, área y emisividad.
+    en: Dominant quantity for reading temperature, area, and emissivity.
+- id: potencia_neta
+  symbol: P_{net}
+  nombre:
+    es: potencia radiada neta
+    en: net radiated power
+  descripcion:
+    es: Balance de potencia radiativa entre un cuerpo y su entorno.
+    en: Radiative power balance between a body and its surroundings.
+  unidad_si: W
+  dimension: M L^2 T^-3
+  is_vector: false
+  components: []
+  category: energia
+  physical_role: resultado con signo
+  used_in:
+  - radiacion_neta
+  common_mistake: Tomar valor absoluto y perder el sentido físico.
+  typical_range: Negativa, cero o positiva según T frente a T_amb.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Positiva si el cuerpo pierde energía neta; negativa si gana.
+      en: Positive if the body loses net energy; negative if it gains.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero si T=T_amb.
+      en: Zero if T=T_amb.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: P_net ∈ R
+  interpretation_role:
+    primary_for:
+    - radiacion_neta
+    secondary_for: []
+  graph_binding:
+    enabled: false
+    graphId: ''
+    channels:
+    - none
+  pedagogical_notes:
+    es: Distingue emisión bruta de intercambio neto.
+    en: Distinguishes gross emission from net exchange.
+- id: flujo_radiativo
+  symbol: j
+  nombre:
+    es: flujo radiativo
+    en: radiative flux
+  descripcion:
+    es: Potencia radiada por unidad de superficie.
+    en: Radiated power per unit surface area.
+  unidad_si: W m^-2
+  dimension: M T^-3
+  is_vector: false
+  components: []
+  category: flujo
+  physical_role: resultado intensivo
+  used_in:
+  - flujo_radiativo_emitido
+  common_mistake: Confundir W/m² con W.
+  typical_range: Decenas a miles de W/m² en contextos térmicos habituales.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El flujo bruto no tiene signo negativo.
+      en: Gross flux has no negative sign.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede anularse si T=0 K o ε=0.
+      en: Can vanish if T=0 K or ε=0.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: j ≥ 0
+  interpretation_role:
+    primary_for:
+    - flujo_radiativo_emitido
+    secondary_for:
+    - ley_stefan_boltzmann
+  graph_binding:
+    enabled: false
+    graphId: ''
+    channels:
+    - none
+  pedagogical_notes:
+    es: Compara superficies sin mezclar tamaño total.
+    en: Compares surfaces without mixing in total size.
+- id: emisividad
+  symbol: \varepsilon
+  nombre:
+    es: emisividad
+    en: emissivity
+  descripcion:
+    es: Factor adimensional que compara la emisión real de una superficie con la de un cuerpo negro.
+    en: Dimensionless factor comparing real surface emission with blackbody emission.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: propiedad_material
+  physical_role: parámetro
+  used_in:
+  - ley_stefan_boltzmann
+  - radiacion_neta
+  - flujo_radiativo_emitido
+  common_mistake: Usar ε>1 o suponer ε=1 sin justificación.
+  typical_range: 0≤ε≤1; alta en superficies negras mates.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No tiene signo; mide eficacia relativa.
+      en: It has no sign; it measures relative effectiveness.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: ε=0 representa emisor idealmente nulo.
+      en: ε=0 represents an ideally non-emitting surface.
+  value_nature:
+    kind: dimensionless_scalar
+    nonnegative_only: true
+    expected_interval: 0 ≤ ε ≤ 1
+  interpretation_role:
+    primary_for:
+    - ley_stefan_boltzmann
+    - radiacion_neta
+    secondary_for:
+    - flujo_radiativo_emitido
+  graph_binding:
+    enabled: true
+    graphId: radiacion-termica-Coord
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Separa superficies reales del cuerpo negro ideal.
+    en: Separates real surfaces from the ideal blackbody.
+- id: constante_stefan_boltzmann
+  symbol: \sigma
+  nombre:
+    es: constante de Stefan-Boltzmann
+    en: Stefan-Boltzmann constant
+  descripcion:
+    es: Constante física que relaciona flujo emitido por un cuerpo negro con T⁴.
+    en: Physical constant relating blackbody emitted flux to T⁴.
+  unidad_si: W m^-2 K^-4
+  dimension: M T^-3 Θ^-4
+  is_vector: false
+  components: []
+  category: constante_fisica
+  physical_role: constante
+  used_in:
+  - ley_stefan_boltzmann
+  - radiacion_neta
+  - flujo_radiativo_emitido
+  common_mistake: Cambiar unidades o redondear sin control.
+  typical_range: σ≈5.670374419×10^-8 W m^-2 K^-4.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es positiva y fija.
+      en: It is positive and fixed.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: No puede anularse.
+      en: It cannot vanish.
+  value_nature:
+    kind: constant
+    nonnegative_only: true
+    expected_interval: σ > 0
+  interpretation_role:
+    primary_for:
+    - ley_stefan_boltzmann
+    secondary_for:
+    - radiacion_neta
+    - flujo_radiativo_emitido
+  graph_binding:
+    enabled: false
+    graphId: ''
+    channels:
+    - constant
+  pedagogical_notes:
+    es: Escala universal, no coeficiente ajustable.
+    en: Universal scale, not an adjustable coefficient.
+- id: area_superficie
+  symbol: A
+  nombre:
+    es: área de la superficie
+    en: surface area
+  descripcion:
+    es: Área efectiva de la superficie que emite o intercambia radiación térmica.
+    en: Effective area of the surface that emits or exchanges thermal radiation.
+  unidad_si: m^2
+  dimension: L^2
+  is_vector: false
+  components: []
+  category: geometria
+  physical_role: parámetro geométrico
+  used_in:
+  - ley_stefan_boltzmann
+  - radiacion_neta
+  - flujo_radiativo_emitido
+  common_mistake: Usar volumen o sección no emisora.
+  typical_range: Desde cm² en sensores hasta m² en placas o paredes.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El área no tiene signo negativo.
+      en: Area has no negative sign.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: A=0 anula la potencia total.
+      en: A=0 makes total power vanish.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: A ≥ 0
+  interpretation_role:
+    primary_for:
+    - ley_stefan_boltzmann
+    - radiacion_neta
+    secondary_for:
+    - flujo_radiativo_emitido
+  graph_binding:
+    enabled: true
+    graphId: radiacion-termica-Coord
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Escala la potencia total sin cambiar la forma T⁴.
+    en: Scales total power without changing T⁴ shape.
+- id: temperatura_absoluta
+  symbol: T
+  nombre:
+    es: temperatura absoluta
+    en: absolute temperature
+  descripcion:
+    es: Temperatura termodinámica de la superficie emisora medida en kelvin.
+    en: Thermodynamic temperature of the emitting surface measured in kelvin.
+  unidad_si: K
+  dimension: Θ
+  is_vector: false
+  components: []
+  category: estado_termico
+  physical_role: variable independiente
+  used_in:
+  - ley_stefan_boltzmann
+  - radiacion_neta
+  - flujo_radiativo_emitido
+  common_mistake: Usar grados Celsius en una cuarta potencia.
+  typical_range: ≈300 K en ambientes; cientos o miles de K en cuerpos calientes.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En kelvin no es negativa.
+      en: In kelvin it is non-negative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: T=0 K es un límite ideal.
+      en: T=0 K is an ideal limit.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: T ≥ 0 K
+  interpretation_role:
+    primary_for:
+    - ley_stefan_boltzmann
+    - radiacion_neta
+    - flujo_radiativo_emitido
+    secondary_for: []
+  graph_binding:
+    enabled: true
+    graphId: radiacion-termica-Coord
+    channels:
+    - xAxis
+  pedagogical_notes:
+    es: Variable que produce la curvatura T⁴.
+    en: Variable that produces the T⁴ curvature.
+- id: temperatura_ambiente
+  symbol: T_{amb}
+  nombre:
+    es: temperatura ambiente
+    en: ambient temperature
+  descripcion:
+    es: Temperatura radiativa equivalente del entorno.
+    en: Equivalent radiative temperature of the surroundings.
+  unidad_si: K
+  dimension: Θ
+  is_vector: false
+  components: []
+  category: estado_termico
+  physical_role: parámetro de entorno
+  used_in:
+  - radiacion_neta
+  common_mistake: Usarla en Celsius o confundirla con la temperatura del aire local.
+  typical_range: A menudo 250–320 K en situaciones ambientales.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En kelvin no es negativa.
+      en: In kelvin it is non-negative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: T_amb=0 K es un entorno ideal extremo.
+      en: T_amb=0 K is an extreme ideal environment.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: T_amb ≥ 0 K
+  interpretation_role:
+    primary_for:
+    - radiacion_neta
+    secondary_for: []
+  graph_binding:
+    enabled: false
+    graphId: ''
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Decide si hay pérdida o ganancia neta.
+    en: Decides whether there is net loss or gain.

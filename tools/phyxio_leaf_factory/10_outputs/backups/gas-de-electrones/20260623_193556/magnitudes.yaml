@@ -1,0 +1,698 @@
+version: 5.0.0
+leaf: gas-de-electrones
+magnitudes:
+- id: densidad_electronica
+  symbol: n_e
+  nombre:
+    es: densidad electrónica
+    en: electron density
+  descripcion:
+    es: Número de electrones libres por unidad de volumen en el gas electrónico.
+    en: Number of free electrons per unit volume in the electron gas.
+  unidad_si: m^-3
+  dimension: L^-3
+  is_vector: false
+  components: []
+  category: density
+  physical_role:
+    es: parámetro de entrada
+    en: input parameter
+  used_in:
+  - energia_fermi_gas_electrones_3d
+  common_mistake:
+    es: Confundir densidad electrónica con densidad de masa o con número total de electrones.
+    en: Confusing electron density with mass density or total electron count.
+  typical_range: 10^25 a 10^30 m^-3
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: none
+      en: none
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: zero means no electron gas
+      en: zero means no electron gas
+  value_nature:
+    kind: positive_scalar
+    nonnegative_only: true
+    expected_interval: n_e>0
+  interpretation_role:
+    primary_for:
+    - energia_fermi
+    secondary_for:
+    - ocupacion_estado
+  graph_binding:
+    channels:
+    - xAxis
+    - parameter
+    preferred_graph: Coord
+  pedagogical_notes:
+    es: En el gas de electrones, densidad electrónica debe leerse dentro del llenado fermiónico y no como una variable clásica
+      aislada.
+    en: In the electron gas, electron density must be read within fermionic filling, not as an isolated classical variable.
+- id: energia_fermi
+  symbol: E_F
+  nombre:
+    es: energía de Fermi
+    en: Fermi energy
+  descripcion:
+    es: Energía del estado ocupado más alto a temperatura cero en el gas de electrones ideal.
+    en: Energy of the highest occupied state at zero temperature in the ideal electron gas.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: energy
+  physical_role:
+    es: resultado dominante
+    en: dominant result
+  used_in:
+  - energia_fermi_gas_electrones_3d
+  - temperatura_fermi_gas_electrones
+  - velocidad_fermi
+  common_mistake:
+    es: Pensar que es la energía de un electrón concreto cualquiera, no una escala del llenado colectivo.
+    en: Thinking it is the energy of any one particular electron, not a collective filling scale.
+  typical_range: 10^-20 a 10^-18 J en metales
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: none
+      en: none
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: zero means vanishing density in this ideal model
+      en: zero means vanishing density in this ideal model
+  value_nature:
+    kind: positive_scalar
+    nonnegative_only: true
+    expected_interval: E_F>0
+  interpretation_role:
+    primary_for:
+    - summary
+    - graph_reading
+    secondary_for:
+    - ocupacion_estado
+    - temperatura_fermi
+  graph_binding:
+    channels:
+    - yAxis
+    - parameter
+    preferred_graph: Coord
+  pedagogical_notes:
+    es: En el gas de electrones, energía de Fermi debe leerse dentro del llenado fermiónico y no como una variable clásica
+      aislada.
+    en: In the electron gas, Fermi energy must be read within fermionic filling, not as an isolated classical variable.
+- id: masa_electron
+  symbol: m_e
+  nombre:
+    es: masa del electrón
+    en: electron mass
+  descripcion:
+    es: Masa inercial del electrón usada en el modelo no relativista de gas libre.
+    en: Inertial mass of the electron used in the nonrelativistic free-gas model.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: []
+  category: constant
+  physical_role:
+    es: constante de partícula
+    en: particle constant
+  used_in:
+  - energia_fermi_gas_electrones_3d
+  - velocidad_fermi
+  common_mistake:
+    es: Sustituirla por masa molar o por masa efectiva sin declarar el cambio de modelo.
+    en: Replacing it with molar mass or effective mass without declaring the model change.
+  typical_range: 9.11e-31 kg
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: none
+      en: none
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: zero is not physically allowed
+      en: zero is not physically allowed
+  value_nature:
+    kind: constant
+    nonnegative_only: true
+    expected_interval: m_e>0
+  interpretation_role:
+    primary_for:
+    - coherence
+    secondary_for: []
+  graph_binding:
+    channels:
+    - constant
+    preferred_graph: Coord
+  pedagogical_notes:
+    es: En el gas de electrones, masa del electrón debe leerse dentro del llenado fermiónico y no como una variable clásica
+      aislada.
+    en: In the electron gas, electron mass must be read within fermionic filling, not as an isolated classical variable.
+- id: constante_planck_reducida
+  symbol: hbar
+  nombre:
+    es: constante de Planck reducida
+    en: reduced Planck constant
+  descripcion:
+    es: Constante cuántica que fija la escala de cuantización de momento y energía.
+    en: Quantum constant setting the quantization scale of momentum and energy.
+  unidad_si: J s
+  dimension: M L^2 T^-1
+  is_vector: false
+  components: []
+  category: constant
+  physical_role:
+    es: constante cuántica
+    en: quantum constant
+  used_in:
+  - energia_fermi_gas_electrones_3d
+  common_mistake:
+    es: Usar h en lugar de hbar sin el factor 2*pi correspondiente.
+    en: Using h instead of hbar without the corresponding 2*pi factor.
+  typical_range: 1.055e-34 J s
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: none
+      en: none
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: zero would remove quantum quantization
+      en: zero would remove quantum quantization
+  value_nature:
+    kind: constant
+    nonnegative_only: true
+    expected_interval: hbar>0
+  interpretation_role:
+    primary_for:
+    - coherence
+    secondary_for: []
+  graph_binding:
+    channels:
+    - constant
+    preferred_graph: Coord
+  pedagogical_notes:
+    es: En el gas de electrones, constante de Planck reducida debe leerse dentro del llenado fermiónico y no como una variable
+      clásica aislada.
+    en: In the electron gas, reduced Planck constant must be read within fermionic filling, not as an isolated classical variable.
+- id: temperatura_fermi
+  symbol: T_F
+  nombre:
+    es: temperatura de Fermi
+    en: Fermi temperature
+  descripcion:
+    es: Temperatura equivalente a la energía de Fermi mediante la constante de Boltzmann.
+    en: Temperature equivalent to Fermi energy through Boltzmann constant.
+  unidad_si: K
+  dimension: Theta
+  is_vector: false
+  components: []
+  category: temperature
+  physical_role:
+    es: escala térmica característica
+    en: characteristic thermal scale
+  used_in:
+  - temperatura_fermi_gas_electrones
+  common_mistake:
+    es: Interpretarla como la temperatura real del gas en lugar de una escala comparativa.
+    en: Interpreting it as the actual gas temperature instead of a comparison scale.
+  typical_range: 10^4 a 10^5 K en muchos metales
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: none
+      en: none
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: zero follows from zero Fermi energy in this model
+      en: zero follows from zero Fermi energy in this model
+  value_nature:
+    kind: positive_scalar
+    nonnegative_only: true
+    expected_interval: T_F>0
+  interpretation_role:
+    primary_for:
+    - model_validity
+    secondary_for:
+    - temperatura_absoluta
+  graph_binding:
+    channels:
+    - parameter
+    preferred_graph: Coord
+  pedagogical_notes:
+    es: En el gas de electrones, temperatura de Fermi debe leerse dentro del llenado fermiónico y no como una variable clásica
+      aislada.
+    en: In the electron gas, Fermi temperature must be read within fermionic filling, not as an isolated classical variable.
+- id: constante_boltzmann
+  symbol: k_B
+  nombre:
+    es: constante de Boltzmann
+    en: Boltzmann constant
+  descripcion:
+    es: Constante que convierte temperatura absoluta en escala energética térmica.
+    en: Constant that converts absolute temperature into thermal energy scale.
+  unidad_si: J K^-1
+  dimension: M L^2 T^-2 Theta^-1
+  is_vector: false
+  components: []
+  category: constant
+  physical_role:
+    es: constante de conversión
+    en: conversion constant
+  used_in:
+  - temperatura_fermi_gas_electrones
+  - ocupacion_fermi_dirac_electrones
+  - energia_reducida_electrones
+  common_mistake:
+    es: Usar grados Celsius directamente donde se requiere temperatura absoluta.
+    en: Using degrees Celsius directly where absolute temperature is required.
+  typical_range: 1.381e-23 J/K
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: none
+      en: none
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: zero is not a physical option
+      en: zero is not a physical option
+  value_nature:
+    kind: constant
+    nonnegative_only: true
+    expected_interval: k_B>0
+  interpretation_role:
+    primary_for:
+    - coherence
+    secondary_for: []
+  graph_binding:
+    channels:
+    - constant
+    preferred_graph: Coord
+  pedagogical_notes:
+    es: En el gas de electrones, constante de Boltzmann debe leerse dentro del llenado fermiónico y no como una variable clásica
+      aislada.
+    en: In the electron gas, Boltzmann constant must be read within fermionic filling, not as an isolated classical variable.
+- id: temperatura_absoluta
+  symbol: T
+  nombre:
+    es: temperatura absoluta
+    en: absolute temperature
+  descripcion:
+    es: Temperatura termodinámica que suaviza la frontera de ocupación alrededor del potencial químico.
+    en: Thermodynamic temperature that smooths the occupation edge around the chemical potential.
+  unidad_si: K
+  dimension: Theta
+  is_vector: false
+  components: []
+  category: temperature
+  physical_role:
+    es: parámetro térmico
+    en: thermal parameter
+  used_in:
+  - ocupacion_fermi_dirac_electrones
+  - energia_reducida_electrones
+  common_mistake:
+    es: Usar Celsius o permitir valores negativos en una fórmula de equilibrio térmico.
+    en: Using Celsius or allowing negative values in a thermal-equilibrium formula.
+  typical_range: 1 K a 10^4 K según sistema
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: none
+      en: none
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: zero requires the limiting step-function model
+      en: zero requires the limiting step-function model
+  value_nature:
+    kind: positive_scalar
+    nonnegative_only: true
+    expected_interval: T>0 for Fermi-Dirac formula
+  interpretation_role:
+    primary_for:
+    - model_validity
+    secondary_for:
+    - ocupacion_estado
+  graph_binding:
+    channels:
+    - parameter
+    preferred_graph: Coord
+  pedagogical_notes:
+    es: En el gas de electrones, temperatura absoluta debe leerse dentro del llenado fermiónico y no como una variable clásica
+      aislada.
+    en: In the electron gas, absolute temperature must be read within fermionic filling, not as an isolated classical variable.
+- id: energia_estado
+  symbol: E
+  nombre:
+    es: energía del estado
+    en: state energy
+  descripcion:
+    es: Energía de un estado electrónico concreto cuya ocupación media se evalúa.
+    en: Energy of a particular electronic state whose mean occupation is evaluated.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: energy
+  physical_role:
+    es: variable independiente
+    en: independent variable
+  used_in:
+  - ocupacion_fermi_dirac_electrones
+  - energia_reducida_electrones
+  common_mistake:
+    es: Confundir la energía del estado con la energía de Fermi del conjunto.
+    en: Confusing state energy with the Fermi energy of the ensemble.
+  typical_range: Alrededor de E_F para la transición
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del cero de energía elegido; importan las diferencias con [[potencial_quimico]].
+      en: The sign depends on the chosen energy zero; differences from [[potencial_quimico]] matter.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: zero means the chosen reference state, not absence of energy
+      en: zero means the chosen reference state, not absence of energy
+  value_nature:
+    kind: signed_scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - graph_reading
+    secondary_for:
+    - ocupacion_estado
+  graph_binding:
+    channels:
+    - xAxis
+    preferred_graph: Coord
+  pedagogical_notes:
+    es: En el gas de electrones, energía del estado debe leerse dentro del llenado fermiónico y no como una variable clásica
+      aislada.
+    en: In the electron gas, state energy must be read within fermionic filling, not as an isolated classical variable.
+- id: potencial_quimico
+  symbol: mu
+  nombre:
+    es: potencial químico
+    en: chemical potential
+  descripcion:
+    es: Energía de referencia que marca el centro de la transición de ocupación en equilibrio.
+    en: Reference energy marking the center of the occupation transition in equilibrium.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: energy
+  physical_role:
+    es: referencia de equilibrio
+    en: equilibrium reference
+  used_in:
+  - ocupacion_fermi_dirac_electrones
+  - energia_reducida_electrones
+  common_mistake:
+    es: Tratarlo como una energía externa fija aunque cambia con densidad y temperatura.
+    en: Treating it as an externally fixed energy even though it changes with density and temperature.
+  typical_range: Cerca de E_F a baja temperatura
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su signo depende del cero elegido; su posición relativa controla la ocupación.
+      en: Its sign depends on the chosen zero; its relative position controls occupation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: zero is only a chosen reference in many contexts
+      en: zero is only a chosen reference in many contexts
+  value_nature:
+    kind: signed_scalar
+    nonnegative_only: false
+    expected_interval: context-dependent
+  interpretation_role:
+    primary_for:
+    - physical_reading
+    secondary_for:
+    - ocupacion_estado
+  graph_binding:
+    channels:
+    - parameter
+    preferred_graph: Coord
+  pedagogical_notes:
+    es: En el gas de electrones, potencial químico debe leerse dentro del llenado fermiónico y no como una variable clásica
+      aislada.
+    en: In the electron gas, chemical potential must be read within fermionic filling, not as an isolated classical variable.
+- id: ocupacion_estado
+  symbol: f
+  nombre:
+    es: ocupación media del estado
+    en: mean state occupation
+  descripcion:
+    es: Probabilidad media de que un estado electrónico fermiónico esté ocupado.
+    en: Mean probability that a fermionic electronic state is occupied.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: probability
+  physical_role:
+    es: resultado de ocupación
+    en: occupation result
+  used_in:
+  - ocupacion_fermi_dirac_electrones
+  common_mistake:
+    es: Interpretarla como número total de electrones del material.
+    en: Interpreting it as the total number of electrons in the material.
+  typical_range: 0 a 1 para un estado simple
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: none
+      en: none
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: zero means the state is essentially empty
+      en: zero means the state is essentially empty
+  value_nature:
+    kind: bounded_scalar
+    nonnegative_only: true
+    expected_interval: 0<=f<=1
+  interpretation_role:
+    primary_for:
+    - summary
+    - graph_reading
+    secondary_for:
+    - energia_estado
+    - temperatura_absoluta
+  graph_binding:
+    channels:
+    - yAxis
+    preferred_graph: Coord
+  pedagogical_notes:
+    es: En el gas de electrones, ocupación media del estado debe leerse dentro del llenado fermiónico y no como una variable
+      clásica aislada.
+    en: In the electron gas, mean state occupation must be read within fermionic filling, not as an isolated classical variable.
+- id: energia_reducida
+  symbol: eta
+  nombre:
+    es: energía reducida
+    en: reduced energy
+  descripcion:
+    es: Separación adimensional entre la energía del estado y el potencial químico medida en unidades térmicas.
+    en: Dimensionless separation between state energy and chemical potential measured in thermal units.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: dimensionless
+  physical_role:
+    es: variable auxiliar
+    en: auxiliary variable
+  used_in:
+  - energia_reducida_electrones
+  common_mistake:
+    es: Asignarle unidades de energía aunque es un cociente adimensional.
+    en: Assigning energy units to it even though it is a dimensionless ratio.
+  typical_range: -10 a 10 en la zona de transición
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Positiva por encima del potencial químico, negativa por debajo.
+      en: Positive above the chemical potential, negative below it.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: zero means E equals mu
+      en: zero means E equals mu
+  value_nature:
+    kind: dimensionless_signed
+    nonnegative_only: false
+    expected_interval: any real value
+  interpretation_role:
+    primary_for:
+    - coherence
+    secondary_for:
+    - ocupacion_estado
+  graph_binding:
+    channels:
+    - xAxis
+    - parameter
+    preferred_graph: Coord
+  pedagogical_notes:
+    es: En el gas de electrones, energía reducida debe leerse dentro del llenado fermiónico y no como una variable clásica
+      aislada.
+    en: In the electron gas, reduced energy must be read within fermionic filling, not as an isolated classical variable.
+- id: velocidad_fermi
+  symbol: v_F
+  nombre:
+    es: velocidad de Fermi
+    en: Fermi velocity
+  descripcion:
+    es: Escala de rapidez asociada a electrones situados cerca de la energía de Fermi.
+    en: Speed scale associated with electrons near the Fermi energy.
+  unidad_si: m s^-1
+  dimension: L T^-1
+  is_vector: false
+  components: []
+  category: speed
+  physical_role:
+    es: escala dinámica
+    en: dynamic scale
+  used_in:
+  - velocidad_fermi
+  common_mistake:
+    es: Confundirla con una deriva eléctrica macroscópica, que suele ser muchísimo menor.
+    en: Confusing it with macroscopic drift speed, usually far smaller.
+  typical_range: 10^5 a 10^6 m/s en metales
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: none
+      en: none
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: zero would imply zero Fermi energy in this model
+      en: zero would imply zero Fermi energy in this model
+  value_nature:
+    kind: positive_scalar
+    nonnegative_only: true
+    expected_interval: v_F>0 and v_F<<c
+  interpretation_role:
+    primary_for:
+    - physical_reading
+    secondary_for:
+    - energia_fermi
+  graph_binding:
+    channels:
+    - parameter
+    preferred_graph: Coord
+  pedagogical_notes:
+    es: En el gas de electrones, velocidad de Fermi debe leerse dentro del llenado fermiónico y no como una variable clásica
+      aislada.
+    en: In the electron gas, Fermi velocity must be read within fermionic filling, not as an isolated classical variable.
+- id: numero_electrones
+  symbol: N
+  nombre:
+    es: número de electrones
+    en: number of electrons
+  descripcion:
+    es: Cantidad total de electrones libres considerados en una muestra o volumen.
+    en: Total number of free electrons considered in a sample or volume.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: count
+  physical_role:
+    es: conteo extensivo
+    en: extensive count
+  used_in: []
+  common_mistake:
+    es: Confundirlo con densidad electrónica sin dividir por volumen.
+    en: Confusing it with electron density without dividing by volume.
+  typical_range: 10^6 a 10^23 según muestra
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: none
+      en: none
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: zero means no electrons in the sample
+      en: zero means no electrons in the sample
+  value_nature:
+    kind: integer_count
+    nonnegative_only: true
+    expected_interval: N>=0
+  interpretation_role:
+    primary_for:
+    - summary
+    secondary_for:
+    - densidad_electronica
+  graph_binding:
+    channels:
+    - none
+    preferred_graph: none
+  pedagogical_notes:
+    es: En el gas de electrones, número de electrones debe leerse dentro del llenado fermiónico y no como una variable clásica
+      aislada.
+    en: In the electron gas, number of electrons must be read within fermionic filling, not as an isolated classical variable.
+- id: volumen
+  symbol: V
+  nombre:
+    es: volumen
+    en: volume
+  descripcion:
+    es: Espacio físico ocupado por la muestra donde se distribuyen los electrones libres.
+    en: Physical space occupied by the sample in which free electrons are distributed.
+  unidad_si: m^3
+  dimension: L^3
+  is_vector: false
+  components: []
+  category: geometry
+  physical_role:
+    es: parámetro geométrico
+    en: geometric parameter
+  used_in: []
+  common_mistake:
+    es: Usar volumen macroscópico y densidad microscópica con unidades incompatibles.
+    en: Using macroscopic volume and microscopic density with incompatible units.
+  typical_range: 10^-18 a 10^-3 m^3 según muestra
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: none
+      en: none
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: zero volume is not valid
+      en: zero volume is not valid
+  value_nature:
+    kind: positive_scalar
+    nonnegative_only: true
+    expected_interval: V>0
+  interpretation_role:
+    primary_for:
+    - coherence
+    secondary_for:
+    - densidad_electronica
+  graph_binding:
+    channels:
+    - none
+    preferred_graph: none
+  pedagogical_notes:
+    es: En el gas de electrones, volumen debe leerse dentro del llenado fermiónico y no como una variable clásica aislada.
+    en: In the electron gas, volume must be read within fermionic filling, not as an isolated classical variable.

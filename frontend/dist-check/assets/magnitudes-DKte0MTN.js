@@ -1,0 +1,134 @@
+const e=`- id: L
+  symbol: L
+  nombre: { es: longitud vibrante, en: vibrating length }
+  descripcion: { es: "Distancia util de cuerda entre los dos extremos que fijan los nodos.", en: "Useful string distance between the two ends that fix the nodes." }
+  unidad_si: m
+  dimension: "[L]"
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: core_physical_quantity
+  used_in: [frecuencia_modo_cuerda, longitud_onda_modo_cuerda, grafico_coord]
+  common_mistake: { es: "Confundir [[L]] con la longitud total enrollada o con una longitud de onda.", en: "Confusing [[L]] with the total stored string or with one wavelength." }
+  typical_range: "0.2 m a 2 m en cuerdas musicales y de laboratorio"
+  sign_behavior: { has_sign: false, meaning: { es: "[[L]] es una distancia positiva.", en: "[[L]] is a positive distance." } }
+  zero_behavior: { allowed: false, meaning: { es: "Sin [[L]] no hay tramo vibrante.", en: "Without [[L]] there is no vibrating span." } }
+  value_nature: { kind: scalar_unsigned, nonnegative_only: true, expected_interval: "L > 0" }
+  interpretation_role: { primary_for: [espacio_modal], secondary_for: [frecuencia] }
+  graph_binding: { channels: [x_domain, boundary_spacing] }
+  pedagogical_notes: { es: "[[L]] decide cuantas semilongitudes de onda caben entre nodos fijos.", en: "[[L]] decides how many half-wavelengths fit between fixed nodes." }
+- id: T
+  symbol: T
+  nombre: { es: tension de la cuerda, en: string tension }
+  descripcion: { es: "Fuerza longitudinal que mantiene la cuerda estirada y controla la rapidez de propagacion.", en: "Longitudinal force that keeps the string taut and controls propagation speed." }
+  unidad_si: N
+  dimension: "[M L T⁻²]"
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: core_physical_quantity
+  used_in: [velocidad_cuerda_tensa, frecuencia_modo_cuerda]
+  common_mistake: { es: "Creer que duplicar [[T]] duplica directamente la frecuencia.", en: "Believing that doubling [[T]] directly doubles the frequency." }
+  typical_range: "1 N a 1000 N segun cuerda"
+  sign_behavior: { has_sign: false, meaning: { es: "Se usa como modulo positivo de traccion.", en: "It is used as a positive tensile magnitude." } }
+  zero_behavior: { allowed: false, meaning: { es: "Con [[T]] nula no hay cuerda tensa ideal.", en: "With zero [[T]] there is no ideal taut string." } }
+  value_nature: { kind: scalar_unsigned, nonnegative_only: true, expected_interval: "T > 0" }
+  interpretation_role: { primary_for: [rigidez_efectiva], secondary_for: [afinacion] }
+  graph_binding: { channels: [speed_control, frequency_scale] }
+  pedagogical_notes: { es: "[[T]] aumenta la rapidez de propagacion de forma sublineal.", en: "[[T]] increases propagation speed sublinearly." }
+- id: mu
+  symbol: mu
+  nombre: { es: densidad lineal, en: linear density }
+  descripcion: { es: "Masa por unidad de longitud de la cuerda vibrante.", en: "Mass per unit length of the vibrating string." }
+  unidad_si: kg/m
+  dimension: "[M L⁻¹]"
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: core_physical_quantity
+  used_in: [velocidad_cuerda_tensa, frecuencia_modo_cuerda]
+  common_mistake: { es: "Usar densidad volumetrica cuando el modelo requiere [[mu]].", en: "Using volume density when the model requires [[mu]]." }
+  typical_range: "10⁻⁴ kg/m a 10⁻¹ kg/m"
+  sign_behavior: { has_sign: false, meaning: { es: "[[mu]] es masa distribuida positiva.", en: "[[mu]] is positive distributed mass." } }
+  zero_behavior: { allowed: false, meaning: { es: "[[mu]] nula eliminaria la inercia de la cuerda.", en: "Zero [[mu]] would remove string inertia." } }
+  value_nature: { kind: scalar_unsigned, nonnegative_only: true, expected_interval: "mu > 0" }
+  interpretation_role: { primary_for: [inercia_lineal], secondary_for: [afinacion] }
+  graph_binding: { channels: [speed_control, material_readout] }
+  pedagogical_notes: { es: "Mayor [[mu]] baja la rapidez y las frecuencias modales.", en: "Larger [[mu]] lowers speed and modal frequencies." }
+- id: v
+  symbol: v
+  nombre: { es: velocidad transversal de propagacion, en: transverse propagation speed }
+  descripcion: { es: "Rapidez de las ondas viajeras transversales que se superponen en la cuerda.", en: "Speed of the transverse traveling waves that superpose on the string." }
+  unidad_si: m/s
+  dimension: "[L T⁻¹]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in: [velocidad_cuerda_tensa, frecuencia_modo_cuerda, interpretacion]
+  common_mistake: { es: "Confundir [[v]] con la rapidez vertical de un punto de la cuerda.", en: "Confusing [[v]] with the vertical speed of a point of the string." }
+  typical_range: "10 m/s a 500 m/s"
+  sign_behavior: { has_sign: false, meaning: { es: "Se interpreta como rapidez positiva.", en: "It is interpreted as positive speed." } }
+  zero_behavior: { allowed: false, meaning: { es: "[[v]] nula no permite propagacion ondulatoria.", en: "Zero [[v]] does not allow wave propagation." } }
+  value_nature: { kind: scalar_unsigned, nonnegative_only: true, expected_interval: "v > 0" }
+  interpretation_role: { primary_for: [escala_temporal], secondary_for: [medio] }
+  graph_binding: { channels: [frequency_scale] }
+  pedagogical_notes: { es: "[[v]] traduce propiedades mecanicas de la cuerda a frecuencias observables.", en: "[[v]] translates mechanical properties into observable frequencies." }
+- id: n
+  symbol: n
+  nombre: { es: numero de modo, en: mode number }
+  descripcion: { es: "Entero positivo que cuenta los vientres de una cuerda fija-fija ideal.", en: "Positive integer that counts antinodes in an ideal fixed-fixed string." }
+  unidad_si: adimensional
+  dimension: "[1]"
+  is_vector: false
+  components: []
+  category: dimension
+  physical_role: core_physical_quantity
+  used_in: [frecuencia_modo_cuerda, longitud_onda_modo_cuerda]
+  common_mistake: { es: "Tratar [[n]] como valor continuo en vez de modo entero.", en: "Treating [[n]] as a continuous value instead of an integer mode." }
+  typical_range: "1 a 10 en analisis inicial"
+  sign_behavior: { has_sign: false, meaning: { es: "Solo enteros positivos tienen sentido modal.", en: "Only positive integers have modal meaning." } }
+  zero_behavior: { allowed: false, meaning: { es: "[[n]] cero no forma vientres.", en: "Zero [[n]] forms no antinodes." } }
+  value_nature: { kind: ratio, nonnegative_only: true, expected_interval: "n = 1, 2, 3, ..." }
+  interpretation_role: { primary_for: [orden_modal], secondary_for: [armonicos] }
+  graph_binding: { channels: [mode_selector, antinode_count] }
+  pedagogical_notes: { es: "[[n]] separa las frecuencias permitidas de las no resonantes.", en: "[[n]] separates allowed frequencies from nonresonant ones." }
+- id: lambda_n
+  symbol: lambda_n
+  nombre: { es: longitud de onda modal, en: modal wavelength }
+  descripcion: { es: "Longitud de onda asociada al modo entero n de la cuerda.", en: "Wavelength associated with integer mode n of the string." }
+  unidad_si: m
+  dimension: "[L]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in: [longitud_onda_modo_cuerda, ejemplos]
+  common_mistake: { es: "Pensar que [[lambda_n]] siempre coincide con [[L]].", en: "Thinking that [[lambda_n]] always equals [[L]]." }
+  typical_range: "2L para el fundamental; menor para modos altos"
+  sign_behavior: { has_sign: false, meaning: { es: "Es separacion espacial positiva.", en: "It is positive spatial spacing." } }
+  zero_behavior: { allowed: false, meaning: { es: "[[lambda_n]] nula no describe una onda.", en: "Zero [[lambda_n]] does not describe a wave." } }
+  value_nature: { kind: scalar_unsigned, nonnegative_only: true, expected_interval: "lambda_n > 0" }
+  interpretation_role: { primary_for: [forma_espacial], secondary_for: [frecuencia] }
+  graph_binding: { channels: [crest_spacing, wavelength_readout] }
+  pedagogical_notes: { es: "[[lambda_n]] baja cuando aumenta el numero de vientres.", en: "[[lambda_n]] decreases when the antinode count increases." }
+- id: f_n
+  symbol: f_n
+  nombre: { es: frecuencia modal de cuerda, en: string modal frequency }
+  descripcion: { es: "Frecuencia propia permitida por la cuerda para el modo n.", en: "Natural frequency allowed by the string for mode n." }
+  unidad_si: Hz
+  dimension: "[T⁻¹]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in: [frecuencia_modo_cuerda, interpretacion, grafico_coord]
+  common_mistake: { es: "Confundir [[f_n]] con una frecuencia cualquiera aplicada externamente.", en: "Confusing [[f_n]] with any externally applied frequency." }
+  typical_range: "10 Hz a varios kHz"
+  sign_behavior: { has_sign: false, meaning: { es: "La frecuencia modal es positiva.", en: "Modal frequency is positive." } }
+  zero_behavior: { allowed: false, meaning: { es: "[[f_n]] nula no corresponde a oscilacion estacionaria.", en: "Zero [[f_n]] is not a standing oscillation." } }
+  value_nature: { kind: scalar_unsigned, nonnegative_only: true, expected_interval: "f_n > 0" }
+  interpretation_role: { primary_for: [resonancia], secondary_for: [afinacion] }
+  graph_binding: { channels: [modal_frequency, resonance_marker] }
+  pedagogical_notes: { es: "[[f_n]] es la lectura observable que une longitud, tension e inercia lineal.", en: "[[f_n]] is the observable reading linking length, tension, and linear inertia." }
+`;export{e as default};

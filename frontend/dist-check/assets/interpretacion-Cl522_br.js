@@ -1,0 +1,69 @@
+const e=`version: 2
+id: interpretacion-resonancia
+leaf_id: resonancia
+nombre: { es: Interpretacion de resonancia, en: Resonance interpretation }
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: oscilaciones
+  parent_id: forzadas-y-resonancia
+  ruta_relativa: fisica-clasica/mecanica/oscilaciones/forzadas-y-resonancia/resonancia
+dependencies:
+  formulas: [amplitud_respuesta, frecuencia_resonancia, factor_calidad, criterio_resonancia]
+  magnitudes: [omega_r, Q, X, b, omega0, omega_f, m, k, F0]
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+result_blocks:
+  summary: { title: { es: Resumen fisico, en: Physical summary } }
+  physical_reading: { title: { es: Lectura del pico, en: Peak reading } }
+  coherence: { title: { es: Coherencia frecuencial, en: Frequency coherence } }
+  model_validity: { title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { title: { es: Lectura de la curva, en: Curve reading } }
+  likely_errors: { title: { es: Errores probables, en: Likely errors } }
+  next_step: { title: { es: Siguiente decision, en: Next decision } }
+targets:
+  X: &base
+    summary_rules:
+      - id: resonance_summary
+        when: "true"
+        status: info
+        text: { es: "[[X]] resume la energia acumulada en regimen estacionario; hay resonancia cuando la curva muestra un maximo al barrer [[omega_f]].", en: "[[X]] summarizes energy accumulated in steady state; resonance occurs when the curve shows a maximum while sweeping [[omega_f]]." }
+    physical_reading_rules:
+      - id: resonance_phys
+        when: "true"
+        status: info
+        text: { es: "El pico indica acumulacion eficiente de energia: la fuente alimenta el modo del sistema mas rapido de lo que [[b]] disipa.", en: "The peak indicates efficient energy build-up: the source feeds the system mode faster than [[b]] dissipates it." }
+    coherence_rules:
+      - id: resonance_coh
+        when: "true"
+        status: ok
+        text: { es: "[[omega_r]] debe estar cerca de [[omega0]] solo si el amortiguamiento es pequeno; con [[b]] grande el pico baja y se desplaza.", en: "[[omega_r]] should be close to [[omega0]] only for small damping; with large [[b]] the peak lowers and shifts." }
+    model_validity_rules:
+      - id: resonance_valid
+        when: "true"
+        status: ok
+        text: { es: "La lectura es valida si el oscilador es lineal, la fuerza es sinusoidal y la medida se hace en regimen estacionario.", en: "The reading is valid if the oscillator is linear, the force is sinusoidal, and measurement is made in steady state." }
+    graph_rules:
+      - id: resonance_graph
+        when: "true"
+        status: info
+        text: { es: "En la grafica Coord, [[omega_f]] recorre el eje horizontal y [[X]] revela si existe un pico resonante definido.", en: "In the Coord graph, [[omega_f]] scans the horizontal axis and [[X]] reveals whether a defined resonance peak exists." }
+    likely_errors:
+      - id: resonance_error
+        when: "true"
+        status: warning
+        text: { es: "Error comun: declarar resonancia con un unico dato grande sin barrer frecuencia ni estimar [[Q]].", en: "Common mistake: declaring resonance from one large datum without sweeping frequency or estimating [[Q]]." }
+    next_step_rules:
+      - id: resonance_next
+        when: "true"
+        status: tip
+        text: { es: "Calcula [[omega_r]], estima [[Q]] y despues decide si la frecuencia de trabajo [[omega_f]] cae dentro de la zona critica.", en: "Compute [[omega_r]], estimate [[Q]], and then decide whether operating [[omega_f]] falls inside the critical region." }
+  omega_r: { <<: *base }
+  Q: { <<: *base }
+  b: { <<: *base }
+  omega0: { <<: *base }
+  omega_f: { <<: *base }
+  m: { <<: *base }
+  k: { <<: *base }
+  F0: { <<: *base }
+`;export{e as default};

@@ -1,0 +1,77 @@
+const n=`version: v5
+id: reflexion
+nombre:
+  es: Reflexion
+  en: Reflection
+area: fisica-clasica
+bloque: ondas
+subbloque: fenomenos-ondulatorios
+parent_id: fenomenos-ondulatorios
+ruta_relativa: fisica-clasica/ondas/fenomenos-ondulatorios/reflexion
+orden: 233100
+type: leaf
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+icon: "🌊"
+descripcion: Cambio de dirección de una onda al rebotar en una frontera.
+description_en: Change of direction of a wave when it bounces from a boundary.
+tags:
+  es:
+    - ondas
+    - reflexion
+    - frontera
+    - normal
+    - intensidad
+  en:
+    - waves
+    - reflection
+    - boundary
+    - normal
+    - intensity
+prerequisitos:
+  - fisica-clasica/ondas/fundamentos/concepto-de-onda
+  - fisica-clasica/ondas/fundamentos/magnitudes-ondulatorias/fase
+graficos:
+  - Svg
+physical_role:
+  es: concepto físico
+  en: physical concept
+dificultad: 2
+tiempo_estimado_min: 25
+pregunta_fisica_central:
+  es: ¿Cómo predice la ley de la reflexión la dirección e intensidad de una onda reflejada?
+  en: How does the law of reflection predict the direction and intensity of a reflected wave?
+representacion_dominante: Svg
+magnitud_dominante: theta_r
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Svg
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 4
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

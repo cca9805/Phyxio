@@ -1,0 +1,94 @@
+version: 1
+id: interpretacion-trabajo-y-torque
+leaf_id: trabajo-y-torque
+nombre: { es: "Interpretacion de trabajo y torque", en: "Interpretation of work and torque" }
+scope: { es: "lectura de trabajo rotacional, potencia, signo y area torque-angulo", en: "reading rotational work, power, sign, and torque-angle area" }
+dependencies:
+  magnitudes: [W, tau, theta, P, omega]
+  formulas: [trabajo_torque_constante, trabajo_torque_variable, potencia_angular]
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+result_blocks:
+  summary: { title: { es: Resumen, en: Summary } }
+  physical_reading: { title: { es: Lectura fisica, en: Physical reading } }
+  coherence: { title: { es: Coherencia fisica, en: Physical coherence } }
+  model_validity: { title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { title: { es: Lectura del grafico, en: Graph reading } }
+  likely_errors: { title: { es: Errores comunes, en: Common errors } }
+  next_step: { title: { es: Siguiente paso, en: Next step } }
+targets:
+  W:
+    summary_rules:
+      - { id: w_summary, when: 'true', status: info, text: { es: "W indica energia transferida por torque durante un desplazamiento angular.", en: "W indicates energy transferred by torque during angular displacement." } }
+    coherence_rules:
+      - { id: w_coherence, when: 'true', status: ok, text: { es: "El signo de W debe concordar con tau y theta.", en: "The sign of W must agree with tau and theta." } }
+    physical_reading_rules:
+      - { id: w_physical, when: 'true', status: info, text: { es: "Trabajo positivo aumenta energia rotacional si no hay perdidas.", en: "Positive work increases rotational energy if there are no losses." } }
+    model_validity_rules:
+      - { id: w_validity, when: 'true', status: info, text: { es: "Usa area si tau cambia con theta.", en: "Use area if tau changes with theta." } }
+    graph_rules:
+      - { id: w_graph, when: 'true', status: info, text: { es: "En el grafico W es el area bajo tau frente a theta.", en: "On the graph W is the area under tau versus theta." } }
+    likely_errors:
+      - { id: w_error, when: 'true', status: info, text: { es: "Error conceptual comun - tratar N*m de torque como si fuera siempre energia.", en: "Common conceptual error - treating N*m of torque as always being energy." } }
+    next_step_rules:
+      - { id: w_next, when: 'true', status: info, text: { es: "Compara W con el cambio de energia rotacional.", en: "Compare W with the change in rotational energy." } }
+  tau:
+    summary_rules:
+      - { id: tau_summary, when: 'true', status: info, text: { es: "Tau es la accion rotacional que puede transferir energia si hay desplazamiento angular.", en: "Tau is the rotational action that can transfer energy if angular displacement occurs." } }
+    coherence_rules:
+      - { id: tau_coherence, when: 'true', status: ok, text: { es: "Tau debe referirse al eje elegido.", en: "Tau must refer to the chosen axis." } }
+    physical_reading_rules:
+      - { id: tau_physical, when: 'true', status: info, text: { es: "Mayor tau produce mayor trabajo para el mismo theta.", en: "Larger tau produces more work for the same theta." } }
+    model_validity_rules:
+      - { id: tau_validity, when: 'true', status: info, text: { es: "Si tau no es constante, no basta multiplicar por theta.", en: "If tau is not constant, multiplying by theta is not enough." } }
+    graph_rules:
+      - { id: tau_graph, when: 'true', status: info, text: { es: "Tau es la altura de la curva en el grafico torque-angulo.", en: "Tau is the curve height in the torque-angle graph." } }
+    likely_errors:
+      - { id: tau_error, when: 'true', status: info, text: { es: "Error comun - olvidar el signo de tau.", en: "Common error - forgetting the sign of tau." } }
+    next_step_rules:
+      - { id: tau_next, when: 'true', status: info, text: { es: "Decide si tau es constante o variable.", en: "Decide whether tau is constant or variable." } }
+  P:
+    summary_rules:
+      - { id: p_summary, when: 'true', status: info, text: { es: "P indica la rapidez instantanea con que el torque transfiere energia.", en: "P indicates the instantaneous rate at which torque transfers energy." } }
+    coherence_rules:
+      - { id: p_coherence, when: 'true', status: ok, text: { es: "P debe usar tau y omega del mismo eje.", en: "P must use tau and omega from the same axis." } }
+    physical_reading_rules:
+      - { id: p_physical, when: 'true', status: info, text: { es: "P positiva significa entrega de energia al giro en ese instante.", en: "Positive P means energy is delivered to spin at that instant." } }
+    model_validity_rules:
+      - { id: p_validity, when: 'true', status: info, text: { es: "P es instantanea; para energia acumulada hay que integrar en el tiempo.", en: "P is instantaneous; accumulated energy requires time integration." } }
+    graph_rules:
+      - { id: p_graph, when: 'true', status: info, text: { es: "P cambia si cambia tau o omega.", en: "P changes if tau or omega changes." } }
+    likely_errors:
+      - { id: p_error, when: 'true', status: info, text: { es: "Error comun - confundir potencia con trabajo.", en: "Common error - confusing power with work." } }
+    next_step_rules:
+      - { id: p_next, when: 'true', status: info, text: { es: "Multiplica por tiempo solo si P permanece aproximadamente constante.", en: "Multiply by time only if P remains approximately constant." } }
+  theta:
+    summary_rules:
+      - { id: theta_summary, when: 'true', status: info, text: { es: "theta mide el giro acumulado que permite convertir torque en trabajo.", en: "theta measures accumulated rotation that lets torque become work." } }
+    coherence_rules:
+      - { id: theta_coherence, when: 'true', status: ok, text: { es: "theta debe estar en radianes y referirse al eje de tau.", en: "theta must be in radians and refer to the tau axis." } }
+    physical_reading_rules:
+      - { id: theta_physical, when: 'true', status: info, text: { es: "Sin desplazamiento angular no hay trabajo rotacional acumulado.", en: "Without angular displacement there is no accumulated rotational work." } }
+    model_validity_rules:
+      - { id: theta_validity, when: 'true', status: info, text: { es: "Si theta cambia por tramos, calcula el trabajo por intervalos.", en: "If theta changes by intervals, compute work interval by interval." } }
+    graph_rules:
+      - { id: theta_graph, when: 'true', status: info, text: { es: "theta actua como eje horizontal en la lectura de area torque-angulo.", en: "theta acts as the horizontal axis in the torque-angle area reading." } }
+    likely_errors:
+      - { id: theta_error, when: 'true', status: info, text: { es: "Error comun - usar grados como si fueran radianes.", en: "Common error - using degrees as if they were radians." } }
+    next_step_rules:
+      - { id: theta_next, when: 'true', status: info, text: { es: "Convierte vueltas o grados a radianes antes de calcular.", en: "Convert turns or degrees to radians before calculating." } }
+  omega:
+    summary_rules:
+      - { id: omega_summary, when: 'true', status: info, text: { es: "omega mide la rapidez angular que convierte torque en potencia instantanea.", en: "omega measures angular speed that turns torque into instantaneous power." } }
+    coherence_rules:
+      - { id: omega_coherence, when: 'true', status: ok, text: { es: "omega debe medirse en el mismo eje y estado que tau.", en: "omega must be measured on the same axis and state as tau." } }
+    physical_reading_rules:
+      - { id: omega_physical, when: 'true', status: info, text: { es: "Mayor omega aumenta P si tau se mantiene fijo.", en: "Larger omega increases P if tau stays fixed." } }
+    model_validity_rules:
+      - { id: omega_validity, when: 'true', status: info, text: { es: "Para energia acumulada no basta omega instantanea; se necesita evolucion temporal o angular.", en: "For accumulated energy, instantaneous omega is not enough; time or angular evolution is needed." } }
+    graph_rules:
+      - { id: omega_graph, when: 'true', status: info, text: { es: "omega puede leerse como variable que escala la curva de potencia.", en: "omega can be read as the variable that scales the power curve." } }
+    likely_errors:
+      - { id: omega_error, when: 'true', status: info, text: { es: "Error comun - mezclar velocidad lineal con velocidad angular.", en: "Common error - mixing linear speed with angular speed." } }
+    next_step_rules:
+      - { id: omega_next, when: 'true', status: info, text: { es: "Verifica unidades en rad/s antes de usar potencia_angular.", en: "Check rad/s units before using potencia_angular." } }

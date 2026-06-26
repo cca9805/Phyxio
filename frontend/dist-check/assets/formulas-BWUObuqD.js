@@ -1,0 +1,295 @@
+const e=`version: 5
+topic:
+  id: energia-cinetica-y-potencial
+  title:
+    es: Energia cinetica y potencial
+    en: Kinetic and potential energy
+variables:
+- id: T
+  symbol: T
+  name: { es: energia cinetica, en: kinetic energy }
+  si_unit: J
+- id: V
+  symbol: V
+  name: { es: energia potencial, en: potential energy }
+  si_unit: J
+- id: L
+  symbol: L
+  name: { es: lagrangiano, en: Lagrangian }
+  si_unit: J
+- id: E
+  symbol: E
+  name: { es: energia mecanica, en: mechanical energy }
+  si_unit: J
+- id: m
+  symbol: m
+  name: { es: masa, en: mass }
+  si_unit: kg
+- id: v
+  symbol: v
+  name: { es: velocidad ordinaria, en: ordinary speed }
+  si_unit: m/s
+- id: qdi
+  symbol: \\dot{q}_i
+  name: { es: velocidad generalizada, en: generalized velocity }
+  si_unit: context-dependent
+- id: qi
+  symbol: q_i
+  name: { es: coordenada generalizada, en: generalized coordinate }
+  si_unit: context-dependent
+- id: h
+  symbol: h
+  name: { es: altura, en: height }
+  si_unit: m
+- id: g
+  symbol: g
+  name: { es: intensidad gravitatoria, en: gravitational field strength }
+  si_unit: m/s^2
+- id: k
+  symbol: k
+  name: { es: rigidez elastica, en: elastic stiffness }
+  si_unit: N/m
+- id: G
+  symbol: g_ij
+  name: { es: matriz metrica inercial, en: inertial metric matrix }
+  si_unit: kg
+formulas:
+- id: energia_cinetica_traslacional
+  title: { es: Energia cinetica traslacional, en: Translational kinetic energy }
+  equation: T = 0.5*m*v^2
+  latex: T=\\frac{1}{2}mv^2
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: Mide la parte energetica asociada al movimiento traslacional de una masa.
+    en: Measures the energetic contribution associated with translational motion of a mass.
+  constraints: [ m > 0 ]
+  validity:
+    es: Valida para particulas o cuerpos tratados con una velocidad traslacional efectiva.
+    en: Valid for particles or bodies described by one effective translational speed.
+  dimension_check: "[J]=[kg][m^2/s^2]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ lagrangiano_mecanico, energia_mecanica_total ]
+  interpretation_tags: [ energia, movimiento, inercia ]
+  result_semantics: { target: T, meaning: La energia cinetica aumenta cuadraticamente con la velocidad. }
+  domain_checks:
+  - expr: m > 0
+    message: { es: La masa debe ser positiva., en: Mass must be positive. }
+  coherence_checks:
+  - expr: T >= 0
+    message: { es: La energia cinetica traslacional no debe ser negativa., en: Translational kinetic energy must not be negative. }
+  graph_implications: En el grafico, T crece como parabola al aumentar v.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: Revisa que v este en m/s antes de elevar al cuadrado., en: Check that v is in m/s before squaring it. }
+  rearrangements:
+  - target: T
+    equation: T = 0.5*m*v^2
+    latex: T=\\frac{1}{2}mv^2
+- id: energia_cinetica_generalizada
+  title: { es: Energia cinetica en coordenada generalizada, en: Kinetic energy in a generalized coordinate }
+  equation: T = 0.5*m*qdi^2
+  latex: T=\\frac{1}{2}m\\dot{q}_i^2
+  category: fundamental
+  relation_type: model_expression
+  physical_meaning:
+    es: Expresa la parte cinetica cuando la velocidad relevante es una velocidad generalizada lineal efectiva.
+    en: Expresses kinetic energy when the relevant speed is an effective linear generalized velocity.
+  constraints: [ m > 0 ]
+  validity:
+    es: Valida si qdi representa una velocidad lineal efectiva o si m es una masa generalizada compatible.
+    en: Valid if qdi represents an effective linear speed or if m is a compatible generalized mass.
+  dimension_check: "[J]=[kg][q_i^2/s^2]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ lagrangiano_mecanico ]
+  interpretation_tags: [ coordenada-generalizada, energia-cinetica ]
+  result_semantics: { target: T, meaning: La energia cinetica depende de la velocidad de la coordenada elegida. }
+  domain_checks:
+  - expr: m > 0
+    message: { es: La masa generalizada debe ser positiva., en: Generalized mass must be positive. }
+  coherence_checks:
+  - expr: T >= 0
+    message: { es: La parte cinetica debe mantenerse no negativa., en: The kinetic part must remain non-negative. }
+  graph_implications: Cambiar la velocidad generalizada modifica la curvatura cinetica del modelo.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: Asegura que qdi pertenece a la misma coordenada usada en V., en: Ensure qdi belongs to the same coordinate used in V. }
+  rearrangements:
+  - target: T
+    equation: T = 0.5*m*qdi^2
+    latex: T=\\frac{1}{2}m\\dot{q}_i^2
+- id: energia_cinetica_metrica
+  title: { es: Energia cinetica con matriz metrica, en: Kinetic energy with metric matrix }
+  equation: T = 0.5*G*qdi^2
+  latex: T=\\frac{1}{2}g_{ij}(q)\\dot{q}^{i}\\dot{q}^{j}
+  category: structural
+  relation_type: quadratic_form
+  physical_meaning:
+    es: Expresa la energia cinetica general como forma cuadratica determinada por la geometria de las coordenadas.
+    en: Expresses general kinetic energy as a quadratic form determined by coordinate geometry.
+  constraints: [ G positive definite, coordinates differentiable ]
+  validity:
+    es: Valida para coordenadas generalizadas suaves cuando la matriz metrica inercial describe la inercia local del sistema.
+    en: Valid for smooth generalized coordinates when the inertial metric matrix describes the system's local inertia.
+  dimension_check: "[J]=[kg][qdot^2] con la metrica adecuada"
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ lagrangiano_mecanico ]
+  interpretation_tags: [ metrica, coordenadas-generalizadas, forma-cuadratica ]
+  result_semantics: { target: T, meaning: La energia cinetica depende de la geometria de coordenadas, no solo de una masa escalar. }
+  domain_checks:
+  - expr: "true"
+    message: { es: La matriz metrica debe ser compatible con las coordenadas elegidas., en: The metric matrix must be compatible with the chosen coordinates. }
+  coherence_checks:
+  - expr: T >= 0
+    message: { es: Una metrica inercial fisica debe producir energia cinetica no negativa., en: A physical inertial metric must produce nonnegative kinetic energy. }
+  graph_implications: Cambiar la metrica cambia la curvatura de T frente a las velocidades generalizadas.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: Usa esta forma cuando una sola masa efectiva no captura acoplamientos entre coordenadas., en: Use this form when a single effective mass does not capture couplings between coordinates. }
+  rearrangements:
+  - target: T
+    equation: T = 0.5*G*qdi^2
+    latex: T=\\frac{1}{2}g_{ij}(q)\\dot{q}^{i}\\dot{q}^{j}
+- id: energia_potencial_gravitatoria
+  title: { es: Energia potencial gravitatoria, en: Gravitational potential energy }
+  equation: V = m*g*h
+  latex: V=m\\cdot g\\cdot h
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: Mide la energia almacenada por posicion vertical en un campo gravitatorio uniforme.
+    en: Measures energy stored by vertical position in a uniform gravitational field.
+  constraints: [ m > 0, g > 0 ]
+  validity:
+    es: Valida cerca de la superficie de un astro cuando g puede considerarse uniforme.
+    en: Valid near a body's surface when g may be treated as uniform.
+  dimension_check: "[J]=[kg][m/s^2][m]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ lagrangiano_mecanico, energia_mecanica_total ]
+  interpretation_tags: [ energia-potencial, gravedad, posicion ]
+  result_semantics: { target: V, meaning: La energia potencial cambia con la altura y la referencia elegida. }
+  domain_checks:
+  - expr: m > 0
+    message: { es: La masa debe ser positiva., en: Mass must be positive. }
+  coherence_checks:
+  - expr: "true"
+    message: { es: El cero de V depende de la referencia de altura., en: The zero of V depends on the height reference. }
+  graph_implications: En el grafico aplicado, V permanece constante si h se fija mientras cambia v.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: Declara la referencia de h antes de interpretar el signo de V., en: State the height reference before interpreting the sign of V. }
+  rearrangements:
+  - target: V
+    equation: V = m*g*h
+    latex: V=m\\cdot g\\cdot h
+- id: energia_potencial_elastica
+  title: { es: Energia potencial elastica, en: Elastic potential energy }
+  equation: V = 0.5*k*qi^2
+  latex: V=\\frac{1}{2}k\\cdot q_i^2
+  category: fundamental
+  relation_type: model_expression
+  physical_meaning:
+    es: Mide la energia almacenada por deformacion cuadratica alrededor de un equilibrio.
+    en: Measures energy stored by quadratic deformation around equilibrium.
+  constraints: [ k >= 0 ]
+  validity:
+    es: Valida en el regimen lineal de un resorte o modo elastico.
+    en: Valid in the linear regime of a spring or elastic mode.
+  dimension_check: "[J]=[N/m][m^2]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ lagrangiano_mecanico, energia_mecanica_total ]
+  interpretation_tags: [ energia-potencial, elasticidad, equilibrio ]
+  result_semantics: { target: V, meaning: La energia potencial elastica aumenta al alejarse del equilibrio. }
+  domain_checks:
+  - expr: k >= 0
+    message: { es: La rigidez estable no debe ser negativa., en: Stable stiffness must not be negative. }
+  coherence_checks:
+  - expr: V >= 0
+    message: { es: Con referencia en equilibrio, la energia elastica es no negativa., en: With the equilibrium reference, elastic energy is non-negative. }
+  graph_implications: Aumentar k eleva la escala de energia potencial elastica.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: Comprueba que qi se mide desde el equilibrio elastico., en: Check that qi is measured from elastic equilibrium. }
+  rearrangements:
+  - target: V
+    equation: V = 0.5*k*qi^2
+    latex: V=\\frac{1}{2}k\\cdot q_i^2
+- id: lagrangiano_mecanico
+  title: { es: Lagrangiano mecanico, en: Mechanical Lagrangian }
+  equation: L = T - V
+  latex: L=T-V
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: Construye la funcion dinamica que alimenta las ecuaciones de Lagrange.
+    en: Builds the dynamical function that feeds Lagrange's equations.
+  constraints: []
+  validity:
+    es: Valido cuando T y V describen el mismo sistema en las mismas coordenadas.
+    en: Valid when T and V describe the same system in the same coordinates.
+  dimension_check: "[J]=[J]-[J]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ ecuaciones_de_lagrange ]
+  interpretation_tags: [ lagrangiano, dinamica, energia ]
+  result_semantics: { target: L, meaning: El lagrangiano no es energia total; codifica el balance dinamico T menos V. }
+  domain_checks:
+  - expr: "true"
+    message: { es: T y V deben estar expresadas con las mismas coordenadas., en: T and V must be expressed in the same coordinates. }
+  coherence_checks:
+  - expr: "true"
+    message: { es: L conserva dimension de energia aunque pueda ser negativo., en: L keeps energy dimension even when it is negative. }
+  graph_implications: La separacion entre T y V indica que regiones son dominadas por movimiento o por configuracion.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: No confundas L con E; sus signos e interpretaciones son distintos., en: Do not confuse L with E; their signs and interpretations differ. }
+  rearrangements:
+  - target: L
+    equation: L = T - V
+    latex: L=T-V
+- id: energia_mecanica_total
+  title: { es: Energia mecanica total, en: Total mechanical energy }
+  equation: E = T + V
+  latex: E=T+V
+  category: comparative
+  relation_type: definition
+  physical_meaning:
+    es: Suma energia cinetica y potencial para contrastar conservacion con construccion lagrangiana.
+    en: Adds kinetic and potential energy to contrast conservation with Lagrangian construction.
+  constraints: []
+  validity:
+    es: Conservable solo si el sistema no intercambia energia mediante fuerzas no conservativas o dependencia temporal explicita.
+    en: Conserved only if the system does not exchange energy through non-conservative forces or explicit time dependence.
+  dimension_check: "[J]=[J]+[J]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [ comparacion_con_lagrangiano ]
+  interpretation_tags: [ energia-mecanica, conservacion, contraste ]
+  result_semantics: { target: E, meaning: La energia mecanica total permite contrastar L con una suma energetica. }
+  domain_checks:
+  - expr: "true"
+    message: { es: Revisa si el sistema es conservativo antes de asumir E constante., en: Check whether the system is conservative before assuming E constant. }
+  coherence_checks:
+  - expr: "true"
+    message: { es: E y L tienen las mismas unidades pero no el mismo significado., en: E and L share units but not meaning. }
+  graph_implications: Si V se fija y T crece, E crece con la misma curvatura que T.
+  pedagogical_triggers:
+  - when: "true"
+    message: { es: Usa E para discutir conservacion, no para sustituir automaticamente a L., en: Use E to discuss conservation, not to automatically replace L. }
+  rearrangements:
+  - target: E
+    equation: E = T + V
+    latex: E=T+V
+ui:
+  default_formula: lagrangiano_mecanico
+  groups:
+  - title: { es: Terminos energeticos, en: Energy terms }
+    items: [ energia_cinetica_traslacional, energia_cinetica_generalizada, energia_cinetica_metrica, energia_potencial_gravitatoria, energia_potencial_elastica ]
+  - title: { es: Construccion lagrangiana, en: Lagrangian construction }
+    items: [ lagrangiano_mecanico, energia_mecanica_total ]
+`;export{e as default};

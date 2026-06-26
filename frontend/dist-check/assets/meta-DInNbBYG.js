@@ -1,0 +1,79 @@
+const n=`id: dispersion-y-atenuacion-en-solidos
+orden: 232420
+nombre:
+  es: Dispersion y atenuacion en solidos
+  en: Dispersion and Attenuation in Solids
+area: fisica-clasica
+bloque: ondas
+subbloque: ondas-mecanicas
+parent_id: ondas-en-solidos
+descripcion: "Pérdida de amplitud y deformación de pulsos en ondas mecánicas que atraviesan sólidos reales."
+description_en: "Amplitude loss and pulse distortion in mechanical waves traveling through real solids."
+ruta_relativa: fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/dispersion-y-atenuacion-en-solidos
+type: leaf
+niveles:
+  es:
+  - ESO
+  - BACHILLERATO
+  - UNIVERSIDAD
+  - EXTRACURRICULAR
+  en:
+  - Secondary
+  - Upper Secondary
+  - University
+  - Extracurricular
+icon: 📉
+graficos:
+- Coord
+- Svg
+physical_role:
+  es: concepto físico
+  en: physical concept
+dificultad: 4
+tiempo_estimado_min: 45
+representacion_dominante: Coord
+magnitud_dominante: alpha
+pregunta_fisica_central:
+  es: "¿Cómo varía la amplitud de una onda ultrasónica con la distancia debido a la atenuación y la dispersión en un sólido?"
+  en: "How does the amplitude of an ultrasonic wave vary with distance due to attenuation and dispersion in a solid?"
+tags:
+  es:
+  - atenuación
+  - dispersión
+  - ondas ultrasónicas
+  - sólidos
+  - coeficiente de atenuación
+  - velocidad de grupo
+  en:
+  - attenuation
+  - dispersion
+  - ultrasonic waves
+  - solids
+  - attenuation coefficient
+  - group velocity
+prerequisitos:
+- fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/velocidad-de-propagacion-en-solidos
+- fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/impedancia-mecanica-en-solidos
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 4
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

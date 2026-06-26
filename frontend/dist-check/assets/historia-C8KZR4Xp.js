@@ -1,0 +1,22 @@
+const e=`# Historia — Ecuación de onda electromagnética
+
+## Problema histórico
+
+A mediados del siglo XIX la física disponía de leyes experimentales bien verificadas para la electricidad y el magnetismo estáticos: las leyes de Gauss, Biot-Savart y Faraday describían campos producidos por cargas en reposo o en movimiento lento. Sin embargo, nadie sabía si la electricidad y el magnetismo podían combinarse para producir algo completamente nuevo cuando los campos variaban rápidamente con el tiempo. La pregunta que no tenía respuesta era: ¿pueden [[E]] y [[B]] existir y propagarse sin ninguna fuente material, viajando por el espacio libre? Maxwell fue quien transformó esa pregunta en una ecuación y luego en una predicción cuantitativa.
+
+## Dificultad conceptual previa
+
+El obstáculo no era solo matemático. La ley de Ampère original, que relacionaba el campo magnético con la densidad de corriente, era inconsistente en situaciones dinámicas: al aplicarla a un condensador en carga, daba resultados contradictorios según la superficie de integración elegida. El paradigma limitante era más profundo: los físicos de la época, incluida la escuela de acción a distancia de Weber y Neumann, concebían las interacciones electromagnéticas como fuerzas instantáneas entre partículas, sin necesidad de un "campo" que se propagara. La idea de que el campo eléctrico variable pudiera actuar como una fuente del campo magnético —incluso en el vacío, sin ninguna carga en movimiento— era conceptualmente extraña y no tenía base experimental directa.
+
+## Qué cambió
+
+Maxwell resolvió la inconsistencia de la ley de Ampère añadiendo a su formulación un término nuevo: la corriente de desplazamiento, proporcional a la variación temporal del campo eléctrico. No era una magnitud medible directamente; era una corrección puramente teórica, motivada por la exigencia de coherencia matemática. Con ese término, las cuatro ecuaciones formaban un sistema cerrado y consistente. En 1865, Maxwell combinó algebraicamente las cuatro ecuaciones eliminando los campos cruzados y obtuvo una ecuación diferencial de segundo orden para [[E]] y para [[B]] por separado, con la forma canónica de la ecuación de onda escalar. La velocidad de propagación que emergió fue el inverso de la raíz cuadrada del producto [[mu0]]·[[epsilon0]], y su valor numérico coincidió con la [[c]] medida experimentalmente por Fizeau (1849) y Foucault (1862) con una precisión sorprendente. Maxwell concluyó que la luz es una onda electromagnética.
+
+## Impacto en la física
+
+La deducción de Maxwell unificó tres ramas hasta entonces separadas: la electricidad, el magnetismo y la óptica. Donde antes había tres conjuntos de fenómenos con leyes propias, ahora había un solo sistema de cuatro ecuaciones. El impacto fue doble: conceptual y tecnológico. Conceptualmente, demostró que el campo electromagnético es una entidad física real que transporta energía y puede propagarse sin soporte material, desterrando el paradigma de la acción a distancia. Tecnológicamente, abrió el camino a Heinrich Hertz, quien en 1886–1888 generó y detectó ondas electromagnéticas de radiofrecuencia en el laboratorio, midiendo [[omega]] y [[k]] y verificando que su cociente era [[c]]. La demostración de Hertz fue el punto de partida de la radio, la televisión y todas las comunicaciones inalámbricas del siglo XX.
+
+## Conexión con física moderna
+
+La ecuación de onda de Maxwell presentaba un problema profundo: la velocidad [[c]] que aparecía en ella era independiente del movimiento del observador, en contradicción con las transformaciones de Galileo. En 1905, Einstein resolvió la contradicción no modificando la ecuación de Maxwell sino abandonando la mecánica de Newton. La invarianza de [[c]] para todos los observadores inerciales se convirtió en el segundo postulado de la relatividad especial, y la ecuación de onda electromagnética resultó ser exactamente invariante bajo las transformaciones de Lorentz. Maxwell había escrito, sin saberlo, la primera ecuación relativista de la física. Hoy, [[c]] no es una magnitud medida sino una constante de definición del Sistema Internacional de Unidades desde 1983, y el metro se define a partir de ella. La ecuación de onda electromagnética sigue siendo el núcleo de la electrodinámica cuántica (QED), la teoría más precisa que la física ha producido.
+`;export{e as default};

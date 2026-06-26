@@ -17,11 +17,20 @@ function extractSymbolsFromEquation(equation) {
   const node = math.parse(zero);
 
   const symbols = new Set();
+  const functionNames = new Set();
+
+  node.traverse((n) => {
+    if (!n?.isFunctionNode) return;
+    const fnName = n.fn?.name;
+    if (fnName) functionNames.add(String(fnName));
+  });
 
   node.traverse((n) => {
     if (!n.isSymbolNode) return;
 
     const name = n.name;
+
+    if (functionNames.has(name)) return;
 
     // Si ese nombre existe en math como función/constante (sqrt, sin, pi, e, etc.),
     // no es un "dato" que el usuario deba introducir.
@@ -36,6 +45,12 @@ function extractSymbolsFromEquation(equation) {
   return Array.from(symbols);
 }
 
+function detectUnsupportedOperators(equation) {
+  const unsupported = [];
+  if (/\bintegral\s*\(/i.test(String(equation || ""))) unsupported.push("integral");
+  return unsupported;
+}
+
 
 function evalConstraint(expr, scope) {
   const v = math.evaluate(expr, scope);
@@ -43,11 +58,28 @@ function evalConstraint(expr, scope) {
 }
 
 const LATEX_ALIAS = {
+  // Variables angulares (frecuente en MCU/MCUA/MCN etc.)
+  theta: "\\theta",
+  theta0: "\\theta_0",
+  omega: "\\omega",
+  alpha: "\\alpha",
+  delta_theta: "\\Delta\\theta",
+
+  tiempo: "t",
+  posicion: "x",
+  velocidad: "v",
+  desplazamiento: "\\Delta x",
   x0: "x_0",
   y0: "y_0",
   v0: "v_0",
   dx: "\\Delta x",
   dt: "\\Delta t",
+  aceleracion: "a",
+  intervalo_tiempo: "\\Delta t",
+  cambio_velocidad: "\\Delta v",
+  velocidad_media: "v_{\\mathrm{med}}",
+  aceleracion_media: "a_{\\mathrm{med}}",
+  rapidez_media: "v_{\\text{esc,med}}",
 
   // ✅ Dinámica (componentes)
   ax: "a_x",
@@ -189,6 +221,15 @@ function solveNumeric(zeroExpr, target, known, guess = 1) {
 
 export function solveEquation({ equation, target, known, constraints = [], latex, unit }) {
   if (!equation || !target) return { ok: false, error: "Falta equation o target." };
+  const unsupported = detectUnsupportedOperators(equation);
+  if (unsupported.length) {
+    return {
+      ok: false,
+      error: `La ecuacion usa operadores no soportados en esta calculadora: ${unsupported.join(", ")}`,
+      steps: [],
+      warnings: [],
+    };
+  }
 
   // Validación de datos
   const syms = extractSymbolsFromEquation(equation);
@@ -255,7 +296,7 @@ export function solveEquation({ equation, target, known, constraints = [], latex
     { type: "text", value: "Sustitución:" },
     { type: "latex", value: substituteLatex(latexFormula, knownForSteps) },
     { type: "text", value: "Resultado:" },
-    { type: "latex", value: `${target} = ${formatNumber(value)}${unit ? `\\,${unit}` : ""}` },
+    { type: "latex", value: `${LATEX_ALIAS[target] || target} = ${formatNumber(value)}${unit ? `\\,${unit}` : ""}` },
   ];
 
   return { ok: true, result: { [target]: value }, steps, stepsRich, warnings: [] };

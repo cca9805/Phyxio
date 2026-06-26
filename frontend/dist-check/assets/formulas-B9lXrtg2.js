@@ -1,0 +1,429 @@
+const e=`version: "1.0"
+leaf_id: relacion-entre-modulos-elasticos
+
+formulas:
+  - id: relacion_G_E_nu
+    nombre:
+      es: Modulo de cizalla en funcion de Young y Poisson
+      en: Shear modulus as a function of Young and Poisson
+    title:
+      es: "Modulo de cizalla en funcion de Young y Poisson"
+      en: "Shear modulus as a function of Young and Poisson"
+    equation: "G_shear = E_young / (2 * (1 + nu_poisson))"
+    latex: "G = E / (2(1 + nu)); ratio_G_E = 1 / (2(1 + nu_poisson))"
+    expresion_latex: "G = \\\\frac{E}{2(1 + \\\\nu)}"
+    expresion_verbal:
+      es: "El modulo de cizalla es el modulo de Young dividido entre dos veces uno mas el coeficiente de Poisson."
+      en: "The shear modulus is the Young modulus divided by twice one plus the Poisson ratio."
+    unidades_SI: Pa
+    dimension: "[M L⁻¹ T⁻²]"
+    variables:
+      - id: G_shear
+        nombre: { es: Modulo de cizalla, en: Shear modulus }
+        unidad: Pa
+      - id: E_young
+        nombre: { es: Modulo de Young, en: Young modulus }
+        unidad: Pa
+      - id: nu_poisson
+        nombre: { es: Coeficiente de Poisson, en: Poisson ratio }
+        unidad: adimensional
+    result_semantics:
+      target: G_shear
+      direction: positive_always
+      physical_meaning:
+        es: "G depende de E y nu. Para nu fijo, G crece linealmente con E. Para E fijo, G decrece al aumentar nu."
+        en: "G depends on E and nu. For fixed nu, G grows linearly with E. For fixed E, G decreases as nu increases."
+    rearrangements:
+      - id: despeje_E_desde_G_nu
+        target: E_young
+        expresion_latex: "E = 2G(1 + \\\\nu)"
+        descripcion:
+          es: "Modulo de Young a partir del modulo de cizalla y el coeficiente de Poisson."
+          en: "Young modulus from shear modulus and Poisson ratio."
+      - id: despeje_nu_desde_G_E
+        target: nu_poisson
+        expresion_latex: "\\\\nu = \\\\frac{E}{2G} - 1"
+        descripcion:
+          es: "Coeficiente de Poisson a partir de la relacion entre modulo de Young y modulo de cizalla."
+          en: "Poisson ratio from the relationship between Young modulus and shear modulus."
+    categoria:
+      principal: ondas-en-solidos
+      secundaria: relacion-modulos
+    category: "isotropic_moduli_relation"
+    relation_type: "derived"
+    physical_meaning:
+      es: "Esta relacion muestra que la respuesta a cizalla no es independiente de la respuesta a traccion en un medio isotropo. Un unico parametro adicional (nu) conecta ambas."
+      en: "This relationship shows that shear response is not independent of tensile response in an isotropic medium. A single additional parameter (nu) connects both."
+    validity:
+      es: "Valida para solidos elasticos lineales, homogeneos e isotropos dentro de los limites fisicos de Poisson."
+      en: "Valid for linear, homogeneous and isotropic elastic solids within physical Poisson-ratio bounds."
+    dimension_check: "\`[M L^-1 T^-2] / [1] -> [M L^-1 T^-2]\`"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "calculo de modulo de cizalla"
+      - "conversion entre E y G"
+      - "diagnostico de rigidez a cizalla"
+    interpretation_tags:
+      - "cizalla"
+      - "poisson"
+      - "modulos_isotropos"
+    domain_checks:
+      - "Verificar que E_young sea positivo."
+      - "Verificar que -1 < nu_poisson <= 0.5."
+    coherence_checks:
+      - "G_shear debe ser positivo."
+      - "G_shear disminuye al aumentar nu_poisson si E_young permanece fijo."
+    graph_implications:
+      - "La curva G/E decrece con nu_poisson."
+      - "G_shear se aproxima a E_young/3 cuando nu_poisson se acerca a 0.5."
+    pedagogical_triggers:
+      - "Tratar E_young y G_shear como independientes."
+      - "Olvidar el factor 2 en el denominador."
+    constraints:
+      - "E_young > 0"
+      - "G_shear > 0"
+      - "-1 < nu_poisson <= 0.5"
+    pedagogical_trigger:
+      es: "¿Por que no son independientes la rigidez a traccion y la rigidez a cizalla en un material isotropo?"
+      en: "Why are tensile stiffness and shear stiffness not independent in an isotropic material?"
+
+  - id: relacion_K_E_nu
+    nombre:
+      es: Modulo de compresibilidad en funcion de Young y Poisson
+      en: Bulk modulus as a function of Young and Poisson
+    title:
+      es: "Modulo de compresibilidad en funcion de Young y Poisson"
+      en: "Bulk modulus as a function of Young and Poisson"
+    equation: "K_bulk = E_young / (3 * (1 - 2 * nu_poisson))"
+    latex: "K = E / (3(1 - 2 nu))"
+    expresion_latex: "K = \\\\frac{E}{3(1 - 2\\\\nu)}"
+    expresion_verbal:
+      es: "El modulo de compresibilidad es el modulo de Young dividido entre tres veces uno menos dos veces el coeficiente de Poisson."
+      en: "The bulk modulus is the Young modulus divided by three times one minus twice the Poisson ratio."
+    unidades_SI: Pa
+    dimension: "[M L⁻¹ T⁻²]"
+    variables:
+      - id: K_bulk
+        nombre: { es: Modulo de compresibilidad, en: Bulk modulus }
+        unidad: Pa
+      - id: E_young
+        nombre: { es: Modulo de Young, en: Young modulus }
+        unidad: Pa
+      - id: nu_poisson
+        nombre: { es: Coeficiente de Poisson, en: Poisson ratio }
+        unidad: adimensional
+    result_semantics:
+      target: K_bulk
+      direction: positive_always
+      physical_meaning:
+        es: "K crece sin limite cuando nu se acerca a 0.5 (material incompresible). Para nu cero, K vale E/3."
+        en: "K grows without limit as nu approaches 0.5 (incompressible material). For zero nu, K equals E/3."
+    rearrangements:
+      - id: despeje_E_desde_K_nu
+        target: E_young
+        expresion_latex: "E = 3K(1 - 2\\\\nu)"
+        descripcion:
+          es: "Modulo de Young a partir del modulo de compresibilidad y el coeficiente de Poisson."
+          en: "Young modulus from bulk modulus and Poisson ratio."
+      - id: despeje_nu_desde_K_E
+        target: nu_poisson
+        expresion_latex: "\\\\nu = \\\\frac{1}{2}\\\\left(1 - \\\\frac{E}{3K}\\\\right)"
+        descripcion:
+          es: "Coeficiente de Poisson a partir de la relacion entre modulo de Young y modulo de compresibilidad."
+          en: "Poisson ratio from the relationship between Young modulus and bulk modulus."
+    categoria:
+      principal: ondas-en-solidos
+      secundaria: relacion-modulos
+    category: "isotropic_moduli_relation"
+    relation_type: "derived"
+    physical_meaning:
+      es: "Conecta la rigidez uniaxial con la resistencia a compresion volumetrica. La divergencia de K cuando nu tiende a 0.5 es la firma de un material incompresible."
+      en: "Connects uniaxial stiffness with resistance to volumetric compression. The divergence of K as nu approaches 0.5 is the signature of an incompressible material."
+    validity:
+      es: "Valida para solidos isotropos lineales con -1 < nu_poisson < 0.5; el limite 0.5 representa incompresibilidad ideal."
+      en: "Valid for linear isotropic solids with -1 < nu_poisson < 0.5; the 0.5 limit represents ideal incompressibility."
+    dimension_check: "\`[M L^-1 T^-2] / [1] -> [M L^-1 T^-2]\`"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "calculo de modulo de compresibilidad"
+      - "diagnostico de incompresibilidad"
+      - "conversion entre E y K"
+    interpretation_tags:
+      - "compresibilidad"
+      - "poisson"
+      - "incompresibilidad"
+    domain_checks:
+      - "Verificar que E_young sea positivo."
+      - "Evitar nu_poisson = 0.5 en calculos numericos."
+    coherence_checks:
+      - "K_bulk debe ser positivo."
+      - "K_bulk crece rapidamente cuando nu_poisson se aproxima a 0.5."
+    graph_implications:
+      - "La curva K/E diverge cerca de nu_poisson = 0.5."
+      - "K_bulk aumenta con nu_poisson para E_young fijo."
+    pedagogical_triggers:
+      - "No reconocer la singularidad en nu_poisson = 0.5."
+      - "Confundir rigidez volumetrica con rigidez a traccion."
+    constraints:
+      - "E_young > 0"
+      - "K_bulk > 0"
+      - "-1 < nu_poisson < 0.5"
+    pedagogical_trigger:
+      es: "¿Que pasa con el modulo de compresibilidad de un material casi incompresible como el caucho?"
+      en: "What happens to the bulk modulus of a nearly incompressible material like rubber?"
+
+  - id: relacion_G_K_nu
+    nombre:
+      es: Relacion entre modulo de cizalla y modulo de compresibilidad
+      en: Relationship between shear modulus and bulk modulus
+    title:
+      es: "Relacion entre modulo de cizalla y modulo de compresibilidad"
+      en: "Relationship between shear modulus and bulk modulus"
+    equation: "G_shear = 3 * K_bulk * (1 - 2 * nu_poisson) / (2 * (1 + nu_poisson))"
+    latex: "G = 3 K (1 - 2 nu) / (2(1 + nu))"
+    expresion_latex: "G = \\\\frac{3K(1 - 2\\\\nu)}{2(1 + \\\\nu)}"
+    expresion_verbal:
+      es: "El modulo de cizalla es tres veces el modulo de compresibilidad multiplicado por uno menos dos veces nu, dividido entre dos veces uno mas nu."
+      en: "The shear modulus is three times the bulk modulus times one minus twice nu, divided by twice one plus nu."
+    unidades_SI: Pa
+    dimension: "[M L⁻¹ T⁻²]"
+    variables:
+      - id: G_shear
+        nombre: { es: Modulo de cizalla, en: Shear modulus }
+        unidad: Pa
+      - id: K_bulk
+        nombre: { es: Modulo de compresibilidad, en: Bulk modulus }
+        unidad: Pa
+      - id: nu_poisson
+        nombre: { es: Coeficiente de Poisson, en: Poisson ratio }
+        unidad: adimensional
+    result_semantics:
+      target: G_shear
+      direction: positive_always
+      physical_meaning:
+        es: "Permite calcular G directamente desde K y nu, sin necesidad de conocer E."
+        en: "Allows calculating G directly from K and nu, without needing E."
+    rearrangements:
+      - id: despeje_K_desde_G_nu
+        target: K_bulk
+        expresion_latex: "K = \\\\frac{2G(1 + \\\\nu)}{3(1 - 2\\\\nu)}"
+        descripcion:
+          es: "Modulo de compresibilidad a partir del modulo de cizalla y el coeficiente de Poisson."
+          en: "Bulk modulus from shear modulus and Poisson ratio."
+      - id: despeje_nu_desde_G_K
+        target: nu_poisson
+        expresion_latex: "\\\\nu = \\\\frac{3K - 2G}{2(3K + G)}"
+        descripcion:
+          es: "Coeficiente de Poisson a partir de los modulos de cizalla y compresibilidad."
+          en: "Poisson ratio from shear and bulk moduli."
+    categoria:
+      principal: ondas-en-solidos
+      secundaria: relacion-modulos
+    category: "isotropic_moduli_relation"
+    relation_type: "derived"
+    physical_meaning:
+      es: "Cuando nu tiende a 0.5, G tiende a cero respecto a K: el material resiste compresion pero no cizalla (fluido ideal). Cuando nu tiende a -1, G tiende a infinito respecto a K."
+      en: "When nu approaches 0.5, G tends to zero relative to K: the material resists compression but not shear (ideal fluid). When nu approaches -1, G tends to infinity relative to K."
+    validity:
+      es: "Valida para elasticidad isotropa lineal y parametros positivos de cizalla y compresibilidad."
+      en: "Valid for linear isotropic elasticity and positive shear and bulk parameters."
+    dimension_check: "\`[M L^-1 T^-2] * [1] / [1] -> [M L^-1 T^-2]\`"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "conversion entre G y K"
+      - "analisis de limite fluido"
+      - "diagnostico de respuesta volumetrica frente a cizalla"
+    interpretation_tags:
+      - "cizalla"
+      - "compresibilidad"
+      - "limites_poisson"
+    domain_checks:
+      - "Verificar que K_bulk sea positivo."
+      - "Verificar que -1 < nu_poisson < 0.5."
+    coherence_checks:
+      - "G_shear debe ser positivo en solidos estables."
+      - "Para nu_poisson cercano a 0.5, G_shear/K_bulk debe ser pequeno."
+    graph_implications:
+      - "Muestra la separacion entre rigidez de forma y rigidez volumetrica."
+      - "La relacion se aplana cerca del limite incompresible si K_bulk se fija."
+    pedagogical_triggers:
+      - "Creer que un K_bulk alto implica siempre G_shear alto."
+      - "Olvidar que los fluidos tienen K_bulk pero G_shear nulo."
+    constraints:
+      - "G_shear > 0"
+      - "K_bulk > 0"
+      - "-1 < nu_poisson < 0.5"
+    pedagogical_trigger:
+      es: "¿Es posible tener un material con K muy alto y G muy bajo?"
+      en: "Is it possible to have a material with very high K and very low G?"
+
+  - id: relacion_E_G_K
+    nombre:
+      es: Modulo de Young en funcion de G y K
+      en: Young modulus as a function of G and K
+    title:
+      es: "Modulo de Young en funcion de G y K"
+      en: "Young modulus as a function of G and K"
+    equation: "E_young = 9 * K_bulk * G_shear / (3 * K_bulk + G_shear)"
+    latex: "E = 9 K G / (3 K + G)"
+    expresion_latex: "E = \\\\frac{9KG}{3K + G}"
+    expresion_verbal:
+      es: "El modulo de Young es nueve veces el producto de K y G dividido entre tres veces K mas G."
+      en: "The Young modulus is nine times the product of K and G divided by three times K plus G."
+    unidades_SI: Pa
+    dimension: "[M L⁻¹ T⁻²]"
+    variables:
+      - id: E_young
+        nombre: { es: Modulo de Young, en: Young modulus }
+        unidad: Pa
+      - id: G_shear
+        nombre: { es: Modulo de cizalla, en: Shear modulus }
+        unidad: Pa
+      - id: K_bulk
+        nombre: { es: Modulo de compresibilidad, en: Bulk modulus }
+        unidad: Pa
+    result_semantics:
+      target: E_young
+      direction: positive_always
+      physical_meaning:
+        es: "Obtiene E directamente a partir de G y K, sin necesidad de conocer nu. La relacion es una media armonica ponderada."
+        en: "Obtains E directly from G and K, without needing nu. The relation is a weighted harmonic mean."
+    rearrangements:
+      - id: despeje_G_desde_E_K
+        target: G_shear
+        expresion_latex: "G = \\\\frac{3KE}{9K - E}"
+        descripcion:
+          es: "Modulo de cizalla a partir de E y K."
+          en: "Shear modulus from E and K."
+      - id: despeje_K_desde_E_G
+        target: K_bulk
+        expresion_latex: "K = \\\\frac{EG}{3(3G - E)}"
+        descripcion:
+          es: "Modulo de compresibilidad a partir de E y G."
+          en: "Bulk modulus from E and G."
+    categoria:
+      principal: ondas-en-solidos
+      secundaria: relacion-modulos
+    category: "isotropic_moduli_relation"
+    relation_type: "derived"
+    physical_meaning:
+      es: "Elimina nu como intermediario. Util cuando G y K se miden directamente (por ejemplo, mediante velocidades de onda P y S)."
+      en: "Eliminates nu as intermediary. Useful when G and K are directly measured (e.g. via P and S wave velocities)."
+    validity:
+      es: "Valida para solidos isotropos lineales cuando G_shear y K_bulk son positivos y consistentes."
+      en: "Valid for linear isotropic solids when G_shear and K_bulk are positive and consistent."
+    dimension_check: "\`[M L^-1 T^-2]^2 / [M L^-1 T^-2] -> [M L^-1 T^-2]\`"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "calculo de Young desde modulos medidos"
+      - "conversion G-K-E"
+      - "estimacion desde velocidades P y S"
+    interpretation_tags:
+      - "young"
+      - "modulos_medidos"
+      - "ondas_P_S"
+    domain_checks:
+      - "Verificar que G_shear y K_bulk sean positivos."
+      - "Verificar que 3*K_bulk + G_shear no sea cero."
+    coherence_checks:
+      - "E_young debe ser positivo."
+      - "E_young debe quedar entre escalas compatibles con G_shear y K_bulk."
+    graph_implications:
+      - "Permite representar E_young sin usar nu_poisson como entrada."
+      - "Aumenta con G_shear y K_bulk si el otro modulo se mantiene fijo."
+    pedagogical_triggers:
+      - "Creer que nu_poisson siempre debe medirse directamente."
+      - "Confundir media armonica ponderada con promedio simple."
+    constraints:
+      - "E_young > 0"
+      - "G_shear > 0"
+      - "K_bulk > 0"
+      - "3G - E > 0"
+    pedagogical_trigger:
+      es: "¿Como se puede determinar E midiendo solo velocidades de onda en el material?"
+      en: "How can E be determined by measuring only wave velocities in the material?"
+
+  - id: relacion_lambda_E_nu
+    nombre:
+      es: Primer parametro de Lame en funcion de Young y Poisson
+      en: First Lame parameter as a function of Young and Poisson
+    title:
+      es: "Primer parametro de Lame en funcion de Young y Poisson"
+      en: "First Lame parameter as a function of Young and Poisson"
+    equation: "lambda_lame = E_young * nu_poisson / ((1 + nu_poisson) * (1 - 2 * nu_poisson))"
+    latex: "lambda = E nu / ((1 + nu)(1 - 2 nu))"
+    expresion_latex: "\\\\lambda = \\\\frac{E\\\\nu}{(1 + \\\\nu)(1 - 2\\\\nu)}"
+    expresion_verbal:
+      es: "El primer parametro de Lame es el producto de E por nu dividido entre uno mas nu por uno menos dos nu."
+      en: "The first Lame parameter is the product of E and nu divided by one plus nu times one minus two nu."
+    unidades_SI: Pa
+    dimension: "[M L⁻¹ T⁻²]"
+    variables:
+      - id: lambda_lame
+        nombre: { es: Primer parametro de Lame, en: First Lame parameter }
+        unidad: Pa
+      - id: E_young
+        nombre: { es: Modulo de Young, en: Young modulus }
+        unidad: Pa
+      - id: nu_poisson
+        nombre: { es: Coeficiente de Poisson, en: Poisson ratio }
+        unidad: adimensional
+    result_semantics:
+      target: lambda_lame
+      direction: signed
+      physical_meaning:
+        es: "Lambda puede ser negativo para materiales auxeticos (nu < 0). Diverge cuando nu tiende a 0.5."
+        en: "Lambda can be negative for auxetic materials (nu < 0). Diverges as nu approaches 0.5."
+    rearrangements:
+      - id: despeje_E_desde_lambda_nu
+        target: E_young
+        expresion_latex: "E = \\\\frac{\\\\lambda(1 + \\\\nu)(1 - 2\\\\nu)}{\\\\nu}"
+        descripcion:
+          es: "Modulo de Young a partir de lambda y nu."
+          en: "Young modulus from lambda and nu."
+    categoria:
+      principal: ondas-en-solidos
+      secundaria: relacion-modulos
+    category: "isotropic_moduli_relation"
+    relation_type: "derived"
+    physical_meaning:
+      es: "Lambda aparece en la ley de Hooke generalizada como coeficiente del termino de dilatacion volumetrica. Junto con G (segundo parametro de Lame, mu), define completamente la rigidez del medio isotropo."
+      en: "Lambda appears in the generalised Hooke law as the coefficient of the volumetric dilation term. Together with G (second Lame parameter, mu), it completely defines the stiffness of the isotropic medium."
+    validity:
+      es: "Valida para elasticidad isotropa lineal con -1 < nu_poisson < 0.5 y nu_poisson distinto de 0 si se despeja E desde lambda."
+      en: "Valid for linear isotropic elasticity with -1 < nu_poisson < 0.5 and nu_poisson nonzero when solving E from lambda."
+    dimension_check: "\`[M L^-1 T^-2] * [1] / [1] -> [M L^-1 T^-2]\`"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "formulacion tensorial de Hooke"
+      - "parametros de Lame"
+      - "simulacion de elasticidad isotropa"
+    interpretation_tags:
+      - "lame"
+      - "elasticidad_tensorial"
+      - "poisson"
+    domain_checks:
+      - "Verificar que E_young sea positivo."
+      - "Verificar que -1 < nu_poisson < 0.5."
+      - "Evitar nu_poisson = 0 si se usa el despeje inverso de E_young."
+    coherence_checks:
+      - "lambda_lame cambia de signo con nu_poisson."
+      - "lambda_lame diverge cuando nu_poisson se aproxima a 0.5."
+    graph_implications:
+      - "La curva de lambda_lame cruza cero en nu_poisson = 0."
+      - "La curva diverge cerca del limite incompresible."
+    pedagogical_triggers:
+      - "Creer que lambda_lame siempre es positiva."
+      - "Confundir lambda_lame con G_shear."
+    constraints:
+      - "E_young > 0"
+      - "-1 < nu_poisson < 0.5"
+    pedagogical_trigger:
+      es: "¿Por que los parametros de Lame son preferidos en la formulacion tensorial de la elasticidad?"
+      en: "Why are Lame parameters preferred in the tensorial formulation of elasticity?"
+`;export{e as default};

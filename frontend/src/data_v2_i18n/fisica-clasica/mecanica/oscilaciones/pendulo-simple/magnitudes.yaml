@@ -1,0 +1,516 @@
+version: 5
+magnitudes:
+- id: L
+  symbol: L
+  nombre:
+    es: longitud
+    en: length
+  descripcion:
+    es: Longitud del hilo o de la varilla idealizada.
+    en: Length of the idealized string or rod.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: geometry
+  physical_role: physical_quantity
+  used_in:
+  - omega0_ps
+  - periodo_ps
+  - ecuacion_angular_ps
+  - ecuacion_no_lineal_ps
+  - energia_ps
+  common_mistake: Medirla desde el suelo en vez de desde el punto de suspensión.
+  typical_range: "0.1 to 5 m in laboratory setups."
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La longitud es positiva por definición geométrica.
+      en: Length is positive by geometric definition.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Longitud nula elimina el péndulo ideal.
+      en: Zero length removes the ideal pendulum.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: [ 0.01, 100 ]
+  interpretation_role:
+    primary_for:
+    - pendulo-simple
+    secondary_for: []
+  graph_binding:
+    channels:
+    - length_slider
+  pedagogical_notes: A mayor L, más lento es el movimiento angular.
+
+- id: g
+  symbol: g
+  nombre:
+    es: gravedad
+    en: gravity
+  descripcion:
+    es: Aceleración gravitatoria local.
+    en: Local gravitational acceleration.
+  unidad_si: m/s^2
+  dimension: L T^-2
+  is_vector: false
+  components: []
+  category: field
+  physical_role: physical_quantity
+  used_in:
+  - omega0_ps
+  - periodo_ps
+  - ecuacion_no_lineal_ps
+  - energia_ps
+  common_mistake: Usar un valor de g sin fijar planeta, altura o aproximación.
+  typical_range: "9.7 to 9.9 m/s^2 near Earth's surface."
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud positiva en este modelo.
+      en: It is used as a positive magnitude in this model.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Sin gravedad no hay restauración pendular.
+      en: Without gravity there is no pendular restoration.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: [ 0.1, 30 ]
+  interpretation_role:
+    primary_for:
+    - pendulo-simple
+    secondary_for: []
+  graph_binding:
+    channels:
+    - gravity_slider
+  pedagogical_notes: Cambiar g cambia el ritmo natural de oscilación.
+
+- id: theta
+  symbol: \theta
+  nombre:
+    es: desplazamiento angular
+    en: angular displacement
+  descripcion:
+    es: Ángulo instantáneo respecto al equilibrio.
+    en: Instantaneous angle relative to equilibrium.
+  unidad_si: rad
+  dimension: 1
+  is_vector: false
+  components: []
+  category: state
+  physical_role: physical_quantity
+  used_in:
+  - ecuacion_angular_ps
+  - ecuacion_no_lineal_ps
+  - energia_ps
+  common_mistake: Tratar grados y radianes como equivalentes en el modelo lineal.
+  typical_range: "small angles for the linear model; finite amplitudes for the nonlinear model."
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica el lado del equilibrio.
+      en: The sign indicates the side of equilibrium.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero marca el paso por equilibrio.
+      en: Zero marks the passage through equilibrium.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: [ -3.2, 3.2 ]
+  interpretation_role:
+    primary_for:
+    - pendulo-simple
+    secondary_for: []
+  graph_binding:
+    channels:
+    - angle_trace
+  pedagogical_notes: Define si el modelo lineal sigue siendo aceptable.
+
+- id: theta0
+  symbol: \theta_0
+  nombre:
+    es: amplitud angular
+    en: angular amplitude
+  descripcion:
+    es: Amplitud inicial del péndulo.
+    en: Initial pendulum amplitude.
+  unidad_si: rad
+  dimension: 1
+  is_vector: false
+  components: []
+  category: state
+  physical_role: physical_quantity
+  used_in:
+  - ecuacion_angular_ps
+  - ecuacion_no_lineal_ps
+  - energia_ps
+  common_mistake: Suponer que cualquier amplitud sirve para la aproximación lineal.
+  typical_range: "very small to moderate angles depending on the model choice."
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como amplitud positiva.
+      en: It is used as a positive amplitude.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Amplitud nula elimina la oscilación.
+      en: Zero amplitude removes the oscillation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: [ 0, 3.2 ]
+  interpretation_role:
+    primary_for:
+    - pendulo-simple
+    secondary_for: []
+  graph_binding:
+    channels:
+    - amplitude_slider
+  pedagogical_notes: Si crece, el periodo real deja de coincidir con el lineal.
+
+- id: omega0
+  symbol: \omega_0
+  nombre:
+    es: pulsación natural
+    en: natural angular frequency
+  descripcion:
+    es: Escala angular del movimiento en pequeñas oscilaciones.
+    en: Angular scale of motion in small oscillations.
+  unidad_si: rad/s
+  dimension: T^-1
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - periodo_ps
+  - frecuencia_ps
+  - ecuacion_angular_ps
+  - ecuacion_no_lineal_ps
+  common_mistake: Confundirla con la frecuencia en Hz.
+  typical_range: "positive and finite for the linear model."
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se reporta como positiva.
+      en: It is reported as positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Cero implicaría ausencia de restauración lineal.
+      en: Zero would imply no linear restoration.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: [ 0, 100 ]
+  interpretation_role:
+    primary_for:
+    - pendulo-simple
+    secondary_for: []
+  graph_binding:
+    channels:
+    - natural_rate
+  pedagogical_notes: Resume el ritmo natural del sistema.
+
+- id: T
+  symbol: T
+  nombre:
+    es: periodo
+    en: period
+  descripcion:
+    es: Tiempo de una oscilación completa.
+    en: Time of one full oscillation.
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - frecuencia_ps
+  - periodo_ps
+  - ecuacion_angular_ps
+  - energia_ps
+  common_mistake: Contar medio ciclo como si fuera un periodo completo.
+  typical_range: "fractions of a second to tens of seconds depending on L and g."
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El periodo es siempre positivo.
+      en: Period is always positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un periodo nulo no describe una oscilación real.
+      en: Zero period does not describe a real oscillation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: [ 0, 100 ]
+  interpretation_role:
+    primary_for:
+    - pendulo-simple
+    secondary_for: []
+  graph_binding:
+    channels:
+    - period_curve
+  pedagogical_notes: Es la magnitud temporal más visible en laboratorio.
+
+- id: f
+  symbol: f
+  nombre:
+    es: frecuencia
+    en: frequency
+  descripcion:
+    es: Número de ciclos por segundo.
+    en: Number of cycles per second.
+  unidad_si: Hz
+  dimension: T^-1
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - frecuencia_ps
+  - ecuacion_angular_ps
+  - energia_ps
+  common_mistake: Compararla con omega0 sin convertir unidades.
+  typical_range: "positive and finite for oscillatory motion."
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud positiva.
+      en: It is used as a positive magnitude.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Frecuencia nula implica ausencia de oscilación periódica.
+      en: Zero frequency implies no periodic oscillation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: [ 0, 100 ]
+  interpretation_role:
+    primary_for:
+    - pendulo-simple
+    secondary_for: []
+  graph_binding:
+    channels:
+    - frequency_curve
+  pedagogical_notes: Facilita comparar el péndulo con otros osciladores.
+
+- id: t
+  symbol: t
+  nombre:
+    es: tiempo
+    en: time
+  descripcion:
+    es: Variable temporal del movimiento.
+    en: Time variable of the motion.
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: []
+  category: state
+  physical_role: physical_quantity
+  used_in:
+  - ecuacion_angular_ps
+  - ecuacion_no_lineal_ps
+  - energia_ps
+  common_mistake: Tomar una instantánea como si fuera evolución completa.
+  typical_range: "nonnegative during the observation window."
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se toma positivo en el intervalo de observación.
+      en: It is taken as positive in the observation window.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: t = 0 fija la condición inicial.
+      en: t = 0 sets the initial condition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: [ 0, 10000 ]
+  interpretation_role:
+    primary_for:
+    - pendulo-simple
+    secondary_for: []
+  graph_binding:
+    channels:
+    - time_axis
+  pedagogical_notes: Permite leer el movimiento como función continua.
+
+- id: phi
+  symbol: \varphi
+  nombre:
+    es: fase inicial
+    en: initial phase
+  descripcion:
+    es: Desfase que fija el inicio de la oscilación.
+    en: Phase shift that sets the oscillation start.
+  unidad_si: rad
+  dimension: 1
+  is_vector: false
+  components: []
+  category: state
+  physical_role: physical_quantity
+  used_in:
+  - ecuacion_angular_ps
+  - ecuacion_no_lineal_ps
+  common_mistake: Ignorar la fase y suponer que todas las soluciones arrancan igual.
+  typical_range: "any real phase angle; bounded modulo 2π in practice."
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Puede cambiar la posición temporal de máximos y mínimos.
+      en: It can shift the timing of maxima and minima.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Fase cero define una referencia simple.
+      en: Zero phase defines a simple reference.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: [ -6.3, 6.3 ]
+  interpretation_role:
+    primary_for:
+    - pendulo-simple
+    secondary_for: []
+  graph_binding:
+    channels:
+    - phase_shift
+  pedagogical_notes: Cambia el instante, no la física del periodo.
+
+- id: theta_dot
+  symbol: \dot\theta
+  nombre:
+    es: velocidad angular
+    en: angular velocity
+  descripcion:
+    es: Primera derivada temporal de theta.
+    en: First time derivative of theta.
+  unidad_si: rad/s
+  dimension: T^-1
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - energia_ps
+  common_mistake: Confundir velocidad angular con pulsación natural.
+  typical_range: "changes sign at turning points."
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica el sentido de giro.
+      en: The sign indicates the direction of rotation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Se anula en los extremos de la oscilación.
+      en: It vanishes at the turning points.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: [ -100, 100 ]
+  interpretation_role:
+    primary_for:
+    - pendulo-simple
+    secondary_for: []
+  graph_binding:
+    channels:
+    - angular_velocity
+  pedagogical_notes: Relaciona amplitud con energía cinética.
+
+- id: theta_dd
+  symbol: theta_dd
+  nombre:
+    es: aceleración angular
+    en: angular acceleration
+  descripcion:
+    es: Segunda derivada temporal del ángulo.
+    en: Second time derivative of the angle.
+  unidad_si: rad/s^2
+  dimension: T^-2
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - ecuacion_no_lineal_ps
+  common_mistake: Tratarla como si fuera la frecuencia natural.
+  typical_range: "changes sign through the oscillation."
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su signo refleja la restauración hacia el equilibrio.
+      en: Its sign reflects restoration toward equilibrium.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede anularse en puntos concretos sin parar el movimiento.
+      en: It may vanish at specific points without stopping motion.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: [ -500, 500 ]
+  interpretation_role:
+    primary_for:
+    - pendulo-simple
+    secondary_for: []
+  graph_binding:
+    channels:
+    - angular_acceleration
+  pedagogical_notes: Es la firma dinámica del torque neto.
+
+- id: E
+  symbol: E
+  nombre:
+    es: energía mecánica
+    en: mechanical energy
+  descripcion:
+    es: Suma de energía cinética y potencial ideal.
+    en: Sum of ideal kinetic and potential energy.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - energia_ps
+  - ecuacion_no_lineal_ps
+  common_mistake: Olvidar la parte cinética cuando el sistema pasa por el equilibrio.
+  typical_range: "nonnegative when the zero of potential is set at equilibrium."
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se toma como magnitud positiva en esta convención.
+      en: It is taken as a positive magnitude in this convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede anularse si la referencia se fija en equilibrio.
+      en: It can be zero if the reference is set at equilibrium.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: [ 0, 100000 ]
+  interpretation_role:
+    primary_for:
+    - pendulo-simple
+    secondary_for: []
+  graph_binding:
+    channels:
+    - energy_curve
+  pedagogical_notes: Útil para amplitudes finitas y contraste de modelo.

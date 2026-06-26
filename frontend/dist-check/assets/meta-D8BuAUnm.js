@@ -1,0 +1,113 @@
+const n=`id: intensidad-y-nivel-sonoro
+
+nombre:
+  es: Intensidad y nivel sonoro
+  en: Intensity and Sound Level
+
+area: fisica-clasica
+bloque: ondas
+subbloque: sonido
+parent_id: sonido
+
+ruta_relativa: fisica-clasica/ondas/sonido/intensidad-y-nivel-sonoro
+orden: 235300
+type: leaf
+
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+
+icon: "✅"
+
+descripcion: Potencia acustica distribuida en superficie y su escala logaritmica en decibelios
+description_en: Acoustic power distributed over surface and its logarithmic scale in decibels
+
+tags:
+  es:
+    - intensidad sonora
+    - nivel sonoro
+    - decibelios
+    - ondas sonoras
+    - potencia acustica
+  en:
+    - sound intensity
+    - sound level
+    - decibels
+    - sound waves
+    - acoustic power
+
+prerequisitos:
+  - fisica-clasica/ondas/sonido/naturaleza-del-sonido
+  - fisica-clasica/ondas/sonido/velocidad-del-sonido
+
+graficos:
+  - Coord
+
+physical_role:
+  es: concepto físico
+  en: physical concept
+
+dificultad: 2
+tiempo_estimado_min: 25
+
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: false
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: false
+    preferred_type: none
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: false
+
+pregunta_fisica_central:
+  es: "¿Como se cuantifica la intensidad de un sonido y por que la escala logaritmica describe mejor la percepcion humana?"
+  en: "How is the loudness of a sound quantified and why does the logarithmic scale better describe human perception?"
+
+representacion_dominante: Coord
+magnitud_dominante: I
+
+nucleo_didactico:
+  idea_fisica_dominante:
+    es: La intensidad sonora es potencia por unidad de area, y el nivel en decibelios refleja la respuesta logaritmica del oido humano
+    en: Sound intensity is power per unit area, and the level in decibels reflects the logarithmic response of the human ear
+  magnitudes_nucleo:
+    - I
+    - L
+    - P
+    - r
+  formulas_nucleo:
+    - intensidad_potencia
+    - nivel_intensidad
+    - intensidad_distancia
+  error_conceptual_dominante:
+    es: Confundir intensidad con nivel sonoro, o pensar que el decibelio es una unidad lineal como el vatio
+    en: Confusing intensity with sound level, or thinking that the decibel is a linear unit like the watt
+  criterio_de_aplicabilidad:
+    es: Ondas sonoras en medios homogeneos sin atenuacion adicional por absorcion
+    en: Sound waves in homogeneous media without additional attenuation due to absorption
+  criterio_de_fallo_del_modelo:
+    es: Cuando hay atmosferas extremas, superficies absorbentes cercanas o campos cercanos del emisor
+    en: When there are extreme atmospheres, nearby absorbing surfaces, or near fields of the emitter
+`;export{n as default};

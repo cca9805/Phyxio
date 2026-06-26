@@ -1,0 +1,560 @@
+const e=`version: 2
+id: interpretacion-impulso
+leaf_id: impulso
+nombre:
+  es: Interpretación de Impulso
+  en: Interpretation of Impulse
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: cantidad-de-movimiento
+  parent_id: fundamentos
+  ruta_relativa: fisica-clasica/mecanica/cantidad-de-movimiento/fundamentos/impulso
+dependencies:
+  formulas:
+  - impulso_integral
+  - impulso_area_curva
+  - impulso_fuerza_media
+  - fuerza_media_cambio_momento
+  - impulso_fuerza_constante
+  - teorema_impulso_momento
+  - cambio_momento
+  - impulso_momento_masa_velocidad
+  - impulso_masa_cambio_velocidad
+  - velocidad_final_impulso
+  - cambio_momento_componentes
+  - impulso_fuerza_triangular
+  - ley_newton_general
+  magnitudes:
+  - J
+  - F
+  - dt
+  - Fmed
+  - m
+  - p_inicial
+  - p_final
+  - DeltaP
+  - v0
+  - vF
+  - Fmax
+  - Jx
+  - Jy
+  - vix
+  - vfx
+  - viy
+  - vfy
+  - p
+  - W
+  - dp
+  - dr
+  - v
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen Físico-Técnico
+      en: Physical-Technical Summary
+  physical_reading:
+    title:
+      es: Análisis Dinámico del Impacto
+      en: Dynamic Impact Analysis
+  coherence:
+    title:
+      es: Validación de Conservación
+      en: Conservation Validation
+  model_validity:
+    title:
+      es: Auditoría de Validez del Modelo
+      en: Model Validity Audit
+  graph_reading:
+    title:
+      es: Diagnóstico de la Firma de Impacto
+      en: Impact Signature Diagnosis
+  likely_errors:
+    title:
+      es: Alerta de Sesgo Cognitivo
+      en: Cognitive Bias Alert
+  next_step:
+    title:
+      es: Optimización y Diseño
+      en: Optimization and Design
+targets:
+  J:
+    summary_rules:
+    - id: J_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "El impulso neto J indica la transferencia total de momento acumulada en el intervalo; resume la acción de la fuerza resultante sobre el sistema."
+        en: "The net impulse J indicates the total momentum transfer accumulated in the interval; it summarizes the action of the resultant force on the system."
+    physical_reading_rules:
+    - id: J_physical_god
+      when: 'true'
+      status: info
+      text:
+        es: "J significa cuánto se altera el estado de movimiento porque conecta la fuerza aplicada con el cambio de velocidad resultante; domina la dinámica del choque."
+        en: "J means how much the motion state is altered because it connects the applied force with the resulting velocity change; it dominates the shock dynamics."
+    coherence_rules:
+    - id: J_coherence_god
+      when: 'true'
+      status: ok
+      text:
+        es: "La magnitud J es coherente con la variación temporal del momento lineal observada en el sistema."
+        en: "The magnitude J is consistent with the temporal variation of the linear momentum observed in the system."
+    model_validity_rules:
+    - id: J_validity_god
+      when: 'true'
+      status: ok
+      text:
+        es: "El modelo impulsivo es válido y asume que la fuerza neta es la única causa del cambio de momento finito."
+        en: "The impulsive model is valid and assumes that the net force is the only cause of the finite momentum change."
+    graph_rules:
+    - id: J_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "En el gráfico F(t), J equivale al área encerrada, representando visualmente la acumulación de fuerza en el eje del tiempo."
+        en: "In the F(t) graph, J is equivalent to the enclosed area, visually representing the force accumulation on the time axis."
+    likely_errors:
+    - id: J_errors_god
+      when: 'true'
+      status: warning
+      text:
+        es: "Es común confundir impulso con fuerza; recuerda que J depende del tiempo mientras que F es una magnitud instantánea."
+        en: "It is common to confuse impulse with force; remember that J depends on time while F is an instantaneous quantity."
+    next_step_rules:
+    - id: J_next_god
+      when: 'true'
+      status: tip
+      text:
+        es: "Determina el cambio de velocidad usando J y la masa para completar el análisis cinemático del evento."
+        en: "Determine the velocity change using J and the mass to complete the kinematic analysis of the event."
+
+  Fmed:
+    summary_rules:
+    - id: Fmed_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "Fmed describe la fuerza constante que produciría el mismo impulso J en el mismo intervalo dt, simplificando perfiles de impacto complejos."
+        en: "Fmed describes the constant force that would produce the same impulse J in the same interval dt, simplifying complex impact profiles."
+    physical_reading_rules:
+    - id: Fmed_physical_god
+      when: 'true'
+      status: info
+      text:
+        es: "Esta magnitud indica la severidad del impacto porque una Fmed alta aumenta el riesgo de rotura estructural o daño biológico severo."
+        en: "This magnitude indicates the severity of the impact because a high Fmed increases the risk of structural failure or severe biological damage."
+    coherence_rules:
+    - id: Fmed_coherence_god
+      when: 'true'
+      status: ok
+      text:
+        es: "El valor de Fmed mantiene el balance dinámico entre el impulso total y la duración de la interacción medida."
+        en: "The Fmed value maintains the dynamic balance between the total impulse and the measured interaction duration."
+    model_validity_rules:
+    - id: Fmed_validity_god
+      when: 'true'
+      status: ok
+      text:
+        es: "La aproximación de fuerza media es válida para estimar cargas de diseño en ingeniería sin conocer la curva F(t) exacta."
+        en: "The average force approximation is valid for estimating engineering design loads without knowing the exact F(t) curve."
+    graph_rules:
+    - id: Fmed_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "Visualmente, Fmed define un rectángulo cuya área es idéntica a la del perfil real de fuerza sobre el eje temporal."
+        en: "Visually, Fmed defines a rectangle whose area is identical to that of the actual force profile over the time axis."
+    likely_errors:
+    - id: Fmed_errors_god
+      when: 'true'
+      status: warning
+      text:
+        es: "Error clásico: Pensar que Fmed es el valor máximo; en realidad, el pico real (Fmax) suele ser muy superior."
+        en: "Classic error: Thinking that Fmed is the maximum value; in reality, the actual peak (Fmax) is usually much higher."
+    next_step_rules:
+    - id: Fmed_next_god
+      when: 'true'
+      status: tip
+      text:
+        es: "Aumenta dt mediante acolchados para que Fmed disminuya, protegiendo así la integridad del sistema ante el mismo impulso."
+        en: "Increase dt using padding so that Fmed decreases, thus protecting the integrity of the system against the same impulse."
+
+  dt:
+    summary_rules:
+    - id: dt_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "dt resume la duración de la interacción; depende directamente de la rigidez de los materiales en contacto durante el choque."
+        en: "dt summarizes the interaction duration; it depends directly on the stiffness of the materials in contact during the impact."
+    physical_reading_rules:
+    - id: dt_physical_god
+      when: 'true'
+      status: info
+      text:
+        es: "El intervalo dt significa la ventana de transferencia de momento; si disminuye, la fuerza resultante aumenta peligrosamente por conservación del impulso."
+        en: "The interval dt means the momentum transfer window; if it decreases, the resulting force increases dangerously due to impulse conservation."
+    coherence_rules:
+    - id: dt_coherence_god
+      when: 'true'
+      status: ok
+      text:
+        es: "El tiempo medido es consistente con el proceso de acumulación de cambio de momento lineal en el sistema."
+        en: "The measured time is consistent with the accumulation process of linear momentum change in the system."
+    model_validity_rules:
+    - id: dt_validity_god
+      when: 'true'
+      status: ok
+      text:
+        es: "El modelo es válido porque el régimen es impulsivo; dt es lo bastante pequeño para ignorar fuerzas externas parásitas."
+        en: "The model is valid because the regime is impulsive; dt is small enough to ignore parasitic external forces."
+    graph_rules:
+    - id: dt_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "Gráficamente, dt es el ancho de la base de la curva F(t), limitando el dominio temporal de la interacción física."
+        en: "Graphically, dt is the width of the base of the F(t) curve, limiting the temporal domain of the physical interaction."
+    likely_errors:
+    - id: dt_errors_god
+      when: 'true'
+      status: warning
+      text:
+        es: "No debes olvidar que el tiempo está en el denominador de la fuerza media; un dt ínfimo dispara la fuerza."
+        en: "You must not forget that time is in the denominator of the average force; a tiny dt shoots up the force."
+    next_step_rules:
+    - id: dt_next_god
+      when: 'true'
+      status: tip
+      text:
+        es: "Analiza cómo variar dt permite controlar las cargas de impacto en aplicaciones de seguridad y embalaje industrial."
+        en: "Analyze how varying dt allows control of impact loads in safety and industrial packaging applications."
+
+  DeltaP:
+    summary_rules:
+    - id: DeltaP_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "DeltaP describe el cambio de momento lineal resultante; indica la respuesta cinemática del sistema ante el impulso externo aplicado."
+        en: "DeltaP describes the resulting linear momentum change; it indicates the system's kinematic response to the applied external impulse."
+    physical_reading_rules:
+    - id: DeltaP_physical_god
+      when: 'true'
+      status: info
+      text:
+        es: "Esta magnitud significa la variación neta de velocidad por masa; depende de la intensidad de la fuerza y su duración."
+        en: "This magnitude means the net velocity variation per mass; it depends on the force intensity and its duration."
+    coherence_rules:
+    - id: DeltaP_coherence_god
+      when: 'true'
+      status: ok
+      text:
+        es: "Existe un balance perfecto entre el impulso J y el cambio de momento DeltaP; la ley de conservación se cumple."
+        en: "There is a perfect balance between impulse J and momentum change DeltaP; the conservation law is satisfied."
+    model_validity_rules:
+    - id: DeltaP_validity_god
+      when: 'true'
+      status: ok
+      text:
+        es: "El modelo asume que DeltaP es la única medida del efecto dinámico acumulado, lo cual es válido en mecánica clásica."
+        en: "The model assumes that DeltaP is the only measure of the accumulated dynamic effect, which is valid in classical mechanics."
+    graph_rules:
+    - id: DeltaP_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "En el gráfico de momento, DeltaP es la diferencia de altura entre el estado final e inicial tras el impacto."
+        en: "In the momentum graph, DeltaP is the height difference between the final and initial state after impact."
+    likely_errors:
+    - id: DeltaP_errors_god
+      when: 'true'
+      status: warning
+      text:
+        es: "Cuidado al restar: debes tomar p_final menos p_inicial; un error en el orden invierte el signo del impulso."
+        en: "Careful when subtracting: you must take p_final minus p_initial; an error in order inverts the impulse sign."
+    next_step_rules:
+    - id: DeltaP_next_god
+      when: 'true'
+      status: tip
+      text:
+        es: "Usa DeltaP para verificar si la velocidad final alcanzada es consistente con la inercia propia del objeto analizado."
+        en: "Use DeltaP to verify if the reached final velocity is consistent with the analyzed object's own inertia."
+
+  F:
+    summary_rules:
+    - id: F_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "La fuerza neta F describe la causa dinámica del cambio de movimiento; indica la intensidad de la interacción en cada instante."
+        en: "The net force F describes the dynamic cause of the motion change; it indicates the intensity of the interaction at each instant."
+    physical_reading_rules:
+    - id: F_physical_god
+      when: 'true'
+      status: info
+      text:
+        es: "F significa la rapidez con la que se transfiere el momento lineal; depende de la ley de fuerza específica de la interacción."
+        en: "F means the speed at which linear momentum is transferred; it depends on the specific force law of the interaction."
+    coherence_rules: &id_coherence_generic
+    - id: generic_coherence_god
+      when: 'true'
+      status: ok
+      text:
+        es: "Magnitud consistente con las leyes de Newton y el formalismo impulsivo del leaf."
+        en: "Magnitude consistent with Newton's laws and the impulsive formalism of the leaf."
+    model_validity_rules: &id_validity_generic
+    - id: generic_validity_god
+      when: 'true'
+      status: ok
+      text:
+        es: "Aproximación válida dentro del dominio de la mecánica clásica para eventos macroscópicos."
+        en: "Valid approximation within the domain of classical mechanics for macroscopic events."
+    graph_rules:
+    - id: F_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "En la gráfica F(t), representa la ordenada que traza el perfil temporal del impacto."
+        en: "In the F(t) graph, it represents the ordinate that traces the temporal profile of the impact."
+    likely_errors: &id_errors_generic
+    - id: generic_errors_god
+      when: 'true'
+      status: warning
+      text:
+        es: "Es común olvidar que en este leaf F suele variar con el tiempo, por lo que su valor puntual no define el impulso total solo."
+        en: "It is common to forget that in this leaf F usually varies with time, so its point value alone does not define the total impulse."
+    next_step_rules: &id_next_generic
+    - id: generic_next_god
+      when: 'true'
+      status: tip
+      text:
+        es: "Integra la fuerza en el tiempo para obtener el impulso total y validar la conservación del momento."
+        en: "Integrate the force over time to obtain the total impulse and validate momentum conservation."
+
+  Fmax:
+    summary_rules:
+    - id: Fmax_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "Fmax describe el pico máximo de intensidad alcanzado; indica la carga crítica que debe soportar el material en el impacto."
+        en: "Fmax describes the maximum peak of intensity reached; it indicates the critical load that the material must withstand in the impact."
+    physical_reading_rules:
+    - id: Fmax_physical_god
+      when: 'true'
+      status: info
+      text:
+        es: "Este valor significa el punto de máxima compresión o deformación; depende de la elasticidad de los cuerpos en contacto."
+        en: "This value means the point of maximum compression or deformation; it depends on the elasticity of the bodies in contact."
+    coherence_rules: *id_coherence_generic
+    model_validity_rules: *id_validity_generic
+    graph_rules:
+    - id: Fmax_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "Gráficamente, Fmax es la cúspide de la firma de impacto, marcando el límite superior del eje de fuerzas."
+        en: "Graphically, Fmax is the peak of the impact signature, marking the upper limit of the force axis."
+    likely_errors: *id_errors_generic
+    next_step_rules: *id_next_generic
+
+  Jx:
+    summary_rules:
+    - id: Jx_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "Jx describe la componente horizontal del impulso; indica la transferencia de momento exclusivamente en el eje X."
+        en: "Jx describes the horizontal component of impulse; it indicates the momentum transfer exclusively in the X axis."
+    physical_reading_rules:
+    - id: Jx_physical_god
+      when: 'true'
+      status: info
+      text:
+        es: "Esta componente significa la causa del cambio de velocidad horizontal; depende de la orientación de la fuerza neta."
+        en: "This component means the cause of the horizontal velocity change; it depends on the net force orientation."
+    coherence_rules: *id_coherence_generic
+    model_validity_rules: *id_validity_generic
+    graph_rules:
+    - id: Jx_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "Representa el área proyectada de la fuerza en el plano horizontal sobre el tiempo."
+        en: "Represents the projected area of force in the horizontal plane over time."
+    likely_errors: *id_errors_generic
+    next_step_rules: *id_next_generic
+
+  Jy:
+    summary_rules:
+    - id: Jy_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "Jy describe la componente vertical del impulso; indica la transferencia de momento exclusivamente en el eje Y."
+        en: "Jy describes the vertical component of impulse; it indicates the momentum transfer exclusively in the Y axis."
+    physical_reading_rules:
+    - id: Jy_physical_god
+      when: 'true'
+      status: info
+      text:
+        es: "Esta componente significa la causa del cambio de velocidad vertical; depende de la inclinación del impacto."
+        en: "This component means the cause of the vertical velocity change; it depends on the impact inclination."
+    coherence_rules: *id_coherence_generic
+    model_validity_rules: *id_validity_generic
+    graph_rules:
+    - id: Jy_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "Representa el área proyectada de la fuerza en el plano vertical sobre el tiempo."
+        en: "Represents the projected area of force in the vertical plane over time."
+    likely_errors: *id_errors_generic
+    next_step_rules: *id_next_generic
+
+  p_final:
+    summary_rules:
+    - id: pf_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "p_final describe el estado de momento lineal tras la interacción; resume el resultado dinámico del impulso recibido."
+        en: "p_final describes the state of linear momentum after the interaction; it summarizes the dynamic result of the received impulse."
+    physical_reading_rules:
+    - id: pf_physical_god
+      when: 'true'
+      status: info
+      text:
+        es: "Este momento final depende de la velocidad final y la masa; indica el destino cinemático del sistema."
+        en: "This final momentum depends on the final velocity and mass; it indicates the system's kinematic destination."
+    coherence_rules: *id_coherence_generic
+    model_validity_rules: *id_validity_generic
+    graph_rules:
+    - id: pf_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "Es la ordenada final en la trayectoria temporal del momento lineal p(t)."
+        en: "It is the final ordinate in the temporal trajectory of linear momentum p(t)."
+    likely_errors: *id_errors_generic
+    next_step_rules: *id_next_generic
+
+  p_inicial:
+    summary_rules:
+    - id: pi_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "p_inicial describe la cantidad de movimiento antes del impacto; indica la condición de partida del sistema."
+        en: "p_inicial describes the amount of motion before impact; it indicates the starting condition of the system."
+    physical_reading_rules:
+    - id: pi_physical_god
+      when: 'true'
+      status: info
+      text:
+        es: "Este momento inicial significa la inercia en movimiento que el impulso J debe alterar para cambiar la trayectoria."
+        en: "This initial momentum means the moving inertia that the impulse J must alter to change the trajectory."
+    coherence_rules: *id_coherence_generic
+    model_validity_rules: *id_validity_generic
+    graph_rules:
+    - id: pi_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "Es el punto de origen de la gráfica p(t) antes de que la fuerza comience a actuar."
+        en: "It is the point of origin of the p(t) graph before the force starts acting."
+    likely_errors: *id_errors_generic
+    next_step_rules: *id_next_generic
+
+  v0:
+    summary_rules:
+    - id: v0_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "v0 describe la velocidad de entrada al impacto; indica el estado cinemático previo a la transferencia de momento."
+        en: "v0 describes the entry velocity to the impact; it indicates the kinematic state prior to momentum transfer."
+    physical_reading_rules:
+    - id: v0_physical_god
+      when: 'true'
+      status: info
+      text:
+        es: "v0 significa el punto de referencia para el cambio de velocidad; depende de la historia previa del sistema."
+        en: "v0 means the reference point for velocity change; it depends on the system's previous history."
+    coherence_rules: *id_coherence_generic
+    model_validity_rules: *id_validity_generic
+    graph_rules:
+    - id: v0_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "Es el valor inicial de la curva v(t) justo antes de que el perfil de fuerza sea distinto de cero."
+        en: "It is the initial value of the v(t) curve just before the force profile becomes non-zero."
+    likely_errors: *id_errors_generic
+    next_step_rules: *id_next_generic
+
+  m:
+    summary_rules:
+    - id: m_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "La masa m describe la inercia del sistema; indica cuánta resistencia opone el objeto a cambiar su momento lineal."
+        en: "Mass m describes the system's inertia; it indicates how much resistance the object offers to changing its linear momentum."
+    physical_reading_rules:
+    - id: m_physical_god
+      when: 'true'
+      status: info
+      text:
+        es: "m significa el factor de escala entre impulso y velocidad; si m aumenta, la variación de velocidad disminuye por inercia."
+        en: "m means the scale factor between impulse and velocity; if m increases, the velocity variation decreases due to inertia."
+    coherence_rules: *id_coherence_generic
+    model_validity_rules: *id_validity_generic
+    graph_rules:
+    - id: m_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "La masa es la constante de proporcionalidad entre la gráfica de velocidad y la de momento."
+        en: "Mass is the proportionality constant between the velocity graph and the momentum graph."
+    likely_errors: *id_errors_generic
+    next_step_rules: *id_next_generic
+
+  vF:
+    summary_rules:
+    - id: vF_summary_god
+      when: 'true'
+      status: info
+      text:
+        es: "vF describe el estado de movimiento final; indica la velocidad alcanzada tras la aplicación del pulso de fuerza neta."
+        en: "vF describes the final motion state; it indicates the velocity reached after applying the net force pulse."
+    physical_reading_rules:
+    - id: vF_physical_god
+      when: 'true'
+      status: info
+      text:
+        es: "Esta velocidad final depende del impulso J recibido porque este ha alterado la cantidad de movimiento original del cuerpo."
+        en: "This final velocity depends on the received impulse J because it has altered the body's original momentum."
+    coherence_rules: *id_coherence_generic
+    model_validity_rules: *id_validity_generic
+    graph_rules:
+    - id: vF_graph_god
+      when: 'true'
+      status: info
+      text:
+        es: "En la curva v(t), vF es el valor de la asíntota horizontal que alcanza el sistema tras el contacto."
+        en: "In the v(t) curve, vF is the value of the horizontal asymptote that the system reaches after contact."
+    likely_errors: *id_errors_generic
+    next_step_rules: *id_next_generic
+`;export{e as default};

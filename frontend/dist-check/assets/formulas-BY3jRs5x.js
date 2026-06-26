@@ -1,0 +1,195 @@
+const e=`version: "1.0"
+leaf_id: tipos-de-ondas-en-solidos
+
+ui:
+  default_formula: vel_longitudinal
+
+formulas:
+
+  - id: vel_longitudinal
+    title:
+      es: "Velocidad de onda longitudinal en solido 3D"
+      en: "Longitudinal wave velocity in 3D solid"
+    equation: "v_L = sqrt((E_young * (1 - nu)) / (rho * (1 + nu) * (1 - 2 * nu)))"
+    latex: "v_L = \\\\sqrt{\\\\frac{E(1-\\\\nu)}{\\\\rho(1+\\\\nu)(1-2\\\\nu)}}"
+    rearrangements:
+      - target: v_L
+        equation: "v_L = sqrt((E_young * (1 - nu)) / (rho * (1 + nu) * (1 - 2 * nu)))"
+        latex: "v_L = \\\\sqrt{\\\\frac{E(1-\\\\nu)}{\\\\rho(1+\\\\nu)(1-2\\\\nu)}}"
+      - target: rho
+        equation: "rho = (E_young * (1 - nu)) / (v_L * v_L * (1 + nu) * (1 - 2 * nu))"
+        latex: "\\\\rho = \\\\frac{E(1-\\\\nu)}{v_L^2(1+\\\\nu)(1-2\\\\nu)}"
+      - target: E_young
+        equation: "E_young = v_L * v_L * rho * (1 + nu) * (1 - 2 * nu) / (1 - nu)"
+        latex: "E = \\\\frac{v_L^2 \\\\rho (1+\\\\nu)(1-2\\\\nu)}{1-\\\\nu}"
+    category: fundamental
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: "La velocidad de la onda de compresion (tipo P) en un solido isotropo tridimensional depende del modulo confinado efectivo, que combina el modulo de Young y el coeficiente de Poisson, dividido entre la densidad. Cuanto mayor la rigidez y menor la densidad, mayor la velocidad."
+      en: "The compression (P-type) wave velocity in an isotropic 3D solid depends on the effective confined modulus, combining Young's modulus and Poisson's ratio, divided by density. Higher stiffness and lower density produce higher velocity."
+    constraints:
+      - "Material isotropo y homogeneo"
+      - "Regimen elastico lineal (deformaciones pequeñas)"
+      - "Solido tridimensional sin confinamiento geometrico (no barra delgada)"
+      - "nu debe estar en el intervalo (-1, 0.5) para estabilidad elastica"
+    validity:
+      es: "Valido para ondas cuya longitud de onda es mucho menor que las dimensiones del solido. No aplicar en barras delgadas (usar modulo de Young simple) ni en laminas (modulo de placa)."
+      en: "Valid for waves whose wavelength is much smaller than the solid dimensions. Do not apply in thin bars (use simple Young's modulus) or plates (use plate modulus)."
+    dimension_check: "[M L⁻¹ T⁻²] / [M L⁻³] = [L² T⁻²] → raiz cuadrada = [L T⁻¹] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - clasificacion de tipo de onda P en solidos
+      - ensayos ultrasonicos de materiales
+    interpretation_tags:
+      - velocidad_onda_longitudinal
+      - modulo_confinado
+      - dependencia_poisson
+    result_semantics:
+      target: v_L
+      kind: velocidad_de_propagacion
+      sign_meaning:
+        es: "La velocidad es siempre positiva; indica rapidez de propagacion de la perturbacion de compresion."
+        en: "Velocity is always positive; it indicates how fast the compression disturbance propagates."
+      absolute_value_meaning:
+        es: "El valor absoluto de v_L indica la rapidez de propagacion de la onda P en metros por segundo."
+        en: "The absolute value of v_L indicates the propagation speed of the P-wave in metres per second."
+    domain_checks:
+      - "v_L > 0 (siempre positivo para solido elastico estable)"
+      - "nu < 0.5 (limite de incompresibilidad)"
+      - "rho > 0"
+      - "E_young > 0"
+    coherence_checks:
+      - "v_L debe ser mayor que v_T para el mismo material"
+      - "Para acero: v_L entre 5800 y 6100 m/s"
+      - "Para aluminio: v_L entre 6200 y 6400 m/s"
+    graph_implications:
+      - "En una grafica v vs E, v_L crece como raiz cuadrada de E"
+      - "La curva v_L siempre esta por encima de v_T para el mismo par (E, nu, rho)"
+    pedagogical_triggers:
+      - "Si v_L calculada es menor que v_T del mismo material, revisar valor de nu o modulos"
+      - "Si v_L supera 8000 m/s para un metal comun, verificar unidades de E (debe estar en Pa, no GPa)"
+
+  - id: vel_transversal
+    title:
+      es: "Velocidad de onda transversal (S) en solido"
+      en: "Transverse (S-wave) velocity in solid"
+    equation: "v_T = sqrt(G_corte / rho)"
+    latex: "v_T = \\\\sqrt{\\\\frac{G}{\\\\rho}}"
+    rearrangements:
+      - target: v_T
+        equation: "v_T = sqrt(G_corte / rho)"
+        latex: "v_T = \\\\sqrt{\\\\frac{G}{\\\\rho}}"
+      - target: G_corte
+        equation: "G_corte = v_T * v_T * rho"
+        latex: "G = v_T^2 \\\\, \\\\rho"
+      - target: rho
+        equation: "rho = G_corte / (v_T * v_T)"
+        latex: "\\\\rho = \\\\frac{G}{v_T^2}"
+    category: fundamental
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: "La velocidad de la onda de corte (tipo S) en un solido depende exclusivamente del modulo de corte G y la densidad rho. A diferencia de la onda longitudinal, no interviene la compresibilidad. En un fluido G es cero, por eso las ondas S no existen en fluidos."
+      en: "The shear (S-type) wave velocity in a solid depends exclusively on the shear modulus G and density rho. Unlike the longitudinal wave, compressibility plays no role. In a fluid G is zero, which is why S-waves do not exist in fluids."
+    constraints:
+      - "El material debe ser solido (G > 0)"
+      - "Material isotropo y homogeneo"
+      - "Regimen elastico lineal"
+    validity:
+      es: "Valido en cualquier solido isotropo. No aplicable en fluidos ni en interfaces; en esas zonas la onda S se convierte parcialmente en onda P."
+      en: "Valid in any isotropic solid. Not applicable in fluids or at interfaces; at those locations the S-wave partially converts to P-wave."
+    dimension_check: "[M L⁻¹ T⁻²] / [M L⁻³] = [L² T⁻²] → raiz cuadrada = [L T⁻¹] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - clasificacion de tipo de onda S
+      - calculo de impedancia de corte
+      - relacion con onda de Rayleigh
+    interpretation_tags:
+      - velocidad_onda_transversal
+      - modulo_de_corte
+      - distincion_solido_fluido
+    result_semantics:
+      target: v_T
+      kind: velocidad_de_propagacion
+      sign_meaning:
+        es: "Siempre positiva; la polarizacion de la vibracion de particula es perpendicular a la direccion de propagacion."
+        en: "Always positive; particle vibration polarization is perpendicular to the propagation direction."
+      absolute_value_meaning:
+        es: "El valor de v_T indica la velocidad de propagacion de la distorsion de corte en el material."
+        en: "The value of v_T indicates the propagation speed of the shear distortion in the material."
+    domain_checks:
+      - "v_T > 0"
+      - "G_corte > 0 (condicion de solido)"
+      - "rho > 0"
+      - "v_T debe ser menor que v_L del mismo material"
+    coherence_checks:
+      - "v_T/v_L debe estar entre 0.5 y 0.7 para metales tipicos"
+      - "Para acero: v_T entre 3100 y 3300 m/s"
+      - "Para aluminio: v_T entre 3000 y 3200 m/s"
+    graph_implications:
+      - "En grafico comparativo, la curva v_T siempre esta por debajo de v_L"
+      - "La separacion entre v_L y v_T crece al aumentar nu"
+    pedagogical_triggers:
+      - "Si v_T supera v_L del mismo material, hay un error en G o en rho"
+      - "Si v_T resulta cero para un material dado, verificar que G no es el de un fluido"
+
+  - id: vel_rayleigh
+    title:
+      es: "Velocidad de onda de Rayleigh (aproximacion de Viktorov)"
+      en: "Rayleigh wave velocity (Viktorov approximation)"
+    equation: "v_R = v_T * (0.862 + 1.14 * nu) / (1 + nu)"
+    latex: "v_R \\\\approx v_T \\\\frac{0.862 + 1.14\\\\nu}{1 + \\\\nu}"
+    rearrangements:
+      - target: v_R
+        equation: "v_R = v_T * (0.862 + 1.14 * nu) / (1 + nu)"
+        latex: "v_R \\\\approx v_T \\\\frac{0.862 + 1.14\\\\nu}{1 + \\\\nu}"
+      - target: v_T
+        equation: "v_T = v_R * (1 + nu) / (0.862 + 1.14 * nu)"
+        latex: "v_T = v_R \\\\frac{1 + \\\\nu}{0.862 + 1.14\\\\nu}"
+    category: derived
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: "La velocidad de la onda de Rayleigh es ligeramente inferior a v_T y depende del coeficiente de Poisson. La formula de Viktorov es una aproximacion precisa al 0.2 % para nu entre 0 y 0.5. La onda de Rayleigh viaja por la superficie libre y su amplitud decae exponencialmente con la profundidad."
+      en: "Rayleigh wave velocity is slightly below v_T and depends on Poisson's ratio. Viktorov's formula is accurate to within 0.2% for nu between 0 and 0.5. The Rayleigh wave travels along the free surface and its amplitude decays exponentially with depth."
+    constraints:
+      - "Superficie libre plana (semiespacio)"
+      - "Material isotropo y homogeneo"
+      - "Regimen elastico lineal"
+      - "nu en el intervalo [0, 0.5] para mayor precision de la aproximacion"
+    validity:
+      es: "La aproximacion de Viktorov es valida para nu entre 0 y 0.5 con error menor al 0.2 %. Para nu negativo (materiales auxeticos) se recomienda resolver la ecuacion secular exacta."
+      en: "Viktorov's approximation is valid for nu between 0 and 0.5 with less than 0.2% error. For negative nu (auxetic materials) solving the exact secular equation is recommended."
+    dimension_check: "[v_R] = [v_T] = [L T⁻¹] ✓ (el cociente de nu es adimensional)"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - ensayos no destructivos superficiales
+      - sismologia de ondas superficiales
+      - caracterizacion de recubrimientos
+    interpretation_tags:
+      - velocidad_superficial
+      - aproximacion_viktorov
+      - rayleigh_wave
+    result_semantics:
+      target: v_R
+      kind: velocidad_de_propagacion
+      sign_meaning:
+        es: "Positiva; la onda avanza en la superficie libre sin necesidad de una segunda interfaz."
+        en: "Positive; the wave advances along the free surface without requiring a second interface."
+      absolute_value_meaning:
+        es: "El valor de v_R indica la velocidad de propagacion de la perturbacion superficial eliptica."
+        en: "The value of v_R indicates the propagation speed of the elliptical surface disturbance."
+    domain_checks:
+      - "v_R > 0"
+      - "v_R < v_T (siempre)"
+      - "nu en [0, 0.5] para la aproximacion de Viktorov"
+    coherence_checks:
+      - "v_R debe estar entre 0.87 y 0.96 veces v_T"
+      - "Para nu igual a 0.3 (acero tipico): v_R aproximadamente 0.927 v_T"
+    graph_implications:
+      - "En grafico v_R vs nu, la curva crece suavemente de 0.87 v_T a 0.96 v_T cuando nu va de 0 a 0.5"
+    pedagogical_triggers:
+      - "Si v_R calculada supera v_T, revisar el valor de nu o la formula empleada"
+      - "Si v_R es mucho menor que 0.87 v_T, verificar que se usa la formula correcta y no la de Love"
+`;export{e as default};

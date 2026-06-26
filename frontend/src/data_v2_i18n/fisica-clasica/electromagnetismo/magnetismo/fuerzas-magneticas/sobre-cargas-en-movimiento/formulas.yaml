@@ -1,0 +1,208 @@
+formulas:
+- id: fuerza_magnetica_lorentz
+  title:
+    es: fuerza magnetica sobre una carga movil
+    en: magnetic force on a moving charge
+  equation: F_B = q * v * B * s_theta
+  latex: F_B = q v B\sin\theta \quad % F_B q v B s_theta
+  rearrangements:
+  - target: fuerza_magnetica
+    equation: F_B = q * v * B * s_theta
+    latex: F_B = q v B\sin\theta \quad % F_B q v B s_theta
+  category: fundamental
+  relation_type: geometric_interpretation
+  physical_meaning:
+    es: La fuerza magnetica aumenta con la carga, la rapidez, el campo y la parte perpendicular del movimiento.
+    en: Magnetic force increases with charge, speed, field strength, and the perpendicular part of the motion.
+  constraints:
+  - La carga se modela como particula puntual.
+  - El campo magnetico se considera uniforme en la escala local de la trayectoria.
+  - La rapidez es suficientemente baja para usar dinamica clasica.
+  - q se usa como modulo para calcular intensidad; el signo se interpreta aparte.
+  validity:
+    es: Valida para cargas clasicas en campos magneticos dados, sin efectos relativistas dominantes ni radiacion apreciable.
+    en: Valid for classical charges in prescribed magnetic fields, without dominant relativistic effects or appreciable radiation.
+  dimension_check: C*(m*s^-1)*T produce N porque T equivale a N*s*(C^-1*m^-1).
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  - aplicaciones.md
+  interpretation_tags:
+  - deflexion
+  - perpendicularidad
+  - intensidad_magnetica
+  result_semantics:
+    target: fuerza_magnetica
+    kind: force_magnitude
+    sign_meaning:
+      es: El signo de q no se conserva en el modulo; se usa para decidir el sentido vectorial.
+      en: The sign of q is not retained in the magnitude; it is used to decide vector direction.
+    absolute_value_meaning:
+      es: El valor absoluto mide la intensidad de la desviacion magnetica.
+      en: The absolute value measures the strength of magnetic deflection.
+  domain_checks:
+  - id: angular_factor_interval
+    condition: s_theta >= 0 && s_theta <= 1
+    message:
+      es: El factor angular debe estar entre cero y uno.
+      en: The angular factor must lie between zero and one.
+  - id: nonnegative_inputs
+    condition: v >= 0 && B >= 0
+    message:
+      es: Rapidez y modulo de campo deben ser no negativos.
+      en: Speed and field magnitude must be nonnegative.
+  coherence_checks:
+  - id: zero_force_parallel
+    condition: s_theta == 0 || v == 0 || B == 0 || q == 0
+    message:
+      es: Una entrada nula anula la fuerza magnetica del modelo.
+      en: A zero input cancels the model magnetic force.
+  graph_implications:
+  - id: linear_with_speed
+    relation: F_B crece linealmente con v si q, B y s_theta se mantienen fijos.
+  - id: angular_collapse
+    relation: F_B cae a cero cuando el movimiento es paralelo al campo.
+  pedagogical_triggers:
+  - id: confuse_parallel_force
+    detect_when: student_claims_force_parallel_to_B
+    feedback:
+      es: La fuerza no apunta a lo largo de B; es perpendicular al plano formado por v y B.
+      en: The force does not point along B; it is perpendicular to the plane formed by v and B.
+- id: aceleracion_centripeta_magnetica
+  title:
+    es: aceleracion centripeta producida por la fuerza magnetica
+    en: centripetal acceleration produced by magnetic force
+  equation: a_c = F_B / m
+  latex: a_c = \frac{F_B}{m} \quad % a_c F_B m
+  rearrangements:
+  - target: a_c
+    equation: a_c = F_B / m
+    latex: a_c = \frac{F_B}{m} \quad % a_c F_B m
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: La fuerza magnetica se traduce en aceleracion perpendicular que curva la trayectoria.
+    en: Magnetic force becomes perpendicular acceleration that curves the trajectory.
+  constraints:
+  - La masa debe ser positiva.
+  - La fuerza considerada es la resultante perpendicular responsable de curvatura.
+  - El sistema se trata en mecanica clasica.
+  validity:
+    es: Valida cuando la fuerza magnetica domina la curvatura y la masa inercial permanece constante.
+    en: Valid when magnetic force dominates curvature and inertial mass remains constant.
+  dimension_check: N/kg produce m*s^-2, la dimension de aceleracion.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  - aplicaciones.md
+  interpretation_tags:
+  - curvatura
+  - inercia
+  - aceleracion_perpendicular
+  result_semantics:
+    target: a_c
+    kind: acceleration_magnitude
+    sign_meaning:
+      es: El modulo no expresa signo; la direccion apunta hacia el centro de curvatura.
+      en: The magnitude does not express sign; direction points toward the center of curvature.
+    absolute_value_meaning:
+      es: El valor mide rapidez de cambio de direccion por unidad de masa.
+      en: The value measures how quickly direction changes per unit mass.
+  domain_checks:
+  - id: positive_mass
+    condition: m > 0
+    message:
+      es: La masa debe ser positiva para interpretar la aceleracion.
+      en: Mass must be positive to interpret acceleration.
+  coherence_checks:
+  - id: zero_acceleration
+    condition: F_B == 0
+    message:
+      es: Si la fuerza magnetica es nula, la aceleracion centripeta magnetica tambien lo es.
+      en: If magnetic force is zero, magnetic centripetal acceleration is also zero.
+  graph_implications:
+  - id: curvature_indicator
+    relation: Mayor a_c implica trayectoria mas curvada si la rapidez se mantiene comparable.
+  pedagogical_triggers:
+  - id: confuse_speed_change
+    detect_when: student_claims_magnetic_force_always_speeds_up
+    feedback:
+      es: En el caso perpendicular ideal, la aceleracion cambia direccion, no rapidez.
+      en: In the ideal perpendicular case, acceleration changes direction, not speed.
+- id: radio_trayectoria_circular
+  title:
+    es: radio de trayectoria circular en campo uniforme
+    en: circular trajectory radius in a uniform field
+  equation: r = m * v / (q * B)
+  latex: r = \frac{mv}{q B} \quad % r m v q B
+  rearrangements:
+  - target: radio_de_trayectoria
+    equation: r = m * v / (q * B)
+    latex: r = \frac{mv}{q B} \quad % r m v q B
+  category: derived
+  relation_type: geometric_interpretation
+  physical_meaning:
+    es: El radio expresa el equilibrio entre inercia de la particula y desviacion magnetica.
+    en: The radius expresses the balance between particle inertia and magnetic deflection.
+  constraints:
+  - La velocidad es perpendicular al campo magnetico.
+  - El campo es uniforme en la region de movimiento.
+  - q representa el modulo de la carga para estimar radio.
+  - No se incluyen perdidas de energia ni colisiones.
+  validity:
+    es: Valida para trayectorias circulares clasicas con campo uniforme y componente perpendicular dominante.
+    en: Valid for classical circular paths with uniform field and dominant perpendicular velocity component.
+  dimension_check: kg*(m*s^-1)/(C*T) produce m porque C*T equivale a kg*s^-1.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  - aplicaciones.md
+  interpretation_tags:
+  - radio
+  - selector_masa_carga
+  - curvatura
+  result_semantics:
+    target: radio_de_trayectoria
+    kind: length
+    sign_meaning:
+      es: El radio es positivo; el signo de la carga fija el sentido de giro.
+      en: Radius is positive; charge sign sets the rotation sense.
+    absolute_value_meaning:
+      es: El valor absoluto es la distancia al centro instantaneo de la orbita.
+      en: The absolute value is the distance to the instantaneous center of the orbit.
+  domain_checks:
+  - id: nonzero_deflection
+    condition: q != 0 && B != 0
+    message:
+      es: Para radio circular finito se necesita carga y campo no nulos.
+      en: A finite circular radius requires nonzero charge and field.
+  - id: positive_speed_mass
+    condition: m > 0 && v >= 0
+    message:
+      es: Masa positiva y rapidez no negativa son necesarias.
+      en: Positive mass and nonnegative speed are required.
+  coherence_checks:
+  - id: huge_radius_weak_field
+    condition: B == 0
+    message:
+      es: Con campo nulo no hay radio circular magnetico finito.
+      en: With zero field there is no finite magnetic circular radius.
+  graph_implications:
+  - id: radius_increases_speed
+    relation: A campo y carga fijos, r aumenta con v.
+  - id: radius_decreases_field
+    relation: A masa y rapidez fijas, r disminuye al aumentar B.
+  pedagogical_triggers:
+  - id: invert_radius_dependence
+    detect_when: student_claims_faster_particle_curves_more
+    feedback:
+      es: Una particula mas rapida se curva menos si q y B no cambian.
+      en: A faster particle bends less if q and B do not change.
+ui:
+  default_formula: fuerza_magnetica_lorentz

@@ -1,0 +1,209 @@
+version: 1
+formulas:
+- id: mrua_posicion
+  title:
+    es: Ecuación horaria de la posición
+    en: Position-time quadratic equation
+  equation: x = x0 + v0*t + 0.5*a*t^2
+  latex: x = x_0 + v_0 t + \frac{1}{2} a t^2
+  rearrangements:
+  - target: a
+    latex: a = \frac{2(x - x_0 - v_0 t)}{t^2}
+    equation: a = 2*(x - x0 - v0*t)/t^2
+    constraints: []
+  - target: v0
+    latex: v_0 = \frac{x - x_0 - \frac{1}{2} a t^2}{t}
+    equation: v0 = (x - x0 - 0.5*a*t^2)/t
+    constraints: []
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Determina la posición en función del tiempo bajo una aceleración constante.
+    en: Determines position as a function of time under constant acceleration.
+  constraints:
+  - a es constante
+  - trayectoria rectilínea
+  validity:
+    es: Sistemas inerciales con aceleración invariante.
+    en: Inertial systems with invariant acceleration.
+  dimension_check: '[L] = [L] + [L/T][T] + [L/T^2][T^2] = [L]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - Predicción de trayectorias aceleradas
+  - Cálculo de distancias de frenado
+  interpretation_tags:
+  - mrua
+  result_semantics:
+    target: a
+    meaning: Resulta util para interpretar a en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mrua_velocidad
+  title:
+    es: Ecuación de la velocidad
+    en: Velocity-time equation
+  equation: v = v0 + a*t
+  latex: v = v_0 + a t
+  rearrangements:
+  - target: a
+    latex: a = \frac{v - v_0}{t}
+    equation: a = (v - v0)/t
+    constraints: []
+  - target: t
+    latex: t = \frac{v - v_0}{a}
+    equation: t = (v - v0)/a
+    constraints: []
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Describe cómo cambia la velocidad linealmente con el tiempo.
+    en: Describes how velocity changes linearly with time.
+  constraints:
+  - a es constante
+  validity:
+    es: Aplicable a todo régimen MRUA.
+    en: Applicable to all UARM regimes.
+  dimension_check: '[L/T] = [L/T] + [L/T^2][T] = [L/T]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - Cálculo de velocidad final
+  - Determinación de tiempos de parada
+  interpretation_tags:
+  - mrua
+  result_semantics:
+    target: a
+    meaning: Resulta util para interpretar a en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mrua_torricelli
+  title:
+    es: Ecuación de Torricelli (Independiente del tiempo)
+    en: Torricelli's equation (Time-independent)
+  equation: v^2 = v0^2 + 2*a*dx
+  latex: v^2 = v_0^2 + 2 a \Delta x
+  rearrangements:
+  - target: dx
+    latex: \Delta x = \frac{v^2 - v_0^2}{2a}
+    equation: dx = (v^2 - v0^2)/(2*a)
+    constraints: []
+  - target: a
+    latex: a = \frac{v^2 - v_0^2}{2 \Delta x}
+    equation: a = (v^2 - v0^2)/(2*dx)
+    constraints: []
+  category: derived
+  relation_type: integral_relation
+  physical_meaning:
+    es: Relaciona velocidades y desplazamientos sin necesidad de conocer el tiempo.
+    en: Relates velocities and displacements without needing to know the time.
+  constraints:
+  - a != 0 (para despejar dx o a)
+  validity:
+    es: Útil en análisis de frenado y colisiones.
+    en: Useful in braking and collision analysis.
+  dimension_check: '[L^2/T^2] = [L^2/T^2] + [L/T^2][L] = [L^2/T^2]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - Cálculo de aceleración en huellas de frenado
+  interpretation_tags:
+  - mrua
+  result_semantics:
+    target: dx
+    meaning: Resulta util para interpretar dx en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: mrua_desplazamiento_medio
+  title:
+    es: Desplazamiento por velocidad media
+    en: Displacement via average velocity
+  equation: dx = ((v0 + v)/2)*t
+  latex: \Delta x = \frac{v_0 + v}{2} t
+  rearrangements:
+  - target: t
+    latex: t = \frac{2 \Delta x}{v_0 + v}
+    equation: t = 2*dx/(v0 + v)
+    constraints: []
+  category: auxiliary
+  relation_type: average_relation
+  physical_meaning:
+    es: Calcula el desplazamiento asumiendo que el cuerpo viaja a su velocidad promedio.
+    en: Calculates displacement assuming the body travels at its average velocity.
+  constraints:
+  - aceleración constante (para que sea la media aritmética)
+  validity:
+    es: Simplificación cinemática para tramos uniformemente variados.
+    en: Kinematic simplification for uniformly varied segments.
+  dimension_check: '[L] = [L/T][T] = [L]'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - Comprobación rápida de coherencia gráfica
+  interpretation_tags:
+  - mrua
+  result_semantics:
+    target: t
+    meaning: Resulta util para interpretar t en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.

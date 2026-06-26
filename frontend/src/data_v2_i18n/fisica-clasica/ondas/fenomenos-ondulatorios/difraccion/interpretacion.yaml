@@ -1,0 +1,561 @@
+version: v5
+id: interpretacion_difraccion
+leaf_id: difraccion
+nombre:
+  es: Interpretacion de difraccion
+  en: Diffraction interpretation
+scope:
+  area: fisica-clasica
+  bloque: ondas
+  subbloque: fenomenos-ondulatorios
+  parent_id: fenomenos-ondulatorios
+  ruta_relativa: fisica-clasica/ondas/fenomenos-ondulatorios/difraccion
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es:
+      summary: Resumen
+      physical_reading: Lectura fisica
+      coherence: Coherencia
+      model_validity: Validez del modelo
+      graph_reading: Lectura grafica
+      likely_errors: Errores probables
+      next_step: Siguiente paso
+    en:
+      summary: Summary
+      physical_reading: Physical reading
+      coherence: Coherence
+      model_validity: Model validity
+      graph_reading: Graph reading
+      likely_errors: Likely errors
+      next_step: Next step
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    max_rules_per_section: 3
+
+dependencies:
+  formulas:
+    - condicion_minimos
+    - aproximacion_angulo_pequeno
+    - posicion_lineal_minimos
+  magnitudes:
+    - theta_dif
+    - lambda
+    - a_abertura
+    - m_orden
+    - L_distancia
+    - y_posicion
+
+global_context:
+  physical_domain:
+    es: Difraccion de ondas electromagneticas y mecanicas por aberturas y obstaculos. Regimen de Fraunhofer (campo lejano).
+    en: Diffraction of electromagnetic and mechanical waves by apertures and obstacles. Fraunhofer regime (far field).
+  axis_convention:
+    es: El angulo cero corresponde a la direccion de incidencia normal. Positivo a un lado, negativo al otro.
+    en: Zero angle corresponds to normal incidence direction. Positive to one side, negative to the other.
+  standard_assumptions:
+    - Abertura rectangular unidimensional
+    - Iluminacion monocromatica plana
+    - Campo lejano (Fraunhofer)
+    - Aproximacion de angulo pequeno cuando aplica
+  standard_warnings:
+    - "En campo cercano (Fresnel), el patron difiere significativamente"
+    - "Aberturas no rectangulares producen patrones distintos"
+    - "Iluminacion no plana modifica la distribucion de intensidad"
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+  a_abertura:
+    magnitude_type: aperture_width
+    semantic_role:
+      es: Ancho de abertura que controla la extension angular del patron.
+      en: Aperture width controlling the angular spread of the pattern.
+    next_step_rules:
+      - id: aa_next_angle
+        when: "true"
+        status: ok
+        text:
+          es: "Compara [[a_abertura]] con [[lambda]] para estimar si la difraccion sera amplia o estrecha."
+          en: "Compare [[a_abertura]] with [[lambda]] to estimate whether diffraction will be broad or narrow."
+    summary_rules:
+      - id: aa_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[a_abertura]] fija la escala geometrica que limita el frente de onda."
+          en: "[[a_abertura]] sets the geometric scale that limits the wavefront."
+    physical_reading_rules:
+      - id: aa_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Al reducir [[a_abertura]], aumenta la apertura angular del patron de difraccion."
+          en: "Reducing [[a_abertura]] increases the angular spread of the diffraction pattern."
+    coherence_rules:
+      - id: aa_coherence_positive
+        when: "a_abertura <= 0"
+        status: error
+        text:
+          es: "[[a_abertura]] debe ser positiva; una abertura nula bloquea la onda."
+          en: "[[a_abertura]] must be positive; a zero aperture blocks the wave."
+      - id: aa_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[a_abertura]] es coherente si representa la dimension transversal efectiva."
+          en: "[[a_abertura]] is coherent if it represents the effective transverse dimension."
+    model_validity_rules:
+      - id: aa_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo usa una rendija ideal; bordes rugosos o formas distintas cambian el patron."
+          en: "The model uses an ideal slit; rough edges or different shapes change the pattern."
+    graph_rules:
+      - id: aa_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el grafico, menor [[a_abertura]] separa mas los minimos laterales."
+          en: "On the graph, smaller [[a_abertura]] separates the lateral minima more."
+    likely_errors:
+      - id: aa_error_confundir
+        when: "true"
+        status: warning
+        text:
+          es: "Error comun: confundir [[a_abertura]] con la distancia a la pantalla o con el espaciado de una red."
+          en: "Common mistake: confuse [[a_abertura]] with screen distance or grating spacing."
+
+  m_orden:
+    magnitude_type: order
+    semantic_role:
+      es: Orden entero que etiqueta minimos y maximos respecto al centro.
+      en: Integer order labeling minima and maxima relative to the center.
+    next_step_rules:
+      - id: mo_next_position
+        when: "true"
+        status: ok
+        text:
+          es: "Usa [[m_orden]] para localizar el minimo correspondiente a cada lado del maximo central."
+          en: "Use [[m_orden]] to locate the corresponding minimum on each side of the central maximum."
+    summary_rules:
+      - id: mo_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[m_orden]] cuenta los ordenes laterales del patron."
+          en: "[[m_orden]] counts lateral orders in the pattern."
+    physical_reading_rules:
+      - id: mo_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Ordenes mayores aparecen mas alejados del centro y suelen tener menor intensidad."
+          en: "Higher orders appear farther from the center and usually have lower intensity."
+    coherence_rules:
+      - id: mo_coherence_integer
+        when: "true"
+        status: ok
+        text:
+          es: "[[m_orden]] debe interpretarse como entero de orden, no como variable continua."
+          en: "[[m_orden]] must be interpreted as an integer order, not a continuous variable."
+    model_validity_rules:
+      - id: mo_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "Ordenes altos pueden quedar fuera del dominio permitido por la condicion angular."
+          en: "High orders may fall outside the domain allowed by the angular condition."
+    graph_rules:
+      - id: mo_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el grafico, [[m_orden]] organiza los minimos de forma simetrica alrededor del centro."
+          en: "On the graph, [[m_orden]] organizes minima symmetrically around the center."
+    likely_errors:
+      - id: mo_error_cero
+        when: "true"
+        status: warning
+        text:
+          es: "Error comun: tomar el orden cero como primer minimo oscuro."
+          en: "Common mistake: take zero order as the first dark minimum."
+
+  L_distancia:
+    magnitude_type: screen_distance
+    semantic_role:
+      es: Distancia entre abertura y pantalla que convierte angulo en posicion.
+      en: Distance between aperture and screen converting angle into position.
+    next_step_rules:
+      - id: ld_next_position
+        when: "true"
+        status: ok
+        text:
+          es: "Combina [[L_distancia]] con [[theta_dif]] para estimar la posicion observada."
+          en: "Combine [[L_distancia]] with [[theta_dif]] to estimate the observed position."
+    summary_rules:
+      - id: ld_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[L_distancia]] amplifica sobre la pantalla la separacion angular."
+          en: "[[L_distancia]] magnifies angular separation on the screen."
+    physical_reading_rules:
+      - id: ld_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Una pantalla mas lejana separa mas las franjas, aunque no cambia el angulo fisico."
+          en: "A farther screen separates fringes more, although it does not change the physical angle."
+    coherence_rules:
+      - id: ld_coherence_positive
+        when: "L_distancia <= 0"
+        status: error
+        text:
+          es: "[[L_distancia]] debe ser positiva para observar un patron en pantalla."
+          en: "[[L_distancia]] must be positive to observe a pattern on a screen."
+      - id: ld_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[L_distancia]] es coherente si corresponde a la separacion real del montaje."
+          en: "[[L_distancia]] is coherent if it corresponds to the real setup separation."
+    model_validity_rules:
+      - id: ld_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "Para Fraunhofer, [[L_distancia]] debe ser suficientemente grande frente al tamano de abertura."
+          en: "For Fraunhofer diffraction, [[L_distancia]] must be sufficiently large compared with aperture size."
+    graph_rules:
+      - id: ld_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el grafico de pantalla, aumentar [[L_distancia]] escala las posiciones laterales."
+          en: "In the screen graph, increasing [[L_distancia]] scales lateral positions."
+    likely_errors:
+      - id: ld_error_campo
+        when: "true"
+        status: warning
+        text:
+          es: "Error comun: suponer campo lejano aunque la pantalla este demasiado cerca."
+          en: "Common mistake: assume far field although the screen is too close."
+
+  theta_dif:
+    magnitude_type: angle
+    semantic_role:
+      es: Angulo de difraccion - direccion angular del minimo respecto a la normal de incidencia.
+      en: Diffraction angle - angular direction of the minimum relative to the incidence normal.
+    next_step_rules:
+      - id: td_next_posicion
+        when: "true"
+        status: ok
+        text:
+          es: "Calcula la posicion lineal [[y_posicion]] en la pantalla para comparar con mediciones experimentales."
+          en: "Calculate the linear position [[y_posicion]] on the screen to compare with experimental measurements."
+      - id: td_next_orden
+        when: "true"
+        status: ok
+        text:
+          es: "Determina el orden [[m_orden]] del minimo para identificar su posicion en el patron completo."
+          en: "Determine the order [[m_orden]] of the minimum to identify its position in the complete pattern."
+    summary_rules:
+      - id: td_summary_central
+        when: "theta_dif == 0"
+        status: ok
+        text:
+          es: "El angulo cero indica el maximo central de difraccion, en la direccion de incidencia sin desviacion."
+          en: "Zero angle indicates the central diffraction maximum, in the incidence direction without deviation."
+      - id: td_summary_pequeno
+        when: "abs(theta_dif) < 0.14"
+        status: ok
+        text:
+          es: "El angulo pequeno permite usar aproximaciones lineales para simplificar calculos de posicion."
+          en: "Small angle allows using linear approximations to simplify position calculations."
+      - id: td_summary_grande
+        when: "abs(theta_dif) >= 0.14"
+        status: warning
+        text:
+          es: "Angulo significativo. La aproximacion lineal puede tener error apreciable; usar trigonometria exacta."
+          en: "Significant angle. Linear approximation may have appreciable error; use exact trigonometry."
+      - id: td_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "El angulo [[theta_dif]] describe la desviacion angular del minimo respecto a la direccion incidente."
+          en: "Angle [[theta_dif]] describes the angular deviation of the minimum from the incident direction."
+    physical_reading_rules:
+      - id: td_reading_signo
+        when: "theta_dif > 0"
+        status: ok
+        text:
+          es: "El signo positivo indica que el minimo aparece a un lado de la direccion central de incidencia."
+          en: "Positive sign indicates the minimum appears to one side of the central incidence direction."
+      - id: td_reading_magnitud
+        when: "true"
+        status: ok
+        text:
+          es: "La magnitud del angulo depende del cociente entre longitud de onda y ancho de abertura, escalado por el orden."
+          en: "The angle magnitude depends on the ratio between wavelength and aperture width, scaled by the order."
+      - id: td_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor indica la direccion en que se observa el minimo de intensidad en el patron de difraccion."
+          en: "The value indicates the direction in which the intensity minimum is observed in the diffraction pattern."
+    coherence_rules:
+      - id: td_coherence_rango
+        when: "abs(theta_dif) > pi/2"
+        status: error
+        text:
+          es: "El angulo excede 90 grados. Verifica los valores de orden, longitud de onda y ancho de abertura."
+          en: "Angle exceeds 90 degrees. Verify the values of order, wavelength and aperture width."
+      - id: td_coherence_argumento
+        when: "abs(m_orden * lambda / a_abertura) > 1"
+        status: error
+        text:
+          es: "El argumento del arcseno excede la unidad. No existe solucion real para estos parametros."
+          en: "Arcsine argument exceeds unity. No real solution exists for these parameters."
+      - id: td_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El angulo es fisicamente consistente con los parametros de entrada."
+          en: "The angle is physically consistent with input parameters."
+    model_validity_rules:
+      - id: td_validity_campo_cercano
+        when: "L_distancia < 10 * a_abertura"
+        status: warning
+        text:
+          es: "Distancia corta respecto al ancho de abertura. El modelo de Fraunhofer puede ser impreciso."
+          en: "Short distance relative to aperture width. Fraunhofer model may be imprecise."
+      - id: td_validity_angulo_grande
+        when: "abs(theta_dif) > 0.5"
+        status: warning
+        text:
+          es: "Angulo grande. La aproximacion paraxial deja de ser valida; se necesita tratamiento exacto."
+          en: "Large angle. Paraxial approximation ceases to be valid; exact treatment needed."
+      - id: td_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "Modelo valido para difraccion de Fraunhofer con aproximacion de angulo pequeno si aplica."
+          en: "Model valid for Fraunhofer diffraction with small angle approximation if applicable."
+    graph_rules:
+      - id: td_graph_patron
+        when: "true"
+        status: ok
+        text:
+          es: "El grafico muestra los minimos como puntos donde la intensidad cae localmente."
+          en: "The graph shows minima as points where intensity falls locally."
+      - id: td_graph_escala
+        when: "true"
+        status: ok
+        text:
+          es: "La escala angular permite leer directamente los angulos de difraccion de cada orden."
+          en: "The angular scale allows direct reading of diffraction angles for each order."
+      - id: td_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "La visualizacion conecta la direccion angular con la posicion en el patron."
+          en: "Visualization connects angular direction with position in the pattern."
+    likely_errors:
+      - id: td_error_grados
+        when: "true"
+        status: warning
+        text:
+          es: "Error comun: confundir la aproximacion de angulo pequeno con una regla universal. Verifica si el patron esta en regimen angular pequeno antes de simplificar."
+          en: "Common mistake: confuse the small-angle approximation with a universal rule. Verify whether the pattern is in the small-angle regime before simplifying."
+      - id: td_error_signo
+        when: "true"
+        status: warning
+        text:
+          es: "Confusion con signos: cada orden tiene dos minimos simetricos, uno con angulo positivo y otro negativo."
+          en: "Sign confusion: each order has two symmetric minima, one with positive angle and one negative."
+      - id: td_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verifica que el angulo resultante tiene sentido fisico para la longitud de onda y abertura dadas."
+          en: "Verify that the resulting angle makes physical sense for the given wavelength and aperture."
+
+  y_posicion:
+    magnitude_type: position
+    semantic_role:
+      es: Posicion lineal en pantalla - coordenada espacial donde se observa el minimo de difraccion.
+      en: Linear position on screen - spatial coordinate where the diffraction minimum is observed.
+    next_step_rules:
+      - id: yp_next_angulo
+        when: "true"
+        status: ok
+        text:
+          es: "Calcula el angulo [[theta_dif]] correspondiente para interpretar la direccion de difraccion."
+          en: "Calculate the corresponding angle [[theta_dif]] to interpret the diffraction direction."
+      - id: yp_next_medida
+        when: "true"
+        status: ok
+        text:
+          es: "Compara con mediciones experimentales del patron para calibrar o verificar el sistema."
+          en: "Compare with experimental measurements of the pattern to calibrate or verify the system."
+    summary_rules:
+      - id: yp_summary_central
+        when: "y_posicion == 0"
+        status: ok
+        text:
+          es: "La posicion cero corresponde al maximo central en el centro geometrico del patron."
+          en: "Zero position corresponds to the central maximum at the geometric center of the pattern."
+      - id: yp_summary_lineal
+        when: "true"
+        status: ok
+        text:
+          es: "La posicion lineal describe donde aparece el minimo en la pantalla fisica, medible experimentalmente."
+          en: "Linear position describes where the minimum appears on the physical screen, measurable experimentally."
+      - id: yp_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor indica la distancia desde el centro hasta el minimo de orden dado."
+          en: "The value indicates the distance from the center to the minimum of given order."
+    physical_reading_rules:
+      - id: yp_reading_escala
+        when: "true"
+        status: ok
+        text:
+          es: "La posicion aumenta con el orden, la longitud de onda y la distancia a pantalla. Aberturas mas estrechas producen patrones mas extendidos."
+          en: "Position increases with order, wavelength and screen distance. Narrower apertures produce more extended patterns."
+      - id: yp_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "La posicion representa la ubicacion observable del minimo en el experimento real."
+          en: "The position represents the observable location of the minimum in the real experiment."
+    coherence_rules:
+      - id: yp_coherence_negativa
+        when: "L_distancia <= 0"
+        status: error
+        text:
+          es: "La distancia a la pantalla debe ser positiva. Revisa el valor de L."
+          en: "Screen distance must be positive. Check the value of L."
+      - id: yp_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "La posicion calculada es coherente con los parametros geometricos del sistema."
+          en: "Calculated position is coherent with the geometric parameters of the system."
+    model_validity_rules:
+      - id: yp_validity_aproximacion
+        when: "abs(y_posicion / L_distancia) > 0.14"
+        status: warning
+        text:
+          es: "La posicion lineal es grande respecto a la distancia. La aproximacion de angulo pequeno pierde precision."
+          en: "Linear position is large relative to distance. Small angle approximation loses precision."
+      - id: yp_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "Valido en regimen de Fraunhofer con aproximacion paraxial."
+          en: "Valid in Fraunhofer regime with paraxial approximation."
+    graph_rules:
+      - id: yp_graph_pantalla
+        when: "true"
+        status: ok
+        text:
+          es: "El grafico muestra el patron de intensidad proyectado sobre la pantalla lineal."
+          en: "The graph shows the intensity pattern projected onto the linear screen."
+      - id: yp_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "La escala lineal permite leer directamente la posicion de cada minimo en unidades de longitud."
+          en: "Linear scale allows direct reading of each minimum position in length units."
+    likely_errors:
+      - id: yp_error_unidades
+        when: "true"
+        status: warning
+        text:
+          es: "Confusion de unidades: asegurate de usar metros consistentes para longitud de onda, ancho, distancia y posicion."
+          en: "Unit confusion: ensure consistent meters are used for wavelength, width, distance and position."
+      - id: yp_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verifica que la posicion resultante cabe fisicamente en la pantalla disponible."
+          en: "Verify that the resulting position physically fits on the available screen."
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true

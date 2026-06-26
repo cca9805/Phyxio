@@ -1,0 +1,271 @@
+version: 5.0.0
+leaf: equilibrio-estadistico
+ui:
+  default_formula: flujo_probabilidad_neto
+formulas:
+- id: criterio_probabilidad_estacionaria
+  title:
+    es: Criterio de probabilidad estacionaria
+    en: Stationary probability criterion
+  equation: J_ij=0
+  latex: J_{ij}(t)=0
+  rearrangements:
+  - id: variacion_probabilidad
+    equation: J_ij=0
+    latex: J_{ij}(t)=0
+    target: probabilidad_estado
+  category: equilibrio estadistico
+  relation_type: criterion
+  physical_meaning:
+    es: En equilibrio estadístico la probabilidad de cada estado permanece constante aunque puedan existir saltos microscópicos
+      compensados.
+    en: At statistical equilibrium each state probability remains constant even when compensated microscopic jumps still occur.
+  constraints:
+    es: El conjunto de estados debe estar definido y las tasas de transición deben ser estables en el intervalo observado.
+    en: The state set must be defined and transition rates must be stable over the observed interval.
+  validity:
+    es: Válido para procesos estacionarios o relajados; falla durante transitorios macroscópicos rápidos.
+    en: Valid for stationary or relaxed processes; it fails during fast macroscopic transients.
+  dimension_check: '[T^-1] for derivative, zero at equilibrium'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - interpretacion
+  - dcl
+  - svg
+  interpretation_tags:
+  - equilibrium
+  - stationary
+  - probability
+  result_semantics:
+    target: probabilidad_estado
+    kind: criterion
+    sign_meaning:
+      es: Un valor positivo o negativo indicaría acumulación o pérdida de probabilidad; cero indica estacionariedad.
+      en: A positive or negative value would indicate accumulation or loss of probability; zero indicates stationarity.
+    absolute_value_meaning:
+      es: La magnitud mide rapidez de cambio de ocupación estadística.
+      en: The magnitude measures the rate of change of statistical occupation.
+  domain_checks:
+  - es: Comprueba que las probabilidades estén normalizadas antes de interpretar estacionariedad.
+    en: Check that probabilities are normalized before interpreting stationarity.
+  coherence_checks:
+  - es: Si una probabilidad crece, otra debe disminuir o debe existir intercambio con un entorno estadístico.
+    en: If one probability grows, another must decrease or there must be exchange with a statistical environment.
+  graph_implications:
+  - es: En el DCL estadístico, las flechas entrantes y salientes se compensan.
+    en: In the statistical DCL, incoming and outgoing arrows compensate.
+  pedagogical_triggers:
+  - es: Distinguir equilibrio de inmovilidad microscópica.
+    en: Distinguish equilibrium from microscopic immobility.
+- id: normalizacion_probabilidades
+  title:
+    es: Normalización de probabilidades
+    en: Probability normalization
+  equation: sum(p_i)=1
+  latex: \sum_i p_i=1
+  rearrangements:
+  - id: probabilidad_restante
+    equation: p_j=1-sum(p_i)
+    latex: p_j=1-\sum_i p_i+p_j
+    target: probabilidad_estado
+  category: probabilidad
+  relation_type: constraint
+  physical_meaning:
+    es: Toda la población estadística debe estar repartida entre los estados accesibles.
+    en: The whole statistical population must be distributed among the accessible states.
+  constraints:
+    es: Solo se suman estados mutuamente excluyentes y accesibles dentro del modelo.
+    en: Only mutually exclusive accessible states inside the model are summed.
+  validity:
+    es: Válido para descripciones probabilísticas cerradas; si hay estados omitidos la suma deja de representar el sistema.
+    en: Valid for closed probabilistic descriptions; if states are omitted the sum no longer represents the system.
+  dimension_check: dimensionless
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - interpretacion
+  - svg
+  interpretation_tags:
+  - normalization
+  - probability
+  result_semantics:
+    target: probabilidad_estado
+    kind: constraint
+    sign_meaning:
+      es: Las probabilidades no admiten signo negativo; un valor negativo indica error de modelo o cálculo.
+      en: Probabilities do not allow negative sign; a negative value indicates model or calculation error.
+    absolute_value_meaning:
+      es: Cada valor indica fracción de sistemas o tiempo asociado a un estado.
+      en: Each value indicates the fraction of systems or time associated with a state.
+  domain_checks:
+  - es: Rechaza valores fuera del intervalo 0 ≤ p_i ≤ 1.
+    en: Reject values outside the interval 0 ≤ p_i ≤ 1.
+  coherence_checks:
+  - es: La suma total debe ser uno antes de usar balances de flujo.
+    en: The total sum must be one before using flow balances.
+  graph_implications:
+  - es: El tamaño de cada depósito visual representa ocupación relativa.
+    en: The size of each visual reservoir represents relative occupation.
+  pedagogical_triggers:
+  - es: No confundir probabilidad con número de partículas absoluto.
+    en: Do not confuse probability with absolute number of particles.
+- id: balance_detallado_dos_estados
+  title:
+    es: Balance detallado entre dos estados
+    en: Detailed balance between two states
+  equation: p_i*k_ij=p_j*k_ji
+  latex: p_i k_ij=p_j k_ji
+  rearrangements:
+  - id: razon_probabilidades
+    equation: p_i/p_j=k_ji/k_ij
+    latex: p_i/p_j=k_ji/k_ij
+    target: probabilidad_estado
+  category: equilibrio estadistico
+  relation_type: balance
+  physical_meaning:
+    es: Cada transición microscópica queda compensada por la inversa en promedio estadístico.
+    en: Each microscopic transition is compensated by its reverse in statistical average.
+  constraints:
+    es: Requiere pares de transiciones reversibles y tasas bien definidas.
+    en: Requires reversible transition pairs and well-defined rates.
+  validity:
+    es: Adecuado cerca del equilibrio; puede fallar en estados estacionarios mantenidos por fuerzas externas.
+    en: Appropriate near equilibrium; may fail in steady states maintained by external driving.
+  dimension_check: '[T^-1] on both sides'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - interpretacion
+  - dcl
+  - svg
+  interpretation_tags:
+  - detailed_balance
+  - rates
+  result_semantics:
+    target: flujo_probabilidad
+    kind: balance
+    sign_meaning:
+      es: La igualdad representa flujo neto nulo entre dos estados.
+      en: The equality represents zero net flow between two states.
+    absolute_value_meaning:
+      es: Cada producto mide tránsito probabilístico por unidad de tiempo.
+      en: Each product measures probabilistic traffic per unit time.
+  domain_checks:
+  - es: Las tasas deben ser no negativas y compatibles con el mismo intervalo temporal.
+    en: Rates must be nonnegative and compatible with the same time interval.
+  coherence_checks:
+  - es: Si ambos productos no coinciden, el par aún no está en balance detallado.
+    en: If both products do not match, the pair is not yet in detailed balance.
+  graph_implications:
+  - es: Las flechas opuestas del DCL deben tener igual grosor en equilibrio detallado.
+    en: Opposite DCL arrows should have equal thickness in detailed equilibrium.
+  pedagogical_triggers:
+  - es: Separar balance global de balance detallado par a par.
+    en: Separate global balance from pairwise detailed balance.
+- id: flujo_probabilidad_neto
+  title:
+    es: Flujo neto de probabilidad
+    en: Net probability flow
+  equation: J_ij=p_i*k_ij-p_j*k_ji
+  latex: J_ij=p_i k_ij-p_j k_ji
+  rearrangements:
+  - id: flujo_inverso
+    equation: p_j*k_ji=p_i*k_ij-J_ij
+    latex: p_j k_ji=p_i k_ij-J_ij
+    target: flujo_probabilidad
+  category: equilibrio estadistico
+  relation_type: definition
+  physical_meaning:
+    es: El flujo neto cuantifica si hay transferencia estadística preferente entre dos estados.
+    en: Net flow quantifies whether there is preferential statistical transfer between two states.
+  constraints:
+    es: Usa probabilidades normalizadas y tasas de transición no negativas.
+    en: Use normalized probabilities and nonnegative transition rates.
+  validity:
+    es: Válido para modelos de Markov discretos o esquemas de transición equivalentes.
+    en: Valid for discrete Markov models or equivalent transition schemes.
+  dimension_check: '[T^-1]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculadora
+  - interpretacion
+  - dcl
+  - svg
+  interpretation_tags:
+  - net_flow
+  - equilibrium_test
+  result_semantics:
+    target: flujo_probabilidad
+    kind: signed_scalar
+    sign_meaning:
+      es: El signo indica el sentido neto del intercambio estadístico según el convenio i→j.
+      en: The sign gives the net direction of statistical exchange under the i→j convention.
+    absolute_value_meaning:
+      es: El módulo mide intensidad del desbalance estadístico por unidad de tiempo.
+      en: The absolute value measures the intensity of statistical imbalance per unit time.
+  domain_checks:
+  - es: En equilibrio estadístico esperado, J_ij debe acercarse a cero dentro de la tolerancia experimental.
+    en: At expected statistical equilibrium, J_ij should approach zero within experimental tolerance.
+  coherence_checks:
+  - es: Un flujo neto persistente implica no equilibrio o una fuente externa.
+    en: A persistent net flow implies nonequilibrium or an external source.
+  graph_implications:
+  - es: El DCL estadístico muestra una flecha resultante si J_ij no es cero.
+    en: The statistical DCL shows a resultant arrow if J_ij is not zero.
+  pedagogical_triggers:
+  - es: Interpretar cero como compensación dinámica, no como ausencia de transición.
+    en: Interpret zero as dynamic compensation, not absence of transition.
+- id: entropia_gibbs_equilibrio
+  title:
+    es: Entropía de Gibbs en equilibrio
+    en: Gibbs entropy at equilibrium
+  equation: S=-k_B*sum(p_i*ln(p_i))
+  latex: S=-k_B\sum_i p_i\ln p_i
+  rearrangements:
+  - id: suma_informacional
+    equation: sum(p_i*ln(p_i))=-S/k_B
+    latex: \sum_i p_i\ln p_i=-\frac{S}{k_B}
+    target: entropia
+  category: entropia
+  relation_type: definition
+  physical_meaning:
+    es: La entropía mide la dispersión estadística de ocupación entre microestados accesibles.
+    en: Entropy measures the statistical spread of occupation among accessible microstates.
+  constraints:
+    es: Las probabilidades deben ser positivas o tratar el límite p_i ln p_i cuando p_i tiende a cero.
+    en: Probabilities must be positive or use the p_i ln p_i limit as p_i tends to zero.
+  validity:
+    es: Válida para distribuciones normalizadas en equilibrio o estados estadísticos comparables.
+    en: Valid for normalized distributions at equilibrium or comparable statistical states.
+  dimension_check: '[J*K^-1]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - interpretacion
+  - svg
+  interpretation_tags:
+  - entropy
+  - spread
+  result_semantics:
+    target: entropia
+    kind: nonnegative_scalar
+    sign_meaning:
+      es: La entropía física no debe salir negativa en una distribución válida.
+      en: Physical entropy should not become negative for a valid distribution.
+    absolute_value_meaning:
+      es: Un valor mayor indica ocupación más extendida entre estados accesibles.
+      en: A larger value indicates occupation spread over more accessible states.
+  domain_checks:
+  - es: Revisa que ninguna probabilidad inválida entre en el logaritmo.
+    en: Check that no invalid probability enters the logarithm.
+  coherence_checks:
+  - es: Distribuciones más uniformes deben producir mayor entropía que distribuciones concentradas.
+    en: More uniform distributions should produce higher entropy than concentrated distributions.
+  graph_implications:
+  - es: El SVG puede mostrar ensanchamiento del reparto estadístico al aumentar entropía.
+    en: The SVG can show broadening of statistical distribution as entropy increases.
+  pedagogical_triggers:
+  - es: Conectar equilibrio con distribución, no con reposo absoluto.
+    en: Connect equilibrium with distribution, not absolute rest.

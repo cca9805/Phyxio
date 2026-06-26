@@ -1,0 +1,260 @@
+version: 5.0.0
+leaf: clasificacion-de-transiciones
+ui:
+  default_formula: salto_parametro_orden
+formulas:
+- id: salto_entropia_latente
+  title:
+    es: Calor latente y salto de entropía
+    en: Latent heat and entropy jump
+  equation: L = T_c*DeltaS
+  latex: L = T_c\Delta S
+  rearrangements:
+  - id: despeje_deltaS
+    equation: DeltaS = L/T_c
+    latex: \Delta S = \frac{L}{T_c}
+    target: salto_entropia
+  - id: despeje_Tc
+    equation: T_c = L/DeltaS
+    latex: T_c = \frac{L}{\Delta S}
+    target: temperatura_critica
+  category: termodinamica
+  relation_type: constitutive
+  physical_meaning:
+    es: En una transición de primer orden, el calor latente mide el salto de entropía en la temperatura crítica.
+    en: In a first-order transition, latent heat measures the entropy jump at the critical temperature.
+  constraints:
+    es: Requiere equilibrio de fases, temperatura crítica positiva y salto de entropía finito.
+    en: Requires phase equilibrium, positive critical temperature, and a finite entropy jump.
+  validity:
+    es: Útil para cambios de fase con coexistencia y calor latente no nulo; no describe transiciones continuas.
+    en: Useful for phase changes with coexistence and nonzero latent heat; it does not describe continuous transitions.
+  dimension_check: '[L] = [Theta]*[M L^2 T^-2 Theta^-1 mol^-1] = [M L^2 T^-2 mol^-1]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - clasificacion_primer_orden
+  interpretation_tags:
+  - primer_orden
+  - calor_latente
+  - entropia
+  result_semantics:
+    target: calor_latente
+    kind: scalar
+    sign_meaning:
+      es: Un valor positivo indica calor absorbido por mol al cruzar la transición en el sentido elegido.
+      en: A positive value indicates heat absorbed per mole when crossing the transition in the chosen direction.
+    absolute_value_meaning:
+      es: Su valor absoluto mide la energía molar intercambiada sin cambio continuo de temperatura.
+      en: Its absolute value measures the molar energy exchanged without a continuous temperature change.
+  domain_checks:
+  - id: temperatura_positiva
+    condition: T_c > 0
+    message:
+      es: La temperatura crítica debe ser positiva en kelvin.
+      en: The critical temperature must be positive in kelvin.
+  - id: primer_orden
+    condition: abs(DeltaS) > 0
+    message:
+      es: Un salto de entropía no nulo señala primer orden.
+      en: A nonzero entropy jump signals first order.
+  coherence_checks:
+  - id: sin_calor_latente_continua
+    condition: L == 0
+    message:
+      es: Si el calor latente se anula, no clasifiques como primer orden solo por esta fórmula.
+      en: If latent heat vanishes, do not classify as first order using this formula alone.
+  graph_implications:
+    es: En el esquema Svg se muestra como salto vertical o discontinuidad entre fases coexistentes.
+    en: In the Svg diagram it appears as a vertical jump or discontinuity between coexisting phases.
+  pedagogical_triggers:
+  - id: confundir_L_con_C
+    text:
+      es: 'No confundas calor latente con capacidad calorífica: uno es intercambio finito, la otra es pendiente térmica.'
+      en: 'Do not confuse latent heat with heat capacity: one is a finite exchange, the other a thermal slope.'
+- id: salto_parametro_orden
+  title:
+    es: Salto del parámetro de orden
+    en: Order parameter jump
+  equation: DeltaPhi = Phi_2 - Phi_1
+  latex: \Delta \Phi = \Phi_2 - \Phi_1
+  rearrangements:
+  - id: despeje_phi2
+    equation: Phi_2 = DeltaPhi + Phi_1
+    latex: \Phi_2 = \Delta\Phi + \Phi_1
+    target: parametro_de_orden
+  - id: despeje_phi1
+    equation: Phi_1 = Phi_2 - DeltaPhi
+    latex: \Phi_1 = \Phi_2 - \Delta\Phi
+    target: parametro_de_orden
+  category: clasificacion
+  relation_type: definition
+  physical_meaning:
+    es: Compara el valor del parámetro de orden a ambos lados de la transición para detectar una discontinuidad.
+    en: Compares the order parameter on both sides of the transition to detect a discontinuity.
+  constraints:
+    es: Los dos valores deben pertenecer a fases vecinas medidas bajo el mismo convenio de normalización.
+    en: Both values must belong to neighboring phases measured with the same normalization convention.
+  validity:
+    es: Sirve si existe un parámetro de orden identificable; puede ser insuficiente en transiciones topológicas.
+    en: Applies when an identifiable order parameter exists; it may be insufficient for topological transitions.
+  dimension_check: '[DeltaPhi] = [Phi]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - clasificacion_primer_orden
+  - clasificacion_continua
+  interpretation_tags:
+  - parametro_orden
+  - discontinuidad
+  - simetria
+  result_semantics:
+    target: salto_parametro_de_orden
+    kind: scalar
+    sign_meaning:
+      es: El signo depende de qué fase se tome como final; la clasificación usa sobre todo si el salto es nulo o no.
+      en: The sign depends on which phase is taken as final; classification mainly uses whether the jump is zero or nonzero.
+    absolute_value_meaning:
+      es: El módulo mide la intensidad de la discontinuidad del orden macroscópico.
+      en: The magnitude measures the strength of the discontinuity in macroscopic order.
+  domain_checks:
+  - id: mismo_convenio
+    condition: same_normalization == true
+    message:
+      es: Compara solo valores con el mismo convenio de escala.
+      en: Compare only values using the same scale convention.
+  coherence_checks:
+  - id: salto_no_nulo
+    condition: abs(DeltaPhi) > 0
+    message:
+      es: Un salto finito del parámetro de orden es señal fuerte de primer orden.
+      en: A finite order-parameter jump is a strong signal of first order.
+  graph_implications:
+    es: En el Svg separa una transición continua, con curva suave, de una transición con salto abrupto.
+    en: In the Svg it separates a continuous transition, with a smooth curve, from a transition with an abrupt jump.
+  pedagogical_triggers:
+  - id: valor_no_salto
+    text:
+      es: 'No basta con que el parámetro sea distinto de cero: mira si cambia de forma discontinua.'
+      en: 'It is not enough that the parameter is nonzero: check whether it changes discontinuously.'
+- id: criterio_derivada_energia_libre
+  title:
+    es: Criterio de derivadas de la energía libre
+    en: Free-energy derivative criterion
+  equation: n
+  latex: \partial^n G|_{T_c}
+  rearrangements: []
+  category: clasificacion
+  relation_type: criterion
+  physical_meaning:
+    es: Clasifica la transición por la primera derivada de la energía libre que presenta una discontinuidad.
+    en: Classifies the transition by the first derivative of the free energy that presents a discontinuity.
+  constraints:
+    es: Necesita una energía libre termodinámica adecuada y variables de control bien definidas.
+    en: Requires an appropriate thermodynamic free energy and well-defined control variables.
+  validity:
+    es: Es un criterio macroscópico útil cerca del equilibrio; no captura siempre transiciones topológicas o fuera de equilibrio.
+    en: It is a macroscopic criterion useful near equilibrium; it does not always capture topological or nonequilibrium transitions.
+  dimension_check: Criterio cualitativo; las derivadas conservan dimensiones compatibles con la variable conjugada evaluada.
+  calculable: false
+  motivo_no_calculable: Es un criterio de clasificación, no una fórmula numérica directa.
+  used_in:
+  - clasificacion_general
+  interpretation_tags:
+  - energia_libre
+  - derivadas
+  - orden_transicion
+  result_semantics:
+    target: orden_de_transicion
+    kind: classification
+    sign_meaning:
+      es: No tiene signo físico; devuelve una categoría de clasificación.
+      en: It has no physical sign; it returns a classification category.
+    absolute_value_meaning:
+      es: El número de orden identifica qué derivada se vuelve singular o discontinua.
+      en: The order number identifies which derivative becomes singular or discontinuous.
+  domain_checks:
+  - id: equilibrio
+    condition: near_equilibrium == true
+    message:
+      es: El criterio presupone una descripción de equilibrio o casi equilibrio.
+      en: The criterion assumes an equilibrium or near-equilibrium description.
+  coherence_checks:
+  - id: primer_derivada
+    condition: derivative_order >= 1
+    message:
+      es: La discontinuidad debe asociarse a una derivada física concreta.
+      en: The discontinuity must be associated with a concrete physical derivative.
+  graph_implications:
+    es: El Svg organiza las transiciones según saltos en magnitudes conjugadas o singularidades de respuesta.
+    en: The Svg organizes transitions by jumps in conjugate quantities or response singularities.
+  pedagogical_triggers:
+  - id: clasificar_por_nombre
+    text:
+      es: No clasifiques por el nombre de la sustancia; clasifica por la variable que se rompe o se vuelve singular.
+      en: Do not classify by the substance name; classify by the variable that jumps or becomes singular.
+- id: exponente_parametro_orden
+  title:
+    es: Ley crítica del parámetro de orden
+    en: Critical law for the order parameter
+  equation: Phi = A*(1 - T/T_c)^beta
+  latex: \Phi = A|1-\frac{T}{T_c}|^{\beta}
+  rearrangements:
+  - id: despeje_A
+    equation: A = Phi/(1 - T/T_c)^beta
+    latex: A = \frac{\Phi}{|1-T/T_c|^{\beta}}
+    target: amplitud_critica
+  category: criticidad
+  relation_type: scaling_law
+  physical_meaning:
+    es: Describe cómo el parámetro de orden se aproxima continuamente a cero cerca de una transición crítica.
+    en: Describes how the order parameter continuously approaches zero near a critical transition.
+  constraints:
+    es: Debe aplicarse cerca de la temperatura crítica y en la fase donde el parámetro de orden existe.
+    en: Must be applied near the critical temperature and in the phase where the order parameter exists.
+  validity:
+    es: Es una ley asintótica de transición continua; lejos de la criticidad puede fallar.
+    en: It is an asymptotic law for continuous transitions; far from criticality it may fail.
+  dimension_check: '[Phi] = [A] porque el factor reducido es adimensional.'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - clasificacion_continua
+  interpretation_tags:
+  - critico
+  - exponente
+  - continuidad
+  result_semantics:
+    target: parametro_de_orden
+    kind: scalar
+    sign_meaning:
+      es: Normalmente se usa el módulo o una rama positiva; el signo depende de la simetría rota.
+      en: Usually the magnitude or a positive branch is used; the sign depends on the broken symmetry.
+    absolute_value_meaning:
+      es: El valor mide la intensidad del orden al alejarse del punto crítico.
+      en: The value measures the strength of order as the system moves away from the critical point.
+  domain_checks:
+  - id: cerca_tc
+    condition: abs(1 - T/T_c) < 0.1
+    message:
+      es: La ley crítica es fiable solo cerca de la temperatura crítica.
+      en: The critical law is reliable only near the critical temperature.
+  - id: beta_positivo
+    condition: beta > 0
+    message:
+      es: Un exponente positivo permite que el parámetro tienda a cero en la criticidad.
+      en: A positive exponent lets the parameter tend to zero at criticality.
+  coherence_checks:
+  - id: continuidad_phi
+    condition: Phi -> 0 cuando T -> T_c
+    message:
+      es: 'En una transición continua, el parámetro de orden no salta: se anula gradualmente.'
+      en: 'In a continuous transition, the order parameter does not jump: it vanishes gradually.'
+  graph_implications:
+    es: En el Svg aparece como rama que se estrecha hacia el punto crítico sin salto vertical.
+    en: In the Svg it appears as a branch narrowing toward the critical point without a vertical jump.
+  pedagogical_triggers:
+  - id: usar_ley_fuera
+    text:
+      es: No extrapoles la ley crítica a temperaturas muy alejadas de T_c.
+      en: Do not extrapolate the critical law to temperatures far from T_c.

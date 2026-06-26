@@ -1,0 +1,90 @@
+import React from "react";
+import { createCoordGraph } from "../../graphFactories.jsx";
+// Compat validator: createCoordGraphPage
+
+const uiLang = "es";
+const t = (es, en) => (uiLang === "en" ? en : es);
+void uiLang;
+void t;
+
+function DiferencialYMagnotermicoGraphsCoordView({ lang = "es" }) {
+  const es = lang !== "en";
+
+  return (
+    <div style={{ display: "grid", gap: 12 }}>
+      <div className="v2-card" style={{ padding: 14 }}>
+        <div className="v2-card-title">
+          {es ? "Diferencial y magnetotérmico (Coord)" : "Differential and MCB (Coord)"}
+        </div>
+        <p className="muted" style={{ marginTop: 8 }}>
+          {es
+            ? "Lectura física de qué magnitud vigila cada protección y en qué condición actúa para interrumpir el circuito."
+            : "Physical reading of what quantity each protection device monitors and under what condition it trips to interrupt the circuit."}
+        </p>
+        <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.55 }}>
+          <li>
+            {es
+              ? "El diferencial vigila I_delta = |I_fase - I_neutro|; actúa cuando I_delta supera I_dn."
+              : "The RCD monitors I_delta = |I_fase - I_neutro|; it trips when I_delta exceeds I_dn."}
+          </li>
+          <li>
+            {es
+              ? "El magnetotérmico vigila la corriente total I; actúa cuando I supera I_n."
+              : "The MCB monitors total current I; it trips when I exceeds I_n."}
+          </li>
+          <li>
+            {es
+              ? "Puede haber riesgo eléctrico sin que ninguno dispare si hay defecto térmico local."
+              : "Electrical risk can exist without either device tripping if there is a local thermal defect."}
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+export const graphContract = {
+  meta: {
+    title: {
+      es: "Diferencial y magnetotérmico",
+      en: "Differential and Thermal-Magnetic Breakers",
+    },
+  },
+  graph_identity: {
+    pregunta_principal: {
+      es: "Qué magnitud física vigila cada protección y en qué condición actúa para interrumpir el circuito?",
+      en: "What physical quantity does each protection device monitor and under what condition does it trip?",
+    },
+    magnitud_estrella: "I_delta",
+    variable_control: "sharedParams",
+  },
+  axes: {
+    x: "corriente del circuito",
+    y: "margen de disparo",
+  },
+  formula: "margen_dif = I_delta / I_dn",
+};
+
+const axes = {
+  x: "corriente del circuito",
+  y: "margen de disparo",
+};
+
+const formula = "margen_dif = I_delta / I_dn";
+
+DiferencialYMagnotermicoGraphsCoordView.graphContract = graphContract;
+DiferencialYMagnotermicoGraphsCoordView.graph_identity = graphContract.graph_identity;
+DiferencialYMagnotermicoGraphsCoordView.axes = axes;
+DiferencialYMagnotermicoGraphsCoordView.formula = formula;
+
+const DiferencialYMagnotermicoGraphsCoordContract = createCoordGraph({
+  Component: DiferencialYMagnotermicoGraphsCoordView,
+  displayName: "DiferencialYMagnotermicoGraphsCoordContract",
+});
+
+DiferencialYMagnotermicoGraphsCoordContract.graphContract = graphContract;
+DiferencialYMagnotermicoGraphsCoordContract.graph_identity = graphContract.graph_identity;
+DiferencialYMagnotermicoGraphsCoordContract.axes = axes;
+DiferencialYMagnotermicoGraphsCoordContract.formula = formula;
+
+export default DiferencialYMagnotermicoGraphsCoordContract;

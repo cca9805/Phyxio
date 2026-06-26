@@ -1,0 +1,196 @@
+const e=`version: 1.0.0
+leaf_id: isobarico
+ui:
+  default_formula: trabajo_isobarico
+formulas:
+  - id: trabajo_isobarico
+    title:
+      es: Trabajo en proceso isobarico
+      en: Work in isobaric process
+    equation: W = p * DeltaV
+    latex: "W = p \\\\, \\\\Delta V"
+    rearrangements:
+      - target: W
+        equation: W = p * DeltaV
+        latex: "W = p \\\\, \\\\Delta V"
+      - target: p
+        equation: p = W / DeltaV
+        latex: "p = \\\\frac{W}{\\\\Delta V}"
+      - target: DeltaV
+        equation: DeltaV = W / p
+        latex: "\\\\Delta V = \\\\frac{W}{p}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: A presion constante, el trabajo mecanico que realiza el gas es directamente proporcional a la variacion de volumen. El diagrama pV muestra un rectangulo cuya area es exactamente este trabajo.
+      en: At constant pressure, the mechanical work done by the gas is directly proportional to the volume change. The pV diagram shows a rectangle whose area is exactly this work.
+    constraints: [presion constante durante todo el proceso, gas en equilibrio cuasiestatico, sin friccion interna]
+    validity:
+      es: Valida exclusivamente cuando la presion permanece constante entre el estado inicial y el final; invalida para procesos donde p cambia.
+      en: Valid exclusively when pressure remains constant between initial and final states; invalid for processes where p changes.
+    dimension_check:
+      es: "p [M L⁻¹ T⁻²] por DeltaV [L³] da trabajo \`[M L² T⁻²]\`."
+      en: "p [M L⁻¹ T⁻²] times DeltaV [L³] gives work \`[M L² T⁻²]\`."
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, interpretacion]
+    interpretation_tags: [trabajo, presion_constante, diagrama_pV, expansion, compresion]
+    result_semantics:
+      target: W
+      kind: work_output
+      sign_meaning:
+        es: Positivo si el gas se expande (DeltaV > 0) y realiza trabajo sobre el entorno; negativo si el entorno comprime el gas (DeltaV < 0).
+        en: Positive if the gas expands (DeltaV > 0) and does work on surroundings; negative if surroundings compress the gas (DeltaV < 0).
+      absolute_value_meaning:
+        es: Energia mecanica transferida al entorno o recibida del entorno durante el cambio de volumen a presion constante.
+        en: Mechanical energy transferred to or received from surroundings during volume change at constant pressure.
+    domain_checks:
+      - condition: "p > 0"
+        message:
+          es: "La presion debe ser positiva para que el proceso isobarico sea fisicamente valido."
+          en: "Pressure must be positive for the isobaric process to be physically valid."
+      - condition: "DeltaV != 0"
+        message:
+          es: "Variacion de volumen nula produce trabajo nulo; el proceso seria isocorico, no isobarico."
+          en: "Zero volume change produces zero work; the process would be isochoric, not isobaric."
+    coherence_checks:
+      - check: "Signo de W igual a signo de DeltaV"
+        es: "W y DeltaV deben tener el mismo signo; presion siempre positiva no puede invertir el signo del trabajo."
+        en: "W and DeltaV must have the same sign; always-positive pressure cannot invert the sign of work."
+    graph_implications:
+      - channel: pV_isobarico
+        mapping: "W es el area del rectangulo de base DeltaV y altura p en el diagrama pV. La linea isobarica es horizontal."
+    pedagogical_triggers:
+      - error: "Usar formula adiabatica o isotermica para proceso isobarico"
+        detection: "abs(W - p * DeltaV) > 0.01 * abs(W)"
+        message:
+          es: "Para proceso isobarico la formula correcta es W = p * DeltaV, no la integral sobre la curva adiabatica o la formula logaritmica isotermica."
+          en: "For isobaric process the correct formula is W = p * DeltaV, not the integral over the adiabatic curve or the isothermal logarithmic formula."
+
+  - id: ley_gay_lussac
+    title:
+      es: Ley de Gay-Lussac (relacion V-T isobarica)
+      en: Gay-Lussac's law (isobaric V-T relation)
+    equation: V1 / T1 = V2 / T2
+    latex: "\\\\frac{V_1}{T_1} = \\\\frac{V_2}{T_2}"
+    rearrangements:
+      - target: T2
+        equation: T2 = T1 * V2 / V1
+        latex: "T_2 = T_1 \\\\frac{V_2}{V_1}"
+      - target: V2
+        equation: V2 = V1 * T2 / T1
+        latex: "V_2 = V_1 \\\\frac{T_2}{T_1}"
+      - target: T1
+        equation: T1 = T2 * V1 / V2
+        latex: "T_1 = T_2 \\\\frac{V_1}{V_2}"
+      - target: DeltaT
+        equation: DeltaT = T2 - T1
+        latex: "\\\\Delta T = T_2 - T_1"
+    category: fundamental
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: A presion constante, el volumen de un gas ideal es directamente proporcional a su temperatura absoluta. Duplicar la temperatura absoluta duplica el volumen.
+      en: At constant pressure, the volume of an ideal gas is directly proportional to its absolute temperature. Doubling the absolute temperature doubles the volume.
+    constraints: [gas ideal, presion constante, temperaturas en kelvin, sin cambio de fase]
+    validity:
+      es: Valida para gas ideal con presion y cantidad de sustancia constantes; se desvian los gases reales a altas presiones o cerca del punto de licuefaccion.
+      en: Valid for ideal gas with constant pressure and amount of substance; real gases deviate at high pressures or near liquefaction point.
+    dimension_check:
+      es: "V [L³] dividido entre T [Theta] da el mismo cociente constante en ambos lados de la ecuacion."
+      en: "V [L³] divided by T [Theta] gives the same constant ratio on both sides of the equation."
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, interpretacion]
+    interpretation_tags: [temperatura, volumen, proporcionalidad_directa, gas_ideal, Gay-Lussac]
+    result_semantics:
+      target: T2
+      kind: state_variable
+      sign_meaning:
+        es: T2 es temperatura absoluta, siempre positiva. Si T2 > T1, hubo expansion; si T2 < T1, hubo compresion.
+        en: T2 is absolute temperature, always positive. If T2 > T1, expansion occurred; if T2 < T1, compression occurred.
+      absolute_value_meaning:
+        es: Temperatura final del gas tras el proceso isobarico, en kelvin.
+        en: Final temperature of the gas after the isobaric process, in kelvin.
+    domain_checks:
+      - condition: "T1 > 0 and T2 > 0"
+        message:
+          es: "Las temperaturas deben ser positivas en kelvin; temperaturas negativas o nulas son fisicamente imposibles."
+          en: "Temperatures must be positive in kelvin; negative or zero temperatures are physically impossible."
+      - condition: "V1 > 0 and V2 > 0"
+        message:
+          es: "Los volumenes deben ser positivos; volumen nulo o negativo carece de significado fisico."
+          en: "Volumes must be positive; zero or negative volume has no physical meaning."
+    coherence_checks:
+      - check: "V2/V1 = T2/T1 para proceso isobarico"
+        es: "La razon de volumenes debe ser igual a la razon de temperaturas absolutas; cualquier discrepancia indica error de calculo o proceso no isobarico."
+        en: "The volume ratio must equal the absolute temperature ratio; any discrepancy indicates calculation error or non-isobaric process."
+    graph_implications:
+      - channel: pV_isobarico
+        mapping: "En el diagrama pV, el estado inicial (V1, p) y el final (V2, p) estan a la misma altura; T2 determina cuanto se desplazo el punto final."
+    pedagogical_triggers:
+      - error: "Usar temperaturas en Celsius en la proporcion V/T"
+        detection: "T1 < 50 or T2 < 50"
+        message:
+          es: "Temperaturas muy bajas sugieren que se usaron grados Celsius. La ley de Gay-Lussac requiere temperaturas en kelvin: T(K) = T(°C) + 273.15."
+          en: "Very low temperatures suggest Celsius degrees were used. Gay-Lussac's law requires temperatures in kelvin: T(K) = T(°C) + 273.15."
+
+  - id: primer_principio_isobarico
+    title:
+      es: Primer principio en proceso isobarico
+      en: First law in isobaric process
+    equation: DeltaU = Q - W
+    latex: "\\\\Delta U = Q - W"
+    rearrangements:
+      - target: DeltaU
+        equation: DeltaU = Q - W
+        latex: "\\\\Delta U = Q - W"
+      - target: Q
+        equation: Q = DeltaU + W
+        latex: "Q = \\\\Delta U + W"
+      - target: W
+        equation: W = Q - DeltaU
+        latex: "W = Q - \\\\Delta U"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: En proceso isobarico, el calor absorbido se reparte entre el aumento de energia interna del gas y el trabajo mecanico realizado sobre el entorno. A diferencia del proceso adiabatico, aqui Q no es nulo.
+      en: In an isobaric process, the absorbed heat is shared between the increase in internal energy of the gas and the mechanical work done on the surroundings. Unlike the adiabatic process, here Q is not zero.
+    constraints: [primer principio de la termodinamica, sistema cerrado, sin reacciones quimicas internas]
+    validity:
+      es: Valida para cualquier proceso termodinamico de sistema cerrado; en proceso isobarico Q = DeltaU + p * DeltaV.
+      en: Valid for any thermodynamic process of a closed system; in isobaric process Q = DeltaU + p * DeltaV.
+    dimension_check:
+      es: "Todos los terminos tienen dimension de energia \`[M L² T⁻²]\`."
+      en: "All terms have energy dimension \`[M L² T⁻²]\`."
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, interpretacion]
+    interpretation_tags: [energia_interna, calor, trabajo, primer_principio, balance_energetico]
+    result_semantics:
+      target: DeltaU
+      kind: energy_balance
+      sign_meaning:
+        es: Positivo si el gas gana energia interna (absorbe mas calor del que convierte en trabajo); negativo si pierde energia interna.
+        en: Positive if the gas gains internal energy (absorbs more heat than it converts to work); negative if it loses internal energy.
+      absolute_value_meaning:
+        es: Magnitud del cambio de energia interna como resultado neto del balance entre calor y trabajo en el proceso isobarico.
+        en: Magnitude of internal energy change as net result of the balance between heat and work in the isobaric process.
+    domain_checks:
+      - condition: "abs(DeltaU - (Q - W)) < 0.01 * max(abs(Q), abs(W)) + 0.01"
+        message:
+          es: "El balance energetico DeltaU = Q - W debe cumplirse dentro del error numerico."
+          en: "The energy balance DeltaU = Q - W must hold within numerical error."
+    coherence_checks:
+      - check: "En expansion isobarica Q > W > 0 y DeltaU > 0"
+        es: "En expansion isobarica, el calor absorbido supera al trabajo realizado; la diferencia aumenta la energia interna."
+        en: "In isobaric expansion, absorbed heat exceeds work done; the difference increases internal energy."
+    graph_implications:
+      - channel: pV_isobarico
+        mapping: "El area bajo la linea isobarica es W; DeltaU no aparece directamente en el diagrama pV pero se infiere comparando Q y W."
+    pedagogical_triggers:
+      - error: "Confundir Q con DeltaU en proceso isobarico"
+        detection: "abs(Q - DeltaU) < 0.01 * abs(Q) and abs(W) > 0.05 * abs(Q)"
+        message:
+          es: "En proceso isobarico Q no es igual a DeltaU porque parte del calor se convierte en trabajo. Usar DeltaU = Q - W."
+          en: "In isobaric process Q does not equal DeltaU because part of the heat is converted to work. Use DeltaU = Q - W."
+`;export{e as default};

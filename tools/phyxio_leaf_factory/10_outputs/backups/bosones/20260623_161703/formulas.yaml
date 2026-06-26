@@ -1,0 +1,232 @@
+version: 5.0.0
+ui:
+  default_formula: bose_einstein_ocupacion
+formulas:
+- id: bose_einstein_ocupacion
+  title:
+    es: Ocupación media Bose-Einstein
+    en: Bose-Einstein mean occupation
+  equation: ocupacion_media=1/(exp((energia-potencial_quimico)/(constante_boltzmann*temperatura))-1)
+  latex: \bar n=\frac{1}{e^{(\varepsilon-\mu)/(k_B T)}-1}
+  rearrangements:
+  - id: energia_desde_ocupacion
+    target: energia
+    equation: energia=potencial_quimico+constante_boltzmann*temperatura*ln(1+1/ocupacion_media)
+    latex: \varepsilon=\mu+k_B T\ln\left(1+\frac{1}{\bar n}\right)
+  - id: potencial_quimico_desde_ocupacion
+    target: potencial_quimico
+    equation: potencial_quimico=energia-constante_boltzmann*temperatura*ln(1+1/ocupacion_media)
+    latex: \mu=\varepsilon-k_B T\ln\left(1+\frac{1}{\bar n}\right)
+  category: estadistica_cuantica
+  relation_type: distribucion
+  physical_meaning:
+    es: Da el número medio de bosones en un estado de energía dada a temperatura y potencial químico fijados.
+    en: Gives the average number of bosons in a state of given energy at fixed temperature and chemical potential.
+  constraints:
+    es: Requiere equilibrio térmico, bosones indistinguibles y energia mayor que potencial_quimico.
+    en: Requires thermal equilibrium, indistinguishable bosons, and energy greater than chemical potential.
+  validity:
+    es: Válida para gases bosónicos ideales o modos bosónicos cuando las interacciones pueden despreciarse.
+    en: Valid for ideal bosonic gases or bosonic modes when interactions can be neglected.
+  dimension_check: El exponente (energia-potencial_quimico)/(constante_boltzmann*temperatura) es adimensional; ocupacion_media
+    es adimensional.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - interpretacion
+  - graficos
+  - calculadora
+  interpretation_tags:
+  - ocupacion
+  - divergencia
+  - temperatura
+  - potencial_quimico
+  result_semantics:
+    target: ocupacion_media
+    kind: scalar_nonnegative
+    sign_meaning:
+      es: La ocupación media no puede ser negativa; un valor negativo indica uso fuera del dominio.
+      en: Mean occupation cannot be negative; a negative value indicates use outside the domain.
+    absolute_value_meaning:
+      es: Su valor indica cuántos bosones ocupan de media el mismo estado cuántico.
+      en: Its value indicates how many bosons occupy the same quantum state on average.
+  domain_checks:
+  - temperatura>0
+  - energia>potencial_quimico
+  - constante_boltzmann>0
+  coherence_checks:
+  - ocupacion_media>=0
+  - ocupacion_media crece si energia-potencial_quimico disminuye
+  - ocupacion_media crece al aumentar temperatura para energia-potencial_quimico fijo
+  graph_implications:
+  - La curva decrece con energia-potencial_quimico.
+  - La ocupación media se dispara cerca de energia=potencial_quimico.
+  - A energías altas la curva tiende a cero.
+  pedagogical_triggers:
+  - Confundir bosones con partículas clásicas distinguibles.
+  - Permitir potencial_quimico mayor que energia en la fórmula.
+  - Interpretar ocupacion_media como probabilidad limitada a uno.
+- id: fugacidad_bosonica
+  title:
+    es: Fugacidad bosónica
+    en: Bosonic fugacity
+  equation: fugacidad=exp(potencial_quimico/(constante_boltzmann*temperatura))
+  latex: z=e^{\mu/(k_B T)}
+  rearrangements:
+  - id: potencial_quimico_desde_fugacidad
+    target: potencial_quimico
+    equation: potencial_quimico=constante_boltzmann*temperatura*ln(fugacidad)
+    latex: \mu=k_B T\ln z
+  category: estadistica_cuantica
+  relation_type: definicion
+  physical_meaning:
+    es: Resume el efecto del potencial químico en el peso estadístico de los estados bosónicos.
+    en: Summarizes the effect of chemical potential on the statistical weight of bosonic states.
+  constraints:
+    es: En un gas bosónico ideal material, fugacidad no supera uno antes de la condensación.
+    en: For an ideal material boson gas, fugacity does not exceed one before condensation.
+  validity:
+    es: Se usa en equilibrio térmico y gran canónico, especialmente para describir ocupaciones bosónicas.
+    en: Used in thermal and grand-canonical equilibrium, especially to describe bosonic occupations.
+  dimension_check: El exponente potencial_quimico/(constante_boltzmann*temperatura) es adimensional; fugacidad es adimensional.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - interpretacion
+  - calculadora
+  interpretation_tags:
+  - fugacidad
+  - potencial_quimico
+  - equilibrio
+  result_semantics:
+    target: fugacidad
+    kind: scalar_nonnegative
+    sign_meaning:
+      es: La fugacidad es positiva; cero sería el límite de potencial químico muy negativo.
+      en: Fugacity is positive; zero is the limit of very negative chemical potential.
+    absolute_value_meaning:
+      es: Mide la cercanía del sistema al régimen de alta ocupación bosónica.
+      en: Measures how close the system is to the high bosonic occupation regime.
+  domain_checks:
+  - temperatura>0
+  - constante_boltzmann>0
+  - fugacidad>0
+  coherence_checks:
+  - fugacidad aumenta con potencial_quimico
+  - fugacidad=1 corresponde a potencial_quimico=0 si temperatura es positiva
+  graph_implications:
+  - A mayor fugacidad, mayor ocupación media para una energía dada.
+  - Cuando fugacidad se acerca a uno, aparecen ocupaciones grandes en estados bajos.
+  pedagogical_triggers:
+  - Tratar fugacidad como velocidad.
+  - Olvidar que fugacidad es adimensional.
+  - Usar fugacidad mayor que uno en un gas bosónico ideal material.
+- id: longitud_onda_termica_de_broglie
+  title:
+    es: Longitud de onda térmica de de Broglie
+    en: Thermal de Broglie wavelength
+  equation: longitud_onda_termica=constante_planck/sqrt(2*pi*masa_particula*constante_boltzmann*temperatura)
+  latex: \lambda_T=\frac{h}{\sqrt{2\pi m k_B T}}
+  rearrangements:
+  - id: temperatura_desde_longitud_onda_termica
+    target: temperatura
+    equation: temperatura=constante_planck^2/(2*pi*masa_particula*constante_boltzmann*longitud_onda_termica^2)
+    latex: T=\frac{h^2}{2\pi m k_B\lambda_T^2}
+  category: estadistica_cuantica
+  relation_type: escala_caracteristica
+  physical_meaning:
+    es: Estima el tamaño cuántico térmico de cada bosón y cuándo sus ondas empiezan a solaparse.
+    en: Estimates the thermal quantum size of each boson and when their waves begin to overlap.
+  constraints:
+    es: Requiere masa positiva y temperatura positiva; describe partículas no relativistas.
+    en: Requires positive mass and positive temperature; describes nonrelativistic particles.
+  validity:
+    es: Adecuada para gases ideales no relativistas cerca del análisis de degeneración cuántica.
+    en: Suitable for ideal nonrelativistic gases near quantum degeneracy analysis.
+  dimension_check: constante_planck/sqrt(masa_particula*constante_boltzmann*temperatura) tiene dimensión de longitud.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - interpretacion
+  - calculadora
+  interpretation_tags:
+  - de_broglie
+  - temperatura
+  - degeneracion
+  result_semantics:
+    target: longitud_onda_termica
+    kind: scalar_nonnegative
+    sign_meaning:
+      es: La longitud de onda térmica es positiva; un valor negativo no tiene sentido físico.
+      en: Thermal wavelength is positive; a negative value has no physical meaning.
+    absolute_value_meaning:
+      es: Compara la extensión cuántica térmica con la distancia media entre bosones.
+      en: Compares thermal quantum extent with the mean distance between bosons.
+  domain_checks:
+  - temperatura>0
+  - masa_particula>0
+  - constante_planck>0
+  coherence_checks:
+  - longitud_onda_termica disminuye al aumentar temperatura
+  - longitud_onda_termica disminuye al aumentar masa_particula
+  graph_implications:
+  - Temperaturas bajas favorecen solapamiento de ondas.
+  - Masas pequeñas aumentan la escala cuántica térmica.
+  pedagogical_triggers:
+  - Pensar que longitud_onda_termica es una trayectoria.
+  - Aplicarla sin cuidado a partículas relativistas.
+  - Ignorar la dependencia inversa con la raíz de la temperatura.
+- id: densidad_critica_bose
+  title:
+    es: Densidad crítica de condensación
+    en: Critical condensation density
+  equation: densidad_critica=2.612/longitud_onda_termica^3
+  latex: n_c=\frac{\zeta(3/2)}{\lambda_T^3}\approx\frac{2.612}{\lambda_T^3}
+  rearrangements:
+  - id: longitud_onda_termica_desde_densidad_critica
+    target: longitud_onda_termica
+    equation: longitud_onda_termica=(2.612/densidad_critica)^(1/3)
+    latex: \lambda_T=\left(\frac{2.612}{n_c}\right)^{1/3}
+  category: estadistica_cuantica
+  relation_type: umbral
+  physical_meaning:
+    es: Indica la densidad a partir de la cual un gas ideal de bosones puede condensar.
+    en: Indicates the density above which an ideal boson gas can condense.
+  constraints:
+    es: Aplica a bosones ideales tridimensionales no relativistas en equilibrio.
+    en: Applies to ideal three-dimensional nonrelativistic bosons in equilibrium.
+  validity:
+    es: Es una estimación de umbral; interacciones, dimensionalidad y confinamiento modifican el resultado.
+    en: It is a threshold estimate; interactions, dimensionality, and confinement modify the result.
+  dimension_check: 1/longitud_onda_termica^3 tiene dimensión de densidad numérica.
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - interpretacion
+  - calculadora
+  interpretation_tags:
+  - condensacion
+  - densidad
+  - umbral
+  result_semantics:
+    target: densidad_critica
+    kind: scalar_nonnegative
+    sign_meaning:
+      es: La densidad crítica es positiva; cero solo aparece como límite ideal no alcanzable.
+      en: Critical density is positive; zero appears only as an unreachable ideal limit.
+    absolute_value_meaning:
+      es: Compara la densidad real con el umbral de condensación Bose-Einstein.
+      en: Compares the actual density with the Bose-Einstein condensation threshold.
+  domain_checks:
+  - longitud_onda_termica>0
+  - densidad_critica>0
+  coherence_checks:
+  - densidad_critica aumenta cuando longitud_onda_termica disminuye
+  - densidad_particulas mayor que densidad_critica sugiere condensación ideal
+  graph_implications:
+  - A baja temperatura la longitud de onda aumenta y la densidad crítica baja.
+  - El cruce entre densidad_particulas y densidad_critica señala el umbral.
+  pedagogical_triggers:
+  - Confundir densidad crítica con densidad de masa.
+  - Aplicar el umbral sin comprobar dimensionalidad.
+  - Olvidar que es un criterio para gas ideal.

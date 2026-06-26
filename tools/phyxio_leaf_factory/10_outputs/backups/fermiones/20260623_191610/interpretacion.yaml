@@ -1,0 +1,822 @@
+version: 5.0.0
+id: fermiones
+leaf_id: fermiones
+nombre:
+  es: Fermiones
+  en: Fermions
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: distribuciones-estadisticas
+  parent_id: fermi-dirac
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/distribuciones-estadisticas/fermi-dirac/fermiones
+  orden: 273310
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas: fermi_dirac_ocupacion, parametro_reducido_fermi, energia_fermi_gas_3d, temperatura_fermi, exclusion_pauli_ocupacion_maxima
+  magnitudes: ocupacion_estado, energia, potencial_quimico, temperatura_absoluta, constante_boltzmann, energia_reducida, energia_fermi,
+    densidad_numerica, masa_particula, constante_planck_reducida, temperatura_fermi, numero_ocupacion, degeneracion_estado
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: physical concept
+  axis_convention:
+    es: El signo depende del convenio de ejes elegido cuando intervienen magnitudes vectoriales.
+    en: The sign depends on the chosen axis convention when vector quantities are involved.
+  standard_assumptions:
+  - es: El modelo se interpreta dentro de las hipótesis declaradas en el leaf.
+    en: The model is interpreted within the assumptions declared in the leaf.
+  standard_warnings:
+  - es: No interpretes el resultado sin revisar unidades, signo y validez del modelo.
+    en: Do not interpret the result without checking units, sign, and model validity.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: La interpretación debe respetar la dimensión física de cada resultado.
+      en: The interpretation must respect the physical dimension of each result.
+error_patterns:
+  enabled: true
+  patterns:
+  - id: unit_sign_model_confusion
+    status: warning
+    text:
+      es: Un error frecuente es leer el número sin unidad, signo o modelo físico.
+      en: A common error is reading the number without unit, sign, or physical model.
+graph_reading_policy:
+  enabled: true
+  primary_variable: ocupacion_estado
+  reading_sequence:
+  - es: Identifica ejes, dirección, sentido y relación entre magnitudes antes de interpretar el resultado.
+    en: Identify axes, direction, sense, and the relation between quantities before interpreting the result.
+  key_points:
+  - es: Conecta la lectura visual con el signo, la unidad y el modelo físico.
+    en: Connect the visual reading with sign, unit, and the physical model.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Compara el resultado con valores cotidianos o escalas físicas conocidas cuando sea posible.
+    en: Compare the result with everyday values or known physical scales when possible.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Comprueba que las unidades finales coinciden con la magnitud interpretada.
+    en: Check that the final units match the interpreted quantity.
+  common_unit_mistakes:
+  - es: Mezclar unidades incompatibles antes de aplicar la fórmula.
+    en: Mixing incompatible units before applying the formula.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  ocupacion_estado:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado
+      en: mean state occupation
+    summary_rules:
+    - id: ocupacion_estado_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[ocupacion_estado]] indica la magnitud física principal que se está interpretando.
+        en: The result [[ocupacion_estado]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: ocupacion_estado_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[ocupacion_estado]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[ocupacion_estado]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: ocupacion_estado_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[ocupacion_estado]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[ocupacion_estado]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: ocupacion_estado_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[ocupacion_estado]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[ocupacion_estado]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: ocupacion_estado_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[ocupacion_estado]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[ocupacion_estado]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: ocupacion_estado_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[ocupacion_estado]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[ocupacion_estado]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: ocupacion_estado_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[ocupacion_estado]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[ocupacion_estado]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: ocupacion_estado_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[ocupacion_estado]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[ocupacion_estado]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: ocupacion_estado_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[ocupacion_estado]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[ocupacion_estado]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable independiente
+      en: state energy
+    summary_rules:
+    - id: energia_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[energia]] indica la magnitud física principal que se está interpretando.
+        en: The result [[energia]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: energia_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[energia]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[energia]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: energia_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[energia]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[energia]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: energia_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[energia]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: energia_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[energia]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[energia]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: energia_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[energia]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[energia]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: energia_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[energia]], revisa la coherencia física y vuelve a la calculadora si necesitas otro despeje.
+        en: After obtaining [[energia]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: energia_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[energia]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: energia_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[energia]] comprobando qué ocurre si una magnitud dominante crece, disminuye o se
+          anula.
+        en: Analyze the limiting cases of [[energia]] by checking what happens if a dominant quantity grows, decreases, or
+          becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  potencial_quimico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parametro
+      en: chemical potential
+    summary_rules:
+    - id: potencial_quimico_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[potencial_quimico]] indica la magnitud física principal que se está interpretando.
+        en: The result [[potencial_quimico]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: potencial_quimico_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[potencial_quimico]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[potencial_quimico]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: potencial_quimico_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[potencial_quimico]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[potencial_quimico]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: potencial_quimico_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[potencial_quimico]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[potencial_quimico]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: potencial_quimico_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[potencial_quimico]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[potencial_quimico]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: potencial_quimico_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[potencial_quimico]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[potencial_quimico]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: potencial_quimico_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[potencial_quimico]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[potencial_quimico]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: potencial_quimico_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[potencial_quimico]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[potencial_quimico]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: potencial_quimico_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[potencial_quimico]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[potencial_quimico]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_reducida:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable auxiliar
+      en: reduced energy
+    summary_rules:
+    - id: energia_reducida_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[energia_reducida]] indica la magnitud física principal que se está interpretando.
+        en: The result [[energia_reducida]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: energia_reducida_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[energia_reducida]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[energia_reducida]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: energia_reducida_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[energia_reducida]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[energia_reducida]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: energia_reducida_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia_reducida]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[energia_reducida]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: energia_reducida_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[energia_reducida]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[energia_reducida]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: energia_reducida_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[energia_reducida]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[energia_reducida]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: energia_reducida_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[energia_reducida]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[energia_reducida]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: energia_reducida_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_reducida]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[energia_reducida]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: energia_reducida_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[energia_reducida]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[energia_reducida]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_fermi:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: escala característica
+      en: Fermi energy
+    summary_rules:
+    - id: energia_fermi_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[energia_fermi]] indica la magnitud física principal que se está interpretando.
+        en: The result [[energia_fermi]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: energia_fermi_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[energia_fermi]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[energia_fermi]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: energia_fermi_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[energia_fermi]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[energia_fermi]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: energia_fermi_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[energia_fermi]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[energia_fermi]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: energia_fermi_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[energia_fermi]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[energia_fermi]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: energia_fermi_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[energia_fermi]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[energia_fermi]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: energia_fermi_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[energia_fermi]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[energia_fermi]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: energia_fermi_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_fermi]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[energia_fermi]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: energia_fermi_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[energia_fermi]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[energia_fermi]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  densidad_numerica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parametro
+      en: number density
+    summary_rules:
+    - id: densidad_numerica_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[densidad_numerica]] indica la magnitud física principal que se está interpretando.
+        en: The result [[densidad_numerica]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: densidad_numerica_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[densidad_numerica]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[densidad_numerica]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: densidad_numerica_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[densidad_numerica]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[densidad_numerica]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: densidad_numerica_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[densidad_numerica]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[densidad_numerica]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: densidad_numerica_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[densidad_numerica]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[densidad_numerica]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: densidad_numerica_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[densidad_numerica]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[densidad_numerica]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: densidad_numerica_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[densidad_numerica]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[densidad_numerica]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: densidad_numerica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[densidad_numerica]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[densidad_numerica]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: densidad_numerica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[densidad_numerica]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[densidad_numerica]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_fermi:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: escala característica
+      en: Fermi temperature
+    summary_rules:
+    - id: temperatura_fermi_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[temperatura_fermi]] indica la magnitud física principal que se está interpretando.
+        en: The result [[temperatura_fermi]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: temperatura_fermi_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura_fermi]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[temperatura_fermi]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: temperatura_fermi_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura_fermi]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[temperatura_fermi]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: temperatura_fermi_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura_fermi]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[temperatura_fermi]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: temperatura_fermi_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[temperatura_fermi]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[temperatura_fermi]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: temperatura_fermi_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[temperatura_fermi]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[temperatura_fermi]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: temperatura_fermi_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[temperatura_fermi]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[temperatura_fermi]], check the physical consistency and return to the calculator if another
+          rearrangement is needed.
+    physical_intuition:
+    - id: temperatura_fermi_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[temperatura_fermi]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[temperatura_fermi]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: temperatura_fermi_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[temperatura_fermi]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[temperatura_fermi]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_ocupacion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado
+      en: state occupation number
+    summary_rules:
+    - id: numero_ocupacion_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[numero_ocupacion]] indica la magnitud física principal que se está interpretando.
+        en: The result [[numero_ocupacion]] indicates the main physical quantity being interpreted.
+    physical_reading_rules:
+    - id: numero_ocupacion_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[numero_ocupacion]] junto con su unidad, su signo y el contexto físico del leaf.
+        en: Read [[numero_ocupacion]] together with its unit, sign, and the physical context of the leaf.
+    coherence_rules:
+    - id: numero_ocupacion_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[numero_ocupacion]] sea coherente con las magnitudes de entrada y con la dimensión esperada.
+        en: Check that [[numero_ocupacion]] is consistent with the input quantities and the expected dimension.
+    model_validity_rules:
+    - id: numero_ocupacion_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[numero_ocupacion]] solo dentro de las hipótesis físicas del modelo usado en este leaf.
+        en: Interpret [[numero_ocupacion]] only within the physical assumptions of the model used in this leaf.
+    graph_rules:
+    - id: numero_ocupacion_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[numero_ocupacion]] con la lectura gráfica disponible en el leaf.
+        en: Relate [[numero_ocupacion]] to the graph reading available in the leaf.
+    likely_errors:
+    - id: numero_ocupacion_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes [[numero_ocupacion]] como un número aislado. Su sentido depende del modelo, la unidad y el signo.
+        en: Do not interpret [[numero_ocupacion]] as an isolated number. Its meaning depends on the model, unit, and sign.
+    next_step_rules:
+    - id: numero_ocupacion_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[numero_ocupacion]], revisa la coherencia física y vuelve a la calculadora si necesitas otro
+          despeje.
+        en: After obtaining [[numero_ocupacion]], check the physical consistency and return to the calculator if another rearrangement
+          is needed.
+    physical_intuition:
+    - id: numero_ocupacion_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[numero_ocupacion]] resume cómo responde el sistema cuando cambian las magnitudes relevantes.
+        en: Intuitively, [[numero_ocupacion]] summarizes how the system responds when the relevant quantities change.
+    limiting_cases:
+    - id: numero_ocupacion_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Analiza los casos límite de [[numero_ocupacion]] comprobando qué ocurre si una magnitud dominante crece, disminuye
+          o se anula.
+        en: Analyze the limiting cases of [[numero_ocupacion]] by checking what happens if a dominant quantity grows, decreases,
+          or becomes zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

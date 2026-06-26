@@ -1,0 +1,229 @@
+const n=`version: 1
+formulas:
+- id: radial_base
+  title: {es: Ecuacion radial del movimiento circular, en: Radial equation of circular motion}
+  equation: "Frad = m * v**2 / r"
+  latex: "F_{rad} = m \\\\frac{v^2}{r}"
+  variables: [Frad, m, v, r]
+  used_in: [teoria, ejemplos, aplicaciones]
+  category: dynamic
+  relation_type: law
+  physical_meaning: {es: La resultante radial de fuerzas reales iguala m v al cuadrado entre r., en: The radial resultant of real forces equals m v squared over r.}
+  constraints:
+    - equation: "r > 0"
+      es: "r no puede ser cero"
+      en: "r cannot be zero"
+    - equation: "m > 0"
+      es: "m no puede ser cero"
+      en: "m cannot be zero"
+  validity: {es: Movimiento circular en marco inercial., en: Circular motion in an inertial frame.}
+  dimension_check: "MLT^{-2} = M L^2 T^{-2} / L"
+  calculable: true
+  motivo_no_calculable: ""
+  interpretation_tags: [radial, force, acceleration]
+  result_semantics: {es: Fuerza neta radial para mantener el giro., en: Net radial force to maintain the turn.}
+  domain_checks:
+    - var: r
+      condition: "> 0"
+    - var: m
+      condition: "> 0"
+  coherence_checks:
+    - target: Frad
+      condition: ">= 0"
+  graph_implications:
+    - graph: Coord
+      role: "Frad vs v curve"
+  pedagogical_triggers:
+    - trigger: "v doubles"
+      insight: {es: "Frad se cuadruplica.", en: "Frad quadruples."}
+  rearrangements:
+    - target: Frad
+      equation: "Frad = m * v**2 / r"
+      latex: "F_{rad} = m \\\\frac{v^2}{r}"
+      constraints:
+        - equation: "r > 0"
+          es: "r no puede ser cero"
+          en: "r cannot be zero"
+    - target: v
+      equation: "v = (Frad * r / m)**0.5"
+      latex: "v = \\\\sqrt{\\\\frac{F_{rad} \\\\, r}{m}}"
+      constraints:
+        - equation: "m > 0"
+          es: "m no puede ser cero"
+          en: "m cannot be zero"
+    - target: m
+      equation: "m = Frad * r / v**2"
+      latex: "m = \\\\frac{F_{rad} \\\\, r}{v^2}"
+      constraints:
+        - equation: "v > 0"
+          es: "v no puede ser cero"
+          en: "v cannot be zero"
+    - target: r
+      equation: "r = m * v**2 / Frad"
+      latex: "r = \\\\frac{m \\\\, v^2}{F_{rad}}"
+      constraints:
+        - equation: "Frad > 0"
+          es: "Frad no puede ser cero"
+          en: "Frad cannot be zero"
+
+- id: curva_plana_vmax
+  title: {es: Velocidad maxima en curva plana, en: Maximum speed on a flat curve}
+  equation: "v = (mu * g * r)**0.5"
+  latex: "v = \\\\sqrt{\\\\mu_s \\\\, g \\\\, r}"
+  variables: [v, mu, g, r]
+  used_in: [teoria, ejemplos, aplicaciones]
+  category: dynamic
+  relation_type: derived
+  physical_meaning: {es: La friccion estatica maxima determina la velocidad limite en curva plana., en: Maximum static friction determines the speed limit on a flat curve.}
+  constraints:
+    - equation: "r > 0"
+      es: "r no puede ser cero"
+      en: "r cannot be zero"
+    - equation: "mu > 0"
+      es: "mu no puede ser cero"
+      en: "mu cannot be zero"
+  validity: {es: Curva plana con coeficiente de rozamiento estatico conocido., en: Flat curve with known static friction coefficient.}
+  dimension_check: "LT^{-1} = (1 * LT^{-2} * L)^{0.5}"
+  calculable: true
+  motivo_no_calculable: ""
+  interpretation_tags: [friction, speed_limit, flat_curve]
+  result_semantics: {es: Velocidad maxima segura sin derrapar., en: Maximum safe speed without skidding.}
+  domain_checks:
+    - var: mu
+      condition: "> 0"
+    - var: r
+      condition: "> 0"
+  coherence_checks:
+    - target: v
+      condition: ">= 0"
+  graph_implications:
+    - graph: Coord
+      role: "v vs r curve"
+  pedagogical_triggers:
+    - trigger: "r doubles"
+      insight: {es: "v se multiplica por raiz de 2.", en: "v is multiplied by square root of 2."}
+  rearrangements:
+    - target: v
+      equation: "v = (mu * g * r)**0.5"
+      latex: "v = \\\\sqrt{\\\\mu_s \\\\, g \\\\, r}"
+      constraints: []
+    - target: mu
+      equation: "mu = v**2 / (g * r)"
+      latex: "\\\\mu_s = \\\\frac{v^2}{g \\\\, r}"
+      constraints:
+        - equation: "r > 0"
+          es: "r no puede ser cero"
+          en: "r cannot be zero"
+    - target: r
+      equation: "r = v**2 / (mu * g)"
+      latex: "r = \\\\frac{v^2}{\\\\mu_s \\\\, g}"
+      constraints:
+        - equation: "mu > 0"
+          es: "mu no puede ser cero"
+          en: "mu cannot be zero"
+
+- id: peralte_ideal
+  title: {es: Angulo de peralte ideal, en: Ideal banking angle}
+  equation: "tan(th) = v**2 / (r * g)"
+  latex: "\\\\tan(\\\\theta) = \\\\frac{v^2}{r \\\\, g}"
+  variables: [th, v, r, g]
+  used_in: [teoria, ejemplos, aplicaciones]
+  category: dynamic
+  relation_type: derived
+  physical_meaning: {es: La inclinacion permite trazar la curva sin depender de la friccion., en: The tilt allows taking the curve without depending on friction.}
+  constraints:
+    - equation: "r > 0"
+      es: "r no puede ser cero"
+      en: "r cannot be zero"
+  validity: {es: Peralte sin friccion a velocidad constante., en: Frictionless banking at constant speed.}
+  dimension_check: "1 = L^2 T^{-2} / (L * L T^{-2})"
+  calculable: true
+  motivo_no_calculable: ""
+  interpretation_tags: [banking, angle, frictionless]
+  result_semantics: {es: Angulo de peralte optimo para una velocidad., en: Optimal banking angle for a given speed.}
+  domain_checks:
+    - var: r
+      condition: "> 0"
+    - var: g
+      condition: "> 0"
+  coherence_checks:
+    - target: th
+      condition: ">= 0"
+  graph_implications:
+    - graph: Coord
+      role: "th vs v curve"
+  pedagogical_triggers:
+    - trigger: "v doubles"
+      insight: {es: "tan(th) se cuadruplica.", en: "tan(th) quadruples."}
+  rearrangements:
+    - target: th
+      equation: "th = arctan(v**2 / (r * g))"
+      latex: "\\\\theta = \\\\arctan\\\\!\\\\left(\\\\frac{v^2}{r \\\\, g}\\\\right)"
+      constraints:
+        - equation: "r > 0"
+          es: "r no puede ser cero"
+          en: "r cannot be zero"
+    - target: v
+      equation: "v = (r * g * tan(th))**0.5"
+      latex: "v = \\\\sqrt{r \\\\, g \\\\, \\\\tan(\\\\theta)}"
+      constraints: []
+    - target: r
+      equation: "r = v**2 / (g * tan(th))"
+      latex: "r = \\\\frac{v^2}{g \\\\, \\\\tan(\\\\theta)}"
+      constraints:
+        - equation: "g > 0"
+          es: "g no puede ser cero"
+          en: "g cannot be zero"
+
+- id: adherencia_maxima
+  title: {es: Rozamiento estatico maximo, en: Maximum static friction}
+  equation: "fs = mu * Nn"
+  latex: "f_s = \\\\mu_s \\\\, N"
+  variables: [fs, mu, Nn]
+  used_in: [teoria, ejemplos, aplicaciones]
+  category: empirical
+  relation_type: law
+  physical_meaning: {es: La fuerza de rozamiento estatico no puede superar este valor., en: The static friction force cannot exceed this value.}
+  constraints:
+    - equation: "Nn > 0"
+      es: "N no puede ser cero"
+      en: "N cannot be zero"
+  validity: {es: Contacto con superficie solida sin deslizamiento., en: Contact on a solid surface without sliding.}
+  dimension_check: "MLT^{-2} = 1 * MLT^{-2}"
+  calculable: true
+  motivo_no_calculable: ""
+  interpretation_tags: [friction, contact, limit]
+  result_semantics: {es: Limite maximo de friccion estatica., en: Maximum static friction limit.}
+  domain_checks:
+    - var: Nn
+      condition: "> 0"
+    - var: mu
+      condition: "> 0"
+  coherence_checks:
+    - target: fs
+      condition: ">= 0"
+  graph_implications:
+    - graph: Coord
+      role: "fs vs Nn linear"
+  pedagogical_triggers:
+    - trigger: "Nn doubles"
+      insight: {es: "fs se duplica.", en: "fs doubles."}
+  rearrangements:
+    - target: fs
+      equation: "fs = mu * Nn"
+      latex: "f_s = \\\\mu_s \\\\, N"
+      constraints: []
+    - target: mu
+      equation: "mu = fs / Nn"
+      latex: "\\\\mu_s = \\\\frac{f_s}{N}"
+      constraints:
+        - equation: "Nn > 0"
+          es: "N no puede ser cero"
+          en: "N cannot be zero"
+    - target: Nn
+      equation: "Nn = fs / mu"
+      latex: "N = \\\\frac{f_s}{\\\\mu_s}"
+      constraints:
+        - equation: "mu > 0"
+          es: "mu no puede ser cero"
+          en: "mu cannot be zero"`;export{n as default};

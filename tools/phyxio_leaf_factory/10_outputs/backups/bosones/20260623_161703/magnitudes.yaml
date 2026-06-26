@@ -1,0 +1,531 @@
+version: 5.0.0
+magnitudes:
+- id: ocupacion_media
+  symbol: n̄
+  nombre:
+    es: ocupación media
+    en: mean occupation
+  descripcion:
+    es: Número medio de bosones que ocupan un mismo estado cuántico.
+    en: Average number of bosons occupying the same quantum state.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: estadistica_cuantica
+  physical_role:
+    es: resultado principal
+    en: main result
+  used_in:
+  - bose_einstein_ocupacion
+  common_mistake:
+    es: Tratarla como probabilidad limitada entre cero y uno.
+    en: Treating it as a probability limited between zero and one.
+  typical_range: 0 a valores muy grandes cerca del estado fundamental
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No tiene signo; debe ser no negativa.
+      en: It has no sign; it must be nonnegative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero significa estado prácticamente vacío.
+      en: Zero means the state is practically empty.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0,+inf)'
+  interpretation_role:
+    primary_for:
+    - bose_einstein_ocupacion
+    secondary_for:
+    - densidad_critica_bose
+  graph_binding:
+    channels:
+    - yAxis
+    role: Magnitud dominante representada en el eje vertical.
+  pedagogical_notes:
+    es: Puede superar uno porque muchos bosones pueden compartir estado.
+    en: It may exceed one because many bosons can share a state.
+- id: energia
+  symbol: ε
+  nombre:
+    es: energía del estado
+    en: state energy
+  descripcion:
+    es: Energía asociada al estado cuántico disponible para los bosones.
+    en: Energy associated with the quantum state available to bosons.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: energia
+  physical_role:
+    es: variable independiente
+    en: independent variable
+  used_in:
+  - bose_einstein_ocupacion
+  common_mistake:
+    es: Usar energía absoluta sin considerar el potencial químico.
+    en: Using absolute energy without considering chemical potential.
+  typical_range: 10^-32 J a 10^-18 J según sistema
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Puede elegirse con cero convencional, pero debe compararse con potencial_quimico.
+      en: It may use a conventional zero, but must be compared with chemical potential.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero es una referencia de energía, no ausencia de estado.
+      en: Zero is an energy reference, not absence of a state.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: (-inf,+inf)
+  interpretation_role:
+    primary_for:
+    - bose_einstein_ocupacion
+    secondary_for: []
+  graph_binding:
+    channels:
+    - xAxis
+    role: Variable horizontal en la lectura de ocupación.
+  pedagogical_notes:
+    es: Lo relevante en la ocupación es energia menos potencial_quimico.
+    en: What matters for occupation is energy minus chemical potential.
+- id: potencial_quimico
+  symbol: μ
+  nombre:
+    es: potencial químico
+    en: chemical potential
+  descripcion:
+    es: Energía asociada a añadir una partícula al sistema en equilibrio.
+    en: Energy associated with adding one particle to the system in equilibrium.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: energia
+  physical_role:
+    es: parámetro termodinámico
+    en: thermodynamic parameter
+  used_in:
+  - bose_einstein_ocupacion
+  - fugacidad_bosonica
+  common_mistake:
+    es: Tomarlo mayor que la energía mínima en un gas bosónico ideal.
+    en: Taking it above the minimum energy in an ideal boson gas.
+  typical_range: Menor o igual que la energía mínima accesible
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Suele ser negativo o se aproxima a la energía mínima desde abajo.
+      en: It is often negative or approaches the minimum energy from below.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede marcar el límite de condensación en una elección habitual de energía mínima cero.
+      en: Zero may mark the condensation limit under a common zero-minimum energy convention.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: (-inf,energia_minima]
+  interpretation_role:
+    primary_for:
+    - bose_einstein_ocupacion
+    - fugacidad_bosonica
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+    role: Desplaza la curva de ocupación.
+  pedagogical_notes:
+    es: Acercar potencial_quimico a la energía del estado aumenta mucho la ocupación.
+    en: Bringing chemical potential close to the state energy greatly increases occupation.
+- id: temperatura
+  symbol: T
+  nombre:
+    es: temperatura
+    en: temperature
+  descripcion:
+    es: Medida de la escala térmica que ensancha la distribución de ocupaciones.
+    en: Measure of the thermal scale that broadens the occupation distribution.
+  unidad_si: K
+  dimension: Θ
+  is_vector: false
+  components: []
+  category: termodinamica
+  physical_role:
+    es: parámetro de control
+    en: control parameter
+  used_in:
+  - bose_einstein_ocupacion
+  - fugacidad_bosonica
+  - longitud_onda_termica_de_broglie
+  common_mistake:
+    es: Usar grados Celsius en lugar de kelvin.
+    en: Using degrees Celsius instead of kelvin.
+  typical_range: 10^-9 K a 10^4 K según sistema
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La temperatura absoluta no tiene signo en este modelo.
+      en: Absolute temperature has no sign in this model.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: T=0 queda fuera de las fórmulas térmicas usadas aquí.
+      en: T=0 lies outside the thermal formulas used here.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0,+inf)
+  interpretation_role:
+    primary_for:
+    - bose_einstein_ocupacion
+    - longitud_onda_termica_de_broglie
+    secondary_for:
+    - fugacidad_bosonica
+  graph_binding:
+    channels:
+    - parameter
+    role: Controla la anchura térmica de la curva.
+  pedagogical_notes:
+    es: A mayor temperatura, más estados excitados pueden tener ocupación apreciable.
+    en: At higher temperature, more excited states can have appreciable occupation.
+- id: constante_boltzmann
+  symbol: k_B
+  nombre:
+    es: constante de Boltzmann
+    en: Boltzmann constant
+  descripcion:
+    es: Constante que convierte temperatura en escala de energía térmica.
+    en: Constant converting temperature into thermal energy scale.
+  unidad_si: J/K
+  dimension: M L^2 T^-2 Θ^-1
+  is_vector: false
+  components: []
+  category: constante
+  physical_role:
+    es: constante física
+    en: physical constant
+  used_in:
+  - bose_einstein_ocupacion
+  - fugacidad_bosonica
+  - longitud_onda_termica_de_broglie
+  common_mistake:
+    es: Olvidar sus unidades y hacer dimensionalmente incorrecto el exponente.
+    en: Forgetting its units and making the exponent dimensionally wrong.
+  typical_range: 1.380649e-23 J/K
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es positiva por definición.
+      en: It is positive by definition.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: No puede anularse en el modelo físico.
+      en: It cannot vanish in the physical model.
+  value_nature:
+    kind: constant
+    nonnegative_only: true
+    expected_interval: (0,+inf)
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - bose_einstein_ocupacion
+  graph_binding:
+    channels:
+    - constant
+    role: Constante que hace adimensional el exponente.
+  pedagogical_notes:
+    es: Siempre aparece junto a temperatura como energía térmica k_B*T.
+    en: It appears with temperature as thermal energy k_B*T.
+- id: fugacidad
+  symbol: z
+  nombre:
+    es: fugacidad
+    en: fugacity
+  descripcion:
+    es: Factor adimensional que codifica el potencial químico en el ensamble gran canónico.
+    en: Dimensionless factor encoding chemical potential in the grand-canonical ensemble.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: estadistica_cuantica
+  physical_role:
+    es: parámetro estadístico
+    en: statistical parameter
+  used_in:
+  - fugacidad_bosonica
+  common_mistake:
+    es: Confundirla con una velocidad o con una probabilidad.
+    en: Confusing it with a velocity or a probability.
+  typical_range: 0 < z <= 1 en gas bosónico ideal material
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No tiene signo; es positiva.
+      en: It has no sign; it is positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: z=0 es solo un límite matemático de potencial químico muy negativo.
+      en: z=0 is only a mathematical limit of very negative chemical potential.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0,1]
+  interpretation_role:
+    primary_for:
+    - fugacidad_bosonica
+    secondary_for:
+    - bose_einstein_ocupacion
+  graph_binding:
+    channels:
+    - parameter
+    role: Parámetro que acerca el sistema a alta ocupación.
+  pedagogical_notes:
+    es: Cuando z se acerca a uno, los estados bajos pueden llenarse masivamente.
+    en: When z approaches one, low states may become massively occupied.
+- id: longitud_onda_termica
+  symbol: λ_T
+  nombre:
+    es: longitud de onda térmica
+    en: thermal wavelength
+  descripcion:
+    es: Escala de extensión cuántica asociada al movimiento térmico de una partícula.
+    en: Quantum extent scale associated with the thermal motion of a particle.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: escala_cuantica
+  physical_role:
+    es: escala de degeneración
+    en: degeneracy scale
+  used_in:
+  - longitud_onda_termica_de_broglie
+  - densidad_critica_bose
+  common_mistake:
+    es: Interpretarla como recorrido real de la partícula.
+    en: Interpreting it as the particle's real path.
+  typical_range: 10^-12 m a 10^-5 m según masa y temperatura
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Una longitud no tiene signo en este uso.
+      en: A length has no sign in this use.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Cero no es alcanzable para temperatura y masa finitas positivas.
+      en: Zero is not reachable for finite positive temperature and mass.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0,+inf)
+  interpretation_role:
+    primary_for:
+    - longitud_onda_termica_de_broglie
+    secondary_for:
+    - densidad_critica_bose
+  graph_binding:
+    channels:
+    - parameter
+    role: Conecta temperatura con degeneración cuántica.
+  pedagogical_notes:
+    es: Si λ_T se parece a la separación media, la estadística cuántica se vuelve esencial.
+    en: If λ_T resembles the mean spacing, quantum statistics become essential.
+- id: masa_particula
+  symbol: m
+  nombre:
+    es: masa de la partícula
+    en: particle mass
+  descripcion:
+    es: Masa de cada bosón material en el modelo no relativista.
+    en: Mass of each material boson in the nonrelativistic model.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: []
+  category: propiedad
+  physical_role:
+    es: parámetro material
+    en: material parameter
+  used_in:
+  - longitud_onda_termica_de_broglie
+  common_mistake:
+    es: Usar la masa total del gas en lugar de la masa de una partícula.
+    en: Using total gas mass instead of single-particle mass.
+  typical_range: 10^-31 kg a 10^-25 kg en ejemplos atómicos y subatómicos
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La masa usada es positiva.
+      en: The mass used is positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: m=0 no corresponde al modelo no relativista de esta fórmula.
+      en: m=0 does not match the nonrelativistic model of this formula.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0,+inf)
+  interpretation_role:
+    primary_for:
+    - longitud_onda_termica_de_broglie
+    secondary_for: []
+  graph_binding:
+    channels:
+    - constant
+    role: Parámetro que reduce la longitud térmica al crecer.
+  pedagogical_notes:
+    es: Bosones más ligeros muestran efectos ondulatorios térmicos más grandes.
+    en: Lighter bosons show larger thermal wave effects.
+- id: constante_planck
+  symbol: h
+  nombre:
+    es: constante de Planck
+    en: Planck constant
+  descripcion:
+    es: Constante cuántica que fija la escala de la longitud de onda térmica.
+    en: Quantum constant setting the scale of the thermal wavelength.
+  unidad_si: J s
+  dimension: M L^2 T^-1
+  is_vector: false
+  components: []
+  category: constante
+  physical_role:
+    es: constante física
+    en: physical constant
+  used_in:
+  - longitud_onda_termica_de_broglie
+  common_mistake:
+    es: Confundir h con h barra sin ajustar el factor 2π.
+    en: Confusing h with h-bar without adjusting the 2π factor.
+  typical_range: 6.62607015e-34 J s
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es positiva por definición.
+      en: It is positive by definition.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: No puede anularse en física cuántica.
+      en: It cannot vanish in quantum physics.
+  value_nature:
+    kind: constant
+    nonnegative_only: true
+    expected_interval: (0,+inf)
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - longitud_onda_termica_de_broglie
+  graph_binding:
+    channels:
+    - constant
+    role: Constante que introduce la escala cuántica.
+  pedagogical_notes:
+    es: Sin h no aparecería la escala de solapamiento ondulatorio.
+    en: Without h, the wave-overlap scale would not appear.
+- id: densidad_critica
+  symbol: n_c
+  nombre:
+    es: densidad crítica
+    en: critical density
+  descripcion:
+    es: Densidad numérica umbral para condensación Bose-Einstein ideal.
+    en: Number-density threshold for ideal Bose-Einstein condensation.
+  unidad_si: m^-3
+  dimension: L^-3
+  is_vector: false
+  components: []
+  category: umbral
+  physical_role:
+    es: resultado de umbral
+    en: threshold result
+  used_in:
+  - densidad_critica_bose
+  common_mistake:
+    es: Confundirla con densidad de masa o con densidad real medida.
+    en: Confusing it with mass density or actual measured density.
+  typical_range: 10^12 m^-3 a 10^30 m^-3 según sistema
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No tiene signo; es no negativa.
+      en: It has no sign; it is nonnegative.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Cero no es un umbral físico para longitud térmica finita.
+      en: Zero is not a physical threshold for finite thermal wavelength.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0,+inf)
+  interpretation_role:
+    primary_for:
+    - densidad_critica_bose
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+    role: Umbral para comparar con la densidad del gas.
+  pedagogical_notes:
+    es: Superar n_c indica que el modelo ideal predice condensación.
+    en: Exceeding n_c indicates that the ideal model predicts condensation.
+- id: densidad_particulas
+  symbol: n
+  nombre:
+    es: densidad de partículas
+    en: particle density
+  descripcion:
+    es: Número de bosones por unidad de volumen del sistema.
+    en: Number of bosons per unit volume in the system.
+  unidad_si: m^-3
+  dimension: L^-3
+  is_vector: false
+  components: []
+  category: estado
+  physical_role:
+    es: variable de comparación
+    en: comparison variable
+  used_in:
+  - densidad_critica_bose
+  common_mistake:
+    es: Usarla como masa por volumen en vez de número por volumen.
+    en: Using it as mass per volume instead of number per volume.
+  typical_range: 10^12 m^-3 a 10^30 m^-3 según sistema
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es una densidad numérica no negativa.
+      en: It is a nonnegative number density.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero significa ausencia de partículas en el volumen.
+      en: Zero means no particles in the volume.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0,+inf)'
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - densidad_critica_bose
+  graph_binding:
+    channels:
+    - parameter
+    role: Sirve para evaluar si se supera el umbral crítico.
+  pedagogical_notes:
+    es: La comparación relevante es densidad_particulas frente a densidad_critica.
+    en: The relevant comparison is particle density versus critical density.

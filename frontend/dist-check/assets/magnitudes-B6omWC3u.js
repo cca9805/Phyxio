@@ -1,0 +1,189 @@
+const e=`version: 5
+magnitudes:
+  - id: P
+    symbol: P
+    nombre: { es: potencia, en: power }
+    unidad_si: W
+    dimension: M L^2 T^-3
+    descripcion:
+      es: Ritmo al que se realiza trabajo o se transfiere energia.
+      en: Rate at which work is done or energy is transferred.
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: rate_of_energy_transfer
+    used_in: [formulas, theory, examples, interpretation, graph]
+    common_mistake:
+      es: Confundir mucha energia total con mucha potencia.
+      en: Confusing large total energy with large power.
+    typical_range:
+      es: Desde watts en dispositivos pequenos hasta kilowatts o megawatts en maquinas.
+      en: From watts in small devices to kilowatts or megawatts in machines.
+    sign_behavior:
+      es: Puede ser positiva si entra energia mecanica o negativa si el sistema pierde energia.
+      en: It may be positive when mechanical energy enters or negative when the system loses energy.
+    zero_behavior:
+      es: P = 0 indica que no hay transferencia neta instantanea de energia mecanica.
+      en: P = 0 means no net instantaneous mechanical energy transfer.
+    value_nature: signed_scalar
+    interpretation_role: target
+    graph_binding: y
+    pedagogical_notes:
+      es: Leer siempre junto al intervalo temporal o al estado instantaneo.
+      en: Always read it together with the time interval or instantaneous state.
+  - id: W
+    symbol: W
+    nombre: { es: trabajo, en: work }
+    unidad_si: J
+    dimension: M L^2 T^-2
+    descripcion:
+      es: Energia transferida mecanicamente durante un intervalo.
+      en: Mechanical energy transferred over an interval.
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: energy_transfer
+    used_in: [formulas, theory, examples, interpretation]
+    common_mistake:
+      es: Usar W como potencia por parecerse a watt.
+      en: Using W as power because it resembles watt.
+    typical_range:
+      es: Depende de fuerza, desplazamiento y proceso.
+      en: Depends on force, displacement, and process.
+    sign_behavior:
+      es: Su signo depende de si la fuerza entrega o extrae energia.
+      en: Its sign depends on whether the force delivers or removes energy.
+    zero_behavior:
+      es: W = 0 puede indicar ausencia de transferencia neta en el intervalo.
+      en: W = 0 may indicate no net transfer over the interval.
+    value_nature: signed_scalar
+    interpretation_role: input
+    graph_binding: none
+    pedagogical_notes:
+      es: En potencia media, W se reparte sobre un intervalo temporal.
+      en: In average power, W is distributed over a time interval.
+  - id: t
+    symbol: t
+    nombre: { es: tiempo, en: time }
+    unidad_si: s
+    dimension: T
+    descripcion:
+      es: Duracion del proceso sobre el que se promedia la potencia.
+      en: Duration of the process over which power is averaged.
+    is_vector: false
+    components: []
+    category: base
+    physical_role: interval
+    used_in: [formulas, theory, examples, interpretation, graph]
+    common_mistake:
+      es: Usar un tiempo total que no corresponde al trabajo calculado.
+      en: Using a total time that does not match the computed work.
+    typical_range:
+      es: Positivo y definido por el intervalo de estudio.
+      en: Positive and defined by the studied interval.
+    sign_behavior:
+      es: Se usa como intervalo positivo.
+      en: Used as a positive interval.
+    zero_behavior:
+      es: t = 0 no permite definir potencia media.
+      en: t = 0 does not define average power.
+    value_nature: positive_scalar
+    interpretation_role: input
+    graph_binding: x
+    pedagogical_notes:
+      es: Distinguir instante de intervalo finito.
+      en: Distinguish instant from finite interval.
+  - id: F
+    symbol: F
+    nombre: { es: fuerza, en: force }
+    unidad_si: N
+    dimension: M L T^-2
+    descripcion:
+      es: Fuerza que realiza trabajo sobre el punto material.
+      en: Force doing work on the material point.
+    is_vector: true
+    components: [Fx, Fy, Fz]
+    category: vector
+    physical_role: mechanical_interaction
+    used_in: [formulas, theory, examples, interpretation, graph]
+    common_mistake:
+      es: Multiplicar por rapidez sin revisar direccion.
+      en: Multiplying by speed without checking direction.
+    typical_range:
+      es: Depende del sistema mecanico y de la escala de fuerza.
+      en: Depends on the mechanical system and force scale.
+    sign_behavior:
+      es: Su contribucion a P depende de la proyeccion sobre la velocidad.
+      en: Its contribution to P depends on the projection onto velocity.
+    zero_behavior:
+      es: F = 0 implica potencia mecanica nula por esa interaccion.
+      en: F = 0 implies zero mechanical power from that interaction.
+    value_nature: vector
+    interpretation_role: input
+    graph_binding: parameter
+    pedagogical_notes:
+      es: En potencia instantanea importa la componente paralela a la velocidad.
+      en: In instantaneous power, the component parallel to velocity matters.
+  - id: v
+    symbol: v
+    nombre: { es: rapidez, en: speed }
+    unidad_si: m/s
+    dimension: L T^-1
+    descripcion:
+      es: Rapidez del punto donde actua la fuerza.
+      en: Speed of the point where the force acts.
+    is_vector: false
+    components: []
+    category: kinematic
+    physical_role: motion_rate
+    used_in: [formulas, theory, examples, interpretation, graph]
+    common_mistake:
+      es: Usar la velocidad de otro punto del sistema.
+      en: Using the velocity of another point of the system.
+    typical_range:
+      es: No negativa cuando se usa como rapidez.
+      en: Nonnegative when used as speed.
+    sign_behavior:
+      es: La direccion se recoge mediante el angulo theta o el producto escalar.
+      en: Direction is handled through theta or the dot product.
+    zero_behavior:
+      es: v = 0 implica potencia instantanea nula aunque haya fuerza estatica.
+      en: v = 0 implies zero instantaneous power even if a static force exists.
+    value_nature: nonnegative_scalar
+    interpretation_role: input
+    graph_binding: x
+    pedagogical_notes:
+      es: Potencia no es solo fuerza grande; requiere movimiento del punto de aplicacion.
+      en: Power is not just large force; the point of application must move.
+  - id: theta
+    symbol: \\theta
+    nombre: { es: angulo fuerza-velocidad, en: force-velocity angle }
+    unidad_si: rad
+    dimension: dimensionless
+    descripcion:
+      es: Angulo entre la fuerza y la direccion de movimiento.
+      en: Angle between the force and the direction of motion.
+    is_vector: false
+    components: []
+    category: geometric
+    physical_role: projection_angle
+    used_in: [formulas, theory, examples, interpretation]
+    common_mistake:
+      es: Tomar theta igual a cero sin justificar alineacion.
+      en: Taking theta as zero without justifying alignment.
+    typical_range:
+      es: Entre 0 y pi radianes en la lectura de proyeccion.
+      en: Between 0 and pi radians in the projection reading.
+    sign_behavior:
+      es: El coseno de theta decide si la fuerza entrega o extrae energia.
+      en: The cosine of theta decides whether the force delivers or removes energy.
+    zero_behavior:
+      es: theta = pi/2 produce potencia nula por fuerza perpendicular.
+      en: theta = pi/2 produces zero power for a perpendicular force.
+    value_nature: angle
+    interpretation_role: condition
+    graph_binding: parameter
+    pedagogical_notes:
+      es: Es el puente entre fuerza vectorial y potencia escalar.
+      en: It bridges vector force and scalar power.
+`;export{e as default};

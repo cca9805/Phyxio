@@ -1,0 +1,231 @@
+const e=`version: 1.0.0
+leaf_id: formulacion-de-kelvin-planck
+ui:
+  default_formula: balance_motor_termico
+formulas:
+  - id: balance_motor_termico
+    title: { es: Balance energetico de una maquina termica, en: Heat engine energy balance }
+    equation: W = Q_H - Q_C
+    latex: "W = Q_H - Q_C"
+    rearrangements:
+      - target: W
+        equation: W = Q_H - Q_C
+        latex: "W = Q_H - Q_C"
+      - target: Q_H
+        equation: Q_H = W + Q_C
+        latex: "Q_H = W + Q_C"
+      - target: Q_C
+        equation: Q_C = Q_H - W
+        latex: "Q_C = Q_H - W"
+    category: fundamental
+    relation_type: conservation_relation
+    physical_meaning: { es: En un ciclo, la energia interna vuelve al valor inicial y el trabajo util sale de la diferencia entre calor absorbido y calor rechazado., en: In a cycle, internal energy returns to its initial value and useful work comes from the difference between absorbed and rejected heat. }
+    constraints: [ciclo cerrado, Q_H positivo, Q_C no negativo]
+    validity: { es: Valido para maquinas termicas ciclicas con convencion de magnitudes positivas de entrada y rechazo., en: Valid for cyclic heat engines with positive magnitudes for input and rejection. }
+    dimension_check:
+      es: "Todos los terminos son energia con dimension \`[M L² T⁻²]\`."
+      en: "All terms are energy with dimension \`[M L² T⁻²]\`."
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [ejemplos, teoria, interpretacion]
+    interpretation_tags: [balance, maquina_termica, trabajo]
+    result_semantics:
+      target: W
+      kind: useful_work
+      sign_meaning: { es: Positivo indica trabajo entregado al exterior., en: Positive means work delivered to the exterior. }
+      absolute_value_meaning: { es: Energia util producida por ciclo., en: Useful energy produced per cycle. }
+    domain_checks:
+      - condition: Q_H >= Q_C
+        message: { es: Para motor, el calor absorbido debe cubrir rechazo y trabajo., en: For an engine, absorbed heat must cover rejection and work. }
+    coherence_checks:
+      - check: W menor que Q_H si Q_C es positivo
+        es: Coherente con Kelvin-Planck.
+        en: Consistent with Kelvin-Planck.
+    graph_implications:
+      - channel: y_value
+        mapping: Trabajo producido por ciclo.
+    pedagogical_triggers:
+      - error: W igual a Q_H con Q_C nulo
+        detection: Q_C == 0
+        message: { es: Esa conversion total en ciclo viola Kelvin-Planck., en: That total cyclic conversion violates Kelvin-Planck. }
+
+  - id: eficiencia_motor
+    title: { es: Eficiencia termica del motor, en: Heat engine efficiency }
+    equation: eta = W / Q_H
+    latex: "eta = W/Q_H"
+    rearrangements:
+      - target: eta
+        equation: eta = W / Q_H
+        latex: "eta = W/Q_H"
+      - target: W
+        equation: W = eta * Q_H
+        latex: "W = eta Q_H"
+      - target: Q_H
+        equation: Q_H = W / eta
+        latex: "Q_H = W/eta"
+    category: derived
+    relation_type: derived_relation
+    physical_meaning: { es: Mide que fraccion del calor absorbido se transforma en trabajo util., en: Measures what fraction of absorbed heat becomes useful work. }
+    constraints: [Q_H mayor que cero, ciclo motor, eta entre cero y uno]
+    validity: { es: Aplica a maquinas termicas ciclicas; no mide rendimiento de procesos abiertos no ciclicos., en: Applies to cyclic heat engines; it does not measure non-cyclic open processes. }
+    dimension_check:
+      es: "Cociente energia sobre energia; [[eta]] es adimensional \`[1]\`."
+      en: "Energy divided by energy; [[eta]] is dimensionless \`[1]\`."
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [ejemplos, aplicaciones, interpretacion]
+    interpretation_tags: [eficiencia, rendimiento, conversion]
+    result_semantics:
+      target: eta
+      kind: efficiency
+      sign_meaning: { es: Debe estar entre cero y uno para un motor fisico., en: Must lie between zero and one for a physical engine. }
+      absolute_value_meaning: { es: Fraccion de calor que sale como trabajo util., en: Fraction of heat leaving as useful work. }
+    domain_checks:
+      - condition: Q_H > 0
+        message: { es: Se necesita calor absorbido positivo., en: Positive absorbed heat is required. }
+      - condition: eta <= 1
+        message: { es: Eficiencia mayor que uno es imposible., en: Efficiency greater than one is impossible. }
+    coherence_checks:
+      - check: eta menor que eta_carnot
+        es: El motor no supera el limite reversible.
+        en: The engine does not exceed the reversible limit.
+    graph_implications:
+      - channel: efficiency_curve
+        mapping: Curva de rendimiento frente a rechazo termico.
+    pedagogical_triggers:
+      - error: eta igual a uno
+        detection: eta == 1
+        message:
+          es: "Una maquina ciclica no puede convertir todo [[Q_H]] en [[W]]."
+          en: "A cyclic engine cannot convert all [[Q_H]] into [[W]]."
+
+  - id: limite_kelvin_planck
+    title: { es: Prohibicion de conversion total ciclica, en: Prohibition of total cyclic conversion }
+    equation: eta < 1
+    latex: "eta < 1"
+    rearrangements:
+      - target: eta
+        equation: eta < 1
+        latex: "eta < 1"
+    category: fundamental
+    relation_type: inequality
+    physical_meaning: { es: Ninguna maquina que opere en ciclo puede extraer calor de un unico foco y convertirlo completamente en trabajo., en: No cyclic engine can extract heat from a single reservoir and convert it completely into work. }
+    constraints: [maquina ciclica, unico efecto neto, un solo foco termico]
+    validity: { es: Enunciado general de la segunda ley para motores ciclicos macroscopicos., en: General second-law statement for macroscopic cyclic engines. }
+    dimension_check:
+      es: "Desigualdad entre numeros adimensionales \`[1]\`."
+      en: "Inequality between dimensionless numbers \`[1]\`."
+    calculable: false
+    motivo_no_calculable: Es un criterio de imposibilidad fisica, no una ecuacion de calculo directo.
+    used_in: [teoria, errores, interpretacion]
+    interpretation_tags: [segunda_ley, imposibilidad, perpetuo_segunda_especie]
+    result_semantics:
+      target: eta
+      kind: physical_limit
+      sign_meaning: { es: Valores cercanos a uno requieren rechazo cada vez menor y condiciones imposibles en ciclo real., en: Values close to one require ever smaller rejection and impossible real-cycle conditions. }
+      absolute_value_meaning: { es: Cota superior de conversion de calor en trabajo., en: Upper bound for heat-to-work conversion. }
+    domain_checks:
+      - condition: eta < 1
+        message: { es: Cumple Kelvin-Planck., en: Satisfies Kelvin-Planck. }
+    coherence_checks:
+      - check: Si Q_C es cero y W positivo, entonces eta seria uno
+        es: Esa situacion queda prohibida.
+        en: That situation is forbidden.
+    graph_implications:
+      - channel: forbidden_zone
+        mapping: Region eta igual o mayor que uno.
+    pedagogical_triggers:
+      - error: motor perfecto
+        detection: eta >= 1
+        message: { es: Motor perfecto ciclico prohibido por Kelvin-Planck., en: Perfect cyclic engine forbidden by Kelvin-Planck. }
+
+  - id: eficiencia_carnot_motor
+    title: { es: Limite de Carnot para motor termico, en: Carnot limit for a heat engine }
+    equation: eta_carnot = 1 - T_C / T_H
+    latex: "eta_carnot = 1 - T_C/T_H"
+    rearrangements:
+      - target: eta_carnot
+        equation: eta_carnot = 1 - T_C / T_H
+        latex: "eta_carnot = 1 - T_C/T_H"
+      - target: T_C
+        equation: T_C = T_H * (1 - eta_carnot)
+        latex: "T_C = T_H(1 - eta_carnot)"
+      - target: T_H
+        equation: T_H = T_C / (1 - eta_carnot)
+        latex: "T_H = T_C/(1 - eta_carnot)"
+    category: derived
+    relation_type: limiting_relation
+    physical_meaning: { es: Da la maxima eficiencia reversible entre dos focos de temperatura absoluta definida., en: Gives the maximum reversible efficiency between two reservoirs with defined absolute temperature. }
+    constraints: [T_H mayor que T_C, temperaturas en kelvin, ciclo reversible ideal]
+    validity: { es: Limite ideal; toda maquina real entre los mismos focos tiene eficiencia menor., en: Ideal limit; every real engine between the same reservoirs has lower efficiency. }
+    dimension_check:
+      es: "Cociente de temperaturas absolutas; resultado adimensional \`[1]\`."
+      en: "Ratio of absolute temperatures; dimensionless result \`[1]\`."
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, aplicaciones, interpretacion]
+    interpretation_tags: [carnot, limite_reversible, temperaturas]
+    result_semantics:
+      target: eta_carnot
+      kind: maximum_efficiency
+      sign_meaning:
+        es: "Debe ser positiva si [[T_H]] supera a [[T_C]]."
+        en: "Must be positive if [[T_H]] exceeds [[T_C]]."
+      absolute_value_meaning: { es: Techo fisico de eficiencia para esos focos., en: Physical efficiency ceiling for those reservoirs. }
+    domain_checks:
+      - condition: T_H > T_C
+        message: { es: El foco caliente debe estar a mayor temperatura absoluta., en: The hot reservoir must have higher absolute temperature. }
+      - condition: T_C > 0
+        message: { es: Las temperaturas deben ser absolutas positivas., en: Temperatures must be positive absolute values. }
+    coherence_checks:
+      - check: eta no supera eta_carnot
+        es: Una maquina real queda por debajo del limite.
+        en: A real engine remains below the limit.
+    graph_implications:
+      - channel: limit_curve
+        mapping: Techo de eficiencia frente a T_C.
+    pedagogical_triggers:
+      - error: Celsius en Carnot
+        detection: T_H < 100 or T_C < 100
+        message: { es: Posible uso de Celsius; Carnot requiere kelvin., en: Possible Celsius use; Carnot requires kelvin. }
+
+  - id: entropia_ciclo_motor
+    title: { es: Criterio entrópico del ciclo motor, en: Entropic criterion for the engine cycle }
+    equation: DeltaS_universo >= 0
+    latex: "DeltaS_universo >= 0"
+    rearrangements:
+      - target: DeltaS_universo
+        equation: DeltaS_universo >= 0
+        latex: "DeltaS_universo >= 0"
+    category: fundamental
+    relation_type: inequality
+    physical_meaning: { es: El ciclo completo no puede reducir la entropia total de motor y focos; por eso la conversion total esta prohibida., en: The complete cycle cannot reduce total entropy of engine and reservoirs; this forbids total conversion. }
+    constraints: [sistema mas entorno, ciclo completo, focos termicos]
+    validity: { es: Forma general de la segunda ley para procesos macroscopicos., en: General second-law form for macroscopic processes. }
+    dimension_check:
+      es: "Entropia con dimension \`[M L² T⁻² Theta⁻¹]\` comparada con cero."
+      en: "Entropy with dimension \`[M L² T⁻² Theta⁻¹]\` compared with zero."
+    calculable: false
+    motivo_no_calculable: Como criterio general requiere detallar intercambios de calor y produccion interna de entropia.
+    used_in: [teoria, ejemplos, interpretacion]
+    interpretation_tags: [entropia, irreversibilidad, segunda_ley]
+    result_semantics:
+      target: DeltaS_universo
+      kind: entropy_balance
+      sign_meaning: { es: Negativo seria imposible; cero reversible; positivo irreversible., en: Negative is impossible; zero reversible; positive irreversible. }
+      absolute_value_meaning: { es: Medida de irreversibilidad total., en: Measure of total irreversibility. }
+    domain_checks:
+      - condition: DeltaS_universo >= 0
+        message: { es: Criterio de segunda ley satisfecho., en: Second-law criterion satisfied. }
+    coherence_checks:
+      - check: eficiencia perfecta implicaria ausencia de rechazo
+        es: El balance entropico lo impide para un ciclo.
+        en: The entropy balance prevents it for a cycle.
+    graph_implications:
+      - channel: entropy_warning
+        mapping: Aviso cuando se intenta entrar en zona prohibida.
+    pedagogical_triggers:
+      - error: DeltaS_universo negativa
+        detection: DeltaS_universo < 0
+        message: { es: Violacion de segunda ley., en: Second-law violation. }
+`;export{e as default};

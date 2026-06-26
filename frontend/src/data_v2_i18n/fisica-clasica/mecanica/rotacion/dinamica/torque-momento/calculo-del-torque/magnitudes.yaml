@@ -1,0 +1,579 @@
+version: 1
+magnitudes:
+- id: tau
+  symbol: \tau
+  nombre:
+    es: torque_resultante
+    en: resultant_torque
+  descripcion:
+    es: Momento de fuerza neto respecto al eje de analisis.
+    en: Net moment of force with respect to the analysis axis.
+  unidad_si: N*m
+  dimension: M*L^2/T^2
+  is_vector: true
+  components:
+  - tau_x
+  - tau_y
+  - tau_z
+  category: derived
+  physical_role:
+    es: Causa rotacional efectiva
+    en: Effective rotational cause
+  used_in:
+  - torque_por_angulo
+  - torque_brazo
+  - torque_plano
+  - segunda_ley_rotacional
+  common_mistake:
+    es: Tratar el torque como escalar sin fijar eje y sentido.
+    en: Treating torque as scalar without fixing axis and sign.
+  typical_range: -500 a 500 N*m
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del convenio de giro y del eje positivo.
+      en: Sign depends on spin convention and positive axis choice.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor cero implica equilibrio rotacional alrededor del eje.
+      en: Zero value implies rotational equilibrium around the axis.
+  value_nature:
+    kind: vector
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - coherencia-de-signo
+  graph_binding:
+    channels:
+    - torque
+  pedagogical_notes:
+    es: Verificar eje, sentido y unidades antes de interpretar el resultado.
+    en: Verify axis, sign convention, and units before interpretation.
+- id: tau_z
+  symbol: \tau_z
+  nombre:
+    es: torque_eje_z
+    en: z_axis_torque
+  descripcion:
+    es: Componente del torque sobre el eje z en problemas planos.
+    en: Torque component on the z axis in planar problems.
+  unidad_si: N*m
+  dimension: M*L^2/T^2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role:
+    es: Salida escalar en dinamica plana
+    en: Scalar output in planar dynamics
+  used_in:
+  - torque_plano
+  common_mistake:
+    es: Olvidar el signo de horario y antihorario.
+    en: Ignoring clockwise and counterclockwise sign.
+  typical_range: -300 a 300 N*m
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Positivo o negativo segun convenio del eje z.
+      en: Positive or negative depending on z-axis convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica balance de momentos en el plano.
+      en: Zero indicates moment balance in the plane.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - coherencia-de-signo
+  graph_binding:
+    channels:
+    - torque
+  pedagogical_notes:
+    es: En 2D, declarar siempre que z sale del plano para evitar ambiguedad.
+    en: In 2D, always declare z as out of plane to avoid ambiguity.
+- id: F
+  symbol: F
+  nombre:
+    es: fuerza_aplicada
+    en: applied_force
+  descripcion:
+    es: Magnitud de la fuerza aplicada en el punto de interes.
+    en: Magnitude of the force applied at the point of interest.
+  unidad_si: N
+  dimension: M*L/T^2
+  is_vector: true
+  components:
+  - F_x
+  - F_y
+  - F_z
+  category: fundamental
+  physical_role:
+    es: Accion externa
+    en: External action
+  used_in:
+  - torque_por_angulo
+  - torque_brazo
+  common_mistake:
+    es: Usar fuerza total sin descomponer segun direccion efectiva.
+    en: Using total force without resolving effective direction.
+  typical_range: 0 a 5000 N
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El vector fuerza cambia de sentido segun la referencia.
+      en: Force vector direction changes with the chosen frame.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero significa ausencia de accion externa.
+      en: Zero means no external action.
+  value_nature:
+    kind: vector
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - datos-de-entrada
+    secondary_for:
+    - coherencia-de-unidades
+  graph_binding:
+    channels:
+    - force
+  pedagogical_notes:
+    es: Confirmar si la fuerza es perpendicular o inclinada antes de operar.
+    en: Confirm whether force is perpendicular or inclined before computing.
+- id: r
+  symbol: r
+  nombre:
+    es: distancia_al_eje
+    en: distance_to_axis
+  descripcion:
+    es: Distancia desde el eje de giro al punto de aplicacion.
+    en: Distance from rotation axis to application point.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role:
+    es: Brazo geometrico radial
+    en: Radial geometric arm
+  used_in:
+  - torque_por_angulo
+  common_mistake:
+    es: Medir distancia al origen en vez de al eje de giro real.
+    en: Measuring distance to origin instead of true rotation axis.
+  typical_range: 0 a 5 m
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Distancia radial no negativa.
+      en: Radial distance is non-negative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero implica fuerza aplicada sobre el eje y torque nulo.
+      en: Zero means force applied at axis and zero torque.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - datos-de-entrada
+    secondary_for:
+    - validez-geometrica
+  graph_binding:
+    channels:
+    - radius
+  pedagogical_notes:
+    es: Dibujar eje y punto de aplicacion antes de fijar r.
+    en: Draw axis and application point before assigning r.
+- id: b
+  symbol: b
+  nombre:
+    es: brazo_de_palanca
+    en: lever_arm
+  descripcion:
+    es: Distancia perpendicular desde el eje a la linea de accion de la fuerza.
+    en: Perpendicular distance from axis to line of action of force.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role:
+    es: Distancia efectiva de momento
+    en: Effective moment distance
+  used_in:
+  - torque_brazo
+  common_mistake:
+    es: Usar r en lugar del brazo perpendicular b.
+    en: Using r instead of perpendicular arm b.
+  typical_range: 0 a 5 m
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud de distancia.
+      en: Used as a distance magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero implica linea de accion pasando por el eje.
+      en: Zero means line of action passes through axis.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - datos-de-entrada
+    secondary_for:
+    - validez-geometrica
+  graph_binding:
+    channels:
+    - lever_arm
+  pedagogical_notes:
+    es: Si no se identifica b, usa descomposicion de fuerza o trigonometria.
+    en: If b is unclear, use force decomposition or trigonometry.
+- id: theta
+  symbol: \theta
+  nombre:
+    es: angulo_entre_r_y_F
+    en: angle_between_r_and_F
+  descripcion:
+    es: Angulo entre el vector posicion y la fuerza aplicada.
+    en: Angle between position vector and applied force.
+  unidad_si: rad
+  dimension: 1
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role:
+    es: Factor direccional del torque
+    en: Directional factor of torque
+  used_in:
+  - torque_por_angulo
+  common_mistake:
+    es: Usar el angulo con la horizontal en vez de entre r y F.
+    en: Using angle to horizontal instead of angle between r and F.
+  typical_range: 0 a 3.1416 rad
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa en seno, normalmente entre cero y pi.
+      en: Used in sine, usually between zero and pi.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero o pi produce torque nulo por alineacion.
+      en: Zero or pi yields zero torque due to alignment.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, pi]'
+  interpretation_role:
+    primary_for:
+    - datos-de-entrada
+    secondary_for:
+    - coherencia-geometrica
+  graph_binding:
+    channels:
+    - angle
+  pedagogical_notes:
+    es: Aclarar siempre desde que vector se mide theta y en que sentido.
+    en: Always specify from which vector theta is measured and orientation.
+- id: x
+  symbol: x
+  nombre:
+    es: coordenada_x
+    en: x_coordinate
+  descripcion:
+    es: Coordenada x del punto de aplicacion de la fuerza.
+    en: x coordinate of the force application point.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role:
+    es: Posicion para torque plano
+    en: Position for planar torque
+  used_in:
+  - torque_plano
+  common_mistake:
+    es: Usar eje distinto al definido en el diagrama.
+    en: Using an axis different from the declared diagram.
+  typical_range: -10 a 10 m
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Signo definido por orientacion del eje x.
+      en: Sign set by x-axis orientation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero ubica el punto sobre el eje y.
+      en: Zero places the point on y axis.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - datos-de-entrada
+    secondary_for:
+    - coherencia-geometrica
+  graph_binding:
+    channels:
+    - x
+  pedagogical_notes:
+    es: Mantener consistencia con origen y ejes usados en todas las ecuaciones.
+    en: Keep consistency with origin and axes in all equations.
+- id: y
+  symbol: y
+  nombre:
+    es: coordenada_y
+    en: y_coordinate
+  descripcion:
+    es: Coordenada y del punto de aplicacion de la fuerza.
+    en: y coordinate of the force application point.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role:
+    es: Posicion para torque plano
+    en: Position for planar torque
+  used_in:
+  - torque_plano
+  common_mistake:
+    es: Cambiar signo de y al pasar entre cuadrantes sin justificar.
+    en: Flipping y sign between quadrants without justification.
+  typical_range: -10 a 10 m
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Signo definido por orientacion del eje y.
+      en: Sign set by y-axis orientation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero ubica el punto sobre el eje x.
+      en: Zero places the point on x axis.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - datos-de-entrada
+    secondary_for:
+    - coherencia-geometrica
+  graph_binding:
+    channels:
+    - y
+  pedagogical_notes:
+    es: Revisar cuadrante y sentido positivo antes de sustituir.
+    en: Check quadrant and positive direction before substitution.
+- id: F_x
+  symbol: F_x
+  nombre:
+    es: componente_x_de_fuerza
+    en: x_component_of_force
+  descripcion:
+    es: Proyeccion de la fuerza sobre el eje x.
+    en: Projection of force on x axis.
+  unidad_si: N
+  dimension: M*L/T^2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role:
+    es: Entrada de torque plano
+    en: Input for planar torque
+  used_in:
+  - torque_plano
+  common_mistake:
+    es: Asignar signo incorrecto al descomponer la fuerza.
+    en: Assigning wrong sign during force decomposition.
+  typical_range: -5000 a 5000 N
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Signo segun orientacion del eje x.
+      en: Sign according to x-axis orientation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero implica componente horizontal nula.
+      en: Zero implies null horizontal component.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - datos-de-entrada
+    secondary_for:
+    - coherencia-de-signo
+  graph_binding:
+    channels:
+    - force_x
+  pedagogical_notes:
+    es: Verificar descomposicion trigonometrica y signos por cuadrante.
+    en: Verify trigonometric decomposition and quadrant signs.
+- id: F_y
+  symbol: F_y
+  nombre:
+    es: componente_y_de_fuerza
+    en: y_component_of_force
+  descripcion:
+    es: Proyeccion de la fuerza sobre el eje y.
+    en: Projection of force on y axis.
+  unidad_si: N
+  dimension: M*L/T^2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role:
+    es: Entrada de torque plano
+    en: Input for planar torque
+  used_in:
+  - torque_plano
+  common_mistake:
+    es: Perder el signo al cambiar el sentido positivo del eje y.
+    en: Losing sign when changing positive y-axis direction.
+  typical_range: -5000 a 5000 N
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Signo segun orientacion del eje y.
+      en: Sign according to y-axis orientation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero implica componente vertical nula.
+      en: Zero implies null vertical component.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - datos-de-entrada
+    secondary_for:
+    - coherencia-de-signo
+  graph_binding:
+    channels:
+    - force_y
+  pedagogical_notes:
+    es: Mantener consistencia entre diagrama, ejes y signos de F_y.
+    en: Keep consistency between diagram, axes, and F_y sign.
+- id: I
+  symbol: I
+  nombre:
+    es: momento_de_inercia
+    en: moment_of_inertia
+  descripcion:
+    es: Inercia rotacional respecto al eje considerado.
+    en: Rotational inertia with respect to the selected axis.
+  unidad_si: kg*m^2
+  dimension: M*L^2
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role:
+    es: Resistencia a cambiar el estado de giro
+    en: Resistance to changing rotational state
+  used_in:
+  - segunda_ley_rotacional
+  common_mistake:
+    es: Usar un valor de I de otro eje sin teorema de ejes.
+    en: Using I from another axis without axis theorem.
+  typical_range: 0.001 a 100 kg*m^2
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Magnitud no negativa por definicion.
+      en: Non-negative magnitude by definition.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero solo para idealizaciones sin masa o eje degenerado.
+      en: Zero only for idealized massless or degenerate axis cases.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '>= 0'
+  interpretation_role:
+    primary_for:
+    - datos-de-entrada
+    secondary_for:
+    - validez-del-modelo
+  graph_binding:
+    channels:
+    - inertia
+  pedagogical_notes:
+    es: Elegir I coherente con geometria y eje del problema.
+    en: Choose I consistent with geometry and problem axis.
+- id: alpha
+  symbol: \alpha
+  nombre:
+    es: aceleracion_angular
+    en: angular_acceleration
+  descripcion:
+    es: Variacion temporal de la velocidad angular.
+    en: Time variation of angular velocity.
+  unidad_si: rad/s^2
+  dimension: 1/T^2
+  is_vector: true
+  components:
+  - alpha_x
+  - alpha_y
+  - alpha_z
+  category: derived
+  physical_role:
+    es: Respuesta dinamica rotacional
+    en: Rotational dynamic response
+  used_in:
+  - segunda_ley_rotacional
+  common_mistake:
+    es: Confundir aceleracion angular con velocidad angular.
+    en: Confusing angular acceleration with angular velocity.
+  typical_range: -200 a 200 rad/s^2
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Signo segun convenio del eje de giro.
+      en: Sign according to rotation-axis convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica giro con velocidad angular constante.
+      en: Zero indicates rotation with constant angular speed.
+  value_nature:
+    kind: vector
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - lectura-de-resultado
+    secondary_for:
+    - coherencia-dinamica
+  graph_binding:
+    channels:
+    - angular_acceleration
+  pedagogical_notes:
+    es: Relacionar el signo de alpha con el signo del torque neto.
+    en: Relate alpha sign to net torque sign.

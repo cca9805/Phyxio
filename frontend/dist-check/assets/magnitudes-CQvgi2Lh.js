@@ -1,0 +1,451 @@
+const n=`version: 2
+magnitudes:
+  - id: m
+    symbol: m
+    nombre:
+      es: Masa del cuerpo
+      en: Body mass
+    descripcion:
+      es: Cantidad de materia del objeto que se desliza por el plano.
+      en: Amount of matter of the object sliding on the plane.
+    unidad_si: kg
+    dimension: M
+    is_vector: false
+    components: []
+    category: mecanica/dinamica
+    physical_role:
+      es: carga
+      en: load
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Confundir con el peso (fuerza en Newtons).
+      en: Confusing with weight (force in Newtons).
+    typical_range: [0.1, 10000]
+    sign_behavior: siempre_positiva
+    zero_behavior: masa nula implica ausencia de fuerzas gravitatorias
+    value_nature: extensiva
+    interpretation_role: input
+    graph_binding: block_size
+    pedagogical_notes: Determina la inercia y la magnitud del peso.
+
+  - id: Fm
+    symbol: "F_m"
+    nombre:
+      es: Fuerza motriz
+      en: Motive force
+    descripcion:
+      es: Fuerza aplicada para mover la carga (esfuerzo).
+      en: Applied force to move the load (effort).
+    unidad_si: N
+    dimension: F
+    is_vector: true
+    components: [Fmx, Fmy]
+    category: mecanica/dinamica
+    physical_role:
+      es: esfuerzo
+      en: effort
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Ignorar que debe ser paralela al plano para máxima eficiencia.
+      en: Ignoring that it must be parallel to the plane for maximum efficiency.
+    typical_range: [1, 5000]
+    sign_behavior: siempre_positiva
+    zero_behavior: fuerza nula implica equilibrio estático o caída libre
+    value_nature: intensiva
+    interpretation_role: output
+    graph_binding: effort_arrow
+    pedagogical_notes: Representa la entrada de energía al sistema.
+    tags: [dinamica, esfuerzo]
+
+  - id: theta
+    symbol: \\theta
+    nombre:
+      es: Ángulo de inclinación
+      en: Inclination angle
+    descripcion:
+      es: Ángulo que forma la rampa con la superficie horizontal.
+      en: Angle that the ramp forms with the horizontal surface.
+    unidad_si: rad
+    dimension: "1"
+    is_vector: false
+    components: []
+    category: mecanica/estatica
+    physical_role:
+      es: parámetro geométrico
+      en: geometric parameter
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Usar el ángulo con la vertical en lugar de con la horizontal.
+      en: Using the angle with the vertical instead of with the horizontal.
+    typical_range: [0, 1.57]
+    sign_behavior: siempre_positiva
+    zero_behavior: plano horizontal (sin ventaja mecánica)
+    value_nature: intensiva
+    interpretation_role: control
+    graph_binding: slope_angle
+    pedagogical_notes: Es la variable crítica que define la ventaja mecánica ideal.
+
+  - id: mu
+    symbol: \\mu
+    nombre:
+      es: Coeficiente de rozamiento
+      en: Friction coefficient
+    descripcion:
+      es: Parámetro que cuantifica la rugosidad entre las superficies en contacto.
+      en: Parameter that quantifies the roughness between the surfaces in contact.
+    unidad_si: ""
+    dimension: "1"
+    is_vector: false
+    components: []
+    category: mecanica/dinamica
+    physical_role:
+      es: factor de pérdida
+      en: loss factor
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Creer que depende del área de contacto.
+      en: Believing it depends on the contact area.
+    typical_range: [0, 1]
+    sign_behavior: siempre_positiva
+    zero_behavior: superficie perfectamente lisa (modelo ideal)
+    value_nature: intensiva
+    interpretation_role: loss_factor
+    graph_binding: surface_texture
+    pedagogical_notes: Reduce el rendimiento de la máquina simple.
+
+  - id: L
+    symbol: L
+    nombre:
+      es: Longitud de la rampa
+      en: Ramp length
+    descripcion:
+      es: Distancia total recorrida por el objeto a lo largo del plano.
+      en: Total distance traveled by the object along the plane.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: []
+    category: mecanica/cinematica
+    physical_role:
+      es: recorrido de entrada
+      en: input travel
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Confundir con la distancia horizontal (base).
+      en: Confusing with the horizontal distance (base).
+    typical_range: [0.1, 1000]
+    sign_behavior: siempre_positiva
+    zero_behavior: sin rampa
+    value_nature: extensiva
+    interpretation_role: input
+    graph_binding: hypotenuse
+    pedagogical_notes: Es la distancia sobre la cual se aplica el esfuerzo.
+
+  - id: h
+    symbol: h
+    nombre:
+      es: Altura de elevación
+      en: Elevation height
+    descripcion:
+      es: Desplazamiento vertical neto conseguido por la máquina.
+      en: Net vertical displacement achieved by the machine.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: []
+    category: mecanica/cinematica
+    physical_role:
+      es: recorrido de salida
+      en: output travel
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Olvidar que es el cateto opuesto al ángulo.
+      en: Forgetting it is the leg opposite to the angle.
+    typical_range: [0, 1000]
+    sign_behavior: siempre_positiva
+    zero_behavior: no hay elevación
+    value_nature: extensiva
+    interpretation_role: output
+    graph_binding: vertical_leg
+    pedagogical_notes: Representa el objetivo útil de elevación.
+
+  - id: W
+    symbol: W
+    nombre:
+      es: Peso
+      en: Weight
+    descripcion:
+      es: Fuerza gravitatoria total que actúa sobre el cuerpo.
+      en: Total gravitational force acting on the body.
+    unidad_si: N
+    dimension: LMT^-2
+    is_vector: true
+    components: [Wpar, Wperp]
+    category: mecanica/dinamica
+    physical_role:
+      es: carga
+      en: load
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: No usar la componente perpendicular para la normal.
+      en: Not using the perpendicular component for the normal.
+    typical_range: [1, 100000]
+    sign_behavior: vertical hacia abajo
+    zero_behavior: ingravidez
+    value_nature: extensiva
+    interpretation_role: output
+    graph_binding: weight_vector
+    pedagogical_notes: Es la fuerza que la rampa ayuda a vencer.
+
+  - id: P
+    symbol: P
+    nombre:
+      es: Potencia
+      en: Effort
+    descripcion:
+      es: Fuerza aplicada a lo largo del plano para subir la carga.
+      en: Force applied along the plane to lift the load.
+    unidad_si: N
+    dimension: LMT^-2
+    is_vector: true
+    components: []
+    category: mecanica/dinamica
+    physical_role:
+      es: actuador
+      en: actuator
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Creer que debe ser mayor al peso total.
+      en: Believing it must be greater than the total weight.
+    typical_range: [0.1, 100000]
+    sign_behavior: paralelo al plano
+    zero_behavior: el cuerpo desliza por su propio peso
+    value_nature: extensiva
+    interpretation_role: input
+    graph_binding: effort_vector
+    pedagogical_notes: Representa la fuerza reducida gracias al plano.
+
+  - id: Wpar
+    symbol: W_{\\parallel}
+    nombre:
+      es: Componente paralela del peso
+      en: Parallel weight component
+    descripcion:
+      es: Fracción del peso que actúa en la dirección del movimiento sobre el plano.
+      en: Fraction of weight acting in the direction of motion on the plane.
+    unidad_si: N
+    dimension: LMT^-2
+    is_vector: true
+    components: []
+    category: mecanica/dinamica
+    physical_role:
+      es: fuerza motriz gravitatoria
+      en: gravitational driving force
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Usar el coseno en lugar del seno para el ángulo con la horizontal.
+      en: Using cosine instead of sine for the angle with the horizontal.
+    typical_range: [0, 100000]
+    sign_behavior: positivo hacia abajo del plano
+    zero_behavior: plano horizontal
+    value_nature: extensiva
+    interpretation_role: intermediate_result
+    graph_binding: vector_projection
+    pedagogical_notes: Es la fuerza que tiende a hacer deslizar al bloque.
+
+  - id: Wperp
+    symbol: W_{\\perp}
+    nombre:
+      es: Componente perpendicular del peso
+      en: Perpendicular weight component
+    descripcion:
+      es: Fracción del peso que presiona el objeto contra la superficie de la rampa.
+      en: Fraction of weight pressing the object against the ramp surface.
+    unidad_si: N
+    dimension: LMT^-2
+    is_vector: true
+    components: []
+    category: mecanica/dinamica
+    physical_role:
+      es: fuerza de compresión
+      en: compression force
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Olvidar que esta componente es la que determina la fuerza normal.
+      en: Forgetting that this component determines the normal force.
+    typical_range: [0, 100000]
+    sign_behavior: perpendicular a la superficie
+    zero_behavior: plano vertical
+    value_nature: extensiva
+    interpretation_role: intermediate_result
+    graph_binding: vector_projection
+    pedagogical_notes: Determina la magnitud de la fricción máxima.
+
+  - id: VM
+    symbol: VM
+    nombre:
+      es: Ventaja mecánica ideal
+      en: Ideal mechanical advantage
+    descripcion:
+      es: Factor de reducción de fuerza basado en la geometría del plano.
+      en: Force reduction factor based on the plane's geometry.
+    unidad_si: ""
+    dimension: "1"
+    is_vector: false
+    components: []
+    category: mecanica/aplicaciones
+    physical_role:
+      es: rendimiento teórico
+      en: theoretical performance
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Olvidar que VM > 1 implica ahorro de fuerza pero aumento de distancia.
+      en: Forgetting that VM > 1 implies force saving but distance increase.
+    typical_range: [1, 100]
+    sign_behavior: siempre_positiva
+    zero_behavior: indefinido para ángulo cero
+    value_nature: intensiva
+    interpretation_role: performance
+    graph_binding: slope_efficiency
+    pedagogical_notes: Equivale a 1/seno(theta) o L/h.
+
+  - id: a
+    symbol: a
+    nombre:
+      es: Aceleración resultante
+      en: Resulting acceleration
+    descripcion:
+      es: Tasa de cambio de la velocidad del cuerpo sobre la rampa.
+      en: Rate of change of the body's velocity on the ramp.
+    unidad_si: m/s^2
+    dimension: LT^-2
+    is_vector: true
+    components: []
+    category: mecanica/dinamica
+    physical_role:
+      es: respuesta dinámica
+      en: dynamic response
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Olvidar incluir el rozamiento en el balance de fuerzas.
+      en: Forgetting to include friction in the force balance.
+    typical_range: [0, 9.81]
+    sign_behavior: paralelo al plano
+    zero_behavior: equilibrio o velocidad constante
+    value_nature: intensiva
+    interpretation_role: dynamic_output
+    graph_binding: motion_blur
+    pedagogical_notes: Se reduce conforme aumenta el rozamiento.
+
+  - id: eta
+    symbol: \\eta
+    nombre:
+      es: Rendimiento
+      en: Efficiency
+    descripcion:
+      es: Relación entre el trabajo útil de salida y el trabajo de entrada.
+      en: Ratio between useful output work and input work.
+    unidad_si: ""
+    dimension: "1"
+    is_vector: false
+    components: []
+    category: mecanica/termodinamica
+    physical_role:
+      es: factor de pérdida
+      en: loss factor
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Usar valores superiores a 1.0.
+      en: Using values greater than 1.0.
+    typical_range: [0, 1]
+    sign_behavior: siempre_positiva
+    zero_behavior: pérdida total por fricción
+    value_nature: intensiva
+    interpretation_role: loss_factor
+    graph_binding: scaling
+    pedagogical_notes: Cuantifica cuánto se aleja el plano real del ideal.
+
+  - id: g
+    symbol: g
+    nombre:
+      es: Aceleración de la gravedad
+      en: Gravity acceleration
+    descripcion:
+      es: Valor de la aceleración gravitatoria local (aprox. 9.81 m/s²).
+      en: Local gravitational acceleration value (approx. 9.81 m/s²).
+    unidad_si: m/s2
+    dimension: L/T2
+    is_vector: false
+    components: []
+    category: mecanica/dinamica
+    physical_role:
+      es: constante local
+      en: local constant
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Usar el valor 10 sin especificar o confundir con el peso.
+      en: Using value 10 without specifying or confusing with weight.
+    typical_range: [9.7, 9.9]
+    sign_behavior: siempre_positiva
+    zero_behavior: ausencia de campo gravitatorio
+    value_nature: intensiva
+    interpretation_role: control
+    graph_binding: gravity_constant
+    pedagogical_notes: Es el motor de la caída y el deslizamiento.
+
+  - id: N
+    symbol: N
+    nombre:
+      es: Fuerza Normal
+      en: Normal Force
+    descripcion:
+      es: Fuerza de reacción perpendicular que ejerce la superficie sobre el objeto.
+      en: Perpendicular reaction force exerted by the surface on the object.
+    unidad_si: N
+    dimension: F
+    is_vector: true
+    components: [Nx, Ny]
+    category: mecanica/dinamica
+    physical_role:
+      es: soporte
+      en: support
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Asumir que siempre es igual al peso total.
+      en: Assuming it is always equal to total weight.
+    typical_range: [1, 10000]
+    sign_behavior: perpendicular al plano
+    zero_behavior: pérdida de contacto
+    value_nature: intensiva
+    interpretation_role: reaction
+    graph_binding: normal_vector
+    pedagogical_notes: En el plano inclinado, es igual a W * cos(theta).
+
+  - id: f
+    symbol: f
+    nombre:
+      es: Fuerza de rozamiento
+      en: Friction force
+    descripcion:
+      es: Fuerza disipativa que se opone al deslizamiento por la rampa.
+      en: Dissipative force that opposes sliding down the ramp.
+    unidad_si: N
+    dimension: F
+    is_vector: true
+    components: [fx, fy]
+    category: mecanica/dinamica
+    physical_role:
+      es: resistencia
+      en: resistance
+    used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/plano-inclinado]
+    common_mistake:
+      es: Olvidar que su valor máximo depende de la Normal.
+      en: Forgetting that its maximum value depends on the Normal.
+    typical_range: [0, 5000]
+    sign_behavior: opuesto al movimiento
+    zero_behavior: superficie ideal (sin fricción)
+    value_nature: intensiva
+    interpretation_role: dissipation
+    graph_binding: friction_arrow
+    pedagogical_notes: Crucial para el cálculo del rendimiento real.
+`;export{n as default};

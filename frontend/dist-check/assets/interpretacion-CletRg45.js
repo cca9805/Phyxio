@@ -1,0 +1,192 @@
+const e=`version: 2
+id: interpretacion-centro-de-masas-en-sistemas-discretos
+leaf_id: centro-de-masas-en-sistemas-discretos
+nombre:
+  es: Interpretacion del centro de masas en sistemas discretos
+  en: Interpretation of the Center of Mass in Discrete Systems
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: dinamica
+  parent_id: centro-de-masas
+  ruta_relativa: fisica-clasica/mecanica/dinamica/estatica/centro-de-masas/centro-de-masas-en-sistemas-discretos
+dependencies:
+  formulas:
+  - masa_total_discreta
+  - centro_masas_general
+  - centro_masas_dos_masas
+  magnitudes:
+  - m_i
+  - x_i
+  - m_1
+  - m_2
+  - x_1
+  - x_2
+  - M
+  - xcm
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  xcm:
+    summary_rules:
+    - id: xcm_summary_defined
+      when: "M > 0"
+      status: info
+      text:
+        es: El resultado indica donde quedaria equilibrado el conjunto discreto si todas las masas actuaran como un unico bloque representativo.
+        en: The result indicates where the discrete set would balance if all masses acted as one representative block.
+    coherence_rules:
+    - id: xcm_between_extremes
+      when: "xcm >= min(x_1, x_2) && xcm <= max(x_1, x_2)"
+      status: ok
+      text:
+        es: Con masas positivas, el centro de masas permanece dentro del intervalo definido por las posiciones extremas.
+        en: With positive masses, the center of mass stays inside the interval set by the extreme positions.
+    physical_reading_rules:
+    - id: xcm_bias_toward_heavier
+      when: "(m_2 > m_1 && abs(xcm - x_2) < abs(xcm - x_1)) || (m_1 > m_2 && abs(xcm - x_1) < abs(xcm - x_2))"
+      status: info
+      text:
+        es: El valor se desplaza hacia la masa dominante porque esa contribucion pesa mas en la suma ponderada.
+        en: The value shifts toward the dominant mass because that contribution weighs more strongly in the weighted sum.
+    model_validity_rules:
+    - id: xcm_same_axis_model
+      when: "M > 0"
+      status: ok
+      text:
+        es: La lectura es valida solo si todas las posiciones se midieron en el mismo eje y con el mismo origen.
+        en: The reading is valid only if all positions were measured on the same axis and from the same origin.
+    graph_rules:
+    - id: xcm_graph_marker
+      when: "M > 0"
+      status: info
+      text:
+        es: En la grafica, xcm debe moverse de forma continua hacia la posicion cuya masa aumenta.
+        en: In the graph, xcm should move continuously toward the position whose mass increases.
+    likely_errors:
+    - id: xcm_midpoint_confusion
+      when: "m_1 != m_2"
+      status: warning
+      text:
+        es: Un error plausible en sistemas discretos es usar el punto medio por inercia visual aunque las masas sean distintas; si eso ocurre, la suma ponderada se sustituyo por una media aritmetica que ya no representa al sistema.
+        en: A plausible discrete-system mistake is to use the midpoint by visual habit even when masses differ; in that case the weighted sum was replaced by an arithmetic mean that no longer represents the system.
+    - id: xcm_missing_term
+      when: "M > 0"
+      status: warning
+      text:
+        es: Otro error frecuente es olvidar un termino m_i x_i o dejar una masa fuera de M; el numero puede parecer razonable y aun asi describir otro sistema.
+        en: Another common mistake is to forget one m_i x_i term or leave one mass out of M; the number may still look reasonable and yet describe a different system.
+    next_step_rules:
+    - id: xcm_next_extension
+      when: "M > 0"
+      status: info
+      text:
+        es: El siguiente paso natural es añadir mas terminos m_i x_i o pasar al caso continuo con dm.
+        en: The natural next step is to add more m_i x_i terms or move to the continuous case with dm.
+
+  M:
+    summary_rules:
+    - id: mass_summary_defined
+      when: "M > 0"
+      status: info
+      text:
+        es: La masa total es el denominador fisico que normaliza la suma y convierte el numerador en una posicion.
+        en: Total mass is the physical denominator that normalizes the sum and turns the numerator into a position.
+    coherence_rules:
+    - id: mass_positive_required
+      when: "M > 0"
+      status: ok
+      text:
+        es: La masa total es positiva, asi que el centro de masas puede interpretarse fisicamente.
+        en: Total mass is positive, so the center of mass can be interpreted physically.
+    physical_reading_rules:
+    - id: mass_sum_reading
+      when: "abs(M - (m_1 + m_2)) < 1e-9"
+      status: info
+      text:
+        es: La masa total coincide con la suma de las contribuciones declaradas en el caso operativo.
+        en: Total mass matches the sum of the declared contributions in the operational case.
+    model_validity_rules:
+    - id: mass_system_boundary
+      when: "M > 0"
+      status: ok
+      text:
+        es: El valor de M solo es correcto si ninguna masa relevante quedo fuera del sistema elegido.
+        en: The value of M is correct only if no relevant mass was left outside the chosen system.
+    graph_rules:
+    - id: mass_graph_weight
+      when: "M > 0"
+      status: info
+      text:
+        es: En la visualizacion, M resume el peso total de los marcadores discretos que participan en la suma.
+        en: In the visualization, M summarizes the total weight of the discrete markers involved in the sum.
+    likely_errors:
+    - id: mass_difference_error
+      when: "M == abs(m_1 - m_2) && m_1 > 0 && m_2 > 0"
+      status: warning
+      text:
+        es: El denominador parece una diferencia de masas y no una suma; revisa la construccion de M.
+        en: The denominator looks like a mass difference rather than a sum; review how M was built.
+    next_step_rules:
+    - id: mass_next_use
+      when: "M > 0"
+      status: info
+      text:
+        es: Usa ahora M para comprobar si el valor de xcm cae en la region fisicamente esperada.
+        en: Use M now to check whether xcm falls in the physically expected region.
+
+cross_checks:
+- id: total_mass_match
+  affects:
+  - M
+  - xcm
+  when: "abs(M - (m_1 + m_2)) > 1e-9"
+  severity: error
+  text:
+    es: La masa total introducida no coincide con la suma de las masas del caso operativo.
+    en: The entered total mass does not match the sum of the masses in the operational case.
+- id: shared_reference
+  affects:
+  - xcm
+  when: "true"
+  severity: info
+  text:
+    es: La lectura de xcm presupone que x_1, x_2 y el resto de posiciones usan el mismo origen y la misma orientacion.
+    en: Reading xcm assumes that x_1, x_2, and the remaining positions use the same origin and orientation.
+`;export{e as default};

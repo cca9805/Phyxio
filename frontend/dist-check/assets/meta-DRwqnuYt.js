@@ -1,0 +1,77 @@
+const e=`id: potencia-electrica
+titulo: Potencia electrica
+titulo_en: Electric Power
+nombre:
+  es: Potencia electrica
+  en: Electric Power
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: corriente-electrica
+parent_id: corriente-electrica
+ruta_relativa: fisica-clasica/electromagnetismo/corriente-electrica/potencia-electrica
+orden: 293300
+type: leaf
+niveles:
+  es:
+  - ESO
+  - BACHILLERATO
+  - UNIVERSIDAD
+  - EXTRACURRICULAR
+  en:
+  - Secondary
+  - Upper Secondary
+  - University
+  - Extracurricular
+icon: "🧪"
+descripcion: Rapidez de transferencia de energia electrica y criterios de diseno termico, eficiencia y seguridad en circuitos.
+description_en: Rate of electric energy transfer and design criteria for thermal behavior, efficiency, and circuit safety.
+pregunta_fisica_central:
+  es: "¿Como se relacionan tension, corriente, resistencia y tiempo para interpretar potencia y energia en sistemas electricos reales?"
+  en: "How are voltage, current, resistance, and time linked to interpret power and energy in real electrical systems?"
+tags:
+  es:
+  - electromagnetismo
+  - potencia
+  - energia
+  - efecto-joule
+  - diseno-termico
+  en:
+  - electromagnetism
+  - power
+  - energy
+  - joule-heating
+  - thermal-design
+prerequisitos:
+- fisica-clasica/electromagnetismo/corriente-electrica/resistencia-y-ley-de-ohm
+graficos:
+- Coord
+representacion_dominante: Coord
+magnitud_dominante: P
+physical_role:
+  es: magnitud física
+  en: physical quantity
+dificultad: 3
+tiempo_estimado_min: 45
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

@@ -1,0 +1,72 @@
+// frontend/src/v2/agent/buildDclGraphMetadata.js
+
+import {
+  GRAPH_TYPES,
+  GRAPH_SEMANTIC_ROLES,
+  GRAPH_READING_MODES,
+  normalizeGraphMetadata,
+} from "./graphMetadata.contract";
+
+export function buildDclGraphMetadata({
+  graphId,
+  title,
+  subtitle,
+  leafId,
+  sceneId,
+  sceneLabel,
+  selectedObject,
+  visibleForces = [],
+  components = [],
+  resultant = null,
+  physicalReading,
+  modelConnection,
+  formulaConnection,
+  recommendedTab = "graficas",
+  agentHints = [],
+  commonMistakes = [],
+} = {}) {
+  return normalizeGraphMetadata({
+    graphId,
+    type: GRAPH_TYPES.DCL,
+    title,
+    subtitle,
+
+    semanticRole: GRAPH_SEMANTIC_ROLES.FORCE_BALANCE,
+    readingMode: GRAPH_READING_MODES.FORCES_BODY_RESULTANT,
+
+    sceneId,
+    sceneLabel,
+    selectedObject,
+
+    visibleForces,
+    components,
+    visibleMagnitudes: [
+      ...visibleForces,
+      ...components,
+      ...(resultant ? [resultant] : []),
+    ],
+
+    physicalReading,
+    modelConnection,
+    formulaConnection,
+
+    recommendedTab,
+
+    agentHints: [
+      "Identifica primero el cuerpo seleccionado.",
+      "Distingue fuerzas reales, componentes y resultante.",
+      "La fuerza neta resume el desequilibrio dinámico, no es una fuerza nueva.",
+      "Lee el sentido de la aceleración a partir de la fuerza neta.",
+      ...agentHints,
+    ],
+
+    commonMistakes: [
+      "Confundir componentes con fuerzas adicionales.",
+      "Tratar la fuerza neta como una fuerza de contacto.",
+      "Olvidar que el DCL pertenece a un cuerpo concreto.",
+      ...commonMistakes,
+    ],
+
+    leafId,
+  });
+}

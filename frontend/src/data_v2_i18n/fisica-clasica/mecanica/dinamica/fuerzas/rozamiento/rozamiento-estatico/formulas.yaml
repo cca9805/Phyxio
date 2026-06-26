@@ -1,0 +1,160 @@
+version: 1
+formulas:
+- id: condicion_estatica
+  title:
+    es: Condicion de ajuste estatico
+    en: Static adjustment condition
+  equation: fs <= fsmax
+  latex: f_s\le f_{s,max}
+  rearrangements: []
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Relacion fisica usada en rozamiento estatico.
+    en: Relacion fisica usada en rozamiento estatico.
+  constraints:
+    es: Contacto en regimen estatico antes del deslizamiento.
+    en: Contact in the static regime before sliding begins.
+  validity:
+    es: Valida dentro del dominio de aplicacion del modelo usado.
+    en: Valida dentro del dominio de aplicacion del modelo usado.
+  dimension_check: Comprobar unidades antes de interpretar.
+  calculable: false
+  motivo_no_calculable:
+    es: Criterio de regimen; requiere contexto dinamico para fijar el valor de fs.
+    en: Regime criterion; it requires the dynamical context to determine the actual
+      value of fs.
+  used_in:
+  - rozamiento-estatico
+  interpretation_tags:
+  - rozamiento-estatico
+  result_semantics:
+    target: fs
+    meaning: Resulta util para interpretar fs en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: umbral_estatico
+  title:
+    es: Umbral maximo del rozamiento estatico
+    en: Maximum static-friction threshold
+  equation: fsmax = mus*N
+  latex: f_{s,max}=\mu_s N
+  rearrangements:
+  - target: fsmax
+    equation: fsmax = mus*N
+    latex: f_{s,max}=\mu_s N
+    constraints: []
+  - target: mus
+    equation: mus = fsmax/N
+    latex: \mu_s=\frac{f_{s,max}}{N}
+    constraints:
+    - expr: N != 0
+      message:
+        es: N != 0
+        en: N != 0
+  - target: N
+    equation: N = fsmax/mus
+    latex: N=\frac{f_{s,max}}{\mu_s}
+    constraints:
+    - expr: mus != 0
+      message:
+        es: mus != 0
+        en: mus != 0
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Relacion fisica usada en rozamiento estatico.
+    en: Relacion fisica usada en rozamiento estatico.
+  constraints: Aplicar solo dentro del modelo descrito.
+  validity:
+    es: Valida dentro del dominio de aplicacion del modelo usado.
+    en: Valida dentro del dominio de aplicacion del modelo usado.
+  dimension_check: Comprobar unidades antes de interpretar.
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - rozamiento-estatico
+  interpretation_tags:
+  - rozamiento-estatico
+  result_semantics:
+    target: fsmax
+    meaning: Resulta util para interpretar fsmax en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.
+- id: criterio_deslizamiento
+  title:
+    es: Criterio de inicio de deslizamiento
+    en: Criterion for the onset of sliding
+  equation: Ft > fsmax
+  latex: F_t>f_{s,max}\Rightarrow
+  rearrangements: []
+  category: operative
+  relation_type: derived_relation
+  physical_meaning:
+    es: Relacion fisica usada en rozamiento estatico.
+    en: Relacion fisica usada en rozamiento estatico.
+  constraints:
+    es: Transicion del regimen estatico al dinamico.
+    en: Transition from the static regime to the kinetic regime.
+  validity:
+    es: Valida dentro del dominio de aplicacion del modelo usado.
+    en: Valida dentro del dominio de aplicacion del modelo usado.
+  dimension_check: Comprobar unidades antes de interpretar.
+  calculable: false
+  motivo_no_calculable:
+    es: Regla de decision de regimen, no ecuacion de sustitucion directa universal.
+    en: Regime-decision rule, not a universal direct-substitution equation.
+  used_in:
+  - rozamiento-estatico
+  interpretation_tags:
+  - rozamiento-estatico
+  result_semantics:
+    target: Ft
+    meaning: Resulta util para interpretar Ft en el contexto del leaf.
+  domain_checks:
+  - expr: 'true'
+    message:
+      es: Verifica que los datos pertenezcan al dominio del modelo.
+      en: Check that the data belong to the model domain.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - La grafica debe reflejar cambios coherentes con la formula.
+  pedagogical_triggers:
+  - when: 'true'
+    message:
+      es: Comprueba signos, unidades y significado del resultado.
+      en: Check signs, units, and meaning of the result.

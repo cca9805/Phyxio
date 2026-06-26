@@ -1,0 +1,159 @@
+formulas:
+
+  - id: mu_actividad
+    title:
+      es: Potencial químico en función de la actividad
+      en: Chemical potential as a function of activity
+    equation: "mu = mu_std + R * T * ln(a)"
+    latex: "\\mu = \\mu^\\circ + R\\,T\\ln a"
+    rearrangements:
+      - target: mu
+        equation: "mu = mu_std + R * T * ln(a)"
+        latex: "\\mu = \\mu^\\circ + R\\,T\\ln a"
+      - target: a
+        equation: "a = exp((mu - mu_std) / (R * T))"
+        latex: "a = \\exp\\!\\left(\\frac{\\mu - \\mu^\\circ}{R\\,T}\\right)"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "El potencial químico de un componente en una mezcla es igual a su valor estándar más un término logarítmico que recoge la contribución de la composición real del sistema. A mayor actividad (mayor concentración efectiva), mayor µ y menor tendencia espontánea a incrementar esa concentración."
+      en: "The chemical potential of a component in a mixture equals its standard value plus a logarithmic term capturing the contribution of the system's actual composition. Higher activity (higher effective concentration) means higher µ and less spontaneous tendency to increase that concentration further."
+    constraints:
+      - mezcla ideal o actividad corregida con coeficientes de actividad
+      - T y p constantes durante la evaluación
+    validity:
+      es: "Válida para gases ideales (a = p_i/p°), soluciones ideales (a = x_i) y soluciones diluidas en la aproximación de solución ideal. Para sistemas no ideales se multiplica la actividad por el coeficiente de actividad γ."
+      en: "Valid for ideal gases (a = p_i/p°), ideal solutions (a = x_i), and dilute solutions in the ideal solution approximation. For non-ideal systems the activity is multiplied by the activity coefficient γ."
+    dimension_check: "[M L² T⁻²] = [M L² T⁻²] + [M L² T⁻² Θ⁻¹][Θ][1]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - equilibrio de fases (igualacion de mu entre fases)
+      - equilibrio quimico (suma de nu_i * mu_i = 0)
+      - calculo de presion de vapor
+    interpretation_tags:
+      - potencial quimico
+      - actividad
+      - equilibrio
+    result_semantics:
+      target: mu
+      kind: intensive_state_function
+      sign_meaning:
+        es: "El signo absoluto de µ depende de µ°; lo relevante es la diferencia de µ entre fases. Si µ_fase1 > µ_fase2 el componente migra espontáneamente de la fase 1 a la fase 2."
+        en: "The absolute sign of µ depends on µ°; what matters is the µ difference between phases. If µ_phase1 > µ_phase2 the component spontaneously migrates from phase 1 to phase 2."
+      absolute_value_meaning:
+        es: "µ cuantifica la energía libre aportada por un mol del componente al sistema en las condiciones actuales de composición, T y p."
+        en: "µ quantifies the free energy contributed by one mole of the component to the system under the current conditions of composition, T and p."
+    domain_checks:
+      - "a > 0"
+      - "T > 0"
+    coherence_checks:
+      - "abs(mu) < 1e7"
+    graph_implications:
+      es: "µ vs ln(a) es una recta de pendiente RT que pasa por (0, µ°). En el gráfico µ vs T, la pendiente es R·ln(a) y varía si la actividad cambia con T."
+      en: "µ vs ln(a) is a straight line with slope RT passing through (0, µ°). In the µ vs T graph, the slope is R·ln(a) and varies if activity changes with T."
+    pedagogical_triggers:
+      - "Alumno confunde µ con µ° sin incluir el término logarítmico de composición."
+      - "Alumno usa T en Celsius en el término RT."
+
+  - id: equilibrio_fases
+    title:
+      es: Condición de equilibrio entre fases
+      en: Phase equilibrium condition
+    equation: "mu_alfa = mu_beta"
+    latex: "\\mu_\\alpha = \\mu_\\beta"
+    rearrangements:
+      - target: mu_alfa
+        equation: "mu_alfa = mu_beta"
+        latex: "\\mu_\\alpha = \\mu_\\beta"
+      - target: mu_beta
+        equation: "mu_beta = mu_alfa"
+        latex: "\\mu_\\beta = \\mu_\\alpha"
+    category: fundamental
+    relation_type: equilibrium_condition
+    physical_meaning:
+      es: "El sistema está en equilibrio de fases cuando el potencial químico de cada componente es idéntico en todas las fases presentes. Si µ_α ≠ µ_β, el componente fluye espontáneamente hacia la fase de menor µ hasta que la igualdad se restaura."
+      en: "The system is in phase equilibrium when the chemical potential of each component is identical in all present phases. If µ_α ≠ µ_β, the component flows spontaneously to the phase of lower µ until equality is restored."
+    constraints:
+      - sistema en equilibrio termodinámico
+      - T y p iguales en ambas fases (equilibrio mecánico y térmico previos)
+    validity:
+      es: "Válida para cualquier número de fases y componentes. Es la base de la regla de fases de Gibbs y de todos los diagramas de fase."
+      en: "Valid for any number of phases and components. It is the basis of Gibbs's phase rule and all phase diagrams."
+    dimension_check: "[M L² T⁻²] = [M L² T⁻²]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - diagramas de fase
+      - calculo de presion de vapor
+      - equilibrio solido-liquido
+    interpretation_tags:
+      - equilibrio de fases
+      - igualdad de potenciales quimicos
+    result_semantics:
+      target: mu_alfa
+      kind: equilibrium_condition
+      sign_meaning:
+        es: "La diferencia µ_α − µ_β determina la dirección de la transferencia de materia. Positiva implica flujo de α a β; nula implica equilibrio."
+        en: "The difference µ_α − µ_β determines the direction of matter transfer. Positive implies flow from α to β; zero implies equilibrium."
+      absolute_value_meaning:
+        es: "El valor absoluto de µ_α en el equilibrio coincide con µ_β y es el valor que impone la presión de vapor o la solubilidad del componente."
+        en: "The absolute value of µ_α at equilibrium equals µ_β and is the value imposing the vapor pressure or solubility of the component."
+    domain_checks:
+      - "true"
+    coherence_checks:
+      - "abs(mu_alfa - mu_beta) < 1e3"
+    graph_implications:
+      es: "En el diagrama µ vs T, el cruce de las curvas de µ de dos fases indica la temperatura de transición de fase (fusión, ebullición, transición sólido-sólido)."
+      en: "In the µ vs T diagram, the crossing of the µ curves of two phases indicates the phase transition temperature (melting, boiling, solid-solid transition)."
+    pedagogical_triggers:
+      - "Alumno no comprende que el equilibrio requiere la igualdad de µ en todas las fases simultáneamente, no solo en pares."
+
+  - id: mu_definicion
+    title:
+      es: Definición de µ como derivada parcial de G
+      en: Definition of µ as partial derivative of G
+    equation: "mu = dG_dni"
+    latex: "\\mu_i = \\left(\\frac{\\partial G}{\\partial n_i}\\right)_{T,p,n_{j\\neq i}}"
+    rearrangements:
+      - target: mu
+        equation: "mu = dG_dni"
+        latex: "\\mu_i = \\left(\\frac{\\partial G}{\\partial n_i}\\right)_{T,p,n_{j\\neq i}}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "µ_i es la energía libre de Gibbs aportada por un mol infinitesimal del componente i al sistema, manteniendo fijos T, p y la cantidad de todos los demás componentes. Es la magnitud que rige el intercambio de materia entre fases o subsistemas."
+      en: "µ_i is the Gibbs free energy contributed by an infinitesimal mole of component i to the system, holding T, p and the amounts of all other components fixed. It is the quantity governing matter exchange between phases or subsystems."
+    constraints:
+      - T y p constantes
+      - sistema cerrado respecto a los demás componentes j ≠ i
+    validity:
+      es: "Definición exacta, válida para cualquier sistema termodinámico en equilibrio. No requiere idealidad."
+      en: "Exact definition, valid for any thermodynamic system in equilibrium. Does not require ideality."
+    dimension_check: "[M L² T⁻²] / [mol] = [M L² T⁻²]"
+    calculable: false
+    motivo_no_calculable: "Esta fórmula es definitoria; µ se calcula en la práctica a partir de µ_std + RT·ln(a), no directamente como derivada parcial."
+    used_in:
+      - definicion formal de mu
+      - relacion entre G y composicion del sistema
+    interpretation_tags:
+      - definicion de potencial quimico
+      - energia libre parcial molar
+    result_semantics:
+      target: mu
+      kind: intensive_state_function
+      sign_meaning:
+        es: "La definición no impone signo; el signo de µ depende de µ° del componente y de las condiciones de composición."
+        en: "The definition does not impose a sign; the sign of µ depends on µ° of the component and the composition conditions."
+      absolute_value_meaning:
+        es: "µ cuantifica cuánto cambia la energía libre del sistema si se añade un mol diferencial del componente i, siendo esta la base para todos los criterios de equilibrio."
+        en: "µ quantifies how much the free energy of the system changes when one differential mole of component i is added, forming the basis for all equilibrium criteria."
+    domain_checks:
+      - "true"
+    coherence_checks:
+      - "true"
+    graph_implications:
+      es: "Esta definición explica la pendiente del gráfico G vs n_i: en el punto de equilibrio la pendiente es µ_i y es igual en todas las fases."
+      en: "This definition explains the slope of the G vs n_i graph: at the equilibrium point the slope is µ_i and is equal in all phases."
+    pedagogical_triggers:
+      - "Alumno trata µ como una energía total en lugar de como una derivada parcial intensiva."

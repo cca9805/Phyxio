@@ -1,0 +1,527 @@
+version: '1.0'
+leaf_id: reflexion-y-transmision-en-solidos
+formulas:
+- id: coeficiente_reflexion_amplitud
+  nombre:
+    es: Coeficiente de reflexion en amplitud
+    en: Amplitude reflection coefficient
+  title:
+    es: Coeficiente de reflexion en amplitud
+    en: Amplitude reflection coefficient
+  equation: R = (Z_2 - Z_1) / (Z_2 + Z_1)
+  expresion_latex: R = \frac{Z_2 - Z_1}{Z_2 + Z_1}
+  latex: R = (Z_2 - Z_1) / (Z_2 + Z_1)
+  expresion_verbal:
+    es: El coeficiente de reflexion en amplitud es la diferencia de impedancias dividida entre su suma.
+    en: The amplitude reflection coefficient is the impedance difference divided by their sum.
+  unidades_SI: adimensional
+  dimension: '[1]'
+  variables:
+  - id: coeficiente_de_reflexion_en_amplitud
+    nombre:
+      es: Coeficiente de reflexion en amplitud
+      en: Amplitude reflection coefficient
+    unidad: adimensional
+  - id: impedancia_acustica_del_medio_1
+    nombre:
+      es: Impedancia acustica del medio 1
+      en: Acoustic impedance of medium 1
+    unidad: Pa·s/m
+  - id: impedancia_acustica_del_medio_2
+    nombre:
+      es: Impedancia acustica del medio 2
+      en: Acoustic impedance of medium 2
+    unidad: Pa·s/m
+  result_semantics:
+    target: coeficiente_de_reflexion_en_amplitud
+    direction: signed
+    physical_meaning:
+      es: Fraccion de amplitud de la onda incidente que se refleja. Positivo si Z_2 > Z_1, negativo si Z_2 < Z_1.
+      en: Fraction of incident wave amplitude that is reflected. Positive if Z_2 > Z_1, negative if Z_2 < Z_1.
+    kind: scalar
+    absolute_value_meaning:
+      es: El valor numerico indica la intensidad de la magnitud calculada.
+      en: The numerical value indicates the intensity of the calculated quantity.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  rearrangements:
+  - id: despeje_Z2_desde_R
+    target: impedancia_acustica_del_medio_2
+    expresion_latex: Z_2 = Z_1 \frac{1 + R}{1 - R}
+    descripcion:
+      es: Impedancia del medio 2 a partir del coeficiente de reflexion y la impedancia del medio 1.
+      en: Impedance of medium 2 from the reflection coefficient and impedance of medium 1.
+    equation: impedancia_acustica_del_medio_2
+    latex: impedancia_acustica_del_medio_2
+  - id: despeje_Z1_desde_R
+    target: impedancia_acustica_del_medio_1
+    expresion_latex: Z_1 = Z_2 \frac{1 - R}{1 + R}
+    descripcion:
+      es: Impedancia del medio 1 a partir del coeficiente de reflexion y la impedancia del medio 2.
+      en: Impedance of medium 1 from the reflection coefficient and impedance of medium 2.
+    equation: impedancia_acustica_del_medio_1
+    latex: impedancia_acustica_del_medio_1
+  - id: calculo_Z1
+    target: impedancia_acustica_del_medio_1
+    expresion_latex: Z_1 = \rho_1 v_1
+    descripcion:
+      es: Impedancia acustica del medio incidente a partir de su densidad y velocidad.
+      en: Acoustic impedance of the incident medium from its density and velocity.
+    equation: impedancia_acustica_del_medio_1
+    latex: impedancia_acustica_del_medio_1
+  - id: calculo_Z2
+    target: impedancia_acustica_del_medio_2
+    expresion_latex: Z_2 = \rho_2 v_2
+    descripcion:
+      es: Impedancia acustica del medio transmitido a partir de su densidad y velocidad.
+      en: Acoustic impedance of the transmitted medium from its density and velocity.
+    equation: impedancia_acustica_del_medio_2
+    latex: impedancia_acustica_del_medio_2
+  categoria:
+    principal: ondas-en-solidos
+    secundaria: reflexion-transmision
+  category: interface_coefficient
+  relation_type: definition
+  physical_meaning:
+    es: Cuantifica el desajuste de impedancias en la interfaz. Si ambas impedancias son iguales, no hay reflexion. Cuanto
+      mayor es el contraste, mayor la fraccion reflejada.
+    en: Quantifies the impedance mismatch at the interface. If both impedances are equal, there is no reflection. The greater
+      the contrast, the larger the reflected fraction.
+  validity:
+    es: Valida para onda plana a incidencia normal en una interfaz ideal entre dos medios elasticos.
+    en: Valid for a normally incident plane wave at an ideal interface between two elastic media.
+  dimension_check: '`[M L^-2 T^-1] / [M L^-2 T^-1] -> [1]`'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - lectura de fase reflejada
+  - calculo de energia reflejada
+  - diagnostico de contraste de impedancias
+  interpretation_tags:
+  - reflexion
+  - fase
+  - contraste_impedancia
+  domain_checks:
+  - Verificar que Z_1 y Z_2 sean positivos.
+  - Confirmar que el medio 1 es el de incidencia.
+  coherence_checks:
+  - R debe estar entre -1 y 1.
+  - R es cero cuando Z_1 y Z_2 coinciden.
+  graph_implications:
+  - Cruza cero cuando Z_2/Z_1 = 1.
+  - El signo indica inversion o no inversion de fase.
+  pedagogical_triggers:
+  - Invertir Z_1 y Z_2 cambia el signo.
+  - Confundir signo de amplitud con fraccion energetica.
+  constraints:
+  - Z_1 > 0
+  - Z_2 > 0
+  - -1 <= R <= 1
+  pedagogical_trigger:
+    es: ¿Por que un ultrasonido se refleja parcialmente al pasar de un tejido a otro?
+    en: Why does an ultrasound partially reflect when passing from one tissue to another?
+- id: coeficiente_transmision_amplitud
+  nombre:
+    es: Coeficiente de transmision en amplitud
+    en: Amplitude transmission coefficient
+  title:
+    es: Coeficiente de transmision en amplitud
+    en: Amplitude transmission coefficient
+  equation: T = 2 * Z_1 / (Z_2 + Z_1)
+  latex: T = 2 Z_1 / (Z_2 + Z_1)
+  expresion_latex: T = \frac{2 Z_1}{Z_2 + Z_1}
+  expresion_verbal:
+    es: El coeficiente de transmision en amplitud es dos veces la impedancia del medio 1 dividida entre la suma de impedancias.
+    en: The amplitude transmission coefficient is twice the impedance of medium 1 divided by the sum of impedances.
+  unidades_SI: adimensional
+  dimension: '[1]'
+  variables:
+  - id: coeficiente_de_transmision_en_amplitud
+    nombre:
+      es: Coeficiente de transmision en amplitud
+      en: Amplitude transmission coefficient
+    unidad: adimensional
+  - id: impedancia_acustica_del_medio_1
+    nombre:
+      es: Impedancia acustica del medio 1
+      en: Acoustic impedance of medium 1
+    unidad: Pa·s/m
+  - id: impedancia_acustica_del_medio_2
+    nombre:
+      es: Impedancia acustica del medio 2
+      en: Acoustic impedance of medium 2
+    unidad: Pa·s/m
+  result_semantics:
+    target: coeficiente_de_transmision_en_amplitud
+    direction: positive_always
+    physical_meaning:
+      es: Fraccion de amplitud que se transmite al segundo medio. Siempre positiva.
+      en: Fraction of amplitude transmitted to the second medium. Always positive.
+    kind: scalar
+    absolute_value_meaning:
+      es: El valor numerico indica la intensidad de la magnitud calculada.
+      en: The numerical value indicates the intensity of the calculated quantity.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  rearrangements:
+  - id: despeje_Z2_desde_T
+    target: impedancia_acustica_del_medio_2
+    expresion_latex: Z_2 = Z_1 \frac{2 - T}{T}
+    descripcion:
+      es: Impedancia del medio 2 a partir del coeficiente de transmision y la impedancia del medio 1.
+      en: Impedance of medium 2 from the transmission coefficient and impedance of medium 1.
+    equation: impedancia_acustica_del_medio_2
+    latex: impedancia_acustica_del_medio_2
+  - id: despeje_Z1_desde_T
+    target: impedancia_acustica_del_medio_1
+    expresion_latex: Z_1 = Z_2 \frac{T}{2 - T}
+    descripcion:
+      es: Impedancia del medio 1 a partir del coeficiente de transmision y la impedancia del medio 2.
+      en: Impedance of medium 1 from the transmission coefficient and impedance of medium 2.
+    equation: impedancia_acustica_del_medio_1
+    latex: impedancia_acustica_del_medio_1
+  categoria:
+    principal: ondas-en-solidos
+    secundaria: reflexion-transmision
+  category: interface_coefficient
+  relation_type: definition
+  physical_meaning:
+    es: Indica que fraccion de la amplitud incidente penetra en el segundo medio. Combinado con R, cumple la condicion de
+      continuidad de desplazamiento en la interfaz.
+    en: Indicates what fraction of incident amplitude penetrates the second medium. Combined with R, it satisfies the displacement
+      continuity condition at the interface.
+  validity:
+    es: Valida para incidencia normal, interfaz plana e ideal y continuidad de desplazamiento.
+    en: Valid for normal incidence, a flat ideal interface and displacement continuity.
+  dimension_check: '`[M L^-2 T^-1] / [M L^-2 T^-1] -> [1]`'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculo de amplitud transmitida
+  - control de continuidad de desplazamiento
+  - comparacion con transmision energetica
+  interpretation_tags:
+  - transmision
+  - amplitud
+  - continuidad
+  domain_checks:
+  - Verificar que Z_1 y Z_2 sean positivos.
+  - Usar la convencion de medio incidente para Z_1.
+  coherence_checks:
+  - T debe estar entre 0 y 2.
+  - T debe cumplir T = 1 + R.
+  graph_implications:
+  - Vale 1 cuando Z_2/Z_1 = 1.
+  - Puede superar 1 si el segundo medio tiene menor impedancia.
+  pedagogical_triggers:
+  - Creer que T mayor que 1 viola energia.
+  - Confundir transmision de amplitud con transmision de energia.
+  constraints:
+  - Z_1 > 0
+  - Z_2 > 0
+  - 0 < T <= 2
+  pedagogical_trigger:
+    es: ¿Puede la amplitud transmitida ser mayor que la incidente?
+    en: Can the transmitted amplitude be greater than the incident one?
+- id: coeficiente_reflexion_energia
+  nombre:
+    es: Coeficiente de reflexion en energia
+    en: Energy reflection coefficient
+  title:
+    es: Coeficiente de reflexion en energia
+    en: Energy reflection coefficient
+  equation: R_E = R^2
+  latex: R_E = R^2
+  expresion_latex: R_E = R^2 = \left(\frac{Z_2 - Z_1}{Z_2 + Z_1}\right)^2
+  expresion_verbal:
+    es: El coeficiente de reflexion en energia es el cuadrado del coeficiente de reflexion en amplitud.
+    en: The energy reflection coefficient is the square of the amplitude reflection coefficient.
+  unidades_SI: adimensional
+  dimension: '[1]'
+  variables:
+  - id: coeficiente_de_reflexion_en_energia
+    nombre:
+      es: Coeficiente de reflexion en energia
+      en: Energy reflection coefficient
+    unidad: adimensional
+  - id: coeficiente_de_reflexion_en_amplitud
+    nombre:
+      es: Coeficiente de reflexion en amplitud
+      en: Amplitude reflection coefficient
+    unidad: adimensional
+  result_semantics:
+    target: coeficiente_de_reflexion_en_energia
+    direction: positive_always
+    physical_meaning:
+      es: Fraccion de la energia incidente que se refleja en la interfaz.
+      en: Fraction of incident energy that is reflected at the interface.
+    kind: scalar
+    absolute_value_meaning:
+      es: El valor numerico indica la intensidad de la magnitud calculada.
+      en: The numerical value indicates the intensity of the calculated quantity.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  rearrangements:
+  - id: despeje_R_desde_RE
+    target: coeficiente_de_reflexion_en_amplitud
+    expresion_latex: R = \pm\sqrt{R_E}
+    descripcion:
+      es: Coeficiente de reflexion en amplitud a partir del coeficiente energetico (signo segun Z_2 vs Z_1).
+      en: Amplitude reflection coefficient from energy coefficient (sign depends on Z_2 vs Z_1).
+    equation: coeficiente_de_reflexion_en_amplitud
+    latex: coeficiente_de_reflexion_en_amplitud
+  categoria:
+    principal: ondas-en-solidos
+    secundaria: reflexion-transmision
+  category: energy_coefficient
+  relation_type: derived
+  physical_meaning:
+    es: Indica cuanta potencia se pierde por reflexion. Es la cantidad relevante para balances energeticos y eficiencia de
+      transmision.
+    en: Indicates how much power is lost to reflection. It is the relevant quantity for energy balances and transmission efficiency.
+  validity:
+    es: Valida para interfaz ideal sin disipacion y con incidencia normal.
+    en: Valid for an ideal lossless interface with normal incidence.
+  dimension_check: '`[1]^2 -> [1]`'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - balance energetico
+  - estimacion de eco ultrasonico
+  - verificacion de conservacion de energia
+  interpretation_tags:
+  - energia_reflejada
+  - eco
+  - conservacion
+  domain_checks:
+  - Verificar que R este entre -1 y 1.
+  - Confirmar que no hay disipacion en la interfaz ideal.
+  coherence_checks:
+  - R_E debe estar entre 0 y 1.
+  - R_E + T_E debe sumar 1.
+  graph_implications:
+  - Es minima cuando las impedancias coinciden.
+  - Crece hacia 1 con contraste extremo.
+  pedagogical_triggers:
+  - Confundir R con R_E.
+  - Olvidar elevar al cuadrado la amplitud reflejada.
+  constraints:
+  - 0 <= R_E <= 1
+  - R_E + T_E = 1 (conservacion de energia)
+  pedagogical_trigger:
+    es: ¿Cuanta energia de un ultrasonido se pierde al cambiar de medio?
+    en: How much ultrasonic energy is lost when changing medium?
+- id: coeficiente_transmision_energia
+  nombre:
+    es: Coeficiente de transmision en energia
+    en: Energy transmission coefficient
+  title:
+    es: Coeficiente de transmision en energia
+    en: Energy transmission coefficient
+  equation: T_E = 4 * Z_1 * Z_2 / (Z_1 + Z_2)^2
+  latex: T_E = 4 Z_1 Z_2 / (Z_1 + Z_2)^2
+  expresion_latex: T_E = \frac{4 Z_1 Z_2}{(Z_1 + Z_2)^2}
+  expresion_verbal:
+    es: El coeficiente de transmision en energia es cuatro veces el producto de impedancias dividido entre el cuadrado de
+      su suma.
+    en: The energy transmission coefficient is four times the impedance product divided by the square of their sum.
+  unidades_SI: adimensional
+  dimension: '[1]'
+  variables:
+  - id: coeficiente_de_transmision_en_energia
+    nombre:
+      es: Coeficiente de transmision en energia
+      en: Energy transmission coefficient
+    unidad: adimensional
+  - id: impedancia_acustica_del_medio_1
+    nombre:
+      es: Impedancia acustica del medio 1
+      en: Acoustic impedance of medium 1
+    unidad: Pa·s/m
+  - id: impedancia_acustica_del_medio_2
+    nombre:
+      es: Impedancia acustica del medio 2
+      en: Acoustic impedance of medium 2
+    unidad: Pa·s/m
+  result_semantics:
+    target: coeficiente_de_transmision_en_energia
+    direction: positive_always
+    physical_meaning:
+      es: Fraccion de la energia incidente que se transmite al segundo medio.
+      en: Fraction of incident energy that is transmitted to the second medium.
+    kind: scalar
+    absolute_value_meaning:
+      es: El valor numerico indica la intensidad de la magnitud calculada.
+      en: The numerical value indicates the intensity of the calculated quantity.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  rearrangements:
+  - id: despeje_ratio_Z_desde_TE
+    target: impedancia_acustica_del_medio_2
+    expresion_latex: \text{Resolver } T_E(Z_1 + Z_2)^2 = 4 Z_1 Z_2
+    descripcion:
+      es: Ecuacion cuadratica que permite obtener la relacion de impedancias a partir de la transmision energetica.
+      en: Quadratic equation yielding the impedance ratio from energy transmission.
+    equation: impedancia_acustica_del_medio_2
+    latex: impedancia_acustica_del_medio_2
+  categoria:
+    principal: ondas-en-solidos
+    secundaria: reflexion-transmision
+  category: energy_coefficient
+  relation_type: derived
+  physical_meaning:
+    es: La transmision energetica es maxima (unidad) cuando ambas impedancias coinciden, y disminuye con el contraste. Es
+      complementaria de R_E.
+    en: Energy transmission is maximum (unity) when both impedances match, and decreases with contrast. It is complementary
+      to R_E.
+  validity:
+    es: Valida para interfaz ideal sin disipacion y onda plana a incidencia normal.
+    en: Valid for an ideal lossless interface and normally incident plane wave.
+  dimension_check: '`[M L^-2 T^-1]^2 / [M L^-2 T^-1]^2 -> [1]`'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - balance energetico
+  - diseno de acoplamiento acustico
+  - estimacion de energia transmitida
+  interpretation_tags:
+  - energia_transmitida
+  - acoplamiento
+  - conservacion
+  domain_checks:
+  - Verificar que Z_1 y Z_2 sean positivos.
+  - Confirmar que la interfaz no introduce perdidas adicionales.
+  coherence_checks:
+  - T_E debe estar entre 0 y 1.
+  - T_E debe ser 1 - R_E en una interfaz ideal.
+  graph_implications:
+  - Tiene maximo en Z_2/Z_1 = 1.
+  - Disminuye con contraste de impedancias.
+  pedagogical_triggers:
+  - Confundir T_E con T.
+  - Olvidar que la energia depende tambien de la impedancia.
+  constraints:
+  - 0 <= T_E <= 1
+  - T_E = 1 - R_E
+  - T_E maximo cuando Z_1 = Z_2
+  pedagogical_trigger:
+    es: ¿En que condiciones se transmite toda la energia de la onda?
+    en: Under what conditions is all the wave energy transmitted?
+- id: impedancia_acustica
+  nombre:
+    es: Impedancia acustica especifica
+    en: Specific acoustic impedance
+  title:
+    es: Impedancia acustica especifica
+    en: Specific acoustic impedance
+  equation: Z = rho_medio * v_onda
+  latex: Z = rho_medio v_onda
+  expresion_latex: Z = \rho \, v
+  expresion_verbal:
+    es: La impedancia acustica es el producto de la densidad del medio por la velocidad de propagacion de la onda.
+    en: Acoustic impedance is the product of medium density and wave propagation velocity.
+  unidades_SI: Pa·s/m
+  dimension: '[M L⁻² T⁻¹]'
+  variables:
+  - id: impedancia_acustica_generica
+    nombre:
+      es: Impedancia acustica
+      en: Acoustic impedance
+    unidad: Pa·s/m
+  - id: impedancia_acustica_del_medio_1
+    nombre:
+      es: Impedancia acustica del medio 1
+      en: Acoustic impedance of medium 1
+    unidad: Pa*s/m
+  - id: impedancia_acustica_del_medio_2
+    nombre:
+      es: Impedancia acustica del medio 2
+      en: Acoustic impedance of medium 2
+    unidad: Pa*s/m
+  - id: rho_medio
+    nombre:
+      es: Densidad del medio
+      en: Medium density
+    unidad: kg/m³
+  - id: v_onda
+    nombre:
+      es: Velocidad de la onda
+      en: Wave velocity
+    unidad: m/s
+  result_semantics:
+    target: impedancia_acustica_generica
+    direction: positive_always
+    physical_meaning:
+      es: Resistencia del medio al paso de la onda. Determina cuanta amplitud y energia se reflejan en una interfaz.
+      en: Resistance of the medium to wave passage. Determines how much amplitude and energy are reflected at an interface.
+    kind: scalar
+    absolute_value_meaning:
+      es: El valor numerico indica la intensidad de la magnitud calculada.
+      en: The numerical value indicates the intensity of the calculated quantity.
+    sign_meaning:
+      es: El signo depende de la convencion fisica adoptada.
+      en: The sign depends on the adopted physical convention.
+  rearrangements:
+  - id: despeje_v_desde_Z
+    target: v_onda
+    expresion_latex: v = \frac{Z}{\rho}
+    descripcion:
+      es: Velocidad de la onda a partir de impedancia y densidad.
+      en: Wave velocity from impedance and density.
+    equation: v_onda
+    latex: v_onda
+  - id: despeje_rho_desde_Z
+    target: rho_medio
+    expresion_latex: \rho = \frac{Z}{v}
+    descripcion:
+      es: Densidad del medio a partir de impedancia y velocidad.
+      en: Medium density from impedance and velocity.
+    equation: rho_medio
+    latex: rho_medio
+  categoria:
+    principal: ondas-en-solidos
+    secundaria: reflexion-transmision
+  category: material_wave_property
+  relation_type: definition
+  physical_meaning:
+    es: Es la propiedad que conecta el estado mecanico del medio con la propagacion ondas. Dos medios con impedancias iguales
+      no producen reflexion entre si.
+    en: It is the property connecting the mechanical state of the medium with wave propagation. Two media with equal impedances
+      produce no reflection between them.
+  validity:
+    es: Valida para ondas planas en medios homogeneos, lineales e isotropos con velocidad bien definida.
+    en: Valid for plane waves in homogeneous, linear and isotropic media with well-defined speed.
+  dimension_check: '`[M L^-3] * [L T^-1] -> [M L^-2 T^-1]`'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculo de impedancias de medios
+  - coeficientes de reflexion
+  - coeficientes de transmision
+  interpretation_tags:
+  - impedancia
+  - densidad
+  - velocidad_onda
+  domain_checks:
+  - Verificar que rho_medio sea positiva.
+  - Verificar que v_onda sea positiva y del modo correcto.
+  coherence_checks:
+  - Z debe ser positiva.
+  - Z_1 y Z_2 deben calcularse con el mismo tipo de onda que incide.
+  graph_implications:
+  - Determina el cociente Z_2/Z_1 usado en el grafico.
+  - Contrastes altos desplazan los coeficientes hacia reflexion fuerte.
+  pedagogical_triggers:
+  - Usar densidad en unidades incorrectas.
+  - Mezclar velocidad longitudinal y velocidad de corte.
+  constraints:
+  - rho_medio > 0
+  - v_onda > 0
+  - Z > 0
+  pedagogical_trigger:
+    es: ¿Por que se necesita gel acoplante entre un transductor y la piel?
+    en: Why is coupling gel needed between a transducer and the skin?

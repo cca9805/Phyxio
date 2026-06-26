@@ -1,0 +1,696 @@
+version: 5.0.0
+id: circuitos-rc
+leaf_id: circuitos-rc
+nombre:
+  es: Circuitos rc
+  en: RC Circuits
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: corriente-electrica
+  parent_id: corriente-electrica
+  ruta_relativa: fisica-clasica/electromagnetismo/corriente-electrica/circuitos-rc
+  orden: 293500
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - tau_rc
+  - carga
+  - descarga
+  - corriente_carga
+  magnitudes:
+  - tau
+  - resistencia
+  - capacitancia
+  - tension_del_capacitor
+  - tension_final_de_carga
+  - tension_inicial
+  - corriente_transitoria
+  - tiempo
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: tau
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  tau:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de tau
+      en: Result of tau
+    summary_rules:
+    - id: tau_summary
+      when: 'true'
+      status: info
+      text:
+        es: La constante de tiempo resume cuan rapido o lento evoluciona el transitorio en comparacion con el tiempo de observacion.
+        en: The time constant summarizes how fast or slow the transient evolves compared with observation time.
+    physical_reading_rules:
+    - id: tau_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si tau es grande frente al horizonte temporal, la respuesta parece lenta y aun no alcanza equilibrio.
+        en: If tau is large versus time horizon, the response looks slow and has not reached equilibrium.
+    coherence_rules:
+    - id: tau_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser positiva y consistente con el producto de resistencia por capacitancia.
+        en: It must be positive and consistent with resistance times capacitance.
+    model_validity_rules:
+    - id: tau_validity
+      when: 'true'
+      status: ok
+      text:
+        es: La interpretacion de tau supone modelo lineal de primer orden sin efectos dinamicos adicionales dominantes.
+        en: Interpretation of tau assumes a first-order linear model without dominant additional dynamics.
+    graph_rules:
+    - id: tau_graph
+      when: 'true'
+      status: info
+      text:
+        es: En una grafica Vc contra t, la proximidad a estado estacionario se evalua comparando t con multiples de tau.
+        en: In a Vc versus t graph, proximity to steady state is assessed by comparing t with multiples of tau.
+    likely_errors:
+    - id: tau_warn
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[tau]] con una lectura aislada es un error frecuente: Error frecuente: tratar tau como tiempo total
+          de carga y no como escala exponencial.'
+        en: 'A common mistake is to interpret [[tau]] in isolation: Common error: treating tau as full charging time instead
+          of exponential scale.'
+    next_step_rules:
+    - id: tau_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa tau para seleccionar puntos de muestreo y estimar rapidez de convergencia.
+        en: Use tau to choose sampling points and estimate convergence speed.
+    physical_intuition:
+    - id: tau_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[tau]] describe el estado dinámico.
+        en: Intuitively, [[tau]] describes the dynamic state.
+    limiting_cases:
+    - id: tau_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[tau]].
+        en: Check limiting cases of [[tau]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  resistencia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de resistencia
+      en: Result of resistencia
+    summary_rules:
+    - id: r_summary
+      when: 'true'
+      status: info
+      text:
+        es: La resistencia regula la intensidad de corriente y la rapidez del ajuste temporal.
+        en: Resistance regulates current intensity and temporal adjustment speed.
+    physical_reading_rules:
+    - id: r_physical
+      when: 'true'
+      status: info
+      text:
+        es: A mayor resistencia, menor corriente de arranque y transitorio mas lento.
+        en: Larger resistance means lower startup current and slower transient.
+    coherence_rules:
+    - id: r_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe mantenerse positiva en el modelo pasivo lineal.
+        en: It must remain positive in the passive linear model.
+    model_validity_rules:
+    - id: r_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Su valor efectivo puede desplazarse por temperatura y tolerancia.
+        en: Its effective value may drift with temperature and tolerance.
+    graph_rules:
+    - id: r_graph
+      when: 'true'
+      status: info
+      text:
+        es: Cambios de resistencia alteran pendiente inicial y horizonte de convergencia.
+        en: Resistance changes alter initial slope and convergence horizon.
+    likely_errors:
+    - id: r_warn
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[resistencia]] con una lectura aislada es un error frecuente: Error frecuente: usar kiloohmios sin
+          convertir a ohmios.'
+        en: 'A common mistake is to interpret [[resistencia]] in isolation: Common error: using kiloohms without converting
+          to ohms.'
+    next_step_rules:
+    - id: r_next
+      when: 'true'
+      status: info
+      text:
+        es: Ajusta R con criterio de compromiso entre rapidez y estres de corriente.
+        en: Tune R balancing speed and current stress.
+    physical_intuition:
+    - id: resistencia_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[resistencia]] describe el estado dinámico.
+        en: Intuitively, [[resistencia]] describes the dynamic state.
+    limiting_cases:
+    - id: resistencia_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[resistencia]].
+        en: Check limiting cases of [[resistencia]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  capacitancia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de capacitancia
+      en: Result of capacitancia
+    summary_rules:
+    - id: c_summary
+      when: 'true'
+      status: info
+      text:
+        es: La capacitancia determina capacidad de almacenamiento y suavizado temporal.
+        en: Capacitance determines storage capability and temporal smoothing.
+    physical_reading_rules:
+    - id: c_physical
+      when: 'true'
+      status: info
+      text:
+        es: A mayor capacitancia, mayor inercia temporal frente a cambios abruptos.
+        en: Larger capacitance means higher temporal inertia against abrupt changes.
+    coherence_rules:
+    - id: c_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser positiva para mantener interpretacion fisica pasiva.
+        en: It must be positive to preserve passive physical interpretation.
+    model_validity_rules:
+    - id: c_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Su valor efectivo puede depender de condiciones de operacion reales.
+        en: Effective value may depend on real operating conditions.
+    graph_rules:
+    - id: c_graph
+      when: 'true'
+      status: info
+      text:
+        es: Cambios en C desplazan la curva sobre el eje temporal.
+        en: Changes in C shift the curve along the time axis.
+    likely_errors:
+    - id: c_warn
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[capacitancia]] con una lectura aislada es un error frecuente: Error frecuente: usar microfaradios
+          como si fueran faradios.'
+        en: 'A common mistake is to interpret [[capacitancia]] in isolation: Common error: treating microfarads as farads.'
+    next_step_rules:
+    - id: c_next
+      when: 'true'
+      status: info
+      text:
+        es: Ajusta C para equilibrar filtrado y velocidad de respuesta.
+        en: Tune C to balance filtering and response speed.
+    physical_intuition:
+    - id: capacitancia_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[capacitancia]] describe el estado dinámico.
+        en: Intuitively, [[capacitancia]] describes the dynamic state.
+    limiting_cases:
+    - id: capacitancia_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[capacitancia]].
+        en: Check limiting cases of [[capacitancia]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  tension_del_capacitor:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de tension_del_capacitor
+      en: Result of tension_del_capacitor
+    summary_rules:
+    - id: vc_summary
+      when: 'true'
+      status: info
+      text:
+        es: La tension del capacitor evoluciona de forma exponencial desde su condicion inicial hacia su condicion final.
+        en: Capacitor voltage evolves exponentially from initial to final condition.
+    physical_reading_rules:
+    - id: vc_physical
+      when: 'true'
+      status: info
+      text:
+        es: El cambio de Vc refleja intercambio de energia entre fuente, resistencia y almacenamiento electrostatico.
+        en: Vc change reflects energy exchange among source, resistor and electrostatic storage.
+    coherence_rules:
+    - id: vc_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: En carga pasiva simple no debe superar de forma sostenida el valor final de excitacion.
+        en: In simple passive charging, it should not sustain overshoot above final excitation.
+    model_validity_rules:
+    - id: vc_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Valido cuando la topologia puede aproximarse por un unico polo dominante.
+        en: Valid when topology can be approximated by a single dominant pole.
+    graph_rules:
+    - id: vc_graph
+      when: 'true'
+      status: info
+      text:
+        es: Curva creciente sugiere carga; curva decreciente sugiere descarga hacia referencia.
+        en: Rising curve suggests charging; decaying curve suggests discharge toward reference.
+    likely_errors:
+    - id: vc_warn
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir Vc instantanea con valor final y aplicar formula inadecuada para el escenario.
+        en: 'A common mistake is to interpret [[tension_del_capacitor]] in isolation: Confusing instantaneous Vc with final
+          value and applying wrong scenario formula.'
+    next_step_rules:
+    - id: vc_next
+      when: 'true'
+      status: info
+      text:
+        es: Contrasta puntos medidos de Vc con la curva teorica para validar parametros equivalentes.
+        en: Compare measured Vc points with theoretical curve to validate equivalent parameters.
+    physical_intuition:
+    - id: tension_del_capacitor_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[tension_del_capacitor]] describe el estado dinámico.
+        en: Intuitively, [[tension_del_capacitor]] describes the dynamic state.
+    limiting_cases:
+    - id: tension_del_capacitor_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[tension_del_capacitor]].
+        en: Check limiting cases of [[tension_del_capacitor]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  tension_final_de_carga:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de tension_final_de_carga
+      en: Result of tension_final_de_carga
+    summary_rules:
+    - id: vf_summary
+      when: 'true'
+      status: info
+      text:
+        es: Vf define el nivel de referencia al que tiende la respuesta.
+        en: Vf defines the reference level approached by response.
+    physical_reading_rules:
+    - id: vf_physical
+      when: 'true'
+      status: info
+      text:
+        es: Cambiar Vf desplaza la asintota de la curva de estado.
+        en: Changing Vf shifts the state-curve asymptote.
+    coherence_rules:
+    - id: vf_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe alinearse con la excitacion y la polaridad de referencia.
+        en: It must align with excitation and reference polarity.
+    model_validity_rules:
+    - id: vf_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Su interpretacion exige fuente estable en la ventana analizada.
+        en: Its interpretation requires a stable source in analyzed window.
+    graph_rules:
+    - id: vf_graph
+      when: 'true'
+      status: info
+      text:
+        es: Vf se interpreta como nivel limite de largo plazo.
+        en: Vf is interpreted as long-term limit level.
+    likely_errors:
+    - id: vf_warn
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error frecuente: confundir Vf con valor instantaneo de salida.'
+        en: 'A common mistake is to interpret [[tension_final_de_carga]] in isolation: Common error: confusing Vf with instantaneous
+          output value.'
+    next_step_rules:
+    - id: vf_next
+      when: 'true'
+      status: info
+      text:
+        es: Contrasta valor final esperado con medicion en tiempos largos.
+        en: Compare expected final value with long-time measurements.
+    physical_intuition:
+    - id: tension_final_de_carga_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[tension_final_de_carga]] describe el estado dinámico.
+        en: Intuitively, [[tension_final_de_carga]] describes the dynamic state.
+    limiting_cases:
+    - id: tension_final_de_carga_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[tension_final_de_carga]].
+        en: Check limiting cases of [[tension_final_de_carga]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  tension_inicial:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de tension_inicial
+      en: Result of tension_inicial
+    summary_rules:
+    - id: v0_summary
+      when: 'true'
+      status: info
+      text:
+        es: La condicion inicial fija el punto de partida del transitorio.
+        en: Initial condition sets the transient starting point.
+    physical_reading_rules:
+    - id: v0_physical
+      when: 'true'
+      status: info
+      text:
+        es: Cambiar V0 modifica todo el tramo inicial de la curva.
+        en: Changing V0 modifies the whole initial curve segment.
+    coherence_rules:
+    - id: v0_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser consistente con el estado previo del capacitor.
+        en: It must be consistent with capacitor previous state.
+    model_validity_rules:
+    - id: v0_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Ignorar V0 invalida la seleccion correcta de escenario.
+        en: Ignoring V0 invalidates proper scenario selection.
+    graph_rules:
+    - id: v0_graph
+      when: 'true'
+      status: info
+      text:
+        es: V0 se observa como ordenada inicial de la trayectoria.
+        en: V0 is read as initial ordinate of the trajectory.
+    likely_errors:
+    - id: v0_warn
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[tension_inicial]] con una lectura aislada es un error frecuente: Error frecuente: asumir V0 igual
+          a cero sin justificarlo.'
+        en: 'A common mistake is to interpret [[tension_inicial]] in isolation: Common error: assuming V0 equals zero without
+          justification.'
+    next_step_rules:
+    - id: v0_next
+      when: 'true'
+      status: info
+      text:
+        es: Verifica condicion inicial antes de sustituir ecuaciones.
+        en: Check initial condition before substitution.
+    physical_intuition:
+    - id: tension_inicial_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[tension_inicial]] describe el estado dinámico.
+        en: Intuitively, [[tension_inicial]] describes the dynamic state.
+    limiting_cases:
+    - id: tension_inicial_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[tension_inicial]].
+        en: Check limiting cases of [[tension_inicial]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  corriente_transitoria:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de corriente_transitoria
+      en: Result of corriente_transitoria
+    summary_rules:
+    - id: i_summary
+      when: 'true'
+      status: info
+      text:
+        es: La corriente transitoria inicia en su maximo y decrece conforme el capacitor se aproxima al equilibrio.
+        en: Transient current starts at maximum and decays as capacitor approaches equilibrium.
+    physical_reading_rules:
+    - id: i_physical
+      when: 'true'
+      status: info
+      text:
+        es: Corriente alta inicial implica mayor esfuerzo termico en resistencia durante un periodo corto.
+        en: High initial current implies greater thermal stress on resistor over short period.
+    coherence_rules:
+    - id: i_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: El valor inicial debe concordar con la ley de Ohm aplicada al instante de arranque ideal.
+        en: Initial value must agree with Ohm law at ideal startup instant.
+    model_validity_rules:
+    - id: i_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si hay inductancia significativa, la evolucion de corriente deja de seguir el modelo RC puro.
+        en: If inductance is significant, current evolution no longer follows pure RC model.
+    graph_rules:
+    - id: i_graph
+      when: 'true'
+      status: info
+      text:
+        es: La grafica de I contra t debe mostrar decaimiento exponencial sin oscilaciones en un RC ideal.
+        en: I versus t graph should show exponential decay without oscillations in an ideal RC.
+    likely_errors:
+    - id: i_warn
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[corriente_transitoria]] con una lectura aislada es un error frecuente: Error tipico: asumir corriente
+          constante en todo el transitorio.'
+        en: 'A common mistake is to interpret [[corriente_transitoria]] in isolation: Typical error: assuming constant current
+          through whole transient.'
+    next_step_rules:
+    - id: i_next
+      when: 'true'
+      status: info
+      text:
+        es: Verifica potencia inicial y energia disipada para comprobar viabilidad termica del diseno.
+        en: Check initial power and dissipated energy to verify thermal design feasibility.
+    physical_intuition:
+    - id: corriente_transitoria_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[corriente_transitoria]] describe el estado dinámico.
+        en: Intuitively, [[corriente_transitoria]] describes the dynamic state.
+    limiting_cases:
+    - id: corriente_transitoria_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[corriente_transitoria]].
+        en: Check limiting cases of [[corriente_transitoria]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

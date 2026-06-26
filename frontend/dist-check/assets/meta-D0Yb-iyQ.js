@@ -1,0 +1,79 @@
+const n=`id: ondas-longitudinales
+orden: 232220
+nombre:
+  es: Ondas longitudinales
+  en: Longitudinal Waves
+area: fisica-clasica
+bloque: ondas
+subbloque: ondas-mecanicas
+parent_id: ondas-en-fluidos
+descripcion: Estudio de las ondas longitudinales en fluidos, compresion, rarefaccion y rapidez de propagacion.
+description_en: Study of longitudinal waves in fluids, compression, rarefaction, and speed of propagation.
+ruta_relativa: fisica-clasica/ondas/ondas-mecanicas/ondas-en-fluidos/ondas-longitudinales
+type: leaf
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+icon: "📡"
+graficos:
+  - Coord
+  - Svg
+physical_role:
+  es: concepto físico
+  en: physical concept
+dificultad: 3
+tiempo_estimado_min: 30
+representacion_dominante: Coord
+magnitud_dominante: v
+pregunta_fisica_central:
+  es: "¿Como se propagan las ondas longitudinales a traves de las variaciones de presion y densidad en un fluido?"
+  en: "How do longitudinal waves propagate through variations of pressure and density in a fluid?"
+tags:
+  es:
+    - ondas longitudinales
+    - compresion y rarefaccion
+    - modulo de compresibilidad
+    - rapidez del sonido
+    - impedancia acustica
+    - ondas de presion
+  en:
+    - longitudinal waves
+    - compression and rarefaction
+    - bulk modulus
+    - speed of sound
+    - acoustic impedance
+    - pressure waves
+prerequisitos:
+  - fisica-clasica/ondas/ondas-mecanicas/ondas-en-cuerdas/velocidad-de-propagacion
+  - fisica-clasica/ondas/fundamentos/sistemas-de-referencia
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 4
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

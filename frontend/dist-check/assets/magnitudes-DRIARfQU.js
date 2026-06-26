@@ -1,0 +1,198 @@
+const e=`version: 1
+magnitudes:
+  - id: t_e
+    symbol: t_e
+    nombre:
+      es: instante de encuentro
+      en: meeting time
+    descripcion:
+      es: Tiempo transcurrido desde el inicio del cronometraje hasta que los cuerpos coinciden en la misma posición.
+      en: Time elapsed from the start of timing until the bodies coincide at the same position.
+    unidad_si: s
+    dimension: "1"
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - encuentros-y-persecuciones
+    common_mistake: Confundir t_e con otra magnitud cercana dentro de encuentros y persecuciones.
+    typical_range: Depende del contexto fisico del problema.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: El signo depende de la convencion elegida cuando procede.
+        en: The sign depends on the chosen convention when applicable.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: El valor cero debe interpretarse segun el modelo y el contexto.
+        en: Zero must be interpreted according to the model and context.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - encuentros-y-persecuciones
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: Usar t_e con una definicion estable antes de sustituir valores.
+  - id: x_e
+    symbol: x_e
+    nombre:
+      es: posición de encuentro
+      en: meeting position
+    descripcion:
+      es: Coordenada espacial donde ambos cuerpos se interceptan.
+      en: Spatial coordinate where both bodies intercept.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - encuentros-y-persecuciones
+    common_mistake: Confundir x_e con otra magnitud cercana dentro de encuentros y persecuciones.
+    typical_range: Depende del contexto fisico del problema.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: El signo depende de la convencion elegida cuando procede.
+        en: The sign depends on the chosen convention when applicable.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: El valor cero debe interpretarse segun el modelo y el contexto.
+        en: Zero must be interpreted according to the model and context.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - encuentros-y-persecuciones
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: Usar x_e con una definicion estable antes de sustituir valores.
+  - id: d_0
+    symbol: d_0
+    nombre:
+      es: separación inicial
+      en: initial separation
+    descripcion:
+      es: Distancia en línea recta que separa a los dos cuerpos en el instante t = 0.
+      en: Straight-line distance separating the two bodies at instant t = 0.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - encuentros-y-persecuciones
+    common_mistake: Confundir d_0 con otra magnitud cercana dentro de encuentros y persecuciones.
+    typical_range: Depende del contexto fisico del problema.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: El signo depende de la convencion elegida cuando procede.
+        en: The sign depends on the chosen convention when applicable.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: El valor cero debe interpretarse segun el modelo y el contexto.
+        en: Zero must be interpreted according to the model and context.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - encuentros-y-persecuciones
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: Usar d_0 con una definicion estable antes de sustituir valores.
+  - id: v_rel
+    symbol: v_{rel}
+    nombre:
+      es: velocidad relativa firmada
+      en: signed relative velocity
+    descripcion:
+      es: Diferencia algebraica entre las velocidades de los dos moviles sobre el eje elegido.
+      en: Algebraic difference between the velocities of the two bodies along the chosen axis.
+    unidad_si: m/s
+    dimension: "1"
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - encuentros-y-persecuciones
+    common_mistake: Confundir v_rel con otra magnitud cercana dentro de encuentros y persecuciones.
+    typical_range: Depende del contexto fisico del problema.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica si la separacion se cierra o se abre segun la convencion elegida.
+        en: The sign indicates whether the separation closes or opens under the chosen convention.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: El valor cero debe interpretarse segun el modelo y el contexto.
+        en: Zero must be interpreted according to the model and context.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - encuentros-y-persecuciones
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: Usar v_rel con una definicion estable antes de sustituir valores.
+  - id: dt
+    symbol: \\Delta t
+    nombre:
+      es: diferencia de tiempo de salida
+      en: departure time difference
+    descripcion:
+      es: Intervalo de tiempo muerto entre la salida del primer móvil y la del segundo.
+      en: Dead time interval between the departure of the first body and the second.
+    unidad_si: s
+    dimension: "1"
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: physical_quantity
+    used_in:
+      - encuentros-y-persecuciones
+    common_mistake: Confundir dt con otra magnitud cercana dentro de encuentros y persecuciones.
+    typical_range: Depende del contexto fisico del problema.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: El signo depende de la convencion elegida cuando procede.
+        en: The sign depends on the chosen convention when applicable.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: El valor cero debe interpretarse segun el modelo y el contexto.
+        en: Zero must be interpreted according to the model and context.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: Context-dependent
+    interpretation_role:
+      primary_for:
+        - encuentros-y-persecuciones
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: Usar dt con una definicion estable antes de sustituir valores.
+`;export{e as default};

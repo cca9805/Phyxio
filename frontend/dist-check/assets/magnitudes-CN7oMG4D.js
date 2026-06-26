@@ -1,0 +1,228 @@
+const e=`magnitudes:
+
+  - id: c
+    symbol: c
+    nombre:
+      es: Calor específico
+      en: Specific heat capacity
+    descripcion:
+      es: Energía por unidad de masa y de temperatura que debe absorber una sustancia para aumentar su temperatura en un kelvin sin cambio de estado. Es una propiedad intensiva del material.
+      en: Energy per unit mass per kelvin that a substance must absorb to raise its temperature by one kelvin without phase change. It is an intensive property of the material.
+    unidad_si: "J/(kg·K)"
+    dimension: "[L^2 T^-2 Theta^-1]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - calor sensible
+      - calorimetría
+      - diseño térmico de materiales
+    common_mistake: "Confundir el calor específico c (J/(kg·K), propiedad intensiva independiente de la cantidad de materia) con la capacidad calorífica total C (J/K, propiedad extensiva que depende de la masa del sistema)."
+    typical_range: "386 J/(kg·K) para cobre, 900 J/(kg·K) para aluminio, 2090 J/(kg·K) para hielo, 4186 J/(kg·K) para agua líquida, 5193 J/(kg·K) para helio gaseoso."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El calor específico es siempre positivo para sustancias termodinámicamente estables. Un valor aparentemente negativo indicaría inestabilidad termodinámica del sistema."
+        en: "Specific heat capacity is always positive for thermodynamically stable substances. An apparently negative value would indicate thermodynamic instability of the system."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un calor específico nulo implicaría que el material no requiere energía para cambiar de temperatura, lo cual es físicamente imposible para cualquier sustancia real."
+        en: "Zero specific heat capacity would imply the material requires no energy to change temperature, which is physically impossible for any real substance."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - comparación de la capacidad de almacenamiento térmico entre materiales
+        - predicción de la respuesta térmica de un material ante un aporte de energía
+      secondary_for:
+        - diseño de sistemas de almacenamiento y disipación de calor
+        - identificación experimental de materiales desconocidos
+    graph_binding:
+      channels:
+        - eje_y_c
+    pedagogical_notes:
+      es: "El calor específico del agua (4186 J/(kg·K)) es excepcionalmente alto y sirve como referencia natural. El hecho de que sea una propiedad intensiva — igual para 1 g que para 1 tonelada del mismo material — es el punto conceptual más difícil para el alumno principiante."
+      en: "Water's specific heat capacity (4186 J/(kg·K)) is exceptionally high and serves as a natural reference. The fact that it is an intensive property — the same for 1 g as for 1 tonne of the same material — is the most difficult conceptual point for the beginning student."
+
+  - id: Q
+    symbol: Q
+    nombre:
+      es: Calor
+      en: Heat
+    descripcion:
+      es: Energía transferida entre dos sistemas por diferencia de temperatura. En este contexto, es la variable cuya magnitud permite determinar experimentalmente el calor específico de un material.
+      en: Energy transferred between two systems due to a temperature difference. In this context, it is the variable whose measured value allows experimental determination of a material's specific heat capacity.
+    unidad_si: J
+    dimension: "[M L^2 T^-2]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: input_parameter
+    used_in:
+      - determinación experimental de c
+      - calorimetría
+    common_mistake: "Suponer que un valor grande de Q implica necesariamente un calor específico grande, ignorando que Q depende también de la masa y de DeltaT."
+    typical_range: "Desde decenas de J en experimentos de laboratorio hasta MJ en procesos industriales."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Q > 0 el sistema absorbe calor; Q < 0 el sistema cede calor. En la determinación de c, se usa el valor absoluto de Q junto con el signo conocido de DeltaT."
+        en: "Q > 0 the system absorbs heat; Q < 0 the system releases heat. When determining c, the absolute value of Q is used together with the known sign of DeltaT."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Q nulo con DeltaT nulo es trivialmente consistente. Q nulo con DeltaT no nulo implicaría c infinito, lo que es físicamente imposible."
+        en: "Zero Q with zero DeltaT is trivially consistent. Zero Q with nonzero DeltaT would imply infinite c, which is physically impossible."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "any"
+    interpretation_role:
+      primary_for:
+        - cálculo de c a partir de datos experimentales de calorimetría
+      secondary_for:
+        - verificación dimensional del resultado de c
+    graph_binding:
+      channels:
+        - eje_y_Q
+    pedagogical_notes:
+      es: "En el contexto de este leaf, Q es la causa medida del cambio de temperatura. La relación Q = m·c·ΔT permite aislar c como cociente, haciendo explícita su definición operacional."
+      en: "In the context of this leaf, Q is the measured cause of the temperature change. The relation Q = m·c·ΔT allows c to be isolated as a quotient, making its operational definition explicit."
+
+  - id: m
+    symbol: m
+    nombre:
+      es: Masa
+      en: Mass
+    descripcion:
+      es: Cantidad de materia de la muestra del material cuyo calor específico se estudia o aplica.
+      en: Amount of matter in the sample of the material whose specific heat capacity is being studied or applied.
+    unidad_si: kg
+    dimension: "[M]"
+    is_vector: false
+    components: []
+    category: fundamental
+    physical_role: input_parameter
+    used_in:
+      - determinación experimental de c
+      - calor sensible
+    common_mistake: "Usar la masa en gramos cuando c está en J/(kg·K), obteniendo un calor mil veces menor al real."
+    typical_range: "0.001 kg a varios kilogramos en experimentos de laboratorio estándar."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La masa es siempre positiva. No tiene interpretación de signo en este contexto."
+        en: "Mass is always positive. It carries no sign interpretation in this context."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Una masa nula no tiene sentido físico en la determinación de c; haría indeterminada la fórmula de definición."
+        en: "Zero mass has no physical meaning in the determination of c; it would make the definition formula indeterminate."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - factor de escala entre c y la capacidad calorífica total del sistema
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "La masa es el factor que convierte c (propiedad intensiva del material) en C (propiedad extensiva del sistema). Esta conversión m·c es conceptualmente tan importante como la fórmula del calor en sí."
+      en: "Mass is the factor that converts c (intensive property of the material) into C (extensive property of the system). This conversion m·c is conceptually as important as the heat formula itself."
+
+  - id: DeltaT
+    symbol: "\\\\Delta T"
+    nombre:
+      es: Variación de temperatura
+      en: Temperature change
+    descripcion:
+      es: Diferencia entre la temperatura final e inicial del sistema durante el proceso de transferencia de calor. Variable medida experimentalmente para determinar c.
+      en: Difference between the final and initial temperatures of the system during the heat transfer process. Experimentally measured variable used to determine c.
+    unidad_si: K
+    dimension: "[Theta]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: input_parameter
+    used_in:
+      - determinación experimental de c
+      - calor sensible
+    common_mistake: "Calcular DeltaT como T_inicial − T_final, obteniendo el signo contrario y por tanto un c aparentemente negativo."
+    typical_range: "Desde fracciones de kelvin en experimentos de alta precisión hasta 100 K en experimentos de laboratorio ordinarios."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "DeltaT > 0 indica calentamiento (absorción de calor); DeltaT < 0 indica enfriamiento (cesión de calor). En la determinación de c, el signo de DeltaT debe coincidir con el signo de Q."
+        en: "DeltaT > 0 indicates heating (heat absorption); DeltaT < 0 indicates cooling (heat release). When determining c, the sign of DeltaT must match the sign of Q."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un DeltaT nulo con Q no nulo produciría una división por cero en la fórmula de c. Físicamente indica que el proceso es isotérmico o que hay cambio de estado."
+        en: "Zero DeltaT with nonzero Q would produce a division by zero in the formula for c. Physically it indicates an isothermal process or a phase change."
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "any"
+    interpretation_role:
+      primary_for:
+        - denominador de la fórmula de definición de c
+        - indicador del sentido del proceso térmico
+      secondary_for: []
+    graph_binding:
+      channels:
+        - eje_x_delta_T
+    pedagogical_notes:
+      es: "DeltaT es el denominador de la definición de c. La precisión con la que se mide DeltaT limita directamente la precisión del valor de c determinado experimentalmente. Un DeltaT pequeño amplifica los errores de medida."
+      en: "DeltaT is the denominator of the definition of c. The precision with which DeltaT is measured directly limits the precision of the experimentally determined value of c. A small DeltaT amplifies measurement errors."
+
+  - id: C_total
+    symbol: C
+    nombre:
+      es: Capacidad calorífica total
+      en: Total heat capacity
+    descripcion:
+      es: Energía necesaria para aumentar la temperatura del sistema completo (no por unidad de masa) en un kelvin. Es una propiedad extensiva que depende tanto del material como de la cantidad de materia.
+      en: Energy needed to raise the temperature of the entire system (not per unit mass) by one kelvin. It is an extensive property depending on both the material and the amount of matter.
+    unidad_si: "J/K"
+    dimension: "[M L^2 T^-2 Theta^-1]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: auxiliary_quantity
+    used_in:
+      - calorimetría
+      - diseño de sistemas térmicos
+    common_mistake: "Usar C_total en lugar de c (calor específico) al comparar propiedades entre materiales distintos, ignorando que C depende de la masa y no permite comparación directa entre materiales."
+    typical_range: "Varía ampliamente según la masa del sistema: desde décimas de J/K para pequeñas muestras de laboratorio hasta miles de J/K para grandes depósitos de agua."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La capacidad calorífica total es siempre positiva. Un valor negativo indicaría inestabilidad termodinámica del sistema."
+        en: "Total heat capacity is always positive. A negative value would indicate thermodynamic instability of the system."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Una capacidad calorífica total nula implicaría que el sistema no requiere energía para cambiar de temperatura, lo cual es físicamente imposible para cualquier sistema material real."
+        en: "Zero total heat capacity would imply the system requires no energy to change temperature, which is physically impossible for any real material system."
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, +∞)"
+    interpretation_role:
+      primary_for:
+        - predicción de la respuesta térmica de un sistema completo
+        - diseño de sistemas de almacenamiento térmico
+      secondary_for:
+        - comparación de la respuesta térmica de sistemas de distinta composición
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: "La distinción entre c (J/(kg·K), intensiva) y C (J/K, extensiva) es el núcleo conceptual de este leaf. C = m·c conecta ambas: cambiar la masa no cambia c del material, pero sí cambia C del sistema. Este es el ejemplo pedagógico más claro de la distinción entre propiedades intensivas y extensivas en termodinámica."
+      en: "The distinction between c (J/(kg·K), intensive) and C (J/K, extensive) is the conceptual core of this leaf. C = m·c connects both: changing the mass does not change c of the material, but does change C of the system. This is the clearest pedagogical example of the distinction between intensive and extensive properties in thermodynamics."
+`;export{e as default};

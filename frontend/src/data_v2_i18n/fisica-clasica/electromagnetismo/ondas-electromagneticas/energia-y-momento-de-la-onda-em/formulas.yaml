@@ -1,0 +1,417 @@
+version: 5
+topic:
+  id: energia-y-momento-de-la-onda-em
+  title:
+    es: Energia y momento de la onda em
+    en: Energy and Momentum of an Electromagnetic Wave
+formulas:
+- id: relacion_campos_rms
+  title:
+    es: Relacion eficaz entre campos
+    en: RMS field relation
+  equation: B_0 = E_0 / c
+  latex: B_0 = \frac{E_0}{c}
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Vincula las escalas eficaces electrica y magnetica de una onda plana en el vacio.
+    en: Links the electric and magnetic rms scales of a plane wave in vacuum.
+  constraints:
+  - E_0 >= 0
+  - c > 0
+  validity:
+    es: Valida para onda plana transversal en el vacio o medio no dispersivo equivalente.
+    en: Valid for a transverse plane wave in vacuum or an equivalent nondispersive medium.
+  dimension_check: '[M T^-2 I^-1] = [M L T^-3 I^-1] / [L T^-1]'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere el campo electrico eficaz y la velocidad de propagacion.
+    en: Requires the rms electric field and propagation speed.
+  used_in:
+  - acoplamiento_campos
+  interpretation_tags:
+  - campos
+  - acoplamiento
+  result_semantics:
+    target: campo_magnetico_eficaz
+    kind: core_physical_quantity
+    sign_meaning:
+      es: El resultado es un modulo eficaz no negativo.
+      en: The result is a nonnegative rms magnitude.
+    absolute_value_meaning:
+      es: Escala magnetica asociada al campo electrico de la misma onda.
+      en: Magnetic scale associated with the electric field of the same wave.
+  domain_checks:
+  - condition: c > 0
+    message:
+      es: La velocidad de propagacion debe ser positiva.
+      en: Propagation speed must be positive.
+    severity: error
+  coherence_checks:
+  - condition: B_0 >= 0
+    message:
+      es: El campo magnetico eficaz no puede ser negativo.
+      en: The rms magnetic field cannot be negative.
+    severity: error
+  graph_implications:
+    es: Ajusta la escala magnetica del esquema transversal Svg.
+    en: Adjusts the magnetic scale in the transverse Svg diagram.
+  pedagogical_triggers:
+  - confundir_escalas_si
+  rearrangements:
+  - target: campo_magnetico_eficaz
+    equation: B_0 = E_0 / c
+    latex: B_0 = \frac{E_0}{c}
+  - target: campo_electrico_eficaz
+    equation: E_0 = B_0 * c
+    latex: E_0 = B_0 * c
+  - target: velocidad_de_la_luz_en_el_vacio
+    equation: c = E_0 / B_0
+    latex: c = \frac{E_0}{B_0}
+  variables:
+  - campo_magnetico_eficaz
+  - campo_electrico_eficaz
+  - velocidad_de_la_luz_en_el_vacio
+- id: densidad_energia_rms
+  title:
+    es: Densidad media de energia desde el campo eficaz
+    en: Average energy density from rms field
+  equation: u_{EM} = epsilon0 * E_0^2
+  latex: u_{EM} = \varepsilon_0 * E_0^2
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Convierte el campo electrico eficaz en energia electromagnetica media por volumen.
+    en: Converts rms electric field into average electromagnetic energy per volume.
+  constraints:
+  - epsilon0 > 0
+  - E_0 >= 0
+  validity:
+    es: Valida para onda plana armonica en el vacio usando valores eficaces.
+    en: Valid for a harmonic plane wave in vacuum using rms values.
+  dimension_check: '[M L^-1 T^-2] = [M^-1 L^-3 T^4 I^2] * [M L T^-3 I^-1]^2'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere conocer el campo electrico eficaz y la permitividad del vacio.
+    en: Requires the rms electric field and vacuum permittivity.
+  used_in:
+  - energia_volumetrica
+  interpretation_tags:
+  - energia
+  - campo
+  result_semantics:
+    target: densidad_media_de_energia_electromagnetica
+    kind: core_physical_quantity
+    sign_meaning:
+      es: Siempre no negativa porque depende del cuadrado del campo.
+      en: Always nonnegative because it depends on the square of the field.
+    absolute_value_meaning:
+      es: Energia media contenida en cada metro cubico de frente de onda.
+      en: Average energy contained in each cubic metre of wavefront.
+  domain_checks:
+  - condition: epsilon0 > 0
+    message:
+      es: La permitividad usada debe ser positiva.
+      en: The permittivity used must be positive.
+    severity: error
+  coherence_checks:
+  - condition: u_{EM} >= 0
+    message:
+      es: La densidad de energia no puede ser negativa.
+      en: Energy density cannot be negative.
+    severity: error
+  graph_implications:
+    es: Proporciona el eje horizontal del grafico de energia frente a intensidad.
+    en: Provides the horizontal axis of the energy-versus-intensity graph.
+  pedagogical_triggers:
+  - olvidar_promedio_rms
+  rearrangements:
+  - target: densidad_media_de_energia_electromagnetica
+    equation: u_{EM} = epsilon0 * E_0^2
+    latex: u_{EM} = \varepsilon_0 * E_0^2
+  - target: epsilon0
+    equation: epsilon0 = u_{EM} / E_0^2
+    latex: \varepsilon_0 = \frac{u_{EM}}{E_0^2}
+  variables:
+  - densidad_media_de_energia_electromagnetica
+  - epsilon0
+  - campo_electrico_eficaz
+- id: intensidad_media_onda
+  title:
+    es: Intensidad media transportada
+    en: Transported average intensity
+  equation: S_{med} = c * u_{EM}
+  latex: S_{med} = c * u_{EM}
+  category: fundamental
+  relation_type: average_relation
+  physical_meaning:
+    es: La energia por volumen se convierte en flujo de energia al avanzar a la velocidad de la onda.
+    en: Energy per volume becomes energy flux as it advances at the wave speed.
+  constraints:
+  - c > 0
+  - u_{EM} >= 0
+  validity:
+    es: Valida para flujo medio de una onda plana que transporta energia perpendicular al frente.
+    en: Valid for the average flux of a plane wave transporting energy normal to the front.
+  dimension_check: '[M T^-3] = [L T^-1] * [M L^-1 T^-2]'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere densidad de energia media y velocidad de propagacion.
+    en: Requires average energy density and propagation speed.
+  used_in:
+  - flujo_energetico
+  interpretation_tags:
+  - intensidad
+  - energia
+  result_semantics:
+    target: intensidad_media_de_poynting
+    kind: core_physical_quantity
+    sign_meaning:
+      es: Se usa como modulo medio positivo del flujo de Poynting.
+      en: It is used as the positive average magnitude of Poynting flux.
+    absolute_value_meaning:
+      es: Potencia por metro cuadrado que cruza la superficie.
+      en: Power per square metre crossing the surface.
+  domain_checks:
+  - condition: S_{med} >= 0
+    message:
+      es: La intensidad media no puede ser negativa en modulo.
+      en: Average intensity cannot be negative as a magnitude.
+    severity: error
+  coherence_checks:
+  - condition: S_{med} < 1e20
+    message:
+      es: Una intensidad mayor corresponde a regimen extremo fuera del modelo clasico cotidiano.
+      en: A larger intensity corresponds to an extreme regime outside everyday classical use.
+    severity: warning
+  graph_implications:
+    es: Define la pendiente del grafico Coord entre energia por volumen e intensidad.
+    en: Defines the Coord graph slope between energy per volume and intensity.
+  pedagogical_triggers:
+  - confundir_intensidad_energia_total
+  rearrangements:
+  - target: intensidad_media_de_poynting
+    equation: S_{med} = c * u_{EM}
+    latex: S_{med} = c * u_{EM}
+  - target: densidad_media_de_energia_electromagnetica
+    equation: u_{EM} = S_{med} / c
+    latex: u_{EM} = \frac{S_{med}}{c}
+  - target: velocidad_de_la_luz_en_el_vacio
+    equation: c = S_{med} / u_{EM}
+    latex: c = \frac{S_{med}}{u_{EM}}
+  variables:
+  - intensidad_media_de_poynting
+  - velocidad_de_la_luz_en_el_vacio
+  - densidad_media_de_energia_electromagnetica
+- id: densidad_momento_onda
+  title:
+    es: Densidad de momento de la onda
+    en: Wave momentum density
+  equation: g_{EM} = u_{EM} / c
+  latex: g_{EM} = \frac{u_{EM}}{c}
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Relaciona energia almacenada con momento lineal transportado por unidad de volumen.
+    en: Relates stored energy with linear momentum transported per unit volume.
+  constraints:
+  - u_{EM} >= 0
+  - c > 0
+  validity:
+    es: Valida para radiacion electromagnetica libre con transporte paralelo a la propagacion.
+    en: Valid for free electromagnetic radiation with transport parallel to propagation.
+  dimension_check: '[M L^-2 T^-1] = [M L^-1 T^-2] / [L T^-1]'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere densidad de energia media y velocidad de propagacion.
+    en: Requires average energy density and propagation speed.
+  used_in:
+  - momento_electromagnetico
+  interpretation_tags:
+  - momento
+  - energia
+  result_semantics:
+    target: densidad_de_momento_electromagnetico
+    kind: core_physical_quantity
+    sign_meaning:
+      es: Se lee como modulo de momento por volumen en la direccion de avance.
+      en: It is read as momentum-per-volume magnitude along propagation.
+    absolute_value_meaning:
+      es: Cantidad de momento lineal electromagnetico contenida en un metro cubico.
+      en: Amount of electromagnetic linear momentum contained in one cubic metre.
+  domain_checks:
+  - condition: c > 0
+    message:
+      es: La velocidad usada para convertir energia en momento debe ser positiva.
+      en: The speed used to convert energy into momentum must be positive.
+    severity: error
+  coherence_checks:
+  - condition: g_{EM} >= 0
+    message:
+      es: La densidad de momento como modulo no puede ser negativa.
+      en: Momentum density as a magnitude cannot be negative.
+    severity: error
+  graph_implications:
+    es: Aparece como lectura secundaria junto a la presion en la tarjeta del grafico.
+    en: Appears as a secondary readout with pressure in the graph card.
+  pedagogical_triggers:
+  - onda_sin_masa_sin_momento
+  rearrangements:
+  - target: densidad_de_momento_electromagnetico
+    equation: g_{EM} = u_{EM} / c
+    latex: g_{EM} = \frac{u_{EM}}{c}
+  - target: densidad_media_de_energia_electromagnetica
+    equation: u_{EM} = g_{EM} * c
+    latex: u_{EM} = g_{EM} * c
+  variables:
+  - densidad_de_momento_electromagnetico
+  - densidad_media_de_energia_electromagnetica
+  - velocidad_de_la_luz_en_el_vacio
+- id: presion_radiacion_absorbente
+  title:
+    es: Presion de radiacion sobre absorbente
+    en: Radiation pressure on an absorber
+  equation: p_rad = S_{med} / c
+  latex: p_{rad} = \frac{S_{med}}{c}
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Convierte el flujo de energia absorbida en presion mecanica sobre una superficie.
+    en: Converts absorbed energy flux into mechanical pressure on a surface.
+  constraints:
+  - S_{med} >= 0
+  - c > 0
+  validity:
+    es: Valida para incidencia normal y absorcion ideal sin reflexion especular dominante.
+    en: Valid for normal incidence and ideal absorption without dominant specular reflection.
+  dimension_check: '[M L^-1 T^-2] = [M T^-3] / [L T^-1]'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere la intensidad media incidente y la velocidad de la luz.
+    en: Requires incident average intensity and the speed of light.
+  used_in:
+  - presion_mecanica
+  interpretation_tags:
+  - presion
+  - momento
+  result_semantics:
+    target: p_rad
+    kind: core_physical_quantity
+    sign_meaning:
+      es: Positiva si la onda empuja en la normal de la superficie.
+      en: Positive if the wave pushes along the surface normal.
+    absolute_value_meaning:
+      es: Fuerza por area debida al momento electromagnetico absorbido.
+      en: Force per area due to absorbed electromagnetic momentum.
+  domain_checks:
+  - condition: S_{med} >= 0
+    message:
+      es: La intensidad incidente debe ser no negativa.
+      en: Incident intensity must be nonnegative.
+    severity: error
+  coherence_checks:
+  - condition: p_rad < 1e8
+    message:
+      es: 'Presion enorme: revisar si el regimen sigue siendo una onda clasica absorbida.'
+      en: 'Huge pressure: check whether the regime is still a classical absorbed wave.'
+    severity: warning
+  graph_implications:
+    es: Muestra la consecuencia mecanica de aumentar la intensidad de la onda.
+    en: Shows the mechanical consequence of increasing wave intensity.
+  pedagogical_triggers:
+  - doblar_presion_sin_reflexion
+  rearrangements:
+  - target: p_rad
+    equation: p_rad = S_{med} / c
+    latex: p_{rad} = \frac{S_{med}}{c}
+  - target: intensidad_media_de_poynting
+    equation: S_{med} = p_rad * c
+    latex: S_{med} = p_{rad} * c
+  variables:
+  - p_rad
+  - intensidad_media_de_poynting
+  - velocidad_de_la_luz_en_el_vacio
+- id: potencia_incidente_area
+  title:
+    es: Potencia incidente sobre area
+    en: Incident power on area
+  equation: P_{rad} = S_{med} * A
+  latex: P_{rad} = S_{med} * A
+  category: derived
+  relation_type: average_relation
+  physical_meaning:
+    es: Escala la intensidad local a la potencia total interceptada por una superficie.
+    en: Scales local intensity into total power intercepted by a surface.
+  constraints:
+  - S_{med} >= 0
+  - A >= 0
+  validity:
+    es: Valida si la intensidad es aproximadamente uniforme sobre el area efectiva.
+    en: Valid if intensity is approximately uniform over the effective area.
+  dimension_check: '[M L^2 T^-3] = [M T^-3] * [L^2]'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere intensidad media y area iluminada efectiva.
+    en: Requires average intensity and effective illuminated area.
+  used_in:
+  - potencia_total
+  interpretation_tags:
+  - potencia
+  - area
+  result_semantics:
+    target: potencia_electromagnetica_incidente
+    kind: core_physical_quantity
+    sign_meaning:
+      es: Es no negativa para una superficie que intercepta energia incidente.
+      en: It is nonnegative for a surface intercepting incident energy.
+    absolute_value_meaning:
+      es: Potencia total recibida por el objeto iluminado.
+      en: Total power received by the illuminated object.
+  domain_checks:
+  - condition: A >= 0
+    message:
+      es: El area efectiva no puede ser negativa.
+      en: Effective area cannot be negative.
+    severity: error
+  coherence_checks:
+  - condition: P_{rad} >= 0
+    message:
+      es: La potencia incidente debe ser no negativa.
+      en: Incident power must be nonnegative.
+    severity: error
+  graph_implications:
+    es: Relaciona la lectura de intensidad con un dispositivo de area finita.
+    en: Relates the intensity reading to a finite-area device.
+  pedagogical_triggers:
+  - confundir_intensidad_y_potencia
+  rearrangements:
+  - target: potencia_electromagnetica_incidente
+    equation: P_{rad} = S_{med} * A
+    latex: P_{rad} = S_{med} * A
+  - target: intensidad_media_de_poynting
+    equation: S_{med} = P_{rad} / A
+    latex: S_{med} = \frac{P_{rad}}{A}
+  - target: area_iluminada
+    equation: A = P_{rad} / S_{med}
+    latex: A = \frac{P_{rad}}{S_{med}}
+  variables:
+  - potencia_electromagnetica_incidente
+  - intensidad_media_de_poynting
+  - area_iluminada
+ui:
+  default_formula: intensidad_media_onda
+  groups:
+  - title:
+      es: Campos y energia
+      en: Fields and energy
+    items:
+    - relacion_campos_rms
+    - densidad_energia_rms
+    - intensidad_media_onda
+  - title:
+      es: Momento y accion mecanica
+      en: Momentum and mechanical action
+    items:
+    - densidad_momento_onda
+    - presion_radiacion_absorbente
+    - potencia_incidente_area

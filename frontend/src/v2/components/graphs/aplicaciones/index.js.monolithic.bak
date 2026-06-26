@@ -1,0 +1,512 @@
+import { withGraphContextRegistry } from "../shared/withGraphContext.jsx";
+import PlanoInclinadoGraphsSvg from "./Svg/PlanoInclinadoGraphsSvg.jsx";
+import PoleaGraphsSvg from "./Svg/PoleaGraphsSvg.jsx";
+import RuedaYEjeGraphsSvg from "./Svg/RuedaYEjeGraphsSvg.jsx";
+import TornilloGraphsCoord from "./Coord/TornilloGraphsCoord.jsx";
+import TornilloGraphsSvg from "./Svg/TornilloGraphsSvg.jsx";
+import TiposDePalancasGraphsSvg from "./Svg/TiposDePalancasGraphsSvg.jsx";
+import VentajaMecanicaGraphsCoord from "./Coord/VentajaMecanicaGraphsCoord.jsx";
+import PalancaGraphsSvg from "./Svg/PalancaGraphsSvg.jsx";
+import PlanoInclinadoGraphsDcl from "./Dcl/PlanoInclinadoGraphsDcl.jsx";
+
+const rawGraphs = {
+  "palanca": {
+    Svg: {
+      id: "palanca-Svg",
+      graphId: "palanca-Svg",
+      title: { es: "Escena SVG · Palanca", en: "SVG Scene · Lever" },
+      sceneId: "palanca_scene",
+      sceneLabel: { es: "Palanca con fulcro, esfuerzo F_e y carga F_c", en: "Lever with fulcrum, effort F_e and load F_c" },
+      objects: { es: ["barra rígida (palanca)", "fulcro", "fuerza de esfuerzo F_e", "carga F_c"], en: ["rigid bar (lever)", "fulcrum", "effort force F_e", "load F_c"] },
+      mainObject: { es: "palanca en equilibrio con esfuerzo y carga", en: "lever in equilibrium with effort and load" },
+      referenceFrame: { es: "laboratorio inercial", en: "inertial laboratory" },
+      geometry: { es: "La escena muestra la barra rígida apoyada en el fulcro con el esfuerzo y la carga en sus posiciones respectivas.", en: "The scene shows the rigid bar resting on the fulcrum with effort and load at their respective positions." },
+      interactions: { es: "El equilibrio requiere que los torques del esfuerzo y de la carga respecto al fulcro sean iguales y opuestos.", en: "Equilibrium requires that the torques of effort and load about the fulcrum are equal and opposite." },
+      modelElements: { es: ["fulcro en posición fija", "brazo de esfuerzo d_e", "brazo de carga d_c", "F_e y F_c"], en: ["fulcrum at fixed position", "effort arm d_e", "load arm d_c", "F_e and F_c"] },
+      visualCues: {
+        es: [
+          "Las flechas de F_e y F_c son proporcionales a sus magnitudes.",
+          "El fulcro está marcado con un triángulo.",
+          "Los brazos d_e y d_c están indicados como distancias al fulcro.",
+        ],
+        en: [
+          "The arrows for F_e and F_c are proportional to their magnitudes.",
+          "The fulcrum is marked with a triangle.",
+          "Arms d_e and d_c are indicated as distances to the fulcrum.",
+        ],
+      },
+      scaleMeaning: { es: "Las longitudes de los brazos son proporcionales a d_e y d_c.", en: "Arm lengths are proportional to d_e and d_c." },
+      relation: { es: "La escena ilustra el equilibrio de torques en una palanca: F_e·d_e = F_c·d_c.", en: "The scene illustrates torque balance on a lever: F_e·d_e = F_c·d_c." },
+      physicalReading: { es: "Leer los brazos d_e y d_c para calcular la ventaja mecánica y verificar el equilibrio de torques.", en: "Read the arms d_e and d_c to compute the mechanical advantage and verify torque balance." },
+      modelConnection: { es: "Se interpreta bajo la segunda condición de equilibrio: Στ = 0.", en: "Interpreted under the second equilibrium condition: Στ = 0." },
+      formulaConnection: { es: "Conecta con F_e·d_e = F_c·d_c y VM = d_e/d_c.", en: "Connects to F_e·d_e = F_c·d_c and MA = d_e/d_c." },
+      readingFocus: { es: "identificar el fulcro, medir los brazos y verificar F_e·d_e = F_c·d_c.", en: "identify the fulcrum, measure the arms, and verify F_e·d_e = F_c·d_c." },
+      agentHints: {
+        es: [
+          "Para equilibrio, los torques deben ser iguales: F_e·d_e = F_c·d_c.",
+          "Si d_e > d_c, se necesita menos esfuerzo que la carga (VM > 1).",
+          "El peso propio de la palanca actúa en su CM y debe incluirse en Στ = 0 si no es despreciable.",
+        ],
+        en: [
+          "For equilibrium, torques must be equal: F_e·d_e = F_c·d_c.",
+          "If d_e > d_c, less effort than load is needed (MA > 1).",
+          "The lever's own weight acts at its CM and must be included in Στ = 0 if not negligible.",
+        ],
+      },
+      commonMistakes: {
+        es: [
+          "Medir los brazos desde el extremo en lugar del fulcro.",
+          "Olvidar que el torque es F·d (perpendicular), no F·distancia directa.",
+          "No considerar el peso propio de la palanca en problemas reales.",
+        ],
+        en: [
+          "Measuring the arms from the end instead of the fulcrum.",
+          "Forgetting that torque is F·d (perpendicular), not F times the direct distance.",
+          "Not considering the lever's own weight in real problems.",
+        ],
+      },
+      recommendedTab: "graficas",
+      component: PalancaGraphsSvg,
+    },
+  },
+  "plano-inclinado": {
+    Dcl: {
+      id: "plano-inclinado-Dcl",
+      graphId: "plano-inclinado-Dcl",
+      title: { es: "DCL · Plano Inclinado", en: "FBD · Inclined Plane" },
+      forces: { es: ["W = m·g (peso, vertical hacia abajo)", "N = m·g·cosθ (normal, perpendicular al plano)", "f_r = μ_c·N (rozamiento, paralela al plano opuesta al movimiento)"], en: ["W = m·g (weight, vertically downward)", "N = m·g·cosθ (normal, perpendicular to the plane)", "f_r = μ_c·N (friction, parallel to the plane opposing motion)"] },
+      object: { es: "bloque sobre plano inclinado un ángulo θ", en: "block on a plane inclined at angle θ" },
+      freeBodyCondition: { es: "El DCL tiene los ejes alineados con el plano (∥ y ⊥). El peso se descompone en W_∥ = m·g·senθ y W_⊥ = m·g·cosθ.", en: "The FBD has axes aligned with the plane (∥ and ⊥). Weight is decomposed into W_∥ = m·g·sinθ and W_⊥ = m·g·cosθ." },
+      equilibriumCondition: { es: "En dirección ⊥: N = m·g·cosθ. En dirección ∥: a = g(senθ − μ_c·cosθ).", en: "In the ⊥ direction: N = m·g·cosθ. In the ∥ direction: a = g(sinθ − μ_c·cosθ)." },
+      netForce: { es: "ΣF_∥ = m·g·senθ − f_r = m·a.", en: "ΣF_∥ = m·g·sinθ − f_r = m·a." },
+      accelerationDirection: { es: "A lo largo del plano, en dirección hacia abajo si senθ > μ_c·cosθ.", en: "Along the plane, downward if sinθ > μ_c·cosθ." },
+      referenceFrameChoice: { es: "Ejes alineados con el plano: eje x paralelo al plano (positivo hacia abajo del plano), eje y perpendicular.", en: "Axes aligned with the plane: x-axis parallel to the plane (positive downward along it), y-axis perpendicular." },
+      forceTypes: { es: ["W = m·g (vertical)", "N (perpendicular al plano)", "f_r = μ_c·N (paralela al plano)"], en: ["W = m·g (vertical)", "N (perpendicular to the plane)", "f_r = μ_c·N (parallel to the plane)"] },
+      signConvention: { es: "Positivo hacia abajo por el plano en x. Positivo alejando del plano en y.", en: "Positive downward along the plane in x. Positive away from the plane in y." },
+      commonMistakes: {
+        es: [
+          "No descomponer el peso con los ejes del plano.",
+          "Confundir N = m·g·cosθ con N = m·g.",
+          "Dibujar el rozamiento en la dirección del movimiento en lugar de opuesta.",
+        ],
+        en: [
+          "Not decomposing the weight using the plane's axes.",
+          "Confusing N = m·g·cosθ with N = m·g.",
+          "Drawing the friction force in the direction of motion instead of opposing it.",
+        ],
+      },
+      agentHints: {
+        es: [
+          "Con los ejes alineados al plano, la ecuación en y da N directamente sin resolver sistema.",
+          "La fuerza de rozamiento siempre se opone al movimiento relativo: hacia arriba si el bloque baja.",
+          "El ángulo θ del plano es el mismo que el ángulo entre el peso y la normal.",
+        ],
+        en: [
+          "With axes aligned to the plane, the y-equation gives N directly without solving a system.",
+          "Friction always opposes relative motion: upward if the block slides down.",
+          "The plane angle θ equals the angle between weight and the normal.",
+        ],
+      },
+      recommendedTab: "graficas",
+      graphType: "Dcl",
+      relation: { es: "El DCL del plano inclinado con ejes alineados al plano muestra la descomposición del peso en componentes paralela y perpendicular al plano.", en: "The inclined plane FBD with plane-aligned axes shows the decomposition of weight into components parallel and perpendicular to the plane." },
+      readingFocus: { es: "identificar el ángulo θ, descomponer el peso con senθ y cosθ, y calcular N y la aceleración.", en: "identify the angle θ, decompose the weight using sinθ and cosθ, and compute N and the acceleration." },
+      component: PlanoInclinadoGraphsDcl,
+    },
+    Svg: {
+      id: "plano-inclinado-Svg",
+      graphId: "plano-inclinado-Svg",
+      title: { es: "Escena SVG · Plano Inclinado", en: "SVG Scene · Inclined Plane" },
+      sceneId: "plano_inclinado_scene",
+      sceneLabel: { es: "Bloque sobre plano inclinado con peso, normal y rozamiento", en: "Block on inclined plane with weight, normal, and friction" },
+      objects: { es: ["plano inclinado θ", "bloque", "W (peso)", "N (normal)", "f_r (rozamiento)"], en: ["inclined plane θ", "block", "W (weight)", "N (normal)", "f_r (friction)"] },
+      mainObject: { es: "bloque sobre plano inclinado", en: "block on inclined plane" },
+      referenceFrame: { es: "ejes alineados con el plano: x paralelo, y perpendicular", en: "axes aligned with the plane: x parallel, y perpendicular" },
+      geometry: { es: "La escena muestra el plano inclinado con el bloque, el ángulo θ, el peso vertical y sus componentes paralela y perpendicular al plano.", en: "The scene shows the inclined plane with the block, angle θ, the vertical weight, and its components parallel and perpendicular to the plane." },
+      interactions: { es: "El peso actua verticalmente, la normal perpendicularmente al plano y el rozamiento paralelo al plano (hacia arriba).", en: "Weight acts vertically, the normal perpendicularly to the plane, and friction parallel to the plane (upward)." },
+      modelElements: { es: ["W vertical", "N perpendicular al plano", "f_r paralela al plano", "W_∥ = m·g·senθ", "W_⊥ = m·g·cosθ"], en: ["W vertical", "N perpendicular to the plane", "f_r parallel to the plane", "W_∥ = m·g·sinθ", "W_⊥ = m·g·cosθ"] },
+      visualCues: {
+        es: [
+          "El ángulo θ del plano es el mismo que el ángulo entre W y N.",
+          "La normal es perpendicular a la superficie del plano, no vertical.",
+          "El rozamiento apunta hacia arriba del plano (se opone al movimiento de bajada).",
+        ],
+        en: [
+          "The plane angle θ equals the angle between W and N.",
+          "The normal is perpendicular to the plane surface, not vertical.",
+          "Friction points up the plane (opposing downward motion).",
+        ],
+      },
+      scaleMeaning: { es: "Las flechas son proporcionales a las magnitudes de las fuerzas.", en: "Arrows are proportional to the magnitudes of the forces." },
+      relation: { es: "La escena ilustra la descomposición del peso en componentes paralela y perpendicular al plano, y la normal y rozamiento que actúan sobre el bloque.", en: "The scene illustrates the decomposition of weight into components parallel and perpendicular to the plane, along with the normal and friction acting on the block." },
+      physicalReading: { es: "Leer el ángulo θ para calcular W_∥ = m·g·senθ, N = m·g·cosθ y la aceleración resultante.", en: "Read angle θ to compute W_∥ = m·g·sinθ, N = m·g·cosθ, and the resulting acceleration." },
+      modelConnection: { es: "Se interpreta bajo la segunda ley de Newton con ejes alineados al plano.", en: "Interpreted under Newton's second law with axes aligned to the plane." },
+      formulaConnection: { es: "Conecta con a = g(senθ − μ_c·cosθ), N = m·g·cosθ y f_r = μ_c·N.", en: "Connects to a = g(sinθ − μ_c·cosθ), N = m·g·cosθ and f_r = μ_c·N." },
+      readingFocus: { es: "identificar el ángulo θ, las fuerzas que actúan y verificar la descomposición del peso.", en: "identify angle θ, the acting forces, and verify the weight decomposition." },
+      agentHints: {
+        es: [
+          "Los ejes alineados con el plano eliminan la necesidad de descomponer N y f_r.",
+          "Solo el peso W se descompone: W_∥ = m·g·senθ y W_⊥ = m·g·cosθ.",
+          "El plano inclinado es una máquina simple: permite subir cargas con menos fuerza recorriendo mayor distancia.",
+        ],
+        en: [
+          "Axes aligned with the plane eliminate the need to decompose N and f_r.",
+          "Only weight W is decomposed: W_∥ = m·g·sinθ and W_⊥ = m·g·cosθ.",
+          "The inclined plane is a simple machine: it allows lifting loads with less force over a greater distance.",
+        ],
+      },
+      commonMistakes: {
+        es: [
+          "Descomponer N en lugar del peso.",
+          "Usar N = m·g en lugar de N = m·g·cosθ.",
+          "Dibujar el rozamiento hacia abajo cuando el bloque sube el plano.",
+        ],
+        en: [
+          "Decomposing N instead of the weight.",
+          "Using N = m·g instead of N = m·g·cosθ.",
+          "Drawing friction downward when the block moves up the plane.",
+        ],
+      },
+      recommendedTab: "graficas",
+      component: PlanoInclinadoGraphsSvg,
+    },
+  },
+  "polea": {
+    Svg: {
+      id: "polea-Svg",
+      graphId: "polea-Svg",
+      title: { es: "Escena SVG · Polea", en: "SVG Scene · Pulley" },
+      sceneId: "polea_scene",
+      sceneLabel: { es: "Polea con cuerda, carga y fuerza de esfuerzo", en: "Pulley with rope, load, and effort force" },
+      objects: { es: ["polea", "cuerda", "carga W", "fuerza de esfuerzo F_e"], en: ["pulley", "rope", "load W", "effort force F_e"] },
+      mainObject: { es: "polea con sistema de carga", en: "pulley with load system" },
+      referenceFrame: { es: "laboratorio inercial", en: "inertial laboratory" },
+      geometry: { es: "La escena muestra la polea con la cuerda y las fuerzas en sus extremos.", en: "The scene shows the pulley with the rope and forces at its ends." },
+      interactions: { es: "La tensión es la misma en toda la cuerda ideal.", en: "Tension is the same throughout the ideal rope." },
+      modelElements: { es: ["T (igual en ambos lados)", "W (carga)", "F_e (esfuerzo)"], en: ["T (equal on both sides)", "W (load)", "F_e (effort)"] },
+      visualCues: {
+        es: [
+          "Si la polea es fija, ambos extremos tienen la misma tensión.",
+          "Si la polea es móvil, dos segmentos soportan W y el esfuerzo es T = W/2.",
+          "La dirección del esfuerzo puede ser cualquier dirección conveniente.",
+        ],
+        en: [
+          "If the pulley is fixed, both rope ends have the same tension.",
+          "If the pulley is movable, two segments support W and effort is T = W/2.",
+          "The direction of effort can be any convenient direction.",
+        ],
+      },
+      scaleMeaning: { es: "Proporcional a las fuerzas.", en: "Proportional to the forces." },
+      relation: { es: "La escena ilustra el funcionamiento básico de una polea como máquina simple.", en: "The scene illustrates the basic operation of a pulley as a simple machine." },
+      physicalReading: { es: "Identificar la carga, el esfuerzo y la tensión para aplicar el equilibrio o la segunda ley.", en: "Identify the load, effort, and tension to apply equilibrium or Newton's second law." },
+      modelConnection: { es: "Se interpreta bajo el equilibrio o dinámica de la polea con la segunda ley de Newton.", en: "Interpreted under pulley equilibrium or dynamics using Newton's second law." },
+      formulaConnection: { es: "Conecta con ΣF = 0 (equilibrio) o ΣF = m·a (dinámica).", en: "Connects to ΣF = 0 (equilibrium) or ΣF = m·a (dynamics)." },
+      readingFocus: { es: "identificar el tipo de polea, la carga y el esfuerzo para calcular la tensión en la cuerda.", en: "identify the pulley type, load, and effort to compute the rope tension." },
+      agentHints: {
+        es: [
+          "La polea cambia la dirección de la fuerza (fija) o multiplica la fuerza (móvil).",
+          "Sin masa de polea ni fricción, T es uniforme en la cuerda.",
+          "Con masa de polea, se necesita la ecuación rotacional.",
+        ],
+        en: [
+          "The pulley changes the direction of force (fixed) or multiplies it (movable).",
+          "Without pulley mass or friction, T is uniform throughout the rope.",
+          "With a massive pulley, the rotational equation of motion is needed.",
+        ],
+      },
+      commonMistakes: {
+        es: [
+          "Olvidar que la polea ideal transmite la tensión sin pérdidas.",
+          "Confundir la polea como amplificador de fuerza sin considerar el desplazamiento.",
+          "No incluir el peso de la polea móvil en la carga total.",
+        ],
+        en: [
+          "Forgetting that an ideal pulley transmits tension without losses.",
+          "Treating the pulley as a force amplifier without considering displacement.",
+          "Not including the weight of the movable pulley in the total load.",
+        ],
+      },
+      recommendedTab: "graficas",
+      component: PoleaGraphsSvg,
+    },
+  },
+  "rueda-y-eje": {
+    Svg: {
+      id: "rueda-y-eje-Svg",
+      graphId: "rueda-y-eje-Svg",
+      title: { es: "Escena SVG · Rueda y Eje", en: "SVG Scene · Wheel and Axle" },
+      sceneId: "rueda_eje_scene",
+      sceneLabel: { es: "Rueda grande y eje pequeño con fuerzas de esfuerzo y carga", en: "Large wheel and small axle with effort and load forces" },
+      objects: { es: ["rueda (radio R)", "eje (radio r)", "F_esfuerzo sobre la rueda", "F_carga sobre el eje"], en: ["wheel (radius R)", "axle (radius r)", "F_effort on the wheel", "F_load on the axle"] },
+      mainObject: { es: "sistema rueda y eje", en: "wheel and axle system" },
+      referenceFrame: { es: "laboratorio inercial con eje de rotación horizontal", en: "inertial laboratory with horizontal rotation axis" },
+      geometry: { es: "La escena muestra la rueda grande y el eje pequeño coaxiales. El esfuerzo se aplica en la periferia de la rueda y la carga en la periferia del eje.", en: "The scene shows the large wheel and small axle as coaxial components. Effort is applied at the wheel's periphery and load is collected at the axle's periphery." },
+      interactions: { es: "El torque del esfuerzo sobre la rueda (τ_R = F_e·R) equilibra el torque de la carga sobre el eje (τ_r = F_c·r).", en: "The effort torque on the wheel (τ_R = F_e·R) balances the load torque on the axle (τ_r = F_c·r)." },
+      modelElements: { es: ["radio R de la rueda", "radio r del eje", "F_e (esfuerzo)", "F_c (carga)"], en: ["wheel radius R", "axle radius r", "F_e (effort)", "F_c (load)"] },
+      visualCues: {
+        es: [
+          "La rueda es notablemente más grande que el eje: esto visualiza la ventaja mecánica.",
+          "El esfuerzo se aplica en la periferia de la rueda; la carga se recoge en el eje.",
+          "VM = R/r: si R = 5r, el esfuerzo es 5 veces menor que la carga.",
+        ],
+        en: [
+          "The wheel is notably larger than the axle: this visualises the mechanical advantage.",
+          "Effort is applied at the wheel's periphery; load is collected at the axle.",
+          "MA = R/r: if R = 5r, the effort is 5 times less than the load.",
+        ],
+      },
+      scaleMeaning: { es: "Las proporciones de radios son indicativas de la ventaja mecánica.", en: "Radius proportions are indicative of the mechanical advantage." },
+      relation: { es: "La escena ilustra cómo la diferencia de radios rueda-eje genera una ventaja mecánica por equilibrio de torques.", en: "The scene illustrates how the wheel-to-axle radius difference generates mechanical advantage through torque balance." },
+      physicalReading: { es: "Leer la proporción de radios R/r para calcular la ventaja mecánica del sistema.", en: "Read the radius ratio R/r to compute the mechanical advantage of the system." },
+      modelConnection: { es: "Se interpreta bajo el equilibrio de torques: F_e·R = F_c·r.", en: "Interpreted under torque balance: F_e·R = F_c·r." },
+      formulaConnection: { es: "Conecta con VM = R/r, F_e = F_c·r/R y τ_e = τ_c.", en: "Connects to MA = R/r, F_e = F_c·r/R, and τ_e = τ_c." },
+      readingFocus: { es: "identificar los radios R y r en la escena para calcular VM = R/r.", en: "identify radii R and r in the scene to compute MA = R/r." },
+      agentHints: {
+        es: [
+          "Si la rueda gira un ángulo θ, el eje también gira el mismo ángulo.",
+          "La distancia recorrida por el esfuerzo (R·θ) es VM veces la recorrida por la carga (r·θ).",
+          "El trabajo del esfuerzo iguala el trabajo de la carga (sin pérdidas).",
+        ],
+        en: [
+          "If the wheel rotates by angle θ, the axle also rotates by the same angle.",
+          "Effort travel distance (R·θ) is MA times the load travel distance (r·θ).",
+          "Effort work equals load work (no losses).",
+        ],
+      },
+      commonMistakes: {
+        es: [
+          "Invertir R y r al calcular VM.",
+          "No relacionar el desplazamiento angular de rueda y eje (son iguales).",
+          "Confundir la rueda y eje con una polea compuesta.",
+        ],
+        en: [
+          "Inverting R and r when computing MA.",
+          "Not relating the angular displacement of wheel and axle (they are equal).",
+          "Confusing the wheel and axle with a compound pulley.",
+        ],
+      },
+      recommendedTab: "graficas",
+      component: RuedaYEjeGraphsSvg,
+    },
+  },
+  "tipos-de-palancas": {
+    Svg: {
+      id: "tipos-de-palancas-Svg",
+      graphId: "tipos-de-palancas-Svg",
+      title: { es: "Escena SVG · Tipos de Palancas", en: "SVG Scene · Types of Levers" },
+      sceneId: "tipos_palancas_scene",
+      sceneLabel: { es: "Palancas de primer, segundo y tercer género con fulcro, esfuerzo y carga", en: "First-, second-, and third-class levers with fulcrum, effort, and load" },
+      objects: { es: ["palanca (barra rígida)", "fulcro (punto de apoyo)", "fuerza de esfuerzo", "carga"], en: ["lever (rigid bar)", "fulcrum (pivot point)", "effort force", "load"] },
+      mainObject: { es: "palanca con fulcro, esfuerzo y carga en distintas posiciones", en: "lever with fulcrum, effort, and load in different positions" },
+      referenceFrame: { es: "laboratorio inercial", en: "inertial laboratory" },
+      geometry: { es: "La escena muestra los tres tipos: 1º género (fulcro entre esfuerzo y carga), 2º género (carga entre fulcro y esfuerzo), 3º género (esfuerzo entre fulcro y carga).", en: "The scene shows all three classes: 1st class (fulcrum between effort and load), 2nd class (load between fulcrum and effort), 3rd class (effort between fulcrum and load)." },
+      interactions: { es: "El equilibrio de torques determina la relación entre esfuerzo y carga: F_e·d_e = F_c·d_c.", en: "Torque balance determines the effort-to-load relationship: F_e·d_e = F_c·d_c." },
+      modelElements: { es: ["fulcro (punto de giro)", "brazo de esfuerzo d_e", "brazo de carga d_c", "F_e y F_c"], en: ["fulcrum (pivot point)", "effort arm d_e", "load arm d_c", "F_e and F_c"] },
+      visualCues: {
+        es: [
+          "1º género: fulcro en el centro (tijeras, balanza). VM = d_e/d_c.",
+          "2º género: carga en el centro (carretilla). VM > 1 siempre.",
+          "3º género: esfuerzo en el centro (antebrazo). VM < 1 pero mayor velocidad de la carga.",
+        ],
+        en: [
+          "1st class: fulcrum in the centre (scissors, balance). MA = d_e/d_c.",
+          "2nd class: load in the centre (wheelbarrow). MA > 1 always.",
+          "3rd class: effort in the centre (forearm). MA < 1 but greater load speed.",
+        ],
+      },
+      scaleMeaning: { es: "Las longitudes de los brazos son proporcionales a los brazos de palanca reales.", en: "Arm lengths are proportional to the actual moment arms." },
+      relation: { es: "La escena ilustra los tres tipos de palancas y cómo la posición relativa del fulcro, carga y esfuerzo determina la ventaja mecánica.", en: "The scene illustrates the three lever classes and how the relative position of fulcrum, load, and effort determines the mechanical advantage." },
+      physicalReading: { es: "Identificar el tipo de palanca por la posición del fulcro y calcular la ventaja mecánica VM = d_e/d_c.", en: "Identify the lever class by the fulcrum position and compute the mechanical advantage MA = d_e/d_c." },
+      modelConnection: { es: "Se interpreta bajo el equilibrio de torques: F_e·d_e = F_c·d_c.", en: "Interpreted under torque balance: F_e·d_e = F_c·d_c." },
+      formulaConnection: { es: "Conecta con VM = d_e/d_c y F_e = F_c·d_c/d_e.", en: "Connects to MA = d_e/d_c and F_e = F_c·d_c/d_e." },
+      readingFocus: { es: "identificar el tipo de palanca, leer los brazos de esfuerzo y carga, y calcular la ventaja mecánica.", en: "identify the lever class, read the effort and load arms, and compute the mechanical advantage." },
+      agentHints: {
+        es: [
+          "El tipo de palanca no determina si VM > 1 o VM < 1: solo la proporción de brazos.",
+          "Las palancas de 3º género tienen VM < 1 pero ofrecen mayor velocidad y desplazamiento.",
+          "Las palancas de 2º género siempre tienen VM > 1 (la carga está siempre más cerca del fulcro).",
+        ],
+        en: [
+          "The lever class does not determine whether MA > 1 or MA < 1: only the arm ratio does.",
+          "3rd-class levers have MA < 1 but offer greater speed and displacement.",
+          "2nd-class levers always have MA > 1 (the load is always closer to the fulcrum).",
+        ],
+      },
+      commonMistakes: {
+        es: [
+          "Confundir el tipo de palanca por la posición del fulcro.",
+          "Creer que las palancas de 3º género son ineficientes: tienen mayor velocidad de salida.",
+          "No distinguir entre brazo de esfuerzo y brazo de carga al calcular VM.",
+        ],
+        en: [
+          "Confusing the lever class by misidentifying the fulcrum position.",
+          "Believing 3rd-class levers are inefficient: they have greater output speed.",
+          "Not distinguishing between the effort arm and the load arm when computing MA.",
+        ],
+      },
+      recommendedTab: "graficas",
+      component: TiposDePalancasGraphsSvg,
+    },
+  },
+  "tornillo": {
+    Coord: {
+      id: "tornillo-Coord",
+      graphId: "tornillo-Coord",
+      title: { es: "Gráfica Coord · Tornillo", en: "Coord Graph · Screw" },
+      xAxis: { es: "paso p del tornillo (m/vuelta)", en: "screw pitch p (m/revolution)" },
+      yAxis: { es: "ventaja mecánica VM o fuerza axial F_axial (N)", en: "mechanical advantage MA or axial force F_axial (N)" },
+      xMagnitude: "p",
+      yMagnitude: "VM o F_axial",
+      relation: { es: "La ventaja mecánica del tornillo es VM = 2πR/p, donde R es el radio del brazo de aplicación y p el paso. Un paso menor o un radio mayor aumentan la VM.", en: "The mechanical advantage of a screw is MA = 2πR/p, where R is the effort arm radius and p the pitch. A finer pitch or larger radius increases MA." },
+      physicalReading: { es: "La VM es inversamente proporcional al paso: tornillos con paso fino ofrecen mayor ventaja mecánica.", en: "MA is inversely proportional to pitch: fine-pitch screws offer greater mechanical advantage." },
+      slopeMeaning: { es: "VM disminuye hiperbólicamente con el paso p para R fijo.", en: "MA decreases hyperbolically with pitch p for fixed R." },
+      interceptMeaning: { es: "Para p → 0, VM → ∞ (tornillo finísimo, pero lento). En la práctica, limitado por la fricción.", en: "As p → 0, MA → ∞ (very fine screw, but slow). In practice, limited by friction." },
+      curvatureMeaning: { es: "VM vs p es hiperbólico; VM vs R es lineal.", en: "MA vs p is hyperbolic; MA vs R is linear." },
+      signMeaning: { es: "La fuerza axial y el esfuerzo son positivos. La dirección axial depende del sentido de rosca.", en: "Axial force and effort are positive. Axial direction depends on thread handedness." },
+      areaMeaning: { es: "Sin interpretación directa.", en: "No direct interpretation." },
+      domainMeaning: { es: "Válido para tornillos con paso p > 0 y condiciones de funcionamiento dentro del rango elástico.", en: "Valid for screws with pitch p > 0 and operating conditions within the elastic range." },
+      modelConnection: { es: "Se interpreta bajo el principio de trabajo: F_e·2πR = F_axial·p (por vuelta).", en: "Interpreted under the work principle: F_e·2πR = F_axial·p (per revolution)." },
+      formulaConnection: { es: "Conecta con VM = 2πR/p y F_e·2πR = F_axial·p.", en: "Connects to MA = 2πR/p and F_e·2πR = F_axial·p." },
+      readingFocus: { es: "leer el paso p y el radio R para calcular la ventaja mecánica del tornillo.", en: "read the pitch p and radius R to compute the mechanical advantage of the screw." },
+      agentHints: {
+        es: [
+          "El tornillo es un plano inclinado enrollado alrededor de un cilindro.",
+          "Un paso más fino da mayor VM pero requiere más vueltas para el mismo avance axial.",
+          "La fricción es muy importante en tornillos: puede reducir significativamente la VM real.",
+        ],
+        en: [
+          "A screw is an inclined plane wrapped around a cylinder.",
+          "A finer pitch gives higher MA but requires more turns for the same axial advance.",
+          "Friction is very significant in screws: it can substantially reduce the real MA below the ideal value.",
+        ],
+      },
+      commonMistakes: {
+        es: [
+          "Olvidar el factor 2π al calcular la VM (confundir p con el ángulo de rotación).",
+          "Ignorar la fricción que reduce notablemente la VM real respecto a la ideal.",
+          "Confundir el paso del tornillo con el ángulo de hélice.",
+        ],
+        en: [
+          "Forgetting the 2π factor when computing MA (confusing p with the rotation angle).",
+          "Ignoring friction, which significantly reduces real MA below the ideal value.",
+          "Confusing the screw pitch with the helix angle.",
+        ],
+      },
+      recommendedTab: "graficas",
+      type: "Coord",
+      graphType: "Coord",
+      component: TornilloGraphsCoord,
+    },
+    Svg: {
+      id: "tornillo-Svg",
+      graphId: "tornillo-Svg",
+      title: { es: "Escena SVG · Tornillo", en: "SVG Scene · Screw" },
+      sceneId: "tornillo_scene",
+      sceneLabel: { es: "Tornillo con paso p y brazo de aplicación R", en: "Screw with pitch p and effort arm R" },
+      objects: { es: ["tornillo", "rosca con paso p", "brazo de aplicación R", "fuerza de esfuerzo F_e", "fuerza axial F_axial"], en: ["screw", "thread with pitch p", "effort arm R", "effort force F_e", "axial force F_axial"] },
+      mainObject: { es: "tornillo como máquina simple", en: "screw as a simple machine" },
+      referenceFrame: { es: "laboratorio inercial con eje axial del tornillo", en: "inertial laboratory with the screw's axial axis" },
+      geometry: { es: "La escena muestra el tornillo con la rosca, el paso p y el brazo R de aplicación del esfuerzo. La hélice equivale a un plano inclinado enrollado.", en: "The scene shows the screw with its thread, pitch p, and effort arm R. The helix is equivalent to a wrapped inclined plane." },
+      interactions: { es: "La fuerza de esfuerzo aplicada tangencialmente en R genera un torque que a su vez produce una fuerza axial por la inclinación de la rosca.", en: "The effort force applied tangentially at R generates a torque that produces an axial force through the thread's inclination." },
+      modelElements: { es: ["paso p (avance por vuelta)", "radio R del brazo", "F_e (esfuerzo tangencial)", "F_axial (fuerza de avance)"], en: ["pitch p (advance per revolution)", "arm radius R", "F_e (tangential effort)", "F_axial (advance force)"] },
+      visualCues: {
+        es: [
+          "El paso p es la distancia que avanza el tornillo por cada vuelta completa.",
+          "Un paso fino (p pequeño) implica mayor VM y más vueltas por milímetro de avance.",
+          "La rosca es visualmente un plano inclinado de ángulo α = arctan(p/2πR).",
+        ],
+        en: [
+          "Pitch p is the distance the screw advances per complete revolution.",
+          "A fine pitch (small p) implies higher MA and more turns per millimetre of advance.",
+          "The thread is visually an inclined plane of angle α = arctan(p/2πR).",
+        ],
+      },
+      scaleMeaning: { es: "Las dimensiones son indicativas. El paso p y el radio R son los parámetros clave.", en: "Dimensions are indicative. Pitch p and radius R are the key parameters." },
+      relation: { es: "La escena ilustra el tornillo como máquina simple que convierte movimiento rotatorio en movimiento traslacional con gran ventaja mecánica.", en: "The scene illustrates the screw as a simple machine that converts rotary motion into translational motion with high mechanical advantage." },
+      physicalReading: { es: "Leer el paso p y el radio R para calcular VM = 2πR/p.", en: "Read pitch p and radius R to compute MA = 2πR/p." },
+      modelConnection: { es: "Se interpreta bajo el principio del plano inclinado enrollado: el trabajo de entrada iguala el trabajo de salida más las pérdidas por fricción.", en: "Interpreted under the wrapped inclined plane principle: input work equals output work plus friction losses." },
+      formulaConnection: { es: "Conecta con VM = 2πR/p, F_e·2πR = F_axial·p (sin fricción).", en: "Connects to MA = 2πR/p and F_e·2πR = F_axial·p (frictionless)." },
+      readingFocus: { es: "identificar el paso p y el radio R en la escena para calcular la ventaja mecánica.", en: "identify pitch p and radius R in the scene to compute the mechanical advantage." },
+      agentHints: {
+        es: [
+          "El tornillo autobloqueante tiene fricción suficiente para no desapretarse solo.",
+          "El tornillo sin fin es un ejemplo de tornillo con gran VM y autobloqueo.",
+          "La eficiencia real del tornillo es muy inferior a 1 por la fricción en la rosca.",
+        ],
+        en: [
+          "A self-locking screw has sufficient friction to prevent self-loosening.",
+          "A worm screw is an example of a screw with high MA and self-locking.",
+          "The real efficiency of a screw is well below 1 due to thread friction.",
+        ],
+      },
+      commonMistakes: {
+        es: [
+          "Usar solo la fuerza axial sin considerar el torque al analizar el tornillo.",
+          "Ignorar la fricción que hace que la VM real sea mucho menor que la ideal.",
+          "Confundir el avance del tornillo por vuelta con el ángulo girado.",
+        ],
+        en: [
+          "Using only the axial force without considering torque when analysing the screw.",
+          "Ignoring friction that makes the real MA much lower than the ideal value.",
+          "Confusing the screw's advance per revolution with the angle rotated.",
+        ],
+      },
+      recommendedTab: "graficas",
+      component: TornilloGraphsSvg,
+    },
+  },
+  "ventaja-mecanica": {
+    Coord: {
+      id: "ventaja-mecanica-Coord",
+      graphId: "ventaja-mecanica-Coord",
+      title: { es: "Gráfica Coord · Ventaja Mecánica", en: "Coord Graph · Mechanical Advantage" },
+      xAxis: { es: "brazo de esfuerzo d_e (m)", en: "effort arm d_e (m)" },
+      yAxis: { es: "ventaja mecánica VM = d_e/d_c", en: "mechanical advantage MA = d_e/d_c" },
+      xMagnitude: "d_e",
+      yMagnitude: "VM",
+      relation: { es: "La ventaja mecánica de una máquina simple es VM = F_carga/F_esfuerzo = d_e/d_c. Crece linealmente con el brazo de esfuerzo para brazo de carga constante.", en: "The mechanical advantage of a simple machine is MA = F_load/F_effort = d_e/d_c. It grows linearly with the effort arm for a fixed load arm." },
+      physicalReading: { es: "A mayor VM, menor esfuerzo necesario pero mayor desplazamiento de esfuerzo. La energía total se conserva: VM no amplífica energía.", en: "Higher MA means less effort required but greater effort displacement. Total energy is conserved: MA does not amplify energy." },
+      slopeMeaning: { es: "La pendiente de VM vs d_e es 1/d_c: para un brazo de carga fijo, la VM aumenta linealmente con d_e.", en: "The slope of MA vs d_e is 1/d_c: for a fixed load arm, MA increases linearly with d_e." },
+      interceptMeaning: { es: "Si d_e = 0 (esfuerzo en el fulcro), VM = 0 (imposible mover la carga).", en: "If d_e = 0 (effort at the fulcrum), MA = 0 (impossible to move the load)." },
+      curvatureMeaning: { es: "La relación es lineal para d_c constante.", en: "The relationship is linear for constant d_c." },
+      signMeaning: { es: "VM ≥ 0 siempre. VM > 1 indica ventaja mecánica; VM < 1 indica ventaja de velocidad.", en: "MA ≥ 0 always. MA > 1 indicates mechanical advantage; MA < 1 indicates velocity advantage." },
+      areaMeaning: { es: "Sin interpretación directa.", en: "No direct interpretation." },
+      domainMeaning: { es: "Válido para VM > 0 (máquinas simples ideales sin fricción).", en: "Valid for MA > 0 (ideal simple machines without friction)." },
+      modelConnection: { es: "Se interpreta bajo el principio de trabajo: F_e·d_e = F_c·d_c (sin pérdidas).", en: "Interpreted under the work principle: F_e·d_e = F_c·d_c (no losses)." },
+      formulaConnection: { es: "Conecta con VM = d_e/d_c = F_c/F_e y F_e·d_e = F_c·d_c.", en: "Connects to MA = d_e/d_c = F_c/F_e and F_e·d_e = F_c·d_c." },
+      readingFocus: { es: "leer la relación de brazos d_e/d_c para calcular VM y deducir la reducción de esfuerzo.", en: "read the arm ratio d_e/d_c to compute MA and deduce the effort reduction." },
+      agentHints: {
+        es: [
+          "VM > 1: menor esfuerzo pero mayor desplazamiento (palanca, polea, plano inclinado).",
+          "VM < 1: mayor esfuerzo pero menor desplazamiento, con ventaja de velocidad.",
+          "La eficiencia real η = VM_real/VM_ideal < 1 por la fricción.",
+        ],
+        en: [
+          "MA > 1: less effort but greater displacement (lever, pulley, inclined plane).",
+          "MA < 1: more effort but less displacement, with velocity advantage.",
+          "Real efficiency η = MA_real/MA_ideal < 1 due to friction.",
+        ],
+      },
+      commonMistakes: {
+        es: [
+          "Creer que VM amplífica la energía (viola la conservación).",
+          "Confundir VM con el rendimiento.",
+          "Olvidar que a mayor VM, el esfuerzo debe recorrer una mayor distancia.",
+        ],
+        en: [
+          "Believing MA amplifies energy (violates conservation).",
+          "Confusing MA with efficiency.",
+          "Forgetting that a higher MA requires the effort to travel a greater distance.",
+        ],
+      },
+      recommendedTab: "graficas",
+      type: "Coord",
+      graphType: "Coord",
+      component: VentajaMecanicaGraphsCoord,
+    },
+  },
+};
+
+export const graphs = withGraphContextRegistry(rawGraphs);
+
+export default graphs;

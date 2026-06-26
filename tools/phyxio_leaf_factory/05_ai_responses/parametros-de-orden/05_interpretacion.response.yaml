@@ -1,0 +1,551 @@
+version: 5.0.0
+id: parametros-de-orden
+leaf_id: parametros-de-orden
+nombre:
+  es: Parametros de orden
+  en: Order Parameters
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: transiciones-de-fase
+  parent_id: transiciones-de-fase
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/transiciones-de-fase/parametros-de-orden
+  orden: 276200
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - parametro_orden_diferencia_fases
+  - ley_parametro_orden_continuo
+  - temperatura_reducida_orden
+  - susceptibilidad_parametro_orden
+  magnitudes:
+  - temperatura
+  - temperatura_critica
+  - temperatura_reducida
+  - parametro_de_orden
+  - salto_parametro_de_orden
+  - amplitud_critica
+  - exponente_critico_beta
+  - campo_conjugado
+  - susceptibilidad
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinámica estadística de transiciones de fase
+    en: statistical thermodynamics of phase transitions
+  axis_convention:
+    es: El signo del parámetro de orden puede depender de la elección de fase o dirección de simetría rota.
+    en: The sign of the order parameter can depend on the chosen broken-symmetry phase or direction.
+  standard_assumptions:
+  - es: El sistema se compara cerca de una transición de fase con una variable de control térmica bien definida.
+    en: The system is compared near a phase transition with a well-defined thermal control variable.
+  - es: El parámetro de orden elegido distingue fases físicamente diferentes y no es solo una coordenada arbitraria.
+    en: The chosen order parameter distinguishes physically different phases and is not merely an arbitrary coordinate.
+  standard_warnings:
+  - es: No confundas que el parámetro de orden se anule con que desaparezca toda estructura microscópica.
+    en: Do not confuse a vanishing order parameter with the disappearance of all microscopic structure.
+  - es: Diferencia entre salto discontinuo, aproximación continua a cero y cambio suave sin transición.
+    en: Distinguish a discontinuous jump, a continuous approach to zero, and a smooth change without a transition.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Comprueba si [[parametro_de_orden]] es adimensional o tiene unidades propias antes de interpretar pendientes o saltos.
+      en: Check whether [[parametro_de_orden]] is dimensionless or has its own units before interpreting slopes or jumps.
+  - id: critical_side_check
+    status: warning
+    text:
+      es: La ley crítica continua suele aplicarse solo en el lado ordenado y suficientemente cerca de [[temperatura_critica]].
+      en: The continuous critical law usually applies only on the ordered side and sufficiently close to [[temperatura_critica]].
+error_patterns:
+  enabled: true
+  patterns:
+  - id: jump_vs_slope_confusion
+    status: warning
+    text:
+      es: Un error frecuente es confundir una pendiente muy grande con un salto real de [[parametro_de_orden]].
+      en: A common error is confusing a very steep slope with a true jump in [[parametro_de_orden]].
+  - id: reduced_temperature_sign_error
+    status: warning
+    text:
+      es: Si se pierde el signo de [[temperatura_reducida]], puede interpretarse el lado ordenado como desordenado.
+      en: If the sign of [[temperatura_reducida]] is lost, the ordered side may be read as the disordered side.
+graph_reading_policy:
+  enabled: true
+  primary_variable: salto_parametro_de_orden
+  reading_sequence:
+  - es: Localiza [[temperatura_critica]] en el eje de control y compara [[parametro_de_orden]] justo antes y justo después.
+    en: Locate [[temperatura_critica]] on the control axis and compare [[parametro_de_orden]] just before and just after it.
+  - es: Decide si aparece un salto finito, una desaparición continua o solo un cambio suave de pendiente.
+    en: Decide whether there is a finite jump, a continuous vanishing, or only a smooth slope change.
+  key_points:
+  - es: Un [[salto_parametro_de_orden]] distinto de cero sugiere discontinuidad entre fases coexistentes.
+    en: A nonzero [[salto_parametro_de_orden]] suggests a discontinuity between coexisting phases.
+  - es: Una curva continua gobernada por [[exponente_critico_beta]] señala comportamiento crítico, no salto brusco.
+    en: A continuous curve governed by [[exponente_critico_beta]] indicates critical behavior, not an abrupt jump.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: En un ferromagneto, [[parametro_de_orden]] puede representar magnetización reducida; en una mezcla, composición relativa.
+    en: In a ferromagnet, [[parametro_de_orden]] may represent reduced magnetization; in a mixture, relative composition.
+  - es: Valores de [[temperatura_reducida]] con módulo mucho menor que 1 indican cercanía a [[temperatura_critica]].
+    en: Values of [[temperatura_reducida]] with magnitude much smaller than 1 indicate closeness to [[temperatura_critica]].
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: El salto y la susceptibilidad deben heredar las unidades del parámetro de orden y del campo conjugado elegido.
+    en: The jump and susceptibility must inherit the units of the chosen order parameter and conjugate field.
+  common_unit_mistakes:
+  - es: Tratar una magnetización, una densidad o una fracción adimensional como si compartieran unidades.
+    en: Treating magnetization, density, or a dimensionless fraction as if they shared the same units.
+  - es: Usar grados Celsius en relaciones críticas que requieren [[temperatura]] y [[temperatura_critica]] absolutas.
+    en: Using Celsius degrees in critical relations that require absolute [[temperatura]] and [[temperatura_critica]].
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  salto_parametro_de_orden:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: diagnóstico de discontinuidad
+      en: discontinuity diagnostic
+    summary_rules:
+    - id: salto_parametro_de_orden_summary_specific
+      when: 'true'
+      status: ok
+      text:
+        es: '[[salto_parametro_de_orden]] resume si el cambio de fase es abrupto en la variable que distingue las fases.'
+        en: '[[salto_parametro_de_orden]] states whether the phase change is abrupt in the variable that distinguishes the
+          phases.'
+    physical_reading_rules:
+    - id: salto_parametro_de_orden_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Un valor no nulo indica que [[parametro_de_orden]] cambia de forma finita al cruzar la transición.
+        en: A nonzero value indicates that [[parametro_de_orden]] changes by a finite amount across the transition.
+    coherence_rules:
+    - id: salto_parametro_de_orden_coherence_specific
+      when: 'true'
+      status: ok
+      text:
+        es: Debe obtenerse comparando el mismo [[parametro_de_orden]] en ambos lados de [[temperatura_critica]] y con la misma
+          convención.
+        en: It must be obtained by comparing the same [[parametro_de_orden]] on both sides of [[temperatura_critica]] with
+          the same convention.
+    model_validity_rules:
+    - id: salto_parametro_de_orden_model_validity_specific
+      when: 'true'
+      status: info
+      text:
+        es: Es significativo cuando las dos fases son comparables y el sistema está suficientemente cerca de la transición.
+        en: It is meaningful when the two phases are comparable and the system is sufficiently close to the transition.
+    graph_rules:
+    - id: salto_parametro_de_orden_graph_specific
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, busca una separación vertical real en [[parametro_de_orden]], no solo una curva muy empinada.
+        en: On the graph, look for a true vertical separation in [[parametro_de_orden]], not merely a very steep curve.
+    likely_errors:
+    - id: salto_parametro_de_orden_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir ruido experimental o histéresis con [[salto_parametro_de_orden]] puede clasificar mal la transición.
+        en: Confusing experimental noise or hysteresis with [[salto_parametro_de_orden]] can misclassify the transition.
+    next_step_rules:
+    - id: salto_parametro_de_orden_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Compara el salto con la resolución de medida y con la ley continua antes de decidir el tipo de transición.
+        en: Compare the jump with measurement resolution and with the continuous law before deciding the transition type.
+    physical_intuition:
+    - id: salto_parametro_de_orden_physical_intuition_specific
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente es la huella de dos estados macroscópicos distintos que no se conectan suavemente.
+        en: Physically it is the fingerprint of two distinct macroscopic states that are not smoothly connected.
+    limiting_cases:
+    - id: salto_parametro_de_orden_limiting_case_specific
+      when: 'true'
+      status: info
+      text:
+        es: Si tiende a cero al refinar la escala térmica, la transición puede ser continua; si permanece finito, apunta a
+          primer orden.
+        en: If it tends to zero as the thermal scale is refined, the transition may be continuous; if it remains finite, it
+          points to first order.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo depende de qué fase se resta; el módulo mide el tamaño real del salto.
+        en: The sign depends on which phase is subtracted; the magnitude measures the actual jump size.
+      common_sign_errors:
+      - es: Cambiar de fase de referencia y creer que cambió la intensidad física.
+        en: Changing the reference phase and thinking that the physical intensity changed.
+  parametro_de_orden:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable dependiente
+      en: order parameter
+    summary_rules:
+    - id: parametro_de_orden_summary_specific
+      when: 'true'
+      status: ok
+      text:
+        es: '[[parametro_de_orden]] es la variable macroscópica que dice qué fase está organizada y cuál no.'
+        en: '[[parametro_de_orden]] is the macroscopic variable that tells which phase is organized and which is not.'
+    physical_reading_rules:
+    - id: parametro_de_orden_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Un valor grande indica fase ordenada; un valor cercano a cero suele indicar fase simétrica o desordenada.
+        en: A large value indicates an ordered phase; a value near zero usually indicates a symmetric or disordered phase.
+    coherence_rules:
+    - id: parametro_de_orden_coherence_specific
+      when: 'true'
+      status: ok
+      text:
+        es: Debe elegirse de modo que realmente distinga las fases; si no cambia, no sirve como diagnóstico.
+        en: It must be chosen so that it truly distinguishes the phases; if it does not change, it is not a useful diagnostic.
+    model_validity_rules:
+    - id: parametro_de_orden_model_validity_specific
+      when: 'true'
+      status: info
+      text:
+        es: La lectura crítica es válida cerca de [[temperatura_critica]] y cuando el campo externo conjugado no fuerza artificialmente
+          el orden.
+        en: The critical reading is valid near [[temperatura_critica]] and when the external conjugate field does not artificially
+          impose order.
+    graph_rules:
+    - id: parametro_de_orden_graph_specific
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, observa si [[parametro_de_orden]] cae suavemente, salta o permanece casi constante al variar [[temperatura]].
+        en: On the graph, observe whether [[parametro_de_orden]] decreases smoothly, jumps, or stays nearly constant as [[temperatura]]
+          changes.
+    likely_errors:
+    - id: parametro_de_orden_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: Tomar cualquier magnitud que cambia con [[temperatura]] como parámetro de orden puede ocultar la simetría física.
+        en: Taking any quantity that changes with [[temperatura]] as an order parameter can hide the physical symmetry.
+    next_step_rules:
+    - id: parametro_de_orden_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Identifica primero qué simetría u organización separa las fases y después interpreta la curva.
+        en: First identify which symmetry or organization separates the phases, then interpret the curve.
+    physical_intuition:
+    - id: parametro_de_orden_physical_intuition_specific
+      when: 'true'
+      status: info
+      text:
+        es: 'Funciona como un semáforo del orden colectivo: no mide solo calor, sino organización macroscópica.'
+        en: 'It acts as a signal of collective order: it does not merely measure heat, but macroscopic organization.'
+    limiting_cases:
+    - id: parametro_de_orden_limiting_case_specific
+      when: 'true'
+      status: info
+      text:
+        es: En el límite desordenado debe tender a cero o a un valor de referencia; si no lo hace, revisa la definición.
+        en: In the disordered limit it should tend to zero or a reference value; if it does not, review the definition.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo puede distinguir dominios equivalentes; el módulo suele medir el grado de orden.
+        en: The sign may distinguish equivalent domains; the magnitude often measures the degree of order.
+      common_sign_errors:
+      - es: Cambiar de fase de referencia y creer que cambió la intensidad física.
+        en: Changing the reference phase and thinking that the physical intensity changed.
+  temperatura_reducida:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable de control
+      en: reduced temperature
+    summary_rules:
+    - id: temperatura_reducida_summary_specific
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_reducida]] mide lo cerca que está el sistema de [[temperatura_critica]] en escala relativa.'
+        en: '[[temperatura_reducida]] measures how close the system is to [[temperatura_critica]] on a relative scale.'
+    physical_reading_rules:
+    - id: temperatura_reducida_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Valores de módulo pequeño señalan régimen crítico; el signo indica desde qué fase se aproxima el sistema.
+        en: Small magnitudes signal the critical regime; the sign indicates from which phase the system approaches.
+    coherence_rules:
+    - id: temperatura_reducida_coherence_specific
+      when: 'true'
+      status: ok
+      text:
+        es: Debe calcularse con [[temperatura]] absoluta y una [[temperatura_critica]] coherente con el material o modelo.
+        en: It must be calculated with absolute [[temperatura]] and a [[temperatura_critica]] consistent with the material
+          or model.
+    model_validity_rules:
+    - id: temperatura_reducida_model_validity_specific
+      when: 'true'
+      status: info
+      text:
+        es: Las leyes de potencia no describen necesariamente puntos lejos de la transición ni zonas dominadas por redondeo
+          finito.
+        en: Power laws do not necessarily describe points far from the transition or regions dominated by finite-size rounding.
+    graph_rules:
+    - id: temperatura_reducida_graph_specific
+      when: 'true'
+      status: info
+      text:
+        es: En una gráfica crítica, [[temperatura_reducida]] ordena el eje horizontal y permite comparar materiales con distinta
+          [[temperatura_critica]].
+        en: On a critical graph, [[temperatura_reducida]] organizes the horizontal axis and allows comparison of materials
+          with different [[temperatura_critica]].
+    likely_errors:
+    - id: temperatura_reducida_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: Usar grados Celsius o eliminar el signo de [[temperatura_reducida]] cambia el lado físico de la transición.
+        en: Using Celsius degrees or removing the sign of [[temperatura_reducida]] changes the physical side of the transition.
+    next_step_rules:
+    - id: temperatura_reducida_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Verifica lado, escala y proximidad antes de aplicar exponentes críticos.
+        en: Check side, scale, and closeness before applying critical exponents.
+    physical_intuition:
+    - id: temperatura_reducida_physical_intuition_specific
+      when: 'true'
+      status: info
+      text:
+        es: 'Es un zoom térmico: convierte la distancia a la transición en una variable comparable.'
+        en: 'It is a thermal zoom: it converts distance to the transition into a comparable variable.'
+    limiting_cases:
+    - id: temperatura_reducida_limiting_case_specific
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[temperatura_reducida]] tiende a cero, las leyes críticas dominan; lejos de cero dominan detalles no universales.
+        en: As [[temperatura_reducida]] tends to zero, critical laws dominate; far from zero, nonuniversal details dominate.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: Su signo distingue el lado térmico respecto a la transición; no debe perderse al usar valores absolutos.
+        en: Its sign distinguishes the thermal side relative to the transition; it should not be lost by using absolute values.
+      common_sign_errors:
+      - es: Cambiar de fase de referencia y creer que cambió la intensidad física.
+        en: Changing the reference phase and thinking that the physical intensity changed.
+  susceptibilidad:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: respuesta al campo conjugado
+      en: response to conjugate field
+    summary_rules:
+    - id: susceptibilidad_summary_specific
+      when: 'true'
+      status: ok
+      text:
+        es: '[[susceptibilidad]] mide cuánto responde [[parametro_de_orden]] ante una perturbación externa pequeña.'
+        en: '[[susceptibilidad]] measures how much [[parametro_de_orden]] responds to a small external perturbation.'
+    physical_reading_rules:
+    - id: susceptibilidad_physical_reading_specific
+      when: 'true'
+      status: info
+      text:
+        es: Una [[susceptibilidad]] grande cerca de [[temperatura_critica]] indica fluctuaciones cooperativas y alta sensibilidad.
+        en: A large [[susceptibilidad]] near [[temperatura_critica]] indicates cooperative fluctuations and high sensitivity.
+    coherence_rules:
+    - id: susceptibilidad_coherence_specific
+      when: 'true'
+      status: ok
+      text:
+        es: Debe referirse al campo conjugado correcto; mezclar campos distintos hace que la respuesta pierda sentido.
+        en: It must refer to the correct conjugate field; mixing different fields makes the response meaningless.
+    model_validity_rules:
+    - id: susceptibilidad_model_validity_specific
+      when: 'true'
+      status: info
+      text:
+        es: La divergencia ideal se redondea en sistemas finitos, con impurezas o con campo externo no nulo.
+        en: The ideal divergence is rounded in finite systems, with impurities, or under a nonzero external field.
+    graph_rules:
+    - id: susceptibilidad_graph_specific
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica, una subida acusada de [[susceptibilidad]] cerca de [[temperatura_critica]] acompaña al comportamiento
+          crítico.
+        en: On the graph, a sharp rise of [[susceptibilidad]] near [[temperatura_critica]] accompanies critical behavior.
+    likely_errors:
+    - id: susceptibilidad_likely_error_specific
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[susceptibilidad]] alta con un salto de [[parametro_de_orden]] mezcla respuesta continua con discontinuidad.
+        en: Confusing high [[susceptibilidad]] with a jump in [[parametro_de_orden]] mixes continuous response with discontinuity.
+    next_step_rules:
+    - id: susceptibilidad_next_step_specific
+      when: 'true'
+      status: info
+      text:
+        es: Contrasta la respuesta con [[salto_parametro_de_orden]] para separar transición continua y abrupta.
+        en: Contrast the response with [[salto_parametro_de_orden]] to separate continuous and abrupt transitions.
+    physical_intuition:
+    - id: susceptibilidad_physical_intuition_specific
+      when: 'true'
+      status: info
+      text:
+        es: Es la facilidad con la que el sistema colectivo se deja empujar por su campo conjugado.
+        en: It is how easily the collective system can be pushed by its conjugate field.
+    limiting_cases:
+    - id: susceptibilidad_limiting_case_specific
+      when: 'true'
+      status: info
+      text:
+        es: Si se mantiene finita muy cerca de la transición, puede faltar criticidad observable o haber redondeo experimental.
+        en: If it remains finite very close to the transition, observable criticality may be absent or experimentally rounded.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: Su signo y unidades dependen de cómo se defina el campo conjugado y el parámetro de orden.
+        en: Its sign and units depend on how the conjugate field and order parameter are defined.
+      common_sign_errors: []

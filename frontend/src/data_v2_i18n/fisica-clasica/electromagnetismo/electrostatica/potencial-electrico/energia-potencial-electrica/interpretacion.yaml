@@ -1,0 +1,971 @@
+version: 5.0.0
+id: energia-potencial-electrica
+leaf_id: energia-potencial-electrica
+nombre:
+  es: Energia potencial electrica
+  en: Electric Potential Energy
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: electrostatica
+  parent_id: potencial-electrico
+  ruta_relativa: fisica-clasica/electromagnetismo/electrostatica/potencial-electrico/energia-potencial-electrica
+  orden: 292320
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - energia_potencial_punto
+  - energia_interaccion_coulomb
+  - variacion_energia_potencial
+  magnitudes:
+  - energia_potencial_electrica
+  - carga_de_prueba
+  - potencial_electrico_en_el_punto_a
+  - q_1
+  - q_2
+  - r_12
+  - k_e
+  - variacion_de_energia_potencial_electrica
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: energia_potencial_electrica
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  energia_potencial_electrica:
+    enabled: true
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: Energía potencial eléctrica almacenada en la configuración
+      en: Electric potential energy stored in the configuration
+    summary_rules:
+    - id: ue_summary_positive
+      when: U_e > 0
+      status: ok
+      text:
+        es: '[[U_e]] indica que el sistema tiene energía positiva: las cargas involucradas se repelen. Para acercarlas desde
+          esta separación sería necesario aportar energía desde el exterior.'
+        en: '[[U_e]] indicates that the system has positive energy: the charges involved repel each other. Bringing them closer
+          from this separation would require energy input from outside.'
+    - id: ue_summary_negative
+      when: U_e < 0
+      status: ok
+      text:
+        es: '[[U_e]] indica que el sistema tiene energía negativa: las cargas se atraen y están en un estado ligado. Separar
+          las cargas hasta el infinito requeriría aportar energía al sistema.'
+        en: '[[U_e]] indicates that the system has negative energy: the charges attract each other and are in a bound state.
+          Separating the charges to infinity would require supplying energy to the system.'
+    - id: ue_summary_zero
+      when: U_e == 0
+      status: warning
+      text:
+        es: '[[U_e]] nula indica que las cargas están en el infinito o que el producto q·V_A se cancela. Verificar los datos
+          de entrada.'
+        en: Zero [[U_e]] indicates that the charges are at infinity or that the product q·V_A cancels out. Verify the input
+          data.
+    - id: ue_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[U_e]] resume la energía almacenada en la interacción eléctrica. Su signo indica si la interacción es atractiva
+          o repulsiva, y su módulo indica la intensidad de la interacción.'
+        en: '[[U_e]] summarizes the energy stored in the electric interaction. Its sign indicates whether the interaction
+          is attractive or repulsive, and its magnitude indicates the strength of the interaction.'
+    physical_reading_rules:
+    - id: ue_reading_large
+      when: abs(U_e) > 1
+      status: ok
+      text:
+        es: La energía de interacción supera 1 J, lo que corresponde a una interacción electrostática intensa. Este valor
+          es habitual en condensadores de alta energía o en sistemas de cargas macroscópicas.
+        en: The interaction energy exceeds 1 J, corresponding to an intense electrostatic interaction. This value is typical
+          of high-energy capacitors or macroscopic charge systems.
+    - id: ue_reading_small
+      when: abs(U_e) < 1e-18
+      status: ok
+      text:
+        es: La energía de interacción es menor de 1 aJ, en el rango subatómico. Este orden de magnitud es propio de interacciones
+          nucleares o moleculares donde dominan otras fuerzas.
+        en: The interaction energy is less than 1 aJ, in the subatomic range. This order of magnitude is typical of nuclear
+          or molecular interactions where other forces dominate.
+    - id: ue_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[U_e]] depende del valor del potencial en el punto y de la carga que se sitúa allí. Un cambio en la posición
+          de la carga dentro del campo modificará este valor, lo que refleja que el campo eléctrico es conservativo.'
+        en: '[[U_e]] depends on the value of the potential at the point and on the charge placed there. A change in the charge''s
+          position within the field will modify this value, reflecting that the electric field is conservative.'
+    coherence_rules:
+    - id: ue_coherence_sign_qVA
+      when: q > 0 and V_A > 0 and U_e < 0
+      status: error
+      text:
+        es: 'Error de coherencia: [[q]] positiva en [[V_A]] positivo debería dar [[U_e]] positiva. Verificar los signos de
+          los datos de entrada.'
+        en: 'Coherence error: positive [[q]] at positive [[V_A]] should give positive [[U_e]]. Verify the signs of the input
+          data.'
+    - id: ue_coherence_sign_qVA_neg
+      when: q < 0 and V_A < 0 and U_e < 0
+      status: error
+      text:
+        es: 'Error de coherencia: [[q]] negativa en [[V_A]] negativo debería dar [[U_e]] positiva (producto de dos negativos).
+          Verificar los signos.'
+        en: 'Coherence error: negative [[q]] at negative [[V_A]] should give positive [[U_e]] (product of two negatives).
+          Verify the signs.'
+    - id: ue_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: El signo de [[U_e]] es coherente con los signos de [[q]] y [[V_A]] introducidos.
+        en: The sign of [[U_e]] is coherent with the signs of [[q]] and [[V_A]] entered.
+    model_validity_rules:
+    - id: ue_validity_point_charge
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo de carga puntual es válido siempre que el tamaño de la carga sea mucho menor que las distancias involucradas.
+          Para cargas macroscópicas con extensión comparable a la distancia de interacción, este resultado es una aproximación.
+        en: The point charge model is valid as long as the charge size is much smaller than the distances involved. For macroscopic
+          charges with extent comparable to the interaction distance, this result is an approximation.
+    - id: ue_validity_static
+      when: 'true'
+      status: ok
+      text:
+        es: Este resultado asume campo electrostático estático. Si la carga está acelerada o el campo varía en el tiempo,
+          la energía potencial escalar no es suficiente para describir el sistema.
+        en: This result assumes a static electrostatic field. If the charge is accelerating or the field varies in time, the
+          scalar potential energy is not sufficient to describe the system.
+    graph_rules:
+    - id: ue_graph_vs_r
+      when: r_12 > 0
+      status: ok
+      text:
+        es: En el gráfico [[U_e]] frente a [[r_12]], el valor calculado corresponde a un punto de la hipérbola. Si [[q_1]]
+          y [[q_2]] tienen el mismo signo, el punto está en la rama positiva; si tienen signos opuestos, en la rama negativa.
+        en: On the [[U_e]] versus [[r_12]] graph, the calculated value corresponds to a point on the hyperbola. If [[q_1]]
+          and [[q_2]] have the same sign, the point is on the positive branch; if they have opposite signs, on the negative
+          branch.
+    - id: ue_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: El valor de [[U_e]] indica a qué altura se encuentra la configuración en el gráfico energía-distancia. Una separación
+          mayor siempre coloca el punto más cerca del eje horizontal (energía cero).
+        en: The value of [[U_e]] indicates the height of the configuration on the energy-distance graph. A larger separation
+          always places the point closer to the horizontal axis (zero energy).
+    likely_errors:
+    - id: ue_error_confunde_V
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error frecuente: confundir [[U_e]] (en joules) con [[V_A]] (en voltios). Si el resultado tiene unidades de voltios,
+          se ha olvidado multiplicar por la carga [[q]].'
+        en: 'A common mistake is to interpret [[energia_potencial_electrica]] in isolation: Frequent error: confusing [[U_e]]
+          (in joules) with [[V_A]] (in volts). If the result has units of volts, the multiplication by charge [[q]] has been
+          forgotten.'
+    - id: ue_error_sign
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia_potencial_electrica]] con una lectura aislada es un error frecuente: Error de signo: calcular
+          [[U_e]] como un valor positivo para cargas de signo opuesto. Recordar que el producto [[q_1]]·[[q_2]] negativo da
+          energía negativa (sistema ligado).'
+        en: 'A common mistake is to interpret [[energia_potencial_electrica]] in isolation: Sign error: calculating [[U_e]]
+          as positive for charges of opposite sign. Remember that a negative product [[q_1]]·[[q_2]] gives negative energy
+          (bound system).'
+    next_step_rules:
+    - id: ue_next_conservation
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[U_e]] calculada, el siguiente paso natural es aplicar la conservación de energía mecánica para hallar la
+          velocidad de la carga en otro punto, usando que la suma de energía cinética y [[U_e]] se conserva.
+        en: With [[U_e]] calculated, the natural next step is to apply conservation of mechanical energy to find the charge's
+          velocity at another point, using the fact that kinetic energy plus [[U_e]] is conserved.
+    physical_intuition:
+    - id: energia_potencial_electrica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[energia_potencial_electrica]] describe el estado dinámico.
+        en: Intuitively, [[energia_potencial_electrica]] describes the dynamic state.
+    limiting_cases:
+    - id: energia_potencial_electrica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[energia_potencial_electrica]].
+        en: Check limiting cases of [[energia_potencial_electrica]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  carga_de_prueba:
+    enabled: true
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: Carga de prueba que determina la energía potencial en el punto
+      en: Test charge that determines the potential energy at the point
+    summary_rules:
+    - id: q_summary_positive
+      when: q > 0
+      status: ok
+      text:
+        es: '[[q]] es positiva. La energía potencial en el punto tendrá el mismo signo que el potencial [[V_A]], indicando
+          que la carga tiende a moverse hacia regiones de menor potencial.'
+        en: '[[q]] is positive. The potential energy at the point will have the same sign as the potential [[V_A]], indicating
+          that the charge tends to move toward lower potential regions.'
+    - id: q_summary_negative
+      when: q < 0
+      status: ok
+      text:
+        es: '[[q]] es negativa. La energía potencial tendrá signo opuesto al potencial [[V_A]], indicando que la carga tiende
+          a moverse hacia regiones de mayor potencial.'
+        en: '[[q]] is negative. The potential energy will have the opposite sign to [[V_A]], indicating the charge tends to
+          move toward higher potential regions.'
+    - id: q_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[q]] describe cuánta carga interacciona con el campo. Su valor determina directamente la energía potencial [[U_e]]
+          en el punto, sin modificar el campo ni el potencial.'
+        en: '[[q]] describes how much charge interacts with the field. Its value directly determines the potential energy
+          [[U_e]] at the point, without modifying the field or the potential.'
+    physical_reading_rules:
+    - id: q_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[q]] es la carga cuya energía se calcula. El campo y el potencial son propiedades del espacio generadas por
+          otras cargas: depende de la configuración externa, no de [[q]].'
+        en: '[[q]] is the charge whose energy is calculated. The field and potential are properties of the space generated
+          by other charges: they depend on the external configuration, not on [[q]].'
+    coherence_rules:
+    - id: q_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[q]] es coherente como parámetro de entrada si no genera un campo apreciable sobre sí misma (aproximación de
+          carga de prueba).'
+        en: '[[q]] is coherent as an input parameter if it does not generate an appreciable field on itself (test charge approximation).'
+    model_validity_rules:
+    - id: q_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: La carga [[q]] debe ser lo suficientemente pequeña como para no perturbar el campo que genera el potencial [[V_A]].
+          En problemas macroscópicos esta condición suele estar implícita.
+        en: The charge [[q]] must be small enough not to disturb the field generating the potential [[V_A]]. In macroscopic
+          problems this condition is usually implicit.
+    graph_rules:
+    - id: q_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[q]] es un parámetro que escala verticalmente el gráfico [[U_e]] vs [[V_A]]. En el gráfico canónico de [[U_e]]
+          vs [[r_12]], [[q]] aparece como factor multiplicativo de la curva.'
+        en: '[[q]] is a parameter that vertically scales the [[U_e]] vs [[V_A]] graph. In the canonical [[U_e]] vs [[r_12]]
+          graph, [[q]] appears as a multiplicative factor of the curve.'
+    likely_errors:
+    - id: q_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[carga_de_prueba]] con una lectura aislada es un error frecuente: Error frecuente: usar la carga de
+          la fuente del campo en lugar de [[q]] para calcular [[U_e]]. Verificar cuál es la carga cuya energía se busca.'
+        en: 'A common mistake is to interpret [[carga_de_prueba]] in isolation: Frequent error: using the field source charge
+          instead of [[q]] to calculate [[U_e]]. Verify which charge''s energy is being sought.'
+    next_step_rules:
+    - id: q_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Conociendo [[q]] y [[U_e]], se puede calcular el potencial [[V_A]] en ese punto. También se puede usar [[q]] para
+          analizar cuánto trabajo realiza el campo al mover esta carga a otro punto.
+        en: Knowing [[q]] and [[U_e]], the potential [[V_A]] at that point can be calculated. [[q]] can also be used to analyze
+          how much work the field does when moving this charge to another point.
+    physical_intuition:
+    - id: carga_de_prueba_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[carga_de_prueba]] describe el estado dinámico.
+        en: Intuitively, [[carga_de_prueba]] describes the dynamic state.
+    limiting_cases:
+    - id: carga_de_prueba_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[carga_de_prueba]].
+        en: Check limiting cases of [[carga_de_prueba]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  potencial_electrico_en_el_punto_a:
+    enabled: true
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: Potencial eléctrico en el punto donde se sitúa la carga
+      en: Electric potential at the point where the charge is placed
+    summary_rules:
+    - id: VA_summary_positive
+      when: V_A > 0
+      status: ok
+      text:
+        es: '[[V_A]] indica un punto del campo con potencial positivo. Una carga positiva [[q]] tendría energía potencial
+          positiva aquí, y sería empujada hacia regiones de menor potencial.'
+        en: '[[V_A]] indicates a field point with positive potential. A positive charge [[q]] would have positive potential
+          energy here, and would be pushed toward lower potential regions.'
+    - id: VA_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[V_A]] describe la energía que el campo almacena por unidad de carga en ese punto. Multiplicado por [[q]] resume
+          la energía real [[U_e]] disponible en esa interacción.'
+        en: '[[V_A]] describes the energy the field stores per unit charge at that point. Multiplied by [[q]] it summarizes
+          the actual energy [[U_e]] available in that interaction.'
+    physical_reading_rules:
+    - id: VA_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[V_A]] depende únicamente de la distribución de cargas fuente. Aumentar [[V_A]] aumenta proporcionalmente [[U_e]]
+          para una carga dada, sin cambiar la naturaleza del campo.'
+        en: '[[V_A]] depends solely on the source charge distribution. Increasing [[V_A]] proportionally increases [[U_e]]
+          for a given charge, without changing the nature of the field.'
+    coherence_rules:
+    - id: VA_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[V_A]] debe ser coherente con la distribución de cargas fuente declarada en el problema. Verificar que el potencial
+          calculado corresponde al punto correcto del campo.'
+        en: '[[V_A]] must be coherent with the source charge distribution declared in the problem. Verify that the calculated
+          potential corresponds to the correct field point.'
+    model_validity_rules:
+    - id: VA_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El potencial eléctrico [[V_A]] solo está bien definido en campos estáticos conservativos. En presencia de campos
+          magnéticos variables, el potencial escalar debe reemplazarse por el potencial vectorial.
+        en: The electric potential [[V_A]] is only well defined in static conservative fields. In the presence of varying
+          magnetic fields, the scalar potential must be replaced by the vector potential.
+    graph_rules:
+    - id: VA_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: En el gráfico [[U_e]] frente a [[r_12]], [[V_A]] en cualquier punto es la energía por unidad de carga en ese punto
+          de la curva. Cambiar [[V_A]] desplaza el punto verticalmente en la escala de energía.
+        en: On the [[U_e]] versus [[r_12]] graph, [[V_A]] at any point is the energy per unit charge at that curve point.
+          Changing [[V_A]] shifts the point vertically on the energy scale.
+    likely_errors:
+    - id: VA_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[potencial_electrico_en_el_punto_a]] con una lectura aislada es un error frecuente: Error frecuente:
+          calcular [[V_A]] en joules en lugar de en voltios, confundiendo el potencial con la energía potencial. El potencial
+          siempre se expresa por unidad de carga.'
+        en: 'A common mistake is to interpret [[potencial_electrico_en_el_punto_a]] in isolation: Frequent error: calculating
+          [[V_A]] in joules instead of volts, confusing potential with potential energy. Potential is always expressed per
+          unit charge.'
+    next_step_rules:
+    - id: VA_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Conociendo [[V_A]] en dos puntos distintos, se puede calcular la variación [[DeltaU_e]] al mover la carga entre
+          esos puntos, y de ahí el trabajo del campo eléctrico.
+        en: Knowing [[V_A]] at two different points, the change [[DeltaU_e]] when moving the charge between those points can
+          be calculated, and from that the work of the electric field.
+    physical_intuition:
+    - id: potencial_electrico_en_el_punto_a_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[potencial_electrico_en_el_punto_a]] describe el estado dinámico.
+        en: Intuitively, [[potencial_electrico_en_el_punto_a]] describes the dynamic state.
+    limiting_cases:
+    - id: potencial_electrico_en_el_punto_a_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[potencial_electrico_en_el_punto_a]].
+        en: Check limiting cases of [[potencial_electrico_en_el_punto_a]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  r_12:
+    enabled: true
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: Separación entre las dos cargas del sistema
+      en: Separation between the two charges of the system
+    summary_rules:
+    - id: r12_summary_large
+      when: r_12 > 1
+      status: ok
+      text:
+        es: '[[r_12]] mayor de 1 m indica cargas muy separadas: la energía de interacción es pequeña y el sistema se acerca
+          al caso de cargas independientes (límite del infinito).'
+        en: '[[r_12]] greater than 1 m indicates widely separated charges: the interaction energy is small and the system
+          approaches the case of independent charges (infinity limit).'
+    - id: r12_summary_small
+      when: r_12 < 1e-9
+      status: warning
+      text:
+        es: '[[r_12]] menor de 1 nm: las cargas están a escala atómica. En este rango, la descripción clásica de punto puede
+          ser insuficiente y los efectos cuánticos son relevantes.'
+        en: '[[r_12]] less than 1 nm: the charges are at atomic scale. In this range, the classical point description may
+          be insufficient and quantum effects are relevant.'
+    - id: r12_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[r_12]] resume la separación entre las dos cargas. Según la dependencia inversa de la ley de Coulomb, duplicar
+          [[r_12]] reduce [[U_e]] a la mitad en módulo, lo que indica una dependencia fuerte con la distancia.'
+        en: '[[r_12]] summarizes the separation between the two charges. Due to the inverse dependence of Coulomb''s law,
+          doubling [[r_12]] reduces [[U_e]] by half in magnitude, indicating a strong dependence on distance.'
+    physical_reading_rules:
+    - id: r12_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[r_12]] determina directamente la escala de la energía de interacción. Reducir [[r_12]] aumenta el módulo de
+          [[U_e]], mientras que aumentar [[r_12]] lo disminuye. La divergencia cuando [[r_12]] tiende a cero refleja que dos
+          cargas puntuales reales no pueden coincidir.'
+        en: '[[r_12]] directly determines the scale of the interaction energy. Reducing [[r_12]] increases the magnitude of
+          [[U_e]], while increasing [[r_12]] decreases it. The divergence as [[r_12]] approaches zero reflects that two real
+          point charges cannot coincide.'
+    coherence_rules:
+    - id: r12_coherence_positive
+      when: r_12 <= 0
+      status: error
+      text:
+        es: 'Error crítico: [[r_12]] debe ser estrictamente positiva. Un valor nulo o negativo es físicamente imposible para
+          la distancia entre dos cargas.'
+        en: 'Critical error: [[r_12]] must be strictly positive. A zero or negative value is physically impossible for the
+          distance between two charges.'
+    - id: r12_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[r_12]] es positiva y físicamente razonable. La energía de interacción calculada es coherente con la separación
+          declarada.'
+        en: '[[r_12]] is positive and physically reasonable. The calculated interaction energy is coherent with the declared
+          separation.'
+    model_validity_rules:
+    - id: r12_validity_classical
+      when: r_12 < 1e-15
+      status: warning
+      text:
+        es: '[[r_12]] menor de 1 fm: se entra en el régimen de la física nuclear, donde la interacción fuerte domina sobre
+          la eléctrica. El modelo coulombiano puro no es aplicable.'
+        en: '[[r_12]] less than 1 fm: entering the nuclear physics regime, where the strong force dominates over the electric
+          one. The pure Coulomb model is not applicable.'
+    - id: r12_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo de energía coulombiana es válido para [[r_12]] mayor que el radio de las cargas. Verificar que las cargas
+          se pueden tratar como puntuales a esta distancia.
+        en: The Coulomb energy model is valid for [[r_12]] greater than the charge radii. Verify that the charges can be treated
+          as point-like at this distance.
+    graph_rules:
+    - id: r12_graph_hyperbola
+      when: r_12 > 0
+      status: ok
+      text:
+        es: En el gráfico [[U_e]] frente a [[r_12]], el punto calculado se sitúa sobre la hipérbola que va desde infinito
+          hasta la distancia mínima física. La pendiente en ese punto es el negativo de la fuerza de Coulomb entre las cargas.
+        en: On the [[U_e]] versus [[r_12]] graph, the calculated point lies on the hyperbola that runs from infinity to the
+          minimum physical distance. The slope at that point equals the negative of the Coulomb force between the charges.
+    - id: r12_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[r_12]] es el eje horizontal del gráfico canónico. Variando [[r_12]] se traza la curva de energía potencial,
+          que es fundamental para visualizar la barrera de potencial o el pozo de potencial.'
+        en: '[[r_12]] is the horizontal axis of the canonical graph. Varying [[r_12]] traces the potential energy curve, which
+          is fundamental for visualizing the potential barrier or potential well.'
+    likely_errors:
+    - id: r12_error_direction
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[r_12]] con una lectura aislada es un error frecuente: Error frecuente: usar la distancia de una de
+          las cargas a un punto de referencia externo en lugar de la distancia entre las dos cargas [[r_12]]. Verificar que
+          [[r_12]] es la separación entre [[q_1]] y [[q_2]].'
+        en: 'A common mistake is to interpret [[r_12]] in isolation: Frequent error: using the distance from one of the charges
+          to an external reference point instead of the distance between the two charges [[r_12]]. Verify that [[r_12]] is
+          the separation between [[q_1]] and [[q_2]].'
+    next_step_rules:
+    - id: r12_next_work
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[r_12]] y [[U_e]] calculadas, el siguiente paso es determinar cuánto trabajo realiza el campo cuando [[r_12]]
+          cambia a otro valor. Esto se obtiene como la diferencia de [[U_e]] entre los dos estados.
+        en: With [[r_12]] and [[U_e]] calculated, the next step is to determine how much work the field does when [[r_12]]
+          changes to another value. This is obtained as the difference in [[U_e]] between the two states.
+    physical_intuition:
+    - id: r_12_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[r_12]] describe el estado dinámico.
+        en: Intuitively, [[r_12]] describes the dynamic state.
+    limiting_cases:
+    - id: r_12_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[r_12]].
+        en: Check limiting cases of [[r_12]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  q_1:
+    enabled: true
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: Primera carga del sistema de interacción coulombiana
+      en: First charge of the Coulomb interaction system
+    summary_rules:
+    - id: q1_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[q_1]] es uno de los dos factores del producto de cargas que determina el signo y la escala de la energía de
+          interacción. Su signo, junto con el de [[q_2]], indica si la interacción es atractiva o repulsiva.'
+        en: '[[q_1]] is one of the two factors of the charge product that determines the sign and scale of the interaction
+          energy. Its sign, together with [[q_2]], indicates whether the interaction is attractive or repulsive.'
+    physical_reading_rules:
+    - id: q1_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[q_1]] contribuye proporcionalmente a la energía de interacción: duplicar [[q_1]] duplica [[U_e]]. La simetría
+          del sistema garantiza que intercambiar [[q_1]] y [[q_2]] no cambia la energía total.'
+        en: '[[q_1]] contributes proportionally to the interaction energy: doubling [[q_1]] doubles [[U_e]]. The symmetry
+          of the system guarantees that swapping [[q_1]] and [[q_2]] does not change the total energy.'
+    coherence_rules:
+    - id: q1_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: El producto [[q_1]]·[[q_2]] determina el signo de [[U_e]]. Si el signo de [[U_e]] no coincide con el esperado
+          del producto de las cargas, verificar los signos de entrada.
+        en: The product [[q_1]]·[[q_2]] determines the sign of [[U_e]]. If the sign of [[U_e]] does not match the expected
+          sign from the charge product, verify the input signs.
+    model_validity_rules:
+    - id: q1_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo de carga puntual para [[q_1]] es válido mientras su extensión física sea mucho menor que [[r_12]]. Para
+          distribuciones extensas de carga usar la integración sobre la distribución.
+        en: The point charge model for [[q_1]] is valid while its physical extent is much smaller than [[r_12]]. For extended
+          charge distributions, integrate over the distribution.
+    graph_rules:
+    - id: q1_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: En el gráfico [[U_e]] vs [[r_12]], [[q_1]] escala la amplitud de la hipérbola y, junto con [[q_2]], determina
+          si la curva está en la región positiva o negativa del eje de energía.
+        en: On the [[U_e]] vs [[r_12]] graph, [[q_1]] scales the amplitude of the hyperbola and, together with [[q_2]], determines
+          whether the curve is in the positive or negative region of the energy axis.
+    likely_errors:
+    - id: q1_error_shared
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[q_1]] con una lectura aislada es un error frecuente: Error frecuente: asignar la energía de interacción
+          solo a [[q_1]], cuando en realidad es una propiedad del sistema completo que involucra tanto [[q_1]] como [[q_2]]
+          y la separación [[r_12]].'
+        en: 'A common mistake is to interpret [[q_1]] in isolation: Frequent error: assigning the interaction energy only
+          to [[q_1]], when it is actually a property of the complete system involving both [[q_1]], [[q_2]], and the separation
+          [[r_12]].'
+    next_step_rules:
+    - id: q1_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[q_1]] y [[U_e]] conocidas, se puede despejar [[q_2]] si se conoce [[r_12]], o determinar [[r_12]] si se
+          conoce [[q_2]]. Estos despejes permiten resolver problemas de diseño de sistemas electrostáticos.
+        en: With [[q_1]] and [[U_e]] known, [[q_2]] can be solved if [[r_12]] is known, or [[r_12]] can be determined if [[q_2]]
+          is known. These rearrangements enable solving electrostatic system design problems.
+    physical_intuition:
+    - id: q_1_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[q_1]] describe el estado dinámico.
+        en: Intuitively, [[q_1]] describes the dynamic state.
+    limiting_cases:
+    - id: q_1_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[q_1]].
+        en: Check limiting cases of [[q_1]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  q_2:
+    enabled: true
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: Segunda carga del sistema de interacción coulombiana
+      en: Second charge of the Coulomb interaction system
+    summary_rules:
+    - id: q2_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[q_2]] es el segundo factor del producto de cargas que determina la energía de interacción. Su papel es simétrico
+          al de [[q_1]]: la energía no depende de cuál se llame primera o segunda.'
+        en: '[[q_2]] is the second factor of the charge product that determines the interaction energy. Its role is symmetric
+          to [[q_1]]: the energy does not depend on which is called first or second.'
+    physical_reading_rules:
+    - id: q2_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[q_2]] determina la parte de la interacción que corresponde a la segunda carga. El principio de acción y reacción
+          garantiza que [[q_2]] experimenta una fuerza igual y opuesta a la que ejerce sobre [[q_1]].'
+        en: '[[q_2]] determines the part of the interaction corresponding to the second charge. Newton''s third law guarantees
+          that [[q_2]] experiences a force equal and opposite to the one it exerts on [[q_1]].'
+    coherence_rules:
+    - id: q2_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Si el resultado de [[U_e]] tiene signo incorrecto respecto al producto [[q_1]]·[[q_2]], verificar el signo de
+          [[q_2]] y asegurarse de que se ha incluido correctamente en el cálculo.
+        en: If the sign of [[U_e]] is incorrect relative to the product [[q_1]]·[[q_2]], verify the sign of [[q_2]] and ensure
+          it has been included correctly in the calculation.
+    model_validity_rules:
+    - id: q2_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: Igual que [[q_1]], [[q_2]] debe ser tratada como puntual para que la fórmula coulombiana sea exacta. Si [[q_2]]
+          es una distribución extendida, se requiere integración.
+        en: Like [[q_1]], [[q_2]] must be treated as a point charge for the Coulomb formula to be exact. If [[q_2]] is an
+          extended distribution, integration is required.
+    graph_rules:
+    - id: q2_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[q_2]] actúa simétricamente a [[q_1]] en el gráfico. Su valor determina la posición de la curva en el eje vertical
+          junto con [[q_1]] y [[k_e]].'
+        en: '[[q_2]] acts symmetrically to [[q_1]] in the graph. Its value determines the curve''s position on the vertical
+          axis together with [[q_1]] and [[k_e]].'
+    likely_errors:
+    - id: q2_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[q_2]] con una lectura aislada es un error frecuente: Error frecuente: omitir el signo de [[q_2]]
+          cuando es negativa, lo que invierte el signo de la energía. Verificar siempre que el signo del producto [[q_1]]·[[q_2]]
+          sea correcto.'
+        en: 'A common mistake is to interpret [[q_2]] in isolation: Frequent error: omitting the sign of [[q_2]] when it is
+          negative, which inverts the sign of the energy. Always verify that the sign of the product [[q_1]]·[[q_2]] is correct.'
+    next_step_rules:
+    - id: q2_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[q_2]] conocida, el siguiente análisis natural es calcular la fuerza coulombiana entre las cargas usando
+          la ley de Coulomb, que es la derivada negativa de [[U_e]] respecto a [[r_12]].
+        en: With [[q_2]] known, the natural next analysis is to calculate the Coulomb force between the charges using Coulomb's
+          law, which is the negative derivative of [[U_e]] with respect to [[r_12]].
+    physical_intuition:
+    - id: q_2_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[q_2]] describe el estado dinámico.
+        en: Intuitively, [[q_2]] describes the dynamic state.
+    limiting_cases:
+    - id: q_2_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[q_2]].
+        en: Check limiting cases of [[q_2]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  variacion_de_energia_potencial_electrica:
+    enabled: true
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: Variación de energía potencial al mover la carga entre dos puntos
+      en: Change in potential energy when moving the charge between two points
+    summary_rules:
+    - id: DeltaUe_summary_negative
+      when: DeltaU_e < 0
+      status: ok
+      text:
+        es: '[[DeltaU_e]] negativa indica que el campo eléctrico realizó trabajo positivo sobre la carga: el sistema cedió
+          energía almacenada. La carga se movió de forma espontánea siguiendo la dirección del campo.'
+        en: 'Negative [[DeltaU_e]] indicates the electric field did positive work on the charge: the system released stored
+          energy. The charge moved spontaneously following the field direction.'
+    - id: DeltaUe_summary_positive
+      when: DeltaU_e > 0
+      status: ok
+      text:
+        es: '[[DeltaU_e]] positiva indica que la carga ganó energía potencial: se movió en contra del campo eléctrico. Para
+          este desplazamiento fue necesario un agente externo que aportara energía al sistema.'
+        en: 'Positive [[DeltaU_e]] indicates the charge gained potential energy: it moved against the electric field. An external
+          agent had to supply energy to the system for this displacement.'
+    - id: DeltaUe_summary_zero
+      when: DeltaU_e == 0
+      status: ok
+      text:
+        es: '[[DeltaU_e]] nula resume que la carga se movió sobre una superficie equipotencial o describió una trayectoria
+          cerrada: el campo eléctrico no realizó trabajo neto, lo que confirma su carácter conservativo.'
+        en: 'Zero [[DeltaU_e]] summarizes that the charge moved on an equipotential surface or completed a closed path: the
+          electric field did no net work, confirming its conservative nature.'
+    - id: DeltaUe_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaU_e]] describe el balance energético del desplazamiento de la carga. Su signo indica el sentido del intercambio
+          energético entre la carga y el campo.'
+        en: '[[DeltaU_e]] describes the energy balance of the charge displacement. Its sign indicates the direction of energy
+          exchange between the charge and the field.'
+    physical_reading_rules:
+    - id: DeltaUe_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaU_e]] depende solo de los puntos inicial y final, no de la trayectoria recorrida. Esta independencia de
+          la trayectoria es la firma del campo conservativo y permite calcular el trabajo sin conocer el camino.'
+        en: '[[DeltaU_e]] depends only on the initial and final points, not on the path taken. This path independence is the
+          signature of a conservative field and allows calculating work without knowing the path.'
+    coherence_rules:
+    - id: DeltaUe_coherence_closed
+      when: DeltaU_e != 0
+      status: warning
+      text:
+        es: Si se declara que la trayectoria es cerrada (mismos puntos inicial y final), [[DeltaU_e]] debe ser cero. Un valor
+          distinto de cero indicaría un error en los datos o una violación del carácter conservativo del campo.
+        en: If the path is declared closed (same initial and final points), [[DeltaU_e]] must be zero. A non-zero value would
+          indicate an error in the data or a violation of the conservative nature of the field.
+    - id: DeltaUe_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaU_e]] es coherente con los puntos inicial y final declarados. El trabajo del campo es el negativo de este
+          valor.'
+        en: '[[DeltaU_e]] is coherent with the declared initial and final points. The work done by the field is the negative
+          of this value.'
+    model_validity_rules:
+    - id: DeltaUe_validity_static
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DeltaU_e]] solo es una magnitud bien definida en campos estáticos o cuasiestáticos donde la energía potencial
+          escalar tiene sentido. En campos variables, usar la formulación con potenciales retardados.'
+        en: '[[DeltaU_e]] is only a well-defined magnitude in static or quasi-static fields where scalar potential energy
+          makes sense. In varying fields, use the formulation with retarded potentials.'
+    graph_rules:
+    - id: DeltaUe_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: En el gráfico [[U_e]] vs [[r_12]], [[DeltaU_e]] se visualiza como la diferencia de altura entre dos puntos de
+          la curva. Un descenso en la curva al aumentar la separación indica trabajo positivo del campo repulsivo.
+        en: On the [[U_e]] vs [[r_12]] graph, [[DeltaU_e]] is visualized as the height difference between two curve points.
+          A descent in the curve as separation increases indicates positive work by the repulsive field.
+    likely_errors:
+    - id: DeltaUe_error_sign
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error frecuente: confundir el signo del trabajo del campo con el signo de [[DeltaU_e]]. El trabajo del campo
+          es el negativo de [[DeltaU_e]]: si [[DeltaU_e]] disminuye, el campo realizó trabajo positivo.'
+        en: 'A common mistake is to interpret [[variacion_de_energia_potencial_electrica]] in isolation: Frequent error: confusing
+          the sign of the field work with the sign of [[DeltaU_e]]. The field work is the negative of [[DeltaU_e]]: if [[DeltaU_e]]
+          decreases, the field did positive work.'
+    next_step_rules:
+    - id: DeltaUe_next_kinetic
+      when: 'true'
+      status: ok
+      text:
+        es: 'Con [[DeltaU_e]] calculada, el siguiente paso natural es aplicar la conservación de energía mecánica: la variación
+          de energía cinética es el negativo de [[DeltaU_e]] cuando no actúan otras fuerzas. Esto permite calcular la velocidad
+          final de la carga.'
+        en: 'With [[DeltaU_e]] calculated, the natural next step is to apply conservation of mechanical energy: the change
+          in kinetic energy equals the negative of [[DeltaU_e]] when no other forces act. This allows calculating the final
+          speed of the charge.'
+    physical_intuition:
+    - id: variacion_de_energia_potencial_electrica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[variacion_de_energia_potencial_electrica]] describe el estado dinámico.
+        en: Intuitively, [[variacion_de_energia_potencial_electrica]] describes the dynamic state.
+    limiting_cases:
+    - id: variacion_de_energia_potencial_electrica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[variacion_de_energia_potencial_electrica]].
+        en: Check limiting cases of [[variacion_de_energia_potencial_electrica]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

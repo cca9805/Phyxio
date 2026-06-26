@@ -1,0 +1,29 @@
+import React, { useMemo } from "react";
+import DclRenderer from "@/v2/components/DCL/DclRenderer";
+import profile from "@/v2/components/DCL/profiles/aplicaciones-ingenieriles.profile.js";
+
+export default function AplicacionesIngenierilesGraphsDcl({
+  lang = "es",
+  params = {},
+}) {
+  // Mapeo de parámetros de la calculadora a magnitudes del DCL
+  const dclParams = useMemo(() => {
+    const Pu = (params.Q || 0.05) * (params.dp || 100000);
+    const Pi = Pu / (params.eta || 0.75);
+    const Pl = Pi - Pu;
+    
+    return {
+      P_util: Pu,
+      P_in: Pi,
+      P_loss: Pl,
+    };
+  }, [params]);
+
+  return (
+    <DclRenderer
+      profile={profile}
+      params={dclParams}
+      lang={lang}
+    />
+  );
+}

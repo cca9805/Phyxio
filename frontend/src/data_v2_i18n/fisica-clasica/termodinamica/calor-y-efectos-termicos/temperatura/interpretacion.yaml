@@ -1,0 +1,519 @@
+version: "2.0"
+id: interpretacion-temperatura
+leaf_id: temperatura
+
+nombre:
+  es: Interpretación de la temperatura y conversión de escalas
+  en: Temperature interpretation and scale conversion
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: calor-y-efectos-termicos
+  parent_id: calor-y-efectos-termicos
+  ruta_relativa: fisica-clasica/termodinamica/calor-y-efectos-termicos/temperatura
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    priority: [summary, likely_errors]
+
+dependencies:
+  formulas:
+    - conversion_celsius_kelvin
+    - conversion_fahrenheit_celsius
+    - variacion_temperatura
+  magnitudes:
+    - T_K
+    - T_C
+    - T_F
+    - DeltaT
+
+global_context:
+  physical_domain:
+    es: "Medida y conversión del estado térmico de un sistema mediante las tres escalas de temperatura más usadas: kelvin, Celsius y Fahrenheit."
+    en: "Measurement and conversion of the thermal state of a system using the three most widely used temperature scales: kelvin, Celsius, and Fahrenheit."
+  axis_convention:
+    es: "T_K es siempre positiva. T_C puede ser negativa por debajo de 0 °C. T_F puede ser negativa por debajo de -17.78 °C. DeltaT lleva signo: positivo para calentamiento, negativo para enfriamiento."
+    en: "T_K is always positive. T_C can be negative below 0 °C. T_F can be negative below -17.78 °C. DeltaT carries a sign: positive for heating, negative for cooling."
+  standard_assumptions:
+    - "Las escalas Celsius y kelvin tienen la misma magnitud de grado: 1 K = 1 °C en diferencias de temperatura"
+    - "La escala Fahrenheit tiene grados 9/5 veces más pequeños que el Celsius"
+    - "El cero absoluto es 0 K = -273.15 °C = -459.67 °F"
+    - "Las relaciones de conversión son exactas por definición del SI"
+  standard_warnings:
+    - "No usar T_C directamente en fórmulas que exigen temperatura absoluta (leyes de gases, Stefan-Boltzmann)"
+    - "Para variaciones de temperatura, Celsius y kelvin son equivalentes; para estados absolutos, solo kelvin es correcto"
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  T_K:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Temperatura absoluta en la escala termodinámica SI, obtenida a partir de la temperatura Celsius."
+      en: "Absolute temperature on the SI thermodynamic scale, obtained from the Celsius temperature."
+    summary_rules:
+      - id: tk_summary_above_boiling
+        when: "T_K > 373.15"
+        status: ok
+        text:
+          es: "[[T_K]] indica una temperatura superior al punto de ebullición del agua a presión estándar (373.15 K). El resultado depende directamente de [[T_C]] desplazado 273.15 unidades hacia arriba."
+          en: "[[T_K]] indicates a temperature above the boiling point of water at standard pressure (373.15 K). The result depends directly on [[T_C]] shifted 273.15 units upward."
+      - id: tk_summary_standard_range
+        condition:
+          variable: T_K
+          gte: 273.15
+          lte: 373.15
+        status: ok
+        text:
+          es: "[[T_K]] se encuentra en el rango de temperatura líquida del agua (273.15 K a 373.15 K). Corresponde a [[T_C]] entre 0 y 100 °C. Este rango resume la mayor parte de las aplicaciones cotidianas e industriales."
+          en: "[[T_K]] is in the liquid water temperature range (273.15 K to 373.15 K). It corresponds to [[T_C]] between 0 and 100 °C. This range describes the majority of everyday and industrial applications."
+      - id: tk_summary_below_freezing
+        condition:
+          variable: T_K
+          lt: 273.15
+          gt: 0
+        status: ok
+        text:
+          es: "[[T_K]] indica una temperatura por debajo del punto de fusión del agua (273.15 K), correspondiente a [[T_C]] negativo. El resultado resume un estado de frío intenso relativo a las condiciones estándar."
+          en: "[[T_K]] indicates a temperature below the water freezing point (273.15 K), corresponding to negative [[T_C]]. The result summarises a state of intense cold relative to standard conditions."
+      - id: tk_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_K]] resume el estado térmico absoluto del sistema. Su valor indica cuántos kelvins separan al sistema del cero absoluto. Depende de [[T_C]] mediante el desplazamiento fijo de 273.15 K."
+          en: "[[T_K]] summarises the absolute thermal state of the system. Its value indicates how many kelvins separate the system from absolute zero. It depends on [[T_C]] through the fixed offset of 273.15 K."
+    physical_reading_rules:
+      - id: tk_reading_low
+        when: "T_K < 100"
+        status: warning
+        text:
+          es: "[[T_K]] inferior a 100 K corresponde a condiciones criogénicas (por debajo de -173 °C). En este rango, muchos materiales cambian radicalmente sus propiedades y las leyes clásicas de gases pueden requerir correcciones cuánticas."
+          en: "[[T_K]] below 100 K corresponds to cryogenic conditions (below -173 °C). In this range, many materials change their properties radically and classical gas laws may require quantum corrections."
+      - id: tk_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_K]] es la temperatura que debe usarse en todas las fórmulas termodinámicas que involucran temperatura absoluta: ley de gases ideales, eficiencia de ciclos de Carnot, ley de Stefan-Boltzmann. Usar [[T_C]] en estas fórmulas introduce errores sistemáticos que crecen cuando [[T_C]] se acerca a cero."
+          en: "[[T_K]] is the temperature to use in all thermodynamic formulas involving absolute temperature: ideal gas law, Carnot cycle efficiency, Stefan-Boltzmann law. Using [[T_C]] in these formulas introduces systematic errors that grow as [[T_C]] approaches zero."
+    coherence_rules:
+      - id: tk_coherence_negative
+        when: "T_K < 0"
+        status: error
+        text:
+          es: "[[T_K]] negativo es físicamente imposible. Revisar el valor de [[T_C]] introducido: debe ser mayor que -273.15 °C. Un resultado negativo indica que [[T_C]] es menor que -273.15 °C, lo que viola el tercer principio de la termodinámica."
+          en: "Negative [[T_K]] is physically impossible. Check the value of [[T_C]] entered: it must be greater than -273.15 °C. A negative result indicates that [[T_C]] is below -273.15 °C, violating the third law of thermodynamics."
+      - id: tk_coherence_zero
+        when: "T_K == 0"
+        status: warning
+        text:
+          es: "[[T_K]] igual a cero corresponde al cero absoluto, inalcanzable en la práctica según el tercer principio de la termodinámica. Verificar si [[T_C]] es exactamente -273.15 °C o si hay un error de redondeo."
+          en: "[[T_K]] equal to zero corresponds to absolute zero, unreachable in practice according to the third law of thermodynamics. Check if [[T_C]] is exactly -273.15 °C or if there is a rounding error."
+      - id: tk_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[T_K]] es coherente con el rango físico permitido (mayor que cero) y corresponde correctamente a [[T_C]] desplazado 273.15 K."
+          en: "The value of [[T_K]] is consistent with the permitted physical range (greater than zero) and correctly corresponds to [[T_C]] shifted by 273.15 K."
+    model_validity_rules:
+      - id: tk_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "La conversión [[T_K]] a partir de [[T_C]] es una relación de definición exacta y siempre válida para T_K mayor que cero. No tiene hipótesis físicas adicionales ni rango de validez restringido. El único límite es el cero absoluto (T_K mayor que cero estrictamente)."
+          en: "The conversion [[T_K]] from [[T_C]] is an exact definitional relationship, always valid for T_K greater than zero. It has no additional physical hypotheses or restricted validity range. The only limit is absolute zero (T_K strictly greater than zero)."
+    graph_rules:
+      - id: tk_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica [[T_K]] vs [[T_C]], el punto calculado debe caer sobre la recta de pendiente 1 con ordenada en el origen 273.15. El punto (0 °C, 273.15 K) es el punto de referencia del agua en estado de fusión."
+          en: "In the [[T_K]] vs [[T_C]] graph, the calculated point must fall on the straight line of slope 1 with y-intercept 273.15. The point (0 °C, 273.15 K) is the reference point for water at the melting state."
+    likely_errors:
+      - id: tk_error_no_offset
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: obtener [[T_K]] igual a [[T_C]] porque se olvidó sumar 273.15. Verificar que el resultado sea siempre 273.15 unidades mayor que el valor de [[T_C]] introducido."
+          en: "Frequent error: obtaining [[T_K]] equal to [[T_C]] because the 273.15 offset was forgotten. Verify that the result is always 273.15 units greater than the entered [[T_C]] value."
+    next_step_rules:
+      - id: tk_next_gas_law
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[T_K]] calculado, el siguiente paso natural es aplicarlo en la ley de gases ideales (PV = nRT) o en la eficiencia de un ciclo de Carnot, donde la temperatura absoluta es imprescindible."
+          en: "With [[T_K]] calculated, the natural next step is to apply it in the ideal gas law (PV = nRT) or in the efficiency of a Carnot cycle, where absolute temperature is essential."
+
+  T_C:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Temperatura en la escala Celsius, obtenida a partir de la temperatura en kelvin."
+      en: "Temperature on the Celsius scale, obtained from the kelvin temperature."
+    summary_rules:
+      - id: tc_summary_above_boiling
+        when: "T_C > 100"
+        status: ok
+        text:
+          es: "[[T_C]] superior a 100 °C indica temperatura por encima del punto de ebullición del agua a presión estándar. El resultado resume un estado de alta energía térmica en el contexto de la escala práctica cotidiana."
+          en: "[[T_C]] above 100 °C indicates temperature above the boiling point of water at standard pressure. The result summarises a state of high thermal energy in the everyday practical scale context."
+      - id: tc_summary_body_range
+        condition:
+          variable: T_C
+          gte: 36
+          lte: 38
+        status: ok
+        text:
+          es: "[[T_C]] se encuentra en el rango de la temperatura corporal humana normal (36 °C a 38 °C). Este resultado indica condiciones térmicas compatibles con procesos biológicos estándar."
+          en: "[[T_C]] is in the range of normal human body temperature (36 °C to 38 °C). This result indicates thermal conditions compatible with standard biological processes."
+      - id: tc_summary_below_zero
+        when: "T_C < 0"
+        status: ok
+        text:
+          es: "[[T_C]] negativo indica temperatura por debajo del punto de fusión del agua. El sistema está en condiciones de frío intenso. El valor describe la distancia en grados Celsius por debajo del punto de referencia del agua sólida-líquida."
+          en: "Negative [[T_C]] indicates temperature below the water freezing point. The system is under intense cold conditions. The value describes the distance in Celsius degrees below the solid-liquid water reference point."
+      - id: tc_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_C]] resume el estado térmico del sistema en la escala práctica más usada en Europa y ciencia. Su valor depende de [[T_K]] desplazado 273.15 unidades hacia abajo y describe la posición relativa al punto de fusión del agua."
+          en: "[[T_C]] summarises the thermal state of the system on the most widely used practical scale in Europe and science. Its value depends on [[T_K]] shifted 273.15 units downward and describes the position relative to the water freezing point."
+    physical_reading_rules:
+      - id: tc_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_C]] expresa la temperatura en la escala cotidiana más intuitiva para el rango de experiencia humana. Para aplicaciones termodinámicas rigurosas (gases, radiación), [[T_C]] debe convertirse a [[T_K]] antes de sustituir en las fórmulas fundamentales."
+          en: "[[T_C]] expresses temperature on the most intuitive everyday scale for the range of human experience. For rigorous thermodynamic applications (gases, radiation), [[T_C]] must be converted to [[T_K]] before substituting in fundamental formulas."
+    coherence_rules:
+      - id: tc_coherence_below_absolute_zero
+        when: "T_C < -273.15"
+        status: error
+        text:
+          es: "[[T_C]] inferior a -273.15 °C es físicamente imposible; corresponde a una temperatura kelvin negativa. Revisar el valor de [[T_K]] introducido."
+          en: "[[T_C]] below -273.15 °C is physically impossible; it corresponds to a negative kelvin temperature. Check the entered [[T_K]] value."
+      - id: tc_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[T_C]] es coherente con el rango físico permitido (mayor que -273.15 °C) y corresponde correctamente a [[T_K]] menos 273.15."
+          en: "The value of [[T_C]] is consistent with the permitted physical range (greater than -273.15 °C) and correctly corresponds to [[T_K]] minus 273.15."
+    model_validity_rules:
+      - id: tc_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "La conversión [[T_C]] desde [[T_K]] es una relación de definición exacta sin restricciones adicionales. El único límite es T_C mayor que -273.15 °C."
+          en: "The conversion [[T_C]] from [[T_K]] is an exact definitional relationship with no additional restrictions. The only limit is T_C greater than -273.15 °C."
+    graph_rules:
+      - id: tc_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica [[T_K]] vs [[T_C]], [[T_C]] es la variable del eje horizontal. El punto calculado debe caer sobre la recta de pendiente 1 con intercepto 273.15. Las dos escalas coinciden en el punto (-273.15 °C, 0 K) correspondiente al cero absoluto."
+          en: "In the [[T_K]] vs [[T_C]] graph, [[T_C]] is the horizontal axis variable. The calculated point must fall on the straight line of slope 1 with intercept 273.15. The two scales meet at the point (-273.15 °C, 0 K) corresponding to absolute zero."
+    likely_errors:
+      - id: tc_error_gas_law
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: usar [[T_C]] directamente en la ley de gases ideales. Si T_C es, por ejemplo, 27 °C y se usa en lugar de 300 K, el error en el resultado es un factor de 300/27, es decir, unas 11 veces. Siempre convertir a [[T_K]] antes de aplicar fórmulas termodinámicas."
+          en: "Frequent error: using [[T_C]] directly in the ideal gas law. If T_C is, for example, 27 °C and is used instead of 300 K, the error in the result is a factor of 300/27, approximately 11 times. Always convert to [[T_K]] before applying thermodynamic formulas."
+    next_step_rules:
+      - id: tc_next_fahrenheit
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[T_C]] calculado, convertir a [[T_F]] usando la fórmula de conversión Fahrenheit-Celsius es el paso natural para verificar la coherencia del resultado en el contexto anglosajón o cuando se trabaja con datos meteorológicos de EE.UU."
+          en: "With [[T_C]] calculated, converting to [[T_F]] using the Fahrenheit-Celsius conversion formula is the natural step to verify the result in the Anglo-Saxon context or when working with US meteorological data."
+
+  T_F:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Temperatura en la escala Fahrenheit, obtenida a partir de la temperatura Celsius."
+      en: "Temperature on the Fahrenheit scale, obtained from the Celsius temperature."
+    summary_rules:
+      - id: tf_summary_boiling
+        when: "T_F >= 212"
+        status: ok
+        text:
+          es: "[[T_F]] superior o igual a 212 °F indica temperatura en el punto de ebullición o por encima del punto de ebullición del agua a presión estándar. Este resultado describe un estado de alta energía térmica en la escala anglosajona."
+          en: "[[T_F]] at or above 212 °F indicates temperature at or above the boiling point of water at standard pressure. This result describes a high thermal energy state on the Anglo-Saxon scale."
+      - id: tf_summary_body
+        condition:
+          variable: T_F
+          gte: 97
+          lte: 100
+        status: ok
+        text:
+          es: "[[T_F]] en el rango 97-100 °F corresponde a la temperatura corporal humana normal. Este resultado indica condiciones térmicas fisiológicamente normales en la escala usada en EE.UU."
+          en: "[[T_F]] in the range 97-100 °F corresponds to normal human body temperature. This result indicates physiologically normal thermal conditions on the scale used in the US."
+      - id: tf_summary_freezing
+        condition:
+          variable: T_F
+          lt: 32
+          gte: -40
+        status: ok
+        text:
+          es: "[[T_F]] inferior a 32 °F indica temperatura por debajo del punto de congelación del agua. El resultado describe condiciones de frío en la escala Fahrenheit, equivalentes a [[T_C]] negativo."
+          en: "[[T_F]] below 32 °F indicates temperature below the water freezing point. The result describes cold conditions on the Fahrenheit scale, equivalent to negative [[T_C]]."
+      - id: tf_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_F]] resume el estado térmico del sistema en la escala de temperatura usada predominantemente en EE.UU. Su valor depende de [[T_C]] mediante el reescalado de factor 9/5 y el desplazamiento de +32."
+          en: "[[T_F]] summarises the thermal state of the system on the temperature scale used predominantly in the US. Its value depends on [[T_C]] through the 9/5 rescaling and the +32 offset."
+    physical_reading_rules:
+      - id: tf_reading_equivalence
+        when: "T_F >= -41 and T_F <= -39"
+        status: ok
+        text:
+          es: "[[T_F]] cercano a -40 °F indica que Celsius y Fahrenheit coinciden en ese punto. Es el único punto en que ambas escalas tienen el mismo valor numérico, lo que sirve como verificación de la fórmula de conversión."
+          en: "[[T_F]] near -40 °F indicates that Celsius and Fahrenheit coincide at that point. It is the only point where both scales have the same numerical value, which serves as a verification check for the conversion formula."
+      - id: tf_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_F]] expresa la misma temperatura física que [[T_C]] y [[T_K]], pero en una escala con grados más pequeños (1 °F = 5/9 °C). Un valor de [[T_F]] siempre resulta numéricamente mayor que [[T_C]] para temperaturas por encima de -40 °F."
+          en: "[[T_F]] expresses the same physical temperature as [[T_C]] and [[T_K]], but on a scale with smaller degrees (1 °F = 5/9 °C). A value of [[T_F]] is always numerically greater than [[T_C]] for temperatures above -40 °F."
+    coherence_rules:
+      - id: tf_coherence_below_absolute_zero
+        when: "T_F < -459.67"
+        status: error
+        text:
+          es: "[[T_F]] inferior a -459.67 °F es físicamente imposible: corresponde al cero absoluto expresado en Fahrenheit. Revisar el valor de [[T_C]] usado en la conversión."
+          en: "[[T_F]] below -459.67 °F is physically impossible: it corresponds to absolute zero expressed in Fahrenheit. Check the [[T_C]] value used in the conversion."
+      - id: tf_coherence_check_water
+        when: "T_C >= -0.1 and T_C <= 0.1"
+        status: ok
+        text:
+          es: "Con [[T_C]] cercano a 0 °C, [[T_F]] debe ser cercano a 32 °F. Si el resultado difiere significativamente de 32, revisar si se sumó correctamente el desplazamiento de +32 en la conversión."
+          en: "With [[T_C]] near 0 °C, [[T_F]] should be near 32 °F. If the result differs significantly from 32, check whether the +32 offset was correctly added in the conversion."
+      - id: tf_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[T_F]] es coherente con el rango físico permitido (mayor que -459.67 °F) y corresponde correctamente a [[T_C]] escalado y desplazado."
+          en: "The value of [[T_F]] is consistent with the permitted physical range (greater than -459.67 °F) and correctly corresponds to [[T_C]] scaled and shifted."
+    model_validity_rules:
+      - id: tf_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "La conversión [[T_F]] desde [[T_C]] es una relación de definición exacta sin restricciones adicionales. Aplica para cualquier temperatura por encima del cero absoluto (-459.67 °F)."
+          en: "The conversion [[T_F]] from [[T_C]] is an exact definitional relationship with no additional restrictions. It applies to any temperature above absolute zero (-459.67 °F)."
+    graph_rules:
+      - id: tf_graph_slope
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica [[T_F]] vs [[T_C]], el punto calculado debe caer sobre la recta de pendiente 1.8 con ordenada en el origen 32. El punto de intersección de ambas escalas (-40, -40) y el punto (0, 32) son las dos referencias de verificación más útiles."
+          en: "In the [[T_F]] vs [[T_C]] graph, the calculated point must fall on the straight line of slope 1.8 with y-intercept 32. The intersection point of both scales (-40, -40) and the point (0, 32) are the two most useful verification references."
+    likely_errors:
+      - id: tf_error_factor
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente al convertir de [[T_C]] a [[T_F]]: olvidar el factor 9/5 y solo sumar 32, o aplicar el factor 9/5 pero no sumar los 32. Ambas partes de la fórmula (reescalado y desplazamiento) son obligatorias."
+          en: "Frequent error when converting from [[T_C]] to [[T_F]]: forgetting the 9/5 factor and only adding 32, or applying the 9/5 factor but not adding the 32. Both parts of the formula (rescaling and offset) are mandatory."
+    next_step_rules:
+      - id: tf_next_kelvin
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[T_F]] calculado, el paso natural para aplicarlo en termodinámica es convertirlo a [[T_K]] pasando primero por [[T_C]] (restar 32, luego multiplicar por 5/9, luego sumar 273.15)."
+          en: "With [[T_F]] calculated, the natural step to apply it in thermodynamics is to convert it to [[T_K]] by going through [[T_C]] first (subtract 32, then multiply by 5/9, then add 273.15)."
+
+  DeltaT:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Variación de temperatura entre el estado final e inicial de un proceso térmico. Determina el sentido del flujo de calor."
+      en: "Temperature change between the final and initial state of a thermal process. Determines the direction of heat flow."
+    summary_rules:
+      - id: deltat_summary_heating
+        when: "DeltaT > 0"
+        status: ok
+        text:
+          es: "[[DeltaT]] positivo indica calentamiento del sistema: la temperatura final es mayor que la inicial. El resultado describe cuántos grados o kelvins aumentó la temperatura. Este valor depende de T_final menos T_inicial."
+          en: "Positive [[DeltaT]] indicates heating of the system: the final temperature is higher than the initial. The result describes how many degrees or kelvins the temperature increased. This value depends on T_final minus T_initial."
+      - id: deltat_summary_cooling
+        when: "DeltaT < 0"
+        status: ok
+        text:
+          es: "[[DeltaT]] negativo indica enfriamiento del sistema: la temperatura final es menor que la inicial. El valor absoluto resume cuántos grados o kelvins descendió la temperatura durante el proceso."
+          en: "Negative [[DeltaT]] indicates cooling of the system: the final temperature is lower than the initial. The absolute value summarises how many degrees or kelvins the temperature dropped during the process."
+      - id: deltat_summary_zero
+        when: "DeltaT == 0"
+        status: ok
+        text:
+          es: "[[DeltaT]] igual a cero indica que la temperatura no cambió durante el proceso. Puede corresponder a un proceso isotérmico, a un cambio de fase o al equilibrio térmico ya alcanzado antes del inicio del proceso."
+          en: "[[DeltaT]] equal to zero indicates that the temperature did not change during the process. This may correspond to an isothermal process, a phase change, or to thermal equilibrium already reached before the process began."
+      - id: deltat_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaT]] resume el cambio de estado térmico del sistema. Su signo indica el sentido del proceso y su magnitud describe la amplitud del cambio. Es numéricamente equivalente tanto en Celsius como en kelvin."
+          en: "[[DeltaT]] summarises the thermal state change of the system. Its sign indicates the direction of the process and its magnitude describes the amplitude of the change. It is numerically equivalent in both Celsius and kelvin."
+    physical_reading_rules:
+      - id: deltat_reading_large
+        when: "DeltaT > 200"
+        status: warning
+        text:
+          es: "[[DeltaT]] superior a 200 K es una variación muy amplia. En este rango, los coeficientes de calor específico y de dilatación de los materiales pueden variar significativamente, haciendo que los modelos con propiedades constantes sean aproximaciones con mayor error."
+          en: "[[DeltaT]] above 200 K is a very large variation. In this range, specific heat and expansion coefficients of materials may vary significantly, making constant-property models approximate with larger errors."
+      - id: deltat_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaT]] es la magnitud de proceso fundamental de la termodinámica clásica: aparece en la ley del calor específico (Q = m·c·[[DeltaT]]) y en la ley de dilatación térmica. En diferencias de temperatura, Celsius y kelvin son intercambiables numéricamente."
+          en: "[[DeltaT]] is the fundamental process quantity of classical thermodynamics: it appears in the specific heat law (Q = m·c·[[DeltaT]]) and in the thermal expansion law. For temperature differences, Celsius and kelvin are numerically interchangeable."
+    coherence_rules:
+      - id: deltat_coherence_sign_mismatch
+        when: "DeltaT < 0"
+        status: ok
+        text:
+          es: "[[DeltaT]] negativo es físicamente correcto para un proceso de enfriamiento. Verificar que el enunciado del problema describe efectivamente un proceso de enfriamiento y que T_final es menor que T_inicial."
+          en: "Negative [[DeltaT]] is physically correct for a cooling process. Verify that the problem statement does indeed describe a cooling process and that T_final is lower than T_inicial."
+      - id: deltat_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El signo de [[DeltaT]] debe ser coherente con el proceso físico descrito: positivo para calentamiento, negativo para enfriamiento, cero para proceso isotérmico."
+          en: "The sign of [[DeltaT]] must be consistent with the described physical process: positive for heating, negative for cooling, zero for an isothermal process."
+    model_validity_rules:
+      - id: deltat_validity_phase_change
+        when: "DeltaT == 0"
+        status: warning
+        text:
+          es: "[[DeltaT]] igual a cero durante un proceso con aporte de calor puede indicar que el sistema está en un cambio de fase. En ese caso, la temperatura no varía aunque se absorba energía (calor latente), y el modelo Q = m·c·[[DeltaT]] no aplica durante la transición."
+          en: "[[DeltaT]] equal to zero during a process with heat input may indicate that the system is undergoing a phase change. In that case, temperature does not change even though energy is absorbed (latent heat), and the model Q = m·c·[[DeltaT]] does not apply during the transition."
+      - id: deltat_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[DeltaT]] como diferencia de temperaturas es siempre válido como definición. Su uso en leyes físicas (calor específico, dilatación) requiere que el proceso sea monofásico y que las propiedades del material sean aproximadamente constantes en el rango de [[DeltaT]] considerado."
+          en: "[[DeltaT]] as a temperature difference is always valid as a definition. Its use in physical laws (specific heat, thermal expansion) requires the process to be single-phase and the material properties to be approximately constant over the considered [[DeltaT]] range."
+    graph_rules:
+      - id: deltat_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica de temperatura frente al tiempo (T vs t), [[DeltaT]] es la diferencia de ordenadas entre dos instantes. Una pendiente positiva en ese intervalo confirma [[DeltaT]] positivo (calentamiento); una pendiente negativa confirma [[DeltaT]] negativo (enfriamiento)."
+          en: "In the temperature versus time graph (T vs t), [[DeltaT]] is the difference in ordinates between two time instants. A positive slope over that interval confirms positive [[DeltaT]] (heating); a negative slope confirms negative [[DeltaT]] (cooling)."
+    likely_errors:
+      - id: deltat_error_inverted
+        when: "true"
+        status: warning
+        text:
+          es: "Error muy frecuente: calcular [[DeltaT]] como T_inicial menos T_final en lugar de T_final menos T_inicial. Este error invierte el signo del resultado y lleva a concluir erróneamente que un proceso de calentamiento es de enfriamiento o viceversa."
+          en: "Very frequent error: calculating [[DeltaT]] as T_initial minus T_final instead of T_final minus T_initial. This error inverts the sign of the result and incorrectly leads to concluding that a heating process is a cooling process or vice versa."
+    next_step_rules:
+      - id: deltat_next_heat
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[DeltaT]] calculado, el siguiente paso natural es calcular el calor intercambiado usando la ley del calor específico (Q = m·c·[[DeltaT]]) o la dilatación térmica resultante (DeltaL = alpha·L0·[[DeltaT]]), según el contexto del problema."
+          en: "With [[DeltaT]] calculated, the natural next step is to compute the exchanged heat using the specific heat law (Q = m·c·[[DeltaT]]) or the resulting thermal expansion (DeltaL = alpha·L0·[[DeltaT]]), depending on the problem context."
+
+cross_checks:
+  - id: consistency_tc_tk
+    when: "abs(T_K - T_C - 273.15) > 0.01"
+    status: error
+    text:
+      es: "Inconsistencia detectada entre [[T_K]] y [[T_C]]: la diferencia no es 273.15. Revisar si ambas temperaturas provienen de la misma conversión o si se han introducido valores de escalas distintas."
+      en: "Inconsistency detected between [[T_K]] and [[T_C]]: the difference is not 273.15. Check whether both temperatures come from the same conversion or if values from different scales have been entered."
+
+error_patterns:
+  - id: celsius_in_absolute_formula
+    description:
+      es: "Usar T_C directamente en fórmulas que requieren temperatura absoluta (ley de gases ideales, Stefan-Boltzmann), omitiendo la conversión a T_K."
+      en: "Using T_C directly in formulas that require absolute temperature (ideal gas law, Stefan-Boltzmann), omitting the conversion to T_K."
+  - id: inverted_DeltaT
+    description:
+      es: "Calcular DeltaT como T_inicial menos T_final en lugar de T_final menos T_inicial, obteniendo el signo opuesto."
+      en: "Calculating DeltaT as T_initial minus T_final instead of T_final minus T_initial, obtaining the opposite sign."
+
+graph_binding:
+  type: Coord
+  x_axis: T_C
+  y_axis: T_K
+  secondary_y: T_F
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true

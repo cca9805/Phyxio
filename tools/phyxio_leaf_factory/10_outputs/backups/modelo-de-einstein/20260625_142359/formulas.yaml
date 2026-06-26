@@ -1,0 +1,304 @@
+version: 5.0.0
+ui:
+  default_formula: calor_especifico_molar_einstein
+formulas:
+- id: parametro_reducido_einstein
+  title:
+    es: Parámetro reducido de Einstein
+    en: Einstein reduced parameter
+  equation: x=theta_E/T
+  latex: x=\frac{\theta_E}{T}
+  rearrangements:
+  - target: theta_E
+    equation: theta_E=x*T
+    latex: \theta_E=xT
+  - target: T
+    equation: T=theta_E/x
+    latex: T=\frac{\theta_E}{x}
+  category: termodinamica_estadistica
+  relation_type: definition
+  physical_meaning:
+    es: Compara la temperatura de Einstein con la temperatura real del sólido.
+    en: Compares the Einstein temperature with the actual temperature of the solid.
+  constraints:
+    es: T debe ser positiva y theta_E debe ser positiva.
+    en: T must be positive and theta_E must be positive.
+  validity:
+    es: Útil en el modelo de Einstein para expresar el régimen térmico cuántico.
+    en: Useful in the Einstein model to express the quantum thermal regime.
+  dimension_check: '[x]=1 porque theta_E y T son temperaturas.'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calor_especifico_molar_einstein
+  - energia_interna_einstein
+  interpretation_tags:
+  - temperatura
+  - regimen_cuantico
+  - variable_reducida
+  result_semantics:
+    target: parametro_reducido
+    kind: dimensionless_ratio
+    sign_meaning:
+      es: Siempre positivo; valores grandes indican baja temperatura frente a theta_E.
+      en: Always positive; large values indicate low temperature relative to theta_E.
+    absolute_value_meaning:
+      es: Mide cuán congelados están los modos vibracionales.
+      en: Measures how frozen the vibrational modes are.
+  domain_checks:
+  - id: temperatura_positiva
+    condition: T>0
+    message:
+      es: La temperatura absoluta debe ser mayor que cero.
+      en: Absolute temperature must be greater than zero.
+  - id: theta_positiva
+    condition: theta_E>0
+    message:
+      es: La temperatura de Einstein debe ser positiva.
+      en: Einstein temperature must be positive.
+  coherence_checks:
+  - id: x_adimensional
+    condition: dimension(x)==1
+    message:
+      es: x no puede tener unidades.
+      en: x cannot have units.
+  graph_implications:
+    es: 'Puede usarse como eje horizontal alternativo: al crecer x, disminuye el calor específico.'
+    en: 'It can be used as an alternative horizontal axis: as x grows, heat capacity decreases.'
+  pedagogical_triggers:
+  - es: Si x es grande, no significa temperatura alta sino T baja respecto a theta_E.
+    en: If x is large, it does not mean high temperature but low T relative to theta_E.
+- id: temperatura_einstein_frecuencia
+  title:
+    es: Temperatura de Einstein
+    en: Einstein temperature
+  equation: theta_E=hbar*omega_E/k_B
+  latex: \theta_E=\frac{\hbar\omega_E}{k_B}
+  rearrangements:
+  - target: omega_E
+    equation: omega_E=theta_E*k_B/hbar
+    latex: \omega_E=\frac{\theta_E k_B}{\hbar}
+  category: termodinamica_estadistica
+  relation_type: definition
+  physical_meaning:
+    es: Traduce la frecuencia vibracional característica del sólido a una escala de temperatura.
+    en: Converts the characteristic vibrational frequency of the solid into a temperature scale.
+  constraints:
+    es: omega_E, hbar y k_B son positivos.
+    en: omega_E, hbar, and k_B are positive.
+  validity:
+    es: Supone que todos los átomos vibran con una única frecuencia de Einstein.
+    en: Assumes all atoms vibrate with a single Einstein frequency.
+  dimension_check: '[theta_E]=K porque [hbar*omega_E]=J y [k_B]=J/K.'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - parametro_reducido_einstein
+  - calor_especifico_molar_einstein
+  - energia_interna_einstein
+  interpretation_tags:
+  - escala_termica
+  - frecuencia
+  - cuantizacion
+  result_semantics:
+    target: temperatura_einstein
+    kind: positive_scale
+    sign_meaning:
+      es: Debe ser positiva; no representa una temperatura de enfriamiento.
+      en: It must be positive; it is not a cooling temperature.
+    absolute_value_meaning:
+      es: Cuanto mayor es theta_E, más temperatura se necesita para activar vibraciones.
+      en: The larger theta_E is, the more temperature is needed to activate vibrations.
+  domain_checks:
+  - id: frecuencia_positiva
+    condition: omega_E>0
+    message:
+      es: La frecuencia angular debe ser positiva.
+      en: Angular frequency must be positive.
+  coherence_checks:
+  - id: energia_temperatura
+    condition: dimension(hbar*omega_E/k_B)==K
+    message:
+      es: La conversión energía-temperatura debe dar kelvin.
+      en: The energy-temperature conversion must give kelvin.
+  graph_implications:
+    es: 'theta_E desplaza la curva de calor específico: materiales con theta_E mayor alcanzan el límite clásico más tarde.'
+    en: 'theta_E shifts the heat capacity curve: materials with larger theta_E reach the classical limit later.'
+  pedagogical_triggers:
+  - es: No confundas theta_E con la temperatura T medida del sólido.
+    en: Do not confuse theta_E with the measured temperature T of the solid.
+- id: calor_especifico_molar_einstein
+  title:
+    es: Calor específico molar de Einstein
+    en: Einstein molar heat capacity
+  equation: C_Vm=3*R*(theta_E/T)^2*exp(theta_E/T)/(exp(theta_E/T)-1)^2
+  latex: C_{V,m}=3R\left(\frac{\theta_E}{T}\right)^2\frac{e^{\theta_E/T}}{(e^{\theta_E/T}-1)^2}
+  rearrangements: []
+  category: termodinamica_estadistica
+  relation_type: constitutive_model
+  physical_meaning:
+    es: Da el calor específico molar a volumen constante de un sólido tratado como osciladores cuánticos idénticos.
+    en: Gives the constant-volume molar heat capacity of a solid treated as identical quantum oscillators.
+  constraints:
+    es: T>0, theta_E>0 y el sólido se aproxima por una sola frecuencia vibracional.
+    en: T>0, theta_E>0, and the solid is approximated by a single vibrational frequency.
+  validity:
+    es: Describe la caída cuántica a baja temperatura y recupera 3R a alta temperatura, pero no reproduce exactamente la ley
+      T³ de Debye.
+    en: It describes the quantum drop at low temperature and recovers 3R at high temperature, but does not exactly reproduce
+      Debye's T³ law.
+  dimension_check: '[C_Vm]=J mol^-1 K^-1 porque R tiene esa unidad y el factor restante es adimensional.'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - grafica_calor_temperatura_einstein
+  interpretation_tags:
+  - calor_especifico
+  - temperatura
+  - limite_clasico
+  - congelacion_cuantica
+  result_semantics:
+    target: calor_especifico_molar_volumen_constante
+    kind: positive_response
+    sign_meaning:
+      es: Debe ser no negativo; un valor negativo no es físico en este modelo.
+      en: It must be non-negative; a negative value is not physical in this model.
+    absolute_value_meaning:
+      es: Mide la energía molar adicional necesaria por kelvin a volumen constante.
+      en: Measures the additional molar energy required per kelvin at constant volume.
+  domain_checks:
+  - id: temperatura_no_cero
+    condition: T>0
+    message:
+      es: La fórmula no acepta T igual a cero en evaluación directa.
+      en: The formula does not accept T equal to zero in direct evaluation.
+  - id: theta_no_cero
+    condition: theta_E>0
+    message:
+      es: theta_E debe ser positiva para definir la escala del modelo.
+      en: theta_E must be positive to define the model scale.
+  coherence_checks:
+  - id: limite_dulong_petit
+    condition: T>>theta_E implies C_Vm≈3*R
+    message:
+      es: A alta temperatura debe acercarse a 3R.
+      en: At high temperature it must approach 3R.
+  - id: limite_baja_T
+    condition: T<<theta_E implies C_Vm≈0
+    message:
+      es: A baja temperatura debe tender a cero.
+      en: At low temperature it must tend to zero.
+  graph_implications:
+    es: La gráfica C_Vm frente a T sube desde cero y se aproxima asintóticamente a 3R.
+    en: The C_Vm versus T graph rises from zero and approaches 3R asymptotically.
+  pedagogical_triggers:
+  - es: 'El límite 3R no vale a baja temperatura: ahí dominan los efectos cuánticos.'
+    en: 'The 3R limit does not apply at low temperature: quantum effects dominate there.'
+- id: energia_interna_einstein
+  title:
+    es: Energía interna de Einstein
+    en: Einstein internal energy
+  equation: U=3*N*k_B*theta_E*(1/2+1/(exp(theta_E/T)-1))
+  latex: U=3Nk_B\theta_E\left(\frac{1}{2}+\frac{1}{e^{\theta_E/T}-1}\right)
+  rearrangements: []
+  category: termodinamica_estadistica
+  relation_type: state_function
+  physical_meaning:
+    es: Representa la energía vibracional total incluyendo energía de punto cero y excitación térmica.
+    en: Represents total vibrational energy including zero-point energy and thermal excitation.
+  constraints:
+    es: N, k_B, theta_E y T son positivos; los osciladores se consideran independientes.
+    en: N, k_B, theta_E, and T are positive; the oscillators are considered independent.
+  validity:
+    es: Válida dentro del modelo de osciladores armónicos cuánticos idénticos e independientes.
+    en: Valid within the model of identical independent quantum harmonic oscillators.
+  dimension_check: '[U]=J porque N es adimensional y k_B*theta_E es energía.'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calor_especifico_molar_einstein
+  interpretation_tags:
+  - energia_interna
+  - punto_cero
+  - excitacion_termica
+  result_semantics:
+    target: energia_interna
+    kind: positive_energy
+    sign_meaning:
+      es: Es positiva con la referencia que incluye energía de punto cero.
+      en: It is positive with the reference including zero-point energy.
+    absolute_value_meaning:
+      es: Indica la energía vibracional almacenada en el sólido.
+      en: Indicates the vibrational energy stored in the solid.
+  domain_checks:
+  - id: numero_atomos_positivo
+    condition: N>0
+    message:
+      es: El número de átomos debe ser positivo.
+      en: The number of atoms must be positive.
+  coherence_checks:
+  - id: crece_con_temperatura
+    condition: dU/dT>=0
+    message:
+      es: La energía interna debe crecer con la temperatura.
+      en: Internal energy must increase with temperature.
+  graph_implications:
+    es: La pendiente térmica de U está relacionada con la capacidad calorífica.
+    en: The thermal slope of U is related to heat capacity.
+  pedagogical_triggers:
+  - es: La energía de punto cero no implica calor específico distinto de cero a T muy baja.
+    en: Zero-point energy does not imply nonzero heat capacity at very low T.
+- id: capacidad_calorifica_total_einstein
+  title:
+    es: Capacidad calorífica total de Einstein
+    en: Einstein total heat capacity
+  equation: C_V=3*N*k_B*(theta_E/T)^2*exp(theta_E/T)/(exp(theta_E/T)-1)^2
+  latex: C_V=3Nk_B\left(\frac{\theta_E}{T}\right)^2\frac{e^{\theta_E/T}}{(e^{\theta_E/T}-1)^2}
+  rearrangements: []
+  category: termodinamica_estadistica
+  relation_type: constitutive_model
+  physical_meaning:
+    es: Relaciona la capacidad calorífica total con el número de átomos del sólido.
+    en: Relates total heat capacity to the number of atoms in the solid.
+  constraints:
+    es: N>0, T>0 y theta_E>0.
+    en: N>0, T>0, and theta_E>0.
+  validity:
+    es: Usa la misma aproximación de frecuencia única que el modelo de Einstein.
+    en: Uses the same single-frequency approximation as the Einstein model.
+  dimension_check: '[C_V]=J K^-1 porque N es adimensional y k_B aporta J/K.'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calor_especifico_molar_einstein
+  interpretation_tags:
+  - capacidad_calorifica
+  - sistema_total
+  - numero_atomos
+  result_semantics:
+    target: capacidad_calorifica_volumen_constante
+    kind: positive_response
+    sign_meaning:
+      es: Debe ser no negativa.
+      en: It must be non-negative.
+    absolute_value_meaning:
+      es: Mide la energía total necesaria para elevar un kelvin el sólido.
+      en: Measures the total energy needed to raise the solid by one kelvin.
+  domain_checks:
+  - id: N_positivo
+    condition: N>0
+    message:
+      es: N debe ser positivo.
+      en: N must be positive.
+  coherence_checks:
+  - id: proporcional_a_N
+    condition: C_V proportional N
+    message:
+      es: Duplicar N duplica C_V si T y theta_E no cambian.
+      en: Doubling N doubles C_V if T and theta_E do not change.
+  graph_implications:
+    es: Escala verticalmente la curva según el tamaño del sistema.
+    en: It vertically scales the curve according to system size.
+  pedagogical_triggers:
+  - es: No mezcles capacidad total C_V con calor específico molar C_Vm.
+    en: Do not mix total heat capacity C_V with molar heat capacity C_Vm.

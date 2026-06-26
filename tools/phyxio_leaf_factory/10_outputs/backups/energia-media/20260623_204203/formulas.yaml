@@ -1,0 +1,229 @@
+version: "5.0.0"
+ui:
+  default_formula: energia_media_particula
+formulas:
+  - id: energia_media_particula
+    title:
+      es: "Energía media por partícula clásica"
+      en: "Average energy per classical particle"
+    equation: "energia_media=(3/2)*k_boltzmann*temperatura"
+    latex: '\langle E \rangle = \frac{3}{2} k_B T'
+    rearrangements:
+      - id: temperatura_desde_energia_media
+        target: temperatura
+        equation: "temperatura=(2*energia_media)/(3*k_boltzmann)"
+        latex: 'T = \frac{2\langle E \rangle}{3k_B}'
+      - id: k_boltzmann_desde_energia_media
+        target: k_boltzmann
+        equation: "k_boltzmann=(2*energia_media)/(3*temperatura)"
+        latex: 'k_B = \frac{2\langle E \rangle}{3T}'
+    category: "termodinamica_estadistica"
+    relation_type: "proportionality"
+    physical_meaning:
+      es: "En un gas clásico ideal en equilibrio, la energía media traslacional por partícula crece linealmente con la temperatura absoluta."
+      en: "In a classical ideal gas at equilibrium, the mean translational energy per particle grows linearly with absolute temperature."
+    constraints:
+      es: "La temperatura debe estar en kelvin y el sistema debe describirse mediante estadística clásica de Maxwell-Boltzmann."
+      en: "Temperature must be in kelvin and the system must be described by classical Maxwell-Boltzmann statistics."
+    validity:
+      es: "Válida para partículas no relativistas, gas ideal diluido y grados de libertad traslacionales en equilibrio térmico."
+      en: "Valid for nonrelativistic particles, dilute ideal gases, and translational degrees of freedom in thermal equilibrium."
+    dimension_check: "J = J/K * K"
+    calculable: true
+    motivo_no_calculable:
+      es: ""
+      en: ""
+    used_in:
+      - teoria
+      - ejemplos
+      - interpretacion
+      - graficos
+    interpretation_tags:
+      - proporcionalidad_directa
+      - temperatura_absoluta
+      - energia_termica
+    result_semantics:
+      target: energia_media
+      kind: scalar
+      sign_meaning:
+        es: "La energía media traslacional clásica es no negativa; un signo negativo indicaría un dato o modelo imposible."
+        en: "Classical average translational energy is nonnegative; a negative sign would indicate impossible data or model use."
+      absolute_value_meaning:
+        es: "Su valor mide la energía cinética traslacional típica asociada al movimiento microscópico de cada partícula."
+        en: "Its value measures the typical translational kinetic energy associated with the microscopic motion of each particle."
+    domain_checks:
+      - id: temperatura_no_negativa
+        condition: "temperatura>=0"
+        severity: error
+        message:
+          es: "La temperatura absoluta no puede ser negativa en este modelo clásico."
+          en: "Absolute temperature cannot be negative in this classical model."
+      - id: equilibrio_termico
+        condition: "sistema_en_equilibrio=true"
+        severity: warning
+        message:
+          es: "Sin equilibrio térmico, una única temperatura puede no describir bien la energía media."
+          en: "Without thermal equilibrium, a single temperature may not describe the average energy well."
+    coherence_checks:
+      - id: proporcionalidad_energia_temperatura
+        rule: "energia_media/temperatura=(3/2)*k_boltzmann when temperatura>0"
+        message:
+          es: "La razón entre energía media y temperatura debe mantenerse constante para el mismo modelo clásico."
+          en: "The ratio between average energy and temperature must remain constant for the same classical model."
+    graph_implications:
+      es: "La gráfica de energía media frente a temperatura es una recta que pasa por el origen."
+      en: "The graph of average energy versus temperature is a straight line through the origin."
+    pedagogical_triggers:
+      - id: confundir_celsius_kelvin
+        trigger:
+          es: "Usar grados Celsius directamente en la fórmula."
+          en: "Using degrees Celsius directly in the formula."
+        feedback:
+          es: "La temperatura de Maxwell-Boltzmann debe introducirse como temperatura absoluta en kelvin."
+          en: "Maxwell-Boltzmann temperature must be entered as absolute temperature in kelvin."
+
+  - id: energia_total_gas_ideal
+    title:
+      es: "Energía interna traslacional total"
+      en: "Total translational internal energy"
+    equation: "energia_total=numero_particulas*energia_media"
+    latex: 'U = N\langle E \rangle'
+    rearrangements:
+      - id: numero_particulas_desde_energia_total
+        target: numero_particulas
+        equation: "numero_particulas=energia_total/energia_media"
+        latex: 'N = \frac{U}{\langle E \rangle}'
+      - id: energia_media_desde_energia_total
+        target: energia_media
+        equation: "energia_media=energia_total/numero_particulas"
+        latex: '\langle E \rangle = \frac{U}{N}'
+    category: "termodinamica_estadistica"
+    relation_type: "scaling"
+    physical_meaning:
+      es: "La energía interna traslacional total se obtiene sumando la energía media de todas las partículas."
+      en: "Total translational internal energy is obtained by summing the average energy over all particles."
+    constraints:
+      es: "El número de partículas debe ser positivo y todas deben pertenecer al mismo sistema en equilibrio."
+      en: "The number of particles must be positive and all particles must belong to the same equilibrium system."
+    validity:
+      es: "Aplicable a gases ideales clásicos cuando se consideran solo los grados de libertad traslacionales."
+      en: "Applies to classical ideal gases when only translational degrees of freedom are considered."
+    dimension_check: "J = 1 * J"
+    calculable: true
+    motivo_no_calculable:
+      es: ""
+      en: ""
+    used_in:
+      - teoria
+      - ejemplos
+      - interpretacion
+    interpretation_tags:
+      - energia_interna
+      - extensividad
+      - suma_microscopica
+    result_semantics:
+      target: energia_total
+      kind: scalar
+      sign_meaning:
+        es: "La energía total traslacional clásica es no negativa y aumenta con el número de partículas."
+        en: "Classical total translational energy is nonnegative and increases with particle number."
+      absolute_value_meaning:
+        es: "Representa la energía cinética traslacional acumulada en el conjunto de partículas."
+        en: "It represents the accumulated translational kinetic energy in the particle ensemble."
+    domain_checks:
+      - id: numero_particulas_positivo
+        condition: "numero_particulas>0"
+        severity: error
+        message:
+          es: "Debe existir al menos una partícula para definir la energía total del gas."
+          en: "At least one particle is required to define the gas total energy."
+    coherence_checks:
+      - id: energia_total_extensiva
+        rule: "energia_total doubles if numero_particulas doubles at fixed energia_media"
+        message:
+          es: "A temperatura fija, duplicar N debe duplicar la energía total traslacional."
+          en: "At fixed temperature, doubling N must double the total translational energy."
+    graph_implications:
+      es: "A energía media fija, la energía total crece linealmente con el número de partículas."
+      en: "At fixed average energy, total energy grows linearly with particle number."
+    pedagogical_triggers:
+      - id: mezclar_media_y_total
+        trigger:
+          es: "Confundir energía media por partícula con energía total del gas."
+          en: "Confusing average energy per particle with total gas energy."
+        feedback:
+          es: "La energía media es intensiva por partícula; la energía total multiplica por N."
+          en: "Average energy is per-particle; total energy multiplies it by N."
+
+  - id: energia_total_temperatura
+    title:
+      es: "Energía interna traslacional en función de la temperatura"
+      en: "Translational internal energy as a function of temperature"
+    equation: "energia_total=(3/2)*numero_particulas*k_boltzmann*temperatura"
+    latex: 'U = \frac{3}{2}Nk_B T'
+    rearrangements:
+      - id: temperatura_desde_energia_total
+        target: temperatura
+        equation: "temperatura=(2*energia_total)/(3*numero_particulas*k_boltzmann)"
+        latex: 'T = \frac{2U}{3Nk_B}'
+      - id: numero_particulas_desde_temperatura
+        target: numero_particulas
+        equation: "numero_particulas=(2*energia_total)/(3*k_boltzmann*temperatura)"
+        latex: 'N = \frac{2U}{3k_B T}'
+    category: "termodinamica_estadistica"
+    relation_type: "combined"
+    physical_meaning:
+      es: "Conecta la energía macroscópica del gas con la temperatura y el número de partículas mediante la energía media microscópica."
+      en: "It connects macroscopic gas energy with temperature and particle number through microscopic average energy."
+    constraints:
+      es: "Requiere gas ideal clásico, temperatura absoluta y número de partículas definido."
+      en: "Requires a classical ideal gas, absolute temperature, and a defined particle number."
+    validity:
+      es: "No incluye vibración, rotación molecular, interacciones fuertes, degeneración cuántica ni efectos relativistas."
+      en: "It excludes vibration, molecular rotation, strong interactions, quantum degeneracy, and relativistic effects."
+    dimension_check: "J = 1 * J/K * K"
+    calculable: true
+    motivo_no_calculable:
+      es: ""
+      en: ""
+    used_in:
+      - teoria
+      - ejemplos
+      - interpretacion
+    interpretation_tags:
+      - energia_interna
+      - temperatura
+      - particulas
+    result_semantics:
+      target: energia_total
+      kind: scalar
+      sign_meaning:
+        es: "Un valor positivo indica energía térmica traslacional acumulada; cero corresponde a T igual a cero en el modelo ideal."
+        en: "A positive value indicates accumulated translational thermal energy; zero corresponds to T equal to zero in the ideal model."
+      absolute_value_meaning:
+        es: "Cuantifica la escala energética macroscópica asociada al movimiento microscópico del gas."
+        en: "It quantifies the macroscopic energy scale associated with microscopic gas motion."
+    domain_checks:
+      - id: temperatura_y_numero_validos
+        condition: "temperatura>=0 and numero_particulas>0"
+        severity: error
+        message:
+          es: "La fórmula requiere temperatura absoluta no negativa y número de partículas positivo."
+          en: "The formula requires nonnegative absolute temperature and positive particle number."
+    coherence_checks:
+      - id: coherencia_con_energia_media
+        rule: "energia_total=numero_particulas*energia_media and energia_media=(3/2)*k_boltzmann*temperatura"
+        message:
+          es: "La energía total debe ser coherente con la energía media por partícula."
+          en: "Total energy must be coherent with the average energy per particle."
+    graph_implications:
+      es: "Para N fijo, la energía total frente a temperatura también es lineal."
+      en: "For fixed N, total energy versus temperature is also linear."
+    pedagogical_triggers:
+      - id: olvidar_factor_tres_medios
+        trigger:
+          es: "Usar k_B T en lugar de tres medios k_B T para tres grados traslacionales."
+          en: "Using k_B T instead of three halves k_B T for three translational degrees of freedom."
+        feedback:
+          es: "Cada grado cuadrático aporta un medio k_B T; en 3D traslacional son tres medios."
+          en: "Each quadratic degree contributes one half k_B T; in translational 3D this gives three halves."

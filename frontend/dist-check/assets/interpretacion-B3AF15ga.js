@@ -1,0 +1,376 @@
+const e=`version: 2
+id: interpretacion-problemas-tipo-examen
+leaf_id: problemas-tipo-examen
+nombre:
+  es: Interpretación de problemas tipo examen
+  en: Interpretation of exam-type problems
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: dinamica
+  parent_id: problemas-integrados
+  ruta_relativa: fisica-clasica/mecanica/dinamica/aplicaciones/problemas-integrados/problemas-tipo-examen
+dependencies:
+  formulas:
+    - segunda_ley_newton_sistema
+    - fuerza_normal_plano
+    - componente_tangencial_peso
+    - tension_cuerda_sistema
+    - fuerza_rozamiento_dinamica
+    - vinculo_aceleracion
+  magnitudes:
+    - masa_1
+    - masa_2
+    - tension_cuerda
+    - aceleracion_sistema
+    - coeficiente_rozamiento
+    - fuerza_normal
+    - fuerza_rozamiento
+    - angulo_plano
+    - aceleracion_gravedad
+    - componente_tangencial_peso
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen físico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  aceleracion_sistema:
+    summary_rules:
+      - id: acc_sum
+        when: "true"
+        status: info
+        text:
+          es: Resume el estado dinámico global nacido de la competencia entre el peso colgante y las resistencias.
+          en: Summarizes the global dynamic state arising from the competition between hanging weight and resistances.
+    physical_reading_rules:
+      - id: acc_phys
+        when: "true"
+        status: info
+        text:
+          es: Si aumenta, indica que la fuerza impulsora de masa_2 domina sobre la fricción y el ángulo de la rampa.
+          en: If it increases, it indicates that the driving force of masa_2 dominates over friction and ramp angle.
+    coherence_rules:
+      - id: acc_coh
+        when: "true"
+        status: ok
+        text:
+          es: Debe ser siempre inferior a g en este montaje pasivo impulsado por gravedad.
+          en: Must always be less than g in this gravity-driven passive setup.
+    model_validity_rules:
+      - id: acc_val
+        when: "true"
+        status: ok
+        text:
+          es: El modelo es válido mientras la aceleración no supere la gravedad y el vínculo permanezca rígido.
+          en: The model is valid as long as acceleration does not exceed gravity and the link remains rigid.
+    graph_rules:
+      - id: acc_graph
+        when: "true"
+        status: info
+        text:
+          es: Su representación gráfica como vector debe ser consistente con el sentido positivo del movimiento.
+          en: Its graphical representation as a vector must be consistent with the positive direction of motion.
+    likely_errors:
+      - id: acc_err
+        when: "true"
+        status: warning
+        text:
+          es: Un error frecuente es ignorar el signo negativo o intentar forzar un módulo positivo sin coherencia física.
+          en: A frequent error is to ignore the negative sign or attempt to force a positive magnitude without physical coherence.
+    next_step_rules:
+      - id: acc_next
+        when: "true"
+        status: info
+        text:
+          es: Usa este valor para verificar la tensión y asegurar que el cable no se haya aflojado.
+          en: Use this value to verify tension and ensure the cable has not slackened.
+
+  fuerza_normal:
+    summary_rules:
+      - id: norm_sum
+        when: "true"
+        status: info
+        text:
+          es: Representa la fuerza de reacción perpendicular ejercida por la rampa sobre el bloque apoyado.
+          en: Represents the perpendicular reaction force exerted by the ramp on the supported block.
+    physical_reading_rules:
+      - id: norm_phys
+        when: "true"
+        status: info
+        text:
+          es: Al aumentar, incrementa la capacidad de frenado del rozamiento dinámico sobre el plano.
+          en: As it increases, it increases the braking capacity of dynamic friction on the plane.
+    coherence_rules:
+      - id: norm_coh
+        when: "true"
+        status: info
+        text:
+          es: Su valor disminuye a medida que el ángulo de inclinación de la rampa se hace mayor.
+          en: Its value decreases as the ramp's inclination angle becomes greater.
+    model_validity_rules:
+      - id: norm_val
+        when: "true"
+        status: ok
+        text:
+          es: Este modelo de normal falla si el bloque pierde contacto con la superficie o experimenta saltos.
+          en: This normal model fails if the block loses contact with the surface or experiences jumps.
+    graph_rules:
+      - id: norm_graph
+        when: "true"
+        status: info
+        text:
+          es: En el diagrama, debe dibujarse siempre perpendicular a la superficie de contacto.
+          en: In the diagram, it must always be drawn perpendicular to the contact surface.
+    likely_errors:
+      - id: norm_err
+        when: "true"
+        status: warning
+        text:
+          es: Confundir la normal con el peso total en una rampa, olvidando la proyección trigonométrica.
+          en: Confusing the normal force with total weight on a ramp, forgetting the trigonometric projection.
+    next_step_rules:
+      - id: norm_next
+        when: "true"
+        status: info
+        text:
+          es: Integra este valor en la ley de Coulomb para cerrar el término resistivo del problema.
+          en: Integrate this value into Coulomb's law to close the resistive term of the problem.
+
+  tension_cuerda:
+    summary_rules:
+      - id: tens_sum
+        when: "true"
+        status: info
+        text:
+          es: Magnitud interna que transmite la interacción entre los cuerpos vinculados.
+          en: Internal magnitude that transmits the interaction between linked bodies.
+    physical_reading_rules:
+      - id: tens_phys
+        when: "true"
+        status: info
+        text:
+          es: Si el sistema acelera hacia la masa colgante, la tensión será menor que el peso de dicha masa.
+          en: If the system accelerates toward the hanging mass, tension will be less than the weight of that mass.
+    coherence_rules:
+      - id: tens_coh
+        when: "true"
+        status: info
+        text:
+          es: Debe ser uniforme en toda la cuerda bajo la hipótesis de poleas y cuerdas ideales.
+          en: It must be uniform throughout the rope under the ideal pulleys and ropes hypothesis.
+    model_validity_rules:
+      - id: tens_val
+        when: "true"
+        status: ok
+        text:
+          es: El modelo de tensión es válido solo si el cable permanece tenso; falla si el valor resulta negativo.
+          en: The tension model is valid only if the cable stays taut; it fails if the value is negative.
+    graph_rules:
+      - id: tens_graph
+        when: "true"
+        status: info
+        text:
+          es: Se representa con vectores opuestos en los puntos de anclaje de cada cuerpo.
+          en: Represented with opposite vectors at the anchor points of each body.
+    likely_errors:
+      - id: tens_err
+        when: "true"
+        status: warning
+        text:
+          es: Suponer que la tensión es igual al peso colgante ignorando que el sistema está acelerando.
+          en: Assuming tension equals the hanging weight while ignoring that the system is accelerating.
+    next_step_rules:
+      - id: tens_next
+        when: "true"
+        status: info
+        text:
+          es: Contrasta este valor con el límite de rotura del material para validar la seguridad del diseño.
+          en: Contrast this value with the material's breaking limit to validate the design safety.
+
+  componente_tangencial_peso:
+    summary_rules:
+      - id: pxt_sum
+        when: "true"
+        status: info
+        text:
+          es: Componente gravitatoria que actúa a lo largo de la línea de máxima pendiente.
+          en: Gravitational component acting along the line of maximum slope.
+    physical_reading_rules:
+      - id: pxt_phys
+        when: "true"
+        status: info
+        text:
+          es: Representa la fuerza motriz o resistente que nace exclusivamente de la inclinación.
+          en: Represents the driving or resisting force arising exclusively from the inclination.
+    coherence_rules:
+      - id: pxt_coh
+        when: "true"
+        status: info
+        text:
+          es: Crece proporcionalmente al seno del ángulo de inclinación de la rampa.
+          en: Increases proportionally to the sine of the ramp's inclination angle.
+    model_validity_rules:
+      - id: pxt_val
+        when: "true"
+        status: ok
+        text:
+          es: La validez de esta proyección requiere que el sistema de referencia esté alineado con el plano.
+          en: The validity of this projection requires the reference system to be aligned with the plane.
+    graph_rules:
+      - id: pxt_graph
+        when: "true"
+        status: info
+        text:
+          es: Debe dibujarse paralela a la superficie, apuntando siempre hacia abajo de la rampa.
+          en: It must be drawn parallel to the surface, always pointing down the ramp.
+    likely_errors:
+      - id: pxt_err
+        when: "true"
+        status: warning
+        text:
+          es: Equivocar la función trigonométrica usando el coseno en lugar del seno para la dirección rampa abajo.
+          en: Mistaking the trigonometric function by using cosine instead of sine for the down-ramp direction.
+    next_step_rules:
+      - id: pxt_next
+        when: "true"
+        status: info
+        text:
+          es: Incluye esta fuerza en el sumatorio del eje X para cerrar el balance dinámico.
+          en: Include this force in the X-axis summation to close the dynamic balance.
+
+  fuerza_rozamiento:
+    summary_rules:
+      - id: froz_sum
+        when: "true"
+        status: info
+        text:
+          es: Fuerza disipativa que se opone al movimiento relativo entre el bloque y la rampa.
+          en: Dissipative force that opposes the relative motion between the block and the ramp.
+    physical_reading_rules:
+      - id: froz_phys
+        when: "true"
+        status: info
+        text:
+          es: Su módulo es constante durante el deslizamiento y depende de la naturaleza de las superficies.
+          en: Its magnitude is constant during sliding and depends on the nature of the surfaces.
+    coherence_rules:
+      - id: froz_coh
+        when: "true"
+        status: info
+        text:
+          es: Es proporcional a la normal; si la inclinación aumenta, la fricción disponible disminuye.
+          en: It is proportional to the normal; if the inclination increases, the available friction decreases.
+    model_validity_rules:
+      - id: froz_val
+        when: "true"
+        status: ok
+        text:
+          es: El modelo de rozamiento dinámico solo es válido si existe deslizamiento real entre los cuerpos.
+          en: The dynamic friction model is only valid if there is real sliding between the bodies.
+    graph_rules:
+      - id: froz_graph
+        when: "true"
+        status: info
+        text:
+          es: Se representa como un vector paralelo a la rampa y opuesto al vector velocidad.
+          en: Represented as a vector parallel to the ramp and opposite to the velocity vector.
+    likely_errors:
+      - id: froz_err
+        when: "true"
+        status: warning
+        text:
+          es: Suponer que el rozamiento ayuda al movimiento o ignorar su dependencia de la fuerza normal.
+          en: Assuming friction assists motion or ignoring its dependence on the normal force.
+    next_step_rules:
+      - id: froz_next
+        when: "true"
+        status: info
+        text:
+          es: Úsalo en el balance de fuerzas del eje X para determinar la aceleración neta del sistema.
+          en: Use it in the X-axis force balance to determine the net system acceleration.
+
+  masa_2:
+    summary_rules:
+      - id: m2_sum
+        when: "true"
+        status: info
+        text:
+          es: Masa del cuerpo colgante necesaria para producir un estado dinámico específico.
+          en: Mass of the hanging body needed to produce a specific dynamic state.
+    physical_reading_rules:
+      - id: m2_phys
+        when: "true"
+        status: info
+        text:
+          es: Si la aceleración deseada es alta, el valor de esta masa deberá ser significativamente mayor.
+          en: If the desired acceleration is high, the value of this mass must be significantly greater.
+    coherence_rules:
+      - id: m2_coh
+        when: "true"
+        status: info
+        text:
+          es: El valor calculado debe ser positivo; una masa negativa indicaría un sistema físicamente imposible.
+          en: The calculated value must be positive; a negative mass would indicate a physically impossible system.
+    model_validity_rules:
+      - id: m2_val
+        when: "true"
+        status: ok
+        text:
+          es: La validez de este despeje asume que conocemos con precisión el rozamiento y la inclinación.
+          en: The validity of this solve assumes we precisely know the friction and inclination.
+    graph_rules:
+      - id: m2_graph
+        when: "true"
+        status: info
+        text:
+          es: Se asocia al bloque que cuelga verticalmente del extremo libre de la cuerda.
+          en: Associated with the block hanging vertically from the free end of the rope.
+    likely_errors:
+      - id: m2_err
+        when: "true"
+        status: warning
+        text:
+          es: Olvidar incluir la masa total en el término inercial al realizar el despeje algebraico.
+          en: Forgetting to include total mass in the inertial term when performing the algebraic solve.
+    next_step_rules:
+      - id: m2_next
+        when: "true"
+        status: info
+        text:
+          es: Compara este valor con las pesas disponibles para verificar la viabilidad del experimento.
+          en: Compare this value with available weights to verify the feasibility of the experiment.
+`;export{e as default};

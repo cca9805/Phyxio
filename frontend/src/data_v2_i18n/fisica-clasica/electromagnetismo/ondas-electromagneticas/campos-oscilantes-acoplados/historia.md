@@ -1,0 +1,19 @@
+## Problema histórico
+
+A mediados del siglo XIX, la física se encontraba fragmentada en tres disciplinas que parecían no tener relación alguna: la electrostática (el estudio de las cargas fijas), el magnetismo (las fuerzas entre imanes y corrientes) y la óptica (la naturaleza y comportamiento de la luz). Aunque científicos como Michael Faraday habían demostrado de forma experimental que existían conexiones profundas entre la electricidad y el magnetismo, la física carecía de un marco teórico unificado. La gran pregunta sin respuesta era: ¿cuál es la verdadera naturaleza física de la luz y cómo se relaciona con las fuerzas eléctricas y magnéticas que gobiernan la materia?
+
+## Dificultad conceptual previa
+
+El principal obstáculo intelectual que impedía avanzar era el dogma newtoniano de que todas las interacciones físicas debían ser mecánicas y requerir contacto directo o un soporte material elástico. Dado que todas las ondas conocidas hasta la fecha (como el sonido, las ondas sísmicas o las olas superficiales) consistían en la vibración colectiva de partículas materiales, se asumió de forma universal que la luz debía propagarse a través de un medio físico invisible extremadamente rígido pero sin fricción que llenaba todo el cosmos, denominado el éter luminífero. Esta hipótesis bloqueaba la comprensión de que los campos eléctrico [[amplitud_del_campo_electrico]] y magnético [[amplitud_del_campo_magnetico]] son entidades físicas reales capaces de existir y vibrar de forma autónoma en el vacío puro sin soporte mecánico.
+
+## Qué cambió
+
+El avance definitivo llegó en 1865, cuando el físico escocés James Clerk Maxwell formuló su revolucionario conjunto de ecuaciones matemáticas de la electrodinámica. Maxwell introdujo una modificación crucial en la ley de Ampère: la corriente de desplazamiento, postulando que un campo eléctrico variable en el tiempo es capaz de inducir un campo magnético espacial, logrando una simetría matemática perfecta. Al combinar estas ecuaciones, Maxwell dedujo una ecuación diferencial de onda que describía la propagación de perturbaciones electromagnéticas. Al calcular teóricamente la velocidad de estas ondas basándose únicamente en las constantes medidas en el laboratorio de permeabilidad [[mu0]] y permitividad [[epsilon0]], descubrió que el resultado coincidía exactamente con la velocidad medida de la luz. Esto le permitió declarar con total convicción científica que la luz era, en realidad, una onda electromagnética.
+
+## Impacto en la física
+
+La síntesis de Maxwell representó la primera gran unificación de la historia de la física clásica, fundiendo la electricidad, el magnetismo y la óptica en una única teoría electromagnética coherente. Este logro demostró que la luz visible es solo una pequeña banda de un espectro continuo de ondas electromagnéticas mucho más amplio. El concepto de campo electromagnético pasó de ser una simple herramienta de cálculo matemático a convertirse en una entidad física real y fundamental que transporta energía e impulso a través del espacio-tiempo, redefiniendo por completo la arquitectura conceptual de la física posterior.
+
+## Conexión con física moderna
+
+La constatación de que la velocidad de propagación de las ondas electromagnéticas [[velocidad_de_la_luz_en_el_vacio]] es una constante universal independiente del estado de movimiento del emisor o del observador fue la chispa directa que inspiró a Albert Einstein a formular su Teoría de la Relatividad Especial en 1905, derribando los conceptos absolutos de espacio y tiempo de Newton. En la física contemporánea, este concepto fundamenta la electrodinámica cuántica (QED), donde la interacción electromagnética se describe a través del intercambio de fotones virtuales (cuantos de luz), constituyendo el pilar central del Modelo Estándar de la física de partículas y de tecnologías cotidianas como las telecomunicaciones por satélite.

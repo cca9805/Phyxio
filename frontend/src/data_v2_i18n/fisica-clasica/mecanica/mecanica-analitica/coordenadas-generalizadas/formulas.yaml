@@ -1,0 +1,232 @@
+version: 5
+topic:
+  id: coordenadas-generalizadas
+  title:
+    es: Coordenadas generalizadas
+    en: Generalized Coordinates
+
+formulas:
+- id: posicion_generalizada
+  title: { es: Posición como función de coordenadas generalizadas, en: Position as a function of generalized coordinates }
+  equation: r_vec = r_vec(q,t)
+  latex: \vec r=\vec r(q_i,t)
+  category: parametrizacion
+  relation_type: mapa_configuracion
+  physical_meaning:
+    es: Expresa la posición física como imagen de las coordenadas generalizadas y del tiempo.
+    en: Expresses physical position as the image of generalized coordinates and time.
+  constraints: [ carta_valida, coordenadas_independientes ]
+  validity:
+    es: Válida localmente mientras la carta describa la configuración sin ambigüedad.
+    en: Locally valid while the chart describes the configuration without ambiguity.
+  dimension_check: "[L] = [L]"
+  calculable: false
+  motivo_no_calculable: { es: "Requiere especificar el mapa geométrico concreto.", en: "Requires specifying the concrete geometric map." }
+  used_in: [ velocidad_generalizada, energia_cinetica_generalizada ]
+  interpretation_tags: [ coordenadas_generalizadas, parametrizacion, configuracion ]
+  result_semantics:
+    target: r_vec
+  domain_checks: [ carta_no_singular ]
+  coherence_checks: [ posicion_con_dimension_de_longitud ]
+  graph_implications: "El gráfico debe mostrar cómo cambiar [[q]] mueve la posición física [[r_vec]]."
+  pedagogical_triggers: [ confundir_coordenada_con_posicion, carta_singular ]
+  rearrangements:
+  - target: r_vec
+    equation: r_vec(q,t)
+  variables: [ r_vec, q, t ]
+
+- id: velocidad_generalizada
+  title: { es: Velocidad inducida por coordenadas generalizadas, en: Velocity induced by generalized coordinates }
+  equation: v = qdot
+  latex: \vec v=\sum_i\frac{\partial \vec r}{\partial q_i}\dot q_i+\frac{\partial \vec r}{\partial t}
+  category: cinematica_generalizada
+  relation_type: derivada_temporal
+  physical_meaning:
+    es: Obtiene la velocidad física diferenciando la parametrización respecto a coordenadas y tiempo.
+    en: Obtains physical velocity by differentiating the parametrization with respect to coordinates and time.
+  constraints: [ mapa_diferenciable ]
+  validity:
+    es: Válida para mapas de configuración diferenciables y coordenadas suficientemente suaves.
+    en: Valid for differentiable configuration maps and sufficiently smooth coordinates.
+  dimension_check: "[L T^-1] = [L/q][q T^-1]"
+  calculable: false
+  motivo_no_calculable: { es: "Requiere conocer derivadas parciales del mapa de posición.", en: "Requires knowing partial derivatives of the position map." }
+  used_in: [ energia_cinetica_generalizada ]
+  interpretation_tags: [ velocidad, jacobiano, coordenadas_generalizadas ]
+  result_semantics:
+    target: v
+  domain_checks: [ qdot_finita ]
+  coherence_checks: [ si_qdot_es_cero_y_no_hay_dependencia_temporal_la_velocidad_se_anula ]
+  graph_implications: "El gráfico debe mostrar que [[qdot]] controla la velocidad física [[v]]."
+  pedagogical_triggers: [ olvidar_derivada_temporal_explicita, confundir_qdot_con_v ]
+  rearrangements:
+  - target: v
+    equation: v
+  variables: [ v, q, qdot, r_vec, t ]
+
+- id: energia_cinetica_generalizada
+  title: { es: Energía cinética en coordenadas generalizadas, en: Kinetic energy in generalized coordinates }
+  equation: T = 1/2*m*v^2
+  latex: T=\frac12 m\,\vec v\cdot\vec v
+  category: energia
+  relation_type: energia_cinetica
+  physical_meaning:
+    es: Calcula la energía cinética usando la velocidad física inducida por las coordenadas generalizadas.
+    en: Computes kinetic energy using the physical velocity induced by generalized coordinates.
+  constraints: [ m > 0 ]
+  validity:
+    es: Válida para una partícula o elemento equivalente con masa constante y velocidad bien definida.
+    en: Valid for a particle or equivalent element with constant mass and well-defined velocity.
+  dimension_check: "[M L^2 T^-2] = [M][L^2 T^-2]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[m]] y [[v]].", en: "Requires [[m]] and [[v]]." }
+  used_in: [ modelos, teoria, ejemplos, interpretacion ]
+  interpretation_tags: [ energia, metrica_cinetica, coordenadas_generalizadas ]
+  result_semantics:
+    target: T
+  domain_checks: [ m > 0 ]
+  coherence_checks: [ T >= 0 ]
+  graph_implications: "La energía [[T]] crece cuadráticamente con la rapidez física inducida por [[qdot]]."
+  pedagogical_triggers: [ usar_qdot_como_si_fuera_v, ignorar_metrica ]
+  rearrangements:
+  - target: T
+    equation: 0.5*m*v^2
+  variables: [ T, m, v, qdot ]
+
+- id: x_desde_polar
+  title: { es: Componente x desde coordenadas polares, en: x component from polar coordinates }
+  equation: x = r*cos(theta)
+  latex: x=r\cos(\\theta)
+  category: cambio_de_base
+  relation_type: proyeccion_cartesiana
+  physical_meaning:
+    es: Convierte la coordenada radial y angular en la proyección cartesiana horizontal.
+    en: Converts radial and angular coordinates into horizontal Cartesian projection.
+  constraints: [ r >= 0 ]
+  validity:
+    es: Válida en el plano euclídeo con convención angular consistente.
+    en: Valid in Euclidean plane with a consistent angular convention.
+  dimension_check: "[L] = [L]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[r]] y [[theta]].", en: "Requires [[r]] and [[theta]]." }
+  used_in: [ radio_cartesiano ]
+  interpretation_tags: [ coordenadas, proyeccion, cambio_de_representacion ]
+  result_semantics:
+    target: x
+  domain_checks: [ r >= 0 ]
+  coherence_checks: [ abs(x) <= r ]
+  graph_implications: "Para [[r]] fijo, [[x]] oscila con [[theta]] y cambia de signo entre cuadrantes."
+  pedagogical_triggers: [ cuadrantes, seno_coseno ]
+  rearrangements:
+  - target: x
+    equation: r*cos(theta)
+  - target: r
+    equation: x/cos(theta)
+  variables: [ x, r, theta ]
+
+- id: y_desde_polar
+  title: { es: Componente y desde coordenadas polares, en: y component from polar coordinates }
+  equation: y = r*sin(theta)
+  latex: y=r\sin(\\theta)
+  category: cambio_de_base
+  relation_type: proyeccion_cartesiana
+  physical_meaning:
+    es: Convierte la coordenada radial y angular en la proyección cartesiana vertical.
+    en: Converts radial and angular coordinates into vertical Cartesian projection.
+  constraints: [ r >= 0 ]
+  validity:
+    es: Válida en el plano euclídeo con referencia angular bien definida.
+    en: Valid in Euclidean plane with a well-defined angular reference.
+  dimension_check: "[L] = [L]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[r]] y [[theta]].", en: "Requires [[r]] and [[theta]]." }
+  used_in: [ radio_cartesiano ]
+  interpretation_tags: [ coordenadas, proyeccion, cambio_de_representacion ]
+  result_semantics:
+    target: y
+  domain_checks: [ r >= 0 ]
+  coherence_checks: [ abs(y) <= r ]
+  graph_implications: "Para [[r]] fijo, [[y]] alcanza extremos en theta = pi/2 y theta = -pi/2."
+  pedagogical_triggers: [ cuadrantes, seno_coseno ]
+  rearrangements:
+  - target: y
+    equation: r*sin(theta)
+  - target: r
+    equation: y/sin(theta)
+  variables: [ y, r, theta ]
+
+- id: radio_cartesiano
+  title: { es: Radio desde coordenadas cartesianas, en: Radius from Cartesian coordinates }
+  equation: r = sqrt(x^2 + y^2)
+  latex: r=\sqrt{x^2+y^2}
+  category: cambio_de_base
+  relation_type: norma
+  physical_meaning:
+    es: Recupera la distancia al origen a partir de las componentes cartesianas.
+    en: Recovers distance to the origin from Cartesian components.
+  constraints: [ x^2 + y^2 >= 0 ]
+  validity:
+    es: Válida en geometría euclídea bidimensional.
+    en: Valid in two-dimensional Euclidean geometry.
+  dimension_check: "[L] = sqrt([L]^2 + [L]^2)"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[x]] y [[y]].", en: "Requires [[x]] and [[y]]." }
+  used_in: [ x_desde_polar, y_desde_polar ]
+  interpretation_tags: [ distancia, geometria, conversion ]
+  result_semantics:
+    target: r
+  domain_checks: [ x^2 + y^2 >= 0 ]
+  coherence_checks: [ r >= 0 ]
+  graph_implications: "Curvas de [[r]] constante corresponden a circunferencias en el plano [[x]]-[[y]]."
+  pedagogical_triggers: [ pitagoras, norma ]
+  rearrangements:
+  - target: r
+    equation: sqrt(x^2 + y^2)
+  variables: [ r, x, y ]
+
+- id: grados_libertad
+  title: { es: Conteo de grados de libertad, en: Degree-of-freedom count }
+  equation: f = 3*n - C
+  latex: f=3n-C
+  category: modelizacion
+  relation_type: conteo_estructural
+  physical_meaning:
+    es: Estima las coordenadas independientes requeridas tras imponer ligaduras.
+    en: Estimates independent coordinates required after applying constraints.
+  constraints: [ n >= 1, C >= 0, C <= 3*n ]
+  validity:
+    es: Válida para conteo estructural de sistemas tridimensionales discretos con ligaduras independientes.
+    en: Valid for structural counting of discrete three-dimensional systems with independent constraints.
+  dimension_check: "[1] = [1]"
+  calculable: true
+  motivo_no_calculable: { es: "Requiere [[n]] y [[C]].", en: "Requires [[n]] and [[C]]." }
+  used_in: []
+  interpretation_tags: [ ligaduras, modelizacion, reduccion ]
+  result_semantics:
+    target: f
+  domain_checks: [ n >= 1, C >= 0, C <= 3*n ]
+  coherence_checks: [ f >= 0 ]
+  graph_implications: "Al aumentar [[C]] con [[n]] fijo, [[f]] decrece linealmente."
+  pedagogical_triggers: [ conteo, independencia_de_ligaduras ]
+  rearrangements:
+  - target: f
+    equation: 3*n - C
+  - target: C
+    equation: 3*n - f
+  variables: [ f, n, C ]
+
+ui:
+  default_formula: posicion_generalizada
+  groups:
+  - title:
+      es: N?cleo generalizado
+      en: Generalized core
+    items: [ posicion_generalizada, velocidad_generalizada, energia_cinetica_generalizada ]
+  - title:
+      es: Conversión de coordenadas
+      en: Coordinate conversion
+    items: [ x_desde_polar, y_desde_polar, radio_cartesiano ]
+  - title:
+      es: Estructura del sistema
+      en: System structure
+    items: [ grados_libertad ]

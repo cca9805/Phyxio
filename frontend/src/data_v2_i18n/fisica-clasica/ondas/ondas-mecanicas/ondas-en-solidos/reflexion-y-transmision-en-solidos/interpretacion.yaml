@@ -1,0 +1,952 @@
+version: 5.0.0
+id: reflexion-y-transmision-en-solidos
+leaf_id: reflexion-y-transmision-en-solidos
+nombre:
+  es: Reflexion y transmision en solidos
+  en: Reflection and Transmission in Solids
+scope:
+  area: fisica-clasica
+  bloque: ondas
+  subbloque: ondas-mecanicas
+  parent_id: ondas-en-solidos
+  ruta_relativa: fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/reflexion-y-transmision-en-solidos
+  orden: 232400
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - coeficiente_reflexion_amplitud
+  - coeficiente_transmision_amplitud
+  - coeficiente_reflexion_energia
+  - coeficiente_transmision_energia
+  - impedancia_acustica
+  magnitudes:
+  - coeficiente_de_reflexion_en_amplitud
+  - coeficiente_de_transmision_en_amplitud
+  - coeficiente_de_reflexion_en_energia
+  - coeficiente_de_transmision_en_energia
+  - impedancia_acustica_del_medio_1
+  - impedancia_acustica_del_medio_2
+  - impedancia_acustica_generica
+  - rho_medio
+  - v_onda
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: ondas
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+  - Svg
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: coeficiente_de_reflexion_en_amplitud
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  coeficiente_de_reflexion_en_amplitud:
+    enabled: true
+    magnitude_type: coefficient
+    semantic_role:
+      es: Fraccion de amplitud reflejada y fase de la onda reflejada.
+      en: Fraction of reflected amplitude and phase of reflected wave.
+    summary_rules:
+    - id: ramp_summary_zero
+      when: abs(R_amp) < 0.01
+      status: ok
+      text:
+        es: '[[R_amp]] cercano a cero indica acoplamiento casi perfecto. Practicamente no hay reflexion.'
+        en: '[[R_amp]] near zero indicates nearly perfect matching. Practically no reflection.'
+    - id: ramp_summary_high
+      when: abs(R_amp) > 0.8
+      status: ok
+      text:
+        es: '[[R_amp]] cercano a la unidad indica contraste de impedancias extremo. La mayor parte de la onda se refleja.'
+        en: '[[R_amp]] near unity indicates extreme impedance contrast. Most of the wave is reflected.'
+    - id: ramp_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[R_amp]] indica la fraccion de amplitud reflejada. Su signo revela si hay inversion de fase.'
+        en: '[[R_amp]] indicates the fraction of reflected amplitude. Its sign reveals whether there is phase inversion.'
+    physical_reading_rules:
+    - id: ramp_reading_positive
+      when: R_amp > 0
+      status: ok
+      text:
+        es: 'R positivo: el segundo medio tiene mayor impedancia. La onda reflejada mantiene la fase de la incidente.'
+        en: 'Positive R: the second medium has higher impedance. The reflected wave maintains the incident phase.'
+    - id: ramp_reading_negative
+      when: R_amp < 0
+      status: ok
+      text:
+        es: 'R negativo: el segundo medio tiene menor impedancia. La onda reflejada invierte la fase.'
+        en: 'Negative R: the second medium has lower impedance. The reflected wave inverts its phase.'
+    - id: ramp_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[R_amp]] depende del cociente de impedancias. Un valor nulo indica impedancias identicas.'
+        en: '[[R_amp]] depends on the impedance ratio. A zero value indicates identical impedances.'
+    coherence_rules:
+    - id: ramp_coherence_range
+      when: abs(R_amp) > 1
+      status: error
+      text:
+        es: '[[R_amp]] fuera del rango [-1, 1]. Revisar el calculo de impedancias.'
+        en: '[[R_amp]] outside range [-1, 1]. Review impedance calculation.'
+    - id: ramp_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[R_amp]] esta entre -1 y 1 y que su signo es coherente con la relacion Z_2/Z_1.
+        en: Verify that [[R_amp]] is between -1 and 1 and its sign is consistent with the Z_2/Z_1 ratio.
+    model_validity_rules:
+    - id: ramp_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo es valido para incidencia normal en interfaz plana perfectamente unida.
+        en: The model is valid for normal incidence at a flat perfectly bonded interface.
+    graph_rules:
+    - id: ramp_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: En la grafica R vs Z_2/Z_1, R cruza por cero cuando Z_2 es igual a Z_1 y se satura en los extremos.
+        en: In the R vs Z_2/Z_1 graph, R crosses zero when Z_2 equals Z_1 and saturates at the extremes.
+    likely_errors:
+    - id: ramp_error_sign
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[coeficiente_de_reflexion_en_amplitud]] con una lectura aislada es un error frecuente: Verificar el
+          orden de las impedancias en la formula: Z_2 menos Z_1 en el numerador (medio 1 es el de incidencia).'
+        en: 'A common mistake is to interpret [[coeficiente_de_reflexion_en_amplitud]] in isolation: Check the impedance order
+          in the formula: Z_2 minus Z_1 in the numerator (medium 1 is the incidence medium).'
+    next_step_rules:
+    - id: ramp_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Elevar al cuadrado para obtener [[R_E]] y verificar la conservacion de energia con [[T_E]].
+        en: Square to obtain [[R_E]] and verify energy conservation with [[T_E]].
+    physical_intuition:
+    - id: coeficiente_de_reflexion_en_amplitud_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[coeficiente_de_reflexion_en_amplitud]] describe el estado dinámico.
+        en: Intuitively, [[coeficiente_de_reflexion_en_amplitud]] describes the dynamic state.
+    limiting_cases:
+    - id: coeficiente_de_reflexion_en_amplitud_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[coeficiente_de_reflexion_en_amplitud]].
+        en: Check limiting cases of [[coeficiente_de_reflexion_en_amplitud]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  impedancia_acustica_del_medio_2:
+    enabled: true
+    magnitude_type: impedance
+    semantic_role:
+      es: Impedancia acustica del medio transmitido.
+      en: Acoustic impedance of the transmitted medium.
+    summary_rules:
+    - id: z2_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[Z_2]] caracteriza el medio al que intenta pasar la onda. Su relacion con [[Z_1]] controla el reparto energetico.'
+        en: '[[Z_2]] characterises the medium the wave tries to enter. Its relation to [[Z_1]] controls energy partition.'
+    physical_reading_rules:
+    - id: z2_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: Si [[Z_2]] supera a [[Z_1]], la reflexion no invierte fase; si es menor, la reflexion invierte fase.
+        en: If [[Z_2]] exceeds [[Z_1]], reflection does not invert phase; if it is smaller, reflection inverts phase.
+    coherence_rules:
+    - id: z2_coherence_positive
+      when: Z_2 <= 0
+      status: error
+      text:
+        es: '[[Z_2]] debe ser positiva; revisar densidad y velocidad del medio transmitido.'
+        en: '[[Z_2]] must be positive; review density and velocity of the transmitted medium.'
+    - id: z2_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[Z_2]] corresponde al segundo medio y no al medio incidente.
+        en: Verify that [[Z_2]] corresponds to the second medium, not the incident medium.
+    model_validity_rules:
+    - id: z2_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: La definicion de [[Z_2]] asume medio transmitido homogeneo y contacto ideal en la interfaz.
+        en: The definition of [[Z_2]] assumes a homogeneous transmitted medium and ideal contact at the interface.
+    graph_rules:
+    - id: z2_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: Variar [[Z_2]] respecto a [[Z_1]] desplaza el punto sobre la curva de coeficientes.
+        en: Varying [[Z_2]] relative to [[Z_1]] moves the point along the coefficient curve.
+    likely_errors:
+    - id: z2_error_swap
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[impedancia_acustica_del_medio_2]] con una lectura aislada es un error frecuente: Asignar mal [[Z_2]]
+          puede convertir una reflexion con inversion en una sin inversion.'
+        en: 'A common mistake is to interpret [[impedancia_acustica_del_medio_2]] in isolation: Assigning [[Z_2]] incorrectly
+          can turn phase-inverting reflection into non-inverting reflection.'
+    next_step_rules:
+    - id: z2_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Usar el cociente [[Z_2]]/[[Z_1]] para leer [[R_amp]], [[R_E]] y [[T_E]].
+        en: Use the [[Z_2]]/[[Z_1]] ratio to read [[R_amp]], [[R_E]] and [[T_E]].
+    physical_intuition:
+    - id: impedancia_acustica_del_medio_2_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[impedancia_acustica_del_medio_2]] describe el estado dinámico.
+        en: Intuitively, [[impedancia_acustica_del_medio_2]] describes the dynamic state.
+    limiting_cases:
+    - id: impedancia_acustica_del_medio_2_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[impedancia_acustica_del_medio_2]].
+        en: Check limiting cases of [[impedancia_acustica_del_medio_2]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  impedancia_acustica_del_medio_1:
+    enabled: true
+    magnitude_type: impedance
+    semantic_role:
+      es: Impedancia acustica del medio incidente.
+      en: Acoustic impedance of the incident medium.
+    summary_rules:
+    - id: z1_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[Z_1]] caracteriza el medio desde el que llega la onda. Su contraste con [[Z_2]] determina el signo y la magnitud
+          de la reflexion.'
+        en: '[[Z_1]] characterises the medium from which the wave arrives. Its contrast with [[Z_2]] determines reflection
+          sign and magnitude.'
+    physical_reading_rules:
+    - id: z1_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: Si [[Z_1]] es mucho mayor que [[Z_2]], la reflexion tiende a invertir fase y la transmision puede tener amplitud
+          mayor que uno.
+        en: If [[Z_1]] is much greater than [[Z_2]], reflection tends to invert phase and transmission amplitude may exceed
+          one.
+    coherence_rules:
+    - id: z1_coherence_positive
+      when: Z_1 <= 0
+      status: error
+      text:
+        es: '[[Z_1]] debe ser positiva; revisar densidad y velocidad del medio incidente.'
+        en: '[[Z_1]] must be positive; review density and velocity of the incident medium.'
+    - id: z1_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Usar [[Z_1]] siempre como medio de incidencia para no invertir el signo de [[R_amp]].
+        en: Use [[Z_1]] always as the incidence medium to avoid inverting the sign of [[R_amp]].
+    model_validity_rules:
+    - id: z1_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: La definicion de [[Z_1]] es valida para onda plana en medio homogeneo e isotropo.
+        en: The definition of [[Z_1]] is valid for a plane wave in a homogeneous isotropic medium.
+    graph_rules:
+    - id: z1_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: En la grafica, [[Z_1]] fija la escala del cociente [[Z_2]]/[[Z_1]].
+        en: On the graph, [[Z_1]] sets the scale of the [[Z_2]]/[[Z_1]] ratio.
+    likely_errors:
+    - id: z1_error_swap
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[impedancia_acustica_del_medio_1]] con una lectura aislada es un error frecuente: No intercambiar
+          [[Z_1]] y [[Z_2]]: cambia el signo de [[R_amp]].'
+        en: 'A common mistake is to interpret [[impedancia_acustica_del_medio_1]] in isolation: Do not swap [[Z_1]] and [[Z_2]]:
+          it changes the sign of [[R_amp]].'
+    next_step_rules:
+    - id: z1_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Comparar [[Z_1]] con [[Z_2]] para estimar si domina reflexion o transmision.
+        en: Compare [[Z_1]] with [[Z_2]] to estimate whether reflection or transmission dominates.
+    physical_intuition:
+    - id: impedancia_acustica_del_medio_1_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[impedancia_acustica_del_medio_1]] describe el estado dinámico.
+        en: Intuitively, [[impedancia_acustica_del_medio_1]] describes the dynamic state.
+    limiting_cases:
+    - id: impedancia_acustica_del_medio_1_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[impedancia_acustica_del_medio_1]].
+        en: Check limiting cases of [[impedancia_acustica_del_medio_1]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  coeficiente_de_transmision_en_amplitud:
+    enabled: true
+    magnitude_type: coefficient
+    semantic_role:
+      es: Fraccion de amplitud que penetra en el segundo medio.
+      en: Fraction of amplitude penetrating the second medium.
+    summary_rules:
+    - id: tamp_summary_high
+      when: T_amp > 1.5
+      status: ok
+      text:
+        es: '[[T_amp]] mayor que 1: la amplitud crece en el segundo medio (impedancia menor). No viola la conservacion de
+          energia.'
+        en: '[[T_amp]] greater than 1: amplitude grows in the second medium (lower impedance). Does not violate energy conservation.'
+    - id: tamp_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[T_amp]] indica la fraccion de amplitud transmitida. Combinado con [[R_amp]], satisface la continuidad de desplazamiento.'
+        en: '[[T_amp]] indicates the transmitted amplitude fraction. Combined with [[R_amp]], it satisfies displacement continuity.'
+    physical_reading_rules:
+    - id: tamp_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: La amplitud transmitida depende del cociente 2*Z_1 / (Z_1 + Z_2). Crece cuando Z_2 disminuye.
+        en: Transmitted amplitude depends on the ratio 2*Z_1 / (Z_1 + Z_2). Grows when Z_2 decreases.
+    coherence_rules:
+    - id: tamp_coherence_range
+      when: T_amp < 0 || T_amp > 2
+      status: error
+      text:
+        es: '[[T_amp]] fuera del rango [0, 2]. Revisar los valores de impedancia.'
+        en: '[[T_amp]] outside range [0, 2]. Review impedance values.'
+    - id: tamp_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[T_amp]] esta entre 0 y 2 y que 1 + R es igual a T (continuidad).
+        en: Verify that [[T_amp]] is between 0 and 2 and that 1 + R equals T (continuity).
+    model_validity_rules:
+    - id: tamp_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: Valido en incidencia normal. En incidencia oblicua, T depende tambien del angulo.
+        en: Valid at normal incidence. At oblique incidence, T also depends on the angle.
+    graph_rules:
+    - id: tamp_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[T_amp]] vale 1 cuando las impedancias coinciden y decrece/crece simetricamente con el contraste.'
+        en: '[[T_amp]] equals 1 when impedances match and decreases/increases symmetrically with contrast.'
+    likely_errors:
+    - id: tamp_error_energy
+      when: 'true'
+      status: warning
+      text:
+        es: No confundir T > 1 con violacion de conservacion. La energia se verifica con [[T_E]], no con [[T_amp]].
+        en: Do not confuse T > 1 with conservation violation. Energy is verified with [[T_E]], not [[T_amp]].
+    next_step_rules:
+    - id: tamp_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Calcular [[T_E]] para verificar la fraccion de energia efectivamente transmitida.
+        en: Calculate [[T_E]] to verify the fraction of energy actually transmitted.
+    physical_intuition:
+    - id: coeficiente_de_transmision_en_amplitud_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[coeficiente_de_transmision_en_amplitud]] describe el estado dinámico.
+        en: Intuitively, [[coeficiente_de_transmision_en_amplitud]] describes the dynamic state.
+    limiting_cases:
+    - id: coeficiente_de_transmision_en_amplitud_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[coeficiente_de_transmision_en_amplitud]].
+        en: Check limiting cases of [[coeficiente_de_transmision_en_amplitud]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  coeficiente_de_reflexion_en_energia:
+    enabled: true
+    magnitude_type: coefficient
+    semantic_role:
+      es: Fraccion de energia incidente reflejada.
+      en: Fraction of incident energy reflected.
+    summary_rules:
+    - id: re_summary_total
+      when: R_E > 0.95
+      status: ok
+      text:
+        es: 'Reflexion casi total: mas del 95 % de la energia rebota. Contraste de impedancias extremo.'
+        en: 'Nearly total reflection: more than 95% of energy bounces back. Extreme impedance contrast.'
+    - id: re_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[R_E]] indica la fraccion de potencia reflejada. Su complemento a 1 es la transmision energetica.'
+        en: '[[R_E]] indicates the fraction of reflected power. Its complement to 1 is the energy transmission.'
+    physical_reading_rules:
+    - id: re_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[R_E]] es el cuadrado de [[R_amp]]. Siempre positivo. Determina cuanta señal de eco se recibe.'
+        en: '[[R_E]] is the square of [[R_amp]]. Always positive. Determines how much echo signal is received.'
+    coherence_rules:
+    - id: re_coherence_conservation
+      when: abs(R_E + T_E - 1) > 0.01
+      status: error
+      text:
+        es: La suma [[R_E]] + [[T_E]] no es 1. Se viola la conservacion de energia. Revisar el calculo.
+        en: The sum [[R_E]] + [[T_E]] is not 1. Energy conservation is violated. Review calculation.
+    - id: re_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que 0 <= [[R_E]] <= 1 y que [[R_E]] + [[T_E]] sume exactamente 1.
+        en: Verify that 0 <= [[R_E]] <= 1 and that [[R_E]] + [[T_E]] sums to exactly 1.
+    model_validity_rules:
+    - id: re_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo asume interfaz ideal sin disipacion. En interfaces reales puede haber perdidas adicionales.
+        en: The model assumes an ideal interface without dissipation. Real interfaces may have additional losses.
+    graph_rules:
+    - id: re_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[R_E]] es una parabola que vale 0 cuando Z_2/Z_1 es 1 y se acerca a 1 en los extremos.'
+        en: '[[R_E]] is a parabola that equals 0 when Z_2/Z_1 is 1 and approaches 1 at the extremes.'
+    likely_errors:
+    - id: re_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[coeficiente_de_reflexion_en_energia]] con una lectura aislada es un error frecuente: Recordar que
+          [[R_E]] es el cuadrado de [[R_amp]], no su valor absoluto.'
+        en: 'A common mistake is to interpret [[coeficiente_de_reflexion_en_energia]] in isolation: Remember that [[R_E]]
+          is the square of [[R_amp]], not its absolute value.'
+    next_step_rules:
+    - id: re_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Calcular [[T_E]] como 1 - [[R_E]] y comparar con el resultado directo para verificar coherencia.
+        en: Calculate [[T_E]] as 1 - [[R_E]] and compare with the direct result to verify coherence.
+    physical_intuition:
+    - id: coeficiente_de_reflexion_en_energia_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[coeficiente_de_reflexion_en_energia]] describe el estado dinámico.
+        en: Intuitively, [[coeficiente_de_reflexion_en_energia]] describes the dynamic state.
+    limiting_cases:
+    - id: coeficiente_de_reflexion_en_energia_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[coeficiente_de_reflexion_en_energia]].
+        en: Check limiting cases of [[coeficiente_de_reflexion_en_energia]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  coeficiente_de_transmision_en_energia:
+    enabled: true
+    magnitude_type: coefficient
+    semantic_role:
+      es: Fraccion de energia incidente transmitida al segundo medio.
+      en: Fraction of incident energy transmitted to the second medium.
+    summary_rules:
+    - id: te_summary_perfect
+      when: T_E > 0.99
+      status: ok
+      text:
+        es: 'Transmision casi perfecta: las impedancias son practicamente iguales.'
+        en: 'Nearly perfect transmission: impedances are practically equal.'
+    - id: te_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[T_E]] indica la eficiencia de transmision energetica a traves de la interfaz.'
+        en: '[[T_E]] indicates the energy transmission efficiency through the interface.'
+    physical_reading_rules:
+    - id: te_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[T_E]] depende del producto 4*Z_1*Z_2 dividido entre (Z_1+Z_2) al cuadrado. Es maximo cuando Z_1 es igual a
+          Z_2.'
+        en: '[[T_E]] depends on the product 4*Z_1*Z_2 divided by (Z_1+Z_2) squared. Maximum when Z_1 equals Z_2.'
+    coherence_rules:
+    - id: te_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que 0 <= [[T_E]] <= 1 y que coincide con 1 - [[R_E]].
+        en: Verify that 0 <= [[T_E]] <= 1 and that it matches 1 - [[R_E]].
+    model_validity_rules:
+    - id: te_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: Valido para interfaz ideal. En presencia de capas intermedias, el resultado puede diferir.
+        en: Valid for ideal interface. In the presence of intermediate layers, the result may differ.
+    graph_rules:
+    - id: te_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[T_E]] es complementario a [[R_E]]: alcanza su maximo (1) cuando el cociente de impedancias es 1.'
+        en: '[[T_E]] is complementary to [[R_E]]: reaches its maximum (1) when impedance ratio is 1.'
+    likely_errors:
+    - id: te_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: No confundir [[T_E]] con [[T_amp]]. La amplitud puede superar 1, pero la energia transmitida nunca excede la incidente.
+        en: Do not confuse [[T_E]] with [[T_amp]]. Amplitude can exceed 1, but transmitted energy never exceeds the incident.
+    next_step_rules:
+    - id: te_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Si se necesita maximizar [[T_E]], considerar el diseño de una capa de adaptacion de impedancia.
+        en: If maximising [[T_E]] is needed, consider designing an impedance-matching layer.
+    physical_intuition:
+    - id: coeficiente_de_transmision_en_energia_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[coeficiente_de_transmision_en_energia]] describe el estado dinámico.
+        en: Intuitively, [[coeficiente_de_transmision_en_energia]] describes the dynamic state.
+    limiting_cases:
+    - id: coeficiente_de_transmision_en_energia_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[coeficiente_de_transmision_en_energia]].
+        en: Check limiting cases of [[coeficiente_de_transmision_en_energia]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  impedancia_acustica_generica:
+    enabled: true
+    magnitude_type: impedance
+    semantic_role:
+      es: Resistencia del medio al paso de la onda.
+      en: Medium resistance to wave passage.
+    summary_rules:
+    - id: zm_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[Z_medio]] resume en un solo valor la capacidad del medio de oponerse al paso de la onda. Es el dato de entrada
+          para calcular los coeficientes de reflexion.'
+        en: '[[Z_medio]] summarises in a single value the medium''s capacity to oppose wave passage. It is the input for calculating
+          reflection coefficients.'
+    physical_reading_rules:
+    - id: zm_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: La impedancia depende del producto densidad-velocidad. Medios densos y rigidos tienen impedancia alta.
+        en: Impedance depends on the density-velocity product. Dense and stiff media have high impedance.
+    coherence_rules:
+    - id: zm_coherence_positive
+      when: Z_medio <= 0
+      status: error
+      text:
+        es: '[[Z_medio]] debe ser positivo. Un valor nulo o negativo indica error en los datos de entrada.'
+        en: '[[Z_medio]] must be positive. A zero or negative value indicates input data error.'
+    - id: zm_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[Z_medio]] tiene unidades correctas (Pa·s/m) y es del orden esperado.
+        en: Verify that [[Z_medio]] has correct units (Pa·s/m) and is of the expected order.
+    model_validity_rules:
+    - id: zm_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: La impedancia es una propiedad del medio, independiente de la frecuencia en el modelo elastico lineal.
+        en: Impedance is a medium property, independent of frequency in the linear elastic model.
+    graph_rules:
+    - id: zm_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: El cociente Z_2/Z_1 es el parametro relevante en la grafica de coeficientes.
+        en: The Z_2/Z_1 ratio is the relevant parameter in the coefficients graph.
+    likely_errors:
+    - id: zm_error_units
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[impedancia_acustica_generica]] con una lectura aislada es un error frecuente: Verificar unidades:
+          densidad en kg/m³ y velocidad en m/s para obtener impedancia en Pa·s/m.'
+        en: 'A common mistake is to interpret [[impedancia_acustica_generica]] in isolation: Check units: density in kg/m³
+          and velocity in m/s to obtain impedance in Pa·s/m.'
+    next_step_rules:
+    - id: zm_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con ambas impedancias calculadas, proceder a los coeficientes de reflexion y transmision.
+        en: With both impedances calculated, proceed to reflection and transmission coefficients.
+    physical_intuition:
+    - id: impedancia_acustica_generica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[impedancia_acustica_generica]] describe el estado dinámico.
+        en: Intuitively, [[impedancia_acustica_generica]] describes the dynamic state.
+    limiting_cases:
+    - id: impedancia_acustica_generica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[impedancia_acustica_generica]].
+        en: Check limiting cases of [[impedancia_acustica_generica]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  v_onda:
+    enabled: true
+    magnitude_type: wave_speed
+    semantic_role:
+      es: Velocidad de propagacion usada para calcular impedancia.
+      en: Propagation speed used to calculate impedance.
+    summary_rules:
+    - id: v_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[v_onda]] conecta las propiedades elasticas del medio con su impedancia acustica.'
+        en: '[[v_onda]] connects the elastic properties of the medium with its acoustic impedance.'
+    physical_reading_rules:
+    - id: v_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: Para ondas longitudinales se usa velocidad P; para ondas de corte se usa velocidad S.
+        en: For longitudinal waves use P-wave speed; for shear waves use S-wave speed.
+    coherence_rules:
+    - id: v_coherence_positive
+      when: v_onda <= 0
+      status: error
+      text:
+        es: '[[v_onda]] debe ser positiva.'
+        en: '[[v_onda]] must be positive.'
+    - id: v_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar que [[v_onda]] corresponde al tipo de onda que incide en la interfaz.
+        en: Verify that [[v_onda]] corresponds to the wave type incident on the interface.
+    model_validity_rules:
+    - id: v_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: La velocidad se toma constante en cada medio para el modelo de incidencia normal.
+        en: Speed is taken as constant in each medium for the normal-incidence model.
+    graph_rules:
+    - id: v_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[v_onda]] afecta al grafico a traves de [[Z_medio]] y del cociente de impedancias.'
+        en: '[[v_onda]] affects the graph through [[Z_medio]] and the impedance ratio.'
+    likely_errors:
+    - id: v_error_mode
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[v_onda]] con una lectura aislada es un error frecuente: No usar velocidad longitudinal si el problema
+          se refiere a una onda de corte, ni viceversa.'
+        en: 'A common mistake is to interpret [[v_onda]] in isolation: Do not use longitudinal speed if the problem refers
+          to a shear wave, or vice versa.'
+    next_step_rules:
+    - id: v_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[v_onda]] y [[rho_medio]], calcular [[Z_medio]] antes de los coeficientes.
+        en: With [[v_onda]] and [[rho_medio]], calculate [[Z_medio]] before the coefficients.
+    physical_intuition:
+    - id: v_onda_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[v_onda]] describe el estado dinámico.
+        en: Intuitively, [[v_onda]] describes the dynamic state.
+    limiting_cases:
+    - id: v_onda_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[v_onda]].
+        en: Check limiting cases of [[v_onda]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  rho_medio:
+    enabled: true
+    magnitude_type: material_property
+    semantic_role:
+      es: Densidad del medio usada para calcular impedancia.
+      en: Medium density used to calculate impedance.
+    summary_rules:
+    - id: rho_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[rho_medio]] entra en la impedancia como producto con [[v_onda]]. Una densidad mayor aumenta la impedancia si
+          la velocidad se mantiene.'
+        en: '[[rho_medio]] enters impedance as a product with [[v_onda]]. Higher density increases impedance if velocity is
+          unchanged.'
+    physical_reading_rules:
+    - id: rho_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'La densidad mide inercia del medio: cuanto mayor es, mayor esfuerzo requiere una misma velocidad de particula.'
+        en: 'Density measures medium inertia: the larger it is, the more stress is needed for the same particle velocity.'
+    coherence_rules:
+    - id: rho_coherence_positive
+      when: rho_medio <= 0
+      status: error
+      text:
+        es: '[[rho_medio]] debe ser positiva para un medio material.'
+        en: '[[rho_medio]] must be positive for a material medium.'
+    - id: rho_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Usar [[rho_medio]] en kg/m3 antes de multiplicar por [[v_onda]].
+        en: Use [[rho_medio]] in kg/m3 before multiplying by [[v_onda]].
+    model_validity_rules:
+    - id: rho_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: Se supone densidad uniforme en cada semiespacio.
+        en: Uniform density is assumed in each half-space.
+    graph_rules:
+    - id: rho_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[rho_medio]] no suele ser el eje del grafico; modifica la impedancia que alimenta el cociente.'
+        en: '[[rho_medio]] is usually not the graph axis; it modifies the impedance feeding the ratio.'
+    likely_errors:
+    - id: rho_error_units
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[rho_medio]] con una lectura aislada es un error frecuente: No mezclar g/cm3 con kg/m3; el error cambia
+          directamente la impedancia.'
+        en: 'A common mistake is to interpret [[rho_medio]] in isolation: Do not mix g/cm3 with kg/m3; the error directly
+          changes impedance.'
+    next_step_rules:
+    - id: rho_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Multiplicar [[rho_medio]] por [[v_onda]] para obtener [[Z_medio]].
+        en: Multiply [[rho_medio]] by [[v_onda]] to obtain [[Z_medio]].
+    physical_intuition:
+    - id: rho_medio_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[rho_medio]] describe el estado dinámico.
+        en: Intuitively, [[rho_medio]] describes the dynamic state.
+    limiting_cases:
+    - id: rho_medio_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[rho_medio]].
+        en: Check limiting cases of [[rho_medio]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

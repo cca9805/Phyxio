@@ -1,0 +1,811 @@
+const e=`version: "1.0"
+id: interp-aplicaciones-sonido
+leaf_id: aplicaciones
+
+nombre:
+  es: Interpretacion de calculos en aplicaciones del sonido
+  en: Interpretation of calculations in sound applications
+
+scope:
+  area: fisica-clasica
+  bloque: ondas
+  subbloque: sonido
+  parent_id: sonido
+  ruta_relativa: fisica-clasica/ondas/sonido/aplicaciones
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretacion
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    priority: [summary, likely_errors]
+
+dependencies:
+  formulas:
+    - distancia_eco
+    - nivel_intensidad
+    - aislamiento_requerido
+  magnitudes:
+    - d_eco
+    - t_vuelo
+    - v_sonido
+    - I
+    - IL
+    - IL_fuente
+    - IL_rec
+    - R_aislamiento
+
+global_context:
+  physical_domain:
+    es: "Aplicaciones tecnologicas del sonido: deteccion por eco, medicion de niveles de ruido y aislamiento acustico."
+    en: "Technological applications of sound: echo detection, noise level measurement and acoustic isolation."
+  axis_convention:
+    es: "Las distancias son positivas. Los niveles sonoros en decibelios pueden ser cero o positivos en uso practico. Los indices de reduccion sonora son siempre positivos."
+    en: "Distances are positive. Sound levels in decibels can be zero or positive in practical use. Sound reduction indices are always positive."
+  standard_assumptions:
+    - "Medio homogeneo para calculo de distancia por eco"
+    - "Intensidad de referencia I0 de 10⁻¹² W/m²"
+    - "Propagacion en campo libre para la ley de distancia e intensidad"
+  standard_warnings:
+    - "El tiempo de vuelo en la formula de eco es el tiempo total de ida y vuelta, no el de una sola trayectoria"
+    - "Los decibelios no se suman directamente; la suma de fuentes requiere sumar intensidades y luego convertir"
+    - "La velocidad del sonido varia significativamente entre medios: 340 m/s en aire, 1500 m/s en agua, hasta 5900 m/s en acero"
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  d_eco:
+    magnitude_type: distancia
+    semantic_role:
+      es: "Distancia al objeto reflectante calculada a partir del tiempo de vuelo del eco y la velocidad del sonido en el medio."
+      en: "Distance to the reflecting object calculated from the echo travel time and the speed of sound in the medium."
+    summary_rules:
+      - id: deco_summary_normal
+        when: "d_eco > 0"
+        status: ok
+        text:
+          es: "[[d_eco]] indica la distancia entre el transductor y el objeto detectado. Es la magnitud que el sonar o el ecografo entrega al operador como resultado util del ensayo de eco."
+          en: "[[d_eco]] indicates the distance between the transducer and the detected object. It is the quantity that the sonar or ultrasound scanner delivers to the operator as the useful result of the echo test."
+      - id: deco_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[d_eco]] se obtiene dividiendo entre dos el producto de [[v_sonido]] por [[t_vuelo]]; el factor 2 refleja que el pulso viaja dos veces la distancia buscada."
+          en: "[[d_eco]] is obtained by dividing by two the product of [[v_sonido]] and [[t_vuelo]]; the factor 2 reflects that the pulse travels twice the sought distance."
+    physical_reading_rules:
+      - id: deco_reading_sonar
+        when: "d_eco > 10"
+        status: ok
+        text:
+          es: "Distancia mayor de 10 m: tipica de sonar submarino o deteccion de obstaculos aereos. En agua, con [[v_sonido]] de 1500 m/s, esta distancia corresponde a un tiempo de vuelo superior a 13 ms."
+          en: "Distance greater than 10 m: typical of submarine sonar or aerial obstacle detection. In water, with [[v_sonido]] of 1500 m/s, this distance corresponds to a travel time above 13 ms."
+      - id: deco_reading_eco
+        when: "d_eco <= 0.5"
+        status: ok
+        text:
+          es: "Distancia menor de 0.5 m: tipica de ecografia medica superficial o sensores de proximidad ultrasonics. A esta escala, el tiempo de vuelo en tejido (v_sonido cercano a 1540 m/s) es inferior a 0.65 ms."
+          en: "Distance below 0.5 m: typical of superficial medical ultrasound or ultrasonic proximity sensors. At this scale, travel time in tissue (v_sonido near 1540 m/s) is below 0.65 ms."
+      - id: deco_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "La distancia calculada es proporcional a [[t_vuelo]] y a [[v_sonido]]; un error en cualquiera de los dos produce un error proporcional en [[d_eco]]."
+          en: "The calculated distance is proportional to [[t_vuelo]] and [[v_sonido]]; an error in either produces a proportional error in [[d_eco]]."
+    coherence_rules:
+      - id: deco_coherence_positiva
+        when: "d_eco > 0"
+        status: ok
+        text:
+          es: "[[d_eco]] positiva: coherente con la geometria del ensayo de eco."
+          en: "Positive [[d_eco]]: coherent with the echo test geometry."
+      - id: deco_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[d_eco]] es consistente con el contexto: para ecografia abdominal el rango util es de 1 a 30 cm; para sonar portuario, de 1 a 500 m."
+          en: "Verify that [[d_eco]] is consistent with the context: for abdominal ultrasound the useful range is 1 to 30 cm; for harbour sonar, 1 to 500 m."
+    model_validity_rules:
+      - id: deco_validity_homogeneidad
+        when: "true"
+        status: warning
+        text:
+          es: "El modelo es valido solo si el medio es homogeneo (velocidad constante). En agua con gradiente termico, la velocidad varia con la profundidad y la trayectoria del pulso se curva, produciendo errores en [[d_eco]] que requieren correcciones de perfilado de velocidad."
+          en: "The model is valid only if the medium is homogeneous (constant velocity). In water with a thermal gradient, velocity varies with depth and the pulse path curves, producing errors in [[d_eco]] that require velocity profiling corrections."
+      - id: deco_validity_resolucion
+        when: "true"
+        status: warning
+        text:
+          es: "La distancia minima detectable esta limitada por la longitud del pulso: objetos mas cercanos que la mitad de la longitud espacial del pulso no pueden resolverse."
+          en: "The minimum detectable distance is limited by the pulse length: objects closer than half the spatial pulse length cannot be resolved."
+      - id: deco_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "En medios homogeneos con pulso corto, el modelo de eco simple es una excelente aproximacion."
+          en: "In homogeneous media with a short pulse, the simple echo model is an excellent approximation."
+    graph_rules:
+      - id: deco_graph_coord
+        when: "true"
+        status: ok
+        text:
+          es: "En un grafico [[d_eco]] frente a [[t_vuelo]], el punto calculado cae sobre una recta de pendiente igual a [[v_sonido]]/2. Diferentes medios producen rectas de diferente pendiente pero el mismo tiempo de vuelo medido."
+          en: "In a [[d_eco]] versus [[t_vuelo]] graph, the calculated point falls on a straight line with slope equal to [[v_sonido]]/2. Different media produce lines of different slope but the same measured travel time."
+      - id: deco_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "La linealidad del grafico es una comprobacion directa de la homogeneidad del medio: si los puntos se desvian de la recta, hay un gradiente de velocidad."
+          en: "The linearity of the graph is a direct check of medium homogeneity: if the points deviate from the line, there is a velocity gradient."
+    likely_errors:
+      - id: deco_error_factor2
+        when: "true"
+        status: warning
+        text:
+          es: "Error mas frecuente: olvidar dividir entre 2. Si el resultado parece el doble de lo fisicamente esperado, probablemente se calculo [[d_eco]] como el producto de [[v_sonido]] por [[t_vuelo]] sin el factor 1/2."
+          en: "Most frequent error: forgetting to divide by 2. If the result seems double what is physically expected, [[d_eco]] was probably calculated as the product of [[v_sonido]] and [[t_vuelo]] without the 1/2 factor."
+      - id: deco_error_medio
+        when: "true"
+        status: warning
+        text:
+          es: "Error de medio: usar [[v_sonido]] del aire (340 m/s) para calcular distancias en agua o tejido. En agua, la velocidad es aproximadamente 1500 m/s: un error de factor 4 en [[d_eco]]."
+          en: "Medium error: using [[v_sonido]] of air (340 m/s) to calculate distances in water or tissue. In water, velocity is approximately 1500 m/s: a factor of 4 error in [[d_eco]]."
+      - id: deco_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[t_vuelo]] esta en las unidades correctas: en ecografia medica se trabaja en microsegundos, y un error de conversion milisegundos/microsegundos produce un error de factor 1000 en [[d_eco]]."
+          en: "Verify that [[t_vuelo]] is in the correct units: in medical ultrasound microseconds are used, and a millisecond/microsecond conversion error produces a factor 1000 error in [[d_eco]]."
+    next_step_rules:
+      - id: deco_next_velocidad
+        when: "true"
+        status: ok
+        text:
+          es: "Si la distancia es conocida independientemente (por ejemplo, fondo del mar en una carta nautica), usar la formula de despeje de [[v_sonido]] para medir la velocidad del sonido en el agua en ese punto y detectar gradientes termicos."
+          en: "If the distance is known independently (for example, seabed depth from a nautical chart), use the formula to solve for [[v_sonido]] to measure the speed of sound in the water at that point and detect thermal gradients."
+      - id: deco_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Combinar multiples medidas de [[d_eco]] en distintas direcciones para construir un mapa de reflexion del objeto (imagen ecografica o mapa batimetrico)."
+          en: "Combine multiple [[d_eco]] measurements in different directions to build a reflection map of the object (ultrasound image or bathymetric map)."
+
+  t_vuelo:
+    magnitude_type: tiempo
+    semantic_role:
+      es: "Tiempo de vuelo del eco, medido entre la emision del pulso y la recepcion del eco; es la medida primaria del sistema sonar o ecografico."
+      en: "Echo travel time, measured between pulse emission and echo reception; it is the primary measurement of the sonar or ultrasound system."
+    summary_rules:
+      - id: tvuelo_summary_normal
+        when: "t_vuelo > 0"
+        status: ok
+        text:
+          es: "[[t_vuelo]] es el tiempo total que el pulso tarda en ir hasta el objeto y volver. Es la medida electronica directa del sistema; [[d_eco]] se deriva de el dividiendo entre dos y multiplicando por [[v_sonido]]."
+          en: "[[t_vuelo]] is the total time the pulse takes to travel to the object and back. It is the direct electronic measurement of the system; [[d_eco]] is derived from it by dividing by two and multiplying by [[v_sonido]]."
+      - id: tvuelo_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[t_vuelo]] resume la informacion temporal del eco; la precision en su medida limita directamente la precision de la distancia calculada."
+          en: "[[t_vuelo]] summarises the temporal information of the echo; the precision of its measurement directly limits the precision of the calculated distance."
+    physical_reading_rules:
+      - id: tvuelo_reading_microsegundos
+        when: "t_vuelo < 0.001"
+        status: ok
+        text:
+          es: "Tiempo de vuelo en el rango de microsegundos: tipico de ecografia medica (profundidades de centimetros en tejido) o de ensayos ultrasonics industriales de espesores pequenos."
+          en: "Travel time in the microsecond range: typical of medical ultrasound (centimetre depths in tissue) or industrial ultrasonic tests of small thicknesses."
+      - id: tvuelo_reading_segundos
+        when: "t_vuelo > 0.1"
+        status: ok
+        text:
+          es: "Tiempo de vuelo superior a 0.1 segundos: tipico de sonar de gran profundidad oceanica. A 1 segundo de tiempo de vuelo en agua, la distancia al objeto supera los 750 m."
+          en: "Travel time above 0.1 seconds: typical of deep ocean sonar. At 1 second travel time in water, the distance to the object exceeds 750 m."
+      - id: tvuelo_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[t_vuelo]] tiene el doble de la duracion que tardaria el sonido en recorrer [[d_eco]] una sola vez; este factor 2 es la fuente del error mas comun en estos calculos."
+          en: "[[t_vuelo]] is twice the duration the sound would take to travel [[d_eco]] once; this factor of 2 is the source of the most common error in these calculations."
+    coherence_rules:
+      - id: tvuelo_coherence_positivo
+        when: "t_vuelo > 0"
+        status: ok
+        text:
+          es: "[[t_vuelo]] positivo: coherente con una medicion temporal correcta."
+          en: "Positive [[t_vuelo]]: coherent with a correct time measurement."
+      - id: tvuelo_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[t_vuelo]] es mayor que el periodo del pulso emitido; si no, el eco se superpone con la emision y no puede distinguirse."
+          en: "Verify that [[t_vuelo]] is greater than the period of the emitted pulse; if not, the echo overlaps with the emission and cannot be distinguished."
+    model_validity_rules:
+      - id: tvuelo_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El tiempo de vuelo es una medida directa sin modelo; el modelo entra en como se interpreta para obtener [[d_eco]]. La unica condicion es que el medio sea homogeneo."
+          en: "Travel time is a direct measurement without a model; the model enters in how it is interpreted to obtain [[d_eco]]. The only condition is that the medium is homogeneous."
+      - id: tvuelo_validity_multitrayectoria
+        when: "true"
+        status: warning
+        text:
+          es: "En espacios cerrados o con multiples reflectores, pueden llegar varios ecos a distintos tiempos de vuelo, dificultando la identificacion del eco directo del objeto buscado."
+          en: "In enclosed spaces or with multiple reflectors, several echoes may arrive at different travel times, making identification of the direct echo from the target object difficult."
+    graph_rules:
+      - id: tvuelo_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En la grafica [[d_eco]] vs [[t_vuelo]], este valor es la variable del eje horizontal. La recta que pasa por el origen con pendiente [[v_sonido]]/2 define la relacion de calibracion del sistema."
+          en: "In the [[d_eco]] vs [[t_vuelo]] graph, this value is the horizontal axis variable. The line through the origin with slope [[v_sonido]]/2 defines the system calibration relation."
+      - id: tvuelo_graph_fallback
+        when: "true"
+        status: ok
+        text:
+          es: "Si el sistema muestra varios picos de eco en la señal temporal, cada pico corresponde a un objeto reflectante diferente a la distancia derivada de su tiempo de llegada."
+          en: "If the system shows several echo peaks in the time signal, each peak corresponds to a different reflecting object at the distance derived from its arrival time."
+    likely_errors:
+      - id: tvuelo_error_unidades
+        when: "true"
+        status: warning
+        text:
+          es: "Error de unidades muy frecuente: confundir microsegundos con milisegundos. En ecografia, 1 ms de tiempo de vuelo corresponderia a una profundidad de mas de 70 cm en tejido, lo que es anatomicamente imposible para la mayoria de organos abdominales."
+          en: "Very frequent unit error: confusing microseconds with milliseconds. In ultrasound, 1 ms travel time would correspond to a depth of more than 70 cm in tissue, which is anatomically impossible for most abdominal organs."
+      - id: tvuelo_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Asegurarse de que [[t_vuelo]] es el tiempo total del recorrido de ida y vuelta, no el tiempo a la mitad de la trayectoria. Si el equipo reporta el tiempo de una sola via, multiplicar por 2 antes de usar la formula."
+          en: "Ensure that [[t_vuelo]] is the total round-trip time, not the one-way transit time. If the equipment reports one-way time, multiply by 2 before using the formula."
+    next_step_rules:
+      - id: tvuelo_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[t_vuelo]] medido y [[v_sonido]] conocida del medio, calcular [[d_eco]] y comparar con la posicion geometrica conocida del objeto para verificar la calibracion del sistema."
+          en: "With measured [[t_vuelo]] and known [[v_sonido]] of the medium, calculate [[d_eco]] and compare with the known geometric position of the object to verify system calibration."
+      - id: tvuelo_next_fallback
+        when: "true"
+        status: ok
+        text:
+          es: "Analizar la forma del eco en funcion del tiempo para extraer informacion sobre el tamaño, la forma y las propiedades del objeto reflectante, mas alla de su distancia."
+          en: "Analyse the echo waveform as a function of time to extract information about the size, shape and properties of the reflecting object, beyond its distance."
+
+  v_sonido:
+    magnitude_type: velocidad_de_propagacion
+    semantic_role:
+      es: "Velocidad del sonido en el medio especifico; parametro de calibracion critico de cualquier sistema de eco."
+      en: "Speed of sound in the specific medium; critical calibration parameter of any echo system."
+    summary_rules:
+      - id: vson_summary_normal
+        when: "v_sonido > 0"
+        status: ok
+        text:
+          es: "[[v_sonido]] es el parametro que convierte el tiempo de vuelo en distancia. Su valor depende del medio (aire, agua, tejido, metal) y de condiciones como la temperatura y la presion. Un error en [[v_sonido]] se traduce directamente en un error proporcional en [[d_eco]]."
+          en: "[[v_sonido]] is the parameter that converts travel time into distance. Its value depends on the medium (air, water, tissue, metal) and conditions such as temperature and pressure. An error in [[v_sonido]] translates directly into a proportional error in [[d_eco]]."
+      - id: vson_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[v_sonido]] resume las propiedades elasticas y de inercia del medio de propagacion; en liquidos y gases depende principalmente de la temperatura."
+          en: "[[v_sonido]] summarises the elastic and inertial properties of the propagation medium; in liquids and gases it depends mainly on temperature."
+    physical_reading_rules:
+      - id: vson_reading_aire
+        when: "v_sonido >= 330 && v_sonido <= 350"
+        status: ok
+        text:
+          es: "Velocidad en el rango del aire a temperatura ambiente. Apropiada para aplicaciones en aire: sensores de aparcamiento, sonar aereo, medicion de distancias en interiores."
+          en: "Velocity in the range of air at ambient temperature. Appropriate for air applications: parking sensors, aerial sonar, indoor distance measurement."
+      - id: vson_reading_agua
+        when: "v_sonido >= 1400 && v_sonido <= 1600"
+        status: ok
+        text:
+          es: "Velocidad en el rango del agua a temperatura normal. Apropiada para sonar submarino y ecografia medica. La variacion con la temperatura es de aproximadamente 4 m/s por grado Celsius."
+          en: "Velocity in the range of water at normal temperature. Appropriate for underwater sonar and medical ultrasound. Variation with temperature is approximately 4 m/s per degree Celsius."
+      - id: vson_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[v_sonido]] corresponde al medio real del ensayo. El error mas comun es usar el valor del aire cuando el ensayo se realiza en agua o en tejido biologico."
+          en: "Verify that [[v_sonido]] corresponds to the actual test medium. The most common error is using the air value when the test is performed in water or biological tissue."
+    coherence_rules:
+      - id: vson_coherence_positiva
+        when: "v_sonido > 0"
+        status: ok
+        text:
+          es: "[[v_sonido]] positiva: coherente con propagacion en un medio material."
+          en: "Positive [[v_sonido]]: coherent with propagation in a material medium."
+      - id: vson_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Para ecografia medica, [[v_sonido]] en tejido blando es aproximadamente 1540 m/s; en hueso supera los 3000 m/s. Un valor muy diferente puede indicar que el tejido identificado no es el correcto."
+          en: "For medical ultrasound, [[v_sonido]] in soft tissue is approximately 1540 m/s; in bone it exceeds 3000 m/s. A very different value may indicate that the identified tissue is not the correct one."
+    model_validity_rules:
+      - id: vson_validity_temperatura
+        when: "true"
+        status: warning
+        text:
+          es: "En agua y en aire, [[v_sonido]] depende de la temperatura. Para aplicaciones de alta precision, usar el valor tabulado a la temperatura real del medio; una diferencia de 10 °C puede cambiar [[v_sonido]] en el agua en aproximadamente 40 m/s (casi 3 %)."
+          en: "In water and air, [[v_sonido]] depends on temperature. For high-precision applications, use the tabulated value at the actual medium temperature; a 10 °C difference can change [[v_sonido]] in water by approximately 40 m/s (nearly 3%)."
+      - id: vson_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "En tejidos biologicos y materiales de ingenieria, [[v_sonido]] se considera constante para variaciones de temperatura pequenas dentro del rango fisologico o de uso normal."
+          en: "In biological tissues and engineering materials, [[v_sonido]] is considered constant for small temperature variations within the physiological or normal operating range."
+    graph_rules:
+      - id: vson_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En la grafica [[d_eco]] vs [[t_vuelo]], [[v_sonido]] determina la pendiente de la recta de calibracion. Un [[v_sonido]] mayor produce una recta mas inclinada: el mismo tiempo de vuelo corresponde a una distancia mayor."
+          en: "In the [[d_eco]] vs [[t_vuelo]] graph, [[v_sonido]] determines the slope of the calibration line. A larger [[v_sonido]] produces a steeper line: the same travel time corresponds to a greater distance."
+      - id: vson_graph_fallback
+        when: "true"
+        status: ok
+        text:
+          es: "Comparar la pendiente experimental de la curva [[d_eco]] vs [[t_vuelo]] con el valor esperado de [[v_sonido]]/2 del medio es una forma de verificar la calibracion del sistema sin necesidad de un objeto de referencia externo."
+          en: "Comparing the experimental slope of the [[d_eco]] vs [[t_vuelo]] curve with the expected [[v_sonido]]/2 of the medium is a way to verify system calibration without needing an external reference object."
+    likely_errors:
+      - id: vson_error_medio_incorrecto
+        when: "true"
+        status: warning
+        text:
+          es: "El error mas frecuente en aplicaciones de sonar y ecografia es usar [[v_sonido]] del medio incorrecto. Para ecografia abdominal usar 1540 m/s (tejido blando); para sonar oceanico usar el valor real del agua del mar a la temperatura y salinidad medidas."
+          en: "The most frequent error in sonar and ultrasound applications is using [[v_sonido]] of the wrong medium. For abdominal ultrasound use 1540 m/s (soft tissue); for ocean sonar use the actual seawater value at the measured temperature and salinity."
+      - id: vson_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "En ensayos industriales de espesor, [[v_sonido]] del material inspeccionado debe calibrarse experimentalmente con una muestra de espesor conocido antes de hacer mediciones de produccion."
+          en: "In industrial thickness tests, [[v_sonido]] of the inspected material must be experimentally calibrated with a sample of known thickness before making production measurements."
+    next_step_rules:
+      - id: vson_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Si se desconoce [[v_sonido]] del medio, medir [[t_vuelo]] a una distancia conocida (objeto de referencia) y despejar [[v_sonido]] usando la formula de rearreglo de [[distancia_eco]]."
+          en: "If [[v_sonido]] of the medium is unknown, measure [[t_vuelo]] at a known distance (reference object) and solve for [[v_sonido]] using the rearrangement formula of [[distancia_eco]]."
+      - id: vson_next_fallback
+        when: "true"
+        status: ok
+        text:
+          es: "Para agua de mar, consultar tablas de velocidad del sonido en funcion de temperatura, salinidad y presion (profundidad) para obtener el valor de [[v_sonido]] mas preciso para el ensayo."
+          en: "For seawater, consult speed-of-sound tables as a function of temperature, salinity and pressure (depth) to obtain the most accurate [[v_sonido]] value for the test."
+
+  IL:
+    magnitude_type: nivel_logaritmico
+    semantic_role:
+      es: "Nivel de intensidad sonora en decibelios; resume cuantas decadas de intensidad separan la fuente del umbral de audicion y es la magnitud usada en normativa de ruido y diseño acustico."
+      en: "Sound intensity level in decibels; summarises how many decades of intensity separate the source from the hearing threshold and is the quantity used in noise regulations and acoustic design."
+    summary_rules:
+      - id: IL_summary_normal
+        when: "IL > 0"
+        status: ok
+        text:
+          es: "[[IL]] indica el nivel sonoro en decibelios sobre el umbral de audicion. Resume cuanto mas intensa es la fuente que el minimo audible para el oido humano. En entornos cotidianos, los valores tipicos van de 30 dB (biblioteca silenciosa) a 90 dB (trafico intenso)."
+          en: "[[IL]] indicates the sound level in decibels above the hearing threshold. It summarises how much more intense the source is than the minimum audible for the human ear. In everyday environments, typical values range from 30 dB (quiet library) to 90 dB (heavy traffic)."
+      - id: IL_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[IL]] es una magnitud logaritmica; un incremento de 10 dB corresponde a multiplicar la intensidad acustica por 10, pero perceptivamente equivale a aproximadamente duplicar la sonoridad percibida."
+          en: "[[IL]] is a logarithmic quantity; an increase of 10 dB corresponds to multiplying the acoustic intensity by 10, but perceptually corresponds to approximately doubling the perceived loudness."
+    physical_reading_rules:
+      - id: IL_reading_alto
+        when: "IL > 85"
+        status: warning
+        text:
+          es: "Nivel sonoro por encima de 85 dB: zona de riesgo de dano auditivo con exposicion prolongada. La normativa de seguridad laboral limita la exposicion a 85 dB a 8 horas diarias; por encima de 100 dB, la exposicion maxima permitida es de 15 minutos."
+          en: "Sound level above 85 dB: risk zone for hearing damage with prolonged exposure. Occupational safety regulations limit exposure to 85 dB for 8 hours per day; above 100 dB, maximum permitted exposure is 15 minutes."
+      - id: IL_reading_bajo
+        when: "IL < 30"
+        status: ok
+        text:
+          es: "Nivel sonoro por debajo de 30 dB: entorno muy silencioso, tipico de estudio de grabacion de alta calidad o sala anecoica. A este nivel, el oido humano puede detectar senales utiles de gran resolucion."
+          en: "Sound level below 30 dB: very quiet environment, typical of high-quality recording studio or anechoic chamber. At this level, the human ear can detect high-resolution useful signals."
+      - id: IL_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Cada incremento de 6 dB en [[IL]] corresponde a duplicar la presion sonora; cada incremento de 10 dB corresponde a multiplicar la intensidad por 10."
+          en: "Each 6 dB increase in [[IL]] corresponds to doubling the sound pressure; each 10 dB increase corresponds to multiplying intensity by 10."
+    coherence_rules:
+      - id: IL_coherence_rango
+        when: "IL >= 0 && IL <= 194"
+        status: ok
+        text:
+          es: "[[IL]] en el rango fisicamente practico."
+          en: "[[IL]] in the physically practical range."
+      - id: IL_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Para una conversacion normal a 1 metro, [[IL]] debe estar entre 55 y 65 dB. Si el resultado se aleja mucho de ese rango para el contexto declarado, verificar las unidades de la intensidad."
+          en: "For a normal conversation at 1 metre, [[IL]] should be between 55 and 65 dB. If the result differs greatly from that range for the declared context, verify the intensity units."
+    model_validity_rules:
+      - id: IL_validity_campo_libre
+        when: "true"
+        status: warning
+        text:
+          es: "La relacion entre [[IL]] y la distancia a la fuente (ley del cuadrado inverso) es valida solo en campo libre. En recintos cerrados, la reverberacion añade un campo difuso que limita la caida del nivel con la distancia mas alla del radio de reverberacion."
+          en: "The relation between [[IL]] and distance from the source (inverse square law) is valid only in free field. In enclosed spaces, reverberation adds a diffuse field that limits the level drop with distance beyond the reverberation radius."
+      - id: IL_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "La formula de [[nivel_intensidad]] es exacta para una intensidad acustica bien definida. Las inexactitudes surgen de la medicion de la intensidad, no de la formula logaritmica."
+          en: "The [[nivel_intensidad]] formula is exact for a well-defined acoustic intensity. Inaccuracies arise from the intensity measurement, not from the logarithmic formula."
+    graph_rules:
+      - id: IL_graph_distancia
+        when: "true"
+        status: ok
+        text:
+          es: "En un grafico [[IL]] frente al logaritmo de la distancia en campo libre, la relacion es lineal con pendiente de menos 20 dB por decada de distancia. Este comportamiento es la firma de la ley del cuadrado inverso en escala logaritmica."
+          en: "In a [[IL]] versus logarithm of distance graph in free field, the relation is linear with slope of minus 20 dB per decade of distance. This behaviour is the signature of the inverse square law on a logarithmic scale."
+      - id: IL_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "La curva [[IL]] vs distancia en un recinto cerrado se aplana a partir del radio de reverberacion, mostrando la transicion entre campo directo y campo difuso."
+          en: "The [[IL]] vs distance curve in an enclosed space flattens beyond the reverberation radius, showing the transition between direct field and diffuse field."
+    likely_errors:
+      - id: IL_error_suma
+        when: "true"
+        status: warning
+        text:
+          es: "Error clasico: sumar decibelios directamente. Dos fuentes de 60 dB no dan 120 dB. La suma correcta requiere convertir cada fuente a intensidad (multiplicar I0 por 10 elevado a IL/10), sumar las intensidades y luego reconvertir a dB: el resultado es 63 dB."
+          en: "Classic error: adding decibels directly. Two 60 dB sources do not give 120 dB. The correct sum requires converting each source to intensity (multiplying I0 by 10 raised to IL/10), adding the intensities and then converting back to dB: the result is 63 dB."
+      - id: IL_error_unidades
+        when: "true"
+        status: warning
+        text:
+          es: "Error de unidades: usar la intensidad en mW/m² en lugar de W/m². Una intensidad de 1 mW/m² da un IL de 90 dB si se usa I0 correcto, pero si se olvida convertir a W/m², el resultado sera incorrecto en 30 dB."
+          en: "Unit error: using intensity in mW/m² instead of W/m². An intensity of 1 mW/m² gives an IL of 90 dB if the correct I0 is used, but if conversion to W/m² is omitted, the result will be wrong by 30 dB."
+      - id: IL_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Recordar que I0 es 10⁻¹² W/m², no 10⁻⁶ W/m² ni ninguna otra referencia. Usar la referencia incorrecta desplaza todos los resultados en una constante de dB."
+          en: "Remember that I0 is 10⁻¹² W/m², not 10⁻⁶ W/m² or any other reference. Using the wrong reference shifts all results by a constant number of dB."
+    next_step_rules:
+      - id: IL_next_aislamiento
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[IL]] calculado de la fuente, determinar el [[R_aislamiento]] necesario de la particion para que el nivel en el recinto receptor cumpla la normativa acustica aplicable."
+          en: "With the calculated source [[IL]], determine the required [[R_aislamiento]] of the partition so that the level in the receiving space complies with the applicable acoustic regulations."
+      - id: IL_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Comparar [[IL]] calculado con los valores limites de exposicion de la normativa de salud laboral (habitualmente 85 dB para 8 horas) para determinar si se necesitan medidas de proteccion."
+          en: "Compare calculated [[IL]] with the exposure limit values of occupational health regulations (typically 85 dB for 8 hours) to determine whether protective measures are needed."
+
+  I:
+    magnitude_type: intensidad
+    semantic_role:
+      es: "Intensidad acustica lineal que se convierte a nivel sonoro en decibelios."
+      en: "Linear acoustic intensity converted into sound level in decibels."
+    summary_rules:
+      - id: I_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[I]] es la magnitud lineal que debe sumarse antes de calcular [[IL]]."
+          en: "[[I]] is the linear quantity that must be added before calculating [[IL]]."
+    physical_reading_rules:
+      - id: I_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Un aumento de diez veces en [[I]] aumenta [[IL]] en 10 dB."
+          en: "A tenfold increase in [[I]] raises [[IL]] by 10 dB."
+    coherence_rules:
+      - id: I_coherence_default
+        when: "I > 0"
+        status: ok
+        text:
+          es: "[[I]] positiva: coherente con flujo de energia acustica."
+          en: "Positive [[I]]: coherent with acoustic energy flux."
+    model_validity_rules:
+      - id: I_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "La conversion a dB requiere una intensidad acustica bien definida y una referencia fija."
+          en: "Conversion to dB requires a well-defined acoustic intensity and a fixed reference."
+    graph_rules:
+      - id: I_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En escala logaritmica, cambios multiplicativos de [[I]] se leen como incrementos lineales de [[IL]]."
+          en: "On a logarithmic scale, multiplicative changes in [[I]] read as linear increments of [[IL]]."
+    likely_errors:
+      - id: I_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "No sumar niveles en dB: convertir primero cada [[IL]] a [[I]], sumar intensidades y volver a dB."
+          en: "Do not add dB levels: first convert each [[IL]] to [[I]], add intensities and convert back to dB."
+    next_step_rules:
+      - id: I_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Usar [[I]] para comparar fuentes en escala lineal antes de interpretar [[IL]]."
+          en: "Use [[I]] to compare sources on a linear scale before interpreting [[IL]]."
+
+  IL_fuente:
+    magnitude_type: nivel_logaritmico
+    semantic_role:
+      es: "Nivel sonoro en el recinto fuente antes de aplicar aislamiento."
+      en: "Sound level in the source room before applying isolation."
+    summary_rules:
+      - id: ILfuente_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[IL_fuente]] fija la exigencia inicial del problema de aislamiento."
+          en: "[[IL_fuente]] sets the initial requirement of the isolation problem."
+    physical_reading_rules:
+      - id: ILfuente_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Cuanto mayor sea [[IL_fuente]], mayor debe ser [[R_aislamiento]] para proteger el receptor."
+          en: "The larger [[IL_fuente]] is, the larger [[R_aislamiento]] must be to protect the receiver."
+    coherence_rules:
+      - id: ILfuente_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[IL_fuente]] debe compararse con [[IL_rec]] usando la misma banda o descriptor de ruido."
+          en: "[[IL_fuente]] must be compared with [[IL_rec]] using the same band or noise descriptor."
+    model_validity_rules:
+      - id: ILfuente_validity_default
+        when: "true"
+        status: warning
+        text:
+          es: "Si el espectro de la fuente domina en bajas frecuencias, el aislamiento global puede sobrestimar la proteccion real."
+          en: "If the source spectrum is dominated by low frequencies, global isolation may overestimate real protection."
+    graph_rules:
+      - id: ILfuente_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En una grafica de diseño, aumentar [[IL_fuente]] desplaza hacia arriba el [[R_aislamiento]] requerido."
+          en: "In a design graph, increasing [[IL_fuente]] shifts the required [[R_aislamiento]] upward."
+    likely_errors:
+      - id: ILfuente_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "No usar [[IL_fuente]] como nivel permitido; el limite se representa con [[IL_rec]]."
+          en: "Do not use [[IL_fuente]] as the permitted level; the limit is represented by [[IL_rec]]."
+    next_step_rules:
+      - id: ILfuente_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Medir [[IL_fuente]] por bandas de frecuencia antes de escoger una particion."
+          en: "Measure [[IL_fuente]] by frequency bands before choosing a partition."
+
+  IL_rec:
+    magnitude_type: nivel_logaritmico
+    semantic_role:
+      es: "Nivel sonoro objetivo o medido en el recinto receptor."
+      en: "Target or measured sound level in the receiving room."
+    summary_rules:
+      - id: ILrec_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[IL_rec]] es el nivel que debe cumplirse tras aplicar [[R_aislamiento]]."
+          en: "[[IL_rec]] is the level that must be met after applying [[R_aislamiento]]."
+    physical_reading_rules:
+      - id: ILrec_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Un [[IL_rec]] bajo exige mayor aislamiento o menor nivel de fuente."
+          en: "A low [[IL_rec]] requires greater isolation or a lower source level."
+    coherence_rules:
+      - id: ILrec_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[IL_rec]] debe ser menor que [[IL_fuente]] si se busca aislamiento positivo."
+          en: "[[IL_rec]] must be lower than [[IL_fuente]] if positive isolation is required."
+    model_validity_rules:
+      - id: ILrec_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El limite receptor debe expresarse con el mismo descriptor temporal y frecuencial que el nivel fuente."
+          en: "The receiver limit must use the same temporal and frequency descriptor as the source level."
+    graph_rules:
+      - id: ILrec_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "Para [[IL_fuente]] fijo, reducir [[IL_rec]] aumenta linealmente el aislamiento requerido."
+          en: "For fixed [[IL_fuente]], reducing [[IL_rec]] linearly increases the required isolation."
+    likely_errors:
+      - id: ILrec_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "No confundir [[IL_rec]] con [[R_aislamiento]]: uno es nivel final y el otro es reduccion."
+          en: "Do not confuse [[IL_rec]] with [[R_aislamiento]]: one is final level and the other is reduction."
+    next_step_rules:
+      - id: ILrec_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Comparar [[IL_rec]] con el limite normativo para decidir si la particion es suficiente."
+          en: "Compare [[IL_rec]] with the regulatory limit to decide whether the partition is sufficient."
+
+  R_aislamiento:
+    magnitude_type: nivel_logaritmico
+    semantic_role:
+      es: "Reduccion sonora que debe aportar una particion para pasar del nivel fuente al nivel receptor permitido."
+      en: "Sound reduction a partition must provide to move from source level to allowed receiver level."
+    summary_rules:
+      - id: Rais_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[R_aislamiento]] expresa cuantos dB debe perder el sonido al atravesar la barrera."
+          en: "[[R_aislamiento]] expresses how many dB the sound must lose when crossing the barrier."
+    physical_reading_rules:
+      - id: Rais_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Un [[R_aislamiento]] alto indica una particion mas eficaz, especialmente si mantiene ese valor en bajas frecuencias."
+          en: "A high [[R_aislamiento]] indicates a more effective partition, especially if it keeps that value at low frequencies."
+    coherence_rules:
+      - id: Rais_coherence_default
+        when: "R_aislamiento >= 0"
+        status: ok
+        text:
+          es: "[[R_aislamiento]] positivo: coherente con una reduccion de nivel entre fuente y receptor."
+          en: "Positive [[R_aislamiento]]: coherent with level reduction between source and receiver."
+    model_validity_rules:
+      - id: Rais_validity_default
+        when: "true"
+        status: warning
+        text:
+          es: "El valor real depende de frecuencia, flanqueos y absorcion del recinto receptor; la diferencia simple es una estimacion inicial."
+          en: "The real value depends on frequency, flanking paths and receiving-room absorption; the simple difference is an initial estimate."
+    graph_rules:
+      - id: Rais_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En diseño, [[R_aislamiento]] crece linealmente con [[IL_fuente]] para un limite [[IL_rec]] fijo."
+          en: "In design, [[R_aislamiento]] grows linearly with [[IL_fuente]] for a fixed [[IL_rec]] limit."
+    likely_errors:
+      - id: Rais_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "No interpretar [[R_aislamiento]] como absorcion: describe transmision entre recintos, no energia disipada dentro del mismo recinto."
+          en: "Do not interpret [[R_aislamiento]] as absorption: it describes transmission between rooms, not energy dissipated within the same room."
+    next_step_rules:
+      - id: Rais_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Elegir una particion cuyo [[R_aislamiento]] real por bandas supere el requisito calculado."
+          en: "Choose a partition whose real band-by-band [[R_aislamiento]] exceeds the calculated requirement."
+
+cross_checks:
+  - id: distancia_tiempo_velocidad
+    description:
+      es: "Verificar que d_eco, t_vuelo y v_sonido son mutuamente consistentes"
+      en: "Verify that d_eco, t_vuelo and v_sonido are mutually consistent"
+    condition: "abs(d_eco - v_sonido * t_vuelo / 2) < 0.01 * d_eco"
+    status_if_fail: warning
+    message_if_fail:
+      es: "Los tres valores d_eco, t_vuelo y v_sonido no son mutuamente consistentes con la formula de eco. Revisar si se olvido el factor 2 o si se mezclan medios distintos."
+      en: "The three values d_eco, t_vuelo and v_sonido are not mutually consistent with the echo formula. Check whether the factor of 2 was omitted or different media are mixed."
+
+error_patterns:
+  - id: error_factor_dos
+    description:
+      es: "Olvido del factor 2 en la formula de eco"
+      en: "Omission of the factor 2 in the echo formula"
+    detect_when: "d_eco = v_sonido * t_vuelo"
+    message:
+      es: "Posible olvido del factor 2: la distancia por eco es v_sonido * t_vuelo / 2, no v_sonido * t_vuelo."
+      en: "Possible omission of factor 2: echo distance is v_sonido * t_vuelo / 2, not v_sonido * t_vuelo."
+
+graph_binding:
+  coord_axes:
+    x: t_vuelo
+    y: d_eco
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+  x_variable: t_vuelo
+  y_variable: d_eco
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true
+`;export{e as default};

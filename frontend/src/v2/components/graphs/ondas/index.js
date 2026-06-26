@@ -1,210 +1,270 @@
-import React from "react";
-import OndasGraphsCoord from "./OndasGraphsCoord";
-import OndasGraphsSvg from "./OndasGraphsSvg";
-import ConceptoDeOndaGraphsCoord from "./ConceptoDeOndaGraphsCoord";
-import MecanicasGraphsCoord from "./MecanicasGraphsCoord";
-import ElectromagneticasGraphsCoord from "./ElectromagneticasGraphsCoord";
-import OndasTransversalesYLongitudinalesGraphsCoord from "./OndasTransversalesYLongitudinalesGraphsCoord";
-import OndasTransversalesYLongitudinalesGraphsSvg from "./OndasTransversalesYLongitudinalesGraphsSvg";
-import LongitudDeOndaGraphsCoord from "./LongitudDeOndaGraphsCoord";
-import LongitudDeOndaGraphsSvg from "./LongitudDeOndaGraphsSvg";
-import FrecuenciaYPeriodoGraphsCoord from "./FrecuenciaYPeriodoGraphsCoord";
-import VelocidadDePropagacionGraphsCoord from "./VelocidadDePropagacionGraphsCoord";
-import VelocidadDePropagacionGraphsSvg from "./VelocidadDePropagacionGraphsSvg";
-import CuerdasVelocidadDePropagacionGraphsCoord from "./CuerdasVelocidadDePropagacionGraphsCoord";
-import CuerdasVelocidadDePropagacionGraphsSvg from "./CuerdasVelocidadDePropagacionGraphsSvg";
-import CuerdasOndasEstacionariasGraphsCoord from "./CuerdasOndasEstacionariasGraphsCoord";
-import CuerdasOndasEstacionariasGraphsSvg from "./CuerdasOndasEstacionariasGraphsSvg";
-import CuerdasArmonicosGraphsCoord from "./CuerdasArmonicosGraphsCoord";
-import CuerdasArmonicosGraphsSvg from "./CuerdasArmonicosGraphsSvg";
-import OndasSuperficialesGraphsCoord from "./OndasSuperficialesGraphsCoord";
-import OndasSuperficialesGraphsSvg from "./OndasSuperficialesGraphsSvg";
-import OndasLongitudinalesFluidosGraphsCoord from "./OndasLongitudinalesFluidosGraphsCoord";
-import OndasLongitudinalesFluidosGraphsSvg from "./OndasLongitudinalesFluidosGraphsSvg";
-import FaseGraphsCoord from "./FaseGraphsCoord";
-import EcuacionDeOndaGraphsCoord from "./EcuacionDeOndaGraphsCoord";
+import { withGraphContextRegistry } from "../shared/withGraphContext.jsx";
+/**
+ * Ondas - Graph Components Index
+ *
+ * WIRING ONLY — los metadatos semánticos (title, xAxis, yAxis, relation,
+ * physicalReading, agentHints, commonMistakes, etc.) viven en graficos.yaml.
+ * Este archivo solo declara { type, graphType, component } por entrada.
+ */
 
-const graphByType = {
-  Coord: OndasGraphsCoord,
-  Svg: OndasGraphsSvg,
+import AplicacionesSonidoGraphsCoord from "./Coord/AplicacionesSonidoGraphsCoord.jsx";
+import AplicacionesUltrasonidosYEnsayosGraphsCoord from "./Coord/AplicacionesUltrasonidosYEnsayosGraphsCoord.jsx";
+import CambioDeVelocidadGraphsCoord from "./Coord/CambioDeVelocidadGraphsCoord.jsx";
+import ConceptoDeOndaGraphsCoord from "./Coord/ConceptoDeOndaGraphsCoord.jsx";
+import CondicionDeEstacionariedadGraphsCoord from "./Coord/CondicionDeEstacionariedadGraphsCoord.jsx";
+import CuerdasArmonicosGraphsCoord from "./Coord/CuerdasArmonicosGraphsCoord.jsx";
+import CuerdasGraphsCoord from "./Coord/CuerdasGraphsCoord.jsx";
+import CuerdasOndasEstacionariasGraphsCoord from "./Coord/CuerdasOndasEstacionariasGraphsCoord.jsx";
+import CuerdasVelocidadEnCuerdaTensaGraphsCoord from "./Coord/CuerdasVelocidadEnCuerdaTensaGraphsCoord.jsx";
+import DifraccionGraphsCoord from "./Coord/DifraccionGraphsCoord.jsx";
+import DispersionYAtenuacionEnSolidosGraphsCoord from "./Coord/DispersionYAtenuacionEnSolidosGraphsCoord.jsx";
+import EcuacionDeOndaGraphsCoord from "./Coord/EcuacionDeOndaGraphsCoord.jsx";
+import EfectoDopplerGraphsCoord from "./Coord/EfectoDopplerGraphsCoord.jsx";
+import ElectromagneticasGraphsCoord from "./Coord/ElectromagneticasGraphsCoord.jsx";
+import EnergiaDeUnaOndaGraphsCoord from "./Coord/EnergiaDeUnaOndaGraphsCoord.jsx";
+import FaseGraphsCoord from "./Coord/FaseGraphsCoord.jsx";
+import FlujoDeEnergiaGraphsCoord from "./Coord/FlujoDeEnergiaGraphsCoord.jsx";
+import FrecuenciaYPeriodoGraphsCoord from "./Coord/FrecuenciaYPeriodoGraphsCoord.jsx";
+import ImpedanciaMecanicaEnSolidosGraphsCoord from "./Coord/ImpedanciaMecanicaEnSolidosGraphsCoord.jsx";
+import IntensidadOndulatoriaGraphsCoord from "./Coord/IntensidadOndulatoriaGraphsCoord.jsx";
+import IntensidadYNivelSonoroGraphsCoord from "./Coord/IntensidadYNivelSonoroGraphsCoord.jsx";
+import InterferenciaConstructivaGraphsCoord from "./Coord/InterferenciaConstructivaGraphsCoord.jsx";
+import InterferenciaDestructivaGraphsCoord from "./Coord/InterferenciaDestructivaGraphsCoord.jsx";
+import IntroduccionGraphsCoord from "./Coord/IntroduccionGraphsCoord.jsx";
+import LeyDeSnellGraphsCoord from "./Coord/LeyDeSnellGraphsCoord.jsx";
+import LongitudDeOndaGraphsCoord from "./Coord/LongitudDeOndaGraphsCoord.jsx";
+import MecanicasGraphsCoord from "./Coord/MecanicasGraphsCoord.jsx";
+import ModosEnPlacasYMembranasGraphsCoord from "./Coord/ModosEnPlacasYMembranasGraphsCoord.jsx";
+import NaturalezaDelSonidoGraphsCoord from "./Coord/NaturalezaDelSonidoGraphsCoord.jsx";
+import OndasFlexionalesEnVigasGraphsCoord from "./Coord/OndasFlexionalesEnVigasGraphsCoord.jsx";
+import OndasGraphsCoord from "./Coord/OndasGraphsCoord.jsx";
+import OndasLongitudinalesEnBarrasGraphsCoord from "./Coord/OndasLongitudinalesEnBarrasGraphsCoord.jsx";
+import OndasLongitudinalesFluidosGraphsCoord from "./Coord/OndasLongitudinalesFluidosGraphsCoord.jsx";
+import OndasSismicasPYSGraphsCoord from "./Coord/OndasSismicasPYSGraphsCoord.jsx";
+import OndasSuperficialesGraphsCoord from "./Coord/OndasSuperficialesGraphsCoord.jsx";
+import OndasSuperficialesRayleighGraphsCoord from "./Coord/OndasSuperficialesRayleighGraphsCoord.jsx";
+import OndasTransversalesDeCorteGraphsCoord from "./Coord/OndasTransversalesDeCorteGraphsCoord.jsx";
+import OndasTransversalesYLongitudinalesGraphsCoord from "./Coord/OndasTransversalesYLongitudinalesGraphsCoord.jsx";
+import PropiedadesElasticasDelSolidoGraphsCoord from "./Coord/PropiedadesElasticasDelSolidoGraphsCoord.jsx";
+import ReflexionYTransmisionEnSolidosGraphsCoord from "./Coord/ReflexionYTransmisionEnSolidosGraphsCoord.jsx";
+import RelacionEntreModulosElasticosGraphsCoord from "./Coord/RelacionEntreModulosElasticosGraphsCoord.jsx";
+import ResonanciaYModosEnBarrasGraphsCoord from "./Coord/ResonanciaYModosEnBarrasGraphsCoord.jsx";
+import SuperposicionGraphsCoord from "./Coord/SuperposicionGraphsCoord.jsx";
+import TiposDeOndasEnSolidosGraphsCoord from "./Coord/TiposDeOndasEnSolidosGraphsCoord.jsx";
+import TonoYTimbreGraphsCoord from "./Coord/TonoYTimbreGraphsCoord.jsx";
+import TubosGraphsCoord from "./Coord/TubosGraphsCoord.jsx";
+import VelocidadDePropagacionGraphsCoord from "./Coord/VelocidadDePropagacionGraphsCoord.jsx";
+import VelocidadDelSonidoGraphsCoord from "./Coord/VelocidadDelSonidoGraphsCoord.jsx";
+import AplicacionesUltrasonidosYEnsayosGraphsSvg from "./Svg/AplicacionesUltrasonidosYEnsayosGraphsSvg.jsx";
+import CambioDeVelocidadGraphsSvg from "./Svg/CambioDeVelocidadGraphsSvg.jsx";
+import ConceptoDeOndaGraphsSvg from "./Svg/ConceptoDeOndaGraphsSvg.jsx";
+import CuerdasOndasEstacionariasGraphsSvg from "./Svg/CuerdasOndasEstacionariasGraphsSvg.jsx";
+import CuerdasVelocidadEnCuerdaTensaGraphsSvg from "./Svg/CuerdasVelocidadEnCuerdaTensaGraphsSvg.jsx";
+import DispersionYAtenuacionEnSolidosGraphsSvg from "./Svg/DispersionYAtenuacionEnSolidosGraphsSvg.jsx";
+import EnergiaDeUnaOndaGraphsSvg from "./Svg/EnergiaDeUnaOndaGraphsSvg.jsx";
+import ImpedanciaMecanicaEnSolidosGraphsSvg from "./Svg/ImpedanciaMecanicaEnSolidosGraphsSvg.jsx";
+import IntroduccionGraphsSvg from "./Svg/IntroduccionGraphsSvg.jsx";
+import LongitudDeOndaGraphsSvg from "./Svg/LongitudDeOndaGraphsSvg.jsx";
+import ModosEnPlacasYMembranasGraphsSvg from "./Svg/ModosEnPlacasYMembranasGraphsSvg.jsx";
+import NaturalezaDelSonidoGraphsSvg from "./Svg/NaturalezaDelSonidoGraphsSvg.jsx";
+import OndasFlexionalesEnVigasGraphsSvg from "./Svg/OndasFlexionalesEnVigasGraphsSvg.jsx";
+import OndasLongitudinalesEnBarrasGraphsSvg from "./Svg/OndasLongitudinalesEnBarrasGraphsSvg.jsx";
+import OndasLongitudinalesFluidosGraphsSvg from "./Svg/OndasLongitudinalesFluidosGraphsSvg.jsx";
+import OndasSismicasPYSGraphsSvg from "./Svg/OndasSismicasPYSGraphsSvg.jsx";
+import OndasSuperficialesGraphsSvg from "./Svg/OndasSuperficialesGraphsSvg.jsx";
+import OndasSuperficialesRayleighGraphsSvg from "./Svg/OndasSuperficialesRayleighGraphsSvg.jsx";
+import OndasTransversalesDeCorteGraphsSvg from "./Svg/OndasTransversalesDeCorteGraphsSvg.jsx";
+import OndasTransversalesYLongitudinalesGraphsSvg from "./Svg/OndasTransversalesYLongitudinalesGraphsSvg.jsx";
+import PropiedadesElasticasDelSolidoGraphsSvg from "./Svg/PropiedadesElasticasDelSolidoGraphsSvg.jsx";
+import ReflexionGraphsSvg from "./Svg/ReflexionGraphsSvg.jsx";
+import ReflexionYTransmisionEnSolidosGraphsSvg from "./Svg/ReflexionYTransmisionEnSolidosGraphsSvg.jsx";
+import RelacionEntreModulosElasticosGraphsSvg from "./Svg/RelacionEntreModulosElasticosGraphsSvg.jsx";
+import ResonanciaYModosEnBarrasGraphsSvg from "./Svg/ResonanciaYModosEnBarrasGraphsSvg.jsx";
+import TiposDeOndasEnSolidosGraphsSvg from "./Svg/TiposDeOndasEnSolidosGraphsSvg.jsx";
+import VelocidadDePropagacionGraphsSvg from "./Svg/VelocidadDePropagacionGraphsSvg.jsx";
+import VelocidadDelSonidoGraphsSvg from "./Svg/VelocidadDelSonidoGraphsSvg.jsx";
+
+const rawGraphs = {
+  "aplicaciones": {
+    Coord: { type: "Coord", graphType: "Coord", component: AplicacionesSonidoGraphsCoord },
+  },
+  "aplicaciones-ultrasonidos-y-ensayos": {
+    Coord: { type: "Coord", graphType: "Coord", component: AplicacionesUltrasonidosYEnsayosGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: AplicacionesUltrasonidosYEnsayosGraphsSvg },
+  },
+  "armonicos": {
+    Coord: { type: "Coord", graphType: "Coord", component: CuerdasArmonicosGraphsCoord },
+  },
+  "cambio-de-velocidad": {
+    Coord: { type: "Coord", graphType: "Coord", component: CambioDeVelocidadGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: CambioDeVelocidadGraphsSvg },
+  },
+  "concepto-de-onda": {
+    Coord: { type: "Coord", graphType: "Coord", component: ConceptoDeOndaGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: ConceptoDeOndaGraphsSvg },
+  },
+  "condicion-de-estacionariedad": {
+    Coord: { type: "Coord", graphType: "Coord", component: CondicionDeEstacionariedadGraphsCoord },
+  },
+  "cuerdas": {
+    Coord: { type: "Coord", graphType: "Coord", component: CuerdasGraphsCoord },
+  },
+  "difraccion": {
+    Coord: { type: "Coord", graphType: "Coord", component: DifraccionGraphsCoord },
+  },
+  "dispersion-y-atenuacion-en-solidos": {
+    Coord: { type: "Coord", graphType: "Coord", component: DispersionYAtenuacionEnSolidosGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: DispersionYAtenuacionEnSolidosGraphsSvg },
+  },
+  "ecuacion-de-onda": {
+    Coord: { type: "Coord", graphType: "Coord", component: EcuacionDeOndaGraphsCoord },
+  },
+  "efecto-doppler": {
+    Coord: { type: "Coord", graphType: "Coord", component: EfectoDopplerGraphsCoord },
+  },
+  "electromagneticas": {
+    Coord: { type: "Coord", graphType: "Coord", component: ElectromagneticasGraphsCoord },
+  },
+  "energia-de-una-onda": {
+    Coord: { type: "Coord", graphType: "Coord", component: EnergiaDeUnaOndaGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: EnergiaDeUnaOndaGraphsSvg },
+  },
+  "fase": {
+    Coord: { type: "Coord", graphType: "Coord", component: FaseGraphsCoord },
+  },
+  "flujo-de-energia": {
+    Coord: { type: "Coord", graphType: "Coord", component: FlujoDeEnergiaGraphsCoord },
+  },
+  "frecuencia-y-periodo": {
+    Coord: { type: "Coord", graphType: "Coord", component: FrecuenciaYPeriodoGraphsCoord },
+  },
+  "impedancia-mecanica-en-solidos": {
+    Coord: { type: "Coord", graphType: "Coord", component: ImpedanciaMecanicaEnSolidosGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: ImpedanciaMecanicaEnSolidosGraphsSvg },
+  },
+  "intensidad-ondulatoria": {
+    Coord: { type: "Coord", graphType: "Coord", component: IntensidadOndulatoriaGraphsCoord },
+  },
+  "intensidad-y-nivel-sonoro": {
+    Coord: { type: "Coord", graphType: "Coord", component: IntensidadYNivelSonoroGraphsCoord },
+  },
+  "interferencia-constructiva": {
+    Coord: { type: "Coord", graphType: "Coord", component: InterferenciaConstructivaGraphsCoord },
+  },
+  "interferencia-destructiva": {
+    Coord: { type: "Coord", graphType: "Coord", component: InterferenciaDestructivaGraphsCoord },
+  },
+  "introduccion": {
+    Coord: { type: "Coord", graphType: "Coord", component: IntroduccionGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: IntroduccionGraphsSvg },
+  },
+  "ley-de-snell": {
+    Coord: { type: "Coord", graphType: "Coord", component: LeyDeSnellGraphsCoord },
+  },
+  "longitud-de-onda": {
+    Coord: { type: "Coord", graphType: "Coord", component: LongitudDeOndaGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: LongitudDeOndaGraphsSvg },
+  },
+  "mecanicas": {
+    Coord: { type: "Coord", graphType: "Coord", component: MecanicasGraphsCoord },
+  },
+  "modos-en-placas-y-membranas": {
+    Coord: { type: "Coord", graphType: "Coord", component: ModosEnPlacasYMembranasGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: ModosEnPlacasYMembranasGraphsSvg },
+  },
+  "naturaleza-del-sonido": {
+    Coord: { type: "Coord", graphType: "Coord", component: NaturalezaDelSonidoGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: NaturalezaDelSonidoGraphsSvg },
+  },
+  "nodos-y-antinodos": {
+    Coord: { type: "Coord", graphType: "Coord", component: OndasGraphsCoord },
+  },
+  "ondas-estacionarias-en-cuerdas": {
+    Coord: { type: "Coord", graphType: "Coord", component: CuerdasOndasEstacionariasGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: CuerdasOndasEstacionariasGraphsSvg },
+  },
+  "ondas-flexionales-en-vigas": {
+    Coord: { type: "Coord", graphType: "Coord", component: OndasFlexionalesEnVigasGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: OndasFlexionalesEnVigasGraphsSvg },
+  },
+  "ondas-longitudinales": {
+    Coord: { type: "Coord", graphType: "Coord", component: OndasLongitudinalesFluidosGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: OndasLongitudinalesFluidosGraphsSvg },
+  },
+  "ondas-longitudinales-en-barras": {
+    Coord: { type: "Coord", graphType: "Coord", component: OndasLongitudinalesEnBarrasGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: OndasLongitudinalesEnBarrasGraphsSvg },
+  },
+  "ondas-sismicas-p-y-s": {
+    Coord: { type: "Coord", graphType: "Coord", component: OndasSismicasPYSGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: OndasSismicasPYSGraphsSvg },
+  },
+  "ondas-superficiales": {
+    Coord: { type: "Coord", graphType: "Coord", component: OndasSuperficialesGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: OndasSuperficialesGraphsSvg },
+  },
+  "ondas-superficiales-rayleigh": {
+    Coord: { type: "Coord", graphType: "Coord", component: OndasSuperficialesRayleighGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: OndasSuperficialesRayleighGraphsSvg },
+  },
+  "ondas-transversales-de-corte": {
+    Coord: { type: "Coord", graphType: "Coord", component: OndasTransversalesDeCorteGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: OndasTransversalesDeCorteGraphsSvg },
+  },
+  "ondas-transversales-y-longitudinales": {
+    Coord: { type: "Coord", graphType: "Coord", component: OndasTransversalesYLongitudinalesGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: OndasTransversalesYLongitudinalesGraphsSvg },
+  },
+  "propiedades-elasticas-del-solido": {
+    Coord: { type: "Coord", graphType: "Coord", component: PropiedadesElasticasDelSolidoGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: PropiedadesElasticasDelSolidoGraphsSvg },
+  },
+  "reflexion": {
+    Svg: { type: "Svg", graphType: "Svg", component: ReflexionGraphsSvg },
+  },
+  "reflexion-y-transmision-en-solidos": {
+    Coord: { type: "Coord", graphType: "Coord", component: ReflexionYTransmisionEnSolidosGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: ReflexionYTransmisionEnSolidosGraphsSvg },
+  },
+  "relacion-entre-modulos-elasticos": {
+    Coord: { type: "Coord", graphType: "Coord", component: RelacionEntreModulosElasticosGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: RelacionEntreModulosElasticosGraphsSvg },
+  },
+  "resonancia": {
+    Coord: { type: "Coord", graphType: "Coord", component: OndasGraphsCoord },
+  },
+  "resonancia-y-modos-en-barras": {
+    Coord: { type: "Coord", graphType: "Coord", component: ResonanciaYModosEnBarrasGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: ResonanciaYModosEnBarrasGraphsSvg },
+  },
+  "superposicion": {
+    Coord: { type: "Coord", graphType: "Coord", component: SuperposicionGraphsCoord },
+  },
+  "tipos-de-ondas-en-solidos": {
+    Coord: { type: "Coord", graphType: "Coord", component: TiposDeOndasEnSolidosGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: TiposDeOndasEnSolidosGraphsSvg },
+  },
+  "tono-y-timbre": {
+    Coord: { type: "Coord", graphType: "Coord", component: TonoYTimbreGraphsCoord },
+  },
+  "tubos": {
+    Coord: { type: "Coord", graphType: "Coord", component: TubosGraphsCoord },
+  },
+  "velocidad-de-propagacion": {
+    Coord: { type: "Coord", graphType: "Coord", component: VelocidadDePropagacionGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: VelocidadDePropagacionGraphsSvg },
+  },
+  "velocidad-del-sonido": {
+    Coord: { type: "Coord", graphType: "Coord", component: VelocidadDelSonidoGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: VelocidadDelSonidoGraphsSvg },
+  },
+  "velocidad-en-cuerda-tensa": {
+    Coord: { type: "Coord", graphType: "Coord", component: CuerdasVelocidadEnCuerdaTensaGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: CuerdasVelocidadEnCuerdaTensaGraphsSvg },
+  },
 };
 
-function wrapWithLeafProfile(Comp, leafProfileId) {
-  const Wrapped = (props) => React.createElement(Comp, { ...props, leafProfileId });
-  Wrapped.displayName = `OndasLeafGraph(${leafProfileId || "default"})`;
-  return Wrapped;
-}
+export const graphs = withGraphContextRegistry(rawGraphs);
+export const ondasGraphs = graphs;
 
-function graphSet(types = [], components = null, leafProfileId = "") {
-  const safeTypes = Array.isArray(types) && types.length ? types : ["Coord"];
-  const out = {};
-  if (components && typeof components === "object") {
-    for (const t of safeTypes) {
-      if (typeof components[t] === "function") out[t] = wrapWithLeafProfile(components[t], leafProfileId);
-    }
-    if (Object.keys(out).length) return out;
-  }
-  for (const t of safeTypes) {
-    if (graphByType[t]) out[t] = wrapWithLeafProfile(graphByType[t], leafProfileId);
-  }
-  if (!Object.keys(out).length) out.Coord = wrapWithLeafProfile(OndasGraphsCoord, leafProfileId);
-  return out;
-}
-
-const ondaLeaves = [
-  {
-    id: "concepto-de-onda",
-    route: "fisica-clasica/ondas/fundamentos/concepto-de-onda",
-    graficos: ["Coord"],
-    components: { Coord: ConceptoDeOndaGraphsCoord },
-  },
-  {
-    id: "mecanicas",
-    route: "fisica-clasica/ondas/fundamentos/tipos-de-ondas/mecanicas",
-    graficos: ["Coord"],
-    components: { Coord: MecanicasGraphsCoord },
-  },
-  {
-    id: "electromagneticas",
-    route: "fisica-clasica/ondas/fundamentos/tipos-de-ondas/electromagneticas",
-    graficos: ["Coord"],
-    components: { Coord: ElectromagneticasGraphsCoord },
-  },
-  {
-    id: "ondas-transversales-y-longitudinales",
-    route: "fisica-clasica/ondas/fundamentos/ondas-transversales-y-longitudinales",
-    graficos: ["Coord", "Svg"],
-    components: {
-      Coord: OndasTransversalesYLongitudinalesGraphsCoord,
-      Svg: OndasTransversalesYLongitudinalesGraphsSvg,
-    },
-  },
-  {
-    id: "longitud-de-onda",
-    route: "fisica-clasica/ondas/fundamentos/magnitudes-ondulatorias/longitud-de-onda",
-    graficos: ["Coord", "Svg"],
-    components: { Coord: LongitudDeOndaGraphsCoord, Svg: LongitudDeOndaGraphsSvg },
-  },
-  {
-    id: "frecuencia-y-periodo",
-    route: "fisica-clasica/ondas/fundamentos/magnitudes-ondulatorias/frecuencia-y-periodo",
-    graficos: ["Coord"],
-    components: { Coord: FrecuenciaYPeriodoGraphsCoord },
-  },
-  {
-    id: "velocidad-de-propagacion",
-    route: "fisica-clasica/ondas/fundamentos/magnitudes-ondulatorias/velocidad-de-propagacion",
-    graficos: ["Coord", "Svg"],
-    components: { Coord: VelocidadDePropagacionGraphsCoord, Svg: VelocidadDePropagacionGraphsSvg },
-  },
-  {
-    id: "fase",
-    route: "fisica-clasica/ondas/fundamentos/magnitudes-ondulatorias/fase",
-    graficos: ["Coord"],
-    components: { Coord: FaseGraphsCoord },
-  },
-  {
-    id: "ecuacion-de-onda",
-    route: "fisica-clasica/ondas/fundamentos/ecuacion-de-onda",
-    graficos: ["Coord"],
-    components: { Coord: EcuacionDeOndaGraphsCoord },
-  },
-  {
-    id: "velocidad-de-propagacion",
-    route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-cuerdas/velocidad-de-propagacion",
-    graficos: ["Coord", "Svg"],
-    components: {
-      Coord: CuerdasVelocidadDePropagacionGraphsCoord,
-      Svg: CuerdasVelocidadDePropagacionGraphsSvg,
-    },
-  },
-  {
-    id: "ondas-estacionarias",
-    route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-cuerdas/ondas-estacionarias",
-    graficos: ["Coord", "Svg"],
-    components: {
-      Coord: CuerdasOndasEstacionariasGraphsCoord,
-      Svg: CuerdasOndasEstacionariasGraphsSvg,
-    },
-  },
-  {
-    id: "armonicos",
-    route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-cuerdas/armonicos",
-    graficos: ["Coord", "Svg"],
-    components: {
-      Coord: CuerdasArmonicosGraphsCoord,
-      Svg: CuerdasArmonicosGraphsSvg,
-    },
-  },
-  {
-    id: "ondas-superficiales",
-    route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-fluidos/ondas-superficiales",
-    graficos: ["Coord", "Svg"],
-    components: {
-      Coord: OndasSuperficialesGraphsCoord,
-      Svg: OndasSuperficialesGraphsSvg,
-    },
-  },
-  {
-    id: "ondas-longitudinales",
-    route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-fluidos/ondas-longitudinales",
-    graficos: ["Coord", "Svg"],
-    components: {
-      Coord: OndasLongitudinalesFluidosGraphsCoord,
-      Svg: OndasLongitudinalesFluidosGraphsSvg,
-    },
-  },
-  { id: "introduccion", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/introduccion", graficos: ["Coord", "Svg"] },
-  { id: "propiedades-elasticas-del-solido", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/propiedades-elasticas-del-solido", graficos: ["Coord", "Svg"] },
-  { id: "tipos-de-ondas-en-solidos", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/tipos-de-ondas-en-solidos", graficos: ["Coord", "Svg"] },
-  { id: "ondas-longitudinales-en-barras", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/ondas-longitudinales-en-barras", graficos: ["Coord", "Svg"] },
-  { id: "ondas-transversales-de-corte", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/ondas-transversales-de-corte", graficos: ["Coord", "Svg"] },
-  { id: "relacion-entre-modulos-elasticos", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/relacion-entre-modulos-elasticos", graficos: ["Coord", "Svg"] },
-  { id: "ondas-flexionales-en-vigas", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/ondas-flexionales-en-vigas", graficos: ["Coord", "Svg"] },
-  { id: "ondas-superficiales-rayleigh", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/ondas-superficiales-rayleigh", graficos: ["Coord", "Svg"] },
-  { id: "ondas-sismicas-p-y-s", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/ondas-sismicas-p-y-s", graficos: ["Coord", "Svg"] },
-  { id: "reflexion-y-transmision-en-solidos", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/reflexion-y-transmision-en-solidos", graficos: ["Coord", "Svg"] },
-  { id: "impedancia-mecanica-en-solidos", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/impedancia-mecanica-en-solidos", graficos: ["Coord", "Svg"] },
-  { id: "dispersion-y-atenuacion-en-solidos", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/dispersion-y-atenuacion-en-solidos", graficos: ["Coord", "Svg"] },
-  { id: "resonancia-y-modos-en-barras", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/resonancia-y-modos-en-barras", graficos: ["Coord", "Svg"] },
-  { id: "modos-en-placas-y-membranas", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/modos-en-placas-y-membranas", graficos: ["Coord", "Svg"] },
-  { id: "aplicaciones-ultrasonidos-y-ensayos", route: "fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/aplicaciones-ultrasonidos-y-ensayos", graficos: ["Coord", "Svg"] },
-  { id: "reflexion", route: "fisica-clasica/ondas/fenomenos-ondulatorios/reflexion", graficos: ["Svg"] },
-  { id: "ley-de-snell", route: "fisica-clasica/ondas/fenomenos-ondulatorios/refraccion/ley-de-snell", graficos: ["Coord"] },
-  { id: "cambio-de-velocidad", route: "fisica-clasica/ondas/fenomenos-ondulatorios/refraccion/cambio-de-velocidad", graficos: ["Coord", "Svg"] },
-  { id: "superposicion", route: "fisica-clasica/ondas/fenomenos-ondulatorios/superposicion", graficos: ["Coord"] },
-  { id: "interferencia-constructiva", route: "fisica-clasica/ondas/fenomenos-ondulatorios/interferencia/interferencia-constructiva", graficos: ["Coord"] },
-  { id: "interferencia-destructiva", route: "fisica-clasica/ondas/fenomenos-ondulatorios/interferencia/interferencia-destructiva", graficos: ["Coord"] },
-  { id: "difraccion", route: "fisica-clasica/ondas/fenomenos-ondulatorios/difraccion", graficos: ["Coord"] },
-  { id: "condicion-de-estacionariedad", route: "fisica-clasica/ondas/ondas-estacionarias/condicion-de-estacionariedad", graficos: ["Coord"] },
-  { id: "nodos-y-antinodos", route: "fisica-clasica/ondas/ondas-estacionarias/nodos-y-antinodos", graficos: ["Coord"] },
-  { id: "resonancia", route: "fisica-clasica/ondas/ondas-estacionarias/resonancia", graficos: ["Coord"] },
-  { id: "cuerdas", route: "fisica-clasica/ondas/ondas-estacionarias/ejemplos-clasicos/cuerdas", graficos: ["Coord"] },
-  { id: "tubos", route: "fisica-clasica/ondas/ondas-estacionarias/ejemplos-clasicos/tubos", graficos: ["Coord"] },
-  { id: "naturaleza-del-sonido", route: "fisica-clasica/ondas/sonido/naturaleza-del-sonido", graficos: ["Coord", "Svg"] },
-  { id: "velocidad-del-sonido", route: "fisica-clasica/ondas/sonido/velocidad-del-sonido", graficos: ["Coord", "Svg"] },
-  { id: "intensidad-y-nivel-sonoro", route: "fisica-clasica/ondas/sonido/intensidad-y-nivel-sonoro", graficos: ["Coord"] },
-  { id: "tono-y-timbre", route: "fisica-clasica/ondas/sonido/tono-y-timbre", graficos: ["Coord"] },
-  { id: "efecto-doppler", route: "fisica-clasica/ondas/sonido/efecto-doppler", graficos: ["Coord"] },
-  { id: "aplicaciones", route: "fisica-clasica/ondas/sonido/aplicaciones", graficos: ["Coord"] },
-  { id: "naturaleza-de-las-ondas-em", route: "fisica-clasica/ondas/ondas-electromagneticas/naturaleza-de-las-ondas-em", graficos: ["Coord", "Svg"] },
-  { id: "espectro-electromagnetico", route: "fisica-clasica/ondas/ondas-electromagneticas/espectro-electromagnetico", graficos: ["Coord"] },
-  { id: "velocidad-de-la-luz", route: "fisica-clasica/ondas/ondas-electromagneticas/velocidad-de-la-luz", graficos: ["Coord", "Svg"] },
-  { id: "comparacion-con-ondas-mecanicas", route: "fisica-clasica/ondas/ondas-electromagneticas/comparacion-con-ondas-mecanicas", graficos: ["Coord", "Svg"] },
-  { id: "energia-de-una-onda", route: "fisica-clasica/ondas/energia-y-transporte/energia-de-una-onda", graficos: ["Coord", "Svg"] },
-  { id: "intensidad-ondulatoria", route: "fisica-clasica/ondas/energia-y-transporte/intensidad-ondulatoria", graficos: ["Coord"] },
-  { id: "flujo-de-energia", route: "fisica-clasica/ondas/energia-y-transporte/flujo-de-energia", graficos: ["Coord"] },
-];
-
-const byRoute = Object.fromEntries(
-  ondaLeaves.map(({ id, route, graficos, components }) => [route, graphSet(graficos, components, id)])
-);
-
-const byId = Object.fromEntries(
-  ondaLeaves.map(({ id, graficos, components }) => [id, graphSet(graficos, components, id)])
-);
-
-export const graphs = {
-  ...byId,
-  ...byRoute,
-};
+export default graphs;

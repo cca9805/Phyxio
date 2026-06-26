@@ -1,0 +1,92 @@
+const e=`version: "v5"
+id: fuerza-de-lorentz
+orden: 291420
+type: leaf
+
+nombre:
+  es: Fuerza de lorentz
+  en: Lorentz Force
+
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: fundamentos
+parent_id: fuerzas-electromagneticas
+ruta_relativa: fisica-clasica/electromagnetismo/fundamentos/fuerzas-electromagneticas/fuerza-de-lorentz
+
+descripcion: "Fuerza total sobre una carga en campos eléctrico y magnético combinados."
+description_en: "Total force on a charge in combined electric and magnetic fields."
+
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+
+icon: 🔌
+tags:
+  es:
+    - fuerza de Lorentz
+    - fuerza magnética
+    - campo eléctrico
+    - campo magnético
+    - electrodinámica
+    - selector de velocidades
+  en:
+    - Lorentz force
+    - magnetic force
+    - electric field
+    - magnetic field
+    - electrodynamics
+    - velocity selector
+
+prerequisitos:
+  - carga-electrica
+  - campo-electrico
+  - campo-magnetico
+
+graficos:
+  - Coord
+
+physical_role:
+  es: concepto físico
+  en: physical concept
+
+representacion_dominante: Coord
+magnitud_dominante: F_L
+
+pregunta_fisica_central:
+  es: "¿Cuál es la fuerza total que experimentan las cargas eléctricas cuando se mueven en presencia simultánea de un campo eléctrico y un campo magnético?"
+  en: "What is the total force experienced by electric charges when they move in the simultaneous presence of an electric field and a magnetic field?"
+
+dificultad: 3
+tiempo_estimado_min: 30
+
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

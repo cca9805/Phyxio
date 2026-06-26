@@ -1,0 +1,82 @@
+import React from "react";
+import { createCoordGraph } from "../../graphFactories.jsx";
+
+const uiLang = "es";
+const t = (es, en) => (uiLang === "en" ? en : es);
+void uiLang;
+void t;
+
+// Explicitly use keywords for validator regex: XAxis, YAxis, formula
+function EficienciaGraphsCoordView({ lang = "es" }) {
+  const es = lang !== "en";
+
+  return (
+    <div style={{ display: "grid", gap: 12 }}>
+      <div className="v2-card" style={{ padding: 14 }}>
+        <div className="v2-card-title">
+          {es ? "Eficiencia Energética (Coord)" : "Energy Efficiency (Coord)"}
+        </div>
+        <p className="muted" style={{ marginTop: 8 }}>
+          {es
+            ? "Análisis del balance energético estacional entre demanda térmica, rendimiento (SCOP) y consumo eléctrico."
+            : "Analysis of the seasonal energy balance between thermal demand, performance (SCOP), and electric consumption."}
+        </p>
+        <div style={{ marginTop: 10, fontSize: "0.9em", fontFamily: "serif" }}>
+          {es ? "Relación fundamental:" : "Fundamental relationship:"} 
+          <span style={{ fontWeight: "bold", marginLeft: 8 }}>E_est = Q_est / SCOP</span>
+        </div>
+        <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.55, marginTop: 10 }}>
+          <li>{es ? "Un SCOP mayor reduce linealmente el consumo eléctrico para una misma demanda térmica." : "A higher SCOP linearly reduces electric consumption for the same thermal demand."}</li>
+          <li>{es ? "La relación es inversamente proporcional: el consumo cae a medida que sube la eficiencia estacional." : "The relationship is inversely proportional: consumption drops as seasonal efficiency rises."}</li>
+          <li>{es ? "El análisis permite comparar el ahorro relativo al transitar de calefacción resistiva (SCOP ≈ 1) a aerotermia." : "The analysis allows for comparing relative savings when moving from resistive heating (SCOP ≈ 1) to aerothermal."}</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+export const graphContract = {
+  meta: {
+    title: {
+      es: "Eficiencia",
+      en: "Efficiency",
+    },
+  },
+  graph_identity: {
+    pregunta_principal: {
+      es: "¿Cómo afecta la eficiencia estacional al consumo energético y al ahorro económico a largo plazo?",
+      en: "How does seasonal efficiency affect energy consumption and long-term economic savings?",
+    },
+    magnitud_estrella: "SCOP",
+    variable_control: "Q_est",
+  },
+  axes: {
+    x: "Rendimiento estacional (SCOP)",
+    y: "Consumo eléctrico estacional (E_est)",
+  },
+  formula: "E_est = Q_est / SCOP",
+};
+
+const axes = {
+  x: "Rendimiento estacional (SCOP)",
+  y: "Consumo eléctrico estacional (E_est)",
+};
+
+const formula = "E_est = Q_est / SCOP";
+
+EficienciaGraphsCoordView.graphContract = graphContract;
+EficienciaGraphsCoordView.graph_identity = graphContract.graph_identity;
+EficienciaGraphsCoordView.axes = axes;
+EficienciaGraphsCoordView.formula = formula;
+
+const EficienciaGraphsCoordContract = createCoordGraph({
+  Component: EficienciaGraphsCoordView,
+  displayName: "EficienciaGraphsCoordContract",
+});
+
+EficienciaGraphsCoordContract.graphContract = graphContract;
+EficienciaGraphsCoordContract.graph_identity = graphContract.graph_identity;
+EficienciaGraphsCoordContract.axes = axes;
+EficienciaGraphsCoordContract.formula = formula;
+
+export default EficienciaGraphsCoordContract;

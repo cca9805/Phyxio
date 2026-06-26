@@ -1,0 +1,441 @@
+const e=`version: "v5"
+id: interpretacion-reflexion
+leaf_id: reflexion
+
+nombre:
+  es: Interpretacion de la reflexion
+  en: Reflection interpretation
+
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: optica
+  parent_id: optica-geometrica
+  ruta_relativa: fisica-clasica/electromagnetismo/optica/optica-geometrica/reflexion
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: "Interpretación"
+    en: "Interpretation"
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    priority:
+      - summary
+      - likely_errors
+
+dependencies:
+  formulas:
+    - ley_reflexion
+    - angulo_critico
+  magnitudes:
+    - theta_i
+    - theta_r
+    - theta_c
+    - n1
+    - n2
+
+global_context:
+  physical_domain:
+    es: "Optica geometrica: reflexion de la luz en superficies planas y curvas."
+    en: "Geometrical optics: reflection of light at flat and curved surfaces."
+  axis_convention:
+    es: "Angulos medidos desde la normal a la superficie, positivos en sentido antihorario."
+    en: "Angles measured from the surface normal, positive counterclockwise."
+  standard_assumptions:
+    - "Superficie lisa (reflexion especular)"
+    - "Luz monocromatica"
+    - "Aproximacion de rayos (longitud de onda despreciable frente a la superficie)"
+  standard_warnings:
+    - "En superficies rugosas la reflexion es difusa y la ley no aplica por rayo individual"
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+  theta_r:
+    magnitude_type: angular
+    semantic_role:
+      es: "Angulo del rayo reflejado respecto a la normal."
+      en: "Angle of the reflected ray with respect to the normal."
+    summary_rules:
+      - id: tr_summary_equal
+        when: "true"
+        status: ok
+        text:
+          es: "[[theta_r]] indica el angulo de reflexion. Por la ley de reflexion, siempre resulta igual a [[theta_i]], lo que significa simetria perfecta respecto a la normal."
+          en: "[[theta_r]] indicates the reflection angle. By the law of reflection, it always equals [[theta_i]], which means perfect symmetry about the normal."
+    physical_reading_rules:
+      - id: tr_reading_normal
+        when: "theta_r == 0"
+        status: ok
+        text:
+          es: "El rayo reflejado vuelve exactamente por el camino de llegada porque la incidencia es perpendicular a la superficie."
+          en: "The reflected ray returns exactly along the incoming path because the incidence is perpendicular to the surface."
+      - id: tr_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "El rayo reflejado sale en el plano de incidencia formando un angulo [[theta_r]] con la normal, simetrico al rayo incidente."
+          en: "The reflected ray leaves in the plane of incidence at angle [[theta_r]] from the normal, symmetric to the incident ray."
+    coherence_rules:
+      - id: tr_coherence_range
+        when: "theta_r < 0 or theta_r > 90"
+        status: error
+        text:
+          es: "Un angulo de reflexion fuera de 0 a 90 grados indica error de calculo o de convencion de signos."
+          en: "A reflection angle outside 0 to 90 degrees indicates a calculation error or sign convention mistake."
+      - id: tr_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El angulo de reflexion esta dentro del rango fisico valido."
+          en: "The reflection angle is within the valid physical range."
+    model_validity_rules:
+      - id: tr_validity_specular
+        when: "true"
+        status: ok
+        text:
+          es: "La ley de reflexion es exacta para superficies especulares. Si la superficie es rugosa a escala de la longitud de onda, la reflexion se vuelve difusa y la ley no predice un angulo unico."
+          en: "The law of reflection is exact for specular surfaces. If the surface is rough at the wavelength scale, reflection becomes diffuse and the law does not predict a single angle."
+    graph_rules:
+      - id: tr_graph_symmetry
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama SVG, el rayo reflejado aparece simetrico al incidente respecto a la linea normal."
+          en: "In the SVG diagram, the reflected ray appears symmetric to the incident ray about the normal line."
+    likely_errors:
+      - id: tr_error_surface_angle
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: medir el angulo desde la superficie en vez de desde la normal. El angulo correcto es el complementario."
+          en: "Common error: measuring the angle from the surface instead of from the normal. The correct angle is the complement."
+    next_step_rules:
+      - id: tr_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con el angulo de reflexion calculado, verificar la simetria en el diagrama y considerar si el angulo de incidencia supera el angulo critico para reflexion total."
+          en: "With the reflection angle calculated, verify the symmetry in the diagram and consider whether the incidence angle exceeds the critical angle for total reflection."
+
+  theta_i:
+    magnitude_type: angular
+    semantic_role:
+      es: "Angulo del rayo incidente respecto a la normal."
+      en: "Angle of the incident ray with respect to the normal."
+    summary_rules:
+      - id: ti_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[theta_i]] indica el angulo de incidencia del rayo sobre la superficie. Determina directamente [[theta_r]] y decide si se supera [[theta_c]] para reflexion total."
+          en: "[[theta_i]] indicates the incidence angle of the ray on the surface. It directly determines [[theta_r]] and decides whether [[theta_c]] is exceeded for total reflection."
+    physical_reading_rules:
+      - id: ti_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "El angulo de incidencia fija toda la geometria de la reflexion: por simetria, [[theta_r]] lo replica y el rayo reflejado queda definido."
+          en: "The angle of incidence fixes the entire reflection geometry: by symmetry, [[theta_r]] replicates it and the reflected ray is fully defined."
+    coherence_rules:
+      - id: ti_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El angulo de incidencia debe estar entre 0 y 90 grados."
+          en: "The angle of incidence must be between 0 and 90 degrees."
+    model_validity_rules:
+      - id: ti_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo geometrico es valido mientras la superficie sea especular a la escala de la longitud de onda."
+          en: "The geometric model is valid as long as the surface is specular at the wavelength scale."
+    graph_rules:
+      - id: ti_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el SVG, el rayo incidente se dibuja desde la esquina superior izquierda hacia el punto de contacto con la superficie."
+          en: "In the SVG, the incident ray is drawn from the upper left corner towards the contact point on the surface."
+    likely_errors:
+      - id: ti_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: confundir angulo de incidencia con angulo de la superficie (complementario)."
+          en: "Common error: confusing the incidence angle with the surface angle (complement)."
+    next_step_rules:
+      - id: ti_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Una vez conocido [[theta_i]], aplicar la ley de reflexion para obtener [[theta_r]] y verificar si supera [[theta_c]] para determinar si hay reflexion total."
+          en: "Once [[theta_i]] is known, apply the law of reflection to obtain [[theta_r]] and check whether it exceeds [[theta_c]] to determine if total reflection occurs."
+
+  theta_c:
+    magnitude_type: angular
+    semantic_role:
+      es: "Angulo critico para reflexion total interna."
+      en: "Critical angle for total internal reflection."
+    summary_rules:
+      - id: tc_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[theta_c]] indica el angulo limite a partir del cual toda la luz se refleja internamente. Depende del cociente entre [[n2]] y [[n1]]."
+          en: "[[theta_c]] indicates the limiting angle above which all light is internally reflected. It depends on the ratio of [[n2]] to [[n1]]."
+    physical_reading_rules:
+      - id: tc_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Cuando [[theta_i]] supera [[theta_c]], no existe rayo refractado y toda la energia se refleja. Esto permite la propagacion guiada en fibra optica."
+          en: "When [[theta_i]] exceeds [[theta_c]], no refracted ray exists and all energy is reflected. This enables guided propagation in optical fibres."
+    coherence_rules:
+      - id: tc_coherence_n1_gt_n2
+        when: "n1 <= n2"
+        status: error
+        text:
+          es: "No existe angulo critico si n1 no es mayor que n2. Revisar el orden de los indices."
+          en: "No critical angle exists if n1 is not greater than n2. Check the index order."
+      - id: tc_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El angulo critico es coherente con los indices proporcionados."
+          en: "The critical angle is consistent with the provided indices."
+    model_validity_rules:
+      - id: tc_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El calculo del angulo critico es exacto dentro de la optica geometrica. Falla en peliculas delgadas donde aparecen efectos ondulatorios."
+          en: "The critical angle calculation is exact within geometrical optics. It fails in thin films where wave effects appear."
+    graph_rules:
+      - id: tc_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama, el angulo critico se marca como linea discontinua que separa la zona de reflexion parcial de la zona de reflexion total."
+          en: "In the diagram, the critical angle is marked as a dashed line separating the partial reflection zone from the total reflection zone."
+    likely_errors:
+      - id: tc_error_inversion
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: invertir n1 y n2 en la formula, obteniendo un arcoseno mayor que 1 (imposible)."
+          en: "Common error: swapping n1 and n2 in the formula, yielding an arcsine greater than 1 (impossible)."
+    next_step_rules:
+      - id: tc_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[theta_c]] calculado, compararlo con [[theta_i]] para determinar si la reflexion es total o parcial."
+          en: "With [[theta_c]] calculated, compare it with [[theta_i]] to determine whether reflection is total or partial."
+
+  n1:
+    magnitude_type: adimensional
+    semantic_role:
+      es: "Indice de refraccion del medio incidente."
+      en: "Refractive index of the incident medium."
+    summary_rules:
+      - id: n1_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[n1]] indica la densidad optica del medio por el que viaja la luz antes de la interfaz. Determina junto con [[n2]] si existe angulo critico."
+          en: "[[n1]] indicates the optical density of the medium through which light travels before the interface. Together with [[n2]] it determines whether a critical angle exists."
+    physical_reading_rules:
+      - id: n1_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Un medio con mayor [[n1]] reduce la velocidad de la luz y aumenta la posibilidad de reflexion total al pasar a un medio menos denso."
+          en: "A medium with higher [[n1]] reduces the speed of light and increases the possibility of total reflection when passing to a less dense medium."
+    coherence_rules:
+      - id: n1_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El indice debe ser mayor o igual a 1 para medios fisicos reales."
+          en: "The index must be greater than or equal to 1 for real physical media."
+    model_validity_rules:
+      - id: n1_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume medios isotropos y homogeneos. En medios anisotrpos el indice depende de la polarizacion."
+          en: "The model assumes isotropic and homogeneous media. In anisotropic media the index depends on polarisation."
+    graph_rules:
+      - id: n1_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama, el medio incidente se representa como la region superior con su indice rotulado."
+          en: "In the diagram, the incident medium is shown as the upper region with its index labelled."
+    likely_errors:
+      - id: n1_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: asumir n1 siempre como 1 (aire) sin considerar que la luz puede viajar en vidrio u otro material."
+          en: "Common error: assuming n1 is always 1 (air) without considering that light may travel in glass or another material."
+    next_step_rules:
+      - id: n1_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Identificar el medio incidente y buscar su indice en tablas para sustituir en la formula del angulo critico."
+          en: "Identify the incident medium and look up its index in tables for substitution into the critical angle formula."
+
+  n2:
+    magnitude_type: adimensional
+    semantic_role:
+      es: "Indice de refraccion del medio transmitido."
+      en: "Refractive index of the transmitted medium."
+    summary_rules:
+      - id: n2_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[n2]] indica la densidad optica del medio al otro lado de la interfaz. Su relacion con [[n1]] determina el angulo critico."
+          en: "[[n2]] indicates the optical density of the medium on the other side of the interface. Its relationship with [[n1]] determines the critical angle."
+    physical_reading_rules:
+      - id: n2_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Si [[n2]] es menor que [[n1]], existe un angulo critico y es posible la reflexion total interna."
+          en: "If [[n2]] is less than [[n1]], a critical angle exists and total internal reflection is possible."
+    coherence_rules:
+      - id: n2_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El indice debe ser mayor o igual a 1 para medios fisicos reales."
+          en: "The index must be greater than or equal to 1 for real physical media."
+    model_validity_rules:
+      - id: n2_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume medios isotropos y homogeneos con interfaz plana bien definida."
+          en: "The model assumes isotropic and homogeneous media with a well-defined flat interface."
+    graph_rules:
+      - id: n2_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama, el medio transmitido se representa como la region inferior con su indice rotulado."
+          en: "In the diagram, the transmitted medium is shown as the lower region with its index labelled."
+    likely_errors:
+      - id: n2_error_default
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: confundir n2 con n1 al plantear el angulo critico, invirtiendo el cociente."
+          en: "Common error: confusing n2 with n1 when calculating the critical angle, inverting the ratio."
+    next_step_rules:
+      - id: n2_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Confirmar que n2 corresponde al medio menos denso y proceder al calculo del angulo critico."
+          en: "Confirm that n2 corresponds to the less dense medium and proceed to calculate the critical angle."
+
+cross_checks:
+  - check: "theta_r == theta_i"
+    description:
+      es: "La ley de reflexion exige igualdad estricta entre angulo incidente y reflejado."
+      en: "The law of reflection requires strict equality between incident and reflected angles."
+
+error_patterns:
+  - pattern: "theta medido desde la superficie"
+    correction:
+      es: "Medir siempre desde la normal, no desde la superficie. El angulo correcto es 90 menos el angulo superficial."
+      en: "Always measure from the normal, not from the surface. The correct angle is 90 minus the surface angle."
+
+graph_binding:
+  enabled: true
+  type: Svg
+  channels:
+    - angle-incident
+    - angle-reflected
+    - critical-angle-marker
+
+mini_graph:
+  enabled: true
+  preferred_type: Svg
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true
+`;export{e as default};

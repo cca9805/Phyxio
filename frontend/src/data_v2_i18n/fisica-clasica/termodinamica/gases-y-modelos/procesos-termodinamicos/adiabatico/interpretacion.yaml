@@ -1,0 +1,979 @@
+version: 1.0.0
+id: adiabatico-interpretacion
+leaf_id: adiabatico
+nombre:
+  es: Interpretacion del proceso adiabatico
+  en: Adiabatic process interpretation
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: gases-y-modelos
+  parent_id: procesos-termodinamicos
+  ruta_relativa: fisica-clasica/termodinamica/gases-y-modelos/procesos-termodinamicos/adiabatico
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es:
+      summary: Resumen fisico
+      reading: Lectura del resultado
+      coherence: Coherencia
+      validity: Validez del modelo
+      graph: Lectura grafica
+      errors: Errores probables
+      next_step: Siguiente paso
+    en:
+      summary: Physical summary
+      reading: Result reading
+      coherence: Coherence
+      validity: Model validity
+      graph: Graph reading
+      errors: Likely errors
+      next_step: Next step
+  priority_order: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  inline_limits:
+    max_summary_chars: 200
+    max_warnings: 2
+    max_suggestions: 2
+dependencies:
+  formulas: [primer_principio_adiabatico, trabajo_adiabatico_ideal, ley_adiabata_presion_volumen, cambio_temperatura_adiabatico]
+  magnitudes: [DeltaU, W, T1, T2, DeltaT_ad, p1, p2, V1, V2, gamma]
+global_context:
+  physical_domain:
+    es: "Procesos termodinamicos sin intercambio de calor en gas ideal."
+    en: "Thermodynamic processes without heat exchange in ideal gas."
+  axis_convention:
+    es: "W positivo indica trabajo realizado por el gas sobre el entorno; DeltaU negativo indica perdida de energia interna."
+    en: "Positive W means work done by the gas on surroundings; negative DeltaU means loss of internal energy."
+  standard_assumptions: [gas ideal, proceso cuasiestatico, gamma constante, paredes adiabatas]
+  standard_warnings: ["no aplicar si hay intercambio de calor apreciable", "verificar que se use temperatura en kelvin"]
+output_contract:
+  format: structured_text
+  include_emojis: true
+  max_lines_per_section: 5
+  truncate_long_values: true
+  decimal_places: 2
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+result_blocks:
+  summary:
+    enabled: true
+    priority: 1
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    enabled: true
+    priority: 2
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    enabled: true
+    priority: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    priority: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    priority: 5
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    priority: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    priority: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  DeltaU:
+    magnitude_type: DeltaU
+    semantic_role:
+      es: Cambio de energia interna del gas en el proceso adiabatico
+      en: Change in internal energy of the gas in the adiabatic process
+    summary_rules:
+      - id: resumen_dU_negativo
+        when: "result < 0"
+        status: info
+        text:
+          es: "[[DeltaU]] negativo indica que el gas ha perdido energia interna al expandirse adiabaticamente."
+          en: "Negative [[DeltaU]] indicates the gas lost internal energy by expanding adiabatically."
+      - id: resumen_dU_positivo
+        when: "result > 0"
+        status: info
+        text:
+          es: "[[DeltaU]] positivo indica que el gas ha ganado energia interna al comprimirse adiabaticamente."
+          en: "Positive [[DeltaU]] indicates the gas gained internal energy by being adiabatically compressed."
+      - id: resumen_dU_cero
+        when: "result == 0"
+        status: warning
+        text:
+          es: "[[DeltaU]] nulo en proceso adiabatico implica que no hubo trabajo; revisar si el proceso es adiabatico isocórico."
+          en: "Zero [[DeltaU]] in an adiabatic process means no work was done; check if the process is adiabatic isochoric."
+      - id: resumen_dU_fallback
+        when: "true"
+        status: info
+        text:
+          es: "[[DeltaU]] es el unico termino energetico activo; en proceso adiabatico, Q = 0."
+          en: "[[DeltaU]] is the only active energy term; in an adiabatic process, Q = 0."
+    physical_reading_rules:
+      - id: lectura_dU_expansion
+        when: "result < 0"
+        status: info
+        text:
+          es: "La energia interna disminuyo porque el gas realizo trabajo mecanico sobre el entorno sin recibir calor."
+          en: "Internal energy decreased because the gas did mechanical work on the surroundings without receiving heat."
+      - id: lectura_dU_compresion
+        when: "result > 0"
+        status: info
+        text:
+          es: "La energia interna aumento porque el entorno realizo trabajo sobre el gas sin que este pueda disipar calor."
+          en: "Internal energy increased because surroundings did work on the gas and it could not dissipate heat."
+      - id: lectura_dU_fallback
+        when: "true"
+        status: info
+        text:
+          es: "En un proceso adiabatico, todo el cambio de energia interna se debe exclusivamente al trabajo intercambiado."
+          en: "In an adiabatic process, all internal energy change is exclusively due to the exchanged work."
+    coherence_rules:
+      - id: coherencia_dU_W
+        when: "abs(result - (-W)) < 0.01 * abs(result) + 0.01"
+        status: success
+        text:
+          es: "[[DeltaU]] es coherente con el negativo del trabajo; el balance adiabatico se cumple."
+          en: "[[DeltaU]] is consistent with negative work; the adiabatic balance holds."
+      - id: coherencia_dU_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Verificar que [[W]] y [[DeltaU]] tengan signos opuestos segun el primer principio adiabatico."
+          en: "Verify that [[W]] and [[DeltaU]] have opposite signs per the adiabatic first law."
+    model_validity_rules:
+      - id: validez_dU_grande
+        when: "abs(result) > 50000"
+        status: warning
+        text:
+          es: "[[DeltaU]] muy grande puede indicar que el modelo de gas ideal no es adecuado o que el proceso no es totalmente adiabatico."
+          en: "Very large [[DeltaU]] may indicate the ideal gas model is not adequate or the process is not fully adiabatic."
+      - id: validez_dU_fallback
+        when: "true"
+        status: info
+        text:
+          es: "El modelo es valido mientras el intercambio de calor sea despreciable y el gas se comporte como ideal."
+          en: "The model is valid as long as heat exchange is negligible and the gas behaves ideally."
+    graph_rules:
+      - id: grafico_dU_area
+        when: "result < 0"
+        status: info
+        text:
+          es: "El area bajo la curva adiabatica en el diagrama pV representa [[W]]; [[DeltaU]] tiene igual magnitud y signo contrario."
+          en: "The area under the adiabatic curve in the pV diagram represents [[W]]; [[DeltaU]] has equal magnitude and opposite sign."
+      - id: grafico_dU_fallback
+        when: "true"
+        status: info
+        text:
+          es: "La curva adiabatica es mas inclinada que la isoterma porque [[gamma]] > 1; esto refleja el mayor cambio de energia."
+          en: "The adiabatic curve is steeper than the isotherm because [[gamma]] > 1; this reflects the greater energy change."
+    likely_errors:
+      - id: error_dU_calor
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: confundir proceso adiabatico con proceso con calor. En proceso adiabatico Q es estrictamente cero; incluirlo en el balance invalida el resultado."
+          en: "Frequent error: confusing an adiabatic process with a process involving heat. In an adiabatic process Q is strictly zero; including it in the balance invalidates the result."
+      - id: error_dU_signo
+        when: "result > 0 and W > 0"
+        status: warning
+        text:
+          es: "Posible inconsistencia de signos: si el gas realiza trabajo positivo, [[DeltaU]] debe ser negativo."
+          en: "Possible sign inconsistency: if the gas does positive work, [[DeltaU]] must be negative."
+      - id: error_dU_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Recordar que el signo de [[DeltaU]] indica si el gas perdio o gano energia interna."
+          en: "Remember that the sign of [[DeltaU]] indicates whether the gas lost or gained internal energy."
+    next_step_rules:
+      - id: siguiente_dU_T2
+        when: "result < 0"
+        status: info
+        text:
+          es: "Si [[DeltaU]] es negativo, calcular [[T2]] para cuantificar el enfriamiento producido."
+          en: "If [[DeltaU]] is negative, calculate [[T2]] to quantify the cooling produced."
+      - id: siguiente_dU_compresion
+        when: "result > 0"
+        status: info
+        text:
+          es: "[[DeltaU]] positivo indica compresion adiabatica; comparar [[T2]] con [[T1]] para verificar el calentamiento."
+          en: "Positive [[DeltaU]] indicates adiabatic compression; compare [[T2]] with [[T1]] to verify the heating."
+      - id: siguiente_dU_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Continuar calculando [[T2]] y [[p2]] para caracterizar completamente el estado final del proceso."
+          en: "Continue calculating [[T2]] and [[p2]] to fully characterize the final state of the process."
+
+  W:
+    magnitude_type: W
+    semantic_role:
+      es: Trabajo mecanico realizado por el gas en el proceso adiabatico
+      en: Mechanical work done by the gas in the adiabatic process
+    summary_rules:
+      - id: resumen_W_expansion
+        when: "result > 0"
+        status: info
+        text:
+          es: "[[W]] positivo confirma expansion adiabatica: el gas entrego energia mecanica al entorno a costa de su energia interna."
+          en: "Positive [[W]] confirms adiabatic expansion: the gas delivered mechanical energy to surroundings at the cost of its internal energy."
+      - id: resumen_W_compresion
+        when: "result < 0"
+        status: info
+        text:
+          es: "[[W]] negativo indica compresion adiabatica: el entorno realizo trabajo sobre el gas, aumentando su energia interna."
+          en: "Negative [[W]] indicates adiabatic compression: surroundings did work on the gas, increasing its internal energy."
+      - id: resumen_W_cero
+        when: "result == 0"
+        status: warning
+        text:
+          es: "[[W]] nulo en proceso adiabatico implica que no hubo cambio de volumen; revisar condicion del proceso."
+          en: "Zero [[W]] in an adiabatic process means no volume change; check the process condition."
+      - id: resumen_W_fallback
+        when: "true"
+        status: info
+        text:
+          es: "[[W]] es la unica via de intercambio energetico en un proceso adiabatico."
+          en: "[[W]] is the only energy exchange pathway in an adiabatic process."
+    physical_reading_rules:
+      - id: lectura_W_positivo
+        when: "result > 0"
+        status: info
+        text:
+          es: "El gas se expandio y entrego energia cinetica macroscopica al piston o al entorno. Esa energia provino exclusivamente de su energia interna."
+          en: "The gas expanded and delivered macroscopic kinetic energy to the piston or surroundings. That energy came exclusively from its internal energy."
+      - id: lectura_W_negativo
+        when: "result < 0"
+        status: info
+        text:
+          es: "El entorno comprimo el gas sin que este pudiera liberar calor. Toda la energia mecanica recibida se almaceno como energia interna."
+          en: "Surroundings compressed the gas without it being able to release heat. All received mechanical energy was stored as internal energy."
+      - id: lectura_W_fallback
+        when: "true"
+        status: info
+        text:
+          es: "En proceso adiabatico, [[W]] y [[DeltaU]] son exactamente opuestos en signo e iguales en magnitud."
+          en: "In an adiabatic process, [[W]] and [[DeltaU]] are exactly opposite in sign and equal in magnitude."
+    coherence_rules:
+      - id: coherencia_W_dU
+        when: "abs(result + DeltaU) < 0.01 * abs(result) + 0.01"
+        status: success
+        text:
+          es: "[[W]] y [[DeltaU]] son opuestos; el balance adiabatico es coherente."
+          en: "[[W]] and [[DeltaU]] are opposites; the adiabatic balance is coherent."
+      - id: coherencia_W_volumen
+        when: "result > 0"
+        status: info
+        text:
+          es: "[[W]] positivo es consistente con [[V2]] mayor que [[V1]]."
+          en: "Positive [[W]] is consistent with [[V2]] greater than [[V1]]."
+      - id: coherencia_W_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Verificar que el signo de [[W]] coincida con el sentido del proceso: expansion positiva, compresion negativa."
+          en: "Verify that the sign of [[W]] matches the process direction: positive for expansion, negative for compression."
+    model_validity_rules:
+      - id: validez_W_gamma
+        when: "gamma <= 1"
+        status: error
+        text:
+          es: "[[gamma]] menor o igual a 1 invalida la ecuacion de la adiabata. Para gas ideal real, [[gamma]] debe ser mayor que 1."
+          en: "[[gamma]] less than or equal to 1 invalidates the adiabat equation. For a real ideal gas, [[gamma]] must be greater than 1."
+      - id: validez_W_cuasiestatico
+        when: "true"
+        status: info
+        text:
+          es: "La formula del trabajo adiabatico asume proceso cuasiestatico reversible. Procesos rapidos o turbulentos pueden dar resultados distintos."
+          en: "The adiabatic work formula assumes a quasi-static reversible process. Fast or turbulent processes may give different results."
+      - id: validez_W_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Modelo valido para gas ideal con [[gamma]] constante y sin perdidas por friccion o turbulencia."
+          en: "Model valid for ideal gas with constant [[gamma]] and no losses from friction or turbulence."
+    graph_rules:
+      - id: grafico_W_area
+        when: "true"
+        status: info
+        text:
+          es: "[[W]] corresponde al area bajo la curva adiabatica en el diagrama pV entre [[V1]] y [[V2]]."
+          en: "[[W]] corresponds to the area under the adiabatic curve in the pV diagram between [[V1]] and [[V2]]."
+      - id: grafico_W_pendiente
+        when: "true"
+        status: info
+        text:
+          es: "La pendiente de la adiabata es mayor que la de la isoterma porque [[gamma]] > 1; esto implica mayor trabajo por unidad de cambio de volumen."
+          en: "The slope of the adiabat is greater than that of the isotherm because [[gamma]] > 1; this implies more work per unit volume change."
+      - id: grafico_W_fallback
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama pV, comparar la curva adiabatica con la isoterma que pasa por el estado inicial para visualizar la diferencia."
+          en: "In the pV diagram, compare the adiabatic curve with the isotherm passing through the initial state to visualize the difference."
+    likely_errors:
+      - id: error_W_isotermico
+        when: "abs(result - p1 * V1 * log(V2 / V1)) < 0.05 * abs(result)"
+        status: warning
+        text:
+          es: "El trabajo calculado coincide con el isotermico. Verificar que se haya usado la formula adiabatica con [[gamma]], no la isoterma."
+          en: "The calculated work matches the isothermal value. Verify that the adiabatic formula with [[gamma]] was used, not the isotherm."
+      - id: error_W_signo_convenio
+        when: "true"
+        status: warning
+        text:
+          es: "Error comun: mezclar convenios de signo. En este leaf [[W]] > 0 es trabajo hecho por el gas, no sobre el gas."
+          en: "Common error: mixing sign conventions. In this leaf [[W]] > 0 is work done by the gas, not on the gas."
+      - id: error_W_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Asegurar que [[V1]], [[V2]], [[p1]], [[p2]] y [[gamma]] esten en unidades coherentes antes de calcular [[W]]."
+          en: "Ensure [[V1]], [[V2]], [[p1]], [[p2]] and [[gamma]] are in coherent units before calculating [[W]]."
+    next_step_rules:
+      - id: siguiente_W_DeltaU
+        when: "true"
+        status: info
+        text:
+          es: "Calcular [[DeltaU]] como el negativo de [[W]] para completar el balance energetico adiabatico."
+          en: "Calculate [[DeltaU]] as the negative of [[W]] to complete the adiabatic energy balance."
+      - id: siguiente_W_T2
+        when: "result > 0"
+        status: info
+        text:
+          es: "Con [[W]] obtenido, usar la relacion adiabatica para obtener [[T2]] y cuantificar el enfriamiento."
+          en: "With [[W]] obtained, use the adiabatic relation to get [[T2]] and quantify the cooling."
+      - id: siguiente_W_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Continuar con el calculo de [[T2]] y [[DeltaT_ad]] para interpretar el efecto termico del proceso."
+          en: "Continue with calculation of [[T2]] and [[DeltaT_ad]] to interpret the thermal effect of the process."
+
+  T2:
+    magnitude_type: T2
+    semantic_role:
+      es: Temperatura final del gas tras el proceso adiabatico
+      en: Final temperature of the gas after the adiabatic process
+    summary_rules:
+      - id: resumen_T2_menor
+        when: "result < T1"
+        status: info
+        text:
+          es: "[[T2]] menor que [[T1]] confirma expansion adiabatica: el gas se enfrio porque realizo trabajo sin absorber calor."
+          en: "[[T2]] less than [[T1]] confirms adiabatic expansion: the gas cooled because it did work without absorbing heat."
+      - id: resumen_T2_mayor
+        when: "result > T1"
+        status: info
+        text:
+          es: "[[T2]] mayor que [[T1]] confirma compresion adiabatica: el gas se calento porque el entorno realizo trabajo sobre el."
+          en: "[[T2]] greater than [[T1]] confirms adiabatic compression: the gas heated up because surroundings did work on it."
+      - id: resumen_T2_igual
+        when: "abs(result - T1) < 0.5"
+        status: warning
+        text:
+          es: "[[T2]] casi igual a [[T1]]; verificar si hubo cambio de volumen significativo o si el proceso fue realmente adiabatico."
+          en: "[[T2]] almost equal to [[T1]]; verify whether there was significant volume change or whether the process was truly adiabatic."
+      - id: resumen_T2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "[[T2]] es la huella termica del proceso adiabatico: cuantifica el efecto del trabajo sobre la temperatura del gas."
+          en: "[[T2]] is the thermal footprint of the adiabatic process: it quantifies the effect of work on gas temperature."
+    physical_reading_rules:
+      - id: lectura_T2_enfriamiento
+        when: "result < T1"
+        status: info
+        text:
+          es: "El enfriamiento no se debe a perdida de calor (Q = 0), sino a que la energia interna disminuyo al realizar trabajo de expansion."
+          en: "The cooling is not due to heat loss (Q = 0), but to internal energy decreasing as the gas did expansion work."
+      - id: lectura_T2_calentamiento
+        when: "result > T1"
+        status: info
+        text:
+          es: "El calentamiento no se debe a ganancia de calor (Q = 0), sino a que el entorno deposito energia en el gas al comprimirlo."
+          en: "The heating is not due to heat gain (Q = 0), but to surroundings depositing energy into the gas by compressing it."
+      - id: lectura_T2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "La variacion de [[T2]] es la señal observable del intercambio de trabajo en un proceso adiabatico."
+          en: "The variation of [[T2]] is the observable signature of work exchange in an adiabatic process."
+    coherence_rules:
+      - id: coherencia_T2_positivo
+        when: "result > 0"
+        status: success
+        text:
+          es: "[[T2]] positiva; temperatura absoluta fisicamente admisible."
+          en: "Positive [[T2]]; physically admissible absolute temperature."
+      - id: coherencia_T2_muy_baja
+        when: "result < 50"
+        status: warning
+        text:
+          es: "[[T2]] muy baja para un proceso de gas ideal ordinario. Verificar valores de [[V1]], [[V2]] y [[gamma]]."
+          en: "[[T2]] very low for an ordinary ideal gas process. Check values of [[V1]], [[V2]] and [[gamma]]."
+      - id: coherencia_T2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "[[T2]] debe satisfacer la relacion adiabatica: [[T2]] = [[T1]] x (V1/V2)^(gamma-1)."
+          en: "[[T2]] must satisfy the adiabatic relation: [[T2]] = [[T1]] x (V1/V2)^(gamma-1)."
+    model_validity_rules:
+      - id: validez_T2_gas_ideal
+        when: "result < 100"
+        status: warning
+        text:
+          es: "A temperaturas muy bajas, el gas real puede licuarse y el modelo de gas ideal deja de ser valido."
+          en: "At very low temperatures, a real gas may liquefy and the ideal gas model ceases to be valid."
+      - id: validez_T2_gamma_constante
+        when: "true"
+        status: info
+        text:
+          es: "El resultado asume [[gamma]] constante. Si [[T2]] difiere mucho de [[T1]], [[gamma]] puede cambiar apreciablemente en gases reales."
+          en: "The result assumes constant [[gamma]]. If [[T2]] differs greatly from [[T1]], [[gamma]] may change appreciably in real gases."
+      - id: validez_T2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Modelo valido para gas ideal en proceso cuasiestatico con [[gamma]] constante."
+          en: "Model valid for ideal gas in quasi-static process with constant [[gamma]]."
+    graph_rules:
+      - id: grafico_T2_curva_TV
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama T-V adiabatico, [[T2]] corresponde al punto final de la curva; su descenso es mas abrupto que en una isoterma."
+          en: "In the adiabatic T-V diagram, [[T2]] corresponds to the final point of the curve; its drop is steeper than in an isotherm."
+      - id: grafico_T2_pV
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama pV, el estado final ([[p2]], [[V2]]) queda por debajo de la isoterma de [[T1]], indicando que [[T2]] < [[T1]] en expansion."
+          en: "In the pV diagram, the final state ([[p2]], [[V2]]) lies below the isotherm of [[T1]], indicating [[T2]] < [[T1]] in expansion."
+      - id: grafico_T2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "La posicion del estado final en el diagrama pV refleja el valor de [[T2]] a traves de la ecuacion de estado del gas ideal."
+          en: "The position of the final state in the pV diagram reflects the value of [[T2]] through the ideal gas equation of state."
+    likely_errors:
+      - id: error_T2_isotermico
+        when: "abs(result - T1) < 0.01"
+        status: warning
+        text:
+          es: "[[T2]] igual a [[T1]] es proceso isotermico, no adiabatico. Revisar que se haya aplicado la formula correcta."
+          en: "[[T2]] equal to [[T1]] is isothermal, not adiabatic. Verify that the correct formula was applied."
+      - id: error_T2_celsius
+        when: "result < 0"
+        status: error
+        text:
+          es: "[[T2]] negativa es fisicamente imposible en escala Kelvin. Posible error de unidades: verificar que [[T1]] este en Kelvin."
+          en: "Negative [[T2]] is physically impossible on the Kelvin scale. Possible unit error: verify that [[T1]] is in Kelvin."
+      - id: error_T2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Verificar que [[T2]] sea consistente con el tipo de proceso: menor en expansion, mayor en compresion."
+          en: "Verify that [[T2]] is consistent with the process type: lower in expansion, higher in compression."
+    next_step_rules:
+      - id: siguiente_T2_DeltaT
+        when: "true"
+        status: info
+        text:
+          es: "Calcular [[DeltaT_ad]] = [[T2]] - [[T1]] para expresar numericamente el cambio termico del proceso."
+          en: "Calculate [[DeltaT_ad]] = [[T2]] - [[T1]] to numerically express the thermal change of the process."
+      - id: siguiente_T2_ciclo
+        when: "true"
+        status: info
+        text:
+          es: "Si el proceso es parte de un ciclo termodinamico, usar [[T2]] como [[T1]] del siguiente proceso."
+          en: "If the process is part of a thermodynamic cycle, use [[T2]] as [[T1]] for the next process."
+      - id: siguiente_T2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Con [[T2]] obtenido, el estado final del gas queda completamente determinado junto con [[p2]] y [[V2]]."
+          en: "With [[T2]] obtained, the final gas state is completely determined together with [[p2]] and [[V2]]."
+
+  T1:
+    magnitude_type: T1
+    semantic_role:
+      es: Temperatura inicial del gas al comienzo del proceso adiabatico
+      en: Initial temperature of the gas at the start of the adiabatic process
+    summary_rules:
+      - id: resumen_T1_kelvin
+        when: "true"
+        status: info
+        text:
+          es: "[[T1]] es el punto de partida del proceso. Debe expresarse en kelvin para aplicar la relacion adiabatica."
+          en: "[[T1]] is the starting point of the process. It must be expressed in kelvin to apply the adiabatic relation."
+    physical_reading_rules:
+      - id: lectura_T1_fisico
+        when: "true"
+        status: info
+        text:
+          es: "[[T1]] representa el nivel de agitacion molecular inicial del gas antes de que comience el proceso adiabatico."
+          en: "[[T1]] represents the initial molecular agitation level of the gas before the adiabatic process begins."
+    coherence_rules:
+      - id: coherencia_T1_positivo
+        when: "result > 0"
+        status: success
+        text:
+          es: "[[T1]] positiva; temperatura absoluta fisicamente admisible."
+          en: "Positive [[T1]]; physically admissible absolute temperature."
+      - id: coherencia_T1_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Verificar que [[T1]] este expresada en kelvin y no en Celsius."
+          en: "Verify that [[T1]] is expressed in kelvin and not in Celsius."
+    model_validity_rules:
+      - id: validez_T1_rango
+        when: "true"
+        status: info
+        text:
+          es: "Modelo valido si [[T1]] esta en el rango donde el gas se comporta como ideal, tipicamente entre 200 K y 2000 K."
+          en: "Model valid if [[T1]] is in the range where the gas behaves ideally, typically between 200 K and 2000 K."
+    graph_rules:
+      - id: grafico_T1_inicio
+        when: "true"
+        status: info
+        text:
+          es: "[[T1]] es la temperatura del estado inicial en el diagrama T-V adiabatico; es el punto de partida de la curva."
+          en: "[[T1]] is the temperature of the initial state in the adiabatic T-V diagram; it is the starting point of the curve."
+    likely_errors:
+      - id: error_T1_celsius
+        when: "result < 200"
+        status: warning
+        text:
+          es: "[[T1]] muy bajo; posible error al confundir grados Celsius con kelvin. Verificar que se haya sumado 273.15."
+          en: "[[T1]] very low; possible confusion between Celsius and kelvin. Verify that 273.15 was added."
+      - id: error_T1_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Recordar que [[T1]] en Celsius debe convertirse a kelvin antes de usar la formula adiabatica."
+          en: "Remember that [[T1]] in Celsius must be converted to kelvin before using the adiabatic formula."
+    next_step_rules:
+      - id: siguiente_T1_T2
+        when: "true"
+        status: info
+        text:
+          es: "Con [[T1]] definido, calcular [[T2]] usando la relacion adiabatica para obtener la temperatura final."
+          en: "With [[T1]] defined, calculate [[T2]] using the adiabatic relation to obtain the final temperature."
+
+  DeltaT_ad:
+    magnitude_type: DeltaT_ad
+    semantic_role:
+      es: Cambio de temperatura resultante del proceso adiabatico
+      en: Temperature change resulting from the adiabatic process
+    physical_reading_rules:
+      - id: lectura_DeltaT_fisico
+        when: "result < 0"
+        status: info
+        text:
+          es: "[[DeltaT_ad]] negativo significa que el gas cedio energia cinetica molecular al realizar trabajo de expansion sin recibir calor."
+          en: "Negative [[DeltaT_ad]] means the gas gave up molecular kinetic energy by doing expansion work without receiving heat."
+      - id: lectura_DeltaT_fallback
+        when: "true"
+        status: info
+        text:
+          es: "[[DeltaT_ad]] cuantifica el efecto termico del intercambio de trabajo sin calor."
+          en: "[[DeltaT_ad]] quantifies the thermal effect of work exchange without heat."
+    coherence_rules:
+      - id: coherencia_DeltaT_signo
+        when: "result < 0"
+        status: success
+        text:
+          es: "[[DeltaT_ad]] negativo coherente con expansion adiabatica donde [[V2]] es mayor que [[V1]]."
+          en: "Negative [[DeltaT_ad]] consistent with adiabatic expansion where [[V2]] is greater than [[V1]]."
+      - id: coherencia_DeltaT_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Verificar que el signo de [[DeltaT_ad]] sea consistente con el tipo de proceso: negativo en expansion, positivo en compresion."
+          en: "Verify that the sign of [[DeltaT_ad]] is consistent with the process type: negative for expansion, positive for compression."
+    model_validity_rules:
+      - id: validez_DeltaT_rango
+        when: "true"
+        status: info
+        text:
+          es: "Modelo valido si el cambio de temperatura no lleva al gas fuera del rango de gas ideal."
+          en: "Model valid if the temperature change does not take the gas outside the ideal gas range."
+    graph_rules:
+      - id: grafico_DeltaT_curva
+        when: "true"
+        status: info
+        text:
+          es: "[[DeltaT_ad]] corresponde al desplazamiento vertical en el diagrama T-V entre el estado inicial y el final."
+          en: "[[DeltaT_ad]] corresponds to the vertical displacement in the T-V diagram between initial and final states."
+    summary_rules:
+      - id: resumen_DeltaT_negativo
+        when: "result < 0"
+        status: info
+        text:
+          es: "[[DeltaT_ad]] negativo confirma expansion adiabatica: el gas se enfrio al realizar trabajo."
+          en: "Negative [[DeltaT_ad]] confirms adiabatic expansion: the gas cooled by doing work."
+      - id: resumen_DeltaT_positivo
+        when: "result > 0"
+        status: info
+        text:
+          es: "[[DeltaT_ad]] positivo confirma compresion adiabatica: el gas se calento al recibir trabajo."
+          en: "Positive [[DeltaT_ad]] confirms adiabatic compression: the gas heated up by receiving work."
+      - id: resumen_DeltaT_fallback
+        when: "true"
+        status: info
+        text:
+          es: "[[DeltaT_ad]] cuantifica el efecto termico del proceso sin intercambio de calor."
+          en: "[[DeltaT_ad]] quantifies the thermal effect of the process without heat exchange."
+    likely_errors:
+      - id: error_DeltaT_cero
+        when: "abs(result) < 0.1"
+        status: warning
+        text:
+          es: "[[DeltaT_ad]] cercano a cero con cambio de volumen apreciable; posible confusion con proceso isotermico. Verificar formula."
+          en: "[[DeltaT_ad]] near zero with appreciable volume change; possible confusion with isothermal process. Verify formula."
+      - id: error_DeltaT_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Recordar que en proceso adiabatico el cambio de temperatura no es cero; confundir adiabatico con isotermico es un error comun."
+          en: "Remember that in an adiabatic process temperature change is not zero; confusing adiabatic with isothermal is a common mistake."
+    next_step_rules:
+      - id: siguiente_DeltaT_DeltaU
+        when: "true"
+        status: info
+        text:
+          es: "Usar [[DeltaT_ad]] para calcular [[DeltaU]] y completar el balance energetico del proceso."
+          en: "Use [[DeltaT_ad]] to calculate [[DeltaU]] and complete the energy balance of the process."
+
+  V2:
+    magnitude_type: V2
+    semantic_role:
+      es: Volumen final del gas al termino del proceso adiabatico
+      en: Final volume of the gas at the end of the adiabatic process
+    physical_reading_rules:
+      - id: lectura_V2_fisico
+        when: "result > V1"
+        status: info
+        text:
+          es: "[[V2]] mayor que [[V1]] significa que el gas ha ocupado mas espacio empujando las paredes o el piston."
+          en: "[[V2]] greater than [[V1]] means the gas has occupied more space by pushing the walls or piston."
+      - id: lectura_V2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "[[V2]] define la geometria del estado final y determina la caida de presion y temperatura en la adiabata."
+          en: "[[V2]] defines the geometry of the final state and determines the pressure and temperature drop in the adiabat."
+    coherence_rules:
+      - id: coherencia_V2_positivo
+        when: "result > 0"
+        status: success
+        text:
+          es: "[[V2]] positivo; volumen fisicamente admisible."
+          en: "Positive [[V2]]; physically admissible volume."
+      - id: coherencia_V2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Verificar que [[V2]] sea coherente con el tipo de proceso: mayor que [[V1]] en expansion, menor en compresion."
+          en: "Verify that [[V2]] is consistent with the process type: greater than [[V1]] in expansion, less in compression."
+    model_validity_rules:
+      - id: validez_V2_no_cero
+        when: "result > 0"
+        status: success
+        text:
+          es: "[[V2]] mayor que cero; no hay singularidad en la ley adiabatica."
+          en: "[[V2]] greater than zero; no singularity in the adiabatic law."
+    graph_rules:
+      - id: grafico_V2_eje
+        when: "true"
+        status: info
+        text:
+          es: "[[V2]] es la abscisa del estado final en el diagrama pV; su posicion respecto a [[V1]] indica si hubo expansion o compresion."
+          en: "[[V2]] is the abscissa of the final state in the pV diagram; its position relative to [[V1]] indicates whether expansion or compression occurred."
+    summary_rules:
+      - id: resumen_V2_mayor
+        when: "result > V1"
+        status: info
+        text:
+          es: "[[V2]] mayor que [[V1]] confirma expansion adiabatica."
+          en: "[[V2]] greater than [[V1]] confirms adiabatic expansion."
+      - id: resumen_V2_menor
+        when: "result < V1"
+        status: info
+        text:
+          es: "[[V2]] menor que [[V1]] confirma compresion adiabatica."
+          en: "[[V2]] less than [[V1]] confirms adiabatic compression."
+      - id: resumen_V2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "[[V2]] determina junto con [[p2]] el estado final en el diagrama pV."
+          en: "[[V2]] together with [[p2]] determines the final state in the pV diagram."
+    likely_errors:
+      - id: error_V2_unidades
+        when: "true"
+        status: warning
+        text:
+          es: "Verificar que [[V2]] este en metros cubicos; confundir litros con metros cubicos es un error frecuente."
+          en: "Verify that [[V2]] is in cubic metres; confusing litres with cubic metres is a frequent mistake."
+      - id: error_V2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Recordar que [[V2]] debe obtenerse de la relacion adiabatica, no asumir que coincide con el valor isotermico."
+          en: "Remember that [[V2]] must be obtained from the adiabatic relation, not assumed to equal the isothermal value."
+    next_step_rules:
+      - id: siguiente_V2_p2
+        when: "true"
+        status: info
+        text:
+          es: "Con [[V2]] determinado, calcular [[p2]] para caracterizar completamente el estado final."
+          en: "With [[V2]] determined, calculate [[p2]] to fully characterise the final state."
+
+  gamma:
+    magnitude_type: gamma
+    semantic_role:
+      es: Coeficiente adiabatico que determina la pendiente de la curva en el diagrama pV
+      en: Adiabatic coefficient that determines the slope of the curve in the pV diagram
+    physical_reading_rules:
+      - id: lectura_gamma_fisico
+        when: "true"
+        status: info
+        text:
+          es: "[[gamma]] refleja cuantos grados de libertad tiene el gas para almacenar energia; mayor [[gamma]] significa menos modos disponibles y mayor impacto termico por unidad de trabajo."
+          en: "[[gamma]] reflects how many degrees of freedom the gas has to store energy; larger [[gamma]] means fewer available modes and greater thermal impact per unit of work."
+    coherence_rules:
+      - id: coherencia_gamma_mayor_uno
+        when: "result > 1"
+        status: success
+        text:
+          es: "[[gamma]] mayor que 1; valor fisicamente valido para gas ideal."
+          en: "[[gamma]] greater than 1; physically valid value for ideal gas."
+      - id: coherencia_gamma_fallback
+        when: "true"
+        status: warning
+        text:
+          es: "[[gamma]] debe ser estrictamente mayor que 1 para que la formula adiabatica sea valida."
+          en: "[[gamma]] must be strictly greater than 1 for the adiabatic formula to be valid."
+    model_validity_rules:
+      - id: validez_gamma_rango
+        when: "result >= 1.1 and result <= 1.7"
+        status: success
+        text:
+          es: "[[gamma]] en rango fisicamente esperado para gases ideales ordinarios."
+          en: "[[gamma]] in the physically expected range for ordinary ideal gases."
+      - id: validez_gamma_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Verificar que [[gamma]] corresponda al tipo de gas: monatomico 1.67, diatomico 1.40, triatom ~1.30."
+          en: "Verify that [[gamma]] corresponds to the gas type: monatomic 1.67, diatomic 1.40, triatomic ~1.30."
+    graph_rules:
+      - id: grafico_gamma_pendiente
+        when: "true"
+        status: info
+        text:
+          es: "[[gamma]] determina la pendiente de la adiabata en el diagrama pV; valores mayores producen curvas mas pronunciadas."
+          en: "[[gamma]] determines the slope of the adiabat in the pV diagram; larger values produce steeper curves."
+    summary_rules:
+      - id: resumen_gamma_diatomico
+        when: "abs(result - 1.4) < 0.05"
+        status: info
+        text:
+          es: "[[gamma]] aproximadamente 1.4 corresponde a gas diatomico (aire, nitrogeno, oxigeno)."
+          en: "[[gamma]] approximately 1.4 corresponds to diatomic gas (air, nitrogen, oxygen)."
+      - id: resumen_gamma_monatomico
+        when: "abs(result - 1.67) < 0.05"
+        status: info
+        text:
+          es: "[[gamma]] aproximadamente 1.67 corresponde a gas monatomico (helio, argon)."
+          en: "[[gamma]] approximately 1.67 corresponds to monatomic gas (helium, argon)."
+      - id: resumen_gamma_fallback
+        when: "true"
+        status: info
+        text:
+          es: "[[gamma]] determina la pendiente de la adiabata en el diagrama pV; mayor [[gamma]] implica mayor caida de presion por expansion."
+          en: "[[gamma]] determines the slope of the adiabat in the pV diagram; larger [[gamma]] implies steeper pressure drop upon expansion."
+    likely_errors:
+      - id: error_gamma_uno
+        when: "abs(result - 1.0) < 0.01"
+        status: error
+        text:
+          es: "[[gamma]] igual a 1 invalida la formula adiabatica. Posible error al confundir [[gamma]] con otro coeficiente o al usar datos de proceso isotermico."
+          en: "[[gamma]] equal to 1 invalidates the adiabatic formula. Possible error confusing [[gamma]] with another coefficient or using isothermal process data."
+      - id: error_gamma_fallback
+        when: "true"
+        status: warning
+        text:
+          es: "Verificar el tipo de gas para asignar [[gamma]] correcto: monatomico 1.67, diatomico 1.40, poliatom ~1.30."
+          en: "Verify the gas type to assign correct [[gamma]]: monatomic 1.67, diatomic 1.40, polyatomic ~1.30."
+    next_step_rules:
+      - id: siguiente_gamma_ley
+        when: "true"
+        status: info
+        text:
+          es: "Con [[gamma]] definido, aplicar la ley adiabatica para calcular [[p2]], [[V2]] o [[T2]] segun los datos disponibles."
+          en: "With [[gamma]] defined, apply the adiabatic law to calculate [[p2]], [[V2]] or [[T2]] according to available data."
+
+  p2:
+    magnitude_type: p2
+    semantic_role:
+      es: Presion final del gas al termino del proceso adiabatico
+      en: Final pressure of the gas at the end of the adiabatic process
+    physical_reading_rules:
+      - id: lectura_p2_fisico
+        when: "result < p1"
+        status: info
+        text:
+          es: "[[p2]] menor que [[p1]] significa que al expandirse el gas, las moleculas golpean las paredes con menor frecuencia e intensidad."
+          en: "[[p2]] less than [[p1]] means that as the gas expands, molecules strike the walls with lower frequency and intensity."
+      - id: lectura_p2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "[[p2]] refleja la densidad de impactos moleculares al final del proceso adiabatico."
+          en: "[[p2]] reflects the density of molecular impacts at the end of the adiabatic process."
+    coherence_rules:
+      - id: coherencia_p2_positivo
+        when: "result > 0"
+        status: success
+        text:
+          es: "[[p2]] positiva; presion absoluta fisicamente admisible."
+          en: "Positive [[p2]]; physically admissible absolute pressure."
+      - id: coherencia_p2_ley_adiabata
+        when: "true"
+        status: info
+        text:
+          es: "Verificar que [[p2]] sea coherente con la ley adiabatica: [[p1]] x ([[V1]]/[[V2]])^[[gamma]]."
+          en: "Verify that [[p2]] is consistent with the adiabatic law: [[p1]] x ([[V1]]/[[V2]])^[[gamma]]."
+    model_validity_rules:
+      - id: validez_p2_no_cero
+        when: "result > 0"
+        status: success
+        text:
+          es: "[[p2]] positiva; modelo de gas ideal aplicable."
+          en: "Positive [[p2]]; ideal gas model applicable."
+      - id: validez_p2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "El modelo es valido siempre que [[p2]] no supere varios megapascales y el gas este lejos del punto critico."
+          en: "The model is valid as long as [[p2]] does not exceed several megapascals and the gas is far from the critical point."
+    graph_rules:
+      - id: grafico_p2_estado_final
+        when: "true"
+        status: info
+        text:
+          es: "[[p2]] es la ordenada del estado final en el diagrama pV; en expansion adiabatica cae mas que en la isoterma correspondiente."
+          en: "[[p2]] is the ordinate of the final state in the pV diagram; in adiabatic expansion it falls more than in the corresponding isotherm."
+    summary_rules:
+      - id: resumen_p2_menor
+        when: "result < p1"
+        status: info
+        text:
+          es: "[[p2]] menor que [[p1]] confirma expansion adiabatica; la caida es mas pronunciada que en la isoterma."
+          en: "[[p2]] less than [[p1]] confirms adiabatic expansion; the drop is steeper than in the isotherm."
+      - id: resumen_p2_mayor
+        when: "result > p1"
+        status: info
+        text:
+          es: "[[p2]] mayor que [[p1]] confirma compresion adiabatica."
+          en: "[[p2]] greater than [[p1]] confirms adiabatic compression."
+      - id: resumen_p2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "[[p2]] junto con [[V2]] define el estado final del gas en el diagrama pV."
+          en: "[[p2]] together with [[V2]] defines the final gas state in the pV diagram."
+    likely_errors:
+      - id: error_p2_isotermico
+        when: "true"
+        status: warning
+        text:
+          es: "Verificar que [[p2]] se haya calculado con la ley adiabatica y no con la ley de Boyle; confundir ambas leyes es un error tipico."
+          en: "Verify that [[p2]] was calculated with the adiabatic law and not with Boyle's law; confusing the two is a typical mistake."
+      - id: error_p2_fallback
+        when: "true"
+        status: info
+        text:
+          es: "[[p2]] en proceso adiabatico cae mas que en el isotermico para la misma expansion; si el resultado es igual al isotermico, revisar [[gamma]]."
+          en: "[[p2]] in an adiabatic process drops more than in the isothermal for the same expansion; if the result equals the isothermal value, review [[gamma]]."
+    next_step_rules:
+      - id: siguiente_p2_verificacion
+        when: "true"
+        status: info
+        text:
+          es: "Verificar [[p2]] usando la relacion adiabatica alternativa con temperaturas: [[p2]]/[[p1]] = ([[T2]]/[[T1]])^(gamma/(gamma-1))."
+          en: "Verify [[p2]] using the alternative adiabatic relation with temperatures: [[p2]]/[[p1]] = ([[T2]]/[[T1]])^(gamma/(gamma-1))."
+
+cross_checks:
+  - id: balance_energetico_adiabatico
+    description:
+      es: "Verifica que DeltaU + W = 0 en proceso adiabatico."
+      en: "Verifies that DeltaU + W = 0 in an adiabatic process."
+    condition: "abs(DeltaU + W) < 0.01 * max(abs(DeltaU), abs(W)) + 0.01"
+    status_if_fail: warning
+    message:
+      es: "El balance energetico adiabatico no se cumple exactamente; verificar coherencia entre DeltaU y W."
+      en: "The adiabatic energy balance does not hold exactly; check consistency between DeltaU and W."
+
+error_patterns:
+  - id: pattern_isotermico
+    detect_when: "abs(T2 - T1) < 0.1 and abs(V2 - V1) > 0.01 * V1"
+    message:
+      es: "Temperatura casi constante con cambio de volumen apreciable; esto seria proceso isotermico, no adiabatico."
+      en: "Temperature nearly constant with appreciable volume change; this would be isothermal, not adiabatic."
+  - id: pattern_calor_no_nulo
+    detect_when: "abs(DeltaU + W) > 0.05 * abs(W)"
+    message:
+      es: "Discrepancia entre DeltaU y W sugiere que el proceso no fue completamente adiabatico o hay un error de calculo."
+      en: "Discrepancy between DeltaU and W suggests the process was not fully adiabatic or there is a calculation error."
+
+graph_binding:
+  enabled: true
+  channels: [pV_adiabat, TV_adiabat]
+  primary_channel: pV_adiabat
+  description:
+    es: "La curva adiabatica en el diagrama pV es mas pronunciada que la isoterma correspondiente por el factor gamma."
+    en: "The adiabatic curve in the pV diagram is steeper than the corresponding isotherm by the gamma factor."
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+  description:
+    es: "Diagrama pV mostrando la curva adiabatica entre el estado inicial y el final."
+    en: "pV diagram showing the adiabatic curve between initial and final state."
+
+output_contract:
+  format: structured_text
+  include_emojis: true
+  max_lines_per_section: 5
+  truncate_long_values: true
+  decimal_places: 2
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]

@@ -1,0 +1,195 @@
+const e=`version: v5
+leaf_id: difraccion
+formulas:
+  - id: condicion_minimos
+    title:
+      es: Condicion de minimos de difraccion
+      en: Diffraction minima condition
+    equation: "a_abertura * sin(theta_dif) = m_orden * lambda"
+    latex: "a \\\\sin\\\\theta = m \\\\lambda"
+    rearrangements:
+      - target: theta_dif
+        equation: "theta_dif = arcsin(m_orden * lambda / a_abertura)"
+        latex: "\\\\theta = \\\\arcsin\\\\left(\\\\frac{m \\\\lambda}{a}\\\\right)"
+      - target: m_orden
+        equation: "m_orden = a_abertura * sin(theta_dif) / lambda"
+        latex: "m = \\\\frac{a \\\\sin\\\\theta}{\\\\lambda}"
+      - target: a_abertura
+        equation: "a_abertura = m_orden * lambda / sin(theta_dif)"
+        latex: "a = \\\\frac{m \\\\lambda}{\\\\sin\\\\theta}"
+    category: derived
+    relation_type: definition
+    physical_meaning:
+      es: "Los minimos de intensidad ocurren cuando la diferencia de camino entre bordes opuestos de la abertura equivale a un numero entero de longitudes de onda."
+      en: "Intensity minima occur when the path difference between opposite edges of the aperture equals an integer number of wavelengths."
+    constraints:
+      - "|m_orden * lambda / a_abertura| <= 1 (argumento del arcseno)"
+      - "a_abertura > 0 (abertura real)"
+      - "lambda > 0 (onda real)"
+    validity:
+      es: "Valida para difraccion de Fraunhofer (campo lejano). Requiere que la pantalla este a distancia mucho mayor que el ancho de la abertura."
+      en: "Valid for Fraunhofer diffraction (far field). Requires screen distance much greater than aperture width."
+    dimension_check: "[L] * adimensional = adimensional * [L] = [L] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - Calculo de angulos de difraccion
+      - Diseno de filtros espaciales
+      - Espectroscopia de redes
+    interpretation_tags:
+      - interferencia_constructiva
+      - diferencia_camino
+      - patron_difraccion
+    result_semantics:
+      target: theta_dif
+      kind: angle
+      sign_meaning:
+        es: "El signo indica el lado de la normal donde aparece el minimo."
+        en: "Sign indicates which side of the normal the minimum appears."
+      absolute_value_meaning:
+        es: "Angulo de desviacion desde la direccion de incidencia normal."
+        en: "Deviation angle from normal incidence direction."
+    domain_checks:
+      - condition: "|m_orden * lambda / a_abertura| <= 1"
+        message:
+          es: "El argumento del arcseno no puede exceder 1. Verifica orden, longitud de onda y ancho."
+          en: "Arcsine argument cannot exceed 1. Verify order, wavelength and width."
+    coherence_checks:
+      - "Si m_orden = 0, entonces theta_dif = 0 (maximo central)"
+      - "Si lambda aumenta, theta_dif aumenta para mismo orden (dispersion)"
+      - "Si a_abertura aumenta, theta_dif disminuye para mismo orden"
+    graph_implications:
+      - "El patron muestra minimos equiespaciados en seno del angulo, no en angulo mismo"
+      - "La separacion angular entre ordenes consecutivos no es constante"
+    pedagogical_triggers:
+      - error: "Usar angulos en grados sin convertir a radianes"
+        detection: "Si resultado de calculo con angulos pequenos difiere mucho de esperado"
+        message:
+          es: "Asegurate de usar radianes en calculos trigonometricos, no grados."
+          en: "Ensure you use radians in trigonometric calculations, not degrees."
+
+  - id: aproximacion_angulo_pequeno
+    title:
+      es: Aproximacion de angulo pequeno
+      en: Small angle approximation
+    equation: "sin(theta_dif) approx theta_dif"
+    latex: "\\\\sin\\\\theta \\\\approx \\\\theta"
+    rearrangements:
+      - target: theta_dif
+        equation: "theta_dif approx sin(theta_dif)"
+        latex: "\\\\theta \\\\approx \\\\sin\\\\theta"
+    category: derived
+    relation_type: approximation
+    physical_meaning:
+      es: "Para angulos pequenos medidos en radianes, el seno del angulo es aproximadamente igual al angulo mismo. El error es menor al 1% para angulos menores que 0.14 rad (8 grados)."
+      en: "For small angles measured in radians, the sine of the angle is approximately equal to the angle itself. Error is less than 1% for angles smaller than 0.14 rad (8 degrees)."
+    constraints:
+      - "|theta_dif| < 0.14 rad (aproximadamente) para error menor al 1%"
+    validity:
+      es: "Aplicable cuando la longitud de onda es mucho menor que el ancho de abertura y el orden es bajo. En difraccion de luz visible por rendijas milimetricas, tipicamente valida para primeros ordenes."
+      en: "Applicable when wavelength is much smaller than aperture width and order is low. In visible light diffraction by millimeter slits, typically valid for low orders."
+    dimension_check: "adimensional = adimensional ✓ (ambos angulos en radianes)"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - Simplificacion de calculos de difraccion
+      - Conversion angular a lineal
+    interpretation_tags:
+      - aproximacion_lineal
+      - regimen_paraxial
+    result_semantics:
+      target: theta_dif
+      kind: angle
+      sign_meaning:
+        es: "La aproximacion conserva el signo del angulo original."
+        en: "Approximation preserves the sign of the original angle."
+      absolute_value_meaning:
+        es: "Angulo en radianes, numericamente igual a su seno."
+        en: "Angle in radians, numerically equal to its sine."
+    domain_checks:
+      - condition: "|theta_dif| < 0.14"
+        message:
+          es: "Aproximacion valida solo para angulos pequenos. Error crece rapidamente fuera de este rango."
+          en: "Approximation only valid for small angles. Error grows rapidly outside this range."
+    coherence_checks:
+      - "La aproximacion subestima ligeramente el seno real para angulos positivos"
+      - "El error relativo es proporcional al cuadrado del angulo"
+    graph_implications:
+      - "En el grafico, la aproximacion lineal coincide con la curva seno cerca del origen"
+      - "La desviacion entre linea recta y curva seno marca el limite de validez"
+    pedagogical_triggers:
+      - error: "Aplicar aproximacion a angulos grandes"
+        detection: "Si calculo con aproximacion difiere mucho de calculo exacto"
+        message:
+          es: "La aproximacion de angulo pequeno solo es valida para angulos menores que unos 10 grados."
+          en: "Small angle approximation is only valid for angles less than about 10 degrees."
+
+  - id: posicion_lineal_minimos
+    title:
+      es: Posicion lineal de los minimos
+      en: Linear position of minima
+    equation: "y_posicion = m_orden * lambda * L_distancia / a_abertura"
+    latex: "y = \\\\frac{m \\\\lambda L}{a}"
+    rearrangements:
+      - target: y_posicion
+        equation: "y_posicion = m_orden * lambda * L_distancia / a_abertura"
+        latex: "y = \\\\frac{m \\\\lambda L}{a}"
+      - target: m_orden
+        equation: "m_orden = y_posicion * a_abertura / (lambda * L_distancia)"
+        latex: "m = \\\\frac{y a}{\\\\lambda L}"
+      - target: L_distancia
+        equation: "L_distancia = y_posicion * a_abertura / (m_orden * lambda)"
+        latex: "L = \\\\frac{y a}{m \\\\lambda}"
+    category: derived
+    relation_type: derived_relation
+    physical_meaning:
+      es: "Usando la aproximacion de angulo pequeno, la posicion lineal del minimo en la pantalla es proporcional al orden, a la longitud de onda y a la distancia, e inversamente proporcional al ancho de abertura."
+      en: "Using the small angle approximation, the linear position of the minimum on the screen is proportional to the order, wavelength and distance, and inversely proportional to the aperture width."
+    constraints:
+      - "Aproximacion de angulo pequeno debe ser valida"
+      - "L_distancia >> a_abertura (campo lejano)"
+    validity:
+      es: "Valida en el regimen de Fraunhofer con aproximacion paraxial. Para posiciones grandes en la pantalla, requiere usar tan(theta) en lugar de theta."
+      en: "Valid in Fraunhofer regime with paraxial approximation. For large positions on screen, requires using tan(theta) instead of theta."
+    dimension_check: "[L] = adimensional * [L] * [L] / [L] = [L] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - Medicion experimental de longitudes de onda
+      - Calibracion de espectrometros
+      - Diseno de sistemas opticos
+    interpretation_tags:
+      - posicion_observable
+      - conversion_angular_lineal
+    result_semantics:
+      target: y_posicion
+      kind: position
+      sign_meaning:
+        es: "Positiva a un lado del centro, negativa al otro. El signo indica direccion lateral."
+        en: "Positive to one side of center, negative to the other. Sign indicates lateral direction."
+      absolute_value_meaning:
+        es: "Distancia lineal desde el maximo central hasta el minimo de orden m."
+        en: "Linear distance from central maximum to minimum of order m."
+    domain_checks:
+      - condition: "L_distancia > 0"
+        message:
+          es: "La distancia a la pantalla debe ser positiva."
+          en: "Screen distance must be positive."
+      - condition: "a_abertura > 0"
+        message:
+          es: "El ancho de abertura debe ser positivo."
+          en: "Aperture width must be positive."
+    coherence_checks:
+      - "Posicion lineal aumenta linealmente con el orden m"
+      - "Posicion lineal aumenta con la distancia L (amplificacion geometrica)"
+      - "Aberturas mas estrechas producen patrones mas extendidos (mayor y)"
+    graph_implications:
+      - "Los minimos aparecen equiespaciados en la pantalla en esta aproximacion"
+      - "La pendiente de y vs m da la dispersion lineal lambda*L/a"
+    pedagogical_triggers:
+      - error: "Confundir posicion lineal con angulo"
+        detection: "Si resultado tiene unidades de grados o radianes cuando deberia ser metros"
+        message:
+          es: "La posicion y se mide en metros en la pantalla, no en grados. El angulo theta esta en radianes."
+          en: "Position y is measured in meters on the screen, not in degrees. Angle theta is in radians."
+`;export{e as default};

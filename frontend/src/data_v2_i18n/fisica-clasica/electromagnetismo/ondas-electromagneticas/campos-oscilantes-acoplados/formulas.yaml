@@ -1,0 +1,299 @@
+version: 5
+topic:
+  id: campos-oscilantes-acoplados
+  title:
+    es: Campos oscilantes acoplados
+    en: Coupled Oscillating Fields
+formulas:
+- id: velocidad_vacio
+  title:
+    es: Velocidad de propagación en el vacío
+    en: Propagation speed in vacuum
+  equation: c = 1 / sqrt(mu0 * epsilon0)
+  latex: c = \frac{1}{\sqrt{\mu_0 * \epsilon_0}}
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Vincula la velocidad de la luz en el vacío con las propiedades electromagnéticas del espacio.
+    en: Links the speed of light in vacuum with the electromagnetic properties of space.
+  constraints:
+  - mu0 > 0
+  - epsilon0 > 0
+  validity:
+    es: Válida estrictamente para propagación en vacío absoluto y libre de fuentes.
+    en: Valid strictly for propagation in absolute vacuum and free of sources.
+  dimension_check: '[L T^-1] = 1 / sqrt([M L T^-2 I^-2] * [M^-1 L^-3 T⁴ I²])'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere valores de permeabilidad y permitividad en unidades del SI.
+    en: Requires permeability and permittivity values in SI units.
+  used_in:
+  - sustitucion_cinematica
+  interpretation_tags:
+  - vacuo
+  - velocidad
+  result_semantics:
+    target: velocidad_de_la_luz_en_el_vacio
+    kind: constant
+    sign_meaning:
+      es: Siempre positiva por definición geométrica y causal.
+      en: Always positive by geometric and causal definition.
+    absolute_value_meaning:
+      es: Magnitud de la velocidad límite de propagación de la radiación.
+      en: Modulus of the limiting propagation speed of radiation.
+  domain_checks:
+  - condition: mu0 > 0
+    message:
+      es: La permeabilidad magnética debe ser estrictamente positiva.
+      en: Magnetic permeability must be strictly positive.
+    severity: error
+  - condition: epsilon0 > 0
+    message:
+      es: La permitividad eléctrica debe ser estrictamente positiva.
+      en: Electric permittivity must be strictly positive.
+    severity: error
+  coherence_checks:
+  - condition: c > 2.9e8 and c < 3.1e8
+    message:
+      es: El valor calculado debe aproximarse a 300,000 km/s.
+      en: The calculated value must approximate 300,000 km/s.
+    severity: warning
+  graph_implications:
+    es: Fija el eje horizontal o vertical del triedro de ondas a velocidad constante c.
+    en: Sets the horizontal or vertical axis of the wave triedre at a constant speed c.
+  pedagogical_triggers:
+  - confusion_medio_material
+  rearrangements:
+  - target: velocidad_de_la_luz_en_el_vacio
+    equation: c = 1 / sqrt(mu0 * epsilon0)
+    latex: c = \frac{1}{\sqrt{\mu_0 * \epsilon_0}}
+  - target: mu0
+    equation: mu0 = 1 / (c^2 * epsilon0)
+    latex: \mu_0 = \frac{1}{c^2 * \epsilon_0}
+  - target: epsilon0
+    equation: epsilon0 = 1 / (c^2 * mu0)
+    latex: \epsilon_0 = \frac{1}{c^2 * \mu_0}
+  variables:
+  - velocidad_de_la_luz_en_el_vacio
+  - mu0
+  - epsilon0
+- id: relacion_amplitudes
+  title:
+    es: Relación de amplitudes de los campos
+    en: Field amplitude relation
+  equation: E_0 = c * B_0
+  latex: E_0 = c * B_0
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: Acopla las amplitudes de oscilación de los campos eléctrico y magnético mediante el factor de escala c.
+    en: Couples the oscillation amplitudes of the electric and magnetic fields via the scale factor c.
+  constraints:
+  - c > 0
+  - B_0 > 0
+  validity:
+    es: Válida para una onda electromagnética plana en el vacío libre de cargas.
+    en: Valid for a plane electromagnetic wave in vacuum free of charges.
+  dimension_check: '[M L T^-3 I^-1] = [L T^-1] * [M T^-2 I^-1]'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere conocer al menos uno de los campos y la velocidad c.
+    en: Requires knowing at least one of the fields and speed c.
+  used_in:
+  - acoplamiento_campos
+  interpretation_tags:
+  - acoplamiento
+  - triedro
+  result_semantics:
+    target: amplitud_del_campo_electrico
+    kind: core_physical_quantity
+    sign_meaning:
+      es: Siempre no negativa, representa el módulo máximo.
+      en: Always non-negative, represents the maximum modulus.
+    absolute_value_meaning:
+      es: Magnitud máxima del campo eléctrico en voltios por metro.
+      en: Maximum modulus of the electric field in volts per meter.
+  domain_checks:
+  - condition: B_0 >= 0
+    message:
+      es: La amplitud magnética no puede ser negativa.
+      en: Magnetic amplitude cannot be negative.
+    severity: error
+  coherence_checks:
+  - condition: E_0 > B_0
+    message:
+      es: Numéricamente, el campo eléctrico en unidades del SI debe superar con creces al magnético debido al factor c.
+      en: Numerically, the electric field in SI units must greatly exceed the magnetic field due to the factor c.
+    severity: warning
+  graph_implications:
+    es: Mantiene la proporción entre las amplitudes de los vectores E y B representados en 3D.
+    en: Maintains the ratio between the amplitudes of the E and B vectors represented in 3D.
+  pedagogical_triggers:
+  - equivalencia_numerica_erronea
+  rearrangements:
+  - target: amplitud_del_campo_electrico
+    equation: E_0 = c * B_0
+    latex: E_0 = c * B_0
+  - target: amplitud_del_campo_magnetico
+    equation: B_0 = E_0 / c
+    latex: B_0 = \frac{E_0}{c}
+  - target: velocidad_de_la_luz_en_el_vacio
+    equation: c = E_0 / B_0
+    latex: c = \frac{E_0}{B_0}
+  variables:
+  - amplitud_del_campo_electrico
+  - amplitud_del_campo_magnetico
+  - velocidad_de_la_luz_en_el_vacio
+- id: relacion_onda
+  title:
+    es: Relación de dispersión de la onda
+    en: Wave dispersion relation
+  equation: c = lambda * f
+  latex: c = \lambda * f
+  category: derived
+  relation_type: average_relation
+  physical_meaning:
+    es: Vincula la longitud de onda y la frecuencia temporal a través de la velocidad constante c en el vacío.
+    en: Links the wavelength and temporal frequency through the constant speed c in vacuum.
+  constraints:
+  - lambda > 0
+  - f > 0
+  validity:
+    es: Válida para cualquier onda electromagnética monocromática y plana propagándose en el vacío.
+    en: Valid for any monochromatic, plane electromagnetic wave propagating in vacuum.
+  dimension_check: '[L T^-1] = [L] * [T^-1]'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere conocer la longitud de onda o la frecuencia.
+    en: Requires knowing either the wavelength or frequency.
+  used_in:
+  - sincronizacion_frecuencias
+  interpretation_tags:
+  - cinematica
+  - espectro
+  result_semantics:
+    target: lambda
+    kind: core_physical_quantity
+    sign_meaning:
+      es: Siempre positiva por representar una distancia de oscilación armónica.
+      en: Always positive as it represents a harmonic oscillation distance.
+    absolute_value_meaning:
+      es: Distancia en metros que define el periodo espacial.
+      en: Distance in meters defining the spatial period.
+  domain_checks:
+  - condition: lambda > 0
+    message:
+      es: La longitud de onda debe ser estrictamente positiva.
+      en: Wavelength must be strictly positive.
+    severity: error
+  - condition: f > 0
+    message:
+      es: La frecuencia debe ser estrictamente positiva.
+      en: Frequency must be strictly positive.
+    severity: error
+  coherence_checks:
+  - condition: lambda * f > 2.9e8 and lambda * f < 3.1e8
+    message:
+      es: El producto debe igualar la velocidad c en el vacío.
+      en: The product must equal the speed c in vacuum.
+    severity: error
+  graph_implications:
+    es: Altera el periodo de oscilación espacial de la senoide mostrada en pantalla al cambiar f.
+    en: Alters the spatial oscillation period of the sine wave shown on screen when f is changed.
+  pedagogical_triggers:
+  - confusion_escala
+  rearrangements:
+  - target: lambda
+    equation: lambda = c / f
+    latex: \lambda = \frac{c}{f}
+  - target: frecuencia
+    equation: f = c / lambda
+    latex: f = \frac{c}{\lambda}
+  - target: velocidad_de_la_luz_en_el_vacio
+    equation: c = lambda * f
+    latex: c = \lambda * f
+  variables:
+  - lambda
+  - frecuencia
+  - velocidad_de_la_luz_en_el_vacio
+- id: intensidad_media
+  title:
+    es: Intensidad de Poynting media
+    en: Average Poynting intensity
+  equation: I = 0.5 * c * epsilon0 * E_0^2
+  latex: I = \frac{1}{2} c * \epsilon_0 * E_0^2
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Describe el flujo neto medio de energía que transporta la onda armónica por unidad de área y tiempo.
+    en: Describes the average net energy flux transported by the harmonic wave per unit area and time.
+  constraints:
+  - E_0 >= 0
+  - c > 0
+  - epsilon0 > 0
+  validity:
+    es: Válida para el flujo energético neto de ondas planas armónicas transversales en el vacío.
+    en: Valid for the net energy flux of transverse harmonic plane waves in vacuum.
+  dimension_check: '[M T^-3] = [L T^-1] * [M^-1 L^-3 T⁴ I²] * [M L T^-3 I^-1]^2'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere conocer el campo eléctrico del frente de onda.
+    en: Requires knowing the electric field of the wavefront.
+  used_in:
+  - potencia_solar
+  interpretation_tags:
+  - energia
+  - flujo
+  result_semantics:
+    target: intensidad_media
+    kind: core_physical_quantity
+    sign_meaning:
+      es: Siempre no negativa, representa un flujo neto promedio.
+      en: Always non-negative, represents a net average flux.
+    absolute_value_meaning:
+      es: Densidad de potencia media transmitida en vatios por metro cuadrado.
+      en: Transmitted mean power density in watts per square meter.
+  domain_checks:
+  - condition: I >= 0
+    message:
+      es: La intensidad de transporte no puede ser negativa.
+      en: The transport intensity cannot be negative.
+    severity: error
+  coherence_checks:
+  - condition: I <= 1e20
+    message:
+      es: Intensidad extremadamente colosal, posible ruptura o condiciones ultralaser artificiales.
+      en: Extremely colossal intensity, possible breakdown or artificial ultra-laser conditions.
+    severity: warning
+  graph_implications:
+    es: Vincula directamente el tamaño visual de los vectores oscilantes con la energía transportada.
+    en: Directly links the visual size of oscillating vectors to the transported energy.
+  pedagogical_triggers:
+  - cuadrado_amplitud
+  rearrangements:
+  - target: intensidad_media
+    equation: I = 0.5 * c * epsilon0 * E_0^2
+    latex: I = \frac{1}{2} c * \epsilon_0 * E_0^2
+  - target: amplitud_del_campo_electrico
+    equation: E_0 = sqrt(2 * I / (c * epsilon0))
+    latex: E_0 = \sqrt{\frac{2 * I}{c * \epsilon_0}}
+  variables:
+  - intensidad_media
+  - amplitud_del_campo_electrico
+  - epsilon0
+  - velocidad_de_la_luz_en_el_vacio
+ui:
+  default_formula: velocidad_vacio
+  groups:
+  - title:
+      es: Relaciones de propagación
+      en: Propagation relations
+    items:
+    - velocidad_vacio
+    - relacion_onda
+  - title:
+      es: Acoplamiento y energía
+      en: Coupling and energy
+    items:
+    - relacion_amplitudes
+    - intensidad_media

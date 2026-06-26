@@ -1,0 +1,128 @@
+formulas:
+
+  - id: ley_gas_ideal
+    title:
+      es: Ley del gas ideal
+      en: Ideal gas law
+    equation: "P * V = n * R * T"
+    latex: "P V = n R T"
+    rearrangements:
+      - target: P
+        equation: "P = n * R * T / V"
+        latex: "P = \\dfrac{n R T}{V}"
+      - target: V
+        equation: "V = n * R * T / P"
+        latex: "V = \\dfrac{n R T}{P}"
+      - target: T
+        equation: "T = P * V / (n * R)"
+        latex: "T = \\dfrac{P V}{n R}"
+      - target: n
+        equation: "n = P * V / (R * T)"
+        latex: "n = \\dfrac{P V}{R T}"
+    category: fundamental
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: "El producto presión–volumen de un gas ideal es proporcional a la cantidad de sustancia y a la temperatura absoluta. La constante de proporcionalidad es la constante universal de los gases R."
+      en: "The pressure–volume product of an ideal gas is proportional to the amount of substance and the absolute temperature. The proportionality constant is the universal gas constant R."
+    constraints:
+      - "Gas en régimen ideal: interacciones intermoleculares despreciables"
+      - "Volumen molecular despreciable frente al volumen del recipiente"
+      - "Sin reacciones químicas ni cambios de fase"
+      - "T en kelvin, no en grados Celsius"
+    validity:
+      es: "Presiones bajas o moderadas (P ≪ 10 MPa), temperaturas por encima del punto de condensación y lejos del punto crítico. Gases nobles y diatómicos a condiciones normales."
+      en: "Low to moderate pressures (P ≪ 10 MPa), temperatures above the condensation point and far from the critical point. Noble and diatomic gases at standard conditions."
+    dimension_check: "[M L^-1 T^-2][L^3] = [N][M L^2 T^-2 N^-1 Theta^-1][Theta] → [M L^2 T^-2] = [M L^2 T^-2] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - cálculo de cualquier variable de estado dadas las otras tres
+      - verificación de condiciones de operación de recipientes a presión
+      - estimaciones rápidas en termodinámica de procesos
+    interpretation_tags:
+      - estado_gas_ideal
+      - relacion_PVT
+      - cantidad_de_sustancia
+    result_semantics:
+      target: P
+      kind: state_variable
+      sign_meaning:
+        es: "Una presión positiva es el resultado normal. Presión negativa indica error de cálculo o régimen fuera del modelo."
+        en: "A positive pressure is the normal result. Negative pressure indicates a calculation error or a regime outside the model."
+      absolute_value_meaning:
+        es: "La magnitud de P indica cuántas veces la presión atmosférica estándar (101 325 Pa) ejerce el gas sobre las paredes del recipiente."
+        en: "The magnitude of P indicates how many times standard atmospheric pressure (101 325 Pa) the gas exerts on the container walls."
+    domain_checks:
+      - "P > 0"
+      - "V > 0"
+      - "T > 0"
+      - "n > 0"
+      - "P < 1e7"
+    coherence_checks:
+      - "result > 0: presión física coherente"
+      - "result > 2e7: presión inusualmente alta — verificar unidades o condiciones"
+      - "result < 1: presión extremadamente baja — posible error de conversión de unidades"
+    graph_implications:
+      - "Punto (V, P) se sitúa sobre la isoterma T = constante en el diagrama P-V"
+      - "Al aumentar T a V constante, el punto se desplaza hacia arriba (mayor P)"
+      - "Al aumentar V a T constante, el punto se desplaza a la derecha y hacia abajo siguiendo la hipérbola PV = cte"
+    pedagogical_triggers:
+      - "Si P calculada es negativa → error de temperatura en Celsius en lugar de kelvin"
+      - "Si P es del orden de 10⁻³ respecto al esperado → posible uso de litros en lugar de m³ para V"
+      - "Si el resultado difiere por factor ~8 → posible confusión n (moles) con masa en gramos para gases con M ≈ 8 g/mol"
+
+  - id: van_der_waals
+    title:
+      es: Ecuación de Van der Waals
+      en: Van der Waals equation
+    equation: "(P + a * n**2 / V**2) * (V - n * b) = n * R * T"
+    latex: "\\left(P + \\frac{a n^2}{V^2}\\right)(V - n b) = n R T"
+    rearrangements:
+      - target: P
+        equation: "P = n * R * T / (V - n * b) - a * n**2 / V**2"
+        latex: "P = \\dfrac{n R T}{V - n b} - \\dfrac{a n^2}{V^2}"
+    category: fundamental
+    relation_type: constitutive_relation
+    physical_meaning:
+      es: "Corrección a la ley del gas ideal que incluye el volumen propio de las moléculas (parámetro b) y las fuerzas de atracción intermolecular (parámetro a). Reproduce comportamientos no ideales a alta presión y baja temperatura."
+      en: "Correction to the ideal gas law that includes the finite molecular volume (parameter b) and intermolecular attraction forces (parameter a). Reproduces non-ideal behaviour at high pressure and low temperature."
+    constraints:
+      - "a y b son constantes específicas del gas (tabuladas para cada especie)"
+      - "Solo aplica en fases gaseosa y fluido supercrítico; cerca de la transición de fase su precisión es limitada"
+      - "V > nb para que el volumen sea físicamente significativo"
+    validity:
+      es: "Gases reales a presiones moderadas-altas (hasta ~100 atm) o temperaturas próximas al punto de condensación. Mejora significativamente la ley del gas ideal en esas condiciones."
+      en: "Real gases at moderate-to-high pressures (up to ~100 atm) or temperatures near the condensation point. Significantly improves on the ideal gas law under those conditions."
+    dimension_check: "[M L^-1 T^-2 + M L^5 N^-2 · N^2 / L^6][L^3 - N · L^3 N^-1] = [N][M L^2 T^-2 N^-1 Theta^-1][Theta] → [M L^2 T^-2] ✓"
+    calculable: false
+    motivo_no_calculable: "Requiere constantes a y b específicas del gas (no declaradas como magnitudes del leaf); la ecuación cúbica en V no tiene solución analítica cerrada en el caso general."
+    used_in:
+      - modelado de gases reales a alta presión
+      - predicción de la temperatura y presión críticas
+      - interpretación cualitativa de desviaciones del comportamiento ideal
+    interpretation_tags:
+      - gas_real
+      - interacciones_moleculares
+      - volumen_exclusion
+    result_semantics:
+      target: P
+      kind: state_variable
+      sign_meaning:
+        es: "La presión de Van der Waals puede ser menor que la del gas ideal al mismo estado debido a la atracción intermolecular."
+        en: "The Van der Waals pressure can be lower than the ideal gas pressure at the same state due to intermolecular attraction."
+      absolute_value_meaning:
+        es: "El término de atracción reduce P respecto al valor ideal; el término de volumen excluido eleva P. El resultado neto depende de las condiciones."
+        en: "The attraction term reduces P below the ideal value; the excluded-volume term raises P. The net result depends on conditions."
+    domain_checks:
+      - "V > n * b"
+      - "P > 0"
+      - "T > 0"
+    coherence_checks:
+      - "Si P_VdW < P_ideal: dominan las fuerzas de atracción — alta densidad o baja T"
+      - "Si P_VdW > P_ideal: domina el efecto de volumen excluido — muy alta presión"
+    graph_implications:
+      - "Las isotermas VdW muestran un bucle de Van der Waals por debajo de la temperatura crítica"
+      - "Por encima de la temperatura crítica las isotermas se aproximan a las del gas ideal"
+    pedagogical_triggers:
+      - "Si el alumno usa VdW sin conocer a y b del gas → recordar que son propiedades específicas de la especie química"
+      - "Si V_total ≤ nb → el cálculo no tiene solución física en fase gaseosa"

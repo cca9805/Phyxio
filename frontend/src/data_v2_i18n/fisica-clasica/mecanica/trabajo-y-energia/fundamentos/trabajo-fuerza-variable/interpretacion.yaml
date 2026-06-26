@@ -1,0 +1,305 @@
+version: 2
+id: interpretacion-trabajo-fuerza-variable
+leaf_id: trabajo-fuerza-variable
+nombre:
+  es: Interpretacion de trabajo con fuerza variable
+  en: Interpretation of variable-force work
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: trabajo-y-energia
+  parent_id: fundamentos
+  ruta_relativa: fisica-clasica/mecanica/trabajo-y-energia/fundamentos/trabajo-fuerza-variable
+dependencies:
+  formulas:
+  - trabajo_integral
+  - trabajo_hooke_intervalo
+  - trabajo_aprox_fuerza_media
+  magnitudes:
+  - W
+  - x1
+  - x2
+  - k
+  - Fmed
+output_contract:
+  sections: [ summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step ]
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura estructural
+      en: Structural reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  W:
+    summary_rules:
+    - id: w_summary
+      when: 'true'
+      status: info
+      text:
+        es: W integra el aporte local de la fuerza variable entre x1 y x2 y su signo depende del area orientada.
+        en: W integrates local variable-force contribution between x1 and x2 and its sign depends on oriented area.
+    physical_reading_rules:
+    - id: w_reading
+      when: 'true'
+      status: info
+      text:
+        es: Un W positivo indica transferencia neta hacia el sistema; un W negativo indica extraccion neta.
+        en: Positive W indicates net transfer into the system; negative W indicates net extraction.
+    coherence_rules:
+    - id: w_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: El signo de W debe coincidir con el balance de area bajo F(x) en el intervalo.
+        en: W sign must match area balance under F(x) over the interval.
+    model_validity_rules:
+    - id: w_validity
+      when: 'true'
+      status: ok
+      text:
+        es: La interpretacion es valida si F(x) esta definida y es integrable en todo el tramo.
+        en: Interpretation is valid if F(x) is defined and integrable over the full segment.
+    graph_rules:
+    - id: w_graph
+      when: 'true'
+      status: info
+      text:
+        es: En Coord, W se lee como area orientada entre x1 y x2.
+        en: In Coord, W is read as oriented area between x1 and x2.
+    likely_errors:
+    - id: w_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error comun: integrar en limites invertidos sin ajustar signo final."
+        en: "Common mistake: integrating with swapped bounds and forgetting sign correction."
+    next_step_rules:
+    - id: w_next
+      when: 'true'
+      status: info
+      text:
+        es: Contrasta W exacto con la estimacion por Fmed para evaluar error de modelo.
+        en: Compare exact W against Fmed estimate to evaluate model error.
+  x1:
+    summary_rules:
+    - id: x1_summary
+      when: 'true'
+      status: info
+      text:
+        es: x1 fija el inicio operativo de acumulacion de trabajo en el eje de posicion.
+        en: x1 sets the operational start for work accumulation on the position axis.
+    physical_reading_rules:
+    - id: x1_reading
+      when: 'true'
+      status: info
+      text:
+        es: Cambiar x1 modifica la porcion de area incluida y puede invertir conclusiones energeticas.
+        en: Changing x1 modifies included area and may invert energetic conclusions.
+    coherence_rules:
+    - id: x1_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser consistente con el origen espacial elegido en todo el problema.
+        en: It must stay consistent with the chosen spatial origin.
+    model_validity_rules:
+    - id: x1_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si el tramo real no comienza en x1, la integral calculada no representa el proceso fisico.
+        en: If the real segment does not start at x1, computed integral does not represent the process.
+    graph_rules:
+    - id: x1_graph
+      when: 'true'
+      status: info
+      text:
+        es: x1 marca el primer borde vertical del area de trabajo en el grafico F-x.
+        en: x1 marks the first vertical boundary of work area in the F-x graph.
+    likely_errors:
+    - id: x1_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error frecuente: usar x1 de un tramo y x2 de otro tramo distinto."
+        en: "Frequent error: using x1 from one segment and x2 from another."
+    next_step_rules:
+    - id: x1_next
+      when: 'true'
+      status: info
+      text:
+        es: Revisa que el intervalo descrito en el enunciado coincide con x1 y x2.
+        en: Verify that statement interval matches x1 and x2.
+  x2:
+    summary_rules:
+    - id: x2_summary
+      when: 'true'
+      status: info
+      text:
+        es: x2 define el final del intervalo y cierra el dominio de integracion.
+        en: x2 defines interval end and closes integration domain.
+    physical_reading_rules:
+    - id: x2_reading
+      when: 'true'
+      status: info
+      text:
+        es: Variar x2 cambia trabajo acumulado incluso si el perfil F(x) no cambia.
+        en: Changing x2 changes accumulated work even if F(x) profile is unchanged.
+    coherence_rules:
+    - id: x2_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe expresarse con la misma referencia y unidades que x1.
+        en: It must be expressed in the same reference and units as x1.
+    model_validity_rules:
+    - id: x2_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si hay cambio de regimen fisico antes de x2, conviene integrar por tramos.
+        en: If physical regime changes before x2, piecewise integration is preferable.
+    graph_rules:
+    - id: x2_graph
+      when: 'true'
+      status: info
+      text:
+        es: x2 marca el segundo borde vertical del area orientada.
+        en: x2 marks the second vertical boundary of oriented area.
+    likely_errors:
+    - id: x2_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error comun: interpretar x2-x1 como distancia recorrida sin revisar direccion."
+        en: "Common error: interpreting x2-x1 as path length without checking direction."
+    next_step_rules:
+    - id: x2_next
+      when: 'true'
+      status: info
+      text:
+        es: Evalua sensibilidad de W ante pequenos cambios de x2 si el perfil crece rapido.
+        en: Evaluate W sensitivity to small x2 changes when profile grows quickly.
+  k:
+    summary_rules:
+    - id: k_summary
+      when: 'true'
+      status: info
+      text:
+        es: k controla la pendiente del perfil lineal F(x)=k x y por tanto la curvatura energetica integrada.
+        en: k controls linear-profile slope F(x)=k x and thus integrated energetic curvature.
+    physical_reading_rules:
+    - id: k_reading
+      when: 'true'
+      status: info
+      text:
+        es: Mayor k implica incremento mas rapido de fuerza con posicion.
+        en: Larger k implies faster force increase with position.
+    coherence_rules:
+    - id: k_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: En SI, k debe expresarse en N/m para coherencia dimensional del trabajo.
+        en: In SI, k must be expressed in N/m for work dimensional coherence.
+    model_validity_rules:
+    - id: k_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Solo es valido usar k constante si la respuesta es aproximadamente lineal.
+        en: Using constant k is valid only when response is approximately linear.
+    graph_rules:
+    - id: k_graph
+      when: 'true'
+      status: info
+      text:
+        es: k se interpreta como inclinacion de la recta en el plano F-x.
+        en: k is interpreted as line slope in the F-x plane.
+    likely_errors:
+    - id: k_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error frecuente: extrapolar k lineal fuera del rango de calibracion."
+        en: "Frequent error: extrapolating linear k outside calibration range."
+    next_step_rules:
+    - id: k_next
+      when: 'true'
+      status: info
+      text:
+        es: Si hay no linealidad observable, cambia a integral de perfil real medido.
+        en: If observable nonlinearity exists, switch to integral of measured real profile.
+  Fmed:
+    summary_rules:
+    - id: fmed_summary
+      when: 'true'
+      status: info
+      text:
+        es: Fmed resume la fuerza variable en un valor equivalente para estimacion rapida de trabajo.
+        en: Fmed summarizes variable force into an equivalent value for quick work estimation.
+    physical_reading_rules:
+    - id: fmed_reading
+      when: 'true'
+      status: info
+      text:
+        es: Funciona bien si el perfil no presenta oscilaciones fuertes o cambios bruscos.
+        en: It works well if the profile has no strong oscillations or abrupt jumps.
+    coherence_rules:
+    - id: fmed_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe producir un W aproximado cercano al valor integral en el rango de interes.
+        en: It should yield approximate W close to integral value in the range of interest.
+    model_validity_rules:
+    - id: fmed_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si el perfil cambia de signo o tiene picos, Fmed puede ocultar efectos relevantes.
+        en: If profile changes sign or has peaks, Fmed may hide relevant effects.
+    graph_rules:
+    - id: fmed_graph
+      when: 'true'
+      status: info
+      text:
+        es: Graficamente equivale a un rectangulo de area cercana al area real bajo la curva.
+        en: Graphically it equals a rectangle with area close to real area under curve.
+    likely_errors:
+    - id: fmed_error
+      when: 'true'
+      status: warning
+      text:
+        es: "Error comun: asumir que Fmed siempre mejora frente a datos no lineales severos."
+        en: "Common error: assuming Fmed always improves strongly nonlinear data."
+    next_step_rules:
+    - id: fmed_next
+      when: 'true'
+      status: info
+      text:
+        es: Reporta tambien criterio de error estimado al usar aproximacion media.
+        en: Also report estimated error criterion when using average approximation.

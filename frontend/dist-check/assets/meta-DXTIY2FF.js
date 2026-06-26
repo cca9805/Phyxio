@@ -1,0 +1,76 @@
+const n=`id: ondas-longitudinales-en-barras
+nombre:
+  es: Ondas longitudinales en barras
+  en: Longitudinal Waves in Bars
+area: fisica-clasica
+bloque: ondas
+subbloque: ondas-mecanicas
+parent_id: ondas-en-solidos
+ruta_relativa: fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/ondas-longitudinales-en-barras
+orden: 232340
+type: leaf
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+icon: "\\U0001F508"
+descripcion: Propagacion no dispersiva de ondas de compresion-traccion en barras esbeltas y sus aplicaciones.
+description_en: Non-dispersive propagation of compression-tension waves in slender bars and their applications.
+tags:
+  es:
+    - ondas longitudinales
+    - barras
+    - velocidad del sonido
+    - modulo de Young
+    - impedancia
+  en:
+    - longitudinal waves
+    - bars
+    - speed of sound
+    - Young modulus
+    - impedance
+prerequisitos:
+  - fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/introduccion
+graficos:
+  - Coord
+  - Svg
+physical_role:
+  es: concepto físico
+  en: physical concept
+dificultad: 3
+tiempo_estimado_min: 25
+representacion_dominante: Coord
+magnitud_dominante: v_barra
+pregunta_fisica_central:
+  es: Como se propagan las ondas de compresion a lo largo de una barra y que determina su velocidad?
+  en: How do compression waves propagate along a bar and what determines their speed?
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

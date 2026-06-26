@@ -1,0 +1,320 @@
+const e=`- id: H
+  symbol: "H"
+  nombre:
+    es: intensidad magnetica
+    en: magnetic field strength
+  descripcion:
+    es: Campo magnetizante asociado a corrientes libres y geometria del dispositivo.
+    en: Magnetizing field associated with free currents and device geometry.
+  unidad_si: A/m
+  dimension: "[I L^-1]"
+  is_vector: true
+  components: ["H_x", "H_y", "H_z"]
+  category: fundamental
+  physical_role: core_physical_quantity
+  used_in:
+    - entrada del modelo lineal de magnetizacion
+    - estimacion de campo en nucleos y bobinas
+  common_mistake: Tratar H como si fuera el campo total B sin separar la respuesta del material.
+  typical_range: "10 A/m a 100000 A/m en dispositivos de laboratorio y nucleos tecnicos."
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo o direccion marca el sentido de magnetizacion inducida por la corriente libre.
+      en: The sign or direction marks the induced magnetization direction set by free current.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Sin intensidad aplicada, el modelo lineal no induce magnetizacion nueva.
+      en: With no applied field strength, the linear model induces no new magnetization.
+  value_nature:
+    kind: vector_component
+    nonnegative_only: false
+    expected_interval: "any finite laboratory value"
+  interpretation_role:
+    primary_for:
+      - campo magnetizante aplicado
+      - entrada comun a M y B
+    secondary_for:
+      - criterio de saturacion
+  graph_binding:
+    channels:
+      - x_axis
+      - vector_direction
+  pedagogical_notes:
+    es: H permite distinguir lo que impone la fuente de lo que aporta el material.
+    en: H separates what the source imposes from what the material contributes.
+- id: M
+  symbol: "M"
+  nombre:
+    es: magnetizacion
+    en: magnetization
+  descripcion:
+    es: Momento magnetico por unidad de volumen creado por la respuesta interna del material.
+    en: Magnetic moment per unit volume created by the material internal response.
+  unidad_si: A/m
+  dimension: "[I L^-1]"
+  is_vector: true
+  components: ["M_x", "M_y", "M_z"]
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - respuesta del material ante H
+    - lectura de ferromagnetismo, paramagnetismo y diamagnetismo
+  common_mistake: Pensar que M siempre tiene el mismo sentido e intensidad que H.
+  typical_range: "casi nula en materiales diamagneticos, muy grande antes de saturacion en ferromagneticos."
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su sentido indica si el material acompaña o se opone al campo magnetizante.
+      en: Its direction indicates whether the material follows or opposes the magnetizing field.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede anularse en vacio, en materiales no magnetizables o al retirar H en el modelo reversible.
+      en: It may vanish in vacuum, in nonmagnetizable matter, or after removing H in the reversible model.
+  value_nature:
+    kind: vector_component
+    nonnegative_only: false
+    expected_interval: "material dependent"
+  interpretation_role:
+    primary_for:
+      - respuesta interna
+      - clasificacion magnetica
+    secondary_for:
+      - deteccion de no linealidad
+  graph_binding:
+    channels:
+      - y_axis
+      - slope_response
+  pedagogical_notes:
+    es: M es la magnitud que impide describir el material como simple espacio vacio.
+    en: M is the quantity that prevents treating matter as empty space.
+- id: B
+  symbol: "B"
+  nombre:
+    es: campo magnetico total
+    en: total magnetic field
+  descripcion:
+    es: Campo magnetico resultante que combina fuente externa y respuesta magnetica del material.
+    en: Resulting magnetic field combining the external source and magnetic material response.
+  unidad_si: T
+  dimension: "[M T^-2 I^-1]"
+  is_vector: true
+  components: ["B_x", "B_y", "B_z"]
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - fuerza magnetica sobre cargas y conductores
+    - diseño de nucleos y entrehierros
+  common_mistake: Atribuir todo B a la corriente libre y olvidar la contribucion del material.
+  typical_range: "microteslas en campos ambientales, decimas de tesla a teslas en nucleos tecnicos."
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: La direccion de B resume la orientacion resultante del campo dentro del material.
+      en: The direction of B summarizes the resulting field orientation inside the material.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: B nulo indica cancelacion o ausencia efectiva de campo magnetico total.
+      en: Zero B indicates cancellation or effective absence of total magnetic field.
+  value_nature:
+    kind: vector_component
+    nonnegative_only: false
+    expected_interval: "0 T to several T in ordinary laboratory systems"
+  interpretation_role:
+    primary_for:
+      - campo util resultante
+      - comparacion con saturacion
+    secondary_for:
+      - fuerza sobre cargas
+  graph_binding:
+    channels:
+      - y_axis
+      - field_intensity
+  pedagogical_notes:
+    es: B es el campo que entra en fuerzas, pero no dice por si solo que parte procede del material.
+    en: B enters magnetic forces, but alone it does not reveal what part comes from matter.
+- id: mu
+  symbol: "\\\\mu"
+  nombre:
+    es: permeabilidad magnetica
+    en: magnetic permeability
+  descripcion:
+    es: Constante efectiva que mide cuanto campo total produce una intensidad magnetica dada en un medio lineal.
+    en: Effective constant measuring how much total field is produced by a given field strength in a linear medium.
+  unidad_si: H/m
+  dimension: "[M L T^-2 I^-2]"
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+    - relacion constitutiva entre B y H
+    - comparacion entre vacio y material
+  common_mistake: Creer que una permeabilidad grande siempre mejora cualquier dispositivo magnetico.
+  typical_range: "cercana a mu0 en aire, mucho mayor en algunos ferromagneticos no saturados."
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En el modelo basico se usa como escala positiva de respuesta lineal.
+      en: In the basic model it is used as a positive scale of linear response.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Una permeabilidad nula no describe un medio magnetico lineal ordinario.
+      en: Zero permeability does not describe an ordinary linear magnetic medium.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "positive"
+  interpretation_role:
+    primary_for:
+      - respuesta global del medio
+      - calculo de B
+    secondary_for:
+      - diseño de nucleos
+  graph_binding:
+    channels:
+      - slope
+  pedagogical_notes:
+    es: Mu condensa la respuesta lineal, pero oculta saturacion e historia magnetica.
+    en: Mu condenses linear response, but hides saturation and magnetic history.
+- id: mu0
+  symbol: "\\\\mu_0"
+  nombre:
+    es: permeabilidad del vacio
+    en: vacuum permeability
+  descripcion:
+    es: Escala magnetica de referencia usada para comparar medios materiales con el vacio.
+    en: Reference magnetic scale used to compare material media with vacuum.
+  unidad_si: H/m
+  dimension: "[M L T^-2 I^-2]"
+  is_vector: false
+  components: []
+  category: constant
+  physical_role: reference_constant
+  used_in:
+    - definicion de permeabilidad relativa
+    - comparacion entre vacio y material
+  common_mistake: Redondearla sin controlar el orden de magnitud de mu.
+  typical_range: "aprox. 1.2566e-6 H/m."
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es una constante positiva de referencia.
+      en: It is a positive reference constant.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Si fuera nula, desapareceria la escala magnetica del modelo.
+      en: If it were zero, the magnetic scale of the model would disappear.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: "1.2566e-6 H/m"
+  interpretation_role:
+    primary_for:
+      - normalizacion de mu_r
+    secondary_for:
+      - estimacion dimensional
+  graph_binding:
+    channels:
+      - reference_slope
+  pedagogical_notes:
+    es: Mu0 fija el punto de comparacion, no la respuesta especifica del material.
+    en: Mu0 fixes the comparison point, not the specific response of the material.
+- id: mu_r
+  symbol: "\\\\mu_r"
+  nombre:
+    es: permeabilidad relativa
+    en: relative permeability
+  descripcion:
+    es: Cociente que compara la permeabilidad del material con la del vacio.
+    en: Ratio comparing the material permeability with vacuum permeability.
+  unidad_si: adimensional
+  dimension: "[1]"
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: core_physical_quantity
+  used_in:
+    - clasificacion de respuesta magnetica
+    - estimacion rapida de concentracion de campo
+  common_mistake: Interpretar mu_r como porcentaje de campo sin mirar H ni saturacion.
+  typical_range: "ligeramente menor que 1 en diamagneticos, algo mayor que 1 en paramagneticos, muy grande en ferromagneticos lineales."
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En medios ordinarios lineales se interpreta como factor positivo de amplificacion relativa.
+      en: In ordinary linear media it is read as a positive relative amplification factor.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un valor nulo no representa un material magnetico lineal ordinario.
+      en: A zero value does not represent an ordinary linear magnetic material.
+  value_nature:
+    kind: ratio
+    nonnegative_only: true
+    expected_interval: "positive, commonly near 1 or much larger in unsaturated ferromagnets"
+  interpretation_role:
+    primary_for:
+      - clasificacion del material
+      - comparacion con vacio
+    secondary_for:
+      - control de plausibilidad
+  graph_binding:
+    channels:
+      - slope_ratio
+      - color_scale
+  pedagogical_notes:
+    es: Mu_r responde la pregunta central del leaf de forma compacta, pero solo dentro del regimen lineal.
+    en: Mu_r answers the central question compactly, but only inside the linear regime.
+- id: chi_m
+  symbol: "\\\\chi_m"
+  nombre:
+    es: susceptibilidad magnetica
+    en: magnetic susceptibility
+  descripcion:
+    es: Parametro adimensional que mide la magnetizacion inducida por unidad de intensidad magnetica.
+    en: Dimensionless parameter measuring induced magnetization per unit magnetic field strength.
+  unidad_si: adimensional
+  dimension: "[1]"
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: core_physical_quantity
+  used_in:
+    - relacion lineal entre M y H
+    - distincion entre dia, para y ferromagnetismo lineal
+  common_mistake: Creer que chi_m negativa significa ausencia de magnetismo.
+  typical_range: "negativa y pequeña en diamagneticos, positiva y pequeña en paramagneticos, efectiva grande en ferromagneticos no saturados."
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica oposicion o alineacion de la magnetizacion con H.
+      en: The sign indicates opposition or alignment of magnetization with H.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Valor nulo representa respuesta material despreciable frente al vacio.
+      en: A zero value represents negligible material response relative to vacuum.
+  value_nature:
+    kind: ratio
+    nonnegative_only: false
+    expected_interval: "negative small, near zero, positive small, or large effective"
+  interpretation_role:
+    primary_for:
+      - respuesta interna del material
+      - signo de la magnetizacion
+    secondary_for:
+      - estimacion de M
+  graph_binding:
+    channels:
+      - slope_response
+      - sign_marker
+  pedagogical_notes:
+    es: Chi_m es la forma mas directa de leer si el material se opone o acompaña al campo aplicado.
+    en: Chi_m is the most direct way to read whether the material opposes or follows the applied field.
+`;export{e as default};

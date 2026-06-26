@@ -1,0 +1,233 @@
+version: 5.0.0
+ui:
+  default_formula: ley_stefan_boltzmann_potencia
+formulas:
+- id: ley_stefan_boltzmann_potencia
+  title:
+    es: Potencia radiada por Stefan-Boltzmann
+    en: Radiated power by Stefan-Boltzmann law
+  equation: potencia_radiada = emisividad * constante_stefan_boltzmann * area_superficie * temperatura_absoluta^4
+  latex: P = \varepsilon \cdot \sigma \cdot A \cdot T^{4}
+  magnitudes:
+  - potencia_radiada
+  - emisividad
+  - constante_stefan_boltzmann
+  - area_superficie
+  - temperatura_absoluta
+  category: radiacion_termica
+  relation_type: power_law
+  physical_meaning:
+    es: La potencia térmica emitida crece con la cuarta potencia de la temperatura absoluta.
+    en: The emitted thermal power grows with the fourth power of absolute temperature.
+  constraints:
+    es:
+    - temperatura_absoluta > 0
+    - area_superficie > 0
+    - 0 <= emisividad <= 1
+    en:
+    - absolute temperature > 0
+    - surface area > 0
+    - 0 <= emissivity <= 1
+  validity:
+    es: Superficie gris ideal o aproximada, temperatura uniforme y emisividad conocida.
+    en: Ideal or approximate gray surface, uniform temperature and known emissivity.
+  dimension_check: '[M L^2 T^-3] = [1] [M T^-3 Θ^-4] [L^2] [Θ^4]'
+  calculable: true
+  used_in:
+  - calculation
+  - interpretation
+  - graph_coord
+  result_semantics:
+    target: potencia_radiada
+    kind: nonnegative_scalar
+    sign_meaning:
+      es: No tiene signo; representa emisión total.
+      en: It has no sign; it represents total emission.
+    absolute_value_meaning:
+      es: Cantidad de energía emitida por unidad de tiempo.
+      en: Amount of energy emitted per unit time.
+  rearrangements:
+  - target: potencia_radiada
+    equation: potencia_radiada = emisividad * constante_stefan_boltzmann * area_superficie * temperatura_absoluta^4
+    latex: P = \varepsilon \cdot \sigma \cdot A \cdot T^{4}
+  - target: emisividad
+    equation: emisividad = potencia_radiada / (constante_stefan_boltzmann * area_superficie * temperatura_absoluta^4)
+    latex: \varepsilon = \frac{P}{\sigma \cdot A \cdot T^{4}}
+  - target: constante_stefan_boltzmann
+    equation: constante_stefan_boltzmann = potencia_radiada / (emisividad * area_superficie * temperatura_absoluta^4)
+    latex: \sigma = \frac{P}{\varepsilon \cdot A \cdot T^{4}}
+  - target: area_superficie
+    equation: area_superficie = potencia_radiada / (emisividad * constante_stefan_boltzmann * temperatura_absoluta^4)
+    latex: A = \frac{P}{\varepsilon \cdot \sigma \cdot T^{4}}
+  - target: temperatura_absoluta
+    equation: temperatura_absoluta = (potencia_radiada / (emisividad * constante_stefan_boltzmann * area_superficie))^(1/4)
+    latex: T = \sqrt[4]{\frac{P}{\varepsilon \cdot \sigma \cdot A}}
+- id: potencia_neta_radiacion
+  title:
+    es: Potencia neta intercambiada por radiación
+    en: Net power exchanged by radiation
+  equation: potencia_neta = emisividad * constante_stefan_boltzmann * area_superficie * (temperatura_absoluta^4 - temperatura_entorno^4)
+  latex: P_{net} = \varepsilon \cdot \sigma \cdot A \cdot \left(T^{4} - T_{ent}^{4}\right)
+  magnitudes:
+  - potencia_neta
+  - emisividad
+  - constante_stefan_boltzmann
+  - area_superficie
+  - temperatura_absoluta
+  - temperatura_entorno
+  category: radiacion_termica
+  relation_type: difference_power_law
+  physical_meaning:
+    es: La potencia neta compara la radiación emitida por el cuerpo con la absorbida desde el entorno.
+    en: Net power compares radiation emitted by the body with radiation absorbed from the surroundings.
+  constraints:
+    es:
+    - temperatura_absoluta > 0
+    - temperatura_entorno > 0
+    - area_superficie > 0
+    - 0 <= emisividad <= 1
+    en:
+    - absolute temperature > 0
+    - surroundings temperature > 0
+    - surface area > 0
+    - 0 <= emissivity <= 1
+  validity:
+    es: Cuerpo gris rodeado por un entorno térmico ideal a temperatura uniforme.
+    en: Gray body surrounded by an ideal thermal environment at uniform temperature.
+  dimension_check: '[M L^2 T^-3] = [1] [M T^-3 Θ^-4] [L^2] [Θ^4]'
+  calculable: true
+  used_in:
+  - calculation
+  - interpretation
+  - graph_coord
+  result_semantics:
+    target: potencia_neta
+    kind: signed_scalar
+    sign_meaning:
+      es: Positiva si el cuerpo pierde energía neta; negativa si gana energía neta.
+      en: Positive if the body loses net energy; negative if it gains net energy.
+    absolute_value_meaning:
+      es: Rapidez del intercambio neto de energía por radiación.
+      en: Rate of net energy exchange by radiation.
+  rearrangements:
+  - target: potencia_neta
+    equation: potencia_neta = emisividad * constante_stefan_boltzmann * area_superficie * (temperatura_absoluta^4 - temperatura_entorno^4)
+    latex: P_{net} = \varepsilon \cdot \sigma \cdot A \cdot \left(T^{4} - T_{ent}^{4}\right)
+  - target: emisividad
+    equation: emisividad = potencia_neta / (constante_stefan_boltzmann * area_superficie * (temperatura_absoluta^4 - temperatura_entorno^4))
+    latex: \varepsilon = \frac{P_{net}}{\sigma \cdot A \cdot \left(T^{4} - T_{ent}^{4}\right)}
+  - target: constante_stefan_boltzmann
+    equation: constante_stefan_boltzmann = potencia_neta / (emisividad * area_superficie * (temperatura_absoluta^4 - temperatura_entorno^4))
+    latex: \sigma = \frac{P_{net}}{\varepsilon \cdot A \cdot \left(T^{4} - T_{ent}^{4}\right)}
+  - target: area_superficie
+    equation: area_superficie = potencia_neta / (emisividad * constante_stefan_boltzmann * (temperatura_absoluta^4 - temperatura_entorno^4))
+    latex: A = \frac{P_{net}}{\varepsilon \cdot \sigma \cdot \left(T^{4} - T_{ent}^{4}\right)}
+  - target: temperatura_absoluta
+    equation: temperatura_absoluta = (potencia_neta / (emisividad * constante_stefan_boltzmann * area_superficie) + temperatura_entorno^4)^(1/4)
+    latex: T = \sqrt[4]{\frac{P_{net}}{\varepsilon \cdot \sigma \cdot A} + T_{ent}^{4}}
+  - target: temperatura_entorno
+    equation: temperatura_entorno = (temperatura_absoluta^4 - potencia_neta / (emisividad * constante_stefan_boltzmann * area_superficie))^(1/4)
+    latex: T_{ent} = \sqrt[4]{T^{4} - \frac{P_{net}}{\varepsilon \cdot \sigma \cdot A}}
+- id: emitancia_radiativa
+  title:
+    es: Emitancia radiativa
+    en: Radiant exitance
+  equation: emitancia_radiativa = emisividad * constante_stefan_boltzmann * temperatura_absoluta^4
+  latex: M = \varepsilon \cdot \sigma \cdot T^{4}
+  magnitudes:
+  - emitancia_radiativa
+  - emisividad
+  - constante_stefan_boltzmann
+  - temperatura_absoluta
+  category: radiacion_termica
+  relation_type: surface_power_density
+  physical_meaning:
+    es: Potencia radiada por unidad de superficie de un cuerpo térmico.
+    en: Power radiated per unit surface area by a thermal body.
+  constraints:
+    es:
+    - temperatura_absoluta > 0
+    - 0 <= emisividad <= 1
+    en:
+    - absolute temperature > 0
+    - 0 <= emissivity <= 1
+  validity:
+    es: Superficie con temperatura uniforme y comportamiento gris aproximado.
+    en: Surface with uniform temperature and approximate gray behavior.
+  dimension_check: '[M T^-3] = [1] [M T^-3 Θ^-4] [Θ^4]'
+  calculable: true
+  used_in:
+  - calculation
+  - interpretation
+  - graph_coord
+  result_semantics:
+    target: emitancia_radiativa
+    kind: nonnegative_scalar
+    sign_meaning:
+      es: No tiene signo; mide emisión superficial.
+      en: It has no sign; it measures surface emission.
+    absolute_value_meaning:
+      es: Potencia radiada por cada metro cuadrado.
+      en: Power radiated by each square meter.
+  rearrangements:
+  - target: emitancia_radiativa
+    equation: emitancia_radiativa = emisividad * constante_stefan_boltzmann * temperatura_absoluta^4
+    latex: M = \varepsilon \cdot \sigma \cdot T^{4}
+  - target: emisividad
+    equation: emisividad = emitancia_radiativa / (constante_stefan_boltzmann * temperatura_absoluta^4)
+    latex: \varepsilon = \frac{M}{\sigma \cdot T^{4}}
+  - target: constante_stefan_boltzmann
+    equation: constante_stefan_boltzmann = emitancia_radiativa / (emisividad * temperatura_absoluta^4)
+    latex: \sigma = \frac{M}{\varepsilon \cdot T^{4}}
+  - target: temperatura_absoluta
+    equation: temperatura_absoluta = (emitancia_radiativa / (emisividad * constante_stefan_boltzmann))^(1/4)
+    latex: T = \sqrt[4]{\frac{M}{\varepsilon \cdot \sigma}}
+- id: calor_radiado
+  title:
+    es: Energía radiada en un intervalo
+    en: Energy radiated over a time interval
+  equation: energia_radiada = potencia_radiada * intervalo_tiempo
+  latex: Q = P \cdot \Delta t
+  magnitudes:
+  - energia_radiada
+  - potencia_radiada
+  - intervalo_tiempo
+  category: radiacion_termica
+  relation_type: rate_to_amount
+  physical_meaning:
+    es: La energía emitida por radiación acumula potencia durante un intervalo de tiempo.
+    en: Energy emitted by radiation accumulates power over a time interval.
+  constraints:
+    es:
+    - potencia_radiada >= 0
+    - intervalo_tiempo >= 0
+    en:
+    - radiated power >= 0
+    - time interval >= 0
+  validity:
+    es: Potencia constante o potencia media durante el intervalo considerado.
+    en: Constant power or average power over the considered interval.
+  dimension_check: '[M L^2 T^-2] = [M L^2 T^-3] [T]'
+  calculable: true
+  used_in:
+  - calculation
+  - interpretation
+  result_semantics:
+    target: energia_radiada
+    kind: nonnegative_scalar
+    sign_meaning:
+      es: No tiene signo; representa energía emitida.
+      en: It has no sign; it represents emitted energy.
+    absolute_value_meaning:
+      es: Energía total transferida por radiación.
+      en: Total energy transferred by radiation.
+  rearrangements:
+  - target: energia_radiada
+    equation: energia_radiada = potencia_radiada * intervalo_tiempo
+    latex: Q = P \cdot \Delta t
+  - target: potencia_radiada
+    equation: potencia_radiada = energia_radiada / intervalo_tiempo
+    latex: P = \frac{Q}{\Delta t}
+  - target: intervalo_tiempo
+    equation: intervalo_tiempo = energia_radiada / potencia_radiada
+    latex: \Delta t = \frac{Q}{P}

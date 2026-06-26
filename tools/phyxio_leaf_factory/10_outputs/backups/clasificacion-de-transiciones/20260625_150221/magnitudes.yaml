@@ -1,0 +1,490 @@
+version: 5.0.0
+magnitudes:
+- id: temperatura
+  symbol: T
+  nombre:
+    es: temperatura
+    en: temperature
+  descripcion:
+    es: Temperatura absoluta que controla el estado térmico del sistema.
+    en: Absolute temperature controlling the thermal state of the system.
+  unidad_si: K
+  dimension: Theta
+  is_vector: false
+  components: []
+  category: control_variable
+  physical_role:
+    es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+    en: Quantity used to classify or diagnose phase transitions.
+  used_in:
+  - salto_entropia_latente
+  - exponente_parametro_orden
+  common_mistake: Confundir Celsius con kelvin en criterios termodinámicos.
+  typical_range: 1 K a 1000 K
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La temperatura absoluta no es negativa en equilibrio termodinámico ordinario.
+      en: Absolute temperature is not negative in ordinary thermodynamic equilibrium.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero kelvin es el límite inferior ideal; no representa una transición por sí solo.
+      en: Zero kelvin is an ideal lower limit; it does not represent a transition by itself.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: 1 K a 1000 K
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    enabled: true
+    channels:
+    - parameter
+    - xAxis
+  pedagogical_notes:
+    es: Usa [[temperatura]] como pieza de diagnóstico, no como etiqueta aislada; su sentido depende de continuidad, salto
+      y régimen físico.
+    en: Use [[temperatura]] as a diagnostic piece, not as an isolated label; its meaning depends on continuity, jump, and
+      physical regime.
+- id: temperatura_critica
+  symbol: T_c
+  nombre:
+    es: temperatura crítica
+    en: critical temperature
+  descripcion:
+    es: Temperatura donde se produce o se aproxima la transición de fase.
+    en: Temperature at which the phase transition occurs or is approached.
+  unidad_si: K
+  dimension: Theta
+  is_vector: false
+  components: []
+  category: threshold
+  physical_role:
+    es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+    en: Quantity used to classify or diagnose phase transitions.
+  used_in:
+  - salto_entropia_latente
+  - exponente_parametro_orden
+  common_mistake: Usarla como temperatura cualquiera y no como escala de frontera entre fases.
+  typical_range: 10 K a 1000 K
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Debe ser positiva para una transición térmica ordinaria.
+      en: It must be positive for an ordinary thermal transition.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Si no hay temperatura crítica definida, este criterio no se aplica directamente.
+      en: If no critical temperature is defined, this criterion does not apply directly.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: 10 K a 1000 K
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    enabled: true
+    channels:
+    - constant
+    - parameter
+  pedagogical_notes:
+    es: Usa [[temperatura_critica]] como pieza de diagnóstico, no como etiqueta aislada; su sentido depende de continuidad,
+      salto y régimen físico.
+    en: Use [[temperatura_critica]] as a diagnostic piece, not as an isolated label; its meaning depends on continuity, jump,
+      and physical regime.
+- id: parametro_de_orden
+  symbol: Phi
+  nombre:
+    es: parámetro de orden
+    en: order parameter
+  descripcion:
+    es: Magnitud macroscópica que distingue fases por simetría u organización interna.
+    en: Macroscopic quantity distinguishing phases by symmetry or internal organization.
+  unidad_si: depende del sistema
+  dimension: variable
+  is_vector: false
+  components: []
+  category: state_variable
+  physical_role:
+    es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+    en: Quantity used to classify or diagnose phase transitions.
+  used_in:
+  - salto_parametro_orden
+  - exponente_parametro_orden
+  common_mistake: Creer que cualquier variable medible es automáticamente un parámetro de orden.
+  typical_range: 0 a 1 en normalizaciones habituales
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo puede codificar una rama de simetría; la clasificación depende de continuidad y módulo.
+      en: The sign may encode a symmetry branch; classification depends on continuity and magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero suele representar la fase desordenada o simétrica bajo el convenio elegido.
+      en: Zero often represents the disordered or symmetric phase under the chosen convention.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: 0 a 1 en normalizaciones habituales
+  interpretation_role:
+    primary_for:
+    - classification
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    enabled: true
+    channels:
+    - yAxis
+    - parameter
+  pedagogical_notes:
+    es: Usa [[parametro_de_orden]] como pieza de diagnóstico, no como etiqueta aislada; su sentido depende de continuidad,
+      salto y régimen físico.
+    en: Use [[parametro_de_orden]] as a diagnostic piece, not as an isolated label; its meaning depends on continuity, jump,
+      and physical regime.
+- id: salto_parametro_de_orden
+  symbol: DeltaPhi
+  nombre:
+    es: salto del parámetro de orden
+    en: order-parameter jump
+  descripcion:
+    es: Diferencia finita del parámetro de orden entre dos fases vecinas.
+    en: Finite difference in the order parameter between two neighboring phases.
+  unidad_si: depende del sistema
+  dimension: variable
+  is_vector: false
+  components: []
+  category: diagnostic
+  physical_role:
+    es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+    en: Quantity used to classify or diagnose phase transitions.
+  used_in:
+  - salto_parametro_orden
+  common_mistake: Interpretar el signo del salto como más importante que su existencia.
+  typical_range: 0 a 1 en escala normalizada
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del sentido de comparación entre fases.
+      en: The sign depends on the comparison direction between phases.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica ausencia de salto detectable, compatible con transición continua si otros criterios lo apoyan.
+      en: Zero indicates no detectable jump, compatible with a continuous transition if other criteria support it.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: 0 a 1 en escala normalizada
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    enabled: true
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Usa [[salto_parametro_de_orden]] como pieza de diagnóstico, no como etiqueta aislada; su sentido depende de continuidad,
+      salto y régimen físico.
+    en: Use [[salto_parametro_de_orden]] as a diagnostic piece, not as an isolated label; its meaning depends on continuity,
+      jump, and physical regime.
+- id: calor_latente
+  symbol: L
+  nombre:
+    es: calor latente molar
+    en: molar latent heat
+  descripcion:
+    es: Energía intercambiada por mol durante una transición de primer orden.
+    en: Energy exchanged per mole during a first-order transition.
+  unidad_si: J mol^-1
+  dimension: M L^2 T^-2 mol^-1
+  is_vector: false
+  components: []
+  category: energy
+  physical_role:
+    es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+    en: Quantity used to classify or diagnose phase transitions.
+  used_in:
+  - salto_entropia_latente
+  common_mistake: Confundir calor latente con calor específico.
+  typical_range: 0 a 10^5 J mol^-1
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica absorción o cesión según el sentido del proceso.
+      en: The sign indicates absorption or release depending on process direction.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero significa que este diagnóstico no identifica una transición de primer orden.
+      en: Zero means this diagnostic does not identify a first-order transition.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: 0 a 10^5 J mol^-1
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    enabled: true
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Usa [[calor_latente]] como pieza de diagnóstico, no como etiqueta aislada; su sentido depende de continuidad, salto
+      y régimen físico.
+    en: Use [[calor_latente]] as a diagnostic piece, not as an isolated label; its meaning depends on continuity, jump, and
+      physical regime.
+- id: salto_entropia
+  symbol: DeltaS
+  nombre:
+    es: salto de entropía molar
+    en: molar entropy jump
+  descripcion:
+    es: Cambio discontinuo de entropía entre fases coexistentes.
+    en: Discontinuous entropy change between coexisting phases.
+  unidad_si: J mol^-1 K^-1
+  dimension: M L^2 T^-2 Theta^-1 mol^-1
+  is_vector: false
+  components: []
+  category: state_change
+  physical_role:
+    es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+    en: Quantity used to classify or diagnose phase transitions.
+  used_in:
+  - salto_entropia_latente
+  common_mistake: Olvidar que el salto se evalúa justo en la transición.
+  typical_range: 0 a 10^3 J mol^-1 K^-1
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende de qué fase se tome como final.
+      en: The sign depends on which phase is taken as final.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero descarta calor latente molar por esta vía.
+      en: Zero rules out molar latent heat through this route.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: 0 a 10^3 J mol^-1 K^-1
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    enabled: true
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Usa [[salto_entropia]] como pieza de diagnóstico, no como etiqueta aislada; su sentido depende de continuidad, salto
+      y régimen físico.
+    en: Use [[salto_entropia]] as a diagnostic piece, not as an isolated label; its meaning depends on continuity, jump, and
+      physical regime.
+- id: energia_libre_gibbs
+  symbol: G
+  nombre:
+    es: energía libre de Gibbs
+    en: Gibbs free energy
+  descripcion:
+    es: Potencial termodinámico usado para comparar fases a presión y temperatura controladas.
+    en: Thermodynamic potential used to compare phases at controlled pressure and temperature.
+  unidad_si: J mol^-1
+  dimension: M L^2 T^-2 mol^-1
+  is_vector: false
+  components: []
+  category: thermodynamic_potential
+  physical_role:
+    es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+    en: Quantity used to classify or diagnose phase transitions.
+  used_in:
+  - criterio_derivada_energia_libre
+  common_mistake: Mirar solo G y no sus derivadas relevantes.
+  typical_range: -10^6 a 10^6 J mol^-1
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El cero depende de la referencia elegida; importan diferencias y derivadas.
+      en: Zero depends on the chosen reference; differences and derivatives matter.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: El cero absoluto de G no tiene significado universal sin referencia.
+      en: Absolute zero of G has no universal meaning without a reference.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: -10^6 a 10^6 J mol^-1
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    enabled: false
+    channels:
+    - none
+  pedagogical_notes:
+    es: Usa [[energia_libre_gibbs]] como pieza de diagnóstico, no como etiqueta aislada; su sentido depende de continuidad,
+      salto y régimen físico.
+    en: Use [[energia_libre_gibbs]] as a diagnostic piece, not as an isolated label; its meaning depends on continuity, jump,
+      and physical regime.
+- id: orden_de_transicion
+  symbol: n
+  nombre:
+    es: orden de transición
+    en: transition order
+  descripcion:
+    es: Categoría que indica qué derivada termodinámica presenta discontinuidad o singularidad.
+    en: Category indicating which thermodynamic derivative has a discontinuity or singularity.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: classification
+  physical_role:
+    es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+    en: Quantity used to classify or diagnose phase transitions.
+  used_in:
+  - criterio_derivada_energia_libre
+  common_mistake: Tomarlo como un número medido continuo en lugar de una etiqueta de criterio.
+  typical_range: 1, 2 o continua/crítica según el criterio
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No posee signo físico porque clasifica el tipo de transición.
+      en: It has no physical sign because it classifies the transition type.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Cero no es una clasificación termodinámica ordinaria.
+      en: Zero is not an ordinary thermodynamic classification.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: 1, 2 o continua/crítica según el criterio
+  interpretation_role:
+    primary_for:
+    - classification
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    enabled: false
+    channels:
+    - none
+  pedagogical_notes:
+    es: Usa [[orden_de_transicion]] como pieza de diagnóstico, no como etiqueta aislada; su sentido depende de continuidad,
+      salto y régimen físico.
+    en: Use [[orden_de_transicion]] as a diagnostic piece, not as an isolated label; its meaning depends on continuity, jump,
+      and physical regime.
+- id: exponente_critico_beta
+  symbol: beta
+  nombre:
+    es: exponente crítico beta
+    en: critical exponent beta
+  descripcion:
+    es: Exponente que describe cómo se anula el parámetro de orden cerca de la criticidad.
+    en: Exponent describing how the order parameter vanishes near criticality.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: critical_exponent
+  physical_role:
+    es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+    en: Quantity used to classify or diagnose phase transitions.
+  used_in:
+  - exponente_parametro_orden
+  common_mistake: Usarlo lejos del punto crítico como si fuera una ley global.
+  typical_range: 0.1 a 0.5 en muchos modelos
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Debe ser positivo para que el orden se anule al acercarse a la transición continua.
+      en: It should be positive for order to vanish when approaching a continuous transition.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Beta igual a cero eliminaría la ley de anulación crítica habitual.
+      en: Beta equal to zero would remove the usual critical vanishing law.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: 0.1 a 0.5 en muchos modelos
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    enabled: true
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Usa [[exponente_critico_beta]] como pieza de diagnóstico, no como etiqueta aislada; su sentido depende de continuidad,
+      salto y régimen físico.
+    en: Use [[exponente_critico_beta]] as a diagnostic piece, not as an isolated label; its meaning depends on continuity,
+      jump, and physical regime.
+- id: amplitud_critica
+  symbol: A
+  nombre:
+    es: amplitud crítica
+    en: critical amplitude
+  descripcion:
+    es: Factor de escala del parámetro de orden en una ley crítica.
+    en: Scale factor of the order parameter in a critical law.
+  unidad_si: depende del sistema
+  dimension: variable
+  is_vector: false
+  components: []
+  category: scale_factor
+  physical_role:
+    es: Magnitud usada para clasificar o diagnosticar transiciones de fase.
+    en: Quantity used to classify or diagnose phase transitions.
+  used_in:
+  - exponente_parametro_orden
+  common_mistake: Confundir la amplitud con el exponente universal.
+  typical_range: 0.01 a 10 en escala normalizada
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende de la rama elegida para el parámetro de orden.
+      en: The sign depends on the chosen branch for the order parameter.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si es cero, la ley no describe un parámetro de orden observable.
+      en: If it is zero, the law does not describe an observable order parameter.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: 0.01 a 10 en escala normalizada
+  interpretation_role:
+    primary_for: []
+    secondary_for:
+    - model_validity
+    - graph_reading
+  graph_binding:
+    enabled: true
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Usa [[amplitud_critica]] como pieza de diagnóstico, no como etiqueta aislada; su sentido depende de continuidad, salto
+      y régimen físico.
+    en: Use [[amplitud_critica]] as a diagnostic piece, not as an isolated label; its meaning depends on continuity, jump,
+      and physical regime.

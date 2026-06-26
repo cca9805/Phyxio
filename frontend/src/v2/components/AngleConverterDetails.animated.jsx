@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
-import Latex from "react-latex-next";
+import Latex from "./shared/SafeLatex.jsx";
 
 function parseNumberLoose(v) {
   if (v == null) return NaN;

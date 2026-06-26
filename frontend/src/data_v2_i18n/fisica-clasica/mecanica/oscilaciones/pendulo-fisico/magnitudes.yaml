@@ -1,0 +1,370 @@
+version: 1
+magnitudes:
+- id: I
+  symbol: I
+  nombre:
+    es: momento de inercia
+    en: moment of inertia
+  descripcion:
+    es: Inercia rotacional del cuerpo rigido respecto al eje de giro.
+    en: Rotational inertia of the rigid body about the pivot axis.
+  unidad_si: kg*m^2
+  dimension: M L^2
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: physical_quantity
+  used_in:
+  - pendulo-fisico
+  common_mistake: Tratar I como constante geometrica universal sin revisar eje real de giro.
+  typical_range: 0.01 a 10 kg*m^2 en montajes de laboratorio y prototipos mecanicos.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El momento de inercia es no negativo para distribuciones fisicas de masa.
+      en: Moment of inertia is non-negative for physical mass distributions.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: I nulo anula la dinamica rotacional del sistema modelado.
+      en: Zero I collapses rotational dynamics in this model.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, 100]
+  interpretation_role:
+    primary_for:
+    - pendulo-fisico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - slider_inertia
+  pedagogical_notes: A mayor I, mayor resistencia a cambiar estado angular.
+
+- id: m
+  symbol: m
+  nombre:
+    es: masa
+    en: mass
+  descripcion:
+    es: Masa total del cuerpo que oscila alrededor del eje fijo.
+    en: Total mass of the body oscillating around a fixed axis.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: physical_quantity
+  used_in:
+  - pendulo-fisico
+  common_mistake: Confundir masa con peso y usar newtons en lugar de kilogramos.
+  typical_range: 0.1 a 30 kg segun aplicacion didactica o industrial.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La masa se considera positiva en todo escenario fisico del leaf.
+      en: Mass is treated as positive in every physical scenario of the leaf.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Masa nula elimina el sistema dinamico considerado.
+      en: Zero mass removes the considered dynamic system.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, 100]
+  interpretation_role:
+    primary_for:
+    - pendulo-fisico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - slider_mass
+  pedagogical_notes: La masa influye en la dinamica junto a I y d, no de forma aislada.
+
+- id: g
+  symbol: g
+  nombre:
+    es: aceleracion gravitatoria
+    en: gravitational acceleration
+  descripcion:
+    es: Intensidad local del campo gravitatorio que produce el torque restaurador.
+    en: Local gravitational field intensity producing restoring torque.
+  unidad_si: m/s^2
+  dimension: L T^-2
+  is_vector: false
+  components: null
+  category: environmental
+  physical_role: physical_quantity
+  used_in:
+  - pendulo-fisico
+  common_mistake: Usar valores de g sin justificar entorno o altitud.
+  typical_range: 9.78 a 9.83 m/s^2 cerca de la superficie terrestre.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud positiva para escalar el torque gravitatorio.
+      en: It is used as a positive magnitude scaling gravitational torque.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: g nula implica ausencia de restauracion gravitatoria en el modelo.
+      en: Zero g implies no gravitational restoration in this model.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, 20]
+  interpretation_role:
+    primary_for:
+    - pendulo-fisico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - constant_gravity
+  pedagogical_notes: Variaciones pequenas de g cambian el periodo de forma medible en precision.
+
+- id: d
+  symbol: d
+  nombre:
+    es: distancia al centro de masas
+    en: pivot-to-center distance
+  descripcion:
+    es: Distancia entre el eje de giro y el centro de masas del cuerpo.
+    en: Distance between pivot axis and body center of mass.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: geometric
+  physical_role: physical_quantity
+  used_in:
+  - pendulo-fisico
+  common_mistake: Medir d desde un borde en vez de desde el eje real del soporte.
+  typical_range: 0.01 a 2 m segun tamano de prototipo.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se trata como longitud positiva definida por geometria del sistema.
+      en: It is handled as a positive length set by system geometry.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: d nula elimina torque gravitatorio y deja de ser pendulo fisico clasico.
+      en: Zero d removes gravitational torque and breaks the classical physical pendulum model.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, 10]
+  interpretation_role:
+    primary_for:
+    - pendulo-fisico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - slider_distance
+  pedagogical_notes: d controla la palanca gravitatoria y modifica el periodo junto con I.
+
+- id: omega0
+  symbol: omega0
+  nombre:
+    es: pulsacion natural
+    en: natural angular frequency
+  descripcion:
+    es: Frecuencia angular propia para oscilaciones pequenas en torno al equilibrio.
+    en: Natural angular frequency for small oscillations around equilibrium.
+  unidad_si: rad/s
+  dimension: T^-1
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - pendulo-fisico
+  common_mistake: Confundir rad/s con Hz y comparar magnitudes sin conversion.
+  typical_range: 0.2 a 20 rad/s en escenarios educativos y mecanicos.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se reporta positiva como escala de rapidez angular del ciclo.
+      en: It is reported positive as angular speed scale of the cycle.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: omega0 nula implica ausencia de oscilacion restauradora.
+      en: Zero omega0 implies no restoring oscillation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, 50]
+  interpretation_role:
+    primary_for:
+    - pendulo-fisico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - natural_rate
+  pedagogical_notes: Permite pasar de parametros geometricos a escala temporal del movimiento.
+
+- id: T
+  symbol: T
+  nombre:
+    es: periodo
+    en: period
+  descripcion:
+    es: Tiempo requerido para completar una oscilacion angular completa.
+    en: Time required to complete one full angular oscillation.
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - pendulo-fisico
+  common_mistake: Medir medio ciclo y reportarlo como periodo completo.
+  typical_range: 0.1 a 20 s en montaje de aula y banco.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El periodo es una duracion siempre positiva.
+      en: Period is always a positive duration.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Periodo nulo no tiene significado fisico en este modelo.
+      en: Zero period has no physical meaning in this model.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, 100]
+  interpretation_role:
+    primary_for:
+    - pendulo-fisico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - cycle_time
+  pedagogical_notes: Una variacion pequena de T puede evidenciar cambio en I o en d.
+
+- id: f
+  symbol: f
+  nombre:
+    es: frecuencia
+    en: frequency
+  descripcion:
+    es: Numero de ciclos por segundo en el regimen lineal del pendulo.
+    en: Number of cycles per second in linear pendulum regime.
+  unidad_si: Hz
+  dimension: T^-1
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - pendulo-fisico
+  common_mistake: Comparar f con omega0 sin dividir por dos pi.
+  typical_range: 0.05 a 5 Hz en la mayoria de practicas.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como conteo positivo de ciclos por unidad de tiempo.
+      en: It is used as a positive cycle count per unit time.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: f nula implica ausencia de oscilacion periodica.
+      en: Zero frequency implies no periodic oscillation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, 20]
+  interpretation_role:
+    primary_for:
+    - pendulo-fisico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - cyclic_rate
+  pedagogical_notes: Facilita comparacion con espectros de excitacion externa.
+
+- id: theta
+  symbol: theta
+  nombre:
+    es: desplazamiento angular
+    en: angular displacement
+  descripcion:
+    es: Angulo instantaneo respecto a la posicion de equilibrio estable.
+    en: Instantaneous angle relative to stable equilibrium position.
+  unidad_si: rad
+  dimension: 1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: physical_quantity
+  used_in:
+  - pendulo-fisico
+  common_mistake: Usar grados en formulas linealizadas sin conversion a radianes.
+  typical_range: -0.35 a 0.35 rad para aproximacion de angulos pequenos.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica hacia que lado del equilibrio gira el cuerpo.
+      en: Sign indicates on which side of equilibrium the body rotates.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: theta nula marca paso por equilibrio, no necesariamente reposo angular.
+      en: Zero theta marks equilibrium crossing, not necessarily angular rest.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: [ -3.2, 3.2 ]
+  interpretation_role:
+    primary_for:
+    - pendulo-fisico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - angle_trace
+  pedagogical_notes: En el regimen lineal se espera respuesta casi sinusoidal de theta.
+
+- id: theta_dd
+  symbol: theta_dd
+  nombre:
+    es: aceleracion angular
+    en: angular acceleration
+  descripcion:
+    es: Segunda derivada temporal del angulo, ligada al torque neto.
+    en: Second time derivative of angle, linked to net torque.
+  unidad_si: rad/s^2
+  dimension: T^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - pendulo-fisico
+  common_mistake: Interpretar theta_dd como velocidad angular.
+  typical_range: -100 a 100 rad/s^2 segun amplitud y geometria.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica direccion instantanea de curvatura dinamica angular.
+      en: Sign indicates instantaneous direction of angular dynamical curvature.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: theta_dd nula puede aparecer en puntos de inflexion dinamica.
+      en: Zero theta_dd may occur at dynamical inflection points.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: [ -500, 500 ]
+  interpretation_role:
+    primary_for:
+    - pendulo-fisico
+    secondary_for: []
+  graph_binding:
+    channels:
+    - angular_acceleration
+  pedagogical_notes: En el modelo lineal, theta_dd es proporcional y opuesta a theta.

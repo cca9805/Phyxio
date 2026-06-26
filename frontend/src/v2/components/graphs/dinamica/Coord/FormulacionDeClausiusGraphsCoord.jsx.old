@@ -1,0 +1,149 @@
+import React from "react";
+import { createCoordGraphPage } from "@/v2/components/graphs/graphFactories.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraph(
+const uiLang = "es";
+const tt = (es, en) => (uiLang === "en" ? en : es);
+
+const graph_identity = {
+  graph_type: "Coord",
+  pregunta_principal: {
+    es: "Por que el calor fluye espontaneamente de caliente a frio y cuanto trabajo externo exige invertirlo?",
+    en: "Why does heat flow spontaneously from hot to cold and how much external work is required to reverse it?",
+  },
+  keywords: [
+    "calor",
+    "fluye",
+    "espontaneamente",
+    "caliente",
+    "frio",
+    "trabajo",
+    "externo",
+    "Clausius",
+    "heat",
+    "flows",
+    "spontaneously",
+    "hot",
+    "cold",
+    "work",
+    "external",
+  ],
+  magnitud_estrella: "Q",
+  variable_control: "DeltaT",
+  formula: "W_min = Q * DeltaT / T_B",
+  target_interpretable: true,
+};
+
+const axes = {
+  xComponent: "XAxis",
+  yComponent: "YAxis",
+  xAxis: "DeltaT",
+  yAxis: "W_min",
+};
+
+const formula = {
+  id: "trabajo_reversion_clausius",
+  formula: "W_min = Q * DeltaT / T_B",
+  equation: "W_min = Q * DeltaT / T_B",
+};
+
+const fmt = (value, digits = 1) =>
+  Number.isFinite(value) ? value.toFixed(digits) : "-";
+
+const FormulacionDeClausiusGraphsCoord = createCoordGraphPage({
+  displayName: "FormulacionDeClausiusGraphsCoord",
+  title: {
+    es: "Trabajo para invertir el flujo de calor",
+    en: "Work required to reverse heat flow",
+  },
+  defaultParams: {
+    Q: 1000,
+    T_B: 280,
+    DeltaT: 20,
+  },
+  controls: [
+    { id: "Q", label: { es: "Calor transferido", en: "Transferred heat" }, min: 100, max: 5000, step: 100 },
+    { id: "T_B", label: { es: "Foco frio", en: "Cold reservoir" }, min: 220, max: 330, step: 5 },
+    { id: "DeltaT", label: { es: "Diferencia termica", en: "Thermal difference" }, min: 0, max: 80, step: 2 },
+  ],
+  compute: (pNum) => {
+    const q = Number.isFinite(pNum.Q) ? pNum.Q : 1000;
+    const tCold = Number.isFinite(pNum.T_B) && pNum.T_B > 0 ? pNum.T_B : 280;
+    const delta = Math.max(0, Number.isFinite(pNum.DeltaT) ? pNum.DeltaT : 20);
+    const maxDelta = Math.max(10, delta * 1.4, 80);
+    const data = Array.from({ length: 40 }, (_, index) => {
+      const x = (index / 39) * maxDelta;
+      return { x, y: q * x / tCold };
+    });
+    const wMin = q * delta / tCold;
+
+    return {
+      data,
+      extra: {
+        interpretationTarget: "W_min",
+        interpretationValue: wMin,
+        graphState: {
+          target: "W_min",
+          graphType: "Coord",
+          graph_identity,
+          axes,
+          formula,
+          Q: q,
+          T_B: tCold,
+          DeltaT: delta,
+          W_min: wMin,
+          T_A: tCold + delta,
+        },
+      },
+    };
+  },
+  render: ({ data, extra }) => {
+    const state = extra?.graphState ?? {};
+    const width = 520;
+    const height = 260;
+    const maxX = Math.max(...data.map((point) => point.x), 1);
+    const maxY = Math.max(...data.map((point) => point.y), 1);
+    const points = data
+      .map((point) => {
+        const x = 42 + (point.x / maxX) * (width - 84);
+        const y = height - 34 - (point.y / maxY) * (height - 68);
+        return `${x},${y}`;
+      })
+      .join(" ");
+    const markerX = 42 + ((state.DeltaT ?? 0) / maxX) * (width - 84);
+    const markerY = height - 34 - ((state.W_min ?? 0) / maxY) * (height - 68);
+
+    return (
+      <div className="v2-card" style={{ display: "grid", gap: 12 }}>
+        <div className="v2-card-title">{tt("Clausius: frio a caliente requiere trabajo", "Clausius: cold to hot requires work")}</div>
+        <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Formulacion de Clausius Coord">
+          <rect x="0" y="0" width={width} height={height} rx="10" fill="rgba(15,23,42,0.86)" />
+          <line x1="38" y1={height - 32} x2={width - 28} y2={height - 32} stroke="rgba(255,255,255,0.28)" />
+          <line x1="42" y1="24" x2="42" y2={height - 28} stroke="rgba(255,255,255,0.28)" />
+          <polyline points={points} fill="none" stroke="#f97316" strokeWidth="3" />
+          <circle cx={markerX} cy={markerY} r="5" fill="#22c55e" />
+          <text x={width - 34} y={height - 42} textAnchor="end" fill="rgba(255,255,255,0.72)" fontSize="12">
+            DeltaT
+          </text>
+          <text x="52" y="38" fill="rgba(255,255,255,0.72)" fontSize="12">
+            W_min
+          </text>
+        </svg>
+        <div style={{ display: "grid", gap: 4, fontSize: 13 }}>
+          <strong>{tt("Lectura fisica", "Physical reading")}</strong>
+          <span>
+            Q = {fmt(state.Q, 0)} J; T_B = {fmt(state.T_B, 0)} K; DeltaT = {fmt(state.DeltaT, 0)} K; W_min = {fmt(state.W_min, 1)} J
+          </span>
+        </div>
+      </div>
+    );
+  },
+});
+
+FormulacionDeClausiusGraphsCoord.graph_identity = graph_identity;
+FormulacionDeClausiusGraphsCoord.pregunta_principal = graph_identity.pregunta_principal;
+FormulacionDeClausiusGraphsCoord.magnitud_estrella = graph_identity.magnitud_estrella;
+FormulacionDeClausiusGraphsCoord.axes = axes;
+FormulacionDeClausiusGraphsCoord.formula = formula;
+
+export default FormulacionDeClausiusGraphsCoord;

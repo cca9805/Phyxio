@@ -1,0 +1,186 @@
+const n=`version: 1
+topic:
+  id: flujo-en-tuberias
+  title: Flujo en Tuberías
+variables:
+- id: Q
+  symbol: Q
+  nombre: Caudal volumétrico
+  unidad_si: m^3/s
+- id: A
+  symbol: A
+  nombre: Área transversal
+  unidad_si: m^2
+- id: v
+  symbol: v
+  nombre: Velocidad media
+  unidad_si: m/s
+- id: dp
+  symbol: \\Delta p
+  nombre: Caída de presión
+  unidad_si: Pa
+- id: f
+  symbol: f
+  nombre: Factor de fricción
+  unidad_si: '1'
+- id: L
+  symbol: L
+  nombre: Longitud
+  unidad_si: m
+- id: rho
+  symbol: \\rho
+  nombre: Densidad
+  unidad_si: kg/m^3
+- id: D
+  symbol: D
+  nombre: Diámetro
+  unidad_si: m
+- id: mu
+  symbol: \\mu
+  nombre: Viscosidad
+  unidad_si: Pa \\cdot s
+formulas:
+- id: caudal_tubo
+  category: cinetica
+  relation_type: definicion
+  title:
+    es: Continuidad en la Tubería
+    en: Pipe Continuity
+  equation: Q = A*v
+  latex: Q = A \\cdot v
+  physical_meaning:
+    es: Relación fundamental entre el caudal volumétrico y la velocidad media en un conducto.
+    en: Fundamental relationship between volumetric flow rate and average velocity in a duct.
+  constraints: "Fluido incompresible, flujo estacionario."
+  validity:
+    es: Válido para flujo incompresible en régimen estacionario.
+    en: Valid for incompressible flow in steady state.
+  dimension_check: "[m^3/s] = [m^2] * [m/s]"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [bombeo, diseño_redes]
+  interpretation_tags: [caudal, velocidad]
+  result_semantics: volumen_por_tiempo
+  domain_checks:
+    - "A > 0"
+    - "v >= 0"
+  coherence_checks:
+    - "Q >= 0"
+  graph_implications:
+    es: Determina la intensidad de las líneas de flujo.
+    en: Determines the intensity of the flow lines.
+  pedagogical_triggers:
+    es: Usar para explicar cómo cambia la velocidad al variar el diámetro.
+    en: Use to explain how velocity changes when varying the diameter.
+  rearrangements:
+  - target: Q
+    equation: Q = A*v
+    latex: Q = A \\cdot v
+  - target: v
+    equation: v = Q/A
+    latex: v = \\frac{Q}{A}
+  - target: A
+    equation: A = Q/v
+    latex: A = \\frac{Q}{v}
+  variables:
+  - Q
+  - A
+  - v
+- id: dp_tubo
+  category: dinamica
+  relation_type: ley_empirica
+  title:
+    es: Ecuación de Darcy-Weisbach
+    en: Darcy-Weisbach Equation
+  equation: dp = f * (L/D) * (rho * v^2 / 2)
+  latex: \\Delta p = f \\frac{L}{D} \\frac{\\rho v^2}{2}
+  physical_meaning:
+    es: Calcula la pérdida de presión por fricción a lo largo de una tubería recta.
+    en: Calculates the pressure loss due to friction along a straight pipe.
+  constraints: "Tramo recto, flujo desarrollado."
+  validity:
+    es: Aplicable tanto a flujo laminar como turbulento usando el factor de fricción adecuado.
+    en: Applicable to both laminar and turbulent flow using the appropriate friction factor.
+  dimension_check: "[Pa] = [1] * [m/m] * [kg/m^3] * [m/s]^2"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [diseño_redes, calculo_bombas]
+  interpretation_tags: [presion, friccion]
+  result_semantics: perdida_energia
+  domain_checks:
+    - "D > 0"
+    - "L >= 0"
+  coherence_checks:
+    - "dp >= 0"
+  graph_implications:
+    es: Define la pendiente del perfil de presiones.
+    en: Defines the slope of the pressure profile.
+  pedagogical_triggers:
+    es: Mostrar cómo duplicar la velocidad cuadruplica la pérdida de presión.
+    en: Show how doubling the velocity quadruples the pressure loss.
+  rearrangements:
+  - target: dp
+    equation: dp = f * (L/D) * (rho * v^2 / 2)
+    latex: \\Delta p = f \\frac{L}{D} \\frac{\\rho v^2}{2}
+  - target: f
+    equation: f = dp * D * 2 / (L * rho * v^2)
+    latex: f = \\frac{2 D \\Delta p}{L \\rho v^2}
+  variables:
+  - dp
+  - f
+  - L
+  - rho
+  - v
+  - D
+- id: area_circular
+  category: geometria
+  relation_type: definicion
+  title:
+    es: Área de Tubería Circular
+    en: Circular Pipe Area
+  equation: A = 3.14159 * D^2 / 4
+  latex: A = \\frac{\\pi D^2}{4}
+  physical_meaning:
+    es: Cálculo del área transversal para conductos cilíndricos.
+    en: Cross-sectional area calculation for cylindrical ducts.
+  constraints: "Sección circular."
+  validity:
+    es: Válido para conductos de sección circular perfecta.
+    en: Valid for perfectly circular section ducts.
+  dimension_check: "[m^2] = [1] * [m]^2"
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [caudal_tubo]
+  interpretation_tags: [geometria]
+  result_semantics: superficie
+  domain_checks:
+    - "D >= 0"
+  coherence_checks:
+    - "A >= 0"
+  graph_implications:
+    es: Escala el diámetro visual en las representaciones SVG.
+    en: Scales the visual diameter in SVG representations.
+  pedagogical_triggers:
+    es: Recordar la dependencia cuadrática del área con el diámetro.
+    en: Recall the quadratic dependence of area with diameter.
+  rearrangements:
+  - target: A
+    equation: A = 3.14159 * D^2 / 4
+    latex: A = \\frac{\\pi D^2}{4}
+  - target: D
+    equation: D = sqrt(4*A/3.14159)
+    latex: D = \\sqrt{\\frac{4A}{\\pi}}
+  variables:
+  - A
+  - D
+ui:
+  default_formula: dp_tubo
+  groups:
+  - title: Pérdidas por Fricción
+    items:
+    - dp_tubo
+    - area_circular
+  - title: Cinemática del Fluido
+    items:
+    - caudal_tubo
+`;export{n as default};

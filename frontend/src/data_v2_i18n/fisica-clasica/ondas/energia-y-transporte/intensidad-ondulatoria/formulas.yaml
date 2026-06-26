@@ -1,0 +1,288 @@
+version: v5
+leaf_id: intensidad-ondulatoria
+formulas:
+- id: intensidad_desde_potencia
+  title:
+    es: Intensidad desde potencia fuente
+    en: Intensity from source power
+  equation: I = P / (4 * PI * r_distancia^2)
+  latex: I = \frac{P}{4\pi r^{2}}
+  rearrangements:
+  - target: intensidad_ondulatoria
+    equation: I = P / (4 * PI * r_distancia^2)
+    latex: I = \frac{P}{4\pi r^{2}}
+  - target: potencia_de_la_fuente
+    equation: P = I * 4 * PI * r_distancia^2
+    latex: P = 4\pi r^{2} I
+  - target: r_distancia
+    equation: r_distancia = sqrt(P / (4 * PI * I))
+    latex: r = \sqrt{\frac{P}{4\pi I}}
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: Para una fuente puntual isotrópica en tres dimensiones, la intensidad disminuye con el cuadrado de la distancia porque
+      la potencia se distribuye sobre el área de una esfera creciente.
+    en: For an isotropic point source in three dimensions, intensity decreases with the square of distance because power is
+      distributed over the area of a growing sphere.
+  constraints:
+  - r_distancia > 0 (fuente puntual ideal)
+  - P ≥ 0 (potencia no negativa)
+  validity:
+    es: Válida para fuentes puntuales isotrópicas en el campo lejano (distancia mucho mayor que la dimensión de la fuente).
+      Para fuentes direccionales, requiere factor de directividad.
+    en: Valid for isotropic point sources in the far field (distance much greater than source dimension). For directional
+      sources, requires directivity factor.
+  dimension_check: '[M L² T⁻³] / [L²] = [M T⁻³] = W/m² ✓'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - Cálculo de intensidad sonora a distancia
+  - Diseño de sistemas de alarma sonora
+  - Seguridad radiométrica
+  interpretation_tags:
+  - ley_inversa_cuadrado
+  - atenuacion_geometrica
+  - fuente_isotropica
+  result_semantics:
+    target: intensidad_ondulatoria
+    kind: intensity
+    sign_meaning:
+      es: La intensidad es siempre no negativa.
+      en: Intensity is always non-negative.
+    absolute_value_meaning:
+      es: Potencia por unidad de área en watts por metro cuadrado.
+      en: Power per unit area in watts per square meter.
+  domain_checks:
+  - condition: I >= 0
+    message:
+      es: La intensidad debe ser no negativa
+      en: Intensity must be non-negative
+  - condition: r_distancia > 0
+    message:
+      es: La distancia debe ser positiva
+      en: Distance must be positive
+  coherence_checks:
+  - Si P = 0, entonces I = 0 (sin fuente no hay intensidad)
+  - Si r_distancia crece, I decrece como 1/r²
+  - Para r_distancia pequeña, la fórmula diverge (límite de fuente puntual ideal)
+  graph_implications:
+  - La intensidad se visualiza como una curva decreciente con distancia en escala log-log con pendiente -2
+  - En representación radial, el grosor o color de los anillos indica intensidad decreciente
+  pedagogical_triggers:
+  - error: Confundir distancia lineal con distancia cuadrática
+    detection: Si resultado I es ~1/r en lugar de ~1/r²
+    message:
+      es: Verifica que usaste r² en el denominador. La intensidad sigue la ley del inverso del cuadrado de la distancia.
+      en: Verify you used r² in the denominator. Intensity follows the inverse square law of distance.
+  - error: Olvidar el factor 4π
+    detection: Si resultado es 4π veces mayor o menor que el esperado
+    message:
+      es: Recuerda incluir 4π que corresponde al área total de la esfera unidad.
+      en: Remember to include 4π which corresponds to the total area of the unit sphere.
+- id: intensidad_desde_presion
+  title:
+    es: Intensidad desde presión acústica
+    en: Intensity from acoustic pressure
+  equation: I = p_presion^2 / (2 * rho * v)
+  latex: I = \frac{p^{2}}{2 \rho v}
+  rearrangements:
+  - target: intensidad_ondulatoria
+    equation: I = p_presion^2 / (2 * rho * v)
+    latex: I = \frac{p^{2}}{2 \rho v}
+  - target: p_presion
+    equation: p_presion = sqrt(2 * rho * v * I)
+    latex: p = \sqrt{2 \rho v I}
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: La intensidad acústica es proporcional al cuadrado de la amplitud de presión e inversamente proporcional a la impedancia
+      del medio (ρv). Esta relación conecta la magnitud mecánica mensurable (presión) con la magnitud energética (intensidad).
+    en: Acoustic intensity is proportional to the square of pressure amplitude and inversely proportional to the medium impedance
+      (ρv). This relationship connects the measurable mechanical magnitude (pressure) with the energetic magnitude (intensity).
+  constraints:
+  - rho > 0 (el medio debe tener masa)
+  - v > 0 (requiere propagación)
+  - p_presion ≥ 0 (usamos amplitud o valor RMS)
+  validity:
+    es: Válida para ondas planas o esféricas en medios fluidos uniformes. La presión p es la amplitud o valor RMS de la presión
+      acústica.
+    en: Valid for plane or spherical waves in uniform fluid media. Pressure p is the amplitude or RMS value of acoustic pressure.
+  dimension_check: '[M² L⁻² T⁻⁴] / ([M L⁻³] · [L T⁻¹]) = [M T⁻³] = W/m² ✓'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - Medición acústica con micrófonos
+  - Conversión entre presión e intensidad
+  - Cálculo de nivel sonoro desde presión medida
+  interpretation_tags:
+  - relacion_presion_intensidad
+  - impedancia_acustica
+  - ondas_planas
+  result_semantics:
+    target: intensidad_ondulatoria
+    kind: intensity
+    sign_meaning:
+      es: La intensidad es siempre no negativa.
+      en: Intensity is always non-negative.
+    absolute_value_meaning:
+      es: Intensidad acústica en función de la presión medida.
+      en: Acoustic intensity as function of measured pressure.
+  domain_checks:
+  - condition: I >= 0
+    message:
+      es: La intensidad debe ser no negativa
+      en: Intensity must be non-negative
+  coherence_checks:
+  - Si p_presion = 0, entonces I = 0 (sin presión no hay onda)
+  - 'I proporcional a p_presion²: duplicar presión cuadruplica intensidad'
+  - Medios más densos (mayor ρv) requieren mayor presión para la misma intensidad
+  graph_implications:
+  - La relación cuadrática se visualiza como parábola I vs p
+  - En escala log-log, la pendiente es 2 (doble log presión → doble log intensidad)
+  pedagogical_triggers:
+  - error: Usar presión instantánea en lugar de amplitud o RMS
+    detection: Si resultado varía oscilatoriamente con el tiempo
+    message:
+      es: Usa la amplitud de presión o el valor RMS (eficaz), no la presión instantánea que oscila.
+      en: Use the pressure amplitude or RMS (effective) value, not the instantaneous pressure that oscillates.
+  - error: Olvidar el factor 2 en el denominador
+    detection: Si resultado es el doble del valor esperado
+    message:
+      es: Verifica el factor 2 en el denominador que proviene del promedio temporal de sin².
+      en: Verify the factor 2 in the denominator that comes from the temporal average of sin².
+- id: nivel_sonoro_dB
+  title:
+    es: Nivel de intensidad sonora en decibelios
+    en: Sound intensity level in decibels
+  equation: beta_nivel = 10 * log10(I / I_0)
+  latex: \beta = 10 \log_{10} (\frac{I}{I_{0}})
+  rearrangements:
+  - target: beta_nivel
+    equation: beta_nivel = 10 * log10(I / I_0)
+    latex: \beta = 10 \log_{10} (\frac{I}{I_{0}})
+  - target: intensidad_ondulatoria
+    equation: I = I_0 * 10^(beta_nivel / 10)
+    latex: I = I_{0} * 10^{\beta/10}
+  category: derived
+  relation_type: logarithmic_scale
+  physical_meaning:
+    es: El nivel de intensidad sonora expresa la intensidad en escala logarítmica referenciada al umbral de audición I₀ =
+      10⁻¹² W/m². Cada 10 dB representa un factor 10 en intensidad física.
+    en: The sound intensity level expresses intensity on a logarithmic scale referenced to the hearing threshold I₀ = 10⁻¹²
+      W/m². Each 10 dB represents a factor of 10 in physical intensity.
+  constraints:
+  - I > 0 (argumento del logaritmo debe ser positivo)
+  - I_0 = 1e-12 (umbral de audición estándar)
+  validity:
+    es: Válida para toda la gama de intensidades acústicas. Para I < I₀, el nivel es negativo (sub-umbral). La escala logarítmica
+      comprime el enorme rango dinámico de la audición.
+    en: Valid for the entire range of acoustic intensities. For I < I₀, the level is negative (sub-threshold). The logarithmic
+      scale compresses the enormous dynamic range of hearing.
+  dimension_check: adimensional = 10 · log10([M T⁻³]/[M T⁻³]) = adimensional ✓ (resultado en dB)
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - Medición de ruido con sonómetros
+  - Normativas de protección auditiva
+  - Diseño de sistemas de audio
+  interpretation_tags:
+  - escala_logaritmica
+  - decibelios
+  - umbral_audicion
+  result_semantics:
+    target: beta_nivel
+    kind: logarithmic_level
+    sign_meaning:
+      es: 'Positivo: audible; Negativo: sub-umbral; Cero: umbral exacto.'
+      en: 'Positive: audible; Negative: sub-threshold; Zero: exact threshold.'
+    absolute_value_meaning:
+      es: Nivel en decibelios respecto al umbral estándar.
+      en: Level in decibels relative to standard threshold.
+  domain_checks:
+  - condition: I > 0
+    message:
+      es: La intensidad debe ser positiva para calcular el nivel en dB
+      en: Intensity must be positive to calculate level in dB
+  coherence_checks:
+  - Si I = I_0, entonces beta_nivel = 0 dB
+  - Si I = 10·I_0, entonces beta_nivel = 10 dB
+  - Si I = 100·I_0, entonces beta_nivel = 20 dB
+  - Un aumento de 3 dB equivale aproximadamente al doble de intensidad
+  graph_implications:
+  - La escala logarítmica permite visualizar el enorme rango dinámico de intensidades
+  - En escala lineal, valores pequeños se comprimen cerca del eje
+  - En escala dB, cada división representa un factor multiplicativo
+  pedagogical_triggers:
+  - error: Confundir factor 10 con factor 2
+    detection: Si estudiante piensa que 10 dB es el doble de intensidad
+    message:
+      es: 10 dB representa 10 veces más intensidad, no 2 veces. +3 dB es aproximadamente el doble de intensidad.
+      en: 10 dB represents 10 times more intensity, not 2 times. +3 dB is approximately double intensity.
+  - error: Sumar intensidades en dB linealmente
+    detection: Si suma 60 dB + 60 dB = 120 dB
+    message:
+      es: Las intensidades en dB no se suman directamente. 60 dB + 60 dB físico = 63 dB (factor 2 en intensidad).
+      en: Intensities in dB are not added directly. 60 dB + 60 dB physical = 63 dB (factor 2 in intensity).
+- id: area_esferica
+  title:
+    es: Área de la esfera a distancia r
+    en: Sphere area at distance r
+  equation: A = 4 * PI * r_distancia^2
+  latex: A = 4\pi r^{2}
+  rearrangements:
+  - target: area_de_la_onda_esferica
+    equation: A = 4 * PI * r_distancia^2
+    latex: A = 4\pi r^{2}
+  - target: r_distancia
+    equation: r_distancia = sqrt(A / (4 * PI))
+    latex: r = \sqrt{\frac{A}{4\pi}}
+  category: derived
+  relation_type: geometric
+  physical_meaning:
+    es: El área de la superficie esférica sobre la cual se distribuye la potencia emitida por una fuente puntual isotrópica.
+      Esta área crece con el cuadrado de la distancia, diluyendo la intensidad.
+    en: The area of the spherical surface over which the power emitted by an isotropic point source is distributed. This area
+      grows with the square of distance, diluting the intensity.
+  constraints:
+  - r_distancia > 0 (distancia positiva)
+  validity:
+    es: Válida para geometría esférica tridimensional. En dos dimensiones (ondas superficiales), el área equivalente es lineal
+      y crece con r, no con r².
+    en: Valid for three-dimensional spherical geometry. In two dimensions (surface waves), the equivalent area is linear and
+      grows with r, not r².
+  dimension_check: '[L²] = adimensional · [L²] ✓'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - Geometría de propagación ondulatoria
+  - Ley de inversa del cuadrado
+  - Cálculo de dosis radiométrica
+  interpretation_tags:
+  - geometria_esferica
+  - expansion_ondulatoria
+  result_semantics:
+    target: area_de_la_onda_esferica
+    kind: geometric_area
+    sign_meaning:
+      es: El área es siempre positiva.
+      en: Area is always positive.
+    absolute_value_meaning:
+      es: Área superficial de la esfera de radio r en metros cuadrados.
+      en: Surface area of sphere with radius r in square meters.
+  domain_checks:
+  - condition: A > 0
+    message:
+      es: El área debe ser positiva
+      en: Area must be positive
+  coherence_checks:
+  - Si r_distancia se duplica, A se cuadruplica
+  - Si r_distancia = 1 m, A = 4π m² ≈ 12.57 m²
+  graph_implications:
+  - Visualización como crecimiento de superficie esférica con radio
+  - Representación de anillos concéntricos de área creciente
+  pedagogical_triggers:
+  - error: Usar área de círculo en lugar de esfera
+    detection: Si usa πr² en lugar de 4πr²
+    message:
+      es: Para ondas tridimensionales, usa el área de la esfera completa 4πr², no el área del círculo πr².
+      en: For three-dimensional waves, use the complete sphere area 4πr², not the circle area πr².

@@ -1,0 +1,490 @@
+
+Responsabilidad de cada carpeta
+00_docs
+
+Documentación humana de la factory.
+
+Aquí se explican arquitectura, flujo, contratos, reglas antitokens, relación con el validador oficial y convenciones de salida.
+
+No debe contener scripts ejecutables.
+
+01_specs
+
+Plantillas YAML de entrada.
+
+Define qué leaf se va a crear, reparar, traducir o validar, qué rutas usa y qué comportamiento debe aplicar la factory.
+
+02_schemas
+
+Schemas JSON para validar contratos.
+
+Debe incluir, como mínimo:
+
+leaf_spec.schema.json
+generation_config.schema.json
+leaf_source_pack.schema.json
+content_atoms.schema.json
+rendered_leaf.schema.json
+03_prompts
+
+Prompts estables usados para preparar payloads de IA.
+
+Los prompts deben pedir salida estructurada, preferiblemente JSON, nunca Markdown final directo.
+
+04_providers
+
+Scripts que preparan entrada y salida.
+
+Responsabilidades:
+
+crear specs base;
+construir paquetes fuente;
+preparar payloads para IA;
+guardar salidas de IA;
+normalizar JSON recibido.
+
+No deben renderizar Markdown final.
+
+05_renderers
+
+Scripts que convierten content_atoms en archivos finales Phyxio.
+
+Responsabilidades:
+
+renderizar teoria.md;
+renderizar modelos.md;
+renderizar errores.md;
+renderizar ejemplos.md;
+renderizar aplicaciones.md;
+renderizar historia.md;
+aplicar archivos renderizados al leaf real.
+06_validators
+
+Validadores internos de etapas.
+
+No sustituyen al validador oficial de Phyxio.
+
+Validan:
+
+leaf_spec;
+generation_config;
+leaf_source_pack;
+content_atoms;
+rendered_leaf.
+
+El cierre final se delega en el validador oficial externo.
+
+07_scripts
+
+Scripts ejecutables de alto nivel.
+
+Sirven como panel de control del flujo manual:
+
+crear spec;
+construir source pack;
+preparar payload;
+guardar salida IA;
+validar atoms;
+renderizar;
+aplicar;
+validar final.
+examples
+
+Ejemplos completos y válidos.
+
+Ningún ejemplo debe estar vacío. Si existe, debe poder validarse contra su schema.
+
+output
+
+Carpeta temporal de salida.
+
+No debe versionarse salvo .gitkeep.
+
+reports
+
+Carpeta temporal de informes.
+
+No debe versionarse salvo .gitkeep.
+
+Qué no pertenece a la factory
+
+No deben vivir dentro de phyxio_leaf_factory:
+
+phyxio_leaf_validator.py
+phyxio_leaf_validator_v2.py
+phyxio_validate_stage.py
+validator_modular/
+
+Estos elementos pertenecen a tools/ y la factory puede llamarlos, pero no contenerlos.
+
+Flujo conceptual
+leaf_spec.yaml
+→ leaf_source_pack.json
+→ generate_payload
+→ content_atoms.json
+→ rendered_leaf/
+→ apply al leaf real
+→ validador oficial Phyxio
+Regla de oro
+
+Un leaf solo se considera terminado cuando pasa el validador oficial de Phyxio.
+
+La factory puede generar, reparar y renderizar, pero no decide por sí sola que un leaf es definitivo.
+
+
+---
+
+# 3. Segundo archivo: flujo de trabajo
+
+Crea:
+
+```txt
+tools/phyxio_leaf_factory/00_docs/01_flujo_de_trabajo.md
+
+Contenido:
+
+# Flujo de trabajo · Phyxio Leaf Factory
+
+Este documento define el flujo oficial de trabajo de la Phyxio Leaf Factory.
+
+La factory está diseñada para trabajar con un flujo manual controlado. No depende de un proveedor concreto de IA. Su función principal es preparar contexto, exigir salida estructurada, validar y renderizar.
+
+## Flujo completo
+
+```txt
+1. Crear leaf_spec
+2. Validar leaf_spec
+3. Construir leaf_source_pack
+4. Validar leaf_source_pack
+5. Preparar payload para IA
+6. Generar content_atoms con IA
+7. Guardar salida IA
+8. Validar content_atoms
+9. Renderizar Markdown
+10. Validar rendered_leaf
+11. Aplicar archivos al leaf real
+12. Ejecutar validador oficial Phyxio
+1. Crear leaf_spec
+
+El archivo leaf_spec.yaml define qué leaf se va a trabajar.
+
+Debe contener:
+
+leaf_id;
+modo de operación;
+rutas del leaf;
+ruta del mapa;
+idioma objetivo;
+política de sobrescritura;
+validador final.
+
+La plantilla vive en:
+
+01_specs/leaf_spec.template.yaml
+2. Validar leaf_spec
+
+Antes de usar una spec, se valida contra:
+
+02_schemas/leaf_spec.schema.json
+
+El validador interno vive en:
+
+06_validators/validate_leaf_spec.py
+3. Construir leaf_source_pack
+
+El leaf_source_pack es un paquete JSON que reúne el contexto necesario del leaf.
+
+Debe incluir, cuando exista:
+
+meta.yaml;
+magnitudes.yaml;
+formulas.yaml;
+interpretacion.yaml;
+fragmento relevante de phyxio-map.yaml;
+lista de archivos Markdown existentes;
+referencias a gráficos del leaf si procede.
+
+El script vive en:
+
+04_providers/build_leaf_source_pack.py
+4. Validar leaf_source_pack
+
+Se valida contra:
+
+02_schemas/leaf_source_pack.schema.json
+
+Debe comprobar que el paquete contiene la información mínima para generar contenido sin inventar estructura.
+
+5. Preparar payload para IA
+
+La factory no debe improvisar prompts en cada ejecución.
+
+Debe combinar:
+
+03_prompts/00_system_leaf_factory.md
+03_prompts/01_generate_content_atoms.md
+output/leaf_source_pack.json
+
+y producir un payload o prompt final en:
+
+output/
+6. Generar content_atoms
+
+La IA debe devolver JSON estricto.
+
+No debe devolver Markdown final.
+
+La salida esperada se llama:
+
+content_atoms.json
+
+Este objeto contiene los bloques conceptuales y didácticos que luego se renderizan a los archivos Markdown definitivos.
+
+7. Guardar salida IA
+
+La salida se guarda mediante:
+
+04_providers/save_llm_output.py
+
+Este paso debe:
+
+limpiar envoltorios innecesarios;
+detectar si la IA devolvió Markdown en vez de JSON;
+guardar la salida cruda;
+guardar una versión normalizada si es posible.
+8. Validar content_atoms
+
+El archivo se valida contra:
+
+02_schemas/content_atoms.schema.json
+
+Esta validación debe ocurrir antes de renderizar.
+
+Si falla, no se debe aplicar nada al leaf real.
+
+9. Renderizar Markdown
+
+El renderer transforma content_atoms.json en archivos Markdown Phyxio.
+
+Salida esperada:
+
+output/rendered_leaf/
+├── teoria.md
+├── teoria.en.md
+├── modelos.md
+├── modelos.en.md
+├── errores.md
+├── errores.en.md
+├── ejemplos.md
+├── ejemplos.en.md
+├── aplicaciones.md
+├── aplicaciones.en.md
+├── historia.md
+└── historia.en.md
+
+El orquestador vive en:
+
+05_renderers/render_atoms_to_markdown.py
+10. Validar rendered_leaf
+
+Antes de sobrescribir archivos reales, se valida que el render contenga todos los archivos esperados.
+
+El validador vive en:
+
+06_validators/validate_rendered_leaf.py
+11. Aplicar al leaf real
+
+Si el render es válido, se copian los archivos al directorio real del leaf.
+
+El script vive en:
+
+05_renderers/apply_rendered_leaf.py
+
+La política de sobrescritura debe venir de leaf_spec.yaml.
+
+12. Ejecutar validador oficial
+
+El cierre se hace con el validador externo de Phyxio.
+
+Por defecto:
+
+tools/phyxio_leaf_validator.py
+
+La factory puede llamarlo mediante:
+
+06_validators/run_final_phyxio_validator.py
+Regla de seguridad
+
+La factory nunca debe aplicar archivos al leaf real si fallan estas validaciones:
+
+leaf_spec
+leaf_source_pack
+content_atoms
+rendered_leaf
+Regla final
+
+Un leaf generado por la factory solo se considera válido cuando pasa el validador oficial de Phyxio.
+
+
+---
+
+# 4. Tercer archivo: contrato de la factory
+
+Crea:
+
+```txt
+tools/phyxio_leaf_factory/00_docs/02_contrato_leaf_factory.md
+
+Contenido:
+
+# Contrato · Phyxio Leaf Factory
+
+Este documento define el contrato operativo de la Phyxio Leaf Factory.
+
+## Propósito
+
+La factory existe para reducir errores, ahorrar tokens y evitar generación directa descontrolada de archivos Markdown.
+
+La IA debe trabajar sobre datos estructurados y no sobre archivos finales.
+
+## Entradas oficiales
+
+La factory acepta como entrada principal:
+
+```txt
+leaf_spec.yaml
+
+A partir de esa spec, construye:
+
+leaf_source_pack.json
+Salida intermedia oficial
+
+La salida principal que debe producir la IA es:
+
+content_atoms.json
+
+Este archivo debe ser JSON válido y cumplir:
+
+02_schemas/content_atoms.schema.json
+Salida final renderizada
+
+El render produce una carpeta:
+
+output/rendered_leaf/
+
+con archivos Markdown compatibles con Phyxio.
+
+Archivos finales esperados
+teoria.md
+teoria.en.md
+modelos.md
+modelos.en.md
+errores.md
+errores.en.md
+ejemplos.md
+ejemplos.en.md
+aplicaciones.md
+aplicaciones.en.md
+historia.md
+historia.en.md
+Archivos YAML
+
+La factory no debe inventar ni reescribir automáticamente estos archivos salvo que el modo de operación lo permita explícitamente:
+
+meta.yaml
+magnitudes.yaml
+formulas.yaml
+interpretacion.yaml
+
+En el flujo principal, estos archivos se consideran fuente de verdad del leaf.
+
+Fórmulas
+
+En Markdown, las fórmulas deben referenciarse mediante IDs existentes:
+
+{{f:id_formula}}
+
+Cada referencia de fórmula debe ir aislada con salto de línea antes y después cuando sea una fórmula de bloque.
+
+Ejemplo correcto:
+
+La relación central del leaf se expresa como:
+
+{{f:segunda_ley_newton}}
+
+Esto conecta fuerza neta, masa y aceleración.
+Magnitudes
+
+Las magnitudes deben referenciarse mediante IDs existentes:
+
+[[id_magnitud]]
+
+La factory no debe inventar magnitudes nuevas dentro de Markdown.
+
+Idiomas
+
+La factory debe soportar:
+
+es
+en
+both
+
+Si el modo es both, debe producir pares ES/EN.
+
+Política de sobrescritura
+
+La factory no debe sobrescribir archivos reales del leaf salvo que la spec lo permita.
+
+La política se define en leaf_spec.yaml.
+
+Valores recomendados:
+
+never
+only_empty
+backup_then_overwrite
+overwrite
+Validación
+
+La factory tiene validadores internos, pero el cierre oficial depende del validador externo de Phyxio.
+
+Orden mínimo:
+
+validate_leaf_spec
+validate_leaf_source_pack
+validate_content_atoms
+validate_rendered_leaf
+run_final_phyxio_validator
+No invención
+
+La factory no debe inventar:
+
+rutas del mapa;
+fórmulas;
+magnitudes;
+IDs de leaf;
+niveles educativos;
+gráficos disponibles;
+pestañas inexistentes.
+
+Si falta información, debe fallar con mensaje claro o dejar el campo como pendiente según el schema.
+
+Principio de salida
+
+La IA no escribe el leaf.
+La IA produce atoms.
+La factory renderiza el leaf.
+El validador oficial decide si el leaf vive.
+
+
+---
+
+# 5. Siguiente paso
+
+El siguiente bloque lógico sería crear:
+
+```txt
+01_specs/leaf_spec.template.yaml
+01_specs/generation_config.template.yaml
+02_schemas/leaf_spec.schema.json
+
+Con eso ya tendríamos la primera pieza operativa: crear y validar una spec.

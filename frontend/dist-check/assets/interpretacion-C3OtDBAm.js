@@ -1,0 +1,258 @@
+const e=`version: "1.0"
+id: interpretacion-procesos-reversibles
+leaf_id: procesos-reversibles
+
+nombre:
+  es: Interpretacion de procesos reversibles
+  en: Interpretation of reversible processes
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: entropia-y-segunda-ley
+  parent_id: entropia-y-segunda-ley
+  ruta_relativa: fisica-clasica/termodinamica/entropia-y-segunda-ley/procesos-reversibles
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretacion
+    en: Interpretation
+  priority_order: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  inline_limits:
+    max_messages: 3
+    max_characters: 300
+  default_formula: condicion_reversibilidad
+
+dependencies:
+  formulas:
+    - condicion_reversibilidad
+    - eficiencia_carnot
+  magnitudes:
+    - DeltaS_univ
+    - DeltaS_sis
+    - DeltaS_ent
+    - eta_Carnot
+    - T_caliente
+    - T_frio
+    - Q_rev
+
+global_context:
+  physical_domain:
+    es: "Termodinamica clasica de equilibrio: procesos ideales sin generacion de entropia, limite de eficiencia maxima."
+    en: "Classical equilibrium thermodynamics: ideal processes with no entropy generation, maximum efficiency limit."
+  axis_convention:
+    es: "En el diagrama T-S, el eje horizontal representa entropia y el eje vertical temperatura."
+    en: "In the T-S diagram, the horizontal axis represents entropy and the vertical axis temperature."
+  standard_assumptions:
+    - "Temperaturas absolutas en kelvin."
+    - "Reservorios termicos a temperatura constante."
+    - "Procesos cuasi-estaticos sin friccion ni disipacion."
+  standard_warnings:
+    - "Ningun proceso real es exactamente reversible; DeltaS_univ = 0 es un limite ideal."
+    - "No usar Celsius en la formula de Carnot."
+    - "No confundir eficiencia de Carnot con eficiencia real."
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title: { es: Resumen, en: Summary }
+  physical_reading:
+    enabled: true
+    order: 2
+    title: { es: Lectura fisica, en: Physical reading }
+  coherence:
+    enabled: true
+    order: 3
+    title: { es: Coherencia, en: Coherence }
+  model_validity:
+    enabled: true
+    order: 4
+    title: { es: Validez del modelo, en: Model validity }
+  graph_reading:
+    enabled: true
+    order: 5
+    title: { es: Lectura grafica, en: Graph reading }
+  likely_errors:
+    enabled: true
+    order: 6
+    title: { es: Errores probables, en: Likely errors }
+  next_step:
+    enabled: true
+    order: 7
+    title: { es: Siguiente paso, en: Next step }
+
+targets:
+  DeltaS_univ: &generic_target
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Magnitud que mide la generacion neta de entropia del universo; en un proceso reversible es exactamente cero."
+      en: "Magnitude measuring net universe entropy generation; in a reversible process it is exactly zero."
+    summary_rules:
+      - id: summary_zero
+        when: "abs(DeltaS_univ) < 0.01"
+        status: ok
+        text:
+          es: "[[DeltaS_univ]] es practicamente cero: el proceso opera en el limite reversible. No se genera entropia neta y la eficiencia es la maxima posible."
+          en: "[[DeltaS_univ]] is practically zero: the process operates at the reversible limit. No net entropy is generated and efficiency is the maximum possible."
+      - id: summary_positive
+        when: "DeltaS_univ > 0"
+        status: warning
+        text:
+          es: "[[DeltaS_univ]] > 0 indica que el proceso no es reversible: hay fuentes de irreversibilidad que generan entropia."
+          en: "[[DeltaS_univ]] > 0 indicates the process is not reversible: there are irreversibility sources generating entropy."
+      - id: summary_negative
+        when: "DeltaS_univ < 0"
+        status: error
+        text:
+          es: "[[DeltaS_univ]] < 0 es imposible segun la segunda ley. Hay un error en el calculo."
+          en: "[[DeltaS_univ]] < 0 is impossible according to the second law. There is a calculation error."
+      - id: summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[DeltaS_univ]] determina si el proceso es reversible (cero) o irreversible (positivo)."
+          en: "The value of [[DeltaS_univ]] determines whether the process is reversible (zero) or irreversible (positive)."
+    physical_reading_rules:
+      - id: physical_reading_reversible
+        when: "true"
+        status: ok
+        text:
+          es: "En un proceso reversible, la entropia del sistema y la del entorno se compensan exactamente. No hay degradacion de energia util ni perdida de calidad energetica."
+          en: "In a reversible process, system and surroundings entropy changes compensate exactly. There is no useful energy degradation or energy quality loss."
+    coherence_rules:
+      - id: coherence_balance
+        when: "abs(DeltaS_sis + DeltaS_ent) > 0.01"
+        status: warning
+        text:
+          es: "En un proceso reversible, [[DeltaS_sis]] + [[DeltaS_ent]] debe ser exactamente cero. Si no se cumple, hay error o el proceso no es reversible."
+          en: "In a reversible process, [[DeltaS_sis]] + [[DeltaS_ent]] must be exactly zero. If not, there is an error or the process is not reversible."
+      - id: coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El balance entropico es coherente: [[DeltaS_sis]] y [[DeltaS_ent]] se compensan."
+          en: "The entropy balance is coherent: [[DeltaS_sis]] and [[DeltaS_ent]] compensate each other."
+    model_validity_rules:
+      - id: validity_temperatures
+        when: "T_caliente <= 0 or T_frio <= 0"
+        status: error
+        text:
+          es: "Las temperaturas deben estar en kelvin y ser positivas."
+          en: "Temperatures must be in kelvin and positive."
+      - id: validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo reversible es valido como referencia ideal. Todo proceso real se desvía de el."
+          en: "The reversible model is valid as an ideal reference. Every real process deviates from it."
+    graph_rules:
+      - id: graph_ts
+        when: "true"
+        status: ok
+        text:
+          es: "En el diagrama T-S, un proceso reversible sigue una curva definida. El ciclo de Carnot forma un rectangulo entre dos isotermas y dos adiabaticas."
+          en: "In the T-S diagram, a reversible process follows a defined curve. The Carnot cycle forms a rectangle between two isotherms and two adiabats."
+    likely_errors:
+      - id: likely_errors_celsius_confusion
+        when: "true"
+        status: warning
+        text:
+          es: "Errores probables: usar Celsius en la formula de Carnot, confundir proceso cuasi-estatico con reversible, o creer que DeltaS_sis = 0 es la condicion de reversibilidad."
+          en: "Likely errors: using Celsius in the Carnot formula, confusing quasi-static with reversible, or believing DeltaS_sis = 0 is the reversibility condition."
+    next_step_rules:
+      - id: next_compare_real
+        when: "true"
+        status: ok
+        text:
+          es: "Siguiente paso: comparar la eficiencia del proceso real con la de Carnot para cuantificar la irreversibilidad. Calcular DeltaS_univ del proceso real."
+          en: "Next step: compare real process efficiency with Carnot to quantify irreversibility. Calculate DeltaS_univ of the real process."
+
+  eta_Carnot:
+    <<: *generic_target
+    magnitude_type: scalar_bounded
+    semantic_role:
+      es: "Eficiencia maxima de una maquina termica reversible entre dos focos."
+      en: "Maximum efficiency of a reversible heat engine between two reservoirs."
+  DeltaS_sis:
+    <<: *generic_target
+    semantic_role:
+      es: "Variacion de entropia del sistema; en un proceso reversible es igual y opuesta a la del entorno."
+      en: "System entropy change; in a reversible process it is equal and opposite to the surroundings."
+  DeltaS_ent:
+    <<: *generic_target
+    semantic_role:
+      es: "Variacion de entropia del entorno; compensa exactamente a la del sistema en un proceso reversible."
+      en: "Surroundings entropy change; exactly compensates the system change in a reversible process."
+  T_caliente:
+    <<: *generic_target
+    magnitude_type: scalar_positive
+    semantic_role:
+      es: "Temperatura absoluta del foco caliente."
+      en: "Absolute temperature of the hot reservoir."
+  T_frio:
+    <<: *generic_target
+    magnitude_type: scalar_positive
+    semantic_role:
+      es: "Temperatura absoluta del foco frio."
+      en: "Absolute temperature of the cold reservoir."
+  Q_rev:
+    <<: *generic_target
+    semantic_role:
+      es: "Calor intercambiado reversiblemente entre sistema y entorno."
+      en: "Heat exchanged reversibly between system and surroundings."
+
+cross_checks:
+  - check: entropy_balance
+    description:
+      es: "DeltaS_sis + DeltaS_ent = 0 en todo proceso reversible."
+      en: "DeltaS_sis + DeltaS_ent = 0 in every reversible process."
+  - check: carnot_limit
+    description:
+      es: "La eficiencia real nunca supera eta_Carnot."
+      en: "Real efficiency never exceeds eta_Carnot."
+  - check: temperature_units
+    description:
+      es: "Todas las temperaturas en kelvin."
+      en: "All temperatures in kelvin."
+
+graph_binding:
+  enabled: true
+  type: Coord
+  axes:
+    x: T_frio
+    y: eta_Carnot
+  interpretation_link: "El grafico muestra como disminuye eta_Carnot al aumentar T_frio para un T_caliente fijo."
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+  axes:
+    x:
+      magnitude: T_frio
+      label: { es: "T_frio (K)", en: "T_cold (K)" }
+    y:
+      magnitude: eta_Carnot
+      label: { es: "eta_Carnot", en: "eta_Carnot" }
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true
+`;export{e as default};

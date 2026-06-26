@@ -1,0 +1,283 @@
+const e=`version: 5
+formulas:
+  - id: torque_1_definition
+    title:
+      es: momento de la primera fuerza
+      en: torque of the first force
+    equation: tau1 = r1*F1*sin(theta1)
+    latex: \\tau_1 = r1 F1 \\sin(\\theta_1)
+    rearrangements:
+      - target: tau1
+        equation: tau1 = r1*F1*sin(theta1)
+        latex: \\tau_1 = r1 F1 \\sin(\\theta_1)
+    category: definition
+    relation_type: rotational_effect
+    physical_meaning:
+      es: Expresa cuánto giro induce la primera fuerza alrededor del eje elegido.
+      en: It expresses how much rotation the first force induces about the chosen axis.
+    constraints:
+      - expr: r1 >= 0
+        message:
+          es: El brazo debe ser no negativo.
+          en: The lever arm must be non-negative.
+      - expr: F1 >= 0
+        message:
+          es: La magnitud de la fuerza debe ser no negativa.
+          en: Force magnitude must be non-negative.
+    validity:
+      es: Válida cuando theta1 se mide respecto al radio y el eje está bien definido.
+      en: Valid when theta1 is measured relative to the radius and the axis is well defined.
+    dimension_check:
+      es: M L^2 T^-2
+      en: M L^2 T^-2
+    calculable: true
+    motivo_no_calculable:
+      es: ""
+      en: ""
+    used_in: [theory, examples, calculator]
+    interpretation_tags: [individual_torque, lever_arm, angle_effect]
+    result_semantics:
+      target: tau1
+      kind: scalar_signed
+      sign_meaning:
+        es: El signo se fija por el convenio de giro adoptado.
+        en: Sign is fixed by the adopted rotation convention.
+      absolute_value_meaning:
+        es: Su módulo mide la intensidad de la tendencia rotacional de la primera fuerza.
+        en: Its magnitude measures the intensity of the first force rotational tendency.
+    domain_checks:
+      - expr: r1 >= 0 && F1 >= 0
+        message:
+          es: Brazo y fuerza deben corresponder a magnitudes físicas admisibles.
+          en: Arm and force must correspond to physically admissible magnitudes.
+    coherence_checks:
+      - expr: "abs(theta1) < 1e-9 || abs(theta1 - pi) < 1e-9 ? abs(tau1) < 1e-9 : true"
+        severity: ok
+        message:
+          es: Si la fuerza es colineal con el radio, su momento debe anularse.
+          en: If the force is colinear with the radius, its torque must vanish.
+    graph_implications:
+      - channel: torque_1
+        message:
+          es: A mayor r1, F1 o seno del ángulo, el gráfico debe mostrar un tau1 mayor.
+          en: Larger r1, F1, or sine of the angle should produce a larger tau1 in the graph.
+    pedagogical_triggers:
+      - detect_when: abs(theta1) < 1e-9 && abs(tau1) > 1e-9
+        message:
+          es: "Revisa el ángulo: una fuerza alineada con el radio no produce momento."
+          en: "Check the angle: a force aligned with the radius produces no torque."
+
+  - id: torque_2_definition
+    title:
+      es: momento de la segunda fuerza
+      en: torque of the second force
+    equation: tau2 = r2*F2*sin(theta2)
+    latex: \\tau_2 = r2 F2 \\sin(\\theta_2)
+    rearrangements:
+      - target: tau2
+        equation: tau2 = r2*F2*sin(theta2)
+        latex: \\tau_2 = r2 F2 \\sin(\\theta_2)
+    category: definition
+    relation_type: rotational_effect
+    physical_meaning:
+      es: Expresa cuánto giro induce la segunda fuerza alrededor del mismo eje.
+      en: It expresses how much rotation the second force induces about the same axis.
+    constraints:
+      - expr: r2 >= 0
+        message:
+          es: El brazo debe ser no negativo.
+          en: The lever arm must be non-negative.
+      - expr: F2 >= 0
+        message:
+          es: La magnitud de la fuerza debe ser no negativa.
+          en: Force magnitude must be non-negative.
+    validity:
+      es: Válida cuando se usa el mismo eje y el mismo convenio angular que para tau1.
+      en: Valid when the same axis and angular convention as tau1 are used.
+    dimension_check:
+      es: M L^2 T^-2
+      en: M L^2 T^-2
+    calculable: true
+    motivo_no_calculable:
+      es: ""
+      en: ""
+    used_in: [theory, examples, calculator]
+    interpretation_tags: [individual_torque, lever_arm, angle_effect]
+    result_semantics:
+      target: tau2
+      kind: scalar_signed
+      sign_meaning:
+        es: El signo depende del sentido de giro que aporta la segunda fuerza.
+        en: Sign depends on the rotation sense contributed by the second force.
+      absolute_value_meaning:
+        es: Su módulo mide la intensidad de la segunda contribución rotacional.
+        en: Its magnitude measures the intensity of the second rotational contribution.
+    domain_checks:
+      - expr: r2 >= 0 && F2 >= 0
+        message:
+          es: Brazo y fuerza deben ser físicamente consistentes.
+          en: Arm and force must be physically consistent.
+    coherence_checks:
+      - expr: "abs(theta2) < 1e-9 || abs(theta2 - pi) < 1e-9 ? abs(tau2) < 1e-9 : true"
+        severity: ok
+        message:
+          es: Con ángulo nulo o llano, tau2 debe anularse.
+          en: With zero or straight angle, tau2 must vanish.
+    graph_implications:
+      - channel: torque_2
+        message:
+          es: El barrido de theta2 debe modificar tau2 según el seno del ángulo.
+          en: Sweeping theta2 should modify tau2 according to the sine of the angle.
+    pedagogical_triggers:
+      - detect_when: abs(theta2) < 1e-9 && abs(tau2) > 1e-9
+        message:
+          es: "Revisa theta2: sin ángulo efectivo no hay momento."
+          en: "Check theta2: without effective angle there is no torque."
+
+  - id: net_torque_condition
+    title:
+      es: condición de sumatoria de momentos
+      en: net torque balance condition
+    equation: tau_net = tau1 - tau2
+    latex: \\tau = \\tau_1 - \\tau_2
+    rearrangements:
+      - target: tau_net
+        equation: tau_net = tau1 - tau2
+        latex: \\tau = \\tau_1 - \\tau_2
+    category: fundamental
+    relation_type: physical_law
+    physical_meaning:
+      es: El momento neto es la suma algebraica de las contribuciones rotacionales respecto al mismo eje.
+      en: Net torque is the algebraic sum of rotational contributions about the same axis.
+    constraints:
+      - expr: true
+        message:
+          es: Todas las contribuciones deben referirse al mismo eje y al mismo convenio de signos.
+          en: All contributions must refer to the same axis and the same sign convention.
+    validity:
+      es: Para equilibrio rotacional debe cumplirse tau_net = 0.
+      en: For rotational equilibrium, tau_net = 0 must hold.
+    dimension_check:
+      es: M L^2 T^-2
+      en: M L^2 T^-2
+    calculable: true
+    motivo_no_calculable:
+      es: ""
+      en: ""
+    used_in: [theory, examples, calculator]
+    interpretation_tags: [net_torque, equilibrium, sign_convention]
+    result_semantics:
+      target: tau_net
+      kind: scalar_signed
+      sign_meaning:
+        es: El signo indica qué sentido de giro domina todavía en el sistema.
+        en: The sign indicates which rotation sense still dominates in the system.
+      absolute_value_meaning:
+        es: El módulo mide cuánto falta para alcanzar el equilibrio rotacional.
+        en: The magnitude measures how far the system is from rotational equilibrium.
+    domain_checks:
+      - expr: true
+        message:
+          es: No pueden mezclarse momentos medidos respecto a ejes distintos.
+          en: Torques measured about different axes cannot be mixed.
+    coherence_checks:
+      - expr: abs(tau_net) < 1e-9
+        severity: ok
+        message:
+          es: Si tau_net es cero, la condición de equilibrio rotacional queda satisfecha.
+          en: If tau_net is zero, the rotational equilibrium condition is satisfied.
+      - expr: abs(tau_net) >= 1e-9
+        severity: warning
+        message:
+          es: Si tau_net no es cero, el sistema conserva una tendencia residual a girar.
+          en: If tau_net is not zero, the system keeps a residual tendency to rotate.
+    graph_implications:
+      - channel: net_torque_curve
+        message:
+          es: El cruce con cero del gráfico identifica la configuración de equilibrio.
+          en: The zero crossing of the graph identifies the equilibrium configuration.
+    pedagogical_triggers:
+      - detect_when: abs(tau1) == abs(tau2) && abs(tau_net) > 1e-9
+        message:
+          es: "Puede haberse cometido un error de signos: magnitudes iguales deberían cancelarse si giran en sentidos opuestos."
+          en: "A sign error may have occurred: equal magnitudes should cancel if they rotate in opposite senses."
+
+  - id: balancing_force_formula
+    title:
+      es: fuerza necesaria para equilibrar
+      en: force required for equilibrium
+    equation: Feq = (r1*F1*sin(theta1))/(r2*sin(theta2))
+    latex: F_eq = \\frac{r1 F1 \\sin(\\theta_1)}{r2 \\sin(\\theta_2)}
+    rearrangements:
+      - target: Feq
+        equation: Feq = (r1*F1*sin(theta1))/(r2*sin(theta2))
+        latex: F_eq = \\frac{r1 F1 \\sin(\\theta_1)}{r2 \\sin(\\theta_2)}
+    category: application
+    relation_type: equilibrium_solution
+    physical_meaning:
+      es: Determina qué segunda fuerza hace cero el momento neto en una geometría dada.
+      en: It determines which second force makes net torque vanish for a given geometry.
+    constraints:
+      - expr: r2 > 0
+        message:
+          es: El segundo brazo debe ser positivo.
+          en: The second lever arm must be positive.
+      - expr: abs(sin(theta2)) > 1e-9
+        message:
+          es: theta2 no puede anular el brazo efectivo de la segunda fuerza.
+          en: theta2 cannot make the effective arm of the second force vanish.
+    validity:
+      es: Válida para problemas planos con dos contribuciones principales y convenio de signos fijo.
+      en: Valid for planar problems with two main contributions and a fixed sign convention.
+    dimension_check:
+      es: M L T^-2
+      en: M L T^-2
+    calculable: true
+    motivo_no_calculable:
+      es: ""
+      en: ""
+    used_in: [theory, examples, calculator]
+    interpretation_tags: [equilibrium_requirement, design, force_estimation]
+    result_semantics:
+      target: Feq
+      kind: positive_scalar
+      sign_meaning:
+        es: Se interpreta como magnitud requerida de la fuerza equilibrante.
+        en: It is interpreted as the required magnitude of the balancing force.
+      absolute_value_meaning:
+        es: Su valor indica cuánta fuerza hace falta para anular tau_net.
+        en: Its value indicates how much force is needed to cancel tau_net.
+    domain_checks:
+      - expr: r2 > 0 && abs(sin(theta2)) > 1e-9
+        message:
+          es: Debe existir brazo efectivo para que la segunda fuerza pueda equilibrar.
+          en: An effective arm must exist for the second force to balance the system.
+    coherence_checks:
+      - expr: Feq >= 0
+        severity: ok
+        message:
+          es: La fuerza de equilibrio debe salir como magnitud física no negativa.
+          en: The equilibrium force must come out as a non-negative physical magnitude.
+    graph_implications:
+      - channel: equilibrium_solution
+        message:
+          es: Si F2 coincide con F2eq, el punto actual debe caer sobre tau_net = 0.
+          en: If F2 matches F2eq, the current point should lie on tau_net = 0.
+    pedagogical_triggers:
+      - detect_when: abs(sin(theta2)) < 1e-9
+        message:
+          es: No intentes equilibrar con una fuerza cuyo ángulo elimina su brazo efectivo.
+          en: Do not try to balance with a force whose angle eliminates its effective arm.
+
+ui:
+  default_formula: net_torque_condition
+  groups:
+    - title:
+        es: Momentos individuales
+        en: Individual torques
+      items: [torque_1_definition, torque_2_definition]
+    - title:
+        es: Equilibrio rotacional
+        en: Rotational equilibrium
+      items: [net_torque_condition, balancing_force_formula]
+`;export{e as default};

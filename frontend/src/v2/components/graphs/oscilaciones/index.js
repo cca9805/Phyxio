@@ -1,110 +1,73 @@
-﻿import EcuacionMovimientoGraphsCoord from "./EcuacionMovimientoGraphsCoord";
-import EnergiaEnMhsGraphsCoord from "./EnergiaEnMhsGraphsCoord";
-import FaseOscilacionesGraphsCoord from "./FaseOscilacionesGraphsCoord";
-import OsciladorMasaMuelleGraphsCoord from "./OsciladorMasaMuelleGraphsCoord";
-import OsciladorMasaMuelleGraphsSvg from "./OsciladorMasaMuelleGraphsSvg";
-import PenduloSimpleOscGraphsCoord from "./PenduloSimpleOscGraphsCoord";
-import PenduloSimpleOscGraphsSvg from "./PenduloSimpleOscGraphsSvg";
-import PenduloFisicoGraphsCoord from "./PenduloFisicoGraphsCoord";
-import PenduloFisicoGraphsSvg from "./PenduloFisicoGraphsSvg";
-import SubamortiguadoGraphsCoord from "./SubamortiguadoGraphsCoord";
-import CriticoGraphsCoord from "./CriticoGraphsCoord";
-import SobreamortiguadoGraphsCoord from "./SobreamortiguadoGraphsCoord";
-import FuerzaForzadaGraphsCoord from "./FuerzaForzadaGraphsCoord";
-import ResonanciaOscGraphsCoord from "./ResonanciaOscGraphsCoord";
-import PenduloFisicoAvanzadoGraphsCoord from "./PenduloFisicoAvanzadoGraphsCoord";
-import PenduloFisicoAvanzadoGraphsSvg from "./PenduloFisicoAvanzadoGraphsSvg";
+import { withGraphContextRegistry } from "../shared/withGraphContext.jsx";
+/**
+ * Oscilaciones - Graph Components Index
+ *
+ * WIRING ONLY — los metadatos semánticos (title, xAxis, yAxis, relation,
+ * physicalReading, agentHints, commonMistakes, etc.) viven en graficos.yaml.
+ * Este archivo solo declara { type, graphType, component } por entrada.
+ */
 
-export const graphs = {
+import CriticoGraphsCoord from "./Coord/CriticoGraphsCoord.jsx";
+import EcuacionMovimientoGraphsCoord from "./Coord/EcuacionMovimientoGraphsCoord.jsx";
+import EnergiaEnMhsGraphsCoord from "./Coord/EnergiaEnMhsGraphsCoord.jsx";
+import FaseOscilacionesGraphsCoord from "./Coord/FaseOscilacionesGraphsCoord.jsx";
+import FuerzaForzadaGraphsCoord from "./Coord/FuerzaForzadaGraphsCoord.jsx";
+import OsciladorMasaMuelleGraphsCoord from "./Coord/OsciladorMasaMuelleGraphsCoord.jsx";
+import PenduloFisicoAvanzadoGraphsCoord from "./Coord/PenduloFisicoAvanzadoGraphsCoord.jsx";
+import PenduloFisicoGraphsCoord from "./Coord/PenduloFisicoGraphsCoord.jsx";
+import PenduloSimpleOscGraphsCoord from "./Coord/PenduloSimpleOscGraphsCoord.jsx";
+import ResonanciaOscGraphsCoord from "./Coord/ResonanciaOscGraphsCoord.jsx";
+import SobreamortiguadoGraphsCoord from "./Coord/SobreamortiguadoGraphsCoord.jsx";
+import SubamortiguadoGraphsCoord from "./Coord/SubamortiguadoGraphsCoord.jsx";
+import OsciladorMasaMuelleGraphsSvg from "./Svg/OsciladorMasaMuelleGraphsSvg.jsx";
+import PenduloFisicoAvanzadoGraphsSvg from "./Svg/PenduloFisicoAvanzadoGraphsSvg.jsx";
+import PenduloFisicoGraphsSvg from "./Svg/PenduloFisicoGraphsSvg.jsx";
+import PenduloSimpleOscGraphsSvg from "./Svg/PenduloSimpleOscGraphsSvg.jsx";
+
+const rawGraphs = {
+  "critico": {
+    Coord: { type: "Coord", graphType: "Coord", component: CriticoGraphsCoord },
+  },
   "ecuacion-movimiento": {
-    Coord: EcuacionMovimientoGraphsCoord,
+    Coord: { type: "Coord", graphType: "Coord", component: EcuacionMovimientoGraphsCoord },
   },
-  "fisica-clasica/mecanica/oscilaciones/mhs/ecuacion-movimiento": {
-    Coord: EcuacionMovimientoGraphsCoord,
-  },
-
   "energia-en-mhs": {
-    Coord: EnergiaEnMhsGraphsCoord,
+    Coord: { type: "Coord", graphType: "Coord", component: EnergiaEnMhsGraphsCoord },
   },
-  "fisica-clasica/mecanica/oscilaciones/mhs/energia-en-mhs": {
-    Coord: EnergiaEnMhsGraphsCoord,
+  "fase": {
+    Coord: { type: "Coord", graphType: "Coord", component: FaseOscilacionesGraphsCoord },
   },
-
-  fase: {
-    Coord: FaseOscilacionesGraphsCoord,
-  },
-  "fisica-clasica/mecanica/oscilaciones/mhs/fase": {
-    Coord: FaseOscilacionesGraphsCoord,
-  },
-
-  "oscilador-masa-muelle": {
-    Coord: OsciladorMasaMuelleGraphsCoord,
-    Svg: OsciladorMasaMuelleGraphsSvg,
-  },
-  "fisica-clasica/mecanica/oscilaciones/oscilador-masa-muelle": {
-    Coord: OsciladorMasaMuelleGraphsCoord,
-    Svg: OsciladorMasaMuelleGraphsSvg,
-  },
-
-  "pendulo-simple": {
-    Coord: PenduloSimpleOscGraphsCoord,
-    Svg: PenduloSimpleOscGraphsSvg,
-  },
-  "fisica-clasica/mecanica/oscilaciones/pendulo-simple": {
-    Coord: PenduloSimpleOscGraphsCoord,
-    Svg: PenduloSimpleOscGraphsSvg,
-  },
-
-  subamortiguado: {
-    Coord: SubamortiguadoGraphsCoord,
-  },
-  "fisica-clasica/mecanica/oscilaciones/amortiguamiento/subamortiguado": {
-    Coord: SubamortiguadoGraphsCoord,
-  },
-
-  critico: {
-    Coord: CriticoGraphsCoord,
-  },
-  "fisica-clasica/mecanica/oscilaciones/amortiguamiento/critico": {
-    Coord: CriticoGraphsCoord,
-  },
-
-  sobreamortiguado: {
-    Coord: SobreamortiguadoGraphsCoord,
-  },
-  "fisica-clasica/mecanica/oscilaciones/amortiguamiento/sobreamortiguado": {
-    Coord: SobreamortiguadoGraphsCoord,
-  },
-
   "fuerza-forzada": {
-    Coord: FuerzaForzadaGraphsCoord,
+    Coord: { type: "Coord", graphType: "Coord", component: FuerzaForzadaGraphsCoord },
   },
-  "fisica-clasica/mecanica/oscilaciones/forzadas-y-resonancia/fuerza-forzada": {
-    Coord: FuerzaForzadaGraphsCoord,
+  "oscilador-masa-muelle": {
+    Coord: { type: "Coord", graphType: "Coord", component: OsciladorMasaMuelleGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: OsciladorMasaMuelleGraphsSvg },
   },
-
-  resonancia: {
-    Coord: ResonanciaOscGraphsCoord,
-  },
-  "fisica-clasica/mecanica/oscilaciones/forzadas-y-resonancia/resonancia": {
-    Coord: ResonanciaOscGraphsCoord,
-  },
-
   "pendulo-fisico": {
-    Coord: PenduloFisicoGraphsCoord,
-    Svg: PenduloFisicoGraphsSvg,
+    Coord: { type: "Coord", graphType: "Coord", component: PenduloFisicoGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: PenduloFisicoGraphsSvg },
   },
-  "fisica-clasica/mecanica/oscilaciones/pendulo-fisico": {
-    Coord: PenduloFisicoGraphsCoord,
-    Svg: PenduloFisicoGraphsSvg,
-  },
-
   "pendulo-fisico-avanzado": {
-    Coord: PenduloFisicoAvanzadoGraphsCoord,
-    Svg: PenduloFisicoAvanzadoGraphsSvg,
+    Coord: { type: "Coord", graphType: "Coord", component: PenduloFisicoAvanzadoGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: PenduloFisicoAvanzadoGraphsSvg },
   },
-  "fisica-clasica/mecanica/oscilaciones/pendulo-fisico-avanzado": {
-    Coord: PenduloFisicoAvanzadoGraphsCoord,
-    Svg: PenduloFisicoAvanzadoGraphsSvg,
+  "pendulo-simple": {
+    Coord: { type: "Coord", graphType: "Coord", component: PenduloSimpleOscGraphsCoord },
+    Svg: { type: "Svg", graphType: "Svg", component: PenduloSimpleOscGraphsSvg },
+  },
+  "resonancia": {
+    Coord: { type: "Coord", graphType: "Coord", component: ResonanciaOscGraphsCoord },
+  },
+  "sobreamortiguado": {
+    Coord: { type: "Coord", graphType: "Coord", component: SobreamortiguadoGraphsCoord },
+  },
+  "subamortiguado": {
+    Coord: { type: "Coord", graphType: "Coord", component: SubamortiguadoGraphsCoord },
   },
 };
+
+export const graphs = withGraphContextRegistry(rawGraphs);
+export const oscilacionesGraphs = graphs;
+
+export default graphs;

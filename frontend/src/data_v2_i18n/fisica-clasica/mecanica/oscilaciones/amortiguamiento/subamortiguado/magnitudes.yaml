@@ -1,0 +1,154 @@
+version: 5
+magnitudes:
+  - id: gamma
+    symbol: \gamma
+    nombre: { es: amortiguamiento, en: damping rate }
+    unidad_si: s^-1
+    descripcion: { es: Tasa de decaimiento exponencial de la amplitud., en: Exponential decay rate of the amplitude. }
+    dimension: T^-1
+    is_vector: false
+    components: []
+    category: parametro_dinamico
+    physical_role: mide la disipacion efectiva del sistema
+    used_in: [condicion_subamortiguado, pulsacion_amortiguada, envolvente, solucion_subamortiguada]
+    common_mistake: confundirlo con una frecuencia de oscilacion
+    typical_range: 0 < gamma < omega0
+    sign_behavior: positivo en amortiguamiento disipativo
+    zero_behavior: si vale cero desaparece el decaimiento
+    value_nature: parametro
+    interpretation_role: controla la rapidez de perdida de amplitud
+    graph_binding: pendiente de la envolvente
+    pedagogical_notes: "Comparar [[gamma]] con [[omega0]] antes de hablar de oscilacion visible."
+  - id: omega0
+    symbol: \omega_0
+    nombre: { es: pulsacion natural, en: natural angular frequency }
+    unidad_si: rad/s
+    descripcion: { es: Escala natural que tendria el sistema sin amortiguamiento., en: Natural scale the system would have without damping. }
+    dimension: T^-1
+    is_vector: false
+    components: []
+    category: parametro_dinamico
+    physical_role: fija la tendencia elastica a oscilar
+    used_in: [condicion_subamortiguado, pulsacion_amortiguada]
+    common_mistake: usar hertz sin convertir a radianes por segundo
+    typical_range: omega0 > gamma
+    sign_behavior: positiva
+    zero_behavior: sin escala restauradora no hay oscilador
+    value_nature: parametro
+    interpretation_role: referencia para clasificar el regimen
+    graph_binding: escala horizontal de ciclos
+    pedagogical_notes: "[[omega0]] no es la frecuencia observada cuando hay amortiguamiento."
+  - id: omega_d
+    symbol: \omega_d
+    nombre: { es: pulsacion amortiguada, en: damped angular frequency }
+    unidad_si: rad/s
+    descripcion: { es: Frecuencia angular efectiva de la oscilacion amortiguada., en: Effective angular frequency of the damped oscillation. }
+    dimension: T^-1
+    is_vector: false
+    components: []
+    category: resultado_dinamico
+    physical_role: marca el ritmo de los cruces y ciclos visibles
+    used_in: [pulsacion_amortiguada, solucion_subamortiguada]
+    common_mistake: tomarla igual a omega0 aunque exista amortiguamiento
+    typical_range: 0 < omega_d < omega0
+    sign_behavior: positiva en regimen subamortiguado
+    zero_behavior: al acercarse a cero se pierde la oscilacion
+    value_nature: resultado
+    interpretation_role: ritmo observable del movimiento
+    graph_binding: separacion temporal entre maximos
+    pedagogical_notes: "[[omega_d]] es la magnitud estrella del leaf."
+  - id: x_env
+    symbol: x_env
+    nombre: { es: envolvente, en: envelope }
+    unidad_si: m
+    descripcion: { es: Cota exponencial que limita la amplitud de la oscilacion., en: Exponential bound that limits oscillation amplitude. }
+    dimension: L
+    is_vector: false
+    components: []
+    category: salida
+    physical_role: muestra la perdida gradual de energia
+    used_in: [envolvente]
+    common_mistake: confundirla con la posicion instantanea
+    typical_range: 0 <= x_env <= A
+    sign_behavior: no negativa como amplitud
+    zero_behavior: tiende a cero con el tiempo
+    value_nature: funcion
+    interpretation_role: mide la amplitud maxima posible en cada instante
+    graph_binding: curva limite superior
+    pedagogical_notes: "[[x_env]] no sustituye a [[x]], solo la acota."
+  - id: A
+    symbol: A
+    nombre: { es: amplitud inicial, en: initial amplitude }
+    unidad_si: m
+    descripcion: { es: Escala inicial de la oscilacion., en: Initial scale of the oscillation. }
+    dimension: L
+    is_vector: false
+    components: []
+    category: condicion_inicial
+    physical_role: fija el tamano inicial del movimiento
+    used_in: [envolvente, solucion_subamortiguada]
+    common_mistake: creer que define el regimen
+    typical_range: amplitud pequena respecto al rango lineal
+    sign_behavior: se toma positiva como amplitud
+    zero_behavior: si vale cero no hay desplazamiento inicial en este modelo
+    value_nature: parametro
+    interpretation_role: escala vertical de la respuesta
+    graph_binding: altura inicial de envolvente
+    pedagogical_notes: "Cambiar [[A]] no cambia la comparacion entre [[gamma]] y [[omega0]]."
+  - id: x
+    symbol: x
+    nombre: { es: desplazamiento, en: displacement }
+    unidad_si: m
+    descripcion: { es: Posicion instantanea respecto al equilibrio., en: Instantaneous position relative to equilibrium. }
+    dimension: L
+    is_vector: false
+    components: []
+    category: salida
+    physical_role: variable observable del movimiento
+    used_in: [solucion_subamortiguada]
+    common_mistake: leer cada maximo como amplitud constante
+    typical_range: -x_env <= x <= x_env
+    sign_behavior: puede ser positiva o negativa
+    zero_behavior: cruza cero durante la oscilacion
+    value_nature: funcion
+    interpretation_role: evidencia ciclos amortiguados
+    graph_binding: curva principal
+    pedagogical_notes: "[[x]] oscila dentro de la envolvente."
+  - id: t
+    symbol: t
+    nombre: { es: tiempo, en: time }
+    unidad_si: s
+    descripcion: { es: Variable temporal de evolucion., en: Time variable of evolution. }
+    dimension: T
+    is_vector: false
+    components: []
+    category: independiente
+    physical_role: ordena el transitorio
+    used_in: [envolvente, solucion_subamortiguada]
+    common_mistake: usar milisegundos como segundos
+    typical_range: t >= 0
+    sign_behavior: no negativo en respuesta posterior al inicio
+    zero_behavior: marca la condicion inicial
+    value_nature: variable
+    interpretation_role: permite comparar ciclos y decaimiento
+    graph_binding: eje horizontal
+    pedagogical_notes: "Los productos [[gamma]][[t]] y [[omega_d]][[t]] son adimensionales."
+  - id: phi
+    symbol: \varphi
+    nombre: { es: fase inicial, en: initial phase }
+    unidad_si: rad
+    descripcion: { es: Desfase que fija el estado inicial de la oscilacion., en: Phase offset that fixes the initial oscillatory state. }
+    dimension: "1"
+    is_vector: false
+    components: []
+    category: condicion_inicial
+    physical_role: ajusta la posicion dentro del ciclo inicial
+    used_in: [solucion_subamortiguada]
+    common_mistake: tratarla como tiempo
+    typical_range: 0 a 2*pi rad
+    sign_behavior: puede representarse modulo 2*pi
+    zero_behavior: fase de referencia
+    value_nature: parametro
+    interpretation_role: desplaza la oscilacion sin cambiar el decaimiento
+    graph_binding: desplazamiento horizontal de la curva
+    pedagogical_notes: "[[phi]] cambia donde empieza el ciclo, no la envolvente."

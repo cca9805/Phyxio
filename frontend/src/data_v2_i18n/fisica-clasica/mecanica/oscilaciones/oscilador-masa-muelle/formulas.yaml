@@ -1,0 +1,329 @@
+version: 1
+ui:
+  default_formula: pulsacion_natural
+formulas:
+- id: pulsacion_natural
+  title:
+    es: Pulsacion natural del oscilador masa muelle
+    en: Natural angular frequency of the mass-spring oscillator
+  equation: omega0 = sqrt(k/m)
+  latex: \omega_0 = \sqrt{\frac{k}{m}}
+  rearrangements:
+  - target: omega0
+    equation: omega0 = sqrt(k/m)
+    latex: \omega_0 = \sqrt{\frac{k}{m}}
+    constraints:
+    - m > 0
+    - k > 0
+  - target: k
+    equation: k = m*(omega0^2)
+    latex: k = m\omega_0^2
+    constraints:
+    - m > 0
+  - target: m
+    equation: m = k/(omega0^2)
+    latex: m = \frac{k}{\omega_0^2}
+    constraints:
+    - omega0 > 0
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Vincula inercia y rigidez para fijar el ritmo intrinseco de oscilacion del sistema lineal.
+    en: Links inertia and stiffness to set the intrinsic oscillation rate of the linear system.
+  constraints: m > 0 y k > 0 en regimen lineal de Hooke.
+  validity:
+    es: Valida cuando el muelle trabaja en su zona elastica y el amortiguamiento no domina el periodo medido.
+    en: Valid when the spring remains in its elastic range and damping does not dominate the measured period.
+  dimension_check: "sqrt([N/m]/[kg]) = T^{-1}"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - ritmo_natural
+  - relacion_masa_rigidez
+  result_semantics:
+    target: omega0
+    kind: characteristic_rate
+    sign_meaning:
+      es: Se usa como valor positivo para describir rapidez angular.
+      en: It is used as a positive value describing angular rate.
+    absolute_value_meaning:
+      es: Mayor valor implica ciclos mas rapidos en el tiempo.
+      en: Larger value implies faster cycles in time.
+  domain_checks:
+  - expr: m > 0
+    message:
+      es: La masa debe ser positiva.
+      en: Mass must be positive.
+  - expr: k > 0
+    message:
+      es: La rigidez debe ser positiva.
+      en: Stiffness must be positive.
+  coherence_checks:
+  - expr: result > 0
+    message:
+      es: La pulsacion debe resultar positiva en el modelo estable.
+      en: Angular frequency must be positive in the stable model.
+  graph_implications:
+  - Al aumentar k con m fija, la oscilacion en x(t) se comprime en el tiempo.
+  pedagogical_triggers:
+  - when: result > 20
+    message:
+      es: Comprueba si el muestreo temporal es suficiente para capturar ciclos rapidos.
+      en: Check whether temporal sampling is enough to capture fast cycles.
+
+- id: periodo_muelle
+  title:
+    es: Periodo del oscilador masa muelle
+    en: Oscillation period of the mass-spring system
+  equation: T = 2*pi*sqrt(m/k)
+  latex: T = 2\pi\sqrt{\frac{m}{k}}
+  rearrangements:
+  - target: T
+    equation: T = 2*pi*sqrt(m/k)
+    latex: T = 2\pi\sqrt{\frac{m}{k}}
+    constraints:
+    - m > 0
+    - k > 0
+  - target: m
+    equation: m = (T^2*k)/(4*pi^2)
+    latex: m = \frac{T^2k}{4\pi^2}
+    constraints:
+    - T > 0
+  - target: k
+    equation: k = (4*pi^2*m)/(T^2)
+    latex: k = \frac{4\pi^2m}{T^2}
+    constraints:
+    - T > 0
+  category: fundamental
+  relation_type: period_relation
+  physical_meaning:
+    es: Traduce masa y rigidez a escala temporal de un ciclo completo de oscilacion.
+    en: Converts mass and stiffness into the time scale of one full oscillation cycle.
+  constraints: m > 0, k > 0 y respuesta aproximadamente armonica.
+  validity:
+    es: Aplicable al oscilador lineal con amplitudes moderadas y forzamiento externo despreciable.
+    en: Applicable to the linear oscillator with moderate amplitudes and negligible external forcing.
+  dimension_check: "[s] = sqrt([kg]/[N/m])"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - escala_temporal
+  - comparacion_experimental
+  result_semantics:
+    target: T
+    kind: characteristic_time
+    sign_meaning:
+      es: El periodo se interpreta como duracion positiva de un ciclo.
+      en: Period is interpreted as a positive cycle duration.
+    absolute_value_meaning:
+      es: Valores altos indican oscilaciones lentas.
+      en: Larger values indicate slower oscillations.
+  domain_checks:
+  - expr: m > 0
+    message:
+      es: La masa debe ser positiva.
+      en: Mass must be positive.
+  - expr: k > 0
+    message:
+      es: La rigidez debe ser positiva.
+      en: Stiffness must be positive.
+  coherence_checks:
+  - expr: result > 0
+    message:
+      es: El periodo calculado debe ser mayor que cero.
+      en: Computed period must be greater than zero.
+  graph_implications:
+  - El periodo fija la separacion temporal entre dos maximos consecutivos en x(t).
+  pedagogical_triggers:
+  - when: result > 5
+    message:
+      es: Si el periodo es grande, revisa si la masa o la rigidez fueron introducidas con unidades correctas.
+      en: If period is large, verify whether mass and stiffness were entered with correct units.
+
+- id: frecuencia_muelle
+  title:
+    es: Frecuencia ciclica del oscilador
+    en: Cyclic frequency of the oscillator
+  equation: f = 1/T
+  latex: f = \frac{1}{T}
+  rearrangements:
+  - target: f
+    equation: f = 1/T
+    latex: f = \frac{1}{T}
+    constraints:
+    - T > 0
+  - target: T
+    equation: T = 1/f
+    latex: T = \frac{1}{f}
+    constraints:
+    - f > 0
+  category: derived
+  relation_type: inverse_relation
+  physical_meaning:
+    es: Expresa cuantos ciclos completos ocurren por unidad de tiempo.
+    en: Expresses how many full cycles occur per unit time.
+  constraints: T > 0 para evitar division por cero.
+  validity:
+    es: Valida para movimiento periodico bien definido.
+    en: Valid for well-defined periodic motion.
+  dimension_check: "[Hz] = [s]^{-1}"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - ritmo_ciclico
+  - lectura_temporal
+  result_semantics:
+    target: f
+    kind: cycle_rate
+    sign_meaning:
+      es: Se toma positiva en regimen periodico estable.
+      en: It is taken as positive in stable periodic regime.
+    absolute_value_meaning:
+      es: Mayor frecuencia implica mas ciclos por segundo.
+      en: Higher frequency implies more cycles per second.
+  domain_checks:
+  - expr: T > 0
+    message:
+      es: El periodo debe ser mayor que cero.
+      en: Period must be greater than zero.
+  coherence_checks:
+  - expr: result > 0
+    message:
+      es: La frecuencia debe ser positiva.
+      en: Frequency must be positive.
+  graph_implications:
+  - La frecuencia determina cuantos picos de x(t) aparecen en una ventana temporal fija.
+  pedagogical_triggers:
+  - when: result > 30
+    message:
+      es: Una frecuencia alta exige revisar resolucion temporal del sensor o grafico.
+      en: High frequency requires checking temporal resolution of sensor or graph.
+
+- id: ecuacion_oscilacion
+  title:
+    es: Ecuacion temporal del desplazamiento
+    en: Time-domain displacement equation
+  equation: x = A*cos(omega0*t + phi)
+  latex: x = A\cos(\omega_0 t + \varphi)
+  rearrangements:
+  - target: x
+    equation: x = A*cos(omega0*t + phi)
+    latex: x = A\cos(\omega_0 t + \varphi)
+    constraints:
+    - A >= 0
+    - omega0 > 0
+  category: structural
+  relation_type: state_evolution
+  physical_meaning:
+    es: Describe la posicion instantanea como combinacion de amplitud, ritmo angular y fase inicial.
+    en: Describes instantaneous position as a combination of amplitude, angular rate, and initial phase.
+  constraints: Amplitud moderada y linealidad elastica en torno al equilibrio.
+  validity:
+    es: Valida para oscilacion armonica simple sin terminos de amortiguamiento dominante.
+    en: Valid for simple harmonic oscillation without dominant damping terms.
+  dimension_check: "[m] = [m]*adimensional"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - fase
+  - amplitud
+  - estado_temporal
+  result_semantics:
+    target: x
+    kind: state_value
+    sign_meaning:
+      es: El signo indica el lado del equilibrio donde se ubica la masa.
+      en: The sign indicates on which side of equilibrium the mass is located.
+    absolute_value_meaning:
+      es: El modulo indica distancia al equilibrio en ese instante.
+      en: Magnitude indicates distance to equilibrium at that instant.
+  domain_checks:
+  - expr: omega0 > 0
+    message:
+      es: La pulsacion debe ser positiva.
+      en: Angular frequency must be positive.
+  - expr: A >= 0
+    message:
+      es: La amplitud no puede ser negativa.
+      en: Amplitude cannot be negative.
+  coherence_checks:
+  - expr: abs(result) <= A + 1e-9
+    message:
+      es: El desplazamiento instantaneo no debe superar la amplitud.
+      en: Instantaneous displacement must not exceed amplitude.
+  graph_implications:
+  - La grafica x(t) es sinusoidal con separacion entre picos igual al periodo.
+  pedagogical_triggers:
+  - when: abs(result) > 0.9*A
+    message:
+      es: Estas cerca de un extremo, la velocidad instantanea sera pequena.
+      en: You are near an extreme point, so instantaneous velocity is small.
+
+- id: ley_hooke_conceptual
+  title:
+    es: Ley de Hooke conceptual para la fuerza restauradora
+    en: Conceptual Hooke law for restoring force
+  equation: F = -k*x
+  latex: F = -kx
+  rearrangements: []
+  category: conceptual
+  relation_type: sign_relation
+  physical_meaning:
+    es: El signo negativo codifica que la fuerza elastica se opone al desplazamiento.
+    en: The negative sign encodes that elastic force opposes displacement.
+  constraints: Requiere zona lineal del muelle y eje de referencia definido.
+  validity:
+    es: Es una relacion de interpretacion fisica y direccion, no un cierre de calculo completo del sistema.
+    en: It is a physical-direction interpretation relation, not a full computational closure of the system.
+  dimension_check: "[N] = [N/m]*[m]"
+  calculable: false
+  motivo_no_calculable: Depende de la convencion de signos y se usa para interpretar direccion de la fuerza, no como algoritmo unico de resolucion.
+  used_in:
+  - teoria
+  - errores
+  - aplicaciones
+  interpretation_tags:
+  - direccion_fuerza
+  - retorno_equilibrio
+  result_semantics:
+    target: F
+    kind: directional_response
+    sign_meaning:
+      es: Si x es positiva, la fuerza apunta hacia x negativa y viceversa.
+      en: If x is positive, force points toward negative x and vice versa.
+    absolute_value_meaning:
+      es: El modulo crece linealmente con la deformacion.
+      en: Magnitude grows linearly with deformation.
+  domain_checks:
+  - expr: k > 0
+    message:
+      es: La rigidez debe ser positiva para un retorno estable.
+      en: Stiffness must be positive for stable restoring behavior.
+  coherence_checks:
+  - expr: true
+    message:
+      es: Verifica que el signo de x y el sentido elegido del eje sean consistentes.
+      en: Verify that x sign and chosen axis direction are consistent.
+  graph_implications:
+  - La recta F frente a x pasa por el origen y tiene pendiente negativa.
+  pedagogical_triggers:
+  - when: true
+    message:
+      es: No ignores el signo; el error mas comun es usar solo modulos.
+      en: Do not ignore the sign; the most common mistake is using magnitudes only.

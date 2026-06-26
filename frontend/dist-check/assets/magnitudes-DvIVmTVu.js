@@ -1,0 +1,242 @@
+const e=`magnitudes:
+
+  - id: a
+    symbol: "a"
+    nombre:
+      es: "Ancho de la rendija"
+      en: "Slit width"
+    descripcion:
+      es: "Ancho físico de la apertura rectangular simple a través de la cual pasa el haz de luz y se produce el fenómeno de difracción."
+      en: "Physical width of the single rectangular aperture through which the light beam passes and the diffraction phenomenon occurs."
+    unidad_si: "m"
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - "cálculo del ángulo del primer mínimo"
+      - "ancho del máximo central de difracción"
+    common_mistake: >
+      "Confundir el ancho de la rendija 'a' con la distancia entre rendijas 'd' del experimento de Young (interferencia de doble rendija)."
+    typical_range: "De 10 a 500 micrómetros (1e-5 a 5e-4 m) para luz visible."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El ancho 'a' es una dimensión espacial intrínseca de la rendija y es siempre positivo."
+        en: "The slit width 'a' is an intrinsic spatial dimension of the slit and is always positive."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un ancho nulo bloquearía por completo la luz, impidiendo la formación de cualquier patrón de difracción."
+        en: "A zero width would completely block the light, preventing the formation of any diffraction pattern."
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "[1e-6, 1e-3]"
+    interpretation_role:
+      primary_for: "geometría de la apertura difractora"
+      secondary_for: "dispersión angular del patrón"
+    graph_binding:
+      channels:
+        - axis: x
+          role: input_parameter
+          description: "Ancho de la rendija en metros"
+    pedagogical_notes:
+      es: >
+        "El ancho de la rendija 'a' es inversamente proporcional al tamaño del patrón. Si la rendija se estrecha, el patrón se ensancha, lo cual es una manifestación del comportamiento ondulatorio de la luz (y análogo al principio de incertidumbre en mecánica cuántica)."
+      en: >
+        "The slit width 'a' is inversely proportional to the size of the pattern. If the slit narrows, the pattern widens, which is a key manifestation of the wave nature of light (and analogous to the uncertainty principle in quantum mechanics)."
+
+  - id: lambda
+    symbol: "\\\\lambda"
+    nombre:
+      es: "Longitud de onda"
+      en: "Wavelength"
+    descripcion:
+      es: "Distancia espacial entre dos crestas consecutivas de la onda electromagnética de luz incidente."
+      en: "Spatial distance between two consecutive crests of the incident electromagnetic light wave."
+    unidad_si: "m"
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - "cálculo de la dispersión de difracción"
+      - "determinación del ángulo de mínimos"
+    common_mistake: >
+      "Usar la longitud de onda en nanómetros sin convertirla a metros al calcular con las otras variables en unidades SI."
+    typical_range: "De 400 a 700 nanómetros (4e-7 a 7e-7 m) para luz visible."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La longitud de onda de un haz monocromático es una distancia característica no negativa."
+        en: "The wavelength of a monochromatic beam is a characteristic non-negative distance."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Una longitud de onda cero no tiene sentido físico para una onda electromagnética real en propagación."
+        en: "A zero wavelength has no physical meaning for a propagating real electromagnetic wave."
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "[1e-7, 1e-6]"
+    interpretation_role:
+      primary_for: "color y energía de la radiación electromagnética"
+      secondary_for: "escala de los efectos difractivos"
+    graph_binding:
+      channels:
+        - axis: parameter
+          role: input_parameter
+          description: "Longitud de onda en metros"
+    pedagogical_notes:
+      es: >
+        "La longitud de onda determina la escala del fenómeno. Cuanto mayor es la longitud de onda (luz roja vs luz azul), mayor es la difracción que sufre al pasar por la misma rendija, de modo que el color de la luz altera directamente las dimensiones del patrón visualizado."
+      en: >
+        "The wavelength determines the scale of the phenomenon. The larger the wavelength (red light vs blue light), the greater the diffraction it undergoes when passing through the same slit, meaning the color of light directly alters the dimensions of the observed pattern."
+
+  - id: theta
+    symbol: "\\\\theta"
+    nombre:
+      es: "Ángulo del primer mínimo"
+      en: "Angle of the first minimum"
+    descripcion:
+      es: "Desviación angular respecto a la dirección de incidencia central donde la interferencia destructiva produce el primer mínimo de intensidad de luz (oscuridad)."
+      en: "Angular deviation from the central direction of incidence where destructive interference produces the first intensity minimum (darkness)."
+    unidad_si: "rad"
+    dimension: "adimensional"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: core_physical_quantity
+    used_in:
+      - "determinación de la apertura angular del máximo central"
+      - "criterio de resolución angular"
+    common_mistake: >
+      "Confundir el valor del ángulo en radianes con grados sexagesimales al aplicar fórmulas algebraicas."
+    typical_range: "Ángulos pequeños, típicamente menores a 0.1 radianes (~5.7 grados) bajo aproximación paraxial."
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo indica si la desviación ocurre a la izquierda/arriba (positivo) o derecha/abajo (negativo) del máximo central."
+        en: "The sign indicates whether the deviation occurs to the left/above (positive) or right/below (negative) of the central maximum."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Un ángulo de cero corresponde exactamente al centro del patrón, donde reside el máximo central de intensidad (interferencia constructiva completa)."
+        en: "A zero angle corresponds exactly to the center of the pattern, where the central intensity maximum resides (complete constructive interference)."
+    value_nature:
+      kind: scalar_with_sign
+      nonnegative_only: false
+      expected_interval: "[-1.57, 1.57]"
+    interpretation_role:
+      primary_for: "dirección de anulación de la intensidad de luz"
+      secondary_for: "ancho angular del máximo central"
+    graph_binding:
+      channels:
+        - axis: y
+          role: output_value
+          description: "Posición angular del primer mínimo en radianes"
+    pedagogical_notes:
+      es: >
+        "Este ángulo marca el final del pico principal de intensidad. En el primer mínimo, la rendija puede imaginarse dividida en dos mitades donde las ondas de una mitad interfieren destructivamente de forma perfecta con las de la otra mitad."
+      en: >
+        "This angle marks the boundary of the main intensity peak. At the first minimum, the slit can be imagined as split into two halves where waves from one half perfectly interfere destructively with waves from the other half."
+
+  - id: L
+    symbol: "L"
+    nombre:
+      es: "Distancia a la pantalla"
+      en: "Distance to the screen"
+    descripcion:
+      es: "Distancia longitudinal medida desde el plano que contiene la rendija hasta la pantalla de observación donde se proyecta el patrón de difracción."
+      en: "Longitudinal distance measured from the plane containing the slit to the observation screen where the diffraction pattern is projected."
+    unidad_si: "m"
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in:
+      - "cálculo de la posición espacial de los mínimos en la pantalla"
+      - "relación entre ancho lineal del patrón y su apertura angular"
+    common_mistake: >
+      "Confundir la distancia a la pantalla 'L' con la posición lateral del patrón en la pantalla 'y'."
+    typical_range: "De 0.5 a 3.0 metros en experimentos típicos de laboratorio escolar o universitario."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La distancia a la pantalla es una longitud geométrica escalar y siempre toma valores positivos."
+        en: "The distance to the screen is a scalar geometric length and always takes positive values."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Una distancia de cero implicaría colocar la pantalla en contacto directo con la rendija, imposibilitando la resolución del patrón difractado."
+        en: "A zero distance would mean placing the screen in direct contact with the slit, making it impossible to resolve the diffracted pattern."
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "[0.1, 10.0]"
+    interpretation_role:
+      primary_for: "escala espacial de proyección del patrón"
+      secondary_for: "factor de conversión angular a lineal"
+    graph_binding:
+      channels:
+        - axis: parameter
+          role: input_parameter
+          description: "Distancia longitudinal en metros a la pantalla"
+    pedagogical_notes:
+      es: >
+        "La distancia L actúa como un factor de amplificación puramente geométrico. No cambia el comportamiento angular intrínseco (el ángulo theta permanece constante), pero ensancha proporcionalmente el patrón proyectado de forma lineal en la pantalla."
+      en: >
+        "The distance L acts as a purely geometric amplification factor. It does not change the intrinsic angular behavior (the angle theta remains constant), but it proportionally widens the projected linear pattern on the screen."
+
+  - id: w
+    symbol: "w"
+    nombre:
+      es: "Ancho del máximo central"
+      en: "Width of the central maximum"
+    descripcion:
+      es: "Distancia lineal medida sobre la pantalla entre los dos primeros mínimos de difracción a cada lado del centro."
+      en: "Linear distance measured on the screen between the first two diffraction minima on either side of the center."
+    unidad_si: "m"
+    dimension: "[L]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: core_physical_quantity
+    used_in:
+      - "evaluación visual del patrón de difracción en laboratorio"
+      - "medida de dispersión lateral del haz difractado"
+    common_mistake: >
+      "Confundir el ancho total 'w' (entre primer mínimo de arriba y primer mínimo de abajo) con la distancia desde el centro al primer mínimo (que es w/2)."
+    typical_range: "De 1 milímetro a unos pocos centímetros (1e-3 a 5e-2 m) en configuraciones usuales."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "El ancho 'w' del máximo central es una magnitud de anchura física y, por ende, es estrictamente positiva."
+        en: "The width 'w' of the central maximum is a physical width quantity and is therefore strictly positive."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Un ancho del máximo central nulo requeriría una longitud de onda nula o una rendija de ancho infinito, lo cual violaría las condiciones físicas de la difracción."
+        en: "A zero central maximum width would require zero wavelength or an infinitely wide slit, violating the physical conditions of diffraction."
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "[1e-4, 0.5]"
+    interpretation_role:
+      primary_for: "tamaño de la franja luminosa central"
+      secondary_for: "sensibilidad experimental a las propiedades del haz y la rendija"
+    graph_binding:
+      channels:
+        - axis: y
+          role: output_curve
+          description: "Ancho lineal en metros del máximo central"
+    pedagogical_notes:
+      es: >
+        "El ancho w del máximo central concentra más del 80% de la energía luminosa que cruza la rendija. Su visualización clara y medición directa en la pantalla es la forma más directa de inferir el ancho microscópico 'a' de una rendija desconocida."
+      en: >
+        "The width w of the central maximum concentrates more than 80% of the light energy passing through the slit. Its clear visualization and direct measurement on the screen is the most direct way to infer the microscopic width 'a' of an unknown slit."
+`;export{e as default};

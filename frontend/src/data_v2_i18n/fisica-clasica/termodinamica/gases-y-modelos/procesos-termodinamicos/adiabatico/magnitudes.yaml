@@ -1,0 +1,442 @@
+version: 1.0.0
+leaf_id: adiabatico
+magnitudes:
+  - id: DeltaU
+    symbol: "\\Delta U"
+    nombre:
+      es: Cambio de energia interna
+      en: Change in internal energy
+    descripcion:
+      es: Variacion de la energia interna del gas entre el estado inicial y el final del proceso adiabatico.
+      en: Change in internal energy of the gas between the initial and final states of the adiabatic process.
+    unidad_si: J
+    dimension: "[M L² T⁻²]"
+    is_vector: false
+    components: null
+    category: state
+    physical_role: core_physical_quantity
+    used_in: [primer principio, proceso adiabatico, balance energetico]
+    common_mistake: Confundir cambio de energia interna con calor intercambiado; en proceso adiabatico Q es cero y DeltaU = -W.
+    typical_range:
+      min: -100000
+      max: 100000
+      unit: J
+      context: Gases en procesos de laboratorio o ciclos de motor.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Negativo si el gas pierde energia interna al expandirse adiabaticamente; positivo si gana energia al comprimirse.
+        en: Negative if the gas loses internal energy upon adiabatic expansion; positive if it gains energy upon compression.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Proceso adiabatico sin cambio de temperatura; solo posible si no hay cambio de volumen (proceso adiabatico isocórico).
+        en: Adiabatic process without temperature change; only possible if there is no volume change (adiabatic isochoric process).
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: [-100000, 100000]
+    interpretation_role:
+      primary_for: balance energetico en proceso adiabatico
+      secondary_for: calculo de trabajo adiabático
+    graph_binding:
+      channels: [pV_adiabat]
+    pedagogical_notes:
+      es: "En proceso adiabatico, [[DeltaU]] equivale a menos el trabajo realizado por el gas."
+      en: "In an adiabatic process, [[DeltaU]] equals minus the work done by the gas."
+
+  - id: W
+    symbol: W
+    nombre:
+      es: Trabajo mecanico del proceso
+      en: Mechanical work of the process
+    descripcion:
+      es: Trabajo realizado por el gas sobre el entorno durante el proceso adiabatico.
+      en: Work done by the gas on the surroundings during the adiabatic process.
+    unidad_si: J
+    dimension: "[M L² T⁻²]"
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: core_physical_quantity
+    used_in: [primer principio adiabatico, balance energetico, calculo de expansion]
+    common_mistake: Confundir signo del trabajo segun convenio; en este leaf W > 0 significa trabajo realizado por el gas sobre el entorno.
+    typical_range:
+      min: -100000
+      max: 100000
+      unit: J
+      context: Expansion o compresion de gases en laboratorio o motor.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Positivo cuando el gas se expande y realiza trabajo sobre el entorno; negativo cuando el entorno realiza trabajo sobre el gas (compresion).
+        en: Positive when the gas expands and does work on the surroundings; negative when surroundings do work on the gas (compression).
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: No hay desplazamiento de piston ni cambio de volumen; proceso adiabatico isocórico con energia interna constante.
+        en: No piston displacement or volume change; adiabatic isochoric process with constant internal energy.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: [-100000, 100000]
+    interpretation_role:
+      primary_for: trabajo mecanico en expansion o compresion adiabatica
+      secondary_for: area bajo curva adiabatica en diagrama pV
+    graph_binding:
+      channels: [pV_adiabat]
+    pedagogical_notes:
+      es: "[[W]] es el area bajo la curva en el diagrama pV. En expansion adiabatica, [[W]] > 0 y [[DeltaU]] < 0."
+      en: "[[W]] is the area under the curve in the pV diagram. In adiabatic expansion, [[W]] > 0 and [[DeltaU]] < 0."
+
+  - id: T1
+    symbol: T_1
+    nombre:
+      es: Temperatura inicial
+      en: Initial temperature
+    descripcion:
+      es: Temperatura absoluta del gas al inicio del proceso adiabatico.
+      en: Absolute temperature of the gas at the beginning of the adiabatic process.
+    unidad_si: K
+    dimension: "[Theta]"
+    is_vector: false
+    components: null
+    category: state
+    physical_role: core_physical_quantity
+    used_in: [cambio de temperatura adiabatico, estado inicial del gas]
+    common_mistake: Usar temperatura en Celsius en lugar de kelvin en las ecuaciones de la adiabata.
+    typical_range:
+      min: 200
+      max: 2000
+      unit: K
+      context: Gases en condiciones de laboratorio o ciclos de motor.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Temperatura absoluta siempre positiva.
+        en: Absolute temperature always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: El cero absoluto no es alcanzable en procesos adiabaticos ordinarios.
+        en: Absolute zero is not reachable in ordinary adiabatic processes.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [1, 10000]
+    interpretation_role:
+      primary_for: estado inicial del proceso adiabatico
+      secondary_for: calculo de temperatura final
+    graph_binding:
+      channels: [TV_adiabat]
+    pedagogical_notes:
+      es: "[[T1]] es el punto de partida del proceso adiabatico. Debe expresarse siempre en kelvin."
+      en: "[[T1]] is the starting point of the adiabatic process. It must always be expressed in kelvin."
+
+  - id: T2
+    symbol: T_2
+    nombre:
+      es: Temperatura final
+      en: Final temperature
+    descripcion:
+      es: Temperatura absoluta del gas al final del proceso adiabatico.
+      en: Absolute temperature of the gas at the end of the adiabatic process.
+    unidad_si: K
+    dimension: "[Theta]"
+    is_vector: false
+    components: null
+    category: state
+    physical_role: core_physical_quantity
+    used_in: [cambio de temperatura adiabatico, estado final del gas]
+    common_mistake: Esperar que T2 sea igual a T1 porque no hay calor; el error es confundir ausencia de calor con ausencia de cambio de temperatura.
+    typical_range:
+      min: 50
+      max: 3000
+      unit: K
+      context: Expansion o compresion adiabatica de gas ideal.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Temperatura absoluta final, siempre positiva.
+        en: Final absolute temperature, always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Temperatura final nula implicaria llegar al cero absoluto, no alcanzable en proceso adiabatico finito.
+        en: Zero final temperature would imply reaching absolute zero, not achievable in a finite adiabatic process.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [1, 10000]
+    interpretation_role:
+      primary_for: estado final del proceso adiabatico
+      secondary_for: calculo de DeltaU y W
+    graph_binding:
+      channels: [TV_adiabat, pV_adiabat]
+    pedagogical_notes:
+      es: "[[T2]] menor que [[T1]] indica expansion adiabatica (el gas se enfria). [[T2]] mayor indica compresion adiabatica (el gas se calienta)."
+      en: "[[T2]] less than [[T1]] indicates adiabatic expansion (gas cools). [[T2]] greater indicates adiabatic compression (gas heats up)."
+
+  - id: DeltaT_ad
+    symbol: "\\Delta T"
+    nombre:
+      es: Cambio de temperatura adiabatico
+      en: Adiabatic temperature change
+    descripcion:
+      es: Diferencia entre la temperatura final y la inicial en un proceso adiabatico.
+      en: Difference between final and initial temperature in an adiabatic process.
+    unidad_si: K
+    dimension: "[Theta]"
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: diagnostic
+    used_in: [interpretacion del proceso adiabatico, calculo de DeltaU]
+    common_mistake: Pensar que DeltaT_ad es cero en proceso adiabatico; el error surge de confundir adiabatico con isotermico.
+    typical_range:
+      min: -500
+      max: 500
+      unit: K
+      context: Procesos adiabaticos en gases ideales bajo condiciones ordinarias.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Negativo en expansion adiabatica (gas se enfria); positivo en compresion adiabatica (gas se calienta).
+        en: Negative in adiabatic expansion (gas cools); positive in adiabatic compression (gas heats up).
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Solo si el volumen no cambia; es un proceso adiabatico sin trabajo con energia interna constante.
+        en: Only if volume does not change; it is an adiabatic process without work and constant internal energy.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: [-1000, 1000]
+    interpretation_role:
+      primary_for: diagnostico de expansion o compresion adiabatica
+      secondary_for: calculo de cambio de energia interna
+    graph_binding:
+      channels: [TV_adiabat]
+    pedagogical_notes:
+      es: "[[DeltaT_ad]] distinto de cero es la señal definitiva de que el proceso adiabatico implica cambio de temperatura, no calor."
+      en: "Non-zero [[DeltaT_ad]] is the definitive sign that the adiabatic process involves temperature change, not heat."
+
+  - id: p1
+    symbol: p_1
+    nombre:
+      es: Presion inicial
+      en: Initial pressure
+    descripcion:
+      es: Presion del gas al inicio del proceso adiabatico.
+      en: Pressure of the gas at the beginning of the adiabatic process.
+    unidad_si: Pa
+    dimension: "[M L⁻¹ T⁻²]"
+    is_vector: false
+    components: null
+    category: state
+    physical_role: parameter
+    used_in: [ley de la adiabata, calculo de trabajo adiabatico]
+    common_mistake: Mezclar unidades; usar kPa y Pa sin conversion al calcular pV.
+    typical_range:
+      min: 1000
+      max: 10000000
+      unit: Pa
+      context: Gases industriales y de laboratorio.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Presion absoluta siempre positiva.
+        en: Absolute pressure always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Presion nula implica vacio ideal; la ley de la adiabata no aplica.
+        en: Zero pressure implies ideal vacuum; the adiabat law does not apply.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [1, 100000000]
+    interpretation_role:
+      primary_for: estado inicial de presion del gas
+      secondary_for: calculo de la curva adiabatica
+    graph_binding:
+      channels: [pV_adiabat]
+    pedagogical_notes:
+      es: "[[p1]] junto con [[V1]] determina el estado inicial en el diagrama pV."
+      en: "[[p1]] together with [[V1]] determines the initial state in the pV diagram."
+
+  - id: p2
+    symbol: p_2
+    nombre:
+      es: Presion final
+      en: Final pressure
+    descripcion:
+      es: Presion del gas al final del proceso adiabatico.
+      en: Pressure of the gas at the end of the adiabatic process.
+    unidad_si: Pa
+    dimension: "[M L⁻¹ T⁻²]"
+    is_vector: false
+    components: null
+    category: state
+    physical_role: parameter
+    used_in: [ley de la adiabata, calculo de trabajo adiabatico]
+    common_mistake: Confundir que en expansion adiabatica la presion cae mas que en la isoterma correspondiente.
+    typical_range:
+      min: 500
+      max: 10000000
+      unit: Pa
+      context: Estados finales en expansion o compresion adiabatica.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Presion absoluta final siempre positiva.
+        en: Final absolute pressure always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Presion final nula no es fisicamente alcanzable en un proceso finito adiabatico.
+        en: Zero final pressure is not physically reachable in a finite adiabatic process.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [1, 100000000]
+    interpretation_role:
+      primary_for: estado final de presion del gas
+      secondary_for: verificacion de la relacion adiabatica
+    graph_binding:
+      channels: [pV_adiabat]
+    pedagogical_notes:
+      es: "En expansion adiabatica, [[p2]] es menor que [[p1]] y la caida es mas pronunciada que en la isoterma."
+      en: "In adiabatic expansion, [[p2]] is less than [[p1]] and the drop is steeper than in the isotherm."
+
+  - id: V1
+    symbol: V_1
+    nombre:
+      es: Volumen inicial
+      en: Initial volume
+    descripcion:
+      es: Volumen ocupado por el gas al inicio del proceso adiabatico.
+      en: Volume occupied by the gas at the beginning of the adiabatic process.
+    unidad_si: "m³"
+    dimension: "[L³]"
+    is_vector: false
+    components: null
+    category: state
+    physical_role: parameter
+    used_in: [ley de la adiabata, calculo de trabajo adiabatico, cambio de temperatura]
+    common_mistake: No convertir litros a metros cubicos antes de sustituir en la ley de la adiabata.
+    typical_range:
+      min: 0.0001
+      max: 10
+      unit: "m³"
+      context: Recipientes de laboratorio, cilindros de motor.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Volumen siempre positivo.
+        en: Volume always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Volumen nulo implica singularidad no fisicamente realizable.
+        en: Zero volume implies a singularity not physically realizable.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [0.000001, 1000]
+    interpretation_role:
+      primary_for: estado inicial del proceso adiabatico
+      secondary_for: calculo de la razon de compresion
+    graph_binding:
+      channels: [pV_adiabat]
+    pedagogical_notes:
+      es: "[[V1]] menor que [[V2]] indica expansion; mayor indica compresion."
+      en: "[[V1]] less than [[V2]] indicates expansion; greater indicates compression."
+
+  - id: V2
+    symbol: V_2
+    nombre:
+      es: Volumen final
+      en: Final volume
+    descripcion:
+      es: Volumen ocupado por el gas al final del proceso adiabatico.
+      en: Volume occupied by the gas at the end of the adiabatic process.
+    unidad_si: "m³"
+    dimension: "[L³]"
+    is_vector: false
+    components: null
+    category: state
+    physical_role: parameter
+    used_in: [ley de la adiabata, calculo de trabajo adiabatico, cambio de temperatura]
+    common_mistake: No tener en cuenta si el proceso es expansion o compresion al interpretar el signo de DeltaU.
+    typical_range:
+      min: 0.0001
+      max: 10
+      unit: "m³"
+      context: Recipientes de laboratorio, cilindros de motor.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Volumen final siempre positivo.
+        en: Final volume always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Volumen nulo no es fisicamente alcanzable; la ley de la adiabata diverge.
+        en: Zero volume is not physically reachable; the adiabat law diverges.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [0.000001, 1000]
+    interpretation_role:
+      primary_for: estado final del proceso adiabatico
+      secondary_for: calculo de presion y temperatura finales
+    graph_binding:
+      channels: [pV_adiabat]
+    pedagogical_notes:
+      es: "[[V2]] mayor que [[V1]] corresponde a expansion adiabatica con descenso de [[T2]] y [[p2]]."
+      en: "[[V2]] greater than [[V1]] corresponds to adiabatic expansion with decrease in [[T2]] and [[p2]]."
+
+  - id: gamma
+    symbol: "\\gamma"
+    nombre:
+      es: Coeficiente adiabatico
+      en: Adiabatic coefficient
+    descripcion:
+      es: Razon entre los calores especificos a presion constante y a volumen constante; determina la pendiente de la adiabata en el diagrama pV.
+      en: Ratio of specific heats at constant pressure and constant volume; determines the slope of the adiabat in the pV diagram.
+    unidad_si: adimensional
+    dimension: "1"
+    is_vector: false
+    components: null
+    category: parameter
+    physical_role: core_physical_quantity
+    used_in: [ley de la adiabata, calculo de trabajo, cambio de temperatura, curva pV]
+    common_mistake: Usar gamma = 1 (proceso isotermico) cuando deberia ser 1.4 para gas diatomico o 1.67 para gas monatomico.
+    typical_range:
+      min: 1.1
+      max: 1.7
+      unit: adimensional
+      context: "Monatomico: ~1.67, diatomico: ~1.40, poliatom: ~1.30."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Gamma es siempre mayor que 1 para todo gas ideal real.
+        en: Gamma is always greater than 1 for every real ideal gas.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Gamma igual a cero o uno no tiene sentido fisico para un gas real.
+        en: Gamma equal to zero or one has no physical meaning for a real gas.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [1.001, 2.0]
+    interpretation_role:
+      primary_for: pendiente de la curva adiabatica en el diagrama pV
+      secondary_for: cuantificacion del enfriamiento en expansion adiabatica
+    graph_binding:
+      channels: [pV_adiabat]
+    pedagogical_notes:
+      es: "[[gamma]] mayor indica que la adiabata cae mas steeply. Para aire (diatomico), [[gamma]] ≈ 1.4."
+      en: "Larger [[gamma]] means the adiabat drops more steeply. For air (diatomic), [[gamma]] ≈ 1.4."

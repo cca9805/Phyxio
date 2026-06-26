@@ -1,0 +1,293 @@
+version: 5.0.0
+ui:
+  default_formula: primera_ley_delta_u
+formulas:
+- id: primera_ley_delta_u
+  title:
+    es: Primera ley con trabajo realizado por el sistema
+    en: First law with work done by the system
+  equation: variacion_energia_interna = calor - trabajo
+  latex: \Delta U = Q - W
+  magnitudes:
+  - variacion_energia_interna
+  - calor
+  - trabajo
+  category: ley_fundamental
+  relation_type: balance_energetico
+  physical_meaning:
+    es: El cambio de energía interna aumenta con el calor recibido y disminuye con el trabajo realizado por el sistema.
+    en: The internal energy change increases with heat received and decreases with work done by the system.
+  constraints:
+    es:
+    - Sistema cerrado simple.
+    - Convención de trabajo realizado por el sistema.
+    - Intercambios macroscópicos bien definidos.
+    en:
+    - Simple closed system.
+    - Work done by the system convention.
+    - Well-defined macroscopic exchanges.
+  validity:
+    es: Válida para sistemas cerrados donde el balance de energía se expresa mediante calor y trabajo macroscópico.
+    en: Valid for closed systems where the energy balance is expressed through macroscopic heat and work.
+  dimension_check: '[M L^2 T^-2] = [M L^2 T^-2] - [M L^2 T^-2]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - balance energético
+  - procesos termodinámicos
+  - interpretación de signos
+  interpretation_tags:
+  - primera_ley
+  - balance
+  - energia_interna
+  result_semantics:
+    target: variacion_energia_interna
+    kind: energy_change
+    sign_meaning:
+      es: Positiva si aumenta la energía interna y negativa si disminuye.
+      en: Positive when internal energy increases and negative when it decreases.
+    absolute_value_meaning:
+      es: Mide la magnitud del cambio energético interno.
+      en: Measures the magnitude of the internal energy change.
+  domain_checks:
+  - id: calor_trabajo_definidos
+    condition: calor is not None and trabajo is not None
+    message:
+      es: Calor y trabajo deben estar definidos para aplicar el balance.
+      en: Heat and work must be defined to apply the balance.
+  coherence_checks:
+  - id: adiabatico_sin_trabajo
+    condition: calor == 0 and trabajo == 0
+    message:
+      es: Si no hay calor ni trabajo, la energía interna no cambia.
+      en: If there is no heat or work, internal energy does not change.
+  graph_implications:
+  - En el DCL energético, las flechas de calor y trabajo determinan el signo de Delta U.
+  pedagogical_triggers:
+  - Confundir trabajo hecho por el sistema con trabajo sobre el sistema.
+  - Tratar el calor como contenido del sistema.
+  rearrangements:
+  - target: variacion_energia_interna
+    equation: variacion_energia_interna = calor - trabajo
+    latex: \Delta U = Q - W
+  - target: calor
+    equation: calor = variacion_energia_interna + trabajo
+    latex: Q = \Delta U + W
+  - target: trabajo
+    equation: trabajo = calor - variacion_energia_interna
+    latex: W = Q - \Delta U
+- id: energia_interna_final
+  title:
+    es: Energía interna final
+    en: Final internal energy
+  equation: energia_interna_final = energia_interna_inicial + variacion_energia_interna
+  latex: U_f = U_i + \Delta U
+  magnitudes:
+  - energia_interna_final
+  - energia_interna_inicial
+  - variacion_energia_interna
+  category: relacion_estado
+  relation_type: state_update
+  physical_meaning:
+    es: Actualiza el estado energético interno sumando el cambio de energía interna al valor inicial.
+    en: Updates the internal energy state by adding the internal energy change to the initial value.
+  constraints:
+    es:
+    - Estados inicial y final definidos.
+    - Misma referencia energética para ambos estados.
+    en:
+    - Initial and final states defined.
+    - Same energy reference for both states.
+  validity:
+    es: Válida cuando se comparan dos estados del mismo sistema con una referencia energética común.
+    en: Valid when comparing two states of the same system with a common energy reference.
+  dimension_check: '[M L^2 T^-2] = [M L^2 T^-2] + [M L^2 T^-2]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - seguimiento de estados
+  - balances acumulados
+  interpretation_tags:
+  - estado
+  - energia_interna
+  - actualizacion
+  result_semantics:
+    target: energia_interna_final
+    kind: state_value
+    sign_meaning:
+      es: Depende de la referencia elegida para la energía interna.
+      en: It depends on the chosen internal energy reference.
+    absolute_value_meaning:
+      es: Representa el nivel energético interno final respecto a la referencia.
+      en: Represents the final internal energy level relative to the reference.
+  domain_checks:
+  - id: referencia_comun
+    condition: same_energy_reference == true
+    message:
+      es: Los estados deben usar la misma referencia energética.
+      en: States must use the same energy reference.
+  coherence_checks:
+  - id: sin_cambio_estado_igual
+    condition: variacion_energia_interna == 0
+    message:
+      es: Si el cambio es nulo, la energía interna final coincide con la inicial.
+      en: If the change is zero, final internal energy equals initial internal energy.
+  graph_implications:
+  - El DCL energético ayuda a justificar si el estado final debe subir o bajar.
+  pedagogical_triggers:
+  - Pensar que solo importa el estado final y olvidar el estado inicial.
+  rearrangements:
+  - target: energia_interna_final
+    equation: energia_interna_final = energia_interna_inicial + variacion_energia_interna
+    latex: U_f = U_i + \Delta U
+  - target: energia_interna_inicial
+    equation: energia_interna_inicial = energia_interna_final - variacion_energia_interna
+    latex: U_i = U_f - \Delta U
+  - target: variacion_energia_interna
+    equation: variacion_energia_interna = energia_interna_final - energia_interna_inicial
+    latex: \Delta U = U_f - U_i
+- id: trabajo_pv_constante
+  title:
+    es: Trabajo presión-volumen a presión constante
+    en: Pressure-volume work at constant pressure
+  equation: trabajo = presion * variacion_volumen
+  latex: W = p \cdot \Delta V
+  magnitudes:
+  - trabajo
+  - presion
+  - variacion_volumen
+  category: trabajo_termodinamico
+  relation_type: special_case
+  physical_meaning:
+    es: A presión constante, el trabajo realizado por el sistema crece con la expansión de volumen.
+    en: At constant pressure, work done by the system grows with volume expansion.
+  constraints:
+    es:
+    - Presión externa constante.
+    - Proceso cuasiestático aproximado.
+    - Trabajo de frontera simple.
+    en:
+    - Constant external pressure.
+    - Approximately quasistatic process.
+    - Simple boundary work.
+  validity:
+    es: Válida para cambios de volumen contra presión externa constante.
+    en: Valid for volume changes against constant external pressure.
+  dimension_check: '[M L^-1 T^-2]·[L^3] = [M L^2 T^-2]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - expansión de gases
+  - compresión
+  - trabajo de frontera
+  interpretation_tags:
+  - trabajo_pv
+  - expansion
+  - compresion
+  result_semantics:
+    target: trabajo
+    kind: energy_transfer
+    sign_meaning:
+      es: Positivo si el sistema se expande con la convención de trabajo realizado por el sistema.
+      en: Positive if the system expands under the work-done-by-system convention.
+    absolute_value_meaning:
+      es: Indica la energía transferida mecánicamente por cambio de volumen.
+      en: Indicates mechanically transferred energy through volume change.
+  domain_checks:
+  - id: presion_no_negativa
+    condition: presion >= 0
+    message:
+      es: La presión macroscópica debe ser no negativa.
+      en: Macroscopic pressure must be nonnegative.
+  coherence_checks:
+  - id: volumen_constante_trabajo_cero
+    condition: variacion_volumen == 0
+    message:
+      es: A volumen constante, el trabajo presión-volumen es nulo.
+      en: At constant volume, pressure-volume work is zero.
+  graph_implications:
+  - En un diagrama energético, expansión y compresión cambian el sentido de la flecha de trabajo.
+  pedagogical_triggers:
+  - Usar esta fórmula cuando la presión cambia mucho.
+  - Olvidar el signo de la variación de volumen.
+  rearrangements:
+  - target: trabajo
+    equation: trabajo = presion * variacion_volumen
+    latex: W = p \cdot \Delta V
+  - target: presion
+    equation: presion = trabajo / variacion_volumen
+    latex: p = \frac{W}{\Delta V}
+  - target: variacion_volumen
+    equation: variacion_volumen = trabajo / presion
+    latex: \Delta V = \frac{W}{p}
+- id: primer_principio_sobre_sistema
+  title:
+    es: Primera ley con trabajo sobre el sistema
+    en: First law with work done on the system
+  equation: variacion_energia_interna = calor + trabajo_sobre_sistema
+  latex: \Delta U = Q + W_{on}
+  magnitudes:
+  - variacion_energia_interna
+  - calor
+  - trabajo_sobre_sistema
+  category: convencion_signos
+  relation_type: equivalent_convention
+  physical_meaning:
+    es: Con la convención de trabajo sobre el sistema, calor y trabajo entrante aumentan la energía interna.
+    en: With the work-on-system convention, heat and incoming work increase internal energy.
+  constraints:
+    es:
+    - Usar una sola convención de signos durante todo el problema.
+    - Sistema cerrado.
+    en:
+    - Use one sign convention throughout the problem.
+    - Closed system.
+  validity:
+    es: Equivalente a la forma clásica si se interpreta correctamente la convención de trabajo.
+    en: Equivalent to the classical form if the work convention is interpreted correctly.
+  dimension_check: '[M L^2 T^-2] = [M L^2 T^-2] + [M L^2 T^-2]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - comparación de convenciones
+  - compresión de gases
+  interpretation_tags:
+  - convencion
+  - trabajo_sobre_sistema
+  - signos
+  result_semantics:
+    target: variacion_energia_interna
+    kind: energy_change
+    sign_meaning:
+      es: Positiva si la entrada neta de energía aumenta el estado interno.
+      en: Positive if net energy input increases the internal state.
+    absolute_value_meaning:
+      es: Mide el tamaño del cambio de energía interna.
+      en: Measures the size of the internal energy change.
+  domain_checks:
+  - id: convencion_unica
+    condition: sign_convention_consistent == true
+    message:
+      es: No mezcles convenciones de trabajo en el mismo cálculo.
+      en: Do not mix work conventions in the same calculation.
+  coherence_checks:
+  - id: trabajo_sobre_opuesto_a_trabajo_sistema
+    condition: trabajo_sobre_sistema == -trabajo
+    message:
+      es: El trabajo sobre el sistema es opuesto al trabajo realizado por el sistema.
+      en: Work done on the system is opposite to work done by the system.
+  graph_implications:
+  - El DCL energético debe indicar claramente si la flecha de trabajo entra o sale del sistema.
+  pedagogical_triggers:
+  - Cambiar de convención a mitad del ejercicio.
+  - Sumar trabajo saliente como si fuese entrante.
+  rearrangements:
+  - target: variacion_energia_interna
+    equation: variacion_energia_interna = calor + trabajo_sobre_sistema
+    latex: \Delta U = Q + W_{on}
+  - target: calor
+    equation: calor = variacion_energia_interna - trabajo_sobre_sistema
+    latex: Q = \Delta U - W_{on}
+  - target: trabajo_sobre_sistema
+    equation: trabajo_sobre_sistema = variacion_energia_interna - calor
+    latex: W_{on} = \Delta U - Q

@@ -1,0 +1,77 @@
+const e=`\uFEFFarea: fisica-clasica
+bloque: mecanica
+descripcion: Estado de equilibrio dinamico donde el arrastre compensa el peso y la aceleracion se anula.
+description_en: Dynamical equilibrium state where drag balances weight and acceleration vanishes.
+dificultad: 3
+graficos:
+- Coord
+- Dcl
+icon: 🪂
+id: velocidad-terminal
+interpretacion:
+  archivo: interpretacion.yaml
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+  enabled: true
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    max_inline_messages: 3
+    show_likely_errors: true
+    show_summary_first: true
+    show_warnings: true
+  ui:
+    dedicated_tab: true
+    inline_calculator: true
+    inline_graph: true
+    tab_label:
+      en: Interpretation
+      es: Interpretacion
+magnitud_dominante: v_t
+niveles:
+  en:
+  - Secondary
+  - Upper Secondary
+  es:
+  - ESO
+  - BACHILLERATO
+nombre:
+  en: Terminal Velocity
+  es: Velocidad terminal
+orden: 212273
+parent_id: fuerza-de-arrastre
+physical_role:
+  en: limiting dynamical state
+  es: estado dinamico limite
+pregunta_fisica_central:
+  en: How can we read in Coord and in an FBD that terminal velocity appears when weight is balanced by drag and that rho, C_d, and A reduce v_t?
+  es: ¿Como leer en Coord y en DCL que la velocidad terminal aparece cuando el peso se compensa con el arrastre y que rho, C_d y A reducen v_t?
+prerequisitos:
+- fundamentos/conceptos-estructurales/interacciones-y-fuerzas
+- fisica-clasica/mecanica/dinamica/fundamentos/leyes-de-newton/segunda-ley-fuerza-masa
+- fisica-clasica/mecanica/dinamica/fuerzas/fuerza-de-arrastre/arrastre-lineal
+- fisica-clasica/mecanica/dinamica/fuerzas/fuerza-de-arrastre/arrastre-cuadratico
+representacion_dominante: Coord
+ruta_relativa: fisica-clasica/mecanica/dinamica/fuerzas/fuerza-de-arrastre/velocidad-terminal
+subbloque: dinamica
+tags:
+  en:
+  - dynamics
+  - drag
+  - terminal-velocity
+  - fluid-fall
+  - dynamic-equilibrium
+  es:
+  - dinamica
+  - arrastre
+  - velocidad-terminal
+  - caida-en-fluidos
+  - equilibrio-dinamico
+tiempo_estimado_min: 55
+type: leaf
+version: 5
+
+`;export{e as default};

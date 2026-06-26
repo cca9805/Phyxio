@@ -1,0 +1,191 @@
+version: 1
+magnitudes:
+  - id: m1
+    symbol: m_1
+    nombre:
+      es: masa 1
+      en: mass 1
+    descripcion:
+      es: Masa situada en uno de los extremos de la cuerda ideal.
+      en: Mass located at one end of the ideal rope.
+    unidad_si: kg
+    dimension: M
+    is_vector: false
+    components: null
+    category: parameter
+    physical_role: inertial_parameter
+    used_in: [aceleracion_atwood, tension_atwood]
+    common_mistake: Pensar que solo importa su peso aislado y no su papel dentro de la inercia total del sistema.
+    typical_range: Desde 0.05 kg hasta varios kilogramos en montajes de laboratorio y problemas introductorios.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La masa es positiva y no lleva signo propio.
+        en: Mass is positive and has no intrinsic sign.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Una masa nula rompe el modelo de dos cuerpos acoplados del leaf.
+        en: A zero mass breaks the two-body coupled model of the leaf.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: m1 > 0
+    interpretation_role:
+      primary_for: [a, T]
+      secondary_for: []
+    graph_binding:
+      channels: [mass_left]
+    pedagogical_notes: Su valor no decide por sí solo el movimiento; importa comparado con m2 y con la masa total.
+
+  - id: m2
+    symbol: m_2
+    nombre:
+      es: masa 2
+      en: mass 2
+    descripcion:
+      es: Masa situada en el otro extremo de la cuerda ideal.
+      en: Mass located at the other end of the ideal rope.
+    unidad_si: kg
+    dimension: M
+    is_vector: false
+    components: null
+    category: parameter
+    physical_role: inertial_parameter
+    used_in: [aceleracion_atwood, tension_atwood]
+    common_mistake: Creer que si m2 es mayor la aceleración siempre se acerca a g sin mirar cuánto mayor es respecto a m1.
+    typical_range: Desde 0.05 kg hasta varios kilogramos en laboratorios y ejercicios estándar.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La masa es siempre positiva dentro del modelo ideal.
+        en: Mass is always positive within the ideal model.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Una masa nula elimina el carácter acoplado del sistema descrito.
+        en: A zero mass removes the coupled nature of the described system.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: m2 > 0
+    interpretation_role:
+      primary_for: [a, T]
+      secondary_for: []
+    graph_binding:
+      channels: [mass_right]
+    pedagogical_notes: El sentido de la aceleración se interpreta comparando m2 con m1, no leyendo m2 de forma aislada.
+
+  - id: g
+    symbol: g
+    nombre:
+      es: aceleración de la gravedad
+      en: gravitational acceleration
+    descripcion:
+      es: Parámetro gravitatorio local que convierte masa en peso.
+      en: Local gravitational parameter converting mass into weight.
+    unidad_si: m/s^2
+    dimension: LT^-2
+    is_vector: false
+    components: null
+    category: constant
+    physical_role: environment_parameter
+    used_in: [aceleracion_atwood, tension_atwood]
+    common_mistake: Tratar g como una fuerza en vez de como una aceleración del entorno.
+    typical_range: Aproximadamente 9.8 m/s^2 en la Tierra y 10 m/s^2 en redondeos escolares.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Aquí se usa su módulo, porque el signo se absorbe en la elección de ejes de cada masa.
+        en: Here its magnitude is used because sign is absorbed into the chosen axes for each mass.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Si g fuese cero desaparecería el mecanismo gravitatorio del sistema de Atwood.
+        en: If g were zero the gravitational driving mechanism of the Atwood system would disappear.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: g > 0
+    interpretation_role:
+      primary_for: [a, T]
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes: g escala tanto la aceleración del sistema como la tensión, pero no modifica por sí sola el sentido del movimiento.
+
+  - id: a
+    symbol: a
+    nombre:
+      es: aceleración del sistema
+      en: system acceleration
+    descripcion:
+      es: Aceleración común en magnitud de ambas masas idealmente acopladas.
+      en: Common acceleration magnitude of both ideally coupled masses.
+    unidad_si: m/s^2
+    dimension: LT^-2
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: dynamic_response
+    used_in: [aceleracion_atwood]
+    common_mistake: Olvidar que un signo negativo no significa error, sino inversión del sentido supuesto.
+    typical_range: Desde 0 hasta valores próximos a g, aunque normalmente claramente menores que g.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Su signo indica si el sentido positivo elegido coincide o no con el movimiento real.
+        en: Its sign indicates whether the chosen positive direction matches the real motion.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: a = 0 expresa equilibrio ideal cuando m1 y m2 son iguales.
+        en: a = 0 expresses ideal equilibrium when m1 and m2 are equal.
+    value_nature:
+      kind: signed_scalar
+      nonnegative_only: false
+      expected_interval: cualquier valor real físicamente compatible; |a| <= g en el modelo ideal
+    interpretation_role:
+      primary_for: [a]
+      secondary_for: [T]
+    graph_binding:
+      channels: [acceleration_value]
+    pedagogical_notes: Se obtiene a partir de la diferencia de pesos sobre la masa total, no del peso de una sola masa.
+
+  - id: T
+    symbol: T
+    nombre:
+      es: tensión de la cuerda
+      en: rope tension
+    descripcion:
+      es: Fuerza transmitida por la cuerda ideal y común a ambos lados en el modelo sin masa.
+      en: Force transmitted by the ideal rope and common to both sides in the massless model.
+    unidad_si: N
+    dimension: MLT^-2
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: internal_constraint_force
+    used_in: [tension_atwood]
+    common_mistake: Creer que T es igual al peso de una de las masas o que tiene dos valores distintos en una cuerda ideal.
+    typical_range: Entre el peso de la masa ligera y el de la masa pesada cuando el sistema realmente acelera.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Se usa como módulo positivo de la fuerza de tracción interna.
+        en: It is used as the positive magnitude of the internal pulling force.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: En el modelo ideal con cuerda tensa, T no puede anularse.
+        en: In the ideal taut-rope model, T cannot vanish.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: T > 0
+    interpretation_role:
+      primary_for: [T]
+      secondary_for: [a]
+    graph_binding:
+      channels: [tension_value]
+    pedagogical_notes: Su valor resume cómo la cuerda acopla dinámicamente los dos bloques dentro del mismo sistema.

@@ -1,0 +1,172 @@
+const e=`formulas:
+  - id: biot_savart_diferencial
+    title:
+      es: Contribucion diferencial de Biot Savart
+      en: Differential Biot-Savart contribution
+    equation: "dB = mu0 * I * dl * s_theta / (4 * pi * r^2)"
+    latex: 'dB = \\frac{\\mu_0 I\\, dl\\, \\sin\\theta}{4\\pi r^2} \\quad % dB mu0 I dl s_theta r'
+    rearrangements:
+      - target: dB
+        equation: "dB = mu0 * I * dl * s_theta / (4 * pi * r^2)"
+        latex: 'dB = \\frac{\\mu_0 I\\, dl\\, \\sin\\theta}{4\\pi r^2} \\quad % dB mu0 I dl s_theta r'
+    category: fundamental
+    relation_type: differential_relation
+    physical_meaning:
+      es: Cada elemento de corriente aporta un campo proporcional a la corriente, a la longitud orientada y al factor angular, y decrece con la distancia.
+      en: Each current element contributes a field proportional to current, oriented length and angular factor, and decreasing with distance.
+    constraints:
+      - corriente estacionaria
+      - elemento de corriente pequeno
+      - medio aproximado como vacio
+    validity:
+      es: Valida para magnetostatica clasica; requiere integrar todas las contribuciones de la geometria.
+      en: Valid for classical magnetostatics; all contributions from the geometry must be integrated.
+    dimension_check: "N*A^-2 multiplicado por A y por m, dividido por m^2, produce T"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["teoria.md", "teoria.en.md", "ejemplos.md", "ejemplos.en.md", "interpretacion.yaml"]
+    interpretation_tags: ["differential_contribution", "distance_decay", "angular_factor"]
+    result_semantics:
+      target: dB
+      kind: scalar_unsigned
+      sign_meaning:
+        es: El modulo es positivo; la direccion vectorial se decide con la regla de la mano derecha.
+        en: The magnitude is positive; vector direction is decided by the right-hand rule.
+      absolute_value_meaning:
+        es: Intensidad de la contribucion elemental antes de sumar toda la distribucion.
+        en: Strength of the elementary contribution before summing the whole distribution.
+    domain_checks:
+      - id: bs_distance_positive
+        condition: "r > 0"
+        message:
+          es: La distancia al punto de observacion debe ser positiva.
+          en: Distance to the observation point must be positive.
+    coherence_checks:
+      - id: bs_angle_range
+        condition: "s_theta >= 0 and s_theta <= 1"
+        message:
+          es: El angulo debe pertenecer al intervalo geometrico fisico.
+          en: The angle must belong to the physical geometric interval.
+    graph_implications:
+      - es: La curva debe mostrar que la contribucion cae rapidamente al aumentar la distancia.
+        en: The curve should show that contribution falls rapidly as distance increases.
+    pedagogical_triggers:
+      - es: Revisar si se olvido el factor angular o si se sumaron modulos sin direccion.
+        en: Check whether the angular factor was forgotten or magnitudes were added without direction.
+
+  - id: campo_hilo_largo
+    title:
+      es: Campo de un hilo recto largo
+      en: Field of a long straight wire
+    equation: "B = mu0 * I / (2 * pi * r)"
+    latex: 'B = \\frac{\\mu_0 I}{2\\pi r} \\quad % B mu0 I r'
+    rearrangements:
+      - target: B
+        equation: "B = mu0 * I / (2 * pi * r)"
+        latex: 'B = \\frac{\\mu_0 I}{2\\pi r} \\quad % B mu0 I r'
+    category: derived
+    relation_type: geometric_interpretation
+    physical_meaning:
+      es: Resultado integrado para un hilo recto muy largo observado a distancia perpendicular r.
+      en: Integrated result for a very long straight wire observed at perpendicular distance r.
+    constraints:
+      - hilo recto muy largo
+      - punto lejos de los extremos
+      - distancia fuera del conductor
+    validity:
+      es: Aproximacion valida cuando la longitud del conductor supera ampliamente la distancia de observacion.
+      en: Valid approximation when conductor length is much larger than observation distance.
+    dimension_check: "N*A^-2 multiplicado por A y dividido por m produce T"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["teoria.md", "teoria.en.md", "ejemplos.md", "ejemplos.en.md", "graph_coord"]
+    interpretation_tags: ["long_wire", "integrated_result", "inverse_distance"]
+    result_semantics:
+      target: B
+      kind: scalar_unsigned
+      sign_meaning:
+        es: El modulo es positivo; el sentido circular lo da la regla de la mano derecha.
+        en: The magnitude is positive; circular direction follows the right-hand rule.
+      absolute_value_meaning:
+        es: Intensidad del campo magnetico alrededor del hilo largo.
+        en: Strength of magnetic field around the long wire.
+    domain_checks:
+      - id: wire_distance_positive
+        condition: "r > 0"
+        message:
+          es: La distancia perpendicular debe ser positiva.
+          en: Perpendicular distance must be positive.
+    coherence_checks:
+      - id: wire_decrease
+        condition: "r > 0"
+        message:
+          es: Para corriente fija, aumentar la distancia reduce el campo.
+          en: For fixed current, increasing distance reduces the field.
+    graph_implications:
+      - es: El grafico de [[B]] frente a [[r]] debe decrecer de forma suave.
+        en: The graph of [[B]] versus [[r]] should decrease smoothly.
+    pedagogical_triggers:
+      - es: Revisar si se uso diametro, distancia longitudinal o distancia al extremo.
+        en: Check whether diameter, longitudinal distance, or distance to an end was used.
+
+  - id: campo_espira_centro
+    title:
+      es: Campo en el centro de una espira circular
+      en: Field at the center of a circular loop
+    equation: "B = mu0 * I / (2 * R)"
+    latex: 'B = \\frac{\\mu_0 I}{2R} \\quad % B mu0 I R'
+    rearrangements:
+      - target: B
+        equation: "B = mu0 * I / (2 * R)"
+        latex: 'B = \\frac{\\mu_0 I}{2R} \\quad % B mu0 I R'
+    category: derived
+    relation_type: geometric_interpretation
+    physical_meaning:
+      es: Resultado integrado para el campo en el centro de una espira circular de radio R.
+      en: Integrated result for field at the center of a circular loop of radius R.
+    constraints:
+      - espira circular
+      - punto exactamente en el centro
+      - corriente estacionaria
+    validity:
+      es: No describe puntos fuera del centro ni bobinas con geometria no circular.
+      en: It does not describe off-center points or coils with noncircular geometry.
+    dimension_check: "N*A^-2 multiplicado por A y dividido por m produce T"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: ["teoria.md", "teoria.en.md", "ejemplos.md", "ejemplos.en.md", "aplicaciones.md"]
+    interpretation_tags: ["circular_loop", "center_field", "symmetry"]
+    result_semantics:
+      target: B
+      kind: scalar_unsigned
+      sign_meaning:
+        es: El modulo es positivo; el sentido axial depende del sentido de corriente en la espira.
+        en: The magnitude is positive; axial direction depends on current direction in the loop.
+      absolute_value_meaning:
+        es: Intensidad del campo magnetico en el centro de la espira.
+        en: Strength of magnetic field at the loop center.
+    domain_checks:
+      - id: loop_radius_positive
+        condition: "R > 0"
+        message:
+          es: El radio de la espira debe ser positivo.
+          en: Loop radius must be positive.
+    coherence_checks:
+      - id: loop_radius_decrease
+        condition: "R > 0"
+        message:
+          es: Para corriente fija, una espira menor produce mayor campo en el centro.
+          en: For fixed current, a smaller loop produces stronger center field.
+    graph_implications:
+      - es: El resultado permite comparar escalas de bobinas y espiras compactas.
+        en: The result supports comparison of coil and compact-loop scales.
+    pedagogical_triggers:
+      - es: Revisar si se uso el diametro en lugar del radio o si el punto no estaba en el centro.
+        en: Check whether diameter was used instead of radius or whether the point was not at the center.
+
+ui:
+  default_formula: campo_hilo_largo
+  show_formula_selector: true
+  show_rearrangements: true
+  show_result_semantics: true
+`;export{e as default};

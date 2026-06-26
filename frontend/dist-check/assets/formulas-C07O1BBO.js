@@ -1,0 +1,175 @@
+const e=`formulas:
+
+  - id: frecuencia_armonico
+    title:
+      es: Frecuencia del n-ésimo armónico
+      en: Frequency of the n-th harmonic
+    equation: "fn = n_arm * f1"
+    latex: "f_n = n \\\\, f_1"
+    rearrangements:
+      - target: fn
+        equation: "fn = n_arm * f1"
+        latex: "f_n = n \\\\, f_1"
+      - target: f1
+        equation: "f1 = fn / n_arm"
+        latex: "f_1 = \\\\frac{f_n}{n}"
+      - target: n_arm
+        equation: "n_arm = fn / f1"
+        latex: "n = \\\\frac{f_n}{f_1}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "Define la frecuencia de cada componente armónico como un múltiplo entero de la frecuencia fundamental. La serie de armónicos es la columna vertebral del timbre de cualquier sonido periódico."
+      en: "Defines the frequency of each harmonic component as an integer multiple of the fundamental frequency. The harmonic series is the backbone of the timbre of any periodic sound."
+    constraints:
+      - "n es un entero positivo (n ≥ 1)"
+      - "f1 > 0 Hz"
+      - "Válida para sonidos con periodicidad estricta"
+    validity:
+      es: "Válida exactamente para sonidos perfectamente periódicos. Los sonidos reales de instrumentos son quasi-periódicos; los armónicos pueden desviarse ligeramente de los múltiplos enteros exactos (inharmonicidad), especialmente en cuerdas rígidas y campanas."
+      en: "Exactly valid for perfectly periodic sounds. Real instrument sounds are quasi-periodic; harmonics may deviate slightly from exact integer multiples (inharmonicity), especially in stiff strings and bells."
+    dimension_check: "[T⁻¹] = [1] · [T⁻¹] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "teoria.md (Nivel formal)"
+      - "ejemplos.md (resolución simbólica)"
+      - "interpretacion.yaml (targets fn, f1, n_arm)"
+    interpretation_tags:
+      - "identificacion_armonico"
+      - "construccion_espectro"
+      - "calculo_tono"
+    result_semantics:
+      target: fn
+      kind: scalar_unsigned
+      sign_meaning:
+        es: "La frecuencia del armónico es siempre positiva."
+        en: "The harmonic frequency is always positive."
+      absolute_value_meaning:
+        es: "Indica en qué posición del eje de frecuencias aparece la línea espectral del armónico n en el gráfico Coord."
+        en: "Indicates at which position on the frequency axis the spectral line of harmonic n appears in the Coord graph."
+    domain_checks:
+      - "n_arm >= 1 (entero positivo)"
+      - "f1 > 0 Hz"
+      - "fn <= 20000 Hz para que el armónico sea audible"
+    coherence_checks:
+      - "fn debe ser exactamente n veces f1 para sonidos armónicos perfectos"
+      - "Si fn/f1 no es un entero, el sonido no es estrictamente armónico"
+    graph_implications:
+      - "En gráfica Coord de espectro: líneas espectrales igualmente espaciadas en el eje x, separadas por f1"
+      - "La primera línea está en f1, la segunda en 2·f1, la tercera en 3·f1, etc."
+    pedagogical_triggers:
+      - "Si fn resulta mayor de 20 kHz con n pequeño: f1 es demasiado alta para el rango audible"
+      - "Si la razón fn/f1 no es entera: el alumno puede estar tratando un sonido inarmónico (campana, xilófono)"
+
+  - id: serie_fourier_presion
+    title:
+      es: Serie de Fourier de la presión acústica
+      en: Fourier series of acoustic pressure
+    equation: "p_total = sum(An * cos(2 * pi * fn * t + phi_n), n, 1, N)"
+    latex: "p(t) = \\\\sum_{n=1}^{N} A_n \\\\cos\\\\!\\\\left(2\\\\pi f_n t + \\\\varphi_n\\\\right)"
+    rearrangements:
+      - target: p_total
+        equation: "p_total = sum(An * cos(2 * pi * n_arm * f1 * t + phi_n), n_arm, 1, N)"
+        latex: "p(t) = \\\\sum_{n=1}^{N} A_n \\\\cos\\\\!\\\\left(2\\\\pi n f_1 t + \\\\varphi_n\\\\right)"
+      - target: An
+        equation: "An = (2 / T_per) * integral(p_total * cos(2 * pi * fn * t), t, 0, T_per)"
+        latex: "A_n = \\\\frac{2}{T} \\\\int_0^T p(t)\\\\,\\\\cos\\\\!\\\\left(2\\\\pi f_n t\\\\right)\\\\,\\\\mathrm{d}t"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "Expresa que cualquier señal de presión acústica periódica puede descomponerse en una suma de sinusoides de frecuencias múltiplos enteros de la fundamental. Cada término aporta su amplitud An y su fase relativa. Esta descomposición es única y exacta para señales periódicas."
+      en: "Expresses that any periodic acoustic pressure signal can be decomposed into a sum of sinusoids at integer-multiple frequencies of the fundamental. Each term contributes its amplitude An and relative phase. This decomposition is unique and exact for periodic signals."
+    constraints:
+      - "Señal estrictamente periódica con periodo T_per"
+      - "Señal de cuadrado integrable (energía finita por periodo)"
+      - "Medio lineal (superposición válida)"
+    validity:
+      es: "Válida exactamente para señales periódicas. Para sonidos transitoriamente periódicos o quasi-estacionarios, es una excelente aproximación local cuando el periodo de análisis es mucho mayor que T_per."
+      en: "Exactly valid for periodic signals. For transiently periodic or quasi-stationary sounds, it is an excellent local approximation when the analysis window is much larger than T_per."
+    dimension_check: "[M L⁻¹ T⁻²] = [M L⁻¹ T⁻²] · [1] ✓ (suma de términos de la misma dimensión)"
+    calculable: false
+    motivo_no_calculable: "La serie completa requiere conocer todas las amplitudes An y fases, que dependen del instrumento o fuente específica. La calculadora puede evaluar la suma para un número finito N de armónicos con amplitudes y fases dadas."
+    used_in:
+      - "teoria.md (Nivel formal y estructural)"
+      - "ejemplos.md (resolución simbólica)"
+      - "interpretacion.yaml (targets p_total, An)"
+    interpretation_tags:
+      - "forma_de_onda"
+      - "composicion_espectral"
+      - "timbre"
+    result_semantics:
+      target: p_total
+      kind: scalar_signed
+      sign_meaning:
+        es: "Positivo indica compresión neta instantánea; negativo indica rarefacción neta."
+        en: "Positive indicates net instantaneous compression; negative indicates net rarefaction."
+      absolute_value_meaning:
+        es: "El módulo en cada instante indica la magnitud de la perturbación de presión resultante de la superposición de todos los armónicos."
+        en: "The magnitude at each instant indicates the strength of the pressure perturbation resulting from the superposition of all harmonics."
+    domain_checks:
+      - "N >= 1 (al menos la fundamental)"
+      - "fn = n * f1 para cada término"
+      - "An >= 0 para cada n"
+    coherence_checks:
+      - "Si todos los An son iguales, la forma de onda no tiene perfil simple"
+      - "Si solo existe n=1, p_total es una sinusoide pura y el timbre es el de una onda pura"
+    graph_implications:
+      - "En gráfica temporal Coord: forma de onda compleja cuya periodicidad es T_per"
+      - "En gráfica espectral Coord: líneas discretas en f1, 2f1, 3f1,... con alturas An"
+    pedagogical_triggers:
+      - "Si el alumno cree que la suma de dos sinusoides da otra sinusoide: mostrar que solo ocurre si tienen la misma frecuencia"
+      - "Si confunde la forma de onda con el espectro: recordar que son representaciones complementarias de la misma señal"
+
+  - id: periodo_fundamental
+    title:
+      es: Relación entre periodo y frecuencia fundamental
+      en: Relationship between period and fundamental frequency
+    equation: "T_per = 1 / f1"
+    latex: "T = \\\\frac{1}{f_1}"
+    rearrangements:
+      - target: T_per
+        equation: "T_per = 1 / f1"
+        latex: "T = \\\\frac{1}{f_1}"
+      - target: f1
+        equation: "f1 = 1 / T_per"
+        latex: "f_1 = \\\\frac{1}{T}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "El periodo de la señal total es el inverso de la frecuencia fundamental, independientemente de cuántos armónicos estén presentes y de sus amplitudes relativas."
+      en: "The period of the total signal is the inverse of the fundamental frequency, regardless of how many harmonics are present and their relative amplitudes."
+    constraints:
+      - "f1 > 0"
+      - "Señal estrictamente periódica"
+    validity:
+      es: "Válida para cualquier señal periódica cuya frecuencia más baja sea f1."
+      en: "Valid for any periodic signal whose lowest frequency is f1."
+    dimension_check: "[T] = 1 / [T⁻¹] ✓"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - "teoria.md"
+      - "interpretacion.yaml (targets T_per, f1)"
+    interpretation_tags:
+      - "periodicidad"
+      - "tono"
+    result_semantics:
+      target: T_per
+      kind: scalar_unsigned
+      sign_meaning:
+        es: "El periodo es siempre positivo."
+        en: "The period is always positive."
+      absolute_value_meaning:
+        es: "Cuanto menor es T_per, mayor es f1 y más agudo es el tono percibido."
+        en: "The smaller T_per, the higher f1 and the higher the perceived pitch."
+    domain_checks:
+      - "f1 > 0 Hz"
+      - "T_per < 50 ms para frecuencias audibles"
+    coherence_checks:
+      - "T_per * f1 debe ser exactamente 1"
+    graph_implications:
+      - "En gráfica temporal Coord: T_per es el periodo visible de la forma de onda compleja"
+    pedagogical_triggers:
+      - "Si el alumno mide el periodo de un armónico individual en lugar del periodo de la señal total: el valor será T_per / n para el armónico n"
+`;export{e as default};

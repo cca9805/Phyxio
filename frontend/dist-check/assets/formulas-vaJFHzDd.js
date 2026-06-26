@@ -1,0 +1,371 @@
+const e=`version: 1
+formulas:
+- id: vf
+  title:
+    es: "Velocidad de rebote (1D)"
+    en: "Rebound velocity (1D)"
+  equation: "vf = -e*vi"
+  latex: 'v_f = -e \\, v_i'
+  rearrangements:
+  - target: "e"
+    equation: "e = -vf/vi"
+    latex: 'e = -\\frac{v_f}{v_i}'
+  - target: "vi"
+    equation: "vi = -vf/e"
+    latex: 'v_i = -\\frac{v_f}{e}'
+  category: "fundamental"
+  relation_type: "definition"
+  physical_meaning:
+    es: "Relaciona la velocidad de salida con la de entrada basándose en la disipación del impacto."
+    en: "Relates exit velocity to entry velocity based on impact dissipation."
+  constraints: "Aplicar solo a colisiones unidimensionales frontales."
+  validity:
+    es: "Válida para choques frontales contra una pared fija."
+    en: "Valid for head-on collisions against a fixed wall."
+  motivo_no_calculable: null
+  dimension_check:
+    es: "[L T^-1]"
+    en: "[L T^-1]"
+  calculable: true
+  used_in: ["teoria", "ejemplos", "aplicaciones"]
+  interpretation_tags: ["rebound", "restitution", "1d_collision"]
+  result_semantics:
+    target: "vf"
+    meaning: "Velocidad inmediatamente después del impacto."
+  domain_checks:
+  - expr: "e >= 0 and e <= 1"
+    message:
+      es: "El coeficiente de restitución debe estar entre 0 y 1."
+      en: "The coefficient of restitution must be between 0 and 1."
+  coherence_checks:
+  - expr: "abs(vf) <= abs(vi)"
+    severity: "error"
+    message:
+      es: "La velocidad de salida no puede ser superior a la de entrada."
+      en: "Exit velocity cannot be higher than entry velocity."
+  graph_implications:
+  - channel: "velocity"
+    message: "Inversión de signo en el instante t_c."
+  pedagogical_triggers:
+  - detect_when: "e > 1"
+    message:
+      es: "Un e > 1 implica un choque superelástico con aporte de energía externa."
+      en: "e > 1 implies a superelastic collision with external energy input."
+  pedagogical_notes: "Es la ley de cierre del leaf."
+  common_mistake: "Olvidar el signo negativo o la masa infinita de la pared."
+
+- id: vfn
+  title:
+    es: "Componente normal de rebote"
+    en: "Normal rebound component"
+  equation: "vfn = -e*vin"
+  latex: 'v_{fn} = -e \\, v_{in}'
+  rearrangements:
+  - target: "e"
+    equation: "e = -vfn/vin"
+    latex: 'e = -\\frac{v_{fn}}{v_{in}}'
+  category: "derived"
+  relation_type: "definition"
+  physical_meaning:
+    es: "El coeficiente de restitución solo afecta a la componente perpendicular a la pared."
+    en: "The coefficient of restitution only affects the component perpendicular to the wall."
+  constraints: "Solo para la componente normal de la velocidad."
+  validity:
+    es: "Colisiones oblicuas contra superficies lisas."
+    en: "Oblique collisions against smooth surfaces."
+  motivo_no_calculable: null
+  dimension_check:
+    es: "[L T^-1]"
+    en: "[L T^-1]"
+  calculable: true
+  used_in: ["teoria", "modelos"]
+  interpretation_tags: ["oblique_collision", "normal_component"]
+  result_semantics:
+    target: "vfn"
+    meaning: "Componente de la velocidad que cambia de sentido."
+  domain_checks: []
+  coherence_checks:
+  - expr: "abs(vfn) <= abs(vin)"
+    severity: "error"
+    message:
+      es: "La componente normal final debe ser menor o igual a la inicial."
+      en: "Final normal component must be less than or equal to the initial one."
+  graph_implications: []
+  pedagogical_triggers: []
+  pedagogical_notes: "Base del análisis vectorial del rebote."
+  common_mistake: "Intentar aplicarle e a la componente tangencial."
+
+- id: vft
+  title:
+    es: "Componente tangencial de rebote"
+    en: "Tangential rebound component"
+  equation: "vft = vit"
+  latex: 'v_{ft} = v_{it}'
+  rearrangements: []
+  category: "derived"
+  relation_type: "constitutive_relation"
+  physical_meaning:
+    es: "En una pared lisa, no hay fuerzas tangenciales, por lo que esta componente se conserva."
+    en: "In a smooth wall, there are no tangential forces, so this component is preserved."
+  constraints: "Asume ausencia total de fricción."
+  validity:
+    es: "Hipótesis de pared perfectamente lisa (sin fricción)."
+    en: "Assumption of a perfectly smooth wall (no friction)."
+  motivo_no_calculable: null
+  dimension_check:
+    es: "[L T^-1]"
+    en: "[L T^-1]"
+  calculable: true
+  used_in: ["teoria"]
+  interpretation_tags: ["tangential_component", "smooth_wall"]
+  result_semantics:
+    target: "vft"
+    meaning: "Componente de la velocidad paralela a la pared."
+  domain_checks: []
+  coherence_checks:
+  - expr: "vft == vit"
+    severity: "ok"
+    message: "Conservación de la componente tangencial."
+  graph_implications: []
+  pedagogical_triggers: []
+  pedagogical_notes: "Define la condición de pared lisa."
+  common_mistake: "Suponer que cambia sin haber fricción."
+
+- id: impulse_wall
+  title:
+    es: "Impulso recibido de la pared"
+    en: "Impulse received from the wall"
+  equation: "J = m*(vf - vi)"
+  latex: 'J = m(v_f - v_i)'
+  rearrangements:
+  - target: "vf"
+    equation: "vf = J/m + vi"
+    latex: 'v_f = \\frac{J}{m} + v_i'
+  category: "fundamental"
+  relation_type: "law"
+  physical_meaning:
+    es: "Cambio en el momento lineal del cuerpo debido a la fuerza impulsiva de la pared."
+    en: "Change in the body's linear momentum due to the wall's impulsive force."
+  constraints: "Válido si la masa m es constante durante el impacto."
+  validity:
+    es: "Siempre válida para sistemas de masa constante."
+    en: "Always valid for constant mass systems."
+  motivo_no_calculable: null
+  dimension_check:
+    es: "[M L T^-1]"
+    en: "[M L T^-1]"
+  calculable: true
+  used_in: ["teoria", "ejemplos"]
+  interpretation_tags: ["impulse", "momentum_change"]
+  result_semantics:
+    target: "J"
+    meaning: "Impulso neto ejercido por la pared sobre el cuerpo."
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+  pedagogical_notes: "Conecta cinemática con dinámica de impacto."
+  common_mistake: "Restar rapideces en lugar de velocidades vectoriales."
+
+- id: energy_loss_wall
+  title:
+    es: "Energía disipada en el impacto"
+    en: "Energy dissipated in the impact"
+  equation: "DeltaK = 0.5*m*(vi^2 - vf^2)"
+  latex: '\\Delta K = \\frac{1}{2} m (v_i^2 - v_f^2)'
+  rearrangements: []
+  category: "derived"
+  relation_type: "law"
+  physical_meaning:
+    es: "Energía cinética que se transforma en calor, sonido y deformación permanente."
+    en: "Kinetic energy transformed into heat, sound, and permanent deformation."
+  constraints: "Aplicar usando las rapideces totales (módulos)."
+  validity:
+    es: "La pérdida es siempre positiva o cero en choques pasivos."
+    en: "Loss is always positive or zero in passive collisions."
+  motivo_no_calculable: null
+  dimension_check:
+    es: "[M L^2 T^-2]"
+    en: "[M L^2 T^-2]"
+  calculable: true
+  used_in: ["teoria", "ejemplos"]
+  interpretation_tags: ["energy_dissipation", "inelasticity"]
+  result_semantics:
+    target: "DeltaK"
+    meaning: "Trabajo de las fuerzas no conservativas durante el impacto."
+  domain_checks: []
+  coherence_checks:
+  - expr: "DeltaK >= 0"
+    severity: "error"
+    message: "La energía disipada no puede ser negativa en un choque pasivo."
+  graph_implications: []
+  pedagogical_triggers: []
+  pedagogical_notes: "Medida termodinámica de la imperfección del choque."
+  common_mistake: "Obtener un valor negativo por invertir el orden de K."
+
+- id: rebound_height
+  title:
+    es: "Altura máxima tras rebote"
+    en: "Rebound maximum height"
+  equation: "hf = (e^2)*h0"
+  latex: 'h_f = e^2 \\, h_0'
+  rearrangements:
+  - target: "e"
+    equation: "e = sqrt(hf/h0)"
+    latex: 'e = \\sqrt{\\frac{h_f}{h_0}}'
+  - target: "h0"
+    equation: "h0 = hf/(e^2)"
+    latex: 'h_0 = \\frac{h_f}{e^2}'
+  category: "derived"
+  relation_type: "definition"
+  physical_meaning:
+    es: "Relaciona las alturas de caída y rebote basándose en la conservación de energía mecánica fuera del impacto."
+    en: "Relates drop and rebound heights based on mechanical energy conservation outside of impact."
+  constraints: "Desprecia la resistencia del aire."
+  validity:
+    es: "Válida cuando se desprecia la resistencia del aire."
+    en: "Valid when air resistance is neglected."
+  motivo_no_calculable: null
+  dimension_check:
+    es: "[L]"
+    en: "[L]"
+  calculable: true
+  used_in: ["ejemplos", "aplicaciones"]
+  interpretation_tags: ["bounce", "free_fall", "heights"]
+  result_semantics:
+    target: "hf"
+    meaning: "Altura máxima alcanzada tras el primer bote."
+  domain_checks: []
+  coherence_checks:
+  - expr: "hf <= h0"
+    severity: "error"
+    message: "La altura de rebote no puede superar la altura de caída."
+  graph_implications: []
+  pedagogical_triggers: []
+  pedagogical_notes: "Método práctico para medir e en laboratorio."
+  common_mistake: "Olvidar el cuadrado en e o la raíz al despejar."
+
+- id: average_force_wall
+  title:
+    es: "Fuerza media de impacto"
+    en: "Average impact force"
+  equation: "F_avg = J/Delta_t"
+  latex: 'F_{avg} = \\frac{J}{\\Delta t}'
+  rearrangements:
+  - target: "Delta_t"
+    equation: "Delta_t = J/F_avg"
+    latex: '\\Delta t = \\frac{J}{F_{avg}}'
+  category: "derived"
+  relation_type: "definition"
+  physical_meaning:
+    es: "Representa la fuerza constante que produciría el mismo impulso que la fuerza real variable."
+    en: "Represents the constant force that would produce the same impulse as the real variable force."
+  constraints: "Delta_t debe ser distinto de cero."
+  validity:
+    es: "Requiere conocer la duración del contacto."
+    en: "Requires knowing the contact duration."
+  motivo_no_calculable: null
+  dimension_check:
+    es: "[M L T^-2]"
+    en: "[M L T^-2]"
+  calculable: true
+  used_in: ["teoria", "ejemplos"]
+  interpretation_tags: ["average_force", "impact_intensity"]
+  result_semantics:
+    target: "F_avg"
+    meaning: "Magnitud de la interacción entre el cuerpo y la pared."
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+  pedagogical_notes: "Simplificación fundamental para ingeniería de impacto."
+  common_mistake: "Confundirla con la fuerza máxima de pico."
+
+- id: rebound_angle
+  title:
+    es: "Ley de reflexión con disipación"
+    en: "Law of reflection with dissipation"
+  equation: "tan(theta_f) = tan(theta_i)/e"
+  latex: '\\tan(\\theta_f) = \\frac{\\tan(\\theta_i)}{e}'
+  rearrangements:
+  - target: "e"
+    equation: "e = tan(theta_i)/tan(theta_f)"
+    latex: 'e = \\frac{\\tan(\\theta_i)}{\\tan(\\theta_f)}'
+  category: "derived"
+  relation_type: "geometric_relation"
+  physical_meaning:
+    es: "Determina cómo cambia la dirección del movimiento tras un choque oblicuo."
+    en: "Determines how the direction of motion changes after an oblique collision."
+  constraints: "Ángulos medidos desde la normal. e > 0."
+  validity:
+    es: "Ángulos medidos respecto a la normal de la pared."
+    en: "Valid for angles measured with respect to the wall normal."
+  motivo_no_calculable: null
+  dimension_check:
+    es: "[1]"
+    en: "[1]"
+  calculable: true
+  used_in: ["teoria", "modelos"]
+  interpretation_tags: ["reflection", "angles", "oblique_impact"]
+  result_semantics:
+    target: "theta_f"
+    meaning: "Dirección de salida del cuerpo."
+  domain_checks: []
+  coherence_checks:
+  - expr: "theta_f >= theta_i"
+    severity: "ok"
+    message: "El ángulo de salida se aleja de la normal si hay disipación."
+  graph_implications: []
+  pedagogical_triggers: []
+  pedagogical_notes: "Muestra la asimetría del rebote inelástico."
+  common_mistake: "Suponer que los ángulos son iguales si e < 1."
+
+- id: rango_e
+  title:
+    es: "Rango físico de e"
+    en: "Physical range of e"
+  equation: "0 <= e <= 1"
+  latex: '0 \\leq e \\leq 1'
+  rearrangements: []
+  category: "auxiliary"
+  relation_type: "constraint"
+  physical_meaning:
+    es: "Restricción termodinámica para choques pasivos."
+    en: "Thermodynamic constraint for passive collisions."
+  constraints: "No aplica a choques activos."
+  validity:
+    es: "Siempre válida a menos que el choque sea superelástico (activo)."
+    en: "Always valid unless the collision is superelastic (active)."
+  motivo_no_calculable: "No es una fórmula de cálculo, sino una condición de validez."
+  dimension_check:
+    es: "[1]"
+    en: "[1]"
+  calculable: false
+  used_in: ["teoria"]
+  interpretation_tags: ["thermodynamics", "energy_conservation"]
+  result_semantics:
+    target: "e"
+    meaning: "Límites físicos del parámetro de restitución."
+  domain_checks: []
+  coherence_checks: []
+  graph_implications: []
+  pedagogical_triggers: []
+  pedagogical_notes: "Garantiza la consistencia física del modelo."
+  common_mistake: "Creer que puede ser mayor a 1 en sistemas naturales."
+
+ui:
+  default_formula: "vf"
+  groups:
+  - title:
+      es: "Cinemática del rebote"
+      en: "Rebound kinematics"
+    items: ["vf", "vfn", "vft", "rebound_angle"]
+  - title:
+      es: "Dinámica y Energía"
+      en: "Dynamics and Energy"
+    items: ["impulse_wall", "energy_loss_wall", "average_force_wall"]
+  - title:
+      es: "Alturas y Coeficiente"
+      en: "Heights and Coefficient"
+    items: ["rebound_height", "rango_e"]
+`;export{e as default};

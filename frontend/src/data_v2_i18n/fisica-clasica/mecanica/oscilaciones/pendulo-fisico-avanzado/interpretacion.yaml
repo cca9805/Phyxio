@@ -1,0 +1,71 @@
+version: 2
+id: interpretacion-pendulo-fisico-avanzado
+leaf_id: pendulo-fisico-avanzado
+nombre: { es: Interpretacion de pendulo fisico avanzado, en: Advanced physical pendulum interpretation }
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: oscilaciones
+  parent_id: oscilaciones
+  ruta_relativa: fisica-clasica/mecanica/oscilaciones/pendulo-fisico-avanzado
+dependencies:
+  formulas: [ ecuacion_no_lineal_pf, omega0_pf_av, periodo_lineal_pf_av, steiner_pf_av, longitud_equivalente_pf_av, energia_pf_av ]
+  magnitudes: [ I_O, I_cm, m, d, g, theta, omega0, T0, leq, theta_dd, E, theta_dot ]
+output_contract:
+  sections: [ summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step ]
+result_blocks:
+  summary: { title: { es: Resumen fisico, en: Physical summary } }
+  physical_reading: { title: { es: Lectura inercial, en: Inertial reading } }
+  coherence: { title: { es: Coherencia geometrica, en: Geometric coherence } }
+  model_validity: { title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { title: { es: Lectura de graficos, en: Graph reading } }
+  likely_errors: { title: { es: Errores probables, en: Likely errors } }
+  next_step: { title: { es: Siguiente decision, en: Next decision } }
+targets:
+  T0: &base
+    summary_rules:
+    - id: pfav_summary
+      when: "true"
+      status: info
+      text: { es: "[[T0]] resume el efecto combinado de inercia [[I_O]] y brazo gravitatorio [[d]] en pequenas oscilaciones.", en: "[[T0]] summarizes the combined effect of inertia [[I_O]] and gravitational arm [[d]] in small oscillations." }
+    physical_reading_rules:
+    - id: pfav_phys
+      when: "true"
+      status: info
+      text: { es: "Aumentar [[I_O]] ralentiza el movimiento porque domina la inercia angular; por tanto, la respuesta depende del balance entre [[I_O]] y [[m]][[g]][[d]].", en: "Increasing [[I_O]] slows motion because angular inertia dominates; therefore, response depends on the balance between [[I_O]] and [[m]][[g]][[d]]." }
+    coherence_rules:
+    - id: pfav_coh
+      when: "true"
+      status: ok
+      text: { es: "[[I_O]] debe ser compatible con [[I_cm]] mediante Steiner y [[d]] debe ser una distancia positiva desde el pivote al centro de masas.", en: "[[I_O]] must be compatible with [[I_cm]] through Steiner, and [[d]] must be a positive pivot-to-center-of-mass distance." }
+    model_validity_rules:
+    - id: pfav_valid
+      when: "true"
+      status: ok
+      text: { es: "El periodo lineal es valido para angulos pequenos; con [[theta]] grande debe usarse la energia o la ecuacion no lineal.", en: "The linear period is valid for small angles; with large [[theta]], energy or the nonlinear equation must be used." }
+    graph_rules:
+    - id: pfav_graph
+      when: "true"
+      status: info
+      text: { es: "El Coord muestra como cambia [[T0]] con la geometria; el Svg debe localizar pivote, centro de masas y distancia [[d]].", en: "The Coord graph shows how [[T0]] changes with geometry; the Svg must locate pivot, center of mass, and distance [[d]]." }
+    likely_errors:
+    - id: pfav_error
+      when: "true"
+      status: warning
+      text: { es: "Error comun: usar [[I_cm]] en lugar de [[I_O]] o aplicar [[T0]] a amplitudes grandes sin comprobar [[theta]].", en: "Common mistake: using [[I_cm]] instead of [[I_O]] or applying [[T0]] to large amplitudes without checking [[theta]]." }
+    next_step_rules:
+    - id: pfav_next
+      when: "true"
+      status: tip
+      text: { es: "Primero fija el eje, calcula [[I_O]], evalua [[T0]] y despues decide si la amplitud exige modelo no lineal.", en: "First fix the axis, compute [[I_O]], evaluate [[T0]], and then decide whether amplitude requires the nonlinear model." }
+  I_O: { <<: *base }
+  I_cm: { <<: *base }
+  m: { <<: *base }
+  d: { <<: *base }
+  g: { <<: *base }
+  theta: { <<: *base }
+  omega0: { <<: *base }
+  leq: { <<: *base }
+  theta_dd: { <<: *base }
+  E: { <<: *base }
+  theta_dot: { <<: *base }

@@ -1,0 +1,219 @@
+const e=`version: "v5"
+leaf_id: espejos
+
+formulas:
+  - id: ecuacion_espejo
+    title:
+      es: Ecuacion del espejo
+      en: Mirror equation
+    category: fundamental
+    relation_type: definition
+    equation: "1/d_o + 1/d_i = 1/f"
+    latex: "\\\\frac{1}{d_o} + \\\\frac{1}{d_i} = \\\\frac{1}{f}"
+    rearrangements:
+      - target: d_i
+        equation: "d_i = (f * d_o) / (d_o - f)"
+        latex: "d_i = \\\\frac{f \\\\, d_o}{d_o - f}"
+      - target: d_o
+        equation: "d_o = (f * d_i) / (d_i - f)"
+        latex: "d_o = \\\\frac{f \\\\, d_i}{d_i - f}"
+      - target: f
+        equation: "f = (d_o * d_i) / (d_o + d_i)"
+        latex: "f = \\\\frac{d_o \\\\, d_i}{d_o + d_i}"
+    variables:
+      - d_o
+      - d_i
+      - f
+    constraints:
+      - "d_o != 0"
+      - "d_i != 0"
+      - "d_o != f"
+    validity:
+      es: "Valida para espejos esfericos dentro de la aproximacion paraxial (apertura menor al 10 por ciento de R)."
+      en: "Valid for spherical mirrors within the paraxial approximation (aperture less than 10 per cent of R)."
+    dimension_check: "[L]^{-1} + [L]^{-1} = [L]^{-1}"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - formacion_imagenes
+      - diseno_optico
+      - telescopios_reflectores
+    interpretation_tags:
+      - posicion_imagen
+      - tipo_imagen
+      - convergencia_divergencia
+    domain_checks:
+      - condition: "d_o > 0"
+        severity: warning
+        message:
+          es: "Objeto real: d_o positivo."
+          en: "Real object: d_o positive."
+    coherence_checks:
+      - condition: "1/d_o + 1/d_i == 1/f"
+        tolerance: 0.01
+        message:
+          es: "Verificar la ecuacion del espejo."
+          en: "Verify the mirror equation."
+    graph_implications:
+      es: "En el grafico SVG, d_i determina la posicion horizontal de la imagen respecto al vertice."
+      en: "In the SVG diagram, d_i determines the horizontal position of the image relative to the vertex."
+    physical_meaning:
+      es: "Relaciona la distancia del objeto, la distancia de la imagen y la distancia focal de un espejo esferico."
+      en: "Relates the object distance, image distance and focal length of a spherical mirror."
+    result_semantics:
+      target: d_i
+      kind: scalar_signed
+      sign_meaning:
+        es: "Positivo: imagen real (mismo lado que el objeto). Negativo: imagen virtual (detras del espejo)."
+        en: "Positive: real image (same side as object). Negative: virtual image (behind the mirror)."
+      absolute_value_meaning:
+        es: "Distancia fisica entre el vertice del espejo y la imagen."
+        en: "Physical distance between the mirror vertex and the image."
+    pedagogical_triggers:
+      - condition: "d_o == f"
+        message:
+          es: "Cuando el objeto esta en el foco, la imagen se forma en el infinito."
+          en: "When the object is at the focus, the image forms at infinity."
+      - condition: "d_o < f and f > 0"
+        message:
+          es: "Objeto entre el foco y el espejo concavo: la imagen es virtual, derecha y aumentada."
+          en: "Object between focus and concave mirror: the image is virtual, upright and enlarged."
+
+  - id: aumento_lateral
+    title:
+      es: Aumento lateral
+      en: Lateral magnification
+    category: fundamental
+    relation_type: definition
+    equation: "M = -d_i / d_o"
+    latex: "M = -\\\\frac{d_i}{d_o}"
+    rearrangements:
+      - target: M
+        equation: "M = -d_i / d_o"
+        latex: "M = -\\\\frac{d_i}{d_o}"
+      - target: d_i
+        equation: "d_i = -M * d_o"
+        latex: "d_i = -M \\\\, d_o"
+      - target: d_o
+        equation: "d_o = -d_i / M"
+        latex: "d_o = -\\\\frac{d_i}{M}"
+    variables:
+      - M
+      - d_i
+      - d_o
+    constraints:
+      - "d_o != 0"
+    validity:
+      es: "Valida para espejos esfericos en aproximacion paraxial con objetos de tamano pequeno respecto a R."
+      en: "Valid for spherical mirrors in the paraxial approximation with objects small compared to R."
+    dimension_check: "[1] = [L] / [L]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - tamano_imagen
+      - orientacion_imagen
+      - diseno_optico
+    interpretation_tags:
+      - tamano_imagen
+      - orientacion_imagen
+      - factor_escala
+    domain_checks:
+      - condition: "d_o > 0"
+        severity: warning
+        message:
+          es: "Objeto real: d_o positivo."
+          en: "Real object: d_o positive."
+    coherence_checks:
+      - condition: "M == -d_i / d_o"
+        tolerance: 0.01
+        message:
+          es: "Verificar la definicion de aumento lateral."
+          en: "Verify the definition of lateral magnification."
+    graph_implications:
+      es: "En el diagrama SVG, M determina la altura relativa de la flecha de la imagen respecto a la del objeto."
+      en: "In the SVG diagram, M determines the relative height of the image arrow compared to the object arrow."
+    physical_meaning:
+      es: "Relaciona el tamano relativo de la imagen con las distancias del objeto y la imagen al espejo."
+      en: "Relates the relative size of the image to the object and image distances from the mirror."
+    result_semantics:
+      target: M
+      kind: scalar_signed
+      sign_meaning:
+        es: "Positivo: imagen derecha (misma orientacion que el objeto). Negativo: imagen invertida."
+        en: "Positive: upright image (same orientation as object). Negative: inverted image."
+      absolute_value_meaning:
+        es: "Factor de escala entre la imagen y el objeto."
+        en: "Scale factor between image and object."
+    pedagogical_triggers:
+      - condition: "M > 1"
+        message:
+          es: "El modulo del aumento es mayor que 1: la imagen es mayor que el objeto."
+          en: "The magnification magnitude is greater than 1: the image is larger than the object."
+      - condition: "M < 1 and M > 0"
+        message:
+          es: "El modulo del aumento es menor que 1: la imagen es menor que el objeto."
+          en: "The magnification magnitude is less than 1: the image is smaller than the object."
+
+  - id: distancia_focal_radio
+    title:
+      es: Relacion focal-radio
+      en: Focal length-radius relation
+    category: fundamental
+    relation_type: definition
+    equation: "f = R / 2"
+    latex: "f = \\\\frac{R}{2}"
+    rearrangements:
+      - target: f
+        equation: "f = R / 2"
+        latex: "f = \\\\frac{R}{2}"
+      - target: R
+        equation: "R = 2 * f"
+        latex: "R = 2f"
+    variables:
+      - f
+      - R
+    constraints: []
+    validity:
+      es: "Exacta para espejos esfericos en aproximacion paraxial."
+      en: "Exact for spherical mirrors in the paraxial approximation."
+    dimension_check: "[L] = [L] / [1]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - calculo_focal
+      - diseno_espejo
+    interpretation_tags:
+      - tipo_espejo
+      - potencia_optica
+    domain_checks: []
+    coherence_checks:
+      - condition: "f == R / 2"
+        tolerance: 0.01
+        message:
+          es: "Verificar la relacion entre focal y radio."
+          en: "Verify the focal length-radius relation."
+    graph_implications:
+      es: "En el diagrama, el foco F se situa a la mitad de la distancia entre el vertice y el centro de curvatura C."
+      en: "In the diagram, the focus F lies halfway between the vertex and the centre of curvature C."
+    physical_meaning:
+      es: "La distancia focal de un espejo esferico es la mitad de su radio de curvatura."
+      en: "The focal length of a spherical mirror is half its radius of curvature."
+    result_semantics:
+      target: f
+      kind: scalar_signed
+      sign_meaning:
+        es: "Positivo: espejo concavo (foco real). Negativo: espejo convexo (foco virtual)."
+        en: "Positive: concave mirror (real focus). Negative: convex mirror (virtual focus)."
+      absolute_value_meaning:
+        es: "Distancia fisica entre vertice y foco."
+        en: "Physical distance between vertex and focus."
+    pedagogical_triggers:
+      - condition: "R > 0"
+        message:
+          es: "Radio positivo corresponde a espejo concavo."
+          en: "Positive radius corresponds to a concave mirror."
+      - condition: "R < 0"
+        message:
+          es: "Radio negativo corresponde a espejo convexo."
+          en: "Negative radius corresponds to a convex mirror."
+`;export{e as default};

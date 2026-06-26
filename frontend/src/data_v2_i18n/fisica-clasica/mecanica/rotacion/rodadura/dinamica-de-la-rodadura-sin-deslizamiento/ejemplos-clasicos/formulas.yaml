@@ -1,0 +1,193 @@
+﻿version: 1
+formulas:
+  - id: condicion_rodadura
+    title:
+      es: Condicion de rodadura pura
+      en: Pure rolling condition
+    equation: v = omega * R
+    latex: v = \omega R
+    rearrangements:
+      - target: v
+        equation: v = omega * R
+        latex: v = \omega R
+      - target: omega
+        equation: omega = v / R
+        latex: \omega = \frac{v}{R}
+      - target: R
+        equation: R = v / omega
+        latex: R = \frac{v}{\omega}
+    category: fundamental
+    relation_type: physical_law
+    physical_meaning:
+      es: Iguala el avance lineal con el avance periferico para contacto sin deslizamiento.
+      en: It equates linear advance with peripheral advance under no-slip contact.
+    constraints:
+      es: Contacto continuo, R positivo y superficie de referencia fija.
+      en: Continuous contact, positive R, and fixed reference surface.
+    validity:
+      es: Valida en rodadura pura o casi pura con deslizamiento despreciable.
+      en: Valid in pure or near-pure rolling with negligible slip.
+    dimension_check: '[L/T] = [T^-1] * [L]'
+    calculable: true
+    motivo_no_calculable: No aplica; formula calculable con datos suficientes.
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - aplicaciones.md
+    interpretation_tags:
+      - rolling_constraint
+      - kinematic_coupling
+    result_semantics:
+      target: omega
+      kind: scalar
+      sign_meaning:
+        es: El signo depende del convenio de ejes para avance y giro.
+        en: Sign depends on the chosen axis convention for translation and rotation.
+      absolute_value_meaning:
+        es: El modulo marca la intensidad del acoplamiento cinematico.
+        en: Magnitude indicates coupling intensity.
+    domain_checks:
+      - condition: R > 0
+        message:
+          es: El radio debe ser positivo para que la relacion sea fisicamente valida.
+          en: Radius must be positive for physical validity.
+    coherence_checks:
+      - check: abs(v - omega * R) <= 0.2
+        warning:
+          es: Si el residuo es alto, revisar si hay deslizamiento o error de unidades.
+          en: If residual is high, check slip or unit mismatch.
+    graph_implications:
+      - if: graph_available
+        then:
+          es: La curva v y la curva omega*R deben quedar proximas.
+          en: Curves v and omega*R should stay close.
+    pedagogical_triggers:
+      - condition: abs(v - omega * R) > 0.2
+        hint:
+          es: Revisa unidades de omega y confirma que R no sea diametro.
+          en: Recheck omega units and confirm R is radius, not diameter.
+
+  - id: residuo_rodadura
+    title:
+      es: Residuo de consistencia de rodadura
+      en: Rolling consistency residual
+    equation: delta = v - omega * R
+    latex: \Delta = v - \omega R
+    rearrangements:
+      - target: delta
+        equation: delta = v - omega * R
+        latex: \Delta = v - \omega R
+    category: diagnostic
+    relation_type: diagnostic
+    physical_meaning:
+      es: Mide desviacion respecto a la condicion ideal de no deslizamiento.
+      en: Measures deviation from the ideal no-slip condition.
+    constraints:
+      es: Las medidas de v, omega y R deben ser simultaneas y coherentes.
+      en: Measurements of v, omega, and R must be simultaneous and coherent.
+    validity:
+      es: Util para clasificar derrape, patinamiento y rodadura casi pura.
+      en: Useful to classify skidding, spin-out, and near-pure rolling.
+    dimension_check: '[L/T] = [L/T] - [T^-1] * [L]'
+    calculable: true
+    motivo_no_calculable: No aplica; formula calculable con datos suficientes.
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - aplicaciones.md
+    interpretation_tags:
+      - residual
+      - coherence_check
+    result_semantics:
+      target: delta
+      kind: scalar
+      sign_meaning:
+        es: El signo distingue deslizamiento por exceso o defecto de avance.
+        en: Sign distinguishes excess-advance vs deficit-advance slip.
+      absolute_value_meaning:
+        es: El modulo cuantifica cuan lejos esta el sistema de rodadura pura.
+        en: Magnitude quantifies distance from pure rolling.
+    domain_checks:
+      - condition: R > 0
+        message:
+          es: Sin radio positivo el diagnostico pierde sentido geometrico.
+          en: Without positive radius, geometric diagnosis loses meaning.
+    coherence_checks:
+      - check: abs(delta) <= 0.5
+        warning:
+          es: Si supera umbral, reportar regimen no ideal y revisar mediciones.
+          en: If threshold is exceeded, report non-ideal regime and inspect measurements.
+    graph_implications:
+      - if: graph_available
+        then:
+          es: Mostrar banda central de tolerancia alrededor de delta igual a cero.
+          en: Show central tolerance band around delta equals zero.
+    pedagogical_triggers:
+      - condition: abs(delta) > 0.5
+        hint:
+          es: Contrasta sensores lineales y angulares antes de interpretar causalidad.
+          en: Cross-check linear and angular sensors before causal interpretation.
+
+  - id: conversion_rpm_rad
+    title:
+      es: Conversion de rpm a radian por segundo
+      en: Conversion from rpm to radians per second
+    equation: omega = 2 * pi * n / 60
+    latex: \omega = \frac{2\pi n}{60}
+    rearrangements:
+      - target: omega
+        equation: omega = 2 * pi * n / 60
+        latex: \omega = \frac{2\pi n}{60}
+      - target: n
+        equation: n = 60 * omega / (2 * pi)
+        latex: n = \frac{60\omega}{2\pi}
+    category: auxiliary
+    relation_type: definition
+    physical_meaning:
+      es: Traduce una lectura instrumental de rpm a unidad SI de velocidad angular.
+      en: Translates rpm instrumentation data to SI angular velocity.
+    constraints:
+      es: n debe estar en revoluciones por minuto y omega en rad/s.
+      en: n must be in revolutions per minute and omega in rad/s.
+    validity:
+      es: Universal para conversion de frecuencia de giro.
+      en: Universal for rotational frequency conversion.
+    dimension_check: '[T^-1] = [1] * [T^-1]'
+    calculable: true
+    motivo_no_calculable: No aplica; formula calculable con datos suficientes.
+    used_in:
+      - teoria.md
+      - ejemplos.md
+      - aplicaciones.md
+    interpretation_tags:
+      - unit_conversion
+      - preprocessing
+    result_semantics:
+      target: omega
+      kind: scalar
+      sign_meaning:
+        es: Con n no negativa, omega se interpreta como modulo de giro.
+        en: With non-negative n, omega is interpreted as rotation magnitude.
+      absolute_value_meaning:
+        es: El modulo establece la escala angular para modelos de rodadura.
+        en: Magnitude sets angular scale for rolling models.
+    domain_checks:
+      - condition: n >= 0
+        message:
+          es: Usar n no negativa en este leaf para mantener convenio simple.
+          en: Use non-negative n in this leaf to keep a simple convention.
+    coherence_checks:
+      - check: omega >= 0
+        warning:
+          es: Si omega es negativa, revisar el convenio y el sentido declarado.
+          en: If omega is negative, review convention and declared direction.
+    graph_implications:
+      - if: graph_available
+        then:
+          es: Graficar conversion n a omega para detectar escalas incorrectas.
+          en: Plot n to omega conversion to detect wrong scales.
+    pedagogical_triggers:
+      - condition: n > 4000
+        hint:
+          es: Validar saturacion de sensor y revisar ruido en alta frecuencia.
+          en: Validate sensor saturation and high-frequency noise.

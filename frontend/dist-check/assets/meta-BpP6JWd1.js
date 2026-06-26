@@ -1,0 +1,77 @@
+const n=`id: aplicaciones-ultrasonidos-y-ensayos
+orden: 232450
+nombre:
+  es: Aplicaciones ultrasonidos y ensayos
+  en: Ultrasound and Testing Applications
+area: fisica-clasica
+bloque: ondas
+subbloque: ondas-mecanicas
+parent_id: ondas-en-solidos
+descripcion: Aplicaciones de ultrasonidos en ensayos no destructivos y diagnóstico físico.
+description_en: Ultrasound applications in non-destructive testing and physical diagnosis.
+ruta_relativa: fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/aplicaciones-ultrasonidos-y-ensayos
+type: leaf
+niveles:
+  es:
+  - ESO
+  - BACHILLERATO
+  - UNIVERSIDAD
+  - EXTRACURRICULAR
+  en:
+  - Secondary
+  - Upper Secondary
+  - University
+  - Extracurricular
+icon: 🛰
+graficos:
+- Coord
+- Svg
+physical_role:
+  es: concepto físico
+  en: physical concept
+dificultad: 4
+tiempo_estimado_min: 45
+representacion_dominante: Coord
+magnitud_dominante: v_us
+pregunta_fisica_central:
+  es: "¿Cómo se calcula la profundidad de un defecto a partir del tiempo de vuelo de un pulso ultrasónico?"
+  en: "How is the depth of a defect calculated from the time of flight of an ultrasonic pulse?"
+tags:
+  es:
+  - ultrasonidos
+  - ensayos no destructivos
+  - tiempo de vuelo
+  - impedancia acústica
+  - coeficiente de reflexion
+  en:
+  - ultrasonics
+  - non-destructive testing
+  - time of flight
+  - acoustic impedance
+  - reflection coefficient
+prerequisitos:
+- fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/reflexion-y-transmision-en-solidos
+- fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/impedancia-mecanica-en-solidos
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 4
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

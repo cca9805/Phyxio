@@ -1,0 +1,550 @@
+version: 5.0.0
+id: resistencias-en-serie
+leaf_id: resistencias-en-serie
+nombre:
+  es: Resistencias en serie
+  en: Resistors in Series
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: corriente-electrica
+  parent_id: circuitos-de-corriente-continua
+  ruta_relativa: fisica-clasica/electromagnetismo/corriente-electrica/circuitos-de-corriente-continua/resistencias-en-serie
+  orden: 293410
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - req_serie
+  - i_total
+  - caida_ohm
+  - divisor
+  - Req_formula
+  - Vi_formula
+  - I_formula
+  - Vt_formula
+  magnitudes:
+  - resistencia_equivalente
+  - resistencia_uno
+  - resistencia_dos
+  - resistencia_tres
+  - tension_total
+  - corriente
+  - caida_de_tension
+  - resistencia_generica
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: electromagnetismo
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: resistencia_equivalente
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  resistencia_equivalente:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de resistencia_equivalente
+      en: Result of resistencia_equivalente
+    summary_rules:
+    - id: req_summary
+      when: 'true'
+      status: info
+      text:
+        es: Al sumar resistencias en serie aumenta Req y, para la misma Vt, disminuye I; por eso baja la potencia global transferida
+          y se reduce la exigencia termica promedio del conjunto.
+        en: Summing series resistances increases Req and, for the same Vt, reduces I; therefore global transferred power drops
+          and average thermal stress on the chain decreases.
+    physical_reading_rules:
+    - id: req_physical
+      when: 'true'
+      status: info
+      text:
+        es: Un incremento de Req reduce I para la misma fuente, lo que limita potencia y calentamiento.
+        en: An increase in Req reduces I for the same source, limiting power and heating.
+    coherence_rules:
+    - id: req_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Req debe ser al menos tan grande como cualquiera de las resistencias individuales positivas.
+        en: Req must be at least as large as any positive individual resistor.
+    model_validity_rules:
+    - id: req_validity
+      when: 'true'
+      status: ok
+      text:
+        es: La suma simple es valida en resistores ohmicos lineales conectados en serie ideal.
+        en: Simple summation is valid for linear ohmic resistors connected in ideal series.
+    graph_rules:
+    - id: req_graph
+      when: 'true'
+      status: info
+      text:
+        es: En una grafica I contra Vt, mayor Req se refleja como menor pendiente.
+        en: In an I versus Vt graph, larger Req appears as a lower slope.
+    likely_errors:
+    - id: req_warn
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[resistencia_equivalente]] con una lectura aislada es un error frecuente: Error frecuente: aplicar
+          formula de paralelo y obtener Req menor que una resistencia individual.'
+        en: 'A common mistake is to interpret [[resistencia_equivalente]] in isolation: Common error: applying parallel formula
+          and getting Req smaller than an individual resistor.'
+    next_step_rules:
+    - id: req_next
+      when: 'true'
+      status: info
+      text:
+        es: Con Req calculada, estima I con la fuente real y verifica potencia por componente.
+        en: With Req computed, estimate I using the real source and verify component power.
+    physical_intuition:
+    - id: resistencia_equivalente_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[resistencia_equivalente]] describe el estado dinámico.
+        en: Intuitively, [[resistencia_equivalente]] describes the dynamic state.
+    limiting_cases:
+    - id: resistencia_equivalente_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[resistencia_equivalente]].
+        en: Check limiting cases of [[resistencia_equivalente]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  corriente:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de corriente
+      en: Result of corriente
+    summary_rules:
+    - id: i_summary
+      when: 'true'
+      status: info
+      text:
+        es: La corriente es comun en toda la serie y se determina por la razon Vt sobre Req.
+        en: Current is common throughout the series and is determined by Vt over Req.
+    physical_reading_rules:
+    - id: i_physical
+      when: 'true'
+      status: info
+      text:
+        es: Mayor corriente implica mayor tasa de disipacion en cada resistor de la cadena.
+        en: Higher current implies higher dissipation rate in each resistor of the chain.
+    coherence_rules:
+    - id: i_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Si I se calcula con Vt y Req, debe reproducir cada Vi al usar Vi igual a I por Ri.
+        en: If I is computed from Vt and Req, it must reproduce each Vi using Vi equals I times Ri.
+    model_validity_rules:
+    - id: i_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado es confiable en regimen estacionario y sin efectos de temperatura dominantes.
+        en: The result is reliable in steady state and without dominant temperature effects.
+    graph_rules:
+    - id: i_graph
+      when: 'true'
+      status: info
+      text:
+        es: La lectura de I en coord favorece comparar linealidad de la respuesta para distintos Vt.
+        en: Reading I in coord mode helps compare response linearity for different Vt values.
+    likely_errors:
+    - id: i_warn
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[corriente]] con una lectura aislada es un error frecuente: Error habitual: dividir Vt por una Ri
+          en lugar de por Req y sobreestimar la corriente.'
+        en: 'Common mistake: divide Vt by one Ri instead of Req and overestimate current.'
+    next_step_rules:
+    - id: i_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa la corriente obtenida para calcular caidas individuales y verificar KVL.
+        en: Use computed current to calculate individual drops and verify KVL.
+    physical_intuition:
+    - id: corriente_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[corriente]] describe el estado dinámico.
+        en: Intuitively, [[corriente]] describes the dynamic state.
+    limiting_cases:
+    - id: corriente_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[corriente]].
+        en: Check limiting cases of [[corriente]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  caida_de_tension:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de caida_de_tension
+      en: Result of caida_de_tension
+    summary_rules:
+    - id: vi_summary
+      when: 'true'
+      status: info
+      text:
+        es: Cada caida de tension es proporcional a la resistencia del elemento para una corriente comun.
+        en: Each voltage drop is proportional to element resistance for a common current.
+    physical_reading_rules:
+    - id: vi_physical
+      when: 'true'
+      status: info
+      text:
+        es: Una Vi grande identifica el componente que absorbe mayor fraccion energetica de la fuente.
+        en: A large Vi identifies the component absorbing the largest energy fraction from the source.
+    coherence_rules:
+    - id: vi_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: La suma de todas las Vi debe cerrar con Vt en magnitud y signo segun la convencion elegida.
+        en: Sum of all Vi values must close with Vt in magnitude and sign under the chosen convention.
+    model_validity_rules:
+    - id: vi_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El reparto proporcional es valido si no hay cargas adicionales conectadas al divisor.
+        en: Proportional distribution is valid if no extra loads are attached to the divider.
+    graph_rules:
+    - id: vi_graph
+      when: 'true'
+      status: info
+      text:
+        es: En una visualizacion de barras, la suma de segmentos Vi debe igualar la barra total Vt.
+        en: In a bar-style view, sum of Vi segments should equal total Vt bar.
+    likely_errors:
+    - id: vi_warn
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[caida_de_tension]] con una lectura aislada es un error frecuente: Error comun: asignar la misma Vi
+          a resistencias distintas cuando sus valores no son iguales.'
+        en: 'A common mistake is to interpret [[caida_de_tension]] in isolation: Common error: assigning equal Vi to different
+          resistors when their values are not equal.'
+    next_step_rules:
+    - id: vi_next
+      when: 'true'
+      status: info
+      text:
+        es: Compara Vi medidas con calculadas para detectar tolerancias o conexion incorrecta.
+        en: Compare measured and computed Vi to detect tolerances or incorrect wiring.
+    physical_intuition:
+    - id: caida_de_tension_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[caida_de_tension]] describe el estado dinámico.
+        en: Intuitively, [[caida_de_tension]] describes the dynamic state.
+    limiting_cases:
+    - id: caida_de_tension_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[caida_de_tension]].
+        en: Check limiting cases of [[caida_de_tension]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  resistencia_generica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de resistencia_generica
+      en: Result of resistencia_generica
+    summary_rules:
+    - id: ri_summary
+      when: 'true'
+      status: info
+      text:
+        es: Ri representa cualquier resistor individual y gobierna su peso en el divisor de tension.
+        en: Ri represents any individual resistor and governs its weight in voltage division.
+    physical_reading_rules:
+    - id: ri_physical
+      when: 'true'
+      status: info
+      text:
+        es: A mayor Ri, mayor caida local y menor margen para el resto de elementos con Vt fija.
+        en: Larger Ri means larger local drop and less remaining margin for other elements at fixed Vt.
+    coherence_rules:
+    - id: ri_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Ri debe mantenerse no negativa en el modelo pasivo para conservar coherencia fisica.
+        en: Ri must remain non-negative in passive model to preserve physical coherence.
+    model_validity_rules:
+    - id: ri_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Si el resistor cambia fuertemente con temperatura, la linealidad asumida puede degradarse.
+        en: If resistor varies strongly with temperature, assumed linearity may degrade.
+    graph_rules:
+    - id: ri_graph
+      when: 'true'
+      status: info
+      text:
+        es: Cambios de Ri desplazan la proporcion Vi sobre Vt en la lectura grafica del divisor.
+        en: Changes in Ri shift Vi over Vt proportion in divider graph reading.
+    likely_errors:
+    - id: ri_warn
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error tipico: confundir Ri con Req y aplicar mal la ecuacion local.'
+        en: 'A common mistake is to interpret [[resistencia_generica]] in isolation: Typical error: confusing Ri with Req
+          and misapplying local equation.'
+    next_step_rules:
+    - id: ri_next
+      when: 'true'
+      status: info
+      text:
+        es: Ajusta Ri para lograr la Vi objetivo y luego valida potencia maxima permitida.
+        en: Tune Ri to achieve target Vi, then validate maximum allowed power.
+    physical_intuition:
+    - id: resistencia_generica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[resistencia_generica]] describe el estado dinámico.
+        en: Intuitively, [[resistencia_generica]] describes the dynamic state.
+    limiting_cases:
+    - id: resistencia_generica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[resistencia_generica]].
+        en: Check limiting cases of [[resistencia_generica]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  tension_total:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de tension_total
+      en: Result of tension_total
+    summary_rules:
+    - id: vt_summary
+      when: 'true'
+      status: info
+      text:
+        es: La tension total de fuente fija el presupuesto energetico disponible para repartir entre las caidas de la malla
+          serie.
+        en: Total source voltage sets the available energy budget to be distributed among series-loop drops.
+    physical_reading_rules:
+    - id: vt_physical
+      when: 'true'
+      status: info
+      text:
+        es: Si Vt aumenta con resistencias fijas, aumenta la corriente comun y con ello la exigencia termica del conjunto.
+        en: If Vt increases with fixed resistances, common current rises and so does chain thermal stress.
+    coherence_rules:
+    - id: vt_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: La suma algebraica de las caidas debe reconstruir Vt bajo una sola convencion de signos.
+        en: Algebraic sum of drops must reconstruct Vt under a single sign convention.
+    model_validity_rules:
+    - id: vt_validity
+      when: 'true'
+      status: ok
+      text:
+        es: Este analisis supone fuente de tension estable; caidas internas de fuente degradan la prediccion ideal.
+        en: This analysis assumes a stable voltage source; internal source drops degrade ideal prediction.
+    graph_rules:
+    - id: vt_graph
+      when: 'true'
+      status: info
+      text:
+        es: En una lectura grafica de reparto, Vt aparece como la barra total que se descompone en segmentos Vi.
+        en: In a distribution graph, Vt appears as the total bar decomposed into Vi segments.
+    likely_errors:
+    - id: vt_warn
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[tension_total]] con una lectura aislada es un error frecuente: Error comun: mezclar Vt con una caida
+          local y perder el cierre de malla.'
+        en: 'A common mistake is to interpret [[tension_total]] in isolation: Common error: mixing Vt with a local drop and
+          breaking loop closure.'
+    next_step_rules:
+    - id: vt_next
+      when: 'true'
+      status: info
+      text:
+        es: Usa Vt medida para recalcular I y comparar con el valor esperado por diseno nominal.
+        en: Use measured Vt to recompute I and compare against nominal design expectation.
+    physical_intuition:
+    - id: tension_total_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[tension_total]] describe el estado dinámico.
+        en: Intuitively, [[tension_total]] describes the dynamic state.
+    limiting_cases:
+    - id: tension_total_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[tension_total]].
+        en: Check limiting cases of [[tension_total]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

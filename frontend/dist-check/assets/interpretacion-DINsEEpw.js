@@ -1,0 +1,459 @@
+const e=`version: "5.0"
+id: interp_calorimetria
+leaf_id: calorimetria
+
+nombre:
+  es: Interpretación de la calorimetría
+  en: Interpretation of calorimetry
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: calor-y-efectos-termicos
+  parent_id: calor-y-efectos-termicos
+  ruta_relativa: fisica-clasica/termodinamica/calor-y-efectos-termicos/calorimetria
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_blocks: 3
+    max_rules_per_block: 2
+
+dependencies:
+  formulas:
+    - principio_calorimetria
+    - calor_sensible_i
+    - temperatura_equilibrio_dos_cuerpos
+  magnitudes:
+    - T_eq
+    - Q_i
+    - m_i
+    - c_i
+    - DeltaT_i
+
+global_context:
+  physical_domain:
+    es: "Aplicación del principio de conservación de energía a sistemas calorimétricos aislados con transferencia de calor entre cuerpos a distinta temperatura."
+    en: "Application of the energy conservation principle to isolated calorimetric systems with heat transfer between bodies at different temperatures."
+  axis_convention:
+    es: "Q_i > 0 si el cuerpo absorbe calor (se calienta); Q_i < 0 si lo cede (se enfría). La suma de todos los Q_i debe ser cero."
+    en: "Q_i > 0 if the body absorbs heat (warms up); Q_i < 0 if it releases heat (cools down). The sum of all Q_i must be zero."
+  standard_assumptions:
+    - "Sistema térmicamente aislado del entorno"
+    - "Sin cambios de estado durante el proceso"
+    - "Calores específicos constantes en el rango de temperatura del proceso"
+    - "Todos los cuerpos alcanzan la misma temperatura de equilibrio final"
+  standard_warnings:
+    - "T_eq debe estar siempre entre las temperaturas iniciales mínima y máxima del sistema"
+    - "Verificar que la suma de todos los Q_i parciales es cero como autocomprobación"
+    - "Distinguir entre c (J/(kg·K)) y C_total (J/K) al calcular los calores parciales"
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  T_eq:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Temperatura final común de todos los cuerpos del sistema aislado; resultado del principio de calorimetría."
+      en: "Final common temperature of all bodies in the isolated system; result of the calorimetry principle."
+    summary_rules:
+      - id: T_eq_summary_interval_ok
+        when: "T_eq > T_min_inicial && T_eq < T_max_inicial"
+        status: ok
+        text:
+          es: "[[T_eq]] está correctamente comprendida entre las temperaturas iniciales del sistema, lo que confirma que el balance energético es físicamente coherente."
+          en: "[[T_eq]] correctly lies between the initial temperatures of the system, confirming that the energy balance is physically consistent."
+      - id: T_eq_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_eq]] es la temperatura final de equilibrio a la que convergen todos los cuerpos del sistema aislado. Los cuerpos más calientes se enfrían hasta [[T_eq]] y los más fríos se calientan hasta [[T_eq]]."
+          en: "[[T_eq]] is the final equilibrium temperature to which all bodies of the isolated system converge. Hotter bodies cool to [[T_eq]] and cooler bodies warm to [[T_eq]]."
+    physical_reading_rules:
+      - id: T_eq_reading_dominant_body
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_eq]] es la media ponderada de las temperaturas iniciales, donde el peso de cada cuerpo es su capacidad calorífica total [[m_i]] · [[c_i]]. El cuerpo con mayor capacidad calorífica total ejerce mayor influencia sobre [[T_eq]] y la acerca a su temperatura inicial."
+          en: "[[T_eq]] is the weighted average of the initial temperatures, where each body's weight is its total heat capacity [[m_i]] · [[c_i]]. The body with greater total heat capacity has more influence on [[T_eq]] and pulls it toward its initial temperature."
+    coherence_rules:
+      - id: T_eq_coherence_out_of_range
+        when: "T_eq <= T_min_inicial || T_eq >= T_max_inicial"
+        status: error
+        text:
+          es: "[[T_eq]] fuera del intervalo de temperaturas iniciales del sistema. Esto es físicamente imposible en un sistema aislado sin fuentes externas de calor. Revisar los signos de [[DeltaT_i]] y el planteamiento del balance."
+          en: "[[T_eq]] outside the interval of initial temperatures of the system. This is physically impossible in an isolated system without external heat sources. Check the signs of [[DeltaT_i]] and the balance setup."
+      - id: T_eq_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[T_eq]] está dentro del intervalo físicamente admisible. Como verificación adicional, calcular la suma de todos los [[Q_i]] parciales: debe ser cero."
+          en: "[[T_eq]] is within the physically admissible interval. As an additional check, compute the sum of all partial [[Q_i]]: it must be zero."
+    model_validity_rules:
+      - id: T_eq_validity_phase_change
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo es válido mientras ningún cuerpo cruce una temperatura de transición de fase en el camino hacia [[T_eq]]. Si algún cuerpo cambia de fase, el proceso debe dividirse en tramos y [[T_eq]] se determina por etapas."
+          en: "The model is valid as long as no body crosses a phase transition temperature on its way to [[T_eq]]. If any body changes phase, the process must be split into stages and [[T_eq]] is determined step by step."
+    graph_rules:
+      - id: T_eq_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica de temperatura frente al tiempo, [[T_eq]] es el valor asintótico horizontal al que convergen todas las curvas de temperatura de los cuerpos. En la gráfica Q vs [[DeltaT_i]], cada cuerpo aporta un punto sobre la recta de pendiente [[m_i]] · [[c_i]] de ese cuerpo."
+          en: "In the temperature vs. time graph, [[T_eq]] is the horizontal asymptotic value toward which all temperature curves of the bodies converge. In the Q vs [[DeltaT_i]] graph, each body contributes a point on the line of slope [[m_i]] · [[c_i]] for that body."
+    likely_errors:
+      - id: T_eq_error_arithmetic_mean
+        when: "true"
+        status: error
+        text:
+          es: "Error conceptual frecuente: confundir [[T_eq]] con una media aritmética simple. Esto ignora las capacidades caloríficas de los cuerpos y produce una temperatura físicamente incorrecta cuando las masas o los [[c_i]] son distintos."
+          en: "Common conceptual mistake: confuse [[T_eq]] with a simple arithmetic mean. This ignores the bodies' heat capacities and gives a physically incorrect temperature when masses or [[c_i]] values differ."
+    next_step_rules:
+      - id: T_eq_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[T_eq]] determinada, calcular los [[Q_i]] de cada cuerpo y verificar que su suma es cero. Si se busca el calor específico de un material desconocido, despejar [[c_i]] de la condición de equilibrio."
+          en: "With [[T_eq]] determined, compute the [[Q_i]] of each body and verify their sum is zero. If the specific heat capacity of an unknown material is sought, solve for [[c_i]] from the equilibrium condition."
+
+  Q_i:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "Calor intercambiado por un cuerpo individual del sistema; variable de proceso cuya suma debe ser cero en el sistema aislado."
+      en: "Heat exchanged by an individual body of the system; process variable whose sum must be zero in the isolated system."
+    summary_rules:
+      - id: Q_i_summary_positive
+        when: "Q_i > 0"
+        status: ok
+        text:
+          es: "[[Q_i]] positivo indica que este cuerpo absorbe calor del sistema: su temperatura inicial era inferior a [[T_eq]] y se ha calentado durante el proceso de equilibrio."
+          en: "Positive [[Q_i]] indicates this body absorbs heat from the system: its initial temperature was below [[T_eq]] and it has warmed up during the equilibration process."
+      - id: Q_i_summary_negative
+        when: "Q_i < 0"
+        status: ok
+        text:
+          es: "[[Q_i]] negativo indica que este cuerpo cede calor al sistema: su temperatura inicial era superior a [[T_eq]] y se ha enfriado durante el proceso de equilibrio."
+          en: "Negative [[Q_i]] indicates this body releases heat to the system: its initial temperature was above [[T_eq]] and it has cooled down during the equilibration process."
+      - id: Q_i_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_i]] es el calor intercambiado por este cuerpo durante el proceso calorimétrico. La suma de todos los calores parciales del sistema aislado debe ser exactamente cero."
+          en: "[[Q_i]] is the heat exchanged by this body during the calorimetric process. The sum of all partial heats in the isolated system must be exactly zero."
+    physical_reading_rules:
+      - id: Q_i_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor absoluto de [[Q_i]] mide la energía térmica que este cuerpo ha intercambiado. Los calores cedidos (negativos) financian exactamente los absorbidos (positivos). Esta es la manifestación del principio de conservación de energía en calorimetría."
+          en: "The absolute value of [[Q_i]] measures the thermal energy this body has exchanged. Heats released (negative) exactly fund those absorbed (positive). This is the manifestation of the energy conservation principle in calorimetry."
+    coherence_rules:
+      - id: Q_i_coherence_sum_nonzero
+        when: "abs(sum_Qi) > 0.01 * abs(Q_max)"
+        status: error
+        text:
+          es: "La suma de todos los [[Q_i]] no es cero dentro de la tolerancia esperada. Revisar si se ha omitido algún cuerpo del sistema (por ejemplo, el propio calorímetro) o si hay un error de signo en alguno de los calores."
+          en: "The sum of all [[Q_i]] is not zero within the expected tolerance. Check whether any body has been omitted from the system (for example, the calorimeter itself) or whether there is a sign error in any of the heats."
+      - id: Q_i_coherence_sign_DeltaT
+        when: "Q_i > 0 && DeltaT_i < 0"
+        status: error
+        text:
+          es: "Incoherencia: [[Q_i]] positivo con [[DeltaT_i]] negativo para el mismo cuerpo. Un cuerpo que se enfría debe ceder calor ([[Q_i]] negativo). Revisar el signo de [[DeltaT_i]]."
+          en: "Inconsistency: positive [[Q_i]] with negative [[DeltaT_i]] for the same body. A body that cools down must release heat (negative [[Q_i]]). Check the sign of [[DeltaT_i]]."
+      - id: Q_i_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Los signos de [[Q_i]] son coherentes con los de [[DeltaT_i]] del cuerpo correspondiente."
+          en: "The signs of [[Q_i]] are consistent with those of [[DeltaT_i]] for the corresponding body."
+    model_validity_rules:
+      - id: Q_i_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_i]] es válido como calor sensible mientras el cuerpo no cruce ninguna transición de fase entre su temperatura inicial y [[T_eq]]. Si la temperatura inicial o [[T_eq]] coincide con el punto de fusión o ebullición del material, debe incluirse el calor latente correspondiente."
+          en: "[[Q_i]] is valid as sensible heat as long as the body does not cross any phase transition between its initial temperature and [[T_eq]]. If the initial temperature or [[T_eq]] coincides with the melting or boiling point of the material, the corresponding latent heat must be included."
+    graph_rules:
+      - id: Q_i_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica [[Q_i]] vs [[DeltaT_i]], cada cuerpo del sistema aporta un punto. Todos los puntos deben estar sobre rectas que pasan por el origen, con pendiente igual a la capacidad calorífica total [[m_i]] · [[c_i]] de cada cuerpo."
+          en: "In the [[Q_i]] vs [[DeltaT_i]] graph, each body of the system contributes a point. All points must lie on lines passing through the origin, with slope equal to the total heat capacity [[m_i]] · [[c_i]] of each body."
+    likely_errors:
+      - id: Q_i_error_all_positive
+        when: "true"
+        status: ok
+        text:
+          es: "Error muy frecuente: asignar [[Q_i]] positivo a todos los cuerpos, incluyendo los que se enfrían. Si todos los calores son positivos, la suma no puede ser cero y el principio de calorimetría no se satisface. Los cuerpos que se enfrían tienen [[Q_i]] negativo."
+          en: "Very common error: assigning positive [[Q_i]] to all bodies, including those that cool down. If all heats are positive, their sum cannot be zero and the calorimetry principle is not satisfied. Bodies that cool down have negative [[Q_i]]."
+    next_step_rules:
+      - id: Q_i_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con todos los [[Q_i]] calculados, verificar que su suma es cero. Si el enunciado pregunta por el calor específico de un material, igualar el [[Q_i]] del material desconocido al opuesto de la suma de los demás y despejar [[c_i]]."
+          en: "With all [[Q_i]] computed, verify their sum is zero. If the problem asks for the specific heat capacity of a material, equate the [[Q_i]] of the unknown material to the negative of the sum of the others and solve for [[c_i]]."
+
+  c_i:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Calor específico del material de uno de los cuerpos del sistema; puede ser dato o incógnita en problemas de calorimetría inversa."
+      en: "Specific heat capacity of the material of one of the system's bodies; can be given data or unknown in inverse calorimetry problems."
+    summary_rules:
+      - id: c_i_summary_water_range
+        when: "c_i > 4000 && c_i < 4400"
+        status: ok
+        text:
+          es: "[[c_i]] está en el rango del agua líquida (4186 J/(kg·K)). Si el material es agua, el resultado es consistente con el valor tabulado."
+          en: "[[c_i]] is in the range of liquid water (4186 J/(kg·K)). If the material is water, the result is consistent with the tabulated value."
+      - id: c_i_summary_metal_range
+        when: "c_i > 100 && c_i < 1000"
+        status: ok
+        text:
+          es: "[[c_i]] está en el rango típico de los metales (100–1000 J/(kg·K)). Comparar con la tabla de calores específicos para identificar el material."
+          en: "[[c_i]] is in the typical range for metals (100–1000 J/(kg·K)). Compare with the specific heat capacity table to identify the material."
+      - id: c_i_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[c_i]] determina la influencia de este cuerpo sobre la temperatura de equilibrio a través de su capacidad calorífica total [[m_i]] · [[c_i]]. Cuanto mayor [[c_i]], más energía necesita este cuerpo para cambiar de temperatura."
+          en: "[[c_i]] determines this body's influence on the equilibrium temperature through its total heat capacity [[m_i]] · [[c_i]]. The larger [[c_i]], the more energy this body needs to change temperature."
+    physical_reading_rules:
+      - id: c_i_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "En problemas de calorimetría inversa, [[c_i]] es la incógnita que se determina igualando el calor cedido por el material desconocido al calor absorbido por el agua del calorímetro. La precisión del resultado depende de la exactitud de la medida de [[T_eq]]."
+          en: "In inverse calorimetry problems, [[c_i]] is the unknown determined by equating the heat released by the unknown material to the heat absorbed by the calorimeter water. The precision of the result depends on the accuracy of the [[T_eq]] measurement."
+    coherence_rules:
+      - id: c_i_coherence_negative
+        when: "c_i < 0"
+        status: error
+        text:
+          es: "[[c_i]] negativo es físicamente imposible para materiales estables. Indica un error de signo: revisar el orden de la resta en [[DeltaT_i]] del cuerpo correspondiente."
+          en: "Negative [[c_i]] is physically impossible for stable materials. It indicates a sign error: check the subtraction order in [[DeltaT_i]] for the corresponding body."
+      - id: c_i_coherence_very_large
+        when: "c_i > 15000"
+        status: warning
+        text:
+          es: "[[c_i]] superior a 15 000 J/(kg·K) es inusual para materiales macroscópicos. Verificar que [[m_i]] está en kg y no en gramos."
+          en: "[[c_i]] above 15 000 J/(kg·K) is unusual for macroscopic materials. Verify that [[m_i]] is in kg and not grams."
+      - id: c_i_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[c_i]] es positivo y dentro del rango físicamente razonable para materiales comunes."
+          en: "[[c_i]] is positive and within the physically reasonable range for common materials."
+    model_validity_rules:
+      - id: c_i_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[c_i]] determinado por calorimetría es un valor promedio en el rango de temperatura del experimento. Para rangos superiores a 200 K, verificar si [[c_i]] varía significativamente con la temperatura para ese material."
+          en: "[[c_i]] determined by calorimetry is an average value over the experimental temperature range. For ranges above 200 K, check whether [[c_i]] varies significantly with temperature for that material."
+    graph_rules:
+      - id: c_i_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica [[Q_i]] vs [[DeltaT_i]], [[c_i]] es la pendiente de la recta del cuerpo i dividida por [[m_i]]. En la gráfica [[C_total]] vs [[m_i]], [[c_i]] es la pendiente de la recta que pasa por el origen."
+          en: "In the [[Q_i]] vs [[DeltaT_i]] graph, [[c_i]] is the slope of body i's line divided by [[m_i]]. In the [[C_total]] vs [[m_i]] graph, [[c_i]] is the slope of the line passing through the origin."
+    likely_errors:
+      - id: c_i_error_units
+        when: "c_i > 10000 && m_i < 0.1"
+        status: warning
+        text:
+          es: "Posible error de unidades: [[m_i]] podría estar en gramos en lugar de kilogramos, inflando [[c_i]] en un factor de 1000."
+          en: "Possible unit error: [[m_i]] may be in grams instead of kilograms, inflating [[c_i]] by a factor of 1000."
+      - id: c_i_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Error frecuente en calorimetría inversa: plantear Q del material desconocido con signo positivo cuando el material cede calor (se enfría). El calor cedido tiene signo negativo; igualarlo con signo negativo al calor absorbido por el agua es la condición correcta."
+          en: "Common error in inverse calorimetry: setting the Q of the unknown material with positive sign when it releases heat (cools down). Heat released has negative sign; equating it with negative sign to the heat absorbed by the water is the correct condition."
+    next_step_rules:
+      - id: c_i_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[c_i]] determinado, compararlo con la tabla de calores específicos de referencia para identificar el material. Si hay una discrepancia mayor al 10 % con el valor tabulado, verificar la corrección por el calor del propio calorímetro."
+          en: "With [[c_i]] determined, compare it with the reference specific heat capacity table to identify the material. If there is more than 10 % discrepancy with the tabulated value, check the correction for the heat of the calorimeter itself."
+
+  m_i:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Masa de uno de los cuerpos del sistema calorimétrico; puede ser dato o incógnita según el tipo de problema."
+      en: "Mass of one of the bodies in the calorimetric system; can be given data or unknown depending on the problem type."
+    summary_rules:
+      - id: m_i_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[m_i]] determina la capacidad calorífica total de este cuerpo junto con [[c_i]]. Un cuerpo más masivo influye más en la temperatura de equilibrio si [[c_i]] es igual al del otro cuerpo."
+          en: "[[m_i]] determines the total heat capacity of this body together with [[c_i]]. A more massive body has greater influence on the equilibrium temperature if [[c_i]] is equal to the other body's."
+    physical_reading_rules:
+      - id: m_i_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "El peso de [[m_i]] en el equilibrio térmico es proporcional al producto [[m_i]] · [[c_i]]. Aumentar [[m_i]] acerca [[T_eq]] a la temperatura inicial de ese cuerpo, al aumentar su capacidad calorífica total relativa al resto del sistema."
+          en: "The weight of [[m_i]] in thermal equilibrium is proportional to the product [[m_i]] · [[c_i]]. Increasing [[m_i]] pulls [[T_eq]] toward this body's initial temperature, as it increases its total heat capacity relative to the rest of the system."
+    coherence_rules:
+      - id: m_i_coherence_positive
+        when: "m_i <= 0"
+        status: error
+        text:
+          es: "[[m_i]] debe ser estrictamente positiva. Un valor nulo o negativo no tiene sentido físico en el sistema calorimétrico."
+          en: "[[m_i]] must be strictly positive. A zero or negative value has no physical meaning in the calorimetric system."
+      - id: m_i_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[m_i]] es positiva y coherente con el sistema descrito."
+          en: "[[m_i]] is positive and consistent with the described system."
+    model_validity_rules:
+      - id: m_i_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume [[m_i]] constante durante el proceso. En sistemas con evaporación parcial o condensación, la masa puede variar y el modelo requiere corrección para cada etapa."
+          en: "The model assumes constant [[m_i]] during the process. In systems with partial evaporation or condensation, mass can change and the model requires correction for each stage."
+    graph_rules:
+      - id: m_i_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica [[T_eq]] vs [[m_i]] (manteniendo el resto de parámetros fijos), [[T_eq]] varía entre las temperaturas iniciales de los dos cuerpos al variar [[m_i]] desde cero hasta infinito, describiendo una función monótona."
+          en: "In the [[T_eq]] vs [[m_i]] graph (with all other parameters fixed), [[T_eq]] varies between the initial temperatures of the two bodies as [[m_i]] varies from zero to infinity, describing a monotone function."
+    likely_errors:
+      - id: m_i_error_grams
+        when: "m_i < 0.01"
+        status: warning
+        text:
+          es: "[[m_i]] muy pequeña. Verificar si el valor está en gramos en lugar de kilogramos. Convertir dividiendo entre 1000."
+          en: "Very small [[m_i]]. Check whether the value is in grams instead of kilograms. Convert by dividing by 1000."
+      - id: m_i_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Error frecuente: introducir [[m_i]] en gramos cuando [[c_i]] está en J/(kg·K), obteniendo calores parciales mil veces menores a los reales y rompiendo la condición de suma cero."
+          en: "Common error: entering [[m_i]] in grams when [[c_i]] is in J/(kg·K), giving partial heats a thousand times smaller than correct and breaking the zero-sum condition."
+    next_step_rules:
+      - id: m_i_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[m_i]] determinada y los calores específicos conocidos, calcular la capacidad calorífica total [[m_i]] · [[c_i]] de este cuerpo y comparar con la de los demás para estimar qué cuerpo dominará el equilibrio térmico."
+          en: "With [[m_i]] determined and specific heat capacities known, compute the total heat capacity [[m_i]] · [[c_i]] of this body and compare with the others to estimate which body will dominate the thermal equilibrium."
+
+cross_checks:
+  - id: sum_Qi_zero
+    check: "La suma de todos los Q_i del sistema debe ser cero con la T_eq calculada"
+    action: "Si la suma no es cero, verificar si se omitió el calorímetro, si hay error de signo en algún DeltaT_i, o si hay un cambio de fase no contemplado"
+  - id: T_eq_in_interval
+    check: "T_eq debe estar estrictamente entre T_min_inicial y T_max_inicial de los cuerpos del sistema"
+    action: "Si T_eq está fuera del intervalo, el planteamiento tiene un error: revisar signos y que todos los cuerpos están incluidos"
+
+error_patterns:
+  - id: all_Q_positive
+    description:
+      es: "Todos los calores Q_i son positivos, incluyendo los de los cuerpos que se enfrían."
+      en: "All heats Q_i are positive, including those of the bodies that cool down."
+  - id: T_eq_arithmetic_mean
+    description:
+      es: "T_eq calculada como media aritmética simple, ignorando las capacidades caloríficas."
+      en: "T_eq computed as simple arithmetic mean, ignoring heat capacities."
+  - id: calorimeter_omitted
+    description:
+      es: "Se omite el calor del propio calorímetro, produciendo un T_eq que no satisface exactamente la suma cero."
+      en: "The heat of the calorimeter itself is omitted, producing a T_eq that does not exactly satisfy the zero sum."
+
+graph_binding:
+  tipo: Coord
+  eje_x: DeltaT_i
+  eje_y: Q_i
+  magnitud_estrella: T_eq
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+      - summary
+      - likely_errors
+  extended_mode:
+    show_all: true
+`;export{e as default};

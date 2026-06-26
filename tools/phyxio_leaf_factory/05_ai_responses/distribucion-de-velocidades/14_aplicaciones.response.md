@@ -1,0 +1,42 @@
+# ------------------------------------------------------------
+# Phyxio Leaf Factory | AI Markdown Response
+# ------------------------------------------------------------
+# Leaf ID: distribucion-de-velocidades
+# Target response file: aplicaciones.md
+#
+# Pega aquí la respuesta markdown devuelta por la IA.
+# No pegues explicaciones, solo el contenido markdown válido.
+# ------------------------------------------------------------
+# PENDING_AI_RESPONSE
+
+# Aplicaciones
+## 1. Sensores de gases en cámaras de vacío
+Variable dominante: [[probabilidad_intervalo]]
+Límite de validez: gas diluido en equilibrio, con [[temperatura_absoluta]] uniforme y sin haces moleculares seleccionados
+
+En una cámara de vacío, un detector puede responder solo a moléculas cuya [[velocidad]] cae entre una [[velocidad_minima]] y una [[velocidad_maxima]]. La distribución de Maxwell-Boltzmann permite predecir qué fracción del gas entra en esa ventana. Lo que se mide no es la altura aislada de [[densidad_probabilidad_velocidad]], sino el área que produce [[probabilidad_intervalo]]. Si se calienta el gas, la curva se desplaza y se ensancha, por lo que la señal del detector puede aumentar o disminuir según la posición de la ventana. El diseño del sensor debe comparar su rango de sensibilidad con [[velocidad_mas_probable]], [[velocidad_media]] y [[velocidad_rms]]. En gases más pesados, la misma [[temperatura_absoluta]] produce velocidades menores por la mayor [[masa_particula]]. La lectura permite ajustar presión, tiempo de exposición y sensibilidad sin suponer que todas las moléculas llegan con la misma rapidez. También permite detectar si la cámara está demasiado caliente para una ventana instrumental estrecha.
+
+## 2. Difusión de gases ligeros y pesados
+Variable dominante: [[velocidad_media]]
+Límite de validez: mezcla ideal sin reacciones y con choques suficientes para mantener equilibrio térmico
+
+La rapidez con que un gas se dispersa en otro depende de la población de [[velocidad]] molecular. A igual [[temperatura_absoluta]], un gas ligero tiene mayor [[velocidad_media]] que uno pesado porque su [[masa_particula]] es menor. Esto ayuda a explicar por qué helio o hidrógeno se difunden con mayor rapidez que gases pesados. La distribución completa importa: la cola rápida contribuye a que algunas moléculas recorran distancias mayores entre choques. La predicción es estadística, no una trayectoria individual. En una aplicación real, se compara la escala de [[velocidad_media]] con el tiempo entre colisiones y con el tamaño del recipiente. Si hay corrientes macroscópicas, gradientes fuertes o reacciones, la distribución térmica ya no basta por sí sola. En un laboratorio, esta comparación ayuda a separar difusión térmica de transporte producido por ventiladores, fugas o convección. La distribución funciona como referencia limpia antes de añadir geometría o gradientes.
+
+## 3. Calibración térmica mediante velocidad molecular
+Variable dominante: [[temperatura_absoluta]]
+Límite de validez: régimen clásico no relativista, con [[velocidad_rms]] mucho menor que la velocidad de la luz
+
+La distribución de velocidades puede usarse de forma inversa: al medir la forma de [[densidad_probabilidad_velocidad]], se estima la [[temperatura_absoluta]] del gas. Si la curva se ensancha y el máximo se mueve a mayor [[velocidad]], la muestra está más caliente. Las escalas [[velocidad_mas_probable]], [[velocidad_media]] y [[velocidad_rms]] proporcionan referencias complementarias. La [[energia_cinetica_media]] conecta esa lectura con la energía microscópica mediante [[constante_boltzmann]]. Esta aplicación es útil cuando la temperatura de una muestra gaseosa debe inferirse sin tocarla directamente. La validez exige que el gas esté en equilibrio; una distribución deformada por expansión o campos externos puede imitar una temperatura aparente que no corresponde a un estado térmico real. Por eso conviene comprobar que las velocidades medidas forman una curva suave y compatible con una sola población molecular. Si no ocurre, la calibración mide una mezcla de procesos.
+
+## 4. Separación molecular por ventanas de velocidad
+Variable dominante: [[velocidad_minima]]
+Límite de validez: intervalo estrecho comparado con la anchura global, sin alterar significativamente la distribución original
+
+Algunos dispositivos seleccionan moléculas dentro de un rango de [[velocidad]], por ejemplo para crear haces con energía controlada. Maxwell-Boltzmann permite estimar qué proporción de moléculas atraviesa una ventana definida por [[velocidad_minima]] y [[velocidad_maxima]]. Si la ventana está cerca de [[velocidad_mas_probable]], el flujo seleccionado será mayor. Si se sitúa en la cola alta, el flujo será pequeño pero más energético. La [[probabilidad_intervalo]] predice la fracción disponible antes de aplicar detalles geométricos del aparato. Cambiar [[temperatura_absoluta]] desplaza la curva y modifica el rendimiento de la selección. La aplicación falla si el propio dispositivo altera mucho la distribución mediante choques, campos o calentamiento local. En ese caso, la muestra seleccionada ya no representa la distribución térmica original, sino una distribución filtrada por el instrumento. La [[densidad_probabilidad_velocidad]] inicial sirve entonces como línea base para cuantificar la pérdida.
+
+## 5. Interpretación de energía térmica en gases ideales
+Variable dominante: [[energia_cinetica_media]]
+Límite de validez: gas monoatómico o traslación molecular dominante, sin excitaciones internas que absorban energía térmica principal
+
+La distribución de velocidades proporciona una lectura microscópica de la energía térmica. Aunque la [[velocidad]] de cada molécula varía, la [[energia_cinetica_media]] queda fijada por la [[temperatura_absoluta]] en el modelo ideal. La [[velocidad_rms]] es especialmente útil porque conecta el promedio cuadrático de la rapidez con la energía cinética. Esta aplicación ayuda a interpretar presión, choques contra paredes y transferencia de energía. Si se duplica la escala térmica, aumentan las velocidades características, pero no todas las moléculas cambian de la misma manera; cambia la forma completa de [[densidad_probabilidad_velocidad]]. El límite aparece si la energía se almacena de forma importante en rotaciones, vibraciones, ionización o interacciones, porque entonces el modelo traslacional simple deja de capturar toda la física. Aun así, como primera lectura, la curva de velocidades ofrece una conexión muy clara entre temperatura, movimiento y energía microscópica. Esta conexión ayuda a interpretar presión y transferencia térmica con una misma escala.
+

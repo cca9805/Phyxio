@@ -1,0 +1,74 @@
+const e=`id: formulacion-de-clausius
+nombre:
+  es: Formulacion de clausius
+  en: Clausius Statement
+area: fisica-clasica
+bloque: termodinamica
+subbloque: entropia-y-segunda-ley
+parent_id: segunda-ley-de-la-termodinamica
+ruta_relativa: fisica-clasica/termodinamica/entropia-y-segunda-ley/segunda-ley-de-la-termodinamica/formulacion-de-clausius
+orden: 255120
+type: leaf
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+icon: 💪
+descripcion: Enunciado de Clausius sobre el flujo espontaneo del calor y la irreversibilidad termica.
+description_en: Clausius statement on spontaneous heat flow and thermal irreversibility.
+tags:
+  es:
+    - termodinamica
+    - segunda ley
+    - clausius
+    - calor
+    - irreversibilidad
+  en:
+    - thermodynamics
+    - second law
+    - clausius
+    - heat
+    - irreversibility
+prerequisitos:
+  - fisica-clasica/termodinamica/principios-basicos/temperatura-y-equilibrio-termico
+  - fisica-clasica/termodinamica/principios-basicos/calor-y-trabajo
+graficos:
+  - Coord
+physical_role:
+  es: ley física
+  en: physical law
+dificultad: 3
+tiempo_estimado_min: 25
+pregunta_fisica_central:
+  es: ¿Por que el calor fluye espontaneamente de lo caliente a lo frio y nunca al reves sin trabajo externo?
+  en: Why does heat spontaneously flow from hot to cold and never the reverse without external work?
+representacion_dominante: Coord
+magnitud_dominante: Q
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion fisica
+      en: Physical interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

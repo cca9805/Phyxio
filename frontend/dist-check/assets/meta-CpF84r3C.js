@@ -1,0 +1,92 @@
+const n=`id: naturaleza-del-sonido
+
+nombre:
+  es: Naturaleza del sonido
+  en: Nature of Sound
+
+area: fisica-clasica
+bloque: ondas
+subbloque: sonido
+parent_id: sonido
+ruta_relativa: fisica-clasica/ondas/sonido/naturaleza-del-sonido
+orden: 235100
+type: leaf
+
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+    - UNIVERSIDAD
+    - EXTRACURRICULAR
+  en:
+    - Secondary
+    - Upper Secondary
+    - University
+    - Extracurricular
+
+icon: 📘
+
+descripcion: "Onda mecánica longitudinal de presión: qué es, cómo se propaga y qué la caracteriza."
+description_en: "Mechanical longitudinal pressure wave: what it is, how it propagates, and what characterises it."
+
+tags:
+  es:
+    - sonido
+    - onda mecánica
+    - presión acústica
+    - longitudinal
+    - propagación
+    - vibración
+  en:
+    - sound
+    - mechanical wave
+    - acoustic pressure
+    - longitudinal
+    - propagation
+    - vibration
+
+prerequisitos:
+  - fisica-clasica/ondas/fundamentos/concepto-de-onda
+  - fisica-clasica/ondas/fundamentos/magnitudes-ondulatorias/frecuencia-y-periodo
+
+graficos:
+  - Coord
+  - Svg
+
+physical_role:
+  es: concepto físico
+  en: physical concept
+
+dificultad: 2
+tiempo_estimado_min: 35
+
+representacion_dominante: Coord
+magnitud_dominante: p_ac
+
+pregunta_fisica_central:
+  es: "¿Cómo se propaga el sonido como presión acústica longitudinal en un medio material?"
+  en: "How does sound propagate as longitudinal acoustic pressure in a material medium?"
+
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

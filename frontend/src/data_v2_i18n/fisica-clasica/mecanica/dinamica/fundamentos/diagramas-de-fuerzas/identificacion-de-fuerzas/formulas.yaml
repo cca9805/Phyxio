@@ -1,0 +1,166 @@
+version: 1
+formulas:
+- id: weight_definition
+  title:
+    es: Definición del peso
+    en: Definition of weight
+  equation: P = m*g
+  latex: P = m g
+  rearrangements:
+  - target: P
+    equation: P = m*g
+    latex: P = m g
+    constraints: []
+  - target: m
+    equation: m = P/g
+    latex: m = \frac{P}{g}
+    constraints: []
+  - target: g
+    equation: g = P/m
+    latex: g = \frac{P}{m}
+    constraints: []
+  category: force_law
+  relation_type: definition
+  physical_meaning:
+    es: Relaciona el módulo del peso con la masa del cuerpo y la intensidad del campo
+      gravitatorio.
+    en: Relates the magnitude of weight to the body's mass and the gravitational field
+      strength.
+  constraints:
+  - Classical Newtonian mechanics
+  - Constant gravitational field
+  validity:
+    es: Válido en entornos gravitatorios constantes (como la superficie terrestre).
+    en: Valid in constant gravitational environments (such as near Earth's surface).
+  dimension_check: 'LHS: [N] = [MLT^-2]; RHS: [M][LT^-2] = [MLT^-2]. Consistent.'
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - theory
+  - examples
+  - interpretation
+  interpretation_tags:
+  - real_force
+  - gravity
+  result_semantics:
+    target: P
+    meaning: Resulta util para interpretar P en el contexto del leaf.
+  domain_checks:
+  - expr: m > 0
+    message:
+      es: La masa debe ser positiva.
+      en: Mass must be positive.
+  - expr: g > 0
+    message:
+      es: La gravedad debe ser positiva.
+      en: Gravity must be positive.
+  coherence_checks:
+  - expr: P >= 0
+    message:
+      es: El peso no puede ser negativo.
+      en: Weight cannot be negative.
+  graph_implications:
+  - weight_vector_length
+  pedagogical_triggers:
+  - always_include_weight
+- id: friction_limit_static
+  title:
+    es: Límite del rozamiento estático
+    en: Static friction limit
+  equation: f_s <= mu_s*N
+  latex: f_s \le \mu_s N
+  rearrangements:
+  - target: f_s
+    equation: f_s <= mu_s*N
+    latex: f_s \le \mu_s N
+    constraints: []
+  category: force_law
+  relation_type: constraint
+  physical_meaning:
+    es: Expresa que el rozamiento estático se ajusta hasta un máximo antes del deslizamiento.
+    en: States that static friction adjusts up to a maximum before slipping occurs.
+  constraints:
+  - Dry contact surfaces
+  - Static regime (no relative motion)
+  validity:
+    es: Válido para superficies en contacto sin deslizamiento relativo.
+    en: Valid for surfaces in contact without relative slipping.
+  dimension_check: '[N] <= [1][N]. Consistent.'
+  calculable: false
+  motivo_no_calculable:
+    es: Es una desigualdad; el valor exacto de f_s depende del balance de otras fuerzas.
+    en: It is an inequality; the exact value of f_s depends on the balance of other
+      forces.
+  used_in:
+  - theory
+  - examples
+  - interpretation
+  interpretation_tags:
+  - conditional_force
+  - threshold
+  result_semantics:
+    target: f_s
+    meaning: Resulta util para interpretar f_s en el contexto del leaf.
+  domain_checks:
+  - expr: mu_s >= 0
+    message:
+      es: El coeficiente de rozamiento no puede ser negativo.
+      en: The friction coefficient cannot be negative.
+  - expr: N >= 0
+    message:
+      es: La normal debe ser no negativa.
+      en: Normal force must be non-negative.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - friction_vector_limit
+  pedagogical_triggers:
+  - check_contact_existence
+- id: force_existence_logic
+  title:
+    es: Lógica de existencia de fuerzas de contacto
+    en: Contact force existence logic
+  equation: (system_contact == 0) -> (N == 0 && f == 0)
+  latex: c = 0 \implies N = 0, f = 0
+  rearrangements: []
+  category: logic_law
+  relation_type: constraint
+  physical_meaning:
+    es: Las fuerzas de contacto solo pueden existir si el estado de contacto es activo.
+    en: Contact forces can only exist if the contact state is active.
+  constraints:
+  - Classical contact mechanics
+  validity:
+    es: Siempre válido para modelos de contacto puntual o superficial simple.
+    en: Always valid for point or simple surface contact models.
+  dimension_check: Logical condition. No units.
+  calculable: false
+  motivo_no_calculable:
+    es: Es una regla lógica de validación de modelo, no una ecuación de cálculo.
+    en: It is a logical model validation rule, not a calculation equation.
+  used_in:
+  - interpretation
+  - model_error_detection
+  interpretation_tags:
+  - model_integrity
+  - contact_state
+  result_semantics:
+    target: system_contact
+    meaning: Resulta util para interpretar system_contact en el contexto del leaf.
+  domain_checks:
+  - expr: system_contact == 0 || system_contact == 1
+    message:
+      es: El estado de contacto debe ser 0 o 1.
+      en: Contact state must be 0 or 1.
+  coherence_checks:
+  - expr: 'true'
+    message:
+      es: Revisa que el resultado tenga sentido fisico.
+      en: Check that the result makes physical sense.
+  graph_implications:
+  - visibility_of_contact_vectors
+  pedagogical_triggers:
+  - avoid_invented_forces

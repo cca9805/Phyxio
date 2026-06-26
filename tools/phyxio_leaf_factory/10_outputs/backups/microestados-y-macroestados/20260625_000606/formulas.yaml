@@ -1,0 +1,310 @@
+version: 5.0.0
+leaf: microestados-y-macroestados
+ui:
+  default_formula: probabilidad_macroestado_multiplicidad
+formulas:
+- id: conteo_microestados_macroestado
+  title:
+    es: Conteo de microestados por macroestado
+    en: Microstate count per macrostate
+  equation: Omega_M = count(i in M)
+  latex: \Omega_M = \#\{i\in M\}
+  rearrangements:
+  - target: numero_microestados
+    equation: numero_microestados = sum(Omega_M)
+    latex: \Omega=\sum_M \Omega_M
+  category: counting
+  relation_type: definition
+  physical_meaning:
+    es: Cuenta cuántas configuraciones microscópicas pertenecen al mismo macroestado observable.
+    en: Counts how many microscopic configurations belong to the same observable macrostate.
+  constraints:
+    es: Solo compara microestados accesibles bajo las mismas restricciones macroscópicas.
+    en: Only compares accessible microstates under the same macroscopic constraints.
+  validity:
+    es: Válida cuando los microestados se han definido sin solapamientos y el macroestado está bien especificado.
+    en: Valid when microstates are defined without overlap and the macrostate is well specified.
+  dimension_check: ok
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - microestado
+  - macroestado
+  - multiplicidad_macroestado
+  interpretation_tags:
+  - multiplicity
+  - macrostate
+  - microstate
+  result_semantics:
+    target: multiplicidad_macroestado
+    kind: scalar
+    sign_meaning:
+      es: Debe ser no negativa; un valor negativo no tiene sentido estadístico.
+      en: It must be nonnegative; a negative value has no statistical meaning.
+    absolute_value_meaning:
+      es: Su tamaño mide cuántas alternativas microscópicas corresponden al resultado.
+      en: Its size measures how many microscopic alternatives correspond to the result.
+  domain_checks:
+  - es: Comprueba que las multiplicidades sean mayores o iguales que cero.
+    en: Check that multiplicities are greater than or equal to zero.
+  - es: Verifica que las probabilidades estén entre 0 y 1.
+    en: Verify that probabilities lie between 0 and 1.
+  coherence_checks:
+  - es: La suma de probabilidades de macroestados excluyentes debe ser 1.
+    en: The sum of probabilities of exclusive macrostates must be 1.
+  - es: Un macroestado con más microestados debe resultar más probable si no hay sesgos adicionales.
+    en: A macrostate with more microstates must be more probable if there are no additional biases.
+  graph_implications:
+    es: En la gráfica, mayor multiplicidad de macroestado eleva la probabilidad asociada al macroestado observable.
+    en: In the graph, larger macrostate multiplicity raises the probability associated with the observable macrostate.
+  pedagogical_triggers:
+  - es: Distinguir microestado y macroestado antes de calcular.
+    en: Distinguish microstate and macrostate before calculating.
+  - es: No confundir multiplicidad con probabilidad ya normalizada.
+    en: Do not confuse multiplicity with already normalized probability.
+- id: probabilidad_macroestado_multiplicidad
+  title:
+    es: Probabilidad de macroestado desde multiplicidad
+    en: Macrostate probability from multiplicity
+  equation: P_M = Omega_M/Omega
+  latex: P_M = \frac{\Omega_M}{\Omega}
+  rearrangements:
+  - target: multiplicidad_macroestado
+    equation: Omega_M = P_M*Omega
+    latex: \Omega_M=P_M\Omega
+  - target: numero_microestados
+    equation: Omega = Omega_M/P_M
+    latex: \Omega=\Omega_M/P_M
+  category: probability
+  relation_type: proportionality
+  physical_meaning:
+    es: Relaciona el peso observable de un macroestado con la fracción de microestados que contiene.
+    en: Relates the observable weight of a macrostate to the fraction of microstates it contains.
+  constraints:
+    es: Solo compara microestados accesibles bajo las mismas restricciones macroscópicas.
+    en: Only compares accessible microstates under the same macroscopic constraints.
+  validity:
+    es: Válida cuando los microestados se han definido sin solapamientos y el macroestado está bien especificado.
+    en: Valid when microstates are defined without overlap and the macrostate is well specified.
+  dimension_check: ok
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - probabilidad_macroestado
+  - multiplicidad_macroestado
+  - numero_microestados
+  interpretation_tags:
+  - multiplicity
+  - macrostate
+  - microstate
+  result_semantics:
+    target: probabilidad_macroestado
+    kind: scalar
+    sign_meaning:
+      es: Debe ser no negativa; un valor negativo no tiene sentido estadístico.
+      en: It must be nonnegative; a negative value has no statistical meaning.
+    absolute_value_meaning:
+      es: Su tamaño mide cuántas alternativas microscópicas corresponden al resultado.
+      en: Its size measures how many microscopic alternatives correspond to the result.
+  domain_checks:
+  - es: Comprueba que las multiplicidades sean mayores o iguales que cero.
+    en: Check that multiplicities are greater than or equal to zero.
+  - es: Verifica que las probabilidades estén entre 0 y 1.
+    en: Verify that probabilities lie between 0 and 1.
+  coherence_checks:
+  - es: La suma de probabilidades de macroestados excluyentes debe ser 1.
+    en: The sum of probabilities of exclusive macrostates must be 1.
+  - es: Un macroestado con más microestados debe resultar más probable si no hay sesgos adicionales.
+    en: A macrostate with more microstates must be more probable if there are no additional biases.
+  graph_implications:
+    es: En la gráfica, mayor multiplicidad de macroestado eleva la probabilidad asociada al macroestado observable.
+    en: In the graph, larger macrostate multiplicity raises the probability associated with the observable macrostate.
+  pedagogical_triggers:
+  - es: Distinguir microestado y macroestado antes de calcular.
+    en: Distinguish microstate and macrostate before calculating.
+  - es: No confundir multiplicidad con probabilidad ya normalizada.
+    en: Do not confuse multiplicity with already normalized probability.
+- id: entropia_boltzmann_macroestado
+  title:
+    es: Entropía de Boltzmann del macroestado
+    en: Boltzmann entropy of the macrostate
+  equation: S = k_B*ln(Omega_M)
+  latex: S = k_B\ln(\Omega_M)
+  rearrangements:
+  - target: multiplicidad_macroestado
+    equation: Omega_M = exp(S/k_B)
+    latex: \Omega_M=e^{S/k_B}
+  category: entropy
+  relation_type: logarithmic
+  physical_meaning:
+    es: Convierte la multiplicidad del macroestado en una magnitud termodinámica aditiva.
+    en: Converts macrostate multiplicity into an additive thermodynamic quantity.
+  constraints:
+    es: Solo compara microestados accesibles bajo las mismas restricciones macroscópicas.
+    en: Only compares accessible microstates under the same macroscopic constraints.
+  validity:
+    es: Válida cuando los microestados se han definido sin solapamientos y el macroestado está bien especificado.
+    en: Valid when microstates are defined without overlap and the macrostate is well specified.
+  dimension_check: ok
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - entropia
+  - constante_boltzmann
+  - multiplicidad_macroestado
+  interpretation_tags:
+  - multiplicity
+  - macrostate
+  - microstate
+  result_semantics:
+    target: entropia
+    kind: scalar
+    sign_meaning:
+      es: Debe ser no negativa; un valor negativo no tiene sentido estadístico.
+      en: It must be nonnegative; a negative value has no statistical meaning.
+    absolute_value_meaning:
+      es: Su tamaño mide cuántas alternativas microscópicas corresponden al resultado.
+      en: Its size measures how many microscopic alternatives correspond to the result.
+  domain_checks:
+  - es: Comprueba que las multiplicidades sean mayores o iguales que cero.
+    en: Check that multiplicities are greater than or equal to zero.
+  - es: Verifica que las probabilidades estén entre 0 y 1.
+    en: Verify that probabilities lie between 0 and 1.
+  coherence_checks:
+  - es: La suma de probabilidades de macroestados excluyentes debe ser 1.
+    en: The sum of probabilities of exclusive macrostates must be 1.
+  - es: Un macroestado con más microestados debe resultar más probable si no hay sesgos adicionales.
+    en: A macrostate with more microstates must be more probable if there are no additional biases.
+  graph_implications:
+    es: En la gráfica, mayor multiplicidad de macroestado eleva la probabilidad asociada al macroestado observable.
+    en: In the graph, larger macrostate multiplicity raises the probability associated with the observable macrostate.
+  pedagogical_triggers:
+  - es: Distinguir microestado y macroestado antes de calcular.
+    en: Distinguish microstate and macrostate before calculating.
+  - es: No confundir multiplicidad con probabilidad ya normalizada.
+    en: Do not confuse multiplicity with already normalized probability.
+- id: normalizacion_macroestados
+  title:
+    es: Normalización de macroestados excluyentes
+    en: Normalization of exclusive macrostates
+  equation: sum(P_M) = 1
+  latex: \sum_M P_M = 1
+  rearrangements:
+  - target: probabilidad_macroestado
+    equation: P_M = 1 - sum(P_other)
+    latex: P_M=1-\sum P_{other}
+  category: probability
+  relation_type: normalization
+  physical_meaning:
+    es: Garantiza que todos los macroestados excluyentes reparten la población estadística completa.
+    en: Ensures all exclusive macrostates distribute the whole statistical population.
+  constraints:
+    es: Solo compara microestados accesibles bajo las mismas restricciones macroscópicas.
+    en: Only compares accessible microstates under the same macroscopic constraints.
+  validity:
+    es: Válida cuando los microestados se han definido sin solapamientos y el macroestado está bien especificado.
+    en: Valid when microstates are defined without overlap and the macrostate is well specified.
+  dimension_check: ok
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - probabilidad_macroestado
+  interpretation_tags:
+  - multiplicity
+  - macrostate
+  - microstate
+  result_semantics:
+    target: probabilidad_macroestado
+    kind: scalar
+    sign_meaning:
+      es: Debe ser no negativa; un valor negativo no tiene sentido estadístico.
+      en: It must be nonnegative; a negative value has no statistical meaning.
+    absolute_value_meaning:
+      es: Su tamaño mide cuántas alternativas microscópicas corresponden al resultado.
+      en: Its size measures how many microscopic alternatives correspond to the result.
+  domain_checks:
+  - es: Comprueba que las multiplicidades sean mayores o iguales que cero.
+    en: Check that multiplicities are greater than or equal to zero.
+  - es: Verifica que las probabilidades estén entre 0 y 1.
+    en: Verify that probabilities lie between 0 and 1.
+  coherence_checks:
+  - es: La suma de probabilidades de macroestados excluyentes debe ser 1.
+    en: The sum of probabilities of exclusive macrostates must be 1.
+  - es: Un macroestado con más microestados debe resultar más probable si no hay sesgos adicionales.
+    en: A macrostate with more microstates must be more probable if there are no additional biases.
+  graph_implications:
+    es: En la gráfica, mayor multiplicidad de macroestado eleva la probabilidad asociada al macroestado observable.
+    en: In the graph, larger macrostate multiplicity raises the probability associated with the observable macrostate.
+  pedagogical_triggers:
+  - es: Distinguir microestado y macroestado antes de calcular.
+    en: Distinguish microstate and macrostate before calculating.
+  - es: No confundir multiplicidad con probabilidad ya normalizada.
+    en: Do not confuse multiplicity with already normalized probability.
+- id: razon_probabilidades_macroestados
+  title:
+    es: Razón de probabilidades entre macroestados
+    en: Probability ratio between macrostates
+  equation: P_A/P_B = Omega_A/Omega_B
+  latex: \frac{P_A}{P_B}=\frac{\Omega_A}{\Omega_B}
+  rearrangements:
+  - target: multiplicidad_macroestado
+    equation: Omega_A = (P_A/P_B)*Omega_B
+    latex: \Omega_A=(P_A/P_B)\Omega_B
+  category: probability
+  relation_type: ratio
+  physical_meaning:
+    es: Compara dos macroestados por el número relativo de microestados que agrupan.
+    en: Compares two macrostates by the relative number of microstates they group.
+  constraints:
+    es: Solo compara microestados accesibles bajo las mismas restricciones macroscópicas.
+    en: Only compares accessible microstates under the same macroscopic constraints.
+  validity:
+    es: Válida cuando los microestados se han definido sin solapamientos y el macroestado está bien especificado.
+    en: Valid when microstates are defined without overlap and the macrostate is well specified.
+  dimension_check: ok
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - probabilidad_macroestado
+  - multiplicidad_macroestado
+  interpretation_tags:
+  - multiplicity
+  - macrostate
+  - microstate
+  result_semantics:
+    target: probabilidad_macroestado
+    kind: scalar
+    sign_meaning:
+      es: Debe ser no negativa; un valor negativo no tiene sentido estadístico.
+      en: It must be nonnegative; a negative value has no statistical meaning.
+    absolute_value_meaning:
+      es: Su tamaño mide cuántas alternativas microscópicas corresponden al resultado.
+      en: Its size measures how many microscopic alternatives correspond to the result.
+  domain_checks:
+  - es: Comprueba que las multiplicidades sean mayores o iguales que cero.
+    en: Check that multiplicities are greater than or equal to zero.
+  - es: Verifica que las probabilidades estén entre 0 y 1.
+    en: Verify that probabilities lie between 0 and 1.
+  coherence_checks:
+  - es: La suma de probabilidades de macroestados excluyentes debe ser 1.
+    en: The sum of probabilities of exclusive macrostates must be 1.
+  - es: Un macroestado con más microestados debe resultar más probable si no hay sesgos adicionales.
+    en: A macrostate with more microstates must be more probable if there are no additional biases.
+  graph_implications:
+    es: En la gráfica, mayor multiplicidad de macroestado eleva la probabilidad asociada al macroestado observable.
+    en: In the graph, larger macrostate multiplicity raises the probability associated with the observable macrostate.
+  pedagogical_triggers:
+  - es: Distinguir microestado y macroestado antes de calcular.
+    en: Distinguish microstate and macrostate before calculating.
+  - es: No confundir multiplicidad con probabilidad ya normalizada.
+    en: Do not confuse multiplicity with already normalized probability.

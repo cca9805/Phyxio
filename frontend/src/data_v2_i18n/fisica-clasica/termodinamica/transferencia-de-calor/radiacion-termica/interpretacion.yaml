@@ -1,0 +1,874 @@
+version: 5.0.0
+id: radiacion-termica
+leaf_id: radiacion-termica
+nombre:
+  es: Radiacion termica
+  en: Thermal Radiation
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: transferencia-de-calor
+  parent_id: transferencia-de-calor
+  ruta_relativa: fisica-clasica/termodinamica/transferencia-de-calor/radiacion-termica
+  orden: 257300
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - ley_stefan_boltzmann
+  - radiacion_neta
+  - flujo_radiativo_emitido
+  magnitudes:
+  - potencia_radiada
+  - potencia_neta
+  - flujo_radiativo
+  - emisividad
+  - constante_stefan_boltzmann
+  - area_superficie
+  - temperatura_absoluta
+  - temperatura_ambiente
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: potencia_radiada
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  potencia_radiada:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado
+      en: radiated power
+    summary_rules:
+    - id: potencia_radiada_summary_stefan_boltzmann
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[potencia_radiada]] mide la potencia emitida por una superficie por radiación térmica.
+        en: The result [[potencia_radiada]] measures the power emitted by a surface through thermal radiation.
+    - id: potencia_radiada_summary_nonnegative
+      when: 'true'
+      status: ok
+      text:
+        es: '[[potencia_radiada]] es una emisión bruta y debe interpretarse como una magnitud no negativa.'
+        en: '[[potencia_radiada]] is gross emission and must be interpreted as a non-negative quantity.'
+    physical_reading_rules:
+    - id: potencia_radiada_physical_reading_t_four
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[potencia_radiada]] como una respuesta muy sensible a [[temperatura_absoluta]], porque depende de T⁴.
+        en: Read [[potencia_radiada]] as highly sensitive to [[temperatura_absoluta]], because it depends on T⁴.
+    - id: potencia_radiada_physical_reading_area_emissivity
+      when: 'true'
+      status: info
+      text:
+        es: Para una misma temperatura, [[potencia_radiada]] aumenta proporcionalmente con [[area_superficie]] y [[emisividad]].
+        en: For the same temperature, [[potencia_radiada]] increases proportionally with [[area_superficie]] and [[emisividad]].
+    coherence_rules:
+    - id: potencia_radiada_coherence_units_watt
+      when: 'true'
+      status: ok
+      text:
+        es: La unidad coherente de [[potencia_radiada]] es W; si aparece W/m², probablemente estás interpretando [[flujo_radiativo]].
+        en: The coherent unit for [[potencia_radiada]] is W; if W/m² appears, you are probably interpreting [[flujo_radiativo]].
+    - id: potencia_radiada_coherence_positive_inputs
+      when: 'true'
+      status: warning
+      text:
+        es: Si [[potencia_radiada]] sale negativa, revisa signos o datos, porque P=εσAT⁴ no produce valores negativos con
+          entradas físicas.
+        en: If [[potencia_radiada]] is negative, check signs or data, because P=εσAT⁴ does not produce negative values with
+          physical inputs.
+    model_validity_rules:
+    - id: potencia_radiada_model_validity_gray_surface
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[potencia_radiada]] suponiendo una superficie gris o idealizada con [[emisividad]] conocida.
+        en: Interpret [[potencia_radiada]] assuming a gray or idealized surface with known [[emisividad]].
+    - id: potencia_radiada_model_validity_uniform_temperature
+      when: 'true'
+      status: warning
+      text:
+        es: Si la superficie no tiene temperatura uniforme, [[potencia_radiada]] exige dividir el sistema en zonas o usar
+          una temperatura efectiva.
+        en: If the surface is not at uniform temperature, [[potencia_radiada]] requires splitting the system into regions
+          or using an effective temperature.
+    graph_rules:
+    - id: potencia_radiada_graph_curve_shape
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, [[potencia_radiada]] debe crecer con curvatura convexa al aumentar [[temperatura_absoluta]].
+        en: In the Coord graph, [[potencia_radiada]] should grow with convex curvature as [[temperatura_absoluta]] increases.
+    - id: potencia_radiada_graph_doubling_temperature
+      when: 'true'
+      status: info
+      text:
+        es: Usa la gráfica para ver que duplicar [[temperatura_absoluta]] multiplica [[potencia_radiada]] por 16 si A y ε
+          son constantes.
+        en: Use the graph to see that doubling [[temperatura_absoluta]] multiplies [[potencia_radiada]] by 16 if A and ε are
+          constant.
+    likely_errors:
+    - id: potencia_radiada_error_linear_reading
+      when: 'true'
+      status: warning
+      text:
+        es: No leas [[potencia_radiada]] como proporcional a T; la relación relevante es de cuarta potencia.
+        en: Do not read [[potencia_radiada]] as proportional to T; the relevant relation is fourth power.
+    - id: potencia_radiada_error_confuse_net
+      when: 'true'
+      status: warning
+      text:
+        es: 'No confundas [[potencia_radiada]] con [[potencia_neta]]: la primera es emisión bruta y la segunda compara con
+          el entorno.'
+        en: 'Do not confuse [[potencia_radiada]] with [[potencia_neta]]: the first is gross emission and the second compares
+          with surroundings.'
+    next_step_rules:
+    - id: potencia_radiada_next_step_net_exchange
+      when: 'true'
+      status: info
+      text:
+        es: Tras obtener [[potencia_radiada]], calcula [[potencia_neta]] si el problema menciona entorno o temperatura ambiente.
+        en: After obtaining [[potencia_radiada]], calculate [[potencia_neta]] if the problem mentions surroundings or ambient
+          temperature.
+    - id: potencia_radiada_next_step_order
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba si el orden de magnitud de [[potencia_radiada]] es razonable para el área y la temperatura dadas.
+        en: Check whether the order of magnitude of [[potencia_radiada]] is reasonable for the given area and temperature.
+    physical_intuition:
+    - id: potencia_radiada_intuition_hot_objects
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[potencia_radiada]] crece de forma explosiva en objetos muy calientes porque cada aumento de
+          T pesa cuatro veces en la potencia.
+        en: Intuitively, [[potencia_radiada]] grows explosively in very hot objects because each increase in T carries fourth-power
+          weight.
+    limiting_cases:
+    - id: potencia_radiada_limit_zero_temperature
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_absoluta]] tiende a 0 K, [[potencia_radiada]] tiende a 0 en el modelo clásico.
+        en: If [[temperatura_absoluta]] tends to 0 K, [[potencia_radiada]] tends to 0 in the classical model.
+    - id: potencia_radiada_limit_zero_area_emissivity
+      when: 'true'
+      status: info
+      text:
+        es: Si [[area_superficie]]=0 o [[emisividad]]=0, [[potencia_radiada]] se anula en este modelo.
+        en: If [[area_superficie]]=0 or [[emisividad]]=0, [[potencia_radiada]] vanishes in this model.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_absoluta:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable independiente
+      en: absolute temperature
+    summary_rules:
+    - id: temperatura_absoluta_summary_kelvin
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_absoluta]] representa temperatura termodinámica y debe expresarse en K.'
+        en: '[[temperatura_absoluta]] represents thermodynamic temperature and must be expressed in K.'
+    - id: temperatura_absoluta_summary_controls_radiation
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_absoluta]] es la variable que domina la emisión porque aparece elevada a la cuarta potencia.'
+        en: '[[temperatura_absoluta]] is the variable that dominates emission because it appears raised to the fourth power.'
+    physical_reading_rules:
+    - id: temperatura_absoluta_physical_reading_not_celsius
+      when: 'true'
+      status: warning
+      text:
+        es: Lee [[temperatura_absoluta]] como kelvin absoluto, no como grados Celsius.
+        en: Read [[temperatura_absoluta]] as absolute kelvin, not degrees Celsius.
+    - id: temperatura_absoluta_physical_reading_sensitivity
+      when: 'true'
+      status: info
+      text:
+        es: Un aumento pequeño de [[temperatura_absoluta]] puede provocar un aumento grande en [[potencia_radiada]].
+        en: A small increase in [[temperatura_absoluta]] can produce a large increase in [[potencia_radiada]].
+    coherence_rules:
+    - id: temperatura_absoluta_coherence_nonnegative
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_absoluta]] debe ser mayor o igual que 0 K; un valor negativo no es físico.'
+        en: '[[temperatura_absoluta]] must be greater than or equal to 0 K; a negative value is not physical.'
+    - id: temperatura_absoluta_coherence_fourth_root
+      when: 'true'
+      status: warning
+      text:
+        es: Si despejas [[temperatura_absoluta]], usa raíz cuarta y comprueba que el cociente dentro de la raíz sea no negativo.
+        en: If solving for [[temperatura_absoluta]], use a fourth root and check that the quotient inside the root is non-negative.
+    model_validity_rules:
+    - id: temperatura_absoluta_model_validity_uniform_surface
+      when: 'true'
+      status: info
+      text:
+        es: La [[temperatura_absoluta]] usada en el modelo representa una temperatura efectiva o uniforme de la superficie.
+        en: The [[temperatura_absoluta]] used in the model represents an effective or uniform surface temperature.
+    - id: temperatura_absoluta_model_validity_environment
+      when: 'true'
+      status: info
+      text:
+        es: En radiación neta, interpreta [[temperatura_absoluta]] comparándola con [[temperatura_ambiente]].
+        en: In net radiation, interpret [[temperatura_absoluta]] by comparing it with [[temperatura_ambiente]].
+    graph_rules:
+    - id: temperatura_absoluta_graph_x_axis
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, [[temperatura_absoluta]] ocupa el eje horizontal y controla la curvatura de P(T).
+        en: In the Coord graph, [[temperatura_absoluta]] is on the horizontal axis and controls the curvature of P(T).
+    - id: temperatura_absoluta_graph_kelvin_origin
+      when: 'true'
+      status: info
+      text:
+        es: El origen T=0 representa el cero absoluto ideal, no 0 °C.
+        en: The origin T=0 represents ideal absolute zero, not 0 °C.
+    likely_errors:
+    - id: temperatura_absoluta_error_celsius
+      when: 'true'
+      status: error
+      text:
+        es: El error más grave es sustituir 25 en lugar de 298 K para temperatura ambiente.
+        en: The most serious error is substituting 25 instead of 298 K for room temperature.
+    - id: temperatura_absoluta_error_linear_change
+      when: 'true'
+      status: warning
+      text:
+        es: No estimes cambios de radiación con diferencias lineales de temperatura si el modelo usa T⁴.
+        en: Do not estimate radiation changes with linear temperature differences if the model uses T⁴.
+    next_step_rules:
+    - id: temperatura_absoluta_next_step_convert
+      when: 'true'
+      status: info
+      text:
+        es: Antes de calcular, convierte toda temperatura dada en Celsius mediante T(K)=T(°C)+273,15.
+        en: Before calculating, convert every Celsius temperature using T(K)=T(°C)+273.15.
+    - id: temperatura_absoluta_next_step_compare
+      when: 'true'
+      status: info
+      text:
+        es: Compara [[temperatura_absoluta]] con [[temperatura_ambiente]] para decidir el signo de [[potencia_neta]].
+        en: Compare [[temperatura_absoluta]] with [[temperatura_ambiente]] to decide the sign of [[potencia_neta]].
+    physical_intuition:
+    - id: temperatura_absoluta_intuition_fourth_power
+      when: 'true'
+      status: info
+      text:
+        es: 'La temperatura actúa como una palanca de cuarta potencia: al subir T, la emisión se dispara.'
+        en: 'Temperature acts as a fourth-power lever: as T rises, emission surges.'
+    limiting_cases:
+    - id: temperatura_absoluta_limit_double
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_absoluta]] se duplica y lo demás no cambia, [[potencia_radiada]] se multiplica por 16.
+        en: If [[temperatura_absoluta]] doubles and everything else remains unchanged, [[potencia_radiada]] is multiplied
+          by 16.
+    - id: temperatura_absoluta_limit_equal_ambient
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_absoluta]]=[[temperatura_ambiente]], la [[potencia_neta]] radiativa ideal es cero.
+        en: If [[temperatura_absoluta]]=[[temperatura_ambiente]], ideal radiative [[potencia_neta]] is zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  area_superficie:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro geométrico
+      en: surface area
+    summary_rules:
+    - id: area_superficie_summary_effective_area
+      when: 'true'
+      status: ok
+      text:
+        es: '[[area_superficie]] es el área efectiva que emite o intercambia radiación.'
+        en: '[[area_superficie]] is the effective area that emits or exchanges radiation.'
+    - id: area_superficie_summary_proportional
+      when: 'true'
+      status: ok
+      text:
+        es: Con T y ε constantes, [[potencia_radiada]] es directamente proporcional a [[area_superficie]].
+        en: With T and ε constant, [[potencia_radiada]] is directly proportional to [[area_superficie]].
+    physical_reading_rules:
+    - id: area_superficie_physical_reading_more_area
+      when: 'true'
+      status: info
+      text:
+        es: Más [[area_superficie]] significa más superficie disponible para emitir energía por unidad de tiempo.
+        en: More [[area_superficie]] means more surface available to emit energy per unit time.
+    - id: area_superficie_physical_reading_effective_not_volume
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[area_superficie]] como área radiante, no como volumen ni como masa del cuerpo.
+        en: Read [[area_superficie]] as radiating area, not as volume or mass of the body.
+    coherence_rules:
+    - id: area_superficie_coherence_square_meters
+      when: 'true'
+      status: ok
+      text:
+        es: La unidad coherente de [[area_superficie]] es m².
+        en: The coherent unit for [[area_superficie]] is m².
+    - id: area_superficie_coherence_nonnegative
+      when: 'true'
+      status: warning
+      text:
+        es: '[[area_superficie]] no puede ser negativa; si aparece un valor negativo hay un error de entrada o despeje.'
+        en: '[[area_superficie]] cannot be negative; if a negative value appears there is an input or rearrangement error.'
+    model_validity_rules:
+    - id: area_superficie_model_validity_exposed_surface
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[area_superficie]] de la parte expuesta al intercambio radiativo, no necesariamente el área total geométrica
+          del objeto.
+        en: Use [[area_superficie]] of the part exposed to radiative exchange, not necessarily the object's total geometric
+          area.
+    - id: area_superficie_model_validity_uniform_properties
+      when: 'true'
+      status: info
+      text:
+        es: Si distintas zonas tienen emisividad o temperatura diferente, conviene sumar contribuciones de área por separado.
+        en: If different regions have different emissivity or temperature, it is better to sum area contributions separately.
+    graph_rules:
+    - id: area_superficie_graph_parameter
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica P(T), [[area_superficie]] actúa como parámetro que escala verticalmente toda la curva.
+        en: In the P(T) graph, [[area_superficie]] acts as a parameter that vertically scales the whole curve.
+    - id: area_superficie_graph_same_shape
+      when: 'true'
+      status: info
+      text:
+        es: Cambiar [[area_superficie]] cambia la altura de la curva, pero no elimina la forma T⁴.
+        en: Changing [[area_superficie]] changes the height of the curve, but does not remove the T⁴ shape.
+    likely_errors:
+    - id: area_superficie_error_cm2
+      when: 'true'
+      status: warning
+      text:
+        es: No uses cm² directamente si la constante σ está en unidades SI; convierte a m².
+        en: Do not use cm² directly if σ is in SI units; convert to m².
+    - id: area_superficie_error_cross_section
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas el área radiante con una sección transversal si la superficie emisora es otra.
+        en: Do not confuse radiating area with a cross-section if the emitting surface is different.
+    next_step_rules:
+    - id: area_superficie_next_step_check_geometry
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[area_superficie]], verifica que corresponda a la geometría real que emite radiación.
+        en: After calculating [[area_superficie]], verify that it corresponds to the real geometry emitting radiation.
+    - id: area_superficie_next_step_scale_power
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[area_superficie]] para estimar cómo cambia [[potencia_radiada]] al duplicar o reducir la superficie expuesta.
+        en: Use [[area_superficie]] to estimate how [[potencia_radiada]] changes when the exposed surface is doubled or reduced.
+    physical_intuition:
+    - id: area_superficie_intuition_many_tiles
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, una superficie mayor equivale a más zonas emitiendo en paralelo.
+        en: Intuitively, a larger surface is like more emitting patches working in parallel.
+    limiting_cases:
+    - id: area_superficie_limit_zero
+      when: 'true'
+      status: info
+      text:
+        es: Si [[area_superficie]]=0, la [[potencia_radiada]] total se anula aunque T sea alta.
+        en: If [[area_superficie]]=0, total [[potencia_radiada]] vanishes even if T is high.
+    - id: area_superficie_limit_double
+      when: 'true'
+      status: info
+      text:
+        es: Si [[area_superficie]] se duplica y lo demás no cambia, [[potencia_radiada]] se duplica.
+        en: If [[area_superficie]] doubles and everything else remains unchanged, [[potencia_radiada]] doubles.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  emisividad:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: Resultado de emisividad
+      en: Result of emisividad
+    summary_rules:
+    - id: emisividad_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[emisividad]] indica la magnitud física principal.
+        en: The result [[emisividad]] indicates the main physical quantity.
+    physical_reading_rules:
+    - id: emisividad_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[emisividad]] junto con su unidad y signo.
+        en: Read [[emisividad]] with its unit and sign.
+    coherence_rules:
+    - id: emisividad_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba la coherencia dimensional de [[emisividad]].
+        en: Check the dimensional consistency of [[emisividad]]
+    model_validity_rules:
+    - id: emisividad_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[emisividad]] solo dentro de la validez del modelo.
+        en: Interpret [[emisividad]] only within the validity of the model.
+    graph_rules:
+    - id: emisividad_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Relaciona [[emisividad]] con la lectura gráfica.
+        en: Relate [[emisividad]] to the graph.
+    likely_errors:
+    - id: emisividad_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: Evita interpretar [[emisividad]] de manera aislada.
+        en: Avoid interpreting [[emisividad]] in isolation.
+    next_step_rules:
+    - id: emisividad_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[emisividad]], revisa los límites físicos.
+        en: After obtaining [[emisividad]], review the physical limits.
+    physical_intuition:
+    - id: emisividad_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[emisividad]] describe el estado dinámico.
+        en: Intuitively, [[emisividad]] describes the dynamic state.
+    limiting_cases:
+    - id: emisividad_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[emisividad]].
+        en: Check limiting cases of [[emisividad]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  potencia_neta:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado con signo
+      en: net radiated power
+    summary_rules:
+    - id: potencia_neta_summary_exchange
+      when: 'true'
+      status: ok
+      text:
+        es: '[[potencia_neta]] mide el balance radiativo entre la superficie y su entorno.'
+        en: '[[potencia_neta]] measures the radiative balance between the surface and its surroundings.'
+    - id: potencia_neta_summary_signed
+      when: 'true'
+      status: ok
+      text:
+        es: '[[potencia_neta]] puede ser positiva, negativa o cero según T frente a T_amb.'
+        en: '[[potencia_neta]] can be positive, negative, or zero depending on T relative to T_amb.'
+    physical_reading_rules:
+    - id: potencia_neta_physical_reading_positive
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_absoluta]] > [[temperatura_ambiente]], [[potencia_neta]] positiva indica pérdida neta de energía
+          por radiación.
+        en: If [[temperatura_absoluta]] > [[temperatura_ambiente]], positive [[potencia_neta]] indicates net energy loss by
+          radiation.
+    - id: potencia_neta_physical_reading_negative
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_absoluta]] < [[temperatura_ambiente]], [[potencia_neta]] negativa indica ganancia neta de energía
+          radiativa.
+        en: If [[temperatura_absoluta]] < [[temperatura_ambiente]], negative [[potencia_neta]] indicates net radiative energy
+          gain.
+    coherence_rules:
+    - id: potencia_neta_coherence_units_watt
+      when: 'true'
+      status: ok
+      text:
+        es: La unidad coherente de [[potencia_neta]] es W.
+        en: The coherent unit for [[potencia_neta]] is W.
+    - id: potencia_neta_coherence_fourth_difference
+      when: 'true'
+      status: warning
+      text:
+        es: Comprueba que se ha calculado T⁴−T_amb⁴, no T−T_amb.
+        en: Check that T⁴−T_amb⁴ has been calculated, not T−T_amb.
+    model_validity_rules:
+    - id: potencia_neta_model_validity_uniform_surroundings
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[potencia_neta]] suponiendo un entorno radiativo equivalente con [[temperatura_ambiente]] uniforme.
+        en: Interpret [[potencia_neta]] assuming an equivalent radiative environment with uniform [[temperatura_ambiente]].
+    - id: potencia_neta_model_validity_other_transfers
+      when: 'true'
+      status: warning
+      text:
+        es: '[[potencia_neta]] no incluye conducción ni convección; solo describe el intercambio radiativo idealizado.'
+        en: '[[potencia_neta]] does not include conduction or convection; it only describes idealized radiative exchange.'
+    graph_rules:
+    - id: potencia_neta_graph_compare_temperatures
+      when: 'true'
+      status: info
+      text:
+        es: Aunque la gráfica principal muestre emisión bruta, usa su forma T⁴ para comparar emisión del cuerpo y del entorno.
+        en: Even if the main graph shows gross emission, use its T⁴ shape to compare emission from the body and surroundings.
+    - id: potencia_neta_graph_zero_balance
+      when: 'true'
+      status: info
+      text:
+        es: El equilibrio radiativo ideal ocurre cuando las dos temperaturas absolutas son iguales y [[potencia_neta]]=0.
+        en: Ideal radiative equilibrium occurs when both absolute temperatures are equal and [[potencia_neta]]=0.
+    likely_errors:
+    - id: potencia_neta_error_always_positive
+      when: 'true'
+      status: warning
+      text:
+        es: 'No fuerces [[potencia_neta]] a ser positiva: el signo contiene información física.'
+        en: 'Do not force [[potencia_neta]] to be positive: the sign contains physical information.'
+    - id: potencia_neta_error_celsius_difference
+      when: 'true'
+      status: error
+      text:
+        es: No uses diferencias en Celsius para sustituir T⁴−T_amb⁴.
+        en: Do not use Celsius differences to substitute for T⁴−T_amb⁴.
+    next_step_rules:
+    - id: potencia_neta_next_step_direction
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[potencia_neta]], explica si el cuerpo se enfría o se calienta por intercambio radiativo.
+        en: After obtaining [[potencia_neta]], explain whether the body cools or heats by radiative exchange.
+    - id: potencia_neta_next_step_compare_mechanisms
+      when: 'true'
+      status: info
+      text:
+        es: Compara [[potencia_neta]] con conducción o convección si el problema incluye otros mecanismos de transferencia.
+        en: Compare [[potencia_neta]] with conduction or convection if the problem includes other transfer mechanisms.
+    physical_intuition:
+    - id: potencia_neta_intuition_balance
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[potencia_neta]] es una resta entre lo que la superficie emite y lo que recibe del entorno.
+        en: Intuitively, [[potencia_neta]] is a subtraction between what the surface emits and what it receives from the surroundings.
+    limiting_cases:
+    - id: potencia_neta_limit_equal_temperatures
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_absoluta]]=[[temperatura_ambiente]], [[potencia_neta]]=0 en el modelo ideal.
+        en: If [[temperatura_absoluta]]=[[temperatura_ambiente]], [[potencia_neta]]=0 in the ideal model.
+    - id: potencia_neta_limit_hot_body
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_absoluta]] es mucho mayor que [[temperatura_ambiente]], domina la emisión del cuerpo.
+        en: If [[temperatura_absoluta]] is much greater than [[temperatura_ambiente]], the body's emission dominates.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: Toma [[potencia_neta]] positiva como pérdida neta de energía del cuerpo salvo que el enunciado defina otro convenio.
+        en: Take positive [[potencia_neta]] as net energy loss from the body unless the statement defines another convention.
+      common_sign_errors:
+      - es: Cambiar el orden de T⁴−T_amb⁴ sin cambiar el significado del signo.
+        en: Changing the order of T⁴−T_amb⁴ without changing the meaning of the sign.
+      - es: Interpretar un valor negativo como imposible en vez de como absorción neta.
+        en: Interpreting a negative value as impossible instead of net absorption.
+  flujo_radiativo:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado intensivo
+      en: radiative flux
+    summary_rules:
+    - id: flujo_radiativo_summary_per_area
+      when: 'true'
+      status: ok
+      text:
+        es: '[[flujo_radiativo]] mide la potencia radiada por unidad de superficie.'
+        en: '[[flujo_radiativo]] measures radiated power per unit surface area.'
+    - id: flujo_radiativo_summary_intensive
+      when: 'true'
+      status: ok
+      text:
+        es: '[[flujo_radiativo]] es una magnitud intensiva de superficie, no una potencia total.'
+        en: '[[flujo_radiativo]] is a surface intensive quantity, not total power.'
+    physical_reading_rules:
+    - id: flujo_radiativo_physical_reading_surface_intensity
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[flujo_radiativo]] como intensidad de emisión por cada metro cuadrado de superficie.
+        en: Read [[flujo_radiativo]] as emission intensity per square meter of surface.
+    - id: flujo_radiativo_physical_reading_independent_area
+      when: 'true'
+      status: info
+      text:
+        es: Para una superficie uniforme, [[flujo_radiativo]] depende de T y ε, pero no del tamaño total del área.
+        en: For a uniform surface, [[flujo_radiativo]] depends on T and ε, but not on total area size.
+    coherence_rules:
+    - id: flujo_radiativo_coherence_units
+      when: 'true'
+      status: ok
+      text:
+        es: La unidad coherente de [[flujo_radiativo]] es W/m².
+        en: The coherent unit for [[flujo_radiativo]] is W/m².
+    - id: flujo_radiativo_coherence_power_area
+      when: 'true'
+      status: warning
+      text:
+        es: Si calculas [[flujo_radiativo]] como P/A, verifica que P sea [[potencia_radiada]] y A sea [[area_superficie]].
+        en: If calculating [[flujo_radiativo]] as P/A, verify that P is [[potencia_radiada]] and A is [[area_superficie]].
+    model_validity_rules:
+    - id: flujo_radiativo_model_validity_uniform_surface
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[flujo_radiativo]] como valor local o promedio si la superficie no es uniforme.
+        en: Interpret [[flujo_radiativo]] as a local or average value if the surface is not uniform.
+    - id: flujo_radiativo_model_validity_gray_body
+      when: 'true'
+      status: info
+      text:
+        es: El valor [[flujo_radiativo]]=εσT⁴ supone una superficie gris con [[emisividad]] definida.
+        en: The value [[flujo_radiativo]]=εσT⁴ assumes a gray surface with defined [[emisividad]].
+    graph_rules:
+    - id: flujo_radiativo_graph_same_shape
+      when: 'true'
+      status: info
+      text:
+        es: La gráfica de [[flujo_radiativo]] frente a T tendría la misma forma T⁴ que la de potencia, pero sin factor de
+          área.
+        en: The graph of [[flujo_radiativo]] versus T would have the same T⁴ shape as power, but without the area factor.
+    - id: flujo_radiativo_graph_compare_surfaces
+      when: 'true'
+      status: info
+      text:
+        es: '[[flujo_radiativo]] permite comparar superficies de distinto tamaño sin que el área total oculte la intensidad
+          de emisión.'
+        en: '[[flujo_radiativo]] allows comparison of surfaces of different sizes without total area hiding emission intensity.'
+    likely_errors:
+    - id: flujo_radiativo_error_total_power
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas [[flujo_radiativo]] con [[potencia_radiada]]; falta o sobra un factor de área.
+        en: Do not confuse [[flujo_radiativo]] with [[potencia_radiada]]; an area factor is missing or extra.
+    - id: flujo_radiativo_error_units
+      when: 'true'
+      status: warning
+      text:
+        es: Si el resultado está en W, no es [[flujo_radiativo]] sino potencia.
+        en: If the result is in W, it is not [[flujo_radiativo]] but power.
+    next_step_rules:
+    - id: flujo_radiativo_next_step_total_power
+      when: 'true'
+      status: info
+      text:
+        es: Multiplica [[flujo_radiativo]] por [[area_superficie]] si necesitas [[potencia_radiada]] total.
+        en: Multiply [[flujo_radiativo]] by [[area_superficie]] if total [[potencia_radiada]] is needed.
+    - id: flujo_radiativo_next_step_compare_materials
+      when: 'true'
+      status: info
+      text:
+        es: Compara [[flujo_radiativo]] entre materiales cambiando [[emisividad]] con la misma temperatura.
+        en: Compare [[flujo_radiativo]] between materials by changing [[emisividad]] at the same temperature.
+    physical_intuition:
+    - id: flujo_radiativo_intuition_brightness_per_area
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[flujo_radiativo]] dice cuánto emite cada porción de superficie, antes de contar cuánta superficie
+          hay.
+        en: Intuitively, [[flujo_radiativo]] says how much each patch of surface emits before counting how much surface exists.
+    limiting_cases:
+    - id: flujo_radiativo_limit_zero_emissivity
+      when: 'true'
+      status: info
+      text:
+        es: Si [[emisividad]]=0, [[flujo_radiativo]] se anula en este modelo.
+        en: If [[emisividad]]=0, [[flujo_radiativo]] vanishes in this model.
+    - id: flujo_radiativo_limit_blackbody
+      when: 'true'
+      status: info
+      text:
+        es: Si [[emisividad]]=1, [[flujo_radiativo]] coincide con el flujo ideal de cuerpo negro σT⁴.
+        en: If [[emisividad]]=1, [[flujo_radiativo]] matches the ideal blackbody flux σT⁴.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

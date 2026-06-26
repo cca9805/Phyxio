@@ -1,0 +1,178 @@
+import React from "react";
+import { createCoordGraphPage } from "@/v2/components/graphs/graphFactories.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraph(
+const uiLang = "es";
+const tt = (es, en, lang = uiLang) => (lang === "en" ? en : es);
+
+export const graphContract = {
+  type: "Coord",
+  title: {
+    es: "Energia interna en sistema cerrado",
+    en: "Internal energy in a closed system",
+  },
+  graph_identity: {
+    graph_type: "Coord",
+    pregunta_principal: {
+      es: "Como cambia la energia interna de un sistema cuando intercambia calor y trabajo con su entorno a traves de una frontera impermeable a la materia?",
+      en: "How does the internal energy of a system change when it exchanges heat and work with its surroundings through a boundary impermeable to matter?",
+    },
+    keywords: ["energia", "interna", "cerrado", "calor", "trabajo", "frontera", "energy", "internal", "closed", "heat", "work", "boundary"],
+    magnitud_estrella: "DeltaU",
+    variable_control: "Q",
+    target_interpretable: true,
+  },
+  interpretation_binding: {
+    paramsIn: ["Q", "W"],
+    stateOut: ["DeltaU", "U"],
+  },
+  equation: "DeltaU = Q + W",
+  axes: { x: "proceso", y: "energia" },
+};
+
+const fmt = (value, digits = 1, lang = "es") => {
+  if (!Number.isFinite(value)) return "-";
+  const text = value.toFixed(digits);
+  return lang === "en" ? text : text.replace(".", ",");
+};
+
+const SistemaCerradoGraphsCoord = createCoordGraphPage({
+  displayName: "SistemaCerradoGraphsCoord",
+  title: {
+    es: "Sistema cerrado: primer principio",
+    en: "Closed system: first law",
+  },
+  defaultParams: {
+    Q: 800,
+    W: -320,
+    U0: 5000,
+  },
+  controls: [
+    { id: "Q", label: { es: "Calor Q (J)", en: "Heat Q (J)" }, min: -3000, max: 3000, step: 50 },
+    { id: "W", label: { es: "Trabajo W (J)", en: "Work W (J)" }, min: -3000, max: 3000, step: 50 },
+    { id: "U0", label: { es: "U inicial (J)", en: "Initial U (J)" }, min: 0, max: 20000, step: 100 },
+  ],
+  compute: (pNum) => {
+    const Q = Number.isFinite(pNum.Q) ? pNum.Q : 800;
+    const W = Number.isFinite(pNum.W) ? pNum.W : -320;
+    const U0 = Number.isFinite(pNum.U0) ? pNum.U0 : 5000;
+    const DeltaU = Q + W;
+    const Uf = U0 + DeltaU;
+
+    const nPasos = 10;
+    const data = Array.from({ length: nPasos + 1 }, (_, i) => ({
+      x: i,
+      U: U0 + (DeltaU * i) / nPasos,
+      Qacum: (Q * i) / nPasos,
+      Wacum: (W * i) / nPasos,
+    }));
+
+    return {
+      data,
+      extra: {
+        interpretationTarget: "DeltaU",
+        interpretationValue: DeltaU,
+        graphState: {
+          DeltaU,
+          U: Uf,
+          Q,
+          W,
+          S: DeltaU >= 0 ? 1 : -1,
+        },
+      },
+    };
+  },
+  render: ({ data, pNum, lang = "es", linked, loadFromCalculator }) => {
+    const Q = Number.isFinite(pNum.Q) ? pNum.Q : 800;
+    const W = Number.isFinite(pNum.W) ? pNum.W : -320;
+    const U0 = Number.isFinite(pNum.U0) ? pNum.U0 : 5000;
+    const DeltaU = Q + W;
+    const Uf = U0 + DeltaU;
+
+    const nPasos = data.length - 1;
+    const Umin = Math.min(U0, Uf) - Math.abs(DeltaU) * 0.2;
+    const Umax = Math.max(U0, Uf) + Math.abs(DeltaU) * 0.2 + 1;
+    const Urange = Umax - Umin;
+
+    const toY = (u) => 320 - ((u - Umin) / Urange) * 200;
+    const pointsU = data.map((d, i) => `${70 + i * (440 / nPasos)},${toY(d.U)}`).join(" ");
+
+    const deltaColor = DeltaU > 0 ? "#16a34a" : DeltaU < 0 ? "#dc2626" : "#64748b";
+    const deltaLabel = DeltaU > 0
+      ? tt("Ganancia de energia interna", "Internal energy gain", lang)
+      : DeltaU < 0
+      ? tt("Perdida de energia interna", "Internal energy loss", lang)
+      : tt("Energia interna constante", "Constant internal energy", lang);
+
+    return (
+      <div className="v2-card" style={{ display: "grid", gap: 12 }}>
+        <div className="v2-card-title">
+          {tt("Sistema cerrado: balance energetico", "Closed system: energy balance", lang)}
+        </div>
+        <svg viewBox="0 0 560 420" role="img" aria-label="Sistema cerrado energia interna">
+          <rect x="0" y="0" width="560" height="420" rx="12" fill="#f8fafc" />
+          <text x="280" y="28" textAnchor="middle" fill="#0f172a" fontSize="15" fontWeight="800">
+            {tt("Energia interna del sistema cerrado", "Internal energy of closed system", lang)}
+          </text>
+
+          <line x1="70" y1="120" x2="70" y2="340" stroke="#94a3b8" strokeWidth="1.5" />
+          <line x1="70" y1="340" x2="520" y2="340" stroke="#94a3b8" strokeWidth="1.5" />
+          <text x="55" y="124" fill="#0f172a" fontSize="11" textAnchor="middle">U</text>
+          <text x="295" y="362" fill="#0f172a" fontSize="11" textAnchor="middle">
+            {tt("proceso", "process", lang)}
+          </text>
+
+          <polyline points={pointsU} fill="none" stroke="#0ea5e9" strokeWidth="3.5" />
+
+          <circle cx="70" cy={toY(U0)} r="5" fill="#0ea5e9" />
+          <text x="82" y={toY(U0) + 4} fill="#0f172a" fontSize="12">
+            {tt("U\u2080", "U\u2080", lang)} = {fmt(U0, 0, lang)} J
+          </text>
+          <circle cx="510" cy={toY(Uf)} r="5" fill={deltaColor} />
+          <text x="390" y={toY(Uf) + 4} fill={deltaColor} fontSize="12" fontWeight="700">
+            {tt("Uf", "Uf", lang)} = {fmt(Uf, 0, lang)} J
+          </text>
+
+          <rect x="76" y="360" width="408" height="44" rx="8" fill={DeltaU >= 0 ? "#dcfce7" : "#fee2e2"} />
+          <text x="92" y="378" fill={deltaColor} fontSize="12" fontWeight="700">
+            {tt("\u0394U", "\u0394U", lang)} = Q + W = {fmt(Q, 0, lang)} + ({fmt(W, 0, lang)}) = {fmt(DeltaU, 0, lang)} J
+          </text>
+          <text x="92" y="396" fill={deltaColor} fontSize="11">{deltaLabel}</text>
+        </svg>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, fontSize: 13 }}>
+          <div style={{ background: "#f0f9ff", borderRadius: 8, padding: 8 }}>
+            <div style={{ fontWeight: 700, color: "#0369a1" }}>Q</div>
+            <div>{fmt(Q, 0, lang)} J</div>
+            <div style={{ fontSize: 11, opacity: 0.7 }}>
+              {Q >= 0 ? tt("absorbido", "absorbed", lang) : tt("cedido", "released", lang)}
+            </div>
+          </div>
+          <div style={{ background: "#fefce8", borderRadius: 8, padding: 8 }}>
+            <div style={{ fontWeight: 700, color: "#a16207" }}>W</div>
+            <div>{fmt(W, 0, lang)} J</div>
+            <div style={{ fontSize: 11, opacity: 0.7 }}>
+              {W >= 0 ? tt("recibido", "received", lang) : tt("realizado", "done by sys", lang)}
+            </div>
+          </div>
+          <div style={{ background: DeltaU >= 0 ? "#f0fdf4" : "#fef2f2", borderRadius: 8, padding: 8 }}>
+            <div style={{ fontWeight: 700, color: deltaColor }}>{tt("\u0394U", "\u0394U", lang)}</div>
+            <div style={{ color: deltaColor, fontWeight: 700 }}>{fmt(DeltaU, 0, lang)} J</div>
+          </div>
+        </div>
+
+        {!linked ? (
+          <button type="button" className="btn btn-sm btn-light" onClick={loadFromCalculator}>
+            {tt("Cargar desde calculadora", "Load from calculator", lang)}
+          </button>
+        ) : null}
+      </div>
+    );
+  },
+});
+
+SistemaCerradoGraphsCoord.graph_identity = graphContract.graph_identity;
+SistemaCerradoGraphsCoord.pregunta_principal = graphContract.graph_identity.pregunta_principal;
+SistemaCerradoGraphsCoord.magnitud_estrella = graphContract.graph_identity.magnitud_estrella;
+
+export default SistemaCerradoGraphsCoord;

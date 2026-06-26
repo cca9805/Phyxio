@@ -1,0 +1,122 @@
+formulas:
+
+  - id: definicion_gibbs
+    title:
+      es: Definición de energía libre de Gibbs
+      en: Definition of Gibbs free energy
+    equation: "G = DeltaH - T * DeltaS"
+    latex: "G = \\Delta H - T\\,\\Delta S"
+    rearrangements:
+      - target: DeltaG
+        equation: "DeltaG = DeltaH - T * DeltaS"
+        latex: "\\Delta G = \\Delta H - T\\,\\Delta S"
+      - target: DeltaH
+        equation: "DeltaH = DeltaG + T * DeltaS"
+        latex: "\\Delta H = \\Delta G + T\\,\\Delta S"
+      - target: DeltaS
+        equation: "DeltaS = (DeltaH - DeltaG) / T"
+        latex: "\\Delta S = \\frac{\\Delta H - \\Delta G}{T}"
+    category: fundamental
+    relation_type: definition
+    physical_meaning:
+      es: "La energía libre de Gibbs combina la contribución entálpica (impulso energético) con el término entrópico escalado por la temperatura, resultando en el potencial que rige la espontaneidad a P y T constantes."
+      en: "The Gibbs free energy combines the enthalpic contribution (energetic drive) with the entropy term scaled by temperature, yielding the potential that governs spontaneity at constant P and T."
+    constraints:
+      - Presión constante
+      - Temperatura constante
+      - Sistema cerrado
+    validity:
+      es: "Válida para procesos a presión y temperatura constantes en sistemas cerrados sin trabajo no expansivo adicional."
+      en: "Valid for processes at constant pressure and temperature in closed systems without additional non-expansion work."
+    dimension_check: "[M L² T⁻²] = [M L² T⁻²] − [Θ][M L² T⁻² Θ⁻¹]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - criterio de espontaneidad
+      - temperatura de inversión
+      - equilibrio químico
+    interpretation_tags:
+      - espontaneidad
+      - balance entalpía-entropía
+      - criterio termodinámico
+    result_semantics:
+      target: DeltaG
+      kind: scalar_signed
+      sign_meaning:
+        es: "Negativo indica que el proceso libera energía útil y ocurre espontáneamente; positivo que requiere aporte externo de energía."
+        en: "Negative indicates the process releases useful energy and occurs spontaneously; positive that it requires external energy input."
+      absolute_value_meaning:
+        es: "La magnitud de la variación de G indica cuán alejado del equilibrio se halla el sistema y cuánto trabajo máximo puede extraerse."
+        en: "The magnitude of the change in G indicates how far from equilibrium the system is and how much maximum work can be extracted."
+    domain_checks:
+      - "T > 0"
+      - "DeltaH is finite"
+      - "DeltaS is finite"
+    coherence_checks:
+      - "DeltaG == 0 implica equilibrio: ni avance ni retroceso espontáneo"
+      - "Si DeltaH < 0 y DeltaS > 0, DeltaG < 0 para cualquier T"
+      - "Si DeltaH > 0 y DeltaS < 0, DeltaG > 0 para cualquier T"
+    graph_implications:
+      - "La línea DeltaG(T) es lineal con pendiente -DeltaS; corta el eje T en T_inv"
+      - "Pendiente negativa indica proceso que se vuelve más espontáneo al subir T"
+    pedagogical_triggers:
+      - "Si DeltaH < 0 pero el alumno concluye no espontaneidad: verificar signo de DeltaS y temperatura"
+      - "Si DeltaG > 0 y se afirma espontaneidad: error en el criterio de signo"
+
+  - id: temperatura_inversion
+    title:
+      es: Temperatura de inversión de espontaneidad
+      en: Spontaneity inversion temperature
+    equation: "T_inv = DeltaH / DeltaS"
+    latex: "T_{inv} = \\frac{\\Delta H}{\\Delta S}"
+    rearrangements:
+      - target: T_inv
+        equation: "T_inv = DeltaH / DeltaS"
+        latex: "T_{inv} = \\frac{\\Delta H}{\\Delta S}"
+      - target: DeltaH
+        equation: "DeltaH = T_inv * DeltaS"
+        latex: "\\Delta H = T_{inv}\\,\\Delta S"
+      - target: DeltaS
+        equation: "DeltaS = DeltaH / T_inv"
+        latex: "\\Delta S = \\frac{\\Delta H}{T_{inv}}"
+    category: derived
+    relation_type: definition
+    physical_meaning:
+      es: "Temperatura a la que la variación de Gibbs se anula; por encima o por debajo de este umbral el proceso cambia de espontáneo a no espontáneo o viceversa."
+      en: "Temperature at which the Gibbs change is zero; above or below this threshold the process switches from spontaneous to non-spontaneous or vice versa."
+    constraints:
+      - "DeltaS distinto de cero"
+      - "DeltaH y DeltaS del mismo signo para T_inv positiva"
+    validity:
+      es: "Solo tiene sentido físico cuando DeltaH y DeltaS tienen el mismo signo; si tienen signos opuestos, el proceso es siempre espontáneo o nunca espontáneo."
+      en: "Only physically meaningful when DeltaH and DeltaS have the same sign; if they have opposite signs, the process is always or never spontaneous."
+    dimension_check: "[Θ] = [M L² T⁻²] / [M L² T⁻² Θ⁻¹]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in:
+      - análisis de espontaneidad con temperatura variable
+      - diseño de procesos industriales
+    interpretation_tags:
+      - umbral de espontaneidad
+      - cruce con eje de temperatura
+    result_semantics:
+      target: T_inv
+      kind: scalar_unsigned
+      sign_meaning:
+        es: "La temperatura de inversión es positiva solo cuando DeltaH y DeltaS tienen el mismo signo; en caso contrario el proceso no tiene umbral de inversión."
+        en: "The inversion temperature is positive only when DeltaH and DeltaS have the same sign; otherwise the process has no inversion threshold."
+      absolute_value_meaning:
+        es: "Indica la temperatura exacta a partir de la cual el proceso invierte su espontaneidad; es la intersección de la recta DeltaG(T) con el eje horizontal."
+        en: "Indicates the exact temperature at which the process reverses its spontaneity; it is the intersection of the DeltaG(T) line with the horizontal axis."
+    domain_checks:
+      - "DeltaS != 0"
+      - "T_inv > 0 implica que DeltaH y DeltaS tienen el mismo signo"
+    coherence_checks:
+      - "T_inv negativa indica inconsistencia en los datos de entrada"
+      - "Si DeltaS > 0 y DeltaH < 0, T_inv resultaría negativa: verificar signo de entradas"
+    graph_implications:
+      - "T_inv es el punto de cruce de la recta DeltaG vs T con el eje DeltaG = 0"
+      - "El marcador T_inv_marker señala visualmente el cambio de régimen de espontaneidad"
+    pedagogical_triggers:
+      - "Si T_inv resulta negativa: el alumno ha confundido signos de DeltaH o DeltaS"
+      - "Si T_inv es muy alta (> 5000 K): verificar que las unidades de DeltaS sean J/K y no kJ/K"

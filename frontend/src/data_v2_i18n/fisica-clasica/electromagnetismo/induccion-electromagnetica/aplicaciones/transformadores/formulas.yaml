@@ -1,0 +1,309 @@
+formulas:
+- id: relacion_transformacion
+  title:
+    es: Relación de transformación de tensiones
+    en: Voltage transformation ratio
+  equation: V_1 / V_2 = N_1 / N_2
+  latex: \frac{V_1}{V_2} = \frac{N_1}{N_2}
+  rearrangements:
+  - target: tension_secundaria
+    equation: V_2 = V_1 * N_2 / N_1
+    latex: V_2 = V_1 * \frac{N_2}{N_1}
+  - target: numero_de_espiras_primario
+    equation: N_1 = N_2 * V_1 / V_2
+    latex: N_1 = N_2 * \frac{V_1}{V_2}
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: La relación entre las tensiones primaria y secundaria es igual a la relación entre los números de espiras de los devanados.
+      Esto permite aumentar o disminuir la tensión según la relación de espiras.
+    en: The ratio between primary and secondary voltages equals the ratio between the numbers of turns in the windings. This
+      allows voltage to be increased or decreased according to the turns ratio.
+  constraints:
+  - Transformador ideal sin pérdidas
+  - Flujo magnético completamente acoplado entre devanados
+  - Corriente alterna en régimen estacionario
+  validity:
+    es: Válido para transformadores ideales y para cálculos de primera aproximación en transformadores reales en régimen estacionario.
+    en: Valid for ideal transformers and for first-approximation calculations in real transformers at steady state.
+  dimension_check: '[V_1]=[V_2]=V; [N_1]=[N_2] adimensional → relación adimensional'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculo_tension_secundaria
+  - diseno_transformadores
+  interpretation_tags:
+  - transformacion_tension
+  - relacion_espiras
+  result_semantics:
+    target: tension_secundaria
+    kind: scalar_unsigned
+    sign_meaning:
+      es: La tensión secundaria es positiva y proporcional a la primaria según la relación de espiras.
+      en: The secondary voltage is positive and proportional to the primary according to the turns ratio.
+    absolute_value_meaning:
+      es: El valor absoluto indica la tensión disponible en el secundario para la carga.
+      en: The absolute value indicates the voltage available at the secondary for the load.
+  domain_checks:
+  - condition: N_1 == 0 or N_2 == 0
+    message:
+      es: 'Número de espiras cero: el transformador no puede funcionar sin devanados.'
+      en: 'Zero number of turns: the transformer cannot operate without windings.'
+  coherence_checks:
+  - condition: V_2 > 10000
+    message:
+      es: 'Tensión secundaria muy alta: verificar la relación de espiras N_2/N_1.'
+      en: 'Very high secondary voltage: check the turns ratio N_2/N_1.'
+  graph_implications:
+  - V_2 es proporcional a V_1 con pendiente N_2/N_1
+  pedagogical_triggers:
+  - Confundir la relación N_1/N_2 con N_2/N_1 al calcular la tensión secundaria
+- id: relacion_corriente
+  title:
+    es: Relación de transformación de corrientes
+    en: Current transformation ratio
+  equation: I_1 / I_2 = N_2 / N_1
+  latex: \frac{I_1}{I_2} = \frac{N_2}{N_1}
+  rearrangements:
+  - target: corriente_secundaria
+    equation: I_2 = I_1 * N_1 / N_2
+    latex: I_2 = I_1 * \frac{N_1}{N_2}
+  - target: corriente_primaria
+    equation: I_1 = I_2 * N_2 / N_1
+    latex: I_1 = I_2 * \frac{N_2}{N_1}
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: La relación entre las corrientes primaria y secundaria es inversa a la relación de espiras. Si aumenta la tensión,
+      disminuye la corriente proporcionalmente para conservar la potencia.
+    en: The ratio between primary and secondary currents is inverse to the turns ratio. If voltage increases, current decreases
+      proportionally to conserve power.
+  constraints:
+  - Transformador ideal sin pérdidas
+  - Potencia conservada entre primario y secundario
+  validity:
+    es: Válido para transformadores ideales. En transformadores reales, hay pequeñas discrepancias debido a las pérdidas.
+    en: Valid for ideal transformers. In real transformers, there are small discrepancies due to losses.
+  dimension_check: '[I_1]=[I_2]=A → relación adimensional'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculo_corriente_primaria
+  - proteccion_transformadores
+  interpretation_tags:
+  - transformacion_corriente
+  - conservacion_potencia
+  result_semantics:
+    target: corriente_secundaria
+    kind: scalar_unsigned
+    sign_meaning:
+      es: La corriente secundaria es positiva e inversamente proporcional a la relación de espiras.
+      en: The secondary current is positive and inversely proportional to the turns ratio.
+    absolute_value_meaning:
+      es: El valor indica la corriente máxima disponible en el secundario según la carga.
+      en: The value indicates the maximum current available at the secondary according to the load.
+  domain_checks:
+  - condition: N_1 == 0 or N_2 == 0
+    message:
+      es: 'Número de espiras cero: no hay transformación posible.'
+      en: 'Zero number of turns: no transformation possible.'
+  coherence_checks:
+  - condition: I_2 > 1000
+    message:
+      es: 'Corriente secundaria muy elevada: verificar la relación N_1/N_2 y la potencia.'
+      en: 'Very high secondary current: check the ratio N_1/N_2 and the power.'
+  graph_implications:
+  - I_2 es proporcional a I_1 con pendiente N_1/N_2
+  pedagogical_triggers:
+  - Olvidar que la relación de corrientes es inversa a la de tensiones
+- id: potencia_aparente
+  title:
+    es: Potencia aparente del transformador
+    en: Transformer apparent power
+  equation: S = V_1 * I_1
+  latex: S = V_1 * I_1
+  rearrangements:
+  - target: potencia_aparente
+    equation: S = V_1 * I_1
+    latex: S = V_1 * I_1
+  - target: corriente_primaria
+    equation: I_1 = S / V_1
+    latex: I_1 = \frac{S}{V_1}
+  - target: tension_primaria
+    equation: V_1 = S / I_1
+    latex: V_1 = \frac{S}{I_1}
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: La potencia aparente es el producto de la tensión por la corriente en el devanado. En el transformador ideal, esta
+      potencia es igual en el primario y en el secundario.
+    en: Apparent power is the product of voltage and current in the winding. In an ideal transformer, this power is equal
+      in the primary and secondary.
+  constraints:
+  - Tensión y corriente en el mismo devanado
+  - Corriente alterna sinusoidal
+  validity:
+    es: Válido para cálculos de potencia nominal y dimensionamiento de transformadores.
+    en: Valid for nominal power calculations and transformer sizing.
+  dimension_check: '[V]=V; [I]=A → [S]=VA'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - dimensionamiento_transformadores
+  - seleccion_protecciones
+  interpretation_tags:
+  - potencia_aparente
+  - capacidad_transformador
+  result_semantics:
+    target: potencia_aparente
+    kind: scalar_unsigned
+    sign_meaning:
+      es: La potencia aparente es siempre positiva, representando la capacidad máxima del transformador.
+      en: Apparent power is always positive, representing the maximum capacity of the transformer.
+    absolute_value_meaning:
+      es: El valor indica la potencia nominal que el transformador puede transferir sin sobrecalentarse.
+      en: The value indicates the nominal power the transformer can transfer without overheating.
+  domain_checks:
+  - condition: S == 0
+    message:
+      es: 'Potencia nula: el transformador no está transferiendo energía.'
+      en: 'Zero power: the transformer is not transferring energy.'
+  coherence_checks:
+  - condition: S > 1000000
+    message:
+      es: 'Potencia superior a 1 MVA: verificar que es un transformador de potencia y no de distribución.'
+      en: 'Power above 1 MVA: verify this is a power transformer and not a distribution transformer.'
+  graph_implications:
+  - S define la capacidad nominal del transformador en la curva de carga
+  pedagogical_triggers:
+  - Confundir potencia aparente con potencia activa en cálculos de rendimiento
+- id: rendimiento_transformador
+  title:
+    es: Rendimiento del transformador
+    en: Transformer efficiency
+  equation: eta = P_2 / P_1
+  latex: \eta = \frac{P_2}{P_1}
+  rearrangements:
+  - target: eta
+    equation: eta = P_2 / P_1
+    latex: \eta = \frac{P_2}{P_1}
+  - target: potencia_activa_de_salida
+    equation: P_2 = eta * P_1
+    latex: P_2 = \eta * P_1
+  - target: potencia_activa_de_entrada
+    equation: P_1 = P_2 / eta
+    latex: P_1 = \frac{P_2}{\eta}
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: El rendimiento es la fracción de la potencia activa de entrada que se transfiere a la salida como potencia útil. La
+      diferencia son las pérdidas en el transformador.
+    en: Efficiency is the fraction of input active power that is transferred to the output as useful power. The difference
+      represents losses in the transformer.
+  constraints:
+  - P_2 es la potencia activa entregada a la carga
+  - P_1 es la potencia activa absorbida del primario
+  - eta debe estar en el intervalo (0, 1)
+  validity:
+    es: Válido en régimen estacionario con carga conectada. No aplica en vacío.
+    en: Valid at steady state with load connected. Does not apply at no-load.
+  dimension_check: '[P_2]=[P_1]=W → eta adimensional'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - evaluacion_energetica
+  - comparacion_transformadores
+  interpretation_tags:
+  - eficiencia_energetica
+  - perdidas_transformador
+  result_semantics:
+    target: eta
+    kind: ratio
+    sign_meaning:
+      es: El rendimiento es adimensional y positivo, típicamente entre 0.95 y 0.99 en transformadores de potencia.
+      en: Efficiency is dimensionless and positive, typically between 0.95 and 0.99 in power transformers.
+    absolute_value_meaning:
+      es: Un rendimiento de 0.98 significa que el 98% de la energía se transfiere al secundario.
+      en: An efficiency of 0.98 means that 98% of the energy is transferred to the secondary.
+  domain_checks:
+  - condition: P_1 == 0
+    message:
+      es: 'Potencia de entrada cero: el rendimiento no está definido en vacío.'
+      en: 'Zero input power: efficiency is undefined at no-load.'
+  - condition: eta >= 1
+    message:
+      es: 'Rendimiento mayor o igual a 1: viola la conservación de energía.'
+      en: 'Efficiency greater than or equal to 1: violates energy conservation.'
+  coherence_checks:
+  - condition: eta < 0.8
+    message:
+      es: 'Rendimiento inferior al 80%: inusual en transformadores modernos, posible sobrecarga.'
+      en: 'Efficiency below 80%: unusual in modern transformers, possible overload.'
+  graph_implications:
+  - eta varía con la carga, máximo típicamente al 50-75% de carga nominal
+  pedagogical_triggers:
+  - Usar potencia aparente en lugar de potencia activa al calcular el rendimiento
+- id: perdidas_totales
+  title:
+    es: Pérdidas totales en el transformador
+    en: Total losses in the transformer
+  equation: P_p = P_{Cu} + P_{Fe}
+  latex: P_p = P_{Cu} + P_{Fe}
+  rearrangements:
+  - target: perdidas_totales
+    equation: P_p = P_{Cu} + P_{Fe}
+    latex: P_p = P_{Cu} + P_{Fe}
+  - target: perdidas_en_cobre
+    equation: P_{Cu} = P_p - P_{Fe}
+    latex: P_{Cu} = P_p - P_{Fe}
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: Las pérdidas totales son la suma de las pérdidas por efecto Joule en los devanados de cobre (P_{Cu}) y las pérdidas
+      en el núcleo de hierro (P_{Fe}) por histéresis y corrientes de Foucault.
+    en: Total losses are the sum of Joule losses in the copper windings (P_{Cu}) and losses in the iron core (P_{Fe}) due
+      to hysteresis and eddy currents.
+  constraints:
+  - Las pérdidas de cobre dependen del cuadrado de la corriente de carga
+  - Las pérdidas de hierro dependen aproximadamente del cuadrado de la tensión
+  validity:
+    es: Válido en régimen estacionario. Las pérdidas de cobre varían con la carga, las de hierro se consideran aproximadamente
+      constantes.
+    en: Valid at steady state. Copper losses vary with load, iron losses are considered approximately constant.
+  dimension_check: Todas las potencias en W → consistente
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calculo_rendimiento
+  - disipacion_termica
+  interpretation_tags:
+  - perdidas_energeticas
+  - calentamiento_transformador
+  result_semantics:
+    target: perdidas_totales
+    kind: scalar_unsigned
+    sign_meaning:
+      es: Las pérdidas son siempre positivas, representando energía disipada como calor.
+      en: Losses are always positive, representing energy dissipated as heat.
+    absolute_value_meaning:
+      es: El valor indica la potencia que se pierde y debe disiparse para evitar sobrecalentamiento.
+      en: The value indicates the power that is lost and must be dissipated to prevent overheating.
+  domain_checks:
+  - condition: P_{Cu} < 0 or P_{Fe} < 0
+    message:
+      es: Las pérdidas individuales no pueden ser negativas.
+      en: Individual losses cannot be negative.
+  coherence_checks:
+  - condition: P_p > 0.1 * P_1
+    message:
+      es: 'Pérdidas superiores al 10% de la potencia de entrada: transformador ineficiente o sobrecargado.'
+      en: 'Losses above 10% of input power: inefficient or overloaded transformer.'
+  graph_implications:
+  - P_{Cu} crece con el cuadrado de la carga; P_{Fe} es aproximadamente constante
+  pedagogical_triggers:
+  - Confundir pérdidas de cobre con pérdidas de hierro y sus dependencias
+ui:
+  default_formula: relacion_transformacion
+  show_formula_selector: true
+  show_rearrangements: true
+  show_result_semantics: true

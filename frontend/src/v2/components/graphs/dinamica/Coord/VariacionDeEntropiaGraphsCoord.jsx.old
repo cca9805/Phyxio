@@ -1,0 +1,153 @@
+import React from "react";
+import { createCoordGraphPage } from "@/v2/components/graphs/graphFactories.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraph(
+const uiLang = "es";
+const tt = (es, en) => (uiLang === "en" ? en : es);
+
+const graph_identity = {
+  graph_type: "Coord",
+  pregunta_principal: {
+    es: "Como se calcula la variacion de entropia entre estados y como se lee en un diagrama T-S?",
+    en: "How is entropy change between states calculated and read on a T-S diagram?",
+  },
+  keywords: [
+    "variacion",
+    "entropia",
+    "estados",
+    "diagrama",
+    "calcula",
+    "lee",
+    "T-S",
+    "entropy",
+    "change",
+    "states",
+    "diagram",
+  ],
+  magnitud_estrella: "DeltaS",
+  variable_control: "T_f",
+  formula: "DeltaS = m * c_p * ln(T_f / T_i)",
+  target_interpretable: true,
+};
+
+const axes = {
+  xComponent: "XAxis",
+  yComponent: "YAxis",
+  xAxis: "DeltaS",
+  yAxis: "T",
+};
+
+const formula = {
+  id: "variacion_entropia_calentamiento",
+  formula: "DeltaS = m * c_p * ln(T_f / T_i)",
+  equation: "DeltaS = m * c_p * ln(T_f / T_i)",
+};
+
+const fmt = (value, digits = 1) =>
+  Number.isFinite(value) ? value.toFixed(digits) : "-";
+
+const VariacionDeEntropiaGraphsCoord = createCoordGraphPage({
+  displayName: "VariacionDeEntropiaGraphsCoord",
+  title: {
+    es: "Trayectoria T-S de calentamiento",
+    en: "Heating path in a T-S diagram",
+  },
+  defaultParams: {
+    m: 1,
+    c_p: 4180,
+    T_i: 293,
+    T_f: 373,
+  },
+  controls: [
+    { id: "m", label: { es: "Masa", en: "Mass" }, min: 0.1, max: 5, step: 0.1 },
+    { id: "c_p", label: { es: "Calor especifico", en: "Specific heat" }, min: 200, max: 5000, step: 100 },
+    { id: "T_i", label: { es: "Temperatura inicial", en: "Initial temperature" }, min: 200, max: 600, step: 5 },
+    { id: "T_f", label: { es: "Temperatura final", en: "Final temperature" }, min: 220, max: 800, step: 5 },
+  ],
+  compute: (pNum) => {
+    const m = Number.isFinite(pNum.m) ? pNum.m : 1;
+    const cp = Number.isFinite(pNum.c_p) ? pNum.c_p : 4180;
+    const ti = Number.isFinite(pNum.T_i) && pNum.T_i > 0 ? pNum.T_i : 293;
+    const tf = Number.isFinite(pNum.T_f) && pNum.T_f > 0 ? pNum.T_f : 373;
+    const deltaS = m * cp * Math.log(tf / ti);
+    const minT = Math.min(ti, tf);
+    const maxT = Math.max(ti, tf);
+    const data = Array.from({ length: 32 }, (_, index) => {
+      const frac = index / 31;
+      const t = ti + (tf - ti) * frac;
+      return { x: m * cp * Math.log(t / ti), y: t };
+    });
+
+    return {
+      data,
+      extra: {
+        interpretationTarget: "DeltaS",
+        interpretationValue: deltaS,
+        graphState: {
+          target: "DeltaS",
+          graphType: "Coord",
+          graph_identity,
+          axes,
+          formula,
+          DeltaS: deltaS,
+          T_i: ti,
+          T_f: tf,
+          m,
+          c_p: cp,
+          minT,
+          maxT,
+        },
+      },
+    };
+  },
+  render: ({ data, extra }) => {
+    const state = extra?.graphState ?? {};
+    const width = 520;
+    const height = 260;
+    const minS = Math.min(...data.map((point) => point.x), 0);
+    const maxS = Math.max(...data.map((point) => point.x), 1);
+    const minT = state.minT ?? 293;
+    const maxT = state.maxT ?? 373;
+    const spanS = Math.max(maxS - minS, 1);
+    const spanT = Math.max(maxT - minT, 1);
+    const points = data
+      .map((point) => {
+        const x = 42 + ((point.x - minS) / spanS) * (width - 84);
+        const y = height - 34 - ((point.y - minT) / spanT) * (height - 68);
+        return `${x},${y}`;
+      })
+      .join(" ");
+
+    return (
+      <div className="v2-card" style={{ display: "grid", gap: 12 }}>
+        <div className="v2-card-title">{tt("Lectura en diagrama T-S", "T-S diagram reading")}</div>
+        <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Variacion entropia Coord">
+          <rect x="0" y="0" width={width} height={height} rx="10" fill="rgba(15,23,42,0.86)" />
+          <line x1="38" y1={height - 32} x2={width - 28} y2={height - 32} stroke="rgba(255,255,255,0.28)" />
+          <line x1="42" y1="24" x2="42" y2={height - 28} stroke="rgba(255,255,255,0.28)" />
+          <polyline points={points} fill="none" stroke="#22c55e" strokeWidth="3" />
+          <text x={width - 34} y={height - 42} textAnchor="end" fill="rgba(255,255,255,0.72)" fontSize="12">
+            DeltaS
+          </text>
+          <text x="52" y="38" fill="rgba(255,255,255,0.72)" fontSize="12">
+            T
+          </text>
+        </svg>
+        <div style={{ display: "grid", gap: 4, fontSize: 13 }}>
+          <strong>{tt("Lectura fisica", "Physical reading")}</strong>
+          <span>
+            T_i = {fmt(state.T_i, 0)} K; T_f = {fmt(state.T_f, 0)} K; DeltaS = {fmt(state.DeltaS, 1)} J/K
+          </span>
+        </div>
+      </div>
+    );
+  },
+});
+
+VariacionDeEntropiaGraphsCoord.graph_identity = graph_identity;
+VariacionDeEntropiaGraphsCoord.pregunta_principal = graph_identity.pregunta_principal;
+VariacionDeEntropiaGraphsCoord.magnitud_estrella = graph_identity.magnitud_estrella;
+VariacionDeEntropiaGraphsCoord.axes = axes;
+VariacionDeEntropiaGraphsCoord.formula = formula;
+
+export default VariacionDeEntropiaGraphsCoord;

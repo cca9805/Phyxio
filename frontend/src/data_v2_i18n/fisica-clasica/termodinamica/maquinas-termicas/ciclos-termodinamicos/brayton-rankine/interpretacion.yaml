@@ -1,0 +1,669 @@
+version: "2.0"
+id: interpretacion-brayton-rankine
+leaf_id: brayton-rankine
+nombre:
+  es: Interpretación de resultados — Ciclos Brayton y Rankine
+  en: Result interpretation — Brayton and Rankine cycles
+
+scope:
+  formulas:
+    - rendimiento_brayton
+    - rendimiento_rankine
+    - balance_energetico
+  magnitudes:
+    - eta_th
+    - W_neto
+    - Q_H
+    - Q_C
+    - r_p
+    - gamma
+    - T_H
+    - T_C
+
+ui:
+  show_result_label: true
+  highlight_key_value: true
+  show_formula_used: true
+
+dependencies:
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+  formulas:
+    - rendimiento_brayton
+    - rendimiento_rankine
+    - balance_energetico
+  magnitudes:
+    - eta_th
+    - W_neto
+    - Q_H
+    - Q_C
+    - r_p
+    - gamma
+    - T_H
+    - T_C
+
+global_context:
+  es: "Los ciclos Brayton y Rankine son los ciclos de potencia dominantes en la ingeniería energética moderna. Brayton impulsa turbinas de gas y reactores de aviación; Rankine impulsa centrales de vapor y nucleares. Ambos convierten calor de alta temperatura en trabajo mecánico, y su rendimiento está limitado por la segunda ley de la termodinámica."
+  en: "The Brayton and Rankine cycles are the dominant power cycles in modern energy engineering. Brayton drives gas turbines and aviation engines; Rankine drives steam and nuclear power plants. Both convert high-temperature heat into mechanical work, and their efficiency is limited by the second law of thermodynamics."
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: Resumen del resultado
+      en: Result summary
+  physical_reading:
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia del resultado
+      en: Result coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura del gráfico
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  eta_th:
+    summary_rules:
+      - id: eta_th_sum_alto
+        when: "eta_th > 0.50"
+        status: destacado
+        text:
+          es: "El rendimiento obtenido es superior al 50 %, lo que indica un ciclo de alta eficiencia. Este valor supera el de la mayoría de las turbinas de gas industriales convencionales y sugiere condiciones de operación ideales o un r_p muy elevado."
+          en: "The obtained efficiency exceeds 50 %, indicating a high-efficiency cycle. This value surpasses most conventional industrial gas turbines and suggests ideal operating conditions or a very high r_p."
+      - id: eta_th_sum_medio
+        condition:
+          variable: eta_th
+          gte: 0.30
+          lte: 0.50
+        status: normal
+        text:
+          es: "El rendimiento obtenido está en el rango típico industrial (30 %–50 %), coherente con turbinas de gas o centrales de vapor reales operando con relaciones de presión moderadas."
+          en: "The obtained efficiency falls in the typical industrial range (30 %–50 %), consistent with real gas turbines or steam power plants operating at moderate pressure ratios."
+      - id: eta_th_sum_bajo
+        when: "eta_th < 0.30"
+        status: advertencia
+        text:
+          es: "El rendimiento obtenido es inferior al 30 %, lo que indica condiciones de operación poco eficientes. Verificar si r_p es demasiado bajo o si T_H es insuficiente para el tipo de ciclo analizado."
+          en: "The obtained efficiency is below 30 %, indicating poorly efficient operating conditions. Check if r_p is too low or if T_H is insufficient for the type of cycle analyzed."
+      - id: eta_th_sum_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "El rendimiento térmico indica la fracción de calor absorbido que se convierte en trabajo neto útil en el ciclo."
+          en: "The thermal efficiency indicates the fraction of absorbed heat converted into useful net work in the cycle."
+
+    physical_reading_rules:
+      - id: eta_th_fis_alto
+        when: "eta_th > 0.45"
+        status: normal
+        text:
+          es: "A este rendimiento, por cada 100 kJ de calor suministrado, el ciclo produce más de 45 kJ de trabajo neto y rechaza menos de 55 kJ al foco frío. La relación de presiones es probablemente superior a 15."
+          en: "At this efficiency, for every 100 kJ of heat supplied, the cycle produces more than 45 kJ of net work and rejects less than 55 kJ to the cold sink. The pressure ratio is likely above 15."
+      - id: eta_th_fis_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "El rendimiento mide cuánto del calor absorbido se transforma en trabajo. El resto, 1 menos el rendimiento, se rechaza inevitablemente al entorno por mandato de la segunda ley."
+          en: "The efficiency measures how much of the absorbed heat is transformed into work. The remainder, 1 minus the efficiency, is inevitably rejected to the environment by the second law."
+
+    coherence_rules:
+      - id: eta_th_coh_rango
+        when: "eta_th >= 1.0"
+        status: error
+        text:
+          es: "Rendimiento igual o superior a 1 es físicamente imposible. Viola la segunda ley de la termodinámica. Revisar los valores de r_p y γ introducidos."
+          en: "Efficiency equal to or greater than 1 is physically impossible. It violates the second law of thermodynamics. Check the values of r_p and γ entered."
+      - id: eta_th_coh_negativo
+        when: "eta_th <= 0"
+        status: error
+        text:
+          es: "Rendimiento nulo o negativo carece de sentido físico en un ciclo de potencia. Verificar que r_p > 1 y γ > 1."
+          en: "Zero or negative efficiency has no physical meaning in a power cycle. Verify that r_p > 1 and γ > 1."
+      - id: eta_th_coh_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "El rendimiento es coherente con los rangos típicos de los ciclos Brayton y Rankine."
+          en: "The efficiency is consistent with the typical ranges of Brayton and Rankine cycles."
+
+    model_validity_rules:
+      - id: eta_th_mod_ideal
+        when: "true"
+        status: advertencia
+        text:
+          es: "Este rendimiento corresponde al ciclo ideal con procesos reversibles. En un ciclo real, las irreversibilidades del compresor, la turbina y los intercambiadores de calor reducen η_th entre un 20 % y un 40 % respecto al valor ideal."
+          en: "This efficiency corresponds to the ideal cycle with reversible processes. In a real cycle, irreversibilities in the compressor, turbine and heat exchangers reduce η_th by 20 % to 40 % below the ideal value."
+
+    graph_rules:
+      - id: eta_th_graf_brayton
+        when: "true"
+        status: normal
+        text:
+          es: "En el gráfico η_th vs r_p, este punto corresponde a un valor concreto de la curva creciente. Aumentar r_p desplaza el punto hacia mayor η_th siguiendo la ley de raíz de potencia del ciclo Brayton ideal."
+          en: "In the η_th vs r_p graph, this point corresponds to a specific value on the rising curve. Increasing r_p shifts the point toward higher η_th following the power-root law of the ideal Brayton cycle."
+
+    likely_errors:
+      - id: eta_th_err_celsius
+        when: "true"
+        status: advertencia
+        text:
+          es: "Error frecuente: usar temperaturas en Celsius en lugar de kelvin al calcular rendimientos de Carnot para comparar con η_th. Siempre convertir a kelvin antes."
+          en: "Common error: using temperatures in Celsius instead of kelvin when calculating Carnot efficiency to compare with η_th. Always convert to kelvin first."
+
+    next_step_rules:
+      - id: eta_th_next_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Con η_th calculado, el siguiente paso es estimar W_neto a partir de Q_H o comparar con el límite de Carnot para evaluar cuánto margen de mejora existe."
+          en: "With η_th calculated, the next step is to estimate W_net from Q_H or compare with the Carnot limit to assess how much room for improvement exists."
+
+  r_p:
+    summary_rules:
+      - id: r_p_sum_alto
+        when: "r_p > 20"
+        status: destacado
+        text:
+          es: "La relación de presiones supera 20, típica de turbinas de gas aeronáuticas de alta eficiencia. A este nivel, η_th es elevado pero W_neto por unidad de masa puede disminuir si no se controla la temperatura máxima."
+          en: "The pressure ratio exceeds 20, typical of high-efficiency aeronautical gas turbines. At this level, η_th is high but W_net per unit mass may decrease if the maximum temperature is not controlled."
+      - id: r_p_sum_normal
+        condition:
+          variable: r_p
+          gte: 5
+          lte: 20
+        status: normal
+        text:
+          es: "La relación de presiones está en el rango habitual de turbinas industriales y aeronáuticas (5–20). Es un valor operativamente justificado."
+          en: "The pressure ratio is in the usual range of industrial and aeronautical turbines (5–20). It is an operationally justified value."
+      - id: r_p_sum_bajo
+        when: "r_p < 5"
+        status: advertencia
+        text:
+          es: "La relación de presiones es inferior a 5, lo que limita fuertemente el rendimiento del ciclo Brayton. En aplicaciones reales se suelen usar valores más altos."
+          en: "The pressure ratio is below 5, which strongly limits the Brayton cycle efficiency. Real applications typically use higher values."
+      - id: r_p_sum_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "La relación de presiones r_p es el parámetro de diseño principal del ciclo Brayton."
+          en: "The pressure ratio r_p is the main design parameter of the Brayton cycle."
+
+    physical_reading_rules:
+      - id: r_p_fis_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "r_p indica cuánto se comprime el gas en el compresor. Una relación de presiones de 10 significa que la presión a la salida del compresor es diez veces la presión de entrada."
+          en: "r_p indicates how much the gas is compressed in the compressor. A pressure ratio of 10 means the pressure at the compressor outlet is ten times the inlet pressure."
+
+    coherence_rules:
+      - id: r_p_coh_minimo
+        when: "r_p <= 1"
+        status: error
+        text:
+          es: "r_p igual o menor a 1 no tiene sentido físico en un ciclo de potencia. La presión debe aumentar en el compresor: r_p siempre debe ser mayor que 1."
+          en: "r_p equal to or less than 1 has no physical meaning in a power cycle. Pressure must increase in the compressor: r_p must always be greater than 1."
+      - id: r_p_coh_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "El valor de r_p es coherente con un ciclo Brayton de potencia."
+          en: "The value of r_p is consistent with a Brayton power cycle."
+
+    model_validity_rules:
+      - id: r_p_mod_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "El ciclo Brayton ideal es válido para gases con γ constante. Para r_p muy alto, las variaciones de γ con la temperatura se vuelven importantes y el modelo de propiedades constantes puede subestimar el trabajo del compresor."
+          en: "The ideal Brayton cycle is valid for gases with constant γ. For very high r_p, the variation of γ with temperature becomes important and the constant-properties model may underestimate compressor work."
+
+    graph_rules:
+      - id: r_p_graf_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "En el gráfico η_th vs r_p, el punto marcado muestra el rendimiento correspondiente a esta relación de presiones. La curva crece de forma sublineal siguiendo una ley de potencia."
+          en: "In the η_th vs r_p graph, the marked point shows the efficiency corresponding to this pressure ratio. The curve grows sub-linearly following a power law."
+
+    likely_errors:
+      - id: r_p_err_fallback
+        when: "true"
+        status: advertencia
+        text:
+          es: "Error frecuente: confundir r_p del ciclo Brayton con la relación de compresión volumétrica del ciclo Otto. Son magnitudes distintas con definiciones diferentes."
+          en: "Common error: confusing Brayton's r_p with the Otto cycle's volumetric compression ratio. They are different quantities with different definitions."
+
+    next_step_rules:
+      - id: r_p_next_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Con r_p calculado, el siguiente paso natural es determinar η_th con la fórmula del ciclo Brayton y compararlo con el rendimiento de Carnot entre T_H y T_C."
+          en: "With r_p calculated, the natural next step is to determine η_th using the Brayton cycle formula and compare it with the Carnot efficiency between T_H and T_C."
+
+  W_neto:
+    summary_rules:
+      - id: W_neto_sum_alto
+        when: "W_neto > 400000"
+        status: destacado
+        text:
+          es: "El trabajo neto supera 400 kJ/kg, un valor alto característico de ciclos de vapor con recalentamiento o de turbinas de gas de alta temperatura."
+          en: "The net work exceeds 400 kJ/kg, a high value characteristic of reheat steam cycles or high-temperature gas turbines."
+      - id: W_neto_sum_normal
+        condition:
+          variable: W_neto
+          gte: 100000
+          lte: 400000
+        status: normal
+        text:
+          es: "El trabajo neto está en el rango industrial típico (100–400 kJ/kg) para ciclos de vapor o gas."
+          en: "The net work is in the typical industrial range (100–400 kJ/kg) for steam or gas cycles."
+      - id: W_neto_sum_bajo
+        when: "W_neto < 100000"
+        status: advertencia
+        text:
+          es: "El trabajo neto es inferior a 100 kJ/kg, lo que indica un ciclo con rendimiento o condiciones de entrada pobres. Revisar Q_H y η_th."
+          en: "The net work is below 100 kJ/kg, indicating a cycle with poor efficiency or inlet conditions. Check Q_H and η_th."
+      - id: W_neto_sum_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "El trabajo neto es la salida útil del ciclo: lo que queda después de restar el trabajo consumido por el compresor o la bomba."
+          en: "The net work is the useful output of the cycle: what remains after subtracting the work consumed by the compressor or pump."
+
+    physical_reading_rules:
+      - id: W_neto_fis_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "W_neto representa la energía mecánica disponible por kilogramo de fluido de trabajo. En una central real, este valor multiplicado por el flujo másico da la potencia eléctrica neta del generador."
+          en: "W_net represents the mechanical energy available per kilogram of working fluid. In a real plant, this value multiplied by the mass flow rate gives the net electrical power of the generator."
+
+    coherence_rules:
+      - id: W_neto_coh_negativo
+        when: "W_neto <= 0"
+        status: error
+        text:
+          es: "Trabajo neto nulo o negativo indica que el compresor o la bomba consumen más energía de la que produce la turbina. El ciclo no produce potencia útil. Revisar los datos."
+          en: "Zero or negative net work indicates that the compressor or pump consumes more energy than the turbine produces. The cycle produces no useful power. Check the input data."
+      - id: W_neto_coh_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "El trabajo neto es positivo y coherente con un ciclo de potencia real."
+          en: "The net work is positive and consistent with a real power cycle."
+
+    model_validity_rules:
+      - id: W_neto_mod_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Este valor corresponde al ciclo ideal. En la práctica, las irreversibilidades del compresor y la turbina (eficiencias isentrópicas 0.80–0.90) reducen W_neto entre un 15 % y un 30 %."
+          en: "This value corresponds to the ideal cycle. In practice, irreversibilities in the compressor and turbine (isentropic efficiencies 0.80–0.90) reduce W_net by 15 % to 30 %."
+
+    graph_rules:
+      - id: W_neto_graf_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "En el diagrama T-s, el trabajo neto es proporcional al área encerrada por el ciclo. Un ciclo con mayor área produce más trabajo neto por unidad de masa de fluido."
+          en: "In the T-s diagram, net work is proportional to the enclosed area of the cycle. A cycle with larger area produces more net work per unit mass of fluid."
+
+    likely_errors:
+      - id: W_neto_err_fallback
+        when: "true"
+        status: advertencia
+        text:
+          es: "Error frecuente: usar solo el trabajo de la turbina sin restar el trabajo del compresor o la bomba. El trabajo neto siempre es la diferencia entre ambos."
+          en: "Common error: using only turbine work without subtracting compressor or pump work. Net work is always the difference between the two."
+
+    next_step_rules:
+      - id: W_neto_next_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Con W_neto y Q_H conocidos, calcular η_th directamente. Comparar también W_neto con el valor de Carnot para saber qué fracción del potencial ideal se aprovecha."
+          en: "With W_net and Q_H known, calculate η_th directly. Also compare W_net with the Carnot value to know what fraction of the ideal potential is harnessed."
+
+  Q_H:
+    summary_rules:
+      - id: Q_H_sum_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Q_H es la entrada energética total del ciclo por kilogramo de fluido de trabajo. Cuantifica cuánta energía primaria consume el ciclo para producir W_neto."
+          en: "Q_H is the total energy input of the cycle per kilogram of working fluid. It quantifies how much primary energy the cycle consumes to produce W_net."
+
+    physical_reading_rules:
+      - id: Q_H_fis_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Q_H fija el consumo de combustible o de calor nuclear por unidad de trabajo producido. Reducir Q_H manteniendo W_neto constante significa mejorar el rendimiento."
+          en: "Q_H sets the fuel or nuclear heat consumption per unit of work produced. Reducing Q_H while keeping W_net constant means improving efficiency."
+
+    coherence_rules:
+      - id: Q_H_coh_menor_Wneto
+        when: "Q_H <= W_neto"
+        status: error
+        text:
+          es: "Q_H no puede ser menor o igual a W_neto: el primer principio exige que Q_H = W_neto + Q_C con Q_C > 0. Revisar los datos introducidos."
+          en: "Q_H cannot be less than or equal to W_net: the first law requires Q_H = W_net + Q_C with Q_C > 0. Check the entered data."
+      - id: Q_H_coh_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Q_H es mayor que W_neto, coherente con el primer principio de la termodinámica."
+          en: "Q_H is greater than W_net, consistent with the first law of thermodynamics."
+
+    model_validity_rules:
+      - id: Q_H_mod_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "En el modelo ideal, Q_H se suministra completamente a temperatura T_H. En la realidad, la transmisión de calor ocurre con una diferencia de temperatura finita, lo que introduce irreversibilidades."
+          en: "In the ideal model, Q_H is supplied entirely at temperature T_H. In reality, heat transfer occurs with a finite temperature difference, introducing irreversibilities."
+
+    graph_rules:
+      - id: Q_H_graf_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "En el diagrama T-s, Q_H es el área bajo la curva de absorción de calor a alta temperatura. Cuanto más alta es T_H y más extensa la curva, mayor es Q_H."
+          en: "In the T-s diagram, Q_H is the area under the heat absorption curve at high temperature. The higher T_H and the more extensive the curve, the larger Q_H."
+
+    likely_errors:
+      - id: Q_H_err_fallback
+        when: "true"
+        status: advertencia
+        text:
+          es: "Error frecuente: confundir Q_H con el poder calorífico inferior del combustible. Q_H es el calor realmente transferido al fluido de trabajo, siempre menor por las pérdidas en la cámara de combustión."
+          en: "Common error: confusing Q_H with the lower heating value of the fuel. Q_H is the heat actually transferred to the working fluid, always lower due to combustion chamber losses."
+
+    next_step_rules:
+      - id: Q_H_next_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Con Q_H y W_neto determinados, calcular Q_C mediante el balance energético y verificar que Q_C > 0 como exige la segunda ley."
+          en: "With Q_H and W_net determined, calculate Q_C via the energy balance and verify that Q_C > 0 as required by the second law."
+
+  Q_C:
+    summary_rules:
+      - id: Q_C_sum_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Q_C es el calor inevitablemente rechazado al foco frío en cada ciclo. Su existencia está garantizada por la segunda ley de la termodinámica y no puede eliminarse."
+          en: "Q_C is the heat inevitably rejected to the cold sink in each cycle. Its existence is guaranteed by the second law of thermodynamics and cannot be eliminated."
+
+    physical_reading_rules:
+      - id: Q_C_fis_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Q_C representa la energía que se disipa al condensador, al río de refrigeración o a la atmósfera. En una central de vapor típica, Q_C supera al W_neto: se rechaza más calor del que se extrae como trabajo."
+          en: "Q_C represents the energy dissipated to the condenser, cooling river or atmosphere. In a typical steam power plant, Q_C exceeds W_net: more heat is rejected than extracted as work."
+
+    coherence_rules:
+      - id: Q_C_coh_cero
+        when: "Q_C <= 0"
+        status: error
+        text:
+          es: "Q_C nulo o negativo viola la segunda ley de la termodinámica. Todo ciclo real rechaza calor al foco frío. Revisar los datos del balance energético."
+          en: "Zero or negative Q_C violates the second law of thermodynamics. Every real cycle rejects heat to the cold sink. Check the energy balance data."
+      - id: Q_C_coh_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Q_C es positivo, coherente con la segunda ley de la termodinámica."
+          en: "Q_C is positive, consistent with the second law of thermodynamics."
+
+    model_validity_rules:
+      - id: Q_C_mod_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "En el ciclo ideal, Q_C se rechaza completamente a temperatura T_C. En el ciclo real, la temperatura del condensador es ligeramente superior a T_C del entorno por la irreversibilidad de la transmisión de calor."
+          en: "In the ideal cycle, Q_C is rejected entirely at temperature T_C. In the real cycle, the condenser temperature is slightly above the ambient T_C due to the irreversibility of heat transfer."
+
+    graph_rules:
+      - id: Q_C_graf_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "En el diagrama T-s, Q_C es el área bajo la curva de rechazo de calor a baja temperatura. La diferencia entre las áreas de Q_H y Q_C es el área del ciclo, proporcional a W_neto."
+          en: "In the T-s diagram, Q_C is the area under the heat rejection curve at low temperature. The difference between the Q_H and Q_C areas is the cycle area, proportional to W_net."
+
+    likely_errors:
+      - id: Q_C_err_fallback
+        when: "true"
+        status: advertencia
+        text:
+          es: "Error frecuente: creer que reducir Q_C a cero mejoraría el rendimiento infinitamente. La segunda ley impone Q_C > 0; intentar diseñar con Q_C = 0 viola el enunciado de Kelvin-Planck."
+          en: "Common error: believing that reducing Q_C to zero would improve efficiency infinitely. The second law imposes Q_C > 0; trying to design with Q_C = 0 violates the Kelvin-Planck statement."
+
+    next_step_rules:
+      - id: Q_C_next_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Con Q_C conocido, verificar que Q_H = W_neto + Q_C y que η_th = 1 - Q_C/Q_H. Esta verificación doble confirma la coherencia del balance energético."
+          en: "With Q_C known, verify that Q_H = W_net + Q_C and that η_th = 1 - Q_C/Q_H. This double check confirms the consistency of the energy balance."
+
+  T_H:
+    summary_rules:
+      - id: T_H_sum_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "T_H es la temperatura máxima del ciclo. En el ciclo Rankine con vapor, T_H está limitada por la presión de la caldera y los materiales; en el ciclo Brayton, por la resistencia térmica de los álabes de turbina."
+          en: "T_H is the maximum temperature of the cycle. In the Rankine steam cycle, T_H is limited by the boiler pressure and materials; in the Brayton cycle, by the thermal resistance of turbine blades."
+
+    physical_reading_rules:
+      - id: T_H_fis_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "A mayor T_H, mayor diferencia de temperatura disponible para el ciclo, y mayor rendimiento potencial. T_H fija el techo energético del ciclo."
+          en: "Higher T_H means a larger temperature difference available for the cycle, and higher potential efficiency. T_H sets the energy ceiling of the cycle."
+
+    coherence_rules:
+      - id: T_H_coh_celsius
+        when: "T_H < 200"
+        status: advertencia
+        text:
+          es: "T_H inferior a 200 K es un valor muy bajo para una turbina de vapor o gas. Verificar si la temperatura se ha introducido en kelvin y no en Celsius."
+          en: "T_H below 200 K is a very low value for a steam or gas turbine. Check whether the temperature was entered in kelvin and not in Celsius."
+      - id: T_H_coh_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "T_H parece coherente para un ciclo de potencia. Verificar que T_H > T_C."
+          en: "T_H appears consistent for a power cycle. Verify that T_H > T_C."
+
+    model_validity_rules:
+      - id: T_H_mod_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "El modelo ideal asume que T_H es la temperatura uniforme del foco caliente. En la realidad, la temperatura del fluido varía a lo largo de la caldera o la cámara de combustión."
+          en: "The ideal model assumes T_H is the uniform temperature of the hot reservoir. In reality, the fluid temperature varies along the boiler or combustion chamber."
+
+    graph_rules:
+      - id: T_H_graf_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "En el diagrama T-s, T_H define el extremo superior del ciclo. Elevar T_H expande el área del ciclo hacia arriba, aumentando W_neto y η_th simultáneamente."
+          en: "In the T-s diagram, T_H defines the upper bound of the cycle. Raising T_H expands the cycle area upward, increasing both W_net and η_th simultaneously."
+
+    likely_errors:
+      - id: T_H_err_fallback
+        when: "true"
+        status: advertencia
+        text:
+          es: "Error frecuente: confundir T_H con la temperatura de llama adiabática. T_H es la temperatura del fluido de trabajo, no del combustible en combustión."
+          en: "Common error: confusing T_H with the adiabatic flame temperature. T_H is the temperature of the working fluid, not the burning fuel."
+
+    next_step_rules:
+      - id: T_H_next_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Con T_H y T_C conocidas, calcular el rendimiento límite de Carnot como referencia superior teórica del ciclo real."
+          en: "With T_H and T_C known, calculate the Carnot efficiency limit as the theoretical upper bound for the real cycle."
+
+  T_C:
+    summary_rules:
+      - id: T_C_sum_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "T_C es la temperatura mínima del ciclo, fijada por el entorno o el sistema de refrigeración. No es un parámetro de diseño libre: está impuesto por la disponibilidad de agua de refrigeración o el clima."
+          en: "T_C is the minimum temperature of the cycle, fixed by the environment or the cooling system. It is not a free design parameter: it is imposed by the availability of cooling water or climate."
+
+    physical_reading_rules:
+      - id: T_C_fis_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Reducir T_C mejora el rendimiento, pero requiere condensadores más fríos o sistemas de refrigeración activos con coste energético propio. Las centrales costeras tienen ventaja por el acceso a agua de mar más fría."
+          en: "Lowering T_C improves efficiency, but requires colder condensers or active cooling systems with their own energy cost. Coastal plants have an advantage from access to cooler seawater."
+
+    coherence_rules:
+      - id: T_C_coh_mayor_TH
+        when: "T_C >= T_H"
+        status: error
+        text:
+          es: "T_C debe ser estrictamente menor que T_H para que el ciclo produzca trabajo. Si T_C ≥ T_H, no existe gradiente de temperatura y el ciclo no funciona."
+          en: "T_C must be strictly less than T_H for the cycle to produce work. If T_C ≥ T_H, there is no temperature gradient and the cycle does not operate."
+      - id: T_C_coh_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "T_C es menor que T_H, lo que permite la operación del ciclo termodinámico."
+          en: "T_C is less than T_H, which enables the operation of the thermodynamic cycle."
+
+    model_validity_rules:
+      - id: T_C_mod_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "En el modelo ideal, T_C es la temperatura fija del foco frío. En la práctica, T_C aumenta ligeramente durante el rechazo de calor por la temperatura de acercamiento finita del condensador."
+          en: "In the ideal model, T_C is the fixed cold reservoir temperature. In practice, T_C rises slightly during heat rejection due to the finite approach temperature of the condenser."
+
+    graph_rules:
+      - id: T_C_graf_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "En el diagrama T-s, T_C define el extremo inferior del ciclo. Reducir T_C expande el área del ciclo hacia abajo, mejorando W_neto y η_th."
+          en: "In the T-s diagram, T_C defines the lower bound of the cycle. Reducing T_C expands the cycle area downward, improving both W_net and η_th."
+
+    likely_errors:
+      - id: T_C_err_fallback
+        when: "true"
+        status: advertencia
+        text:
+          es: "Error frecuente: suponer que T_C puede ser igual a 0 K. Es un límite teórico inalcanzable; en la práctica T_C está entre 280 K y 340 K para la mayoría de las centrales."
+          en: "Common error: assuming T_C can equal 0 K. This is an unreachable theoretical limit; in practice T_C lies between 280 K and 340 K for most power plants."
+
+    next_step_rules:
+      - id: T_C_next_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Con T_H y T_C definidos, el rendimiento de Carnot es el límite superior teórico. Cualquier ciclo real operará con un rendimiento significativamente inferior por las irreversibilidades."
+          en: "With T_H and T_C defined, the Carnot efficiency is the theoretical upper limit. Any real cycle will operate at a significantly lower efficiency due to irreversibilities."
+
+  gamma:
+    summary_rules:
+      - id: gamma_sum_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "El índice adiabático γ del gas de trabajo es un parámetro fijo de la composición molecular del fluido. Para aire seco a temperatura moderada, γ ≈ 1.40."
+          en: "The adiabatic index γ of the working gas is a fixed parameter of the fluid's molecular composition. For dry air at moderate temperature, γ ≈ 1.40."
+
+    physical_reading_rules:
+      - id: gamma_fis_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "γ determina cuánto aumenta la temperatura en la compresión adiabática. Un γ mayor produce un mayor incremento de T en el compresor, aumentando el trabajo de compresión pero también elevando la temperatura de entrada a la turbina."
+          en: "γ determines how much the temperature rises in adiabatic compression. A higher γ produces a larger T increase in the compressor, raising compression work but also elevating the turbine inlet temperature."
+
+    coherence_rules:
+      - id: gamma_coh_menor1
+        when: "gamma <= 1"
+        status: error
+        text:
+          es: "γ igual o menor a 1 no tiene sentido físico para un gas ideal. El índice adiabático siempre es mayor que 1 para cualquier gas real."
+          en: "γ equal to or less than 1 has no physical meaning for an ideal gas. The adiabatic index is always greater than 1 for any real gas."
+      - id: gamma_coh_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "El valor de γ es coherente con un gas diatómico o poliatómico real."
+          en: "The value of γ is consistent with a real diatomic or polyatomic gas."
+
+    model_validity_rules:
+      - id: gamma_mod_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "El ciclo Brayton ideal asume γ constante. En la realidad, γ disminuye con la temperatura (de 1.40 a ~1.30 entre 300 K y 1300 K para el aire), lo que hace que el modelo de propiedades constantes sobreestime ligeramente el rendimiento."
+          en: "The ideal Brayton cycle assumes constant γ. In reality, γ decreases with temperature (from 1.40 to ~1.30 between 300 K and 1300 K for air), so the constant-properties model slightly overestimates the efficiency."
+
+    graph_rules:
+      - id: gamma_graf_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "En el gráfico η_th vs r_p, un γ mayor desplaza toda la curva hacia valores más altos de η_th para el mismo r_p, porque la compresión adiabática es más eficiente termodinámicamente."
+          en: "In the η_th vs r_p graph, a higher γ shifts the entire curve to higher η_th values for the same r_p, because adiabatic compression is thermodynamically more efficient."
+
+    likely_errors:
+      - id: gamma_err_fallback
+        when: "true"
+        status: advertencia
+        text:
+          es: "Error frecuente: usar γ = 1.67 (gas monoatómico noble como el argón) para el aire. El aire es un gas diatómico con γ ≈ 1.40 a temperatura ambiente."
+          en: "Common error: using γ = 1.67 (monatomic noble gas like argon) for air. Air is a diatomic gas with γ ≈ 1.40 at room temperature."
+
+    next_step_rules:
+      - id: gamma_next_fallback
+        when: "true"
+        status: normal
+        text:
+          es: "Con γ y r_p definidos, se puede calcular directamente η_th del ciclo Brayton ideal y las temperaturas en cada punto del ciclo."
+          en: "With γ and r_p defined, η_th of the ideal Brayton cycle can be calculated directly along with the temperatures at each cycle point."

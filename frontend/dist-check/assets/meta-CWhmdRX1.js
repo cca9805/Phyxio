@@ -1,0 +1,73 @@
+const e=`version: 5
+id: trabajo
+nombre:
+  es: Trabajo
+  en: Work
+titulo:
+  es: Trabajo
+  en: Work
+titulo_en: Work
+area: fisica-clasica
+bloque: mecanica
+subbloque: trabajo-y-energia
+parent_id: fundamentos
+type: leaf
+ruta_relativa: fisica-clasica/mecanica/trabajo-y-energia/fundamentos/trabajo
+orden: 214110
+icon: "✅"
+descripcion: Estudia la transferencia de energia por una fuerza a lo largo de un desplazamiento.
+description_en: Studies energy transfer by a force along a displacement.
+dificultad: 2
+tiempo_estimado_min: 40
+niveles:
+  es: [ ESO, BACHILLERATO, UNIVERSIDAD ]
+  en: [ Secondary, Upper Secondary, University ]
+prerequisitos:
+- fisica-clasica/fundamentos/vectores
+- fisica-clasica/mecanica/dinamica/fundamentos/leyes-de-newton/segunda-ley-fuerza-masa
+tags:
+  es: [ trabajo, energia, fuerza, desplazamiento, producto-escalar ]
+  en: [ work, energy, force, displacement, dot-product ]
+physical_role:
+  es: magnitud física
+  en: physical quantity
+graficos: []
+representacion_dominante: none
+magnitud_dominante: W
+pregunta_fisica_central:
+  es: "¿Como determina el angulo entre fuerza y desplazamiento el signo y magnitud del trabajo?"
+  en: "How does the angle between force and displacement determine the sign and magnitude of work?"
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    show_tab: true
+    show_inline_cards: true
+    allow_contextual_feedback: true
+    inline_calculator: true
+    inline_graph: false
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: false
+    preferred_type: Coord
+    output_magnitude: W
+  output_policy:
+    show_summary: true
+    show_summary_first: true
+    show_physical_reading: true
+    show_coherence_checks: true
+    show_model_limitations: true
+    show_warnings: true
+    show_likely_errors: true
+    max_inline_messages: 4
+  dependencies:
+    require_formulas: true
+    require_magnitudes: true
+    require_examples: true
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: false
+`;export{e as default};

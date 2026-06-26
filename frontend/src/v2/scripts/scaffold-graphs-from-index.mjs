@@ -6,6 +6,7 @@ const ROOT = process.cwd();
 const targets = [
   path.join(ROOT, "src/v2/components/graphs/cinematica/index.js"),
   path.join(ROOT, "src/v2/components/graphs/dinamica/index.js"),
+  path.join(ROOT, "src/v2/components/graphs/termodinamica/index.js"),
 ];
 
 const templatesDir = path.join(ROOT, "src/v2/components/graphs/_templates");

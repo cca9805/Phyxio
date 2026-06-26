@@ -1,0 +1,73 @@
+const n=`id: sobre-cargas-en-movimiento
+nombre:
+  es: "Sobre cargas en movimiento"
+  en: "Magnetic Force on Moving Charges"
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: magnetismo
+parent_id: fuerzas-magneticas
+ruta_relativa: fisica-clasica/electromagnetismo/magnetismo/fuerzas-magneticas/sobre-cargas-en-movimiento
+orden: 299210
+type: leaf
+niveles:
+  es:
+    - BACHILLERATO
+    - UNIVERSIDAD
+  en:
+    - Upper Secondary
+    - University
+icon: "⚡"
+descripcion: "Fuerza magnetica sobre una carga movil y curvatura de su trayectoria."
+description_en: "Magnetic force on a moving charge and curvature of its path."
+tags:
+  es:
+    - magnetismo
+    - fuerza magnetica
+    - carga movil
+    - Lorentz
+    - trayectoria circular
+  en:
+    - magnetism
+    - magnetic force
+    - moving charge
+    - Lorentz
+    - circular path
+prerequisitos:
+  - fisica-clasica/electromagnetismo/magnetismo/campo-magnetico
+  - fisica-clasica/electromagnetismo/electrostatica/carga-electrica
+graficos:
+  - Coord
+  - Svg
+physical_role:
+  es: "concepto físico"
+  en: "physical concept"
+representacion_dominante: Coord
+magnitud_dominante: F_B
+pregunta_fisica_central:
+  es: "¿Como determina el campo magnetico la fuerza sobre una carga en movimiento?"
+  en: "How does a magnetic field determine the force on a moving charge?"
+dificultad: 3
+tiempo_estimado_min: 35
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 2
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

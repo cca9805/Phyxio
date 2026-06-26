@@ -1,0 +1,311 @@
+const n=`magnitudes:
+- id: P
+  symbol: P
+  nombre:
+    es: Potencia (Fuerza de entrada)
+    en: Effort (Input force)
+  descripcion:
+    es: Fuerza aplicada para mover la carga o vencer la resistencia.
+    en: Force applied to move the load or overcome the resistance.
+  unidad_si: N
+  dimension: LMT^-2
+  is_vector: true
+  components: [Px, Py]
+  category: mecanica/dinamica
+  physical_role: actuador
+  used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/palanca]
+  common_mistake:
+    es: Confundir con masa (kg) o confundir con presión.
+    en: Confusing with mass (kg) or confusing with pressure.
+  typical_range: [0.1, 10000]
+  sign_behavior: siempre positiva en magnitud
+  zero_behavior: equilibrio si R también es cero
+  value_nature: extensiva
+  interpretation_role: input
+  graph_binding: b_P
+  pedagogical_notes: En el cuerpo humano es la fuerza muscular.
+
+- id: R
+  symbol: R
+  nombre:
+    es: Resistencia (Carga)
+    en: Resistance (Load)
+  descripcion:
+    es: Fuerza u objeto que se opone al movimiento y que se desea vencer.
+    en: Force or object that opposes motion and is to be overcome.
+  unidad_si: N
+  dimension: LMT^-2
+  is_vector: true
+  components: [Rx, Ry]
+  category: mecanica/dinamica
+  physical_role: carga
+  used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/palanca]
+  common_mistake:
+    es: Olvidar multiplicar la masa por la gravedad.
+    en: Forgetting to multiply mass by gravity.
+  typical_range: [0.1, 100000]
+  sign_behavior: opuesta a la potencia generalmente
+  zero_behavior: carga nula implica movimiento sin esfuerzo ideal
+  value_nature: extensiva
+  interpretation_role: output
+  graph_binding: b_R
+  pedagogical_notes: Representa el objetivo mecánico de la máquina.
+
+- id: bP
+  symbol: d_P
+  nombre:
+    es: Brazo de potencia
+    en: Effort arm
+  descripcion:
+    es: Distancia perpendicular desde el fulcro hasta la línea de acción de la potencia.
+    en: Perpendicular distance from the fulcrum to the line of action of the effort.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: mecanica/estatica
+  physical_role: parámetro geométrico
+  used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/palanca]
+  common_mistake:
+    es: Medir desde el extremo de la barra en lugar de desde el fulcro.
+    en: Measuring from the end of the bar instead of from the fulcrum.
+  typical_range: [0.01, 100]
+  sign_behavior: siempre positivo (distancia)
+  zero_behavior: brazo nulo implica momento nulo independientemente de la fuerza
+  value_nature: intensiva
+  interpretation_role: control
+  graph_binding: x_P
+  pedagogical_notes: Es la variable clave para ganar ventaja mecánica.
+
+- id: bR
+  symbol: d_R
+  nombre:
+    es: Brazo de resistencia
+    en: Resistance arm
+  descripcion:
+    es: Distancia perpendicular desde el fulcro hasta la línea de acción de la resistencia.
+    en: Perpendicular distance from the fulcrum to the line of action of the resistance.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: mecanica/estatica
+  physical_role: parámetro geométrico
+  used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/palanca]
+  common_mistake:
+    es: Confundir con la longitud total de la palanca.
+    en: Confusing with the total length of the lever.
+  typical_range: [0.01, 100]
+  sign_behavior: siempre positivo
+  zero_behavior: define el punto de apoyo si es cero
+  value_nature: intensiva
+  interpretation_role: control
+  graph_binding: x_R
+  pedagogical_notes: Determina la carga que se puede vencer.
+
+- id: VM
+  symbol: VM
+  nombre:
+    es: Ventaja mecánica ideal
+    en: Ideal mechanical advantage
+  descripcion:
+    es: Factor de amplificación de fuerza basado únicamente en la geometría.
+    en: Force amplification factor based solely on geometry.
+  unidad_si: ""
+  dimension: "1"
+  is_vector: false
+  components: []
+  category: mecanica/aplicaciones
+  physical_role: rendimiento teórico
+  used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/palanca]
+  common_mistake:
+    es: Creer que VM > 1 ahorra energía (solo ahorra fuerza).
+    en: Believing that VM > 1 saves energy (it only saves force).
+  typical_range: [0.1, 1000]
+  sign_behavior: siempre positivo
+  zero_behavior: indefinido si bR es cero
+  value_nature: intensiva
+  interpretation_role: performance
+  graph_binding: slope
+  pedagogical_notes: "VM > 1: ahorra fuerza; VM < 1: gana velocidad."
+
+- id: eta
+  symbol: \\eta
+  nombre:
+    es: Rendimiento (Eficiencia)
+    en: Efficiency
+  descripcion:
+    es: Relación entre el trabajo útil de salida y el trabajo de entrada.
+    en: Ratio between useful output work and input work.
+  unidad_si: ""
+  dimension: "1"
+  is_vector: false
+  components: []
+  category: mecanica/termodinamica
+  physical_role: factor de pérdida
+  used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/palanca]
+  common_mistake:
+    es: Usar valores mayores a 1 (viola la conservación).
+    en: Using values greater than 1 (violates conservation).
+  typical_range: [0, 1]
+  sign_behavior: siempre positivo
+  zero_behavior: indica pérdida total de energía
+  value_nature: intensiva
+  interpretation_role: loss_factor
+  graph_binding: scaling
+  pedagogical_notes: En máquinas simples reales siempre es menor a 1.
+
+- id: VMreal
+  symbol: VM_{real}
+  nombre:
+    es: Ventaja mecánica real
+    en: Actual mechanical advantage
+  descripcion:
+    es: Amplificación de fuerza real considerando las pérdidas por fricción.
+    en: Actual force amplification considering friction losses.
+  unidad_si: ""
+  dimension: "1"
+  is_vector: false
+  components: []
+  category: mecanica/aplicaciones
+  physical_role: rendimiento real
+  used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/palanca]
+  common_mistake:
+    es: Confundir con la ventaja ideal.
+    en: Confusing with ideal advantage.
+  typical_range: [0.1, 1000]
+  sign_behavior: siempre positivo
+  zero_behavior: nula si el rendimiento es cero
+  value_nature: intensiva
+  interpretation_role: performance
+  graph_binding: line_height
+  pedagogical_notes: VMreal = VM * eta.
+
+- id: tauP
+  symbol: \\tau_P
+  nombre:
+    es: Momento de la potencia
+    en: Effort torque
+  descripcion:
+    es: Tendencia de giro generada por la fuerza de entrada.
+    en: Rotational tendency generated by the input force.
+  unidad_si: N·m
+  dimension: L^2MT^-2
+  is_vector: true
+  components: [tauZ]
+  category: mecanica/dinamica
+  physical_role: causa de rotación
+  used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/palanca]
+  common_mistake:
+    es: Ignorar el signo o sentido de giro.
+    en: Ignoring the sign or direction of rotation.
+  typical_range: [-1000, 1000]
+  sign_behavior: positivo o negativo según sentido
+  zero_behavior: no hay tendencia de giro
+  value_nature: extensiva
+  interpretation_role: balance_component
+  graph_binding: rotation_arrow
+  pedagogical_notes: Debe anularse con tauR para el equilibrio.
+
+- id: tauR
+  symbol: \\tau_R
+  nombre:
+    es: Momento de la resistencia
+    en: Resistance torque
+  descripcion:
+    es: Tendencia de giro generada por la carga.
+    en: Rotational tendency generated by the load.
+  unidad_si: N·m
+  dimension: L^2MT^-2
+  is_vector: true
+  components: [tauZ]
+  category: mecanica/dinamica
+  physical_role: oposición a la rotación
+  used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/palanca]
+  common_mistake:
+    es: Confundir con la fuerza de resistencia.
+    en: Confusing with the resistance force.
+  typical_range: [-1000, 1000]
+  sign_behavior: opuesto al de la potencia en equilibrio
+  zero_behavior: no hay oposición al giro
+  value_nature: extensiva
+  interpretation_role: balance_component
+  graph_binding: weight_arrow
+  pedagogical_notes: Se calcula respecto al mismo fulcro.
+
+- id: sP
+  symbol: s_P
+  nombre:
+    es: Desplazamiento de la potencia
+    en: Effort displacement
+  descripcion:
+    es: Distancia recorrida por el punto de aplicación de la fuerza de entrada.
+    en: Distance traveled by the point of application of the input force.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: mecanica/cinematica
+  physical_role: recorrido de entrada
+  used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/palanca]
+  common_mistake:
+    es: Olvidar que es inversamente proporcional a la fuerza.
+    en: Forgetting it is inversely proportional to force.
+  typical_range: [0, 100]
+  sign_behavior: siempre positivo
+  zero_behavior: máquina estática
+  value_nature: extensiva
+  interpretation_role: kinematic_output
+  graph_binding: arc_length
+  pedagogical_notes: "Regla de oro: si ahorras fuerza, aumentas sP."
+
+- id: sR
+  symbol: s_R
+  nombre:
+    es: Desplazamiento de la resistencia
+    en: Resistance displacement
+  descripcion:
+    es: Distancia recorrida por la carga o resistencia.
+    en: Distance traveled by the load or resistance.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: mecanica/cinematica
+  physical_role: recorrido de salida
+  used_in: [fisica-clasica/mecanica/aplicaciones/maquinas-simples/palanca]
+  common_mistake:
+    es: Confundir con el brazo de resistencia.
+    en: Confusing with the resistance arm.
+  typical_range: [0, 100]
+  sign_behavior: siempre positivo
+  zero_behavior: carga inmóvil
+  value_nature: extensiva
+  interpretation_role: kinematic_output
+  graph_binding: arc_length
+  pedagogical_notes: Es el desplazamiento útil obtenido.
+
+- id: clasePalanca
+  symbol: "clase"
+  nombre:
+    es: Clase de palanca
+    en: Lever class
+  descripcion:
+    es: Clasificación de la palanca (1ª, 2ª o 3ª) según la posición relativa del fulcro, la potencia y la resistencia.
+    en: Lever classification (1st, 2nd or 3rd) based on the relative position of the fulcrum, effort and load.
+  unidad_si: "-"
+  dimension: "1"
+  is_vector: false
+  components: null
+  category: mecanica/maquinas-simples
+  physical_role: parameter
+  used_in: [palanca]
+  common_mistake: "Confundir una palanca de 2ª clase con una de 3ª al no identificar correctamente el elemento central."
+  typical_range: "1, 2, 3"
+  sign_behavior: always_positive
+  zero_behavior: null
+  value_nature: scalar
+  interpretation_role: parameter
+  graph_binding: variable_control
+  pedagogical_notes: "Crucial para el diseño mecánico y la ventaja mecánica resultante."
+`;export{n as default};

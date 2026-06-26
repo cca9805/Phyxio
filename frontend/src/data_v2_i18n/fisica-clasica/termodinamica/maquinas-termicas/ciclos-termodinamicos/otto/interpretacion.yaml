@@ -1,0 +1,531 @@
+version: "1.0"
+id: interpretacion_otto
+leaf_id: otto
+
+nombre:
+  es: "Interpretación del ciclo de Otto"
+  en: "Otto cycle interpretation"
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: maquinas-termicas
+  parent_id: ciclos-termodinamicos
+  ruta_relativa: fisica-clasica/termodinamica/maquinas-termicas/ciclos-termodinamicos/otto
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretacion
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    priority:
+      - summary
+      - likely_errors
+
+dependencies:
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+  formulas:
+    - rendimiento_otto
+    - balance_energetico_otto
+    - rendimiento_alternativo_otto
+  magnitudes:
+    - eta_O
+    - r
+    - gamma
+    - Q_H
+    - Q_C
+    - W_neto
+
+global_context:
+  physical_domain:
+    es: "Termodinámica de ciclos de potencia de encendido por chispa"
+    en: "Spark-ignition power cycle thermodynamics"
+  axis_convention:
+    es: "En el diagrama P-V, el área encerrada por las dos adiabáticas y las dos isocóricas es W_neto"
+    en: "In the P-V diagram, the area enclosed by the two adiabats and the two isochores is W_neto"
+  standard_assumptions:
+    - "Gas ideal con propiedades constantes"
+    - "Procesos reversibles"
+    - "Temperaturas en kelvin"
+  standard_warnings:
+    - "No aplicar rendimiento Otto como rendimiento real de motor"
+    - "Verificar conversión Celsius a kelvin"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen del resultado
+      en: Result summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia del resultado
+      en: Result coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+  eta_O:
+    magnitude_type: ratio
+    semantic_role:
+      es: "Rendimiento máximo teórico del ciclo Otto para la relación de compresión dada"
+      en: "Maximum theoretical Otto cycle efficiency for the given compression ratio"
+    summary_rules:
+      - id: eta_summary_high
+        when: "eta_O > 0.6"
+        status: ok
+        text:
+          es: "[[eta_O]] indica un rendimiento Otto elevado, lo que significa que la relación de compresión [[r]] es alta y el potencial termodinámico para producir trabajo es grande."
+          en: "[[eta_O]] indicates a high Otto efficiency, meaning the compression ratio [[r]] is high and the thermodynamic potential to produce work is large."
+      - id: eta_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[eta_O]] indica el rendimiento máximo teórico del ciclo. Este valor depende exclusivamente de [[r]] y [[gamma]] y es independiente de la cantidad de calor suministrado [[Q_H]]."
+          en: "[[eta_O]] indicates the maximum theoretical cycle efficiency. This value depends exclusively on [[r]] and [[gamma]] and is independent of the amount of heat supplied [[Q_H]]."
+    physical_reading_rules:
+      - id: eta_reading_meaning
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[eta_O]] representa la fracción máxima de [[Q_H]] que puede convertirse en [[W_neto]]. El complemento a uno debe cederse obligatoriamente como [[Q_C]] al foco frío por imposición de la segunda ley. A diferencia del Diesel, esta fracción no depende de cuánto calor se inyecta."
+          en: "The value of [[eta_O]] represents the maximum fraction of [[Q_H]] that can be converted into [[W_neto]]. The complement to one must be obligatorily rejected as [[Q_C]] to the cold reservoir as imposed by the second law. Unlike Diesel, this fraction does not depend on how much heat is injected."
+    coherence_rules:
+      - id: eta_coherence_range
+        when: "eta_O >= 1"
+        status: error
+        text:
+          es: "[[eta_O]] mayor o igual a 1 viola la segunda ley. Verificar que [[r]] sea mayor que 1 y [[gamma]] mayor que 1."
+          en: "[[eta_O]] greater than or equal to 1 violates the second law. Verify that [[r]] is greater than 1 and [[gamma]] greater than 1."
+      - id: eta_coherence_negative
+        when: "eta_O < 0"
+        status: error
+        text:
+          es: "[[eta_O]] negativo indica que [[r]] es menor que 1, lo cual es físicamente imposible para un motor."
+          en: "Negative [[eta_O]] indicates that [[r]] is less than 1, which is physically impossible for an engine."
+      - id: eta_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[eta_O]] se encuentra en el intervalo válido (0, 1), coherente con la segunda ley de la termodinámica."
+          en: "[[eta_O]] lies in the valid interval (0, 1), coherent with the second law of thermodynamics."
+    model_validity_rules:
+      - id: eta_model_cold_air
+        when: "true"
+        status: warning
+        text:
+          es: "El rendimiento Otto con aire frío ([[gamma]] de 1.4) sobreestima el real un 10-15 %. Para temperaturas superiores a 2000 K, usar [[gamma]] de 1.3 da resultados más realistas."
+          en: "Otto efficiency with cold air ([[gamma]] of 1.4) overestimates the real value by 10-15 %. For temperatures above 2000 K, using [[gamma]] of 1.3 gives more realistic results."
+    graph_rules:
+      - id: eta_graph_coord
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama Coord, [[eta_O]] se visualiza como una curva cóncava creciente con [[r]]. El punto naranja marca el rendimiento al valor medio del rango de [[r]]."
+          en: "In the Coord diagram, [[eta_O]] is visualized as an increasing concave curve with [[r]]. The orange dot marks the efficiency at the midpoint [[r]] value."
+    likely_errors:
+      - id: eta_error_qh_dependence
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: creer que [[eta_O]] depende de [[Q_H]]. La fórmula no contiene [[Q_H]] porque ambos intercambios de calor son isocóricos."
+          en: "Common error: believing [[eta_O]] depends on [[Q_H]]. The formula does not contain [[Q_H]] because both heat exchanges are isochoric."
+      - id: eta_error_celsius
+        when: "eta_O > 0.70"
+        status: warning
+        text:
+          es: "Un [[eta_O]] superior al 70 % con parámetros de gasolina sugiere un [[r]] demasiado alto o un [[gamma]] incorrecto. Verificar los datos."
+          en: "An [[eta_O]] above 70 % with gasoline parameters suggests an [[r]] too high or incorrect [[gamma]]. Verify the data."
+    next_step_rules:
+      - id: eta_next_compare
+        when: "true"
+        status: ok
+        text:
+          es: "Comparar [[eta_O]] con el rendimiento de Carnot entre las temperaturas extremas del ciclo para cuantificar la eficiencia de segunda ley. Luego comparar con el Diesel a la misma [[r]] para ver el efecto de la relación de corte."
+          en: "Compare [[eta_O]] with Carnot efficiency between extreme cycle temperatures to quantify second-law efficiency. Then compare with Diesel at the same [[r]] to see the cutoff ratio effect."
+
+  r:
+    magnitude_type: design
+    semantic_role:
+      es: "Parámetro geométrico que controla exclusivamente el rendimiento del ciclo Otto"
+      en: "Geometric parameter that exclusively controls Otto cycle efficiency"
+    summary_rules:
+      - id: r_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[r]] indica la relación de compresión del cilindro. Es el único parámetro de diseño que determina [[eta_O]] en el ciclo Otto ideal."
+          en: "[[r]] indicates the cylinder compression ratio. It is the only design parameter determining [[eta_O]] in the ideal Otto cycle."
+    physical_reading_rules:
+      - id: r_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Mayor [[r]] produce mayor compresión adiabática, elevando la temperatura antes de la combustión y mejorando la calidad termodinámica del calor absorbido. Los rendimientos marginales son decrecientes."
+          en: "Higher [[r]] produces greater adiabatic compression, raising temperature before combustion and improving the thermodynamic quality of absorbed heat. Marginal returns are diminishing."
+    coherence_rules:
+      - id: r_coherence_check
+        when: "r <= 1"
+        status: error
+        text:
+          es: "[[r]] debe ser estrictamente mayor que 1 para que exista compresión. Verificar los datos del enunciado."
+          en: "[[r]] must be strictly greater than 1 for compression to exist. Verify the problem data."
+      - id: r_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[r]] es mayor que 1, condición necesaria para el ciclo Otto."
+          en: "[[r]] is greater than 1, a necessary condition for the Otto cycle."
+    model_validity_rules:
+      - id: r_model_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo de aire frío es preciso para [[r]] entre 6 y 13. Para [[r]] mayor que 12 en gasolina, la detonación limita la aplicabilidad práctica."
+          en: "The cold-air standard is accurate for [[r]] between 6 and 13. For [[r]] above 12 in gasoline, detonation limits practical applicability."
+    graph_rules:
+      - id: r_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama Coord, [[r]] es la variable del eje horizontal. La curva muestra cómo [[eta_O]] crece con [[r]] con concavidad negativa."
+          en: "In the Coord diagram, [[r]] is the horizontal axis variable. The curve shows how [[eta_O]] grows with [[r]] with negative concavity."
+    likely_errors:
+      - id: r_error_diesel
+        when: "r > 14"
+        status: warning
+        text:
+          es: "[[r]] mayor que 14 es típico de motores Diesel, no de Otto. En gasolina, la detonación limita [[r]] a 8-12."
+          en: "[[r]] above 14 is typical of Diesel engines, not Otto. In gasoline, detonation limits [[r]] to 8-12."
+      - id: r_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Confirmar que [[r]] corresponde al tipo de motor analizado."
+          en: "Confirm that [[r]] corresponds to the engine type being analysed."
+    next_step_rules:
+      - id: r_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[r]] determinada, calcular [[eta_O]] y evaluar si el rendimiento real del motor se aproxima al límite teórico."
+          en: "With [[r]] determined, calculate [[eta_O]] and evaluate whether the actual engine efficiency approaches the theoretical limit."
+
+  gamma:
+    magnitude_type: property
+    semantic_role:
+      es: "Propiedad del gas que modula la pendiente de las adiabáticas y el rendimiento"
+      en: "Gas property that modulates the slope of adiabats and efficiency"
+    summary_rules:
+      - id: gamma_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[gamma]] indica el índice adiabático del gas de trabajo. Con aire frío vale 1.4; con gases de combustión calientes baja a 1.3, reduciendo el rendimiento teórico un 10-15 %."
+          en: "[[gamma]] indicates the working gas adiabatic index. With cold air it is 1.4; with hot combustion gases it drops to 1.3, reducing theoretical efficiency by 10-15 %."
+    physical_reading_rules:
+      - id: gamma_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "Mayor [[gamma]] produce adiabáticas más empinadas en el diagrama P-V, lo que aumenta el área encerrada por el ciclo y por tanto [[W_neto]] para el mismo [[Q_H]]."
+          en: "Higher [[gamma]] produces steeper adiabats in the P-V diagram, increasing the area enclosed by the cycle and therefore [[W_neto]] for the same [[Q_H]]."
+    coherence_rules:
+      - id: gamma_coherence_check
+        when: "gamma <= 1"
+        status: error
+        text:
+          es: "[[gamma]] debe ser mayor que 1 para un gas ideal. Verificar el tipo de gas."
+          en: "[[gamma]] must be greater than 1 for an ideal gas. Verify the gas type."
+      - id: gamma_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[gamma]] es mayor que 1, coherente con un gas diatómico o poliatómico."
+          en: "[[gamma]] is greater than 1, coherent with a diatomic or polyatomic gas."
+    model_validity_rules:
+      - id: gamma_model_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[gamma]] de 1.4 corresponde al modelo de aire frío. Para temperaturas de combustión superiores a 2000 K, usar 1.3 es más preciso."
+          en: "[[gamma]] of 1.4 corresponds to the cold-air standard. For combustion temperatures above 2000 K, using 1.3 is more accurate."
+    graph_rules:
+      - id: gamma_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama Coord, [[gamma]] es un parámetro del control deslizante. Mayor [[gamma]] eleva toda la curva [[eta_O]] frente a [[r]]."
+          en: "In the Coord diagram, [[gamma]] is a slider parameter. Higher [[gamma]] raises the entire [[eta_O]] vs [[r]] curve."
+    likely_errors:
+      - id: gamma_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Confirmar que [[gamma]] es coherente con el gas de trabajo y las temperaturas del ciclo."
+          en: "Confirm that [[gamma]] is consistent with the working gas and cycle temperatures."
+    next_step_rules:
+      - id: gamma_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Comparar el rendimiento con [[gamma]] de 1.4 y 1.3 para cuantificar la sensibilidad del modelo al índice adiabático."
+          en: "Compare efficiency with [[gamma]] of 1.4 and 1.3 to quantify model sensitivity to the adiabatic index."
+
+  W_neto:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Trabajo útil neto producido por el ciclo Otto"
+      en: "Net useful work produced by the Otto cycle"
+    summary_rules:
+      - id: w_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[W_neto]] indica el trabajo mecánico útil máximo que el ciclo puede producir. Es el producto de [[eta_O]] por [[Q_H]]."
+          en: "[[W_neto]] indicates the maximum useful mechanical work the cycle can produce. It is the product of [[eta_O]] times [[Q_H]]."
+    physical_reading_rules:
+      - id: w_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[W_neto]] es la diferencia entre [[Q_H]] y [[Q_C]]. Corresponde al área encerrada por el ciclo en el diagrama P-V, delimitada por dos adiabáticas y dos isocóricas."
+          en: "[[W_neto]] is the difference between [[Q_H]] and [[Q_C]]. It corresponds to the area enclosed by the cycle in the P-V diagram, bounded by two adiabats and two isochores."
+    coherence_rules:
+      - id: w_coherence_exceeds
+        when: "W_neto > Q_H"
+        status: error
+        text:
+          es: "[[W_neto]] no puede superar [[Q_H]]. El trabajo producido no puede exceder el calor suministrado (primera ley)."
+          en: "[[W_neto]] cannot exceed [[Q_H]]. The work produced cannot exceed the heat supplied (first law)."
+      - id: w_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[W_neto]] es menor que [[Q_H]] y positivo, coherente con la primera y segunda ley."
+          en: "[[W_neto]] is less than [[Q_H]] and positive, coherent with the first and second laws."
+    model_validity_rules:
+      - id: w_model_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume que todo [[W_neto]] es extraíble. En la realidad, pérdidas mecánicas reducen el trabajo aprovechable al 50-70 % del teórico."
+          en: "The model assumes all [[W_neto]] is extractable. In reality, mechanical losses reduce usable work to 50-70 % of theoretical."
+    graph_rules:
+      - id: w_graph_area
+        when: "true"
+        status: info
+        text:
+          es: "[[W_neto]] corresponde al área encerrada por el ciclo en el diagrama P-V."
+          en: "[[W_neto]] corresponds to the area enclosed by the cycle in the P-V diagram."
+    likely_errors:
+      - id: w_error_sign
+        when: "W_neto < 0"
+        status: error
+        text:
+          es: "[[W_neto]] negativo indica que [[Q_C]] supera [[Q_H]], lo cual es imposible en un motor térmico."
+          en: "Negative [[W_neto]] indicates [[Q_C]] exceeds [[Q_H]], which is impossible in a heat engine."
+      - id: w_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[W_neto]] coincida con [[eta_O]] por [[Q_H]] para confirmar coherencia."
+          en: "Verify that [[W_neto]] matches [[eta_O]] times [[Q_H]] to confirm coherence."
+    next_step_rules:
+      - id: w_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[W_neto]] calculado, dividir por [[Q_H]] para obtener [[eta_O]] y comparar con la fórmula explícita."
+          en: "With [[W_neto]] calculated, divide by [[Q_H]] to obtain [[eta_O]] and compare with the explicit formula."
+
+  Q_H:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Calor total absorbido a volumen constante durante la combustión"
+      en: "Total heat absorbed at constant volume during combustion"
+    summary_rules:
+      - id: qh_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] indica la energía térmica suministrada al ciclo. En el Otto, el rendimiento es independiente de [[Q_H]], a diferencia del Diesel."
+          en: "[[Q_H]] indicates the thermal energy supplied to the cycle. In Otto, efficiency is independent of [[Q_H]], unlike Diesel."
+    physical_reading_rules:
+      - id: qh_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] se absorbe a volumen constante. Mayor [[Q_H]] produce mayor [[W_neto]] en valor absoluto pero no cambia la fracción convertida en trabajo."
+          en: "[[Q_H]] is absorbed at constant volume. Higher [[Q_H]] produces higher [[W_neto]] in absolute value but does not change the fraction converted to work."
+    coherence_rules:
+      - id: qh_coherence_positive
+        when: "Q_H <= 0"
+        status: error
+        text:
+          es: "[[Q_H]] debe ser positivo. Sin aporte de calor no existe ciclo motor."
+          en: "[[Q_H]] must be positive. Without heat input there is no power cycle."
+      - id: qh_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_H]] es positivo, coherente con la operación de un motor térmico."
+          en: "[[Q_H]] is positive, coherent with heat engine operation."
+    model_validity_rules:
+      - id: qh_model_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume combustión instantánea a volumen constante. En motores reales, la combustión dura unos milisegundos y no es perfectamente isocórica."
+          en: "The model assumes instantaneous constant-volume combustion. In real engines, combustion lasts a few milliseconds and is not perfectly isochoric."
+    graph_rules:
+      - id: qh_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama P-V, [[Q_H]] se absorbe durante la isocórica vertical de combustión (proceso 2-3)."
+          en: "In the P-V diagram, [[Q_H]] is absorbed during the vertical combustion isochore (process 2-3)."
+    likely_errors:
+      - id: qh_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[Q_H]] no se confunde con [[W_neto]]. El trabajo siempre es una fracción de [[Q_H]]."
+          en: "Verify that [[Q_H]] is not confused with [[W_neto]]. Work is always a fraction of [[Q_H]]."
+    next_step_rules:
+      - id: qh_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[Q_H]] conocido, aplicar [[eta_O]] para obtener [[W_neto]] y usar el balance energético para verificar [[Q_C]]."
+          en: "With [[Q_H]] known, apply [[eta_O]] to obtain [[W_neto]] and use the energy balance to verify [[Q_C]]."
+
+  Q_C:
+    magnitude_type: extensive
+    semantic_role:
+      es: "Calor inevitable cedido al foco frío a volumen constante"
+      en: "Inevitable heat rejected to the cold reservoir at constant volume"
+    summary_rules:
+      - id: qc_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] indica el calor que obligatoriamente debe cederse al foco frío. Su existencia es consecuencia directa de la segunda ley."
+          en: "[[Q_C]] indicates the heat that must obligatorily be rejected to the cold reservoir. Its existence is a direct consequence of the second law."
+    physical_reading_rules:
+      - id: qc_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] es [[Q_H]] multiplicado por (1 menos [[eta_O]]). Reducir [[Q_C]] relativo requiere aumentar [[r]], es decir, comprimir más antes de la combustión."
+          en: "[[Q_C]] is [[Q_H]] times (1 minus [[eta_O]]). Reducing relative [[Q_C]] requires increasing [[r]], that is, compressing more before combustion."
+    coherence_rules:
+      - id: qc_coherence_exceeds
+        when: "Q_C >= Q_H"
+        status: error
+        text:
+          es: "[[Q_C]] no puede igualar ni superar [[Q_H]] en un motor térmico."
+          en: "[[Q_C]] cannot equal or exceed [[Q_H]] in a heat engine."
+      - id: qc_coherence_ok
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q_C]] es positivo y menor que [[Q_H]], coherente con el balance energético del ciclo Otto."
+          en: "[[Q_C]] is positive and less than [[Q_H]], coherent with the Otto cycle energy balance."
+    model_validity_rules:
+      - id: qc_model_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el ciclo Otto ideal, [[Q_C]] es el calor mínimo que debe cederse para la relación de compresión dada."
+          en: "In the ideal Otto cycle, [[Q_C]] is the minimum heat that must be rejected for the given compression ratio."
+    graph_rules:
+      - id: qc_graph_default
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama P-V, [[Q_C]] se rechaza durante la isocórica vertical de escape (proceso 4-1)."
+          en: "In the P-V diagram, [[Q_C]] is rejected during the vertical exhaust isochore (process 4-1)."
+    likely_errors:
+      - id: qc_error_zero
+        when: "Q_C <= 0"
+        status: error
+        text:
+          es: "[[Q_C]] nulo o negativo viola la segunda ley. Ningún ciclo puede operar sin rechazar calor al foco frío."
+          en: "Zero or negative [[Q_C]] violates the second law. No cycle can operate without rejecting heat to the cold reservoir."
+      - id: qc_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[Q_C]] sea igual a [[Q_H]] menos [[W_neto]] para confirmar coherencia con el balance energético."
+          en: "Verify that [[Q_C]] equals [[Q_H]] minus [[W_neto]] to confirm coherence with the energy balance."
+    next_step_rules:
+      - id: qc_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[Q_C]] determinado, calcular [[W_neto]] por balance y verificar que [[eta_O]] sea coherente."
+          en: "With [[Q_C]] determined, calculate [[W_neto]] by balance and verify that [[eta_O]] is coherent."

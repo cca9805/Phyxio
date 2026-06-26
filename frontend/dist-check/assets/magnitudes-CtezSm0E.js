@@ -1,0 +1,175 @@
+const e=`version: 1.0.0
+leaf_id: extensivas
+magnitudes:
+  - id: X_ext
+    symbol: "X"
+    nombre: { es: Magnitud extensiva generica, en: Generic extensive magnitude }
+    descripcion: { es: Magnitud que escala con la cantidad de sistema considerada., en: Magnitude that scales with the amount of system considered. }
+    unidad_si: "depende de X"
+    dimension: "depende de X"
+    is_vector: false
+    components: []
+    category: extensiva
+    physical_role: { es: cantidad total acumulada, en: total accumulated quantity }
+    used_in: [criterio_extensividad, aditividad_extensiva]
+    common_mistake: { es: Tratarla como independiente del tamano del sistema., en: Treating it as independent of system size. }
+    typical_range: { es: "proporcional a la muestra", en: "proportional to sample size" }
+    sign_behavior: { es: Puede ser positiva o depender de referencia segun la magnitud., en: May be positive or reference-dependent depending on the magnitude. }
+    zero_behavior: { es: Sin cantidad acumulada respecto a la referencia elegida., en: No accumulated amount relative to the chosen reference. }
+    value_nature: variable
+    interpretation_role: total
+    graph_binding: { type: Coord, role: output }
+    pedagogical_notes: { es: "Duplicar el sistema duplica [[X_ext]].", en: "Duplicating the system duplicates [[X_ext]]." }
+  - id: lambda_escala
+    symbol: "lambda"
+    nombre: { es: Factor de escala, en: Scaling factor }
+    descripcion: { es: Numero de copias equivalentes o factor de tamano del sistema., en: Number of equivalent copies or system-size factor. }
+    unidad_si: "1"
+    dimension: "[1]"
+    is_vector: false
+    components: []
+    category: parametro
+    physical_role: { es: escala del sistema, en: system scale }
+    used_in: [criterio_extensividad]
+    common_mistake: { es: Interpretarlo como temperatura o intensidad., en: Interpreting it as temperature or intensity. }
+    typical_range: { es: "0.1 a 10 en ejemplos de escala", en: "0.1 to 10 in scaling examples" }
+    sign_behavior: { es: Usualmente positivo., en: Usually positive. }
+    zero_behavior: { es: Sistema nulo idealizado., en: Idealized zero system. }
+    value_nature: parameter
+    interpretation_role: control
+    graph_binding: { type: Coord, role: control }
+    pedagogical_notes: { es: "No cambia la naturaleza de la sustancia; cambia cuanto sistema hay.", en: "It does not change the substance nature; it changes how much system there is." }
+  - id: U
+    symbol: "U"
+    nombre: { es: Energia interna, en: Internal energy }
+    descripcion: { es: Energia microscopica total contenida en el sistema., en: Total microscopic energy contained in the system. }
+    unidad_si: "J"
+    dimension: "[M L² T⁻²]"
+    is_vector: false
+    components: []
+    category: energia
+    physical_role: { es: energia total acumulada, en: total accumulated energy }
+    used_in: [aditividad_extensiva, magnitud_especifica]
+    common_mistake: { es: Comparar sistemas de distinto tamano usando U sin normalizar., en: Comparing different-size systems using U without normalization. }
+    typical_range: { es: "J a MJ segun muestra", en: "J to MJ depending on sample" }
+    sign_behavior: { es: Depende de referencia de energia., en: Depends on energy reference. }
+    zero_behavior: { es: Referencia energetica elegida., en: Chosen energy reference. }
+    value_nature: state
+    interpretation_role: total
+    graph_binding: { type: Coord, role: output }
+    pedagogical_notes: { es: "[[U]] se duplica si se juntan dos copias iguales.", en: "[[U]] doubles if two identical copies are joined." }
+  - id: S
+    symbol: "S"
+    nombre: { es: Entropia, en: Entropy }
+    descripcion: { es: Entropia total del sistema macroscópico., en: Total entropy of the macroscopic system. }
+    unidad_si: "J/K"
+    dimension: "[M L² T⁻² Θ⁻¹]"
+    is_vector: false
+    components: []
+    category: estado
+    physical_role: { es: cantidad termodinamica total, en: total thermodynamic amount }
+    used_in: [aditividad_extensiva]
+    common_mistake: { es: Creer que toda entropia es intensiva por asociarla a desorden local., en: Thinking all entropy is intensive by associating it with local disorder. }
+    typical_range: { es: "J/K a kJ/K", en: "J/K to kJ/K" }
+    sign_behavior: { es: Normalmente no negativa con referencia termodinamica usual., en: Usually non-negative with common thermodynamic reference. }
+    zero_behavior: { es: Limite de referencia ideal.", en: "Ideal reference limit." }
+    value_nature: state
+    interpretation_role: total
+    graph_binding: { type: Coord, role: output }
+    pedagogical_notes: { es: "La entropia total crece con la cantidad de materia.", en: "Total entropy grows with amount of matter." }
+  - id: V
+    symbol: "V"
+    nombre: { es: Volumen, en: Volume }
+    descripcion: { es: Espacio ocupado por el sistema., en: Space occupied by the system. }
+    unidad_si: "m³"
+    dimension: "[L³]"
+    is_vector: false
+    components: []
+    category: geometrica
+    physical_role: { es: extension espacial total, en: total spatial extent }
+    used_in: [aditividad_extensiva, densidad]
+    common_mistake: { es: Confundir volumen total con volumen especifico., en: Confusing total volume with specific volume. }
+    typical_range: { es: "mL a m³", en: "mL to m³" }
+    sign_behavior: { es: Positivo.", en: "Positive." }
+    zero_behavior: { es: Sistema sin extension idealizada., en: Idealized system with no extent. }
+    value_nature: state
+    interpretation_role: total
+    graph_binding: { type: Coord, role: output }
+    pedagogical_notes: { es: "Dos recipientes iguales juntos tienen doble [[V]].", en: "Two equal vessels together have double [[V]]." }
+  - id: m
+    symbol: "m"
+    nombre: { es: Masa, en: Mass }
+    descripcion: { es: Cantidad total de materia del sistema., en: Total amount of matter in the system. }
+    unidad_si: "kg"
+    dimension: "[M]"
+    is_vector: false
+    components: []
+    category: materia
+    physical_role: { es: cantidad material total, en: total material amount }
+    used_in: [aditividad_extensiva, densidad, magnitud_especifica]
+    common_mistake: { es: Usarla para comparar materiales sin dividir por volumen o cantidad., en: Using it to compare materials without dividing by volume or amount. }
+    typical_range: { es: "g a toneladas", en: "g to tonnes" }
+    sign_behavior: { es: No negativa.", en: "Non-negative." }
+    zero_behavior: { es: Ausencia de materia., en: Absence of matter. }
+    value_nature: state
+    interpretation_role: total
+    graph_binding: { type: Coord, role: output }
+    pedagogical_notes: { es: "La masa total es el ejemplo mas directo de extensividad.", en: "Total mass is the most direct example of extensivity." }
+  - id: N
+    symbol: "N"
+    nombre: { es: Cantidad de particulas, en: Number of particles }
+    descripcion: { es: Numero total de entidades microscopicas consideradas., en: Total number of microscopic entities considered. }
+    unidad_si: "1"
+    dimension: "[1]"
+    is_vector: false
+    components: []
+    category: materia
+    physical_role: { es: conteo total de entidades, en: total entity count }
+    used_in: [magnitud_molar]
+    common_mistake: { es: Tratarlo como concentracion.", en: "Treating it as concentration." }
+    typical_range: { es: "10^20 a 10^25 en muestras macroscopicas", en: "10^20 to 10^25 in macroscopic samples" }
+    sign_behavior: { es: Entero no negativo.", en: "Non-negative integer." }
+    zero_behavior: { es: Sin particulas del tipo considerado., en: No particles of the considered type. }
+    value_nature: state
+    interpretation_role: total
+    graph_binding: { type: Coord, role: parameter }
+    pedagogical_notes: { es: "[[N]] es extensiva aunque sea adimensional.", en: "[[N]] is extensive even though it is dimensionless." }
+  - id: rho
+    symbol: "rho"
+    nombre: { es: Densidad, en: Density }
+    descripcion: { es: Masa por unidad de volumen, una propiedad intensiva derivada de extensivas., en: Mass per unit volume, an intensive property derived from extensives. }
+    unidad_si: "kg/m³"
+    dimension: "[M L⁻³]"
+    is_vector: false
+    components: []
+    category: derivada_intensiva
+    physical_role: { es: normalizacion por volumen, en: normalization by volume }
+    used_in: [densidad]
+    common_mistake: { es: Creer que por depender de masa debe ser extensiva.", en: "Thinking that because it depends on mass it must be extensive." }
+    typical_range: { es: "1 a 20000 kg/m³", en: "1 to 20000 kg/m³" }
+    sign_behavior: { es: Positiva.", en: "Positive." }
+    zero_behavior: { es: Limite de vacio ideal.", en: "Ideal vacuum limit." }
+    value_nature: derived
+    interpretation_role: normalizada
+    graph_binding: { type: Coord, role: output }
+    pedagogical_notes: { es: "Dividir dos extensivas compatibles puede dar una intensiva.", en: "Dividing compatible extensives can give an intensive." }
+  - id: x_esp
+    symbol: "x"
+    nombre: { es: Magnitud especifica, en: Specific magnitude }
+    descripcion: { es: Magnitud extensiva por unidad de masa., en: Extensive magnitude per unit mass. }
+    unidad_si: "depende de X/kg"
+    dimension: "depende de X por [M⁻¹]"
+    is_vector: false
+    components: []
+    category: derivada_intensiva
+    physical_role: { es: normalizacion por masa, en: normalization by mass }
+    used_in: [magnitud_especifica]
+    common_mistake: { es: Confundir total y especifico al comparar muestras.", en: "Confusing total and specific when comparing samples." }
+    typical_range: { es: "depende de la propiedad", en: "depends on property" }
+    sign_behavior: { es: Depende de X.", en: "Depends on X." }
+    zero_behavior: { es: Propiedad especifica nula respecto a referencia.", en: "Zero specific property relative to reference." }
+    value_nature: derived
+    interpretation_role: normalizada
+    graph_binding: { type: Coord, role: output }
+    pedagogical_notes: { es: "Normalizar permite comparar sistemas de distinto tamano.", en: "Normalizing allows comparison between different-size systems." }
+`;export{e as default};

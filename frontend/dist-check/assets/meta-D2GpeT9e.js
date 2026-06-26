@@ -1,0 +1,61 @@
+const n=`id: velocidad-de-propagacion
+nombre:
+  es: Velocidad de propagacion
+  en: Wave Speed
+area: fisica-clasica
+bloque: ondas
+subbloque: fundamentos
+parent_id: magnitudes-ondulatorias
+ruta_relativa: fisica-clasica/ondas/fundamentos/magnitudes-ondulatorias/velocidad-de-propagacion
+orden: 231430
+type: leaf
+niveles:
+  es: [ESO, BACHILLERATO, UNIVERSIDAD, EXTRACURRICULAR]
+  en: [Secondary, Upper Secondary, University, Extracurricular]
+icon: 📡
+descripcion: Rapidez con la que avanza el patron de una onda en un medio.
+description_en: Speed at which a wave pattern advances through a medium.
+tags:
+  es: [ondas, rapidez, propagacion, medio, frecuencia, longitud]
+  en: [waves, speed, propagation, medium, frequency, wavelength]
+prerequisitos:
+  - fisica-clasica/ondas/fundamentos/concepto-de-onda
+  - fisica-clasica/ondas/fundamentos/magnitudes-ondulatorias/longitud-de-onda
+  - fisica-clasica/ondas/fundamentos/magnitudes-ondulatorias/frecuencia-y-periodo
+graficos: [Coord, Svg]
+physical_role:
+  es: concepto físico
+  en: physical concept
+dificultad: 2
+tiempo_estimado_min: 22
+representacion_dominante: Coord
+magnitud_dominante: v
+pregunta_fisica_central:
+  es: ¿Cómo se determina la velocidad de propagacion de una onda a partir de su repeticion espacial y temporal?
+  en: How is the propagation speed of a wave determined from its spatial and temporal repetition?
+nucleo:
+  magnitudes: [v, lambda, f, Delta_x, Delta_t]
+  formulas: [velocidad_onda_frecuencia, velocidad_media_patron]
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 4
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

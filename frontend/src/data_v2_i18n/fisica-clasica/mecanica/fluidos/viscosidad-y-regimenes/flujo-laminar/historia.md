@@ -1,0 +1,16 @@
+# Historia del Flujo Laminar
+
+## Problema histórico
+A mediados del siglo XIX, los científicos e ingenieros se enfrentaban a un misterio persistente en la hidráulica: ¿cómo se mueven exactamente los líquidos a través de tubos estrechos? Aunque las leyes del movimiento de Newton se conocían bien, el comportamiento de los fluidos reales parecía caótico y contradictorio. Médicos como Jean Léonard Marie Poiseuille estaban particularmente interesados en la circulación de la sangre, mientras que ingenieros como Gotthilf Hagen buscaban mejorar el diseño de canales y tuberías. El problema central era que no existía una relación clara que conectara la presión aplicada con el volumen de fluido que salía por el otro extremo.
+
+## Dificultad conceptual previa
+Antes de los experimentos de Hagen y Poiseuille, se tendía a tratar a los fluidos como entes ideales (sin rozamiento) o se creía que el roce solo ocurría entre el fluido y la pared. La idea de que el fluido tuviera una fricción interna "capa a capa" era difícil de visualizar y aún más difícil de medir. No se comprendía que el fluido pegado a la pared estuviera realmente estático, lo que llevaba a modelos erróneos donde se asumía que todo el bloque de agua se movía a la misma velocidad, ignorando el perfil de velocidades real.
+
+## Qué cambió
+Independientemente, entre 1838 y 1840, Hagen y Poiseuille realizaron mediciones extremadamente precisas usando tubos capilares. Poiseuille, utilizando mercurio y agua, descubrió empíricamente que el caudal era proporcional a la cuarta potencia del radio del tubo ($R^4$). Este hallazgo fue revolucionario, pues indicaba una sensibilidad geométrica mucho mayor de la esperada. Poco después, teóricos como Stokes utilizaron las ecuaciones de Navier-Stokes para demostrar matemáticamente que esta relación era la consecuencia directa de un régimen de flujo ordenado por láminas, sentando las bases de la hidrodinámica viscosa.
+
+## Impacto en la física
+El descubrimiento del régimen laminar permitió, por primera vez, predecir con exactitud el comportamiento de fluidos reales. Separó claramente el concepto de fluido ideal del fluido viscoso y proporcionó una herramienta fundamental para la medicina (fisiología cardiovascular) y la ingeniería química. Además, sirvió de base para que Osborne Reynolds definiera más tarde el número adimensional que divide al orden laminar del caos turbulento, permitiendo a la humanidad clasificar los estados del movimiento de la materia fluida.
+
+## Conexión con física moderna
+Hoy en día, la comprensión del flujo laminar es esencial en la nanotecnología y la microfluídica. En los chips "lab-on-a-chip", el control del régimen laminar permite realizar diagnósticos médicos complejos usando una sola gota de sangre. Asimismo, en la astrofísica moderna, el estudio del flujo laminar en discos de acreción alrededor de estrellas jóvenes ayuda a entender cómo se forman los sistemas planetarios de manera ordenada antes de que las turbulencias gravitatorias tomen el control.

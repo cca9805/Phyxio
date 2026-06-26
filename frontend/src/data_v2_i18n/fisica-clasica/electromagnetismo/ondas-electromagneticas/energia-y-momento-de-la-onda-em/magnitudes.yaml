@@ -1,0 +1,513 @@
+version: 5
+topic:
+  id: energia-y-momento-de-la-onda-em
+  title:
+    es: Energia y momento de la onda em
+    en: Energy and Momentum of an Electromagnetic Wave
+magnitudes:
+- id: campo_electrico_eficaz
+  symbol: E_0
+  nombre:
+    es: campo electrico eficaz
+    en: rms electric field
+  descripcion:
+    es: Valor eficaz del campo electrico de una onda plana armonica.
+    en: Root-mean-square electric field of a harmonic plane wave.
+  unidad_si: V/m
+  dimension: '[M L T^-3 I^-1]'
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: core_physical_quantity
+  used_in:
+  - densidad_energia_rms
+  - relacion_campos_rms
+  common_mistake:
+    es: Confundirlo con amplitud maxima y perder el factor medio de energia.
+    en: Confusing it with peak amplitude and losing the averaging factor.
+  typical_range: 1e0 a 1e6 V/m en ondas clasicas no ionizantes
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como modulo eficaz no negativo del campo oscilante.
+      en: It is used as a nonnegative rms magnitude of the oscillating field.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Sin campo electrico eficaz no hay onda energetica en este modelo.
+      en: With no rms electric field there is no energetic wave in this model.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: E0 >= 0
+  interpretation_role:
+    primary_for:
+    - amplitud_energetica
+    - estimacion_intensidad
+    secondary_for:
+    - comparacion_con_B0
+  graph_binding:
+    channels:
+    - electric_field_scale
+  pedagogical_notes:
+    es: Es la puerta entre el campo visible de la onda y su transporte energetico medio.
+    en: It links the visible wave field to the average transported energy.
+- id: campo_electrico_instantaneo_representado
+  symbol: E
+  nombre:
+    es: campo electrico instantaneo representado
+    en: represented instantaneous electric field
+  descripcion:
+    es: Campo electrico visual usado por el grafico Svg compartido de onda electromagnetica.
+    en: Visual electric field used by the shared electromagnetic-wave Svg graph.
+  unidad_si: V/m
+  dimension: '[M L T^-3 I^-1]'
+  is_vector: false
+  components: []
+  category: state
+  physical_role: external_reference
+  used_in:
+  - grafico_svg_onda
+  common_mistake:
+    es: Confundir el campo instantaneo visual [[E]] con el valor eficaz [[E0]] usado en energia media.
+    en: Confusing the visual instantaneous field [[E]] with the rms value [[E0]] used for average energy.
+  typical_range: 1e0 a 1e6 V/m en representaciones clasicas
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo representa la fase instantanea del campo en el dibujo de onda.
+      en: The sign represents the instantaneous phase of the field in the wave diagram.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero puede aparecer en un nodo temporal o espacial de la oscilacion.
+      en: Zero can appear at a temporal or spatial node of the oscillation.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: any
+  interpretation_role:
+    primary_for:
+    - visualizacion_svg
+    secondary_for:
+    - comparacion_con_E0
+  graph_binding:
+    channels:
+    - svg_electric_field
+  pedagogical_notes:
+    es: '[[E]] existe para sincronizar el Svg reutilizado; los calculos energeticos usan [[E0]].'
+    en: '[[E]] exists to synchronize the reused Svg; energy calculations use [[E0]].'
+- id: campo_magnetico_eficaz
+  symbol: B_0
+  nombre:
+    es: campo magnetico eficaz
+    en: rms magnetic field
+  descripcion:
+    es: Valor eficaz del campo magnetico asociado al campo electrico de la onda plana.
+    en: Root-mean-square magnetic field associated with the electric field in a plane wave.
+  unidad_si: T
+  dimension: '[M T^-2 I^-1]'
+  is_vector: false
+  components: []
+  category: fundamental
+  physical_role: core_physical_quantity
+  used_in:
+  - relacion_campos_rms
+  common_mistake:
+    es: Esperar que tenga el mismo valor numerico que el campo electrico en unidades SI.
+    en: Expecting the same numerical value as the electric field in SI units.
+  typical_range: 1e-9 a 1e-3 T para radiacion cotidiana o tecnica
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se interpreta como modulo eficaz perpendicular al campo electrico.
+      en: It is interpreted as the rms magnitude perpendicular to the electric field.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si desaparece, desaparece tambien el acoplamiento transversal de la onda.
+      en: If it vanishes, the transverse wave coupling also vanishes.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: B0 >= 0
+  interpretation_role:
+    primary_for:
+    - acoplamiento_campos
+    secondary_for:
+    - diagnostico_unidades_si
+  graph_binding:
+    channels:
+    - magnetic_field_scale
+  pedagogical_notes:
+    es: Sirve para recordar que energia y momento no son solo electricos, sino electromagneticos.
+    en: It reminds students that the energy and momentum are electromagnetic, not only electric.
+- id: epsilon0
+  symbol: \varepsilon_0
+  nombre:
+    es: permitividad del vacio
+    en: vacuum permittivity
+  descripcion:
+    es: Constante que mide la respuesta electrica del vacio y fija la escala energetica del campo.
+    en: Constant measuring the electric response of vacuum and setting the field energy scale.
+  unidad_si: F/m
+  dimension: '[M^-1 L^-3 T^4 I^2]'
+  is_vector: false
+  components: []
+  category: constant
+  physical_role: core_physical_quantity
+  used_in:
+  - densidad_energia_rms
+  common_mistake:
+    es: Tratarla como un coeficiente ajustable del material cuando el modelo es de vacio.
+    en: Treating it as a tunable material coefficient when the model is for vacuum.
+  typical_range: 8.854e-12 F/m
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es positiva; una permitividad negativa no pertenece a este modelo de vacio.
+      en: It is positive; negative permittivity is outside this vacuum model.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un valor nulo destruiria la escala de energia del campo electrico.
+      en: A zero value would destroy the electric-field energy scale.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: epsilon0 > 0
+  interpretation_role:
+    primary_for:
+    - escala_constitutiva
+    secondary_for:
+    - revision_dimensional
+  graph_binding:
+    channels:
+    - none
+  pedagogical_notes:
+    es: Debe verse como constante de conversion fisica entre campo eficaz y energia volumetrica.
+    en: It should be seen as the physical conversion constant between rms field and volume energy.
+- id: velocidad_de_la_luz_en_el_vacio
+  symbol: c
+  nombre:
+    es: velocidad de la luz en el vacio
+    en: speed of light in vacuum
+  descripcion:
+    es: Velocidad de propagacion que conecta energia, intensidad y momento en una onda EM plana.
+    en: Propagation speed connecting energy, intensity, and momentum in a plane EM wave.
+  unidad_si: m/s
+  dimension: '[L T^-1]'
+  is_vector: false
+  components: []
+  category: constant
+  physical_role: core_physical_quantity
+  used_in:
+  - relacion_campos_rms
+  - intensidad_media_onda
+  - densidad_momento_onda
+  - presion_radiacion_absorbente
+  common_mistake:
+    es: Usarla solo como velocidad y no como factor que convierte densidad en flujo.
+    en: Using it only as a speed and not as the factor converting density into flux.
+  typical_range: 2.99792458e8 m/s en el vacio
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En estas formulas es una rapidez positiva de propagacion.
+      en: In these formulas it is a positive propagation speed.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Un valor nulo eliminaria la propagacion de la onda.
+      en: A zero value would eliminate wave propagation.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: c > 0
+  interpretation_role:
+    primary_for:
+    - conversion_flujo_momento
+    secondary_for:
+    - escala_relativista
+  graph_binding:
+    channels:
+    - slope_factor
+  pedagogical_notes:
+    es: En este leaf, [[c]] no solo desplaza la onda; marca la pendiente entre energia y flujo.
+    en: In this leaf, [[c]] does not only move the wave; it sets the slope between energy and flux.
+- id: densidad_media_de_energia_electromagnetica
+  symbol: u_{EM}
+  nombre:
+    es: densidad media de energia electromagnetica
+    en: average electromagnetic energy density
+  descripcion:
+    es: Energia media almacenada por unidad de volumen en el campo de la onda.
+    en: Average energy stored per unit volume in the wave field.
+  unidad_si: J/m^3
+  dimension: '[M L^-1 T^-2]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+  - densidad_energia_rms
+  - intensidad_media_onda
+  - densidad_momento_onda
+  common_mistake:
+    es: Confundir energia por volumen con energia total de un pulso finito.
+    en: Confusing energy per volume with the total energy of a finite pulse.
+  typical_range: 1e-12 a 1e-2 J/m^3 en radiacion clasica comun
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es no negativa porque mide energia almacenada en el campo.
+      en: It is nonnegative because it measures field energy storage.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica ausencia de transporte energetico electromagnetico local.
+      en: Zero indicates no local electromagnetic energy transport.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: u_EM >= 0
+  interpretation_role:
+    primary_for:
+    - energia_por_volumen
+    secondary_for:
+    - diagnostico_de_intensidad
+  graph_binding:
+    channels:
+    - x_energy_density
+  pedagogical_notes:
+    es: Es la magnitud que permite ver la onda como energia distribuida en el espacio.
+    en: It lets students see the wave as energy distributed through space.
+- id: intensidad_media_de_poynting
+  symbol: S_{med}
+  nombre:
+    es: intensidad media de Poynting
+    en: average Poynting intensity
+  descripcion:
+    es: Flujo medio de energia electromagnetica que cruza una unidad de area por unidad de tiempo.
+    en: Average electromagnetic energy flux crossing unit area per unit time.
+  unidad_si: W/m^2
+  dimension: '[M T^-3]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+  - intensidad_media_onda
+  - presion_radiacion_absorbente
+  - potencia_incidente_area
+  common_mistake:
+    es: Leerla como energia total y no como potencia por area.
+    en: Reading it as total energy rather than power per area.
+  typical_range: 1e-3 a 1e4 W/m^2 en situaciones clasicas habituales
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Aqui es el modulo medio dirigido en el sentido de propagacion.
+      en: Here it is the average magnitude directed along propagation.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero significa que no atraviesa energia neta por la superficie.
+      en: Zero means no net energy crosses the surface.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: S_med >= 0
+  interpretation_role:
+    primary_for:
+    - flujo_energetico
+    - presion_radiacion
+    secondary_for:
+    - potencia_sobre_area
+  graph_binding:
+    channels:
+    - y_intensity
+    - star_value
+  pedagogical_notes:
+    es: Es la magnitud dominante porque convierte el campo oscilante en energia disponible por area.
+    en: It is dominant because it turns an oscillating field into usable energy per area.
+- id: densidad_de_momento_electromagnetico
+  symbol: g_{EM}
+  nombre:
+    es: densidad de momento electromagnetico
+    en: electromagnetic momentum density
+  descripcion:
+    es: Momento lineal transportado por unidad de volumen en la onda electromagnetica.
+    en: Linear momentum transported per unit volume in the electromagnetic wave.
+  unidad_si: N s/m^3
+  dimension: '[M L^-2 T^-1]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+  - densidad_momento_onda
+  common_mistake:
+    es: Pensar que una onda sin masa no puede transportar momento.
+    en: Thinking that a massless wave cannot transport momentum.
+  typical_range: 1e-20 a 1e-10 N s/m^3 en radiacion debil o solar
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como modulo en la direccion de propagacion.
+      en: It is used as a magnitude along the propagation direction.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero implica ausencia de momento electromagnetico local.
+      en: Zero implies no local electromagnetic momentum.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: g_EM >= 0
+  interpretation_role:
+    primary_for:
+    - momento_por_volumen
+    secondary_for:
+    - presion_de_radiacion
+  graph_binding:
+    channels:
+    - momentum_density_readout
+  pedagogical_notes:
+    es: Hace visible que el transporte de energia de la onda lleva asociado transporte de momento.
+    en: It makes visible that wave energy transport carries momentum transport with it.
+- id: p_rad
+  symbol: p_{rad}
+  nombre:
+    es: presion de radiacion absorbida
+    en: absorbed radiation pressure
+  descripcion:
+    es: Presion ejercida por una onda electromagnetica cuando su energia se absorbe en una superficie.
+    en: Pressure exerted by an electromagnetic wave when its energy is absorbed at a surface.
+  unidad_si: Pa
+  dimension: '[M L^-1 T^-2]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+  - presion_radiacion_absorbente
+  common_mistake:
+    es: Duplicarla siempre como si toda superficie fuese reflectante.
+    en: Doubling it automatically as if every surface were perfectly reflecting.
+  typical_range: 1e-12 a 1e-4 Pa en radiacion clasica no extrema
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se toma como magnitud positiva normal a la superficie absorbente.
+      en: It is taken as a positive magnitude normal to the absorbing surface.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica intensidad nula o ausencia de absorcion efectiva.
+      en: Zero indicates zero intensity or no effective absorption.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: p_rad >= 0
+  interpretation_role:
+    primary_for:
+    - empuje_sobre_superficie
+    secondary_for:
+    - momento_transportado
+  graph_binding:
+    channels:
+    - pressure_readout
+  pedagogical_notes:
+    es: Conecta una onda aparentemente intangible con una fuerza mecanica medible.
+    en: It connects an apparently intangible wave with a measurable mechanical force.
+- id: area_iluminada
+  symbol: A
+  nombre:
+    es: area iluminada
+    en: illuminated area
+  descripcion:
+    es: Superficie efectiva que intercepta la intensidad media de la onda.
+    en: Effective surface intercepting the wave average intensity.
+  unidad_si: m^2
+  dimension: '[L^2]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role: core_physical_quantity
+  used_in:
+  - potencia_incidente_area
+  common_mistake:
+    es: Usar el area geometrica total aunque solo una parte reciba la onda.
+    en: Using total geometric area even when only part receives the wave.
+  typical_range: 1e-6 a 1e6 m^2 segun detector, panel o vela solar
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El area efectiva es una magnitud geometrica positiva.
+      en: Effective area is a positive geometric magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Area nula implica potencia interceptada nula.
+      en: Zero area implies zero intercepted power.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: A >= 0
+  interpretation_role:
+    primary_for:
+    - potencia_total
+    secondary_for:
+    - escalado_dispositivo
+  graph_binding:
+    channels:
+    - area_control
+  pedagogical_notes:
+    es: Diferencia intensidad local de potencia total interceptada por un objeto real.
+    en: It separates local intensity from total power intercepted by a real object.
+- id: potencia_electromagnetica_incidente
+  symbol: P_{rad}
+  nombre:
+    es: potencia electromagnetica incidente
+    en: incident electromagnetic power
+  descripcion:
+    es: Potencia total que la onda entrega sobre un area iluminada.
+    en: Total power delivered by the wave over an illuminated area.
+  unidad_si: W
+  dimension: '[M L^2 T^-3]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role: core_physical_quantity
+  used_in:
+  - potencia_incidente_area
+  common_mistake:
+    es: Confundirla con la intensidad media y olvidar multiplicar por el area efectiva.
+    en: Confusing it with average intensity and forgetting to multiply by effective area.
+  typical_range: 1e-9 a 1e9 W segun area e intensidad
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es una potencia transferida no negativa en el modelo absorbente.
+      en: It is a nonnegative transferred power in the absorbing model.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero aparece si la intensidad o el area efectiva son nulas.
+      en: Zero occurs if either intensity or effective area is zero.
+  value_nature:
+    kind: scalar_unsigned
+    nonnegative_only: true
+    expected_interval: P_rad >= 0
+  interpretation_role:
+    primary_for:
+    - energia_recibida_por_dispositivo
+    secondary_for:
+    - dimensionamiento_area
+  graph_binding:
+    channels:
+    - power_readout
+  pedagogical_notes:
+    es: Obliga a distinguir una propiedad local de la onda de una entrega total a un sistema.
+    en: It forces the distinction between a local wave property and total delivery to a system.

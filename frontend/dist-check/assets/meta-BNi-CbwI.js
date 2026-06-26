@@ -1,0 +1,59 @@
+const n=`id: analisis-dinamico-de-la-rodadura
+nombre:
+  es: Análisis dinámico de la rodadura
+  en: Dynamic Analysis of Rolling
+area: fisica-clasica
+bloque: mecanica
+subbloque: rotacion
+parent_id: dinamica-de-la-rodadura-sin-deslizamiento
+ruta_relativa: fisica-clasica/mecanica/rotacion/rodadura/dinamica-de-la-rodadura-sin-deslizamiento/analisis-dinamico-de-la-rodadura
+orden: 212451
+type: leaf
+icon: ⚖️
+dificultad: 4
+tiempo_estimado_min: 40
+descripcion: Aplicación de la segunda ley de Newton (traslación y rotación) para cuerpos que ruedan sin deslizar.
+description_en: Application of Newton's second law (translation and rotation) for bodies rolling without slipping.
+tags:
+  es: [rodadura, dinámica, torque, fuerzas, sólida rígido]
+  en: [rolling, dynamics, torque, forces, rigid body]
+prerequisitos:
+  - fisica-clasica/mecanica/rotacion/rodadura/condicion-de-rodadura-sin-deslizamiento
+  - fisica-clasica/mecanica/rotacion/dinamica/segunda-ley-rotacional/ecuacion-fundamental
+niveles:
+  es: [BACHILLERATO, UNIVERSIDAD]
+  en: [Upper Secondary, University]
+graficos: [Svg, Coord]
+physical_role:
+  es: modelo físico dinámico
+  en: dynamic physical model
+pregunta_fisica_central:
+  es: "¿Cómo determinamos la aceleración de un cuerpo que rueda sin deslizar combinando las ecuaciones de traslación y rotación?"
+  en: "How do we determine the acceleration of a body rolling without slipping by combining translation and rotation equations?"
+representacion_dominante: Svg
+magnitud_dominante: a
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    tab_label:
+      es: Ver Interpretación
+      en: View Interpretation
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+  mini_graph:
+    enabled: true
+    preferred_type: Svg
+  output_policy:
+    max_inline_messages: 4
+    show_summary_first: true
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    auto_load_magnitudes: true
+    auto_load_formulas: true
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

@@ -1,0 +1,118 @@
+const e=`# Exam-type example
+
+## Problem statement
+
+A single-phase transformer has a primary winding of [[N_1]] equal to 800 turns and a secondary winding of [[N_2]] equal to 160 turns. The primary is connected to an alternating voltage of [[V_1]] equal to 230 V. The transformer feeds a resistive load that consumes an active power of [[P_2]] equal to 500 W. The transformer efficiency [[eta]] is 0.96. Calculate the secondary voltage, the current in both windings, the input power and the total transformer losses.
+
+## Data
+
+- [[N_1]] is 800 turns
+- [[N_2]] is 160 turns
+- [[V_1]] is 230 V
+- [[P_2]] is 500 W
+- [[eta]] is 0.96
+
+The data describe a step-down transformer because the secondary winding has fewer turns than the primary winding. The load is read from [[P_2]], not from a given resistance, so [[V_2]] must be obtained first and [[I_2]] inferred afterwards. Efficiency [[eta]] does not change the turns ratio, but it does allow [[P_1]] and losses [[P_p]] to be estimated.
+
+## System definition
+
+The system is a single-phase step-down voltage transformer with resistive load connected to the secondary. The transformer geometric parameters define the transformation ratio. Operating conditions include fixed primary voltage and determined active load.
+
+## Physical model
+
+The ideal transformer model with losses considered through efficiency is applied. The relation between [[V_1]] and [[V_2]] is controlled by [[N_1]] and [[N_2]], while the relation between [[I_1]] and [[I_2]] is inverse to the turns ratio. The apparent power [[S]] is the capacity reference for the windings, and [[eta]] quantifies the fraction of input active power transferred to the secondary.
+
+## Model justification
+
+The magnetic field in the core is approximately uniform. The transformer operates at steady state with linear resistive load. Losses are considered through the provided experimental efficiency. Conditions justify using basic transformation ratios with efficiency correction.
+
+## Symbolic solution
+
+Secondary voltage is obtained from the transformation ratio. Voltage is inversely proportional to the turns ratio:
+
+{{f:relacion_transformacion}}
+
+[[V_2]] equals [[V_1]] multiplied by [[N_2]] divided by [[N_1]]
+
+Secondary current is calculated from output power and secondary voltage:
+
+[[I_2]] equals [[P_2]] divided by [[V_2]]
+
+Primary current is obtained from conservation of apparent power, using the inverse turns ratio:
+
+{{f:relacion_corriente}}
+
+[[I_1]] equals [[I_2]] multiplied by [[N_2]] divided by [[N_1]]
+
+The same power capacity can be read through the apparent-power relation in the primary winding:
+
+{{f:potencia_aparente}}
+
+Input power is calculated from output power and efficiency:
+
+{{f:rendimiento_transformador}}
+
+[[P_1]] equals [[P_2]] divided by [[eta]]
+
+Total losses are the difference between input and output power:
+
+{{f:perdidas_totales}}
+
+[[P_p]] equals [[P_1]] minus [[P_2]]
+
+## Numerical substitution
+
+The transformation ratio is 800 divided by 160 equal to 5.
+
+Secondary voltage [[V_2]] is 230 V multiplied by 160 divided by 800 equal to 46 V.
+
+Secondary current [[I_2]] is 500 W divided by 46 V approximately 10.87 A.
+
+Primary current [[I_1]] is 10.87 A multiplied by 160 divided by 800 approximately 2.17 A.
+
+Input power [[P_1]] is 500 W divided by 0.96 approximately 520.8 W.
+
+Total losses [[P_p]] are 520.8 W minus 500 W equal to 20.8 W.
+
+## Dimensional validation
+
+For [[V_2]]: V times dimensionless divided by dimensionless gives V. Correct.
+
+For [[I_2]]: W divided by V gives A. Correct.
+
+For [[I_1]]: A times dimensionless divided by dimensionless gives A. Correct.
+
+For [[P_1]]: W divided by dimensionless gives W. Correct.
+
+For [[P_p]]: W minus W gives W. Correct.
+
+## Physical interpretation
+
+The transformer reduces voltage from 230 V to 46 V with a ratio of 5 to 1. Current increases from approximately 2.2 A in the primary to approximately 10.9 A in the secondary, maintaining power. The 96% efficiency is typical of a well-designed small power transformer. Losses of approximately 21 W are dissipated as heat in windings and core. This transformer could feed a low-voltage load such as a lighting system or consumer electronics.
+
+# Real-world example
+
+## Context
+
+A domestic distribution transformer in a residential area has a rated power [[S]] of 50 kVA. The primary is connected to the medium voltage network at 13800 V. The secondary provides the domestic voltage of 230 V single-phase. The transformer has a nominal efficiency of 98.5%. In a measurement at peak hour, the consumption recorded at the secondary is 42 kW with a power factor close to unity.
+
+## Physical estimation
+
+The approximate transformation ratio is 13800 V divided by 230 V equal to 60. The number of primary turns is approximately 60 times that of the secondary.
+
+Nominal secondary current is estimated as [[S]] divided by [[V_2]] equal to 50000 VA divided by 230 V approximately 217 A.
+
+Actual estimated current with 42 kW and unity power factor is approximately 42000 W divided by 230 V equal to 183 A.
+
+The transformer operates at 183 divided by 217 times one hundred approximately 84% of its nominal load, within its optimal operating range.
+
+Estimated losses are 1.5% of the transferred power. With 42 kW output, losses are approximately 0.015 multiplied by 42000 W equal to 630 W.
+
+Input power is approximately 42630 W. At 13800 V, primary current is approximately 3.1 A.
+
+## Interpretation
+
+The distribution transformer is operating within normal parameters, near its point of maximum efficiency. Losses of approximately 630 W are dissipated mainly as heat in the core and windings, requiring natural or forced ventilation depending on design. The current reduction from approximately 183 A in the secondary to only 3.1 A in the primary demonstrates the advantage of high-voltage distribution. Without the transformer, distributing 42 kW at 230 V would require cables capable of carrying the full current of 183 A, much thicker and more expensive than those needed for 3.1 A at 13800 V.
+
+This example shows how distribution transformers enable efficient electrical supply to entire neighbourhoods, minimising losses in supply lines and reducing the cost of electrical infrastructure.
+`;export{e as default};

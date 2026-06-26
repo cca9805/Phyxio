@@ -1,0 +1,269 @@
+version: 1
+ui:
+  default_formula: periodo_pf
+formulas:
+- id: omega0_pf
+  title:
+    es: Pulsacion natural del pendulo fisico
+    en: Natural angular frequency of the physical pendulum
+  equation: omega0 = sqrt((m*g*d)/I)
+  latex: \omega_0 = \sqrt{\frac{mgd}{I}}
+  rearrangements:
+  - target: omega0
+    equation: omega0 = sqrt((m*g*d)/I)
+    latex: \omega_0 = \sqrt{\frac{mgd}{I}}
+    constraints:
+    - I > 0
+    - m > 0
+    - d > 0
+  - target: I
+    equation: I = (m*g*d)/(omega0^2)
+    latex: I = \frac{mgd}{\omega_0^2}
+    constraints:
+    - omega0 > 0
+  - target: d
+    equation: d = (I*omega0^2)/(m*g)
+    latex: d = \frac{I\omega_0^2}{mg}
+    constraints:
+    - m > 0
+    - g > 0
+  category: fundamental
+  relation_type: characteristic_relation
+  physical_meaning:
+    es: Relaciona inercia y torque gravitatorio para fijar la rapidez angular propia en angulos pequenos.
+    en: Relates inertia and gravitational torque to set intrinsic angular rate in small-angle motion.
+  constraints: I > 0, m > 0, d > 0, g > 0 y aproximacion de angulos pequenos.
+  validity:
+    es: Valida para oscilaciones pequenas alrededor del equilibrio y eje de giro fijo.
+    en: Valid for small oscillations around equilibrium with fixed pivot axis.
+  dimension_check: "[T^-1] = sqrt(([kg]*[m/s^2]*[m])/[kg*m^2])"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - ritmo_natural
+  - inercia_vs_gravedad
+  result_semantics:
+    target: omega0
+    kind: characteristic_rate
+    sign_meaning:
+      es: Se usa positiva como rapidez angular caracteristica.
+      en: It is used as a positive characteristic angular rate.
+    absolute_value_meaning:
+      es: Mayor valor implica oscilacion mas rapida.
+      en: Larger value implies faster oscillation.
+  domain_checks:
+  - expr: I > 0
+    message:
+      es: El momento de inercia debe ser positivo.
+      en: Moment of inertia must be positive.
+  - expr: d > 0
+    message:
+      es: La distancia al centro de masas debe ser positiva.
+      en: Pivot-to-center distance must be positive.
+  coherence_checks:
+  - expr: result > 0
+    message:
+      es: La pulsacion natural debe resultar positiva.
+      en: Natural angular frequency must be positive.
+  graph_implications:
+  - Si I aumenta con m, g y d fijos, la oscilacion angular se vuelve mas lenta.
+  pedagogical_triggers:
+  - when: result > 10
+    message:
+      es: Comprueba si la aproximacion de angulos pequenos sigue siendo razonable.
+      en: Verify whether the small-angle approximation still holds.
+
+- id: periodo_pf
+  title:
+    es: Periodo del pendulo fisico
+    en: Period of the physical pendulum
+  equation: T = 2*pi*sqrt(I/(m*g*d))
+  latex: T = 2\pi\sqrt{\frac{I}{mgd}}
+  rearrangements:
+  - target: T
+    equation: T = 2*pi*sqrt(I/(m*g*d))
+    latex: T = 2\pi\sqrt{\frac{I}{mgd}}
+    constraints:
+    - I > 0
+    - m > 0
+    - d > 0
+  - target: I
+    equation: I = (T^2*m*g*d)/(4*pi^2)
+    latex: I = \frac{T^2mgd}{4\pi^2}
+    constraints:
+    - T > 0
+  - target: d
+    equation: d = (4*pi^2*I)/(T^2*m*g)
+    latex: d = \frac{4\pi^2I}{T^2mg}
+    constraints:
+    - T > 0
+    - m > 0
+  category: fundamental
+  relation_type: period_relation
+  physical_meaning:
+    es: Traduce geometria e inercia del cuerpo en escala temporal de una oscilacion completa.
+    en: Converts body geometry and inertia into the time scale of one full oscillation.
+  constraints: I > 0, m > 0, d > 0 y oscilacion de pequena amplitud.
+  validity:
+    es: Valida cuando el sistema oscila con angulos pequenos y disipacion secundaria.
+    en: Valid when the system oscillates at small angles with secondary dissipation.
+  dimension_check: "[s] = sqrt([kg*m^2]/([kg]*[m/s^2]*[m]))"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - escala_temporal
+  - comparacion_experimental
+  result_semantics:
+    target: T
+    kind: characteristic_time
+    sign_meaning:
+      es: El periodo es una duracion positiva por ciclo.
+      en: Period is a positive cycle duration.
+    absolute_value_meaning:
+      es: Valores altos implican oscilacion mas lenta.
+      en: Larger values imply slower oscillation.
+  domain_checks:
+  - expr: m > 0
+    message:
+      es: La masa debe ser positiva.
+      en: Mass must be positive.
+  - expr: g > 0
+    message:
+      es: La gravedad debe ser positiva.
+      en: Gravity must be positive.
+  coherence_checks:
+  - expr: result > 0
+    message:
+      es: El periodo calculado debe ser mayor que cero.
+      en: Computed period must be greater than zero.
+  graph_implications:
+  - El tiempo entre picos angulares consecutivos de theta(t) debe aproximar T.
+  pedagogical_triggers:
+  - when: result > 8
+    message:
+      es: Revisa si el eje y la distancia d fueron medidos correctamente.
+      en: Check whether pivot axis and distance d were measured correctly.
+
+- id: frecuencia_pf
+  title:
+    es: Frecuencia del pendulo fisico
+    en: Frequency of the physical pendulum
+  equation: f = 1/T
+  latex: f = \frac{1}{T}
+  rearrangements:
+  - target: f
+    equation: f = 1/T
+    latex: f = \frac{1}{T}
+    constraints:
+    - T > 0
+  - target: T
+    equation: T = 1/f
+    latex: T = \frac{1}{f}
+    constraints:
+    - f > 0
+  category: derived
+  relation_type: inverse_relation
+  physical_meaning:
+    es: Expresa cuantos ciclos angulares completos se repiten por segundo.
+    en: Expresses how many full angular cycles repeat per second.
+  constraints: T > 0 para evitar division por cero.
+  validity:
+    es: Valida para movimientos periodicos en regimen lineal.
+    en: Valid for periodic motion in linear regime.
+  dimension_check: "[Hz] = [s^-1]"
+  calculable: true
+  motivo_no_calculable: null
+  used_in:
+  - teoria
+  - ejemplos
+  - aplicaciones
+  interpretation_tags:
+  - ciclos_por_segundo
+  - conversion_periodo
+  result_semantics:
+    target: f
+    kind: cycle_rate
+    sign_meaning:
+      es: Se interpreta positiva como conteo de ciclos.
+      en: It is interpreted as a positive cycle count.
+    absolute_value_meaning:
+      es: Mayor valor implica mayor cantidad de ciclos por segundo.
+      en: Larger value implies more cycles per second.
+  domain_checks:
+  - expr: T > 0
+    message:
+      es: El periodo debe ser positivo.
+      en: Period must be positive.
+  coherence_checks:
+  - expr: result > 0
+    message:
+      es: La frecuencia debe resultar positiva.
+      en: Frequency must be positive.
+  graph_implications:
+  - Una ventana temporal fija contiene aproximadamente f veces ese numero de ciclos.
+  pedagogical_triggers:
+  - when: result > 3
+    message:
+      es: Verifica resolucion temporal del registro experimental.
+      en: Verify temporal resolution of experimental acquisition.
+
+- id: ecuacion_no_lineal_pf
+  title:
+    es: Ecuacion angular no lineal del pendulo fisico
+    en: Nonlinear angular equation of the physical pendulum
+  equation: I*theta_dd + m*g*d*sin(theta) = 0
+  latex: I\theta_{dd} + mgd\sin(\theta) = 0
+  rearrangements: []
+  category: structural
+  relation_type: differential_relation
+  physical_meaning:
+    es: Conecta aceleracion angular con torque gravitatorio sin linealizar el seno del angulo.
+    en: Connects angular acceleration with gravitational torque without linearising sine.
+  constraints: Requiere condiciones iniciales y solucion analitica aproximada o integracion numerica.
+  validity:
+    es: Aplica para amplitudes generales, incluyendo regimen fuera de angulos pequenos.
+    en: Applies to general amplitudes, including regimes beyond small-angle assumptions.
+  dimension_check: "[kg*m^2]*[rad/s^2] y [kg]*[m/s^2]*[m] tienen misma dimension dinamica"
+  calculable: false
+  motivo_no_calculable: Es una ecuacion diferencial no lineal y no se resuelve con despeje algebraico directo del leaf.
+  used_in:
+  - teoria
+  - modelos
+  - errores
+  interpretation_tags:
+  - no_linealidad
+  - torque_restaurador
+  result_semantics:
+    target: theta_dd
+    kind: dynamic_response
+    sign_meaning:
+      es: El signo de theta_dd depende del sentido del torque neto respecto a theta.
+      en: Sign of theta_dd depends on net torque direction relative to theta.
+    absolute_value_meaning:
+      es: Mayor modulo indica cambio angular mas brusco.
+      en: Larger magnitude indicates sharper angular change.
+  domain_checks:
+  - expr: I > 0
+    message:
+      es: I debe ser positiva para dinamica fisica valida.
+      en: I must be positive for physically valid dynamics.
+  coherence_checks:
+  - expr: true
+    message:
+      es: Comprueba consistencia de unidades y convencion de signos antes de integrar.
+      en: Check unit consistency and sign convention before integrating.
+  graph_implications:
+  - Para amplitudes grandes, la senal theta(t) deja de ser sinusoidal perfecta.
+  pedagogical_triggers:
+  - when: true
+    message:
+      es: Si la amplitud crece, evalua pasar de aproximacion lineal a modelo no lineal.
+      en: If amplitude grows, consider moving from linear approximation to nonlinear model.

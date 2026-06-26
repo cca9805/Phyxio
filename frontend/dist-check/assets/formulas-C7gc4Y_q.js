@@ -1,0 +1,236 @@
+const e=`version: 1
+formulas:
+- id: Vcm
+  title: { es: Velocidad del centro de masas, en: Center of mass velocity }
+  equation: Vcm = (m1*v1 + m2*v2)/(m1 + m2)
+  latex: 'V_{cm} = \\frac{m_1 v_1 + m_2 v_2}{m_1 + m_2}'
+  rearrangements:
+  - { target: Vcm, equation: Vcm = (m1*v1 + m2*v2)/(m1 + m2), latex: 'V_{cm} = \\frac{m_1 v_1 + m_2 v_2}{m_1 + m_2}', constraints: ['m1+m2 > 0'] }
+  category: fundamental
+  relation_type: physical_law
+  physical_meaning: { es: Velocidad del marco de referencia móvil donde el momento total es nulo., en: Velocity of the moving reference frame where total momentum is zero. }
+  constraints: Solo aplicable en sistemas aislados.
+  validity: { es: Universal para cualquier sistema de partículas., en: Universal for any particle system. }
+  dimension_check: { es: m/s, en: m/s }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [center_of_mass, inertial_frame]
+  result_semantics: { target: Vcm, score: 5 }
+  domain_checks:
+  - { expr: 'm1 + m2 > 0', message: { es: La masa total debe ser mayor que cero., en: Total mass must be greater than zero. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: velocity, message: { es: Muestra la velocidad del marco CM., en: Shows the CM frame velocity. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa el cálculo de Vcm., en: Check Vcm calculation. } }
+
+- id: u1
+  title: { es: Velocidad relativa 1 (marco CM), en: Relative velocity 1 (CM frame) }
+  equation: u1 = v1 - Vcm
+  latex: 'u_1 = v_1 - V_{cm}'
+  rearrangements:
+  - { target: u1, equation: u1 = v1 - Vcm, latex: 'u_1 = v_1 - V_{cm}', constraints: [] }
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning: { es: Velocidad de la primera partícula vista desde el centro de masas., en: Velocity of the first particle as seen from the center of mass. }
+  constraints: null
+  validity: { es: Válida para transformaciones galileanas., en: Valid for Galilean transformations. }
+  dimension_check: { es: m/s, en: m/s }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [relative_motion, galilean_transformation]
+  result_semantics: { target: u1, score: 4 }
+  domain_checks:
+  - { expr: 'true', message: { es: Válido., en: Valid. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: velocity, message: { es: Muestra la velocidad u1., en: Shows velocity u1. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa u1., en: Check u1. } }
+
+- id: u2
+  title: { es: Velocidad relativa 2 (marco CM), en: Relative velocity 2 (CM frame) }
+  equation: u2 = v2 - Vcm
+  latex: 'u_2 = v_2 - V_{cm}'
+  rearrangements:
+  - { target: u2, equation: u2 = v2 - Vcm, latex: 'u_2 = v_2 - V_{cm}', constraints: [] }
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning: { es: Velocidad de la segunda partícula vista desde el centro de masas., en: Velocity of the second particle as seen from the center of mass. }
+  constraints: null
+  validity: { es: Válida para transformaciones galileanas., en: Valid for Galilean transformations. }
+  dimension_check: { es: m/s, en: m/s }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [relative_motion, galilean_transformation]
+  result_semantics: { target: u2, score: 4 }
+  domain_checks:
+  - { expr: 'true', message: { es: Válido., en: Valid. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: velocity, message: { es: Muestra la velocidad u2., en: Shows velocity u2. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa u2., en: Check u2. } }
+
+- id: mu
+  title: { es: Masa reducida, en: Reduced mass }
+  equation: mu = (m1*m2)/(m1 + m2)
+  latex: '\\mu = \\frac{m_1 m_2}{m_1 + m_2}'
+  rearrangements:
+  - { target: mu, equation: mu = (m1*m2)/(m1 + m2), latex: '\\mu = \\frac{m_1 m_2}{m_1 + m_2}', constraints: ['m1+m2 > 0'] }
+  category: fundamental
+  relation_type: definition
+  physical_meaning: { es: Inercia efectiva del par de partículas para su movimiento relativo., en: Effective inertia of the particle pair for their relative motion. }
+  constraints: m1 + m2 > 0
+  validity: { es: Fundamental para problemas de dos cuerpos., en: Fundamental for two-body problems. }
+  dimension_check: { es: kg, en: kg }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [inertia, two_body_system]
+  result_semantics: { target: mu, score: 3 }
+  domain_checks:
+  - { expr: 'm1 + m2 > 0', message: { es: Masa total no nula., en: Non-zero total mass. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: mass, message: { es: Muestra la masa reducida., en: Shows the reduced mass. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa mu., en: Check mu. } }
+
+- id: K_cm
+  title: { es: Energía cinética en el marco CM, en: Kinetic energy in the CM frame }
+  equation: K_cm = 0.5 * mu * v_rel^2
+  latex: 'K_{cm} = \\frac{1}{2} \\mu v_{rel}^2'
+  rearrangements:
+  - { target: K_cm, equation: K_cm = 0.5 * mu * v_rel^2, latex: 'K_{cm} = \\frac{1}{2} \\mu v_{rel}^2', constraints: [] }
+  category: derived
+  relation_type: definition
+  physical_meaning: { es: Energía cinética asociada exclusivamente al movimiento relativo., en: Kinetic energy associated exclusively with relative motion. }
+  constraints: null
+  validity: { es: Define el presupuesto energético útil para interacciones., en: Defines the useful energy budget for interactions. }
+  dimension_check: { es: J, en: J }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [energy, relative_motion]
+  result_semantics: { target: K_cm, score: 5 }
+  domain_checks:
+  - { expr: 'true', message: { es: Válido., en: Valid. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: energy, message: { es: Muestra la energía interna., en: Shows internal energy. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa K_cm., en: Check K_cm. } }
+
+- id: p_cm_total
+  title: { es: Momento lineal total en el marco CM, en: Total linear momentum in the CM frame }
+  equation: p_cm_total = m1*u1 + m2*u2
+  latex: 'P_{cm} = m_1 u_1 + m_2 u_2'
+  rearrangements:
+  - { target: p_cm_total, equation: p_cm_total = m1*u1 + m2*u2, latex: 'P_{cm} = m_1 u_1 + m_2 u_2', constraints: [] }
+  category: fundamental
+  relation_type: definition
+  physical_meaning: { es: Suma de los momentos en el marco central; debe ser siempre cero., en: Sum of momenta in the central frame; must always be zero. }
+  constraints: null
+  validity: { es: Condición definitoria del marco del centro de masas., en: Defining condition of the center of mass frame. }
+  dimension_check: { es: kg*m/s, en: kg*m/s }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [momentum, symmetry]
+  result_semantics: { target: p_cm_total, score: 5 }
+  domain_checks:
+  - { expr: 'true', message: { es: Válido., en: Valid. } }
+  coherence_checks:
+  - { expr: 'abs(p_cm_total) < 0.001', severity: ok, message: { es: El momento en el CM es nulo., en: CM momentum is zero. } }
+  graph_implications:
+  - { channel: momentum, message: { es: Muestra la nulidad del momento., en: Shows momentum nullity. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Verifica la nulidad del momento., en: Verify momentum nullity. } }
+
+- id: v1_inverse
+  title: { es: Transformación inversa de velocidad 1, en: Inverse velocity transformation 1 }
+  equation: v1 = u1 + Vcm
+  latex: 'v_1 = u_1 + V_{cm}'
+  rearrangements:
+  - { target: v1, equation: v1 = u1 + Vcm, latex: 'v_1 = u_1 + V_{cm}', constraints: [] }
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning: { es: Recuperación de la velocidad en el laboratorio sumando la velocidad del CM., en: Recovery of laboratory velocity by adding CM velocity. }
+  constraints: null
+  validity: { es: Válida para transformaciones galileanas., en: Valid for Galilean transformations. }
+  dimension_check: { es: m/s, en: m/s }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [inverse_transformation, lab_frame]
+  result_semantics: { target: v1, score: 4 }
+  domain_checks:
+  - { expr: 'true', message: { es: Válido., en: Valid. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: velocity, message: { es: Muestra el retorno al lab., en: Shows return to lab. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa el retorno al lab 1., en: Check return to lab 1. } }
+
+- id: v2_inverse
+  title: { es: Transformación inversa de velocidad 2, en: Inverse velocity transformation 2 }
+  equation: v2 = u2 + Vcm
+  latex: 'v_2 = u_2 + V_{cm}'
+  rearrangements:
+  - { target: v2, equation: v2 = u2 + Vcm, latex: 'v_2 = u_2 + V_{cm}', constraints: [] }
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning: { es: Recuperación de la velocidad en el laboratorio para la segunda partícula., en: Recovery of laboratory velocity for the second particle. }
+  constraints: null
+  validity: { es: Válida para transformaciones galileanas., en: Valid for Galilean transformations. }
+  dimension_check: { es: m/s, en: m/s }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [inverse_transformation, lab_frame]
+  result_semantics: { target: v2, score: 4 }
+  domain_checks:
+  - { expr: 'true', message: { es: Válido., en: Valid. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: velocity, message: { es: Muestra el retorno al lab., en: Shows return to lab. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa el retorno al lab 2., en: Check return to lab 2. } }
+
+- id: koenig_theorem
+  title: { es: Teorema de König para la energía, en: König's theorem for energy }
+  equation: K_total = 0.5 * (m1 + m2) * Vcm^2 + K_cm
+  latex: 'K_{total} = \\frac{1}{2} (m_1 + m_2) V_{cm}^2 + K_{cm}'
+  rearrangements:
+  - { target: K_total, equation: K_total = 0.5 * (m1 + m2) * Vcm^2 + K_cm, latex: 'K_{total} = \\frac{1}{2} (m_1 + m_2) V_{cm}^2 + K_{cm}', constraints: [] }
+  category: derived
+  relation_type: physical_law
+  physical_meaning: { es: Descomposición de la energía cinética total en traslacional e interna., en: Decomposition of total kinetic energy into translational and internal. }
+  constraints: null
+  validity: { es: Fundamental para la jerarquía energética de sistemas., en: Fundamental for system energy hierarchy. }
+  dimension_check: { es: J, en: J }
+  calculable: true
+  motivo_no_calculable: null
+  used_in: [theory, examples, calculator]
+  interpretation_tags: [energy, decomposition, internal_energy]
+  result_semantics: { target: K_total, score: 5 }
+  domain_checks:
+  - { expr: 'true', message: { es: Válido., en: Valid. } }
+  coherence_checks:
+  - { expr: 'true', severity: ok, message: { es: Coherente., en: Coherent. } }
+  graph_implications:
+  - { channel: energy, message: { es: Muestra la jerarquía de energía., en: Shows energy hierarchy. } }
+  pedagogical_triggers:
+  - { detect_when: check, message: { es: Revisa el balance energético total., en: Check total energy balance. } }
+`;export{e as default};

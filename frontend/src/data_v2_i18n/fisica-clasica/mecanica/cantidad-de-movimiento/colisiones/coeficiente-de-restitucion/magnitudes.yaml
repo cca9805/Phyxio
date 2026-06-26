@@ -1,0 +1,626 @@
+version: 1
+magnitudes:
+  - id: e
+    symbol: e
+    nombre:
+      es: coeficiente de restitución
+      en: coefficient of restitution
+    descripcion:
+      es: Parámetro adimensional que mide la fracción de velocidad relativa normal conservada tras un impacto.
+      en: Dimensionless parameter that measures the fraction of normal relative speed preserved after an impact.
+    unidad_si: "1"
+    dimension: "1"
+    is_vector: false
+    components: null
+    category: primary
+    physical_role: model_parameter
+    used_in:
+      - coeficiente-de-restitucion
+    common_mistake:
+      es: Confundir e con la eficiencia energética; e mide velocidades relativas, no energías directamente.
+      en: Confusing e with energy efficiency; e measures relative speeds, not energies directly.
+    typical_range: "0 a 1 en choques ordinarios; puede superar 1 en colisiones superelásticas"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: e es no negativo por definición en choques ordinarios; un valor negativo indica error de signos.
+        en: e is non-negative by definition in ordinary collisions; a negative value indicates a sign error.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: e igual a cero indica colisión totalmente inelástica donde los cuerpos quedan unidos.
+        en: e equal to zero indicates a perfectly inelastic collision where the bodies stick together.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "[0, 1]"
+    interpretation_role:
+      primary_for:
+        - coeficiente-de-restitucion
+      secondary_for:
+        - colisiones-elasticas
+        - colisiones-inelasticas
+        - colisiones-totalmente-inelasticas
+    graph_binding:
+      channels:
+        - clasificacion_colision
+    pedagogical_notes:
+      es: Usar e como parámetro de clasificación antes de calcular velocidades finales.
+      en: Use e as a classification parameter before calculating final velocities.
+
+  - id: v1i
+    symbol: v_{1i}
+    nombre:
+      es: velocidad inicial del cuerpo 1
+      en: initial velocity of body 1
+    descripcion:
+      es: Componente escalar de la velocidad del cuerpo 1 justo antes del contacto, con signo según el eje elegido.
+      en: Scalar component of the velocity of body 1 just before contact, signed according to the chosen axis.
+    unidad_si: m/s
+    dimension: L T^-1
+    is_vector: false
+    components: null
+    category: independent
+    physical_role: initial_condition
+    used_in:
+      - coeficiente-de-restitucion
+    common_mistake:
+      es: Olvidar que v1i lleva signo según la dirección del eje; un cuerpo que se acerca desde la derecha tiene v1i negativo si el eje apunta a la derecha.
+      en: Forgetting that v1i carries a sign according to the axis direction; a body approaching from the right has negative v1i if the axis points right.
+    typical_range: "Depende del problema; del orden de m/s en choques de laboratorio"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica la dirección del movimiento respecto al eje de referencia elegido.
+        en: The sign indicates the direction of motion relative to the chosen reference axis.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: El cuerpo 1 está en reposo antes del choque.
+        en: Body 1 is at rest before the collision.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: "(-inf, +inf)"
+    interpretation_role:
+      primary_for:
+        - coeficiente-de-restitucion
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: Fijar el sentido positivo del eje antes de asignar signos a las velocidades.
+      en: Fix the positive direction of the axis before assigning signs to velocities.
+
+  - id: v2i
+    symbol: v_{2i}
+    nombre:
+      es: velocidad inicial del cuerpo 2
+      en: initial velocity of body 2
+    descripcion:
+      es: Componente escalar de la velocidad del cuerpo 2 justo antes del contacto, con signo según el eje elegido.
+      en: Scalar component of the velocity of body 2 just before contact, signed according to the chosen axis.
+    unidad_si: m/s
+    dimension: L T^-1
+    is_vector: false
+    components: null
+    category: independent
+    physical_role: initial_condition
+    used_in:
+      - coeficiente-de-restitucion
+    common_mistake:
+      es: Asignar el mismo signo a ambas velocidades iniciales cuando los cuerpos se acercan de frente.
+      en: Assigning the same sign to both initial velocities when the bodies approach head-on.
+    typical_range: "Depende del problema; del orden de m/s en choques de laboratorio"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica la dirección del movimiento respecto al eje de referencia elegido.
+        en: The sign indicates the direction of motion relative to the chosen reference axis.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: El cuerpo 2 está en reposo antes del choque (blanco estacionario).
+        en: Body 2 is at rest before the collision (stationary target).
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: "(-inf, +inf)"
+    interpretation_role:
+      primary_for:
+        - coeficiente-de-restitucion
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: En muchos problemas v2i es cero (cuerpo en reposo); verificar siempre antes de simplificar.
+      en: In many problems v2i is zero (body at rest); always verify before simplifying.
+
+  - id: v1f
+    symbol: v_{1f}
+    nombre:
+      es: velocidad final del cuerpo 1
+      en: final velocity of body 1
+    descripcion:
+      es: Componente escalar de la velocidad del cuerpo 1 justo después del contacto, con signo según el eje elegido.
+      en: Scalar component of the velocity of body 1 just after contact, signed according to the chosen axis.
+    unidad_si: m/s
+    dimension: L T^-1
+    is_vector: false
+    components: null
+    category: dependent
+    physical_role: output_quantity
+    used_in:
+      - coeficiente-de-restitucion
+    common_mistake:
+      es: Asumir que v1f tiene el mismo signo que v1i; en una colisión frontal el cuerpo 1 puede rebotar y cambiar de sentido.
+      en: Assuming v1f has the same sign as v1i; in a head-on collision body 1 may bounce back and reverse direction.
+    typical_range: "Depende del problema"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica la dirección del movimiento tras el choque.
+        en: The sign indicates the direction of motion after the collision.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: El cuerpo 1 queda en reposo tras el choque (posible en colisiones entre masas iguales con e igual a 1).
+        en: Body 1 is at rest after the collision (possible in equal-mass collisions with e equal to 1).
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: "(-inf, +inf)"
+    interpretation_role:
+      primary_for:
+        - coeficiente-de-restitucion
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: v1f se obtiene combinando la ecuación de restitución con la conservación del momento lineal.
+      en: v1f is obtained by combining the restitution equation with conservation of linear momentum.
+
+  - id: v2f
+    symbol: v_{2f}
+    nombre:
+      es: velocidad final del cuerpo 2
+      en: final velocity of body 2
+    descripcion:
+      es: Componente escalar de la velocidad del cuerpo 2 justo después del contacto, con signo según el eje elegido.
+      en: Scalar component of the velocity of body 2 just after contact, signed according to the chosen axis.
+    unidad_si: m/s
+    dimension: L T^-1
+    is_vector: false
+    components: null
+    category: dependent
+    physical_role: output_quantity
+    used_in:
+      - coeficiente-de-restitucion
+    common_mistake:
+      es: Confundir v2f con la velocidad relativa de separación; v2f es la velocidad absoluta del cuerpo 2, no la diferencia.
+      en: Confusing v2f with the relative separation speed; v2f is the absolute velocity of body 2, not the difference.
+    typical_range: "Depende del problema"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica la dirección del movimiento tras el choque.
+        en: The sign indicates the direction of motion after the collision.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: El cuerpo 2 queda en reposo tras el choque.
+        en: Body 2 is at rest after the collision.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: "(-inf, +inf)"
+    interpretation_role:
+      primary_for:
+        - coeficiente-de-restitucion
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: v2f se obtiene combinando la ecuación de restitución con la conservación del momento lineal.
+      en: v2f is obtained by combining the restitution equation with conservation of linear momentum.
+
+  - id: m1
+    symbol: m_1
+    nombre:
+      es: masa del cuerpo 1
+      en: mass of body 1
+    descripcion:
+      es: Masa inercial del primer cuerpo involucrado en la colisión.
+      en: Inertial mass of the first body involved in the collision.
+    unidad_si: kg
+    dimension: M
+    is_vector: false
+    components: null
+    category: independent
+    physical_role: system_parameter
+    used_in:
+      - coeficiente-de-restitucion
+    common_mistake:
+      es: Omitir m1 al calcular la pérdida de energía; e solo no basta para obtener la energía disipada.
+      en: Omitting m1 when calculating energy loss; e alone is not enough to obtain the dissipated energy.
+    typical_range: "Depende del problema"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La masa es siempre positiva.
+        en: Mass is always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Una masa nula no tiene sentido físico en una colisión.
+        en: Zero mass has no physical meaning in a collision.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "(0, +inf)"
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - coeficiente-de-restitucion
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: Necesaria para calcular la masa reducida y la pérdida de energía.
+      en: Needed to calculate the reduced mass and the energy loss.
+
+  - id: m2
+    symbol: m_2
+    nombre:
+      es: masa del cuerpo 2
+      en: mass of body 2
+    descripcion:
+      es: Masa inercial del segundo cuerpo involucrado en la colisión.
+      en: Inertial mass of the second body involved in the collision.
+    unidad_si: kg
+    dimension: M
+    is_vector: false
+    components: null
+    category: independent
+    physical_role: system_parameter
+    used_in:
+      - coeficiente-de-restitucion
+    common_mistake:
+      es: Intercambiar m1 y m2 sin actualizar los subíndices de las velocidades.
+      en: Swapping m1 and m2 without updating the velocity subscripts.
+    typical_range: "Depende del problema"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La masa es siempre positiva.
+        en: Mass is always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Una masa nula no tiene sentido físico en una colisión.
+        en: Zero mass has no physical meaning in a collision.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "(0, +inf)"
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - coeficiente-de-restitucion
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: Necesaria para calcular la masa reducida y la pérdida de energía.
+      en: Needed to calculate the reduced mass and the energy loss.
+
+  - id: mu
+    symbol: \mu
+    nombre:
+      es: masa reducida
+      en: reduced mass
+    descripcion:
+      es: Masa efectiva del sistema de dos cuerpos que aparece en la fórmula de pérdida de energía; definida como m1*m2/(m1+m2).
+      en: Effective mass of the two-body system that appears in the energy loss formula; defined as m1*m2/(m1+m2).
+    unidad_si: kg
+    dimension: M
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: auxiliary_quantity
+    used_in:
+      - coeficiente-de-restitucion
+    common_mistake:
+      es: Usar la masa total en lugar de la masa reducida en la fórmula de pérdida de energía.
+      en: Using the total mass instead of the reduced mass in the energy loss formula.
+    typical_range: "Siempre menor que la menor de las dos masas"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La masa reducida es siempre positiva.
+        en: The reduced mass is always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Una masa reducida nula implica que al menos una masa es cero, lo cual no tiene sentido.
+        en: Zero reduced mass implies at least one mass is zero, which is meaningless.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "(0, +inf)"
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - coeficiente-de-restitucion
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: mu siempre es menor que la menor de m1 y m2; aparece de forma natural en el marco del centro de masas.
+      en: mu is always less than the smaller of m1 and m2; it appears naturally in the center-of-mass frame.
+
+  - id: DeltaK
+    symbol: \Delta K
+    nombre:
+      es: pérdida de energía cinética
+      en: kinetic energy loss
+    descripcion:
+      es: Energía cinética transformada en formas no mecánicas (calor, sonido, deformación) durante la colisión.
+      en: Kinetic energy transformed into non-mechanical forms (heat, sound, deformation) during the collision.
+    unidad_si: J
+    dimension: M L^2 T^-2
+    is_vector: false
+    components: null
+    category: dependent
+    physical_role: output_quantity
+    used_in:
+      - coeficiente-de-restitucion
+    common_mistake:
+      es: Calcular DeltaK como diferencia de energías cinéticas individuales en lugar de usar la fórmula con masa reducida.
+      en: Calculating DeltaK as a difference of individual kinetic energies instead of using the reduced mass formula.
+    typical_range: "Siempre no negativo en choques ordinarios"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: DeltaK es no negativo porque representa energía disipada.
+        en: DeltaK is non-negative because it represents dissipated energy.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: DeltaK igual a cero indica colisión perfectamente elástica (e igual a 1).
+        en: DeltaK equal to zero indicates a perfectly elastic collision (e equal to 1).
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for:
+        - coeficiente-de-restitucion
+      secondary_for: []
+    graph_binding:
+      channels:
+        - curva_disipacion
+    pedagogical_notes:
+      es: DeltaK depende de e² (no de e), por lo que pequeños cambios en e producen cambios cuadráticos en la energía perdida.
+      en: DeltaK depends on e² (not e), so small changes in e produce quadratic changes in the lost energy.
+
+  - id: h0
+    symbol: h_0
+    nombre:
+      es: altura inicial de caída
+      en: initial drop height
+    descripcion:
+      es: Altura desde la que se deja caer el cuerpo antes del primer rebote.
+      en: Height from which the body is dropped before the first bounce.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: independent
+    physical_role: initial_condition
+    used_in:
+      - coeficiente-de-restitucion
+    common_mistake:
+      es: Medir h0 desde el centro de masas del objeto en lugar del punto de contacto.
+      en: Measuring h0 from the center of mass of the object instead of the contact point.
+    typical_range: "Típicamente entre 0.5 y 3 m en pruebas de laboratorio"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: h0 es siempre positiva.
+        en: h0 is always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Altura cero significa que no hay caída.
+        en: Zero height means there is no drop.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "(0, +inf)"
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - coeficiente-de-restitucion
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: h0 define la energía potencial inicial que se convierte en cinética justo antes del impacto.
+      en: h0 defines the initial potential energy that converts to kinetic energy just before impact.
+
+  - id: hf
+    symbol: h_f
+    nombre:
+      es: altura de rebote
+      en: bounce height
+    descripcion:
+      es: Altura máxima alcanzada por el cuerpo después del primer rebote.
+      en: Maximum height reached by the body after the first bounce.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: dependent
+    physical_role: output_quantity
+    used_in:
+      - coeficiente-de-restitucion
+    common_mistake:
+      es: Confundir la altura de rebote con la distancia total recorrida.
+      en: Confusing the bounce height with the total distance traveled.
+    typical_range: "Siempre menor o igual que h0 en choques ordinarios"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: hf es siempre no negativa.
+        en: hf is always non-negative.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: hf igual a cero indica colisión totalmente inelástica (e igual a 0).
+        en: hf equal to zero indicates a perfectly inelastic collision (e equal to 0).
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "[0, h0]"
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - coeficiente-de-restitucion
+    graph_binding:
+      channels:
+        - decaimiento_exponencial
+    pedagogical_notes:
+      es: hf es la medida experimental directa para obtener e sin necesidad de medir velocidades.
+      en: hf is the direct experimental measurement to obtain e without needing to measure velocities.
+
+  - id: hn
+    symbol: h_n
+    nombre:
+      es: altura tras n rebotes
+      en: height after n bounces
+    descripcion:
+      es: Altura máxima alcanzada por el cuerpo después de n rebotes consecutivos.
+      en: Maximum height reached by the body after n consecutive bounces.
+    unidad_si: m
+    dimension: L
+    is_vector: false
+    components: null
+    category: dependent
+    physical_role: output_quantity
+    used_in:
+      - coeficiente-de-restitucion
+    common_mistake:
+      es: Confundir hn con hf; hn es la altura tras n botes, mientras que hf es solo la del primer rebote.
+      en: Confusing hn with hf; hn is the height after n bounces, while hf is only the first bounce.
+    typical_range: "Siempre menor que h0 si e es menor que 1"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: hn es siempre no negativa.
+        en: hn is always non-negative.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: hn igual a cero indica que la pelota ya no rebota.
+        en: hn equal to zero indicates the ball no longer bounces.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "[0, h0]"
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - coeficiente-de-restitucion
+    graph_binding:
+      channels:
+        - decaimiento_exponencial
+    pedagogical_notes:
+      es: hn decae geométricamente; cada bote multiplica la altura anterior por e al cuadrado.
+      en: hn decays geometrically; each bounce multiplies the previous height by e squared.
+
+  - id: n
+    symbol: "n"
+    nombre:
+      es: número de rebotes
+      en: number of bounces
+    descripcion:
+      es: Número entero de rebotes consecutivos contados desde la caída inicial.
+      en: Integer number of consecutive bounces counted from the initial drop.
+    unidad_si: "1"
+    dimension: "1"
+    is_vector: false
+    components: null
+    category: independent
+    physical_role: counter
+    used_in:
+      - coeficiente-de-restitucion
+    common_mistake:
+      es: Confundir el número de botes con el número de impactos.
+      en: Confusing the number of bounces with the number of impacts.
+    typical_range: "Entero positivo, típicamente entre 1 y 20"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: n es siempre un entero positivo.
+        en: n is always a positive integer.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: n igual a cero corresponde a la altura inicial antes de cualquier rebote.
+        en: n equal to zero corresponds to the initial height before any bounce.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "[1, +inf)"
+    interpretation_role:
+      primary_for: []
+      secondary_for:
+        - coeficiente-de-restitucion
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: n aparece como exponente en la fórmula de rebote; duplicar n reduce la altura drásticamente.
+      en: n appears as an exponent in the bounce formula; doubling n drastically reduces the height.
+
+  - id: vrel_f
+    symbol: v_{rel,f}
+    nombre:
+      es: velocidad relativa de separación
+      en: relative separation speed
+    descripcion:
+      es: Velocidad relativa con la que los cuerpos se separan justo después del contacto.
+      en: Relative speed at which the bodies separate just after contact.
+    unidad_si: m/s
+    dimension: L T^-1
+    is_vector: false
+    components: null
+    category: dependent
+    physical_role: output_quantity
+    used_in:
+      - coeficiente-de-restitucion
+    common_mistake:
+      es: Confundir la velocidad relativa de separación con la velocidad absoluta de uno de los cuerpos.
+      en: Confusing the relative separation speed with the absolute velocity of one of the bodies.
+    typical_range: "Depende del problema"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El signo indica la dirección de la separación respecto al eje elegido.
+        en: The sign indicates the separation direction relative to the chosen axis.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: vrel_f igual a cero indica colisión totalmente inelástica.
+        en: vrel_f equal to zero indicates a perfectly inelastic collision.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: "(-inf, +inf)"
+    interpretation_role:
+      primary_for:
+        - coeficiente-de-restitucion
+      secondary_for: []
+    graph_binding:
+      channels:
+        - comparacion_vrel
+    pedagogical_notes:
+      es: vrel_f es la lectura directa de e multiplicada por la velocidad relativa de acercamiento.
+      en: vrel_f is the direct reading of e multiplied by the approach relative speed.
+

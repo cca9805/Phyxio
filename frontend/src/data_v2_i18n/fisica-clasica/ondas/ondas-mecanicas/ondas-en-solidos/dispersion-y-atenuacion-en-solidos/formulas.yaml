@@ -1,0 +1,326 @@
+- id: atenuacion_exponencial
+  title:
+    es: Atenuación exponencial de la amplitud
+    en: Exponential amplitude attenuation
+  equation: A = A0 * exp(-alpha * x)
+  latex: A = A_0 \cdot e^{-\alpha x}
+  rearrangements:
+  - target: amplitud_a_distancia_x
+    equation: A = A0 * exp(-alpha * x)
+    latex: A = A_0 \cdot e^{-\alpha x}
+  - target: alpha
+    equation: alpha = -ln(A/A0) / x
+    latex: \alpha = -\frac{\ln(A/A_0)}{x}
+  - target: amplitud_inicial
+    equation: A0 = A * exp(alpha * x)
+    latex: A_0 = A \cdot e^{\alpha x}
+  - target: distancia_de_propagacion
+    equation: x = -ln(A/A0) / alpha
+    latex: x = -\frac{\ln(A/A_0)}{\alpha}
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Describe cómo la amplitud de una onda disminuye exponencialmente con la distancia debido a la atenuación del material.
+    en: Describes how the amplitude of a wave decreases exponentially with distance due to material attenuation.
+  constraints:
+    es: Válido para ondas planas en medios homogéneos e isótropos. No incluye dispersión geométrica.
+    en: Valid for plane waves in homogeneous and isotropic media. Does not include geometric dispersion.
+  validity:
+    es: Aplicable cuando alpha es constante con la distancia y la frecuencia. Válido para x ≥ 0 y A > 0.
+    en: Applicable when alpha is constant with distance and frequency. Valid for x ≥ 0 and A > 0.
+  dimension_check:
+    es: 'Argumento del exponencial debe ser adimensional: alpha [L⁻¹] × x [L] = [1]'
+    en: 'Exponential argument must be dimensionless: alpha [L⁻¹] × x [L] = [1]'
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - calculo_de_perdidas
+  - extraccion_de_alpha
+  - prediccion_de_amplitud
+  result_semantics:
+    target: amplitud_a_distancia_x
+    kind: amplitud_atenuada
+    sign_meaning:
+      es: La amplitud es siempre positiva; representa la magnitud de la onda atenuada.
+      en: Amplitude is always positive; represents the magnitude of the attenuated wave.
+    absolute_value_meaning:
+      es: El valor absoluto indica la intensidad restante de la onda después de la atenuación.
+      en: The absolute value indicates the remaining intensity of the wave after attenuation.
+  domain_checks:
+  - 'A > 0: la amplitud no puede ser negativa'
+  - 'A ≤ A0: la amplitud no puede aumentar por atenuación'
+  - 'x ≥ 0: la distancia no puede ser negativa'
+  - 'alpha > 0: el coeficiente de atenuación debe ser positivo'
+  coherence_checks:
+  - si x = 0, entonces A debe igualar A0
+  - si alpha aumenta, A disminuye para x fijo
+  - ratio A/A0 debe estar entre 0 y 1
+  graph_implications:
+  - curva exponencial decreciente en el plano A vs x
+  - pendiente inicial = -alpha * A0
+  - asintota horizontal en A = 0
+  pedagogical_triggers:
+  - verificar que el estudiante no confunde atenuación con dispersión geométrica
+  - detectar si se olvida el signo negativo en el exponente
+  - identificar si se usa logaritmo natural en lugar de logaritmo base 10
+- id: longitud_atenuacion
+  title:
+    es: Longitud característica de atenuación
+    en: Characteristic attenuation length
+  equation: L_d = 1/alpha
+  latex: L_d = \frac{1}{\alpha}
+  rearrangements:
+  - target: longitud_de_atenuacion
+    equation: L_d = 1/alpha
+    latex: L_d = \frac{1}{\alpha}
+  - target: alpha
+    equation: alpha = 1/L_d
+    latex: \alpha = \frac{1}{L_d}
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: Define la distancia a la cual la amplitud se reduce al 37% (1/e) de su valor inicial.
+    en: Defines the distance at which amplitude reduces to 37% (1/e) of its initial value.
+  constraints:
+    es: Válido solo para atenuación exponencial simple. No aplica si alpha varía con la distancia.
+    en: Valid only for simple exponential attenuation. Does not apply if alpha varies with distance.
+  validity:
+    es: Aplicable cuando alpha > 0 y es constante. L_d > 0 siempre.
+    en: Applicable when alpha > 0 and is constant. L_d > 0 always.
+  dimension_check:
+    es: alpha [L⁻¹] → 1/alpha [L] ✓
+    en: alpha [L⁻¹] → 1/alpha [L] ✓
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - escala_caracteristica
+  - comparacion_de_materiales
+  - estimacion_de_penetracion
+  result_semantics:
+    target: longitud_de_atenuacion
+    kind: distancia_caracteristica
+    sign_meaning:
+      es: La longitud de atenuación es siempre positiva; valores más pequeños indican mayor atenuación.
+      en: Attenuation length is always positive; smaller values indicate higher attenuation.
+    absolute_value_meaning:
+      es: Indica qué tan lejos puede penetrar la onda antes de atenuarse significativamente.
+      en: Indicates how far the wave can penetrate before significant attenuation.
+  domain_checks:
+  - 'L_d > 0: la longitud de atenuación debe ser positiva'
+  - 'alpha > 0: el coeficiente debe ser positivo'
+  coherence_checks:
+  - si alpha aumenta, L_d disminuye
+  - si L_d es grande, el material tiene baja atenuación
+  - L_d no puede ser infinito (alpha = 0)
+  graph_implications:
+  - recíproco de la pendiente inicial en escala logarítmica
+  - distancia donde A = A0/e en la curva de atenuación
+  pedagogical_triggers:
+  - verificar que el estudiante entiende L_d como distancia, no como coeficiente
+  - detectar confusión entre L_d y profundidad máxima de detección
+  - identificar si se usa L_d correctamente para comparar materiales
+- id: perdida_db
+  title:
+    es: Pérdida por atenuación en decibelios
+    en: Attenuation loss in decibels
+  equation: L_db = 20 * log10(A0/A)
+  latex: L_{db} = 20 \cdot \log_{10}\left(\frac{A_0}{A}\right)
+  rearrangements:
+  - target: perdida_en_decibelios
+    equation: L_db = 20 * log10(A0/A)
+    latex: L_{db} = 20 \cdot \log_{10}\left(\frac{A_0}{A}\right)
+  - target: amplitud_a_distancia_x
+    equation: A = A0 * 10^(-L_db/20)
+    latex: A = A_0 \cdot 10^{-L_{db}/20}
+  - target: amplitud_inicial
+    equation: A0 = A * 10^(L_db/20)
+    latex: A_0 = A \cdot 10^{L_{db}/20}
+  category: derived
+  relation_type: definition
+  physical_meaning:
+    es: Expresa la pérdida de amplitud en escala logarítmica (decibelios), común en ingeniería.
+    en: Expresses amplitude loss on a logarithmic scale (decibels), common in engineering.
+  constraints:
+    es: Válido para relaciones de amplitud positivas. No incluye dispersión geométrica.
+    en: Valid for positive amplitude ratios. Does not include geometric dispersion.
+  validity:
+    es: Aplicable cuando A > 0 y A0 > 0. L_db ≥ 0 para atenuación.
+    en: Applicable when A > 0 and A0 > 0. L_db ≥ 0 for attenuation.
+  dimension_check:
+    es: Argumento del logaritmo es adimensional. L_db es adimensional (referencia dB).
+    en: Logarithm argument is dimensionless. L_db is dimensionless (dB reference).
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - medicion_practica
+  - especificaciones_tecnicas
+  - comparacion_logaritmica
+  result_semantics:
+    target: perdida_en_decibelios
+    kind: perdida_logaritmica
+    sign_meaning:
+      es: L_db positivo indica atenuación; cero indica sin pérdidas; negativo indicaría ganancia (no físico).
+      en: Positive L_db indicates attenuation; zero indicates no loss; negative would indicate gain (non-physical).
+    absolute_value_meaning:
+      es: Representa cuántos decibelios se ha perdido la señal.
+      en: Represents how many decibels the signal has lost.
+  domain_checks:
+  - 'L_db ≥ 0: la pérdida no puede ser negativa'
+  - 'A ≤ A0: la amplitud no puede aumentar'
+  - 'A > 0 y A0 > 0: ambas amplitudes deben ser positivas'
+  coherence_checks:
+  - si A = A0, entonces L_db = 0
+  - si A disminuye, L_db aumenta
+  - L_db = 8.686 * alpha * x para atenuación exponencial
+  graph_implications:
+  - escala logarítmica facilita visualización de grandes rangos
+  - relación lineal entre L_db y x para atenuación exponencial
+  pedagogical_triggers:
+  - verificar que el estudiante usa log10, no logaritmo natural
+  - detectar confusión entre 20*log10 y 10*log10 (potencia vs amplitud)
+  - identificar si se interpreta correctamente el signo de L_db
+- id: dependencia_frecuencia
+  title:
+    es: Dependencia del coeficiente de atenuación con la frecuencia
+    en: Frequency dependence of attenuation coefficient
+  equation: alpha = alpha_0 * (f/f_0)^n
+  latex: \alpha = \alpha_0 \cdot \left(\frac{f}{f_0}\right)^n
+  rearrangements:
+  - target: alpha
+    equation: alpha = alpha_0 * (f/f_0)^n
+    latex: \alpha = \alpha_0 \cdot \left(\frac{f}{f_0}\right)^n
+  - target: frecuencia
+    equation: f = f_0 * (alpha/alpha_0)^(1/n)
+    latex: f = f_0 \cdot \left(\frac{\alpha}{\alpha_0}\right)^{1/n}
+  - target: alpha_0
+    equation: alpha_0 = alpha / (f/f_0)^n
+    latex: \alpha_0 = \frac{\alpha}{\left(\frac{f}{f_0}\right)^n}
+  category: structural
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Describe cómo el coeficiente de atenuación aumenta con la frecuencia según un modelo de potencia.
+    en: Describes how the attenuation coefficient increases with frequency according to a power law model.
+  constraints:
+    es: Modelo empírico válido en rangos limitados de frecuencia. El exponente n depende del mecanismo dominante.
+    en: Empirical model valid in limited frequency ranges. The exponent n depends on the dominant mechanism.
+  validity:
+    es: Aplicable para f > 0, alpha_0 > 0 y n > 0. Válido en el rango experimental donde se determinó.
+    en: Applicable for f > 0, alpha_0 > 0 and n > 0. Valid in the experimental range where it was determined.
+  dimension_check:
+    es: Ratio f/f_0 adimensional → alpha [L⁻¹] = alpha_0 [L⁻¹] ✓
+    en: Ratio f/f_0 dimensionless → alpha [L⁻¹] = alpha_0 [L⁻¹] ✓
+  calculable: false
+  motivo_no_calculable:
+    es: Requiere parámetros empíricos (alpha_0, f_0, n) que deben medirse experimentalmente para cada material.
+    en: Requires empirical parameters (alpha_0, f_0, n) that must be measured experimentally for each material.
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - seleccion_de_frecuencia
+  - optimizacion_de_parametros
+  - caracterizacion_de_material
+  result_semantics:
+    target: alpha
+    kind: coeficiente_frecuencial
+    sign_meaning:
+      es: Alpha siempre positivo; aumenta con f para n > 0.
+      en: Alpha always positive; increases with f for n > 0.
+    absolute_value_meaning:
+      es: Magnitud de la atenuación a la frecuencia considerada.
+      en: Magnitude of attenuation at the considered frequency.
+  domain_checks:
+  - 'alpha > 0: el coeficiente debe ser positivo'
+  - 'f > 0: la frecuencia debe ser positiva'
+  - 'alpha_0 > 0: el coeficiente de referencia debe ser positivo'
+  coherence_checks:
+  - si f = f_0, entonces alpha = alpha_0
+  - si n > 1, alpha crece rápidamente con f
+  - si n < 1, alpha crece lentamente con f
+  graph_implications:
+  - 'curva de potencia en escala log-log: línea recta con pendiente n'
+  - permite extrapolación dentro del rango válido
+  pedagogical_triggers:
+  - verificar que el estudiante entiende la naturaleza empírica del modelo
+  - detectar si se asume n = 1 sin justificación
+  - identificar si se extrapola fuera del rango experimental válido
+- id: relacion_dispersion
+  title:
+    es: Relación de dispersión básica
+    en: Basic dispersion relation
+  equation: v_g = v_f / (1 + (f/v_f) * dv_f/df)
+  latex: v_g = \frac{v_f}{1 + \frac{f}{v_f} \cdot \frac{dv_f}{df}}
+  rearrangements:
+  - target: v_g
+    equation: v_g = v_f / (1 + (f/v_f) * dv_f/df)
+    latex: v_g = \frac{v_f}{1 + \frac{f}{v_f} \cdot \frac{dv_f}{df}}
+  - target: v_f
+    equation: v_f = v_g * (1 + (f/v_f) * dv_f/df)
+    latex: v_f = v_g \cdot \left(1 + \frac{f}{v_f} \cdot \frac{dv_f}{df}\right)
+  category: structural
+  relation_type: differential_relation
+  physical_meaning:
+    es: Conecta la velocidad de grupo y la velocidad de fase en medios dispersivos.
+    en: Connects group velocity and phase velocity in dispersive media.
+  constraints:
+    es: Válido para medios donde v_f depende suavemente de f. Requiere conocer dv_f/df.
+    en: Valid for media where v_f depends smoothly on f. Requires knowing dv_f/df.
+  validity:
+    es: Aplicable cuando la dispersión es débil o moderada. No válido para resonancias fuertes.
+    en: Applicable when dispersion is weak or moderate. Not valid for strong resonances.
+  dimension_check:
+    es: dv_f/df [L] → (f/v_f)*(dv_f/df) adimensional → v_g [L T⁻¹] ✓
+    en: dv_f/df [L] → (f/v_f)*(dv_f/df) dimensionless → v_g [L T⁻¹] ✓
+  calculable: false
+  motivo_no_calculable:
+    es: Requiere la derivada dv_f/df que debe obtenerse experimentalmente o de un modelo teórico.
+    en: Requires the derivative dv_f/df that must be obtained experimentally or from a theoretical model.
+  used_in:
+  - teoria
+  - ejemplos
+  interpretation_tags:
+  - analisis_de_dispersion
+  - propagacion_de_pulsos
+  - distorsion_de_senal
+  result_semantics:
+    target: v_g
+    kind: velocidad_de_energia
+    sign_meaning:
+      es: v_g siempre positiva en dirección de propagación de energía.
+      en: v_g always positive in direction of energy propagation.
+    absolute_value_meaning:
+      es: Velocidad a la que viaja la información y la energía del pulso.
+      en: Velocity at which pulse information and energy travel.
+  domain_checks:
+  - 'v_g > 0: la velocidad de grupo debe ser positiva'
+  - 'v_f > 0: la velocidad de fase debe ser positiva'
+  - 'f > 0: la frecuencia debe ser positiva'
+  coherence_checks:
+  - si dv_f/df = 0 (no dispersión), entonces v_g = v_f
+  - si dv_f/df > 0, entonces v_g < v_f
+  - si dv_f/df < 0, entonces v_g > v_f
+  graph_implications:
+  - la diferencia v_g - v_f determina la distorsión del pulso
+  - en medios dispersivos, diferentes frecuencias viajan a diferentes velocidades
+  pedagogical_triggers:
+  - verificar que el estudiante distingue entre v_g y v_f
+  - detectar si se asume medio no dispersivo sin justificación
+  - identificar si se interpreta correctamente el signo de dv_f/df

@@ -1,0 +1,340 @@
+const n=`\uFEFFversion: 1
+magnitudes:
+- id: m
+  symbol: m
+  nombre:
+    es: Masa del bloque
+    en: Block mass
+  descripcion:
+    es: Magnitud inercial de la carga suspendida.
+    en: Inertial magnitude of the suspended load.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: parameter
+  used_in:
+  - peso_gravitatorio
+  - dinamica_vertical
+  - tension_aceleracion
+  common_mistake:
+    es: Confundir masa con peso.
+    en: Confusing mass with weight.
+  typical_range:
+    es: Entre 0.1 y 3000 kg en escenarios didácticos e industriales.
+    en: Between 0.1 and 3000 kg in didactic and industrial scenarios.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Siempre positiva.
+      en: Always positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: No representa carga física válida en este modelo.
+      en: It does not represent a valid physical load in this model.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '> 0'
+  interpretation_role:
+    primary_for:
+    - escala-inercial
+    secondary_for:
+    - validacion-de-datos
+  graph_binding:
+    channels:
+    - mass_input
+  pedagogical_notes:
+    es: No determina por sí sola el sentido del movimiento.
+    en: It does not determine motion direction by itself.
+- id: T
+  symbol: T
+  nombre:
+    es: Tensión de la cuerda
+    en: Rope tension
+  descripcion:
+    es: Fuerza de tracción transmitida por la cuerda.
+    en: Traction force transmitted by the rope.
+  unidad_si: N
+  dimension: MLT^-2
+  is_vector: false
+  components: null
+  category: state
+  physical_role: state
+  used_in:
+  - dinamica_vertical
+  - tension_aceleracion
+  - equilibrio_vertical
+  common_mistake:
+    es: Asumir que siempre es igual al peso.
+    en: Assuming it is always equal to weight.
+  typical_range:
+    es: Desde 0 hasta decenas de miles de N según sistema.
+    en: From 0 to tens of thousands of N depending on system.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su signo depende del convenio del eje vertical.
+      en: Its sign depends on vertical-axis convention.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: En caída libre ideal puede tender a cero.
+      en: In ideal free fall it can approach zero.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - seguridad-del-cable
+    secondary_for:
+    - estado-dinamico
+  graph_binding:
+    channels:
+    - y_axis_tension
+  pedagogical_notes:
+    es: Es la variable crítica para diseño estructural del vínculo.
+    en: It is the critical variable for link structural design.
+- id: W
+  symbol: W
+  nombre:
+    es: Peso
+    en: Weight
+  descripcion:
+    es: Fuerza gravitatoria ejercida sobre la masa suspendida.
+    en: Gravitational force acting on the suspended mass.
+  unidad_si: N
+  dimension: MLT^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: state
+  used_in:
+  - peso_gravitatorio
+  - dinamica_vertical
+  - equilibrio_vertical
+  common_mistake:
+    es: Usar W como si fuera masa.
+    en: Using W as if it were mass.
+  typical_range:
+    es: Entre 1 y 50000 N según la carga.
+    en: Between 1 and 50000 N depending on load.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Apunta hacia abajo en el sistema físico real.
+      en: It points downward in the real physical system.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Sería cero solo en ausencia de gravedad efectiva.
+      en: It would be zero only without effective gravity.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - carga-gravitatoria
+    secondary_for:
+    - balance-vertical
+  graph_binding:
+    channels:
+    - weight_force
+  pedagogical_notes:
+    es: Su módulo depende linealmente de m y g.
+    en: Its magnitude depends linearly on m and g.
+- id: g
+  symbol: g
+  nombre:
+    es: Aceleración gravitatoria
+    en: Gravitational acceleration
+  descripcion:
+    es: Intensidad local del campo gravitatorio.
+    en: Local intensity of the gravitational field.
+  unidad_si: m/s^2
+  dimension: LT^-2
+  is_vector: false
+  components: null
+  category: constant
+  physical_role: parameter
+  used_in:
+  - peso_gravitatorio
+  - tension_aceleracion
+  common_mistake:
+    es: Mezclar unidades o signos sin convenio claro.
+    en: Mixing units or signs without a clear convention.
+  typical_range:
+    es: Aproximadamente 9.8 m/s^2 en la Tierra.
+    en: Approximately 9.8 m/s^2 on Earth.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como módulo positivo.
+      en: It is used as a positive magnitude.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Queda fuera del dominio terrestre del leaf.
+      en: It is outside the terrestrial domain of the leaf.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '> 0'
+  interpretation_role:
+    primary_for:
+    - escala-gravitatoria
+    secondary_for:
+    - comparacion-entornos
+  graph_binding:
+    channels:
+    - gravity_input
+  pedagogical_notes:
+    es: Cambios pequeños en g alteran directamente W y T.
+    en: Small changes in g directly alter W and T.
+- id: a
+  symbol: a
+  nombre:
+    es: Aceleración vertical
+    en: Vertical acceleration
+  descripcion:
+    es: Cambio de velocidad vertical por unidad de tiempo.
+    en: Vertical velocity change per unit time.
+  unidad_si: m/s^2
+  dimension: LT^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: dependent
+  used_in:
+  - dinamica_vertical
+  - tension_aceleracion
+  common_mistake:
+    es: Ignorar el signo relativo al eje elegido.
+    en: Ignoring sign relative to chosen axis.
+  typical_range:
+    es: Entre -20 y 20 m/s^2 en ejercicios base.
+    en: Between -20 and 20 m/s^2 in base exercises.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Su signo representa sentido de cambio de velocidad.
+      en: Its sign represents direction of velocity change.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero indica equilibrio dinámico.
+      en: Zero indicates dynamic equilibrium.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - respuesta-dinamica
+    secondary_for:
+    - control-del-sistema
+  graph_binding:
+    channels:
+    - x_axis_acceleration
+  pedagogical_notes:
+    es: Es el vínculo entre fuerzas y cinemática del bloque.
+    en: It links forces and block kinematics.
+- id: h
+  symbol: h
+  nombre:
+    es: Altura recorrida
+    en: Traveled height
+  descripcion:
+    es: Desplazamiento vertical medido respecto a una referencia.
+    en: Vertical displacement measured from a reference.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: state
+  physical_role: state
+  used_in:
+  - energia_potencial
+  common_mistake:
+    es: Perder la referencia y cambiar signo sin control.
+    en: Losing reference and changing sign without control.
+  typical_range:
+    es: Entre 0 y 200 m en problemas típicos.
+    en: Between 0 and 200 m in typical problems.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo depende del origen elegido.
+      en: Sign depends on chosen origin.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Cero marca nivel de referencia de energía.
+      en: Zero marks energy reference level.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - lectura-energetica
+    secondary_for:
+    - contexto-geometrico
+  graph_binding:
+    channels:
+    - height_input
+  pedagogical_notes:
+    es: Debe declararse explícitamente el origen de alturas.
+    en: Height origin must be declared explicitly.
+- id: E_p
+  symbol: E_p
+  nombre:
+    es: Energía potencial gravitatoria
+    en: Gravitational potential energy
+  descripcion:
+    es: Energía asociada a la posición vertical de la masa.
+    en: Energy associated with vertical position of the mass.
+  unidad_si: J
+  dimension: ML^2T^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: dependent
+  used_in:
+  - energia_potencial
+  common_mistake:
+    es: Tratarla como fuerza en vez de energía.
+    en: Treating it as force instead of energy.
+  typical_range:
+    es: Desde 0 hasta cientos de miles de J.
+    en: From 0 up to hundreds of thousands of J.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Depende del nivel de referencia escogido.
+      en: It depends on chosen reference level.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Puede anularse en el nivel de referencia.
+      en: It can vanish at the reference level.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: R
+  interpretation_role:
+    primary_for:
+    - balance-energetico
+    secondary_for:
+    - comparacion-de-alturas
+  graph_binding:
+    channels:
+    - energy_output
+  pedagogical_notes:
+    es: Complementa la lectura dinámica cuando hay trayectos largos.
+    en: It complements dynamic reading for long travel paths.\r
+`;export{n as default};

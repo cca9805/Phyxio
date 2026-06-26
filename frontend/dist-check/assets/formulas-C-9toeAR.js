@@ -1,0 +1,240 @@
+const e=`- id: ley_faraday_media
+  title:
+    es: Ley de Faraday media
+    en: Average Faraday law
+  equation: "epsilon_ind = -N * DeltaPhi_B / Deltat"
+  latex: "\\\\varepsilon_{ind} = -N\\\\,\\\\frac{\\\\Delta \\\\Phi_B}{\\\\Delta t}  % epsilon_ind N DeltaPhi_B Deltat"
+  rearrangements:
+    - target: epsilon_ind
+      equation: "epsilon_ind = -N * DeltaPhi_B / Deltat"
+      latex: "\\\\varepsilon_{ind} = -N\\\\,\\\\frac{\\\\Delta \\\\Phi_B}{\\\\Delta t}  % epsilon_ind N DeltaPhi_B Deltat"
+    - target: DeltaPhi_B
+      equation: "DeltaPhi_B = -epsilon_ind * Deltat / N"
+      latex: "\\\\Delta \\\\Phi_B = -\\\\frac{\\\\varepsilon_{ind}\\\\,\\\\Delta t}{N}  % DeltaPhi_B epsilon_ind Deltat N"
+    - target: Deltat
+      equation: "Deltat = -N * DeltaPhi_B / epsilon_ind"
+      latex: "\\\\Delta t = -\\\\frac{N\\\\,\\\\Delta \\\\Phi_B}{\\\\varepsilon_{ind}}  % Deltat N DeltaPhi_B epsilon_ind"
+    - target: N
+      equation: "N = -epsilon_ind * Deltat / DeltaPhi_B"
+      latex: "N = -\\\\frac{\\\\varepsilon_{ind}\\\\,\\\\Delta t}{\\\\Delta \\\\Phi_B}  % N epsilon_ind Deltat DeltaPhi_B"
+  category: fundamental
+  relation_type: average_relation
+  physical_meaning:
+    es: "La fem inducida media es proporcional a la rapidez de cambio del flujo enlazado y al numero de espiras."
+    en: "Average induced emf is proportional to linked-flux rate of change and number of turns."
+  constraints:
+    - circuito definido
+    - intervalo temporal positivo
+    - espiras enlazan cambios similares de flujo
+  validity:
+    es: "Valida para estimar fem media durante un cambio finito de flujo."
+    en: "Valid for estimating average emf during a finite flux change."
+  dimension_check: "Wb dividido por s produce V; N es adimensional."
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [teoria, ejemplos, interpretacion]
+  interpretation_tags: [induccion, lenz, transitorio]
+  result_semantics:
+    target: epsilon_ind
+    kind: signed_quantity
+    sign_meaning:
+      es: "El signo negativo expresa oposicion al cambio de flujo."
+      en: "The negative sign expresses opposition to flux change."
+    absolute_value_meaning:
+      es: "Mayor modulo indica mayor fem inducida media."
+      en: "Larger magnitude indicates larger average induced emf."
+  domain_checks:
+    - id: dt_positive
+      when: "Deltat > 0"
+      status: ok
+      message:
+        es: "Intervalo positivo permite una rapidez media de cambio."
+        en: "Positive interval allows an average rate of change."
+  coherence_checks:
+    - id: no_flux_change
+      when: "DeltaPhi_B == 0"
+      status: ok
+      message:
+        es: "Cambio de flujo nulo implica fem media nula."
+        en: "Zero flux change implies zero average emf."
+  graph_implications:
+    - "epsilon_ind es lineal frente a DeltaPhi_B dividido por Deltat."
+  pedagogical_triggers:
+    - "Recordar que el flujo estatico no basta para inducir fem."
+- id: tasa_cambio_flujo
+  title:
+    es: Rapidez media de cambio de flujo
+    en: Average flux-change rate
+  equation: "r_Phi = DeltaPhi_B / Deltat"
+  latex: "r_{\\\\Phi} = \\\\frac{\\\\Delta \\\\Phi_B}{\\\\Delta t}  % r_Phi DeltaPhi_B Deltat"
+  rearrangements:
+    - target: r_Phi
+      equation: "r_Phi = DeltaPhi_B / Deltat"
+      latex: "r_{\\\\Phi} = \\\\frac{\\\\Delta \\\\Phi_B}{\\\\Delta t}  % r_Phi DeltaPhi_B Deltat"
+    - target: DeltaPhi_B
+      equation: "DeltaPhi_B = r_Phi * Deltat"
+      latex: "\\\\Delta \\\\Phi_B = r_{\\\\Phi}\\\\,\\\\Delta t  % DeltaPhi_B r_Phi Deltat"
+    - target: Deltat
+      equation: "Deltat = DeltaPhi_B / r_Phi"
+      latex: "\\\\Delta t = \\\\frac{\\\\Delta \\\\Phi_B}{r_{\\\\Phi}}  % Deltat DeltaPhi_B r_Phi"
+  category: derived
+  relation_type: average_relation
+  physical_meaning:
+    es: "Esta magnitud separa cuanto cambia el flujo de lo rapido que ocurre el cambio."
+    en: "This quantity separates how much flux changes from how fast the change occurs."
+  constraints:
+    - intervalo temporal positivo
+  validity:
+    es: "Valida como pendiente media de flujo en un intervalo finito."
+    en: "Valid as average flux slope over a finite interval."
+  dimension_check: "Wb dividido por s produce Wb/s."
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [teoria, ejemplos, interpretacion]
+  interpretation_tags: [pendiente, grafica]
+  result_semantics:
+    target: r_Phi
+    kind: signed_quantity
+    sign_meaning:
+      es: "El signo indica aumento o disminucion de flujo segun la normal."
+      en: "The sign indicates flux increase or decrease relative to the normal."
+    absolute_value_meaning:
+      es: "Mayor modulo indica cambio de flujo mas rapido."
+      en: "Larger magnitude indicates faster flux change."
+  domain_checks:
+    - id: finite_rate
+      when: "Deltat > 0"
+      status: ok
+      message:
+        es: "La rapidez media queda definida."
+        en: "Average rate is defined."
+  coherence_checks:
+    - id: dt_zero_invalid
+      when: "Deltat == 0"
+      status: error
+      message:
+        es: "Intervalo nulo invalida la rapidez media."
+        en: "Zero interval invalidates average rate."
+  graph_implications:
+    - "r_Phi es el eje horizontal natural para representar la ley."
+  pedagogical_triggers:
+    - "No confundir flujo grande con cambio rapido de flujo."
+- id: ley_faraday_tasa
+  title:
+    es: Ley de Faraday con rapidez de flujo
+    en: Faraday law with flux rate
+  equation: "epsilon_ind = -N * r_Phi"
+  latex: "\\\\varepsilon_{ind} = -N\\\\,r_{\\\\Phi}  % epsilon_ind N r_Phi"
+  rearrangements:
+    - target: epsilon_ind
+      equation: "epsilon_ind = -N * r_Phi"
+      latex: "\\\\varepsilon_{ind} = -N\\\\,r_{\\\\Phi}  % epsilon_ind N r_Phi"
+    - target: r_Phi
+      equation: "r_Phi = -epsilon_ind / N"
+      latex: "r_{\\\\Phi} = -\\\\frac{\\\\varepsilon_{ind}}{N}  % r_Phi epsilon_ind N"
+    - target: N
+      equation: "N = -epsilon_ind / r_Phi"
+      latex: "N = -\\\\frac{\\\\varepsilon_{ind}}{r_{\\\\Phi}}  % N epsilon_ind r_Phi"
+  category: derived
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: "La fem inducida es una respuesta lineal a la rapidez de cambio de flujo enlazado."
+    en: "Induced emf is a linear response to linked-flux rate of change."
+  constraints:
+    - mismo cambio de flujo en las espiras
+    - convencion de signo fija
+  validity:
+    es: "Valida cuando r_Phi representa el cambio medio de flujo enlazado por espira."
+    en: "Valid when r_Phi represents average linked flux change per turn."
+  dimension_check: "Wb/s es V; N es adimensional."
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [teoria, ejemplos, interpretacion, grafico]
+  interpretation_tags: [linealidad, oposicion]
+  result_semantics:
+    target: epsilon_ind
+    kind: signed_quantity
+    sign_meaning:
+      es: "El signo indica polaridad opuesta a la variacion de flujo."
+      en: "The sign indicates polarity opposed to flux variation."
+    absolute_value_meaning:
+      es: "Mayor modulo indica respuesta inductiva mas intensa."
+      en: "Larger magnitude indicates stronger inductive response."
+  domain_checks:
+    - id: N_positive
+      when: "N > 0"
+      status: ok
+      message:
+        es: "Numero de espiras positivo coherente."
+        en: "Positive number of turns is coherent."
+  coherence_checks:
+    - id: zero_rate_zero_emf
+      when: "r_Phi == 0"
+      status: ok
+      message:
+        es: "Sin rapidez de cambio de flujo, la fem inducida media se anula."
+        en: "Without flux-change rate, average induced emf vanishes."
+  graph_implications:
+    - "La pendiente de epsilon_ind frente a r_Phi tiene modulo N y signo negativo."
+  pedagogical_triggers:
+    - "Leer la pendiente del grafico como efecto del numero de espiras."
+- id: flujo_uniforme
+  title:
+    es: Flujo magnetico uniforme efectivo
+    en: Effective uniform magnetic flux
+  equation: "Phi_B = B_perp * A"
+  latex: "\\\\Phi_B = B_{\\\\perp}\\\\,A  % Phi_B B_perp A"
+  rearrangements:
+    - target: Phi_B
+      equation: "Phi_B = B_perp * A"
+      latex: "\\\\Phi_B = B_{\\\\perp}\\\\,A  % Phi_B B_perp A"
+    - target: B_perp
+      equation: "B_perp = Phi_B / A"
+      latex: "B_{\\\\perp} = \\\\frac{\\\\Phi_B}{A}  % B_perp Phi_B A"
+    - target: A
+      equation: "A = Phi_B / B_perp"
+      latex: "A = \\\\frac{\\\\Phi_B}{B_{\\\\perp}}  % A Phi_B B_perp"
+  category: auxiliary
+  relation_type: geometric_interpretation
+  physical_meaning:
+    es: "En campo uniforme, el flujo depende de la componente perpendicular efectiva y del area enlazada."
+    en: "In a uniform field, flux depends on effective perpendicular component and linked area."
+  constraints:
+    - campo aproximadamente uniforme
+    - area plana efectiva
+  validity:
+    es: "Valida cuando B_perp representa la componente efectiva sobre toda el area."
+    en: "Valid when B_perp represents the effective component over the whole area."
+  dimension_check: "T multiplicado por m^2 produce Wb."
+  calculable: true
+  motivo_no_calculable: ""
+  used_in: [teoria, ejemplos, interpretacion]
+  interpretation_tags: [geometria, flujo]
+  result_semantics:
+    target: Phi_B
+    kind: signed_quantity
+    sign_meaning:
+      es: "El signo depende de la orientacion de B_perp respecto a la normal."
+      en: "The sign depends on orientation of B_perp relative to the normal."
+    absolute_value_meaning:
+      es: "Mayor modulo indica mas campo atravesando el area."
+      en: "Larger magnitude indicates more field crossing the area."
+  domain_checks:
+    - id: area_positive
+      when: "A > 0"
+      status: ok
+      message:
+        es: "Area positiva coherente con una superficie enlazada."
+        en: "Positive area is coherent with a linked surface."
+  coherence_checks:
+    - id: zero_perp_zero_flux
+      when: "B_perp == 0"
+      status: ok
+      message:
+        es: "Campo perpendicular nulo produce flujo nulo en este modelo."
+        en: "Zero perpendicular field produces zero flux in this model."
+  graph_implications:
+    - "Cambios de B_perp o A pueden cambiar Phi_B y activar Faraday."
+  pedagogical_triggers:
+    - "No usar el campo total si solo importa la componente perpendicular efectiva."
+`;export{e as default};

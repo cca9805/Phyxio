@@ -1,0 +1,163 @@
+version: 5
+id: pascal-interp
+leaf_id: principio-de-pascal
+scope: local
+nombre:
+  es: Análisis de la Prensa Hidráulica
+  en: Hydraulic Press Analysis
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: Resumen de Transmisión
+      en: Transmission Summary
+  physical_reading:
+    title:
+      es: Lectura Física (Ventaja Mecánica)
+      en: Physical Reading (Mechanical Advantage)
+  coherence:
+    title:
+      es: Coherencia del Sistema
+      en: System Coherence
+  model_validity:
+    title:
+      es: Validez de la Prensa
+      en: Press Validity
+  graph_reading:
+    title:
+      es: Análisis del DCL
+      en: DCL Analysis
+  likely_errors:
+    title:
+      es: Errores Comunes
+      en: Common Errors
+  next_step:
+    title:
+      es: Siguientes Pasos
+      en: Next Steps
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [F1, A1, F2, A2, p]
+  formulas: [ley_pascal, multiplicacion_fuerza]
+
+targets:
+  F2:
+    summary_rules:
+      - id: f2-val
+        when: F2 > 0
+        status: success
+        text:
+          es: La fuerza de salida [[F2]] resume el equilibrio estático alcanzado por el fluido al transmitir la presión de forma íntegra.
+          en: The output force [[F2]] resumes the static equilibrium reached by the fluid by transmitting pressure undiminished.
+    physical_reading_rules:
+      - id: f2-gain
+        when: F2 > F1
+        status: success
+        text:
+          es: Significa que se ha logrado una multiplicación de fuerza porque el área de salida [[A2]] es mayor que la de entrada, lo que indica ventaja mecánica.
+          en: It means that force multiplication has been achieved because the output area [[A2]] is larger than the input area, which indicates mechanical advantage.
+      - id: f2-loss
+        when: F2 < F1
+        status: warning
+        text:
+          es: Indica que el sistema está actuando como un reductor de fuerza porque el émbolo de salida es más pequeño, lo que significa que el diseño no es elevador.
+          en: Indicates that the system is acting as a force reducer because the output piston is smaller, which means the design is not a lift.
+    coherence_rules:
+      - id: f2-coh
+        when: F2 > 0
+        status: success
+        text:
+          es: El resultado es coherente porque la fuerza se distribuye proporcionalmente a la superficie del émbolo receptor siguiendo la Ley de Pascal.
+          en: The result is coherent because force is distributed proportionally to the receiving piston's surface following Pascal's Law.
+    model_validity_rules:
+      - id: f2-valid
+        when: F2 > 0
+        status: success
+        text:
+          es: Válido asumiendo que el fluido es incompresible y no hay fugas en las juntas, lo que supone que el sistema está perfectamente sellado.
+          en: Valid assuming the fluid is incompressible and there are no seal leaks, which assumes the system is perfectly sealed.
+    graph_rules:
+      - id: f2-graph
+        when: F2 > 0
+        status: success
+        text:
+          es: Se visualiza como el vector de fuerza de mayor longitud situado sobre el émbolo de salida en el diagrama DCL del sistema.
+          en: It is visualized as the longer force vector located on the output piston in the system's DCL diagram.
+    likely_errors:
+      - id: err-f2-small
+        when: F2 < F1 and A2 > A1
+        status: error
+        text:
+          es: Error al creer que la fuerza disminuye. Si el área de salida [[A2]] es mayor, debes esperar que [[F2]] sea mayor que [[F1]].
+          en: Error in believing that force decreases. If output area [[A2]] is larger, you should expect [[F2]] to be greater than [[F1]].
+    next_step_rules:
+      - id: next-f2-work
+        when: F2 > 0
+        status: info
+        text:
+          es: Calcula el trabajo realizado para verificar que la energía se conserva aunque la fuerza se multiplique.
+          en: Calculate the work performed to verify that energy is conserved even though force is multiplied.
+
+  p:
+    summary_rules:
+      - id: p-val
+        when: p > 0
+        status: success
+        text:
+          es: La presión de confinamiento [[p]] describe el estado de carga uniforme que se transmite por todo el volumen del fluido incompresible.
+          en: The confinement pressure [[p]] describes the uniform load state transmitted through the entire volume of the incompressible fluid.
+    physical_reading_rules:
+      - id: p-meaning
+        when: p > 0
+        status: success
+        text:
+          es: Indica la intensidad del esfuerzo que el fluido transmite porque iguala la fuerza por unidad de área en ambos émbolos del sistema.
+          en: Indicates the intensity of the effort that the fluid transmits because it equalizes force per unit area on both pistons of the system.
+    coherence_rules:
+      - id: p-coh
+        when: p > 0
+        status: success
+        text:
+          es: El resultado es coherente con el principio de transmisión isótropa porque la presión no depende de la orientación de las paredes.
+          en: The result is coherent with the isotropic transmission principle because pressure does not depend on the orientation of the walls.
+    model_validity_rules:
+      - id: p-valid
+        when: p > 1e7
+        status: warning
+        text:
+          es: ¡Atención! A presiones muy altas, el modelo asume que el recipiente es rígido, pero los materiales reales podrían deformarse o fallar.
+          en: Attention! At very high pressures, the model assumes the container is rigid, but real materials could deform or fail.
+    graph_rules:
+      - id: p-graph
+        when: p > 0
+        status: success
+        text:
+          es: La presión se manifiesta visualmente por la densidad y dirección de los vectores de presión sobre las caras internas del gráfico Svg.
+          en: Pressure is visually manifested by the density and direction of pressure vectors on the internal faces of the Svg graph.
+    likely_errors:
+      - id: err-p-diff
+        when: p < 0
+        status: error
+        text:
+          es: Error matemático al suponer una presión negativa. Confundir presión absoluta con manométrica puede llevar a este resultado imposible.
+          en: Mathematical error in assuming negative pressure. Confusing absolute with gauge pressure can lead to this impossible result.
+    next_step_rules:
+      - id: next-p-valves
+        when: p > 0
+        status: info
+        text:
+          es: Investiga cómo funcionan las válvulas de seguridad para evitar que la presión rompa el sistema hidráulico.
+          en: Investigate how safety valves work to prevent pressure from breaking the hydraulic system.

@@ -1,0 +1,412 @@
+version: 1
+magnitudes:
+- id: m
+  symbol: m
+  nombre:
+    es: masa
+    en: mass
+  descripcion:
+    es: Masa puntual que oscila unida al muelle y determina la inercia del sistema.
+    en: Point mass attached to the spring that sets the inertia of the system.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: physical_quantity
+  used_in:
+  - oscilador-masa-muelle
+  common_mistake: Confundir masa con peso e introducir newtons en lugar de kilogramos.
+  typical_range: 0.05 kg a 20 kg en laboratorio y aplicaciones de aislamiento vibratorio.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La masa es siempre positiva en el modelo clasico.
+      en: Mass is always positive in the classical model.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Masa nula anula el sistema mecanico modelado.
+      en: Zero mass collapses the modelled mechanical system.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, 50]
+  interpretation_role:
+    primary_for:
+    - oscilador-masa-muelle
+    secondary_for: []
+  graph_binding:
+    channels:
+    - slider_masa
+  pedagogical_notes: A mayor masa, el sistema oscila mas lento si la rigidez no cambia.
+
+- id: k
+  symbol: k
+  nombre:
+    es: constante elastica
+    en: spring constant
+  descripcion:
+    es: Rigidez del muelle; relaciona fuerza restauradora y deformacion en regimen lineal.
+    en: Spring stiffness relating restoring force to deformation in the linear regime.
+  unidad_si: N/m
+  dimension: M T^{-2}
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: physical_quantity
+  used_in:
+  - oscilador-masa-muelle
+  common_mistake: Usar un valor efectivo de rigidez fuera del rango donde Hooke es lineal.
+  typical_range: 1 N/m a 5000 N/m segun geometria y material del muelle.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: En el modelo estable, la rigidez efectiva es positiva.
+      en: In the stable model, effective stiffness is positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Rigidez nula elimina la fuerza restauradora.
+      en: Zero stiffness removes the restoring force.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, 10000]
+  interpretation_role:
+    primary_for:
+    - oscilador-masa-muelle
+    secondary_for: []
+  graph_binding:
+    channels:
+    - slider_rigidez
+  pedagogical_notes: A mayor rigidez, menor periodo para la misma masa.
+
+- id: omega0
+  symbol: \omega_0
+  nombre:
+    es: pulsacion natural
+    en: natural angular frequency
+  descripcion:
+    es: Frecuencia angular propia del sistema sin forzamiento ni amortiguamiento dominante.
+    en: Natural angular frequency of the system without dominant forcing or damping.
+  unidad_si: rad/s
+  dimension: T^{-1}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - oscilador-masa-muelle
+  common_mistake: Tomar rad/s como si fueran Hz sin dividir por 2 pi.
+  typical_range: 0.5 rad/s a 100 rad/s en sistemas educativos y prototipos.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa como magnitud positiva del ritmo oscilatorio.
+      en: It is used as a positive magnitude of oscillation rate.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Pulsacion cero implica ausencia de oscilacion armonica.
+      en: Zero angular frequency implies no harmonic oscillation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, 300]
+  interpretation_role:
+    primary_for:
+    - oscilador-masa-muelle
+    secondary_for: []
+  graph_binding:
+    channels:
+    - frecuencia_angular
+  pedagogical_notes: Controla la rapidez temporal de la evolucion sinusoidal.
+
+- id: T
+  symbol: T
+  nombre:
+    es: periodo
+    en: period
+  descripcion:
+    es: Tiempo de una oscilacion completa en torno al equilibrio.
+    en: Time required for one full oscillation around equilibrium.
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - oscilador-masa-muelle
+  common_mistake: Medir media oscilacion y reportarla como periodo completo.
+  typical_range: 0.05 s a 20 s segun masa y rigidez.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El periodo es una duracion positiva.
+      en: Period is a positive duration.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Periodo nulo no es fisicamente realizable.
+      en: Zero period is not physically realizable.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, 100]
+  interpretation_role:
+    primary_for:
+    - oscilador-masa-muelle
+    secondary_for: []
+  graph_binding:
+    channels:
+    - ciclo_temporal
+  pedagogical_notes: Es la inversa temporal de la frecuencia, no de la pulsacion.
+
+- id: f
+  symbol: f
+  nombre:
+    es: frecuencia
+    en: frequency
+  descripcion:
+    es: Numero de oscilaciones por segundo en el movimiento armonico.
+    en: Number of oscillations per second in harmonic motion.
+  unidad_si: Hz
+  dimension: T^{-1}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - oscilador-masa-muelle
+  common_mistake: Olvidar que 1 Hz equivale a un ciclo por segundo.
+  typical_range: 0.1 Hz a 20 Hz en montajes didacticos.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se interpreta como valor positivo de repeticion.
+      en: It is interpreted as a positive repetition rate.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Frecuencia cero indica ausencia de oscilacion periodica.
+      en: Zero frequency indicates no periodic oscillation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, 100]
+  interpretation_role:
+    primary_for:
+    - oscilador-masa-muelle
+    secondary_for: []
+  graph_binding:
+    channels:
+    - frecuencia_ciclica
+  pedagogical_notes: Se relaciona con T por inversion, no por suma ni diferencia.
+
+- id: A
+  symbol: A
+  nombre:
+    es: amplitud
+    en: amplitude
+  descripcion:
+    es: Maximo desplazamiento respecto a la posicion de equilibrio.
+    en: Maximum displacement relative to the equilibrium position.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: physical_quantity
+  used_in:
+  - oscilador-masa-muelle
+  common_mistake: Confundir amplitud con posicion instantanea.
+  typical_range: 0.001 m a 0.5 m en regimen lineal.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se reporta como modulo no negativo.
+      en: It is reported as a non-negative magnitude.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si A vale cero no hay oscilacion, solo equilibrio.
+      en: If A is zero there is no oscillation, only equilibrium.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: [ 0, 1 ]
+  interpretation_role:
+    primary_for:
+    - oscilador-masa-muelle
+    secondary_for: []
+  graph_binding:
+    channels:
+    - altura_pico
+  pedagogical_notes: Determina energia almacenada junto con la rigidez.
+
+- id: x
+  symbol: x
+  nombre:
+    es: desplazamiento
+    en: displacement coordinate
+  descripcion:
+    es: Posicion instantanea respecto al equilibrio con signo segun el eje elegido.
+    en: Instantaneous position relative to equilibrium with sign from axis convention.
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: null
+  category: state
+  physical_role: physical_quantity
+  used_in:
+  - oscilador-masa-muelle
+  common_mistake: Olvidar el signo de la posicion al evaluar la fuerza restauradora.
+  typical_range: -0.5 m a 0.5 m para laboratorio de aula.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica el lado del equilibrio donde se encuentra la masa.
+      en: The sign indicates the side of equilibrium where the mass is located.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: x igual a cero significa paso por equilibrio, no velocidad nula.
+      en: x equal to zero means crossing equilibrium, not zero speed.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: [ -1, 1 ]
+  interpretation_role:
+    primary_for:
+    - oscilador-masa-muelle
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_vertical_x_t
+  pedagogical_notes: El cambio de signo de x cambia el sentido de la fuerza restauradora.
+
+- id: t
+  symbol: t
+  nombre:
+    es: tiempo
+    en: time
+  descripcion:
+    es: Variable independiente que ordena la evolucion dinamica del sistema.
+    en: Independent variable that orders the system dynamical evolution.
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: physical_quantity
+  used_in:
+  - oscilador-masa-muelle
+  common_mistake: Cambiar unidades de tiempo sin convertir antes de sustituir.
+  typical_range: 0 s a 200 s en analisis temporal escolar.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El tiempo transcurrido es no negativo en este contexto.
+      en: Elapsed time is non-negative in this context.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: t igual a cero define el instante inicial de condiciones.
+      en: t equal to zero defines the initial-condition instant.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: [ 0, 1000 ]
+  interpretation_role:
+    primary_for:
+    - oscilador-masa-muelle
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_horizontal
+  pedagogical_notes: Sin una referencia temporal clara, la fase inicial queda ambigua.
+
+- id: phi
+  symbol: \varphi
+  nombre:
+    es: fase inicial
+    en: initial phase
+  descripcion:
+    es: Ajuste angular de la condicion inicial dentro de la solucion sinusoidal.
+    en: Angular offset of the initial condition inside the sinusoidal solution.
+  unidad_si: rad
+  dimension: 1
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: physical_quantity
+  used_in:
+  - oscilador-masa-muelle
+  common_mistake: Mezclar grados y radianes sin conversion consistente.
+  typical_range: -pi a pi segun referencia inicial.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo refleja adelanto o retraso angular inicial.
+      en: The sign reflects initial angular lead or lag.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Fase nula implica referencia inicial alineada con el coseno base.
+      en: Zero phase means initial reference aligned with base cosine.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: [ -3.2, 3.2 ]
+  interpretation_role:
+    primary_for:
+    - oscilador-masa-muelle
+    secondary_for: []
+  graph_binding:
+    channels:
+    - desfase_temporal
+  pedagogical_notes: La fase cambia la posicion inicial sin alterar la pulsacion propia.
+
+- id: F
+  symbol: F
+  nombre:
+    es: fuerza restauradora
+    en: restoring force
+  descripcion:
+    es: Fuerza elastica que apunta hacia el equilibrio y se opone al desplazamiento.
+    en: Elastic force pointing toward equilibrium and opposing displacement.
+  unidad_si: N
+  dimension: M L T^{-2}
+  is_vector: true
+  components:
+  - Fx
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - oscilador-masa-muelle
+  common_mistake: Ignorar el signo negativo en la ley de Hooke conceptual.
+  typical_range: -1000 N a 1000 N segun deformacion y rigidez.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo cambia con x y siempre apunta a restaurar el equilibrio.
+      en: Sign changes with x and always points to restore equilibrium.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: En equilibrio la fuerza elastica neta vale cero.
+      en: At equilibrium the net elastic force is zero.
+  value_nature:
+    kind: scalar
+    nonnegative_only: false
+    expected_interval: [ -5000, 5000 ]
+  interpretation_role:
+    primary_for:
+    - oscilador-masa-muelle
+    secondary_for: []
+  graph_binding:
+    channels:
+    - fuerza_vs_desplazamiento
+  pedagogical_notes: Su pendiente frente a x es la firma del comportamiento lineal del muelle.

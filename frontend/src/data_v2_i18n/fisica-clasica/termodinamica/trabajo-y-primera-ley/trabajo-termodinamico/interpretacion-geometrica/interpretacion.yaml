@@ -1,0 +1,375 @@
+version: 5.0.0
+id: interpretacion-geometrica
+leaf_id: interpretacion-geometrica
+nombre:
+  es: Interpretacion geometrica
+  en: Geometric Interpretation
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: trabajo-y-primera-ley
+  parent_id: trabajo-termodinamico
+  ruta_relativa: fisica-clasica/termodinamica/trabajo-y-primera-ley/trabajo-termodinamico/interpretacion-geometrica
+  orden: 254120
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - trabajo_area_pV
+  - trabajo_ciclo
+  magnitudes:
+  - trabajo_termodinamico
+  - presion
+  - volumen
+  - trabajo_neto_del_ciclo
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: trabajo_termodinamico
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  trabajo_termodinamico:
+    enabled: true
+    magnitude_type: work
+    semantic_role:
+      es: Trabajo representado como área bajo la curva p(V) en el diagrama p-V.
+      en: Work represented as area under the p(V) curve in the p-V diagram.
+    summary_rules:
+    - id: W_geom_summary_positive
+      when: W > 0
+      status: ok
+      text:
+        es: '[[W]] positivo corresponde a un área bajo la curva p-V con el proceso moviéndose hacia la derecha (expansión,
+          V_f > V_i). El área encerrada entre la curva y el eje de volúmenes es la energía mecánica transferida al entorno.'
+        en: Positive [[W]] corresponds to an area under the p-V curve with the process moving to the right (expansion, V_f
+          > V_i). The area enclosed between the curve and the volume axis is the mechanical energy transferred to the surroundings.
+    - id: W_geom_summary_negative
+      when: W < 0
+      status: ok
+      text:
+        es: '[[W]] negativo corresponde a un proceso moviéndose hacia la izquierda (compresión, V_f < V_i). El área bajo la
+          curva representa la energía mecánica transferida desde el entorno al sistema.'
+        en: Negative [[W]] corresponds to a process moving to the left (compression, V_f < V_i). The area under the curve
+          represents mechanical energy transferred from the surroundings to the system.
+    - id: W_geom_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[W]] es el área entre la curva p(V) y el eje de volúmenes. Diferentes trayectorias entre los mismos estados
+          inicial y final encierran áreas diferentes, lo que refleja la dependencia de [[W]] con la trayectoria.'
+        en: '[[W]] is the area between the p(V) curve and the volume axis. Different paths between the same initial and final
+          states enclose different areas, reflecting the path dependence of [[W]].'
+    physical_reading_rules:
+    - id: W_geom_reading_path
+      when: 'true'
+      status: ok
+      text:
+        es: 'La representación geométrica hace evidente la dependencia de [[W]] con la trayectoria: dibujar dos curvas distintas
+          entre los mismos estados y comparar visualmente el área bajo cada una muestra que [[W]] es diferente para cada proceso.'
+        en: 'The geometric representation makes the path dependence of [[W]] evident: drawing two different curves between
+          the same states and visually comparing the area under each shows that [[W]] differs for each process.'
+    - id: W_geom_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: La altura de la curva p(V) a cada volumen representa la presión en ese instante del proceso. Una curva alta implica
+          alta presión; la integral (área) acumula todas las contribuciones de presión por cada incremento de volumen.
+        en: The height of the p(V) curve at each volume represents the pressure at that moment of the process. A high curve
+          implies high pressure; the integral (area) accumulates all pressure contributions for each volume increment.
+    coherence_rules:
+    - id: W_geom_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: El área calculada geométricamente debe coincidir con el resultado analítico para el mismo tipo de proceso. Una
+          discrepancia indica un error en la lectura del área o en los límites de integración.
+        en: The geometrically computed area must match the analytical result for the same process type. A discrepancy indicates
+          an error in reading the area or in the integration limits.
+    model_validity_rules:
+    - id: W_geom_model_quasistatic
+      when: 'true'
+      status: ok
+      text:
+        es: La equivalencia [[W]] = área es válida únicamente para procesos cuasi-estáticos representados por curvas suaves
+          en el diagrama p-V. Procesos irreversibles no tienen una curva bien definida.
+        en: The equivalence [[W]] = area is valid only for quasi-static processes represented by smooth curves in the p-V
+          diagram. Irreversible processes do not have a well-defined curve.
+    graph_rules:
+    - id: W_geom_graph_area
+      when: 'true'
+      status: ok
+      text:
+        es: En el diagrama p-V, sombrear el área entre la curva del proceso y el eje horizontal. Para expansión, el área queda
+          a la derecha del estado inicial; para compresión, a la izquierda. La magnitud del área sombreada es [[W]].
+        en: In the p-V diagram, shade the area between the process curve and the horizontal axis. For expansion, the area
+          is to the right of the initial state; for compression, to the left. The magnitude of the shaded area is [[W]].
+    likely_errors:
+    - id: W_geom_error_axis
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[trabajo_termodinamico]] con una lectura aislada es un error frecuente: Error frecuente: leer el área
+          midiendo la base sobre el eje p y la altura sobre el eje V, cuando la base es ΔV (sobre el eje V) y la altura es
+          la función p(V).'
+        en: 'A common mistake is to interpret [[trabajo_termodinamico]] in isolation: Frequent error: reading the area by
+          measuring the base on the p-axis and height on the V-axis, when the base is ΔV (on the V-axis) and the height is
+          the p(V) function.'
+    next_step_rules:
+    - id: W_geom_next_cycle
+      when: 'true'
+      status: ok
+      text:
+        es: 'Aplicar la lectura del área a ciclos termodinámicos completos: el área encerrada por el ciclo en el diagrama
+          p-V es el trabajo neto por ciclo.'
+        en: 'Apply the area reading to complete thermodynamic cycles: the area enclosed by the cycle in the p-V diagram is
+          the net work per cycle.'
+    physical_intuition:
+    - id: trabajo_termodinamico_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[trabajo_termodinamico]] describe el estado dinámico.
+        en: Intuitively, [[trabajo_termodinamico]] describes the dynamic state.
+    limiting_cases:
+    - id: trabajo_termodinamico_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[trabajo_termodinamico]].
+        en: Check limiting cases of [[trabajo_termodinamico]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  trabajo_neto_del_ciclo:
+    enabled: true
+    magnitude_type: net_cycle_work
+    semantic_role:
+      es: Trabajo neto del ciclo; geométricamente el área encerrada por el lazo del ciclo en el diagrama p-V.
+      en: Net cycle work; geometrically the area enclosed by the cycle loop in the p-V diagram.
+    summary_rules:
+    - id: W_ciclo_summary_clockwise
+      when: W_ciclo > 0
+      status: ok
+      text:
+        es: '[[W_ciclo]] positivo: el ciclo se recorre en sentido horario en el diagrama p-V. El sistema es un motor que convierte
+          calor en trabajo.'
+        en: 'Positive [[W_ciclo]]: the cycle is traversed clockwise in the p-V diagram. The system is an engine converting
+          heat into work.'
+    - id: W_ciclo_summary_ccw
+      when: W_ciclo < 0
+      status: ok
+      text:
+        es: '[[W_ciclo]] negativo: el ciclo se recorre en sentido antihorario. El sistema es un refrigerador o bomba de calor
+          que consume trabajo.'
+        en: 'Negative [[W_ciclo]]: the cycle is traversed counter-clockwise. The system is a refrigerator or heat pump consuming
+          work.'
+    - id: W_ciclo_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[W_ciclo]] es el área del lazo en el diagrama p-V. Mayor área encerrada implica mayor trabajo neto por ciclo.'
+        en: '[[W_ciclo]] is the loop area in the p-V diagram. Larger enclosed area means more net work per cycle.'
+    physical_reading_rules:
+    - id: W_ciclo_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: 'El área del ciclo en el diagrama p-V permite comparar visualmente la eficiencia de ciclos distintos (Carnot,
+          Otto, Diesel) que operen entre los mismos límites de temperatura: el ciclo con mayor área produce más trabajo por
+          ciclo.'
+        en: 'The cycle area in the p-V diagram allows visual comparison of the efficiency of different cycles (Carnot, Otto,
+          Diesel) operating between the same temperature limits: the cycle with larger area produces more work per cycle.'
+    coherence_rules:
+    - id: W_ciclo_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: El área del ciclo debe ser positiva para un motor y negativa para un refrigerador. Verificar el sentido de recorrido
+          antes de concluir sobre el tipo de máquina.
+        en: The cycle area must be positive for an engine and negative for a refrigerator. Verify the traversal direction
+          before concluding about the machine type.
+    model_validity_rules:
+    - id: W_ciclo_model_default
+      when: 'true'
+      status: ok
+      text:
+        es: El cálculo geométrico del área del ciclo asume que todos los procesos del ciclo son cuasi-estáticos. En ciclos
+          reales con irreversibilidades, el área real es menor que la calculada con el modelo ideal.
+        en: The geometric calculation of cycle area assumes all cycle processes are quasi-static. In real cycles with irreversibilities,
+          the actual area is smaller than that calculated with the ideal model.
+    graph_rules:
+    - id: W_ciclo_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: En el diagrama p-V, el ciclo forma un lazo cerrado. El área interior del lazo es [[W_ciclo]]. El sentido horario
+          (recorrido de expansión por arriba) implica que la curva de expansión está por encima de la de compresión, encorrando
+          un área positiva neta.
+        en: In the p-V diagram, the cycle forms a closed loop. The interior area of the loop is [[W_ciclo]]. Clockwise direction
+          (expansion path on top) means the expansion curve is above the compression curve, enclosing a positive net area.
+    likely_errors:
+    - id: W_ciclo_error_direction
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[trabajo_neto_del_ciclo]] con una lectura aislada es un error frecuente: Error frecuente: calcular
+          el área del ciclo correctamente pero asignarle el signo equivocado por no verificar el sentido de recorrido del
+          ciclo en el diagrama p-V.'
+        en: 'A common mistake is to interpret [[trabajo_neto_del_ciclo]] in isolation: Frequent error: computing the cycle
+          area correctly but assigning the wrong sign by not checking the cycle traversal direction in the p-V diagram.'
+    next_step_rules:
+    - id: W_ciclo_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con [[W_ciclo]] determinado, calcular la eficiencia del ciclo dividiendo [[W_ciclo]] por el calor absorbido en
+          los procesos de calentamiento.
+        en: With [[W_ciclo]] determined, compute the cycle efficiency by dividing [[W_ciclo]] by the heat absorbed in the
+          heating processes.
+    physical_intuition:
+    - id: trabajo_neto_del_ciclo_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[trabajo_neto_del_ciclo]] describe el estado dinámico.
+        en: Intuitively, [[trabajo_neto_del_ciclo]] describes the dynamic state.
+    limiting_cases:
+    - id: trabajo_neto_del_ciclo_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[trabajo_neto_del_ciclo]].
+        en: Check limiting cases of [[trabajo_neto_del_ciclo]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

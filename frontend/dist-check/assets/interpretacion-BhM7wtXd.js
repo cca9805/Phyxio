@@ -1,0 +1,102 @@
+const e=`version: 2
+id: interpretacion-ecuaciones-de-lagrange
+leaf_id: ecuaciones-de-lagrange
+nombre:
+  es: Interpretacion de ecuaciones de Lagrange
+  en: Interpretation of Lagrange's equations
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: mecanica-analitica
+  parent_id: lagrangiano
+  ruta_relativa: fisica-clasica/mecanica/mecanica-analitica/lagrangiano/ecuaciones-de-lagrange
+dependencies:
+  formulas: [ lagrangiano_mecanico, momento_conjugado_lagrangiano, operador_euler_lagrange, ecuacion_lagrange_conservativa, ecuacion_lagrange_forzada, aceleracion_oscilador_forzado ]
+  magnitudes: [ L, T, V, qi, qdi, qddi, pi, Qi, Ri, m, k ]
+output_contract:
+  sections: [ summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step ]
+result_blocks:
+  summary: { title: { es: Resumen fisico, en: Physical summary } }
+  physical_reading: { title: { es: Lectura fisica, en: Physical reading } }
+  coherence: { title: { es: Coherencia, en: Coherence } }
+  model_validity: { title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { title: { es: Lectura grafica, en: Graph reading } }
+  likely_errors: { title: { es: Errores probables, en: Likely errors } }
+  next_step: { title: { es: Siguiente paso, en: Next step } }
+targets:
+  L:
+    summary_rules:
+    - { id: l_summary, when: "true", status: info, text: { es: "L resume la diferencia entre T y V que organiza la derivacion dinamica.", en: "L summarizes the difference between T and V that organizes the dynamical derivation." } }
+    physical_reading_rules:
+    - { id: l_physical, when: "true", status: info, text: { es: "Si cambia el reparto entre T y V, cambia la sensibilidad del modelo y por tanto la ecuacion resultante.", en: "If the balance between T and V changes, model sensitivity changes and therefore the resulting equation changes." } }
+    coherence_rules:
+    - { id: l_coherence, when: "true", status: ok, text: { es: "L debe conservar dimension de energia y depender de las mismas coordenadas del problema.", en: "L must keep energy dimension and depend on the same problem coordinates." } }
+    model_validity_rules:
+    - { id: l_validity, when: "true", status: ok, text: { es: "La lectura es valida para un lagrangiano mecanico regular en el dominio considerado.", en: "The reading is valid for a regular mechanical Lagrangian in the considered domain." } }
+    graph_rules:
+    - { id: l_graph, when: "true", status: info, text: { es: "En el grafico aplicado, la forma dinamica cambia cuando se altera el balance inercial y restaurador.", en: "In the applied graph, dynamical shape changes when inertial and restoring balance is altered." } }
+    likely_errors:
+    - { id: l_error, when: "true", status: warning, text: { es: "Error frecuente: creer que L es la energia total en vez de una funcion generadora de dinamica.", en: "Common mistake: believing that L is total energy instead of a function generating dynamics." } }
+    next_step_rules:
+    - { id: l_next, when: "true", status: info, text: { es: "Tras escribir L, calcula el momento conjugado y el operador de Euler-Lagrange.", en: "After writing L, compute conjugate momentum and the Euler-Lagrange operator." } }
+  pi:
+    summary_rules:
+    - { id: pi_summary, when: "true", status: info, text: { es: "pi mide la respuesta de L frente a la velocidad generalizada qdi.", en: "pi measures the response of L to generalized velocity qdi." } }
+    physical_reading_rules:
+    - { id: pi_physical, when: "true", status: info, text: { es: "Su valor depende de la coordenada elegida; por eso no siempre coincide con un momento lineal cartesiano.", en: "Its value depends on the chosen coordinate; therefore it does not always coincide with Cartesian linear momentum." } }
+    coherence_rules:
+    - { id: pi_coherence, when: "true", status: ok, text: { es: "Comprueba que la derivada se toma respecto de qdi y no respecto de qi.", en: "Check that the derivative is taken with respect to qdi and not qi." } }
+    model_validity_rules:
+    - { id: pi_validity, when: "true", status: ok, text: { es: "La definicion es valida cuando L depende diferenciablemente de qdi.", en: "The definition is valid when L depends differentiably on qdi." } }
+    graph_rules:
+    - { id: pi_graph, when: "true", status: info, text: { es: "La lectura grafica distingue respuesta inercial de respuesta restauradora.", en: "The graph reading distinguishes inertial response from restoring response." } }
+    likely_errors:
+    - { id: pi_error, when: "true", status: warning, text: { es: "No confundas pi con una fuerza ni con un simbolo decorativo.", en: "Do not confuse pi with a force or with decorative notation." } }
+    next_step_rules:
+    - { id: pi_next, when: "true", status: info, text: { es: "Usa pi dentro del termino temporal del operador de Euler-Lagrange.", en: "Use pi inside the time-derivative term of the Euler-Lagrange operator." } }
+  Ri:
+    summary_rules:
+    - { id: ri_summary, when: "true", status: info, text: { es: "Ri expresa el residuo dinamico que debe anularse o igualarse a Qi.", en: "Ri expresses the dynamical residual that must vanish or equal Qi." } }
+    physical_reading_rules:
+    - { id: ri_physical, when: "true", status: info, text: { es: "Si Ri no coincide con la fuerza generalizada esperada, la ecuacion de movimiento esta incompleta.", en: "If Ri does not match the expected generalized force, the equation of motion is incomplete." } }
+    coherence_rules:
+    - { id: ri_coherence, when: "true", status: ok, text: { es: "En caso conservativo debe cumplirse Ri igual a cero.", en: "In the conservative case Ri must equal zero." } }
+    model_validity_rules:
+    - { id: ri_validity, when: "true", status: ok, text: { es: "El operador requiere coordenadas diferenciables y un lagrangiano regular.", en: "The operator requires differentiable coordinates and a regular Lagrangian." } }
+    graph_rules:
+    - { id: ri_graph, when: "true", status: info, text: { es: "En una curva residual, los cruces por cero indican equilibrio variacional conservativo.", en: "On a residual curve, zero crossings indicate conservative variational balance." } }
+    likely_errors:
+    - { id: ri_error, when: "true", status: warning, text: { es: "Error frecuente: escribir la forma memorizada sin justificar que termino representa cada derivada.", en: "Common mistake: writing the memorized form without explaining what each derivative represents." } }
+    next_step_rules:
+    - { id: ri_next, when: "true", status: info, text: { es: "Decide si Ri debe anularse o igualarse a Qi.", en: "Decide whether Ri must vanish or equal Qi." } }
+  Qi:
+    summary_rules:
+    - { id: qi_summary, when: "true", status: info, text: { es: "Qi incorpora la accion no potencial asociada a la coordenada qi.", en: "Qi incorporates the non-potential action associated with coordinate qi." } }
+    physical_reading_rules:
+    - { id: qi_physical, when: "true", status: info, text: { es: "Su signo y magnitud indican como el agente externo desplaza la dinamica respecto al caso conservativo.", en: "Its sign and magnitude indicate how the external agent shifts dynamics relative to the conservative case." } }
+    coherence_rules:
+    - { id: qi_coherence, when: "true", status: ok, text: { es: "Qi debe tener la misma dimension que Ri para que la ecuacion sea coherente.", en: "Qi must have the same dimension as Ri for the equation to be coherent." } }
+    model_validity_rules:
+    - { id: qi_validity, when: "true", status: ok, text: { es: "Representa solo fuerzas que no se han absorbido ya en V.", en: "It represents only forces not already absorbed into V." } }
+    graph_rules:
+    - { id: qi_graph, when: "true", status: info, text: { es: "En el grafico aplicado, variar Qi desplaza la aceleracion y el termino equivalente Q-kq.", en: "In the applied graph, changing Qi shifts acceleration and the equivalent term Q-kq." } }
+    likely_errors:
+    - { id: qi_error, when: "true", status: warning, text: { es: "No confundas Qi con una fuerza cartesiana comun sin proyectarla en la coordenada correcta.", en: "Do not confuse Qi with an ordinary Cartesian force without projecting it onto the correct coordinate." } }
+    next_step_rules:
+    - { id: qi_next, when: "true", status: info, text: { es: "Si Qi desaparece, verifica que recuperas la ecuacion conservativa.", en: "If Qi disappears, verify that you recover the conservative equation." } }
+  qddi:
+    summary_rules:
+    - { id: qddi_summary, when: "true", status: info, text: { es: "qddi traduce la ecuacion de Lagrange a una aceleracion interpretable en el ejemplo lineal.", en: "qddi translates Lagrange's equation into an interpretable acceleration in the linear example." } }
+    physical_reading_rules:
+    - { id: qddi_physical, when: "true", status: info, text: { es: "Aumenta si Qi domina sobre k por qi y disminuye si domina la restauracion elastica.", en: "It increases if Qi dominates k times qi and decreases if elastic restoration dominates." } }
+    coherence_rules:
+    - { id: qddi_coherence, when: "true", status: ok, text: { es: "Si Qi y k por qi se compensan, qddi debe anularse.", en: "If Qi and k times qi balance, qddi must vanish." } }
+    model_validity_rules:
+    - { id: qddi_validity, when: "true", status: ok, text: { es: "La lectura pertenece al oscilador lineal usado como caso de verificacion.", en: "This reading belongs to the linear oscillator used as a verification case." } }
+    graph_rules:
+    - { id: qddi_graph, when: "true", status: info, text: { es: "La grafica muestra como qddi cambia de signo al cruzar el equilibrio.", en: "The graph shows how qddi changes sign when equilibrium is crossed." } }
+    likely_errors:
+    - { id: qddi_error, when: "true", status: warning, text: { es: "Error frecuente: aceptar una aceleracion sin comprobar que reproduce el signo esperado del termino restaurador.", en: "Common mistake: accepting an acceleration without checking that it reproduces the expected sign of the restoring term." } }
+    next_step_rules:
+    - { id: qddi_next, when: "true", status: info, text: { es: "Usa qddi para contrastar el formalismo con una ecuacion de movimiento conocida.", en: "Use qddi to compare the formalism against a known equation of motion." } }
+`;export{e as default};

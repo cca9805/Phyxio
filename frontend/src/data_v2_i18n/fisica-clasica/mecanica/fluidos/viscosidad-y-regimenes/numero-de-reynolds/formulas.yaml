@@ -1,0 +1,79 @@
+version: 5
+topic:
+  id: numero-de-reynolds
+  title:
+    es: Número de Reynolds
+    en: Reynolds Number
+
+formulas:
+  - id: re_dinamico
+    title:
+      es: Definición con Viscosidad Dinámica
+      en: Definition with Dynamic Viscosity
+    equation: Re = (rho * v * L) / eta
+    latex: Re = \frac{\rho v L}{\eta}
+    category: fluid_regime
+    relation_type: definition
+    physical_meaning:
+      es: Cuantifica la importancia relativa de la inercia frente a la fricción viscosa.
+      en: Quantifies the relative importance of inertia versus viscous friction.
+    constraints: [eta > 0]
+    validity:
+      es: Válido para cualquier fluido newtoniano.
+      en: Valid for any Newtonian fluid.
+    dimension_check: "[1] = ([M/L^3] * [L/T] * [L]) / [M/(L*T)] = [M/(L*T)] / [M/(L*T)] = [1]"
+    calculable: true
+    motivo_no_calculable:
+      es: No se puede calcular si la viscosidad es cero (fluido ideal).
+      en: Cannot be calculated if viscosity is zero (ideal fluid).
+    used_in: [flow_classification]
+    interpretation_tags: [inertia, viscosity, scale]
+    result_semantics: reynolds_number
+    domain_checks: [rho > 0, v >= 0, L > 0, eta > 0]
+    coherence_checks: [Re >= 0]
+    graph_implications: "Determina si el perfil de flujo es laminar o si aparecen turbulencias."
+    pedagogical_triggers: [high_re_chaos]
+    rearrangements:
+      - target: Re
+        equation: Re = (rho * v * L) / eta
+    variables: [Re, rho, v, L, eta]
+
+  - id: re_cinematico
+    title:
+      es: Definición con Viscosidad Cinemática
+      en: Definition with Kinematic Viscosity
+    equation: Re = (v * L) / nu
+    latex: Re = \frac{v L}{\nu}
+    category: fluid_regime
+    relation_type: definition
+    physical_meaning:
+      es: Expresa el Reynolds en función de la difusividad del momentum.
+      en: Expresses Reynolds in terms of momentum diffusivity.
+    constraints: [nu > 0]
+    validity:
+      es: Útil cuando se conoce directamente la viscosidad cinemática del fluido.
+      en: Useful when the kinematic viscosity of the fluid is directly known.
+    dimension_check: "[1] = ([L/T] * [L]) / [L^2/T] = [L^2/T] / [L^2/T] = [1]"
+    calculable: true
+    motivo_no_calculable:
+      es: Requiere que la viscosidad cinemática sea mayor que cero.
+      en: Requires kinematic viscosity to be greater than zero.
+    used_in: [flow_classification]
+    interpretation_tags: [kinematic, scaling]
+    result_semantics: reynolds_number
+    domain_checks: [v >= 0, L > 0, nu > 0]
+    coherence_checks: [Re >= 0]
+    graph_implications: "Simplifica el cálculo para visualizaciones rápidas."
+    pedagogical_triggers: [nu_scaling]
+    rearrangements:
+      - target: Re
+        equation: Re = (v * L) / nu
+    variables: [Re, v, L, nu]
+
+ui:
+  default_formula: re_dinamico
+  groups:
+    - title:
+        es: Formas del Número de Reynolds
+        en: Reynolds Number Forms
+      items: [re_dinamico, re_cinematico]

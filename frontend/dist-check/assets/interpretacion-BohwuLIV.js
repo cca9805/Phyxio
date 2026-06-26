@@ -1,0 +1,645 @@
+const e=`version: 1.0.0
+id: formulacion-de-clausius-interpretacion
+leaf_id: formulacion-de-clausius
+nombre:
+  es: Interpretacion del Enunciado de Clausius
+  en: Clausius Statement Interpretation
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: entropia-y-segunda-ley
+  parent_id: segunda-ley-de-la-termodinamica
+  ruta_relativa: fisica-clasica/termodinamica/entropia-y-segunda-ley/segunda-ley-de-la-termodinamica/formulacion-de-clausius
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es:
+      summary: Resumen fisico
+      reading: Lectura del resultado
+      coherence: Coherencia
+      validity: Validez del modelo
+      graph: Lectura grafica
+      errors: Errores probables
+      next_step: Siguiente paso
+    en:
+      summary: Physical summary
+      reading: Result reading
+      coherence: Coherence
+      validity: Model validity
+      graph: Graph reading
+      errors: Likely errors
+      next_step: Next step
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_summary_chars: 200
+    max_warnings: 2
+    max_suggestions: 2
+dependencies:
+  formulas:
+    - flujo_calor_clausius
+    - trabajo_reversion_clausius
+    - eficiencia_carnot_refrigeracion
+    - entropia_transferencia
+  magnitudes:
+    - Q
+    - T
+    - DeltaT
+    - W
+    - eta
+    - COP_R
+    - DeltaS
+    - W_min
+    - T_A
+    - T_B
+global_context:
+  physical_domain:
+    es: Transferencia de calor y procesos termicos irreversibles
+    en: Heat transfer and irreversible thermal processes
+  axis_convention:
+    es: T_A foco caliente, T_B foco frio, Q fluye de caliente a frio
+    en: T_A hot reservoir, T_B cold reservoir, Q flows hot to cold
+  standard_assumptions:
+    - Temperaturas uniformes en cada foco
+    - Procesos cuasi-estaticos
+  standard_warnings:
+    - No aplicable a escalas microscopicas
+output_contract:
+  format: structured_text
+  include_emojis: true
+  max_lines_per_section: 5
+  truncate_long_values: true
+  decimal_places: 2
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+result_blocks:
+  summary:
+    enabled: true
+    priority: 1
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    enabled: true
+    priority: 2
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    enabled: true
+    priority: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    priority: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    priority: 5
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    priority: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    priority: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+  Q:
+    magnitude_type: Q
+    semantic_role:
+      es: Calor transferido
+      en: Transferred heat
+    summary_rules:
+      - id: resumen_q
+        when: "true"
+        status: info
+        text:
+          es: "[[Q]] representa la energia termica transferida."
+          en: "[[Q]] represents transferred thermal energy."
+    physical_reading_rules:
+      - id: lectura_q
+        when: "true"
+        status: info
+        text:
+          es: "[[Q]] fija la escala del intercambio: mas calor exige mas trabajo si se invierte el flujo."
+          en: "[[Q]] sets the exchange scale: more heat requires more work if the flow is reversed."
+    coherence_rules:
+      - id: coherencia_q
+        when: Q >= 0
+        status: success
+        text:
+          es: "[[Q]] no negativo es coherente con una cantidad transferida."
+          en: "Non-negative [[Q]] is coherent with a transferred amount."
+    model_validity_rules:
+      - id: validez_q
+        when: "true"
+        status: info
+        text:
+          es: "El modelo supone que [[Q]] se intercambia entre focos bien definidos."
+          en: "The model assumes [[Q]] is exchanged between well-defined reservoirs."
+    graph_rules:
+      - id: grafico_q
+        when: "true"
+        status: info
+        text:
+          es: "Al aumentar [[Q]], la curva de trabajo minimo sube proporcionalmente."
+          en: "As [[Q]] increases, the minimum-work curve rises proportionally."
+    likely_errors:
+      - id: error_q
+        when: "true"
+        status: warning
+        text:
+          es: "Error comun: confundir [[Q]] transferido con el trabajo consumido."
+          en: "Common error: confusing transferred [[Q]] with consumed work."
+    next_step_rules:
+      - id: siguiente_q
+        when: "true"
+        status: info
+        text:
+          es: "Siguiente: compara [[Q]] con [[W_min]] para estimar el coste de inversion."
+          en: "Next: compare [[Q]] with [[W_min]] to estimate reversal cost."
+
+  T:
+    magnitude_type: T
+    semantic_role:
+      es: Temperatura absoluta
+      en: Absolute temperature
+    summary_rules:
+      - id: resumen_t
+        when: "true"
+        status: info
+        text:
+          es: "[[T]] debe expresarse en kelvin para usar relaciones termodinamicas."
+          en: "[[T]] must be expressed in kelvin for thermodynamic relations."
+    physical_reading_rules:
+      - id: lectura_t
+        when: "true"
+        status: info
+        text:
+          es: "[[T]] determina que foco puede ceder calor espontaneamente."
+          en: "[[T]] determines which reservoir can release heat spontaneously."
+    coherence_rules:
+      - id: coherencia_t
+        when: T > 0
+        status: success
+        text:
+          es: "[[T]] positiva en kelvin es coherente con el modelo clasico."
+          en: "Positive kelvin [[T]] is coherent with the classical model."
+    model_validity_rules:
+      - id: validez_t
+        when: T > 0
+        status: info
+        text:
+          es: "La formulacion clasica requiere temperatura absoluta positiva."
+          en: "The classical statement requires positive absolute temperature."
+    graph_rules:
+      - id: grafico_t
+        when: "true"
+        status: info
+        text:
+          es: "La lectura grafica debe hacerse con temperaturas absolutas."
+          en: "The graph must be read with absolute temperatures."
+    likely_errors:
+      - id: error_t_celsius
+        when: T < 100
+        status: warning
+        text:
+          es: "Posible uso de Celsius: revisa si [[T]] deberia estar en kelvin."
+          en: "Possible Celsius use: check whether [[T]] should be in kelvin."
+    next_step_rules:
+      - id: siguiente_t
+        when: "true"
+        status: info
+        text:
+          es: "Siguiente: identifica [[T_A]] y [[T_B]] antes de aplicar formulas."
+          en: "Next: identify [[T_A]] and [[T_B]] before applying formulas."
+
+  DeltaT:
+    magnitude_type: DeltaT
+    semantic_role:
+      es: Diferencia de temperatura
+      en: Temperature difference
+    summary_rules:
+      - id: resumen_deltat
+        when: "true"
+        status: info
+        text:
+          es: "[[DeltaT]] mide el gradiente que dificulta bombear calor de frio a caliente."
+          en: "[[DeltaT]] measures the gradient that makes pumping heat from cold to hot harder."
+    physical_reading_rules:
+      - id: lectura_deltat
+        when: "true"
+        status: info
+        text:
+          es: "[[DeltaT]] es la barrera termica que el trabajo externo debe compensar."
+          en: "[[DeltaT]] is the thermal barrier external work must compensate."
+    coherence_rules:
+      - id: coherencia_deltat
+        when: DeltaT >= 0
+        status: success
+        text:
+          es: "[[DeltaT]] no negativo indica foco caliente correctamente identificado."
+          en: "Non-negative [[DeltaT]] means the hot reservoir is correctly identified."
+    model_validity_rules:
+      - id: validez_deltat
+        when: "true"
+        status: info
+        text:
+          es: "El modelo usa [[DeltaT]] entre focos uniformes y en equilibrio interno."
+          en: "The model uses [[DeltaT]] between uniform, internally equilibrated reservoirs."
+    graph_rules:
+      - id: grafico_deltat
+        when: "true"
+        status: info
+        text:
+          es: "En el grafico, mayor [[DeltaT]] eleva [[W_min]]."
+          en: "On the graph, larger [[DeltaT]] raises [[W_min]]."
+    likely_errors:
+      - id: error_deltat_signo
+        when: DeltaT < 0
+        status: error
+        text:
+          es: "Error probable: se invirtieron foco frio y foco caliente."
+          en: "Likely error: cold and hot reservoirs were swapped."
+    next_step_rules:
+      - id: siguiente_deltat
+        when: "true"
+        status: info
+        text:
+          es: "Siguiente: reduce [[DeltaT]] si buscas mayor COP teorico."
+          en: "Next: reduce [[DeltaT]] if seeking a higher theoretical COP."
+
+  T_B:
+    magnitude_type: T_B
+    semantic_role:
+      es: Temperatura del foco frio
+      en: Cold reservoir temperature
+    summary_rules:
+      - id: resumen_tb
+        when: "true"
+        status: info
+        text:
+          es: "[[T_B]] es la temperatura del foco frio desde el que se extrae calor."
+          en: "[[T_B]] is the cold reservoir temperature from which heat is extracted."
+    physical_reading_rules:
+      - id: lectura_tb
+        when: "true"
+        status: info
+        text:
+          es: "[[T_B]] controla el coste relativo de extraer calor del foco frio."
+          en: "[[T_B]] controls the relative cost of extracting heat from the cold reservoir."
+    coherence_rules:
+      - id: coherencia_tb
+        when: T_B > 0
+        status: success
+        text:
+          es: "[[T_B]] positiva mantiene valido el uso de temperatura absoluta."
+          en: "Positive [[T_B]] keeps absolute-temperature use valid."
+    model_validity_rules:
+      - id: validez_tb
+        when: T_B > 0
+        status: info
+        text:
+          es: "El foco frio debe poder describirse mediante una temperatura uniforme."
+          en: "The cold reservoir must be describable by a uniform temperature."
+    graph_rules:
+      - id: grafico_tb
+        when: "true"
+        status: info
+        text:
+          es: "A menor [[T_B]], la refrigeracion suele ser mas exigente."
+          en: "At lower [[T_B]], refrigeration is usually more demanding."
+    likely_errors:
+      - id: error_tb_celsius
+        when: T_B < 100
+        status: warning
+        text:
+          es: "Posible error: [[T_B]] parece introducida en Celsius."
+          en: "Possible error: [[T_B]] may have been entered in Celsius."
+    next_step_rules:
+      - id: siguiente_tb
+        when: "true"
+        status: info
+        text:
+          es: "Siguiente: usa [[T_B]] junto con [[DeltaT]] para estimar [[COP_R]]."
+          en: "Next: use [[T_B]] with [[DeltaT]] to estimate [[COP_R]]."
+
+  W_min:
+    magnitude_type: W
+    semantic_role:
+      es: Trabajo minimo para revertir flujo termico
+      en: Minimum work to reverse heat flow
+    summary_rules:
+      - id: resumen_trabajo
+        when: "true"
+        status: info
+        text:
+          es: "Trabajo requerido: [[W_min]] J para transferir calor de frio a caliente."
+          en: "Required work: [[W_min]] J to transfer heat from cold to hot."
+    physical_reading_rules:
+      - id: lectura_trabajo
+        when: W_min > 0
+        status: info
+        text:
+          es: "El trabajo representa el costo energetico de revertir la direccion espontanea del flujo calorifico."
+          en: "Work represents the energy cost of reversing the spontaneous heat flow direction."
+    coherence_rules:
+      - id: coherencia_trabajo_negativo
+        when: W_min < 0
+        status: error
+        text:
+          es: "Error: El trabajo requerido no puede ser negativo."
+          en: "Error: Required work cannot be negative."
+      - id: coherencia_trabajo_ok
+        when: W_min >= 0
+        status: success
+        text:
+          es: "Coherente: trabajo positivo o nulo verificado."
+          en: "Coherent: positive or zero work verified."
+    model_validity_rules:
+      - id: validez_temperaturas
+        when: T_A > T_B and T_B > 0
+        status: success
+        text:
+          es: "Modelo valido: temperaturas consistentes con transferencia forzada."
+          en: "Valid model: temperatures consistent with forced transfer."
+      - id: validez_error
+        when: T_A <= T_B
+        status: error
+        text:
+          es: "Modelo invalido: se requiere T_A mayor que T_B."
+          en: "Invalid model: T_A must be greater than T_B."
+    graph_rules:
+      - id: grafico_trabajo
+        when: "true"
+        status: info
+        text:
+          es: "El vector de trabajo apunta hacia el sistema, indicando entrada de energia."
+          en: "Work vector points toward system, indicating energy input."
+    likely_errors:
+      - id: error_celsius
+        when: T_A < 100
+        status: warning
+        text:
+          es: "Posible error: usar Celsius en lugar de Kelvin."
+          en: "Possible error: using Celsius instead of Kelvin."
+      - id: error_formula
+        when: "true"
+        status: info
+        text:
+          es: "Error comun: olvidar dividir por T_B en la formula de trabajo minimo."
+          en: "Common error: forgetting to divide by T_B in minimum work formula."
+    next_step_rules:
+      - id: siguiente_cop
+        when: "true"
+        status: info
+        text:
+          es: "Siguiente: Calcular COP para evaluar eficiencia energetica."
+          en: "Next: Calculate COP to evaluate energy efficiency."
+
+  COP_R:
+    magnitude_type: eta
+    semantic_role:
+      es: Coeficiente de eficiencia de refrigeracion
+      en: Refrigeration coefficient of performance
+    summary_rules:
+      - id: resumen_cop
+        when: "true"
+        status: info
+        text:
+          es: "COP = [[COP_R]]: relacion entre calor extraido y trabajo consumido."
+          en: "COP = [[COP_R]]: ratio between extracted heat and consumed work."
+    physical_reading_rules:
+      - id: lectura_cop_alto
+        when: COP_R >= 5
+        status: success
+        text:
+          es: "COP elevado: refrigerador muy eficiente. Se extrae mucho calor con poco trabajo."
+          en: "High COP: very efficient refrigerator. Much heat extracted with little work."
+      - id: lectura_cop_medio
+        when: COP_R >= 2 and COP_R < 5
+        status: info
+        text:
+          es: "COP moderado: eficiencia estandar para aplicaciones comerciales."
+          en: "Moderate COP: standard efficiency for commercial applications."
+      - id: lectura_cop_bajo
+        when: COP_R < 2
+        status: warning
+        text:
+          es: "COP bajo: equipo poco eficiente o condiciones de operacion severas."
+          en: "Low COP: inefficient equipment or severe operating conditions."
+    coherence_rules:
+      - id: coherencia_cop_negativo
+        when: COP_R < 0
+        status: error
+        text:
+          es: "Error: COP negativo fisicamente imposible."
+          en: "Error: negative COP physically impossible."
+      - id: coherencia_cop_extremo
+        when: COP_R > 50
+        status: warning
+        text:
+          es: "COP excesivamente alto. Verificar unidades de temperatura."
+          en: "Excessively high COP. Verify temperature units."
+      - id: coherencia_cop_ok
+        when: COP_R > 0 and COP_R <= 50
+        status: success
+        text:
+          es: "COP dentro de rango esperado para refrigeracion."
+          en: "COP within expected range for refrigeration."
+    model_validity_rules:
+      - id: validez_cop_carnot
+        when: COP_R <= 20
+        status: success
+        text:
+          es: "Modelo valido: COP realista dentro del limite de Carnot."
+          en: "Valid model: realistic COP within Carnot limit."
+      - id: validez_cop_imposible
+        when: COP_R > 20
+        status: error
+        text:
+          es: "COP por encima del limite de Carnot para la mayoria de aplicaciones."
+          en: "COP above Carnot limit for most applications."
+    graph_rules:
+      - id: grafico_cop
+        when: "true"
+        status: info
+        text:
+          es: "En el grafico, el punto indica la operabilidad del sistema a estas temperaturas."
+          en: "In the graph, the point indicates system operability at these temperatures."
+    likely_errors:
+      - id: error_cop_celsius
+        when: T_A < 100 or T_B < 100
+        status: error
+        text:
+          es: "Error probable: temperaturas en Celsius en lugar de Kelvin."
+          en: "Likely error: temperatures in Celsius instead of Kelvin."
+      - id: error_cop_signo
+        when: "true"
+        status: info
+        text:
+          es: "Error comun: COP no es porcentaje; COP=3 significa ratio 3:1, no 3%."
+          en: "Common error: COP is not percentage; COP=3 means 3:1 ratio, not 3%."
+    next_step_rules:
+      - id: siguiente_comparar
+        when: "true"
+        status: info
+        text:
+          es: "Siguiente: Comparar con COP de Carnot teorico."
+          en: "Next: Compare with theoretical Carnot COP."
+
+  DeltaS:
+    magnitude_type: DeltaS
+    semantic_role:
+      es: Cambio de entropia del sistema
+      en: System entropy change
+    summary_rules:
+      - id: resumen_entropia_positiva
+        when: DeltaS > 0
+        status: info
+        text:
+          es: "Entropia aumenta [[DeltaS]] J/K: sistema absorbe calor."
+          en: "Entropy increases [[DeltaS]] J/K: system absorbs heat."
+      - id: resumen_entropia_negativa
+        when: DeltaS < 0
+        status: warning
+        text:
+          es: "Entropia disminuye [[DeltaS]] J/K: sistema cede calor."
+          en: "Entropy decreases [[DeltaS]] J/K: system releases heat."
+      - id: resumen_entropia_cero
+        when: DeltaS == 0
+        status: info
+        text:
+          es: "Entropia constante: proceso reversible ideal."
+          en: "Constant entropy: ideal reversible process."
+    physical_reading_rules:
+      - id: lectura_entropia_calor
+        when: DeltaS > 0
+        status: info
+        text:
+          es: "Aumento de desorden molecular por absorcion de energia termica."
+          en: "Increase in molecular disorder due to thermal energy absorption."
+      - id: lectura_entropia_frio
+        when: DeltaS < 0
+        status: info
+        text:
+          es: "Disminucion local de entropia compensada por aumento en el entorno."
+          en: "Local entropy decrease compensated by increase in surroundings."
+    coherence_rules:
+      - id: coherencia_entropia_signo
+        when: DeltaS > 0 and Q > 0
+        status: success
+        text:
+          es: "Coherente: entropia aumenta cuando sistema absorbe calor."
+          en: "Coherent: entropy increases when system absorbs heat."
+      - id: coherencia_entropia_inconsistente
+        when: DeltaS < 0 and Q > 0
+        status: error
+        text:
+          es: "Incoherencia: Q>0 pero DeltaS<0. Revisar signos."
+          en: "Inconsistency: Q>0 but DeltaS<0. Check signs."
+      - id: coherencia_entropia_verificacion
+        when: "true"
+        status: info
+        text:
+          es: "Verificacion: |DeltaS| aproximadamente igual a |Q|/T."
+          en: "Verification: |DeltaS| approximately equal to |Q|/T."
+    model_validity_rules:
+      - id: validez_entropia_temperatura
+        when: T > 0
+        status: success
+        text:
+          es: "Modelo valido: temperatura positiva para calculo entropico."
+          en: "Valid model: positive temperature for entropic calculation."
+      - id: validez_entropia_limite
+        when: T < 10 and abs(DeltaS) > 100
+        status: warning
+        text:
+          es: "Temperaturas muy bajas con grandes cambios entropicos: verificar equilibrio local."
+          en: "Very low temperatures with large entropy changes: verify local equilibrium."
+    graph_rules:
+      - id: grafico_entropia
+        when: "true"
+        status: info
+        text:
+          es: "En diagrama T-S, el area bajo la curva representa calor transferido."
+          en: "In T-S diagram, area under curve represents transferred heat."
+    likely_errors:
+      - id: error_universo
+        when: "true"
+        status: info
+        text:
+          es: "Error conceptual: la entropia del UNIVERSO nunca disminuye."
+          en: "Conceptual error: UNIVERSE entropy never decreases."
+      - id: error_signo
+        when: "true"
+        status: info
+        text:
+          es: "Error: confundir signo de DeltaS para sistema vs universo."
+          en: "Error: confusing DeltaS sign for system vs universe."
+    next_step_rules:
+      - id: siguiente_universo
+        when: "true"
+        status: info
+        text:
+          es: "Siguiente: Calcular entropia del universo (sistema + entorno)."
+          en: "Next: Calculate universe entropy (system + surroundings)."
+
+cross_checks:
+  - between: [W_min, COP_R]
+    check: "W_min > 0 and COP_R > 0"
+    description:
+      es: Trabajo y COP positivos
+      en: Positive work and COP
+
+error_patterns:
+  - pattern: "T_Celsius"
+    detect_when: "T_A < 100"
+    message:
+      es: "Posible uso de Celsius. Usar Kelvin."
+      en: "Possible use of Celsius. Use Kelvin."
+    severity: warning
+
+graph_binding:
+  channels:
+    - heat_flow_arrow
+    - temperature_indicator
+  sync_mode: bidirectional
+  update_on: [calculator_result]
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+  default_view: temperature_profile
+  show_on_calculator: true
+`;export{e as default};

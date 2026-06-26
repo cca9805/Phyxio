@@ -1,0 +1,188 @@
+version: v5
+id: interpretacion-tubos
+leaf_id: tubos
+nombre:
+  es: Interpretacion de tubos estacionarios
+  en: Interpretation of standing tubes
+scope:
+  area: fisica-clasica
+  bloque: ondas
+  subbloque: ondas-estacionarias
+  parent_id: ejemplos-clasicos
+  ruta_relativa: fisica-clasica/ondas/ondas-estacionarias/ejemplos-clasicos/tubos
+ui:
+  enabled: true
+  display_modes: [calculator_inline, graph_inline, dedicated_tab, modal]
+  labels:
+    es: Lectura acustica
+    en: Acoustic reading
+  priority_order: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  inline_limits:
+    max_messages: 4
+dependencies:
+  formulas: [frecuencia_tubo_abierto, frecuencia_tubo_cerrado, longitud_onda_tubo_abierto, longitud_onda_tubo_cerrado]
+  magnitudes: [L, L_eff, v, n, m, lambda_n, f_n]
+global_context:
+  physical_domain:
+    es: "Ondas estacionarias longitudinales en columnas de aire dentro de tubos."
+    en: "Longitudinal standing waves in air columns inside tubes."
+  axis_convention:
+    es: "El eje horizontal representa posicion en el tubo y el eje vertical una lectura modal de desplazamiento o presion."
+    en: "The horizontal axis represents position in the tube and the vertical axis a modal reading of displacement or pressure."
+  standard_assumptions:
+    - { es: "Aire casi uniforme y tubo estrecho respecto a la longitud de onda.", en: "Nearly uniform air and a tube narrow compared with wavelength." }
+    - { es: "Extremos abiertos o cerrados bien identificados.", en: "Open or closed ends clearly identified." }
+  standard_warnings:
+    - { es: "Un tubo abierto-cerrado ideal no tiene todos los armonicos.", en: "An ideal open-closed tube does not have all harmonics." }
+    - { es: "La longitud efectiva puede diferir de la longitud fisica.", en: "Effective length may differ from physical length." }
+result_blocks:
+  summary: { enabled: true, order: 1, title: { es: Resumen, en: Summary } }
+  physical_reading: { enabled: true, order: 2, title: { es: Lectura fisica, en: Physical reading } }
+  coherence: { enabled: true, order: 3, title: { es: Coherencia, en: Coherence } }
+  model_validity: { enabled: true, order: 4, title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { enabled: true, order: 5, title: { es: Lectura del grafico, en: Graph reading } }
+  likely_errors: { enabled: true, order: 6, title: { es: Errores probables, en: Likely errors } }
+  next_step: { enabled: true, order: 7, title: { es: Siguiente paso, en: Next step } }
+targets:
+  L:
+    magnitude_type: parameter
+    semantic_role: { es: longitud geometrica del resonador, en: geometric length of the resonator }
+    summary_rules:
+      - { id: L_sum, when: "true", status: ok, text: { es: "[[L]] indica el tamaño fisico del tubo y describe la base geometrica de la columna resonante.", en: "[[L]] indicates the physical tube size and describes the geometric basis of the resonant column." } }
+    physical_reading_rules:
+      - { id: L_read, when: "true", status: ok, text: { es: "Mayor [[L]] suele bajar las frecuencias porque el patron acustico necesita mas recorrido espacial.", en: "Larger [[L]] usually lowers frequencies because the acoustic pattern needs more spatial span." } }
+    coherence_rules:
+      - { id: L_coh, when: "L > 0", status: ok, text: { es: "[[L]] positiva es coherente con un tubo medible.", en: "Positive [[L]] is coherent with a measurable tube." } }
+    model_validity_rules:
+      - { id: L_val, when: "true", status: ok, text: { es: "La lectura es valida si la longitud fisica se traduce bien a [[L_eff]]; falla en bocas anchas o geometria compleja.", en: "The reading is valid if physical length translates well into [[L_eff]]; it fails for wide mouths or complex geometry." } }
+    graph_rules:
+      - { id: L_graph, when: "true", status: ok, text: { es: "En el grafico, [[L]] marca el dominio fisico visible del tubo.", en: "On the graph, [[L]] marks the visible physical domain of the tube." } }
+    likely_errors:
+      - { id: L_err, when: "true", status: warning, text: { es: "Error tipico: usar solo [[L]] cuando el extremo abierto exige correccion acustica.", en: "Typical mistake: using only [[L]] when the open end requires acoustic correction." } }
+    next_step_rules:
+      - { id: L_next, when: "true", status: ok, text: { es: "Revisa [[L_eff]] antes de calcular una frecuencia modal.", en: "Review [[L_eff]] before calculating a modal frequency." } }
+  L_eff:
+    magnitude_type: parameter
+    semantic_role: { es: longitud acustica efectiva, en: effective acoustic length }
+    summary_rules:
+      - { id: Le_sum, when: "true", status: ok, text: { es: "[[L_eff]] resume la longitud acustica que domina el encaje modal dentro del tubo.", en: "[[L_eff]] summarizes the acoustic length that dominates modal fitting inside the tube." } }
+    physical_reading_rules:
+      - { id: Le_read, when: "true", status: ok, text: { es: "Si [[L_eff]] aumenta, las resonancias bajan porque la misma onda tarda mas en reconstruir el patron.", en: "If [[L_eff]] increases, resonances drop because the same wave takes longer to rebuild the pattern." } }
+    coherence_rules:
+      - { id: Le_coh, when: "L_eff > 0", status: ok, text: { es: "[[L_eff]] positiva confirma una columna acustica posible.", en: "Positive [[L_eff]] confirms a possible acoustic column." } }
+    model_validity_rules:
+      - { id: Le_val, when: "true", status: ok, text: { es: "El resultado es valido en tubos estrechos; deja de valer si la correccion de extremo cambia con frecuencia o forma.", en: "The result is valid in narrow tubes; it breaks down if end correction changes with frequency or shape." } }
+    graph_rules:
+      - { id: Le_graph, when: "true", status: ok, text: { es: "En el grafico, [[L_eff]] fija la distancia entre las fronteras acusticas efectivas.", en: "On the graph, [[L_eff]] fixes the distance between effective acoustic boundaries." } }
+    likely_errors:
+      - { id: Le_err, when: "true", status: warning, text: { es: "Error tipico: creer que [[L_eff]] siempre coincide exactamente con [[L]].", en: "Typical mistake: believing [[L_eff]] always exactly equals [[L]]." } }
+    next_step_rules:
+      - { id: Le_next, when: "true", status: ok, text: { es: "Decide si el tubo es abierto-abierto o abierto-cerrado antes de usar [[L_eff]].", en: "Decide whether the tube is open-open or open-closed before using [[L_eff]]." } }
+  v:
+    magnitude_type: parameter
+    semantic_role: { es: rapidez sonora que fija la escala temporal, en: sound speed setting the time scale }
+    summary_rules:
+      - { id: v_sum, when: "true", status: ok, text: { es: "[[v]] indica la rapidez del sonido y describe como el aire convierte longitud modal en frecuencia.", en: "[[v]] indicates sound speed and describes how air converts modal length into frequency." } }
+    physical_reading_rules:
+      - { id: v_read, when: "true", status: ok, text: { es: "Mayor [[v]] eleva [[f_n]] porque la perturbacion recorre antes la misma longitud acustica.", en: "Larger [[v]] raises [[f_n]] because the disturbance covers the same acoustic length sooner." } }
+    coherence_rules:
+      - { id: v_coh, when: "v > 0", status: ok, text: { es: "[[v]] positiva es necesaria para propagacion sonora.", en: "Positive [[v]] is necessary for sound propagation." } }
+    model_validity_rules:
+      - { id: v_val, when: "true", status: ok, text: { es: "La lectura asume aire casi uniforme; deja de valer con gradientes termicos fuertes o flujo rapido.", en: "The reading assumes nearly uniform air; it breaks down with strong thermal gradients or fast flow." } }
+    graph_rules:
+      - { id: v_graph, when: "true", status: ok, text: { es: "En el grafico, [[v]] cambia la etiqueta de frecuencia sin cambiar el tipo de frontera.", en: "On the graph, [[v]] changes the frequency label without changing boundary type." } }
+    likely_errors:
+      - { id: v_err, when: "true", status: warning, text: { es: "Error tipico: usar una velocidad de cuerda en vez de [[v]] del sonido en aire.", en: "Typical mistake: using string speed instead of sound [[v]] in air." } }
+    next_step_rules:
+      - { id: v_next, when: "true", status: ok, text: { es: "Relaciona [[v]] con [[L_eff]] para estimar el orden de [[f_n]].", en: "Relate [[v]] to [[L_eff]] to estimate the order of [[f_n]]." } }
+  n:
+    magnitude_type: integer_index
+    semantic_role: { es: modo entero de tubo abierto, en: integer mode of an open tube }
+    summary_rules:
+      - { id: n_sum, when: "true", status: ok, text: { es: "[[n]] indica el modo abierto y significa que la serie admite armonicos consecutivos.", en: "[[n]] indicates the open-tube mode and means the series admits consecutive harmonics." } }
+    physical_reading_rules:
+      - { id: n_read, when: "true", status: ok, text: { es: "Aumentar [[n]] comprime el patron espacial y eleva [[f_n]] en un tubo abierto ideal.", en: "Increasing [[n]] compresses the spatial pattern and raises [[f_n]] in an ideal open tube." } }
+    coherence_rules:
+      - { id: n_coh, when: "n >= 1", status: ok, text: { es: "[[n]] debe ser entero positivo para un modo abierto.", en: "[[n]] must be a positive integer for an open mode." } }
+    model_validity_rules:
+      - { id: n_val, when: "true", status: ok, text: { es: "La serie es valida para dos extremos abiertos equivalentes; falla si un extremo actua como cerrado.", en: "The series is valid for two equivalent open ends; it fails if one end acts as closed." } }
+    graph_rules:
+      - { id: n_graph, when: "true", status: ok, text: { es: "En el grafico, [[n]] controla cuantos semiperiodos aparecen en el tubo abierto.", en: "On the graph, [[n]] controls how many half-periods appear in the open tube." } }
+    likely_errors:
+      - { id: n_err, when: "true", status: warning, text: { es: "Error tipico: aplicar [[n]] de tubo abierto a un tubo cerrado sin cambiar la serie.", en: "Typical mistake: applying open-tube [[n]] to a closed tube without changing the series." } }
+    next_step_rules:
+      - { id: n_next, when: "true", status: ok, text: { es: "Si el tubo tiene un extremo cerrado, cambia a [[m]] y factores impares.", en: "If the tube has one closed end, switch to [[m]] and odd factors." } }
+  m:
+    magnitude_type: integer_index
+    semantic_role: { es: indice que genera factores impares, en: index generating odd factors }
+    summary_rules:
+      - { id: m_sum, when: "true", status: ok, text: { es: "[[m]] indica la posicion en la serie cerrada y resume la seleccion de armonicos impares.", en: "[[m]] indicates position in the closed series and summarizes odd-harmonic selection." } }
+    physical_reading_rules:
+      - { id: m_read, when: "true", status: ok, text: { es: "Mayor [[m]] selecciona factores impares mas altos y por eso eleva [[f_n]].", en: "Larger [[m]] selects higher odd factors and therefore raises [[f_n]]." } }
+    coherence_rules:
+      - { id: m_coh, when: "m >= 1", status: ok, text: { es: "[[m]] positivo genera el fundamental cerrado y sus resonancias impares.", en: "Positive [[m]] generates the closed-tube fundamental and its odd resonances." } }
+    model_validity_rules:
+      - { id: m_val, when: "true", status: ok, text: { es: "La lectura es valida si un extremo impone nodo de desplazamiento; falla si ambos extremos son abiertos.", en: "The reading is valid if one end imposes a displacement node; it fails if both ends are open." } }
+    graph_rules:
+      - { id: m_graph, when: "true", status: ok, text: { es: "En el grafico, [[m]] debe mostrar nodo en un extremo y vientre en el otro.", en: "On the graph, [[m]] should show a node at one end and an antinode at the other." } }
+    likely_errors:
+      - { id: m_err, when: "true", status: warning, text: { es: "Error tipico: introducir armonicos pares en una serie cerrada ideal.", en: "Typical mistake: inserting even harmonics in an ideal closed series." } }
+    next_step_rules:
+      - { id: m_next, when: "true", status: ok, text: { es: "Compara la serie de [[m]] con la de [[n]] para identificar el tipo de tubo.", en: "Compare the [[m]] series with the [[n]] series to identify tube type." } }
+  lambda_n:
+    magnitude_type: derived
+    semantic_role: { es: escala espacial del modo acustico, en: spatial scale of the acoustic mode }
+    summary_rules:
+      - { id: la_sum, when: "true", status: ok, text: { es: "[[lambda_n]] describe la escala espacial del modo y depende de la frontera del tubo.", en: "[[lambda_n]] describes the spatial scale of the mode and depends on the tube boundary." } }
+    physical_reading_rules:
+      - { id: la_read, when: "true", status: ok, text: { es: "Una [[lambda_n]] menor significa patrones mas comprimidos y frecuencias mas altas.", en: "A smaller [[lambda_n]] means more compressed patterns and higher frequencies." } }
+    coherence_rules:
+      - { id: la_coh, when: "lambda_n > 0", status: ok, text: { es: "[[lambda_n]] positiva conserva una onda sonora posible.", en: "Positive [[lambda_n]] preserves a possible sound wave." } }
+    model_validity_rules:
+      - { id: la_val, when: "true", status: ok, text: { es: "La lectura es valida si el tubo es estrecho frente a [[lambda_n]]; falla en resonadores anchos o muy irregulares.", en: "The reading is valid if the tube is narrow compared with [[lambda_n]]; it fails in wide or very irregular resonators." } }
+    graph_rules:
+      - { id: la_graph, when: "true", status: ok, text: { es: "En el grafico, [[lambda_n]] se lee por la separacion espacial del patron modal.", en: "On the graph, [[lambda_n]] is read from the spatial spacing of the modal pattern." } }
+    likely_errors:
+      - { id: la_err, when: "true", status: warning, text: { es: "Error tipico: usar la misma [[lambda_n]] para tubo abierto y cerrado.", en: "Typical mistake: using the same [[lambda_n]] for open and closed tubes." } }
+    next_step_rules:
+      - { id: la_next, when: "true", status: ok, text: { es: "Usa [[lambda_n]] con [[v]] para comprobar la escala de frecuencia.", en: "Use [[lambda_n]] with [[v]] to check the frequency scale." } }
+  f_n:
+    magnitude_type: derived
+    semantic_role: { es: frecuencia propia acustica, en: acoustic natural frequency }
+    summary_rules:
+      - { id: fn_sum, when: "true", status: ok, text: { es: "[[f_n]] resume la frecuencia resultante del balance entre longitud efectiva, velocidad sonora y frontera.", en: "[[f_n]] summarizes the resulting frequency from the balance of effective length, sound speed, and boundary." } }
+    physical_reading_rules:
+      - { id: fn_read, when: "true", status: ok, text: { es: "[[f_n]] aumenta con [[v]] y con el orden modal, y disminuye cuando crece [[L_eff]].", en: "[[f_n]] increases with [[v]] and modal order, and decreases when [[L_eff]] grows." } }
+    coherence_rules:
+      - { id: fn_coh, when: "f_n > 0", status: ok, text: { es: "[[f_n]] positiva representa una resonancia sonora posible.", en: "Positive [[f_n]] represents a possible sound resonance." } }
+    model_validity_rules:
+      - { id: fn_val, when: "true", status: ok, text: { es: "El valor es valido para aire uniforme y fronteras idealizadas; deja de valer con perdidas fuertes o geometria compleja.", en: "The value is valid for uniform air and idealized boundaries; it breaks down with strong losses or complex geometry." } }
+    graph_rules:
+      - { id: fn_graph, when: "true", status: ok, text: { es: "En el grafico, [[f_n]] aparece como etiqueta de la resonancia seleccionada.", en: "On the graph, [[f_n]] appears as the label of the selected resonance." } }
+    likely_errors:
+      - { id: fn_err, when: "true", status: warning, text: { es: "Error tipico: calcular [[f_n]] con la serie abierta cuando el tubo esta cerrado por un extremo.", en: "Typical mistake: computing [[f_n]] with the open series when the tube is closed at one end." } }
+    next_step_rules:
+      - { id: fn_next, when: "true", status: ok, text: { es: "Compara [[f_n]] con la serie permitida para decidir si la resonancia es abierta o cerrada.", en: "Compare [[f_n]] with the allowed series to decide whether the resonance is open or closed." } }
+cross_checks:
+  - id: positive_air_column
+    condition: "L_eff > 0 and v > 0"
+    message: { es: "La columna de aire requiere longitud efectiva y velocidad positivas.", en: "The air column requires positive effective length and speed." }
+error_patterns:
+  - id: closed_even_mode
+    detect_when: "closed tube even harmonic"
+    message: { es: "Modo par cerrado detectado.", en: "Closed even mode detected." }
+graph_binding:
+  preferred_type: Coord
+  target: f_n
+  channels: [L, L_eff, v, n, m, lambda_n, f_n]
+mini_graph:
+  enabled: true
+  type: Coord
+  target: f_n
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true

@@ -1,0 +1,75 @@
+﻿# Ejemplo tipo examen
+
+## Enunciado
+
+En una vivienda unifamiliar de construcción tradicional, el sistema de calefacción original consiste en radiadores eléctricos de efecto Joule. Durante una temporada invernal típica de 150 días, el equipo registra un [[consumo_electrico_estacional]] de 5000 kWh. Dado que estos sistemas transforman la electricidad en calor con una eficiencia cercana a la unidad, podemos asumir que la [[demanda_termica_estacional]] de la vivienda es también de 5000 kWh. El propietario decide realizar una mejora integral en dos etapas para alcanzar un estándar de alta eficiencia energética: primero, la instalación de ventanas de triple vidrio que reduce la [[demanda_termica_estacional]] en un 25% y, segundo, la sustitución de radiadores por una bomba de calor con un [[rendimiento_estacional_scop]] medio de 3.5. Se solicita calcular el [[nuevo]] consumo [[consumo_electrico_estacional]] y determinar el [[ahorro_energetico_porcentual]] global del sistema tras la intervención.
+
+## Datos
+
+- [[consumo_escenario_base]] ([[consumo_electrico_estacional]] inicial): 5000 kWh eléctricos iniciales.
+- [[demanda_termica_estacional]] [[base]]: 5000 kWh térmicos (por [[rendimiento_estacional_scop]] = 1 en radiadores).
+- Reducción de demanda pasiva: 25% (mejoras en la envolvente).
+- Rendimiento estacional [[nuevo]] ([[rendimiento_estacional_scop]]): 3.5 (bomba de calor).
+
+## Definición del sistema
+
+El sistema físico bajo estudio es la envolvente térmica de la vivienda y el generador térmico acoplado. Se considera un sistema cerrado desde el punto de vista del balance de masa, pero abierto al flujo de energía térmica que se pierde por las paredes y ventanas, y al flujo de energía eléctrica que alimenta el compresor de la aerotermia.
+
+## Modelo físico
+
+Se utiliza el modelo de balance estacional estacionario. Se asume que la vivienda se comporta como un sistema térmico con pérdidas lineales compensadas por una fuente de calor (generador) cuyo rendimiento se mide mediante el [[rendimiento_estacional_scop]]. La [[demanda_termica_estacional]] se considera constante a lo largo de la temporada invernal para promediar el flujo de energía. No se consideran aportes internos gratuitos por ocupación o electrodomésticos para simplificar el cálculo inicial del [[consumo_electrico_estacional]]. La relación núcleo del leaf es causal: al reducir la [[demanda_termica_estacional]] y aumentar el [[rendimiento_estacional_scop]], baja el [[consumo_electrico_estacional]] y se modifica el [[ahorro_energetico_porcentual]] respecto al escenario [[base]].
+
+## Justificación del modelo
+
+El uso de este modelo es adecuado porque el análisis cubre una temporada completa de 150 días, lo que permite promediar las fluctuaciones horarias de temperatura, viento y radiación solar, centrándose exclusivamente en el flujo de energía neto acumulado que determina la factura energética final del hogar.
+
+## Resolución simbólica
+
+Para resolver este problema, determinamos primero la nueva demanda térmica proyectada tras la mejora pasiva de aislamiento. La nueva demanda es igual a la demanda térmica [[base]] multiplicada por el factor de reducción de tres cuartas partes (0.75). Este paso es crucial para entender que la eficiencia de la máquina actúa sobre una carga menor.
+
+Posteriormente, aplicamos la definición de [[rendimiento_estacional_scop]] para encontrar el [[nuevo]] consumo eléctrico necesario para cubrir esa carga:
+
+{{f:consumo_estacional}}
+
+Finalmente, evaluamos el ahorro relativo comparando los dos estados energéticos mediante la fórmula de ahorro porcentual estándar:
+
+{{f:ahorro_porcentual}}
+
+Para completar el análisis económico básico, se puede proyectar el coste estacional si se conoce el precio de la energía:
+
+{{f:facturacion_estacional}}
+
+## Sustitución numérica
+
+1. Nueva demanda térmica: 5000 kWh * 0.75 = 3750 kWh térmicos.
+2. Nuevo consumo eléctrico: 3750 kWh / 3.5 = 1071.43 kWh eléctricos.
+3. Ahorro porcentual energético: 100 * (1 - 1071.43 / 5000) = 78.57%.
+4. Coste proyectado (a 0.22 EUR/kWh): 1071.43 * 0.22 = 235.71 EUR.
+
+## Validación dimensional
+
+La fórmula de consumo estacional divide una cantidad de energía (kWh térmicos) entre un coeficiente adimensional, resultando en energía (kWh eléctricos), lo cual es dimensionalmente coherente. El ahorro porcentual es una razón de dos energías, por lo que resulta en un valor porcentual puro, sin unidades físicas, como se esperaba en el análisis técnico.
+
+## Interpretación física
+
+El ahorro conseguido supera el 78%. Es fundamental notar que el ahorro total no es la simple suma de las mejoras (25% + ahorro por cambio de máquina), sino un efecto multiplicativo y sinérgico. Al reducir la demanda térmica de la casa, la bomba de calor no solo tiene menos trabajo, sino que cada unidad de energía que inyecta lo hace con una eficiencia muy superior a la tecnología resistiva anterior. Esta sinergia demuestra que la rehabilitación de edificios es tan importante como la eficiencia de las máquinas instaladas. Además, al reducir el consumo, se disminuye la dependencia de la red eléctrica, aportando robustez al sistema energético nacional.
+
+# Ejemplo de aplicación real
+
+
+## Contexto
+
+Análisis de rentabilidad y resiliencia ante una crisis de precios en el mercado mayorista. Una familia invierte 6000 EUR en las mejoras del ejemplo anterior para blindarse ante la inflación. Se busca comparar el periodo de retorno de la inversión si el [[precio_medio]] de la energía es de 0.22 EUR/kWh frente a un escenario de crisis energética donde el precio sube a 0.396 EUR/kWh.
+
+## Estimación física
+
+- Inversión inicial total: 6000 EUR.
+- [[consumo_escenario_base]] (escenario Joule): 5000 kWh.
+- [[consumo_escenario_nuevo]] (escenario bomba de calor + aislamiento): 1071.43 kWh.
+- Ahorro anual en mercado estable: 864.29 EUR cada temporada.
+- Ahorro anual en mercado de crisis: 1555.71 EUR cada temporada.
+- [[coste_economico_estacional]]: aproximadamente 235 EUR frente a los 1100 EUR que pagaban antes de la intervención.
+
+## Interpretación
+
+La eficiencia energética reduce drásticamente la exposición económica de las familias a la volatilidad de los precios internacionales de la energía. En periodos de crisis, la amortización de las medidas de ahorro se acelera significativamente, casi duplicando su velocidad de retorno, lo que convierte la inversión en eficiencia en un escudo financiero crítico. Además, un sistema eficiente garantiza que, incluso con precios elevados, el [[coste_economico_estacional]] final del confort térmico sea manejable, evitando situaciones de pobreza energética. La reducción del consumo de 5000 kWh a apenas poco más de 1000 kWh supone una liberación de recursos financieros que la familia puede dedicar a otros fines, mejorando su calidad de vida global y su resiliencia ante futuros choques externos.

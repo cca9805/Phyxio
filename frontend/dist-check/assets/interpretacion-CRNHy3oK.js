@@ -1,0 +1,247 @@
+const e=`version: 2
+id: interpretacion-rodadura-como-puente-entre-traslacion-y-rotacion
+leaf_id: rodadura-como-puente-entre-traslacion-y-rotacion
+nombre:
+  es: Interpretación de Rodadura como puente
+  en: Interpretation of Rolling as a Bridge
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: rotacion
+  parent_id: rodadura
+  ruta_relativa: fisica-clasica/mecanica/rotacion/rodadura/rodadura-como-puente-entre-traslacion-y-rotacion
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación
+    en: Interpretation
+  priority_order:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_limits:
+    max_messages: 3
+dependencies:
+  formulas:
+  - condicion_rodadura_puente
+  - aceleracion_rodadura_puente
+  - desplazamiento_rodadura_puente
+  magnitudes:
+  - v_cm
+  - omega
+  - R
+  - a_cm
+  - alpha
+  - theta
+global_context:
+  physical_domain:
+    es: Rodadura ideal como acoplamiento de traslación y rotación.
+    en: Ideal rolling as coupling of translation and rotation.
+  axis_convention:
+    es: El sentido positivo de avance y giro se fija antes de interpretar.
+    en: Positive advance and spin directions are fixed before interpretation.
+  standard_assumptions:
+  - sólido rígido
+  - radio constante
+  - contacto sin deslizamiento
+  standard_warnings:
+  - no usar la relación de rodadura si hay patinaje
+  - no confundir velocidad lineal con velocidad angular
+result_blocks:
+  summary: { title: { es: Resumen físico, en: Physical summary } }
+  physical_reading: { title: { es: Lectura física, en: Physical reading } }
+  coherence: { title: { es: Coherencia, en: Coherence } }
+  model_validity: { title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { title: { es: Lectura gráfica, en: Graph reading } }
+  likely_errors: { title: { es: Errores probables, en: Likely errors } }
+  next_step: { title: { es: Siguiente paso, en: Next step } }
+targets:
+  v_cm:
+    magnitude_type: scalar
+    semantic_role:
+      es: velocidad del centro que expresa el avance traslacional de la rodadura
+      en: center velocity expressing translational advance in rolling
+    summary_rules:
+    - id: vcm_summary_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "v_cm resume el avance del centro; en rodadura ideal debe ser coherente con omega y R."
+        en: "v_cm summarizes center advance; in ideal rolling it must be coherent with omega and R."
+    physical_reading_rules:
+    - id: vcm_physical_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "El contacto causa el puente porque, al impedir deslizamiento, convierte giro angular en avance lineal."
+        en: "Contact causes the bridge: by preventing slipping, it converts angular spin into linear advance."
+    coherence_rules:
+    - id: vcm_coherence_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "Comprueba unidades y signo: v_cm es lineal, omega es angular y R traduce una en otra."
+        en: "Check units and sign: v_cm is linear, omega is angular, and R translates one into the other."
+    model_validity_rules:
+    - id: vcm_validity_bridge
+      when: 'true'
+      status: warning
+      text:
+        es: "Si hay patinaje, bloqueo o radio efectivo variable, conviene cambiar de modelo."
+        en: "If there is slipping, locking, or variable effective radius, switch models."
+    graph_rules:
+    - id: vcm_graph_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "El SVG debe mostrar centro que avanza, rueda que gira y punto de contacto instantáneamente quieto."
+        en: "The SVG must show an advancing center, a spinning wheel, and an instantaneously still contact point."
+    likely_errors:
+    - id: vcm_error_bridge
+      when: 'true'
+      status: warning
+      text:
+        es: "Error conceptual probable: confundir omega con velocidad lineal, olvidar el radio o aplicar la relación cuando la rueda patina."
+        en: "Likely error: using omega as if it were already a linear velocity or applying the relation while the wheel slips."
+    next_step_rules:
+    - id: vcm_next_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "El siguiente paso es decidir si el problema sigue siendo cinemático o necesita dinámica del contacto."
+        en: "The next step is deciding whether the problem remains kinematic or needs contact dynamics."
+  a_cm:
+    magnitude_type: scalar
+    semantic_role:
+      es: aceleración lineal acoplada a la aceleración angular por rodadura
+      en: linear acceleration coupled to angular acceleration by rolling
+    summary_rules:
+    - id: acm_summary_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "a_cm extiende el puente de velocidades al cambio temporal del movimiento."
+        en: "a_cm extends the velocity bridge to time variation of the motion."
+    physical_reading_rules:
+    - id: acm_physical_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "Si alpha aumenta, a_cm aumenta porque el contacto mantiene el mismo radio traductor."
+        en: "If alpha increases, a_cm increases because contact keeps the same translating radius."
+    coherence_rules:
+    - id: acm_coherence_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "Comprueba que a_cm y alpha tengan signos compatibles."
+        en: "Check that a_cm and alpha have compatible signs."
+    model_validity_rules:
+    - id: acm_validity_bridge
+      when: 'true'
+      status: warning
+      text:
+        es: "Si el contacto desliza, a_cm y alpha dejan de estar obligadas por R."
+        en: "If contact slips, a_cm and alpha are no longer constrained by R."
+    graph_rules:
+    - id: acm_graph_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "El Coord debe mostrar la misma tendencia al cambiar alpha o R."
+        en: "The Coord graph should show the same trend when alpha or R changes."
+    likely_errors:
+    - id: acm_error_bridge
+      when: 'true'
+      status: warning
+      text:
+        es: "Error conceptual probable: conectar aceleraciones sin radio o sin rodadura válida."
+        en: "Likely conceptual error: connecting accelerations without radius or valid rolling."
+    next_step_rules:
+    - id: acm_next_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "Después de a_cm, revisa si la causa requiere dinámica."
+        en: "After a_cm, check whether the cause requires dynamics."
+  theta:
+    magnitude_type: scalar
+    semantic_role:
+      es: ángulo girado que mide el avance acumulado en rodadura
+      en: turned angle measuring accumulated advance in rolling
+    summary_rules:
+    - id: theta_summary_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "theta conecta giro acumulado con distancia recorrida por el centro."
+        en: "theta connects accumulated spin with distance traveled by the center."
+    physical_reading_rules:
+    - id: theta_physical_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "Un mayor theta implica más avance porque el radio convierte ángulo en longitud."
+        en: "A larger theta implies more advance because radius converts angle into length."
+    coherence_rules:
+    - id: theta_coherence_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "Usa theta en radianes para que el producto con R sea una longitud."
+        en: "Use theta in radians so the product with R is a length."
+    model_validity_rules:
+    - id: theta_validity_bridge
+      when: 'true'
+      status: warning
+      text:
+        es: "Si hay deslizamiento acumulado, theta ya no reconstruye la distancia."
+        en: "If accumulated slipping occurs, theta no longer reconstructs distance."
+    graph_rules:
+    - id: theta_graph_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "El SVG debe mostrar giro acumulado y avance compatible."
+        en: "The SVG should show compatible accumulated spin and advance."
+    likely_errors:
+    - id: theta_error_bridge
+      when: 'true'
+      status: warning
+      text:
+        es: "Error conceptual probable: usar grados como si fueran radianes."
+        en: "Likely conceptual error: using degrees as if they were radians."
+    next_step_rules:
+    - id: theta_next_bridge
+      when: 'true'
+      status: info
+      text:
+        es: "Después de theta, contrasta distancia recorrida y radio efectivo."
+        en: "After theta, compare traveled distance and effective radius."
+cross_checks: []
+error_patterns: []
+graph_binding:
+  enabled: true
+  preferred_type: Svg
+mini_graph:
+  enabled: true
+  type: Svg
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+`;export{e as default};

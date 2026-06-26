@@ -1,0 +1,85 @@
+const e=`id: lineas-de-campo
+
+nombre:
+  es: Lineas de campo
+  en: Field Lines
+
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: electrostatica
+parent_id: campo-electrostatico
+ruta_relativa: fisica-clasica/electromagnetismo/electrostatica/campo-electrostatico/lineas-de-campo
+orden: 292210
+type: leaf
+
+niveles:
+  es:
+    - ESO
+    - BACHILLERATO
+  en:
+    - Secondary
+    - Upper Secondary
+
+icon: "💪"
+graficos:
+  - Coord
+
+physical_role:
+  es: concepto físico
+  en: physical concept
+
+descripcion: "Representación geométrica del campo eléctrico mediante líneas de fuerza: densidad, tangencia y reglas de trazado."
+description_en: "Geometric representation of the electric field through field lines: density, tangency and drawing rules."
+
+tags:
+  es:
+    - campo eléctrico
+    - líneas de campo
+    - densidad de líneas
+    - geometría vectorial
+    - visualización
+    - flujo eléctrico
+  en:
+    - electric field
+    - field lines
+    - line density
+    - vector geometry
+    - visualization
+    - electric flux
+
+prerequisitos:
+  - fisica-clasica/electromagnetismo/electrostatica/campo-electrostatico/campo-electrico-puntual
+
+dificultad: 2
+tiempo_estimado_min: 40
+
+representacion_dominante: Coord
+magnitud_dominante: E
+
+pregunta_fisica_central:
+  es: "¿Cómo representan las líneas de campo la dirección, el sentido y la intensidad del campo eléctrico en el espacio?"
+  en: "How do field lines represent the direction, sense, and intensity of the electric field in space?"
+
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

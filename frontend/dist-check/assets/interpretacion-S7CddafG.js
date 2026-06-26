@@ -1,0 +1,285 @@
+const e=`version: 2
+id: interpretacion-definicion-centro-de-masas
+leaf_id: definicion-centro-de-masas
+nombre:
+  es: Interpretación de la definición de centro de masas
+  en: Interpretation of the Definition of the Center of Mass
+scope:
+  area: mecánica
+  bloque: dinámica
+  subbloque: estática
+  parent_id: centro-de-masas
+  ruta_relativa: fisica-clasica/mecanica/dinamica/estatica/centro-de-masas/definicion-centro-de-masas
+dependencies:
+  formulas: [M, xcm, Mxcm, rcm_general]
+  magnitudes: [m1, m2, x1, x2, M, xcm, Mxcm, m_i, r_i, rcm]
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+result_blocks:
+  summary:
+    title:
+      es: Resumen físico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  xcm:
+    summary_rules:
+      - id: xcm_summary
+        when: "M > 0"
+        status: info
+        text:
+          es: El resultado localiza la posición colectiva del sistema como promedio ponderado por masa.
+          en: The result locates the collective position of the system as a mass-weighted average.
+    physical_reading_rules:
+      - id: xcm_bias
+        when: "(m2 > m1 && abs(xcm - x2) < abs(xcm - x1)) || (m1 > m2 && abs(xcm - x1) < abs(xcm - x2))"
+        status: info
+        text:
+          es: El centro de masas se aproxima al cuerpo más pesado, que es la lectura física correcta.
+          en: The center of mass moves toward the heavier body, which is the correct physical reading.
+      - id: xcm_midpoint_equal
+        when: "abs(m1 - m2) < 1e-9 && abs(xcm - ((x1 + x2) / 2)) < 1e-9"
+        status: info
+        text:
+          es: Si las masas son iguales, la definición se reduce al punto medio.
+          en: If the masses are equal, the definition reduces to the midpoint.
+    coherence_rules:
+      - id: xcm_interval
+        when: "xcm >= min(x1, x2) && xcm <= max(x1, x2)"
+        status: ok
+        text:
+          es: Con masas positivas, xcm cae dentro del intervalo físico delimitado por x1 y x2.
+          en: With positive masses, xcm falls inside the physical interval delimited by x1 and x2.
+      - id: xcm_outside
+        when: "xcm < min(x1, x2) || xcm > max(x1, x2)"
+        status: error
+        text:
+          es: Para masas positivas, un xcm fuera del intervalo indica un planteamiento incorrecto.
+          en: For positive masses, an xcm outside the interval indicates an incorrect setup.
+    model_validity_rules:
+      - id: xcm_same_reference
+        when: "M > 0"
+        status: ok
+        text:
+          es: La interpretación solo es válida si x1 y x2 se midieron con el mismo origen y el mismo eje.
+          en: The interpretation is valid only if x1 and x2 were measured with the same origin and axis.
+    graph_rules:
+      - id: xcm_graph
+        when: "M > 0"
+        status: info
+        text:
+          es: En la gráfica, el marcador del centro de masas debe quedar entre ambos cuerpos y desplazarse hacia la masa mayor.
+          en: In the graph, the center-of-mass marker should stay between both bodies and shift toward the larger mass.
+    likely_errors:
+      - id: midpoint_confusion
+        when: "abs(m1 - m2) > 1e-9 && abs(xcm - ((x1 + x2) / 2)) < 1e-9"
+        status: warning
+        text:
+          es: Parece que se ha usado el punto medio geométrico en lugar del promedio ponderado.
+          en: It looks like the geometric midpoint was used instead of the weighted average.
+    next_step_rules:
+      - id: xcm_next
+        when: "M > 0"
+        status: info
+        text:
+          es: El siguiente paso natural es extender la definición a más partículas o a varias dimensiones.
+          en: The natural next step is to extend the definition to more particles or several dimensions.
+
+  M:
+    summary_rules:
+      - id: M_summary
+        when: "M > 0"
+        status: info
+        text:
+          es: La masa total normaliza el promedio y hace físicamente interpretable la definición.
+          en: Total mass normalizes the average and makes the definition physically interpretable.
+    physical_reading_rules:
+      - id: M_sum
+        when: "abs(M - (m1 + m2)) < 1e-9"
+        status: info
+        text:
+          es: La masa total coincide con la suma de las contribuciones del sistema introductorio.
+          en: Total mass matches the sum of the introductory system contributions.
+    coherence_rules:
+      - id: M_positive
+        when: "M > 0"
+        status: ok
+        text:
+          es: La masa total es positiva, así que la división en la definición tiene sentido.
+          en: Total mass is positive, so the division in the definition makes sense.
+      - id: M_zero
+        when: "M == 0"
+        status: error
+        text:
+          es: Una masa total nula invalida la lectura física del centro de masas.
+          en: A zero total mass invalidates the physical reading of the center of mass.
+    model_validity_rules:
+      - id: M_boundary
+        when: "M > 0"
+        status: ok
+        text:
+          es: El valor de M solo es correcto si el sistema incluye exactamente los cuerpos que quieres describir.
+          en: The value of M is correct only if the system includes exactly the bodies you want to describe.
+    graph_rules:
+      - id: M_graph
+        when: "M > 0"
+        status: info
+        text:
+          es: El tamaño relativo de los cuerpos en la visualización debe ser coherente con M.
+          en: The relative size of the bodies in the visualization should be consistent with M.
+    likely_errors:
+      - id: M_difference
+        when: "M == abs(m1 - m2) && m1 > 0 && m2 > 0"
+        status: warning
+        text:
+          es: El denominador parece una diferencia de masas cuando debería ser una suma.
+          en: The denominator looks like a difference of masses when it should be a sum.
+    next_step_rules:
+      - id: M_next
+        when: "M > 0"
+        status: info
+        text:
+          es: Usa ahora M para revisar si xcm cae entre las posiciones extremas del sistema.
+          en: Use M now to check whether xcm lies between the system's extreme positions.
+
+  Mxcm:
+    summary_rules:
+      - id: Mxcm_summary
+        when: "M > 0"
+        status: info
+        text:
+          es: La forma multiplicada resume el peso espacial total del sistema respecto al origen.
+          en: The multiplied form summarizes the system's total spatial weighting with respect to the origin.
+    physical_reading_rules:
+      - id: Mxcm_bridge
+        when: "abs(Mxcm - (M * xcm)) < 1e-9"
+        status: info
+        text:
+          es: La relación conecta la definición operativa con una lectura estructural del sistema.
+          en: The relation connects the operational definition with a structural reading of the system.
+    coherence_rules:
+      - id: Mxcm_consistency
+        when: "abs(Mxcm - (m1 * x1 + m2 * x2)) < 1e-9"
+        status: ok
+        text:
+          es: El momento espacial total coincide con la suma ponderada de aportes individuales.
+          en: The total spatial moment matches the weighted sum of individual contributions.
+    model_validity_rules:
+      - id: Mxcm_validity
+        when: "M > 0"
+        status: ok
+        text:
+          es: Esta lectura es válida mientras el sistema y el origen estén bien definidos.
+          en: This reading is valid as long as the system and origin are well defined.
+    graph_rules:
+      - id: Mxcm_graph
+        when: "M > 0"
+        status: info
+        text:
+          es: En la gráfica puede leerse como el balance ponderado de las posiciones respecto al origen.
+          en: In the graph it can be read as the weighted balance of positions with respect to the origin.
+    likely_errors:
+      - id: Mxcm_misread
+        when: "abs(Mxcm - xcm) < 1e-9 && abs(M - 1) > 1e-9"
+        status: warning
+        text:
+          es: Parece que se ha confundido el momento espacial total con la coordenada del centro de masas.
+          en: It looks like the total spatial moment was confused with the center-of-mass coordinate.
+    next_step_rules:
+      - id: Mxcm_next
+        when: "M > 0"
+        status: info
+        text:
+          es: Úsalo como puente conceptual antes de generalizar a la expresión vectorial.
+          en: Use it as a conceptual bridge before generalizing to the vector expression.
+
+  rcm:
+    summary_rules:
+      - id: rcm_summary
+        when: "true"
+        status: info
+        text:
+          es: rcm representa la extensión vectorial del centro de masas cuando el problema no es solo unidimensional.
+          en: rcm represents the vector extension of the center of mass when the problem is not only one-dimensional.
+    physical_reading_rules:
+      - id: rcm_extension
+        when: "true"
+        status: info
+        text:
+          es: La generalización conserva la idea de promedio ponderado por masa en cada componente.
+          en: The generalization preserves the idea of a mass-weighted average in each component.
+    coherence_rules:
+      - id: rcm_general_consistency
+        when: "true"
+        status: ok
+        text:
+          es: La formulación vectorial es coherente con la definición escalar cuando solo hay un eje relevante.
+          en: The vector formulation is consistent with the scalar definition when only one axis matters.
+    model_validity_rules:
+      - id: rcm_reference
+        when: "true"
+        status: ok
+        text:
+          es: Todas las posiciones vectoriales deben medirse en el mismo marco de referencia.
+          en: All vector positions must be measured in the same reference frame.
+    graph_rules:
+      - id: rcm_graph
+        when: "true"
+        status: info
+        text:
+          es: La lectura gráfica pasa de un marcador sobre un eje a un punto en un espacio vectorial.
+          en: The graphical reading moves from a marker on one axis to a point in a vector space.
+    likely_errors:
+      - id: rcm_scalar_confusion
+        when: "true"
+        status: warning
+        text:
+          es: No reduzcas rcm a una sola coordenada si la geometría del problema ya es bidimensional o tridimensional.
+          en: Do not reduce rcm to a single coordinate if the geometry of the problem is already two- or three-dimensional.
+    next_step_rules:
+      - id: rcm_next
+        when: "true"
+        status: info
+        text:
+          es: El siguiente paso natural es estudiar sistemas discretos con más partículas o cuerpos extendidos.
+          en: The natural next step is to study discrete systems with more particles or extended bodies.
+
+cross_checks:
+  - id: total_mass_match
+    affects: [M, xcm]
+    when: "abs(M - (m1 + m2)) > 1e-9"
+    severity: error
+    text:
+      es: La masa total introducida no coincide con la suma de m1 y m2.
+      en: The entered total mass does not match the sum of m1 and m2.
+  - id: non_negative_masses
+    affects: [M, xcm]
+    when: "m1 < 0 || m2 < 0"
+    severity: error
+    text:
+      es: Una masa negativa indica un dato o un modelo físico incorrecto en este contexto.
+      en: A negative mass indicates an incorrect datum or physical model in this context.
+`;export{e as default};

@@ -1,0 +1,95 @@
+const n=`version: 5
+id: routhiano-y-coordenadas-ciclicas
+nombre:
+  es: Routhiano y coordenadas ciclicas
+  en: Routhian and Cyclic Coordinates
+titulo:
+  es: Routhiano y coordenadas ciclicas
+  en: Routhian and Cyclic Coordinates
+type: leaf
+area: fisica-clasica
+bloque: mecanica
+subbloque: mecanica-analitica
+parent_id: lagrangiano
+ruta_relativa: fisica-clasica/mecanica/mecanica-analitica/lagrangiano/routhiano-y-coordenadas-ciclicas
+orden: 219335
+dificultad: 5
+tiempo_estimado_min: 75
+niveles:
+  es:
+  - UNIVERSIDAD
+  en:
+  - University
+icon: 🔁
+descripcion: Routhiano y coordenadas ciclicas en mecanica avanzada.
+description_en: Routhian and Cyclic Coordinates in advanced mechanics.
+descripcion_corta: el Routhiano mezcla reduccion hamiltoniana parcial y ecuaciones lagrangianas para explotar coordenadas ciclicas
+magnitud_dominante: Routh
+representacion_dominante: none
+physical_role:
+  es: metodo de resolucion
+  en: resolution method
+pregunta_fisica_central:
+  es: ¿Como usa el Routhiano las coordenadas ciclicas para reducir un problema lagrangiano?
+  en: How does the Routhian use cyclic coordinates to reduce a Lagrangian problem?
+prerequisitos:
+- fisica-clasica/mecanica/mecanica-analitica/lagrangiano/simetrias-y-conservaciones
+tags:
+  es:
+  - routhiano-y-coordenadas-ciclicas
+  - mecanica-avanzada
+  - modelo
+  en:
+  - routhiano-y-coordenadas-ciclicas
+  - advanced-mechanics
+  - model
+objetivos:
+- es: Identificar el objeto fisico central del leaf.
+  en: Identify the central physical object of the leaf.
+- es: Aplicar las formulas dentro de su dominio de validez.
+  en: Apply the formulas within their validity domain.
+- es: Interpretar el resultado como criterio de modelo avanzado.
+  en: Interpret the result as an advanced model criterion.
+suposiciones:
+- es: Sistema clasico descrito por variables suaves y unidades coherentes.
+  en: Classical system described by smooth variables and coherent units.
+- es: Dominio fisico compatible con las hipotesis especificas del leaf.
+  en: Physical domain compatible with the specific assumptions of the leaf.
+competencias_lomloe:
+- STEM
+- modelizacion
+- razonamiento_cientifico
+- resolucion_problemas
+graficos: []
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    tab_label:
+      es: Interpretacion avanzada
+      en: Advanced interpretation
+    inline_calculator: true
+    inline_graph: false
+    dedicated_tab: true
+    show_summary: true
+    show_physical_reading: true
+    show_coherence: true
+    show_model_validity: true
+    show_graph_reading: true
+    show_likely_errors: true
+    show_next_step: true
+  mini_graph:
+    enabled: false
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    show_warnings: true
+    show_likely_errors: true
+    max_inline_messages: 3
+    show_status_icons: true
+    allow_collapsible_sections: true
+  dependencies:
+    requires_magnitudes: true
+    requires_formulas: true
+    supports_graph_binding: false
+`;export{n as default};

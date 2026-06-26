@@ -1,0 +1,31 @@
+# Applications
+
+## 1. Mean energy in molecular simulations
+Dominant variable: [[estimador_montecarlo]]
+Validity limit: [[numero_muestras]] > 10^4 and [[error_estandar]]/|[[estimador_montecarlo]]| < 0.05
+
+In molecular simulation, Monte Carlo estimates the mean energy of a system without visiting every possible configuration. Each accepted configuration contributes one [[valor_muestra]], and the average of many values gives the [[estimador_montecarlo]]. What is measured is not a time trajectory, but a statistical mean compatible with [[temperatura]] and the sampling rule. [[varianza_muestral]] shows how strongly individual configurations fluctuate, while [[error_estandar]] indicates whether the mean is already useful. In Metropolis sampling, [[probabilidad_aceptacion]] must remain operational to avoid a frozen chain. Before collecting useful data, the chain must thermalize: early steps are discarded because the system has not yet found the correct distribution. The required number of thermalization steps depends on system size, [[temperatura]], and how quickly [[probabilidad_aceptacion]] stabilizes. Only after thermalization do the sampled [[valor_muestra]] values represent physically valid configurations, and only then does the [[estimador_montecarlo]] converge toward the true thermodynamic mean.
+
+## 2. High-dimensional integrals
+Dominant variable: [[numero_muestras]]
+Validity limit: [[error_estandar]] must decrease when [[numero_muestras]] increases
+
+Many thermodynamic quantities can be written as averages over enormous state spaces. Monte Carlo turns that task into sample-based estimation. Each [[valor_muestra]] represents an evaluation of a physical integrand at a random region of state space. The method predicts a mean and constrains its uncertainty through [[error_estandar]]. It is especially useful when a regular grid is impossible. The limit appears when [[varianza_muestral]] is too large or when samples miss the most important regions. Then [[peso_muestra]] or importance sampling is needed. The advantage over grid-based integration grows with the number of dimensions: in d dimensions, a grid with n points per axis requires n^d evaluations, while Monte Carlo uses [[numero_muestras]] independent of d. The [[error_estandar]] scales as the inverse square root of [[numero_muestras]] regardless of how many integration variables the problem has, making the method uniquely effective when the state space dimension exceeds four or five.
+
+## 3. Metropolis sampling of thermal states
+Dominant variable: [[probabilidad_aceptacion]]
+Validity limit: 0.2 < [[probabilidad_aceptacion]] < 0.8 as an orientative criterion
+
+In thermal models, a proposed move may increase or decrease [[energia_estado]]. [[probabilidad_aceptacion]] decides whether that move enters the sampled sequence, with a scale controlled by [[temperatura]] and [[constante_boltzmann]]. This application predicts physical averages while maintaining a distribution compatible with thermal equilibrium. If acceptance is almost zero, exploration is poor; if it is almost total because moves are tiny, exploration may also be poor. The [[estimador_montecarlo]] is reliable only when the chain visits relevant states and [[error_estandar]] is read together with mixing behavior. Detecting poor mixing requires going beyond the [[probabilidad_aceptacion]] rate alone. Autocorrelation between consecutive [[valor_muestra]] values can reveal that the effective number of independent samples is far smaller than [[numero_muestras]]. When autocorrelation is long, the naively computed [[error_estandar]] underestimates the true uncertainty, and a correction based on the integrated autocorrelation time becomes necessary before trusting the [[estimador_montecarlo]].
+
+## 4. Observables with weights
+Dominant variable: [[peso_muestra]]
+Validity limit: no small subset of samples should concentrate almost all weight
+
+When samples are not equivalent, each carries a [[peso_muestra]]. This occurs in importance sampling, reweighting, or corrections from auxiliary distributions. The prediction is a corrected physical average, not a simple arithmetic mean. The weighted [[estimador_montecarlo]] can use efficiently generated samples, but it requires careful weight normalization. If a few weights dominate, the effective [[varianza_muestral]] increases and [[error_estandar]] may be underestimated. A standard diagnostic is the effective sample size derived from the weight distribution itself: it equals the square of the sum of weights divided by the sum of squared weights. When this ratio is close to [[numero_muestras]], the weights are nearly uniform and the weighted [[estimador_montecarlo]] behaves like a simple mean; when it drops sharply, the real information content is much lower than the raw sample count suggests, and the [[error_estandar]] reported without this correction understates the true uncertainty.
+
+## 5. Computational precision control
+Dominant variable: [[error_estandar]]
+Validity limit: the cost of increasing [[numero_muestras]] must match the required precision
+
+Monte Carlo is often used to decide when a simulation can stop. The observable may keep fluctuating, but [[error_estandar]] tells whether the average is precise enough. This application does not only measure a physical quantity; it constrains computational cost. If halving the error requires far more [[numero_muestras]], one must ask whether that precision is physically necessary. [[varianza_muestral]] guides the strategy: if it is high, improving the sampling may be better than simply collecting more data. A practical stopping criterion combines [[error_estandar]] with the physically relevant scale of the observable. If the uncertainty in [[estimador_montecarlo]] is already smaller than the experimental resolution or the inherent precision of the physical model, collecting more [[valor_muestra]] provides no useful additional information. The [[varianza_muestral]] then confirms whether the remaining uncertainty comes from genuine physical diversity in the system or from a sampling strategy that could be improved before investing more computational effort.

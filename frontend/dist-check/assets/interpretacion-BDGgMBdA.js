@@ -1,0 +1,1096 @@
+const e=`version: "v5"
+id: interpretacion_motores
+leaf_id: motores
+
+nombre:
+  es: Interpretación de los motores eléctricos
+  en: Interpretation of electric motors
+
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: induccion-electromagnetica
+  parent_id: aplicaciones
+  ruta_relativa: fisica-clasica/electromagnetismo/induccion-electromagnetica/aplicaciones/motores
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_rules: 3
+    show_warnings: true
+
+dependencies:
+  formulas:
+    - fuerza_laplace_motor
+    - par_motor_electrico
+    - fem_contragiro_motor
+    - potencia_mecanica_motor
+    - eficiencia_motor
+  magnitudes:
+    - F_L
+    - tau_m
+    - epsilon_c
+    - P_mec
+    - P_elec
+    - eta
+    - omega
+    - I
+    - B
+    - N_c
+    - L_c
+    - r_a
+    - sin_theta
+
+global_context:
+  physical_domain:
+    es: "Electromagnetismo clásico — conversión de energía eléctrica en par mecánico mediante la fuerza de Laplace sobre conductores en un campo magnético estático."
+    en: "Classical electromagnetism — conversion of electrical energy into mechanical torque via the Laplace force on conductors in a static magnetic field."
+  axis_convention:
+    es: "El par positivo se toma en la dirección de giro de diseño del motor. La velocidad angular positiva corresponde al mismo sentido. El rendimiento está acotado en el intervalo (0, 1)."
+    en: "Positive torque is taken in the motor's design rotation direction. Positive angular speed corresponds to the same sense. Efficiency is bounded in the interval (0, 1)."
+  standard_assumptions:
+    - "Campo magnético uniforme en el entrehierro"
+    - "Conductor activo recto de longitud L_c constante"
+    - "Modelo de CC ideal: conmutador mantiene sin_theta próximo a 1"
+    - "Régimen estacionario: omega y I constantes"
+    - "Pérdidas globales resumidas en un solo rendimiento constante eta"
+  standard_warnings:
+    - "El modelo ideal no incluye saturación del núcleo ni variación del campo con la carga"
+    - "La corriente de arranque puede ser diez veces la corriente nominal cuando omega es cero"
+    - "El rendimiento real varía con la temperatura y el nivel de carga"
+    - "Las unidades de omega deben ser rad/s, no rpm"
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  F_L:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "[[F_L]] es la fuerza primaria sobre el conductor activo y el origen de toda la acción mecánica del motor."
+      en: "[[F_L]] is the primary force on the active conductor and the origin of all mechanical action in the motor."
+    summary_rules:
+      - id: fl_summary_positive
+        when: "F_L > 0"
+        status: ok
+        text:
+          es: "[[F_L]] indica una fuerza motriz activa. El conductor recibe un empuje en la dirección de rotación de diseño. Su valor depende linealmente de [[I]], [[B]], [[L_c]] y [[sin_theta]]."
+          en: "[[F_L]] indicates an active driving force. The conductor receives a push in the design rotation direction. Its value depends linearly on [[I]], [[B]], [[L_c]] and [[sin_theta]]."
+      - id: fl_summary_zero
+        when: "F_L == 0"
+        status: warning
+        text:
+          es: "[[F_L]] es nula. El motor no produce fuerza activa: alguno de los factores (corriente, campo, longitud o ángulo) es cero."
+          en: "[[F_L]] is zero. The motor produces no active force: one of the factors (current, field, length or angle) is zero."
+      - id: fl_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[F_L]] resume la interacción magnética entre la corriente del rotor y el campo del estátor. Aumenta linealmente con [[I]] y con [[B]]."
+          en: "[[F_L]] summarises the magnetic interaction between rotor current and stator field. It increases linearly with [[I]] and [[B]]."
+    physical_reading_rules:
+      - id: fl_reading_sin_theta
+        when: "true"
+        status: ok
+        text:
+          es: "[[sin_theta]] es el factor geométrico que modula la eficacia de la fuerza: es máximo cuando el conductor es perpendicular al campo y nulo cuando es paralelo. En el motor de CC el conmutador garantiza que este factor permanezca próximo a su valor máximo durante el giro."
+          en: "[[sin_theta]] is the geometric factor that modulates the force effectiveness: it is maximum when the conductor is perpendicular to the field and zero when parallel. In a DC motor the commutator ensures this factor remains close to its maximum value during rotation."
+    coherence_rules:
+      - id: fl_coherence_zero_factor
+        when: "I == 0 or B == 0 or L_c == 0 or sin_theta == 0"
+        status: error
+        text:
+          es: "Uno de los factores (I, B, L_c, sin_theta) es nulo: [[F_L]] debe ser cero. Si el resultado obtenido no lo es, hay un error de sustitución."
+          en: "One of the factors (I, B, L_c, sin_theta) is zero: [[F_L]] must be zero. If the obtained result is not, there is a substitution error."
+      - id: fl_coherence_range
+        when: "F_L > 1000"
+        status: warning
+        text:
+          es: "[[F_L]] supera 1000 N, que es elevado para un motor de laboratorio. Revisar que [[I]] y [[L_c]] estén en las unidades correctas (A y m)."
+          en: "[[F_L]] exceeds 1000 N, which is high for a laboratory motor. Check that [[I]] and [[L_c]] are in the correct units (A and m)."
+      - id: fl_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[F_L]] sea el producto de [[N_c]], [[I]], [[L_c]], [[B]] y [[sin_theta]]. Si los factores están en unidades SI el resultado es directamente en N."
+          en: "Verify that [[F_L]] is the product of [[N_c]], [[I]], [[L_c]], [[B]] and [[sin_theta]]. If factors are in SI units the result is directly in N."
+    model_validity_rules:
+      - id: fl_validity_saturation
+        when: "B > 1.8"
+        status: warning
+        text:
+          es: "[[B]] superior a 1.8 T puede indicar saturación del núcleo magnético. En ese caso el campo real en el entrehierro ya no es proporcional a la corriente de excitación y el modelo lineal pierde validez."
+          en: "[[B]] above 1.8 T may indicate magnetic core saturation. In that case the real air-gap field is no longer proportional to the excitation current and the linear model loses validity."
+      - id: fl_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo es válido para campo uniforme, conductor recto y corriente estacionaria. Si el motor opera en régimen transitorio o la distribución de campo no es uniforme, [[F_L]] debe entenderse como valor instantáneo medio."
+          en: "The model is valid for uniform field, straight conductor and steady current. If the motor operates in transient regime or the field distribution is non-uniform, [[F_L]] should be understood as an average instantaneous value."
+    graph_rules:
+      - id: fl_graph_vs_angle
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica de fuerza frente al ángulo, [[F_L]] describe una curva sinusoidal con amplitud proporcional a [[N_c]], [[I]], [[L_c]] y [[B]]. El punto de operación real del motor de CC corresponde a la posición donde [[sin_theta]] es máximo."
+          en: "In the force vs. angle graph, [[F_L]] traces a sinusoidal curve with amplitude proportional to [[N_c]], [[I]], [[L_c]] and [[B]]. The actual DC motor operating point corresponds to the position where [[sin_theta]] is maximum."
+    likely_errors:
+      - id: fl_error_total_length
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: usar la longitud total del bobinado en lugar de la longitud activa [[L_c]]. Los cabezales de bobina fuera del campo no producen fuerza útil."
+          en: "Common error: using the total winding length instead of the active length [[L_c]]. The end-winding sections outside the field do not produce useful force."
+    next_step_rules:
+      - id: fl_next_torque
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[F_L]] calculado, el siguiente paso es obtener el par multiplicando por el radio de armadura [[r_a]]. El par es la magnitud que se compara con la resistencia de la carga."
+          en: "With [[F_L]] calculated, the next step is to obtain torque by multiplying by the armature radius [[r_a]]. Torque is the quantity compared with the load resistance."
+
+  I:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "[[I]] es el nexo entre el circuito eléctrico y la acción mecánica: controlar la corriente equivale a controlar el par."
+      en: "[[I]] is the link between the electrical circuit and mechanical action: controlling current is equivalent to controlling torque."
+    summary_rules:
+      - id: i_summary_positive
+        when: "I > 0"
+        status: ok
+        text:
+          es: "[[I]] positiva indica corriente que genera par motor en la dirección de diseño. Su valor depende de la tensión de alimentación y de la fem contraelectromotriz [[epsilon_c]]."
+          en: "Positive [[I]] indicates current generating driving torque in the design direction. Its value depends on the supply voltage and back-EMF [[epsilon_c]]."
+      - id: i_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[I]] resume la demanda electromecánica del motor en el instante de operación. Aumenta cuando aumenta la carga y disminuye cuando la velocidad sube y [[epsilon_c]] crece."
+          en: "[[I]] summarises the electromechanical demand of the motor at the operating instant. It increases when the load increases and decreases when speed rises and [[epsilon_c]] grows."
+    physical_reading_rules:
+      - id: i_reading_startup
+        when: "omega == 0"
+        status: warning
+        text:
+          es: "Con [[omega]] nulo la fem contraelectromotriz es cero y [[I]] puede ser diez o más veces la corriente nominal. El arranque directo es crítico para los devanados."
+          en: "With zero [[omega]] back-EMF is zero and [[I]] can be ten or more times the nominal current. Direct starting is critical for the windings."
+      - id: i_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[I]] depende de la diferencia entre la tensión de alimentación y [[epsilon_c]]. A mayor velocidad mayor [[epsilon_c]] y menor [[I]]: el motor se autorregula reduciendo el consumo cuando la carga disminuye."
+          en: "[[I]] depends on the difference between supply voltage and [[epsilon_c]]. Higher speed means higher [[epsilon_c]] and lower [[I]]: the motor self-regulates by reducing consumption as load decreases."
+    coherence_rules:
+      - id: i_coherence_zero
+        when: "I == 0"
+        status: warning
+        text:
+          es: "[[I]] nula implica que no hay fuerza ni par. El motor no puede mover la carga con corriente cero."
+          en: "Zero [[I]] implies no force or torque. The motor cannot move the load with zero current."
+      - id: i_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[I]] sea consistente con la potencia eléctrica: [[P_elec]] dividida entre la tensión de alimentación debe dar [[I]] aproximadamente."
+          en: "Verify that [[I]] is consistent with electrical power: [[P_elec]] divided by supply voltage should give approximately [[I]]."
+    model_validity_rules:
+      - id: i_validity_transient
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo estacionario asume [[I]] constante. Durante el arranque o cambios bruscos de carga, [[I]] varía con el tiempo y se necesita el modelo dinámico del circuito de armadura."
+          en: "The steady-state model assumes constant [[I]]. During start-up or sudden load changes, [[I]] varies with time and the dynamic armature circuit model is needed."
+    graph_rules:
+      - id: i_graph_vs_speed
+        when: "true"
+        status: ok
+        text:
+          es: "En la curva corriente-velocidad, [[I]] decrece al aumentar [[omega]] porque [[epsilon_c]] aumenta. En el punto de velocidad en vacío [[I]] es prácticamente cero."
+          en: "In the current-speed curve, [[I]] decreases as [[omega]] increases because [[epsilon_c]] increases. At the no-load speed point [[I]] is practically zero."
+    likely_errors:
+      - id: i_error_no_backemf
+        when: "true"
+        status: warning
+        text:
+          es: "Error clásico: calcular [[I]] dividiendo directamente la tensión de alimentación entre la resistencia interna, sin restar [[epsilon_c]]. Eso solo es correcto en el arranque."
+          en: "Classic error: calculating [[I]] by dividing the supply voltage directly by internal resistance, without subtracting [[epsilon_c]]. That is only correct at start-up."
+    next_step_rules:
+      - id: i_next_force
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[I]] conocida, calcular [[F_L]] y [[tau_m]]. La corriente es el parámetro de control: aumentarla sube el par pero también las pérdidas por efecto Joule."
+          en: "With [[I]] known, calculate [[F_L]] and [[tau_m]]. Current is the control parameter: increasing it raises torque but also Joule losses."
+
+  B:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "[[B]] es el parámetro de diseño del estátor que fija la escala de la fuerza, el par y la fem contraelectromotriz."
+      en: "[[B]] is the stator design parameter that sets the scale of force, torque and back-EMF."
+    summary_rules:
+      - id: b_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[B]] resume la intensidad del campo en el entrehierro. Un campo más intenso aumenta linealmente [[F_L]], [[tau_m]] y [[epsilon_c]], lo que permite obtener el mismo par con menos corriente."
+          en: "[[B]] summarises the field intensity in the air gap. A stronger field linearly increases [[F_L]], [[tau_m]] and [[epsilon_c]], allowing the same torque with less current."
+    physical_reading_rules:
+      - id: b_reading_design
+        when: "true"
+        status: ok
+        text:
+          es: "[[B]] está determinado por el diseño del estátor y no varía durante la operación normal en los motores de imán permanente. En motores de excitación bobinada, [[B]] puede ajustarse mediante la corriente de campo."
+          en: "[[B]] is determined by the stator design and does not vary during normal operation in permanent-magnet motors. In wound-field motors, [[B]] can be adjusted via field current."
+    coherence_rules:
+      - id: b_coherence_saturation
+        when: "B > 1.8"
+        status: warning
+        text:
+          es: "[[B]] superior a 1.8 T sugiere posible saturación del núcleo. En saturación el modelo lineal no es válido."
+          en: "[[B]] above 1.8 T suggests possible core saturation. In saturation the linear model is not valid."
+      - id: b_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[B]] típico en el entrehierro de un motor de CC está entre 0.5 T y 1.2 T. Valores fuera de ese rango deben verificarse con la hoja de especificaciones."
+          en: "Typical [[B]] in the air gap of a DC motor is between 0.5 T and 1.2 T. Values outside that range should be verified with the datasheet."
+    model_validity_rules:
+      - id: b_validity_uniform
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume [[B]] uniforme en el entrehierro. En motores reales existe variación azimutal del campo, especialmente cerca de los bordes de los polos. Para cálculos de precisión se usa el valor efectivo medio."
+          en: "The model assumes uniform [[B]] in the air gap. In real motors there is azimuthal field variation, especially near pole edges. For precision calculations the mean effective value is used."
+    graph_rules:
+      - id: b_graph_parameter
+        when: "true"
+        status: ok
+        text:
+          es: "[[B]] aparece como parámetro que escala la amplitud de todas las curvas del motor (fuerza, par, fem contraelectromotriz). Cambiar [[B]] desplaza la curva par-velocidad proporcionalmente."
+          en: "[[B]] appears as a parameter that scales the amplitude of all motor curves (force, torque, back-EMF). Changing [[B]] shifts the torque-speed curve proportionally."
+    likely_errors:
+      - id: b_error_iron_vs_gap
+        when: "true"
+        status: warning
+        text:
+          es: "Error habitual: usar el campo en el hierro del estátor en lugar del campo en el entrehierro. El campo en el entrehierro es el relevante para la fuerza de Laplace."
+          en: "Common error: using the stator iron field instead of the air-gap field. The air-gap field is the relevant one for the Laplace force."
+    next_step_rules:
+      - id: b_next_torque
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[B]] y [[I]] conocidos, el par [[tau_m]] puede calcularse directamente. Para aumentar el par sin cambiar la corriente, la única opción es aumentar [[B]] (o [[N_c]], [[L_c]], [[r_a]])."
+          en: "With [[B]] and [[I]] known, torque [[tau_m]] can be calculated directly. To increase torque without changing current, the only option is to increase [[B]] (or [[N_c]], [[L_c]], [[r_a]])."
+
+  N_c:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "[[N_c]] es el multiplicador geométrico que amplifica la contribución de cada conductor al par total."
+      en: "[[N_c]] is the geometric multiplier that amplifies each conductor's contribution to total torque."
+    summary_rules:
+      - id: nc_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[N_c]] resume cuántos conductores activos trabajan en paralelo. Duplicar [[N_c]] duplica [[F_L]] y [[tau_m]] sin cambiar la corriente ni el campo. Depende del diseño del bobinado."
+          en: "[[N_c]] summarises how many active conductors work in parallel. Doubling [[N_c]] doubles [[F_L]] and [[tau_m]] without changing current or field. It depends on the winding design."
+    physical_reading_rules:
+      - id: nc_reading_design
+        when: "true"
+        status: ok
+        text:
+          es: "[[N_c]] está fijado por el diseño del rotor. No varía durante la operación. Un mayor [[N_c]] permite obtener el mismo par con menos corriente, reduciendo las pérdidas Joule."
+          en: "[[N_c]] is set by the rotor design. It does not vary during operation. A higher [[N_c]] allows the same torque with less current, reducing Joule losses."
+    coherence_rules:
+      - id: nc_coherence_integer
+        when: "true"
+        status: ok
+        text:
+          es: "[[N_c]] debe ser un entero positivo. Si el valor calculado no es entero, verificar que no se ha confundido con el número de espiras (que es [[N_c]] dividido por dos)."
+          en: "[[N_c]] must be a positive integer. If the computed value is not an integer, verify it has not been confused with the number of turns (which is [[N_c]] divided by two)."
+    model_validity_rules:
+      - id: nc_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo lineal es válido independientemente del valor de [[N_c]]. Su efecto es puramente multiplicativo sobre [[F_L]] y [[tau_m]]."
+          en: "The linear model is valid regardless of the value of [[N_c]]. Its effect is purely multiplicative on [[F_L]] and [[tau_m]]."
+    graph_rules:
+      - id: nc_graph_scale
+        when: "true"
+        status: ok
+        text:
+          es: "Cambiar [[N_c]] escala uniformemente la amplitud de las curvas de fuerza y par frente al ángulo, sin modificar su forma sinusoidal."
+          en: "Changing [[N_c]] uniformly scales the amplitude of the force and torque curves vs. angle, without modifying their sinusoidal shape."
+    likely_errors:
+      - id: nc_error_turns
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: confundir [[N_c]] (número de conductores) con el número de espiras. Una espira tiene dos conductores activos, por lo que el número de espiras es la mitad de [[N_c]]."
+          en: "Typical error: confusing [[N_c]] (number of conductors) with the number of turns. One turn has two active conductors, so the number of turns is half of [[N_c]]."
+    next_step_rules:
+      - id: nc_next_fl
+        when: "true"
+        status: ok
+        text:
+          es: "[[N_c]] entra directamente en [[F_L]] y [[tau_m]]. Con los demás parámetros fijos, es el factor de diseño más sencillo para ajustar el par nominal del motor."
+          en: "[[N_c]] enters directly into [[F_L]] and [[tau_m]]. With other parameters fixed, it is the simplest design factor for adjusting the motor's nominal torque."
+
+  L_c:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "[[L_c]] define cuánta longitud de conductor está activamente generando fuerza dentro del campo del entrehierro."
+      en: "[[L_c]] defines how much conductor length is actively generating force inside the air-gap field."
+    summary_rules:
+      - id: lc_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[L_c]] resume la longitud útil del conductor en el campo. Aumentar [[L_c]] aumenta [[F_L]] linealmente. En la práctica está limitada por la longitud axial del estátor."
+          en: "[[L_c]] summarises the useful conductor length in the field. Increasing [[L_c]] increases [[F_L]] linearly. In practice it is limited by the stator axial length."
+    physical_reading_rules:
+      - id: lc_reading_active
+        when: "true"
+        status: ok
+        text:
+          es: "Solo la parte del conductor dentro del campo activa la fuerza de Laplace. Las cabezas de bobina, aunque conducen la misma corriente, están fuera del campo y no contribuyen al par."
+          en: "Only the conductor portion inside the field activates the Laplace force. End windings, although carrying the same current, are outside the field and do not contribute to torque."
+    coherence_rules:
+      - id: lc_coherence_positive
+        when: "L_c <= 0"
+        status: error
+        text:
+          es: "[[L_c]] debe ser positiva. Un valor nulo o negativo indica un error de datos."
+          en: "[[L_c]] must be positive. A zero or negative value indicates a data error."
+      - id: lc_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[L_c]] típica en motores de laboratorio está entre 0.02 m y 0.3 m. Valores fuera de ese rango merecen verificación."
+          en: "Typical [[L_c]] in laboratory motors is between 0.02 m and 0.3 m. Values outside that range deserve verification."
+    model_validity_rules:
+      - id: lc_validity_uniform
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume campo uniforme a lo largo de [[L_c]]. Si el campo varía axialmente, usar el valor medio efectivo de B para mantener la validez de la expresión."
+          en: "The model assumes uniform field along [[L_c]]. If the field varies axially, use the effective mean value of B to maintain the validity of the expression."
+    graph_rules:
+      - id: lc_graph_scale
+        when: "true"
+        status: ok
+        text:
+          es: "[[L_c]] escala la amplitud de la curva de fuerza igual que [[N_c]]. En la gráfica de par frente a ángulo, [[L_c]] y [[N_c]] son factores equivalentes."
+          en: "[[L_c]] scales the force curve amplitude just like [[N_c]]. In the torque vs. angle graph, [[L_c]] and [[N_c]] are equivalent factors."
+    likely_errors:
+      - id: lc_error_total
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: usar la longitud total del conductor (que incluye cabezales de bobina) en lugar de la longitud activa [[L_c]] en el campo. Eso sobreestima la fuerza."
+          en: "Frequent error: using the total conductor length (including end windings) instead of the active length [[L_c]] in the field. That overestimates the force."
+    next_step_rules:
+      - id: lc_next_fl
+        when: "true"
+        status: ok
+        text:
+          es: "[[L_c]] entra junto con [[N_c]] y [[B]] en el cálculo de [[F_L]]. Para aumentar la potencia sin cambiar la geometría, el enfoque más efectivo es aumentar [[I]] o [[B]]."
+          en: "[[L_c]] enters together with [[N_c]] and [[B]] in the calculation of [[F_L]]. To increase power without changing geometry, the most effective approach is to increase [[I]] or [[B]]."
+
+  r_a:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "[[r_a]] es el brazo de palanca que convierte la fuerza lineal de Laplace en el par rotacional del eje."
+      en: "[[r_a]] is the lever arm that converts the linear Laplace force into the shaft's rotational torque."
+    summary_rules:
+      - id: ra_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[r_a]] resume la distancia del conductor activo al eje de giro. Un radio mayor aumenta el par y también la fem contraelectromotriz, lo que reduce la corriente en régimen. Depende del diseño del rotor."
+          en: "[[r_a]] summarises the distance from the active conductor to the rotation axis. A larger radius increases torque and also back-EMF, which reduces steady-state current. It depends on the rotor design."
+    physical_reading_rules:
+      - id: ra_reading_lever
+        when: "true"
+        status: ok
+        text:
+          es: "[[r_a]] actúa como brazo de palanca: multiplica [[F_L]] para dar [[tau_m]]. Al mismo tiempo entra en [[epsilon_c]] multiplicando [[omega]], de modo que un motor más grande (mayor [[r_a]]) genera mayor fem y se autorregula a menor corriente."
+          en: "[[r_a]] acts as a lever arm: it multiplies [[F_L]] to give [[tau_m]]. It also enters [[epsilon_c]] by multiplying [[omega]], so a larger motor (higher [[r_a]]) generates greater back-EMF and self-regulates to lower current."
+    coherence_rules:
+      - id: ra_coherence_positive
+        when: "r_a <= 0"
+        status: error
+        text:
+          es: "[[r_a]] debe ser positivo. Un valor nulo o negativo es físicamente imposible."
+          en: "[[r_a]] must be positive. A zero or negative value is physically impossible."
+      - id: ra_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[r_a]] típico en motores de laboratorio está entre 0.02 m y 0.15 m. Verificar que no se ha confundido con el radio exterior o con el diámetro."
+          en: "Typical [[r_a]] in laboratory motors is between 0.02 m and 0.15 m. Verify it has not been confused with the outer radius or the diameter."
+    model_validity_rules:
+      - id: ra_validity_cylindrical
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume geometría cilíndrica con [[r_a]] constante. En rotores no cilíndricos se usa el radio efectivo medio calculado desde la distribución de conductores."
+          en: "The model assumes cylindrical geometry with constant [[r_a]]. In non-cylindrical rotors the mean effective radius computed from the conductor distribution is used."
+    graph_rules:
+      - id: ra_graph_torque
+        when: "true"
+        status: ok
+        text:
+          es: "[[r_a]] escala uniformemente la curva de par frente al ángulo. En la curva par-velocidad, [[r_a]] no desplaza la pendiente sino que escala la amplitud máxima del par."
+          en: "[[r_a]] uniformly scales the torque vs. angle curve. In the torque-speed curve, [[r_a]] does not shift the slope but scales the maximum torque amplitude."
+    likely_errors:
+      - id: ra_error_diameter
+        when: "true"
+        status: warning
+        text:
+          es: "Error habitual: usar el diámetro del rotor en lugar del radio. El par resultante sería el doble del valor correcto."
+          en: "Common error: using the rotor diameter instead of the radius. The resulting torque would be twice the correct value."
+    next_step_rules:
+      - id: ra_next_tau
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[r_a]] y [[F_L]] calculados, el par [[tau_m]] se obtiene directamente. A continuación, con [[tau_m]] y [[omega]], calcular [[P_mec]]."
+          en: "With [[r_a]] and [[F_L]] calculated, torque [[tau_m]] is obtained directly. Then, with [[tau_m]] and [[omega]], calculate [[P_mec]]."
+
+  sin_theta:
+    magnitude_type: ratio
+    semantic_role:
+      es: "[[sin_theta]] modula la eficacia geométrica de la interacción campo-conductor. Es máximo cuando el conductor es perpendicular al campo."
+      en: "[[sin_theta]] modulates the geometric effectiveness of the field-conductor interaction. It is maximum when the conductor is perpendicular to the field."
+    summary_rules:
+      - id: sintheta_summary_max
+        when: "sin_theta > 0.95"
+        status: ok
+        text:
+          es: "[[sin_theta]] próximo a 1 indica que el conductor es casi perpendicular al campo: la fuerza de Laplace está cerca de su valor máximo para las condiciones dadas."
+          en: "[[sin_theta]] close to 1 indicates the conductor is nearly perpendicular to the field: the Laplace force is near its maximum for the given conditions."
+      - id: sintheta_summary_low
+        when: "sin_theta < 0.5"
+        status: warning
+        text:
+          es: "[[sin_theta]] inferior a 0.5 indica que el conductor no está bien orientado respecto al campo. La fuerza es menos de la mitad de su valor máximo posible."
+          en: "[[sin_theta]] below 0.5 indicates the conductor is not well oriented relative to the field. The force is less than half its maximum possible value."
+      - id: sintheta_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[sin_theta]] resume la eficiencia geométrica de la fuerza. En el motor de CC real el conmutador garantiza que este factor permanezca próximo a 1 durante todo el ciclo."
+          en: "[[sin_theta]] summarises the geometric efficiency of the force. In the real DC motor the commutator ensures this factor remains close to 1 throughout the cycle."
+    physical_reading_rules:
+      - id: sintheta_reading_commutator
+        when: "true"
+        status: ok
+        text:
+          es: "En el motor de CC, el conmutador invierte la corriente en el conductor cuando este alcanza la posición paralela al campo (donde [[sin_theta]] sería nulo). Así la fuerza siempre actúa en el mismo sentido de giro."
+          en: "In the DC motor, the commutator reverses the current in the conductor when it reaches the position parallel to the field (where [[sin_theta]] would be zero). This keeps the force always acting in the same rotation direction."
+    coherence_rules:
+      - id: sintheta_coherence_range
+        when: "sin_theta < 0 or sin_theta > 1"
+        status: error
+        text:
+          es: "[[sin_theta]] debe estar en el intervalo (0, 1). Un valor fuera de ese rango indica un error en la especificación del ángulo."
+          en: "[[sin_theta]] must be in the interval (0, 1). A value outside that range indicates an error in the angle specification."
+      - id: sintheta_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Para el modelo de motor de CC simplificado se toma [[sin_theta]] igual a 1. Si se especifica otro valor, verificar el ángulo del conductor respecto al campo."
+          en: "For the simplified DC motor model [[sin_theta]] is taken as 1. If another value is specified, check the conductor angle relative to the field."
+    model_validity_rules:
+      - id: sintheta_validity_commutator
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo es más preciso cuando se toma [[sin_theta]] como valor medio efectivo del ciclo, que es próximo a 1 en motores con muchos segmentos de conmutador."
+          en: "The model is most accurate when [[sin_theta]] is taken as the effective cycle-average value, which is close to 1 in motors with many commutator segments."
+    graph_rules:
+      - id: sintheta_graph_modulator
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica de fuerza frente al ángulo, [[sin_theta]] modula la forma de la curva. Sin conmutador, la curva sería sinusoidal; con conmutador, la fuerza queda prácticamente constante."
+          en: "In the force vs. angle graph, [[sin_theta]] modulates the curve shape. Without commutator the curve would be sinusoidal; with commutator the force remains practically constant."
+    likely_errors:
+      - id: sintheta_error_omit
+        when: "true"
+        status: warning
+        text:
+          es: "Error habitual: omitir [[sin_theta]] en la fórmula de fuerza, lo que equivale a asumir siempre [[sin_theta]] igual a 1. Eso solo es correcto en el modelo de CC con conmutador ideal."
+          en: "Common error: omitting [[sin_theta]] from the force formula, which is equivalent to assuming [[sin_theta]] always equals 1. That is only correct in the ideal commutator DC model."
+    next_step_rules:
+      - id: sintheta_next_fl
+        when: "true"
+        status: ok
+        text:
+          es: "[[sin_theta]] entra directamente en [[F_L]]. Una vez determinado el ángulo de operación, calcular [[F_L]] y pasar a [[tau_m]]."
+          en: "[[sin_theta]] enters directly into [[F_L]]. Once the operating angle is determined, calculate [[F_L]] and proceed to [[tau_m]]."
+
+  tau_m:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "[[tau_m]] es la magnitud central del motor: cuantifica la capacidad de mover la carga y es el resultado mecánico directo de la interacción electromagnética."
+      en: "[[tau_m]] is the central quantity of the motor: it quantifies the capacity to move the load and is the direct mechanical result of the electromagnetic interaction."
+    summary_rules:
+      - id: taum_summary_positive
+        when: "tau_m > 0"
+        status: ok
+        text:
+          es: "[[tau_m]] positivo indica que el motor produce par en el sentido de diseño y puede mover la carga. Depende linealmente de [[F_L]] y del brazo [[r_a]]."
+          en: "Positive [[tau_m]] indicates the motor produces torque in the design direction and can move the load. It depends linearly on [[F_L]] and the lever arm [[r_a]]."
+      - id: taum_summary_zero
+        when: "tau_m == 0"
+        status: warning
+        text:
+          es: "[[tau_m]] nulo: el motor no genera acción rotacional. Verificar que [[I]], [[B]] y [[sin_theta]] no son cero."
+          en: "Zero [[tau_m]]: the motor generates no rotational action. Check that [[I]], [[B]] and [[sin_theta]] are not zero."
+      - id: taum_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[tau_m]] resume el momento de fuerza disponible en el eje. Debe compararse con el par resistente de la carga para determinar si el motor puede arrancar y mantener el régimen."
+          en: "[[tau_m]] summarises the moment of force available at the shaft. It should be compared with the load's resistive torque to determine whether the motor can start and maintain operation."
+    physical_reading_rules:
+      - id: taum_reading_load
+        when: "true"
+        status: ok
+        text:
+          es: "El par motor actúa sobre el eje y debe superar el par de la carga para producir aceleración. En régimen estacionario [[tau_m]] es igual al par resistente. Si [[tau_m]] es inferior, el motor no puede mantener la velocidad y desacelera."
+          en: "Motor torque acts on the shaft and must exceed the load's resistive torque to produce acceleration. At steady state [[tau_m]] equals the resistive torque. If [[tau_m]] is lower, the motor cannot maintain speed and decelerates."
+    coherence_rules:
+      - id: taum_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[tau_m]] sea el producto de [[F_L]] por [[r_a]]. Si [[F_L]] está en newtons y [[r_a]] en metros, [[tau_m]] debe estar en N·m."
+          en: "Verify that [[tau_m]] is the product of [[F_L]] by [[r_a]]. If [[F_L]] is in newtons and [[r_a]] in metres, [[tau_m]] must be in N·m."
+    model_validity_rules:
+      - id: taum_validity_steady
+        when: "true"
+        status: ok
+        text:
+          es: "El par calculado con el modelo ideal es válido en régimen estacionario. Durante transitorios el par instantáneo varía con la posición angular y debe considerarse el par medio."
+          en: "Torque calculated with the ideal model is valid at steady state. During transients instantaneous torque varies with angular position and the mean torque must be considered."
+    graph_rules:
+      - id: taum_graph_speed_curve
+        when: "true"
+        status: ok
+        text:
+          es: "En la curva par-velocidad del motor, [[tau_m]] decrece linealmente al aumentar [[omega]] porque la fem contraelectromotriz [[epsilon_c]] reduce la corriente y, con ella, el par."
+          en: "In the motor's torque-speed curve, [[tau_m]] decreases linearly as [[omega]] increases because back-EMF [[epsilon_c]] reduces current and, with it, torque."
+    likely_errors:
+      - id: taum_error_force
+        when: "true"
+        status: warning
+        text:
+          es: "Error típico: reportar [[F_L]] como si fuera el par. Son magnitudes con dimensiones distintas. El par requiere multiplicar la fuerza por [[r_a]]."
+          en: "Typical error: reporting [[F_L]] as if it were torque. They are quantities with different dimensions. Torque requires multiplying force by [[r_a]]."
+    next_step_rules:
+      - id: taum_next_power
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[tau_m]] y [[omega]] calculados, el siguiente paso es obtener [[P_mec]]. Comparar [[P_mec]] con [[P_elec]] para calcular el rendimiento [[eta]]."
+          en: "With [[tau_m]] and [[omega]] calculated, the next step is to obtain [[P_mec]]. Compare [[P_mec]] with [[P_elec]] to calculate efficiency [[eta]]."
+
+  epsilon_c:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "[[epsilon_c]] es el mecanismo de autorregulación del motor: crece con la velocidad y limita la corriente y el par en régimen estacionario."
+      en: "[[epsilon_c]] is the motor's self-regulation mechanism: it grows with speed and limits current and torque at steady state."
+    summary_rules:
+      - id: epsc_summary_positive
+        when: "epsilon_c > 0"
+        status: ok
+        text:
+          es: "[[epsilon_c]] positiva indica que el motor gira en el sentido de diseño. Su valor depende de [[omega]] y crece linealmente con la velocidad, reduciendo la corriente disponible para generar par."
+          en: "Positive [[epsilon_c]] indicates the motor rotates in the design direction. Its value depends on [[omega]] and grows linearly with speed, reducing the current available to generate torque."
+      - id: epsc_summary_zero
+        when: "epsilon_c == 0"
+        status: warning
+        text:
+          es: "[[epsilon_c]] nula indica motor en reposo. Toda la tensión de alimentación cae en la resistencia interna y la corriente de arranque puede ser muy elevada."
+          en: "Zero [[epsilon_c]] indicates motor at rest. The full supply voltage drops across internal resistance and start-up current can be very high."
+      - id: epsc_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[epsilon_c]] resume la tensión que el rotor en movimiento opone a la alimentación. Aumenta linealmente con [[omega]]: a mayor velocidad, menor corriente y menor par."
+          en: "[[epsilon_c]] summarises the voltage that the rotating rotor opposes to the supply. It increases linearly with [[omega]]: higher speed means lower current and lower torque."
+    physical_reading_rules:
+      - id: epsc_reading_autoreg
+        when: "true"
+        status: ok
+        text:
+          es: "[[epsilon_c]] es el resultado directo de la ley de Faraday aplicada al rotor en giro. A mayor [[omega]], mayor variación de flujo, mayor [[epsilon_c]] y menor corriente de armadura. Esa retroalimentación negativa estabiliza la velocidad del motor."
+          en: "[[epsilon_c]] is the direct result of Faraday's law applied to the rotating rotor. Higher [[omega]] means greater flux variation, greater [[epsilon_c]] and lower armature current. That negative feedback stabilises motor speed."
+    coherence_rules:
+      - id: epsc_coherence_startup
+        when: "omega == 0 and epsilon_c != 0"
+        status: error
+        text:
+          es: "Si [[omega]] es cero, [[epsilon_c]] debe ser cero. Un valor distinto de cero indica un error en los datos de entrada."
+          en: "If [[omega]] is zero, [[epsilon_c]] must be zero. A non-zero value indicates an error in input data."
+      - id: epsc_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[epsilon_c]] sea el producto de [[N_c]], [[L_c]], [[B]], [[r_a]] y [[omega]]. En unidades SI el resultado debe estar en voltios."
+          en: "Verify that [[epsilon_c]] is the product of [[N_c]], [[L_c]], [[B]], [[r_a]] and [[omega]]. In SI units the result must be in volts."
+    model_validity_rules:
+      - id: epsc_validity_steady
+        when: "true"
+        status: ok
+        text:
+          es: "[[epsilon_c]] calculada con el modelo ideal es válida en régimen estacionario. Durante el arranque, la velocidad varía y [[epsilon_c]] debe integrarse con las ecuaciones dinámicas del circuito."
+          en: "[[epsilon_c]] calculated with the ideal model is valid at steady state. During start-up, speed varies and [[epsilon_c]] must be integrated with the circuit's dynamic equations."
+    graph_rules:
+      - id: epsc_graph_vs_speed
+        when: "true"
+        status: ok
+        text:
+          es: "En la gráfica de fem contraelectromotriz frente a velocidad, [[epsilon_c]] es una recta que parte del origen con pendiente proporcional a [[N_c]], [[L_c]], [[B]] y [[r_a]]."
+          en: "In the back-EMF vs. speed graph, [[epsilon_c]] is a straight line from the origin with slope proportional to [[N_c]], [[L_c]], [[B]] and [[r_a]]."
+    likely_errors:
+      - id: epsc_error_ignore
+        when: "true"
+        status: warning
+        text:
+          es: "Error clásico: ignorar [[epsilon_c]] al calcular la corriente en régimen. La corriente no es la tensión dividida entre la resistencia interna: hay que restar [[epsilon_c]] a la tensión de alimentación antes de dividir."
+          en: "Classic error: ignoring [[epsilon_c]] when calculating steady-state current. Current is not supply voltage divided by internal resistance: [[epsilon_c]] must be subtracted from supply voltage before dividing."
+    next_step_rules:
+      - id: epsc_next_current
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[epsilon_c]] y la resistencia interna conocidas, la corriente de régimen se calcula como la diferencia entre la tensión de alimentación y [[epsilon_c]], dividida entre la resistencia interna."
+          en: "With [[epsilon_c]] and the internal resistance known, steady-state current is calculated as the difference between supply voltage and [[epsilon_c]], divided by internal resistance."
+
+  omega:
+    magnitude_type: scalar_signed
+    semantic_role:
+      es: "[[omega]] es la variable de estado del eje: determina [[epsilon_c]], la potencia mecánica y el punto de operación del motor."
+      en: "[[omega]] is the shaft state variable: it determines [[epsilon_c]], mechanical power and the motor operating point."
+    summary_rules:
+      - id: omega_summary_positive
+        when: "omega > 0"
+        status: ok
+        text:
+          es: "[[omega]] positiva indica rotación en el sentido de diseño. Cuanto mayor es [[omega]], mayor [[epsilon_c]] y menor corriente de régimen, lo que desplaza el punto de operación hacia menor par y mayor potencia mecánica."
+          en: "Positive [[omega]] indicates rotation in the design direction. Higher [[omega]] means greater [[epsilon_c]] and lower steady-state current, shifting the operating point towards lower torque and higher mechanical power."
+      - id: omega_summary_zero
+        when: "omega == 0"
+        status: warning
+        text:
+          es: "[[omega]] nula: el motor está en reposo o bloqueado. La corriente de arranque puede dañar el bobinado si persiste."
+          en: "Zero [[omega]]: the motor is at rest or stalled. Start-up current can damage the winding if it persists."
+      - id: omega_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[omega]] resume la velocidad de operación del eje. Determina la fem contraelectromotriz y la potencia mecánica disponible junto con el par."
+          en: "[[omega]] summarises the shaft operating speed. It determines back-EMF and the mechanical power available together with torque."
+    physical_reading_rules:
+      - id: omega_reading_units
+        when: "true"
+        status: ok
+        text:
+          es: "[[omega]] debe expresarse en rad/s. Si el dato disponible es en rpm, multiplicar por 2π/60 para convertir. Una velocidad de 1500 rpm equivale a aproximadamente 157 rad/s."
+          en: "[[omega]] must be expressed in rad/s. If the available data is in rpm, multiply by 2π/60 to convert. A speed of 1500 rpm is equivalent to approximately 157 rad/s."
+    coherence_rules:
+      - id: omega_coherence_rpm
+        when: "omega > 1600"
+        status: warning
+        text:
+          es: "[[omega]] superior a 1600 rad/s equivale a más de 15 000 rpm. Es inusual para motores de CC estándar. Verificar que no se está usando rpm en lugar de rad/s."
+          en: "[[omega]] above 1600 rad/s is equivalent to more than 15 000 rpm. This is unusual for standard DC motors. Verify that rpm is not being used instead of rad/s."
+      - id: omega_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[omega]] típica de motores de CC de uso general está entre 50 rad/s y 300 rad/s (de 500 rpm a 3000 rpm)."
+          en: "Typical [[omega]] for general-purpose DC motors is between 50 rad/s and 300 rad/s (500 rpm to 3000 rpm)."
+    model_validity_rules:
+      - id: omega_validity_steady
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume [[omega]] constante en régimen. En transitorios de arranque o de carga, [[omega]] varía con el tiempo y se requiere integrar la ecuación dinámica de movimiento."
+          en: "The model assumes constant [[omega]] at steady state. During start-up or load transients, [[omega]] varies with time and the dynamic equation of motion must be integrated."
+    graph_rules:
+      - id: omega_graph_xaxis
+        when: "true"
+        status: ok
+        text:
+          es: "En la curva par-velocidad y en la curva potencia-velocidad, [[omega]] ocupa el eje horizontal. El punto de operación es la intersección de la curva del motor con la curva de la carga."
+          en: "In the torque-speed and power-speed curves, [[omega]] occupies the horizontal axis. The operating point is the intersection of the motor curve with the load curve."
+    likely_errors:
+      - id: omega_error_rpm
+        when: "true"
+        status: warning
+        text:
+          es: "Error muy frecuente: introducir [[omega]] en rpm y no convertir a rad/s. El resultado de [[P_mec]] y [[epsilon_c]] quedará incorrecto por un factor de 2π/60."
+          en: "Very common error: entering [[omega]] in rpm without converting to rad/s. The result for [[P_mec]] and [[epsilon_c]] will be incorrect by a factor of 2π/60."
+    next_step_rules:
+      - id: omega_next_pmec
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[omega]] y [[tau_m]] calculados, obtener [[P_mec]]. A continuación, con [[P_elec]] calculada o dada, determinar el rendimiento [[eta]]."
+          en: "With [[omega]] and [[tau_m]] calculated, obtain [[P_mec]]. Then, with [[P_elec]] calculated or given, determine efficiency [[eta]]."
+
+  P_mec:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "[[P_mec]] es la salida útil del motor: la potencia que efectivamente llega al eje para mover la carga."
+      en: "[[P_mec]] is the motor's useful output: the power that actually reaches the shaft to move the load."
+    summary_rules:
+      - id: pmec_summary_positive
+        when: "P_mec > 0"
+        status: ok
+        text:
+          es: "[[P_mec]] positiva indica que el motor entrega trabajo mecánico al eje. Depende del par y de la velocidad angular y resulta siempre menor que [[P_elec]] por las pérdidas internas."
+          en: "Positive [[P_mec]] indicates the motor delivers mechanical work to the shaft. It depends on torque and angular speed and is always less than [[P_elec]] due to internal losses."
+      - id: pmec_summary_zero
+        when: "P_mec == 0"
+        status: warning
+        text:
+          es: "[[P_mec]] nula cuando [[omega]] o [[tau_m]] son cero. El motor consume energía eléctrica pero no entrega potencia útil al eje."
+          en: "Zero [[P_mec]] when [[omega]] or [[tau_m]] is zero. The motor consumes electrical energy but delivers no useful power to the shaft."
+      - id: pmec_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[P_mec]] resume la conversión de energía eléctrica en trabajo mecánico. Aumenta con [[tau_m]] y con [[omega]], alcanzando su máximo en torno al 50 % del par de arranque en el modelo ideal."
+          en: "[[P_mec]] summarises the conversion of electrical energy into mechanical work. It increases with [[tau_m]] and [[omega]], reaching its maximum at around 50 % of stall torque in the ideal model."
+    physical_reading_rules:
+      - id: pmec_reading_shaft
+        when: "true"
+        status: ok
+        text:
+          es: "[[P_mec]] es la potencia disponible en el eje para accionar la carga. No incluye las pérdidas de transmisión mecánica. Si la carga requiere más potencia que [[P_mec]], el motor desacelerará."
+          en: "[[P_mec]] is the power available at the shaft to drive the load. It does not include mechanical transmission losses. If the load requires more power than [[P_mec]], the motor will decelerate."
+    coherence_rules:
+      - id: pmec_coherence_vs_pelec
+        when: "P_mec >= P_elec"
+        status: error
+        text:
+          es: "[[P_mec]] no puede ser mayor o igual a [[P_elec]] porque siempre hay pérdidas. Verificar los datos de entrada."
+          en: "[[P_mec]] cannot be greater than or equal to [[P_elec]] because there are always losses. Check input data."
+      - id: pmec_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[P_mec]] sea el producto de [[tau_m]] por [[omega]]. Si [[tau_m]] está en N·m y [[omega]] en rad/s, el resultado es directamente en W."
+          en: "Verify that [[P_mec]] is the product of [[tau_m]] by [[omega]]. If [[tau_m]] is in N·m and [[omega]] in rad/s, the result is directly in W."
+    model_validity_rules:
+      - id: pmec_validity_steady
+        when: "true"
+        status: ok
+        text:
+          es: "[[P_mec]] calculada con el modelo ideal es válida en régimen estacionario. No incluye pérdidas mecánicas por rozamiento ni por ventilación, que en motores reales reducen aún más la potencia entregada a la carga."
+          en: "[[P_mec]] calculated with the ideal model is valid at steady state. It does not include mechanical losses due to friction or ventilation, which in real motors further reduce the power delivered to the load."
+    graph_rules:
+      - id: pmec_graph_vs_speed
+        when: "true"
+        status: ok
+        text:
+          es: "En la curva [[P_mec]] frente a [[omega]], la potencia tiene forma de parábola con un máximo en la mitad de la velocidad en vacío. A velocidad cero y a velocidad en vacío, [[P_mec]] es nula."
+          en: "In the [[P_mec]] vs. [[omega]] curve, power has a parabolic shape with a maximum at half the no-load speed. At zero speed and at no-load speed, [[P_mec]] is zero."
+    likely_errors:
+      - id: pmec_error_rpm
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: calcular [[P_mec]] con [[omega]] en rpm. El factor de conversión 2π/60 debe aplicarse antes de multiplicar por [[tau_m]]."
+          en: "Frequent error: calculating [[P_mec]] with [[omega]] in rpm. The conversion factor 2π/60 must be applied before multiplying by [[tau_m]]."
+    next_step_rules:
+      - id: pmec_next_eta
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[P_mec]] y [[P_elec]] calculadas, obtener el rendimiento [[eta]]. Si [[eta]] es inferior al valor nominal del motor, investigar qué pérdidas adicionales están presentes."
+          en: "With [[P_mec]] and [[P_elec]] calculated, obtain efficiency [[eta]]. If [[eta]] is below the motor's nominal value, investigate what additional losses are present."
+
+  P_elec:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "[[P_elec]] es la entrada energética del motor desde la red: el coste eléctrico de producir el par y la velocidad."
+      en: "[[P_elec]] is the motor's energy input from the supply: the electrical cost of producing torque and speed."
+    summary_rules:
+      - id: pelec_summary_positive
+        when: "P_elec > 0"
+        status: ok
+        text:
+          es: "[[P_elec]] positiva indica que el motor consume energía de la red. Siempre supera a [[P_mec]] por las pérdidas Joule, magnéticas y mecánicas del motor."
+          en: "Positive [[P_elec]] indicates the motor consumes energy from the supply. It always exceeds [[P_mec]] due to the motor's Joule, magnetic and mechanical losses."
+      - id: pelec_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[P_elec]] resume la potencia eléctrica absorbida. Junto con [[P_mec]], determina el rendimiento [[eta]]. En instalaciones reales [[P_elec]] es el valor que factura la red."
+          en: "[[P_elec]] summarises the absorbed electrical power. Together with [[P_mec]], it determines efficiency [[eta]]. In real installations [[P_elec]] is the value billed by the supply."
+    physical_reading_rules:
+      - id: pelec_reading_losses
+        when: "true"
+        status: ok
+        text:
+          es: "La diferencia entre [[P_elec]] y [[P_mec]] representa todas las pérdidas internas del motor. Una parte se disipa como calor en la resistencia del bobinado (pérdidas Joule) y otra parte como pérdidas magnéticas y mecánicas."
+          en: "The difference between [[P_elec]] and [[P_mec]] represents all internal motor losses. Part is dissipated as heat in the winding resistance (Joule losses) and another part as magnetic and mechanical losses."
+    coherence_rules:
+      - id: pelec_coherence_vs_pmec
+        when: "P_elec <= P_mec"
+        status: error
+        text:
+          es: "[[P_elec]] debe ser estrictamente mayor que [[P_mec]]. Una igualdad o inversión violaría la conservación de energía."
+          en: "[[P_elec]] must be strictly greater than [[P_mec]]. Equality or reversal would violate energy conservation."
+      - id: pelec_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[P_elec]] sea coherente con la corriente de armadura y la tensión de alimentación. En régimen: [[P_elec]] es aproximadamente el producto de la tensión por la corriente de armadura."
+          en: "Verify that [[P_elec]] is consistent with armature current and supply voltage. At steady state: [[P_elec]] is approximately the product of supply voltage and armature current."
+    model_validity_rules:
+      - id: pelec_validity_dc
+        when: "true"
+        status: ok
+        text:
+          es: "En el motor de CC, [[P_elec]] se calcula directamente como el producto de tensión continua por corriente de armadura. En motores de CA, el cálculo requiere considerar el factor de potencia."
+          en: "In the DC motor, [[P_elec]] is calculated directly as the product of DC voltage and armature current. In AC motors, the calculation requires considering the power factor."
+    graph_rules:
+      - id: pelec_graph_vs_speed
+        when: "true"
+        status: ok
+        text:
+          es: "En la curva [[P_elec]] frente a [[omega]], la potencia eléctrica disminuye al aumentar la velocidad porque la corriente disminuye. La diferencia entre la curva [[P_elec]] y la curva [[P_mec]] representa las pérdidas totales."
+          en: "In the [[P_elec]] vs. [[omega]] curve, electrical power decreases as speed increases because current decreases. The gap between the [[P_elec]] and [[P_mec]] curves represents total losses."
+    likely_errors:
+      - id: pelec_error_confused
+        when: "true"
+        status: warning
+        text:
+          es: "Error habitual: confundir [[P_elec]] con [[P_mec]] al calcular el rendimiento, obteniendo [[eta]] igual a 1. El rendimiento es siempre inferior a 1."
+          en: "Common error: confusing [[P_elec]] with [[P_mec]] when calculating efficiency, obtaining [[eta]] equal to 1. Efficiency is always less than 1."
+    next_step_rules:
+      - id: pelec_next_eta
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[P_elec]] y [[P_mec]] calculadas, el rendimiento [[eta]] se obtiene directamente dividiendo [[P_mec]] entre [[P_elec]]. Un [[eta]] bajo indica pérdidas elevadas que merecen diagnóstico."
+          en: "With [[P_elec]] and [[P_mec]] calculated, efficiency [[eta]] is obtained directly by dividing [[P_mec]] by [[P_elec]]. A low [[eta]] indicates high losses that deserve diagnosis."
+
+  eta:
+    magnitude_type: ratio
+    semantic_role:
+      es: "[[eta]] sintetiza en un solo número la calidad de la conversión energética del motor: la fracción de la energía eléctrica que se convierte en trabajo mecánico útil."
+      en: "[[eta]] synthesises the quality of the motor's energy conversion in a single number: the fraction of electrical energy converted into useful mechanical work."
+    summary_rules:
+      - id: eta_summary_high
+        when: "eta > 0.85"
+        status: ok
+        text:
+          es: "[[eta]] superior al 85 % indica un motor de alta eficiencia. Más del 85 % de la energía eléctrica consumida se convierte en potencia mecánica útil."
+          en: "[[eta]] above 85 % indicates a high-efficiency motor. More than 85 % of the consumed electrical energy is converted into useful mechanical power."
+      - id: eta_summary_low
+        when: "eta < 0.60"
+        status: warning
+        text:
+          es: "[[eta]] inferior al 60 % indica pérdidas elevadas. Un motor con este rendimiento en una instalación industrial consumiría el 67 % más de electricidad que uno ideal para el mismo trabajo."
+          en: "[[eta]] below 60 % indicates high losses. A motor with this efficiency in an industrial installation would consume 67 % more electricity than an ideal one for the same work."
+      - id: eta_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[eta]] resume la eficiencia de conversión del motor. Depende de la carga, la temperatura y el diseño. En motores modernos de potencia media, [[eta]] suele situarse entre 0.75 y 0.95."
+          en: "[[eta]] summarises the motor's conversion efficiency. It depends on load, temperature and design. In modern medium-power motors, [[eta]] is typically between 0.75 and 0.95."
+    physical_reading_rules:
+      - id: eta_reading_losses
+        when: "true"
+        status: ok
+        text:
+          es: "La fracción (1 − [[eta]]) de la potencia eléctrica se disipa como calor en el bobinado, en el núcleo y en los rodamientos. Un [[eta]] bajo tiene consecuencias térmicas: el motor se calienta más y su vida útil se reduce."
+          en: "The fraction (1 − [[eta]]) of electrical power is dissipated as heat in the winding, core and bearings. A low [[eta]] has thermal consequences: the motor runs hotter and its service life shortens."
+    coherence_rules:
+      - id: eta_coherence_range
+        when: "eta >= 1 or eta <= 0"
+        status: error
+        text:
+          es: "[[eta]] debe estar estrictamente en el intervalo (0, 1). Un valor fuera de ese rango viola la conservación de energía o indica datos erróneos."
+          en: "[[eta]] must be strictly in the interval (0, 1). A value outside that range violates energy conservation or indicates erroneous data."
+      - id: eta_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[eta]] sea el cociente [[P_mec]] / [[P_elec]] y que ambas potencias estén en las mismas unidades (W)."
+          en: "Verify that [[eta]] is the ratio [[P_mec]] / [[P_elec]] and that both powers are in the same units (W)."
+    model_validity_rules:
+      - id: eta_validity_steady
+        when: "true"
+        status: ok
+        text:
+          es: "[[eta]] calculado con el modelo ideal es una estimación global que resume todas las pérdidas en un solo parámetro constante. En la realidad [[eta]] varía con la carga, la temperatura y el envejecimiento."
+          en: "[[eta]] calculated with the ideal model is a global estimate that summarises all losses in a single constant parameter. In reality [[eta]] varies with load, temperature and ageing."
+    graph_rules:
+      - id: eta_graph_vs_load
+        when: "true"
+        status: ok
+        text:
+          es: "En la curva de rendimiento frente a la carga, [[eta]] tiene un máximo en torno al 75-80 % de la potencia nominal. Por debajo y por encima de ese punto, las pérdidas relativas aumentan."
+          en: "In the efficiency vs. load curve, [[eta]] has a maximum at around 75-80 % of rated power. Below and above that point, relative losses increase."
+    likely_errors:
+      - id: eta_error_percent
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: usar [[eta]] como porcentaje (por ejemplo 85) en lugar de decimal (0.85) al calcular [[P_mec]] o [[P_elec]]. El resultado queda multiplicado por 100."
+          en: "Frequent error: using [[eta]] as a percentage (e.g. 85) instead of a decimal (0.85) when calculating [[P_mec]] or [[P_elec]]. The result ends up multiplied by 100."
+    next_step_rules:
+      - id: eta_next_compare
+        when: "eta < 0.75"
+        status: warning
+        text:
+          es: "[[eta]] inferior al 75 % sugiere revisar el estado del motor. Las pérdidas pueden deberse a degradación del aislamiento, suciedad en el entrehierro o rodamientos deteriorados."
+          en: "[[eta]] below 75 % suggests checking the motor's condition. Losses may be due to insulation degradation, air-gap contamination or deteriorated bearings."
+      - id: eta_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[eta]] calculado, la evaluación del motor queda completa. Para profundizar, comparar [[eta]] con la curva de rendimiento del fabricante a distintos niveles de carga."
+          en: "With [[eta]] calculated, the motor evaluation is complete. To go further, compare [[eta]] with the manufacturer's efficiency curve at different load levels."
+
+cross_checks:
+  - id: cc_pmec_consistency
+    condition: "P_mec > P_elec"
+    message:
+      es: "La potencia mecánica supera la potencia eléctrica: imposible por conservación de energía. Revisar datos de entrada."
+      en: "Mechanical power exceeds electrical power: impossible by energy conservation. Check input data."
+  - id: cc_eta_range
+    condition: "eta >= 1"
+    message:
+      es: "El rendimiento es mayor o igual a 1: viola la conservación de energía. Verificar los valores de P_mec y P_elec."
+      en: "Efficiency is greater than or equal to 1: violates energy conservation. Verify P_mec and P_elec values."
+  - id: cc_startup_current
+    condition: "omega == 0"
+    message:
+      es: "Motor en reposo: la fem contraelectromotriz es cero y la corriente de arranque puede ser diez veces la nominal. Usar resistencia de arranque o variador de frecuencia."
+      en: "Motor at rest: back-EMF is zero and start-up current can be ten times nominal. Use a starting resistor or variable-speed drive."
+
+error_patterns:
+  - id: ep_rpm_not_rads
+    detect_when: "omega > 1600"
+    message:
+      es: "Velocidad angular muy alta: verificar que omega está en rad/s y no en rpm. Multiplicar rpm por 2π/60 para convertir."
+      en: "Very high angular speed: verify that omega is in rad/s not rpm. Multiply rpm by 2π/60 to convert."
+  - id: ep_eta_percent
+    detect_when: "eta > 1"
+    message:
+      es: "El rendimiento supera 1: probablemente se ha introducido como porcentaje. Dividir entre 100."
+      en: "Efficiency exceeds 1: it was probably entered as a percentage. Divide by 100."
+  - id: ep_total_length
+    detect_when: "F_L > 2000"
+    message:
+      es: "Fuerza muy elevada: verificar que L_c es la longitud activa en el campo y no la longitud total del conductor."
+      en: "Very high force: verify that L_c is the active length in the field and not the total conductor length."
+
+graph_binding:
+  channels:
+    - id: par_vs_velocidad
+      magnitude: tau_m
+      role: y_axis
+    - id: velocidad_angular
+      magnitude: omega
+      role: x_axis
+    - id: potencia_mecanica
+      magnitude: P_mec
+      role: secondary_y
+    - id: eficiencia_motor
+      magnitude: eta
+      role: annotation
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+  default_view: par_vs_velocidad
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+      - summary
+      - likely_errors
+  extended_mode:
+    show_all: true
+`;export{e as default};

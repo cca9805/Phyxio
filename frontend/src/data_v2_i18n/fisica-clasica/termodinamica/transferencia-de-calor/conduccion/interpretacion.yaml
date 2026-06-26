@@ -1,0 +1,1113 @@
+version: 5.0.0
+id: conduccion
+leaf_id: conduccion
+nombre:
+  es: Conduccion
+  en: Conduction
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: transferencia-de-calor
+  parent_id: transferencia-de-calor
+  ruta_relativa: fisica-clasica/termodinamica/transferencia-de-calor/conduccion
+  orden: 257100
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - diferencia_temperatura
+  - gradiente_temperatura_1d
+  - ley_fourier_conduccion_1d
+  - flujo_calor_conduccion
+  - flujo_potencia_area
+  - calor_potencia_tiempo
+  - resistencia_termica_conduccion
+  - potencia_resistencia_termica
+  magnitudes:
+  - calor_transferido
+  - tiempo
+  - potencia_termica
+  - flujo_calor
+  - conductividad_termica
+  - area
+  - espesor
+  - temperatura_caliente
+  - temperatura_fria
+  - diferencia_temperatura
+  - gradiente_temperatura
+  - resistencia_termica
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: diferencia_temperatura
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  diferencia_temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: temperature difference
+    summary_rules:
+    - id: diferencia_temperatura_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[diferencia_temperatura]] es el motor térmico de la conducción: sin diferencia de temperatura no hay flujo neto.'
+        en: '[[diferencia_temperatura]] is the thermal driver of conduction: without a temperature difference there is no
+          net flow.'
+    physical_reading_rules:
+    - id: diferencia_temperatura_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[diferencia_temperatura]] como separación térmica entre ambos extremos del material.
+        en: Read [[diferencia_temperatura]] as the thermal separation between both ends of the material.
+    coherence_rules:
+    - id: diferencia_temperatura_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[diferencia_temperatura]] debe ser coherente con [[temperatura_caliente]] y [[temperatura_fria]].'
+        en: '[[diferencia_temperatura]] must be consistent with [[temperatura_caliente]] and [[temperatura_fria]].'
+    model_validity_rules:
+    - id: diferencia_temperatura_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El modelo lineal usa [[diferencia_temperatura]] mantenida y propiedades aproximadamente constantes.
+        en: The linear model uses maintained [[diferencia_temperatura]] and approximately constant properties.
+    graph_rules:
+    - id: diferencia_temperatura_graph_base
+      when: 'true'
+      status: ok
+      text:
+        es: En el gráfico Coord, [[diferencia_temperatura]] es la variable horizontal principal.
+        en: In the Coord graph, [[diferencia_temperatura]] is the main horizontal variable.
+    likely_errors:
+    - id: diferencia_temperatura_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[diferencia_temperatura]] con una lectura aislada es un error frecuente: No confundas [[diferencia_temperatura]]
+          con una temperatura absoluta.'
+        en: Do not confuse [[diferencia_temperatura]] with an absolute temperature.
+    next_step_rules:
+    - id: diferencia_temperatura_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[diferencia_temperatura]], úsala para interpretar la potencia o el flujo conducido.
+        en: After obtaining [[diferencia_temperatura]], use it to interpret conducted power or flux.
+    physical_intuition:
+    - id: diferencia_temperatura_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Mayor [[diferencia_temperatura]] empuja más intensamente la transferencia de calor.
+        en: Larger [[diferencia_temperatura]] drives heat transfer more strongly.
+    limiting_cases:
+    - id: diferencia_temperatura_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[diferencia_temperatura]] es cero, la conducción neta se anula; si crece, la potencia aumenta linealmente
+          en el modelo ideal.
+        en: If [[diferencia_temperatura]] is zero, net conduction vanishes; if it grows, power increases linearly in the ideal
+          model.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_caliente:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: hot-side temperature
+    summary_rules:
+    - id: temperatura_caliente_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_caliente]] es la temperatura del lado que actúa como origen térmico de la conducción.'
+        en: '[[temperatura_caliente]] is the temperature of the side acting as the thermal source of conduction.'
+    physical_reading_rules:
+    - id: temperatura_caliente_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura_caliente]] como el extremo de mayor temperatura en el modelo.
+        en: Read [[temperatura_caliente]] as the higher-temperature end in the model.
+    coherence_rules:
+    - id: temperatura_caliente_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_caliente]] debe ser mayor que [[temperatura_fria]] si ΔT se define como caliente menos fría.'
+        en: '[[temperatura_caliente]] must be greater than [[temperatura_fria]] if ΔT is defined as hot minus cold.'
+    model_validity_rules:
+    - id: temperatura_caliente_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El modelo supone que [[temperatura_caliente]] se mantiene aproximadamente constante durante el proceso.
+        en: The model assumes [[temperatura_caliente]] remains approximately constant during the process.
+    graph_rules:
+    - id: temperatura_caliente_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Si aumenta [[temperatura_caliente]] manteniendo fija [[temperatura_fria]], aumenta ΔT y crece la potencia conducida.
+        en: If [[temperatura_caliente]] increases while [[temperatura_fria]] stays fixed, ΔT increases and conducted power
+          grows.
+    likely_errors:
+    - id: temperatura_caliente_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura_caliente]] con una lectura aislada es un error frecuente: No intercambies [[temperatura_caliente]]
+          y [[temperatura_fria]] si la fórmula usa una diferencia positiva.'
+        en: 'A common mistake is to interpret [[temperatura_caliente]] in isolation: Do not swap [[temperatura_caliente]]
+          and [[temperatura_fria]] if the formula uses a positive difference.'
+    next_step_rules:
+    - id: temperatura_caliente_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de fijar [[temperatura_caliente]], calcula o revisa la diferencia de temperatura.
+        en: After setting [[temperatura_caliente]], calculate or check the temperature difference.
+    physical_intuition:
+    - id: temperatura_caliente_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: '[[temperatura_caliente]] marca el lado desde el que el calor tiende a salir espontáneamente.'
+        en: '[[temperatura_caliente]] marks the side from which heat tends to leave spontaneously.'
+    limiting_cases:
+    - id: temperatura_caliente_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_caliente]] se iguala a [[temperatura_fria]], desaparece la conducción neta.
+        en: If [[temperatura_caliente]] equals [[temperatura_fria]], net conduction disappears.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_fria:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: cold-side temperature
+    summary_rules:
+    - id: temperatura_fria_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_fria]] es la temperatura del lado receptor hacia el que tiende a fluir el calor.'
+        en: '[[temperatura_fria]] is the receiving-side temperature toward which heat tends to flow.'
+    physical_reading_rules:
+    - id: temperatura_fria_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura_fria]] como el extremo de menor temperatura del sistema conductor.
+        en: Read [[temperatura_fria]] as the lower-temperature end of the conducting system.
+    coherence_rules:
+    - id: temperatura_fria_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_fria]] debe ser menor que [[temperatura_caliente]] si se interpreta una conducción espontánea de
+          caliente a frío.'
+        en: '[[temperatura_fria]] must be lower than [[temperatura_caliente]] if spontaneous conduction from hot to cold is
+          interpreted.'
+    model_validity_rules:
+    - id: temperatura_fria_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El modelo supone que [[temperatura_fria]] se mantiene aproximadamente constante durante el proceso.
+        en: The model assumes [[temperatura_fria]] remains approximately constant during the process.
+    graph_rules:
+    - id: temperatura_fria_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_fria]] aumenta manteniendo fija [[temperatura_caliente]], ΔT disminuye y baja la potencia conducida.
+        en: If [[temperatura_fria]] increases while [[temperatura_caliente]] stays fixed, ΔT decreases and conducted power
+          drops.
+    likely_errors:
+    - id: temperatura_fria_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura_fria]] con una lectura aislada es un error frecuente: No uses [[temperatura_fria]] como
+          si fuera una diferencia de temperatura; es una temperatura de un extremo.'
+        en: 'A common mistake is to interpret [[temperatura_fria]] in isolation: Do not use [[temperatura_fria]] as if it
+          were a temperature difference; it is the temperature of one end.'
+    next_step_rules:
+    - id: temperatura_fria_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de fijar [[temperatura_fria]], revisa el valor de ΔT y el sentido del flujo.
+        en: After setting [[temperatura_fria]], check ΔT and the direction of heat flow.
+    physical_intuition:
+    - id: temperatura_fria_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: '[[temperatura_fria]] marca el lado hacia el que el calor tiende a entrar.'
+        en: '[[temperatura_fria]] marks the side into which heat tends to enter.'
+    limiting_cases:
+    - id: temperatura_fria_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_fria]] se acerca a [[temperatura_caliente]], el flujo neto se reduce.
+        en: If [[temperatura_fria]] approaches [[temperatura_caliente]], net flow decreases.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  gradiente_temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: temperature gradient
+    summary_rules:
+    - id: gradiente_temperatura_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[gradiente_temperatura]] mide cómo cambia la temperatura por unidad de longitud.'
+        en: '[[gradiente_temperatura]] measures how temperature changes per unit length.'
+    physical_reading_rules:
+    - id: gradiente_temperatura_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[gradiente_temperatura]] como pendiente térmica espacial dentro del material.
+        en: Read [[gradiente_temperatura]] as the spatial thermal slope inside the material.
+    coherence_rules:
+    - id: gradiente_temperatura_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[gradiente_temperatura]] debe ser compatible con [[diferencia_temperatura]] dividida entre [[espesor]].'
+        en: '[[gradiente_temperatura]] must be compatible with [[diferencia_temperatura]] divided by [[espesor]].'
+    model_validity_rules:
+    - id: gradiente_temperatura_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El uso de un gradiente uniforme supone conducción unidimensional y temperatura aproximadamente lineal en el espesor.
+        en: Using a uniform gradient assumes one-dimensional conduction and approximately linear temperature through the thickness.
+    graph_rules:
+    - id: gradiente_temperatura_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: En una gráfica temperatura-posición, [[gradiente_temperatura]] corresponde a la pendiente de la recta.
+        en: In a temperature-position graph, [[gradiente_temperatura]] corresponds to the slope of the line.
+    likely_errors:
+    - id: gradiente_temperatura_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[gradiente_temperatura]] con una lectura aislada es un error frecuente: No olvides dividir por el
+          espesor ni pierdas el sentido del signo en la ley de Fourier.'
+        en: Do not forget to divide by thickness, and do not lose the sign meaning in Fourier's law.
+    next_step_rules:
+    - id: gradiente_temperatura_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[gradiente_temperatura]], úsalo para interpretar el flujo de calor por conducción.
+        en: After obtaining [[gradiente_temperatura]], use it to interpret conductive heat flux.
+    physical_intuition:
+    - id: gradiente_temperatura_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Un [[gradiente_temperatura]] grande significa que la temperatura cae mucho en poca distancia.
+        en: A large [[gradiente_temperatura]] means temperature drops a lot over a short distance.
+    limiting_cases:
+    - id: gradiente_temperatura_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si el espesor aumenta con ΔT fija, [[gradiente_temperatura]] disminuye.
+        en: If thickness increases with fixed ΔT, [[gradiente_temperatura]] decreases.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  espesor:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: thickness
+    summary_rules:
+    - id: espesor_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[espesor]] representa la distancia que debe recorrer el calor a través del material.'
+        en: '[[espesor]] represents the distance heat must travel through the material.'
+    physical_reading_rules:
+    - id: espesor_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[espesor]] como longitud de conducción en la dirección del gradiente térmico.
+        en: Read [[espesor]] as the conduction length along the thermal-gradient direction.
+    coherence_rules:
+    - id: espesor_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[espesor]] debe ser positivo y expresarse en metros.'
+        en: '[[espesor]] must be positive and expressed in meters.'
+    model_validity_rules:
+    - id: espesor_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El modelo supone que [[espesor]] es uniforme y que el calor atraviesa el material de una cara a la otra.
+        en: The model assumes [[espesor]] is uniform and heat crosses the material from one face to the other.
+    graph_rules:
+    - id: espesor_graph_base
+      when: 'true'
+      status: ok
+      text:
+        es: Aumentar [[espesor]] reduce la pendiente de la gráfica potencia frente a ΔT.
+        en: Increasing [[espesor]] reduces the slope of the power versus ΔT graph.
+    likely_errors:
+    - id: espesor_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[espesor]] con una lectura aislada es un error frecuente: No introduzcas milímetros o centímetros
+          sin convertirlos a metros.'
+        en: 'A common mistake is to interpret [[espesor]] in isolation: Do not enter millimeters or centimeters without converting
+          them to meters.'
+    next_step_rules:
+    - id: espesor_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de fijar [[espesor]], comprueba si aumentar el aislamiento debería reducir la potencia térmica.
+        en: After setting [[espesor]], check whether increasing insulation should reduce thermal power.
+    physical_intuition:
+    - id: espesor_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Mayor [[espesor]] significa un camino térmico más largo y, por tanto, mayor oposición al paso del calor.
+        en: Larger [[espesor]] means a longer thermal path and therefore greater opposition to heat passage.
+    limiting_cases:
+    - id: espesor_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[espesor]] tiende a cero, el modelo predice una potencia muy grande y deja de ser físicamente realista.
+        en: If [[espesor]] tends to zero, the model predicts very large power and stops being physically realistic.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  potencia_termica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: thermal power
+    summary_rules:
+    - id: potencia_termica_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[potencia_termica]] indica la rapidez con la que se transfiere calor por conducción.'
+        en: '[[potencia_termica]] indicates the rate at which heat is transferred by conduction.'
+    physical_reading_rules:
+    - id: potencia_termica_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[potencia_termica]] en vatios: un valor mayor significa más energía transferida cada segundo.'
+        en: 'Read [[potencia_termica]] in watts: a larger value means more energy transferred each second.'
+    coherence_rules:
+    - id: potencia_termica_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[potencia_termica]] aumenta con [[conductividad_termica]], [[area]] y [[diferencia_temperatura]], y disminuye
+          al aumentar [[espesor]].'
+        en: '[[potencia_termica]] increases with [[conductividad_termica]], [[area]], and [[diferencia_temperatura]], and
+          decreases as [[espesor]] increases.'
+    model_validity_rules:
+    - id: potencia_termica_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[potencia_termica]] como valor estacionario si el gradiente de temperatura y las propiedades del material
+          son constantes.
+        en: Interpret [[potencia_termica]] as a steady-state value if the temperature gradient and material properties are
+          constant.
+    graph_rules:
+    - id: potencia_termica_graph_base
+      when: 'true'
+      status: ok
+      text:
+        es: En el gráfico Coord, [[potencia_termica]] debe crecer linealmente con [[diferencia_temperatura]] si k, A y L son
+          constantes.
+        en: In the Coord graph, [[potencia_termica]] should grow linearly with [[diferencia_temperatura]] if k, A, and L are
+          constant.
+    likely_errors:
+    - id: potencia_termica_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[potencia_termica]] con una lectura aislada es un error frecuente: No confundas [[potencia_termica]]
+          con [[calor_transferido]]: la potencia es por unidad de tiempo.'
+        en: 'Do not confuse [[potencia_termica]] with [[calor_transferido]]: power is per unit time.'
+    next_step_rules:
+    - id: potencia_termica_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: 'Después de obtener [[potencia_termica]], revisa qué variable controla más el resultado: k, A, ΔT o L.'
+        en: 'After obtaining [[potencia_termica]], check which variable controls the result most: k, A, ΔT, or L.'
+    physical_intuition:
+    - id: potencia_termica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: '[[potencia_termica]] es el caudal energético que atraviesa el material.'
+        en: '[[potencia_termica]] is the energy flow rate crossing the material.'
+    limiting_cases:
+    - id: potencia_termica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si ΔT es cero, [[potencia_termica]] es cero; si el espesor aumenta mucho, la potencia disminuye.
+        en: If ΔT is zero, [[potencia_termica]] is zero; if thickness becomes very large, power decreases.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  conductividad_termica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: thermal conductivity
+    summary_rules:
+    - id: conductividad_termica_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[conductividad_termica]] mide la facilidad del material para conducir calor.'
+        en: '[[conductividad_termica]] measures how easily the material conducts heat.'
+    physical_reading_rules:
+    - id: conductividad_termica_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[conductividad_termica]] como propiedad del material, no como propiedad de la forma geométrica.
+        en: Read [[conductividad_termica]] as a material property, not as a property of geometric shape.
+    coherence_rules:
+    - id: conductividad_termica_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[conductividad_termica]] debe ser positiva y expresarse normalmente en W/(m·K).'
+        en: '[[conductividad_termica]] must be positive and is usually expressed in W/(m·K).'
+    model_validity_rules:
+    - id: conductividad_termica_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El modelo supone [[conductividad_termica]] constante; si cambia mucho con la temperatura, la ley lineal es una
+          aproximación.
+        en: The model assumes constant [[conductividad_termica]]; if it changes strongly with temperature, the linear law
+          is an approximation.
+    graph_rules:
+    - id: conductividad_termica_graph_base
+      when: 'true'
+      status: ok
+      text:
+        es: En la gráfica, aumentar [[conductividad_termica]] aumenta la pendiente de la relación entre ΔT y potencia.
+        en: In the graph, increasing [[conductividad_termica]] increases the slope of the relation between ΔT and power.
+    likely_errors:
+    - id: conductividad_termica_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[conductividad_termica]] con una lectura aislada es un error frecuente: No confundas [[conductividad_termica]]
+          alta con buen aislamiento; un buen aislante tiene k baja.'
+        en: Do not confuse high [[conductividad_termica]] with good insulation; a good insulator has low k.
+    next_step_rules:
+    - id: conductividad_termica_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de fijar [[conductividad_termica]], compara si el material se parece más a un conductor térmico o a un
+          aislante.
+        en: After setting [[conductividad_termica]], compare whether the material behaves more like a thermal conductor or
+          an insulator.
+    physical_intuition:
+    - id: conductividad_termica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Una [[conductividad_termica]] grande abre una autopista térmica; una pequeña estrecha el paso del calor.
+        en: A large [[conductividad_termica]] opens a thermal highway; a small one narrows heat passage.
+    limiting_cases:
+    - id: conductividad_termica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[conductividad_termica]] tiende a cero, la conducción se vuelve despreciable; si es muy grande, el material
+          transmite calor con facilidad.
+        en: If [[conductividad_termica]] tends to zero, conduction becomes negligible; if it is very large, the material transmits
+          heat easily.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  area:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: cross-sectional area
+    summary_rules:
+    - id: area_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[area]] representa la superficie disponible para que el calor atraviese el material.'
+        en: '[[area]] represents the surface available for heat to cross the material.'
+    physical_reading_rules:
+    - id: area_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[area]] como sección de paso térmico perpendicular a la dirección de conducción.
+        en: Read [[area]] as the thermal passage section perpendicular to the conduction direction.
+    coherence_rules:
+    - id: area_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[area]] debe ser positiva y estar en metros cuadrados.'
+        en: '[[area]] must be positive and expressed in square meters.'
+    model_validity_rules:
+    - id: area_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El modelo supone que la conducción atraviesa aproximadamente toda [[area]] de forma uniforme.
+        en: The model assumes that conduction crosses approximately all of [[area]] uniformly.
+    graph_rules:
+    - id: area_graph_base
+      when: 'true'
+      status: ok
+      text:
+        es: Aumentar [[area]] incrementa la pendiente de la gráfica potencia frente a ΔT.
+        en: Increasing [[area]] increases the slope of the power versus ΔT graph.
+    likely_errors:
+    - id: area_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[area]] con una lectura aislada es un error frecuente: No uses cm² como si fueran m²; el error puede
+          multiplicar el resultado por diez mil.'
+        en: 'A common mistake is to interpret [[area]] in isolation: Do not use cm² as if they were m²; the error can multiply
+          the result by ten thousand.'
+    next_step_rules:
+    - id: area_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de fijar [[area]], revisa si corresponde realmente a la superficie atravesada por el calor.
+        en: After setting [[area]], check whether it truly corresponds to the surface crossed by heat.
+    physical_intuition:
+    - id: area_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Mayor [[area]] permite que más calor pase simultáneamente, como abrir más carriles al tráfico térmico.
+        en: Larger [[area]] lets more heat pass at once, like opening more lanes to thermal traffic.
+    limiting_cases:
+    - id: area_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[area]] tiende a cero, la potencia total transferida tiende a cero.
+        en: If [[area]] tends to zero, total transferred power tends to zero.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  flujo_calor:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: heat flux
+    summary_rules:
+    - id: flujo_calor_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[flujo_calor]] expresa la potencia térmica conducida por unidad de área.'
+        en: '[[flujo_calor]] expresses conducted thermal power per unit area.'
+    physical_reading_rules:
+    - id: flujo_calor_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[flujo_calor]] como intensidad superficial de transferencia térmica.
+        en: Read [[flujo_calor]] as the surface intensity of thermal transfer.
+    coherence_rules:
+    - id: flujo_calor_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[flujo_calor]] debe tener unidades W/m² y no debe depender del área si ya se ha normalizado por superficie.'
+        en: '[[flujo_calor]] must have units W/m² and should not depend on area once normalized by surface.'
+    model_validity_rules:
+    - id: flujo_calor_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El valor de [[flujo_calor]] es válido para conducción unidimensional con gradiente térmico bien definido.
+        en: The value of [[flujo_calor]] is valid for one-dimensional conduction with a well-defined thermal gradient.
+    graph_rules:
+    - id: flujo_calor_graph_base
+      when: 'true'
+      status: ok
+      text:
+        es: Si el eje vertical representa [[flujo_calor]], la pendiente frente a ΔT equivale a k/L.
+        en: If the vertical axis represents [[flujo_calor]], the slope versus ΔT equals k/L.
+    likely_errors:
+    - id: flujo_calor_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[flujo_calor]] con una lectura aislada es un error frecuente: No confundas [[flujo_calor]] con [[potencia_termica]]:
+          el primero está dividido entre el área.'
+        en: 'Do not confuse [[flujo_calor]] with [[potencia_termica]]: the former is divided by area.'
+    next_step_rules:
+    - id: flujo_calor_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de calcular [[flujo_calor]], multiplica por el área si necesitas la potencia térmica total.
+        en: After calculating [[flujo_calor]], multiply by area if total thermal power is needed.
+    physical_intuition:
+    - id: flujo_calor_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: '[[flujo_calor]] mide cuán intensa es la transferencia térmica en cada metro cuadrado.'
+        en: '[[flujo_calor]] measures how intense the thermal transfer is on each square meter.'
+    limiting_cases:
+    - id: flujo_calor_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si el gradiente térmico se anula, [[flujo_calor]] también se anula.
+        en: If the thermal gradient vanishes, [[flujo_calor]] also vanishes.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  calor_transferido:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: transferred heat
+    summary_rules:
+    - id: calor_transferido_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: El resultado [[calor_transferido]] indica la energía térmica total transferida por conducción durante un intervalo
+          de tiempo.
+        en: The result [[calor_transferido]] indicates the total thermal energy transferred by conduction during a time interval.
+    physical_reading_rules:
+    - id: calor_transferido_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[calor_transferido]] como energía acumulada, no como rapidez de transferencia.
+        en: Read [[calor_transferido]] as accumulated energy, not as transfer rate.
+    coherence_rules:
+    - id: calor_transferido_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[calor_transferido]] debe aumentar si aumenta el tiempo, la potencia térmica o la diferencia de temperatura
+          mantenida.'
+        en: '[[calor_transferido]] should increase if time, thermal power, or the maintained temperature difference increases.'
+    model_validity_rules:
+    - id: calor_transferido_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[calor_transferido]] bajo conducción estacionaria si la potencia usada se mantiene aproximadamente
+          constante.
+        en: Interpret [[calor_transferido]] under steady conduction if the power used remains approximately constant.
+    graph_rules:
+    - id: calor_transferido_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: En una gráfica potencia-tiempo, [[calor_transferido]] corresponde al área bajo la curva.
+        en: In a power-time graph, [[calor_transferido]] corresponds to the area under the curve.
+    likely_errors:
+    - id: calor_transferido_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[calor_transferido]] con una lectura aislada es un error frecuente: No confundas [[calor_transferido]]
+          en julios con [[potencia_termica]] en vatios.'
+        en: Do not confuse [[calor_transferido]] in joules with [[potencia_termica]] in watts.
+    next_step_rules:
+    - id: calor_transferido_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[calor_transferido]], compara si la energía transferida es razonable para el intervalo de
+          tiempo usado.
+        en: After obtaining [[calor_transferido]], compare whether the transferred energy is reasonable for the time interval
+          used.
+    physical_intuition:
+    - id: calor_transferido_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[calor_transferido]] mide cuánta energía ha cruzado el material, como el total acumulado de un
+          goteo térmico.
+        en: Intuitively, [[calor_transferido]] measures how much energy has crossed the material, like the accumulated total
+          of a thermal drip.
+    limiting_cases:
+    - id: calor_transferido_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si el tiempo tiende a cero, [[calor_transferido]] tiende a cero; si la potencia se mantiene durante más tiempo,
+          crece proporcionalmente.
+        en: If time tends to zero, [[calor_transferido]] tends to zero; if power is maintained for longer, it grows proportionally.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  tiempo:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: time
+    summary_rules:
+    - id: tiempo_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[tiempo]] fija durante cuánto se mantiene la transferencia de calor por conducción.'
+        en: '[[tiempo]] sets how long the conductive heat transfer is maintained.'
+    physical_reading_rules:
+    - id: tiempo_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[tiempo]] como duración del proceso, no como una propiedad del material.
+        en: Read [[tiempo]] as the duration of the process, not as a material property.
+    coherence_rules:
+    - id: tiempo_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[tiempo]] debe ser positivo y expresarse en segundos si se trabaja en unidades SI.'
+        en: '[[tiempo]] must be positive and expressed in seconds when using SI units.'
+    model_validity_rules:
+    - id: tiempo_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El uso de [[tiempo]] con potencia constante supone que las condiciones térmicas no cambian de forma relevante
+          durante el intervalo.
+        en: Using [[tiempo]] with constant power assumes that thermal conditions do not change significantly during the interval.
+    graph_rules:
+    - id: tiempo_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Si el gráfico representa potencia constante, el calor transferido crece linealmente con [[tiempo]].
+        en: If the graph represents constant power, transferred heat grows linearly with [[tiempo]].
+    likely_errors:
+    - id: tiempo_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[tiempo]] con una lectura aislada es un error frecuente: No introduzcas minutos u horas como si fueran
+          segundos.'
+        en: 'A common mistake is to interpret [[tiempo]] in isolation: Do not enter minutes or hours as if they were seconds.'
+    next_step_rules:
+    - id: tiempo_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de fijar [[tiempo]], revisa si el intervalo es compatible con la hipótesis de régimen estacionario.
+        en: After setting [[tiempo]], check whether the interval is compatible with the steady-state assumption.
+    physical_intuition:
+    - id: tiempo_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: A igualdad de potencia, duplicar [[tiempo]] duplica el calor total transferido.
+        en: For the same power, doubling [[tiempo]] doubles the total transferred heat.
+    limiting_cases:
+    - id: tiempo_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[tiempo]] es cero no se acumula calor transferido; si crece indefinidamente, el modelo puede dejar de ser
+          estacionario.
+        en: If [[tiempo]] is zero no transferred heat accumulates; if it grows indefinitely, the model may stop being steady.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  resistencia_termica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: thermal resistance
+    summary_rules:
+    - id: resistencia_termica_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[resistencia_termica]] mide la oposición del sistema al paso del calor por conducción.'
+        en: '[[resistencia_termica]] measures the system''s opposition to conductive heat transfer.'
+    physical_reading_rules:
+    - id: resistencia_termica_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[resistencia_termica]] en K/W: indica cuánta diferencia de temperatura se necesita por cada vatio transferido.'
+        en: 'Read [[resistencia_termica]] in K/W: it indicates how much temperature difference is needed per watt transferred.'
+    coherence_rules:
+    - id: resistencia_termica_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[resistencia_termica]] aumenta con [[espesor]] y disminuye con [[conductividad_termica]] y [[area]].'
+        en: '[[resistencia_termica]] increases with [[espesor]] and decreases with [[conductividad_termica]] and [[area]].'
+    model_validity_rules:
+    - id: resistencia_termica_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[resistencia_termica]] como resistencia equivalente de una capa homogénea en conducción unidimensional.
+        en: Interpret [[resistencia_termica]] as the equivalent resistance of a homogeneous layer in one-dimensional conduction.
+    graph_rules:
+    - id: resistencia_termica_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: En una gráfica potencia frente a ΔT, la pendiente es la inversa de [[resistencia_termica]].
+        en: In a power versus ΔT graph, the slope is the inverse of [[resistencia_termica]].
+    likely_errors:
+    - id: resistencia_termica_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[resistencia_termica]] con una lectura aislada es un error frecuente: No confundas [[resistencia_termica]]
+          alta con conducción alta; una resistencia alta reduce la transferencia.'
+        en: Do not confuse high [[resistencia_termica]] with high conduction; high resistance reduces transfer.
+    next_step_rules:
+    - id: resistencia_termica_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[resistencia_termica]], puedes estimar la potencia como ΔT dividida entre la resistencia térmica.
+        en: After obtaining [[resistencia_termica]], you can estimate power as ΔT divided by thermal resistance.
+    physical_intuition:
+    - id: resistencia_termica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: '[[resistencia_termica]] funciona como un estrechamiento térmico: cuanto mayor es, más difícil es que pase calor.'
+        en: '[[resistencia_termica]] acts like a thermal bottleneck: the larger it is, the harder it is for heat to pass.'
+    limiting_cases:
+    - id: resistencia_termica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[resistencia_termica]] crece mucho, la potencia transferida para una misma ΔT se vuelve pequeña.
+        en: If [[resistencia_termica]] grows very large, transferred power for the same ΔT becomes small.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

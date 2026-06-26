@@ -1,0 +1,1114 @@
+version: 5.0.0
+id: clasificacion-de-transiciones
+leaf_id: clasificacion-de-transiciones
+nombre:
+  es: Clasificacion de transiciones
+  en: Classification of Transitions
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: transiciones-de-fase
+  parent_id: transiciones-de-fase
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/transiciones-de-fase/clasificacion-de-transiciones
+  orden: 276100
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Svg
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - salto_entropia_latente
+  - salto_parametro_orden
+  - criterio_derivada_energia_libre
+  - exponente_parametro_orden
+  magnitudes:
+  - temperatura
+  - temperatura_critica
+  - parametro_de_orden
+  - salto_parametro_de_orden
+  - calor_latente
+  - salto_entropia
+  - energia_libre_gibbs
+  - orden_de_transicion
+  - exponente_critico_beta
+  - amplitud_critica
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: thermodynamics and statistical physics
+  axis_convention:
+    es: El signo de saltos y diferencias depende de la convención fase final menos fase inicial o fase ordenada
+      menos desordenada.
+    en: The sign of jumps and differences depends on the convention final phase minus initial phase or ordered phase
+      minus disordered phase.
+  standard_assumptions:
+  - es: La clasificación presupone equilibrio termodinámico local y variables externas controladas.
+    en: The classification assumes local thermodynamic equilibrium and controlled external variables.
+  - es: Los saltos deben distinguirse de histéresis, redondeo por tamaño finito y ruido experimental.
+    en: Jumps must be distinguished from hysteresis, finite-size rounding, and experimental noise.
+  standard_warnings:
+  - es: 'No clasifiques una transición solo por el dibujo: revisa continuidad, derivadas, calor latente y parámetro
+      de orden.'
+    en: 'Do not classify a transition only from the picture: check continuity, derivatives, latent heat, and order
+      parameter.'
+graph_binding:
+  enabled: true
+  type: Svg
+  channels:
+  - Svg
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: 'Cada magnitud debe conservar su dimensión: energía, entropía, temperatura o cantidad adimensional según
+        corresponda.'
+      en: 'Each quantity must keep its dimension: energy, entropy, temperature, or dimensionless quantity as appropriate.'
+  - id: classification_consistency
+    status: ok
+    text:
+      es: La etiqueta de [[orden_de_transicion]] debe concordar con [[calor_latente]], [[salto_entropia]] y [[salto_parametro_de_orden]].
+      en: The [[orden_de_transicion]] label must agree with [[calor_latente]], [[salto_entropia]], and [[salto_parametro_de_orden]].
+error_patterns:
+  enabled: true
+  patterns:
+  - id: jump_vs_slope_confusion
+    status: warning
+    text:
+      es: Confundir una pendiente muy grande con un salto real produce una clasificación falsa de primer orden.
+      en: Confusing a very large slope with a real jump produces a false first-order classification.
+  - id: critical_exponent_outside_range
+    status: warning
+    text:
+      es: Ajustar exponentes lejos de [[temperatura_critica]] mezcla física crítica con detalles no universales.
+      en: Fitting exponents far from [[temperatura_critica]] mixes critical physics with non-universal details.
+  - id: latent_heat_second_order_confusion
+    status: warning
+    text:
+      es: Una transición continua ideal no debe tener [[calor_latente]] finito aunque pueda presentar divergencias
+        de respuesta.
+      en: An ideal continuous transition should not have finite [[calor_latente]] even though response functions
+        may diverge.
+graph_reading_policy:
+  enabled: true
+  primary_variable: calor_latente
+  reading_sequence:
+  - es: Identifica en el Svg si el recorrido muestra primer orden, transición continua o cruce suave.
+    en: Identify in the Svg whether the path shows first order, continuous transition, or smooth crossover.
+  - es: Busca primero saltos de [[parametro_de_orden]], [[salto_entropia]] o [[calor_latente]]; después analiza
+      exponentes críticos.
+    en: First look for jumps in [[parametro_de_orden]], [[salto_entropia]], or [[calor_latente]]; then analyze critical
+      exponents.
+  key_points:
+  - es: Un salto finito apunta a primer orden; continuidad con ley de escala apunta a transición continua.
+    en: A finite jump points to first order; continuity with scaling law points to a continuous transition.
+  - es: La clasificación debe conectar el diagrama visual con [[energia_libre_gibbs]] y sus derivadas.
+    en: The classification must connect the visual diagram with [[energia_libre_gibbs]] and its derivatives.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Compara el caso con fusión/ebullición para primer orden y con ferromagnetismo ideal para transición continua.
+    en: Compare the case with melting/boiling for first order and ideal ferromagnetism for a continuous transition.
+  - es: Si el calor latente es cero pero la respuesta se vuelve singular, piensa en comportamiento crítico.
+    en: If latent heat is zero but the response becomes singular, think of critical behavior.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Revisa que [[calor_latente]] tenga dimensión de energía, [[salto_entropia]] de entropía y los exponentes
+      sean adimensionales.
+    en: Check that [[calor_latente]] has energy dimension, [[salto_entropia]] entropy dimension, and exponents are
+      dimensionless.
+  common_unit_mistakes:
+  - es: Mezclar temperatura Celsius con kelvin al comparar [[temperatura]] y [[temperatura_critica]].
+    en: Mixing Celsius temperature with kelvin when comparing [[temperatura]] and [[temperatura_critica]].
+  - es: Tratar [[orden_de_transicion]] como una magnitud con unidad en vez de como etiqueta de clasificación.
+    en: Treating [[orden_de_transicion]] as a quantity with a unit instead of a classification label.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: true
+  processes:
+  - id: first_order_transition
+    text:
+      es: Detecta primer orden cuando hay [[calor_latente]], [[salto_entropia]] o [[salto_parametro_de_orden]] finitos.
+      en: Detect first order when finite [[calor_latente]], [[salto_entropia]], or [[salto_parametro_de_orden]]
+        appears.
+  - id: continuous_transition
+    text:
+      es: Detecta transición continua cuando el [[parametro_de_orden]] se anula suavemente y aparecen leyes con
+        [[exponente_critico_beta]].
+      en: Detect a continuous transition when [[parametro_de_orden]] vanishes smoothly and laws with [[exponente_critico_beta]]
+        appear.
+  - id: crossover
+    text:
+      es: Detecta cruce suave cuando no hay singularidad ni discontinuidad robusta al refinar la escala.
+      en: Detect a smooth crossover when there is no singularity and no discontinuity robust under scale refinement.
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable de control térmico usada para atravesar la transición
+      en: thermal control variable used to cross the transition
+    summary_rules:
+    - id: temperatura_summary_classification
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] indica en qué lado de [[temperatura_critica]] se encuentra el sistema y qué fase debe
+          esperarse.'
+        en: '[[temperatura]] indicates on which side of [[temperatura_critica]] the system lies and which phase
+          should be expected.'
+    physical_reading_rules:
+    - id: temperatura_physical_reading_units_context
+      when: 'true'
+      status: info
+      text:
+        es: Debe usarse en escala absoluta y compararse con [[temperatura_critica]], no con cero Celsius ni con
+          cambios arbitrarios.
+        en: It must be used on an absolute scale and compared with [[temperatura_critica]], not with Celsius zero
+          or arbitrary changes.
+    coherence_rules:
+    - id: temperatura_coherence_with_phase_criteria
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que el cociente o distancia térmica frente a [[temperatura_critica]] conserve el signo esperado
+          para cada fase.
+        en: Check that the ratio or thermal distance relative to [[temperatura_critica]] keeps the expected sign
+          for each phase.
+    model_validity_rules:
+    - id: temperatura_model_validity_equilibrium_limits
+      when: 'true'
+      status: info
+      text:
+        es: La interpretación exige equilibrio térmico; barridos rápidos pueden producir histéresis y confundir
+          la clasificación.
+        en: The interpretation requires thermal equilibrium; fast scans may produce hysteresis and confuse the classification.
+    graph_rules:
+    - id: temperatura_svg_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: En Svg, [[temperatura]] permite recorrer el diagrama desde una fase hacia la frontera crítica.
+        en: In Svg, [[temperatura]] lets the diagram be traversed from one phase toward the critical boundary.
+    likely_errors:
+    - id: temperatura_likely_error_classification_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: No interpretes una [[temperatura]] experimental de salto como [[temperatura_critica]] si hay sobrecalentamiento
+          o retraso cinético.
+        en: Do not interpret an experimental switching [[temperatura]] as [[temperatura_critica]] if overheating
+          or kinetic delay is present.
+    next_step_rules:
+    - id: temperatura_next_step_diagnostic_sequence
+      when: 'true'
+      status: info
+      text:
+        es: Compara [[temperatura]] con [[temperatura_critica]] y decide si procede buscar saltos o leyes críticas.
+        en: Compare [[temperatura]] with [[temperatura_critica]] and decide whether to look for jumps or critical
+          laws.
+    physical_intuition:
+    - id: temperatura_physical_intuition_phase_change
+      when: 'true'
+      status: info
+      text:
+        es: Mover [[temperatura]] desplaza el equilibrio entre fases, como girar el mando que favorece orden o desorden.
+        en: Changing [[temperatura]] shifts equilibrium between phases, like turning the control that favors order
+          or disorder.
+    limiting_cases:
+    - id: temperatura_limiting_case_phase_boundary
+      when: 'true'
+      status: info
+      text:
+        es: Muy lejos de [[temperatura_critica]], la clasificación local pierde sensibilidad a detalles críticos.
+        en: Far from [[temperatura_critica]], local classification loses sensitivity to critical details.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_critica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: temperatura característica en la que cambia la fase o el régimen de orden
+      en: characteristic temperature at which phase or ordering regime changes
+    summary_rules:
+    - id: temperatura_critica_summary_classification
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_critica]] fija el punto de comparación donde se decide si la transición muestra salto,
+          continuidad o comportamiento crítico.'
+        en: '[[temperatura_critica]] sets the comparison point where one decides whether the transition shows a
+          jump, continuity, or critical behavior.'
+    physical_reading_rules:
+    - id: temperatura_critica_physical_reading_units_context
+      when: 'true'
+      status: info
+      text:
+        es: Debe leerse como escala absoluta positiva; alejarse o acercarse a ella cambia el régimen de validez
+          de los exponentes.
+        en: It must be read as a positive absolute scale; moving away from or toward it changes the validity regime
+          for exponents.
+    coherence_rules:
+    - id: temperatura_critica_coherence_with_phase_criteria
+      when: 'true'
+      status: ok
+      text:
+        es: Verifica que [[temperatura]] y [[temperatura_critica]] estén en kelvin antes de formar distancias reducidas
+          o comparar ramas.
+        en: Verify that [[temperatura]] and [[temperatura_critica]] are in kelvin before forming reduced distances
+          or comparing branches.
+    model_validity_rules:
+    - id: temperatura_critica_model_validity_equilibrium_limits
+      when: 'true'
+      status: info
+      text:
+        es: La clasificación local alrededor de [[temperatura_critica]] exige equilibrio térmico y control suficiente
+          de presión, campo u otro parámetro externo.
+        en: Local classification around [[temperatura_critica]] requires thermal equilibrium and sufficient control
+          of pressure, field, or another external parameter.
+    graph_rules:
+    - id: temperatura_critica_svg_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: En Svg, [[temperatura_critica]] actúa como frontera visual entre fases y como referencia de saltos o
+          continuidad.
+        en: In Svg, [[temperatura_critica]] acts as the visual boundary between phases and as the reference for
+          jumps or continuity.
+    likely_errors:
+    - id: temperatura_critica_likely_error_classification_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas [[temperatura_critica]] con cualquier temperatura de cambio observable si existe histéresis
+          o sobreenfriamiento.
+        en: Do not confuse [[temperatura_critica]] with any observed switching temperature if hysteresis or supercooling
+          exists.
+    next_step_rules:
+    - id: temperatura_critica_next_step_diagnostic_sequence
+      when: 'true'
+      status: info
+      text:
+        es: Después de fijarla, compara a ambos lados el [[parametro_de_orden]], [[energia_libre_gibbs]] y discontinuidades.
+        en: After fixing it, compare [[parametro_de_orden]], [[energia_libre_gibbs]], and discontinuities on both
+          sides.
+    physical_intuition:
+    - id: temperatura_critica_physical_intuition_phase_change
+      when: 'true'
+      status: info
+      text:
+        es: Es el punto del mapa donde dos descripciones de fase compiten o una fase pierde estabilidad.
+        en: It is the point on the map where two phase descriptions compete or one phase loses stability.
+    limiting_cases:
+    - id: temperatura_critica_limiting_case_phase_boundary
+      when: 'true'
+      status: info
+      text:
+        es: Lejos de [[temperatura_critica]], las leyes críticas con [[exponente_critico_beta]] dejan de ser una
+          descripción local fiable.
+        en: Far from [[temperatura_critica]], critical laws with [[exponente_critico_beta]] stop being a reliable
+          local description.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  parametro_de_orden:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable macroscópica que diferencia fases ordenadas y desordenadas
+      en: macroscopic variable distinguishing ordered and disordered phases
+    summary_rules:
+    - id: parametro_de_orden_summary_classification
+      when: 'true'
+      status: ok
+      text:
+        es: '[[parametro_de_orden]] indica qué propiedad distingue las fases y permite seguir cómo aparece o desaparece
+          el orden.'
+        en: '[[parametro_de_orden]] indicates which property distinguishes the phases and tracks how order appears
+          or disappears.'
+    physical_reading_rules:
+    - id: parametro_de_orden_physical_reading_units_context
+      when: 'true'
+      status: info
+      text:
+        es: Su valor nulo suele representar fase simétrica o desordenada, mientras que un valor no nulo marca orden
+          según la definición del problema.
+        en: A zero value often represents a symmetric or disordered phase, while a nonzero value marks order according
+          to the problem definition.
+    coherence_rules:
+    - id: parametro_de_orden_coherence_with_phase_criteria
+      when: 'true'
+      status: ok
+      text:
+        es: Asegura que la misma convención de signo, escala y normalización de [[parametro_de_orden]] se use en
+          toda la clasificación.
+        en: Ensure that the same sign convention, scale, and normalization of [[parametro_de_orden]] are used throughout
+          the classification.
+    model_validity_rules:
+    - id: parametro_de_orden_model_validity_equilibrium_limits
+      when: 'true'
+      status: info
+      text:
+        es: El parámetro elegido debe separar realmente las fases; si no cambia entre ellas, no diagnostica la transición.
+        en: The chosen parameter must really separate the phases; if it does not change between them, it does not
+          diagnose the transition.
+    graph_rules:
+    - id: parametro_de_orden_svg_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: En Svg, sigue si [[parametro_de_orden]] aparece de forma continua, desaparece o salta en [[temperatura_critica]].
+        en: In Svg, track whether [[parametro_de_orden]] appears continuously, vanishes, or jumps at [[temperatura_critica]].
+    likely_errors:
+    - id: parametro_de_orden_likely_error_classification_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: No elijas como [[parametro_de_orden]] una magnitud cómoda pero incapaz de distinguir las simetrías de
+          fase.
+        en: Do not choose as [[parametro_de_orden]] a convenient quantity that cannot distinguish phase symmetries.
+    next_step_rules:
+    - id: parametro_de_orden_next_step_diagnostic_sequence
+      when: 'true'
+      status: info
+      text:
+        es: Compara su evolución con [[salto_parametro_de_orden]] y con la ley de [[exponente_critico_beta]].
+        en: Compare its evolution with [[salto_parametro_de_orden]] and the [[exponente_critico_beta]] law.
+    physical_intuition:
+    - id: parametro_de_orden_physical_intuition_phase_change
+      when: 'true'
+      status: info
+      text:
+        es: 'Es el termómetro del orden interno: no mide temperatura, mide cuánto se ha organizado la fase.'
+        en: 'It is the thermometer of internal order: it does not measure temperature, it measures how organized
+          the phase has become.'
+    limiting_cases:
+    - id: parametro_de_orden_limiting_case_phase_boundary
+      when: 'true'
+      status: info
+      text:
+        es: Si fluctúa alrededor de cero por simetría o dominios, usa promedios adecuados antes de clasificar.
+        en: If it fluctuates around zero because of symmetry or domains, use suitable averages before classification.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  salto_parametro_de_orden:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: discontinuidad del parámetro de orden al cruzar la transición
+      en: discontinuity of the order parameter across the transition
+    summary_rules:
+    - id: salto_parametro_de_orden_summary_classification
+      when: 'true'
+      status: ok
+      text:
+        es: '[[salto_parametro_de_orden]] distingue una aparición brusca del orden frente a una variación continua.'
+        en: '[[salto_parametro_de_orden]] distinguishes abrupt onset of order from continuous variation.'
+    physical_reading_rules:
+    - id: salto_parametro_de_orden_physical_reading_units_context
+      when: 'true'
+      status: info
+      text:
+        es: Un salto finito indica que la variable macroscópica que caracteriza la fase cambia sin pasar suavemente
+          por valores intermedios.
+        en: A finite jump indicates that the macroscopic variable characterizing the phase changes without smoothly
+          passing through intermediate values.
+    coherence_rules:
+    - id: salto_parametro_de_orden_coherence_with_phase_criteria
+      when: 'true'
+      status: ok
+      text:
+        es: Debe compararse con la definición de [[parametro_de_orden]] y con el signo elegido para las dos fases.
+        en: It must be compared with the definition of [[parametro_de_orden]] and with the sign chosen for the two
+          phases.
+    model_validity_rules:
+    - id: salto_parametro_de_orden_model_validity_equilibrium_limits
+      when: 'true'
+      status: info
+      text:
+        es: Solo es clasificatorio si las fases se han identificado en equilibrio y no por ruido de medida o dominio
+          metastable.
+        en: It is classificatory only if phases are identified in equilibrium, not through measurement noise or
+          a metastable domain.
+    graph_rules:
+    - id: salto_parametro_de_orden_svg_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: En Svg, representa el corte vertical entre ramas del [[parametro_de_orden]] al cruzar [[temperatura_critica]].
+        en: In Svg, it represents the vertical gap between [[parametro_de_orden]] branches when crossing [[temperatura_critica]].
+    likely_errors:
+    - id: salto_parametro_de_orden_likely_error_classification_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas un cambio rápido pero continuo con [[salto_parametro_de_orden]]; la discontinuidad debe
+          sobrevivir al refinamiento de escala.
+        en: Do not confuse a rapid but continuous change with [[salto_parametro_de_orden]]; the discontinuity must
+          survive scale refinement.
+    next_step_rules:
+    - id: salto_parametro_de_orden_next_step_diagnostic_sequence
+      when: 'true'
+      status: info
+      text:
+        es: Si el salto desaparece, evalúa una ley crítica con [[exponente_critico_beta]] y [[amplitud_critica]].
+        en: If the jump disappears, evaluate a critical law with [[exponente_critico_beta]] and [[amplitud_critica]].
+    physical_intuition:
+    - id: salto_parametro_de_orden_physical_intuition_phase_change
+      when: 'true'
+      status: info
+      text:
+        es: El salto es una firma de reorganización colectiva súbita, no de simple pendiente pronunciada.
+        en: The jump is a signature of sudden collective reorganization, not merely a steep slope.
+    limiting_cases:
+    - id: salto_parametro_de_orden_limiting_case_phase_boundary
+      when: 'true'
+      status: info
+      text:
+        es: En muestras finitas el salto puede redondearse; interpreta el valor con resolución térmica y tamaño
+          de sistema.
+        en: In finite samples the jump may be rounded; interpret the value with thermal resolution and system size.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  calor_latente:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: energía intercambiada sin cambio continuo de temperatura en una transición de primer orden
+      en: energy exchanged without continuous temperature change in a first-order transition
+    summary_rules:
+    - id: calor_latente_summary_classification
+      when: 'true'
+      status: ok
+      text:
+        es: 'Un [[calor_latente]] distinto de cero señala una transición de primer orden: el sistema absorbe o libera
+          energía durante el salto de fase.'
+        en: 'A nonzero [[calor_latente]] indicates a first-order transition: the system absorbs or releases energy
+          during the phase jump.'
+    physical_reading_rules:
+    - id: calor_latente_physical_reading_units_context
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[calor_latente]] como energía por cantidad de sustancia o masa asociada a la coexistencia de fases,
+          no como calor específico ordinario.
+        en: Read [[calor_latente]] as energy per amount of substance or mass associated with phase coexistence,
+          not as ordinary heat capacity.
+    coherence_rules:
+    - id: calor_latente_coherence_with_phase_criteria
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser coherente con [[temperatura_critica]] positiva y con un [[salto_entropia]] compatible mediante
+          el criterio latente declarado.
+        en: It must be consistent with positive [[temperatura_critica]] and a compatible [[salto_entropia]] through
+          the declared latent criterion.
+    model_validity_rules:
+    - id: calor_latente_model_validity_equilibrium_limits
+      when: 'true'
+      status: info
+      text:
+        es: Es útil cuando la transición presenta coexistencia y discontinuidad termodinámica; cerca de fenómenos
+          continuos debe tender a cero.
+        en: It is useful when the transition has coexistence and thermodynamic discontinuity; near continuous phenomena
+          it should tend to zero.
+    graph_rules:
+    - id: calor_latente_svg_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: En el esquema Svg, localiza [[calor_latente]] en la rama de primer orden y conéctalo con salto de entropía
+          y coexistencia.
+        en: In the Svg diagram, locate [[calor_latente]] on the first-order branch and connect it with entropy jump
+          and coexistence.
+    likely_errors:
+    - id: calor_latente_likely_error_classification_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'No confundas [[calor_latente]] grande con transición más rápida: clasifica discontinuidad energética,
+          no velocidad del proceso.'
+        en: 'Do not confuse large [[calor_latente]] with a faster transition: it classifies energetic discontinuity,
+          not process speed.'
+    next_step_rules:
+    - id: calor_latente_next_step_diagnostic_sequence
+      when: 'true'
+      status: info
+      text:
+        es: Contrasta [[calor_latente]] con [[salto_parametro_de_orden]] y [[orden_de_transicion]] antes de decidir
+          la categoría.
+        en: Compare [[calor_latente]] with [[salto_parametro_de_orden]] and [[orden_de_transicion]] before deciding
+          the category.
+    physical_intuition:
+    - id: calor_latente_physical_intuition_phase_change
+      when: 'true'
+      status: info
+      text:
+        es: Si aparece calor oculto, la energía reordena la fase sin desplazar suavemente todas las variables macroscópicas.
+        en: If hidden heat appears, energy reorganizes the phase without smoothly moving all macroscopic variables.
+    limiting_cases:
+    - id: calor_latente_limiting_case_phase_boundary
+      when: 'true'
+      status: info
+      text:
+        es: Si [[calor_latente]] se aproxima a cero mientras crecen fluctuaciones, revisa si el comportamiento es
+          continuo o crítico.
+        en: If [[calor_latente]] approaches zero while fluctuations grow, check whether the behavior is continuous
+          or critical.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  salto_entropia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: discontinuidad de entropía que acompaña una transición de primer orden
+      en: entropy discontinuity accompanying a first-order transition
+    summary_rules:
+    - id: salto_entropia_summary_classification
+      when: 'true'
+      status: ok
+      text:
+        es: '[[salto_entropia]] mide si la entropía cambia de forma brusca al cruzar la transición.'
+        en: '[[salto_entropia]] measures whether entropy changes abruptly when crossing the transition.'
+    physical_reading_rules:
+    - id: salto_entropia_physical_reading_units_context
+      when: 'true'
+      status: info
+      text:
+        es: Un valor positivo suele indicar mayor desorden en la fase de mayor [[temperatura]], pero el signo depende
+          de cómo se ordenen las fases.
+        en: A positive value often indicates greater disorder in the higher-[[temperatura]] phase, but the sign
+          depends on how phases are ordered.
+    coherence_rules:
+    - id: salto_entropia_coherence_with_phase_criteria
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[salto_entropia]] tenga dimensión entrópica y sea compatible con [[calor_latente]] y
+          [[temperatura_critica]].
+        en: Check that [[salto_entropia]] has entropy dimension and is compatible with [[calor_latente]] and [[temperatura_critica]].
+    model_validity_rules:
+    - id: salto_entropia_model_validity_equilibrium_limits
+      when: 'true'
+      status: info
+      text:
+        es: Tiene sentido cuando hay dos fases distinguibles en equilibrio a [[temperatura_critica]]; no debe imponerse
+          en cruces suaves.
+        en: It is meaningful when two distinguishable phases coexist at [[temperatura_critica]]; it should not be
+          imposed on smooth crossovers.
+    graph_rules:
+    - id: salto_entropia_svg_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: En la lectura Svg, busca la discontinuidad termodinámica que separa primer orden de transiciones continuas.
+        en: In the Svg reading, look for the thermodynamic discontinuity separating first order from continuous
+          transitions.
+    likely_errors:
+    - id: salto_entropia_likely_error_classification_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'No tomes cualquier variación de entropía como [[salto_entropia]]: debe ser una discontinuidad en la
+          transición.'
+        en: 'Do not treat any entropy variation as [[salto_entropia]]: it must be a discontinuity at the transition.'
+    next_step_rules:
+    - id: salto_entropia_next_step_diagnostic_sequence
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[salto_entropia]] junto con [[calor_latente]] para confirmar si la clasificación es de primer orden.
+        en: Use [[salto_entropia]] together with [[calor_latente]] to confirm whether the classification is first
+          order.
+    physical_intuition:
+    - id: salto_entropia_physical_intuition_phase_change
+      when: 'true'
+      status: info
+      text:
+        es: La entropía salta cuando el sistema cambia de organización microscópica sin recorrer estados intermedios
+          equivalentes.
+        en: Entropy jumps when the system changes microscopic organization without passing through equivalent intermediate
+          states.
+    limiting_cases:
+    - id: salto_entropia_limiting_case_phase_boundary
+      when: 'true'
+      status: info
+      text:
+        es: Si [[salto_entropia]] se anula dentro de la precisión experimental, no basta para defender una transición
+          de primer orden.
+        en: If [[salto_entropia]] vanishes within experimental precision, it is not enough to claim a first-order
+          transition.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia_libre_gibbs:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: potencial termodinámico cuya continuidad y derivadas clasifican la transición
+      en: thermodynamic potential whose continuity and derivatives classify the transition
+    summary_rules:
+    - id: energia_libre_gibbs_summary_classification
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia_libre_gibbs]] permite decidir qué fase es estable y qué derivada cambia de forma discontinua.'
+        en: '[[energia_libre_gibbs]] lets one decide which phase is stable and which derivative changes discontinuously.'
+    physical_reading_rules:
+    - id: energia_libre_gibbs_physical_reading_units_context
+      when: 'true'
+      status: info
+      text:
+        es: La fase estable corresponde al mínimo apropiado; los cruces o tangencias de ramas explican saltos y
+          continuidad.
+        en: The stable phase corresponds to the appropriate minimum; crossings or tangencies of branches explain
+          jumps and continuity.
+    coherence_rules:
+    - id: energia_libre_gibbs_coherence_with_phase_criteria
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba continuidad de [[energia_libre_gibbs]] y discontinuidades de sus derivadas antes de fijar
+          [[orden_de_transicion]].
+        en: Check continuity of [[energia_libre_gibbs]] and discontinuities of its derivatives before fixing [[orden_de_transicion]].
+    model_validity_rules:
+    - id: energia_libre_gibbs_model_validity_equilibrium_limits
+      when: 'true'
+      status: info
+      text:
+        es: Su uso supone equilibrio termodinámico; en transiciones irreversibles o nucleación lenta, la rama medida
+          puede ser metastable.
+        en: Its use assumes thermodynamic equilibrium; in irreversible transitions or slow nucleation, the measured
+          branch may be metastable.
+    graph_rules:
+    - id: energia_libre_gibbs_svg_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: En Svg, [[energia_libre_gibbs]] actúa como núcleo conceptual que conecta estabilidad, coexistencia y
+          criterio de derivada.
+        en: In Svg, [[energia_libre_gibbs]] is the conceptual core connecting stability, coexistence, and derivative
+          criteria.
+    likely_errors:
+    - id: energia_libre_gibbs_likely_error_classification_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: No clasifiques solo por el valor de [[energia_libre_gibbs]]; la información decisiva está en continuidad
+          y derivadas.
+        en: Do not classify only from the value of [[energia_libre_gibbs]]; the decisive information lies in continuity
+          and derivatives.
+    next_step_rules:
+    - id: energia_libre_gibbs_next_step_diagnostic_sequence
+      when: 'true'
+      status: info
+      text:
+        es: 'Identifica qué derivada cambia: entropía, volumen, capacidad calorífica u otra respuesta del sistema.'
+        en: 'Identify which derivative changes: entropy, volume, heat capacity, or another response of the system.'
+    physical_intuition:
+    - id: energia_libre_gibbs_physical_intuition_phase_change
+      when: 'true'
+      status: info
+      text:
+        es: 'Es el paisaje de estabilidad: el sistema cae en la fase cuyo valle termodinámico domina.'
+        en: 'It is the stability landscape: the system falls into the phase whose thermodynamic valley dominates.'
+    limiting_cases:
+    - id: energia_libre_gibbs_limiting_case_phase_boundary
+      when: 'true'
+      status: info
+      text:
+        es: Si no hay equilibrio o las ramas no son comparables, [[energia_libre_gibbs]] no basta para una clasificación
+          segura.
+        en: If there is no equilibrium or branches are not comparable, [[energia_libre_gibbs]] is not enough for
+          safe classification.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  orden_de_transicion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: categoría que resume la continuidad o discontinuidad termodinámica de la transición
+      en: category summarizing thermodynamic continuity or discontinuity of the transition
+    summary_rules:
+    - id: orden_de_transicion_summary_classification
+      when: 'true'
+      status: ok
+      text:
+        es: '[[orden_de_transicion]] resume si la transición se clasifica por salto de magnitudes o por singularidades
+          continuas.'
+        en: '[[orden_de_transicion]] summarizes whether the transition is classified by jumps in quantities or by
+          continuous singularities.'
+    physical_reading_rules:
+    - id: orden_de_transicion_physical_reading_units_context
+      when: 'true'
+      status: info
+      text:
+        es: No es una unidad física sino una etiqueta diagnóstica basada en [[energia_libre_gibbs]], [[calor_latente]]
+          y [[parametro_de_orden]].
+        en: It is not a physical unit but a diagnostic label based on [[energia_libre_gibbs]], [[calor_latente]],
+          and [[parametro_de_orden]].
+    coherence_rules:
+    - id: orden_de_transicion_coherence_with_phase_criteria
+      when: 'true'
+      status: ok
+      text:
+        es: 'Debe coincidir con las discontinuidades observadas: primer orden si hay calor latente o salto de primer
+          derivada relevante.'
+        en: 'It must match observed discontinuities: first order if latent heat or a relevant first-derivative jump
+          appears.'
+    model_validity_rules:
+    - id: orden_de_transicion_model_validity_equilibrium_limits
+      when: 'true'
+      status: info
+      text:
+        es: La etiqueta depende del modelo termodinámico y de qué variable externa se mantiene controlada.
+        en: The label depends on the thermodynamic model and on which external variable is controlled.
+    graph_rules:
+    - id: orden_de_transicion_svg_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: En Svg, úsalo como lectura final tras recorrer las ramas de primer orden, continua y crítica.
+        en: In Svg, use it as the final reading after following the first-order, continuous, and critical branches.
+    likely_errors:
+    - id: orden_de_transicion_likely_error_classification_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: No asignes [[orden_de_transicion]] por el aspecto visual de una curva sin comprobar derivadas o saltos.
+        en: Do not assign [[orden_de_transicion]] from the visual appearance of a curve without checking derivatives
+          or jumps.
+    next_step_rules:
+    - id: orden_de_transicion_next_step_diagnostic_sequence
+      when: 'true'
+      status: info
+      text:
+        es: Después de etiquetar, justifica qué magnitud provocó la decisión y qué criterio descartó las alternativas.
+        en: After labeling, justify which quantity made the decision and which criterion ruled out alternatives.
+    physical_intuition:
+    - id: orden_de_transicion_physical_intuition_phase_change
+      when: 'true'
+      status: info
+      text:
+        es: 'Es el nombre del patrón de cambio: salto abrupto, suavidad con singularidad o simple cruce sin transición
+          real.'
+        en: 'It names the pattern of change: abrupt jump, smoothness with singularity, or mere crossover without
+          a real transition.'
+    limiting_cases:
+    - id: orden_de_transicion_limiting_case_phase_boundary
+      when: 'true'
+      status: info
+      text:
+        es: Si los datos son finitos o redondeados, puede haber ambigüedad entre transición continua y cruce suave.
+        en: If data are finite or rounded, ambiguity may remain between a continuous transition and a smooth crossover.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  exponente_critico_beta:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: exponente que describe cómo nace continuamente el parámetro de orden cerca del punto crítico
+      en: exponent describing how the order parameter emerges continuously near the critical point
+    summary_rules:
+    - id: exponente_critico_beta_summary_classification
+      when: 'true'
+      status: ok
+      text:
+        es: '[[exponente_critico_beta]] caracteriza la forma local con la que [[parametro_de_orden]] tiende a cero
+          en una transición continua.'
+        en: '[[exponente_critico_beta]] characterizes the local way [[parametro_de_orden]] tends to zero in a continuous
+          transition.'
+    physical_reading_rules:
+    - id: exponente_critico_beta_physical_reading_units_context
+      when: 'true'
+      status: info
+      text:
+        es: No mide una cantidad extensiva; mide una ley de escala y debe estimarse cerca de [[temperatura_critica]].
+        en: It does not measure an extensive quantity; it measures a scaling law and must be estimated near [[temperatura_critica]].
+    coherence_rules:
+    - id: exponente_critico_beta_coherence_with_phase_criteria
+      when: 'true'
+      status: ok
+      text:
+        es: Debe usarse con [[amplitud_critica]] y una variable reducida definida de forma consistente.
+        en: It must be used with [[amplitud_critica]] and a consistently defined reduced variable.
+    model_validity_rules:
+    - id: exponente_critico_beta_model_validity_equilibrium_limits
+      when: 'true'
+      status: info
+      text:
+        es: Solo es fiable en el régimen crítico, antes de que efectos microscópicos o tamaño finito dominen.
+        en: It is reliable only in the critical regime, before microscopic effects or finite size dominate.
+    graph_rules:
+    - id: exponente_critico_beta_svg_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: En Svg, identifica la rama continua donde no hay salto pero sí ley crítica del [[parametro_de_orden]].
+        en: In Svg, identify the continuous branch where there is no jump but a critical law for [[parametro_de_orden]].
+    likely_errors:
+    - id: exponente_critico_beta_likely_error_classification_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: No ajustes [[exponente_critico_beta]] usando datos lejanos a [[temperatura_critica]] o mezclando ambos
+          lados de la transición sin criterio.
+        en: Do not fit [[exponente_critico_beta]] using data far from [[temperatura_critica]] or mixing both sides
+          of the transition without a criterion.
+    next_step_rules:
+    - id: exponente_critico_beta_next_step_diagnostic_sequence
+      when: 'true'
+      status: info
+      text:
+        es: Revisa si el valor estimado corresponde al modelo de campo medio, Ising u otra clase de universalidad.
+        en: Check whether the estimated value corresponds to mean-field, Ising, or another universality class.
+    physical_intuition:
+    - id: exponente_critico_beta_physical_intuition_phase_change
+      when: 'true'
+      status: info
+      text:
+        es: El exponente es la huella dactilar de cómo se desvanece el orden, no el tamaño absoluto del orden.
+        en: The exponent is the fingerprint of how order fades, not the absolute size of order.
+    limiting_cases:
+    - id: exponente_critico_beta_limiting_case_phase_boundary
+      when: 'true'
+      status: info
+      text:
+        es: Si [[salto_parametro_de_orden]] es finito, una ley con [[exponente_critico_beta]] no describe el punto
+          de salto.
+        en: If [[salto_parametro_de_orden]] is finite, a law with [[exponente_critico_beta]] does not describe the
+          jump point.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  amplitud_critica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: factor de escala que acompaña la ley crítica del parámetro de orden
+      en: scale factor accompanying the critical law of the order parameter
+    summary_rules:
+    - id: amplitud_critica_summary_classification
+      when: 'true'
+      status: ok
+      text:
+        es: '[[amplitud_critica]] fija el tamaño de [[parametro_de_orden]] en la ley crítica, mientras el exponente
+          fija la curvatura logarítmica.'
+        en: '[[amplitud_critica]] sets the size of [[parametro_de_orden]] in the critical law, while the exponent
+          sets logarithmic curvature.'
+    physical_reading_rules:
+    - id: amplitud_critica_physical_reading_units_context
+      when: 'true'
+      status: info
+      text:
+        es: Su unidad y significado dependen de cómo se normalice [[parametro_de_orden]]; no debe compararse entre
+          modelos sin esa convención.
+        en: Its unit and meaning depend on how [[parametro_de_orden]] is normalized; it should not be compared across
+          models without that convention.
+    coherence_rules:
+    - id: amplitud_critica_coherence_with_phase_criteria
+      when: 'true'
+      status: ok
+      text:
+        es: Debe ser compatible con la dimensión de [[parametro_de_orden]] y con el valor de [[exponente_critico_beta]].
+        en: It must be compatible with the dimension of [[parametro_de_orden]] and with the value of [[exponente_critico_beta]].
+    model_validity_rules:
+    - id: amplitud_critica_model_validity_equilibrium_limits
+      when: 'true'
+      status: info
+      text:
+        es: Es un parámetro de ajuste local; extrapolarlo fuera del intervalo crítico puede producir lecturas artificiales.
+        en: It is a local fitting parameter; extrapolating it outside the critical interval can produce artificial
+          readings.
+    graph_rules:
+    - id: amplitud_critica_svg_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: En Svg, acompaña la rama continua y ayuda a visualizar cuánto orden queda cerca de [[temperatura_critica]].
+        en: In Svg, it accompanies the continuous branch and helps visualize how much order remains near [[temperatura_critica]].
+    likely_errors:
+    - id: amplitud_critica_likely_error_classification_confusion
+      when: 'true'
+      status: warning
+      text:
+        es: 'No atribuyas universalidad a [[amplitud_critica]]: lo universal suele estar en exponentes, no en amplitudes
+          sin normalizar.'
+        en: 'Do not assign universality to [[amplitud_critica]]: universality usually lies in exponents, not in
+          unnormalized amplitudes.'
+    next_step_rules:
+    - id: amplitud_critica_next_step_diagnostic_sequence
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba si cambiar la normalización del [[parametro_de_orden]] cambia la amplitud pero conserva el
+          exponente.
+        en: Check whether changing the normalization of [[parametro_de_orden]] changes the amplitude while preserving
+          the exponent.
+    physical_intuition:
+    - id: amplitud_critica_physical_intuition_phase_change
+      when: 'true'
+      status: info
+      text:
+        es: La amplitud dice cuánto sube la rama; el exponente dice con qué delicadeza nace desde el punto crítico.
+        en: The amplitude says how high the branch rises; the exponent says how delicately it emerges from the critical
+          point.
+    limiting_cases:
+    - id: amplitud_critica_limiting_case_phase_boundary
+      when: 'true'
+      status: info
+      text:
+        es: Si el intervalo de ajuste no es pequeño frente a [[temperatura_critica]], la [[amplitud_critica]] puede
+          absorber errores del modelo.
+        en: If the fitting interval is not small relative to [[temperatura_critica]], [[amplitud_critica]] may absorb
+          model errors.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

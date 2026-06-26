@@ -1,0 +1,688 @@
+const e=`version: "2.0"
+id: interp-ondas-longitudinales-en-barras
+leaf_id: ondas-longitudinales-en-barras
+
+nombre:
+  es: Interpretacion de ondas longitudinales en barras
+  en: Interpretation of longitudinal waves in bars
+
+scope:
+  area: fisica-clasica
+  bloque: ondas
+  subbloque: ondas-mecanicas
+  parent_id: ondas-en-solidos
+  ruta_relativa: fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/ondas-longitudinales-en-barras
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretacion
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 2
+    priority: [summary, likely_errors]
+
+dependencies:
+  formulas:
+    - velocidad_longitudinal_barra
+    - impedancia_barra
+    - relacion_dispersion_barra
+    - longitud_onda_longitudinal
+  magnitudes:
+    - v_barra
+    - E_young
+    - rho_vol
+    - A_seccion
+    - Z_barra
+    - omega
+    - k_long
+    - lambda_long
+    - u_particula
+    - sigma_axial
+
+global_context:
+  physical_domain:
+    es: "Propagacion no dispersiva de ondas de compresion-traccion axial en barras esbeltas segun el modelo unidimensional clasico."
+    en: "Non-dispersive propagation of axial compression-tension waves in slender bars according to the classical one-dimensional model."
+  axis_convention:
+    es: "Eje x a lo largo del eje de la barra; desplazamiento axial u(x,t) en la misma direccion."
+    en: "x-axis along the bar axis; axial displacement u(x,t) in the same direction."
+  standard_assumptions:
+    - "Barra esbelta: longitud de onda >> dimension transversal"
+    - "Material isotropo, homogeneo, elastico lineal"
+    - "Seccion transversal constante"
+    - "Sin amortiguamiento"
+    - "Pequeñas deformaciones"
+  standard_warnings:
+    - "A frecuencias altas (lambda comparable al diametro), usar Rayleigh-Love"
+    - "No confundir velocidad en barra con velocidad de ondas P en medio infinito"
+    - "La impedancia mecanica depende del area, no solo del material"
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  v_barra:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Velocidad de propagacion de ondas de compresion-traccion axiales en la barra; depende solo del material."
+      en: "Propagation speed of axial compression-tension waves in the bar; depends only on material."
+    summary_rules:
+      - id: vb_summary_high
+        when: "v_barra > 5000"
+        status: ok
+        text:
+          es: "[[v_barra]] indica un material rigido con alta velocidad de propagacion. Valores superiores a 5000 m/s son tipicos de metales como acero o aluminio."
+          en: "[[v_barra]] indicates a stiff material with high propagation speed. Values above 5000 m/s are typical of metals such as steel or aluminium."
+      - id: vb_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[v_barra]] resume la velocidad a la que un pulso de compresion recorre la barra. Este valor depende solo del modulo de Young y la densidad, no de la geometria ni la frecuencia."
+          en: "[[v_barra]] summarizes the speed at which a compression pulse travels along the bar. This value depends only on Young's modulus and density, not on geometry or frequency."
+    physical_reading_rules:
+      - id: vb_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[v_barra]] depende de la raiz cuadrada de [[E_young]]/[[rho_vol]]. Duplicar la rigidez aumenta la velocidad por un factor raiz de 2. Un pulso recorre 1 m en 1000/[[v_barra]] milisegundos."
+          en: "[[v_barra]] depends on the square root of [[E_young]]/[[rho_vol]]. Doubling stiffness increases speed by a factor of root 2. A pulse traverses 1 m in 1000/[[v_barra]] milliseconds."
+    coherence_rules:
+      - id: vb_coherence_too_high
+        when: "v_barra > 7000"
+        status: error
+        text:
+          es: "[[v_barra]] supera 7000 m/s, imposible para un solido comun. Revisar unidades de [[E_young]] (debe ser Pa, no GPa) o de [[rho_vol]]."
+          en: "[[v_barra]] exceeds 7000 m/s, impossible for a common solid. Check [[E_young]] units (must be Pa, not GPa) or [[rho_vol]]."
+      - id: vb_coherence_too_low
+        when: "v_barra < 500"
+        status: warning
+        text:
+          es: "[[v_barra]] inferior a 500 m/s es inusual para solidos. Verificar que se usa el modulo de Young (no el de cizalla) y que [[rho_vol]] esta en kg/m3."
+          en: "[[v_barra]] below 500 m/s is unusual for solids. Verify Young's modulus (not shear) is used and [[rho_vol]] is in kg/m3."
+      - id: vb_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[v_barra]] es fisicamente plausible para el material considerado."
+          en: "The value of [[v_barra]] is physically plausible for the considered material."
+    model_validity_rules:
+      - id: vb_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo de barra esbelta es valido mientras la longitud de onda sea al menos 6 veces la dimension transversal mayor. A frecuencias donde esto no se cumple, aparecen efectos de inercia lateral (Rayleigh-Love)."
+          en: "The slender bar model is valid as long as wavelength is at least 6 times the largest transverse dimension. At frequencies where this fails, lateral inertia effects appear (Rayleigh-Love)."
+    graph_rules:
+      - id: vb_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "En el grafico omega vs k, [[v_barra]] es la pendiente constante de la recta. Si la recta se curva, se ha salido del regimen de barra esbelta."
+          en: "In the omega vs k plot, [[v_barra]] is the constant slope of the line. If the line curves, the slender bar regime has been exceeded."
+    likely_errors:
+      - id: vb_error_pwave
+        when: "v_barra > 5500"
+        status: warning
+        text:
+          es: "Verificar que no se ha usado el modulo de onda plana M en lugar de [[E_young]]. M da la velocidad de ondas P (mayor que la de barra). Para acero, la diferencia es del 16%."
+          en: "Verify the plane-wave modulus M was not used instead of [[E_young]]. M gives P-wave speed (higher than bar speed). For steel, the difference is 16%."
+      - id: vb_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Confirmar que [[E_young]] esta en Pa y [[rho_vol]] en kg/m3. Para acero se espera ~5100 m/s, para aluminio ~5090 m/s."
+          en: "Confirm [[E_young]] is in Pa and [[rho_vol]] in kg/m3. For steel expect ~5100 m/s, for aluminium ~5090 m/s."
+    next_step_rules:
+      - id: vb_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[v_barra]] calculada, obtener la impedancia mecanica si se necesita analizar reflexion en uniones, o la longitud de onda si se necesita verificar la condicion de esbeltez."
+          en: "With [[v_barra]] computed, obtain mechanical impedance if reflection at junctions needs analysis, or wavelength if slenderness condition needs verification."
+
+  E_young:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Modulo de Young del material de la barra; determina la rigidez axial."
+      en: "Young's modulus of the bar material; determines axial stiffness."
+    summary_rules:
+      - id: Ey_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[E_young]] resume la rigidez del material. Entra bajo una raiz cuadrada en [[v_barra]], por lo que duplicar E aumenta la velocidad por un factor raiz de 2."
+          en: "[[E_young]] summarizes material stiffness. It enters under a square root in [[v_barra]], so doubling E increases speed by a factor of root 2."
+    physical_reading_rules:
+      - id: Ey_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[E_young]] representa la fuerza por unidad de area necesaria para producir una deformacion unitaria. Un material mas rigido propaga ondas mas rapido porque la fuerza restauradora es mayor."
+          en: "[[E_young]] represents the force per unit area needed to produce unit strain. A stiffer material propagates waves faster because the restoring force is greater."
+    coherence_rules:
+      - id: Ey_coherence_gpa
+        when: "E_young < 1000"
+        status: warning
+        text:
+          es: "[[E_young]] parece estar en GPa en lugar de Pa. Multiplicar por 10^9 antes de sustituir en la formula."
+          en: "[[E_young]] seems to be in GPa instead of Pa. Multiply by 10^9 before substituting in the formula."
+      - id: Ey_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[E_young]] es coherente con materiales solidos tipicos."
+          en: "[[E_young]] is consistent with typical solid materials."
+    model_validity_rules:
+      - id: Ey_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[E_young]] se asume constante en el regimen elastico lineal. Para materiales viscoelasticos, E se convierte en complejo y aparece amortiguamiento."
+          en: "[[E_young]] is assumed constant in the linear elastic regime. For viscoelastic materials, E becomes complex and damping appears."
+    graph_rules:
+      - id: Ey_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "Un mayor [[E_young]] aumenta la pendiente de la recta omega vs k, desplazando la recta de dispersion hacia arriba."
+          en: "A higher [[E_young]] increases the slope of the omega vs k line, shifting the dispersion line upward."
+    likely_errors:
+      - id: Ey_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[E_young]] esta en Pa y corresponde al material correcto de la barra. Valores tipicos: acero 210 GPa, aluminio 70 GPa."
+          en: "Verify that [[E_young]] is in Pa and corresponds to the correct bar material. Typical values: steel 210 GPa, aluminium 70 GPa."
+    next_step_rules:
+      - id: Ey_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[E_young]] definido, calcular [[v_barra]] como raiz de [[E_young]]/[[rho_vol]]. Si se necesita impedancia, multiplicar [[rho_vol]] por [[A_seccion]] por [[v_barra]]."
+          en: "With [[E_young]] defined, compute [[v_barra]] as root of [[E_young]]/[[rho_vol]]. If impedance is needed, multiply [[rho_vol]] by [[A_seccion]] by [[v_barra]]."
+
+  rho_vol:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Densidad volumetrica del material; la inercia que se opone a la aceleracion axial."
+      en: "Volumetric density of the material; the inertia opposing axial acceleration."
+    summary_rules:
+      - id: rv_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[rho_vol]] resume la inercia volumetrica del material. Un valor elevado indica un material pesado que propaga ondas mas lentamente a igual rigidez."
+          en: "[[rho_vol]] summarizes the volumetric inertia of the material. A high value indicates a heavy material that propagates waves more slowly at equal stiffness."
+    physical_reading_rules:
+      - id: rv_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[rho_vol]] aparece en el denominador bajo la raiz cuadrada. Duplicar la densidad reduce [[v_barra]] por un factor raiz de 2. Tambien aumenta la impedancia mecanica."
+          en: "[[rho_vol]] appears in the denominator under the square root. Doubling density reduces [[v_barra]] by a factor of root 2. It also increases mechanical impedance."
+    coherence_rules:
+      - id: rv_coherence_positive
+        when: "rho_vol <= 0"
+        status: error
+        text:
+          es: "[[rho_vol]] debe ser positiva para cualquier material real."
+          en: "[[rho_vol]] must be positive for any real material."
+      - id: rv_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[rho_vol]] es coherente con materiales solidos tipicos."
+          en: "[[rho_vol]] is consistent with typical solid materials."
+    model_validity_rules:
+      - id: rv_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[rho_vol]] se asume constante y uniforme. Para materiales compuestos o porosos, la densidad efectiva puede diferir de la densidad bruta."
+          en: "[[rho_vol]] is assumed constant and uniform. For composite or porous materials, effective density may differ from bulk density."
+    graph_rules:
+      - id: rv_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "Mayor [[rho_vol]] reduce la pendiente de la recta omega vs k, deprimiendo la curva de dispersion."
+          en: "Higher [[rho_vol]] reduces the slope of the omega vs k line, depressing the dispersion curve."
+    likely_errors:
+      - id: rv_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[rho_vol]] esta en kg/m3. Valores tipicos: acero 7850, aluminio 2700, hormigon 2400."
+          en: "Verify [[rho_vol]] is in kg/m3. Typical values: steel 7850, aluminium 2700, concrete 2400."
+    next_step_rules:
+      - id: rv_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[rho_vol]] y [[E_young]] disponibles, calcular [[v_barra]] como raiz de [[E_young]]/[[rho_vol]]."
+          en: "With [[rho_vol]] and [[E_young]] available, compute [[v_barra]] as root of [[E_young]]/[[rho_vol]]."
+
+  Z_barra:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Impedancia mecanica longitudinal de la barra; relaciona fuerza axial con velocidad de particula."
+      en: "Longitudinal mechanical impedance of the bar; relates axial force to particle velocity."
+    summary_rules:
+      - id: Zb_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Z_barra]] indica la resistencia de la barra al movimiento ondulatorio. Un valor elevado significa que se necesita mas fuerza axial para generar la misma velocidad de particula."
+          en: "[[Z_barra]] indicates the bar's resistance to wave motion. A high value means more axial force is needed to generate the same particle velocity."
+    physical_reading_rules:
+      - id: Zb_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Z_barra]] depende del material ([[rho_vol]] y [[v_barra]]) y de la geometria ([[A_seccion]]). Cambios de seccion producen cambios de impedancia y generan reflexion parcial en la union."
+          en: "[[Z_barra]] depends on material ([[rho_vol]] and [[v_barra]]) and geometry ([[A_seccion]]). Section changes produce impedance changes and generate partial reflection at the junction."
+    coherence_rules:
+      - id: Zb_coherence_alt
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar con la formula alternativa Z igual a [[A_seccion]] por raiz de ([[E_young]] por [[rho_vol]]). Ambas expresiones deben dar el mismo resultado."
+          en: "Verify with alternative formula Z equals [[A_seccion]] times root of ([[E_young]] times [[rho_vol]]). Both expressions must give the same result."
+    model_validity_rules:
+      - id: Zb_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "Valida para ondas planas progresivas en barras de seccion uniforme. En barras cortas con reflexiones multiples, la impedancia efectiva difiere de este valor."
+          en: "Valid for plane progressive waves in bars of uniform section. In short bars with multiple reflections, effective impedance differs from this value."
+    graph_rules:
+      - id: Zb_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "La relacion Z vs [[A_seccion]] es lineal para un material dado. Duplicar la seccion duplica la impedancia."
+          en: "Z vs [[A_seccion]] is linear for a given material. Doubling the section doubles impedance."
+    likely_errors:
+      - id: Zb_error_specific
+        when: "true"
+        status: ok
+        text:
+          es: "No confundir impedancia mecanica (fuerza/velocidad, en kg/s) con impedancia acustica especifica (presion/velocidad, en Pa·s/m). La mecanica incluye el area."
+          en: "Do not confuse mechanical impedance (force/velocity, in kg/s) with specific acoustic impedance (pressure/velocity, in Pa·s/m). Mechanical includes area."
+    next_step_rules:
+      - id: Zb_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[Z_barra]] conocida, calcular el coeficiente de reflexion en una union como R igual a (Z2 - Z1)/(Z2 + Z1)."
+          en: "With [[Z_barra]] known, calculate reflection coefficient at a junction as R equals (Z2 - Z1)/(Z2 + Z1)."
+
+  A_seccion:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Area de la seccion transversal; entra en la impedancia pero no en la velocidad de onda."
+      en: "Cross-sectional area; enters impedance but not wave speed."
+    summary_rules:
+      - id: As_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[A_seccion]] resume la geometria transversal de la barra. No afecta a [[v_barra]] pero determina [[Z_barra]], que controla la reflexion en cambios de seccion."
+          en: "[[A_seccion]] summarizes the bar's transverse geometry. It does not affect [[v_barra]] but determines [[Z_barra]], which controls reflection at section changes."
+    physical_reading_rules:
+      - id: As_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[A_seccion]] multiplica directamente la impedancia. Cambios de seccion generan reflexion incluso si el material es el mismo, porque la impedancia depende del area."
+          en: "[[A_seccion]] directly multiplies impedance. Section changes generate reflection even if the material is the same, because impedance depends on area."
+    coherence_rules:
+      - id: As_coherence_positive
+        when: "A_seccion <= 0"
+        status: error
+        text:
+          es: "[[A_seccion]] debe ser positiva para cualquier seccion real."
+          en: "[[A_seccion]] must be positive for any real section."
+      - id: As_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[A_seccion]] es coherente con las dimensiones de la barra."
+          en: "[[A_seccion]] is consistent with bar dimensions."
+    model_validity_rules:
+      - id: As_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "La seccion se asume constante a lo largo de la barra. Para barras de seccion variable, la impedancia varia continuamente y la reflexion es distribuida."
+          en: "Section is assumed constant along the bar. For variable-section bars, impedance varies continuously and reflection is distributed."
+    graph_rules:
+      - id: As_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[A_seccion]] no aparece en el grafico omega vs k pero si en la relacion Z vs A, que es lineal para un material dado."
+          en: "[[A_seccion]] does not appear in the omega vs k plot but does appear in the Z vs A relation, which is linear for a given material."
+    likely_errors:
+      - id: As_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar unidades en m2. Para seccion circular, [[A_seccion]] vale pi por d al cuadrado dividido entre 4."
+          en: "Verify units in m2. For circular section, [[A_seccion]] equals pi times d squared divided by 4."
+    next_step_rules:
+      - id: As_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[A_seccion]] conocida, calcular [[Z_barra]] como [[rho_vol]] por [[A_seccion]] por [[v_barra]]."
+          en: "With [[A_seccion]] known, compute [[Z_barra]] as [[rho_vol]] times [[A_seccion]] times [[v_barra]]."
+
+  omega:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Frecuencia angular de la excitacion o del modo de la onda longitudinal."
+      en: "Angular frequency of the excitation or mode of the longitudinal wave."
+    summary_rules:
+      - id: om_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[omega]] resume la frecuencia angular del fenomeno. En barras, la relacion de dispersion lineal indica que [[omega]] es directamente proporcional a [[k_long]], sin dispersion."
+          en: "[[omega]] summarizes the angular frequency of the phenomenon. In bars, the linear dispersion relation indicates that [[omega]] is directly proportional to [[k_long]], without dispersion."
+    physical_reading_rules:
+      - id: om_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[omega]] define el ritmo temporal de la oscilacion. A diferencia de las ondas flexionales, la velocidad de fase no depende de [[omega]] en barras esbeltas: todas las frecuencias viajan a [[v_barra]]."
+          en: "[[omega]] defines the temporal oscillation rate. Unlike flexural waves, phase velocity does not depend on [[omega]] in slender bars: all frequencies travel at [[v_barra]]."
+    coherence_rules:
+      - id: om_coherence_positive
+        when: "omega <= 0"
+        status: error
+        text:
+          es: "[[omega]] debe ser positiva para una onda propagante."
+          en: "[[omega]] must be positive for a propagating wave."
+      - id: om_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[omega]] es coherente con el rango esperado para la aplicacion."
+          en: "The value of [[omega]] is consistent with the expected range for the application."
+    model_validity_rules:
+      - id: om_validity_high
+        when: "omega > 100000"
+        status: warning
+        text:
+          es: "A frecuencias angulares muy elevadas, la longitud de onda puede ser comparable al diametro y el modelo de barra esbelta deja de ser valido. Calcular [[lambda_long]] para verificar."
+          en: "At very high angular frequencies, wavelength may be comparable to diameter and the slender bar model breaks down. Compute [[lambda_long]] to verify."
+      - id: om_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "Para el rango de frecuencia actual, el modelo de barra esbelta es apropiado."
+          en: "For the current frequency range, the slender bar model is appropriate."
+    graph_rules:
+      - id: om_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[omega]] es el eje vertical en la curva de dispersion. La recta perfecta confirma la ausencia de dispersion."
+          en: "[[omega]] is the vertical axis in the dispersion curve. The perfect straight line confirms absence of dispersion."
+    likely_errors:
+      - id: om_error_hz
+        when: "omega < 10"
+        status: warning
+        text:
+          es: "[[omega]] parece muy baja. Verificar si se ha introducido la frecuencia en Hz en lugar de rad/s. Para convertir, multiplicar Hz por 2pi."
+          en: "[[omega]] seems very low. Verify whether frequency was entered in Hz instead of rad/s. To convert, multiply Hz by 2pi."
+      - id: om_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Confirmar que [[omega]] esta en rad/s. Para 1 kHz, omega vale aproximadamente 6283 rad/s."
+          en: "Confirm [[omega]] is in rad/s. For 1 kHz, omega is approximately 6283 rad/s."
+    next_step_rules:
+      - id: om_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[omega]] definida, calcular [[k_long]] como [[omega]]/[[v_barra]] y [[lambda_long]] como [[v_barra]]/f para characterizar completamente la onda a esa frecuencia."
+          en: "With [[omega]] defined, compute [[k_long]] as [[omega]]/[[v_barra]] and [[lambda_long]] as [[v_barra]]/f to fully characterize the wave at that frequency."
+
+  k_long:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Numero de onda longitudinal; define la escala espacial del patron de compresion-traccion."
+      en: "Longitudinal wavenumber; defines the spatial scale of the compression-tension pattern."
+    summary_rules:
+      - id: kl_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[k_long]] resume la componente espacial de la onda longitudinal. Crece linealmente con la frecuencia, confirmando la ausencia de dispersion en barras esbeltas."
+          en: "[[k_long]] summarizes the spatial component of the longitudinal wave. It grows linearly with frequency, confirming absence of dispersion in slender bars."
+    physical_reading_rules:
+      - id: kl_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[k_long]] indica cuantos ciclos espaciales caben en 2pi metros. A diferencia de ondas flexionales, la relacion con [[omega]] es estrictamente lineal."
+          en: "[[k_long]] indicates how many spatial cycles fit in 2pi metres. Unlike flexural waves, the relation with [[omega]] is strictly linear."
+    coherence_rules:
+      - id: kl_coherence_positive
+        when: "k_long <= 0"
+        status: error
+        text:
+          es: "[[k_long]] debe ser positivo para una onda propagante."
+          en: "[[k_long]] must be positive for a propagating wave."
+      - id: kl_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[k_long]] es coherente con los parametros de la barra y la frecuencia. Debe coincidir con [[omega]]/[[v_barra]]."
+          en: "[[k_long]] is consistent with bar parameters and frequency. It must equal [[omega]]/[[v_barra]]."
+    model_validity_rules:
+      - id: kl_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo es valido mientras 2pi/[[k_long]] (la longitud de onda) sea al menos 6 veces la dimension transversal de la barra."
+          en: "The model is valid as long as 2pi/[[k_long]] (the wavelength) is at least 6 times the bar's transverse dimension."
+    graph_rules:
+      - id: kl_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[k_long]] es el eje horizontal en la curva de dispersion. La recta omega vs k con pendiente constante [[v_barra]] es la firma de la propagacion no dispersiva."
+          en: "[[k_long]] is the horizontal axis in the dispersion curve. The omega vs k line with constant slope [[v_barra]] is the signature of non-dispersive propagation."
+    likely_errors:
+      - id: kl_error_default
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[k_long]] se ha calculado como [[omega]]/[[v_barra]], no como [[omega]] dividido entre la velocidad de ondas P."
+          en: "Verify [[k_long]] has been computed as [[omega]]/[[v_barra]], not as [[omega]] divided by P-wave speed."
+    next_step_rules:
+      - id: kl_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Con [[k_long]] calculado, obtener [[lambda_long]] como 2pi/[[k_long]] y comparar con la dimension transversal de la barra para verificar la validez del modelo."
+          en: "With [[k_long]] computed, obtain [[lambda_long]] as 2pi/[[k_long]] and compare with the bar's transverse dimension to verify model validity."
+
+  lambda_long:
+    magnitude_type: scalar_unsigned
+    semantic_role:
+      es: "Longitud de onda longitudinal; la distancia entre compresiones consecutivas."
+      en: "Longitudinal wavelength; the distance between consecutive compressions."
+    summary_rules:
+      - id: ll_summary_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[lambda_long]] resume la escala espacial de la onda. Si es grande respecto a la dimension transversal, el modelo de barra esbelta es valido. Si disminuye, los efectos laterales dominan."
+          en: "[[lambda_long]] summarizes the spatial scale of the wave. If large compared to the transverse dimension, the slender bar model is valid. If it decreases, lateral effects dominate."
+    physical_reading_rules:
+      - id: ll_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[lambda_long]] disminuye inversamente con la frecuencia. En una barra de longitud L, caben L/[[lambda_long]] ondas completas. Esta escala determina si el fenomeno es de propagacion libre o de modos discretos."
+          en: "[[lambda_long]] decreases inversely with frequency. In a bar of length L, L/[[lambda_long]] complete waves fit. This scale determines whether the phenomenon is free propagation or discrete modes."
+    coherence_rules:
+      - id: ll_coherence_positive
+        when: "lambda_long <= 0"
+        status: error
+        text:
+          es: "[[lambda_long]] debe ser positiva."
+          en: "[[lambda_long]] must be positive."
+      - id: ll_coherence_product
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que [[lambda_long]] por f da [[v_barra]]. Si no coincide, revisar la conversion de [[omega]] a f (dividir por 2pi)."
+          en: "Verify that [[lambda_long]] times f gives [[v_barra]]. If not, check [[omega]] to f conversion (divide by 2pi)."
+    model_validity_rules:
+      - id: ll_validity_thin
+        when: "lambda_long < 0.01"
+        status: warning
+        text:
+          es: "[[lambda_long]] menor que 1 cm puede ser comparable al diametro de la barra. Verificar la condicion de esbeltez para la frecuencia actual."
+          en: "[[lambda_long]] less than 1 cm may be comparable to bar diameter. Verify the slenderness condition for the current frequency."
+      - id: ll_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "La longitud de onda es suficientemente mayor que la dimension transversal para que el modelo de barra esbelta sea adecuado."
+          en: "Wavelength is sufficiently larger than transverse dimension for the slender bar model to be adequate."
+    graph_rules:
+      - id: ll_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "La grafica [[lambda_long]] vs frecuencia es una hiperbola. A frecuencias bajas la onda es larga; a frecuencias altas se reduce y los efectos de seccion aparecen."
+          en: "The [[lambda_long]] vs frequency plot is a hyperbola. At low frequencies the wave is long; at high frequencies it shrinks and section effects appear."
+    likely_errors:
+      - id: ll_error_omega
+        when: "true"
+        status: ok
+        text:
+          es: "No calcular [[lambda_long]] como [[v_barra]]/[[omega]]. Hay que usar f en Hz, no [[omega]] en rad/s. Si se parte de [[omega]], dividir primero por 2pi."
+          en: "Do not compute [[lambda_long]] as [[v_barra]]/[[omega]]. Use f in Hz, not [[omega]] in rad/s. If starting from [[omega]], divide by 2pi first."
+    next_step_rules:
+      - id: ll_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Comparar [[lambda_long]] con las dimensiones fisicas del sistema para determinar si estamos en regimen de propagacion libre o de modos discretos."
+          en: "Compare [[lambda_long]] with the physical dimensions of the system to determine whether we are in free propagation or discrete mode regime."
+
+cross_checks:
+  - id: velocidad_vs_impedancia
+    description:
+      es: "Z debe ser igual a rho por A por v_barra. Si Z/A difiere de rho*v_barra, hay inconsistencia."
+      en: "Z must equal rho times A times v_barra. If Z/A differs from rho*v_barra, there is inconsistency."
+  - id: velocidad_vs_lambda
+    description:
+      es: "v_barra debe ser igual a lambda por f. Si no coinciden, hay error en la conversion de frecuencia."
+      en: "v_barra must equal lambda times f. If they disagree, there is a frequency conversion error."
+
+error_patterns:
+  - id: v_barra_muy_alta
+    description:
+      es: "Velocidad superior a 7000 m/s en un metal comun. Revisar unidades de E (debe estar en Pa, no GPa) o de rho."
+      en: "Speed above 7000 m/s in a common metal. Check E units (must be Pa, not GPa) or rho."
+  - id: v_barra_muy_baja
+    description:
+      es: "Velocidad inferior a 500 m/s. Verificar que se usa el modulo de Young (no el de cizalla) y que rho esta en kg/m3."
+      en: "Speed below 500 m/s. Verify that Young's modulus (not shear) is used and that rho is in kg/m3."
+
+graph_binding:
+  enabled: true
+  type: Coord
+  primary_channel: dispersion_line
+  secondary_channel: null
+  description:
+    es: "Recta omega vs k de pendiente v_barra, confirmando la ausencia de dispersion."
+    en: "omega vs k line with slope v_barra, confirming absence of dispersion."
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+  description:
+    es: "Mini-grafico con la recta de dispersion omega vs k en el rango audible."
+    en: "Mini-graph with the omega vs k dispersion line in the audible range."
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true
+`;export{e as default};

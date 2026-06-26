@@ -1,0 +1,263 @@
+version: v5
+leaf_id: espejos
+magnitudes:
+- id: d_o
+  symbol: d_o
+  nombre:
+    es: Distancia del objeto al espejo
+    en: Object distance from the mirror
+  descripcion:
+    es: Distancia medida a lo largo del eje optico desde el objeto hasta el vertice del espejo.
+    en: Distance measured along the optical axis from the object to the mirror vertex.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role:
+    es: parametro de entrada
+    en: input parameter
+  used_in:
+  - ecuacion_espejo
+  - aumento_lateral
+  common_mistake:
+    es: Confundir el signo de d_o con el de d_i al usar la convencion de signos.
+    en: Confusing the sign of d_o with that of d_i when applying the sign convention.
+  typical_range:
+    min: 0.01
+    max: 100
+    unit: m
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: 'Positivo: objeto real delante del espejo. Negativo: objeto virtual detras del espejo.'
+      en: 'Positive: real object in front of the mirror. Negative: virtual object behind the mirror.'
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Objeto en el vertice del espejo; situacion degenerada que anula la ecuacion del espejo.
+      en: Object at the mirror vertex; degenerate case that invalidates the mirror equation.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: 0.01 a 100 m
+  interpretation_role:
+    primary_for:
+    - posicion_objeto
+    secondary_for:
+    - tipo_imagen
+  graph_binding:
+    channels:
+    - x_axis
+  pedagogical_notes:
+    es: Siempre positivo para objetos reales en la convencion habitual de optica geometrica.
+    en: Always positive for real objects in the standard geometrical optics sign convention.
+- id: d_i
+  symbol: d_i
+  nombre:
+    es: Distancia de la imagen al espejo
+    en: Image distance from the mirror
+  descripcion:
+    es: Distancia medida a lo largo del eje optico desde el vertice del espejo hasta la imagen.
+    en: Distance measured along the optical axis from the mirror vertex to the image.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role:
+    es: magnitud derivada principal
+    en: primary derived magnitude
+  used_in:
+  - ecuacion_espejo
+  - aumento_lateral
+  common_mistake:
+    es: Olvidar que d_i negativo indica imagen virtual, no un error de calculo.
+    en: Forgetting that negative d_i indicates a virtual image, not a calculation error.
+  typical_range:
+    min: -10
+    max: 100
+    unit: m
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: 'Positivo: imagen real delante del espejo. Negativo: imagen virtual detras del espejo.'
+      en: 'Positive: real image in front of the mirror. Negative: virtual image behind the mirror.'
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Imagen en el infinito; el objeto esta en el foco.
+      en: Image at infinity; the object is at the focus.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: -10 a 100 m
+  interpretation_role:
+    primary_for:
+    - posicion_imagen
+    - tipo_imagen
+    secondary_for:
+    - tamano_imagen
+  graph_binding:
+    channels:
+    - y_derived
+  pedagogical_notes:
+    es: El signo de d_i indica si la imagen es real (positivo) o virtual (negativo). Es la magnitud objetivo principal de
+      la ecuacion del espejo.
+    en: The sign of d_i indicates whether the image is real (positive) or virtual (negative). It is the primary target of
+      the mirror equation.
+- id: distancia_focal_del_espejo
+  symbol: f
+  nombre:
+    es: Distancia focal del espejo
+    en: Focal length of the mirror
+  descripcion:
+    es: Distancia desde el vertice del espejo hasta el foco, donde convergen los rayos paraxiales reflejados.
+    en: Distance from the mirror vertex to the focus, where reflected paraxial rays converge.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role:
+    es: parametro del sistema optico
+    en: optical system parameter
+  used_in:
+  - ecuacion_espejo
+  - distancia_focal_radio
+  common_mistake:
+    es: Asignar signo positivo a la focal de un espejo convexo por no aplicar la convencion.
+    en: Assigning a positive sign to a convex mirror focal length by not applying the convention.
+  typical_range:
+    min: -5
+    max: 5
+    unit: m
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: 'Positivo: espejo concavo con foco real. Negativo: espejo convexo con foco virtual.'
+      en: 'Positive: concave mirror with real focus. Negative: convex mirror with virtual focus.'
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Espejo plano; radio de curvatura infinito; no hay convergencia.
+      en: Flat mirror; infinite radius of curvature; no convergence.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: -5 a 5 m
+  interpretation_role:
+    primary_for:
+    - tipo_espejo
+    - potencia_optica
+    secondary_for:
+    - posicion_imagen
+  graph_binding:
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: El signo de f distingue el tipo de espejo y el tipo de foco (real o virtual). Es la mitad del radio de curvatura.
+    en: The sign of f distinguishes mirror type and focus type (real or virtual). It equals half the radius of curvature.
+- id: radio_de_curvatura_del_espejo
+  symbol: R
+  nombre:
+    es: Radio de curvatura del espejo
+    en: Radius of curvature of the mirror
+  descripcion:
+    es: Radio de la esfera de la que forma parte la superficie reflectante del espejo.
+    en: Radius of the sphere from which the mirror reflecting surface is part.
+  unidad_si: m
+  dimension: '[L]'
+  is_vector: false
+  components: []
+  category: parameter
+  physical_role:
+    es: parametro geometrico del espejo
+    en: geometric parameter of the mirror
+  used_in:
+  - distancia_focal_radio
+  common_mistake:
+    es: Confundir el radio de curvatura con la distancia focal; R es el doble de f.
+    en: Confusing the radius of curvature with the focal length; R is twice f.
+  typical_range:
+    min: -10
+    max: 10
+    unit: m
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: 'Positivo: espejo concavo. Negativo: espejo convexo.'
+      en: 'Positive: concave mirror. Negative: convex mirror.'
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Espejo plano con radio infinito.
+      en: Flat mirror with infinite radius.
+  value_nature:
+    kind: scalar_signed
+    nonnegative_only: false
+    expected_interval: -10 a 10 m
+  interpretation_role:
+    primary_for:
+    - geometria_espejo
+    secondary_for:
+    - distancia_focal
+  graph_binding:
+    channels:
+    - parameter
+  pedagogical_notes:
+    es: Siempre se cumple que f es la mitad de R. El signo sigue la misma convencion que f.
+    en: It always holds that f is half of R. The sign follows the same convention as f.
+- id: aumento_lateral
+  symbol: M
+  nombre:
+    es: Aumento lateral
+    en: Lateral magnification
+  descripcion:
+    es: Cociente entre el tamano de la imagen y el tamano del objeto, con signo que indica orientacion.
+    en: Ratio of image size to object size, with a sign indicating orientation.
+  unidad_si: adimensional
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: derived
+  physical_role:
+    es: magnitud derivada que describe tamano y orientacion de la imagen
+    en: derived magnitude describing image size and orientation
+  used_in:
+  - aumento_lateral
+  common_mistake:
+    es: Ignorar el signo negativo de M e interpretar la imagen como derecha cuando esta invertida.
+    en: Ignoring the negative sign of M and interpreting the image as upright when it is inverted.
+  typical_range:
+    min: -10
+    max: 10
+    unit: adimensional
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: 'Positivo: imagen derecha. Negativo: imagen invertida.'
+      en: 'Positive: upright image. Negative: inverted image.'
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Sin imagen formada; situacion no fisica en el modelo estandar.
+      en: No image formed; non-physical situation in the standard model.
+  value_nature:
+    kind: ratio
+    nonnegative_only: false
+    expected_interval: -10 a 10
+  interpretation_role:
+    primary_for:
+    - tamano_imagen
+    - orientacion_imagen
+    secondary_for:
+    - tipo_imagen
+  graph_binding:
+    channels:
+    - y_derived
+  pedagogical_notes:
+    es: El valor absoluto indica el factor de escala y el signo la orientacion. M igual a menos 1 indica imagen del mismo
+      tamano pero invertida.
+    en: The absolute value gives the scale factor and the sign gives the orientation. M equal to minus 1 indicates a same-size
+      but inverted image.

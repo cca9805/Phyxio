@@ -1,0 +1,409 @@
+﻿# ============================================================================
+# PLANTILLA GLOBAL - interpretacion.yaml
+# Versión: 5.0.0
+# Descripción: Plantilla universal para cualquier leaf de Phyxio
+# Uso: Copiar y especializar según dominio (ondas, termo, mecánica, etc.)
+#
+# ⚠️ REGLA VITAL DE COHERENCIA INTER-ARCHIVOS:
+# Este archivo debe mantener sincronía con:
+#   1. meta.yaml (interpretacion.enabled debe ser true)
+#   2. formulas.yaml (todos los targets de fórmulas deben existir aquí)
+#   3. magnitudes.yaml (símbolos usados en reglas deben existir)
+#   4. graficos/ (si graph_binding.enabled = true, los gráficos deben existir)
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 0: REGLAS DE COHERENCIA INTER-ARCHIVOS (LEER ANTES DE EDITAR)
+# ----------------------------------------------------------------------------
+#
+# 1. COHERENCIA CON formulas.yaml:
+#    - Extraer todos los targets: grep -n "target:" formulas.yaml
+#    - Cada target de formulas.yaml debe tener un bloque en targets: aquí
+#    - Incluye: result_semantics.target + rearrangements[].target
+#    - Añadir cada fórmula nueva a dependencies.formulas
+#
+# 2. COHERENCIA CON magnitudes.yaml:
+#    - Todos los símbolos usados en reglas (ej: "C_d", "v", "t") deben
+#      existir en magnitudes.yaml
+#    - El validador cruza símbolos entre archivos
+#
+# 3. COHERENCIA CON meta.yaml:
+#    - Si interpretacion.enabled: true en meta.yaml, este archivo es OBLIGATORIO
+#    - scope.area/bloque/subbloque deben coincidir con meta.yaml
+#    - id/leaf_id deben coincidir con meta.yaml.id
+#
+# 4. COHERENCIA CON graficos/:
+#    - Si mini_graph.enabled: true o graph_binding.enabled: true,
+#      los archivos SVG/Coord/DCL deben existir en la carpeta graficos/
+#
+# ----------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 1: METADATOS (OBLIGATORIOS)
+# ----------------------------------------------------------------------------
+version: "5.0.0"                    # Usar formato semver string
+id: "leaf-id-unico"                 # Sincronizar con phyxio-map.yaml
+leaf_id: "leaf-id-unico"            # Mismo que id
+
+nombre:
+  es: "Título en español"           # Copiar exacto de phyxio-map.yaml
+  en: "Title in English"            # Copiar exacto de phyxio-map.yaml
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 2: SCOPE (OBLIGATORIO - objeto completo)
+# ----------------------------------------------------------------------------
+scope:
+  area: "fisica-clasica"              # o "fisica-moderna", "matematicas", etc.
+  bloque: "mecanica"                  # o "termodinamica", "electromagnetismo", etc.
+  subbloque: "cinematica"             # o "ondas", "optica", etc.
+  parent_id: "nodo-padre-id"          # ID del nodo padre en phyxio-map.yaml
+  ruta_relativa: "fisica-clasica/mecanica/cinematica/leaf-id"
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 3: OUTPUT_CONTRACT (OBLIGATORIO - estructura específica)
+# Define qué secciones de resultado debe generar el leaf
+# ----------------------------------------------------------------------------
+output_contract:
+  sections:                           # Lista de secciones obligatorias
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_mode:
+    max_sections: 2
+    priority: [summary, likely_errors]
+  extended_mode:
+    show_all: true
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 4: RESULT_BLOCKS (OBLIGATORIO - los 7 bloques)
+# Configuración de cada bloque. TODOS deben existir, aunque estén disabled.
+# Los nombres deben coincidir con output_contract.sections
+# ----------------------------------------------------------------------------
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: "Resumen"
+      en: "Summary"
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: "Lectura física"
+      en: "Physical reading"
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: "Coherencia"
+      en: "Coherence"
+  model_validity:
+    enabled: false                    # Habilitar si el leaf tiene modelos con límites
+    order: 4
+    title:
+      es: "Validez del modelo"
+      en: "Model validity"
+  graph_reading:
+    enabled: false                    # Habilitar si hay gráficos
+    order: 5
+    title:
+      es: "Lectura gráfica"
+      en: "Graph reading"
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: "Errores comunes"
+      en: "Common errors"
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: "Próximos pasos"
+      en: "Next steps"
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 5: UI - Configuración de interfaz (OBLIGATORIO)
+# ----------------------------------------------------------------------------
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true           # Mostrar calculadora inline
+    graph_inline: false               # Mostrar gráfico inline (si aplica)
+    dedicated_tab: true               # Pestaña dedicada
+    modal: false                      # Modal emergente
+  labels:
+    es: "Interpretación física"
+    en: "Physical interpretation"
+  priority_order:                     # Orden de prioridad de los 7 bloques
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 3                   # Máximo de secciones inline
+    priority:                         # Prioridad inline
+      - summary
+      - likely_errors
+      - next_step
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 6: MINI_GRAPH (OBLIGATORIO)
+# ----------------------------------------------------------------------------
+mini_graph:
+  enabled: false                      # true si el leaf tiene gráficos
+  preferred_type: "none"              # Coord | Svg | Dcl | none
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 7: OUTPUT_POLICY (OBLIGATORIO)
+# ----------------------------------------------------------------------------
+output_policy:
+  show_summary_first: true            # Mostrar resumen primero
+  max_inline_messages: 4              # Máximo mensajes inline (≥1)
+  show_warnings: true                 # Mostrar advertencias
+  show_likely_errors: true            # Mostrar errores probables
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 8: DEPENDENCIES (OBLIGATORIO)
+# Lista de IDs de fórmulas y magnitudes requeridas
+# ----------------------------------------------------------------------------
+dependencies:
+  formulas: ""                        # Ej: "formula_1, formula_2, formula_3"
+  magnitudes: ""                      # Ej: "magnitud_a, magnitud_b"
+  requires_formulas: true             # Requiere formulas.yaml
+  requires_magnitudes: true           # Requiere magnitudes.yaml
+  supports_graph_binding: false       # Soporta binding con gráficos
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 9: GLOBAL_CONTEXT (OPCIONAL - recomendado para leafs complejos)
+# ----------------------------------------------------------------------------
+global_context:
+  physical_domain:
+    es: "Dominio físico del leaf"
+    en: "Physical domain of the leaf"
+  axis_convention:
+    es: "Convención de ejes utilizada"
+    en: "Axis convention used"
+  standard_assumptions:
+    - "Suposición estándar 1"
+    - "Suposición estándar 2"
+  standard_warnings:
+    - "Advertencia estándar 1"
+    - "Advertencia estándar 2"
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 10: GRAPH_BINDING (OPCIONAL - solo si supports_graph_binding: true)
+# ----------------------------------------------------------------------------
+graph_binding:
+  enabled: false
+  type: "Svg"                         # Svg | Coord | Dcl
+  channels:
+    - "channel_1"
+    - "channel_2"
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 11: CROSS_CHECKS (OPCIONAL - validaciones cruzadas entre magnitudes)
+# ----------------------------------------------------------------------------
+cross_checks:
+  enabled: false
+  checks:
+    - id: "check_1"
+      description:
+        es: "Descripción del check"
+        en: "Check description"
+      condition: "magnitude_A > magnitude_B"
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 12: ERROR_PATTERNS (OPCIONAL - patrones de error conocidos)
+# ----------------------------------------------------------------------------
+error_patterns:
+  patterns:
+    - id: "pattern_1"
+      trigger: "condition"
+      message:
+        es: "Mensaje de error"
+        en: "Error message"
+      severity: "warning"               # error | warning | info
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 13: TARGETS (OBLIGATORIO)
+# REGLA DE COHERENCIA: Cada target de formulas.yaml debe existir aquí
+# REGLA DE LOS 9 BLOQUES: Cada target debe tener las 9 secciones de reglas
+# ----------------------------------------------------------------------------
+targets:
+  # --------------------------------------------------------------------------
+  # EJEMPLO DE TARGET COMPLETO (copiar y adaptar para cada magnitud)
+  # --------------------------------------------------------------------------
+  <magnitude_id>:                       # ID del target (debe coincidir con formulas.yaml)
+    # Metadatos del target (OPCIONALES pero RECOMENDADOS)
+    magnitude_type: "scalar"          # scalar | vector | tensor
+    semantic_role:
+      es: "Rol semántico en español"
+      en: "Semantic role in English"
+
+    # 1. REGLAS DE RESUMEN (OBLIGATORIO)
+    summary_rules:
+      - id: "<target>_summary_default"
+        when: "true"
+        status: "ok"
+        text:
+          es: "Mensaje de resumen"
+          en: "Summary message"
+      - id: "<target>_summary_range"
+        condition:
+          variable: "<target>"
+          gte: 1
+          lte: 5
+        status: "warning"
+        text:
+          es: "La magnitud esta en zona de vigilancia; revisar modelo, unidades y rango fisico."
+          en: "The magnitude is in a monitoring range; check model, units, and physical range."
+
+    # 2. REGLAS DE LECTURA FÍSICA (OBLIGATORIO)
+    physical_reading_rules:
+      - id: "<target>_reading_default"
+        when: "value > 0"
+        status: "ok"
+        text:
+          es: "El valor es positivo"
+          en: "The value is positive"
+
+    # 3. REGLAS DE COHERENCIA (OBLIGATORIO)
+    coherence_rules:
+      - id: "<target>_coherence_range"
+        condition:
+          variable: "<target>"
+          gte: "min_value"
+          lte: "max_value"
+        status: "ok"
+        text:
+          es: "El valor está en rango válido"
+          en: "Value is within valid range"
+
+    # 4. REGLAS DE VALIDEZ DEL MODELO (OBLIGATORIO - puede ser genérico)
+    model_validity_rules:
+      - id: "<target>_validity_default"
+        when: "true"
+        status: "ok"
+        text:
+          es: "El modelo es válido en estas condiciones"
+          en: "Model is valid under these conditions"
+
+    # 5. REGLAS DE GRÁFICOS (OBLIGATORIO - puede ser genérico si no hay gráficos)
+    graph_rules:
+      - id: "<target>_graph_default"
+        when: "true"
+        status: "ok"
+        text:
+          es: "Representación gráfica disponible"
+          en: "Graphical representation available"
+
+    # 6. ERRORES PROBABLES (OBLIGATORIO)
+    likely_errors:
+      - id: "<target>_error_sign"
+        when: "value < 0"
+        status: "warning"
+        text:
+          es: "Confundir el signo de <target> con un error numerico automatico: primero revisar el convenio fisico."
+          en: "A common mistake is to assume the sign of <target> is automatically numerical error: first check the physical convention."
+
+    # 7. SIGUIENTES PASOS (OBLIGATORIO)
+    next_step_rules:
+      - id: "<target>_next_default"
+        when: "true"
+        status: "ok"
+        text:
+          es: "Próximo paso: verifica otros parámetros"
+          en: "Next step: check other parameters"
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 13: PLANTILLAS REUTILIZABLES (OPCIONAL)
+# Definir anchors YAML para reglas que se repiten entre targets
+# Ejemplo: reglas de unidades que aplican a varias magnitudes
+# ----------------------------------------------------------------------------
+# &common_unit_rules
+#   - id: "si_units"
+#     when: "unit_system == 'SI'"
+#     status: "ok"
+#     text:
+#       es: "Usando unidades del SI"
+#       en: "Using SI units"
+
+# ----------------------------------------------------------------------------
+# NOTAS DE ESPECIALIZACIÓN POR DOMINIO
+# ----------------------------------------------------------------------------
+# MECÁNICA (Cinemática/Dinámica):
+#   - graph_rules: relevante para gráficos posición-tiempo, velocidad-tiempo
+#   - mini_graph.enabled: true si hay gráficos de movimiento
+#   - global_context.axis_convention: importante (ejes x,y,z)
+#
+# TERMODINÁMICA:
+#   - graph_rules: diagramas P-V, T-S
+#   - cross_checks: verificar primera y segunda ley
+#   - global_context.standard_assumptions: gas ideal, procesos reversibles
+#
+# ONDAS:
+#   - graph_rules: fundamentales (ondas senoidales, espectros)
+#   - mini_graph.enabled: true (visualización de ondas)
+#   - graph_binding: relevante para animaciones
+#
+# ELECTROMAGNETISMO:
+#   - vector magnitudes: usar magnitude_type: "vector"
+#   - graph_rules: campos vectoriales, líneas de campo
+#   - cross_checks: verificar leyes de Maxwell cuando aplique
+#
+# ÓPTICA:
+#   - graph_rules: rayos, diagramas de lentes
+#   - mini_graph.enabled: true para diagramas de rayos
+#
+# FÍSICA MODERNA:
+#   - model_validity_rules: crucial (límites cuánticos, relativistas)
+#   - global_context.standard_warnings: efectos cuánticos, incertidumbre
+# ----------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------
+# SECCIÓN 14: CHECKLIST DE COHERENCIA PRE-VALIDACIÓN
+# ----------------------------------------------------------------------------
+# Antes de declarar el leaf listo, verificar:
+#
+# [ ] Todos los targets de formulas.yaml están en targets:
+#     Comando: grep -n "target:" formulas.yaml
+#
+# [ ] Todos los símbolos de reglas existen en magnitudes.yaml
+#     El validador cruza símbolos entre archivos
+#
+# [ ] Las 9 secciones de reglas existen en cada target (aunque sean genéricas)
+#     summary_rules, physical_reading_rules, coherence_rules,
+#     model_validity_rules, graph_rules, likely_errors, next_step_rules,
+#     physical_intuition, limiting_cases
+#
+# [ ] Cada regla tiene id, status, text.es, text.en y un disparador:
+#     when simple ("true", "x > 0") o condition estructurado.
+#
+# [ ] summary_rules no usa rangos compuestos tipo "x >= a and x <= b" en when;
+#     esos rangos se declaran con condition.variable + gte/lte/gt/lt.
+#
+# [ ] likely_errors contiene errores conceptuales plausibles:
+#     Confundir, Creer, Olvidar, Suponer / confuse, assume, forget, believe.
+#
+# [ ] output_contract.sections coincide con las claves de result_blocks
+#
+# [ ] Si mini_graph.enabled = true, los archivos de gráficos existen en graficos/
+#
+# [ ] scope coincide con meta.yaml (area, bloque, subbloque)
+#
+# [ ] id/leaf_id coinciden con meta.yaml.id
+#
+# [ ] dependencies.formulas contiene todas las fórmulas del leaf
+#
+# Comando de validación:
+#   python tools/validator_modular/main.py <ruta-al-leaf>
+# ----------------------------------------------------------------------------

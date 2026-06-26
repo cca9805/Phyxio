@@ -1,0 +1,72 @@
+const e=`version: 5
+id: leyes-de-kirchhoff
+nombre:
+  es: Leyes de kirchhoff
+  en: Kirchhoff's Laws
+titulo:
+  es: Leyes de kirchhoff
+  en: Kirchhoff's Laws
+titulo_en: Kirchhoff's Laws
+area: fisica-clasica
+bloque: electromagnetismo
+subbloque: corriente-electrica
+parent_id: circuitos-de-corriente-continua
+type: leaf
+ruta_relativa: fisica-clasica/electromagnetismo/corriente-electrica/circuitos-de-corriente-continua/leyes-de-kirchhoff
+orden: 293430
+icon: "⚡"
+descripcion: Conserva carga y energia para resolver nodos y mallas en circuitos de corriente continua.
+description_en: Uses charge and energy conservation to solve nodes and meshes in direct-current circuits.
+dificultad: 3
+tiempo_estimado_min: 85
+niveles:
+  es: [ ESO, BACHILLERATO, UNIVERSIDAD, EXTRACURRICULAR ]
+  en: [ Secondary, Upper Secondary, University, Extracurricular ]
+prerequisitos:
+- fisica-clasica/electromagnetismo/corriente-electrica/circuitos-de-corriente-continua/resistencias-en-paralelo
+tags:
+  es: [ leyes-de-kirchhoff, kcl, kvl, analisis-nodal, analisis-de-mallas ]
+  en: [ kirchhoff-laws, kcl, kvl, nodal-analysis, mesh-analysis ]
+physical_role:
+  es: concepto físico
+  en: physical concept
+graficos: []
+representacion_dominante: none
+magnitud_dominante: I3
+pregunta_fisica_central:
+  es: "¿Cómo permiten las leyes de Kirchhoff construir ecuaciones coherentes de nodo y malla para predecir corrientes y tensiones en redes DC?"
+  en: "How do Kirchhoff laws build coherent node and mesh equations to predict currents and voltages in DC networks?"
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    show_tab: true
+    show_inline_cards: true
+    allow_contextual_feedback: true
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+    output_magnitude: I3
+  output_policy:
+    show_summary: true
+    show_summary_first: true
+    show_physical_reading: true
+    show_coherence_checks: true
+    show_model_limitations: true
+    show_warnings: true
+    show_likely_errors: true
+    max_inline_messages: 4
+  dependencies:
+    require_formulas: true
+    require_magnitudes: true
+    require_examples: true
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{e as default};

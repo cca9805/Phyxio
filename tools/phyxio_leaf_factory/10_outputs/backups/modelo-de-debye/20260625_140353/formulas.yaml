@@ -1,0 +1,324 @@
+version: 5.0.0
+ui:
+  default_formula: calor_especifico_debye_integral
+formulas:
+- id: temperatura_debye
+  title:
+    es: Temperatura de Debye
+    en: Debye temperature
+  equation: theta_D=hbar*omega_D/k_B
+  latex: \Theta_D=\frac{\hbar\omega_D}{k_B}
+  rearrangements:
+  - id: despeje_frecuencia_debye
+    target: frecuencia_debye
+    equation: omega_D=k_B*theta_D/hbar
+    latex: \omega_D=\frac{k_B\Theta_D}{\hbar}
+  - id: despeje_hbar
+    target: hbar
+    equation: hbar=k_B*theta_D/omega_D
+    latex: \hbar=\frac{k_B\Theta_D}{\omega_D}
+  category: termodinamica-estadistica
+  relation_type: definition
+  physical_meaning:
+    es: Convierte la frecuencia máxima del espectro de Debye en una temperatura característica del sólido.
+    en: Converts the maximum Debye spectrum frequency into a characteristic temperature of the solid.
+  constraints:
+    es: Requiere frecuencia de corte positiva y constantes físicas positivas.
+    en: Requires a positive cutoff frequency and positive physical constants.
+  validity:
+    es: Útil cuando el sólido puede describirse mediante modos acústicos colectivos hasta una frecuencia de corte.
+    en: Useful when the solid can be described by collective acoustic modes up to a cutoff frequency.
+  dimension_check: '[K]=([J*s]*[s^-1])/[J*K^-1]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calor_especifico_debye_baja_temperatura
+  - calor_especifico_debye_integral
+  interpretation_tags:
+  - escala_termica
+  - corte_fononico
+  - comparacion_T_theta
+  result_semantics:
+    target: temperatura_debye
+    kind: scale
+    sign_meaning:
+      es: Debe ser positiva; un valor negativo no tiene sentido físico.
+      en: It must be positive; a negative value has no physical meaning.
+    absolute_value_meaning:
+      es: Indica la temperatura a partir de la cual se excita gran parte del espectro vibracional.
+      en: Indicates the temperature above which much of the vibrational spectrum is excited.
+  domain_checks:
+  - id: theta_positive
+    condition: theta_D>0
+    message:
+      es: La temperatura de Debye debe ser positiva.
+      en: Debye temperature must be positive.
+  coherence_checks:
+  - id: omega_positive
+    condition: omega_D>0
+    message:
+      es: La frecuencia de Debye debe ser positiva.
+      en: Debye frequency must be positive.
+  graph_implications:
+    es: Fija la escala horizontal cuando se representa el calor específico frente a T/ΘD.
+    en: Sets the horizontal scale when plotting heat capacity versus T/ΘD.
+  pedagogical_triggers:
+  - id: confundir_con_temperatura_actual
+    text:
+      es: No confundas ΘD con la temperatura real del experimento.
+      en: Do not confuse ΘD with the actual experimental temperature.
+- id: variable_reducida_debye
+  title:
+    es: Temperatura reducida de Debye
+    en: Reduced Debye temperature
+  equation: x=T/theta_D
+  latex: x=\frac{T}{\Theta_D}
+  rearrangements:
+  - id: despeje_temperatura
+    target: temperatura
+    equation: T=x*theta_D
+    latex: T=x\Theta_D
+  - id: despeje_temperatura_debye
+    target: temperatura_debye
+    equation: theta_D=T/x
+    latex: \Theta_D=\frac{T}{x}
+  category: termodinamica-estadistica
+  relation_type: scaling
+  physical_meaning:
+    es: Compara la temperatura del sólido con la escala vibracional marcada por la temperatura de Debye.
+    en: Compares the solid temperature with the vibrational scale set by the Debye temperature.
+  constraints:
+    es: T y ΘD deben estar en kelvin y ΘD no puede ser cero.
+    en: T and ΘD must be in kelvin and ΘD cannot be zero.
+  validity:
+    es: Sirve para decidir si domina el régimen cuántico frío o el límite clásico de alta temperatura.
+    en: It indicates whether the cold quantum regime or the high-temperature classical limit dominates.
+  dimension_check: '[1]=[K]/[K]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - calor_especifico_debye_baja_temperatura
+  - calor_especifico_debye_integral
+  - limite_dulong_petit
+  interpretation_tags:
+  - variable_adimensional
+  - regimen_termico
+  - comparacion
+  result_semantics:
+    target: temperatura_reducida
+    kind: ratio
+    sign_meaning:
+      es: Debe ser positiva si T y ΘD son físicas.
+      en: It must be positive if T and ΘD are physical.
+    absolute_value_meaning:
+      es: Valores mucho menores que 1 indican régimen cuántico de baja temperatura; valores grandes se acercan al límite clásico.
+      en: Values much less than 1 indicate a low-temperature quantum regime; large values approach the classical limit.
+  domain_checks:
+  - id: theta_not_zero
+    condition: theta_D>0
+    message:
+      es: No se puede dividir por una temperatura de Debye nula.
+      en: Cannot divide by a zero Debye temperature.
+  coherence_checks:
+  - id: x_regime
+    condition: x>=0
+    message:
+      es: La temperatura reducida no debe ser negativa.
+      en: Reduced temperature should not be negative.
+  graph_implications:
+    es: Es la magnitud natural del eje horizontal en la curva de Debye.
+    en: It is the natural quantity on the horizontal axis of the Debye curve.
+  pedagogical_triggers:
+  - id: usar_celsius
+    text:
+      es: Usar grados Celsius rompe la interpretación de T/ΘD.
+      en: Using Celsius breaks the interpretation of T/ΘD.
+- id: calor_especifico_debye_baja_temperatura
+  title:
+    es: Ley T cúbica de Debye
+    en: Debye cubic low-temperature law
+  equation: C_V=(12*pi^4/5)*N*k_B*(T/theta_D)^3
+  latex: C_V=\frac{12\pi^4}{5}Nk_B\left(\frac{T}{\Theta_D}\right)^3
+  rearrangements:
+  - id: despeje_numero_atomos
+    target: numero_atomos
+    equation: N=C_V/((12*pi^4/5)*k_B*(T/theta_D)^3)
+    latex: N=\frac{C_V}{(12\pi^4/5)k_B(T/\Theta_D)^3}
+  - id: despeje_temperatura_aproximada
+    target: temperatura
+    equation: T=theta_D*(C_V/((12*pi^4/5)*N*k_B))^(1/3)
+    latex: T=\Theta_D\left(\frac{C_V}{(12\pi^4/5)Nk_B}\right)^{1/3}
+  category: termodinamica-estadistica
+  relation_type: approximation
+  physical_meaning:
+    es: Predice que a baja temperatura solo se excita una fracción pequeña de modos acústicos y el calor específico crece
+      como T cúbica.
+    en: Predicts that at low temperature only a small fraction of acoustic modes is excited and heat capacity grows cubically
+      with T.
+  constraints:
+    es: Requiere T mucho menor que ΘD y un sólido cristalino con modos acústicos dominantes.
+    en: Requires T much smaller than ΘD and a crystalline solid dominated by acoustic modes.
+  validity:
+    es: Adecuada típicamente para T/ΘD menor que 0.1, antes de que el espectro completo participe.
+    en: Typically appropriate for T/ΘD below 0.1, before the full spectrum participates.
+  dimension_check: '[J*K^-1]=[1]*[1]*[J*K^-1]*[1]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - estimacion_baja_temperatura
+  - comparacion_experimental
+  interpretation_tags:
+  - baja_temperatura
+  - ley_cubica
+  - fonones_acusticos
+  result_semantics:
+    target: calor_especifico
+    kind: response
+    sign_meaning:
+      es: Debe ser positivo; un valor negativo indica datos o modelo incorrectos.
+      en: It must be positive; a negative value indicates wrong data or model.
+    absolute_value_meaning:
+      es: Mide cuánta energía debe añadirse para aumentar un kelvin la temperatura del sólido.
+      en: Measures how much energy must be added to raise the solid temperature by one kelvin.
+  domain_checks:
+  - id: low_temp_domain
+    condition: T/theta_D<0.1
+    message:
+      es: La ley cúbica solo es fiable en baja temperatura.
+      en: The cubic law is reliable only at low temperature.
+  coherence_checks:
+  - id: cv_less_dulong
+    condition: C_V<3*N*k_B
+    message:
+      es: En baja temperatura el calor específico debe quedar por debajo del límite de Dulong-Petit.
+      en: At low temperature heat capacity should remain below the Dulong-Petit limit.
+  graph_implications:
+    es: La curva arranca casi horizontal y se curva hacia arriba con dependencia cúbica.
+    en: The curve starts almost flat and bends upward with cubic dependence.
+  pedagogical_triggers:
+  - id: aplicar_t_cubica_fuera_rango
+    text:
+      es: No extiendas la ley T³ hasta temperaturas comparables con ΘD.
+      en: Do not extend the T³ law to temperatures comparable with ΘD.
+- id: limite_dulong_petit
+  title:
+    es: Límite de Dulong-Petit
+    en: Dulong-Petit limit
+  equation: C_V=3*N*k_B
+  latex: C_V=3Nk_B
+  rearrangements:
+  - id: despeje_numero_atomos_dulong
+    target: numero_atomos
+    equation: N=C_V/(3*k_B)
+    latex: N=\frac{C_V}{3k_B}
+  - id: calor_especifico_molar_dulong
+    target: calor_especifico_molar
+    equation: C_m=3*R
+    latex: C_m=3R
+  category: termodinamica-estadistica
+  relation_type: limit
+  physical_meaning:
+    es: Da el valor clásico de alta temperatura cuando cada átomo aporta tres modos vibracionales equipartidos.
+    en: Gives the high-temperature classical value when each atom contributes three equipartitioned vibrational modes.
+  constraints:
+    es: Requiere T mayor o comparable con ΘD y comportamiento armónico sin efectos electrónicos dominantes.
+    en: Requires T greater than or comparable to ΘD and harmonic behavior without dominant electronic effects.
+  validity:
+    es: Funciona como límite superior clásico de la contribución vibracional en muchos sólidos simples.
+    en: Works as the classical upper limit of the vibrational contribution in many simple solids.
+  dimension_check: '[J*K^-1]=[1]*[1]*[J*K^-1]'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - limite_alta_temperatura
+  - calor_especifico_molar
+  interpretation_tags:
+  - alta_temperatura
+  - limite_clasico
+  - equiparticion
+  result_semantics:
+    target: calor_especifico
+    kind: limit
+    sign_meaning:
+      es: El límite es positivo porque añadir temperatura requiere aportar energía.
+      en: The limit is positive because raising temperature requires adding energy.
+    absolute_value_meaning:
+      es: Representa el máximo clásico vibracional antes de introducir correcciones no armónicas o electrónicas.
+      en: Represents the classical vibrational maximum before adding anharmonic or electronic corrections.
+  domain_checks:
+  - id: high_temp_domain
+    condition: T/theta_D>=1
+    message:
+      es: El límite clásico se alcanza cuando T es comparable o mayor que ΘD.
+      en: The classical limit is reached when T is comparable to or greater than ΘD.
+  coherence_checks:
+  - id: molar_3r
+    condition: C_m≈3*R
+    message:
+      es: Por mol, el valor esperado se acerca a 3R.
+      en: Per mole, the expected value approaches 3R.
+  graph_implications:
+    es: La curva se aproxima a una meseta horizontal.
+    en: The curve approaches a horizontal plateau.
+  pedagogical_triggers:
+  - id: olvidar_limite
+    text:
+      es: Un crecimiento indefinido de C_V con T contradice el límite clásico.
+      en: An unlimited growth of C_V with T contradicts the classical limit.
+- id: calor_especifico_debye_integral
+  title:
+    es: Calor específico integral de Debye
+    en: Debye integral heat capacity
+  equation: C_V=9*N*k_B*(T/theta_D)^3*D3(theta_D/T)
+  latex: C_V=9Nk_B\left(\frac{T}{\Theta_D}\right)^3D_3\left(\frac{\Theta_D}{T}\right)
+  rearrangements: []
+  category: termodinamica-estadistica
+  relation_type: model
+  physical_meaning:
+    es: Resume la suma de modos fonónicos con densidad de estados de Debye entre baja y alta temperatura.
+    en: Summarizes the phonon mode sum with Debye density of states between low and high temperature.
+  constraints:
+    es: D3 representa la integral de Debye y suele evaluarse numéricamente; T y ΘD deben ser positivos.
+    en: D3 represents the Debye integral and is usually evaluated numerically; T and ΘD must be positive.
+  validity:
+    es: Modelo central para sólidos cristalinos simples donde los fonones acústicos dominan el calor específico.
+    en: Central model for simple crystalline solids where acoustic phonons dominate heat capacity.
+  dimension_check: '[J*K^-1]=[1]*[1]*[J*K^-1]*[1]*[1]'
+  calculable: false
+  motivo_no_calculable: Requiere evaluar una integral especial de Debye o una tabla numérica.
+  used_in:
+  - curva_debye
+  - ajuste_temperatura_debye
+  interpretation_tags:
+  - integral_debye
+  - curva_completa
+  - fonones
+  result_semantics:
+    target: calor_especifico
+    kind: model_output
+    sign_meaning:
+      es: Debe ser positivo y crecer hacia una meseta al aumentar T.
+      en: It must be positive and grow toward a plateau as T increases.
+    absolute_value_meaning:
+      es: Cuantifica la respuesta térmica vibracional completa predicha por el modelo de Debye.
+      en: Quantifies the full vibrational thermal response predicted by the Debye model.
+  domain_checks:
+  - id: positive_temperatures
+    condition: T>0 and theta_D>0
+    message:
+      es: La integral de Debye necesita temperaturas positivas.
+      en: The Debye integral needs positive temperatures.
+  coherence_checks:
+  - id: low_high_limits
+    condition: C_V approaches T^3 at low T and 3*N*k_B at high T
+    message:
+      es: La curva debe unir la ley T³ con el límite de Dulong-Petit.
+      en: The curve must connect the T³ law with the Dulong-Petit limit.
+  graph_implications:
+    es: La gráfica normalizada debe crecer desde cero hasta una meseta cerca de 3R por mol.
+    en: The normalized graph should rise from zero to a plateau near 3R per mole.
+  pedagogical_triggers:
+  - id: integral_no_es_constante
+    text:
+      es: La función de Debye no es una constante; cambia con ΘD/T.
+      en: The Debye function is not constant; it changes with ΘD/T.

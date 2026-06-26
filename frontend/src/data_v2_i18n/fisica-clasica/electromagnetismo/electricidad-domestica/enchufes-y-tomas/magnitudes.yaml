@@ -1,0 +1,454 @@
+version: 2
+magnitudes:
+- id: potencia_de_carga
+  symbol: P
+  nombre:
+    es: potencia de carga
+    en: load power
+  descripcion:
+    es: Potencia activa consumida por un equipo conectado a la toma; dato de partida para calcular la corriente individual
+      que circula por el contacto.
+    en: Active power consumed by equipment connected to the socket; starting data for calculating the individual current through
+      the contact.
+  unidad_si: W
+  dimension: ML^2T^{-3}
+  is_vector: false
+  components: null
+  category: observable
+  physical_role: physical_quantity
+  used_in:
+  - enchufes-y-tomas
+  common_mistake: Sumar vatios de distintos circuitos en lugar de los del circuito concreto de la toma evaluada.
+  typical_range: 100 W (lampara) a 3000 W (calefactor portatil).
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La potencia consumida es siempre positiva para cargas pasivas resistivas e inductivas.
+      en: Consumed power is always positive for passive resistive and inductive loads.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: P = 0 indica que no hay carga activa conectada a esa toma.
+      en: P = 0 indicates no active load connected to that socket.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, 3500]'
+  interpretation_role:
+    primary_for:
+    - enchufes-y-tomas
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_potencia
+  pedagogical_notes:
+    es: Usa [[potencia_de_carga]] para leer el papel fisico de potencia de carga y comprobar unidad, signo y rango.
+    en: Use [[potencia_de_carga]] to read the physical role of potencia de carga and check unit, sign and range.
+- id: potencia_total_simultanea
+  symbol: P_{tot}
+  nombre:
+    es: potencia total simultanea
+    en: simultaneous total power
+  descripcion:
+    es: Suma de las potencias activas de todos los equipos conectados simultáneamente a la toma o regleta; determina la corriente
+      total que el contacto debe soportar.
+    en: Sum of active powers of all devices simultaneously connected to the socket or strip; determines the total current
+      the contact must handle.
+  unidad_si: W
+  dimension: ML^2T^{-3}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - enchufes-y-tomas
+  common_mistake: Sumar potencias de equipos que no están encendidos al mismo tiempo; el criterio es simultaneidad real, no
+    capacidad instalada.
+  typical_range: 0 W a 3500 W para una toma de 16 A a 230 V.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: P_tot es siempre positiva; es la suma de potencias individuales no negativas.
+      en: P_tot is always positive; it is the sum of non-negative individual powers.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: P_tot = 0 indica que todos los equipos estan apagados o desconectados.
+      en: P_tot = 0 indicates all equipment is off or disconnected.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, 3500]'
+  interpretation_role:
+    primary_for:
+    - enchufes-y-tomas
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_potencia_total
+  pedagogical_notes:
+    es: Usa [[potencia_total_simultanea]] para leer el papel fisico de potencia total simultanea y comprobar unidad, signo
+      y rango.
+    en: Use [[potencia_total_simultanea]] to read the physical role of potencia total simultanea and check unit, sign and
+      range.
+- id: tension_de_suministro
+  symbol: V
+  nombre:
+    es: tensión de suministro
+    en: supply voltage
+  descripcion:
+    es: Tensión eficaz de la red doméstica; parámetro de referencia fijo para convertir potencia en corriente y para calcular
+      la capacidad máxima de la toma.
+    en: RMS voltage of the domestic network; fixed reference parameter for converting power to current and for calculating
+      maximum socket capacity.
+  unidad_si: V
+  dimension: ML^2T^{-3}I^{-1}
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: physical_quantity
+  used_in:
+  - enchufes-y-tomas
+  common_mistake: Usar 220 V en lugar de 230 V para instalaciones europeas; el error en corriente calculada es del 4 porciento.
+  typical_range: 207 V a 253 V (230 V nominal +/- 10 % segun EN 50160).
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Se usa el valor eficaz RMS, siempre positivo, para calculos de potencia y corriente.
+      en: The always-positive RMS value is used for power and current calculations.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: V = 0 indica ausencia de suministro; no aplica para calculos de carga activa.
+      en: V = 0 indicates no supply; does not apply for active load calculations.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[207, 253]'
+  interpretation_role:
+    primary_for:
+    - enchufes-y-tomas
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_tension
+  pedagogical_notes:
+    es: Usa [[tension_de_suministro]] para leer el papel fisico de tensión de suministro y comprobar unidad, signo y rango.
+    en: Use [[tension_de_suministro]] to read the physical role of tensión de suministro and check unit, sign and range.
+- id: corriente_individual_de_carga
+  symbol: I
+  nombre:
+    es: corriente individual de carga
+    en: individual load current
+  descripcion:
+    es: Corriente que demanda un equipo individual conectado a la toma, obtenida de su potencia y la tensión de suministro.
+    en: Current demanded by a single device connected to the socket, obtained from its power and supply voltage.
+  unidad_si: A
+  dimension: I
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - enchufes-y-tomas
+  common_mistake: Confundir la corriente individual I con la corriente total I_tot cuando hay varios equipos conectados.
+  typical_range: 0.4 A (lampara 100W) a 13 A (calefactor 3000W) a 230 V.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La corriente individual es siempre positiva en valor absoluto para cargas pasivas.
+      en: Individual current is always positive in absolute value for passive loads.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: I = 0 indica que el equipo esta apagado o desconectado.
+      en: I = 0 indicates the device is off or disconnected.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, 16]'
+  interpretation_role:
+    primary_for:
+    - enchufes-y-tomas
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_corriente_individual
+  pedagogical_notes:
+    es: Usa [[corriente_individual_de_carga]] para leer el papel fisico de corriente individual de carga y comprobar unidad,
+      signo y rango.
+    en: Use [[corriente_individual_de_carga]] to read the physical role of corriente individual de carga and check unit, sign
+      and range.
+- id: corriente_total_en_la_toma
+  symbol: I_{tot}
+  nombre:
+    es: corriente total en la toma
+    en: total socket current
+  descripcion:
+    es: Corriente total que circula por los contactos de la toma o regleta cuando se conectan simultáneamente varios equipos;
+      magnitud clave para evaluar el riesgo de sobrecarga.
+    en: Total current flowing through the socket or strip contacts when multiple devices are simultaneously connected; key
+      quantity for overload risk assessment.
+  unidad_si: A
+  dimension: I
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - enchufes-y-tomas
+  common_mistake: Calcular I_tot sumando corrientes individuales de equipos no encendidos simultaneamente; el criterio es
+    la simultaneidad real de uso.
+  typical_range: 0 A a 16 A para toma estandar de 16 A.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: I_tot es siempre positiva; es la suma de corrientes individuales no negativas.
+      en: I_tot is always positive; it is the sum of non-negative individual currents.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: I_tot = 0 indica que no hay ningun equipo encendido conectado a la toma.
+      en: I_tot = 0 indicates no powered device is connected to the socket.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, 16]'
+  interpretation_role:
+    primary_for:
+    - enchufes-y-tomas
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_corriente_total
+  pedagogical_notes:
+    es: Usa [[corriente_total_en_la_toma]] para leer el papel fisico de corriente total en la toma y comprobar unidad, signo
+      y rango.
+    en: Use [[corriente_total_en_la_toma]] to read the physical role of corriente total en la toma and check unit, sign and
+      range.
+- id: corriente_maxima_nominal
+  symbol: I_{max}
+  nombre:
+    es: corriente máxima nominal
+    en: nominal maximum current
+  descripcion:
+    es: Límite de corriente que el fabricante garantiza para la toma o regleta sin degradación térmica de los contactos; calibre
+      de diseño del dispositivo.
+    en: Current limit the manufacturer guarantees for the socket or strip without thermal degradation of contacts; device
+      design rating.
+  unidad_si: A
+  dimension: I
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: threshold
+  used_in:
+  - enchufes-y-tomas
+  common_mistake: Usar I_max de la toma individual cuando la regleta tiene un I_max mas bajo; el limite relevante es el del
+    dispositivo mas restrictivo en la cadena.
+  typical_range: 10 A (tomas tipo F debiles), 16 A (tomas estandar europeas), 10 A (regletas de baja calidad).
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: I_max es siempre positivo; define el techo de corriente segura del dispositivo.
+      en: I_max is always positive; defines the safe current ceiling of the device.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: I_max = 0 no tiene sentido fisico para un dispositivo operativo.
+      en: I_max = 0 has no physical meaning for an operational device.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[6, 20]'
+  interpretation_role:
+    primary_for:
+    - enchufes-y-tomas
+    secondary_for: []
+  graph_binding:
+    channels:
+    - linea_umbral_corriente
+  pedagogical_notes:
+    es: Usa [[corriente_maxima_nominal]] para leer el papel fisico de corriente máxima nominal y comprobar unidad, signo y
+      rango.
+    en: Use [[corriente_maxima_nominal]] to read the physical role of corriente máxima nominal and check unit, sign and range.
+- id: potencia_maxima_nominal
+  symbol: P_{max}
+  nombre:
+    es: potencia máxima nominal
+    en: nominal maximum power
+  descripcion:
+    es: Potencia máxima que puede conectarse a la toma sin superar su corriente nominal; estimación para carga resistiva a
+      tensión nominal.
+    en: Maximum power connectable to the socket without exceeding its nominal current; estimate for resistive load at nominal
+      voltage.
+  unidad_si: W
+  dimension: ML^2T^{-3}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: threshold
+  used_in:
+  - enchufes-y-tomas
+  common_mistake: Usar P_max como limite exacto sin considerar el factor de potencia de cargas inductivas o los transitorios
+    de arranque de motores.
+  typical_range: 2300 W (10 A) a 3680 W (16 A) a 230 V.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: P_max es siempre positiva; define el techo de potencia del dispositivo.
+      en: P_max is always positive; defines the power ceiling of the device.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: P_max = 0 no tiene sentido para una toma operativa.
+      en: P_max = 0 has no meaning for an operational socket.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[1000, 5000]'
+  interpretation_role:
+    primary_for:
+    - enchufes-y-tomas
+    secondary_for: []
+  graph_binding:
+    channels:
+    - linea_potencia_maxima
+  pedagogical_notes:
+    es: Usa [[potencia_maxima_nominal]] para leer el papel fisico de potencia máxima nominal y comprobar unidad, signo y rango.
+    en: Use [[potencia_maxima_nominal]] to read the physical role of potencia máxima nominal and check unit, sign and range.
+- id: resistencia_de_contacto
+  symbol: R_{contacto}
+  nombre:
+    es: resistencia de contacto
+    en: contact resistance
+  descripcion:
+    es: Resistencia eléctrica en la interfaz mecánica entre el borne de la toma y el pin del enchufe; aumenta con la oxidación,
+      suciedad o deformación del contacto.
+    en: Electrical resistance at the mechanical interface between the socket terminal and the plug pin; increases with oxidation,
+      dirt, or contact deformation.
+  unidad_si: Ω
+  dimension: ML^2T^{-3}I^{-2}
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: physical_quantity
+  used_in:
+  - enchufes-y-tomas
+  common_mistake: Asumir que R_contacto es nula en tomas nuevas; incluso tomas nuevas tienen resistencias de contacto en el
+    rango de decimas de ohmio que pueden generar calor apreciable con corrientes altas.
+  typical_range: 0.01 ohm (contacto nuevo) a varios ohms (contacto muy degradado).
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: R_contacto es siempre no negativa; una toma perfecta tendria R_contacto cero, pero en la practica siempre es positiva.
+      en: R_contacto is always non-negative; a perfect socket would have zero R_contacto, but in practice it is always positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: R_contacto = 0 es un limite ideal; en la practica siempre existe alguna resistencia de contacto.
+      en: R_contacto = 0 is an ideal limit; in practice there is always some contact resistance.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0.01, 5]'
+  interpretation_role:
+    primary_for:
+    - enchufes-y-tomas
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_resistencia
+  pedagogical_notes:
+    es: Usa [[resistencia_de_contacto]] para leer el papel fisico de resistencia de contacto y comprobar unidad, signo y rango.
+    en: Use [[resistencia_de_contacto]] to read the physical role of resistencia de contacto and check unit, sign and range.
+- id: potencia_disipada_en_el_contacto
+  symbol: P_{perdida}
+  nombre:
+    es: potencia disipada en el contacto
+    en: contact dissipated power
+  descripcion:
+    es: Potencia convertida en calor en la interfaz de contacto de la toma; determina el calentamiento local y el riesgo de
+      degradación o incendio.
+    en: Power converted to heat at the socket contact interface; determines local heating and risk of degradation or fire.
+  unidad_si: W
+  dimension: ML^2T^{-3}
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - enchufes-y-tomas
+  common_mistake: Ignorar P_perdida porque es pequena en valores tipicos; con corrientes altas y R_contacto degradada puede
+    superar varios vatios y generar temperaturas peligrosas.
+  typical_range: 0.01 W (contacto nuevo, corriente baja) a varios W (contacto degradado, corriente alta).
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: P_perdida es siempre positiva; representa disipacion de energia por efecto Joule.
+      en: P_perdida is always positive; it represents energy dissipation via the Joule effect.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: P_perdida = 0 solo en el limite ideal de R_contacto = 0.
+      en: P_perdida = 0 only in the ideal limit of R_contacto = 0.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0.001, 20]'
+  interpretation_role:
+    primary_for:
+    - enchufes-y-tomas
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_perdida_termica
+  pedagogical_notes:
+    es: Usa [[potencia_disipada_en_el_contacto]] para leer el papel fisico de potencia disipada en el contacto y comprobar
+      unidad, signo y rango.
+    en: Use [[potencia_disipada_en_el_contacto]] to read the physical role of potencia disipada en el contacto and check unit,
+      sign and range.
+- id: margen_uso
+  symbol: margen_{uso}
+  nombre:
+    es: ratio de uso de la toma
+    en: socket usage ratio
+  descripcion:
+    es: Fracción de la corriente nominal I_max que está siendo consumida por los equipos conectados; indicador de proximidad
+      a la sobrecarga.
+    en: Fraction of the nominal current I_max being consumed by connected equipment; indicator of proximity to overload.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: diagnostic_index
+  used_in:
+  - enchufes-y-tomas
+  common_mistake: Interpretar margen_uso < 1 como seguridad absoluta; un margen_uso de 0,9 indica que la toma opera al 90%
+    y cualquier carga adicional puede provocar sobrecarga.
+  typical_range: 0 (toma vacia) a valores superiores a 1 (sobrecarga activa).
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: margen_uso es siempre no negativo; es el cociente de dos magnitudes positivas.
+      en: margen_uso is always non-negative; it is the ratio of two positive quantities.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: margen_uso = 0 indica que no hay ninguna carga activa conectada a la toma.
+      en: margen_uso = 0 indicates no active load connected to the socket.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, 2]'
+  interpretation_role:
+    primary_for:
+    - enchufes-y-tomas
+    secondary_for: []
+  graph_binding:
+    channels:
+    - eje_y_margen_uso
+  pedagogical_notes:
+    es: Usa [[margen_uso]] para leer el papel fisico de ratio de uso de la toma y comprobar unidad, signo y rango.
+    en: Use [[margen_uso]] to read the physical role of ratio de uso de la toma and check unit, sign and range.

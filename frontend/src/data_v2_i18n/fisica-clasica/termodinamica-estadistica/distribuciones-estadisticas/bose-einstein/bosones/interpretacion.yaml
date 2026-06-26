@@ -1,0 +1,768 @@
+version: 5.0.0
+id: bosones
+leaf_id: bosones
+nombre:
+  es: Bosones
+  en: Bosons
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: distribuciones-estadisticas
+  parent_id: bose-einstein
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/distribuciones-estadisticas/bose-einstein/bosones
+  orden: 273210
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - bose_einstein_ocupacion
+  - fugacidad_bosonica
+  - longitud_onda_termica_de_broglie
+  - densidad_critica_bose
+  magnitudes:
+  - ocupacion_media
+  - energia
+  - potencial_quimico
+  - temperatura
+  - constante_boltzmann
+  - fugacidad
+  - longitud_onda_termica
+  - masa_particula
+  - constante_planck
+  - densidad_critica
+  - densidad_particulas
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: ocupacion_media
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  ocupacion_media:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado principal
+      en: main result
+    summary_rules:
+    - id: ocupacion_media_summary
+      when: 'true'
+      status: ok
+      text:
+        es: '[[ocupacion_media]] cuenta cuántos bosones ocupan de media un estado: crece mucho cuando [[energia]] se acerca
+          a [[potencial_quimico]] a temperatura finita.'
+        en: '[[ocupacion_media]] gives the average number of bosons in one state: it grows strongly when [[energia]] approaches
+          [[potencial_quimico]] at finite temperature.'
+    physical_reading_rules:
+    - id: ocupacion_media_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: 'Lee [[ocupacion_media]] como número adimensional no negativo, no como probabilidad: puede superar 1 porque varios
+          bosones comparten el mismo estado.'
+        en: 'Read [[ocupacion_media]] as a non-negative dimensionless number, not as a probability: it may exceed 1 because
+          several bosons can share one state.'
+    coherence_rules:
+    - id: ocupacion_media_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Si [[ocupacion_media]] es negativa o aparece con unidades, revisa el exponente de Bose-Einstein y la condición
+          [[potencial_quimico]] menor que [[energia]].
+        en: If [[ocupacion_media]] is negative or has units, check the Bose-Einstein exponent and the condition that [[potencial_quimico]]
+          is below [[energia]].
+    model_validity_rules:
+    - id: ocupacion_media_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: La lectura vale para bosones indistinguibles en equilibrio térmico; cerca de la condensación, el estado fundamental
+          puede requerir tratamiento separado.
+        en: The reading is valid for indistinguishable bosons in thermal equilibrium; near condensation, the ground state
+          may need separate treatment.
+    graph_rules:
+    - id: ocupacion_media_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: En la gráfica Coord, [[ocupacion_media]] baja al aumentar [[energia]] y se vuelve muy grande cerca del umbral
+          controlado por [[potencial_quimico]].
+        en: In the Coord graph, [[ocupacion_media]] decreases as [[energia]] increases and becomes very large near the threshold
+          set by [[potencial_quimico]].
+    likely_errors:
+    - id: ocupacion_media_likely_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[ocupacion_media]] con una lectura aislada es un error frecuente: No sustituyas la distribución bosónica
+          por Maxwell-Boltzmann cuando [[ocupacion_media]] no es pequeña o cuando la degeneración cuántica es importante.'
+        en: 'A common mistake is to interpret [[ocupacion_media]] in isolation: Do not replace the bosonic distribution with
+          Maxwell-Boltzmann when [[ocupacion_media]] is not small or when quantum degeneracy matters.'
+    next_step_rules:
+    - id: ocupacion_media_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Contrasta el valor con [[temperatura]], [[fugacidad]] y [[densidad_particulas]] para decidir si el gas está en
+          régimen clásico o degenerado.
+        en: Compare the value with [[temperatura]], [[fugacidad]], and [[densidad_particulas]] to decide whether the gas is
+          classical or degenerate.
+    physical_intuition:
+    - id: ocupacion_media_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: 'La ausencia de exclusión permite acumulación: muchos bosones pueden caer en el mismo nivel si la energía efectiva
+          es suficientemente baja.'
+        en: 'The absence of exclusion allows accumulation: many bosons can fall into the same level if the effective energy
+          is low enough.'
+    limiting_cases:
+    - id: ocupacion_media_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Cuando el exponente es grande, [[ocupacion_media]] tiende a cero; cuando se acerca a cero por arriba, [[ocupacion_media]]
+          crece sin límite ideal.
+        en: When the exponent is large, [[ocupacion_media]] tends to zero; when it approaches zero from above, [[ocupacion_media]]
+          grows without bound in the ideal model.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  energia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable independiente
+      en: independent variable
+    summary_rules:
+    - id: energia_summary
+      when: 'true'
+      status: ok
+      text:
+        es: '[[energia]] fija el nivel del estado; frente a [[potencial_quimico]] determina cuán accesible resulta para los
+          bosones.'
+        en: '[[energia]] sets the state level; compared with [[potencial_quimico]], it determines how accessible the state
+          is to bosons.'
+    physical_reading_rules:
+    - id: energia_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: Una [[energia]] mayor reduce la ocupación media a la misma [[temperatura]] porque aumenta el coste térmico del
+          estado.
+        en: A higher [[energia]] lowers the mean occupation at the same [[temperatura]] because it raises the thermal cost
+          of the state.
+    coherence_rules:
+    - id: energia_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Usa julios o una unidad energética coherente con [[constante_boltzmann]]*[[temperatura]]; mezclar eV y J deforma
+          el exponente.
+        en: Use joules or an energy unit consistent with [[constante_boltzmann]]*[[temperatura]]; mixing eV and J distorts
+          the exponent.
+    model_validity_rules:
+    - id: energia_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: La energía debe describir niveles compatibles con el modelo de gas ideal bosónico o con el espectro declarado.
+        en: The energy must describe levels compatible with the ideal boson gas model or with the stated spectrum.
+    graph_rules:
+    - id: energia_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: 'En el eje x, [[energia]] se lee como variable independiente: la curva de ocupación cae de forma no lineal al
+          desplazarse hacia niveles altos.'
+        en: 'On the x-axis, [[energia]] is read as the independent variable: the occupation curve drops nonlinearly toward
+          high levels.'
+    likely_errors:
+    - id: energia_likely_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[energia]] con una lectura aislada es un error frecuente: No confundas [[energia]] con temperatura:
+          ambas aparecen juntas, pero una mide nivel del estado y la otra agitación térmica.'
+        en: 'Do not confuse [[energia]] with temperature: both appear together, but one measures the state level and the other
+          thermal agitation.'
+    next_step_rules:
+    - id: energia_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba si el intervalo de [[energia]] usado incluye la zona cercana a [[potencial_quimico]], donde la lectura
+          cambia más rápido.
+        en: Check whether the [[energia]] range includes the region near [[potencial_quimico]], where the reading changes
+          fastest.
+    physical_intuition:
+    - id: energia_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Los niveles bajos son asientos baratos para bosones; los niveles altos exigen más energía térmica para poblarse.
+        en: Low levels are cheap seats for bosons; high levels require more thermal energy to become populated.
+    limiting_cases:
+    - id: energia_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Para [[energia]] muy grande frente a [[constante_boltzmann]]*[[temperatura]], la ocupación se aproxima al límite
+          clásico diluido.
+        en: For [[energia]] much larger than [[constante_boltzmann]]*[[temperatura]], occupation approaches the dilute classical
+          limit.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  potencial_quimico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro termodinámico
+      en: thermodynamic parameter
+    summary_rules:
+    - id: potencial_quimico_summary
+      when: 'true'
+      status: ok
+      text:
+        es: '[[potencial_quimico]] regula la entrada estadística de partículas y, para bosones ideales, no debe superar el
+          nivel de menor [[energia]].'
+        en: '[[potencial_quimico]] controls the statistical entry of particles and, for ideal bosons, must not exceed the
+          lowest [[energia]] level.'
+    physical_reading_rules:
+    - id: potencial_quimico_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: Más [[potencial_quimico]] acerca el sistema a alta ocupación; si alcanza el mínimo energético aparece el umbral
+          de condensación ideal.
+        en: Higher [[potencial_quimico]] moves the system toward high occupation; reaching the energy minimum marks the ideal
+          condensation threshold.
+    coherence_rules:
+    - id: potencial_quimico_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Si el denominador de Bose-Einstein se anula o cambia de signo, revisa [[potencial_quimico]] frente a [[energia]].
+        en: If the Bose-Einstein denominator vanishes or changes sign, check [[potencial_quimico]] against [[energia]].
+    model_validity_rules:
+    - id: potencial_quimico_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: La regla de signo depende de la referencia de energía; lo importante es que el exponente permanezca físicamente
+          admisible.
+        en: The sign rule depends on the energy reference; what matters is that the exponent remains physically admissible.
+    graph_rules:
+    - id: potencial_quimico_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: Al aumentar [[potencial_quimico]], la curva [[ocupacion_media]] frente a [[energia]] se eleva y se concentra cerca
+          de bajas energías.
+        en: As [[potencial_quimico]] increases, the [[ocupacion_media]] versus [[energia]] curve rises and concentrates near
+          low energies.
+    likely_errors:
+    - id: potencial_quimico_likely_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[potencial_quimico]] con una lectura aislada es un error frecuente: No trates [[potencial_quimico]]
+          como una energía externa cualquiera: en bosones ideales está limitado por el estado fundamental.'
+        en: 'A common mistake is to interpret [[potencial_quimico]] in isolation: Do not treat [[potencial_quimico]] as just
+          any external energy: in ideal bosons it is bounded by the ground state.'
+    next_step_rules:
+    - id: potencial_quimico_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Evalúa [[fugacidad]] para traducir [[potencial_quimico]] a un parámetro adimensional más cómodo.
+        en: Evaluate [[fugacidad]] to translate [[potencial_quimico]] into a more convenient dimensionless parameter.
+    physical_intuition:
+    - id: potencial_quimico_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: '[[potencial_quimico]] actúa como una perilla de población: al subirla, los estados se llenan con más facilidad.'
+        en: '[[potencial_quimico]] acts as a population knob: raising it makes states easier to fill.'
+    limiting_cases:
+    - id: potencial_quimico_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[potencial_quimico]] está muy por debajo de [[energia]], la ocupación cae al régimen clásico; al acercarse
+          al mínimo, surge degeneración.
+        en: When [[potencial_quimico]] is far below [[energia]], occupation falls to the classical regime; approaching the
+          minimum brings degeneracy.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  fugacidad:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro estadístico
+      en: statistical parameter
+    summary_rules:
+    - id: fugacidad_summary
+      when: 'true'
+      status: ok
+      text:
+        es: '[[fugacidad]] resume el efecto de [[potencial_quimico]] y [[temperatura]] en un factor adimensional que mide
+          cercanía a degeneración.'
+        en: '[[fugacidad]] summarizes the effect of [[potencial_quimico]] and [[temperatura]] in a dimensionless factor measuring
+          closeness to degeneracy.'
+    physical_reading_rules:
+    - id: fugacidad_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: Para el gas bosónico ideal, [[fugacidad]] debe mantenerse entre 0 y 1; valores cercanos a 1 anuncian ocupaciones
+          grandes.
+        en: For the ideal boson gas, [[fugacidad]] must remain between 0 and 1; values near 1 signal large occupations.
+    coherence_rules:
+    - id: fugacidad_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Si [[fugacidad]] supera 1 en el modelo ideal, revisa el signo de [[potencial_quimico]] o la referencia de energía.
+        en: If [[fugacidad]] exceeds 1 in the ideal model, check the sign of [[potencial_quimico]] or the energy reference.
+    model_validity_rules:
+    - id: fugacidad_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: La fugacidad es útil en equilibrio y en gases ideales o débilmente interactuantes; interacciones fuertes cambian
+          su lectura.
+        en: Fugacity is useful in equilibrium and in ideal or weakly interacting gases; strong interactions change its reading.
+    graph_rules:
+    - id: fugacidad_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: Una [[fugacidad]] mayor desplaza hacia arriba la curva de [[ocupacion_media]], especialmente en estados de baja
+          [[energia]].
+        en: Higher [[fugacidad]] shifts the [[ocupacion_media]] curve upward, especially at low [[energia]] states.
+    likely_errors:
+    - id: fugacidad_likely_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[fugacidad]] con una lectura aislada es un error frecuente: No confundas [[fugacidad]] con una probabilidad:
+          es un factor termodinámico adimensional, no una fracción de partículas.'
+        en: 'Do not confuse [[fugacidad]] with a probability: it is a dimensionless thermodynamic factor, not a particle fraction.'
+    next_step_rules:
+    - id: fugacidad_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[fugacidad]] junto con [[longitud_onda_termica]] para estimar si la densidad entra en régimen degenerado.
+        en: Use [[fugacidad]] together with [[longitud_onda_termica]] to estimate whether density enters the degenerate regime.
+    physical_intuition:
+    - id: fugacidad_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: '[[fugacidad]] es un indicador de apetito estadístico: cuanto más cerca de 1, más fácil es acumular bosones.'
+        en: '[[fugacidad]] is a statistical appetite indicator: the closer to 1, the easier boson accumulation becomes.'
+    limiting_cases:
+    - id: fugacidad_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Con [[fugacidad]] muy pequeña aparece el gas clásico diluido; al acercarse a 1 aparece el borde bosónico de alta
+          ocupación.
+        en: With very small [[fugacidad]] the dilute classical gas appears; approaching 1 reveals the bosonic edge of high
+          occupation.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  longitud_onda_termica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: escala de degeneración
+      en: degeneracy scale
+    summary_rules:
+    - id: longitud_onda_termica_summary
+      when: 'true'
+      status: ok
+      text:
+        es: '[[longitud_onda_termica]] mide el tamaño cuántico térmico efectivo de una partícula y compara onda con separación
+          media.'
+        en: '[[longitud_onda_termica]] measures the effective thermal quantum size of a particle and compares wave extent
+          with mean spacing.'
+    physical_reading_rules:
+    - id: longitud_onda_termica_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: Una [[longitud_onda_termica]] grande indica que las ondas de materia se solapan y la estadística bosónica se vuelve
+          visible.
+        en: A large [[longitud_onda_termica]] indicates matter waves overlap and bosonic statistics becomes visible.
+    coherence_rules:
+    - id: longitud_onda_termica_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: Debe salir en metros y aumentar al bajar [[temperatura]] o [[masa_particula]]; si no, revisa la raíz y las unidades
+          de [[constante_planck]].
+        en: It must come out in meters and increase when [[temperatura]] or [[masa_particula]] decreases; otherwise check
+          the square root and [[constante_planck]] units.
+    model_validity_rules:
+    - id: longitud_onda_termica_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: La expresión térmica de de Broglie presupone partículas no relativistas en equilibrio térmico.
+        en: The thermal de Broglie expression assumes nonrelativistic particles in thermal equilibrium.
+    graph_rules:
+    - id: longitud_onda_termica_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: Aunque no sea eje principal, [[longitud_onda_termica]] explica cuándo la curva de ocupación deja de parecer clásica.
+        en: Even when it is not the main axis, [[longitud_onda_termica]] explains when the occupation curve stops looking
+          classical.
+    likely_errors:
+    - id: longitud_onda_termica_likely_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[longitud_onda_termica]] con una lectura aislada es un error frecuente: No la interpretes como longitud
+          de onda de una partícula concreta con momento fijo; es una escala térmica promedio.'
+        en: 'A common mistake is to interpret [[longitud_onda_termica]] in isolation: Do not interpret it as the wavelength
+          of one particle with fixed momentum; it is an average thermal scale.'
+    next_step_rules:
+    - id: longitud_onda_termica_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Calcula [[densidad_particulas]]*[[longitud_onda_termica]]^3 para detectar solapamiento cuántico.
+        en: Compute [[densidad_particulas]]*[[longitud_onda_termica]]^3 to detect quantum overlap.
+    physical_intuition:
+    - id: longitud_onda_termica_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: Cuando las ondas térmicas se pisan unas a otras, el gas deja de comportarse como canicas clásicas.
+        en: When thermal waves step over one another, the gas stops behaving like classical marbles.
+    limiting_cases:
+    - id: longitud_onda_termica_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: A [[temperatura]] alta, [[longitud_onda_termica]] se hace pequeña; a baja temperatura crece y favorece degeneración.
+        en: At high [[temperatura]], [[longitud_onda_termica]] becomes small; at low temperature it grows and favors degeneracy.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: parámetro de control
+      en: control parameter
+    summary_rules:
+    - id: temperatura_summary
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] controla la escala térmica [[constante_boltzmann]]*[[temperatura]] que suaviza la ocupación de
+          los niveles bosónicos.'
+        en: '[[temperatura]] controls the thermal scale [[constante_boltzmann]]*[[temperatura]] that smooths occupation of
+          bosonic levels.'
+    physical_reading_rules:
+    - id: temperatura_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: A mayor [[temperatura]], las diferencias de [[energia]] pesan menos y se pueblan más niveles excitados.
+        en: At higher [[temperatura]], [[energia]] differences matter less and more excited levels become populated.
+    coherence_rules:
+    - id: temperatura_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] debe expresarse en kelvin y ser positiva; usar grados Celsius en el exponente produce resultados
+          sin sentido.'
+        en: '[[temperatura]] must be in kelvin and positive; using degrees Celsius in the exponent produces meaningless results.'
+    model_validity_rules:
+    - id: temperatura_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: 'El equilibrio térmico es imprescindible: sin temperatura bien definida, la distribución de Bose-Einstein no describe
+          el sistema.'
+        en: 'Thermal equilibrium is essential: without a well-defined temperature, the Bose-Einstein distribution does not
+          describe the system.'
+    graph_rules:
+    - id: temperatura_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: 'Cambiar [[temperatura]] modifica la curvatura de [[ocupacion_media]] frente a [[energia]]: temperaturas altas
+          aplanan la caída.'
+        en: 'Changing [[temperatura]] modifies the curvature of [[ocupacion_media]] versus [[energia]]: high temperatures
+          flatten the drop.'
+    likely_errors:
+    - id: temperatura_likely_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura]] con una lectura aislada es un error frecuente: No interpretes subir [[temperatura]]
+          como aumentar siempre la condensación; normalmente dispersa población hacia estados excitados.'
+        en: 'A common mistake is to interpret [[temperatura]] in isolation: Do not interpret raising [[temperatura]] as always
+          increasing condensation; it usually spreads population into excited states.'
+    next_step_rules:
+    - id: temperatura_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Compara [[densidad_particulas]] con [[densidad_critica]] a esa [[temperatura]] para valorar degeneración o condensación.
+        en: Compare [[densidad_particulas]] with [[densidad_critica]] at that [[temperatura]] to assess degeneracy or condensation.
+    physical_intuition:
+    - id: temperatura_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: 'La temperatura agita el tablero: con más agitación, los bosones se reparten en más niveles.'
+        en: 'Temperature shakes the board: with more agitation, bosons spread over more levels.'
+    limiting_cases:
+    - id: temperatura_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: Cuando [[temperatura]] tiende a cero, el modelo ideal empuja la población hacia los estados más bajos; a temperatura
+          alta aparece el límite clásico.
+        en: As [[temperatura]] tends to zero, the ideal model pushes population toward the lowest states; at high temperature
+          the classical limit appears.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  densidad_critica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: resultado de umbral
+      en: threshold result
+    summary_rules:
+    - id: densidad_critica_summary
+      when: 'true'
+      status: ok
+      text:
+        es: '[[densidad_critica]] marca el umbral de densidad por encima del cual el gas ideal bosónico no cabe en estados
+          excitados.'
+        en: '[[densidad_critica]] marks the density threshold above which the ideal boson gas cannot fit into excited states.'
+    physical_reading_rules:
+    - id: densidad_critica_physical_reading
+      when: 'true'
+      status: info
+      text:
+        es: Si [[densidad_particulas]] supera [[densidad_critica]], el exceso se interpreta como población del estado fundamental
+          en el modelo ideal.
+        en: If [[densidad_particulas]] exceeds [[densidad_critica]], the excess is interpreted as ground-state population
+          in the ideal model.
+    coherence_rules:
+    - id: densidad_critica_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[densidad_critica]] debe tener unidad m^-3 y decrecer cuando [[longitud_onda_termica]] aumenta.'
+        en: '[[densidad_critica]] must have unit m^-3 and decrease when [[longitud_onda_termica]] increases.'
+    model_validity_rules:
+    - id: densidad_critica_model_validity
+      when: 'true'
+      status: info
+      text:
+        es: El umbral es el del gas ideal homogéneo; confinamiento, interacciones o dimensionalidad distinta modifican el
+          valor.
+        en: The threshold is for the homogeneous ideal gas; confinement, interactions, or different dimensionality modify
+          the value.
+    graph_rules:
+    - id: densidad_critica_graph_reading
+      when: 'true'
+      status: info
+      text:
+        es: La comparación con [[densidad_critica]] permite leer si la curva de ocupación sugiere régimen clásico, degenerado
+          o condensado.
+        en: Comparison with [[densidad_critica]] helps read whether the occupation curve suggests classical, degenerate, or
+          condensed behavior.
+    likely_errors:
+    - id: densidad_critica_likely_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[densidad_critica]] con una lectura aislada es un error frecuente: No confundas [[densidad_critica]]
+          con densidad máxima absoluta: es un umbral de cambio de régimen dentro del modelo.'
+        en: 'Do not confuse [[densidad_critica]] with an absolute maximum density: it is a regime-change threshold within
+          the model.'
+    next_step_rules:
+    - id: densidad_critica_next_step
+      when: 'true'
+      status: info
+      text:
+        es: Compara [[densidad_particulas]]/[[densidad_critica]] y revisa si el leaf requiere tratar condensado aparte.
+        en: Compare [[densidad_particulas]]/[[densidad_critica]] and check whether the leaf requires treating the condensate
+          separately.
+    physical_intuition:
+    - id: densidad_critica_physical_intuition
+      when: 'true'
+      status: info
+      text:
+        es: '[[densidad_critica]] es el aforo de los estados excitados: superarlo obliga a llenar el estado más bajo.'
+        en: '[[densidad_critica]] is the capacity of excited states: exceeding it forces filling the lowest state.'
+    limiting_cases:
+    - id: densidad_critica_limiting_case
+      when: 'true'
+      status: info
+      text:
+        es: A temperaturas bajas, [[densidad_critica]] disminuye; a temperaturas altas aumenta y la condensación se aleja.
+        en: At low temperatures, [[densidad_critica]] decreases; at high temperatures it increases and condensation recedes.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

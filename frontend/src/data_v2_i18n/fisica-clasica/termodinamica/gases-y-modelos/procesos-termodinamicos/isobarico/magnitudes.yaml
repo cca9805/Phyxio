@@ -1,0 +1,442 @@
+version: 1.0.0
+leaf_id: isobarico
+magnitudes:
+  - id: p
+    symbol: p
+    nombre:
+      es: Presion constante
+      en: Constant pressure
+    descripcion:
+      es: Presion del gas durante todo el proceso isobarico; permanece invariable entre el estado inicial y el final.
+      en: Pressure of the gas throughout the entire isobaric process; it remains unchanged between the initial and final states.
+    unidad_si: Pa
+    dimension: "[M L⁻¹ T⁻²]"
+    is_vector: false
+    components: null
+    category: state
+    physical_role: core_physical_quantity
+    used_in: [trabajo isobarico, calor isobarico, ley de Gay-Lussac]
+    common_mistake: Creer que la presion cambia porque el volumen cambia; en proceso isobarico la presion es la restriccion, no la variable.
+    typical_range:
+      min: 1000
+      max: 10000000
+      unit: Pa
+      context: Atmosfera estandar 101325 Pa; calderas industriales pueden superar 1 MPa.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Presion absoluta siempre positiva; presion nula o negativa carece de significado fisico en este modelo.
+        en: Absolute pressure always positive; zero or negative pressure has no physical meaning in this model.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Presion nula implica vacio ideal; la ley de Gay-Lussac y el modelo de gas ideal dejan de aplicar.
+        en: Zero pressure implies ideal vacuum; Gay-Lussac's law and the ideal gas model no longer apply.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [1, 100000000]
+    interpretation_role:
+      primary_for: restriccion del proceso isobarico; define la recta horizontal en el diagrama pV
+      secondary_for: calculo del trabajo mecanico y del calor intercambiado
+    graph_binding:
+      channels: [pV_isobarico]
+    pedagogical_notes:
+      es: "[[p]] es la magnitud que permanece fija. En el diagrama pV, el proceso es una linea horizontal a altura [[p]]."
+      en: "[[p]] is the magnitude that remains fixed. In the pV diagram, the process is a horizontal line at height [[p]]."
+
+  - id: V1
+    symbol: V_1
+    nombre:
+      es: Volumen inicial
+      en: Initial volume
+    descripcion:
+      es: Volumen ocupado por el gas al comienzo del proceso isobarico, antes de que se produzca la expansion o compresion.
+      en: Volume occupied by the gas at the beginning of the isobaric process, before expansion or compression occurs.
+    unidad_si: "m³"
+    dimension: "[L³]"
+    is_vector: false
+    components: null
+    category: state
+    physical_role: core_physical_quantity
+    used_in: [trabajo isobarico, ley de Gay-Lussac, variacion de volumen]
+    common_mistake: No convertir litros a metros cubicos antes de calcular el trabajo; 1 L = 0.001 m³.
+    typical_range:
+      min: 0.0001
+      max: 10
+      unit: "m³"
+      context: Recipientes de laboratorio de 0.1 a 10 L; cilindros de motor entre 0.5 y 5 L.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Volumen siempre positivo; no existe volumen negativo.
+        en: Volume always positive; negative volume does not exist.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Volumen inicial nulo es una singularidad fisica no realizable; el modelo no aplica.
+        en: Zero initial volume is a physically unrealizable singularity; the model does not apply.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [0.000001, 1000]
+    interpretation_role:
+      primary_for: estado inicial del proceso isobarico en el diagrama pV
+      secondary_for: calculo de DeltaV y del trabajo mecanico
+    graph_binding:
+      channels: [pV_isobarico]
+    pedagogical_notes:
+      es: "[[V1]] marca el extremo izquierdo de la linea isobarica en el diagrama pV. Si [[V1]] < [[V2]], hay expansion."
+      en: "[[V1]] marks the left endpoint of the isobaric line in the pV diagram. If [[V1]] < [[V2]], expansion occurs."
+
+  - id: V2
+    symbol: V_2
+    nombre:
+      es: Volumen final
+      en: Final volume
+    descripcion:
+      es: Volumen ocupado por el gas al final del proceso isobarico, tras completarse la expansion o compresion.
+      en: Volume occupied by the gas at the end of the isobaric process, after expansion or compression is complete.
+    unidad_si: "m³"
+    dimension: "[L³]"
+    is_vector: false
+    components: null
+    category: state
+    physical_role: core_physical_quantity
+    used_in: [trabajo isobarico, ley de Gay-Lussac, variacion de volumen]
+    common_mistake: Confundir si V2 es mayor o menor que V1 al interpretar si el proceso fue expansion o compresion.
+    typical_range:
+      min: 0.0001
+      max: 10
+      unit: "m³"
+      context: Recipientes de laboratorio de 0.1 a 10 L; cilindros de motor entre 0.5 y 5 L.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Volumen final siempre positivo.
+        en: Final volume always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Volumen final nulo implica compresion total no realizable; la presion divergiria.
+        en: Zero final volume implies total unrealizable compression; pressure would diverge.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [0.000001, 1000]
+    interpretation_role:
+      primary_for: estado final del proceso isobarico en el diagrama pV
+      secondary_for: calculo de DeltaV, trabajo y temperatura final
+    graph_binding:
+      channels: [pV_isobarico]
+    pedagogical_notes:
+      es: "[[V2]] marca el extremo derecho de la linea isobarica. Comparar [[V2]] con [[V1]] determina si el proceso fue expansion o compresion."
+      en: "[[V2]] marks the right endpoint of the isobaric line. Comparing [[V2]] with [[V1]] determines whether the process was expansion or compression."
+
+  - id: DeltaV
+    symbol: "\\Delta V"
+    nombre:
+      es: Variacion de volumen
+      en: Volume change
+    descripcion:
+      es: Diferencia entre el volumen final y el inicial en el proceso isobarico; determina directamente el trabajo mecanico realizado.
+      en: Difference between final and initial volume in the isobaric process; directly determines the mechanical work done.
+    unidad_si: "m³"
+    dimension: "[L³]"
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: core_physical_quantity
+    used_in: [trabajo isobarico, interpretacion del proceso]
+    common_mistake: Olvidar el signo de DeltaV; expansion implica DeltaV > 0 y trabajo positivo del gas.
+    typical_range:
+      min: -5
+      max: 5
+      unit: "m³"
+      context: Procesos en cilindros de motor o recipientes de laboratorio.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Positivo en expansion (el gas hace trabajo sobre el entorno); negativo en compresion (el entorno hace trabajo sobre el gas).
+        en: Positive in expansion (gas does work on surroundings); negative in compression (surroundings do work on the gas).
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Variacion nula implica proceso isocorico, no isobarico; no hay trabajo mecanico y el proceso no es propiamente isobarico.
+        en: Zero change implies isochoric, not isobaric process; no mechanical work and the process is not properly isobaric.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: [-1000, 1000]
+    interpretation_role:
+      primary_for: calculo del trabajo mecanico isobarico
+      secondary_for: diagnostico de expansion o compresion en el proceso
+    graph_binding:
+      channels: [pV_isobarico]
+    pedagogical_notes:
+      es: "[[DeltaV]] = [[V2]] - [[V1]] es la longitud de la linea isobarica en el diagrama pV. El area del rectangulo bajo esa linea es [[W]]."
+      en: "[[DeltaV]] = [[V2]] - [[V1]] is the length of the isobaric line in the pV diagram. The rectangular area below that line equals [[W]]."
+
+  - id: T1
+    symbol: T_1
+    nombre:
+      es: Temperatura inicial
+      en: Initial temperature
+    descripcion:
+      es: Temperatura absoluta del gas al inicio del proceso isobarico, expresada en kelvin.
+      en: Absolute temperature of the gas at the start of the isobaric process, expressed in kelvin.
+    unidad_si: K
+    dimension: "[Theta]"
+    is_vector: false
+    components: null
+    category: state
+    physical_role: core_physical_quantity
+    used_in: [ley de Gay-Lussac, calor isobarico, variacion de temperatura]
+    common_mistake: Usar temperatura en grados Celsius en la proporcion V/T; siempre convertir a kelvin sumando 273.15.
+    typical_range:
+      min: 200
+      max: 2000
+      unit: K
+      context: Temperatura ambiente ~293 K; hornos industriales hasta 1500 K.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Temperatura absoluta siempre positiva en kelvin.
+        en: Absolute temperature always positive in kelvin.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Cero absoluto inalcanzable en procesos termodinamicos ordinarios; la ley de Gay-Lussac no aplica cerca del cero absoluto.
+        en: Absolute zero unachievable in ordinary thermodynamic processes; Gay-Lussac's law does not apply near absolute zero.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [1, 10000]
+    interpretation_role:
+      primary_for: estado termico inicial en la proporcion isobarica V/T
+      secondary_for: calculo del calor absorbido o cedido
+    graph_binding:
+      channels: [pV_isobarico]
+    pedagogical_notes:
+      es: "[[T1]] es el denominador inicial en la proporcion de Gay-Lussac [[V1]]/[[T1]] = [[V2]]/[[T2]]."
+      en: "[[T1]] is the initial denominator in Gay-Lussac's proportion [[V1]]/[[T1]] = [[V2]]/[[T2]]."
+
+  - id: T2
+    symbol: T_2
+    nombre:
+      es: Temperatura final
+      en: Final temperature
+    descripcion:
+      es: Temperatura absoluta del gas al final del proceso isobarico; ligada al volumen final por la ley de Gay-Lussac.
+      en: Absolute temperature of the gas at the end of the isobaric process; linked to the final volume by Gay-Lussac's law.
+    unidad_si: K
+    dimension: "[Theta]"
+    is_vector: false
+    components: null
+    category: state
+    physical_role: core_physical_quantity
+    used_in: [ley de Gay-Lussac, calor isobarico, variacion de temperatura]
+    common_mistake: Asumir que la temperatura final es proporcional a la presion final; en proceso isobarico la presion es constante y T2 depende del volumen.
+    typical_range:
+      min: 50
+      max: 3000
+      unit: K
+      context: Expansion isobarica puede elevar la temperatura significativamente en motores de combustion.
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: Temperatura absoluta final siempre positiva.
+        en: Final absolute temperature always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Temperatura final nula implica cero absoluto, no alcanzable en proceso isobarico finito.
+        en: Zero final temperature implies absolute zero, not achievable in a finite isobaric process.
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: [1, 10000]
+    interpretation_role:
+      primary_for: estado termico final tras el proceso isobarico
+      secondary_for: calculo del calor y la variacion de energia interna
+    graph_binding:
+      channels: [pV_isobarico]
+    pedagogical_notes:
+      es: "En expansion isobarica [[T2]] > [[T1]]; en compresion isobarica [[T2]] < [[T1]]. La proporcion [[V2]]/[[T2]] es igual a [[V1]]/[[T1]]."
+      en: "In isobaric expansion [[T2]] > [[T1]]; in isobaric compression [[T2]] < [[T1]]. The ratio [[V2]]/[[T2]] equals [[V1]]/[[T1]]."
+
+  - id: DeltaT
+    symbol: "\\Delta T"
+    nombre:
+      es: Variacion de temperatura
+      en: Temperature change
+    descripcion:
+      es: Diferencia entre la temperatura final y la inicial en el proceso isobarico; determina el calor intercambiado si se conoce la capacidad calorifica a presion constante.
+      en: Difference between final and initial temperature in the isobaric process; determines the exchanged heat if the heat capacity at constant pressure is known.
+    unidad_si: K
+    dimension: "[Theta]"
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: diagnostic
+    used_in: [calor isobarico, variacion de energia interna, interpretacion del proceso]
+    common_mistake: Calcular DeltaT en Celsius y usarlo en formulas que requieren DeltaT en Kelvin; numericamente son equivalentes pero conviene ser explicito.
+    typical_range:
+      min: -500
+      max: 500
+      unit: K
+      context: Procesos laboratorio o industriales tipicos con diferencias de temperatura de decenas a cientos de kelvin.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Positivo si el gas absorbe calor y se calienta (expansion isobarica); negativo si el gas cede calor y se enfria (compresion isobarica).
+        en: Positive if the gas absorbs heat and heats up (isobaric expansion); negative if the gas releases heat and cools (isobaric compression).
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Variacion de temperatura nula en proceso isobarico implica que tampoco cambia el volumen; el proceso degeneraria en un estado de equilibrio estatico.
+        en: Zero temperature change in an isobaric process implies no volume change either; the process would degenerate into a static equilibrium state.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: [-5000, 5000]
+    interpretation_role:
+      primary_for: diagnostico del sentido termico del proceso isobarico
+      secondary_for: calculo del calor isobarico mediante capacidad calorifica molar
+    graph_binding:
+      channels: [pV_isobarico]
+    pedagogical_notes:
+      es: "[[DeltaT]] positivo en expansion isobarica indica que el gas absorbe calor del entorno. Comparar [[DeltaT]] con [[DeltaV]] verifica la proporcion directa de Gay-Lussac."
+      en: "Positive [[DeltaT]] in isobaric expansion indicates the gas absorbs heat from surroundings. Comparing [[DeltaT]] with [[DeltaV]] verifies Gay-Lussac's direct proportion."
+
+  - id: W
+    symbol: W
+    nombre:
+      es: Trabajo mecanico isobarico
+      en: Isobaric mechanical work
+    descripcion:
+      es: Trabajo realizado por el gas sobre el entorno durante el proceso isobarico; igual al producto de la presion constante por la variacion de volumen.
+      en: Work done by the gas on the surroundings during the isobaric process; equal to the product of constant pressure and volume change.
+    unidad_si: J
+    dimension: "[M L² T⁻²]"
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: core_physical_quantity
+    used_in: [primer principio, balance energetico isobarico, diagrama pV]
+    common_mistake: Calcular el trabajo usando la formula adiabatica o isotermica en lugar de W = p * DeltaV.
+    typical_range:
+      min: -100000
+      max: 100000
+      unit: J
+      context: Expansion de un mol de gas ideal a 1 atm y variacion de volumen de 1 L da aproximadamente 101 J.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Positivo cuando el gas se expande y realiza trabajo sobre el entorno; negativo cuando el entorno comprime el gas.
+        en: Positive when the gas expands and does work on the surroundings; negative when surroundings compress the gas.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Trabajo nulo implica que no hay cambio de volumen; el proceso es isocorico, no isobarico.
+        en: Zero work implies no volume change; the process is isochoric, not isobaric.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: [-1000000, 1000000]
+    interpretation_role:
+      primary_for: trabajo mecanico en expansion o compresion isobarica
+      secondary_for: area del rectangulo bajo la linea isobarica en el diagrama pV
+    graph_binding:
+      channels: [pV_isobarico]
+    pedagogical_notes:
+      es: "[[W]] = [[p]] * [[DeltaV]] es el area del rectangulo en el diagrama pV. Es la magnitud central de este leaf porque cuantifica el intercambio mecanico."
+      en: "[[W]] = [[p]] * [[DeltaV]] is the rectangular area in the pV diagram. It is the central magnitude of this leaf because it quantifies the mechanical exchange."
+
+  - id: Q
+    symbol: Q
+    nombre:
+      es: Calor intercambiado
+      en: Exchanged heat
+    descripcion:
+      es: Calor absorbido o cedido por el gas durante el proceso isobarico; en expansiones isobaricas el gas absorbe calor del entorno.
+      en: Heat absorbed or released by the gas during the isobaric process; in isobaric expansions the gas absorbs heat from surroundings.
+    unidad_si: J
+    dimension: "[M L² T⁻²]"
+    is_vector: false
+    components: null
+    category: derived
+    physical_role: core_physical_quantity
+    used_in: [primer principio, balance energetico isobarico, calor isobarico]
+    common_mistake: Asumir que todo el calor absorbido se convierte en energia interna; parte del calor se destina a realizar trabajo mecanico.
+    typical_range:
+      min: -500000
+      max: 500000
+      unit: J
+      context: Calentar 1 mol de gas diatomico 100 K a presion constante requiere aproximadamente 3500 J.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Positivo si el gas absorbe calor del entorno (expansion isobarica); negativo si el gas cede calor al entorno (compresion isobarica).
+        en: Positive if the gas absorbs heat from surroundings (isobaric expansion); negative if the gas releases heat to surroundings (isobaric compression).
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Calor nulo en proceso isobarico implicaria que todo el trabajo proviene de la energia interna con presion constante, lo cual contradice el primer principio para gas ideal en proceso isobarico ordinario.
+        en: Zero heat in an isobaric process would imply all work comes from internal energy at constant pressure, contradicting the first law for ideal gas in ordinary isobaric process.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: [-10000000, 10000000]
+    interpretation_role:
+      primary_for: energia termica intercambiada con el entorno en proceso isobarico
+      secondary_for: calculo de la variacion de energia interna junto con el trabajo
+    graph_binding:
+      channels: [pV_isobarico]
+    pedagogical_notes:
+      es: "[[Q]] > [[W]] en expansion isobarica porque parte del calor se destina a aumentar la energia interna. La fraccion [[W]]/[[Q]] es caracteristica del tipo de gas."
+      en: "[[Q]] > [[W]] in isobaric expansion because part of the heat goes to increase internal energy. The ratio [[W]]/[[Q]] is characteristic of the gas type."
+
+  - id: DeltaU
+    symbol: "\\Delta U"
+    nombre:
+      es: Variacion de energia interna
+      en: Change in internal energy
+    descripcion:
+      es: Cambio en la energia interna del gas entre el estado inicial y el final del proceso isobarico; resulta de la diferencia entre el calor absorbido y el trabajo realizado.
+      en: Change in the internal energy of the gas between initial and final states of the isobaric process; equals the difference between absorbed heat and work done.
+    unidad_si: J
+    dimension: "[M L² T⁻²]"
+    is_vector: false
+    components: null
+    category: state
+    physical_role: core_physical_quantity
+    used_in: [primer principio, balance energetico isobarico]
+    common_mistake: Pensar que en proceso isobarico la energia interna no cambia porque la presion es constante; la energia interna depende de la temperatura, no de la presion.
+    typical_range:
+      min: -300000
+      max: 300000
+      unit: J
+      context: Para gas ideal diatomico, DeltaU = (5/2) * n * R * DeltaT.
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Positivo si la temperatura final es mayor que la inicial (expansion isobarica con absorcion de calor); negativo si la temperatura baja (compresion isobarica con cesion de calor).
+        en: Positive if final temperature is greater than initial (isobaric expansion with heat absorption); negative if temperature drops (isobaric compression with heat release).
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Variacion de energia interna nula implica temperatura constante, lo cual en proceso isobarico significa proceso isotermico isobarico solo posible a presion y temperatura fijas con cambio de fase.
+        en: Zero internal energy change implies constant temperature, which in an isobaric process means isothermal-isobaric only possible at fixed pressure and temperature with phase change.
+    value_nature:
+      kind: scalar
+      nonnegative_only: false
+      expected_interval: [-1000000, 1000000]
+    interpretation_role:
+      primary_for: balance energetico interno del gas en proceso isobarico
+      secondary_for: verificacion del primer principio junto con Q y W
+    graph_binding:
+      channels: [pV_isobarico]
+    pedagogical_notes:
+      es: "[[DeltaU]] = [[Q]] - [[W]] en proceso isobarico. Para gas ideal, [[DeltaU]] depende solo de [[DeltaT]], independientemente de la presion."
+      en: "[[DeltaU]] = [[Q]] - [[W]] in isobaric process. For ideal gas, [[DeltaU]] depends only on [[DeltaT]], regardless of pressure."

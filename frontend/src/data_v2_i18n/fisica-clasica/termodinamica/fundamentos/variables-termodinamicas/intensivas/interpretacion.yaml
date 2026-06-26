@@ -1,0 +1,621 @@
+version: 1.0.0
+id: intensivas-interpretacion
+leaf_id: intensivas
+nombre:
+  es: Interpretacion de variables intensivas
+  en: Intensive variable interpretation
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: fundamentos
+  parent_id: variables-termodinamicas
+  ruta_relativa: fisica-clasica/termodinamica/fundamentos/variables-termodinamicas/intensivas
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es:
+      summary: Resumen fisico
+      reading: Lectura del resultado
+      coherence: Coherencia
+      validity: Validez del modelo
+      graph: Lectura grafica
+      errors: Errores probables
+      next_step: Siguiente paso
+    en:
+      summary: Physical summary
+      reading: Result reading
+      coherence: Coherence
+      validity: Model validity
+      graph: Graph reading
+      errors: Likely errors
+      next_step: Next step
+  priority_order:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_limits:
+    max_summary_chars: 220
+    max_warnings: 2
+    max_suggestions: 2
+dependencies:
+  formulas:
+  - criterio_intensividad
+  - igualdad_equilibrio_intensivo
+  - densidad_intensiva
+  - promedio_ponderado_intensivo
+  magnitudes:
+  - X_int
+  - lambda_escala
+  - T
+  - P
+  - rho
+  - m
+  - V
+  - X_A
+  - X_B
+global_context:
+  physical_domain:
+    es: Clasificacion de variables por independencia de escala
+    en: Classification of variables by scale independence
+  axis_convention:
+    es: El eje horizontal representa factor de escala del sistema.
+    en: The horizontal axis represents system scaling factor.
+  standard_assumptions:
+  - mismo estado local
+  - muestra uniforme
+  standard_warnings:
+  - no sumar intensivas
+  - declarar ponderacion
+output_contract:
+  format: structured_text
+  include_emojis: true
+  max_lines_per_section: 5
+  truncate_long_values: true
+  decimal_places: 2
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    enabled: true
+    priority: 1
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    enabled: true
+    priority: 2
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    enabled: true
+    priority: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    priority: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    priority: 5
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    priority: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    priority: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  X_int:
+    magnitude_type: X_int
+    semantic_role:
+      es: Variable intensiva generica
+      en: Generic intensive variable
+    summary_rules:
+    - id: resumen_X_int
+      when: 'true'
+      status: info
+      text:
+        es: '[[X_int]] se interpreta dentro de la distincion entre estado intensivo y cantidad total.'
+        en: '[[X_int]] is interpreted within the distinction between intensive state and total amount.'
+    physical_reading_rules:
+    - id: lectura_X_int
+      when: 'true'
+      status: info
+      text:
+        es: 'Una diferencia de [[X_int]] puede indicar una tendencia fisica: transferencia, empuje, flujo o necesidad de ponderar cantidades.'
+        en: 'A difference in [[X_int]] can indicate a physical tendency: transfer, push, flow, or the need to weight amounts.'
+    coherence_rules:
+    - id: coherencia_X_int
+      when: 'true'
+      status: success
+      text:
+        es: '[[X_int]] debe compararse con la misma referencia de sistema y con unidades compatibles.'
+        en: '[[X_int]] must be compared with the same system reference and compatible units.'
+    model_validity_rules:
+    - id: validez_X_int
+      when: 'true'
+      status: info
+      text:
+        es: El modelo es valido si la muestra es uniforme o si se declara una media fisicamente justificada.
+        en: The model is valid if the sample is uniform or a physically justified mean is stated.
+    graph_rules:
+    - id: grafico_X_int
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, una intensiva se reconoce porque la curva permanece estable al aumentar [[lambda_escala]].
+        en: In the graph, an intensive variable is recognized because the curve stays stable as [[lambda_escala]] increases.
+    likely_errors:
+    - id: error_X_int
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[X_int]] con inventario total es un error tipico; tambien lo es sumar lecturas intensivas sin ponderacion.
+        en: Confusing [[X_int]] with total inventory is a typical error; adding intensive readings without weighting is another.
+    next_step_rules:
+    - id: siguiente_X_int
+      when: 'true'
+      status: info
+      text:
+        es: 'Siguiente paso: aplicar el test de escalado y decidir si usar una intensiva, una extensiva o una propiedad normalizada.'
+        en: 'Next step: apply the scaling test and decide whether to use an intensive, an extensive, or a normalized property.'
+  lambda_escala:
+    magnitude_type: lambda_escala
+    semantic_role:
+      es: Control de tamano del sistema
+      en: System size control
+    summary_rules:
+    - id: resumen_lambda_escala
+      when: 'true'
+      status: info
+      text:
+        es: '[[lambda_escala]] se interpreta dentro de la distincion entre estado intensivo y cantidad total.'
+        en: '[[lambda_escala]] is interpreted within the distinction between intensive state and total amount.'
+    physical_reading_rules:
+    - id: lectura_lambda_escala
+      when: 'true'
+      status: info
+      text:
+        es: 'Una diferencia de [[lambda_escala]] puede indicar una tendencia fisica: transferencia, empuje, flujo o necesidad de ponderar cantidades.'
+        en: 'A difference in [[lambda_escala]] can indicate a physical tendency: transfer, push, flow, or the need to weight amounts.'
+    coherence_rules:
+    - id: coherencia_lambda_escala
+      when: 'true'
+      status: success
+      text:
+        es: '[[lambda_escala]] debe compararse con la misma referencia de sistema y con unidades compatibles.'
+        en: '[[lambda_escala]] must be compared with the same system reference and compatible units.'
+    model_validity_rules:
+    - id: validez_lambda_escala
+      when: 'true'
+      status: info
+      text:
+        es: El modelo es valido si la muestra es uniforme o si se declara una media fisicamente justificada.
+        en: The model is valid if the sample is uniform or a physically justified mean is stated.
+    graph_rules:
+    - id: grafico_lambda_escala
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, una intensiva se reconoce porque la curva permanece estable al aumentar [[lambda_escala]].
+        en: In the graph, an intensive variable is recognized because the curve stays stable as [[lambda_escala]] increases.
+    likely_errors:
+    - id: error_lambda_escala
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[lambda_escala]] con inventario total es un error tipico; tambien lo es sumar lecturas intensivas sin ponderacion.
+        en: Confusing [[lambda_escala]] with total inventory is a typical error; adding intensive readings without weighting is another.
+    next_step_rules:
+    - id: siguiente_lambda_escala
+      when: 'true'
+      status: info
+      text:
+        es: 'Siguiente paso: aplicar el test de escalado y decidir si usar una intensiva, una extensiva o una propiedad normalizada.'
+        en: 'Next step: apply the scaling test and decide whether to use an intensive, an extensive, or a normalized property.'
+  T:
+    magnitude_type: T
+    semantic_role:
+      es: Lectura de equilibrio termico
+      en: Thermal equilibrium reading
+    summary_rules:
+    - id: resumen_T
+      when: 'true'
+      status: info
+      text:
+        es: '[[T]] se interpreta dentro de la distincion entre estado intensivo y cantidad total.'
+        en: '[[T]] is interpreted within the distinction between intensive state and total amount.'
+    physical_reading_rules:
+    - id: lectura_T
+      when: 'true'
+      status: info
+      text:
+        es: 'Una diferencia de [[T]] puede indicar una tendencia fisica: transferencia, empuje, flujo o necesidad de ponderar cantidades.'
+        en: 'A difference in [[T]] can indicate a physical tendency: transfer, push, flow, or the need to weight amounts.'
+    coherence_rules:
+    - id: coherencia_T
+      when: 'true'
+      status: success
+      text:
+        es: '[[T]] debe compararse con la misma referencia de sistema y con unidades compatibles.'
+        en: '[[T]] must be compared with the same system reference and compatible units.'
+    model_validity_rules:
+    - id: validez_T
+      when: 'true'
+      status: info
+      text:
+        es: El modelo es valido si la muestra es uniforme o si se declara una media fisicamente justificada.
+        en: The model is valid if the sample is uniform or a physically justified mean is stated.
+    graph_rules:
+    - id: grafico_T
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, una intensiva se reconoce porque la curva permanece estable al aumentar [[lambda_escala]].
+        en: In the graph, an intensive variable is recognized because the curve stays stable as [[lambda_escala]] increases.
+    likely_errors:
+    - id: error_T
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[T]] con inventario total es un error tipico; tambien lo es sumar lecturas intensivas sin ponderacion.
+        en: Confusing [[T]] with total inventory is a typical error; adding intensive readings without weighting is another.
+    next_step_rules:
+    - id: siguiente_T
+      when: 'true'
+      status: info
+      text:
+        es: 'Siguiente paso: aplicar el test de escalado y decidir si usar una intensiva, una extensiva o una propiedad normalizada.'
+        en: 'Next step: apply the scaling test and decide whether to use an intensive, an extensive, or a normalized property.'
+  P:
+    magnitude_type: P
+    semantic_role:
+      es: Lectura mecanica local
+      en: Local mechanical reading
+    summary_rules:
+    - id: resumen_P
+      when: 'true'
+      status: info
+      text:
+        es: '[[P]] se interpreta dentro de la distincion entre estado intensivo y cantidad total.'
+        en: '[[P]] is interpreted within the distinction between intensive state and total amount.'
+    physical_reading_rules:
+    - id: lectura_P
+      when: 'true'
+      status: info
+      text:
+        es: 'Una diferencia de [[P]] puede indicar una tendencia fisica: transferencia, empuje, flujo o necesidad de ponderar cantidades.'
+        en: 'A difference in [[P]] can indicate a physical tendency: transfer, push, flow, or the need to weight amounts.'
+    coherence_rules:
+    - id: coherencia_P
+      when: 'true'
+      status: success
+      text:
+        es: '[[P]] debe compararse con la misma referencia de sistema y con unidades compatibles.'
+        en: '[[P]] must be compared with the same system reference and compatible units.'
+    model_validity_rules:
+    - id: validez_P
+      when: 'true'
+      status: info
+      text:
+        es: El modelo es valido si la muestra es uniforme o si se declara una media fisicamente justificada.
+        en: The model is valid if the sample is uniform or a physically justified mean is stated.
+    graph_rules:
+    - id: grafico_P
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, una intensiva se reconoce porque la curva permanece estable al aumentar [[lambda_escala]].
+        en: In the graph, an intensive variable is recognized because the curve stays stable as [[lambda_escala]] increases.
+    likely_errors:
+    - id: error_P
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[P]] con inventario total es un error tipico; tambien lo es sumar lecturas intensivas sin ponderacion.
+        en: Confusing [[P]] with total inventory is a typical error; adding intensive readings without weighting is another.
+    next_step_rules:
+    - id: siguiente_P
+      when: 'true'
+      status: info
+      text:
+        es: 'Siguiente paso: aplicar el test de escalado y decidir si usar una intensiva, una extensiva o una propiedad normalizada.'
+        en: 'Next step: apply the scaling test and decide whether to use an intensive, an extensive, or a normalized property.'
+  rho:
+    magnitude_type: rho
+    semantic_role:
+      es: Concentracion de masa
+      en: Mass concentration
+    summary_rules:
+    - id: resumen_rho
+      when: 'true'
+      status: info
+      text:
+        es: '[[rho]] se interpreta dentro de la distincion entre estado intensivo y cantidad total.'
+        en: '[[rho]] is interpreted within the distinction between intensive state and total amount.'
+    physical_reading_rules:
+    - id: lectura_rho
+      when: 'true'
+      status: info
+      text:
+        es: 'Una diferencia de [[rho]] puede indicar una tendencia fisica: transferencia, empuje, flujo o necesidad de ponderar cantidades.'
+        en: 'A difference in [[rho]] can indicate a physical tendency: transfer, push, flow, or the need to weight amounts.'
+    coherence_rules:
+    - id: coherencia_rho
+      when: 'true'
+      status: success
+      text:
+        es: '[[rho]] debe compararse con la misma referencia de sistema y con unidades compatibles.'
+        en: '[[rho]] must be compared with the same system reference and compatible units.'
+    model_validity_rules:
+    - id: validez_rho
+      when: 'true'
+      status: info
+      text:
+        es: El modelo es valido si la muestra es uniforme o si se declara una media fisicamente justificada.
+        en: The model is valid if the sample is uniform or a physically justified mean is stated.
+    graph_rules:
+    - id: grafico_rho
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, una intensiva se reconoce porque la curva permanece estable al aumentar [[lambda_escala]].
+        en: In the graph, an intensive variable is recognized because the curve stays stable as [[lambda_escala]] increases.
+    likely_errors:
+    - id: error_rho
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[rho]] con inventario total es un error tipico; tambien lo es sumar lecturas intensivas sin ponderacion.
+        en: Confusing [[rho]] with total inventory is a typical error; adding intensive readings without weighting is another.
+    next_step_rules:
+    - id: siguiente_rho
+      when: 'true'
+      status: info
+      text:
+        es: 'Siguiente paso: aplicar el test de escalado y decidir si usar una intensiva, una extensiva o una propiedad normalizada.'
+        en: 'Next step: apply the scaling test and decide whether to use an intensive, an extensive, or a normalized property.'
+  m:
+    magnitude_type: m
+    semantic_role:
+      es: Cantidad usada como peso
+      en: Amount used as weight
+    summary_rules:
+    - id: resumen_m
+      when: 'true'
+      status: info
+      text:
+        es: '[[m]] se interpreta dentro de la distincion entre estado intensivo y cantidad total.'
+        en: '[[m]] is interpreted within the distinction between intensive state and total amount.'
+    physical_reading_rules:
+    - id: lectura_m
+      when: 'true'
+      status: info
+      text:
+        es: 'Una diferencia de [[m]] puede indicar una tendencia fisica: transferencia, empuje, flujo o necesidad de ponderar cantidades.'
+        en: 'A difference in [[m]] can indicate a physical tendency: transfer, push, flow, or the need to weight amounts.'
+    coherence_rules:
+    - id: coherencia_m
+      when: 'true'
+      status: success
+      text:
+        es: '[[m]] debe compararse con la misma referencia de sistema y con unidades compatibles.'
+        en: '[[m]] must be compared with the same system reference and compatible units.'
+    model_validity_rules:
+    - id: validez_m
+      when: 'true'
+      status: info
+      text:
+        es: El modelo es valido si la muestra es uniforme o si se declara una media fisicamente justificada.
+        en: The model is valid if the sample is uniform or a physically justified mean is stated.
+    graph_rules:
+    - id: grafico_m
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, una intensiva se reconoce porque la curva permanece estable al aumentar [[lambda_escala]].
+        en: In the graph, an intensive variable is recognized because the curve stays stable as [[lambda_escala]] increases.
+    likely_errors:
+    - id: error_m
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[m]] con inventario total es un error tipico; tambien lo es sumar lecturas intensivas sin ponderacion.
+        en: Confusing [[m]] with total inventory is a typical error; adding intensive readings without weighting is another.
+    next_step_rules:
+    - id: siguiente_m
+      when: 'true'
+      status: info
+      text:
+        es: 'Siguiente paso: aplicar el test de escalado y decidir si usar una intensiva, una extensiva o una propiedad normalizada.'
+        en: 'Next step: apply the scaling test and decide whether to use an intensive, an extensive, or a normalized property.'
+  V:
+    magnitude_type: V
+    semantic_role:
+      es: Extension usada para normalizar
+      en: Extension used for normalization
+    summary_rules:
+    - id: resumen_V
+      when: 'true'
+      status: info
+      text:
+        es: '[[V]] se interpreta dentro de la distincion entre estado intensivo y cantidad total.'
+        en: '[[V]] is interpreted within the distinction between intensive state and total amount.'
+    physical_reading_rules:
+    - id: lectura_V
+      when: 'true'
+      status: info
+      text:
+        es: 'Una diferencia de [[V]] puede indicar una tendencia fisica: transferencia, empuje, flujo o necesidad de ponderar cantidades.'
+        en: 'A difference in [[V]] can indicate a physical tendency: transfer, push, flow, or the need to weight amounts.'
+    coherence_rules:
+    - id: coherencia_V
+      when: 'true'
+      status: success
+      text:
+        es: '[[V]] debe compararse con la misma referencia de sistema y con unidades compatibles.'
+        en: '[[V]] must be compared with the same system reference and compatible units.'
+    model_validity_rules:
+    - id: validez_V
+      when: 'true'
+      status: info
+      text:
+        es: El modelo es valido si la muestra es uniforme o si se declara una media fisicamente justificada.
+        en: The model is valid if the sample is uniform or a physically justified mean is stated.
+    graph_rules:
+    - id: grafico_V
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, una intensiva se reconoce porque la curva permanece estable al aumentar [[lambda_escala]].
+        en: In the graph, an intensive variable is recognized because the curve stays stable as [[lambda_escala]] increases.
+    likely_errors:
+    - id: error_V
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[V]] con inventario total es un error tipico; tambien lo es sumar lecturas intensivas sin ponderacion.
+        en: Confusing [[V]] with total inventory is a typical error; adding intensive readings without weighting is another.
+    next_step_rules:
+    - id: siguiente_V
+      when: 'true'
+      status: info
+      text:
+        es: 'Siguiente paso: aplicar el test de escalado y decidir si usar una intensiva, una extensiva o una propiedad normalizada.'
+        en: 'Next step: apply the scaling test and decide whether to use an intensive, an extensive, or a normalized property.'
+  X_A:
+    magnitude_type: X_A
+    semantic_role:
+      es: Valor intensivo de la parte A
+      en: Intensive value of part A
+    summary_rules:
+    - id: resumen_X_A
+      when: 'true'
+      status: info
+      text:
+        es: '[[X_A]] se interpreta dentro de la distincion entre estado intensivo y cantidad total.'
+        en: '[[X_A]] is interpreted within the distinction between intensive state and total amount.'
+    physical_reading_rules:
+    - id: lectura_X_A
+      when: 'true'
+      status: info
+      text:
+        es: 'Una diferencia de [[X_A]] puede indicar una tendencia fisica: transferencia, empuje, flujo o necesidad de ponderar cantidades.'
+        en: 'A difference in [[X_A]] can indicate a physical tendency: transfer, push, flow, or the need to weight amounts.'
+    coherence_rules:
+    - id: coherencia_X_A
+      when: 'true'
+      status: success
+      text:
+        es: '[[X_A]] debe compararse con la misma referencia de sistema y con unidades compatibles.'
+        en: '[[X_A]] must be compared with the same system reference and compatible units.'
+    model_validity_rules:
+    - id: validez_X_A
+      when: 'true'
+      status: info
+      text:
+        es: El modelo es valido si la muestra es uniforme o si se declara una media fisicamente justificada.
+        en: The model is valid if the sample is uniform or a physically justified mean is stated.
+    graph_rules:
+    - id: grafico_X_A
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, una intensiva se reconoce porque la curva permanece estable al aumentar [[lambda_escala]].
+        en: In the graph, an intensive variable is recognized because the curve stays stable as [[lambda_escala]] increases.
+    likely_errors:
+    - id: error_X_A
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[X_A]] con inventario total es un error tipico; tambien lo es sumar lecturas intensivas sin ponderacion.
+        en: Confusing [[X_A]] with total inventory is a typical error; adding intensive readings without weighting is another.
+    next_step_rules:
+    - id: siguiente_X_A
+      when: 'true'
+      status: info
+      text:
+        es: 'Siguiente paso: aplicar el test de escalado y decidir si usar una intensiva, una extensiva o una propiedad normalizada.'
+        en: 'Next step: apply the scaling test and decide whether to use an intensive, an extensive, or a normalized property.'
+  X_B:
+    magnitude_type: X_B
+    semantic_role:
+      es: Valor intensivo de la parte B
+      en: Intensive value of part B
+    summary_rules:
+    - id: resumen_X_B
+      when: 'true'
+      status: info
+      text:
+        es: '[[X_B]] se interpreta dentro de la distincion entre estado intensivo y cantidad total.'
+        en: '[[X_B]] is interpreted within the distinction between intensive state and total amount.'
+    physical_reading_rules:
+    - id: lectura_X_B
+      when: 'true'
+      status: info
+      text:
+        es: 'Una diferencia de [[X_B]] puede indicar una tendencia fisica: transferencia, empuje, flujo o necesidad de ponderar cantidades.'
+        en: 'A difference in [[X_B]] can indicate a physical tendency: transfer, push, flow, or the need to weight amounts.'
+    coherence_rules:
+    - id: coherencia_X_B
+      when: 'true'
+      status: success
+      text:
+        es: '[[X_B]] debe compararse con la misma referencia de sistema y con unidades compatibles.'
+        en: '[[X_B]] must be compared with the same system reference and compatible units.'
+    model_validity_rules:
+    - id: validez_X_B
+      when: 'true'
+      status: info
+      text:
+        es: El modelo es valido si la muestra es uniforme o si se declara una media fisicamente justificada.
+        en: The model is valid if the sample is uniform or a physically justified mean is stated.
+    graph_rules:
+    - id: grafico_X_B
+      when: 'true'
+      status: info
+      text:
+        es: En el grafico, una intensiva se reconoce porque la curva permanece estable al aumentar [[lambda_escala]].
+        en: In the graph, an intensive variable is recognized because the curve stays stable as [[lambda_escala]] increases.
+    likely_errors:
+    - id: error_X_B
+      when: 'true'
+      status: warning
+      text:
+        es: Confundir [[X_B]] con inventario total es un error tipico; tambien lo es sumar lecturas intensivas sin ponderacion.
+        en: Confusing [[X_B]] with total inventory is a typical error; adding intensive readings without weighting is another.
+    next_step_rules:
+    - id: siguiente_X_B
+      when: 'true'
+      status: info
+      text:
+        es: 'Siguiente paso: aplicar el test de escalado y decidir si usar una intensiva, una extensiva o una propiedad normalizada.'
+        en: 'Next step: apply the scaling test and decide whether to use an intensive, an extensive, or a normalized property.'

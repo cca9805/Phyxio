@@ -1,0 +1,243 @@
+version: '2.0'
+formulas:
+- id: flujo_electrico_superficie
+  title:
+    es: Flujo eléctrico a través de una superficie plana
+    en: Electric flux through a flat surface
+  equation: Φ_E = E * A * cos(angulo_campo)
+  latex: \Phi_E = E A\cos\theta  % angulo_campo
+  rearrangements:
+  - target: flujo_electrico
+    equation: Φ_E = E * A * cos(angulo_campo)
+    latex: \Phi_E = E A\cos\theta  % angulo_campo
+  - target: campo_electrico
+    equation: E = Φ_E / (A * cos(angulo_campo))
+    latex: E = \frac{\Phi_E}{A\cos\theta}  % angulo_campo
+  - target: angulo_campo
+    equation: angulo_campo = Φ_E / (E * A)
+    latex: \cos\theta = \frac{\Phi_E}{E A}  % angulo_campo
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: 'El flujo eléctrico mide cuántas líneas de campo atraviesan una superficie dada. Es máximo cuando el campo es perpendicular
+      a la superficie (θ = 0) y nulo cuando es tangente (θ = π/2). El factor coseno proyecta el campo sobre la dirección normal:
+      solo la componente perpendicular contribuye al flujo.
+
+      '
+    en: 'Electric flux measures how many field lines cross a given surface. It is maximum when the field is perpendicular
+      to the surface (θ = 0) and zero when tangential (θ = π/2). The cosine factor projects the field onto the normal direction:
+      only the perpendicular component contributes to the flux.
+
+      '
+  constraints:
+  - Campo uniforme sobre toda la superficie
+  - Superficie plana (para una superficie curva se requiere la integral)
+  - El ángulo θ está definido entre E y la normal exterior
+  validity:
+    es: Válida para superficies planas en campo uniforme. Para campos variables o superficies curvas, el flujo se obtiene
+      integrando E·dA sobre la superficie.
+    en: Valid for flat surfaces in a uniform field. For varying fields or curved surfaces, the flux is obtained by integrating
+      E·dA over the surface.
+  dimension_check: '[V·m] = [V/m][m²][adim] ✓'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - cálculo del flujo en superficies gaussianas
+  - interpretación gráfica de líneas de campo
+  interpretation_tags:
+  - flujo eléctrico
+  - densidad de líneas
+  - proyección normal
+  result_semantics:
+    target: flujo_electrico
+    kind: output_quantity
+    sign_meaning:
+      es: Flujo positivo si las líneas salen de la superficie (campo apunta hacia fuera); negativo si entran (campo apunta
+        hacia dentro).
+      en: Positive flux if lines exit the surface (field points outward); negative if they enter (field points inward).
+    absolute_value_meaning:
+      es: El módulo del flujo es proporcional al número de líneas de campo que atraviesan la superficie. Mayor campo o mayor
+        área perpendicular aumentan el flujo.
+      en: The magnitude of flux is proportional to the number of field lines crossing the surface. Larger field or larger
+        perpendicular area increases the flux.
+  domain_checks:
+  - condition: 0 <= angulo_campo <= pi
+    message:
+      es: El ángulo entre E y la normal debe estar entre 0 y π. Un ángulo fuera de este rango indica un error en la definición
+        de la normal.
+      en: The angle between E and the normal must be between 0 and π. An angle outside this range indicates an error in the
+        definition of the normal.
+  coherence_checks:
+  - condition: Φ_E = 0 when angulo_campo = pi/2
+    message:
+      es: Si el flujo no es nulo cuando el campo es paralelo a la superficie, hay un error en el ángulo o en la fórmula.
+      en: If the flux is non-zero when the field is parallel to the surface, there is an error in the angle or the formula.
+  graph_implications:
+  - En el gráfico φ vs θ, la curva es un coseno; el máximo está en θ = 0 y el mínimo en θ = π.
+  pedagogical_triggers:
+  - trigger: angulo_campo = pi/2
+    message:
+      es: 'Cuando el campo es paralelo a la superficie, el flujo es cero: ninguna línea de campo la atraviesa. Este es el
+        caso de una superficie lateral de un cilindro en un campo radial.'
+      en: 'When the field is parallel to the surface, the flux is zero: no field line crosses it. This is the case of the
+        lateral surface of a cylinder in a radial field.'
+- id: densidad_lineas_campo
+  title:
+    es: Relación entre densidad de líneas y módulo del campo
+    en: Relationship between line density and field magnitude
+  equation: rho_lineas = E * k_lineas
+  latex: \rho_L = k E
+  rearrangements:
+  - target: rho_lineas
+    equation: rho_lineas = E * k_lineas
+    latex: \rho_L = k E
+  - target: campo_electrico
+    equation: E = rho_lineas / k_lineas
+    latex: E = \frac{\rho_L}{k}
+  category: derived
+  relation_type: proportionality
+  physical_meaning:
+    es: 'La densidad de líneas de campo (número de líneas por unidad de área perpendicular) es directamente proporcional al
+      módulo del campo eléctrico E. La constante de proporcionalidad k depende del número de líneas elegido para representar
+      la carga unitaria en el diagrama. Esta relación es el fundamento de la interpretación visual: donde las líneas se aprietan,
+      el campo es más intenso.
+
+      '
+    en: 'The density of field lines (number of lines per unit area perpendicular to the field) is directly proportional to
+      the magnitude of the electric field E. The proportionality constant k depends on the number of lines chosen to represent
+      the unit charge in the diagram. This relationship is the foundation of the visual interpretation: where lines crowd
+      together, the field is stronger.
+
+      '
+  constraints:
+  - La representación con líneas discretas es aproximada; E es un campo continuo
+  - k es un parámetro del diagrama, no una constante física universal
+  validity:
+    es: Válida como convención representacional en cualquier diagrama de campo eléctrico estático.
+    en: Valid as a representational convention in any electrostatic field diagram.
+  dimension_check: '[líneas/m²] = [líneas/(V·m)] · [V/m] ✓'
+  calculable: false
+  motivo_no_calculable: k es un parámetro del diagrama, no una constante física medible; la fórmula es cualitativa.
+  used_in:
+  - lectura e interpretación de diagramas de campo
+  - estimación visual de zonas de campo intenso
+  interpretation_tags:
+  - densidad de líneas
+  - representación visual del campo
+  result_semantics:
+    target: rho_lineas
+    kind: output_quantity
+    sign_meaning:
+      es: La densidad de líneas es siempre positiva; el sentido del campo se indica con la orientación (flechas) de las líneas,
+        no con su densidad.
+      en: Line density is always positive; the sense of the field is indicated by the orientation (arrows) of the lines, not
+        by their density.
+    absolute_value_meaning:
+      es: Mayor densidad indica mayor módulo de E. Duplicar la densidad de líneas en una zona indica que E se duplica en esa
+        zona.
+      en: Higher density indicates larger magnitude of E. Doubling the line density in a region indicates that E doubles in
+        that region.
+  domain_checks:
+  - condition: E >= 0
+    message:
+      es: El módulo de E es siempre no negativo; si el cálculo da un valor negativo, hay un error de signo.
+      en: The magnitude of E is always non-negative; if the calculation gives a negative value, there is a sign error.
+  coherence_checks:
+  - condition: rho_lineas increases as r decreases near a point charge
+    message:
+      es: Al acercarse a una carga puntual, la densidad de líneas debe aumentar (el campo crece como 1/r²). Si disminuye,
+        hay un error en la geometría.
+      en: When approaching a point charge, line density must increase (field grows as 1/r²). If it decreases, there is a geometry
+        error.
+  graph_implications:
+  - En el diagrama de campo de una carga puntual, las líneas divergen radialmente y su separación crece con r², reflejando
+    la caída del campo.
+  pedagogical_triggers:
+  - trigger: uniform E region
+    message:
+      es: En una región de campo uniforme (como entre las placas de un condensador), las líneas son paralelas y equidistantes.
+        Si se aprecian variaciones de densidad, el campo no es uniforme.
+      en: In a region of uniform field (such as between capacitor plates), lines are parallel and equidistant. If density
+        variations are visible, the field is not uniform.
+- id: carga_fuente_gauss
+  title:
+    es: Carga fuente a partir del flujo (ley de Gauss)
+    en: Source charge from flux (Gauss's law)
+  equation: q_fuente = Φ_E * epsilon_0
+  latex: q = \varepsilon_0\Phi_E  % q_fuente
+  rearrangements:
+  - target: q_fuente
+    equation: q_fuente = Φ_E * epsilon_0
+    latex: q = \varepsilon_0\Phi_E
+  - target: flujo_electrico
+    equation: Φ_E = q_fuente / epsilon_0
+    latex: \Phi_E = \frac{q}{\varepsilon_0}
+  category: fundamental
+  relation_type: law
+  physical_meaning:
+    es: 'La ley de Gauss establece que el flujo eléctrico total a través de cualquier superficie cerrada es igual a la carga
+      encerrada dividida entre la permitividad del vacío. Esta relación conecta directamente el número de líneas de campo
+      que atraviesan la superficie (flujo [[Φ_E]]) con la carga fuente [[q_fuente]] que las genera. Es la base cuantitativa
+      de la representación por líneas de campo.
+
+      '
+    en: 'Gauss''s law states that the total electric flux through any closed surface equals the enclosed charge divided by
+      the permittivity of free space. This relation directly connects the number of field lines crossing the surface (flux
+      [[Φ_E]]) with the source charge [[q_fuente]] that generates them. It is the quantitative foundation of the field-line
+      representation.
+
+      '
+  constraints:
+  - Superficie cerrada
+  - Régimen electrostático
+  - epsilon_0 constante (permitividad del vacío, 8.854×10⁻¹² F/m)
+  validity:
+    es: Válida en electrostática para cualquier superficie cerrada. En presencia de dieléctricos, la permitividad efectiva
+      sustituye a epsilon_0.
+    en: Valid in electrostatics for any closed surface. In the presence of dielectrics, the effective permittivity replaces
+      epsilon_0.
+  dimension_check: '[C] = [F/m] · [V·m] = [C] ✓'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - determinación de la carga encerrada por una superficie gaussiana
+  - diseño de diagramas de líneas de campo con número correcto de líneas por carga
+  interpretation_tags:
+  - ley de Gauss
+  - carga encerrada
+  - flujo eléctrico
+  result_semantics:
+    target: q_fuente
+    kind: output_quantity
+    sign_meaning:
+      es: Carga positiva si el flujo neto sale de la superficie; carga negativa si el flujo neto entra.
+      en: Positive charge if net flux exits the surface; negative charge if net flux enters.
+    absolute_value_meaning:
+      es: Mayor módulo de [[q_fuente]] implica mayor flujo total y mayor densidad de líneas [[rho_lineas]] en el entorno inmediato
+        de la carga.
+      en: Larger magnitude of [[q_fuente]] implies larger total flux and higher line density [[rho_lineas]] in the immediate
+        vicinity of the charge.
+  domain_checks:
+  - condition: Φ_E != 0 or q_fuente = 0
+    message:
+      es: Si la carga encerrada es cero, el flujo neto a través de la superficie debe ser cero. Un flujo no nulo con carga
+        cero indica un error en el sistema.
+      en: If the enclosed charge is zero, the net flux through the surface must be zero. A non-zero flux with zero charge
+        indicates an error in the system.
+  coherence_checks:
+  - condition: q_fuente > 0 implies Φ_E > 0
+    message:
+      es: Carga positiva encerrada implica flujo neto positivo (las líneas salen de la superficie). Si el flujo es negativo
+        con carga positiva, hay un error en la orientación de la normal.
+      en: Positive enclosed charge implies positive net flux (lines exit the surface). If flux is negative with positive charge,
+        there is an orientation error in the normal.
+  graph_implications:
+  - El número de líneas que salen de la superficie gaussiana es proporcional a q_fuente; si se dobla la carga, se dobla el
+    número de líneas.
+  pedagogical_triggers:
+  - trigger: Φ_E = 0 with charges inside
+    message:
+      es: Flujo neto cero no significa campo nulo en la superficie; significa que la carga neta encerrada es cero (puede haber
+        cargas positivas y negativas iguales dentro).
+      en: Zero net flux does not mean zero field at the surface; it means the net enclosed charge is zero (there may be equal
+        positive and negative charges inside).

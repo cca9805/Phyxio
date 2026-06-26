@@ -1,0 +1,1203 @@
+version: 5.0.0
+id: conveccion
+leaf_id: conveccion
+nombre:
+  es: Conveccion
+  en: Convection
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: transferencia-de-calor
+  parent_id: transferencia-de-calor
+  ruta_relativa: fisica-clasica/termodinamica/transferencia-de-calor/conveccion
+  orden: 257200
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - diferencia_temperatura_conveccion
+  - ley_enfriamiento_newton_conveccion
+  - flujo_calor_conveccion
+  - flujo_potencia_area
+  - calor_potencia_tiempo
+  - resistencia_termica_conveccion
+  - potencia_resistencia_conveccion
+  - coeficiente_conveccion_nusselt
+  magnitudes:
+  - calor_transferido
+  - tiempo
+  - potencia_termica
+  - flujo_calor
+  - coeficiente_conveccion
+  - area
+  - temperatura_superficie
+  - temperatura_fluido
+  - diferencia_temperatura
+  - resistencia_termica_conveccion
+  - numero_nusselt
+  - conductividad_termica_fluido
+  - longitud_caracteristica
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: diferencia_temperatura
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  diferencia_temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: temperature difference
+    summary_rules:
+    - id: diferencia_temperatura_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[diferencia_temperatura]] es el salto térmico entre la superficie y el fluido que impulsa la convección.'
+        en: '[[diferencia_temperatura]] is the thermal gap between the surface and the fluid that drives convection.'
+    physical_reading_rules:
+    - id: diferencia_temperatura_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[diferencia_temperatura]] como la causa directa del intercambio térmico convectivo ideal.
+        en: Read [[diferencia_temperatura]] as the direct cause of ideal convective heat exchange.
+    coherence_rules:
+    - id: diferencia_temperatura_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[diferencia_temperatura]] debe ser coherente con [[temperatura_superficie]] y [[temperatura_fluido]].'
+        en: '[[diferencia_temperatura]] must be consistent with [[temperatura_superficie]] and [[temperatura_fluido]].'
+    model_validity_rules:
+    - id: diferencia_temperatura_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[diferencia_temperatura]] usando temperaturas representativas de la superficie y del fluido.
+        en: Interpret [[diferencia_temperatura]] using representative surface and fluid temperatures.
+    graph_rules:
+    - id: diferencia_temperatura_graph_base
+      when: 'true'
+      status: ok
+      text:
+        es: En el gráfico Coord, [[diferencia_temperatura]] es la variable horizontal principal.
+        en: In the Coord graph, [[diferencia_temperatura]] is the main horizontal variable.
+    likely_errors:
+    - id: diferencia_temperatura_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[diferencia_temperatura]] con una lectura aislada es un error frecuente: No confundas [[diferencia_temperatura]]
+          con una temperatura absoluta ni con la temperatura local de la capa límite.'
+        en: Do not confuse [[diferencia_temperatura]] with an absolute temperature or with local boundary-layer temperature.
+    next_step_rules:
+    - id: diferencia_temperatura_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[diferencia_temperatura]], úsala para interpretar [[potencia_termica]] o [[flujo_calor]].
+        en: After obtaining [[diferencia_temperatura]], use it to interpret [[potencia_termica]] or [[flujo_calor]].
+    physical_intuition:
+    - id: diferencia_temperatura_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Mayor [[diferencia_temperatura]] significa mayor empuje térmico para el intercambio entre superficie y fluido.
+        en: Larger [[diferencia_temperatura]] means a stronger thermal drive for exchange between surface and fluid.
+    limiting_cases:
+    - id: diferencia_temperatura_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[diferencia_temperatura]] se anula, el intercambio convectivo neto ideal también se anula.
+        en: If [[diferencia_temperatura]] vanishes, ideal net convective exchange also vanishes.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo depende de si defines la diferencia como superficie menos fluido o fluido menos superficie.
+        en: The sign depends on whether you define the difference as surface minus fluid or fluid minus surface.
+      common_sign_errors:
+      - es: Interpretar un signo negativo como error físico sin revisar el convenio.
+        en: Interpreting a negative sign as a physical error without checking the convention.
+  temperatura_superficie:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: surface temperature
+    summary_rules:
+    - id: temperatura_superficie_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_superficie]] representa la temperatura de la pared o cuerpo que intercambia calor con el fluido.'
+        en: '[[temperatura_superficie]] represents the temperature of the wall or body exchanging heat with the fluid.'
+    physical_reading_rules:
+    - id: temperatura_superficie_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura_superficie]] como condición térmica de frontera, no como temperatura media del fluido.
+        en: Read [[temperatura_superficie]] as a thermal boundary condition, not as the mean fluid temperature.
+    coherence_rules:
+    - id: temperatura_superficie_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_superficie]] debe combinarse con [[temperatura_fluido]] para obtener una diferencia térmica coherente.'
+        en: '[[temperatura_superficie]] must be combined with [[temperatura_fluido]] to obtain a coherent thermal difference.'
+    model_validity_rules:
+    - id: temperatura_superficie_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El modelo básico supone que [[temperatura_superficie]] es representativa de toda el área de intercambio.
+        en: The basic model assumes [[temperatura_superficie]] is representative of the whole exchange area.
+    graph_rules:
+    - id: temperatura_superficie_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_fluido]] se mantiene fija, aumentar [[temperatura_superficie]] aumenta [[diferencia_temperatura]].
+        en: If [[temperatura_fluido]] remains fixed, increasing [[temperatura_superficie]] increases [[diferencia_temperatura]].
+    likely_errors:
+    - id: temperatura_superficie_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura_superficie]] con una lectura aislada es un error frecuente: No uses [[temperatura_superficie]]
+          como si fuera la temperatura de la corriente principal del fluido.'
+        en: 'A common mistake is to interpret [[temperatura_superficie]] in isolation: Do not use [[temperatura_superficie]]
+          as if it were the main fluid stream temperature.'
+    next_step_rules:
+    - id: temperatura_superficie_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de fijar [[temperatura_superficie]], revisa qué temperatura del fluido se usa como referencia.
+        en: After setting [[temperatura_superficie]], check which fluid temperature is used as reference.
+    physical_intuition:
+    - id: temperatura_superficie_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: '[[temperatura_superficie]] marca uno de los extremos térmicos del intercambio convectivo.'
+        en: '[[temperatura_superficie]] marks one thermal end of the convective exchange.'
+    limiting_cases:
+    - id: temperatura_superficie_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_superficie]] se iguala a [[temperatura_fluido]], desaparece el intercambio neto ideal.
+        en: If [[temperatura_superficie]] equals [[temperatura_fluido]], ideal net exchange disappears.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_fluido:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: fluid temperature
+    summary_rules:
+    - id: temperatura_fluido_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_fluido]] representa la temperatura de referencia del fluido que intercambia calor con la superficie.'
+        en: '[[temperatura_fluido]] represents the reference temperature of the fluid exchanging heat with the surface.'
+    physical_reading_rules:
+    - id: temperatura_fluido_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[temperatura_fluido]] como temperatura de la corriente principal o temperatura media adecuada.
+        en: Read [[temperatura_fluido]] as the free-stream temperature or the appropriate mean temperature.
+    coherence_rules:
+    - id: temperatura_fluido_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_fluido]] debe ser compatible con el tipo de convección y con el punto donde se define la referencia
+          térmica.'
+        en: '[[temperatura_fluido]] must be compatible with the type of convection and the point where the thermal reference
+          is defined.'
+    model_validity_rules:
+    - id: temperatura_fluido_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: En convección interna, [[temperatura_fluido]] puede requerir una temperatura media; en convección externa suele
+          ser la corriente libre.
+        en: In internal convection, [[temperatura_fluido]] may require a mean temperature; in external convection it is often
+          the free stream.
+    graph_rules:
+    - id: temperatura_fluido_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_superficie]] se mantiene fija, aumentar [[temperatura_fluido]] reduce [[diferencia_temperatura]].
+        en: If [[temperatura_superficie]] remains fixed, increasing [[temperatura_fluido]] reduces [[diferencia_temperatura]].
+    likely_errors:
+    - id: temperatura_fluido_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[temperatura_fluido]] con una lectura aislada es un error frecuente: No uses una temperatura local
+          de la capa límite si el modelo requiere la temperatura de referencia del fluido.'
+        en: 'A common mistake is to interpret [[temperatura_fluido]] in isolation: Do not use a local boundary-layer temperature
+          if the model requires the reference fluid temperature.'
+    next_step_rules:
+    - id: temperatura_fluido_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de fijar [[temperatura_fluido]], calcula o revisa [[diferencia_temperatura]].
+        en: After setting [[temperatura_fluido]], calculate or check [[diferencia_temperatura]].
+    physical_intuition:
+    - id: temperatura_fluido_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: '[[temperatura_fluido]] marca el entorno térmico que recibe o entrega energía a la superficie.'
+        en: '[[temperatura_fluido]] marks the thermal environment receiving or delivering energy to the surface.'
+    limiting_cases:
+    - id: temperatura_fluido_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_fluido]] se aproxima a [[temperatura_superficie]], disminuye el intercambio convectivo neto.
+        en: If [[temperatura_fluido]] approaches [[temperatura_superficie]], net convective exchange decreases.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  potencia_termica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: thermal power
+    summary_rules:
+    - id: potencia_termica_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[potencia_termica]] indica la rapidez total con la que se intercambia energía térmica por convección.'
+        en: '[[potencia_termica]] indicates the total rate at which thermal energy is exchanged by convection.'
+    physical_reading_rules:
+    - id: potencia_termica_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[potencia_termica]] en vatios como una tasa global de intercambio, no como energía acumulada.
+        en: Read [[potencia_termica]] in watts as a global exchange rate, not accumulated energy.
+    coherence_rules:
+    - id: potencia_termica_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[potencia_termica]] debe crecer con [[coeficiente_conveccion]], [[area]] y [[diferencia_temperatura]] si el
+          resto permanece constante.'
+        en: '[[potencia_termica]] must grow with [[coeficiente_conveccion]], [[area]], and [[diferencia_temperatura]] if everything
+          else remains constant.'
+    model_validity_rules:
+    - id: potencia_termica_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[potencia_termica]] como valor instantáneo o medio si el proceso no es estacionario.
+        en: Interpret [[potencia_termica]] as an instantaneous or average value if the process is not steady.
+    graph_rules:
+    - id: potencia_termica_graph_base
+      when: 'true'
+      status: ok
+      text:
+        es: En el gráfico Coord, [[potencia_termica]] crece linealmente con [[diferencia_temperatura]] si [[coeficiente_conveccion]]
+          y [[area]] son constantes.
+        en: In the Coord graph, [[potencia_termica]] grows linearly with [[diferencia_temperatura]] if [[coeficiente_conveccion]]
+          and [[area]] are constant.
+    likely_errors:
+    - id: potencia_termica_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[potencia_termica]] con una lectura aislada es un error frecuente: No confundas [[potencia_termica]]
+          con [[calor_transferido]]; la primera es una tasa y el segundo es energía acumulada.'
+        en: Do not confuse [[potencia_termica]] with [[calor_transferido]]; the former is a rate and the latter is accumulated
+          energy.
+    next_step_rules:
+    - id: potencia_termica_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[potencia_termica]], revisa si necesitas convertirla en [[flujo_calor]] o en [[calor_transferido]].
+        en: After obtaining [[potencia_termica]], check whether you need to convert it into [[flujo_calor]] or [[calor_transferido]].
+    physical_intuition:
+    - id: potencia_termica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: '[[potencia_termica]] mide el caudal energético total que cruza la frontera superficie-fluido.'
+        en: '[[potencia_termica]] measures the total energy flow rate crossing the surface-fluid boundary.'
+    limiting_cases:
+    - id: potencia_termica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[diferencia_temperatura]], [[coeficiente_conveccion]] o [[area]] se anulan, la potencia convectiva ideal se
+          anula.
+        en: If [[diferencia_temperatura]], [[coeficiente_conveccion]], or [[area]] vanish, ideal convective power vanishes.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo de [[potencia_termica]] depende de si el sistema se define como receptor o emisor de calor.
+        en: The sign of [[potencia_termica]] depends on whether the system is defined as receiving or releasing heat.
+      common_sign_errors:
+      - es: Tomar una potencia negativa como imposible sin revisar el sistema elegido.
+        en: Treating negative power as impossible without checking the chosen system.
+  coeficiente_conveccion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: convective heat transfer coefficient
+    summary_rules:
+    - id: coeficiente_conveccion_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[coeficiente_conveccion]] mide la eficacia del intercambio térmico entre la superficie y el fluido.'
+        en: '[[coeficiente_conveccion]] measures the effectiveness of heat exchange between the surface and the fluid.'
+    physical_reading_rules:
+    - id: coeficiente_conveccion_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[coeficiente_conveccion]] como un parámetro efectivo que resume fluido, geometría y régimen de flujo.
+        en: Read [[coeficiente_conveccion]] as an effective parameter summarizing fluid, geometry, and flow regime.
+    coherence_rules:
+    - id: coeficiente_conveccion_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[coeficiente_conveccion]] debe ser positivo y coherente con el tipo de convección natural o forzada.'
+        en: '[[coeficiente_conveccion]] must be positive and consistent with natural or forced convection.'
+    model_validity_rules:
+    - id: coeficiente_conveccion_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El modelo básico solo es fiable si [[coeficiente_conveccion]] representa adecuadamente las condiciones del flujo.
+        en: The basic model is reliable only if [[coeficiente_conveccion]] adequately represents the flow conditions.
+    graph_rules:
+    - id: coeficiente_conveccion_graph_base
+      when: 'true'
+      status: ok
+      text:
+        es: En una gráfica de [[flujo_calor]] frente a [[diferencia_temperatura]], [[coeficiente_conveccion]] es la pendiente.
+        en: In a [[flujo_calor]] versus [[diferencia_temperatura]] graph, [[coeficiente_conveccion]] is the slope.
+    likely_errors:
+    - id: coeficiente_conveccion_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[coeficiente_conveccion]] con una lectura aislada es un error frecuente: No trates [[coeficiente_conveccion]]
+          como una constante universal: cambia con fluido, velocidad, geometría y régimen.'
+        en: 'A common mistake is to interpret [[coeficiente_conveccion]] in isolation: Do not treat [[coeficiente_conveccion]]
+          as a universal constant: it changes with fluid, velocity, geometry, and regime.'
+    next_step_rules:
+    - id: coeficiente_conveccion_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[coeficiente_conveccion]], revisa si procede de una medición, una tabla o una correlación
+          con [[numero_nusselt]].
+        en: After obtaining [[coeficiente_conveccion]], check whether it comes from measurement, a table, or a correlation
+          with [[numero_nusselt]].
+    physical_intuition:
+    - id: coeficiente_conveccion_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Un [[coeficiente_conveccion]] alto indica que el fluido renueva con eficacia la capa próxima a la superficie.
+        en: A high [[coeficiente_conveccion]] indicates that the fluid effectively renews the layer near the surface.
+    limiting_cases:
+    - id: coeficiente_conveccion_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[coeficiente_conveccion]] disminuye mucho, el intercambio convectivo se debilita aunque exista diferencia
+          de temperatura.
+        en: If [[coeficiente_conveccion]] becomes very small, convective exchange weakens even if a temperature difference
+          exists.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  area:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: exchange area
+    summary_rules:
+    - id: area_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[area]] representa la superficie efectiva disponible para el intercambio convectivo.'
+        en: '[[area]] represents the effective surface available for convective exchange.'
+    physical_reading_rules:
+    - id: area_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[area]] como superficie expuesta al fluido, no como cualquier área geométrica del objeto.
+        en: Read [[area]] as the surface exposed to the fluid, not just any geometric area of the object.
+    coherence_rules:
+    - id: area_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[area]] debe ser positiva y expresarse en metros cuadrados.'
+        en: '[[area]] must be positive and expressed in square meters.'
+    model_validity_rules:
+    - id: area_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El modelo supone que [[area]] participa de forma representativa en el intercambio térmico.
+        en: The model assumes [[area]] participates representatively in the thermal exchange.
+    graph_rules:
+    - id: area_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Aumentar [[area]] aumenta la pendiente de la gráfica de [[potencia_termica]] frente a [[diferencia_temperatura]].
+        en: Increasing [[area]] increases the slope of the [[potencia_termica]] versus [[diferencia_temperatura]] graph.
+    likely_errors:
+    - id: area_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[area]] con una lectura aislada es un error frecuente: No uses cm² como si fueran m² ni incluyas superficies
+          no expuestas al fluido.'
+        en: 'A common mistake is to interpret [[area]] in isolation: Do not use cm² as if they were m² and do not include
+          surfaces not exposed to the fluid.'
+    next_step_rules:
+    - id: area_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de fijar [[area]], decide si necesitas potencia total o flujo por unidad de superficie.
+        en: After setting [[area]], decide whether you need total power or flux per unit surface.
+    physical_intuition:
+    - id: area_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Mayor [[area]] abre más frontera para que el fluido intercambie energía con la superficie.
+        en: Larger [[area]] opens more boundary for the fluid to exchange energy with the surface.
+    limiting_cases:
+    - id: area_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[area]] tiende a cero, la potencia convectiva total tiende a cero aunque el flujo local sea finito.
+        en: If [[area]] tends to zero, total convective power tends to zero even if local flux is finite.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  flujo_calor:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: heat flux
+    summary_rules:
+    - id: flujo_calor_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[flujo_calor]] expresa la potencia térmica convectiva por unidad de superficie.'
+        en: '[[flujo_calor]] expresses convective thermal power per unit surface.'
+    physical_reading_rules:
+    - id: flujo_calor_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[flujo_calor]] como intensidad superficial del intercambio, no como potencia total.
+        en: Read [[flujo_calor]] as surface exchange intensity, not total power.
+    coherence_rules:
+    - id: flujo_calor_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[flujo_calor]] debe ser coherente con [[potencia_termica]] dividida entre [[area]].'
+        en: '[[flujo_calor]] must be consistent with [[potencia_termica]] divided by [[area]].'
+    model_validity_rules:
+    - id: flujo_calor_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[flujo_calor]] como valor medio si el intercambio no es uniforme en toda la superficie.
+        en: Interpret [[flujo_calor]] as an average value if the exchange is not uniform over the whole surface.
+    graph_rules:
+    - id: flujo_calor_graph_base
+      when: 'true'
+      status: ok
+      text:
+        es: En una gráfica de [[flujo_calor]] frente a [[diferencia_temperatura]], la pendiente corresponde a [[coeficiente_conveccion]].
+        en: In a [[flujo_calor]] versus [[diferencia_temperatura]] graph, the slope corresponds to [[coeficiente_conveccion]].
+    likely_errors:
+    - id: flujo_calor_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[flujo_calor]] con una lectura aislada es un error frecuente: No confundas [[flujo_calor]] en W/m²
+          con [[potencia_termica]] en W.'
+        en: Do not confuse [[flujo_calor]] in W/m² with [[potencia_termica]] in W.
+    next_step_rules:
+    - id: flujo_calor_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[flujo_calor]], multiplícalo por [[area]] si necesitas [[potencia_termica]] total.
+        en: After obtaining [[flujo_calor]], multiply it by [[area]] if you need total [[potencia_termica]].
+    physical_intuition:
+    - id: flujo_calor_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: '[[flujo_calor]] mide cuán intenso es el intercambio térmico en cada metro cuadrado.'
+        en: '[[flujo_calor]] measures how intense the heat exchange is on each square meter.'
+    limiting_cases:
+    - id: flujo_calor_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[diferencia_temperatura]] o [[coeficiente_conveccion]] se anulan, [[flujo_calor]] se anula en el modelo ideal.
+        en: If [[diferencia_temperatura]] or [[coeficiente_conveccion]] vanish, [[flujo_calor]] vanishes in the ideal model.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo de [[flujo_calor]] depende del sentido positivo elegido para el intercambio térmico.
+        en: The sign of [[flujo_calor]] depends on the chosen positive direction for heat exchange.
+      common_sign_errors:
+      - es: Confundir signo con intensidad y olvidar que el valor absoluto mide el tamaño del flujo.
+        en: Confusing sign with intensity and forgetting that the absolute value measures flux size.
+  calor_transferido:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: transferred heat
+    summary_rules:
+    - id: calor_transferido_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[calor_transferido]] indica la energía térmica acumulada durante un intervalo de intercambio convectivo.'
+        en: '[[calor_transferido]] indicates the thermal energy accumulated during a convective exchange interval.'
+    physical_reading_rules:
+    - id: calor_transferido_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[calor_transferido]] como energía total, no como ritmo instantáneo.
+        en: Read [[calor_transferido]] as total energy, not as an instantaneous rate.
+    coherence_rules:
+    - id: calor_transferido_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[calor_transferido]] debe ser coherente con [[potencia_termica]] y [[tiempo]].'
+        en: '[[calor_transferido]] must be consistent with [[potencia_termica]] and [[tiempo]].'
+    model_validity_rules:
+    - id: calor_transferido_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[potencia_termica]] cambia durante el proceso, interpreta [[calor_transferido]] usando una potencia media
+          o un modelo transitorio.
+        en: If [[potencia_termica]] changes during the process, interpret [[calor_transferido]] using average power or a transient
+          model.
+    graph_rules:
+    - id: calor_transferido_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: En una gráfica potencia-tiempo, [[calor_transferido]] corresponde al área bajo la curva.
+        en: In a power-time graph, [[calor_transferido]] corresponds to the area under the curve.
+    likely_errors:
+    - id: calor_transferido_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[calor_transferido]] con una lectura aislada es un error frecuente: No confundas [[calor_transferido]]
+          en julios con [[potencia_termica]] en vatios.'
+        en: Do not confuse [[calor_transferido]] in joules with [[potencia_termica]] in watts.
+    next_step_rules:
+    - id: calor_transferido_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[calor_transferido]], revisa si el intervalo de [[tiempo]] y la potencia usada son realistas.
+        en: After obtaining [[calor_transferido]], check whether the [[tiempo]] interval and power used are realistic.
+    physical_intuition:
+    - id: calor_transferido_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: '[[calor_transferido]] acumula el efecto energético de la convección durante el tiempo estudiado.'
+        en: '[[calor_transferido]] accumulates the energetic effect of convection during the studied time.'
+    limiting_cases:
+    - id: calor_transferido_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[tiempo]] tiende a cero, [[calor_transferido]] tiende a cero aunque exista potencia instantánea.
+        en: If [[tiempo]] tends to zero, [[calor_transferido]] tends to zero even if instantaneous power exists.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo de [[calor_transferido]] depende de si el sistema recibe o cede energía.
+        en: The sign of [[calor_transferido]] depends on whether the system receives or releases energy.
+      common_sign_errors:
+      - es: Leer un calor negativo como imposible sin identificar el sistema de referencia.
+        en: Reading negative heat as impossible without identifying the reference system.
+  tiempo:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: time
+    summary_rules:
+    - id: tiempo_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[tiempo]] fija la duración durante la cual se acumula el intercambio convectivo.'
+        en: '[[tiempo]] sets the duration over which convective exchange accumulates.'
+    physical_reading_rules:
+    - id: tiempo_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[tiempo]] como intervalo físico transcurrido, no como propiedad del fluido.
+        en: Read [[tiempo]] as elapsed physical interval, not as a fluid property.
+    coherence_rules:
+    - id: tiempo_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[tiempo]] debe ser no negativo y estar en segundos si se trabaja en unidades SI.'
+        en: '[[tiempo]] must be nonnegative and in seconds when using SI units.'
+    model_validity_rules:
+    - id: tiempo_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: El uso directo de [[tiempo]] con [[potencia_termica]] supone potencia constante o media durante el intervalo.
+        en: Direct use of [[tiempo]] with [[potencia_termica]] assumes constant or average power during the interval.
+    graph_rules:
+    - id: tiempo_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Si se representa potencia frente a tiempo, [[tiempo]] permite interpretar el área como calor transferido.
+        en: If power is plotted versus time, [[tiempo]] allows the area to be interpreted as transferred heat.
+    likely_errors:
+    - id: tiempo_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[tiempo]] con una lectura aislada es un error frecuente: No introduzcas minutos u horas como si fueran
+          segundos.'
+        en: 'A common mistake is to interpret [[tiempo]] in isolation: Do not enter minutes or hours as if they were seconds.'
+    next_step_rules:
+    - id: tiempo_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de fijar [[tiempo]], decide si la potencia puede considerarse constante o si hace falta una media.
+        en: After setting [[tiempo]], decide whether power can be considered constant or whether an average is needed.
+    physical_intuition:
+    - id: tiempo_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: A mayor [[tiempo]], mayor energía acumulada si la potencia térmica mantiene el mismo signo y valor medio.
+        en: Longer [[tiempo]] gives more accumulated energy if thermal power keeps the same sign and average value.
+    limiting_cases:
+    - id: tiempo_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[tiempo]] es cero, no se acumula calor transferido.
+        en: If [[tiempo]] is zero, no transferred heat accumulates.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  resistencia_termica_conveccion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: calculable
+      en: convective thermal resistance
+    summary_rules:
+    - id: resistencia_termica_conveccion_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[resistencia_termica_conveccion]] mide la oposición equivalente al intercambio térmico por convección.'
+        en: '[[resistencia_termica_conveccion]] measures the equivalent opposition to convective heat exchange.'
+    physical_reading_rules:
+    - id: resistencia_termica_conveccion_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[resistencia_termica_conveccion]] como freno térmico superficial entre la pared y el fluido.
+        en: Read [[resistencia_termica_conveccion]] as a surface thermal brake between wall and fluid.
+    coherence_rules:
+    - id: resistencia_termica_conveccion_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[resistencia_termica_conveccion]] debe disminuir cuando aumentan [[coeficiente_conveccion]] o [[area]].'
+        en: '[[resistencia_termica_conveccion]] must decrease when [[coeficiente_conveccion]] or [[area]] increases.'
+    model_validity_rules:
+    - id: resistencia_termica_conveccion_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[resistencia_termica_conveccion]] cuando la convección pueda representarse como una resistencia térmica equivalente.
+        en: Use [[resistencia_termica_conveccion]] when convection can be represented as an equivalent thermal resistance.
+    graph_rules:
+    - id: resistencia_termica_conveccion_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: En una gráfica de [[potencia_termica]] frente a [[diferencia_temperatura]], la pendiente es la inversa de [[resistencia_termica_conveccion]].
+        en: In a [[potencia_termica]] versus [[diferencia_temperatura]] graph, the slope is the inverse of [[resistencia_termica_conveccion]].
+    likely_errors:
+    - id: resistencia_termica_conveccion_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[resistencia_termica_conveccion]] con una lectura aislada es un error frecuente: No interpretes una
+          [[resistencia_termica_conveccion]] alta como intercambio alto; significa mayor oposición.'
+        en: 'A common mistake is to interpret [[resistencia_termica_conveccion]] in isolation: Do not interpret high [[resistencia_termica_conveccion]]
+          as high exchange; it means greater opposition.'
+    next_step_rules:
+    - id: resistencia_termica_conveccion_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[resistencia_termica_conveccion]], puedes compararla con resistencias de conducción o radiación
+          si el modelo se amplía.
+        en: After obtaining [[resistencia_termica_conveccion]], you can compare it with conduction or radiation resistances
+          if the model is extended.
+    physical_intuition:
+    - id: resistencia_termica_conveccion_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Una [[resistencia_termica_conveccion]] pequeña indica una frontera superficie-fluido eficaz para transportar calor.
+        en: A small [[resistencia_termica_conveccion]] indicates an effective surface-fluid boundary for transporting heat.
+    limiting_cases:
+    - id: resistencia_termica_conveccion_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[coeficiente_conveccion]] o [[area]] crecen mucho, [[resistencia_termica_conveccion]] disminuye.
+        en: If [[coeficiente_conveccion]] or [[area]] grow strongly, [[resistencia_termica_conveccion]] decreases.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  numero_nusselt:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: Nusselt number
+    summary_rules:
+    - id: numero_nusselt_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_nusselt]] compara el intercambio convectivo con la conducción característica del fluido.'
+        en: '[[numero_nusselt]] compares convective exchange with characteristic conduction in the fluid.'
+    physical_reading_rules:
+    - id: numero_nusselt_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[numero_nusselt]] como número adimensional asociado a una correlación de convección.
+        en: Read [[numero_nusselt]] as a dimensionless number associated with a convection correlation.
+    coherence_rules:
+    - id: numero_nusselt_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[numero_nusselt]] debe ser positivo y coherente con la geometría, el fluido y el régimen.'
+        en: '[[numero_nusselt]] must be positive and consistent with geometry, fluid, and regime.'
+    model_validity_rules:
+    - id: numero_nusselt_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[numero_nusselt]] solo dentro del rango de validez de la correlación usada.
+        en: Interpret [[numero_nusselt]] only within the validity range of the correlation used.
+    graph_rules:
+    - id: numero_nusselt_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[conductividad_termica_fluido]] y [[longitud_caracteristica]] son constantes, [[coeficiente_conveccion]] crece
+          linealmente con [[numero_nusselt]].
+        en: If [[conductividad_termica_fluido]] and [[longitud_caracteristica]] are constant, [[coeficiente_conveccion]] grows
+          linearly with [[numero_nusselt]].
+    likely_errors:
+    - id: numero_nusselt_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[numero_nusselt]] con una lectura aislada es un error frecuente: No asignes unidades a [[numero_nusselt]]
+          ni uses una correlación fuera de su dominio.'
+        en: 'A common mistake is to interpret [[numero_nusselt]] in isolation: Do not assign units to [[numero_nusselt]] or
+          use a correlation outside its domain.'
+    next_step_rules:
+    - id: numero_nusselt_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de obtener [[numero_nusselt]], úsalo con [[conductividad_termica_fluido]] y [[longitud_caracteristica]]
+          para estimar [[coeficiente_conveccion]].
+        en: After obtaining [[numero_nusselt]], use it with [[conductividad_termica_fluido]] and [[longitud_caracteristica]]
+          to estimate [[coeficiente_conveccion]].
+    physical_intuition:
+    - id: numero_nusselt_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Un [[numero_nusselt]] mayor indica que el movimiento del fluido mejora el intercambio respecto a una referencia
+          conductiva.
+        en: A larger [[numero_nusselt]] indicates that fluid motion improves exchange relative to a conductive reference.
+    limiting_cases:
+    - id: numero_nusselt_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[numero_nusselt]] se acerca a valores cercanos a uno, la mejora convectiva sobre la conducción característica
+          es limitada.
+        en: If [[numero_nusselt]] approaches values near one, convective enhancement over characteristic conduction is limited.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  conductividad_termica_fluido:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: fluid thermal conductivity
+    summary_rules:
+    - id: conductividad_termica_fluido_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[conductividad_termica_fluido]] mide la capacidad conductiva del fluido usada en correlaciones convectivas.'
+        en: '[[conductividad_termica_fluido]] measures the fluid conductive capability used in convective correlations.'
+    physical_reading_rules:
+    - id: conductividad_termica_fluido_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[conductividad_termica_fluido]] como propiedad del fluido, no como coeficiente de convección.
+        en: Read [[conductividad_termica_fluido]] as a fluid property, not as the convective coefficient.
+    coherence_rules:
+    - id: conductividad_termica_fluido_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[conductividad_termica_fluido]] debe ser positiva y corresponder al fluido y temperatura del problema.'
+        en: '[[conductividad_termica_fluido]] must be positive and correspond to the fluid and temperature of the problem.'
+    model_validity_rules:
+    - id: conductividad_termica_fluido_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[conductividad_termica_fluido]] en correlaciones solo si las propiedades del fluido se han evaluado a una
+          temperatura representativa.
+        en: Use [[conductividad_termica_fluido]] in correlations only if fluid properties have been evaluated at a representative
+          temperature.
+    graph_rules:
+    - id: conductividad_termica_fluido_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Con [[numero_nusselt]] y [[longitud_caracteristica]] constantes, [[coeficiente_conveccion]] aumenta con [[conductividad_termica_fluido]].
+        en: With [[numero_nusselt]] and [[longitud_caracteristica]] constant, [[coeficiente_conveccion]] increases with [[conductividad_termica_fluido]].
+    likely_errors:
+    - id: conductividad_termica_fluido_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[conductividad_termica_fluido]] con una lectura aislada es un error frecuente: No confundas [[conductividad_termica_fluido]]
+          con [[coeficiente_conveccion]]; tienen unidades y significado distintos.'
+        en: Do not confuse [[conductividad_termica_fluido]] with [[coeficiente_conveccion]]; they have different units and
+          meanings.
+    next_step_rules:
+    - id: conductividad_termica_fluido_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de fijar [[conductividad_termica_fluido]], comprueba la temperatura de evaluación y la coherencia con
+          el fluido.
+        en: After setting [[conductividad_termica_fluido]], check the evaluation temperature and consistency with the fluid.
+    physical_intuition:
+    - id: conductividad_termica_fluido_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Mayor [[conductividad_termica_fluido]] facilita el transporte microscópico de energía dentro del fluido.
+        en: Higher [[conductividad_termica_fluido]] facilitates microscopic energy transport within the fluid.
+    limiting_cases:
+    - id: conductividad_termica_fluido_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[conductividad_termica_fluido]] es muy baja, el coeficiente estimado por Nusselt disminuye para la misma geometría.
+        en: If [[conductividad_termica_fluido]] is very low, the coefficient estimated by Nusselt decreases for the same geometry.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  longitud_caracteristica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: input
+      en: characteristic length
+    summary_rules:
+    - id: longitud_caracteristica_summary_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[longitud_caracteristica]] es la escala geométrica usada en la correlación convectiva.'
+        en: '[[longitud_caracteristica]] is the geometric scale used in the convective correlation.'
+    physical_reading_rules:
+    - id: longitud_caracteristica_physical_reading_base
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[longitud_caracteristica]] como una escala representativa de la geometría, no como una longitud arbitraria.
+        en: Read [[longitud_caracteristica]] as a representative scale of the geometry, not as an arbitrary length.
+    coherence_rules:
+    - id: longitud_caracteristica_coherence_base
+      when: 'true'
+      status: ok
+      text:
+        es: '[[longitud_caracteristica]] debe ser positiva y compatible con la geometría de la correlación usada.'
+        en: '[[longitud_caracteristica]] must be positive and compatible with the geometry of the correlation used.'
+    model_validity_rules:
+    - id: longitud_caracteristica_model_validity_base
+      when: 'true'
+      status: info
+      text:
+        es: Una elección incorrecta de [[longitud_caracteristica]] puede invalidar el cálculo de [[coeficiente_conveccion]].
+        en: An incorrect choice of [[longitud_caracteristica]] can invalidate the calculation of [[coeficiente_conveccion]].
+    graph_rules:
+    - id: longitud_caracteristica_graph_base
+      when: 'true'
+      status: info
+      text:
+        es: Con [[numero_nusselt]] y [[conductividad_termica_fluido]] constantes, aumentar [[longitud_caracteristica]] reduce
+          [[coeficiente_conveccion]].
+        en: With [[numero_nusselt]] and [[conductividad_termica_fluido]] constant, increasing [[longitud_caracteristica]]
+          reduces [[coeficiente_conveccion]].
+    likely_errors:
+    - id: longitud_caracteristica_likely_error_base
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[longitud_caracteristica]] con una lectura aislada es un error frecuente: No uses una [[longitud_caracteristica]]
+          tomada de otra geometría o de otra correlación.'
+        en: 'A common mistake is to interpret [[longitud_caracteristica]] in isolation: Do not use a [[longitud_caracteristica]]
+          taken from another geometry or another correlation.'
+    next_step_rules:
+    - id: longitud_caracteristica_next_step_base
+      when: 'true'
+      status: info
+      text:
+        es: Después de fijar [[longitud_caracteristica]], revisa si corresponde a placa, tubo, esfera u otra geometría.
+        en: After setting [[longitud_caracteristica]], check whether it corresponds to a plate, tube, sphere, or another geometry.
+    physical_intuition:
+    - id: longitud_caracteristica_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: '[[longitud_caracteristica]] traduce la forma del sistema a una escala útil para correlaciones de convección.'
+        en: '[[longitud_caracteristica]] translates system shape into a useful scale for convection correlations.'
+    limiting_cases:
+    - id: longitud_caracteristica_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Si [[longitud_caracteristica]] se elige demasiado grande o demasiado pequeña, el coeficiente estimado puede quedar
+          fuera de escala.
+        en: If [[longitud_caracteristica]] is chosen too large or too small, the estimated coefficient can fall out of scale.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

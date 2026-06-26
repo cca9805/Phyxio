@@ -1,0 +1,268 @@
+version: 5.0.0
+leaf: metodo-de-montecarlo
+ui:
+  default_formula: estimador_montecarlo_media
+formulas:
+- id: estimador_montecarlo_media
+  title:
+    es: Estimador de media Monte Carlo
+    en: Monte Carlo mean estimator
+  equation: estimador_montecarlo=(1/numero_muestras)*sum(valor_muestra)
+  latex: \hat A_N=\frac{1}{N}\sum_{i=1}^{N}A_i
+  rearrangements:
+  - id: suma_desde_estimador
+    equation: sum(valor_muestra)=estimador_montecarlo*numero_muestras
+    latex: \sum_i A_i=\hat A_N N
+    target: valor_muestra
+  category: estadistica
+  relation_type: definition
+  physical_meaning:
+    es: El promedio de muchas muestras aleatorias aproxima el valor medio físico del observable.
+    en: The average of many random samples approximates the physical mean value of the observable.
+  constraints:
+    es: Las muestras deben pertenecer al ensemble o distribución objetivo.
+    en: Samples must belong to the target ensemble or distribution.
+  validity:
+    es: Válido cuando el muestreo es representativo y las correlaciones están controladas.
+    en: Valid when sampling is representative and correlations are controlled.
+  dimension_check: '[estimador_montecarlo]=[valor_muestra]'
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - calculadora
+  - interpretacion
+  - graficos
+  interpretation_tags:
+  - average
+  - sampling
+  - estimator
+  result_semantics:
+    target: estimador_montecarlo
+    kind: scalar
+    sign_meaning:
+      es: El signo procede del observable muestreado.
+      en: The sign comes from the sampled observable.
+    absolute_value_meaning:
+      es: Su valor absoluto indica la escala media estimada.
+      en: Its absolute value indicates the estimated mean scale.
+  domain_checks:
+  - es: numero_muestras debe ser positivo.
+    en: numero_muestras must be positive.
+  coherence_checks:
+  - es: El estimador debe tener las mismas unidades que valor_muestra.
+    en: The estimator must have the same units as valor_muestra.
+  graph_implications:
+  - es: Al aumentar numero_muestras, el estimador se estabiliza alrededor del valor esperado.
+    en: As numero_muestras increases, the estimator stabilizes around the expected value.
+  pedagogical_triggers:
+  - es: Distinguir media muestral de valor exacto.
+    en: Distinguish sample mean from exact value.
+- id: error_estandar_montecarlo
+  title:
+    es: Error estándar Monte Carlo
+    en: Monte Carlo standard error
+  equation: error_estandar=sqrt(varianza_muestral/numero_muestras)
+  latex: \sigma_{\hat A}=\sqrt{\frac{s_A^2}{N}}
+  rearrangements:
+  - id: muestras_desde_error
+    equation: numero_muestras=varianza_muestral/(error_estandar^2)
+    latex: N=\frac{s_A^2}{\sigma_{\hat A}^2}
+    target: numero_muestras
+  category: estadistica
+  relation_type: scaling
+  physical_meaning:
+    es: Cuantifica la incertidumbre estadística residual del estimador.
+    en: It quantifies the residual statistical uncertainty of the estimator.
+  constraints:
+    es: Requiere varianza finita y número de muestras positivo.
+    en: Requires finite variance and a positive number of samples.
+  validity:
+    es: Describe la convergencia ideal de muestras independientes o débilmente correlacionadas.
+    en: Describes ideal convergence for independent or weakly correlated samples.
+  dimension_check: '[error_estandar]=[valor_muestra]'
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - calculadora
+  - interpretacion
+  - graficos
+  interpretation_tags:
+  - uncertainty
+  - convergence
+  - sampling_error
+  result_semantics:
+    target: error_estandar
+    kind: scalar_nonnegative
+    sign_meaning:
+      es: No tiene signo físico; es una escala positiva de incertidumbre.
+      en: It has no physical sign; it is a positive uncertainty scale.
+    absolute_value_meaning:
+      es: Menor valor absoluto significa estimación más precisa.
+      en: A smaller absolute value means a more precise estimate.
+  domain_checks:
+  - es: varianza_muestral no puede ser negativa.
+    en: varianza_muestral cannot be negative.
+  coherence_checks:
+  - es: Duplicar precisión requiere aumentar mucho numero_muestras.
+    en: Doubling precision requires greatly increasing numero_muestras.
+  graph_implications:
+  - es: La curva de error baja aproximadamente como inversa de la raíz de numero_muestras.
+    en: The error curve decreases roughly as the inverse square root of numero_muestras.
+  pedagogical_triggers:
+  - es: Evitar creer que el error cae linealmente con las muestras.
+    en: Avoid thinking that error falls linearly with sample count.
+- id: varianza_muestral_montecarlo
+  title:
+    es: Varianza muestral
+    en: Sample variance
+  equation: varianza_muestral=(1/(numero_muestras-1))*sum((valor_muestra-estimador_montecarlo)^2)
+  latex: s_A^2=\frac{1}{N-1}\sum_i(A_i-\hat A_N)^2
+  rearrangements: []
+  category: estadistica
+  relation_type: definition
+  physical_meaning:
+    es: Mide la dispersión de valores microscópicos que alimentan el estimador.
+    en: It measures the spread of microscopic values feeding the estimator.
+  constraints:
+    es: Requiere al menos dos muestras.
+    en: Requires at least two samples.
+  validity:
+    es: Representa dispersión muestral si los datos son comparables y pertenecen al mismo observable.
+    en: Represents sample spread if data are comparable and belong to the same observable.
+  dimension_check: '[varianza_muestral]=[valor_muestra]^2'
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - calculadora
+  - interpretacion
+  interpretation_tags:
+  - spread
+  - variance
+  result_semantics:
+    target: varianza_muestral
+    kind: scalar_nonnegative
+    sign_meaning:
+      es: Siempre es no negativa.
+      en: It is always nonnegative.
+    absolute_value_meaning:
+      es: Cuanto mayor es, más dispersas son las muestras.
+      en: The larger it is, the more spread out the samples are.
+  domain_checks:
+  - es: numero_muestras debe ser mayor que uno.
+    en: numero_muestras must be greater than one.
+  coherence_checks:
+  - es: La varianza tiene unidades cuadradas del observable.
+    en: Variance has squared units of the observable.
+  graph_implications:
+  - es: Mayor varianza eleva la curva de error para el mismo numero_muestras.
+    en: Greater variance raises the error curve for the same numero_muestras.
+  pedagogical_triggers:
+  - es: Separar dispersión física de error del promedio.
+    en: Separate physical spread from error of the mean.
+- id: probabilidad_aceptacion_metropolis
+  title:
+    es: Probabilidad de aceptación de Metropolis
+    en: Metropolis acceptance probability
+  equation: probabilidad_aceptacion=min(1,exp(-energia_estado/(constante_boltzmann*temperatura)))
+  latex: P_{acc}=\min(1,e^{-\Delta E/(k_B T)})
+  rearrangements: []
+  category: muestreo
+  relation_type: criterion
+  physical_meaning:
+    es: Permite aceptar cambios que exploran estados según su peso estadístico térmico.
+    en: It accepts changes that explore states according to their thermal statistical weight.
+  constraints:
+    es: Temperatura positiva y escala energética coherente.
+    en: Positive temperature and coherent energy scale.
+  validity:
+    es: Usada en muestreos tipo Metropolis para distribuciones de equilibrio.
+    en: Used in Metropolis-type sampling for equilibrium distributions.
+  dimension_check: energia_estado/(constante_boltzmann*temperatura) adimensional
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - calculadora
+  - interpretacion
+  interpretation_tags:
+  - metropolis
+  - acceptance
+  - thermal_weight
+  result_semantics:
+    target: probabilidad_aceptacion
+    kind: probability
+    sign_meaning:
+      es: Debe estar entre cero y uno.
+      en: It must lie between zero and one.
+    absolute_value_meaning:
+      es: Valor alto indica cambio estadísticamente aceptable.
+      en: High value indicates a statistically acceptable move.
+  domain_checks:
+  - es: temperatura debe ser mayor que cero.
+    en: temperatura must be greater than zero.
+  coherence_checks:
+  - es: La probabilidad de aceptación no puede superar uno.
+    en: Acceptance probability cannot exceed one.
+  graph_implications:
+  - es: A mayor temperatura se aceptan más cambios energéticos desfavorables.
+    en: At higher temperature, more unfavorable energy changes are accepted.
+  pedagogical_triggers:
+  - es: No interpretar aceptación como certeza de estado final.
+    en: Do not interpret acceptance as certainty of final state.
+- id: promedio_ponderado_muestras
+  title:
+    es: Promedio ponderado de muestras
+    en: Weighted sample average
+  equation: estimador_montecarlo=sum(peso_muestra*valor_muestra)/sum(peso_muestra)
+  latex: \hat A=\frac{\sum_i w_i A_i}{\sum_i w_i}
+  rearrangements: []
+  category: estadistica
+  relation_type: weighted_average
+  physical_meaning:
+    es: Corrige el promedio cuando las muestras no tienen el mismo peso estadístico.
+    en: It corrects the average when samples do not have the same statistical weight.
+  constraints:
+    es: Los pesos deben ser no negativos y no todos nulos.
+    en: Weights must be nonnegative and not all zero.
+  validity:
+    es: Adecuado para muestreo ponderado o reponderación estadística.
+    en: Suitable for weighted sampling or statistical reweighting.
+  dimension_check: '[estimador_montecarlo]=[valor_muestra]'
+  calculable: true
+  motivo_no_calculable:
+    es: ''
+    en: ''
+  used_in:
+  - calculadora
+  - interpretacion
+  interpretation_tags:
+  - weighted_average
+  - importance_sampling
+  result_semantics:
+    target: estimador_montecarlo
+    kind: scalar
+    sign_meaning:
+      es: El signo depende del observable ponderado.
+      en: The sign depends on the weighted observable.
+    absolute_value_meaning:
+      es: Representa la escala media ponderada por el ensemble.
+      en: It represents the ensemble-weighted mean scale.
+  domain_checks:
+  - es: sum(peso_muestra) debe ser positiva.
+    en: sum(peso_muestra) must be positive.
+  coherence_checks:
+  - es: Un peso dominante puede sesgar mucho el promedio.
+    en: A dominant weight can strongly bias the average.
+  graph_implications:
+  - es: Pesos desiguales pueden retrasar la estabilización del estimador.
+    en: Unequal weights may delay estimator stabilization.
+  pedagogical_triggers:
+  - es: Distinguir promedio simple y promedio ponderado.
+    en: Distinguish simple and weighted averages.

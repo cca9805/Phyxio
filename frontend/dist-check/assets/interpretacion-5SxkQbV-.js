@@ -1,0 +1,499 @@
+const e=`version: 2
+id: interpretacion-ecuaciones-de-estado
+leaf_id: ecuaciones-de-estado
+
+nombre:
+  es: "Interpretación de las ecuaciones de estado del gas ideal"
+  en: "Interpretation of ideal gas equations of state"
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: gases-y-modelos
+  parent_id: gases-y-modelos
+  ruta_relativa: fisica-clasica/termodinamica/gases-y-modelos/ecuaciones-de-estado
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    title:
+      es: "Estado del gas calculado"
+      en: "Calculated gas state"
+  physical_reading:
+    title:
+      es: "Lectura física del resultado"
+      en: "Physical reading of the result"
+  coherence:
+    title:
+      es: "Coherencia del resultado"
+      en: "Result coherence"
+  model_validity:
+    title:
+      es: "Validez del modelo ideal"
+      en: "Ideal model validity"
+  graph_reading:
+    title:
+      es: "Posición en el diagrama P–V"
+      en: "Position in the P–V diagram"
+  likely_errors:
+    title:
+      es: "Errores frecuentes"
+      en: "Common errors"
+  next_step:
+    title:
+      es: "Siguiente paso"
+      en: "Next step"
+
+ui:
+  enabled: true
+  display_modes:
+    - calculator_inline
+    - graph_inline
+    - dedicated_tab
+    - modal
+  labels:
+    - gas_ideal
+    - ecuacion_de_estado
+    - variables_de_estado
+  priority_order:
+    - summary_rules
+    - physical_reading_rules
+    - coherence_rules
+    - model_validity_rules
+    - graph_rules
+    - likely_errors
+    - next_step_rules
+  inline_limits: 3
+
+dependencies:
+  formulas:
+    - ley_gas_ideal
+    - van_der_waals
+  magnitudes:
+    - P
+    - V
+    - T
+    - n
+    - R
+
+global_context:
+  physical_domain:
+    es: "Termodinámica de gases ideales. Las variables de estado P, V, T y n satisfacen la ley del gas ideal."
+    en: "Ideal gas thermodynamics. The state variables P, V, T and n satisfy the ideal gas law."
+  axis_convention:
+    es: "Presión en Pa, volumen en m³, temperatura en K, cantidad de sustancia en mol. R = 8.314 J/(mol·K)."
+    en: "Pressure in Pa, volume in m³, temperature in K, amount of substance in mol. R = 8.314 J/(mol·K)."
+  standard_assumptions:
+    - Gas ideal sin interacciones intermoleculares
+    - Temperatura obligatoriamente en kelvin
+    - Volumen en metros cúbicos y presión en pascales para usar R = 8.314
+  standard_warnings:
+    - "Error frecuente: temperatura en Celsius en lugar de kelvin. Convertir añadiendo 273.15."
+    - "Error frecuente: volumen en litros en lugar de m³. Dividir entre 1000."
+
+targets:
+  P:
+    magnitude_type: state_variable
+    semantic_role:
+      es: "Presión del gas en el estado calculado"
+      en: "Pressure of the gas in the calculated state"
+    summary_rules:
+      - id: p_sum_normal
+        when: "result > 0 && result <= 2000000"
+        status: ok
+        text:
+          es: "Presión en rango habitual de laboratorio. Estado del gas termodinámicamente coherente."
+          en: "Pressure within the usual laboratory range. Thermodynamically coherent gas state."
+      - id: p_sum_high
+        when: "result > 2000000"
+        status: warning
+        text:
+          es: "Presión elevada. Verificar que el modelo de gas ideal sigue siendo aplicable a estas condiciones."
+          en: "High pressure. Verify that the ideal gas model still applies under these conditions."
+      - id: p_sum_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Estado del gas calculado con la ley del gas ideal."
+          en: "Gas state calculated using the ideal gas law."
+    physical_reading_rules:
+      - id: p_read_above_atm
+        when: "result > 101325"
+        status: info
+        text:
+          es: "El gas está a mayor presión que la atmósfera. En un recipiente no rígido, tendería a expandirse."
+          en: "The gas is above atmospheric pressure. In a non-rigid container, it would tend to expand."
+      - id: p_read_below_atm
+        when: "result < 101325 && result > 0"
+        status: info
+        text:
+          es: "El gas está por debajo de la presión atmosférica (estado de subpresión relativa)."
+          en: "The gas is below atmospheric pressure (sub-atmospheric state)."
+      - id: p_read_fallback
+        when: "true"
+        status: info
+        text:
+          es: "La presión refleja la densidad de colisiones moleculares contra las paredes a esa temperatura y volumen."
+          en: "The pressure reflects the density of molecular collisions against the walls at that temperature and volume."
+    coherence_rules:
+      - id: p_coh_negative
+        when: "result <= 0"
+        status: danger
+        text:
+          es: "¡Incoherencia! Presión negativa o nula: verificar que T esté en kelvin y que V y n sean positivos."
+          en: "Inconsistency! Non-positive pressure: verify that T is in kelvin and that V and n are positive."
+      - id: p_coh_extreme
+        when: "result > 100000000"
+        status: warning
+        text:
+          es: "Presión extremadamente alta: probable error de unidades. ¿Se usó V en litros en lugar de m³?"
+          en: "Extremely high pressure: likely unit error. Was V entered in litres instead of m³?"
+      - id: p_coh_fallback
+        when: "true"
+        status: ok
+        text:
+          es: "El resultado es físicamente coherente si P es positiva."
+          en: "The result is physically coherent if P is positive."
+    model_validity_rules:
+      - id: p_val_high
+        when: "result > 10000000"
+        status: warning
+        text:
+          es: "A presiones superiores a ~100 atm la ley del gas ideal puede introducir errores superiores al 5 %. Considerar Van der Waals."
+          en: "At pressures above ~100 atm the ideal gas law may introduce errors above 5 %. Consider using Van der Waals."
+      - id: p_val_fallback
+        when: "true"
+        status: ok
+        text:
+          es: "La ley del gas ideal es válida para gases de baja densidad alejados del punto de condensación."
+          en: "The ideal gas law is valid for low-density gases far from the condensation point."
+    graph_rules:
+      - id: p_graph_isoterm
+        when: "true"
+        status: info
+        text:
+          es: "El punto (V, P) se sitúa sobre la isoterma T = cte en el diagrama P–V. Isotermas más altas corresponden a mayor temperatura."
+          en: "The point (V, P) lies on the T = const isotherm in the P–V diagram. Higher isotherms correspond to higher temperature."
+    likely_errors:
+      - id: p_err_celsius
+        when: "true"
+        status: info
+        text:
+          es: "Verificar que la temperatura fue introducida en kelvin, no en Celsius. Un error frecuente es usar el valor en Celsius directamente, lo que produce una presión unas 12 veces menor que la correcta a temperatura ambiente."
+          en: "Verify that temperature was entered in kelvin, not Celsius. A common mistake is using the Celsius value directly, which produces a pressure about 12 times smaller than correct at room temperature."
+      - id: p_err_litros
+        when: "true"
+        status: info
+        text:
+          es: "Verificar que V esté en m³ y que R = 8.314 J/(mol·K) sea el valor empleado."
+          en: "Verify that V is in m³ and that R = 8.314 J/(mol·K) is the value used."
+    next_step_rules:
+      - id: p_next_atm
+        when: "true"
+        status: info
+        text:
+          es: "Comparar con la presión atmosférica (101 325 Pa) para expresar el resultado en atmósferas."
+          en: "Compare with atmospheric pressure (101 325 Pa) to express the result in atmospheres."
+
+  V:
+    magnitude_type: state_variable
+    semantic_role:
+      es: "Volumen del gas en el estado calculado"
+      en: "Volume of the gas in the calculated state"
+    summary_rules:
+      - id: v_sum_small
+        when: "result > 0 && result < 0.001"
+        status: info
+        text:
+          es: "Volumen menor de 1 litro. Muestra pequeña o presión elevada."
+          en: "Volume less than 1 litre. Small sample or high pressure."
+      - id: v_sum_lab
+        when: "result >= 0.001 && result <= 1"
+        status: ok
+        text:
+          es: "Volumen entre 1 L y 1 m³, rango habitual de laboratorio."
+          en: "Volume between 1 L and 1 m³, typical laboratory range."
+      - id: v_sum_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Volumen calculado con la ley del gas ideal a las condiciones dadas."
+          en: "Volume calculated with the ideal gas law at the given conditions."
+    physical_reading_rules:
+      - id: v_read_prop
+        when: "true"
+        status: info
+        text:
+          es: "A mayor temperatura o menor presión, el volumen aumenta en proporción directa según la ley del gas ideal."
+          en: "At higher temperature or lower pressure, the volume increases in direct proportion according to the ideal gas law."
+      - id: v_read_molar
+        when: "n > 0 && result / n > 0.02 && result / n < 0.03"
+        status: ok
+        text:
+          es: "Volumen molar próximo a 22.4 L/mol: coherente con condiciones cercanas a 0 °C y 1 atm."
+          en: "Molar volume close to 22.4 L/mol: consistent with conditions near 0 °C and 1 atm."
+    coherence_rules:
+      - id: v_coh_negative
+        when: "result <= 0"
+        status: danger
+        text:
+          es: "¡Incoherencia! Volumen nulo o negativo: revisar que P, T y n sean positivos."
+          en: "Inconsistency! Zero or negative volume: check that P, T and n are positive."
+      - id: v_coh_fallback
+        when: "true"
+        status: ok
+        text:
+          es: "El volumen es coherente si es estrictamente positivo."
+          en: "The volume is coherent if it is strictly positive."
+    model_validity_rules:
+      - id: v_val_compressed
+        when: "n > 0 && result / n < 0.0001"
+        status: warning
+        text:
+          es: "Volumen molar muy pequeño: gas muy comprimido, el modelo ideal puede subestimar la presión real."
+          en: "Very small molar volume: highly compressed gas, the ideal model may underestimate the real pressure."
+      - id: v_val_fallback
+        when: "true"
+        status: ok
+        text:
+          es: "La ley del gas ideal predice correctamente el volumen cuando la densidad del gas es baja."
+          en: "The ideal gas law correctly predicts the volume when the gas density is low."
+    graph_rules:
+      - id: v_graph_horiz
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama P–V, el estado se desplaza horizontalmente al cambiar V a T y n constantes."
+          en: "In the P–V diagram, the state moves horizontally when V changes at constant T and n."
+    likely_errors:
+      - id: v_err_litros
+        when: "true"
+        status: info
+        text:
+          es: "Si el volumen es ~1000 veces mayor al esperado, probablemente se calculó en m³ cuando se esperaba litros. 1 m³ = 1000 L."
+          en: "If the volume is ~1000 times larger than expected, it was likely calculated in m³ when litres were expected. 1 m³ = 1000 L."
+    next_step_rules:
+      - id: v_next_litros
+        when: "true"
+        status: info
+        text:
+          es: "Multiplicar por 1000 para expresar el volumen en litros y comparar con recipientes cotidianos."
+          en: "Multiply by 1000 to express the volume in litres and compare with everyday containers."
+      - id: v_next_molar
+        when: "n > 0"
+        status: info
+        text:
+          es: "Calcular el volumen molar (V dividido entre n) y comparar con el valor de referencia 22.4 L/mol a condiciones normales."
+          en: "Calculate the molar volume (V divided by n) and compare with the reference value of 22.4 L/mol at standard conditions."
+
+  T:
+    magnitude_type: state_variable
+    semantic_role:
+      es: "Temperatura termodinámica del gas en el estado calculado"
+      en: "Thermodynamic temperature of the gas in the calculated state"
+    summary_rules:
+      - id: t_sum_cold
+        when: "result > 0 && result < 273"
+        status: warning
+        text:
+          es: "Temperatura por debajo de 0 °C. El gas puede estar próximo al punto de condensación según la especie."
+          en: "Temperature below 0 °C. The gas may be close to condensation depending on the species."
+      - id: t_sum_room
+        when: "result >= 273 && result <= 373"
+        status: ok
+        text:
+          es: "Temperatura entre 0 °C y 100 °C: rango cotidiano habitual para muchos gases."
+          en: "Temperature between 0 °C and 100 °C: common everyday range for many gases."
+      - id: t_sum_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Temperatura del gas calculada a partir de las variables de estado P, V y n."
+          en: "Gas temperature calculated from the state variables P, V and n."
+    physical_reading_rules:
+      - id: t_read_very_cold
+        when: "result < 100"
+        status: warning
+        text:
+          es: "Temperatura muy baja: muchos gases reales habrán condensado. Verificar que el sistema sea realmente gaseoso."
+          en: "Very low temperature: many real gases will have condensed. Verify that the system is truly gaseous."
+      - id: t_read_fallback
+        when: "true"
+        status: info
+        text:
+          es: "La temperatura controla la energía cinética media de las moléculas. Doblar T a V constante dobla P."
+          en: "Temperature controls the mean molecular kinetic energy. Doubling T at constant V doubles P."
+    coherence_rules:
+      - id: t_coh_negative
+        when: "result <= 0"
+        status: danger
+        text:
+          es: "¡Incoherencia! Temperatura nula o negativa en kelvin: error físico. La temperatura termodinámica es siempre positiva."
+          en: "Inconsistency! Zero or negative temperature in kelvin: physical error. Thermodynamic temperature is always positive."
+      - id: t_coh_fallback
+        when: "true"
+        status: ok
+        text:
+          es: "El resultado es coherente si T es estrictamente positiva en kelvin."
+          en: "The result is coherent if T is strictly positive in kelvin."
+    model_validity_rules:
+      - id: t_val_low
+        when: "result < 100"
+        status: warning
+        text:
+          es: "Por debajo de ~100 K muchos gases reales se desvían significativamente del modelo ideal."
+          en: "Below ~100 K many real gases deviate significantly from the ideal model."
+      - id: t_val_fallback
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo de gas ideal predice correctamente T para gases de baja densidad."
+          en: "The ideal gas model correctly predicts T for low-density gases."
+    graph_rules:
+      - id: t_graph_isoterm
+        when: "true"
+        status: info
+        text:
+          es: "Cada valor de T corresponde a una isoterma diferente en el diagrama P–V. Mayor T equivale a una hipérbola más alta."
+          en: "Each T value corresponds to a different isotherm in the P–V diagram. Higher T corresponds to a higher hyperbola."
+    likely_errors:
+      - id: t_err_celsius
+        when: "result < 0"
+        status: danger
+        text:
+          es: "Temperatura negativa: alguna variable se introdujo con signo incorrecto, o T está en Celsius."
+          en: "Negative temperature: a variable was entered with the wrong sign, or T is in Celsius."
+      - id: t_err_units
+        when: "true"
+        status: info
+        text:
+          es: "Asegurarse de que P está en Pa, V en m³ y n en mol para obtener T directamente en kelvin."
+          en: "Ensure P is in Pa, V in m³ and n in mol to obtain T directly in kelvin."
+    next_step_rules:
+      - id: t_next_celsius
+        when: "true"
+        status: info
+        text:
+          es: "Restar 273.15 al resultado para obtener la temperatura en grados Celsius y relacionarla con escalas cotidianas."
+          en: "Subtract 273.15 from the result to obtain the temperature in degrees Celsius and relate it to everyday scales."
+
+  n:
+    magnitude_type: state_variable
+    semantic_role:
+      es: "Cantidad de sustancia del gas en el estado calculado"
+      en: "Amount of substance of the gas in the calculated state"
+    summary_rules:
+      - id: n_sum_small
+        when: "result > 0 && result < 0.01"
+        status: info
+        text:
+          es: "Muestra muy pequeña de gas: menos de 0.01 mol."
+          en: "Very small gas sample: less than 0.01 mol."
+      - id: n_sum_normal
+        when: "result >= 0.01"
+        status: ok
+        text:
+          es: "Cantidad de sustancia significativa calculada a partir del estado termodinámico del gas."
+          en: "Significant amount of substance calculated from the thermodynamic state of the gas."
+      - id: n_sum_fallback
+        when: "true"
+        status: info
+        text:
+          es: "Cantidad de moles calculada usando la ley del gas ideal."
+          en: "Number of moles calculated using the ideal gas law."
+    physical_reading_rules:
+      - id: n_read_fallback
+        when: "true"
+        status: info
+        text:
+          es: "El resultado indica cuántos moles de gas están confinados en las condiciones dadas. Cada mol contiene el número de Avogadro de moléculas."
+          en: "The result indicates how many moles of gas are confined under the given conditions. Each mole contains Avogadro's number of molecules."
+    coherence_rules:
+      - id: n_coh_negative
+        when: "result <= 0"
+        status: danger
+        text:
+          es: "¡Incoherencia! Número de moles nulo o negativo: revisar que P, V y T sean estrictamente positivos."
+          en: "Inconsistency! Zero or negative moles: check that P, V and T are strictly positive."
+      - id: n_coh_fallback
+        when: "true"
+        status: ok
+        text:
+          es: "El resultado es coherente si n es estrictamente positivo."
+          en: "The result is coherent if n is strictly positive."
+    model_validity_rules:
+      - id: n_val_fallback
+        when: "true"
+        status: ok
+        text:
+          es: "La ley del gas ideal predice correctamente n cuando el gas está en régimen ideal. Para gases muy densos usar Van der Waals."
+          en: "The ideal gas law correctly predicts n when the gas is in the ideal regime. For very dense gases use Van der Waals."
+    graph_rules:
+      - id: n_graph_isoterm
+        when: "true"
+        status: info
+        text:
+          es: "En el diagrama P–V, doblar n a T constante desplaza toda la isoterma hacia valores mayores del producto PV."
+          en: "In the P–V diagram, doubling n at constant T shifts the entire isotherm toward higher PV product values."
+    likely_errors:
+      - id: n_err_litros
+        when: "true"
+        status: info
+        text:
+          es: "Si n es ~1000 veces mayor al esperado, probablemente se usaron litros en lugar de m³ para el volumen."
+          en: "If n is ~1000 times larger than expected, litres were probably used instead of m³ for the volume."
+    next_step_rules:
+      - id: n_next_masa
+        when: "true"
+        status: info
+        text:
+          es: "Multiplicar n por la masa molar del gas (g/mol) para obtener la masa total del gas en gramos."
+          en: "Multiply n by the molar mass of the gas (g/mol) to obtain the total mass of gas in grams."
+
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+    eje_x: V
+    eje_y: P
+    param: T
+
+mini_graph:
+  enabled: true
+  type: Coord
+  show_current_point: true
+
+cross_checks:
+  - id: pv_nrt_check
+    description:
+      es: "Verificar que el producto PV coincide con nRT dentro de la tolerancia numérica esperada."
+      en: "Verify that the product PV matches nRT within the expected numerical tolerance."
+    formula: "abs(P * V - n * R * T) / (n * R * T) < 0.01"
+
+error_patterns:
+  - id: celsius_error
+    description:
+      es: "Temperatura en Celsius en lugar de kelvin"
+      en: "Temperature in Celsius instead of kelvin"
+    detect_when: "T < 100"
+    suggestion:
+      es: "Añadir 273.15 a la temperatura para convertirla a kelvin."
+      en: "Add 273.15 to the temperature to convert to kelvin."
+  - id: litros_error
+    description:
+      es: "Volumen en litros en lugar de m³"
+      en: "Volume in litres instead of m³"
+    detect_when: "V > 10 && P > 100000"
+    suggestion:
+      es: "Dividir el volumen entre 1000 para pasar de litros a metros cúbicos."
+      en: "Divide the volume by 1000 to convert from litres to cubic metres."
+`;export{e as default};

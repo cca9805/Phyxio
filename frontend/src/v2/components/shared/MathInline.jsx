@@ -1,5 +1,5 @@
 import React from "react";
-import Latex from "react-latex-next";
+import Latex from "./SafeLatex.jsx";
 import "katex/dist/katex.min.css";
 
 function normalizeToLatex(s = "") {

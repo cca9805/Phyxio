@@ -1,0 +1,315 @@
+version: 2
+id: interpretacion-tensor-de-inercia
+leaf_id: tensor-de-inercia
+nombre:
+  es: Interpretacion de Tensor de Inercia
+  en: Interpretation of Inertia Tensor
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: dinamica
+  parent_id: momento-de-inercia
+  ruta_relativa: fisica-clasica/mecanica/dinamica/dinamica-rotacional/momento-de-inercia/tensor-de-inercia
+dependencies:
+  formulas:
+  - rel_l_omega
+  - energia_cinetica_tensores
+  magnitudes:
+  - tensor_inercia
+  - producto_inercia
+  - momento_angular
+  - omega
+  - E
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen fisico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  tensor_inercia:
+    summary_rules:
+    - id: tensor_summary
+      when: "true"
+      status: info
+      text:
+        es: El tensor de inercia resume como la geometria de masa convierte omega en momento_angular.
+        en: The inertia tensor summarizes how mass geometry converts omega into momento_angular.
+    coherence_rules:
+    - id: tensor_coherence
+      when: "true"
+      status: ok
+      text:
+        es: La matriz debe ser simetrica y referirse al mismo origen y al mismo sistema de ejes.
+        en: The matrix must be symmetric and refer to the same origin and the same set of axes.
+    physical_reading_rules:
+    - id: tensor_physical
+      when: "true"
+      status: info
+      text:
+        es: El tensor no solo fija cuanto cuesta girar; tambien fija que direcciones de giro producen respuestas alineadas y cuales introducen acoplamiento.
+        en: The tensor does not only set how hard rotation is; it also determines which spin directions stay aligned and which ones introduce coupling.
+    model_validity_rules:
+    - id: tensor_validity
+      when: "true"
+      status: info
+      text:
+        es: Solo puede tratarse como constante si el cuerpo es rigido y la distribucion de masa no cambia durante el proceso.
+        en: It can be treated as constant only if the body is rigid and the mass distribution does not change during the process.
+    graph_rules:
+    - id: tensor_graph
+      when: "true"
+      status: info
+      text:
+        es: En el grafico, la desalineacion entre L y omega debe leerse como efecto de la estructura de la matriz.
+        en: In the graph, the misalignment between L and omega must be read as an effect of the matrix structure.
+    likely_errors:
+    - id: tensor_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error comun: usar el tensor como si fuera un escalar unico y olvidar que puede rotar la direccion de momento_angular."
+        en: "Common error: using the tensor as if it were a single scalar and forgetting that it can rotate the direction of momento_angular."
+    next_step_rules:
+    - id: tensor_next
+      when: "true"
+      status: info
+      text:
+        es: "Siguiente paso: revisar si conviene diagonalizar y pasar a ejes principales."
+        en: "Next step: check whether diagonalization and a move to principal axes are appropriate."
+
+  producto_inercia:
+    summary_rules:
+    - id: prod_summary
+      when: "true"
+      status: info
+      text:
+        es: Producto_inercia mide acoplamiento entre ejes y asimetria respecto al marco elegido.
+        en: Producto_inercia measures axis coupling and asymmetry relative to the chosen frame.
+    coherence_rules:
+    - id: prod_coherence
+      when: "true"
+      status: ok
+      text:
+        es: "Si producto_inercia vale cero, debe existir una razon fisica: simetria o ejes principales."
+        en: "If producto_inercia is zero, there must be a physical reason: symmetry or principal axes."
+    physical_reading_rules:
+    - id: prod_physical
+      when: "true"
+      status: info
+      text:
+        es: Un producto de inercia no nulo hace que una componente de omega contribuya a otra componente de momento_angular y por eso puede rotar la direccion de L.
+        en: A nonzero product of inertia makes one component of omega contribute to another component of momento_angular and can therefore rotate the direction of L.
+    model_validity_rules:
+    - id: prod_validity
+      when: "true"
+      status: info
+      text:
+        es: Su interpretacion depende del origen y de los ejes; cambiar de marco puede anularlo sin cambiar el cuerpo real.
+        en: Its interpretation depends on the origin and axes; changing frame may cancel it without changing the real body.
+    graph_rules:
+    - id: prod_graph
+      when: "true"
+      status: info
+      text:
+        es: En el grafico, aumentar Ixy debe aumentar la separacion angular entre L y omega.
+        en: In the graph, increasing Ixy should increase the angular separation between L and omega.
+    likely_errors:
+    - id: prod_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error comun: borrar producto_inercia por comodidad algebraica sin justificar simetria."
+        en: "Common error: deleting producto_inercia for algebraic convenience without justifying symmetry."
+    next_step_rules:
+    - id: prod_next
+      when: "true"
+      status: info
+      text:
+        es: "Siguiente paso: buscar autovectores para encontrar ejes principales."
+        en: "Next step: find eigenvectors to identify the principal axes."
+
+  momento_angular:
+    summary_rules:
+    - id: l_summary
+      when: "true"
+      status: info
+      text:
+        es: Momento_angular es la respuesta rotacional que resulta de aplicar el tensor a omega.
+        en: Momento_angular is the rotational response obtained by applying the tensor to omega.
+    coherence_rules:
+    - id: l_coherence
+      when: "true"
+      status: ok
+      text:
+        es: Sus componentes deben tener unidades kg*m^2/s y ser coherentes con el mismo marco que el tensor.
+        en: Its components must have units of kg*m^2/s and belong to the same frame as the tensor.
+    physical_reading_rules:
+    - id: l_physical
+      when: "true"
+      status: info
+      text:
+        es: Si momento_angular no apunta como omega, la lectura correcta no es "hay un error", sino "el tensor esta mezclando direcciones".
+        en: If momento_angular does not point like omega, the correct reading is not "there is an error" but "the tensor is mixing directions."
+    model_validity_rules:
+    - id: l_validity
+      when: "true"
+      status: info
+      text:
+        es: La relacion con omega requiere que ambas magnitudes se expresen en el mismo sistema de ejes.
+        en: Its relation to omega requires both quantities to be expressed in the same axis system.
+    graph_rules:
+    - id: l_graph
+      when: "true"
+      status: info
+      text:
+        es: En el grafico, L debe inclinarse cuando hay acoplamiento fuera de la diagonal.
+        en: In the graph, L should tilt whenever off-diagonal coupling is present.
+    likely_errors:
+    - id: l_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error comun: asumir que el modulo correcto garantiza tambien la direccion correcta."
+        en: "Common error: assuming that a correct magnitude also guarantees the correct direction."
+    next_step_rules:
+    - id: l_next
+      when: "true"
+      status: info
+      text:
+        es: "Siguiente paso: comparar la direccion de L con la de omega para diagnosticar acoplamientos."
+        en: "Next step: compare the direction of L with that of omega to diagnose coupling."
+
+  omega:
+    summary_rules:
+    - id: omega_summary
+      when: "true"
+      status: info
+      text:
+        es: Omega fija la direccion de giro impuesta o observada, pero no garantiza por si sola la direccion de L.
+        en: Omega sets the imposed or observed spin direction, but by itself it does not guarantee the direction of L.
+    coherence_rules:
+    - id: omega_coherence
+      when: "true"
+      status: ok
+      text:
+        es: Debe interpretarse en el mismo marco cartesiano en el que se escribio el tensor.
+        en: It must be interpreted in the same Cartesian frame in which the tensor was written.
+    physical_reading_rules:
+    - id: omega_physical
+      when: "true"
+      status: info
+      text:
+        es: Cambiar la direccion de omega puede activar o apagar acoplamientos, porque el tensor no responde igual en todas las direcciones.
+        en: Changing the direction of omega can activate or suppress coupling because the tensor does not respond equally in every direction.
+    model_validity_rules:
+    - id: omega_validity
+      when: "true"
+      status: info
+      text:
+        es: En ejes principales, omega recupera una lectura mas limpia; fuera de ellos, puede producir respuestas oblicuas.
+        en: In principal axes, omega regains a cleaner reading; outside them, it may produce oblique responses.
+    graph_rules:
+    - id: omega_graph
+      when: "true"
+      status: info
+      text:
+        es: En el grafico, omega es la entrada que permite ver como la matriz rota la respuesta.
+        en: In the graph, omega is the input that shows how the matrix rotates the response.
+    likely_errors:
+    - id: omega_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error comun: tratar omega como un escalar unico cuando el problema pide componentes o direccion."
+        en: "Common error: treating omega as a single scalar when the problem requires components or direction."
+    next_step_rules:
+    - id: omega_next
+      when: "true"
+      status: info
+      text:
+        es: "Siguiente paso: proyectar omega sobre ejes principales para simplificar la lectura."
+        en: "Next step: project omega onto principal axes to simplify the reading."
+
+  E:
+    summary_rules:
+    - id: e_summary
+      when: "true"
+      status: info
+      text:
+        es: E resume el coste energetico del giro una vez elegido el eje principal o la reduccion equivalente.
+        en: E summarizes the energetic cost of rotation once a principal axis or equivalent reduction has been chosen.
+    coherence_rules:
+    - id: e_coherence
+      when: "true"
+      status: ok
+      text:
+        es: Debe expresarse en joule y ser compatible con la misma eleccion de eje usada para I y omega.
+        en: It must be expressed in joules and be compatible with the same axis choice used for I and omega.
+    physical_reading_rules:
+    - id: e_physical
+      when: "true"
+      status: info
+      text:
+        es: La energia no depende solo de cuanto gira el cuerpo, sino de que direccion principal del tensor esta siendo excitada.
+        en: The energy depends not only on how fast the body spins, but on which principal direction of the tensor is being excited.
+    model_validity_rules:
+    - id: e_validity
+      when: "true"
+      status: info
+      text:
+        es: Energia_cinetica_tensores debe usarse cuando la lectura ya se ha reducido a un eje principal o a un momento equivalente justificado.
+        en: Energia_cinetica_tensores should be used when the reading has already been reduced to a principal axis or to a justified equivalent moment.
+    graph_rules:
+    - id: e_graph
+      when: "true"
+      status: info
+      text:
+        es: El grafico ayuda a ver que cambiar de eje puede cambiar la lectura energetica aunque el cuerpo sea el mismo.
+        en: The graph helps show that changing axes can change the energetic reading even though the body is the same.
+    likely_errors:
+    - id: e_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error comun: meter un unico I en la formula energetica sin explicar de que eje principal sale."
+        en: "Common error: inserting one scalar I into the energy formula without explaining from which principal axis it comes."
+    next_step_rules:
+    - id: e_next
+      when: "true"
+      status: info
+      text:
+        es: "Siguiente paso: comparar E entre ejes principales para detectar que direccion almacena mas energia."
+        en: "Next step: compare E across principal axes to detect which direction stores more energy."

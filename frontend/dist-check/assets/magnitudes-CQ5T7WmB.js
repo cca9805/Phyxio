@@ -1,0 +1,241 @@
+const e=`\uFEFFmagnitudes:
+- id: P
+  symbol: P
+  nombre:
+    es: Potencia electrica
+    en: Electric power
+  simbolo: P
+  unidad_si: W
+  dimension: M L^2 T^-3
+  tipo: escalar
+  is_vector: false
+  components: []
+  descripcion:
+    es: Rapidez de transferencia o disipacion de energia electrica por unidad de tiempo.
+    en: Rate of electrical energy transfer or dissipation per unit time.
+  category: estado
+  physical_role: magnitud derivada
+  used_in:
+  - potencia_base
+  - potencia_resistiva_corriente
+  - potencia_resistiva_tension
+  - energia_desde_potencia
+  common_mistake:
+    es: Confundir potencia instantanea con energia acumulada.
+    en: Confusing instantaneous power with accumulated energy.
+  typical_range:
+    es: Desde mW en sensores hasta kW en cargas domesticas e industriales.
+    en: From mW in sensors to kW in domestic and industrial loads.
+  sign_behavior: positive_or_negative
+  zero_behavior:
+    es: Si P es cero, no hay transferencia neta de energia en ese instante.
+    en: If P is zero, there is no net energy transfer at that instant.
+  value_nature: instant_or_average
+  interpretation_role:
+    es: Indica exigencia energetica y termica del sistema.
+    en: Indicates the system energetic and thermal demand.
+  graph_binding:
+    x: t
+    y: P
+  pedagogical_notes:
+    es: Priorizar lectura causal entre V, I y disipacion termica.
+    en: Prioritize causal reading between V, I, and thermal dissipation.
+
+- id: V
+  symbol: V
+  nombre:
+    es: Tension electrica
+    en: Voltage
+  simbolo: V
+  unidad_si: V
+  dimension: M L^2 T^-3 I^-1
+  tipo: escalar
+  is_vector: false
+  components: []
+  descripcion:
+    es: Diferencia de potencial electrico entre dos puntos.
+    en: Electric potential difference between two points.
+  category: estado
+  physical_role: variable de control
+  used_in:
+  - potencia_base
+  - potencia_resistiva_tension
+  common_mistake:
+    es: Usar tension nominal como si fuera tension real bajo carga.
+    en: Using nominal voltage as if it were actual loaded voltage.
+  typical_range:
+    es: De milivoltios a cientos de voltios segun aplicacion.
+    en: From millivolts to hundreds of volts depending on application.
+  sign_behavior: signed_reference
+  zero_behavior:
+    es: Si V es cero no hay diferencia de potencial para transferir energia por efecto electrico.
+    en: If V is zero there is no potential difference to drive electrical energy transfer.
+  value_nature: instant_or_rms
+  interpretation_role:
+    es: Determina capacidad de entrega energetica junto con I.
+    en: Sets energy delivery capacity together with I.
+  graph_binding:
+    x: t
+    y: V
+  pedagogical_notes:
+    es: Distinguir valor nominal, instantaneo y eficaz.
+    en: Distinguish nominal, instantaneous, and RMS values.
+
+- id: I
+  symbol: I
+  nombre:
+    es: Corriente electrica
+    en: Electric current
+  simbolo: I
+  unidad_si: A
+  dimension: I
+  tipo: escalar
+  is_vector: false
+  components: []
+  descripcion:
+    es: Flujo de carga electrica por unidad de tiempo.
+    en: Electric charge flow per unit time.
+  category: estado
+  physical_role: variable de flujo
+  used_in:
+  - potencia_base
+  - potencia_resistiva_corriente
+  common_mistake:
+    es: Ignorar picos de corriente al estimar potencia termica.
+    en: Ignoring current spikes when estimating thermal power.
+  typical_range:
+    es: Desde microamperios en instrumentacion hasta decenas de amperios en potencia.
+    en: From microamperes in instrumentation to tens of amperes in power systems.
+  sign_behavior: signed_reference
+  zero_behavior:
+    es: Si I es cero no hay transporte de carga y P por via VI es nula.
+    en: If I is zero there is no charge transport and VI power is zero.
+  value_nature: instant_or_rms
+  interpretation_role:
+    es: Controla la disipacion por efecto Joule en conductores resistivos.
+    en: Controls Joule dissipation in resistive conductors.
+  graph_binding:
+    x: t
+    y: I
+  pedagogical_notes:
+    es: Diferenciar corriente media, eficaz y de pico.
+    en: Differentiate average, RMS, and peak current.
+
+- id: R
+  symbol: R
+  nombre:
+    es: Resistencia electrica
+    en: Electrical resistance
+  simbolo: R
+  unidad_si: ohm
+  dimension: M L^2 T^-3 I^-2
+  tipo: escalar
+  is_vector: false
+  components: []
+  descripcion:
+    es: Oposicion al paso de corriente en un elemento resistivo.
+    en: Opposition to current flow in a resistive element.
+  category: parametro
+  physical_role: propiedad del elemento
+  used_in:
+  - potencia_resistiva_corriente
+  - potencia_resistiva_tension
+  common_mistake:
+    es: Tratar R como constante cuando la temperatura cambia de forma notable.
+    en: Treating R as constant when temperature changes significantly.
+  typical_range:
+    es: Desde miliohmios en shunts hasta megaohmios en sensores.
+    en: From milliohms in shunts to megaohms in sensors.
+  sign_behavior: non_negative
+  zero_behavior:
+    es: R cercana a cero implica corrientes elevadas y riesgo de sobrepotencia.
+    en: R near zero implies high currents and over-power risk.
+  value_nature: parameter_or_effective
+  interpretation_role:
+    es: Modula disipacion y conversion de energia electrica en calor.
+    en: Modulates dissipation and electrical-to-thermal energy conversion.
+  graph_binding:
+    x: t
+    y: R
+  pedagogical_notes:
+    es: Revisar dependencia con temperatura para evitar errores de diseno.
+    en: Check temperature dependence to avoid design errors.
+
+- id: E
+  symbol: E
+  nombre:
+    es: Energia electrica
+    en: Electrical energy
+  simbolo: E
+  unidad_si: J
+  dimension: M L^2 T^-2
+  tipo: escalar
+  is_vector: false
+  components: []
+  descripcion:
+    es: Cantidad total transferida o disipada durante un intervalo temporal.
+    en: Total amount transferred or dissipated over a time interval.
+  category: acumulada
+  physical_role: resultado energetico
+  used_in:
+  - energia_desde_potencia
+  common_mistake:
+    es: Mezclar joule, watt-hora y kilowatt-hora sin conversion correcta.
+    en: Mixing joule, watt-hour, and kilowatt-hour without correct conversion.
+  typical_range:
+    es: De microjoules en electronica de baja potencia a megajoules en procesos industriales.
+    en: From microjoules in low-power electronics to megajoules in industrial processes.
+  sign_behavior: signed_or_non_negative
+  zero_behavior:
+    es: E igual a cero indica ausencia de transferencia neta en el intervalo.
+    en: E equal to zero indicates no net transfer over the interval.
+  value_nature: accumulated
+  interpretation_role:
+    es: Traduce potencia en costo energetico y calentamiento acumulado.
+    en: Converts power into energetic cost and accumulated heating.
+  graph_binding:
+    x: t
+    y: E
+  pedagogical_notes:
+    es: Reforzar relacion entre area bajo curva P(t) y energia.
+    en: Reinforce the relationship between area under P(t) and energy.
+
+- id: t
+  symbol: t
+  nombre:
+    es: Tiempo
+    en: Time
+  simbolo: t
+  unidad_si: s
+  dimension: T
+  tipo: escalar
+  is_vector: false
+  components: []
+  descripcion:
+    es: Duracion del intervalo de analisis energetico.
+    en: Duration of the energy-analysis interval.
+  category: independiente
+  physical_role: variable de evolucion
+  used_in:
+  - energia_desde_potencia
+  common_mistake:
+    es: Sustituir minutos u horas sin convertir a segundos cuando la expresion usa SI.
+    en: Substituting minutes or hours without converting to seconds when SI form is used.
+  typical_range:
+    es: De microsegundos en conmutacion a horas en consumo domestico.
+    en: From microseconds in switching to hours in household consumption.
+  sign_behavior: non_negative
+  zero_behavior:
+    es: t igual a cero implica energia acumulada nula si P es acotada.
+    en: t equal to zero implies zero accumulated energy if P is bounded.
+  value_nature: independent_variable
+  interpretation_role:
+    es: Escala temporal que conecta tasa de transferencia y energia total.
+    en: Time scale linking transfer rate and total energy.
+  graph_binding:
+    x: t
+    y: none
+  pedagogical_notes:
+    es: Unificar unidades de tiempo antes de cualquier calculo energetico.
+    en: Normalize time units before any energy calculation.
+`;export{e as default};

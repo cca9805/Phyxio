@@ -1,0 +1,218 @@
+version: 5
+topic:
+  id: propagacion-en-medios
+  title:
+    es: Propagacion en medios
+    en: Propagation in Media
+formulas:
+- id: velocidad_en_medio
+  title:
+    es: Velocidad de fase en un medio
+    en: Phase speed in a medium
+  equation: v_m = c / n
+  latex: v_m = \frac{c}{n}
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: Relaciona el indice efectivo del medio con la velocidad de propagacion de la onda.
+    en: Relates the medium effective index to the wave propagation speed.
+  constraints:
+  - c > 0
+  - n > 0
+  validity:
+    es: Valida para medios lineales, homogeneos e isotropos como primera aproximacion.
+    en: Valid for linear, homogeneous, isotropic media as a first approximation.
+  dimension_check: '[L T^-1] = [L T^-1] / [1]'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere [[c]] y [[n]].
+    en: Requires [[c]] and [[n]].
+  used_in:
+  - propagacion_material
+  interpretation_tags:
+  - velocidad
+  - indice
+  result_semantics:
+    target: v_m
+    kind: core_physical_quantity
+    sign_meaning:
+      es: La velocidad en el medio es positiva.
+      en: Medium speed is positive.
+    absolute_value_meaning:
+      es: Rapidez de fase dentro del material.
+      en: Phase speed inside the material.
+  domain_checks:
+  - condition: n > 0
+    message:
+      es: El indice debe ser positivo.
+      en: The index must be positive.
+    severity: error
+  coherence_checks:
+  - condition: v_m > 0
+    message:
+      es: La velocidad calculada debe ser positiva.
+      en: Computed speed must be positive.
+    severity: error
+  graph_implications:
+    es: Define una curva decreciente de [[v_m]] frente a [[n]].
+    en: Defines a decreasing curve of [[v_m]] versus [[n]].
+  pedagogical_triggers:
+  - usar_c_en_material
+  rearrangements:
+  - target: v_m
+    equation: v_m = c / n
+    latex: v_m = \frac{c}{n}
+  - target: velocidad_de_la_luz_en_el_vacio
+    equation: c = n * v_m
+    latex: c = n * v_m
+  - target: indice_de_refraccion_efectivo
+    equation: n = c / v_m
+    latex: n = \frac{c}{v_m}
+  variables:
+  - v_m
+  - velocidad_de_la_luz_en_el_vacio
+  - indice_de_refraccion_efectivo
+- id: indice_medio_em
+  title:
+    es: Indice electromagnetico efectivo
+    en: Effective electromagnetic index
+  equation: n = sqrt(epsilon_r * mu_r)
+  latex: n = \sqrt{\varepsilon_r * \mu_r}
+  category: derived
+  relation_type: material_relation
+  physical_meaning:
+    es: Expresa el indice efectivo mediante la respuesta electrica y magnetica del medio.
+    en: Expresses effective index through the electric and magnetic response of the medium.
+  constraints:
+  - epsilon_r > 0
+  - mu_r > 0
+  validity:
+    es: Valida como modelo efectivo en medios lineales y sin perdidas dominantes.
+    en: Valid as an effective model in linear media without dominant losses.
+  dimension_check: '[1] = sqrt([1] * [1])'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere [[epsilon_r]] y [[mu_r]].
+    en: Requires [[epsilon_r]] and [[mu_r]].
+  used_in:
+  - materiales_transparentes
+  interpretation_tags:
+  - medio
+  - material
+  result_semantics:
+    target: indice_de_refraccion_efectivo
+    kind: core_physical_quantity
+    sign_meaning:
+      es: El indice efectivo se toma positivo en medios ordinarios.
+      en: Effective index is taken as positive in ordinary media.
+    absolute_value_meaning:
+      es: Factor de reduccion de velocidad y longitud de onda frente al vacio.
+      en: Reduction factor for speed and wavelength compared with vacuum.
+  domain_checks:
+  - condition: epsilon_r > 0
+    message:
+      es: La permitividad relativa debe ser positiva.
+      en: Relative permittivity must be positive.
+    severity: error
+  coherence_checks:
+  - condition: n > 0
+    message:
+      es: El indice calculado debe ser positivo.
+      en: Computed index must be positive.
+    severity: error
+  graph_implications:
+    es: Permite conectar parametros materiales con el valor de [[n]].
+    en: Connects material parameters with the value of [[n]].
+  pedagogical_triggers:
+  - olvidar_mu_r
+  rearrangements:
+  - target: indice_de_refraccion_efectivo
+    equation: n = sqrt(epsilon_r * mu_r)
+    latex: n = \sqrt{\varepsilon_r * \mu_r}
+  - target: epsilon_r
+    equation: epsilon_r = n^2 / mu_r
+    latex: \varepsilon_r = \frac{n^2}{\mu_r}
+  - target: mu_r
+    equation: mu_r = n^2 / epsilon_r
+    latex: \mu_r = \frac{n^2}{\varepsilon_r}
+  variables:
+  - indice_de_refraccion_efectivo
+  - epsilon_r
+  - mu_r
+- id: longitud_onda_en_medio
+  title:
+    es: Longitud de onda en el medio
+    en: Wavelength in the medium
+  equation: lambda_m = lambda0 / n
+  latex: \lambda_m = \frac{\lambda_0}{n}
+  category: derived
+  relation_type: propagation_relation
+  physical_meaning:
+    es: Muestra que la longitud de onda se acorta dentro de un medio ordinario.
+    en: Shows that wavelength shortens inside an ordinary medium.
+  constraints:
+  - lambda0 > 0
+  - n > 0
+  validity:
+    es: Valida cuando la frecuencia se conserva al cruzar la frontera y el indice es efectivo.
+    en: Valid when frequency is conserved across the boundary and the index is effective.
+  dimension_check: '[L] = [L] / [1]'
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere [[lambda0]] y [[n]].
+    en: Requires [[lambda0]] and [[n]].
+  used_in:
+  - cambio_escala_espacial
+  interpretation_tags:
+  - longitud_onda
+  - medio
+  result_semantics:
+    target: lambda_m
+    kind: core_physical_quantity
+    sign_meaning:
+      es: La longitud de onda en el medio es positiva.
+      en: Medium wavelength is positive.
+    absolute_value_meaning:
+      es: Escala espacial real de los frentes de onda dentro del material.
+      en: Real spatial scale of wavefronts inside the material.
+  domain_checks:
+  - condition: lambda0 > 0
+    message:
+      es: La longitud de onda de vacio debe ser positiva.
+      en: Vacuum wavelength must be positive.
+    severity: error
+  coherence_checks:
+  - condition: lambda_m > 0
+    message:
+      es: La longitud de onda en el medio debe ser positiva.
+      en: Medium wavelength must be positive.
+    severity: error
+  graph_implications:
+    es: Muestra que [[lambda_m]] disminuye cuando aumenta [[n]].
+    en: Shows that [[lambda_m]] decreases when [[n]] increases.
+  pedagogical_triggers:
+  - frecuencia_vs_lambda
+  rearrangements:
+  - target: lambda_m
+    equation: lambda_m = lambda0 / n
+    latex: \lambda_m = \frac{\lambda_0}{n}
+  - target: lambda0
+    equation: lambda0 = n * lambda_m
+    latex: \lambda_0 = n * \lambda_m
+  - target: indice_de_refraccion_efectivo
+    equation: n = lambda0 / lambda_m
+    latex: n = \frac{\lambda_0}{\lambda_m}
+  variables:
+  - lambda_m
+  - lambda0
+  - indice_de_refraccion_efectivo
+ui:
+  default_formula: velocidad_en_medio
+  groups:
+  - title:
+      es: Propagacion material
+      en: Material propagation
+    items:
+    - velocidad_en_medio
+    - indice_medio_em
+    - longitud_onda_en_medio

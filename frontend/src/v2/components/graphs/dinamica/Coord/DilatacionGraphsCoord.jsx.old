@@ -1,0 +1,150 @@
+import React from "react";
+import { createCoordGraphPage } from "@/v2/components/graphs/graphFactories.jsx";
+
+// Extractor hints: XAxis, YAxis, createCoordGraph(
+const uiLang = "es";
+const tt = (es, en) => (uiLang === "en" ? en : es);
+
+const graph_identity = {
+  graph_type: "Coord",
+  pregunta_principal: {
+    es: "Cuanto se alarga una barra metalica cuando aumenta su temperatura y de que propiedad depende?",
+    en: "How much does a metal rod lengthen when temperature increases, and which material property controls it?",
+  },
+  keywords: [
+    "alarga",
+    "barra",
+    "metalica",
+    "temperatura",
+    "propiedad",
+    "material",
+    "elongacion",
+    "dilatacion",
+    "rod",
+    "lengthen",
+    "temperature",
+    "material",
+    "property",
+    "elongation",
+    "expansion",
+  ],
+  magnitud_estrella: "alpha",
+  variable_control: "DeltaT",
+  formula: "DeltaL = alpha * L0 * DeltaT",
+  target_interpretable: true,
+};
+
+const axes = {
+  xComponent: "XAxis",
+  yComponent: "YAxis",
+  xAxis: "DeltaT",
+  yAxis: "DeltaL",
+};
+
+const formula = {
+  id: "dilatacion_lineal",
+  formula: "DeltaL = alpha * L0 * DeltaT",
+  equation: "DeltaL = alpha * L0 * DeltaT",
+};
+
+const fmt = (value, digits = 2) =>
+  Number.isFinite(value) ? value.toFixed(digits) : "-";
+
+const DilatacionGraphsCoord = createCoordGraphPage({
+  displayName: "DilatacionGraphsCoord",
+  title: {
+    es: "Pendiente de dilatacion lineal",
+    en: "Linear expansion slope",
+  },
+  defaultParams: {
+    alpha: 12,
+    L0: 18,
+    DeltaT: 45,
+  },
+  controls: [
+    { id: "alpha", label: { es: "Coeficiente alpha", en: "Coefficient alpha" }, min: 1, max: 30, step: 1 },
+    { id: "L0", label: { es: "Longitud inicial", en: "Initial length" }, min: 1, max: 100, step: 1 },
+    { id: "DeltaT", label: { es: "Cambio de temperatura", en: "Temperature change" }, min: -80, max: 120, step: 5 },
+  ],
+  compute: (pNum) => {
+    const alphaMicro = Number.isFinite(pNum.alpha) ? pNum.alpha : 12;
+    const alpha = alphaMicro * 1e-6;
+    const length = Number.isFinite(pNum.L0) ? pNum.L0 : 18;
+    const deltaT = Number.isFinite(pNum.DeltaT) ? pNum.DeltaT : 45;
+    const deltaL = alpha * length * deltaT;
+    const data = Array.from({ length: 41 }, (_, index) => {
+      const x = -80 + index * 5;
+      return { x, y: alpha * length * x * 1000 };
+    });
+
+    return {
+      data,
+      extra: {
+        interpretationTarget: "alpha",
+        interpretationValue: alpha,
+        graphState: {
+          target: "alpha",
+          graphType: "Coord",
+          graph_identity,
+          axes,
+          formula,
+          alpha,
+          L0: length,
+          DeltaT: deltaT,
+          DeltaL: deltaL,
+        },
+      },
+    };
+  },
+  render: ({ data, pNum, extra }) => {
+    const deltaLMm = (extra?.graphState?.DeltaL ?? 0) * 1000;
+    const maxAbs = Math.max(...data.map((point) => Math.abs(point.y)), 1);
+    const width = 520;
+    const height = 260;
+    const x0 = 34 + (80 / 200) * (width - 70);
+    const y0 = height / 2;
+    const points = data
+      .map((point) => {
+        const x = 34 + ((point.x + 80) / 200) * (width - 70);
+        const y = y0 - (point.y / maxAbs) * (height * 0.42);
+        return `${x},${y}`;
+      })
+      .join(" ");
+    const currentX = 34 + (((pNum.DeltaT ?? 45) + 80) / 200) * (width - 70);
+    const currentY = y0 - (deltaLMm / maxAbs) * (height * 0.42);
+
+    return (
+      <div className="v2-card" style={{ display: "grid", gap: 12 }}>
+        <div className="v2-card-title">{tt("DeltaL frente a DeltaT", "DeltaL versus DeltaT")}</div>
+        <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Dilatacion Coord">
+          <rect x="0" y="0" width={width} height={height} rx="10" fill="rgba(15,23,42,0.86)" />
+          <line x1="34" y1={y0} x2={width - 28} y2={y0} stroke="rgba(255,255,255,0.28)" />
+          <line x1={x0} y1="24" x2={x0} y2={height - 28} stroke="rgba(255,255,255,0.28)" />
+          <polyline points={points} fill="none" stroke="#38bdf8" strokeWidth="3" />
+          <circle cx={currentX} cy={currentY} r="6" fill="#f59e0b" stroke="#fff7ed" strokeWidth="2" />
+          <text x={width - 32} y={y0 - 8} textAnchor="end" fill="rgba(255,255,255,0.72)" fontSize="12">
+            DeltaT
+          </text>
+          <text x={x0 + 10} y="38" fill="rgba(255,255,255,0.72)" fontSize="12">
+            DeltaL
+          </text>
+        </svg>
+        <div style={{ display: "grid", gap: 4, fontSize: 13 }}>
+          <strong>{tt("Lectura fisica", "Physical reading")}</strong>
+          <span>
+            {tt("La pendiente alpha por L0 produce ", "The alpha times L0 slope gives ")}
+            {fmt(deltaLMm)} mm
+          </span>
+        </div>
+      </div>
+    );
+  },
+});
+
+DilatacionGraphsCoord.graph_identity = graph_identity;
+DilatacionGraphsCoord.pregunta_principal = graph_identity.pregunta_principal;
+DilatacionGraphsCoord.magnitud_estrella = graph_identity.magnitud_estrella;
+DilatacionGraphsCoord.axes = axes;
+DilatacionGraphsCoord.formula = formula;
+
+export default DilatacionGraphsCoord;

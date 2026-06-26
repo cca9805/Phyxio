@@ -1,0 +1,416 @@
+const e=`version: 2
+id: interpretacion-ecuacion-de-euler-de-fluidos
+leaf_id: ecuacion-de-euler-de-fluidos
+nombre:
+  es: Interpretacion de Ecuacion de Euler de fluidos
+  en: Interpretation of Euler Equation for Fluids
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: fluidos
+  parent_id: ecuaciones-del-movimiento
+  ruta_relativa: fisica-clasica/mecanica/fluidos/dinamica-de-fluidos/ecuaciones-del-movimiento/ecuacion-de-euler-de-fluidos
+dependencies:
+  formulas:
+  - derivada_material_velocidad
+  - ecuacion_euler_fluidos
+  - continuidad_incompresible
+  - bernoulli_no_estacionario
+  magnitudes:
+  - rho
+  - v
+  - p
+  - g
+  - DvDt
+  - t
+  - Phi
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura grafica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  rho:
+    summary_rules:
+    - id: rho_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[rho]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[rho]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: rho_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[rho]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[rho]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: rho_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[rho]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[rho]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: rho_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras la ecuacion de euler de fluidos expresa el balance entre inercia material, presion y fuerzas de volumen cuando la viscosidad se desprecia; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while euler equation for fluids expresses the balance among material inertia, pressure, and body forces when viscosity is neglected; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: rho_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[rho]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[rho]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: rho_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[rho]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[rho]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: rho_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[rho]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[rho]] with a limiting case and state what observable change it would produce.
+  v:
+    summary_rules:
+    - id: v_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[v]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[v]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: v_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[v]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[v]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: v_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[v]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[v]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: v_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras la ecuacion de euler de fluidos expresa el balance entre inercia material, presion y fuerzas de volumen cuando la viscosidad se desprecia; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while euler equation for fluids expresses the balance among material inertia, pressure, and body forces when viscosity is neglected; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: v_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[v]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[v]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: v_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[v]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[v]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: v_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[v]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[v]] with a limiting case and state what observable change it would produce.
+  p:
+    summary_rules:
+    - id: p_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[p]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[p]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: p_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[p]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[p]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: p_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[p]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[p]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: p_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras la ecuacion de euler de fluidos expresa el balance entre inercia material, presion y fuerzas de volumen cuando la viscosidad se desprecia; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while euler equation for fluids expresses the balance among material inertia, pressure, and body forces when viscosity is neglected; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: p_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[p]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[p]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: p_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[p]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[p]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: p_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[p]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[p]] with a limiting case and state what observable change it would produce.
+  g:
+    summary_rules:
+    - id: g_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[g]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[g]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: g_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[g]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[g]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: g_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[g]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[g]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: g_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras la ecuacion de euler de fluidos expresa el balance entre inercia material, presion y fuerzas de volumen cuando la viscosidad se desprecia; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while euler equation for fluids expresses the balance among material inertia, pressure, and body forces when viscosity is neglected; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: g_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[g]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[g]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: g_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[g]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[g]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: g_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[g]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[g]] with a limiting case and state what observable change it would produce.
+  DvDt:
+    summary_rules:
+    - id: DvDt_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[DvDt]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[DvDt]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: DvDt_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[DvDt]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[DvDt]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: DvDt_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[DvDt]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[DvDt]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: DvDt_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras la ecuacion de euler de fluidos expresa el balance entre inercia material, presion y fuerzas de volumen cuando la viscosidad se desprecia; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while euler equation for fluids expresses the balance among material inertia, pressure, and body forces when viscosity is neglected; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: DvDt_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[DvDt]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[DvDt]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: DvDt_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[DvDt]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[DvDt]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: DvDt_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[DvDt]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[DvDt]] with a limiting case and state what observable change it would produce.
+  t:
+    summary_rules:
+    - id: t_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[t]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[t]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: t_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[t]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[t]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: t_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[t]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[t]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: t_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras la ecuacion de euler de fluidos expresa el balance entre inercia material, presion y fuerzas de volumen cuando la viscosidad se desprecia; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while euler equation for fluids expresses the balance among material inertia, pressure, and body forces when viscosity is neglected; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: t_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[t]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[t]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: t_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[t]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[t]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: t_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[t]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[t]] with a limiting case and state what observable change it would produce.
+  Phi:
+    summary_rules:
+    - id: Phi_summary
+      when: 'true'
+      status: info
+      text:
+        es: '[[Phi]] indica que mecanismo domina, resume el balance del leaf y depende de que las hipotesis sigan siendo validas.'
+        en: '[[Phi]] indicates which mechanism dominates, summarizes the leaf balance, and depends on the assumptions remaining valid.'
+    physical_reading_rules:
+    - id: Phi_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Si [[Phi]] cambia de escala, cambia el balance causal del modelo: puede desplazar el regimen dominante, mover un punto critico o revelar que la aproximacion ya no representa el sistema real.'
+        en: 'If [[Phi]] changes scale, the causal balance of the model changes: it may shift the dominant regime, move a critical point, or reveal that the approximation no longer represents the real system.'
+    coherence_rules:
+    - id: Phi_coherence
+      when: 'true'
+      status: ok
+      text:
+        es: '[[Phi]] es coherente solo si procede del mismo sistema fisico que las demas magnitudes y conserva unidades compatibles.'
+        en: '[[Phi]] is coherent only if it comes from the same physical system as the other quantities and keeps compatible units.'
+    model_validity_rules:
+    - id: Phi_validity
+      when: 'true'
+      status: ok
+      text:
+        es: El modelo sigue siendo valido mientras la ecuacion de euler de fluidos expresa el balance entre inercia material, presion y fuerzas de volumen cuando la viscosidad se desprecia; si el termino omitido se vuelve comparable, conviene cambiar de descripcion.
+        en: The model remains valid while euler equation for fluids expresses the balance among material inertia, pressure, and body forces when viscosity is neglected; if the omitted term becomes comparable, the description should be changed.
+    graph_rules:
+    - id: Phi_graph
+      when: 'true'
+      status: info
+      text:
+        es: Sin grafico declarado, [[Phi]] se lee mediante tendencia, signo, escala y casos limite.
+        en: With no declared graph, [[Phi]] is read through trend, sign, scale, and limiting cases.
+    likely_errors:
+    - id: Phi_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error probable: confundir [[Phi]] con un dato aislado, olvidar el dominio o suponer que el signo no tiene significado fisico.'
+        en: 'Likely mistake: confuse [[Phi]] with an isolated datum, forget the domain, or assume that the sign has no physical meaning.'
+    next_step_rules:
+    - id: Phi_next
+      when: 'true'
+      status: info
+      text:
+        es: Despues de calcular, contrasta [[Phi]] con un caso limite y explica que cambio observable produciria.
+        en: After calculating, compare [[Phi]] with a limiting case and state what observable change it would produce.
+`;export{e as default};

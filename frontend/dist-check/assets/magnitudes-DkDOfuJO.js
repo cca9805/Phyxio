@@ -1,0 +1,516 @@
+const e=`magnitudes:
+
+  - id: p
+    symbol: "p"
+    nombre:
+      es: Presión
+      en: Pressure
+    descripcion:
+      es: Presión del gas durante el proceso isocórico. Varía porque el volumen es constante y el calor cambia la temperatura.
+      en: Gas pressure during the isochoric process. It varies because the volume is constant and heat changes the temperature.
+    unidad_si: Pa
+    dimension: "[M L⁻¹ T⁻²]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: derived
+    used_in:
+      - teoria
+      - interpretacion
+      - graficos
+    common_mistake: Creer que la presión permanece constante en el proceso isocórico; es justamente el volumen el que es constante, y la presión cambia con la temperatura.
+    typical_range: "10³ Pa (laboratorio a baja presión) a 10⁷ Pa (recipiente a presión industrial)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La presión es siempre positiva en termodinámica clásica del gas ideal.
+        en: Pressure is always positive in classical ideal gas thermodynamics.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Presión cero corresponde a vacío perfecto, fuera del dominio del gas ideal.
+        en: Zero pressure corresponds to a perfect vacuum, outside the ideal gas domain.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, ∞)"
+    interpretation_role:
+      primary_for:
+        - seguimiento del estado termodinámico
+        - verificación de la ley de Gay-Lussac isocórica
+      secondary_for:
+        - cálculo de trabajo en otros procesos
+    graph_binding:
+      channels:
+        - eje_y_diagrama_pV
+        - eje_y_diagrama_pT
+    pedagogical_notes:
+      es: En el proceso isocórico la presión es la magnitud que más sorprende al alumno porque cambia aunque «no ocurre nada visible». Conectar con la ley de Gay-Lussac a volumen constante para consolidar la intuición.
+      en: In the isochoric process, pressure is the magnitude that most surprises students because it changes even though "nothing visible happens". Connect with Gay-Lussac's law at constant volume to consolidate intuition.
+
+  - id: V
+    symbol: "V"
+    nombre:
+      es: Volumen
+      en: Volume
+    descripcion:
+      es: Volumen del gas, que permanece constante en todo el proceso isocórico.
+      en: Gas volume, which remains constant throughout the isochoric process.
+    unidad_si: m³
+    dimension: "[L³]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: parameter
+    used_in:
+      - teoria
+      - modelos
+      - ejemplos
+    common_mistake: Confundir volumen constante con presión constante. En el proceso isocórico es el volumen el que no cambia, no la presión.
+    typical_range: "10⁻³ m³ (1 litro, laboratorio) a 1 m³ (depósito industrial)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: El volumen es siempre positivo; no tiene signo físico significativo en este proceso.
+        en: Volume is always positive; it carries no physically significant sign in this process.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Volumen nulo sería singularidad física fuera del modelo de gas ideal.
+        en: Zero volume would be a physical singularity outside the ideal gas model.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, ∞)"
+    interpretation_role:
+      primary_for:
+        - identificación del tipo de proceso
+      secondary_for:
+        - comparación con procesos isobárico e isotérmico
+    graph_binding:
+      channels:
+        - eje_x_diagrama_pV
+    pedagogical_notes:
+      es: El volumen constante es la condición definitoria del proceso isocórico. Visualizarlo como una línea vertical en el diagrama pV ayuda a distinguirlo inmediatamente del proceso isobárico (línea horizontal).
+      en: Constant volume is the defining condition of the isochoric process. Visualizing it as a vertical line in the pV diagram helps immediately distinguish it from the isobaric process (horizontal line).
+
+  - id: T
+    symbol: "T"
+    nombre:
+      es: Temperatura absoluta
+      en: Absolute temperature
+    descripcion:
+      es: Temperatura absoluta del gas en kelvins, que cambia como consecuencia del calor aportado a volumen constante.
+      en: Absolute temperature of the gas in kelvins, which changes as a result of heat added at constant volume.
+    unidad_si: K
+    dimension: "[Θ]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: derived
+    used_in:
+      - teoria
+      - formulas
+      - ejemplos
+      - interpretacion
+    common_mistake: Usar temperatura en grados Celsius en la ley de Gay-Lussac isocórica en lugar de kelvins, lo que da proporciones incorrectas.
+    typical_range: "200 K (gas criogénico) a 1500 K (gas de combustión)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La temperatura absoluta es siempre positiva en termodinámica clásica.
+        en: Absolute temperature is always positive in classical thermodynamics.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: El cero absoluto es inalcanzable por el tercer principio de la termodinámica.
+        en: Absolute zero is unattainable by the third law of thermodynamics.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, ∞)"
+    interpretation_role:
+      primary_for:
+        - cálculo de variación de energía interna
+        - verificación de la ley de Gay-Lussac isocórica
+      secondary_for:
+        - comparación entre estados inicial y final
+    graph_binding:
+      channels:
+        - eje_x_diagrama_pT
+    pedagogical_notes:
+      es: Recordar siempre usar la escala Kelvin. Un error de unidades entre Celsius y Kelvin es la causa de error más frecuente en problemas isocóricos de bachillerato.
+      en: Always remember to use the Kelvin scale. A unit error between Celsius and Kelvin is the most frequent mistake in isochoric problems at secondary level.
+
+  - id: T1
+    symbol: "T_1"
+    nombre:
+      es: Temperatura inicial
+      en: Initial temperature
+    descripcion:
+      es: Temperatura absoluta del gas al inicio del proceso isocórico.
+      en: Absolute temperature of the gas at the start of the isochoric process.
+    unidad_si: K
+    dimension: "[Θ]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: parameter
+    used_in:
+      - formulas
+      - ejemplos
+    common_mistake: Proporcionar T1 en grados Celsius sin convertir a kelvins antes de aplicar la ley de Gay-Lussac.
+    typical_range: "273 K (0 °C) a 600 K"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La temperatura inicial es positiva como toda temperatura absoluta.
+        en: Initial temperature is positive like all absolute temperatures.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Temperatura inicial nula es físicamente imposible en condiciones normales.
+        en: Zero initial temperature is physically impossible under normal conditions.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, ∞)"
+    interpretation_role:
+      primary_for:
+        - cálculo de DeltaT
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: T1 es el estado de referencia desde el que arranca el proceso. En el diagrama pT, es el punto inicial de la recta que pasa por el origen.
+      en: T1 is the reference state from which the process starts. In the pT diagram, it is the starting point of the line through the origin.
+
+  - id: T2
+    symbol: "T_2"
+    nombre:
+      es: Temperatura final
+      en: Final temperature
+    descripcion:
+      es: Temperatura absoluta del gas al final del proceso isocórico.
+      en: Absolute temperature of the gas at the end of the isochoric process.
+    unidad_si: K
+    dimension: "[Θ]"
+    is_vector: false
+    components: []
+    category: state
+    physical_role: derived
+    used_in:
+      - formulas
+      - ejemplos
+      - interpretacion
+    common_mistake: Deducir T2 usando temperatura en Celsius en lugar de kelvins, produciendo una razón de presiones incorrecta.
+    typical_range: "300 K a 1200 K"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La temperatura final es positiva; si fuera menor que T1 indica enfriamiento.
+        en: Final temperature is positive; if smaller than T1 it indicates cooling.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Temperatura final nula es físicamente inalcanzable.
+        en: Zero final temperature is physically unattainable.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, ∞)"
+    interpretation_role:
+      primary_for:
+        - cálculo de DeltaT y DeltaU
+        - verificación de la relación de presiones
+      secondary_for: []
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: T2 determina el estado final del gas en el diagrama pT isocórico. La razón T2/T1 es igual a la razón p2/p1, lo que permite verificar el resultado sin calcular DeltaU.
+      en: T2 determines the final state of the gas in the isochoric pT diagram. The ratio T2/T1 equals the ratio p2/p1, allowing verification without computing DeltaU.
+
+  - id: DeltaT
+    symbol: "\\\\Delta T"
+    nombre:
+      es: Variación de temperatura
+      en: Temperature change
+    descripcion:
+      es: Diferencia entre temperatura final e inicial del proceso isocórico.
+      en: Difference between final and initial temperature of the isochoric process.
+    unidad_si: K
+    dimension: "[Θ]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: derived
+    used_in:
+      - formulas
+      - teoria
+      - ejemplos
+      - interpretacion
+    common_mistake: Calcular DeltaT en Celsius y usarlo en la fórmula de DeltaU sin percatarse de que el resultado en kelvins es idéntico en diferencias pero que el error aparece al usar temperaturas absolutas en ratios.
+    typical_range: "10 K (calentamiento moderado) a 500 K (proceso industrial intenso)"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: DeltaT positivo indica calentamiento; negativo indica enfriamiento del gas.
+        en: Positive DeltaT indicates heating; negative DeltaT indicates cooling of the gas.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: DeltaT nulo implica DeltaU nulo y Q nulo, lo que trivializa el proceso isocórico a estado estacionario.
+        en: Zero DeltaT implies zero DeltaU and zero Q, trivializing the isochoric process to a steady state.
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-∞, ∞) excluyendo 0 en procesos reales"
+    interpretation_role:
+      primary_for:
+        - cálculo de DeltaU mediante n·Cv·DeltaT
+        - determinación del sentido del flujo de calor
+      secondary_for:
+        - verificación de coherencia con cambio de presión
+    graph_binding:
+      channels:
+        - amplitud_variacion_eje_x_pT
+    pedagogical_notes:
+      es: "DeltaT es el motor del proceso isocórico: sin variación de temperatura no hay calor ni cambio de energía interna. El signo de DeltaT determina si el gas absorbe o cede calor."
+      en: DeltaT is the driver of the isochoric process — without temperature change there is no heat and no change in internal energy. The sign of DeltaT determines whether the gas absorbs or releases heat.
+
+  - id: Q
+    symbol: "Q"
+    nombre:
+      es: Calor intercambiado
+      en: Heat exchanged
+    descripcion:
+      es: Calor absorbido o cedido por el gas en el proceso isocórico. Coincide con la variación de energía interna porque el trabajo es nulo.
+      en: Heat absorbed or released by the gas in the isochoric process. It equals the internal energy change because the work is zero.
+    unidad_si: J
+    dimension: "[M L² T⁻²]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: derived
+    used_in:
+      - formulas
+      - teoria
+      - ejemplos
+      - interpretacion
+    common_mistake: Creer que Q y DeltaU son siempre iguales en todos los procesos; esto solo es cierto cuando el trabajo es nulo (proceso isocórico).
+    typical_range: "100 J (laboratorio, pequeño recipiente) a 10⁶ J (depósito industrial)"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: Q positivo indica calor absorbido por el gas (calentamiento); negativo indica calor cedido (enfriamiento).
+        en: Positive Q indicates heat absorbed by the gas (heating); negative indicates heat released (cooling).
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Q nulo en proceso isocórico implica que la temperatura no cambia y el proceso es estático.
+        en: Zero Q in an isochoric process means temperature does not change and the process is static.
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-∞, ∞)"
+    interpretation_role:
+      primary_for:
+        - balance energético del primer principio
+        - determinación del sentido del intercambio térmico
+      secondary_for:
+        - comparación con procesos isobárico e isotérmico
+    graph_binding:
+      channels:
+        - altura_zona_coloreada_diagrama_pT
+    pedagogical_notes:
+      es: En el proceso isocórico, todo el calor va a energía interna porque no hay trabajo mecánico. Esta es la clave para entender por qué el recipiente rígido es el caso más «limpio» del primer principio.
+      en: In the isochoric process, all heat goes into internal energy because there is no mechanical work. This is the key to understanding why the rigid container is the «cleanest» case of the first law.
+
+  - id: W
+    symbol: "W"
+    nombre:
+      es: Trabajo mecánico
+      en: Mechanical work
+    descripcion:
+      es: Trabajo realizado por el gas en el proceso isocórico. Es exactamente nulo porque el volumen no cambia.
+      en: Work done by the gas in the isochoric process. It is exactly zero because volume does not change.
+    unidad_si: J
+    dimension: "[M L² T⁻²]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: derived
+    used_in:
+      - formulas
+      - teoria
+      - modelos
+      - ejemplos
+    common_mistake: Olvidar que el trabajo es nulo y aplicar la fórmula del trabajo isobárico al proceso isocórico, obteniendo un resultado no nulo incorrecto.
+    typical_range: "Exactamente 0 J en todo proceso isocórico ideal"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: El trabajo es nulo; no tiene signo relevante en este proceso.
+        en: Work is zero; sign is irrelevant in this process.
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: Trabajo nulo es la condición definitoria del proceso isocórico. Si W resulta no nulo, el proceso no es isocórico.
+        en: Zero work is the defining condition of the isochoric process. If W is non-zero, the process is not isochoric.
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "[0, 0]"
+    interpretation_role:
+      primary_for:
+        - verificación del tipo de proceso
+        - simplificación del primer principio a Q = DeltaU
+      secondary_for: []
+    graph_binding:
+      channels:
+        - area_diagrama_pV_nula
+    pedagogical_notes:
+      es: El trabajo nulo es la consecuencia más poderosa del volumen constante. Identificar que W es nulo es el primer paso de cualquier resolución isocórica y simplifica inmediatamente el primer principio.
+      en: Zero work is the most powerful consequence of constant volume. Identifying that W is zero is the first step of any isochoric solution and immediately simplifies the first law.
+
+  - id: DeltaU
+    symbol: "\\\\Delta U"
+    nombre:
+      es: Variación de energía interna
+      en: Internal energy change
+    descripcion:
+      es: Cambio de energía interna del gas en el proceso isocórico. Coincide exactamente con el calor intercambiado.
+      en: Change in internal energy of the gas in the isochoric process. It exactly equals the heat exchanged.
+    unidad_si: J
+    dimension: "[M L² T⁻²]"
+    is_vector: false
+    components: []
+    category: derived
+    physical_role: derived
+    used_in:
+      - formulas
+      - teoria
+      - ejemplos
+      - interpretacion
+    common_mistake: Confundir DeltaU con Q en procesos no isocóricos, o pensar que DeltaU es siempre nula cuando W es nula.
+    typical_range: "100 J a 10⁶ J según el gas, n y DeltaT"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: DeltaU positivo indica aumento de energía interna (calentamiento); negativo indica disminución (enfriamiento).
+        en: Positive DeltaU indicates increase in internal energy (heating); negative indicates decrease (cooling).
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: DeltaU nula en proceso isocórico implica que no hubo intercambio de calor ni cambio de temperatura.
+        en: Zero DeltaU in an isochoric process implies no heat exchange and no temperature change occurred.
+    value_nature:
+      kind: scalar_signed
+      nonnegative_only: false
+      expected_interval: "(-∞, ∞)"
+    interpretation_role:
+      primary_for:
+        - lectura física del balance energético
+        - cuantificación del calor en proceso isocórico
+      secondary_for:
+        - comparación con proceso isobárico donde DeltaU < Q
+    graph_binding:
+      channels:
+        - magnitud_variacion_temperatura_diagrama_pT
+    pedagogical_notes:
+      es: DeltaU es la magnitud estrella del proceso isocórico porque concentra toda la energía del proceso. La relación DeltaU igual a Q resume de forma exquisita el primer principio cuando no hay trabajo.
+      en: DeltaU is the star magnitude of the isochoric process because it concentrates all the energy. The relation DeltaU equals Q summarises the first law beautifully when there is no work.
+
+  - id: n
+    symbol: "n"
+    nombre:
+      es: Cantidad de sustancia
+      en: Amount of substance
+    descripcion:
+      es: Número de moles del gas que participa en el proceso isocórico.
+      en: Number of moles of gas participating in the isochoric process.
+    unidad_si: mol
+    dimension: "[N]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: parameter
+    used_in:
+      - formulas
+      - teoria
+      - ejemplos
+    common_mistake: Confundir moles de gas con masa del gas. Un mol de hidrógeno pesa 2 g, mientras que un mol de CO2 pesa 44 g.
+    typical_range: "0.1 mol (laboratorio) a 100 mol (recipiente industrial)"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: La cantidad de sustancia es siempre positiva.
+        en: Amount of substance is always positive.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Cero moles equivale a no tener gas; el proceso no tiene sentido físico.
+        en: Zero moles means no gas; the process has no physical meaning.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, ∞)"
+    interpretation_role:
+      primary_for:
+        - escala del resultado de DeltaU
+      secondary_for:
+        - normalización por unidad de masa (si se conoce la masa molar)
+    graph_binding:
+      channels: []
+    pedagogical_notes:
+      es: El número de moles escala linealmente la energía interna. Duplicar n duplica DeltaU y Q manteniendo el mismo DeltaT. Importante en comparaciones entre recipientes de distinto tamaño.
+      en: The number of moles scales internal energy linearly. Doubling n doubles DeltaU and Q while keeping the same DeltaT. Important when comparing containers of different sizes.
+
+  - id: Cv
+    symbol: "C_V"
+    nombre:
+      es: Calor específico molar a volumen constante
+      en: Molar heat capacity at constant volume
+    descripcion:
+      es: Energía necesaria para elevar un mol de gas en un kelvin manteniendo el volumen constante.
+      en: Energy needed to raise one mole of gas by one kelvin while keeping volume constant.
+    unidad_si: "J/(mol·K)"
+    dimension: "[M L² T⁻² Θ⁻¹ N⁻¹]"
+    is_vector: false
+    components: []
+    category: parameter
+    physical_role: parameter
+    used_in:
+      - formulas
+      - teoria
+      - modelos
+      - ejemplos
+    common_mistake: Usar Cp en lugar de Cv en el proceso isocórico. Cp es siempre mayor que Cv y su uso daría un DeltaU incorrecto.
+    typical_range: "12.5 J/(mol·K) para gas monoatómico, 20.8 J/(mol·K) para diatómico, 24.9 J/(mol·K) para triatómico"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: El calor específico es siempre positivo; su valor depende de los grados de libertad del gas.
+        en: Heat capacity is always positive; its value depends on the degrees of freedom of the gas.
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: Calor específico nulo implicaría un material que no almacena energía térmica, físicamente imposible.
+        en: Zero heat capacity would imply a material that stores no thermal energy, physically impossible.
+    value_nature:
+      kind: scalar_unsigned
+      nonnegative_only: true
+      expected_interval: "(0, ∞)"
+    interpretation_role:
+      primary_for:
+        - cálculo de DeltaU y Q isocórico
+        - caracterización del tipo de gas (mono, di, triatómico)
+      secondary_for:
+        - cálculo de gamma y relación con Cp
+    graph_binding:
+      channels:
+        - pendiente_curva_pT_proporcional_a_Cv
+    pedagogical_notes:
+      es: Cv es el parámetro que conecta el tipo de gas con su capacidad de almacenar calor. Un gas monoatómico (Cv de 12.5) almacena menos energía por kelvin que uno diatómico (20.8) porque tiene menos grados de libertad.
+      en: Cv is the parameter that connects the type of gas with its capacity to store heat. A monatomic gas (Cv of 12.5) stores less energy per kelvin than a diatomic one (20.8) because it has fewer degrees of freedom.
+`;export{e as default};

@@ -1,0 +1,181 @@
+version: 1
+magnitudes:
+  - id: Erot
+    symbol: E_rot
+    nombre: { es: "energía cinética rotacional", en: "rotational kinetic energy" }
+    descripcion: { es: "Energía asociada a la rotación macroscópica de un cuerpo rígido respecto a un eje.", en: "Energy associated with macroscopic rigid-body rotation about an axis." }
+    unidad_si: "J"
+    dimension: "M L^2 T^-2"
+    is_vector: false
+    components: []
+    category: "energy"
+    physical_role: { es: "magnitud escalar de estado mecánico", en: "scalar mechanical state quantity" }
+    used_in: ["teoria", "ejemplos", "aplicaciones", "interpretacion"]
+    common_mistake: { es: "Tratarla como vector o asignarle signo por el sentido de giro.", en: "Treating it as a vector or assigning a sign from the rotation direction." }
+    typical_range: { es: "desde fracciones de joule en laboratorio hasta megajoules en volantes industriales", en: "from fractions of a joule in a lab to megajoules in industrial flywheels" }
+    sign_behavior:
+      has_sign: false
+      meaning: { es: "es no negativa si I y omega son reales", en: "it is non-negative when I and omega are real" }
+    zero_behavior:
+      allowed: true
+      meaning: { es: "vale cero si no hay rotación o si la inercia efectiva del modelo es nula", en: "it is zero if there is no rotation or if the effective inertia is zero in the model" }
+    value_nature:
+      kind: "scalar_nonnegative"
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for: ["energy_balance", "work_energy"]
+      secondary_for: ["rolling_motion", "power_transfer"]
+    graph_binding:
+      channels: ["vertical_axis", "area_equivalent"]
+    pedagogical_notes: { es: "Debe leerse como reserva de trabajo mecánico ligada al giro.", en: "It should be read as a reserve of mechanical work tied to rotation." }
+
+  - id: I
+    symbol: I
+    nombre: { es: "momento de inercia", en: "moment of inertia" }
+    descripcion: { es: "Medida escalar de la resistencia del cuerpo a cambiar su rotación alrededor del eje elegido.", en: "Scalar measure of resistance to changing rotation about the selected axis." }
+    unidad_si: "kg m^2"
+    dimension: "M L^2"
+    is_vector: false
+    components: []
+    category: "inertia"
+    physical_role: { es: "parámetro geométrico-dinámico del modelo", en: "geometric-dynamic model parameter" }
+    used_in: ["teoria", "modelos", "ejemplos", "aplicaciones"]
+    common_mistake: { es: "Usar siempre m R^2 aunque la masa no esté concentrada en el borde.", en: "Always using m R^2 even when the mass is not concentrated at the rim." }
+    typical_range: { es: "depende fuertemente de la masa, del radio efectivo y del eje", en: "strongly depends on mass, effective radius, and axis" }
+    sign_behavior:
+      has_sign: false
+      meaning: { es: "para un eje principal físico es positivo", en: "for a physical principal axis it is positive" }
+    zero_behavior:
+      allowed: false
+      meaning: { es: "un cuerpo real extendido no tiene inercia nula alrededor de un eje material relevante", en: "a real extended body does not have zero inertia around a relevant material axis" }
+    value_nature:
+      kind: "scalar_positive"
+      nonnegative_only: true
+      expected_interval: "(0, +inf)"
+    interpretation_role:
+      primary_for: ["energy_storage", "axis_selection"]
+      secondary_for: ["torque_response"]
+    graph_binding:
+      channels: ["curve_parameter", "slope_parameter"]
+    pedagogical_notes: { es: "Cambiar el eje cambia la energía para la misma omega.", en: "Changing the axis changes the energy for the same omega." }
+
+  - id: omega
+    symbol: omega
+    nombre: { es: "velocidad angular", en: "angular speed" }
+    descripcion: { es: "Ritmo de cambio angular que fija cuánto giro ocurre por unidad de tiempo.", en: "Rate of angular change that sets how much rotation occurs per unit time." }
+    unidad_si: "rad/s"
+    dimension: "T^-1"
+    is_vector: true
+    components: ["omega_x", "omega_y", "omega_z"]
+    category: "kinematics"
+    physical_role: { es: "variable cinemática dominante", en: "dominant kinematic variable" }
+    used_in: ["teoria", "ejemplos", "graficos", "interpretacion"]
+    common_mistake: { es: "Usar rpm directamente sin convertir a radianes por segundo.", en: "Using rpm directly without converting to radians per second." }
+    typical_range: { es: "desde menos de 1 rad/s en maquinaria lenta hasta miles de rad/s en rotores rápidos", en: "from below 1 rad/s in slow machinery to thousands of rad/s in fast rotors" }
+    sign_behavior:
+      has_sign: true
+      meaning: { es: "el signo indica orientación, pero la energía depende de omega al cuadrado", en: "the sign indicates orientation, but energy depends on omega squared" }
+    zero_behavior:
+      allowed: true
+      meaning: { es: "omega cero implica energía rotacional cero en el modelo rígido", en: "zero omega implies zero rotational energy in the rigid model" }
+    value_nature:
+      kind: "signed_scalar_or_vector_component"
+      nonnegative_only: false
+      expected_interval: "(-inf, +inf)"
+    interpretation_role:
+      primary_for: ["quadratic_growth", "state_comparison"]
+      secondary_for: ["power"]
+    graph_binding:
+      channels: ["horizontal_axis", "quadratic_input"]
+    pedagogical_notes: { es: "Duplicar omega cuadruplica la energía si I permanece fijo.", en: "Doubling omega quadruples the energy if I remains fixed." }
+
+  - id: Wrot
+    symbol: W_rot
+    nombre: { es: "trabajo rotacional", en: "rotational work" }
+    descripcion: { es: "Trabajo realizado por torques externos que cambia la energía rotacional del sistema.", en: "Work done by external torques that changes the rotational energy of the system." }
+    unidad_si: "J"
+    dimension: "M L^2 T^-2"
+    is_vector: false
+    components: []
+    category: "work"
+    physical_role: { es: "intercambio de energía", en: "energy transfer" }
+    used_in: ["teoria", "ejemplos", "aplicaciones"]
+    common_mistake: { es: "Sumar trabajos internos que se cancelan dentro del sistema elegido.", en: "Adding internal works that cancel within the chosen system." }
+    typical_range: { es: "comparable a la variación de energía rotacional medida", en: "comparable to the measured rotational energy change" }
+    sign_behavior:
+      has_sign: true
+      meaning: { es: "positivo si aumenta la energía rotacional y negativo si la reduce", en: "positive if it increases rotational energy and negative if it reduces it" }
+    zero_behavior:
+      allowed: true
+      meaning: { es: "puede ser cero si no hay desplazamiento angular neto o si el trabajo positivo y negativo se compensan", en: "it may be zero if there is no net angular displacement or positive and negative work cancel" }
+    value_nature:
+      kind: "signed_scalar"
+      nonnegative_only: false
+      expected_interval: "(-inf, +inf)"
+    interpretation_role:
+      primary_for: ["work_energy"]
+      secondary_for: ["loss_analysis"]
+    graph_binding:
+      channels: ["area_under_torque_angle"]
+    pedagogical_notes: { es: "No es una energía almacenada, sino una transferencia.", en: "It is not stored energy but a transfer." }
+
+  - id: Eroti
+    symbol: E_rot,i
+    nombre: { es: "energía rotacional inicial", en: "initial rotational energy" }
+    descripcion: { es: "Valor de energía rotacional antes del proceso analizado.", en: "Rotational energy value before the analyzed process." }
+    unidad_si: "J"
+    dimension: "M L^2 T^-2"
+    is_vector: false
+    components: []
+    category: "initial_state"
+    physical_role: { es: "estado inicial", en: "initial state" }
+    used_in: ["ejemplos", "interpretacion"]
+    common_mistake: { es: "Tomarla como cero sin justificar el estado inicial.", en: "Taking it as zero without justifying the initial state." }
+    typical_range: { es: "depende de I y de omega inicial", en: "depends on I and initial omega" }
+    sign_behavior:
+      has_sign: false
+      meaning: { es: "no negativa", en: "non-negative" }
+    zero_behavior:
+      allowed: true
+      meaning: { es: "cero si el cuerpo parte sin giro", en: "zero if the body starts without spin" }
+    value_nature:
+      kind: "scalar_nonnegative"
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for: ["state_change"]
+      secondary_for: ["energy_balance"]
+    graph_binding:
+      channels: ["initial_marker"]
+    pedagogical_notes: { es: "Conviene etiquetarla para no mezclar estado inicial y final.", en: "It should be labeled to avoid mixing initial and final states." }
+
+  - id: Erotf
+    symbol: E_rot,f
+    nombre: { es: "energía rotacional final", en: "final rotational energy" }
+    descripcion: { es: "Valor de energía rotacional después del proceso analizado.", en: "Rotational energy value after the analyzed process." }
+    unidad_si: "J"
+    dimension: "M L^2 T^-2"
+    is_vector: false
+    components: []
+    category: "final_state"
+    physical_role: { es: "estado final", en: "final state" }
+    used_in: ["ejemplos", "interpretacion"]
+    common_mistake: { es: "Compararla con el trabajo sin restar la energía inicial.", en: "Comparing it with work without subtracting the initial energy." }
+    typical_range: { es: "depende de I y de omega final", en: "depends on I and final omega" }
+    sign_behavior:
+      has_sign: false
+      meaning: { es: "no negativa", en: "non-negative" }
+    zero_behavior:
+      allowed: true
+      meaning: { es: "cero si el cuerpo termina sin giro", en: "zero if the body ends without spin" }
+    value_nature:
+      kind: "scalar_nonnegative"
+      nonnegative_only: true
+      expected_interval: "[0, +inf)"
+    interpretation_role:
+      primary_for: ["state_change"]
+      secondary_for: ["energy_balance"]
+    graph_binding:
+      channels: ["final_marker"]
+    pedagogical_notes: { es: "Debe cerrar el balance con trabajo externo y pérdidas explícitas.", en: "It must close the balance with external work and explicit losses." }

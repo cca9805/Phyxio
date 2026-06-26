@@ -1,0 +1,19 @@
+## Problema histórico
+
+Antes de la síntesis de Maxwell, las leyes del electromagnetismo existían como fragmentos desconectados, descubiertos de forma independiente por científicos como Coulomb, Ampère y Faraday. Cada una describía un fenómeno específico: la atracción de cargas, la creación de magnetismo por corrientes o la inducción. Sin embargo, existía una inconsistencia teórica fundamental en la ley de Ampère: cuando se aplicaba a un condensador en carga, la ley predecía resultados diferentes según la superficie elegida para el mismo contorno. Si la superficie pasaba por el cable, había corriente; si pasaba entre las placas, no la había. Esta "ruptura" de la continuidad matemática era un síntesis de la crisis de la física clásica de mediados del siglo XIX, que no lograba explicar cómo la electricidad y el magnetismo se propagaban a través del vacío sin portadores materiales.
+
+## Dificultad conceptual previa
+
+La principal barrera era la idea de que la electricidad y el magnetismo eran fluidos o fuerzas de acción a distancia que requerían un circuito cerrado de materia para manifestarse. No se concebía que el flujo eléctrico [[flujo_electrico]] a través del vacío pudiera tener un efecto magnético real. La ley de Ampère original fallaba al intentar describir sistemas con acumuladores de carga (condensadores), sugiriendo que la física "desaparecía" en el espacio vacío entre conductores. Esta falta de un término de balance global impedía ver al electromagnetismo como un sistema unificado y conservativo.
+
+## Qué cambió
+
+James Clerk Maxwell resolvió esta crisis mediante una genialidad matemática y conceptual: introdujo el término de "corriente de desplazamiento" en la ley de Ampère. Al proponer que una variación del flujo eléctrico [[variacion_del_flujo_electrico]] produce el mismo efecto magnético que una corriente real [[corriente_encerrada]], Maxwell no solo unificó las leyes existentes en un sistema coherente, sino que predijo que los campos podían auto-sustentarse. Al integrar estas leyes, se hizo evidente que la luz no era otra cosa que una onda electromagnética viajando a una velocidad constante [[velocidad_de_la_luz]] determinada por las propiedades del vacío [[epsilon0]] y [[mu0]]. Fue la primera gran unificación de la física: la electricidad, el magnetismo y la óptica pasaron a ser ramas de un mismo árbol teórico.
+
+## Impacto en la física
+
+La formulación integral permitió a los científicos pasar de experimentos aislados a una teoría de campos global. Por primera vez, se pudo calcular la velocidad de la luz [[velocidad_de_la_luz]] a partir de mediciones puramente eléctricas y magnéticas en un laboratorio. Esto demostró que la luz no era una entidad aparte, sino una perturbación de los campos que Maxwell había unificado. Este impacto fue el motor de la segunda revolución industrial, permitiendo el desarrollo de los sistemas de generación y distribución de energía eléctrica a gran escala que alimentan el mundo moderno.
+
+## Conexión con física moderna
+
+La formulación integral de Maxwell es la base sobre la cual se asienta la electrodinámica clásica y el punto de partida de la relatividad especial de Einstein. Al observar que la velocidad [[velocidad_de_la_luz]] era una constante universal en estas ecuaciones, Einstein dedujo que el tiempo y el espacio debían ser relativos para mantener la validez de Maxwell en todos los sistemas. Hoy en día, esta formulación sigue siendo la herramienta preferida por los ingenieros de radiofrecuencia para calcular la ganancia de antenas y la eficiencia de los sistemas de transferencia de energía inalámbrica, demostrando que un conjunto de integrales concebidas en 1865 sigue gobernando la tecnología de la era de la información.

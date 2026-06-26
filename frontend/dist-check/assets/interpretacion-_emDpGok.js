@@ -1,0 +1,299 @@
+const e=`version: 5
+id: energia-orbital-interp
+leaf_id: energia-orbital
+scope: local
+nombre:
+  es: Analisis de energia orbital
+  en: Orbital energy analysis
+
+output_contract:
+  sections: [summary, physical_reading, coherence, model_validity, graph_reading, likely_errors, next_step]
+
+result_blocks:
+  summary: { title: { es: Resumen del resultado, en: Result summary } }
+  physical_reading: { title: { es: Lectura fisica causal, en: Causal physical reading } }
+  coherence: { title: { es: Coherencia de datos, en: Data coherence } }
+  model_validity: { title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { title: { es: Lectura grafica, en: Graph reading } }
+  likely_errors: { title: { es: Errores probables, en: Likely errors } }
+  next_step: { title: { es: Siguiente paso, en: Next step } }
+
+dependencies:
+  requires_magnitudes: true
+  requires_formulas: true
+  supports_graph_binding: true
+  magnitudes: [G, M, m, r, a, v, K, U, E, eps, E0]
+  formulas: [energia_total_desde_k_u, energia_cinetica, energia_potencial, energia_especifica_estado, energia_total_ligada, energia_especifica_ligada, energia_circular, clasificacion_orbital_conceptual]
+
+targets:
+  E:
+    summary_rules:
+      - id: E-summary
+        when: E < 0
+        status: success
+        text: { es: "La energia total [[E]] es negativa; fisicamente indica un estado ligado bajo la referencia [[E0]].", en: "Total energy [[E]] is negative; physically it indicates a bound state under the [[E0]] reference." }
+      - id: E-open
+        when: E > 0
+        status: warning
+        text: { es: "La energia total [[E]] es positiva; el estado supera el umbral de escape ideal.", en: "Total energy [[E]] is positive; the state exceeds the ideal escape threshold." }
+    physical_reading_rules:
+      - id: E-phys
+        when: E != 0
+        status: success
+        text: { es: "El signo de [[E]] resume la competencia entre [[K]] positiva y [[U]] negativa.", en: "The sign of [[E]] summarizes the competition between positive [[K]] and negative [[U]]." }
+    coherence_rules:
+      - id: E-coh
+        when: E == E
+        status: success
+        text: { es: "Compruebe que [[E]] procede de sumar [[K]] y [[U]] con la misma referencia.", en: "Check that [[E]] comes from adding [[K]] and [[U]] with the same reference." }
+    model_validity_rules:
+      - id: E-valid
+        when: E == E
+        status: success
+        text: { es: "La lectura conserva [[E]] solo si no hay rozamiento, empuje ni perturbaciones fuertes.", en: "The reading conserves [[E]] only if there is no drag, thrust, or strong perturbation." }
+    graph_rules:
+      - id: E-graph
+        when: E == E
+        status: info
+        text: { es: "En el grafico, [[E0]] separa estados ligados y de escape.", en: "On the graph, [[E0]] separates bound and escape states." }
+    likely_errors:
+      - id: E-error
+        when: E > 0 and a > 0
+        status: warning
+        text: { es: "Error conceptual probable: confundir una relacion de orbita ligada con un estado de [[E]] positiva.", en: "Likely conceptual error: confusing a bound-orbit relation with a positive [[E]] state." }
+    next_step_rules:
+      - id: E-next
+        when: E < 0
+        status: info
+        text: { es: "Si necesita tamaño orbital, derive o contraste el semieje mayor [[a]].", en: "If orbital size is needed, derive or check the semi-major axis [[a]]." }
+
+  eps:
+    summary_rules:
+      - id: eps-summary
+        when: eps < 0
+        status: success
+        text: { es: "[[eps]] negativa clasifica el estado como ligado por unidad de masa.", en: "Negative [[eps]] classifies the state as bound per unit mass." }
+      - id: eps-escape
+        when: eps >= 0
+        status: warning
+        text: { es: "[[eps]] no negativa indica umbral de escape o trayectoria abierta.", en: "Non-negative [[eps]] indicates escape threshold or open trajectory." }
+    physical_reading_rules:
+      - id: eps-phys
+        when: eps == eps
+        status: success
+        text: { es: "[[eps]] permite comparar orbitas sin depender de [[m]].", en: "[[eps]] compares orbits without depending on [[m]]." }
+    coherence_rules:
+      - id: eps-coh
+        when: eps == eps
+        status: success
+        text: { es: "El signo de [[eps]] debe coincidir con el signo clasificatorio de [[E]].", en: "The sign of [[eps]] must match the classificatory sign of [[E]]." }
+    model_validity_rules:
+      - id: eps-valid
+        when: eps == eps
+        status: success
+        text: { es: "Valido para problema de dos cuerpos con referencia de potencial en infinito.", en: "Valid for a two-body problem with potential reference at infinity." }
+    graph_rules:
+      - id: eps-graph
+        when: eps == eps
+        status: info
+        text: { es: "La linea cero muestra la frontera energetica de escape.", en: "The zero line shows the energetic escape boundary." }
+    likely_errors:
+      - id: eps-error
+        when: eps < 0
+        status: info
+        text: { es: "No interprete [[eps]] negativa como error; indica ligadura orbital.", en: "Do not interpret negative [[eps]] as an error; it indicates orbital binding." }
+    next_step_rules:
+      - id: eps-next
+        when: eps < 0
+        status: info
+        text: { es: "Puede calcular [[a]] si desea traducir energia en tamaño orbital.", en: "You can compute [[a]] if you want to translate energy into orbital size." }
+
+  K:
+    summary_rules:
+      - id: K-summary
+        when: K >= 0
+        status: success
+        text: { es: "[[K]] es la contribucion positiva asociada a la rapidez [[v]].", en: "[[K]] is the positive contribution associated with speed [[v]]." }
+    physical_reading_rules:
+      - id: K-phys
+        when: K >= 0
+        status: success
+        text: { es: "Aumentar [[v]] eleva [[K]], pero no garantiza escape si [[U]] sigue dominando.", en: "Increasing [[v]] raises [[K]], but does not guarantee escape if [[U]] still dominates." }
+    coherence_rules:
+      - id: K-coh
+        when: K >= 0
+        status: success
+        text: { es: "[[K]] debe ser no negativa en mecanica clasica.", en: "[[K]] must be non-negative in classical mechanics." }
+    model_validity_rules:
+      - id: K-valid
+        when: K >= 0
+        status: success
+        text: { es: "La expresion es clasica y no relativista.", en: "The expression is classical and non-relativistic." }
+    graph_rules:
+      - id: K-graph
+        when: K >= 0
+        status: info
+        text: { es: "[[K]] se representa como contribucion positiva.", en: "[[K]] is represented as a positive contribution." }
+    likely_errors:
+      - id: K-error
+        when: K < 0
+        status: error
+        text: { es: "Error conceptual: [[K]] no puede ser negativa.", en: "Conceptual error: [[K]] cannot be negative." }
+    next_step_rules:
+      - id: K-next
+        when: K >= 0
+        status: info
+        text: { es: "Combine [[K]] con [[U]] para interpretar [[E]].", en: "Combine [[K]] with [[U]] to interpret [[E]]." }
+
+  U:
+    summary_rules:
+      - id: U-summary
+        when: U < 0
+        status: success
+        text: { es: "[[U]] negativa indica que el satelite esta dentro del pozo gravitatorio.", en: "Negative [[U]] indicates that the satellite is inside the gravitational well." }
+    physical_reading_rules:
+      - id: U-phys
+        when: U < 0
+        status: success
+        text: { es: "Al aumentar [[r]], [[U]] se acerca a cero desde valores negativos.", en: "As [[r]] increases, [[U]] approaches zero from negative values." }
+    coherence_rules:
+      - id: U-coh
+        when: r > 0
+        status: success
+        text: { es: "[[r]] positiva mantiene coherente la energia potencial.", en: "Positive [[r]] keeps potential energy coherent." }
+    model_validity_rules:
+      - id: U-valid
+        when: r > 0
+        status: success
+        text: { es: "Valida para campo newtoniano de masa central.", en: "Valid for a Newtonian central-mass field." }
+    graph_rules:
+      - id: U-graph
+        when: U < 0
+        status: info
+        text: { es: "[[U]] debe quedar bajo la linea cero.", en: "[[U]] must lie below the zero line." }
+    likely_errors:
+      - id: U-error
+        when: U > 0
+        status: error
+        text: { es: "Error probable: se perdio el signo negativo de la referencia en infinito.", en: "Likely error: the negative sign from the infinity reference was lost." }
+    next_step_rules:
+      - id: U-next
+        when: U < 0
+        status: info
+        text: { es: "Sume [[U]] con [[K]] para decidir el signo de [[E]].", en: "Add [[U]] with [[K]] to decide the sign of [[E]]." }
+
+  a:
+    summary_rules:
+      - id: a-summary
+        when: a > 0
+        status: success
+        text: { es: "[[a]] resume el tamaño de una orbita ligada.", en: "[[a]] summarizes the size of a bound orbit." }
+    physical_reading_rules:
+      - id: a-phys
+        when: a > 0
+        status: success
+        text: { es: "Una [[a]] mayor implica energia ligada menos negativa.", en: "A larger [[a]] implies less negative bound energy." }
+    coherence_rules:
+      - id: a-coh
+        when: a > 0
+        status: success
+        text: { es: "[[a]] positiva es coherente con una orbita eliptica ligada.", en: "Positive [[a]] is coherent with a bound elliptical orbit." }
+    model_validity_rules:
+      - id: a-valid
+        when: a > 0
+        status: success
+        text: { es: "Use [[a]] solo en relaciones orbitales globales, no como radio instantaneo general.", en: "Use [[a]] only in global orbital relations, not as a general instantaneous radius." }
+    graph_rules:
+      - id: a-graph
+        when: a > 0
+        status: info
+        text: { es: "[[a]] se interpreta como tamaño orbital asociado al nivel de energia.", en: "[[a]] is interpreted as orbital size associated with the energy level." }
+    likely_errors:
+      - id: a-error
+        when: a <= 0
+        status: error
+        text: { es: "Error conceptual: una orbita ligada no usa [[a]] negativa en este convenio.", en: "Conceptual error: a bound orbit does not use negative [[a]] in this convention." }
+    next_step_rules:
+      - id: a-next
+        when: a > 0
+        status: info
+        text: { es: "Compare [[a]] con [[r]] solo si la orbita es circular.", en: "Compare [[a]] with [[r]] only if the orbit is circular." }
+
+  r:
+    summary_rules:
+      - id: r-summary
+        when: r > 0
+        status: success
+        text: { es: "[[r]] es la distancia instantanea usada para leer energia de estado.", en: "[[r]] is the instantaneous distance used to read state energy." }
+    physical_reading_rules:
+      - id: r-phys
+        when: r > 0
+        status: success
+        text: { es: "Al aumentar [[r]], el pozo potencial se hace menos profundo.", en: "As [[r]] increases, the potential well becomes less deep." }
+    coherence_rules:
+      - id: r-coh
+        when: r > 0
+        status: success
+        text: { es: "[[r]] debe ser positiva para evitar singularidad gravitatoria.", en: "[[r]] must be positive to avoid gravitational singularity." }
+    model_validity_rules:
+      - id: r-valid
+        when: r > 0
+        status: success
+        text: { es: "La lectura con [[r]] es instantanea y no sustituye a [[a]] en una elipse.", en: "The reading with [[r]] is instantaneous and does not replace [[a]] in an ellipse." }
+    graph_rules:
+      - id: r-graph
+        when: r > 0
+        status: info
+        text: { es: "En Coord, [[r]] funciona como eje horizontal de las curvas de energia.", en: "In Coord, [[r]] is the horizontal axis of the energy curves." }
+    likely_errors:
+      - id: r-error
+        when: r <= 0
+        status: error
+        text: { es: "Error conceptual: [[r]] no puede ser cero o negativa.", en: "Conceptual error: [[r]] cannot be zero or negative." }
+    next_step_rules:
+      - id: r-next
+        when: r > 0
+        status: info
+        text: { es: "Combine [[r]] con [[v]] para calcular [[eps]].", en: "Combine [[r]] with [[v]] to compute [[eps]]." }
+
+  v:
+    summary_rules:
+      - id: v-summary
+        when: v >= 0
+        status: success
+        text: { es: "[[v]] controla la contribucion cinetica del estado orbital.", en: "[[v]] controls the kinetic contribution of the orbital state." }
+    physical_reading_rules:
+      - id: v-phys
+        when: v >= 0
+        status: success
+        text: { es: "Aumentar [[v]] aumenta [[K]], pero la clasificacion depende tambien de [[U]].", en: "Increasing [[v]] increases [[K]], but classification also depends on [[U]]." }
+    coherence_rules:
+      - id: v-coh
+        when: v >= 0
+        status: success
+        text: { es: "Como modulo, [[v]] debe ser no negativa.", en: "As a magnitude, [[v]] must be non-negative." }
+    model_validity_rules:
+      - id: v-valid
+        when: v >= 0
+        status: success
+        text: { es: "La formula cinetica usada es no relativista.", en: "The kinetic formula used is non-relativistic." }
+    graph_rules:
+      - id: v-graph
+        when: v >= 0
+        status: info
+        text: { es: "[[v]] desplaza la lectura de energia hacia la parte cinetica.", en: "[[v]] shifts the energy reading toward the kinetic part." }
+    likely_errors:
+      - id: v-error
+        when: v < 0
+        status: error
+        text: { es: "Error conceptual: si [[v]] es rapidez, no debe introducirse negativa.", en: "Conceptual error: if [[v]] is speed, it should not be entered as negative." }
+    next_step_rules:
+      - id: v-next
+        when: v >= 0
+        status: info
+        text: { es: "Compare el aumento de [[K]] con la profundidad de [[U]].", en: "Compare the increase in [[K]] with the depth of [[U]]." }
+
+config:
+  decimal_places: 4
+  show_graphs: true
+`;export{e as default};

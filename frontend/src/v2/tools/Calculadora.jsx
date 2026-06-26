@@ -1,13 +1,69 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "../../styles/floating-tools.css";
+import { getUiLanguage } from "../utils/uiLanguage";
 
 const STORAGE_KEY = "phyxio_basic_calculator_v1";
 
+const UI_TEXT = {
+  es: {
+    title: "Calculadora",
+    expression: "Expresion",
+    expressionPlaceholder: "Ej: 3*(2+5)^2",
+    result: "Resultado",
+    power: "Potencia",
+    sqrtTitle: "Raiz cuadrada: sqrt(",
+    saveHistory: "Guardar en historial (tambien Enter)",
+    history: "Historial",
+    clear: "Limpiar",
+    noHistory: "Aun no hay calculos guardados.",
+    reuseExpression: "Reutilizar expresion",
+    genericError: "Error",
+  },
+  en: {
+    title: "Calculator",
+    expression: "Expression",
+    expressionPlaceholder: "Ex: 3*(2+5)^2",
+    result: "Result",
+    power: "Power",
+    sqrtTitle: "Square root: sqrt(",
+    saveHistory: "Save to history (also Enter)",
+    history: "History",
+    clear: "Clear",
+    noHistory: "There are no saved calculations yet.",
+    reuseExpression: "Reuse expression",
+    genericError: "Error",
+  },
+};
+
+const ERROR_MAP_EN = {
+  "Numero invalido (demasiados puntos).": "Invalid number (too many decimal points).",
+  "Parentesis desbalanceados.": "Unbalanced parentheses.",
+  "Token inesperado.": "Unexpected token.",
+  "sqrt() invalido.": "Invalid sqrt().",
+  "sqrt() de numero negativo.": "sqrt() of a negative number.",
+  "Operacion invalida.": "Invalid operation.",
+  "Division por cero.": "Division by zero.",
+  "RPN invalido.": "Invalid RPN.",
+  "Expresion invalida.": "Invalid expression.",
+};
+
+function toUiError(msg, lang) {
+  if (!msg) return "";
+  const raw = String(msg);
+  if (lang !== "en") return raw;
+  if (ERROR_MAP_EN[raw]) return ERROR_MAP_EN[raw];
+  if (raw.startsWith("Caracter no valido:")) return raw.replace("Caracter no valido:", "Invalid character:");
+  if (raw.startsWith("Identificador no soportado:")) return raw.replace("Identificador no soportado:", "Unsupported identifier:");
+  if (raw.startsWith("Funcion no soportada:")) return raw.replace("Funcion no soportada:", "Unsupported function:");
+  if (raw.startsWith("Operador no soportado:")) return raw.replace("Operador no soportado:", "Unsupported operator:");
+  return raw;
+}
+
 /**
- * Tokeniza una expresión sencilla:
- * - Números: 12, 12.3, 12,3
+ * Tokeniza una expresion sencilla:
+ * - Numeros: 12, 12.3, 12,3
  * - Operadores: + - * / ^
- * - Paréntesis: ( )
+ * - Parentesis: ( )
  * - Identificadores: pi, e, sqrt
  * - Coma decimal -> punto
  */
@@ -31,7 +87,7 @@ function tokenize(expr) {
       let j = i + 1;
       while (j < s.length && (isDigit(s[j]) || s[j] === ".")) j++;
       const raw = s.slice(i, j);
-      if ((raw.match(/\./g) || []).length > 1) throw new Error("Número inválido (demasiados puntos).");
+      if ((raw.match(/\./g) || []).length > 1) throw new Error("Numero invalido (demasiados puntos).");
       tokens.push({ type: "num", value: Number(raw) });
       i = j;
       continue;
@@ -54,7 +110,7 @@ function tokenize(expr) {
       continue;
     }
 
-    throw new Error(`Carácter no válido: "${c}"`);
+    throw new Error(`Caracter no valido: "${c}"`);
   }
 
   return tokens;
@@ -65,7 +121,7 @@ function tokenize(expr) {
  * Soporta:
  * - + - * / ^
  * - unary minus
- * - función sqrt(x)
+ * - funcion sqrt(x)
  * - constantes pi, e
  */
 function toRpn(tokens) {
@@ -123,10 +179,10 @@ function toRpn(tokens) {
         while (opStack.length && opStack[opStack.length - 1].type !== "lpar") {
           out.push(opStack.pop());
         }
-        if (!opStack.length) throw new Error("Paréntesis desbalanceados.");
+        if (!opStack.length) throw new Error("Parentesis desbalanceados.");
         opStack.pop(); // pop "("
 
-        // si encima hay una función, se aplica
+        // si encima hay una funcion, se aplica
         if (opStack.length && isFunc(opStack[opStack.length - 1])) {
           out.push(opStack.pop());
         }
@@ -139,8 +195,8 @@ function toRpn(tokens) {
       if ("+-*/^".includes(v)) {
         // unary minus si:
         // - al inicio
-        // - después de '('
-        // - después de otro operador
+        // - despues de '('
+        // - despues de otro operador
         const unary =
           v === "-" &&
           (!prev ||
@@ -184,7 +240,7 @@ function toRpn(tokens) {
 
   while (opStack.length) {
     const x = opStack.pop();
-    if (x.type === "lpar") throw new Error("Paréntesis desbalanceados.");
+    if (x.type === "lpar") throw new Error("Parentesis desbalanceados.");
     out.push(x);
   }
 
@@ -203,25 +259,25 @@ function evalRpn(rpn) {
     if (t.type === "func") {
       if (t.value === "sqrt") {
         const a = st.pop();
-        if (!Number.isFinite(a)) throw new Error("sqrt() inválido.");
-        if (a < 0) throw new Error("sqrt() de número negativo.");
+        if (!Number.isFinite(a)) throw new Error("sqrt() invalido.");
+        if (a < 0) throw new Error("sqrt() de numero negativo.");
         st.push(Math.sqrt(a));
         continue;
       }
-      throw new Error(`Función no soportada: ${t.value}`);
+      throw new Error(`Funcion no soportada: ${t.value}`);
     }
 
     if (t.type === "op") {
       if (t.value === "u-") {
         const a = st.pop();
-        if (!Number.isFinite(a)) throw new Error("Operación inválida.");
+        if (!Number.isFinite(a)) throw new Error("Operacion invalida.");
         st.push(-a);
         continue;
       }
 
       const b = st.pop();
       const a = st.pop();
-      if (!Number.isFinite(a) || !Number.isFinite(b)) throw new Error("Operación inválida.");
+      if (!Number.isFinite(a) || !Number.isFinite(b)) throw new Error("Operacion invalida.");
 
       switch (t.value) {
         case "+":
@@ -234,7 +290,7 @@ function evalRpn(rpn) {
           st.push(a * b);
           break;
         case "/":
-          if (b === 0) throw new Error("División por cero.");
+          if (b === 0) throw new Error("Division por cero.");
           st.push(a / b);
           break;
         case "^":
@@ -246,10 +302,10 @@ function evalRpn(rpn) {
       continue;
     }
 
-    throw new Error("RPN inválido.");
+    throw new Error("RPN invalido.");
   }
 
-  if (st.length !== 1 || !Number.isFinite(st[0])) throw new Error("Expresión inválida.");
+  if (st.length !== 1 || !Number.isFinite(st[0])) throw new Error("Expresion invalida.");
   return st[0];
 }
 
@@ -296,6 +352,8 @@ function Btn({ children, onClick, title, className = "" }) {
 }
 
 export default function Calculadora() {
+  const lang = getUiLanguage();
+  const t = UI_TEXT[lang] || UI_TEXT.es;
   const [expr, setExpr] = useState("2*(3+5)");
   const [result, setResult] = useState("");
   const [error, setError] = useState("");
@@ -312,8 +370,8 @@ export default function Calculadora() {
 
   // Persist
   useEffect(() => {
-    const t = setTimeout(() => safeSave({ expr, history }), 200);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => safeSave({ expr, history }), 200);
+    return () => clearTimeout(timer);
   }, [expr, history]);
 
   const computed = useMemo(() => {
@@ -326,9 +384,9 @@ export default function Calculadora() {
 
       return { ok: true, value: formatResult(val), error: "" };
     } catch (e) {
-      return { ok: false, value: "", error: e?.message || "Error" };
+      return { ok: false, value: "", error: toUiError(e?.message || t.genericError, lang) };
     }
-  }, [expr]);
+  }, [expr, lang, t.genericError]);
 
   // Resultado "en vivo" (pero sin ensuciar historial)
   useEffect(() => {
@@ -374,11 +432,11 @@ export default function Calculadora() {
   return (
     <div className="calc-container">
       <div className="calc-header">
-        <h3 className="calc-title">Calculadora</h3>
+        <h3 className="calc-title">{t.title}</h3>
       </div>
 
       <div className="calc-main-panel">
-        <label className="calc-label">Expresión</label>
+        <label className="calc-label">{t.expression}</label>
         <input
           ref={inputRef}
           value={expr}
@@ -386,12 +444,12 @@ export default function Calculadora() {
           onKeyDown={(e) => {
             if (e.key === "Enter") commit();
           }}
-          placeholder='Ej: 3*(2+5)^2'
+          placeholder={t.expressionPlaceholder}
           className="calc-input"
         />
 
         <div className="calc-result-box">
-          <div className="calc-result-label">Resultado</div>
+          <div className="calc-result-label">{t.result}</div>
           <div className="calc-result-value">
             {result ? result : <span className="calc-result-placeholder">...</span>}
           </div>
@@ -427,12 +485,12 @@ export default function Calculadora() {
           <Btn onClick={() => insert("+")}>+</Btn>
           <Btn onClick={() => insert("-")}>−</Btn>
 
-          <Btn onClick={() => insert("^")} title="Potencia">^</Btn>
+          <Btn onClick={() => insert("^")} title={t.power}>^</Btn>
           <Btn onClick={() => insert("π")} title="pi">π</Btn>
           <Btn onClick={() => insert("e")} title="e">e</Btn>
           <Btn
             onClick={() => insert("sqrt(")}
-            title="Raíz cuadrada: sqrt("
+            title={t.sqrtTitle}
           >
             √(
           </Btn>
@@ -440,7 +498,7 @@ export default function Calculadora() {
           <Btn
             onClick={() => commit()}
             className="calc-btn-full"
-            title="Guardar en historial (también Enter)"
+            title={t.saveHistory}
           >
             =
           </Btn>
@@ -449,19 +507,19 @@ export default function Calculadora() {
 
       <div className="calc-history-section">
         <div className="calc-history-header">
-          <h4 className="calc-history-title">Historial</h4>
+          <h4 className="calc-history-title">{t.history}</h4>
           <button
             type="button"
             className="calc-history-clear"
             onClick={() => setHistory([])}
           >
-            Limpiar
+            {t.clear}
           </button>
         </div>
 
         {history.length === 0 ? (
           <div className="calc-history-empty">
-            Aún no hay cálculos guardados.
+            {t.noHistory}
           </div>
         ) : (
           <div className="calc-history-list">
@@ -471,7 +529,7 @@ export default function Calculadora() {
                 type="button"
                 onClick={() => useHistory(h)}
                 className="calc-history-item"
-                title="Reutilizar expresión"
+                title={t.reuseExpression}
               >
                 <div className="calc-history-expr">{h.expr}</div>
                 <div className="calc-history-result">= {h.result}</div>
@@ -483,3 +541,4 @@ export default function Calculadora() {
     </div>
   );
 }
+

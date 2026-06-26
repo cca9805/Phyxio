@@ -1,0 +1,409 @@
+const e=`version: 2
+id: interpretacion-resistencia-y-ley-de-ohm
+leaf_id: resistencia-y-ley-de-ohm
+nombre:
+  es: Análisis de Conducción Óhmica
+  en: Ohmic Conduction Analysis
+scope:
+  area: fisica-clasica
+  bloque: electromagnetismo
+  subbloque: corriente-electrica
+dependencies:
+  magnitudes: [V, I, R, rho, L, A, G]
+  formulas: [ley_ohm, resistencia_geometrica, definicion_conductancia]
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen de Conducción
+      en: Conduction Summary
+  physical_reading:
+    title:
+      es: Lectura Física
+      en: Physical Reading
+  coherence:
+    title:
+      es: Coherencia de Datos
+      en: Data Coherence
+  model_validity:
+    title:
+      es: Validez del Modelo
+      en: Model Validity
+  likely_errors:
+    title:
+      es: Errores Probables
+      en: Likely Errors
+  graph_reading:
+    title:
+      es: Análisis Gráfico
+      en: Graphic Analysis
+  next_step:
+    title:
+      es: Siguiente Paso
+      en: Next Step
+targets:
+  V:
+    summary_rules:
+      - id: v_summary
+        when: "true"
+        status: info
+        text:
+          es: Estimación detallada de la caída de tensión o diferencia de potencial o [[V]] requerida para establecer un flujo de carga estable a través del elemento resistivo.
+          en: Detailed estimation of the voltage drop or potential difference or [[V]] required to establish a stable charge flow through the resistive element.
+    physical_reading_rules:
+      - id: v_physical
+        when: "true"
+        status: info
+        text:
+          es: "La [[V]] actúa como la causa motriz o empuje eléctrico. Debido a la naturaleza del material óhmico, el incremento en la tensión provoca un aumento proporcional en la velocidad de deriva de los electrones porque necesitan vencer las colisiones internas con mayor energía."
+          en: "[[V]] acts as the driving cause or electric push. Due to the nature of the ohmic material, increasing voltage causes a proportional increase in electron drift velocity because they need to overcome internal collisions with greater energy."
+    coherence_rules:
+      - id: v_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "El valor calculado de [[V]] debe ser compatible con los límites operativos de la fuente de alimentación y no superar el voltaje de ruptura dieléctrica del componente analizado."
+          en: "The calculated [[V]] value must be compatible with the power supply's operating limits and not exceed the dielectric breakdown voltage of the analyzed component."
+    model_validity_rules:
+      - id: v_validity
+        when: "true"
+        status: ok
+        text:
+          es: "Este cálculo es físicamente válido siempre que el material mantenga un comportamiento lineal y no existan fuerzas electromotrices parásitas adicionales en la malla del circuito."
+          en: "This calculation is physically valid as long as the material maintains linear behavior and there are no additional parasitic electromotive forces in the circuit mesh."
+    graph_rules:
+      - id: v_graph
+        when: "true"
+        status: info
+        text:
+          es: "En el gráfico cartesiano, la tensión se representa típicamente en el eje horizontal para ilustrar cómo la corriente responde de forma lineal a la excitación externa."
+          en: "In the Cartesian plot, voltage is typically represented on the horizontal axis to illustrate how current responds linearly to external excitation."
+    likely_errors:
+      - id: high_v
+        when: "input.V > 1000"
+        status: warning
+        text:
+          es: "El alumno suele confundir el potencial con la energía total; una tensión extremadamente alta puede provocar arcos eléctricos peligrosos."
+          en: "The student often confuses potential with total energy; extremely high voltage can cause dangerous electrical arcs."
+    next_step_rules:
+      - id: v_next
+        when: "true"
+        status: info
+        text:
+          es: "Calcula la potencia disipada total mediante el producto de la tensión y la corriente para asegurar la integridad térmica del componente."
+          en: "Calculate the total dissipated power by multiplying voltage and current to ensure the component's thermal integrity."
+
+  I:
+    summary_rules:
+      - id: i_summary
+        when: "true"
+        status: info
+        text:
+          es: Cuantificación de la intensidad de corriente o [[I]] resultante que atraviesa la sección transversal del conductor bajo la influencia del campo eléctrico aplicado.
+          en: Quantification of the resulting current intensity or [[I]] crossing the conductor's cross-section under the influence of the applied electric field.
+    physical_reading_rules:
+      - id: i_physical
+        when: "true"
+        status: info
+        text:
+          es: "La [[I]] representa el flujo neto de portadores de carga por unidad de tiempo. Este flujo está limitado porque existen densidades de colisiones con los iones de la red atómica del material que frenan el avance."
+          en: "[[I]] represents the net flow of charge carriers per unit time. This flow is limited because there are densities of collisions with the material's atomic lattice ions that slow down the advance."
+    coherence_rules:
+      - id: i_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "La corriente obtenida debe ser inferior a la corriente de fusión del cable para garantizar que el calor generado por efecto Joule no destruya el conductor."
+          en: "The obtained current must be lower than the wire's melting current to ensure that the heat generated by the Joule effect does not destroy the conductor."
+    model_validity_rules:
+      - id: i_validity
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asumes un régimen estacionario puro donde la corriente no varía con el tiempo y los efectos inductivos debidos a la geometría son despreciables."
+          en: "The model assumes a pure steady-state regime where current does not vary with time and inductive effects due to geometry are negligible."
+    graph_rules:
+      - id: i_graph
+        when: "true"
+        status: info
+        text:
+          es: "La pendiente de la recta en una representación de corriente frente a tensión es igual a la conductancia, reflejando la facilidad de transporte de carga."
+          en: "The slope of the line in a current versus voltage representation is equal to conductance, reflecting the ease of charge transport."
+    likely_errors:
+      - id: forget_i
+        when: "input.I > 25"
+        status: critical
+        text:
+          es: "El usuario suele olvidar que una corriente superior a 25 amperios excede la capacidad de conductores estándar y representa un riesgo grave de incendio."
+          en: "The user often forgets that a current above 25 amperes exceeds the capacity of standard conductors and represents a serious fire risk."
+    next_step_rules:
+      - id: i_next
+        when: "true"
+        status: info
+        text:
+          es: "Verifica el balance de corrientes en los nudos adyacentes si el circuito posee ramificaciones en paralelo para asegurar la conservación de la carga."
+          en: "Verify the current balance at adjacent nodes if the circuit has parallel branches to ensure charge conservation."
+
+  R:
+    summary_rules:
+      - id: r_summary
+        when: "true"
+        status: info
+        text:
+          es: Caracterización de la oposición eléctrica o [[R]] del dispositivo basándose en su respuesta dinámica o en sus parámetros físicos de resistividad y geometría.
+          en: Characterization of the device's electrical opposition or [[R]] based on its dynamic response or its physical parameters of resistivity and geometry.
+    physical_reading_rules:
+      - id: r_physical
+        when: "true"
+        status: info
+        text:
+          es: "La [[R]] es la manifestación macroscópica de la dispersión de los electrones. Aumenta con la longitud debido a un mayor número de colisiones y disminuye con el área transversal porque hay más caminos paralelos."
+          en: "[[R]] is the macroscopic manifestation of electron scattering. It increases with length due to a higher number of collisions and decreases with cross-sectional area because there are more parallel paths."
+    coherence_rules:
+      - id: r_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de la resistencia debe ser estrictamente positivo para componentes pasivos y coherente con el tipo de material conductor declarado en la simulación."
+          en: "The resistance value must be strictly positive for passive components and consistent with the type of conductive material declared in the simulation."
+    model_validity_rules:
+      - id: r_validity
+        when: "true"
+        status: ok
+        text:
+          es: "Válido mientras la temperatura del material permanezca estable; un aumento térmico incrementaría las vibraciones de la red atómica y por tanto la resistencia real."
+          en: "Valid as long as the material temperature remains stable; a thermal increase would increase atomic lattice vibrations and therefore the actual resistance."
+    graph_rules:
+      - id: r_graph
+        when: "true"
+        status: info
+        text:
+          es: "En un gráfico de resistencia frente a longitud, se debe obtener una relación lineal cuya pendiente dependa exclusivamente de la resistividad y el área del conductor."
+          en: "In a plot of resistance versus length, a linear relationship should be obtained whose slope depends exclusively on the resistivity and the conductor's area."
+    likely_errors:
+      - id: confuse_r
+        when: "input.R < 0.1"
+        status: warning
+        text:
+          es: "Es común suponer o confundir una resistencia casi nula con un aislamiento perfecto; valores bajos implican riesgo elevado de cortocircuito."
+          en: "It is common to assume or confuse near-zero resistance with perfect insulation; low values imply high risk of short circuit."
+    next_step_rules:
+      - id: r_next
+        when: "true"
+        status: info
+        text:
+          es: "Determina la conductividad del material para evaluar su eficiencia relativa en comparación con otros estándares industriales como el cobre recocido."
+          en: "Determine the material's conductivity to evaluate its relative efficiency compared to other industrial standards such as annealed copper."
+
+  rho:
+    summary_rules:
+      - id: rho_summary
+        when: "true"
+        status: info
+        text:
+          es: Evaluación de la resistividad intrínseca o [[rho]] del material para identificar su naturaleza química a partir de sus dimensiones físicas y resistencia medida.
+          en: Evaluation of the material's intrinsic resistivity or [[rho]] to identify its chemical nature based on its physical dimensions and measured resistance.
+    physical_reading_rules:
+      - id: rho_physical
+        when: "true"
+        status: info
+        text:
+          es: "La [[rho]] refleja la estructura electrónica interna. Materiales con baja resistividad poseen una alta densidad de electrones libres con gran movilidad en la red cristalina."
+          en: "[[rho]] reflects the internal electronic structure. Materials with low resistivity possess a high density of free electrons with high mobility in the crystal lattice."
+    coherence_rules:
+      - id: rho_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "El valor de [[rho]] debe compararse con los rangos conocidos para materiales conductores típicos para validar la pureza del espécimen."
+          en: "The [[rho]] value must match known ranges for typical conductive materials to validate the specimen's purity."
+    model_validity_rules:
+      - id: rho_validity
+        when: "true"
+        status: ok
+        text:
+          es: "Asume que el material es isótropo y homogéneo; variaciones en la pureza o defectos estructurales locales invalidarían el uso de un único valor de resistividad."
+          en: "Assumes the material is isotropic and homogeneous; variations in purity or local structural defects would invalidate the use of a single resistivity value."
+    graph_rules:
+      - id: rho_graph
+        when: "true"
+        status: info
+        text:
+          es: "La resistividad es la propiedad que define la escala de los gráficos de resistencia geométrica; un material diferente cambiaría la inclinación de todas las curvas."
+          en: "Resistivity is the property defining the scale of geometric resistance graphs; a different material would change the slope of all curves."
+    likely_errors:
+      - id: believe_rho
+        when: "input.rho < 0"
+        status: critical
+        text:
+          es: "No se debe creer o suponer que la resistividad puede ser negativa en materiales pasivos convencionales; revise sus cálculos de área."
+          en: "One should not believe or assume that resistivity can be negative in conventional passive materials; check your area calculations."
+    next_step_rules:
+      - id: rho_next
+        when: "true"
+        status: info
+        text:
+          es: "Evalúa el coeficiente térmico de resistividad si planeas operar el dispositivo en un rango amplio de temperaturas industriales o extremas."
+          en: "Evaluate the thermal coefficient of resistivity if you plan to operate the device over a wide range of industrial or extreme temperatures."
+
+  L:
+    summary_rules:
+      - id: l_summary
+        when: "true"
+        status: info
+        text:
+          es: Longitud total [[L]] del conductor entre los puntos de medición.
+          en: Total length [[L]] of the conductor between measurement points.
+    physical_reading_rules:
+      - id: l_physical
+        when: "true"
+        status: info
+        text:
+          es: "A mayor longitud, mayor es la probabilidad de que los electrones colisionen con los iones de la red, aumentando la resistencia."
+          en: "The longer the length, the higher the probability of electrons colliding with lattice ions, increasing resistance."
+    coherence_rules:
+      - id: l_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "La longitud debe ser un valor positivo y coherente con las dimensiones físicas del dispositivo o instalación analizada."
+          en: "Length must be a positive value and consistent with the physical dimensions of the analyzed device or installation."
+    model_validity_rules:
+      - id: l_validity
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume que el conductor es rectilíneo o que su curvatura no afecta la distribución uniforme de la corriente."
+          en: "The model assumes the conductor is rectilinear or that its curvature does not affect the uniform current distribution."
+    graph_rules:
+      - id: l_graph
+        when: "true"
+        status: info
+        text:
+          es: "La longitud es la variable independiente en los estudios de resistencia geométrica, mostrando una relación lineal directa."
+          en: "Length is the independent variable in geometric resistance studies, showing a direct linear relationship."
+    likely_errors:
+      - id: short_l
+        when: "input.L < 0.001"
+        status: warning
+        text:
+          es: "Es común olvidar que en longitudes microscópicas la resistencia de contacto puede dominar sobre la resistencia del material."
+          en: "It is common to forget that at microscopic lengths contact resistance can dominate over material resistance."
+    next_step_rules:
+      - id: l_next
+        when: "true"
+        status: info
+        text:
+          es: "Considera el uso de bobinados para aumentar la longitud efectiva en espacios reducidos si necesitas una resistencia específica alta."
+          en: "Consider using windings to increase effective length in small spaces if you need a specific high resistance."
+
+  A:
+    summary_rules:
+      - id: a_summary
+        when: "true"
+        status: info
+        text:
+          es: Área de la sección transversal [[A]] del conductor.
+          en: Cross-sectional area [[A]] of the conductor.
+    physical_reading_rules:
+      - id: a_physical
+        when: "true"
+        status: info
+        text:
+          es: "Un área mayor ofrece más 'carriles' paralelos para el flujo de carga, lo que reduce la densidad de colisiones y la resistencia."
+          en: "A larger area offers more parallel 'lanes' for charge flow, reducing collision density and resistance."
+    coherence_rules:
+      - id: a_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "El área debe ser positiva y corresponder a calibres comerciales estándar si se trata de conductores industriales."
+          en: "Area must be positive and correspond to standard commercial gauges for industrial conductors."
+    model_validity_rules:
+      - id: a_validity
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo asume que la sección es constante a lo largo de toda la longitud del conductor para evitar gradientes de campo."
+          en: "The model assumes the cross-section is constant along the entire length of the conductor to avoid field gradients."
+    graph_rules:
+      - id: a_graph
+        when: "true"
+        status: info
+        text:
+          es: "La resistencia es inversamente proporcional al área, lo que resulta en una hipérbola en un gráfico de R frente a A."
+          en: "Resistance is inversely proportional to area, resulting in a hyperbola in a plot of R versus A."
+    likely_errors:
+      - id: mix_units_a
+        when: "input.A < 1e-12"
+        status: critical
+        text:
+          es: "Se suele confundir mm2 con m2, lo que lleva a áreas físicamente imposibles para conductores reales; revise sus unidades."
+          en: "One often confuses mm2 with m2, leading to physically impossible areas for real conductors; check your units."
+    next_step_rules:
+      - id: a_next
+        when: "true"
+        status: info
+        text:
+          es: "Evalúa si el área efectiva se reduce por el efecto pelicular si la frecuencia de operación es elevada."
+          en: "Evaluate if the effective area is reduced by the skin effect if the operating frequency is high."
+
+  G:
+    summary_rules:
+      - id: g_summary
+        when: "true"
+        status: info
+        text:
+          es: Conductancia eléctrica [[G]] o facilidad de paso de la corriente.
+          en: Electrical conductance [[G]] or ease of current passage.
+    physical_reading_rules:
+      - id: g_physical
+        when: "true"
+        status: info
+        text:
+          es: "Representa la eficiencia neta del camino conductor; es el inverso de la resistencia y facilita el análisis de ramificaciones."
+          en: "Represents the net efficiency of the conductive path; it is the inverse of resistance and facilitates branch analysis."
+    coherence_rules:
+      - id: g_coherence
+        when: "true"
+        status: ok
+        text:
+          es: "La conductancia debe ser el recíproco exacto de la resistencia medida en el dispositivo."
+          en: "Conductance must be the exact reciprocal of the resistance measured in the device."
+    model_validity_rules:
+      - id: g_validity
+        when: "true"
+        status: ok
+        text:
+          es: "Válida para cualquier elemento donde se pueda definir una resistencia óhmica estable."
+          en: "Valid for any element where a stable ohmic resistance can be defined."
+    graph_rules:
+      - id: g_graph
+        when: "true"
+        status: info
+        text:
+          es: "En un gráfico I-V, la pendiente de la recta representa directamente la conductancia del componente."
+          en: "In an I-V plot, the slope of the line directly represents the component's conductance."
+    likely_errors:
+      - id: confuse_g
+        when: "input.G > 1000"
+        status: warning
+        text:
+          es: "Una conductancia extremadamente alta implica una resistencia casi nula, lo que debe suponerse como un cortocircuito potencial."
+          en: "Extremely high conductance implies near-zero resistance, which should be assumed as a potential short circuit."
+    next_step_rules:
+      - id: g_next
+        when: "true"
+        status: info
+        text:
+          es: "Usa la conductancia para sumar directamente las ramas en paralelo y simplificar la red eléctrica analizada."
+          en: "Use conductance to directly add parallel branches and simplify the analyzed electrical network."
+`;export{e as default};

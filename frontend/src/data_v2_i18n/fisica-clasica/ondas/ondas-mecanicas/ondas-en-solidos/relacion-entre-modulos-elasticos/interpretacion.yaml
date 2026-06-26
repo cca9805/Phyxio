@@ -1,0 +1,610 @@
+version: 5.0.0
+id: relacion-entre-modulos-elasticos
+leaf_id: relacion-entre-modulos-elasticos
+nombre:
+  es: Relacion entre modulos elasticos
+  en: Relationship Between Elastic Moduli
+scope:
+  area: fisica-clasica
+  bloque: ondas
+  subbloque: ondas-mecanicas
+  parent_id: ondas-en-solidos
+  ruta_relativa: fisica-clasica/ondas/ondas-mecanicas/ondas-en-solidos/relacion-entre-modulos-elasticos
+  orden: 232360
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Summary
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Physical reading
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherence
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Model validity
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Graph reading
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Likely errors
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Next step
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - relacion_G_E_nu
+  - relacion_K_E_nu
+  - relacion_G_K_nu
+  - relacion_E_G_K
+  - relacion_lambda_E_nu
+  magnitudes:
+  - modulo_de_young
+  - modulo_de_cizalla
+  - modulo_de_compresibilidad
+  - nu_poisson
+  - lambda_lame
+  - cociente_g_e
+  - cociente_k_e
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: ondas
+    en: ''
+  axis_convention:
+    es: El signo depende de la convención de ejes.
+    en: Sign depends on axes.
+  standard_assumptions:
+  - es: Interpretado bajo el modelo físico.
+    en: Interpreted under the physical model.
+  standard_warnings:
+  - es: Revisa unidades y signo.
+    en: Check units and sign.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+  - Svg
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    status: ok
+    text:
+      es: Coherencia dimensional.
+      en: Dimensional consistency.
+error_patterns:
+  enabled: true
+  patterns: []
+graph_reading_policy:
+  enabled: true
+  primary_variable: modulo_de_cizalla
+  reading_sequence: []
+  key_points: []
+comparative_context:
+  enabled: true
+  reference_values: []
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Unidad final coherente.
+    en: Coherent final unit.
+targets:
+  modulo_de_cizalla:
+    enabled: true
+    magnitude_type: modulus
+    semantic_role:
+      es: Rigidez a cizalla derivada de E y nu.
+      en: Shear stiffness derived from E and nu.
+    summary_rules:
+    - id: g_summary_high
+      when: G_shear > 0.45 * E_young
+      status: ok
+      text:
+        es: '[[G_shear]] cercano a E/2: material con nu bajo, rigidez de cizalla proporcionalmente alta.'
+        en: '[[G_shear]] near E/2: material with low nu, proportionally high shear stiffness.'
+    - id: g_summary_low
+      when: G_shear < 0.35 * E_young
+      status: ok
+      text:
+        es: '[[G_shear]] significativamente menor que E/2: nu relativamente alto, mayor compliancia a cizalla.'
+        en: '[[G_shear]] significantly less than E/2: relatively high nu, greater shear compliance.'
+    - id: g_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[G_shear]] depende de [[E_young]] y [[nu_poisson]] segun G = E / (2(1+nu)).'
+        en: '[[G_shear]] depends on [[E_young]] and [[nu_poisson]] via G = E / (2(1+nu)).'
+    physical_reading_rules:
+    - id: g_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: G mide la rigidez a cambio de forma. A mayor nu, menor G relativo a E.
+        en: G measures shape change stiffness. The higher nu, the lower G relative to E.
+    coherence_rules:
+    - id: g_coherence_positive
+      when: G_shear <= 0
+      status: error
+      text:
+        es: '[[G_shear]] debe ser positivo. Revisar los datos de entrada.'
+        en: '[[G_shear]] must be positive. Review input data.'
+    - id: g_coherence_vs_E
+      when: G_shear > E_young / 2 && nu_poisson >= 0
+      status: error
+      text:
+        es: '[[G_shear]] mayor que E/2 con nu positivo: inconsistencia. Verificar nu.'
+        en: '[[G_shear]] greater than E/2 with positive nu: inconsistency. Check nu.'
+    - id: g_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: G coherente con E y nu.
+        en: G consistent with E and nu.
+    model_validity_rules:
+    - id: g_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: Valido para material isotropo en regimen elastico lineal.
+        en: Valid for isotropic material in linear elastic regime.
+    graph_rules:
+    - id: g_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: G/E decrece monotonamente con nu, desde 0.5 (nu=0) hasta 0.33 (nu=0.5).
+        en: G/E decreases monotonically with nu, from 0.5 (nu=0) to 0.33 (nu=0.5).
+    likely_errors:
+    - id: g_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[modulo_de_cizalla]] con una lectura aislada es un error frecuente: Verificar que se usa nu en la
+          formula y no otro parametro. G = E/(2(1+nu)), no E/(2nu).'
+        en: 'A common mistake is to interpret [[modulo_de_cizalla]] in isolation: Check that nu is used in the formula and
+          not another parameter. G = E/(2(1+nu)), not E/(2nu).'
+    next_step_rules:
+    - id: g_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Calcular [[K_bulk]] con la otra formula para tener la descripcion elastica completa.
+        en: Calculate [[K_bulk]] with the other formula for the complete elastic description.
+    physical_intuition:
+    - id: modulo_de_cizalla_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[modulo_de_cizalla]] describe el estado dinámico.
+        en: Intuitively, [[modulo_de_cizalla]] describes the dynamic state.
+    limiting_cases:
+    - id: modulo_de_cizalla_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[modulo_de_cizalla]].
+        en: Check limiting cases of [[modulo_de_cizalla]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  modulo_de_young:
+    enabled: true
+    magnitude_type: modulus
+    semantic_role:
+      es: Rigidez uniaxial, constante de entrada principal.
+      en: Uniaxial stiffness, main input constant.
+    summary_rules:
+    - id: e_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[E_young]] es la constante de entrada. Combinada con [[nu_poisson]], determina todos los demas modulos.'
+        en: '[[E_young]] is the input constant. Combined with [[nu_poisson]], it determines all other moduli.'
+    physical_reading_rules:
+    - id: e_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: E es la pendiente de la curva tension-deformacion en traccion uniaxial.
+        en: E is the slope of the stress-strain curve in uniaxial tension.
+    coherence_rules:
+    - id: e_coherence_positive
+      when: E_young <= 0
+      status: error
+      text:
+        es: '[[E_young]] debe ser positivo. Un valor nulo o negativo no tiene sentido fisico.'
+        en: '[[E_young]] must be positive. A zero or negative value has no physical meaning.'
+    - id: e_coherence_cross
+      when: 'true'
+      status: ok
+      text:
+        es: 'Verificar coherencia cruzada: E = 9KG/(3K+G).'
+        en: 'Cross-check: E = 9KG/(3K+G).'
+    model_validity_rules:
+    - id: e_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: Valido en regimen elastico lineal. E constante implica que la deformacion es proporcional a la tension.
+        en: Valid in linear elastic regime. Constant E implies strain is proportional to stress.
+    graph_rules:
+    - id: e_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: E fijo normaliza las curvas G/E y K/E, que dependen solo de nu.
+        en: Fixed E normalises the G/E and K/E curves, which depend only on nu.
+    likely_errors:
+    - id: e_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: No confundir E (pendiente elastica) con resistencia ultima (tension de rotura).
+        en: Do not confuse E (elastic slope) with ultimate strength (breaking stress).
+    next_step_rules:
+    - id: e_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con E y nu, calcular G, K y lambda usando las formulas de conversion.
+        en: With E and nu, calculate G, K and lambda using the conversion formulae.
+    physical_intuition:
+    - id: modulo_de_young_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[modulo_de_young]] describe el estado dinámico.
+        en: Intuitively, [[modulo_de_young]] describes the dynamic state.
+    limiting_cases:
+    - id: modulo_de_young_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[modulo_de_young]].
+        en: Check limiting cases of [[modulo_de_young]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  nu_poisson:
+    enabled: true
+    magnitude_type: coefficient
+    semantic_role:
+      es: Parametro de control que governa todas las relaciones entre modulos.
+      en: Control parameter governing all relationships between moduli.
+    summary_rules:
+    - id: nu_summary_auxetic
+      when: nu_poisson < 0
+      status: ok
+      text:
+        es: '[[nu_poisson]] negativo: material auxetico. G > E/2 y K < E/3.'
+        en: 'Negative [[nu_poisson]]: auxetic material. G > E/2 and K < E/3.'
+    - id: nu_summary_incompressible
+      when: nu_poisson > 0.49
+      status: ok
+      text:
+        es: '[[nu_poisson]] cercano a 0.5: material casi incompresible. K mucho mayor que G.'
+        en: '[[nu_poisson]] near 0.5: nearly incompressible material. K much greater than G.'
+    - id: nu_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[nu_poisson]] controla la particion cizalla/volumen. Con E y nu, todos los modulos quedan determinados.'
+        en: '[[nu_poisson]] controls the shear/volume partition. With E and nu, all moduli are determined.'
+    physical_reading_rules:
+    - id: nu_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: Nu es la razon de contraccion lateral a extension longitudinal. Gobierna el cociente G/K.
+        en: Nu is the ratio of lateral contraction to longitudinal extension. Governs the G/K ratio.
+    coherence_rules:
+    - id: nu_coherence_range
+      when: nu_poisson <= -1 || nu_poisson > 0.5
+      status: error
+      text:
+        es: '[[nu_poisson]] fuera del rango termodinamico (-1, 0.5]. Material inestable o error de datos.'
+        en: '[[nu_poisson]] outside thermodynamic range (-1, 0.5]. Unstable material or data error.'
+    - id: nu_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Nu dentro del rango valido.
+        en: Nu within valid range.
+    model_validity_rules:
+    - id: nu_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: Las relaciones son exactas para cualquier nu en (-1, 0.5] en un isotropo lineal.
+        en: The relationships are exact for any nu in (-1, 0.5] in a linear isotropic medium.
+    graph_rules:
+    - id: nu_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: Nu es el eje horizontal natural del grafico. Barrer nu muestra las curvas de G/E y K/E.
+        en: Nu is the natural horizontal axis of the graph. Sweeping nu shows the G/E and K/E curves.
+    likely_errors:
+    - id: nu_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[nu_poisson]] con una lectura aislada es un error frecuente: Verificar que nu se usa con su signo
+          correcto. Nu negativo es valido en materiales auxeticos.'
+        en: 'A common mistake is to interpret [[nu_poisson]] in isolation: Check that nu is used with its correct sign. Negative
+          nu is valid in auxetic materials.'
+    next_step_rules:
+    - id: nu_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Con nu y cualquier modulo, calcular los demas usando las formulas de conversion.
+        en: With nu and any modulus, calculate the rest using the conversion formulae.
+    physical_intuition:
+    - id: nu_poisson_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[nu_poisson]] describe el estado dinámico.
+        en: Intuitively, [[nu_poisson]] describes the dynamic state.
+    limiting_cases:
+    - id: nu_poisson_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[nu_poisson]].
+        en: Check limiting cases of [[nu_poisson]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  modulo_de_compresibilidad:
+    enabled: true
+    magnitude_type: modulus
+    semantic_role:
+      es: Rigidez volumetrica derivada de E y nu.
+      en: Volumetric stiffness derived from E and nu.
+    summary_rules:
+    - id: k_summary_divergent
+      when: K_bulk > 5 * E_young
+      status: ok
+      text:
+        es: '[[K_bulk]] mucho mayor que E: material casi incompresible (nu cercano a 0.5).'
+        en: '[[K_bulk]] much greater than E: nearly incompressible material (nu close to 0.5).'
+    - id: k_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[K_bulk]] indica la resistencia a compresion volumetrica del material.'
+        en: '[[K_bulk]] indicates the material''s resistance to volumetric compression.'
+    physical_reading_rules:
+    - id: k_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: K mide la rigidez a cambio de volumen. Diverge cuando nu tiende a 0.5.
+        en: K measures volume change stiffness. Diverges as nu approaches 0.5.
+    coherence_rules:
+    - id: k_coherence_positive
+      when: K_bulk <= 0
+      status: error
+      text:
+        es: '[[K_bulk]] debe ser positivo. Verificar que nu < 0.5.'
+        en: '[[K_bulk]] must be positive. Check that nu < 0.5.'
+    - id: k_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: K coherente con E y nu.
+        en: K consistent with E and nu.
+    model_validity_rules:
+    - id: k_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: Valido para material isotropo. Para nu = 0.5 exacto, K es formalmente infinito.
+        en: Valid for isotropic material. For exact nu = 0.5, K is formally infinite.
+    graph_rules:
+    - id: k_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: K/E crece monotonamente con nu y diverge en nu = 0.5.
+        en: K/E grows monotonically with nu and diverges at nu = 0.5.
+    likely_errors:
+    - id: k_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[modulo_de_compresibilidad]] con una lectura aislada es un error frecuente: Si K resulta muy grande,
+          verificar que nu no esta artificialmente cercano a 0.5 por error de redondeo.'
+        en: 'A common mistake is to interpret [[modulo_de_compresibilidad]] in isolation: If K is very large, check that nu
+          is not artificially close to 0.5 due to rounding error.'
+    next_step_rules:
+    - id: k_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Verificar coherencia con la relacion E = 9KG/(3K+G).
+        en: Verify coherence with the relation E = 9KG/(3K+G).
+    physical_intuition:
+    - id: modulo_de_compresibilidad_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[modulo_de_compresibilidad]] describe el estado dinámico.
+        en: Intuitively, [[modulo_de_compresibilidad]] describes the dynamic state.
+    limiting_cases:
+    - id: modulo_de_compresibilidad_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[modulo_de_compresibilidad]].
+        en: Check limiting cases of [[modulo_de_compresibilidad]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  lambda_lame:
+    enabled: true
+    magnitude_type: modulus
+    semantic_role:
+      es: Primer parametro de Lame, coeficiente del termino de dilatacion.
+      en: First Lame parameter, coefficient of the dilation term.
+    summary_rules:
+    - id: lam_summary_negative
+      when: lambda_lame < 0
+      status: ok
+      text:
+        es: '[[lambda_lame]] negativo: material auxetico (nu < 0).'
+        en: 'Negative [[lambda_lame]]: auxetic material (nu < 0).'
+    - id: lam_summary_default
+      when: 'true'
+      status: ok
+      text:
+        es: '[[lambda_lame]] es un parametro de la formulacion tensorial. Su magnitud no tiene interpretacion mecanica directa.'
+        en: '[[lambda_lame]] is a parameter of the tensorial formulation. Its magnitude has no direct mechanical interpretation.'
+    physical_reading_rules:
+    - id: lam_reading_default
+      when: 'true'
+      status: ok
+      text:
+        es: Lambda aparece en la ley de Hooke generalizada. Su signo sigue el de nu.
+        en: Lambda appears in the generalised Hooke law. Its sign follows that of nu.
+    coherence_rules:
+    - id: lam_coherence_default
+      when: 'true'
+      status: ok
+      text:
+        es: Lambda puede ser positivo, nulo o negativo. No tiene restriccion de signo propia.
+        en: Lambda can be positive, zero or negative. It has no sign restriction of its own.
+    model_validity_rules:
+    - id: lam_validity_default
+      when: 'true'
+      status: ok
+      text:
+        es: Valido para isotropos. En codigos de elementos finitos es la entrada estandar.
+        en: Valid for isotropic media. In finite element codes it is the standard input.
+    graph_rules:
+    - id: lam_graph_default
+      when: 'true'
+      status: ok
+      text:
+        es: Lambda/E cruza por cero cuando nu = 0 y diverge cuando nu tiende a 0.5.
+        en: Lambda/E crosses zero when nu = 0 and diverges as nu approaches 0.5.
+    likely_errors:
+    - id: lam_error_default
+      when: 'true'
+      status: warning
+      text:
+        es: 'Confundir [[lambda_lame]] con una lectura aislada es un error frecuente: No interpretar lambda como un modulo
+          medible. No existe un ''ensayo de lambda''.'
+        en: 'A common mistake is to interpret [[lambda_lame]] in isolation: Do not interpret lambda as a measurable modulus.
+          No ''lambda test'' exists.'
+    next_step_rules:
+    - id: lam_next_default
+      when: 'true'
+      status: ok
+      text:
+        es: Usar lambda y G como entrada para el tensor constitutivo en simulaciones.
+        en: Use lambda and G as input for the constitutive tensor in simulations.
+    physical_intuition:
+    - id: lambda_lame_physical_intuition_base
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[lambda_lame]] describe el estado dinámico.
+        en: Intuitively, [[lambda_lame]] describes the dynamic state.
+    limiting_cases:
+    - id: lambda_lame_limiting_case_base
+      when: 'true'
+      status: info
+      text:
+        es: Comprueba los casos límite de [[lambda_lame]].
+        en: Check limiting cases of [[lambda_lame]]
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

@@ -1,0 +1,74 @@
+const n=`id: bloque-colgante
+nombre:
+  es: Bloque colgante
+  en: Hanging Block
+area: fisica-clasica
+bloque: mecanica
+subbloque: dinamica
+parent_id: sistemas-simples
+ruta_relativa: fisica-clasica/mecanica/dinamica/dinamica-traslacional/sistemas-simples/bloque-colgante
+orden: 212512
+type: leaf
+niveles:
+  es:
+  - ESO
+  - BACHILLERATO
+  - UNIVERSIDAD
+  en:
+  - Secondary
+  - Upper Secondary
+  - University
+icon: 🧲
+descripcion: 'Bloque colgante: cómo se relacionan peso, tensión y aceleración en una carga suspendida.'
+description_en: 'Hanging block: how weight, tension, and acceleration are related in a suspended load.'
+tags:
+  es:
+  - bloque-colgante
+  - tension
+  - carga-suspendida
+  - elevacion-vertical
+  - segunda-ley
+  en:
+  - hanging-block
+  - tension
+  - suspended-load
+  - vertical-lifting
+  - newton-second-law
+prerequisitos:
+- fisica-clasica/mecanica/dinamica/fundamentos/leyes-de-newton/segunda-ley-fuerza-masa
+- fisica-clasica/mecanica/dinamica/fundamentos/leyes-de-newton/diagrama-cuerpo-libre
+pregunta_fisica_central:
+  es: ¿Qué muestra la curva T(a), tomando a positiva hacia arriba, sobre cómo la tensión debe superar al peso para elevar la carga?
+  en: What does the T(a) curve, taking a as positive upward, show about how tension must exceed weight to lift the load?
+representacion_dominante: Coord
+magnitud_dominante: T
+graficos:
+- Coord
+physical_role:
+  es: fenómeno físico
+  en: physical phenomenon
+dificultad: 3
+tiempo_estimado_min: 45
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretación
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 4
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+`;export{n as default};

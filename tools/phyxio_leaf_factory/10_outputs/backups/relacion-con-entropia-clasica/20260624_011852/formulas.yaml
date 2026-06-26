@@ -1,0 +1,203 @@
+version: 5.0.0
+leaf: relacion-con-entropia-clasica
+ui:
+  default_formula: variacion_entropia_reversible
+formulas:
+- id: variacion_entropia_reversible
+  title:
+    es: Variación clásica de entropía reversible
+    en: Classical reversible entropy change
+  equation: DeltaS=Q_rev/T
+  latex: \Delta S=\frac{Q_{rev}}{T}
+  rearrangements:
+  - id: calor_reversible_desde_entropia
+    equation: Q_rev=DeltaS*T
+    latex: Q_{rev}=\Delta S\,T
+    target: calor_reversible
+  - id: temperatura_desde_calor_entropia
+    equation: T=Q_rev/DeltaS
+    latex: T=\frac{Q_{rev}}{\Delta S}
+    target: temperatura
+  category: termodinamica
+  relation_type: definition
+  physical_meaning:
+    es: En un proceso reversible, la variación de entropía se obtiene comparando el calor intercambiado con la temperatura absoluta.
+    en: In a reversible process, entropy change is obtained by comparing exchanged heat with absolute temperature.
+  constraints:
+    es: Requiere intercambio reversible, temperatura absoluta positiva y equilibrio local durante el intercambio de calor.
+    en: Requires reversible exchange, positive absolute temperature, and local equilibrium during heat transfer.
+  validity:
+    es: Válida para procesos reversibles o para integrar caminos reversibles equivalentes entre estados de equilibrio.
+    en: Valid for reversible processes or for integrating equivalent reversible paths between equilibrium states.
+  dimension_check: '[DeltaS]=J/K; [Q_rev]/[T]=J/K'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria.md
+  - modelos.md
+  - ejemplos.md
+  - aplicaciones.md
+  interpretation_tags:
+  - entropy
+  - reversible_process
+  - classical_thermodynamics
+  result_semantics:
+    target: delta_entropia
+    kind: scalar
+    sign_meaning:
+      es: Positiva si el sistema gana calor reversible; negativa si lo cede bajo el convenio elegido.
+      en: Positive if the system gains reversible heat; negative if it releases it under the chosen convention.
+    absolute_value_meaning:
+      es: Mide cuánta dispersión energética macroscópica cambia por kelvin.
+      en: Measures how much macroscopic energy dispersal changes per kelvin.
+  domain_checks:
+  - id: temperatura_positiva
+    condition: T>0
+    message:
+      es: La temperatura absoluta debe ser positiva.
+      en: Absolute temperature must be positive.
+  - id: reversibilidad
+    condition: process_is_reversible
+    message:
+      es: El calor debe interpretarse como calor reversible.
+      en: Heat must be interpreted as reversible heat.
+  coherence_checks:
+  - id: dimension_entropy
+    condition: dimension(DeltaS)==J/K
+    message:
+      es: La dimensión final debe ser J/K.
+      en: The final dimension must be J/K.
+  graph_implications:
+    es: En una gráfica de calor reversible frente a variación de entropía, la pendiente representa la temperatura.
+    en: In a reversible heat versus entropy-change graph, the slope represents temperature.
+  pedagogical_triggers:
+  - es: Si usas calor irreversible directamente, cambia el modelo.
+    en: If you use irreversible heat directly, change the model.
+- id: entropia_boltzmann_clasica
+  title:
+    es: Conexión estadística de Boltzmann
+    en: Boltzmann statistical connection
+  equation: S=k_B*ln(Omega)
+  latex: S=k_B\ln(\Omega)
+  rearrangements:
+  - id: microestados_desde_entropia
+    equation: Omega=exp(S/k_B)
+    latex: \Omega=e^{S/k_B}
+    target: numero_microestados
+  - id: constante_desde_entropia_microestados
+    equation: k_B=S/ln(Omega)
+    latex: k_B=\frac{S}{\ln(\Omega)}
+    target: k_boltzmann
+  category: termodinamica_estadistica
+  relation_type: definition
+  physical_meaning:
+    es: La entropía clásica coincide con una medida logarítmica de la multiplicidad microscópica cuando ambos describen el mismo macroestado.
+    en: Classical entropy matches a logarithmic measure of microscopic multiplicity when both describe the same macrostate.
+  constraints:
+    es: El número de microestados debe ser positivo y el macroestado debe estar bien definido por restricciones macroscópicas.
+    en: The number of microstates must be positive and the macrostate must be well defined by macroscopic constraints.
+  validity:
+    es: Se usa en equilibrio estadístico clásico, con microestados compatibles y conteo consistente de accesibilidad.
+    en: Used in classical statistical equilibrium, with compatible microstates and consistent accessibility counting.
+  dimension_check: '[S]=[k_B]=J/K because ln(Omega) is dimensionless'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria.md
+  - modelos.md
+  - historia.md
+  interpretation_tags:
+  - boltzmann
+  - multiplicity
+  - classical_entropy
+  result_semantics:
+    target: entropia
+    kind: scalar
+    sign_meaning:
+      es: La entropía absoluta aumenta al aumentar la multiplicidad accesible respecto a la referencia.
+      en: Absolute entropy increases as accessible multiplicity grows relative to the reference.
+    absolute_value_meaning:
+      es: Cuantifica en J/K el peso estadístico del macroestado.
+      en: Quantifies the macrostate statistical weight in J/K.
+  domain_checks:
+  - id: omega_positive
+    condition: Omega>0
+    message:
+      es: El logaritmo solo admite multiplicidad positiva.
+      en: The logarithm only accepts positive multiplicity.
+  coherence_checks:
+  - id: dimension_boltzmann
+    condition: dimension(S)==dimension(k_B)
+    message:
+      es: El logaritmo es adimensional; la unidad procede de k_B.
+      en: The logarithm is dimensionless; the unit comes from k_B.
+  graph_implications:
+    es: Una gráfica de S frente a ln(Omega) es lineal y su pendiente es k_B.
+    en: A plot of S versus ln(Omega) is linear and its slope is k_B.
+  pedagogical_triggers:
+  - es: No confundas multiplicidad con probabilidad normalizada.
+    en: Do not confuse multiplicity with normalized probability.
+- id: igualdad_delta_entropia
+  title:
+    es: Equivalencia entre cambio clásico y estadístico
+    en: Equivalence between classical and statistical change
+  equation: DeltaS=k_B*ln(Omega_f/Omega_i)
+  latex: \Delta S=k_B\ln\left(\frac{\Omega_f}{\Omega_i}\right)
+  rearrangements:
+  - id: ratio_microestados_desde_delta
+    equation: Omega_f_over_Omega_i=exp(DeltaS/k_B)
+    latex: \frac{\Omega_f}{\Omega_i}=e^{\Delta S/k_B}
+    target: ratio_microestados
+  - id: k_desde_delta_ratio
+    equation: k_B=DeltaS/ln(Omega_f_over_Omega_i)
+    latex: k_B=\frac{\Delta S}{\ln(\Omega_f/\Omega_i)}
+    target: k_boltzmann
+  category: conexion
+  relation_type: equivalence
+  physical_meaning:
+    es: El mismo cambio de entropía puede leerse como calor reversible dividido por temperatura o como cambio logarítmico de microestados.
+    en: The same entropy change can be read as reversible heat divided by temperature or as a logarithmic change in microstates.
+  constraints:
+    es: Los dos macrostados deben ser comparables y pertenecer al mismo sistema bajo restricciones compatibles.
+    en: Both macrostates must be comparable and belong to the same system under compatible constraints.
+  validity:
+    es: Válida cuando la descripción clásica y la estadística se refieren a los mismos estados de equilibrio.
+    en: Valid when classical and statistical descriptions refer to the same equilibrium states.
+  dimension_check: '[DeltaS]=[k_B]*1=J/K'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria.md
+  - ejemplos.md
+  - aplicaciones.md
+  interpretation_tags:
+  - entropy_change
+  - microstate_ratio
+  - reversibility
+  result_semantics:
+    target: delta_entropia
+    kind: scalar
+    sign_meaning:
+      es: Si Omega_f supera a Omega_i, DeltaS es positiva; si es menor, negativa.
+      en: If Omega_f exceeds Omega_i, DeltaS is positive; if smaller, negative.
+    absolute_value_meaning:
+      es: Indica el tamaño termodinámico del cambio de multiplicidad.
+      en: Indicates the thermodynamic size of the multiplicity change.
+  domain_checks:
+  - id: ratio_positive
+    condition: Omega_f_over_Omega_i>0
+    message:
+      es: El cociente de microestados debe ser positivo.
+      en: The microstate ratio must be positive.
+  coherence_checks:
+  - id: sign_ratio
+    condition: sign(DeltaS)==sign(ln(Omega_f_over_Omega_i))
+    message:
+      es: El signo debe concordar con el logaritmo del cociente.
+      en: The sign must match the logarithm of the ratio.
+  graph_implications:
+    es: La conexión se visualiza como una relación lineal entre DeltaS y ln(Omega_f/Omega_i).
+    en: The connection is visualized as a linear relation between DeltaS and ln(Omega_f/Omega_i).
+  pedagogical_triggers:
+  - es: Un cociente igual a uno da cambio entrópico nulo.
+    en: A ratio equal to one gives zero entropy change.

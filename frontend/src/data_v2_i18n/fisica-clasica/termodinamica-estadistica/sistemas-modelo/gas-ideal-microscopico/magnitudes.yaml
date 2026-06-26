@@ -1,0 +1,379 @@
+version: 5.0.0
+magnitudes:
+- id: temperatura
+  symbol: T
+  nombre:
+    es: temperatura absoluta
+    en: absolute temperature
+  descripcion:
+    es: Parámetro macroscópico que mide la agitación térmica microscópica del gas.
+    en: Macroscopic parameter measuring the gas microscopic thermal agitation.
+  unidad_si: K
+  dimension: Θ
+  is_vector: false
+  components: []
+  category: thermal_state
+  physical_role:
+    es: variable térmica de control
+    en: thermal control variable
+  used_in:
+  - energia_cinetica_media_temperatura
+  - ecuacion_estado_gas_ideal_particulas
+  - velocidad_cuadratica_media
+  common_mistake: Usar grados Celsius directamente en fórmulas microscópicas.
+  typical_range: 1 K a 3000 K en gases clásicos habituales.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La temperatura absoluta no se interpreta con signo en este modelo.
+      en: Absolute temperature is not interpreted with sign in this model.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: T=0 queda fuera del tratamiento clásico del gas ideal.
+      en: T=0 lies outside the classical ideal-gas treatment.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: T>0
+  interpretation_role:
+    primary_for:
+    - energia_cinetica_media_temperatura
+    - ecuacion_estado_gas_ideal_particulas
+    secondary_for:
+    - velocidad_cuadratica_media
+  graph_binding:
+    channels:
+    - xAxis
+    - parameter
+    preferred_axis: xAxis
+  pedagogical_notes:
+    es: Al aumentar T aumenta linealmente la energía cinética media.
+    en: Increasing T linearly increases mean kinetic energy.
+- id: energia_cinetica_media
+  symbol: K_media
+  nombre:
+    es: energía cinética media
+    en: mean kinetic energy
+  descripcion:
+    es: Energía cinética traslacional promedio por partícula en el gas ideal.
+    en: Average translational kinetic energy per particle in the ideal gas.
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: []
+  category: microscopic_energy
+  physical_role:
+    es: magnitud dominante
+    en: dominant magnitude
+  used_in:
+  - energia_cinetica_media_temperatura
+  - presion_microscopica_gas_ideal
+  common_mistake: Confundirla con la energía total del conjunto del gas.
+  typical_range: 10^-23 J a 10^-20 J por partícula en gases ordinarios.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: No tiene signo direccional; representa una cantidad energética media.
+      en: It has no directional sign; it represents an average energy amount.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: K_media=0 sería ausencia idealizada de agitación traslacional clásica.
+      en: K_media=0 would be an idealized absence of classical translational agitation.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: K_media>=0
+  interpretation_role:
+    primary_for:
+    - energia_cinetica_media_temperatura
+    secondary_for:
+    - presion_microscopica_gas_ideal
+  graph_binding:
+    channels:
+    - yAxis
+    preferred_axis: yAxis
+  pedagogical_notes:
+    es: Es la lectura microscópica directa de la temperatura.
+    en: It is the direct microscopic reading of temperature.
+- id: constante_boltzmann
+  symbol: k_B
+  nombre:
+    es: constante de Boltzmann
+    en: Boltzmann constant
+  descripcion:
+    es: Constante que convierte temperatura en escala energética por partícula.
+    en: Constant converting temperature into energy scale per particle.
+  unidad_si: J/K
+  dimension: M L^2 T^-2 Θ^-1
+  is_vector: false
+  components: []
+  category: constant
+  physical_role:
+    es: constante universal
+    en: universal constant
+  used_in:
+  - energia_cinetica_media_temperatura
+  - ecuacion_estado_gas_ideal_particulas
+  - velocidad_cuadratica_media
+  common_mistake: Sustituirla por R cuando se trabaja con número de partículas.
+  typical_range: 1.380649e-23 J/K.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es positiva por definición en el SI.
+      en: It is positive by definition in SI.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: No puede anularse; fija la escala térmica microscópica.
+      en: It cannot vanish; it sets the microscopic thermal scale.
+  value_nature:
+    kind: constant
+    nonnegative_only: true
+    expected_interval: k_B=1.380649e-23 J/K
+  interpretation_role:
+    primary_for:
+    - energia_cinetica_media_temperatura
+    secondary_for:
+    - ecuacion_estado_gas_ideal_particulas
+  graph_binding:
+    channels:
+    - constant
+    preferred_axis: constant
+  pedagogical_notes:
+    es: Usa k_B cuando N cuenta partículas, no moles.
+    en: Use k_B when N counts particles, not moles.
+- id: presion
+  symbol: p
+  nombre:
+    es: presión
+    en: pressure
+  descripcion:
+    es: Fuerza normal media por unidad de área debida a choques de partículas.
+    en: Mean normal force per unit area due to particle collisions.
+  unidad_si: Pa
+  dimension: M L^-1 T^-2
+  is_vector: false
+  components: []
+  category: macroscopic_state
+  physical_role:
+    es: resultado macroscópico
+    en: macroscopic result
+  used_in:
+  - presion_microscopica_gas_ideal
+  - ecuacion_estado_gas_ideal_particulas
+  common_mistake: Interpretarla como peso del gas en lugar de transferencia de momento.
+  typical_range: 10^3 Pa a 10^7 Pa en gases clásicos comunes.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La presión absoluta no tiene signo en este modelo simple.
+      en: Absolute pressure has no sign in this simple model.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: p=0 implicaría ausencia de choques o límite de vacío ideal.
+      en: p=0 would imply no collisions or an ideal vacuum limit.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: p>0
+  interpretation_role:
+    primary_for:
+    - presion_microscopica_gas_ideal
+    secondary_for:
+    - ecuacion_estado_gas_ideal_particulas
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: parameter
+  pedagogical_notes:
+    es: La presión traduce choques microscópicos en una magnitud macroscópica.
+    en: Pressure translates microscopic collisions into a macroscopic quantity.
+- id: volumen
+  symbol: V
+  nombre:
+    es: volumen
+    en: volume
+  descripcion:
+    es: Espacio disponible para el movimiento de las partículas del gas.
+    en: Space available for gas particle motion.
+  unidad_si: m^3
+  dimension: L^3
+  is_vector: false
+  components: []
+  category: macroscopic_state
+  physical_role:
+    es: variable geométrica
+    en: geometric variable
+  used_in:
+  - presion_microscopica_gas_ideal
+  - ecuacion_estado_gas_ideal_particulas
+  common_mistake: Olvidar que reducir V aumenta la frecuencia de choques.
+  typical_range: 10^-6 m^3 a 10^2 m^3 según el sistema.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: El volumen del recipiente no tiene signo.
+      en: Container volume has no sign.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: V=0 no es un estado físico admisible para un gas.
+      en: V=0 is not an admissible physical state for a gas.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: V>0
+  interpretation_role:
+    primary_for:
+    - ecuacion_estado_gas_ideal_particulas
+    secondary_for:
+    - presion_microscopica_gas_ideal
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: parameter
+  pedagogical_notes:
+    es: A N y T fijos, mayor V reduce la presión.
+    en: At fixed N and T, larger V lowers pressure.
+- id: numero_particulas
+  symbol: N
+  nombre:
+    es: número de partículas
+    en: number of particles
+  descripcion:
+    es: Cantidad de partículas microscópicas representadas por el gas ideal.
+    en: Number of microscopic particles represented by the ideal gas.
+  unidad_si: '1'
+  dimension: '1'
+  is_vector: false
+  components: []
+  category: amount
+  physical_role:
+    es: conteo microscópico
+    en: microscopic count
+  used_in:
+  - presion_microscopica_gas_ideal
+  - ecuacion_estado_gas_ideal_particulas
+  common_mistake: Confundir número de partículas con número de moles.
+  typical_range: 10^10 a 10^25 partículas según escala.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es un conteo, no una magnitud con dirección.
+      en: It is a count, not a directional quantity.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: N=0 describe vacío, no un gas con propiedades termodinámicas.
+      en: N=0 describes vacuum, not a gas with thermodynamic properties.
+  value_nature:
+    kind: count
+    nonnegative_only: true
+    expected_interval: N>=0
+  interpretation_role:
+    primary_for:
+    - ecuacion_estado_gas_ideal_particulas
+    secondary_for:
+    - presion_microscopica_gas_ideal
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: parameter
+  pedagogical_notes:
+    es: Al duplicar N a V y T fijos, se duplica la presión.
+    en: Doubling N at fixed V and T doubles pressure.
+- id: masa_particula
+  symbol: m
+  nombre:
+    es: masa de partícula
+    en: particle mass
+  descripcion:
+    es: Masa de una partícula individual del gas.
+    en: Mass of an individual gas particle.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: []
+  category: particle_property
+  physical_role:
+    es: parámetro microscópico
+    en: microscopic parameter
+  used_in:
+  - velocidad_cuadratica_media
+  common_mistake: Usar masa total del gas en lugar de masa de una partícula.
+  typical_range: 10^-27 kg a 10^-25 kg para gases atómicos y moleculares ligeros.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La masa de partícula es positiva.
+      en: Particle mass is positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: m=0 no corresponde a un gas clásico material.
+      en: m=0 does not correspond to a classical material gas.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: m>0
+  interpretation_role:
+    primary_for:
+    - velocidad_cuadratica_media
+    secondary_for: []
+  graph_binding:
+    channels:
+    - parameter
+    preferred_axis: parameter
+  pedagogical_notes:
+    es: Partículas más ligeras se mueven más rápido a igual temperatura.
+    en: Lighter particles move faster at the same temperature.
+- id: velocidad_rms
+  symbol: v_rms
+  nombre:
+    es: velocidad cuadrática media
+    en: root-mean-square speed
+  descripcion:
+    es: Rapidez típica asociada a la energía cinética media de las partículas.
+    en: Typical speed associated with the mean kinetic energy of particles.
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: false
+  components: []
+  category: microscopic_motion
+  physical_role:
+    es: escala de rapidez
+    en: speed scale
+  used_in:
+  - velocidad_cuadratica_media
+  common_mistake: Tratarla como velocidad vectorial neta del gas.
+  typical_range: 10^2 m/s a 10^4 m/s en gases térmicos no relativistas.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Es rapidez media cuadrática, no componente con signo.
+      en: It is rms speed, not a signed component.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: v_rms=0 sería ausencia de movimiento térmico clásico.
+      en: v_rms=0 would be absence of classical thermal motion.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: v_rms>=0
+  interpretation_role:
+    primary_for:
+    - velocidad_cuadratica_media
+    secondary_for:
+    - energia_cinetica_media_temperatura
+  graph_binding:
+    channels:
+    - none
+    preferred_axis: none
+  pedagogical_notes:
+    es: Crece como raíz cuadrada de T, no linealmente.
+    en: It grows as the square root of T, not linearly.

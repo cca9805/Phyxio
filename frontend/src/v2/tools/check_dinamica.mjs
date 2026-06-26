@@ -1,4 +1,4 @@
-// frontend/src/v2/tools/check_dinamica.mjs
+﻿// frontend/src/v2/tools/check_dinamica.mjs
 import fs from "fs";
 import path from "path";
 import YAML from "yaml";
@@ -14,7 +14,7 @@ const ROOT = path.resolve(SCRIPT_DIR, "../../..");
 
 // Rutas reales de tu proyecto
 const MAP_PATH = path.join(ROOT, "src", "v2", "map", "phyxio-map.yaml");
-const DATA_V2 = path.join(ROOT, "src", "data_v2");
+const DATA_I18N = path.join(ROOT, "src", "data_v2_i18n");
 const GRAPHS_DIN = path.join(
   ROOT,
   "src",
@@ -85,9 +85,9 @@ function findDinamicaNode(node) {
   return null;
 }
 
-// SVG2: existe data_v2/<ruta_relativa>/graphs/svg.config.jsx
+// SVG2: existe data_v2_i18n/<ruta_relativa>/graphs/svg.config.jsx
 function hasSvg2(rutaRel) {
-  const p = path.join(DATA_V2, rutaRel, "graphs", "svg.config.jsx");
+  const p = path.join(DATA_I18N, rutaRel, "graphs", "svg.config.jsx");
   return exists(p);
 }
 
@@ -162,7 +162,7 @@ function findComponentByHeuristic(id, kind) {
 function main() {
   console.log("📍 ROOT:", ROOT);
   console.log("📍 MAP_PATH:", MAP_PATH);
-  console.log("📍 DATA_V2:", DATA_V2);
+  console.log("📍 DATA_I18N:", DATA_I18N);
   console.log("📍 GRAPHS_DIN:", GRAPHS_DIN);
 
   if (!exists(MAP_PATH)) {
@@ -173,7 +173,7 @@ function main() {
   const y = YAML.parse(readText(MAP_PATH));
 
   // Tu YAML tiene raíz y.root
-  const rootNode = y?.root ?? y;
+  const rootNode = y?.root ? y;
   const dinamicaNode = findDinamicaNode(rootNode);
 
   if (!dinamicaNode) {
@@ -208,7 +208,7 @@ function main() {
   const registry = readLegacyRegistry();
 
   for (const L of leafs) {
-    const folderPath = path.join(DATA_V2, L.ruta);
+    const folderPath = path.join(DATA_I18N, L.ruta);
 
     if (!exists(folderPath)) {
       missingFolders.push({ id: L.id, ruta: L.ruta });
@@ -268,10 +268,10 @@ function main() {
 
   console.log("\n=== 2) CARPETAS ===");
   if (missingFolders.length) {
-    console.log("❌ Carpetas inexistentes (ruta_relativa no existe en data_v2):");
+    console.log("❌ Carpetas inexistentes (ruta_relativa no existe en data_v2_i18n):");
     missingFolders.forEach((x) => console.log(` - ${x.id} :: ${x.ruta}`));
   } else {
-    console.log("✅ Todas las carpetas leaf existen en data_v2");
+    console.log("✅ Todas las carpetas leaf existen en data_v2_i18n");
   }
 
   if (folderMismatch.length) {
@@ -321,3 +321,4 @@ function main() {
 }
 
 main();
+

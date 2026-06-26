@@ -1,0 +1,971 @@
+version: 1
+magnitudes:
+- id: J
+  symbol: J
+  nombre:
+    es: impulso
+    en: impulse
+  descripcion:
+    es: Cambio de cantidad de movimiento producido por una fuerza neta durante un
+      intervalo de tiempo.
+    en: Change in momentum produced by a net force over a time interval.
+  unidad_si: N·s
+  dimension: M L T^-1
+  is_vector: true
+  components:
+  - Jx
+  - Jy
+  category: derived
+  physical_role: efecto acumulado de una fuerza
+  used_in:
+  - impulso_integral
+  - impulso_area_curva
+  - impulso_fuerza_media
+  - impulso_fuerza_constante
+  - teorema_impulso_momento
+  - impulso_masa_cambio_velocidad
+  - impulso_momento_masa_velocidad
+  - fuerza_media_cambio_momento
+  - velocidad_final_impulso
+  - impulso_fuerza_triangular
+  common_mistake: Confundir impulso con fuerza instantánea o tratarlo como siempre
+    positivo.
+  typical_range: Desde 10^-2 N·s en impactos pequeños hasta 10^5 N·s o más en choques
+    macroscópicos.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica el sentido del cambio de momento respecto al eje elegido.
+      en: The sign indicates the direction of momentum change relative to the chosen
+        axis.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Impulso nulo significa que no hay cambio neto de cantidad de movimiento
+        en el eje analizado.
+      en: Zero impulse means no net momentum change along the analyzed axis.
+  value_nature:
+    kind: vector_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for:
+    - impulso
+    - cambio_momento
+    secondary_for:
+    - fuerza_media
+    - velocidad_final
+  graph_binding:
+    channels:
+    - area_force_time
+    - impulse_arrow
+  pedagogical_notes: El impulso debe interpretarse como área bajo F(t) o como cambio
+    de momento, no como fuerza.
+- id: F
+  symbol: F
+  nombre:
+    es: fuerza neta
+    en: net force
+  descripcion:
+    es: Fuerza resultante aplicada al sistema durante la interacción.
+    en: Resultant force applied to the system during the interaction.
+  unidad_si: N
+  dimension: M L T^-2
+  is_vector: true
+  components:
+  - Fx
+  - Fy
+  category: derived
+  physical_role: causa dinámica
+  used_in:
+  - impulso_integral
+  - impulso_area_curva
+  - impulso_fuerza_constante
+  common_mistake: Usar fuerza máxima o fuerza instantánea como si siempre fuera fuerza
+    media.
+  typical_range: Desde menos de 1 N hasta 10^5 N en impactos intensos.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica el sentido de la fuerza respecto al eje elegido.
+      en: The sign indicates the direction of force relative to the chosen axis.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Fuerza neta nula implica que no se acumula impulso en ese instante o intervalo.
+      en: Zero net force means no impulse accumulates at that instant or interval.
+  value_nature:
+    kind: vector_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for:
+    - impulso_integral
+    - impulso_fuerza_constante
+    secondary_for:
+    - area_bajo_curva
+  graph_binding:
+    channels:
+    - force_time_curve
+  pedagogical_notes: En impulso importa la fuerza neta durante el intervalo, no solo
+    su valor máximo.
+- id: dt
+  symbol: \Delta t
+  nombre:
+    es: intervalo de tiempo
+    en: time interval
+  descripcion:
+    es: Duración del contacto o de la interacción durante la que se acumula impulso.
+    en: Duration of the contact or interaction over which impulse accumulates.
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: null
+  category: parameter
+  physical_role: duración de interacción
+  used_in:
+  - impulso_integral
+  - impulso_fuerza_media
+  - fuerza_media_cambio_momento
+  - impulso_fuerza_constante
+  - impulso_fuerza_triangular
+  common_mistake: Creer que aumentar el tiempo cambia necesariamente el impulso cuando
+    el cambio de momento está fijado.
+  typical_range: Desde 10^-4 s en impactos muy breves hasta varios segundos en frenadas
+    suaves.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Un intervalo de tiempo físico se toma positivo.
+      en: A physical time interval is taken as positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: dt igual a cero haría indefinida la fuerza media.
+      en: dt equal to zero would make average force undefined.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, inf)
+  interpretation_role:
+    primary_for:
+    - fuerza_media
+    - tiempo_contacto
+    secondary_for:
+    - impulso
+  graph_binding:
+    channels:
+    - time_width
+  pedagogical_notes: Para el mismo cambio de momento, aumentar dt reduce la fuerza
+    media.
+- id: Fmed
+  symbol: F_{med}
+  nombre:
+    es: fuerza media
+    en: average force
+  descripcion:
+    es: Fuerza constante equivalente que produciría el mismo impulso durante el mismo
+      intervalo.
+    en: Equivalent constant force that would produce the same impulse over the same
+      interval.
+  unidad_si: N
+  dimension: M L T^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: fuerza equivalente
+  used_in:
+  - impulso_fuerza_media
+  - fuerza_media_cambio_momento
+  common_mistake: Confundir fuerza media con fuerza máxima durante el impacto.
+  typical_range: Desde pocos newtons en interacciones suaves hasta 10^5 N o más en
+    choques.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica el sentido de la fuerza media respecto al eje elegido.
+      en: The sign indicates the direction of average force relative to the chosen
+        axis.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Fuerza media nula implica impulso neto nulo en el intervalo.
+      en: Zero average force implies zero net impulse over the interval.
+  value_nature:
+    kind: scalar_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for:
+    - fuerza_media
+    - impacto
+    secondary_for:
+    - impulso
+  graph_binding:
+    channels:
+    - average_force_level
+  pedagogical_notes: Fmed resume toda la curva F(t); no describe necesariamente la
+    fuerza real en cada instante.
+- id: m
+  symbol: m
+  nombre:
+    es: masa
+    en: mass
+  descripcion:
+    es: Masa del cuerpo o sistema cuya cantidad de movimiento cambia.
+    en: Mass of the body or system whose momentum changes.
+  unidad_si: kg
+  dimension: M
+  is_vector: false
+  components: null
+  category: fundamental
+  physical_role: inercia del sistema
+  used_in:
+  - impulso_masa_cambio_velocidad
+  - impulso_momento_masa_velocidad
+  - velocidad_final_impulso
+  - cambio_momento_componentes
+  common_mistake: Usar esta relación cuando la masa cambia durante la interacción.
+  typical_range: Depende del sistema; desde gramos hasta toneladas en problemas clásicos.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: La masa clásica es positiva.
+      en: Classical mass is positive.
+  zero_behavior:
+    allowed: false
+    meaning:
+      es: Masa nula no permite aplicar las fórmulas clásicas de impulso con m.
+      en: Zero mass does not allow classical impulse formulas involving m.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (0, inf)
+  interpretation_role:
+    primary_for:
+    - cambio_velocidad
+    secondary_for:
+    - momento
+  graph_binding:
+    channels: []
+  pedagogical_notes: Las fórmulas con m presuponen masa constante.
+- id: p_inicial
+  symbol: p_i
+  nombre:
+    es: momento inicial
+    en: initial momentum
+  descripcion:
+    es: Cantidad de movimiento del sistema antes de la interacción.
+    en: Momentum of the system before the interaction.
+  unidad_si: kg·m/s
+  dimension: M L T^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: estado inicial
+  used_in:
+  - teorema_impulso_momento
+  - cambio_momento
+  common_mistake: Olvidar el signo de la velocidad inicial al calcular el momento.
+  typical_range: Depende de la masa y velocidad del sistema.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica dirección del momento inicial respecto al eje elegido.
+      en: The sign indicates the direction of initial momentum relative to the chosen
+        axis.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Momento inicial nulo indica reposo inicial o cancelación en el eje considerado.
+      en: Zero initial momentum indicates initial rest or cancellation along the considered
+        axis.
+  value_nature:
+    kind: scalar_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for:
+    - estado_inicial
+    secondary_for:
+    - cambio_momento
+  graph_binding:
+    channels:
+    - initial_state
+  pedagogical_notes: p_inicial y p_final deben referirse al mismo sistema y al mismo
+    eje.
+- id: p_final
+  symbol: p_f
+  nombre:
+    es: momento final
+    en: final momentum
+  descripcion:
+    es: Cantidad de movimiento del sistema después de la interacción.
+    en: Momentum of the system after the interaction.
+  unidad_si: kg·m/s
+  dimension: M L T^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: estado final
+  used_in:
+  - teorema_impulso_momento
+  - cambio_momento
+  common_mistake: Restar en orden incorrecto y cambiar el signo de DeltaP.
+  typical_range: Depende de la masa y velocidad final del sistema.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica dirección del momento final respecto al eje elegido.
+      en: The sign indicates the direction of final momentum relative to the chosen
+        axis.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Momento final nulo indica reposo final o cancelación en el eje considerado.
+      en: Zero final momentum indicates final rest or cancellation along the considered
+        axis.
+  value_nature:
+    kind: scalar_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for:
+    - estado_final
+    secondary_for:
+    - cambio_momento
+  graph_binding:
+    channels:
+    - final_state
+  pedagogical_notes: El momento final debe calcularse con el mismo convenio de signos
+    que el inicial.
+- id: DeltaP
+  symbol: \Delta p
+  nombre:
+    es: cambio de momento
+    en: momentum change
+  descripcion:
+    es: Diferencia entre el momento final y el momento inicial del sistema.
+    en: Difference between final and initial momentum of the system.
+  unidad_si: kg·m/s
+  dimension: M L T^-1
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: cambio de estado
+  used_in:
+  - cambio_momento
+  - teorema_impulso_momento
+  - fuerza_media_cambio_momento
+  - impulso_momento_masa_velocidad
+  common_mistake: Confundir DeltaP con el momento final o calcular p_inicial - p_final
+    en lugar de p_final - p_inicial.
+  typical_range: Depende de la masa y de la variación de velocidad.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica el sentido del cambio de momento.
+      en: The sign indicates the direction of momentum change.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: DeltaP nulo indica que el momento no cambia en el eje analizado.
+      en: Zero DeltaP means momentum does not change along the analyzed axis.
+  value_nature:
+    kind: scalar_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for:
+    - cambio_momento
+    - impulso
+    secondary_for:
+    - fuerza_media
+  graph_binding:
+    channels:
+    - momentum_change_arrow
+  pedagogical_notes: DeltaP es igual al impulso neto si se usa el mismo sistema y
+    eje.
+- id: v0
+  symbol: v_0
+  nombre:
+    es: velocidad inicial
+    en: initial velocity
+  descripcion:
+    es: Velocidad del cuerpo antes de recibir el impulso.
+    en: Velocity of the body before receiving the impulse.
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: estado cinemático inicial
+  used_in:
+  - impulso_masa_cambio_velocidad
+  - impulso_momento_masa_velocidad
+  - velocidad_final_impulso
+  common_mistake: Tomar la rapidez como siempre positiva e ignorar el sentido.
+  typical_range: Depende del problema; desde valores pequeños hasta cientos de m/s
+    en mecánica clásica.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica sentido de la velocidad inicial respecto al eje elegido.
+      en: The sign indicates the direction of initial velocity relative to the chosen
+        axis.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Velocidad inicial nula indica reposo inicial en el eje analizado.
+      en: Zero initial velocity indicates initial rest along the analyzed axis.
+  value_nature:
+    kind: scalar_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for:
+    - estado_inicial
+    secondary_for:
+    - velocidad_final
+  graph_binding:
+    channels:
+    - initial_velocity_arrow
+  pedagogical_notes: En problemas de rebote el signo de v0 es esencial.
+- id: vF
+  symbol: v_f
+  nombre:
+    es: velocidad final
+    en: final velocity
+  descripcion:
+    es: Velocidad del cuerpo después de recibir el impulso.
+    en: Velocity of the body after receiving the impulse.
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: estado cinemático final
+  used_in:
+  - impulso_masa_cambio_velocidad
+  - impulso_momento_masa_velocidad
+  - velocidad_final_impulso
+  common_mistake: Ignorar que puede tener signo contrario a la velocidad inicial.
+  typical_range: Depende del problema y del impulso aplicado.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica sentido de la velocidad final respecto al eje elegido.
+      en: The sign indicates the direction of final velocity relative to the chosen
+        axis.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Velocidad final nula indica que el cuerpo queda detenido en el eje analizado.
+      en: Zero final velocity indicates the body stops along the analyzed axis.
+  value_nature:
+    kind: scalar_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for:
+    - velocidad_final
+    secondary_for:
+    - impulso
+  graph_binding:
+    channels:
+    - final_velocity_arrow
+  pedagogical_notes: vF debe mantener el mismo eje y convenio de signos que v0.
+- id: Fmax
+  symbol: F_{max}
+  nombre:
+    es: fuerza máxima
+    en: maximum force
+  descripcion:
+    es: Valor máximo de la fuerza en un perfil fuerza-tiempo, especialmente en perfiles
+      triangulares.
+    en: Maximum value of force in a force-time profile, especially triangular profiles.
+  unidad_si: N
+  dimension: M L T^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: pico de fuerza
+  used_in:
+  - impulso_fuerza_triangular
+  common_mistake: Confundir Fmax con Fmed; en una fuerza triangular Fmed suele ser
+    Fmax/2.
+  typical_range: Depende del impacto; puede ser mucho mayor que la fuerza media.
+  sign_behavior:
+    has_sign: false
+    meaning:
+      es: Fmax representa una magnitud máxima y se toma no negativa.
+      en: Fmax represents a maximum magnitude and is taken as nonnegative.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Fmax cero implica ausencia de fuerza en el perfil considerado.
+      en: Zero Fmax means no force in the considered profile.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: '[0, inf)'
+  interpretation_role:
+    primary_for:
+    - fuerza_triangular
+    secondary_for:
+    - area_bajo_curva
+  graph_binding:
+    channels:
+    - peak_force
+  pedagogical_notes: Fmax no debe sustituirse por Fmed salvo que el perfil lo justifique.
+- id: Jx
+  symbol: J_x
+  nombre:
+    es: componente x del impulso
+    en: x-component of impulse
+  descripcion:
+    es: Componente del impulso o del cambio de momento sobre el eje x.
+    en: Component of impulse or momentum change along the x-axis.
+  unidad_si: N·s
+  dimension: M L T^-1
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: componente vectorial
+  used_in:
+  - cambio_momento_componentes
+  common_mistake: Sumar componentes de ejes distintos o perder el signo.
+  typical_range: Depende de la proyección del movimiento en x.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica sentido sobre el eje x.
+      en: The sign indicates direction along the x-axis.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Jx cero indica que no hay cambio de momento en x.
+      en: Zero Jx means no momentum change along x.
+  value_nature:
+    kind: scalar_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for:
+    - componentes
+    secondary_for:
+    - impulso
+  graph_binding:
+    channels:
+    - impulse_x
+  pedagogical_notes: Jx debe calcularse con velocidades proyectadas en el mismo eje.
+- id: Jy
+  symbol: J_y
+  nombre:
+    es: componente y del impulso
+    en: y-component of impulse
+  descripcion:
+    es: Componente del impulso o del cambio de momento sobre el eje y.
+    en: Component of impulse or momentum change along the y-axis.
+  unidad_si: N·s
+  dimension: M L T^-1
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: componente vectorial
+  used_in:
+  - cambio_momento_componentes
+  common_mistake: Tratar Jy como si tuviera el mismo valor que Jx por simetría inexistente.
+  typical_range: Depende de la proyección del movimiento en y.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica sentido sobre el eje y.
+      en: The sign indicates direction along the y-axis.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Jy cero indica que no hay cambio de momento en y.
+      en: Zero Jy means no momentum change along y.
+  value_nature:
+    kind: scalar_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for:
+    - componentes
+    secondary_for:
+    - impulso
+  graph_binding:
+    channels:
+    - impulse_y
+  pedagogical_notes: Jy solo tiene sentido después de fijar claramente el eje y.
+- id: vix
+  symbol: v_{ix}
+  nombre:
+    es: velocidad inicial en x
+    en: initial x-velocity
+  descripcion:
+    es: Componente x de la velocidad inicial.
+    en: x-component of the initial velocity.
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: componente cinemática inicial
+  used_in:
+  - cambio_momento_componentes
+  common_mistake: Usar rapidez inicial en lugar de componente x.
+  typical_range: Depende del movimiento en el eje x.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica sentido inicial sobre x.
+      en: The sign indicates initial direction along x.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: vix cero indica ausencia de movimiento inicial en x.
+      en: Zero vix indicates no initial motion along x.
+  value_nature:
+    kind: scalar_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for:
+    - componentes
+    secondary_for:
+    - estado_inicial
+  graph_binding:
+    channels:
+    - velocity_initial_x
+  pedagogical_notes: Debe compartir eje y signo con vfx.
+- id: vfx
+  symbol: v_{fx}
+  nombre:
+    es: velocidad final en x
+    en: final x-velocity
+  descripcion:
+    es: Componente x de la velocidad final.
+    en: x-component of the final velocity.
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: componente cinemática final
+  used_in:
+  - cambio_momento_componentes
+  common_mistake: No cambiar el signo en rebotes o inversiones de sentido.
+  typical_range: Depende del movimiento final en x.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica sentido final sobre x.
+      en: The sign indicates final direction along x.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: vfx cero indica ausencia de movimiento final en x.
+      en: Zero vfx indicates no final motion along x.
+  value_nature:
+    kind: scalar_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for:
+    - componentes
+    secondary_for:
+    - estado_final
+  graph_binding:
+    channels:
+    - velocity_final_x
+  pedagogical_notes: Debe compararse con vix usando el mismo eje.
+- id: viy
+  symbol: v_{iy}
+  nombre:
+    es: velocidad inicial en y
+    en: initial y-velocity
+  descripcion:
+    es: Componente y de la velocidad inicial.
+    en: y-component of the initial velocity.
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: componente cinemática inicial
+  used_in:
+  - cambio_momento_componentes
+  common_mistake: Suponer viy nula sin justificar el sistema de ejes.
+  typical_range: Depende del movimiento en el eje y.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica sentido inicial sobre y.
+      en: The sign indicates initial direction along y.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: viy cero indica ausencia de movimiento inicial en y.
+      en: Zero viy indicates no initial motion along y.
+  value_nature:
+    kind: scalar_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for:
+    - componentes
+    secondary_for:
+    - estado_inicial
+  graph_binding:
+    channels:
+    - velocity_initial_y
+  pedagogical_notes: Solo debe usarse si el eje y está definido.
+- id: vfy
+  symbol: v_{fy}
+  nombre:
+    es: velocidad final en y
+    en: final y-velocity
+  descripcion:
+    es: Componente y de la velocidad final.
+    en: y-component of the final velocity.
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: false
+  components: null
+  category: state
+  physical_role: componente cinemática final
+  used_in:
+  - cambio_momento_componentes
+  common_mistake: Mezclar componente y con rapidez total.
+  typical_range: Depende del movimiento final en el eje y.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo indica sentido final sobre y.
+      en: The sign indicates final direction along y.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: vfy cero indica ausencia de movimiento final en y.
+      en: Zero vfy indicates no final motion along y.
+  value_nature:
+    kind: scalar_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for:
+    - componentes
+    secondary_for:
+    - estado_final
+  graph_binding:
+    channels:
+    - velocity_final_y
+  pedagogical_notes: Debe compararse con viy usando el mismo eje.
+- id: p
+  symbol: p
+  nombre:
+    es: cantidad de movimiento
+    en: momentum
+  descripcion:
+    es: 'Magnitud de soporte: cantidad de movimiento'
+    en: 'Support magnitude: momentum'
+  unidad_si: kg·m/s
+  dimension: M L T^-1
+  is_vector: true
+  components: null
+  category: derived
+  physical_role: variable de estado
+  used_in: []
+  common_mistake:
+    es: Confundir con otras magnitudes similares.
+    en: Confuse with other similar magnitudes.
+  typical_range: Variable según el sistema.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Indica dirección o sentido.
+      en: Indicates direction or sense.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Indica ausencia de la magnitud.
+      en: Indicates absence of the magnitude.
+  value_nature:
+    kind: vector_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for: []
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Importante para el contexto del leaf.
+    en: Important for the leaf context.
+- id: W
+  symbol: W
+  nombre:
+    es: trabajo
+    en: work
+  descripcion:
+    es: 'Magnitud de soporte: trabajo'
+    en: 'Support magnitude: work'
+  unidad_si: J
+  dimension: M L^2 T^-2
+  is_vector: false
+  components: null
+  category: derived
+  physical_role: parámetro energético
+  used_in: []
+  common_mistake:
+    es: Confundir con otras magnitudes similares.
+    en: Confuse with other similar magnitudes.
+  typical_range: Variable según el sistema.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Indica dirección o sentido.
+      en: Indicates direction or sense.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Indica ausencia de la magnitud.
+      en: Indicates absence of the magnitude.
+  value_nature:
+    kind: scalar
+    nonnegative_only: true
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for: []
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Importante para el contexto del leaf.
+    en: Important for the leaf context.
+- id: dp
+  symbol: dp
+  nombre:
+    es: diferencial de momento
+    en: momentum differential
+  descripcion:
+    es: 'Magnitud de soporte: diferencial de momento'
+    en: 'Support magnitude: momentum differential'
+  unidad_si: kg·m/s
+  dimension: M L T^-1
+  is_vector: true
+  components: null
+  category: derived
+  physical_role: variable de estado
+  used_in: []
+  common_mistake:
+    es: Confundir con otras magnitudes similares.
+    en: Confuse with other similar magnitudes.
+  typical_range: Variable según el sistema.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Indica dirección o sentido.
+      en: Indicates direction or sense.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Indica ausencia de la magnitud.
+      en: Indicates absence of the magnitude.
+  value_nature:
+    kind: vector_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for: []
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Importante para el contexto del leaf.
+    en: Important for the leaf context.
+- id: dr
+  symbol: dr
+  nombre:
+    es: diferencial de posición
+    en: position differential
+  descripcion:
+    es: 'Magnitud de soporte: diferencial de posición'
+    en: 'Support magnitude: position differential'
+  unidad_si: m
+  dimension: L
+  is_vector: true
+  components: null
+  category: derived
+  physical_role: variable de estado
+  used_in: []
+  common_mistake:
+    es: Confundir con otras magnitudes similares.
+    en: Confuse with other similar magnitudes.
+  typical_range: Variable según el sistema.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Indica dirección o sentido.
+      en: Indicates direction or sense.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Indica ausencia de la magnitud.
+      en: Indicates absence of the magnitude.
+  value_nature:
+    kind: vector_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for: []
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Importante para el contexto del leaf.
+    en: Important for the leaf context.
+- id: v
+  symbol: v
+  nombre:
+    es: velocidad
+    en: velocity
+  descripcion:
+    es: 'Magnitud de soporte: velocidad'
+    en: 'Support magnitude: velocity'
+  unidad_si: m/s
+  dimension: L T^-1
+  is_vector: true
+  components: null
+  category: derived
+  physical_role: variable de estado
+  used_in: []
+  common_mistake:
+    es: Confundir con otras magnitudes similares.
+    en: Confuse with other similar magnitudes.
+  typical_range: Variable según el sistema.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: Indica dirección o sentido.
+      en: Indicates direction or sense.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Indica ausencia de la magnitud.
+      en: Indicates absence of the magnitude.
+  value_nature:
+    kind: vector_projection
+    nonnegative_only: false
+    expected_interval: (-inf, inf)
+  interpretation_role:
+    primary_for: []
+    secondary_for: []
+  graph_binding:
+    channels: []
+  pedagogical_notes:
+    es: Importante para el contexto del leaf.
+    en: Important for the leaf context.

@@ -1,0 +1,683 @@
+version: 2
+id: interpretacion-pendulo-simple
+leaf_id: pendulo-simple
+nombre:
+  es: Interpretación del péndulo simple
+  en: Interpretation of the simple pendulum
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: oscilaciones
+  parent_id: oscilaciones
+  ruta_relativa: fisica-clasica/mecanica/oscilaciones/pendulo-simple
+dependencies:
+  formulas:
+  - omega0_ps
+  - periodo_ps
+  - frecuencia_ps
+  - ecuacion_angular_ps
+  - ecuacion_no_lineal_ps
+  - energia_ps
+  magnitudes:
+  - L
+  - g
+  - theta
+  - theta0
+  - omega0
+  - T
+  - f
+  - t
+  - phi
+  - theta_dot
+  - theta_dd
+  - E
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen físico
+      en: Physical summary
+  physical_reading:
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  L:
+    summary_rules:
+    - id: L_summary
+      when: "true"
+      status: info
+      text:
+        es: La longitud fija la escala temporal junto con la gravedad.
+        en: Length sets the time scale together with gravity.
+    physical_reading_rules:
+    - id: L_physical
+      when: "true"
+      status: info
+      text:
+        es: Si L crece, el periodo aumenta porque la restauración tarda más en completar un ciclo.
+        en: If L grows, the period increases because restoration takes longer to complete a cycle.
+    coherence_rules:
+    - id: L_coherence
+      when: "true"
+      status: ok
+      text:
+        es: La longitud debe ser positiva y medirse desde el punto de suspensión.
+        en: Length must be positive and measured from the suspension point.
+    model_validity_rules:
+    - id: L_validity
+      when: "true"
+      status: ok
+      text:
+        es: La relación lineal es válida solo con ángulos pequeños.
+        en: The linear relation is valid only for small angles.
+    graph_rules:
+    - id: L_graph
+      when: "true"
+      status: info
+      text:
+        es: La gráfica del periodo crece al aumentar L.
+        en: The period graph rises as L increases.
+    likely_errors:
+    - id: L_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error común: medir L desde la masa y no desde el punto de suspensión."
+        en: "Common mistake: measuring L from the mass instead of the suspension point."
+    next_step_rules:
+    - id: L_next
+      when: "true"
+      status: tip
+      text:
+        es: Usa L para diseñar un periodo objetivo o verificar un experimento.
+        en: Use L to design a target period or verify an experiment.
+
+  g:
+    summary_rules:
+    - id: g_summary
+      when: "true"
+      status: info
+      text:
+        es: La gravedad determina la rapidez de la oscilación para una longitud dada.
+        en: Gravity determines the oscillation speed for a given length.
+    physical_reading_rules:
+    - id: g_physical
+      when: "true"
+      status: info
+      text:
+        es: Un g mayor hace que el periodo disminuya porque la restauración es más intensa.
+        en: A larger g makes the period smaller because restoration is stronger.
+    coherence_rules:
+    - id: g_coherence
+      when: "true"
+      status: ok
+      text:
+        es: El valor de g debe corresponder al entorno físico real.
+        en: The value of g must correspond to the real physical environment.
+    model_validity_rules:
+    - id: g_validity
+      when: "true"
+      status: ok
+      text:
+        es: Cambios grandes de entorno exigen recalcular el modelo.
+        en: Large environment changes require recalculating the model.
+    graph_rules:
+    - id: g_graph
+      when: "true"
+      status: info
+      text:
+        es: La dependencia con g es inversa en el periodo.
+        en: The dependence on g is inverse in the period.
+    likely_errors:
+    - id: g_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error común: usar g genérico sin justificar ubicación o unidades."
+        en: "Common mistake: using generic g without justifying location or units."
+    next_step_rules:
+    - id: g_next
+      when: "true"
+      status: tip
+      text:
+        es: Verifica g antes de comparar resultados entre laboratorios o planetas.
+        en: Verify g before comparing results across labs or planets.
+
+  theta:
+    summary_rules:
+    - id: theta_summary
+      when: "true"
+      status: info
+      text:
+        es: El ángulo indica el estado instantáneo del péndulo respecto al equilibrio.
+        en: The angle indicates the pendulum's instantaneous state relative to equilibrium.
+    physical_reading_rules:
+    - id: theta_physical
+      when: "true"
+      status: info
+      text:
+        es: El signo de theta muestra hacia qué lado se mueve el cuerpo y si la restauración actúa.
+        en: The sign of theta shows which side the body moves to and whether restoration acts.
+    coherence_rules:
+    - id: theta_coherence
+      when: "true"
+      status: ok
+      text:
+        es: Theta debe mantenerse en radianes cuando se usa la aproximación lineal.
+        en: Theta must be kept in radians when using the linear approximation.
+    model_validity_rules:
+    - id: theta_validity
+      when: "true"
+      status: ok
+      text:
+        es: Si theta deja de ser pequeña, la forma lineal ya no es suficiente.
+        en: If theta stops being small, the linear form is no longer sufficient.
+    graph_rules:
+    - id: theta_graph
+      when: "true"
+      status: info
+      text:
+        es: La gráfica de theta(t) muestra máximos, mínimos y cruces por equilibrio.
+        en: The theta(t) graph shows maxima, minima, and equilibrium crossings.
+    likely_errors:
+    - id: theta_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error común: mezclar grados con radianes en la ecuación de movimiento."
+        en: "Common mistake: mixing degrees and radians in the motion equation."
+    next_step_rules:
+    - id: theta_next
+      when: "true"
+      status: tip
+      text:
+        es: Usa theta para decidir si debes pasar al modelo no lineal.
+        en: Use theta to decide whether to move to the nonlinear model.
+
+  theta0:
+    summary_rules:
+    - id: theta0_summary
+      when: "true"
+      status: info
+      text:
+        es: La amplitud fija el tamaño del desplazamiento inicial.
+        en: Amplitude sets the size of the initial displacement.
+    physical_reading_rules:
+    - id: theta0_physical
+      when: "true"
+      status: info
+      text:
+        es: Una amplitud mayor puede cambiar el periodo real y desplazar la lectura lineal.
+        en: A larger amplitude can change the real period and shift the linear reading.
+    coherence_rules:
+    - id: theta0_coherence
+      when: "true"
+      status: ok
+      text:
+        es: La amplitud debe ser no negativa y coherente con el modelo escogido.
+        en: Amplitude must be non-negative and coherent with the chosen model.
+    model_validity_rules:
+    - id: theta0_validity
+      when: "true"
+      status: ok
+      text:
+        es: Si theta0 es grande, conviene usar la ecuación no lineal.
+        en: If theta0 is large, the nonlinear equation should be used.
+    graph_rules:
+    - id: theta0_graph
+      when: "true"
+      status: info
+      text:
+        es: La amplitud controla la separación entre máximos en theta(t).
+        en: Amplitude controls the spacing between maxima in theta(t).
+    likely_errors:
+    - id: theta0_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error común: asumir que cualquier amplitud sirve para el periodo lineal."
+        en: "Common mistake: assuming any amplitude works for the linear period."
+    next_step_rules:
+    - id: theta0_next
+      when: "true"
+      status: tip
+      text:
+        es: Revisa theta0 antes de decidir si la aproximación es fiable.
+        en: Check theta0 before deciding whether the approximation is reliable.
+
+  omega0:
+    summary_rules:
+    - id: omega0_summary
+      when: "true"
+      status: info
+      text:
+        es: La pulsación natural resume la rapidez angular propia del sistema.
+        en: The natural angular frequency summarizes the system's intrinsic angular pace.
+    physical_reading_rules:
+    - id: omega0_physical
+      when: "true"
+      status: info
+      text:
+        es: Si omega0 sube, el sistema completa ciclos más rápido porque la restauración es más intensa.
+        en: If omega0 rises, the system completes cycles faster because restoration is stronger.
+    coherence_rules:
+    - id: omega0_coherence
+      when: "true"
+      status: ok
+      text:
+        es: Omega0 debe ser positiva y compatible con T y f.
+        en: Omega0 must be positive and compatible with T and f.
+    model_validity_rules:
+    - id: omega0_validity
+      when: "true"
+      status: ok
+      text:
+        es: La pulsación lineal solo describe bien ángulos pequeños.
+        en: The linear angular frequency only describes small angles well.
+    graph_rules:
+    - id: omega0_graph
+      when: "true"
+      status: info
+      text:
+        es: Omega0 es la escala inversa que organiza la gráfica del periodo.
+        en: Omega0 is the inverse scale that organizes the period graph.
+    likely_errors:
+    - id: omega0_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error común: confundir omega0 con frecuencia en Hz."
+        en: "Common mistake: confusing omega0 with frequency in Hz."
+    next_step_rules:
+    - id: omega0_next
+      when: "true"
+      status: tip
+      text:
+        es: Usa omega0 para anticipar si la respuesta será rápida o lenta.
+        en: Use omega0 to anticipate whether the response will be fast or slow.
+
+  T:
+    summary_rules:
+    - id: T_summary
+      when: "true"
+      status: info
+      text:
+        es: El periodo es la magnitud temporal más directa para comparar ensayos.
+        en: Period is the most direct time quantity for comparing trials.
+    physical_reading_rules:
+    - id: T_physical
+      when: "true"
+      status: info
+      text:
+        es: Un T mayor significa oscilaciones más lentas porque cada ciclo tarda más.
+        en: A larger T means slower oscillations because each cycle takes longer.
+    coherence_rules:
+    - id: T_coherence
+      when: "true"
+      status: ok
+      text:
+        es: T debe ser positiva y consistente con omega0 y f.
+        en: T must be positive and consistent with omega0 and f.
+    model_validity_rules:
+    - id: T_validity
+      when: "true"
+      status: ok
+      text:
+        es: T lineal es útil solo cuando la amplitud es pequeña.
+        en: The linear T is useful only when the amplitude is small.
+    graph_rules:
+    - id: T_graph
+      when: "true"
+      status: info
+      text:
+        es: La curva T(L) es una referencia directa del modelo.
+        en: The T(L) curve is a direct reference of the model.
+    likely_errors:
+    - id: T_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error común: tomar medio periodo como si fuera T completo."
+        en: "Common mistake: taking half a period as if it were the full T."
+    next_step_rules:
+    - id: T_next
+      when: "true"
+      status: tip
+      text:
+        es: Compara T con f para comprobar coherencia numérica.
+        en: Compare T with f to check numerical coherence.
+
+  f:
+    summary_rules:
+    - id: f_summary
+      when: "true"
+      status: info
+      text:
+        es: La frecuencia mide ciclos por segundo y es el inverso del periodo.
+        en: Frequency measures cycles per second and is the inverse of period.
+    physical_reading_rules:
+    - id: f_physical
+      when: "true"
+      status: info
+      text:
+        es: Si f sube, el tiempo entre repeticiones disminuye porque el ciclo se acelera.
+        en: If f rises, the time between repetitions decreases because the cycle speeds up.
+    coherence_rules:
+    - id: f_coherence
+      when: "true"
+      status: ok
+      text:
+        es: F debe ser positiva y compatible con T.
+        en: F must be positive and compatible with T.
+    model_validity_rules:
+    - id: f_validity
+      when: "true"
+      status: ok
+      text:
+        es: La interpretación en Hz vale mientras el movimiento siga siendo periódico.
+        en: The Hz interpretation holds while the motion remains periodic.
+    graph_rules:
+    - id: f_graph
+      when: "true"
+      status: info
+      text:
+        es: F permite leer la rapidez del ciclo de forma directa.
+        en: F lets you read cycle speed directly.
+    likely_errors:
+    - id: f_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error común: mezclar Hz con rad/s sin convertir."
+        en: "Common mistake: mixing Hz and rad/s without converting."
+    next_step_rules:
+    - id: f_next
+      when: "true"
+      status: tip
+      text:
+        es: Usa f para comparar el péndulo con otras oscilaciones.
+        en: Use f to compare the pendulum with other oscillations.
+
+  t:
+    summary_rules:
+    - id: t_summary
+      when: "true"
+      status: info
+      text:
+        es: El tiempo organiza la evolución de las variables del péndulo.
+        en: Time organizes the evolution of the pendulum variables.
+    physical_reading_rules:
+    - id: t_physical
+      when: "true"
+      status: info
+      text:
+        es: t permite leer máximos, mínimos y cruces de equilibrio como eventos sucesivos.
+        en: t lets you read maxima, minima, and equilibrium crossings as successive events.
+    coherence_rules:
+    - id: t_coherence
+      when: "true"
+      status: ok
+      text:
+        es: t debe usarse como variable temporal no negativa en el intervalo observado.
+        en: t must be used as a non-negative time variable in the observed interval.
+    model_validity_rules:
+    - id: t_validity
+      when: "true"
+      status: ok
+      text:
+        es: La referencia temporal debe ser coherente con las condiciones iniciales.
+        en: The time reference must be coherent with the initial conditions.
+    graph_rules:
+    - id: t_graph
+      when: "true"
+      status: info
+      text:
+        es: El eje temporal conecta las medidas con la solución analítica.
+        en: The time axis connects measurements to the analytic solution.
+    likely_errors:
+    - id: t_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error común: comparar tiempos sin fijar el mismo origen."
+        en: "Common mistake: comparing times without fixing the same origin."
+    next_step_rules:
+    - id: t_next
+      when: "true"
+      status: tip
+      text:
+        es: Define t = 0 antes de discutir la fase.
+        en: Define t = 0 before discussing the phase.
+
+  phi:
+    summary_rules:
+    - id: phi_summary
+      when: "true"
+      status: info
+      text:
+        es: La fase inicial desplaza la solución en el tiempo.
+        en: The initial phase shifts the solution in time.
+    physical_reading_rules:
+    - id: phi_physical
+      when: "true"
+      status: info
+      text:
+        es: Phi cambia cuándo aparecen máximos y mínimos, no la física del periodo.
+        en: Phi changes when maxima and minima appear, not the physics of the period.
+    coherence_rules:
+    - id: phi_coherence
+      when: "true"
+      status: ok
+      text:
+        es: La fase debe poder interpretarse como un desfase angular.
+        en: The phase must be interpretable as an angular offset.
+    model_validity_rules:
+    - id: phi_validity
+      when: "true"
+      status: ok
+      text:
+        es: Phi no cambia el periodo, solo el punto de partida temporal.
+        en: Phi does not change the period, only the temporal starting point.
+    graph_rules:
+    - id: phi_graph
+      when: "true"
+      status: info
+      text:
+        es: La fase desplaza la gráfica sin cambiar su forma básica.
+        en: The phase shifts the graph without changing its basic shape.
+    likely_errors:
+    - id: phi_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error común: atribuir a phi un cambio de longitud o gravedad."
+        en: "Common mistake: attributing a change in length or gravity to phi."
+    next_step_rules:
+    - id: phi_next
+      when: "true"
+      status: tip
+      text:
+        es: Usa phi para ajustar la condición inicial observada.
+        en: Use phi to fit the observed initial condition.
+
+  theta_dot:
+    summary_rules:
+    - id: theta_dot_summary
+      when: "true"
+      status: info
+      text:
+        es: La velocidad angular conecta movimiento y energía cinética.
+        en: Angular velocity connects motion and kinetic energy.
+    physical_reading_rules:
+    - id: theta_dot_physical
+      when: "true"
+      status: info
+      text:
+        es: theta_dot cambia de signo cuando el cuerpo invierte el sentido.
+        en: theta_dot changes sign when the body reverses direction.
+    coherence_rules:
+    - id: theta_dot_coherence
+      when: "true"
+      status: ok
+      text:
+        es: Theta_dot debe ser coherente con theta y con la energía.
+        en: Theta_dot must be coherent with theta and with energy.
+    model_validity_rules:
+    - id: theta_dot_validity
+      when: "true"
+      status: ok
+      text:
+        es: La magnitud es útil en el modelo ideal y también en el análisis energético.
+        en: The magnitude is useful in the ideal model and in energy analysis.
+    graph_rules:
+    - id: theta_dot_graph
+      when: "true"
+      status: info
+      text:
+        es: La velocidad angular es una lectura derivada de la gráfica de theta.
+        en: Angular velocity is a derived reading from the theta graph.
+    likely_errors:
+    - id: theta_dot_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error común: confundir velocidad angular con pulsación natural."
+        en: "Common mistake: confusing angular velocity with natural angular frequency."
+    next_step_rules:
+    - id: theta_dot_next
+      when: "true"
+      status: tip
+      text:
+        es: Usa theta_dot para cerrar balances de energía.
+        en: Use theta_dot to close energy balances.
+
+  theta_dd:
+    summary_rules:
+    - id: theta_dd_summary
+      when: "true"
+      status: info
+      text:
+        es: La aceleración angular revela la restauración instantánea.
+        en: Angular acceleration reveals the instantaneous restoration.
+    physical_reading_rules:
+    - id: theta_dd_physical
+      when: "true"
+      status: info
+      text:
+        es: Theta_dd apunta hacia el equilibrio cuando el péndulo se aleja de él.
+        en: Theta_dd points toward equilibrium when the pendulum moves away from it.
+    coherence_rules:
+    - id: theta_dd_coherence
+      when: "true"
+      status: ok
+      text:
+        es: Theta_dd debe ser coherente con la ecuación no lineal.
+        en: Theta_dd must be coherent with the nonlinear equation.
+    model_validity_rules:
+    - id: theta_dd_validity
+      when: "true"
+      status: ok
+      text:
+        es: Su lectura dinámica es más útil cuando la amplitud no es pequeña.
+        en: Its dynamic reading is more useful when the amplitude is not small.
+    graph_rules:
+    - id: theta_dd_graph
+      when: "true"
+      status: info
+      text:
+        es: La curvatura temporal se refleja en theta_dd.
+        en: Temporal curvature is reflected in theta_dd.
+    likely_errors:
+    - id: theta_dd_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error común: creer que theta_dd y theta_dot son lo mismo."
+        en: "Common mistake: thinking theta_dd and theta_dot are the same."
+    next_step_rules:
+    - id: theta_dd_next
+      when: "true"
+      status: tip
+      text:
+        es: Usa theta_dd para decidir si la linealización sigue siendo válida.
+        en: Use theta_dd to decide whether linearization remains valid.
+
+  E:
+    summary_rules:
+    - id: E_summary
+      when: "true"
+      status: info
+      text:
+        es: La energía resume el intercambio entre velocidad y desplazamiento.
+        en: Energy summarizes the exchange between speed and displacement.
+    physical_reading_rules:
+    - id: E_physical
+      when: "true"
+      status: info
+      text:
+        es: E permanece constante en el modelo ideal sin rozamiento.
+        en: E remains constant in the ideal frictionless model.
+    coherence_rules:
+    - id: E_coherence
+      when: "true"
+      status: ok
+      text:
+        es: La energía debe ser coherente con theta y theta_dot.
+        en: Energy must be coherent with theta and theta_dot.
+    model_validity_rules:
+    - id: E_validity
+      when: "true"
+      status: ok
+      text:
+        es: La energía es especialmente útil cuando la amplitud deja de ser pequeña.
+        en: Energy is especially useful when amplitude stops being small.
+    graph_rules:
+    - id: E_graph
+      when: "true"
+      status: info
+      text:
+        es: La gráfica de energía ayuda a interpretar amplitudes finitas.
+        en: The energy graph helps interpret finite amplitudes.
+    likely_errors:
+    - id: E_error
+      when: "true"
+      status: warning
+      text:
+        es: "Error común: olvidar la parte potencial o la cinética."
+        en: "Common mistake: forgetting the potential or kinetic part."
+    next_step_rules:
+    - id: E_next
+      when: "true"
+      status: tip
+      text:
+        es: Usa E para confirmar si conviene pasar al modelo no lineal.
+        en: Use E to confirm whether you should move to the nonlinear model.

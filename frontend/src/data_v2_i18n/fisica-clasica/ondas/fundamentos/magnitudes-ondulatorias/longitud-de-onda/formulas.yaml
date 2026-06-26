@@ -1,0 +1,114 @@
+version: v5
+leaf_id: longitud-de-onda
+formulas:
+  - id: numero_onda_longitud
+    title: { es: Número de onda y longitud de onda, en: Wavenumber and wavelength }
+    equation: "k = 2*pi / lambda"
+    latex: "k=2\\pi/\\lambda % k lambda"
+    rearrangements:
+      - target: k
+        equation: "k = 2*pi / lambda"
+        latex: "k=2\\pi/\\lambda % k lambda"
+      - target: lambda
+        equation: "lambda = 2*pi / k"
+        latex: "\\lambda=2\\pi/k % lambda k"
+    category: fundamental
+    relation_type: spatial_phase_relation
+    physical_meaning: { es: Relaciona la repetición espacial con el ritmo angular de fase., en: Relates spatial repetition to angular phase rate. }
+    constraints: ["longitud de onda positiva", "patron periodico espacial"]
+    validity: { es: Válida para ondas con repetición espacial definida., en: Valid for waves with defined spatial repetition. }
+    dimension_check: "[L^-1] = [L^-1]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, interpretacion, grafico_coord]
+    interpretation_tags: [longitud_onda, numero_onda, fase]
+    result_semantics:
+      target: lambda
+      kind: positive_length
+      sign_meaning: { es: Se interpreta como distancia positiva., en: Interpreted as positive distance. }
+      absolute_value_meaning: { es: Mide una separación espacial completa del ciclo., en: Measures one complete spatial separation of the cycle. }
+    domain_checks:
+      - id: lambda_positive
+        condition: "lambda > 0"
+        message: { es: La longitud de onda debe ser positiva., en: Wavelength must be positive. }
+    coherence_checks:
+      - id: inverse_spatial_rate
+        condition: "k*lambda == 2*pi"
+        message: { es: Número de onda y longitud de onda deben ser inversos angulares., en: Wavenumber and wavelength must be angular inverses. }
+    graph_implications: { es: En el gráfico, mayor lambda separa más las crestas., en: On the graph, larger lambda separates crests more. }
+    pedagogical_triggers:
+      - id: amplitude_confusion
+        text: { es: Si el alumno mide verticalmente, recordar que lambda se mide horizontalmente., en: If the student measures vertically, remind them that lambda is measured horizontally. }
+  - id: velocidad_longitud_frecuencia
+    title: { es: Rapidez, longitud de onda y frecuencia, en: Speed, wavelength, and frequency }
+    equation: "v = lambda * f"
+    latex: "v=\\lambda f % v lambda f"
+    rearrangements:
+      - target: v
+        equation: "v = lambda * f"
+        latex: "v=\\lambda f % v lambda f"
+      - target: lambda
+        equation: "lambda = v / f"
+        latex: "\\lambda=v/f % lambda v f"
+    category: derived
+    relation_type: propagation_relation
+    physical_meaning: { es: La rapidez del patrón es la distancia de un ciclo multiplicada por ciclos por segundo., en: Pattern speed is one-cycle distance multiplied by cycles per second. }
+    constraints: ["frecuencia positiva", "medio con rapidez definida"]
+    validity: { es: Válida en ondas periódicas con rapidez de propagación estable., en: Valid for periodic waves with stable propagation speed. }
+    dimension_check: "[L T^-1] = [L] [T^-1]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, interpretacion, grafico_coord]
+    interpretation_tags: [propagacion, frecuencia, longitud_onda]
+    result_semantics:
+      target: lambda
+      kind: positive_length
+      sign_meaning: { es: La longitud resultante se interpreta positiva., en: The resulting length is interpreted as positive. }
+      absolute_value_meaning: { es: Indica distancia espacial por ciclo temporal., en: Indicates spatial distance per temporal cycle. }
+    domain_checks:
+      - id: frequency_positive
+        condition: "f > 0"
+        message: { es: La frecuencia debe ser positiva., en: Frequency must be positive. }
+    coherence_checks:
+      - id: speed_units
+        condition: "dimension(v) == [L T^-1]"
+        message: { es: El producto debe tener unidades de velocidad., en: The product must have velocity units. }
+    graph_implications: { es: Para v fija, mayor f comprime la separación espacial., en: For fixed v, larger f compresses spatial spacing. }
+    pedagogical_triggers:
+      - id: speed_frequency_confusion
+        text: { es: Si el alumno cree que f sola da lambda, pedir la rapidez del medio., en: If the student thinks f alone gives lambda, ask for medium speed. }
+  - id: longitud_por_crestas
+    title: { es: Longitud de onda por medición de crestas, en: Wavelength from crest measurement }
+    equation: "lambda = Delta_x / n"
+    latex: "\\lambda=\\Delta x/n % lambda Delta_x n"
+    rearrangements:
+      - target: lambda
+        equation: "lambda = Delta_x / n"
+        latex: "\\lambda=\\Delta x/n % lambda Delta_x n"
+    category: measurement
+    relation_type: operational_definition
+    physical_meaning: { es: Estima la longitud de onda dividiendo una separación medida entre intervalos completos., en: Estimates wavelength by dividing a measured separation by complete intervals. }
+    constraints: ["intervalos completos", "estados equivalentes"]
+    validity: { es: Válida si los puntos medidos están en estados equivalentes consecutivos o repetidos., en: Valid if measured points are in consecutive or repeated equivalent states. }
+    dimension_check: "[L] = [L]"
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, interpretacion, grafico_coord]
+    interpretation_tags: [medida, crestas, escala_espacial]
+    result_semantics:
+      target: lambda
+      kind: measured_length
+      sign_meaning: { es: Se toma como longitud positiva medida., en: Taken as a positive measured length. }
+      absolute_value_meaning: { es: Representa la separación media por intervalo espacial completo., en: Represents average separation per complete spatial interval. }
+    domain_checks:
+      - id: intervals_positive
+        condition: "n > 0"
+        message: { es: El número de intervalos debe ser positivo., en: Number of intervals must be positive. }
+    coherence_checks:
+      - id: equivalent_states
+        condition: "same_phase_states"
+        message: { es: Los puntos extremos deben estar en estados equivalentes., en: Endpoints must be in equivalent states. }
+    graph_implications: { es: En el gráfico, Delta_x debe abarcar n separaciones completas., en: On the graph, Delta_x must span n complete separations. }
+    pedagogical_triggers:
+      - id: crest_count_error
+        text: { es: Si el alumno cuenta crestas, revisar que intervalos son uno menos que crestas consecutivas., en: If the student counts crests, check that intervals are one fewer than consecutive crests. }

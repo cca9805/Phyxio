@@ -1,0 +1,677 @@
+const e=`version: "5.0"
+id: interp-sistema-cerrado
+leaf_id: sistema-cerrado
+
+nombre:
+  es: Interpretación — Sistema cerrado
+  en: Interpretation — Closed System
+
+scope:
+  area: fisica-clasica
+  bloque: termodinamica
+  subbloque: fundamentos
+  parent_id: sistemas-termodinamicos
+  ruta_relativa: fisica-clasica/termodinamica/fundamentos/sistemas-termodinamicos/sistema-cerrado
+
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación
+    en: Interpretation
+  priority_order:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+  inline_limits:
+    max_sections: 3
+    priority: [summary, likely_errors, coherence]
+
+dependencies:
+  formulas:
+    - primer_principio_cerrado
+    - segundo_principio_cerrado
+  magnitudes:
+    - U
+    - DeltaU
+    - Q
+    - W
+    - S
+
+global_context:
+  physical_domain:
+    es: "Termodinámica clásica. Sistema cerrado: frontera impermeable a la materia que permite intercambio de calor y trabajo con el entorno. El primer principio relaciona la variación de energía interna con los intercambios de calor y trabajo."
+    en: "Classical thermodynamics. Closed system: boundary impermeable to matter that allows heat and work exchange with the surroundings. The first law relates the change in internal energy to heat and work exchanges."
+  axis_convention:
+    es: "Convenio de signo IUPAC: calor Q positivo cuando entra al sistema; trabajo W positivo cuando el entorno realiza trabajo sobre el sistema (compresión). En convención de ingeniería W es positivo cuando el sistema realiza trabajo: declarar siempre cuál se usa."
+    en: "IUPAC sign convention: heat Q positive when entering the system; work W positive when the surroundings perform work on the system (compression). In engineering convention W is positive when the system does work: always declare which one is used."
+  standard_assumptions:
+    - "Frontera impermeable a toda forma de materia durante todo el proceso"
+    - "Calor Q y trabajo W son los únicos mecanismos de transferencia de energía"
+    - "Los estados termodinámicos inicial y final están bien definidos"
+    - "Sistema macroscópico en régimen clásico de equilibrio"
+  standard_warnings:
+    - "Declarar la convención de signos antes de aplicar el primer principio"
+    - "DeltaU es función de estado; Q y W dependen del camino termodinámico"
+    - "La entropía del sistema cerrado puede disminuir sin violar el segundo principio"
+
+output_contract:
+  sections:
+    - summary
+    - physical_reading
+    - coherence
+    - model_validity
+    - graph_reading
+    - likely_errors
+    - next_step
+
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura del gráfico
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+
+targets:
+
+  DeltaU:
+    magnitude_type: derived
+    semantic_role:
+      es: "Resultado principal del primer principio. Indica cuánta energía interna ha ganado o perdido el sistema cerrado."
+      en: "Main result of the first law. Indicates how much internal energy the closed system has gained or lost."
+    summary_rules:
+      - id: deltaU_positive
+        when: "DeltaU > 0"
+        status: ok
+        text:
+          es: "[[DeltaU]] positivo: el sistema ha ganado energía interna neta. La suma de calor recibido más trabajo recibido es positiva."
+          en: "Positive [[DeltaU]]: the system has gained net internal energy. The sum of heat received plus work received is positive."
+      - id: deltaU_negative
+        when: "DeltaU < 0"
+        status: ok
+        text:
+          es: "[[DeltaU]] negativo: el sistema ha perdido energía interna neta. Ha cedido más energía al entorno de la que ha recibido."
+          en: "Negative [[DeltaU]]: the system has lost net internal energy. It has transferred more energy to the surroundings than it has received."
+      - id: deltaU_zero
+        when: "DeltaU == 0"
+        status: ok
+        text:
+          es: "[[DeltaU]] nulo: la energía interna no ha variado. El proceso es cíclico o [[Q]] y [[W]] se compensan exactamente."
+          en: "Zero [[DeltaU]]: internal energy has not changed. The process is cyclic or [[Q]] and [[W]] exactly cancel."
+    physical_reading_rules:
+      - id: deltaU_reading_positive
+        when: "DeltaU > 0"
+        status: ok
+        text:
+          es: "[[DeltaU]] positivo indica que la temperatura interna ha aumentado (gas ideal), o ha habido un cambio de fase endotérmico, o ambos. El sistema ha absorbido más energía de la que ha cedido al entorno."
+          en: "Positive [[DeltaU]] indicates the internal temperature has increased (ideal gas), or there has been an endothermic phase change, or both. The system has absorbed more energy than it has released to the surroundings."
+      - id: deltaU_reading_negative
+        when: "DeltaU < 0"
+        status: ok
+        text:
+          es: "[[DeltaU]] negativo causa una disminución de temperatura (gas ideal), un cambio de fase exotérmico, o trabajo neto realizado por el sistema sobre el entorno. El sistema ha liberado más energía de la que ha recibido."
+          en: "Negative [[DeltaU]] causes a temperature decrease (ideal gas), an exothermic phase change, or net work done by the system on the surroundings. The system has released more energy than it has received."
+      - id: deltaU_reading_zero
+        when: "DeltaU == 0"
+        status: ok
+        text:
+          es: "[[DeltaU]] nulo: para un gas ideal, temperatura constante (proceso isotérmico). El calor absorbido iguala exactamente el trabajo cedido al entorno."
+          en: "Zero [[DeltaU]]: for an ideal gas, constant temperature (isothermal process). The heat absorbed exactly equals the work released to the surroundings."
+    coherence_rules:
+      - id: deltaU_coherence_imposible_pos
+        when: "DeltaU > 0"
+        status: ok
+        text:
+          es: "Verificar que [[Q]] + [[W]] = [[DeltaU]]. Si [[Q]] y [[W]] son ambos negativos y [[DeltaU]] es positivo, hay un error de signo."
+          en: "Verify that [[Q]] + [[W]] = [[DeltaU]]. If both [[Q]] and [[W]] are negative and [[DeltaU]] is positive, there is a sign error."
+      - id: deltaU_coherence_imposible_neg
+        when: "DeltaU < 0"
+        status: ok
+        text:
+          es: "Verificar que [[Q]] + [[W]] = [[DeltaU]]. Si [[Q]] y [[W]] son ambos positivos y [[DeltaU]] es negativo, hay un error de signo."
+          en: "Verify that [[Q]] + [[W]] = [[DeltaU]]. If both [[Q]] and [[W]] are positive and [[DeltaU]] is negative, there is a sign error."
+      - id: deltaU_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El primer principio exige [[DeltaU]] = [[Q]] + [[W]]. Cualquier discrepancia entre los tres valores indica un error de convención de signos o un mecanismo de transferencia no contabilizado."
+          en: "The first law requires [[DeltaU]] = [[Q]] + [[W]]. Any discrepancy among the three values indicates a sign convention error or an unaccounted transfer mechanism."
+    model_validity_rules:
+      - id: deltaU_validity_frontera
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo de sistema cerrado es válido mientras la frontera sea impermeable a la materia. Si hay flujo de masa, usar el modelo de sistema abierto con términos de entalpía de flujo."
+          en: "The closed system model is valid as long as the boundary is impermeable to matter. If there is mass flow, use the open system model with enthalpy flow terms."
+      - id: deltaU_validity_adiabatico
+        when: "DeltaU == 0"
+        status: ok
+        text:
+          es: "Si el proceso se declara isotérmico de gas ideal, confirmar que no hay cambios de fase ni reacciones que alteren [[U]] sin cambiar la temperatura."
+          en: "If the process is declared isothermal for an ideal gas, confirm there are no phase changes or reactions that alter [[U]] without changing temperature."
+      - id: deltaU_validity_real
+        when: "true"
+        status: ok
+        text:
+          es: "En sistemas reales, verificar que el tiempo del proceso es corto respecto a la constante de tiempo térmica del sistema, para que la hipótesis de frontera impermeable sea válida."
+          en: "In real systems, verify that the process time is short compared to the thermal time constant of the system, so that the impermeable boundary hypothesis holds."
+    graph_rules:
+      - id: deltaU_graph_rising
+        when: "DeltaU > 0"
+        status: ok
+        text:
+          es: "En la gráfica de energía interna vs proceso, la curva sube. La pendiente positiva refleja la ganancia neta de energía interna del sistema cerrado."
+          en: "In the internal energy vs process graph, the curve rises. The positive slope reflects the net internal energy gain of the closed system."
+      - id: deltaU_graph_falling
+        when: "DeltaU < 0"
+        status: ok
+        text:
+          es: "La curva desciende. En un proceso cíclico completo, la curva debe regresar exactamente al punto de partida porque [[DeltaU]] es función de estado."
+          en: "The curve descends. In a complete cyclic process, the curve must return exactly to the starting point because [[DeltaU]] is a state function."
+      - id: deltaU_graph_flat
+        when: "DeltaU == 0"
+        status: ok
+        text:
+          es: "Curva horizontal: [[DeltaU]] nulo corresponde a un proceso cíclico o isotérmico de gas ideal. El área neta bajo la curva de [[Q]] vs proceso iguala el área bajo la curva de [[W]] vs proceso."
+          en: "Flat curve: zero [[DeltaU]] corresponds to a cyclic or ideal gas isothermal process. The net area under the [[Q]] vs process curve equals the area under the [[W]] vs process curve."
+    likely_errors:
+      - id: deltaU_error_signo_W
+        when: "DeltaU > 0"
+        status: warning
+        text:
+          es: "Error frecuente: sumar el valor absoluto del trabajo en lugar de aplicar el signo correcto. Si el sistema realiza trabajo (expansión), [[W]] es negativo en convención IUPAC y debe restarse de [[Q]] para obtener [[DeltaU]]."
+          en: "Common error: adding the absolute value of work instead of applying the correct sign. If the system does work (expansion), [[W]] is negative in IUPAC convention and must be subtracted from [[Q]] to obtain [[DeltaU]]."
+      - id: deltaU_error_camino
+        when: "true"
+        status: warning
+        text:
+          es: "Error conceptual: creer que [[DeltaU]] depende del camino termodinámico. [[DeltaU]] es función de estado y solo depende de los estados inicial y final, aunque [[Q]] y [[W]] individuales dependan del camino."
+          en: "Conceptual error: believing [[DeltaU]] depends on the thermodynamic path. [[DeltaU]] is a state function and depends only on the initial and final states, even though individual [[Q]] and [[W]] depend on the path."
+      - id: deltaU_error_calor_estado
+        when: "true"
+        status: warning
+        text:
+          es: "Error clásico: decir que el sistema tiene calor. [[Q]] no es una propiedad del estado del sistema; es energía en tránsito. El sistema tiene energía interna [[U]], no calor."
+          en: "Classic error: saying the system has heat. [[Q]] is not a property of the system state; it is energy in transit. The system has internal energy [[U]], not heat."
+    next_step_rules:
+      - id: deltaU_next_adiabatico
+        when: "DeltaU > 0"
+        status: ok
+        text:
+          es: "Con [[DeltaU]] positivo conocido, explorar si el proceso fue adiabático (para calcular [[W]] = [[DeltaU]]) o isocórico (para calcular [[Q]] = [[DeltaU]]). Conectar con temperatura y presión del estado final."
+          en: "With positive [[DeltaU]] known, explore whether the process was adiabatic (to calculate [[W]] = [[DeltaU]]) or isochoric (to calculate [[Q]] = [[DeltaU]]). Connect to the temperature and pressure of the final state."
+      - id: deltaU_next_ciclo
+        when: "DeltaU == 0"
+        status: ok
+        text:
+          es: "Con [[DeltaU]] nulo, analizar el proceso cíclico completo o confirmar condiciones del proceso isotérmico. Conectar con la eficiencia de ciclos termodinámicos y el concepto de trabajo neto."
+          en: "With zero [[DeltaU]], analyze the complete cyclic process or confirm isothermal process conditions. Connect to thermodynamic cycle efficiency and the concept of net work."
+      - id: deltaU_next_entropia
+        when: "true"
+        status: ok
+        text:
+          es: "Después de verificar [[DeltaU]], calcular la variación de [[S]] del sistema para determinar la irreversibilidad del proceso y comparar con el límite de Clausius."
+          en: "After verifying [[DeltaU]], calculate the change in [[S]] of the system to determine process irreversibility and compare with the Clausius limit."
+
+  Q:
+    magnitude_type: parameter
+    semantic_role:
+      es: "Mecanismo de transferencia de energía por gradiente térmico a través de la frontera del sistema cerrado."
+      en: "Energy transfer mechanism by thermal gradient through the closed system boundary."
+    summary_rules:
+      - id: Q_positive
+        when: "Q > 0"
+        status: ok
+        text:
+          es: "[[Q]] positivo: el sistema absorbe calor del entorno. El entorno está a mayor temperatura que el sistema en la frontera de intercambio."
+          en: "Positive [[Q]]: the system absorbs heat from the surroundings. The surroundings are at a higher temperature than the system at the exchange boundary."
+      - id: Q_negative
+        when: "Q < 0"
+        status: ok
+        text:
+          es: "[[Q]] negativo: el sistema cede calor al entorno. El sistema está a mayor temperatura que el entorno en la frontera de intercambio."
+          en: "Negative [[Q]]: the system releases heat to the surroundings. The system is at a higher temperature than the surroundings at the exchange boundary."
+      - id: Q_zero
+        when: "Q == 0"
+        status: ok
+        text:
+          es: "[[Q]] nulo: proceso adiabático. No hay transferencia de calor y [[DeltaU]] es igual a [[W]]."
+          en: "Zero [[Q]]: adiabatic process. No heat transfer and [[DeltaU]] equals [[W]]."
+    physical_reading_rules:
+      - id: Q_reading_phase
+        when: "Q > 0"
+        status: ok
+        text:
+          es: "[[Q]] positivo puede corresponder a un calentamiento del sistema (aumento de temperatura) o a un cambio de fase endotérmico (fusión, vaporización) a temperatura constante."
+          en: "Positive [[Q]] can correspond to a system temperature increase or an endothermic phase change (melting, vaporization) at constant temperature."
+      - id: Q_reading_adiabatic
+        when: "Q == 0"
+        status: ok
+        text:
+          es: "Proceso adiabático no implica proceso isotérmico. En una compresión adiabática de gas ideal, [[Q]] es nulo pero la temperatura aumenta porque [[W]] es positivo y [[DeltaU]] = [[W]]."
+          en: "Adiabatic process does not imply isothermal process. In adiabatic compression of ideal gas, [[Q]] is zero but temperature increases because [[W]] is positive and [[DeltaU]] = [[W]]."
+      - id: Q_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q]] mide la energía que cruza la frontera como calor, impulsada por un gradiente de temperatura. No es una propiedad del estado del sistema: es energía en tránsito."
+          en: "[[Q]] measures the energy crossing the boundary as heat, driven by a temperature gradient. It is not a property of the system state: it is energy in transit."
+    coherence_rules:
+      - id: Q_coherence_sign
+        when: "Q > 0"
+        status: ok
+        text:
+          es: "[[Q]] positivo en convención IUPAC significa que el sistema absorbe calor. Verificar que la fuente de calor está a mayor temperatura que el sistema (condición necesaria para la transferencia de calor espontánea)."
+          en: "Positive [[Q]] in IUPAC convention means the system absorbs heat. Verify that the heat source is at a higher temperature than the system (necessary condition for spontaneous heat transfer)."
+      - id: Q_coherence_adiabatic
+        when: "Q == 0"
+        status: ok
+        text:
+          es: "[[Q]] nulo y [[DeltaU]] no nulo solo es coherente si [[W]] es no nulo. Verificar que hay un mecanismo de trabajo que justifique el cambio de energía interna."
+          en: "Zero [[Q]] and non-zero [[DeltaU]] is coherent only if [[W]] is non-zero. Verify there is a work mechanism that justifies the internal energy change."
+      - id: Q_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q]] y [[W]] son independientes entre sí; cualquier combinación de signos es posible en sistema cerrado. Solo la suma [[Q]] + [[W]] queda restringida a ser igual a [[DeltaU]]."
+          en: "[[Q]] and [[W]] are independent of each other; any combination of signs is possible in a closed system. Only the sum [[Q]] + [[W]] is constrained to equal [[DeltaU]]."
+    model_validity_rules:
+      - id: Q_validity_path
+        when: "true"
+        status: ok
+        text:
+          es: "[[Q]] depende del camino termodinámico. El mismo estado final puede alcanzarse con valores de [[Q]] muy distintos. Si se requiere un valor específico de [[Q]], especificar el tipo de proceso (isobárico, isotérmico, etc.)."
+          en: "[[Q]] depends on the thermodynamic path. The same final state can be reached with very different [[Q]] values. If a specific [[Q]] value is required, specify the process type (isobaric, isothermal, etc.)."
+      - id: Q_validity_boundary
+        when: "true"
+        status: ok
+        text:
+          es: "La medida de [[Q]] requiere que la frontera del sistema sea diatérmica (permeable al calor). Si la frontera es adiabática, [[Q]] es cero por definición del proceso."
+          en: "Measuring [[Q]] requires that the system boundary be diathermal (permeable to heat). If the boundary is adiabatic, [[Q]] is zero by definition of the process."
+      - id: Q_validity_real
+        when: "true"
+        status: ok
+        text:
+          es: "En procesos reales, [[Q]] puede medirse con calorimetría. La incertidumbre experimental en [[Q]] se propaga directamente a la incertidumbre en [[DeltaU]] si [[W]] es conocido con precisión."
+          en: "In real processes, [[Q]] can be measured by calorimetry. Experimental uncertainty in [[Q]] propagates directly to the uncertainty in [[DeltaU]] if [[W]] is known precisely."
+    graph_rules:
+      - id: Q_graph_accum
+        when: "Q > 0"
+        status: ok
+        text:
+          es: "En la gráfica de [[Q]] acumulado vs proceso, la curva sube. La pendiente es la tasa de transferencia de calor: alta en intercambios rápidos, baja en procesos lentos."
+          en: "In the cumulative [[Q]] vs process graph, the curve rises. The slope is the heat transfer rate: high in fast exchanges, low in slow processes."
+      - id: Q_graph_zero
+        when: "Q == 0"
+        status: ok
+        text:
+          es: "En proceso adiabático, la curva de [[Q]] vs proceso es una línea horizontal en cero. La curva de [[DeltaU]] coincide con la curva de [[W]], lo que confirma [[DeltaU]] = [[W]]."
+          en: "In an adiabatic process, the [[Q]] vs process curve is a horizontal line at zero. The [[DeltaU]] curve coincides with the [[W]] curve, confirming [[DeltaU]] = [[W]]."
+      - id: Q_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "La gráfica de [[Q]] y [[W]] acumulados, representadas juntas, ilustra visualmente el balance del primer principio: la suma de ambas curvas debe coincidir con la curva de [[DeltaU]]."
+          en: "The graph of cumulative [[Q]] and [[W]] plotted together visually illustrates the first law balance: the sum of both curves must coincide with the [[DeltaU]] curve."
+    likely_errors:
+      - id: Q_error_confundir_calor_temperatura
+        when: "Q > 0"
+        status: warning
+        text:
+          es: "Error frecuente: confundir calor con temperatura. [[Q]] grande no implica temperatura alta. En una vaporización, [[Q]] es enorme y la temperatura permanece constante hasta que todo el líquido se convierte en vapor."
+          en: "Common error: confusing heat with temperature. Large [[Q]] does not imply high temperature. In vaporization, [[Q]] is large and temperature remains constant until all liquid converts to vapor."
+      - id: Q_error_adiabatico_isotermico
+        when: "Q == 0"
+        status: warning
+        text:
+          es: "Error conceptual: asumir que proceso adiabático ([[Q]] = 0) implica proceso isotérmico ([[DeltaU]] = 0). Son condiciones distintas: en una compresión adiabática de gas ideal, la temperatura aumenta aunque [[Q]] sea cero."
+          en: "Conceptual error: assuming adiabatic process ([[Q]] = 0) implies isothermal process ([[DeltaU]] = 0). These are different conditions: in adiabatic compression of an ideal gas, temperature increases even though [[Q]] is zero."
+      - id: Q_error_contenido_calor
+        when: "true"
+        status: warning
+        text:
+          es: "Error clásico: decir que el sistema tiene calor. [[Q]] no es una propiedad del estado del sistema cerrado. Una vez que [[Q]] atraviesa la frontera, se almacena como [[U]], no como calor."
+          en: "Classic error: saying the system has heat. [[Q]] is not a property of the closed system state. Once [[Q]] crosses the boundary, it is stored as [[U]], not as heat."
+    next_step_rules:
+      - id: Q_next_proceso
+        when: "Q > 0"
+        status: ok
+        text:
+          es: "Con [[Q]] conocido, identificar el tipo de proceso para calcular [[W]] y [[DeltaU]]. En proceso isocórico, [[W]] = 0 y [[DeltaU]] = [[Q]] directamente."
+          en: "With [[Q]] known, identify the process type to calculate [[W]] and [[DeltaU]]. In isochoric process, [[W]] = 0 and [[DeltaU]] = [[Q]] directly."
+      - id: Q_next_adiabatico
+        when: "Q == 0"
+        status: ok
+        text:
+          es: "En proceso adiabático, calcular [[W]] para determinar [[DeltaU]]. Conectar con el trabajo de compresión o expansión adiabática de gas ideal y la variación de temperatura asociada."
+          en: "In an adiabatic process, calculate [[W]] to determine [[DeltaU]]. Connect to the work of adiabatic compression or expansion of an ideal gas and the associated temperature change."
+      - id: Q_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Después de cuantificar [[Q]], calcular [[DeltaU]] aplicando el primer principio con [[W]] conocido. Verificar la consistencia dimensional y de signos antes de interpretar el resultado."
+          en: "After quantifying [[Q]], calculate [[DeltaU]] by applying the first law with known [[W]]. Verify dimensional and sign consistency before interpreting the result."
+
+  W:
+    magnitude_type: parameter
+    semantic_role:
+      es: "Mecanismo de transferencia de energía por fuerzas mecánicas, eléctricas o de otro tipo a través de la frontera del sistema cerrado."
+      en: "Energy transfer mechanism by mechanical, electrical, or other forces through the closed system boundary."
+    summary_rules:
+      - id: W_positive
+        when: "W > 0"
+        status: ok
+        text:
+          es: "[[W]] positivo (IUPAC): el entorno realiza trabajo sobre el sistema. En términos mecánicos, el sistema es comprimido o recibe trabajo eléctrico del exterior."
+          en: "Positive [[W]] (IUPAC): the surroundings perform work on the system. In mechanical terms, the system is compressed or receives electrical work from the exterior."
+      - id: W_negative
+        when: "W < 0"
+        status: ok
+        text:
+          es: "[[W]] negativo (IUPAC): el sistema realiza trabajo sobre el entorno. En términos mecánicos, el sistema se expande o entrega trabajo eléctrico al exterior."
+          en: "Negative [[W]] (IUPAC): the system performs work on the surroundings. In mechanical terms, the system expands or delivers electrical work to the exterior."
+      - id: W_zero
+        when: "W == 0"
+        status: ok
+        text:
+          es: "[[W]] nulo: proceso isocórico o sin trabajo mecánico. Solo existe intercambio de calor entre el sistema y el entorno, y [[DeltaU]] = [[Q]]."
+          en: "Zero [[W]]: isochoric process or no mechanical work. Only heat exchange exists and [[DeltaU]] = [[Q]]."
+    physical_reading_rules:
+      - id: W_reading_compression
+        when: "W > 0"
+        status: ok
+        text:
+          es: "[[W]] positivo indica que el entorno comprime el gas o impulsa una reacción electroquímica. La energía mecánica del entorno se convierte en energía interna del sistema."
+          en: "Positive [[W]] indicates the surroundings compress the gas or drive an electrochemical reaction. Mechanical energy from the surroundings converts to system internal energy."
+      - id: W_reading_expansion
+        when: "W < 0"
+        status: ok
+        text:
+          es: "[[W]] negativo indica que el sistema realiza trabajo útil sobre el entorno. En un motor, esta es la energía mecánica disponible para mover el vehículo o generar electricidad."
+          en: "Negative [[W]] indicates the system does useful work on the surroundings. In an engine, this is the mechanical energy available to move the vehicle or generate electricity."
+      - id: W_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "[[W]] depende del camino termodinámico. El trabajo de expansión-compresión es el más común en sistemas cerrados gaseosos, pero también existe trabajo eléctrico, magnético y superficial."
+          en: "[[W]] depends on the thermodynamic path. Expansion-compression work is most common in gaseous closed systems, but electrical, magnetic, and surface work also exist."
+    coherence_rules:
+      - id: W_coherence_convention
+        when: "true"
+        status: ok
+        text:
+          es: "Verificar que se usa la misma convención de signos a lo largo de todo el problema. Convención IUPAC: [[W]] positivo cuando el entorno realiza trabajo sobre el sistema. Convención de ingeniería: [[W]] positivo cuando el sistema realiza trabajo."
+          en: "Verify the same sign convention is used throughout the problem. IUPAC convention: [[W]] positive when surroundings do work on the system. Engineering convention: [[W]] positive when the system does work."
+      - id: W_coherence_isochorico
+        when: "W == 0"
+        status: ok
+        text:
+          es: "[[W]] nulo es coherente con proceso isocórico (volumen constante) en sistema cerrado con solo trabajo pV. Si hay trabajo eléctrico, [[W]] puede ser no nulo aunque el volumen no cambie."
+          en: "Zero [[W]] is coherent with isochoric process (constant volume) in a closed system with only pV work. If there is electrical work, [[W]] can be non-zero even if volume does not change."
+      - id: W_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El signo de [[W]] debe ser consistente con el movimiento del émbolo o la dirección del flujo de corriente eléctrica declarada. Una inconsistencia señala un error de convención o de dirección del proceso."
+          en: "The sign of [[W]] must be consistent with the piston movement or the direction of the declared electric current flow. An inconsistency signals a convention error or process direction error."
+    model_validity_rules:
+      - id: W_validity_pv
+        when: "true"
+        status: ok
+        text:
+          es: "Para sistemas gaseosos cerrados, el trabajo de presión-volumen es el dominante. El modelo es válido cuando otros tipos de trabajo (eléctrico, superficial) son despreciables respecto al trabajo pV."
+          en: "For closed gaseous systems, pressure-volume work is dominant. The model is valid when other work types (electrical, surface) are negligible compared to pV work."
+      - id: W_validity_quasistatic
+        when: "true"
+        status: ok
+        text:
+          es: "El cálculo de [[W]] como integral de presión por volumen asume proceso cuasiestático (estados de equilibrio en todo momento). Para procesos rápidos (explosiones), [[W]] debe calcularse por diferencia con [[DeltaU]] y [[Q]]."
+          en: "Calculating [[W]] as the integral of pressure over volume assumes a quasi-static process (equilibrium states at all times). For fast processes (explosions), [[W]] must be calculated by difference from [[DeltaU]] and [[Q]]."
+      - id: W_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo de trabajo mecánico pV es aplicable cuando la frontera del sistema cerrado es móvil y la presión exterior está bien definida. En otros casos, especificar el tipo de trabajo incluido."
+          en: "The pV mechanical work model is applicable when the closed system boundary is mobile and the external pressure is well defined. In other cases, specify the type of work included."
+    graph_rules:
+      - id: W_graph_compression
+        when: "W > 0"
+        status: ok
+        text:
+          es: "En la gráfica de [[W]] acumulado vs proceso, la curva sube para trabajo de compresión. En un diagrama P-V, el trabajo es el área bajo la curva de proceso, con signo positivo para compresión (volumen disminuye)."
+          en: "In the cumulative [[W]] vs process graph, the curve rises for compression work. In a P-V diagram, work is the area under the process curve, with positive sign for compression (volume decreases)."
+      - id: W_graph_expansion
+        when: "W < 0"
+        status: ok
+        text:
+          es: "Para expansión, la curva de [[W]] acumulado desciende. En un diagrama P-V, el área bajo la curva de expansión representa trabajo negativo (el sistema cede energía al entorno)."
+          en: "For expansion, the cumulative [[W]] curve descends. In a P-V diagram, the area under the expansion curve represents negative work (system releases energy to surroundings)."
+      - id: W_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "La suma de las curvas de [[Q]] acumulado y [[W]] acumulado debe coincidir con la curva de [[DeltaU]] en todo momento del proceso. Esta es la representación gráfica del primer principio."
+          en: "The sum of the cumulative [[Q]] and [[W]] curves must coincide with the [[DeltaU]] curve at every point of the process. This is the graphical representation of the first law."
+    likely_errors:
+      - id: W_error_convencion
+        when: "W > 0"
+        status: warning
+        text:
+          es: "Error de convención: sumar W con signo positivo cuando el sistema realiza trabajo en expansión. Con convención IUPAC, la expansión del sistema implica [[W]] negativo (el sistema pierde energía como trabajo)."
+          en: "Convention error: adding W with positive sign when the system does work in expansion. With IUPAC convention, system expansion implies negative [[W]] (the system loses energy as work)."
+      - id: W_error_isocórico
+        when: "W == 0"
+        status: warning
+        text:
+          es: "Verificar que el proceso es realmente isocórico antes de asumir [[W]] = 0. Si hay trabajo eléctrico, magnético o superficial, [[W]] puede ser no nulo aunque el volumen no cambie."
+          en: "Verify the process is truly isochoric before assuming [[W]] = 0. If there is electrical, magnetic, or surface work, [[W]] can be non-zero even if volume does not change."
+      - id: W_error_camino
+        when: "true"
+        status: warning
+        text:
+          es: "Error conceptual: asumir que [[W]] es el mismo para dos procesos que conectan los mismos estados. [[W]] depende del camino; el mismo par de estados puede dar lugar a valores de [[W]] completamente distintos."
+          en: "Conceptual error: assuming [[W]] is the same for two processes connecting the same states. [[W]] depends on the path; the same pair of states can yield completely different [[W]] values."
+    next_step_rules:
+      - id: W_next_DeltaU
+        when: "W > 0"
+        status: ok
+        text:
+          es: "Con [[W]] positivo conocido en proceso adiabático, calcular [[DeltaU]] = [[W]] y determinar la variación de temperatura asociada. Conectar con la ecuación de estado del gas o la capacidad calorífica."
+          en: "With positive [[W]] known in an adiabatic process, calculate [[DeltaU]] = [[W]] and determine the associated temperature change. Connect to the gas equation of state or heat capacity."
+      - id: W_next_efficiency
+        when: "W < 0"
+        status: ok
+        text:
+          es: "Con [[W]] negativo conocido, calcular la eficiencia del proceso como la fracción del calor absorbido que se convirtió en trabajo útil. Comparar con el límite de eficiencia de Carnot."
+          en: "With negative [[W]] known, calculate the process efficiency as the fraction of absorbed heat that converted to useful work. Compare with the Carnot efficiency limit."
+      - id: W_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Después de cuantificar [[W]], verificar la consistencia con el primer principio calculando [[DeltaU]] = [[Q]] + [[W]] y comprobando que el resultado es físicamente razonable."
+          en: "After quantifying [[W]], verify consistency with the first law by calculating [[DeltaU]] = [[Q]] + [[W]] and checking that the result is physically reasonable."
+
+  S:
+    magnitude_type: derived
+    semantic_role:
+      es: "Indicador de irreversibilidad del proceso en el sistema cerrado. Puede disminuir en el sistema sin violar el segundo principio."
+      en: "Irreversibility indicator of the process in the closed system. Can decrease in the system without violating the second law."
+    summary_rules:
+      - id: S_positive
+        when: "S > 0"
+        status: ok
+        text:
+          es: "[[S]] positivo: la entropía del sistema ha aumentado. El proceso es irreversible o el sistema ha absorbido calor a temperatura finita."
+          en: "Positive [[S]]: system entropy has increased. The process is irreversible or the system has absorbed heat at finite temperature."
+      - id: S_negative
+        when: "S < 0"
+        status: ok
+        text:
+          es: "[[S]] negativo: la entropía del sistema ha disminuido. El sistema ha cedido calor al entorno. Esto no viola el segundo principio: la entropía del universo sigue siendo no negativa."
+          en: "Negative [[S]]: system entropy has decreased. The system has released heat to the surroundings. This does not violate the second law: the entropy of the universe remains non-negative."
+      - id: S_zero
+        when: "S == 0"
+        status: ok
+        text:
+          es: "[[S]] nulo: proceso reversible y adiabático (isentrópico), o retorno al estado inicial en ciclo completo. La entropía del sistema no ha variado."
+          en: "Zero [[S]]: reversible and adiabatic process (isentropic), or return to initial state in a complete cycle. System entropy has not changed."
+    physical_reading_rules:
+      - id: S_reading_irreversible
+        when: "S > 0"
+        status: ok
+        text:
+          es: "[[S]] positivo indica que el proceso es irreversible y/o que hay flujo de calor hacia el sistema. La irreversibilidad se mide por la generación de entropía interna: [[DeltaS]] - [[Q]]/T, que es siempre no negativa."
+          en: "Positive [[S]] indicates the process is irreversible and/or there is heat flow into the system. Irreversibility is measured by internal entropy generation: [[DeltaS]] - [[Q]]/T, which is always non-negative."
+      - id: S_reading_refrigerador
+        when: "S < 0"
+        status: ok
+        text:
+          es: "[[S]] negativo es posible en sistema cerrado cuando se extrae calor del sistema a temperatura baja. Un refrigerador opera exactamente así: el refrigerante pierde entropía al ceder calor al condensador, pagando el coste con trabajo del compresor."
+          en: "Negative [[S]] is possible in a closed system when heat is extracted at low temperature. A refrigerator operates exactly this way: the refrigerant loses entropy when releasing heat to the condenser, paying the cost with compressor work."
+      - id: S_reading_default
+        when: "true"
+        status: ok
+        text:
+          es: "La variación de [[S]] del sistema cerrado depende tanto del calor intercambiado como de las irreversibilidades internas. Solo la entropía del universo (sistema más entorno) está restringida a no disminuir."
+          en: "The change in [[S]] of the closed system depends on both the exchanged heat and internal irreversibilities. Only the entropy of the universe (system plus surroundings) is constrained to not decrease."
+    coherence_rules:
+      - id: S_coherence_clausius
+        when: "S > 0"
+        status: ok
+        text:
+          es: "Verificar que [[DeltaS]] >= [[Q]]/T. Si [[DeltaS]] es positivo y [[Q]]/T es negativo o cero, la desigualdad siempre se cumple. Si [[Q]] es positivo, verificar que [[DeltaS]] > [[Q]]/T para proceso irreversible o [[DeltaS]] = [[Q]]/T para reversible."
+          en: "Verify [[DeltaS]] >= [[Q]]/T. If [[DeltaS]] is positive and [[Q]]/T is negative or zero, the inequality always holds. If [[Q]] is positive, verify [[DeltaS]] > [[Q]]/T for irreversible or [[DeltaS]] = [[Q]]/T for reversible."
+      - id: S_coherence_negative
+        when: "S < 0"
+        status: ok
+        text:
+          es: "[[DeltaS]] negativo es coherente cuando [[Q]] es negativo y [[Q]]/T < [[DeltaS]] < 0. Calcular la entropía del entorno para confirmar que la entropía del universo no disminuye."
+          en: "Negative [[DeltaS]] is coherent when [[Q]] is negative and [[Q]]/T < [[DeltaS]] < 0. Calculate the entropy of the surroundings to confirm that the entropy of the universe does not decrease."
+      - id: S_coherence_default
+        when: "true"
+        status: ok
+        text:
+          es: "El segundo principio exige [[DeltaS]] >= [[Q]]/T en todo momento. La violación de esta desigualdad indica un error de cálculo o de modelado del proceso."
+          en: "The second law requires [[DeltaS]] >= [[Q]]/T at all times. Violation of this inequality indicates a calculation or process modeling error."
+    model_validity_rules:
+      - id: S_validity_universo
+        when: "S < 0"
+        status: ok
+        text:
+          es: "[[DeltaS]] del sistema negativo no invalida el modelo. Verificar que [[DeltaS_universo]] = [[DeltaS]] + [[DeltaS_entorno]] es no negativo. El modelo de sistema cerrado es válido para calcular [[DeltaS]] del sistema."
+          en: "Negative system [[DeltaS]] does not invalidate the model. Verify that [[DeltaS_universo]] = [[DeltaS]] + [[DeltaS_entorno]] is non-negative. The closed system model is valid for calculating system [[DeltaS]]."
+      - id: S_validity_reversible
+        when: "S == 0"
+        status: ok
+        text:
+          es: "[[DeltaS]] nulo en proceso adiabático es coherente con el modelo de proceso isentrópico ideal. En procesos reales, [[DeltaS]] es siempre ligeramente positivo por las irreversibilidades internas."
+          en: "Zero [[DeltaS]] in adiabatic process is coherent with the ideal isentropic process model. In real processes, [[DeltaS]] is always slightly positive due to internal irreversibilities."
+      - id: S_validity_default
+        when: "true"
+        status: ok
+        text:
+          es: "El modelo de entropía del sistema cerrado es válido en todo el rango de condiciones termodinámicas clásicas. Las desviaciones del modelo ideal (proceso cuasiestático) se manifiestan como entropía generada internamente."
+          en: "The closed system entropy model is valid across the full range of classical thermodynamic conditions. Deviations from the ideal model (quasi-static process) manifest as internally generated entropy."
+    graph_rules:
+      - id: S_graph_rising
+        when: "S > 0"
+        status: ok
+        text:
+          es: "En la gráfica de [[S]] vs proceso, la curva sube. En un diagrama T-S, el área bajo la curva de proceso reversible es el calor intercambiado. La irreversibilidad se representa como área adicional."
+          en: "In the [[S]] vs process graph, the curve rises. In a T-S diagram, the area under the reversible process curve is the exchanged heat. Irreversibility is represented as additional area."
+      - id: S_graph_falling
+        when: "S < 0"
+        status: ok
+        text:
+          es: "La curva de [[S]] desciende cuando el sistema cede calor al entorno. En un diagrama T-S, la curva corre de derecha a izquierda (entropía decreciente) cuando el proceso extrae calor del sistema."
+          en: "The [[S]] curve descends when the system releases heat to the surroundings. In a T-S diagram, the curve runs right to left (decreasing entropy) when the process extracts heat from the system."
+      - id: S_graph_default
+        when: "true"
+        status: ok
+        text:
+          es: "La pendiente de la curva de [[S]] vs proceso indica la tasa de cambio de entropía. En un proceso reversible, coincide con [[Q]]/T en cada instante. En proceso irreversible, la curva está siempre por encima de la curva [[Q]]/T integrada."
+          en: "The slope of the [[S]] vs process curve indicates the rate of entropy change. In a reversible process, it coincides with [[Q]]/T at each instant. In an irreversible process, the curve is always above the integrated [[Q]]/T curve."
+    likely_errors:
+      - id: S_error_universo
+        when: "S < 0"
+        status: warning
+        text:
+          es: "Error conceptual: concluir que el segundo principio se viola cuando [[DeltaS]] del sistema es negativo. El segundo principio se aplica al universo, no al sistema. [[DeltaS]] del sistema puede ser negativo si la entropía del entorno aumenta en mayor medida."
+          en: "Conceptual error: concluding that the second law is violated when system [[DeltaS]] is negative. The second law applies to the universe, not the system. System [[DeltaS]] can be negative if the entropy of the surroundings increases by a greater amount."
+      - id: S_error_clausius
+        when: "S > 0"
+        status: warning
+        text:
+          es: "Error de cálculo: aplicar [[DeltaS]] = [[Q]]/T para un proceso irreversible real. La igualdad [[DeltaS]] = [[Q]]/T solo se cumple para procesos reversibles. En procesos reales, [[DeltaS]] > [[Q]]/T."
+          en: "Calculation error: applying [[DeltaS]] = [[Q]]/T for a real irreversible process. The equality [[DeltaS]] = [[Q]]/T holds only for reversible processes. In real processes, [[DeltaS]] > [[Q]]/T."
+      - id: S_error_isotérmico
+        when: "true"
+        status: warning
+        text:
+          es: "Error frecuente: confundir proceso isentrópico ([[DeltaS]] = 0) con proceso isotérmico (temperatura constante). Son condiciones distintas. Un proceso isentrópico adiabático de gas ideal no mantiene la temperatura constante."
+          en: "Common error: confusing isentropic process ([[DeltaS]] = 0) with isothermal process (constant temperature). These are different conditions. An adiabatic isentropic ideal gas process does not maintain constant temperature."
+    next_step_rules:
+      - id: S_next_universo
+        when: "S < 0"
+        status: ok
+        text:
+          es: "Con [[DeltaS]] del sistema negativo, calcular [[DeltaS]] del entorno para verificar que [[DeltaS]] del universo es no negativo. El entorno absorbe calor a temperatura definida: [[DeltaS_entorno]] = -[[Q]] / T_entorno."
+          en: "With negative system [[DeltaS]], calculate surroundings [[DeltaS]] to verify that universe [[DeltaS]] is non-negative. The surroundings absorb heat at defined temperature: [[DeltaS_entorno]] = -[[Q]] / T_entorno."
+      - id: S_next_irreversibilidad
+        when: "S > 0"
+        status: ok
+        text:
+          es: "Con [[DeltaS]] positivo, calcular la entropía generada internamente: [[DeltaS_gen]] = [[DeltaS]] - [[Q]]/T. Este valor cuantifica las irreversibilidades internas del proceso (fricción, gradientes térmicos, mezcla)."
+          en: "With positive [[DeltaS]], calculate the internally generated entropy: [[DeltaS_gen]] = [[DeltaS]] - [[Q]]/T. This value quantifies the internal irreversibilities of the process (friction, thermal gradients, mixing)."
+      - id: S_next_default
+        when: "true"
+        status: ok
+        text:
+          es: "Después de calcular [[DeltaS]], conectar con la eficiencia termodinámica del proceso. En ciclos de Carnot, el proceso isentrópico es el límite superior de eficiencia al que se comparan los ciclos reales."
+          en: "After calculating [[DeltaS]], connect to the thermodynamic efficiency of the process. In Carnot cycles, the isentropic process is the upper efficiency limit against which real cycles are compared."
+`;export{e as default};

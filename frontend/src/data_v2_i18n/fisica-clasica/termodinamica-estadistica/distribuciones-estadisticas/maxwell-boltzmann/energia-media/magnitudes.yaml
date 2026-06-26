@@ -1,0 +1,250 @@
+version: "5.0.0"
+magnitudes:
+  - id: energia_media
+    symbol: "<E>"
+    nombre:
+      es: "energía media"
+      en: "average energy"
+    descripcion:
+      es: "Energía cinética traslacional promedio de una partícula en un gas clásico ideal."
+      en: "Average translational kinetic energy of one particle in a classical ideal gas."
+    unidad_si: "J"
+    dimension: "M L^2 T^-2"
+    is_vector: false
+    components: []
+    category: "energia"
+    physical_role: "resultado"
+    used_in:
+      - energia_media_particula
+      - energia_total_gas_ideal
+      - energia_total_temperatura
+    common_mistake: "Confundirla con la energía total del gas o calcularla usando temperatura Celsius."
+    typical_range: "A 300 K, aproximadamente 6.2e-21 J por partícula clásica."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "No debe ser negativa en el modelo clásico; representa una escala de energía cinética."
+        en: "It should not be negative in the classical model; it represents a kinetic-energy scale."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Cero solo aparece idealmente cuando la temperatura absoluta es cero."
+        en: "Zero appears only ideally when the absolute temperature is zero."
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "energia_media>=0"
+    interpretation_role:
+      primary_for:
+        - summary
+        - physical_reading
+        - graph_reading
+      secondary_for:
+        - model_validity
+        - likely_errors
+    graph_binding:
+      channels:
+        - yAxis
+      preferred_axis: y
+      graph_ids:
+        - energia-media-Coord
+    pedagogical_notes:
+      es: "Es una media por partícula: aumenta con la temperatura, pero no con el número total de partículas."
+      en: "It is a per-particle average: it increases with temperature, but not with total particle number."
+
+  - id: temperatura
+    symbol: "T"
+    nombre:
+      es: "temperatura absoluta"
+      en: "absolute temperature"
+    descripcion:
+      es: "Variable termodinámica que fija la escala energética microscópica en equilibrio térmico."
+      en: "Thermodynamic variable that sets the microscopic energy scale at thermal equilibrium."
+    unidad_si: "K"
+    dimension: "Theta"
+    is_vector: false
+    components: []
+    category: "termodinamica"
+    physical_role: "variable independiente"
+    used_in:
+      - energia_media_particula
+      - energia_total_temperatura
+    common_mistake: "Introducir grados Celsius directamente en relaciones con k_B."
+    typical_range: "Laboratorio cotidiano: 200 K a 1000 K; gases astrofísicos pueden ser mucho más calientes."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La temperatura absoluta no es negativa en este tratamiento clásico de Maxwell-Boltzmann."
+        en: "Absolute temperature is not negative in this classical Maxwell-Boltzmann treatment."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "T igual a cero es un límite ideal donde el modelo clásico deja de ser físicamente completo."
+        en: "T equal to zero is an ideal limit where the classical model stops being physically complete."
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "temperatura>=0"
+    interpretation_role:
+      primary_for:
+        - graph_reading
+        - model_validity
+      secondary_for:
+        - summary
+        - physical_reading
+    graph_binding:
+      channels:
+        - xAxis
+      preferred_axis: x
+      graph_ids:
+        - energia-media-Coord
+    pedagogical_notes:
+      es: "Es la variable que se lee en el eje horizontal y debe expresarse en kelvin para que la pendiente tenga sentido físico."
+      en: "It is read on the horizontal axis and must be expressed in kelvin for the slope to have physical meaning."
+
+  - id: k_boltzmann
+    symbol: "k_B"
+    nombre:
+      es: "constante de Boltzmann"
+      en: "Boltzmann constant"
+    descripcion:
+      es: "Constante que convierte temperatura absoluta en escala de energía por partícula."
+      en: "Constant that converts absolute temperature into an energy scale per particle."
+    unidad_si: "J/K"
+    dimension: "M L^2 T^-2 Theta^-1"
+    is_vector: false
+    components: []
+    category: "constante"
+    physical_role: "constante de proporcionalidad"
+    used_in:
+      - energia_media_particula
+      - energia_total_temperatura
+    common_mistake: "Tratarla como una variable ajustable del gas en vez de una constante universal."
+    typical_range: "1.380649e-23 J/K exacta en el SI actual."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Es una constante positiva que fija la escala energética por kelvin."
+        en: "It is a positive constant that fixes the energy scale per kelvin."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "No puede ser cero; si lo fuera, la temperatura no aportaría energía térmica."
+        en: "It cannot be zero; otherwise temperature would not contribute thermal energy."
+    value_nature:
+      kind: scalar_constant
+      nonnegative_only: true
+      expected_interval: "k_boltzmann=1.380649e-23"
+    interpretation_role:
+      primary_for:
+        - physical_reading
+        - coherence
+      secondary_for:
+        - graph_reading
+    graph_binding:
+      channels:
+        - constant
+      preferred_axis: none
+      graph_ids:
+        - energia-media-Coord
+    pedagogical_notes:
+      es: "En la gráfica determina la pendiente junto con el factor tres medios; no cambia de un gas a otro."
+      en: "On the graph it determines the slope together with the factor three halves; it does not change from one gas to another."
+
+  - id: numero_particulas
+    symbol: "N"
+    nombre:
+      es: "número de partículas"
+      en: "number of particles"
+    descripcion:
+      es: "Cantidad de partículas microscópicas que componen el sistema gaseoso considerado."
+      en: "Number of microscopic particles making up the gas system under consideration."
+    unidad_si: "1"
+    dimension: "1"
+    is_vector: false
+    components: []
+    category: "conteo"
+    physical_role: "parámetro extensivo"
+    used_in:
+      - energia_total_gas_ideal
+      - energia_total_temperatura
+    common_mistake: "Pensar que cambia la energía media por partícula cuando solo cambia la energía total."
+    typical_range: "Desde pocos cuerpos en simulaciones hasta del orden de 1e23 en muestras macroscópicas."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Es un conteo y por tanto no puede tener signo negativo."
+        en: "It is a count and therefore cannot have a negative sign."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Con N igual a cero no hay sistema gaseoso al que asignar energía media."
+        en: "With N equal to zero there is no gas system to assign an average energy to."
+    value_nature:
+      kind: integer_count
+      nonnegative_only: true
+      expected_interval: "numero_particulas>0"
+    interpretation_role:
+      primary_for:
+        - coherence
+        - model_validity
+      secondary_for:
+        - physical_reading
+    graph_binding:
+      channels:
+        - parameter
+      preferred_axis: none
+      graph_ids:
+        - energia-media-Coord
+    pedagogical_notes:
+      es: "Aparece al pasar de una magnitud intensiva por partícula a una energía total extensiva."
+      en: "It appears when moving from an intensive per-particle quantity to an extensive total energy."
+
+  - id: energia_total
+    symbol: "U"
+    nombre:
+      es: "energía interna traslacional"
+      en: "translational internal energy"
+    descripcion:
+      es: "Suma de las energías cinéticas traslacionales medias de todas las partículas del gas ideal."
+      en: "Sum of the average translational kinetic energies of all particles in the ideal gas."
+    unidad_si: "J"
+    dimension: "M L^2 T^-2"
+    is_vector: false
+    components: []
+    category: "energia"
+    physical_role: "resultado macroscópico"
+    used_in:
+      - energia_total_gas_ideal
+      - energia_total_temperatura
+    common_mistake: "Usarla indistintamente como si fuera la energía media por partícula."
+    typical_range: "Depende de N; para un mol a 300 K es del orden de 3.7e3 J."
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "En este modelo traslacional ideal es no negativa."
+        en: "In this ideal translational model it is nonnegative."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Cero corresponde al límite ideal de temperatura absoluta cero."
+        en: "Zero corresponds to the ideal limit of zero absolute temperature."
+    value_nature:
+      kind: scalar
+      nonnegative_only: true
+      expected_interval: "energia_total>=0"
+    interpretation_role:
+      primary_for:
+        - coherence
+        - physical_reading
+      secondary_for:
+        - summary
+        - model_validity
+    graph_binding:
+      channels:
+        - none
+      preferred_axis: none
+      graph_ids: []
+    pedagogical_notes:
+      es: "Es macroscópica y extensiva: aumenta si aumenta la temperatura o si aumenta el número de partículas."
+      en: "It is macroscopic and extensive: it increases when temperature or particle number increases."

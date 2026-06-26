@@ -1,0 +1,73 @@
+const n=`version: 1
+id: energia-cinetica
+nombre:
+  es: Energia cinetica
+  en: Kinetic Energy
+area: fisica-clasica
+bloque: mecanica
+subbloque: trabajo-y-energia
+parent_id: trabajo-y-energia
+ruta_relativa: fisica-clasica/mecanica/trabajo-y-energia/energia-cinetica
+orden: 214200
+type: leaf
+niveles:
+  es:
+  - ESO
+  - BACHILLERATO
+  en:
+  - Secondary
+  - Upper Secondary
+icon: ✅
+descripcion: Energia asociada al movimiento y al trabajo neto que cambia la rapidez.
+description_en: Energy associated with motion and with the net work that changes speed.
+tags:
+  es:
+  - energia-cinetica
+  - trabajo-energia
+  - velocidad
+  - masa
+  - movimiento
+  en:
+  - kinetic-energy
+  - work-energy
+  - speed
+  - mass
+  - motion
+prerequisitos:
+- fisica-clasica/mecanica/cinematica/mru
+- fisica-clasica/mecanica/trabajo-y-energia/fundamentos/trabajo
+graficos:
+- Coord
+physical_role:
+  es: magnitud física
+  en: physical quantity
+dificultad: 2
+tiempo_estimado_min: 35
+interpretacion:
+  enabled: true
+  archivo: interpretacion.yaml
+  ui:
+    inline_calculator: true
+    inline_graph: true
+    dedicated_tab: true
+    tab_label:
+      es: Interpretacion
+      en: Interpretation
+  mini_graph:
+    enabled: true
+    preferred_type: Coord
+  output_policy:
+    show_summary_first: true
+    max_inline_messages: 3
+    show_warnings: true
+    show_likely_errors: true
+  dependencies:
+    requires_formulas: true
+    requires_magnitudes: true
+    supports_graph_binding: true
+pregunta_fisica_central:
+  es: ¿Como cuantifica la energia cinetica el movimiento y su cambio por trabajo neto?
+  en: How does kinetic energy quantify motion and its change due to net work?
+representacion_dominante: Coord
+magnitud_dominante: K
+`;export{n as default};

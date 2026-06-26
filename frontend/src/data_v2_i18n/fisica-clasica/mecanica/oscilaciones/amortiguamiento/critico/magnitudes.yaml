@@ -1,0 +1,127 @@
+version: 5
+magnitudes:
+- id: omega0
+  symbol: \omega_0
+  nombre: { es: Pulsacion natural, en: Natural pulsation }
+  si_unit: rad/s
+  unidad_si: rad/s
+  dimension: T^-1
+  is_vector: false
+  components: []
+  category: dinamica
+  physical_role: escala_temporal_dinamica
+  used_in: [ condicion_critica, tiempo_caracteristico, solucion_critica ]
+  common_mistake: Tratarla como frecuencia en Hz sin convertir unidades.
+  typical_range: [ 0.5, 50 ]
+  sign_behavior: positiva
+  zero_behavior: invalida_el_modelo
+  value_nature: parametro
+  interpretation_role: controla_rapidez_decaimiento
+  graph_binding: "Incrementar [[omega0]] acelera caída de [[x]] y reduce [[tau]]."
+  descripcion: { es: Escala de rapidez intrínseca del sistema sin forzamiento externo dominante., en: Intrinsic speed scale of the system without dominant external forcing. }
+  pedagogical_notes: { es: "No confundir con frecuencia angular de oscilación en régimen subamortiguado.", en: "Do not confuse with oscillation angular frequency in the underdamped regime." }
+
+- id: gamma
+  symbol: \gamma
+  nombre: { es: Coeficiente de amortiguamiento equivalente, en: Equivalent damping coefficient }
+  si_unit: 1/s
+  unidad_si: 1/s
+  dimension: T^-1
+  is_vector: false
+  components: []
+  category: disipacion
+  physical_role: intensidad_de_amortiguamiento
+  used_in: [ condicion_critica ]
+  common_mistake: Usarlo con signo incorrecto en la ecuación de movimiento.
+  typical_range: [ 0.1, 80 ]
+  sign_behavior: positiva
+  zero_behavior: paso_a_regimen_no_amortiguado
+  value_nature: parametro
+  interpretation_role: fija_regimen_dinamico
+  graph_binding: "Comparar [[gamma]] con [[omega0]] clasifica el régimen (sub, crítico, sobre)."
+  descripcion: { es: Parámetro efectivo que cuantifica la disipación viscosa lineal del sistema., en: Effective parameter quantifying linear viscous dissipation of the system. }
+  pedagogical_notes: { es: "La igualdad [[gamma]]=[[omega0]] define la frontera crítica.", en: "Equality [[gamma]]=[[omega0]] defines the critical boundary." }
+
+- id: tau
+  symbol: \tau
+  nombre: { es: Tiempo caracteristico, en: Characteristic time }
+  si_unit: s
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: []
+  category: escala_temporal
+  physical_role: tiempo_de_asentamiento_primario
+  used_in: [ tiempo_caracteristico ]
+  common_mistake: Interpretarlo como periodo de oscilación.
+  typical_range: [ 0.01, 5 ]
+  sign_behavior: positiva
+  zero_behavior: no_fisica
+  value_nature: derivada
+  interpretation_role: mide_rapidez_decaimiento
+  graph_binding: "[[tau]] menor implica asentamiento más rápido sin oscilación sostenida."
+  descripcion: { es: Tiempo típico en el que la respuesta crítica reduce significativamente su amplitud., en: Typical time over which critical response significantly reduces amplitude. }
+  pedagogical_notes: { es: "En crítico, describe rapidez de convergencia y no periodicidad.", en: "In critical damping, it describes convergence speed, not periodicity." }
+
+- id: x
+  symbol: x
+  nombre: { es: Desplazamiento, en: Displacement }
+  si_unit: m
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: estado
+  physical_role: variable_de_salida
+  used_in: [ solucion_critica ]
+  common_mistake: Forzar sobrepaso oscilatorio en interpretación de curva crítica.
+  typical_range: [ -0.5, 0.5 ]
+  sign_behavior: depende_de_referencia
+  zero_behavior: equilibrio
+  value_nature: estado
+  interpretation_role: respuesta_transitoria
+  graph_binding: "[[x]] cae al equilibrio con forma monótona amortiguada en el caso ideal crítico."
+  descripcion: { es: Coordenada de salida que evoluciona desde condición inicial hacia equilibrio., en: Output coordinate evolving from initial condition toward equilibrium. }
+  pedagogical_notes: { es: "La forma temporal importa más que el valor instantáneo aislado.", en: "Temporal shape matters more than isolated instantaneous value." }
+
+- id: t
+  symbol: t
+  nombre: { es: Tiempo, en: Time }
+  si_unit: s
+  unidad_si: s
+  dimension: T
+  is_vector: false
+  components: []
+  category: variable_independiente
+  physical_role: eje_temporal
+  used_in: [ solucion_critica ]
+  common_mistake: Mezclar segundos con milisegundos sin normalización previa.
+  typical_range: [ 0, 20 ]
+  sign_behavior: no_negativo_en_simulacion
+  zero_behavior: condicion_inicial
+  value_nature: independiente
+  interpretation_role: ordena_evolucion
+  graph_binding: "[[t]] organiza el seguimiento de asentamiento y comparación de regímenes."
+  descripcion: { es: Variable independiente sobre la que se observa la respuesta dinámica., en: Independent variable over which dynamic response is observed. }
+  pedagogical_notes: { es: "Usar ventana temporal suficiente para ver convergencia real.", en: "Use a sufficiently long time window to observe true convergence." }
+
+- id: A
+  symbol: A
+  nombre: { es: Amplitud inicial efectiva, en: Effective initial amplitude }
+  si_unit: m
+  unidad_si: m
+  dimension: L
+  is_vector: false
+  components: []
+  category: condicion_inicial
+  physical_role: escala_de_respuesta
+  used_in: [ solucion_critica ]
+  common_mistake: Tomarla como constante universal del sistema y no de condición inicial.
+  typical_range: [ 0, 1 ]
+  sign_behavior: no_negativa_en_magnitud
+  zero_behavior: respuesta_nula
+  value_nature: parametro_inicial
+  interpretation_role: fija_nivel_inicial
+  graph_binding: "[[A]] escala la magnitud global de [[x]] sin cambiar la clase de régimen."
+  descripcion: { es: Factor de escala asociado al estado inicial de desplazamiento/respuesta., en: Scale factor associated with initial displacement/response state. }
+  pedagogical_notes: { es: "Cambiar [[A]] no modifica condición crítica, solo escala de salida.", en: "Changing [[A]] does not alter critical condition, only output scale." }

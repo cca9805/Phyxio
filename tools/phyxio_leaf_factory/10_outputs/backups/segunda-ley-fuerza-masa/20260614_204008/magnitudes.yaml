@@ -1,0 +1,764 @@
+version: "5.0.0"
+magnitudes:
+  - id: fuerza_neta
+    symbol: "\\vec{F}_{\\mathrm{net}}"
+    nombre:
+      es: "Fuerza neta"
+      en: "Net force"
+    descripcion:
+      es: "Resultado vectorial de todas las fuerzas que actúan sobre un cuerpo."
+      en: "Vector result of all forces acting on a body."
+    unidad_si: "N"
+    dimension: "M L T^-2"
+    is_vector: true
+    components:
+      - fuerza_neta_x
+      - fuerza_neta_y
+    category: "dinamica"
+    physical_role: "calculable"
+    used_in:
+      - segunda_ley_newton_vectorial
+      - segunda_ley_newton_masa
+      - segunda_ley_newton_aceleracion
+      - fuerza_neta_sumatoria
+    common_mistake: "Confundir la fuerza neta con una fuerza individual aplicada al cuerpo."
+    typical_range: "0 N a 10^5 N en problemas escolares habituales"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo depende del eje elegido y marca el sentido de la resultante."
+        en: "The sign depends on the chosen axis and indicates the direction of the resultant."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Si es cero, la aceleración es nula y el cuerpo mantiene su estado de movimiento."
+        en: "If it is zero, acceleration is zero and the body keeps its state of motion."
+    value_nature:
+      kind: "vector"
+      nonnegative_only: false
+      expected_interval: "cualquier vector real"
+    interpretation_role:
+      primary_for:
+        - segunda_ley_newton_vectorial
+        - fuerza_neta_sumatoria
+      secondary_for:
+        - segunda_ley_newton_masa
+        - segunda_ley_newton_aceleracion
+    graph_binding:
+      channels:
+        - Coord
+        - Dcl
+    pedagogical_notes: "Debe interpretarse como desequilibrio dinámico, no como una fuerza nueva."
+
+  - id: fuerza_neta_x
+    symbol: "F_{\\mathrm{net},x}"
+    nombre:
+      es: "Componente x de la fuerza neta"
+      en: "x-component of net force"
+    descripcion:
+      es: "Componente de la fuerza neta sobre el eje horizontal elegido."
+      en: "Component of net force along the chosen horizontal axis."
+    unidad_si: "N"
+    dimension: "M L T^-2"
+    is_vector: false
+    components: []
+    category: "dinamica"
+    physical_role: "component"
+    used_in:
+      - segunda_ley_newton_x
+      - fuerza_neta_x_sumatoria
+    common_mistake: "Usar el módulo de la fuerza neta en lugar de su componente sobre el eje."
+    typical_range: "-10^5 N a 10^5 N"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo indica si la componente apunta a favor o en contra del eje x positivo."
+        en: "The sign indicates whether the component points with or against the positive x-axis."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Indica equilibrio dinámico sobre el eje x."
+        en: "It indicates dynamic equilibrium along the x-axis."
+    value_nature:
+      kind: "scalar_component"
+      nonnegative_only: false
+      expected_interval: "real"
+    interpretation_role:
+      primary_for:
+        - segunda_ley_newton_x
+      secondary_for:
+        - fuerza_neta_sumatoria
+    graph_binding:
+      channels:
+        - Coord
+        - Dcl
+    pedagogical_notes: "Permite aplicar la segunda ley por ejes sin mezclar direcciones."
+
+  - id: fuerza_neta_y
+    symbol: "F_{\\mathrm{net},y}"
+    nombre:
+      es: "Componente y de la fuerza neta"
+      en: "y-component of net force"
+    descripcion:
+      es: "Componente de la fuerza neta sobre el eje vertical o normal elegido."
+      en: "Component of net force along the chosen vertical or normal axis."
+    unidad_si: "N"
+    dimension: "M L T^-2"
+    is_vector: false
+    components: []
+    category: "dinamica"
+    physical_role: "component"
+    used_in:
+      - segunda_ley_newton_y
+      - fuerza_neta_y_sumatoria
+    common_mistake: "Suponer que siempre vale cero aunque exista aceleración vertical."
+    typical_range: "-10^5 N a 10^5 N"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo indica si la componente apunta a favor o en contra del eje y positivo."
+        en: "The sign indicates whether the component points with or against the positive y-axis."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Indica equilibrio dinámico sobre el eje y."
+        en: "It indicates dynamic equilibrium along the y-axis."
+    value_nature:
+      kind: "scalar_component"
+      nonnegative_only: false
+      expected_interval: "real"
+    interpretation_role:
+      primary_for:
+        - segunda_ley_newton_y
+      secondary_for:
+        - fuerza_neta_sumatoria
+    graph_binding:
+      channels:
+        - Coord
+        - Dcl
+    pedagogical_notes: "Es clave en apoyos, planos inclinados y movimientos verticales."
+
+  - id: masa
+    symbol: "m"
+    nombre:
+      es: "Masa"
+      en: "Mass"
+    descripcion:
+      es: "Cantidad escalar que mide la inercia de un cuerpo."
+      en: "Scalar quantity measuring a body's inertia."
+    unidad_si: "kg"
+    dimension: "M"
+    is_vector: false
+    components: []
+    category: "dinamica"
+    physical_role: "input"
+    used_in:
+      - segunda_ley_newton_vectorial
+      - segunda_ley_newton_x
+      - segunda_ley_newton_y
+      - segunda_ley_newton_masa
+      - segunda_ley_newton_aceleracion
+      - peso
+      - componente_peso_paralela_plano
+      - componente_peso_perpendicular_plano
+    common_mistake: "Confundir masa con peso o cambiarla al variar la gravedad."
+    typical_range: "10^-3 kg a 10^4 kg en problemas escolares habituales"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "La masa no tiene signo porque es una magnitud escalar positiva."
+        en: "Mass has no sign because it is a positive scalar quantity."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "Una masa nula no representa un cuerpo material en este modelo."
+        en: "Zero mass does not represent a material body in this model."
+    value_nature:
+      kind: "scalar"
+      nonnegative_only: true
+      expected_interval: "m > 0"
+    interpretation_role:
+      primary_for:
+        - segunda_ley_newton_masa
+      secondary_for:
+        - segunda_ley_newton_vectorial
+        - peso
+    graph_binding:
+      channels:
+        - Coord
+    pedagogical_notes: "Controla cuánta aceleración aparece ante una misma fuerza neta."
+
+  - id: aceleracion
+    symbol: "\\vec{a}"
+    nombre:
+      es: "Aceleración"
+      en: "Acceleration"
+    descripcion:
+      es: "Vector que mide el cambio de velocidad por unidad de tiempo."
+      en: "Vector measuring velocity change per unit time."
+    unidad_si: "m/s^2"
+    dimension: "L T^-2"
+    is_vector: true
+    components:
+      - aceleracion_x
+      - aceleracion_y
+    category: "dinamica"
+    physical_role: "calculable"
+    used_in:
+      - segunda_ley_newton_vectorial
+      - segunda_ley_newton_masa
+      - segunda_ley_newton_aceleracion
+    common_mistake: "Creer que siempre tiene el mismo sentido que la velocidad."
+    typical_range: "0 m/s^2 a 10^3 m/s^2 en problemas escolares habituales"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Su signo por componentes indica el sentido del cambio de velocidad."
+        en: "Its component sign indicates the direction of velocity change."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Aceleración nula implica fuerza neta nula en un sistema inercial."
+        en: "Zero acceleration implies zero net force in an inertial frame."
+    value_nature:
+      kind: "vector"
+      nonnegative_only: false
+      expected_interval: "cualquier vector real"
+    interpretation_role:
+      primary_for:
+        - segunda_ley_newton_aceleracion
+      secondary_for:
+        - segunda_ley_newton_vectorial
+    graph_binding:
+      channels:
+        - Coord
+        - Dcl
+    pedagogical_notes: "Debe vincularse a la fuerza neta, no necesariamente al movimiento visible."
+
+  - id: aceleracion_x
+    symbol: "a_x"
+    nombre:
+      es: "Componente x de la aceleración"
+      en: "x-component of acceleration"
+    descripcion:
+      es: "Componente de la aceleración sobre el eje x elegido."
+      en: "Component of acceleration along the chosen x-axis."
+    unidad_si: "m/s^2"
+    dimension: "L T^-2"
+    is_vector: false
+    components: []
+    category: "dinamica"
+    physical_role: "component"
+    used_in:
+      - segunda_ley_newton_x
+    common_mistake: "Asignar el signo por intuición visual sin respetar el eje elegido."
+    typical_range: "-10^3 m/s^2 a 10^3 m/s^2"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo indica el sentido de la aceleración respecto al eje x positivo."
+        en: "The sign indicates acceleration direction relative to the positive x-axis."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Indica aceleración nula en el eje x."
+        en: "It indicates zero acceleration along the x-axis."
+    value_nature:
+      kind: "scalar_component"
+      nonnegative_only: false
+      expected_interval: "real"
+    interpretation_role:
+      primary_for:
+        - segunda_ley_newton_x
+      secondary_for:
+        - segunda_ley_newton_vectorial
+    graph_binding:
+      channels:
+        - Coord
+        - Dcl
+    pedagogical_notes: "Debe emparejarse solo con la componente x de la fuerza neta."
+
+  - id: aceleracion_y
+    symbol: "a_y"
+    nombre:
+      es: "Componente y de la aceleración"
+      en: "y-component of acceleration"
+    descripcion:
+      es: "Componente de la aceleración sobre el eje y elegido."
+      en: "Component of acceleration along the chosen y-axis."
+    unidad_si: "m/s^2"
+    dimension: "L T^-2"
+    is_vector: false
+    components: []
+    category: "dinamica"
+    physical_role: "component"
+    used_in:
+      - segunda_ley_newton_y
+    common_mistake: "Forzar aceleración vertical nula en situaciones donde no hay equilibrio."
+    typical_range: "-10^3 m/s^2 a 10^3 m/s^2"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo indica el sentido de la aceleración respecto al eje y positivo."
+        en: "The sign indicates acceleration direction relative to the positive y-axis."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Indica aceleración nula en el eje y."
+        en: "It indicates zero acceleration along the y-axis."
+    value_nature:
+      kind: "scalar_component"
+      nonnegative_only: false
+      expected_interval: "real"
+    interpretation_role:
+      primary_for:
+        - segunda_ley_newton_y
+      secondary_for:
+        - segunda_ley_newton_vectorial
+    graph_binding:
+      channels:
+        - Coord
+        - Dcl
+    pedagogical_notes: "Debe emparejarse solo con la componente y de la fuerza neta."
+
+  - id: fuerza_aplicada
+    symbol: "\\vec{F}"
+    nombre:
+      es: "Fuerza aplicada"
+      en: "Applied force"
+    descripcion:
+      es: "Fuerza individual ejercida sobre el cuerpo por una interacción externa."
+      en: "Individual force exerted on the body by an external interaction."
+    unidad_si: "N"
+    dimension: "M L T^-2"
+    is_vector: true
+    components: []
+    category: "dinamica"
+    physical_role: "input"
+    used_in:
+      - fuerza_neta_sumatoria
+      - fuerza_neta_x_sumatoria
+      - fuerza_neta_y_sumatoria
+    common_mistake: "Igualarla directamente a la fuerza neta sin sumar el resto de fuerzas."
+    typical_range: "0 N a 10^5 N"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Por componentes, el signo depende del sentido elegido como positivo."
+        en: "By components, the sign depends on the chosen positive direction."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Puede no existir fuerza aplicada explícita aunque haya otras fuerzas."
+        en: "An explicit applied force may be absent while other forces exist."
+    value_nature:
+      kind: "vector"
+      nonnegative_only: false
+      expected_interval: "cualquier vector real"
+    interpretation_role:
+      primary_for:
+        - fuerza_neta_sumatoria
+      secondary_for:
+        - segunda_ley_newton_vectorial
+    graph_binding:
+      channels:
+        - Dcl
+    pedagogical_notes: "Debe distinguirse de peso, normal, rozamiento y resultante."
+
+  - id: peso
+    symbol: "\\vec{P}"
+    nombre:
+      es: "Peso"
+      en: "Weight"
+    descripcion:
+      es: "Fuerza gravitatoria que actúa sobre un cuerpo cerca de un astro."
+      en: "Gravitational force acting on a body near an astronomical object."
+    unidad_si: "N"
+    dimension: "M L T^-2"
+    is_vector: true
+    components: []
+    category: "dinamica"
+    physical_role: "calculable"
+    used_in:
+      - peso
+      - fuerza_neta_sumatoria
+      - fuerza_neta_y_sumatoria
+    common_mistake: "Confundir peso con masa o expresarlo en kilogramos."
+    typical_range: "0 N a 10^6 N en problemas escolares habituales"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Por componentes, suele ser negativo si el eje vertical positivo apunta hacia arriba."
+        en: "By components, it is often negative if the positive vertical axis points upward."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Peso nulo solo aparece si la gravedad efectiva es nula."
+        en: "Zero weight appears only if effective gravity is zero."
+    value_nature:
+      kind: "vector"
+      nonnegative_only: false
+      expected_interval: "P = m g como módulo no negativo"
+    interpretation_role:
+      primary_for:
+        - peso
+      secondary_for:
+        - fuerza_neta_sumatoria
+    graph_binding:
+      channels:
+        - Dcl
+    pedagogical_notes: "Como vector apunta hacia el centro del astro; como módulo se expresa positivo."
+
+  - id: gravedad
+    symbol: "g"
+    nombre:
+      es: "Aceleración de la gravedad"
+      en: "Gravitational acceleration"
+    descripcion:
+      es: "Intensidad local del campo gravitatorio expresada como aceleración."
+      en: "Local gravitational field strength expressed as acceleration."
+    unidad_si: "m/s^2"
+    dimension: "L T^-2"
+    is_vector: false
+    components: []
+    category: "constante"
+    physical_role: "constant"
+    used_in:
+      - peso
+      - componente_peso_paralela_plano
+      - componente_peso_perpendicular_plano
+    common_mistake: "Usarla siempre como negativa aunque la fórmula use el módulo."
+    typical_range: "9.8 m/s^2 cerca de la superficie terrestre"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Como módulo se usa positivo; el signo se asigna al componente del peso."
+        en: "As a magnitude it is positive; the sign is assigned to the weight component."
+    zero_behavior:
+      allowed: false
+      meaning:
+        es: "En este modelo terrestre se considera distinta de cero."
+        en: "In this Earth-based model it is considered nonzero."
+    value_nature:
+      kind: "constant"
+      nonnegative_only: true
+      expected_interval: "g > 0"
+    interpretation_role:
+      primary_for:
+        - peso
+      secondary_for:
+        - componente_peso_paralela_plano
+        - componente_peso_perpendicular_plano
+    graph_binding:
+      channels:
+        - Dcl
+    pedagogical_notes: "Conviene tratarla como módulo para evitar errores de signo."
+
+  - id: normal
+    symbol: "N"
+    nombre:
+      es: "Normal"
+      en: "Normal force"
+    descripcion:
+      es: "Fuerza de contacto perpendicular a la superficie de apoyo."
+      en: "Contact force perpendicular to the supporting surface."
+    unidad_si: "N"
+    dimension: "M L T^-2"
+    is_vector: true
+    components: []
+    category: "dinamica"
+    physical_role: "calculable"
+    used_in:
+      - rozamiento_cinetico
+      - componente_peso_perpendicular_plano
+      - fuerza_neta_sumatoria
+      - fuerza_neta_y_sumatoria
+    common_mistake: "Suponer que siempre vale igual que el peso."
+    typical_range: "0 N a 10^6 N"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Su componente tiene signo según el eje normal elegido."
+        en: "Its component has a sign according to the chosen normal axis."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Si no hay contacto, la normal es cero."
+        en: "If there is no contact, the normal force is zero."
+    value_nature:
+      kind: "vector"
+      nonnegative_only: false
+      expected_interval: "módulo N >= 0"
+    interpretation_role:
+      primary_for:
+        - rozamiento_cinetico
+        - componente_peso_perpendicular_plano
+      secondary_for:
+        - fuerza_neta_sumatoria
+    graph_binding:
+      channels:
+        - Dcl
+    pedagogical_notes: "Depende de la geometría y de la aceleración perpendicular, no solo del peso."
+
+  - id: coeficiente_rozamiento
+    symbol: "\\mu"
+    nombre:
+      es: "Coeficiente de rozamiento"
+      en: "Friction coefficient"
+    descripcion:
+      es: "Parámetro adimensional que relaciona rozamiento y normal."
+      en: "Dimensionless parameter relating friction and normal force."
+    unidad_si: "1"
+    dimension: "1"
+    is_vector: false
+    components: []
+    category: "parametro"
+    physical_role: "input"
+    used_in:
+      - rozamiento_cinetico
+    common_mistake: "Tratarlo como una fuerza o darle unidades."
+    typical_range: "0 a 1.5 en modelos escolares habituales"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "No tiene signo; el sentido del rozamiento se decide aparte."
+        en: "It has no sign; friction direction is decided separately."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Si es cero, el contacto se modela sin rozamiento."
+        en: "If it is zero, the contact is modeled without friction."
+    value_nature:
+      kind: "parameter"
+      nonnegative_only: true
+      expected_interval: "mu >= 0"
+    interpretation_role:
+      primary_for:
+        - rozamiento_cinetico
+      secondary_for:
+        - fuerza_neta_sumatoria
+    graph_binding:
+      channels:
+        - Coord
+        - Dcl
+    pedagogical_notes: "Modifica el módulo del rozamiento, pero no fija por sí solo su dirección."
+
+  - id: fuerza_rozamiento
+    symbol: "F_r"
+    nombre:
+      es: "Fuerza de rozamiento"
+      en: "Friction force"
+    descripcion:
+      es: "Fuerza de contacto tangencial que se opone al deslizamiento relativo."
+      en: "Tangential contact force opposing relative sliding."
+    unidad_si: "N"
+    dimension: "M L T^-2"
+    is_vector: true
+    components: []
+    category: "dinamica"
+    physical_role: "calculable"
+    used_in:
+      - rozamiento_cinetico
+      - fuerza_neta_sumatoria
+      - fuerza_neta_x_sumatoria
+    common_mistake: "Ponerlo siempre hacia la izquierda sin analizar el movimiento relativo."
+    typical_range: "0 N a 10^5 N"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "Su signo depende del eje y del sentido contrario al deslizamiento relativo."
+        en: "Its sign depends on the axis and the direction opposing relative sliding."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Puede ser cero si no hay contacto rugoso o no hay rozamiento modelado."
+        en: "It may be zero if there is no rough contact or no modeled friction."
+    value_nature:
+      kind: "vector"
+      nonnegative_only: false
+      expected_interval: "módulo F_r >= 0"
+    interpretation_role:
+      primary_for:
+        - rozamiento_cinetico
+      secondary_for:
+        - fuerza_neta_sumatoria
+    graph_binding:
+      channels:
+        - Dcl
+    pedagogical_notes: "El módulo se calcula con la normal; el sentido se razona físicamente."
+
+  - id: angulo
+    symbol: "\\theta"
+    nombre:
+      es: "Ángulo del plano"
+      en: "Incline angle"
+    descripcion:
+      es: "Inclinación de la superficie respecto a la horizontal."
+      en: "Inclination of the surface relative to the horizontal."
+    unidad_si: "rad"
+    dimension: "1"
+    is_vector: false
+    components: []
+    category: "parametro"
+    physical_role: "input"
+    used_in:
+      - componente_peso_paralela_plano
+      - componente_peso_perpendicular_plano
+    common_mistake: "Intercambiar seno y coseno en las componentes del peso."
+    typical_range: "0 rad a pi/2 rad en planos inclinados escolares"
+    sign_behavior:
+      has_sign: false
+      meaning:
+        es: "Se toma como ángulo geométrico positivo."
+        en: "It is taken as a positive geometric angle."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Si es cero, el plano es horizontal."
+        en: "If it is zero, the plane is horizontal."
+    value_nature:
+      kind: "parameter"
+      nonnegative_only: true
+      expected_interval: "0 <= theta <= pi/2"
+    interpretation_role:
+      primary_for:
+        - componente_peso_paralela_plano
+        - componente_peso_perpendicular_plano
+      secondary_for:
+        - fuerza_neta_sumatoria
+    graph_binding:
+      channels:
+        - Svg
+        - Dcl
+    pedagogical_notes: "Es la bisagra trigonométrica del plano inclinado."
+
+  - id: componente_peso_paralela
+    symbol: "P_{\\parallel}"
+    nombre:
+      es: "Componente paralela del peso"
+      en: "Parallel component of weight"
+    descripcion:
+      es: "Parte del peso paralela al plano inclinado."
+      en: "Part of weight parallel to the inclined plane."
+    unidad_si: "N"
+    dimension: "M L T^-2"
+    is_vector: false
+    components: []
+    category: "dinamica"
+    physical_role: "calculable"
+    used_in:
+      - componente_peso_paralela_plano
+      - fuerza_neta_x_sumatoria
+    common_mistake: "Usar coseno en lugar de seno para la componente paralela."
+    typical_range: "0 N a 10^6 N"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo depende de si el eje paralelo positivo apunta cuesta arriba o cuesta abajo."
+        en: "The sign depends on whether the positive parallel axis points up or down the incline."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Es cero cuando el plano es horizontal."
+        en: "It is zero when the plane is horizontal."
+    value_nature:
+      kind: "scalar_component"
+      nonnegative_only: false
+      expected_interval: "módulo P_parallel >= 0"
+    interpretation_role:
+      primary_for:
+        - componente_peso_paralela_plano
+      secondary_for:
+        - fuerza_neta_x_sumatoria
+    graph_binding:
+      channels:
+        - Dcl
+    pedagogical_notes: "Es la parte del peso que tiende a deslizar el cuerpo por el plano."
+
+  - id: componente_peso_perpendicular
+    symbol: "P_{\\perp}"
+    nombre:
+      es: "Componente perpendicular del peso"
+      en: "Perpendicular component of weight"
+    descripcion:
+      es: "Parte del peso perpendicular al plano inclinado."
+      en: "Part of weight perpendicular to the inclined plane."
+    unidad_si: "N"
+    dimension: "M L T^-2"
+    is_vector: false
+    components: []
+    category: "dinamica"
+    physical_role: "calculable"
+    used_in:
+      - componente_peso_perpendicular_plano
+      - fuerza_neta_y_sumatoria
+    common_mistake: "Usar seno en lugar de coseno para la componente perpendicular."
+    typical_range: "0 N a 10^6 N"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo depende de la orientación del eje perpendicular elegido."
+        en: "The sign depends on the orientation of the chosen perpendicular axis."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "Tiende a cero cuando el plano se aproxima a vertical."
+        en: "It tends to zero as the plane approaches vertical."
+    value_nature:
+      kind: "scalar_component"
+      nonnegative_only: false
+      expected_interval: "módulo P_perp >= 0"
+    interpretation_role:
+      primary_for:
+        - componente_peso_perpendicular_plano
+      secondary_for:
+        - fuerza_neta_y_sumatoria
+    graph_binding:
+      channels:
+        - Dcl
+    pedagogical_notes: "Determina la normal si no hay aceleración perpendicular al plano."
+
+  - id: peso
+    symbol: "\\vec{P}"
+    nombre:
+      es: "Peso"
+      en: "Weight"
+    descripcion:
+      es: "Fuerza gravitatoria que actúa sobre un cuerpo debido a la atracción de un astro."
+      en: "Gravitational force acting on a body due to the attraction of a celestial body."
+    unidad_si: "N"
+    dimension: "M L T^-2"
+    is_vector: true
+    components:
+      - componente_peso_paralela
+      - componente_peso_perpendicular
+    category: "dinamica"
+    physical_role: "calculable"
+    used_in:
+      - segunda_ley_newton_y
+      - fuerza_neta_y_sumatoria
+    common_mistake: "Confundir peso con masa: tienen unidades y significado físico distintos."
+    typical_range: "0 N a 10^6 N"
+    sign_behavior:
+      has_sign: true
+      meaning:
+        es: "El signo depende del eje vertical elegido; apunta hacia el centro del astro."
+        en: "The sign depends on the chosen vertical axis; points toward the center of the celestial body."
+    zero_behavior:
+      allowed: true
+      meaning:
+        es: "En gravedad cero (espacio libre), el peso es nulo aunque la masa permanezca."
+        en: "In zero gravity (free space), weight is zero while mass remains."
+    value_nature:
+      kind: "vector"
+      nonnegative_only: false
+      expected_interval: "módulo P >= 0"
+    interpretation_role:
+      primary_for:
+        - segunda_ley_newton_y
+      secondary_for:
+        - fuerza_neta_y_sumatoria
+    graph_binding:
+      channels:
+        - Dcl
+    pedagogical_notes: "Fuerza gravitatoria que debe descomponerse en ejes cuando hay plano inclinado."

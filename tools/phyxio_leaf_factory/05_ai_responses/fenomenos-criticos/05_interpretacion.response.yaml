@@ -1,0 +1,1657 @@
+version: 5.0.0
+id: fenomenos-criticos
+leaf_id: fenomenos-criticos
+nombre:
+  es: Fenomenos criticos
+  en: Critical Phenomena
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: transiciones-de-fase
+  parent_id: transiciones-de-fase
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/transiciones-de-fase/fenomenos-criticos
+  orden: 276300
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - temperatura_reducida_critica
+  - parametro_orden_ley_critica
+  - susceptibilidad_critica
+  - longitud_correlacion_critica
+  - calor_especifico_critico
+  magnitudes:
+  - temperatura
+  - temperatura_critica
+  - temperatura_reducida
+  - parametro_de_orden
+  - amplitud_critica
+  - exponente_critico_beta
+  - susceptibilidad
+  - amplitud_susceptibilidad
+  - exponente_critico_gamma
+  - longitud_correlacion
+  - amplitud_correlacion
+  - exponente_critico_nu
+  - calor_especifico
+  - amplitud_calor_especifico
+  - exponente_critico_alpha
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: termodinamica-estadistica
+    en: statistical thermodynamics
+  axis_convention:
+    es: 'En fenómenos críticos el signo clave suele estar en la temperatura reducida: distingue los lados de la
+      transición.'
+    en: 'In critical phenomena the key sign is often in reduced temperature: it distinguishes the sides of the transition.'
+  standard_assumptions:
+  - es: El sistema se considera cerca de una transición continua con comportamiento de escala dominante.
+    en: The system is considered near a continuous transition with dominant scaling behavior.
+  - es: Los exponentes críticos se interpretan dentro de una clase de universalidad y no como constantes arbitrarias.
+    en: Critical exponents are interpreted within a universality class and not as arbitrary constants.
+  standard_warnings:
+  - es: No extrapoles leyes de potencia lejos de la temperatura crítica.
+    en: Do not extrapolate power laws far from the critical temperature.
+  - es: Distingue divergencia ideal, redondeo experimental y límites de tamaño finito.
+    en: Distinguish ideal divergence, experimental rounding, and finite-size limits.
+graph_binding:
+  enabled: true
+  type: Coord
+  channels:
+  - Coord
+cross_checks:
+  enabled: true
+  checks:
+  - id: dimension_check
+    when: 'true'
+    status: ok
+    text:
+      es: 'La interpretación debe respetar dimensiones: la temperatura reducida y los exponentes son adimensionales;
+        las amplitudes conservan la dimensión de su magnitud.'
+      en: 'The interpretation must respect dimensions: reduced temperature and exponents are dimensionless; amplitudes
+        carry the dimension of their quantity.'
+  - id: critical_side_check
+    when: 'true'
+    status: ok
+    text:
+      es: Comprueba si la ley se aplica por debajo, por encima o a ambos lados de la temperatura crítica.
+      en: Check whether the law applies below, above, or on both sides of the critical temperature.
+error_patterns:
+  enabled: true
+  patterns:
+  - id: unit_sign_model_confusion
+    when: 'true'
+    status: warning
+    text:
+      es: Un error frecuente es leer un exponente o una temperatura reducida sin distinguir unidad, signo y lado
+        crítico.
+      en: A common error is reading an exponent or reduced temperature without distinguishing unit, sign, and critical
+        side.
+  - id: finite_size_confusion
+    when: 'true'
+    status: warning
+    text:
+      es: Otro error frecuente es tomar un máximo experimental redondeado como divergencia matemática exacta.
+      en: Another common error is treating a rounded experimental maximum as an exact mathematical divergence.
+graph_reading_policy:
+  enabled: true
+  primary_variable: temperatura_reducida
+  reading_sequence:
+  - es: Localiza primero [[temperatura_critica]] y calcula el signo de [[temperatura_reducida]].
+    en: First locate [[temperatura_critica]] and determine the sign of [[temperatura_reducida]].
+  - es: 'Identifica qué magnitud se representa: [[parametro_de_orden]], [[susceptibilidad]], [[longitud_correlacion]]
+      o [[calor_especifico]].'
+    en: 'Identify which quantity is plotted: [[parametro_de_orden]], [[susceptibilidad]], [[longitud_correlacion]],
+      or [[calor_especifico]].'
+  - es: Lee la pendiente efectiva o la curvatura como evidencia de ley crítica, no como una recta ordinaria cualquiera.
+    en: Read the effective slope or curvature as evidence of a critical law, not as just any ordinary line.
+  key_points:
+  - es: Cerca de [[temperatura_reducida]] igual a cero aparecen anulación, divergencia o singularidad según la magnitud.
+    en: Near [[temperatura_reducida]] equal to zero, vanishing, divergence, or singularity appears depending on
+      the quantity.
+  - es: La lectura gráfica debe conectar exponente, amplitud y rango de validez.
+    en: The graph reading must connect exponent, amplitude, and validity range.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: En una transición crítica ideal, [[longitud_correlacion]] puede crecer hasta superar muchas distancias microscópicas.
+    en: In an ideal critical transition, [[longitud_correlacion]] can grow beyond many microscopic distances.
+  - es: Los exponentes críticos típicos son números adimensionales de orden unidad, no unidades térmicas ni energéticas.
+    en: Typical critical exponents are dimensionless numbers of order unity, not thermal or energy units.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: '[[temperatura_reducida]], [[exponente_critico_beta]], [[exponente_critico_gamma]], [[exponente_critico_nu]]
+      y [[exponente_critico_alpha]] son adimensionales.'
+    en: '[[temperatura_reducida]], [[exponente_critico_beta]], [[exponente_critico_gamma]], [[exponente_critico_nu]],
+      and [[exponente_critico_alpha]] are dimensionless.'
+  common_unit_mistakes:
+  - es: Asignar kelvin a [[temperatura_reducida]] en lugar de tratarla como cociente adimensional.
+    en: Assigning kelvin to [[temperatura_reducida]] instead of treating it as a dimensionless ratio.
+  - es: Confundir la dimensión de una amplitud con la dimensión del exponente crítico.
+    en: Confusing the dimension of an amplitude with the dimension of the critical exponent.
+free_body_diagram_hint:
+  enabled: false
+  key_forces: []
+  equilibrium_condition:
+    es: ''
+    en: ''
+process_type_detection:
+  enabled: true
+  processes:
+  - id: continuous_critical_transition
+    label:
+      es: transición continua crítica
+      en: continuous critical transition
+    evidence:
+      es: El parámetro de orden se anula sin salto finito y aparecen leyes de potencia.
+      en: The order parameter vanishes without a finite jump and power laws appear.
+  - id: rounded_experimental_transition
+    label:
+      es: transición redondeada por tamaño finito
+      en: finite-size rounded transition
+    evidence:
+      es: Las divergencias ideales aparecen como máximos finitos o curvas suavizadas.
+      en: Ideal divergences appear as finite peaks or smoothed curves.
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  temperatura:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable de control térmico
+      en: thermal control variable
+    summary_rules:
+    - id: temperatura_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura]] debe leerse como una pieza del patrón crítico: describe cómo cambia el sistema al acercarse
+          a [[temperatura_critica]].'
+        en: '[[temperatura]] must be read as part of the critical pattern: it describes how the system changes as
+          it approaches [[temperatura_critica]].'
+    physical_reading_rules:
+    - id: temperatura_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura]] junto con el signo de [[temperatura_reducida]], porque estar por debajo o
+          por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[temperatura]] together with the sign of [[temperatura_reducida]], because being below or
+          above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: temperatura_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura]] use unidades compatibles y que su tendencia sea coherente con una ley
+          de escala cerca de [[temperatura_critica]].
+        en: Check that [[temperatura]] uses compatible units and that its trend is consistent with a scaling law
+          near [[temperatura_critica]].
+    model_validity_rules:
+    - id: temperatura_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[temperatura]] son aproximaciones asintóticas: no deben extrapolarse lejos de
+          [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[temperatura]] are asymptotic approximations: they should not be extrapolated far
+          from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: temperatura_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[temperatura]] con [[temperatura_reducida]]: la curvatura o pendiente
+          efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[temperatura]] to [[temperatura_reducida]]: the curvature or effective
+          slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: temperatura_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[temperatura]] como una variación ordinaria suave si el modelo predice divergencia, anulación
+          o singularidad cerca de [[temperatura_critica]].
+        en: Do not treat [[temperatura]] as an ordinary smooth variation if the model predicts divergence, vanishing,
+          or singular behavior near [[temperatura_critica]].
+    next_step_rules:
+    - id: temperatura_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[temperatura]], compara el régimen por debajo y por encima de [[temperatura_critica]]
+          y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[temperatura]], compare the regimes below and above [[temperatura_critica]] and
+          check which critical exponent controls the trend.
+    physical_intuition:
+    - id: temperatura_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[temperatura]] refleja que muchas partes del sistema dejan de comportarse de forma independiente
+          cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[temperatura]] reflects that many parts of the system stop behaving independently as correlations
+          grow near criticality.
+    limiting_cases:
+    - id: temperatura_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[temperatura]] debe evaluarse con especial cuidado; lejos
+          de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[temperatura]] must be evaluated carefully; far from zero,
+          critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_critica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: escala de referencia de la transición crítica
+      en: reference scale of the critical transition
+    summary_rules:
+    - id: temperatura_critica_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_critica]] debe leerse como una pieza del patrón crítico: describe cómo cambia el sistema
+          al acercarse a [[temperatura_critica]].'
+        en: '[[temperatura_critica]] must be read as part of the critical pattern: it describes how the system changes
+          as it approaches [[temperatura_critica]].'
+    physical_reading_rules:
+    - id: temperatura_critica_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura_critica]] junto con el signo de [[temperatura_reducida]], porque estar por
+          debajo o por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[temperatura_critica]] together with the sign of [[temperatura_reducida]], because being
+          below or above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: temperatura_critica_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura_critica]] use unidades compatibles y que su tendencia sea coherente con
+          una ley de escala cerca de [[temperatura_critica]].
+        en: Check that [[temperatura_critica]] uses compatible units and that its trend is consistent with a scaling
+          law near [[temperatura_critica]].
+    model_validity_rules:
+    - id: temperatura_critica_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[temperatura_critica]] son aproximaciones asintóticas: no deben extrapolarse
+          lejos de [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[temperatura_critica]] are asymptotic approximations: they should not be extrapolated
+          far from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: temperatura_critica_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[temperatura_critica]] con [[temperatura_reducida]]: la curvatura o
+          pendiente efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[temperatura_critica]] to [[temperatura_reducida]]: the curvature or effective
+          slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: temperatura_critica_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[temperatura_critica]] como una variación ordinaria suave si el modelo predice divergencia,
+          anulación o singularidad cerca de [[temperatura_critica]].
+        en: Do not treat [[temperatura_critica]] as an ordinary smooth variation if the model predicts divergence,
+          vanishing, or singular behavior near [[temperatura_critica]].
+    next_step_rules:
+    - id: temperatura_critica_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[temperatura_critica]], compara el régimen por debajo y por encima de [[temperatura_critica]]
+          y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[temperatura_critica]], compare the regimes below and above [[temperatura_critica]]
+          and check which critical exponent controls the trend.
+    physical_intuition:
+    - id: temperatura_critica_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[temperatura_critica]] refleja que muchas partes del sistema dejan de comportarse de forma
+          independiente cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[temperatura_critica]] reflects that many parts of the system stop behaving independently
+          as correlations grow near criticality.
+    limiting_cases:
+    - id: temperatura_critica_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[temperatura_critica]] debe evaluarse con especial cuidado;
+          lejos de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[temperatura_critica]] must be evaluated carefully; far
+          from zero, critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  temperatura_reducida:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable reducida que mide distancia relativa a la criticidad
+      en: reduced variable measuring relative distance from criticality
+    summary_rules:
+    - id: temperatura_reducida_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[temperatura_reducida]] mide la distancia relativa a [[temperatura_critica]] y decide si la lectura
+          pertenece al lado ordenado, desordenado o crítico.'
+        en: '[[temperatura_reducida]] measures the relative distance from [[temperatura_critica]] and decides whether
+          the reading belongs to the ordered, disordered, or critical side.'
+    physical_reading_rules:
+    - id: temperatura_reducida_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[temperatura_reducida]] junto con el signo de [[temperatura_reducida]], porque estar por
+          debajo o por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[temperatura_reducida]] together with the sign of [[temperatura_reducida]], because being
+          below or above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: temperatura_reducida_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[temperatura_reducida]] use unidades compatibles y que su tendencia sea coherente con
+          una ley de escala cerca de [[temperatura_critica]].
+        en: Check that [[temperatura_reducida]] uses compatible units and that its trend is consistent with a scaling
+          law near [[temperatura_critica]].
+    model_validity_rules:
+    - id: temperatura_reducida_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[temperatura_reducida]] son aproximaciones asintóticas: no deben extrapolarse
+          lejos de [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[temperatura_reducida]] are asymptotic approximations: they should not be extrapolated
+          far from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: temperatura_reducida_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[temperatura_reducida]] con [[temperatura_reducida]]: la curvatura
+          o pendiente efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[temperatura_reducida]] to [[temperatura_reducida]]: the curvature or effective
+          slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: temperatura_reducida_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: 'No confundas [[temperatura_reducida]] con [[temperatura]]: es adimensional y su signo localiza el lado
+          de la transición.'
+        en: 'Do not confuse [[temperatura_reducida]] with [[temperatura]]: it is dimensionless and its sign locates
+          the side of the transition.'
+    next_step_rules:
+    - id: temperatura_reducida_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[temperatura_reducida]], compara el régimen por debajo y por encima de [[temperatura_critica]]
+          y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[temperatura_reducida]], compare the regimes below and above [[temperatura_critica]]
+          and check which critical exponent controls the trend.
+    physical_intuition:
+    - id: temperatura_reducida_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[temperatura_reducida]] refleja que muchas partes del sistema dejan de comportarse de
+          forma independiente cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[temperatura_reducida]] reflects that many parts of the system stop behaving independently
+          as correlations grow near criticality.
+    limiting_cases:
+    - id: temperatura_reducida_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[temperatura_reducida]] debe evaluarse con especial cuidado;
+          lejos de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[temperatura_reducida]] must be evaluated carefully; far
+          from zero, critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  parametro_de_orden:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: variable dependiente que mide organización macroscópica
+      en: dependent variable measuring macroscopic ordering
+    summary_rules:
+    - id: parametro_de_orden_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[parametro_de_orden]] resume el grado de orden macroscópico; cerca de [[temperatura_critica]] suele
+          anularse de forma continua en una transición crítica.'
+        en: '[[parametro_de_orden]] summarizes macroscopic order; near [[temperatura_critica]] it usually vanishes
+          continuously in a critical transition.'
+    physical_reading_rules:
+    - id: parametro_de_orden_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[parametro_de_orden]] junto con el signo de [[temperatura_reducida]], porque estar por debajo
+          o por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[parametro_de_orden]] together with the sign of [[temperatura_reducida]], because being below
+          or above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: parametro_de_orden_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[parametro_de_orden]] use unidades compatibles y que su tendencia sea coherente con una
+          ley de escala cerca de [[temperatura_critica]].
+        en: Check that [[parametro_de_orden]] uses compatible units and that its trend is consistent with a scaling
+          law near [[temperatura_critica]].
+    model_validity_rules:
+    - id: parametro_de_orden_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[parametro_de_orden]] son aproximaciones asintóticas: no deben extrapolarse
+          lejos de [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[parametro_de_orden]] are asymptotic approximations: they should not be extrapolated
+          far from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: parametro_de_orden_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[parametro_de_orden]] con [[temperatura_reducida]]: la curvatura o
+          pendiente efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[parametro_de_orden]] to [[temperatura_reducida]]: the curvature or effective
+          slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: parametro_de_orden_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[parametro_de_orden]] como una variación ordinaria suave si el modelo predice divergencia,
+          anulación o singularidad cerca de [[temperatura_critica]].
+        en: Do not treat [[parametro_de_orden]] as an ordinary smooth variation if the model predicts divergence,
+          vanishing, or singular behavior near [[temperatura_critica]].
+    next_step_rules:
+    - id: parametro_de_orden_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[parametro_de_orden]], compara el régimen por debajo y por encima de [[temperatura_critica]]
+          y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[parametro_de_orden]], compare the regimes below and above [[temperatura_critica]]
+          and check which critical exponent controls the trend.
+    physical_intuition:
+    - id: parametro_de_orden_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[parametro_de_orden]] refleja que muchas partes del sistema dejan de comportarse de forma
+          independiente cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[parametro_de_orden]] reflects that many parts of the system stop behaving independently
+          as correlations grow near criticality.
+    limiting_cases:
+    - id: parametro_de_orden_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[parametro_de_orden]] debe evaluarse con especial cuidado;
+          lejos de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[parametro_de_orden]] must be evaluated carefully; far
+          from zero, critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  amplitud_critica:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: factor de escala de la ley crítica del parámetro de orden
+      en: scale factor of the order-parameter critical law
+    summary_rules:
+    - id: amplitud_critica_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[amplitud_critica]] debe leerse como una pieza del patrón crítico: describe cómo cambia el sistema
+          al acercarse a [[temperatura_critica]].'
+        en: '[[amplitud_critica]] must be read as part of the critical pattern: it describes how the system changes
+          as it approaches [[temperatura_critica]].'
+    physical_reading_rules:
+    - id: amplitud_critica_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[amplitud_critica]] junto con el signo de [[temperatura_reducida]], porque estar por debajo
+          o por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[amplitud_critica]] together with the sign of [[temperatura_reducida]], because being below
+          or above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: amplitud_critica_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[amplitud_critica]] use unidades compatibles y que su tendencia sea coherente con una
+          ley de escala cerca de [[temperatura_critica]].
+        en: Check that [[amplitud_critica]] uses compatible units and that its trend is consistent with a scaling
+          law near [[temperatura_critica]].
+    model_validity_rules:
+    - id: amplitud_critica_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[amplitud_critica]] son aproximaciones asintóticas: no deben extrapolarse lejos
+          de [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[amplitud_critica]] are asymptotic approximations: they should not be extrapolated
+          far from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: amplitud_critica_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[amplitud_critica]] con [[temperatura_reducida]]: la curvatura o pendiente
+          efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[amplitud_critica]] to [[temperatura_reducida]]: the curvature or effective
+          slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: amplitud_critica_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[amplitud_critica]] como una variación ordinaria suave si el modelo predice divergencia,
+          anulación o singularidad cerca de [[temperatura_critica]].
+        en: Do not treat [[amplitud_critica]] as an ordinary smooth variation if the model predicts divergence,
+          vanishing, or singular behavior near [[temperatura_critica]].
+    next_step_rules:
+    - id: amplitud_critica_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[amplitud_critica]], compara el régimen por debajo y por encima de [[temperatura_critica]]
+          y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[amplitud_critica]], compare the regimes below and above [[temperatura_critica]]
+          and check which critical exponent controls the trend.
+    physical_intuition:
+    - id: amplitud_critica_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[amplitud_critica]] refleja que muchas partes del sistema dejan de comportarse de forma
+          independiente cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[amplitud_critica]] reflects that many parts of the system stop behaving independently
+          as correlations grow near criticality.
+    limiting_cases:
+    - id: amplitud_critica_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[amplitud_critica]] debe evaluarse con especial cuidado;
+          lejos de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[amplitud_critica]] must be evaluated carefully; far from
+          zero, critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  exponente_critico_beta:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: exponente que regula el apagado del parámetro de orden
+      en: exponent controlling order-parameter vanishing
+    summary_rules:
+    - id: exponente_critico_beta_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[exponente_critico_beta]] debe leerse como una pieza del patrón crítico: describe cómo cambia el sistema
+          al acercarse a [[temperatura_critica]].'
+        en: '[[exponente_critico_beta]] must be read as part of the critical pattern: it describes how the system
+          changes as it approaches [[temperatura_critica]].'
+    physical_reading_rules:
+    - id: exponente_critico_beta_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[exponente_critico_beta]] junto con el signo de [[temperatura_reducida]], porque estar por
+          debajo o por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[exponente_critico_beta]] together with the sign of [[temperatura_reducida]], because being
+          below or above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: exponente_critico_beta_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[exponente_critico_beta]] use unidades compatibles y que su tendencia sea coherente con
+          una ley de escala cerca de [[temperatura_critica]].
+        en: Check that [[exponente_critico_beta]] uses compatible units and that its trend is consistent with a
+          scaling law near [[temperatura_critica]].
+    model_validity_rules:
+    - id: exponente_critico_beta_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[exponente_critico_beta]] son aproximaciones asintóticas: no deben extrapolarse
+          lejos de [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[exponente_critico_beta]] are asymptotic approximations: they should not be extrapolated
+          far from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: exponente_critico_beta_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[exponente_critico_beta]] con [[temperatura_reducida]]: la curvatura
+          o pendiente efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[exponente_critico_beta]] to [[temperatura_reducida]]: the curvature or
+          effective slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: exponente_critico_beta_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[exponente_critico_beta]] como una variación ordinaria suave si el modelo predice divergencia,
+          anulación o singularidad cerca de [[temperatura_critica]].
+        en: Do not treat [[exponente_critico_beta]] as an ordinary smooth variation if the model predicts divergence,
+          vanishing, or singular behavior near [[temperatura_critica]].
+    next_step_rules:
+    - id: exponente_critico_beta_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[exponente_critico_beta]], compara el régimen por debajo y por encima de [[temperatura_critica]]
+          y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[exponente_critico_beta]], compare the regimes below and above [[temperatura_critica]]
+          and check which critical exponent controls the trend.
+    physical_intuition:
+    - id: exponente_critico_beta_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[exponente_critico_beta]] refleja que muchas partes del sistema dejan de comportarse de
+          forma independiente cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[exponente_critico_beta]] reflects that many parts of the system stop behaving independently
+          as correlations grow near criticality.
+    limiting_cases:
+    - id: exponente_critico_beta_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[exponente_critico_beta]] debe evaluarse con especial
+          cuidado; lejos de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[exponente_critico_beta]] must be evaluated carefully;
+          far from zero, critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  susceptibilidad:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: respuesta del sistema a una perturbación conjugada
+      en: system response to a conjugate perturbation
+    summary_rules:
+    - id: susceptibilidad_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[susceptibilidad]] mide cuánto responde el sistema a una perturbación; su aumento cerca de [[temperatura_critica]]
+          revela fluctuaciones críticas.'
+        en: '[[susceptibilidad]] measures how strongly the system responds to a perturbation; its growth near [[temperatura_critica]]
+          reveals critical fluctuations.'
+    physical_reading_rules:
+    - id: susceptibilidad_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[susceptibilidad]] junto con el signo de [[temperatura_reducida]], porque estar por debajo
+          o por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[susceptibilidad]] together with the sign of [[temperatura_reducida]], because being below
+          or above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: susceptibilidad_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[susceptibilidad]] use unidades compatibles y que su tendencia sea coherente con una
+          ley de escala cerca de [[temperatura_critica]].
+        en: Check that [[susceptibilidad]] uses compatible units and that its trend is consistent with a scaling
+          law near [[temperatura_critica]].
+    model_validity_rules:
+    - id: susceptibilidad_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[susceptibilidad]] son aproximaciones asintóticas: no deben extrapolarse lejos
+          de [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[susceptibilidad]] are asymptotic approximations: they should not be extrapolated
+          far from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: susceptibilidad_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[susceptibilidad]] con [[temperatura_reducida]]: la curvatura o pendiente
+          efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[susceptibilidad]] to [[temperatura_reducida]]: the curvature or effective
+          slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: susceptibilidad_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[susceptibilidad]] como una variación ordinaria suave si el modelo predice divergencia, anulación
+          o singularidad cerca de [[temperatura_critica]].
+        en: Do not treat [[susceptibilidad]] as an ordinary smooth variation if the model predicts divergence, vanishing,
+          or singular behavior near [[temperatura_critica]].
+    next_step_rules:
+    - id: susceptibilidad_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[susceptibilidad]], compara el régimen por debajo y por encima de [[temperatura_critica]]
+          y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[susceptibilidad]], compare the regimes below and above [[temperatura_critica]]
+          and check which critical exponent controls the trend.
+    physical_intuition:
+    - id: susceptibilidad_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[susceptibilidad]] refleja que muchas partes del sistema dejan de comportarse de forma
+          independiente cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[susceptibilidad]] reflects that many parts of the system stop behaving independently as
+          correlations grow near criticality.
+    limiting_cases:
+    - id: susceptibilidad_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[susceptibilidad]] debe evaluarse con especial cuidado;
+          lejos de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[susceptibilidad]] must be evaluated carefully; far from
+          zero, critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  amplitud_susceptibilidad:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: factor de escala de la divergencia de susceptibilidad
+      en: scale factor of susceptibility divergence
+    summary_rules:
+    - id: amplitud_susceptibilidad_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[amplitud_susceptibilidad]] debe leerse como una pieza del patrón crítico: describe cómo cambia el
+          sistema al acercarse a [[temperatura_critica]].'
+        en: '[[amplitud_susceptibilidad]] must be read as part of the critical pattern: it describes how the system
+          changes as it approaches [[temperatura_critica]].'
+    physical_reading_rules:
+    - id: amplitud_susceptibilidad_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[amplitud_susceptibilidad]] junto con el signo de [[temperatura_reducida]], porque estar
+          por debajo o por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[amplitud_susceptibilidad]] together with the sign of [[temperatura_reducida]], because being
+          below or above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: amplitud_susceptibilidad_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[amplitud_susceptibilidad]] use unidades compatibles y que su tendencia sea coherente
+          con una ley de escala cerca de [[temperatura_critica]].
+        en: Check that [[amplitud_susceptibilidad]] uses compatible units and that its trend is consistent with
+          a scaling law near [[temperatura_critica]].
+    model_validity_rules:
+    - id: amplitud_susceptibilidad_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[amplitud_susceptibilidad]] son aproximaciones asintóticas: no deben extrapolarse
+          lejos de [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[amplitud_susceptibilidad]] are asymptotic approximations: they should not be extrapolated
+          far from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: amplitud_susceptibilidad_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[amplitud_susceptibilidad]] con [[temperatura_reducida]]: la curvatura
+          o pendiente efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[amplitud_susceptibilidad]] to [[temperatura_reducida]]: the curvature
+          or effective slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: amplitud_susceptibilidad_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[amplitud_susceptibilidad]] como una variación ordinaria suave si el modelo predice divergencia,
+          anulación o singularidad cerca de [[temperatura_critica]].
+        en: Do not treat [[amplitud_susceptibilidad]] as an ordinary smooth variation if the model predicts divergence,
+          vanishing, or singular behavior near [[temperatura_critica]].
+    next_step_rules:
+    - id: amplitud_susceptibilidad_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[amplitud_susceptibilidad]], compara el régimen por debajo y por encima de [[temperatura_critica]]
+          y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[amplitud_susceptibilidad]], compare the regimes below and above [[temperatura_critica]]
+          and check which critical exponent controls the trend.
+    physical_intuition:
+    - id: amplitud_susceptibilidad_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[amplitud_susceptibilidad]] refleja que muchas partes del sistema dejan de comportarse
+          de forma independiente cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[amplitud_susceptibilidad]] reflects that many parts of the system stop behaving independently
+          as correlations grow near criticality.
+    limiting_cases:
+    - id: amplitud_susceptibilidad_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[amplitud_susceptibilidad]] debe evaluarse con especial
+          cuidado; lejos de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[amplitud_susceptibilidad]] must be evaluated carefully;
+          far from zero, critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  exponente_critico_gamma:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: exponente que regula la divergencia de susceptibilidad
+      en: exponent controlling susceptibility divergence
+    summary_rules:
+    - id: exponente_critico_gamma_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[exponente_critico_gamma]] debe leerse como una pieza del patrón crítico: describe cómo cambia el
+          sistema al acercarse a [[temperatura_critica]].'
+        en: '[[exponente_critico_gamma]] must be read as part of the critical pattern: it describes how the system
+          changes as it approaches [[temperatura_critica]].'
+    physical_reading_rules:
+    - id: exponente_critico_gamma_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[exponente_critico_gamma]] junto con el signo de [[temperatura_reducida]], porque estar
+          por debajo o por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[exponente_critico_gamma]] together with the sign of [[temperatura_reducida]], because being
+          below or above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: exponente_critico_gamma_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[exponente_critico_gamma]] use unidades compatibles y que su tendencia sea coherente
+          con una ley de escala cerca de [[temperatura_critica]].
+        en: Check that [[exponente_critico_gamma]] uses compatible units and that its trend is consistent with a
+          scaling law near [[temperatura_critica]].
+    model_validity_rules:
+    - id: exponente_critico_gamma_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[exponente_critico_gamma]] son aproximaciones asintóticas: no deben extrapolarse
+          lejos de [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[exponente_critico_gamma]] are asymptotic approximations: they should not be extrapolated
+          far from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: exponente_critico_gamma_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[exponente_critico_gamma]] con [[temperatura_reducida]]: la curvatura
+          o pendiente efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[exponente_critico_gamma]] to [[temperatura_reducida]]: the curvature or
+          effective slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: exponente_critico_gamma_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[exponente_critico_gamma]] como una variación ordinaria suave si el modelo predice divergencia,
+          anulación o singularidad cerca de [[temperatura_critica]].
+        en: Do not treat [[exponente_critico_gamma]] as an ordinary smooth variation if the model predicts divergence,
+          vanishing, or singular behavior near [[temperatura_critica]].
+    next_step_rules:
+    - id: exponente_critico_gamma_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[exponente_critico_gamma]], compara el régimen por debajo y por encima de [[temperatura_critica]]
+          y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[exponente_critico_gamma]], compare the regimes below and above [[temperatura_critica]]
+          and check which critical exponent controls the trend.
+    physical_intuition:
+    - id: exponente_critico_gamma_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[exponente_critico_gamma]] refleja que muchas partes del sistema dejan de comportarse
+          de forma independiente cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[exponente_critico_gamma]] reflects that many parts of the system stop behaving independently
+          as correlations grow near criticality.
+    limiting_cases:
+    - id: exponente_critico_gamma_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[exponente_critico_gamma]] debe evaluarse con especial
+          cuidado; lejos de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[exponente_critico_gamma]] must be evaluated carefully;
+          far from zero, critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  longitud_correlacion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: tamaño característico de regiones correlacionadas
+      en: characteristic size of correlated regions
+    summary_rules:
+    - id: longitud_correlacion_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[longitud_correlacion]] indica el tamaño de regiones que fluctúan juntas; su crecimiento es una huella
+          central de los fenómenos críticos.'
+        en: '[[longitud_correlacion]] indicates the size of regions fluctuating together; its growth is a central
+          fingerprint of critical phenomena.'
+    physical_reading_rules:
+    - id: longitud_correlacion_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[longitud_correlacion]] junto con el signo de [[temperatura_reducida]], porque estar por
+          debajo o por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[longitud_correlacion]] together with the sign of [[temperatura_reducida]], because being
+          below or above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: longitud_correlacion_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[longitud_correlacion]] use unidades compatibles y que su tendencia sea coherente con
+          una ley de escala cerca de [[temperatura_critica]].
+        en: Check that [[longitud_correlacion]] uses compatible units and that its trend is consistent with a scaling
+          law near [[temperatura_critica]].
+    model_validity_rules:
+    - id: longitud_correlacion_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[longitud_correlacion]] son aproximaciones asintóticas: no deben extrapolarse
+          lejos de [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[longitud_correlacion]] are asymptotic approximations: they should not be extrapolated
+          far from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: longitud_correlacion_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[longitud_correlacion]] con [[temperatura_reducida]]: la curvatura
+          o pendiente efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[longitud_correlacion]] to [[temperatura_reducida]]: the curvature or effective
+          slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: longitud_correlacion_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[longitud_correlacion]] como una variación ordinaria suave si el modelo predice divergencia,
+          anulación o singularidad cerca de [[temperatura_critica]].
+        en: Do not treat [[longitud_correlacion]] as an ordinary smooth variation if the model predicts divergence,
+          vanishing, or singular behavior near [[temperatura_critica]].
+    next_step_rules:
+    - id: longitud_correlacion_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[longitud_correlacion]], compara el régimen por debajo y por encima de [[temperatura_critica]]
+          y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[longitud_correlacion]], compare the regimes below and above [[temperatura_critica]]
+          and check which critical exponent controls the trend.
+    physical_intuition:
+    - id: longitud_correlacion_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[longitud_correlacion]] refleja que muchas partes del sistema dejan de comportarse de
+          forma independiente cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[longitud_correlacion]] reflects that many parts of the system stop behaving independently
+          as correlations grow near criticality.
+    limiting_cases:
+    - id: longitud_correlacion_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[longitud_correlacion]] debe evaluarse con especial cuidado;
+          lejos de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[longitud_correlacion]] must be evaluated carefully; far
+          from zero, critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  amplitud_correlacion:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: factor de escala de la longitud de correlación
+      en: scale factor of correlation length
+    summary_rules:
+    - id: amplitud_correlacion_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[amplitud_correlacion]] debe leerse como una pieza del patrón crítico: describe cómo cambia el sistema
+          al acercarse a [[temperatura_critica]].'
+        en: '[[amplitud_correlacion]] must be read as part of the critical pattern: it describes how the system
+          changes as it approaches [[temperatura_critica]].'
+    physical_reading_rules:
+    - id: amplitud_correlacion_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[amplitud_correlacion]] junto con el signo de [[temperatura_reducida]], porque estar por
+          debajo o por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[amplitud_correlacion]] together with the sign of [[temperatura_reducida]], because being
+          below or above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: amplitud_correlacion_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[amplitud_correlacion]] use unidades compatibles y que su tendencia sea coherente con
+          una ley de escala cerca de [[temperatura_critica]].
+        en: Check that [[amplitud_correlacion]] uses compatible units and that its trend is consistent with a scaling
+          law near [[temperatura_critica]].
+    model_validity_rules:
+    - id: amplitud_correlacion_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[amplitud_correlacion]] son aproximaciones asintóticas: no deben extrapolarse
+          lejos de [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[amplitud_correlacion]] are asymptotic approximations: they should not be extrapolated
+          far from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: amplitud_correlacion_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[amplitud_correlacion]] con [[temperatura_reducida]]: la curvatura
+          o pendiente efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[amplitud_correlacion]] to [[temperatura_reducida]]: the curvature or effective
+          slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: amplitud_correlacion_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[amplitud_correlacion]] como una variación ordinaria suave si el modelo predice divergencia,
+          anulación o singularidad cerca de [[temperatura_critica]].
+        en: Do not treat [[amplitud_correlacion]] as an ordinary smooth variation if the model predicts divergence,
+          vanishing, or singular behavior near [[temperatura_critica]].
+    next_step_rules:
+    - id: amplitud_correlacion_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[amplitud_correlacion]], compara el régimen por debajo y por encima de [[temperatura_critica]]
+          y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[amplitud_correlacion]], compare the regimes below and above [[temperatura_critica]]
+          and check which critical exponent controls the trend.
+    physical_intuition:
+    - id: amplitud_correlacion_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[amplitud_correlacion]] refleja que muchas partes del sistema dejan de comportarse de
+          forma independiente cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[amplitud_correlacion]] reflects that many parts of the system stop behaving independently
+          as correlations grow near criticality.
+    limiting_cases:
+    - id: amplitud_correlacion_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[amplitud_correlacion]] debe evaluarse con especial cuidado;
+          lejos de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[amplitud_correlacion]] must be evaluated carefully; far
+          from zero, critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  exponente_critico_nu:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: exponente que regula la divergencia de longitud de correlación
+      en: exponent controlling correlation-length divergence
+    summary_rules:
+    - id: exponente_critico_nu_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[exponente_critico_nu]] debe leerse como una pieza del patrón crítico: describe cómo cambia el sistema
+          al acercarse a [[temperatura_critica]].'
+        en: '[[exponente_critico_nu]] must be read as part of the critical pattern: it describes how the system
+          changes as it approaches [[temperatura_critica]].'
+    physical_reading_rules:
+    - id: exponente_critico_nu_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[exponente_critico_nu]] junto con el signo de [[temperatura_reducida]], porque estar por
+          debajo o por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[exponente_critico_nu]] together with the sign of [[temperatura_reducida]], because being
+          below or above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: exponente_critico_nu_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[exponente_critico_nu]] use unidades compatibles y que su tendencia sea coherente con
+          una ley de escala cerca de [[temperatura_critica]].
+        en: Check that [[exponente_critico_nu]] uses compatible units and that its trend is consistent with a scaling
+          law near [[temperatura_critica]].
+    model_validity_rules:
+    - id: exponente_critico_nu_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[exponente_critico_nu]] son aproximaciones asintóticas: no deben extrapolarse
+          lejos de [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[exponente_critico_nu]] are asymptotic approximations: they should not be extrapolated
+          far from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: exponente_critico_nu_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[exponente_critico_nu]] con [[temperatura_reducida]]: la curvatura
+          o pendiente efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[exponente_critico_nu]] to [[temperatura_reducida]]: the curvature or effective
+          slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: exponente_critico_nu_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[exponente_critico_nu]] como una variación ordinaria suave si el modelo predice divergencia,
+          anulación o singularidad cerca de [[temperatura_critica]].
+        en: Do not treat [[exponente_critico_nu]] as an ordinary smooth variation if the model predicts divergence,
+          vanishing, or singular behavior near [[temperatura_critica]].
+    next_step_rules:
+    - id: exponente_critico_nu_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[exponente_critico_nu]], compara el régimen por debajo y por encima de [[temperatura_critica]]
+          y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[exponente_critico_nu]], compare the regimes below and above [[temperatura_critica]]
+          and check which critical exponent controls the trend.
+    physical_intuition:
+    - id: exponente_critico_nu_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[exponente_critico_nu]] refleja que muchas partes del sistema dejan de comportarse de
+          forma independiente cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[exponente_critico_nu]] reflects that many parts of the system stop behaving independently
+          as correlations grow near criticality.
+    limiting_cases:
+    - id: exponente_critico_nu_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[exponente_critico_nu]] debe evaluarse con especial cuidado;
+          lejos de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[exponente_critico_nu]] must be evaluated carefully; far
+          from zero, critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  calor_especifico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: respuesta térmica singular cerca de la criticidad
+      en: singular thermal response near criticality
+    summary_rules:
+    - id: calor_especifico_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[calor_especifico]] muestra cómo responde la energía del sistema a cambios térmicos; cerca de [[temperatura_critica]]
+          puede presentar una singularidad.'
+        en: '[[calor_especifico]] shows how the system energy responds to thermal changes; near [[temperatura_critica]]
+          it may present a singularity.'
+    physical_reading_rules:
+    - id: calor_especifico_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[calor_especifico]] junto con el signo de [[temperatura_reducida]], porque estar por debajo
+          o por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[calor_especifico]] together with the sign of [[temperatura_reducida]], because being below
+          or above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: calor_especifico_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[calor_especifico]] use unidades compatibles y que su tendencia sea coherente con una
+          ley de escala cerca de [[temperatura_critica]].
+        en: Check that [[calor_especifico]] uses compatible units and that its trend is consistent with a scaling
+          law near [[temperatura_critica]].
+    model_validity_rules:
+    - id: calor_especifico_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[calor_especifico]] son aproximaciones asintóticas: no deben extrapolarse lejos
+          de [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[calor_especifico]] are asymptotic approximations: they should not be extrapolated
+          far from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: calor_especifico_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[calor_especifico]] con [[temperatura_reducida]]: la curvatura o pendiente
+          efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[calor_especifico]] to [[temperatura_reducida]]: the curvature or effective
+          slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: calor_especifico_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[calor_especifico]] como una variación ordinaria suave si el modelo predice divergencia,
+          anulación o singularidad cerca de [[temperatura_critica]].
+        en: Do not treat [[calor_especifico]] as an ordinary smooth variation if the model predicts divergence,
+          vanishing, or singular behavior near [[temperatura_critica]].
+    next_step_rules:
+    - id: calor_especifico_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[calor_especifico]], compara el régimen por debajo y por encima de [[temperatura_critica]]
+          y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[calor_especifico]], compare the regimes below and above [[temperatura_critica]]
+          and check which critical exponent controls the trend.
+    physical_intuition:
+    - id: calor_especifico_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[calor_especifico]] refleja que muchas partes del sistema dejan de comportarse de forma
+          independiente cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[calor_especifico]] reflects that many parts of the system stop behaving independently
+          as correlations grow near criticality.
+    limiting_cases:
+    - id: calor_especifico_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[calor_especifico]] debe evaluarse con especial cuidado;
+          lejos de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[calor_especifico]] must be evaluated carefully; far from
+          zero, critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  amplitud_calor_especifico:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: factor de escala del calor específico crítico
+      en: scale factor of critical heat capacity
+    summary_rules:
+    - id: amplitud_calor_especifico_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[amplitud_calor_especifico]] debe leerse como una pieza del patrón crítico: describe cómo cambia el
+          sistema al acercarse a [[temperatura_critica]].'
+        en: '[[amplitud_calor_especifico]] must be read as part of the critical pattern: it describes how the system
+          changes as it approaches [[temperatura_critica]].'
+    physical_reading_rules:
+    - id: amplitud_calor_especifico_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[amplitud_calor_especifico]] junto con el signo de [[temperatura_reducida]], porque estar
+          por debajo o por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[amplitud_calor_especifico]] together with the sign of [[temperatura_reducida]], because
+          being below or above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: amplitud_calor_especifico_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[amplitud_calor_especifico]] use unidades compatibles y que su tendencia sea coherente
+          con una ley de escala cerca de [[temperatura_critica]].
+        en: Check that [[amplitud_calor_especifico]] uses compatible units and that its trend is consistent with
+          a scaling law near [[temperatura_critica]].
+    model_validity_rules:
+    - id: amplitud_calor_especifico_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[amplitud_calor_especifico]] son aproximaciones asintóticas: no deben extrapolarse
+          lejos de [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[amplitud_calor_especifico]] are asymptotic approximations: they should not be extrapolated
+          far from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: amplitud_calor_especifico_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[amplitud_calor_especifico]] con [[temperatura_reducida]]: la curvatura
+          o pendiente efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[amplitud_calor_especifico]] to [[temperatura_reducida]]: the curvature
+          or effective slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: amplitud_calor_especifico_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[amplitud_calor_especifico]] como una variación ordinaria suave si el modelo predice divergencia,
+          anulación o singularidad cerca de [[temperatura_critica]].
+        en: Do not treat [[amplitud_calor_especifico]] as an ordinary smooth variation if the model predicts divergence,
+          vanishing, or singular behavior near [[temperatura_critica]].
+    next_step_rules:
+    - id: amplitud_calor_especifico_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[amplitud_calor_especifico]], compara el régimen por debajo y por encima de
+          [[temperatura_critica]] y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[amplitud_calor_especifico]], compare the regimes below and above [[temperatura_critica]]
+          and check which critical exponent controls the trend.
+    physical_intuition:
+    - id: amplitud_calor_especifico_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[amplitud_calor_especifico]] refleja que muchas partes del sistema dejan de comportarse
+          de forma independiente cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[amplitud_calor_especifico]] reflects that many parts of the system stop behaving independently
+          as correlations grow near criticality.
+    limiting_cases:
+    - id: amplitud_calor_especifico_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[amplitud_calor_especifico]] debe evaluarse con especial
+          cuidado; lejos de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[amplitud_calor_especifico]] must be evaluated carefully;
+          far from zero, critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []
+  exponente_critico_alpha:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: exponente que regula la singularidad del calor específico
+      en: exponent controlling heat-capacity singularity
+    summary_rules:
+    - id: exponente_critico_alpha_summary_criticidad
+      when: 'true'
+      status: ok
+      text:
+        es: '[[exponente_critico_alpha]] debe leerse como una pieza del patrón crítico: describe cómo cambia el
+          sistema al acercarse a [[temperatura_critica]].'
+        en: '[[exponente_critico_alpha]] must be read as part of the critical pattern: it describes how the system
+          changes as it approaches [[temperatura_critica]].'
+    physical_reading_rules:
+    - id: exponente_critico_alpha_physical_reading_regimen
+      when: 'true'
+      status: info
+      text:
+        es: Interpreta [[exponente_critico_alpha]] junto con el signo de [[temperatura_reducida]], porque estar
+          por debajo o por encima de [[temperatura_critica]] puede cambiar la fase observada.
+        en: Interpret [[exponente_critico_alpha]] together with the sign of [[temperatura_reducida]], because being
+          below or above [[temperatura_critica]] can change the observed phase.
+    coherence_rules:
+    - id: exponente_critico_alpha_coherence_units_and_scaling
+      when: 'true'
+      status: ok
+      text:
+        es: Comprueba que [[exponente_critico_alpha]] use unidades compatibles y que su tendencia sea coherente
+          con una ley de escala cerca de [[temperatura_critica]].
+        en: Check that [[exponente_critico_alpha]] uses compatible units and that its trend is consistent with a
+          scaling law near [[temperatura_critica]].
+    model_validity_rules:
+    - id: exponente_critico_alpha_model_validity_asymptotic
+      when: 'true'
+      status: info
+      text:
+        es: 'Las leyes críticas de [[exponente_critico_alpha]] son aproximaciones asintóticas: no deben extrapolarse
+          lejos de [[temperatura_critica]] ni dentro de regiones dominadas por tamaño finito, impurezas o histéresis.'
+        en: 'Critical laws for [[exponente_critico_alpha]] are asymptotic approximations: they should not be extrapolated
+          far from [[temperatura_critica]] or into regions dominated by finite size, impurities, or hysteresis.'
+    graph_rules:
+    - id: exponente_critico_alpha_graph_loglog_slope
+      when: 'true'
+      status: info
+      text:
+        es: 'En la gráfica Coord, relaciona [[exponente_critico_alpha]] con [[temperatura_reducida]]: la curvatura
+          o pendiente efectiva indica si el comportamiento crítico sigue la ley esperada.'
+        en: 'In the Coord graph, relate [[exponente_critico_alpha]] to [[temperatura_reducida]]: the curvature or
+          effective slope indicates whether the critical behavior follows the expected law.'
+    likely_errors:
+    - id: exponente_critico_alpha_likely_error_ordinary_divergence
+      when: 'true'
+      status: warning
+      text:
+        es: No trates [[exponente_critico_alpha]] como una variación ordinaria suave si el modelo predice divergencia,
+          anulación o singularidad cerca de [[temperatura_critica]].
+        en: Do not treat [[exponente_critico_alpha]] as an ordinary smooth variation if the model predicts divergence,
+          vanishing, or singular behavior near [[temperatura_critica]].
+    next_step_rules:
+    - id: exponente_critico_alpha_next_step_compare_regimes
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[exponente_critico_alpha]], compara el régimen por debajo y por encima de [[temperatura_critica]]
+          y revisa qué exponente crítico controla la tendencia.
+        en: After interpreting [[exponente_critico_alpha]], compare the regimes below and above [[temperatura_critica]]
+          and check which critical exponent controls the trend.
+    physical_intuition:
+    - id: exponente_critico_alpha_physical_intuition_correlations
+      when: 'true'
+      status: info
+      text:
+        es: Físicamente, [[exponente_critico_alpha]] refleja que muchas partes del sistema dejan de comportarse
+          de forma independiente cuando aumenta la correlación cerca de la criticidad.
+        en: Physically, [[exponente_critico_alpha]] reflects that many parts of the system stop behaving independently
+          as correlations grow near criticality.
+    limiting_cases:
+    - id: exponente_critico_alpha_limiting_case_near_far
+      when: 'true'
+      status: info
+      text:
+        es: Si [[temperatura_reducida]] se acerca a cero, [[exponente_critico_alpha]] debe evaluarse con especial
+          cuidado; lejos de cero, el comportamiento crítico puede dejar de ser dominante.
+        en: If [[temperatura_reducida]] approaches zero, [[exponente_critico_alpha]] must be evaluated carefully;
+          far from zero, critical behavior may no longer dominate.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: ''
+        en: ''
+      common_sign_errors: []

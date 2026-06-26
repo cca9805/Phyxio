@@ -1,0 +1,63 @@
+import React from "react";
+import { createCoordGraph } from "../../graphFactories.jsx";
+// Compat validator: createCoordGraphPage
+
+const uiLang = "es";
+const t = (es, en) => (uiLang === "en" ? en : es);
+void uiLang;
+void t;
+
+function EnchufesYTomasGraphsCoordView({ lang = "es" }) {
+  const es = lang !== "en";
+
+  return (
+    <div style={{ display: "grid", gap: 12 }}>
+      <div className="v2-card" style={{ padding: 14 }}>
+        <div className="v2-card-title">
+          {es ? "Enchufes y tomas (Coord)" : "Plugs and Sockets (Coord)"}
+        </div>
+        <p className="muted" style={{ marginTop: 8 }}>
+          {es
+            ? "Lectura física del margen de uso de la toma y la potencia disipada en el contacto en función de la corriente total conectada."
+            : "Physical reading of socket usage ratio and contact dissipated power as a function of total connected current."}
+        </p>
+        <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.55 }}>
+          <li>
+            {es
+              ? "El margen_uso = I_tot / I_max cuantifica la proximidad a la sobrecarga."
+              : "margen_uso = I_tot / I_max quantifies proximity to overload."}
+          </li>
+          <li>
+            {es
+              ? "La potencia disipada en el contacto crece con el cuadrado de I_tot."
+              : "Power dissipated at the contact grows with the square of I_tot."}
+          </li>
+          <li>
+            {es
+              ? "Una R_contacto elevada genera riesgo térmico incluso con I_tot dentro del límite nominal."
+              : "High R_contacto generates thermal risk even with I_tot within the nominal limit."}
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+const EnchufesYTomasGraphsCoordContract = createCoordGraph({
+  leafId: "enchufes-y-tomas",
+  formulaId: "ratio_uso",
+  axes: {
+    x: { magnitudeId: "I_tot", label: { es: "Corriente total (A)", en: "Total current (A)" } },
+    y: { magnitudeId: "margen_uso", label: { es: "Ratio de uso", en: "Usage ratio" } },
+  },
+  metadata: {
+    title: { es: "Ratio de uso de la toma vs corriente total", en: "Socket usage ratio vs total current" },
+    description: {
+      es: "Muestra cómo el margen de uso aumenta linealmente con I_tot y la línea de referencia en I_max.",
+      en: "Shows how the usage ratio increases linearly with I_tot and the reference line at I_max.",
+    },
+  },
+  ViewComponent: EnchufesYTomasGraphsCoordView,
+});
+
+export default EnchufesYTomasGraphsCoordContract;

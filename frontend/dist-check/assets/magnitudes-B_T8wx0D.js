@@ -1,0 +1,131 @@
+const e=`version: 1
+magnitudes:
+- id: F_net
+  symbol: \\vec{F}_{\\text{net}}
+  nombre:
+    es: Fuerza neta
+    en: Net force
+  descripcion:
+    es: Suma vectorial de todas las fuerzas externas que actuan sobre el sistema.
+    en: Vector sum of all external forces acting on the system.
+  unidad_si: N
+  dimension: LMT^{-2}
+  is_vector: true
+  components:
+  - F_net_x
+  - F_net_y
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - primera-ley-inercia
+  common_mistake: Confundir fuerza neta nula con ausencia total de fuerzas individuales.
+  typical_range: Desde 0 N en equilibrio hasta valores no nulos cuando el estado de movimiento cambia.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: En una componente, el signo indica el sentido de la resultante respecto al eje elegido.
+      en: In one component, the sign indicates the direction of the resultant relative to the chosen axis.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: Si F_net = 0 en un marco inercial, no hay aceleracion y el estado de movimiento se conserva.
+      en: If F_net = 0 in an inertial frame, there is no acceleration and the state of motion is preserved.
+  value_nature:
+    kind: vector_projection
+    nonnegative_only: false
+    expected_interval: Determined by the force scale of the problem
+  interpretation_role:
+    primary_for:
+    - primera-ley-inercia
+    secondary_for: []
+  graph_binding:
+    channels:
+    - resultant_reading
+    - force_balance
+  pedagogical_notes: F_net es la lectura central del leaf y debe conectarse con el DCL antes de cualquier cuenta.
+- id: a
+  symbol: \\vec{a}
+  nombre:
+    es: Aceleracion
+    en: Acceleration
+  descripcion:
+    es: Tasa de cambio temporal de la velocidad del sistema.
+    en: Time rate of change of the system velocity.
+  unidad_si: m/s^2
+  dimension: LT^{-2}
+  is_vector: true
+  components:
+  - a_x
+  - a_y
+  category: derived
+  physical_role: frame_effect
+  used_in:
+  - primera-ley-inercia
+  common_mistake: Pensar que a = 0 implica necesariamente reposo en vez de velocidad constante.
+  typical_range: Exactamente 0 m/s^2 en el regimen ideal de la primera ley.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo solo importa por componente; en este leaf interesa sobre todo que todas sean cero.
+      en: The sign matters only by component; in this leaf the key point is that all of them are zero.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: a = 0 significa ausencia de cambio de velocidad, no ausencia de movimiento.
+      en: a = 0 means no change in velocity, not absence of motion.
+  value_nature:
+    kind: vector_projection
+    nonnegative_only: false
+    expected_interval: 0 in the ideal first-law regime
+  interpretation_role:
+    primary_for:
+    - primera-ley-inercia
+    secondary_for: []
+  graph_binding:
+    channels:
+    - motion_state
+  pedagogical_notes: La aceleracion sirve para separar movimiento uniforme de cambio de velocidad.
+- id: v
+  symbol: \\vec{v}
+  nombre:
+    es: Velocidad
+    en: Velocity
+  descripcion:
+    es: Estado cinemático del sistema medido en el marco elegido.
+    en: Kinematic state of the system measured in the chosen frame.
+  unidad_si: m/s
+  dimension: LT^{-1}
+  is_vector: true
+  components:
+  - v_x
+  - v_y
+  category: derived
+  physical_role: physical_quantity
+  used_in:
+  - primera-ley-inercia
+  common_mistake: Dibujar una fuerza horizontal extra solo porque v no es cero.
+  typical_range: Puede ser 0 o cualquier valor constante compatible con el escenario.
+  sign_behavior:
+    has_sign: true
+    meaning:
+      es: El signo de cada componente indica direccion de movimiento, no la existencia de una fuerza en ese sentido.
+      en: The sign of each component indicates direction of motion, not the existence of a force in that direction.
+  zero_behavior:
+    allowed: true
+    meaning:
+      es: v = 0 es un caso particular de estado constante; no es el unico estado compatible con la primera ley.
+      en: v = 0 is a particular constant state, not the only state compatible with the first law.
+  value_nature:
+    kind: vector_projection
+    nonnegative_only: false
+    expected_interval: Any constant value compatible with the chosen frame
+  interpretation_role:
+    primary_for:
+    - primera-ley-inercia
+    secondary_for: []
+  graph_binding:
+    channels:
+    - state_descriptor
+    - constant_motion
+  pedagogical_notes: En este leaf v debe leerse como constante, no como causa dinamica.
+`;export{e as default};

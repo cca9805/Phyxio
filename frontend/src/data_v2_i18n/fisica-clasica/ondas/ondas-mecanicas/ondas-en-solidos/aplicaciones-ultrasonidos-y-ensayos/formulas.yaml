@@ -1,0 +1,195 @@
+- id: profundidad_defecto
+  title:
+    es: Profundidad del defecto por tiempo de vuelo
+    en: Defect depth from time of flight
+  equation: d_defecto = v_us * t_vuelo / 2
+  latex: d_{defecto} = \frac{v_{us} \cdot t_{vuelo}}{2}  % v_us t_vuelo d_defecto
+  rearrangements:
+  - target: d_defecto
+    equation: d_defecto = v_us * t_vuelo / 2
+    latex: d_{defecto} = \frac{v_{us} \cdot t_{vuelo}}{2}
+  - target: v_us
+    equation: v_us = 2 * d_defecto / t_vuelo
+    latex: v_{us} = \frac{2 \cdot d_{defecto}}{t_{vuelo}}
+  - target: t_vuelo
+    equation: t_vuelo = 2 * d_defecto / v_us
+    latex: t_{vuelo} = \frac{2 \cdot d_{defecto}}{v_{us}}
+  category: fundamental
+  relation_type: definition
+  physical_meaning:
+    es: El pulso ultrasónico recorre la distancia desde el transductor al defecto y regresa. El factor 2 en el denominador
+      corrige este doble recorrido. Conocida [[v_us]] del material, [[t_vuelo]] medido por el equipo permite calcular [[d_defecto]]
+      con precisión.
+    en: The ultrasonic pulse travels from the transducer to the defect and back. The factor 2 in the denominator corrects
+      for this round trip. Given the known [[v_us]] of the material, the equipment-measured [[t_vuelo]] allows [[d_defecto]]
+      to be calculated accurately.
+  constraints:
+  - v_us > 0
+  - t_vuelo > 0
+  - d_defecto > 0
+  validity:
+    es: Válida cuando el pulso se propaga en un medio homogéneo sin discontinuidades intermedias que alteren la velocidad.
+      Falla si hay gradientes de temperatura, zonas de porosidad variable o reflexiones múltiples no separadas en tiempo.
+    en: Valid when the pulse propagates in a homogeneous medium without intermediate discontinuities that alter the speed.
+      Fails if there are temperature gradients, variable porosity zones or multiple reflections not separated in time.
+  dimension_check: '[L] = [L T⁻¹] · [T] / 1 = [L] ✓'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - tiempo_de_vuelo
+  - deteccion_de_defecto
+  - calibracion
+  result_semantics:
+    target: d_defecto
+    kind: scalar_unsigned
+    sign_meaning:
+      es: La profundidad del defecto es siempre positiva; un valor negativo indicaría error de cálculo o de configuración
+        del equipo.
+      en: Defect depth is always positive; a negative value would indicate a calculation or equipment configuration error.
+    absolute_value_meaning:
+      es: El valor en metros indica a qué distancia de la superficie de entrada se localiza la discontinuidad detectada. Valores
+        inferiores a 1 mm requieren transductores de alta frecuencia y resolución temporal elevada.
+      en: The value in metres indicates at what distance from the entry surface the detected discontinuity is located. Values
+        below 1 mm require high-frequency transducers and high temporal resolution.
+  domain_checks:
+  - d_defecto > 0
+  - d_defecto < espesor_pieza
+  coherence_checks:
+  - d_defecto aumenta si t_vuelo aumenta con v_us fijo
+  - d_defecto disminuye si v_us aumenta con t_vuelo fijo
+  graph_implications:
+  - 'En el osciloscopio A-scan, la posición del eco de defecto en el eje temporal indica d_defecto: mayor tiempo equivale
+    a mayor profundidad'
+  - La amplitud del eco relaciona la extensión del defecto, no su profundidad
+  pedagogical_triggers:
+  - Si d_defecto resulta mayor que el espesor de la pieza, el alumno olvidó el factor 2 o usó unidades inconsistentes
+  - Si el resultado es el doble del esperado, el factor 2 fue omitido en el denominador
+- id: impedancia_acustica
+  title:
+    es: Impedancia acústica del medio
+    en: Acoustic impedance of the medium
+  equation: Z_ac = rho_mat * v_us
+  latex: Z_{ac} = rho_{mat} \cdot v_{us}  % Z_ac rho_mat v_us
+  rearrangements:
+  - target: impedancia_acustica
+    equation: Z_ac = rho_mat * v_us
+    latex: Z_{ac} = rho_{mat} \cdot v_{us}
+  - target: rho_mat
+    equation: rho_mat = Z_ac / v_us
+    latex: rho_{mat} = \frac{Z_{ac}}{v_{us}}
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: La impedancia acústica [[Z_ac]] es el producto de la densidad del medio [[rho_mat]] por la velocidad de propagación
+      [[v_us]]. Cuantifica la resistencia del medio al paso de la onda; una diferencia de [[Z_ac]] entre dos medios produce
+      reflexión en su interfaz.
+    en: Acoustic impedance [[Z_ac]] is the product of medium density [[rho_mat]] and propagation speed [[v_us]]. It quantifies
+      the medium's resistance to wave passage; a difference in [[Z_ac]] between two media produces reflection at their interface.
+  constraints:
+  - rho_mat > 0
+  - v_us > 0
+  validity:
+    es: Válida para ondas planas en medios homogéneos e isótropos. En medios anisótropos como composites de fibra, la impedancia
+      depende de la dirección de propagación.
+    en: Valid for plane waves in homogeneous, isotropic media. In anisotropic media such as fibre composites, impedance depends
+      on the propagation direction.
+  dimension_check: '[M L⁻² T⁻¹] = [M L⁻³] · [L T⁻¹] ✓'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - impedancia_acustica
+  - adaptacion_de_medios
+  - reflexion_transmision
+  result_semantics:
+    target: impedancia_acustica
+    kind: scalar_unsigned
+    sign_meaning:
+      es: La impedancia acústica es siempre positiva; es un producto de dos cantidades positivas.
+      en: Acoustic impedance is always positive; it is a product of two positive quantities.
+    absolute_value_meaning:
+      es: El valor en kg m⁻² s⁻¹ (rayl) indica la rigidez acústica del medio. El agua tiene aproximadamente 1.5 MRayl y el
+        acero aproximadamente 45 MRayl.
+      en: The value in kg m⁻² s⁻¹ (rayl) indicates the acoustic stiffness of the medium. Water has approximately 1.5 MRayl
+        and steel approximately 45 MRayl.
+  domain_checks:
+  - Z_ac > 0
+  - Z_ac >= 1.5e6 para medios acuosos
+  coherence_checks:
+  - Z_ac aumenta si rho_mat aumenta con v_us fijo
+  - Z_ac de acero debe ser aproximadamente 30 veces mayor que la de agua
+  graph_implications:
+  - En gráfica de materiales, Z_ac crece con la densidad y con la rigidez; metales pesados y rígidos tienen los valores más
+    altos
+  pedagogical_triggers:
+  - Si Z_ac resulta inferior a 1 MRayl para un metal, verificar si se usaron unidades CGS en lugar de SI
+  - Si el alumno pregunta por qué se necesita gel en la sonda, relacionar con la diferencia de Z_ac entre piel y transductor
+- id: coeficiente_reflexion
+  title:
+    es: Coeficiente de reflexión acústica en amplitud
+    en: Acoustic reflection coefficient in amplitude
+  equation: R_ac = (Z_ac2 - Z_ac1) / (Z_ac2 + Z_ac1)
+  latex: R_{ac} = \frac{Z_{ac2} - Z_{ac1}}{Z_{ac2} + Z_{ac1}}  % R_ac Z_ac
+  rearrangements:
+  - target: coeficiente_de_reflexion_acustica
+    equation: R_ac = (Z_ac2 - Z_ac1) / (Z_ac2 + Z_ac1)
+    latex: R_{ac} = \frac{Z_{ac2} - Z_{ac1}}{Z_{ac2} + Z_{ac1}}
+  category: fundamental
+  relation_type: constitutive_relation
+  physical_meaning:
+    es: '[[R_ac]] cuantifica qué fracción de la amplitud de presión se refleja en una interfaz entre dos medios con impedancias
+      [[Z_ac]] distintas. Su signo indica si la onda reflejada está en fase o en contrafase con la incidente.'
+    en: '[[R_ac]] quantifies what fraction of the pressure amplitude is reflected at an interface between two media with different
+      [[Z_ac]]. Its sign indicates whether the reflected wave is in phase or in antiphase with the incident wave.'
+  constraints:
+  - Z_ac1 > 0
+  - Z_ac2 > 0
+  - Z_ac1 + Z_ac2 > 0
+  validity:
+    es: Válida en la aproximación de incidencia normal y medios de extensión infinita. Para incidencia oblicua se requieren
+      las ecuaciones de Fresnel acústico.
+    en: Valid in the normal-incidence approximation with infinite-extent media. For oblique incidence, acoustic Fresnel equations
+      are required.
+  dimension_check: '[1] = [M L⁻² T⁻¹] / [M L⁻² T⁻¹] = adimensional ✓'
+  calculable: true
+  motivo_no_calculable: ''
+  used_in:
+  - teoria
+  - ejemplos
+  - interpretacion
+  interpretation_tags:
+  - reflexion_interfaz
+  - contraste_acustico
+  - deteccion_de_defecto
+  result_semantics:
+    target: coeficiente_de_reflexion_acustica
+    kind: scalar_signed
+    sign_meaning:
+      es: Positivo indica que el segundo medio es más rígido (mayor Z_ac); la onda reflejada está en fase con la incidente.
+        Negativo indica que el segundo medio es más blando; la onda reflejada está en contrafase.
+      en: Positive means the second medium is stiffer (higher Z_ac); the reflected wave is in phase with the incident one.
+        Negative means the second medium is softer; the reflected wave is in antiphase.
+    absolute_value_meaning:
+      es: El módulo indica la fracción de amplitud reflejada. Para una fisura llena de aire, es próximo a 1, lo que produce
+        un eco muy intenso y fácilmente detectable.
+      en: The magnitude indicates the fraction of amplitude reflected. For an air-filled crack, it is close to 1, producing
+        a very intense and easily detectable echo.
+  domain_checks:
+  - R_ac >= -1
+  - R_ac <= 1
+  coherence_checks:
+  - R_ac próximo a 1 o -1 indica discontinuidad severa (fisura, poro, inclusión de aire)
+  - R_ac próximo a 0 indica adaptación acústica buena o inclusión de material similar
+  graph_implications:
+  - En el A-scan, la amplitud del eco es proporcional al módulo de R_ac; mayor módulo produce pico más alto
+  - El signo de R_ac determina la polaridad del eco; un cambio de fase visible en el osciloscopio indica R_ac negativo
+  pedagogical_triggers:
+  - Si el alumno obtiene R_ac mayor que 1 en módulo, ha calculado el cociente invertido o ha cometido error algebraico
+  - Si el resultado es cero para acero-agua, verificar que no se han usado las mismas impedancias para ambos medios

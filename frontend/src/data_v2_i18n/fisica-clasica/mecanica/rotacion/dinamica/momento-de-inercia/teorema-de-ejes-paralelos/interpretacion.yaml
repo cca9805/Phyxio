@@ -1,0 +1,309 @@
+version: 1
+id: interpretacion-teorema-de-ejes-paralelos
+leaf_id: teorema-de-ejes-paralelos
+nombre:
+  es: Interpretacion del teorema de ejes paralelos
+  en: Interpretation of parallel axis theorem
+scope:
+  es: lectura numerica de Steiner, coherencia de ejes y errores de distancia al centro de masa
+  en: numerical reading of Steiner theorem, axis coherence, and center-of-mass distance mistakes
+dependencies:
+  magnitudes:
+  - I
+  - Icm
+  - alpha
+  - d
+  - m
+  - tau
+  formulas:
+  - respuesta-rotacional
+  - steiner-directa
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+result_blocks:
+  summary:
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    title:
+      es: Lectura fisica
+      en: Physical reading
+  coherence:
+    title:
+      es: Coherencia fisica
+      en: Physical coherence
+  model_validity:
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    title:
+      es: Lectura del grafico
+      en: Graph reading
+  likely_errors:
+    title:
+      es: Errores comunes
+      en: Common errors
+  next_step:
+    title:
+      es: Siguiente paso
+      en: Next step
+targets:
+  I:
+    summary_rules:
+    - id: I_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: "Alejar el eje del centro de masas aumenta I cuadraticamente con d. Cuanto mayor es d, mas domina el termino de traslacion m*d^2 sobre Icm, lo que significa que el sistema se vuelve progresivamente mas resistente al giro. Esto implica que I es siempre mayor que Icm para cualquier eje paralelo desplazado."
+        en: "Moving the axis away from the center of mass increases I quadratically with d. The larger d is, the more the translational term m*d^2 dominates over Icm, which means the system becomes progressively more resistant to rotation. This implies I is always greater than Icm for any displaced parallel axis."
+    coherence_rules:
+    - id: I_coherence_bound
+      when: I >= Icm
+      status: ok
+      text:
+        es: Para ejes paralelos, I no debe ser menor que Icm.
+        en: For parallel axes, I should not be lower than Icm.
+    physical_reading_rules:
+    - id: I_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: Alejar el eje del centro de masa aumenta la inercia de giro.
+        en: Moving axis away from center of mass increases rotational inertia.
+    model_validity_rules:
+    - id: I_validity_main
+      when: 'true'
+      status: info
+      text:
+        es: Requiere ejes paralelos y cuerpo rigido.
+        en: Requires parallel axes and a rigid body.
+    graph_rules:
+    - id: I_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: La curva I-d debe crecer de forma cuadratica.
+        en: I-d curve should grow quadratically.
+    likely_errors:
+    - id: I_error_cm
+      when: 'true'
+      status: warning
+      text:
+        es: "Confundir I con Icm: el alumno suele pensar que steiner-directa traslada I entre cualquier par de ejes arbitrarios sin necesidad de pasar por el centro de masas. Esto produce un I incorrecto que puede resultar menor que Icm. Tambien se suele olvidar elevar d al cuadrado, lo que rompe la coherencia dimensional."
+        en: "Confuse I with Icm: students often believe that steiner-directa translates I between any pair of parallel axes without going through the center of mass. This produces an incorrect I that may be smaller than Icm. Students also tend to forget squaring d, which breaks dimensional coherence."
+    next_step_rules:
+    - id: I_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Con I y tau calcula alpha para evaluar respuesta dinamica.
+        en: With I and tau, compute alpha to evaluate dynamic response.
+  d:
+    summary_rules:
+    - id: d_summary_main
+      when: 'true'
+      status: info
+      text:
+        es: d mide el desplazamiento entre eje central y eje paralelo nuevo.
+        en: d measures displacement between central axis and new parallel axis.
+    coherence_rules:
+    - id: d_coherence_nonneg
+      when: d >= 0
+      status: ok
+      text:
+        es: d se interpreta como distancia y no puede ser negativa.
+        en: d is a distance and cannot be negative.
+    physical_reading_rules:
+    - id: d_physical_main
+      when: 'true'
+      status: info
+      text:
+        es: Pequenos cambios en d pueden cambiar mucho I por dependencia cuadratica.
+        en: Small changes in d can strongly modify I due to quadratic dependence.
+    model_validity_rules:
+    - id: d_validity_main
+      when: 'true'
+      status: info
+      text:
+        es: d debe medirse en la perpendicular correcta entre ejes.
+        en: d must be measured on the correct perpendicular between axes.
+    graph_rules:
+    - id: d_graph_main
+      when: 'true'
+      status: info
+      text:
+        es: Si d aumenta, I debe crecer de manera monotona.
+        en: As d increases, I should increase monotonically.
+    likely_errors:
+    - id: d_error_units
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error comun: introducir d en cm mientras el resto esta en m.'
+        en: 'Common error: entering d in cm while the rest is in m.'
+    next_step_rules:
+    - id: d_next_main
+      when: 'true'
+      status: info
+      text:
+        es: Verifica sensibilidad de I ante incertidumbre de medida en d.
+        en: Check sensitivity of I to measurement uncertainty in d.
+  Icm:
+    summary_rules:
+    - id: Icm_summary
+      when: 'true'
+      status: info
+      text:
+        es: 'Icm: lectura resumida disponible.'
+        en: 'Icm: summary reading available.'
+    coherence_rules:
+    - id: Icm_coherence
+      when: 'true'
+      status: info
+      text:
+        es: 'Icm: verificar coherencia con el resto de variables.'
+        en: 'Icm: check coherence with the rest of the variables.'
+    physical_reading_rules:
+    - id: Icm_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'Icm: interpretar en el contexto fisico del problema.'
+        en: 'Icm: interpret within the physical context of the problem.'
+    model_validity_rules:
+    - id: Icm_validity
+      when: 'true'
+      status: info
+      text:
+        es: 'Icm: confirmar hipotesis y rango de validez del modelo.'
+        en: 'Icm: confirm assumptions and model validity range.'
+    graph_rules:
+    - id: Icm_graph
+      when: 'true'
+      status: info
+      text:
+        es: 'Icm: revisar correspondencia con la representacion grafica.'
+        en: 'Icm: review consistency with the graphical representation.'
+    likely_errors:
+    - id: Icm_likely_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error comun: usar Icm sin revisar signo, unidades o dominio.'
+        en: 'Common error: using Icm without checking sign, units, or domain.'
+    next_step_rules:
+    - id: Icm_next_step
+      when: 'true'
+      status: info
+      text:
+        es: 'Siguiente paso: contrastar Icm con una ecuacion independiente.'
+        en: 'Next step: cross-check Icm with an independent equation.'
+  alpha:
+    summary_rules:
+    - id: alpha_summary
+      when: 'true'
+      status: info
+      text:
+        es: 'alpha: lectura resumida disponible.'
+        en: 'alpha: summary reading available.'
+    coherence_rules:
+    - id: alpha_coherence
+      when: 'true'
+      status: info
+      text:
+        es: 'alpha: verificar coherencia con el resto de variables.'
+        en: 'alpha: check coherence with the rest of the variables.'
+    physical_reading_rules:
+    - id: alpha_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'alpha: interpretar en el contexto fisico del problema.'
+        en: 'alpha: interpret within the physical context of the problem.'
+    model_validity_rules:
+    - id: alpha_validity
+      when: 'true'
+      status: info
+      text:
+        es: 'alpha: confirmar hipotesis y rango de validez del modelo.'
+        en: 'alpha: confirm assumptions and model validity range.'
+    graph_rules:
+    - id: alpha_graph
+      when: 'true'
+      status: info
+      text:
+        es: 'alpha: revisar correspondencia con la representacion grafica.'
+        en: 'alpha: review consistency with the graphical representation.'
+    likely_errors:
+    - id: alpha_likely_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error comun: usar alpha sin revisar signo, unidades o dominio.'
+        en: 'Common error: using alpha without checking sign, units, or domain.'
+    next_step_rules:
+    - id: alpha_next_step
+      when: 'true'
+      status: info
+      text:
+        es: 'Siguiente paso: contrastar alpha con una ecuacion independiente.'
+        en: 'Next step: cross-check alpha with an independent equation.'
+  tau:
+    summary_rules:
+    - id: tau_summary
+      when: 'true'
+      status: info
+      text:
+        es: 'tau: lectura resumida disponible.'
+        en: 'tau: summary reading available.'
+    coherence_rules:
+    - id: tau_coherence
+      when: 'true'
+      status: info
+      text:
+        es: 'tau: verificar coherencia con el resto de variables.'
+        en: 'tau: check coherence with the rest of the variables.'
+    physical_reading_rules:
+    - id: tau_physical
+      when: 'true'
+      status: info
+      text:
+        es: 'tau: interpretar en el contexto fisico del problema.'
+        en: 'tau: interpret within the physical context of the problem.'
+    model_validity_rules:
+    - id: tau_validity
+      when: 'true'
+      status: info
+      text:
+        es: 'tau: confirmar hipotesis y rango de validez del modelo.'
+        en: 'tau: confirm assumptions and model validity range.'
+    graph_rules:
+    - id: tau_graph
+      when: 'true'
+      status: info
+      text:
+        es: 'tau: revisar correspondencia con la representacion grafica.'
+        en: 'tau: review consistency with the graphical representation.'
+    likely_errors:
+    - id: tau_likely_error
+      when: 'true'
+      status: warning
+      text:
+        es: 'Error comun: usar tau sin revisar signo, unidades o dominio.'
+        en: 'Common error: using tau without checking sign, units, or domain.'
+    next_step_rules:
+    - id: tau_next_step
+      when: 'true'
+      status: info
+      text:
+        es: 'Siguiente paso: contrastar tau con una ecuacion independiente.'
+        en: 'Next step: cross-check tau with an independent equation.'

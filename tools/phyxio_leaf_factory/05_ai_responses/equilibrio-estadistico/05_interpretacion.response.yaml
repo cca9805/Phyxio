@@ -1,0 +1,522 @@
+version: 5.0.0
+id: equilibrio-estadistico
+leaf_id: equilibrio-estadistico
+nombre:
+  es: Equilibrio estadistico
+  en: Statistical Equilibrium
+scope:
+  area: fisica-clasica
+  bloque: termodinamica-estadistica
+  subbloque: fundamentos
+  parent_id: fundamentos
+  ruta_relativa: fisica-clasica/termodinamica-estadistica/fundamentos/equilibrio-estadistico
+  orden: 271400
+output_contract:
+  sections: &id001
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+  inline_mode:
+    max_sections: 2
+    priority:
+    - summary
+    - likely_errors
+  extended_mode:
+    show_all: true
+result_blocks:
+  summary:
+    enabled: true
+    order: 1
+    title:
+      es: Resumen
+      en: Summary
+  physical_reading:
+    enabled: true
+    order: 2
+    title:
+      es: Lectura física
+      en: Physical reading
+  coherence:
+    enabled: true
+    order: 3
+    title:
+      es: Coherencia
+      en: Coherence
+  model_validity:
+    enabled: true
+    order: 4
+    title:
+      es: Validez del modelo
+      en: Model validity
+  graph_reading:
+    enabled: true
+    order: 5
+    title:
+      es: Lectura gráfica
+      en: Graph reading
+  likely_errors:
+    enabled: true
+    order: 6
+    title:
+      es: Errores probables
+      en: Likely errors
+  next_step:
+    enabled: true
+    order: 7
+    title:
+      es: Siguiente paso
+      en: Next step
+ui:
+  enabled: true
+  display_modes:
+    calculator_inline: true
+    graph_inline: true
+    dedicated_tab: true
+    modal: false
+  labels:
+    es: Interpretación física
+    en: Physical interpretation
+  priority_order: *id001
+  inline_limits:
+    max_sections: 3
+    priority:
+    - summary
+    - likely_errors
+    - next_step
+mini_graph:
+  enabled: true
+  preferred_type: Dcl
+output_policy:
+  show_summary_first: true
+  max_inline_messages: 3
+  show_warnings: true
+  show_likely_errors: true
+dependencies:
+  formulas:
+  - criterio_probabilidad_estacionaria
+  - normalizacion_probabilidades
+  - balance_detallado_dos_estados
+  - flujo_probabilidad_neto
+  - entropia_gibbs_equilibrio
+  magnitudes:
+  - probabilidad_estado
+  - tiempo
+  - tasa_transicion
+  - flujo_probabilidad
+  - entropia
+  - constante_boltzmann
+  - temperatura
+  - energia_estado
+  - peso_boltzmann
+  - desbalance_estadistico
+  requires_formulas: true
+  requires_magnitudes: true
+  supports_graph_binding: true
+global_context:
+  enabled: true
+  physical_domain:
+    es: 'termodinámica estadística: equilibrio como estado estacionario de probabilidades'
+    en: 'statistical thermodynamics: equilibrium as a stationary probability state'
+  axis_convention:
+    es: Las flechas del diagrama indican sentido de flujo de probabilidad, no fuerzas mecánicas reales.
+    en: Diagram arrows indicate probability-flow direction, not real mechanical forces.
+  standard_assumptions:
+  - es: El conjunto de estados accesibles se mantiene fijo durante la interpretación.
+    en: The set of accessible states remains fixed during interpretation.
+  - es: Las tasas de transición son estacionarias en la escala temporal observada.
+    en: Transition rates are stationary over the observed time scale.
+  standard_warnings:
+  - es: Equilibrio estadístico no significa inmovilidad microscópica; significa balance de entradas y salidas probabilísticas.
+    en: Statistical equilibrium does not mean microscopic immobility; it means balanced probabilistic inflows and outflows.
+graph_binding:
+  enabled: true
+  type: Dcl
+  channels:
+  - Dcl
+  - Svg
+cross_checks:
+  enabled: true
+  checks:
+  - id: probability_normalization_check
+    when: 'true'
+    status: ok
+    text:
+      es: La suma de todas las probabilidades de estado debe ser 1 dentro del espacio de estados elegido.
+      en: The sum of all state probabilities must be 1 within the chosen state space.
+  - id: net_flow_balance_check
+    when: 'true'
+    status: ok
+    text:
+      es: En equilibrio estadístico, cada estado debe tener entrada y salida probabilística compensadas.
+      en: At statistical equilibrium, each state must have compensated probabilistic inflow and outflow.
+error_patterns:
+  enabled: true
+  patterns:
+  - id: equilibrium_as_no_motion
+    when: 'true'
+    status: warning
+    text:
+      es: 'Error frecuente: creer que equilibrio estadístico implica que no hay saltos entre estados.'
+      en: 'Common error: thinking statistical equilibrium means no jumps between states.'
+  - id: force_diagram_confusion
+    when: 'true'
+    status: warning
+    text:
+      es: 'Error frecuente: leer las flechas del DCL estadístico como fuerzas mecánicas en vez de flujos de probabilidad.'
+      en: 'Common error: reading statistical diagram arrows as mechanical forces instead of probability flows.'
+graph_reading_policy:
+  enabled: true
+  primary_variable: probabilidad_estado
+  reading_sequence:
+  - es: Identifica estados, flechas de transición, sentido elegido y flujo neto antes de decidir si hay equilibrio.
+    en: Identify states, transition arrows, chosen direction, and net flow before deciding whether equilibrium holds.
+  - es: Distingue balance detallado entre dos estados de estacionariedad global en muchos estados.
+    en: Distinguish detailed balance between two states from global stationarity over many states.
+  key_points:
+  - es: Flechas opuestas iguales sugieren balance detallado.
+    en: Equal opposite arrows suggest detailed balance.
+  - es: Un indicador de desbalance distinto de cero señala relajación o estado no equilibrado.
+    en: A nonzero imbalance indicator signals relaxation or a nonequilibrium state.
+comparative_context:
+  enabled: true
+  reference_values:
+  - es: Una probabilidad de estado debe estar entre 0 y 1.
+    en: A state probability must lie between 0 and 1.
+  - es: Un flujo de probabilidad neto nulo es la escala de referencia del equilibrio.
+    en: Zero net probability flow is the reference scale for equilibrium.
+  order_of_magnitude_check: true
+dimensional_hint:
+  enabled: true
+  formula_dimensions:
+    es: Probabilidades y pesos son adimensionales; tasas y flujos de probabilidad tienen escala temporal inversa cuando se
+      expresan por unidad de tiempo.
+    en: Probabilities and weights are dimensionless; rates and probability flows carry inverse-time scale when expressed per
+      unit time.
+  common_unit_mistakes:
+  - es: Tratar una tasa de transición como probabilidad sin multiplicar por un intervalo temporal.
+    en: Treating a transition rate as a probability without multiplying by a time interval.
+  - es: Sumar entropía con probabilidades como si tuvieran la misma dimensión.
+    en: Adding entropy and probabilities as if they had the same dimension.
+free_body_diagram_hint:
+  enabled: true
+  key_forces:
+  - es: 'Flecha i→j: salida de probabilidad desde el estado i.'
+    en: 'Arrow i→j: probability outflow from state i.'
+  - es: 'Flecha j→i: entrada de probabilidad hacia el estado i.'
+    en: 'Arrow j→i: probability inflow into state i.'
+  - es: 'Indicador de flujo neto: diferencia entre ambos sentidos.'
+    en: 'Net-flow indicator: difference between both directions.'
+  equilibrium_condition:
+    es: El equilibrio estadístico se representa cuando el flujo neto de probabilidad se anula y las probabilidades permanecen
+      estacionarias.
+    en: Statistical equilibrium is represented when net probability flow vanishes and probabilities remain stationary.
+process_type_detection:
+  enabled: false
+  processes: []
+wave_behavior_context:
+  enabled: false
+  phenomena: []
+field_visualization_hint:
+  enabled: false
+  field_lines:
+    direction_rule:
+      es: ''
+      en: ''
+    density_meaning:
+      es: ''
+      en: ''
+  superposition_note:
+    es: ''
+    en: ''
+ray_tracing_hint:
+  enabled: false
+  construction_rays: []
+  image_type_detection: []
+targets:
+  probabilidad_estado:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: ocupación estadística
+      en: statistical occupation
+    summary_rules:
+    - id: probabilidad_estado_summary_equilibrio
+      when: 'true'
+      status: ok
+      text:
+        es: '[[probabilidad_estado]] se interpreta como la ocupación estadística de un estado accesible dentro del equilibrio
+          estadístico: no describe una trayectoria individual, sino el reparto colectivo entre estados.'
+        en: '[[probabilidad_estado]] is read as the statistical occupation of an accessible state within statistical equilibrium:
+          it does not describe one individual path, but the collective distribution among states.'
+    physical_reading_rules:
+    - id: probabilidad_estado_physical_reading_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[probabilidad_estado]] junto con el conjunto de estados, las tasas de transición y la condición de flujo
+          neto; su significado cambia si el sistema aún relaja.
+        en: Read [[probabilidad_estado]] together with the state set, transition rates, and the net-flow condition; its meaning
+          changes if the system is still relaxing.
+    coherence_rules:
+    - id: probabilidad_estado_coherence_equilibrio
+      when: 'true'
+      status: ok
+      text:
+        es: 'Comprueba que [[probabilidad_estado]] respeta normalización, unidades y balance estadístico: una ocupación válida
+          no puede contradecir la suma de probabilidades ni el sentido del flujo.'
+        en: 'Check that [[probabilidad_estado]] respects normalization, units, and statistical balance: a valid occupation
+          cannot contradict probability normalization or the flow direction.'
+    model_validity_rules:
+    - id: probabilidad_estado_model_validity_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[probabilidad_estado]] solo si las tasas son aproximadamente estacionarias, los estados accesibles están
+          definidos y el contacto térmico no cambia durante la observación.
+        en: Use [[probabilidad_estado]] only if rates are approximately stationary, accessible states are defined, and the
+          thermal contact does not change during observation.
+    graph_rules:
+    - id: probabilidad_estado_graph_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: 'En el DCL estadístico, relaciona [[probabilidad_estado]] con flechas de probabilidad: equilibrio significa compensación
+          de flujos, no ausencia de transiciones microscópicas.'
+        en: 'In the statistical free-body-style diagram, relate [[probabilidad_estado]] to probability arrows: equilibrium
+          means compensated flows, not absence of microscopic transitions.'
+    likely_errors:
+    - id: probabilidad_estado_likely_error_equilibrio
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas [[probabilidad_estado]] con una fuerza, una posición mecánica o una certeza individual; es una magnitud
+          estadística dependiente del modelo de estados.
+        en: Do not confuse [[probabilidad_estado]] with a force, a mechanical position, or an individual certainty; it is
+          a statistical quantity tied to the state model.
+    next_step_rules:
+    - id: probabilidad_estado_next_step_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[probabilidad_estado]], revisa si el flujo neto se anula, si las probabilidades suman
+          uno y si el diagrama muestra balance detallado o solo estacionariedad global.
+        en: After interpreting [[probabilidad_estado]], check whether net flow vanishes, probabilities sum to one, and the
+          diagram shows detailed balance or only global stationarity.
+    physical_intuition:
+    - id: probabilidad_estado_intuition_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[probabilidad_estado]] indica cómo se reparte la presencia del sistema entre estados cuando las
+          entradas y salidas estadísticas se compensan.
+        en: Intuitively, [[probabilidad_estado]] indicates how the system presence is distributed among states when statistical
+          inflows and outflows compensate.
+    limiting_cases:
+    - id: probabilidad_estado_limiting_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: En el límite de flujo nulo y probabilidades constantes, [[probabilidad_estado]] es compatible con equilibrio;
+          si aparece deriva persistente, describe un estado transitorio o estacionario no equilibrado.
+        en: In the limit of zero net flow and constant probabilities, [[probabilidad_estado]] is compatible with equilibrium;
+          persistent drift indicates a transient or nonequilibrium steady state.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: El signo positivo de [[flujo_probabilidad]] debe indicar un sentido de transición declarado, no una ganancia absoluta.
+        en: A positive sign of [[flujo_probabilidad]] must indicate a declared transition direction, not an absolute gain.
+      common_sign_errors: []
+  flujo_probabilidad:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: diagnóstico de equilibrio
+      en: equilibrium diagnostic
+    summary_rules:
+    - id: flujo_probabilidad_summary_equilibrio
+      when: 'true'
+      status: ok
+      text:
+        es: '[[flujo_probabilidad]] se interpreta como el intercambio neto de probabilidad entre estados dentro del equilibrio
+          estadístico: no describe una trayectoria individual, sino el reparto colectivo entre estados.'
+        en: '[[flujo_probabilidad]] is read as the net exchange of probability between states within statistical equilibrium:
+          it does not describe one individual path, but the collective distribution among states.'
+    physical_reading_rules:
+    - id: flujo_probabilidad_physical_reading_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[flujo_probabilidad]] junto con el conjunto de estados, las tasas de transición y la condición de flujo neto;
+          su significado cambia si el sistema aún relaja.
+        en: Read [[flujo_probabilidad]] together with the state set, transition rates, and the net-flow condition; its meaning
+          changes if the system is still relaxing.
+    coherence_rules:
+    - id: flujo_probabilidad_coherence_equilibrio
+      when: 'true'
+      status: ok
+      text:
+        es: 'Comprueba que [[flujo_probabilidad]] respeta normalización, unidades y balance estadístico: una ocupación válida
+          no puede contradecir la suma de probabilidades ni el sentido del flujo.'
+        en: 'Check that [[flujo_probabilidad]] respects normalization, units, and statistical balance: a valid occupation
+          cannot contradict probability normalization or the flow direction.'
+    model_validity_rules:
+    - id: flujo_probabilidad_model_validity_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[flujo_probabilidad]] solo si las tasas son aproximadamente estacionarias, los estados accesibles están definidos
+          y el contacto térmico no cambia durante la observación.
+        en: Use [[flujo_probabilidad]] only if rates are approximately stationary, accessible states are defined, and the
+          thermal contact does not change during observation.
+    graph_rules:
+    - id: flujo_probabilidad_graph_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: 'En el DCL estadístico, relaciona [[flujo_probabilidad]] con flechas de probabilidad: equilibrio significa compensación
+          de flujos, no ausencia de transiciones microscópicas.'
+        en: 'In the statistical free-body-style diagram, relate [[flujo_probabilidad]] to probability arrows: equilibrium
+          means compensated flows, not absence of microscopic transitions.'
+    likely_errors:
+    - id: flujo_probabilidad_likely_error_equilibrio
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas [[flujo_probabilidad]] con una fuerza, una posición mecánica o una certeza individual; es una magnitud
+          estadística dependiente del modelo de estados.
+        en: Do not confuse [[flujo_probabilidad]] with a force, a mechanical position, or an individual certainty; it is a
+          statistical quantity tied to the state model.
+    next_step_rules:
+    - id: flujo_probabilidad_next_step_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[flujo_probabilidad]], revisa si el flujo neto se anula, si las probabilidades suman uno
+          y si el diagrama muestra balance detallado o solo estacionariedad global.
+        en: After interpreting [[flujo_probabilidad]], check whether net flow vanishes, probabilities sum to one, and the
+          diagram shows detailed balance or only global stationarity.
+    physical_intuition:
+    - id: flujo_probabilidad_intuition_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[flujo_probabilidad]] indica cómo se reparte la presencia del sistema entre estados cuando las
+          entradas y salidas estadísticas se compensan.
+        en: Intuitively, [[flujo_probabilidad]] indicates how the system presence is distributed among states when statistical
+          inflows and outflows compensate.
+    limiting_cases:
+    - id: flujo_probabilidad_limiting_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: En el límite de flujo nulo y probabilidades constantes, [[flujo_probabilidad]] es compatible con equilibrio; si
+          aparece deriva persistente, describe un estado transitorio o estacionario no equilibrado.
+        en: In the limit of zero net flow and constant probabilities, [[flujo_probabilidad]] is compatible with equilibrium;
+          persistent drift indicates a transient or nonequilibrium steady state.
+    sign_convention_reminder:
+      enabled: true
+      text:
+        es: El signo positivo de [[flujo_probabilidad]] debe indicar un sentido de transición declarado, no una ganancia absoluta.
+        en: A positive sign of [[flujo_probabilidad]] must indicate a declared transition direction, not an absolute gain.
+      common_sign_errors:
+      - es: Cambiar el sentido i→j sin cambiar el signo del flujo.
+        en: Changing the i→j direction without changing the flow sign.
+      - es: Interpretar flujo neto nulo como ausencia de saltos microscópicos.
+        en: Reading zero net flow as absence of microscopic jumps.
+  entropia:
+    enabled: true
+    magnitude_type: scalar
+    semantic_role:
+      es: dispersión estadística
+      en: statistical spread
+    summary_rules:
+    - id: entropia_summary_equilibrio
+      when: 'true'
+      status: ok
+      text:
+        es: '[[entropia]] se interpreta como la dispersión informacional del reparto de probabilidades dentro del equilibrio
+          estadístico: no describe una trayectoria individual, sino el reparto colectivo entre estados.'
+        en: '[[entropia]] is read as the informational spread of the probability distribution within statistical equilibrium:
+          it does not describe one individual path, but the collective distribution among states.'
+    physical_reading_rules:
+    - id: entropia_physical_reading_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: Lee [[entropia]] junto con el conjunto de estados, las tasas de transición y la condición de flujo neto; su significado
+          cambia si el sistema aún relaja.
+        en: Read [[entropia]] together with the state set, transition rates, and the net-flow condition; its meaning changes
+          if the system is still relaxing.
+    coherence_rules:
+    - id: entropia_coherence_equilibrio
+      when: 'true'
+      status: ok
+      text:
+        es: 'Comprueba que [[entropia]] respeta normalización, unidades y balance estadístico: una ocupación válida no puede
+          contradecir la suma de probabilidades ni el sentido del flujo.'
+        en: 'Check that [[entropia]] respects normalization, units, and statistical balance: a valid occupation cannot contradict
+          probability normalization or the flow direction.'
+    model_validity_rules:
+    - id: entropia_model_validity_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: Usa [[entropia]] solo si las tasas son aproximadamente estacionarias, los estados accesibles están definidos y
+          el contacto térmico no cambia durante la observación.
+        en: Use [[entropia]] only if rates are approximately stationary, accessible states are defined, and the thermal contact
+          does not change during observation.
+    graph_rules:
+    - id: entropia_graph_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: 'En el DCL estadístico, relaciona [[entropia]] con flechas de probabilidad: equilibrio significa compensación
+          de flujos, no ausencia de transiciones microscópicas.'
+        en: 'In the statistical free-body-style diagram, relate [[entropia]] to probability arrows: equilibrium means compensated
+          flows, not absence of microscopic transitions.'
+    likely_errors:
+    - id: entropia_likely_error_equilibrio
+      when: 'true'
+      status: warning
+      text:
+        es: No confundas [[entropia]] con una fuerza, una posición mecánica o una certeza individual; es una magnitud estadística
+          dependiente del modelo de estados.
+        en: Do not confuse [[entropia]] with a force, a mechanical position, or an individual certainty; it is a statistical
+          quantity tied to the state model.
+    next_step_rules:
+    - id: entropia_next_step_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: Después de interpretar [[entropia]], revisa si el flujo neto se anula, si las probabilidades suman uno y si el
+          diagrama muestra balance detallado o solo estacionariedad global.
+        en: After interpreting [[entropia]], check whether net flow vanishes, probabilities sum to one, and the diagram shows
+          detailed balance or only global stationarity.
+    physical_intuition:
+    - id: entropia_intuition_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: Intuitivamente, [[entropia]] indica cómo se reparte la presencia del sistema entre estados cuando las entradas
+          y salidas estadísticas se compensan.
+        en: Intuitively, [[entropia]] indicates how the system presence is distributed among states when statistical inflows
+          and outflows compensate.
+    limiting_cases:
+    - id: entropia_limiting_equilibrio
+      when: 'true'
+      status: info
+      text:
+        es: En el límite de flujo nulo y probabilidades constantes, [[entropia]] es compatible con equilibrio; si aparece
+          deriva persistente, describe un estado transitorio o estacionario no equilibrado.
+        en: In the limit of zero net flow and constant probabilities, [[entropia]] is compatible with equilibrium; persistent
+          drift indicates a transient or nonequilibrium steady state.
+    sign_convention_reminder:
+      enabled: false
+      text:
+        es: El signo positivo de [[flujo_probabilidad]] debe indicar un sentido de transición declarado, no una ganancia absoluta.
+        en: A positive sign of [[flujo_probabilidad]] must indicate a declared transition direction, not an absolute gain.
+      common_sign_errors: []

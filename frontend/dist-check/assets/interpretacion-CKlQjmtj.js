@@ -1,0 +1,502 @@
+const e=`version: 2
+id: interpretacion-marco-del-centro-de-masas-en-colisiones
+leaf_id: marco-del-centro-de-masas-en-colisiones
+nombre:
+  es: Interpretación del Marco del Centro de Masas
+  en: Interpretation of the Center of Mass Frame
+scope:
+  area: fisica-clasica
+  bloque: mecanica
+  subbloque: cantidad-de-movimiento
+  parent_id: colisiones
+  ruta_relativa: fisica-clasica/mecanica/cantidad-de-movimiento/colisiones/marco-del-centro-de-masas-en-colisiones
+
+dependencies:
+  formulas: [Vcm, u1, u2, mu, K_cm, p_cm_total, v1_inverse, v2_inverse, koenig_theorem]
+  magnitudes: [m1, m2, v1, v2, Vcm, u1, u2, mu, K_cm, p_cm_total, K_total, v_rel]
+
+mini_graph:
+  enabled: true
+  preferred_type: Coord
+  config:
+    axes: { x: { label: { es: "v_lab", en: "v_lab" } }, y: { label: { es: "u_cm", en: "u_cm" } } }
+
+output_contract:
+  sections:
+  - summary
+  - physical_reading
+  - coherence
+  - model_validity
+  - graph_reading
+  - likely_errors
+  - next_step
+
+result_blocks:
+  summary: { title: { es: Resumen físico, en: Physical summary } }
+  physical_reading: { title: { es: Lectura física, en: Physical reading } }
+  coherence: { title: { es: Coherencia, en: Coherence } }
+  model_validity: { title: { es: Validez del modelo, en: Model validity } }
+  graph_reading: { title: { es: Lectura gráfica, en: Graph reading } }
+  likely_errors: { title: { es: Errores probables, en: Likely errors } }
+  next_step: { title: { es: Siguiente paso, en: Next step } }
+
+targets:
+  Vcm:
+    summary_rules:
+      - id: vcm_result
+        when: 'true'
+        status: info
+        text:
+          es: "La velocidad [[Vcm]] = {value} {unit} indica el ritmo de traslación global que el sistema completo hereda de sus condiciones iniciales."
+          en: "The velocity [[Vcm]] = {value} {unit} indicates the global translation rate that the entire system inherits from its initial conditions."
+    physical_reading_rules:
+      - id: vcm_interpretation
+        when: 'true'
+        status: info
+        text:
+          es: "Esta magnitud surge porque existe una distribución ponderada de masas y velocidades; actúa como el ancla inercial que permanece constante durante el impacto."
+          en: "This value arises because there is a weighted distribution of masses and velocities; it acts as the inertial anchor that remains constant during the impact."
+    coherence_rules:
+      - id: vcm_range_check
+        when: 'Vcm > max(v1, v2) + 0.01 or Vcm < min(v1, v2) - 0.01'
+        status: fail
+        text:
+          es: "Inconsistencia física: la velocidad del centro de masas debe estar comprendida entre las velocidades de los cuerpos individuales."
+          en: "Physical inconsistency: the center of mass velocity must be between the velocities of the individual bodies."
+    model_validity_rules:
+      - id: vcm_inertial_check
+        when: 'true'
+        status: ok
+        text:
+          es: "La validez de [[Vcm]] como referencia constante se mantiene mientras no actúen fuerzas externas sobre el par de partículas."
+          en: "The validity of [[Vcm]] as a constant reference is maintained as long as no external forces act on the particle pair."
+    graph_rules:
+      - id: vcm_graph_point
+        when: 'true'
+        status: info
+        text:
+          es: "En la gráfica de velocidades, [[Vcm]] define el origen del marco de referencia móvil donde el momento total se anula."
+          en: "In the velocity graph, [[Vcm]] defines the origin of the moving reference frame where total momentum vanishes."
+    likely_errors:
+      - id: vcm_change_error
+        when: 'false'
+        status: error
+        text:
+          es: "Error: has asumido que [[Vcm]] cambia tras el choque, pero las fuerzas internas no pueden alterar el movimiento del centro de masas."
+          en: "Error: you assumed that [[Vcm]] changes after the collision, but internal forces cannot alter the center of mass motion."
+    next_step_rules:
+      - id: vcm_to_relative
+        when: 'true'
+        status: info
+        text:
+          es: "Con [[Vcm]] calculada, procede a restar este valor a las velocidades de laboratorio para obtener las velocidades relativas [[u1]] y [[u2]]."
+          en: "With [[Vcm]] calculated, proceed to subtract this value from the laboratory velocities to obtain the relative velocities [[u1]] and [[u2]]."
+
+  u1:
+    summary_rules:
+      - id: u1_summary
+        when: 'true'
+        status: info
+        text:
+          es: "La velocidad relativa [[u1]] = {value} {unit} describe el movimiento de la primera partícula respecto al ancla inercial del sistema."
+          en: "The relative velocity [[u1]] = {value} {unit} describes the motion of the first particle relative to the system's inertial anchor."
+    physical_reading_rules:
+      - id: u1_reading
+        when: 'true'
+        status: info
+        text:
+          es: "Esta magnitud significa que existe un componente del movimiento que realmente participa en la dinámica del choque."
+          en: "This magnitude means that there is a component of motion that actually participates in the collision dynamics."
+    coherence_rules:
+      - id: u1_check
+        when: 'true'
+        status: ok
+        text:
+          es: "Coherente con la transformación de Galileo."
+          en: "Coherent with Galilean transformation."
+    model_validity_rules:
+      - id: u1_validity
+        when: 'true'
+        status: ok
+        text:
+          es: "Válida para observadores en el CM."
+          en: "Valid for observers in the CM."
+    graph_rules:
+      - id: u1_graph
+        when: 'true'
+        status: info
+        text:
+          es: "Muestra la posición de la partícula 1 en el espacio de velocidades relativas."
+          en: "Shows particle 1 position in relative velocity space."
+    likely_errors:
+      - id: u1_error
+        when: 'false'
+        status: error
+        text:
+          es: "Error en u1."
+          en: "Error in u1."
+    next_step_rules:
+      - id: u1_next
+        when: 'true'
+        status: info
+        text:
+          es: "Siguiente paso."
+          en: "Next step."
+
+  u2:
+    summary_rules:
+      - id: u2_summary
+        when: 'true'
+        status: info
+        text:
+          es: "La velocidad relativa [[u2]] = {value} {unit} resume el estado de movimiento del segundo cuerpo en el marco de momento nulo."
+          en: "The relative velocity [[u2]] = {value} {unit} summarizes the motion state of the second body in the zero-momentum frame."
+    physical_reading_rules:
+      - id: u2_reading
+        when: 'true'
+        status: info
+        text:
+          es: "La magnitud depende de la dirección de aproximación del blanco al centro de masas."
+          en: "The magnitude depends on the approach direction of the target to the center of mass."
+    coherence_rules:
+      - id: u2_check
+        when: 'true'
+        status: ok
+        text:
+          es: "Coherente."
+          en: "Coherent."
+    model_validity_rules:
+      - id: u2_validity
+        when: 'true'
+        status: ok
+        text:
+          es: "Válida."
+          en: "Valid."
+    graph_rules:
+      - id: u2_graph
+        when: 'true'
+        status: info
+        text:
+          es: "Visualiza u2."
+          en: "Visualize u2."
+    likely_errors:
+      - id: u2_error
+        when: 'false'
+        status: error
+        text:
+          es: "Error."
+          en: "Error."
+    next_step_rules:
+      - id: u2_next
+        when: 'true'
+        status: info
+        text:
+          es: "Continuar."
+          en: "Continue."
+
+  p_cm_total:
+    summary_rules:
+      - id: pcm_summary
+        when: 'abs(p_cm_total) < 0.001'
+        status: ok
+        text:
+          es: "El momento total [[p_cm_total]] = {value} {unit} confirma el balance nulo necesario en el marco central."
+          en: "The total momentum [[p_cm_total]] = {value} {unit} confirms the null balance required in the central frame."
+    physical_reading_rules:
+      - id: pcm_reading
+        when: 'true'
+        status: info
+        text:
+          es: "La nulidad del momento significa que estamos en la firma física del marco del centro de masas."
+          en: "The nullity of momentum means that we are in the physical signature of the center of mass frame."
+    coherence_rules:
+      - id: pcm_check
+        when: 'abs(p_cm_total) > 0.001'
+        status: fail
+        text:
+          es: "Fallo crítico: el momento total en el marco CM debe ser siempre cero."
+          en: "Critical failure: total momentum in the CM frame must always be zero."
+    model_validity_rules:
+      - id: pcm_validity
+        when: 'true'
+        status: ok
+        text:
+          es: "Validación del marco móvil."
+          en: "Mobile frame validation."
+    graph_rules:
+      - id: pcm_graph
+        when: 'true'
+        status: info
+        text:
+          es: "Centro de simetría."
+          en: "Symmetry center."
+    likely_errors:
+      - id: pcm_error
+        when: 'abs(p_cm_total) > 0.1'
+        status: error
+        text:
+          es: "Transformación incorrecta."
+          en: "Incorrect transformation."
+    next_step_rules:
+      - id: pcm_next
+        when: 'true'
+        status: info
+        text:
+          es: "Proseguir."
+          en: "Proceed."
+
+  v1:
+    summary_rules:
+      - id: v1_summary
+        when: 'true'
+        status: info
+        text:
+          es: "La velocidad final [[v1]] = {value} {unit} describe el estado de movimiento recuperado en el laboratorio tras la interacción."
+          en: "The final velocity [[v1]] = {value} {unit} describes the motion state recovered in the laboratory after interaction."
+    physical_reading_rules:
+      - id: v1_reading
+        when: 'true'
+        status: info
+        text:
+          es: "Este valor indica la suma vectorial de la traslación del CM y la dispersión relativa."
+          en: "This value indicates the vector sum of CM translation and relative scattering."
+    coherence_rules:
+      - id: v1_check
+        when: 'true'
+        status: ok
+        text:
+          es: "Coherente."
+          en: "Coherent."
+    model_validity_rules:
+      - id: v1_validity
+        when: 'true'
+        status: ok
+        text:
+          es: "Válida."
+          en: "Valid."
+    graph_rules:
+      - id: v1_graph
+        when: 'true'
+        status: info
+        text:
+          es: "Velocidad de salida 1."
+          en: "Exit velocity 1."
+    likely_errors:
+      - id: v1_error
+        when: 'false'
+        status: error
+        text:
+          es: "Error."
+          en: "Error."
+    next_step_rules:
+      - id: v1_next
+        when: 'true'
+        status: info
+        text:
+          es: "Finalizar."
+          en: "Finalize."
+
+  v2:
+    summary_rules:
+      - id: v2_summary
+        when: 'true'
+        status: info
+        text:
+          es: "La velocidad final [[v2]] = {value} {unit} describe el destino cinemático de la segunda partícula en el marco del laboratorio."
+          en: "The final velocity [[v2]] = {value} {unit} describes the kinematic destination of the second particle in the laboratory frame."
+    physical_reading_rules:
+      - id: v2_reading
+        when: 'true'
+        status: info
+        text:
+          es: "Esta magnitud significa el retroceso o avance del blanco tras el choque."
+          en: "This magnitude means the recoil or forward motion of the target after the collision."
+    coherence_rules:
+      - id: v2_check
+        when: 'true'
+        status: ok
+        text:
+          es: "Coherente."
+          en: "Coherent."
+    model_validity_rules:
+      - id: v2_validity
+        when: 'true'
+        status: ok
+        text:
+          es: "Válida."
+          en: "Valid."
+    graph_rules:
+      - id: v2_graph
+        when: 'true'
+        status: info
+        text:
+          es: "Velocidad de salida 2."
+          en: "Exit velocity 2."
+    likely_errors:
+      - id: v2_error
+        when: 'false'
+        status: error
+        text:
+          es: "Error."
+          en: "Error."
+    next_step_rules:
+      - id: v2_next
+        when: 'true'
+        status: info
+        text:
+          es: "Finalizar."
+          en: "Finalize."
+
+  K_cm:
+    summary_rules:
+      - id: kcm_summary
+        when: 'true'
+        status: info
+        text:
+          es: "La energía interna [[K_cm]] = {value} {unit} indica qué parte del presupuesto energético total está realmente disponible para la interacción."
+          en: "The internal energy [[K_cm]] = {value} {unit} indicates what part of the total energy budget is actually available for interaction."
+    physical_reading_rules:
+      - id: kcm_relative_effect
+        when: 'true'
+        status: info
+        text:
+          es: "Esta energía se explica porque existe movimiento relativo entre las partículas; es lo que significa viajar con el centro de masas."
+          en: "This energy is explained because there is relative motion between the particles; that is what it means to travel with the center of mass."
+    coherence_rules:
+      - id: kcm_total_energy_check
+        when: 'K_cm > K_total + 0.01'
+        status: fail
+        text:
+          es: "Violación de la jerarquía de König: la energía interna no puede ser superior a la energía cinética total del sistema en el laboratorio."
+          en: "Violation of König's hierarchy: internal energy cannot be higher than the total kinetic energy of the system in the laboratory."
+    model_validity_rules:
+      - id: kcm_separation_validity
+        when: 'true'
+        status: ok
+        text:
+          es: "La separación de [[K_cm]] permite analizar el choque de forma independiente a la traslación global del sistema."
+          en: "The separation of [[K_cm]] allows the collision to be analyzed independently of the system's global translation."
+    graph_rules:
+      - id: kcm_energy_bar
+        when: 'true'
+        status: info
+        text:
+          es: "Gráficamente, [[K_cm]] representa el balance de energía interna que puede reducirse o conservarse."
+          en: "Graphically, [[K_cm]] represents the internal energy balance that can be reduced or conserved."
+    likely_errors:
+      - id: kcm_reduced_mass_error
+        when: 'false'
+        status: error
+        text:
+          es: "Has calculado [[K_cm]] sin usar la masa reducida [[mu]], lo que sobreestima la energía disponible para el impacto."
+          en: "You calculated [[K_cm]] without using the reduced mass [[mu]], which overestimates the energy available for the impact."
+    next_step_rules:
+      - id: kcm_to_dissipation
+        when: 'true'
+        status: info
+        text:
+          es: "Usa este valor de [[K_cm]] para evaluar el grado de inelaticidad del choque comparándolo con el estado final."
+          en: "Use this value of [[K_cm]] to evaluate the degree of inelasticty of the collision by comparing it with the final state."
+
+  mu:
+    summary_rules:
+      - id: mu_summary
+        when: 'true'
+        status: info
+        text:
+          es: "La masa reducida [[mu]] = {value} {unit} describe la inercia efectiva del par, permitiendo tratar el choque como un problema virtual."
+          en: "The reduced mass [[mu]] = {value} {unit} describes the effective inertia of the pair, allowing the collision to be treated as a virtual problem."
+    physical_reading_rules:
+      - id: mu_physical_meaning
+        when: 'true'
+        status: info
+        text:
+          es: "Este valor surge porque existe inercia mutua en el par; domina la respuesta inercial ante cambios de velocidad relativa."
+          en: "This value arises because there is mutual inertia in the pair; it dominates the inertial response to relative velocity changes."
+    coherence_rules:
+      - id: mu_limit_check
+        when: 'mu > m1 + 0.01 or mu > m2 + 0.01'
+        status: fail
+        text:
+          es: "Error matemático: la masa reducida no puede ser superior a ninguna de las masas individuales que componen el sistema."
+          en: "Mathematical error: the reduced mass cannot be higher than any of the individual masses composing the system."
+    model_validity_rules:
+      - id: mu_two_body_validity
+        when: 'true'
+        status: ok
+        text:
+          es: "El uso de [[mu]] es válido para cualquier interacción central donde solo las fuerzas internas determinen el movimiento relativo."
+          en: "The use of [[mu]] is valid for any central interaction where only internal forces determine the relative motion."
+    graph_rules:
+      - id: mu_inertia_scaling
+        when: 'true'
+        status: info
+        text:
+          es: "La magnitud de [[mu]] determina la escala de respuesta inercial del sistema ante la fuerza de colisión."
+          en: "The magnitude of [[mu]] determines the scale of the system's inertial response to the collision force."
+    likely_errors:
+      - id: mu_sum_error
+        when: 'mu == m1 + m2'
+        status: error
+        text:
+          es: "Has sumado las masas en lugar de usar la fórmula reducida; la inercia relativa no es la masa total del sistema."
+          en: "You added the masses instead of using the reduced formula; relative inertia is not the total mass of the system."
+    next_step_rules:
+      - id: mu_to_energy_calc
+        when: 'true'
+        status: info
+        text:
+          es: "Con [[mu]] determinada, el siguiente paso es incorporarla al cálculo de la energía cinética interna [[K_cm]]."
+          en: "With [[mu]] determined, the next step is to incorporate it into the internal kinetic energy calculation [[K_cm]]."
+
+  K_total:
+    summary_rules:
+      - id: ktotal_summary
+        when: 'true'
+        status: info
+        text:
+          es: "La energía cinética total [[K_total]] = {value} {unit} describe la capacidad total de movimiento del sistema vista desde el laboratorio."
+          en: "The total kinetic energy [[K_total]] = {value} {unit} describes the total motion capacity of the system as seen from the laboratory."
+    physical_reading_rules:
+      - id: ktotal_reading
+        when: 'true'
+        status: info
+        text:
+          es: "Este balance se explica como la suma de la energía de traslación del conjunto y la energía de interacción interna."
+          en: "This balance is explained as the sum of the translational energy of the assembly and the internal interaction energy."
+    coherence_rules:
+      - id: ktotal_check
+        when: 'K_total < K_cm - 0.01'
+        status: fail
+        text:
+          es: "Error de jerarquía: la energía total debe ser siempre mayor o igual a la energía interna."
+          en: "Hierarchy error: total energy must always be greater than or equal to internal energy."
+    model_validity_rules:
+      - id: ktotal_validity
+        when: 'true'
+        status: ok
+        text:
+          es: "Referencia energética global del experimento."
+          en: "Global energy reference of the experiment."
+    graph_rules:
+      - id: ktotal_graph
+        when: 'true'
+        status: info
+        text:
+          es: "Representa el techo energético del sistema."
+          en: "Represents the energy ceiling of the system."
+    likely_errors:
+      - id: ktotal_error
+        when: 'K_total < 0'
+        status: error
+        text:
+          es: "Energía negativa físicamente imposible."
+          en: "Physically impossible negative energy."
+    next_step_rules:
+      - id: ktotal_next
+        when: 'true'
+        status: info
+        text:
+          es: "Analizar pérdidas."
+          en: "Analyze losses."
+`;export{e as default};

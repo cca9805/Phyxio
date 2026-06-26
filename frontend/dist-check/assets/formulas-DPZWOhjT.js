@@ -1,0 +1,97 @@
+const e=`version: 1.0.0
+leaf_id: sistema-abierto
+ui:
+  default_formula: balance_masa_abierto
+formulas:
+  - id: balance_masa_abierto
+    title: { es: Balance de masa de sistema abierto, en: Open-system mass balance }
+    equation: dm_sys/dt = sum(m_dot_in) - sum(m_dot_out)
+    latex: "\\\\frac{dm_{sys}}{dt}=\\\\sum \\\\dot m_{in}-\\\\sum \\\\dot m_{out}"
+    rearrangements:
+      - { target: m_sys, equation: dm_sys/dt = sum(m_dot_in) - sum(m_dot_out), latex: "\\\\frac{dm_{sys}}{dt}=\\\\sum \\\\dot m_{in}-\\\\sum \\\\dot m_{out}" }
+      - { target: m_dot, equation: m_dot_net = m_dot_in - m_dot_out, latex: "\\\\dot m_{net}=\\\\dot m_{in}-\\\\dot m_{out}" }
+    category: conservation
+    relation_type: balance
+    physical_meaning: { es: La masa almacenada cambia solo por el flujo neto que cruza la frontera., en: Stored mass changes only by the net mass flow crossing the boundary. }
+    constraints: [volumen de control definido, corrientes identificadas, convenio de signos]
+    validity: { es: Valida para un volumen de control con entradas y salidas de masa bien delimitadas., en: Valid for a control volume with well-defined mass inlets and outlets. }
+    dimension_check: { es: "Ambos lados tienen dimension \`[M T⁻¹]\`.", en: "Both sides have dimension \`[M T⁻¹]\`." }
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, interpretacion]
+    interpretation_tags: [masa, acumulacion, frontera]
+    result_semantics:
+      target: m_sys
+      kind: accumulation_rate
+      sign_meaning: { es: Positivo indica que el sistema gana masa., en: Positive means the system gains mass. }
+      absolute_value_meaning: { es: Rapidez de acumulacion material., en: Rate of material accumulation. }
+    domain_checks:
+      - { condition: "m_dot_in >= 0 and m_dot_out >= 0", message: { es: "Los caudales fisicos no negativos deben etiquetarse por sentido.", en: "Physical non-negative flows must be labeled by direction." } }
+    coherence_checks:
+      - { check: "m_dot_in igual a m_dot_out implica masa estacionaria", es: "Sin acumulacion neta de masa.", en: "No net mass accumulation." }
+    graph_implications:
+      - { channel: mass_balance, mapping: "La pendiente de masa almacenada aumenta con el caudal neto." }
+    pedagogical_triggers:
+      - { error: "Llamar cerrado a un sistema con m_dot no nulo", detection: "m_dot != 0", message: { es: "Si cruza masa, el sistema es abierto.", en: "If mass crosses, the system is open." } }
+  - id: energia_especifica_flujo
+    title: { es: Energia especifica transportada por una corriente, en: Specific energy carried by a stream }
+    equation: e_flujo = h + v^2/2 + g z
+    latex: "e=h+\\\\frac{v^2}{2}+gz"
+    rearrangements:
+      - { target: e_flujo, equation: e_flujo = h + v^2/2 + g z, latex: "e=h+\\\\frac{v^2}{2}+gz" }
+      - { target: h, equation: h = e_flujo - v^2/2 - g z, latex: "h=e-\\\\frac{v^2}{2}-gz" }
+    category: constitutive
+    relation_type: definition
+    physical_meaning: { es: Cada kilogramo que cruza la frontera transporta entalpia, energia cinetica y energia potencial., en: Each kilogram crossing the boundary carries enthalpy, kinetic energy, and potential energy. }
+    constraints: [corriente macroscopica, velocidad media definida, altura de referencia definida]
+    validity: { es: Apropiada cuando la corriente puede describirse por propiedades medias en una seccion., en: Appropriate when the stream can be described by mean properties at a section. }
+    dimension_check: { es: "Todos los terminos tienen dimension \`[L² T⁻²]\`.", en: "All terms have dimension \`[L² T⁻²]\`." }
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, interpretacion]
+    interpretation_tags: [entalpia, energia_flujo, corriente]
+    result_semantics:
+      target: e_flujo
+      kind: specific_energy
+      sign_meaning: { es: Depende de la referencia de energia elegida., en: Depends on the chosen energy reference. }
+      absolute_value_meaning: { es: Energia que acompana a cada unidad de masa de la corriente., en: Energy accompanying each unit mass of the stream. }
+    domain_checks:
+      - { condition: "m_dot >= 0", message: { es: "Usar el sentido de corriente para entradas y salidas.", en: "Use stream direction for inlets and outlets." } }
+    coherence_checks:
+      - { check: "si velocidad y altura son pequenas domina h", es: "La entalpia suele ser el termino principal en muchos equipos.", en: "Enthalpy is often the dominant term in many devices." }
+    graph_implications:
+      - { channel: stream_energy, mapping: "La potencia transportada crece con m_dot y e_flujo." }
+    pedagogical_triggers:
+      - { error: "Olvidar energia cinetica o potencial relevante", detection: "v alta o z grande", message: { es: "Compara ordenes de magnitud antes de despreciar terminos.", en: "Compare orders of magnitude before neglecting terms." } }
+  - id: balance_energia_flujo
+    title: { es: Balance de energia en sistema abierto, en: Open-system energy balance }
+    equation: dE_sys/dt = Q_dot - W_dot + sum(m_dot_in e_in) - sum(m_dot_out e_out)
+    latex: "\\\\frac{dE_{sys}}{dt}=\\\\dot Q-\\\\dot W+\\\\sum \\\\dot m_{in} e_{in}-\\\\sum \\\\dot m_{out} e_{out}"
+    rearrangements:
+      - { target: E_sys, equation: dE_sys/dt = Q_dot - W_dot + sum(m_dot_in e_in) - sum(m_dot_out e_out), latex: "\\\\frac{dE_{sys}}{dt}=\\\\dot Q-\\\\dot W+\\\\sum \\\\dot m_{in} e_{in}-\\\\sum \\\\dot m_{out} e_{out}" }
+      - { target: Q_dot, equation: Q_dot = dE_sys/dt + W_dot - sum(m_dot_in e_in) + sum(m_dot_out e_out), latex: "\\\\dot Q=\\\\frac{dE_{sys}}{dt}+\\\\dot W-\\\\sum \\\\dot m_{in} e_{in}+\\\\sum \\\\dot m_{out} e_{out}" }
+      - { target: W_dot, equation: W_dot = Q_dot + sum(m_dot_in e_in) - sum(m_dot_out e_out) - dE_sys/dt, latex: "\\\\dot W=\\\\dot Q+\\\\sum \\\\dot m_{in} e_{in}-\\\\sum \\\\dot m_{out} e_{out}-\\\\frac{dE_{sys}}{dt}" }
+    category: conservation
+    relation_type: balance
+    physical_meaning: { es: La energia almacenada cambia por calor, trabajo y energia transportada con la masa., en: Stored energy changes through heat, work, and energy carried with mass. }
+    constraints: [volumen de control, convenio de signos, propiedades de entrada y salida]
+    validity: { es: Valida para balances macroscopicos de energia con corrientes identificadas., en: Valid for macroscopic energy balances with identified streams. }
+    dimension_check: { es: "Todos los terminos tienen dimension \`[M L² T⁻³]\`.", en: "All terms have dimension \`[M L² T⁻³]\`." }
+    calculable: true
+    motivo_no_calculable: ""
+    used_in: [teoria, ejemplos, interpretacion]
+    interpretation_tags: [energia, flujo, calor, trabajo]
+    result_semantics:
+      target: E_sys
+      kind: energy_accumulation_rate
+      sign_meaning: { es: Positivo indica que el sistema acumula energia., en: Positive means the system accumulates energy. }
+      absolute_value_meaning: { es: Potencia neta almacenada dentro del sistema., en: Net power stored inside the system. }
+    domain_checks:
+      - { condition: "frontera definida", message: { es: "Cada termino debe cruzar una frontera especifica.", en: "Each term must cross a specified boundary." } }
+    coherence_checks:
+      - { check: "sin m_dot recupera balance de sistema cerrado", es: "Al cerrar el flujo de masa queda calor menos trabajo.", en: "When mass flow closes, heat minus work remains." }
+    graph_implications:
+      - { channel: energy_balance, mapping: "La curva de energia almacenada responde al balance neto de potencias." }
+    pedagogical_triggers:
+      - { error: "Olvidar m_dot e en sistemas abiertos", detection: "m_dot != 0", message: { es: "La masa que cruza tambien transporta energia.", en: "Crossing mass also carries energy." } }
+`;export{e as default};

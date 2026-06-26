@@ -1,0 +1,233 @@
+version: 5
+topic:
+  id: velocidad-orbital
+  title:
+    es: Velocidad orbital
+    en: Orbital velocity
+
+formulas:
+- id: velocidad_orbital_circular
+  title:
+    es: Velocidad orbital circular
+    en: Circular orbital velocity
+  equation: v_orb = sqrt((G * M) / r)
+  latex: v_{orb} = \sqrt{\frac{G M}{r}}
+  category: gravitacion
+  relation_type: law
+  physical_meaning:
+    es: Velocidad tangencial para orbita circular en campo central.
+    en: Tangential speed for circular orbit in a central field.
+  constraints: [ G > 0, M > 0, r > 0 ]
+  validity:
+    es: Valida en aproximacion de dos cuerpos con masa central dominante.
+    en: Valid in two-body approximation with dominant central mass.
+  dimension_check: "[L*T^-1] = sqrt(([M^-1*L^3*T^-2]*[M])/[L])"
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere masa central y radio orbital en SI.
+    en: Requires central mass and orbital radius in SI.
+  used_in: [ estimacion_orbita_baja, diseno_mision ]
+  interpretation_tags: [ circular, kepleriano ]
+  result_semantics:
+    target: v_orb
+  domain_checks: [ r > 0 ]
+  coherence_checks: [ v_orb > 0 ]
+  graph_implications: Curva decreciente con raiz de uno sobre r.
+  pedagogical_triggers: [ confusion_r_h ]
+  rearrangements:
+  - target: v_orb
+    equation: v_orb = sqrt((G * M) / r)
+  - target: M
+    equation: M = (v_orb^2 * r) / G
+  - target: r
+    equation: r = (G * M) / (v_orb^2)
+  variables: [ v_orb, G, M, r ]
+
+- id: velocidad_escape
+  title:
+    es: Velocidad de escape
+    en: Escape velocity
+  equation: v_escape = sqrt((2 * G * M) / r)
+  latex: v_{esc} = \sqrt{\frac{2 G M}{r}}
+  category: gravitacion
+  relation_type: derived
+  physical_meaning:
+    es: Umbral minimo para no quedar ligado gravitatoriamente.
+    en: Minimum threshold to avoid remaining gravitationally bound.
+  constraints: [ G > 0, M > 0, r > 0 ]
+  validity:
+    es: Valida para salida radial ideal sin propulsion posterior.
+    en: Valid for ideal radial departure without further propulsion.
+  dimension_check: "[L*T^-1] = sqrt(([M^-1*L^3*T^-2]*[M])/[L])"
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere radio de lanzamiento y masa central.
+    en: Requires launch radius and central mass.
+  used_in: [ analisis_escape, energia_orbital ]
+  interpretation_tags: [ umbral, escape ]
+  result_semantics:
+    target: v_escape
+  domain_checks: [ r > 0 ]
+  coherence_checks: [ v_escape > 0 ]
+  graph_implications: Curva paralela a v_orb con factor raiz de dos.
+  pedagogical_triggers: [ confundir_escape_orbital ]
+  rearrangements:
+  - target: v_escape
+    equation: v_escape = sqrt((2 * G * M) / r)
+  - target: M
+    equation: M = (v_escape^2 * r) / (2 * G)
+  variables: [ v_escape, G, M, r ]
+
+- id: periodo_orbital
+  title:
+    es: Periodo orbital circular
+    en: Circular orbital period
+  equation: T = 2 * pi * sqrt((r^3) / (G * M))
+  latex: T = 2\pi\sqrt{\frac{r^3}{G M}}
+  category: gravitacion
+  relation_type: derived
+  physical_meaning:
+    es: Tiempo de una revolucion completa en orbita circular.
+    en: Time for one full revolution in circular orbit.
+  constraints: [ G > 0, M > 0, r > 0 ]
+  validity:
+    es: Valida para orbita circular estable en campo central.
+    en: Valid for stable circular orbit in central field.
+  dimension_check: "[T] = sqrt(([L^3])/([M^-1*L^3*T^-2]*[M]))"
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere radio orbital y masa central.
+    en: Requires orbital radius and central mass.
+  used_in: [ sincronizacion, planeacion_temporal ]
+  interpretation_tags: [ periodicidad, kepler ]
+  result_semantics:
+    target: T
+  domain_checks: [ r > 0 ]
+  coherence_checks: [ T > 0 ]
+  graph_implications: A mayor r, el periodo aumenta de forma no lineal.
+  pedagogical_triggers: [ linealizar_periodo ]
+  rearrangements:
+  - target: T
+    equation: T = 2 * pi * sqrt((r^3) / (G * M))
+  - target: r
+    equation: r = ((G * M) * (T / (2 * pi))^2)^(1/3)
+  variables: [ T, r, G, M ]
+
+- id: parametro_gravitacional
+  title:
+    es: Parametro gravitacional
+    en: Gravitational parameter
+  equation: mu = G * M
+  latex: \mu = G M
+  category: gravitacion
+  relation_type: definition
+  physical_meaning:
+    es: Producto que compacta constante universal y masa central.
+    en: Product compacting universal constant and central mass.
+  constraints: [ G > 0, M > 0 ]
+  validity:
+    es: Valida en modelo de fuente central dominante.
+    en: Valid in dominant central-source model.
+  dimension_check: "[L^3*T^-2] = [M^-1*L^3*T^-2]*[M]"
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere G y M.
+    en: Requires G and M.
+  used_in: [ vis_viva, dinamica_orbital ]
+  interpretation_tags: [ compactacion ]
+  result_semantics:
+    target: mu
+  domain_checks: [ M > 0 ]
+  coherence_checks: [ mu > 0 ]
+  graph_implications: Ajusta escala de curvas orbitales.
+  pedagogical_triggers: [ olvidar_unidades_mu ]
+  rearrangements:
+  - target: mu
+    equation: mu = G * M
+  - target: M
+    equation: M = mu / G
+  variables: [ mu, G, M ]
+
+- id: vis_viva
+  title:
+    es: Ecuacion vis viva
+    en: Vis-viva equation
+  equation: v_orb = sqrt(mu * (2 / r - 1 / a))
+  latex: v = \sqrt{\mu\left(\frac{2}{r}-\frac{1}{a}\right)}
+  category: gravitacion
+  relation_type: law
+  physical_meaning:
+    es: Relacion entre velocidad, radio instantaneo y semieje mayor.
+    en: Relation among speed, instantaneous radius, and semimajor axis.
+  constraints: [ mu > 0, r > 0, a > 0 ]
+  validity:
+    es: Valida en orbitas keplerianas sin perturbacion fuerte.
+    en: Valid in Keplerian orbits without strong perturbation.
+  dimension_check: "[L*T^-1] = sqrt([L^3*T^-2]*[L^-1])"
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere mu, r y a consistentes.
+    en: Requires consistent mu, r, and a.
+  used_in: [ elipticas, transferencia ]
+  interpretation_tags: [ energia, geometria ]
+  result_semantics:
+    target: v_orb
+  domain_checks: [ r > 0, a > 0 ]
+  coherence_checks: [ v_orb > 0 ]
+  graph_implications: Conecta punto orbital instantaneo con nivel energetico medio.
+  pedagogical_triggers: [ confundir_a_r ]
+  rearrangements:
+  - target: v_orb
+    equation: v_orb = sqrt(mu * (2 / r - 1 / a))
+  - target: a
+    equation: a = 1 / (2 / r - v_orb^2 / mu)
+  variables: [ v_orb, mu, r, a ]
+
+- id: energia_orbital_especifica
+  title:
+    es: Energia orbital especifica
+    en: Specific orbital energy
+  equation: E = -mu / (2 * a)
+  latex: \epsilon = -\frac{\mu}{2a}
+  category: energia
+  relation_type: derived
+  physical_meaning:
+    es: Energia por unidad de masa que clasifica regimen orbital.
+    en: Energy per unit mass classifying orbital regime.
+  constraints: [ mu > 0, a > 0 ]
+  validity:
+    es: Valida para orbitas keplerianas ligadas en aproximacion clasica.
+    en: Valid for bound Keplerian orbits in classical approximation.
+  dimension_check: "[L^2*T^-2] = [L^3*T^-2]/[L]"
+  calculable: true
+  motivo_no_calculable:
+    es: Requiere mu y semieje mayor.
+    en: Requires mu and semimajor axis.
+  used_in: [ clasificacion_orbital ]
+  interpretation_tags: [ ligadura, energia ]
+  result_semantics:
+    target: E
+  domain_checks: [ a > 0 ]
+  coherence_checks: []
+  graph_implications: Define si orbita es ligada segun signo de energia.
+  pedagogical_triggers: [ ignorar_signo ]
+  rearrangements:
+  - target: E
+    equation: E = -mu / (2 * a)
+  - target: a
+    equation: a = -mu / (2 * E)
+  variables: [ E, mu, a ]
+
+ui:
+  default_formula: velocidad_orbital_circular
+  groups:
+  - title:
+      es: Formulas calculables
+      en: Calculable formulas
+    items:
+    - velocidad_orbital_circular
+    - velocidad_escape
+    - periodo_orbital
+    - parametro_gravitacional
+    - vis_viva
+    - energia_orbital_especifica
